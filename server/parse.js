@@ -77,8 +77,7 @@ function finishTimer(message, reset){
 exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
   var toDoQuery = new Parse.Query('ToDo');
-  var user = new Parse.User({objectId:userId});
-  toDoQuery.equalTo("owner",user);
+  toDoQuery.equalTo("owner",userId);
   runQueryToTheEnd(toDoQuery,function(result,error){
     if(result) callback(result);
     else callback(false,error);
