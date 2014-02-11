@@ -74,6 +74,16 @@ function finishTimer(message, reset){
   logger.log(message + ' in (' + time + " ms)");
   if(reset) startTime = new Date().getTime();
 }
+exports.cleanDup = function(userId,callback){
+  Parse.Cloud.useMasterKey();
+  var toDoQuery = new Parse.Query('ToDo');
+  var user = new Parse.User({objectId:userId});
+  toDoQuery.equalTo("owner",user);
+  runQueryToTheEnd(toDoQuery,function(result,error){
+    if(result) callback(result);
+    else callback(false,error);
+  });
+}
 exports.clean = function(callback){
   Parse.Cloud.useMasterKey();
   var user = Parse.User.current();

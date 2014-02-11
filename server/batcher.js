@@ -128,6 +128,7 @@ exports.makeBatches = function(col){
       var localTags = new Array();
       for(var i = 0 ; i < tags.length ; i++){
         var rawTag = tags[i];
+        if(!rawTag) continue;
         var tagObj;
         if(rawTag.objectId){
           tagObj = new Tag({"objectId":rawTag.objectId});

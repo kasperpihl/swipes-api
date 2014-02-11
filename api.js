@@ -17,6 +17,14 @@ app.get('/clean',function(req, res){
 		});
 	},function(error){ res.send(error); });
 });
+app.get('/removeDuplicates',function(req,res){
+	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
+	var userId = req.query.userId;
+	parse.cleanDup(userId,function(result,error){
+		if(error)res.send(error);
+		else res.send('success');
+	});
+});
 
 app.post('/sync', function(req, res) {
 	var startTime = new Date().getTime();
