@@ -77,9 +77,52 @@ function finishTimer(message, reset){
 exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
   var toDoQuery = new Parse.Query('ToDo');
-  toDoQuery.equalTo("owner",userId);
+  toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
+  toDoQuery.notEqualTo('deleted',true);
   runQueryToTheEnd(toDoQuery,function(result,error){
-    if(result) callback(result);
+    console.log("found objects: " + result.length);
+    if(result){
+      var objectsToDelete = [];
+      var objectsByTitle = {};
+      for(var i = 0 ; i < result.length ; i++){
+        var object = result[i];
+        var attr = "tempId";
+        var existingObject = objectsByTitle[object.get(attr)];
+        if(existingObject){
+          var thisUpdatedAt = object.createdAt.getTime();
+          var existingUpdatedAt = existingObject.createdAt.getTime();
+          //console.log(object.get('repeatCount') + ' - ' + object.get('repeatOption') + " " + existingObject.get('repeatOption'));
+          if(thisUpdatedAt >= existingUpdatedAt){
+            existingObject.set('deleted',true);
+            objectsToDelete.push(existingObject);
+            objectsByTitle[object.get(attr)] = object;
+          }
+          else{
+            object.set('deleted',true);
+            objectsToDelete.push(object);
+          }
+        }
+        else objectsByTitle[object.get(attr)] = object;
+      }
+      console.log("deleting: " + objectsToDelete.length + ' keeping: ' + Object.keys(objectsByTitle).length);
+      var batcher = require('./batcher.js');
+      var batches = batcher.makeBatches({"ToDo":objectsToDelete});
+      console.log("number of batches: " + batches.length);
+      var queue = require('./queue.js');
+      var queueError;
+      queue.push(batches,true);
+      queue.run(function(batch){
+        Parse.Object.saveAll(batch,{success:function(result){
+        queue.next();
+        },error:function(error){
+          queueError = error;
+          queue.next();
+        }});
+      },function(finished){
+        if(queueError) callback(false,queueError);
+        else callback("Deleted duplicates " + objectsToDelete.length);
+      });
+    }
     else callback(false,error);
   });
 }
