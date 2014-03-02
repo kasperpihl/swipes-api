@@ -266,7 +266,7 @@ exports.sync = function(body,callback){
           batcher.updateDuplicates(result);
         }
         else if(error) runningError = error;
-        //queue.next();
+        queue.next();
       });
       },function(finished){
         if(runningError) return callback(false,runningError);
@@ -276,6 +276,7 @@ exports.sync = function(body,callback){
 
 
   function saveAll(){
+    return;
     finishTimer('finalized duplicates',true);
     var batches = batcher.makeBatches();
 
