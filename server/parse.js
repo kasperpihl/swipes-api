@@ -276,7 +276,6 @@ exports.sync = function(body,callback){
 
 
   function saveAll(){
-    return;
     finishTimer('finalized duplicates',true);
     var batches = batcher.makeBatches();
 
