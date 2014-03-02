@@ -16,5 +16,5 @@ function makeid(length)
 exports.log = function(message,force){
 	if(!identifier && Parse.User.current()) identifier = Parse.User.current().id;
 	if(!identifier) identifier = makeid(5);
-	if(!live || force || forceLog) console.log(message);
+	if(!live || force || forceLog) console.log(identifier + ': ' + message);
 };
