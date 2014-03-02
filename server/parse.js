@@ -266,7 +266,7 @@ exports.sync = function(body,callback){
           batcher.updateDuplicates(result);
         }
         else if(error) runningError = error;
-        queue.next();
+        //queue.next();
       });
       },function(finished){
         if(runningError) return callback(false,runningError);
@@ -305,7 +305,7 @@ exports.sync = function(body,callback){
 
 
   function handleSaveError(batch,queue,error){
-    logger.log(error,true);
+    logger.log('Error from save ' + error,true);
     /*
       If object not found or a time out
       Check for deletedobjects and duplicates

@@ -34,7 +34,7 @@ app.post('/sync', function(req, res) {
   			logger.log('Finished request in (' + time + " ms)");
 			if(result) res.send(result);
 			else{
-				logger.log(error,true);
+				logger.log('Error from return ' + error,true);
 				var sendError = {code:141,message:'Server error'};
 				if(error && error.code) sendError.code = error.code;
 				if(error && error.message) sendError.message = error.message;
