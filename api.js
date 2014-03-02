@@ -7,6 +7,7 @@ var Parse = require('parse').Parse;
 var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
+
 app.get('/clean',function(req, res){
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	var sessionToken = req.query.sessionToken;
@@ -17,14 +18,26 @@ app.get('/clean',function(req, res){
 		});
 	},function(error){ res.send(error); });
 });
+
 app.get('/removeDuplicates',function(req,res){
-	/*Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
+	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	Parse.Cloud.useMasterKey();
 	var userId = req.query.userId;
 	parse.cleanDup(userId,function(result,error){
 		if(error)res.send(error);
 		else res.send({"message":result});
-	});*/
+	});
+});
+
+app.get('/trial',function(req,res){
+	
+	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
+	if(!req.query.user) 
+		return res.send(142,{code:142,message:"user must be included"});
+	parse.trial(req.query.user,function(result,error){
+		if(error)res.send(error);
+		else res.send(result);
+	});
 });
 
 app.post('/sync', function(req, res) {

@@ -24,7 +24,7 @@ function scrapeChanges(object,lastUpdateTime){
   callback (result,error)
 */
 function runQueriesToTheEnd(queries,callback){
-  if(!queries || queries.length == 0) return callback(false,error("No queries to run"));
+  if(!queries || queries.length == 0) return callback(false,errorReturn("No queries to run"));
   var stopped;
   var resultObj = {};
   var i = 0;
@@ -42,7 +42,7 @@ function runQueriesToTheEnd(queries,callback){
       runQueryToTheEnd(queries[i],internalCallback);
     }
   }
-  runQueryToTheEnd(queries[i],callback);
+  runQueryToTheEnd(queries[i],internalCallback);
 }
 function runQueryToTheEnd(query,callback,deltaResult,deltaSkip){
   if(!deltaResult) deltaResult = [];
@@ -111,6 +111,7 @@ exports.cleanDup = function(userId,callback){
       var queue = require('./queue.js');
       var queueError;
       queue.push(batches,true);
+      return;
       queue.run(function(batch){
         Parse.Object.saveAll(batch,{success:function(result){
         queue.next();
@@ -126,6 +127,46 @@ exports.cleanDup = function(userId,callback){
     else callback(false,error);
   });
 }
+
+exports.trial = function(userId, callback){
+  Parse.Cloud.useMasterKey();
+  var trialQuery = new Parse.Query('Trial')
+  trialQuery.equalTo('user',new Parse.User({objectId:userId}));
+  var userQuery = new Parse.Query(Parse.User);
+  userQuery.equalTo('objectId',userId);
+  /*userQuery.find({success:function(users){
+    callback(users,false);
+  },error:function(error){ callback(false, error); }});*/
+  runQueriesToTheEnd([trialQuery,userQuery],function(result,error){
+    if(error) callback(false,error);
+    else{
+      if(result['Trial'] && result['Trial'].length > 0){
+        callback(false, errorReturn('Already received trial'));
+      }
+      else if(result["_User"] && result["_User"].length == 1){
+        var user = result["_User"][0];
+        var startDate = new Date();
+        var noOfDays = 14;
+        var endDate = new Date(startDate.getTime() + (noOfDays * (1000 * 60 * 60 * 24)));
+        if(user.get('userLevel') > 0) return callback(false, errorReturn('Already upgraded'));
+        user.set('userLevel',1);
+        var Trial = Parse.Object.extend('Trial');
+        var trial = new Trial();
+        trial.set('startDate',startDate);
+        trial.set('endDate',endDate);
+        trial.set('user',user);
+        Parse.Object.saveAll([trial,user],{success:function(list){
+          callback({"message":"successful trial"});
+        },error:function(list,error){
+          callback(false,error);
+        }});
+        
+      }
+    }
+    
+  });
+}
+
 exports.clean = function(callback){
   Parse.Cloud.useMasterKey();
   var user = Parse.User.current();
@@ -133,7 +174,7 @@ exports.clean = function(callback){
   toDoQuery.equalTo('owner',user);
   var tagQuery = new Parse.Query('Tag');
   tagQuery.equalTo('owner',user);
-  logger.log('starting clean for user: ' + user);
+  logger.log('starting clean for user: ' + user,true);
   var queries = [toDoQuery,tagQuery];
   var queue = require('./queue.js');
   queue.push(queries,true);
@@ -142,18 +183,18 @@ exports.clean = function(callback){
     
     var batcher = require('./batcher.js');
     var batches = batcher.makeBatches(objects);
-    logger.log('starting ' + batches.length + ' batches');
+    logger.log('starting ' + batches.length + ' batches',true);
     queue.reset();
     queue.push(batches,true);
     var counter = 0;
     queue.run(function(batch){
       counter++;
-      logger.log('destroying batch ' + counter);
+      logger.log('destroying batch ' + counter,true);
       Parse.Object.destroyAll(batch,{success:function(){
-        logger.log('destroyed batch');
+        logger.log('destroyed batch',true);
         queue.next();
       }, error:function(error){
-        logger.log('error destroying batch');
+        logger.log('error destroying batch',true);
         destroyError = error;
         queue.next();
       }});
@@ -176,7 +217,7 @@ exports.clean = function(callback){
     
   });
 }
-function error(errorName,code){
+function errorReturn(errorName,code){
   if(!code) code = 141;
   if(!errorName) errorName = 'Server error';
   return {code : 141, message:errorName};
@@ -184,8 +225,8 @@ function error(errorName,code){
 exports.sync = function(body,callback){
   Parse.Cloud.useMasterKey();
   var user = Parse.User.current();
-  if(!user) return callback(false,error('You have to be logged in'));
-  if(body.objects && !_.isObject(body.objects)) return callback(false,error('Objects must be object or array')); 
+  if(!user) return callback(false,errorReturn('You have to be logged in'));
+  if(body.objects && !_.isObject(body.objects)) return callback(false,errorReturn('Objects must be object or array')); 
   var startTime = new Date();
 
   var batcher = require('./batcher.js');
@@ -221,6 +262,8 @@ exports.sync = function(body,callback){
         else saveAll();
     });
   };
+
+
   function saveAll(){
     finishTimer('finalized duplicates',true);
     var batches = batcher.makeBatches();
@@ -236,6 +279,8 @@ exports.sync = function(body,callback){
       else fetchAll();
     });
   };
+
+
   function saveBatch(batch,queue){
     Parse.Object.saveAll(batch,{success:function(result){
         queue.next();
@@ -244,6 +289,8 @@ exports.sync = function(body,callback){
         handleSaveError(batch,queue,error);
       }});
   };
+
+
   function handleSaveError(batch,queue,error){
     logger.log(error,true);
     /*
@@ -270,6 +317,9 @@ exports.sync = function(body,callback){
       queue.next();
     }
   };
+
+
+
   function fetchAll(){
     finishTimer('finished saving',true);
     queue.reset();
