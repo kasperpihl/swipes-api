@@ -8,27 +8,6 @@ var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
 
-app.get('/clean',function(req, res){
-	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
-	var sessionToken = req.query.sessionToken;
-	Parse.User.become(sessionToken).then(function(result){
-		parse.clean(function(result,error){
-			if(error)res.send(error);
-			else res.send('success');
-		});
-	},function(error){ res.send(error); });
-});
-
-app.get('/removeDuplicates',function(req,res){
-	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
-	Parse.Cloud.useMasterKey();
-	var userId = req.query.userId;
-	parse.cleanDup(userId,function(result,error){
-		if(error)res.send(error);
-		else res.send({"message":result});
-	});
-});
-
 app.get('/trial',function(req,res){
 	
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
@@ -48,12 +27,14 @@ app.post('/sync', function(req, res) {
 		return res.send(142,{code:142,message:"sessionToken must be included"});
 	}
 	Parse.User.become(req.body.sessionToken).then(function(result){
+		logger.log('Started request');
 		parse.sync(req.body,function(result,error){
 			var endTime = new Date().getTime();
   			var time = endTime - startTime;
   			logger.log('Finished request in (' + time + " ms)");
 			if(result) res.send(result);
 			else{
+				logger.log(error,true);
 				var sendError = {code:141,message:'Server error'};
 				if(error && error.code) sendError.code = error.code;
 				if(error && error.message) sendError.message = error.message;

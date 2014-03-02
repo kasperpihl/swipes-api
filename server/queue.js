@@ -11,7 +11,7 @@ var doneCallback;
 var iteratorCallback;
 
 var options = {
-	recurring:5
+	recurring:3
 };
 exports.push = function(object,isCollection){
 	if(isCollection && _.isArray(object)){

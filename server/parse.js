@@ -77,8 +77,16 @@ function finishTimer(message, reset){
 exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
   var toDoQuery = new Parse.Query('ToDo');
-  toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
+  //toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
   toDoQuery.notEqualTo('deleted',true);
+  toDoQuery.count({success:function(counter){
+    console.log(counter);
+    callback("found " + counter,false);
+  },error:function(error){
+    console.log(error);
+    callback(false,error);
+  }});
+  return;
   runQueryToTheEnd(toDoQuery,function(result,error){
     console.log("found objects: " + result.length);
     if(result){
@@ -112,10 +120,14 @@ exports.cleanDup = function(userId,callback){
       var queueError;
       queue.push(batches,true);
       return;
+      var counter = 1;
       queue.run(function(batch){
+        console.log('starting batch ' + counter++);
         Parse.Object.saveAll(batch,{success:function(result){
         queue.next();
+        console.log(result.length);
         },error:function(error){
+          console.log(error);
           queueError = error;
           queue.next();
         }});
@@ -234,7 +246,6 @@ exports.sync = function(body,callback){
   
   var queryUtility = require('./queryUtility.js');
   startTimer();
-  
   batcher.makeParseObjectsFromRaw(body.objects,user);
   var runningError;
   var lastUpdate = (body.lastUpdate) ? new Date(body.lastUpdate) : false;
@@ -282,7 +293,9 @@ exports.sync = function(body,callback){
 
 
   function saveBatch(batch,queue){
+    logger.log('saving batch with length: '+batch.length);
     Parse.Object.saveAll(batch,{success:function(result){
+        logger.log('completed batch with length '+ result.length);
         queue.next();
       },error:function(error){
         // TODO: Handle error on batches here
