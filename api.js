@@ -9,7 +9,7 @@ var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
 
 app.get('/trial',function(req,res){
-	
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	if(!req.query.user)
 		return res.jsonp({code:142,message:"user must be included"});
@@ -23,6 +23,7 @@ app.post('/sync', function(req, res) {
 	var startTime = new Date().getTime();
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	res.setHeader('Content-Type', 'application/json');
+	
 	if(!req.body.sessionToken){
 		return res.send({code:142,message:"sessionToken must be included"});
 	}
