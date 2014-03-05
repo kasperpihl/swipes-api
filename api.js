@@ -11,11 +11,11 @@ var logger = require('./server/logger.js');
 app.get('/trial',function(req,res){
 	
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
-	if(!req.query.user) 
-		return res.send(142,{code:142,message:"user must be included"});
+	if(!req.query.user)
+		return res.jsonp({code:142,message:"user must be included"});
 	parse.trial(req.query.user,function(result,error){
-		if(error)res.send(error);
-		else res.send(result);
+		if(error)res.jsonp(error);
+		else res.jsonp(result);
 	});
 });
 
@@ -24,7 +24,7 @@ app.post('/sync', function(req, res) {
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	res.setHeader('Content-Type', 'application/json');
 	if(!req.body.sessionToken){
-		return res.send(142,{code:142,message:"sessionToken must be included"});
+		return res.send({code:142,message:"sessionToken must be included"});
 	}
 	Parse.User.become(req.body.sessionToken).then(function(result){
 		logger.log('Started request');
@@ -38,10 +38,10 @@ app.post('/sync', function(req, res) {
 				var sendError = {code:141,message:'Server error'};
 				if(error && error.code) sendError.code = error.code;
 				if(error && error.message) sendError.message = error.message;
-				res.send(sendError.code,sendError);
+				res.send(sendError);
 			}
 		});
-	},function(error){ res.send(400,error); });
+	},function(error){ res.send(error); });
 });
 var port = Number(process.env.PORT || 5000);
 app.listen(port);

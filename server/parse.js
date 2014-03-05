@@ -168,13 +168,17 @@ exports.trial = function(userId, callback){
         trial.set('endDate',endDate);
         trial.set('user',user);
         Parse.Object.saveAll([trial,user],{success:function(list){
-          callback({"message":"successful trial"});
+          callback({"code":200,"message":"successful trial"});
         },error:function(list,error){
           callback(false,error);
         }});
         
       }
+      else {
+        callback(false,errorReturn('User not found'));
+      }
     }
+
     
   });
 }

@@ -1,6 +1,7 @@
 var keys = require('../conf/keys.js');
+var _ = require('underscore');
 var Parse = require('parse').Parse;
-var forceLog = false;
+var forceLog = true;
 var live = keys.live();
 function makeid(length)
 {
@@ -17,6 +18,7 @@ exports.log = function(message,force){
 	if(!live || force || forceLog){
 		var identifier = Parse.User.current().id;
 		if(!identifier) identifier = makeid(5);
+		if(_.isObject(message)) message = JSON.stringify(message);
 		console.log(identifier + ': ' + message);
 	}
 };
