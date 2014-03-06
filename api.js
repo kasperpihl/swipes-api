@@ -7,7 +7,7 @@ var Parse = require('parse').Parse;
 var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
-//app.use(subdomain({ base : 'localhost:5000', removeWWW : true }));
+app.use(subdomain({ base : 'swipesapp.com', removeWWW : true }));
 app.configure(function(){
 	//app.get('/unsubscribe',express.static(__dirname + '/launch/unsubscribe.html'));
   	//app.use(express.static(__dirname + '/launch'));
