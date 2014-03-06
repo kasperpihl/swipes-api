@@ -1,12 +1,14 @@
 var express = require('express');
 var app = express();
-
 app.use(express.json());
+var subdomain = require('subdomain');
 var parse = require('./server/parse.js');
 var Parse = require('parse').Parse;
 var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
+app.use(subdomain({ base : 'localhost:5000', removeWWW : true }));
+app.use(express.static(path.join(__dirname, 'launch')));
 
 app.get('/trial',function(req,res){
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,11 +21,15 @@ app.get('/trial',function(req,res){
 	});
 });
 
+app.get('/subdomain/test/',function(req,res){
+
+});
+
 app.post('/sync', function(req, res) {
 	var startTime = new Date().getTime();
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	res.setHeader('Content-Type', 'application/json');
-	
+
 	if(!req.body.sessionToken){
 		return res.send({code:142,message:"sessionToken must be included"});
 	}

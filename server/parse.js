@@ -157,10 +157,11 @@ exports.trial = function(userId, callback){
       }
       else if(result["_User"] && result["_User"].length == 1){
         var user = result["_User"][0];
-        var startDate = new Date();
-        var noOfDays = 14;
-        var endDate = new Date(startDate.getTime() + (noOfDays * (1000 * 60 * 60 * 24)));
         if(user.get('userLevel') > 0) return callback(false, errorReturn('Already upgraded'));
+        
+        var startDate = new Date();
+        var noOfDays = 31;
+        var endDate = new Date(startDate.getTime() + (noOfDays * (1000 * 60 * 60 * 24)));
         user.set('userLevel',1);
         var Trial = Parse.Object.extend('Trial');
         var trial = new Trial();

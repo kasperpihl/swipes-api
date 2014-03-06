@@ -6,7 +6,8 @@
   "dependencies": {
     "express": "3.x",
     "parse": "1.2.13",
-    "underscore": "1.5.2"
+    "underscore": "1.5.2",
+    "subdomain": "0.1.x"
   },
   "engines": {
     "node": "0.10.x"
