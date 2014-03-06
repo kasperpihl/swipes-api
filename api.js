@@ -7,9 +7,14 @@ var Parse = require('parse').Parse;
 var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
-app.use(subdomain({ base : 'localhost:5000', removeWWW : true }));
-app.use(express.static(path.join(__dirname, 'launch')));
-
+//app.use(subdomain({ base : 'localhost:5000', removeWWW : true }));
+app.configure(function(){
+	//app.get('/unsubscribe',express.static(__dirname + '/launch/unsubscribe.html'));
+  	//app.use(express.static(__dirname + '/launch'));
+  	
+  	app.use(express.directory('public'));
+});
+app.get('/unsubscribe',function(req,res){ res.writeHead(302, { 'Location': '/unsubscribe.html' }); });
 app.get('/trial',function(req,res){
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
@@ -22,7 +27,7 @@ app.get('/trial',function(req,res){
 });
 
 app.get('/subdomain/test/',function(req,res){
-
+	res.send('YEAH');
 });
 
 app.post('/sync', function(req, res) {
