@@ -8,7 +8,7 @@ var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
 
-app.get('/trial',function(req,res){
+app.route('/trial').get(function(req,res){
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	if(!req.query.user)
@@ -23,7 +23,7 @@ app.get('/trial',function(req,res){
 	res.send('YEAH');
 });*/
 
-app.post('/sync', function(req, res) {
+app.route('/sync').post(function(req, res) {
 	var startTime = new Date().getTime();
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
 	res.setHeader('Content-Type', 'application/json');
