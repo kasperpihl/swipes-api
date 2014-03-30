@@ -28,3 +28,5 @@ app.get('/removeDuplicates',function(req,res){
 		else res.send({"message":result});
 	});
 });
+var port = Number(process.env.PORT || 5000);
+app.listen(port);

@@ -1,13 +1,12 @@
 {
   "name": "SwipesAPI",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Swipes Sync + API",
   "author": "Kasper Pihl Tornøe <kasper@swipesapp.com>",
   "dependencies": {
-    "express": "3.x",
-    "parse": "1.2.13",
-    "underscore": "1.5.2",
-    "subdomain": "0.1.x"
+    "express": "4.x",
+    "parse": "1.2.17",
+    "underscore": "1.5.2"
   },
   "engines": {
     "node": "0.10.x"

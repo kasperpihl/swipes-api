@@ -1,19 +1,13 @@
 var express = require('express');
 var app = express();
 app.use(express.json());
-//var subdomain = require('subdomain');
+
 var parse = require('./server/parse.js');
 var Parse = require('parse').Parse;
 var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
-//app.use(subdomain({ base : 'swipesapp.com', removeWWW : true }));
-/*app.configure(function(){
-	//app.get('/unsubscribe',express.static(__dirname + '/launch/unsubscribe.html'));
-  	app.use(express.static(__dirname + '/public'));
-  	
-  	//app.use(express.directory('public'));
-});*/
+
 app.get('/trial',function(req,res){
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
