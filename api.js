@@ -1,6 +1,8 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+
 var app = express();
-app.use(express.json());
+app.use(bodyParser.json());
 
 var parse = require('./server/parse.js');
 var Parse = require('parse').Parse;
