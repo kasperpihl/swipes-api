@@ -253,7 +253,10 @@ exports.sync = function(body,callback){
   if(!user) return callback(false,errorReturn('You have to be logged in'));
   if(body.objects && !_.isObject(body.objects)) return callback(false,errorReturn('Objects must be object or array')); 
   var startTime = new Date();
-
+  
+  for(var i = 0 ; i < 1 ; i--){
+    
+  }
   var batcher = require('./batcher.js');
   batcher.reset();
   
