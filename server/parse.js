@@ -78,9 +78,10 @@ exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
   var toDoQuery = new Parse.Query('ToDo');
   toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
-  toDoQuery.notEqualTo('deleted',true);
-  var date = new Date();
-  toDoQuery.lessThan('completionDate',date);
+  //toDoQuery.notEqualTo('deleted',true);
+  //var date = new Date();
+  //toDoQuery.exists('tags');
+  //toDoQuery.lessThan('completionDate',date);
   //toDoQuery.exists('completionDate');
   /*toDoQuery.count({success:function(counter){
     console.log(counter);
@@ -96,11 +97,11 @@ exports.cleanDup = function(userId,callback){
       var objectsToDelete = [];
       var objectsByTitle = {};
       for(var i = 0 ; i < result.length ; i++){
-        var object = result[i];
-        object.set('deleted',true);
+       var object = result[i];
+        /*object.set('deleted',true);
         object.set('lastSave',new Parse.User({objectId:userId}));
         objectsToDelete.push(object);
-        continue;
+        continue;*/
         var attr = "tempId";
         var existingObject = objectsByTitle[object.get(attr)];
         if(existingObject){
