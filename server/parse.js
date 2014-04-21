@@ -78,10 +78,13 @@ exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
   var toDoQuery = new Parse.Query('ToDo');
   toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
+  //var date = new Date();
+  //toDoQuery.lessThan('completionDate',date);
+  //toDoQuery.equalTo("deleted",true);
   //toDoQuery.notEqualTo('deleted',true);
   //var date = new Date();
   //toDoQuery.exists('tags');
-  //toDoQuery.lessThan('completionDate',date);
+  //
   //toDoQuery.exists('completionDate');
   /*toDoQuery.count({success:function(counter){
     console.log(counter);
@@ -98,6 +101,8 @@ exports.cleanDup = function(userId,callback){
       var objectsByTitle = {};
       for(var i = 0 ; i < result.length ; i++){
        var object = result[i];
+       //objectsToDelete.push(object);
+       //continue;
         /*object.set('deleted',true);
         object.set('lastSave',new Parse.User({objectId:userId}));
         objectsToDelete.push(object);
@@ -127,11 +132,11 @@ exports.cleanDup = function(userId,callback){
       var queue = require('./queue.js');
       var queueError;
       queue.push(batches,true);
-      return;
       var counter = 1;
+      return;
       queue.run(function(batch){
         console.log('starting batch ' + counter++);
-        Parse.Object.saveAll(batch,{success:function(result){
+        Parse.Object.destroyAll(batch,{success:function(result){
         queue.next();
         console.log(result.length);
         },error:function(error){
@@ -253,10 +258,7 @@ exports.sync = function(body,callback){
   if(!user) return callback(false,errorReturn('You have to be logged in'));
   if(body.objects && !_.isObject(body.objects)) return callback(false,errorReturn('Objects must be object or array')); 
   var startTime = new Date();
-  
-  for(var i = 0 ; i < 1 ; i--){
-    
-  }
+
   var batcher = require('./batcher.js');
   batcher.reset();
   

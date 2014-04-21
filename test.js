@@ -1,7 +1,9 @@
 var express = require('express');
-var app = express();
+var bodyParser = require('body-parser');
 
-app.use(express.json());
+var app = express();
+app.use(bodyParser.json());
+
 var parse = require('./server/parse.js');
 var Parse = require('parse').Parse;
 var _ = require('underscore');
