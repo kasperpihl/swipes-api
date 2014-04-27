@@ -327,7 +327,7 @@ exports.sync = function(body,callback){
 
 
   function handleSaveError(batch,queue,error){
-    logger.log('Error from save ' + error,true);
+    logger.log('Error from save ' + JSON.stringify(error),true);
     /*
       If object not found or a time out
       Check for deletedobjects and duplicates
