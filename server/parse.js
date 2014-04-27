@@ -332,7 +332,7 @@ exports.sync = function(body,callback){
       If object not found or a time out
       Check for deletedobjects and duplicates
     */
-    if(error.code == 101 || error.code == 124 || error.code == 100){
+    if(error.code == 101 || error.code == 124 || error.code == 100 || (error.code == 142 && error.message =="Unauthorized Save")){
       var queries = queryUtility.queriesForNotFound(user,batch);
       runQueriesToTheEnd(queries,function(result,error){
         if(result){
