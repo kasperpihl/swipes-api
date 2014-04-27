@@ -18,7 +18,8 @@ exports.log = function(message,force){
 	if(!live || force || forceLog){
 		var identifier = Parse.User.current().id;
 		if(!identifier) identifier = makeid(5);
-		if(_.isObject(message)){ 
+		console.log(message);
+		if(_.isObject(message)){
 			message = JSON.stringify(message);
 			console.log("stringify");
 		}
