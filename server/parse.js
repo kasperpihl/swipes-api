@@ -62,7 +62,7 @@ function runQueryToTheEnd(query,callback,deltaResult,deltaSkip){
     else callback(deltaResult,false,query);
   },error:function(error){
     callback(deltaResult,error,query);
-  }});
+  }, useMasterKey:true});
 };
 var startTime;
 function startTimer(){
@@ -78,7 +78,10 @@ exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
   var toDoQuery = new Parse.Query('ToDo');
   toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
-  //var date = new Date();
+  var date = new Date();
+  //toDoQuery.greaterThan('schedule',date);
+  //toDoQuery.doesNotExist('title');
+  toDoQuery.equalTo("deleted",true);
   //toDoQuery.lessThan('completionDate',date);
   //toDoQuery.equalTo("deleted",true);
   //toDoQuery.notEqualTo('deleted',true);
@@ -101,13 +104,16 @@ exports.cleanDup = function(userId,callback){
       var objectsByTitle = {};
       for(var i = 0 ; i < result.length ; i++){
        var object = result[i];
-       //objectsToDelete.push(object);
-       //continue;
+       object.set('deleted',true);
+       objectsToDelete.push(object);
+       continue;
+
         /*object.set('deleted',true);
         object.set('lastSave',new Parse.User({objectId:userId}));
         objectsToDelete.push(object);
         continue;*/
         var attr = "tempId";
+        if(!object.get(attr)) continue;
         var existingObject = objectsByTitle[object.get(attr)];
         if(existingObject){
           var thisUpdatedAt = object.createdAt.getTime();
@@ -133,7 +139,6 @@ exports.cleanDup = function(userId,callback){
       var queueError;
       queue.push(batches,true);
       var counter = 1;
-      return;
       queue.run(function(batch){
         console.log('starting batch ' + counter++);
         Parse.Object.destroyAll(batch,{success:function(result){
@@ -210,7 +215,6 @@ exports.clean = function(callback){
   queue.push(queries,true);
   var destroyError;
   function batchDelete(objects){
-    
     var batcher = require('./batcher.js');
     var batches = batcher.makeBatches(objects);
     logger.log('starting ' + batches.length + ' batches',true);
@@ -261,7 +265,7 @@ exports.sync = function(body,callback){
 
   var batcher = require('./batcher.js');
   batcher.reset();
-  
+
   var queryUtility = require('./queryUtility.js');
   startTimer();
   batcher.makeParseObjectsFromRaw(body.objects,user);
@@ -318,7 +322,7 @@ exports.sync = function(body,callback){
       },error:function(error){
         // TODO: Handle error on batches here
         handleSaveError(batch,queue,error);
-      }});
+      }, useMasterKey:true});
   };
 
 
@@ -334,7 +338,8 @@ exports.sync = function(body,callback){
         if(result){
           var deletedAndUpdatedBatch = batcher.findDeletedObjectsAndDuplicates(batch,result);
           logger.log("deleted objects: " + deletedAndUpdatedBatch.deleted.length);
-          if(deletedAndUpdatedBatch.deleted.length > 0) deletedObjects = deletedObjects.concat(deletedAndUpdatedBatch.deleted);
+          if(deletedAndUpdatedBatch.deleted.length > 0) 
+            deletedObjects = deletedObjects.concat(deletedAndUpdatedBatch.deleted);
           saveBatch(deletedAndUpdatedBatch.batch,queue);
         }
         else{

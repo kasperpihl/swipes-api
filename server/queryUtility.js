@@ -6,7 +6,7 @@ exports.queriesForUpdating = function(user,lastUpdate,nowTime){
 	if(lastUpdate) tagQuery.greaterThan('updatedAt',lastUpdate);
 	else tagQuery.notEqualTo('deleted',true);
 	if(nowTime) tagQuery.lessThanOrEqualTo('updatedAt',nowTime);
-
+	
 	var taskQuery = queryForClassAndUser("ToDo",user);
 	if(lastUpdate) taskQuery.greaterThan('updatedAt',lastUpdate);
 	else taskQuery.notEqualTo('deleted',true);
