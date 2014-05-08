@@ -5,9 +5,11 @@
   "author": "Kasper Pihl Tornøe <kasper@swipesapp.com>",
   "dependencies": {
     "express": "4.x",
-    "parse": "1.2.17",
-    "underscore": "1.5.2",
-    "body-parser": "~1.0.0"
+    "parse": "1.2.19",
+    "underscore": "1.6.0",
+    "body-parser": "~1.0.0",
+    "pg": "3.0.3",
+    "pg-objects": "0.0.2"
   },
   "engines": {
     "node": "0.10.x"

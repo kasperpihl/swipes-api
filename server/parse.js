@@ -76,12 +76,12 @@ function finishTimer(message, reset){
 }
 exports.cleanDup = function(userId,callback){
   Parse.Cloud.useMasterKey();
-  var toDoQuery = new Parse.Query('ToDo');
+  var toDoQuery = new Parse.Query('Tag');
   toDoQuery.equalTo("owner",new Parse.User({objectId:userId}));
   var date = new Date();
   //toDoQuery.greaterThan('schedule',date);
   //toDoQuery.doesNotExist('title');
-  toDoQuery.equalTo("deleted",true);
+  //toDoQuery.equalTo("deleted",true);
   //toDoQuery.lessThan('completionDate',date);
   //toDoQuery.equalTo("deleted",true);
   //toDoQuery.notEqualTo('deleted',true);
@@ -107,7 +107,7 @@ exports.cleanDup = function(userId,callback){
        object.set('deleted',true);
        objectsToDelete.push(object);
        continue;
-
+        
         /*object.set('deleted',true);
         object.set('lastSave',new Parse.User({objectId:userId}));
         objectsToDelete.push(object);
@@ -139,6 +139,7 @@ exports.cleanDup = function(userId,callback){
       var queueError;
       queue.push(batches,true);
       var counter = 1;
+
       queue.run(function(batch){
         console.log('starting batch ' + counter++);
         Parse.Object.destroyAll(batch,{success:function(result){
