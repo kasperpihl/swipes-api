@@ -1,120 +1,176 @@
 var pg = require('pg');
-var Parse = require('parse').Parse;
 var _ = require('underscore');
 var logger = require('./logger.js');
-var conString = "postgres://kasper:tornoe89@localhost/postgres";
-exports.format = function(format) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    return format.replace(/{(\d+)}/g, function(match, number) { 
-      return typeof args[number] != 'undefined'
-        ? args[number] 
-        : match
-      ;
-    });
-  };
-exports.sync = function(body, callback){
-	/*
-	1. load body objects
-	2. prepare & validate objects
-	3. create batches to do saving
+var conString = process.env.DATABASE_URL ? process.env.DATABASE_URL : "postgres://kasper:tornoe89@localhost/postgres";
+var sql = require('./pg-sql.js');
 
-	*/
-	var user = Parse.User.current();
-	if(!user)
-		return callback(false,errorReturn('You have to be logged in'));
+exports.test = function(time,callback){
+	if(!time) 
+		time = "2014-05-09T14:51:48.119Z";
+	var date = new Date(time);
+	console.log(date);
+	var client = new pg.Client(conString);
+	client.connect(function(err) {
+		if(err) 
+			return console.error('could not connect to postgres', err);
+		logger.time('connected client');
+		var todo = sql.todo();
+		var query = todo.select(todo.star()).where(todo.updatedAt.gt(date)).toQuery();
+		client.query(query.text,query.values,function(err, result) {
+			if(err) {
+				return console.error('error running query', err);
+			}
+			console.log(result.rows.length);
+			//console.log(result);
+			callback();
+		});
+	});
+	
+};
+
+exports.sync = function ( body, userId, callback ){
+
+	if ( !userId )
+		return callback( false, errorReturn('You have to be logged in') );
 	if(body.objects && !_.isObject(body.objects)) 
 		return callback(false,errorReturn('Objects must be object or array'));
 
 	var requestStartTime = new Date();
 	var batcher = require('./pg-batcher.js');
   	batcher.reset();
-
-  	//batcher.sortObjects();
-  	batcher.prepareSQLs(body.objects,user);
-  	startTimer();
-  	var insertions = batcher.insertions();
-  	var updates = batcher.updates();
+  	logger.time('ready to sort');
+  	batcher.sortObjects(body.objects,userId);
+  	logger.time('sorted objects');
+  	
+  	var collection = batcher.collection();
+  	//var insertions = batcher.insertions();
+  	//var updates = batcher.updates();
 
 	var client = new pg.Client(conString);
-	client.connect(function(err) {
-		if(err) 
-			return console.error('could not connect to postgres', err);
-		console.log('connected');
-		var queue = require('./queue.js');
-		queue.set('recurring',1);
+	var resultObjects = {};
 
-		var insertedTags = insertions['Tag'];
-		var insertedToDos = insertions['ToDo'];
-		if ( insertedTags && insertedTags.length > 0 )
-			queue.push( insertedTags, true );
-		if ( insertedToDos && insertedToDos.length > 0 )
-			queue.push( insertedToDos, true );
-		
-		var updatedTags = updates['Tag'];
-		var updatedToDos = updates['ToDo'];
-		if ( updatedTags && updatedTags.length > 0 )
-			queue.push( updatedTags, true );
-		if ( updatedToDos && updatedToDos.length > 0 )
-			queue.push( updatedToDos, true );
+	var queue = require('./queue.js');
+	queue.set('recurring',1);
 
+	function connect(){
+		client.connect(function(err) {
+			if(err) 
+				return console.error('could not connect to postgres', err);
+			logger.time('connected client');
+			checkDuplicates();
+
+		});
+	}
+	function checkDuplicates(){
+		queue.reset();
+		var localIds = batcher.localIds();
+		var columns = ['id','localId'];
+		var todo = sql.todo();
+		var tag = sql.tag();
+		queue.push ( { "table" : tag, objects : localIds[ 'Tag' ] , className: "Tag" } );
+		queue.push ( { "table" : todo , objects : localIds[ 'ToDo' ] , className: "ToDo" } );
+		queue.run(function(obj){
+			//logger.log("checking " + obj.className + " duplicates for: " + (obj.objects ? obj.objects.length : 0));
+			if(!obj.objects || obj.objects.length == 0)
+				return queue.next();
+
+			var query = obj.table.select(obj.table.id,obj.table.localId).from(obj.table).where(obj.table.userId.equals(userId).and(obj.table.localId.in(obj.objects))).toQuery();
+			//console.log(query);
+
+			client.query(query.text,query.values,function(err, result) {
+				if(result && result.rows){
+					//console.log("resulted with "+ result.rows.length + " duplicates");
+					for( var i = 0 ; i < result.rows.length ; i++ ){
+						var localId = result.rows[i].localId;
+						var id = result.rows[i].id;
+						var object = collection[obj.className][localId];
+						object.id = id;
+						//console.log(object.updates);
+						//delete object.updates["localId"];
+						//delete object.updates["userId"];
+						object.action = 'update';
+					}
+				}
+				if(err)
+					console.log(err);
+				//console.log(result);
+				queue.next();
+			});
+		},function(finished){
+			logger.time('checked duplicates');
+			saveObjects();
+		});
+	};
+	function saveObjects(){
+		var batch = batcher.batch();
+		queue.reset();
+		queue.push( batch , true );
 		queue.run(function(customObject){
-			console.log(customObject);
-			var queryString = "";
-			var replacementArray;
+			var query;
+			var model = customObject.sqlModel;
 			if(customObject.action == 'insert'){
-				queryString = "INSERT into {0} ({1}) VALUES ({2})";
-				queryString = exports.format(queryString,customObject.className.toLowerCase(), customObject.prep.insertFields, customObject.prep.insertParams);
+				query = model.insert(customObject.updates).toQuery();
 			}
 			else{
-				queryString = "UPDATE {0} SET {1}";
-				queryString = exports.format(queryString,customObject.className.toLowerCase(), customObject.prep.updateFields );
+				query = model.update(customObject.updates).where(model.id.equals(customObject.id)).toQuery();
 			}
-			console.log(queryString);
-			client.query(queryString,customObject.prep.values, function(err, result) {
+			//console.log(query);
+			//console.log("saving obj " + customObject.localId);
+			client.query(query.text,query.values, function(err, result) {
 				if(err) {
 					return console.error('error running query', err);
 				}
-				console.log("resulted query");
-				console.log(result);
+				//console.log('success');
+				//console.log("resulted query");
+				//console.log(result);
 				//output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
 				queue.next();//
 			});
 		},function(finished){
-			console.log('finished');
-			client.end();
+			logger.time("saved objects");
+			getUpdates();
 		});
+	};
+	function getUpdates(){
 		
-	});
-	
+		var lastUpdate = (body.lastUpdate) ? new Date(body.lastUpdate) : false;
 
-  	for(var customObject in updates){
-
-  	}
-	/*pg.connect(conString, function(err, client, done) {
-		if(err) {
-			return console.error('error fetching client from pool', err);
-		}
-		var now = new Date();
-		client.query('INSERT INTO todo ("localId", "title", "updatedAt", "userId") VALUES ( $1, $2, $3, $4 )',["local1","tag 1",now,user.id], function(err, result) {
-			//call `done()` to release the client back to the pool
-			done();
-
-			if(err) {
-				return console.error('error running query', err);
-			}
-			console.log(result);
-			//output: 1
+		queue.reset();
+		var todo = sql.todo();
+		var tag = sql.tag();
+		queue.push ( { "table" : tag, className: "Tag" } );
+		queue.push ( { "table" : todo, className: "ToDo" } );
+		var biggestTime;
+		queue.run(function(obj){
+			var where = lastUpdate ? obj.table.userId.equals(userId).and(obj.table.updatedAt.gt(lastUpdate)) : obj.table.userId.equals(userId); 
+			var query = obj.table.select.apply(obj.table,sql.retColumns(obj.table)).where(where).toQuery();//
+			client.query(query.text,query.values,function(err, result) {
+				if(err) {
+					return console.error('error running query', err);
+				}
+				for( var index in result.rows){
+					var localObj = result.rows[index];
+					if(!biggestTime || localObj.updatedAt > biggestTime)
+						biggestTime = localObj.updatedAt;
+					sql.parseObjectForClass(localObj,obj.className);
+				}
+				resultObjects[obj.className] = result.rows;
+				//console.log("resulted query with " + result.rows.length);
+				//console.log(result);
+				//output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
+				queue.next();//
+			});
+		},function(finished){
+			finish(biggestTime);
 		});
-	});*/
+	};
+	function finish(biggestTime){
+		logger.time('finished query');
+		client.end();
+		resultObjects.serverTime = new Date().toISOString();
+		if(biggestTime)
+			resultObjects.updateTime = biggestTime.toISOString();
+      	callback(resultObjects,false);
+	};
+	connect();
 };
-
-var startTime;
-function startTimer(){
-  startTime = new Date().getTime();
-}
-function finishTimer(message, reset){
-  var endTime = new Date().getTime();
-  var time = endTime - startTime;
-  logger.log(message + ' in (' + time + " ms)");
-  if(reset) startTime = new Date().getTime();
-}

@@ -3,6 +3,17 @@ var _ = require('underscore');
 var Parse = require('parse').Parse;
 var forceLog = true;
 var live = keys.live();
+
+var startTime = new Date().getTime();
+var checkPointTime = new Date().getTime();
+exports.time = function(message){
+  var endTime = new Date().getTime();
+  var time = endTime - checkPointTime;
+  if(message)
+  	exports.log(message + ' in (' + time + " ms)");
+  checkPointTime = new Date().getTime();
+}
+
 function makeid(length)
 {
     var text = "";
@@ -16,8 +27,9 @@ function makeid(length)
 exports.log = function(message,force){
 	
 	if(!live || force || forceLog){
-		var identifier = Parse.User.current().id;
+		var identifier = Parse.User.current();
 		if(!identifier) identifier = makeid(5);
+		else identifier = identifier.id;
 		if(_.isObject(message)){
 			message = JSON.stringify(message);
 		}

@@ -10,7 +10,12 @@ var _ = require('underscore');
 var keys = require('./conf/keys.js');
 var logger = require('./server/logger.js');
 var postgres = require('./server/postgres.js');
-
+app.route('/test').get(function(req, res){
+  Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
+  postgres.test(req.query.time,function(){
+    res.send("yeah");
+  });
+});
 app.route('/sync').post(function(req, res) {
   var startTime = new Date().getTime();
   Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
@@ -19,9 +24,11 @@ app.route('/sync').post(function(req, res) {
   if(!req.body.sessionToken){
     return res.send({code:142,message:"sessionToken must be included"});
   }
+  logger.time();
   Parse.User.become(req.body.sessionToken).then(function(result){
-    logger.log('Started request');
-    postgres.sync(req.body,function(result,error){
+    logger.time('Started request');
+    console.log();
+    postgres.sync(req.body, result.id, function(result,error){
       var endTime = new Date().getTime();
         var time = endTime - startTime;
         logger.log('Finished request in (' + time + " ms)");

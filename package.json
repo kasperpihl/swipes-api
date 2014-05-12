@@ -9,7 +9,8 @@
     "underscore": "1.6.0",
     "body-parser": "~1.0.0",
     "pg": "3.0.3",
-    "pg-objects": "0.0.2"
+    "pg-objects": "0.0.2",
+    "sql": "0.38"
   },
   "engines": {
     "node": "0.10.x"

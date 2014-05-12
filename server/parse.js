@@ -53,7 +53,8 @@ function runQueryToTheEnd(query,callback,deltaResult,deltaSkip){
     var runAgain = false;
     if(result && result.length > 0){
       deltaResult = deltaResult.concat(result);
-      if(result.length == 1000) runAgain = true;
+      if(result.length == 1000 && deltaSkip < 1000) 
+        runAgain = true;
     }
     if(runAgain){ 
       deltaSkip = deltaSkip + 1000;
@@ -139,7 +140,7 @@ exports.cleanDup = function(userId,callback){
       var queueError;
       queue.push(batches,true);
       var counter = 1;
-
+      return;
       queue.run(function(batch){
         console.log('starting batch ' + counter++);
         Parse.Object.destroyAll(batch,{success:function(result){

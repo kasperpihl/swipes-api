@@ -1,100 +1,91 @@
 var _ = require('underscore');
-var pgobj = require('./pg-objects.js');
+var sql = require('./pg-sql.js');
 var batches = [];
-var newObjects = {};
+var localIds = {};
 var collection = {};
-var updates = {};
-var insertions = {};
 exports.reset = function(){
   collection = {};
-  newObjects = {};
-
+  localIds = {};
   batches = [];
-  updates = {};
-  insertions = {};
 };
 
-exports.updates = function(){
-  return updates;
-};
-exports.insertions = function(){
-  return insertions;
+exports.batch = function(col){
+  if ( !col ) 
+    col = collection;
+  var batch = [];
+  for ( var className in col ){
+    for ( var localId in col[ className ] ){
+      batch.push( col[ className ][ localId] );
+    }
+  }
+  return batch;
 }
+
 exports.collection = function(){
   return collection;
 }
-exports.newObjects = function(){
-  return newObjects;
+exports.localIds = function(){
+  return localIds;
 }
 
 
-function whiteListForClass(className){
+function makeCustomObjectForSQL( object, sqlModel, userId){
+  var objectUpdates = {};
+  var customUpdateObject = { "sqlModel": sqlModel, action : "insert" };
   
-  var customWhiteList; 
-    if ( className == "ToDo" )
-        customWhiteList = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption"];//[,"tags",];
-    if ( className == "Tag" )
-        customWhiteList = ["title"];
-  
-  return customWhiteList;
+  objectUpdates.userId = userId;
 
-}
-function makeCustomObjectForSQLWithWhiteList( object, className, whiteList, user){
-  var prepMapping = {};
-  var customUpdateObject = { "className" : className };
-  var update = false;
-  var action = 'insert';
-  if(object.objectId){
-    update = true;
-    action = 'update';
-    customUpdateObject.localId = object.objectId;
-  }
-  else if(object.tempId){
-    prepMapping.localId = object.tempId;
-    prepMapping.userId = user.id;
-    customUpdateObject.localId = object.tempId;
+  var identifier = object.objectId ? object.objectId : (object.tempId ? object.tempId : null);
+  if(identifier){
+    objectUpdates.localId = identifier;
+    customUpdateObject.localId = identifier;
   }
   else{
-    console.log("couldn't handle object: " + JSON.stringify(object));
+    console.log( "couldn't handle object: " + JSON.stringify( object ) );
     return;
   }
-  prepMapping.updatedAt = new Date();
-  customUpdateObject.action = action;
+  objectUpdates.updatedAt = new Date();
 
   if(object.deleted){
-    prepMapping.deleted = true;
+    objectUpdates.deleted = true;
   }
   else {
-    for(var attribute in object){
-      if(_.indexOf(whiteList,attribute) == -1)
-        continue;
+    for ( var attribute in object ){
       var result = object[attribute];
-      if((attribute == "schedule" || attribute == "completionDate" || attribute == "repeatedDate") && _.isObject(result)){
-        result = new Date(result['iso'])
+      if(attribute == "tags"){
+        console.log('tag');
+        console.log(result);
       }
-      prepMapping[attribute] = result;
+      if( !sqlModel.hasColumn(attribute) )
+        continue;
+      else if( ( attribute == "schedule" || attribute == "completionDate" || attribute == "repeatedDate" ) && _.isObject( result ) ){
+        result = new Date( result['iso'] );
+      }
+      objectUpdates[ attribute ] = result;
     }
   }
   
-  var prep = pgobj.prepare(prepMapping); 
+  //var prep = pgobj.prepare( prepMapping ); 
   
-  customUpdateObject.prep = prep;
+  customUpdateObject.updates = objectUpdates;
   return customUpdateObject;
 }
 
 
-exports.sortObjects = function(collectionToSave){
+exports.sortObjects = function(collectionToSave, userId){
   
   if ( !collectionToSave || collectionToSave.length == 0 ) 
     return false;
 
   for ( var className in collectionToSave ){
     
-    if ( _.indexOf( [ "ToDo" , "Tag" ], className ) == -1 ) 
+    var sqlModel = sql.objectForClass(className);
+    if(!sqlModel)
       continue;
     
     collection[ className ] = {};
-    newObjects[ className ] = {};
+    localIds[ className ] = [];
+    
     var objects = collectionToSave[ className ];
     
     for ( var i = 0  ;  i < objects.length  ;  i++ ){
@@ -102,42 +93,14 @@ exports.sortObjects = function(collectionToSave){
       
       if ( !_.isObject( rawObject ) || _.isArray( rawObject ) || _.isFunction( rawObject ) ) 
         continue;
+      var customObject = makeCustomObjectForSQL( rawObject , sqlModel , userId );
 
-      if ( rawObject.objectId )
-        collection[ className ][ rawObject.objectId ] = rawObject;
-      else if ( rawObject.tempId ){
-        collection[ className ][ rawObject.tempId ] = rawObject;
-        newObjects[ className ][ rawObject.tempId ] = rawObject;
+      if(customObject){
+        collection[ className ][ customObject.localId ] = customObject;
+        localIds[ className ].push( customObject.localId );
+
       }
 
     }
   }
-};
-
-
-exports.prepareSQLs = function(collectionToSave,user){
-	if(!collectionToSave || collectionToSave.length == 0) 
-    return false;
-	for(var className in collectionToSave){
-    if(_.indexOf(["ToDo","Tag"],className) == -1) 
-      continue;
-    var whiteList = whiteListForClass(className);
-		
-    updates[className] = [];
-		insertions[className] = [];
-		
-    var objects = collectionToSave[className];
-		for(var i = 0 ; i < objects.length ; i++){
-			var rawObject = objects[i];
-      if(!_.isObject(rawObject) || _.isArray(rawObject) || _.isFunction(rawObject)) 
-        continue;
-      var customObject = makeCustomObjectForSQLWithWhiteList(rawObject,className, whiteList, user);
-
-      if(customObject){
-        var targetArray = (customObject.action == "update") ? updates[className] : insertions[className];
-        targetArray.push(customObject);
-      }
-		}
-	}
-
 };
