@@ -4,13 +4,13 @@
   "description": "Swipes Sync + API",
   "author": "Kasper Pihl Tornøe <kasper@swipesapp.com>",
   "dependencies": {
+    "forky": "0.1.2",
     "express": "4.x",
-    "parse": "1.2.19",
+    "parse": "1.2.17",
     "underscore": "1.6.0",
     "body-parser": "~1.0.0",
-    "pg": "3.0.3",
-    "pg-objects": "0.0.2",
-    "sql": "0.38"
+    "pg": "3.1.x",
+    "sql": "0.39"
   },
   "engines": {
     "node": "0.10.x"

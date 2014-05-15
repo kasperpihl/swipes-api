@@ -1,75 +1,78 @@
 var _ = require('underscore');
-var queue = [];
-/* BOOL that is set when the queue has been completed */
-var calledDone = false;
 
-var iterator = -1;
-var doneCounter = 0;
-var isRunningQueue = false;
 
-var doneCallback;
-var iteratorCallback;
-
-var options = {
-	recurring:3
-};
-exports.push = function(object,isCollection){
-	if(isCollection && _.isArray(object)){
-		for(var i = 0 ; i < object.length ; i++)
-			queue[queue.length] = object[i];
+function Queue(){
+	this.options = {
+		recurring:3
+	};
+	this.isRunningQueue = false;
+}
+Queue.prototype.reset = function(){
+	this.queue = [];
+	this.iterator = -1;
+  	this.doneCounter = 0;
+  	this.calledDone= false;
+  	this.iteratorCallback = false;
+  	this.doneCallback = false;
+}
+Queue.prototype.push = function( object, isCollection ){
+	if ( isCollection && _.isArray( object ) ){
+		for ( var i = 0 ; i < object.length ; i++ )
+			this.queue[ this.queue.length ] = object[ i ];
 	}
-	else queue[queue.length] = object;
+	else this.queue[ this.queue.length ] = object;
 };
-exports.getQueue = function(){
-	return queue;
-};
-exports.set = function(name,value){
-	if(name == 'recurring'){
-		value = parseInt(value,10);
-		//if(!(value >= 1 && value <= 3)) return;
+
+Queue.prototype.set = function( name, value){
+	if ( name == 'recurring' ){
+		value = parseInt( value, 10 );
 	}
-	options[name] = value;
+	this.options[ name ] = value;
 };
 /* Called */
-function nextItem(){
-	iterator = iterator + 1;
-	if(iterator>=queue.length){
+Queue.prototype.nextItem =  function(){
+	this.iterator++;
+	if ( this.iterator >= this.queue.length ){
       return;
     }
-	if(iteratorCallback) iteratorCallback(queue[iterator]);
-	else exports.next();
+	if ( this.iteratorCallback ) 
+		this.iteratorCallback( this.queue[ this.iterator ], this.iterator );
+	else 
+		this.next();
 }
 /* resets the queue - removes all the objct*/
 
-function checkDone(){
-	if(calledDone) return;
-	if(doneCounter == queue.length){
-		calledDone = true;
-      	isRunningQueue = false;
-      	if(doneCallback) doneCallback(true);
+Queue.prototype.checkDone = function(){
+	if ( this.calledDone ) 
+		return;
+	if ( this.doneCounter == this.queue.length ){
+		this.calledDone = true;
+      	this.isRunningQueue = false;
+      	if ( this.doneCallback ) 
+      		this.doneCallback( true );
     }
-    else nextItem();
+    else this.nextItem();
 }
 
-exports.next = function(){
-	doneCounter++;
-    checkDone();
+Queue.prototype.next = function(){
+	this.doneCounter++;
+    this.checkDone();
 };
-exports.reset = function(){
-	queue = [];
-	iterator = -1;
-  	doneCounter = 0;
-  	calledDone= false;
-  	iteratorCallback = false;
-  	doneCallback = false;
-}
-exports.run = function(iterator,done){
-	if(isRunningQueue) return done(false);
-	isRunningQueue = true;
-	if(queue.length === 0) return done(false);
-	if(_.isFunction(iterator)) iteratorCallback = iterator;
-	if(_.isFunction(done)) doneCallback = done;
-  	for(var i = 0 ; i < options["recurring"] ; i++){
-    	nextItem();
+
+Queue.prototype.run = function(iterator,done){
+	if ( this.isRunningQueue ) 
+		return done( false );
+	this.isRunningQueue = true;
+	if ( this.queue.length === 0 ) 
+		return done( false );
+
+	if ( _.isFunction( iterator ) ) 
+		this.iteratorCallback = iterator;
+	if ( _.isFunction( done ) ) 
+		this.doneCallback = done;
+  	
+  	for ( var i = 0 ; i < this.options["recurring"] ; i++ ){
+    	this.nextItem();
   	}
 };
+module.exports = Queue;

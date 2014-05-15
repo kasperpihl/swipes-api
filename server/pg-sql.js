@@ -2,7 +2,7 @@ var sql = require('sql');
 var _ = require('underscore');
 
 var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "createdAt" , "userId" ];
-var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" ];
+var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate"];
 var tagColumns = [ "title" ];
 
 
@@ -10,8 +10,11 @@ var sharedReturnColumns = [ 'localId' , 'updatedAt' , 'deleted'];
 var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption"];
 var tagReturnColumns = [ 'title' ];
 
-var todo = sql.define({'name':"todo",'columns':sharedColumns.concat(todoColumns)});
+
+var todo = sql.define( { 'name' : "todo" , 'columns' : sharedColumns.concat( todoColumns ) } );
 var tag = sql.define({'name':"tag",'columns':sharedColumns.concat(tagColumns)});
+var todo_tag = sql.define({'name':"todo_tag","columns":['id',"todoId","tagId","userId","order"]});
+
 todo.returnColumns = sharedReturnColumns.concat(todoReturnColumns);
 tag.returnColumns = sharedReturnColumns.concat(tagReturnColumns);
 exports.retColumns = function(self){
@@ -23,7 +26,6 @@ exports.retColumns = function(self){
 			attribute = attribute.as("objectId");
 		}
 		attributeArray.push(attribute);
-
 	}
 	return attributeArray;
 };
@@ -46,6 +48,9 @@ exports.tag = function(){
 exports.todo = function(){
 	return todo;
 };
+exports.todo_tag = function(){
+	return todo_tag;
+}
 exports.objectForClass = function ( className ){
 	if(className == "ToDo")
 		return todo;

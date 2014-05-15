@@ -1,15 +1,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var Parse = require('parse').Parse;
+var _ = require('underscore');
 
 var app = express();
 app.use(bodyParser.json());
 
-var parse = require('./server/parse.js');
-var Parse = require('parse').Parse;
-var _ = require('underscore');
 var keys = require('./conf/keys.js');
-var logger = require('./server/logger.js');
-var postgres = require('./server/postgres.js');
+var Logger = require('./server/logger.js');
+var Postgres = require('./server/postgres.js');
+var parse = require('./server/parse.js');
+
 app.route('/test').get(function(req, res){
   Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
   postgres.test(req.query.time,function(){
@@ -24,10 +25,13 @@ app.route('/sync').post(function(req, res) {
   if(!req.body.sessionToken){
     return res.send({code:142,message:"sessionToken must be included"});
   }
-  logger.time();
+
+  var logger = new Logger();
+  logger.time("timing");
+  var postgres = new Postgres(logger);
   Parse.User.become(req.body.sessionToken).then(function(result){
     logger.time('Started request');
-    console.log();
+    logger.setIdentifier(result.id);
     postgres.sync(req.body, result.id, function(result,error){
       var endTime = new Date().getTime();
         var time = endTime - startTime;

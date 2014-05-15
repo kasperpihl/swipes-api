@@ -1,38 +1,40 @@
 var keys = require('../conf/keys.js');
 var _ = require('underscore');
-var Parse = require('parse').Parse;
 var forceLog = true;
 var live = keys.live();
 
-var startTime = new Date().getTime();
-var checkPointTime = new Date().getTime();
-exports.time = function(message){
-  var endTime = new Date().getTime();
-  var time = endTime - checkPointTime;
-  if(message)
-  	exports.log(message + ' in (' + time + " ms)");
-  checkPointTime = new Date().getTime();
+function Logger(identifier){
+	this.logs = [];
+	this.identifier = identifier;
+	this.startTime = new Date().getTime();
+	this.checkPointTime = new Date().getTime();
+}
+Logger.prototype.setIdentifier = function( identifier ){
+	this.identifier = identifier;
+	if(!this.logs || this.logs.length == 0)
+		return;
+	for( var index in this.logs)
+		this.log(this.logs[index]);
 }
 
-function makeid(length)
-{
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+Logger.prototype.time = function( message ){
+  var endTime = new Date().getTime();
+  var time = endTime - this.checkPointTime;
+  if ( message )
+  	this.log( message + ' in (' + time + " ms)");
+  this.checkPointTime = new Date().getTime();
+}
 
-    for( var i=0; i < length; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-};
-exports.log = function(message,force){
-	
+Logger.prototype.log = function( message , force ){
 	if(!live || force || forceLog){
-		var identifier = Parse.User.current();
-		if(!identifier) identifier = makeid(5);
-		else identifier = identifier.id;
+		if(!this.identifier){
+			return this.logs.push(message);
+		}
 		if(_.isObject(message)){
 			message = JSON.stringify(message);
 		}
-		console.log(identifier + ': ' + message);
+		message = ( this.identifier + ': ' + message );
+		console.log(message);
 	}
 };
+module.exports = Logger;
