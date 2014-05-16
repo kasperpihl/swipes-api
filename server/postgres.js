@@ -224,7 +224,7 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		
 		// TODO: use transactions here
 		var tagQuery = tagModel.select(tagModel.id,tagModel.localId).where(tagModel.userId.equals(userId)).toNamedQuery(tagKey);
-		var todoQuery = todo.update({"tagsLastUpdate":"now()"}).where(todo.userId.equals(userId).and(todo.localId.in(todosToUpdate))).returning(todo.id,todo.localId).toNamedQuery(todoKey);
+		var todoQuery = todo.update({"tagsLastUpdate":"now()", "updatedAt": "now()" }).where(todo.userId.equals(userId).and(todo.localId.in(todosToUpdate))).returning(todo.id,todo.localId).toNamedQuery(todoKey);
 		self.performQueries([tagQuery,todoQuery],function(result,error){
 			if(error) 
 				console.log(error);
@@ -264,7 +264,7 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 						order++;
 						added = true;
 					}
-					
+
 				}
 			}
 			if ( added )
@@ -285,29 +285,53 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		var todo = sql.todo();
 		var tag = sql.tag();
 		var todo_tag = sql.todo_tag();
-		queue.push ( { "table" : tag, className: "Tag" } );
-		queue.push ( { "table" : todo, className: "ToDo" } );
-		var biggestTime;
-		queue.run(function(obj){
-			var where = lastUpdate ? obj.table.userId.equals(userId).and(obj.table.updatedAt.gt(lastUpdate)) : obj.table.userId.equals(userId); 
-			var query = obj.table.select.apply(obj.table,sql.retColumns(obj.table)).where(where).toQuery();//
-			client.query(query.text,query.values,function(err, result) {
-				if(err) {
-					return console.error('error running query', err);
+		var where = lastUpdate ? todo_tag.userId.equals(userId).and(todo.tagsLastUpdate.gt(lastUpdate)) : todo_tag.userId.equals(userId);
+		var todosWithRelation = todo_tag.leftJoin( todo ).on( todo_tag.todoId.equals( todo.id ) ).leftJoin( tag ).on( todo_tag.tagId.equals( tag.id ) );
+		var todoTagQuery = todo_tag.select( todo.localId.as("todoLocalId") , tag.localId.as("tagLocalId"), todo_tag.order ).from(todosWithRelation).where(where).order(todo.localId,todo_tag.order).toNamedQuery("todo_tags");
+		
+		
+
+		where = lastUpdate ? tag.userId.equals( userId ).and( tag.updatedAt.gt( lastUpdate ) ) : tag.userId.equals( userId );
+		var tagQuery = tag.select.apply( tag,sql.retColumns( tag ) ).where( where ).toNamedQuery( "Tag" );
+		
+		where = lastUpdate ? todo.userId.equals( userId ).and( todo.updatedAt.gt( lastUpdate ) ) : todo.userId.equals( userId );
+		var toDoQuery = todo.select.apply( todo,sql.retColumns( todo ) ).where( where ).toNamedQuery( "ToDo" );
+		var queries = [tagQuery, todoTagQuery, toDoQuery];
+
+		self.performQueries(queries, function(result, error){
+			if(error) 
+				console.log(error);
+			var relations = {};
+			if(result["todo_tags"] && result.todo_tags.length > 0){
+				console.log(result["todo_tags"]);
+				for(var i in result.todo_tags){
+					var tagRelation = result.todo_tags[i];
+					if(!relations[tagRelation.todoLocalId])
+						relations[tagRelation.todoLocalId] = [];
+					relations[tagRelation.todoLocalId].push({objectId:tagRelation.tagLocalId});
 				}
-				for( var index in result.rows){
-					var localObj = result.rows[index];
+			}
+			var biggestTime;
+			for(var className in result){
+				if(!(className == "Tag" || className == "ToDo"))
+					continue;
+				var isTodo = (className == "ToDo");
+				for(var index in result[className]){
+					var localObj = result[className][index];
 					if(!biggestTime || localObj.updatedAt > biggestTime)
 						biggestTime = localObj.updatedAt;
-					sql.parseObjectForClass(localObj,obj.className);
+					if(isTodo && relations[localObj.objectId]){
+						localObj["tags"] = relations[localObj.objectId];
+						console.log(relations[localObj.objectId]);
+					}
+					sql.parseObjectForClass(localObj,className);
 				}
-				resultObjects[obj.className] = result.rows;
-
-				queue.next();//
-			});
-		},function(finished){
+				resultObjects[className] = result[className];
+			}
+			//console.log(result);
 			finish(biggestTime);
 		});
+		
 	};
 	function finish(biggestTime){
 		self.logger.time('finished query');
