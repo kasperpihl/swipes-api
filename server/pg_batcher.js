@@ -306,12 +306,15 @@ PGBatcher.prototype.makeCustomObjectForSQL = function( object, sqlModel, userId)
   }
   objectUpdates.updatedAt = "now()";
 
-  if(object.deleted){
+  if ( object.deleted ){
+
     objectUpdates.deleted = true;
+  
   }
   else {
+
     for ( var attribute in object ){
-      var result = object[attribute];
+      var result = object[ attribute ];
       
       /* Handling tags - they are not part of the model and is handled through the relationship */
       if ( attribute == "tags" ){

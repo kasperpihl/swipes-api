@@ -11,11 +11,8 @@ function Postgres( logger ){
 };
 
 
-
 Postgres.prototype.sync = function ( body, userId, callback ){
 
-	if ( !userId )
-		return callback( false, 'You have to be logged in' );
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
 
@@ -30,9 +27,8 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 			return insertAndSaveObjects();
 
 		self.client.performQueries( queries , function( results, error ){
-			// TODO: Handle error
 			if ( error )
-				console.log(error);
+				return finishWithError( error );
 
 			for ( var className in results ){
 				batcher.updateCollectionToDetermineUpdatesWithResult( className , results[ className ] );
@@ -48,9 +44,8 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 			return getUpdates();
 
 		self.client.performQueries( queries, function( result, error ){
-			// TODO: handle error here
 			if ( error )
-				console.log( error );
+				return finishWithError( error );
 			handleRelations();
 		});
 	};
@@ -69,18 +64,22 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		self.client.performQueries( initialRelationShipQueries,function( result, error ){
 			// TODO: handle error
 			if ( error ) 
-				console.log("t" + error);
+				return finishWithError( error );
 
 			var finalRelationshipQueries = batcher.getFinalRelationshipQueriesWithResults( result );
 
 			self.client.performQueries( finalRelationshipQueries, function( result, error){
 				// TODO: Handle error here
 				if ( error )
-					console.log(error);
+					return finishWithError( error );
 
-				self.client.commit(function(error){
-
-					getUpdates();	
+				self.client.commit(function( result, error ){
+					
+					if ( error )
+						return finishWithError( error);
+					
+					getUpdates();
+				
 				});	
 			});
 		});
@@ -92,9 +91,10 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		var queries = batcher.getQueriesForFindingUpdates( lastUpdate );
 
 		self.client.performQueries(queries, function(result, error){
-			// TODO: handle error here
-			if(error) 
-				console.log(error);
+
+			if ( error ) 
+				return finishWithError( error );
+
 			var relations = {};
 			if(result["todo_tags"] && result.todo_tags.length > 0){
 				for(var i in result.todo_tags){
@@ -125,6 +125,10 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		});
 		
 	};
+	function finishWithError(error){
+		self.client.end();
+		callback( false, error );
+	};
 	function finish(biggestTime){
 		self.logger.time('finished query');
 		self.client.end();
@@ -137,6 +141,8 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 
 	// Connect client and get started
 	this.client.connect( function( connected, error ){
+		if( error )
+			return finishWithError ( error );
 		if ( connected )
 			findIdsFromLocalIdsToDetermineUpdates();
 	});
