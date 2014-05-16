@@ -1,22 +1,16 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var Parse = require('parse').Parse;
-var _ = require('underscore');
+var express =     require( 'express' ),
+    bodyParser =  require( 'body-parser' ),
+    Parse =       require( 'parse' ).Parse,
+    _ =           require( 'underscore' );
 
 var app = express();
 app.use(bodyParser.json());
 
-var keys = require('./conf/keys.js');
-var Logger = require('./server/logger.js');
-var Postgres = require('./server/postgres.js');
-var parse = require('./server/parse.js');
+var keys =      require('./conf/keys.js');
+var Logger =    require('./server/logger.js');
+var Postgres =  require('./server/postgres.js');
+var parse =     require('./server/parse.js');
 
-app.route('/test').get(function(req, res){
-  Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
-  postgres.test(req.query.time,function(){
-    res.send("yeah");
-  });
-});
 app.route('/sync').post(function(req, res) {
   var startTime = new Date().getTime();
   Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));

@@ -17,6 +17,9 @@ var todo_tag = sql.define({'name':"todo_tag","columns":['id',"todoId","tagId","u
 
 todo.returnColumns = sharedReturnColumns.concat(todoReturnColumns);
 tag.returnColumns = sharedReturnColumns.concat(tagReturnColumns);
+todo.className = "ToDo";
+tag.className = "Tag";
+
 exports.retColumns = function(self){
 	var attributeArray = [];
 	for(var key in self.returnColumns){
