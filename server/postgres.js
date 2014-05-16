@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var sql = require('./pg-sql.js');
+var sql = require('./pg_sql.js');
 var PGBatcher = require('./pg_batcher.js');
 var Queue = require('./queue.js');
 var PGClient = require('./pg_client.js');
@@ -21,7 +21,6 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 
 	var self = this;
 	var batcher = new PGBatcher( body.objects, userId );
-
 	
 	var resultObjects = {};
 
@@ -58,16 +57,12 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 	
 	
 	function handleRelations(){
-		console.log( "handle relations" );
-		
+
 		var initialRelationShipQueries = batcher.getInitialRelationshipQueries();
 		if ( !initialRelationShipQueries )
 			return getUpdates();
 
-		var errorFromTransaction;
 		self.client.transaction( function( error ){
-			// TODO: handle error here
-			errorFromTransaction = error;
 			self.client.rollback();
 		});
 
@@ -83,11 +78,10 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 				if ( error )
 					console.log(error);
 
-				self.client.commit(function( result, error ){
-					if ( !errorFromTransaction )
-						getUpdates();
-				});
-				
+				self.client.commit(function(error){
+
+					getUpdates();	
+				});	
 			});
 		});
 	};

@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var sql = require('./pg-sql.js');
+var sql = require('./pg_sql.js');
 function PGBatcher( objects , userId ){
   this.reset();
   this.userId = userId;
@@ -22,7 +22,7 @@ PGBatcher.prototype.getRelations = function(){
 */
 
 PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function(){
-  
+
   var queries = [];
   var objects = [ this.localIds[ 'Tag'] , this.localIds[ 'ToDo' ] ];
   for( var i in objects ){
