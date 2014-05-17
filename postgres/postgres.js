@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var sql = require('./pg_sql.js');
 var PGBatcher = require('./pg_batcher.js');
-var Queue = require('./queue.js');
+var Queue = require('../utilities/queue.js');
 var PGClient = require('./pg_client.js');
 
 

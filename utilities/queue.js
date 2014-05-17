@@ -1,11 +1,14 @@
 var _ = require('underscore');
 
 
-function Queue(){
+function Queue( recurring ){
 	this.options = {
 		recurring:3
 	};
 	this.isRunningQueue = false;
+	
+	if ( recurring )
+		this.set( "recurring" , recurring);
 }
 Queue.prototype.reset = function(){
 	this.queue = [];

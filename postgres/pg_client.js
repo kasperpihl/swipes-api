@@ -3,7 +3,6 @@
 
 */
 
-
 var pg = require('pg');
 var _ = require('underscore');
 var conString = process.env.DATABASE_URL ? process.env.DATABASE_URL : "postgres://kasper:tornoe89@localhost/postgres";
@@ -48,10 +47,13 @@ PGClient.prototype.performQuery = function ( query , callback ){
 };
 
 PGClient.prototype.performQueries = function ( queries, callback ){
+	
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
+
 	var i = 0, target = queries.length, returnArr = {};	
 	var self = this;
+	
 	function next(){
 		if ( i == target )
 			return callback( returnArr, false );
@@ -63,11 +65,15 @@ PGClient.prototype.performQueries = function ( queries, callback ){
 
 			if( !query.name )
 				query.name = "" + i;
+
 			returnArr[ query.name ] = result.rows;
 			i++;
+
 			next();
+
 		});
-	}
+	};
+
 	next();
 };
 
