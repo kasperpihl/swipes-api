@@ -6,7 +6,7 @@ function Queue( recurring ){
 		recurring:3
 	};
 	this.isRunningQueue = false;
-	
+
 	if ( recurring )
 		this.set( "recurring" , recurring);
 }
@@ -32,6 +32,7 @@ Queue.prototype.set = function( name, value){
 	}
 	this.options[ name ] = value;
 };
+
 /* Called */
 Queue.prototype.nextItem =  function(){
 	this.iterator++;
@@ -62,7 +63,7 @@ Queue.prototype.next = function(){
     this.checkDone();
 };
 
-Queue.prototype.run = function(iterator,done){
+Queue.prototype.run = function( iterator , done ){
 	if ( this.isRunningQueue ) 
 		return done( false );
 	this.isRunningQueue = true;
