@@ -6,10 +6,10 @@ var express =     require( 'express' ),
 var app = express();
 app.use(bodyParser.json());
 
-var keys =          require( './conf/keys.js' );
-var Logger =        require( './utilities/logger.js' );
-var Postgres =      require( './postgres/postgres.js' );
-var ParseHandler =  require( './parse/parse_handler.js' );
+var keys =            require( './conf/keys.js' );
+var Logger =          require( './utilities/logger.js' );
+var PostgresHandler = require( './postgres/postgres_handler.js' );
+var ParseHandler =    require( './parse/parse_handler.js' );
 
 
 app.route('/sync').post(function(req, res) {
@@ -29,9 +29,9 @@ app.route('/sync').post(function(req, res) {
     logger.time( 'Started request' );
     logger.setIdentifier( user.id );
     
-    parseHandler.sync(req.body, user, function(result,error){
+    parseHandler.sync(req.body, user, function( result , error ){
 
-      logger.log('Finished request',true);
+      logger.time('Finished request',true);
       
       if ( result ) 
         res.send( result );
@@ -64,14 +64,14 @@ app.route( '/v1/sync' ).post( function( req, res ) {
   }
 
   var logger = new Logger();
-  var postgres = new Postgres(logger);
+  var postgresHandler = new PostgresHandler(logger);
 
   Parse.User.become(req.body.sessionToken).then(function( user ){
 
     logger.time( 'credential validation completed' );
-    logger.setIdentifier(user.id);
+    logger.setIdentifier( user.id );
     
-    postgres.sync(req.body, user.id, function(result,error){
+    postgresHandler.sync( req.body, user.id, function( result , error ){
 
       logger.time('Finished request', true);
       

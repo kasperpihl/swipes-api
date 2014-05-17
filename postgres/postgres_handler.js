@@ -4,14 +4,13 @@ var PGBatcher = require('./pg_batcher.js');
 var Queue = require('../utilities/queue.js');
 var PGClient = require('./pg_client.js');
 
-
-function Postgres( logger ){
+function PostgresHandler( logger ){
 	this.logger = logger;
 	this.client = new PGClient();
 };
 
 
-Postgres.prototype.sync = function ( body, userId, callback ){
+PostgresHandler.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
@@ -22,11 +21,17 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 	var resultObjects = {};
 
 	function findIdsFromLocalIdsToDetermineUpdates(){
+		
+		self.logger.log('finding ids determing updates');
+		
 		var queries = batcher.getQueriesForFindingIdsFromLocalIds();
 		if (!queries)
 			return insertAndSaveObjects();
 
 		self.client.performQueries( queries , function( results, error ){
+
+			self.logger.time('found ids determing updates');
+			
 			if ( error )
 				return finishWithError( error );
 
@@ -43,7 +48,10 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		if ( !queries )
 			return getUpdates();
 
+		self.logger.log( "inserting and saving objects " );
+		
 		self.client.performQueries( queries, function( result, error ){
+			self.logger.time( "inserted objects" );
 			if ( error )
 				return finishWithError( error );
 			handleRelations();
@@ -60,9 +68,10 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		self.client.transaction( function( error ){
 			self.client.rollback();
 		});
-
+		self.logger.log("starting relationship updates");
 		self.client.performQueries( initialRelationShipQueries,function( result, error ){
 			// TODO: handle error
+			self.logger.time("relationship step 1");
 			if ( error ) 
 				return finishWithError( error );
 
@@ -70,6 +79,8 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 
 			self.client.performQueries( finalRelationshipQueries, function( result, error){
 				// TODO: Handle error here
+				self.logger.time("relationship updates done");
+
 				if ( error )
 					return finishWithError( error );
 
@@ -90,8 +101,10 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 		
 		var queries = batcher.getQueriesForFindingUpdates( lastUpdate );
 
-		self.client.performQueries(queries, function(result, error){
+		self.logger.log('finding updates');
 
+		self.client.performQueries(queries, function(result, error){
+			self.logger.time('updates found');
 			if ( error ) 
 				return finishWithError( error );
 
@@ -148,4 +161,4 @@ Postgres.prototype.sync = function ( body, userId, callback ){
 	});
 };
 
-module.exports = Postgres;
+module.exports = PostgresHandler;

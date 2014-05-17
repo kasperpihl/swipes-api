@@ -5,11 +5,27 @@
 
 var pg = require('pg');
 var _ = require('underscore');
-var conString = process.env.DATABASE_URL ? process.env.DATABASE_URL : "postgres://kasper:tornoe89@localhost/postgres";
+
 
 function PGClient(){
-	this.client = new pg.Client(conString);
+	var conString = this.buildConString();
+	if ( !conString )
+		throw Error('define DATABASE_URL as environment var');
+	this.client = new pg.Client( conString );
 	this.transactionErrorHandler = false;
+}
+
+PGClient.prototype.buildConString = function(){
+
+	var conString = process.env.DATABASE_URL;
+	if ( !conString && process.env.RDS_HOSTNAME ){
+		conString = "postgres://" + 
+					process.env.RDS_USERNAME + ":" + 
+					process.env.RDS_PASSWORD + "@" + 
+					process.env.RDS_HOSTNAME + ":" +
+					process.env.RDS_POST + "/ebdb";
+	}
+	return conString;
 }
 
 PGClient.prototype.connect = function( callback ){
