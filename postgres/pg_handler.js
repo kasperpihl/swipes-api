@@ -4,13 +4,42 @@ var PGBatcher = require('./pg_batcher.js');
 var Queue = require('../utilities/queue.js');
 var PGClient = require('./pg_client.js');
 
-function PostgresHandler( logger ){
+function PGHandler( logger ){
 	this.logger = logger;
 	this.client = new PGClient();
+	this.batchInserts = false;
+	this.batchSize = 50;
 };
 
+PGHandler.prototype.test = function( callback ){
+	var models = [ sql.todo() , sql.tag() , sql.todo_tag() ];
+	var queries = [];
+	for(var i in models){
+		var model = models[i];
+		queries.push(model['delete']().toQuery());
+	}
+	var self = this;
+	this.client.connect( function( connected, error ){
+		if( error )
+			return callback( error );
+		if ( connected ){
+			self.client.performQueries( queries ,function(result,error){
+				console.log(result);
+				console.log(error);
+				callback(result);
+			});
+		}
+	});
 
-PostgresHandler.prototype.sync = function ( body, userId, callback ){
+	/*var todo = sql.todo();
+	var query = todo.update()
+					.where( todo.id.in( [ 1 , 2 ] ) )
+					.toQuery();
+	console.log(query.text);
+	callback(query.text);*/
+};
+
+PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
@@ -22,10 +51,10 @@ PostgresHandler.prototype.sync = function ( body, userId, callback ){
 
 	function findIdsFromLocalIdsToDetermineUpdates(){
 		
-		self.logger.log('finding ids determing updates');
+		self.logger.log( 'finding ids determing updates' );
 		
-		var queries = batcher.getQueriesForFindingIdsFromLocalIds();
-		if (!queries)
+		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
+		if ( !queries )
 			return insertAndSaveObjects();
 
 		self.client.performQueries( queries , function( results, error ){
@@ -44,11 +73,11 @@ PostgresHandler.prototype.sync = function ( body, userId, callback ){
 	};
 
 	function insertAndSaveObjects(){
-		var queries = batcher.getQueriesForInsertingAndSavingObjects();
+		var queries = batcher.getQueriesForInsertingAndSavingObjects( self.batchInserts, self.batchSize );
 		if ( !queries )
 			return getUpdates();
 
-		self.logger.log( "inserting and saving objects " );
+		self.logger.log( "inserting and saving " + queries.length + " number of queries " );
 		
 		self.client.performQueries( queries, function( result, error ){
 			self.logger.time( "inserted objects" );
@@ -161,4 +190,4 @@ PostgresHandler.prototype.sync = function ( body, userId, callback ){
 	});
 };
 
-module.exports = PostgresHandler;
+module.exports = PGHandler;

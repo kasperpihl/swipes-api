@@ -35,7 +35,7 @@ Logger.prototype.time = function( message , isFinal){
 Logger.prototype.log = function( message , force ){
 	
 	if ( !live || force || forceLog ){
-		
+		return this.logs.push( message );
 		if ( !this.identifier ){
 			return this.logs.push( message );
 		}

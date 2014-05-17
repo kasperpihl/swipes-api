@@ -21,7 +21,7 @@ PGBatcher.prototype.getRelations = function(){
   Generating queries for SQL
 */
 
-PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function(){
+PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
 
   var queries = [];
   var objects = [ this.localIds[ 'Tag'] , this.localIds[ 'ToDo' ] ];
@@ -31,15 +31,23 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function(){
     if ( !localIds || localIds.length == 0 )
       continue;
     
+    var chunks = [];
+    while ( localIds.length > 0 )
+      chunks.push( localIds.splice( 0, batchSize ) );
+    
     var model = ( i == 0 ) ? sql.tag() : sql.todo();
-    var queryName = ( i == 0 ) ? "Tag" : "ToDo";
-    var query = model.select( model.id, model.localId )
+    for( var index in chunks ){
+      var queryName = ( i == 0 ) ? "Tag"+index : "ToDo"+index;
+      var chunk = chunks[ index ];
+      var query = model.select( model.id, model.localId )
                       .from( model )
                       .where( model.userId.equals( this.userId )
-                                          .and( model.localId.in( localIds ) ) )
+                                          .and( model.localId.in( chunk ) ) )
                       .toNamedQuery( queryName );
     
-    queries.push(query);
+      queries.push(query);
+    }
+    
   
   }
 
@@ -47,21 +55,42 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function(){
 
 };
 
-PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function(){
+PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInserts, batchSize ){
 
   var returnQueries = [];
   var updateQueries = [];
+
 
   for ( var className in this.collection ){
     var model = sql.objectForClass( className );
     var insertQuery = model;
     var inserted = false;
+    var batchCounter = 0;
     for ( var localId in this.collection[ className ] ){
       var obj = this.collection[ className ][ localId ];
       
       if ( obj.action == 'insert' ){
-        insertQuery = insertQuery.insert(obj.updates);
+        
+        var tmpInsertQuery = insertQuery.insert(obj.updates);
+        
+        if ( batchInserts ){
+          insertQuery = tmpInsertQuery;
+          batchCounter++;
+        }
+        else
+          returnQueries.push( tmpInsertQuery.toQuery() );
+
         inserted = true;
+        
+        if(batchCounter == batchSize ){
+
+          inserted = false;
+          batchCounter = 0;
+          updateQueries.push( insertQuery.toQuery() );
+          insertQuery = model;
+
+        }
+      
       }
       else{
         var updateQuery = model.update( obj.updates ).where( model.id.equals( obj.id ) ).toQuery();
@@ -69,7 +98,7 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function(){
       }
     }
     
-    if ( inserted )
+    if ( inserted && batchInserts )
       returnQueries.push( insertQuery.toQuery() );
   }
 
@@ -220,10 +249,14 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
 
 
 PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( className , results ){
-  
+  var className;
+  if ( className.indexOf("Tag") == 0 )
+    className = "Tag";
+  else if ( className.indexOf( "ToDo" ) == 0 )
+    className = "ToDo";
+
   for( var i in results ){
     var row = results[ i ];
-
     var objInCollection = this.collection[ className ][ row.localId ];
     objInCollection.id = row.id;
     objInCollection.action = 'update';
@@ -240,6 +273,7 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId, logger ){
   if ( !collectionToSave || collectionToSave.length == 0 ) 
     return false;
 
+  var numberOfObjects = 0;
   for ( var className in collectionToSave ){
     
     var sqlModel = sql.objectForClass(className);
@@ -261,11 +295,12 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId, logger ){
       if ( customObject ){
         this.collection[ className ][ customObject.localId ] = customObject;
         this.localIds[ className ].push( customObject.localId );
-
+        numberOfObjects++;
       }
 
     }
   }
+  console.log("number: " + numberOfObjects);
 };
 
 

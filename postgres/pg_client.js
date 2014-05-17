@@ -23,7 +23,7 @@ PGClient.prototype.buildConString = function(){
 					process.env.RDS_USERNAME + ":" + 
 					process.env.RDS_PASSWORD + "@" + 
 					process.env.RDS_HOSTNAME + ":" +
-					process.env.RDS_POST + "/ebdb";
+					process.env.RDS_PORT + "/ebdb";
 	}
 	return conString;
 }
