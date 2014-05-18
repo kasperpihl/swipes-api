@@ -46,7 +46,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	
 	var self = this;
 	var args = [];
-	if ( _.isString( query ) )
+	if ( _.isString( query ) || query.name )
 		args.push( query );
 	
 	else if ( _.isObject( query ) ){
@@ -76,7 +76,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	this.client.query.apply( this.client, args );
 };
 
-PGClient.prototype.performQueries = function ( queries, callback ){
+PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 	
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
@@ -97,7 +97,12 @@ PGClient.prototype.performQueries = function ( queries, callback ){
 				query.name = "" + i;
 
 			returnArr[ query.name ] = result.rows;
+
+			if ( iterator )
+				iterator( result, i);
+			
 			i++;
+			
 
 			next();
 
@@ -130,11 +135,11 @@ PGClient.prototype.cleanTransaction = function(){
 
 PGClient.prototype.transaction = function( batchSize, handler ){
 	this.transactionBatchSize = batchSize;
-	console.log(batchSize);
 	this.runningTransaction = true;
 	if ( handler && _.isFunction( handler ) )
 		this.transactionErrorHandler = handler;
-	this.performQuery( "BEGIN" );
+	if ( batchSize != 50 )
+		this.performQuery( "BEGIN" );
 };
 
 PGClient.prototype.rollback = function(){

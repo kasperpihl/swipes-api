@@ -44,7 +44,7 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
                       .where( model.userId.equals( this.userId )
                                           .and( model.localId.in( chunk ) ) )
                       .toNamedQuery( queryName );
-    
+
       queries.push(query);
     }
     
@@ -96,22 +96,50 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInse
       }
       else{
         var updateQuery = model.update( obj.updates ).where( model.id.equals( obj.id ) ).toQuery();
-        testQuery = testQuery.update( obj.updates ).where( model.id.equals( obj.id ) );
         updateQueries.push( updateQuery );
       }
     }
     
-    console.log( testQuery.toQuery() );
     
     if ( inserted && batchInserts )
       returnQueries.push( insertQuery.toQuery() );
-  }
 
+  }
+  updateQueries = this.batchUpdateQueries( updateQueries );
   returnQueries = returnQueries.concat( updateQueries );
 
   return ( returnQueries.length > 0 ) ? returnQueries : false;
 
 };
+
+
+PGBatcher.prototype.batchUpdateQueries = function( updateQueries ){
+  if ( !updateQueries || updateQueries.length <= 1 ) 
+    return updateQueries;
+
+  var superQuery = { text: "BEGIN "};
+  for ( var i in updateQueries ){
+    var query = updateQueries[ i ];
+    
+    if ( i == 0 ){
+      superQuery.text += query.text;
+      superQuery.values = query.values;
+      continue;
+    }
+
+    //var dollarMatches  = superQuery.text.match(/\$[1-9]?[0-9]+/g); //Math.max.apply(null, superQuery.text.match(/\\$[1-9][0-9]/g));
+    //var dollarMatches[ dollarMatches.length - 1 ];
+    
+    var currentNumberOfValues = superQuery.values.length;
+    for ( var repCount = 1 ; repCount <= query.values.length ; repCount++ ){
+      query.text = query.text.replace( "$" + repCount , "$" + ( repCount + currentNumberOfValues ) );
+    }
+
+    superQuery.text += " " + query.text;
+    superQuery.values = superQuery.values.concat( query.values );
+  } //\\$[1-9][0-9]  ///\d+/g
+  return superQuery;
+}
 
 PGBatcher.prototype.getInitialRelationshipQueries = function(){
 
