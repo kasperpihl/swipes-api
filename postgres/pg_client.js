@@ -13,6 +13,10 @@ function PGClient(){
 		throw Error('define DATABASE_URL as environment var');
 	this.client = new pg.Client( conString );
 	this.transactionErrorHandler = false;
+	this.transactionBatchSize = 0;
+	this.transactionCounter = 0;
+	this.runningTransaction = false;
+
 }
 
 PGClient.prototype.buildConString = function(){
@@ -40,6 +44,7 @@ PGClient.prototype.end = function(){
 
 PGClient.prototype.performQuery = function ( query , callback ){
 	
+	var self = this;
 	var args = [];
 	if ( _.isString( query ) )
 		args.push( query );
@@ -53,9 +58,18 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	}
 
 	args.push(function( err, result ){
-		if( err && this.transactionErrorHandler )
-			this.transactionErrorHandler( err );
-		if ( callback ) 
+		if( err && self.transactionErrorHandler )
+			self.transactionErrorHandler( err );
+		
+		if ( self.runningTransaction && self.transactionBatchSize && result && self.incrementTransaction() ){
+			//console.log('incremented transaction');
+			self.performQueries( [ 'COMMIT', 'BEGIN' ], function(localRes, localErr){
+				if ( callback )
+					callback( localRes, localErr );
+			});
+
+		}
+		else if ( callback )
 			callback( result , err );
 	});
 	
@@ -98,7 +112,26 @@ PGClient.prototype.performQueries = function ( queries, callback ){
 Transactions handler
 */
 
-PGClient.prototype.transaction = function( handler ){
+PGClient.prototype.incrementTransaction = function( callback ){
+	this.transactionCounter++;
+	if ( this.transactionCounter == this.transactionBatchSize ){
+		this.transactionCounter = 0;
+		return true;
+	}
+	return false;
+}
+
+PGClient.prototype.cleanTransaction = function(){
+	this.runningTransaction = false;
+	this.transactionBatchSize = 0;
+	this.transactionCounter = 0;
+	this.transactionErrorHandler = false;
+};
+
+PGClient.prototype.transaction = function( batchSize, handler ){
+	this.transactionBatchSize = batchSize;
+	console.log(batchSize);
+	this.runningTransaction = true;
 	if ( handler && _.isFunction( handler ) )
 		this.transactionErrorHandler = handler;
 	this.performQuery( "BEGIN" );
@@ -106,11 +139,13 @@ PGClient.prototype.transaction = function( handler ){
 
 PGClient.prototype.rollback = function(){
 	this.performQuery( "ROLLBACK" );
+	this.cleanTransaction();
 };
 
 PGClient.prototype.commit = function( callback ){
+	var self = this;
 	this.performQuery( "COMMIT" ,function( result, error ){
-		this.transactionErrorHandler = false;
+		self.cleanTransaction();
 		if ( callback )
 			callback( result, error );
 	});

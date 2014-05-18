@@ -64,6 +64,8 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInse
   for ( var className in this.collection ){
     var model = sql.objectForClass( className );
     var insertQuery = model;
+
+    var testQuery = model;
     var inserted = false;
     var batchCounter = 0;
     for ( var localId in this.collection[ className ] ){
@@ -94,9 +96,12 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInse
       }
       else{
         var updateQuery = model.update( obj.updates ).where( model.id.equals( obj.id ) ).toQuery();
+        testQuery = testQuery.update( obj.updates ).where( model.id.equals( obj.id ) );
         updateQueries.push( updateQuery );
       }
     }
+    
+    console.log( testQuery.toQuery() );
     
     if ( inserted && batchInserts )
       returnQueries.push( insertQuery.toQuery() );

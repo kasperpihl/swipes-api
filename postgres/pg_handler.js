@@ -79,11 +79,23 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 		self.logger.log( "inserting and saving " + queries.length + " number of queries " );
 		
+		self.client.transaction( 50 , function( error ){
+			self.client.rollback();
+		});
 		self.client.performQueries( queries, function( result, error ){
 			self.logger.time( "inserted objects" );
 			if ( error )
 				return finishWithError( error );
-			handleRelations();
+			
+			self.client.commit(function( result, error ){
+					
+				if ( error )
+					return finishWithError( error);
+				
+				handleRelations();
+			
+			});
+
 		});
 	};
 	
@@ -94,7 +106,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		if ( !initialRelationShipQueries )
 			return getUpdates();
 
-		self.client.transaction( function( error ){
+		self.client.transaction( 50 , function( error ){
 			self.client.rollback();
 		});
 		self.logger.log("starting relationship updates");
@@ -147,8 +159,9 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 				}
 			}
 			var biggestTime;
-			for(var className in result){
-				if(!(className == "Tag" || className == "ToDo"))
+			for ( var className in result ){
+
+				if ( !( className == "Tag" || className == "ToDo" ) )
 					continue;
 				var isTodo = (className == "ToDo");
 				for(var index in result[className]){
