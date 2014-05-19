@@ -1,7 +1,4 @@
-var keys = require('../conf/keys.js');
 var _ = require('underscore');
-var forceLog = true;
-var live = keys.live();
 
 function Logger(identifier){
 	this.logs = [];
@@ -42,8 +39,8 @@ Logger.prototype.time = function( message , isFinal){
 
 Logger.prototype.log = function( message , force ){
 	
-	if ( this.forceOutput ){
-		
+	if ( this.forceOutput || force ){
+
 		if( _.isObject( message ) ){
 			message = JSON.stringify( message );
 		}
@@ -51,7 +48,6 @@ Logger.prototype.log = function( message , force ){
 		if ( this.identifier ){
 			message = ( this.identifier + ': ' + message );
 		}
-		
 		console.log( message );
 	}
 	this.logs.push( message );

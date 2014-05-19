@@ -6,13 +6,13 @@ var PGClient = require('./pg_client.js');
 
 function PGHandler( logger ){
 	this.logger = logger;
-	this.client = new PGClient();
+	this.client = new PGClient( logger );
 	this.batchInserts = false;
 	this.batchSize = 50;
 };
 
 PGHandler.prototype.test = function( callback ){
-	var models = [ sql.todo() , sql.tag() , sql.todo_tag() ];
+	var models = [ sql.todo , sql.tag , sql.todo_tag ];
 	var queries = [];
 	for(var i in models){
 		var model = models[i];
@@ -38,7 +38,6 @@ PGHandler.prototype.test = function( callback ){
 	console.log(query.text);
 	callback(query.text);*/
 };
-
 PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
@@ -79,11 +78,12 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 		self.logger.log( "inserting and saving " + queries.length + " number of queries " );
 		
-		self.client.transaction( 50 , function( error ){
+		self.client.transaction( function( error ){
 			self.client.rollback();
 		});
-		self.client.performQueries( queries, function( result, error ){
+		self.client.performQueries( queries, function( result, error , i){
 			self.logger.time( "inserted objects" );
+			//console.log(queries[i].text); 
 			if ( error )
 				return finishWithError( error );
 			
@@ -106,7 +106,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		if ( !initialRelationShipQueries )
 			return getUpdates();
 
-		self.client.transaction( 50 , function( error ){
+		self.client.transaction( function( error ){
 			self.client.rollback();
 		});
 		self.logger.log("starting relationship updates");
@@ -181,6 +181,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		
 	};
 	function finishWithError(error){
+		console.log(error);
 		self.client.end();
 		callback( false, error );
 	};

@@ -1,5 +1,7 @@
 var _ = require('underscore');
 var sql = require('./pg_sql.js');
+var CaseUpdateQuery = require('../tests/case_update_query.js');
+
 function PGBatcher( objects , userId ){
   this.reset();
   this.userId = userId;
@@ -35,7 +37,7 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
     while ( localIds.length > 0 )
       chunks.push( localIds.splice( 0, batchSize ) );
     
-    var model = ( i == 0 ) ? sql.tag() : sql.todo();
+    var model = ( i == 0 ) ? sql.tag : sql.todo;
     for( var index in chunks ){
       var queryName = ( i == 0 ) ? "Tag"+index : "ToDo"+index;
       var chunk = chunks[ index ];
@@ -64,9 +66,10 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInse
   for ( var className in this.collection ){
     var model = sql.objectForClass( className );
     var insertQuery = model;
-
+    var updateQuery = new CaseUpdateQuery( model._name, "id" );
     var testQuery = model;
     var inserted = false;
+    var updated = false;
     var batchCounter = 0;
     for ( var localId in this.collection[ className ] ){
       var obj = this.collection[ className ][ localId ];
@@ -75,12 +78,8 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInse
         
         var tmpInsertQuery = insertQuery.insert(obj.updates);
         
-        if ( batchInserts ){
-          insertQuery = tmpInsertQuery;
-          batchCounter++;
-        }
-        else
-          returnQueries.push( tmpInsertQuery.toQuery() );
+        insertQuery = tmpInsertQuery;
+        batchCounter++;
 
         inserted = true;
         
@@ -88,58 +87,42 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInse
 
           inserted = false;
           batchCounter = 0;
-          updateQueries.push( insertQuery.toQuery() );
+          insertQuery = insertQuery.toQuery();
+          insertQuery.numberOfRows = batchSize;
+          updateQueries.push( insertQuery );
           insertQuery = model;
 
         }
       
       }
       else{
-        var updateQuery = model.update( obj.updates ).where( model.id.equals( obj.id ) ).toQuery();
-        updateQueries.push( updateQuery );
+
+        updated = true;
+        updateQuery.addObjectUpdate( obj.updates , obj.id );
+        if( updateQuery.objectCounter == batchSize ){
+          updateQueries.push( updateQuery.toQuery() );
+          updateQuery = new CaseUpdateQuery( model._name , "id" );
+          updated = false;
+        }
+        //var updateQuery = model.update( obj.updates ).where( model.id.equals( obj.id ) ).toQuery();
+        
       }
     }
     
     
     if ( inserted && batchInserts )
       returnQueries.push( insertQuery.toQuery() );
+    if ( updated && batchInserts )
+      updateQueries.push( updateQuery.toQuery() );
 
   }
-  updateQueries = this.batchUpdateQueries( updateQueries );
+//  updateQueries = this.batchUpdateQueries( updateQueries );
   returnQueries = returnQueries.concat( updateQueries );
 
   return ( returnQueries.length > 0 ) ? returnQueries : false;
 
 };
 
-
-PGBatcher.prototype.batchUpdateQueries = function( updateQueries ){
-  if ( !updateQueries || updateQueries.length <= 1 ) 
-    return updateQueries;
-
-  var superQuery = { text: "BEGIN "};
-  for ( var i in updateQueries ){
-    var query = updateQueries[ i ];
-    
-    if ( i == 0 ){
-      superQuery.text += query.text;
-      superQuery.values = query.values;
-      continue;
-    }
-
-    //var dollarMatches  = superQuery.text.match(/\$[1-9]?[0-9]+/g); //Math.max.apply(null, superQuery.text.match(/\\$[1-9][0-9]/g));
-    //var dollarMatches[ dollarMatches.length - 1 ];
-    
-    var currentNumberOfValues = superQuery.values.length;
-    for ( var repCount = 1 ; repCount <= query.values.length ; repCount++ ){
-      query.text = query.text.replace( "$" + repCount , "$" + ( repCount + currentNumberOfValues ) );
-    }
-
-    superQuery.text += " " + query.text;
-    superQuery.values = superQuery.values.concat( query.values );
-  } //\\$[1-9][0-9]  ///\d+/g
-  return superQuery;
-}
 
 PGBatcher.prototype.getInitialRelationshipQueries = function(){
 
@@ -148,7 +131,7 @@ PGBatcher.prototype.getInitialRelationshipQueries = function(){
     return false;
 
   var tagKey = "tag", todoKey = "todo";
-  var tagModel = sql.tag(), todo = sql.todo();
+  var tagModel = sql.tag, todo = sql.todo;
   
   // TODO: use transactions here
   var tagQuery = tagModel.select( tagModel.id, tagModel.localId )
@@ -169,7 +152,7 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
   var tagKey = "tag", todoKey = "todo";
   var lookup = { "tag": {} , "todo": {} };
 
-  var todo_tag = sql.todo_tag();
+  var todo_tag = sql.todo_tag;
 
   // Create lookup dictionary for id/localId 
   var queries = new Array();
@@ -199,7 +182,7 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
 
   // chaining the insertion of tag relations into one query
   // using added to test whether anything was inserted (check if removed all tags from task)
-  var insertTagRelationQuery = sql.todo_tag(), added = false;
+  var insertTagRelationQuery = sql.todo_tag, added = false;
   for ( var todoLocalId in this.relations.tags ){
 
     var tagsToUpdate = this.relations.tags[ todoLocalId ];
@@ -233,9 +216,9 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
 
 PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
   
-  var todo = sql.todo(), 
-      tag = sql.tag(), 
-      todo_tag = sql.todo_tag();
+  var todo = sql.todo, 
+      tag = sql.tag, 
+      todo_tag = sql.todo_tag;
 
   var models = [ todo_tag , tag, todo ];
   var queries = [];
@@ -333,7 +316,6 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId, logger ){
 
     }
   }
-  console.log("number: " + numberOfObjects);
 };
 
 

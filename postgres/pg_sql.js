@@ -5,20 +5,35 @@ var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "createdAt" , "us
 var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate"];
 var tagColumns = [ "title" ];
 
+exports.todo = sql.define( { 
+	'name' : "todo" , 
+	'columns' : sharedColumns.concat( todoColumns ) 
+} );
+
+exports.tag = sql.define( { 
+	'name' : "tag", 
+	'columns' : sharedColumns.concat( tagColumns ) 
+} );
+exports.todo_tag = sql.define( { 
+	'name' : "todo_tag" , 
+	"columns" : [ 'id' , "todoId" , "tagId" , "userId" , "order" ] 
+} );
+
+
+
+
 
 var sharedReturnColumns = [ 'localId' , 'updatedAt' , 'deleted'];
 var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption"];
 var tagReturnColumns = [ 'title' ];
 
 
-var todo = sql.define( { 'name' : "todo" , 'columns' : sharedColumns.concat( todoColumns ) } );
-var tag = sql.define( { 'name' : "tag", 'columns' : sharedColumns.concat( tagColumns ) } );
-var todo_tag = sql.define( { 'name' : "todo_tag" , "columns" : [ 'id' , "todoId" , "tagId" , "userId" , "order" ] } );
 
-todo.returnColumns = sharedReturnColumns.concat( todoReturnColumns );
-tag.returnColumns = sharedReturnColumns.concat( tagReturnColumns );
-todo.className = "ToDo";
-tag.className = "Tag";
+
+exports.todo.returnColumns = sharedReturnColumns.concat( todoReturnColumns );
+exports.tag.returnColumns = sharedReturnColumns.concat( tagReturnColumns );
+exports.todo.className = "ToDo";
+exports.tag.className = "Tag";
 
 exports.retColumns = function( self ){
 	
@@ -55,19 +70,10 @@ exports.parseObjectForClass = function( object, className ){
 	}
 };
 
-exports.tag = function(){
-	return tag;
-};
-exports.todo = function(){
-	return todo;
-};
-exports.todo_tag = function(){
-	return todo_tag;
-}
 
 exports.objectForClass = function ( className ){
 	if ( className == "ToDo" )
-		return todo;
+		return exports.todo;
 	else if ( className == "Tag" )
-		return tag;
+		return exports.tag;
 };

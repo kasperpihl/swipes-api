@@ -7,15 +7,13 @@ var pg = require('pg');
 var _ = require('underscore');
 
 
-function PGClient(){
+function PGClient( logger ){
+	this.logger = logger;
 	var conString = this.buildConString();
 	if ( !conString )
 		throw Error('define DATABASE_URL as environment var');
 	this.client = new pg.Client( conString );
 	this.transactionErrorHandler = false;
-	this.transactionBatchSize = 0;
-	this.transactionCounter = 0;
-	this.runningTransaction = false;
 
 }
 
@@ -46,30 +44,36 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	
 	var self = this;
 	var args = [];
-	if ( _.isString( query ) || query.name )
+	var numberOfObjects = 0;
+	if ( _.isString( query ) )
 		args.push( query );
-	
 	else if ( _.isObject( query ) ){
 		if ( query.text )
 			args.push( query.text );
 
 		if ( query.values )
 			args.push( query.values);
+
+		if ( query.numberOfRows )
+			numberOfObjects = query.numberOfRows;
 	}
 
+	var command = args[0].substring(0,6);
+	
+	var startTime = new Date().getTime();
+	if( numberOfObjects ) 
+		this.logger.log( command + ' query with ' + numberOfObjects + " rows" );
+
 	args.push(function( err, result ){
+		var endTime = new Date().getTime();
+		var resultTime = (endTime - startTime);
+		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
+		if ( numberOfObjects ) 
+			self.logger.log( command + " " + numberOfObjects + ' rows ' + rowsPrSecond + "/s (" + resultTime + "ms)");
 		if( err && self.transactionErrorHandler )
 			self.transactionErrorHandler( err );
 		
-		if ( self.runningTransaction && self.transactionBatchSize && result && self.incrementTransaction() ){
-			//console.log('incremented transaction');
-			self.performQueries( [ 'COMMIT', 'BEGIN' ], function(localRes, localErr){
-				if ( callback )
-					callback( localRes, localErr );
-			});
-
-		}
-		else if ( callback )
+		if ( callback )
 			callback( result , err );
 	});
 	
@@ -117,40 +121,21 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 Transactions handler
 */
 
-PGClient.prototype.incrementTransaction = function( callback ){
-	this.transactionCounter++;
-	if ( this.transactionCounter == this.transactionBatchSize ){
-		this.transactionCounter = 0;
-		return true;
-	}
-	return false;
-}
-
-PGClient.prototype.cleanTransaction = function(){
-	this.runningTransaction = false;
-	this.transactionBatchSize = 0;
-	this.transactionCounter = 0;
-	this.transactionErrorHandler = false;
-};
-
 PGClient.prototype.transaction = function( batchSize, handler ){
 	this.transactionBatchSize = batchSize;
 	this.runningTransaction = true;
 	if ( handler && _.isFunction( handler ) )
 		this.transactionErrorHandler = handler;
-	if ( batchSize != 50 )
-		this.performQuery( "BEGIN" );
+	this.performQuery( "BEGIN" );
 };
 
 PGClient.prototype.rollback = function(){
 	this.performQuery( "ROLLBACK" );
-	this.cleanTransaction();
 };
 
 PGClient.prototype.commit = function( callback ){
 	var self = this;
 	this.performQuery( "COMMIT" ,function( result, error ){
-		self.cleanTransaction();
 		if ( callback )
 			callback( result, error );
 	});

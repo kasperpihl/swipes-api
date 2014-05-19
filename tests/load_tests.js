@@ -6,7 +6,6 @@ var CaseUpdateQuery = require('./case_update_query.js');
 
 function LoadTests(){
 	this.logger = new Logger();
-	this.logger.forceOutput = true;
 	this.client = new PGClient();
 	this.targetNumber = 10000;
 	this.batchSize = 200;
@@ -17,7 +16,6 @@ LoadTests.prototype.populateDatabaseWithObjects = function( callback ){
 	var queries = [];
 	this.logger.time('starting handling');
 	for ( var i = 0 ; i < this.numberOfBatches ; i++ ){
-
 		var query = sql.todo();
 		var userId = this.makeid(10);
 		for( var taskNumber = 0 ; taskNumber < this.batchSize ; taskNumber++ ){
@@ -27,11 +25,6 @@ LoadTests.prototype.populateDatabaseWithObjects = function( callback ){
 			dummyData.userId = userId;
 			dummyData.updatedAt = this.randomDate( new Date( 2012, 0, 1 ), new Date() ).toISOString();
 			query = query.insert(dummyData);
-
-			/*if ( i == 0 && taskNumber == 5){
-				queries.push ( query.toNamedQuery("INSERTTODO") );
-				query = sql.todo();
-			}*/
 		}
 		queries.push( query.toNamedQuery("INSERTTODO") );
 	}
@@ -39,7 +32,7 @@ LoadTests.prototype.populateDatabaseWithObjects = function( callback ){
 	this.logger.time('prepared objects');
 	this.client.connect( function( connected ){
 		if ( !connected )
-			return console.log ( 'could not connect' );
+			return callback(false,self.logger.logs);
 		self.logger.time('populating ' + self.batchSize * self.numberOfBatches + " in " + self.numberOfBatches + " of " + self.batchSize + " batches");
 		self.client.performQueries( queries , function( result, error){
 			self.logger.time("finalized", true);
@@ -51,38 +44,6 @@ LoadTests.prototype.populateDatabaseWithObjects = function( callback ){
 			self.logger.time( "" + ( counter + 1 ) + " - " + insertSpeed + " rec/s - " + self.batchSize );
 		});
 	});
-};
-
-LoadTests.prototype.buildQuery = function( whenThenObject ) {
-	var setStatement = 'UPDATE "todo" SET "title" = CASE';
-	var whereStatement = ' END WHERE ("id" IN (';
-	var values = [];
-	var counter = 1;
-	for ( var when in whenThenObject ){
-		//when = parseInt( when, 10 );
-		var then = whenThenObject[ when ];
-		then = parseInt(then, 10);
-		values.push( when );
-		values.push( then );
-		var whenCount = counter++;
-		
-		var thenCount = counter++;
-		
-		setStatement += ' WHEN ("todo"."id" = $' + whenCount + ') THEN $' + thenCount;
-		whereStatement += '$' + whenCount + ", ";
-	}
-	setStatement += ' ELSE "title"';
-	whereStatement = whereStatement.slice(0 , -2);
-	whereStatement += "))";
-	
-	var finalStatement = setStatement + whereStatement;
-	//console.log( finalStatement );
-	//console.log( values );
-
-	return { "text" : finalStatement , values: values };
-// UPDATE "todo" SET "order" = CASE WHEN "id" = $1 THEN $2 WHEN "id" = $3 THEN $4 END WHERE ("todo"."id" IN ($2, $3));
-	
-	//'UPDATE "todo" SET "order" = $1 WHERE ("todo"."id" IN ($2, $3))'
 };
 
 LoadTests.prototype.loadTestUpdates = function( callback ){

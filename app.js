@@ -46,12 +46,13 @@ app.route( '/v1/sync' ).post( function( req, res ) {
 
       logger.time('Finished request', true);
       result['logs'] = logger.logs;
+      console.log( result['logs']);
       if ( result ) 
         res.send( result );
       else{
 
         logger.log('Error from return ' + error,true);
-        
+        console.log( logger.logs );        
         var sendError = {code:141,message:'Server error'};
         
         if ( error && error.code ) 

@@ -1,18 +1,17 @@
 
 function CaseUpdateQuery(tableName, whereAttribute){
-	this.tableName = tableName;
+
 	this.escapedTableName = '"' + tableName + '"';
-
-	this.query = {};
-	this.query.text = 'UPDATE ' + this.escapedTableName;
-	this.query.values = [];
-
-	this.whereAttribute = whereAttribute;
 	this.escapedWhereAttribute = '"' + whereAttribute + '"';
 
-	this.whereStatement = 'WHERE ("'+whereAttribute + '" IN(';
-	this.setStatements = {};
+	this.objectCounter = 0;
 
+	this.query = {};
+	this.query.values = [];
+
+
+	this.whereStatement = 'WHERE (' + this.escapedWhereAttribute + ' IN(';
+	this.setStatements = {};
 
 	this.replacementCounter = 1;
 }
@@ -21,6 +20,7 @@ CaseUpdateQuery.prototype.addObjectUpdate = function( updates, whenValue ){
 	this.query.values.push( whenValue );
 	var whenCount = this.replacementCounter++;
 	this.whereStatement += '$' + whenCount + ", ";
+	this.objectCounter++;
 
 	for ( var attribute in updates ){
 		var value = updates [ attribute ];
@@ -41,21 +41,27 @@ CaseUpdateQuery.prototype.initializeSetStatementForAttribute = function( attribu
 };
 
 CaseUpdateQuery.prototype.toQuery = function(){
-	var totalSetStatementsString = "SET ";
+
+	this.query.text = 'UPDATE ' + this.escapedTableName;
+	
+	// PREPARE SET STATEMENTS
+	var totalSetStatementsString = " SET ";
 	for ( var attribute in this.setStatements ){
+
 		var setStatement = this.setStatements[ attribute ];
 		setStatement += ' ELSE "' + attribute + '" END';
 		totalSetStatementsString += setStatement + ", ";
+
 	}
 	totalSetStatementsString = totalSetStatementsString.slice(0,-2);
 
-	this.query.text += " " + totalSetStatementsString;
+	this.query.text += totalSetStatementsString;
 
 	this.whereStatement = this.whereStatement.slice(0,-2);
 	this.whereStatement += "))";
 	
 	this.query.text += " " + this.whereStatement;
-
+	this.query.numberOfRows = this.objectCounter;
 	//console.log(this.query);
 	return this.query;
 }
