@@ -16,7 +16,7 @@ PGHandler.prototype.test = function( callback ){
 	var queries = [];
 	for(var i in models){
 		var model = models[i];
-		queries.push(model['delete']().toQuery());
+		queries.push(model['delete']().where(model.userId.equals("MZzWux0IyT")).toQuery());
 	}
 	var self = this;
 	this.client.connect( function( connected, error ){
