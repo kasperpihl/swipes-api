@@ -1,5 +1,5 @@
 
-function CaseUpdateQuery(tableName, whereAttribute, userId){
+function CaseUpdateQuery(tableName, whereAttribute){
 
 	this.escapedTableName = '"' + tableName + '"';
 	this.escapedWhereAttribute = '"' + whereAttribute + '"';
@@ -15,13 +15,7 @@ function CaseUpdateQuery(tableName, whereAttribute, userId){
 	
 	this.setStatements = {};
 	
-
-	var userWhere = "";
-	if ( userId ){
-		userWhere = '"userId" = $' + this.replacementCounter++ + ' AND ';
-		this.query.values.push( userId );
-	}
-	this.whereStatement = 'WHERE ' + userWhere + '(' + this.escapedWhereAttribute + ' IN(';
+	this.whereStatement = 'WHERE (' + this.escapedWhereAttribute + ' IN(';
 }
 
 CaseUpdateQuery.prototype.addObjectUpdate = function( updates, whenValue ){
