@@ -139,7 +139,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	function getUpdates(){
 		var lastUpdate = ( body.lastUpdate ) ? new Date( body.lastUpdate ) : false;
-		
+		if( lastUpdate )
+			lastUpdate = new Date( lastUpdate.getTime() + 1);
 		var queries = batcher.getQueriesForFindingUpdates( lastUpdate );
 
 		self.logger.log('finding updates');
