@@ -24,7 +24,7 @@ app.route( '/loadTest' ).get( function( req, res ){
 app.route( '/stats').get( function( req, res ){
 	var loadTests = new LoadTests();
 
-	loadTests.loadTestUpdates(function(result,error){
+	loadTests.getStats(function(result,error){
 		if( error )
 			res.send(error);
 		else res.send( result);

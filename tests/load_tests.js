@@ -2,14 +2,14 @@ var _ = require('underscore');
 var sql = require('../postgres/pg_sql.js');
 var PGClient = require('../postgres/pg_client.js');
 var Logger = require( '../utilities/logger.js' );
-
+var CaseUpdateQuery = require('./case_update_query.js');
 
 function LoadTests(){
 	this.logger = new Logger();
 	this.logger.forceOutput = true;
 	this.client = new PGClient();
 	this.targetNumber = 10000;
-	this.batchSize = 500;
+	this.batchSize = 200;
 	this.numberOfBatches = parseInt( this.targetNumber / this.batchSize , 10 );
 };
 
@@ -89,7 +89,6 @@ LoadTests.prototype.loadTestUpdates = function( callback ){
 	var todo = sql.todo();
 	var self = this;
 
-	
 
 	this.client.connect( function( connected, err ){
 		if ( !connected )
@@ -105,19 +104,20 @@ LoadTests.prototype.loadTestUpdates = function( callback ){
 
 			
 			for ( var i = 0 ; i < self.numberOfBatches ; i++ ){
-				var whenThenObject = {};
+				var updateQuery = new CaseUpdateQuery( "todo", "id" );
 				for ( var taskNumber = 0 ; taskNumber < self.batchSize ; taskNumber++){
 				//var identifier = (i == 0) ? 29674 : 29750;
 
 					var identifier = Math.floor( ( Math.random() * maxIdNumber ) );
-					whenThenObject[ identifier ] = 1337; //"ztest";
-
+					var updates = { "order": 1337, "title": "ztest2" };
+					updateQuery.addObjectUpdate( updates, identifier );
 				
 				}
-				var query = self.buildQuery( whenThenObject ) ;
-				queries.push( query );
+				var query = updateQuery.toQuery();
+				queries.push(query);
+
 			}
-			
+			//return;
 			
 			self.client.performQueries( queries , function( result, error){
 				
@@ -153,15 +153,14 @@ LoadTests.prototype.getStats = function( callback ){
 		if ( !connected )
 			return callback( false, err );
 		self.logger.time( 'connected' );
-		var ids = [ "STk1yEnxiY" ,"L5nebAQGgh" ];
-		var counterQuery = todo.select( todo.id ).where( todo.userId.in( ids ) ).toQuery();
+		var counterQuery = todo.select( todo.id.count(), todo.userId.count().distinct() ).toQuery();
 		var query = counterQuery;
 		
 		self.client.performQuery( query , function( result, error){
 			
 			self.logger.time( "finalized" , true );
 			self.client.end();
-			console.log( result );
+			//console.log( result );
 
 			callback( { tasks: result.rows[ 0 ].id_count , users: result.rows[ 0 ].userId_count } , error );
 		
