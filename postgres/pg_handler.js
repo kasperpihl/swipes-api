@@ -45,7 +45,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	var self = this;
 	var batcher = new PGBatcher( body.objects, userId );
-	
+	this.logger.time('batched objects');
 	var resultObjects = {};
 
 	function findIdsFromLocalIdsToDetermineUpdates(){

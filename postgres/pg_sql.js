@@ -22,7 +22,6 @@ exports.todo_tag = sql.define( {
 
 
 
-
 var sharedReturnColumns = [ 'localId' , 'updatedAt' , 'deleted'];
 var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption"];
 var tagReturnColumns = [ 'title' ];

@@ -59,10 +59,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	}
 
 	var command = args[0].substring(0,6);
-	
 	var startTime = new Date().getTime();
-	if( numberOfObjects ) 
-		this.logger.log( command + ' query with ' + numberOfObjects + " rows" );
 
 	args.push(function( err, result ){
 		var endTime = new Date().getTime();
