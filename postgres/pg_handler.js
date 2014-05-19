@@ -50,12 +50,12 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	function findIdsFromLocalIdsToDetermineUpdates(){
 		
-		self.logger.log( 'finding ids determing updates' );
+		
 		
 		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
 		if ( !queries )
 			return insertAndSaveObjects();
-
+		self.logger.time( 'prepared queries for duplicates' );
 		self.client.performQueries( queries , function( results, error ){
 
 			self.logger.time('found ids determing updates');
@@ -76,13 +76,13 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		if ( !queries )
 			return getUpdates();
 
-		self.logger.log( "inserting and saving " + queries.length + " number of queries " );
+		self.logger.time( "inserting and saving " + queries.length + " number of queries " );
 		
 		self.client.transaction( function( error ){
 			self.client.rollback();
 		});
 		self.client.performQueries( queries, function( result, error , i){
-			self.logger.time( "inserted objects" );
+			self.logger.time( "finalized insertions and updates" );
 			//console.log(queries[i].text); 
 			if ( error )
 				return finishWithError( error );
@@ -199,6 +199,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	this.client.connect( function( connected, error ){
 		if( error )
 			return finishWithError ( error );
+		self.logger.time('connected to database');
 		if ( connected )
 			findIdsFromLocalIdsToDetermineUpdates();
 	});

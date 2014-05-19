@@ -16,7 +16,7 @@ LoadTests.prototype.populateDatabaseWithObjects = function( callback ){
 	var queries = [];
 	this.logger.time('starting handling');
 	for ( var i = 0 ; i < this.numberOfBatches ; i++ ){
-		var query = sql.todo();
+		var query = sql.todo;
 		var userId = this.makeid(10);
 		for( var taskNumber = 0 ; taskNumber < this.batchSize ; taskNumber++ ){
 			var taskLocalId = this.makeid(10);
@@ -47,7 +47,7 @@ LoadTests.prototype.populateDatabaseWithObjects = function( callback ){
 };
 
 LoadTests.prototype.loadTestUpdates = function( callback ){
-	var todo = sql.todo();
+	var todo = sql.todo;
 	var self = this;
 
 
@@ -107,14 +107,14 @@ LoadTests.prototype.updateObject = function( maxIdNumber ){
 
 
 LoadTests.prototype.getStats = function( callback ){
-	var todo = sql.todo();
+	var todo = sql.todo;
 	var self = this;
 
 	this.client.connect( function( connected, err ){
 		if ( !connected )
 			return callback( false, err );
 		self.logger.time( 'connected' );
-		var counterQuery = todo.select( todo.id.count(), todo.userId.count().distinct() ).toQuery();
+		var counterQuery = todo.select( todo.id.count() ).toQuery();
 		var query = counterQuery;
 		
 		self.client.performQuery( query , function( result, error){

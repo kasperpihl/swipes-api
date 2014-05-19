@@ -46,6 +46,7 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
                       .where( model.userId.equals( this.userId )
                                           .and( model.localId.in( chunk ) ) )
                       .toNamedQuery( queryName );
+      query.numberOfRows = chunk.length;
 
       queries.push(query);
     }
