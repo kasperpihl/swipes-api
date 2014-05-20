@@ -2,12 +2,17 @@
 	Client for talking with the postgres database
 
 */
-
+var sql 	= require('sql'),
+	Parse 	= require( 'parse' ).Parse;
+var keys =            require( '../conf/keys.js' );
+var session = sql.define( { "name": "session" , columns: [ 'sessionToken', 'userId', 'expires'] } );
 var pg = require('pg');
+pg.defaults.poolSize = 100;
 var _ = require('underscore');
-
+var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
 
 function PGClient( logger ){
+	this.connected = false;
 	this.logger = logger;
 	var conString = this.buildConString();
 	if ( !conString )
@@ -31,18 +36,34 @@ PGClient.prototype.buildConString = function(){
 }
 
 PGClient.prototype.connect = function( callback ){
+	var self = this;
 	this.client.connect(function(err) {
+		if ( !err )
+			self.connected = true;
 		if ( callback )
 			callback( ( err ? false : true ) , err );
 	});
 };
+
 PGClient.prototype.end = function(){
 	this.client.end();
+	this.connected = false;
 }
 
 PGClient.prototype.performQuery = function ( query , callback ){
-	
 	var self = this;
+
+	if ( !this.connected ){
+		this.connect( function( connected , error ){
+			if ( error )
+				return callback ? callback( false, error ) : false;
+			self.performQuery ( query, callback );
+		});
+		
+		return;
+
+	}
+
 	var args = [];
 	var numberOfObjects = 0;
 	if ( _.isString( query ) )
@@ -58,14 +79,22 @@ PGClient.prototype.performQuery = function ( query , callback ){
 			numberOfObjects = query.numberOfRows;
 	}
 
+	if ( args.length == 0 )
+		return callback (false, "wrong query format");
+
 	var command = args[0].substring(0,6);
 	var startTime = new Date().getTime();
 
 	args.push(function( err, result ){
+		if ( err ){
+			self.logger.log( args[0] );
+			self.logger.log( err );
+			self.logger.log( args[1] );
+		}
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
-		if ( numberOfObjects ) 
+		if ( numberOfObjects )
 			self.logger.log( command + " " + numberOfObjects + ' rows ' + rowsPrSecond + "/s (" + resultTime + "ms)");
 		if( err && self.transactionErrorHandler )
 			self.transactionErrorHandler( err );
@@ -112,6 +141,45 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 	next();
 };
+
+PGClient.prototype.storeSession = function( token , userId ){
+	var expires = new Date( new Date().getTime() + sessionSeconds );
+	var query = session.insert( { sessionToken: token, userId: userId, expires: expires } ).toQuery();
+	this.performQuery( query );
+}
+
+PGClient.prototype.validateToken = function( token , store , callback){
+	var self = this;
+	if ( !token )
+		callback(false, { code : 142 , message : "sessionToken must be included" });
+	function validateFromParse( store ){
+		console.log( "validating from parse " + store);
+    	Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+    	Parse.User.become( token ).then( function( user ){
+    		callback( user.id, false );
+    		if ( store )
+    			self.storeSession( token , user.id );
+
+	    },function( error ){
+	      
+	    	callback( false, error ); 
+	    });
+	};
+	if ( !store)
+		return validateFromParse( store );
+
+	var now = new Date();
+	var query = session.select( session.userId, session.expires ).where( session.sessionToken.equals( token ).and( session.expires.gt( now ) ) ).toQuery();
+	this.performQuery( query, function( result, error ){
+		if ( error )
+			return callback( false, error);
+		if ( result.rows && result.rows.length > 0 ){
+			callback( result.rows[0].userId, false );
+		}
+		else 
+			validateFromParse( true );
+	});
+}
 
 
 /*

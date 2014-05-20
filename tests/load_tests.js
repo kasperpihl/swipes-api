@@ -116,12 +116,12 @@ LoadTests.prototype.getStats = function( callback ){
 		self.logger.time( 'connected' );
 		var counterQuery = todo.select( todo.id.count() ).toQuery();
 		var query = counterQuery;
-		
+		query = "select * from pg_settings where name='max_connections'";
 		self.client.performQuery( query , function( result, error){
 			
 			self.logger.time( "finalized" , true );
 			self.client.end();
-			//console.log( result );
+			console.log( result.rows );
 
 			callback( { tasks: result.rows[ 0 ].id_count , users: result.rows[ 0 ].userId_count } , error );
 		

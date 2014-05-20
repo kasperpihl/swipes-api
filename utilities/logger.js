@@ -10,10 +10,7 @@ function Logger(identifier){
 
 Logger.prototype.setIdentifier = function( identifier ){
 	this.identifier = identifier;
-	if(!this.logs || this.logs.length == 0)
-		return;
-	for( var index in this.logs)
-		this.log(this.logs[index]);
+	this.log("identified user: " + identifier);
 };
 
 Logger.prototype.getTime = function(){

@@ -23,7 +23,6 @@ app.route( '/loadTest' ).get( function( req, res ){
 
 app.route( '/stats').get( function( req, res ){
 	var loadTests = new LoadTests();
-
 	loadTests.getStats(function(result,error){
 		if( error )
 			res.send(error);

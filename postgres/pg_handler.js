@@ -4,9 +4,9 @@ var PGBatcher = require('./pg_batcher.js');
 var Queue = require('../utilities/queue.js');
 var PGClient = require('./pg_client.js');
 
-function PGHandler( logger ){
+function PGHandler( client, logger ){
 	this.logger = logger;
-	this.client = new PGClient( logger );
+	this.client = client;
 	this.hasMoreToSave = false;
 	this.batchSize = 50;
 };
@@ -49,8 +49,6 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	var resultObjects = {};
 
 	function findIdsFromLocalIdsToDetermineUpdates(){
-		
-		
 		
 		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
 		if ( !queries )
@@ -197,14 +195,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
       	callback( resultObjects , false );
 	};
 
-	// Connect client and get started
-	this.client.connect( function( connected, error ){
-		if( error )
-			return finishWithError ( error );
-		self.logger.time('connected to database');
-		if ( connected )
-			findIdsFromLocalIdsToDetermineUpdates();
-	});
+	// Get started
+	findIdsFromLocalIdsToDetermineUpdates();
 };
 
 module.exports = PGHandler;

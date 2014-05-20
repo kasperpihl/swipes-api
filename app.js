@@ -1,15 +1,14 @@
 var express =       require( 'express' ),
     bodyParser =    require( 'body-parser' ),
-    Parse =         require( 'parse' ).Parse,
     _ =             require( 'underscore' );
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 
-var keys =            require( './conf/keys.js' );
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
+var PGClient =        require('./postgres/pg_client.js');
 
 app.route('/test').get(function(req,res){
   var logger = new Logger();
@@ -20,9 +19,8 @@ app.route('/test').get(function(req,res){
 });
 
 
-
 app.route( '/v1/sync' ).post( function( req, res ) {
-  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+  
   res.setHeader( 'Content-Type' , 'application/json' );
 
   if ( !req.body.sessionToken ){
@@ -30,31 +28,31 @@ app.route( '/v1/sync' ).post( function( req, res ) {
   }
 
   var logger = new Logger();
-  var pgHandler = new PGHandler(logger);
-
-  Parse.User.become(req.body.sessionToken).then(function( user ){
-
-    logger.time( 'credential validation completed' );
-    logger.setIdentifier( user.id );
+  var client = new PGClient( logger );
+  
+  client.validateToken( req.body.sessionToken , true , function( userId, error){
+    // TODO: send proper error back that fits clients handling
+    if ( error )
+      return res.send( error );
     
+    logger.time( 'credential validation completed' );
+    logger.setIdentifier( userId );
+
+    var pgHandler = new PGHandler( client , logger );
     if ( req.body.hasMoreToSave )
       pgHandler.hasMoreToSave = true;
     if ( req.body.batchSize )
       pgHandler.batchSize = req.body.batchSize;
-
-    pgHandler.sync( req.body, user.id, function( result , error ){
+    
+    pgHandler.sync( req.body, userId, function( result , error ){
 
       logger.time('Finished request', true);
       result['logs'] = logger.logs;
-      console.log( result['logs']);
       if ( result ) 
         res.send( result );
       else{
 
-        logger.log('Error from return ' + error,true);
-        console.log( logger.logs );        
-        var sendError = {code:141,message:'Server error'};
-        
+        var sendError = {code:141,message:'Server error' , logs: logger.logs };
         if ( error && error.code ) 
           sendError.code = error.code;
         if ( error && error.message ) 
@@ -64,8 +62,6 @@ app.route( '/v1/sync' ).post( function( req, res ) {
       }
 
     });
-  },function( error ){ 
-    res.send(error); 
   });
 });
 
