@@ -58,7 +58,7 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
 
 };
 
-PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchInserts, batchSize ){
+PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize ){
 
   var returnQueries = [];
   var updateQueries = [];
