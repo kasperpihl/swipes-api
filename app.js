@@ -1,9 +1,7 @@
 var express =       require( 'express' ),
     bodyParser =    require( 'body-parser' ),
     Parse =         require( 'parse' ).Parse,
-    _ =             require( 'underscore' ),
-    cookieParser =  require('cookie-parser'),
-    session =       require('express-session');
+    _ =             require( 'underscore' );
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
