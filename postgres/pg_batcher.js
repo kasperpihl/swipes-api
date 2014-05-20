@@ -111,9 +111,9 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
     }
     
     
-    if ( inserted && batchInserts )
+    if ( inserted )
       returnQueries.push( insertQuery.toQuery() );
-    if ( updated && batchInserts )
+    if ( updated )
       updateQueries.push( updateQuery.toQuery() );
 
   }
