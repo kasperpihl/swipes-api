@@ -7,7 +7,7 @@ var PGClient = require('./pg_client.js');
 function PGHandler( logger ){
 	this.logger = logger;
 	this.client = new PGClient( logger );
-	this.batchInserts = false;
+	this.hasMoreToSave = false;
 	this.batchSize = 50;
 };
 
@@ -72,7 +72,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	};
 
 	function insertAndSaveObjects(){
-		var queries = batcher.getQueriesForInsertingAndSavingObjects( self.batchInserts, self.batchSize );
+		var queries = batcher.getQueriesForInsertingAndSavingObjects( self.batchSize );
 		if ( !queries )
 			return getUpdates();
 
@@ -138,6 +138,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	};
 
 	function getUpdates(){
+		if ( self.hasMoreToSave )
+			return finish();
 		var lastUpdate = ( body.lastUpdate ) ? new Date( body.lastUpdate ) : false;
 		if( lastUpdate )
 			lastUpdate = new Date( lastUpdate.getTime() + 1);
@@ -176,13 +178,12 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 				}
 				resultObjects[className] = result[className];
 			}
-			//console.log(result);
 			finish( biggestTime );
 		});
 		
 	};
 	function finishWithError(error){
-		console.log(error);
+		self.logger.log( error );
 		self.client.end();
 		callback( false, error );
 	};

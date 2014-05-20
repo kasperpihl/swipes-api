@@ -37,8 +37,8 @@ app.route( '/v1/sync' ).post( function( req, res ) {
     logger.time( 'credential validation completed' );
     logger.setIdentifier( user.id );
     
-    if ( req.body.batchInserts )
-      pgHandler.batchInserts = true;
+    if ( req.body.hasMoreToSave )
+      pgHandler.hasMoreToSave = true;
     if ( req.body.batchSize )
       pgHandler.batchSize = req.body.batchSize;
 
