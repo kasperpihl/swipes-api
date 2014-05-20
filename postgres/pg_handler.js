@@ -1,8 +1,6 @@
 var _ = require('underscore');
 var sql = require('./pg_sql.js');
 var PGBatcher = require('./pg_batcher.js');
-var Queue = require('../utilities/queue.js');
-var PGClient = require('./pg_client.js');
 
 function PGHandler( client, logger ){
 	this.logger = logger;
@@ -24,19 +22,11 @@ PGHandler.prototype.test = function( callback ){
 			return callback( error );
 		if ( connected ){
 			self.client.performQueries( queries ,function(result,error){
-				console.log(result);
-				console.log(error);
 				callback(result);
 			});
 		}
 	});
 
-	/*var todo = sql.todo();
-	var query = todo.update()
-					.where( todo.id.in( [ 1 , 2 ] ) )
-					.toQuery();
-	console.log(query.text);
-	callback(query.text);*/
 };
 PGHandler.prototype.sync = function ( body, userId, callback ){
 
@@ -81,7 +71,6 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		});
 		self.client.performQueries( queries, function( result, error , i){
 			self.logger.time( "finalized insertions and updates" );
-			//console.log(queries[i].text); 
 			if ( error )
 				return finishWithError( error );
 			

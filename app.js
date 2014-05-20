@@ -12,7 +12,8 @@ var PGClient =        require('./postgres/pg_client.js');
 
 app.route('/test').get(function(req,res){
   var logger = new Logger();
-  var pgHandler = new PGHandler( logger );
+  var client = new PGClient();
+  var pgHandler = new PGHandler( client, logger );
   pgHandler.test(function(result,error){
     res.send(result);
   })
@@ -22,11 +23,7 @@ app.route('/test').get(function(req,res){
 app.route( '/v1/sync' ).post( function( req, res ) {
   
   res.setHeader( 'Content-Type' , 'application/json' );
-
-  if ( !req.body.sessionToken ){
-    return res.send( { code : 142 , message : "sessionToken must be included" } );
-  }
-
+  
   var logger = new Logger();
   var client = new PGClient( logger );
   

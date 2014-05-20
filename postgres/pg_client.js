@@ -153,7 +153,6 @@ PGClient.prototype.validateToken = function( token , store , callback){
 	if ( !token )
 		callback(false, { code : 142 , message : "sessionToken must be included" });
 	function validateFromParse( store ){
-		console.log( "validating from parse " + store);
     	Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
     	Parse.User.become( token ).then( function( user ){
     		callback( user.id, false );

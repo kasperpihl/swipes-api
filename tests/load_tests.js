@@ -87,7 +87,6 @@ LoadTests.prototype.loadTestUpdates = function( callback ){
 				callback( result , error );
 
 			}, function( result, counter ){
-				//console.log( result );
 				var time = self.logger.getTime();
 				var insertSpeed = parseInt( self.batchSize / time * 1000 , 10 );
 				self.logger.time( "" + ( counter + 1 ) + " - " + insertSpeed + " rec/s - " + self.batchSize );
@@ -121,7 +120,6 @@ LoadTests.prototype.getStats = function( callback ){
 			
 			self.logger.time( "finalized" , true );
 			self.client.end();
-			console.log( result.rows );
 
 			callback( { tasks: result.rows[ 0 ].id_count , users: result.rows[ 0 ].userId_count } , error );
 		

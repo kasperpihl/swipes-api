@@ -64,7 +64,7 @@ CaseUpdateQuery.prototype.toQuery = function(){
 	
 	this.query.text += " " + this.whereStatement;
 	this.query.numberOfRows = this.objectCounter;
-	//console.log(this.query);
+
 	return this.query;
 }
 
