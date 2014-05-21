@@ -2,7 +2,7 @@ var express =       require( 'express' ),
     bodyParser =    require( 'body-parser' ),
     _ =             require( 'underscore' );
 var Parse = require('parse').Parse;
-var keys = require('./conf/keys.js');
+var keys = require('./utilities/keys.js');
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 

@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var sql = require('./pg_sql.js');
-var CaseUpdateQuery = require('../tests/case_update_query.js');
+var CaseUpdateQuery = require('./case_update_query.js');
 
 var Collections = require('./collections/collections.js');
 var Models = require('./models/models.js');

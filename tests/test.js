@@ -4,13 +4,13 @@ var bodyParser = require('body-parser');
 var app = express();
 app.use(bodyParser.json());
 
-var parse = require('./parse/parse_handler.js');
+var parse = require('../parse/parse_handler.js');
 var Parse = require('parse').Parse;
 var _ = require('underscore');
-var keys = require('./conf/keys.js');
-var logger = require('./utilities/logger.js');
+var keys = require('../utilities/keys.js');
+var logger = require('../utilities/logger.js');
 
-var LoadTests = require('./tests/load_tests.js');
+var LoadTests = require('./load_tests.js');
 
 app.route( '/loadTest' ).get( function( req, res ){
 	var loadTests = new LoadTests();

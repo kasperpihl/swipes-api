@@ -2,7 +2,7 @@ var _ = require('underscore');
 var sql = require('../postgres/pg_sql.js');
 var PGClient = require('../postgres/pg_client.js');
 var Logger = require( '../utilities/logger.js' );
-var CaseUpdateQuery = require('./case_update_query.js');
+var CaseUpdateQuery = require('../postgres/case_update_query.js');
 
 function LoadTests(){
 	this.logger = new Logger();
