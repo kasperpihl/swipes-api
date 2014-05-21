@@ -4,7 +4,6 @@
 */
 var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse;
-var keys =            require( '../conf/keys.js' );
 var session = sql.define( { "name": "session" , columns: [ 'sessionToken', 'userId', 'expires'] } );
 var pg = require('pg');
 pg.defaults.poolSize = 100;
@@ -12,12 +11,13 @@ var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
 
 function PGClient( logger ){
+	
 	this.connected = false;
+	this.done = false;
 	this.logger = logger;
-	var conString = this.buildConString();
-	if ( !conString )
+	this.conString = this.buildConString();
+	if ( !this.conString )
 		throw Error('define DATABASE_URL as environment var');
-	this.client = new pg.Client( conString );
 	this.transactionErrorHandler = false;
 
 }
@@ -37,16 +37,22 @@ PGClient.prototype.buildConString = function(){
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
-	this.client.connect(function(err) {
-		if ( !err )
+	pg.connect( this.conString, function( err, client, done ) {
+		if ( !err ){
 			self.connected = true;
+			self.client = client;
+			self.done = done;
+		}
 		if ( callback )
 			callback( ( err ? false : true ) , err );
 	});
 };
 
 PGClient.prototype.end = function(){
-	this.client.end();
+	if ( this.done ){
+		this.done();
+	}
+	this.client = false;
 	this.connected = false;
 }
 
@@ -88,8 +94,8 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	args.push(function( err, result ){
 		if ( err ){
 			self.logger.log( args[0] );
-			self.logger.log( err );
 			self.logger.log( args[1] );
+			self.logger.log( err );
 		}
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
@@ -148,12 +154,12 @@ PGClient.prototype.storeSession = function( token , userId ){
 	this.performQuery( query );
 }
 
+
 PGClient.prototype.validateToken = function( token , store , callback){
 	var self = this;
 	if ( !token )
 		callback(false, { code : 142 , message : "sessionToken must be included" });
 	function validateFromParse( store ){
-    	Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
     	Parse.User.become( token ).then( function( user ){
     		callback( user.id, false );
     		if ( store )
@@ -179,7 +185,6 @@ PGClient.prototype.validateToken = function( token , store , callback){
 			validateFromParse( true );
 	});
 }
-
 
 /*
 Transactions handler

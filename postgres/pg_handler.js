@@ -17,16 +17,9 @@ PGHandler.prototype.test = function( callback ){
 		queries.push(model['delete']().where(model.userId.equals("MZzWux0IyT")).toQuery());
 	}
 	var self = this;
-	this.client.connect( function( connected, error ){
-		if( error )
-			return callback( error );
-		if ( connected ){
-			self.client.performQueries( queries ,function(result,error){
-				callback(result);
-			});
-		}
+	self.client.performQueries( queries ,function(result,error){
+		callback(result, error);
 	});
-
 };
 PGHandler.prototype.sync = function ( body, userId, callback ){
 
@@ -170,7 +163,6 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		
 	};
 	function finishWithError(error){
-		self.logger.log( error );
 		self.client.end();
 		callback( false, error );
 	};

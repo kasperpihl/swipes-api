@@ -1,5 +1,5 @@
 var _ = require('underscore');
-
+var Parse = require( 'parse' ).Parse;
 function Logger(identifier){
 	this.logs = [];
 	this.forceOutput = false;
@@ -49,5 +49,19 @@ Logger.prototype.log = function( message , force ){
 	}
 	this.logs.push( message );
 };
+Logger.prototype.sendErrorLogToParse = function( error, body ){
+	var ServerError = Parse.Object.extend("ServerError");
+	var serverError = new ServerError();
+	serverError.set("logs", this.logs);
+	serverError.set("error", error);
+	if ( this.identifier ){
+		var User = new Parse.Object.extend( "_User" );
+		var userRef = new User({"objectId": this.identifier });
+		serverError.set( 'user', userRef );
+	}
+	if ( body )
+		serverError.set( 'request', body );
+	serverError.save();
+}
 
 module.exports = Logger;

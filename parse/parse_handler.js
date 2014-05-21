@@ -6,14 +6,15 @@ var ParseQueries = require('./parse_queries.js');
 
 function ParseHandler( logger ){
   this.logger = logger;
+
 };
 
-ParseHandler.prototype.sync = function( body , user , callback ){
+ParseHandler.prototype.sync = function( body , userId , callback ){
 
   if( body.objects && !_.isObject( body.objects ) ) 
     return callback( false , errorReturn( 'Objects must be object or array' ) ); 
-
-  
+  var User = Parse.Object.extend( "_User" );
+  var user = new User( { "objectId" : userId } );
   var batcher = new ParseBatcher( body.objects , user );
   var queryUtility = new ParseQueries( user );
   var queue = new Queue( recurring );

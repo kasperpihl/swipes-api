@@ -60,13 +60,13 @@ ParseQueries.prototype.queriesForNotFound = function( batch ){
 		
 		if ( ids[ className ][ "tempIds" ].length > 0 ){
 			
-			var tempIdQuery = queryForClass( className );
+			var tempIdQuery = this.queryForClass( className );
 			tempIdQuery.containedIn( "tempId" , ids[ className ][ "tempIds" ] );
 			localQueries.push( tempIdQuery );
 		}
 
 		if ( ids[ className ][ "objectIds" ].length > 0 ){
-			var objectIdQuery = queryForClass( className );
+			var objectIdQuery = this.queryForClass( className );
 			objectIdQuery.containedIn( "objectId" , ids[ className ][ "objectIds" ] );
 			localQueries.push( objectIdQuery );
 		}
@@ -96,7 +96,7 @@ ParseQueries.prototype.queriesForDuplications = function( tempIds ){
 		for (  i = 0,  j = tagTempIds.length;    i < j;   i += chunkSize   ) {
 			
 			var chunk = tagTempIds.slice( i , i + chunkSize );
-			var tagQuery = queryForClass( "Tag" );
+			var tagQuery = this.queryForClass( "Tag" );
 			tagQuery.containedIn( 'tempId' , chunk );
       		queries.push( tagQuery );
     	}
@@ -108,7 +108,7 @@ ParseQueries.prototype.queriesForDuplications = function( tempIds ){
 		for (  i = 0,  j = taskTempIds.length; 	 i < j;    i += chunkSize  ) {
 			
 			var chunk = taskTempIds.slice( i , i + chunkSize );
-			var taskQuery = queryForClass( "ToDo" );
+			var taskQuery = this.queryForClass( "ToDo" );
 			taskQuery.containedIn( 'tempId' , chunk );
 			queries.push( taskQuery );
     	}

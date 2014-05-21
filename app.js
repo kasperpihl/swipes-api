@@ -1,7 +1,8 @@
 var express =       require( 'express' ),
     bodyParser =    require( 'body-parser' ),
     _ =             require( 'underscore' );
-
+var Parse = require('parse').Parse;
+var keys = require('./conf/keys.js');
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 
@@ -10,6 +11,21 @@ var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
 var PGClient =        require('./postgres/pg_client.js');
 
+function sendBackError( error, res, logs ){
+  var sendError = {code:141,message:'Server error' };
+  if ( logs ) 
+    sendError.logs = logs;
+  if ( error && error.code ) 
+    sendError.code = error.code;
+  if ( error && error.message ) 
+    sendError.message = error.message;
+        
+  res.send( sendError );
+}
+
+app.route( '/v1/sync' ).post( handleSync );
+app.route( '/sync' ).post( handleSync );
+
 app.route('/test').get(function(req,res){
   var logger = new Logger();
   var client = new PGClient();
@@ -17,49 +33,6 @@ app.route('/test').get(function(req,res){
   pgHandler.test(function(result,error){
     res.send(result);
   })
-});
-
-
-app.route( '/v1/sync' ).post( function( req, res ) {
-  
-  res.setHeader( 'Content-Type' , 'application/json' );
-  
-  var logger = new Logger();
-  var client = new PGClient( logger );
-  
-  client.validateToken( req.body.sessionToken , true , function( userId, error){
-    // TODO: send proper error back that fits clients handling
-    if ( error )
-      return res.send( error );
-    
-    logger.time( 'credential validation completed' );
-    logger.setIdentifier( userId );
-    var pgHandler = new PGHandler( client , logger );
-    if ( req.body.hasMoreToSave )
-      pgHandler.hasMoreToSave = true;
-    if ( req.body.batchSize )
-      pgHandler.batchSize = req.body.batchSize;
-    
-    pgHandler.sync( req.body, userId, function( result , error ){
-
-      logger.time('Finished request', true);
-      result['logs'] = logger.logs;
-      if ( result ) 
-        res.send( result );
-      else{
-
-        var reqBody = JSON.stringify(req.body);
-        var sendError = {code:141,message:'Server error' , logs: logger.logs, reqBody:reqBody };
-        if ( error && error.code ) 
-          sendError.code = error.code;
-        if ( error && error.message ) 
-          sendError.message = error.message;
-        
-        res.send( sendError );
-      }
-
-    });
-  });
 });
 
 app.route('/trial').get(function(req,res){
@@ -78,46 +51,53 @@ app.route('/trial').get(function(req,res){
   });
 });
 
-app.route('/sync').post(function(req, res) {
-  Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
-  res.setHeader('Content-Type', 'application/json');
+function handleSync( req, res ){
+  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 
-  if ( !req.body.sessionToken ){
-    return res.send({code:142,message:"sessionToken must be included"});
-  }
-
+  var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
+  //res.setHeader( 'Content-Type' , 'application/json' );
   var logger = new Logger();
-  var parseHandler = new ParseHandler( logger );
-  
-  Parse.User.become( req.body.sessionToken ).then( function( user ){
-    
-    logger.time( 'Started request' );
-    logger.setIdentifier( user.id );
-    
-    parseHandler.sync(req.body, user, function( result , error ){
+  var client = new PGClient( logger );
 
-      logger.time('Finished request',true);
-      
-      if ( result ) 
+  client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
+    // TODO: send proper error back that fits clients handling
+    if ( error )
+      return sendBackError( error , res);
+    
+    logger.time( 'credential validation completed' );
+    logger.setIdentifier( userId );
+
+    var handler;
+    if ( versionNumber ){
+      var handler = new PGHandler( client , logger );
+      if ( req.body.hasMoreToSave )
+        handler.hasMoreToSave = true;
+      if ( req.body.batchSize )
+        handler.batchSize = req.body.batchSize;
+    }
+    else{
+      handler = new ParseHandler( logger );
+    }
+    
+    
+    handler.sync( req.body, userId, function( result , error ){
+      logger.time('Finished request', true);
+      if ( result ){
+        if ( req.body.sendLogs ) 
+          result['logs'] = logger.logs;
         res.send( result );
-      else{
-
-        logger.log('Error from return ' + error,true);
-        
-        var sendError = {code:141,message:'Server error'};
-        
-        if ( error && error.code ) 
-          sendError.code = error.code;
-        if ( error && error.message ) 
-          sendError.message = error.message;
-        
-        res.send( sendError );
       }
+      else{
+        logger.sendErrorLogToParse( error, req.body );
+        sendBackError( error , res, logger.logs );
+        
+      }
+
     });
-  },function(error){ 
-    res.send(error); 
   });
-});
+};
+
+
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port);
