@@ -103,7 +103,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			if ( error ) 
 				return finishWithError( error );
 
-			var finalRelationshipQueries = batcher.getFinalRelationshipQueriesWithResults( result );
+			var finalRelationshipQueries = batcher.getFinalRelationshipQueriesWithResults( result, self.batchSize );
 
 			self.client.performQueries( finalRelationshipQueries, function( result, error){
 				// TODO: Handle error here

@@ -2,22 +2,21 @@ var _ = require('underscore');
 var sql = require('./pg_sql.js');
 var CaseUpdateQuery = require('../tests/case_update_query.js');
 
+var Collections = require('./collections/collections.js');
+var Models = require('./models/models.js');
+
 function PGBatcher( objects , userId ){
-  this.reset();
   this.userId = userId;
+  this.reset();
   this.sortObjects( objects, userId );
 };
 
 PGBatcher.prototype.reset = function(){
-  this.batches = [];
-  this.collection = {};
-  this.localIds = {};
-  this.relations = { "tags": {} };
+  this.todoCollection = new Collections.Todo();
+  this.tagCollection = new Collections.Tag();
+  this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection };
+  
 };
-
-PGBatcher.prototype.getRelations = function(){
-  return this.relations;
-}
 
 /*
   Generating queries for SQL
@@ -26,7 +25,10 @@ PGBatcher.prototype.getRelations = function(){
 PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
 
   var queries = [];
-  var objects = [ this.localIds[ 'Tag'] , this.localIds[ 'ToDo' ] ];
+
+
+  var objects = [ this.tagCollection.pluck('localId') , this.todoCollection.pluck('localId') ];
+
   for( var i in objects ){
 
     var localIds = objects[ i ];
@@ -63,62 +65,56 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
   var returnQueries = [];
   var updateQueries = [];
 
+  for ( var className in this.collections ){
+    var collection = this.collections[ className ].groupBy(function( model){ return ( model.get('databaseId') ? 'update' : 'insert' ) });
+    
+    var updates = collection['update'];
+    var insertions = collection['insert'];
 
-  for ( var className in this.collection ){
     var model = sql.objectForClass( className );
-    var insertQuery = model;
-    var updateQuery = new CaseUpdateQuery( model._name, "id" );
-    var testQuery = model;
-    var inserted = false;
-    var updated = false;
+    
+
+    function pushQuery( query, numberOfRows ){
+      query = query.toQuery();
+      
+      if( numberOfRows )
+        query.numberOfRows = numberOfRows;
+      
+      returnQueries.push( query );
+
+    };
+
+    var query = model;
     var batchCounter = 0;
-    for ( var localId in this.collection[ className ] ){
-      var obj = this.collection[ className ][ localId ];
-      
-      if ( obj.action == 'insert' ){
-        
-        var tmpInsertQuery = insertQuery.insert(obj.updates);
-        
-        insertQuery = tmpInsertQuery;
-        batchCounter++;
 
-        inserted = true;
-        
-        if(batchCounter == batchSize ){
-
-          inserted = false;
-          batchCounter = 0;
-          insertQuery = insertQuery.toQuery();
-          insertQuery.numberOfRows = batchSize;
-          updateQueries.push( insertQuery );
-          insertQuery = model;
-
-        }
-      
-      }
-      else{
-
-        updated = true;
-        updateQuery.addObjectUpdate( obj.updates , obj.id );
-        if( updateQuery.objectCounter == batchSize ){
-          updateQueries.push( updateQuery.toQuery() );
-          updateQuery = new CaseUpdateQuery( model._name , "id" );
-          updated = false;
-        }
-        //var updateQuery = model.update( obj.updates ).where( model.id.equals( obj.id ) ).toQuery();
-        
+    for ( var i in insertions ){
+      var obj = insertions[ i ];
+      query = query.insert( obj.toJSON() );
+      if ( ++batchCounter >= batchSize ){
+        pushQuery( query, batchCounter );
+        batchCounter = 0;
+        query = model; 
       }
     }
-    
-    
-    if ( inserted )
-      returnQueries.push( insertQuery.toQuery() );
-    if ( updated )
-      updateQueries.push( updateQuery.toQuery() );
 
+    if ( batchCounter > 0){
+      pushQuery( query, batchCounter );
+    }
+
+    query = new CaseUpdateQuery( model._name, "id" );
+    for ( var i in updates ){
+      var obj = updates[ i ];
+      query.addObjectUpdate( obj.toJSON() , obj.get('databaseId') );
+
+      if( query.objectCounter == batchSize ){
+        pushQuery( query );
+        query = new CaseUpdateQuery( model._name, "id" );
+      }
+    }
+    if( query.objectCounter > 0)
+      pushQuery( query );
+    
   }
-//  updateQueries = this.batchUpdateQueries( updateQueries );
-  returnQueries = returnQueries.concat( updateQueries );
 
   return ( returnQueries.length > 0 ) ? returnQueries : false;
 
@@ -127,21 +123,24 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
 
 PGBatcher.prototype.getInitialRelationshipQueries = function(){
 
-  var todosToUpdate = _.keys( this.relations.tags );
-  if ( todosToUpdate.length == 0 )
+  var todosToUpdate = this.todoCollection.filter(function ( model ){
+    return ( model.relations.tags ? true : false );
+  });
+  var localIds = _.pluck( todosToUpdate, "id" );
+
+  if ( localIds.length == 0 )
     return false;
 
   var tagKey = "tag", todoKey = "todo";
   var tagModel = sql.tag, todo = sql.todo;
   
-  // TODO: use transactions here
   var tagQuery = tagModel.select( tagModel.id, tagModel.localId )
                          .where( tagModel.userId.equals( this.userId ) )
                          .toNamedQuery( tagKey );
 
   var todoQuery = todo.update( { "tagsLastUpdate" : "now()" , "updatedAt" : "now()" } )
                       .where( todo.userId.equals( this.userId )
-                                          .and( todo.localId.in( todosToUpdate ) ) )
+                                          .and( todo.localId.in( localIds ) ) )
                       .returning( todo.id , todo.localId )
                       .toNamedQuery( todoKey );
   
@@ -149,7 +148,7 @@ PGBatcher.prototype.getInitialRelationshipQueries = function(){
 
 };
 
-PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
+PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, batchSize ){
   var tagKey = "tag", todoKey = "todo";
   var lookup = { "tag": {} , "todo": {} };
 
@@ -161,7 +160,7 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
 
   for ( var className in result ){
     
-    var isTodo = ( className == todoKey ); 
+    var isTodo = ( className == todoKey );
     
     for ( var index in result[ className ] ){
       
@@ -183,10 +182,11 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
 
   // chaining the insertion of tag relations into one query
   // using added to test whether anything was inserted (check if removed all tags from task)
-  var insertTagRelationQuery = sql.todo_tag, added = false;
-  for ( var todoLocalId in this.relations.tags ){
-
-    var tagsToUpdate = this.relations.tags[ todoLocalId ];
+  var insertTagRelationQuery = sql.todo_tag, batchCounter = 0;
+  for ( var todoLocalId in lookup[ todoKey ] ){
+    var todoModel = this.todoCollection.get( todoLocalId );
+    console.log( todoModel );
+    var tagsToUpdate = todoModel.relations.tags;
     var todoId = lookup[ todoKey ][ todoLocalId ];
     
     if ( !todoId )
@@ -202,14 +202,18 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result ){
       if ( tagId ){
         insertTagRelationQuery = insertTagRelationQuery.insert( { "userId" : this.userId , "todoId": todoId , "tagId": tagId , "order": order } );
         order++;
-        added = true;
+        if ( ++batchCounter >= batchSize ){
+          queries.push( insertTagRelationQuery.toQuery() );
+          batchCounter = 0;
+          insertTagRelationQuery = sql.todo_tag;
+        }
       }
 
     }
   }
 
-  if ( added )
-    queries.push( insertTagRelationQuery.toNamedQuery( 'todo_tag' ) );
+  if ( batchCounter > 0 )
+    queries.push( insertTagRelationQuery.toQuery() );
 
   return queries;
 
@@ -266,17 +270,16 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
 
 
 PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( className , results ){
-  var className;
   if ( className.indexOf("Tag") == 0 )
     className = "Tag";
   else if ( className.indexOf( "ToDo" ) == 0 )
     className = "ToDo";
-
+  var collection = this.collections[ className ];
   for( var i in results ){
     var row = results[ i ];
-    var objInCollection = this.collection[ className ][ row.localId ];
-    objInCollection.id = row.id;
-    objInCollection.action = 'update';
+    var model = collection.get( row.localId );
+    if ( model ) 
+      model.set( { "databaseId" : row.id } );
   }
 
 };
@@ -285,109 +288,23 @@ PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( cla
   Running this function parses the JSON from sync into objects and sorts them into this.collection
   It extracts 
 */
-PGBatcher.prototype.sortObjects = function( collectionToSave, userId, logger ){
+PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
   
   if ( !collectionToSave || collectionToSave.length == 0 ) 
     return false;
 
-  var numberOfObjects = 0;
   for ( var className in collectionToSave ){
-    
-    var sqlModel = sql.objectForClass(className);
-    if ( !sqlModel )
-      continue;
-    
-    this.collection[ className ] = {};
-    this.localIds[ className ] = [];
-    
     var objects = collectionToSave[ className ];
-    
-    for ( var i = 0  ;  i < objects.length  ;  i++ ){
-      var rawObject = objects[ i ];
-      
-      if ( !_.isObject( rawObject ) || _.isArray( rawObject ) || _.isFunction( rawObject ) ) 
-        continue;
-      var customObject = this.makeCustomObjectForSQL( rawObject , sqlModel , userId );
+    if ( className == "ToDo" )
+      this.todoCollection.loadObjects( objects, userId );
+    else if( className == "Tag" )
+      this.tagCollection.loadObjects( objects, userId );
 
-      if ( customObject ){
-        this.collection[ className ][ customObject.localId ] = customObject;
-        this.localIds[ className ].push( customObject.localId );
-        numberOfObjects++;
-      }
-
-    }
   }
 };
 
 
-PGBatcher.prototype.handleTagRelationsForObjectWithId = function( localId , tags ){
 
-  var tagsArray = this.relations.tags[ localId ] = new Array();
-  if ( !tags || tags.length == 0 )
-    return;
-
-  for ( var index in tags ){
-    var relation = tags[ index ];
-    var identifier = relation.objectId;
-    if ( !identifier )
-      identifier = relation.tempId;
-    if ( identifier )
-      tagsArray.push( identifier );
-  }  
-}
-
-PGBatcher.prototype.makeCustomObjectForSQL = function( object, sqlModel, userId){
-  // objectUpdates will be the direct attribute:value object to be saved in database
-  var objectUpdates = {};
-
-  // a custom object that will contain the model, actions and relevant side data
-  var customUpdateObject = { "sqlModel": sqlModel, action : "insert" };
-  
-  objectUpdates.userId = userId;
-
-  var identifier = object.objectId ? object.objectId : (object.tempId ? object.tempId : null);
-  if ( identifier ){
-    objectUpdates.localId = identifier;
-    customUpdateObject.localId = identifier;
-  }
-  else{
-    // TODO: monitor this error
-    console.log( "couldn't handle object: " + JSON.stringify( object ) );
-    return;
-  }
-  objectUpdates.updatedAt = "now()";
-
-  if ( object.deleted ){
-
-    objectUpdates.deleted = true;
-  
-  }
-  else {
-
-    for ( var attribute in object ){
-      var result = object[ attribute ];
-      
-      /* Handling tags - they are not part of the model and is handled through the relationship */
-      if ( attribute == "tags" ){
-        this.handleTagRelationsForObjectWithId( customUpdateObject.localId , result );        
-      }
-
-      if ( !sqlModel.hasColumn( attribute ) )
-        continue;
-
-      if ( ( attribute == "schedule" || attribute == "completionDate" || attribute == "repeatedDate" ) && _.isObject( result ) ){
-        result = new Date( result[ 'iso' ] );
-      }
-
-      objectUpdates[ attribute ] = result;
-
-    }
-  }
-  
-  customUpdateObject.updates = objectUpdates;
-
-  return customUpdateObject;
-}
 
 
 module.exports = PGBatcher;

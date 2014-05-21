@@ -16,10 +16,15 @@ var TagModel = BaseModel.extend({
 		if ( !data.deleted ) {
 			for ( var attribute in data ){
 				var value = data[ attribute ];
+				if ( !this.sql.hasColumn( attribute ) )
+			        continue;
 				attributeUpdates[ attribute ] = value;
 			}
 		}
 		this.set( attributeUpdates, { validate: true } );
+	},
+	validate: function( attrs, options ){
+		
 	}
 });
 

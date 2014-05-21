@@ -9,13 +9,21 @@ var BaseModel = Backbone.Model.extend({
 			identifier = data.tempId;
 		if( identifier )
 			attributeUpdates.localId = identifier;
-		if( !userId )
+		if( userId )
 			attributeUpdates.userId = userId;
 
 		if ( data.deleted )
 			attributeUpdates.deleted = true;
 
 		return attributeUpdates;
+	},
+	toJSON: function( options ){
+		var toJSON = Backbone.Model.prototype.toJSON.apply( this, arguments );
+		if ( toJSON['databaseId'] ){
+			delete toJSON['localId'];
+			delete toJSON['databaseId'];
+		}
+		return toJSON;
 	}
 });
 

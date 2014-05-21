@@ -34,7 +34,6 @@ app.route( '/v1/sync' ).post( function( req, res ) {
     
     logger.time( 'credential validation completed' );
     logger.setIdentifier( userId );
-
     var pgHandler = new PGHandler( client , logger );
     if ( req.body.hasMoreToSave )
       pgHandler.hasMoreToSave = true;
@@ -49,7 +48,8 @@ app.route( '/v1/sync' ).post( function( req, res ) {
         res.send( result );
       else{
 
-        var sendError = {code:141,message:'Server error' , logs: logger.logs };
+        var reqBody = JSON.stringify(req.body);
+        var sendError = {code:141,message:'Server error' , logs: logger.logs, reqBody:reqBody };
         if ( error && error.code ) 
           sendError.code = error.code;
         if ( error && error.message ) 

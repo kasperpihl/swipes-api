@@ -1,5 +1,5 @@
 
-function CaseUpdateQuery(tableName, whereAttribute){
+function CaseUpdateQuery( tableName, whereAttribute ){
 
 	this.escapedTableName = '"' + tableName + '"';
 	this.escapedWhereAttribute = '"' + whereAttribute + '"';
@@ -8,7 +8,6 @@ function CaseUpdateQuery(tableName, whereAttribute){
 
 	this.query = {};
 	this.query.values = [];
-
 
 	this.replacementCounter = 1;
 	
