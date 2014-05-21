@@ -6,8 +6,6 @@ function CaseUpdateQuery( tableName, whereAttribute, staticSetMapping ){
 	this.escapedWhereAttribute = '"' + whereAttribute + '"';
 
 
-
-
 	this.objectCounter = 0;
 
 	this.query = {};
