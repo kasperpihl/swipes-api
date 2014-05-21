@@ -1,8 +1,12 @@
+var _ = require('underscore');
 
-function CaseUpdateQuery( tableName, whereAttribute ){
+function CaseUpdateQuery( tableName, whereAttribute, staticSetMapping ){
 
 	this.escapedTableName = '"' + tableName + '"';
 	this.escapedWhereAttribute = '"' + whereAttribute + '"';
+
+
+
 
 	this.objectCounter = 0;
 
@@ -11,6 +15,16 @@ function CaseUpdateQuery( tableName, whereAttribute ){
 
 	this.replacementCounter = 1;
 	
+	this.bannedAttributes = [];
+	this.initialSetStatement = "SET ";
+	if ( staticSetMapping ){
+		for ( var attr in staticSetMapping ){
+			value = staticSetMapping[ attr ];
+			this.initialSetStatement += '"' + attr + '" = $' + this.replacementCounter++ + ", ";
+			this.query.values.push( value );
+			this.bannedAttributes.push( attr );
+		}
+	}
 	
 	this.setStatements = {};
 	
@@ -24,6 +38,9 @@ CaseUpdateQuery.prototype.addObjectUpdate = function( updates, whenValue ){
 	this.objectCounter++;
 
 	for ( var attribute in updates ){
+		if( _.indexOf( this.bannedAttributes, attribute ) != -1 )
+			continue;
+
 		var value = updates [ attribute ];
 
 		this.query.values.push( value );
@@ -46,7 +63,7 @@ CaseUpdateQuery.prototype.toQuery = function(){
 	this.query.text = 'UPDATE ' + this.escapedTableName;
 	
 	// PREPARE SET STATEMENTS
-	var totalSetStatementsString = " SET ";
+	var totalSetStatementsString = this.initialSetStatement;
 	for ( var attribute in this.setStatements ){
 
 		var setStatement = this.setStatements[ attribute ];

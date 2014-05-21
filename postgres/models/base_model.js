@@ -3,7 +3,7 @@ var Backbone = require('backbone');
 var BaseModel = Backbone.Model.extend({
 	action: 'insert',
 	getAttributeUpdateArrayFromData:function( data, userId){
-		var attributeUpdates = { updatedAt: "now()" };
+		var attributeUpdates = {};
 		var identifier = data.objectId;
 		if ( !identifier )
 			identifier = data.tempId;

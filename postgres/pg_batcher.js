@@ -101,14 +101,14 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
       pushQuery( query, batchCounter );
     }
 
-    query = new CaseUpdateQuery( model._name, "id" );
+    query = new CaseUpdateQuery( model._name, "id" , { "updatedAt" : "now()" } );
     for ( var i in updates ){
       var obj = updates[ i ];
       query.addObjectUpdate( obj.toJSON() , obj.get('databaseId') );
 
       if( query.objectCounter == batchSize ){
         pushQuery( query );
-        query = new CaseUpdateQuery( model._name, "id" );
+        query = new CaseUpdateQuery( model._name, "id", { "updatedAt" : "now()" } );
       }
     }
     if( query.objectCounter > 0)
