@@ -90,7 +90,6 @@ function handleSync( req, res ){
       else{
         logger.sendErrorLogToParse( error, req.body );
         sendBackError( error , res, logger.logs );
-        
       }
 
     });
