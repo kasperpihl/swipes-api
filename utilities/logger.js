@@ -48,7 +48,6 @@ Logger.prototype.log = function( message , force ){
 		console.log( message );
 	}
 	this.logs.push( message );
-	console.log( message );
 };
 Logger.prototype.sendErrorLogToParse = function( error, body ){
 	var ServerError = Parse.Object.extend("ServerError");

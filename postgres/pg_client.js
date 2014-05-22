@@ -189,16 +189,18 @@ PGClient.prototype.validateToken = function( token , store , callback){
 Transactions handler
 */
 
-PGClient.prototype.transaction = function( batchSize, handler ){
-	this.transactionBatchSize = batchSize;
+PGClient.prototype.transaction = function( handler ){
 	this.runningTransaction = true;
-	if ( handler && _.isFunction( handler ) )
+	if ( handler && _.isFunction( handler ) ){
 		this.transactionErrorHandler = handler;
+	}
 	this.performQuery( "BEGIN" );
 };
 
 PGClient.prototype.rollback = function(){
-	this.performQuery( "ROLLBACK" );
+	this.performQuery( "ROLLBACK" ,function( result, error ){
+
+	});
 };
 
 PGClient.prototype.commit = function( callback ){

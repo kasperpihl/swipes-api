@@ -1,4 +1,4 @@
-//require('strong-agent').profile("4805c27d826dec99b06108df1b5dab80","SwipesAPI");
+require('strong-agent').profile("4805c27d826dec99b06108df1b5dab80","SwipesAPI");
 var express =       require( 'express' ),
     bodyParser =    require( 'body-parser' ),
     _ =             require( 'underscore' );
@@ -30,9 +30,6 @@ app.route( '/sync' ).post( handleSync );
 app.route('/test').get(function(req,res){
   var logger = new Logger();
   var client = new PGClient();
-  console.log('test');
-  res.send("test");
-  return;
   var pgHandler = new PGHandler( client, logger );
   pgHandler.test(function(result,error){
     res.send(result);
