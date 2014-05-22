@@ -82,7 +82,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	
 	function handleRelations(){
 
-		var initialRelationShipQueries = batcher.getInitialRelationshipQueries();
+		var initialRelationShipQueries = batcher.getInitialRelationshipQueries( self.batchSize );
 		if ( !initialRelationShipQueries )
 			return getUpdates();
 
@@ -95,7 +95,6 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			self.logger.time("relationship step 1");
 			if ( error ) 
 				return finishWithError( error );
-
 			var finalRelationshipQueries = batcher.getFinalRelationshipQueriesWithResults( result, self.batchSize );
 
 			self.client.performQueries( finalRelationshipQueries, function( result, error){

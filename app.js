@@ -59,7 +59,6 @@ function handleSync( req, res ){
   //res.setHeader( 'Content-Type' , 'application/json' );
   var logger = new Logger();
   var client = new PGClient( logger );
-  console.log('started request');
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
     if ( error )

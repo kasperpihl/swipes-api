@@ -93,7 +93,7 @@ ParseQueries.prototype.queriesForDuplications = function( tempIds ){
 
 	if ( tagTempIds && tagTempIds.length > 0 ){
 		
-		for (  i = 0,  j = tagTempIds.length;    i < j;   i += chunkSize   ) {
+		for ( var i = 0,  j = tagTempIds.length;    i < j;   i += chunkSize   ) {
 			
 			var chunk = tagTempIds.slice( i , i + chunkSize );
 			var tagQuery = this.queryForClass( "Tag" );
@@ -105,7 +105,7 @@ ParseQueries.prototype.queriesForDuplications = function( tempIds ){
 	var taskTempIds = tempIds[ 'ToDo' ];
 	if ( taskTempIds && taskTempIds.length > 0 ){
 		
-		for (  i = 0,  j = taskTempIds.length; 	 i < j;    i += chunkSize  ) {
+		for ( var i = 0,  j = taskTempIds.length; 	 i < j;    i += chunkSize  ) {
 			
 			var chunk = taskTempIds.slice( i , i + chunkSize );
 			var taskQuery = this.queryForClass( "ToDo" );

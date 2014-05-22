@@ -136,7 +136,7 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
 };
 
 
-PGBatcher.prototype.getInitialRelationshipQueries = function(){
+PGBatcher.prototype.getInitialRelationshipQueries = function( chunkSize ){
 
   var todosToUpdate = this.todoCollection.filter(function ( model ){
     return ( model.relations.tags ? true : false );
@@ -152,14 +152,22 @@ PGBatcher.prototype.getInitialRelationshipQueries = function(){
   var tagQuery = tagModel.select( tagModel.id, tagModel.localId )
                          .where( tagModel.userId.equals( this.userId ) )
                          .toNamedQuery( tagKey );
-
-  var todoQuery = todo.update( { "tagsLastUpdate" : "now()" , "updatedAt" : "now()" } )
+  var queries = [ tagQuery ];
+  for ( var i = 0, j = localIds.length;   i < j;    i += chunkSize  ) {
+      var chunk = localIds.slice( i , i + chunkSize );
+      if( chunk.length == 0 )
+        continue;
+      var todoQuery = todo.update( { "tagsLastUpdate" : "now()" , "updatedAt" : "now()" } )
                       .where( todo.userId.equals( this.userId )
-                                          .and( todo.localId.in( localIds ) ) )
+                                          .and( todo.localId.in( chunk ) ) )
                       .returning( todo.id , todo.localId )
-                      .toNamedQuery( todoKey );
+                      .toNamedQuery( todoKey+i );
+      todoQuery.numberOfRows = chunk.length;
+      queries.push( todoQuery );
+  }
+
   
-  return [ tagQuery , todoQuery ];
+  return queries;
 
 };
 
@@ -174,26 +182,34 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
   var updatedToDoIds = new Array();
 
   for ( var className in result ){
-    
-    var isTodo = ( className == todoKey );
+    var lookupIndex = className;
+    var isTodo = ( className.indexOf(todoKey) > -1 );
+    if ( isTodo )
+      lookupIndex = todoKey;
     
     for ( var index in result[ className ] ){
       
       var obj = result[ className ][ index ];
       var identifier = obj.id;
-      lookup[ className ][ obj.localId ] = identifier;
+      lookup[ lookupIndex ][ obj.localId ] = identifier;
       
       if ( isTodo )
         updatedToDoIds.push( identifier );
     
     }
-  
   }
 
-  var deleteTagRelationQuery = todo_tag['delete']().where( todo_tag.userId.equals( this.userId )
-                                                                          .and( todo_tag.todoId.in( updatedToDoIds ) ) ).toQuery();
+  for ( var i = 0, j = updatedToDoIds.length;   i < j;    i += batchSize  ) {
 
-  queries.push( deleteTagRelationQuery );
+      var chunk = updatedToDoIds.slice( i , i + batchSize );
+      if ( chunk.length == 0 )
+        continue;
+      var deleteTagRelationQuery = todo_tag['delete']().where( todo_tag.userId.equals( this.userId )
+                                                                          .and( todo_tag.todoId.in( chunk ) ) ).toQuery();
+      deleteTagRelationQuery.numberOfRows = chunk.length;
+      queries.push( deleteTagRelationQuery );
+  }
+  
 
   // chaining the insertion of tag relations into one query
   // using added to test whether anything was inserted (check if removed all tags from task)
@@ -217,7 +233,9 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
         insertTagRelationQuery = insertTagRelationQuery.insert( { "userId" : this.userId , "todoId": todoId , "tagId": tagId , "order": order } );
         order++;
         if ( ++batchCounter >= batchSize ){
-          queries.push( insertTagRelationQuery.toQuery() );
+          insertTagRelationQuery = insertTagRelationQuery.toQuery();
+          insertTagRelationQuery.numberOfRows = batchSize;
+          queries.push( insertTagRelationQuery );
           batchCounter = 0;
           insertTagRelationQuery = sql.todo_tag;
         }
@@ -226,8 +244,11 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
     }
   }
 
-  if ( batchCounter > 0 )
-    queries.push( insertTagRelationQuery.toQuery() );
+  if ( batchCounter > 0 ){
+    insertTagRelationQuery = insertTagRelationQuery.toQuery();
+    insertTagRelationQuery.numberOfRows = batchCounter;
+    queries.push( insertTagRelationQuery );
+  }
 
   return queries;
 
