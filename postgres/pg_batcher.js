@@ -69,10 +69,10 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
 
   for ( var className in this.collections ){
     var collection = this.collections[ className ].groupBy(function( model){ 
-      model.set({}, { validate:true });
-      if ( model.validationError ){
+      //model.set({}, { validate:true });
+      /*if ( model.validationError ){
         return 'invalid';
-      }
+      }*/
       return ( model.get('databaseId') ? 'update' : 'insert' ) 
     });
     if ( collection['invalid'] ){
