@@ -200,7 +200,6 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
   var insertTagRelationQuery = sql.todo_tag, batchCounter = 0;
   for ( var todoLocalId in lookup[ todoKey ] ){
     var todoModel = this.todoCollection.get( todoLocalId );
-    console.log( todoModel );
     var tagsToUpdate = todoModel.relations.tags;
     var todoId = lookup[ todoKey ][ todoLocalId ];
     
