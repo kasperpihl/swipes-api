@@ -76,6 +76,7 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
       return ( model.get('databaseId') ? 'update' : 'insert' ) 
     });
     if ( collection['invalid'] ){
+      console.log('invalid');
       for ( var model in collection['invalid'] ){
         this.logger.log( model.validationError );
       }
@@ -102,8 +103,8 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
     var batchCounter = 0;
 
     for ( var i in insertions ){
-      var model = insertions[ i ];
-      query = query.insert( model.toJSON() );
+      var obj = insertions[ i ];
+      query = query.insert( obj.toJSON() );
       if ( ++batchCounter >= batchSize ){
         pushQuery( query, batchCounter );
         batchCounter = 0;
