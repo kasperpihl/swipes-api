@@ -30,6 +30,9 @@ app.route( '/sync' ).post( handleSync );
 app.route('/test').get(function(req,res){
   var logger = new Logger();
   var client = new PGClient();
+  console.log('test');
+  res.send("test");
+  return;
   var pgHandler = new PGHandler( client, logger );
   pgHandler.test(function(result,error){
     res.send(result);
@@ -59,12 +62,11 @@ function handleSync( req, res ){
   //res.setHeader( 'Content-Type' , 'application/json' );
   var logger = new Logger();
   var client = new PGClient( logger );
-
+  console.log('started request');
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
     if ( error )
       return sendBackError( error , res);
-    
     logger.time( 'credential validation completed' );
     logger.setIdentifier( userId );
 
