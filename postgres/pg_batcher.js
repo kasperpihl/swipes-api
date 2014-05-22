@@ -5,8 +5,10 @@ var CaseUpdateQuery = require('./case_update_query.js');
 var Collections = require('./collections/collections.js');
 var Models = require('./models/models.js');
 
-function PGBatcher( objects , userId ){
+function PGBatcher( objects , userId, logger ){
   this.userId = userId;
+  this.logger = logger;
+  this.error = false;
   this.reset();
   this.sortObjects( objects, userId );
 };
@@ -66,7 +68,19 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
   var updateQueries = [];
 
   for ( var className in this.collections ){
-    var collection = this.collections[ className ].groupBy(function( model){ return ( model.get('databaseId') ? 'update' : 'insert' ) });
+    var collection = this.collections[ className ].groupBy(function( model){ 
+      model.set({}, { validate:true });
+      if ( model.validationError ){
+        return 'invalid';
+      }
+      return ( model.get('databaseId') ? 'update' : 'insert' ) 
+    });
+    if ( collection['invalid'] ){
+      for ( var model in collection['invalid'] ){
+        this.logger.log( model.validationError );
+      }
+      return;
+    }
     
     var updates = collection['update'];
     var insertions = collection['insert'];
@@ -88,8 +102,8 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
     var batchCounter = 0;
 
     for ( var i in insertions ){
-      var obj = insertions[ i ];
-      query = query.insert( obj.toJSON() );
+      var model = insertions[ i ];
+      query = query.insert( model.toJSON() );
       if ( ++batchCounter >= batchSize ){
         pushQuery( query, batchCounter );
         batchCounter = 0;

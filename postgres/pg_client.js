@@ -165,8 +165,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
     		if ( store )
     			self.storeSession( token , user.id );
 
-	    },function( error ){
-	      
+	    },function( error, error2 ){
 	    	callback( false, error ); 
 	    });
 	};

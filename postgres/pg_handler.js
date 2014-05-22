@@ -27,7 +27,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		return callback( false, 'Objects must be object or array' );
 
 	var self = this;
-	var batcher = new PGBatcher( body.objects, userId );
+	var batcher = new PGBatcher( body.objects, userId, this.logger );
 	this.logger.time('batched objects');
 	var resultObjects = {};
 

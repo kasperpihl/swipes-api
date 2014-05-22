@@ -3,7 +3,7 @@ var Backbone = require('backbone');
 var BaseCollection = Backbone.Collection.extend({
 	model:false,
 	insertions: function(){
-
+		
 	},
 	updates: function(){
 
@@ -17,6 +17,9 @@ var BaseCollection = Backbone.Collection.extend({
 			models.push(model);
 		}
 		this.add(models);
+		this.on('invalid', function(model, error){
+
+		})
 	}
 });
 

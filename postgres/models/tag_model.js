@@ -21,10 +21,18 @@ var TagModel = BaseModel.extend({
 				attributeUpdates[ attribute ] = value;
 			}
 		}
-		this.set( attributeUpdates, { validate: true } );
+		this.set( attributeUpdates );
 	},
 	validate: function( attrs, options ){
-		
+		if ( !attrs.localId )
+			return "couldn't identify tag";
+		// is insertion
+		if ( !attrs.databaseId ){
+			if ( !attrs.title )
+				return "title is missing for insertion of tag";
+			if ( !attrs.userId )
+				return "userId must be set for insertion of tag";
+		}
 	}
 });
 
