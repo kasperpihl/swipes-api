@@ -183,6 +183,51 @@ ParseBatcher.prototype.updateDuplicates = function( duplicates ){
 
 };
 
+
+ParseBatcher.prototype.scrapeChanges = function ( object , lastUpdateTime ){
+  
+  var attributes = object.attributes;
+  var updateTime = new Date();
+
+  object.set( 'parseClassName' , object.className );
+  
+  var deleteAttributes = [ "owner" , "ACL" , "lastSave" ]
+  for( var i in deleteAttributes ){
+    var attr = deleteAttributes[ i ];
+    if ( attributes[ attr ] )
+      delete attributes[ attr ];
+  }
+
+  if ( !attributes[ 'attributeChanges' ] ) 
+    return;
+  
+  if ( !lastUpdateTime ) 
+    return delete attributes['attributeChanges'];
+  
+  var changes = object.get('attributeChanges');
+  
+  if ( !changes ) 
+    changes = {};
+  
+  if ( attributes ){
+    
+    for ( var attribute in attributes ){
+      
+      var lastChange = changes[ attribute ];
+      
+      if ( ( attribute == "deleted" && attributes[ attribute ] ) || attribute == "tempId" || attribute == "parseClassName" ) 
+        continue;
+      
+      if( !lastChange || lastChange <= lastUpdateTime ) 
+        delete attributes[ attribute ];
+
+    }
+
+  }
+
+};
+
+
 ParseBatcher.prototype.makeBatches = function( col ){
 	batches = [];
   if ( !col ) 

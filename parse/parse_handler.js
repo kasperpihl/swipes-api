@@ -17,13 +17,12 @@ ParseHandler.prototype.sync = function( body , userId , callback ){
   var user = new User( { "objectId" : userId } );
   var batcher = new ParseBatcher( body.objects , user );
   var queryUtility = new ParseQueries( user );
-  var queue = new Queue( recurring );
+  var queue = new Queue( 3 );
 
   var runningError;
   var lastUpdate = ( body.lastUpdate ) ? new Date( body.lastUpdate ) : false;
   
   var deletedObjects = [];
-  var recurring = 3;
   var self = this;
   /* Run and check for duplicates with tempId */
   function checkForDuplicates( batch ){
@@ -37,7 +36,7 @@ ParseHandler.prototype.sync = function( body , userId , callback ){
     queue.push( queries , true );
     queue.run( function( query ){
 
-      runQueryToTheEnd( query , function( result , error ){
+      queryUtility.runQueryToTheEnd( query , function( result , error ){
          
         if( result && result.length > 0 ){
           
@@ -116,7 +115,7 @@ ParseHandler.prototype.sync = function( body , userId , callback ){
 
       var queries = queryUtility.queriesForNotFound( batch );
       
-      runQueriesToTheEnd( queries , function( result , error ){
+      queryUtility.runQueriesToTheEnd( queries , function( result , error ){
         if ( result ){
 
           var deletedAndUpdatedBatch = batcher.findDeletedObjectsAndDuplicates( batch , result );
@@ -160,13 +159,13 @@ ParseHandler.prototype.sync = function( body , userId , callback ){
     self.logger.log( '' + queries.length + " queries prepared" );
 
     queue.run( function( query ){
-      runQueryToTheEnd( query , function( result , error , query ){
+      queryUtility.runQueryToTheEnd( query , function( result , error , query ){
         
         if ( !error && result && result.length > 0 ){
           for ( var i in result ){
             if ( !biggestTimeStamp || result[ i ].updatedAt.getTime() > biggestTimeStamp.getTime() ) 
               biggestTimeStamp = result[ i ].updatedAt;
-            scrapeChanges( result[ i ] , lastUpdate );
+            batcher.scrapeChanges( result[ i ] , lastUpdate );
           }
 
           var index = query.className;
@@ -213,126 +212,6 @@ ParseHandler.prototype.sync = function( body , userId , callback ){
 };
 
 
-function scrapeChanges( object , lastUpdateTime ){
-  
-  var attributes = object.attributes;
-  var updateTime = new Date();
-
-  object.set( 'parseClassName' , object.className );
-  
-  var deleteAttributes = [ "owner" , "ACL" , "lastSave" ]
-  for( var i in deleteAttributes ){
-    var attr = deleteAttributes[ i ];
-    if ( attributes[ attr ] )
-      delete attributes[ attr ];
-  }
-
-  if ( !attributes[ 'attributeChanges' ] ) 
-    return;
-  
-  if ( !lastUpdateTime ) 
-    return delete attributes['attributeChanges'];
-  
-  var changes = object.get('attributeChanges');
-  
-  if ( !changes ) 
-    changes = {};
-  
-  if ( attributes ){
-    
-    for ( var attribute in attributes ){
-      
-      var lastChange = changes[ attribute ];
-      
-      if ( ( attribute == "deleted" && attributes[ attribute ] ) || attribute == "tempId" || attribute == "parseClassName" ) 
-        continue;
-      
-      if( !lastChange || lastChange <= lastUpdateTime ) 
-        delete attributes[ attribute ];
-
-    }
-
-  }
-
-};
-
-/* Running a query unlimited with skips if limit of object is reached
-  callback (result,error)
-*/
-function runQueriesToTheEnd( queries, callback ){
-  
-  if ( !queries || queries.length == 0 ) 
-    return callback(false,errorReturn("No queries to run"));
-  
-  var stopped;
-  var resultObj = {};
-  var i = 0;
-  
-  var internalCallback = function( result , error , query ){
-    
-    i++;
-    
-    if ( error && !stopped ){
-      
-      callback( false , error , queries);
-      stopped = true;
-    }
-    else if ( result ){
-      
-      resultObj[ query.className ] = result;
-    }
-
-    if ( i == queries.length && !stopped ) 
-      callback( resultObj , false , queries );
-    else{
-
-      runQueryToTheEnd( queries[ i ], internalCallback );
-    }
-
-  }
-  runQueryToTheEnd( queries[ i ], internalCallback);
-
-}
-function runQueryToTheEnd(query,callback,deltaResult,deltaSkip){
-  
-  if ( !deltaResult ) 
-    deltaResult = [];
-  if ( !deltaSkip ) 
-    deltaSkip = 0;
-  
-  if ( deltaSkip ) 
-    query.skip( parseInt( deltaSkip , 10 ) );
-  
-  query.limit(1000);
-  
-  query.find( {
-    success : function( result ){
-
-      var runAgain = false;
-      if ( result && result.length > 0 ){
-
-        deltaResult = deltaResult.concat(result);
-        if ( result.length == 1000 && deltaSkip < 1000 ) 
-          runAgain = true;
-
-      }
-
-      if ( runAgain ){ 
-        
-        deltaSkip = deltaSkip + 1000;
-        runQueryToTheEnd( query , callback , deltaResult , deltaSkip );
-      }
-      else 
-        callback( deltaResult , false , query );
-
-    },
-    error : function( error ){
-      callback( deltaResult , error , query );
-    }, 
-    useMasterKey:true
-
-  });
-};
 
 
 
@@ -343,13 +222,13 @@ ParseHandler.prototype.trial = function(userId, callback){
   trialQuery.equalTo( 'user' , new Parse.User( { objectId : userId } ) );
 
   var userQuery = new Parse.Query( Parse.User );
-
+  var queryUtility = new ParseQueries();
   userQuery.equalTo( 'objectId' , userId );
   /*userQuery.find({success:function(users){
     callback(users,false);
   },error:function(error){ callback(false, error); }});*/
   
-  runQueriesToTheEnd( [ trialQuery , userQuery ], function( result , error ){
+  queryUtility.runQueriesToTheEnd( [ trialQuery , userQuery ], function( result , error ){
     if ( error )
       callback( false , error );
     else{

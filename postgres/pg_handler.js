@@ -29,7 +29,6 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	var self = this;
 	var batcher = new PGBatcher( body.objects, userId, this.logger );
 	this.logger.time('batched objects');
-	var resultObjects = {};
 
 	function findIdsFromLocalIdsToDetermineUpdates(){
 		
@@ -131,33 +130,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			if ( error ) 
 				return finishWithError( error );
 
-			var relations = {};
-			if(result["todo_tags"] && result.todo_tags.length > 0){
-				for(var i in result.todo_tags){
-					var tagRelation = result.todo_tags[i];
-					if(!relations[tagRelation.todoLocalId])
-						relations[tagRelation.todoLocalId] = [];
-					relations[tagRelation.todoLocalId].push({objectId:tagRelation.tagLocalId});
-				}
-			}
-			var biggestTime;
-			for ( var className in result ){
-
-				if ( !( className == "Tag" || className == "ToDo" ) )
-					continue;
-				var isTodo = (className == "ToDo");
-				for(var index in result[className]){
-					var localObj = result[className][index];
-					if(!biggestTime || localObj.updatedAt > biggestTime)
-						biggestTime = localObj.updatedAt;
-					if(isTodo && relations[localObj.objectId]){
-						localObj["tags"] = relations[localObj.objectId];
-					}
-					sql.parseObjectForClass(localObj,className);
-				}
-				resultObjects[className] = result[className];
-			}
-			finish( biggestTime );
+			var resultObjects = batcher.prepareReturnObjectsForResult( result );
+			finish( resultObjects );
 		});
 		
 	};
@@ -165,13 +139,10 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		self.client.end();
 		callback( false, error );
 	};
-	function finish(biggestTime){
+	function finish( resultObjects ){
 		self.logger.time('finished query');
 		self.client.end();
 		resultObjects.serverTime = new Date().toISOString();
-		if ( biggestTime )
-			resultObjects.updateTime = biggestTime.toISOString();
-      	
       	callback( resultObjects , false );
 	};
 

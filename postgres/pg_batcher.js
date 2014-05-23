@@ -302,6 +302,88 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
   return queries;
 }
 
+PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
+  var resultObjects = {};
+  var relations = {};
+  if(result["todo_tags"] && result.todo_tags.length > 0){
+    for(var i in result.todo_tags){
+      var tagRelation = result.todo_tags[i];
+      if(!relations[tagRelation.todoLocalId])
+        relations[tagRelation.todoLocalId] = [];
+      relations[tagRelation.todoLocalId].push({objectId:tagRelation.tagLocalId});
+    }
+  }
+  var biggestTime;
+  for ( var className in result ){
+
+    if ( !( className == "Tag" || className == "ToDo" ) )
+      continue;
+
+    var isTodo = ( className == "ToDo" );
+    for ( var index in result [ className ] ){
+      
+      var localObj = result[className][index];
+      if ( !biggestTime || localObj.updatedAt > biggestTime )
+        biggestTime = localObj.updatedAt;
+      
+      if ( isTodo && relations[ localObj.objectId ] ){
+        localObj["tags"] = relations[ localObj.objectId ];
+      }
+      
+      sql.parseObjectForClass( localObj , className );
+    }
+    
+    resultObjects[ className ] = result[ className ];
+
+    if ( biggestTime )
+      resultObjects.updateTime = biggestTime.toISOString();
+  }
+  return resultObjects;
+}
+
+
+function scrapeChanges( object , lastUpdateTime ){
+  
+  var attributes = object.attributes;
+  var updateTime = new Date();
+
+  object.set( 'parseClassName' , object.className );
+  
+  var deleteAttributes = [ "owner" , "ACL" , "lastSave" ]
+  for( var i in deleteAttributes ){
+    var attr = deleteAttributes[ i ];
+    if ( attributes[ attr ] )
+      delete attributes[ attr ];
+  }
+
+  if ( !attributes[ 'attributeChanges' ] ) 
+    return;
+  
+  if ( !lastUpdateTime ) 
+    return delete attributes['attributeChanges'];
+  
+  var changes = object.get('attributeChanges');
+  
+  if ( !changes ) 
+    changes = {};
+  
+  if ( attributes ){
+    
+    for ( var attribute in attributes ){
+      
+      var lastChange = changes[ attribute ];
+      
+      if ( ( attribute == "deleted" && attributes[ attribute ] ) || attribute == "tempId" || attribute == "parseClassName" ) 
+        continue;
+      
+      if( !lastChange || lastChange <= lastUpdateTime ) 
+        delete attributes[ attribute ];
+
+    }
+
+  }
+
+};
 
 
 PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( className , results ){

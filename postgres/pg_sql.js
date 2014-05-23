@@ -1,8 +1,8 @@
 var sql = require('sql');
 var _ = require('underscore');
 
-var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "createdAt" , "userId" ];
-var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate"];
+var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId" ];
+var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate", "parentLocalId" ];
 var tagColumns = [ "title" ];
 
 exports.todo = sql.define( { 
@@ -20,10 +20,8 @@ exports.todo_tag = sql.define( {
 } );
 
 
-
-
 var sharedReturnColumns = [ 'localId' , 'updatedAt' , 'deleted'];
-var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption"];
+var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption", "parentLocalId" ];
 var tagReturnColumns = [ 'title' ];
 
 

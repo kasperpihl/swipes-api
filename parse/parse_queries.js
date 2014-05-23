@@ -1,6 +1,10 @@
 var Parse = require('parse').Parse;
-
+var _ = require('underscore');
 function ParseQueries( user ){
+	if ( _.isString( user ) ){
+		var User = Parse.Object.extend( "_User" );
+		user = new User({ objectId: user });
+	}
 	this.user = user;
 };
 
@@ -28,7 +32,8 @@ ParseQueries.prototype.queriesForUpdating = function( lastUpdate , nowTime ){
 ParseQueries.prototype.queryForClass = function( className ){
 	
 	var query = new Parse.Query( className );
-	query.equalTo( 'owner', this.user );
+	if ( this.user )
+		query.equalTo( 'owner', this.user );
 	
 	return query;
 };
@@ -73,13 +78,13 @@ ParseQueries.prototype.queriesForNotFound = function( batch ){
 
 		if ( localQueries.length > 0 ){
 			
-			if ( localQueries.length == 1 ) 
+			if ( localQueries.length == 1 )
 				queries.push( localQueries[ 0 ] );
 			else{
 				
 				queries.push( Parse.Query.or( localQueries[ 0 ] , localQueries[ 1 ] ) );
 			}
-		
+			
 		}
 	}
 
@@ -117,5 +122,84 @@ ParseQueries.prototype.queriesForDuplications = function( tempIds ){
 	
 	return queries;
 };
+
+/* Running a query unlimited with skips if limit of object is reached
+  callback (result,error)
+*/
+ParseQueries.prototype.runQueriesToTheEnd = function( queries, callback ){
+  
+  if ( !queries || queries.length == 0 ) 
+    return callback(false,"No queries to run");
+  
+  var stopped;
+  var resultObj = {};
+  var i = 0;
+  var self = this; 
+  var internalCallback = function( result , error , query ){
+    
+    i++;
+    
+    if ( error && !stopped ){
+      
+      callback( false , error , queries);
+      stopped = true;
+    }
+    else if ( result ){
+      
+      resultObj[ query.className ] = result;
+    }
+
+    if ( i == queries.length && !stopped ) 
+      callback( resultObj , false , queries );
+    else{
+
+      self.runQueryToTheEnd( queries[ i ], internalCallback );
+    }
+
+  }
+  self.runQueryToTheEnd( queries[ i ], internalCallback);
+
+}
+ParseQueries.prototype.runQueryToTheEnd = function(query,callback,deltaResult,deltaSkip){
+  var self = this;
+  if ( !deltaResult ) 
+    deltaResult = [];
+  if ( !deltaSkip ) 
+    deltaSkip = 0;
+  
+  if ( deltaSkip ) 
+    query.skip( parseInt( deltaSkip , 10 ) );
+  
+  query.limit(1000);
+  
+  query.find( {
+    success : function( result ){
+
+      var runAgain = false;
+      if ( result && result.length > 0 ){
+
+        deltaResult = deltaResult.concat(result);
+        if ( result.length == 1000 && deltaSkip < 1000 ) 
+          runAgain = true;
+
+      }
+
+      if ( runAgain ){ 
+        
+        deltaSkip = deltaSkip + 1000;
+        self.runQueryToTheEnd( query , callback , deltaResult , deltaSkip );
+      }
+      else 
+        callback( deltaResult , false , query );
+
+    },
+    error : function( error ){
+      callback( deltaResult , error , query );
+    }, 
+    useMasterKey:true
+
+  });
+};
+
 
 module.exports = ParseQueries;

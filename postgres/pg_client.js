@@ -37,7 +37,8 @@ PGClient.prototype.buildConString = function(){
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
-	pg.connect( this.conString, function( err, client, done ) {
+	var targetConnect = this.client ? this.client : pg;
+	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			self.connected = true;
 			self.client = client;
