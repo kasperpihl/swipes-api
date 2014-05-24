@@ -21,10 +21,8 @@ MoveController.prototype.loadDataFromParseFromUser = function( fromUserId, callb
         if ( error ) 
             return callback( false, error);
         for ( var parseClassName in result ){
-        	console.log( parseClassName );
-        	var objects = result[ parseClassName ];
-        	for ( var index in objects ){
-        		var obj = objects[ index ];
+        	for ( var index in result[ parseClassName ] ){
+        		var obj = result[ parseClassName ][ index ];
         		parseBatcher.scrapeChanges( obj );
         		result[ parseClassName ][ index ] = obj.toJSON();
         	}
@@ -50,25 +48,10 @@ MoveController.prototype.copyDataFromParseToPostgresForUser = function( userId ,
 				return callback(error);
 			
 			self.client.commit();
-			
+			self.client.end();
 			callback( result );
 		
 		});
-	});
-	return;
-	this.client.performQueries( queries, function( result, error ){
-		if ( error )
-			return callback(error);
-
-		var resultObject = fromBatcher.prepareReturnObjectsForResult(result);
-		var toBatcher = new PGBatcher( result, toUserId, self.logger );
-		var queries = toBatcher.getQueriesForInsertingAndSavingObjects( 50 );
-		self.client.performQueries( queries , function( result, error){
-			if ( error )
-				return (error);
-
-			callback( result );
-		})
 	});
 };
 
