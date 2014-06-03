@@ -6,7 +6,27 @@ var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
+app.use(function(req, res, next) {
+  console.log('called');
+  var allowedHost = [ 
+    "*" 
+  ]; 
 
+  if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) { 
+    res.header('Access-Control-Allow-Credentials', true); 
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS'); 
+    res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type'); 
+    if ('OPTIONS' === req.method) { 
+      res.writeHead(204); 
+      res.end(); 
+    } 
+    else { 
+      next(); 
+    } 
+  }
+  else next();
+});
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
@@ -21,7 +41,7 @@ function sendBackError( error, res, logs ){
   if ( error && error.message ) 
     sendError.message = error.message;
         
-  res.send( sendError );
+  res.error( sendError );
 }
 
 app.route( '/v1/sync' ).post( handleSync );
@@ -38,6 +58,7 @@ app.route('/test').get(function(req,res){
 
 app.route('/trial').get(function(req,res){
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
   Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
   if ( !req.query.user )
     return res.jsonp({code:142,message:"user must be included"});
@@ -52,7 +73,7 @@ app.route('/trial').get(function(req,res){
   });
 });
 
-function handleSync( req, res ){
+function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;

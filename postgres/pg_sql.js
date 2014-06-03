@@ -19,6 +19,10 @@ exports.todo_tag = sql.define( {
 	"columns" : [ 'id' , "todoId" , "tagId" , "userId" , "order" ] 
 } );
 
+exports.attachment = sql.define( {
+	'name': "attachment",
+	"columns": [ 'identifier', 'service', 'title', 'sync', 'todoId', 'userId' ]
+} );
 
 var sharedReturnColumns = [ 'localId' , 'updatedAt' , 'deleted'];
 var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption", "parentLocalId" ];

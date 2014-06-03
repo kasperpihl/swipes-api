@@ -22,6 +22,9 @@ var TodoModel = BaseModel.extend({
 				if ( attribute == "tags" ){
         			this.handleTagRelations( value );        
       			}
+      			if ( attribute == "attachments" ){
+      				this.handleAttachmentRelations( value );
+      			}
 
 				if ( !this.sql.hasColumn( attribute ) )
 			        continue;
@@ -34,6 +37,15 @@ var TodoModel = BaseModel.extend({
 		}
 
 		this.set( attributeUpdates );
+	},
+	handleAttachmentRelations:function( attachments ){
+		this.relations.attachments = new Array();
+		if ( !attachments || attachments.length == 0 )
+			return;
+
+		for ( var index in attachments ){
+			this.relations.attachments.push( attachments[ index ] );	
+		}
 	},
 	handleTagRelations:function( tags ){
 		this.relations.tags = new Array();
