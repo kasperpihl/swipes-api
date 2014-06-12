@@ -106,6 +106,7 @@ function handleSync( req, res, next ){
         res.send( result );
       }
       else{
+        console.log(error);
         logger.sendErrorLogToParse( error, req.body );
         sendBackError( error , res, logger.logs );
       }

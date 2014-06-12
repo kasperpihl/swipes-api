@@ -163,6 +163,9 @@ PGBatcher.prototype.getInitialRelationshipQueries = function( chunkSize ){
   if ( relationAttachmentsLocalIds && relationAttachmentsLocalIds.length > 0 )
     relationLocalIds[ "attachments" ] = relationAttachmentsLocalIds;
   
+  if ( _.keys(relationLocalIds).length == 0 )
+    return; 
+     
   for ( var index in relationLocalIds ){
     var localIds = relationLocalIds[ index ];
     for ( var i = 0, j = localIds.length;   i < j;    i += chunkSize  ) {
@@ -244,10 +247,10 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
       var chunk = updatedToDoAttachments.slice( i , i + batchSize );
       if ( chunk.length == 0 )
         continue;
-      var deleteTagRelationQuery = todo_attachment['delete']().where( todo_attachment.userId.equals( this.userId )
+      var deleteToDoRelationQuery = todo_attachment['delete']().where( todo_attachment.userId.equals( this.userId )
                                                                           .and( todo_attachment.todoId.in( chunk ) ) ).toQuery();
-      deleteTagRelationQuery.numberOfRows = chunk.length;
-      queries.push( deleteTagRelationQuery );
+      deleteToDoRelationQuery.numberOfRows = chunk.length;
+      queries.push( deleteToDoRelationQuery );
   }
 
 
@@ -370,8 +373,12 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
         where = model.userId.equals( this.userId )
                             .and( model.updatedAt.gt( lastUpdate ) );
         
+        var order = (i == 4) ? model.parentLocalId : model.title;
+
+
         var query = model.select.apply( model, sql.retColumns( model ) )
                          .where( where )
+                         .order( order )
                          .toNamedQuery( model.className );
     }
 
