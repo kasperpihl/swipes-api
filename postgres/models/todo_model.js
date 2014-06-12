@@ -42,7 +42,6 @@ var TodoModel = BaseModel.extend({
 		this.relations.attachments = new Array();
 		if ( !attachments || attachments.length == 0 )
 			return;
-
 		for ( var index in attachments ){
 			this.relations.attachments.push( attachments[ index ] );	
 		}

@@ -74,7 +74,6 @@ app.route('/trial').get(function(req,res){
 
 function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
-  console.log("called");
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
   var logger = new Logger();
