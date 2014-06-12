@@ -154,7 +154,7 @@ PGBatcher.prototype.getInitialRelationshipQueries = function( chunkSize ){
   var relationTagsLocalIds = _.pluck( todosWithTagsToUpdate, "id" );
   if ( relationTagsLocalIds && relationTagsLocalIds.length > 0 )
     relationLocalIds[ "tags" ] = relationTagsLocalIds;
-
+  
   var todosWithAttachmentsToUpdate = this.todoCollection.filter( function ( model ){
     return model.relations.attachments ? true : false;
   });
@@ -427,7 +427,6 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
       }
       if ( isTodo && attachmentRelations[ localObj.objectId ] ){
         localObj[ "attachments" ] = attachmentRelations[ localObj.objectId ];
-        console.log(localObj["attachments"]);
       }
       
       sql.parseObjectForClass( localObj , className );
@@ -495,7 +494,7 @@ PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( cla
   for( var i in results ){
     var row = results[ i ];
     var model = collection.get( row.localId );
-    if ( model ) 
+    if ( model )
       model.set( { "databaseId" : row.id } );
   }
 

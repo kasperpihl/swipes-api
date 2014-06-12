@@ -6,15 +6,11 @@ var TodoModel = BaseModel.extend({
 	tableName: "todo",
 	idAttribute: "localId",
 	className: "ToDo",
-	relations: {},
 	sql: sql.todo,
-
 	parseRawData:function ( data, userId ) {
-		
+		this.relations = {};
 		var attributeUpdates = this.getAttributeUpdateArrayFromData( data, userId );
-		
 		// If deleted don't iterate attributes
-		
 		if ( !data.deleted ) {
 			for ( var attribute in data ){
 				var value = data[ attribute ];
