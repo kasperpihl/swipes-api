@@ -63,8 +63,9 @@ exports.parseObjectForClass = function( object, className ){
 	object.parseClassName = className;
 	if ( className == "ToDo" ){
 		for ( var attribute in object ){
-			if ( object[ attribute ] && _.indexOf( [ 'schedule' , "completionDate" , "repeatedDate" ], attribute ) != -1 )
-				object[ attribute ] = convertDate( object[ attribute ] );
+			var value = object[ attribute ];
+			if ( value && _.indexOf( [ 'schedule' , "completionDate" , "repeatedDate" ], attribute ) != -1 )
+				object[ attribute ] = convertDate( value );
 		}
 	}
 };

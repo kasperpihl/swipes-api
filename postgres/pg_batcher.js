@@ -373,8 +373,7 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
         where = model.userId.equals( this.userId )
                             .and( model.updatedAt.gt( lastUpdate ) );
         
-        var order = (i == 4) ? model.parentLocalId : model.title;
-
+        var order = (i == 3) ? model.parentLocalId.descending : model.title;
 
         var query = model.select.apply( model, sql.retColumns( model ) )
                          .where( where )
