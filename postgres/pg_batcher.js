@@ -75,6 +75,7 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
       }*/
       return ( model.get('databaseId') ? 'update' : 'insert' ) 
     });
+
     if ( collection['invalid'] ){
       console.log('invalid');
       for ( var model in collection['invalid'] ){
@@ -330,14 +331,12 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
       tag = sql.tag, 
       todo_tag = sql.todo_tag,
       todo_attachment = sql.todo_attachment;
-
   var models = [ todo_tag, todo_attachment , tag, todo ];
   var queries = [];
   for ( var i in models ){
     var query, 
         model = models[ i ],
         where = model.userId.equals( this.userId );
-    
     // Model is todo_tag relation
     if ( i == 0 ){
 
@@ -374,7 +373,6 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
                             .and( model.updatedAt.gt( lastUpdate ) );
         
         var order = (i == 3) ? model.parentLocalId.descending : model.title;
-
         var query = model.select.apply( model, sql.retColumns( model ) )
                          .where( where )
                          .order( order )
@@ -383,7 +381,6 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
 
     queries.push(query);
   }
-  
   return queries;
 }
 
@@ -416,14 +413,13 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
   }
   var biggestTime;
   for ( var className in result ){
-
     if ( !( className == "Tag" || className == "ToDo" ) )
       continue;
-
     var isTodo = ( className == "ToDo" );
     for ( var index in result [ className ] ){
       
       var localObj = result[className][index];
+
       if ( !biggestTime || localObj.updatedAt > biggestTime )
         biggestTime = localObj.updatedAt;
       
@@ -440,8 +436,9 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
     
     resultObjects[ className ] = result[ className ];
 
-    if ( biggestTime )
+    if ( biggestTime ){
       resultObjects.updateTime = biggestTime.toISOString();
+    }
   }
   return resultObjects;
 }

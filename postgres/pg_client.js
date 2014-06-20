@@ -132,7 +132,6 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 			if( !query.name )
 				query.name = "" + i;
-
 			returnArr[ query.name ] = result.rows;
 
 			if ( iterator )

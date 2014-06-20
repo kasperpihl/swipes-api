@@ -1,9 +1,14 @@
 var sql = require('sql');
 var _ = require('underscore');
 
-var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId" ];
-var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate", "attachmentsLastUpdate" , "parentLocalId" ];
+var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt" ];
+var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate", "attachmentsLastUpdate" , "parentLocalId", "origin", "originIdentifier" ];
 var tagColumns = [ "title" ];
+
+var sharedReturnColumns = [ 'localId' , 'updatedAt', 'createdAt' , 'deleted' ];
+var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption", "parentLocalId", "origin", "originIdentifier" ];
+var tagReturnColumns = [ 'title' ];
+
 
 exports.todo = sql.define( { 
 	'name' : "todo" , 
@@ -24,9 +29,6 @@ exports.todo_attachment = sql.define( {
 	"columns": [ 'identifier', 'service', 'title', 'sync', 'todoId', 'userId' ]
 } );
 
-var sharedReturnColumns = [ 'localId' , 'updatedAt' , 'deleted'];
-var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption", "parentLocalId" ];
-var tagReturnColumns = [ 'title' ];
 
 
 
@@ -55,6 +57,7 @@ exports.retColumns = function( self ){
 
 function convertDate( dateObj ){
 	var object = { "__type" : "Date", "iso" : dateObj.toISOString() };
+	console.log(object);
 	return object;
 };
 

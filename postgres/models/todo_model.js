@@ -25,8 +25,9 @@ var TodoModel = BaseModel.extend({
 				if ( !this.sql.hasColumn( attribute ) )
 			        continue;
 
-			    if ( _.isObject( value ) && value["__type"] == "Date" )
+			    if ( _.isObject( value ) && value["__type"] == "Date" ){
 		        	value = new Date( value[ 'iso' ] );
+			    }
 
 				attributeUpdates[ attribute ] = value;
 			}
