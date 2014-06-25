@@ -37,7 +37,6 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			return insertAndSaveObjects();
 		self.logger.time( 'prepared queries for duplicates' );
 		self.client.performQueries( queries , function( results, error ){
-			console.log(results);
 			self.logger.time('found ids determing updates');
 			
 			if ( error )
@@ -59,11 +58,9 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		self.logger.time( "inserting and saving " + queries.length + " number of queries " );
 		
 		self.client.transaction( function( error ){
-			console.log ("transaction error");
 			self.client.rollback();
 		});
 		self.client.performQueries( queries, function( result, error , i){
-			console.log (result);
 			self.logger.time( "finalized insertions and updates" );
 			if ( error )
 				return finishWithError( error );

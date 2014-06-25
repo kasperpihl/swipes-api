@@ -57,7 +57,6 @@ exports.retColumns = function( self ){
 
 function convertDate( dateObj ){
 	var object = { "__type" : "Date", "iso" : dateObj.toISOString() };
-	console.log(object);
 	return object;
 };
 

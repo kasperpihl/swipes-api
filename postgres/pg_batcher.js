@@ -77,7 +77,6 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
     });
 
     if ( collection['invalid'] ){
-      console.log('invalid');
       for ( var model in collection['invalid'] ){
         this.logger.log( model.validationError );
       }
