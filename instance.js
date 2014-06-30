@@ -2,20 +2,12 @@ require('strong-agent').profile("4805c27d826dec99b06108df1b5dab80","SwipesAPI");
 var express =       require( 'express' ),
     http    =       require( 'http' ),
     bodyParser =    require( 'body-parser' ),
-    toobusy =       require( 'toobusy' ),
     _ =             require( 'underscore' );
 var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
 http.globalAgent.maxSockets = 25;
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
-app.use(function(req, res, next) {
-  if (toobusy()) {
-    res.send(503, "I'm busy right now, sorry.");
-  } else {
-    next();
-  } 
-});
 app.use(function(req, res, next) {
   var allowedHost = [ 
     "*" 
@@ -36,6 +28,8 @@ app.use(function(req, res, next) {
   }
   else next();
 });
+
+
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
