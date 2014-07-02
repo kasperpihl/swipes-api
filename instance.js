@@ -80,7 +80,7 @@ function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
-  if(versionNumber == 5){
+  if(versionNumber == 0){
     sendBackError({ code: 123, message: "update required" }, res );
     return;
   }
