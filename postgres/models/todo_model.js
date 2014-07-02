@@ -10,6 +10,7 @@ var TodoModel = BaseModel.extend({
 	parseRawData:function ( data, userId ) {
 		this.relations = {};
 		var attributeUpdates = this.getAttributeUpdateArrayFromData( data, userId );
+		
 		// If deleted don't iterate attributes
 		if ( !data.deleted ) {
 			for ( var attribute in data ){
@@ -20,6 +21,10 @@ var TodoModel = BaseModel.extend({
       			}
       			if ( attribute == "attachments" ){
       				this.handleAttachmentRelations( value );
+      			}
+      			if( attribute == "title" && !value ){
+      				this.validationError = "corruptdata";
+      				continue;
       			}
 
 				if ( !this.sql.hasColumn( attribute ) )

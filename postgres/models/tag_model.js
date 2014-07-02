@@ -15,6 +15,10 @@ var TagModel = BaseModel.extend({
 		
 		if ( !data.deleted ) {
 			for ( var attribute in data ){
+				if( attribute == "title" && !value ){
+					this.validationError = "corruptdata";
+					continue;
+				}
 				var value = data[ attribute ];
 				if ( !this.sql.hasColumn( attribute ) )
 			        continue;

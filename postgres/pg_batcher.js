@@ -17,7 +17,7 @@ PGBatcher.prototype.reset = function(){
   this.todoCollection = new Collections.Todo();
   this.tagCollection = new Collections.Tag();
   this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection };
-  
+  this.deletedModels = [];
 };
 
 /*
@@ -437,6 +437,13 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
       resultObjects.updateTime = biggestTime.toISOString();
     }
   }
+  for( var index in this.deletedModels ){
+    var model = this.deletedModels[ index ];
+    
+    if( model && model.get("localId") ){
+      resultObjects[ model.className ].push( { "objectId": model.get("localId"), "tempId": model.get("localId"), "deleted": true } );
+    }
+  }
   return resultObjects;
 }
 
@@ -511,10 +518,27 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
 
   for ( var className in collectionToSave ){
     var objects = collectionToSave[ className ];
+    var collection;
     if ( className == "ToDo" )
-      this.todoCollection.loadObjects( objects, userId );
+      collection = this.todoCollection;
     else if( className == "Tag" )
-      this.tagCollection.loadObjects( objects, userId );
+      collection = this.tagCollection;
+
+    if( collection ){
+      collection.loadObjects( objects, userId );
+      if( collection.errorModels.length > 0 ){
+        for( var index in collection.errorModels ){
+          var model = collection.errorModels[ index ];
+          if( model.validationError && model.validationError == "corruptdata" ){
+            this.deletedModels.push(model);
+          }
+          else{
+            this.error = { "code" :158, "message": model.validationError };
+          }
+        }
+      }
+    }
+    
   }
 };
 

@@ -2,6 +2,7 @@ var Backbone = require('backbone');
 
 var BaseCollection = Backbone.Collection.extend({
 	model:false,
+	errorModels:[],
 	insertions: function(){
 		
 	},
@@ -14,7 +15,11 @@ var BaseCollection = Backbone.Collection.extend({
 			var model = new this.model();
 			var data = objects[ i ];
 			model.parseRawData( data, userId );
-			models.push(model);
+			if( !model.validationError )
+				models.push(model);
+			else{
+				this.errorModels.push(model);
+			}
 		}
 		this.add(models);
 		this.on('invalid', function(model, error){

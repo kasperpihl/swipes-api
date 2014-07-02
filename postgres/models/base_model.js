@@ -2,6 +2,8 @@ var Backbone = require('backbone');
 
 var BaseModel = Backbone.Model.extend({
 	action: 'insert',
+	error: null,
+	
 	getAttributeUpdateArrayFromData:function( data, userId){
 		var attributeUpdates = {};
 		var identifier = data.objectId;

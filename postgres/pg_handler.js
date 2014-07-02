@@ -25,9 +25,16 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
+	function finishWithError(error){
+		self.client.end();
+		callback( false, error );
+	};
 
 	var self = this;
 	var batcher = new PGBatcher( body.objects, userId, this.logger );
+	if ( batcher.error )
+		return finishWithError( batcher.error );
+
 	this.logger.time('batched objects');
 
 	function findIdsFromLocalIdsToDetermineUpdates(){
@@ -140,10 +147,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		});
 		
 	};
-	function finishWithError(error){
-		self.client.end();
-		callback( false, error );
-	};
+	
 	function finish( resultObjects ){
 		self.logger.time('finished query');
 		self.client.end();
