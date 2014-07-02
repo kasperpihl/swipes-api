@@ -147,6 +147,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	function finish( resultObjects ){
 		self.logger.time('finished query');
 		self.client.end();
+		if( !resultObjects )
+			resultObjects = {};
 		resultObjects.serverTime = new Date().toISOString();
       	callback( resultObjects , false );
 	};
