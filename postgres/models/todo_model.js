@@ -50,6 +50,8 @@ var TodoModel = BaseModel.extend({
 
 		for ( var index in tags ){
 			var relation = tags[ index ];
+			if ( !relation )
+				continue;
 			var identifier = relation.objectId;
 			if ( !identifier )
 			  identifier = relation.tempId;
