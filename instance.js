@@ -1,4 +1,4 @@
-require('strong-agent').profile("4805c27d826dec99b06108df1b5dab80","SwipesAPI");
+//require('strong-agent').profile("4805c27d826dec99b06108df1b5dab80","SwipesAPI");
 var express =       require( 'express' ),
     http    =       require( 'http' ),
     bodyParser =    require( 'body-parser' ),
