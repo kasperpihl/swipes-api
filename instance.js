@@ -43,6 +43,8 @@ function sendBackError( error, res, logs ){
     sendError.code = error.code;
   if ( error && error.message ) 
     sendError.message = error.message;
+  if ( error && error.hardSync )
+    sendError.hardSync = true;
         
   res.send( sendError );
 }

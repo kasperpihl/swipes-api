@@ -66,21 +66,19 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
 
   var returnQueries = [];
   var updateQueries = [];
-
+  var self = this;
   for ( var className in this.collections ){
     var collection = this.collections[ className ].groupBy(function( model){ 
-      //model.set({}, { validate:true });
-      /*if ( model.validationError ){
+      model.set({}, { validate:true });
+      if ( model.validationError ){
+        self.error = { code: 157, message: model.validationError, hardSync: true };
         return 'invalid';
-      }*/
+      }
       return ( model.get('databaseId') ? 'update' : 'insert' ) 
     });
 
     if ( collection['invalid'] ){
-      for ( var model in collection['invalid'] ){
-        this.logger.log( model.validationError );
-      }
-      return;
+      return ;
     }
     
     var updates = collection['update'];
@@ -517,7 +515,6 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
       this.todoCollection.loadObjects( objects, userId );
     else if( className == "Tag" )
       this.tagCollection.loadObjects( objects, userId );
-
   }
 };
 

@@ -52,6 +52,10 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	function insertAndSaveObjects(){
 		var queries = batcher.getQueriesForInsertingAndSavingObjects( self.batchSize );
+		if( batcher.error ){
+			return callback(false, batcher.error);
+		}
+
 		if ( !queries )
 			return getUpdates();
 
