@@ -80,6 +80,10 @@ function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
+  if(versionNumber == 0){
+    sendBackError({ code: 123, message: "update required" }, res );
+    return;
+  }
   var logger = new Logger();
   var client = new PGClient( logger );
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
@@ -126,6 +130,5 @@ var server = app.listen(port);
 process.on('SIGINT', function() {
   server.close();
   // calling .shutdown allows your process to exit normally
-  toobusy.shutdown();
   process.exit();
 });
