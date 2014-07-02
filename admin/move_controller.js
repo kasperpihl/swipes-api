@@ -20,6 +20,7 @@ MoveController.prototype.loadDataFromParseFromUser = function( fromUserId, callb
     	//console.log( result.length);
         if ( error ) 
             return callback( false, error);
+        console.log(result);
         for ( var parseClassName in result ){
         	for ( var index in result[ parseClassName ] ){
         		var obj = result[ parseClassName ][ index ];

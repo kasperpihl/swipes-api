@@ -16,11 +16,11 @@ app.route( '/move' ).get( function( req, res ){
 
   var logger = new Logger();
   var client = new PGClient( logger );
-  if ( !req.query.fromUser || !req.query.toUser )
-    return res.jsonp({code:142,message:"fromUser and toUser must be specified"});
+  if ( !req.query.user)
+    return res.jsonp({code:142,message:"user must be specified"});
 
   var moveController = new MoveController( client, logger );
-  moveController.copyDataFromUserToUser( req.query.fromUser, req.query.toUser, function( result, error ){
+  moveController.copyDataFromParseToPostgresForUser( req.query.user, function( result, error ){
     res.jsonp( result );
   });
 return ;
