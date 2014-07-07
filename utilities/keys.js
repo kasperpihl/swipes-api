@@ -8,6 +8,9 @@ options["masterKey"] = live ? "gIvKfS12gMjaJuT2cvdnc1uONs2XpwPSjYQX01vP" : "Xh5X
 exports.live = function(){
 	return live;
 }
+exports.setLive = function( newLive ){
+	live = (newLive) ? true : false;
+}
 exports.get = function(key){
 	return options[key];
 }

@@ -25,12 +25,13 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
+	var self = this;
 	function finishWithError(error){
 		self.client.end();
 		callback( false, error );
 	};
 
-	var self = this;
+	
 	var batcher = new PGBatcher( body.objects, userId, this.logger );
 	if ( batcher.error )
 		return finishWithError( batcher.error );

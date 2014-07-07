@@ -52,6 +52,7 @@ PGClient.prototype.connect = function( callback ){
 PGClient.prototype.end = function(){
 	if ( this.done ){
 		this.done();
+		this.done = false;
 	}
 	this.client = false;
 	this.connected = false;

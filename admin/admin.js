@@ -6,6 +6,7 @@ app.use(bodyParser.json());
 
 var Parse = require('parse').Parse;
 var keys = require('../utilities/keys.js');
+keys.setLive(true);
 
 var Logger =          require( '../utilities/logger.js' );
 var PGClient =        require('../postgres/pg_client.js');
