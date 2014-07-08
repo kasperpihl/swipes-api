@@ -90,8 +90,10 @@ function handleSync( req, res, next ){
   var client = new PGClient( logger );
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
-    if ( error )
+    if ( error ){
+      client.end();
       return sendBackError( error , res);
+    }
     logger.time( 'credential validation completed' );
     logger.setIdentifier( userId );
 
@@ -109,6 +111,7 @@ function handleSync( req, res, next ){
     
     
     handler.sync( req.body, userId, function( result , error ){
+      client.end();
       logger.time('Finished request', true);
       if ( result ){
         if ( req.body.sendLogs ) 
@@ -127,10 +130,4 @@ function handleSync( req, res, next ){
 
 
 var port = Number(process.env.PORT || 5000);
-var server = app.listen(port);
-
-process.on('SIGINT', function() {
-  server.close();
-  // calling .shutdown allows your process to exit normally
-  process.exit();
-});
+app.listen(port);

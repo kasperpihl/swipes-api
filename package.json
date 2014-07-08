@@ -11,9 +11,7 @@
     "backbone": "1.1.x",
     "body-parser": "1.x",
     "pg": "3.1.0",
-    "sql": "0.39.0",
-    "strong-agent": "0.4.x",
-    "toobusy": "0.2.4"
+    "sql": "0.39.0"
   },
   "engines": {
     "node": "0.10.x"
