@@ -2,11 +2,11 @@ var sql = require('sql');
 var _ = require('underscore');
 
 var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt" ];
-var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatedDate", "repeatOption" , "tagsLastUpdate", "attachmentsLastUpdate" , "parentLocalId", "origin", "originIdentifier" ];
+var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatDate", "repeatOption" , "tagsLastUpdate", "attachmentsLastUpdate" , "parentLocalId", "origin", "originIdentifier" ];
 var tagColumns = [ "title" ];
 
 var sharedReturnColumns = [ 'localId' , 'updatedAt', 'createdAt' , 'deleted' ];
-var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatedDate", "repeatOption", "parentLocalId", "origin", "originIdentifier" ];
+var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatDate", "repeatOption", "parentLocalId", "origin", "originIdentifier" ];
 var tagReturnColumns = [ 'title' ];
 
 
@@ -66,7 +66,7 @@ exports.parseObjectForClass = function( object, className ){
 	if ( className == "ToDo" ){
 		for ( var attribute in object ){
 			var value = object[ attribute ];
-			if ( value && _.indexOf( [ 'schedule' , "completionDate" , "repeatedDate" ], attribute ) != -1 )
+			if ( value && _.indexOf( [ 'schedule' , "completionDate" , "repeatDate" ], attribute ) != -1 )
 				object[ attribute ] = convertDate( value );
 		}
 	}
