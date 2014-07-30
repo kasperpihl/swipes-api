@@ -50,12 +50,23 @@ PGClient.prototype.connect = function( callback ){
 };
 
 PGClient.prototype.end = function(){
-	if ( this.done ){
-		this.done();
-		this.done = false;
+	var self = this;
+	function finalize(){
+		if ( self.done ){
+			self.done();
+			self.done = false;
+		}
+		self.client = false;
+		self.connected = false;
 	}
-	this.client = false;
-	this.connected = false;
+	if( this.runningTransaction ){
+		this.rollback( function(){
+			finalize();
+		})
+	}
+	else
+		finalize();
+	
 }
 
 PGClient.prototype.performQuery = function ( query , callback ){
@@ -115,8 +126,6 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	}
 	catch( err ){
 		callback( null, err );
-	}
-	finally{
 		this.end();
 	}
 	
@@ -206,15 +215,19 @@ PGClient.prototype.transaction = function( handler ){
 	this.performQuery( "BEGIN" );
 };
 
-PGClient.prototype.rollback = function(){
+PGClient.prototype.rollback = function(callback){
+	var self = this;
 	this.performQuery( "ROLLBACK" ,function( result, error ){
-
+		self.runningTransaction = false;
+		if ( callback )
+			callback( result, error );
 	});
 };
 
 PGClient.prototype.commit = function( callback ){
 	var self = this;
 	this.performQuery( "COMMIT" ,function( result, error ){
+		self.runningTransaction = false;
 		if ( callback )
 			callback( result, error );
 	});
