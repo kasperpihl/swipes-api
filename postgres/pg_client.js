@@ -110,8 +110,16 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		if ( callback )
 			callback( result , err );
 	});
+	try{
+		this.client.query.apply( this.client, args );
+	}
+	catch( err ){
+		callback( null, err );
+	}
+	finally{
+		this.end();
+	}
 	
-	this.client.query.apply( this.client, args );
 };
 
 PGClient.prototype.performQueries = function ( queries, callback, iterator ){
