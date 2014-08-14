@@ -31,6 +31,17 @@ return ;
     
   });
 });
+
+app.route( '/loadEmails').get( function( req, res){
+  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+
+  var logger = new Logger();
+  var fetchController = new FetchController( false, logger );
+  fetchController.fetchSignups(function( result, error ){
+    //console.log( error );
+    res.jsonp( result );
+  });
+})
 app.route( '/fetch' ).get( function( req, res ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 

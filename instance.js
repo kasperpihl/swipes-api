@@ -61,6 +61,25 @@ app.route('/test').get(function(req,res){
   })
 });
 
+app.route('/vero').post( function(req,res){
+  var Vero = require('./utilities/vero').EventLogger;
+  var authToken = "YmU3ZGNlMTBhOTAzZTJlMjRhMTJkZjFjODYyODE2YzZmZWFkMmRmNzphZmZiNjI1YWQ4YzY3YTU1NDA3Nzk4ZTZjMWY4OWZjNTAyZjU1NTQ4"; // = process.env['VERO_TOKEN'];
+  var devMode = false; // false in PRODN
+  var veroLogger = new Vero(authToken, devMode);
+
+  var identifier = req.body.identifier;
+  var email = req.body.email;
+  var identity = { id: identifier, email: email };
+  var eventName = req.body.eventName;
+  var eventData = req.body.eventData;
+  if(!eventData)
+    eventData = {};
+      veroLogger.addEvent(identity, eventName, eventData, function (err, localRes, body) {
+      if (err) res.jsonp( err );
+      else res.jsonp( body );
+  });
+});
+
 app.route('/trial').get(function(req,res){
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");

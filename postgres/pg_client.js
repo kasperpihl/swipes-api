@@ -40,9 +40,22 @@ PGClient.prototype.connect = function( callback ){
 	var targetConnect = this.client ? this.client : pg;
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
+			console.log("connecting");
 			self.connected = true;
 			self.client = client;
 			self.done = done;
+			/*client.on('drain', function() {
+				console.log('drained');
+				if(!self.runningTransaction){
+      				console.log("ended");
+      				self.end();
+				}
+    		});*/		
+			/*for( var index in pg.pools.all ){
+				console.log( index );
+
+			}*/
+  			
 		}
 		if ( callback )
 			callback( ( err ? false : true ) , err );
@@ -52,6 +65,7 @@ PGClient.prototype.connect = function( callback ){
 PGClient.prototype.end = function(){
 	var self = this;
 	function finalize(){
+		console.log("finalizing");
 		if ( self.done ){
 			self.done();
 			self.done = false;
@@ -61,8 +75,9 @@ PGClient.prototype.end = function(){
 	}
 	if( this.runningTransaction ){
 		this.rollback( function(){
-			finalize();
-		})
+			
+		});
+		finalize();
 	}
 	else
 		finalize();
@@ -136,10 +151,32 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
 
-	var i = 0, target = queries.length, returnArr = {};	
+	var i = 0, retCounter = 0 , target = queries.length, returnArr = {};	
 	var self = this;
-	
-	function next(){
+	for( var i = 0 ; i < queries.length ; i++ ){
+		var query = queries[ i ];
+		self.performQuery( query , function ( result , err ){
+			if ( err )
+				return callback ? callback( false, err , retCounter ) : false;
+
+			if( !query.name )
+				query.name = "" + retCounter;
+			returnArr[ query.name ] = result.rows;
+
+			if ( iterator )
+				iterator( result, retCounter);
+			
+			retCounter++;
+			
+			if ( retCounter == target ){
+				if( !self.runningTransaction )
+					self.end();
+				return callback( returnArr, false );
+			}
+
+		});
+	}
+	/*function next(){
 		if ( i == target )
 			return callback( returnArr, false );
 
@@ -163,7 +200,7 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 		});
 	};
 
-	next();
+	next();*/
 };
 
 PGClient.prototype.storeSession = function( token , userId ){
@@ -219,18 +256,22 @@ PGClient.prototype.rollback = function(callback){
 	var self = this;
 	this.performQuery( "ROLLBACK" ,function( result, error ){
 		self.runningTransaction = false;
+		self.end();
 		if ( callback )
 			callback( result, error );
 	});
+	
 };
 
 PGClient.prototype.commit = function( callback ){
 	var self = this;
 	this.performQuery( "COMMIT" ,function( result, error ){
 		self.runningTransaction = false;
+		self.end();
 		if ( callback )
 			callback( result, error );
 	});
+
 };
 
 module.exports = PGClient;

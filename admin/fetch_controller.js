@@ -7,6 +7,43 @@ function FetchController( client, logger ){
 	this.logger = logger;
 };
 
+FetchController.prototype.fetchSignups = function( callback ){
+	var parseQueries = new ParseQueries( );
+	var query = new Parse.Query('Signup');
+	query.limit(1000);
+	query.descending('createdAt');
+	var queries = [ query ];
+	query.find()
+	parseQueries.runQueriesToTheEnd( queries, function( result, error, query ){
+		if ( error ){
+	        	console.log( error );
+	            return callback( false, error);
+	        }
+	        var emailString = "";
+	        for( var i in result.Signup ){
+	        	var user = result.Signup[i];
+	        	var email = user.get("email");
+	        	console.log(user.createdAt);
+	        	if(email && email !== undefined)
+	        		emailString += email + ", ";
+	        	
+	        	if(i == 965)
+	        		break;
+	        }
+	        console.log(emailString);
+	        console.log( result.Signup.length );
+	        /*
+	        for ( var parseClassName in result ){
+	        	for ( var index in result[ parseClassName ] ){
+	        		var obj = result[ parseClassName ][ index ];
+	        		parseBatcher.scrapeChanges( obj );
+	        		result[ parseClassName ][ index ] = obj.toJSON();
+	        	}
+	        }*/
+	        callback( result, false);
+	});
+}
+
 FetchController.prototype.fetchList = function( callback ){
 	var todo = sql.todo;
 	var todo_attachment = sql.todo_attachment;

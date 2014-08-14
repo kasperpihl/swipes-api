@@ -4,6 +4,7 @@ var PGBatcher = require('./pg_batcher.js');
 
 function PGHandler( client, logger ){
 	this.logger = logger;
+	//this.logger.forceOutput = true;
 	this.client = client;
 	this.hasMoreToSave = false;
 	this.batchSize = 50;
