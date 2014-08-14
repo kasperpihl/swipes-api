@@ -40,7 +40,6 @@ PGClient.prototype.connect = function( callback ){
 	var targetConnect = this.client ? this.client : pg;
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
-			console.log("connecting");
 			self.connected = true;
 			self.client = client;
 			self.done = done;
@@ -65,7 +64,6 @@ PGClient.prototype.connect = function( callback ){
 PGClient.prototype.end = function(){
 	var self = this;
 	function finalize(){
-		console.log("finalizing");
 		if ( self.done ){
 			self.done();
 			self.done = false;
