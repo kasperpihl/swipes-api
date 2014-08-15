@@ -53,6 +53,8 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
       query.numberOfRows = chunk.length;
 
       queries.push(query);
+      console.log(query.text);
+      console.log(query.values);
     }
     
   
