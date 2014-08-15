@@ -121,8 +121,6 @@ function handleSync( req, res, next ){
       var handler = new PGHandler( client , logger );
       if ( req.body.hasMoreToSave )
         handler.hasMoreToSave = true;
-      if ( req.body.batchSize )
-        handler.batchSize = req.body.batchSize;
     }
     else{
       handler = new ParseHandler( logger );
