@@ -441,6 +441,10 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
     var model = this.deletedModels[ index ];
     
     if( model && model.get("localId") ){
+      if( !resultObjects[ model.className ] ){
+        console.log("created array for className: "+ model.className);
+        resultObjects[model.className] = [];
+      }
       resultObjects[ model.className ].push( { "objectId": model.get("localId"), "tempId": model.get("localId"), "deleted": true } );
     }
   }
