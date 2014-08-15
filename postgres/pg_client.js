@@ -151,11 +151,18 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 	var i = 0, retCounter = 0 , target = queries.length, returnArr = {};	
 	var self = this;
+	var hasSentCallback = false;
 	for( var i = 0 ; i < queries.length ; i++ ){
 		var query = queries[ i ];
 		self.performQuery( query , function ( result , err ){
-			if ( err )
-				return callback ? callback( false, err , retCounter ) : false;
+			if ( err ){
+				if( !hasSentCallback ){
+					hasSentCallback = true;
+					return callback ? callback( false, err , retCounter ) : false;
+				}
+				return false;
+				
+			}
 
 			if( !query.name )
 				query.name = "" + retCounter;
@@ -166,7 +173,7 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 			
 			retCounter++;
 			
-			if ( retCounter == target ){
+			if ( retCounter == target && !hasSentCallback ){
 				if( !self.runningTransaction )
 					self.end();
 				return callback( returnArr, false );

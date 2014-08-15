@@ -12,7 +12,6 @@ app.use(function(req, res, next) {
   var allowedHost = [ 
     "*" 
   ]; 
-
   if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) { 
     res.header('Access-Control-Allow-Credentials', true); 
     res.header('Access-Control-Allow-Origin', req.headers.origin);
