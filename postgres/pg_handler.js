@@ -7,7 +7,7 @@ function PGHandler( client, logger ){
 	//this.logger.forceOutput = true;
 	this.client = client;
 	this.hasMoreToSave = false;
-	this.batchSize = 50;
+	this.batchSize = 25;
 };
 
 PGHandler.prototype.test = function( callback ){

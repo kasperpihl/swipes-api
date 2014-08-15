@@ -106,7 +106,7 @@ LoadTests.prototype.updateObject = function( maxIdNumber ){
 
 
 LoadTests.prototype.getStats = function( callback ){
-	var todo = sql.todo;
+	var todo = sql.tag;
 	var self = this;
 
 	this.client.connect( function( connected, err ){
@@ -115,7 +115,6 @@ LoadTests.prototype.getStats = function( callback ){
 		self.logger.time( 'connected' );
 		var counterQuery = todo.select( todo.id.count() ).toQuery();
 		var query = counterQuery;
-		query = "select * from pg_settings where name='max_connections'";
 		self.client.performQuery( query , function( result, error){
 			
 			self.logger.time( "finalized" , true );
