@@ -71,8 +71,6 @@ app.route('/vero').post( function(req,res){
   var email = req.body.email;
   var identity = { id: identifier, email: email };
   var eventName = req.body.eventName;
-  console.log(req.body);
-  console.log(req.body.eventName);
   var eventData = req.body.eventData;
   if(!eventData)
     eventData = {};
