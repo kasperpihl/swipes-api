@@ -104,6 +104,8 @@ function handleSync( req, res, next ){
     sendBackError({ code: 123, message: "update required" }, res );
     return;
   }
+  sendBackError({code: 504, message: "maintainence"}, res);
+  return;
   var logger = new Logger();
   var client = new PGClient( logger );
 
