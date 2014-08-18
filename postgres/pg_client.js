@@ -15,6 +15,7 @@ function PGClient( logger ){
 	this.connected = false;
 	this.done = false;
 	this.logger = logger;
+	this.userId = false;
 	this.conString = this.buildConString();
 	if ( !this.conString )
 		throw Error('define DATABASE_URL as environment var');
@@ -126,8 +127,9 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		if(resultTime > 1000){
-			console.log(new Date() + " query delayed with " + resultTime + " ms");
-			console.log( query.text, query.values );
+			console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
+			console.log( query.text );
+			console.log( query.values );
 		}
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
 		if ( numberOfObjects )
@@ -225,6 +227,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
 		callback(false, { code : 142 , message : "sessionToken must be included" });
 	function validateFromParse( store ){
     	Parse.User.become( token ).then( function( user ){
+    		self.userId = user.id;
     		callback( user.id, false );
     		if ( store )
     			self.storeSession( token , user.id );
@@ -242,6 +245,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
 		if ( error )
 			return callback( false, error);
 		if ( result.rows && result.rows.length > 0 ){
+			self.userId = result.rows[0].userId;
 			callback( result.rows[0].userId, false );
 		}
 		else 
