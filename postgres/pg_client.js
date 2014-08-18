@@ -125,6 +125,10 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		}
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
+		if(resultTime > 1000){
+			console.log(new Date() + " query delayed with " + resultTime + " ms");
+			console.log( query.text, query.values );
+		}
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
 		if ( numberOfObjects )
 			self.logger.log( command + " " + numberOfObjects + ' rows ' + rowsPrSecond + "/s (" + resultTime + "ms)");

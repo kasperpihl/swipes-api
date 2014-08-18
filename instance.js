@@ -133,8 +133,6 @@ function handleSync( req, res, next ){
       if ( result ){
         if ( req.body.sendLogs ) 
           result['logs'] = logger.logs;
-        console.log(new Date());
-        console.log(logger.logs);
         res.send( result );
       }
       else{
