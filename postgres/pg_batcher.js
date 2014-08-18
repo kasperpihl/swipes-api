@@ -51,7 +51,6 @@ PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
                                           .and( model.localId.in( chunk ) ) )
                       .toNamedQuery( queryName );
       query.numberOfRows = chunk.length;
-
       queries.push(query);
     }
     
@@ -442,6 +441,7 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
     
     if( model && model.get("localId") ){
       if( !resultObjects[ model.className ] ){
+
         resultObjects[model.className] = [];
       }
       resultObjects[ model.className ].push( { "objectId": model.get("localId"), "tempId": model.get("localId"), "deleted": true } );

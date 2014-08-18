@@ -44,18 +44,6 @@ PGClient.prototype.connect = function( callback ){
 			self.connected = true;
 			self.client = client;
 			self.done = done;
-			/*client.on('drain', function() {
-				console.log('drained');
-				if(!self.runningTransaction){
-      				console.log("ended");
-      				self.end();
-				}
-    		});*/		
-			/*for( var index in pg.pools.all ){
-				console.log( index );
-
-			}*/
-  			
 		}
 		if ( callback )
 			callback( ( err ? false : true ) , err );
@@ -89,7 +77,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	if ( !this.connected ){
 		this.connect( function( connected , error ){
 			if ( error )
-				return callback ? callback( false, error ) : false;
+				return callback ? callback( false, error, query ) : false;
 			self.performQuery ( query, callback );
 		});
 		
@@ -113,7 +101,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	}
 
 	if ( args.length == 0 )
-		return callback (false, "wrong query format");
+		return callback (false, "wrong query format", query);
 
 	var command = args[0].substring(0,6);
 	var startTime = new Date().getTime();
@@ -138,13 +126,13 @@ PGClient.prototype.performQuery = function ( query , callback ){
 			self.transactionErrorHandler( err );
 		
 		if ( callback )
-			callback( result , err );
+			callback( result , err, query );
 	});
 	try{
 		this.client.query.apply( this.client, args );
 	}
 	catch( err ){
-		callback( null, err );
+		callback( null, err, query );
 		this.end();
 	}
 	
@@ -160,8 +148,10 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 	var hasSentCallback = false;
 	for( var i = 0 ; i < queries.length ; i++ ){
 		var query = queries[ i ];
-		self.performQuery( query , function ( result , err ){
+		self.performQuery( query , function ( result , err, query ){
+			
 			if ( err ){
+				//console.log( err );
 				if( !hasSentCallback ){
 					hasSentCallback = true;
 					return callback ? callback( false, err , retCounter ) : false;
@@ -172,6 +162,7 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 			if( !query.name )
 				query.name = "" + retCounter;
+
 			returnArr[ query.name ] = result.rows;
 
 			if ( iterator )

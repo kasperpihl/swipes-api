@@ -44,6 +44,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
 		if ( !queries )
 			return insertAndSaveObjects();
+		//console.log(queries);
 		self.logger.time( 'prepared queries for duplicates' );
 		self.client.performQueries( queries , function( results, error ){
 			self.logger.time('found ids determing updates');
@@ -52,6 +53,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 				return finishWithError( error );
 
 			for ( var className in results ){
+				//console.log( className);
+				//console.log( results[className]);
 				batcher.updateCollectionToDetermineUpdatesWithResult( className , results[ className ] );
 			}
 
