@@ -114,7 +114,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		}
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
-		if(resultTime > 1000){
+		if(resultTime > 3500){
 			console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
 			console.log( query.text );
 			console.log( query.values );
