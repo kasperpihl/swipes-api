@@ -297,7 +297,7 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
           insertAttachmentRelationQuery.numberOfRows = batchSize;
           queries.push( insertAttachmentRelationQuery );
           insertAttachmentCounter = 0;
-          insertAttachmentRelationQuery = sql.todo_tag;
+          insertAttachmentRelationQuery = sql.todo_attachment;
         }
       }
 
