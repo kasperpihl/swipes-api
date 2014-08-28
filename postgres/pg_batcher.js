@@ -291,6 +291,9 @@ PGBatcher.prototype.getFinalRelationshipQueriesWithResults = function( result, b
       var attachment = attachmentsToUpdate[ i ];
       
       if ( attachment ){
+        if( attachment.title.length > 255 )
+          attachment.title = attachment.title.substring(0,255);
+        
         insertAttachmentRelationQuery = insertAttachmentRelationQuery.insert( { "userId" : this.userId , "todoId": todoId , title : attachment.title , service: attachment.service, identifier: attachment.identifier, sync: attachment.sync } );
         if ( ++insertAttachmentCounter >= batchSize ){
           insertAttachmentRelationQuery = insertAttachmentRelationQuery.toQuery();
