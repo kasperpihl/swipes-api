@@ -33,7 +33,7 @@ var TodoModel = BaseModel.extend({
 			    if ( _.isObject( value ) && value["__type"] == "Date" ){
 		        	value = new Date( value[ 'iso' ] );
 			    }
-			    if( ( attribute == "title" || attribute == "originIdentifier") && value.length > 255 ){
+			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
 			    	value = value.substring(0,255);
       			}
 				attributeUpdates[ attribute ] = value;
