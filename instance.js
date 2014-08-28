@@ -14,7 +14,7 @@ app.use(function(req, res, next) {
   ]; 
   if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) { 
     res.header('Access-Control-Allow-Credentials', true); 
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS'); 
     res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type'); 
     if ('OPTIONS' === req.method) { 
