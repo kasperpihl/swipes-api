@@ -28,7 +28,6 @@ app.use(function(req, res, next) {
   else next();
 });
 
-
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
@@ -51,7 +50,8 @@ function sendBackError( error, res, logs ){
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 
-app.route('/test').get(function(req,res){
+app.route('/test').get(function(req,res,next){
+
   var logger = new Logger();
   var client = new PGClient();
   var pgHandler = new PGHandler( client, logger );
@@ -106,7 +106,7 @@ function handleSync( req, res, next ){
   }
 
   var logger = new Logger();
-  var client = new PGClient( logger );
+  var client = new PGClient( logger, 12000 );
 
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
@@ -129,10 +129,14 @@ function handleSync( req, res, next ){
     
     
     handler.sync( req.body, userId, function( result , error ){
-      client.end();
       logger.time('Finished request', true);
+      if(client.timedout){
+        sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
+        return;
+      }
+      client.end();
       if ( result ){
-        if ( req.body.sendLogs ) 
+        if ( req.body.sendLogs )
           result['logs'] = logger.logs;
         res.send( result );
       }

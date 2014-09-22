@@ -10,17 +10,26 @@ pg.defaults.poolSize = 100;
 var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
 
-function PGClient( logger ){
+function PGClient( logger, timerForDone ){
 	
 	this.connected = false;
 	this.done = false;
+	this.timedout = false;
 	this.logger = logger;
 	this.userId = false;
 	this.conString = this.buildConString();
 	if ( !this.conString )
 		throw Error('define DATABASE_URL as environment var');
 	this.transactionErrorHandler = false;
-
+	if( timerForDone ){
+		var self = this;
+		setTimeout(function(){
+			if(self){
+				self.end();
+				self.timedout = true;
+			}
+		}, timerForDone);
+	}
 }
 
 PGClient.prototype.buildConString = function(){
@@ -73,7 +82,8 @@ PGClient.prototype.end = function(){
 
 PGClient.prototype.performQuery = function ( query , callback ){
 	var self = this;
-
+	if( this.timedout )
+		return callback( false, {code:510, message:"Request Timed Out"}, query );
 	if ( !this.connected ){
 		this.connect( function( connected , error ){
 			if ( error )
@@ -178,31 +188,6 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 		});
 	}
-	/*function next(){
-		if ( i == target )
-			return callback( returnArr, false );
-
-		var query = queries[ i ];
-		self.performQuery( query , function ( result , err ){
-			if ( err )
-				return callback ? callback( false, err , i ) : false;
-
-			if( !query.name )
-				query.name = "" + i;
-			returnArr[ query.name ] = result.rows;
-
-			if ( iterator )
-				iterator( result, i);
-			
-			i++;
-			
-
-			next();
-
-		});
-	};
-
-	next();*/
 };
 
 PGClient.prototype.storeSession = function( token , userId ){
@@ -256,7 +241,7 @@ PGClient.prototype.transaction = function( handler ){
 	this.performQuery( "BEGIN" );
 };
 
-PGClient.prototype.rollback = function(callback){
+PGClient.prototype.rollback = function(callback, force){
 	var self = this;
 	this.performQuery( "ROLLBACK" ,function( result, error ){
 		self.runningTransaction = false;
