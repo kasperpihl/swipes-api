@@ -36,6 +36,11 @@ var TodoModel = BaseModel.extend({
 			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
 			    	value = value.substring(0,255);
       			}
+      			if(_.isDate(value) && !this.isValidDate(value)){
+					console.log("parseRawData " +attribute);
+					console.log(value);
+				}
+
 				attributeUpdates[ attribute ] = value;
 			}
 		}
@@ -75,9 +80,11 @@ var TodoModel = BaseModel.extend({
 	validate:function( attrs, options ){
 		if ( !attrs.localId )
 			return "couldn't identify todo";
-
-		if(attrs.schedule && !this.isValidDate(attrs.schedule))
+		
+		if(attrs.schedule && !this.isValidDate(attrs.schedule)){
+			console.log("validate");
 			console.log(attrs.schedule);
+		}
 
 		//if(attrs.schedule)
 		// is insertion
