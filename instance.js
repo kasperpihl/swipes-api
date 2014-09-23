@@ -51,7 +51,13 @@ app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 
 app.route('/test').get(function(req,res,next){
+  var foo;
+  var test = new Date(foo);
 
+  
+  console.log(test);
+  console.log(!isNaN(test.getTime()));
+  return;
   var logger = new Logger();
   var client = new PGClient();
   var pgHandler = new PGHandler( client, logger );

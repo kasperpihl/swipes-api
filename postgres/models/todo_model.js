@@ -67,9 +67,19 @@ var TodoModel = BaseModel.extend({
 		}
 
 	},
+	isValidDate: function(d){
+		if ( !_.isDate(d) )
+    		return false;
+  		return !isNaN(d.getTime());
+	},
 	validate:function( attrs, options ){
 		if ( !attrs.localId )
 			return "couldn't identify todo";
+
+		if(attrs.schedule && !this.isValidDate(attrs.schedule))
+			console.log(attrs.schedule);
+
+		//if(attrs.schedule)
 		// is insertion
 
 		if ( !attrs.databaseId ){
