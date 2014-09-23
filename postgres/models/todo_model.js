@@ -80,7 +80,7 @@ var TodoModel = BaseModel.extend({
 
 		var newString = dateStr.substring(0,11) + repairedString;
 		//console.log(dateStr.substring(0,11) + repairedString);
-		console.log( "repaired " + timeStr + " to: " +newString );
+		//console.log( "repaired " + timeStr + " to: " +newString );
 		// Replace signs
 		return newString;
 	},
