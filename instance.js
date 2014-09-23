@@ -26,12 +26,24 @@ app.use(function(req, res, next) {
     } 
   }
   else next();
-});
+}
+
 
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
 var PGClient =        require('./postgres/pg_client.js');
+
+
+function repairDateString(dateStr){
+  var repairedString;
+  if(dateStr.indexOf("T") != 10)
+    return false;
+  var timeStr = dateStr.substring(11);
+  console.log(timeStr);
+
+}
+
 
 function sendBackError( error, res, logs ){
   var sendError = {code:141,message:'Server error' };
@@ -52,6 +64,12 @@ app.route( '/sync' ).post( handleSync );
 
 app.route('/test').get(function(req,res,next){
   var foo;
+  /*var foo = "2014-09-22T08:00:00 am.000Z";
+  "2014-09-18T4:29:34,963 p.m.Z";
+  var isAM = foo.indexOf(" am");
+  if(isAM != -1){
+    foo.replace(" am","");
+  }*/
   var test = new Date(foo);
 
   

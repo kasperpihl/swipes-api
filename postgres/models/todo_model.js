@@ -7,6 +7,78 @@ var TodoModel = BaseModel.extend({
 	idAttribute: "localId",
 	className: "ToDo",
 	sql: sql.todo,
+	repairDateString:function(dateStr){
+		var repairedString;
+		if(dateStr.indexOf("T") != 10)
+		return false;
+		var timeStr = dateStr.substring(11);
+		var repairedString = timeStr;
+
+		// different variations of am or pm in the string
+		var amArray = [' am',' a.m.'];
+		var pmArray = [' pm', ' p.m.'];
+
+		// var to find if am or pm is in the string
+		var amOrPm = "none";
+
+		// Convert 
+		function convertTo24Hour(hours, amOrPm) {
+			if(amOrPm == "am" && hours == 12) {
+				hours = 0;
+			}
+			if(amOrPm == "pm" && hours < 12) {
+				hours = (hours + 12);
+			}
+			var hourString = ""+ hours;
+			if( hourString.length == 1)
+				hourString = "0" + hourString;
+			
+			return hourString;
+		};
+
+		function containsStringFromArray(string, array){
+			for (var i = 0; i < array.length; i++) {
+				var substring = array[i];
+				if (string.indexOf(substring) != - 1) {
+					return substring;
+				}
+			}
+			return null;
+		};
+
+		// locate if AM/PM
+		var amString = containsStringFromArray(timeStr, amArray);
+		var pmString = containsStringFromArray(timeStr, pmArray);
+
+		// Clean AM/PM out from the string
+		if(amString){
+			repairedString = repairedString.replace(amString, "");
+			amOrPm = "am";
+		}
+		else if(pmString){
+			repairedString = repairedString.replace(pmString, "");
+			amOrPm = "pm";
+		}
+
+		// if , occurs, replace it with a dot
+		repairedString = repairedString.replace(',','.');
+
+		// Replace hours accordingly
+		if(amOrPm != "none"){
+			var minuteSeperatorIndex = repairedString.indexOf(':')
+			var hour = parseInt(timeStr.substring(0, minuteSeperatorIndex ));
+
+			var newHourString = convertTo24Hour(hour, amOrPm);
+			repairedString = newHourString + repairedString.substring(minuteSeperatorIndex);
+
+		}
+
+		var newString = dateStr.substring(0,11) + repairedString;
+		//console.log(dateStr.substring(0,11) + repairedString);
+		console.log( "repaired " + timeStr + " to: " +newString );
+		// Replace signs
+		return newString;
+	},
 	parseRawData:function ( data, userId ) {
 		this.relations = {};
 		var attributeUpdates = this.getAttributeUpdateArrayFromData( data, userId );
@@ -34,9 +106,11 @@ var TodoModel = BaseModel.extend({
 			    	var oldVal = value;
 		        	value = new Date( value[ 'iso' ] );
 		        	if(_.isDate(value) && !this.isValidDate(value)){
-						console.log("parseRawData " +attribute);
-						console.log(oldVal);
-						console.log(value);
+		        		var repairedString = this.repairDateString(oldVal['iso']);
+		        		value = new Date( repairedString );
+		        		if(_.isDate(value) && !this.isValidDate(value)){
+		        			console.log("failed repair " + repairedString);
+		        		}
 					}
 			    }
 			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
