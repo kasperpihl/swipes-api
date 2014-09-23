@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
     } 
   }
   else next();
-}
+});
 
 
 var Logger =          require( './utilities/logger.js' );
@@ -63,19 +63,6 @@ app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 
 app.route('/test').get(function(req,res,next){
-  var foo;
-  /*var foo = "2014-09-22T08:00:00 am.000Z";
-  "2014-09-18T4:29:34,963 p.m.Z";
-  var isAM = foo.indexOf(" am");
-  if(isAM != -1){
-    foo.replace(" am","");
-  }*/
-  var test = new Date(foo);
-
-  
-  console.log(test);
-  console.log(!isNaN(test.getTime()));
-  return;
   var logger = new Logger();
   var client = new PGClient();
   var pgHandler = new PGHandler( client, logger );
