@@ -31,15 +31,18 @@ var TodoModel = BaseModel.extend({
 			        continue;
 
 			    if ( _.isObject( value ) && value["__type"] == "Date" ){
+			    	var oldVal = value;
 		        	value = new Date( value[ 'iso' ] );
+		        	if(_.isDate(value) && !this.isValidDate(value)){
+						console.log("parseRawData " +attribute);
+						console.log(oldVal);
+						console.log(value);
+					}
 			    }
 			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
 			    	value = value.substring(0,255);
       			}
-      			if(_.isDate(value) && !this.isValidDate(value)){
-					console.log("parseRawData " +attribute);
-					console.log(value);
-				}
+      			
 
 				attributeUpdates[ attribute ] = value;
 			}
