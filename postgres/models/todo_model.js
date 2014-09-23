@@ -15,8 +15,8 @@ var TodoModel = BaseModel.extend({
 		var repairedString = timeStr;
 
 		// different variations of am or pm in the string
-		var amArray = [' am',' a.m.'];
-		var pmArray = [' pm', ' p.m.'];
+		var amArray = [' am',' a.m.', ' AM'];
+		var pmArray = [' pm', ' p.m.', ' PM'];
 
 		// var to find if am or pm is in the string
 		var amOrPm = "none";
@@ -60,12 +60,17 @@ var TodoModel = BaseModel.extend({
 			amOrPm = "pm";
 		}
 
+		var minuteSeperatorIndex = repairedString.indexOf(':');
+		if(minuteSeperatorIndex == -1){
+			repairedString = repairedString.replace('.',':');
+		}
+
 		// if , occurs, replace it with a dot
 		repairedString = repairedString.replace(',','.');
 
 		// Replace hours accordingly
 		if(amOrPm != "none"){
-			var minuteSeperatorIndex = repairedString.indexOf(':')
+			
 			var hour = parseInt(timeStr.substring(0, minuteSeperatorIndex ));
 
 			var newHourString = convertTo24Hour(hour, amOrPm);
@@ -109,7 +114,7 @@ var TodoModel = BaseModel.extend({
 		        		var repairedString = this.repairDateString(oldVal['iso']);
 		        		value = new Date( repairedString );
 		        		if(_.isDate(value) && !this.isValidDate(value)){
-		        			console.log("failed repair " + repairedString);
+		        			console.log("failed repair " + oldVal['iso']);
 		        		}
 					}
 			    }
