@@ -7,6 +7,12 @@ var TodoModel = BaseModel.extend({
 	idAttribute: "localId",
 	className: "ToDo",
 	sql: sql.todo,
+	/*
+	repairDateString("2014-09-22T08:00:00 am.000Z");
+	repairDateString("2014-09-17T7:48:24,737 p.m.Z");
+	repairDateString("2014-09-23T12:31:55,517 a.m.Z");
+	repairDateString("2014-09-23T2:59:29.485 pmZ")
+	*/
 	repairDateString:function(dateStr){
 		var repairedString;
 		if(dateStr.indexOf("T") != 10)
@@ -114,7 +120,8 @@ var TodoModel = BaseModel.extend({
 		        		var repairedString = this.repairDateString(oldVal['iso']);
 		        		value = new Date( repairedString );
 		        		if(_.isDate(value) && !this.isValidDate(value)){
-		        			console.log("failed repair " + oldVal['iso']);
+		        			this.validationError("failed repair " + oldVal['iso']);
+		        			continue;
 		        		}
 					}
 			    }

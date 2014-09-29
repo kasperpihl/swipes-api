@@ -15,6 +15,7 @@ app.use(function(req, res, next) {
   if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) { 
     res.header('Access-Control-Allow-Credentials', true); 
     res.header('Access-Control-Allow-Origin', "*");
+    res.header('Cache-Control', 'no-cache');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS'); 
     res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type'); 
     if ('OPTIONS' === req.method) { 
@@ -92,6 +93,7 @@ app.route('/vero').post( function(req,res){
 
 app.route('/trial').get(function(req,res){
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header('Cache-Control', 'no-cache');
   res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
   Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
   if ( !req.query.user )
