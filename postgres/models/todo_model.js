@@ -120,7 +120,7 @@ var TodoModel = BaseModel.extend({
 		        		var repairedString = this.repairDateString(oldVal['iso']);
 		        		value = new Date( repairedString );
 		        		if(_.isDate(value) && !this.isValidDate(value)){
-		        			this.validationError("failed repair " + oldVal['iso']);
+		        			this.validationError = "failed repair " + oldVal['iso'];
 		        			continue;
 		        		}
 					}
