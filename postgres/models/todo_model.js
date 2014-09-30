@@ -7,12 +7,6 @@ var TodoModel = BaseModel.extend({
 	idAttribute: "localId",
 	className: "ToDo",
 	sql: sql.todo,
-	/*
-	repairDateString("2014-09-22T08:00:00 am.000Z");
-	repairDateString("2014-09-17T7:48:24,737 p.m.Z");
-	repairDateString("2014-09-23T12:31:55,517 a.m.Z");
-	repairDateString("2014-09-23T2:59:29.485 pmZ")
-	*/
 	repairDateString:function(dateStr){
 		var repairedString;
 		if(dateStr.indexOf("T") != 10)
@@ -85,8 +79,8 @@ var TodoModel = BaseModel.extend({
 		}
 
 		var newString = dateStr.substring(0,11) + repairedString;
-		//console.log(dateStr.substring(0,11) + repairedString);
-		//console.log( "repaired " + timeStr + " to: " +newString );
+		console.log(dateStr.substring(0,11) + repairedString);
+		console.log( "repaired " + timeStr + " to: " +newString );
 		// Replace signs
 		return newString;
 	},
@@ -123,8 +117,9 @@ var TodoModel = BaseModel.extend({
 		        			this.validationError = "failed repair " + value['iso'];
 		        			continue;
 		        		}
-		        		value = tempVal;
+		        		
 					}
+					value = tempVal;
 			    }
 			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
 			    	value = value.substring(0,255);
@@ -172,7 +167,6 @@ var TodoModel = BaseModel.extend({
 			return "couldn't identify todo";
 		
 		if(attrs.schedule && !this.isValidDate(attrs.schedule)){
-			console.log("validate");
 			console.log(attrs.schedule);
 		}
 
