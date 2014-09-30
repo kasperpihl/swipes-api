@@ -16,7 +16,7 @@ var TodoModel = BaseModel.extend({
 	repairDateString:function(dateStr){
 		var repairedString;
 		if(dateStr.indexOf("T") != 10)
-		return false;
+			return false;
 		var timeStr = dateStr.substring(11);
 		var repairedString = timeStr;
 
@@ -114,15 +114,16 @@ var TodoModel = BaseModel.extend({
 			        continue;
 
 			    if ( _.isObject( value ) && value["__type"] == "Date" ){
-			    	var oldVal = value;
-		        	value = new Date( value[ 'iso' ] );
-		        	if(_.isDate(value) && !this.isValidDate(value)){
-		        		var repairedString = this.repairDateString(oldVal['iso']);
-		        		value = new Date( repairedString );
-		        		if(_.isDate(value) && !this.isValidDate(value)){
-		        			this.validationError = "failed repair " + oldVal['iso'];
+			    	//var oldVal = value;
+		        	var tempVal = new Date( value[ 'iso' ] );
+		        	if(_.isDate(tempVal) && !this.isValidDate(tempVal)){
+		        		var repairedString = this.repairDateString(value['iso']);
+		        		tempVal = new Date( repairedString );
+		        		if(_.isDate(tempVal) && !this.isValidDate(tempVal)){
+		        			this.validationError = "failed repair " + value['iso'];
 		        			continue;
 		        		}
+		        		value = tempVal;
 					}
 			    }
 			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
