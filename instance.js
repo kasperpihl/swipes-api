@@ -109,7 +109,6 @@ app.route('/trial').get(function(req,res){
 });
 
 function handleSync( req, res, next ){
-  res.header('Cache-Control', 'no-cache');
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
