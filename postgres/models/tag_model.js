@@ -18,7 +18,7 @@ var TagModel = BaseModel.extend({
 
 				var value = data[ attribute ];
 				if( attribute == "title" && !value ){
-					this.validationError = "corruptdata";
+					this.set("validationError", "corruptdata");
 					continue;
 				}
 				if ( !this.sql.hasColumn( attribute ) )

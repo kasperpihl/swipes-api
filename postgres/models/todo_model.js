@@ -100,7 +100,7 @@ var TodoModel = BaseModel.extend({
       				this.handleAttachmentRelations( value );
       			}
       			if( attribute == "title" && !value ){
-      				this.validationError = "corruptdata";
+      				this.set("validationError", "corruptdata");
       				continue;
       			}
 
@@ -114,7 +114,7 @@ var TodoModel = BaseModel.extend({
 		        		var repairedString = this.repairDateString(value['iso']);
 		        		tempVal = new Date( repairedString );
 		        		if(_.isDate(tempVal) && !this.isValidDate(tempVal)){
-		        			this.validationError = "failed repair " + value['iso'];
+		        			this.set("validationError", "failed repair " + value['iso']);
 		        			continue;
 		        		}
 		        		

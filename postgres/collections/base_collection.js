@@ -15,7 +15,7 @@ var BaseCollection = Backbone.Collection.extend({
 			var model = new this.model();
 			var data = objects[ i ];
 			model.parseRawData( data, userId );
-			if( !model.validationError )
+			if( !model.get("validationError") )
 				models.push(model);
 			else{
 				this.errorModels.push(model);
