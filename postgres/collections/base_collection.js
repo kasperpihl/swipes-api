@@ -11,6 +11,7 @@ var BaseCollection = Backbone.Collection.extend({
 	},
 	loadObjects: function( objects, userId ){
 		var models = [];
+		this.errorModels = new Array();
 		for ( var i in objects ){
 			var model = new this.model();
 			var data = objects[ i ];
