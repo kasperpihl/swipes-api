@@ -539,7 +539,7 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
             this.deletedModels.push(model);
           }
           else{
-            this.error = { "code" :158, "message": model.validationError };
+            this.error = { "code" :158, "message": model.get("validationError") };
           }
         }
       }
