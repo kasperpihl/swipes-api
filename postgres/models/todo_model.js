@@ -137,7 +137,16 @@ var TodoModel = BaseModel.extend({
 		if ( !attachments || attachments.length == 0 )
 			return;
 		for ( var index in attachments ){
-			this.relations.attachments.push( attachments[ index ] );	
+			var attachment = attachments[ index ];
+
+			var alreadyExist = false;
+			for(var i in this.relations.attachments){
+				var existingAttachment = this.relations.attachments[i];
+				if(attachment.identifier == existingAttachment.identifier && attachment.service == existingAttachment.service)
+					alreadyExist = true;
+			}
+			if(!alreadyExist)
+				this.relations.attachments.push( attachment );	
 		}
 	},
 	handleTagRelations:function( tags ){
