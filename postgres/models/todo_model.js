@@ -79,8 +79,8 @@ var TodoModel = BaseModel.extend({
 		}
 
 		var newString = dateStr.substring(0,11) + repairedString;
-		console.log(dateStr.substring(0,11) + repairedString);
-		console.log( "repaired " + timeStr + " to: " +newString );
+		//console.log(dateStr.substring(0,11) + repairedString);
+		//console.log( "repaired " + timeStr + " to: " +newString );
 		// Replace signs
 		return newString;
 	},
@@ -166,10 +166,17 @@ var TodoModel = BaseModel.extend({
 		if ( !attrs.localId )
 			return "couldn't identify todo";
 		
-		if(attrs.schedule && !this.isValidDate(attrs.schedule)){
-			console.log(attrs.schedule);
+		if(attrs.schedule &&  !this.isValidDate(attrs.schedule)){
+			return "invalid schedule";
 		}
 
+		if(attrs.completionDate && !this.isValidDate(attrs.completionDate)){
+			return "invalid completionDate";
+		}
+
+		if(attrs.repeatDate && !this.isValidDate(attrs.repeatDate)){
+			return "invalid schedule";
+		}
 		//if(attrs.schedule)
 		// is insertion
 

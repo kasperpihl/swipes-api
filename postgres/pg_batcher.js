@@ -535,7 +535,7 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
       if( collection.errorModels.length > 0 ){
         for( var index in collection.errorModels ){
           var model = collection.errorModels[ index ];
-          if( model.validationError && model.validationError == "corruptdata" ){
+          if( model.get("validationError") && model.get("validationError") == "corruptdata" ){
             this.deletedModels.push(model);
           }
           else{
