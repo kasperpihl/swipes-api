@@ -69,8 +69,8 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
   for ( var className in this.collections ){
     var collection = this.collections[ className ].groupBy(function( model){ 
       model.set({}, { validate:true });
-      if ( model.get("validationError") ){
-        self.error = { code: 157, message: model.get("validationError"), hardSync: true };
+      if ( model.validationError ){
+        self.error = { code: 157, message: model.validationError, hardSync: true };
         return 'invalid';
       }
       return ( model.get('databaseId') ? 'update' : 'insert' ) 

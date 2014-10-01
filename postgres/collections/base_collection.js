@@ -2,7 +2,6 @@ var Backbone = require('backbone');
 
 var BaseCollection = Backbone.Collection.extend({
 	model:false,
-	errorModels:[],
 	insertions: function(){
 		
 	},

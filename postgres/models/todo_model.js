@@ -181,8 +181,9 @@ var TodoModel = BaseModel.extend({
 		// is insertion
 
 		if ( !attrs.databaseId ){
-			if ( !attrs.title )
+			if ( !attrs.title ){
 				return "title is missing for insertion of todo";
+			}
 			if ( !attrs.userId )
 				return "userId must be set for insertion of todo";
 		}
