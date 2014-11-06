@@ -8,6 +8,8 @@ var TodoModel = BaseModel.extend({
 	className: "ToDo",
 	sql: sql.todo,
 	repairDateString:function(dateStr){
+		if(!dateStr) 
+			return false;
 		var repairedString;
 		if(dateStr.indexOf("T") != 10)
 			return false;

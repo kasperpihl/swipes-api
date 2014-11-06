@@ -50,16 +50,6 @@ var ParseHandler =    require( './parse/parse_handler.js' );
 var PGClient =        require('./postgres/pg_client.js');
 
 
-function repairDateString(dateStr){
-  var repairedString;
-  if(dateStr.indexOf("T") != 10)
-    return false;
-  var timeStr = dateStr.substring(11);
-  console.log(timeStr);
-
-}
-
-
 
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
