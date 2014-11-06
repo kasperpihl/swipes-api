@@ -6,6 +6,22 @@ var express =       require( 'express' ),
 var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
 http.globalAgent.maxSockets = 25;
+
+function sendBackError( error, res, logs ){
+  var sendError = {code:141,message:'Server error' };
+  if ( logs ) 
+    sendError.logs = logs;
+  if ( error && error.code ) 
+    sendError.code = error.code;
+  if ( error && error.message ) 
+    sendError.message = error.message;
+  if ( error && error.hardSync )
+    sendError.hardSync = true;
+        
+  res.send( sendError );
+}
+
+
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 app.use(function(req, res, next) {
@@ -28,7 +44,6 @@ app.use(function(req, res, next) {
   else next();
 });
 
-
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
@@ -45,19 +60,6 @@ function repairDateString(dateStr){
 }
 
 
-function sendBackError( error, res, logs ){
-  var sendError = {code:141,message:'Server error' };
-  if ( logs ) 
-    sendError.logs = logs;
-  if ( error && error.code ) 
-    sendError.code = error.code;
-  if ( error && error.message ) 
-    sendError.message = error.message;
-  if ( error && error.hardSync )
-    sendError.hardSync = true;
-        
-  res.send( sendError );
-}
 
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
