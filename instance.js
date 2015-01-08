@@ -2,7 +2,8 @@
 var express =       require( 'express' ),
     http    =       require( 'http' ),
     bodyParser =    require( 'body-parser' ),
-    _ =             require( 'underscore' );
+    _ =             require( 'underscore' ),
+    crypto    = require('crypto');
 var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
 http.globalAgent.maxSockets = 25;
@@ -21,6 +22,26 @@ function sendBackError( error, res, logs ){
   res.send( sendError );
 }
 
+function getIntercomHmac( userId ){
+  var key       = 'wHegdJq173o6E3oYkEZ8l2snIKzzY5tgjV_r8CLL';
+  var algorithm = 'sha256';
+  var hash, hmac;
+
+  hmac = crypto.createHmac(algorithm, key);
+
+  // change to 'binary' if you want a binary digest
+  hmac.setEncoding('hex');
+
+  // write in the text that you want the hmac digest for
+  hmac.write(userId);
+
+  // you can't read from the stream until you call end()
+  hmac.end();
+
+  // read out hmac digest
+  hash = hmac.read(); 
+  return hash;
+}
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
@@ -141,6 +162,8 @@ function handleSync( req, res, next ){
       if ( result ){
         if ( req.body.sendLogs )
           result['logs'] = logger.logs;
+
+        result['intercom-hmac'] = getIntercomHmac(userId);
         res.send( result );
       }
       else{
@@ -151,6 +174,7 @@ function handleSync( req, res, next ){
     });
   });
 };
+
 
 
 

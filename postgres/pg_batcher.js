@@ -366,7 +366,6 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
     }
     // Model is tag and todo
     else{
-
       if( lastUpdate )
         where = model.userId.equals( this.userId )
                             .and( model.updatedAt.gt( lastUpdate ) );
