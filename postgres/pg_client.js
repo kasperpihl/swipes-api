@@ -200,7 +200,7 @@ PGClient.prototype.storeSession = function( token , userId ){
 PGClient.prototype.validateToken = function( token , store , callback){
 	var self = this;
 	if ( !token )
-		callback(false, { code : 142 , message : "sessionToken must be included" });
+		return callback(false, { code : 142 , message : "sessionToken must be included" });
 	function validateFromParse( store ){
     	Parse.User.become( token ).then( function( user ){
     		self.userId = user.id;
