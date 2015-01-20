@@ -12,24 +12,25 @@ var Logger =          require( '../utilities/logger.js' );
 var PGClient =        require('../postgres/pg_client.js');
 var MoveController =  require('./move_controller.js');
 var FetchController = require('./fetch_controller.js')
+
 app.route( '/move' ).get( function( req, res ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 
   var logger = new Logger();
   var client = new PGClient( logger );
-  if ( !req.query.user)
-    return res.jsonp({code:142,message:"user must be specified"});
+  if ( !req.query.fromUser)
+    return res.jsonp({code:142,message:"fromUser must be specified"});
+
+  if ( !req.query.toUser)
+    return res.jsonp({code:142,message:"toUser must be specified"});
 
   var moveController = new MoveController( client, logger );
-  moveController.copyDataFromParseToPostgresForUser( req.query.user, function( result, error ){
-    res.jsonp( result );
+  moveController.copyDataFromUserToUser( req.query.fromUser, req.query.toUser, function(results, error){
+    console.log(results);
+    console.log(error);
+    res.jsonp(results);
   });
-return ;
-
-  client.validateToken( req.body.sessionToken , true , function( userId, error){
-    // TODO: send proper error back that fits clients handling
-    
-  });
+  return ;
 });
 
 app.route( '/loadEmails').get( function( req, res){
@@ -41,7 +42,8 @@ app.route( '/loadEmails').get( function( req, res){
     //console.log( error );
     res.jsonp( result );
   });
-})
+});
+
 app.route( '/fetch' ).get( function( req, res ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 

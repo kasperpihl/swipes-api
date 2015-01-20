@@ -517,13 +517,13 @@ PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( cla
   It extracts 
 */
 PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
-  
   if ( !collectionToSave || collectionToSave.length == 0 ) 
     return false;
 
   for ( var className in collectionToSave ){
     var objects = collectionToSave[ className ];
     var collection;
+    console.log(objects);
     if ( className == "ToDo" )
       collection = this.todoCollection;
     else if( className == "Tag" )
