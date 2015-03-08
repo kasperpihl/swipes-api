@@ -145,8 +145,10 @@ ParseQueries.prototype.runQueriesToTheEnd = function( queries, callback ){
       stopped = true;
     }
     else if ( result ){
-      
-      resultObj[ query.className ] = result;
+      if(resultObj[query.className])
+      	resultObj[query.className] = resultObj[query.className].concat(result);
+      else
+      	resultObj[ query.className ] = result;
     }
 
     if ( i == queries.length && !stopped ) 

@@ -74,7 +74,7 @@ var PGClient =        require('./postgres/pg_client.js');
 
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
-
+app.route( '/v1/add').post( handleAdd );
 app.route('/test').get(function(req,res,next){
   var logger = new Logger();
   var client = new PGClient();
@@ -84,24 +84,6 @@ app.route('/test').get(function(req,res,next){
   })
 });
 
-app.route('/vero').post( function(req,res){
-  var Vero = require('./utilities/vero').EventLogger;
-  var authToken = "YmU3ZGNlMTBhOTAzZTJlMjRhMTJkZjFjODYyODE2YzZmZWFkMmRmNzphZmZiNjI1YWQ4YzY3YTU1NDA3Nzk4ZTZjMWY4OWZjNTAyZjU1NTQ4"; // = process.env['VERO_TOKEN'];
-  var devMode = false; // false in PRODN
-  var veroLogger = new Vero(authToken, devMode);
-
-  var identifier = req.body.identifier;
-  var email = req.body.email;
-  var identity = { id: identifier, email: email };
-  var eventName = req.body.eventName;
-  var eventData = req.body.eventData;
-  if(!eventData)
-    eventData = {};
-  veroLogger.addEvent(identity, eventName, eventData, function (err, localRes, body) {
-    if (err) res.jsonp( err );
-    else res.jsonp( body );
-  });
-});
 
 app.route('/trial').get(function(req,res){
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -119,6 +101,42 @@ app.route('/trial').get(function(req,res){
 
   });
 });
+
+function handleAdd( req, res, next){
+  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+  var logger = new Logger();
+  var client = new PGClient( logger, 12000 );
+
+  client.validateToken( req.body.sessionToken , false, function( userId, error){
+    // TODO: send proper error back that fits clients handling
+    if ( error ){
+      client.end();
+      return sendBackError( error , res);
+    }
+    logger.setIdentifier( userId );
+
+    var handler = new PGHandler( client , logger );
+    
+    handler.add( req.body, userId, function( result , error ){
+      logger.time('Finished request', true);
+      if(client.timedout){
+        sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
+        return;
+      }
+      client.end();
+      if ( result ){
+        if ( req.body.sendLogs )
+          result['logs'] = logger.logs;
+        res.send( result );
+      }
+      else{
+        logger.sendErrorLogToParse( error, req.body );
+        sendBackError( error , res, logger.logs );
+      }
+
+    });
+  });
+};
 
 function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );

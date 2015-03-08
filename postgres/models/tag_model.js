@@ -32,9 +32,11 @@ var TagModel = BaseModel.extend({
 		if ( !attrs.localId )
 			return "couldn't identify tag";
 		// is insertion
-		if ( !attrs.databaseId ){
-			if ( !attrs.title )
+		if ( !attrs.databaseId){
+			if ( !attrs.title ){
+				console.log(attrs);
 				return "title is missing for insertion of tag";
+			}
 			if ( !attrs.userId )
 				return "userId must be set for insertion of tag";
 		}

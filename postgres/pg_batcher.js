@@ -70,6 +70,8 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
     var collection = this.collections[ className ].groupBy(function( model){ 
       model.set({}, { validate:true });
       if ( model.validationError ){
+        if(model.get("deleted"))
+          return "ignore";
         self.error = { code: 157, message: model.validationError, hardSync: true };
         return 'invalid';
       }
@@ -350,9 +352,10 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
       query = model.select( todo.localId.as("todoLocalId") , tag.localId.as("tagLocalId"), model.order )
                     .from( todosWithRelation )
                     .where( where )
-                    .order( todo.localId , model.order )
-                    .toNamedQuery("todo_tags");  
+                    .order( model.todoId , model.order )
+                    .toNamedQuery("todo_tags");
     }
+    // Model is todo_attachment relation
     else if ( i == 1 ){
 
       if ( lastUpdate )
@@ -364,17 +367,27 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
                     .where( where )
                     .toNamedQuery("todo_attachments");
     }
-    // Model is tag and todo
+    // Model is tag (2) and todo (3)
     else{
       if( lastUpdate )
         where = model.userId.equals( this.userId )
                             .and( model.updatedAt.gt( lastUpdate ) );
-        
-        var order = (i == 3) ? model.parentLocalId.descending : model.title;
+      else
+        where = model.userId.equals( this.userId )
+                            .and( model.deleted.notEqualTo( true ) );
+
+      if (i == 3){ 
         var query = model.select.apply( model, sql.retColumns( model ) )
-                         .where( where )
-                         .order( order )
-                         .toNamedQuery( model.className );
+                       .where( where )
+                       .order( model.userId, model.parentLocalId.descending )
+                       .toNamedQuery( model.className );
+      }
+      else{
+        var query = model.select.apply( model, sql.retColumns( model ) )
+                       .where( where )
+                       .order( model.title )
+                       .toNamedQuery( model.className );
+      }
     }
 
     queries.push(query);
@@ -523,7 +536,6 @@ PGBatcher.prototype.sortObjects = function( collectionToSave, userId ){
   for ( var className in collectionToSave ){
     var objects = collectionToSave[ className ];
     var collection;
-    console.log(objects);
     if ( className == "ToDo" )
       collection = this.todoCollection;
     else if( className == "Tag" )

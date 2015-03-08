@@ -22,6 +22,19 @@ PGHandler.prototype.test = function( callback ){
 		callback(result, error);
 	});
 };
+PGHandler.prototype.add = function ( body, userId, callback ){
+
+	callback({"success": true});
+	if (body.object && !_.isObject(body.object)){
+		return callback( false, 'Object must be json-object' );
+	}
+	var self = this;
+	function finishWithError(error){
+		self.client.end();
+		callback( false, error );
+	};
+
+};
 PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
@@ -138,9 +151,10 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		if( lastUpdate )
 			lastUpdate = new Date( lastUpdate.getTime() + 1);
 		//lastUpdate = false;
+		self.logger.time("making queries for updates");
 		var queries = batcher.getQueriesForFindingUpdates( lastUpdate );
 
-		self.logger.log('finding updates');
+		self.logger.time('made queries for updates');
 
 		self.client.performQueries(queries, function(result, error){
 			self.logger.time('updates found');

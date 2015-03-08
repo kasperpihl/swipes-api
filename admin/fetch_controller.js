@@ -6,14 +6,56 @@ function FetchController( client, logger ){
 	this.client = client;
 	this.logger = logger;
 };
+FetchController.prototype.fetchEmailsForIds = function( ids, callback ){
+	var chunkSize = 500;
+	if(!ids)
+		return callback(false, "must include id");
+	var queries = [];
+	
+	var i, j;
+	if ( ids.length > 0 ){
+		for (  i = 0, j = ids.length;    i < j;   i += chunkSize  ) {
+			var slice = ids.slice( i , i + chunkSize );
+			var query = new Parse.Query(Parse.User);
+			console.log(slice.length);
+			query.limit(chunkSize+1);
+			query.containedIn("objectId",slice);
+			queries.push(query);
+		}
+		var parseQueries = new ParseQueries( );
+		parseQueries.runQueriesToTheEnd( queries, function( result, error, query ){
+			console.log(result);
+			if ( error ){
+	        	console.log( error );
+	            return callback( false, error);
+	        }
+	        var emailString = "";
+	        for( var i in result._User ){
+	        	var user = result._User[i];
+	        	var email = user.get("username");
+	        	if(email && email !== undefined)
+	        		emailString += email + ",";
+	        }
+	        /*
+	        for ( var parseClassName in result ){
+	        	for ( var index in result[ parseClassName ] ){
+	        		var obj = result[ parseClassName ][ index ];
+	        		parseBatcher.scrapeChanges( obj );
+	        		result[ parseClassName ][ index ] = obj.toJSON();
+	        	}
+	        }*/
+	        callback( emailString, false);
+		});
+	}
+	else callback(false, "no ids provided");
 
+}
 FetchController.prototype.fetchSignups = function( callback ){
 	var parseQueries = new ParseQueries( );
 	var query = new Parse.Query('Signup');
 	query.limit(1000);
 	query.descending('createdAt');
 	var queries = [ query ];
-	query.find()
 	parseQueries.runQueriesToTheEnd( queries, function( result, error, query ){
 		if ( error ){
 	        	console.log( error );
