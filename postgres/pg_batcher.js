@@ -374,7 +374,7 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
                             .and( model.updatedAt.gt( lastUpdate ) );
       else
         where = model.userId.equals( this.userId )
-                            .and( model.deleted.notEqualTo( true ) );
+                            .and( model.deleted.notEqual( true ) );
 
       if (i == 3){ 
         var query = model.select.apply( model, sql.retColumns( model ) )
