@@ -6,7 +6,7 @@ var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "re
 var tagColumns = [ "title" ];
 
 var sharedReturnColumns = [ 'localId' , 'updatedAt', 'createdAt' , 'deleted' ];
-var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatDate", "repeatOption", "parentLocalId", "origin", "originIdentifier" ];
+var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatDate", "repeatOption", "parentLocalId", "origin", "originIdentifier", "tagsLastUpdate", "attachmentsLastUpdate" ];
 var tagReturnColumns = [ 'title' ];
 
 

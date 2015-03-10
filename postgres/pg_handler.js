@@ -161,7 +161,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			if ( error ) 
 				return finishWithError( error );
 
-			var resultObjects = batcher.prepareReturnObjectsForResult( result );
+			var resultObjects = batcher.prepareReturnObjectsForResult( result, lastUpdate );
 			finish( resultObjects );
 		});
 		

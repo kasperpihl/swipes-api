@@ -395,11 +395,10 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
   return queries;
 }
 
-PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
+PGBatcher.prototype.prepareReturnObjectsForResult = function( result, lastUpdate ){
   var resultObjects = {};
   var tagRelations = {};
   if ( result[ "todo_tags" ] && result.todo_tags.length > 0 ){
-
     for ( var i in result.todo_tags ){
       
       var tagRelation = result.todo_tags[ i ];
@@ -435,12 +434,27 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result ){
         biggestTime = localObj.updatedAt;
       
       /* Update relations to json on todoobject for client */
-      if ( isTodo && tagRelations[ localObj.objectId ] ){
-        localObj["tags"] = tagRelations[ localObj.objectId ];
+      if ( isTodo ){
+        if( lastUpdate && localObj.tagsLastUpdate && localObj.tagsLastUpdate.getTime() > lastUpdate.getTime() ){
+          if(tagRelations[ localObj.objectId ] ){
+            localObj["tags"] = tagRelations[ localObj.objectId ];
+          }
+          else{
+            localObj["tags"] = [];
+          }
+        }
+        if( lastUpdate && localObj.attachmentsLastUpdate && localObj.attachmentsLastUpdate.getTime() > lastUpdate.getTime() ){
+          if ( attachmentRelations[ localObj.objectId ] ){
+            localObj[ "attachments" ] = attachmentRelations[ localObj.objectId ];
+          }
+          else
+            localObj[ "attachments"] = [];
+        }
+        delete localObj["attachmentsLastUpdate"];
+        delete localObj["tagsLastUpdate"];
+        
       }
-      if ( isTodo && attachmentRelations[ localObj.objectId ] ){
-        localObj[ "attachments" ] = attachmentRelations[ localObj.objectId ];
-      }
+      
       
       sql.parseObjectForClass( localObj , className );
     }
