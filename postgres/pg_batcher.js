@@ -435,7 +435,7 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result, lastUpdate
       
       /* Update relations to json on todoobject for client */
       if ( isTodo ){
-        if( lastUpdate && localObj.tagsLastUpdate && localObj.tagsLastUpdate.getTime() > lastUpdate.getTime() ){
+        if( !lastUpdate || lastUpdate && localObj.tagsLastUpdate && localObj.tagsLastUpdate.getTime() > lastUpdate.getTime() ){
           if(tagRelations[ localObj.objectId ] ){
             localObj["tags"] = tagRelations[ localObj.objectId ];
           }
@@ -443,7 +443,7 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result, lastUpdate
             localObj["tags"] = [];
           }
         }
-        if( lastUpdate && localObj.attachmentsLastUpdate && localObj.attachmentsLastUpdate.getTime() > lastUpdate.getTime() ){
+        if( !lastUpdate || lastUpdate && localObj.attachmentsLastUpdate && localObj.attachmentsLastUpdate.getTime() > lastUpdate.getTime() ){
           if ( attachmentRelations[ localObj.objectId ] ){
             localObj[ "attachments" ] = attachmentRelations[ localObj.objectId ];
           }

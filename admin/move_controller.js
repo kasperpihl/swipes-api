@@ -54,6 +54,8 @@ MoveController.prototype.copyDataFromUserToUser = function( fromUserId, toUserId
 			//return;
 			self.deleteAllDataForUser(toUserId,function(result,error){
 				if(!error){
+					callback(true);
+					return;
 					var toHandler = new PGHandler( self.client, self.logger );
 					toHandler.sync(body, toUserId, function( result, error){
 						callback(result,error);
