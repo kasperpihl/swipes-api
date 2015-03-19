@@ -69,7 +69,8 @@ var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
 var ParseHandler =    require( './parse/parse_handler.js' );
 var PGClient =        require('./postgres/pg_client.js');
-
+var MoveController =  require('./admin/move_controller.js');
+var FetchController = require('./admin/fetch_controller.js');
 
 
 app.route( '/v1/sync' ).post( handleSync );
@@ -84,6 +85,34 @@ app.route('/test').get(function(req,res,next){
   })
 });
 
+app.route( '/move' ).get( function( req, res ){
+  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+
+  var logger = new Logger();
+  var client = new PGClient( logger );
+  if ( !req.query.from)
+    return res.jsonp({code:142,message:"from must be specified"});
+  var users = { "test": "qm6FIHpYQX", "felipe": "b4mooVKc4f"};
+
+
+  var to, from = req.query.from;
+  if(users[from])
+    from = users[from];
+  
+  if ( req.query.to && users[req.query.to] ){
+    to = users[req.query.to];
+  }
+  else
+    return res.jsonp({code:142,message:"'to' must be defined (firstName)"});
+  
+  var moveController = new MoveController( client, logger );
+  moveController.copyDataFromUserToUser( from, to, function(results, error){
+    //console.log(results);
+    console.log(error);
+    res.jsonp(error);
+  });
+  return ;
+});
 
 app.route('/trial').get(function(req,res){
   res.setHeader('Access-Control-Allow-Origin', '*');
