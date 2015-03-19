@@ -207,8 +207,10 @@ function handleSync( req, res, next ){
       }
       client.end();
       if ( result ){
-        if ( req.body.sendLogs )
+        if ( req.body.sendLogs ){
+          console.log("response");
           result['logs'] = logger.logs;
+        }
 
         result['intercom-hmac'] = getIntercomHmac(userId);
         res.send( result );
