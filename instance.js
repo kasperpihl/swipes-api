@@ -100,7 +100,7 @@ app.route( '/move' ).get( function( req, res ){
   var client = new PGClient( logger );
   if ( !req.query.from)
     return res.jsonp({code:142,message:"from must be specified"});
-  var users = { "test": "qm6FIHpYQX", "felipe": "b4mooVKc4f"};
+  var users = { "test": "qm6FIHpYQX", "felipe": "b4mooVKc4f", "stanimir": "ONaP54dxAu", "kasper": "3TMYzCDo6u"};
 
 
   var to, from = req.query.from;
