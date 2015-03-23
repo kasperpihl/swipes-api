@@ -116,8 +116,13 @@ app.route( '/move' ).get( function( req, res ){
   var moveController = new MoveController( client, logger );
   moveController.copyDataFromUserToUser( from, to, function(results, error){
     //console.log(results);
-    console.log(error);
-    res.jsonp(error);
+    if(error){
+      res.jsonp(error);
+    }
+    else{
+      res.jsonp({"status":"success"});
+    }
+    
   });
   return ;
 });
