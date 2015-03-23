@@ -84,7 +84,15 @@ app.route('/test').get(function(req,res,next){
     res.send(result);
   })
 });
-
+app.route( '/hmac').post( function( req, res){
+  if(!req.body.identifier)
+    return res.jsonp({code:142, message: "identifier must be defined"});
+  if(!_.isString(req.body.identifier))
+    return res.jsonp({code:142, message: "identifier must be string"});
+  if(req.body.identifier.indexOf("test-") != 0)
+    return res.jsonp({code:142, message: "identifier must start with test-"})
+  res.jsonp({"intercom-hmac":getIntercomHmac(req.body.identifier)});
+});
 app.route( '/move' ).get( function( req, res ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 
