@@ -77,6 +77,26 @@ app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 app.route( '/v1/add').post( handleAdd );
 app.route('/test').get(function(req,res,next){
+  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+  var data = {
+    channels:[ "Development" ], //"wjDRVyp6Ot"
+    data:{
+      aps:{
+        "content-available": 1,
+        "sound": "Time Picker.m4a"
+      },
+      "syncId": "123456"
+    }
+  };
+  Parse.Push.send(data, {
+    success:function(){
+      res.send();
+    },
+    error: function(error){
+      res.send(error);
+    }
+  });
+  return;
   var logger = new Logger();
   var client = new PGClient();
   var pgHandler = new PGHandler( client, logger );
@@ -100,7 +120,7 @@ app.route( '/move' ).get( function( req, res ){
   var client = new PGClient( logger );
   if ( !req.query.from)
     return res.jsonp({code:142,message:"from must be specified"});
-  var users = { "test": "qm6FIHpYQX", "felipe": "b4mooVKc4f", "stanimir": "ONaP54dxAu", "kasper": "3TMYzCDo6u"};
+  var users = { "test": "qm6FIHpYQX", "felipe": "b4mooVKc4f", "stanimir": "ONaP54dxAu", "kasper": "3TMYzCDo6u", "none": "none"};
 
 
   var to, from = req.query.from;

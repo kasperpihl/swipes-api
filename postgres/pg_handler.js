@@ -1,11 +1,13 @@
 var _ = require('underscore');
 var sql = require('./pg_sql.js');
 var PGBatcher = require('./pg_batcher.js');
+var Parse = require('parse').Parse;
 
 function PGHandler( client, logger ){
 	this.logger = logger;
 	//this.logger.forceOutput = true;
 	this.client = client;
+	this.didSave = false;
 	this.hasMoreToSave = false;
 	this.batchSize = 25;
 };
@@ -40,6 +42,9 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
 	var self = this;
+	if( body.syncId )
+		self.syncId = body.syncId;
+
 	function finishWithError(error){
 		self.client.end();
 		callback( false, error );
@@ -83,7 +88,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 		if ( !queries )
 			return getUpdates();
-
+		self.didSave = true;
 		self.logger.time( "inserting and saving " + queries.length + " number of queries " );
 		
 		self.client.transaction( function( error ){
@@ -142,12 +147,33 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			});
 		});
 	};
+	function sendPush(){
+		var data = {
+			channels:[ userId ], //"wjDRVyp6Ot"
+			data:{
+				aps:{
+					"content-available": 1,
+					"sound": "Time Picker.m4a"
+				}
+			}
+		};
+		if(self.syncId)
+			data.data.syncId = self.syncId
 
+		Parse.Push.send(data, {
+			success:function(){
+			},
+			error: function(error){
+			}
+		});
+	}
 	function getUpdates(){
 		if ( self.hasMoreToSave )
 			return finish();
 		var lastUpdate = ( body.lastUpdate ) ? new Date( body.lastUpdate ) : false;
-		
+		if(self.didSave){
+			sendPush();
+		}
 		if( lastUpdate )
 			lastUpdate = new Date( lastUpdate.getTime() + 1);
 		//lastUpdate = false;
