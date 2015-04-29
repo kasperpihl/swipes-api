@@ -152,8 +152,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			channels:[ userId ], //"wjDRVyp6Ot"
 			data:{
 				aps:{
-					"content-available": 1,
-					"sound": "Time Picker.m4a"
+					"content-available": 1
 				}
 			}
 		};
