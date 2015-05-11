@@ -72,7 +72,9 @@ var PGClient =        require('./postgres/pg_client.js');
 var MoveController =  require('./admin/move_controller.js');
 var FetchController = require('./admin/fetch_controller.js');
 
-
+app.route( '/').get( function(req,res,next){
+  res.send("Swipes synchronization services - online");
+});
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 app.route( '/v1/add').post( handleAdd );
