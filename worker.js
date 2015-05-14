@@ -67,6 +67,7 @@ app.use(function(req, res, next) {
 
 var Logger =          require( './utilities/logger.js' );
 var PGHandler = require( './postgres/pg_handler.js' );
+var ParseHandler =    require( './parse/parse_handler.js' );
 var PGClient =        require('./postgres/pg_client.js');
 var MoveController =  require('./admin/move_controller.js');
 var FetchController = require('./admin/fetch_controller.js');
@@ -148,6 +149,23 @@ app.route( '/move' ).get( function( req, res ){
   return ;
 });
 
+app.route('/trial').get(function(req,res){
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+  Parse.initialize(keys.get("applicationId"),keys.get("javaScriptKey"),keys.get("masterKey"));
+  if ( !req.query.user )
+    return res.jsonp({code:142,message:"user must be included"});
+
+  var parseHandler = new ParseHandler();
+  parseHandler.trial( req.query.user , function( result , error ){
+    if ( error )
+      res.jsonp( error );
+    else 
+      res.jsonp( result );
+
+  });
+});
+
 function handleAdd( req, res, next){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   var logger = new Logger();
@@ -205,9 +223,15 @@ function handleSync( req, res, next ){
     logger.time( 'credential validation completed' );
     logger.setIdentifier( userId );
 
-    var handler = new PGHandler( client , logger );
-    if ( req.body.hasMoreToSave )
-      handler.hasMoreToSave = true;
+    var handler;
+    if ( versionNumber ){
+      var handler = new PGHandler( client , logger );
+      if ( req.body.hasMoreToSave )
+        handler.hasMoreToSave = true;
+    }
+    else{
+      handler = new ParseHandler( logger );
+    }
     
     
     handler.sync( req.body, userId, function( result , error ){
