@@ -9,6 +9,7 @@ http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.route( '/').get( function(req,res,next){
+  console.log("main");
   res.send("Swipes synchronization services - online");
 });
 app.route( '/work').post( function(req,res,next){
