@@ -1,8 +1,6 @@
 var sql = require('../postgres/pg_sql.js');
 var PGBatcher = require('../postgres/pg_batcher.js');
 var PGHandler = require( '../postgres/pg_handler.js' );
-var ParseQueries = require('../parse/parse_queries.js');
-var ParseBatcher = require('../parse/parse_batcher.js');
 
 function MoveController( client, logger ){
 	this.client = client;
