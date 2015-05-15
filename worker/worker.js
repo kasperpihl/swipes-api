@@ -2,6 +2,9 @@
 var express =       require( 'express' ),
     http    =       require( 'http' ),
     _ =             require( 'underscore' ),
+    AWS =           require( 'aws-sdk' ),
+    awsRegion =     'us-east-1',
+    sqs =           {},
     crypto    = require('crypto');
 var Parse = require('parse').Parse;
 var keys = require('../utilities/keys.js');
@@ -13,7 +16,15 @@ app.route( '/').get( function(req,res,next){
   res.send("Swipes synchronization services - online");
 });
 app.route( '/work').post( function(req,res,next){
-  console.log(req);
+  AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    region: awsRegion
+    });
+  sqs = new AWS.SQS();
+
+  console.log('response: ', req.body);
+  console.log('Starting receive message.', '...a 200 response should be received.');
   res.send("success");
 });
 

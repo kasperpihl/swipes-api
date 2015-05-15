@@ -12,9 +12,10 @@
     "body-parser": "1.x",
     "pg": "4.3.0",
     "sql": "0.47.0",
-    "request": "~2.51.0"
+    "request": "~2.51.0",
+    "aws-sdk": "*"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.12.x"
   }
 }
