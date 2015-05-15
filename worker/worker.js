@@ -16,6 +16,8 @@ app.route( '/').get( function(req,res,next){
 });
 app.route( '/work').post( function(req,res,next){
   console.log(req);
+  res.send("success");
 });
+
 var port = Number(process.env.PORT || 5000);
 app.listen(port);
