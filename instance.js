@@ -2,46 +2,16 @@
 var express =       require( 'express' ),
     http    =       require( 'http' ),
     bodyParser =    require( 'body-parser' ),
-    _ =             require( 'underscore' ),
-    crypto    = require('crypto');
+    _ =             require( 'underscore' );
 var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
+var util = require('./utilities/util.js');
+var Logger =          require( './utilities/logger.js' );
+var PGHandler = require( './postgres/pg_handler.js' );
+var PGClient =        require('./postgres/pg_client.js');
+var MoveController =  require('./admin/move_controller.js');
+
 http.globalAgent.maxSockets = 25;
-
-function sendBackError( error, res, logs ){
-  var sendError = {code:141,message:'Server error' };
-  if ( logs ) 
-    sendError.logs = logs;
-  if ( error && error.code ) 
-    sendError.code = error.code;
-  if ( error && error.message ) 
-    sendError.message = error.message;
-  if ( error && error.hardSync )
-    sendError.hardSync = true;
-        
-  res.send( sendError );
-}
-
-function getIntercomHmac( userId ){
-  var key       = 'wHegdJq173o6E3oYkEZ8l2snIKzzY5tgjV_r8CLL';
-  var algorithm = 'sha256';
-  var hash, hmac;
-
-  hmac = crypto.createHmac(algorithm, key);
-
-  // change to 'binary' if you want a binary digest
-  hmac.setEncoding('hex');
-
-  // write in the text that you want the hmac digest for
-  hmac.write(userId);
-
-  // you can't read from the stream until you call end()
-  hmac.end();
-
-  // read out hmac digest
-  hash = hmac.read(); 
-  return hash;
-}
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
@@ -65,11 +35,6 @@ app.use(function(req, res, next) {
   else next();
 });
 
-var Logger =          require( './utilities/logger.js' );
-var PGHandler = require( './postgres/pg_handler.js' );
-var PGClient =        require('./postgres/pg_client.js');
-var MoveController =  require('./admin/move_controller.js');
-var FetchController = require('./admin/fetch_controller.js');
 
 app.route( '/').get( function(req,res,next){
   res.send("Swipes synchronization services - online");
@@ -77,34 +42,7 @@ app.route( '/').get( function(req,res,next){
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 app.route( '/v1/add').post( handleAdd );
-app.route('/test').get(function(req,res,next){
-  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
-  var data = {
-    channels:[ "Development" ], //"wjDRVyp6Ot"
-    data:{
-      aps:{
-        "content-available": 1,
-        "sound": "Time Picker.m4a"
-      },
-      "syncId": "123456"
-    }
-  };
-  Parse.Push.send(data, {
-    success:function(){
-      res.send();
-    },
-    error: function(error){
-      res.send(error);
-    }
-  });
-  return;
-  var logger = new Logger();
-  var client = new PGClient();
-  var pgHandler = new PGHandler( client, logger );
-  pgHandler.test(function(result,error){
-    res.send(result);
-  })
-});
+
 app.route( '/hmac').post( function( req, res){
   if(!req.body.identifier)
     return res.jsonp({code:142, message: "identifier must be defined"});
@@ -112,7 +50,7 @@ app.route( '/hmac').post( function( req, res){
     return res.jsonp({code:142, message: "identifier must be string"});
   if(req.body.identifier.indexOf("test-") != 0)
     return res.jsonp({code:142, message: "identifier must start with test-"})
-  res.jsonp({"intercom-hmac":getIntercomHmac(req.body.identifier)});
+  res.jsonp({"intercom-hmac":util.getIntercomHmac(req.body.identifier)});
 });
 app.route( '/move' ).get( function( req, res ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
@@ -157,7 +95,7 @@ function handleAdd( req, res, next){
     // TODO: send proper error back that fits clients handling
     if ( error ){
       client.end();
-      return sendBackError( error , res);
+      return util.sendBackError( error , res);
     }
     logger.setIdentifier( userId );
 
@@ -166,7 +104,7 @@ function handleAdd( req, res, next){
     handler.add( req.body, userId, function( result , error ){
       logger.time('Finished request', true);
       if(client.timedout){
-        sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
+        util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
         return;
       }
       client.end();
@@ -177,7 +115,7 @@ function handleAdd( req, res, next){
       }
       else{
         logger.sendErrorLogToParse( error, req.body );
-        sendBackError( error , res, logger.logs );
+        util.sendBackError( error , res, logger.logs );
       }
 
     });
@@ -189,7 +127,7 @@ function handleSync( req, res, next ){
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
   if(versionNumber == 0){
-    sendBackError({ code: 123, message: "update required" }, res );
+    util.sendBackError({ code: 123, message: "update required" }, res );
     return;
   }
 
@@ -200,7 +138,7 @@ function handleSync( req, res, next ){
     // TODO: send proper error back that fits clients handling
     if ( error ){
       client.end();
-      return sendBackError( error , res);
+      return util.sendBackError( error , res);
     }
     logger.time( 'credential validation completed' );
     logger.setIdentifier( userId );
@@ -213,7 +151,7 @@ function handleSync( req, res, next ){
     handler.sync( req.body, userId, function( result , error ){
       logger.time('Finished request', true);
       if(client.timedout){
-        sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
+        util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
         return;
       }
       client.end();
@@ -222,12 +160,12 @@ function handleSync( req, res, next ){
           result['logs'] = logger.logs;
         }
 
-        result['intercom-hmac'] = getIntercomHmac(userId);
+        result['intercom-hmac'] = util.getIntercomHmac(userId);
         res.send( result );
       }
       else{
         logger.sendErrorLogToParse( error, req.body );
-        sendBackError( error , res, logger.logs );
+        util.sendBackError( error , res, logger.logs );
       }
 
     });
