@@ -3,6 +3,7 @@ var express =       require( 'express' ),
     http    =       require( 'http' ),
     _ =             require( 'underscore' ),
     AWS =           require( 'aws-sdk' ),
+    bodyParser =    require( 'body-parser' ),
     awsRegion =     'us-east-1',
     sqs =           {},
     crypto    = require('crypto');
@@ -11,6 +12,7 @@ var keys = require('../utilities/keys.js');
 http.globalAgent.maxSockets = 25;
 
 var app = express();
+app.use(bodyParser.json( { limit: 3000000 } ) );
 app.route( '/').get( function(req,res,next){
   console.log("main");
   res.send("Swipes synchronization services - online");
