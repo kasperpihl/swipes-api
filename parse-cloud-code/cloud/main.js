@@ -139,17 +139,64 @@ function sendError(response,error){
     }
   });
 }
-
+Parse.Cloud.job("cleanError",function(request, status){
+  Parse.Cloud.useMasterKey();
+  Parse.Cloud.useMasterKey();
+  var counter = 0;
+  // Query for all users
+  var now = new Date();
+  var sixMonthsAgo = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000);
+  var query = new Parse.Query("Error");
+  query.lessThan('createdAt',sixMonthsAgo);
+  query.limit(1000);
+  function finish(result, error){
+    if(error){
+      status.error(error.description);
+    }
+    else{
+      status.success(result);
+    }
+  };
+  function runIteration(){
+    query.find({
+      success:function(result){
+        var runAgain = false;
+        if(result && result.length > 0){
+          counter += result.length;
+          /*if(result.length == 1000 && counter < 5000)
+            runAgain = true;*/
+          Parse.Object.destroyAll(result, {
+            success: function(){
+              if(runAgain)
+                runIteration();
+              else
+                finish("Removed: " + counter);
+            },
+            error:function(error){
+              finish(false, error);
+            }
+          })
+        }
+        else{
+          finish(counter);
+        }
+      },error:function(error){
+        finish(false, error);
+      }
+    });
+  };
+  runIteration();
+})
 Parse.Cloud.job("trialRevoke", function(request, status) {
   // Set up to modify user data
   Parse.Cloud.useMasterKey();
   var counter = 0;
   // Query for all users
   var now = new Date();
-  var query = new Parse.Query("Trial");
-  query.include('user');
-  query.notEqualTo('revoked',true);
-  query.lessThan('endDate',now);
+  var sixMonthsAgo = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000);
+  var query = new Parse.Query("Error");
+  query.lessThan('createdAt',sixMonthsAgo);
+  query.limit(1000);
   query.each(function(trial){
     var user = trial.get('user');
     if(user){ 
