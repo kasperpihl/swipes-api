@@ -480,49 +480,6 @@ PGBatcher.prototype.prepareReturnObjectsForResult = function( result, lastUpdate
 }
 
 
-function scrapeChanges( object , lastUpdateTime ){
-  
-  var attributes = object.attributes;
-  var updateTime = new Date();
-
-  object.set( 'parseClassName' , object.className );
-  
-  var deleteAttributes = [ "owner" , "ACL" , "lastSave" ]
-  for( var i in deleteAttributes ){
-    var attr = deleteAttributes[ i ];
-    if ( attributes[ attr ] )
-      delete attributes[ attr ];
-  }
-
-  if ( !attributes[ 'attributeChanges' ] ) 
-    return;
-  
-  if ( !lastUpdateTime ) 
-    return delete attributes['attributeChanges'];
-  
-  var changes = object.get('attributeChanges');
-  
-  if ( !changes ) 
-    changes = {};
-  
-  if ( attributes ){
-    
-    for ( var attribute in attributes ){
-      
-      var lastChange = changes[ attribute ];
-      
-      if ( ( attribute == "deleted" && attributes[ attribute ] ) || attribute == "tempId" || attribute == "parseClassName" ) 
-        continue;
-      
-      if( !lastChange || lastChange <= lastUpdateTime ) 
-        delete attributes[ attribute ];
-
-    }
-
-  }
-
-};
-
 
 PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( className , results ){
   if ( className.indexOf("Tag") == 0 )

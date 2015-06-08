@@ -36,14 +36,6 @@ FetchController.prototype.fetchEmailsForIds = function( ids, callback ){
 	        	if(email && email !== undefined)
 	        		emailString += email + ",";
 	        }
-	        /*
-	        for ( var parseClassName in result ){
-	        	for ( var index in result[ parseClassName ] ){
-	        		var obj = result[ parseClassName ][ index ];
-	        		parseBatcher.scrapeChanges( obj );
-	        		result[ parseClassName ][ index ] = obj.toJSON();
-	        	}
-	        }*/
 	        callback( emailString, false);
 		});
 	}
@@ -74,14 +66,6 @@ FetchController.prototype.fetchSignups = function( callback ){
 	        }
 	        console.log(emailString);
 	        console.log( result.Signup.length );
-	        /*
-	        for ( var parseClassName in result ){
-	        	for ( var index in result[ parseClassName ] ){
-	        		var obj = result[ parseClassName ][ index ];
-	        		parseBatcher.scrapeChanges( obj );
-	        		result[ parseClassName ][ index ] = obj.toJSON();
-	        	}
-	        }*/
 	        callback( result, false);
 	});
 }
@@ -118,14 +102,6 @@ FetchController.prototype.fetchList = function( callback ){
 	        	
 	        }
 	        console.log(emailString);
-	        /*
-	        for ( var parseClassName in result ){
-	        	for ( var index in result[ parseClassName ] ){
-	        		var obj = result[ parseClassName ][ index ];
-	        		parseBatcher.scrapeChanges( obj );
-	        		result[ parseClassName ][ index ] = obj.toJSON();
-	        	}
-	        }*/
 	        callback( result, false);
 	    });
 		//console.log( userArray );

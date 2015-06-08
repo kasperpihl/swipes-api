@@ -1,6 +1,6 @@
 var sql = require('../postgres/pg_sql.js');
 var PGBatcher = require('../postgres/pg_batcher.js');
-var PGHandler = require( '../postgres/pg_handler.js' );
+var SyncController = require( '../controller/sync_controller.js' );
 
 function MoveController( client, logger ){
 	this.client = client;
@@ -51,8 +51,8 @@ MoveController.prototype.copyDataFromUserToUser = function( fromUserId, toUserId
 			//return;
 			self.deleteAllDataForUser(toUserId,function(result,error){
 				if(!error){
-					var toHandler = new PGHandler( self.client, self.logger );
-					toHandler.sync(body, toUserId, function( result, error){
+					var syncController = new SyncController( self.client, self.logger );
+					syncController.sync(body, toUserId, function( result, error){
 						callback("done",error);
 					});
 				}

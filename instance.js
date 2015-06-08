@@ -7,7 +7,7 @@ var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
 var util = require('./utilities/util.js');
 var Logger =          require( './utilities/logger.js' );
-var PGHandler = require( './postgres/pg_handler.js' );
+var SyncController = require( './controller/sync_controller.js' );
 var PGClient =        require('./postgres/pg_client.js');
 var MoveController =  require('./admin/move_controller.js');
 
@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true); 
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS'); 
-    res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type'); 
+    res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type');
     if ('OPTIONS' === req.method) { 
       res.writeHead(204); 
       res.end(); 
@@ -41,7 +41,6 @@ app.route( '/').get( function(req,res,next){
 });
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
-app.route( '/v1/add').post( handleAdd );
 
 app.route( '/hmac').post( function( req, res){
   if(!req.body.identifier)
@@ -52,6 +51,8 @@ app.route( '/hmac').post( function( req, res){
     return res.jsonp({code:142, message: "identifier must start with test-"})
   res.jsonp({"intercom-hmac":util.getIntercomHmac(req.body.identifier)});
 });
+
+
 app.route( '/move' ).get( function( req, res ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 
@@ -86,42 +87,6 @@ app.route( '/move' ).get( function( req, res ){
   return ;
 });
 
-function handleAdd( req, res, next){
-  Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
-  var logger = new Logger();
-  var client = new PGClient( logger, 12000 );
-
-  client.validateToken( req.body.sessionToken , false, function( userId, error){
-    // TODO: send proper error back that fits clients handling
-    if ( error ){
-      client.end();
-      return util.sendBackError( error , res);
-    }
-    logger.setIdentifier( userId );
-
-    var handler = new PGHandler( client , logger );
-    
-    handler.add( req.body, userId, function( result , error ){
-      logger.time('Finished request', true);
-      if(client.timedout){
-        util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
-        return;
-      }
-      client.end();
-      if ( result ){
-        if ( req.body.sendLogs )
-          result['logs'] = logger.logs;
-        res.send( result );
-      }
-      else{
-        logger.sendErrorLogToParse( error, req.body );
-        util.sendBackError( error , res, logger.logs );
-      }
-
-    });
-  });
-};
-
 function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
@@ -143,12 +108,12 @@ function handleSync( req, res, next ){
     logger.time( 'credential validation completed' );
     logger.setIdentifier( userId );
 
-    var handler = new PGHandler( client , logger );
+    var syncController = new SyncController( client , logger );
     if ( req.body.hasMoreToSave )
-      handler.hasMoreToSave = true;
+      syncController.hasMoreToSave = true;
     
     
-    handler.sync( req.body, userId, function( result , error ){
+    syncController.sync( req.body, userId, function( result , error ){
       logger.time('Finished request', true);
       if(client.timedout){
         util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
@@ -171,7 +136,6 @@ function handleSync( req, res, next ){
     });
   });
 };
-
 
 
 

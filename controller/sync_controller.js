@@ -1,9 +1,9 @@
 var _ = require('underscore');
-var sql = require('./pg_sql.js');
-var PGBatcher = require('./pg_batcher.js');
+var sql = require('../postgres/pg_sql.js');
+var PGBatcher = require('../postgres/pg_batcher.js');
 var Parse = require('parse').Parse;
 
-function PGHandler( client, logger ){
+function SyncController( client, logger ){
 	this.logger = logger;
 	//this.logger.forceOutput = true;
 	this.client = client;
@@ -12,32 +12,7 @@ function PGHandler( client, logger ){
 	this.batchSize = 25;
 };
 
-PGHandler.prototype.test = function( callback ){
-	var models = [ sql.todo , sql.tag , sql.todo_tag ];
-	var queries = [];
-	for(var i in models){
-		var model = models[i];
-		queries.push(model['delete']().where(model.userId.equals("MZzWux0IyT")).toQuery());
-	}
-	var self = this;
-	self.client.performQueries( queries ,function(result,error){
-		callback(result, error);
-	});
-};
-PGHandler.prototype.add = function ( body, userId, callback ){
-
-	callback({"success": true});
-	if (body.object && !_.isObject(body.object)){
-		return callback( false, 'Object must be json-object' );
-	}
-	var self = this;
-	function finishWithError(error){
-		self.client.end();
-		callback( false, error );
-	};
-
-};
-PGHandler.prototype.sync = function ( body, userId, callback ){
+SyncController.prototype.sync = function ( body, userId, callback ){
 
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
@@ -57,7 +32,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 	this.logger.time('batched objects');
 
-	function findIdsFromLocalIdsToDetermineUpdates(){
+	function findInformationsFromLocalIds(){
 		
 		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
 		if ( !queries )
@@ -202,7 +177,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 	};
 
 	// Get started
-	findIdsFromLocalIdsToDetermineUpdates();
+	findInformationsFromLocalIds();
 };
 
-module.exports = PGHandler;
+module.exports = SyncController;
