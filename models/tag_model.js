@@ -1,5 +1,5 @@
 var BaseModel = require('./base_model.js');
-var sql = require('../pg_sql.js');
+var sql = require('../database/sql_definitions.js');
 
 var TagModel = BaseModel.extend({
 	tableName: "tag",
@@ -34,7 +34,6 @@ var TagModel = BaseModel.extend({
 		// is insertion
 		if ( !attrs.databaseId){
 			if ( !attrs.title ){
-				console.log(attrs);
 				return "title is missing for insertion of tag";
 			}
 			if ( !attrs.userId )

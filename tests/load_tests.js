@@ -1,8 +1,8 @@
 var _ = require('underscore');
-var sql = require('../postgres/pg_sql.js');
-var PGClient = require('../postgres/pg_client.js');
+var sql = require('../database/sql_definitions.js');
+var PGClient = require('../database/pg_client.js');
 var Logger = require( '../utilities/logger.js' );
-var CaseUpdateQuery = require('../postgres/case_update_query.js');
+var BatchUpdateQueryCreator = require('../database/batch_update_query_creator.js');
 
 function LoadTests(){
 	this.logger = new Logger();
@@ -65,7 +65,7 @@ LoadTests.prototype.loadTestUpdates = function( callback ){
 
 			
 			for ( var i = 0 ; i < self.numberOfBatches ; i++ ){
-				var updateQuery = new CaseUpdateQuery( "todo", "id" );
+				var updateQuery = new BatchUpdateQueryCreator( "todo", "id" );
 				for ( var taskNumber = 0 ; taskNumber < self.batchSize ; taskNumber++){
 				//var identifier = (i == 0) ? 29674 : 29750;
 

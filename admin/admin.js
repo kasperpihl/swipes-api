@@ -7,7 +7,7 @@ var Parse = require('parse').Parse;
 var keys = require('../utilities/keys.js');
 
 var Logger =          require( '../utilities/logger.js' );
-var PGClient =        require('../postgres/pg_client.js');
+var PGClient =        require('../database/pg_client.js');
 var MoveController =  require('./move_controller.js');
 var FetchController = require('./fetch_controller.js')
 

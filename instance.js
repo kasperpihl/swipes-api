@@ -7,8 +7,8 @@ var Parse = require('parse').Parse;
 var keys = require('./utilities/keys.js');
 var util = require('./utilities/util.js');
 var Logger =          require( './utilities/logger.js' );
-var SyncController = require( './controller/sync_controller.js' );
-var PGClient =        require('./postgres/pg_client.js');
+var SyncController = require( './controllers/sync_controller.js' );
+var PGClient =        require('./database/pg_client.js');
 var MoveController =  require('./admin/move_controller.js');
 
 http.globalAgent.maxSockets = 25;
@@ -82,7 +82,6 @@ app.route( '/move' ).get( function( req, res ){
     else{
       res.jsonp({"status":"success"});
     }
-    
   });
   return ;
 });

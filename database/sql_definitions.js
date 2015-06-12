@@ -2,11 +2,11 @@ var sql = require('sql');
 var _ = require('underscore');
 
 var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt" ];
-var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatDate", "repeatOption" , "tagsLastUpdate", "attachmentsLastUpdate" , "parentLocalId", "origin", "originIdentifier" ];
+var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatDate", "repeatOption" , "tags", "attachments" , "parentLocalId", "origin", "originIdentifier" ];
 var tagColumns = [ "title" ];
 
 var sharedReturnColumns = [ 'localId' , 'updatedAt', 'createdAt' , 'deleted' ];
-var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatDate", "repeatOption", "parentLocalId", "origin", "originIdentifier", "tagsLastUpdate", "attachmentsLastUpdate" ];
+var todoReturnColumns = [ "title", "notes", "order", "priority", "location", "repeatCount", "schedule", "completionDate", "repeatDate", "repeatOption", "parentLocalId", "origin", "originIdentifier", "attachments", "tags" ];
 var tagReturnColumns = [ 'title' ];
 
 
@@ -19,17 +19,10 @@ exports.tag = sql.define( {
 	'name' : "tag", 
 	'columns' : sharedColumns.concat( tagColumns ) 
 } );
-exports.todo_tag = sql.define( { 
-	'name' : "todo_tag" , 
-	"columns" : [ 'id' , "todoId" , "tagId" , "userId" , "order" ] 
+exports.session = sql.define({
+	'name': "session",
+	'columns': [ 'sessionToken', 'userId', 'expires']
 } );
-
-exports.todo_attachment = sql.define( {
-	'name': "todo_attachment",
-	"columns": [ 'identifier', 'service', 'title', 'sync', 'todoId', 'userId' ]
-} );
-
-
 
 
 
@@ -37,6 +30,7 @@ exports.todo.returnColumns = sharedReturnColumns.concat( todoReturnColumns );
 exports.tag.returnColumns = sharedReturnColumns.concat( tagReturnColumns );
 exports.todo.className = "ToDo";
 exports.tag.className = "Tag";
+
 
 exports.retColumns = function( self ){
 	

@@ -1,6 +1,6 @@
 var _ = require('underscore');
 
-function CaseUpdateQuery( tableName, whereAttribute, staticSetMapping ){
+function BatchUpdateQueryCreator( tableName, whereAttribute, staticSetMapping ){
 
 	this.escapedTableName = '"' + tableName + '"';
 	this.escapedWhereAttribute = '"' + whereAttribute + '"';
@@ -29,7 +29,7 @@ function CaseUpdateQuery( tableName, whereAttribute, staticSetMapping ){
 	this.whereStatement = 'WHERE (' + this.escapedWhereAttribute + ' IN(';
 }
 
-CaseUpdateQuery.prototype.addObjectUpdate = function( updates, whenValue ){
+BatchUpdateQueryCreator.prototype.addObjectUpdate = function( updates, whenValue ){
 	this.query.values.push( whenValue );
 	var whenCount = this.replacementCounter++;
 	this.whereStatement += '$' + whenCount + ", ";
@@ -51,12 +51,12 @@ CaseUpdateQuery.prototype.addObjectUpdate = function( updates, whenValue ){
 	}
 };
 
-CaseUpdateQuery.prototype.initializeSetStatementForAttribute = function( attribute ){
+BatchUpdateQueryCreator.prototype.initializeSetStatementForAttribute = function( attribute ){
 	var setStatement = '"' + attribute + '" = CASE';
 	this.setStatements[ attribute ] = setStatement;
 };
 
-CaseUpdateQuery.prototype.toQuery = function(){
+BatchUpdateQueryCreator.prototype.toQuery = function(){
 
 	this.query.text = 'UPDATE ' + this.escapedTableName;
 	
@@ -82,4 +82,4 @@ CaseUpdateQuery.prototype.toQuery = function(){
 	return this.query;
 }
 
-module.exports = CaseUpdateQuery;
+module.exports = BatchUpdateQueryCreator;

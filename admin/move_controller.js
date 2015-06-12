@@ -1,6 +1,6 @@
-var sql = require('../postgres/pg_sql.js');
+var sql = require('../database/sql_definitions.js');
 var PGBatcher = require('../postgres/pg_batcher.js');
-var SyncController = require( '../controller/sync_controller.js' );
+var SyncController = require( '../controllers/sync_controller.js' );
 
 function MoveController( client, logger ){
 	this.client = client;
@@ -17,11 +17,8 @@ MoveController.prototype.deleteAllDataForUser = function( userId, callback ){
 	var self = this;
 	var deleteTodoQuery = sql.todo['delete']().where( sql.todo.userId.equals( userId )).toQuery();
 	var deleteTagQuery = sql.tag['delete']().where( sql.tag.userId.equals( userId )).toQuery();
-	var deleteTagRelationQuery = sql.todo_tag['delete']().where( sql.todo_tag.userId.equals( userId )).toQuery();
-	var deleteAttachmentRelationQuery = sql.todo_attachment['delete']().where( sql.todo_attachment.userId.equals( userId )).toQuery();
 
-
-	var queries = [ deleteTodoQuery, deleteTagQuery, deleteTagRelationQuery, deleteAttachmentRelationQuery ];
+	var queries = [ deleteTodoQuery, deleteTagQuery ];
 
 	self.client.performQueries( queries, function(results, error){
 		if(results){

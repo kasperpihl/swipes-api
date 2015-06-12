@@ -67,3 +67,83 @@ exports.sendSqsMessage = function(message, callback) {
     }
   });
 }
+
+exports.repairDateString = function( dateStr ){
+  if(!dateStr) 
+      return false;
+  var repairedString;
+  if(dateStr.indexOf("T") != 10)
+    return false;
+  var timeStr = dateStr.substring(11);
+  var repairedString = timeStr;
+
+  // different variations of am or pm in the string
+  var amArray = [' am',' a.m.', ' AM'];
+  var pmArray = [' pm', ' p.m.', ' PM'];
+
+  // var to find if am or pm is in the string
+  var amOrPm = "none";
+
+  // Convert 
+  function convertTo24Hour(hours, amOrPm) {
+    if(amOrPm == "am" && hours == 12) {
+      hours = 0;
+    }
+    if(amOrPm == "pm" && hours < 12) {
+      hours = (hours + 12);
+    }
+    var hourString = ""+ hours;
+    if( hourString.length == 1)
+      hourString = "0" + hourString;
+    
+    return hourString;
+  };
+
+  function containsStringFromArray(string, array){
+    for (var i = 0; i < array.length; i++) {
+      var substring = array[i];
+      if (string.indexOf(substring) != - 1) {
+        return substring;
+      }
+    }
+    return null;
+  };
+
+  // locate if AM/PM
+  var amString = containsStringFromArray(timeStr, amArray);
+  var pmString = containsStringFromArray(timeStr, pmArray);
+
+  // Clean AM/PM out from the string
+  if(amString){
+    repairedString = repairedString.replace(amString, "");
+    amOrPm = "am";
+  }
+  else if(pmString){
+    repairedString = repairedString.replace(pmString, "");
+    amOrPm = "pm";
+  }
+
+  var minuteSeperatorIndex = repairedString.indexOf(':');
+  if(minuteSeperatorIndex == -1){
+    repairedString = repairedString.replace('.',':');
+  }
+
+  // if , occurs, replace it with a dot
+  repairedString = repairedString.replace(',','.');
+
+  // Replace hours accordingly
+  if(amOrPm != "none"){
+    
+    var hour = parseInt(timeStr.substring(0, minuteSeperatorIndex ));
+
+    var newHourString = convertTo24Hour(hour, amOrPm);
+    repairedString = newHourString + repairedString.substring(minuteSeperatorIndex);
+
+  }
+
+  var newString = dateStr.substring(0,11) + repairedString;
+  //console.log(dateStr.substring(0,11) + repairedString);
+  //console.log( "repaired " + timeStr + " to: " +newString );
+  // Replace signs
+  return newString;
+}

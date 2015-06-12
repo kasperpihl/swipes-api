@@ -1,4 +1,4 @@
-var sql = require('../postgres/pg_sql.js');
+var sql = require('../database/sql_definitions.js');
 var ParseQueries = require('../parse/parse_queries.js');
 var Parse = require('parse').Parse;
 

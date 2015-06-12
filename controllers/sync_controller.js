@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var sql = require('../postgres/pg_sql.js');
+var sql = require('../database/sql_definitions.js');
 var PGBatcher = require('../postgres/pg_batcher.js');
 var Parse = require('parse').Parse;
 
@@ -79,68 +79,13 @@ SyncController.prototype.sync = function ( body, userId, callback ){
 				if ( error )
 					return finishWithError( error);
 				
-				handleRelations();
+				getUpdates();
 			
 			});
 
 		});
 	};
 	
-	
-	function handleRelations(){
-
-		var initialRelationShipQueries = batcher.getInitialRelationshipQueries( self.batchSize );
-		if ( !initialRelationShipQueries )
-			return getUpdates();
-
-		self.client.transaction( function( error ){
-			self.client.rollback();
-		});
-		self.logger.log("starting relationship updates");
-		self.client.performQueries( initialRelationShipQueries,function( result, error ){
-			// TODO: handle error
-			self.logger.time("relationship step 1");
-			if ( error ) 
-				return finishWithError( error );
-			var finalRelationshipQueries = batcher.getFinalRelationshipQueriesWithResults( result, self.batchSize );
-			
-			self.client.performQueries( finalRelationshipQueries, function( result, error){
-				// TODO: Handle error here
-				self.logger.time("relationship updates done");
-
-				if ( error )
-					return finishWithError( error );
-
-				self.client.commit(function( result, error ){
-					
-					if ( error )
-						return finishWithError( error);
-					
-					getUpdates();
-				
-				});	
-			});
-		});
-	};
-	function sendPush(){
-		var data = {
-			channels:[ userId ], //"wjDRVyp6Ot"
-			data:{
-				aps:{
-					"content-available": 1
-				}
-			}
-		};
-		if(self.syncId)
-			data.data.syncId = self.syncId
-
-		Parse.Push.send(data, {
-			success:function(){
-			},
-			error: function(error){
-			}
-		});
-	}
 	function getUpdates(){
 		if ( self.hasMoreToSave )
 			return finish();
@@ -166,7 +111,25 @@ SyncController.prototype.sync = function ( body, userId, callback ){
 		});
 		
 	};
-	
+	function sendPush(){
+		var data = {
+			channels:[ userId ], //"wjDRVyp6Ot"
+			data:{
+				aps:{
+					"content-available": 1
+				}
+			}
+		};
+		if(self.syncId)
+			data.data.syncId = self.syncId
+
+		Parse.Push.send(data, {
+			success:function(){
+			},
+			error: function(error){
+			}
+		});
+	}
 	function finish( resultObjects ){
 		self.logger.time('finished query');
 		self.client.end();

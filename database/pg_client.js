@@ -3,8 +3,8 @@
 
 */
 var sql 	= require('sql'),
-	Parse 	= require( 'parse' ).Parse;
-var session = sql.define( { "name": "session" , columns: [ 'sessionToken', 'userId', 'expires'] } );
+	Parse 	= require( 'parse' ).Parse,
+	defs 	= require('./sql_definitions.js');
 var pg = require('pg');
 pg.defaults.poolSize = 296;
 pg.defaults.poolIdleTimeout = 12000;
@@ -200,7 +200,7 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 PGClient.prototype.storeSession = function( token , userId ){
 	var expires = new Date( new Date().getTime() + sessionSeconds );
-	var query = session.insert( { sessionToken: token, userId: userId, expires: expires } ).toQuery();
+	var query = defs.session.insert( { sessionToken: token, userId: userId, expires: expires } ).toQuery();
 	this.performQuery( query );
 }
 
@@ -224,7 +224,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
 		return validateFromParse( store );
 
 	var now = new Date();
-	var query = session.select( session.userId, session.expires ).where( session.sessionToken.equals( token ).and( session.expires.gt( now ) ) ).toQuery();
+	var query = defs.session.select( defs.session.userId, defs.session.expires ).where( defs.session.sessionToken.equals( token ).and( defs.session.expires.gt( now ) ) ).toQuery();
 	this.performQuery( query, function( result, error ){
 		if ( error )
 			return callback( false, error);
