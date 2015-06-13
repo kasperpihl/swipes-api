@@ -39,6 +39,19 @@ app.use(function(req, res, next) {
 app.route( '/').get( function(req,res,next){
   res.send("Swipes synchronization services - online");
 });
+
+
+var QueryCreator = require('./database/query_creator.js');
+app.route('/test').get( function(req,res,next){
+  var creator = new QueryCreator( "kzORIThNaw");
+  query = creator.getAllTasksFromServiceThatIsNotCompletedNorDeleted("evernote", function(results, error){
+    console.log(results);
+    console.log(error);
+    res.send("result");
+  });
+
+});
+
 app.route( '/v1/sync' ).post( handleSync );
 app.route( '/sync' ).post( handleSync );
 

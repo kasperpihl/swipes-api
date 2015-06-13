@@ -24,9 +24,24 @@ app.route( '/work').post( function(req,res,next){
   var workToDo = req.body;
   if(!workToDo)
     res.send()
-  console.log('response: ', req.body);
+  console.log('response: ', req.body );
   console.log('Starting receive message.', '...a 200 response should be received.');
   res.send("success");
+});
+
+
+var QueryCreator = require('../database/query_creator.js');
+app.route('/test').get( function(req,res,next){
+  // userId in instantiation
+  var creator = new QueryCreator( "kzORIThNaw");
+
+  query = creator.getAllTasksFromServiceThatIsNotCompletedNorDeleted("evernote", function(results, error){
+    // Check results for all the objects
+    console.log(results);
+    console.log(error);
+    res.send(results);
+  });
+
 });
 
 var port = Number(process.env.PORT || 5000);

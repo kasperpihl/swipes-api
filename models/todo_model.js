@@ -75,8 +75,7 @@ var TodoModel = BaseModel.extend({
 
 		if(attrs.repeatDate && !this.isValidDate(attrs.repeatDate)){
 			return "invalid repeatDate";
-		}
-		//if(attrs.schedule)
+		}		//if(attrs.schedule)
 		// is insertion
 
 		if ( !attrs.databaseId ){

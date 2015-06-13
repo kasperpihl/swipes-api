@@ -31,7 +31,15 @@ exports.tag.returnColumns = sharedReturnColumns.concat( tagReturnColumns );
 exports.todo.className = "ToDo";
 exports.tag.className = "Tag";
 
-
+exports.getColumnsFromStringArray = function( model, columnsArray ){
+	var attributeArray = [];
+	for ( var index in columnsArray ){
+		var columnAsString = columnsArray[index];
+		var column = model[ columnAsString ];
+		attributeArray.push(column);
+	}
+	return attributeArray;
+};
 exports.retColumns = function( self ){
 	
 	var attributeArray = [];
