@@ -152,7 +152,8 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 			channels:[ userId ], //"wjDRVyp6Ot"
 			data:{
 				aps:{
-					"content-available": 1
+					"content-available": 1,
+					"sound": ""
 				}
 			}
 		};
