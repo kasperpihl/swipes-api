@@ -59,4 +59,39 @@ QueryCreator.prototype.getAllTasksFromServiceThatIsNotCompletedNorDeleted = func
 	return query;
 };
 
+
+/*
+	Get query for retrieving updates for objects
+	Including timestamp will retrieve only newest updates
+	Excluding it will retrieve all, but no deleted objects (New sync)
+*/
+PGBatcher.prototype.getQueryForFindingUpdatedObjects = function(table, lastUpdate){
+	var allowedTables = ["todo", "tag"];
+	var model = sql[table];
+	if( model ){
+		var query, where, order;
+
+		// If no timestamp, return all objects that's not deleted
+		where = model.userId.equals( this.userId ).and( model.deleted.notEqual( true ) );
+		// If timestamp, return only updated objects after timestamp (including deleted!)
+		if( lastUpdate )
+			where = model.userId.equals( this.userId ).and( model.updatedAt.gt( lastUpdate ) );
+
+		// Start preparing select query and ask for columns to return from the sql definitions
+		query = model.select.apply( model, sql.getReturningColumnsForTable( model ) )
+							.where( where )
+		
+
+		// If todo table, order with parent tasks first for client to not loop through subtasks before having the main task
+		if(table == "todo"){
+			query = query.order(model.userId, model.parentLocalId.descending)
+		}
+
+		// Prepare and give name to query
+		query = query.toNamedQuery( model.className );
+	}
+
+	return query;
+}
+
 module.exports = QueryCreator;

@@ -199,16 +199,13 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
 
 PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
   
-  var todo = sql.todo, 
-      tag = sql.tag;
-  var models = [ todo, tag ];
+  var models = [ sql.todo, sql.tag ];
   var queries = [];
   for ( var i in models ){
     var query, 
         model = models[ i ],
         where = model.userId.equals( this.userId )
                           .and( model.deleted.notEqual( true ) );
-    // Model is todo_tag relation
     if( lastUpdate )
       where = model.userId.equals( this.userId )
                           .and( model.updatedAt.gt( lastUpdate ) );
@@ -216,14 +213,14 @@ PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
 
     if (i == 0){ 
       // Todo
-      var query = model.select.apply( model, sql.retColumns( model ) )
+      var query = model.select.apply( model, sql.getReturningColumnsForTable( model ) )
                      .where( where )
                      .order( model.userId, model.parentLocalId.descending )
                      .toNamedQuery( model.className );
     }
     else if (i == 1){
       // Tag
-      var query = model.select.apply( model, sql.retColumns( model ) )
+      var query = model.select.apply( model, sql.getReturningColumnsForTable( model ) )
                      .where( where )
                      .order( model.title )
                      .toNamedQuery( model.className );

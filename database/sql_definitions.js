@@ -40,13 +40,13 @@ exports.getColumnsFromStringArray = function( model, columnsArray ){
 	}
 	return attributeArray;
 };
-exports.retColumns = function( self ){
+exports.getReturningColumnsForTable = function( table ){
 	
 	var attributeArray = [];
-	for ( var key in self.returnColumns ){
-		var attribute = self[ self.returnColumns[ key ] ];
+	for ( var key in table.returnColumns ){
+		var attribute = table[ table.returnColumns[ key ] ];
 
-		if ( self.returnColumns[ key ] == "localId" ){
+		if ( table.returnColumns[ key ] == "localId" ){
 			attributeArray.push( attribute.as( 'tempId' ) );
 			attribute = attribute.as( "objectId" );
 		}
