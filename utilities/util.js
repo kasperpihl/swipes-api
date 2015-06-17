@@ -23,7 +23,15 @@ exports.getIntercomHmac = function( userId ){
   return hash;
 }
 
-
+exports.generateId = function( length ){
+  var i, j, possible, ref, text;
+  text = "";
+  possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
 exports.sendBackError = function( error, res, logs ){
   var sendError = {code:141,message:'Server error' };
   if ( logs ) 
@@ -37,6 +45,12 @@ exports.sendBackError = function( error, res, logs ){
         
   res.send( sendError );
 }
+
+// Converts date to json for saving
+exports.convertDate = function( dateObj ){
+  var object = { "__type" : "Date", "iso" : dateObj.toISOString() };
+  return object;
+};
 
 exports.sendSqsMessage = function(message, callback) {
   'use strict';

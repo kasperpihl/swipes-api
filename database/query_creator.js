@@ -27,6 +27,35 @@ app.route('/test').get( function(req,res,next){
 
 });
 
+
+Object to be created:
+
+// Generate a collection to prepare for save
+var todoCollection = new Collections.Todo();
+todoCollection.loadObjects( arrayOfJsonFormatBelow )
+var saveQueries = todoCollection.getInsertAndSaveQueries()
+pgClient.performQueries( saveQueries )
+
+json format:
+{
+	tempId: util.generateId(12)
+	order: -1
+	schedule: util.convertDate( new Date() )
+	title: thread title
+	origin: "gmail"
+	originIdentifier: "threadId"
+	attachments: [
+		{
+			service: "gmail"
+			identifier: "json:{"threadid":"14c15bfa50b6dd93","email":"spwatton@gmail.com”}”
+			title: "threadId"
+			sync: 1
+		}
+	]
+}
+
+
+
 */
 
 var _ = require('underscore');
@@ -39,7 +68,7 @@ function QueryCreator( userId ){
 	this.logger = new Logger();
 	this.logger.setIdentifier( userId );
 	this.client = new PGClient( this.logger, 12000 );
-
+	this.batchSize = 25;
 };
 
 QueryCreator.prototype.getAllTasksFromServiceThatIsNotCompletedNorDeleted = function(service, callback){
@@ -55,17 +84,46 @@ QueryCreator.prototype.getAllTasksFromServiceThatIsNotCompletedNorDeleted = func
 			return callback(null, error);
 		else if ( callback )
 			callback(results);
-	});
+	});	
 	return query;
 };
 
+/*
+  Generating queries for SQL 
+
+  - find and determine which of the objects already exists
+*/
+QueryCreator.prototype.getQueriesForFindingExistingObjectsAndInformations = function(table, localIds){
+
+	var queries = [];
+
+	if ( !localIds || localIds.length == 0 )
+		return false;
+
+	var chunks = [];
+	while ( localIds.length > 0 )
+		chunks.push( localIds.splice( 0, batchSize ) );
+
+	for( var index in chunks ){
+		var chunk = chunks[ index ];
+		var query = table.select( table.id, table.localId )
+						.from( table )
+						.where( table.userId.equals( this.userId ).and( table.localId.in( chunk ) ) )
+						.toNamedQuery( table.className );
+		query.numberOfRows = chunk.length;
+		queries.push(query);
+	}
+	
+	return ( queries.length > 0 ) ? queries : false;
+
+};
 
 /*
 	Get query for retrieving updates for objects
 	Including timestamp will retrieve only newest updates
 	Excluding it will retrieve all, but no deleted objects (New sync)
 */
-PGBatcher.prototype.getQueryForFindingUpdatedObjects = function(table, lastUpdate){
+QueryCreator.prototype.getQueryForFindingUpdatedObjects = function(table, lastUpdate){
 	var allowedTables = ["todo", "tag"];
 	var model = sql[table];
 	if( model ){
