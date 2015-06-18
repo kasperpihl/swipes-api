@@ -1,6 +1,6 @@
 var BaseModel = require('./base_model.js');
 var sql = require('../database/sql_definitions.js');
-var util = require('../utilities/util.js');
+var util = require('../utilities/util.js')();
 var _ = require('underscore');
 
 var TodoModel = BaseModel.extend({

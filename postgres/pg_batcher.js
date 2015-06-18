@@ -196,7 +196,6 @@ PGBatcher.prototype.getQueriesForInsertingAndSavingObjects = function( batchSize
 
 
 
-
 PGBatcher.prototype.getQueriesForFindingUpdates = function(lastUpdate){
   
   var models = [ sql.todo, sql.tag ];

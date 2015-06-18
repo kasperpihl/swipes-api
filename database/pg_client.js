@@ -208,23 +208,20 @@ PGClient.prototype.storeSession = function( token , userId ){
 }
 
 
-PGClient.prototype.validateToken = function( token , store , callback){
+PGClient.prototype.validateToken = function( token , callback){
 	var self = this;
 	if ( !token )
 		return callback(false, { code : 142 , message : "sessionToken must be included" });
-	function validateFromParse( store ){
-    	Parse.User.become( token ).then( function( user ){
-    		self.userId = user.id;
-    		callback( user.id, false );
-    		if ( store )
-    			self.storeSession( token , user.id );
+	function validateFromParse(){
+		Parse.User.become( token ).then( function( user ){
+			self.userId = user.id;
+			callback( user.id, false );
+			self.storeSession( token , user.id );
 
 	    },function( error, error2 ){
 	    	callback( false, error ); 
 	    });
 	};
-	if ( !store)
-		return validateFromParse( store );
 
 	var now = new Date();
 	var query = defs.session.select( defs.session.userId, defs.session.expires ).where( defs.session.sessionToken.equals( token ).and( defs.session.expires.gt( now ) ) ).toQuery();
@@ -236,7 +233,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
 			callback( result.rows[0].userId, false );
 		}
 		else 
-			validateFromParse( true );
+			validateFromParse();
 	});
 }
 

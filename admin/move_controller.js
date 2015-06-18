@@ -1,6 +1,6 @@
 var sql = require('../database/sql_definitions.js');
 var PGBatcher = require('../postgres/pg_batcher.js');
-var SyncController = require( '../controllers/sync_controller.js' );
+var SyncController = require( '../api/controllers/sync_controller.js' );
 
 function MoveController( client, logger ){
 	this.client = client;

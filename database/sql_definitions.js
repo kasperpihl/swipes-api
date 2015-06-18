@@ -1,5 +1,6 @@
 var sql = require('sql');
 var _ = require('underscore');
+var util = require('../utilities/util.js')();
 
 var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt" ];
 var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatDate", "repeatOption" , "tags", "attachments" , "parentLocalId", "origin", "originIdentifier" ];
@@ -21,7 +22,7 @@ exports.tag = sql.define( {
 } );
 exports.session = sql.define({
 	'name': "session",
-	'columns': [ 'sessionToken', 'userId', 'expires']
+	'columns': [ 'sessionToken', 'userId', 'expires' ]
 } );
 
 
@@ -57,11 +58,6 @@ exports.getReturningColumnsForTable = function( table ){
 	return attributeArray;
 };
 
-function convertDate( dateObj ){
-	var object = { "__type" : "Date", "iso" : dateObj.toISOString() };
-	return object;
-};
-
 exports.parseObjectForClass = function( object, className ){
 
 	object.parseClassName = className;
@@ -69,7 +65,7 @@ exports.parseObjectForClass = function( object, className ){
 		for ( var attribute in object ){
 			var value = object[ attribute ];
 			if ( value && _.indexOf( [ 'schedule' , "completionDate" , "repeatDate" ], attribute ) != -1 )
-				object[ attribute ] = convertDate( value );
+				object[ attribute ] = util.convertDate( value );
 		}
 	}
 };
