@@ -1,7 +1,8 @@
-var _ = require('underscore');
-var sql = require('../database/sql_definitions.js');
-var PGBatcher = require('../postgres/pg_batcher.js');
-var Parse = require('parse').Parse;
+var COMMON = 			'../../common/';
+var _ = 			require('underscore');
+var sql = 			require(COMMON + 'database/sql_definitions.js');
+var Collections = 	require(COMMON + 'collections/collections.js');
+var Parse = 		require('parse').Parse;
 
 function SyncController( client, logger ){
 	this.logger = logger;
@@ -11,17 +12,25 @@ function SyncController( client, logger ){
 	this.hasMoreToSave = false;
 	this.batchSize = 25;
 };
+SyncController.prototype.loadCollections = function(collections){
+	this.todoCollection = new Collections.Todo();
+	this.tagCollection = new Collections.Tag();
+	this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection };
+}
 
-SyncController.prototype.sync = function ( body, userId, callback ){
-
+SyncController.prototype.sync = function ( req, userId, callback ){
+	
+	var body = req.body;
+	
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
+	
 	var self = this;
+	
 	if( body.syncId )
 		self.syncId = body.syncId;
 
 	function finishWithError(error){
-		self.client.end();
 		callback( false, error );
 	};
 
@@ -37,23 +46,19 @@ SyncController.prototype.sync = function ( body, userId, callback ){
 		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
 		if ( !queries )
 			return insertAndSaveObjects();
-		//console.log(queries);
-		self.logger.time( 'prepared queries for duplicates' );
 		self.client.performQueries( queries , function( results, error ){
-			self.logger.time('found ids determing updates');
-			
 			if ( error )
 				return finishWithError( error );
 
 			for ( var className in results ){
-				//console.log( className);
-				//console.log( results[className]);
+
 				batcher.updateCollectionToDetermineUpdatesWithResult( className , results[ className ] );
 			}
 
 			insertAndSaveObjects();
 		});
 	};
+
 
 	function insertAndSaveObjects(){
 		var queries = batcher.getQueriesForInsertingAndSavingObjects( self.batchSize );
@@ -136,6 +141,7 @@ SyncController.prototype.sync = function ( body, userId, callback ){
 		self.client.end();
 		if( !resultObjects )
 			resultObjects = {};
+		resultObjects['intercom-hmac'] = util.getIntercomHmac(this.userId);
 		resultObjects.serverTime = new Date().toISOString();
       	callback( resultObjects , false );
 	};

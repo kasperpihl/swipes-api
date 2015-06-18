@@ -1,4 +1,9 @@
 //require('strong-agent').profile("4805c27d826dec99b06108df1b5dab80","SwipesAPI");
+
+// ===========================================================================================================
+// Setup
+// ===========================================================================================================
+
 var express =       require( 'express' ),
 http    =       require( 'http' ),
 bodyParser =    require( 'body-parser' ),
@@ -10,7 +15,10 @@ http.globalAgent.maxSockets = 25;
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 
-// Allow CORS for cross-domain support in browsers
+// ===========================================================================================================
+// Middle ware to set headers enabling CORS
+// ===========================================================================================================
+  
 app.use(function(req, res, next) {
 	var allowedHost = [
 		"*"
@@ -31,16 +39,24 @@ app.use(function(req, res, next) {
 	else next();
 });
 
+// ===========================================================================================================
+// Routes
+// ===========================================================================================================
+
+
+	// Main Route
+	// =========================================================================================================
 
 app.route( '/').get( function(req,res,next){
 	res.send("Swipes synchronization services - online");
 });
 
+	// Sync Route
+	// =========================================================================================================    
 
-app.route( '/v1/sync' ).post( function(req, res){
-	new APIController().sync(req,res);
-});
+app.route( '/v1/sync' ).post( function(req, res){ new APIController( req, res ).sync(); });
 
+/*
 app.route( '/move' ).get( function( req, res ){
 	Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 
@@ -73,51 +89,11 @@ app.route( '/move' ).get( function( req, res ){
 	});
 	return ;
 });
+*/
 
-
-function handleSync( req, res, next ){
-
-	var logger = new Logger();
-	var client = new PGClient( logger, 12000 );
-
-	client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
-		// TODO: send proper error back that fits clients handling
-		if ( error ){
-			client.end();
-			return util.sendBackError( error , res);
-		}
-		logger.time( 'credential validation completed' );
-		logger.setIdentifier( userId );
-
-		var syncController = new SyncController( client , logger );
-		if ( req.body.hasMoreToSave )
-			syncController.hasMoreToSave = true;
-
-
-		syncController.sync( req.body, userId, function( result , error ){
-			logger.time('Finished request', true);
-			if(client.timedout){
-				util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
-				return;
-			}
-			client.end();
-			if ( result ){
-				if ( req.body.sendLogs ){
-					result['logs'] = logger.logs;
-				}
-
-				result['intercom-hmac'] = util.getIntercomHmac(userId);
-				res.send( result );
-			}
-			else{
-				logger.sendErrorLogToParse( error, req.body );
-				util.sendBackError( error , res, logger.logs );
-			}
-
-		});
-	});
-};
-
+// ===========================================================================================================
+// Start the server 
+// ===========================================================================================================
 
 
 var port = Number(process.env.PORT || 5000);

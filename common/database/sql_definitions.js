@@ -1,6 +1,7 @@
+var COMMON = '../';
 var sql = require('sql');
 var _ = require('underscore');
-var util = require('../utilities/util.js')();
+var util = require(COMMON + 'utilities/util.js');
 
 var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt" ];
 var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatDate", "repeatOption" , "tags", "attachments" , "parentLocalId", "origin", "originIdentifier" ];

@@ -1,15 +1,15 @@
-var sql = require('../database/sql_definitions.js');
-var PGBatcher = require('../postgres/pg_batcher.js');
-var SyncController = require( '../api/controllers/sync_controller.js' );
+var COMMON = '../../';
+var sql = require(COMMON + 'database/sql_definitions.js');
+var SyncController = require( './sync_controller.js' );
 
-function MoveController( client, logger ){
+function AdminController( client, logger ){
 	this.client = client;
 	this.logger = logger;
 	this.logger.forceOutput = true;
 };
 
 
-MoveController.prototype.deleteAllDataForUser = function( userId, callback ){
+AdminController.prototype.deleteAllDataForUser = function( userId, callback ){
 	var todo = sql.todo;
 	var tag = sql.tag;
 	var todo_tag = sql.todo_tag;
@@ -30,7 +30,7 @@ MoveController.prototype.deleteAllDataForUser = function( userId, callback ){
 }
 
 
-MoveController.prototype.copyDataFromUserToUser = function( fromUserId, toUserId, callback ){
+AdminController.prototype.copyDataFromUserToUser = function( fromUserId, toUserId, callback ){
 	var self = this;
 
 	var fromBatcher = new PGBatcher([], fromUserId, self.logger);
@@ -61,4 +61,4 @@ MoveController.prototype.copyDataFromUserToUser = function( fromUserId, toUserId
 	});
 };
 
-module.exports = MoveController;
+module.exports = AdminController;

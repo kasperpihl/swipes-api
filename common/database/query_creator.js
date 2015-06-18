@@ -57,11 +57,11 @@ json format:
 
 
 */
-
+var COMMON = '../';
 var _ = require('underscore');
 var sql = require('./sql_definitions.js');
-var Logger =          require( '../utilities/logger.js' );
 var PGClient =        require('./pg_client.js');
+var Logger =          require(COMMON + 'utilities/logger.js' );
 
 function QueryCreator( userId ){
 	this.userId = userId;
@@ -87,69 +87,5 @@ QueryCreator.prototype.getAllTasksFromServiceThatIsNotCompletedNorDeleted = func
 	});	
 	return query;
 };
-
-/*
-  Generating queries for SQL 
-
-  - find and determine which of the objects already exists
-*/
-QueryCreator.prototype.getQueriesForFindingExistingObjectsAndInformations = function(table, localIds){
-
-	var queries = [];
-
-	if ( !localIds || localIds.length == 0 )
-		return false;
-
-	var chunks = [];
-	while ( localIds.length > 0 )
-		chunks.push( localIds.splice( 0, batchSize ) );
-
-	for( var index in chunks ){
-		var chunk = chunks[ index ];
-		var query = table.select( table.id, table.localId )
-						.from( table )
-						.where( table.userId.equals( this.userId ).and( table.localId.in( chunk ) ) )
-						.toNamedQuery( table.className );
-		query.numberOfRows = chunk.length;
-		queries.push(query);
-	}
-	
-	return ( queries.length > 0 ) ? queries : false;
-
-};
-
-/*
-	Get query for retrieving updates for objects
-	Including timestamp will retrieve only newest updates
-	Excluding it will retrieve all, but no deleted objects (New sync)
-*/
-QueryCreator.prototype.getQueryForFindingUpdatedObjects = function(table, lastUpdate){
-	var allowedTables = ["todo", "tag"];
-	var model = sql[table];
-	if( model ){
-		var query, where, order;
-
-		// If no timestamp, return all objects that's not deleted
-		where = model.userId.equals( this.userId ).and( model.deleted.notEqual( true ) );
-		// If timestamp, return only updated objects after timestamp (including deleted!)
-		if( lastUpdate )
-			where = model.userId.equals( this.userId ).and( model.updatedAt.gt( lastUpdate ) );
-
-		// Start preparing select query and ask for columns to return from the sql definitions
-		query = model.select.apply( model, sql.getReturningColumnsForTable( model ) )
-							.where( where )
-		
-
-		// If todo table, order with parent tasks first for client to not loop through subtasks before having the main task
-		if(table == "todo"){
-			query = query.order(model.userId, model.parentLocalId.descending)
-		}
-
-		// Prepare and give name to query
-		query = query.toNamedQuery( model.className );
-	}
-
-	return query;
-}
 
 module.exports = QueryCreator;

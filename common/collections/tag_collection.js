@@ -1,6 +1,7 @@
+var COMMON = '../';
 var BaseCollection = require('./base_collection.js');
-var Models = require('../models/models.js');
-var sql = require('../database/sql_definitions.js');
+var Models = require(COMMON + 'models/models.js');
+var sql = require(COMMON + 'database/sql_definitions.js');
 
 var TagCollection = BaseCollection.extend({
 	model: Models.Tag,
