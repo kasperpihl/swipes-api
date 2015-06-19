@@ -1,3 +1,8 @@
+// ===========================================================================================================
+// Sync Controller - Handling Client Sync
+// ===========================================================================================================
+
+
 var COMMON = 			'../../common/';
 var _ = 			require('underscore');
 var sql = 			require(COMMON + 'database/sql_definitions.js');
@@ -5,6 +10,11 @@ var Collections = 	require(COMMON + 'collections/collections.js');
 var Parse = 		require('parse').Parse;
 var util =			require(COMMON + 'utilities/util.js');
 var Q = require("q");
+
+
+// ===========================================================================================================
+// Instantiation
+// ===========================================================================================================
 
 function SyncController( userId, client, logger ){
 	this.userId = userId;
