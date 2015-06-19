@@ -9,75 +9,77 @@ var TodoModel = BaseModel.extend({
 	className: "ToDo",
 	sql: sql.todo,
 
+
+	// ===========================================================================================================
+	// Load json into the model
+	// ===========================================================================================================
 	parseRawData:function ( data, userId ) {
 		this.relations = {};
 		var attributeUpdates = this.getAttributeUpdateArrayFromData( data, userId );
-		
-		// If deleted don't check attributes attributes
+
+		// Only iterate attributes if object is not deleted
 		if ( !data.deleted ) {
 			for ( var attribute in data ){
+
 				var value = data[ attribute ];
 
-      			if( attribute == "title" && !value ){
-      				this.set("validationError", "corruptdata");
-      				continue;
-      			}
-
+				// Check If attribute exist in SQL - sql_definitions.js
 				if ( !this.sql.hasColumn( attribute ) )
-			        continue;
+					continue;
 
-			    if ( _.isObject( value ) && value["__type"] == "Date" ){
-			    	//var oldVal = value;
-		        	var tempVal = new Date( value[ 'iso' ] );
-		        	if(_.isDate(tempVal) && !this.isValidDate(tempVal)){
-		        		var repairedString = util.repairDateString(value['iso']);
-		        		tempVal = new Date( repairedString );
-		        		if(_.isDate(tempVal) && !this.isValidDate(tempVal)){
-		        			this.set("validationError", "failed repair " + value['iso']);
-		        			continue;
-		        		}
-		        		
+				if ( _.isObject( value ) && value["__type"] == "Date" ){
+					var tempVal = new Date( value[ 'iso' ] );
+					// attempt to fix date string / old issue with clients not sending iso format - should be fixed from clients
+					if(_.isDate(tempVal) && !util.isValidDate(tempVal)){
+						var repairedString = util.repairDateString(value['iso']);
+						tempVal = new Date( repairedString );
 					}
 					value = tempVal;
-			    }
+				}
 
-			    if ( attribute == "attachments" || attribute == "tags" ){
-			    	value = JSON.stringify(value);
-      			}
+				// Convert to jsonb for saving
+				if ( attribute == "attachments" || attribute == "tags" ){
+					// TODO: validate content of attachment/tags
+					value = JSON.stringify(value);
+				}
 
-			    if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
-			    	value = value.substring(0,255);
-      			}
-      			
+				if( ( attribute == "title" || attribute == "originIdentifier") && value && value.length > 255 ){
+					value = value.substring(0,255);
+				}
+
 
 				attributeUpdates[ attribute ] = value;
 			}
 		}
-
 		this.set( attributeUpdates );
 	},
-	isValidDate: function(d){
-		if ( !_.isDate(d) )
-    		return false;
-  		return !isNaN(d.getTime());
-	},
+
+
+	// ===========================================================================================================
+	// Validate model for missing attributes and wrong values
+	// ===========================================================================================================
 	validate:function( attrs, options ){
+		// No identifier
 		if ( !attrs.localId )
-			return "couldn't identify todo";
+			return "no identifier for todo";
 		
-		if(attrs.schedule &&  !this.isValidDate(attrs.schedule)){
+		// Invalid title
+		if( attrs.title && attrs.title.length == 0 ){
+			return "invalid title";
+		}
+
+		// Invalid dates
+		if(attrs.schedule &&  !util.isValidDate(attrs.schedule)){
 			return "invalid schedule";
 		}
-
-		if(attrs.completionDate && !this.isValidDate(attrs.completionDate)){
+		if(attrs.completionDate && !util.isValidDate(attrs.completionDate)){
 			return "invalid completionDate";
 		}
-
-		if(attrs.repeatDate && !this.isValidDate(attrs.repeatDate)){
+		if(attrs.repeatDate && !util.isValidDate(attrs.repeatDate)){
 			return "invalid repeatDate";
-		}		//if(attrs.schedule)
-		// is insertion
+		}
 
+		// Object didn't exist - check for required attributes
 		if ( !attrs.databaseId ){
 			if ( !attrs.title ){
 				return "title is missing for insertion of todo";

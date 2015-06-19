@@ -6,7 +6,7 @@ var sql = require(COMMON + 'database/sql_definitions.js');
 var TodoCollection = BaseCollection.extend({
 	model: Models.Todo,
 	sql: sql.todo,
-	getQueryForFindingUpdates: function( userId, lastUpdate ){
+	queryForFindingUpdates: function( userId, lastUpdate ){
 		var model = this.sql;
 		var where = model.userId.equals( userId )
 								.and( model.deleted.notEqual( true ) );

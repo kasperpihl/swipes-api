@@ -7,30 +7,40 @@ var TagModel = BaseModel.extend({
 	idAttribute: "localId",
 	sql: sql.tag,
 
+	// ===========================================================================================================
+	// Load json into the model
+	// ===========================================================================================================
 	parseRawData: function( data, userId ){
 
 		var attributeUpdates = this.getAttributeUpdateArrayFromData( data, userId );
 		
-		// If deleted don't iterate attributes
-		
+		// Only iterate attributes if object is not deleted
 		if ( !data.deleted ) {
 			for ( var attribute in data ){
 
 				var value = data[ attribute ];
-				if( attribute == "title" && !value ){
-					this.set("validationError", "corruptdata");
-					continue;
-				}
+
+				// Check If attribute exist in SQL - sql_definitions.js
 				if ( !this.sql.hasColumn( attribute ) )
-			        continue;
+					continue;
+
 				attributeUpdates[ attribute ] = value;
 			}
 		}
 		this.set( attributeUpdates );
 	},
+	// ===========================================================================================================
+	// Validate model for missing attributes and wrong values
+	// ===========================================================================================================
 	validate: function( attrs, options ){
 		if ( !attrs.localId )
-			return "couldn't identify tag";
+			return "no identifier for tag";
+
+		// Invalid title
+		if( attrs.title && attrs.title.length == 0 ){
+			return "invalid title for tag";
+		}
+
 		// is insertion
 		if ( !attrs.databaseId){
 			if ( !attrs.title ){

@@ -2,6 +2,7 @@ var crypto    = require('crypto');
 var awsRegion =     'us-east-1';
 var QueueUrl = 'https://sqs.us-east-1.amazonaws.com/745159268654/Swipes';
 var options = {};
+var _ = require('underscore');
 var Parse = 		require('parse').Parse;
 options["applicationId"] = "nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
 options["javaScriptKey"] = "SEwaoJk0yUzW2DG8GgYwuqbeuBeGg51D1mTUlByg";
@@ -51,16 +52,18 @@ exports.generateId = function( length ){
 }
 exports.sendBackError = function( error, res, logs ){
 	var sendError = {code:141,message:'Server error' };
-	if ( logs ) 
-		sendError.logs = logs;
-	if ( error && error.code ) 
-		sendError.code = error.code;
-	if ( error && error.message ) 
-		sendError.message = error.message;
-	if ( error && error.hardSync )
-		sendError.hardSync = true;
+	if( error && _.isString( error ) )
+		sendError.message = error;
+	else if( error && _.isObject(error) ){
+		if ( error.code ) 
+			sendError.code = error.code;
+		if ( error.message ) 
+			sendError.message = error.message;
+		if ( error.hardSync )
+			sendError.hardSync = true;
+	}
 	sendError.ok = false;
-
+	res.status(400);
 	res.send( sendError );
 }
 
@@ -72,7 +75,15 @@ exports.convertDate = function( dateObj ){
 	var object = { "__type" : "Date", "iso" : dateObj.toISOString() };
 	return object;
 };
+// ===========================================================================================================
+// Check if object is a date object
+// ===========================================================================================================
 
+exports.isValidDate = function(d){
+	if ( !_.isDate(d) )
+		return false;
+	return !isNaN(d.getTime());
+}
 
 // ===========================================================================================================
 // Sends a message to the Background worker queue
@@ -109,6 +120,9 @@ exports.sendSqsMessage = function(message, callback) {
 }
 
 
+// ===========================================================================================================
+// Send a silent push
+// ===========================================================================================================
 exports.sendSilentPush = function(channels, userInfo){
 	var data = {
 		channels:channels, //"wjDRVyp6Ot"

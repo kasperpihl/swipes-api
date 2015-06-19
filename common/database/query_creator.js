@@ -14,20 +14,6 @@ A user completes a task in Swipes (that is linked to an email)
 A user moves an email from the Swipes List (that has a task in Swipes)
 - Leave the task, but unlink it
 
-
-TESTING: 
-var QueryCreator = require('../database/query_creator.js');
-app.route('/test').get( function(req,res,next){
-  var creator = new QueryCreator( "kzORIThNaw");
-  query = creator.getAllTasksFromServiceThatIsNotCompletedNorDeleted("evernote", function(results, error){
-    console.log(results);
-    console.log(error);
-    res.send("result");
-  });
-
-});
-
-
 Object to be created:
 
 // Generate a collection to prepare for save

@@ -1,7 +1,7 @@
 var COMMON = '../';
 var Backbone = require('backbone');
 var BatchUpdateQueryCreator = require(COMMON + 'database/batch_update_query_creator.js');
-
+var Q = require("q");
 var BaseCollection = Backbone.Collection.extend({
 	model:false,
 	batchSize: 25,
@@ -24,6 +24,7 @@ var BaseCollection = Backbone.Collection.extend({
 			if( !model.get("validationError") )
 				models.push(model);
 			else{
+				this.error = model.get("validationError");
 				this.errorModels.push(model);
 			}
 		}
@@ -61,9 +62,9 @@ var BaseCollection = Backbone.Collection.extend({
 		}
 		return queries;
 	},
-	// ===========================================================================================================
-	// Update models with databaseId determining which is updates (results is the result of queries from above)
-	// ===========================================================================================================
+
+		// Update models with databaseId determining which is updates (results is the result of queries from above)
+		// ===========================================================================================================
 	updateCollectionAndDetermineUpdates: function( results ){
 		for( var i in results ){
 			var row = results[ i ];
@@ -81,15 +82,29 @@ var BaseCollection = Backbone.Collection.extend({
 	// Generate queries for inserting and saving the collection objects
 	// ===========================================================================================================
 	getQueriesForInsertingAndSavingObjects: function(){
-		var returnQueries = [];
-		var updateQueries = [];
-		var self = this;
+		var returnQueries = [], self = this, deferred = Q.defer();
+		
 
 		// Group between insertions and updates
 		var collection = this.groupBy(function( model){
-			
+			// check for validations
+			model.set({}, { validate:true });
+			if ( model.validationError ){
+				if(model.get("deleted"))
+					return "ignore";
+				self.error = { code: 157, message: model.validationError, hardSync: true };
+				return 'invalid';
+			}
 			return ( model.get('databaseId') ? 'update' : 'insert' ) 
 		});
+		// Reject promise if errors
+		if ( self.error ){
+			console.log(self.error);
+			deferred.reject(self.error);
+			return deferred.promise;
+		}
+		console.log(collection);
+
 
 		var updates = collection['update'];
 		var insertions = collection['insert'];
@@ -145,7 +160,10 @@ var BaseCollection = Backbone.Collection.extend({
 			if( query.objectCounter > 0)
 				pushQuery( query );
 		}
-		return returnQueries;
+		console.log(returnQueries);
+
+		deferred.resolve(returnQueries);
+		return deferred.promise;
 
 	}
 });

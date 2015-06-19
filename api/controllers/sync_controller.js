@@ -24,6 +24,7 @@ function SyncController( userId, client, logger ){
 // ===========================================================================================================
 // Main sync function - called from the request and handles the whole sync process
 // ===========================================================================================================
+
 SyncController.prototype.sync = function ( req, userId, callback ){
 	var self = this;
 	var body = req.body;
@@ -33,11 +34,11 @@ SyncController.prototype.sync = function ( req, userId, callback ){
 	
 
 	// Run the promise loop for syncing - load, find existing, save, get updates!
-	this.loadCollections(body.objects)
-	.then( function(){ 			return self.findInformationsFromLocalIds() })
-	.then( function(){ 			return self.insertAndSaveObjects( body.syncId ) })
-	.then( function(){ 			return self.fetchRecentUpdates( body.lastUpdate ) })
-	.then( function(result){ 	return self.prepareReturnObject(result) })
+	this.loadCollectionsWithObjects(body.objects)
+	.then( function(){ 			return self.findInformationsFromLocalIds() 			})
+	.then( function(){ 			return self.insertAndSaveObjects( body.syncId ) 	})
+	.then( function(){ 			return self.fetchRecentUpdates( body.lastUpdate ) 	})
+	.then( function(result){ 	return self.prepareReturnObject(result) 			})
 	.then(function(returnObject){
 		callback(returnObject);
 	})
@@ -54,9 +55,10 @@ SyncController.prototype.sync = function ( req, userId, callback ){
 
 
 // ===========================================================================================================
-// Load objects from Sync into collections and check for initial validation errors
+// Load objects from Sync into collections
 // ===========================================================================================================
-SyncController.prototype.loadCollections = function(collections){
+
+SyncController.prototype.loadCollectionsWithObjects = function(collections){
 	var deferred = Q.defer();
 	this.logger.time("loadCollections");
 	
@@ -64,12 +66,16 @@ SyncController.prototype.loadCollections = function(collections){
 		this.tagCollection.loadJSONObjects( collections["Tag"] );
 	if( collections && collections["ToDo"])
 		this.todoCollection.loadJSONObjects( collections["ToDo"]);
-	// TODO: Handle validation Error - deferred.reject()
+	
 	deferred.resolve();
 	return deferred.promise; 
 }
 
 
+
+// ===========================================================================================================
+// Load objects from Sync into collections
+// ===========================================================================================================
 
 SyncController.prototype.findInformationsFromLocalIds = function(){
 	var deferred = Q.defer(), self = this;
@@ -87,13 +93,11 @@ SyncController.prototype.findInformationsFromLocalIds = function(){
 				return deferred.reject( error );
 
 			for ( var className in results ){
-				
-				var res = results[className];
-				var collection;
-				if( className == "ToDo" ) collection = self.todoCollection
-				if( className == "Tag" ) collection = self.tagCollection
-				if(collection)
-					collection.updateCollectionAndDetermineUpdates(res);
+				if( className == "ToDo" ) 
+					self.todoCollection.updateCollectionAndDetermineUpdates(results[className]);
+				if( className == "Tag" ) 
+					self.tagCollection.updateCollectionAndDetermineUpdates(results[className]);
+			
 			}
 
 			deferred.resolve()
@@ -103,47 +107,64 @@ SyncController.prototype.findInformationsFromLocalIds = function(){
 }
 
 
+// ===========================================================================================================
+// Insert and Update objects - check for validation errors
+// ===========================================================================================================
 
 SyncController.prototype.insertAndSaveObjects = function( syncId ){
-	var deferred = Q.defer(), self = this;
+	var deferred = Q.defer(), self = this, queries = [];
 	this.logger.time("insertAndSaveObjects");
 
 	// Concat queries from each collection to prepare insertion and update queries
-	var queries = this.tagCollection.getQueriesForInsertingAndSavingObjects()
-		.concat(this.todoCollection.getQueriesForInsertingAndSavingObjects());
+	this.tagCollection.getQueriesForInsertingAndSavingObjects().then(function(tagQueries){
 
-	if ( !queries || queries.length == 0 ){
-		deferred.resolve();
-	}
-	else{
-		this.didSave = true;
-		this.logger.time( "inserting and saving " + queries.length + " number of queries " );
-		
-		this.client.transaction( function( error ){
-			self.client.rollback();
-		});
-		this.client.performQueries( queries, function( result, error , i){
-			self.logger.time( "finalized insertions and updates" );
-			if ( error )
-				return deferred.reject( error );
-			
-			self.client.commit(function( result, error ){
-					
-				if ( error )
-					return deferred.reject( error);
-				
-				util.sendSilentPush([ self.userId ], { syncId: syncId });
-				deferred.resolve();
-			
+		queries = queries.concat(tagQueries);
+		return self.todoCollection.getQueriesForInsertingAndSavingObjects();
+
+	}).then( function(todoQueries){
+
+		// successfully batched the queries for saving
+		queries = queries.concat(todoQueries);
+		if ( !queries || queries.length == 0 ){
+			deferred.resolve();
+		}
+		else{
+
+			// Start a transaction before saving all objects
+			self.client.transaction( function( error ){
+				self.client.rollback();
 			});
+			self.client.performQueries( queries, function( result, error , i){
+				self.logger.time( "finalized insertions and updates" );
+				if ( error )
+					return deferred.reject( error );
+				
+				self.client.commit(function( result, error ){
+						
+					if ( error )
+						return deferred.reject( error);
+					
+					// Send silent push to other clients that an update happened
+					util.sendSilentPush([ self.userId ], { syncId: syncId });
+					deferred.resolve();
+				
+				});
 
-		});
-	}
+			});
+		}
+	}).fail(function(error){
+		// an error occurred when creating the queries - most likely a validation error
+		deferred.reject(error);
+	});
+
+	
 	return deferred.promise;
 }
 
 
-
+// ===========================================================================================================
+// Fetch changed objects to return to client
+// ===========================================================================================================
 
 SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 	this.logger.log("fetchRecentUpdates");
@@ -161,8 +182,8 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 			lastUpdate = new Date( lastUpdate.getTime() + 1);
 
 	// Concat queries from each collection to get updated objects
-	var queries = [this.tagCollection.getQueryForFindingUpdates(this.userId, lastUpdate),
-		this.todoCollection.getQueryForFindingUpdates(this.userId, lastUpdate)];
+	var queries = [this.tagCollection.queryForFindingUpdates(this.userId, lastUpdate),
+		this.todoCollection.queryForFindingUpdates(this.userId, lastUpdate)];
 
 
 	this.client.performQueries(queries, function(result, error){
@@ -176,6 +197,9 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 }
 
 
+// ===========================================================================================================
+// Prepare return object, formatting it for client and setting time w/ more
+// ===========================================================================================================
 
 SyncController.prototype.prepareReturnObject = function( result ){
 	var deferred = Q.defer(), self = this, returnObject = {}, biggestTime;
@@ -198,6 +222,7 @@ SyncController.prototype.prepareReturnObject = function( result ){
 	// Intercom hmac setting
 	returnObject['intercom-hmac'] = util.getIntercomHmac(this.userId);
 	returnObject.ok = true;
+	// The current time on the server right before returing - optional if client want to check if client time and server time is aligned
 	returnObject.serverTime = new Date().toISOString();
 
 

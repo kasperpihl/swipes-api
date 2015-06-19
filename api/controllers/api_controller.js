@@ -32,6 +32,7 @@ function APIController(req, res){
 // Authorization and Request Validation
 // ===========================================================================================================
 APIController.prototype.validateRequest = function(){
+	// TODO: Perform validation of incoming request
 	return true;
 }
 APIController.prototype.authorize = function(callback){
@@ -54,16 +55,16 @@ APIController.prototype.authorize = function(callback){
 APIController.prototype.handleResult = function(result, error){
 	// Check for timeout on the client (13 seconds operations will trigger timeout)
 	if(this.client.timedout)
-		return this.handleError( {code:510, message:"Request Timed Out"} );
+		return this.handleErrorResponse( {code:510, message:"Request Timed Out"} );
 	if( error )
-		return this.handleError(error);
-	this.handleSuccess(result);
+		return this.handleErrorResponse(error);
+	this.handleSuccessResponse(result);
 }
-APIController.prototype.handleError = function(error, log){
+APIController.prototype.handleErrorResponse = function(error, log){
 	this.client.end();
 	util.sendBackError(error, this.res);
 }
-APIController.prototype.handleSuccess = function(result){
+APIController.prototype.handleSuccessResponse = function(result){
 	this.client.end();
 	this.res.send( result );
 }
@@ -73,6 +74,10 @@ APIController.prototype.handleSuccess = function(result){
 // ===========================================================================================================
 // API Calls
 // ===========================================================================================================
+	
+	// Full client sync
+	// ===========================================================================================================
+
 APIController.prototype.sync = function (){
 	var self = this;
 	this.authorize( function(userId){
