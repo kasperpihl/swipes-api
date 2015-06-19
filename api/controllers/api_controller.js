@@ -1,11 +1,17 @@
-var COMMON = '../../';
-var keys = 				require(COMMON + 'utilities/keys.js');
+// ===========================================================================================================
+// API Controller - Handling API Requests (routes) from the Public api
+// ===========================================================================================================
+
+
+var COMMON = 			'../../common/';
 var util = 				require(COMMON + 'utilities/util.js');
 var Logger =			require(COMMON + 'utilities/logger.js' );
 var Parse = 			require('parse').Parse;
 var PGClient =        	require(COMMON + 'database/pg_client.js');
-
+var Q = 				require("q");
 var SyncController = require( './sync_controller.js' );
+
+
 
 // ===========================================================================================================
 // Instantiation
@@ -13,11 +19,13 @@ var SyncController = require( './sync_controller.js' );
 function APIController(req, res){
 	this.req = req;
 	this.res = res;
-	Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+	Parse.initialize( util.getOption( "applicationId" ) , util.getOption( "javaScriptKey" ) , util.getOption( "masterKey" ) );
 	this.logger = new Logger();
-	this.client = new PGClient( logger, 12000 );
+	this.logger.forceOutput = true;
+	this.client = new PGClient( this.logger, 12000 );
 
 };
+
 
 
 // ===========================================================================================================
@@ -32,16 +40,19 @@ APIController.prototype.authorize = function(callback){
 		// TODO: send proper error back that fits clients handling
 		if ( error )
 			return self.handleError( error );
+		self.userId = userId;
 		self.logger.setIdentifier( userId ); // Set userId in the logger to identify
 		callback(userId);
 	});
 }
 
 
+
 // ===========================================================================================================
 // Result handling
 // ===========================================================================================================
 APIController.prototype.handleResult = function(result, error){
+	// Check for timeout on the client (13 seconds operations will trigger timeout)
 	if(this.client.timedout)
 		return this.handleError( {code:510, message:"Request Timed Out"} );
 	if( error )
@@ -54,7 +65,7 @@ APIController.prototype.handleError = function(error, log){
 }
 APIController.prototype.handleSuccess = function(result){
 	this.client.end();
-	res.send( result );
+	this.res.send( result );
 }
 
 
@@ -66,8 +77,8 @@ APIController.prototype.sync = function (){
 	var self = this;
 	this.authorize( function(userId){
 		// Successfully authed
-		var syncController = new SyncController( self.client , self.logger );
-		syncController.sync( self.req, userId, self.handleResult );
+		var syncController = new SyncController( userId, self.client , self.logger );
+		syncController.sync( self.req, userId, self.handleResult.bind(self) );
 	});
 };
 

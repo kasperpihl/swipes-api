@@ -3,151 +3,208 @@ var _ = 			require('underscore');
 var sql = 			require(COMMON + 'database/sql_definitions.js');
 var Collections = 	require(COMMON + 'collections/collections.js');
 var Parse = 		require('parse').Parse;
+var util =			require(COMMON + 'utilities/util.js');
+var Q = require("q");
 
-function SyncController( client, logger ){
+function SyncController( userId, client, logger ){
+	this.userId = userId;
 	this.logger = logger;
-	//this.logger.forceOutput = true;
 	this.client = client;
 	this.didSave = false;
 	this.hasMoreToSave = false;
 	this.batchSize = 25;
-};
-SyncController.prototype.loadCollections = function(collections){
+
+	// Initialize the collections to handle the objects to update/insert
 	this.todoCollection = new Collections.Todo();
 	this.tagCollection = new Collections.Tag();
 	this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection };
-}
+};
 
+
+// ===========================================================================================================
+// Main sync function - called from the request and handles the whole sync process
+// ===========================================================================================================
 SyncController.prototype.sync = function ( req, userId, callback ){
-	
+	var self = this;
 	var body = req.body;
 	
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
 	
-	var self = this;
+
+	// Run the promise loop for syncing - load, find existing, save, get updates!
+	this.loadCollections(body.objects)
+	.then( function(){ 			return self.findInformationsFromLocalIds() })
+	.then( function(){ 			return self.insertAndSaveObjects( body.syncId ) })
+	.then( function(){ 			return self.fetchRecentUpdates( body.lastUpdate ) })
+	.then( function(result){ 	return self.prepareReturnObject(result) })
+	.then(function(returnObject){
+		callback(returnObject);
+	})
+	.fail(function(error){
+		console.log(error);
+		callback(false, error);
+	})
+	.catch(function(error){
+		console.log(error);
+		callback(false, error);
+	});
 	
-	if( body.syncId )
-		self.syncId = body.syncId;
+};
 
-	function finishWithError(error){
-		callback( false, error );
-	};
 
+// ===========================================================================================================
+// Load objects from Sync into collections and check for initial validation errors
+// ===========================================================================================================
+SyncController.prototype.loadCollections = function(collections){
+	var deferred = Q.defer();
+	this.logger.time("loadCollections");
 	
-	var batcher = new PGBatcher( body.objects, userId, this.logger );
-	if ( batcher.error )
-		return finishWithError( batcher.error );
+	if( collections && collections["Tag"])
+		this.tagCollection.loadJSONObjects( collections["Tag"] );
+	if( collections && collections["ToDo"])
+		this.todoCollection.loadJSONObjects( collections["ToDo"]);
+	// TODO: Handle validation Error - deferred.reject()
+	deferred.resolve();
+	return deferred.promise; 
+}
 
-	this.logger.time('batched objects');
 
-	function findInformationsFromLocalIds(){
-		
-		var queries = batcher.getQueriesForFindingIdsFromLocalIds( self.batchSize );
-		if ( !queries )
-			return insertAndSaveObjects();
-		self.client.performQueries( queries , function( results, error ){
+
+SyncController.prototype.findInformationsFromLocalIds = function(){
+	var deferred = Q.defer(), self = this;
+	this.logger.time("findInformationsFromLocalIds");
+	// Concat queries from each collection to check for their id's in the database
+	var queries = this.tagCollection.getQueriesForFindingExistingObjectsAndInformations( this.userId )
+		.concat(this.todoCollection.getQueriesForFindingExistingObjectsAndInformations( this.userId ));
+
+	if ( !queries || queries.length == 0 )
+		deferred.resolve();
+	else{
+
+		this.client.performQueries( queries , function( results, error ){
 			if ( error )
-				return finishWithError( error );
+				return deferred.reject( error );
 
 			for ( var className in results ){
-
-				batcher.updateCollectionToDetermineUpdatesWithResult( className , results[ className ] );
+				
+				var res = results[className];
+				var collection;
+				if( className == "ToDo" ) collection = self.todoCollection
+				if( className == "Tag" ) collection = self.tagCollection
+				if(collection)
+					collection.updateCollectionAndDetermineUpdates(res);
 			}
 
-			insertAndSaveObjects();
+			deferred.resolve()
 		});
-	};
+	}
+	return deferred.promise;
+}
 
 
-	function insertAndSaveObjects(){
-		var queries = batcher.getQueriesForInsertingAndSavingObjects( self.batchSize );
-		if( batcher.error ){
-			return finishWithError(batcher.error);
-		}
 
-		if ( !queries )
-			return getUpdates();
-		self.didSave = true;
-		self.logger.time( "inserting and saving " + queries.length + " number of queries " );
+SyncController.prototype.insertAndSaveObjects = function( syncId ){
+	var deferred = Q.defer(), self = this;
+	this.logger.time("insertAndSaveObjects");
+
+	// Concat queries from each collection to prepare insertion and update queries
+	var queries = this.tagCollection.getQueriesForInsertingAndSavingObjects()
+		.concat(this.todoCollection.getQueriesForInsertingAndSavingObjects());
+
+	if ( !queries || queries.length == 0 ){
+		deferred.resolve();
+	}
+	else{
+		this.didSave = true;
+		this.logger.time( "inserting and saving " + queries.length + " number of queries " );
 		
-		self.client.transaction( function( error ){
+		this.client.transaction( function( error ){
 			self.client.rollback();
 		});
-		self.client.performQueries( queries, function( result, error , i){
+		this.client.performQueries( queries, function( result, error , i){
 			self.logger.time( "finalized insertions and updates" );
 			if ( error )
-				return finishWithError( error );
+				return deferred.reject( error );
 			
 			self.client.commit(function( result, error ){
 					
 				if ( error )
-					return finishWithError( error);
+					return deferred.reject( error);
 				
-				getUpdates();
+				util.sendSilentPush([ self.userId ], { syncId: syncId });
+				deferred.resolve();
 			
 			});
 
 		});
-	};
-	
-	function getUpdates(){
-		if ( self.hasMoreToSave )
-			return finish();
-		var lastUpdate = ( body.lastUpdate ) ? new Date( body.lastUpdate ) : false;
-		if(self.didSave){
-			sendPush();
-		}
-		if( lastUpdate )
-			lastUpdate = new Date( lastUpdate.getTime() + 1);
-		//lastUpdate = false;
-		self.logger.time("making queries for updates");
-		var queries = batcher.getQueriesForFindingUpdates( lastUpdate );
-
-		self.logger.time('made queries for updates');
-
-		self.client.performQueries(queries, function(result, error){
-			self.logger.time('updates found');
-			if ( error ) 
-				return finishWithError( error );
-
-			var resultObjects = batcher.prepareReturnObjectsForResult( result, lastUpdate );
-			finish( resultObjects );
-		});
-		
-	};
-	function sendPush(){
-		var data = {
-			channels:[ userId ], //"wjDRVyp6Ot"
-			data:{
-				aps:{
-					"content-available": 1,
-					"sound": ""
-				}
-			}
-		};
-		if(self.syncId)
-			data.data.syncId = self.syncId
-
-		Parse.Push.send(data, {
-			success:function(){
-			},
-			error: function(error){
-			}
-		});
 	}
-	function finish( resultObjects ){
-		self.logger.time('finished query');
-		self.client.end();
-		if( !resultObjects )
-			resultObjects = {};
-		resultObjects['intercom-hmac'] = util.getIntercomHmac(this.userId);
-		resultObjects.serverTime = new Date().toISOString();
-      	callback( resultObjects , false );
-	};
+	return deferred.promise;
+}
 
-	// Get started
-	findInformationsFromLocalIds();
-};
+
+
+
+SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
+	this.logger.log("fetchRecentUpdates");
+	var deferred = Q.defer(), self = this;
+
+	// The user indicated he has more to be saved (if client has a lot of objects it'll batch them to speed up requests)
+	if ( this.hasMoreToSave ){
+		deferred.resolve();
+		return deferred.promise;
+	}
+
+
+	lastUpdate = ( lastUpdate ) ? new Date( lastUpdate ) : false;
+	if( lastUpdate )
+			lastUpdate = new Date( lastUpdate.getTime() + 1);
+
+	// Concat queries from each collection to get updated objects
+	var queries = [this.tagCollection.getQueryForFindingUpdates(this.userId, lastUpdate),
+		this.todoCollection.getQueryForFindingUpdates(this.userId, lastUpdate)];
+
+
+	this.client.performQueries(queries, function(result, error){
+		self.logger.time('updates found');
+		if ( error ) 
+			return deferred.reject( error );
+		deferred.resolve(result);
+	});
+
+	return deferred.promise;
+}
+
+
+
+SyncController.prototype.prepareReturnObject = function( result ){
+	var deferred = Q.defer(), self = this, returnObject = {}, biggestTime;
+
+	for ( var className in result ){
+		for ( var index in result [ className ] ){
+			var localObj = result[className][index];
+			if ( !biggestTime || localObj.updatedAt > biggestTime )
+				biggestTime = localObj.updatedAt;
+
+			sql.parseObjectForClass( localObj , className );
+		}
+		returnObject[ className ] = result[ className ];
+
+		if ( biggestTime ){
+			returnObject.updateTime = biggestTime.toISOString();
+		}
+	}
+
+	// Intercom hmac setting
+	returnObject['intercom-hmac'] = util.getIntercomHmac(this.userId);
+	returnObject.ok = true;
+	returnObject.serverTime = new Date().toISOString();
+
+
+	deferred.resolve(returnObject);
+	return deferred.promise;
+
+}
+
 
 module.exports = SyncController;

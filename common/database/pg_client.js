@@ -133,12 +133,12 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
 		if(self.logger.getTime() > 30){
 			//console.log(resultTime);
-			self.logger.log( query.text );
+			//self.logger.log( query.text );
 		}
 		if ( numberOfObjects || true ){
 			if(command == "SELECT" && result)
 				numberOfObjects = result.rows.length;
-			self.logger.time( command + " " + numberOfObjects + ' rows ' + rowsPrSecond + "/s (" + resultTime + "ms)");
+			//self.logger.time( command + " " + numberOfObjects + ' rows ' + rowsPrSecond + "/s (" + resultTime + "ms)");
 		}
 		if( err && self.transactionErrorHandler )
 			self.transactionErrorHandler( err );

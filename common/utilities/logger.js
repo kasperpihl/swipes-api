@@ -15,23 +15,23 @@ Logger.prototype.setIdentifier = function( identifier ){
 
 Logger.prototype.getTime = function(){
 	var nowTime = new Date().getTime();
-  var targetTime = this.checkPointTime;
-  
-  var time = nowTime - targetTime;
-  return time;
+	var targetTime = this.checkPointTime;
+
+	var time = nowTime - targetTime;
+	return time;
 }
 
 Logger.prototype.time = function( message , isFinal){
-  
-  var nowTime = new Date().getTime();
-  var targetTime = isFinal ? this.startTime : this.checkPointTime;
-  
-  var time = nowTime - targetTime;
-  
-  if ( message )
-  	this.log( message + ' in (' + time + " ms)");
-  
-  this.checkPointTime = new Date().getTime();
+
+	var nowTime = new Date().getTime();
+	var targetTime = isFinal ? this.startTime : this.checkPointTime;
+
+	var time = nowTime - targetTime;
+
+	if ( message )
+		this.log( message + ' in (' + time + " ms)");
+
+	this.checkPointTime = new Date().getTime();
 };
 
 Logger.prototype.log = function( message , force ){

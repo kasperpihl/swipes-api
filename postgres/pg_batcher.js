@@ -61,48 +61,6 @@ PGBatcher.prototype.loadObjects = function( collections, userId ){
 
 
 
-/*
-  Generating queries for SQL 
-
-  - find and determine which of the objects already exists
-*/
-PGBatcher.prototype.getQueriesForFindingIdsFromLocalIds = function( batchSize ){
-
-  var queries = [];
-
-
-  var objects = [ this.tagCollection.pluck('localId') , this.todoCollection.pluck('localId') ];
-
-  for( var i in objects ){
-
-    var localIds = objects[ i ];
-    if ( !localIds || localIds.length == 0 )
-      continue;
-    
-    var chunks = [];
-    while ( localIds.length > 0 )
-      chunks.push( localIds.splice( 0, batchSize ) );
-    
-    var model = ( i == 0 ) ? sql.tag : sql.todo;
-    for( var index in chunks ){
-      var queryName = ( i == 0 ) ? "Tag"+index : "ToDo"+index;
-      var chunk = chunks[ index ];
-      var query = model.select( model.id, model.localId )
-                      .from( model )
-                      .where( model.userId.equals( this.userId )
-                                          .and( model.localId.in( chunk ) ) )
-                      .toNamedQuery( queryName );
-      query.numberOfRows = chunk.length;
-      queries.push(query);
-    }
-    
-  
-  }
-
-  return ( queries.length > 0 ) ? queries : false;
-
-};
-
 PGBatcher.prototype.updateCollectionToDetermineUpdatesWithResult = function( className , results ){
   if ( className.indexOf("Tag") == 0 )
     className = "Tag";

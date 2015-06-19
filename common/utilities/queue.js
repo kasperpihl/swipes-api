@@ -13,10 +13,10 @@ function Queue( recurring ){
 Queue.prototype.reset = function(){
 	this.queue = [];
 	this.iterator = -1;
-  	this.doneCounter = 0;
-  	this.calledDone= false;
-  	this.iteratorCallback = false;
-  	this.doneCallback = false;
+	this.doneCounter = 0;
+	this.calledDone= false;
+	this.iteratorCallback = false;
+	this.doneCallback = false;
 }
 Queue.prototype.push = function( object, isCollection ){
 	if ( isCollection && _.isArray( object ) ){
@@ -37,8 +37,8 @@ Queue.prototype.set = function( name, value){
 Queue.prototype.nextItem =  function(){
 	this.iterator++;
 	if ( this.iterator >= this.queue.length ){
-      return;
-    }
+		return;
+	}
 	if ( this.iteratorCallback ) 
 		this.iteratorCallback( this.queue[ this.iterator ], this.iterator );
 	else 
@@ -51,16 +51,16 @@ Queue.prototype.checkDone = function(){
 		return;
 	if ( this.doneCounter == this.queue.length ){
 		this.calledDone = true;
-      	this.isRunningQueue = false;
-      	if ( this.doneCallback ) 
-      		this.doneCallback( true );
-    }
-    else this.nextItem();
+		this.isRunningQueue = false;
+		if ( this.doneCallback ) 
+			this.doneCallback( true );
+	}
+	else this.nextItem();
 }
 
 Queue.prototype.next = function(){
 	this.doneCounter++;
-    this.checkDone();
+	this.checkDone();
 };
 
 Queue.prototype.run = function( iterator , done ){
@@ -74,9 +74,9 @@ Queue.prototype.run = function( iterator , done ){
 		this.iteratorCallback = iterator;
 	if ( _.isFunction( done ) ) 
 		this.doneCallback = done;
-  	
-  	for ( var i = 0 ; i < this.options["recurring"] ; i++ ){
-    	this.nextItem();
-  	}
+
+	for ( var i = 0 ; i < this.options["recurring"] ; i++ ){
+		this.nextItem();
+	}
 };
 module.exports = Queue;

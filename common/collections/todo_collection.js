@@ -1,11 +1,13 @@
+var COMMON = '../';
 var BaseCollection = require('./base_collection.js');
 var Models = require(COMMON + 'models/models.js');
 var sql = require(COMMON + 'database/sql_definitions.js');
 
 var TodoCollection = BaseCollection.extend({
 	model: Models.Todo,
-	getQueryForFindingUpdate: function( userId, lastUpdate ){
-		var model = this.model.sql;
+	sql: sql.todo,
+	getQueryForFindingUpdates: function( userId, lastUpdate ){
+		var model = this.sql;
 		var where = model.userId.equals( userId )
 								.and( model.deleted.notEqual( true ) );
 		if( lastUpdate )
