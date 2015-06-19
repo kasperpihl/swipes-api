@@ -6,6 +6,10 @@ var sql = require(COMMON + 'database/sql_definitions.js');
 var TodoCollection = BaseCollection.extend({
 	model: Models.Todo,
 	sql: sql.todo,
+
+	// ===========================================================================================================
+	// Query for finding latest updates
+	// ===========================================================================================================
 	queryForFindingUpdates: function( userId, lastUpdate ){
 		var model = this.sql;
 		var where = model.userId.equals( userId )
@@ -19,6 +23,20 @@ var TodoCollection = BaseCollection.extend({
 								.order( model.userId, model.parentLocalId.descending )
 								.toNamedQuery( model.className );
 		return query;
+	},
+
+	// ===========================================================================================================
+	// Query for finding tasks imported from a service
+	// ===========================================================================================================
+	queryForFindTodosForService: function(userId, service){
+		var columnsToReturn = [ "origin", "originIdentifier", "localId" ];
+		var query = this.sql.select.apply( this.sql, sql.getColumnsFromStringArray( this.sql, columnsToReturn) )
+			.from( this.sql )
+			.where( this.sql.origin.equals( service )
+					.and( this.sql.userId.equals( userId ) ))
+			.order( this.sql.originIdentifier )
+			.toNamedQuery( "" + service + "Query" );
+		return query; 
 	}
 });
 

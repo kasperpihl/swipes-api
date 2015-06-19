@@ -6,6 +6,10 @@ var sql = require(COMMON + 'database/sql_definitions.js');
 var TagCollection = BaseCollection.extend({
 	model: Models.Tag,
 	sql: sql.tag,
+
+	// ===========================================================================================================
+	// Query for finding latest updates
+	// ===========================================================================================================	
 	getQueryForFindingUpdates: function( userId, lastUpdate ){
 		var model = this.sql;
 		var where = model.userId.equals( userId )
