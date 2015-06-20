@@ -1,5 +1,5 @@
 var google 			= require('googleapis');
-var gmail			= google.mail('v1');
+var gmail			= google.gmail('v1');
 var OAuth2Client	= google.auth.Oauth2;
 var Q				= require('q');
 
