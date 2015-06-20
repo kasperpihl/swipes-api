@@ -12,10 +12,13 @@ function GmailHandler(userId, client, logger){
 }
 
 GmailHandler.prototype.run = function(){
-
+	var connector = GmailConnector();
+	connector.delegate = this;
 }
 
-
+GmailHandler.prototype.didUpdateAccessToken = function(accessToken){
+	
+}
 GmailHandler.prototype.fetchEmails = function(){
 
 }
