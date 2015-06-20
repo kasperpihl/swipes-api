@@ -89,10 +89,29 @@ GmailHandler.prototype.fetchTasks = function(){
 
 // ===========================================================================================================
 // Compare the tasks and emails and prepare tasks and email to be saved
+// What should happen if:
+//
+// A user deletes a task in Swipes (that is linked to an email)
+// - Remove Swipes list-label
+//
+// A user completes a task in Swipes (that is linked to an email)
+// - Remove Swipes list-label
+//
+// A user moves an email from the Swipes List (that has a task in Swipes)
+// - Leave the task, but unlink it
 // ===========================================================================================================
 GmailHandler.prototype.compare = function(){
 	var deferred = Q.defer(), self = this;
 
+	var localId = util.generateId(12);
+	var exampleTask = {
+		title: "Title",
+		localId: localId,
+		origin: "gmail"
+	};
+
+	// To create a new task to save 
+	this.collection.newTaskFromService()
 
 	deferred.resolve();
 	return deferred.promise;
@@ -105,8 +124,34 @@ GmailHandler.prototype.compare = function(){
 GmailHandler.prototype.saveTasks = function(){
 	var deferred = Q.defer(), self = this;
 
+	this.collection.getQueriesForInsertingAndSavingObjects(function(queries){
+		// Start a transaction before saving all objects
+		self.client.transaction( function( error ){
+			self.client.rollback();
+		});
+		self.client.performQueries( queries, function( result, error , i){
+			self.logger.time( "finalized insertions and updates" );
+			if ( error )
+				return deferred.reject( error );
+			
+			self.client.commit(function( result, error ){
+					
+				if ( error )
+					return deferred.reject( error);
+				
+				// Send silent push to other clients that an update happened
+				//util.sendSilentPush([ self.userId ], { syncId: syncId });
+				deferred.resolve();
+			
+			});
 
-	deferred.resolve();
+		});
+	})
+	.fail(function(error){
+		// A validation error probably happened
+		deferred.reject(error);
+	});
+
 	return deferred.promise;
 }
 
