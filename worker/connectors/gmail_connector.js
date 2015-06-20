@@ -2,6 +2,7 @@ var google 			= require('googleapis');
 var gmail			= google.gmail('v1');
 var OAuth2Client	= google.auth.Oauth2;
 var Q				= require('q');
+var _				= require('underscore');
 
 function GmailConnector(userId, tokens){
 	this.tokens 	= tokens;
@@ -75,7 +76,8 @@ GmailConnector.prototype.getMessagesWithLabels = function(labels, callback ){
 	if(self.labelIds.length > 0)
 	{
 		self.getAllLabels()
-		.then(function(allLabels){ return self.findLabelIdsOrCreate(labels, allLabels); })
+		.then(function(allLabels){ 	return self.findLabelIdsOrCreate(labels, allLabels); 	}) // find all label id's from all labels
+		.then(function(){ 			return self.pullMessagesFromLabelAndUser(self.labelIds);}) // pull labeled messages
 		// add untill done
 		.then(function(messages){
 			callback(messages);
@@ -91,24 +93,58 @@ GmailConnector.prototype.getMessagesWithLabels = function(labels, callback ){
 };
 
 
-GmailConnector.prototype.findLabelIdsOrCreate = function(labels, deferred){
+GmailConnector.prototype.findLabelIdsOrCreate = function(labels, allLabels, deferred){
+
+	if(!deferred)
+		deferred = Q.defer();
+
+	if(!_.isArray(labels))
+		throw new Error('The passed "labels" parameter is not an array');
+
+	if(!_.isArray(allLabels))
+		throw new Error('The passed "allLabels" parameter is not an array');	
+
+	var labelIds = [];
+
+	for(var a = 0; a < labels.length; a ++){
+
+		var indexOf = allLabels.indexOf(labels[a]);
+
+		if(indexOf != -1)
+		{
+			labelIds.push(allLabels[indexOf]);
+		}
+
+	}
+
+	if(labelIds.length < 1)
+	{
+		self.createSwipesLabel()
+			.then(function(){
+				deferred.resolve();
+			});
+	}
+	else
+	{
+
+		deferred.resolve(labelIds);
+
+	}
+
+	return deferred.promise;
 
 };
 
-GmailConnector.prototype.pullMessagesFromLabelAndUser = function(label, deferred){
+GmailConnector.prototype.pullMessagesFromLabelAndUser = function(labelIds, deferred){
 
 	var self = this;
 
 	if(!deferred)
 		deferred = Q.defer();
 
-	// DO STUFF
-
-
-
 	var request = {
 		userId: userId,
-		labelIds: labelId,
+		labelIds: labelIds,
 		maxResults: 50
 	};
 
@@ -130,7 +166,41 @@ GmailConnector.prototype.pullMessagesFromLabelAndUser = function(label, deferred
 
 };
 
-GmailConnector.prototype.createSwipesLabel = function(){
+GmailConnector.prototype.createSwipesLabel = function(deferred){
+
+	var self = this;
+
+	if(!deferred)
+		deferred = Q.defer();
+
+	var request = {
+		userId 		: self.userId,
+		resources 	: {
+			abelListVisibility: 'labelShow', 
+			messageListVisibility: 'show', 
+			name: 'Add to Swipes'			
+			}
+		};
+
+	gmail.users.labels.create(request, function(err, response){
+		if(err)
+		{
+			self.handleError(err)
+				.then(function(){
+					// Resolved the error, try again! Include deferred object to still try to resolve the promise
+					self.pullMessagesFromLabelAndUserId(labelId, userId, deferred);
+				})
+				.fail(function(){
+					// Couldn't resolve!
+					// Local error handling or reject
+					deferred.reject(err);
+				});
+		}
+
+		deferred.resolve(response);
+	});
+
+	return defered.promise;
 
 };
 
