@@ -68,30 +68,25 @@ GmailConnector.prototype.handleError = function(error){
 	};
 
 
-GmailConnector.prototype.getMessagesWithLabels = function(labels, deferred){
+GmailConnector.prototype.getMessagesWithLabels = function(labels, callback ){
 
 	var self = this;
 
-	if(!deferred)
-		deferred = Q.defer();
-	
 	if(self.labelIds.length > 0)
 	{
 		self.getAllLabels()
-			.then(function(allLabels){ return self.findLabelIdsOrCreate(labels, allLabels); })
-			// add untill done
-			.then(function(){
-				deferred.resolve();
-			})
-			.fail(function(error){
-				deferred.reject(error);
-			})
-			.catch(function(error){
-				deferred.reject(error);
-			});
+		.then(function(allLabels){ return self.findLabelIdsOrCreate(labels, allLabels); })
+		// add untill done
+		.then(function(messages){
+			callback(messages);
+		})
+		.fail(function(error){
+			callback(false, error);
+		})
+		.catch(function(error){
+			callback(false, error);
+		});
 	}
-
-	return deferred.promise;
 	
 };
 
