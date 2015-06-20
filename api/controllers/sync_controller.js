@@ -203,6 +203,7 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 		deferred.resolve(result);
 	});
 
+
 	return deferred.promise;
 }
 

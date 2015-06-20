@@ -7,7 +7,9 @@ var GmailConnector = 	require(WORKER + "connectors/gmail_connector.js");
 
 function GmailHandler(userId, client, logger){
 	this.collection = new Collections.Todo();
-	
+	this.connector = new GmailConnector();
+	this.connector.delegate = this;
+
 	this.userId = userId;
 	this.client = client;
 	this.logger = logger;
@@ -23,10 +25,8 @@ GmailHandler.prototype.run = function(settings, action){
 	this.settings = settings;
 	this.action = action;
 
-	var connector = new GmailConnector();
-	connector.delegate = this;
 
-	connector.auth()
+	this.connector.auth()
 	.then(function(){ return self.fetchEmails() })
 	.then(function(){ return self.fetchTasks(); })
 	.then(function(){ return self.compare(); })
@@ -52,6 +52,7 @@ GmailHandler.prototype.run = function(settings, action){
 // ===========================================================================================================
 GmailHandler.prototype.fetchEmails = function(){
 	var deferred = Q.defer(), self = this;
+
 
 	deferred.resolve();
 	return deferred.promise;
@@ -87,7 +88,6 @@ GmailHandler.prototype.compare = function(){
 	var deferred = Q.defer(), self = this;
 
 
-
 	deferred.resolve();
 	return deferred.promise;
 }
@@ -99,7 +99,7 @@ GmailHandler.prototype.compare = function(){
 GmailHandler.prototype.saveTasks = function(){
 	var deferred = Q.defer(), self = this;
 
-	
+
 	deferred.resolve();
 	return deferred.promise;
 }
