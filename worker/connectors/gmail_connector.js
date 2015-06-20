@@ -5,7 +5,26 @@ var Q				= require('q');
 
 function GmailConnector(tokens){
 	this.tokens = tokens;
+	this.auth(tokens);
 }
+
+GmailConnector.prototype.handleError = function(error){
+	var deffered = Q.defer();
+	
+	if( error ){
+		if(error.code === 401)
+		{
+			this.auth(this.tokens)
+			.then(function(){ deferred.resolve() })
+			.fail(function(err){ deferred.reject(err) });
+		}
+		else
+			deferred.reject();
+	}
+	else deferred.reject();
+	return deferred.promise;
+}
+
 
 // =================================================================================================
 // Pull all labels from Gmail
@@ -15,27 +34,33 @@ function GmailConnector(tokens){
 	* @param {obj} user --> object containg all user information needed
 	* @return all labels that the user has
 	*/
-	GmailConnector.prototype.getAllLabels = function(gmailUserId){
+	GmailConnector.prototype.getAllLabels = function(gmailUserId, deferred){
 
-		var deffered = Q.deffer();
-
-		this.auth(this.tokens);
+		var self = this;
+		
+		if(!deferred)
+			deferred = Q.defer()
 
 		gmail.users.labels.list({userId: gmailUserId}, function(err, response){
 			if(err)
 			{
-				if(err.code === 401)
-				{
-					this.auth(tokens);
-					this.getAllLabels(gmailUserId, this.tokens);
-				}
+				self.handleError(err)
+				.then(function(){
+					// Resolved the error, try again! Include deferred object to still try to resolve the promise
+					self.getAllLabels(gmailUserId, deferred);
+				})
+				.fail(function(){
+					// Couldn't resolve!
+					// Local error handling or reject
+					deferred.reject(err);
+				});
 			}
-
-			deffered.resolve(response);
+			else
+				deferred.resolve(response);
 
 		});
 
-		return deffered.promise;
+		return deferred.promise;
 
 	};
 
@@ -79,6 +104,9 @@ GmailConnector.prototype.createSwipesLabel = function(){
 					
 					deffered.resolve(oauth2Client);
 					return deffered.promise;
+				})
+				.fail(function(err){
+					deferred.reject(err);
 				});
 		}
 		else
@@ -105,8 +133,7 @@ GmailConnector.prototype.createSwipesLabel = function(){
 		oauth2Client.refreshAccessToken(function(err, tokens){
 			if(err)
 			{
-				console.log('GMAIL ERROR: ' + err);
-				return;
+				return deferred.reject(err);
 			}
 
 

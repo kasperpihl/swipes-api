@@ -21,6 +21,7 @@ var BaseModel = Backbone.Model.extend({
 	},
 	toJSON: function( options ){
 		var toJSON = Backbone.Model.prototype.toJSON.apply( this, arguments );
+		// If object is to be updated, then remove database and localId - already there!
 		if ( toJSON['databaseId'] ){
 			delete toJSON['localId'];
 			delete toJSON['databaseId'];

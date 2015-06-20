@@ -5,7 +5,7 @@ var Q = require("q");
 var BaseCollection = Backbone.Collection.extend({
 	model:false,
 	batchSize: 25,
-
+	
 
 	// ===========================================================================================================
 	// Loading JSON Objects, and make initial validation
@@ -13,7 +13,6 @@ var BaseCollection = Backbone.Collection.extend({
 	// ===========================================================================================================
 	loadJSONObjects: function( objects, userId ){
 		var models = [];
-		this.errorModels = new Array();
 		for ( var i in objects ){
 			var data = objects[ i ];
 			if(data === null || !data)
@@ -21,17 +20,9 @@ var BaseCollection = Backbone.Collection.extend({
 			var model = new this.model();
 			
 			model.parseRawData( data, userId );
-			if( !model.get("validationError") )
-				models.push(model);
-			else{
-				this.error = model.get("validationError");
-				this.errorModels.push(model);
-			}
+			models.push(model);
 		}
 		this.add(models);
-		this.on('invalid', function(model, error){
-
-		})
 	},
 
 

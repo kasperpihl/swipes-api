@@ -28,8 +28,8 @@ var TodoCollection = BaseCollection.extend({
 	// ===========================================================================================================
 	// Query for finding tasks imported from a service
 	// ===========================================================================================================
-	queryForFindTodosForService: function(userId, service){
-		var columnsToReturn = [ "origin", "originIdentifier", "localId" ];
+	queryToFindTodosForService: function(userId, service){
+		var columnsToReturn = [ "id", "localId", "origin", "originIdentifier", "title", "updatedAt", "attachments" ];
 		var query = this.sql.select.apply( this.sql, sql.getColumnsFromStringArray( this.sql, columnsToReturn) )
 			.from( this.sql )
 			.where( this.sql.origin.equals( service )
