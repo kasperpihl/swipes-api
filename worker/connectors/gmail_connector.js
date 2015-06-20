@@ -37,9 +37,11 @@ GmailConnector.prototype.handleError = function(error){
 	GmailConnector.prototype.getAllLabels = function(gmailUserId, deferred){
 
 		var self = this;
-		
+	
 		if(!deferred)
 			deferred = Q.defer()
+
+		var deffered = Q.deffer();
 
 		gmail.users.labels.list({userId: gmailUserId}, function(err, response){
 			if(err)
@@ -54,6 +56,7 @@ GmailConnector.prototype.handleError = function(error){
 					// Local error handling or reject
 					deferred.reject(err);
 				});
+
 			}
 			else
 				deferred.resolve(response);
@@ -66,6 +69,25 @@ GmailConnector.prototype.handleError = function(error){
 
 
 GmailConnector.prototype.pullLabeledMessages = function(){
+
+	var self = this;
+
+	var deffered = Q.defer();
+
+	var request = {
+
+	}
+
+	gmail.users.threads.list(request, function(err, messages){
+		if(err)
+		{
+			if(err.code === 401)
+			{
+				self.auth();
+				
+			}
+		}
+	});
 
 };
 
