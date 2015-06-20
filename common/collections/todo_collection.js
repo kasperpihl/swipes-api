@@ -37,6 +37,14 @@ var TodoCollection = BaseCollection.extend({
 			.order( this.sql.originIdentifier )
 			.toNamedQuery( "" + service + "Query" );
 		return query; 
+	},
+
+
+	// ===========================================================================================================
+	// New task created from a service
+	// ===========================================================================================================
+	newTaskFromService: function( service, serviceIdentifier ){
+
 	}
 });
 

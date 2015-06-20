@@ -27,16 +27,7 @@ app.listen(port);
 getAllTasksFromServiceThatIsNotCompletedNorDeleted:(String)service ()
 getMatchingTasksFromListOfIds:(Array)ids andService:(String)service
 
-What should happen if:
 
-A user deletes a task in Swipes (that is linked to an email)
-- Remove Swipes list-label
-
-A user completes a task in Swipes (that is linked to an email)
-- Remove Swipes list-label
-
-A user moves an email from the Swipes List (that has a task in Swipes)
-- Leave the task, but unlink it
 
 Object to be created:
 
