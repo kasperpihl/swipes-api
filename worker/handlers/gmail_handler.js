@@ -52,9 +52,15 @@ GmailHandler.prototype.run = function(settings, action){
 // ===========================================================================================================
 GmailHandler.prototype.fetchEmails = function(){
 	var deferred = Q.defer(), self = this;
-
-
-	deferred.resolve();
+	this.connector.getMessagesWithLabels(["Add to Swipes"], function(messages, error){
+		if( error ){
+			deferred.reject( error );
+		}
+		else{
+			self.fetchedEmails = messages;
+			deferred.resolve();
+		}
+	});
 	return deferred.promise;
 }
 
