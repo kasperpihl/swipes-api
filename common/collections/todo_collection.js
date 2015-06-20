@@ -44,7 +44,6 @@ var TodoCollection = BaseCollection.extend({
 	// New task created from a service
 	// ===========================================================================================================
 	newTaskFromService: function( service, serviceIdentifier ){
-
 	}
 });
 

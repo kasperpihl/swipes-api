@@ -7,7 +7,16 @@ var GmailConnector = 	require(WORKER + "connectors/gmail_connector.js");
 
 function GmailHandler(userId, client, logger){
 	this.collection = new Collections.Todo();
-	this.connector = new GmailConnector();
+
+	var token = {
+		access_token: null,
+		token_type: 'Bearer',
+		refresh_token: '1/KJUeF4W4rtspJv42WF7cQdoP5VQextjCtTOL11n1OQHBactUREZofsF9C7PrpE-j',
+		expiry_date: null
+	}
+	userId = '108178009002508861945';
+
+	this.connector = new GmailConnector(userId, token);
 	this.connector.delegate = this;
 
 	this.userId = userId;
@@ -21,11 +30,12 @@ function GmailHandler(userId, client, logger){
 // Main function - starting and handling the whole process 
 // ===========================================================================================================
 GmailHandler.prototype.run = function(settings, action){
+	console.log("running");
 	var deferred = Q.defer(), self = this;
 	this.settings = settings;
 	this.action = action;
 
-
+	self.logger.log("sync for gmail");
 	this.connector.auth()
 	.then(function(){ return self.fetchEmails() })
 	.then(function(){ return self.fetchTasks(); })
@@ -52,11 +62,13 @@ GmailHandler.prototype.run = function(settings, action){
 // ===========================================================================================================
 GmailHandler.prototype.fetchEmails = function(){
 	var deferred = Q.defer(), self = this;
+	self.logger.time("fetch emails");
 	this.connector.getMessagesWithLabels(["Add to Swipes"], function(messages, error){
 		if( error ){
 			deferred.reject( error );
 		}
 		else{
+			console.log(messages);
 			self.fetchedEmails = messages;
 			deferred.resolve();
 		}
@@ -70,7 +82,7 @@ GmailHandler.prototype.fetchEmails = function(){
 // ===========================================================================================================
 GmailHandler.prototype.fetchTasks = function(){
 	var deferred = Q.defer(), self = this;
-
+	self.logger.time("fetch tasks");
 	var query = this.collection.queryToFindTodosForService(this.userId, "gmail");
 	
 	this.client.performQuery(query, function(result, error){
@@ -102,7 +114,10 @@ GmailHandler.prototype.fetchTasks = function(){
 // ===========================================================================================================
 GmailHandler.prototype.compare = function(){
 	var deferred = Q.defer(), self = this;
-
+	self.logger.time("compare");
+	console.log(this.fetchedEmails);
+	console.log("vs");
+	console.log(this.fetchTasks);
 	var localId = util.generateId(12);
 	var exampleTask = {
 		title: "Title",
@@ -111,7 +126,7 @@ GmailHandler.prototype.compare = function(){
 	};
 
 	// To create a new task to save 
-	this.collection.newTaskFromService()
+	//this.collection.newTaskFromService()
 
 	deferred.resolve();
 	return deferred.promise;
@@ -123,8 +138,12 @@ GmailHandler.prototype.compare = function(){
 // ===========================================================================================================
 GmailHandler.prototype.saveTasks = function(){
 	var deferred = Q.defer(), self = this;
-
+	self.logger.time("save tasks");
 	this.collection.getQueriesForInsertingAndSavingObjects(function(queries){
+		console.log("queries: " + queries.length);
+		if(queries && queries.length == 0)
+			return deferred.resolve();
+
 		// Start a transaction before saving all objects
 		self.client.transaction( function( error ){
 			self.client.rollback();
@@ -161,7 +180,7 @@ GmailHandler.prototype.saveTasks = function(){
 // ===========================================================================================================
 GmailHandler.prototype.saveEmails = function(){
 	var deferred = Q.defer(), self = this;
-
+	self.logger.time("save emails");
 	deferred.resolve();
 	return deferred.promise;
 }
@@ -173,3 +192,5 @@ GmailHandler.prototype.saveEmails = function(){
 GmailHandler.prototype.didUpdateAccessToken = function(accessToken){
 	
 }
+
+module.exports = GmailHandler;

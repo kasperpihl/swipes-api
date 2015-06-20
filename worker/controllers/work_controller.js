@@ -35,23 +35,26 @@ WorkController.prototype.work = function(message){
 
 	var userId = message.userId;
 	// Instantiate the service handler based on the message from the queue
-	var handler = new Handlers[message.service](userId, this.client, this.logger);
 	
+	var handler = new Handlers[message.service](userId, this.client, this.logger);
 	// Start the sync process
 	this.fetchSettingsForService(message.service)
 	.then(function(settings){ return handler.run(settings, message); })
 	.then(function(result){
 		// Successfully ran integration sync
+		console.log("final");
 		self.client.end();
 		self.res.send(result);
 	})
 	.fail(function(error){
 		// An error occurred
+		console.log(error);
 		self.client.end();
 		util.sendBackError(error, self.res);
 	})
 	.catch(function(error){
 		// An exception was thrown
+		console.log(error);
 		self.client.end();
 		util.sendBackError(error, self.res);
 
@@ -59,7 +62,9 @@ WorkController.prototype.work = function(message){
 };
 
 WorkController.prototype.fetchSettingsForService = function(service, identifier){
-
+	var deferred = Q.defer();
+	deferred.resolve();
+	return deferred.promise;
 }
 
 

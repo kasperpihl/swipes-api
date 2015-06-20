@@ -16,7 +16,7 @@ var app = express();
 app.use(bodyParser.json( { limit: (30 * 1024 * 1024) } ) );
 
 
-app.route( '/work').post( function(req,res,next){ new WorkController(req, res).run() });
+app.route( '/work').post( function(req,res,next){ new WorkController(req, res).work({"service":"gmail","userId":"ONaP54dxAu"}) });
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port);

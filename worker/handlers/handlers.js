@@ -3,5 +3,5 @@
 var GmailHandler = require('./gmail_handler.js');
 
 module.exports = {
-	Gmail: GmailHandler
+	gmail: GmailHandler
 };
