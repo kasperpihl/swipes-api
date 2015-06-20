@@ -4,12 +4,14 @@
 
 
 var COMMON = 			'../../common/';
+var WORKER =			'../';
 var util = 				require(COMMON + 'utilities/util.js');
 var Logger =			require(COMMON + 'utilities/logger.js' );
-var Parse = 			require('parse').Parse;
+
 var PGClient =        	require(COMMON + 'database/pg_client.js');
 var Q = 				require("q");
 
+var Handlers =			require(WORKER + "handlers/handlers.js");
 
 
 // ===========================================================================================================
@@ -18,12 +20,48 @@ var Q = 				require("q");
 function WorkController(req, res){
 	this.req = req;
 	this.res = res;
-	Parse.initialize( util.getOption( "applicationId" ) , util.getOption( "javaScriptKey" ) , util.getOption( "masterKey" ) );
 	this.logger = new Logger();
 	this.logger.forceOutput = true;
-	this.client = new PGClient( this.logger, 12000 );
+	this.client = new PGClient( this.logger );
 
 };
+
+
+// ===========================================================================================================
+// Do the work, called from the background queue with a message
+// ===========================================================================================================
+WorkController.prototype.work = function(message){
+	var self = this;
+
+	var userId = message.userId;
+	// Instantiate the service handler based on the message from the queue
+	var handler = new Handlers[message.service](userId, this.client, this.logger);
+	
+	// Start the sync process
+	this.fetchSettingsForService(message.service)
+	.then(function(settings){ return handler.run(settings, message); })
+	.then(function(result){
+		// Successfully ran integration sync
+		self.client.end();
+		self.res.send(result);
+	})
+	.fail(function(error){
+		// An error occurred
+		self.client.end();
+		util.sendBackError(error, self.res);
+	})
+	.catch(function(error){
+		// An exception was thrown
+		self.client.end();
+		util.sendBackError(error, self.res);
+
+	});
+};
+
+WorkController.prototype.fetchSettingsForService = function(service, identifier){
+
+}
+
 
 
 module.exports = WorkController;

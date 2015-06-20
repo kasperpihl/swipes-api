@@ -6,13 +6,19 @@ var Q = require("q");
 function GmailHandler(userId, client, logger){
 	this.collection = new Collections.Todo();
 
+	
 	this.logger = logger;
 	this.client = client;
 
 }
 
-GmailHandler.prototype.run = function(){
 
+// ===========================================================================================================
+// Main function - starting and handling the whole process 
+// ===========================================================================================================
+GmailHandler.prototype.run = function(settings, action){
+	this.settings = settings;
+	this.action = action;
 }
 
 
@@ -35,3 +41,5 @@ GmailHandler.prototype.saveTasks = function(){
 GmailHandler.prototype.saveEmails = function(){
 
 }
+
+GmailHandler
