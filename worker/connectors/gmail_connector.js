@@ -5,25 +5,25 @@ var Q				= require('q');
 
 function GmailConnector(tokens){
 	this.tokens = tokens;
-	this.auth(tokens);
+	this.authed = false;
 }
 
 GmailConnector.prototype.handleError = function(error){
-	var deffered = Q.defer();
+	var deferred = Q.defer();
 	
 	if( error ){
 		if(error.code === 401)
 		{
 			this.auth(this.tokens)
-			.then(function(){ deferred.resolve() })
-			.fail(function(err){ deferred.reject(err) });
+			.then(function(){ deferred.resolve(); })
+			.fail(function(err){ deferred.reject(err); });
 		}
 		else
 			deferred.reject();
 	}
 	else deferred.reject();
 	return deferred.promise;
-}
+};
 
 
 // =================================================================================================
@@ -39,9 +39,7 @@ GmailConnector.prototype.handleError = function(error){
 		var self = this;
 	
 		if(!deferred)
-			deferred = Q.defer()
-
-		var deffered = Q.deffer();
+			deferred = Q.defer();
 
 		gmail.users.labels.list({userId: gmailUserId}, function(err, response){
 			if(err)
@@ -68,24 +66,36 @@ GmailConnector.prototype.handleError = function(error){
 	};
 
 
-GmailConnector.prototype.pullLabeledMessages = function(){
+GmailConnector.prototype.pullMessagesFromLabelAndUser = function(label, userId, deferred){
 
 	var self = this;
 
-	var deffered = Q.defer();
+	if(!deferred)
+		deferred = Q.defer();
+
+	// DO STUFF
+
+
 
 	var request = {
-
-	}
+		userId: userId,
+		labelIds: labelId,
+		maxResults: 50
+	};
 
 	gmail.users.threads.list(request, function(err, messages){
 		if(err)
 		{
-			if(err.code === 401)
-			{
-				self.auth();
-				
-			}
+			self.handleError(err)
+				.then(function(){
+					// Resolved the error, try again! Include deferred object to still try to resolve the promise
+					self.pullMessagesFromLabelAndUserId(labelId, userId, deferred);
+				})
+				.fail(function(){
+					// Couldn't resolve!
+					// Local error handling or reject
+					deferred.reject(err);
+				});
 		}
 	});
 
@@ -101,7 +111,7 @@ GmailConnector.prototype.createSwipesLabel = function(){
 
 	GmailConnector.prototype.auth = function(){
 
-		var deffered = Q.defer();
+		var deferred = Q.defer();
 
 		var CLIENT_ID = '336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com';
 		var CLIENT_SECRET = '5heB-MAD5Qm-y1miBVic03cE';
@@ -124,18 +134,17 @@ GmailConnector.prototype.createSwipesLabel = function(){
 					oauth2Client.credentials = tokens;
 					google.options({ auth: oauth2Client }); // set auth as a global default
 					
-					deffered.resolve(oauth2Client);
-					return deffered.promise;
+					deferred.resolve(oauth2Client);
+					
 				})
 				.fail(function(err){
 					deferred.reject(err);
 				});
 		}
-		else
-		{
-			return oauth2Client;
+		else{
+			deferred.resolve();
 		}
-
+		return deferred.promise;
 	};
 
 // =================================================================================================
@@ -148,7 +157,7 @@ GmailConnector.prototype.createSwipesLabel = function(){
 
 	GmailConnector.prototype.refreshToken = function(oauth2Client){
 
-		var deffered = Q.defer();
+		var deferred = Q.defer();
 
 		var self = this;
 
@@ -160,16 +169,16 @@ GmailConnector.prototype.createSwipesLabel = function(){
 
 
 			if(self.delegate && _.isFunction(self.delegate.didUpdateAccessToken))
-			self.delegate.didUpdateAccessToken(tokens.access_token);
+				self.delegate.didUpdateAccessToken(tokens.access_token);
 
 
 			self.tokens = tokens;
 
-			deffered.resolve(tokens);
+			deferred.resolve(tokens);
 
 		});
 
-		return deffered.promise;
+		return deferred.promise;
 
 	};
 

@@ -26,7 +26,8 @@ GmailHandler.prototype.run = function(settings, action){
 	var connector = new GmailConnector();
 	connector.delegate = this;
 
-	this.fetchEmails()
+	connector.auth()
+	.then(function(){ return self.fetchEmails() })
 	.then(function(){ return self.fetchTasks(); })
 	.then(function(){ return self.compare(); })
 	.then(function(){ return self.saveTasks(); })
