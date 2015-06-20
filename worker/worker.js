@@ -7,7 +7,7 @@ var express =			require( 'express' ),
 http =					require( 'http' ),
 _ =						require( 'underscore' ),
 bodyParser = 			require( 'body-parser' ),
-var Parse = 			require('parse').Parse;
+Parse = 				require('parse').Parse;
 var WorkController = 	require('./controllers/work_controller.js');
 
 http.globalAgent.maxSockets = 25;

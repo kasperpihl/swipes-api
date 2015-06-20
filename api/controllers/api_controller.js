@@ -34,7 +34,7 @@ function APIController(req, res){
 APIController.prototype.validateRequest = function(){
 	// TODO: Perform validation of incoming request
 	return true;
-}
+};
 APIController.prototype.authorize = function(callback){
 	var self = this;
 	this.client.validateToken( this.req.body.sessionToken , function( userId, error){
@@ -45,7 +45,7 @@ APIController.prototype.authorize = function(callback){
 		self.logger.setIdentifier( userId ); // Set userId in the logger to identify
 		callback(userId);
 	});
-}
+};
 
 
 

@@ -99,6 +99,7 @@ GmailHandler.prototype.compare = function(){
 GmailHandler.prototype.saveTasks = function(){
 	var deferred = Q.defer(), self = this;
 
+	
 	deferred.resolve();
 	return deferred.promise;
 }
