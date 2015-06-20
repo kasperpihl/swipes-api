@@ -3,9 +3,11 @@ var gmail			= google.gmail('v1');
 var OAuth2Client	= google.auth.Oauth2;
 var Q				= require('q');
 
-function GmailConnector(tokens){
-	this.tokens = tokens;
-	this.authed = false;
+function GmailConnector(userId, tokens){
+	this.tokens 	= tokens;
+	this.userId 	= userId;
+	this.authed 	= false;
+	this.labelIds 	= [];
 }
 
 GmailConnector.prototype.handleError = function(error){
@@ -34,7 +36,7 @@ GmailConnector.prototype.handleError = function(error){
 	* @param {obj} user --> object containg all user information needed
 	* @return all labels that the user has
 	*/
-	GmailConnector.prototype.getAllLabels = function(gmailUserId, deferred){
+	GmailConnector.prototype.getAllLabels = function(deferred){
 
 		var self = this;
 	
@@ -66,7 +68,39 @@ GmailConnector.prototype.handleError = function(error){
 	};
 
 
-GmailConnector.prototype.pullMessagesFromLabelAndUser = function(label, userId, deferred){
+GmailConnector.prototype.getMessagesWithLabels = function(labels, deferred){
+
+	var self = this;
+
+	if(!deferred)
+		deferred = Q.defer();
+	
+	if(self.labelIds.length > 0)
+	{
+		self.getAllLabels()
+			.then(function(allLabels){ return self.findLabelIdsOrCreate(labels, allLabels); })
+			// add untill done
+			.then(function(){
+				deferred.resolve();
+			})
+			.fail(function(error){
+				deferred.reject(error);
+			})
+			.catch(function(error){
+				deferred.reject(error);
+			});
+	}
+
+	return deferred.promise;
+	
+};
+
+
+GmailConnector.prototype.findLabelIdsOrCreate = function(labels, deferred){
+
+};
+
+GmailConnector.prototype.pullMessagesFromLabelAndUser = function(label, deferred){
 
 	var self = this;
 
