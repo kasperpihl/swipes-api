@@ -17,17 +17,19 @@ function GmailConnector(tokens){
 	*/
 	GmailConnector.prototype.getAllLabels = function(gmailUserId){
 
+		var self = this;
+
 		var deffered = Q.deffer();
 
-		this.auth(this.tokens);
+		self.auth(self.tokens);
 
 		gmail.users.labels.list({userId: gmailUserId}, function(err, response){
 			if(err)
 			{
 				if(err.code === 401)
 				{
-					this.auth(tokens);
-					this.getAllLabels(gmailUserId, this.tokens);
+					self.auth(tokens);
+					self.getAllLabels(gmailUserId, self.tokens);
 				}
 			}
 
@@ -41,6 +43,25 @@ function GmailConnector(tokens){
 
 
 GmailConnector.prototype.pullLabeledMessages = function(){
+
+	var self = this;
+
+	var deffered = Q.defer();
+
+	var request = {
+
+	}
+
+	gmail.users.threads.list(request, function(err, messages){
+		if(err)
+		{
+			if(err.code === 401)
+			{
+				self.auth();
+				
+			}
+		}
+	});
 
 };
 
