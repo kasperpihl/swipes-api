@@ -30,15 +30,13 @@ GmailConnector.prototype.handleError = function(error){
 };
 
 GmailConnector.prototype.getMessagesWithLabels = function(labels, callback ){
-	console.log("getMessage", labels);
 	var self = this;
 
 	self.getAllLabels()
 	.then(function(allLabels){ 	return self.findLabelIdsOrCreate(labels, allLabels); 	}) // find all label id's from all labels
-	.then(function(){ console.log("labelIds", self.labelIds); return self.pullMessagesFromLabelAndUser(self.labelIds);}) // pull labeled messages
+	.then(function(){ return self.pullMessagesFromLabelAndUser(self.labelIds); }) // pull labeled messages
 	// add untill done
 	.then(function(messages){
-
 		callback(messages);
 	})
 	.fail(function(error){
@@ -90,7 +88,6 @@ GmailConnector.prototype.getAllLabels = function(deferred){
 
 		}
 		else{
-			console.log("got all labels", response.labels.length);
 			deferred.resolve(response.labels);
 		}
 
@@ -118,10 +115,7 @@ GmailConnector.prototype.findLabelIdsOrCreate = function(labels, allLabels, defe
 	var labelIds = [];
 
 	for(var a = 0; a < labels.length; a ++){
-		console.log("labels[a]",labels[a]);
-		console.log();
 		var indexOf = _.pluck(allLabels,"name").indexOf(labels[a]);
-		console.log("indexOf",indexOf);
 		if(indexOf != -1)
 		{
 			labelIds.push(allLabels[indexOf]);
@@ -131,14 +125,11 @@ GmailConnector.prototype.findLabelIdsOrCreate = function(labels, allLabels, defe
 
 	if(labelIds.length < 1)
 	{
-		console.log("here");
 		self.createLabel(labels[0])
 			.then(function(){
-				console.log("created label");
 				deferred.resolve();
 			})
 			.fail(function(error){
-				console.log("create label", error);
 				deferred.reject(error);
 			});
 	}
@@ -181,6 +172,7 @@ GmailConnector.prototype.pullMessagesFromLabelAndUser = function(labelIds, defer
 				});
 		}
 		else{
+			console.log(messages);
 			deferred.resolve(messages);
 		}
 	});
@@ -193,7 +185,6 @@ GmailConnector.prototype.createLabel = function(label, deferred){
 
 	if(!deferred)
 		deferred = Q.defer();
-	console.log(label);
 	var request = {
 		userId 		: self.userId,
 		resources 	: {

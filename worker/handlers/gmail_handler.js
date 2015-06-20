@@ -37,7 +37,7 @@ GmailHandler.prototype.run = function(settings, action){
 
 	self.logger.log("sync for gmail");
 	this.connector.auth()
-	.then(function(){ return self.fetchEmails() })
+	.then(function(){ return self.fetchEmails(); })
 	.then(function(){ return self.fetchTasks(); })
 	.then(function(){ return self.compare(); })
 	.then(function(){ return self.saveTasks(); })
@@ -68,7 +68,7 @@ GmailHandler.prototype.fetchEmails = function(){
 			deferred.reject( error );
 		}
 		else{
-			console.log(messages);
+			console.log("returnMessages", messages);
 			self.fetchedEmails = messages;
 			deferred.resolve();
 		}
@@ -98,7 +98,6 @@ GmailHandler.prototype.fetchTasks = function(){
 	return deferred.promise;
 }
 
-
 // ===========================================================================================================
 // Compare the tasks and emails and prepare tasks and email to be saved
 // What should happen if:
@@ -115,9 +114,8 @@ GmailHandler.prototype.fetchTasks = function(){
 GmailHandler.prototype.compare = function(){
 	var deferred = Q.defer(), self = this;
 	self.logger.time("compare");
-	console.log(this.fetchedEmails);
-	console.log("vs");
-	console.log(this.fetchTasks);
+	console.log("fetchedEmails",this.fetchedEmails);
+	console.log("fetchedTasks",this.fetchedTasks);
 	var localId = util.generateId(12);
 	var exampleTask = {
 		title: "Title",
@@ -139,8 +137,7 @@ GmailHandler.prototype.compare = function(){
 GmailHandler.prototype.saveTasks = function(){
 	var deferred = Q.defer(), self = this;
 	self.logger.time("save tasks");
-	this.collection.getQueriesForInsertingAndSavingObjects(function(queries){
-		console.log("queries: " + queries.length);
+	this.collection.getQueriesForInsertingAndSavingObjects().then(function(queries){
 		if(queries && queries.length == 0)
 			return deferred.resolve();
 

@@ -90,12 +90,9 @@ var BaseCollection = Backbone.Collection.extend({
 		});
 		// Reject promise if errors
 		if ( self.error ){
-			console.log(self.error);
 			deferred.reject(self.error);
 			return deferred.promise;
 		}
-		console.log(collection);
-
 
 		var updates = collection['update'];
 		var insertions = collection['insert'];
@@ -151,7 +148,6 @@ var BaseCollection = Backbone.Collection.extend({
 			if( query.objectCounter > 0)
 				pushQuery( query );
 		}
-		console.log(returnQueries);
 
 		deferred.resolve(returnQueries);
 		return deferred.promise;
