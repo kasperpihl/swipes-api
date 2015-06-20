@@ -33,6 +33,7 @@ function PGClient( logger, timerForDone ){
 	}
 }
 
+
 PGClient.prototype.buildConString = function(){
 
 	var conString = process.env.DATABASE_URL;
@@ -44,7 +45,8 @@ PGClient.prototype.buildConString = function(){
 					process.env.RDS_PORT + "/ebdb";
 	}
 	return conString;
-}
+};
+
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
@@ -59,6 +61,7 @@ PGClient.prototype.connect = function( callback ){
 			callback( ( err ? false : true ) , err );
 	});
 };
+
 
 PGClient.prototype.end = function(){
 	var self = this;
@@ -79,7 +82,7 @@ PGClient.prototype.end = function(){
 	else
 		finalize();
 	
-}
+};
 
 PGClient.prototype.performQuery = function ( query , callback ){
 	var self = this;
@@ -205,7 +208,7 @@ PGClient.prototype.storeSession = function( token , userId ){
 	var expires = new Date( new Date().getTime() + sessionSeconds );
 	var query = defs.session.insert( { sessionToken: token, userId: userId, expires: expires } ).toQuery();
 	this.performQuery( query );
-}
+};
 
 
 PGClient.prototype.validateToken = function( token , callback){
@@ -235,7 +238,7 @@ PGClient.prototype.validateToken = function( token , callback){
 		else 
 			validateFromParse();
 	});
-}
+};
 
 /*
 Transactions handler

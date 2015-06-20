@@ -78,7 +78,7 @@ SyncController.prototype.loadCollectionsWithObjects = function(collections){
 		this.todoCollection.loadJSONObjects( collections["ToDo"]);
 	
 	deferred.resolve();
-	return deferred.promise; 
+	return deferred.promise;
 }
 
 
