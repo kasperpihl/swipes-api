@@ -35,13 +35,14 @@ function SyncController( userId, client, logger ){
 // Main sync function - called from the request and handles the whole sync process
 // ===========================================================================================================
 
-SyncController.prototype.sync = function ( req, userId, callback ){
+SyncController.prototype.sync = function ( req, callback ){
 	var self = this;
 	var body = req.body;
 	
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
-	
+	if( body.hasMoreToSave )
+		this.hasMoreToSave = true;
 
 	// Run the promise loop for syncing - load, find existing, save, get updates!
 	this.loadCollectionsWithObjects(body.objects)

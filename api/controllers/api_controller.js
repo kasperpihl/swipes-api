@@ -10,6 +10,7 @@ var Parse = 			require('parse').Parse;
 var PGClient =        	require(COMMON + 'database/pg_client.js');
 var Q = 				require("q");
 var SyncController = require( './sync_controller.js' );
+var AuthController = require( './auth_controller.js' );
 
 
 
@@ -83,7 +84,20 @@ APIController.prototype.sync = function (){
 	this.authorize( function(userId){
 		// Successfully authed
 		var syncController = new SyncController( userId, self.client , self.logger );
-		syncController.sync( self.req, userId, self.handleResult.bind(self) );
+		syncController.sync( self.req, self.handleResult.bind(self) );
+	});
+};
+	
+	// Auth call - used to authorize integrations on server
+	// ===========================================================================================================
+
+APIController.prototype.auth = function (){
+	var self = this;
+	// Auth for Swipes first
+	this.authorize( function(userId){
+		// Successfully authed for Swipes - then auth integration
+		var authController = new AuthController( userId, self.client , self.logger );
+		authController.auth( self.req, self.handleResult.bind(self) );
 	});
 };
 

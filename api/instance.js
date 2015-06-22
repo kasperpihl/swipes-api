@@ -56,6 +56,10 @@ app.route( '/').get( function(req,res,next){
 app.route( '/v1/sync' ).post( function(req, res){ new APIController( req, res ).sync(); });
 
 
+	// Auth Route - to send auth data for integrations
+	// =========================================================================================================
+
+app.route( 'v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });
 
 
 // ===========================================================================================================
