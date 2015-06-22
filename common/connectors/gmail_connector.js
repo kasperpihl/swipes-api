@@ -29,6 +29,48 @@ GmailConnector.prototype.handleError = function(error){
 	return deferred.promise;
 };
 
+// =================================================================================================
+// Authenticate and refresh token if needed
+// =================================================================================================
+
+GmailConnector.prototype.auth = function(){
+
+	var deferred = Q.defer();
+	
+	var CLIENT_ID = '336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com';
+	var CLIENT_SECRET = '5heB-MAD5Qm-y1miBVic03cE';
+	var REDIRECT_URL ='http://127.0.0.1:3000/auth/google/callback';
+	var oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
+		oauth2Client.credentials = this.tokens;
+
+	google.options({auth: oauth2Client }); // set auth asa global default
+
+	var date = new Date();
+	var expiry = this.tokens.expiry_date;
+	var now = date.getTime();
+	
+
+	if(expiry < now)
+	{
+		this.refreshToken(oauth2Client)
+			.then(function(tokens){
+				oauth2Client.credentials = tokens;
+				google.options({ auth: oauth2Client }); // set auth as a global default
+				
+				deferred.resolve(oauth2Client);
+				
+			})
+			.fail(function(err){
+				deferred.reject(err);
+			});
+	}
+	else{
+		deferred.resolve();
+	}
+	return deferred.promise;
+};
+
+
 GmailConnector.prototype.getMessagesWithLabels = function(labels, callback ){
 	var self = this;
 
@@ -217,46 +259,7 @@ GmailConnector.prototype.createLabel = function(label, deferred){
 };
 
 
-// =================================================================================================
-// Authenticate and refresh token if needed
-// =================================================================================================
 
-GmailConnector.prototype.auth = function(){
-
-	var deferred = Q.defer();
-	
-	var CLIENT_ID = '336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com';
-	var CLIENT_SECRET = '5heB-MAD5Qm-y1miBVic03cE';
-	var REDIRECT_URL ='http://127.0.0.1:3000/auth/google/callback';
-	var oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
-		oauth2Client.credentials = this.tokens;
-
-	google.options({auth: oauth2Client }); // set auth asa global default
-
-	var date = new Date();
-	var expiry = this.tokens.expiry_date;
-	var now = date.getTime();
-	
-
-	if(expiry < now)
-	{
-		this.refreshToken(oauth2Client)
-			.then(function(tokens){
-				oauth2Client.credentials = tokens;
-				google.options({ auth: oauth2Client }); // set auth as a global default
-				
-				deferred.resolve(oauth2Client);
-				
-			})
-			.fail(function(err){
-				deferred.reject(err);
-			});
-	}
-	else{
-		deferred.resolve();
-	}
-	return deferred.promise;
-};
 
 // =================================================================================================
 // Refresh token 

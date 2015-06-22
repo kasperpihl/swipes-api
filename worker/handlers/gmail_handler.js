@@ -1,9 +1,8 @@
 var COMMON = '../../common/';
-var WORKER = '../';
 var Collections = 		require(COMMON + 'collections/collections.js');
 var util =				require(COMMON + 'utilities/util.js');
 var Q = require("q");
-var GmailConnector = 	require(WORKER + "connectors/gmail_connector.js");
+var GmailConnector = 	require(COMMON + "connectors/gmail_connector.js");
 
 function GmailHandler(userId, client, logger){
 	this.collection = new Collections.Todo();
