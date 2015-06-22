@@ -145,7 +145,7 @@ Parse.Cloud.job("cleanError",function(request, status){
   var counter = 0;
   // Query for all users
   var now = new Date();
-  var sixMonthsAgo = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000);
+  var sixMonthsAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
   var query = new Parse.Query("Error");
   query.lessThan('createdAt',sixMonthsAgo);
   query.limit(1000);
