@@ -8,6 +8,8 @@ bodyParser =    require( 'body-parser' ),
 _ =             require( 'underscore' );
 
 var APIController = require('./controllers/api_controller.js');
+var WebhookController = require('./controllers/webhook_controller.js');
+
 http.globalAgent.maxSockets = 25;
 
 var app = express();
@@ -41,25 +43,35 @@ app.use(function(req, res, next) {
 // ===========================================================================================================
 // Routes
 // ===========================================================================================================
-
-
-	// Main Route
-	// =========================================================================================================
-
 app.route( '/').get( function(req,res,next){
 	res.send("Swipes synchronization services - online");
 });
 
-	// Sync Route
-	// =========================================================================================================    
 
+// Sync Route
+// =========================================================================================================    
 app.route( '/v1/sync' ).post( function(req, res){ new APIController( req, res ).sync(); });
 
 
-	// Auth Route - to send auth data for integrations
+// Auth Route - to send auth data for integrations
+// =========================================================================================================
+app.route( 'v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });
+	
+
+// Auth Route - to send auth data for integrations
+// =========================================================================================================
+app.route( 'v1/mailbox/add' ).post( function( req, res){ new APIController( req, res ).addMailbox(); });
+
+
+// ===========================================================================================================
+// Webhooks
+// ===========================================================================================================
+
+
+	// Context IO Webhook
 	// =========================================================================================================
 
-app.route( 'v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });
+app.route( 'v1/webhooks/contextio' ).post( function( req, res){ new WebhookController( req, res ).contextIO(); });
 
 
 // ===========================================================================================================

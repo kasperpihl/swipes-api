@@ -10,7 +10,7 @@ var TagCollection = BaseCollection.extend({
 	// ===========================================================================================================
 	// Query for finding latest updates
 	// ===========================================================================================================	
-	getQueryForFindingUpdates: function( userId, lastUpdate ){
+	queryForFindingUpdates: function( userId, lastUpdate ){
 		var model = this.sql;
 		var where = model.userId.equals( userId )
 								.and( model.deleted.notEqual( true ) );

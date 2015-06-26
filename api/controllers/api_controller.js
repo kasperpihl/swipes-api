@@ -75,10 +75,10 @@ APIController.prototype.handleSuccessResponse = function(result){
 // ===========================================================================================================
 // API Calls
 // ===========================================================================================================
-	
-	// Full client sync
-	// ===========================================================================================================
 
+
+// Full client sync
+// ===========================================================================================================
 APIController.prototype.sync = function (){
 	var self = this;
 	this.authorize( function(userId){
@@ -88,9 +88,9 @@ APIController.prototype.sync = function (){
 	});
 };
 	
-	// Auth call - used to authorize integrations on server
-	// ===========================================================================================================
 
+// Auth call - used to authorize integrations on server
+// ===========================================================================================================
 APIController.prototype.auth = function (){
 	var self = this;
 	// Auth for Swipes first
@@ -102,5 +102,15 @@ APIController.prototype.auth = function (){
 };
 
 
+// Add Mailbox call - used to prepare client to add Mailbox
+// ===========================================================================================================
+APIController.prototype.addMailbox = function(){
+	var self = this;
+	this.authorize( function(userId){
+		// Successfully authed for Swipes - then auth integration
+		var authController = new AuthController( userId, self.client , self.logger );
+		authController.auth( self.req, self.handleResult.bind(self) );
+	});
+}
 
 module.exports = APIController;

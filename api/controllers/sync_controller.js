@@ -74,9 +74,9 @@ SyncController.prototype.loadCollectionsWithObjects = function(collections){
 	this.logger.time("loadCollections");
 	
 	if( collections && collections["Tag"])
-		this.tagCollection.loadJSONObjects( collections["Tag"] );
+		this.tagCollection.loadJSONObjects( collections["Tag"], this.userId );
 	if( collections && collections["ToDo"])
-		this.todoCollection.loadJSONObjects( collections["ToDo"]);
+		this.todoCollection.loadJSONObjects( collections["ToDo"], this.userId );
 	
 	deferred.resolve();
 	return deferred.promise;
@@ -191,12 +191,12 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 	lastUpdate = ( lastUpdate ) ? new Date( lastUpdate ) : false;
 	if( lastUpdate )
 			lastUpdate = new Date( lastUpdate.getTime() + 1);
-
+	console.log(this.tagCollection);
 	// Concat queries from each collection to get updated objects
 	var queries = [this.tagCollection.queryForFindingUpdates(this.userId, lastUpdate),
 		this.todoCollection.queryForFindingUpdates(this.userId, lastUpdate)];
 
-
+	self.logger.log('finding updates');
 	this.client.performQueries(queries, function(result, error){
 		self.logger.time('updates found');
 		if ( error ) 
@@ -215,7 +215,7 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 
 SyncController.prototype.prepareReturnObject = function( result ){
 	var deferred = Q.defer(), self = this, returnObject = {}, biggestTime;
-
+	this.logger.log("prepareReturnObject");
 	for ( var className in result ){
 		for ( var index in result [ className ] ){
 			var localObj = result[className][index];

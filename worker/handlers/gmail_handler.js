@@ -154,7 +154,7 @@ GmailHandler.prototype.saveTasks = function(){
 				if ( error )
 					return deferred.reject( error);
 				
-				// Send silent push to other clients that an update happened
+				// TODO: Send silent push to other clients that an update happened
 				//util.sendSilentPush([ self.userId ], { syncId: syncId });
 				deferred.resolve();
 			
