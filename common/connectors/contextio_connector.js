@@ -9,8 +9,16 @@ function ContextIOConnector(){
 	});
 }
 
-ContextIOConnector.prototype.addMailbox = function(contextUserId, callback){
-	this.client.connect_tokens.post({}, function( err, response){
+ContextIOConnector.prototype.addMailbox = function(callback_url, contextUserId, callback){
+	if(!callback_url){
+		return callback(false, "must include callback_url");
+	}
+	if(contextUserId)
+		connector = this.client.accounts(contextUserId)
+	else
+		connector = this.client
+	
+	connector.connect_tokens().post({callback_url: callback_url}, function( err, response){
 		if(err)
 			callback(false, err);
 		else

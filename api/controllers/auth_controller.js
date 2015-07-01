@@ -1,5 +1,5 @@
 // ===========================================================================================================
-// Sync Controller - Handling Client Sync
+// AuthController - Handling Client Auths
 // ===========================================================================================================
 
 
@@ -9,6 +9,7 @@ var sql = 			require(COMMON + 'database/sql_definitions.js');
 var Collections = 	require(COMMON + 'collections/collections.js');
 var Parse = 		require('parse').Parse;
 var util =			require(COMMON + 'utilities/util.js');
+var ContextIO =		require(COMMON + 'connectors/contextio_connector.js');
 var Q = require("q");
 
 
@@ -33,6 +34,16 @@ AuthController.prototype.auth = function ( req, callback ){
 
 };
 
+AuthController.prototype.addMailbox = function ( req, callback ){
+	// Add code to fetch context IO user ID
+	var body = req.body;
+	
+	var contextIO = new ContextIO();
+	contextIO.addMailbox(body.callback_url, false, function(res, error){
+		callback(res, error);
+	});
+	
+};
 
 
 

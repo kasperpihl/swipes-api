@@ -55,12 +55,12 @@ app.route( '/v1/sync' ).post( function(req, res){ new APIController( req, res ).
 
 // Auth Route - to send auth data for integrations
 // =========================================================================================================
-app.route( 'v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });
+app.route( '/v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });
 	
 
 // Auth Route - to send auth data for integrations
 // =========================================================================================================
-app.route( 'v1/mailbox/add' ).post( function( req, res){ new APIController( req, res ).addMailbox(); });
+app.route( '/v1/mailbox' ).post( function( req, res){ new APIController( req, res ).addMailbox(); });
 
 
 // ===========================================================================================================

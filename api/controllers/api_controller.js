@@ -41,7 +41,7 @@ APIController.prototype.authorize = function(callback){
 	this.client.validateToken( this.req.body.sessionToken , function( userId, error){
 		// TODO: send proper error back that fits clients handling
 		if ( error )
-			return self.handleError( error );
+			return self.handleErrorResponse( error );
 		self.userId = userId;
 		self.logger.setIdentifier( userId ); // Set userId in the logger to identify
 		callback(userId);
@@ -106,11 +106,11 @@ APIController.prototype.auth = function (){
 // ===========================================================================================================
 APIController.prototype.addMailbox = function(){
 	var self = this;
-	this.authorize( function(userId){
-		// Successfully authed for Swipes - then auth integration
-		var authController = new AuthController( userId, self.client , self.logger );
-		authController.auth( self.req, self.handleResult.bind(self) );
-	});
+	var authController = new AuthController( false, self.client , self.logger );
+	authController.addMailbox( self.req, self.handleResult.bind(self) );
+	/*this.authorize( function(userId){
+		
+	});*/
 }
 
 module.exports = APIController;
