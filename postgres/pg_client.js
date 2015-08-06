@@ -10,7 +10,6 @@ pg.defaults.poolSize = 296;
 pg.defaults.poolIdleTimeout = 12000;
 var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
-
 function PGClient( logger, timerForDone ){
 	
 	this.connected = false;

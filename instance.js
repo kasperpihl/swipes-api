@@ -133,7 +133,14 @@ function handleSync( req, res, next ){
 
   var logger = new Logger();
   var client = new PGClient( logger, 12000 );
-
+  process.on('uncaughtException', function (err) {
+    if(client !== null && client){
+      client.end();
+    }
+    console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
+    console.error(err.stack)
+    process.exit(1)
+  })
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
     if ( error ){
