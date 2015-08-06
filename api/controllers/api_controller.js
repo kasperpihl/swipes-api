@@ -38,13 +38,15 @@ APIController.prototype.validateRequest = function(){
 };
 APIController.prototype.authorize = function(callback){
 	var self = this;
-	this.client.validateToken( this.req.body.sessionToken , function( userId, error){
+	this.client.validateToken( this.req.body.sessionToken , function( userId, organisationId){
 		// TODO: send proper error back that fits clients handling
-		if ( error )
+		if ( !userId  || !organisationId){
+			var error = organisationId;
 			return self.handleErrorResponse( error );
+		}
 		self.userId = userId;
 		self.logger.setIdentifier( userId ); // Set userId in the logger to identify
-		callback(userId);
+		callback(userId, organisationId);
 	});
 };
 
@@ -81,9 +83,10 @@ APIController.prototype.handleSuccessResponse = function(result){
 // ===========================================================================================================
 APIController.prototype.sync = function (){
 	var self = this;
-	this.authorize( function(userId){
+	this.authorize( function(userId, organisationId){
 		// Successfully authed
-		var syncController = new SyncController( userId, self.client , self.logger );
+		console.log(organisationId);
+		var syncController = new SyncController( userId, organisationId, self.client , self.logger );
 		syncController.sync( self.req, self.handleResult.bind(self) );
 	});
 };

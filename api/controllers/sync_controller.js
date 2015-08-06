@@ -16,8 +16,10 @@ var Q = require("q");
 // Instantiation
 // ===========================================================================================================
 
-function SyncController( userId, client, logger ){
+function SyncController( userId, organisationId, client, logger ){
 	this.userId = userId;
+	console.log(organisationId);
+	this.organisationId = parseInt(organisationId, 10);
 	this.logger = logger;
 	this.client = client;
 	this.didSave = false;
@@ -27,7 +29,10 @@ function SyncController( userId, client, logger ){
 	// Initialize the collections to handle the objects to update/insert
 	this.todoCollection = new Collections.Todo();
 	this.tagCollection = new Collections.Tag();
-	this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection };
+	this.memberCollection = new Collections.Member();
+	this.projectCollection = new Collections.Project();
+	this.messageCollection = new Collections.Message();
+	this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection, "Member": this.memberCollection, "Project" : this.projectCollection, "Message": this.messageCollection };
 };
 
 
@@ -47,7 +52,7 @@ SyncController.prototype.sync = function ( req, callback ){
 	// Run the promise loop for syncing - load, find existing, save, get updates!
 	this.loadCollectionsWithObjects(body.objects)
 	.then( function(){ 			return self.findInformationsFromLocalIds() 			})
-	.then( function(){ 			return self.insertAndSaveObjects( body.syncId ) 	})
+	.then( function(){ 			return self.insertAndSaveObjects( body.syncId, self.userId ) 	})
 	.then( function(){ 			return self.fetchRecentUpdates( body.lastUpdate ) 	})
 	.then( function(result){ 	return self.prepareReturnObject(result) 			})
 	.then(function(returnObject){
@@ -74,9 +79,15 @@ SyncController.prototype.loadCollectionsWithObjects = function(collections){
 	this.logger.time("loadCollections");
 	
 	if( collections && collections["Tag"])
-		this.tagCollection.loadJSONObjects( collections["Tag"], this.userId );
+		this.tagCollection.loadJSONObjects( collections["Tag"], this.organisationId );
 	if( collections && collections["ToDo"])
-		this.todoCollection.loadJSONObjects( collections["ToDo"], this.userId );
+		this.todoCollection.loadJSONObjects( collections["ToDo"], this.organisationId );
+	if( collections && collections["Member"])
+		this.memberCollection.loadJSONObjects( collections["Member"], this.organisationId );
+	if( collections && collections["Project"])
+		this.projectCollection.loadJSONObjects( collections["Project"], this.organisationId );
+	if( collections && collections["Message"])
+		this.messageCollection.loadJSONObjects( collections["Message"], this.organisationId );
 	
 	deferred.resolve();
 	return deferred.promise;
@@ -92,8 +103,10 @@ SyncController.prototype.findInformationsFromLocalIds = function(){
 	var deferred = Q.defer(), self = this;
 	this.logger.time("findInformationsFromLocalIds");
 	// Concat queries from each collection to check for their id's in the database
-	var queries = this.tagCollection.getQueriesForFindingExistingObjectsAndInformations( this.userId )
-		.concat(this.todoCollection.getQueriesForFindingExistingObjectsAndInformations( this.userId ));
+	var queries = this.tagCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId )
+		.concat(this.todoCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId ))
+		.concat(this.projectCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId ))
+		.concat(this.messageCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId ));
 
 	if ( !queries || queries.length == 0 )
 		deferred.resolve();
@@ -104,11 +117,9 @@ SyncController.prototype.findInformationsFromLocalIds = function(){
 				return deferred.reject( error );
 
 			for ( var className in results ){
-				if( className == "ToDo" ) 
-					self.todoCollection.updateCollectionAndDetermineUpdates(results[className]);
-				if( className == "Tag" ) 
-					self.tagCollection.updateCollectionAndDetermineUpdates(results[className]);
-			
+				collection = self.collections[className];
+				if(collection)
+					collection.updateCollectionAndDetermineUpdates( results[className]);			
 			}
 
 			deferred.resolve()
@@ -122,20 +133,24 @@ SyncController.prototype.findInformationsFromLocalIds = function(){
 // Insert and Update objects - check for validation errors
 // ===========================================================================================================
 
-SyncController.prototype.insertAndSaveObjects = function( syncId ){
+SyncController.prototype.insertAndSaveObjects = function( syncId, userId ){
 	var deferred = Q.defer(), self = this, queries = [];
 	this.logger.time("insertAndSaveObjects");
 
 	// Concat queries from each collection to prepare insertion and update queries
-	this.tagCollection.getQueriesForInsertingAndSavingObjects().then(function(tagQueries){
+	this.tagCollection.getQueriesForInsertingAndSavingObjects(userId).then(function(tagQueries){
 
 		queries = queries.concat(tagQueries);
-		return self.todoCollection.getQueriesForInsertingAndSavingObjects();
-
-	}).then( function(todoQueries){
-
-		// successfully batched the queries for saving
+		return self.todoCollection.getQueriesForInsertingAndSavingObjects(userId);
+	}).then(function(todoQueries){
 		queries = queries.concat(todoQueries);
+		return self.projectCollection.getQueriesForInsertingAndSavingObjects(userId);
+	}).then(function(projectQueries){
+		queries = queries.concat(projectQueries);
+		return self.messageCollection.getQueriesForInsertingAndSavingObjects(userId);
+	}).then( function(messageQueries){
+		// successfully batched the queries for saving
+		queries = queries.concat(messageQueries);
 		if ( !queries || queries.length == 0 ){
 			deferred.resolve();
 		}
@@ -193,8 +208,11 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 			lastUpdate = new Date( lastUpdate.getTime() + 1);
 	console.log(this.tagCollection);
 	// Concat queries from each collection to get updated objects
-	var queries = [this.tagCollection.queryForFindingUpdates(this.userId, lastUpdate),
-		this.todoCollection.queryForFindingUpdates(this.userId, lastUpdate)];
+	var queries = [this.tagCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
+		this.todoCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
+		this.memberCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
+		this.projectCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
+		this.messageCollection.queryForFindingUpdates(this.organisationId, lastUpdate)];
 
 	self.logger.log('finding updates');
 	this.client.performQueries(queries, function(result, error){
@@ -227,6 +245,7 @@ SyncController.prototype.prepareReturnObject = function( result ){
 		returnObject[ className ] = result[ className ];
 
 		if ( biggestTime ){
+			console.log("biggest",biggestTime);
 			returnObject.updateTime = biggestTime.toISOString();
 		}
 	}

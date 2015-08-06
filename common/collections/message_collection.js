@@ -3,9 +3,9 @@ var BaseCollection = require('./base_collection.js');
 var Models = require(COMMON + 'models/models.js');
 var sql = require(COMMON + 'database/sql_definitions.js');
 
-var TagCollection = BaseCollection.extend({
-	model: Models.Tag,
-	sql: sql.tag,
+var MessageCollection = BaseCollection.extend({
+	model: Models.Message,
+	sql: sql.message,
 
 	// ===========================================================================================================
 	// Query for finding latest updates
@@ -20,10 +20,9 @@ var TagCollection = BaseCollection.extend({
 
 		var query = model.select.apply( model, sql.getReturningColumnsForTable( model ) )
 								.where( where )
-								.order( model.title )
 								.toNamedQuery( model.className );
 		return query;
 	}
 });
 
-module.exports = TagCollection;
+module.exports = MessageCollection;

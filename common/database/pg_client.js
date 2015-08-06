@@ -204,9 +204,12 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 	}
 };
 
-PGClient.prototype.storeSession = function( token , userId ){
+PGClient.prototype.storeSession = function( token , userId, organisationId ){
 	var expires = new Date( new Date().getTime() + sessionSeconds );
-	var query = defs.session.insert( { sessionToken: token, userId: userId, expires: expires } ).toQuery();
+	insertData = { sessionToken: token, userId: userId, expires: expires };
+	if(organisationId)
+		insertData.organisationId = organisationId
+	var query = defs.session.insert( insertData ).toQuery();
 	this.performQuery( query );
 };
 
@@ -218,8 +221,9 @@ PGClient.prototype.validateToken = function( token , callback){
 	function validateFromParse(){
 		Parse.User.become( token ).then( function( user ){
 			self.userId = user.id;
-			callback( user.id, false );
-			self.storeSession( token , user.id );
+			var orgId = parseInt(user.get("organisationId"),10)
+			callback( user.id, orgId );
+			self.storeSession( token , user.id, orgId );
 
 	    },function( error, error2 ){
 	    	callback( false, error ); 
@@ -227,13 +231,13 @@ PGClient.prototype.validateToken = function( token , callback){
 	};
 
 	var now = new Date();
-	var query = defs.session.select( defs.session.userId, defs.session.expires ).where( defs.session.sessionToken.equals( token ).and( defs.session.expires.gt( now ) ) ).toQuery();
+	var query = defs.session.select( defs.session.userId, defs.session.expires, defs.session.organisationId ).where( defs.session.sessionToken.equals( token ).and( defs.session.expires.gt( now ) ) ).toQuery();
 	this.performQuery( query, function( result, error ){
 		if ( error )
 			return callback( false, error);
 		if ( result.rows && result.rows.length > 0 ){
 			self.userId = result.rows[0].userId;
-			callback( result.rows[0].userId, false );
+			callback( result.rows[0].userId, result.rows[0].organisationId );
 		}
 		else 
 			validateFromParse();

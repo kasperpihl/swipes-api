@@ -11,15 +11,14 @@ var BaseCollection = Backbone.Collection.extend({
 	// Loading JSON Objects, and make initial validation
 	// (Obs we don't know here yet if object is to be inserted or updated)
 	// ===========================================================================================================
-	loadJSONObjects: function( objects, userId ){
+	loadJSONObjects: function( objects, organisationId ){
 		var models = [];
 		for ( var i in objects ){
 			var data = objects[ i ];
 			if(data === null || !data)
 				continue;
 			var model = new this.model();
-			
-			model.parseRawData( data, userId );
+			model.parseRawData( data, organisationId );
 			models.push(model);
 		}
 		this.add(models);
@@ -30,7 +29,7 @@ var BaseCollection = Backbone.Collection.extend({
 	// Generating queries for finding and determining which of the objects already exists
 	// attributes 
 	// ===========================================================================================================
-	getQueriesForFindingExistingObjectsAndInformations: function(userId, attributes){
+	getQueriesForFindingExistingObjectsAndInformations: function(organisationId, attributes){
 
 		var table = this.sql, queries = [];
 		var localIds = this.pluck("localId");
@@ -46,7 +45,7 @@ var BaseCollection = Backbone.Collection.extend({
 			var chunk = chunks[ index ];
 			var query = table.select.apply( table, [ table.id, table.localId ] )
 							.from( table )
-							.where( table.userId.equals( userId ).and( table.localId.in( chunk ) ) )
+							.where( table.ownerId.equals( organisationId ).and( table.localId.in( chunk ) ) )
 							.toNamedQuery( table.className );
 			query.numberOfRows = chunk.length;
 			queries.push(query);
@@ -72,7 +71,7 @@ var BaseCollection = Backbone.Collection.extend({
 	// ===========================================================================================================
 	// Generate queries for inserting and saving the collection objects
 	// ===========================================================================================================
-	getQueriesForInsertingAndSavingObjects: function(){
+	getQueriesForInsertingAndSavingObjects: function(userId){
 		var returnQueries = [], self = this, deferred = Q.defer();
 		
 
@@ -96,7 +95,6 @@ var BaseCollection = Backbone.Collection.extend({
 
 		var updates = collection['update'];
 		var insertions = collection['insert'];
-
 		var model = this.sql;
 		// Local function to add query to return array.
 		function pushQuery( query, numberOfRows ){
@@ -116,6 +114,7 @@ var BaseCollection = Backbone.Collection.extend({
 			var batchCounter = 0;
 			for ( var i in insertions ){
 				var obj = insertions[ i ];
+				obj.set("userId", userId);
 				query = query.insert( obj.toJSON() );
 
 				if ( ++batchCounter >= self.batchSize ){

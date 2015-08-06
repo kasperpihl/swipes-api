@@ -3,12 +3,44 @@ var sql = require('sql');
 var _ = require('underscore');
 var util = require(COMMON + 'utilities/util.js');
 
-var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt" ];
-var sharedReturnColumns = [ 'localId' , 'updatedAt', 'createdAt' , 'deleted' ];
+var sharedColumns = [ "id", 'localId', "updatedAt", "deleted", "userId", "createdAt", "ownerId" ];
+var sharedReturnColumns = [ 'localId' , 'updatedAt', 'createdAt' , 'deleted', "ownerId", "userId" ];
 
-var todoColumns = [ "title" , "notes" , "order" , "priority" , "location" ,  "repeatCount" , "schedule" , "completionDate", "repeatDate", "repeatOption" , "tags", "attachments" , "parentLocalId", "origin", "originIdentifier" ];
+var todoColumns = [ "title" , 
+					"notes" , 
+					"order" , 
+					"priority" , 
+					"location" ,  
+					"repeatCount" , 
+					"schedule" , 
+					"completionDate", 
+					"repeatDate", 
+					"repeatOption" , 
+					"tags", 
+					"attachments" , 
+					"parentLocalId", 
+					"projectLocalId", 
+					"projectOrder", 
+					"origin", 
+					"originIdentifier",
+					"toUserId",
+					"assignees"
+				];
 var tagColumns = [ "title" ];
+var projectColumns = [ 'name' ];
 
+var memberColumns = [	'username', 
+						"fullName", 
+						"organisationId",
+						"profileImageURL"
+];
+
+var messageColumns = [ 	'message', 
+						'timestamp', 
+						'toUserId',
+						"projectLocalId",
+						"likes" 
+];
 
 exports.organisation = sql.define( {
 	'name': 'organisation',
@@ -16,16 +48,18 @@ exports.organisation = sql.define( {
 });
 exports.member = sql.define({
 	'name': 'member',
-	'columns': [ 'organisationId', 'userId', 'username', 'fullName']
+	'columns': sharedColumns.concat( memberColumns )
 });
-exports.project = sql.define({
-	'name': 'project',
-	'columns': [ 'id', 'title', 'localId', 'createdAt', 'updatedAt' ]
-});
+
 exports.message = sql.define({
 	'name': 'message',
-	'columns': [ 'id', 'message', 'createdByUserId', 'toUserId']
+	'columns': sharedColumns.concat( messageColumns )
 })
+
+exports.project = sql.define({
+	'name': 'project',
+	'columns': sharedColumns.concat( projectColumns ) 
+});
 
 exports.todo = sql.define( { 
 	'name' : "todo" , 
@@ -38,15 +72,22 @@ exports.tag = sql.define( {
 } );
 exports.session = sql.define({
 	'name': "session",
-	'columns': [ 'sessionToken', 'userId', 'expires' ]
+	'columns': [ 'sessionToken', 'userId', 'expires', 'organisationId' ]
 } );
 
 
 
 exports.todo.returnColumns = sharedReturnColumns.concat( todoColumns );
 exports.tag.returnColumns = sharedReturnColumns.concat( tagColumns );
+exports.member.returnColumns = sharedReturnColumns.concat( memberColumns );
+exports.project.returnColumns = sharedReturnColumns.concat( projectColumns );
+exports.message.returnColumns = sharedReturnColumns.concat( messageColumns );
 exports.todo.className = "ToDo";
 exports.tag.className = "Tag";
+exports.member.className = "Member";
+exports.project.className = "Project";
+exports.message.className = "Message";
+
 
 exports.getColumnsFromStringArray = function( model, columnsArray ){
 	var attributeArray = [];
@@ -60,6 +101,8 @@ exports.getColumnsFromStringArray = function( model, columnsArray ){
 exports.getReturningColumnsForTable = function( table ){
 	
 	var attributeArray = [];
+	if(!table.returnColumns)
+		return table.star();
 	for ( var key in table.returnColumns ){
 		var attribute = table[ table.returnColumns[ key ] ];
 

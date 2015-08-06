@@ -4,16 +4,16 @@ var BaseModel = Backbone.Model.extend({
 	action: 'insert',
 	error: null,
 	
-	getAttributeUpdateArrayFromData:function( data, userId){
+	getAttributeUpdateArrayFromData:function( data, organisationId){
 		var attributeUpdates = {};
 		var identifier = data.objectId;
 		if ( !identifier )
 			identifier = data.tempId;
 		if( identifier )
 			attributeUpdates.localId = identifier;
-		if( userId )
-			attributeUpdates.userId = userId;
-
+		if( organisationId )
+			attributeUpdates.ownerId = organisationId;
+		
 		if ( data.deleted )
 			attributeUpdates.deleted = true;
 

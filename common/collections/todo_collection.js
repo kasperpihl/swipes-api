@@ -10,12 +10,12 @@ var TodoCollection = BaseCollection.extend({
 	// ===========================================================================================================
 	// Query for finding latest updates
 	// ===========================================================================================================
-	queryForFindingUpdates: function( userId, lastUpdate ){
+	queryForFindingUpdates: function( organisationId, lastUpdate ){
 		var model = this.sql;
-		var where = model.userId.equals( userId )
+		var where = model.ownerId.equals( organisationId )
 								.and( model.deleted.notEqual( true ) );
 		if( lastUpdate )
-			where = model.userId.equals( userId )
+			where = model.ownerId.equals( organisationId )
 								.and( model.updatedAt.gt( lastUpdate ) );
 
 		var query = model.select.apply( model, sql.getReturningColumnsForTable( model ) )
