@@ -50,17 +50,6 @@ PGClient.prototype.connect = function( callback ){
 	var targetConnect = this.client ? this.client : pg;
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
-			var pool = pg.pools.getOrCreate();
-			console.log("pool status", pool.availableObjectsCount(), pool.getPoolSize());
-				
-			if(pool.availableObjectsCount() < 20){
-				console.log("draining pool", pool.availableObjectsCount(), pool.getPoolSize());
-				pool.drain(function() {
-				    pool.destroyAllNow();
-				});
-
-				return callback(false, "Pool got reset")
-			}
 			self.connected = true;
 			self.client = client;
 			self.done = done;
