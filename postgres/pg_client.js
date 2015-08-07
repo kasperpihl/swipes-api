@@ -6,7 +6,7 @@ var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse;
 var session = sql.define( { "name": "session" , columns: [ 'sessionToken', 'userId', 'expires'] } );
 var pg = require('pg');
-pg.defaults.poolSize = 290;
+pg.defaults.poolSize = 60;
 pg.defaults.poolIdleTimeout = 12000;
 var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
@@ -50,6 +50,15 @@ PGClient.prototype.connect = function( callback ){
 	var targetConnect = this.client ? this.client : pg;
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
+			var pool = pg.pools.getOrCreate();
+			if(pool.availableObjectsCount() < 20){
+				console.log("draining pool", pool.availableObjectsCount(), pool.getPoolSize());
+				pool.drain(function() {
+				    pool.destroyAllNow();
+				});
+
+				return callback(false, "Pool got reset")
+			}
 			self.connected = true;
 			self.client = client;
 			self.done = done;
