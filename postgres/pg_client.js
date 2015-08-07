@@ -51,7 +51,7 @@ PGClient.prototype.connect = function( callback ){
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			var pool = pg.pools.getOrCreate(self.conString);
-			console.log("pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
+			console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
 			self.connected = true;
 			self.client = client;
 			self.done = done;
