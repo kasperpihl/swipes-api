@@ -11,7 +11,7 @@ var PGHandler = require( './postgres/pg_handler.js' );
 var PGClient =        require('./postgres/pg_client.js');
 var MoveController =  require('./admin/move_controller.js');
 
-http.globalAgent.maxSockets = 25;
+http.globalAgent.maxSockets = 100;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
