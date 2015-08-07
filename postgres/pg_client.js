@@ -51,6 +51,8 @@ PGClient.prototype.connect = function( callback ){
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			var pool = pg.pools.getOrCreate();
+			console.log("pool status", pool.availableObjectsCount(), pool.getPoolSize());
+				
 			if(pool.availableObjectsCount() < 20){
 				console.log("draining pool", pool.availableObjectsCount(), pool.getPoolSize());
 				pool.drain(function() {
