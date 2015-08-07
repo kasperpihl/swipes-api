@@ -57,7 +57,9 @@ PGClient.prototype.connect = function( callback ){
 			
 				pool.drain(function() {
 				    pool.destroyAllNow();
+				    pool.destroy();
 				});
+				
 				return callback( false , "Drained pool" );
 			}
 			self.connected = true;
