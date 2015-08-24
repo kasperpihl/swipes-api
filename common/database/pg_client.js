@@ -4,7 +4,8 @@
 */
 var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse,
-	defs 	= require('./sql_definitions.js');
+	defs 	= require('./sql_definitions.js'),
+	https	= require('https');;
 var pg = require('pg');
 pg.defaults.poolSize = 296;
 pg.defaults.poolIdleTimeout = 12000;
@@ -218,8 +219,34 @@ PGClient.prototype.validateToken = function( token , callback){
 	var self = this;
 	if ( !token )
 		return callback(false, { code : 142 , message : "sessionToken must be included" });
-	function validateFromParse(){
-		Parse.User.become( token ).then( function( user ){
+	function validateFromSlack(){
+		var fullURL = "/api/auth.test?token="+ token;
+		var options = {
+			method: "POST",
+			host: "slack.com",
+			path: fullURL,
+			headers: { 'Content-Type': 'application/json' }
+		};
+		try {
+			var req = https.request(options, function(res) {
+				res.setEncoding('utf8');
+				res.on('data', function (data) {
+					var jsonObject = JSON.parse(data);
+					console.log(jsonObject);
+					if(jsonObject && jsonObject.ok){
+						self.userId = jsonObject.user_id;
+						callback( jsonObject.user_id, jsonObject.team_id );
+						self.storeSession( token , jsonObject.user_id, jsonObject.team_id );
+					}
+				});
+			});
+			req.end();
+		}
+		catch(err) {
+			console.log(err)
+		}
+		
+		/*Parse.User.become( token ).then( function( user ){
 			self.userId = user.id;
 			var orgId = parseInt(user.get("organisationId"),10)
 			callback( user.id, orgId );
@@ -227,20 +254,24 @@ PGClient.prototype.validateToken = function( token , callback){
 
 	    },function( error, error2 ){
 	    	callback( false, error ); 
-	    });
+	    });*/
 	};
 
 	var now = new Date();
 	var query = defs.session.select( defs.session.userId, defs.session.expires, defs.session.organisationId ).where( defs.session.sessionToken.equals( token ).and( defs.session.expires.gt( now ) ) ).toQuery();
 	this.performQuery( query, function( result, error ){
-		if ( error )
+		if ( error ){
+			console.log("error", error);
 			return callback( false, error);
+		}
 		if ( result.rows && result.rows.length > 0 ){
 			self.userId = result.rows[0].userId;
 			callback( result.rows[0].userId, result.rows[0].organisationId );
 		}
-		else 
-			validateFromParse();
+		else{
+			console.log("validating from slack"); 
+			validateFromSlack();
+		}
 	});
 };
 

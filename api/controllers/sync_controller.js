@@ -18,8 +18,7 @@ var Q = require("q");
 
 function SyncController( userId, organisationId, client, logger ){
 	this.userId = userId;
-	console.log(organisationId);
-	this.organisationId = parseInt(organisationId, 10);
+	this.organisationId = organisationId;
 	this.logger = logger;
 	this.client = client;
 	this.didSave = false;
@@ -82,13 +81,6 @@ SyncController.prototype.loadCollectionsWithObjects = function(collections){
 		this.tagCollection.loadJSONObjects( collections["Tag"], this.organisationId );
 	if( collections && collections["ToDo"])
 		this.todoCollection.loadJSONObjects( collections["ToDo"], this.organisationId );
-	if( collections && collections["Member"])
-		this.memberCollection.loadJSONObjects( collections["Member"], this.organisationId );
-	if( collections && collections["Project"])
-		this.projectCollection.loadJSONObjects( collections["Project"], this.organisationId );
-	if( collections && collections["Message"])
-		this.messageCollection.loadJSONObjects( collections["Message"], this.organisationId );
-	
 	deferred.resolve();
 	return deferred.promise;
 }
@@ -105,8 +97,6 @@ SyncController.prototype.findInformationsFromLocalIds = function(){
 	// Concat queries from each collection to check for their id's in the database
 	var queries = this.tagCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId )
 		.concat(this.todoCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId ))
-		.concat(this.projectCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId ))
-		.concat(this.messageCollection.getQueriesForFindingExistingObjectsAndInformations( this.organisationId ));
 
 	if ( !queries || queries.length == 0 )
 		deferred.resolve();
@@ -144,13 +134,7 @@ SyncController.prototype.insertAndSaveObjects = function( syncId, userId ){
 		return self.todoCollection.getQueriesForInsertingAndSavingObjects(userId);
 	}).then(function(todoQueries){
 		queries = queries.concat(todoQueries);
-		return self.projectCollection.getQueriesForInsertingAndSavingObjects(userId);
-	}).then(function(projectQueries){
-		queries = queries.concat(projectQueries);
-		return self.messageCollection.getQueriesForInsertingAndSavingObjects(userId);
-	}).then( function(messageQueries){
 		// successfully batched the queries for saving
-		queries = queries.concat(messageQueries);
 		if ( !queries || queries.length == 0 ){
 			deferred.resolve();
 		}
@@ -209,10 +193,7 @@ SyncController.prototype.fetchRecentUpdates = function(lastUpdate){
 	console.log(this.tagCollection);
 	// Concat queries from each collection to get updated objects
 	var queries = [this.tagCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
-		this.todoCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
-		this.memberCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
-		this.projectCollection.queryForFindingUpdates(this.organisationId, lastUpdate),
-		this.messageCollection.queryForFindingUpdates(this.organisationId, lastUpdate)];
+		this.todoCollection.queryForFindingUpdates(this.organisationId, lastUpdate)];
 
 	self.logger.log('finding updates');
 	this.client.performQueries(queries, function(result, error){
@@ -249,7 +230,7 @@ SyncController.prototype.prepareReturnObject = function( result ){
 			returnObject.updateTime = biggestTime.toISOString();
 		}
 	}
-
+	returnObject['userId'] = this.userId;
 	// Intercom hmac setting
 	returnObject['intercom-hmac'] = util.getIntercomHmac(this.userId);
 	returnObject.ok = true;
