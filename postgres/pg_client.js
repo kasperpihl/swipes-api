@@ -97,11 +97,19 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	if( this.timedout )
 		return callback ? callback( false, {code:510, message:"Request Timed Out"}, query ) : false;
 	if ( !this.connected ){
-		this.connect( function( connected , error ){
-			if ( error )
-				return callback ? callback( false, error, query ) : false;
-			self.performQuery ( query, callback );
-		});
+		try{
+			this.connect( function( connected , error ){
+				if ( error )
+					return callback ? callback( false, error, query ) : false;
+				self.performQuery ( query, callback );
+			});
+		}
+		catch( err ){
+			self.end();
+			callback( null, err, query );
+			
+		}
+		
 		
 		return;
 
