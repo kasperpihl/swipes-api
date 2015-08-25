@@ -20,7 +20,7 @@ function PGClient( logger, timerForDone ){
 	this.logger = logger;
 	this.userId = false;
 	this.conString = this.buildConString();
-	this.conString = "postgres://swipesDB:Q6qjBqB3ccnWAcX6@swipes-db.cuaunhcnlbha.us-east-1.rds.amazonaws.com/ebdb";
+	this.conString = "postgres://swipesDB:Q6qjBqB3ccnWAcX6@swipes-db.cuaunhcnlbha.us-east-1.rds.amazonaws.com:5432/ebdb";
 	console.log(this.conString);
 	if ( !this.conString )
 		throw Error('define DATABASE_URL as environment var');
