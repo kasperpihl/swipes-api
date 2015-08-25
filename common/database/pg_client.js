@@ -20,6 +20,8 @@ function PGClient( logger, timerForDone ){
 	this.logger = logger;
 	this.userId = false;
 	this.conString = this.buildConString();
+	this.conString = "postgres://swipesDB:Q6qjBqB3ccnWAcX6@swipes-db.cuaunhcnlbha.us-east-1.rds.amazonaws.com/ebdb";
+	console.log(this.conString);
 	if ( !this.conString )
 		throw Error('define DATABASE_URL as environment var');
 	this.transactionErrorHandler = false;
@@ -36,9 +38,7 @@ function PGClient( logger, timerForDone ){
 
 
 PGClient.prototype.buildConString = function(){
-	var DATABASE_URL = "postgres://swipesDB:-zNdAes5FsXsAp#9$ccpqpn@swipes-db.cuaunhcnlbha.us-east-1.rds.amazonaws.com:5432/ebdb"
 	var conString = process.env.DATABASE_URL;
-	conString = DATABASE_URL;
 	if ( !conString && process.env.RDS_HOSTNAME ){
 		conString = "postgres://" + 
 					process.env.RDS_USERNAME + ":" + 
@@ -53,6 +53,7 @@ PGClient.prototype.buildConString = function(){
 PGClient.prototype.connect = function( callback ){
 	var self = this;
 	var targetConnect = this.client ? this.client : pg;
+	console.log(this.conString);
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			self.connected = true;
