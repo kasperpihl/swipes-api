@@ -36,8 +36,9 @@ function PGClient( logger, timerForDone ){
 
 
 PGClient.prototype.buildConString = function(){
-
+	var DATABASE_URL = "postgres://swipesDB:-zNdAes5FsXsAp#9$ccpqpn@swipes-db.cuaunhcnlbha.us-east-1.rds.amazonaws.com:5432/ebdb"
 	var conString = process.env.DATABASE_URL;
+	conString = DATABASE_URL;
 	if ( !conString && process.env.RDS_HOSTNAME ){
 		conString = "postgres://" + 
 					process.env.RDS_USERNAME + ":" + 
