@@ -14,6 +14,7 @@
     "sql": "0.47.0",
     "request": "~2.51.0",
     "aws-sdk": "*",
+    "contextio": "*",
     "q": "*",
     "googleapis": "^2.0.5"
   },
