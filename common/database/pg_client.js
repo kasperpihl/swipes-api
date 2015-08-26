@@ -319,7 +319,7 @@ PGClient.prototype.validateToken = function( token , callback){
 					self.fetchSlackInfo(token, data.user_id, data.team_id);
 					self.userId = data.user_id;
 					callback( data.user_id, data.team_id );
-					//self.storeSession( token , data.user_id, data.team_id );
+					self.storeSession( token , data.user_id, data.team_id );
 					
 				}
 				else{
