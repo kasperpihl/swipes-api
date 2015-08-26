@@ -27,39 +27,6 @@ var todoColumns = [ "title" ,
 					"assignees"
 				];
 var tagColumns = [ "title" ];
-var projectColumns = [ 'name' ];
-
-var memberColumns = [	'username', 
-						"fullName", 
-						"organisationId",
-						"profileImageURL"
-];
-
-var messageColumns = [ 	'message', 
-						'timestamp', 
-						'toUserId',
-						"projectLocalId",
-						"likes" 
-];
-
-exports.organisation = sql.define( {
-	'name': 'organisation',
-	'columns': [ 'id', 'name', 'createdAt', 'updatedAt' ]
-});
-exports.member = sql.define({
-	'name': 'member',
-	'columns': sharedColumns.concat( memberColumns )
-});
-
-exports.message = sql.define({
-	'name': 'message',
-	'columns': sharedColumns.concat( messageColumns )
-})
-
-exports.project = sql.define({
-	'name': 'project',
-	'columns': sharedColumns.concat( projectColumns ) 
-});
 
 exports.todo = sql.define( { 
 	'name' : "todo" , 
@@ -75,18 +42,22 @@ exports.session = sql.define({
 	'columns': [ 'sessionToken', 'userId', 'expires', 'organisationId' ]
 } );
 
+exports.user = sql.define( { 
+	'name' : "user" , 
+	'columns' : [ "slackId", "username", "email", "real_name", "first_name", "last_name", "title", "is_admin", "is_owner", "teamId", "phone", "profileImageURL", "slackToken"] 
+} );
+
+exports.team = sql.define( { 
+	'name' : "team" , 
+	'columns' : [ "slackId", "name", "domain", "email_domain", "imageURL" ] 
+} );
+
 
 
 exports.todo.returnColumns = sharedReturnColumns.concat( todoColumns );
 exports.tag.returnColumns = sharedReturnColumns.concat( tagColumns );
-exports.member.returnColumns = sharedReturnColumns.concat( memberColumns );
-exports.project.returnColumns = sharedReturnColumns.concat( projectColumns );
-exports.message.returnColumns = sharedReturnColumns.concat( messageColumns );
 exports.todo.className = "ToDo";
 exports.tag.className = "Tag";
-exports.member.className = "Member";
-exports.project.className = "Project";
-exports.message.className = "Message";
 
 
 exports.getColumnsFromStringArray = function( model, columnsArray ){

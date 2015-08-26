@@ -20,8 +20,6 @@ function PGClient( logger, timerForDone ){
 	this.logger = logger;
 	this.userId = false;
 	this.conString = this.buildConString();
-	this.conString = "postgres://swipesDB:Q6qjBqB3ccnWAcX6@swipes-db.cuaunhcnlbha.us-east-1.rds.amazonaws.com:5432/ebdb";
-	console.log(this.conString);
 	if ( !this.conString )
 		throw Error('define DATABASE_URL as environment var');
 	this.transactionErrorHandler = false;
@@ -53,7 +51,6 @@ PGClient.prototype.buildConString = function(){
 PGClient.prototype.connect = function( callback ){
 	var self = this;
 	var targetConnect = this.client ? this.client : pg;
-	console.log(this.conString);
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			self.connected = true;
@@ -215,48 +212,123 @@ PGClient.prototype.storeSession = function( token , userId, organisationId ){
 	var query = defs.session.insert( insertData ).toQuery();
 	this.performQuery( query );
 };
+PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
+	var self = this;
+	this.slackRequest("users.info", token, {user: userId}, function(data, error){
+		if(data && data.ok){
+			var dataObj = { 
+				slackId: userId, 
+				username: data.user.name, 
+				first_name: data.user.profile.first_name, 
+				last_name: data.user.profile.last_name,
+				email: data.user.profile.email,
+				title: data.user.profile.title,
+				phone: data.user.profile.phone,
+				is_admin: data.user.is_admin,
+				is_owner: data.user.is_owner,
+				teamId: teamId, 
+				real_name: data.user.profile.real_name_normalized,
+				slackToken: token,
+				profileImageURL: data.user.profile.image_original
+			};
+			var query = defs.user.select(defs.user.slackId).from(defs.user).where( defs.user.slackId.equals(userId)).toQuery()
+			self.performQuery(query, function(res, error){
+				if(res && res.rows){
+					var insUpQuery;
+					if(res.rows.length){
+						insUpQuery = defs.user.update(dataObj).where( defs.user.slackId.equals(userId)).toQuery()
+					}
+					else
+						insUpQuery = defs.user.insert(dataObj).toQuery()
+					self.performQuery(insUpQuery, function(res,err){
+						console.log("performed query, error:", err);
+					});
+				}
 
+			})
+		}
+		else console.log(data, error);
+	});
+	this.slackRequest("team.info", token, {}, function(data,error){
+		if(data && data.ok){
+			var dataObj = {
+				slackId: teamId,
+				name: data.team.name,
+				domain: data.team.domain,
+				email_domain: data.team.email_domain,
+				imageURL: data.team.icon.image_original
+			};
+			var query = defs.team.select(defs.team.slackId).from(defs.team).where( defs.team.slackId.equals(teamId)).toQuery()
+			self.performQuery(query, function(res, error){
+				if(res && res.rows){
+					var insUpQuery;
+					if(res.rows.length){
+						insUpQuery = defs.team.update(dataObj).where( defs.team.slackId.equals(teamId)).toQuery()
+					}
+					else
+						insUpQuery = defs.team.insert(dataObj).toQuery()
+					self.performQuery(insUpQuery, function(res,err){
+						console.log("performed query, error:", err);
+					});
+				}
+			})
+		}
+		else console.log(data, error);
+	})
+}
+
+
+PGClient.prototype.slackRequest = function(path, token, params, callback){
+	var fullURL = "/api/" + path + "?token="+token;
+	for(var key in params){
+		fullURL += "&" + key + "=" + params[key];
+	}
+	var options = {
+		method: "POST",
+		host: "slack.com",
+		path: fullURL,
+		headers: { 'Content-Type': 'application/json' }
+	};
+	try {
+		var req = https.request(options, function(res) {
+			res.setEncoding('utf8');
+			var output = '';
+			res.on('data', function (chunk) {
+				output += chunk;
+			});
+			res.on('end', function() {
+	            var jsonObject = JSON.parse(output);
+				callback(jsonObject);
+	        });
+		});
+		req.end();
+	}
+	catch(err) {
+		callback(false, err);
+	}
+}
 
 PGClient.prototype.validateToken = function( token , callback){
 	var self = this;
 	if ( !token )
 		return callback(false, { code : 142 , message : "sessionToken must be included" });
 	function validateFromSlack(){
-		var fullURL = "/api/auth.test?token="+ token;
-		var options = {
-			method: "POST",
-			host: "slack.com",
-			path: fullURL,
-			headers: { 'Content-Type': 'application/json' }
-		};
-		try {
-			var req = https.request(options, function(res) {
-				res.setEncoding('utf8');
-				res.on('data', function (data) {
-					var jsonObject = JSON.parse(data);
-					console.log(jsonObject);
-					if(jsonObject && jsonObject.ok){
-						self.userId = jsonObject.user_id;
-						callback( jsonObject.user_id, jsonObject.team_id );
-						self.storeSession( token , jsonObject.user_id, jsonObject.team_id );
-					}
-				});
-			});
-			req.end();
-		}
-		catch(err) {
-			console.log(err)
-		}
-		
-		/*Parse.User.become( token ).then( function( user ){
-			self.userId = user.id;
-			var orgId = parseInt(user.get("organisationId"),10)
-			callback( user.id, orgId );
-			self.storeSession( token , user.id, orgId );
-
-	    },function( error, error2 ){
-	    	callback( false, error ); 
-	    });*/
+		self.slackRequest("auth.test", token, {}, function(data, error){
+			if(data){
+				if(data.ok){
+					self.fetchSlackInfo(token, data.user_id, data.team_id);
+					self.userId = data.user_id;
+					callback( data.user_id, data.team_id );
+					//self.storeSession( token , data.user_id, data.team_id );
+					
+				}
+				else{
+					callback(false, data);
+				}
+			}
+			else
+				callback(false, error);
+		})
 	};
 
 	var now = new Date();

@@ -22,7 +22,7 @@ function APIController(req, res){
 	this.res = res;
 	Parse.initialize( util.getOption( "applicationId" ) , util.getOption( "javaScriptKey" ) , util.getOption( "masterKey" ) );
 	this.logger = new Logger();
-	this.logger.forceOutput = true;
+	//this.logger.forceOutput = true;
 	this.client = new PGClient( this.logger, 12000 );
 
 };
@@ -85,7 +85,6 @@ APIController.prototype.sync = function (){
 	var self = this;
 	this.authorize( function(userId, organisationId){
 		// Successfully authed
-		console.log(organisationId);
 		var syncController = new SyncController( userId, organisationId, self.client , self.logger );
 		syncController.sync( self.req, self.handleResult.bind(self) );
 	});

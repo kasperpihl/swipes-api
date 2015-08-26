@@ -28,9 +28,6 @@ function SyncController( userId, organisationId, client, logger ){
 	// Initialize the collections to handle the objects to update/insert
 	this.todoCollection = new Collections.Todo();
 	this.tagCollection = new Collections.Tag();
-	this.memberCollection = new Collections.Member();
-	this.projectCollection = new Collections.Project();
-	this.messageCollection = new Collections.Message();
 	this.collections = { "Tag" : this.tagCollection, "ToDo": this.todoCollection, "Member": this.memberCollection, "Project" : this.projectCollection, "Message": this.messageCollection };
 };
 
