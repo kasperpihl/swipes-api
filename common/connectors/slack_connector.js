@@ -4,7 +4,33 @@ var _				= require('underscore');
 function SlackConnector(token){
 	this.token = token;
 }
-
+SlackConnector.prototype.requestToken = function(code, callback){
+	var fullURL = "/api/oauth.access?client_id=2345135970.9201204242&client_secret=306fd7099a762968aa876d53579fa694&code="+code;
+	var options = {
+		method: "POST",
+		host: "slack.com",
+		path: fullURL,
+		headers: { 'Content-Type': 'application/json' }
+	};
+	try {
+		console.log("requesting token");
+		var req = https.request(options, function(res) {
+			res.setEncoding('utf8');
+			var output = '';
+			res.on('data', function (chunk) {
+				output += chunk;
+			});
+			res.on('end', function() {
+	            var jsonObject = JSON.parse(output);
+				callback(jsonObject);
+	        });
+		});
+		req.end();
+	}
+	catch(err) {
+		callback(false, err);
+	}
+}
 SlackConnector.prototype.request = function(path, params, callback){
 	var fullURL = "/api/" + path + "?token="+this.token;
 	for(var key in params){

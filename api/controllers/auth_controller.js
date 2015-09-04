@@ -10,6 +10,7 @@ var Collections = 	require(COMMON + 'collections/collections.js');
 var Parse = 		require('parse').Parse;
 var util =			require(COMMON + 'utilities/util.js');
 var ContextIO =		require(COMMON + 'connectors/contextio_connector.js');
+var SlackConnector =require(COMMON + 'connectors/slack_connector.js');
 var Q = require("q");
 
 
@@ -32,6 +33,15 @@ AuthController.prototype.auth = function ( req, callback ){
 	var self = this;
 	var body = req.body;
 
+};
+
+AuthController.prototype.verifySlackToken = function ( req, callback ){
+	var self = this;
+	var body = req.body;
+	var slackConnector = new SlackConnector();
+	slackConnector.requestToken(body.code, function(res, error){
+		callback(res,error);
+	});
 };
 
 AuthController.prototype.addMailbox = function ( req, callback ){

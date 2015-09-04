@@ -89,7 +89,15 @@ APIController.prototype.sync = function (){
 		syncController.sync( self.req, self.handleResult.bind(self) );
 	});
 };
-	
+
+// Full client sync
+// ===========================================================================================================
+APIController.prototype.verifySlackToken = function (){
+	var self = this;
+	console.log("APIController | verifySlackToken");
+	var authController = new AuthController( null, self.client , self.logger );
+	authController.verifySlackToken( self.req, self.handleResult.bind(self) );
+};
 
 // Auth call - used to authorize integrations on server
 // ===========================================================================================================
