@@ -2,10 +2,11 @@
 	Client for talking with the postgres database
 
 */
+var COMMON = 			'../';
 var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse,
 	defs 	= require('./sql_definitions.js'),
-	https	= require('https');;
+	SlackConnector = require(COMMON + 'connectors/slack_connector.js');
 var pg = require('pg');
 pg.defaults.poolSize = 296;
 pg.defaults.poolIdleTimeout = 12000;
@@ -214,7 +215,7 @@ PGClient.prototype.storeSession = function( token , userId, organisationId ){
 };
 PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
 	var self = this;
-	this.slackRequest("users.info", token, {user: userId}, function(data, error){
+	this.slackConnector.request("users.info", {user: userId}, function(data, error){
 		if(data && data.ok){
 			var dataObj = { 
 				slackId: userId, 
@@ -231,6 +232,8 @@ PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
 				slackToken: token,
 				profileImageURL: data.user.profile.image_original
 			};
+			if(!dataObj.profileImageURL)
+				dataObj.profileImageURL = data.user.profile.image_192;
 			var query = defs.user.select(defs.user.slackId).from(defs.user).where( defs.user.slackId.equals(userId)).toQuery()
 			self.performQuery(query, function(res, error){
 				if(res && res.rows){
@@ -249,7 +252,7 @@ PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
 		}
 		else console.log(data, error);
 	});
-	this.slackRequest("team.info", token, {}, function(data,error){
+	this.slackConnector.request("team.info", {}, function(data,error){
 		if(data && data.ok){
 			var dataObj = {
 				slackId: teamId,
@@ -277,43 +280,14 @@ PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
 	})
 }
 
-
-PGClient.prototype.slackRequest = function(path, token, params, callback){
-	var fullURL = "/api/" + path + "?token="+token;
-	for(var key in params){
-		fullURL += "&" + key + "=" + params[key];
-	}
-	var options = {
-		method: "POST",
-		host: "slack.com",
-		path: fullURL,
-		headers: { 'Content-Type': 'application/json' }
-	};
-	try {
-		var req = https.request(options, function(res) {
-			res.setEncoding('utf8');
-			var output = '';
-			res.on('data', function (chunk) {
-				output += chunk;
-			});
-			res.on('end', function() {
-	            var jsonObject = JSON.parse(output);
-				callback(jsonObject);
-	        });
-		});
-		req.end();
-	}
-	catch(err) {
-		callback(false, err);
-	}
-}
-
 PGClient.prototype.validateToken = function( token , callback){
 	var self = this;
 	if ( !token )
 		return callback(false, { code : 142 , message : "sessionToken must be included" });
 	function validateFromSlack(){
-		self.slackRequest("auth.test", token, {}, function(data, error){
+		self.slackConnector = new SlackConnector(token);
+
+		self.slackConnector.request("auth.test", {}, function(data, error){
 			if(data){
 				if(data.ok){
 					self.fetchSlackInfo(token, data.user_id, data.team_id);

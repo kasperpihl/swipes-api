@@ -39,6 +39,7 @@ function SyncController( userId, organisationId, client, logger ){
 SyncController.prototype.sync = function ( req, callback ){
 	var self = this;
 	var body = req.body;
+	var token = body.sessionToken;
 	
 	if( body.objects && !_.isObject( body.objects ) ) 
 		return callback( false, 'Objects must be object or array' );
