@@ -48,27 +48,33 @@ PGClient.prototype.buildConString = function(){
 PGClient.prototype.connect = function( callback ){
 	var self = this;
 	var targetConnect = this.client ? this.client : pg;
-	targetConnect.connect( this.conString, function( err, client, done ) {
-		if ( !err ){
-			var pool = pg.pools.getOrCreate(self.conString);
+	try{	
+		targetConnect.connect( this.conString, function( err, client, done ) {
+			if ( !err ){
+				var pool = pg.pools.getOrCreate(self.conString);
 
-			if(pool.getPoolSize() > 50){
-				console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
-			
-				pool.drain(function() {
-				    pool.destroyAllNow();
-				    pool.destroy();
-				});
+				if(pool.getPoolSize() > 50){
+					console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
 				
-				return callback( false , "Drained pool" );
+					pool.drain(function() {
+					    pool.destroyAllNow();
+					    pool.destroy();
+					});
+					
+					return callback( false , "Drained pool" );
+				}
+				self.connected = true;
+				self.client = client;
+				self.done = done;
 			}
-			self.connected = true;
-			self.client = client;
-			self.done = done;
-		}
-		if ( callback )
-			callback( ( err ? false : true ) , err );
-	});
+			if ( callback )
+				callback( ( err ? false : true ) , err );
+		});
+	}
+	catch( err ){
+		callback( null, err );
+		self.end();
+	}
 };
 
 PGClient.prototype.end = function(){
