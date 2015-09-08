@@ -58,6 +58,11 @@ app.route( '/v1/sync' ).post( function(req, res){ new APIController( req, res ).
 app.route( '/v1/slackToken' ).post( function(req, res){ new APIController( req, res ).verifySlackToken(); });
 
 
+// Invite User
+// =========================================================================================================
+app.route( '/v1/invite/slack' ).post( function(req, res){ new APIController( req, res ).inviteSlackUser(); });
+app.route( '/v1/invite/slack').get( function(req, res){ new APIController( req, res ).getInvitedUsers(); });
+
 // Auth Route - to send auth data for integrations
 // =========================================================================================================
 app.route( '/v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });

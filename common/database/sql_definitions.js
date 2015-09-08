@@ -52,6 +52,11 @@ exports.team = sql.define( {
 	'columns' : [ "slackId", "name", "domain", "email_domain", "imageURL" ] 
 } );
 
+exports.invite = sql.define( { 
+	'name' : "invite" , 
+	'columns' : [ "id", "inviterSlackId", "inviteeSlackId", "type", "createdAt", "hoursSinceSignup", "teamId" ] 
+} );
+
 
 
 exports.todo.returnColumns = sharedReturnColumns.concat( todoColumns );

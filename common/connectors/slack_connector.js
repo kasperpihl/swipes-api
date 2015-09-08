@@ -4,6 +4,9 @@ var _				= require('underscore');
 function SlackConnector(token){
 	this.token = token;
 }
+SlackConnector.prototype.setToken = function(token){
+	this.token = token;
+}
 SlackConnector.prototype.requestToken = function(code, callback){
 	var fullURL = "/api/oauth.access?client_id=2345135970.9201204242&redirect_uri=http://team.swipesapp.com/slacksuccess/&client_secret=306fd7099a762968aa876d53579fa694&code="+code;
 	var options = {

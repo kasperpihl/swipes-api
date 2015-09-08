@@ -11,6 +11,7 @@ var PGClient =        	require(COMMON + 'database/pg_client.js');
 var Q = 				require("q");
 var SyncController = require( './sync_controller.js' );
 var AuthController = require( './auth_controller.js' );
+var InviteController = require( './invite_controller.js' );
 
 
 
@@ -38,9 +39,13 @@ APIController.prototype.validateRequest = function(){
 };
 APIController.prototype.authorize = function(callback){
 	var self = this;
+	if(!this.req || !this.req.body){
+		return self.handleErrorResponse("Wrong data format - content should be json");
+	}
+
 	this.client.validateToken( this.req.body.sessionToken , function( userId, organisationId){
 		// TODO: send proper error back that fits clients handling
-		if ( !userId  || !organisationId){
+		if ( !userId || !organisationId){
 			var error = organisationId;
 			return self.handleErrorResponse( error );
 		}
@@ -94,9 +99,22 @@ APIController.prototype.sync = function (){
 // ===========================================================================================================
 APIController.prototype.verifySlackToken = function (){
 	var self = this;
-	console.log("APIController | verifySlackToken");
 	var authController = new AuthController( null, self.client , self.logger );
 	authController.verifySlackToken( self.req, self.handleResult.bind(self) );
+};
+
+APIController.prototype.inviteSlackUser = function (){
+	var self = this;
+	this.authorize( function(userId, organisationId){
+		// Successfully authed for Swipes - then auth integration
+		var inviteController = new InviteController( userId, organisationId, self.client , self.logger );
+		inviteController.inviteUser( self.req, self.handleResult.bind(self) );
+	});
+};
+APIController.prototype.getInvitedUsers = function (){
+	var self = this;
+	var inviteController = new InviteController( false, false, self.client , self.logger );
+	inviteController.getInvitedUsers( self.req, self.handleResult.bind(self) );
 };
 
 // Auth call - used to authorize integrations on server

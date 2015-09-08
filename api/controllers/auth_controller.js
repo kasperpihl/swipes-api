@@ -40,7 +40,34 @@ AuthController.prototype.verifySlackToken = function ( req, callback ){
 	var body = req.body;
 	var slackConnector = new SlackConnector();
 	slackConnector.requestToken(body.code, function(res, error){
-		callback(res,error);
+		if(res){
+			if(res.ok){
+				var returnRes = res;
+				slackConnector.setToken(res.access_token);
+				slackConnector.request("auth.test", {}, function(res, error){
+					if(res){
+						if(res.ok){
+							var query = sql.invite.select( sql.invite.star() )
+								.where( sql.invite.teamId.equals(res.team_id).and( sql.invite.inviteeSlackId.equals(res.user_id) ) );
+							self.client.performQuery(query, function(res, result){
+								if(res){
+									if(res.rows.length)
+										returnRes.fromInvite = true;
+									callback(returnRes);
+								}
+								else callback(false, error);
+							});
+						}
+						else callback(false, res);
+					}
+					else callback(false, error);
+				});
+			}
+			else callback(false, res);
+		}
+		else callback(res,error);
+
+		
 	});
 };
 
