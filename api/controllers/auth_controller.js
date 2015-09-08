@@ -51,8 +51,21 @@ AuthController.prototype.verifySlackToken = function ( req, callback ){
 								.where( sql.invite.teamId.equals(res.team_id).and( sql.invite.inviteeSlackId.equals(res.user_id) ) );
 							self.client.performQuery(query, function(res, result){
 								if(res){
-									if(res.rows.length)
+									if(res.rows.length){
 										returnRes.fromInvite = true;
+										var lowestInvitation = new Date().getTime();
+										for( var i in res.rows){
+											row = res.rows[i];
+											if(row.createdAt && row.createdAt.getTime() < lowestInvitation){
+												lowestInvitation = row.createdAt.getTime()
+											}
+										}
+										var nowUnix = new Date().getTime()/1000;
+										var inviteUnix = lowestInvitation/1000;
+										var secondsSinceInvite = nowUnix - inviteUnix;
+										var hoursSinceInvite = Math.floor(secondsSinceInvite / 60 / 60);
+										returnRes.hoursSinceInvite = hoursSinceInvite;
+									}
 									callback(returnRes);
 								}
 								else callback(false, error);
