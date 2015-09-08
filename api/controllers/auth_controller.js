@@ -42,16 +42,17 @@ AuthController.prototype.verifySlackToken = function ( req, callback ){
 	slackConnector.requestToken(body.code, function(res, error){
 		if(res){
 			if(res.ok){
-				var returnRes = res;
 				slackConnector.setToken(res.access_token);
 				slackConnector.request("auth.test", {}, function(res, error){
 					if(res){
 						if(res.ok){
 							var query = sql.invite.select( sql.invite.star() )
-								.where( sql.invite.teamId.equals(res.team_id).and( sql.invite.inviteeSlackId.equals(res.user_id) ) );
+								.where( sql.invite.teamId.equals(res.team_id).and( sql.invite.inviteeSlackId.equals(res.user_id) ) ).toQuery();
 							self.client.performQuery(query, function(res, result){
 								if(res){
+									var returnRes = {access_token: slackConnector.token, ok:true};
 									if(res.rows.length){
+
 										returnRes.fromInvite = true;
 										var lowestInvitation = new Date().getTime();
 										for( var i in res.rows){
@@ -68,7 +69,9 @@ AuthController.prototype.verifySlackToken = function ( req, callback ){
 									}
 									callback(returnRes);
 								}
-								else callback(false, error);
+								else{ 
+									callback(false, error);
+								}
 							});
 						}
 						else callback(false, res);
@@ -78,7 +81,7 @@ AuthController.prototype.verifySlackToken = function ( req, callback ){
 			}
 			else callback(false, res);
 		}
-		else callback(res,error);
+		else callback(false ,error);
 
 		
 	});
