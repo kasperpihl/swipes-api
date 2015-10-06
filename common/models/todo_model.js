@@ -36,7 +36,7 @@ var TodoModel = BaseModel.extend({
 					}
 					value = tempVal;
 				}
-				
+
 				// Convert to jsonb for saving
 				if ( attribute == "attachments" || attribute == "tags" || attribute == "assignees" ){
 					// TODO: validate content of attachment/tags
@@ -58,34 +58,35 @@ var TodoModel = BaseModel.extend({
 	// ===========================================================================================================
 	// Validate model for missing attributes and wrong values
 	// ===========================================================================================================
-	validate:function( attrs, options ){
+	validate:function( attrs, options ) {
 		// No identifier
 		if ( !attrs.localId )
 			return "no identifier for todo";
-		
+
 		// Invalid title
-		if( attrs.title && attrs.title.length == 0 ){
+		if( attrs.title && attrs.title.length == 0 ) {
 			return "invalid title";
 		}
 
 		// Invalid dates
-		if(attrs.schedule &&  !util.isValidDate(attrs.schedule)){
+		if(attrs.schedule &&  !util.isValidDate(attrs.schedule)) {
 			return "invalid schedule";
 		}
-		if(attrs.completionDate && !util.isValidDate(attrs.completionDate)){
+		if(attrs.completionDate && !util.isValidDate(attrs.completionDate)) {
 			return "invalid completionDate";
 		}
-		if(attrs.repeatDate && !util.isValidDate(attrs.repeatDate)){
+		if(attrs.repeatDate && !util.isValidDate(attrs.repeatDate)) {
 			return "invalid repeatDate";
 		}
 
 		// Object didn't exist - check for required attributes
-		if ( !attrs.databaseId ){
-			if ( !attrs.title ){
+		if ( !attrs.databaseId ) {
+			if ( !attrs.title ) {
 				return "title is missing for insertion of todo";
 			}
-			if ( !attrs.userId )
+			if ( !attrs.userId ) {
 				return "userId must be set for insertion of todo";
+			}
 		}
 	}
 });
