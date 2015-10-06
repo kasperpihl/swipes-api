@@ -52,7 +52,7 @@ PGClient.prototype.connect = function( callback ){
 		if ( !err ){
 			var pool = pg.pools.getOrCreate(self.conString);
 
-			if(pool.getPoolSize() > 90){
+			if(pool.getPoolSize() > 70){
 				console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
 			
 				pool.drain(function() {
