@@ -234,7 +234,7 @@ PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
 			};
 			if(!dataObj.profileImageURL)
 				dataObj.profileImageURL = data.user.profile.image_192;
-			var query = defs.user.select(defs.user.slackId).from(defs.user).where( defs.user.slackId.equals(userId)).toQuery()
+			var query = defs.user.select(defs.user.slackId).from(defs.user).where( defs.user.teamId.equals(teamId).and(defs.user.slackId.equals(userId))).toQuery()
 			self.performQuery(query, function(res, error){
 				if(res && res.rows){
 					var insUpQuery;
