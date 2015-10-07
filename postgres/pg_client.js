@@ -50,7 +50,7 @@ PGClient.prototype.connect = function( callback ){
 	var targetConnect = this.client ? this.client : pg;
 	targetConnect.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
-			var pool = pg.pools.getOrCreate(self.conString);
+			/*var pool = pg.pools.getOrCreate(self.conString);
 
 			if(pool.getPoolSize() > 70){
 				console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
@@ -61,7 +61,7 @@ PGClient.prototype.connect = function( callback ){
 				});
 				
 				return callback( false , "Drained pool" );
-			}
+			}*/
 			self.connected = true;
 			self.client = client;
 			self.done = done;
@@ -145,9 +145,9 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		if(resultTime > 3500){
-			//console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
-			//console.log( query.text );
-			//console.log( query.values );
+			console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
+			console.log( query.text );
+			console.log( query.values );
 		}
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
 		if(self.logger.getTime() > 30){
