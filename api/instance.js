@@ -2,18 +2,20 @@
 // Setup
 // ===========================================================================================================
 
-var express =       require( 'express' ),
-	http    =       require( 'http' ),
-	bodyParser =    require( 'body-parser' ),
-	_ =             require( 'underscore' ),
+var express = require( 'express' ),
+	http    = require( 'http' ),
+	bodyParser = require( 'body-parser' ),
+	cookieParser = require('cookie-parser'),
+	_ = require( 'underscore' ),
 	APIController = require('./controllers/api_controller.js'),
-	WebhookController = require('./controllers/webhook_controller.js');
+	WebhookController = require('./controllers/webhook_controller.js'),
+	asanaRouter = require('./routes/asana.js');
 
 http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
-
+app.use(cookieParser())
 
 // ===========================================================================================================
 // Middle ware to set headers enabling CORS
@@ -27,10 +29,10 @@ app.use(function(req, res, next) {
 		res.header('Access-Control-Allow-Credentials', true);
 		res.header('Access-Control-Allow-Origin', "*");
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-		res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type');
+		res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5, Content-Type, Content-Length');
+
 		if ('OPTIONS' === req.method) {
-			res.writeHead(204);
-			res.end();
+			res.sendStatus(200);
 		}
 		else {
 			next();
@@ -71,6 +73,9 @@ app.route( '/v1/auth' ).post( function( req, res){ new APIController( req, res )
 // =========================================================================================================
 app.route( '/v1/mailbox' ).post( function( req, res){ new APIController( req, res ).addMailbox(); });
 
+// Asana Routes
+// =========================================================================================================
+app.use('/v1/asana', asanaRouter);
 
 // ===========================================================================================================
 // Webhooks
