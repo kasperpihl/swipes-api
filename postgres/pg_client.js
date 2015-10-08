@@ -84,9 +84,8 @@ PGClient.prototype.end = function(){
 	}
 	if( this.runningTransaction ){
 		this.rollback( function(){
-			
 		});
-		finalize();
+		
 	}
 	else
 		finalize();

@@ -133,7 +133,7 @@ function handleSync( req, res, next ){
 
   var logger = new Logger();
   var client = new PGClient( logger, 12000 );
-  process.setMaxListeners(0);
+  //process.setMaxListeners(0);
   process.on('uncaughtException', function (err) {
     if(client !== null && client){
       client.end();
