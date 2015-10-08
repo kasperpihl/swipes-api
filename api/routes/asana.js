@@ -2,6 +2,7 @@ var express = require( 'express' ),
 	Asana = require('asana');
 
 var router = express.Router();
+var ORIGIN = process.env.ORIGIN;
 
 // Create an Asana client. Do this per request since it keeps state that
 // shouldn't be shared across requests.
@@ -24,9 +25,9 @@ router.get("/asana_oauth", function (req, res) {
 		var client = createClient();
 
 		client.app.accessTokenFromCode(code).then(function(credentials) {
-			res.cookie('token', credentials.access_token, { maxAge: 60 * 60 * 1000 });
+			res.cookie('asana_token', credentials.access_token, { maxAge: 60 * 60 * 1000, httpOnly: true });
 
-			res.redirect('http://localhost:9000/');
+			res.redirect(ORIGIN + '/#asana_import');
 		});
 	} else {
 		// T_TODO we have to handle errors better
@@ -34,10 +35,21 @@ router.get("/asana_oauth", function (req, res) {
 	}
 });
 
+router.get("/import", function (req, res) {
+	var token = req.cookies['asana_token'];
+	console.log(token);
+
+	if (token) {
+		res.status(200).json({});
+	} else {
+		res.end('Missing asana token');
+	}
+});
+
 router.post("/asanaToken", function (req, res) {
 	var client = createClient();
 	// check the user for refresher token
-	var token = req.cookies.token;
+	var token = req.cookies['asana_token'];
 
 	if (token) {
 		// Here's where we direct the client to use Oauth with the credentials
@@ -45,7 +57,8 @@ router.post("/asanaToken", function (req, res) {
 		client.useOauth({ credentials: token });
 
 		client.users.me().then(function(me) {
-			res.redirect('/');
+			// We don't use redirect here because it's not allowed for cross-origin requests that require preflight.
+			res.status(200).json({redirect: ORIGIN + '/#asana_import'});
 		}).catch(function(err) {
 			// T_TODO handle errors better
 			res.end('Error fetching user: ' + err);
@@ -55,7 +68,7 @@ router.post("/asanaToken", function (req, res) {
 		var asanaAuthorizeUrl = client.app.asanaAuthorizeUrl();
 
 		// We don't use redirect here because it's not allowed for cross-origin requests that require preflight.
-		res.status(200).json({asanaAuthorizeUrl: asanaAuthorizeUrl});
+		res.status(200).json({redirect: asanaAuthorizeUrl});
 	}
 });
 

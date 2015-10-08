@@ -17,6 +17,8 @@ var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 app.use(cookieParser())
 
+var ORIGIN = process.env.ORIGIN;
+
 // ===========================================================================================================
 // Middle ware to set headers enabling CORS
 // ===========================================================================================================
@@ -27,7 +29,7 @@ app.use(function(req, res, next) {
 	];
 	if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) {
 		res.header('Access-Control-Allow-Credentials', true);
-		res.header('Access-Control-Allow-Origin', "*");
+		res.header('Access-Control-Allow-Origin', ORIGIN);
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 		res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5, Content-Type, Content-Length');
 
