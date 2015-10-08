@@ -11,7 +11,7 @@ function createClient() {
 	// I don't like env vars when it is not for third party libs
     clientId: process.env.ASANA_CLIENT_ID,
     clientSecret: process.env.ASANA_CLIENT_SECRET,
-    redirectUri: 'http://localhost:5000/v1/asana/asana_oauth'
+    redirectUri: process.env.ASANA_REDIRECT_URL
   });
 }
 
