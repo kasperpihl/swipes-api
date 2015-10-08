@@ -23,7 +23,8 @@ function PGClient( logger, timerForDone ){
 	this.transactionErrorHandler = false;
 	if( timerForDone ){
 		var self = this;
-		setTimeout(function(){
+		this.timebomb = setTimeout(function(){
+			console.log("Timebomb exploded");
 			if(self){
 				self.end();
 				self.timedout = true;
@@ -47,8 +48,7 @@ PGClient.prototype.buildConString = function(){
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
-	var targetConnect = this.client ? this.client : pg;
-	targetConnect.connect( this.conString, function( err, client, done ) {
+	pg.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			/*var pool = pg.pools.getOrCreate(self.conString);
 
@@ -73,6 +73,7 @@ PGClient.prototype.connect = function( callback ){
 
 PGClient.prototype.end = function(){
 	var self = this;
+	clearTimeout(this.timebomb);
 	function finalize(){
 		if ( self.done ){
 			self.done();
@@ -145,9 +146,9 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		if(resultTime > 3500){
-			console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
+			/*console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
 			console.log( query.text );
-			console.log( query.values );
+			console.log( query.values );*/
 		}
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
 		if(self.logger.getTime() > 30){
