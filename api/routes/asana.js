@@ -4,11 +4,18 @@ var COMMON = '../../common/';
 	Q = require('q'),
 	Promise = require('bluebird'), // Asana use bluebird... go figure
 	Async = require('async'), // we have to pick callbacks OR promises... not both :D
-	SlackConnector = require(COMMON + 'connectors/slack_connector.js');
+	SlackConnector = require(COMMON + 'connectors/slack_connector.js'),
+	util = require(COMMON + 'utilities/util.js');
+	pg = require('pg'),
+	getSlug = require('speakingurl');
+
+var ORIGIN = process.env.ORIGIN;
+var DATABASE_URL = process.env.DATABASE_URL;
 
 var router = express.Router();
-var ORIGIN = process.env.ORIGIN;
 var slackConnector = new SlackConnector();
+
+pg.defaults.poolSize = 100;
 
 // Create an Asana client. Do this per request since it keeps state that
 // shouldn't be shared across requests.
@@ -22,26 +29,69 @@ function createClient() {
   });
 }
 
+// performQuery the promise way
+function performQuery(query) {
+	var deferred = Q.defer();
+
+	pg.connect(DATABASE_URL, function(err, client, done) {
+		if(err) {
+			deferred.reject(new Error("Could not connect to postgres " + JSON.stringify(err)));
+		}
+
+		// T_TODO the query is not escaped!!!
+		client.query(query, function(err, result) {
+			if(err) {
+				deferred.reject(new Error("Error running query " + JSON.stringify(err)));
+			}
+
+			done();
+			deferred.resolve(result);
+		});
+	});
+
+	return deferred.promise;
+}
+
+function getSlackChannels() {
+	var deferred = Q.defer();
+
+	slackConnector.request("channels.list", {}, function (res, err) {
+		if (err) {
+			deferred.reject(err);
+		}
+
+		deferred.resolve(res);
+	})
+
+	return deferred.promise;
+}
+
 function handleSharedTasks(options) {
 	var client = options.client;
 	var tasks = options.sharedTasks;
 	var deferred = Q.defer();
 	var promiseArray = [];
+	var uniqueProjects = []
 
-	console.log(tasks);
 	tasks.forEach(function (task) {
 		// For now we care only for the first assigned project to the task
 		var projectId = task.projects[0].id;
 
+		if (uniqueProjects.indexOf(projectId) === -1) {
+			uniqueProjects.push(projectId);
+		}
+	});
+
+	uniqueProjects.forEach(function (projectId) {
 		promiseArray.push(
 			client.projects.findById(projectId, {opt_fields: 'name'})
 		);
 	});
 
-	Promise.all(promiseArray).then(function (result) {
-		callbacksArray = [];
+	Promise.all(promiseArray).then(function (projects) {
+		var callbacksArray = [];
 
-		result.forEach(function (project) {
+		projects.forEach(function (project) {
 			var name = encodeURIComponent(project.name);
 
 			callbacksArray.push(
@@ -58,10 +108,93 @@ function handleSharedTasks(options) {
 		});
 
 		Async.parallel(callbacksArray, function (err, res) {
-			console.log(err);
-			console.log(res);
-			deferred.resolve();
+			if (err) {
+				deferred.reject(new Error("Something went wrong with the slack create channel thing."));
+			}
+
+			var promiseArray = [];
+			var channels = res; // if there is a channel with that name the response is {ok: false, error: "name_taken"}
+
+			tasks.forEach(function (task) {
+				promiseArray.push(
+					// check if the task is already in the database
+					performQuery('SELECT id FROM todo WHERE asana_id=' + task.id)
+				);
+			})
+
+			Q.all(promiseArray).then(function (results) {
+				// Get channels ids
+				getSlackChannels().then(function (res) {
+					var tasksToInsert = [];
+					var filteredChannels = {};
+					var slackChannels = res.channels || [];
+
+					results.forEach(function (result, idx) {
+						// There is no task with that asana_id.. we should add it
+						if (result.rows.length === 0) {
+							tasksToInsert.push(tasks[idx]);
+						}
+					});
+
+					projects.forEach(function (project) {
+						var name = getSlug(project.name);
+
+						slackChannels.forEach(function (channel) {
+							if (name === channel.name) {
+								filteredChannels[channel.name] = channel.id;
+							}
+						})
+					});
+
+					slackConnector.request("auth.test", {}, function(data, error) {
+						if (error) {
+							deferred.reject(new Error(error));
+						}
+
+						var ownerId = data['team_id'];
+						var userId = data['user_id'];
+
+						if (tasksToInsert.length === 0) {
+							deferred.resolve();
+						}
+
+						tasksToInsert.forEach(function (task) {
+							var projectId = task.projects[0].id;
+							var slackChannelId = null;
+							var promiseArray = [];
+							var localId = util.generateId(12);
+							var deleted = false;
+
+							projects.forEach(function (project) {
+								if (project.id === projectId) {
+									slackChannelId = filteredChannels[getSlug(project.name)];
+								}
+							});
+
+							// T_TODO the data from asana is not escaped!!!
+							var query = 'INSERT into todo (title, "projectLocalId", "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees) ';
+								query += 'VALUES (\''+ task.name +'\', \''+ slackChannelId +'\', \''+ ownerId +'\', \''+ userId +'\', false, now(), \''+ task.id +'\', \''+ localId +'\', now(), \'["'+ userId +'"]\')'
+
+							promiseArray.push(
+								performQuery(query)
+							);
+
+							Q.all(promiseArray).then(function () {
+								deferred.resolve();
+							}).fail(function (err) {
+								deferred.reject(new Error(err));
+							})
+						});
+					});
+				}).fail(function (err) {
+					deferred.reject(new Error(err));
+				});
+			}).fail(function (err) {
+				deferred.reject(new Error("Something went wrong with check for asana_id in our database."));
+			});
 		});
+	}).catch(function (e) {
+		deferred.reject(new Error(e));
 	});
 
 	return deferred.promise;
@@ -138,6 +271,9 @@ router.post("/import", function (req, res) {
 				})
 				.then(function () {
 					res.status(200).json({});
+				}).fail(function (err) {
+					console.log(err);
+					res.status(400).json({})
 				})
 			})
 	} else {
