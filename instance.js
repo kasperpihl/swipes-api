@@ -183,7 +183,16 @@ function handleSync( req, res, next ){
 
 
 
+app.testQuery = function(cb) {
+  var logger = new Logger();
+  logger.forceOutput = true;
+  var client = new PGClient( logger, 12000 );
+
+  client.performQuery('select NOW()', function(result, err, query) {
+    cb(null, result.rows)
+  })
+}
 
 var port = Number(process.env.PORT || 5000);
 //app.listen(port);
-exports = app;
+module.exports = app;
