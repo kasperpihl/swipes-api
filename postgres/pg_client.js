@@ -48,6 +48,8 @@ PGClient.prototype.buildConString = function(){
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
+  console.log('connecting client')
+  this.connected = true;
 	pg.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			/*var pool = pg.pools.getOrCreate(self.conString);
@@ -75,7 +77,9 @@ PGClient.prototype.end = function(){
 	var self = this;
 	clearTimeout(this.timebomb);
 	function finalize(){
+    console.log('finalizing connection')
 		if ( self.done ){
+      console.log('calling self.done()')
 			self.done();
 			self.done = false;
 		}

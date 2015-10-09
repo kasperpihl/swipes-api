@@ -133,7 +133,7 @@ function handleSync( req, res, next ){
   console.log(JSON.stringify(req.body));
 
   var logger = new Logger();
-  var client = new PGClient( logger, 12000 );
+  var client = new PGClient( logger, 1000 );
   //process.setMaxListeners(0);
   process.on('uncaughtException', function (err) {
     if(client !== null && client){
@@ -189,6 +189,7 @@ app.testQuery = function(cb) {
   var client = new PGClient( logger, 12000 );
 
   client.performQuery('select NOW()', function(result, err, query) {
+    client.end();
     cb(null, result.rows)
   })
 }
