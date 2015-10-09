@@ -180,6 +180,14 @@ PGClient.prototype.performQuery = function ( query , callback ){
 };
 
 PGClient.prototype.performQueries = function ( queries, callback, iterator ){
+  var self = this;
+	if ( !this.connected ){
+    return this.connect( function( connected , error ){
+      if ( error )
+        return callback ? callback( false, error, query ) : false;
+      self.performQueries ( queries, callback, iterator );
+    });
+  }
 	
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
