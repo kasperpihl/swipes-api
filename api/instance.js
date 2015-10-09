@@ -3,12 +3,11 @@
 // ===========================================================================================================
 
 var express =       require( 'express' ),
-http    =       require( 'http' ),
-bodyParser =    require( 'body-parser' ),
-_ =             require( 'underscore' );
-
-var APIController = require('./controllers/api_controller.js');
-var WebhookController = require('./controllers/webhook_controller.js');
+	http    =       require( 'http' ),
+	bodyParser =    require( 'body-parser' ),
+	_ =             require( 'underscore' ),
+	APIController = require('./controllers/api_controller.js'),
+	WebhookController = require('./controllers/webhook_controller.js');
 
 http.globalAgent.maxSockets = 25;
 
@@ -23,7 +22,7 @@ process.on('uncaughtException', function (err) {
 // ===========================================================================================================
 // Middle ware to set headers enabling CORS
 // ===========================================================================================================
-// 
+//
 app.use(function(req, res, next) {
 	var allowedHost = [
 		"*"
@@ -53,12 +52,12 @@ app.route( '/').get( function(req,res,next){
 
 
 // Sync Route
-// =========================================================================================================    
+// =========================================================================================================
 app.route( '/v1/sync' ).post( function(req, res){ new APIController( req, res ).sync(); });
 
 
 // Slack Token
-// =========================================================================================================    
+// =========================================================================================================
 app.route( '/v1/slackToken' ).post( function(req, res){ new APIController( req, res ).verifySlackToken(); });
 
 
@@ -70,7 +69,7 @@ app.route( '/v1/invite/slack').get( function(req, res){ new APIController( req, 
 // Auth Route - to send auth data for integrations
 // =========================================================================================================
 app.route( '/v1/auth' ).post( function( req, res){ new APIController( req, res ).auth(); });
-	
+
 
 // Auth Route - to send auth data for integrations
 // =========================================================================================================
@@ -89,9 +88,9 @@ app.route( 'v1/webhooks/contextio' ).post( function( req, res){ new WebhookContr
 
 
 // ===========================================================================================================
-// Start the server 
+// Start the server
 // ===========================================================================================================
 
-
-var port = Number(process.env.PORT || 5000);
-app.listen(port);
+var PORT = Number(process.env.PORT || 5000);
+app.listen(PORT);
+console.log('server started on port %s', PORT);
