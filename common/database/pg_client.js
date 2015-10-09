@@ -5,6 +5,7 @@
 var COMMON = 			'../';
 var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse,
+	Queue = require(COMMON + "utilities/queue.js");
 	defs 	= require('./sql_definitions.js'),
 	SlackConnector = require(COMMON + 'connectors/slack_connector.js');
 var pg = require('pg');
@@ -148,55 +149,30 @@ PGClient.prototype.performQuery = function ( query , callback ){
 };
 
 PGClient.prototype.performQueries = function ( queries, callback, iterator ){
-
-	var self = this;
-	if ( !this.connected ){
-		return this.connect( function( connected , error ){
-			if ( error )
-				return callback ? callback( false, error, query ) : false;
-			self.performQueries ( queries, callback, iterator );
-		});
-	}
-
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
 
-	var i = 0, retCounter = 0 , target = queries.length, returnArr = {};	
+	var returnArr = {};
 	var self = this;
-	var hasSentCallback = false;
-	for( var i = 0 ; i < queries.length ; i++ ){
-		var query = queries[ i ];
+	// new queue running 1 query at a time
+	var queue = new Queue(1);
+	queue.push(queries, true);
+	queue.run(function(query, i, next){
 		self.performQuery( query , function ( result , err, query ){
-			
 			if ( err ){
-				//console.log( err );
-				if( !hasSentCallback ){
-					hasSentCallback = true;
-					return callback ? callback( false, err , retCounter ) : false;
-				}
-				return false;
-				
+				return callback ? callback( false, err ) : false;
 			}
 
 			if( !query.name )
-				query.name = "" + retCounter;
+				query.name = "" + i;
 
-			if( returnArr[ query.name ] )
-				returnArr[ query.name ] = returnArr[ query.name ].concat( result.rows );
-			else
-				returnArr[ query.name ] = result.rows;
-
-			if ( iterator )
-				iterator( result, retCounter);
-			
-			retCounter++;
-			
-			if ( retCounter == target && !hasSentCallback ){
-				return callback( returnArr, false );
-			}
-
+			returnArr[ query.name ] = result.rows;
+			next();
 		});
-	}
+	},
+	function(){
+		return callback( returnArr, false );
+	});
 };
 
 PGClient.prototype.storeSession = function( token , userId, organisationId ){
