@@ -138,7 +138,7 @@ function handleSync( req, res, next ){
     console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
     console.error(err.stack)
     process.exit(1)
-  })
+  });
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
     if ( error ){
@@ -155,11 +155,12 @@ function handleSync( req, res, next ){
 
     handler.sync( req.body, userId, function( result , error ){
       logger.time('Finished request', true);
+      client.end();
       if(client.timedout){
         util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
         return;
       }
-      client.end();
+      
       if ( result ){
         if ( req.body.sendLogs ){
           result['logs'] = logger.logs;

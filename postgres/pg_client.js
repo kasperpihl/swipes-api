@@ -24,7 +24,7 @@ function PGClient( logger, timerForDone ){
 	if( timerForDone ){
 		var self = this;
 		this.timebomb = setTimeout(function(){
-			//console.log(new Date() + ": Timebomb exploded");
+			console.log(new Date() + ": Timebomb exploded");
 			if(self){
 				//self.end();
 				self.timedout = true;
