@@ -6,7 +6,7 @@ var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse;
 var session = sql.define( { "name": "session" , columns: [ 'sessionToken', 'userId', 'expires'] } );
 var pg = require('pg');
-pg.defaults.poolSize = 60;
+pg.defaults.poolSize = 80;
 pg.defaults.poolIdleTimeout = 12000;
 var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
@@ -48,19 +48,13 @@ PGClient.prototype.buildConString = function(){
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
-  this.connected = true;
+	this.connected = true;
 	pg.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
 			var pool = pg.pools.getOrCreate(self.conString);
 
-			if(pool.getPoolSize() > 50){
-				console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
-
-				pool.drain(function() {
-				    pool.destroyAllNow();
-				    pool.destroy();
-				});
-
+			if(pool.getPoolSize() > 75){
+				process.exit(1);
 				return callback( false , "Drained pool" );
 			}
 			self.connected = true;
@@ -134,7 +128,6 @@ PGClient.prototype.performQuery = function ( query , callback ){
 			self.logger.log( err );
 		}
 		if(self.timedout){
-			self.end();
 			return callback ? callback( false, {code:510, message:"Request Timed Out"}, query ) : false;
 		}
 		var endTime = new Date().getTime();
