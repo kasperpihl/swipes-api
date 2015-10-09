@@ -91,23 +91,23 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		self.didSave = true;
 		self.logger.time( "inserting and saving " + queries.length + " number of queries " );
 		
-		/*self.client.transaction( function( error ){
+		self.client.transaction( function( error ){
 			self.client.rollback();
-		});*/
+		});
 		self.client.performQueries( queries, function( result, error , i){
 			self.logger.time( "finalized insertions and updates" );
 			if ( error )
 				return finishWithError( error );
-			handleRelations();
-			/*
+			
+			
 			self.client.commit(function( result, error ){
 					
 				if ( error )
 					return finishWithError( error);
 				
-				
+				handleRelations();
 			
-			});*/
+			});
 
 		});
 	};
@@ -136,8 +136,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 
 				if ( error )
 					return finishWithError( error );
-				getUpdates();
-				/*
+				
 				self.client.commit(function( result, error ){
 					
 					if ( error )
@@ -145,7 +144,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 					
 					getUpdates();
 				
-				});	*/
+				});	
 			});
 		});
 	};
