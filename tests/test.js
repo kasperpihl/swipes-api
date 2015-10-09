@@ -6,9 +6,9 @@ var bodyText = '{"sessionToken":"ylprdyhogqjd2pwqtpckvw0b5","platform":"web","ve
 
 var server = http.createServer(app)
 server.listen(5000, function() {
-  console.log('listening on 5000')
+  //console.log('listening on 5000')
   app.testQuery(function(err, rows) {
-    console.log('query tested', rows)
+    //console.log('query tested', rows)
 
     const options = {
       json: true,
@@ -16,8 +16,6 @@ server.listen(5000, function() {
     }
 
     request.post('http://localhost:5000/v1/sync', options, function(err, res) {
-      console.log('error?', err)
-      //console.log(res.body)
       console.log('closing server')
       server.close()
     })
