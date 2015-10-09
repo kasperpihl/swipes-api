@@ -2,22 +2,36 @@
 // Setup
 // ===========================================================================================================
 
-var express = require( 'express' ),
-	http    = require( 'http' ),
-	bodyParser = require( 'body-parser' ),
-	cookieParser = require('cookie-parser'),
-	_ = require( 'underscore' ),
+var COMMON = "../common/";
+var express =       require( 'express' ),
+	http    =       require( 'http' ),
+	bodyParser =    require( 'body-parser' ),
+	_ =             require( 'underscore' ),
 	APIController = require('./controllers/api_controller.js'),
-	WebhookController = require('./controllers/webhook_controller.js'),
-	asanaRouter = require('./routes/asana.js');
+	asanaRouter = require('./routes/asana.js'),
+	WebhookController = require('./controllers/webhook_controller.js');
+var util = 				require(COMMON + 'utilities/util.js');
 
 http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 app.use(cookieParser())
-
 var ORIGIN = process.env.ORIGIN;
+
+// Catch any parsing errors
+app.use(function(err,req,res,next){
+	if(err){
+		util.sendBackError(err, res);
+	}
+	else
+		next();
+});
+process.on('uncaughtException', function (err) {
+	console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
+	console.error(err.stack)
+	process.exit(1)
+});
 
 // ===========================================================================================================
 // Middle ware to set headers enabling CORS

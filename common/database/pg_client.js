@@ -5,10 +5,11 @@
 var COMMON = 			'../';
 var sql 	= require('sql'),
 	Parse 	= require( 'parse' ).Parse,
+	Queue = require(COMMON + "utilities/queue.js");
 	defs 	= require('./sql_definitions.js'),
 	SlackConnector = require(COMMON + 'connectors/slack_connector.js');
 var pg = require('pg');
-pg.defaults.poolSize = 296;
+pg.defaults.poolSize = 80;
 pg.defaults.poolIdleTimeout = 12000;
 var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
@@ -26,9 +27,9 @@ function PGClient( logger, timerForDone ){
 	this.transactionErrorHandler = false;
 	if( timerForDone ){
 		var self = this;
-		setTimeout(function(){
+		this.timebomb = setTimeout(function(){
+			console.log(new Date() + ": Timebomb exploded");
 			if(self){
-				self.end();
 				self.timedout = true;
 			}
 		}, timerForDone);
@@ -51,9 +52,15 @@ PGClient.prototype.buildConString = function(){
 
 PGClient.prototype.connect = function( callback ){
 	var self = this;
-	var targetConnect = this.client ? this.client : pg;
-	targetConnect.connect( this.conString, function( err, client, done ) {
+	pg.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
+			var pool = pg.pools.getOrCreate(self.conString);
+
+			if(pool.getPoolSize() > 75){
+				console.log(new Date() + ": Exited from full pool");
+				process.exit(1);
+				return callback( false , "Drained pool" );
+			}
 			self.connected = true;
 			self.client = client;
 			self.done = done;
@@ -65,39 +72,23 @@ PGClient.prototype.connect = function( callback ){
 
 
 PGClient.prototype.end = function(){
-	var self = this;
-	function finalize(){
-		if ( self.done ){
-			self.done();
-			self.done = false;
-		}
-		self.client = false;
-		self.connected = false;
+	clearTimeout(this.timebomb);
+	if ( this.done ){
+		this.done();
+		this.done = false;
 	}
-	if( this.runningTransaction ){
-		this.rollback( function(){
-			
-		});
-		finalize();
-	}
-	else
-		finalize();
-	
+	this.client = false;
+	this.connected = false;
 };
 
 PGClient.prototype.performQuery = function ( query , callback ){
 	var self = this;
-	if( this.timedout )
-		return callback ? callback( false, {code:510, message:"Request Timed Out"}, query ) : false;
 	if ( !this.connected ){
-		this.connect( function( connected , error ){
+		return this.connect( function( connected , error ){
 			if ( error )
 				return callback ? callback( false, error, query ) : false;
 			self.performQuery ( query, callback );
 		});
-		
-		return;
-
 	}
 
 	var args = [];
@@ -127,82 +118,56 @@ PGClient.prototype.performQuery = function ( query , callback ){
 			self.logger.log( args[1] );
 			self.logger.log( err );
 		}
+		if(self.timedout){
+			err = {code:510, message:"Request Timed Out"};
+			result = false;
+		}
+		
+		// If in a transaction, roll back first
+		if( err && self.runningTransaction ){
+			self.rollback(function(){
+				callback( result , err, query );
+			});
+		}
+		else if ( callback )
+			callback( result , err, query );
+
+
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		if(resultTime > 3500){
-			// console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId);
-			// console.log( query.text );
-			// console.log( query.values );
+			console.log(new Date() + ": " + resultTime, query.text, query.values );
 		}
-		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
-		if(self.logger.getTime() > 30){
-			//console.log(resultTime);
-			//self.logger.log( query.text );
-		}
-		if ( numberOfObjects || true ){
-			if(command == "SELECT" && result)
-				numberOfObjects = result.rows.length;
-			//self.logger.time( command + " " + numberOfObjects + ' rows ' + rowsPrSecond + "/s (" + resultTime + "ms)");
-		}
-		if( err && self.transactionErrorHandler )
-			self.transactionErrorHandler( err );
-		
-		if ( callback )
-			callback( result , err, query );
 	});
-	try{
-		this.client.query.apply( this.client, args );
-	}
-	catch( err ){
-		callback( null, err, query );
-		this.end();
-	}
+	this.client.query.apply( this.client, args );
 	
 };
 
 PGClient.prototype.performQueries = function ( queries, callback, iterator ){
-	
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
 
-	var i = 0, retCounter = 0 , target = queries.length, returnArr = {};	
+	var returnArr = {};
 	var self = this;
-	var hasSentCallback = false;
-	for( var i = 0 ; i < queries.length ; i++ ){
-		var query = queries[ i ];
+	// new queue running 1 query at a time
+	var queue = new Queue(1);
+	queue.push(queries, true);
+	queue.run(function(query, i, next){
 		self.performQuery( query , function ( result , err, query ){
-			
 			if ( err ){
-				//console.log( err );
-				if( !hasSentCallback ){
-					hasSentCallback = true;
-					return callback ? callback( false, err , retCounter ) : false;
-				}
-				return false;
-				
+				return callback ? callback( false, err ) : false;
 			}
 
 			if( !query.name )
-				query.name = "" + retCounter;
+				query.name = "" + i;
 
-			if( returnArr[ query.name ] )
-				returnArr[ query.name ] = returnArr[ query.name ].concat( result.rows );
-			else
-				returnArr[ query.name ] = result.rows;
-
-			if ( iterator )
-				iterator( result, retCounter);
-			
-			retCounter++;
-			
-			if ( retCounter == target && !hasSentCallback ){
-				if( !self.runningTransaction )
-					self.end();
-				return callback( returnArr, false );
-			}
-
+			returnArr[ query.name ] = result.rows;
+			next();
 		});
-	}
+	},
+	function(){
+		return callback( returnArr, false );
+	});
 };
 
 PGClient.prototype.storeSession = function( token , userId, organisationId ){
@@ -234,7 +199,7 @@ PGClient.prototype.fetchSlackInfo = function(token, userId, teamId){
 			};
 			if(!dataObj.profileImageURL)
 				dataObj.profileImageURL = data.user.profile.image_192;
-			var query = defs.user.select(defs.user.slackId).from(defs.user).where( defs.user.slackId.equals(userId)).toQuery()
+			var query = defs.user.select(defs.user.slackId).from(defs.user).where( defs.user.teamId.equals(teamId).and(defs.user.slackId.equals(userId))).toQuery()
 			self.performQuery(query, function(res, error){
 				if(res && res.rows){
 					var insUpQuery;
@@ -327,19 +292,15 @@ PGClient.prototype.validateToken = function( token , callback){
 Transactions handler
 */
 
-PGClient.prototype.transaction = function( handler ){
+PGClient.prototype.transaction = function(){
 	this.runningTransaction = true;
-	if ( handler && _.isFunction( handler ) ){
-		this.transactionErrorHandler = handler;
-	}
 	this.performQuery( "BEGIN" );
 };
 
-PGClient.prototype.rollback = function(callback, force){
+PGClient.prototype.rollback = function(callback){
 	var self = this;
 	this.performQuery( "ROLLBACK" ,function( result, error ){
 		self.runningTransaction = false;
-		self.end();
 		if ( callback )
 			callback( result, error );
 	});
@@ -350,7 +311,6 @@ PGClient.prototype.commit = function( callback ){
 	var self = this;
 	this.performQuery( "COMMIT" ,function( result, error ){
 		self.runningTransaction = false;
-		self.end();
 		if ( callback )
 			callback( result, error );
 	});

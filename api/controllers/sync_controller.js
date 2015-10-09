@@ -139,9 +139,7 @@ SyncController.prototype.insertAndSaveObjects = function( syncId, userId ){
 		else{
 
 			// Start a transaction before saving all objects
-			self.client.transaction( function( error ){
-				self.client.rollback();
-			});
+			self.client.transaction();
 			self.client.performQueries( queries, function( result, error , i){
 				self.logger.time( "finalized insertions and updates" );
 				if ( error )
