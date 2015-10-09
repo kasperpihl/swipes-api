@@ -119,9 +119,9 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
 		if ( !initialRelationShipQueries )
 			return getUpdates();
 
-		/*self.client.transaction( function( error ){
+		self.client.transaction( function( error ){
 			self.client.rollback();
-		});*/
+		});
 		self.logger.log("starting relationship updates");
 		self.client.performQueries( initialRelationShipQueries,function( result, error ){
 			// TODO: handle error
