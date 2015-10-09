@@ -1,18 +1,27 @@
 // ===========================================================================================================
 // Setup
 // ===========================================================================================================
-
+var COMMON = "../common/";
 var express =       require( 'express' ),
 	http    =       require( 'http' ),
 	bodyParser =    require( 'body-parser' ),
 	_ =             require( 'underscore' ),
 	APIController = require('./controllers/api_controller.js'),
 	WebhookController = require('./controllers/webhook_controller.js');
-
+var util = 				require(COMMON + 'utilities/util.js');
 http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
+
+// Catch any parsing errors
+app.use(function(err,req,res,next){
+	if(err){
+		util.sendBackError(err, res);
+	}
+	else
+		next();
+});
 process.on('uncaughtException', function (err) {
 	console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
 	console.error(err.stack)

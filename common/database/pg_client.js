@@ -72,18 +72,13 @@ PGClient.prototype.connect = function( callback ){
 
 
 PGClient.prototype.end = function(){
-	var self = this;
 	clearTimeout(this.timebomb);
-	function finalize(){
-		if ( self.done ){
-			self.done();
-			self.done = false;
-		}
-		self.client = false;
-		self.connected = false;
+	if ( this.done ){
+		this.done();
+		this.done = false;
 	}
-	finalize();
-	
+	this.client = false;
+	this.connected = false;
 };
 
 PGClient.prototype.performQuery = function ( query , callback ){
@@ -297,11 +292,8 @@ PGClient.prototype.validateToken = function( token , callback){
 Transactions handler
 */
 
-PGClient.prototype.transaction = function( handler ){
+PGClient.prototype.transaction = function(){
 	this.runningTransaction = true;
-	if ( handler && _.isFunction( handler ) ){
-		this.transactionErrorHandler = handler;
-	}
 	this.performQuery( "BEGIN" );
 };
 

@@ -50,10 +50,13 @@ exports.generateId = function( length ){
 	}
 	return text;
 }
-exports.sendBackError = function( error, res, logs ){
-	var sendError = {code:141,message:'Server error' };
+exports.sendBackError = function( error, res ){
+	var sendError = {ok: false, code:141,message:'Server error' };
 	if( error && _.isString( error ) )
 		sendError.message = error;
+	if(error && _.isError(error)){
+		sendError.message = JSON.parse(JSON.stringify(error, ['message'])).message;
+	}
 	else if( error && _.isObject(error) ){
 		if ( error.code ) 
 			sendError.code = error.code;
@@ -62,7 +65,6 @@ exports.sendBackError = function( error, res, logs ){
 		if ( error.hardSync )
 			sendError.hardSync = true;
 	}
-	sendError.ok = false;
 	res.status(400);
 	res.send( sendError );
 }
