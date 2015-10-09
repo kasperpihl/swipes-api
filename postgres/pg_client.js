@@ -11,7 +11,7 @@ pg.defaults.poolIdleTimeout = 12000;
 var _ = require('underscore');
 var sessionSeconds = 1 * 24 * 60 * 60 * 1000;
 function PGClient( logger, timerForDone ){
-	
+
 	this.connected = false;
 	this.done = false;
 	this.timedout = false;
@@ -37,9 +37,9 @@ PGClient.prototype.buildConString = function(){
 
 	var conString = process.env.DATABASE_URL;
 	if ( !conString && process.env.RDS_HOSTNAME ){
-		conString = "postgres://" + 
-					process.env.RDS_USERNAME + ":" + 
-					process.env.RDS_PASSWORD + "@" + 
+		conString = "postgres://" +
+					process.env.RDS_USERNAME + ":" +
+					process.env.RDS_PASSWORD + "@" +
 					process.env.RDS_HOSTNAME + ":" +
 					process.env.RDS_PORT + "/ebdb";
 	}
@@ -56,12 +56,12 @@ PGClient.prototype.connect = function( callback ){
 
 			if(pool.getPoolSize() > 70){
 				console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
-			
+
 				pool.drain(function() {
 				    pool.destroyAllNow();
 				    pool.destroy();
 				});
-				
+
 				return callback( false , "Drained pool" );
 			}*/
 			self.connected = true;
@@ -89,11 +89,11 @@ PGClient.prototype.end = function(){
 	if( this.runningTransaction ){
 		this.rollback( function(){
 		});
-		
+
 	}
 	else
 		finalize();
-	
+
 }
 
 PGClient.prototype.performQuery = function ( query , callback ){
@@ -111,10 +111,10 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		catch( err ){
 			self.end();
 			callback( null, err, query );
-			
+
 		}
-		
-		
+
+
 		return;
 
 	}
@@ -165,7 +165,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		}
 		if( err && self.transactionErrorHandler )
 			self.transactionErrorHandler( err );
-		
+
 		if ( callback )
 			callback( result , err, query );
 	});
@@ -176,7 +176,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		callback( null, err, query );
 		this.end();
 	}
-	
+
 };
 
 PGClient.prototype.performQueries = function ( queries, callback, iterator ){
@@ -185,20 +185,21 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
     return this.connect( function( connected , error ){
       if ( error )
         return callback ? callback( false, error, query ) : false;
+      console.log('not connected - connecting')
       self.performQueries ( queries, callback, iterator );
     });
   }
-	
+
 	if ( !queries || !_.isArray(queries) || queries.length == 0 )
 		return callback( false, "no queries provided" );
 
-	var i = 0, retCounter = 0 , target = queries.length, returnArr = {};	
+	var i = 0, retCounter = 0 , target = queries.length, returnArr = {};
 	var self = this;
 	var hasSentCallback = false;
 	for( var i = 0 ; i < queries.length ; i++ ){
 		var query = queries[ i ];
 		self.performQuery( query , function ( result , err, query ){
-			
+
 			if ( err ){
 				//console.log( err );
 				if( !hasSentCallback ){
@@ -206,7 +207,7 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 					return callback ? callback( false, err , retCounter ) : false;
 				}
 				return false;
-				
+
 			}
 
 			if( !query.name )
@@ -216,12 +217,10 @@ PGClient.prototype.performQueries = function ( queries, callback, iterator ){
 
 			if ( iterator )
 				iterator( result, retCounter);
-			
+
 			retCounter++;
-			
+
 			if ( retCounter == target && !hasSentCallback ){
-				if( !self.runningTransaction )
-					self.end();
 				return callback( returnArr, false );
 			}
 
@@ -248,7 +247,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
     			self.storeSession( token , user.id );
 
 	    },function( error, error2 ){
-	    	callback( false, error ); 
+	    	callback( false, error );
 	    });
 	};
 	if ( !store)
@@ -263,7 +262,7 @@ PGClient.prototype.validateToken = function( token , store , callback){
 			self.userId = result.rows[0].userId;
 			callback( result.rows[0].userId, false );
 		}
-		else 
+		else
 			validateFromParse( true );
 	});
 }
@@ -284,18 +283,16 @@ PGClient.prototype.rollback = function(callback, force){
 	var self = this;
 	this.performQuery( "ROLLBACK" ,function( result, error ){
 		self.runningTransaction = false;
-		self.end();
 		if ( callback )
 			callback( result, error );
 	});
-	
+
 };
 
 PGClient.prototype.commit = function( callback ){
 	var self = this;
 	this.performQuery( "COMMIT" ,function( result, error ){
 		self.runningTransaction = false;
-		self.end();
 		if ( callback )
 			callback( result, error );
 	});

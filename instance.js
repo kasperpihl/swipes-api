@@ -16,21 +16,21 @@ http.globalAgent.maxSockets = 25;
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 app.use(function(req, res, next) {
-  var allowedHost = [ 
-    "*" 
-  ]; 
-  if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) { 
-    res.header('Access-Control-Allow-Credentials', true); 
+  var allowedHost = [
+    "*"
+  ];
+  if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) {
+    res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS'); 
-    res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type'); 
-    if ('OPTIONS' === req.method) { 
-      res.writeHead(204); 
-      res.end(); 
-    } 
-    else { 
-      next(); 
-    } 
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5,Content-Type');
+    if ('OPTIONS' === req.method) {
+      res.writeHead(204);
+      res.end();
+    }
+    else {
+      next();
+    }
   }
   else next();
 });
@@ -65,13 +65,13 @@ app.route( '/move' ).get( function( req, res ){
   var to, from = req.query.from;
   if(users[from])
     from = users[from];
-  
+
   if ( req.query.to && users[req.query.to] ){
     to = users[req.query.to];
   }
   else
     return res.jsonp({code:142,message:"'to' must be defined (firstName)"});
-  
+
   var moveController = new MoveController( client, logger );
   moveController.copyDataFromUserToUser( from, to, function(results, error){
     //console.log(results);
@@ -81,7 +81,7 @@ app.route( '/move' ).get( function( req, res ){
     else{
       res.jsonp({"status":"success"});
     }
-    
+
   });
   return ;
 });
@@ -100,7 +100,7 @@ function handleAdd( req, res, next){
     logger.setIdentifier( userId );
 
     var handler = new PGHandler( client , logger );
-    
+
     handler.add( req.body, userId, function( result , error ){
       logger.time('Finished request', true);
       if(client.timedout){
@@ -134,15 +134,7 @@ function handleSync( req, res, next ){
 
   var logger = new Logger();
   var client = new PGClient( logger, 1000 );
-  //process.setMaxListeners(0);
-  process.on('uncaughtException', function (err) {
-    if(client !== null && client){
-      client.end();
-    }
-    console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
-    console.error(err.stack)
-    process.exit(1)
-  })
+
   client.validateToken( req.body.sessionToken , versionNumber , function( userId, error){
     // TODO: send proper error back that fits clients handling
     if ( error ){
@@ -155,8 +147,8 @@ function handleSync( req, res, next ){
     var handler = new PGHandler( client , logger );
     if ( req.body.hasMoreToSave )
       handler.hasMoreToSave = true;
-    
-    
+
+
     handler.sync( req.body, userId, function( result , error ){
       logger.time('Finished request', true);
       if(client.timedout){

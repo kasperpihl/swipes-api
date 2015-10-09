@@ -5,6 +5,7 @@ var Parse = require('parse').Parse;
 
 function PGHandler( client, logger ){
 	this.logger = logger;
+  this.logger.forceOutput = true;
 	//this.logger.forceOutput = true;
 	this.client = client;
 	this.didSave = false;
