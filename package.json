@@ -17,7 +17,9 @@
     "q": "*",
     "request": "~2.51.0",
     "sql": "0.47.0",
-    "underscore": "1.8.x"
+    "underscore": "1.8.x",
+    "bluebird": "2.10.2",
+    "async": "1.4.2"
   },
   "engines": {
     "node": "0.12.x"
