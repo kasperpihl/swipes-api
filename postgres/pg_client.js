@@ -26,7 +26,7 @@ function PGClient( logger, timerForDone ){
 		this.timebomb = setTimeout(function(){
 			//console.log(new Date() + ": Timebomb exploded");
 			if(self){
-				self.end();
+				//self.end();
 				self.timedout = true;
 			}
 		}, timerForDone);
@@ -51,9 +51,9 @@ PGClient.prototype.connect = function( callback ){
   this.connected = true;
 	pg.connect( this.conString, function( err, client, done ) {
 		if ( !err ){
-			/*var pool = pg.pools.getOrCreate(self.conString);
+			var pool = pg.pools.getOrCreate(self.conString);
 
-			if(pool.getPoolSize() > 70){
+			if(pool.getPoolSize() > 50){
 				console.log(new Date().toISOString(), "pool size", pool.getPoolSize(), "available", pool.availableObjectsCount(), "waiting", pool.waitingClientsCount()); //1
 
 				pool.drain(function() {
@@ -62,7 +62,7 @@ PGClient.prototype.connect = function( callback ){
 				});
 
 				return callback( false , "Drained pool" );
-			}*/
+			}
 			self.connected = true;
 			self.client = client;
 			self.done = done;
@@ -98,22 +98,12 @@ PGClient.prototype.performQuery = function ( query , callback ){
 	if( this.timedout )
 		return callback ? callback( false, {code:510, message:"Request Timed Out"}, query ) : false;
 	if ( !this.connected ){
-		try{
-			this.connect( function( connected , error ){
-				if ( error )
-					return callback ? callback( false, error, query ) : false;
-				self.performQuery ( query, callback );
-			});
-		}
-		catch( err ){
-			self.end();
-			callback( null, err, query );
-
-		}
-
-
+		this.connect( function( connected , error ){
+			if ( error )
+				return callback ? callback( false, error, query ) : false;
+			self.performQuery ( query, callback );
+		});
 		return;
-
 	}
 
 	var args = [];
@@ -143,6 +133,10 @@ PGClient.prototype.performQuery = function ( query , callback ){
 			self.logger.log( args[1] );
 			self.logger.log( err );
 		}
+		if(self.timedout){
+			self.end();
+			return callback ? callback( false, {code:510, message:"Request Timed Out"}, query ) : false;
+		}
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		if(resultTime > 3500){
@@ -165,18 +159,14 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		if ( callback )
 			callback( result , err, query );
 	});
-	try{
-		this.client.query.apply( this.client, args );
-	}
-	catch( err ){
-		callback( null, err, query );
-		this.end();
-	}
-
+	this.client.query.apply( this.client, args );
 };
 
 PGClient.prototype.performQueries = function ( queries, callback, iterator ){
   var self = this;
+  if( this.timedout )
+	return callback ? callback( false, {code:510, message:"Request Timed Out"} ) : false;
+	
 	if ( !this.connected ){
     return this.connect( function( connected , error ){
       if ( error )
