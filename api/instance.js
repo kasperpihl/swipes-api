@@ -14,7 +14,11 @@ http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
-
+process.on('uncaughtException', function (err) {
+	console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
+	console.error(err.stack)
+	process.exit(1)
+});
 
 // ===========================================================================================================
 // Middle ware to set headers enabling CORS
