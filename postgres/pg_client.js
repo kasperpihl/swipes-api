@@ -24,7 +24,7 @@ function PGClient( logger, timerForDone ){
 	if( timerForDone ){
 		var self = this;
 		this.timebomb = setTimeout(function(){
-			console.log(new Date() + ": Timebomb exploded");
+			//console.log(new Date() + ": Timebomb exploded");
 			if(self){
 				self.end();
 				self.timedout = true;
@@ -146,7 +146,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
 		var endTime = new Date().getTime();
 		var resultTime = (endTime - startTime);
 		if(resultTime > 3500){
-			console.log(new Date() + " query delayed with " + resultTime + " ms for user " + self.userId, query.text );
+			console.log(new Date() + ": " + resultTime, query.text, query.values );
 			/*console.log( query.values );*/
 		}
 		var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
