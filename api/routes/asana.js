@@ -11,6 +11,8 @@ var COMMON = '../../common/';
 
 var ORIGIN = process.env.ORIGIN;
 var DATABASE_URL = process.env.DATABASE_URL;
+var slackTeamId = null;
+var slackUserId = null;
 
 var router = express.Router();
 var slackConnector = new SlackConnector();
@@ -51,6 +53,23 @@ function performQuery(query) {
 	return deferred.promise;
 }
 
+function getSlackInfo() {
+	var deferred = Q.defer();
+
+	slackConnector.request("auth.test", {}, function(data, error) {
+		if (error) {
+			deferred.reject(new Error(error));
+		}
+
+		slackTeamId = data['team_id'];
+		slackUserId = data['user_id'];
+
+		deferred.resolve();
+	})
+
+	return deferred.promise;
+}
+
 function getSlackChannels() {
 	var deferred = Q.defer();
 
@@ -61,6 +80,138 @@ function getSlackChannels() {
 
 		deferred.resolve(res);
 	})
+
+	return deferred.promise;
+}
+
+function handleInsertingTasks(options) {
+	var tasks = options.tasks;
+	var projects = options.projects;
+	var deferred = Q.defer();
+
+	if (tasks.length === 0) {
+		deferred.resolve();
+	}
+
+	// Get channels ids
+	getSlackChannels().then(function (res) {
+		var filteredChannels = {};
+		var slackChannels = res.channels || [];
+
+		projects.forEach(function (project) {
+			var name = getSlug(project.name);
+
+			slackChannels.forEach(function (channel) {
+				if (name === channel.name) {
+					filteredChannels[channel.name] = channel.id;
+				}
+			})
+		});
+
+		tasks.forEach(function (task) {
+			var projectId = task.projects[0].id;
+			var slackChannelId = null;
+			var promiseArray = [];
+			var localId = util.generateId(12);
+			var deleted = false;
+
+			projects.forEach(function (project) {
+				if (project.id === projectId) {
+					slackChannelId = filteredChannels[getSlug(project.name)];
+				}
+			});
+
+			var query = {
+				name : "insert_shared_todo_asana",
+				text: 'INSERT into todo (title, "projectLocalId", "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+				values: [
+					task.name,
+					slackChannelId,
+					slackTeamId,
+					slackUserId,
+					'false',
+					'now()',
+					task.id,
+					localId,
+					'now()',
+					'["'+ slackUserId +'"]'
+				]
+			};
+
+			promiseArray.push(
+				performQuery(query)
+			);
+
+			Q.all(promiseArray).then(function () {
+				deferred.resolve();
+			}).fail(function (err) {
+				deferred.reject(new Error(err));
+			})
+		});
+	}).fail(function (err) {
+		deferred.reject(new Error(err));
+	});
+
+	return deferred.promise;
+}
+
+function handleUpdatingTasks(options) {
+	var tasks = options.tasks;
+	var deferred = Q.defer();
+	var promiseArray = [];
+
+	tasks.forEach(function (taskId) {
+		// check if the user is in the assignees array (jsonb)
+		var query = {
+				name: "if_is_in_assignees_array",
+				text: "SELECT id, assignees from todo WHERE asana_id=$1 and assignees ? $2",
+				values: [taskId, slackUserId]
+			}
+
+		promiseArray.push(
+			performQuery(query)
+		)
+	})
+
+	Q.all(promiseArray).then(function (results) {
+		var promiseArray = [];
+
+		results.forEach(function (result, idx) {
+			if (result.rows.length > 0) {
+				var row = result.rows[0];
+				var id = row.id;
+				var assignees = row.assignees;
+				var query = {};
+
+				if (assignees.length > 0) {
+					assignees.push(slackUserId);
+				} else {
+					assignees = [slackUserId];
+				}
+
+				assignees = JSON.stringify(assignees);
+
+				query = {
+					name: "update_assignees_array",
+					text: "UPDATE todo SET assignees = $1 WHERE id=$2",
+					values: [assignees, id]
+				}
+
+				//deferred.resolve();
+				promiseArray.push(
+					performQuery(query)
+				)
+			}
+		});
+
+		Q.all(promiseArray).then(function () {
+			deferred.resolve();
+		}).fail(function(err) {
+			deferred.reject(new Error(err));
+		});
+	}).fail(function (err) {
+		deferred.reject(new Error(err));
+	});
 
 	return deferred.promise;
 }
@@ -97,45 +248,36 @@ function handlePrivateTasks(options) {
 			deferred.resolve();
 		}
 
-		slackConnector.request("auth.test", {}, function(data, error) {
-			if (error) {
-				deferred.reject(new Error(error));
-			}
+		tasksToInsert.forEach(function (task) {
+			var promiseArray = [];
+			var localId = util.generateId(12);
+			var deleted = false;
+			var query = {
+				name : "insert_todo_asana",
+				text: 'INSERT into todo (title, "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees, "toUserId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+				values: [
+					task.name,
+					slackTeamId,
+					slackUserId,
+					'false',
+					'now()',
+					task.id,
+					localId,
+					'now()',
+					'null',
+					slackUserId
+				]
+			};
 
-			var ownerId = data['team_id'];
-			var userId = data['user_id'];
+			promiseArray.push(
+				performQuery(query)
+			);
 
-			tasksToInsert.forEach(function (task) {
-				var promiseArray = [];
-				var localId = util.generateId(12);
-				var deleted = false;
-				var query = {
-					name : "insert_todo_asana",
-					text: 'INSERT into todo (title, "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees, "toUserId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-					values: [
-						task.name,
-						ownerId,
-						userId,
-						'false',
-						'now()',
-						task.id,
-						localId,
-						'now()',
-						'null',
-						userId
-					]
-				};
-
-				promiseArray.push(
-					performQuery(query)
-				);
-
-				Q.all(promiseArray).then(function () {
-					deferred.resolve();
-				}).fail(function (err) {
-					deferred.reject(new Error(err));
-				})
-			});
+			Q.all(promiseArray).then(function () {
+				deferred.resolve();
+			}).fail(function (err) {
+				deferred.reject(new Error(err));
+			})
 		});
 	}).fail(function (err) {
 		deferred.reject(new Error("Error while checking for duplicated tasks"));
@@ -206,82 +348,24 @@ function handleSharedTasks(options) {
 			})
 
 			Q.all(promiseArray).then(function (results) {
-				// Get channels ids
-				getSlackChannels().then(function (res) {
-					var tasksToInsert = [];
-					var filteredChannels = {};
-					var slackChannels = res.channels || [];
+				var tasksToInsert = [];
+				var tasksToUpdate = [];
 
-					results.forEach(function (result, idx) {
-						// There is no task with that asana_id.. we should add it
-						if (result.rows.length === 0) {
-							tasksToInsert.push(tasks[idx]);
-						}
-					});
+				results.forEach(function (result, idx) {
+					// There is no task with that asana_id.. we should add it
+					if (result.rows.length === 0) {
+						tasksToInsert.push(tasks[idx]);
+					} else {
+						// Here we only need the ids of the tasks
+						tasksToUpdate.push(tasks[idx].id);
+					}
+				});
 
-					projects.forEach(function (project) {
-						var name = getSlug(project.name);
-
-						slackChannels.forEach(function (channel) {
-							if (name === channel.name) {
-								filteredChannels[channel.name] = channel.id;
-							}
-						})
-					});
-
-					slackConnector.request("auth.test", {}, function(data, error) {
-						if (error) {
-							deferred.reject(new Error(error));
-						}
-
-						var ownerId = data['team_id'];
-						var userId = data['user_id'];
-
-						if (tasksToInsert.length === 0) {
-							deferred.resolve();
-						}
-
-						tasksToInsert.forEach(function (task) {
-							var projectId = task.projects[0].id;
-							var slackChannelId = null;
-							var promiseArray = [];
-							var localId = util.generateId(12);
-							var deleted = false;
-
-							projects.forEach(function (project) {
-								if (project.id === projectId) {
-									slackChannelId = filteredChannels[getSlug(project.name)];
-								}
-							});
-
-							var query = {
-								name : "insert_shared_todo_asana",
-								text: 'INSERT into todo (title, "projectLocalId", "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-								values: [
-									task.name,
-									slackChannelId,
-									ownerId,
-									userId,
-									'false',
-									'now()',
-									task.id,
-									localId,
-									'now()',
-									'["'+ userId +'"]'
-								]
-							};
-
-							promiseArray.push(
-								performQuery(query)
-							);
-
-							Q.all(promiseArray).then(function () {
-								deferred.resolve();
-							}).fail(function (err) {
-								deferred.reject(new Error(err));
-							})
-						});
-					});
+				Q.all([
+					handleUpdatingTasks({tasks: tasksToUpdate}),
+					handleInsertingTasks({tasks: tasksToInsert, projects: projects})
+				]).then(function () {
+					deferred.resolve()
 				}).fail(function (err) {
 					deferred.reject(new Error(err));
 				});
@@ -322,59 +406,64 @@ router.post("/import", function (req, res) {
 
 	slackConnector.setToken(body.sessionToken);
 
-	if (token) {
-		client.useOauth({ credentials: token });
+	getSlackInfo().then(function () {
+		if (token) {
+			client.useOauth({ credentials: token });
 
-		client.users.me()
-			.then(function (user) {
-				var userId = user.id;
-				// We are going with the default workspace for now
-				var defaultWorkspaceId = user.workspaces[0].id;
+			client.users.me()
+				.then(function (user) {
+					var userId = user.id;
+					// We are going with the default workspace for now
+					var defaultWorkspaceId = user.workspaces[0].id;
 
-				// Return a promise here
-				return client.tasks.findAll({
-					assignee: userId,
-					workspace: defaultWorkspaceId,
-					completed_since: 'now',
-					opt_fields: 'id, name, completed, projects'
-				});
-			})
-			.then(function (response) {
-				return response.data;
-			})
-			.filter(function (task) {
-				// we will import only current tasks
-				// the check for name !== '' is there because in asana you have one placeholder task
-				return task.name !== '' && task.completed === false;
-			})
-			.then(function (list) {
-				// The tasks that have projects will not be private
-				var privateTasks = []
-				var sharedTasks = []
-
-				list.forEach(function (task) {
-					if (task.projects.length > 0) {
-						sharedTasks.push(task);
-					} else {
-						privateTasks.push(task);
-					}
+					// Return a promise here
+					return client.tasks.findAll({
+						assignee: userId,
+						workspace: defaultWorkspaceId,
+						completed_since: 'now',
+						opt_fields: 'id, name, completed, projects'
+					});
 				})
-
-				Q.all([
-					handlePrivateTasks({client: client, tasks: privateTasks}),
-					handleSharedTasks({client: client, tasks: sharedTasks})
-				])
-				.then(function () {
-					performQuery("deallocate all")
-					res.status(200).json({});
-				}).fail(function (err) {
-					performQuery("deallocate all")
-					res.status(400).json({})
+				.then(function (response) {
+					return response.data;
 				})
-			})
-	} else {
-		res.end('Missing asana token');
-	}
+				.filter(function (task) {
+					// we will import only current tasks
+					// the check for name !== '' is there because in asana you have one placeholder task
+					return task.name !== '' && task.completed === false;
+				})
+				.then(function (list) {
+					// The tasks that have projects will not be private
+					var privateTasks = []
+					var sharedTasks = []
+
+					list.forEach(function (task) {
+						if (task.projects.length > 0) {
+							sharedTasks.push(task);
+						} else {
+							privateTasks.push(task);
+						}
+					})
+
+					Q.all([
+						handlePrivateTasks({tasks: privateTasks}),
+						handleSharedTasks({client: client, tasks: sharedTasks})
+					])
+					.then(function () {
+						performQuery("deallocate all")
+						res.status(200).json({});
+					}).fail(function (err) {
+						console.log(err);
+						performQuery("deallocate all")
+						res.status(400).json({})
+					})
+				})
+		} else {
+			res.end('Missing asana token');
+		}
+	}).fail(function (err) {
+		res.status(400).json({})
+	})
 });
 
 router.post("/asanaToken", function (req, res) {
