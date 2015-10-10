@@ -365,9 +365,10 @@ router.post("/import", function (req, res) {
 					handleSharedTasks({client: client, tasks: sharedTasks})
 				])
 				.then(function () {
+					performQuery("deallocate all")
 					res.status(200).json({});
 				}).fail(function (err) {
-					console.log(err);
+					performQuery("deallocate all")
 					res.status(400).json({})
 				})
 			})
