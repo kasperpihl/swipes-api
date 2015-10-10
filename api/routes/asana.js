@@ -38,7 +38,6 @@ function performQuery(query) {
 			deferred.reject(new Error("Could not connect to postgres " + JSON.stringify(err)));
 		}
 
-		// T_TODO the query is not escaped!!!
 		client.query(query, function(err, result) {
 			if(err) {
 				deferred.reject(new Error("Error running query " + JSON.stringify(err)));
@@ -72,9 +71,15 @@ function handlePrivateTasks(options) {
 	var promiseArray = [];
 
 	tasks.forEach(function (task) {
+		// check if the task is already in the database
+		var query = {
+				name: "if_exist_with_asana_id",
+				text: "SELECT id FROM todo WHERE asana_id=$1",
+				values: [task.id]
+			}
+
 		promiseArray.push(
-			// check if the task is already in the database
-			performQuery('SELECT id FROM todo WHERE asana_id=' + task.id)
+			performQuery(query)
 		)
 	})
 
@@ -104,10 +109,22 @@ function handlePrivateTasks(options) {
 				var promiseArray = [];
 				var localId = util.generateId(12);
 				var deleted = false;
-
-				// T_TODO the data from asana is not escaped!!!
-				var query = 'INSERT into todo (title, "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees, "toUserId") ';
-					query += 'VALUES (\''+ task.name +'\', \''+ ownerId +'\', \''+ userId +'\', false, now(), \''+ task.id +'\', \''+ localId +'\', now(), null, \''+ userId +'\')'
+				var query = {
+					name : "insert_todo_asana",
+					text: 'INSERT into todo (title, "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees, "toUserId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+					values: [
+						task.name,
+						ownerId,
+						userId,
+						'false',
+						'now()',
+						task.id,
+						localId,
+						'now()',
+						'null',
+						userId
+					]
+				};
 
 				promiseArray.push(
 					performQuery(query)
@@ -176,9 +193,15 @@ function handleSharedTasks(options) {
 			var promiseArray = [];
 
 			tasks.forEach(function (task) {
+				var query = {
+						name: "if_exist_with_asana_id",
+						text: "SELECT id FROM todo WHERE asana_id=$1",
+						values: [task.id]
+					}
+
 				promiseArray.push(
 					// check if the task is already in the database
-					performQuery('SELECT id FROM todo WHERE asana_id=' + task.id)
+					performQuery(query)
 				);
 			})
 
@@ -231,9 +254,22 @@ function handleSharedTasks(options) {
 								}
 							});
 
-							// T_TODO the data from asana is not escaped!!!
-							var query = 'INSERT into todo (title, "projectLocalId", "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees) ';
-								query += 'VALUES (\''+ task.name +'\', \''+ slackChannelId +'\', \''+ ownerId +'\', \''+ userId +'\', false, now(), \''+ task.id +'\', \''+ localId +'\', now(), \'["'+ userId +'"]\')'
+							var query = {
+								name : "insert_shared_todo_asana",
+								text: 'INSERT into todo (title, "projectLocalId", "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+								values: [
+									task.name,
+									slackChannelId,
+									ownerId,
+									userId,
+									'false',
+									'now()',
+									task.id,
+									localId,
+									'now()',
+									'["'+ userId +'"]'
+								]
+							};
 
 							promiseArray.push(
 								performQuery(query)
