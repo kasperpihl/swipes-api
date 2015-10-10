@@ -20,7 +20,8 @@
     "request": "~2.51.0",
     "speakingurl": "^6.0.0",
     "sql": "0.47.0",
-    "underscore": "1.8.x"
+    "underscore": "1.8.x",
+    "cookie-parser": "1.4.0"
   },
   "engines": {
     "node": "0.12.x"

@@ -9,6 +9,7 @@ var express =       require( 'express' ),
 	_ =             require( 'underscore' ),
 	APIController = require('./controllers/api_controller.js'),
 	asanaRouter = require('./routes/asana.js'),
+	cookieParser = require('cookie-parser'),
 	WebhookController = require('./controllers/webhook_controller.js');
 var util = 				require(COMMON + 'utilities/util.js');
 

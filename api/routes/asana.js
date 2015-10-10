@@ -66,9 +66,70 @@ function getSlackChannels() {
 	return deferred.promise;
 }
 
+function handlePrivateTasks(options) {
+	var tasks = options.tasks;
+	var deferred = Q.defer();
+	var promiseArray = [];
+
+	tasks.forEach(function (task) {
+		promiseArray.push(
+			// check if the task is already in the database
+			performQuery('SELECT id FROM todo WHERE asana_id=' + task.id)
+		)
+	})
+
+	Q.all(promiseArray).then(function (results) {
+		var tasksToInsert = [];
+
+		results.forEach(function (result, idx) {
+			// There is no task with that asana_id.. we should add it
+			if (result.rows.length === 0) {
+				tasksToInsert.push(tasks[idx]);
+			}
+		});
+
+		if (tasksToInsert.length === 0) {
+			deferred.resolve();
+		}
+
+		slackConnector.request("auth.test", {}, function(data, error) {
+			if (error) {
+				deferred.reject(new Error(error));
+			}
+
+			var ownerId = data['team_id'];
+			var userId = data['user_id'];
+
+			tasksToInsert.forEach(function (task) {
+				var promiseArray = [];
+				var localId = util.generateId(12);
+				var deleted = false;
+
+				// T_TODO the data from asana is not escaped!!!
+				var query = 'INSERT into todo (title, "ownerId", "userId", deleted, "updatedAt", asana_id, "localId", schedule, assignees, "toUserId") ';
+					query += 'VALUES (\''+ task.name +'\', \''+ ownerId +'\', \''+ userId +'\', false, now(), \''+ task.id +'\', \''+ localId +'\', now(), null, \''+ userId +'\')'
+
+				promiseArray.push(
+					performQuery(query)
+				);
+
+				Q.all(promiseArray).then(function () {
+					deferred.resolve();
+				}).fail(function (err) {
+					deferred.reject(new Error(err));
+				})
+			});
+		});
+	}).fail(function (err) {
+		deferred.reject(new Error("Error while checking for duplicated tasks"));
+	});
+
+	return deferred.promise;
+}
+
 function handleSharedTasks(options) {
 	var client = options.client;
-	var tasks = options.sharedTasks;
+	var tasks = options.tasks;
 	var deferred = Q.defer();
 	var promiseArray = [];
 	var uniqueProjects = []
@@ -113,7 +174,6 @@ function handleSharedTasks(options) {
 			}
 
 			var promiseArray = [];
-			var channels = res; // if there is a channel with that name the response is {ok: false, error: "name_taken"}
 
 			tasks.forEach(function (task) {
 				promiseArray.push(
@@ -264,11 +324,10 @@ router.post("/import", function (req, res) {
 					}
 				})
 
-				//T_TODO We have to handle private tasks too
-				handleSharedTasks({
-					client: client,
-					sharedTasks: sharedTasks
-				})
+				Q.all([
+					handlePrivateTasks({client: client, tasks: privateTasks}),
+					handleSharedTasks({client: client, tasks: sharedTasks})
+				])
 				.then(function () {
 					res.status(200).json({});
 				}).fail(function (err) {
