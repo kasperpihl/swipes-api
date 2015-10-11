@@ -5,8 +5,10 @@
   "author": "Kasper Pihl Tornøe <kasper@swipesapp.com>",
   "dependencies": {
     "asana": "^0.11.0",
+    "async": "1.4.2",
     "aws-sdk": "*",
     "backbone": "1.1.x",
+    "bluebird": "2.10.2",
     "body-parser": "1.x",
     "contextio": "*",
     "express": "4.13.0",
@@ -16,10 +18,10 @@
     "pg": "4.3.0",
     "q": "*",
     "request": "~2.51.0",
+    "speakingurl": "^6.0.0",
     "sql": "0.47.0",
     "underscore": "1.8.x",
-    "bluebird": "2.10.2",
-    "async": "1.4.2"
+    "cookie-parser": "1.4.0"
   },
   "engines": {
     "node": "0.12.x"
