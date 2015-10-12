@@ -30,7 +30,7 @@ router.post('/channels.create', function (req, res, next) {
           if (util.isEmpty(results)) {
             res.status(409).json({err: 'There is a channel with that name.'});
           } else {
-            res.status(200).json({ok: true});
+            res.status(200).json({ok: true, results: {}});
           }
         }).error(function (err) {
           conn.close();
@@ -48,7 +48,7 @@ router.get('/channels.list', function (req, res, next) {
         .then(function (cursor) {
           cursor.toArray().then(function (array) {
             conn.close();
-            res.status(200).json({ok: true, channels: array});
+            res.status(200).json({ok: true, results: array});
           });
         }).error(function (err) {
           conn.close();
