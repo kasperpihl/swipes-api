@@ -58,9 +58,6 @@ app.route( '/').get( function(req,res,next){
 app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 
-//app.route( '/v1/:action' ).post( function(req, res){ new APIController().callAction(req.params.action, req, res); });
-//app.route( '/v1/:action' ).get( function(req, res){ new APIController().callAction(req.params.action, req, res); });
-
 // ===========================================================================================================
 // Error handlers / they should be at the end of the middleware stack!!!
 // ===========================================================================================================

@@ -1,10 +1,6 @@
-var r = require('rethinkdb');
 var randomstring = require('randomstring');
 
 var util = {
-  rethinkdbOnConnect: function () {
-    return r.connect({host: 'localhost', port: 28015, db: 'swipes' });
-  },
   // type is one of the slack types [U, C, G]
   // U for user
   // C for channel

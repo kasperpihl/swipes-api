@@ -3,25 +3,18 @@ var getSlug = require('speakingurl');
 var r = require('rethinkdb');
 var moment = require('moment');
 var util = require('../util.js');
-var onConnect = util.rethinkdbOnConnect;
+var db = require('../db.js');
 var generateId = util.generateSlackLikeId;
 
 var router = express.Router();
 
 router.get('/channels.list', function (req, res, next) {
-  onConnect()
-    .then(function (conn) {
-      r.table("channels").run(conn)
-        .then(function (cursor) {
-          cursor.toArray().then(function (array) {
-            conn.close();
-            res.status(200).json({ok: true, results: array});
-          });
-        }).error(function (err) {
-          conn.close();
-          return next(err);
-        });
-    }).error(function (err) {
+  var query = r.table("channels");
+
+  db.rethinkQuery(query)
+    .then(function (results) {
+        res.status(200).json({ok: true, results: results});
+    }).catch(function (err) {
       return next(err);
     });
 });
@@ -34,62 +27,44 @@ router.post('/channels.create', function (req, res, next) {
   doc.is_archived = false;
   doc.created = moment().unix();
 
-  onConnect()
-    .then(function (conn) {
-      r.branch(
-        r.table("channels").getAll(doc.name, {index: "name"}).isEmpty(),
-        r.table('channels').insert(doc),
-        {}
-      ).run(conn)
-        .then(function (results) {
-          conn.close();
+  var query = r.branch(
+          r.table("channels").getAll(doc.name, {index: "name"}).isEmpty(),
+          r.table('channels').insert(doc),
+          {}
+        );
 
-          if (util.isEmpty(results)) {
-            res.status(409).json({err: 'There is a channel with that name.'});
-          } else {
-            res.status(200).json({ok: true});
-          }
-        }).error(function (err) {
-          conn.close();
-          return next(err);
-        });
-    }).error(function (err) {
+  db.rethinkQuery(query)
+    .then(function (results) {
+      if (util.isEmpty(results)) {
+        res.status(409).json({err: 'There is a channel with that name.'});
+      } else {
+        res.status(200).json({ok: true});
+      }
+    }).catch(function (err) {
       return next(err);
     });
 });
 
 router.post('/channels.archive', function (req, res, next) {
   var id = req.body.id;
+  var query = r.table("channels").get(id).update({is_archived: true});
 
-  onConnect()
-    .then(function (conn) {
-      r.table("channels").get(id).update({is_archived: true}).run(conn)
-        .then(function () {
-          conn.close();
-          res.status(200).json({ok: true});
-        }).error(function (err) {
-          conn.close();
-          return next(err);
-        });
-    }).error(function (err) {
+  db.rethinkQuery(query)
+    .then(function (results) {
+      res.status(200).json({ok: true});
+    }).catch(function (err) {
       return next(err);
     });
 });
 
 router.post('/channels.unarchive', function (req, res, next) {
   var id = req.body.id;
+  var query = r.table("channels").get(id).update({is_archived: false});
 
-  onConnect()
-    .then(function (conn) {
-      r.table("channels").get(id).update({is_archived: false}).run(conn)
-        .then(function () {
-          conn.close();
-          res.status(200).json({ok: true});
-        }).error(function (err) {
-          conn.close();
-          return next(err);
-        });
-    }).error(function (err) {
+  db.rethinkQuery(query)
+    .then(function (results) {
+      res.status(200).json({ok: true});
+    }).catch(function (err) {
       return next(err);
     });
 });
