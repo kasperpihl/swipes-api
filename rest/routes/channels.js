@@ -28,7 +28,7 @@ router.post('/channels.create', function (req, res, next) {
           conn.close();
 
           if (util.isEmpty(results)) {
-            res.status(400).json({err: 'There is a channel with that name.'});
+            res.status(409).json({err: 'There is a channel with that name.'});
           } else {
             res.status(200).json({});
           }
