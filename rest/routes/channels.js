@@ -22,14 +22,14 @@ router.get('/channels.list', function (req, res, next) {
 
 router.post('/channels.create', function (req, res, next) {
   var doc = {};
-  var name = validator.trim(req.body.name);
+  var name = getSlug(validator.trim(req.body.name));
 
   if (validator.isNull(name)) {
     return res.status(409).json({err: 'The name cannot be empty!'});
   }
 
   doc.id = generateId('C');
-  doc.name = getSlug(name);
+  doc.name = name;
   doc.is_archived = false;
   doc.created = moment().unix();
 
@@ -46,6 +46,28 @@ router.post('/channels.create', function (req, res, next) {
       } else {
         res.status(200).json({ok: true});
       }
+    }).catch(function (err) {
+      return next(err);
+    });
+});
+
+router.post('/channels.rename', function (req, res, next) {
+  var id = req.body.id;
+  var name = getSlug(validator.trim(req.body.name));
+
+  if (validator.isNull(id)) {
+    return res.status(409).json({err: 'Id is required!'});
+  }
+
+  if (validator.isNull(name)) {
+    return res.status(409).json({err: 'The name cannot be empty!'});
+  }
+
+  var query = r.table("channels").get(id).update({name: name});
+
+  db.rethinkQuery(query)
+    .then(function (results) {
+      res.status(200).json({ok: true});
     }).catch(function (err) {
       return next(err);
     });
