@@ -8,6 +8,23 @@ var generateId = util.generateSlackLikeId;
 
 var router = express.Router();
 
+router.get('/channels.list', function (req, res, next) {
+  onConnect()
+    .then(function (conn) {
+      r.table("channels").run(conn)
+        .then(function (cursor) {
+          cursor.toArray().then(function (array) {
+            conn.close();
+            res.status(200).json({ok: true, results: array});
+          });
+        }).error(function (err) {
+          conn.close();
+          return next(err);
+        });
+    }).error(function (err) {
+      return next(err);
+    });
+});
 
 router.post('/channels.create', function (req, res, next) {
   var doc = {};
@@ -30,7 +47,7 @@ router.post('/channels.create', function (req, res, next) {
           if (util.isEmpty(results)) {
             res.status(409).json({err: 'There is a channel with that name.'});
           } else {
-            res.status(200).json({ok: true, results: {}});
+            res.status(200).json({ok: true});
           }
         }).error(function (err) {
           conn.close();
@@ -41,15 +58,33 @@ router.post('/channels.create', function (req, res, next) {
     });
 });
 
-router.get('/channels.list', function (req, res, next) {
+router.post('/channels.archive', function (req, res, next) {
+  var id = req.body.id;
+
   onConnect()
     .then(function (conn) {
-      r.table("channels").run(conn)
-        .then(function (cursor) {
-          cursor.toArray().then(function (array) {
-            conn.close();
-            res.status(200).json({ok: true, results: array});
-          });
+      r.table("channels").get(id).update({is_archived: true}).run(conn)
+        .then(function () {
+          conn.close();
+          res.status(200).json({ok: true});
+        }).error(function (err) {
+          conn.close();
+          return next(err);
+        });
+    }).error(function (err) {
+      return next(err);
+    });
+});
+
+router.post('/channels.unarchive', function (req, res, next) {
+  var id = req.body.id;
+
+  onConnect()
+    .then(function (conn) {
+      r.table("channels").get(id).update({is_archived: false}).run(conn)
+        .then(function () {
+          conn.close();
+          res.status(200).json({ok: true});
         }).error(function (err) {
           conn.close();
           return next(err);
