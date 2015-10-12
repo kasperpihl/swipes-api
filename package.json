@@ -24,7 +24,8 @@
     "rethinkdb": "^2.1.1",
     "speakingurl": "^6.0.0",
     "sql": "0.47.0",
-    "underscore": "1.8.x"
+    "underscore": "1.8.x",
+    "validator": "^4.1.0"
   },
   "engines": {
     "node": "0.12.x"

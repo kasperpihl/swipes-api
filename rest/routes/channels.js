@@ -2,6 +2,7 @@ var express = require( 'express' );
 var getSlug = require('speakingurl');
 var r = require('rethinkdb');
 var moment = require('moment');
+var validator = require('validator');
 var util = require('../util.js');
 var db = require('../db.js');
 var generateId = util.generateSlackLikeId;
@@ -21,9 +22,14 @@ router.get('/channels.list', function (req, res, next) {
 
 router.post('/channels.create', function (req, res, next) {
   var doc = {};
+  var name = validator.trim(req.body.name);
+
+  if (validator.isNull(name)) {
+    return res.status(409).json({err: 'The name cannot be empty!'});
+  }
 
   doc.id = generateId('C');
-  doc.name = getSlug(req.body.name);
+  doc.name = getSlug(name);
   doc.is_archived = false;
   doc.created = moment().unix();
 
