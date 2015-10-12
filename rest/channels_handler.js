@@ -8,7 +8,7 @@ var COMMON = 			'../common/';
 var inherits = 			require('util').inherits;
 var util = 				require(COMMON + 'utilities/util.js');
 var Logger =			require(COMMON + 'utilities/logger.js' );
-var PGClient =        	require("./pg_client.js");
+//var PGClient =        	require("./pg_client.js");
 var Q = 				require("q");
 
 

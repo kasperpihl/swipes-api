@@ -3,27 +3,23 @@
 // ===========================================================================================================
 
 var COMMON = "../common/";
-var express =       require( 'express' ),
-	http    =       require( 'http' ),
-	bodyParser =    require( 'body-parser' ),
-	_ =             require( 'underscore' ),
-	APIController = require('./api_controller.js');
-var util = 				require(COMMON + 'utilities/util.js');
+var express = require( 'express' );
+var http = require( 'http' );
+var bodyParser = require( 'body-parser' );
+var _ = require( 'underscore' );
+var APIController = require('./api_controller.js');
+var util = require(COMMON + 'utilities/util.js');
 
 http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
-//app.use(cookieParser());
 
-// Catch any parsing errors, wrong json etc
-app.use(function(err,req,res,next){
-	if(err){
-		util.sendBackError(err, res);
-	}
-	else
-		next();
-});
+// ===========================================================================================================
+// Require routes
+// ===========================================================================================================
+var channelsRouter = require('./routes/channels.js');
+var tasksRouter = require('./routes/tasks.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', function (err) {
@@ -33,7 +29,7 @@ process.on('uncaughtException', function (err) {
 });
 
 // ===========================================================================================================
-// Middle ware to set headers enabling CORS
+// Middleware to set headers enabling CORS
 // ===========================================================================================================
 app.use(function(req, res, next) {
 	var allowedHost = [
@@ -62,11 +58,29 @@ app.route( '/').get( function(req,res,next){
 	res.send("Swipes synchronization services - online");
 });
 
-// Main Route
-// =========================================================================================================
-app.route( '/v1/:action' ).post( function(req, res){ new APIController().callAction(req.params.action, req, res); });
-app.route( '/v1/:action' ).get( function(req, res){ new APIController().callAction(req.params.action, req, res); });
+app.use('/v1', channelsRouter);
+app.use('/v1', tasksRouter);
 
+//app.route( '/v1/:action' ).post( function(req, res){ new APIController().callAction(req.params.action, req, res); });
+//app.route( '/v1/:action' ).get( function(req, res){ new APIController().callAction(req.params.action, req, res); });
+
+// ===========================================================================================================
+// Error handlers / they should be at the end of the middleware stack!!!
+// ===========================================================================================================
+
+function logErrors(err, req, res, next) {
+  // We can use some service like loggy to log errors
+  console.error(err.stack);
+  next(err);
+}
+
+function clientErrorHandler(err, req, res, next) {
+  //TODO we have to support different error codes
+  res.status(500).send({ error: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
+}
+
+app.use(logErrors);
+app.use(clientErrorHandler);
 
 // ===========================================================================================================
 // Start the server
