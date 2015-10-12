@@ -41,4 +41,22 @@ router.post('/channels.create', function (req, res, next) {
     });
 });
 
+router.get('/channels.list', function (req, res, next) {
+  onConnect()
+    .then(function (conn) {
+      r.table("channels").run(conn)
+        .then(function (cursor) {
+          cursor.toArray().then(function (array) {
+            conn.close();
+            res.status(200).json(array);
+          });
+        }).error(function (err) {
+          conn.close();
+          return next(err);
+        });
+    }).error(function (err) {
+      return next(err);
+    });
+});
+
 module.exports = router;

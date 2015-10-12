@@ -2,13 +2,10 @@
 // Setup
 // ===========================================================================================================
 
-var COMMON = "../common/";
 var express = require( 'express' );
 var http = require( 'http' );
 var bodyParser = require( 'body-parser' );
 var _ = require( 'underscore' );
-var APIController = require('./api_controller.js');
-var util = require(COMMON + 'utilities/util.js');
 
 http.globalAgent.maxSockets = 25;
 
