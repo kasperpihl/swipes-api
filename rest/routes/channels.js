@@ -10,7 +10,7 @@ var generateId = util.generateSlackLikeId;
 var router = express.Router();
 
 router.get('/channels.list', function (req, res, next) {
-  var query = r.table("channels");
+  var query = r.table('channels');
 
   db.rethinkQuery(query)
     .then(function (results) {
@@ -34,7 +34,7 @@ router.post('/channels.create', function (req, res, next) {
   doc.created = moment().unix();
 
   var query = r.branch(
-          r.table("channels").getAll(doc.name, {index: "name"}).isEmpty(),
+          r.table('channels').getAll(doc.name, {index: 'name'}).isEmpty(),
           r.table('channels').insert(doc),
           {}
         );
@@ -63,7 +63,7 @@ router.post('/channels.rename', function (req, res, next) {
     return res.status(409).json({err: 'The name cannot be empty!'});
   }
 
-  var query = r.table("channels").get(id).update({name: name});
+  var query = r.table('channels').get(id).update({name: name});
 
   db.rethinkQuery(query)
     .then(function (results) {
@@ -75,7 +75,7 @@ router.post('/channels.rename', function (req, res, next) {
 
 router.post('/channels.archive', function (req, res, next) {
   var id = req.body.id;
-  var query = r.table("channels").get(id).update({is_archived: true});
+  var query = r.table('channels').get(id).update({is_archived: true});
 
   db.rethinkQuery(query)
     .then(function (results) {
@@ -87,7 +87,7 @@ router.post('/channels.archive', function (req, res, next) {
 
 router.post('/channels.unarchive', function (req, res, next) {
   var id = req.body.id;
-  var query = r.table("channels").get(id).update({is_archived: false});
+  var query = r.table('channels').get(id).update({is_archived: false});
 
   db.rethinkQuery(query)
     .then(function (results) {

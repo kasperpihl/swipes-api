@@ -30,9 +30,9 @@ process.on('uncaughtException', function (err) {
 // ===========================================================================================================
 app.use(function(req, res, next) {
 	var allowedHost = [
-		"*"
+		'*'
 	];
-	if(allowedHost.indexOf("*") !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) {
+	if(allowedHost.indexOf('*') !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) {
 		res.header('Access-Control-Allow-Credentials', true);
 		res.header('Access-Control-Allow-Origin', '*');
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
 // Routes
 // ===========================================================================================================
 app.route( '/').get( function(req,res,next){
-	res.send("Swipes synchronization services - online");
+	res.send('Swipes synchronization services - online');
 });
 
 app.use('/v1', channelsRouter);
