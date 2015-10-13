@@ -22,6 +22,7 @@ app.use(parseErrorHandler);
 // ===========================================================================================================
 // Require routes
 // ===========================================================================================================
+var usersRouter = require('./routes/users.js');
 var channelsRouter = require('./routes/channels.js');
 var tasksRouter = require('./routes/tasks.js');
 
@@ -62,6 +63,7 @@ app.route( '/').get( function(req,res,next){
 	res.send('Swipes synchronization services - online');
 });
 
+app.use('/v1', usersRouter);
 app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 
