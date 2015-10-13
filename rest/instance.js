@@ -11,6 +11,14 @@ http.globalAgent.maxSockets = 25;
 
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
+function parseErrorHandler(err, req, res, next) {
+  //TODO we have to support different error codes
+  if(err)
+  	res.status(500).send({ error: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
+  else
+  	next()
+}
+app.use(parseErrorHandler);
 
 // ===========================================================================================================
 // Require routes
@@ -68,13 +76,8 @@ function logErrors(err, req, res, next) {
   next(err);
 }
 
-function clientErrorHandler(err, req, res, next) {
-  //TODO we have to support different error codes
-  res.status(500).send({ error: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
-}
-
 app.use(logErrors);
-app.use(clientErrorHandler);
+
 
 // ===========================================================================================================
 // Start the server
