@@ -46,7 +46,8 @@ router.post('/users.create', function (req, res, next) {
     id: generateId("U"),
     email: email,
     username: username,
-    password: sha1(password)
+    password: sha1(password),
+    created: moment().unix()
   }
 
   var query = r.branch(
