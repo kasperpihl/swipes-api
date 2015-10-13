@@ -9,6 +9,17 @@ var generateId = util.generateSlackLikeId;
 
 var router = express.Router();
 
+router.get('/users.list', function (req, res, next) {
+  var query = r.table('users');
+
+  db.rethinkQuery(query)
+    .then(function (results) {
+        res.status(200).json({ok: true, results: results});
+    }).catch(function (err) {
+      return next(err);
+    });
+});
+
 router.post('/users.create', function (req, res, next) {
   var email = validator.trim(req.body.email);
   var username = validator.trim(req.body.username);
