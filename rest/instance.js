@@ -12,9 +12,8 @@ http.globalAgent.maxSockets = 25;
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 function parseErrorHandler(err, req, res, next) {
-  //TODO we have to support different error codes
   if(err)
-  	res.status(500).send({ error: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
+  	res.status(400).send({ error: 'Invalid json.' });
   else
   	next()
 }
@@ -67,7 +66,7 @@ app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 
 // ===========================================================================================================
-// Error handlers / they should be at the end of the middleware stack!!!
+// Error handlers / they should be at the end of the middleware stack
 // ===========================================================================================================
 
 function logErrors(err, req, res, next) {
@@ -76,7 +75,15 @@ function logErrors(err, req, res, next) {
   next(err);
 }
 
+function unhandledServerError(err, req, res, next) {
+  if(err)
+  	res.status(500).send({ error: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
+  else
+  	next()
+}
+
 app.use(logErrors);
+app.use(unhandledServerError);
 
 
 // ===========================================================================================================
