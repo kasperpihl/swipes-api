@@ -23,8 +23,8 @@ router.get('/users.list', function (req, res, next) {
 router.post('/users.create', function (req, res, next) {
   var email = validator.trim(req.body.email);
   var username = validator.trim(req.body.username);
-  var password = validator.trim(req.body.password);
-  var repassword = validator.trim(req.body.repassword);
+  var password = req.body.password;
+  var repassword = req.body.repassword;
 
   if (!validator.isEmail(email)) {
     return res.status(409).json({err: 'Ivalid email!'});

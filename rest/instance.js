@@ -6,10 +6,15 @@ var express = require( 'express' );
 var http = require( 'http' );
 var bodyParser = require( 'body-parser' );
 var _ = require( 'underscore' );
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var util = require('./util.js');
 
 http.globalAgent.maxSockets = 25;
 
 var app = express();
+
+app.use(cookieParser());
 app.use(bodyParser.json( { limit: 3000000 } ) );
 function parseErrorHandler(err, req, res, next) {
   if(err) {
@@ -20,9 +25,16 @@ function parseErrorHandler(err, req, res, next) {
 }
 app.use(parseErrorHandler);
 
+app.use(session({
+  resave: true,
+  saveUninitialized: false,
+  secret: 'swipy the dinocat'
+}));
+
 // ===========================================================================================================
 // Require routes
 // ===========================================================================================================
+var usersAuth = require('./routes/users_auth.js');
 var usersRouter = require('./routes/users.js');
 var channelsRouter = require('./routes/channels.js');
 var tasksRouter = require('./routes/tasks.js');
@@ -64,6 +76,9 @@ app.route( '/').get( function(req,res,next){
 	res.send('Swipes synchronization services - online');
 });
 
+app.use('/v1', usersAuth);
+
+app.use('/v1', util.checkAuth);
 app.use('/v1', usersRouter);
 app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);

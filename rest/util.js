@@ -14,6 +14,13 @@ var util = {
   // suports only objects for now
   isEmpty: function (obj) {
     return Object.keys(obj).length === 0;
+  },
+  checkAuth: function (req, res, next) {
+    if (!req.session.userId) {
+      res.status(400).json({err: 'You are not authorized.'});
+    } else {
+      next();
+    }
   }
 };
 

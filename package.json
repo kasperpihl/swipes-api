@@ -13,6 +13,7 @@
     "contextio": "*",
     "cookie-parser": "1.4.0",
     "express": "4.13.0",
+    "express-session": "^1.11.3",
     "forky": "0.1.2",
     "googleapis": "^2.0.5",
     "moment": "^2.10.6",
