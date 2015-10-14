@@ -9,6 +9,10 @@ var generateId = util.generateSlackLikeId;
 
 var router = express.Router();
 
+function createTeam() {
+
+}
+
 router.get('/users.list', function (req, res, next) {
   var query = r.table('users');
 
@@ -42,23 +46,38 @@ router.post('/users.create', function (req, res, next) {
     return res.status(409).json({err: 'The passwords must match!'});
   }
 
-  var doc = {
-    id: generateId("U"),
+  var userId = generateId("U");
+  var teamId = generateId("T");
+
+  var userDoc = {
+    id: userId,
     email: email,
     username: username,
     password: sha1(password),
     created: moment().unix()
   }
 
+  var teamDoc = {
+    id: teamId,
+    name: 'Personal team',
+    ownerId: userId,
+    type: 'personal',
+    users: [userId]
+  }
+
+  var selectOrganizationId = r.table('organizations').limit(1)("id").nth(0);
+  var insertUser = r.table('users').insert(
+    r.expr(userDoc).merge(
+      {'organizationId': selectOrganizationId}
+    )
+  );
+  var insertTeam = r.table('teams').insert(teamDoc);
+
   var query = r.table('organizations').coerceTo('array').do(
     function (organizations) {
       return r.branch(
-        r.table('users').getAll(doc.email, {index: 'email'}).isEmpty(),
-        r.table('users').insert(
-          r.expr(doc).merge(
-            {'organizationId': r.db("swipes").table('organizations').limit(1)("id").nth(0)}
-          )
-        ),
+        r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
+        r.do(insertUser, insertTeam),
         {}
       );
     }
