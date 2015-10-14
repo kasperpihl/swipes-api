@@ -9,10 +9,6 @@ var generateId = util.generateSlackLikeId;
 
 var router = express.Router();
 
-function createTeam() {
-
-}
-
 router.get('/users.list', function (req, res, next) {
   var query = r.table('users');
 
