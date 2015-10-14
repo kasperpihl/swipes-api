@@ -12,10 +12,11 @@ http.globalAgent.maxSockets = 25;
 var app = express();
 app.use(bodyParser.json( { limit: 3000000 } ) );
 function parseErrorHandler(err, req, res, next) {
-  if(err)
+  if(err) {
   	res.status(400).send({ error: 'Invalid json.' });
-  else
+  } else {
   	next()
+  }
 }
 app.use(parseErrorHandler);
 
