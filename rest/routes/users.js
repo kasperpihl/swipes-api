@@ -50,10 +50,18 @@ router.post('/users.create', function (req, res, next) {
     created: moment().unix()
   }
 
-  var query = r.branch(
-    r.table('users').getAll(doc.email, {index: 'email'}).isEmpty(),
-    r.table('users').insert(doc),
-    {}
+  var query = r.table('organizations').coerceTo('array').do(
+    function (organizations) {
+      return r.branch(
+        r.table('users').getAll(doc.email, {index: 'email'}).isEmpty(),
+        r.table('users').insert(
+          r.expr(doc).merge(
+            {'organizationId': r.db("swipes").table('organizations').limit(1)("id").nth(0)}
+          )
+        ),
+        {}
+      );
+    }
   );
 
   db.rethinkQuery(query)
