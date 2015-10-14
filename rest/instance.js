@@ -76,9 +76,13 @@ app.route( '/').get( function(req,res,next){
 	res.send('Swipes synchronization services - online');
 });
 
+// Routes for which we don't need authentication
 app.use('/v1', usersAuth);
 
+// Check if the user is logged
 app.use('/v1', util.checkAuth);
+
+// Routes for which we need authentication
 app.use('/v1', usersRouter);
 app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
