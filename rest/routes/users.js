@@ -1,11 +1,6 @@
 var express = require( 'express' );
 var r = require('rethinkdb');
-var moment = require('moment');
-var validator = require('validator');
-var sha1 = require('sha1');
-var util = require('../util.js');
 var db = require('../db.js');
-var generateId = util.generateSlackLikeId;
 
 var router = express.Router();
 
