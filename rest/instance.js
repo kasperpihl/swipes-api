@@ -3,6 +3,7 @@
 // ===========================================================================================================
 
 var express = require( 'express' );
+var cors = require('cors');
 var http = require( 'http' );
 var bodyParser = require( 'body-parser' );
 var _ = require( 'underscore' );
@@ -15,6 +16,12 @@ http.globalAgent.maxSockets = 25;
 var app = express();
 
 app.use(cookieParser());
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: 'swipy the dinocat'
+}));
+
 app.use(bodyParser.json( { limit: 3000000 } ) );
 function parseErrorHandler(err, req, res, next) {
   if(err) {
@@ -24,12 +31,6 @@ function parseErrorHandler(err, req, res, next) {
   }
 }
 app.use(parseErrorHandler);
-
-app.use(session({
-  resave: true,
-  saveUninitialized: false,
-  secret: 'swipy the dinocat'
-}));
 
 // ===========================================================================================================
 // Require routes
@@ -47,39 +48,29 @@ process.on('uncaughtException', function (err) {
 });
 
 // ===========================================================================================================
-// Middleware to set headers enabling CORS
-// ===========================================================================================================
-app.use(function(req, res, next) {
-	var allowedHost = [
-		'*'
-	];
-	if(allowedHost.indexOf('*') !==-1 || allowedHost.indexOf(req.headers.origin) !== -1) {
-		res.header('Access-Control-Allow-Credentials', true);
-		res.header('Access-Control-Allow-Origin', '*');
-		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-		res.header('Access-Control-Allow-Headers','X-Requested-With, Content-MD5, Content-Type, Content-Length');
-
-		if ('OPTIONS' === req.method) {
-			res.sendStatus(200);
-		}
-		else {
-			next();
-		}
-	}
-	else next();
-});
-
-// ===========================================================================================================
 // Routes
 // ===========================================================================================================
 app.route( '/').get( function(req,res,next){
 	res.send('Swipes synchronization services - online');
 });
 
+
+// ===========================================================================================================
+// Middleware for enabling cors for all /v1 routes
+// Without preflight request. We will not use them for now.
+// ===========================================================================================================
+var corsOptions = {
+  origin: 'http://localhost:9000',
+  methods: 'HEAD, GET, POST',
+  allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
+  credentials: true
+}
+app.use('/v1', cors(corsOptions));
+
 // Routes for which we don't need authentication
 app.use('/v1', usersAuth);
 
-// Check if the user is logged
+// Middleware to check if the user is logged
 app.use('/v1', util.checkAuth);
 
 // Routes for which we need authentication

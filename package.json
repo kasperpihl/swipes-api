@@ -12,6 +12,7 @@
     "body-parser": "1.x",
     "contextio": "*",
     "cookie-parser": "1.4.0",
+    "cors": "^2.7.1",
     "express": "4.13.0",
     "express-session": "^1.11.3",
     "forky": "0.1.2",

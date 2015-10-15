@@ -23,9 +23,7 @@ router.get('/users.logout', function (req, res, next) {
 
 router.post('/users.login', function (req, res, next) {
   var email = validator.trim(req.body.email);
-  var password = req.body.password
-    ? sha1(req.body.password)
-    : ''
+  var password = req.body.password ? sha1(req.body.password) : '';
 
   if (!validator.isEmail(email)) {
     return res.status(409).json({err: 'Ivalid email!'});
