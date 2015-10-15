@@ -135,6 +135,7 @@ router.post('/users.create', function (req, res, next) {
           errors: [{field: 'email', message: 'There is a user with that email.'}]
         });
       } else {
+        req.session.userId = userId;
         res.status(200).json({ok: true});
       }
     }).catch(function (err) {
