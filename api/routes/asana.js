@@ -451,7 +451,7 @@ router.post("/import", function (req, res) {
 					])
 					.then(function () {
 						performQuery("deallocate all")
-						res.status(200).json({});
+						res.status(200).json({ok: true});
 					}).fail(function (err) {
 						console.log(err);
 						performQuery("deallocate all")
@@ -478,7 +478,7 @@ router.post("/asanaToken", function (req, res) {
 
 		client.users.me().then(function(me) {
 			// We don't use redirect here because it's not allowed for cross-origin requests that require preflight.
-			res.status(200).json({redirect: ORIGIN + '/#asana_import'});
+			res.status(200).json({ok: true, redirect: ORIGIN + '/#asana_import'});
 		}).catch(function(err) {
 			// T_TODO handle errors better
 			res.end('Error fetching user: ' + err);
@@ -488,7 +488,7 @@ router.post("/asanaToken", function (req, res) {
 		var asanaAuthorizeUrl = client.app.asanaAuthorizeUrl();
 
 		// We don't use redirect here because it's not allowed for cross-origin requests that require preflight.
-		res.status(200).json({redirect: asanaAuthorizeUrl});
+		res.status(200).json({ok: true, redirect: asanaAuthorizeUrl});
 	}
 });
 
