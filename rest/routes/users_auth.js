@@ -1,3 +1,7 @@
+"use strict";
+
+const TEAM_ID = process.env.TEAM_ID;
+
 var express = require( 'express' );
 var r = require('rethinkdb');
 var validator = require('validator');
@@ -102,30 +106,15 @@ router.post('/users.create', function (req, res, next) {
     created: moment().unix()
   }
 
-  var teamDoc = {
-    id: teamId,
-    name: 'Personal team',
-    ownerId: userId,
-    type: 'personal',
-    users: [userId]
-  }
+  var insertUser = r.table('users').insert(userDoc);
+  var appendUserToTeam = r.table('teams').get(TEAM_ID).update({
+    users: r.row('users').append(userId)
+  });
 
-  var selectOrganizationId = r.table('organizations').limit(1)("id").nth(0);
-  var insertUser = r.table('users').insert(
-    r.expr(userDoc).merge(
-      {'organizationId': selectOrganizationId}
-    )
-  );
-  var insertTeam = r.table('teams').insert(teamDoc);
-
-  var query = r.table('organizations').coerceTo('array').do(
-    function (organizations) {
-      return r.branch(
-        r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
-        r.do(insertUser, insertTeam),
-        {}
-      );
-    }
+  var query = r.branch(
+    r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
+    r.do(insertUser),
+    {}
   );
 
   db.rethinkQuery(query)
@@ -135,8 +124,13 @@ router.post('/users.create', function (req, res, next) {
           errors: [{field: 'email', message: 'There is a user with that email.'}]
         });
       } else {
-        req.session.userId = userId;
-        res.status(200).json({ok: true});
+        db.rethinkQuery(appendUserToTeam)
+          .then(function () {
+            req.session.userId = userId;
+            res.status(200).json({ok: true});
+          }).catch(function (err) {
+            return next(err);
+          });
       }
     }).catch(function (err) {
       return next(err);
