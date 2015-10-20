@@ -1,9 +1,12 @@
 "use strict";
 
+const TEAM_ID = 'TSMFYIEKK';
+
 let r = require('rethinkdb');
 let util = require('./util.js');
 let db = require('./db.js');
 let Promise = require('bluebird'); // we should use native promises one day
+let generateId = util.generateSlackLikeId;
 
 let tables = ['users', 'teams', 'channels', 'messages'];
 let indexes = {
@@ -11,7 +14,7 @@ let indexes = {
   users: 'email'
 }
 let teamDoc = {
-  id: 'TSMFYIEKK',
+  id: TEAM_ID,
   name: 'Swipes HQ',
   parent: null,
   users: [],
@@ -23,6 +26,7 @@ r.connect({host: 'localhost', port: 28015 })
     r.dbCreate('swipes').run(conn)
       .then(res => {
         conn.close();
+        console.log('creating tables');
 
         let tablesCreateArray = [];
 
@@ -34,6 +38,8 @@ r.connect({host: 'localhost', port: 28015 })
         })
 
         Promise.all(tablesCreateArray).then(res => {
+          console.log('creating indexes');
+
           let tablesCreateIndexArray = [];
 
           Object.keys(indexes).forEach(key => {
@@ -48,9 +54,25 @@ r.connect({host: 'localhost', port: 28015 })
             let query = r.table('teams').insert(teamDoc);
 
             db.rethinkQuery(query).then(res => {
-              console.log('DONE');
+              createChannels();
             })
           })
         })
       })
   })
+
+
+let createChannels = () => {
+  console.log('creating some channels');
+
+  let channels = [
+    {id: generateId('C'), name: "general", teamId: TEAM_ID},
+    {id: generateId('C'), name: "random", teamId: TEAM_ID}
+  ]
+
+  let query = r.table('channels').insert(channels);
+
+  db.rethinkQuery(query).then(res => {
+    console.log('DONE');
+  })
+}
