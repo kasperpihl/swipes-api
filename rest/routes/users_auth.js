@@ -32,7 +32,7 @@ router.post('/users.login', function (req, res, next) {
   var password = req.body.password ? sha1(req.body.password) : '';
 
   if (!validator.isEmail(email)) {
-    return res.status(409).json({errors: [{field: 'email', message: 'Ivalid email!'}]});
+    return res.status(409).json({ok:false,errors: [{field: 'email', message: 'Invalid email!'}]});
   }
 
   var query = r.table('users').filter({

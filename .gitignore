@@ -1,5 +1,6 @@
 .elasticbeanstalk/
 .DS_Store
+rethinkdb_data
 # Logs
 logs
 *.log
