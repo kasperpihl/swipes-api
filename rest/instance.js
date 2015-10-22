@@ -1,19 +1,18 @@
 // ===========================================================================================================
 // Setup
 // ===========================================================================================================
+var PORT = Number(process.env.PORT || 5000);
 
-var express = require( 'express' );
+
+var app = require( 'express' )();
+var server = app.listen(PORT);
+var io = require('socket.io').listen(server);
 var cors = require('cors');
-var http = require( 'http' );
 var bodyParser = require( 'body-parser' );
 var _ = require( 'underscore' );
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var util = require('./util.js');
-
-http.globalAgent.maxSockets = 25;
-
-var app = express();
 
 app.use(cookieParser());
 app.use(session({
@@ -58,7 +57,6 @@ app.route( '/').get( function(req,res,next){
 
 // ===========================================================================================================
 // Middleware for enabling cors for all /v1 routes
-// Without preflight request. We will not use them for now.
 // ===========================================================================================================
 var corsOptions = {
   origin: 'http://localhost:9000',
@@ -80,6 +78,9 @@ app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 app.use('/v1', rtmRouter);
 
+// require our socketio module and pass the io instance
+require('./socketio/socketio.js')(io);
+
 // ===========================================================================================================
 // Error handlers / they should be at the end of the middleware stack
 // ===========================================================================================================
@@ -100,11 +101,4 @@ function unhandledServerError(err, req, res, next) {
 app.use(logErrors);
 app.use(unhandledServerError);
 
-
-// ===========================================================================================================
-// Start the server
-// ===========================================================================================================
-
-var PORT = Number(process.env.PORT || 5000);
-app.listen(PORT);
 console.log('server started on port %s', PORT);

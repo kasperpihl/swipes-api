@@ -15,7 +15,7 @@ var handleCursors = function (results) {
           results.close();
 
           return resolve(array);
-        }).error(function () {
+        }).error(function (err) {
           results.close();
 
           return reject(err);
@@ -37,9 +37,11 @@ var rethinkdb = {
         .then(function (conn) {
           query.run(conn)
             .then(function (results) {
-              conn.close();
+              if (!options.feed) {
+                conn.close();
+              }
 
-              if (options.cursor) {
+              if (options.cursor || options.feed) {
                 return resolve(results);
               } else {
                 handleCursors(results)
