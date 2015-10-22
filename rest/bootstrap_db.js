@@ -7,6 +7,7 @@ let util = require('./util.js');
 let db = require('./db.js');
 let Promise = require('bluebird'); // we should use native promises one day
 let generateId = util.generateSlackLikeId;
+let moment = require('moment');
 
 let tables = ['users', 'teams', 'channels', 'messages'];
 let indexes = {
@@ -66,8 +67,8 @@ let createChannels = () => {
   console.log('creating some channels');
 
   let channels = [
-    {id: generateId('C'), name: "general", teamId: TEAM_ID},
-    {id: generateId('C'), name: "random", teamId: TEAM_ID}
+    {id: generateId('C'), name: "general", teamId: TEAM_ID, created: moment().unix()},
+    {id: generateId('C'), name: "random", teamId: TEAM_ID, created: moment().unix()}
   ]
 
   let query = r.table('channels').insert(channels);
