@@ -72,6 +72,7 @@ router.post('/channels.rename', function (req, res, next) {
 
   db.rethinkQuery(query)
     .then(function (results) {
+      // r.table('events').insert({event_name:"channel_renamed","team_id":"team1234","data":{"channeldata..."}}),
       res.status(200).json({ok: true});
     }).catch(function (err) {
       return next(err);

@@ -7,7 +7,7 @@ let db = require('../db.js');
 
 let channelChanges = (socket) => {
   let insertQ =
-    r.table('channels')
+    r.table('events')
       .filter({teamId: TEAM_ID})
       .changes()
 
