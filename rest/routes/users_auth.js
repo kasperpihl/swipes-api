@@ -106,7 +106,21 @@ router.post('/users.create', function (req, res, next) {
     created: moment().unix()
   }
 
-  var insertUser = r.table('users').insert(userDoc);
+  var insertUser =
+    r.table('channels')
+      .filter((doc) => {
+        return doc('is_general').eq(true)
+      })
+      .coerceTo('array')
+      .do((channel) => {
+        return r.table('users')
+          .insert(
+            r.expr(userDoc)
+              .merge(
+                {channels: channel('id')}
+              )
+          )
+      })
   var appendUserToTeam = r.table('teams').get(TEAM_ID).update({
     users: r.row('users').append(userId)
   });
