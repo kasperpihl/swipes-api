@@ -39,6 +39,7 @@ var usersRouter = require('./routes/users.js');
 var channelsRouter = require('./routes/channels.js');
 var tasksRouter = require('./routes/tasks.js');
 var rtmRouter = require('./routes/rtm.js');
+var chatRouter = require('./routes/chat.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', function (err) {
@@ -77,6 +78,7 @@ app.use('/v1', usersRouter);
 app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 app.use('/v1', rtmRouter);
+app.use('/v1', chatRouter);
 
 // require our socketio module and pass the io instance
 require('./socketio/socketio.js')(io);
