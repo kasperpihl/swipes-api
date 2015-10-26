@@ -8,8 +8,9 @@ let db = require('../db.js');
 module.exports.channelChanges = (socket) => {
   let insertQ =
     r.table('channels')
-      .filter({teamId: TEAM_ID})
-      .changes()
+      .filter((doc) => {
+        return doc('teamId').eq(TEAM_ID).and(doc('id').match("^C"))
+      }).changes()
 
     db.rethinkQuery(insertQ, {feed: true})
       .then((cursor) => {
