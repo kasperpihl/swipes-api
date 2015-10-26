@@ -46,6 +46,9 @@ router.get('/rtm.start', (req, res, next) => {
         users: data[2]
       }
 
+      // require our socketio module and pass the io instance
+      require('../socketio/socketio.js')(req.app.locals.io, userId);
+
       res.status(200).json(rtmResponse);
     }).catch(err => {
       return next(err);
