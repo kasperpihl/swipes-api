@@ -54,14 +54,16 @@ module.exports.channelChanges = (socket) => {
               }
 
               data = {
-                channel: n.id
+                id: n.id
                 // T_TODO put user ID here
               }
             }
 
             if (o.deleted !== n.deleted && n.deleted === true) {
               type = 'channel_deleted';
-              data = {channel: n.id};
+              data = {
+                id: n.id
+              };
             }
           }
 
