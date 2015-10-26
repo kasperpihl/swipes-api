@@ -30,7 +30,7 @@ module.exports.channelChanges = (socket) => {
 
             type = 'channel_created';
             data = {
-              id: n.id,
+              channel_id: n.id,
               name: n.name,
               created: n.created
               // T_TODO put user ID here `creator`
@@ -42,7 +42,7 @@ module.exports.channelChanges = (socket) => {
             if (o.name !== n.name) {
               type = 'channel_rename';
               data = {
-                id: n.id,
+                channel_id: n.id,
                 name: n.name
               };
             }
@@ -55,7 +55,7 @@ module.exports.channelChanges = (socket) => {
               }
 
               data = {
-                id: n.id
+                channel_id: n.id
                 // T_TODO put user ID here
               }
             }
@@ -63,7 +63,7 @@ module.exports.channelChanges = (socket) => {
             if (o.deleted !== n.deleted && n.deleted === true) {
               type = 'channel_deleted';
               data = {
-                id: n.id
+                channel_id: n.id
               };
             }
           }
