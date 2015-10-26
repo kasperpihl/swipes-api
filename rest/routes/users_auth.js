@@ -121,6 +121,7 @@ router.post('/users.create', function (req, res, next) {
               )
           )
       })
+      
   var appendUserToTeam = r.table('teams').get(TEAM_ID).update({
     users: r.row('users').append(userId)
   });

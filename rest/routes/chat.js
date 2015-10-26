@@ -15,11 +15,11 @@ var router = express.Router();
 
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
-  let channel = req.body.channel;
+  let channelId = req.body.channel_id;
   let user = req.body.user;
   let text = req.body.text;
 
-  if (validator.isNull(channel)) {
+  if (validator.isNull(channelId)) {
     return res.status(409).json({err: 'The channel id cannot be empty!'});
   }
 
@@ -33,7 +33,7 @@ router.post('/chat.send', (req, res, next) => {
 
   let ts = moment().unix();
   let doc = {
-    channel: channel,
+    channel_id: channelId,
     user: user,
     text: text,
     ts: ts
