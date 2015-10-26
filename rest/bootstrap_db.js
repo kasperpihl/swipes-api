@@ -67,8 +67,21 @@ let createChannels = () => {
   console.log('creating some channels');
 
   let channels = [
-    {id: generateId('C'), name: "general", type: "public", teamId: TEAM_ID, created: moment().unix()},
-    {id: generateId('C'), name: "random", type: "public", teamId: TEAM_ID, created: moment().unix()}
+    {
+      id: generateId('C'),
+      name: "general",
+      type: "public",
+      is_general: true,
+      teamId: TEAM_ID,
+      created: moment().unix()
+    },
+    {
+      id: generateId('C'),
+      name: "random",
+      type: "public",
+      teamId: TEAM_ID,
+      created: moment().unix()
+    }
   ]
 
   let query = r.table('channels').insert(channels);
