@@ -21,6 +21,13 @@ app.use(session({
   secret: 'swipy the dinocat'
 }));
 
+app.use(cors({
+  origin: 'http://localhost:9000',
+  methods: 'HEAD, GET, POST',
+  allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
+  credentials: true
+}));
+
 app.use(bodyParser.json( { limit: 3000000 } ) );
 function parseErrorHandler(err, req, res, next) {
   if(err) {
@@ -54,18 +61,6 @@ process.on('uncaughtException', function (err) {
 app.route( '/').get( function(req,res,next){
 	res.send('Swipes synchronization services - online');
 });
-
-
-// ===========================================================================================================
-// Middleware for enabling cors for all /v1 routes
-// ===========================================================================================================
-var corsOptions = {
-  origin: 'http://localhost:9000',
-  methods: 'HEAD, GET, POST',
-  allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
-  credentials: true
-}
-app.use('/v1', cors(corsOptions));
 
 // Routes for which we don't need authentication
 app.use('/v1', usersAuth);
