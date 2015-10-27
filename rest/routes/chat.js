@@ -2,16 +2,17 @@
 
 const TEAM_ID = process.env.TEAM_ID;
 
-var express = require( 'express' );
-var getSlug = require('speakingurl');
-var r = require('rethinkdb');
-var moment = require('moment');
-var validator = require('validator');
-var util = require('../util.js');
-var db = require('../db.js');
-var generateId = util.generateSlackLikeId;
+let express = require( 'express' );
+let getSlug = require('speakingurl');
+let r = require('rethinkdb');
+let moment = require('moment');
+let validator = require('validator');
+let util = require('../util.js');
+let db = require('../db.js');
+let generateId = util.generateSlackLikeId;
+let randomNumber = util.randomNumber;
 
-var router = express.Router();
+let router = express.Router();
 
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
@@ -32,7 +33,7 @@ router.post('/chat.send', (req, res, next) => {
     return res.status(409).json({err: 'You can\'t send an empty message!'});
   }
 
-  let ts = moment().unix();
+  let ts = moment().valueOf() + randomNumber(4) + "";
   let doc = {
     channel_id: channelId,
     user_id: user_id,

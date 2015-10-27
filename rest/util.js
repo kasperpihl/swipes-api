@@ -11,6 +11,14 @@ var util = {
 
     return type + id;
   },
+  randomNumber: function (length) {
+    number = randomstring.generate({
+      length: length,
+      charset: 'numeric'
+    });
+
+    return number;
+  },
   // suports only objects for now
   isEmpty: function (obj) {
     return Object.keys(obj).length === 0;
