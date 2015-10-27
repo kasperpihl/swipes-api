@@ -5,12 +5,11 @@ const TEAM_ID = process.env.TEAM_ID;
 let express = require( 'express' );
 let getSlug = require('speakingurl');
 let r = require('rethinkdb');
-let moment = require('moment');
 let validator = require('validator');
 let util = require('../util.js');
 let db = require('../db.js');
 let generateId = util.generateSlackLikeId;
-let randomNumber = util.randomNumber;
+let generateSlackLikeTs = util.generateSlackLikeTs;
 
 let router = express.Router();
 
@@ -28,8 +27,7 @@ router.post('/chat.send', (req, res, next) => {
     return res.status(409).json({err: 'You can\'t send an empty message!'});
   }
 
-  let ts = moment().valueOf() + randomNumber(3) + "";
-  ts = ts.substring(0,ts.length - 6) + "." + ts.substring(ts.length - 6);
+  let ts = generateSlackLikeTs();
   let doc = {
     channel_id: channelId,
     user_id: userId,
