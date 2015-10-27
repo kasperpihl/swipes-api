@@ -25,7 +25,7 @@ router.get('/rtm.start', (req, res, next) => {
       return x('users').map((user) => {
         return x.merge({users: user})
       })
-      .filter((row) => {return row("users").ne(userId)})
+      .filter((row) => { return row("users") })
     })
     .eqJoin("users", r.db('swipes').table('users'))
     .zip()
