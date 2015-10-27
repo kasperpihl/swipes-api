@@ -65,6 +65,9 @@ var corsOptions = {
   allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
   credentials: true
 }
+if(process.env.ORIGIN)
+  corsOptions.origin = process.env.ORIGIN;
+
 app.use('/v1', cors(corsOptions));
 
 // Routes for which we don't need authentication

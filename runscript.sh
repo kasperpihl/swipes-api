@@ -5,4 +5,4 @@ export ASANA_REDIRECT_URL=http://localhost:5000/v1/asana/asana_oauth
 export ORIGIN=http://localhost:9000
 export TEAM_ID=TSMFYIEKK
 #node api/instance.js
-node rest/instance.js
+nodemon rest/instance.js
