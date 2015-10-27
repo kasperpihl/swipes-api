@@ -33,7 +33,8 @@ router.post('/chat.send', (req, res, next) => {
     return res.status(409).json({err: 'You can\'t send an empty message!'});
   }
 
-  let ts = moment().valueOf() + randomNumber(4) + "";
+  let ts = moment().valueOf() + randomNumber(3) + "";
+  ts = ts.substring(0,ts.length - 6) + "." + ts.substring(ts.length - 6);
   let doc = {
     channel_id: channelId,
     user_id: user_id,

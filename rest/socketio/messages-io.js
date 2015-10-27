@@ -27,21 +27,21 @@ module.exports.channelMessages = (socket, userId) => {
         // T_TODO Implement update and delete here
         let n = row.new_val;
         let type = 'message';
-        let data = {};
+        let message = {};
 
         let channel_id = n.channel_id;
 
         db.rethinkQuery(userChannelsQ)
           .then((channels) => {
             if (channels.indexOf(channel_id) !== -1) {
-              data = {
+              message = {
                 channel_id: n.channel_id,
-                user: n.user,
+                user_id: n.user_id,
                 text: n.text,
                 ts: n.ts
               }
 
-              socket.emit('message', {type: type, data: data});
+              socket.emit('message', {type: type, message: message});
             }
           })
       })

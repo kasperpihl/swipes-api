@@ -9,7 +9,7 @@ module.exports = (io, userId) => {
   io.sockets.on('connection', (socket) => {
     console.log('connected!');
 
-    socket.emit('message', {type: 'hi'});
+    socket.emit('hello', {type: 'hello'});
 
     channels(socket);
     messages(socket, userId);
