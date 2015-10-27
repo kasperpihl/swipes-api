@@ -38,7 +38,7 @@ router.post('/channels.history', function (req, res, next) {
 
   db.rethinkQuery(query)
     .then(function (results) {
-        res.status(200).json({ok: true, results: results});
+        res.status(200).json({ok: true, messages: results});
     }).catch(function (err) {
       return next(err);
     });
