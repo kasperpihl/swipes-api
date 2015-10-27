@@ -14,12 +14,21 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var util = require('./util.js');
 
-app.use(cookieParser());
-app.use(session({
+var sessionMiddleware = session({
   resave: true,
   saveUninitialized: true,
   secret: 'swipy the dinocat'
-}));
+})
+
+app.use(cookieParser());
+
+// When socket-io documentation sux you go to stackoverflow
+// http://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
+io.use(function (socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+})
+
+app.use(sessionMiddleware);
 
 app.use(cors({
   origin: 'http://localhost:9000',
@@ -56,12 +65,6 @@ process.on('uncaughtException', function (err) {
 });
 
 // ===========================================================================================================
-// App locals variables
-// ===========================================================================================================
-
-app.locals.io = io;
-
-// ===========================================================================================================
 // Routes
 // ===========================================================================================================
 
@@ -81,6 +84,9 @@ app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 app.use('/v1', rtmRouter);
 app.use('/v1', chatRouter);
+
+// require our socketio module and pass the io instance
+require('./socketio/socketio.js')(io);
 
 // ===========================================================================================================
 // Error handlers / they should be at the end of the middleware stack
