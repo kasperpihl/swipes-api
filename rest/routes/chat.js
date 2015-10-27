@@ -15,15 +15,16 @@ var router = express.Router();
 
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
+  // T_TODO take user_id from logged in user instead of a parameter (Or validate it)
   let channelId = req.body.channel_id;
-  let user = req.body.user;
+  let user_id = req.body.user_id;
   let text = req.body.text;
 
   if (validator.isNull(channelId)) {
     return res.status(409).json({err: 'The channel id cannot be empty!'});
   }
 
-  if (validator.isNull(user)) {
+  if (validator.isNull(user_id)) {
     return res.status(409).json({err: 'The user id cannot be empty!'});
   }
 
@@ -34,7 +35,7 @@ router.post('/chat.send', (req, res, next) => {
   let ts = moment().unix();
   let doc = {
     channel_id: channelId,
-    user: user,
+    user_id: user_id,
     text: text,
     ts: ts
   };
