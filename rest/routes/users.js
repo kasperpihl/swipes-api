@@ -1,16 +1,18 @@
-var express = require( 'express' );
-var r = require('rethinkdb');
-var db = require('../db.js');
+"use strict";
 
-var router = express.Router();
+let express = require( 'express' );
+let r = require('rethinkdb');
+let db = require('../db.js');
 
-router.get('/users.list', function (req, res, next) {
-  var query = r.table('users');
+let router = express.Router();
+
+router.get('/users.list', (req, res, next) => {
+  let query = r.table('users');
 
   db.rethinkQuery(query)
-    .then(function (results) {
+    .then((results) => {
         res.status(200).json({ok: true, results: results});
-    }).catch(function (err) {
+    }).catch((err) => {
       return next(err);
     });
 });
