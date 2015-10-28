@@ -1,21 +1,26 @@
-var r = require('rethinkdb');
-var Promise = require('bluebird');
+"use strict";
 
-var isCursor = function(obj) {
+let config = require('config');
+let r = require('rethinkdb');
+let Promise = require('bluebird');
+
+let dbConfig = config.get('dbConfig');
+
+let isCursor = (obj) => {
   // TODO: Suggest an r.isCursor() API or something similar.
   return obj != null && obj._conn != null;
 }
 
-var handleCursors = function (results) {
-  return new Promise(function (resolve, reject) {
+let handleCursors = (results) => {
+  return new Promise((resolve, reject) => {
     if (isCursor(results)) {
       results.toArray()
-        .then(function (array) {
+        .then((array) => {
           // Clean up memory from the cursor
           results.close();
 
           return resolve(array);
-        }).error(function (err) {
+        }).error((err) => {
           results.close();
 
           return reject(err);
@@ -26,17 +31,17 @@ var handleCursors = function (results) {
   });
 }
 
-var rethinkdb = {
+let rethinkdb = {
   // options:
   //      cursor: true/false(default) Most of the time we will need just the results as array from the cursor
-  rethinkQuery: function (query, options) {
-    var options = options || {};
+  rethinkQuery: (query, options) => {
+    options = options || {};
 
-    return new Promise(function (resolve, reject) {
-      r.connect({host: 'localhost', port: 28015, db: 'swipes' })
-        .then(function (conn) {
+    return new Promise((resolve, reject) => {
+      r.connect(dbConfig)
+        .then((conn) => {
           query.run(conn)
-            .then(function (results) {
+            .then((results) => {
               if (!options.feed) {
                 conn.close();
               }
@@ -45,18 +50,18 @@ var rethinkdb = {
                 return resolve(results);
               } else {
                 handleCursors(results)
-                  .then(function (results) {
+                  .then((results) => {
                     return resolve(results);
-                  }).error(function (err) {
+                  }).error((err) => {
                     return reject(err);
                   });
               }
-            }).error(function (err) {
+            }).error((err) => {
               conn.close();
 
               return reject(err);
             });
-        }).error(function (err) {
+        }).error((err) => {
           return reject(err);
         });
     });
