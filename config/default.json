@@ -3,5 +3,6 @@
     "host": "localhost",
     "port": 28015,
     "db": "swipes"
-  }
+  },
+  "origin": "http://localhost:9000"
 }

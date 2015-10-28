@@ -13,6 +13,7 @@ var _ = require( 'underscore' );
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var util = require('./util.js');
+var config = require('config');
 
 var sessionMiddleware = session({
   resave: true,
@@ -31,7 +32,7 @@ io.use(function (socket, next) {
 app.use(sessionMiddleware);
 
 app.use(cors({
-  origin: 'http://localhost:9000',
+  origin: config.get('origin'),
   methods: 'HEAD, GET, POST',
   allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
   credentials: true
