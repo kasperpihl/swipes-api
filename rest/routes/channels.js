@@ -24,6 +24,43 @@ router.get('/channels.list', (req, res, next) => {
     });
 });
 
+router.post('/channels.mark', (req, res, next) => {
+  // T_TODO validation
+  let userId = req.session.userId;
+  let channel_id = req.body.channel_id;
+  let ts = req.body.ts;
+
+  let findChannelIndexQ =
+    r.table("users")
+      .get(userId)("channels")
+      .offsetsOf(
+        r.row("id").match(channel_id)
+      )
+      .nth(0)
+
+  let updateQ =
+    findChannelIndexQ.do((index) => {
+      return r.table('users')
+        .get(userId)
+        .update((user) => {
+          return {
+            channels: user('channels').changeAt(index,
+              user("channels")
+                .nth(index)
+                .merge({"last_read": ts})
+            )
+          }
+        })
+    })
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+        res.status(200).json({ok: true});
+    }).catch((err) => {
+      return next(err);
+    });
+});
+
 router.post('/channels.history', (req, res, next) => {
   // T_TODO check if that user is part of the channel
   // and ofc some validation for the required params
