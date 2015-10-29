@@ -46,6 +46,7 @@ router.post('/channels.history', (req, res, next) => {
 
 router.post('/channels.create', (req, res, next) => {
   let doc = {};
+  let userId = req.session.userId;
   let name = getSlug(validator.trim(req.body.name));
 
   if (validator.isNull(name)) {
@@ -57,6 +58,7 @@ router.post('/channels.create', (req, res, next) => {
   doc.is_archived = false;
   doc.created = moment().unix();
   doc.teamId = TEAM_ID;
+  doc.creator_id = userId;
 
   let query = r.branch(
           r.table('channels').getAll(doc.name, {index: 'name'}).isEmpty(),

@@ -32,8 +32,8 @@ module.exports.channelChanges = (socket) => {
             data = {
               channel_id: n.id,
               name: n.name,
+              creator_id: n.creator_id,
               created: n.created
-              // T_TODO put user ID here `creator`
             };
           } else {
             let o = row.old_val;
