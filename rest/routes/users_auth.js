@@ -116,9 +116,14 @@ router.post('/users.create', (req, res, next) => {
         return r.table('users')
           .insert(
             r.expr(userDoc)
-              .merge(
-                {channels: channel('id')}
-              )
+              .merge({
+                channels: [
+                  {
+                    id: channel('id').nth(0),
+                    last_read: 123 // long long ago :D :D
+                  }
+                ]
+              })
           )
       })
 
