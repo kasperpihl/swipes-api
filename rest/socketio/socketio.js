@@ -16,7 +16,7 @@ module.exports = (io) => {
 
     socket.emit('hello', {type: 'hello'});
 
-    channels(socket);
+    channels(socket, userId);
     messages(socket, userId);
   });
 };
