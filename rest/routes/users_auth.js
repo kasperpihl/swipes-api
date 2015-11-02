@@ -106,7 +106,15 @@ router.post('/users.create', (req, res, next) => {
     created: moment().unix()
   }
 
-  let insertUser =
+  let checkQ = r.do(
+    r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
+    r.table('users').getAll(userDoc.username, {index: 'username'}).isEmpty(),
+    (isEmail, isUsername) => {
+      return r.expr([isEmail, isUsername])
+    }
+  )
+
+  let insertUserQ =
     r.table('channels')
       .filter((doc) => {
         return doc('is_general').eq(true)
@@ -127,24 +135,30 @@ router.post('/users.create', (req, res, next) => {
           )
       })
 
-  let appendUserToTeam = r.table('teams').get(TEAM_ID).update({
-    users: r.row('users').append(userId)
+  let appendUserToTeamQ = r.table('teams').get(TEAM_ID).update((team) => {
+    return {
+      users: team('users').append(userId)
+    }
   });
 
-  let query = r.branch(
-    r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
-    r.do(insertUser),
-    {}
-  );
+  let insertUpdateQ =
+    r.do(
+      insertUserQ,
+      appendUserToTeamQ
+    )
 
-  db.rethinkQuery(query)
+  db.rethinkQuery(checkQ)
     .then((results) => {
-      if (util.isEmpty(results)) {
+      if (!results[0]) {
         res.status(409).json({
           errors: [{field: 'email', message: 'There is a user with that email.'}]
         });
+      } else if (!results[1]) {
+        res.status(409).json({
+          errors: [{field: 'username', message: 'This username is not available.'}]
+        });
       } else {
-        db.rethinkQuery(appendUserToTeam)
+        db.rethinkQuery(insertUpdateQ)
           .then(() => {
             req.session.userId = userId;
             res.status(200).json({ok: true});
