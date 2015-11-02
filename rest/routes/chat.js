@@ -26,7 +26,7 @@ let insertMessage = (res, next, doc) => {
     });
 }
 
-let createChannel = (creatorId, toUsername) => {
+let createChannel = (creatorId, receiverId) => {
   // T_TODO check if there is a DM channel already with these users
   return new Promise((resolve, reject) => {
     let doc = {
@@ -42,27 +42,20 @@ let createChannel = (creatorId, toUsername) => {
 
     db.rethinkQuery(createDMChannelQ)
       .then((inserted) => {
-        let channelId = inserted.changes[0].new_val.id;
+        let newChannelId = inserted.changes[0].new_val.id;
         let channelToAppend = {
-          id: channelId
+          id: newChannelId
         };
         let updateQ =
-          r.do(
-            r.table('users').filter({username: toUsername}).nth(0),
-            (toUser) => {
-              return r.table('users')
-                .getAll(creatorId, toUser('id'))
-                .update((user) => {
-                  return {
-                    channels: user('channels').append(channelToAppend)
-                  }
-                })
-            }
-          )
+          r.table('users')
+            .getAll(creatorId, receiverId)
+            .update({
+              channels: r.row('channels').append(channelToAppend)
+            })
 
         db.rethinkQuery(updateQ)
           .then(() => {
-            return resolve(channelId);
+            return resolve(newChannelId);
           })
           .catch((err) => {
             return reject(err);
@@ -95,11 +88,9 @@ router.post('/chat.send', (req, res, next) => {
     ts: ts
   };
 
-  if (channelId.indexOf('@') === 0) {
-    let toUsername = channelId.substr(1);
-
-    createChannel(userId, toUsername).then ((channelId) => {
-      doc.channel_id = channelId;
+  if (channelId.indexOf('U') === 0) {
+    createChannel(userId, channelId).then ((newChannelId) => {
+      doc.channel_id = newChannelId;
 
       insertMessage(res, next, doc);
     })
