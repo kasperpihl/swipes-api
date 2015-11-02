@@ -9,7 +9,7 @@ module.exports.channelChanges = (socket, userId) => {
   let insertQ =
     r.table('channels')
       .filter((doc) => {
-        return doc('teamId').eq(TEAM_ID).and(doc('id').match("^C"))
+        return doc('teamId').eq(TEAM_ID).and(doc('id').match("^C|D"))
       }).changes()
 
     db.rethinkQuery(insertQ, {feed: true})
