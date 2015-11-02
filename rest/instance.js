@@ -1,29 +1,41 @@
+"use strict";
+
 // ===========================================================================================================
 // Setup
 // ===========================================================================================================
-var PORT = Number(process.env.PORT || 5000);
+let PORT = Number(process.env.PORT || 5000);
 
-var express = require( 'express' );
-var app = express();
+let express = require( 'express' );
+let app = express();
 
-var server = app.listen(PORT);
-var io = require('socket.io').listen(server);
-var cors = require('cors');
-var bodyParser = require( 'body-parser' );
-var _ = require( 'underscore' );
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var util = require('./util.js');
+let server = app.listen(PORT);
+let io = require('socket.io').listen(server);
+let cors = require('cors');
+let bodyParser = require( 'body-parser' );
+let _ = require( 'underscore' );
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
+let util = require('./util.js');
+let config = require('config');
 
-app.use(cookieParser());
-app.use(session({
+let sessionMiddleware = session({
   resave: true,
   saveUninitialized: true,
   secret: 'swipy the dinocat'
-}));
+})
+
+app.use(cookieParser());
+
+// When socket-io documentation sux you go to stackoverflow
+// http://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, socket.request.res, next);
+})
+
+app.use(sessionMiddleware);
 
 app.use(cors({
-  origin: 'http://localhost:9000',
+  origin: config.get('origin'),
   methods: 'HEAD, GET, POST',
   allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
   credentials: true
@@ -31,7 +43,7 @@ app.use(cors({
 app.use('/apps', express.static(__dirname + '/../apps'));
 
 app.use(bodyParser.json( { limit: 3000000 } ) );
-function parseErrorHandler(err, req, res, next) {
+let parseErrorHandler = (err, req, res, next) => {
   if(err) {
   	res.status(400).send({ error: 'Invalid json.' });
   } else {
@@ -43,31 +55,26 @@ app.use(parseErrorHandler);
 // ===========================================================================================================
 // Require routes
 // ===========================================================================================================
-var usersAuth = require('./routes/users_auth.js');
-var usersRouter = require('./routes/users.js');
-var channelsRouter = require('./routes/channels.js');
-var tasksRouter = require('./routes/tasks.js');
-var rtmRouter = require('./routes/rtm.js');
-var chatRouter = require('./routes/chat.js');
+let usersAuth = require('./routes/users_auth.js');
+let usersRouter = require('./routes/users.js');
+let channelsRouter = require('./routes/channels.js');
+let tasksRouter = require('./routes/tasks.js');
+let rtmRouter = require('./routes/rtm.js');
+let chatRouter = require('./routes/chat.js');
+let imRouter = require('./routes/im.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', (err) => {
 	console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
 	console.error(err.stack)
 	process.exit(1)
 });
 
 // ===========================================================================================================
-// App locals variables
-// ===========================================================================================================
-
-app.locals.io = io;
-
-// ===========================================================================================================
 // Routes
 // ===========================================================================================================
 
-app.route( '/').get( function(req,res,next){
+app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
 
@@ -83,18 +90,22 @@ app.use('/v1', channelsRouter);
 app.use('/v1', tasksRouter);
 app.use('/v1', rtmRouter);
 app.use('/v1', chatRouter);
+app.use('/v1', imRouter);
+
+// require our socketio module and pass the io instance
+require('./socketio/socketio.js')(io);
 
 // ===========================================================================================================
 // Error handlers / they should be at the end of the middleware stack
 // ===========================================================================================================
 
-function logErrors(err, req, res, next) {
+let logErrors = (err, req, res, next) => {
   // We can use some service like loggy to log errors
   console.error(err.stack);
   next(err);
 }
 
-function unhandledServerError(err, req, res, next) {
+let unhandledServerError = (err, req, res, next) => {
   if(err)
   	res.status(500).send({ error: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
   else

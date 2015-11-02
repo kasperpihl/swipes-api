@@ -2,18 +2,18 @@
 
 const TEAM_ID = process.env.TEAM_ID;
 
-var express = require( 'express' );
-var r = require('rethinkdb');
-var validator = require('validator');
-var sha1 = require('sha1');
-var moment = require('moment');
-var util = require('../util.js');
-var db = require('../db.js');
-var generateId = util.generateSlackLikeId;
+let express = require( 'express' );
+let r = require('rethinkdb');
+let validator = require('validator');
+let sha1 = require('sha1');
+let moment = require('moment');
+let util = require('../util.js');
+let db = require('../db.js');
+let generateId = util.generateSlackLikeId;
 
-var router = express.Router();
+let router = express.Router();
 
-router.get('/users.logged', function (req, res, next) {
+router.get('/users.logged', (req, res, next) => {
   if (!req.session.userId) {
     res.status(400).json({errors: [{message: 'Not logged in.'}]});
   } else {
@@ -21,47 +21,47 @@ router.get('/users.logged', function (req, res, next) {
   }
 });
 
-router.get('/users.logout', function (req, res, next) {
+router.get('/users.logout', (req, res, next) => {
   delete req.session.userId;
 
   res.status(200).json({ok: true});
 });
 
-router.post('/users.login', function (req, res, next) {
-  var email = validator.trim(req.body.email);
-  var password = req.body.password ? sha1(req.body.password) : '';
+router.post('/users.login', (req, res, next) => {
+  let email = validator.trim(req.body.email);
+  let password = req.body.password ? sha1(req.body.password) : '';
 
   if (!validator.isEmail(email)) {
     return res.status(409).json({ok:false,errors: [{field: 'email', message: 'Invalid email!'}]});
   }
 
-  var query = r.table('users').filter({
+  let query = r.table('users').filter({
     email: email
   }).withFields('id', 'password');
 
   db.rethinkQuery(query)
-    .then(function (results) {
+    .then((results) => {
       if (results.length === 0) {
         res.status(409).json({errors: [{field: 'email', message: 'Incorrect email.'}]});
       } else if (password !== results[0].password) {
         res.status(409).json({errors: [{field: 'password', message: 'Incorrect password.'}]});
       } else {
-        var userId = results[0].id
+        let userId = results[0].id
 
         req.session.userId = userId;
         res.status(200).json({ok: true});
       }
-    }).catch(function (err) {
+    }).catch((err) => {
       return next(err);
     });
 });
 
-router.post('/users.create', function (req, res, next) {
-  var email = validator.trim(req.body.email);
-  var username = validator.trim(req.body.username);
-  var password = req.body.password;
-  var repassword = req.body.repassword;
-  var errors = [];
+router.post('/users.create', (req, res, next) => {
+  let email = validator.trim(req.body.email);
+  let username = validator.trim(req.body.username);
+  let password = req.body.password;
+  let repassword = req.body.repassword;
+  let errors = [];
 
   if (!validator.isEmail(email)) {
     errors.push({
@@ -95,10 +95,10 @@ router.post('/users.create', function (req, res, next) {
     return res.status(409).json({errors: errors});
   }
 
-  var userId = generateId("U");
-  var teamId = generateId("T");
+  let userId = generateId("U");
+  let teamId = generateId("T");
 
-  var userDoc = {
+  let userDoc = {
     id: userId,
     email: email,
     username: username,
@@ -106,7 +106,15 @@ router.post('/users.create', function (req, res, next) {
     created: moment().unix()
   }
 
-  var insertUser =
+  let checkQ = r.do(
+    r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
+    r.table('users').getAll(userDoc.username, {index: 'username'}).isEmpty(),
+    (isEmail, isUsername) => {
+      return r.expr([isEmail, isUsername])
+    }
+  )
+
+  let insertUserQ =
     r.table('channels')
       .filter((doc) => {
         return doc('is_general').eq(true)
@@ -116,38 +124,49 @@ router.post('/users.create', function (req, res, next) {
         return r.table('users')
           .insert(
             r.expr(userDoc)
-              .merge(
-                {channels: channel('id')}
-              )
+              .merge({
+                channels: [
+                  {
+                    id: channel('id').nth(0),
+                    last_read: 123 // long long ago :D :D
+                  }
+                ]
+              })
           )
       })
-      
-  var appendUserToTeam = r.table('teams').get(TEAM_ID).update({
-    users: r.row('users').append(userId)
+
+  let appendUserToTeamQ = r.table('teams').get(TEAM_ID).update((team) => {
+    return {
+      users: team('users').append(userId)
+    }
   });
 
-  var query = r.branch(
-    r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
-    r.do(insertUser),
-    {}
-  );
+  let insertUpdateQ =
+    r.do(
+      insertUserQ,
+      appendUserToTeamQ
+    )
 
-  db.rethinkQuery(query)
-    .then(function (results) {
-      if (util.isEmpty(results)) {
+  db.rethinkQuery(checkQ)
+    .then((results) => {
+      if (!results[0]) {
         res.status(409).json({
           errors: [{field: 'email', message: 'There is a user with that email.'}]
         });
+      } else if (!results[1]) {
+        res.status(409).json({
+          errors: [{field: 'username', message: 'This username is not available.'}]
+        });
       } else {
-        db.rethinkQuery(appendUserToTeam)
-          .then(function () {
+        db.rethinkQuery(insertUpdateQ)
+          .then(() => {
             req.session.userId = userId;
             res.status(200).json({ok: true});
-          }).catch(function (err) {
+          }).catch((err) => {
             return next(err);
           });
       }
-    }).catch(function (err) {
+    }).catch((err) => {
       return next(err);
     });
 });

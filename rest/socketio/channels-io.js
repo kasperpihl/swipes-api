@@ -5,7 +5,7 @@ const TEAM_ID = process.env.TEAM_ID;
 let r = require('rethinkdb');
 let db = require('../db.js');
 
-module.exports.channelChanges = (socket) => {
+module.exports.channelChanges = (socket, userId) => {
   let insertQ =
     r.table('channels')
       .filter((doc) => {
@@ -32,8 +32,8 @@ module.exports.channelChanges = (socket) => {
             data = {
               channel_id: n.id,
               name: n.name,
+              creator_id: n.creator_id,
               created: n.created
-              // T_TODO put user ID here `creator`
             };
           } else {
             let o = row.old_val;
@@ -55,8 +55,8 @@ module.exports.channelChanges = (socket) => {
               }
 
               data = {
-                channel_id: n.id
-                // T_TODO put user ID here
+                channel_id: n.id,
+                user_id: userId
               }
             }
 

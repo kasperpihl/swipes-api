@@ -10,6 +10,7 @@
     "backbone": "1.1.x",
     "bluebird": "2.10.2",
     "body-parser": "1.x",
+    "config": "^1.16.0",
     "contextio": "*",
     "cookie-parser": "1.4.0",
     "cors": "^2.7.1",

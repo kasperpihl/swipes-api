@@ -12,14 +12,12 @@ module.exports.channelMessages = (socket, userId) => {
         return doc('channel_id').match("^C")
       }).changes()
 
-  let userChannelsQ = r.table('users').get(userId)('channels');
-
   db.rethinkQuery(channelMessagesQ, {feed: true})
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {
           console.log(err);
-          // T_TODO how to handle erros here?!
+          // T_TODO how to handle errors here?!
           // Sending error message on the socket?
           return;
         }
@@ -31,9 +29,17 @@ module.exports.channelMessages = (socket, userId) => {
 
         let channel_id = n.channel_id;
 
-        db.rethinkQuery(userChannelsQ)
-          .then((channels) => {
-            if (channels.indexOf(channel_id) !== -1) {
+        let matchChannelQ =
+          r.table('users')
+          .get(userId)('channels')
+          .filter((channel) => {
+            return channel("id").match(channel_id)
+          })
+          .count();
+
+        db.rethinkQuery(matchChannelQ)
+          .then((count) => {
+            if (count > 0) {
               message = {
                 channel_id: n.channel_id,
                 user_id: n.user_id,

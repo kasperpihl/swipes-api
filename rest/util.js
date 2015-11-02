@@ -1,29 +1,39 @@
-var randomstring = require('randomstring');
+"use strict";
 
-var util = {
+let randomstring = require('randomstring');
+let moment = require('moment');
+
+let randomNumber = (length) => {
+  let number = randomstring.generate({
+    length: length,
+    charset: 'numeric'
+  });
+
+  return number;
+}
+
+let util = {
   // type is one of the slack types [U, C, G]
   // U for user
   // C for channel
   // G for group
-  generateSlackLikeId: function (type) {
+  generateSlackLikeId: (type) => {
     type = type.toUpperCase();
-    id = randomstring.generate(8).toUpperCase();
+    let id = randomstring.generate(8).toUpperCase();
 
     return type + id;
   },
-  randomNumber: function (length) {
-    number = randomstring.generate({
-      length: length,
-      charset: 'numeric'
-    });
+  generateSlackLikeTs: () => {
+    let rNumber = randomNumber(3);
+    let ts = moment().valueOf() + rNumber;
 
-    return number;
+    return ts.substring(0,ts.length - 6) + "." + ts.substring(ts.length - 6);
   },
   // suports only objects for now
-  isEmpty: function (obj) {
+  isEmpty: (obj) => {
     return Object.keys(obj).length === 0;
   },
-  checkAuth: function (req, res, next) {
+  checkAuth: (req, res, next) => {
     if (!req.session.userId) {
       res.status(400).json({err: 'You are not authorized.'});
     } else {
