@@ -3,8 +3,9 @@
 // ===========================================================================================================
 var PORT = Number(process.env.PORT || 5000);
 
+var express = require( 'express' );
+var app = express();
 
-var app = require( 'express' )();
 var server = app.listen(PORT);
 var io = require('socket.io').listen(server);
 var cors = require('cors');
@@ -27,6 +28,7 @@ app.use(cors({
   allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
   credentials: true
 }));
+app.use('/apps', express.static(__dirname + '/../apps'));
 
 app.use(bodyParser.json( { limit: 3000000 } ) );
 function parseErrorHandler(err, req, res, next) {
