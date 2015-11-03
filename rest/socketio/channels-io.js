@@ -68,7 +68,7 @@ module.exports.channelChanges = (socket, userId) => {
             }
           }
 
-          socket.emit(type, {type: type, data: data});
+          socket.emit('message', {type: type, data: data});
         })
       })
  }
