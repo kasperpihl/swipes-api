@@ -26,46 +26,6 @@ let insertMessage = (res, next, doc) => {
     });
 }
 
-let createChannel = (creatorId, receiverId) => {
-  // T_TODO check if there is a DM channel already with these users
-  return new Promise((resolve, reject) => {
-    let doc = {
-      id: generateId('D'),
-      created: moment().unix(),
-      teamId: TEAM_ID,
-      creator_id: creatorId
-    };
-
-    let createDMChannelQ =
-      r.table('channels')
-        .insert(doc, {returnChanges: true});
-
-    db.rethinkQuery(createDMChannelQ)
-      .then((inserted) => {
-        let newChannelId = inserted.changes[0].new_val.id;
-        let channelToAppend = {
-          id: newChannelId
-        };
-        let updateQ =
-          r.table('users')
-            .getAll(creatorId, receiverId)
-            .update({
-              channels: r.row('channels').append(channelToAppend)
-            })
-
-        db.rethinkQuery(updateQ)
-          .then(() => {
-            return resolve(newChannelId);
-          })
-          .catch((err) => {
-            return reject(err);
-          })
-      }).catch((err) => {
-        return reject(err);
-      });
-  });
-}
-
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
   let channelId = req.body.channel_id;
@@ -88,15 +48,7 @@ router.post('/chat.send', (req, res, next) => {
     ts: ts
   };
 
-  if (channelId.indexOf('U') === 0) {
-    createChannel(userId, channelId).then ((newChannelId) => {
-      doc.channel_id = newChannelId;
-
-      insertMessage(res, next, doc);
-    })
-  } else {
-    insertMessage(res, next, doc);
-  }
+  insertMessage(res, next, doc);
 });
 
 module.exports = router;
