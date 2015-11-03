@@ -13,7 +13,15 @@ router.get('/rtm.start', (req, res, next) => {
   let userId = req.session.userId;
 
   let meQ = r.table('users').get(userId).without('password');
-  let channelsQ = r.table('channels').filter({teamId: TEAM_ID});
+  let channelsQ = r.table('channels').filter((channel) => {
+    return channel('teamId').eq(TEAM_ID)
+      .and(channel('id').match('^C'))
+  });
+  let imsQ = r.table('users')
+    .get(userId)('channels')
+    .filter((channel) => {
+      return channel('id').match('^D')
+    })
 
   // All the users in the team that are not the current logged user
   let notMeQ =
@@ -34,6 +42,7 @@ router.get('/rtm.start', (req, res, next) => {
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(channelsQ),
+    db.rethinkQuery(imsQ),
     db.rethinkQuery(notMeQ)
   ]
 
@@ -43,7 +52,8 @@ router.get('/rtm.start', (req, res, next) => {
         ok: true,
         self: data[0],
         channels: data[1],
-        users: data[2]
+        ims: data[2],
+        users: data[3]
       }
 
       res.status(200).json(rtmResponse);
