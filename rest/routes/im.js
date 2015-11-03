@@ -32,7 +32,8 @@ let createChannel = (creatorId, receiverId) => {
       id: generateId('D'),
       created: moment().unix(),
       teamId: TEAM_ID,
-      creator_id: creatorId
+      creator_id: creatorId,
+      user_ids: [creatorId, receiverId]
     };
 
     let createDMChannelQ =
