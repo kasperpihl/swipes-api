@@ -20,7 +20,7 @@ let insertMessage = (res, next, doc) => {
 
   db.rethinkQuery(query)
     .then((results) => {
-      res.status(200).json({ok: true});
+      res.status(200).json({ok: true, message: doc});
     }).catch((err) => {
       return next(err);
     });
