@@ -29,12 +29,18 @@ let channelsIm = (socket, userId) => {
 
           if (!row.old_val) {
             let n = row.new_val;
+            let targetUserId;
+
+            n.user_ids.forEach((user_id) => {
+              if (user_id !== userId) {
+                targetUserId = user_id;
+              }
+            })
 
             type = 'im_created';
             data = {
-              channel_id: n.id,
-              user_id: n.creator_id,
-              created: n.created
+              user_id: targetUserId,
+              channel: n
             };
           }
 
