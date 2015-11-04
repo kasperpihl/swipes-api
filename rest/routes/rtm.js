@@ -17,10 +17,11 @@ router.get('/rtm.start', (req, res, next) => {
     return channel('teamId').eq(TEAM_ID)
       .and(channel('id').match('^C'))
   });
-  let imsQ = r.table('users')
-    .get(userId)('channels')
+  let imsQ = r.table('channels')
     .filter((channel) => {
-      return channel('id').match('^D')
+      return channel('teamId').eq(TEAM_ID)
+        .and(channel('id').match("^D"))
+        .and(channel('user_ids').contains(userId))
     })
 
   // All the users in the team that are not the current logged user

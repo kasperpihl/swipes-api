@@ -4,7 +4,7 @@ const TEAM_ID = process.env.TEAM_ID;
 
 let channels = require('./channels-io.js').channelChanges;
 let messages = require('./messages-io.js').channelMessages;
-let im = require('./im-io.js').imChanges;
+let im = require('./im-io.js');
 
 module.exports = (io) => {
   io.sockets.on('connection', (socket) => {
@@ -15,10 +15,11 @@ module.exports = (io) => {
       return;
     }
 
-    socket.emit('hello', {type: 'hello'});
+    socket.emit('message', {type: 'hello'});
 
     channels(socket, userId);
     messages(socket, userId);
-    im(socket, userId);
+    im.channelsIm(socket, userId);
+    im.userIm(socket, userId);
   });
 };
