@@ -66,7 +66,14 @@ let createChannel = (creatorId, receiverId) => {
   });
 }
 
-let openChannel = (userId, channelId) => {
+let openChannel = (userId, targetUserId,channelId) => {
+  let imOpenEvent = {
+    type: 'im_open',
+    user_id: userId,
+    target_user_id: targetUserId,
+    channel_id: channelId
+  }
+
   return new Promise((resolve, reject) => {
     let findChannelIndexQ =
       r.table("users")
@@ -91,8 +98,12 @@ let openChannel = (userId, channelId) => {
             })
         })
 
+      let imOpenEventQ = r.table('events').insert(imOpenEvent);
+
       db.rethinkQuery(updateQ)
         .then(() => {
+          db.rethinkQuery(imOpenEventQ)
+
           return resolve(true);
         })
         .catch((err) => {
@@ -157,7 +168,7 @@ router.post('/im.open', (req, res, next) => {
 
         if (imsLen === 0) {
           createChannel(userId, targetUserId).then((newChannelId) => {
-            openChannel(userId, newChannelId)
+            openChannel(userId, targetUserId, newChannelId)
               .then(() => {
                 res.status(200).json({ok: true, channel_id: newChannelId});
               })
@@ -170,7 +181,7 @@ router.post('/im.open', (req, res, next) => {
         } else {
           let channelId = ims[0];
 
-          openChannel(userId, channelId)
+          openChannel(userId, targetUserId, channelId)
             .then(() => {
               res.status(200).json({ok: true, channel_id: channelId});
             })
