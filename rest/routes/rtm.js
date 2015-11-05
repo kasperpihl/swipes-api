@@ -13,10 +13,20 @@ router.get('/rtm.start', (req, res, next) => {
   let userId = req.session.userId;
 
   let meQ = r.table('users').get(userId).without('password');
-  let channelsQ = r.table('channels').filter((channel) => {
-    return channel('teamId').eq(TEAM_ID)
-      .and(channel('id').match('^C'))
-  });
+  let channelsQ =
+  r.table('channels')
+    .concatMap((channel) => {
+      return r.table('users').get(userId)('channels')
+        .map((uChannel) => {
+      	  return r.branch(
+            uChannel('id').eq(channel('id')),
+            uChannel.merge({is_member: true}),
+            channel.merge({is_member: false})
+          )
+        }).map((fChannel) => {
+          return fChannel.merge(channel)
+        })
+    })
   let imsQ = r.table('users')
     .get(userId)('channels')
     .filter((channel) => {
