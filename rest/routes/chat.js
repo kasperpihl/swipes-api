@@ -26,6 +26,97 @@ let insertMessage = (res, next, doc) => {
     });
 }
 
+let isOpen = (userId, channelId) => {
+  return new Promise((resolve, reject) => {
+    let channelQ = r.table('users')
+      .get(userId)('channels')
+      .filter((channel) => {
+        return channel('id').eq(channelId)
+      })
+
+    db.rethinkQuery(channelQ)
+      .then((channels) => {
+        return resolve(channels[0].is_open);
+      })
+      .catch((err) => {
+        return reject(err);
+      })
+  });
+}
+
+let openImChannel = (userId, channelId) => {
+  return new Promise((resolve, reject) => {
+    let getChannelQ = r.table('channels').get(channelId)
+    let targetUserId;
+
+    db.rethinkQuery(getChannelQ)
+      .then((channel) => {
+        // T_TODO check if there is a valid channel?!?
+        channel.user_ids.forEach((id) => {
+          if (id !== userId) {
+            targetUserId = id;
+          }
+        })
+
+        isOpen(targetUserId, channelId)
+          .then((openStatus) => {
+            if (openStatus) {
+              return resolve();
+            } else {
+              let imOpenEvent = {
+                type: 'im_open',
+                user_id: targetUserId,
+                target_user_id: userId,
+                channel_id: channelId
+              }
+
+              let findChannelIndexQ =
+                r.table("users")
+                  .get(targetUserId)("channels")
+                  .offsetsOf(
+                    r.row("id").match(channelId)
+                  )
+                  .nth(0)
+
+                let openChannelQ =
+                  findChannelIndexQ.do((index) => {
+                    return r.table('users')
+                      .get(targetUserId)
+                      .update((user) => {
+                        return {
+                          channels: user('channels').changeAt(index,
+                            user("channels")
+                              .nth(index)
+                              .merge({"is_open": true})
+                          )
+                        }
+                      })
+                  })
+
+                let imOpenEventQ = r.table('events').insert(imOpenEvent);
+
+                db.rethinkQuery(openChannelQ)
+                  .then(() => {
+                    db.rethinkQuery(imOpenEventQ)
+                      .then(() => {
+                        return resolve(true);
+                      }).catch((err) => {
+                        return reject(err);
+                      })
+                  })
+                  .catch((err) => {
+                    return reject(err);
+                  })
+            }
+          }).catch((err) => {
+            return reject(err);
+          })
+      }).catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
   let channelId = req.body.channel_id;
@@ -48,7 +139,14 @@ router.post('/chat.send', (req, res, next) => {
     ts: ts
   };
 
-  insertMessage(res, next, doc);
+  if (channelId.charAt(0) === 'D') {
+    openImChannel(userId, channelId)
+      .then(() => {
+        insertMessage(res, next, doc);
+      })
+  } else {
+    insertMessage(res, next, doc);
+  }
 });
 
 module.exports = router;

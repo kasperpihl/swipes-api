@@ -9,7 +9,7 @@ module.exports.channelMessages = (socket, userId) => {
   let channelMessagesQ =
     r.table('messages')
       .filter((doc) => {
-        return doc('channel_id').match("^C")
+        return doc('channel_id').match("^C|D")
       }).changes()
 
   db.rethinkQuery(channelMessagesQ, {feed: true})

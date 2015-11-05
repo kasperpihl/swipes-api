@@ -61,7 +61,6 @@ let userIm = (socket, userId) => {
   db.rethinkQuery(listenQ, {feed: true})
     .then((cursor) => {
       cursor.each((err, row) => {
-        console.log('newnew');
         if (err) {
           console.log(err);
           // T_TODO how to handle erros here?!
