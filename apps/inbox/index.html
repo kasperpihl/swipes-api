@@ -1,105 +1,134 @@
 <div class="wrapper">
 	
-	<nav>
-		<div class="logo">
-			<img src="http://swipesapp.com/slack/assets/img/swipes-team-landingpage-logo.png" alt="" />
-		</div>
-		<div class="folders">
-			<ul>
-				<a href="">
-					<li class="active">INBOX</li>
-				</a>
-				<a href="">
-					<li>DRAFTS</li>
-				</a>
-				<a href="">
-					<li>SENT</li>
-				</a>
-				<a href="">
-					<li>SPAM</li>
-				</a>
-				<a href="">
-					<li>TRASH</li>
-				</a>
-			</ul>
-		</div>
-		
-		<div class="profile">
-			<p class="name">Kristjan Vool</p>
-			<i class="material-icons">keyboard_arrow_down</i>
-			
-			<div class="profile-dropdown">
-				<ul>
-					<li>
-						<i class="material-icons">person_add</i>
-						Add an Account
-					</li>
-					<li>
-						<i class="material-icons">settings</i>
-						Settings
-					</li>					
-					<li>
-						<i class="material-icons">play_for_work</i>
-						Log out
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<div class="action-noti"></div>
 	
 	<div class="email-list">
 		<div class="emails-wrap">
-			<div class="navbar">
-				<input type="search" placeholder="Search"/>
-				<i class="material-icons search">search</i>
-			</div>
+			<nav>
+				<i class="material-icons refresh" title="Refresh">refresh</i>
+				<i class="material-icons archive hidden" title="Archive">archive</i>
+				<i class="material-icons delete hidden" title="Delete">delete</i>
+				<i class="material-icons create-task hidden" title="Create a task">open_in_new</i>
+			</nav>
 			
-			<ul class="list-of-emails">
-				<li class="an-email"></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
+			<ul class="emails">
+				
+				<li class="email new-email hidden">
+					<div class="prof-pic">
+						<div class="initials">C</div>
+					</div>
+					
+					<div class="email-summary">
+						<div class="first-line">
+							<span class="name">CamScanner</span>
+							<span class="time">
+								<div class="dot unread"></div> 
+								9:26 PM (1 minute ago)
+							</span>
+						</div>
+						<div class="headline">Activation Code:594554</div>
+						<div class="summary">Confirm your email and get ready to digitize, sync, share and manage various paper documents on all devices.</div>
+					</div>
+				</li>
+				
+				<li class="email">
+					<div class="prof-pic">
+						<img src="https://d262ilb51hltx0.cloudfront.net/fit/c/36/36/1*yjl2ONCwM7NbngsWCFm4mQ.png" alt="">
+					</div>
+					
+					<div class="email-summary">
+						<div class="first-line">
+							<span class="name">Matter</span>
+							<span class="time">
+								<div class="dot"></div> 
+								Nov 3 (1 day ago)
+							</span>
+						</div>
+						<div class="headline">Dear Officer, How Can I Trust You When All You Seem To Do Is Kill?</div>
+						<div class="summary">Matter Dear Officer, How Can I Trust You When All You Seem To Do Is Kill? A Bay Area..</div>
+					</div>
+				</li>
+				
+				<li class="email">
+					<div class="prof-pic">
+						<img src="https://d262ilb51hltx0.cloudfront.net/fit/c/36/36/1*yjl2ONCwM7NbngsWCFm4mQ.png" alt="">
+					</div>
+					
+					<div class="email-summary">
+						<div class="first-line">
+							<span class="name">Medium Daily Digest</span>
+							<span class="time">
+								<div class="dot unread"></div> 
+								Nov 3 (1 day ago)
+							</span>
+						</div>
+						<div class="headline">“The Crazy-Daring, Concrete Bus Stops of the Soviet Era” published in Vantage by Pete Brook</div>
+						<div class="summary">Medium Daily Digest Get Medium for iOS or Android RECOMMENDED BY MEDIUM STAFF</div>
+					</div>
+				</li>
+				
+				<li class="email">
+					<div class="prof-pic">
+						<div class="initials">OC</div>
+					</div>
+					
+					<div class="email-summary">
+						<div class="first-line">
+							<span class="name">Outlook.com Calendar</span>
+							<span class="time">
+								<div class="dot unread"></div> 
+								Nov 1 (3 days ago)
+							</span>
+						</div>
+						<div class="headline">Andreas Vainos's birthday on Nov 02</div>
+						<div class="summary">Andreas Vainos's birthday on Nov 02. When: Monday, November 02, 2015</div>
+					</div>
+				</li>
+				
+				<li class="email">
+					<div class="prof-pic">
+						<img src="https://d262ilb51hltx0.cloudfront.net/fit/c/36/36/1*yjl2ONCwM7NbngsWCFm4mQ.png" alt="">
+					</div>
+					
+					<div class="email-summary">
+						<div class="first-line">
+							<span class="name">Medium Daily Digest</span>
+							<span class="time">
+								<div class="dot"></div> 
+								Nov 1 (3 days ago)
+							</span>
+						</div>
+						<div class="headline">“An Ode to Living Abroad…and Coming Home” published in The Lighthouse by Dave Ashton</div>
+						<div class="summary">Medium Daily Digest Get Medium for iOS or Android RECOMMENDED BY MEDIUM STAFF</div>
+					</div>
+				</li>
+				
+				<li class="email">
+					<div class="prof-pic">
+						<div class="initials">TF</div>
+					</div>
+					
+					<div class="email-summary">
+						<div class="first-line">
+							<span class="name">The FROONT team</span>
+							<span class="time">
+								<div class="dot unread"></div> 
+								Oct 31 (4 days ago)
+							</span>
+						</div>
+						<div class="headline">October newsletter</div>
+						<div class="summary">Hi, Irem! Happy Halloween! This is a quick update what's new in FROONT!</div>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</div>
 	
 	<div class="email-view">
-		<div class="wrap email-one">
-			
-			<h1 class="headline">
-				Testing this
-			</h1>
-			
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit, impedit? Nobis est perferendis, quam. Ratione quidem laboriosam saepe quibusdam quisquam.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere quo quis, aut, dolor ab odit cupiditate, fuga nemo adipisci sunt eius quae similique nobis, eligendi ipsam eaque rerum cum nulla pariatur quaerat! Voluptas quas repudiandae mollitia iste odio quaerat, molestiae!</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium, cupiditate.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, nisi sed. Excepturi ullam iusto voluptatem nulla, mollitia quam veniam maiores rem eaque maxime, nihil! Omnis neque veniam soluta fugit nesciunt nulla eaque, eveniet, beatae consectetur, illo dolor quisquam iste mollitia voluptates ab quaerat totam modi earum? Harum culpa itaque necessitatibus?</p>
+		<div class="wrap single">
+			<div class="email-card">
+				
+			</div>
 		</div>
 	</div>
 	

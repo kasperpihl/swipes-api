@@ -18,11 +18,32 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Source Sans Pro';
-  background-color: #F7F7F7;
 }
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.action-noti {
+  padding: 5px 10px;
+  color: white;
+  background-color: rgba(60, 68, 92, 0.6);
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  z-index: 9999;
+  display: none;
+}
+
+.action-noti.notify {
+  display: block;
 }
 
 .wrapper {
@@ -30,11 +51,29 @@ html, body {
   height: 100%;
 }
 
-nav {
+.email-list {
+  width: 40%;
+  height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+  background-color: #F9F9F9;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  z-index: 99;
+}
+
+.emails-wrap {
   width: 100%;
-  height: 70px;
-  background-color: #FCC956;
-  padding: 0 10%;
+  position: relative;
+}
+
+.emails-wrap nav {
+  width: 40%;
+  height: 50px;
+  padding: 0 50px;
+  position: fixed;
+  z-index: 999;
+  background-color: #F9F9F9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -45,311 +84,206 @@ nav {
           align-items: center;
 }
 
-nav .logo {
-  height: 70px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-nav .logo img {
-  width: 120px;
-}
-
-nav .folders {
-  height: 70px;
-  margin-left: 50px;
-}
-
-nav .folders ul {
-  height: 70px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-
-nav .folders ul a {
-  height: 70px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-
-nav .folders ul a li {
-  margin: 0 15px;
-  font-weight: 400;
-  color: rgba(0, 12, 47, 0.5);
-}
-
-nav .folders ul a li.active {
-  color: #000C2F;
-  font-weight: 600;
-}
-
-nav .folders ul a li:hover {
-  color: #000C2F;
-}
-
-nav .profile {
-  height: 70px;
-  position: absolute;
-  right: 10%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+.emails-wrap nav i {
+  color: #9499A7;
+  padding: 10px;
   cursor: pointer;
 }
 
-nav .profile p {
-  font-size: 18px;
-  color: white;
+.emails-wrap nav i:first-child {
+  margin-right: 100px;
+}
+
+.emails-wrap nav i:hover {
+  color: #3C445C;
+}
+
+.emails-wrap nav i.refresh.loading {
+  -webkit-transform: rotate(1080deg);
+      -ms-transform: rotate(1080deg);
+          transform: rotate(1080deg);
+  -webkit-transition: .98s ease-in-out;
+          transition: .98s ease-in-out;
+}
+
+.emails-wrap ul.emails {
+  width: 100%;
+  -webkit-transform: translateY(50px);
+      -ms-transform: translateY(50px);
+          transform: translateY(50px);
+}
+
+.emails-wrap ul.emails li.email {
+  width: 100%;
+  min-height: 100px;
+  border-bottom: 1px solid rgba(148, 153, 167, 0.3);
+  padding: 8px 0;
+  position: relative;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.emails-wrap ul.emails li.email * {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.emails-wrap ul.emails li.email.new-email {
+  display: none;
+}
+
+.emails-wrap ul.emails li.email:last-child {
+  border-bottom: none;
+}
+
+.emails-wrap ul.emails li.email.selected {
+  background-color: #AAE9FE;
+}
+
+.emails-wrap ul.emails li.email.selected:hover {
+  background-color: #AAE9FE;
+}
+
+.emails-wrap ul.emails li.email:hover {
+  background-color: rgba(55, 199, 253, 0.4);
+}
+
+.emails-wrap ul.emails li.email .prof-pic {
+  width: 80px;
+  height: 80px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.emails-wrap ul.emails li.email .prof-pic img {
+  width: 40px;
+  border-radius: 50%;
+}
+
+.emails-wrap ul.emails li.email .prof-pic .initials {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #37C7FD;
+  border-radius: 50%;
+  color: #37C7FD;
+  text-align: center;
+  line-height: 36px;
+}
+
+.emails-wrap ul.emails li.email .email-summary {
+  width: 100%;
+  padding-right: 20px;
+}
+
+.emails-wrap ul.emails li.email .email-summary .first-line {
+  width: 100%;
+}
+
+.emails-wrap ul.emails li.email .email-summary .first-line span.name {
+  color: #9499A7;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.emails-wrap ul.emails li.email .email-summary .first-line span.time {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  color: #9499A7;
+  font-size: 16px;
+  font-weight: 400;
+  float: right;
+}
+
+.emails-wrap ul.emails li.email .email-summary .first-line span.time .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 10px;
+  margin-top: 6px;
+}
+
+.emails-wrap ul.emails li.email .email-summary .first-line span.time .dot.unread {
+  background-color: #37C7FD;
+}
+
+.emails-wrap ul.emails li.email .email-summary .headline {
+  color: #3C445C;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 1px;
+  text-align: left;
+  padding: 5px 0;
 }
 
-nav .profile i {
-  color: white;
-  margin-left: 5px;
-  margin-top: 3px;
+.emails-wrap ul.emails li.email .email-summary .summary {
+  color: #9499A7;
+  font-size: 15px;
+  font-weight: 400;
 }
 
-nav .profile .profile-dropdown {
-  width: 250px;
+.email-view {
+  width: 60%;
+  height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+  left: 40%;
+  background-color: #F9F9F9;
+  z-index: 1;
+}
+
+.email-card {
+  width: 90%;
+  max-width: 700px;
+  height: 400px;
   position: absolute;
-  top: 70px;
-  right: 10%;
+  left: 50%;
+  top: 50%;
+  background-color: white;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  overflow: hidden;
-  z-index: 999;
-  -webkit-transform: scale3d(0, 0, 0);
-          transform: scale3d(0, 0, 0);
-  -webkit-transform-origin: 100% 0%;
-      -ms-transform-origin: 100% 0%;
-          transform-origin: 100% 0%;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-nav .profile .profile-dropdown.active {
-  -webkit-transform: scale3d(1, 1, 1);
-          transform: scale3d(1, 1, 1);
-  -webkit-transform-origin: 100% 0%;
-      -ms-transform-origin: 100% 0%;
-          transform-origin: 100% 0%;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-nav .profile .profile-dropdown.active > ul > li {
-  opacity: 1;
-  -webkit-transform: translate3d(0%, 0px, 0px);
-          transform: translate3d(0%, 0px, 0px);
+  border-radius: 5px;
+  opacity: 0;
+  -webkit-transform: translate(-50%, -45%);
+      -ms-transform: translate(-50%, -45%);
+          transform: translate(-50%, -45%);
   -webkit-transition: .3s ease-in-out;
           transition: .3s ease-in-out;
 }
 
-nav .profile .profile-dropdown.active > ul > li:nth-child(1) {
-  -webkit-transition-delay: 0.1s;
-          transition-delay: 0.1s;
-}
-
-nav .profile .profile-dropdown.active > ul > li:nth-child(2) {
-  -webkit-transition-delay: 0.2s;
-          transition-delay: 0.2s;
-}
-
-nav .profile .profile-dropdown.active > ul > li:nth-child(3) {
-  -webkit-transition-delay: 0.3s;
-          transition-delay: 0.3s;
-}
-
-nav .profile .profile-dropdown ul {
-  width: 250px;
-  background-color: white;
-}
-
-nav .profile .profile-dropdown ul li {
-  width: 100%;
-  height: 50px;
-  color: #363B3E;
-  font-weight: 600;
-  opacity: 0;
-  -webkit-transform: translate3d(50%, 0px, 0px);
-          transform: translate3d(50%, 0px, 0px);
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-transition: .2s ease-in-out;
-          transition: .2s ease-in-out;
-}
-
-nav .profile .profile-dropdown ul li:hover > i {
-  padding-right: 30px;
-  -webkit-transition: .2s ease-in-out;
-          transition: .2s ease-in-out;
-}
-
-nav .profile .profile-dropdown ul li:not(:last-child) {
-  border-bottom: 1px solid #CDD5D7;
-}
-
-nav .profile .profile-dropdown ul li i {
-  color: #363B3E;
-  padding: 0 10px;
-  padding-right: 20px;
-  -webkit-transition: .2s ease-in-out;
-          transition: .2s ease-in-out;
-}
-
-.email-list {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  overflow-y: scroll;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-.email-list.open {
-  width: 50%;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-.emails-wrap .navbar {
-  padding: 0 30px;
-  padding-top: 40px;
-}
-
-.emails-wrap .navbar input {
-  border: 1px solid #CDD5D7;
-  border-radius: 20px;
-  padding: 8px 15px;
-  font-size: 14px;
-  color: #363B3E;
-  padding-right: 35px;
-}
-
-.emails-wrap .navbar input:hover, .emails-wrap .navbar input:focus {
-  border: 1px solid #363B3E;
-}
-
-.emails-wrap .navbar input:hover + i.search, .emails-wrap .navbar input:focus + i.search {
-  color: #363B3E;
-}
-
-.emails-wrap .navbar i.search {
-  -webkit-transform: translate3d(0px, 5px, 0px);
-          transform: translate3d(0px, 5px, 0px);
-  font-size: 18px;
-  margin-left: -35px;
-  color: #CDD5D7;
-  cursor: pointer;
-}
-
-.emails-wrap ul.list-of-emails {
-  width: 100%;
-  margin-top: 50px;
-}
-
-.emails-wrap ul.list-of-emails li {
-  width: 100%;
-  height: 80px;
-  border-bottom: 1px solid #CDD5D7;
-  cursor: pointer;
-}
-
-.emails-wrap ul.list-of-emails li:hover {
-  background-color: #CDD5D7;
-}
-
-.email-view {
-  width: 50%;
-  height: 100%;
-  position: fixed;
-  overflow-y: scroll;
-  -webkit-transform: translate3d(200%, 0px, 0px);
-          transform: translate3d(200%, 0px, 0px);
-  background-color: white;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-.email-view.open {
-  -webkit-transform: translate3d(100%, 0px, 0px);
-          transform: translate3d(100%, 0px, 0px);
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-.email-view .wrap {
-  -webkit-transform: translate3d(0px, 20%, 0px);
-          transform: translate3d(0px, 20%, 0px);
-  opacity: 0;
-}
-
-.email-view .wrap.open {
-  -webkit-transform: translate3d(0px, 0%, 0px);
-          transform: translate3d(0px, 0%, 0px);
+.email-card.open {
   opacity: 1;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-  -webkit-transition-delay: .2s;
-          transition-delay: .2s;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-transition: .3s ease-in-out;
+          transition: .3s ease-in-out;
 }
 
-.email-view .wrap h1 {
-  color: #363B3E;
-  padding: 30px 40px;
-}
-
-.email-view .wrap p {
-  color: #4e5559;
-  padding: 10px 40px;
-}
-
-.an-email.open {
-  border-top: 1px solid #CDD5D7;
-  background-color: white;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
-}
-
-.an-email.open:hover {
-  background-color: white;
-  -webkit-transition: .4s ease-in-out;
-          transition: .4s ease-in-out;
+.email-card.close {
+  opacity: 0;
+  -webkit-transform: translate(-50%, -65%);
+      -ms-transform: translate(-50%, -65%);
+          transform: translate(-50%, -65%);
+  -webkit-transition: .3s ease-in-out;
+          transition: .3s ease-in-out;
 }
