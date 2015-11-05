@@ -9,7 +9,7 @@ module.exports.channelMessages = (socket, userId) => {
   let channelMessagesQ =
     r.table('messages')
       .filter((doc) => {
-        return doc('channel_id').match("^C|D")
+        return doc('channel_id').match('^C|D')
       }).changes()
 
   db.rethinkQuery(channelMessagesQ, {feed: true})
@@ -33,7 +33,8 @@ module.exports.channelMessages = (socket, userId) => {
           r.table('users')
           .get(userId)('channels')
           .filter((channel) => {
-            return channel("id").match(channel_id)
+            console.log('channel', channel_id);
+            return channel('id').match(channel_id)
           })
           .count();
 
