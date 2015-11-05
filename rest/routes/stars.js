@@ -32,11 +32,25 @@ router.post('/stars.add', (req, res, next) => {
 
     let checkStarQ = r.table('stars').filter(star).count();
     let addStarQ = r.table('stars').insert(star);
+    let updateUserChannelsQ =
+      r.table('users')
+        .get(userId)
+        .update((user) => {
+          return {
+            channels: user('channels').map((channel) => {
+              return r.branch(
+                channel('id').eq(channelId),
+                channel.merge({is_starred: true}),
+                channel
+              )
+            })
+          }
+        })
 
     db.rethinkQuery(checkStarQ)
       .then((count) => {
         if (count === 0) {
-          db.rethinkQuery(addStarQ)
+          db.rethinkQuery(r.do(addStarQ, updateUserChannelsQ))
             .then(() => {
                 res.status(200).json({ok: true});
             }).catch((err) => {
@@ -65,10 +79,26 @@ router.post('/stars.remove', (req, res, next) => {
     }
 
     let removeQ = r.table('stars').filter(star).delete();
+    let updateUserChannelsQ =
+      r.table('users')
+        .get(userId)
+        .update((user) => {
+          return {
+            channels: user('channels').map((channel) => {
+              return r.branch(
+                channel('id').eq(channelId),
+                channel.without('is_starred'),
+                channel
+              )
+            })
+          }
+        })
 
     db.rethinkQuery(removeQ)
       .then((response) => {
         let deleted = response.deleted;
+
+        db.rethinkQuery(updateUserChannelsQ);
 
         if (deleted > 0) {
           res.status(200).json({ok: true});
