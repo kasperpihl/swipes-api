@@ -43,17 +43,34 @@ let createChannel = (creatorId, receiverId) => {
     db.rethinkQuery(createDMChannelQ)
       .then((inserted) => {
         let newChannelId = inserted.changes[0].new_val.id;
-        let channelToAppend = {
-          id: newChannelId
-        };
-        let updateQ =
-          r.table('users')
-            .getAll(creatorId, receiverId)
-            .update({
-              channels: r.row('channels').append(channelToAppend)
-            })
 
-        db.rethinkQuery(updateQ)
+        let creatorChannel = {
+          id: newChannelId,
+          user_id: creatorId
+        };
+        let receiverChannel = {
+          id: newChannelId,
+          user_id: receiverId
+        };
+
+        let updateCreatorQ =
+          r.table('users')
+            .get(creatorId)
+            .update((user) => {
+              return {
+                channels: user('channels').append(receiverChannel)
+              }
+            });
+        let updateReceiverQ =
+          r.table('users')
+            .get(receiverId)
+            .update((user) => {
+              return {
+                channels: user('channels').append(creatorChannel)
+              }
+            });
+
+        db.rethinkQuery(r.do(updateCreatorQ, updateReceiverQ))
           .then(() => {
             return resolve(newChannelId);
           })

@@ -10,7 +10,7 @@ let channelsIm = (socket, userId) => {
     r.table('channels')
       .filter((channel) => {
         return channel('teamId').eq(TEAM_ID)
-          .and(channel('id').match("^D"))
+          .and(channel('id').match('^D'))
           .and(channel('user_ids').contains(userId))
       }).changes()
 

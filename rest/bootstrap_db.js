@@ -9,10 +9,11 @@ let Promise = require('bluebird'); // we should use native promises one day
 let generateId = util.generateSlackLikeId;
 let moment = require('moment');
 
-let tables = ['users', 'teams', 'channels', 'messages', 'events'];
+let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars'];
 let indexes = {
   channels: 'name',
-  users: 'email'
+  users: 'email',
+  users: 'username'
 }
 let teamDoc = {
   id: TEAM_ID,
