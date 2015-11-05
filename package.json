@@ -29,6 +29,7 @@
     "socket.io": "^1.3.7",
     "speakingurl": "^6.0.0",
     "sql": "0.47.0",
+    "subdirs": "^0.1.0",
     "underscore": "1.8.x",
     "validator": "^4.1.0"
   },
@@ -37,5 +38,6 @@
   },
   "devDependencies": {
     "contextio": "^0.5.0"
+    
   }
 }
