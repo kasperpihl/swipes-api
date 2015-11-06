@@ -5,6 +5,8 @@ $(document).ready(function(){
 	var email = $('li.email');
 	var emailCard = $('.email-card');
 	var textEditor = $('.text-editor');
+	var replyToEmail = $('.reply');
+	
 	var multiSelect = $('.multiple-selection');
 	var refreshEmail = $('.refresh');
 	var archiveEmail = $('.archive');
@@ -82,9 +84,13 @@ $(document).ready(function(){
 			$(this).removeClass('loading');
 			$('.new-email').css('display', 'flex');
 		})
+		
+		multiSelect.removeClass('open');
+		$('.items-selected').html('');
 	})
 	
-	replyToEmail.on('click', function() {
+	replyToEmail.on('click', function(e) {
+		console.log(e);
 		var emailFrom = $('.email-card').find('.from').text();
 		var getSubject = $('.reply-prev-email').find('.headline').text();
 		var deleteEmailAddress = '<i class="material-icons">close</i>';
