@@ -38,6 +38,7 @@ let channelsIm = (socket, userId) => {
             })
 
             type = 'im_created';
+            // TODO TIHO
             data = {
               user_id: targetUserId,
               channel: n

@@ -1,7 +1,5 @@
 var $ = window.jQuery;
 $(document).ready(function(){
-	parent.postMessage(JSON.stringify({ok:true}), "http://localhost:9000");
-	
 	var email = $('li.email');
 	var emailCard = $('.email-card');
 	var multiSelect = $('.multiple-selection');

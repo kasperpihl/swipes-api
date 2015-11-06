@@ -15,9 +15,9 @@ document.getElementById("jquery-temp-id").id = "";
 
 <body>
 <script>
-window.swipes = {}
+var origin = "http://localhost:9000"
 function receivedMessageFromSwipes(message){
-	if(message.origin == "http://localhost:9000"){
+	if(message.origin == origin){
 		var i, json = JSON.parse(message.data);
 		if(!json || !json.ok){
 			console.log("error w/ json to app");
@@ -44,13 +44,35 @@ function receivedMessageFromSwipes(message){
 	}
 }
 window.addEventListener("message", receivedMessageFromSwipes, false);
+
+
+var SwipesController = (function() {
+	function SwipesController() {
+		
+	}
+	SwipesController.prototype.test = function() {
+		parent.postMessage(JSON.stringify({ok:true, type:"ping"}), origin);
+	};
+
+	return SwipesController;
+
+})();
+(function(){
+	$(document).click(function(e){
+		console.log("parent click", e);
+	});
+})
+window.swipes = new SwipesController();
+swipes.test();
 </script>
 
 
 
 
-<script type='text/javascript'>
 
+
+<script type='text/javascript'>
+/*
 // This code is for hijacking and controlling ajax calls.
 var s_ajaxListener = new Object();
 s_ajaxListener.tempOpen = XMLHttpRequest.prototype.open;
@@ -79,7 +101,7 @@ XMLHttpRequest.prototype.send = function(a,b) {
   s_ajaxListener.tempSend.apply(this, arguments);
   if(s_ajaxListener.method.toLowerCase() == 'post')s_ajaxListener.data = a;
   s_ajaxListener.callback();
-}
+}*/
 </script>
 </body>
 </html>
