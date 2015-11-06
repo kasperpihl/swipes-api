@@ -27,14 +27,14 @@ router.get('/channels.list', (req, res, next) => {
 router.post('/channels.mark', (req, res, next) => {
   // T_TODO validation
   let userId = req.session.userId;
-  let channel_id = req.body.channel_id;
+  let channelId = req.body.channel_id;
   let ts = req.body.ts;
 
   let findChannelIndexQ =
     r.table("users")
       .get(userId)("channels")
       .offsetsOf(
-        r.row("id").match(channel_id)
+        r.row("id").match(channelId)
       )
       .nth(0)
 
@@ -53,7 +53,16 @@ router.post('/channels.mark', (req, res, next) => {
         })
     })
 
-  db.rethinkQuery(updateQ)
+  let eventQ =
+    r.table('events')
+      .insert({
+        type: 'channel_marked',
+        user_id: userId,
+        channel_id: channelId,
+        ts: ts
+      })
+
+  db.rethinkQuery(r.do(updateQ, eventQ))
     .then(() => {
         res.status(200).json({ok: true});
     }).catch((err) => {

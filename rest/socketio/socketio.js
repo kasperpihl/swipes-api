@@ -22,6 +22,7 @@ module.exports = (io) => {
     messages(socket, userId);
     im.channelsIm(socket, userId);
     im.userIm(socket, userId);
+    im.channelMarked(socket, userId);
     stars.stars(socket, userId);
   });
 };
