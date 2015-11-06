@@ -286,6 +286,7 @@ html, body {
 	box-shadow: $mat-sha-two;
 	border-radius: 5px;
 	opacity: 0;
+	overflow: hidden;
 	transform: translateX(-50%);
 	transition: .3s ease-in-out;
 	
@@ -294,13 +295,106 @@ html, body {
 		top: 100px;
 		transition: .3s ease-in-out;
 	}
-	
-	&.close {
-		opacity: 0;
-		transform: translate(-50%, -65%);
-		transition: .3s ease-in-out;
+
+	.destination-fields {
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		.to-field {
+			border: 1px solid rgba($lightGray,.3);
+			padding: 5px 15px;
+			color: rgba($lightGray, .6);
+			display: flex;
+			align-items: center;
+			
+			span.email {
+				color: $darkGray;
+				background-color: rgba($lightGray, .3);
+				padding: 5px 10px;
+				padding-right: 0px;
+				border-radius: 5px;
+				display: flex;
+				align-items: center;
+				margin-left: 15px;
+				
+				i {
+					padding: 0 10px;
+					cursor: pointer;
+					font-size: 16px;
+					color: rgba($darkGray, .6);
+				}
+				
+				&:hover > i {
+					color: $darkGray;
+				}
+			}
+		}
+		
+		.subject-field {
+			border: 1px solid rgba($lightGray,.3);
+			border-top: none;
+			padding: 10px 15px;
+			color: rgba($lightGray, .6);
+			
+			span.subject {
+				color: $darkGray;
+				padding: 5px 5px;
+				padding-right: 0px;
+				margin-left: 5px;
+			}
+		}
 	}
 	
+	.reply-wrap {
+		width: 100%;
+		min-height: 400px;
+		padding: 50px 0;
+		padding-bottom: 100px;
+		background-color: #eee;
+		position: relative;
+		
+		.text-editor {
+			width: 90%;
+			min-height: 300px;
+			margin-left: 5%;
+			color: $darkGray;
+		}
+		.editor-toolbar {
+			width: 100%;
+			height: 50px;
+			background-color: white;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			border-bottom: 1px solid rgba($lightGray, .4);
+			
+			.btn-send {
+				width: 100px;
+				height: 50px;
+				background-color: $blue;
+				color: white;
+				line-height: 50px;
+				position: absolute;
+				right: 0;
+				text-align: center;
+				cursor: pointer;
+			}
+		}
+	}
+	
+	.reply-prev-email {
+		
+		&.active {
+			width: 95%;
+			margin-top: 80px;
+			margin-left: 5%;
+			border-left: 5px solid $lightBlue;
+			
+			& * {
+				transform: scale(.97);
+			}
+		}
+	} 
+
 	.headline {
 		color: $darkGray;
 		font-size: 22px;
