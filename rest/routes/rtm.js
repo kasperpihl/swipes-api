@@ -15,8 +15,14 @@ router.get('/rtm.start', (req, res, next) => {
   let meQ = r.table('users').get(userId).without('password');
   let channelsQ =
   r.table('channels')
+    .filter((channel) => {
+      return channel('id').match('^C')
+    })
     .concatMap((channel) => {
       return r.table('users').get(userId)('channels')
+        .filter((uChannel) => {
+          return uChannel('id').match('^C')
+        })
         .map((uChannel) => {
       	  return r.branch(
             uChannel('id').eq(channel('id')),
