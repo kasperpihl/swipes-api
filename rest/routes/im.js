@@ -93,40 +93,32 @@ let openChannel = (userId, targetUserId,channelId) => {
   }
 
   return new Promise((resolve, reject) => {
-    let findChannelIndexQ =
-      r.table("users")
-        .get(userId)("channels")
-        .offsetsOf(
-          r.row("id").match(channelId)
-        )
-        .nth(0)
-
-      let updateQ =
-        findChannelIndexQ.do((index) => {
-          return r.table('users')
-            .get(userId)
-            .update((user) => {
-              return {
-                channels: user('channels').changeAt(index,
-                  user("channels")
-                    .nth(index)
-                    .merge({"is_open": true})
-                )
-              }
+    let updateQ =
+      r.table('users')
+        .get(userId)
+        .update((user) => {
+          return {
+            channels: user('channels').map((channel) => {
+              return r.branch(
+                channel('id').eq(channelId),
+                channel.merge({'is_open': true}),
+                channel
+              )
             })
+          }
         })
 
-      let imOpenEventQ = r.table('events').insert(imOpenEvent);
+    let imOpenEventQ = r.table('events').insert(imOpenEvent);
 
-      db.rethinkQuery(updateQ)
-        .then(() => {
-          db.rethinkQuery(imOpenEventQ)
+    db.rethinkQuery(updateQ)
+      .then(() => {
+        db.rethinkQuery(imOpenEventQ)
 
-          return resolve(true);
-        })
-        .catch((err) => {
-          return reject(err);
-        })
+        return resolve(true);
+      })
+      .catch((err) => {
+        return reject(err);
+      })
   })
 }
 
