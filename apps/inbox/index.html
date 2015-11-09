@@ -165,17 +165,43 @@
 				<i class="material-icons reply">reply</i>
 				<i class="material-icons delete">delete</i>
 			</div>
+			
+			<div class="new-email-card">
+				<div class="destination-fields">
+					<div class="to-field">To: <div class="emails" contenteditable="true"><span class="email">kristjan@ragunaru.com<i class="material-icons">close</i></span></div> </div>
+					<div class="subject-field">Subject:<span class="subject" contenteditable="true"></span></div>
+				</div>
+				
+				<div class="reply-wrap">
+					<div class="text-editor" contenteditable="true">
+						Compose new Email
+					</div>
+					<div class="editor-toolbar">
+						<div class="getImg">
+							<i class="material-icons">attach_file</i>
+						</div>
+						<div class="btn-send">Send</div> 
+					</div>
+				</div> 
+			</div>
 
 			<div class="email-card">
 				
 				<div class="destination-fields hidden">
-					<div class="to-field">To:<span class="email"></span></div>
+					<div class="to-field">To: <div class="emails" contenteditable="true"><span class="email"></span></div> </div>
 					<div class="subject-field">Subject:<span class="subject" contenteditable="true"></span></div>
 				</div>
 				
 				<div class="reply-wrap hidden">
-					<div class="text-editor" contenteditable="true"></div>
-					<div class="editor-toolbar"><div class="btn-send">Send</div> </div>
+					<div class="text-editor" contenteditable="true">
+						Compose reply
+					</div>
+					<div class="editor-toolbar">
+						<div class="getImg">
+							<i class="material-icons">attach_file</i>
+						</div>
+						<div class="btn-send">Send</div> 
+					</div>
 				</div> 
 				
 				<div class="reply-prev-email">
@@ -425,4 +451,12 @@
 		</div>
 	</div>
 
+</div>
+
+<div class="new-email-fab">
+	<i class="material-icons">close</i>
+</div>
+
+<div class="new-email-wrapper">
+	<div class="new-email-bgc"></div>
 </div>

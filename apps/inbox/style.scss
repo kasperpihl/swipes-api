@@ -85,6 +85,29 @@ html, body {
 	z-index: 99;
 }
 
+.new-email-fab {
+	width: 50px;
+	height: 50px;
+	background-color: $orange;
+	border-radius: 50%;
+	position: absolute;
+	bottom: 50px;
+	left: 35%;
+	z-index: 9999;
+	transform: rotate(45deg);
+	cursor: pointer;
+	
+	i {
+		left: 50%;
+    	top: 50%;
+		position: absolute;
+		transform-origin: 50% 50%;
+    	transform: translate(-50%, -50%);
+		color: white;
+		cursor: pointer;
+	}
+}
+
 .emails-wrap {
 	width: 100%;
 	position: relative;
@@ -276,6 +299,38 @@ html, body {
 	}
 }
 
+.new-email-wrapper {
+	width: 80%;
+	left: 50%;
+	top: 50%;
+	height: 60vh;
+	position: absolute;
+	z-index: 9999;
+	overflow: hidden;
+	transform: scale3d(0,0,0) translate(-50%, -50%);
+	
+	&.scale-in {
+		transform: scale3d(1,1,1) translate(-50%, -50%);
+	}
+}
+
+.new-email-bgc {
+	width: 200px;
+	height: 200px;
+	position: absolute;
+	left: calc(50% - 100px);
+	top: calc(50% - 100px);
+	border-radius: 50%;
+	background-color: $darkGray;
+	transform: scale3d(0,0,0);
+	
+	&.scale-in {
+		transform: scale3d(8,8,8);
+		transition: .5s cubic-bezier(.31,-1.04,.45,1.89);
+	}
+}
+
+
 .email-card {
 	width: 90%;
 	max-width: 700px;
@@ -302,9 +357,14 @@ html, body {
 		.to-field {
 			border: 1px solid rgba($lightGray,.3);
 			padding: 5px 15px;
+			min-height: 40px;
 			color: rgba($lightGray, .6);
 			display: flex;
 			align-items: center;
+			
+			.emails {
+				min-width: 40px;
+			}
 			
 			span.email {
 				color: $darkGray;
@@ -347,16 +407,21 @@ html, body {
 	.reply-wrap {
 		width: 100%;
 		min-height: 400px;
-		padding: 50px 0;
-		padding-bottom: 100px;
-		background-color: #eee;
+		padding-bottom: 50px;
+		background-color: white;
 		position: relative;
 		
 		.text-editor {
-			width: 90%;
-			min-height: 300px;
-			margin-left: 5%;
+			width: 100%;
+			min-height: 350px;
+			padding: 10px 15px;
+			background-color: rgba(0,0,0,.03);
 			color: $darkGray;
+			
+			img {
+				max-width: 90%;
+				margin-left: 5%;
+			}
 		}
 		.editor-toolbar {
 			width: 100%;
@@ -375,8 +440,25 @@ html, body {
 				line-height: 50px;
 				position: absolute;
 				right: 0;
+				top: 0;
 				text-align: center;
 				cursor: pointer;
+			}
+			
+			.getImg {
+				width: 50px;
+				height: 50px;
+				line-height: 50px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				text-align: center;
+				cursor: pointer;
+				
+				i {
+					line-height: 50px;
+					color: $lightGray;
+				}
 			}
 		}
 	}
