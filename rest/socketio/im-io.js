@@ -87,7 +87,45 @@ let userIm = (socket, userId) => {
     })
  }
 
+ let channelMarked = (socket, userId) => {
+   let listenQ =
+     r.table('events')
+       .filter((e) => {
+         return e('type').eq('channel_marked')
+           .and(e('user_id').eq(userId))
+       })
+       .changes()
+
+  db.rethinkQuery(listenQ, {feed: true})
+   .then((cursor) => {
+     cursor.each((err, row) => {
+       if (err) {
+         console.log(err);
+         // T_TODO how to handle erros here?!
+         // Sending error message on the socket?
+         return;
+       }
+
+       let type;
+       let data;
+
+       if (!row.old_val) {
+         let n = row.new_val;
+
+         type = 'channel_marked';
+         data = {
+           channel_id: n.channel_id,
+           ts: n.ts
+         };
+       }
+
+       socket.emit('message', {type: type, data: data});
+     })
+   })
+ }
+
  module.exports = {
    channelsIm: channelsIm,
-   userIm: userIm
+   userIm: userIm,
+   channelMarked: channelMarked
  }

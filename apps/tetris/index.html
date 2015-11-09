@@ -21,7 +21,7 @@
 
   <div id="tetris">
     <div id="menu">
-      <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
+      <p id="start"><a href="javascript:play();">Press Enter to Play.</a></p>
       <p><canvas id="upcoming"></canvas></p>
       <p>score <span id="score">00000</span></p>
       <p>rows <span id="rows">0</span></p>
@@ -61,8 +61,8 @@
     // game constants
     //-------------------------------------------------------------------------
 
-    var KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
-        DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, MIN: 0, MAX: 3 },
+    var KEY     = { ENTER: 13, ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
+        DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, TELEPORT: 4, MIN: 0, MAX: 3 },
         stats   = new Stats(),
         canvas  = get('canvas'),
         ctx     = canvas.getContext('2d'),
@@ -213,10 +213,11 @@
           case KEY.RIGHT:  actions.push(DIR.RIGHT); handled = true; break;
           case KEY.UP:     actions.push(DIR.UP);    handled = true; break;
           case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
+          case KEY.SPACE:   actions.push(DIR.TELEPORT);  handled = true; break;
           case KEY.ESC:    lose();                  handled = true; break;
         }
       }
-      else if (ev.keyCode == KEY.SPACE) {
+      else if (ev.keyCode == KEY.ENTER) {
         play();
         handled = true;
       }
@@ -274,6 +275,7 @@
         case DIR.RIGHT: move(DIR.RIGHT); break;
         case DIR.UP:    rotate();        break;
         case DIR.DOWN:  drop();          break;
+        case DIR.TELEPORT: move(DIR.TELEPORT);      break;
       }
     }
 
@@ -283,8 +285,26 @@
         case DIR.RIGHT: x = x + 1; break;
         case DIR.LEFT:  x = x - 1; break;
         case DIR.DOWN:  y = y + 1; break;
+        case DIR.TELEPORT:  y = y; break;
       }
-      if (unoccupied(current.type, x, y, current.dir)) {
+
+      if (dir === DIR.TELEPORT) {
+        var moveOrNot = false;
+
+        for (var t=current.y; t<30; t++) {
+          if (unoccupied(current.type, x, t, current.dir)) {
+            current.x = x;
+            current.y = current.y + 1;
+            invalidate();
+            moveOrNot = true;
+          } else {
+            current.y = current.y - 1; // Don't ask me... I have no idea too.
+            break;
+          }
+        }
+
+        return moveOrNot;
+      } else if (unoccupied(current.type, x, y, current.dir)) {
         current.x = x;
         current.y = y;
         invalidate();
@@ -316,6 +336,20 @@
         }
       }
     }
+
+    // function teleport() {
+    //   if (!move(DIR.TELEPORT)) {
+    //     addScore(10);
+    //     dropPiece();
+    //     removeLines();
+    //     setCurrentPiece(next);
+    //     setNextPiece(randomPiece());
+    //     clearActions();
+    //     if (occupied(current.type, current.x, current.y, current.dir)) {
+    //       lose();
+    //     }
+    //   }
+    // }
 
     function dropPiece() {
       eachblock(current.type, current.x, current.y, current.dir, function(x, y) {
