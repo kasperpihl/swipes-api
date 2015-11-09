@@ -120,7 +120,7 @@ let openImChannel = (userId, channelId) => {
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
   let channelId = req.body.channel_id;
-  let userId = req.session.userId;
+  let userId = req.userId;
   let text = req.body.text;
 
   if (validator.isNull(channelId)) {

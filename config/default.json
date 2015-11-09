@@ -4,5 +4,6 @@
     "port": 28015,
     "db": "swipes"
   },
-  "origin": "http://localhost:9000"
+  "origin": "http://localhost:9000",
+  "jwtTokenSecret": "swipy the dinocat"
 }

@@ -150,7 +150,7 @@ let openChannel = (userId, targetUserId,channelId) => {
 // }
 
 router.post('/im.list', (req, res, next) => {
-  let userId = req.session.userId;
+  let userId = req.userId;
 
   let listQ = imListQ(userId);
 
@@ -164,7 +164,7 @@ router.post('/im.list', (req, res, next) => {
 
 router.post('/im.open', (req, res, next) => {
   // T_TODO validate input data
-  let userId = req.session.userId;
+  let userId = req.userId;
   let targetUserId = req.body.user_id;
 
   let userImListQ = toArrayOfIds(imListQ(userId));

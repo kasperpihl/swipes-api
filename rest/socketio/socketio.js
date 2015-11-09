@@ -10,7 +10,7 @@ let stars = require('./stars-io.js');
 module.exports = (io) => {
   io.sockets.on('connection', (socket) => {
     console.log('connected!');
-    let userId = socket.request.session.userId;
+    let userId = socket.request.userId;
 
     if (!userId) {
       return;

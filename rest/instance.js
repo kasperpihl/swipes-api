@@ -10,29 +10,13 @@ let app = express();
 
 let server = app.listen(PORT);
 let io = require('socket.io').listen(server);
+let jwt = require('jwt-simple');
 let cors = require('cors');
 let bodyParser = require( 'body-parser' );
 let _ = require( 'underscore' );
-let cookieParser = require('cookie-parser');
-let session = require('express-session');
-let util = require('./util.js');
 let config = require('config');
-
-let sessionMiddleware = session({
-  resave: true,
-  saveUninitialized: true,
-  secret: 'swipy the dinocat'
-})
-
-app.use(cookieParser());
-
-// When socket-io documentation sux you go to stackoverflow
-// http://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
-io.use((socket, next) => {
-  sessionMiddleware(socket.request, socket.request.res, next);
-})
-
-app.use(sessionMiddleware);
+let util = require('./util.js');
+let jwtMiddleware = require('./jwt-auth-middleware.js');
 
 app.use(cors({
   origin: config.get('origin'),
@@ -59,7 +43,6 @@ let appsRouter = require('./routes/apps.js');
 let usersAuth = require('./routes/users_auth.js');
 let usersRouter = require('./routes/users.js');
 let channelsRouter = require('./routes/channels.js');
-let tasksRouter = require('./routes/tasks.js');
 let rtmRouter = require('./routes/rtm.js');
 let chatRouter = require('./routes/chat.js');
 let imRouter = require('./routes/im.js');
@@ -80,23 +63,25 @@ process.on('uncaughtException', (err) => {
 app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
-app.use('/v1', appsRouter);
 // Routes for which we don't need authentication
+app.use('/v1', appsRouter);
 app.use('/v1', usersAuth);
 
-
-// Middleware to check if the user is logged
-app.use('/v1', util.checkAuth);
+// Middleware to check if a valid token is provided from the user
+app.use('/v1', jwtMiddleware.restAuth);
 
 // Routes for which we need authentication
 app.use('/v1', usersRouter);
 app.use('/v1', channelsRouter);
-app.use('/v1', tasksRouter);
 app.use('/v1', rtmRouter);
 app.use('/v1', chatRouter);
 app.use('/v1', imRouter);
 app.use('/v1', starsRouter);
 
+// We want req.userId to the socket.io stuff too
+io.use((socket, next) => {
+  jwtMiddleware.ioAuth(socket.request, socket.request.res, next);
+})
 
 // require our socketio module and pass the io instance
 require('./socketio/socketio.js')(io);

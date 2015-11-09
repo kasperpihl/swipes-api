@@ -7,25 +7,13 @@ let r = require('rethinkdb');
 let validator = require('validator');
 let sha1 = require('sha1');
 let moment = require('moment');
+let jwt = require('jwt-simple');
+let config = require('config');
 let util = require('../util.js');
 let db = require('../db.js');
 let generateId = util.generateSlackLikeId;
 
 let router = express.Router();
-
-router.get('/users.logged', (req, res, next) => {
-  if (!req.session.userId) {
-    res.status(400).json({errors: [{message: 'Not logged in.'}]});
-  } else {
-    res.status(200).json({ok: true});
-  }
-});
-
-router.get('/users.logout', (req, res, next) => {
-  delete req.session.userId;
-
-  res.status(200).json({ok: true});
-});
 
 router.post('/users.login', (req, res, next) => {
   let email = validator.trim(req.body.email);
@@ -47,9 +35,11 @@ router.post('/users.login', (req, res, next) => {
         res.status(409).json({errors: [{field: 'password', message: 'Incorrect password.'}]});
       } else {
         let userId = results[0].id
+        let token = jwt.encode({
+          iss: userId
+        }, config.get('jwtTokenSecret'))
 
-        req.session.userId = userId;
-        res.status(200).json({ok: true});
+        res.status(200).json({ok: true, token: token});
       }
     }).catch((err) => {
       return next(err);
@@ -160,8 +150,11 @@ router.post('/users.create', (req, res, next) => {
       } else {
         db.rethinkQuery(insertUpdateQ)
           .then(() => {
-            req.session.userId = userId;
-            res.status(200).json({ok: true});
+            let token = jwt.encode({
+              iss: userId
+            }, config.get('jwtTokenSecret'))
+
+            res.status(200).json({ok: true, token: token});
           }).catch((err) => {
             return next(err);
           });

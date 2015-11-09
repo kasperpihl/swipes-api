@@ -13,7 +13,7 @@ let generateId = util.generateSlackLikeId;
 
 let router = express.Router();
 
-router.get('/channels.list', (req, res, next) => {
+router.post('/channels.list', (req, res, next) => {
   let query = r.table('channels');
 
   db.rethinkQuery(query)
@@ -26,7 +26,7 @@ router.get('/channels.list', (req, res, next) => {
 
 router.post('/channels.mark', (req, res, next) => {
   // T_TODO validation
-  let userId = req.session.userId;
+  let userId = req.userId;
   let channelId = req.body.channel_id;
   let ts = req.body.ts;
 
@@ -92,7 +92,7 @@ router.post('/channels.history', (req, res, next) => {
 
 router.post('/channels.create', (req, res, next) => {
   let doc = {};
-  let userId = req.session.userId;
+  let userId = req.userId;
   let name = getSlug(validator.trim(req.body.name));
 
   if (validator.isNull(name)) {
