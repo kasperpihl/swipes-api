@@ -1,0 +1,196 @@
+@mixin col {
+    border:0px solid rgba(0,0,0,0);
+    float:left;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    -moz-background-clip:padding-box !important;
+    -webkit-background-clip:padding-box !important;
+    background-clip:padding-box !important;
+}
+
+.col {
+   @include col;
+}
+
+@mixin grid($num, $gutter_pc, $gutter_px, $padding, $max_columns) {
+    $one_col: (100% - ($gutter_pc * ($max_columns - 1))) / $max_columns;
+    width:($one_col * $num) + ($gutter_pc * ($num - 1));
+    border-left-width:$gutter_px;
+    padding:$padding;
+    margin-left:$gutter_pc;
+}
+
+@mixin grid_first {
+    margin-left:0;
+}
+ 
+@media screen and (min-width: 0px) and (max-width: 619px) {
+        
+    .col {
+        margin-left:2%;
+        padding:0 1.6%;
+    }
+   
+    $max_columns: 3;
+    $padding: 0 1.6%;
+    $gutter_px: 0;
+    $gutter_pc: 2%;
+   
+    .row .col:first-child {
+        @include grid_first;
+    }
+        
+    .grid_1 {
+        @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_2 {
+        @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_3 {
+        @include grid_first;
+        width:100%;
+    }
+}
+
+@media screen and (min-width: 620px) and (max-width: 959px) {
+        
+    .col {
+        margin-left:2%;
+        padding:0 1.6%;
+    }
+        
+    
+    $max_columns: 6;
+    $padding: 0 1.6%;
+    $gutter_px: 0;
+    $gutter_pc: 2%;
+    
+    .row .col:first-child {
+        @include grid_first;
+    }
+        
+    .grid_1 {
+        @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_2 {
+        @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_3 {
+        @include grid(3, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_4 {
+        @include grid(4, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_5 {
+        @include grid(5, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_6 {
+        @include grid_first;
+        width:100%;
+    }
+}
+
+@media screen and (min-width: 960px) and (max-width: 1199px) {
+        
+    .col {
+        margin-left:2%;
+        padding:0 1.6%;
+    }
+        
+    $max_columns: 10;
+    $padding: 0 1.6%;
+    $gutter_px: 0;
+    $gutter_pc: 2%;
+    
+    .row .col:first-child {
+        @include grid_first;
+    }
+        
+    .grid_1 {
+        @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_2 {
+        @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_3 {
+        @include grid(3, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_4 {
+        @include grid(4, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_5 {
+        @include grid(5, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_6 {
+        @include grid(6, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_7 {
+        @include grid(7, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_8 {
+        @include grid(8, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_9 {
+        @include grid(9, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_10 {
+        @include grid_first;
+        width:100%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+        
+    .col {
+        margin-left:2%;
+        padding:0 1.6%;
+    }    
+    
+    $max_columns: 12;
+    $padding: 0 1.6%;
+    $gutter_px: 0;
+    $gutter_pc: 2%;
+    
+    .row .col:first-child {
+        @include grid_first;
+    }
+        
+    .grid_1 {
+        @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_2 {
+        @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_3 {
+        @include grid(3, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_4 {
+        @include grid(4, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_5 {
+        @include grid(5, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_6 {
+        @include grid(6, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_7 {
+        @include grid(7, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_8 {
+        @include grid(8, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_9 {
+        @include grid(9, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_10 {
+        @include grid(10, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_11 {
+        @include grid(11, $gutter_pc, $gutter_px, $padding, $max_columns);
+    }
+    .grid_12 {
+        @include grid_first;
+        width:100%;
+    }
+}
