@@ -6,6 +6,8 @@ let fs = require('fs');
 let r = require('rethinkdb');
 let config = require('config');
 let db = require('../db.js');
+// relative directory to installed apps
+let appDir = __dirname + '/../../apps/';
 
 require('rethinkdb-init')(r);
 let dbConfig = config.get('dbConfig');
@@ -61,19 +63,19 @@ let dropTables = (tables) => {
   });
 }
 
-let getManifest = (appId) => {
-  let manifest;
+let getAppFile = (appId, fileName) => {
+  let file;
 
   try {
-    let dest = __dirname + '/../../apps/' + appId + '/manifest.json';
+    let dest = appDir + appId + '/' + fileName;
 
-    manifest = JSON.parse(fs.readFileSync(dest, 'utf8'));
+    file = fs.readFileSync(dest, 'utf8');
   } catch (err) {
     console.log(err);
-    manifest = null;
+    file = null;
   }
 
-  return manifest;
+  return file;
 }
 
 router.post('/apps.list', (req, res, next) => {
@@ -114,7 +116,7 @@ router.post('/apps.activate', (req, res, next) => {
         updateApp(appId, updateObj, res, next);
       } else {
         let updateObj = {is_active: true};
-        let manifest = getManifest(appId);
+        let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
 
         if (!manifest) {
           return res.status(200).json({ok: false, err: 'no_manifest_found'});
@@ -182,7 +184,7 @@ router.post('/apps.delete', (req, res, next) => {
   }
 
   let deleteQ = r.table('apps').get(appId).delete();
-  let manifest = getManifest(appId);
+  let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
 
   if (!manifest) {
     return res.status(200).json({ok: false, err: 'no_manifest_found'});
@@ -214,7 +216,40 @@ router.post('/apps.delete', (req, res, next) => {
 });
 
 router.get('/apps.load', (req, res, next) => {
-  res.send("success")
+  let appId = req.query.appId;
+  let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+
+  // TODO: Do validations and stuff
+  if (!manifest) {
+    return res.status(200).json({ok: false, err: 'no_manifest_found'});
+  }
+
+  let indexFile = getAppFile(appId, manifest.main_app.index);
+
+  if(!indexFile){
+    return res.status(200).json({ok: false, err: 'no_index_found'});
+  }
+
+  let apiHost = 'http://' + req.headers.host
+  let appUrlDir = apiHost + '/apps/' + appId
+  let _defUrlDir = apiHost + '/apps/app-loader/'
+  // Insert SwipesSDK and scripts right after head
+  let insertString = '';
+  insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'underscore.min.js"></script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'swipes-client-sdk.js"></script>\r\n';
+  insertString += '<script>window.swipes = new SwipesClientSDK(SwipesAPIConnector, "'+apiHost+'", "' + req.query.token + '");</script>\r\n';
+
+  var index = indexFile.indexOf('<head>')
+  if(index != -1){
+    index += 6
+    indexFile = indexFile.slice(0, index) + insertString + indexFile.slice(index);  
+  }
+  // Replace <{appDir}}> with actual host
+  indexFile = indexFile.replace(new RegExp('<{appDir}>', 'g'), appUrlDir );
+
+  res.status(200).send(indexFile);
 });
 
 module.exports = router;

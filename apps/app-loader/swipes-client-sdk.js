@@ -1,8 +1,17 @@
 var SwipesClientSDK = (function() {
 	var self;
-	function SwipesClientSDK(client) {
-		console.log("client", client);
-		this._client = new client("te");
+	function SwipesClientSDK(apiUrl, token) {
+		if (!SwipesAPIConnector){
+			throw new Error("SwipesClientSDK: SwipesAPIController not loaded first")
+		}
+		if (!apiUrl){
+			throw new Error("SwipesClientSDK: No apiUrl set in constructor");
+		}
+		if (!token) {
+			throw new Error("SwipesClientSDK: No token set in constructor");
+		}
+
+		this._client = new SwipesAPIConnector(apiUrl, token);
 		// set the sdk property on client so it can call this class
 		this._client._sdk = this;
 		self = this;
