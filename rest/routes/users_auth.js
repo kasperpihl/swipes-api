@@ -25,17 +25,25 @@ router.post('/users.login', (req, res, next) => {
 
   let query = r.table('users').filter({
     email: email
-  }).withFields('id', 'password', 'is_admin');
+  }).map((user) => {
+    return {
+      id: user('id'),
+      password: user('password'),
+      is_admin: user("is_admin").default(false)
+    }
+  });
 
   db.rethinkQuery(query)
-    .then((results) => {
-      if (results.length === 0) {
+    .then((users) => {
+      let user = users[0];
+
+      if (users.length === 0) {
         res.status(409).json({errors: [{field: 'email', message: 'Incorrect email.'}]});
-      } else if (password !== results[0].password) {
+      } else if (password !== user.password) {
         res.status(409).json({errors: [{field: 'password', message: 'Incorrect password.'}]});
       } else {
-        let userId = results[0].id;
-        let isAdmin = results[0].is_admin;
+        let userId = user.id;
+        let isAdmin = user.is_admin;
         let token = jwt.encode({
           iss: userId,
           adm: isAdmin
