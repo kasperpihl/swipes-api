@@ -3,16 +3,31 @@
 let express = require( 'express' );
 let router = express.Router();
 let fs = require('fs');
-let walk = require('walk');
-let subdirs = require('subdirs');
 let r = require('rethinkdb');
+let config = require('config');
 let db = require('../db.js');
 
-router.post('/app.list', (req, res, next) => {
+require('rethinkdb-init')(r);
+let dbConfig = config.get('dbConfig');
+
+let updateApp = (appId, updateObj, res, next) => {
+  let updateQ =
+    r.table('apps')
+      .get(appId)
+      .update(updateObj);
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+      res.status(200).json({ok: true});
+    }).catch((err) => {
+      return next(err);
+    });
+}
+
+router.post('/apps.list', (req, res, next) => {
   let isAdmin = req.isAdmin;
   let filter = isAdmin ? {} : {is_active: true};
-  let listQ =
-    r.table('apps').filter(filter);
+  let listQ = r.table('apps').filter(filter);
 
   db.rethinkQuery(listQ)
     .then((apps) => {
@@ -20,38 +35,80 @@ router.post('/app.list', (req, res, next) => {
     }).catch((err) => {
       return next(err);
     });
-
-  // subdirs(__dirname + "/../../apps/", function(err, dirs) {
-  //   console.log(dirs); // all of your subdirs are in here!
-  //   for(var i = 0 ; i < dirs.length ; i++){
-  //     var dir = dirs[i];
-  //     var split = dir.split("/");
-  //     var appName = split[split.length - 1];
-  //     if(appName == "app-loader")
-  //       continue;
-  //     console.log(i, dir);
-  //     try{
-  //       var obj = JSON.parse(fs.readFileSync(dir+"/manifest.json", 'utf8'));
-  //       console.log(obj);
-  //     }
-  //     catch(e){
-  //       console.log(e);
-  //     }
-  //   }
-  //   res.send("yeah");
-  // })
 });
 
 router.post('/apps.activate', (req, res, next) => {
+  let isAdmin = req.isAdmin;
 
+  if (!isAdmin) {
+    res.status(200).json({ok: false, err: 'not_admin'});
+  }
+
+  let appId = req.body && req.body.app_id;
+  let getAppQ = r.table('apps').get(appId);
+
+  db.rethinkQuery(getAppQ)
+    .then((app) => {
+      if (app.is_active) {
+        res.status(200).json({ok: false, err: 'already_active'});
+      } else if (app.is_active === false) {
+        let updateObj = {is_active: true};
+
+        updateApp(appId, updateObj, res, next);
+      } else {
+        let updateObj = {is_active: true};
+        let manifest;
+
+        try {
+          let dest = __dirname + '/../../apps/' + appId + '/manifest.json';
+
+          manifest = JSON.parse(fs.readFileSync(dest, 'utf8'));
+        } catch (err) {
+          console.log(err);
+          res.status(200).json({ok: false, err: 'no_manifest_found'});
+        }
+
+        let tables = manifest.tables;
+
+        if (!tables || tables.length < 1) {
+          updateApp(appId, updateObj, res, next);
+          return;
+        }
+
+        let prefixedTables = tables.map((item) => {
+          let name = appId + '_' + item.name;
+
+          item.name = name;
+          return item;
+        })
+
+        r.init(dbConfig, prefixedTables)
+          .then(() => {
+            updateApp(appId, updateObj, res, next);
+          }).catch((err) => {
+            return next(err);
+          });
+      }
+    }).catch((err) => {
+      return next(err);
+    });
 });
 
 router.post('/apps.deactivate', (req, res, next) => {
+  let isAdmin = req.isAdmin;
 
+  if (!isAdmin) {
+    res.status(200).json({ok: false, err: 'not_admin'});
+  }
+
+  let appId = req.body && req.body.app_id;
+  let updateObj = {is_active: false};
+
+  updateApp(appId, updateObj, res, next);
 });
 
 router.post('/apps.delete', (req, res, next) => {
-
+  
 });
 
 router.post('/apps.load', (req, res, next) => {
