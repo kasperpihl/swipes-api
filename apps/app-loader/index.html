@@ -1,7 +1,6 @@
 <html>
 <head>
-<script src="http://underscorejs.org/underscore.js"></script>
-<script id="jquery-temp-id"></script>
+<script src="jquery.js" id="jquery-temp-id"></script>
 <script>
 var PATH = "http://" + document.location.host + "/apps/";
 document.getElementById("jquery-temp-id").src = PATH + "app-loader/jquery-2.1.4.min.js";
@@ -45,145 +44,11 @@ function receivedMessageFromSwipes(message){
 	}
 }
 window.addEventListener("message", receivedMessageFromSwipes, false);
-function generateId(length) {
-	var i, j, possible, ref, text;
-	text = "";
-	possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
-};
-
-var ClientAPIController = (function() {
-	function ClientAPIController(url) {
-		_.bindAll(this, "_receivedMessageFromApp")
-		if (!url) {
-			throw new Error("No url set in constructor");
-		}
-
-		this._url = url;
-		this._timeoutTimer = 1;
-		this._timers = {};
-		this._callbacks = {};
-		window.addEventListener("message", this._receivedMessageFromApp, false);
-	}
-
-	ClientAPIController.prototype._apiCall = function(command, data, callback) {
-		
-		var callJson, identifier;
-		console.log("_api call", command, data);
-
-		if (!this._doc) {
-			throw new Error("No doc/iframe set");
-		}
-		identifier = generateId(10);
-		callJson = {
-			"identifier": identifier,
-			"command": command,
-			"data": data
-		};
-		if (callback && _.isFunction(callback)) {
-			this._addCallback(identifier, callback);
-		}
-		this._doc.postMessage(JSON.stringify(callJson), this._url);
-
-	};
-
-	ClientAPIController.prototype._receivedMessageFromApp = function(msg) {
-		var message;
-		message = JSON.parse(msg.data);
-		if (message.reply_to) {
-			this._doCallback(message.reply_to, message.data, message.error);
-		}
-	};
-
-	ClientAPIController.prototype._doCallback = function(identifier, res, err) {
-		var callback;
-		console.log("callback iframe", identifier, res, err);
-		callback = this._callbacks[identifier];
-		if (callback) {
-			callback(res, err);
-		}
-		this._clearCallback(identifier);
-	};
 
 
-	/*
-	Add callback for an identifier and set timeout to clear if not called before
-	*/
-
-	ClientAPIController.prototype._addCallback = function(identifier, callback) {
-		this._callbacks[identifier] = callback;
-		var _this = this;
-		this._timers[identifier] = setTimeout(function() {
-			if ((_this != null) && _this._callbacks[identifier]) {
-				_this._doCallback(identifier, null, "Timed out");
-			}
-		}, this._timeoutTimer * 1000);
-	};
-
-
-	/*
-	Clear out callbacks and timers
-	*/
-
-	ClientAPIController.prototype._clearCallback = function(identifier) {
-		if (this._callbacks[identifier]) {
-			delete this._callbacks[identifier];
-		}
-		if (this._timers[identifier]) {
-			clearTimeout(this._timers[identifier]);
-			delete this._timers[identifier];
-		}
-	};
-
-	return ClientAPIController;
-
-})();
-window.swipes = new ClientAPIController(origin);
-swipes._doc = parent;
-swipes._apiCall("test", {"hey":true}, function(res, err){
-	console.log("res iframe", res, err);
-});
 </script>
 
 
 
-
-
-
-<script type='text/javascript'>
-/*
-// This code is for hijacking and controlling ajax calls.
-var s_ajaxListener = new Object();
-s_ajaxListener.tempOpen = XMLHttpRequest.prototype.open;
-s_ajaxListener.tempSend = XMLHttpRequest.prototype.send;
-s_ajaxListener.callback = function () {
-  // this.method :the ajax method used
-  // this.url    :the url of the requested script (including query string, if any) (urlencoded) 
-  // this.data   :the data sent, if any ex: foo=bar&a=b (urlencoded)
-}
-
-XMLHttpRequest.prototype.open = function(a,b) {
-  if (!a) var a='';
-  if (!b) var b='';
-  s_ajaxListener.tempOpen.apply(this, arguments);
-  s_ajaxListener.method = a;  
-  s_ajaxListener.url = b;
-  if (a.toLowerCase() == 'get') {
-    s_ajaxListener.data = b.split('?');
-    s_ajaxListener.data = s_ajaxListener.data[1];
-  }
-}
-
-XMLHttpRequest.prototype.send = function(a,b) {
-  if (!a) var a='';
-  if (!b) var b='';
-  s_ajaxListener.tempSend.apply(this, arguments);
-  if(s_ajaxListener.method.toLowerCase() == 'post')s_ajaxListener.data = a;
-  s_ajaxListener.callback();
-}*/
-</script>
 </body>
 </html>
