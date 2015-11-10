@@ -1,33 +1,27 @@
 $(document).ready(function() {
 	// Set the width and the height of the floating-label container for label positioning
-	var sizeW = $('.floating-label').children('input').width();
-	var sizeH = $('.floating-label').children('input').height();
-	$('.floating-label').css('width', sizeW);	
-	$('.floating-label').css('height', sizeH);
+	var floatSizeW = $('.swipes-floating-label').children('input').width();
+	var floatSizeH = $('.swipes-floating-label').children('input').height();
+	$('.swipes-floating-label').css('width', floatSizeW);	
+	$('.swipes-floating-label').css('height', floatSizeH);
 })
 
-// Floating the label
-$('.floating-input').on('click', function() {
+$('.swipes-floating-input').on('focus', function() {
 	$(this).next('label').addClass('active');
 })
 
-// Remove active class from floating label if nothing typed in the input
-$(document).mouseup(function (e) {
-   var container = $('#email');
-
-   if (!container.is(e.target) && container.has(e.target).length === 0) {
-      
-		var valueOfCont = container.val();
-		if (valueOfCont.length > 0) {
-			
-		} else {
-			$('label').removeClass('active');
-		}
+$('.swipes-floating-input').on('blur', function() {
+	var floatingInputVal = $('.swipes-floating-input').val();
+	if(floatingInputVal.length > 0) {
 		
-   } else {
-		
+	} else {
+		$(this).next('label').removeClass('active');
 	}
-});
+})
+
+$('.swipes-slider').mouseup(function() {
+	$(this).blur();
+})
 
 // button.primary hover
 $('.hover-full').mouseenter(function() {
@@ -43,7 +37,6 @@ $('.hover-full').mouseenter(function() {
 
 // button.outline hover
 $('.hover-lighten').mouseenter(function() {
-	var bgColor = $(this).css('background-color');
 	var bgColorRGBA = $(this).css('background-color').replace(')', ', 0.75)').replace('rgb', 'rgba');
 	$(this).css('background-color', bgColorRGBA)
 }).mouseleave(function() {
@@ -54,4 +47,31 @@ $('.hover-lighten').mouseenter(function() {
 	var backToRGB = changeTo.replace('rgba', 'rgb');
 	var fullRGB = backToRGB + ')';
 	$(this).css('background-color', fullRGB);
+})
+
+$('.swipes-checkbox').on('click', function() {
+	var $el = $( this ).find(".swipes-input-checkbox");
+	$el.click();
+})
+
+$('.swipes-input-checkbox').change(function() {
+	if( $(this).is(':checked')) {
+		$(this).parent().addClass('checked');
+	} else {
+		$(this).parent().removeClass('checked');
+	}
+})
+
+$('.swipes-radio').on('click', function() {
+
+	var $el = $(this).find(".swipes-input-radio");
+	var name = $el.attr("name")
+
+	$(".swipes-input-radio[name='" + name + "']").each(function(){
+		$(this).prop("checked",false);
+		$(this).parent().removeClass("checked");
+	})
+	
+	$(this).addClass('checked');
+	$el.prop("checked", true);
 })
