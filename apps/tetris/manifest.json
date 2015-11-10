@@ -9,7 +9,8 @@
 	},
 	"tables":[
 		{
-			"name": "highscore"
+			"name": "highscore",
+			"indexes": ["score"]
 		}
 	]
 }
