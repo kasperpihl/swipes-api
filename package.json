@@ -32,7 +32,8 @@
     "sql": "0.47.0",
     "subdirs": "^0.1.0",
     "underscore": "1.8.x",
-    "validator": "^4.1.0"
+    "validator": "^4.1.0",
+    "walk": "^2.3.9"
   },
   "engines": {
     "node": "4.2.x"

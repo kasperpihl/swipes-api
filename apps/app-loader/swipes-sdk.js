@@ -6,7 +6,7 @@ var SwipesSDK = (function() {
 		self = this;
 	}
 
-	// API for navigation bar in main app
+	// API for handling navigation bar in main app
 	SwipesSDK.prototype.navigation = {
 		// Setting the title of the navigation bar manually
 		setTitle:function(title){
@@ -25,25 +25,30 @@ var SwipesSDK = (function() {
 			
 		}
 	};
-
+	
+	// API for handling data
 	SwipesSDK.prototype.api = {
 		get:function(options, callback){
 
 		},
 		save: function(options, saveData, callback){
-			
 			_this._client.callApi("api.save")
+		},
+		on:function(event, callback){
+
 		}
 	};
 
+	// API for handling calls from main app
+	SwipesSDK.prototype.handleLowLevelCall = function(message){
+
+	};
+	SwipesSDK.prototype.update = {
+
+	};
 	return SwipesSDK;
 
 })();
-
-
-
-
-
 
 
 
@@ -99,6 +104,9 @@ var SwipesLowLevelAPIConnector = (function() {
 		message = JSON.parse(msg.data);
 		if (message.reply_to) {
 			this._doCallback(message.reply_to, message.data, message.error);
+		}
+		else if(message.identifier){
+
 		}
 	};
 

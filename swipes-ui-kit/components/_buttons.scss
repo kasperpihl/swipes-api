@@ -3,6 +3,13 @@ button {
 	padding: 10px 20px;
 	transition: .1s ease-in-out;
 	
+	&.disabled {
+		background-color: $studioGray-100 !important;
+		border-color: $studioGray-100 !important;
+		color: $deepBlue-60 !important;
+		cursor: not-allowed !important;
+	}
+	
 	&.rounded {
 		border-radius: 5px;
 	}

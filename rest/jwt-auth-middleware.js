@@ -11,6 +11,7 @@ let restAuth = (req, res, next) => {
       let decoded = jwt.decode(token, config.get('jwtTokenSecret'));
 
       req.userId = decoded.iss;
+      req.isAdmin = decoded.adm;
       next();
     } catch (err) {
       res.status(200).json({ok: false, err: 'not_authed'});
