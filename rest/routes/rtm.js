@@ -9,8 +9,8 @@ let Promise = require('bluebird');
 
 let router = express.Router();
 
-router.get('/rtm.start', (req, res, next) => {
-  let userId = req.session.userId;
+router.post('/rtm.start', (req, res, next) => {
+  let userId = req.userId;
 
   let meQ = r.table('users').get(userId).without('password');
   let channelsQ =

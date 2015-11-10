@@ -61,6 +61,35 @@ html, body {
   z-index: 99;
 }
 
+.new-email-fab {
+  width: 50px;
+  height: 50px;
+  background-color: #FC3A1C;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 50px;
+  left: 35%;
+  z-index: 9999;
+  -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.new-email-fab i {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  -webkit-transform-origin: 50% 50%;
+      -ms-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  color: white;
+  cursor: pointer;
+}
+
 .emails-wrap {
   width: 100%;
   position: relative;
@@ -289,6 +318,44 @@ html, body {
   color: #3C445C;
 }
 
+.new-email-wrapper {
+  width: 80%;
+  left: 50%;
+  top: 50%;
+  height: 60vh;
+  position: absolute;
+  z-index: 9999;
+  overflow: hidden;
+  -webkit-transform: scale3d(0, 0, 0) translate(-50%, -50%);
+          transform: scale3d(0, 0, 0) translate(-50%, -50%);
+}
+
+.new-email-wrapper.scale-in {
+  -webkit-transform: scale3d(1, 1, 1) translate(-50%, -50%);
+          transform: scale3d(1, 1, 1) translate(-50%, -50%);
+}
+
+.new-email-bgc {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  left: -webkit-calc(50% - 100px);
+  left: calc(50% - 100px);
+  top: -webkit-calc(50% - 100px);
+  top: calc(50% - 100px);
+  border-radius: 50%;
+  background-color: #3C445C;
+  -webkit-transform: scale3d(0, 0, 0);
+          transform: scale3d(0, 0, 0);
+}
+
+.new-email-bgc.scale-in {
+  -webkit-transform: scale3d(8, 8, 8);
+          transform: scale3d(8, 8, 8);
+  -webkit-transition: 0.5s cubic-bezier(0.31, -1.04, 0.45, 1.89);
+          transition: 0.5s cubic-bezier(0.31, -1.04, 0.45, 1.89);
+}
+
 .email-card {
   width: 90%;
   max-width: 700px;
@@ -322,6 +389,7 @@ html, body {
 .email-card .destination-fields .to-field {
   border: 1px solid rgba(148, 153, 167, 0.3);
   padding: 5px 15px;
+  min-height: 40px;
   color: rgba(148, 153, 167, 0.6);
   display: -webkit-box;
   display: -webkit-flex;
@@ -331,6 +399,10 @@ html, body {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.email-card .destination-fields .to-field .emails {
+  min-width: 40px;
 }
 
 .email-card .destination-fields .to-field span.email {
@@ -378,17 +450,22 @@ html, body {
 .email-card .reply-wrap {
   width: 100%;
   min-height: 400px;
-  padding: 50px 0;
-  padding-bottom: 100px;
-  background-color: #eee;
+  padding-bottom: 50px;
+  background-color: white;
   position: relative;
 }
 
 .email-card .reply-wrap .text-editor {
-  width: 90%;
-  min-height: 300px;
-  margin-left: 5%;
+  width: 100%;
+  min-height: 350px;
+  padding: 10px 15px;
+  background-color: rgba(0, 0, 0, 0.03);
   color: #3C445C;
+}
+
+.email-card .reply-wrap .text-editor img {
+  max-width: 90%;
+  margin-left: 5%;
 }
 
 .email-card .reply-wrap .editor-toolbar {
@@ -409,8 +486,25 @@ html, body {
   line-height: 50px;
   position: absolute;
   right: 0;
+  top: 0;
   text-align: center;
   cursor: pointer;
+}
+
+.email-card .reply-wrap .editor-toolbar .getImg {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.email-card .reply-wrap .editor-toolbar .getImg i {
+  line-height: 50px;
+  color: #9499A7;
 }
 
 .email-card .reply-prev-email.active {

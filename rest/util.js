@@ -32,13 +32,6 @@ let util = {
   // suports only objects for now
   isEmpty: (obj) => {
     return Object.keys(obj).length === 0;
-  },
-  checkAuth: (req, res, next) => {
-    if (!req.session.userId) {
-      res.status(400).json({err: 'You are not authorized.'});
-    } else {
-      next();
-    }
   }
 };
 

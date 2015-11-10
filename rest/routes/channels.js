@@ -13,7 +13,7 @@ let generateId = util.generateSlackLikeId;
 
 let router = express.Router();
 
-router.get('/channels.list', (req, res, next) => {
+router.post('/channels.list', (req, res, next) => {
   let query = r.table('channels');
 
   db.rethinkQuery(query)
@@ -26,32 +26,24 @@ router.get('/channels.list', (req, res, next) => {
 
 router.post('/channels.mark', (req, res, next) => {
   // T_TODO validation
-  let userId = req.session.userId;
+  let userId = req.userId;
   let channelId = req.body.channel_id;
   let ts = req.body.ts;
 
-  let findChannelIndexQ =
-    r.table("users")
-      .get(userId)("channels")
-      .offsetsOf(
-        r.row("id").match(channelId)
-      )
-      .nth(0)
-
   let updateQ =
-    findChannelIndexQ.do((index) => {
-      return r.table('users')
-        .get(userId)
-        .update((user) => {
-          return {
-            channels: user('channels').changeAt(index,
-              user("channels")
-                .nth(index)
-                .merge({"last_read": ts})
+    r.table('users')
+      .get(userId)
+      .update((user) => {
+        return {
+          channels: user('channels').map((channel) => {
+            return r.branch(
+              channel('id').eq(channelId),
+              channel.merge({last_read: ts}),
+              channel
             )
-          }
-        })
-    })
+          })
+        }
+      })
 
   let eventQ =
     r.table('events')
@@ -92,7 +84,7 @@ router.post('/channels.history', (req, res, next) => {
 
 router.post('/channels.create', (req, res, next) => {
   let doc = {};
-  let userId = req.session.userId;
+  let userId = req.userId;
   let name = getSlug(validator.trim(req.body.name));
 
   if (validator.isNull(name)) {

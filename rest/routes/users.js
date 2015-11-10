@@ -6,7 +6,7 @@ let db = require('../db.js');
 
 let router = express.Router();
 
-router.get('/users.list', (req, res, next) => {
+router.post('/users.list', (req, res, next) => {
   let query = r.table('users');
 
   db.rethinkQuery(query)

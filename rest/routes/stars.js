@@ -7,7 +7,7 @@ let db = require('../db.js');
 let router = express.Router();
 
 router.post('/stars.list', (req, res, next) => {
-  let userId = req.session.userId;
+  let userId = req.userId;
   let listQ = r.table('stars').filter({user_id: userId})
 
   db.rethinkQuery(listQ)
@@ -20,7 +20,7 @@ router.post('/stars.list', (req, res, next) => {
 })
 
 router.post('/stars.add', (req, res, next) => {
-  let userId = req.session.userId;
+  let userId = req.userId;
   let channelId = req.body.channel_id;
 
   if (channelId) {
@@ -68,7 +68,7 @@ router.post('/stars.add', (req, res, next) => {
 })
 
 router.post('/stars.remove', (req, res, next) => {
-  let userId = req.session.userId;
+  let userId = req.userId;
   let channelId = req.body.channel_id;
 
   if (channelId) {

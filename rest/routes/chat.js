@@ -70,27 +70,19 @@ let openImChannel = (userId, channelId) => {
                 channel_id: channelId
               }
 
-              let findChannelIndexQ =
-                r.table("users")
-                  .get(targetUserId)("channels")
-                  .offsetsOf(
-                    r.row("id").match(channelId)
-                  )
-                  .nth(0)
-
-                let openChannelQ =
-                  findChannelIndexQ.do((index) => {
-                    return r.table('users')
-                      .get(targetUserId)
-                      .update((user) => {
-                        return {
-                          channels: user('channels').changeAt(index,
-                            user("channels")
-                              .nth(index)
-                              .merge({"is_open": true})
-                          )
-                        }
+              let openChannelQ =
+                r.table('users')
+                  .get(targetUserId)
+                  .update((user) => {
+                    return {
+                      channels: user('channels').map((channel) => {
+                        return r.branch(
+                          channel('id').eq(channelId),
+                          channel.merge({'is_open': true}),
+                          channel
+                        )
                       })
+                    }
                   })
 
                 let imOpenEventQ = r.table('events').insert(imOpenEvent);
@@ -120,7 +112,7 @@ let openImChannel = (userId, channelId) => {
 router.post('/chat.send', (req, res, next) => {
   // T_TODO check if there is a channel with that id
   let channelId = req.body.channel_id;
-  let userId = req.session.userId;
+  let userId = req.userId;
   let text = req.body.text;
 
   if (validator.isNull(channelId)) {
