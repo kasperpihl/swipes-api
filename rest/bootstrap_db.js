@@ -9,7 +9,7 @@ let Promise = require('bluebird'); // we should use native promises one day
 let generateId = util.generateSlackLikeId;
 let moment = require('moment');
 
-let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars'];
+let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars', 'apps'];
 let indexes = {
   channels: 'name',
   users: 'email',
@@ -57,6 +57,7 @@ r.connect({host: 'localhost', port: 28015 })
 
             db.rethinkQuery(query).then(res => {
               createChannels();
+              createApps();
             })
           })
         })
@@ -88,6 +89,33 @@ let createChannels = () => {
   let query = r.table('channels').insert(channels);
 
   db.rethinkQuery(query).then(res => {
-    console.log('DONE');
+    console.log('DONE adding Channels');
+  })
+}
+
+let createApps = () => {
+  console.log('creating some apps');
+
+  let apps = [
+    {
+      "description":"A fake email client for showing Swipes",
+      "id":"inbox",
+      "is_active":false,
+      "title":"Inbox App",
+      "version":"0.1"
+    },
+    {
+      "description":"A Tetris game for Swipes",
+      "id":"tetris",
+      "is_active":null,
+      "title":"Tetris App",
+      "version":"0.1"
+    }
+  ];
+
+  let insertQ = r.table('apps').insert(apps);
+
+  db.rethinkQuery(insertQ).then(res => {
+    console.log('DONE adding Apps');
   })
 }
