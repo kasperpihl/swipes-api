@@ -68,7 +68,7 @@ var SwipesAPIConnector = (function() {
 			"command": command,
 			"data": data
 		};
-		if (callback && _.isFunction(callback)) {
+		if (callback && _typeof callback === 'function') {
 			this._addCallback(identifier, callback);
 		}
 		this._doc.postMessage(JSON.stringify(callJson), this._url);

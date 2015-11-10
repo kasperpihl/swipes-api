@@ -233,10 +233,10 @@ router.get('/apps.load', (req, res, next) => {
   let apiHost = 'http://' + req.headers.host
   let appUrlDir = apiHost + '/apps/' + appId
   let _defUrlDir = apiHost + '/apps/app-loader/'
-  // Insert SwipesSDK and scripts right after head
+  
+  // Insert dependencies, SwipesSDK and other scripts right after head
   let insertString = '';
   insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'underscore.min.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-client-sdk.js"></script>\r\n';
   insertString += '<script>window.swipes = new SwipesClientSDK(SwipesAPIConnector, "'+apiHost+'", "' + req.query.token + '");</script>\r\n';
