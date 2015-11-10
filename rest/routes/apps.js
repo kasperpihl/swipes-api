@@ -4,9 +4,10 @@ let express = require( 'express' );
 let router = express.Router();
 let fs = require("fs");
 let subdirs = require('subdirs');
- 
 
-router.get('/app.list', (req, res, next) => {
+router.post('/app.list', (req, res, next) => {
+  let isAdmin = req.isAdmin;
+
   subdirs(__dirname + "/../../apps/", function(err, dirs) {
     console.log(dirs); // all of your subdirs are in here!
     for(var i = 0 ; i < dirs.length ; i++){
@@ -28,25 +29,20 @@ router.get('/app.list', (req, res, next) => {
   })
 });
 
-
 router.post('/apps.activate', (req, res, next) => {
 
 });
 
-
 router.post('/apps.deactivate', (req, res, next) => {
-  
-});
 
+});
 
 router.post('/apps.delete', (req, res, next) => {
 
 });
 
-
 router.post('/apps.load', (req, res, next) => {
-  
-});
 
+});
 
 module.exports = router;

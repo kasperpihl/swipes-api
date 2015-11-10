@@ -64,13 +64,13 @@ app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
 // Routes for which we don't need authentication
-app.use('/v1', appsRouter);
 app.use('/v1', usersAuth);
 
 // Middleware to check if a valid token is provided from the user
 app.use('/v1', jwtMiddleware.restAuth);
 
 // Routes for which we need authentication
+app.use('/v1', appsRouter);
 app.use('/v1', usersRouter);
 app.use('/v1', channelsRouter);
 app.use('/v1', rtmRouter);
