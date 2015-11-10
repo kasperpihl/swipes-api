@@ -15,7 +15,6 @@ document.getElementById("jquery-temp-id").id = "";
 
 <body>
 <script>
-var origin = "http://" + document.location.hostname + ":9000"
 function receivedMessageFromSwipes(message){
 	if(message.origin == origin){
 		var i, json = JSON.parse(message.data);
@@ -24,8 +23,6 @@ function receivedMessageFromSwipes(message){
 			return;
 		}
 		var data = json.data;
-		if(data.identifier)
-			swipes.path = PATH + data.identifier + "/"
 		if(data.body){
 			$('body').append(data.body);	
 		}

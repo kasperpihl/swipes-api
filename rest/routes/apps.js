@@ -213,8 +213,8 @@ router.post('/apps.delete', (req, res, next) => {
     });
 });
 
-router.post('/apps.load', (req, res, next) => {
-
+router.get('/apps.load', (req, res, next) => {
+  res.send("success")
 });
 
 module.exports = router;
