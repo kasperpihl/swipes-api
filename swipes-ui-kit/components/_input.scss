@@ -21,7 +21,7 @@
 		padding: 5px 0;
 		width: 350px;
 		border: none;
-		border-bottom: 1px solid $deepBlue-40;
+		border-bottom: 2px solid $deepBlue-40;
 		background-color: transparent;
 		font-weight: 400;
 		font-size: 16px;
@@ -56,25 +56,28 @@
 }
 
 input:not[type="submit"], input:not[type="range"], input:not[type="radio"], input:not[type="button"], input:not[type="checkbox"] {
-	padding: 5px 0;
-	width: 350px;
-	border: none;
-	border-bottom: 1px solid $deepBlue-40;
-	background-color: transparent;
-	font-weight: 400;
-	font-size: 16px;
-	color: $deepBlue-80;
-	position: relative;
-		
-	&:focus {
-		outline: none;
-		border-bottom-color: $blue-100;
+	
+	.swipes-input {	
+		padding: 5px 0;
+		width: 350px;
+		border: none;
+		border-bottom: 2px solid $deepBlue-40;
+		background-color: transparent;
+		font-weight: 400;
+		font-size: 16px;
+		color: $deepBlue-80;
+		position: relative;
+			
+		&:focus {
+			outline: none;
+			border-bottom-color: $blue-100;
+		}
 	}
 }
 
 .swipes-range {
 	width: 250px;
-	margin: 100px auto;
+	position: relative;
 	
 	input[type=range] {
 		-webkit-appearance: none;
@@ -90,7 +93,7 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 		width: 100%;
 		height: 4px;
 		cursor: pointer;
-	
+		animate: 0.2s;
 		background: $deepBlue-80;
 		border-radius: 20px;
 		border: 0.2px solid #010101;
@@ -105,20 +108,44 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 		cursor: pointer;
 		-webkit-appearance: none;
 		margin-top: calc(-14px / 2 + 2px);
-		transition: .2s ease-in-out;
+		transition: .2s cubic-bezier(.39,.01,.5,5);
 	}
 	
 	input[type=range]:focus::-webkit-slider-thumb {
 		height: 18px;
 		width: 18px;
-		margin-top: calc(-18px / 2 + 2px);
-		transition: .2s ease-in-out;
+		margin-top: -18px / 2 + 2px;
+		transition: .2s cubic-bezier(.39,.01,.5,5);
 	}
-	
 	input[type=range]:focus::-webkit-slider-runnable-track {
 		background: $deepBlue-40;
 		transition: .2s ease-in-out;
-	}	
+	}
+	
+	.swipes-ripple-range {
+		width: 60px;
+		height: 60px;
+		background-color: rgba($deepBlue-100, 1);
+		border-radius: 50px;
+		position: absolute;
+		top: calc(50% - 30px);
+		left: 0;
+		z-index: -1;
+		transform: scale(0);
+		animation: ripple .3s ease-in-out;
+	}
+	
+	@keyframes ripple {
+		0% {
+			opacity: .4;
+			transform: scale(0);
+		}
+		
+		100% {
+			opacity: 0;
+			transform: scale(1);
+		}
+	}
 }
 
 .swipes-checkbox {

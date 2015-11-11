@@ -21,13 +21,18 @@ $('.swipes-floating-input').on('blur', function() {
 
 $('.swipes-slider').mouseup(function() {
 	$(this).blur();
+	var sliderVal = $(this).val();
+	$(this).parent().append('<div class="swipes-ripple-range"></div>');
+	$(this).siblings('.swipes-ripple-range').css('left', 'calc(' + sliderVal + '% - 30px)').delay(310).queue(function(){
+		$(this).remove().dequeue();
+	});
 })
 
 // button.primary hover
 $('.hover-full').mouseenter(function() {
 	var borderColor = $(this).css('border-color');
 	$(this).css('background-color', borderColor);	
-	$(this).css('color', 'white');
+	$(this).css('color', 'white'); 
 	console.log(borderColor)
 }).mouseleave(function() {
 	var borderColor = $(this).css('border-color');
