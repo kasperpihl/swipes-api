@@ -264,7 +264,7 @@ router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let query = req.body.query;
 
-  let table = appId + "_" + query.table;
+  let table = appId + '_' + query.table;
   let rowId = query.id;
   let data = query.data;
 
@@ -287,13 +287,29 @@ router.post('/apps.saveData', (req, res, next) => {
 router.post('/apps.getData', (req, res, next) => {
   let appId = req.body.app_id;
   let query = req.body.query;
-  let table = appId + "_" + query.table;
+  let table = appId + '_' + query.table;
+  let limit = query.limit;
+  let order = query.order;
 
   let rethinkQ = r.table(table);
 
+  if (order) {
+    let desc = order.charAt(0) === '-';
+
+    if (desc) {
+      rethinkQ = rethinkQ.orderBy(r.desc(order.substr(1)));
+    } else {
+      rethinkQ = rethinkQ.orderBy(order);
+    }
+  }
+
+  if (limit) {
+    rethinkQ = rethinkQ.limit(limit);
+  }
+
   db.rethinkQuery(rethinkQ)
-    .then((scores) => {
-      res.status(200).json({ok: true, scores: scores});
+    .then((results) => {
+      res.status(200).json({ok: true, results: results});
     }).catch((err) => {
       return next(err);
     });

@@ -685,8 +685,9 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   border: 3px solid #959699;
   position: relative;
   box-sizing: border-box;
+  border-radius: 2px;
   padding-top: 4px;
-  padding-left: 2px;
+  padding-left: 3px;
   overflow: hidden;
 }
 .swipes-checkbox.checked {
@@ -701,7 +702,7 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   content: "";
   position: absolute;
   width: 8px;
-  height: 2px;
+  height: 3px;
   background-color: #F4F4F5;
   -webkit-transform: rotate(45deg) translate(5px, 5px);
       -ms-transform: rotate(45deg) translate(5px, 5px);
@@ -711,11 +712,11 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   content: "";
   position: absolute;
   width: 14px;
-  height: 2px;
+  height: 3px;
   background-color: #F4F4F5;
-  -webkit-transform: rotate(-45deg) translate(-1px, 6px);
-      -ms-transform: rotate(-45deg) translate(-1px, 6px);
-          transform: rotate(-45deg) translate(-1px, 6px);
+  -webkit-transform: rotate(-55deg) translate(-2px, 5px);
+      -ms-transform: rotate(-55deg) translate(-2px, 5px);
+          transform: rotate(-55deg) translate(-2px, 5px);
 }
 .swipes-checkbox .swipes-input-checkbox {
   width: 0;
@@ -812,4 +813,147 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
 }
 .swipes-dropdown li.init {
   cursor: pointer;
+}
+
+.swipes-context-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+.swipes-context-btn * {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.swipes-context-btn:hover {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+.swipes-context-btn.open {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+.swipes-context-btn i {
+  color: #000C2F;
+  cursor: pointer;
+}
+.swipes-context-btn ul {
+  width: 250px;
+  position: absolute;
+  left: -250px;
+  top: 50px;
+  overflow: hidden;
+}
+.swipes-context-btn ul.open {
+  -webkit-animation: swipes-context .1s ease-in-out forwards;
+          animation: swipes-context .1s ease-in-out forwards;
+  -webkit-animation-delay: .3s;
+          animation-delay: .3s;
+}
+.swipes-context-btn ul .context-ripple {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  -webkit-transform: scale(0);
+      -ms-transform: scale(0);
+          transform: scale(0);
+}
+.swipes-context-btn ul .context-ripple.open {
+  -webkit-animation: context-ripple .3s ease-in-out;
+          animation: context-ripple .3s ease-in-out;
+}
+.swipes-context-btn ul li {
+  width: 100%;
+  height: 50px;
+  opacity: 0;
+  line-height: 50px;
+  padding-left: 20px;
+  color: #666D82;
+  font-weight: 400;
+  position: relative;
+}
+.swipes-context-btn ul li.open {
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+  -webkit-animation: context-list-open .1s ease-in-out forwards;
+          animation: context-list-open .1s ease-in-out forwards;
+  -webkit-animation-delay: .2s;
+          animation-delay: .2s;
+}
+.swipes-context-btn ul li.open:hover {
+  color: #000C2F;
+  font-weight: 600;
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+@-webkit-keyframes swipes-context {
+  100% {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+}
+@keyframes swipes-context {
+  100% {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+}
+@-webkit-keyframes context-list-open {
+  100% {
+    opacity: 1;
+    background-color: white;
+  }
+}
+@keyframes context-list-open {
+  100% {
+    opacity: 1;
+    background-color: white;
+  }
+}
+@-webkit-keyframes context-ripple {
+  0% {
+    -webkit-transform: scale3d(0);
+            transform: scale3d(0);
+  }
+  100% {
+    -webkit-transform: scale(35);
+            transform: scale(35);
+  }
+}
+@keyframes context-ripple {
+  0% {
+    -webkit-transform: scale3d(0);
+            transform: scale3d(0);
+  }
+  100% {
+    -webkit-transform: scale(35);
+            transform: scale(35);
+  }
 }
