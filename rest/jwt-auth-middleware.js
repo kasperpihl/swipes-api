@@ -4,10 +4,8 @@ let jwt = require('jwt-simple');
 let config = require('config');
 
 let restAuth = (req, res, next) => {
-  let token = req.body && req.body.token;
-  if(!token)
-    token = req.query && req.query.token;
-  console.log(token);
+  let token = req.body && req.body.token || req.query && req.query.token;
+
   if (token) {
     try {
       let decoded = jwt.decode(token, config.get('jwtTokenSecret'));
