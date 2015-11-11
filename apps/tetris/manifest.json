@@ -12,5 +12,6 @@
 			"name": "highscore",
 			"indexes": ["score"]
 		}
-	]
+	],
+	"listenTo": ["highscore"]
 }
