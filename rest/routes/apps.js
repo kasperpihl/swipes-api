@@ -237,8 +237,8 @@ router.get('/apps.load', (req, res, next) => {
   // Insert dependencies, SwipesSDK and other scripts right after head
   let insertString = '';
   insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'swipes-js-sdk/swipes-api-connector.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'swipes-js-sdk/swipes-app-sdk.js"></script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'swipes-app-sdk.js"></script>\r\n';
   if(!manifest.main_app.disableUIKit){
     insertString += '<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>\r\n';
     insertString += '<link rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
