@@ -1,0 +1,46 @@
+.swipes-dropdown { 
+	height: 50px;
+   	background-color: white;
+	line-height: 40px;
+	font-weight: 600;
+	user-select: none;
+	position: relative;
+	box-shadow: $swipes-shadow-one;
+	border-bottom: 1px solid $studioGray-60;
+	
+	i {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding-top: 15px;
+		padding-right: 15px;
+		cursor: pointer;
+	}
+	
+	& * {
+		user-select: none;
+	}
+	
+	li { 
+		padding: 5px 10px; 
+		z-index: 2; 
+		cursor: default;
+		
+		&:not(.init) { 
+			float: left; 
+			height: 50px;
+			width: 100%; 
+			display: none; 
+			background: white; 
+			box-shadow: $swipes-shadow-one;
+			
+			&:hover, ul li.selected:not(.init) { 
+				background: $studioGray-20;
+			}
+		}
+		
+		&.init {
+			cursor: pointer;
+		}
+	}
+}

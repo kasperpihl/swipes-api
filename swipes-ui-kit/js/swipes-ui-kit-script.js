@@ -4,6 +4,31 @@ $(document).ready(function() {
 	var floatSizeH = $('.swipes-floating-label').children('input').height();
 	$('.swipes-floating-label').css('width', floatSizeW);	
 	$('.swipes-floating-label').css('height', floatSizeH);
+	
+	
+	// Dropdown
+	var swipesDropdown = $('.swipes-dropdown');
+	var swipesDropdownInit = $('.swipes-dropdown').find('.init').text();
+	var swipesDropdownFirst = swipesDropdown.find('.selected').text();
+	
+	if (swipesDropdownInit.length > 0) {
+		
+	} else {
+		$('.init').html(swipesDropdownFirst);
+	}
+	
+	swipesDropdown.on('click', '.init', function() {
+		$(this).closest('ul').children('li:not(.init)').toggle();
+	});
+
+	var allOptions = swipesDropdown.children('li:not(.init)');
+	
+	swipesDropdown.on('click', 'li:not(.init)', function() {
+		allOptions.removeClass('selected');
+		$(this).addClass('selected');
+		$("ul").children('.init').html($(this).html());
+		allOptions.toggle();
+	});
 })
 
 $('.swipes-floating-input').on('focus', function() {
