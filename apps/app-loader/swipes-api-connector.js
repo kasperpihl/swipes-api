@@ -1,13 +1,11 @@
 var SwipesAPIConnector = (function() {
 	function SwipesAPIConnector(apiUrl, token) {
-		_.bindAll(this, "_receivedMessageFromApp")
+		var bindedCallback = this._receivedMessageFromListener.bind(this)
 		if (!apiUrl){
-			throw new Error("SwipesAPIConnector: No apiUrl set in constructor");
+			throw new Error('SwipesAPIConnector: No apiUrl set in constructor');
 		}
-		if (!token) {
-			throw new Error("SwipesAPIConnector: No token set in constructor");
-		}
-		this._baseUrl = apiUrl + "/v1/";
+
+		this._baseUrl = apiUrl + '/v1/';
 		this._token = token;
 		
 
@@ -15,35 +13,74 @@ var SwipesAPIConnector = (function() {
 
 		this._timers = {};
 		this._callbacks = {};
-		window.addEventListener("message", this._receivedMessageFromApp, false);
-	}
-	
 
-	SwipesAPIConnector.prototype.callSwipesApi = function(command, options, callback) {
-		
-		var url = this._baseURL + command;
-		if ((options == null) || !_.isObject(options)) {
-			options = {};
+		window.addEventListener('message', bindedCallback, false);
+
+	};
+	SwipesAPIConnector.prototype.setListener = function(listener){
+		// Test if listener is an object
+		if(typeof listener !== 'object'){
+			throw new Error('SwipesAPIConnector: Listener not an object');
 		}
-		options.token = this._token;
-		var serData = JSON.stringify(options);
+
+		// Test for required delegate methods
+		if(typeof listener.postMessage !== 'function'){
+			throw new Error('SwipesAPIConnector: Listener not responding to postMessage');
+		}
+		this._listener = listener;
+	};
+
+	/* 
+		Delegate is the object that will handle calls through the listener ()
+	*/
+	SwipesAPIConnector.prototype.setDelegate = function(delegate){
+
+		// Test if delegate is an object
+		if(typeof delegate !== 'object'){
+			throw new Error('SwipesAPIConnector: Delegate not an object');
+		}
+
+		// Test for required delegate methods
+		if(typeof delegate.handleLowLevelCallFromConnector !== 'function'){
+			throw new Error('SwipesAPIConnector: Delegate not responding to handleLowLevelCallFromConnector');
+		}
+		this._delegate = delegate;
+	};
+
+	SwipesAPIConnector.prototype.callSwipesApi = function(options, data, callback) {
+		var command, method = 'POST';
+		if(typeof options === 'string')
+			command = options;
+		if(typeof options === 'object'){
+			if(options.method)
+				method = options.method;
+		}
+		var url = this._baseURL + command;
+		if ((data == null) || !_.isObject(data)) {
+			data = {};
+		}
+		if(this._token){
+			data.token = this._token;
+		}
+
+		var serData = JSON.stringify(data);
 		var settings = {
 			url: url,
 			type: 'POST',
 			success: function(data) {
-				console.log("swipes api success", data);
+				console.log('swipes api success', data);
 				if (data && data.ok) {
-					return typeof callback === "function" ? callback(data) : void 0;
+					return typeof callback === 'function' ? callback(data) : void 0;
 				} else {
-					return typeof callback === "function" ? callback(false, data) : void 0;
+					return typeof callback === 'function' ? callback(false, data) : void 0;
 				}
 			},
 			error: function(error) {
-			console.log("swipes api error", error);
-				return typeof callback === "function" ? callback(false, error) : void 0;
+				console.log('swipes api error', error);
+				return typeof callback === 'function' ? callback(false, error) : void 0;
 			},
 			crossDomain: true,
-			contentType: "application/json; charset=utf-8",
+			contentType: 'application/json; charset=utf-8',
 			context: this,
 			data: serData,
 			processData: true
@@ -57,35 +94,63 @@ var SwipesAPIConnector = (function() {
 	 */
 	SwipesAPIConnector.prototype.callMainApp = function(command, data, callback) {
 		
-		console.log("client call to main app", command, data);
+		console.log('client call to main app', command, data);
 
-		if (!this._doc) {
-			throw new Error("SwipesAPIConnector: callMainApp: No doc/iframe set");
-		}
-		var identifier = this.generateId();
+		var identifier = this._generateId();
 		var callJson = {
-			"identifier": identifier,
-			"command": command,
-			"data": data
+			'identifier': identifier,
+			'command': command,
+			'data': data
 		};
-		if (callback && _typeof callback === 'function') {
+		if (callback && typeof callback === 'function') {
 			this._addCallback(identifier, callback);
 		}
-		this._doc.postMessage(JSON.stringify(callJson), this._url);
 
+		
+		this._sendMessageToListener(callJson);
 	};
 
-	SwipesAPIConnector.prototype._receivedMessageFromApp = function(msg) {
+
+	SwipesAPIConnector.prototype._sendMessageToListener = function(json){
+		if (!this._listener) {
+			throw new Error('SwipesAPIConnector: _sendMessageToListener: No listener was set when trying to send message');
+		}
+		this._listener.postMessage(JSON.stringify(callJson), this._url);
+	};
+
+
+	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
 		var message = JSON.parse(msg.data);
 		if (message.reply_to) {
 			this._runLocalCallback(message.reply_to, message.data, message.error);
 		}
 		else if(message.identifier){
-			this._sdk.handleLowLevelCall(message);
+			if(!this._delegate){
+				return console.warn('SwipesAPIConnector: delegate not set when receiving message from app')
+			}
+			else{
+				var _this = this;
+				this._delegate.handleLowLevelCallFromConnector(this, message, function(result, error){
+					_this._respondMessageToListener(message.identifier, result, error);
+				});
+			}
 		}
 	};
 
-
+	SwipesAPIConnector.prototype._respondMessageToListener = function(identifier, data, error){
+		var callJson = {
+			'ok': true,
+			'reply_to': identifier
+		};
+		if(data){
+			callJson.data = data;
+		}
+		else if(error){
+			callJson.ok = false;
+			callJson.error = error;
+		}
+		this._sendMessageToListener(callJson);
+	}
 	/*
 		
 	 */
@@ -107,7 +172,7 @@ var SwipesAPIConnector = (function() {
 		var _this = this;
 		this._timers[identifier] = setTimeout(function() {
 			if ((_this != null) && _this._callbacks[identifier]) {
-				_this._runLocalCallback(identifier, null, "Timed out");
+				_this._runLocalCallback(identifier, null, 'Timed out');
 			}
 		}, this._timeoutTimer * 1000);
 	};
@@ -129,11 +194,11 @@ var SwipesAPIConnector = (function() {
 	/*
 		Function to generate random string to identify calls between frames for callbacks
 	 */
-	SwipesAPIConnector.prototype.generateId = function() {
+	SwipesAPIConnector.prototype._generateId = function() {
 		var length = 5;
 
-		var text = "";
-		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		var text = '';
+		var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		var i, j, ref;
 		for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));

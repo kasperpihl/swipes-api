@@ -238,8 +238,12 @@ router.get('/apps.load', (req, res, next) => {
   let insertString = '';
   insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'swipes-client-sdk.js"></script>\r\n';
-  insertString += '<script>window.swipes = new SwipesClientSDK(SwipesAPIConnector, "'+apiHost+'", "' + req.query.token + '");</script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'swipes-app-sdk.js"></script>\r\n';
+  if(!manifest.main_app.disableUIKit){
+    insertString += '<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>\r\n';
+    insertString += '<link rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
+  }
+  insertString += '<script>window.swipes = new SwipesAppSDK(SwipesAPIConnector, "'+apiHost+'", "' + req.query.token + '");</script>\r\n';
 
   var index = indexFile.indexOf('<head>')
   if(index != -1){

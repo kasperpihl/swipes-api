@@ -1,24 +1,24 @@
-var SwipesClientSDK = (function() {
+var SwipesAppSDK = (function() {
 	var self;
-	function SwipesClientSDK(apiUrl, token) {
+	function SwipesAppSDK(apiUrl, token) {
 		if (!SwipesAPIConnector){
-			throw new Error("SwipesClientSDK: SwipesAPIController not loaded first")
+			throw new Error("SwipesAppSDK: SwipesAPIController not loaded first")
 		}
 		if (!apiUrl){
-			throw new Error("SwipesClientSDK: No apiUrl set in constructor");
+			throw new Error("SwipesAppSDK: No apiUrl set in constructor");
 		}
 		if (!token) {
-			throw new Error("SwipesClientSDK: No token set in constructor");
+			throw new Error("SwipesAppSDK: No token set in constructor");
 		}
 
 		this._client = new SwipesAPIConnector(apiUrl, token);
 		// set the sdk property on client so it can call this class
-		this._client._sdk = this;
+		this._client.setDelegate(this);
 		self = this;
 	}
 
 	// API for handling navigation bar in main app
-	SwipesClientSDK.prototype.navigation = {
+	SwipesAppSDK.prototype.navigation = {
 		// Setting the title of the navigation bar manually
 		setTitle:function(title){
 			console.log("new title", _this, swipes);
@@ -38,7 +38,7 @@ var SwipesClientSDK = (function() {
 	};
 
 	// API for handling data
-	SwipesClientSDK.prototype.api = {
+	SwipesAppSDK.prototype.api = {
 		get:function(options, callback){
 
 		},
@@ -51,12 +51,12 @@ var SwipesClientSDK = (function() {
 	};
 
 	// API for handling calls from main app
-	SwipesClientSDK.prototype.handleLowLevelCall = function(message){
+	SwipesAppSDK.prototype.handleLowLevelCallFromConnector = function(connector, message){
 
 	};
-	SwipesClientSDK.prototype.update = {
+	SwipesAppSDK.prototype.update = {
 
 	};
-	return SwipesClientSDK;
+	return SwipesAppSDK;
 
 })();
