@@ -32,7 +32,7 @@ $('.swipes-slider').mouseup(function() {
 $('.hover-full').mouseenter(function() {
 	var borderColor = $(this).css('border-color');
 	$(this).css('background-color', borderColor);	
-	$(this).css('color', 'white');
+	$(this).css('color', 'white'); 
 	console.log(borderColor)
 }).mouseleave(function() {
 	var borderColor = $(this).css('border-color');
