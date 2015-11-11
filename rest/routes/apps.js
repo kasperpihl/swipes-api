@@ -289,8 +289,8 @@ router.post('/apps.getData', (req, res, next) => {
   let rethinkQ = r.table(table);
 
   db.rethinkQuery(rethinkQ)
-    .then((scores) => {
-      res.status(200).json({ok: true, scores: scores});
+    .then((results) => {
+      res.status(200).json({ok: true, results: results});
     }).catch((err) => {
       return next(err);
     });
