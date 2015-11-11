@@ -1,3 +1,0 @@
-[submodule "apps/app-loader/swipes-js-sdk"]
-	path = apps/app-loader/swipes-js-sdk
-	url = https://github.com/swipesapp/swipes-js-sdk.git
