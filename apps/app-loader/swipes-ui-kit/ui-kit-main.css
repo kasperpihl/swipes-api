@@ -685,8 +685,9 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   border: 3px solid #959699;
   position: relative;
   box-sizing: border-box;
+  border-radius: 2px;
   padding-top: 4px;
-  padding-left: 2px;
+  padding-left: 3px;
   overflow: hidden;
 }
 .swipes-checkbox.checked {
@@ -701,7 +702,7 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   content: "";
   position: absolute;
   width: 8px;
-  height: 2px;
+  height: 3px;
   background-color: #F4F4F5;
   -webkit-transform: rotate(45deg) translate(5px, 5px);
       -ms-transform: rotate(45deg) translate(5px, 5px);
@@ -711,11 +712,11 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   content: "";
   position: absolute;
   width: 14px;
-  height: 2px;
+  height: 3px;
   background-color: #F4F4F5;
-  -webkit-transform: rotate(-45deg) translate(-1px, 6px);
-      -ms-transform: rotate(-45deg) translate(-1px, 6px);
-          transform: rotate(-45deg) translate(-1px, 6px);
+  -webkit-transform: rotate(-55deg) translate(-2px, 5px);
+      -ms-transform: rotate(-55deg) translate(-2px, 5px);
+          transform: rotate(-55deg) translate(-2px, 5px);
 }
 .swipes-checkbox .swipes-input-checkbox {
   width: 0;

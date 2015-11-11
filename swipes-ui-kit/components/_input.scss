@@ -155,8 +155,9 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 	border: 3px solid $studioGray-120;
 	position: relative;
 	box-sizing: border-box;
+	border-radius: 2px;
 	padding-top: 4px;
-	padding-left: 2px;
+	padding-left: 3px;
 	overflow: hidden;
 	
 	&.checked {
@@ -170,7 +171,7 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 			content: "";
 			position: absolute;
 			width:8px;
-			height: 2px;
+			height: 3px;
 			background-color: $studioGray-20;
 			transform: rotate(45deg) translate(5px, 5px)
 		}
@@ -179,9 +180,9 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 			content: "";
 			position: absolute;
 			width:14px;
-			height: 2px;
+			height: 3px;
 			background-color: $studioGray-20;
-			transform: rotate(-45deg) translate(-1px, 6px)
+			transform: rotate(-55deg) translate(-2px, 5px)
 		}
 	}
 	

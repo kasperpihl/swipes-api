@@ -11,6 +11,7 @@ $(document).ready(function() {
 	var swipesDropdownInit = $('.swipes-dropdown').find('.init').text();
 	var swipesDropdownFirst = swipesDropdown.find('.selected').text();
 	
+	// Setting the first option for the dropdown
 	if (swipesDropdownInit.length > 0) {
 		
 	} else {
@@ -31,6 +32,7 @@ $(document).ready(function() {
 	});
 })
 
+// Floating input
 $('.swipes-floating-input').on('focus', function() {
 	$(this).next('label').addClass('active');
 })
@@ -44,6 +46,7 @@ $('.swipes-floating-input').on('blur', function() {
 	}
 })
 
+// Input:range
 $('.swipes-slider').mouseup(function() {
 	$(this).blur();
 	var sliderVal = $(this).val();
@@ -79,6 +82,7 @@ $('.hover-lighten').mouseenter(function() {
 	$(this).css('background-color', fullRGB);
 })
 
+// Checkbox
 $('.swipes-checkbox').on('click', function() {
 	var $el = $( this ).find(".swipes-input-checkbox");
 	$el.click();
@@ -92,6 +96,7 @@ $('.swipes-input-checkbox').change(function() {
 	}
 })
 
+// Radio button
 $('.swipes-radio').on('click', function() {
 
 	var $el = $(this).find(".swipes-input-radio");
@@ -106,12 +111,11 @@ $('.swipes-radio').on('click', function() {
 	$el.prop("checked", true);
 })
 
+// Context button
 var swipesContextBTN = $('.swipes-context-btn');
 var swipesContext = $('.swipes-context');
 var swipesContextList = $('.swipes-context-list');
 var swipesContextRipple = $('.context-ripple');
-
-
 
 swipesContextBTN.on('click', function() {
 	swipesContextBTN.toggleClass('open');
