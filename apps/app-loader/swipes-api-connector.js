@@ -47,8 +47,8 @@ var SwipesAPIConnector = (function() {
 		}
 
 		// Test for required delegate methods
-		if(typeof delegate.handleLowLevelCallFromConnector !== 'function'){
-			throw new Error('SwipesAPIConnector: Delegate not responding to handleLowLevelCallFromConnector');
+		if(typeof delegate.connectorHandleResponseReceivedFromListener !== 'function'){
+			throw new Error('SwipesAPIConnector: Delegate not responding to connectorHandleResponseReceivedFromListener');
 		}
 		this._delegate = delegate;
 	};
@@ -61,9 +61,14 @@ var SwipesAPIConnector = (function() {
 			if(options.method)
 				method = options.method;
 		}
-		console.log(this._baseURL)
+		// If no data is send, but only a callback set those
+		if(typeof data === 'function'){
+			callback = data;
+			data = null;
+		}
+
 		var url = this._baseURL + command;
-		if ((data == null) || !_.isObject(data)) {
+		if ((data == null) || typeof data !== 'object') {
 			data = {};
 		}
 		if(this._token){
@@ -99,10 +104,8 @@ var SwipesAPIConnector = (function() {
 	/*
 	
 	 */
-	SwipesAPIConnector.prototype.callMainApp = function(command, data, callback) {
+	SwipesAPIConnector.prototype.callListener = function(command, data, callback) {
 		
-		console.log('client call to main app', command, data);
-
 		var identifier = this._generateId();
 		var callJson = {
 			'identifier': identifier,
@@ -122,7 +125,7 @@ var SwipesAPIConnector = (function() {
 		if (!this._listener) {
 			throw new Error('SwipesAPIConnector: _sendMessageToListener: No listener was set when trying to send message');
 		}
-		this._listener.postMessage(JSON.stringify(callJson), this._targetUrl);
+		this._listener.postMessage(JSON.stringify(json), this._targetUrl);
 	};
 
 
@@ -137,7 +140,7 @@ var SwipesAPIConnector = (function() {
 			}
 			else{
 				var _this = this;
-				this._delegate.handleLowLevelCallFromConnector(this, message, function(result, error){
+				this._delegate.connectorHandleResponseReceivedFromListener(this, message, function(result, error){
 					_this._respondMessageToListener(message.identifier, result, error);
 				});
 			}

@@ -243,9 +243,11 @@ router.get('/apps.load', (req, res, next) => {
     insertString += '<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>\r\n';
     insertString += '<link rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
   }
-  insertString += '<script>window.swipes = new SwipesAppSDK(SwipesAPIConnector, "'+apiHost+'", "' + req.query.token + '");';
-  insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '")</script>\r\n';
-
+  insertString += '<script>';
+  insertString += 'window.swipes = new SwipesAppSDK(SwipesAPIConnector, "'+apiHost+'", "' + req.query.token + '");\r\n';
+  insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '"); swipes.navigation.setTitle("Test");\r\n';
+  insertString += 'swipes.myapp.manifest = ' + JSON.stringify(manifest) + ';';
+  insertString += '</script>\r\n';
   var index = indexFile.indexOf('<head>')
   if(index != -1){
     index += 6
@@ -255,6 +257,14 @@ router.get('/apps.load', (req, res, next) => {
   indexFile = indexFile.replace(new RegExp('<{appDir}>', 'g'), appUrlDir );
 
   res.status(200).send(indexFile);
+});
+
+router.post('/apps.saveData', (req, res, next) => {
+
+});
+
+router.post('/apps.getData', (req, res, next) => {
+
 });
 
 module.exports = router;

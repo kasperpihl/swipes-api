@@ -21,8 +21,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.navigation = {
 		// Setting the title of the navigation bar manually
 		setTitle:function(title){
-			console.log("new title", _this, swipes);
-			_this._client.callMainApp("navigation.setTitle",{"title":"Inbox Tetris"});
+			self._client.callListener("navigation.setTitle",{"title":title});
 		},
 		// Push new title (view), will show a backbutton.
 		push: function(title, identifier){
@@ -36,11 +35,27 @@ var SwipesAppSDK = (function() {
 			
 		}
 	};
+	SwipesAppSDK.prototype.myapp = {
+		// Manifest will be loaded in here
+	};
 
 	// API for handling data
 	SwipesAppSDK.prototype.api = {
 		get:function(options, callback){
-
+			
+			var queryData = {
+				appId: self.myapp.manifest.identifier
+			};
+			if(typeof options === 'string')
+				queryData.table = options;
+			else if(typeof options === 'object' && typeof options.table === 'string'){
+				table = options.table;
+			}
+			else{
+				throw new Error("SwipesAppSDK: Get request must have table")
+			}
+			console.log(queryData);
+			self._client.callSwipesApi("apps.saveData", queryData, callback);
 		},
 		save: function(options, saveData, callback){
 			_this._client.callSwipesApi();
@@ -51,8 +66,9 @@ var SwipesAppSDK = (function() {
 	};
 
 	// API for handling calls from main app
-	SwipesAppSDK.prototype.handleLowLevelCallFromConnector = function(connector, message){
-
+	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function(connector, message, callback){
+		if(callback)
+			callback("yeah");
 	};
 	SwipesAppSDK.prototype.update = {
 
