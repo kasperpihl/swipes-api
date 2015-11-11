@@ -13,5 +13,13 @@
 			"indexes": ["score"]
 		}
 	],
-	"listenTo": ["highscore"]
+	"listenTo": [
+		{
+			"table": "highscore",
+			"query": {
+				"limit": 5,
+				"order": "-score"
+			}
+		}
+	]
 }

@@ -33,10 +33,29 @@ module.exports.hook = (socket, userId) => {
         let manifest = JSON.parse(getAppFile(app.id, 'manifest.json'));
 
         if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
-          console.log(manifest.listenTo);
           manifest.listenTo.forEach((item) => {
-            let table = app.id + '_' + item;
-            let changesQ = r.table(table).changes()
+            let table = app.id + '_' + item.table;
+            let query = item.query;
+            let limit = query.limit;
+            let order = query.order;
+
+            let changesQ = r.table(table);
+
+            if (order) {
+              let desc = order.charAt(0) === '-';
+
+              if (desc) {
+                changesQ = changesQ.orderBy({index: r.desc(order.substr(1))});
+              } else {
+                changesQ = changesQ.orderBy({index: order});
+              }
+            }
+
+            if (limit) {
+              changesQ = changesQ.limit(limit);
+            }
+
+            changesQ = changesQ.changes();
 
             db.rethinkQuery(changesQ, {feed: true})
               .then((cursor) => {
@@ -48,10 +67,7 @@ module.exports.hook = (socket, userId) => {
                   }
 
                   let type = table;
-                  let data = {
-                    old: row.old_val,
-                    new: row.new_val
-                  }
+                  let data = row.new_val;
 
                   socket.emit('message', {type: type, data: data});
                 })
