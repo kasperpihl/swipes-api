@@ -105,3 +105,17 @@ $('.swipes-radio').on('click', function() {
 	$(this).addClass('checked');
 	$el.prop("checked", true);
 })
+
+var swipesContextBTN = $('.swipes-context-btn');
+var swipesContext = $('.swipes-context');
+var swipesContextList = $('.swipes-context-list');
+var swipesContextRipple = $('.context-ripple');
+
+
+
+swipesContextBTN.on('click', function() {
+	swipesContextBTN.toggleClass('open');
+	swipesContext.toggleClass('open');
+	swipesContextRipple.toggleClass('open');
+	swipesContextList.toggleClass('open');
+})
