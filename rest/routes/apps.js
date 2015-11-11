@@ -233,7 +233,7 @@ router.get('/apps.load', (req, res, next) => {
   let apiHost = 'http://' + req.headers.host
   let appUrlDir = apiHost + '/apps/' + appId
   let _defUrlDir = apiHost + '/apps/app-loader/'
-  
+
   // Insert dependencies, SwipesSDK and other scripts right after head
   let insertString = '';
   insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
@@ -249,12 +249,51 @@ router.get('/apps.load', (req, res, next) => {
   var index = indexFile.indexOf('<head>')
   if(index != -1){
     index += 6
-    indexFile = indexFile.slice(0, index) + insertString + indexFile.slice(index);  
+    indexFile = indexFile.slice(0, index) + insertString + indexFile.slice(index);
   }
   // Replace <{appDir}}> with actual host
   indexFile = indexFile.replace(new RegExp('<{appDir}>', 'g'), appUrlDir );
 
   res.status(200).send(indexFile);
 });
+
+router.post('/apps.saveData', (req, res, next) => {
+  let appId = req.body.app_id;
+  let query = req.body.query;
+
+  let table = appId + "_" + query.table;
+  let rowId = query.id;
+  let data = query.data;
+
+  let rethinkQ = r.table(table);
+
+  if (rowId) {
+    rethinkQ = rethinkQ.get(rowId).update(data);
+  } else {
+    rethinkQ = rethinkQ.insert(data);
+  }
+
+  db.rethinkQuery(rethinkQ)
+    .then(() => {
+      res.status(200).json({ok: true});
+    }).catch((err) => {
+      return next(err);
+    });
+})
+
+router.post('/apps.getData', (req, res, next) => {
+  let appId = req.body.app_id;
+  let query = req.body.query;
+  let table = appId + "_" + query.table;
+
+  let rethinkQ = r.table(table);
+
+  db.rethinkQuery(rethinkQ)
+    .then((scores) => {
+      res.status(200).json({ok: true, scores: scores});
+    }).catch((err) => {
+      return next(err);
+    });
+})
 
 module.exports = router;
