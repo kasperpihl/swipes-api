@@ -7,6 +7,7 @@ var SwipesAPIConnector = (function() {
 
 		this._baseURL = apiUrl + '/v1/';
 		this._token = token;
+		
 
 		this._timeoutTimer = 10;
 
@@ -16,10 +17,7 @@ var SwipesAPIConnector = (function() {
 		window.addEventListener('message', bindedCallback, false);
 
 	};
-	SwipesAPIConnector.prototype.getAPIURL = function(){
-		return this._baseURL;
-	}
-	SwipesAPIConnector.prototype.setListener = function(listener, targetUrl){
+	SwipesAPIConnector.prototype.setListener = function(listener){
 		// Test if listener is an object
 		if(typeof listener !== 'object'){
 			throw new Error('SwipesAPIConnector: Listener not an object');
@@ -29,10 +27,6 @@ var SwipesAPIConnector = (function() {
 		if(typeof listener.postMessage !== 'function'){
 			throw new Error('SwipesAPIConnector: Listener not responding to postMessage');
 		}
-		if(!targetUrl){
-			throw new Error('SwipesAPIConnector: Must include targetUrl to use listener');
-		}
-		this._targetUrl = targetUrl;
 		this._listener = listener;
 	};
 
@@ -47,8 +41,8 @@ var SwipesAPIConnector = (function() {
 		}
 
 		// Test for required delegate methods
-		if(typeof delegate.connectorHandleResponseReceivedFromListener !== 'function'){
-			throw new Error('SwipesAPIConnector: Delegate not responding to connectorHandleResponseReceivedFromListener');
+		if(typeof delegate.handleLowLevelCallFromConnector !== 'function'){
+			throw new Error('SwipesAPIConnector: Delegate not responding to handleLowLevelCallFromConnector');
 		}
 		this._delegate = delegate;
 	};
@@ -61,13 +55,9 @@ var SwipesAPIConnector = (function() {
 			if(options.method)
 				method = options.method;
 		}
-		// If no data is send, but only a callback set those
-		if(typeof data === 'function'){
-			callback = data;
-		}
-
+		console.log(this._baseURL)
 		var url = this._baseURL + command;
-		if ((data == null) || typeof data !== 'object') {
+		if ((data == null) || !_.isObject(data)) {
 			data = {};
 		}
 		if(this._token){
@@ -103,8 +93,10 @@ var SwipesAPIConnector = (function() {
 	/*
 	
 	 */
-	SwipesAPIConnector.prototype.callListener = function(command, data, callback) {
+	SwipesAPIConnector.prototype.callMainApp = function(command, data, callback) {
 		
+		console.log('client call to main app', command, data);
+
 		var identifier = this._generateId();
 		var callJson = {
 			'identifier': identifier,
@@ -124,7 +116,7 @@ var SwipesAPIConnector = (function() {
 		if (!this._listener) {
 			throw new Error('SwipesAPIConnector: _sendMessageToListener: No listener was set when trying to send message');
 		}
-		this._listener.postMessage(JSON.stringify(json), this._targetUrl);
+		this._listener.postMessage(JSON.stringify(callJson), this._url);
 	};
 
 
@@ -139,7 +131,7 @@ var SwipesAPIConnector = (function() {
 			}
 			else{
 				var _this = this;
-				this._delegate.connectorHandleResponseReceivedFromListener(this, message, function(result, error){
+				this._delegate.handleLowLevelCallFromConnector(this, message, function(result, error){
 					_this._respondMessageToListener(message.identifier, result, error);
 				});
 			}

@@ -10,11 +10,11 @@
 
 <body>
 <script>
-console.log(swipes.myapp.manifest);
+console.log(swipes.info.manifest);
 </script>
 <style>
     body      { font-family: Helvetica, sans-serif; margin: 0; padding:0; }
-    #tetris   { margin: 1em auto; padding: 1em;  }
+    #tetris   { margin: 1em auto; padding: 1em; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
     #canvas   { display: inline-block; vertical-align: top; background: url(texture.jpg); box-shadow: 10px 10px 10px #999; border: 2px solid #333; }
     #menu     { display: inline-block; vertical-align: top; position: relative; }
     #menu p   { margin: 0.5em 0; text-align: center; }
@@ -37,6 +37,10 @@ console.log(swipes.myapp.manifest);
       <p><canvas id="upcoming"></canvas></p>
       <p>score <span id="score">00000</span></p>
       <p>rows <span id="rows">0</span></p>
+      <p>Highscores</p>
+      <ul id="highscores">
+        
+      </ul>
     </div>
     <canvas id="canvas">
       Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
@@ -48,10 +52,12 @@ console.log(swipes.myapp.manifest);
     // swipes inserted methods
     //-------------------------------------------------------------------------
     function sendHighScore(score){
-      swipes.api.save("highscore", {score: score})
+      swipes.app().save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
+        console.log("result from save", res, err);
+      })
     }
     function loadHighScores(){
-      swipes.api.get("highscore", {}, function(res, err){
+      swipes.app("tetris").get("highscore", function(res, err){
         console.log("result from high", res, err);
       })
     }
@@ -483,7 +489,6 @@ console.log(swipes.myapp.manifest);
     //-------------------------------------------------------------------------
 
     run();
-
   </script>
 </body>
 </html>

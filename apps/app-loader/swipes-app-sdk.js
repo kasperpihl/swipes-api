@@ -16,7 +16,7 @@ var SwipesAppSDK = (function() {
 		this._client.setDelegate(this);
 		self = this;
 	}
-	
+
 	// API for handling navigation bar in main app
 	SwipesAppSDK.prototype.navigation = {
 		// Setting the title of the navigation bar manually
@@ -35,33 +35,68 @@ var SwipesAppSDK = (function() {
 			
 		}
 	};
-	SwipesAppSDK.prototype.myapp = {
+
+
+	SwipesAppSDK.prototype.info = {
 		// Manifest will be loaded in here
+	};
+	SwipesAppSDK.prototype.users = {
+		get: function(options, callback){
+			var query = {};
+			if(typeof options === 'object'){
+				if(options.id)
+					query.id = options.id;
+			}
+			self._client.callListener("users.get", query, callback);
+		}
 	};
 
 	// API for handling data
-	SwipesAppSDK.prototype.api = {
-		get:function(options, callback){
-			
-			var queryData = {
-				appId: self.myapp.manifest.identifier
-			};
-			if(typeof options === 'string')
-				queryData.table = options;
-			else if(typeof options === 'object' && typeof options.table === 'string'){
-				table = options.table;
-			}
-			else{
-				throw new Error("SwipesAppSDK: Get request must have table")
-			}
-			console.log(queryData);
-			self._client.callSwipesApi("apps.saveData", queryData, callback);
-		},
-		save: function(options, saveData, callback){
-			_this._client.callSwipesApi();
-		},
-		on:function(event, callback){
+	SwipesAppSDK.prototype.app = function(app_id){
+		if(!app_id)
+			app_id = self.info.manifest.identifier;
+		return {
 
+			get:function(options, callback){
+				
+				var data = {
+					app_id: app_id,
+					query: {}
+				};
+				if(typeof options === 'string')
+					data.query.table = options;
+				else if(typeof options === 'object' && typeof options.table === 'string'){
+					data.query.table = options.table;
+				}
+				else{
+					throw new Error("SwipesAppSDK: Get request must have table")
+				}
+
+				self._client.callSwipesApi("apps.getData", data, callback);
+			},
+
+			save: function(options, saveData, callback){
+				var data = {
+					app_id: app_id,
+					query: { data: saveData }
+				};
+				if(typeof options === 'string')
+					data.query.table = options;
+				else if(typeof options === 'object' && typeof options.table === 'string'){
+					data.query.table = options.table;
+					if(options.id){
+						data.query.id = options.id;
+					}
+				}
+				else{
+					throw new Error("SwipesAppSDK: Get request must have table")
+				}
+				
+				self._client.callSwipesApi("apps.saveData", data, callback);
+			},
+			on:function(event, callback){
+
+			}
 		}
 	};
 
