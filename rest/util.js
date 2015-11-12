@@ -32,6 +32,9 @@ let util = {
   // suports only objects for now
   isEmpty: (obj) => {
     return Object.keys(obj).length === 0;
+  },
+  appTable: (appId, table) => {
+    return appId + '_' + table;
   }
 };
 

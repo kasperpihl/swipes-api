@@ -6,6 +6,8 @@ let fs = require('fs');
 let r = require('rethinkdb');
 let config = require('config');
 let db = require('../db.js');
+let jsonToQuery = require('../json_to_query.js').jsonToQuery;
+let util = require('../util.js');
 // relative directory to installed apps
 let appDir = __dirname + '/../../apps/';
 
@@ -262,19 +264,21 @@ router.get('/apps.load', (req, res, next) => {
 
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
-  let query = req.body.query;
+  let queryObject = req.body.query;
 
-  let table = appId + '_' + query.table;
-  let rowId = query.id;
-  let data = query.data;
-
-  let rethinkQ = r.table(table);
-
-  if (rowId) {
-    rethinkQ = rethinkQ.get(rowId).update(data);
-  } else {
-    rethinkQ = rethinkQ.insert(data);
+  if (!queryObject.table) {
+    return res.status(200).json({ok: false, err: 'table_required'});
   }
+
+  if (!queryObject.data) {
+    return res.status(200).json({ok: false, err: 'data_required'});
+  }
+
+  let tableName = util.appTable(appId, queryObject.table);
+
+  queryObject.table = tableName;
+
+  let rethinkQ = jsonToQuery(queryObject);
 
   db.rethinkQuery(rethinkQ)
     .then(() => {
@@ -286,26 +290,17 @@ router.post('/apps.saveData', (req, res, next) => {
 
 router.post('/apps.getData', (req, res, next) => {
   let appId = req.body.app_id;
-  let query = req.body.query;
-  let table = appId + '_' + query.table;
-  let limit = query.limit;
-  let order = query.order;
+  let queryObject = req.body.query;
 
-  let rethinkQ = r.table(table);
-
-  if (order) {
-    let desc = order.charAt(0) === '-';
-
-    if (desc) {
-      rethinkQ = rethinkQ.orderBy(r.desc(order.substr(1)));
-    } else {
-      rethinkQ = rethinkQ.orderBy(order);
-    }
+  if (!queryObject.table) {
+    return res.status(200).json({ok: false, err: 'table_required'});
   }
 
-  if (limit) {
-    rethinkQ = rethinkQ.limit(limit);
-  }
+  let tableName = util.appTable(appId, queryObject.table);
+
+  queryObject.table = tableName;
+
+  let rethinkQ = jsonToQuery(queryObject);
 
   db.rethinkQuery(rethinkQ)
     .then((results) => {
