@@ -1,0 +1,13 @@
+## GRID
+
+Breakpoints
+	- min-width 1200px
+		* 12 columns
+	- min-width 960px
+		* 10 columns
+	- min-width 620px
+		* 6 columns
+	- min-width 0px
+		* 3 columns
+
+call with grid_*

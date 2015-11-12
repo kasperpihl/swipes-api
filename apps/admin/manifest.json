@@ -1,0 +1,10 @@
+{
+  "manifest_version": 1,
+  "title": "Admin",
+  "identifier": "admin",
+  "version": "0.1",
+  "description": "The Admin App For Swipes",
+  "main_app": {
+    "index": "index.html"
+  }
+}

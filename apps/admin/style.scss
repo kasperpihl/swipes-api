@@ -1,0 +1,149 @@
+@import "swipes-ui-kit/swipes-ui-kit-styles";
+
+html, body {
+	font-family: 'Source Sans Pro';
+	background-color: $studioGray-20;
+}
+
+::-webkit-input-placeholder {
+   font-family: 'Source Sans Pro';
+	font-size: 18px;
+	font-weight: 600;
+	color: $studioGray-80;
+}
+
+button {
+	font-family: 'Source Sans Pro';
+	cursor: pointer;
+}
+
+.app-manager {
+	width: 100%;
+	position: relative;
+	margin-top: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+	h3 {
+		text-align: center;
+		color: $deepBlue-80;
+	}
+	
+	.search-apps {
+		margin-top: 50px;
+		background-color: white;
+		padding: 15px 20px;
+		box-shadow: $swipes-shadow-one;
+		position: relative;
+		font-family: 'Source Sans Pro';
+		font-size: 18px;
+		font-weight: 600;
+		color: $deepBlue-80;
+		
+		&:focus {
+			outline: none;
+		}
+	}
+	
+	label {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+}
+
+.app-list {
+	margin-top: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.card {
+	background-color: white;
+	box-shadow: $swipes-shadow-one;
+	border-radius: 5px;
+	padding: 30px 0;
+}
+
+.app {
+	margin: 25px 0;
+	height: 70px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	
+	.app-icon {
+		@include size(50px !important);
+		background-color: $studioGray-100;
+		border-radius: 5px;
+	}
+	
+	.app-details {
+		width: 50%;
+		margin-left: 30px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		
+		.name {
+			font-size: 20px;
+			color: $deepBlue-100;
+			
+			span.activation-status {
+				font-size: 12px;
+				color: $red;
+				margin-left: 10px;
+			}
+		}
+		
+		.description {
+			font-size: 16px;
+			color: $deepBlue-60;
+		}
+	}
+	
+	.app-actions {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		
+		button.outline {
+			border-width: 2px;
+			padding: 5px; 
+			margin: 0 10px;
+			
+			&.activate {
+				border-color: $green-color;
+				color: $green-color;
+				font-weight: 600;
+			}
+			
+			&.deactivate {
+				border-color: $yellow-color;
+				color: $yellow-color;
+				font-weight: 600;
+			}
+			
+			&.delete {
+				border-color: $red-color;
+				color: $red-color;
+				font-weight: 600;
+			}
+			
+			&.settings {
+				padding: 0 5px;
+				border-color: $studioGray-100;
+				color: $studioGray-100;
+				font-weight: 600;
+				
+				i {
+					padding: 0;
+					margin: 0;
+					transform: translateY(2px);
+				}
+			}
+		}
+	}
+}
