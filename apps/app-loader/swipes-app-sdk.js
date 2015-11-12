@@ -14,6 +14,7 @@ var SwipesAppSDK = (function() {
 		this._client = new SwipesAPIConnector(apiUrl, token);
 		// set the sdk property on client so it can call this class
 		this._client.setDelegate(this);
+		this._listeners = {};
 		self = this;
 	}
 
@@ -43,6 +44,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.users = {
 		get: function(options, callback){
 			var query = {};
+			if(typeof options === 'string'){
+				query.id = options;
+			}
 			if(typeof options === 'object'){
 				if(options.id)
 					query.id = options.id;
@@ -67,6 +71,12 @@ var SwipesAppSDK = (function() {
 					data.query.table = options;
 				else if(typeof options === 'object' && typeof options.table === 'string'){
 					data.query.table = options.table;
+					if(options.limit){
+						data.query.limit = options.limit;
+					}
+					if(options.order){
+						data.query.order = options.order;
+					}
 				}
 				else{
 					throw new Error("SwipesAppSDK: Get request must have table")
@@ -94,14 +104,46 @@ var SwipesAppSDK = (function() {
 				
 				self._client.callSwipesApi("apps.saveData", data, callback);
 			},
-			on:function(event, callback){
-
+			on:function(event, handler){
+				eventName = app_id + "_" + event
+				self.listeners.add(eventName, handler);
+				self._client.callListener("listenTo", {event: eventName});
 			}
 		}
 	};
 
+	SwipesAppSDK.prototype.listeners = {
+		add: function(eventName, callback){
+			var currentListeners = self._listeners[eventName];
+			if(!currentListeners)
+				currentListeners = [];
+			currentListeners.push(callback);
+			self._listeners[eventName] = currentListeners;
+		},
+		get: function(eventName){
+			var currentListeners = self._listeners[eventName];
+
+			if(!currentListeners)
+				currentListeners = [];
+			return currentListeners;
+		}
+	}
+
 	// API for handling calls from main app
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function(connector, message, callback){
+		if(message){
+			var data = message.data;
+			if(message.command == "event"){
+				var listeners = self.listeners.get(data.type);
+				for(var i = 0 ; i < listeners.length ; i++){
+
+					var handler = listeners[i];
+
+					if(handler)
+						handler(message);
+				}
+			}
+		}
 		if(callback)
 			callback("yeah");
 	};

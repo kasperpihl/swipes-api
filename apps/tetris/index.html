@@ -51,17 +51,46 @@ console.log(swipes.info.manifest);
     //-------------------------------------------------------------------------
     // swipes inserted methods
     //-------------------------------------------------------------------------
+    var highscores = [];
+    var users = {};
     function sendHighScore(score){
       swipes.app().save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
         console.log("result from save", res, err);
+        fetchHighScores();
       })
     }
-    function loadHighScores(){
-      swipes.app("tetris").get("highscore", function(res, err){
+    swipes.app("tetris").on("highscore", function(e){
+      fetchHighScores();
+    });
+    function fetchHighScores(){
+      swipes.app("tetris").get({table:"highscore", limit: 5, order: "-score"}, function(res, err){
         console.log("result from high", res, err);
+        if(res && res.results){
+
+          $("#highscores").html("")
+          var users = {}
+          var counter = 0;
+          for(var i = 0 ; i < res.results.length ; i++){
+            var highscore = res.results[i];
+            swipes.users.get(highscore.user_id, function(user){
+              users[user.id] = user.username;
+              counter++;
+
+              if(counter == res.results.length){
+                for(i = 0 ; i < res.results.length ; i++){
+                  var highscore = res.results[i];
+                  $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                }
+              }
+            })
+            var highscore = res.results[i];
+            
+            
+          }
+        }
       })
     }
-    loadHighScores();
+    fetchHighScores();
     //-------------------------------------------------------------------------
     // base helper methods
     //-------------------------------------------------------------------------
