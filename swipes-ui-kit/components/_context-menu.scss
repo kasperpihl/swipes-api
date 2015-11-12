@@ -36,9 +36,12 @@
 		position: absolute;
 		left: -250px;
 		top: 50px;
+		z-index: 99;
 		overflow: hidden;
+		transform: scale3d(1, 0, 1);
 		
 		&.open {
+			transform: scale3d(1, 1, 1);
 			animation: swipes-context .1s ease-in-out forwards;
 			animation-delay: .3s;
 		}
@@ -64,7 +67,7 @@
 			opacity: 0;
 			line-height: 50px;
 			padding-left: 20px;
-			color: $deepBlue-60;
+			color: $studioGray-20;
 			font-weight: 400;
 			position: relative;
 			
@@ -74,7 +77,7 @@
 				animation-delay: .2s;
 				
 				&:hover {
-					color: $deepBlue-100;
+					color: $studioGray-20;
 					font-weight: 600;
 					transition: .1s ease-in-out;
 				}
@@ -84,14 +87,14 @@
 	
 	@keyframes swipes-context {
 		100% {
-			box-shadow: $swipes-shadow-one;
+			box-shadow: $swipes-shadow-two;
 		}
 	}
 
 	@keyframes context-list-open {
 		100% {
 			opacity: 1;
-			background-color: white;
+			background-color: $deepBlue-100;
 		}
 	}
 

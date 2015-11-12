@@ -1,6 +1,7 @@
 .swipes-dropdown { 
 	height: 50px;
    	background-color: white;
+	padding: 0;
 	line-height: 40px;
 	font-weight: 600;
 	user-select: none;
@@ -22,6 +23,7 @@
 	}
 	
 	li { 
+		width: 100%;
 		padding: 5px 10px; 
 		z-index: 2; 
 		cursor: default;

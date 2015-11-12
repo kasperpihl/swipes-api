@@ -1,6 +1,7 @@
 .swipes-floating-label {
+	width: 100%;
 	position: relative;
-	margin-top: 30px;
+	margin: 40px 0;
 	
 	&.error {
 		
@@ -19,7 +20,7 @@
 	
 	input {
 		padding: 5px 0;
-		width: 350px;
+		width: 100%;
 		border: none;
 		border-bottom: 2px solid $deepBlue-40;
 		background-color: transparent;
@@ -76,13 +77,15 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 }
 
 .swipes-range {
-	width: 250px;
+	width: 100%;
 	position: relative;
 	
 	input[type=range] {
 		-webkit-appearance: none;
 		margin: 18px 0;
 		width: 100%;
+		position: relative;
+		z-index: 2;
 	}
 	
 	input[type=range]:focus {
@@ -130,7 +133,7 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 		position: absolute;
 		top: calc(50% - 30px);
 		left: 0;
-		z-index: -1;
+		z-index: 1;
 		transform: scale(0);
 		animation: ripple .3s ease-in-out;
 	}
