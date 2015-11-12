@@ -5,6 +5,8 @@ const TEAM_ID = process.env.TEAM_ID;
 let r = require('rethinkdb');
 let db = require('../db.js');
 let fs = require('fs');
+let jsonToQuery = require('../json_to_query.js').jsonToQuery;
+let util = require('../util.js');
 // relative directory to installed apps
 let appDir = __dirname + '/../../apps/';
 
@@ -34,26 +36,11 @@ module.exports.hook = (socket, userId) => {
 
         if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
           manifest.listenTo.forEach((item) => {
-            let table = app.id + '_' + item.table;
-            let query = item.query;
-            let limit = query.limit;
-            let order = query.order;
+            let tableName = util.appTable(app.id, item.table);
 
-            let changesQ = r.table(table);
+            item.table = tableName;
 
-            if (order) {
-              let desc = order.charAt(0) === '-';
-
-              if (desc) {
-                changesQ = changesQ.orderBy({index: r.desc(order.substr(1))});
-              } else {
-                changesQ = changesQ.orderBy({index: order});
-              }
-            }
-
-            if (limit) {
-              changesQ = changesQ.limit(limit);
-            }
+            let changesQ = jsonToQuery(item, {feed: true});
 
             changesQ = changesQ.changes();
 

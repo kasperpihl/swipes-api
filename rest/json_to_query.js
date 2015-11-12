@@ -8,7 +8,10 @@
 
 let r = require('rethinkdb');
 
-let jsonToQuery = (json) => {
+let jsonToQuery = (json, options) => {
+  options = options ? options : {};
+
+  let feed = options.feed;
   let rethinkQ;
 
   let table = json.table;
@@ -43,12 +46,15 @@ let jsonToQuery = (json) => {
 
       if (order) {
         let desc = order.charAt(0) === '-';
+        let orderBy;
 
-        if (desc) {
-          rethinkQ = rethinkQ.orderBy(r.desc(order.substr(1)));
+        if (feed) {
+          orderBy = desc ? {index: r.desc(order.substr(1))} : {index: order};
         } else {
-          rethinkQ = rethinkQ.orderBy(order);
+          orderBy = desc ? r.desc(order.substr(1)) : order;
         }
+
+        rethinkQ = rethinkQ.orderBy(orderBy);
       }
 
       let limit = json.limit;
