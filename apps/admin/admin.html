@@ -30,31 +30,23 @@
 		<!--
 			This is an underscore template to be rendered
 		-->
-		<script type="text/template" id="active-app-row-template">
-			<div class="col grid_11 app" id="app-<%= data.id %>">
+		<script type="text/template" id="app-row-template">
+			<%
+				var activateClass = "activate";
+				var activateButtonTitle = "ACTIVATE";
+				if(!data.is_active){
+					activateClass = "de" + activateClass;
+					activateButtonTitle = "DE" + activateButtonTitle;
+				}
+			%>
+			<div class="col grid_12 app" id="app-<%= data.id %>">
 				<div class="app-icon"></div>
 				<div class="app-details">
 					<div class="name font-semibold"><%= data.title %></div>
 					<div class="description"><%= data.description %></div>
 				</div>
 				<div class="app-actions">
-					<button class="swipes-button outline rounded deactivate hover-full">DEACTIVATE</button>
-					<button class="swipes-button outline rounded delete hover-full">DELETE</button>
-					<button class="swipes-button outline rounded settings studiogray-100 hover-full">
-						<i class="material-icons">settings</i>
-					</button>						
-				</div>
-			</div>
-		</script>
-		<script type="text/template" id="deactive-app-row-template">
-			<div class="col grid_11 app" id="app-<%= data.id %>">
-				<div class="app-icon"></div>
-				<div class="app-details">
-					<div class="name font-semibold"><%= data.title %></div>
-					<div class="description"><%= data.description %></div>
-				</div>
-				<div class="app-actions">
-					<button class="swipes-button outline rounded activate hover-full">ACTIVATE</button>
+					<button class="swipes-button outline rounded <%= activateClass %> hover-full"><%= activateButtonTitle %></button>
 					<button class="swipes-button outline rounded delete hover-full">DELETE</button>
 					<button class="swipes-button outline rounded settings studiogray-100 hover-full">
 						<i class="material-icons">settings</i>

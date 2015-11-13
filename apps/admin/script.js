@@ -2,9 +2,8 @@ $(function(){
 	// Holder for the apps objects
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
-	window.appTemplateActive = _.template($("#active-app-row-template").html(), {variable: "data"});
-	window.appTemplateDeactive = _.template($("#deactive-app-row-template").html(), {variable: "data"});
-	
+	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
+
 	swipes.navigation.setBackgroundColor("#ededed")
 	swipes.navigation.setForegroundColor("dark")
 	
@@ -28,11 +27,10 @@ $(function(){
 		$(".app-list").html("");
 		for(var i = 0 ; i < _apps.length ; i++){
 			var app = _apps[i];
+			var renderedApp = appTemplate(app);
 			if(app.is_active) {
-				var renderedApp = appTemplateActive(app);
 				$(".app-list.active").append(renderedApp);	
 			} else {
-				var renderedApp = appTemplateDeactive(app);
 				$(".app-list.deactive").append(renderedApp);	
 			}	
 		}
