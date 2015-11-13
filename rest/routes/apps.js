@@ -248,7 +248,8 @@ router.get('/apps.load', (req, res, next) => {
   }
   insertString += '<script>';
   insertString += 'window.swipes = new SwipesAppSDK("'+apiHost+'", "' + req.query.token + '");\r\n';
-  insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '"); swipes.navigation.setTitle("Test");\r\n';
+  insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '");\r\n';
+  insertString += 'swipes.navigation.setTitle("' + manifest.title + '");'
   insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
   insertString += 'swipes.info.userId = "' + req.userId + '";';
   insertString += '</script>\r\n';
