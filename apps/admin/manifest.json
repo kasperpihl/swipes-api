@@ -6,5 +6,5 @@
   "description": "The Admin App For Swipes",
   "main_app": {
     "index": "admin.html"
-  },
+  }
 }
