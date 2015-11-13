@@ -93,7 +93,7 @@ router.post('/apps.list', (req, res, next) => {
     });
 });
 
-router.post('/apps.activate', (req, res, next) => {
+router.post('/apps.install', (req, res, next) => {
   let isAdmin = req.isAdmin;
 
   if (!isAdmin) {
@@ -150,7 +150,7 @@ router.post('/apps.activate', (req, res, next) => {
     });
 });
 
-router.post('/apps.deactivate', (req, res, next) => {
+router.post('/apps.deinstall', (req, res, next) => {
   let isAdmin = req.isAdmin;
 
   if (!isAdmin) {
