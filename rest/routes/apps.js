@@ -2,9 +2,11 @@
 
 let express = require( 'express' );
 let router = express.Router();
+let Promise = require('bluebird');
 let fs = require('fs');
 let r = require('rethinkdb');
 let config = require('config');
+let _ = require('underscore');
 let db = require('../db.js');
 let jsonToQuery = require('../json_to_query.js').jsonToQuery;
 let util = require('../util.js');
@@ -81,17 +83,59 @@ let getAppFile = (appId, fileName) => {
   return file;
 }
 
+let getFolderNames = (dir, filter) => {
+  return new Promise(function(resolve, reject) {
+    let folderNames = [];
+
+    fs.readdir(dir, (err, files) => {
+      if (err) {
+        return reject(err);
+      }
+
+      let folders = files.filter((file) => {
+        return filter.indexOf(file) < 0 && fs.statSync(dir + file).isDirectory();
+      })
+
+      return resolve(folders);
+    });
+  });
+}
+
 router.post('/apps.list', (req, res, next) => {
-  let isAdmin = req.isAdmin;
+  getFolderNames(appDir, ['app-loader'])
+    .then((folders) => {
+      let fsApps = [];
 
-  let listQ = utilDB.appsList(isAdmin);
+      folders.forEach((folder) => {
+        fsApps.push(JSON.parse(getAppFile(folder, 'manifest.json')));
+      })
 
-  db.rethinkQuery(listQ)
-    .then((apps) => {
-      res.status(200).json({ok: true, apps: apps});
+      let isAdmin = req.isAdmin;
+      let listQ = utilDB.appsList(isAdmin);
+
+      db.rethinkQuery(listQ)
+        .then((apps) => {
+          let whitelist = ['identifier', 'title', 'description', 'version', 'is_installed']
+
+          apps.forEach((app) => {
+            fsApps = fsApps.map((fsApp) => {
+              if (app.id === fsApp.identifier) {
+                fsApp.is_installed = true;
+              }
+
+              fsApp = _.pick(fsApp, whitelist);
+
+              return fsApp;
+            })
+          })
+
+          return res.status(200).json({ok: true, apps: fsApps});
+        }).catch((err) => {
+          return next(err);
+        });
     }).catch((err) => {
       return next(err);
-    });
+    })
 });
 
 router.post('/apps.install', (req, res, next) => {
