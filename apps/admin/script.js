@@ -4,12 +4,11 @@ $(function(){
 	// Underscore rendered template, check admin.html for app-row-template
 	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
 	
-	swipes.navigation.setBackgroundColor("#fff")
+	swipes.navigation.setBackgroundColor("#ededed")
 	swipes.navigation.setForegroundColor("dark")
-	swipes.navigation.enableBoxShadow(false)
-	swipes.navigation.buttonHandler = function(identifier){
-		console.log("do something with button");
-	}
+	
+	
+	//swipes.navigation.enableBoxShadow(false) to disable boxshadow
 
 	// Call underlying swipes api 
 	function loadApps(){
@@ -18,6 +17,8 @@ $(function(){
 				console.log(res);
 				window._apps = res.apps;
 				render();
+				
+				$('.hover-full').swButtonFullHover();
 			}
 			else console.log("error loading apps");
 		});
@@ -35,5 +36,6 @@ $(function(){
 			$(".app-list #app-" + app.id).replaceWith(renderedApp);
 	}
 	loadApps();
+
 	
 });

@@ -24,7 +24,7 @@ html, body {
 
 @media screen and (min-width: 0px) and (max-width: 619px) {
   .col {
-    margin-left: 2%;
+    margin: 0 2%;
     padding: 0 1.6%;
   }
   .row .col:first-child {
@@ -50,7 +50,7 @@ html, body {
 
 @media screen and (min-width: 620px) and (max-width: 959px) {
   .col {
-    margin-left: 2%;
+    margin: 0 2%;
     padding: 0 1.6%;
   }
   .row .col:first-child {
@@ -94,7 +94,7 @@ html, body {
 
 @media screen and (min-width: 960px) and (max-width: 1199px) {
   .col {
-    margin-left: 2%;
+    margin: 0 2%;
     padding: 0 1.6%;
   }
   .row .col:first-child {
@@ -162,7 +162,7 @@ html, body {
 
 @media screen and (min-width: 1200px) {
   .col {
-    margin-left: 2%;
+    margin: 0 2%;
     padding: 0 1.6%;
   }
   .row .col:first-child {
@@ -302,244 +302,244 @@ p {
   font-weight: 800;
 }
 
-button {
+.swipes-button {
   padding: 10px 20px;
   -webkit-transition: .1s ease-in-out;
           transition: .1s ease-in-out;
 }
 
-button.disabled {
+.swipes-button.disabled {
   background-color: #C6C8CC !important;
   border-color: #C6C8CC !important;
   color: #666D82 !important;
   cursor: not-allowed !important;
 }
 
-button.rounded {
+.swipes-button.rounded {
   border-radius: 5px;
 }
 
-button.radial {
+.swipes-button.radial {
   border-radius: 50px;
 }
 
-button.outline {
+.swipes-button.outline {
   border-width: 1px;
   border-style: solid;
 }
 
-button.outline.deepblue-20 {
+.swipes-button.outline.deepblue-20 {
   border-color: #CCCED5;
 }
 
-button.outline.deepblue-40 {
+.swipes-button.outline.deepblue-40 {
   border-color: #999EAC;
 }
 
-button.outline.deepblue-60 {
+.swipes-button.outline.deepblue-60 {
   border-color: #666D82;
 }
 
-button.outline.deepblue-80 {
+.swipes-button.outline.deepblue-80 {
   border-color: #333D59;
 }
 
-button.outline.deepblue-100 {
+.swipes-button.outline.deepblue-100 {
   border-color: #000C2F;
 }
 
-button.outline.deepblue-120 {
+.swipes-button.outline.deepblue-120 {
   border-color: #000923;
 }
 
-button.outline.studiogray-20 {
+.swipes-button.outline.studiogray-20 {
   border-color: #F4F4F5;
 }
 
-button.outline.studiogray-40 {
+.swipes-button.outline.studiogray-40 {
   border-color: #E8E9EB;
 }
 
-button.outline.studiogray-60 {
+.swipes-button.outline.studiogray-60 {
   border-color: #DDDEE0;
 }
 
-button.outline.studiogray-80 {
+.swipes-button.outline.studiogray-80 {
   border-color: #D1D3D6;
 }
 
-button.outline.studiogray-100 {
+.swipes-button.outline.studiogray-100 {
   border-color: #C6C8CC;
 }
 
-button.outline.studiogray-120 {
+.swipes-button.outline.studiogray-120 {
   border-color: #959699;
 }
 
-button.outline.blue-20 {
+.swipes-button.outline.blue-20 {
   border-color: #D8F5FF;
 }
 
-button.outline.blue-40 {
+.swipes-button.outline.blue-40 {
   border-color: #B2EBFE;
 }
 
-button.outline.blue-60 {
+.swipes-button.outline.blue-60 {
   border-color: #8BE1FE;
 }
 
-button.outline.blue-80 {
+.swipes-button.outline.blue-80 {
   border-color: #65D7FD;
 }
 
-button.outline.blue-100 {
+.swipes-button.outline.blue-100 {
   border-color: #3ECDFD;
 }
 
-button.outline.blue-120 {
+.swipes-button.outline.blue-120 {
   border-color: #2F9ABE;
 }
 
-button.outline.red-20 {
+.swipes-button.outline.red-20 {
   border-color: #FEDAD2;
 }
 
-button.outline.red-40 {
+.swipes-button.outline.red-40 {
   border-color: #FEB5A5;
 }
 
-button.outline.red-60 {
+.swipes-button.outline.red-60 {
   border-color: #FD9078;
 }
 
-button.outline.red-80 {
+.swipes-button.outline.red-80 {
   border-color: #FD6B4B;
 }
 
-button.outline.red-100 {
+.swipes-button.outline.red-100 {
   border-color: #FC461E;
 }
 
-button.outline.red-120 {
+.swipes-button.outline.red-120 {
   border-color: #BD3516;
 }
 
-button.primary.deepblue-20 {
+.swipes-button.primary.deepblue-20 {
   background-color: #CCCED5;
   color: #000923;
 }
 
-button.primary.deepblue-40 {
+.swipes-button.primary.deepblue-40 {
   background-color: #999EAC;
   color: #000923;
 }
 
-button.primary.deepblue-60 {
+.swipes-button.primary.deepblue-60 {
   background-color: #666D82;
   color: #F4F4F5;
 }
 
-button.primary.deepblue-80 {
+.swipes-button.primary.deepblue-80 {
   background-color: #333D59;
   color: #F4F4F5;
 }
 
-button.primary.deepblue-100 {
+.swipes-button.primary.deepblue-100 {
   background-color: #000C2F;
   color: #F4F4F5;
 }
 
-button.primary.deepblue-120 {
+.swipes-button.primary.deepblue-120 {
   background-color: #000923;
   color: #F4F4F5;
 }
 
-button.primary.studiogray-20 {
+.swipes-button.primary.studiogray-20 {
   background-color: #F4F4F5;
   color: #000923;
 }
 
-button.primary.studiogray-40 {
+.swipes-button.primary.studiogray-40 {
   background-color: #E8E9EB;
   color: #000923;
 }
 
-button.primary.studiogray-60 {
+.swipes-button.primary.studiogray-60 {
   background-color: #DDDEE0;
   color: #000923;
 }
 
-button.primary.studiogray-80 {
+.swipes-button.primary.studiogray-80 {
   background-color: #D1D3D6;
   color: #000923;
 }
 
-button.primary.studiogray-100 {
+.swipes-button.primary.studiogray-100 {
   background-color: #C6C8CC;
   color: #000923;
 }
 
-button.primary.studiogray-120 {
+.swipes-button.primary.studiogray-120 {
   background-color: #959699;
   color: #000923;
 }
 
-button.primary.blue-20 {
+.swipes-button.primary.blue-20 {
   background-color: #D8F5FF;
   color: #000923;
 }
 
-button.primary.blue-40 {
+.swipes-button.primary.blue-40 {
   background-color: #B2EBFE;
   color: #000923;
 }
 
-button.primary.blue-60 {
+.swipes-button.primary.blue-60 {
   background-color: #8BE1FE;
   color: #000923;
 }
 
-button.primary.blue-80 {
+.swipes-button.primary.blue-80 {
   background-color: #65D7FD;
   color: #000923;
 }
 
-button.primary.blue-100 {
+.swipes-button.primary.blue-100 {
   background-color: #3ECDFD;
   color: #000923;
 }
 
-button.primary.blue-120 {
+.swipes-button.primary.blue-120 {
   background-color: #2F9ABE;
   color: #F4F4F5;
 }
 
-button.primary.red-20 {
+.swipes-button.primary.red-20 {
   background-color: #FEDAD2;
   color: #000923;
 }
 
-button.primary.red-40 {
+.swipes-button.primary.red-40 {
   background-color: #FEB5A5;
   color: #000923;
 }
 
-button.primary.red-60 {
+.swipes-button.primary.red-60 {
   background-color: #FD9078;
   color: #000923;
 }
 
-button.primary.red-80 {
+.swipes-button.primary.red-80 {
   background-color: #FD6B4B;
   color: #000923;
 }
 
-button.primary.red-100 {
+.swipes-button.primary.red-100 {
   background-color: #FC461E;
   color: #000923;
 }
 
-button.primary.red-120 {
+.swipes-button.primary.red-120 {
   background-color: #BD3516;
   color: #F4F4F5;
 }
@@ -1126,6 +1126,7 @@ button {
 .app {
   margin: 25px 0;
   height: 70px;
+  border-left: 5px solid #fd6f50;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
