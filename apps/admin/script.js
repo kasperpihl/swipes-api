@@ -4,6 +4,9 @@ $(function(){
 	// Underscore rendered template, check admin.html for app-row-template
 	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
 	
+	swipes.navigation.setBackgroundColor("red")
+	swipes.navigation.setForegroundColor("dark")
+
 	// Call underlying swipes api 
 	function loadApps(){
 		swipes._client.callSwipesApi("apps.list", function(res, error){
@@ -25,7 +28,6 @@ $(function(){
 			$(".app-list").append(renderedApp);
 		else
 			$(".app-list #app-" + app.id).replaceWith(renderedApp);
-
 	}
 	loadApps();
 	

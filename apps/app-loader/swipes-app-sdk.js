@@ -32,8 +32,11 @@ var SwipesAppSDK = (function() {
 		pop: function(){
 
 		},
-		setColors:function(backgroundColor, foregroundColor){
-			
+		setBackgroundColor:function(backgroundColor){
+			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});			
+		},
+		setForegroundColor: function(foreground){
+			self._client.callListener("navigation.setForegroundColor", {"color": foreground});
 		}
 	};
 
