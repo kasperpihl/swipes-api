@@ -1099,7 +1099,7 @@ button {
   right: 0;
 }
 
-.app-list {
+.main-app-list {
   margin-top: 50px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -1116,6 +1116,36 @@ button {
           align-items: center;
 }
 
+.main-app-list h5 {
+  color: #000C2F;
+  margin-left: 30px;
+  text-transform: uppercase;
+}
+
+.app-list {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.app-list.active > .app {
+  border-left: 5px solid #6ec071;
+}
+
+.app-list.deactive > .app {
+  border-left: 5px solid #fd6f50;
+}
+
 .card {
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
@@ -1126,7 +1156,6 @@ button {
 .app {
   margin: 25px 0;
   height: 70px;
-  border-left: 5px solid #fd6f50;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1198,7 +1227,7 @@ button {
 
 .app .app-actions button.outline {
   border-width: 2px;
-  padding: 5px;
+  padding: 5px 10px;
   margin: 0 10px;
 }
 

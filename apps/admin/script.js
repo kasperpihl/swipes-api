@@ -2,7 +2,8 @@ $(function(){
 	// Holder for the apps objects
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
-	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
+	window.appTemplateActive = _.template($("#active-app-row-template").html(), {variable: "data"});
+	window.appTemplateDeactive = _.template($("#deactive-app-row-template").html(), {variable: "data"});
 	
 	swipes.navigation.setBackgroundColor("#ededed")
 	swipes.navigation.setForegroundColor("dark")
@@ -25,15 +26,17 @@ $(function(){
 	}
 	function render(){
 		$(".app-list").html("");
-		for(var i = 0 ; i < _apps.length ; i++)
-			renderApp(_apps[i], true);
-	}
-	function renderApp(app, insert){
-		renderedApp = appTemplate(app);
-		if(insert)
-			$(".app-list").append(renderedApp);
-		else
-			$(".app-list #app-" + app.id).replaceWith(renderedApp);
+		for(var i = 0 ; i < _apps.length ; i++){
+			var app = _apps[i];
+			if(app.is_active) {
+				var renderedApp = appTemplateActive(app);
+				$(".app-list.active").append(renderedApp);	
+			} else {
+				var renderedApp = appTemplateDeactive(app);
+				$(".app-list.deactive").append(renderedApp);	
+			}	
+		}
+
 	}
 	loadApps();
 	//swipes.navigation.setTitle("Kristjan");

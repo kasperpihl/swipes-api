@@ -53,11 +53,31 @@ button {
 	}
 }
 
-.app-list {
+.main-app-list {
 	margin-top: 50px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	
+	h5 {
+		color: $deepBlue-100;
+		margin-left: 30px;
+		text-transform: uppercase;
+	}
+}
+
+.app-list {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+	&.active > .app {
+		border-left: 5px solid lighten($green-color, 10%);
+	}
+	
+	&.deactive > .app {
+		border-left: 5px solid lighten($red-color, 10%);
+	}
 }
 
 .card {
@@ -70,7 +90,6 @@ button {
 .app {
 	margin: 25px 0;
 	height: 70px;
-	border-left: 5px solid lighten($red-color, 10%);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -112,7 +131,7 @@ button {
 		
 		button.outline {
 			border-width: 2px;
-			padding: 5px; 
+			padding: 5px 10px; 
 			margin: 0 10px;
 			
 			&.activate {
