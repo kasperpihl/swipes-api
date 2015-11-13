@@ -11,6 +11,7 @@ $(function(){
 	function loadApps(){
 		swipes._client.callSwipesApi("apps.list", function(res, error){
 			if(res && res.ok){
+				console.log(res);
 				window._apps = res.apps;
 				render();
 			}
@@ -30,5 +31,10 @@ $(function(){
 			$(".app-list #app-" + app.id).replaceWith(renderedApp);
 	}
 	loadApps();
+	setTimeout(function(){
+		swipes.navigation.setTitle("Kristjan");
+		swipes.navigation.setBackgroundColor("red");
+		swipes.navigation.setForegroundColor("light");
+	}, 3000);
 	
 });
