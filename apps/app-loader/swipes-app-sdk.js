@@ -38,6 +38,9 @@ var SwipesAppSDK = (function() {
 		setForegroundColor: function(foreground){
 			self._client.callListener("navigation.setForegroundColor", {"color": foreground});
 		}
+		enableBoxShadow: function(enable){
+			self._client.callListener("navigation.enableBoxShadow", {"enable": enable})
+		}
 	};
 
 
