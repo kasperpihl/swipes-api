@@ -31,21 +31,30 @@ let updateApp = (appId, updateObj, res, next) => {
     });
 }
 
+let insertApp = (app, res, next) => {
+  let insertQ = r.table('apps').insert(app)
+
+  db.rethinkQuery(insertQ)
+    .then(() => {
+      res.status(200).json({ok: true});
+    }).catch((err) => {
+      return next(err);
+    });
+}
+
 let deleteApp = (appId, res, next) => {
   //T_TODO make a real delete at some point. It will slow down the ship right now
-  let updateQ =
+  let deleteQ =
     r.table('apps')
       .get(appId)
       .delete();
 
-  res.status(200).json({ok: true});
-
-  // db.rethinkQuery(updateQ)
-  //   .then(() => {
-  //     res.status(200).json({ok: true});
-  //   }).catch((err) => {
-  //     return next(err);
-  //   });
+  db.rethinkQuery(deleteQ)
+    .then(() => {
+      res.status(200).json({ok: true});
+    }).catch((err) => {
+      return next(err);
+    });
 }
 
 let dropTables = (tables) => {
@@ -119,7 +128,7 @@ router.post('/apps.list', (req, res, next) => {
 
           apps.forEach((app) => {
             fsApps = fsApps.map((fsApp) => {
-              if (app.id === fsApp.identifier) {
+              if (app.id === fsApp.identifier && app.is_installed) {
                 fsApp.is_installed = true;
               }
 
@@ -155,14 +164,13 @@ router.post('/apps.install', (req, res, next) => {
 
   db.rethinkQuery(getAppQ)
     .then((app) => {
-      if (app.is_active) {
-        return res.status(200).json({ok: false, err: 'already_active'});
-      } else if (app.is_active === false) {
-        let updateObj = {is_active: true};
+      if (app && app.is_installed) {
+        return res.status(200).json({ok: false, err: 'already_installed'});
+      } else if (app && app.is_installed === false) {
+        let updateObj = {is_installed: true};
 
         updateApp(appId, updateObj, res, next);
       } else {
-        let updateObj = {is_active: true};
         let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
 
         if (!manifest) {
@@ -170,9 +178,10 @@ router.post('/apps.install', (req, res, next) => {
         }
 
         let tables = manifest.tables;
+        let insertObj = {id: appId, is_installed: true};
 
         if (!tables || tables.length < 1) {
-          updateApp(appId, updateObj, res, next);
+          insertApp(insertObj, res, next);
           return;
         }
 
@@ -185,7 +194,7 @@ router.post('/apps.install', (req, res, next) => {
 
         r.init(dbConfig, prefixedTables)
           .then(() => {
-            updateApp(appId, updateObj, res, next);
+            insertApp(insertObj, res, next);
           }).catch((err) => {
             return next(err);
           });
@@ -208,7 +217,7 @@ router.post('/apps.deinstall', (req, res, next) => {
     return res.status(200).json({ok: false, err: 'app_id_required'});
   }
 
-  let updateObj = {is_active: false};
+  let updateObj = {is_installed: false};
 
   updateApp(appId, updateObj, res, next);
 });
@@ -253,10 +262,8 @@ router.post('/apps.delete', (req, res, next) => {
 
   dropTables(prefixedTables)
     .then(() => {
-      //T_TODO faking delete here
-      let updateObj = {is_active: null};
-      updateApp(appId, updateObj, res, next);
-      //deleteApp(appId, res, next);
+      //T_TODO delete the files too
+      deleteApp(appId, res, next);
     }).catch((err) => {
       return next(err);
     });
