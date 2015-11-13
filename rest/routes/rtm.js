@@ -5,12 +5,14 @@ const TEAM_ID = process.env.TEAM_ID;
 let express = require( 'express' );
 let r = require('rethinkdb');
 let db = require('../db.js');
+let utilDB = require('../util_db.js');
 let Promise = require('bluebird');
 
 let router = express.Router();
 
 router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
+  let isAdmin = req.isAdmin;
 
   let meQ = r.table('users').get(userId).without('password');
   let channelsQ =
@@ -56,11 +58,14 @@ router.post('/rtm.start', (req, res, next) => {
     .zip()
     .without("users", "password")
 
+  let appsListQ = utilDB.appsList(isAdmin);
+
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(channelsQ),
     db.rethinkQuery(imsQ),
-    db.rethinkQuery(notMeQ)
+    db.rethinkQuery(notMeQ),
+    db.rethinkQuery(appsListQ)
   ]
 
   Promise.all(promiseArrayQ)
@@ -70,7 +75,8 @@ router.post('/rtm.start', (req, res, next) => {
         self: data[0],
         channels: data[1],
         ims: data[2],
-        users: data[3]
+        users: data[3],
+        apps: data[4]
       }
 
       res.status(200).json(rtmResponse);

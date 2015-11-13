@@ -39,6 +39,6 @@ $(function(){
 
 	}
 	loadApps();
-	//swipes.navigation.setTitle("Kristjan");
+
 	
 });

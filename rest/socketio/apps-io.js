@@ -53,7 +53,7 @@ module.exports.hook = (socket, userId) => {
                     return;
                   }
 
-                  let type = table;
+                  let type = tableName;
                   let data = row.new_val;
 
                   socket.emit('message', {type: type, data: data});

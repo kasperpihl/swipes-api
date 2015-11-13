@@ -22,7 +22,7 @@ router.post('/stars.list', (req, res, next) => {
 router.post('/stars.add', (req, res, next) => {
   let userId = req.userId;
   let channelId = req.body.channel_id;
-
+  
   if (channelId) {
     let star = {
       type: 'channel',
