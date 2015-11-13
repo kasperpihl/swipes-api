@@ -224,8 +224,12 @@ console.log(swipes.info.manifest);
       addEvents(); // attach keydown and resize events
 
       var last = now = timestamp();
+      var counter = 0;
+      var testArray = [];
+
       function frame() {
         now = timestamp();
+
         update(Math.min(1, (now - last) / 1000.0)); // using requestAnimationFrame have to be able to handle large delta's caused when it 'hibernates' in a background or non-visible tab
         draw();
         last = now;
@@ -344,6 +348,7 @@ console.log(swipes.info.manifest);
           if (unoccupied(current.type, x, t, current.dir)) {
             current.x = x;
             current.y = current.y + 1;
+            dt = 0;
             invalidate();
             moveOrNot = true;
           } else {

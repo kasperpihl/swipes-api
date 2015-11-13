@@ -16,7 +16,7 @@ var util = 				require(COMMON + 'utilities/util.js');
 http.globalAgent.maxSockets = 25;
 
 var app = express();
-app.use(bodyParser.json( { limit: 3000000 } ) );
+app.use(bodyParser.json( { limit: 3000000, type: '*/*' } ) );
 app.use(cookieParser())
 var ORIGIN = process.env.ORIGIN;
 

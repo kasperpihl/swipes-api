@@ -3,9 +3,6 @@ $(function(){
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
 	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
-
-	swipes.navigation.setBackgroundColor("#ededed")
-	swipes.navigation.setForegroundColor("dark")
 	
 	
 	//swipes.navigation.enableBoxShadow(false) to disable boxshadow

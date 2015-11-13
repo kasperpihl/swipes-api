@@ -15,6 +15,10 @@ router.post('/rtm.start', (req, res, next) => {
   let isAdmin = req.isAdmin;
 
   let meQ = r.table('users').get(userId).without('password');
+  /*
+  // T_TODO:
+  This query bugs, if a user is not subsribed to any channels. Then it doesn't take the channels that he is not subscribed to
+ */
   let channelsQ =
   r.table('channels')
     .filter((channel) => {
