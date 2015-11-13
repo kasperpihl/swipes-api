@@ -6,6 +6,9 @@ $(function(){
 	
 	swipes.navigation.setBackgroundColor("#ededed")
 	swipes.navigation.setForegroundColor("dark")
+	
+	
+	//swipes.navigation.enableBoxShadow(false) to disable boxshadow
 
 	// Call underlying swipes api 
 	function loadApps(){
@@ -14,6 +17,8 @@ $(function(){
 				console.log(res);
 				window._apps = res.apps;
 				render();
+				
+				$('.hover-full').swButtonFullHover();
 			}
 			else console.log("error loading apps");
 		});
@@ -31,8 +36,6 @@ $(function(){
 			$(".app-list #app-" + app.id).replaceWith(renderedApp);
 	}
 	loadApps();
-	setTimeout(function(){
-		swipes.navigation.setTitle("Kristjan");
-	}, 3000);
+	//swipes.navigation.setTitle("Kristjan");
 	
 });
