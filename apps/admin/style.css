@@ -1126,6 +1126,7 @@ button {
 .app {
   margin: 25px 0;
   height: 70px;
+  border-left: 5px solid #6ec071;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

@@ -4,7 +4,7 @@ $(function(){
 	// Underscore rendered template, check admin.html for app-row-template
 	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
 	
-	swipes.navigation.setBackgroundColor("red")
+	swipes.navigation.setBackgroundColor("#ededed")
 	swipes.navigation.setForegroundColor("dark")
 
 	// Call underlying swipes api 
@@ -33,8 +33,6 @@ $(function(){
 	loadApps();
 	setTimeout(function(){
 		swipes.navigation.setTitle("Kristjan");
-		swipes.navigation.setBackgroundColor("red");
-		swipes.navigation.setForegroundColor("light");
 	}, 3000);
 	
 });
