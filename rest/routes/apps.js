@@ -8,6 +8,7 @@ let config = require('config');
 let db = require('../db.js');
 let jsonToQuery = require('../json_to_query.js').jsonToQuery;
 let util = require('../util.js');
+let utilDB = require('../util_db.js');
 // relative directory to installed apps
 let appDir = __dirname + '/../../apps/';
 
@@ -82,8 +83,8 @@ let getAppFile = (appId, fileName) => {
 
 router.post('/apps.list', (req, res, next) => {
   let isAdmin = req.isAdmin;
-  let filter = isAdmin ? {} : {is_active: true};
-  let listQ = r.table('apps').filter(filter);
+
+  let listQ = utilDB.appsList(isAdmin);
 
   db.rethinkQuery(listQ)
     .then((apps) => {
