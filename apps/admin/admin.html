@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		
+		<link href="<{appDir}>/style.css" rel="stylesheet">
+		<script src="<{appDir}>/script.js"></script>
+	</head>
+	<body>
+		<div class="col grid_10 app-manager">
+			<h3 class="font-bold">App Manager</h3>
+			<input type="text" class="col grid_4 swipes-input search-apps" placeholder="Search for apps" id="search-apps">
+		
+			<div class="col grid_8 card app-list">
+				Loading Apps..
+			</div>
+		</div>
+
+		<!--
+			This is an underscore template to be rendered
+		-->
+		<script type="text/template" id="app-row-template">
+			<div class="col grid_11 app" id="app-<%= data.id %>">
+				<div class="app-icon"></div>
+				<div class="app-details">
+					<div class="name font-semibold"><%= data.title %></div>
+					<div class="description"><%= data.description %></div>
+				</div>
+				<div class="app-actions">
+					<button class="outline rounded activate hover-full">ACTIVATE</button>
+					<button class="outline rounded deactivate hover-full disabled">DEACTIVATE</button>
+					<button class="outline rounded delete hover-full">DELETE</button>
+					<button class="outline rounded settings studiogray-100 hover-full">
+						<i class="material-icons">settings</i>
+					</button>						
+				</div>
+			</div>
+		</script>
+	</body>
+</html>

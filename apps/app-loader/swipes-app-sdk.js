@@ -41,6 +41,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.info = {
 		// Manifest will be loaded in here
 	};
+
 	SwipesAppSDK.prototype.users = {
 		get: function(options, callback){
 			var query = {};
@@ -55,14 +56,13 @@ var SwipesAppSDK = (function() {
 		}
 	};
 
-	// API for handling data
+
+	// API for handling data from apps
 	SwipesAppSDK.prototype.app = function(app_id){
 		if(!app_id)
 			app_id = self.info.manifest.identifier;
 		return {
-
 			get:function(options, callback){
-				
 				var data = {
 					app_id: app_id,
 					query: {}
@@ -70,13 +70,7 @@ var SwipesAppSDK = (function() {
 				if(typeof options === 'string')
 					data.query.table = options;
 				else if(typeof options === 'object' && typeof options.table === 'string'){
-					data.query.table = options.table;
-					if(options.limit){
-						data.query.limit = options.limit;
-					}
-					if(options.order){
-						data.query.order = options.order;
-					}
+					data.query = options;
 				}
 				else{
 					throw new Error("SwipesAppSDK: Get request must have table")
@@ -90,6 +84,9 @@ var SwipesAppSDK = (function() {
 					app_id: app_id,
 					query: { data: saveData }
 				};
+				if(typeof saveData !== 'object'){
+					throw new Error("SwipesAppSDK: save: data object is required");
+				}
 				if(typeof options === 'string')
 					data.query.table = options;
 				else if(typeof options === 'object' && typeof options.table === 'string'){
@@ -99,7 +96,7 @@ var SwipesAppSDK = (function() {
 					}
 				}
 				else{
-					throw new Error("SwipesAppSDK: Get request must have table")
+					throw new Error("SwipesAppSDK: save: Get request must have table")
 				}
 				
 				self._client.callSwipesApi("apps.saveData", data, callback);
