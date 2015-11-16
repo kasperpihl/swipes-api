@@ -1225,41 +1225,41 @@ button {
           justify-content: space-around;
 }
 
-.app .app-actions button.outline {
-  border-width: 2px;
-  padding: 5px 10px;
-  margin: 0 10px;
-}
-
-.app .app-actions button.outline.activate {
-  border-color: #4CAF50;
-  color: #4CAF50;
-  font-weight: 600;
-}
-
-.app .app-actions button.outline.deactivate {
-  border-color: #FFCA28;
-  color: #FFCA28;
-  font-weight: 600;
-}
-
-.app .app-actions button.outline.delete {
-  border-color: #FC461E;
-  color: #FC461E;
-  font-weight: 600;
-}
-
-.app .app-actions button.outline.settings {
+.app .app-actions .settings {
   padding: 0 5px;
-  border-color: #C6C8CC;
-  color: #C6C8CC;
-  font-weight: 600;
+  color: #959699;
+  font-weight: 400;
 }
 
-.app .app-actions button.outline.settings i {
+.app .app-actions .settings i {
   padding: 0;
   margin: 0;
   -webkit-transform: translateY(2px);
       -ms-transform: translateY(2px);
           transform: translateY(2px);
+}
+
+.app .app-actions button.outline {
+  border-width: 1px;
+  padding: 5px 10px;
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+.app .app-actions button.outline.activate {
+  border-color: #4CAF50;
+  color: #4CAF50;
+  font-weight: 400;
+}
+
+.app .app-actions button.outline.deactivate {
+  border-color: #FFCA28;
+  color: #FFCA28;
+  font-weight: 400;
+}
+
+.app .app-actions button.outline.delete {
+  border-color: #FC461E;
+  color: #FC461E;
+  font-weight: 400;
 }

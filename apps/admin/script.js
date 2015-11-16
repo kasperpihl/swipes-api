@@ -15,7 +15,7 @@ $(function(){
 				window._apps = res.apps;
 				render();
 				
-				$('.hover-full').swButtonFullHover();
+				$.swButtonFullHover();
 			}
 			else console.log("error loading apps");
 		});
