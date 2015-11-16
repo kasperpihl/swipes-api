@@ -1,11 +1,11 @@
 var SwipesAPIConnector = (function() {
-	function SwipesAPIConnector(apiUrl, token) {
+	function SwipesAPIConnector(baseUrl, token) {
 		var bindedCallback = this._receivedMessageFromListener.bind(this)
-		if (!apiUrl){
-			throw new Error('SwipesAPIConnector: No apiUrl set in constructor');
+		if (!baseUrl){
+			throw new Error('SwipesAPIConnector: No baseUrl set in constructor');
 		}
-
-		this._baseURL = apiUrl + '/v1/';
+		this._baseURL = baseUrl;
+		this._apiUrl = baseUrl + '/v1/';
 		this._token = token;
 
 		this._timeoutTimer = 10;
@@ -16,9 +16,16 @@ var SwipesAPIConnector = (function() {
 		window.addEventListener('message', bindedCallback, false);
 
 	};
+	SwipesAPIConnector.prototype.setAppId = function(appId){
+		this._appId = appId;
+	};
+	SwipesAPIConnector.prototype.copyConnector = function(){
+		var connector = new SwipesAPIConnector(this._baseURL, this._token);
+		return connector;
+	};
 	SwipesAPIConnector.prototype.getAPIURL = function(){
-		return this._baseURL;
-	}
+		return this._apiUrl;
+	};
 	SwipesAPIConnector.prototype.setListener = function(listener, targetUrl){
 		// Test if listener is an object
 		if(typeof listener !== 'object'){
@@ -66,7 +73,7 @@ var SwipesAPIConnector = (function() {
 			callback = data;
 		}
 
-		var url = this._baseURL + command;
+		var url = this._apiUrl + command;
 		if ((data == null) || typeof data !== 'object') {
 			data = {};
 		}
@@ -111,6 +118,8 @@ var SwipesAPIConnector = (function() {
 			'command': command,
 			'data': data
 		};
+		if(this._appId)
+			callJson.app_id = this._appId;
 		if (callback && typeof callback === 'function') {
 			this._addCallback(identifier, callback);
 		}
@@ -130,6 +139,10 @@ var SwipesAPIConnector = (function() {
 
 	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
 		var message = JSON.parse(msg.data);
+		if (message.app_id && message.app_id != this._appId){
+			console.log("returned due to not matching app id");
+			return;
+		}
 		if (message.reply_to) {
 			this._runLocalCallback(message.reply_to, message.data, message.error);
 		}
