@@ -44,15 +44,31 @@ let insertApp = (app, res, next) => {
 
 let deleteApp = (appId, res, next) => {
   //T_TODO make a real delete at some point. It will slow down the ship right now
+  let deletePerUserQ =
+    r.table('users')
+      .update((user) => {
+        return {
+          apps: user('apps').default([]).filter((app) => {
+            return app('id').ne(appId)
+          })
+        }
+      })
+
   let deleteQ =
     r.table('apps')
       .get(appId)
       .delete();
 
-  db.rethinkQuery(deleteQ)
+  db.rethinkQuery(deletePerUserQ)
     .then(() => {
-      res.status(200).json({ok: true});
-    }).catch((err) => {
+      db.rethinkQuery(deleteQ)
+        .then(() => {
+          res.status(200).json({ok: true});
+        }).catch((err) => {
+          return next(err);
+        });
+    })
+    .catch((err) => {
       return next(err);
     });
 }
