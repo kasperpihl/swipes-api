@@ -7,6 +7,25 @@ let Promise = require('bluebird');
 
 let router = express.Router();
 
+let isActive = (userId, appId) => {
+  return new Promise((resolve, reject) => {
+    let isActiveQ =
+      r.table('users')
+        .get(userId)('apps')
+        .filter((app) => {
+          return app('id').eq(appId).and(app('is_active').eq(true))
+        })
+
+    db.rethinkQuery(isActiveQ)
+      .then((app) => {
+        return resolve(app);
+      })
+      .catch((err) => {
+        return reject(err);
+      })
+  })
+}
+
 router.post('/users.list', (req, res, next) => {
   let query = r.table('users');
 
@@ -24,21 +43,31 @@ router.post('/users.activateApp', (req, res, next) => {
 
   //T_TODO check if the user can install that app
 
-  let appendAppQ =
-    r.table('users')
-      .get(userId)
-      .update((user) => {
-        return {
-          apps: user('apps').default([]).append({
-            id: appId,
-            is_active: true
-          })
-        }
-      })
+  isActive(userId, appId)
+    .then((app) => {
+      if (app.length > 0) {
+        let appendAppQ =
+          r.table('users')
+            .get(userId)
+            .update((user) => {
+              return {
+                apps: user('apps').default([]).append({
+                  id: appId,
+                  is_active: true
+                })
+              }
+            })
 
-  db.rethinkQuery(appendAppQ)
-    .then(() => {
-      return res.status(200).json({ok: true});
+        db.rethinkQuery(appendAppQ)
+          .then(() => {
+            return res.status(200).json({ok: true});
+          })
+          .catch((err) => {
+            return next(err);
+          })
+      } else {
+        return res.status(200).json({ok: false, err: 'already_activated'});
+      }
     })
     .catch((err) => {
       return next(err);
