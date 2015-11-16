@@ -10,7 +10,10 @@
 
 <body>
 <script>
-console.log(swipes.info.manifest);
+swipes.app("core").get("channels", function(res, err){
+  console.log(res, err);
+});
+
 </script>
 <style>
     body      { font-family: Helvetica, sans-serif; margin: 0; padding:0; }

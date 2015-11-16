@@ -14,7 +14,7 @@ var SwipesAppSDK = (function() {
 		this._client = new SwipesAPIConnector(apiUrl, token);
 		// set the sdk property on client so it can call this class
 		this._client.setDelegate(this);
-		this._listeners = {};
+		this._listenersObj = {};
 		self = this;
 	}
 
@@ -26,11 +26,11 @@ var SwipesAppSDK = (function() {
 		},
 		// Push new title (view), will show a backbutton.
 		push: function(title, identifier){
-
+			self._client.callListener("navigation.push", {title: title, identifier: identifier})
 		},
 		// Pops back one title
 		pop: function(){
-
+			self._client.callListener("navigation.pop")
 		},
 		setBackgroundColor:function(backgroundColor){
 			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});			
@@ -43,23 +43,8 @@ var SwipesAppSDK = (function() {
 		}
 	};
 
-
 	SwipesAppSDK.prototype.info = {
 		// Manifest will be loaded in here
-	};
-
-	SwipesAppSDK.prototype.users = {
-		get: function(options, callback){
-			var query = {};
-			if(typeof options === 'string'){
-				query.id = options;
-			}
-			if(typeof options === 'object'){
-				if(options.id)
-					query.id = options.id;
-			}
-			self._client.callListener("users.get", query, callback);
-		}
 	};
 
 
@@ -81,8 +66,10 @@ var SwipesAppSDK = (function() {
 				else{
 					throw new Error("SwipesAppSDK: Get request must have table")
 				}
-
-				self._client.callSwipesApi("apps.getData", data, callback);
+				if(app_id == "core")
+					self._client.callListener("getData", data, callback);
+				else
+					self._client.callSwipesApi("apps.getData", data, callback);
 			},
 
 			save: function(options, saveData, callback){
@@ -108,23 +95,28 @@ var SwipesAppSDK = (function() {
 				self._client.callSwipesApi("apps.saveData", data, callback);
 			},
 			on:function(event, handler){
-				eventName = app_id + "_" + event
-				self.listeners.add(eventName, handler);
+				eventName = event
+				if(app_id && app_id !== "core")
+					eventName = app_id + "_" + event
+				self._listeners.add(eventName, handler);
 				self._client.callListener("listenTo", {event: eventName});
 			}
 		}
 	};
 
-	SwipesAppSDK.prototype.listeners = {
+	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
-			var currentListeners = self._listeners[eventName];
+			var currentListeners = self._listenersObj[eventName];
 			if(!currentListeners)
 				currentListeners = [];
 			currentListeners.push(callback);
-			self._listeners[eventName] = currentListeners;
+			self._listenersObj[eventName] = currentListeners;
+		},
+		remove: function(eventName){
+			
 		},
 		get: function(eventName){
-			var currentListeners = self._listeners[eventName];
+			var currentListeners = self._listenersObj[eventName];
 
 			if(!currentListeners)
 				currentListeners = [];
@@ -137,7 +129,7 @@ var SwipesAppSDK = (function() {
 		if(message){
 			var data = message.data;
 			if(message.command == "event"){
-				var listeners = self.listeners.get(data.type);
+				var listeners = self._listeners.get(data.type);
 				for(var i = 0 ; i < listeners.length ; i++){
 
 					var handler = listeners[i];
