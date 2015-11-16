@@ -2,6 +2,7 @@
 
 const TEAM_ID = process.env.TEAM_ID;
 
+let config = require('config');
 let express = require( 'express' );
 let r = require('rethinkdb');
 let db = require('../db.js');
@@ -62,7 +63,7 @@ router.post('/rtm.start', (req, res, next) => {
     .zip()
     .without("users", "password")
 
-  let appsListQ = r.table('users').get(userId)('apps')
+  let appsListQ = r.table('users').get(userId)('apps').default([])
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
@@ -76,7 +77,7 @@ router.post('/rtm.start', (req, res, next) => {
     .then(data => {
       let rtmResponse = {
         ok: true,
-        url: 'http://localhost:5000/v1/',
+        url: config.get('hostname') + ':' + config.get('port'),
         self: data[0],
         channels: data[1],
         ims: data[2],

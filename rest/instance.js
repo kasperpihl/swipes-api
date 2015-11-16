@@ -3,18 +3,17 @@
 // ===========================================================================================================
 // Setup
 // ===========================================================================================================
-let PORT = Number(process.env.PORT || 5000);
+let config = require('config');
+let PORT = Number(config.get('port') || 5000);
 
 let express = require( 'express' );
 let app = express();
-
 let server = app.listen(PORT);
 let io = require('socket.io').listen(server);
 let jwt = require('jwt-simple');
 let cors = require('cors');
 let bodyParser = require( 'body-parser' );
 let _ = require( 'underscore' );
-let config = require('config');
 let util = require('./util.js');
 let jwtMiddleware = require('./jwt-auth-middleware.js');
 
