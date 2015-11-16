@@ -129,40 +129,40 @@ button {
 		align-items: center;
 		justify-content: space-around;
 		
+		.settings {
+			padding: 0 5px;
+			color: $studioGray-120;
+			font-weight: 400;
+				
+			i {
+				padding: 0;
+				margin: 0;
+				transform: translateY(2px);
+			}
+		}
+		
 		button.outline {
-			border-width: 2px;
+			border-width: 1px;
 			padding: 5px 10px; 
 			margin: 0 10px;
+			font-size: 14px;
 			
 			&.activate {
 				border-color: $green-color;
 				color: $green-color;
-				font-weight: 600;
+				font-weight: 400;
 			}
 			
 			&.deactivate {
 				border-color: $yellow-color;
 				color: $yellow-color;
-				font-weight: 600;
+				font-weight: 400;
 			}
 			
 			&.delete {
 				border-color: $red-color;
 				color: $red-color;
-				font-weight: 600;
-			}
-			
-			&.settings {
-				padding: 0 5px;
-				border-color: $studioGray-100;
-				color: $studioGray-100;
-				font-weight: 600;
-				
-				i {
-					padding: 0;
-					margin: 0;
-					transform: translateY(2px);
-				}
+				font-weight: 400;
 			}
 		}
 	}

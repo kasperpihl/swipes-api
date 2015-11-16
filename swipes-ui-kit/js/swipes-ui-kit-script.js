@@ -1,19 +1,19 @@
 $(document).ready(function() {
 	
-	$.fn.swButtonFullHover = function() {
-		// hover for .outline
-		$('.swipes-button.hover-full').mouseenter(function() {
-			var borderColor = $(this).css('border-color');
-			$(this).css('background-color', borderColor);	
-			$(this).css('color', 'white'); 
-		}).mouseleave(function() {
-			var borderColor = $(this).css('border-color');
-			$(this).css('background-color', 'transparent');
-			$(this).css('color', borderColor);
-		})
-	}; 
+	$.swButtonFullHover = function() {
+        // hover for .outline
+        $('.swipes-button.hover-full').mouseenter(function() {
+            var borderColor = $(this).css('border-color');
+            $(this).css('background-color', borderColor);    
+            $(this).css('color', 'white'); 
+        }).mouseleave(function() {
+            var borderColor = $(this).css('border-color');
+            $(this).css('background-color', 'transparent');
+            $(this).css('color', borderColor);
+        })
+    };
 	
-	$.fn.swButtonLightenHover = function() {
+	$.swButtonLightenHover = function() {
 		// button.outline hover
 		$('.hover-lighten').mouseenter(function() {
 			var bgColorRGBA = $(this).css('background-color').replace(')', ', 0.75)').replace('rgb', 'rgba');
@@ -29,7 +29,7 @@ $(document).ready(function() {
 		})
 	}; 
 	
-	$.fn.swFloatingLabelInput = function() {
+	$.swFloatingLabelInput = function() {
 		// Set the width and the height of the floating-label container for label positioning
 		var floatSizeW = $('.swipes-floating-label').children('input').width();
 		var floatSizeH = $('.swipes-floating-label').children('input').height();
@@ -51,7 +51,7 @@ $(document).ready(function() {
 		})
 	}; 
 	
-	$.fn.swDropdown = function() {
+	$.swDropdown = function() {
 		// Dropdown
 		var swipesDropdown = $('.swipes-dropdown');
 		var swipesDropdownInit = $('.swipes-dropdown').find('.init').text();
@@ -78,7 +78,7 @@ $(document).ready(function() {
 		});
 	}; 
 	
-	$.fn.swInputRange = function() {
+	$.swInputRange = function() {
 		// Input:range
 		$('.swipes-slider').mouseup(function() {
 			$(this).blur();
@@ -90,7 +90,7 @@ $(document).ready(function() {
 		})
 	}; 
 	
-	$.fn.swInputCheckBox = function() {
+	$.swInputCheckBox = function() {
 		// Checkbox
 		$('.swipes-checkbox').on('click', function() {
 			var $el = $( this ).find(".swipes-input-checkbox");
@@ -106,7 +106,7 @@ $(document).ready(function() {
 		})
 	}; 
 	
-	$.fn.swInputRadio = function() {
+	$.swInputRadio = function() {
 		// Radio button
 		$('.swipes-radio').on('click', function() {
 		
@@ -123,7 +123,7 @@ $(document).ready(function() {
 		})
 	}; 
 	
-	$.fn.swContextMenu = function() {
+	$.swContextMenu = function() {
 		var swipesContextBTN = $('.swipes-context-btn');
 		var swipesContext = $('.swipes-context');
 		var swipesContextList = $('.swipes-context-list');

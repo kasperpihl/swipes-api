@@ -76,6 +76,7 @@ router.post('/rtm.start', (req, res, next) => {
     .then(data => {
       let rtmResponse = {
         ok: true,
+        url: 'http://localhost:5000/v1/',
         self: data[0],
         channels: data[1],
         ims: data[2],
