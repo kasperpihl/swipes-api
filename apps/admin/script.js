@@ -15,7 +15,7 @@ $(function(){
 				window._apps = res.apps;
 				render();
 				
-				$('.hover-full').swButtonFullHover();
+				$.swButtonFullHover();
 			}
 			else console.log("error loading apps");
 		});
@@ -34,6 +34,12 @@ $(function(){
 
 	}
 	loadApps();
-
-	
+	function installApp(appId){
+		swipes._client.callSwipesApi("apps.install", {app_id: appId}, function(res, error){
+			if(res && res.ok){
+				console.log("successful install");
+			}
+			else console.log("error loading apps");
+		});
+	}
 });
