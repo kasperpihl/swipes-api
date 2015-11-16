@@ -62,7 +62,7 @@ router.post('/rtm.start', (req, res, next) => {
     .zip()
     .without("users", "password")
 
-  let appsListQ = utilDB.appsList(isAdmin);
+  let appsListQ = r.table('users').get(userId)('apps')
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
