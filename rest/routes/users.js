@@ -3,6 +3,7 @@
 let express = require( 'express' );
 let r = require('rethinkdb');
 let db = require('../db.js');
+let utilDB = require('../util_db.js');
 let Promise = require('bluebird');
 
 let router = express.Router();
@@ -13,7 +14,7 @@ let isActive = (userId, appId) => {
       r.table('users')
         .get(userId)('apps')
         .filter((app) => {
-          return app('id').eq(appId).and(app('is_active').eq(true))
+          return app('id').eq(appId)
         })
 
     db.rethinkQuery(isActiveQ)
@@ -41,12 +42,20 @@ router.post('/users.activateApp', (req, res, next) => {
   let userId = req.userId;
   let appId = req.body.app_id;
 
-  //T_TODO check if the user can install that app
+  //T_TODO check if the user can activate that app
 
   isActive(userId, appId)
     .then((app) => {
-      if (app.length > 0) {
-        let appendAppQ =
+      if(app.length > 0 && app[0].is_active === true) {
+        return res.status(200).json({ok: false, err: 'already_activated'});
+      }
+
+      let updateAppsQ;
+
+      if(app.length > 0 && app[0].is_active === false) {
+        updateAppsQ = utilDB.updateUserAppQ(userId, appId, {is_active: true});
+      } else {
+        updateAppsQ =
           r.table('users')
             .get(userId)
             .update((user) => {
@@ -57,17 +66,32 @@ router.post('/users.activateApp', (req, res, next) => {
                 })
               }
             })
-
-        db.rethinkQuery(appendAppQ)
-          .then(() => {
-            return res.status(200).json({ok: true});
-          })
-          .catch((err) => {
-            return next(err);
-          })
-      } else {
-        return res.status(200).json({ok: false, err: 'already_activated'});
       }
+
+      db.rethinkQuery(updateAppsQ)
+        .then(() => {
+          return res.status(200).json({ok: true});
+        })
+        .catch((err) => {
+          return next(err);
+        })
+    })
+    .catch((err) => {
+      return next(err);
+    })
+});
+
+router.post('/users.unactivateApp', (req, res, next) => {
+  let userId = req.userId;
+  let appId = req.body.app_id;
+
+  //T_TODO check if the user can unactivate that app
+
+  let unActivateQ = utilDB.updateUserAppQ(userId, appId, {is_active: false});
+
+  db.rethinkQuery(unActivateQ)
+    .then(() => {
+      return res.status(200).json({ok: true});
     })
     .catch((err) => {
       return next(err);
