@@ -140,7 +140,6 @@ var SwipesAPIConnector = (function() {
 	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
 		var message = JSON.parse(msg.data);
 		if (message.app_id && message.app_id != this._appId){
-			console.log("returned due to not matching app id");
 			return;
 		}
 		if (message.reply_to) {

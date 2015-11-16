@@ -34,6 +34,15 @@ $(function(){
 
 	}
 	loadApps();
+	swipes.app("core").on("highscore", function(e){
 
-	
+	})
+	function installApp(appId){
+		swipes._client.callSwipesApi("apps.install", {app_id: appId}, function(res, error){
+			if(res && res.ok){
+				console.log("successful install");
+			}
+			else console.log("error loading apps");
+		});
+	}
 });
