@@ -38,12 +38,11 @@ let createChannel = (creatorId, receiverId) => {
     };
 
     let createDMChannelQ =
-      r.table('channels')
-        .insert(doc, {returnChanges: true});
+      r.table('channels').insert(doc);
 
     db.rethinkQuery(createDMChannelQ)
-      .then((inserted) => {
-        let newChannelId = inserted.changes[0].new_val.id;
+      .then(() => {
+        let newChannelId = doc.id;
 
         let creatorChannel = {
           id: newChannelId,
@@ -73,7 +72,7 @@ let createChannel = (creatorId, receiverId) => {
 
         db.rethinkQuery(r.do(updateCreatorQ, updateReceiverQ))
           .then(() => {
-            return resolve(newChannelId);
+            return resolve(doc);
           })
           .catch((err) => {
             return reject(err);
@@ -84,7 +83,7 @@ let createChannel = (creatorId, receiverId) => {
   });
 }
 
-let openChannel = (userId, targetUserId,channelId) => {
+let openChannel = (userId, targetUserId, channelId) => {
   let imOpenEvent = {
     type: 'im_open',
     user_id: userId,
@@ -148,7 +147,7 @@ router.post('/im.list', (req, res, next) => {
 
   db.rethinkQuery(listQ)
     .then((results) => {
-        res.status(200).json({ok: true, channels: results});
+        return res.status(200).json({ok: true, channels: results});
     }).catch((err) => {
       return next(err);
     });
@@ -177,10 +176,10 @@ router.post('/im.open', (req, res, next) => {
         let imsLen = ims.length
 
         if (imsLen === 0) {
-          createChannel(userId, targetUserId).then((newChannelId) => {
-            openChannel(userId, targetUserId, newChannelId)
+          createChannel(userId, targetUserId).then((newChannel) => {
+            openChannel(userId, targetUserId, newChannel.id)
               .then(() => {
-                res.status(200).json({ok: true, channel_id: newChannelId});
+                return res.status(200).json({ok: true, channel: newChannel});
               })
               .catch((err) => {
                 return next(err);
@@ -190,10 +189,17 @@ router.post('/im.open', (req, res, next) => {
           });
         } else {
           let channelId = ims[0];
+          let getChannelQ = r.table('channels').get(channelId);
 
           openChannel(userId, targetUserId, channelId)
             .then(() => {
-              res.status(200).json({ok: true, channel_id: channelId});
+              db.rethinkQuery(getChannelQ)
+                .then((channel) => {
+                  return res.status(200).json({ok: true, channel: channel});
+                })
+                .catch((err) => {
+                  return next(err);
+                })
             })
             .catch((err) => {
               return next(err);
