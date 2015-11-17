@@ -15,7 +15,7 @@ $(function(){
 				window._apps = res.apps;
 				render();
 				
-				$.swButtonFullHover();
+				$.swContextMenu();
 			}
 			else console.log("error loading apps");
 		});
@@ -42,4 +42,46 @@ $(function(){
 			else console.log("error loading apps");
 		});
 	}
+	
+	$('.tab').click(function() {
+		$('.tab').removeClass('selected');
+		$(this).addClass('selected');
+		
+		var index = $('.nav').find('.tab').index(this);
+		var selectedLine = $('.selected-line');
+		
+		if (index == 0) {
+			selectedLine.css('left', 'calc((100% / 3) / 3)')
+		} else if (index == 1) {
+			selectedLine.css('left', 'calc(((100% / 3) / 3) * 4)')
+		} else {
+			selectedLine.css('left', 'calc(((100% / 3) / 3) * 7)')
+		}
+	});
+	
+	$(".tab").click(function(e){
+		 self = $(this);
+
+		 if(self.find(".woba").length == 0)
+			  self.prepend("<span class='woba'></span>");
+
+		 woba = self.find(".woba");
+
+		 woba.removeClass("animate");
+
+
+		 if(!woba.height() && !woba.width())
+		 {
+
+			  d = Math.max(self.outerWidth(), self.outerHeight());
+			  woba.css({height: d, width: d});
+		 }
+
+
+		 x = e.pageX - self.offset().left - woba.width()/2;
+		 y = e.pageY - self.offset().top - woba.height()/2;
+
+
+		 woba.css({top: y + 'px', left: x+'px'}).addClass("animate");
+	})
 });

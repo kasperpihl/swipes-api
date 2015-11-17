@@ -1,168 +1,230 @@
 @import "swipes-ui-kit/swipes-ui-kit-styles";
 
+$break-small: 400px;
+$break-medium: 800px;
+$break-large: 1200px;
+
 html, body {
-	font-family: 'Source Sans Pro';
+	font-family: 'Open Sans';
 	background-color: $studioGray-20;
 }
 
-::-webkit-input-placeholder {
-   font-family: 'Source Sans Pro';
-	font-size: 18px;
-	font-weight: 600;
-	color: $studioGray-80;
+.woba {
+	display: block; 
+	position: absolute;
+	background: $deepBlue-40;
+	border-radius: 100%;
+	transform: scale(0);
+	opacity: .5;
 }
 
-button {
-	font-family: 'Source Sans Pro';
-	cursor: pointer;
+.woba.animate {
+	animation: ripple .5s linear forwards;
 }
 
-.app-manager {
+@keyframes ripple {
+	100% {opacity: 0; transform: scale(2.5);}
+}
+
+.nav {
 	width: 100%;
-	position: relative;
-	margin-top: 100px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	
-	h3 {
-		text-align: center;
-		color: $deepBlue-80;
-	}
-	
-	.search-apps {
-		margin-top: 50px;
-		background-color: white;
-		padding: 15px 20px;
-		box-shadow: $swipes-shadow-one;
-		position: relative;
-		font-family: 'Source Sans Pro';
-		font-size: 18px;
-		font-weight: 600;
-		color: $deepBlue-80;
-		
-		&:focus {
-			outline: none;
-		}
-	}
-	
-	label {
-		position: absolute;
-		top: 0;
-		right: 0;
-	}
-}
-
-.main-app-list {
-	margin-top: 50px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	
-	h5 {
-		color: $deepBlue-100;
-		margin-left: 30px;
-		text-transform: uppercase;
-	}
-}
-
-.app-list {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	
-	&.active > .app {
-		border-left: 5px solid lighten($green-color, 10%);
-	}
-	
-	&.deactive > .app {
-		border-left: 5px solid lighten($red-color, 10%);
-	}
-}
-
-.card {
+	height: 60px;
+	top: 0;
 	background-color: white;
+	position: fixed;
+	z-index: 99;
 	box-shadow: $swipes-shadow-one;
-	border-radius: 5px;
-	padding: 30px 0;
+	display: flex;
+	
+	.tab {
+		width: calc(100% / 3);
+		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		color: $deepBlue-40;
+		font-weight: 600;
+		text-transform: uppercase;
+		overflow: hidden;
+		cursor: pointer;
+		position: relative;
+		transition: .2s ease-in-out;
+		
+		@media screen and (max-width: $break-medium) {
+			font-size: 14px;
+		}
+		
+		@media screen and (max-width: $break-small) {
+			font-size: 11px;
+		}
+		
+		&:hover {
+			color: $deepBlue-100;
+			transition: .1s ease-in-out;
+		}
+		
+		&.selected {
+			font-weight: 700;
+			color: $deepBlue-100;
+			transition: .2s ease-in-out;
+		}
+	}
+	
+	.selected-line {
+		width: calc((100% / 3) / 3);
+		height: 2px;
+		background-color: $deepBlue-100;
+		position: absolute;
+		bottom: 0;
+		left: calc((100% / 3) / 3);
+		transition: .3s cubic-bezier(.78,.1,.45,.94);
+	}
 }
 
-.app {
-	margin: 25px 0;
-	height: 70px;
+.admin-wrapper {
+	width: 100%;
+	margin-top: 120px;
+	position: relative;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: space-between;
 	
-	.app-icon {
-		@include size(50px !important);
-		background-color: $studioGray-100;
-		border-radius: 5px;
-	}
-	
-	.app-details {
-		width: 50%;
-		margin-left: 30px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+	.app-list {
+		width: 57.5%;
 		
-		.name {
-			font-size: 20px;
+		@media screen and (max-width: $break-medium) {
+			width: 100%;
+		}
+			
+		h5.app-status {
 			color: $deepBlue-100;
+			text-transform: uppercase;
+		}
+		
+		.app {
+			margin: 50px 0;
+			position: relative;
+			display: flex;
+			justify-content: space-between;
 			
-			span.activation-status {
-				font-size: 12px;
-				color: $red;
-				margin-left: 10px;
-			}
-		}
-		
-		.description {
-			font-size: 16px;
-			color: $deepBlue-60;
-		}
-	}
-	
-	.app-actions {
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-		
-		.settings {
-			padding: 0 5px;
-			color: $studioGray-120;
-			font-weight: 400;
+			.app-icon {
 				
-			i {
-				padding: 0;
-				margin: 0;
-				transform: translateY(2px);
-			}
-		}
-		
-		button.outline {
-			border-width: 1px;
-			padding: 5px 10px; 
-			margin: 0 10px;
-			font-size: 14px;
-			
-			&.activate {
-				border-color: $green-color;
-				color: $green-color;
-				font-weight: 400;
+				.icon {
+					@include size(80px);
+					background-color: $studioGray-80;
+					border-radius: 10px;
+				}
 			}
 			
-			&.deactivate {
-				border-color: $yellow-color;
-				color: $yellow-color;
-				font-weight: 400;
+			.app-details {
+				width: 80%;
+				padding: 0 20px;
+				display: flex;
+				align-content: space-between;
+				flex-direction: column;
+				
+				.app-title {
+					color: $deepBlue-100;
+					font-weight: 700;
+					padding-bottom: 15px;
+					display: flex;
+					
+					.dot {
+						width: 7px;
+						height: 7px;
+						border-radius: 50px;
+						margin-left: 5px;
+						
+						&.active {
+							background-color: lighten($green-color, 10%);
+						}
+						
+						&.deactive {
+							background-color: lighten($red-color, 10%);
+						}
+					}
+				}
+				
+				.app-description {
+					color: $deepBlue-60;
+					font-weight: 400;
+				}
 			}
 			
-			&.delete {
-				border-color: $red-color;
-				color: $red-color;
-				font-weight: 400;
+			.app-actions {
+				display: flex;
+				flex-direction: column;
+				align-content: flex-start;
+				
+				.mobile-app-actions {
+					display: none;
+					
+					@media screen and (max-width: $break-medium) {
+						position: absolute;
+						display: flex;
+						top: -15px;
+						right: 0;
+
+						&:hover, &.open {
+							box-shadow: none;
+							background-color: transparent;
+						}
+						
+						.swipes-context {
+							width: 150px;
+						}
+						
+						.swipes-context-list {
+							color: $deepBlue-100;
+						}
+
+						.context-ripple {
+							background-color: white;
+						}
+					}
+				}
+				
+				.swipes-button {
+					padding: 5px 20px;
+					margin: 5px 0;
+					cursor: pointer;
+					text-align: center;
+					color: $studioGray-120;
+					text-transform: uppercase;
+					font-size: 14px;
+					
+					@media screen and (max-width: $break-medium) {
+						display: none;
+					}
+					
+					&.activate-app {
+						
+						&:hover {
+							border-color: $green-color;
+							background-color: $green-color;
+							color: $studioGray-20;
+						}
+					}
+					
+					&.disable-app {
+						
+						&:hover {
+							border-color: $yellow-color;
+							background-color: $yellow-color;
+							color: $studioGray-20;
+						}
+					}
+					
+					&.delete-app {
+						
+						&:hover {
+							border-color: $red-color;
+							background-color: $red-color;
+							color: $studioGray-20;
+						}
+					}
+				}
 			}
 		}
 	}

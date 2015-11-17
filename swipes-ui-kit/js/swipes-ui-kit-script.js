@@ -125,15 +125,12 @@ $(document).ready(function() {
 	
 	$.swContextMenu = function() {
 		var swipesContextBTN = $('.swipes-context-btn');
-		var swipesContext = $('.swipes-context');
-		var swipesContextList = $('.swipes-context-list');
-		var swipesContextRipple = $('.context-ripple');
 		
 		swipesContextBTN.on('click', function() {
-			swipesContextBTN.toggleClass('open');
-			swipesContext.toggleClass('open');
-			swipesContextRipple.toggleClass('open');
-			swipesContextList.toggleClass('open');
+			$(this).toggleClass('open');
+			$(this).children('.swipes-context').toggleClass('open');
+			$(this).children('.swipes-context').children('.context-ripple').toggleClass('open');
+			$(this).children('.swipes-context').children('.swipes-context-list').toggleClass('open');
 		})
 	}; 
 	
