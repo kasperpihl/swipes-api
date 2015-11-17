@@ -29,8 +29,8 @@ let stars = (socket, userId) => {
 
           type = 'star_added';
           data = {
-            channel_id: n.channel_id,
-            type: 'channel'
+            id: n.item_id,
+            type: n.type
           };
         }
 
@@ -39,8 +39,8 @@ let stars = (socket, userId) => {
 
           type = 'star_removed';
           data = {
-            channel_id: o.channel_id,
-            type: 'channel'
+            id: o.item_id,
+            type: o.type
           };
         }
 
