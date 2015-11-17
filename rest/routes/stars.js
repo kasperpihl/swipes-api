@@ -45,15 +45,17 @@ router.post('/stars.add', (req, res, next) => {
     r.table('users')
       .get(userId)
       .update((user) => {
-        return {
-          channels: user(type + 's').map((item) => {
-            return r.branch(
-              item('id').eq(id),
-              item.merge({is_starred: true}),
-              item
-            )
-          })
-        }
+        let obj = {};
+
+        obj[type + 's'] = user(type + 's').map((item) => {
+          return r.branch(
+            item('id').eq(id),
+            item.merge({is_starred: true}),
+            item
+          )
+        });
+
+        return obj;
       })
 
   db.rethinkQuery(checkStarQ)
@@ -97,15 +99,17 @@ router.post('/stars.remove', (req, res, next) => {
     r.table('users')
       .get(userId)
       .update((user) => {
-        return {
-          channels: user(type + 's').map((item) => {
-            return r.branch(
-              item('id').eq(id),
-              item.without('is_starred'),
-              item
-            )
-          })
-        }
+        let obj = {};
+
+        obj[type + 's'] = user(type + 's').map((item) => {
+          return r.branch(
+            item('id').eq(id),
+            item.without('is_starred'),
+            item
+          )
+        });
+
+        return obj;
       })
 
   db.rethinkQuery(removeQ)
