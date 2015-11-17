@@ -58,7 +58,7 @@ router.post('/users.login', (req, res, next) => {
 
 router.post('/users.create', (req, res, next) => {
   let email = validator.trim(req.body.email);
-  let username = validator.trim(req.body.username);
+  let name = validator.trim(req.body.name);
   let password = req.body.password;
   let repassword = req.body.repassword;
   let errors = [];
@@ -70,7 +70,7 @@ router.post('/users.create', (req, res, next) => {
     });
   }
 
-  if (validator.isNull(username)) {
+  if (validator.isNull(name)) {
     errors.push({
       field: 'username',
       message: 'The username cannot be empty!'
@@ -101,16 +101,16 @@ router.post('/users.create', (req, res, next) => {
   let userDoc = {
     id: userId,
     email: email,
-    username: username,
+    name: name,
     password: sha1(password),
     created: moment().unix()
   }
 
   let checkQ = r.do(
     r.table('users').getAll(userDoc.email, {index: 'email'}).isEmpty(),
-    r.table('users').getAll(userDoc.username, {index: 'username'}).isEmpty(),
-    (isEmail, isUsername) => {
-      return r.expr([isEmail, isUsername])
+    r.table('users').getAll(userDoc.name, {index: 'name'}).isEmpty(),
+    (isEmail, isName) => {
+      return r.expr([isEmail, isName])
     }
   )
 

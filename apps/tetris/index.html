@@ -39,7 +39,7 @@ console.log(swipes.info.manifest);
       <p>rows <span id="rows">0</span></p>
       <p>Highscores</p>
       <ul id="highscores">
-        
+
       </ul>
     </div>
     <canvas id="canvas">
@@ -73,7 +73,7 @@ console.log(swipes.info.manifest);
           for(var i = 0 ; i < res.results.length ; i++){
             var highscore = res.results[i];
             swipes.users.get(highscore.user_id, function(user){
-              users[user.id] = user.username;
+              users[user.id] = user.name;
               counter++;
 
               if(counter == res.results.length){
@@ -84,8 +84,8 @@ console.log(swipes.info.manifest);
               }
             })
             var highscore = res.results[i];
-            
-            
+
+
           }
         }
       })
