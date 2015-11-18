@@ -3,56 +3,68 @@
 	<head>
 		<meta charset="UTF-8">
 		
-		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<link href="<{appDir}>/style.css" rel="stylesheet">
 		<script src="<{appDir}>/script.js"></script>
 	</head>
 	<body>
-		<div class="col grid_12 app-manager">
-			<h3 class="font-bold">Admin Panel</h3>
 		
-			<div class="col grid_8 card main-app-list">
-				<div class="col grid_12 activated">
-					<h5 class="font-normal">activated apps</h5>
-					
-					<div class="col grid_12 app-list active"></div>
-				</div>
-				
-				<div class="col grid_12 deactivated">
-					<h5 class="font-normal">deactivated apps</h5>
-					<div class="col grid_12 app-list deactive"></div>
-				</div>
-			</div>
+		<div class="nav">
+			<div class="tab app-manager selected">app managment</div>
+			<div class="tab user-manager">user managment</div>
+			<div class="tab settings">overall</div>
+			<div class="selected-line"></div>
 		</div>
-
+		
+		<div class="col grid_12 admin-wrapper app-managment">
+			
+			<div class="app-list active">
+				<h5 class="app-status">active</h5>
+				
+			</div>
+			
+			<div class="app-list deactive">
+				<h5 class="app-status">deactive</h5>
+			</div>
+			
+		</div>
+		
 		<!--
 			This is an underscore template to be rendered
 		-->
 		<script type="text/template" id="app-row-template">
 			<%
-				var activateClass = "activate";
+				var activateClass = "active";
 				var activateButtonTitle = "ACTIVATE";
 				if(!data.is_active){
 					activateClass = "de" + activateClass;
 					activateButtonTitle = "DE" + activateButtonTitle;
 				}
 			%>
-			<div class="col grid_12 app" id="app-<%= data.id %>">
-				<div class="app-icon"></div>
-				<div class="app-details">
-					<div class="name font-semibold"><%= data.title %></div>
-					<div class="description"><%= data.description %></div>
+			<div class="app" id="app-<%= data.id %>">
+					<div class="app-icon">
+						<div class="icon"></div>
+					</div>
+					<div class="app-details">
+						<div class="app-title"><%= data.title %> <div class="dot <%= activateClass %>"></div></div>
+						<div class="app-description"><%= data.description %></div>
+					</div>
+					<div class="app-actions">
+						<div class="swipes-context-btn mobile-app-actions">
+						<i class="material-icons">more_vert</i>
+						<ul class="swipes-context">
+							<div class="context-ripple"></div>
+							<li class="swipes-context-list"><%= activateButtonTitle %></li>
+							<li class="swipes-context-list">DELETE</li>
+						</ul>
+					</div>
+						<div class="swipes-button outline rounded studiogray-120 disable-app"><%= activateButtonTitle %></div>
+						<div class="swipes-button outline rounded studiogray-120 delete-app">delete</div>
+					</div>
 				</div>
-				<div class="app-actions">
-					<button class="swipes-button outline rounded <%= activateClass %> hover-full"><%= activateButtonTitle %></button>
-					<button class="swipes-button outline rounded delete hover-full">DELETE</button>
-					<button class="swipes-button settings">
-						<i class="material-icons">settings</i>
-					</button>						
-				</div>
-			</div>
 		</script>
 	</body>
 </html>

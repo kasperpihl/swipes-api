@@ -13,7 +13,7 @@ let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars', 'apps
 let indexes = {
   channels: 'name',
   users: 'email',
-  users: 'username',
+  users: 'name',
   tetris_highscore: 'score'
 }
 let teamDoc = {

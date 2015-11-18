@@ -924,9 +924,9 @@ input .swipes-input:focus {
 }
 
 .swipes-context-btn ul {
-  width: 250px;
+  width: 150px;
   position: absolute;
-  left: -250px;
+  left: -150px;
   top: 50px;
   z-index: 99;
   overflow: hidden;
@@ -967,7 +967,7 @@ input .swipes-input:focus {
   opacity: 0;
   line-height: 50px;
   padding-left: 20px;
-  color: #F4F4F5;
+  color: #000C2F;
   font-weight: 400;
   position: relative;
 }
@@ -982,7 +982,7 @@ input .swipes-input:focus {
 }
 
 .swipes-context-btn ul li.open:hover {
-  color: #F4F4F5;
+  color: #000C2F;
   font-weight: 600;
   -webkit-transition: .1s ease-in-out;
           transition: .1s ease-in-out;
@@ -1003,14 +1003,14 @@ input .swipes-input:focus {
 @-webkit-keyframes context-list-open {
   100% {
     opacity: 1;
-    background-color: #000C2F;
+    background-color: white;
   }
 }
 
 @keyframes context-list-open {
   100% {
     opacity: 1;
-    background-color: #000C2F;
+    background-color: white;
   }
 }
 
@@ -1037,70 +1037,119 @@ input .swipes-input:focus {
 }
 
 html, body {
-  font-family: 'Source Sans Pro';
+  font-family: 'Open Sans';
   background-color: #F4F4F5;
 }
 
-::-webkit-input-placeholder {
-  font-family: 'Source Sans Pro';
-  font-size: 18px;
-  font-weight: 600;
-  color: #D1D3D6;
-}
-
-button {
-  font-family: 'Source Sans Pro';
-  cursor: pointer;
-}
-
-.app-manager {
-  width: 100%;
-  position: relative;
-  margin-top: 100px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.app-manager h3 {
-  text-align: center;
-  color: #333D59;
-}
-
-.app-manager .search-apps {
-  margin-top: 50px;
-  background-color: white;
-  padding: 15px 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
-  position: relative;
-  font-family: 'Source Sans Pro';
-  font-size: 18px;
-  font-weight: 600;
-  color: #333D59;
-}
-
-.app-manager .search-apps:focus {
-  outline: none;
-}
-
-.app-manager label {
+.woba {
+  display: block;
   position: absolute;
-  top: 0;
-  right: 0;
+  background: #999EAC;
+  border-radius: 100%;
+  -webkit-transform: scale(0);
+      -ms-transform: scale(0);
+          transform: scale(0);
+  opacity: .5;
 }
 
-.main-app-list {
-  margin-top: 50px;
+.woba.animate {
+  -webkit-animation: ripple 0.5s linear forwards;
+          animation: ripple 0.5s linear forwards;
+}
+
+@keyframes ripple {
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(2.5);
+            transform: scale(2.5);
+  }
+}
+
+.nav {
+  width: 100%;
+  height: 60px;
+  top: 0;
+  background-color: white;
+  position: fixed;
+  z-index: 99;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav .tab {
+  width: -webkit-calc(100% / 3);
+  width: calc(100% / 3);
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: #999EAC;
+  font-weight: 600;
+  text-transform: uppercase;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+}
+
+@media screen and (max-width: 800px) {
+  .nav .tab {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .nav .tab {
+    font-size: 11px;
+  }
+}
+
+.nav .tab:hover {
+  color: #000C2F;
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+
+.nav .tab.selected {
+  font-weight: 700;
+  color: #000C2F;
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+}
+
+.nav .selected-line {
+  width: -webkit-calc((100% / 3) / 3);
+  width: calc((100% / 3) / 3);
+  height: 2px;
+  background-color: #000C2F;
+  position: absolute;
+  bottom: 0;
+  left: -webkit-calc((100% / 3) / 3);
+  left: calc((100% / 3) / 3);
+  -webkit-transition: 0.3s cubic-bezier(0.78, 0.1, 0.45, 0.94);
+          transition: 0.3s cubic-bezier(0.78, 0.1, 0.45, 0.94);
+}
+
+.admin-wrapper {
+  width: 100%;
+  margin-top: 120px;
+  position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1116,70 +1165,89 @@ button {
           align-items: center;
 }
 
-.main-app-list h5 {
+.admin-wrapper .app-list {
+  width: 57.5%;
+}
+
+@media screen and (max-width: 800px) {
+  .admin-wrapper .app-list {
+    width: 100%;
+  }
+}
+
+.admin-wrapper .app-list h5.app-status {
   color: #000C2F;
-  margin-left: 30px;
   text-transform: uppercase;
 }
 
-.app-list {
+.admin-wrapper .app-list .app {
+  margin: 50px 0;
+  position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.app-list.active > .app {
-  border-left: 5px solid #6ec071;
-}
-
-.app-list.deactive > .app {
-  border-left: 5px solid #fd6f50;
-}
-
-.card {
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
-  padding: 30px 0;
-}
-
-.app {
-  margin: 25px 0;
-  height: 70px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
 
-.app .app-icon {
-  width: 50px !important;
-  height: 50px !important;
-  background-color: #C6C8CC;
-  border-radius: 5px;
+.admin-wrapper .app-list .app .app-icon .icon {
+  width: 80px;
+  height: 80px;
+  background-color: #D1D3D6;
+  border-radius: 10px;
 }
 
-.app .app-details {
-  width: 50%;
-  margin-left: 30px;
+.admin-wrapper .app-list .app .app-details {
+  width: 80%;
+  padding: 0 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-content: space-between;
+      -ms-flex-line-pack: justify;
+          align-content: space-between;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.admin-wrapper .app-list .app .app-details .app-title {
+  color: #000C2F;
+  font-weight: 700;
+  padding-bottom: 15px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.admin-wrapper .app-list .app .app-details .app-title .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50px;
+  margin-left: 5px;
+}
+
+.admin-wrapper .app-list .app .app-details .app-title .dot.active {
+  background-color: #6ec071;
+}
+
+.admin-wrapper .app-list .app .app-details .app-title .dot.deactive {
+  background-color: #fd6f50;
+}
+
+.admin-wrapper .app-list .app .app-details .app-description {
+  color: #666D82;
+  font-weight: 400;
+}
+
+.admin-wrapper .app-list .app .app-actions {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1189,77 +1257,70 @@ button {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-align-content: flex-start;
+      -ms-flex-line-pack: start;
+          align-content: flex-start;
 }
 
-.app .app-details .name {
-  font-size: 20px;
-  color: #000C2F;
+.admin-wrapper .app-list .app .app-actions .mobile-app-actions {
+  display: none;
 }
 
-.app .app-details .name span.activation-status {
-  font-size: 12px;
-  color: #F44336;
-  margin-left: 10px;
+@media screen and (max-width: 800px) {
+  .admin-wrapper .app-list .app .app-actions .mobile-app-actions {
+    position: absolute;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    top: -15px;
+    right: 0;
+  }
+  .admin-wrapper .app-list .app .app-actions .mobile-app-actions:hover, .admin-wrapper .app-list .app .app-actions .mobile-app-actions.open {
+    box-shadow: none;
+    background-color: transparent;
+  }
+  .admin-wrapper .app-list .app .app-actions .mobile-app-actions .swipes-context {
+    width: 150px;
+  }
+  .admin-wrapper .app-list .app .app-actions .mobile-app-actions .swipes-context-list {
+    color: #000C2F;
+  }
+  .admin-wrapper .app-list .app .app-actions .mobile-app-actions .context-ripple {
+    background-color: white;
+  }
 }
 
-.app .app-details .description {
-  font-size: 16px;
-  color: #666D82;
-}
-
-.app .app-actions {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
-}
-
-.app .app-actions .settings {
-  padding: 0 5px;
+.admin-wrapper .app-list .app .app-actions .swipes-button {
+  padding: 5px 20px;
+  margin: 5px 0;
+  cursor: pointer;
+  text-align: center;
   color: #959699;
-  font-weight: 400;
-}
-
-.app .app-actions .settings i {
-  padding: 0;
-  margin: 0;
-  -webkit-transform: translateY(2px);
-      -ms-transform: translateY(2px);
-          transform: translateY(2px);
-}
-
-.app .app-actions button.outline {
-  border-width: 1px;
-  padding: 5px 10px;
-  margin: 0 10px;
+  text-transform: uppercase;
   font-size: 14px;
 }
 
-.app .app-actions button.outline.activate {
+@media screen and (max-width: 800px) {
+  .admin-wrapper .app-list .app .app-actions .swipes-button {
+    display: none;
+  }
+}
+
+.admin-wrapper .app-list .app .app-actions .swipes-button.activate-app:hover {
   border-color: #4CAF50;
-  color: #4CAF50;
-  font-weight: 400;
+  background-color: #4CAF50;
+  color: #F4F4F5;
 }
 
-.app .app-actions button.outline.deactivate {
+.admin-wrapper .app-list .app .app-actions .swipes-button.disable-app:hover {
   border-color: #FFCA28;
-  color: #FFCA28;
-  font-weight: 400;
+  background-color: #FFCA28;
+  color: #F4F4F5;
 }
 
-.app .app-actions button.outline.delete {
+.admin-wrapper .app-list .app .app-actions .swipes-button.delete-app:hover {
   border-color: #FC461E;
-  color: #FC461E;
-  font-weight: 400;
+  background-color: #FC461E;
+  color: #F4F4F5;
 }

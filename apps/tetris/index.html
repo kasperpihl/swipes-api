@@ -42,7 +42,7 @@ swipes.app("core").get("channels", function(res, err){
       <p>rows <span id="rows">0</span></p>
       <p>Highscores</p>
       <ul id="highscores">
-        
+
       </ul>
     </div>
     <canvas id="canvas">
@@ -76,7 +76,7 @@ swipes.app("core").get("channels", function(res, err){
           for(var i = 0 ; i < res.results.length ; i++){
             var highscore = res.results[i];
             swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-              users[user.id] = user.username;
+              users[user.id] = user.name;
               counter++;
 
               if(counter == res.results.length){
@@ -87,8 +87,8 @@ swipes.app("core").get("channels", function(res, err){
               }
             })
             var highscore = res.results[i];
-            
-            
+
+
           }
         }
       })

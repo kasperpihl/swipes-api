@@ -32,9 +32,9 @@
 	}
 	
 	ul {
-		width: 250px;
+		width: 150px;
 		position: absolute;
-		left: -250px;
+		left: -150px;
 		top: 50px;
 		z-index: 99;
 		overflow: hidden;
@@ -67,7 +67,7 @@
 			opacity: 0;
 			line-height: 50px;
 			padding-left: 20px;
-			color: $studioGray-20;
+			color: $deepBlue-100;
 			font-weight: 400;
 			position: relative;
 			
@@ -77,7 +77,7 @@
 				animation-delay: .2s;
 				
 				&:hover {
-					color: $studioGray-20;
+					color: $deepBlue-100;
 					font-weight: 600;
 					transition: .1s ease-in-out;
 				}
@@ -94,7 +94,7 @@
 	@keyframes context-list-open {
 		100% {
 			opacity: 1;
-			background-color: $deepBlue-100;
+			background-color: white;
 		}
 	}
 
