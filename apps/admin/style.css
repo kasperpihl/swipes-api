@@ -1140,8 +1140,9 @@ html, body {
   background-color: #000C2F;
   position: absolute;
   bottom: 0;
-  left: -webkit-calc((100% / 3) / 3);
-  left: calc((100% / 3) / 3);
+  left: 0;
+  -webkit-transform: translate3d(95px, 0px, 0px);
+          transform: translate3d(95px, 0px, 0px);
   -webkit-transition: 0.3s cubic-bezier(0.78, 0.1, 0.45, 0.94);
           transition: 0.3s cubic-bezier(0.78, 0.1, 0.45, 0.94);
 }
@@ -1175,9 +1176,14 @@ html, body {
   }
 }
 
-.admin-wrapper .app-list h5.app-status {
+.admin-wrapper .app-list h5 {
   color: #000C2F;
   text-transform: uppercase;
+}
+
+.admin-wrapper .app-list p {
+  margin: 50px 0;
+  color: #000C2F;
 }
 
 .admin-wrapper .app-list .app {

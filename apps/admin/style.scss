@@ -77,7 +77,8 @@ html, body {
 		background-color: $deepBlue-100;
 		position: absolute;
 		bottom: 0;
-		left: calc((100% / 3) / 3);
+		left: 0;
+		transform: translate3d(95px, 0px, 0px);
 		transition: .3s cubic-bezier(.78,.1,.45,.94);
 	}
 }
@@ -97,9 +98,14 @@ html, body {
 			width: 100%;
 		}
 			
-		h5.app-status {
+		h5 {
 			color: $deepBlue-100;
 			text-transform: uppercase;
+		}
+		
+		p {
+			margin: 50px 0;
+			color: $deepBlue-100;
 		}
 		
 		.app {

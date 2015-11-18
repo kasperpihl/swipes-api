@@ -22,16 +22,23 @@ $(function(){
 	}
 	function render(){
 		$(".app-list").html("");
+		$(".app-list.active").append("<h5>enable</h5>");
+		$(".app-list.deactive").append("<h5>disabled</h5>");	
 		for(var i = 0 ; i < _apps.length ; i++){
 			var app = _apps[i];
 			var renderedApp = appTemplate(app);
-			if(app.is_active) {
+			if(app.is_active) {	
 				$(".app-list.active").append(renderedApp);	
 			} else {
-				$(".app-list.deactive").append(renderedApp);	
+				$(".app-list.deactive").append(renderedApp);
 			}	
 		}
 
+		if ($('.app-list.active').children('.app').length == 0) {
+			$(".app-list.active").append("<p>Sorry, none of the apps are currently enabled.</p>");
+		} else if ($('.app-list.deactive').children('.app').length == 0) {
+			$(".app-list.deactive").append("<p>Sorry, none of the apps are currently disabled.</p>");
+		}
 	}
 	loadApps();
 	function installApp(appId){
@@ -43,23 +50,58 @@ $(function(){
 		});
 	}
 	
+	$(window).resize(function() {
+		var adminTabs = $('.nav'); 
+		var selectedLine = $('.selected-line');
+		var tabSelected = $('.nav').find('.selected');
+		var tabData = tabSelected.attr('data-tab');
+		
+		if (tabData == 1) {
+			var adminTabsWidth = adminTabs.width();
+			var translatePercentage = (100 / 3) / 3;
+			var translatePixels = adminTabsWidth * translatePercentage / 100;
+			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
+		} else if (tabData == 2) {
+			var adminTabsWidth = adminTabs.width();
+			var translatePercentage = ((100 / 3) / 3) * 4;
+			var translatePixels = adminTabsWidth * translatePercentage / 100;
+			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
+		} else {
+			var adminTabsWidth = adminTabs.width();
+			var translatePercentage = ((100 / 3) / 3) * 7;
+			var translatePixels = adminTabsWidth * translatePercentage / 100;
+			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
+		}
+	})
+	
 	$('.tab').click(function() {
 		$('.tab').removeClass('selected');
 		$(this).addClass('selected');
 		
-		var index = $('.nav').find('.tab').index(this);
+		var adminTabs = $('.nav'); 
 		var selectedLine = $('.selected-line');
 		
-		if (index == 0) {
-			selectedLine.css('left', 'calc((100% / 3) / 3)')
-		} else if (index == 1) {
-			selectedLine.css('left', 'calc(((100% / 3) / 3) * 4)')
+		var tabData = $(this).attr('data-tab');
+		
+		if (tabData == 1) {
+			var adminTabsWidth = adminTabs.width();
+			var translatePercentage = (100 / 3) / 3;
+			var translatePixels = adminTabsWidth * translatePercentage / 100;
+			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
+		} else if (tabData == 2) {
+			var adminTabsWidth = adminTabs.width();
+			var translatePercentage = ((100 / 3) / 3) * 4;
+			var translatePixels = adminTabsWidth * translatePercentage / 100;
+			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
 		} else {
-			selectedLine.css('left', 'calc(((100% / 3) / 3) * 7)')
+			var adminTabsWidth = adminTabs.width();
+			var translatePercentage = ((100 / 3) / 3) * 7;
+			var translatePixels = adminTabsWidth * translatePercentage / 100;
+			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
 		}
 	});
 	
-	$(".tab").click(function(e){
+	$(".ripple").click(function(e){
 		 self = $(this);
 
 		 if(self.find(".woba").length == 0)

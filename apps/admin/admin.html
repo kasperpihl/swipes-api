@@ -13,21 +13,20 @@
 	<body>
 		
 		<div class="nav">
-			<div class="tab app-manager selected">app managment</div>
-			<div class="tab user-manager">user managment</div>
-			<div class="tab settings">overall</div>
+			<div class="tab app-manager ripple selected" data-tab="1">app managment</div>
+			<div class="tab user-manager ripple" data-tab="2">user managment</div>
+			<div class="tab settings ripple" data-tab="3">overall</div>
 			<div class="selected-line"></div>
 		</div>
 		
 		<div class="col grid_12 admin-wrapper app-managment">
 			
 			<div class="app-list active">
-				<h5 class="app-status">active</h5>
 				
 			</div>
 			
 			<div class="app-list deactive">
-				<h5 class="app-status">deactive</h5>
+
 			</div>
 			
 		</div>
@@ -38,10 +37,12 @@
 		<script type="text/template" id="app-row-template">
 			<%
 				var activateClass = "active";
-				var activateButtonTitle = "ACTIVATE";
+				var activeBtnClass = "disable-app"
+				var activateButtonTitle = "DEACTIVATE";
 				if(!data.is_active){
 					activateClass = "de" + activateClass;
-					activateButtonTitle = "DE" + activateButtonTitle;
+					activateButtonTitle = "Activate";
+					activeBtnClass = "activate-app"
 				}
 			%>
 			<div class="app" id="app-<%= data.id %>">
@@ -61,7 +62,7 @@
 							<li class="swipes-context-list">DELETE</li>
 						</ul>
 					</div>
-						<div class="swipes-button outline rounded studiogray-120 disable-app"><%= activateButtonTitle %></div>
+						<div class="swipes-button outline rounded studiogray-120 <%= activeBtnClass %>"><%= activateButtonTitle %></div>
 						<div class="swipes-button outline rounded studiogray-120 delete-app">delete</div>
 					</div>
 				</div>
