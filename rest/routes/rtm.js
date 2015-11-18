@@ -8,8 +8,61 @@ let r = require('rethinkdb');
 let db = require('../db.js');
 let utilDB = require('../util_db.js');
 let Promise = require('bluebird');
+let _ = require('underscore');
 
 let router = express.Router();
+
+let getApps = (userId) => {
+  let appsQ =
+    r.table('apps')
+      .filter({is_installed: true})
+      .without('is_installed')
+      .coerceTo('Array');
+
+  let userAppsQ =
+    r.table('users')
+      .get(userId)('apps')
+      .default([]);
+
+  let appsListQ =
+    r.do(appsQ, userAppsQ, (apps, userApps) => {
+      return r.expr([apps, userApps])
+    });
+
+  return new Promise((resolve, reject) => {
+    db.rethinkQuery(appsListQ)
+      .then((results) => {
+        let apps = results[0];
+        let userApps = results[1];
+        let response = [];
+
+        apps.forEach((app) => {
+          let found = false;
+          let len = userApps.length;
+
+          for (let i=0; i<len; i++) {
+            let userApp = userApps[i];
+
+            if (app.id === userApp.id) {
+              response.push(_.extend(app, userApp));
+              found = true;
+
+              break;
+            }
+          }
+
+          if (!found) {
+            response.push(app);
+          }
+        })
+
+        return resolve(response);
+      })
+      .catch((err) => {
+        return reject(err);
+      })
+  })
+}
 
 router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
@@ -40,6 +93,7 @@ router.post('/rtm.start', (req, res, next) => {
           return fChannel.merge(channel)
         })
     })
+
   let imsQ = r.table('users')
     .get(userId)('channels')
     .filter((channel) => {
@@ -63,14 +117,12 @@ router.post('/rtm.start', (req, res, next) => {
     .zip()
     .without("users", "password")
 
-  let appsListQ = r.table('users').get(userId)('apps').default([])
-
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(channelsQ),
     db.rethinkQuery(imsQ),
     db.rethinkQuery(notMeQ),
-    db.rethinkQuery(appsListQ)
+    getApps(userId)
   ]
 
   Promise.all(promiseArrayQ)

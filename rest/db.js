@@ -40,6 +40,7 @@ let handleCursors = (results) => {
 let rethinkdb = {
   // options:
   //      cursor: true/false(default) Most of the time we will need just the results as array from the cursor
+  //      feed: true/false (to handle change feeds - don't close the connection)
   rethinkQuery: (query, options) => {
     options = options || {};
 
