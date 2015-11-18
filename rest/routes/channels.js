@@ -72,7 +72,7 @@ router.post('/channels.history', (req, res, next) => {
     r.table('messages')
       .filter({channel_id: channel_id})
       .limit(count)
-      .orderBy('ts');
+      .orderBy(r.desc('ts'));
 
   db.rethinkQuery(query)
     .then((results) => {
