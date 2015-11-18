@@ -16,8 +16,8 @@ swipes.app("core").get("channels", function(res, err){
 
 </script>
 <style>
-    body      { font-family: Helvetica, sans-serif; margin: 0; padding:0; }
-    #tetris   { margin: 1em auto; padding: 1em; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
+    body      { font-family: Helvetica, sans-serif; margin: 0; padding:0; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center;-webkit-justify-content: center; -ms-flex-pack: center; justify-content: center; box-shadow: inset -4px 0px 5px -2px rgba(51,51,51,0.44); -webkit-box-shadow: inset -4px 0px 5px -2px rgba(51,51,51,0.44);}
+    #tetris   { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
     #canvas   { display: inline-block; vertical-align: top; background: url(texture.jpg); box-shadow: 10px 10px 10px #999; border: 2px solid #333; }
     #menu     { display: inline-block; vertical-align: top; position: relative; }
     #menu p   { margin: 0.5em 0; text-align: center; }
@@ -25,6 +25,8 @@ swipes.app("core").get("channels", function(res, err){
     #upcoming { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score    { color: red; font-weight: bold; vertical-align: middle; }
     #rows     { color: blue; font-weight: bold; vertical-align: middle; }
+    ul#highscores { text-align: center; }
+    ul#highscores>li { font-size: 18px; color: #333 }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
     @media screen and (min-width: 500px) and (min-height: 500px)  { #tetris { font-size: 1.25em; width: 450px; } #menu { width: 200px; height: 400px; } #upcoming { width: 100px; height: 100px; } #canvas { width: 200px; height: 400px; } } /* 20px chunks */
@@ -42,7 +44,7 @@ swipes.app("core").get("channels", function(res, err){
       <p>rows <span id="rows">0</span></p>
       <p>Highscores</p>
       <ul id="highscores">
-
+        
       </ul>
     </div>
     <canvas id="canvas">
