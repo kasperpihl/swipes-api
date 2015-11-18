@@ -75,7 +75,7 @@ swipes.app("core").get("channels", function(res, err){
           var counter = 0;
           for(var i = 0 ; i < res.results.length ; i++){
             var highscore = res.results[i];
-            swipes.users.get(highscore.user_id, function(user){
+            swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
               users[user.id] = user.username;
               counter++;
 
