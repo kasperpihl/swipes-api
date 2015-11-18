@@ -64,35 +64,67 @@ let getApps = (userId) => {
   })
 }
 
+let getChannels = (userId) => {
+  let channelsQ =
+    r.table('channels')
+      .filter((channel) => {
+        return channel('id').match('^C')
+      })
+      .coerceTo('Array');
+
+  let userChannels =
+    r.table('users')
+      .get(userId)('channels')
+      .filter((channel) => {
+        return channel('id').match('^C')
+      })
+      .coerceTo('Array');
+
+  let channelListQ =
+    r.do(channelsQ, userChannels, (channels, userChannels) => {
+      return r.expr([channels, userChannels])
+    });
+
+  return new Promise((resolve, reject) => {
+    db.rethinkQuery(channelListQ)
+      .then((results) => {
+        let channels = results[0];
+        let userChannels = results[1];
+        let response = [];
+
+        channels.forEach((channel) => {
+          let found = false;
+          let len = userChannels.length;
+
+          for (let i=0; i<len; i++) {
+            let userChannel = userChannels[i];
+
+            if (channel.id === userChannel.id) {
+              response.push(_.extend(channel, userChannel, {is_member: true}));
+              found = true;
+
+              break;
+            }
+          }
+
+          if (!found) {
+            response.push(_.extend(channel, {is_member: false}));
+          }
+        })
+
+        return resolve(response);
+      })
+      .catch((err) => {
+        return reject(err);
+      })
+  })
+}
+
 router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
 
   let meQ = r.table('users').get(userId).without('password');
-  /*
-  // T_TODO:
-  This query bugs, if a user is not subsribed to any channels. Then it doesn't take the channels that he is not subscribed to
- */
-  let channelsQ =
-  r.table('channels')
-    .filter((channel) => {
-      return channel('id').match('^C')
-    })
-    .concatMap((channel) => {
-      return r.table('users').get(userId)('channels')
-        .filter((uChannel) => {
-          return uChannel('id').match('^C')
-        })
-        .map((uChannel) => {
-      	  return r.branch(
-            uChannel('id').eq(channel('id')),
-            uChannel.merge({is_member: true}),
-            channel.merge({is_member: false})
-          )
-        }).map((fChannel) => {
-          return fChannel.merge(channel)
-        })
-    })
 
   let imsQ = r.table('users')
     .get(userId)('channels')
@@ -119,7 +151,7 @@ router.post('/rtm.start', (req, res, next) => {
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
-    db.rethinkQuery(channelsQ),
+    getChannels(userId),
     db.rethinkQuery(imsQ),
     db.rethinkQuery(notMeQ),
     getApps(userId)
