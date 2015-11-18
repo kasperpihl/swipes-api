@@ -196,7 +196,7 @@ router.post('/apps.install', (req, res, next) => {
         let tables = manifest.tables;
         let insertObj = {
           id: appId,
-          title: manifest.title,
+          name: manifest.title,
           description: manifest.description,
           version: manifest.version,
           is_installed: true
