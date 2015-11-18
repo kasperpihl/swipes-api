@@ -57,7 +57,7 @@ swipes.app("core").get("channels", function(res, err){
     var highscores = [];
     var users = {};
     function sendHighScore(score){
-      swipes.app().save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
+      swipes.app("tetris").save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
         console.log("result from save", res, err);
         fetchHighScores();
       })

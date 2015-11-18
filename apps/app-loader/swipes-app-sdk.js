@@ -46,12 +46,17 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.info = {
 		// Manifest will be loaded in here
 	};
-
-
+	SwipesAppSDK.prototype.mainApp = function(){
+		return self.app();
+	};
+	SwipesAppSDK.prototype.currentApp = function(){
+		var app_id = self.info.manifest.identifier;
+		return self.app(app_id);
+	};
 	// API for handling data from apps
 	SwipesAppSDK.prototype.app = function(app_id){
 		if(!app_id)
-			app_id = self.info.manifest.identifier;
+			app_id = "core";
 		return {
 			get:function(options, callback){
 				var data = {
@@ -113,7 +118,7 @@ var SwipesAppSDK = (function() {
 			self._listenersObj[eventName] = currentListeners;
 		},
 		remove: function(eventName){
-			
+
 		},
 		get: function(eventName){
 			var currentListeners = self._listenersObj[eventName];
