@@ -44,7 +44,7 @@ swipes.app("core").get("channels", function(res, err){
       <p>rows <span id="rows">0</span></p>
       <p>Highscores</p>
       <ul id="highscores">
-        
+
       </ul>
     </div>
     <canvas id="canvas">
@@ -58,17 +58,19 @@ swipes.app("core").get("channels", function(res, err){
     //-------------------------------------------------------------------------
     var highscores = [];
     var users = {};
+    var currentApp = swipes.currentApp();
+    
     function sendHighScore(score){
-      swipes.app("tetris").save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
+      currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
         console.log("result from save", res, err);
         fetchHighScores();
       })
     }
-    swipes.app("tetris").on("highscore", function(e){
+    currentApp.on("highscore", function(e){
       fetchHighScores();
     });
     function fetchHighScores(){
-      swipes.app("tetris").get({table:"highscore", limit: 5, order: "-score"}, function(res, err){
+      currentApp.get({table:"highscore", limit: 5, order: "-score"}, function(res, err){
         console.log("result from high", res, err);
         if(res && res.results){
 

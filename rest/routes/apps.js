@@ -11,13 +11,29 @@ let db = require('../db.js');
 let jsonToQuery = require('../json_to_query.js').jsonToQuery;
 let util = require('../util.js');
 let utilDB = require('../util_db.js');
+
 // relative directory to installed apps
 let appDir = __dirname + '/../../apps/';
+let generateId = util.generateSlackLikeId;
 
 require('rethinkdb-init')(r);
 let dbConfig = config.get('dbConfig');
 
 let updateApp = (appId, updateObj, res, next) => {
+  let deletePerUserQ;
+
+  if (updateObj.is_installed === false) {
+    deletePerUserQ =
+      r.table('users')
+        .update((user) => {
+          return {
+            apps: user('apps').default([]).filter((app) => {
+              return app('id').ne(appId)
+            })
+          }
+        })
+  }
+
   let updateQ =
     r.table('apps')
       .get(appId)
@@ -25,6 +41,10 @@ let updateApp = (appId, updateObj, res, next) => {
 
   db.rethinkQuery(updateQ)
     .then(() => {
+      if (deletePerUserQ) {
+        db.rethinkQuery(deletePerUserQ)
+      }
+
       res.status(200).json({ok: true});
     }).catch((err) => {
       return next(err);
@@ -57,7 +77,7 @@ let deleteApp = (appId, res, next) => {
   let deleteQ =
     r.table('apps')
       .get(appId)
-      .delete();
+      .update({is_installed: false, deleted: true});
 
   db.rethinkQuery(deletePerUserQ)
     .then(() => {
@@ -140,18 +160,29 @@ router.post('/apps.list', (req, res, next) => {
 
       db.rethinkQuery(listQ)
         .then((apps) => {
-          let whitelist = ['identifier', 'title', 'description', 'version', 'is_installed']
+          let whitelist = ['id' ,'manifest_id', 'title', 'description', 'version', 'is_installed']
 
           apps.forEach((app) => {
             fsApps = fsApps.map((fsApp) => {
-              if (app.id === fsApp.identifier && app.is_installed) {
-                fsApp.is_installed = true;
+              if (app.manifest_id === fsApp.identifier) {
+                fsApp.id = app.id;
+
+                if (app.is_installed) {
+                  fsApp.is_installed = true;
+                }
               }
 
-              fsApp = _.pick(fsApp, whitelist);
+              fsApp.manifest_id = fsApp.identifier;
 
               return fsApp;
             })
+          })
+
+          // whitelist properties
+          fsApps = fsApps.map((fsApp) => {
+            fsApp = _.pick(fsApp, whitelist);
+
+            return fsApp;
           })
 
           return res.status(200).json({ok: true, apps: fsApps});
@@ -171,31 +202,60 @@ router.post('/apps.install', (req, res, next) => {
   }
 
   let appId = req.body && req.body.app_id;
+  let manifestId = req.body && req.body.manifest_id;
 
-  if (!appId) {
-    return res.status(200).json({ok: false, err: 'app_id_required'});
+  if (!appId && !manifestId) {
+    return res.status(200).json({ok: false, err: 'app_id_or_manifest_id_required'});
   }
 
-  let getAppQ = r.table('apps').get(appId);
+  let getAppQ;
+
+  if (appId) {
+    getAppQ = r.table('apps').get(appId);
+  } else {
+    // This should always return 0 or 1 result
+    getAppQ =
+      r.table('apps')
+        .filter((app) => {
+          return app('manifest_id').eq(manifestId)
+            .and(app.hasFields('deleted').not())
+        });
+  }
 
   db.rethinkQuery(getAppQ)
     .then((app) => {
+      if(!app) {
+        return res.status(200).json({ok: false, err: 'no_app_found'});
+      }
+
+      if (app.deleted === true) {
+        return res.status(200).json({ok: false, err: 'app_deleted'});
+      }
+
+      app = app.length > 0 ? app[0] : app;
+
       if (app && app.is_installed) {
         return res.status(200).json({ok: false, err: 'already_installed'});
-      } else if (app && app.is_installed === false) {
+      } else if (app && app.is_installed === false && app.deleted !== true) {
+        if (!appId) {
+          return res.status(200).json({ok: false, err: 'app_id_required'});
+        }
+
         let updateObj = {is_installed: true};
 
         updateApp(appId, updateObj, res, next);
       } else {
-        let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+        let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
 
         if (!manifest) {
           return res.status(200).json({ok: false, err: 'no_manifest_found'});
         }
 
         let tables = manifest.tables;
+        let appId = generateId('A');
         let insertObj = {
           id: appId,
+          manifest_id: manifestId,
           name: manifest.title,
           description: manifest.description,
           version: manifest.version,
@@ -248,7 +308,6 @@ router.post('/apps.delete', (req, res, next) => {
   //T_TODO
   // delete the files of the app
   // remove all the users from that app
-  // remove the app row from apps table
   let isAdmin = req.isAdmin;
 
   if (!isAdmin) {
@@ -261,53 +320,65 @@ router.post('/apps.delete', (req, res, next) => {
     return res.status(200).json({ok: false, err: 'app_id_required'});
   }
 
-  let deleteQ = r.table('apps').get(appId).delete();
-  let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+  let getAppQ = r.table('apps').get(appId);
 
-  if (!manifest) {
-    return res.status(200).json({ok: false, err: 'no_manifest_found'});
-  }
+  db.rethinkQuery(getAppQ)
+    .then((app) => {
+      if (!app) {
+        return res.status(200).json({ok: false, err: 'no_app_found'});
+      }
 
-  let tables = manifest.tables;
+      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
 
-  if (!tables || tables.length < 1) {
-    deleteApp(appId, res, next);
-    return;
-  }
+      if (!manifest) {
+        return res.status(200).json({ok: false, err: 'no_manifest_found'});
+      }
 
-  let prefixedTables = tables.map((item) => {
-    let name = appId + '_' + item.name;
+      let tables = manifest.tables;
 
-    item.name = name;
-    return item;
-  })
+      if (!tables || tables.length < 1) {
+        deleteApp(appId, res, next);
+        return;
+      }
 
-  dropTables(prefixedTables)
-    .then(() => {
-      //T_TODO delete the files too
-      deleteApp(appId, res, next);
-    }).catch((err) => {
-      return next(err);
-    });
+      let prefixedTables = tables.map((item) => {
+        let name = appId + '_' + item.name;
+
+        item.name = name;
+        return item;
+      })
+
+      dropTables(prefixedTables)
+        .then(() => {
+          //T_TODO delete the files too
+          deleteApp(appId, res, next);
+        }).catch((err) => {
+          return next(err);
+        });
+    })
+    .catch((err) => {
+      return next(err)
+    })
 });
 
 router.get('/apps.load', (req, res, next) => {
-  let appId = req.query.appId;
-  let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+  let appId = req.query.app_id;
+  let manifestId = req.query.manifest_id;
+  let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
 
   // TODO: Do validations and stuff
   if (!manifest) {
     return res.status(200).json({ok: false, err: 'no_manifest_found'});
   }
 
-  let indexFile = getAppFile(appId, manifest.main_app.index);
+  let indexFile = getAppFile(manifestId, manifest.main_app.index);
 
   if(!indexFile){
     return res.status(200).json({ok: false, err: 'no_index_found'});
   }
 
   let apiHost = 'http://' + req.headers.host
-  let appUrlDir = apiHost + '/apps/' + appId
+  let appUrlDir = apiHost + '/apps/' + manifestId
   let _defUrlDir = apiHost + '/apps/app-loader/'
 
   // Insert dependencies, SwipesSDK and other scripts right after head
@@ -323,7 +394,7 @@ router.get('/apps.load', (req, res, next) => {
   insertString += '<script>';
   insertString += 'window.swipes = new SwipesAppSDK("'+apiHost+'", "' + req.query.token + '");\r\n';
   insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '");\r\n';
-  insertString += 'swipes._client.setAppId("' + manifest.identifier + '");\r\n';
+  insertString += 'swipes._client.setAppId("' + appId + '");\r\n';
   insertString += 'swipes.navigation.setTitle("' + manifest.title + '");'
   insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
   insertString += 'swipes.info.userId = "' + req.userId + '";';

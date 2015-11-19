@@ -33,7 +33,7 @@ var SwipesAppSDK = (function() {
 			self._client.callListener("navigation.pop")
 		},
 		setBackgroundColor:function(backgroundColor){
-			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});			
+			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});
 		},
 		setForegroundColor: function(foreground){
 			self._client.callListener("navigation.setForegroundColor", {"color": foreground});
@@ -50,17 +50,18 @@ var SwipesAppSDK = (function() {
 		return self.app();
 	};
 	SwipesAppSDK.prototype.currentApp = function(){
-		var app_id = self.info.manifest.identifier;
-		return self.app(app_id);
+		var appId = self._client._appId;
+
+		return self.app(appId);
 	};
 	// API for handling data from apps
-	SwipesAppSDK.prototype.app = function(app_id){
-		if(!app_id)
-			app_id = "core";
+	SwipesAppSDK.prototype.app = function(appId){
+		if(!appId)
+			appId = "core";
 		return {
 			get:function(options, callback){
 				var data = {
-					app_id: app_id,
+					app_id: appId,
 					query: {}
 				};
 				if(typeof options === 'string')
@@ -71,7 +72,7 @@ var SwipesAppSDK = (function() {
 				else{
 					throw new Error("SwipesAppSDK: Get request must have table")
 				}
-				if(app_id == "core")
+				if(appId == "core")
 					self._client.callListener("getData", data, callback);
 				else
 					self._client.callSwipesApi("apps.getData", data, callback);
@@ -79,7 +80,7 @@ var SwipesAppSDK = (function() {
 
 			save: function(options, saveData, callback){
 				var data = {
-					app_id: app_id,
+					app_id: appId,
 					query: { data: saveData }
 				};
 				if(typeof saveData !== 'object'){
@@ -96,13 +97,13 @@ var SwipesAppSDK = (function() {
 				else{
 					throw new Error("SwipesAppSDK: save: Get request must have table")
 				}
-				
+
 				self._client.callSwipesApi("apps.saveData", data, callback);
 			},
 			on:function(event, handler){
 				eventName = event
-				if(app_id && app_id !== "core")
-					eventName = app_id + "_" + event
+				if(appId && appId !== "core")
+					eventName = appId + "_" + event
 				self._listeners.add(eventName, handler);
 				self._client.callListener("listenTo", {event: eventName});
 			}
