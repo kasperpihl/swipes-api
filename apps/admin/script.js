@@ -3,35 +3,43 @@ $(function(){
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
 	window.appTemplate = _.template($("#app-row-template").html(), {variable: "data"});
-	
-	
+
 	//swipes.navigation.enableBoxShadow(false) to disable boxshadow
 
-	// Call underlying swipes api 
+	// Call underlying swipes api
 	function loadApps(){
 		swipes._client.callSwipesApi("apps.list", function(res, error){
 			if(res && res.ok){
 				console.log(res);
 				window._apps = res.apps;
 				render();
-				
+				attachEvents();
+
 				$.swContextMenu();
 			}
-			else console.log("error loading apps");
+			else {
+				console.log("error loading apps");
+			}
 		});
 	}
+
 	function render(){
 		$(".app-list").html("");
 		$(".app-list.active").append("<h5>enable</h5>");
-		$(".app-list.deactive").append("<h5>disabled</h5>");	
+		$(".app-list.deactive").append("<h5>disabled</h5>");
 		for(var i = 0 ; i < _apps.length ; i++){
 			var app = _apps[i];
+
+			if (app.manifest_id === 'admin') {
+				continue;
+			}
+
 			var renderedApp = appTemplate(app);
-			if(app.is_active) {	
-				$(".app-list.active").append(renderedApp);	
+			if(app.is_installed) {
+				$(".app-list.active").append(renderedApp);
 			} else {
 				$(".app-list.deactive").append(renderedApp);
-			}	
+			}
 		}
 
 		if ($('.app-list.active').children('.app').length == 0) {
@@ -40,22 +48,52 @@ $(function(){
 			$(".app-list.deactive").append("<p>Sorry, none of the apps are currently disabled.</p>");
 		}
 	}
-	loadApps();
-	function installApp(appId){
-		swipes._client.callSwipesApi("apps.install", {app_id: appId}, function(res, error){
-			if(res && res.ok){
-				console.log("successful install");
+
+	function whichEndpoint (element) {
+		if (element.hasClass("install")) {
+			return "apps.install";
+		} else if (element.hasClass("uninstall")) {
+			return "apps.uninstall";
+		} else if (element.hasClass("delete")) {
+			return "apps.delete";
+		}
+	}
+
+	function attachEvents() {
+		$(".app-list").find(".action-btn").on("click", function () {
+			var element = $(this);
+			var id = element.data('id') || null;
+			var manifestId = element.data('manifest-id') || null;
+			var endpoint = whichEndpoint(element);
+			var reqObj = {};
+
+			if (id) {
+				reqObj.app_id = id;
+			} else {
+				reqObj.manifest_id = manifestId;
 			}
-			else console.log("error loading apps");
+
+			changeAppState(endpoint, reqObj);
+		})
+	}
+
+	function changeAppState(endpoint, reqObj){
+		swipes._client.callSwipesApi(endpoint, reqObj, function(res, error){
+			if(res && res.ok){
+				loadApps();
+			}
+			else {
+				console.log(res.err);
+			}
 		});
 	}
-	
+
 	$(window).resize(function() {
-		var adminTabs = $('.nav'); 
+		var adminTabs = $('.nav');
 		var selectedLine = $('.selected-line');
 		var tabSelected = $('.nav').find('.selected');
 		var tabData = tabSelected.attr('data-tab');
-		
+
 		if (tabData == 1) {
 			var adminTabsWidth = adminTabs.width();
 			var translatePercentage = (100 / 3) / 3;
@@ -73,16 +111,16 @@ $(function(){
 			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
 		}
 	})
-	
+
 	$('.tab').click(function() {
 		$('.tab').removeClass('selected');
 		$(this).addClass('selected');
-		
-		var adminTabs = $('.nav'); 
+
+		var adminTabs = $('.nav');
 		var selectedLine = $('.selected-line');
-		
+
 		var tabData = $(this).attr('data-tab');
-		
+
 		if (tabData == 1) {
 			var adminTabsWidth = adminTabs.width();
 			var translatePercentage = (100 / 3) / 3;
@@ -100,7 +138,7 @@ $(function(){
 			selectedLine.css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
 		}
 	});
-	
+
 	$(".ripple").click(function(e){
 		 self = $(this);
 
@@ -126,4 +164,6 @@ $(function(){
 
 		 woba.css({top: y + 'px', left: x+'px'}).addClass("animate");
 	})
+
+	loadApps();
 });

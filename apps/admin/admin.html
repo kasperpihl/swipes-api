@@ -2,50 +2,50 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		
+
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
+
 		<link href="<{appDir}>/style.css" rel="stylesheet">
 		<script src="<{appDir}>/script.js"></script>
 	</head>
 	<body>
-		
+
 		<div class="nav">
 			<div class="tab app-manager ripple selected" data-tab="1">app managment</div>
 			<div class="tab user-manager ripple" data-tab="2">user managment</div>
 			<div class="tab settings ripple" data-tab="3">overall</div>
 			<div class="selected-line"></div>
 		</div>
-		
+
 		<div class="grid_12 admin-wrapper app-managment">
-			
+
 			<div class="app-list active">
-				
+
 			</div>
-			
+
 			<div class="app-list deactive">
 
 			</div>
-			
+
 		</div>
-		
+
 		<!--
 			This is an underscore template to be rendered
 		-->
 		<script type="text/template" id="app-row-template">
 			<%
 				var activateClass = "active";
-				var activeBtnClass = "disable-app"
-				var activateButtonTitle = "DEACTIVATE";
-				if(!data.is_active){
+				var activeBtnClass = "disable-app uninstall"
+				var activateButtonTitle = "Uninstall";
+				if(!data.is_installed){
 					activateClass = "de" + activateClass;
-					activateButtonTitle = "Activate";
-					activeBtnClass = "activate-app"
+					activateButtonTitle = "Install";
+					activeBtnClass = "activate-app install"
 				}
 			%>
-			<div class="app" id="app-<%= data.id %>">
+			<div class="app">
 					<div class="app-icon">
 						<div class="icon"></div>
 					</div>
@@ -62,8 +62,8 @@
 							<li class="swipes-context-list">DELETE</li>
 						</ul>
 					</div>
-						<div class="swipes-button outline rounded studiogray-120 <%= activeBtnClass %>"><%= activateButtonTitle %></div>
-						<div class="swipes-button outline rounded studiogray-120 delete-app">delete</div>
+						<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="swipes-button outline rounded studiogray-120 action-btn <%= activeBtnClass %>"><%= activateButtonTitle %></div>
+						<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="swipes-button outline rounded studiogray-120 action-btn delete-app delete">delete</div>
 					</div>
 				</div>
 		</script>

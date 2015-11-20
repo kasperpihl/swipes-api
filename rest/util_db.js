@@ -6,8 +6,15 @@ let r = require('rethinkdb');
   Common Apps Queries
 */
 let appsList = (isAdmin) => {
-  let filter = isAdmin ? {} : {is_active: true};
-  let listQ = r.table('apps').filter(filter);
+  let listQ = r.table('apps');
+
+  if (isAdmin) {
+    listQ = listQ.filter((app) =>{
+      return app.hasFields('deleted').not()
+    });
+  } else {
+    listQ = listQ.filter({is_installed: true});
+  }
 
   return listQ;
 }
