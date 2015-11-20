@@ -27,12 +27,17 @@ let getAppFile = (appId, fileName) => {
 
 module.exports.hook = (socket, userId) => {
   console.log('^..^');
-  let listAppsQ = r.table('apps').filter({is_active: true});
+  let listAppsQ =
+    r.table("users")
+      .get(userId)("apps")
+      .eqJoin("id", r.table('apps'))
+      .zip()
+      .withFields("id", "manifest_id")
 
   db.rethinkQuery(listAppsQ)
     .then((apps) => {
       apps.forEach((app) => {
-        let manifest = JSON.parse(getAppFile(app.id, 'manifest.json'));
+        let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
 
         if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
           manifest.listenTo.forEach((item) => {
