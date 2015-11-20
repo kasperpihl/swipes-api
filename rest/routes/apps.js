@@ -172,14 +172,13 @@ router.post('/apps.list', (req, res, next) => {
                 }
               }
 
-              fsApp.manifest_id = fsApp.identifier;
-
               return fsApp;
             })
           })
 
           // whitelist properties
           fsApps = fsApps.map((fsApp) => {
+            fsApp.manifest_id = fsApp.identifier;
             fsApp = _.pick(fsApp, whitelist);
 
             return fsApp;

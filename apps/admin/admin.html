@@ -37,12 +37,12 @@
 		<script type="text/template" id="app-row-template">
 			<%
 				var activateClass = "active";
-				var activeBtnClass = "disable-app uninstall"
+				var actionBtnClass = "uninstall"
 				var activateButtonTitle = "Uninstall";
 				if(!data.is_installed){
 					activateClass = "de" + activateClass;
 					activateButtonTitle = "Install";
-					activeBtnClass = "activate-app install"
+					actionBtnClass = "install"
 				}
 			%>
 			<div class="app">
@@ -62,24 +62,24 @@
 							<li class="swipes-context-list">DELETE</li>
 						</ul>
 					</div>
-					<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="button-app-status <%= activateClass %>">
+					<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="action-btn button-app-status <%= activateClass %> <%= actionBtnClass %>">
 						<span class="button-label"><%= activateButtonTitle %></span>
-						
+
 						<div class="loader">
 							<div class="dot"></div>
 							<div class="dot"></div>
 							<div class="dot"></div>
-						</div> 
+						</div>
 					</div>
-						
-					<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="button-app-status delete-app delete">
+
+					<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="action-btn button-app-status delete-app delete">
 						<span class="button-label">Delete</span>
-						
+
 						<div class="loader">
 							<div class="dot"></div>
 							<div class="dot"></div>
 							<div class="dot"></div>
-						</div> 
+						</div>
 					</div>
 				</div>
 			</div>

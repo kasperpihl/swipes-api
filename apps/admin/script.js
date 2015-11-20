@@ -73,16 +73,19 @@ $(function(){
 				reqObj.manifest_id = manifestId;
 			}
 
-			changeAppState(endpoint, reqObj);
+			changeAppState(endpoint, reqObj, element);
 		})
 	}
 
-	function changeAppState(endpoint, reqObj){
+	function changeAppState(endpoint, reqObj, element){
+		element.addClass('loading');
+
 		swipes._client.callSwipesApi(endpoint, reqObj, function(res, error){
 			if(res && res.ok){
 				loadApps();
 			}
 			else {
+				element.removeClass('loading');
 				console.log(res.err);
 			}
 		});
