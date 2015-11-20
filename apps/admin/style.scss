@@ -213,18 +213,18 @@ html, body {
 					&.active {
 						
 						&:hover {
-							border-color: $red-color;
-							background-color: $red-color;
+							border-color: $yellow-color;
+							background-color: $yellow-color;
 							color: white;
 							transition: .1s ease-in-out;
 						}
 						
 						.loader {
-							background-color: $red-color;
+							background-color: $yellow-color;
 						}
 						
 						&.loading {
-							border-color: $red-color;
+							border-color: $yellow-color;
 						}
 					}
 					

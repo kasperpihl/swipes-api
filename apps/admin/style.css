@@ -1320,19 +1320,19 @@ html, body {
 }
 
 .admin-wrapper .app-list .app .app-actions .button-app-status.active:hover {
-  border-color: #FC461E;
-  background-color: #FC461E;
+  border-color: #FFCA28;
+  background-color: #FFCA28;
   color: white;
   -webkit-transition: .1s ease-in-out;
           transition: .1s ease-in-out;
 }
 
 .admin-wrapper .app-list .app .app-actions .button-app-status.active .loader {
-  background-color: #FC461E;
+  background-color: #FFCA28;
 }
 
 .admin-wrapper .app-list .app .app-actions .button-app-status.active.loading {
-  border-color: #FC461E;
+  border-color: #FFCA28;
 }
 
 .admin-wrapper .app-list .app .app-actions .button-app-status.deactive:hover {
