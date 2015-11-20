@@ -55,24 +55,32 @@
 				</div>
 				<div class="app-actions">
 					<div class="swipes-context-btn mobile-app-actions">
-					<i class="material-icons">more_vert</i>
-					<ul class="swipes-context">
-						<div class="context-ripple"></div>
-						<li class="swipes-context-list"><%= activateButtonTitle %></li>
-						<li class="swipes-context-list">DELETE</li>
-					</ul>
-				</div>
-				<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="button-app-status <%= activateClass %>">
-					<span class="button-label"><%= activateButtonTitle %></span>
-					
-					<div class="loader">
-						<div class="dot"></div>
-						<div class="dot"></div>
-						<div class="dot"></div>
-					</div> 
-				</div>
-					
-				<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="swipes-button outline rounded studiogray-120 delete-app delete">delete</div>
+						<i class="material-icons">more_vert</i>
+						<ul class="swipes-context">
+							<div class="context-ripple"></div>
+							<li class="swipes-context-list"><%= activateButtonTitle %></li>
+							<li class="swipes-context-list">DELETE</li>
+						</ul>
+					</div>
+					<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="button-app-status <%= activateClass %>">
+						<span class="button-label"><%= activateButtonTitle %></span>
+						
+						<div class="loader">
+							<div class="dot"></div>
+							<div class="dot"></div>
+							<div class="dot"></div>
+						</div> 
+					</div>
+						
+					<div data-id="<%= data.id %>" data-manifest-id="<%= data.manifest_id %>" class="button-app-status delete-app delete">
+						<span class="button-label">Delete</span>
+						
+						<div class="loader">
+							<div class="dot"></div>
+							<div class="dot"></div>
+							<div class="dot"></div>
+						</div> 
+					</div>
 				</div>
 			</div>
 		</script>

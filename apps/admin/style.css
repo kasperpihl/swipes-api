@@ -1311,6 +1311,7 @@ html, body {
   position: relative;
   overflow: hidden;
   font-size: 14px;
+  margin: 5px 0;
 }
 
 @media screen and (max-width: 800px) {
@@ -1333,6 +1334,22 @@ html, body {
 
 .admin-wrapper .app-list .app .app-actions .button-app-status.active.loading {
   border-color: #FFCA28;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.delete-app:hover {
+  border-color: #FC461E;
+  background-color: #FC461E;
+  color: white;
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.delete-app .loader {
+  background-color: #FC461E;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.delete-app.loading {
+  border-color: #FC461E;
 }
 
 .admin-wrapper .app-list .app .app-actions .button-app-status.deactive:hover {
@@ -1431,38 +1448,4 @@ html, body {
     -webkit-transform: translateY(-6px);
             transform: translateY(-6px);
   }
-}
-
-.admin-wrapper .app-list .app .app-actions .swipes-button {
-  padding: 5px 20px;
-  margin: 5px 0;
-  cursor: pointer;
-  text-align: center;
-  color: #959699;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-@media screen and (max-width: 800px) {
-  .admin-wrapper .app-list .app .app-actions .swipes-button {
-    display: none;
-  }
-}
-
-.admin-wrapper .app-list .app .app-actions .swipes-button.activate-app:hover {
-  border-color: #4CAF50;
-  background-color: #4CAF50;
-  color: #F4F4F5;
-}
-
-.admin-wrapper .app-list .app .app-actions .swipes-button.disable-app:hover {
-  border-color: #FFCA28;
-  background-color: #FFCA28;
-  color: #F4F4F5;
-}
-
-.admin-wrapper .app-list .app .app-actions .swipes-button.delete-app:hover {
-  border-color: #FC461E;
-  background-color: #FC461E;
-  color: #F4F4F5;
 }
