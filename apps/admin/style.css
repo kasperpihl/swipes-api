@@ -1298,6 +1298,141 @@ html, body {
   }
 }
 
+.admin-wrapper .app-list .app .app-actions .button-app-status {
+  width: 120px;
+  height: 31px;
+  border: 1px solid #959699;
+  color: #959699;
+  text-align: center;
+  border-radius: 5px;
+  line-height: 31px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 800px) {
+  .admin-wrapper .app-list .app .app-actions .button-app-status {
+    display: none;
+  }
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.active:hover {
+  border-color: #FC461E;
+  background-color: #FC461E;
+  color: white;
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.active .loader {
+  background-color: #FC461E;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.active.loading {
+  border-color: #FC461E;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.deactive:hover {
+  border-color: #4CAF50;
+  background-color: #4CAF50;
+  color: white;
+  -webkit-transition: .1s ease-in-out;
+          transition: .1s ease-in-out;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.deactive .loader {
+  background-color: #4CAF50;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.deactive.loading {
+  border-color: #4CAF50;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.loading {
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.loading span.button-label {
+  -webkit-transform: translateY(-40px);
+      -ms-transform: translateY(-40px);
+          transform: translateY(-40px);
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.loading .loader {
+  -webkit-transform: translateY(-40px);
+      -ms-transform: translateY(-40px);
+          transform: translateY(-40px);
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.loading .loader .dot {
+  -webkit-animation: load-loader 0.7s ease-in-out infinite;
+          animation: load-loader 0.7s ease-in-out infinite;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.loading .loader .dot:nth-child(2) {
+  -webkit-animation-delay: .2s;
+          animation-delay: .2s;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status.loading .loader .dot:last-child {
+  -webkit-animation-delay: .4s;
+          animation-delay: .4s;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status .loader {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 40px;
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.admin-wrapper .app-list .app .app-actions .button-app-status .loader .dot {
+  width: 10px;
+  height: 10px;
+  position: relative;
+  margin: 0 2px;
+  margin-top: 3px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+@-webkit-keyframes load-loader {
+  50% {
+    -webkit-transform: translateY(-6px);
+            transform: translateY(-6px);
+  }
+}
+
+@keyframes load-loader {
+  50% {
+    -webkit-transform: translateY(-6px);
+            transform: translateY(-6px);
+  }
+}
+
 .admin-wrapper .app-list .app .app-actions .swipes-button {
   padding: 5px 20px;
   margin: 5px 0;

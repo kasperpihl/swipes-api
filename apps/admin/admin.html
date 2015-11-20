@@ -62,7 +62,18 @@
 							<li class="swipes-context-list">DELETE</li>
 						</ul>
 					</div>
-						<div class="swipes-button outline rounded studiogray-120 <%= activeBtnClass %>"><%= activateButtonTitle %></div>
+						<!-- <div class="swipes-button outline rounded studiogray-120 <%= activeBtnClass %>"><%= activateButtonTitle %></div>
+						<div class="swipes-button outline rounded studiogray-120 delete-app">delete</div> -->
+						<div class="button-app-status <%= activateClass %>">
+							<span class="button-label"><%= activateButtonTitle %></span>
+							
+							<div class="loader">
+								<div class="dot"></div>
+								<div class="dot"></div>
+								<div class="dot"></div>
+							</div> 
+						</div>
+						
 						<div class="swipes-button outline rounded studiogray-120 delete-app">delete</div>
 					</div>
 				</div>
