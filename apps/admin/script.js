@@ -67,6 +67,14 @@ $(function(){
 			var endpoint = whichEndpoint(element);
 			var reqObj = {};
 
+			if (endpoint === "apps.delete") {
+				var r = confirm("Do you really want to delete this application?");
+
+				if (r !== true) {
+					return;
+				}
+			}
+
 			if (id) {
 				reqObj.app_id = id;
 			} else {
