@@ -286,7 +286,7 @@ router.post('/apps.install', (req, res, next) => {
     });
 });
 
-router.post('/apps.deinstall', (req, res, next) => {
+router.post('/apps.uninstall', (req, res, next) => {
   let isAdmin = req.isAdmin;
 
   if (!isAdmin) {
