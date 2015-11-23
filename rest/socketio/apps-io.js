@@ -25,7 +25,7 @@ let getAppFile = (appId, fileName) => {
   return file;
 }
 
-module.exports.hook = (socket, userId) => {
+let hook = (socket, userId) => {
   console.log('^..^');
   let listAppsQ =
     r.table("users")
@@ -71,4 +71,49 @@ module.exports.hook = (socket, userId) => {
       console.log(err);
       return;
     });
+}
+
+let adminApps = (socket, userId) => {
+  let listenQ = r.table('apps').changes();
+
+  db.rethinkQuery(listenQ, {feed: true})
+    .then((cursor) => {
+      cursor.each((err, row) => {
+        if (err) {
+          console.log(err);
+          // T_TODO how to handle erros here?!
+          // Sending error message on the socket?
+          return;
+        }
+
+        let type;
+        let data;
+
+        if (!row.old_val || row.new_val.is_installed === true) {
+          type = 'app_installed';
+          data = row.new_val;
+        }
+
+        if (row.new_val && row.new_val.is_installed === false) {
+          type = 'app_unstalled';
+          data = {
+            id: row.new_val.id
+          };
+        }
+
+        if (row.new_val && row.new_val.deleted) {
+          type = 'app_deleted';
+          data = {
+            id: row.new_val.id
+          };
+        }
+
+        socket.emit('message', {type: type, data: data});
+      })
+    })
+}
+
+module.exports = {
+  hook: hook,
+  adminApps: adminApps
 }

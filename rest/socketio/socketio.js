@@ -26,5 +26,6 @@ module.exports = (io) => {
     im.channelMarked(socket, userId);
     stars.stars(socket, userId);
     apps.hook(socket, userId);
+    apps.adminApps(socket, userId);
   });
 };
