@@ -174,7 +174,7 @@ router.post('/apps.list', (req, res, next) => {
             fsApps = fsApps.map((fsApp) => {
               if (app.manifest_id === fsApp.identifier) {
                 fsApp.id = app.id;
-                fsApp.url = util.appUrl(req.hostname, app.id);
+                fsApp.url = util.appUrl(req, app);
 
                 if (app.is_installed) {
                   fsApp.is_installed = true;

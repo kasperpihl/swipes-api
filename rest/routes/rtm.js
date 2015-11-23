@@ -13,7 +13,7 @@ let _ = require('underscore');
 
 let router = express.Router();
 
-let getApps = (userId, hostname) => {
+let getApps = (userId, req) => {
   let appsQ =
     r.table('apps')
       .filter({is_installed: true})
@@ -41,7 +41,7 @@ let getApps = (userId, hostname) => {
           let found = false;
           let len = userApps.length;
 
-          app.url = util.appUrl(hostname, app.id);
+          app.url = util.appUrl(req, app);
 
           for (let i=0; i<len; i++) {
             let userApp = userApps[i];
@@ -157,7 +157,7 @@ router.post('/rtm.start', (req, res, next) => {
     getChannels(userId),
     db.rethinkQuery(imsQ),
     db.rethinkQuery(notMeQ),
-    getApps(userId, req.hostname)
+    getApps(userId, req)
   ]
 
   Promise.all(promiseArrayQ)

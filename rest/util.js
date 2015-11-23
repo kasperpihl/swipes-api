@@ -37,10 +37,11 @@ let util = {
   appTable: (appId, table) => {
     return appId + '_' + table;
   },
-  appUrl: (hostname, appId) => {
-    let hostUrl = config.get('protocol') + hostname + ':' + config.get('webPort');
+  appUrl: (req, app) => {
+    let hostUrl = config.get('protocol') + req.hostname + ':' + config.get('port');
+    let getString = '/v1/apps.load?app_id=' + app.id + '&manifest_id=' + app.manifest_id + '&token=' + req.body.token;
 
-    return hostUrl + '/#app/' + appId;
+    return hostUrl + getString;
   }
 };
 
