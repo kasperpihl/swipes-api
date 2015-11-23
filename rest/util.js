@@ -1,5 +1,6 @@
 "use strict";
 
+let config = require('config');
 let randomstring = require('randomstring');
 let moment = require('moment');
 
@@ -35,6 +36,11 @@ let util = {
   },
   appTable: (appId, table) => {
     return appId + '_' + table;
+  },
+  appUrl: (hostname, appId) => {
+    let hostUrl = config.get('protocol') + hostname + ':' + config.get('webPort');
+
+    return hostUrl + '/#app/' + appId;
   }
 };
 

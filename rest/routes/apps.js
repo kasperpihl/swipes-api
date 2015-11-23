@@ -160,12 +160,21 @@ router.post('/apps.list', (req, res, next) => {
 
       db.rethinkQuery(listQ)
         .then((apps) => {
-          let whitelist = ['id' ,'manifest_id', 'title', 'description', 'version', 'is_installed']
+          let whitelist = [
+            'id',
+            'manifest_id',
+            'title',
+            'description',
+            'version',
+            'is_installed',
+            'url'
+          ]
 
           apps.forEach((app) => {
             fsApps = fsApps.map((fsApp) => {
               if (app.manifest_id === fsApp.identifier) {
                 fsApp.id = app.id;
+                fsApp.url = util.appUrl(req.hostname, app.id);
 
                 if (app.is_installed) {
                   fsApp.is_installed = true;

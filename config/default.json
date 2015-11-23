@@ -6,6 +6,8 @@
   },
   "hostname": "http://localhost",
   "port": 5000,
+  "webPort" :9000,
+  "protocol": "http://",
   "origin": ["http://192.168.1.100:9000", "http://localhost:9000"],
   "jwtTokenSecret": "swipy the dinocat"
 }

@@ -5,6 +5,7 @@ const TEAM_ID = process.env.TEAM_ID;
 let config = require('config');
 let express = require( 'express' );
 let r = require('rethinkdb');
+let util = require('../util.js');
 let db = require('../db.js');
 let utilDB = require('../util_db.js');
 let Promise = require('bluebird');
@@ -12,7 +13,7 @@ let _ = require('underscore');
 
 let router = express.Router();
 
-let getApps = (userId) => {
+let getApps = (userId, hostname) => {
   let appsQ =
     r.table('apps')
       .filter({is_installed: true})
@@ -39,6 +40,8 @@ let getApps = (userId) => {
         apps.forEach((app) => {
           let found = false;
           let len = userApps.length;
+
+          app.url = util.appUrl(hostname, app.id);
 
           for (let i=0; i<len; i++) {
             let userApp = userApps[i];
@@ -154,7 +157,7 @@ router.post('/rtm.start', (req, res, next) => {
     getChannels(userId),
     db.rethinkQuery(imsQ),
     db.rethinkQuery(notMeQ),
-    getApps(userId)
+    getApps(userId, req.hostname)
   ]
 
   Promise.all(promiseArrayQ)
