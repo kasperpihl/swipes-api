@@ -59,7 +59,7 @@ swipes.app("core").get("channels", function(res, err){
     var highscores = [];
     var users = {};
     var currentApp = swipes.currentApp();
-    
+
     function sendHighScore(score){
       currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
         console.log("result from save", res, err);
@@ -70,7 +70,7 @@ swipes.app("core").get("channels", function(res, err){
       fetchHighScores();
     });
     function fetchHighScores(){
-      currentApp.get({table:"highscore", limit: 5, order: "-score"}, function(res, err){
+      currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}, function(res, err){
         console.log("result from high", res, err);
         if(res && res.results){
 
