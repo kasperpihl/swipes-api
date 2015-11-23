@@ -42,7 +42,8 @@ let jsonToQuery = (json, options) => {
       // Single get
       rethinkQ = rethinkQ.get(id);
     } else {
-      let order = json.order;
+      let query = json.query;
+      let order = query && query.order;
 
       if (order) {
         let desc = order.charAt(0) === '-';
@@ -57,7 +58,7 @@ let jsonToQuery = (json, options) => {
         rethinkQ = rethinkQ.orderBy(orderBy);
       }
 
-      let limit = json.limit;
+      let limit = query && query.limit;
 
       if (limit) {
         rethinkQ = rethinkQ.limit(limit);
