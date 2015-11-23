@@ -7,6 +7,7 @@ let messages = require('./messages-io.js').channelMessages;
 let im = require('./im-io.js');
 let stars = require('./stars-io.js');
 let apps = require('./apps-io.js');
+let common = require('./common-events-io.js');
 
 module.exports = (io) => {
   io.sockets.on('connection', (socket) => {
@@ -27,5 +28,6 @@ module.exports = (io) => {
     stars.stars(socket, userId);
     apps.hook(socket, userId);
     apps.adminApps(socket, userId);
+    common.commonEvents(socket, userId);
   });
 };

@@ -68,8 +68,16 @@ router.post('/users.activateApp', (req, res, next) => {
             })
       }
 
+      let eventQ = r.table('events').insert({
+        app_id: appId,
+        type: 'app.activated',
+        user_id: userId
+      })
+
       db.rethinkQuery(updateAppsQ)
         .then(() => {
+          db.rethinkQuery(eventQ)
+
           return res.status(200).json({ok: true});
         })
         .catch((err) => {
@@ -81,7 +89,7 @@ router.post('/users.activateApp', (req, res, next) => {
     })
 });
 
-router.post('/users.unactivateApp', (req, res, next) => {
+router.post('/users.deactivateApp', (req, res, next) => {
   let userId = req.userId;
   let appId = req.body.app_id;
 
@@ -89,8 +97,16 @@ router.post('/users.unactivateApp', (req, res, next) => {
 
   let unActivateQ = utilDB.updateUserAppQ(userId, appId, {is_active: false});
 
+  let eventQ = r.table('events').insert({
+    app_id: appId,
+    type: 'app.deactivated',
+    user_id: userId
+  })
+
   db.rethinkQuery(unActivateQ)
     .then(() => {
+      db.rethinkQuery(eventQ)
+
       return res.status(200).json({ok: true});
     })
     .catch((err) => {
