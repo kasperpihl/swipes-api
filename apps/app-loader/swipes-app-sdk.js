@@ -60,7 +60,8 @@ var SwipesAppSDK = (function() {
 		if(!appId)
 			appId = "core";
 		return {
-			get:function(options, callback){
+			get:function(options, id, callback){
+				var deferred = Q.defer();
 				var data = {
 					app_id: appId,
 					query: {}
@@ -73,13 +74,27 @@ var SwipesAppSDK = (function() {
 				else{
 					throw new Error("SwipesAppSDK: Get request must have table")
 				}
+				if(typeof id === 'string'){
+					data.query.id = id;
+				}
+				else if(typeof id === 'function')
+					callback = id;
+
+				var intCallback = function(res, error){
+					if(callback) callback(res,error);
+					if(res) deferred.resolve(res);
+					else deferred.reject(error);
+				};
+				
 				if(appId == "core")
-					self._client.callListener("getData", data, callback);
+					self._client.callListener("getData", data, intCallback);
 				else
-					self._client.callSwipesApi("apps.getData", data, callback);
+					self._client.callSwipesApi("apps.getData", data, intCallback);
+				return deferred.promise;
 			},
 
 			save: function(options, saveData, callback){
+				var deferred = Q.defer();
 				var data = {
 					app_id: appId,
 					query: { data: saveData }
@@ -99,7 +114,13 @@ var SwipesAppSDK = (function() {
 					throw new Error("SwipesAppSDK: save: Get request must have table")
 				}
 
-				self._client.callSwipesApi("apps.saveData", data, callback);
+				var intCallback = function(res, error){
+					if(callback) callback(res,error);
+					if(res) deferred.resolve(res);
+					else deferred.reject(error);
+				};
+				self._client.callSwipesApi("apps.saveData", data, intCallback);
+				return deferred.promise;
 			},
 			on:function(event, handler){
 				eventName = event

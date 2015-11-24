@@ -16,6 +16,7 @@ var SwipesAPIConnector = (function() {
 		window.addEventListener('message', bindedCallback, false);
 
 	};
+
 	SwipesAPIConnector.prototype.setAppId = function(appId){
 		this._appId = appId;
 	};

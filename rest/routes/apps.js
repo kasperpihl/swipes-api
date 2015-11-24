@@ -394,12 +394,13 @@ router.get('/apps.load', (req, res, next) => {
   let insertString = '';
   insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'underscore.min.js"></script>\r\n';
+  insertString += '<script src="' + _defUrlDir + 'q.min.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-app-sdk.js"></script>\r\n';
 
   // Unless disabled, include the Swipes UI Kit
   if(!manifest.main_app.disableUIKit){
-    insertString += '<link rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
+    insertString += '<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
     insertString += '<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>\r\n';
   }
 

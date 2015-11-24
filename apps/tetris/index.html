@@ -10,9 +10,9 @@
 
 <body>
 <script>
-swipes.app("core").get("channels", function(res, err){
-  console.log(res, err);
-});
+/*swipes.app("core").get("channels").then(function(channels){
+  console.log("promises", channels);
+});*/
 
 </script>
 <style>
@@ -80,7 +80,7 @@ swipes.app("core").get("channels", function(res, err){
           for(var i = 0 ; i < res.results.length ; i++){
             var highscore = res.results[i];
             swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-              users[user.id] = user.username;
+              users[user.id] = user.name;
               counter++;
 
               if(counter == res.results.length){
@@ -131,7 +131,7 @@ swipes.app("core").get("channels", function(res, err){
         ctx     = canvas.getContext('2d'),
         ucanvas = get('upcoming'),
         uctx    = ucanvas.getContext('2d'),
-        speed   = { start: 0.1, decrement: 0.005, min: 0.1 }, // (Old 0.6 / 0.005 / 0.1 ) how long before piece drops by 1 row (seconds)
+        speed   = { start: 0.6, decrement: 0.005, min: 0.1 }, // (Old 0.6 / 0.005 / 0.1 ) how long before piece drops by 1 row (seconds)
         nx      = 10, // width of tetris court (in blocks)
         ny      = 20, // height of tetris court (in blocks)
         nu      = 5;  // width/height of upcoming preview (in blocks)
