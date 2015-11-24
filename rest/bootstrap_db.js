@@ -9,12 +9,11 @@ let Promise = require('bluebird'); // we should use native promises one day
 let generateId = util.generateSlackLikeId;
 let moment = require('moment');
 
-let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars', 'apps', 'tetris_highscore'];
+let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars', 'apps'];
 let indexes = {
   channels: 'name',
   users: 'email',
-  users: 'name',
-  tetris_highscore: 'score'
+  users: 'name'
 }
 let teamDoc = {
   id: TEAM_ID,
@@ -99,8 +98,12 @@ let createApps = () => {
 
   let apps = [
     {
-      "id":"tetris",
-      "is_installed": true
+      id: generateId('A'),
+      "name": "Admin",
+      "manifest_id": "admin",
+      "version": "0.1",
+      "description": "The Admin App For Swipes",
+      admin_only: true
     }
   ];
 

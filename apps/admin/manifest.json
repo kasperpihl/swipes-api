@@ -4,6 +4,7 @@
   "identifier": "admin",
   "version": "0.1",
   "description": "The Admin App For Swipes",
+  "admin_only": true,
   "main_app": {
     "index": "admin.html"
   }

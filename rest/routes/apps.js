@@ -167,7 +167,8 @@ router.post('/apps.list', (req, res, next) => {
             'description',
             'version',
             'is_installed',
-            'url'
+            'url',
+            'required'
           ]
 
           apps.forEach((app) => {
@@ -179,15 +180,25 @@ router.post('/apps.list', (req, res, next) => {
                 if (app.is_installed) {
                   fsApp.is_installed = true;
                 }
+
+                if (isAdmin && app.required) {
+                  fsApp.required = true;
+                }
               }
 
               return fsApp;
             })
           })
 
-          // whitelist properties
-          fsApps = fsApps.map((fsApp) => {
+          fsApps = fsApps.filter((fsApp) => {
+            if (isAdmin) {
+              return true;
+            } else {
+              return fsApp.is_installed && !fsApp.admin_only;
+            }
+          }).map((fsApp) => {
             fsApp.manifest_id = fsApp.identifier;
+            // Whitelist properties
             fsApp = _.pick(fsApp, whitelist);
 
             return fsApp;

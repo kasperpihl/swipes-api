@@ -13,10 +13,20 @@ let _ = require('underscore');
 
 let router = express.Router();
 
-let getApps = (userId, req) => {
+let getApps = (userId, isAdmin, req) => {
+  let filter;
+
+  if (isAdmin) {
+    filter = {is_installed: true};
+  } else {
+    filter = (app) => {
+      return app('is_installed').eq(true).and(app.hasFields('admin_only').not());
+    }
+  }
+
   let appsQ =
     r.table('apps')
-      .filter({is_installed: true})
+      .filter(filter)
       .without('is_installed')
       .coerceTo('Array');
 
@@ -54,8 +64,10 @@ let getApps = (userId, req) => {
             }
           }
 
-          if (!found) {
-            response.push(app);
+          if (isAdmin && app.admin_only && app.required) {
+            response.push(_.extend(app, {is_active: true}));
+          }else if (!found) {
+            response.push(_.extend(app, {is_active: false}));
           }
         })
 
@@ -157,7 +169,7 @@ router.post('/rtm.start', (req, res, next) => {
     getChannels(userId),
     db.rethinkQuery(imsQ),
     db.rethinkQuery(notMeQ),
-    getApps(userId, req)
+    getApps(userId, isAdmin, req)
   ]
 
   Promise.all(promiseArrayQ)
