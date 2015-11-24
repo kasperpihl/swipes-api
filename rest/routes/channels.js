@@ -174,4 +174,114 @@ router.post('/channels.delete', (req, res, next) => {
     });
 });
 
+router.post('/channels.join', (req, res, next) => {
+  let userId = req.userId;
+  let channelName = req.body.channel_name;
+  let getChannelQ =
+    r.table('channels')
+      .getAll(channelName, {index: 'name'})
+      .nth(0)
+      .default(null);
+
+  db.rethinkQuery(getChannelQ)
+    .then((channel) => {
+      if (channel === null) {
+        res.status(200).json({ok: false, err: 'channel_does_not_exist'});
+      }
+
+      let lastTsInChannelQ =
+        r.table('messages')
+          .filter({channel_id: channel.id})
+          .orderBy(r.desc('ts'))
+          .nth(0)
+          .default({ts: null})
+          .getField('ts');
+
+      db.rethinkQuery(lastTsInChannelQ)
+        .then((ts) => {
+          let updateUserQ =
+            r.table('users')
+              .get(userId)
+              .update((user) => {
+                return {
+                  channels: user('channels').append({
+                    id: channel.id,
+                    ts, ts
+                  })
+                }
+              });
+
+          db.rethinkQuery(updateUserQ)
+            .then(() => {
+              channel.last_read = ts;
+
+              let eventQ = r.table('events').insert({
+                user_id: userId,
+                channel: channel,
+                type: 'channel_joined'
+              });
+
+              db.rethinkQuery(eventQ);
+
+              res.status(200).json({ok: true, channel: channel});
+            })
+            .catch((err) => {
+              return next(err);
+            })
+        }).catch((err) => {
+          return next(err);
+        })
+    })
+    .catch((err) => {
+      return next(err);
+    })
+});
+
+router.post('/channels.leave', (req, res, next) => {
+  let userId = req.userId;
+  let channelName = req.body.channel_name;
+  let getChannelQ =
+    r.table('channels')
+      .getAll(channelName, {index: 'name'})
+      .nth(0)
+      .default(null);
+
+  db.rethinkQuery(getChannelQ)
+  .then((channel) => {
+    if (channel === null) {
+      res.status(200).json({ok: false, err: 'channel_does_not_exist'});
+    }
+
+    let updateUserQ =
+      r.table('users')
+        .get(userId)
+        .update((user) => {
+          return {
+            channels: user('channels').filter((ch) => {
+              return ch('id').ne(channel.id)
+            })
+          }
+        });
+
+    db.rethinkQuery(updateUserQ)
+      .then(() => {
+        let eventQ = r.table('events').insert({
+          user_id: userId,
+          channel_id: channel.id,
+          type: 'channel_left'
+        });
+
+        db.rethinkQuery(eventQ);
+
+        res.status(200).json({ok: true});
+      })
+      .catch((err) => {
+        return next(err);
+      })
+  })
+  .catch((err) => {
+    return next(err);
+  })
+})
+
 module.exports = router;

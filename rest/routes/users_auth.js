@@ -96,7 +96,6 @@ router.post('/users.create', (req, res, next) => {
   }
 
   let userId = generateId("U");
-  let teamId = generateId("T");
 
   let userDoc = {
     id: userId,
