@@ -4,11 +4,16 @@ let r = require('rethinkdb');
 let db = require('../db.js');
 let _ = require('underscore');
 
+// We don't listen here for some 'special' events because we do
+// some stuff with them before we send them back trough the websocket
+let specialEvents = ['im_open'];
+
 let commonEvents = (socket, userId) => {
   let listenQ =
     r.table('events')
       .filter((e) => {
         return e('user_id').eq(userId)
+              .and(r.expr(specialEvents).contains(e('type')).not())
       })
       .changes()
 
@@ -29,7 +34,7 @@ let commonEvents = (socket, userId) => {
           let n = row.new_val;
 
           type = n.type;
-          data = _.omit(n, ['id', 'type']);
+          data = _.omit(n, ['id', 'type', 'user_id']);
         }
 
         socket.emit('message', {type: type, data: data});
