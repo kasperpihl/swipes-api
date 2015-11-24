@@ -413,7 +413,7 @@ router.get('/apps.load', (req, res, next) => {
   insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
   insertString += 'swipes.info.userId = "' + req.userId + '";';
   if(channelId)
-    insertString += 'swipes.info.channelId = "' + channelId + '";'; 
+    insertString += 'swipes.info.channelId = "' + channelId + '";';
   insertString += '</script>\r\n';
 
   // Locate <head> and insert our code as the very first
@@ -434,49 +434,71 @@ router.get('/apps.load', (req, res, next) => {
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
-  
-  if (!queryObject.table) {
-    return res.status(200).json({ok: false, err: 'table_required'});
-  }
+  let getAppQ = r.table('apps').get(appId);
 
-  if (!queryObject.data) {
-    return res.status(200).json({ok: false, err: 'data_required'});
-  }
+  db.rethinkQuery(getAppQ)
+    .then((app) => {
+      if (!app) {
+        return res.status(200).json({ok: false, err: 'app_not_found'});
+      }
 
-  let tableName = util.appTable(appId, queryObject.table);
+      if (!queryObject.table) {
+        return res.status(200).json({ok: false, err: 'table_required'});
+      }
 
-  queryObject.table = tableName;
+      if (!queryObject.data) {
+        return res.status(200).json({ok: false, err: 'data_required'});
+      }
 
-  let rethinkQ = jsonToQuery(queryObject);
+      let tableName = util.appTable(appId, queryObject.table);
 
-  db.rethinkQuery(rethinkQ)
-    .then(() => {
-      res.status(200).json({ok: true});
-    }).catch((err) => {
+      queryObject.table = tableName;
+
+      let rethinkQ = jsonToQuery(queryObject);
+
+      db.rethinkQuery(rethinkQ)
+        .then(() => {
+          res.status(200).json({ok: true});
+        }).catch((err) => {
+          return next(err);
+        });
+    })
+    .catch((err) => {
       return next(err);
-    });
+    })
 })
 
 router.post('/apps.getData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
+  let getAppQ = r.table('apps').get(appId);
 
-  if (!queryObject.table) {
-    return res.status(200).json({ok: false, err: 'table_required'});
-  }
+  db.rethinkQuery(getAppQ)
+    .then((app) => {
+      if (!app) {
+        return res.status(200).json({ok: false, err: 'app_not_found'});
+      }
 
-  let tableName = util.appTable(appId, queryObject.table);
+      if (!queryObject.table) {
+        return res.status(200).json({ok: false, err: 'table_required'});
+      }
 
-  queryObject.table = tableName;
+      let tableName = util.appTable(appId, queryObject.table);
 
-  let rethinkQ = jsonToQuery(queryObject);
+      queryObject.table = tableName;
 
-  db.rethinkQuery(rethinkQ)
-    .then((results) => {
-      res.status(200).json({ok: true, results: results});
-    }).catch((err) => {
+      let rethinkQ = jsonToQuery(queryObject);
+
+      db.rethinkQuery(rethinkQ)
+        .then((results) => {
+          res.status(200).json({ok: true, results: results});
+        }).catch((err) => {
+          return next(err);
+        });
+    })
+    .catch((err) => {
       return next(err);
-    });
+    })
 });
 
 module.exports = router;
