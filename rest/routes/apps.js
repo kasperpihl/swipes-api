@@ -373,6 +373,7 @@ router.get('/apps.load', (req, res, next) => {
   let appId = req.query.app_id;
   let manifestId = req.query.manifest_id;
   let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
+  let channelId - req.query.channel_id;
 
   // TODO: Do validations and stuff
   if (!manifest) {
@@ -395,10 +396,14 @@ router.get('/apps.load', (req, res, next) => {
   insertString += '<script src="' + _defUrlDir + 'underscore.min.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
   insertString += '<script src="' + _defUrlDir + 'swipes-app-sdk.js"></script>\r\n';
+
+  // Unless disabled, include the Swipes UI Kit
   if(!manifest.main_app.disableUIKit){
     insertString += '<link rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
     insertString += '<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>\r\n';
   }
+
+  // Instantiate objects and add runtime stuff
   insertString += '<script>';
   insertString += 'window.swipes = new SwipesAppSDK("'+apiHost+'", "' + req.query.token + '");\r\n';
   insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '");\r\n';
@@ -406,14 +411,21 @@ router.get('/apps.load', (req, res, next) => {
   insertString += 'swipes.navigation.setTitle("' + manifest.title + '");'
   insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
   insertString += 'swipes.info.userId = "' + req.userId + '";';
+  if(channelId)
+    insertString += 'swipes.info.channelId = "' + channelId + '";'; 
   insertString += '</script>\r\n';
+
+  // Locate <head> and insert our code as the very first
   var index = indexFile.indexOf('<head>')
   if(index != -1){
     index += 6
     indexFile = indexFile.slice(0, index) + insertString + indexFile.slice(index);
   }
-  // Replace <{appDir}}> with actual host
+
+
+  // Replace <{appDir}}> with actual host for apps to target their folder
   indexFile = indexFile.replace(new RegExp('<{appDir}>', 'g'), appUrlDir );
+
 
   res.status(200).send(indexFile);
 });
