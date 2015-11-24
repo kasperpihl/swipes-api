@@ -80,7 +80,7 @@ swipes.app("core").get("channels", function(res, err){
           for(var i = 0 ; i < res.results.length ; i++){
             var highscore = res.results[i];
             swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-              users[user.id] = user.name;
+              users[user.id] = user.username;
               counter++;
 
               if(counter == res.results.length){
@@ -126,12 +126,12 @@ swipes.app("core").get("channels", function(res, err){
     //-------------------------------------------------------------------------
 
     var KEY     = { ENTER: 13, ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
-        DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, TELEPORT: 4, MIN: 0, MAX: 3 },
+        DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, TELEPORT: 4, LONGRIGHT: 5, LONGLEFT: 6, MIN: 0, MAX: 3 },
         canvas  = get('canvas'),
         ctx     = canvas.getContext('2d'),
         ucanvas = get('upcoming'),
         uctx    = ucanvas.getContext('2d'),
-        speed   = { start: 0.6, decrement: 0.005, min: 0.1 }, // how long before piece drops by 1 row (seconds)
+        speed   = { start: 0.1, decrement: 0.005, min: 0.1 }, // (Old 0.6 / 0.005 / 0.1 ) how long before piece drops by 1 row (seconds)
         nx      = 10, // width of tetris court (in blocks)
         ny      = 20, // height of tetris court (in blocks)
         nu      = 5;  // width/height of upcoming preview (in blocks)
@@ -269,13 +269,33 @@ swipes.app("core").get("channels", function(res, err){
     function keydown(ev) {
       var handled = false;
       if (playing) {
+        var action = -1;
         switch(ev.keyCode) {
-          case KEY.LEFT:   actions.push(DIR.LEFT);  handled = true; break;
-          case KEY.RIGHT:  actions.push(DIR.RIGHT); handled = true; break;
-          case KEY.UP:     actions.push(DIR.UP);    handled = true; break;
-          case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
-          case KEY.SPACE:   actions.push(DIR.TELEPORT);  handled = true; break;
-          case KEY.ESC:    lose();                  handled = true; break;
+          case KEY.LEFT:{   
+            action = DIR.LEFT;
+            if(ev.ctrlKey || ev.metaKey)
+              action = DIR.LONGLEFT;
+            break;
+          }
+          case KEY.RIGHT:{
+            action = DIR.RIGHT;
+            if(ev.ctrlKey || ev.metaKey)
+              action = DIR.LONGRIGHT;
+            break;
+          }  
+          case KEY.UP:     action = DIR.UP; break;
+          case KEY.DOWN:{
+            action = DIR.DOWN; 
+            if(ev.ctrlKey || ev.metaKey)
+              action = DIR.TELEPORT;
+            break;
+          }   
+          case KEY.SPACE:  action = DIR.TELEPORT; break;
+          case KEY.ESC:    lose(); handled = true; break;
+        }
+        if(action !== -1){
+          actions.push(action);
+          handled = true;
         }
       }
       else if (ev.keyCode == KEY.ENTER) {
@@ -323,8 +343,10 @@ swipes.app("core").get("channels", function(res, err){
         handle(actions.shift());
         dt = dt + idt;
         if (dt > step) {
+          console.log("dropping", dt);
           dt = dt - step;
           drop();
+          console.log("dropped", dt);
         }
       }
     }
@@ -333,6 +355,8 @@ swipes.app("core").get("channels", function(res, err){
       switch(action) {
         case DIR.LEFT:  move(DIR.LEFT);  break;
         case DIR.RIGHT: move(DIR.RIGHT); break;
+        case DIR.LONGLEFT: move(DIR.LONGLEFT); break;
+        case DIR.LONGRIGHT: move(DIR.LONGRIGHT); break;
         case DIR.UP:    rotate();        break;
         case DIR.DOWN:  drop();          break;
         case DIR.TELEPORT: move(DIR.TELEPORT);      break;
@@ -345,18 +369,39 @@ swipes.app("core").get("channels", function(res, err){
         case DIR.RIGHT: x = x + 1; break;
         case DIR.LEFT:  x = x - 1; break;
         case DIR.DOWN:  y = y + 1; break;
-        case DIR.TELEPORT:  y = y; break;
+        case DIR.TELEPORT:
+        case DIR.LONGLEFT:
+        case DIR.LONGRIGHT: y = y; break;
       }
+      if( dir === DIR.LONGLEFT || dir === DIR.LONGRIGHT ){
+        var moveOrNot = false;
+        var dMove = 1;
+        if(dir === DIR.LONGLEFT)
+          dMove = -1;
 
+        for(var i = 0 ; i<10 ; i++){
+          x = x + dMove;
+          if (unoccupied(current.type, x, y, current.dir)) {
+            current.x = x;
+            current.y = y;
+            dt = 0;
+            invalidate();
+            moveOrNot = true;
+          }
+          else{
+            break;
+          }
+        }
+        return moveOrNot;
+      }
       if (dir === DIR.TELEPORT) {
         var moveOrNot = false;
-
         for (var t=current.y; t<30; t++) {
           if (unoccupied(current.type, x, t, current.dir)) {
             current.x = x;
             current.y = current.y + 1;
-            dt = 0;
             invalidate();
+            dt = 0;
             moveOrNot = true;
           } else {
             current.y = current.y - 1; // Don't ask me... I have no idea too.
