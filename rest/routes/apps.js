@@ -373,7 +373,7 @@ router.get('/apps.load', (req, res, next) => {
   let appId = req.query.app_id;
   let manifestId = req.query.manifest_id;
   let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
-  let channelId - req.query.channel_id;
+  let channelId = req.query.channel_id;
 
   // TODO: Do validations and stuff
   if (!manifest) {
