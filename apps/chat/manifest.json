@@ -1,0 +1,10 @@
+{
+  "manifest_version": 1,
+  "title": "Chat",
+  "identifier": "chat",
+  "version": "0.1",
+  "description": "The Chat App For Swipes",
+  "main_app": {
+    "index": "chat.html"
+  }
+}

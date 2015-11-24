@@ -22,7 +22,7 @@ $(function(){
 			}
 		});
 	}
-
+	
 	function render(){
 		$(".app-list").html("");
 		$(".app-list.active").append("<h5>enable</h5>");

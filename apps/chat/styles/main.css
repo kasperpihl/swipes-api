@@ -1,0 +1,580 @@
+/* line 47, scss/main.scss */
+.chat-list-view-controller {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+/* line 51, scss/main.scss */
+.chat-list-view-controller .thread-header {
+  display: none;
+  position: absolute;
+  height: 40px;
+  background: #E6E6E6;
+  width: 100%;
+  z-index: 2001;
+  top: 0;
+  left: 0;
+}
+/* line 60, scss/main.scss */
+.chat-list-view-controller .thread-header h4 {
+  font-size: 14px;
+  padding-left: 14px;
+}
+/* line 64, scss/main.scss */
+.chat-list-view-controller .thread-header.shown {
+  display: block;
+}
+/* line 67, scss/main.scss */
+.chat-list-view-controller .thread-header .clear-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 40px;
+  width: 100px;
+  font-size: 16px;
+  padding-top: 9px;
+  text-decoration: underline;
+}
+/* line 76, scss/main.scss */
+.chat-list-view-controller .thread-header .clear-button:hover {
+  text-decoration: none;
+}
+
+/* line 83, scss/main.scss */
+.chat-list {
+  padding-bottom: 8px;
+  padding-top: 20px;
+  padding-left: 3%;
+}
+/* line 87, scss/main.scss */
+.chat-list .section {
+  padding-top: 12px;
+}
+/* line 90, scss/main.scss */
+.chat-list .section-list {
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 5px;
+}
+/* line 95, scss/main.scss */
+.chat-list .section-header {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* line 96, scss/main.scss */
+.chat-list .section-header h2 {
+  padding-left: 14px;
+}
+/* line 101, scss/main.scss */
+.chat-list .section-header .seperator-container {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+/* line 105, scss/main.scss */
+.chat-list .section-header .seperator {
+  height: 1px;
+}
+
+/* line 111, scss/main.scss */
+.chat-item {
+  display: relative;
+}
+
+/* line 114, scss/main.scss */
+.chat-list-container {
+  height: calc(100% - 66px);
+  width: 96%;
+  margin: 0 auto;
+  position: relative;
+}
+/* line 119, scss/main.scss */
+.chat-list-container::-webkit-scrollbar {
+  display: none;
+}
+/* line 123, scss/main.scss */
+.chat-list-container:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+/* line 127, scss/main.scss */
+.chat-list-container .chat-list-container-scroller {
+  overflow-y: scroll;
+  height: 100%;
+  vertical-align: bottom;
+}
+/* line 132, scss/main.scss */
+.chat-list-container .unread-seperator {
+  opacity: 0.8;
+  padding-left: 10px;
+}
+/* line 135, scss/main.scss */
+.chat-list-container .unread-seperator.read {
+  opacity: 0.3;
+  -moz-transition: opacity 0.4s ease-out;
+  -o-transition: opacity 0.4s ease-out;
+  -webkit-transition: opacity 0.4s ease-out;
+  transition: opacity 0.4s ease-out;
+}
+/* line 139, scss/main.scss */
+.chat-list-container .unread-seperator .section-header {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+/* line 142, scss/main.scss */
+.chat-list-container .unread-seperator .section-header h2 {
+  color: #F44336;
+}
+/* line 146, scss/main.scss */
+.chat-list-container .unread-seperator .section-header .seperator {
+  background-color: #F44336;
+}
+
+/* line 153, scss/main.scss */
+.chat-item:hover .left-hover-box, .chat-item:hover .top-hover-box, .chat-item:hover .hover-box, .chat-message:hover .left-hover-box, .chat-message:hover .top-hover-box, .chat-message:hover .hover-box {
+  opacity: 1;
+  -moz-transition: opacity 0.1s ease-out;
+  -o-transition: opacity 0.1s ease-out;
+  -webkit-transition: opacity 0.1s ease-out;
+  transition: opacity 0.1s ease-out;
+}
+
+/* line 158, scss/main.scss */
+.chat-message {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  min-height: 28px;
+  position: relative;
+}
+/* line 165, scss/main.scss */
+.chat-message.hasProfileImage {
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+/* line 171, scss/main.scss */
+.chat-message .chat-left-side-container {
+  float: left;
+  width: 45px;
+}
+/* line 175, scss/main.scss */
+.chat-message .chat-right-side-container {
+  margin-left: 45px;
+  padding-right: 20px;
+}
+/* line 180, scss/main.scss */
+.chat-message .picture-container .picture-circular {
+  width: 34px;
+  height: 34px;
+  -moz-border-radius: 17px;
+  -webkit-border-radius: 17px;
+  border-radius: 17px;
+}
+/* line 186, scss/main.scss */
+.chat-message .sender-container {
+  font-size: 14px;
+  line-height: 1;
+  padding-bottom: 4px;
+}
+/* line 190, scss/main.scss */
+.chat-message .sender-container .sender-name {
+  font: 700 14px/1 "Open Sans", sans-serif;
+}
+/* line 193, scss/main.scss */
+.chat-message .sender-container .timestamp {
+  font: 600 11px/1 "Open Sans", sans-serif;
+  opacity: .4;
+}
+/* line 199, scss/main.scss */
+.chat-message .message-container {
+  word-wrap: break-word;
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  font: 14px/1.5 "Open Sans", sans-serif;
+  color: rgba(0, 12, 47, 0.8);
+}
+/* line 202, scss/main.scss */
+.chat-message .message-container a {
+  cursor: pointer;
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+/* line 209, scss/main.scss */
+.chat-message .file-container {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  padding-top: 5px;
+}
+/* line 212, scss/main.scss */
+.chat-message .file-container img {
+  cursor: pointer;
+  border: 1px solid #EAEAEA;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+/* line 218, scss/main.scss */
+.chat-message .attachment-container {
+  border-left: 3px solid #DDDDDD;
+  position: relative;
+  margin-top: 0px;
+  padding-left: 12px;
+  margin-bottom: 0px;
+}
+/* line 224, scss/main.scss */
+.chat-message .attachment-container img {
+  max-width: 400px;
+}
+/* line 227, scss/main.scss */
+.chat-message .attachment-container .attachment-content {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  font: 13px "Open Sans", sans-serif;
+  word-wrap: break-word;
+}
+/* line 228, scss/main.scss */
+.chat-message .attachment-container .attachment-content a {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+/* line 231, scss/main.scss */
+.chat-message .attachment-container .attachment-content .service_name {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  font: 14px "Open Sans", sans-serif;
+  padding-bottom: 5px;
+  color: #ffffff;
+}
+/* line 237, scss/main.scss */
+.chat-message .attachment-container .attachment-content .title {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  font: 16px "Open Sans", sans-serif;
+  padding-bottom: 5px;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+/* line 245, scss/main.scss */
+.chat-message .attachment-container .attachment-content .title a {
+  cursor: pointer;
+}
+/* line 249, scss/main.scss */
+.chat-message .attachment-container .attachment-content .text {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  word-wrap: break-word;
+  font: 13px/1.5 "Open Sans", sans-serif;
+  padding-top: 3px;
+  padding-bottom: 2px;
+}
+/* line 262, scss/main.scss */
+.chat-message .like-container {
+  margin-top: 3px;
+  font-size: 14px;
+}
+/* line 267, scss/main.scss */
+.chat-message .like-container .like-button svg {
+  margin-right: 5px;
+  margin-bottom: -4px;
+  width: 20px;
+  height: 20px;
+}
+/* line 274, scss/main.scss */
+.chat-message .like-container .like-string {
+  color: #9E9E9E;
+}
+/* line 279, scss/main.scss */
+.chat-message .like-button {
+  display: inline-block;
+}
+/* line 281, scss/main.scss */
+.chat-message .like-button svg {
+  fill: #9E9E9E;
+}
+/* line 284, scss/main.scss */
+.chat-message .like-button:hover {
+  text-decoration: none;
+}
+/* line 286, scss/main.scss */
+.chat-message .like-button:hover svg {
+  opacity: 0.8;
+}
+/* line 293, scss/main.scss */
+.chat-message .like-button.liked svg {
+  fill: #F44336;
+}
+/* line 299, scss/main.scss */
+.chat-message .top-hover-box {
+  opacity: 0;
+}
+/* line 301, scss/main.scss */
+.chat-message .top-hover-box .like-button {
+  line-height: 10px;
+  font-size: 10px;
+}
+/* line 304, scss/main.scss */
+.chat-message .top-hover-box .like-button svg {
+  width: 12px;
+  height: 12px;
+}
+/* line 310, scss/main.scss */
+.chat-message .left-hover-box {
+  width: 45px;
+  opacity: 0;
+  min-height: 20px;
+}
+/* line 314, scss/main.scss */
+.chat-message .left-hover-box .timestamp {
+  font: 9px/1 "Open Sans", sans-serif;
+  position: absolute;
+  top: 8px;
+  left: 0px;
+}
+/* line 320, scss/main.scss */
+.chat-message .left-hover-box .like-button {
+  position: absolute;
+  top: 5px;
+  line-height: 10px;
+  font-size: 10px;
+}
+/* line 325, scss/main.scss */
+.chat-message .left-hover-box .like-button svg {
+  width: 12px;
+  height: 12px;
+}
+/* line 331, scss/main.scss */
+.chat-message .hover-box {
+  opacity: 0;
+  right: 0;
+  top: 50%;
+  margin-top: -10px;
+  margin-right: 20px;
+  position: absolute;
+}
+/* line 337, scss/main.scss */
+.chat-message .hover-box svg {
+  height: 20px;
+  width: 20px;
+  fill: #9E9E9E;
+}
+/* line 343, scss/main.scss */
+.chat-message .hover-box:hover svg {
+  fill: #1B1E23;
+}
+
+/* line 351, scss/main.scss */
+.chat-new-message {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  min-height: 40px;
+  padding-top: 2px;
+  background-color: #ffffff;
+  z-index: 999;
+}
+/* line 359, scss/main.scss */
+.chat-new-message .input-container {
+  width: 95%;
+  min-height: 100%;
+  margin-left: 3%;
+  border-top: 2px solid #DDDDDD;
+  padding: 10px 0;
+}
+/* line 366, scss/main.scss */
+.chat-new-message .input-container textarea {
+  width: 100%;
+  min-height: 40px;
+  max-height: 160px;
+  margin: 0;
+  resize: none;
+  border: none;
+  font: 14px "Open Sans", sans-serif;
+  padding: 10px 64px;
+}
+/* line 377, scss/main.scss */
+.chat-new-message #file-input {
+  display: none;
+}
+/* line 381, scss/main.scss */
+.chat-new-message .attach-button-container {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  left: 3%;
+  top: calc(50% - 20px);
+  border-right: 1px solid rgba(0, 12, 47, 0.2);
+  cursor: pointer;
+}
+/* line 382, scss/main.scss */
+.chat-new-message .attach-button-container .loading {
+  display: none;
+}
+/* line 386, scss/main.scss */
+.chat-new-message .attach-button-container.isUploading .loading {
+  display: block;
+  height: 20px;
+  width: 20px;
+  margin-top: calc(50% - 10px);
+  margin-left: calc(50% - 10px);
+}
+/* line 393, scss/main.scss */
+.chat-new-message .attach-button-container.isUploading svg {
+  display: none;
+}
+/* line 404, scss/main.scss */
+.chat-new-message .attach-button-container svg {
+  height: 20px;
+  width: 20px;
+  margin-top: calc(50% - 10px);
+  margin-left: calc(50% - 10px);
+  fill: rgba(0, 12, 47, 0.3);
+}
+/* line 412, scss/main.scss */
+.chat-new-message .attach-button-container:hover > svg {
+  fill: rgba(0, 12, 47, 0.8);
+}
+/* line 416, scss/main.scss */
+.chat-new-message input {
+  border: 0;
+  font: 14px "Open Sans", sans-serif;
+  padding-right: 34px;
+  width: 100%;
+  height: 40px;
+}
+
+/* line 427, scss/main.scss */
+.section-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* line 431, scss/main.scss */
+.section-header {
+  height: 14px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  margin-top: 20px;
+  position: relative;
+}
+/* line 438, scss/main.scss */
+.section-header .expandable h2 {
+  color: #24282E;
+  text-decoration: underline;
+}
+/* line 442, scss/main.scss */
+.section-header .expandable:hover h2 {
+  text-decoration: none;
+}
+/* line 446, scss/main.scss */
+.section-header h2 {
+  margin: 0;
+  font: 12px "Open Sans", sans-serif;
+  letter-spacing: 1px;
+  color: #9E9E9E;
+  background-color: white;
+  padding-right: 8px;
+  padding-left: 8px;
+}
+/* line 447, scss/main.scss */
+.section-header h2.left {
+  float: left;
+  font-weight: 600;
+}
+/* line 451, scss/main.scss */
+.section-header h2.right {
+  float: right;
+}
+/* line 463, scss/main.scss */
+.section-header .seperator-container {
+  width: 100%;
+  height: 100%;
+  padding-top: 6px;
+  padding-right: 5px;
+}
+/* line 468, scss/main.scss */
+.section-header .seperator-container .seperator {
+  background-color: rgba(158, 158, 158, 0.4);
+  height: 2px;
+}
+
+/* line 479, scss/main.scss */
+.autocomplete-list {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-height: 70%;
+  overflow-y: scroll;
+  background-color: #ffffff;
+  z-index: 999;
+}
+/* line 486, scss/main.scss */
+.autocomplete-list .ac-main-container {
+  position: relative;
+  width: 100%;
+}
+/* line 490, scss/main.scss */
+.autocomplete-list .ac-main-container .ac-header {
+  height: 30px;
+  position: fixed;
+  width: 100%;
+  margin-top: -30px;
+  background-color: #ffffff;
+}
+/* line 499, scss/main.scss */
+.autocomplete-list .ac-main-container .ac-header .label {
+  color: #1B1E23;
+}
+/* line 507, scss/main.scss */
+.autocomplete-list.shown {
+  display: block;
+}
+/* line 510, scss/main.scss */
+.autocomplete-list .ac-result-list {
+  margin: 0;
+}
+/* line 512, scss/main.scss */
+.autocomplete-list .ac-result-list li {
+  position: relative;
+  padding: 5px;
+  padding-left: 35px;
+}
+/* line 516, scss/main.scss */
+.autocomplete-list .ac-result-list li .leftIcon {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+}
+/* line 524, scss/main.scss */
+.autocomplete-list .ac-result-list li.selected {
+  background-color: blue;
+  color: white;
+}
+/* line 527, scss/main.scss */
+.autocomplete-list .ac-result-list li.selected .leftIcon {
+  fill: white;
+}

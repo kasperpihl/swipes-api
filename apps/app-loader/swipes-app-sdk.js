@@ -54,6 +54,7 @@ var SwipesAppSDK = (function() {
 
 		return self.app(appId);
 	};
+
 	// API for handling data from apps
 	SwipesAppSDK.prototype.app = function(appId){
 		if(!appId)

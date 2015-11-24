@@ -1,0 +1,28 @@
+<html>
+<head>
+<link href="<{appDir}>/styles/main.css" rel="stylesheet">
+
+<script src="<{appDir}>/chat-list.js"></script>
+<script src="<{appDir}>/new-message.js"></script>
+
+<script src="<{appDir}>/main.js"></script>
+</head>
+<body>
+	<div class="chat-list-container">
+		<div class="chat-list-container-scroller">
+		</div>
+	</div>
+	<div class="chat-new-message">
+		<div class="input-container">
+			<input type="file" id="file-input">
+			<div class="attach-button-container">
+				<svg class="icon">
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-editTabAttach"></use>
+				</svg>
+				<img class="loading" src="styles/img/ajax-loader.gif"/>
+			</div>
+			<textarea data-autoresize tabindex="1" id="new-message-textarea" rows="1" placeholder="Write new message"></textarea>  
+		</div>
+	</div>
+</body>
+</html>

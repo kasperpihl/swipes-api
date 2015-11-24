@@ -1,0 +1,56 @@
+<% _.each( data.attachments, function(attachment){ 
+	var colorStyle = "";
+	if(attachment.color)
+		colorStyle = "border-left: 3px solid #"+attachment.color;
+	var renderedText;
+	if(attachment.text){
+		renderedText = attachment.text;
+	}
+%>
+<div class="attachment-container" style="<%= colorStyle %>">
+	<div class="attachment-content">
+	
+	<% if(attachment.service_name ){ %>
+	
+		<div class="service-name"><%= attachment.service_name %></div>
+	
+	<% } if(attachment.title){ %>
+
+		<div class="title">
+			<% 
+			var catchTitle = "target=\"_blank\"";
+			if(attachment.title_link && attachment.title_link.startsWith("http://swipesapp.com/forward"))
+				catchTitle = "class=\"catchClick\"";
+			if(attachment.title_link) print("<a "+ catchTitle +" href=\""+attachment.title_link + "\">"); %>
+				<%= attachment.title %>
+			<% if(attachment.title_link) print("</a>"); %>
+		</div>
+	
+	<% } if(attachment.pretext){ %>
+
+		<div class="pretext"><%= data.handleMentionsAndLinks(attachment.pretext) %></div>
+
+	<% } if(attachment.text){ %>
+
+		<div class="text"><%= data.handleMentionsAndLinks(attachment.text) %></div>
+	
+	<% } if(attachment.image_url ){ %>
+		
+		<% if(attachment.title_link) print("<a target=\"blank\" href=\""+attachment.title_link + "\">");
+			var width = attachment.image_width;
+			var height = attachment.image_height;
+			var ratio = parseFloat(width/height);
+			if(width > 400){
+				width = 400;
+				height = width / ratio;
+			}
+		 %>
+			
+			<img style="width: <%= width %>px; height: <%= height %>px;" src="<%= attachment.image_url %>" />
+		
+		<% if(attachment.title_link) print("</a>"); %>
+
+	<% } %>
+	</div>
+</div>
+<% }) %>

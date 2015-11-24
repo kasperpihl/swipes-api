@@ -1,0 +1,176 @@
+<%
+	var hasProfilePicture = "";
+	var user = data.message.get("user");
+	if(!user)
+		user = data.message.get("user_id");
+	var sender;
+	var profilePictureURL;
+
+	if(user){
+		sender = swipy.swipesCollections.users.get(user);
+		//if(sender.get("profile"))
+			//profilePictureURL = sender.get("profile").image_192;
+	}
+
+	var icons = data.message.get("icons");
+
+	var name = "";
+
+	if(sender){
+		name = sender.get("name");
+		if(!name)
+			name = sender.get("name");
+	}
+
+
+	var username = data.message.get("name");
+	if(username && !name){
+		name = username;
+	}
+	if(icons && !profilePictureURL){
+		profilePictureURL = icons.image_48;
+	}
+
+	var hasAttachment = false;
+	var numberOfLikes = data.message.get("numberOfLikes");
+	var shouldShowBigLike = false;
+	if( data.message.get("attachments") ){
+		hasAttachment = true;
+		shouldShowBigLike = true;
+	}
+	if(numberOfLikes > 0){
+		shouldShowBigLike = true;
+	}
+	var isLikedClass = ""
+	if(data.message.get("likedByMe"))
+		isLikedClass = "liked"
+
+	var likeString = "Be the first to like this.";
+	if(numberOfLikes > 0){
+		if(data.message.get("likedByMe")){
+			if(numberOfLikes == 1){
+				likeString = "You like this.";
+			}
+			else{
+				var numberLeft = numberOfLikes - 1;
+				likeString = "You and " + numberLeft + " others like this."
+			}
+		}
+		else{
+			if(numberOfLikes == 1){
+				likeString = "1 person like this."
+			}
+			else
+				likeString = numberOfLikes + " people like this."
+		}
+	}
+
+	//#Handle thread - check for messages starting with <swipeslink>:
+	var isThreadRegex = /(<http:\/\/swipesapp.com\/task.*?\>:)/g;
+	var text = data.message.get("text")
+	if(text){
+		var matches = data.message.get("text").match(isThreadRegex)
+		var match;
+		if(matches && matches.length)
+			match = matches[0];
+		if(match && text.indexOf(match) == 0){
+			//#console.log(match);
+			if(data.isThread){
+				text = text.substring(match.length);
+			}
+			else{
+				text = name + " commented on \"" + match.slice(0, match.length-1) + "\""
+			}
+		}
+	}
+
+
+	//#Set class for showing profile image
+	var hasImageClass = "hasProfileImage";
+	if(data.isFromSameSender)
+		hasImageClass = "";
+%>
+<div class="chat-message <%= hasImageClass %>">
+	<div class="chat-left-side-container">
+		<% if(!data.isFromSameSender){ %>
+		<div class="picture-container">
+			<div class="picture-circular" style="background: url(<%= profilePictureURL %>) no-repeat; background-size: 34px 34px;">
+			</div>
+		</div>
+		<% } else { %>
+			<div class="left-hover-box">
+				<% if(!shouldShowBigLike){ %>
+				<!--<a class="like-button">
+					<svg class="icon">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-thumb"></use>
+					</svg>
+				</a>-->
+				<% } %>
+				<span class="timestamp"><%= data.message.get("timeStr") %></span>
+			</div>
+		<% } %>
+	</div>
+	<div class="chat-right-side-container">
+		<% if(!data.isFromSameSender){ %>
+		<div class="sender-container">
+			<span class="sender-name"><%= name %></span>
+			<span class="timestamp"><%= data.message.get("timeStr") %></span>
+			<% if(!shouldShowBigLike){ %>
+			<span class="top-hover-box">
+				<!--<a class="like-button">
+					<svg class="icon">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-thumb"></use>
+					</svg>
+				</a>-->
+			</span>
+			<% } %>
+		</div>
+		<% } %>
+		<div class="message-container">
+			<%= data.handleMentionsAndLinks(text) %>
+		</div>
+		<% if(data.message.get("subtype") == "file_share") { %>
+
+			<div class="file-container">
+				<div class="comment"></div>
+				<% var file = data.message.get("file");
+				if(file){
+					var fileURL = file.thumb_360;
+					if(file.thumb_360_gif)
+						fileURL = file.thumb_360_gif;
+					if(fileURL){
+				%>
+					<img class="chat-image" style="height: <%= file.thumb_360_h %>px; width:<%= file.thumb_360_w %>px;" src="<%= fileURL %>" />
+				<% } }
+				else console.log(data.message);
+				%>
+			</div>
+		<% } %>
+		<% if( hasAttachment ){ %>
+
+			<%= data.attTmpl({attachments: data.message.get("attachments"), handleMentionsAndLinks: data.handleMentionsAndLinks}) %>
+			<!--<a href="http://test.com" target="_blank"><img src="styles/img/temp/attachment-placeholder.png"></a>-->
+
+
+		<% } %>
+		<% if(shouldShowBigLike){ %>
+		<!--<div class="like-container">
+			<a class="like-button <%= isLikedClass %>">
+				<svg class="icon">
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-thumb"></use>
+				</svg>
+			</a>
+			<span class="like-string">
+				<%= likeString %>
+			</span>
+		</div>-->
+		<% } %>
+	</div>
+	<div class="hover-box">
+		<a class="actions">
+			<svg class="icon">
+				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-quickBarNow"></use>
+			</svg>
+		</a>
+	</div>
+</div>
