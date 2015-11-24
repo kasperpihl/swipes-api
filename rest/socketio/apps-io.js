@@ -95,7 +95,7 @@ let adminApps = (socket, userId) => {
         }
 
         if (row.new_val && row.new_val.is_installed === false) {
-          type = 'app_unstalled';
+          type = 'app_uninstalled';
           data = {
             id: row.new_val.id
           };

@@ -1,0 +1,37 @@
+{
+	"manifest_version": 1,
+	"title": "Core",
+	"identifier": "core",
+	"version": "0.1",
+	"description": "The Core For Swipes",
+	"tables":[
+		{
+			"name": "apps"
+		},
+		{
+			"name": "groups",
+			"indexes": ["name"]
+		},
+		{
+			"name": "events"
+		},
+		{
+			"name": "stars"
+		},
+		{
+			"name": "teams"
+		},
+		{
+			"name": "users",
+			"indexes": ["email", "name", "username"]
+		}
+	],
+	"background":{
+		"search": "search.js"
+	},
+	"listenTo": [
+		{
+			"table": "messages"
+		}
+	]
+}

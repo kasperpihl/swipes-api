@@ -434,7 +434,7 @@ router.get('/apps.load', (req, res, next) => {
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
-
+  
   if (!queryObject.table) {
     return res.status(200).json({ok: false, err: 'table_required'});
   }

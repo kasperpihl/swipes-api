@@ -7,7 +7,7 @@
 	"main_app": {
 		"index": "chat.html"
 	},
-  "tables":[
+	"tables":[
 		{
 			"name": "messages",
 			"indexes": ["ts"]
