@@ -1,5 +1,4 @@
 var background = {};
-
 background.beforeHandlers = {
 	messages: function(data, callback){
 		if(!data.ts){

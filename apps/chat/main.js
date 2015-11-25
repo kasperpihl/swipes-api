@@ -15,7 +15,7 @@ $(function(){
 		return swipes.currentApp().save({table: "messages"}, {"text": "test"})
 	}).then(function(){
 		console.log("fourth promise")
-		return swipes.currentApp().method("start")
+		return swipes.currentApp().method("start", {"test": true})
 	}).then(function(result){
 		console.log("fifth promise", result);
 	}).fail(function(error){

@@ -466,7 +466,7 @@ router.post('/apps.method', (req, res, next) => {
 
       background.methods[method](data, (result, error) => {
         if(error){
-          res.status(200).json({ok: false, err: 'method_error'});
+          return res.status(200).json({ok: false, err: 'method_error'});
         }
         res.status(200).json({ok: true, res: result});
       });
