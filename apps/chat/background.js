@@ -18,12 +18,11 @@ background.afterHandlers = {
 	}
 };
 
-
-background.searchHandler = (string, callback) => {
-
-};
-background.autoCompleteHandler = (string, callback) => {
-
-};
+background.methods = {
+	start: function(data, callback){
+		console.log("method run", data);
+		callback("yeah")
+	}
+}
 
 module.exports = background;
