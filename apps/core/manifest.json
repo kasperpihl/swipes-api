@@ -26,9 +26,6 @@
 			"indexes": ["email", "name", "username"]
 		}
 	],
-	"background":{
-		"search": "search.js"
-	},
 	"listenTo": [
 		{
 			"table": "messages"

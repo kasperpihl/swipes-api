@@ -431,6 +431,52 @@ router.get('/apps.load', (req, res, next) => {
   res.status(200).send(indexFile);
 });
 
+router.post('/apps.method', (req, res, next) => {
+  let method = req.body.method;
+  let data = req.body.data;
+  if(!data){
+    data = {};
+  }
+  let appId = req.body.app_id;
+  let getAppQ = r.table('apps').get(appId);
+  
+  db.rethinkQuery(getAppQ)
+    .then((app) => {
+      if (!app) {
+        return res.status(200).json({ok: false, err: 'app_not_found'});
+      }
+
+      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+      if (!manifest) {
+        return res.status(200).json({ok: false, err: 'no_manifest_found'});
+      }
+
+      if(!manifest.background){
+        return res.status(200).json({ok: false, err: 'manifest_no_background_defined'});
+      }
+      // Check if app has background script setup
+      var background = require(appDir + manifest.identifier + "/" + manifest.background);
+      if (!background) {
+        return res.status(200).json({ok: false, err: 'background_script_not_found'});
+      }
+
+      if(!background.methods || !background.methods[method] || typeof background.methods[method] !== 'function'){
+        return res.status(200).json({ok: false, err: 'method_not_found'});
+      }
+
+      background.methods[method](data, (result, error) => {
+        if(error){
+          res.status(200).json({ok: false, err: 'method_error'});
+        }
+        res.status(200).json({ok: true, res: result});
+      });
+      
+    })
+    .catch((err) => {
+      return next(err);
+    })
+});
+
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;

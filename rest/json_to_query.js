@@ -26,14 +26,7 @@ let jsonToQuery = (json, options) => {
 
   if (data) {
     // The user wants to perform an insert or update
-    let id = json.id;
-
-    if (id) {
-      // Single update
-      rethinkQ = rethinkQ.get(id).update(data);
-    } else {
-      rethinkQ = rethinkQ.insert(data);
-    }
+    rethinkQ = rethinkQ.insert(data, {conflict: "update"});
   } else {
     // The user wants to perform a get
     let id = json.id;
