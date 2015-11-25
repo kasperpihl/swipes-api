@@ -25,6 +25,7 @@ let jsonToQuery = (json, options) => {
   let data = json.data;
 
   if (data) {
+    console.log("queries", data);
     // The user wants to perform an insert or update
     rethinkQ = rethinkQ.insert(data, {conflict: "update"});
   } else {

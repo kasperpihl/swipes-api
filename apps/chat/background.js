@@ -1,6 +1,7 @@
 var background = {};
 background.beforeHandlers = {
 	messages: function(data, callback){
+		console.log("before handler", data);
 		if(!data.ts){
 			var threeRandom = ('000' + Math.random().toFixed(3)*1000).substr(-3);
 			var ts = parseFloat(new Date().getTime() / 1000).toFixed(3) + threeRandom;

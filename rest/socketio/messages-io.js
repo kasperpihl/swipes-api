@@ -4,7 +4,6 @@ const TEAM_ID = process.env.TEAM_ID;
 
 let r = require('rethinkdb');
 let db = require('../db.js');
-
 module.exports.channelMessages = (socket, userId) => {
   let channelMessagesQ =
     r.table('messages')

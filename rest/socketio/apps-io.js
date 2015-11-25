@@ -27,7 +27,8 @@ let getAppFile = (appId, fileName) => {
 
 let scopeCheck = (userId, scope) => {
   let scopeType;
-
+  let matchScopeQ = r.table('users')
+    
   if (scope.charAt(0) === 'A') {
     scopeType = 'apps'
   }
@@ -36,11 +37,13 @@ let scopeCheck = (userId, scope) => {
     scopeType = 'channels'
   }
 
-  let matchScopeQ =
-    r.table('users')
-    .get(userId)(scopeType)
-    .filter({id: scope})
-    .count();
+  if(scopeType){
+    matchScopeQ = matchScopeQ.get(userId)(scopeType).filter({id: scope}).count()
+  }
+  else{
+    // If no scope type, assume that it is just the user 
+    matchScopeQ = matchScopeQ.filter({id: scope}).count()
+  }
 
   return matchScopeQ;
 }
@@ -68,7 +71,6 @@ let hook = (socket, userId) => {
             let changesQ = jsonToQuery(item, {feed: true});
 
             changesQ = changesQ.changes();
-
             db.rethinkQuery(changesQ, {feed: true})
               .then((cursor) => {
                 cursor.each((err, row) => {
@@ -79,6 +81,7 @@ let hook = (socket, userId) => {
                   }
 
                   let scope = row.new_val.scope;
+                  
                   let scopeCheckQ = scopeCheck(userId, scope);
 
                   db.rethinkQuery(scopeCheckQ)
@@ -96,7 +99,7 @@ let hook = (socket, userId) => {
         }
       })
     }).catch((err) => {
-      console.log(err);
+      console.log("caught there", err);
       return;
     });
 }

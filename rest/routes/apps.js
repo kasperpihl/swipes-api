@@ -418,7 +418,8 @@ router.get('/apps.load', (req, res, next) => {
   // Instantiate objects and add runtime stuff
   insertString += '<script>';
   insertString += 'window.swipes = new SwipesAppSDK("'+apiHost+'", "' + req.query.token + '");\r\n';
-  insertString += 'swipes._client.setListener(parent, "' + req.headers.referer + '");\r\n';
+  insertString += 'if(parent) swipes._client.setListener(parent, "' + req.headers.referer + '");\r\n';
+  insertString += 'if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.api) swipes._client.setListener(window.webkit.messageHandlers.api, "' + req.headers.referer + '");\r\n';
   insertString += 'swipes._client.setAppId("' + appId + '");\r\n';
   insertString += 'swipes.navigation.setTitle("' + manifest.title + '");'
   insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
@@ -488,6 +489,7 @@ router.post('/apps.method', (req, res, next) => {
     })
 });
 
+
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
@@ -495,6 +497,7 @@ router.post('/apps.saveData', (req, res, next) => {
 
   db.rethinkQuery(getAppQ)
     .then((app) => {
+      
       if (!app) {
         return res.status(200).json({ok: false, err: 'app_not_found'});
       }
@@ -504,6 +507,9 @@ router.post('/apps.saveData', (req, res, next) => {
 
       if (!queryObject.data) {
         return res.status(200).json({ok: false, err: 'data_required'});
+      }
+      if( typeof queryObject.data !== 'object' && typeof queryObject.data !== 'array'){
+        return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
       }
 
       let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
@@ -519,47 +525,71 @@ router.post('/apps.saveData', (req, res, next) => {
           return res.status(200).json({ok: false, err: 'background_script_not_found'});
         }
       }
+      
+      if(typeof queryObject.data === 'object')
+        queryObject.data = [queryObject.data];
 
-      // The query to actually save and move on - added here so before handlers below is simpler
-      let saveQueryFunction = () => {
+
+      let beforeHandler = (data, callback) => {
+        if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
+          // A beforeHandler should call its callback with the data
+          background.beforeHandlers[queryObject.table](data, (newData, error) => {
+            callback(newData, error);
+          })
+        }
+        else{
+          callback(data);
+        }
+
+      }
+      let validateFunction = (data) => {
+        return new Promise((resolve, reject) => {
+          beforeHandler(data, function(newData, error){
+            if(error){
+              return reject(error);
+            }
+            if(!newData){
+              return reject("before_handler_failed");
+            }
+
+            if(!newData.scope){
+              return reject("scope_not_provided");
+            }
+            if(req.scopes.indexOf(newData.scope) == -1){
+              return reject("scope_not_allowed");
+            }
+            return resolve(newData);
+          });
+          
+        });
+      }
+
+      var promises = [];
+      for(var i = 0 ; i < queryObject.data.length ; i++){
+        var locDat = queryObject.data[i];
+        promises.push(validateFunction(locDat));
+      }
+      Promise.all(promises).then( dataSet => {
+        console.log("got new validated dataset", dataSet);
         let tableWithoutPrefix = queryObject.table;
-        let tableName = util.appTable(appId, queryObject.table);
+        let tableName = util.appTable(app.manifest_id, queryObject.table);
 
         queryObject.table = tableName;
-
+        queryObject.data = dataSet;
+        console.log("queryObject before save", queryObject);
         let rethinkQ = jsonToQuery(queryObject);
-
-        db.rethinkQuery(rethinkQ)
-          .then(() => {
-
-            // Check if any afterhandlers exists - if so run them before returning
-            // TODO: Add short timeout for returning anyway
-            if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix]){
-              background.afterHandlers[tableWithoutPrefix](queryObject.data, (data) => {
-                res.status(200).json({ok: true});
-              })
-            }
-            else
-              res.status(200).json({ok: true});
-          }).catch((err) => {
-            return next(err);
-          });
-      }
-
-      // Check if any before handlers is set
-      if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
-        // A beforeHandler should call its callback with the data
-        background.beforeHandlers[queryObject.table](queryObject.data, (data) => {
-          if(!data)
-            return res.status(200).json({ok: false, err: 'before_handler_failed'});
-          queryObject.data = data;
-          saveQueryFunction();
-        })
-      }
-      else{
-        saveQueryFunction()
-      }
-
+        console.log("rethinkQ", rethinkQ);
+        return db.rethinkQuery(rethinkQ);
+        
+      }).then( result => {
+        // TODO: Add afterHandler with promises
+        res.status(200).json({ok: true});
+      }).catch((err) => {
+        if(typeof err === 'string')
+          return res.status(200).json({ok: false, err: err});
+        return next(err);
+      });
+      
     })
     .catch((err) => {
       return next(err);
@@ -582,7 +612,7 @@ router.post('/apps.getData', (req, res, next) => {
       }
 
 
-      let tableName = util.appTable(appId, queryObject.table);
+      let tableName = util.appTable(app.manifest_id, queryObject.table);
 
       queryObject.table = tableName;
 
