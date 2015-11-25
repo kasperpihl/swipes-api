@@ -441,7 +441,6 @@ router.post('/apps.saveData', (req, res, next) => {
       if (!app) {
         return res.status(200).json({ok: false, err: 'app_not_found'});
       }
-
       if (!queryObject.table) {
         return res.status(200).json({ok: false, err: 'table_required'});
       }
@@ -450,18 +449,60 @@ router.post('/apps.saveData', (req, res, next) => {
         return res.status(200).json({ok: false, err: 'data_required'});
       }
 
-      let tableName = util.appTable(appId, queryObject.table);
+      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+      if (!manifest) {
+        return res.status(200).json({ok: false, err: 'no_manifest_found'});
+      }
 
-      queryObject.table = tableName;
+      // Check if app has background script setup
+      var background;
+      if(manifest.background){
+        background = require(appDir + manifest.identifier + "/" + manifest.background);
+        if (!background) {
+          return res.status(200).json({ok: false, err: 'background_script_not_found'});
+        }
+      }
 
-      let rethinkQ = jsonToQuery(queryObject);
+      // The query to actually save and move on - added here so before handlers below is simpler
+      let saveQueryFunction = () => {
+        let tableWithoutPrefix = queryObject.table;
+        let tableName = util.appTable(appId, queryObject.table);
 
-      db.rethinkQuery(rethinkQ)
-        .then(() => {
-          res.status(200).json({ok: true});
-        }).catch((err) => {
-          return next(err);
-        });
+        queryObject.table = tableName;
+
+        let rethinkQ = jsonToQuery(queryObject);
+
+        db.rethinkQuery(rethinkQ)
+          .then(() => {
+
+            // Check if any afterhandlers exists - if so run them before returning
+            // TODO: Add short timeout for returning anyway
+            if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix]){
+              background.afterHandlers[tableWithoutPrefix](queryObject.data, (data) => {
+                res.status(200).json({ok: true});
+              })
+            }
+            else
+              res.status(200).json({ok: true});
+          }).catch((err) => {
+            return next(err);
+          });
+      }
+
+      // Check if any before handlers is set
+      if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
+        // A beforeHandler should call its callback with the data
+        background.beforeHandlers[queryObject.table](queryObject.data, (data) => {
+          if(!data)
+            return res.status(200).json({ok: false, err: 'before_handler_failed'});
+          queryObject.data = data;
+          saveQueryFunction();
+        })
+      }
+      else{
+        saveQueryFunction()
+      }
+      
     })
     .catch((err) => {
       return next(err);
@@ -482,6 +523,7 @@ router.post('/apps.getData', (req, res, next) => {
       if (!queryObject.table) {
         return res.status(200).json({ok: false, err: 'table_required'});
       }
+
 
       let tableName = util.appTable(appId, queryObject.table);
 

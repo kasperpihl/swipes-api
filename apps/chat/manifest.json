@@ -13,6 +13,7 @@
 			"indexes": ["ts"]
 		}
 	],
+	"background": "background.js",
 	"listenTo": [
 		{
 			"table": "messages"
