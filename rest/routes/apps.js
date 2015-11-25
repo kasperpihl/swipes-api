@@ -287,7 +287,7 @@ router.post('/apps.install', (req, res, next) => {
         }
 
         let prefixedTables = tables.map((item) => {
-          let name = appId + '_' + item.name;
+          let name = manifestId + '_' + item.name;
 
           item.name = name;
           return item;
@@ -361,7 +361,7 @@ router.post('/apps.delete', (req, res, next) => {
       }
 
       let prefixedTables = tables.map((item) => {
-        let name = appId + '_' + item.name;
+        let name = app.manifest_id + '_' + item.name;
 
         item.name = name;
         return item;
@@ -450,7 +450,7 @@ router.post('/apps.method', (req, res, next) => {
   }
   let appId = req.body.app_id;
   let getAppQ = r.table('apps').get(appId);
-  
+
   db.rethinkQuery(getAppQ)
     .then((app) => {
       if (!app) {
@@ -481,7 +481,7 @@ router.post('/apps.method', (req, res, next) => {
         }
         res.status(200).json({ok: true, res: result});
       });
-      
+
     })
     .catch((err) => {
       return next(err);
@@ -559,7 +559,7 @@ router.post('/apps.saveData', (req, res, next) => {
       else{
         saveQueryFunction()
       }
-      
+
     })
     .catch((err) => {
       return next(err);
