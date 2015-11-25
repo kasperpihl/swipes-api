@@ -267,6 +267,10 @@ router.post('/channels.leave', (req, res, next) => {
       return res.status(200).json({ok: false, err: 'channel_does_not_exist'});
     }
 
+    if (channel.is_general) {
+      return res.status(200).json({ok: false, err: 'cant_leave_general'});
+    }
+
     let updateUserQ =
       r.table('users')
         .get(userId)
