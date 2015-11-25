@@ -186,49 +186,64 @@ router.post('/channels.join', (req, res, next) => {
   db.rethinkQuery(getChannelQ)
     .then((channel) => {
       if (channel === null) {
-        res.status(200).json({ok: false, err: 'channel_does_not_exist'});
+        return res.status(200).json({ok: false, err: 'channel_does_not_exist'});
       }
 
-      let lastTsInChannelQ =
-        r.table('messages')
-          .filter({channel_id: channel.id})
-          .orderBy(r.desc('ts'))
-          .nth(0)
-          .default({ts: null})
-          .getField('ts');
+      let checkJoinedQ =
+        r.table('users')
+          .get(userId)('channels')
+          .filter({id: channel.id});
 
-      db.rethinkQuery(lastTsInChannelQ)
-        .then((ts) => {
-          let updateUserQ =
-            r.table('users')
-              .get(userId)
-              .update((user) => {
-                return {
-                  channels: user('channels').append({
-                    id: channel.id,
-                    ts, ts
-                  })
-                }
-              });
+      db.rethinkQuery(checkJoinedQ)
+        .then((joined) => {
+          if (joined.length > 0) {
+            return res.status(200).json({ok: false, err: 'already_joined'});
+          }
 
-          db.rethinkQuery(updateUserQ)
-            .then(() => {
-              channel.last_read = ts;
+          let lastTsInChannelQ =
+            r.table('messages')
+              .filter({channel_id: channel.id})
+              .orderBy(r.desc('ts'))
+              .nth(0)
+              .default({ts: null})
+              .getField('ts');
 
-              let eventQ = r.table('events').insert({
-                user_id: userId,
-                channel: channel,
-                type: 'channel_joined'
-              });
+          db.rethinkQuery(lastTsInChannelQ)
+            .then((ts) => {
+              let updateUserQ =
+                r.table('users')
+                  .get(userId)
+                  .update((user) => {
+                    return {
+                      channels: user('channels').append({
+                        id: channel.id,
+                        ts, ts
+                      })
+                    }
+                  });
 
-              db.rethinkQuery(eventQ);
+              db.rethinkQuery(updateUserQ)
+                .then(() => {
+                  channel.last_read = ts;
 
-              res.status(200).json({ok: true, channel: channel});
-            })
-            .catch((err) => {
+                  let eventQ = r.table('events').insert({
+                    user_id: userId,
+                    channel: channel,
+                    type: 'channel_joined'
+                  });
+
+                  db.rethinkQuery(eventQ);
+
+                  return res.status(200).json({ok: true, channel: channel});
+                })
+                .catch((err) => {
+                  return next(err);
+                })
+            }).catch((err) => {
               return next(err);
             })
-        }).catch((err) => {
+        })
+        .catch((err) => {
           return next(err);
         })
     })
@@ -249,7 +264,7 @@ router.post('/channels.leave', (req, res, next) => {
   db.rethinkQuery(getChannelQ)
   .then((channel) => {
     if (channel === null) {
-      res.status(200).json({ok: false, err: 'channel_does_not_exist'});
+      return res.status(200).json({ok: false, err: 'channel_does_not_exist'});
     }
 
     let updateUserQ =
@@ -273,7 +288,7 @@ router.post('/channels.leave', (req, res, next) => {
 
         db.rethinkQuery(eventQ);
 
-        res.status(200).json({ok: true});
+        return res.status(200).json({ok: true});
       })
       .catch((err) => {
         return next(err);
