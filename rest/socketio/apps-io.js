@@ -25,6 +25,26 @@ let getAppFile = (appId, fileName) => {
   return file;
 }
 
+let scopeCheck = (userId, scope) => {
+  let scopeType;
+
+  if (scope.charAt(0) === 'A') {
+    scopeType = 'apps'
+  }
+
+  if (scope.charAt(0) === 'C') {
+    scopeType = 'channels'
+  }
+
+  let matchScopeQ =
+    r.table('users')
+    .get(userId)(scopeType)
+    .filter({id: scope})
+    .count();
+
+  return matchScopeQ;
+}
+
 let hook = (socket, userId) => {
   console.log('^..^');
   let listAppsQ =
@@ -41,7 +61,7 @@ let hook = (socket, userId) => {
 
         if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
           manifest.listenTo.forEach((item) => {
-            let tableName = util.appTable(app.id, item.table);
+            let tableName = util.appTable(app.manifest_id, item.table);
 
             item.table = tableName;
 
@@ -58,10 +78,18 @@ let hook = (socket, userId) => {
                     return;
                   }
 
-                  let type = tableName;
-                  let data = row.new_val;
+                  let scope = row.new_val.scope;
+                  let scopeCheckQ = scopeCheck(userId, scope);
 
-                  socket.emit('message', {type: type, data: data});
+                  db.rethinkQuery(scopeCheckQ)
+                    .then((count) => {
+                      if (count > 0) {
+                        let type = tableName;
+                        let data = row.new_val;
+
+                        socket.emit('message', {type: type, data: data});
+                      }
+                    })
                 })
               })
           })
