@@ -25,7 +25,7 @@ $(function(){
 	
 	function render(){
 		$(".app-list").html("");
-		$(".app-list.active").append("<h5>enable</h5>");
+		$(".app-list.active").append("<h5>enabled</h5>");
 		$(".app-list.deactive").append("<h5>disabled</h5>");
 		for(var i = 0 ; i < _apps.length ; i++){
 			var app = _apps[i];
