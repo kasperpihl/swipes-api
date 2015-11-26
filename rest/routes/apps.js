@@ -446,7 +446,7 @@ router.get('/apps.load', (req, res, next) => {
 router.post('/apps.method', (req, res, next) => {
   let method = req.body.method;
   let data = req.body.data;
-  
+  let methodTimeout = 15000;
   if(!data){
     data = {};
   }
@@ -477,7 +477,11 @@ router.post('/apps.method', (req, res, next) => {
         return res.status(200).json({ok: false, err: 'method_not_found'});
       }
 
+      var didReturn = false;
+      var timer = setTimeout(() => { didReturn = true; res.status(200).json({ok: false, err: 'method_error'}); }, methodTimeout);
       background.methods[method](data, (result, error) => {
+        clearTimeout(timer);
+        if(didReturn) return;
         if(error){
           return res.status(200).json({ok: false, err: 'method_error'});
         }
@@ -538,8 +542,9 @@ router.post('/apps.saveData', (req, res, next) => {
         if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
           // A beforeHandler should call its callback with the data
           var didReturn = false;
-          setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
+          var timer = setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
           background.beforeHandlers[queryObject.table](data, (newData, error) => {
+            clearTimeout(timer);
             if(!didReturn) callback(newData, error);
           })
         }
@@ -596,8 +601,9 @@ router.post('/apps.saveData', (req, res, next) => {
         return new Promise((resolve, reject) => {
           if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
             var didReturn = false;
-            setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
+            var timer = setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
             background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
+              clearTimeout(timer);
               if(!didReturn) resolve();
             })
           }
