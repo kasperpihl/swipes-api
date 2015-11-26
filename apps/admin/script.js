@@ -1,3 +1,12 @@
+$(document).ready(function() {
+	var adminTabsWidth = $('.nav').width();
+	var translatePercentage = (100 / 3) / 3;
+	var translatePixels = adminTabsWidth * translatePercentage / 100;
+	$('.selected-line').css('transform', 'translate3d(' + translatePixels + 'px, 0px, 0px)');
+
+})
+
+
 $(function(){
 	// Holder for the apps objects
 	window._apps = [];
@@ -98,7 +107,7 @@ $(function(){
 			}
 		});
 	}
-
+	
 	$(window).resize(function() {
 		var adminTabs = $('.nav');
 		var selectedLine = $('.selected-line');
