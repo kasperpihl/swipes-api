@@ -11,7 +11,6 @@ let common = require('./common-events-io.js');
 
 module.exports = (io) => {
   io.sockets.on('connection', (socket) => {
-    console.log('connected!');
     let userId = socket.request.userId;
 
     if (!userId) {

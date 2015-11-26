@@ -8,11 +8,13 @@ background.beforeHandlers = {
 			data.ts = ts;
 		}
 		callback(data);
+
+		
 	}
 };
 
 background.afterHandlers = {
-	messages: function(data, callback){
+	messages: function(data, old, callback){
 		console.log("after handler, do something after object is saved here");
 		callback();
 	}

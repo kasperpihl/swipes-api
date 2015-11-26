@@ -100,7 +100,7 @@ var SwipesAppSDK = (function() {
 					app_id: appId,
 					query: { data: saveData }
 				};
-				if(typeof saveData !== 'object' && typeof saveData !== 'array'){
+				if(typeof saveData !== 'object'){
 					throw new Error("SwipesAppSDK: save: data object is required");
 				}
 				if(typeof options === 'string')

@@ -49,7 +49,6 @@ let scopeCheck = (userId, scope) => {
 }
 
 let hook = (socket, userId) => {
-  console.log('^..^');
   let listAppsQ =
     r.table("users")
       .get(userId)("apps")

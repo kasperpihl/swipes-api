@@ -446,6 +446,7 @@ router.get('/apps.load', (req, res, next) => {
 router.post('/apps.method', (req, res, next) => {
   let method = req.body.method;
   let data = req.body.data;
+  
   if(!data){
     data = {};
   }
@@ -494,21 +495,23 @@ router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
   let getAppQ = r.table('apps').get(appId);
-
+  let app, tableWithoutPrefix, background;
+  let handlerTimeout = 3000;
   db.rethinkQuery(getAppQ)
-    .then((app) => {
-      
+    .then((localApp) => {
+      app = localApp;
+      // Run validations for request
       if (!app) {
         return res.status(200).json({ok: false, err: 'app_not_found'});
       }
       if (!queryObject.table) {
         return res.status(200).json({ok: false, err: 'table_required'});
       }
-
+      tableWithoutPrefix = queryObject.table;
       if (!queryObject.data) {
         return res.status(200).json({ok: false, err: 'data_required'});
       }
-      if( typeof queryObject.data !== 'object' && typeof queryObject.data !== 'array'){
+      if( typeof queryObject.data !== 'object'){
         return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
       }
 
@@ -518,7 +521,6 @@ router.post('/apps.saveData', (req, res, next) => {
       }
 
       // Check if app has background script setup
-      var background;
       if(manifest.background){
         background = require(appDir + manifest.identifier + "/" + manifest.background);
         if (!background) {
@@ -526,22 +528,27 @@ router.post('/apps.saveData', (req, res, next) => {
         }
       }
       
-      if(typeof queryObject.data === 'object')
+      // If data is not an array, create it as array, this is for our loops to work
+      if(!queryObject.data instanceof Array)
         queryObject.data = [queryObject.data];
 
 
+      // Define the beforeHandler function if any exist for current app
       let beforeHandler = (data, callback) => {
         if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
           // A beforeHandler should call its callback with the data
+          var didReturn = false;
+          setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
           background.beforeHandlers[queryObject.table](data, (newData, error) => {
-            callback(newData, error);
+            if(!didReturn) callback(newData, error);
           })
         }
         else{
           callback(data);
         }
-
       }
+
+      // Define validation function, this will call any beforeHandler, and then validate data from our side
       let validateFunction = (data) => {
         return new Promise((resolve, reject) => {
           beforeHandler(data, function(newData, error){
@@ -551,7 +558,6 @@ router.post('/apps.saveData', (req, res, next) => {
             if(!newData){
               return reject("before_handler_failed");
             }
-
             if(!newData.scope){
               return reject("scope_not_provided");
             }
@@ -564,36 +570,55 @@ router.post('/apps.saveData', (req, res, next) => {
         });
       }
 
+      // Create promises to validate for each objects to save
       var promises = [];
       for(var i = 0 ; i < queryObject.data.length ; i++){
-        var locDat = queryObject.data[i];
-        promises.push(validateFunction(locDat));
+        promises.push(validateFunction(queryObject.data[i]));
       }
-      Promise.all(promises).then( dataSet => {
-        console.log("got new validated dataset", dataSet);
-        let tableWithoutPrefix = queryObject.table;
-        let tableName = util.appTable(app.manifest_id, queryObject.table);
 
-        queryObject.table = tableName;
-        queryObject.data = dataSet;
-        console.log("queryObject before save", queryObject);
-        let rethinkQ = jsonToQuery(queryObject);
-        console.log("rethinkQ", rethinkQ);
-        return db.rethinkQuery(rethinkQ);
-        
-      }).then( result => {
-        // TODO: Add afterHandler with promises
-        res.status(200).json({ok: true});
-      }).catch((err) => {
-        if(typeof err === 'string')
-          return res.status(200).json({ok: false, err: err});
-        return next(err);
-      });
+      return Promise.all(promises);
+
+    }).then( dataSet => {
       
-    })
-    .catch((err) => {
+      let tableName = util.appTable(app.manifest_id, queryObject.table);
+
+      queryObject.table = tableName;
+      queryObject.data = dataSet;
+
+      let rethinkQ = jsonToQuery(queryObject, {returnChanges: true});
+
+      return db.rethinkQuery(rethinkQ);
+        
+    }).then( result => {
+      console.log("resulted from actual save", result);
+      
+      let afterHandler = (newData, oldData) => {
+        return new Promise((resolve, reject) => {
+          if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
+            var didReturn = false;
+            setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
+            background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
+              if(!didReturn) resolve();
+            })
+          }
+          else{
+            resolve();
+          }
+        });
+      };
+      var promises = []
+      for(var i = 0 ; i < result.changes.length ; i++){
+        promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
+      }
+
+      return Promise.all(promises);
+    }).then(() =>{
+      res.status(200).json({ok: true});
+    }).catch((err) => {
+      if(typeof err === 'string')
+        return res.status(200).json({ok: false, err: err});
       return next(err);
-    })
+    });
 })
 
 router.post('/apps.getData', (req, res, next) => {
