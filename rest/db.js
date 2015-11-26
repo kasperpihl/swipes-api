@@ -45,32 +45,32 @@ let rethinkdb = {
     options = options || {};
 
     return new Promise((resolve, reject) => {
-      r.connect(dbConfig)
-        .then((conn) => {
-          query.run(conn)
-            .then((results) => {
-              if (!options.feed) {
-                conn.close();
-              }
+      let conn;
+      r.connect(dbConfig).then((localConn) => {
+        conn = localConn;
+        return query.run(conn);
+      }).then((results) => {
+        
+        if (!options.feed) {
+          conn.close();
+        }
 
-              if (options.cursor || options.feed) {
-                return resolve(results);
-              } else {
-                handleCursors(results)
-                  .then((results) => {
-                    return resolve(results);
-                  }).error((err) => {
-                    return reject(err);
-                  });
-              }
-            }).error((err) => {
-              conn.close();
+        if (options.cursor || options.feed) {
+          return resolve(results);
+        } else {
+          return handleCursors(results);
+        }
 
-              return reject(err);
-            });
-        }).error((err) => {
-          return reject(err);
-        });
+      }).then((results) => {
+
+        return resolve(results);
+
+      }).error((err) => {
+
+        conn.close();
+        return reject(err);
+
+      });
     });
   }
 }

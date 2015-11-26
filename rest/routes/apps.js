@@ -233,84 +233,110 @@ router.post('/apps.install', (req, res, next) => {
     getAppQ = r.table('apps').get(appId);
   } else {
     // This should always return 0 or 1 result
-    getAppQ =
-      r.table('apps')
-        .filter((app) => {
-          return app('manifest_id').eq(manifestId)
+    getAppQ = r.table('apps').filter((app) => {
+      return app('manifest_id').eq(manifestId)
             .and(app.hasFields('deleted').not())
-        });
-  }
-
-  db.rethinkQuery(getAppQ)
-    .then((app) => {
-      if(!app) {
-        return res.status(200).json({ok: false, err: 'no_app_found'});
-      }
-
-      if (app.deleted === true) {
-        return res.status(200).json({ok: false, err: 'app_deleted'});
-      }
-
-      app = app.length > 0 ? app[0] : app;
-
-      if (app && app.is_installed) {
-        return res.status(200).json({ok: false, err: 'already_installed'});
-      } else if (app && app.is_installed === false && app.deleted !== true) {
-        if (!appId) {
-          return res.status(200).json({ok: false, err: 'app_id_required'});
-        }
-
-        let updateObj = {is_installed: true};
-
-        updateApp(appId, updateObj, res, next);
-      } else {
-        let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
-
-        if (!manifest) {
-          return res.status(200).json({ok: false, err: 'no_manifest_found'});
-        }
-
-        let tables = manifest.tables;
-        let appId = generateId('A');
-        let insertObj = {
-          id: appId,
-          manifest_id: manifestId,
-          name: manifest.title,
-          description: manifest.description,
-          version: manifest.version,
-          is_installed: true
-        };
-        if(manifest.main_app)
-          insertObj.has_main_app = true;
-        if(manifest.channel_view)
-          insertObj.has_channel_view = true;
-        if(manifest.background)
-          insertObj.has_background = true;
-        if(manifest.tables)
-          insertObj.tables = manifest.tables;
-
-        if (!tables || tables.length < 1) {
-          insertApp(insertObj, res, next);
-          return;
-        }
-
-        let prefixedTables = tables.map((item) => {
-          let name = manifestId + '_' + item.name;
-
-          item.name = name;
-          return item;
-        })
-
-        r.init(dbConfig, prefixedTables)
-          .then(() => {
-            insertApp(insertObj, res, next);
-          }).catch((err) => {
-            return next(err);
-          });
-      }
-    }).catch((err) => {
-      return next(err);
     });
+  }
+  
+  // Global variables for the manifest and the app
+  let app, manifest;
+
+  db.rethinkQuery(getAppQ).then((localApp) => {
+    /*
+      Validate that we have a manifest, and set proper loaded app if existing
+     */
+    
+
+    if(localApp instanceof Array){
+      if(localApp.length){
+        app = localApp[0];
+      }
+    }
+    else{
+      app = localApp;
+    }
+
+
+    if(!manifestId){
+      if(app && app.manifest_id)
+        manifestId = app.manifest_id;
+      else 
+        return res.status(200).json({ok: false, err: 'no_app_found'});
+    }
+
+    manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
+
+    if (!manifest) {
+      return res.status(200).json({ok: false, err: 'no_manifest_found'});
+    }
+    if(!app)
+      app = {};
+    // Just return a promise to jump to next
+
+    // Find out which tables to install
+    var tablesToInstall = [];
+    if(manifest.tables){
+      if(!app.tables)
+        app.tables = [];
+      for(var i = 0 ; i < manifest.tables.length ; i++ ){
+        var table = manifest.tables[i];
+        if(app.tables.indexOf(table.name) === -1){
+          table.name = manifestId + '_' + table.name;
+          tablesToInstall.push(table);
+          app.tables.push(table.name);
+        }
+      }
+    }
+
+    if(tablesToInstall.length){
+      console.log("installing tables", tablesToInstall);
+      return r.init(dbConfig, tablesToInstall);
+    }
+    else {
+      console.log("no tables to install");
+      return new Promise((resolve) =>{ resolve() });
+    }
+
+
+  }).then((result) => {
+    /*
+      Tables are now installed
+      Prepare apps object to be updated
+     */
+  
+    
+    let updateObj = { 
+      id: app.id,
+      name: manifest.title,
+      manifest_id: manifestId,
+      description: manifest.description,
+      version: manifest.version,
+      is_installed: true
+    };
+    if(app.tables && app.tables.length){
+      updateObj.tables = app.tables;
+    }
+
+    if(!updateObj.id)
+      updateObj.id = generateId('A');
+
+    if(manifest.main_app)
+      updateObj.has_main_app = true;
+    if(manifest.channel_view)
+      updateObj.has_channel_view = true;
+    if(manifest.background)
+      updateObj.has_background = true;
+    
+    console.log("updating app object")
+
+    return db.rethinkQuery(r.table('apps').insert(updateObj, {'conflict': 'update'}));
+
+  }).then((result) => {
+    res.status(200).json({ok: true});
+  }).catch((err) => {
+    return next(err);
+  });
 });
 
 router.post('/apps.uninstall', (req, res, next) => {
@@ -374,14 +400,10 @@ router.post('/apps.delete', (req, res, next) => {
         item.name = name;
         return item;
       })
-
-      dropTables(prefixedTables)
-        .then(() => {
-          //T_TODO delete the files too
-          deleteApp(appId, res, next);
-        }).catch((err) => {
-          return next(err);
-        });
+      return dropTables(prefixedTables);
+    }).then(() => {  
+      //T_TODO delete the files too
+      deleteApp(appId, res, next);
     })
     .catch((err) => {
       return next(err)
@@ -466,46 +488,45 @@ router.post('/apps.method', (req, res, next) => {
 
   let getAppQ = r.table('apps').filter({manifest_id: appId});
 
-  db.rethinkQuery(getAppQ)
-    .then((apps) => {
-      if (!apps.length) {
-        return res.status(200).json({ok: false, err: 'app_not_found'});
-      }
-      app = apps[0];
+  db.rethinkQuery(getAppQ).then((apps) => {
+    if (!apps.length) {
+      return res.status(200).json({ok: false, err: 'app_not_found'});
+    }
+    app = apps[0];
 
-      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
-      if (!manifest) {
-        return res.status(200).json({ok: false, err: 'no_manifest_found'});
-      }
+    let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+    if (!manifest) {
+      return res.status(200).json({ok: false, err: 'no_manifest_found'});
+    }
 
-      if(!manifest.background){
-        return res.status(200).json({ok: false, err: 'manifest_no_background_defined'});
-      }
-      // Check if app has background script setup
-      var background = require(appDir + manifest.identifier + "/" + manifest.background);
-      if (!background) {
-        return res.status(200).json({ok: false, err: 'background_script_not_found'});
-      }
+    if(!manifest.background){
+      return res.status(200).json({ok: false, err: 'manifest_no_background_defined'});
+    }
+    // Check if app has background script setup
+    var background = require(appDir + manifest.identifier + "/" + manifest.background);
+    if (!background) {
+      return res.status(200).json({ok: false, err: 'background_script_not_found'});
+    }
 
-      if(!background.methods || !background.methods[method] || typeof background.methods[method] !== 'function'){
-        return res.status(200).json({ok: false, err: 'method_not_found'});
+    if(!background.methods || !background.methods[method] || typeof background.methods[method] !== 'function'){
+      return res.status(200).json({ok: false, err: 'method_not_found'});
+    }
+
+    var didReturn = false;
+    var timer = setTimeout(() => { didReturn = true; res.status(200).json({ok: false, err: 'method_error'}); }, methodTimeout);
+    background.methods[method](data, (result, error) => {
+      clearTimeout(timer);
+      if(didReturn) return;
+      if(error){
+        return res.status(200).json({ok: false, err: 'method_error'});
       }
+      res.status(200).json({ok: true, res: result});
+    });
 
-      var didReturn = false;
-      var timer = setTimeout(() => { didReturn = true; res.status(200).json({ok: false, err: 'method_error'}); }, methodTimeout);
-      background.methods[method](data, (result, error) => {
-        clearTimeout(timer);
-        if(didReturn) return;
-        if(error){
-          return res.status(200).json({ok: false, err: 'method_error'});
-        }
-        res.status(200).json({ok: true, res: result});
-      });
-
-    })
-    .catch((err) => {
-      return next(err);
-    })
+  })
+  .catch((err) => {
+    return next(err);
+  })
 });
 
 
@@ -515,134 +536,133 @@ router.post('/apps.saveData', (req, res, next) => {
   let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
   let app, tableWithoutPrefix, background;
   let handlerTimeout = 3000;
-  db.rethinkQuery(getAppQ)
-    .then((apps) => {
-      // Run validations for request
-      if (!apps.length) {
-        return res.status(200).json({ok: false, err: 'app_not_found'});
-      }
-      app = apps[0];
+  db.rethinkQuery(getAppQ).then((apps) => {
+    // Run validations for request
+    if (!apps.length) {
+      return res.status(200).json({ok: false, err: 'app_not_found'});
+    }
+    app = apps[0];
 
-      if (!queryObject.table) {
-        return res.status(200).json({ok: false, err: 'table_required'});
-      }
-      tableWithoutPrefix = queryObject.table;
-      if (!queryObject.data) {
-        return res.status(200).json({ok: false, err: 'data_required'});
-      }
-      if( typeof queryObject.data !== 'object'){
-        return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
-      }
-      let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
-      if (!manifest) {
-        return res.status(200).json({ok: false, err: 'no_manifest_found'});
-      }
+    if (!queryObject.table) {
+      return res.status(200).json({ok: false, err: 'table_required'});
+    }
+    tableWithoutPrefix = queryObject.table;
+    if (!queryObject.data) {
+      return res.status(200).json({ok: false, err: 'data_required'});
+    }
+    if( typeof queryObject.data !== 'object'){
+      return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
+    }
+    let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+    if (!manifest) {
+      return res.status(200).json({ok: false, err: 'no_manifest_found'});
+    }
 
-      // Check if app has background script setup
-      if(manifest.background){
-        background = require(appDir + manifest.identifier + "/" + manifest.background);
-        if (!background) {
-          return res.status(200).json({ok: false, err: 'background_script_not_found'});
-        }
+    // Check if app has background script setup
+    if(manifest.background){
+      background = require(appDir + manifest.identifier + "/" + manifest.background);
+      if (!background) {
+        return res.status(200).json({ok: false, err: 'background_script_not_found'});
       }
+    }
+    
+    // If data is not an array, create it as array, this is for our loops to work
+    if(!queryObject.data instanceof Array)
+      queryObject.data = [queryObject.data];
+
+
+    // Define the beforeHandler function if any exist for current app
+    let beforeHandler = (data, callback) => {
+      if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
+        // A beforeHandler should call its callback with the data
+        var didReturn = false;
+        var timer = setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
+        background.beforeHandlers[queryObject.table](data, (newData, error) => {
+          clearTimeout(timer);
+          if(!didReturn) callback(newData, error);
+        })
+      }
+      else{
+        callback(data);
+      }
+    }
+
+    // Define validation function, this will call any beforeHandler, and then validate data from our side
+    let validateFunction = (data) => {
+      return new Promise((resolve, reject) => {
+        beforeHandler(data, function(newData, error){
+          if(error){
+            return reject(error);
+          }
+          if(!newData){
+            return reject("before_handler_failed");
+          }
+          if(!newData.scope){
+            if(queryObject.scope){
+              newData.scope = queryObject.scope;
+            }
+            else{
+              return reject("scope_not_provided");
+            }
+          }
+          if(req.scopes.indexOf(newData.scope) == -1){
+            return reject("scope_not_allowed");
+          }
+          return resolve(newData);
+        });
+        
+      });
+    }
+
+    // Create promises to validate for each objects to save
+    var promises = [];
+    for(var i = 0 ; i < queryObject.data.length ; i++){
+      promises.push(validateFunction(queryObject.data[i]));
+    }
+
+    return Promise.all(promises);
+
+  }).then( dataSet => {
+    
+    let tableName = util.appTable(appId, queryObject.table);
+
+    queryObject.table = tableName;
+    queryObject.data = dataSet;
+
+    let rethinkQ = jsonToQuery(queryObject, {returnChanges: true});
+
+    return db.rethinkQuery(rethinkQ);
       
-      // If data is not an array, create it as array, this is for our loops to work
-      if(!queryObject.data instanceof Array)
-        queryObject.data = [queryObject.data];
-
-
-      // Define the beforeHandler function if any exist for current app
-      let beforeHandler = (data, callback) => {
-        if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
-          // A beforeHandler should call its callback with the data
+  }).then( result => {
+    
+    let afterHandler = (newData, oldData) => {
+      return new Promise((resolve, reject) => {
+        if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
           var didReturn = false;
-          var timer = setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
-          background.beforeHandlers[queryObject.table](data, (newData, error) => {
+          var timer = setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
+          background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
             clearTimeout(timer);
-            if(!didReturn) callback(newData, error);
+            if(!didReturn) resolve();
           })
         }
         else{
-          callback(data);
+          resolve();
         }
-      }
+      });
+    };
+    var promises = []
+    for(var i = 0 ; i < result.changes.length ; i++){
+      promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
+    }
 
-      // Define validation function, this will call any beforeHandler, and then validate data from our side
-      let validateFunction = (data) => {
-        return new Promise((resolve, reject) => {
-          beforeHandler(data, function(newData, error){
-            if(error){
-              return reject(error);
-            }
-            if(!newData){
-              return reject("before_handler_failed");
-            }
-            if(!newData.scope){
-              if(queryObject.scope){
-                newData.scope = queryObject.scope;
-              }
-              else{
-                return reject("scope_not_provided");
-              }
-            }
-            if(req.scopes.indexOf(newData.scope) == -1){
-              return reject("scope_not_allowed");
-            }
-            return resolve(newData);
-          });
-          
-        });
-      }
-
-      // Create promises to validate for each objects to save
-      var promises = [];
-      for(var i = 0 ; i < queryObject.data.length ; i++){
-        promises.push(validateFunction(queryObject.data[i]));
-      }
-
-      return Promise.all(promises);
-
-    }).then( dataSet => {
-      
-      let tableName = util.appTable(appId, queryObject.table);
-
-      queryObject.table = tableName;
-      queryObject.data = dataSet;
-
-      let rethinkQ = jsonToQuery(queryObject, {returnChanges: true});
-
-      return db.rethinkQuery(rethinkQ);
-        
-    }).then( result => {
-      
-      let afterHandler = (newData, oldData) => {
-        return new Promise((resolve, reject) => {
-          if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
-            var didReturn = false;
-            var timer = setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
-            background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
-              clearTimeout(timer);
-              if(!didReturn) resolve();
-            })
-          }
-          else{
-            resolve();
-          }
-        });
-      };
-      var promises = []
-      for(var i = 0 ; i < result.changes.length ; i++){
-        promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
-      }
-
-      return Promise.all(promises);
-    }).then(() =>{
-      res.status(200).json({ok: true});
-    }).catch((err) => {
-      if(typeof err === 'string')
-        return res.status(200).json({ok: false, err: err});
-      return next(err);
-    });
+    return Promise.all(promises);
+  }).then(() =>{
+    res.status(200).json({ok: true});
+  }).catch((err) => {
+    if(typeof err === 'string')
+      return res.status(200).json({ok: false, err: err});
+    return next(err);
+  });
 })
 
 router.post('/apps.getData', (req, res, next) => {
@@ -650,34 +670,31 @@ router.post('/apps.getData', (req, res, next) => {
   let queryObject = req.body.query;
   let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
   let app;
-  db.rethinkQuery(getAppQ)
-    .then((apps) => {
-      if (!apps.length) {
-        return res.status(200).json({ok: false, err: 'app_not_found'});
-      }
-      app = apps[0];
+  db.rethinkQuery(getAppQ).then((apps) => {
+    if (!apps.length) {
+      return res.status(200).json({ok: false, err: 'app_not_found'});
+    }
+    app = apps[0];
 
-      if (!queryObject.table) {
-        return res.status(200).json({ok: false, err: 'table_required'});
-      }
+    if (!queryObject.table) {
+      return res.status(200).json({ok: false, err: 'table_required'});
+    }
 
 
-      let tableName = util.appTable(appId, queryObject.table);
+    let tableName = util.appTable(appId, queryObject.table);
 
-      queryObject.table = tableName;
+    queryObject.table = tableName;
 
-      let rethinkQ = jsonToQuery(queryObject);
-
-      db.rethinkQuery(rethinkQ)
-        .then((results) => {
-          res.status(200).json({ok: true, results: results});
-        }).catch((err) => {
-          return next(err);
-        });
-    })
-    .catch((err) => {
-      return next(err);
-    })
+    let rethinkQ = jsonToQuery(queryObject);
+    
+    return db.rethinkQuery(rethinkQ);
+  
+  }).then((results) => {
+    res.status(200).json({ok: true, results: results});
+  })
+  .catch((err) => {
+    return next(err);
+  })
 });
 
 module.exports = router;
