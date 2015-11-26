@@ -50,17 +50,27 @@ let rethinkdb = {
         conn = localConn;
         return query.run(conn);
       }).then((results) => {
-        
+
         if (!options.feed) {
           conn.close();
         }
 
         if (options.cursor || options.feed) {
-          return resolve(results);
+          if (options.returnConnection) {
+            return resolve([results, conn]);
+          } else {
+            return resolve(results);
+          }
         } else {
-          return handleCursors(results);
+          handleCursors(results)
+            .then((results) => {
+              return resolve(results);
+            }).error((err) => {
+              return reject(err);
+            });
         }
-
+      }).error((err) => {
+        conn.close();
       }).then((results) => {
 
         return resolve(results);
