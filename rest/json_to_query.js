@@ -25,7 +25,7 @@ let jsonToQuery = (json, options) => {
   let data = json.data;
 
   if (data) {
-    console.log("queries", data);
+    
     var queryOptions= {conflict: "update"};
     if(options.returnChanges)
       queryOptions.returnChanges = true;

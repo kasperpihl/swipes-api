@@ -50,9 +50,10 @@ var SwipesAppSDK = (function() {
 		return self.app();
 	};
 	SwipesAppSDK.prototype.currentApp = function(){
-		var appId = self._client._appId;
-
-		return self.app(appId);
+		return self.app(self.info.manifest.identifier);
+	};
+	SwipesAppSDK.prototype.setDefaultScope = function(scope){
+		self._defaultScope = scope;
 	};
 
 	// API for handling data from apps
@@ -60,7 +61,6 @@ var SwipesAppSDK = (function() {
 		if(!appId)
 			appId = "core";
 		return {
-
 			get:function(options, id, callback){
 				var deferred = Q.defer();
 				var data = {
@@ -100,16 +100,29 @@ var SwipesAppSDK = (function() {
 					app_id: appId,
 					query: { data: saveData }
 				};
+
+				if(typeof options === 'string'){
+					options = {table: options};
+				}
+				
+				if(typeof options !== 'object'){
+					throw new Error("SwipesAppSDK: save: options must be included");
+				}
 				if(typeof saveData !== 'object'){
 					throw new Error("SwipesAppSDK: save: data object is required");
 				}
-				if(typeof options === 'string')
-					data.query.table = options;
-				else if(typeof options === 'object' && typeof options.table === 'string'){
-					data.query.table = options.table;
+
+				if(typeof options.table !== 'string'){
+					throw new Error("SwipesAppSDK: save: request must have table");
 				}
-				else{
-					throw new Error("SwipesAppSDK: save: request must have table")
+				data.query.table = options.table;
+
+				// If defaultscope is set
+				if(self._defaultScope){
+					data.query.scope = self._defaultScope;
+				}
+				if(typeof options.scope === 'string'){
+					data.query.scope = options.scope;
 				}
 
 				var intCallback = function(res, error){

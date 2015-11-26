@@ -280,6 +280,14 @@ router.post('/apps.install', (req, res, next) => {
           version: manifest.version,
           is_installed: true
         };
+        if(manifest.main_app)
+          insertObj.has_main_app = true;
+        if(manifest.channel_view)
+          insertObj.has_channel_view = true;
+        if(manifest.background)
+          insertObj.has_background = true;
+        if(manifest.tables)
+          insertObj.tables = manifest.tables;
 
         if (!tables || tables.length < 1) {
           insertApp(insertObj, res, next);
@@ -424,8 +432,12 @@ router.get('/apps.load', (req, res, next) => {
   insertString += 'swipes.navigation.setTitle("' + manifest.title + '");'
   insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
   insertString += 'swipes.info.userId = "' + req.userId + '";';
-  if(channelId)
-    insertString += 'swipes.info.channelId = "' + channelId + '";';
+  if(channelId){
+    insertString += 'swipes.info.channelId = "' + channelId + '";\r\n';
+    insertString += 'swipes.setDefaultScope("' + channelId + '");\r\n';
+  }else{
+    insertString += 'swipes.setDefaultScope("' + appId + '");\r\n';
+  }
   insertString += '</script>\r\n';
 
   // Locate <head> and insert our code as the very first
@@ -450,14 +462,16 @@ router.post('/apps.method', (req, res, next) => {
   if(!data){
     data = {};
   }
-  let appId = req.body.app_id;
-  let getAppQ = r.table('apps').get(appId);
+  let app, appId = req.body.app_id;
+
+  let getAppQ = r.table('apps').filter({manifest_id: appId});
 
   db.rethinkQuery(getAppQ)
-    .then((app) => {
-      if (!app) {
+    .then((apps) => {
+      if (!apps.length) {
         return res.status(200).json({ok: false, err: 'app_not_found'});
       }
+      app = apps[0];
 
       let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
       if (!manifest) {
@@ -498,16 +512,17 @@ router.post('/apps.method', (req, res, next) => {
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
-  let getAppQ = r.table('apps').get(appId);
+  let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
   let app, tableWithoutPrefix, background;
   let handlerTimeout = 3000;
   db.rethinkQuery(getAppQ)
-    .then((localApp) => {
-      app = localApp;
+    .then((apps) => {
       // Run validations for request
-      if (!app) {
+      if (!apps.length) {
         return res.status(200).json({ok: false, err: 'app_not_found'});
       }
+      app = apps[0];
+
       if (!queryObject.table) {
         return res.status(200).json({ok: false, err: 'table_required'});
       }
@@ -518,8 +533,7 @@ router.post('/apps.saveData', (req, res, next) => {
       if( typeof queryObject.data !== 'object'){
         return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
       }
-
-      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+      let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
       if (!manifest) {
         return res.status(200).json({ok: false, err: 'no_manifest_found'});
       }
@@ -564,7 +578,12 @@ router.post('/apps.saveData', (req, res, next) => {
               return reject("before_handler_failed");
             }
             if(!newData.scope){
-              return reject("scope_not_provided");
+              if(queryObject.scope){
+                newData.scope = queryObject.scope;
+              }
+              else{
+                return reject("scope_not_provided");
+              }
             }
             if(req.scopes.indexOf(newData.scope) == -1){
               return reject("scope_not_allowed");
@@ -585,7 +604,7 @@ router.post('/apps.saveData', (req, res, next) => {
 
     }).then( dataSet => {
       
-      let tableName = util.appTable(app.manifest_id, queryObject.table);
+      let tableName = util.appTable(appId, queryObject.table);
 
       queryObject.table = tableName;
       queryObject.data = dataSet;
@@ -595,7 +614,6 @@ router.post('/apps.saveData', (req, res, next) => {
       return db.rethinkQuery(rethinkQ);
         
     }).then( result => {
-      console.log("resulted from actual save", result);
       
       let afterHandler = (newData, oldData) => {
         return new Promise((resolve, reject) => {
@@ -630,20 +648,21 @@ router.post('/apps.saveData', (req, res, next) => {
 router.post('/apps.getData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
-  let getAppQ = r.table('apps').get(appId);
-
+  let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
+  let app;
   db.rethinkQuery(getAppQ)
-    .then((app) => {
-      if (!app) {
+    .then((apps) => {
+      if (!apps.length) {
         return res.status(200).json({ok: false, err: 'app_not_found'});
       }
+      app = apps[0];
 
       if (!queryObject.table) {
         return res.status(200).json({ok: false, err: 'table_required'});
       }
 
 
-      let tableName = util.appTable(app.manifest_id, queryObject.table);
+      let tableName = util.appTable(appId, queryObject.table);
 
       queryObject.table = tableName;
 
