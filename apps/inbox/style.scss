@@ -11,6 +11,7 @@ $mat-sha-three: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 $mat-sha-four: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 $mat-sha-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 
+$break-mid: 850px;
 
 @mixin transition-delay($time) {
 	transition-delay: $time;
@@ -83,6 +84,16 @@ html, body {
 	background-color: $bg;
 	box-shadow: $mat-sha-four;
 	z-index: 99;
+	
+	@media screen and (max-width: $break-mid) {
+		width: 100%;
+		transition: .4s ease-in-out;
+			
+		&.move-aside-mob {
+			transform: translateX(-100%);
+			transition: .4s ease-in-out;
+		}
+	}
 }
 
 .new-email-fab {
@@ -122,6 +133,10 @@ html, body {
 		box-shadow: $mat-sha-one;
 		display: flex;
 		align-items: center;
+		
+		@media screen and (max-width: $break-mid) {
+			width: 100%;
+		}
 		
 		i {
 			color: $lightGray;
@@ -267,6 +282,11 @@ html, body {
 	left: 40%;
 	background-color: $bg;
 	z-index: 1;
+	
+	@media screen and (max-width: $break-mid) {
+		width: 100%;
+		left: 0;
+	}
 	
 	.wrap {
 		

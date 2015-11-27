@@ -61,6 +61,21 @@ html, body {
   z-index: 99;
 }
 
+@media screen and (max-width: 850px) {
+  .email-list {
+    width: 100%;
+    -webkit-transition: .4s ease-in-out;
+            transition: .4s ease-in-out;
+  }
+  .email-list.move-aside-mob {
+    -webkit-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+            transform: translateX(-100%);
+    -webkit-transition: .4s ease-in-out;
+            transition: .4s ease-in-out;
+  }
+}
+
 .new-email-fab {
   width: 50px;
   height: 50px;
@@ -111,6 +126,12 @@ html, body {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+@media screen and (max-width: 850px) {
+  .emails-wrap nav {
+    width: 100%;
+  }
 }
 
 .emails-wrap nav i {
@@ -279,6 +300,13 @@ html, body {
   left: 40%;
   background-color: #F9F9F9;
   z-index: 1;
+}
+
+@media screen and (max-width: 850px) {
+  .email-view {
+    width: 100%;
+    left: 0;
+  }
 }
 
 .email-view .wrap .action-icons {

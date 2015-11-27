@@ -41,26 +41,37 @@ let rethinkdb = {
   // options:
   //      cursor: true/false(default) Most of the time we will need just the results as array from the cursor
   //      feed: true/false (to handle change feeds - don't close the connection)
+  //      returnConnection: return the cursor and the connection in an array
   rethinkQuery: (query, options) => {
     options = options || {};
 
     return new Promise((resolve, reject) => {
       let conn;
+
       r.connect(dbConfig).then((localConn) => {
         conn = localConn;
+
         return query.run(conn);
       }).then((results) => {
-        
+
         if (!options.feed) {
           conn.close();
         }
 
         if (options.cursor || options.feed) {
-          return resolve(results);
+          if (options.returnConnection) {
+            return resolve([results, conn]);
+          } else {
+            return resolve(results);
+          }
         } else {
-          return handleCursors(results);
+          handleCursors(results)
+            .then((results) => {
+              return resolve(results);
+            }).error((err) => {
+              return reject(err);
+            });
         }
-
       }).then((results) => {
 
         return resolve(results);
