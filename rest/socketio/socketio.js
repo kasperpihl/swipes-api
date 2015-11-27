@@ -11,15 +11,24 @@ let apps = require('./apps-io.js');
 let common = require('./common-events-io.js');
 let db = require('../db.js');
 let scopes = [];
+let userScope = [];
 
-let restartFeeds = () => {
+let controlFeeds = (command, userScope) => {
   scopes.forEach((scope) => {
-    scope.restart();
+    scope[command](userScope);
   })
 }
 
 let handleScopeChange = (userId) => {
-  let scopeCheckQ = r.table('users').get(userId).changes();
+  let scopeCheckQ = r.table("users")
+    .filter({id: userId})
+    .map((user) => {
+      return r.union(
+        r.expr([user('id')]),
+        user('channels').map((ch) => {return ch('id')}),
+        user('apps').map((app) => {return app('id')})
+      )
+  }).changes({includeInitial: true})
 
   db.rethinkQuery(scopeCheckQ, {feed: true})
     .then((cursor) => {
@@ -33,8 +42,10 @@ let handleScopeChange = (userId) => {
         let o = row.old_val;
         let n = row.new_val;
 
-        if (o.apps.length !== n.apps.length || o.channels.length !== n.channels.length) {
-          restartFeeds();
+        if (!o) {
+          controlFeeds('start', n);
+        } else {
+          controlFeeds('restart', n);
         }
       })
     })
@@ -53,15 +64,13 @@ module.exports = (io) => {
 
     socket.emit('message', {type: 'hello'});
 
-    handleScopeChange(userId);
-
     scopes = [
       apps.hook(socket, userId)
     ];
 
-    scopes.forEach((scope) => {
-      scope.start();
-    })
+    //console.log(arguments);
+
+    handleScopeChange(userId);
 
     channels(socket, userId);
     messages(socket, userId);

@@ -160,7 +160,6 @@ router.post('/apps.list', (req, res, next) => {
 
       db.rethinkQuery(listQ)
         .then((apps) => {
-
           let whitelist = [
             'id',
             'manifest_id',
@@ -239,7 +238,7 @@ router.post('/apps.install', (req, res, next) => {
             .and(app.hasFields('deleted').not())
     });
   }
-  
+
   // Global variables for the manifest and the app
   let app, manifest;
 
@@ -247,7 +246,7 @@ router.post('/apps.install', (req, res, next) => {
     /*
       Validate that we have a manifest, and set proper loaded app if existing
      */
-    
+
 
     if(localApp instanceof Array){
       if(localApp.length){
@@ -262,7 +261,7 @@ router.post('/apps.install', (req, res, next) => {
     if(!manifestId){
       if(app && app.manifest_id)
         manifestId = app.manifest_id;
-      else 
+      else
         return res.status(200).json({ok: false, err: 'no_app_found'});
     }
 
@@ -283,10 +282,9 @@ router.post('/apps.install', (req, res, next) => {
       for(var i = 0 ; i < manifest.tables.length ; i++ ){
         var table = manifest.tables[i];
         if(app.tables.indexOf(table.name) === -1){
-          app.tables.push(table.name);
           table.name = manifestId + '_' + table.name;
           tablesToInstall.push(table);
-          
+          app.tables.push(table.name);
         }
       }
     }
@@ -306,9 +304,9 @@ router.post('/apps.install', (req, res, next) => {
       Tables are now installed
       Prepare apps object to be updated
      */
-  
-    
-    let updateObj = { 
+
+
+    let updateObj = {
       id: app.id,
       name: manifest.title,
       manifest_id: manifestId,
@@ -322,10 +320,14 @@ router.post('/apps.install', (req, res, next) => {
 
     if(!updateObj.id)
       updateObj.id = generateId('A');
-    updateObj.has_main_app = (manifest.main_app) ? true : false;
-    updateObj.has_channel_view = (manifest.channel_view) ? true : false;
-    updateObj.has_background = (manifest.background) ? true : false;
-    
+
+    if(manifest.main_app)
+      updateObj.has_main_app = true;
+    if(manifest.channel_view)
+      updateObj.has_channel_view = true;
+    if(manifest.background)
+      updateObj.has_background = true;
+
     console.log("updating app object")
 
     return db.rethinkQuery(r.table('apps').insert(updateObj, {'conflict': 'update'}));
@@ -399,7 +401,7 @@ router.post('/apps.delete', (req, res, next) => {
         return item;
       })
       return dropTables(prefixedTables);
-    }).then(() => {  
+    }).then(() => {
       //T_TODO delete the files too
       deleteApp(appId, res, next);
     })
@@ -417,12 +419,6 @@ router.get('/apps.load', (req, res, next) => {
   // TODO: Do validations and stuff
   if (!manifest) {
     return res.status(200).json({ok: false, err: 'no_manifest_found'});
-  }
-  if(!channelId && !manifest.main_app){
-    return res.status(200).json({ok: false, err: 'no_main_app_found'});
-  }
-  if(channelId && !manifest.channel_view){
-    return res.status(200).json({ok: false, err: 'no_channel_view_found'});
   }
 
   let indexFile = getAppFile(manifestId, manifest.main_app.index);
@@ -569,7 +565,7 @@ router.post('/apps.saveData', (req, res, next) => {
         return res.status(200).json({ok: false, err: 'background_script_not_found'});
       }
     }
-    
+
     // If data is not an array, create it as array, this is for our loops to work
     if(!queryObject.data instanceof Array)
       queryObject.data = [queryObject.data];
@@ -580,7 +576,7 @@ router.post('/apps.saveData', (req, res, next) => {
       if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
         // A beforeHandler should call its callback with the data
         var didReturn = false;
-        var timer = setTimeout(() =>{ didReturn = true; callback(false, 'before_handler_timeout') }, handlerTimeout)
+        var timer = setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
         background.beforeHandlers[queryObject.table](data, (newData, error) => {
           clearTimeout(timer);
           if(!didReturn) callback(newData, error);
@@ -599,22 +595,22 @@ router.post('/apps.saveData', (req, res, next) => {
             return reject(error);
           }
           if(!newData){
-            return reject('before_handler_failed');
+            return reject("before_handler_failed");
           }
           if(!newData.scope){
             if(queryObject.scope){
               newData.scope = queryObject.scope;
             }
             else{
-              return reject('scope_not_provided');
+              return reject("scope_not_provided");
             }
           }
           if(req.scopes.indexOf(newData.scope) == -1){
-            return reject('scope_not_allowed');
+            return reject("scope_not_allowed");
           }
           return resolve(newData);
         });
-        
+
       });
     }
 
@@ -627,7 +623,7 @@ router.post('/apps.saveData', (req, res, next) => {
     return Promise.all(promises);
 
   }).then( dataSet => {
-    
+
     let tableName = util.appTable(appId, queryObject.table);
 
     queryObject.table = tableName;
@@ -636,14 +632,14 @@ router.post('/apps.saveData', (req, res, next) => {
     let rethinkQ = jsonToQuery(queryObject, {returnChanges: true});
 
     return db.rethinkQuery(rethinkQ);
-      
+
   }).then( result => {
-    
+
     let afterHandler = (newData, oldData) => {
       return new Promise((resolve, reject) => {
         if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
           var didReturn = false;
-          var timer = setTimeout(() =>{ didReturn = true; reject('after_handler_timeout') }, handlerTimeout)
+          var timer = setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
           background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
             clearTimeout(timer);
             if(!didReturn) resolve();
@@ -655,9 +651,6 @@ router.post('/apps.saveData', (req, res, next) => {
       });
     };
     var promises = []
-    if(!result.changes || !result.changes.length){
-      return new Promise((resolve) => { resolve(); });
-    }
     for(var i = 0 ; i < result.changes.length ; i++){
       promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
     }
@@ -693,9 +686,9 @@ router.post('/apps.getData', (req, res, next) => {
     queryObject.table = tableName;
 
     let rethinkQ = jsonToQuery(queryObject);
-    
+
     return db.rethinkQuery(rethinkQ);
-  
+
   }).then((results) => {
     res.status(200).json({ok: true, results: results});
   })

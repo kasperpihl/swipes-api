@@ -65,7 +65,7 @@ let emitEvents = (cursor, socket, eventType) => {
 }
 
 let hook = (socket, userId) => {
-  let start = () => {
+  let start = (userScope) => {
     return new Promise((resolve, reject) => {
       let listAppsQ =
         r.table("users")
@@ -90,7 +90,10 @@ let hook = (socket, userId) => {
 
                 let changesQ = jsonToQuery(item, {feed: true});
 
-                changesQ = changesQ.changes();
+                changesQ = changesQ.filter((doc) => {
+                  return r.expr(userScope).contains(doc('scope'));
+                }).changes();
+
                 changesPromises.push(db.rethinkQuery(changesQ, {feed: true, returnConnection: true}));
               })
             }
