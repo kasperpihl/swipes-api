@@ -44,9 +44,18 @@ $(document).ready(function(){
 				multiSelect.removeClass('open');
 				$('.items-selected').html('')
 				$('.action-icons').addClass('open');
+				$('.email-list').addClass('move-aside-mob');
 			}
 		}
 	})
+	
+	swipes.navigation.onPop(function(){
+        email.removeClass('selected');
+		archiveEmail.add(deleteEmail).add(createTask).hide();
+		emailCard.removeClass('open');
+		$('.action-icons').removeClass('open');
+		$('.email-list').removeClass('move-aside-mob');
+    })
 	
 	archiveEmail.on('click', function() {
 		var numSelectedEmails = $('.selected').length;
