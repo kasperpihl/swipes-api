@@ -72,10 +72,6 @@ let rethinkdb = {
               return reject(err);
             });
         }
-      }).then((results) => {
-
-        return resolve(results);
-
       }).error((err) => {
 
         conn.close();
