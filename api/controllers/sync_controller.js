@@ -73,13 +73,16 @@ SyncController.prototype.sync = function ( req, callback ){
 
 SyncController.prototype.loadCollectionsWithObjects = function(collections){
 	var deferred = Q.defer();
+
 	this.logger.time("loadCollections");
 	
 	if( collections && collections["Tag"])
 		this.tagCollection.loadJSONObjects( collections["Tag"], this.organisationId );
 	if( collections && collections["ToDo"])
 		this.todoCollection.loadJSONObjects( collections["ToDo"], this.organisationId );
+	
 	deferred.resolve();
+
 	return deferred.promise;
 }
 

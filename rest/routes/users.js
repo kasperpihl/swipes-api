@@ -70,7 +70,7 @@ router.post('/users.activateApp', (req, res, next) => {
 
       let eventQ = r.table('events').insert({
         app_id: appId,
-        type: 'app.activated',
+        type: 'app_activated',
         user_id: userId
       })
 
@@ -99,7 +99,7 @@ router.post('/users.deactivateApp', (req, res, next) => {
 
   let eventQ = r.table('events').insert({
     app_id: appId,
-    type: 'app.deactivated',
+    type: 'app_deactivated',
     user_id: userId
   })
 

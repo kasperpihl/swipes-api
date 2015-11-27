@@ -4,7 +4,7 @@
 	"identifier": "chat",
 	"version": "0.1",
 	"description": "The Chat App For Swipes",
-	"main_app": {
+	"channel_view": {
 		"index": "chat.html"
 	},
 	"tables":[
@@ -16,6 +16,7 @@
 	"background": "background.js",
 	"listenTo": [
 		{
+			"name": "newMessages",
 			"table": "messages"
 		}
 	]

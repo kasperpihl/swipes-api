@@ -11,6 +11,11 @@ background.beforeHandlers = {
 		
 	}
 };
+background.eventHandlers = {
+	newMessages: function(data){
+		swipes.currentApp().up
+	}
+};
 
 background.afterHandlers = {
 	messages: function(data, old, callback){

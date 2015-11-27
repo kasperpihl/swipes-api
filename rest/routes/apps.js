@@ -282,9 +282,10 @@ router.post('/apps.install', (req, res, next) => {
       for(var i = 0 ; i < manifest.tables.length ; i++ ){
         var table = manifest.tables[i];
         if(app.tables.indexOf(table.name) === -1){
+          app.tables.push(table.name);
           table.name = manifestId + '_' + table.name;
           tablesToInstall.push(table);
-          app.tables.push(table.name);
+          
         }
       }
     }
@@ -320,13 +321,9 @@ router.post('/apps.install', (req, res, next) => {
 
     if(!updateObj.id)
       updateObj.id = generateId('A');
-
-    if(manifest.main_app)
-      updateObj.has_main_app = true;
-    if(manifest.channel_view)
-      updateObj.has_channel_view = true;
-    if(manifest.background)
-      updateObj.has_background = true;
+    updateObj.has_main_app = (manifest.main_app) ? true : false;
+    updateObj.has_channel_view = (manifest.channel_view) ? true : false;
+    updateObj.has_background = (manifest.background) ? true : false;
     
     console.log("updating app object")
 
@@ -419,6 +416,12 @@ router.get('/apps.load', (req, res, next) => {
   // TODO: Do validations and stuff
   if (!manifest) {
     return res.status(200).json({ok: false, err: 'no_manifest_found'});
+  }
+  if(!channelId && !manifest.main_app){
+    return res.status(200).json({ok: false, err: 'no_main_app_found'});
+  }
+  if(channelId && !manifest.channel_view){
+    return res.status(200).json({ok: false, err: 'no_channel_view_found'});
   }
 
   let indexFile = getAppFile(manifestId, manifest.main_app.index);
@@ -576,7 +579,7 @@ router.post('/apps.saveData', (req, res, next) => {
       if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
         // A beforeHandler should call its callback with the data
         var didReturn = false;
-        var timer = setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
+        var timer = setTimeout(() =>{ didReturn = true; callback(false, 'before_handler_timeout') }, handlerTimeout)
         background.beforeHandlers[queryObject.table](data, (newData, error) => {
           clearTimeout(timer);
           if(!didReturn) callback(newData, error);
@@ -595,18 +598,18 @@ router.post('/apps.saveData', (req, res, next) => {
             return reject(error);
           }
           if(!newData){
-            return reject("before_handler_failed");
+            return reject('before_handler_failed');
           }
           if(!newData.scope){
             if(queryObject.scope){
               newData.scope = queryObject.scope;
             }
             else{
-              return reject("scope_not_provided");
+              return reject('scope_not_provided');
             }
           }
           if(req.scopes.indexOf(newData.scope) == -1){
-            return reject("scope_not_allowed");
+            return reject('scope_not_allowed');
           }
           return resolve(newData);
         });
@@ -639,7 +642,7 @@ router.post('/apps.saveData', (req, res, next) => {
       return new Promise((resolve, reject) => {
         if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
           var didReturn = false;
-          var timer = setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
+          var timer = setTimeout(() =>{ didReturn = true; reject('after_handler_timeout') }, handlerTimeout)
           background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
             clearTimeout(timer);
             if(!didReturn) resolve();
@@ -651,6 +654,9 @@ router.post('/apps.saveData', (req, res, next) => {
       });
     };
     var promises = []
+    if(!result.changes || !result.changes.length){
+      return new Promise((resolve) => { resolve(); });
+    }
     for(var i = 0 ; i < result.changes.length ; i++){
       promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
     }

@@ -25,10 +25,5 @@
 			"name": "users",
 			"indexes": ["email", "name", "username"]
 		}
-	],
-	"listenTo": [
-		{
-			"table": "messages"
-		}
 	]
 }

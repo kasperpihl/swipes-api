@@ -18,6 +18,7 @@ var SwipesAppSDK = (function() {
 		self = this;
 	}
 
+
 	// API for handling navigation bar in main app
 	SwipesAppSDK.prototype.navigation = {
 		// Setting the title of the navigation bar manually
@@ -32,6 +33,10 @@ var SwipesAppSDK = (function() {
 		pop: function(){
 			self._client.callListener("navigation.pop")
 		},
+		setNavigationButtons: function(buttons){
+			// TODO: prefix any images with url.
+			self._client.callListener("navigation.setNavigationButtons", buttons);
+		},
 		setBackgroundColor:function(backgroundColor){
 			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});
 		},
@@ -40,6 +45,9 @@ var SwipesAppSDK = (function() {
 		},
 		enableBoxShadow: function(enable){
 			self._client.callListener("navigation.enableBoxShadow", {"enable": enable})
+		},
+		onPop: function(callback){
+			self._listeners.add("navigation.pop", handler);
 		}
 	};
 

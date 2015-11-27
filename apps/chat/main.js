@@ -18,4 +18,5 @@ $(function(){
 	}).fail(function(error){
 		console.log("promise failed", error);
 	})
+
 });

@@ -2,7 +2,7 @@
 	var $ = window.jQuery;
 $(document).ready(function(){
 	parent.postMessage(JSON.stringify({ok:true}), "http://localhost:9000");
-	
+
 	var email = $('li.email');
 	var emailCard = $('.email-card');
 	var textEditor = $('.text-editor');
@@ -36,6 +36,7 @@ $(document).ready(function(){
 				emailCard.removeClass('open');
 				$('.action-icons').removeClass('open');
 			} else {
+				swipes.navigation.push(false, 1);
 				archiveEmail.add(deleteEmail).add(createTask).show();
 				email.removeClass('selected');
 				$(this).addClass('selected');
