@@ -1,0 +1,23 @@
+{
+	"manifest_version": 1,
+	"title": "Chat2",
+	"identifier": "chat2",
+	"version": "0.1",
+	"description": "The Chat App For Swipes",
+	"channel_view": {
+		"index": "chat.html"
+	},
+	"tables":[
+		{
+			"name": "messages",
+			"indexes": ["ts"]
+		}
+	],
+	"background": "background.js",
+	"listenTo": [
+		{
+			"name": "newMessages",
+			"table": "messages"
+		}
+	]
+}
