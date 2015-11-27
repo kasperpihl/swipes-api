@@ -47,7 +47,7 @@ var SwipesAppSDK = (function() {
 			self._client.callListener("navigation.enableBoxShadow", {"enable": enable})
 		},
 		onPop: function(callback){
-			self._listeners.add("navigation.pop", handler);
+			self._listeners.add("navigation.pop", callback);
 		}
 	};
 

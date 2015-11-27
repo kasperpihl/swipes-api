@@ -1,0 +1,16 @@
+{
+  "manifest_version": 1,
+  "title": "Stanimir App",
+  "identifier": "stanimir",
+  "version": "0.1",
+  "description": "A real app for Stanimir",
+  "main_app": {
+    "index": "stanimir.html"
+  },
+  "background": "background.js",
+  "tables": [
+  	{
+  		"name": "stanimir"
+  	}
+  ]
+}

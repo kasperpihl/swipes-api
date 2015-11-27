@@ -160,6 +160,7 @@ router.post('/apps.list', (req, res, next) => {
 
       db.rethinkQuery(listQ)
         .then((apps) => {
+
           let whitelist = [
             'id',
             'manifest_id',
