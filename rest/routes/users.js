@@ -28,7 +28,7 @@ let isActive = (userId, appId) => {
 }
 
 router.post('/users.list', (req, res, next) => {
-  let query = r.table('users');
+  let query = r.table('users').pluck('name', 'id', 'email', 'created');
 
   db.rethinkQuery(query)
     .then((results) => {
