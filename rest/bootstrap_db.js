@@ -10,6 +10,7 @@ let generateId = util.generateSlackLikeId;
 let moment = require('moment');
 
 let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars', 'apps'];
+// T_TODO: Indexes is not setting properly here because you double define users below. Should be array structure
 let indexes = {
   channels: 'name',
   users: 'email',
