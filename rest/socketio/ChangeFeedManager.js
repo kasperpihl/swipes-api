@@ -7,9 +7,9 @@ let ChangeFeedManager = (options) => {
 
   let _connections = [];
 
-  let _start = () => {
+  let _start = (...args) => {
     return new Promise((resolve, reject) => {
-      options.start().then((connections) => {
+      options.start(...args).then((connections) => {
         _connections = connections;
 
         return resolve();
@@ -27,8 +27,8 @@ let ChangeFeedManager = (options) => {
     stop: () => {
       _stop();
     },
-    start: () => {
-      return _start();
+    start: (...args) => {
+      return _start(...args);
     },
     restart: () => {
       _stop();

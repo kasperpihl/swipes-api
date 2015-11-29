@@ -14,3 +14,8 @@ $(function(){
 	});
 
 })
+
+function doPush() {
+	swipes.navigation.push("New title here");
+}
+

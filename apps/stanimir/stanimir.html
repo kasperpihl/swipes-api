@@ -1,0 +1,29 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="<{appDir}>/script.js"></script>
+</head>
+
+<body>
+
+    <button type='button' onclick='alert("Alert!")'>Alert!</button><br><br>
+     
+    <button type='button' onclick='confirm("Do you agree?")'>Confirm?</button><br><br>
+
+    <button type='button' onclick='prompt("Say something please", "bau")'>Prompt</button><br><br>
+    
+    <button type='button' onclick='doPush()'>Push it!</button><br><br>
+    
+    <button type='button' onclick='window.webkit.messageHandlers.api.postMessage("{\"ok\":true}")'>Post to parent</button><br><br>
+
+    <button type='button' onclick='console.log("hello from JS")'>Console</button><br><br>
+
+    <a href="http://www.google.com">Now go to google!</a>
+	
+</body>
+</html>
