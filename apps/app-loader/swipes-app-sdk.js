@@ -1,22 +1,23 @@
 var SwipesAppSDK = (function() {
 	var self;
-	function SwipesAppSDK(apiUrl, token) {
+	function SwipesAppSDK(apiUrl) {
 		if (!SwipesAPIConnector){
 			throw new Error("SwipesAppSDK: SwipesAPIController not loaded first")
 		}
 		if (!apiUrl){
 			throw new Error("SwipesAppSDK: No apiUrl set in constructor");
 		}
-		if (!token) {
-			throw new Error("SwipesAppSDK: No token set in constructor");
-		}
 
-		this._client = new SwipesAPIConnector(apiUrl, token);
+		this._client = new SwipesAPIConnector(apiUrl);
 		// set the sdk property on client so it can call this class
 		this._client.setDelegate(this);
 		this._listenersObj = {};
 		self = this;
 	}
+
+	SwipesAppSDK.prototype.setToken = function(token){
+		this._client.setToken(token);
+	};
 
 
 	// API for handling navigation bar in main app
