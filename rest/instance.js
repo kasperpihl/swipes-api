@@ -20,8 +20,7 @@ let jwtMiddleware = require('./jwt-auth-middleware.js');
 app.use(cors({
   origin: config.get('origin'),
   methods: 'HEAD, GET, POST',
-  allowedHeader: 'Content-Type, Authorization, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
-  credentials: true
+  allowedHeader: 'Content-Type, Accept, X-Requested-With, Session, Content-Length, X-Requested-With'
 }));
 app.use('/apps', express.static(__dirname + '/../apps'));
 
@@ -46,7 +45,7 @@ let rtmRouter = require('./routes/rtm.js');
 let chatRouter = require('./routes/chat.js');
 let imRouter = require('./routes/im.js');
 let starsRouter = require('./routes/stars.js');
-
+let sdkRouter = require('./routes/sdk.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -64,6 +63,7 @@ app.route('/').get((req,res,next) => {
 });
 // Routes for which we don't need authentication
 app.use('/v1', usersAuth);
+app.use('/v1', sdkRouter);
 
 // Middleware to check if a valid token is provided from the user
 app.use('/v1', jwtMiddleware.restAuth);

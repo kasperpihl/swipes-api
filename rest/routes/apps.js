@@ -433,36 +433,19 @@ router.get('/apps.load', (req, res, next) => {
 
   let apiHost = 'http://' + req.headers.host
   let appUrlDir = apiHost + '/apps/' + manifestId
-  let _defUrlDir = apiHost + '/apps/app-loader/'
 
   // Insert dependencies, SwipesSDK and other scripts right after head
   let insertString = '';
-  insertString += '<script src="' + _defUrlDir + 'jquery.min.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'underscore.min.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'q.min.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>\r\n';
-  insertString += '<script src="' + _defUrlDir + 'swipes-app-sdk.js"></script>\r\n';
-
-  // Unless disabled, include the Swipes UI Kit
-  if(!manifest.main_app.disableUIKit){
-    insertString += '<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css"/>\r\n';
-    insertString += '<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>\r\n';
-  }
-
-  // Instantiate objects and add runtime stuff
-  insertString += '<script>';
-  insertString += 'window.swipes = new SwipesAppSDK("'+apiHost+'", "' + req.query.token + '");\r\n';
-  insertString += 'if(parent) swipes._client.setListener(parent, "' + req.headers.referer + '");\r\n';
-  insertString += 'if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.api) swipes._client.setListener(window.webkit.messageHandlers.api, "' + req.headers.referer + '");\r\n';
-  insertString += 'swipes._client.setAppId("' + appId + '");\r\n';
-  insertString += 'swipes.navigation.setTitle("' + manifest.title + '");'
-  insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
-  insertString += 'swipes.info.userId = "' + req.userId + '";';
+  console.log(req.headers);
+  var referer = req.headers.referer ? req.headers.referer : false;
+  insertString += '<script src="' + apiHost + '/v1/sdk.load?manifest_id=' + manifestId+ '&referer=' + referer + '&token=' + req.query.token + '"></script>\r\n';
+  
+  insertString += '<script>\r\n';
+  if(appId)
+    insertString += 'swipes.setDefaultScope("' + appId + '");\r\n';
   if(channelId){
     insertString += 'swipes.info.channelId = "' + channelId + '";\r\n';
     insertString += 'swipes.setDefaultScope("' + channelId + '");\r\n';
-  }else{
-    insertString += 'swipes.setDefaultScope("' + appId + '");\r\n';
   }
   insertString += '</script>\r\n';
 
@@ -472,7 +455,6 @@ router.get('/apps.load', (req, res, next) => {
     index += 6
     indexFile = indexFile.slice(0, index) + insertString + indexFile.slice(index);
   }
-
 
   // Replace <{appDir}}> with actual host for apps to target their folder
   indexFile = indexFile.replace(new RegExp('<{appDir}>', 'g'), appUrlDir );
