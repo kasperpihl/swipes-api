@@ -4,6 +4,17 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
+    <script src="http://localhost:5000/v1/sdk.load?manifest_id=chat2"></script>
+    <script>
+        swipes.setToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJVQUNJQVA2SE8iLCJhZG0iOnRydWV9.o-PvsWhgssk20pqARMoanNRFIOQOgPbq5HcI8RaJ2QU");
+        swipes.currentApp().get("messages", function(messages){
+            console.log(messages);
+        });
+        swipes._client.callSwipesApi('users.list', function(res,error){
+            console.log("users.list", res, error);
+        });
+
+    </script>
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="Chat app for Swipes">
@@ -18,6 +29,8 @@
     <!-- endbuild -->
 </head>
   <body>
+    <script>
+    </script>
     <!--[if lt IE 10]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
