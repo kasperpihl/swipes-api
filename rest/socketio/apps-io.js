@@ -27,29 +27,6 @@ let getAppFile = (appId, fileName) => {
   return file;
 }
 
-// let scopeCheck = (userId, scope) => {
-//   let scopeType;
-//   let matchScopeQ = r.table('users')
-//
-//   if (scope.charAt(0) === 'A') {
-//     scopeType = 'apps'
-//   }
-//
-//   if (scope.charAt(0) === 'C') {
-//     scopeType = 'channels'
-//   }
-//
-//   if(scopeType){
-//     matchScopeQ = matchScopeQ.get(userId)(scopeType).filter({id: scope}).count()
-//   }
-//   else{
-//     // If no scope type, assume that it is just the user
-//     matchScopeQ = matchScopeQ.filter({id: scope}).count()
-//   }
-//
-//   return matchScopeQ;
-// }
-
 let emitEvents = (cursor, socket, eventType) => {
   cursor.each((err, row) => {
     if (err) {
