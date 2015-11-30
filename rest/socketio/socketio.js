@@ -65,15 +65,13 @@ module.exports = (io) => {
     socket.emit('message', {type: 'hello'});
 
     scopes = [
-      apps.hook(socket, userId)
+      apps.hook(socket, userId),
+      messages(socket, userId)
     ];
-
-    //console.log(arguments);
 
     handleScopeChange(userId);
 
     channels(socket, userId);
-    messages(socket, userId);
     im.channelsIm(socket, userId);
     im.userIm(socket, userId);
     stars.stars(socket, userId);

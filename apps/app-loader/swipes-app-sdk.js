@@ -34,9 +34,9 @@ var SwipesAppSDK = (function() {
 		pop: function(){
 			self._client.callListener("navigation.pop")
 		},
-		setNavigationButtons: function(buttons){
+		setButtons: function(buttons){
 			// TODO: prefix any images with url.
-			self._client.callListener("navigation.setNavigationButtons", buttons);
+			self._client.callListener("navigation.setButtons", buttons);
 		},
 		setBackgroundColor:function(backgroundColor){
 			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});
@@ -49,6 +49,9 @@ var SwipesAppSDK = (function() {
 		},
 		onPop: function(callback){
 			self._listeners.add("navigation.pop", callback);
+		},
+		onButtonPressed:function(callback){
+			self._listeners.add("navigation.onButtonPressed", callback);
 		}
 	};
 
