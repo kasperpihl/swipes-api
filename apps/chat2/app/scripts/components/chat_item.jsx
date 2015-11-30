@@ -5,13 +5,20 @@ var ChatItem = React.createClass({
 
 		return (
 			<div className="chat-message">
-				<div className="chat-left-side-container">
-					<p className="name">kristjan</p>
+				<div className="chat-avatar">
+					<div className="avatar">
+						<img src="https://unsplash.it/50/?random" />
+					</div>
 				</div>
-				<div className="chat-right-side-container">
-					<p className="message-container">
-						{this.props.data.text}
-					</p>
+				<div className="chat-content">
+					<div className="chat-top-side-container">
+						<p className="name">{this.props.data.user.name}</p>
+					</div>
+					<div className="chat-bottom-side-container">
+						<p className="message-container">
+							{this.props.data.text}
+						</p>
+					</div>
 				</div>
 			</div>
 		);
