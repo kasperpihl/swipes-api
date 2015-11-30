@@ -58,7 +58,7 @@ router.get('/sdk.load', (req, res, next) => {
 	}
 
 	// If apps load sends the referer, use it for parent
-	var referer = req.query.referer ? req.query.referer : "";
+	var referer = req.query.referer ? req.query.referer : 'test';
 	insertString += 'if(parent) swipes._client.setListener(parent, "' + referer + '");';
 	insertString += 'if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.api) swipes._client.setListener(window.webkit.messageHandlers.api, "' + req.headers.referer + '");';
 	insertString += 'swipes._client.setAppId("' + manifestId + '");';

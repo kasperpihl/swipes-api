@@ -10,9 +10,7 @@
         swipes.currentApp().get("messages", function(messages){
             console.log(messages);
         });
-        swipes._client.callSwipesApi('users.list', function(res,error){
-            console.log("users.list", res, error);
-        });
+        swipes._client.callSwipesApi('users.list');
 
     </script>
     <meta charset="utf-8">

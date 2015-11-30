@@ -1,6 +1,6 @@
 var SwipesAPIConnector = (function() {
 	function SwipesAPIConnector(baseUrl, token) {
-		var bindedCallback = this._receivedMessageFromListener.bind(this)
+		var bindedCallback = this._receivedMessageFromListener.bind(this);
 		if (!baseUrl){
 			throw new Error('SwipesAPIConnector: No baseUrl set in constructor');
 		}
@@ -91,9 +91,11 @@ var SwipesAPIConnector = (function() {
 			success: function(data) {
 				console.log('swipes api success', data);
 				if (data && data.ok) {
-					return typeof callback === 'function' ? callback(data) : void 0;
+					if(typeof callback === 'function')
+						callback(data);
 				} else {
-					return typeof callback === 'function' ? callback(false, data) : void 0;
+					if(typeof callback === 'function')
+						callback(false, data);
 				}
 			},
 			error: function(error) {
