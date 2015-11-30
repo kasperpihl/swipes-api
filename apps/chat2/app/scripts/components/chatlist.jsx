@@ -31,7 +31,8 @@ ChatList.Section = React.createClass({
 		});
 		return (
 			<div className="section">
-				<h2>{this.props.data.title}</h2>
+				<div className="line" title={this.props.data.title}></div>
+				
 				{chatItems}
 			</div>
 		);
@@ -48,6 +49,7 @@ ChatList.Input = React.createClass({
 				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
 				</div>*/}
+				<i className="material-icons chat-input-attach-icon">attach_file</i>
 				<textarea data-autoresize tabIndex="1" onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1" placeholder="Your message"></textarea>  
 			</div>
 		);
