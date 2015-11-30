@@ -87,7 +87,7 @@ let getChannels = (userId) => {
       })
       .coerceTo('Array');
 
-  let userChannels =
+  let userChannelsQ =
     r.table('users')
       .get(userId)('channels')
       .filter((channel) => {
@@ -96,7 +96,7 @@ let getChannels = (userId) => {
       .coerceTo('Array');
 
   let channelListQ =
-    r.do(channelsQ, userChannels, (channels, userChannels) => {
+    r.do(channelsQ, userChannelsQ, (channels, userChannels) => {
       return r.expr([channels, userChannels])
     });
 
@@ -105,6 +105,7 @@ let getChannels = (userId) => {
       .then((results) => {
         let channels = results[0];
         let userChannels = results[1];
+        let unreadCountPromises = [];
         let response = [];
 
         channels.forEach((channel) => {
@@ -115,6 +116,13 @@ let getChannels = (userId) => {
             let userChannel = userChannels[i];
 
             if (channel.id === userChannel.id) {
+              let unreadCountQ =
+                r.table('messages')
+                  .getAll(channel.id, {index: 'channel_id'})
+                  .filter(r.row("ts").gt(userChannel.last_read))
+                  .count();
+
+              unreadCountPromises.push(db.rethinkQuery(unreadCountQ));
               response.push(_.extend(channel, userChannel, {is_member: true}));
               found = true;
 
@@ -127,7 +135,18 @@ let getChannels = (userId) => {
           }
         })
 
-        return resolve(response);
+        Promise.all(unreadCountPromises).then((unreadCountRes) => {
+          response.forEach((item, idx) => {
+            let unreadCount = unreadCountRes[idx] || 0;
+
+            response[idx].unread_count = unreadCount;
+          })
+
+          return resolve(response);
+        })
+        .catch((err) => {
+          return reject(err);
+        })
       })
       .catch((err) => {
         return reject(err);

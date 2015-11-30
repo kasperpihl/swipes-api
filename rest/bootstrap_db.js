@@ -20,8 +20,11 @@ let tables = [
     name: 'users',
     indexes: ['name', 'email']
   },
+  {
+    name: 'messages',
+    indexes: ['channel_id']
+  },
   'teams',
-  'messages',
   'events',
   'stars',
   'apps'
