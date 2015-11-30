@@ -22,8 +22,7 @@ let getAppFile = (appId, fileName) => {
 
 router.get('/sdk.load', (req, res, next) => {
 	let appId = req.query.app_id;
-	let manifestId = req.query.manifest_id;
-	let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
+	let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
 
 
 	// TODO: Do validations and stuff
@@ -32,7 +31,7 @@ router.get('/sdk.load', (req, res, next) => {
 	}
 
 	let apiHost = 'http://' + req.headers.host;
-	let appUrlDir = apiHost + '/apps/' + manifestId;
+
 	let _defUrlDir = apiHost + '/apps/app-loader/';
 	// Insert dependencies, SwipesSDK and other scripts right after head
 	let insertString = '';
@@ -62,10 +61,8 @@ router.get('/sdk.load', (req, res, next) => {
 	var referer = req.query.referer ? req.query.referer : 'test';
 	insertString += 'if(parent) swipes._client.setListener(parent, "' + referer + '");';
 	insertString += 'if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.api) swipes._client.setListener(window.webkit.messageHandlers.api, "' + req.headers.referer + '");';
-	insertString += 'swipes._client.setAppId("' + manifestId + '");';
+	insertString += 'swipes._client.setAppId("' + appId + '");';
 	insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
-	if(req.userId)
-		insertString += 'swipes.info.userId = "' + req.userId + '";';
 
 /*
 	
