@@ -14,7 +14,7 @@ var SwipesAPIConnector = (function() {
 		this._callbacks = {};
 
 		window.addEventListener('message', bindedCallback, false);
-
+		
 	};
 	SwipesAPIConnector.prototype.setToken = function(token){
 		this._token = token;
@@ -89,7 +89,7 @@ var SwipesAPIConnector = (function() {
 			url: url,
 			type: 'POST',
 			success: function(data) {
-				console.log('swipes api success', data);
+				console.log('/' + command + ' success', data);
 				if (data && data.ok) {
 					if(typeof callback === 'function')
 						callback(data);
@@ -99,7 +99,7 @@ var SwipesAPIConnector = (function() {
 				}
 			},
 			error: function(error) {
-				console.log('swipes api error', error);
+				console.log('/' + command + ' error', error);
 				return typeof callback === 'function' ? callback(false, error) : void 0;
 			},
 			crossDomain: true,
