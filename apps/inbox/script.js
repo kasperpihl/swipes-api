@@ -14,7 +14,7 @@ $(document).ready(function(){
 	var archiveEmail = $('.archive');
 	var deleteEmail = $('.delete');
 	var createTask = $('.create-task');
-	
+
 	email.on('click', function(e) {
 		if(e.ctrlKey || e.metaKey) { // multiselect
 			if ($(this).hasClass('selected')) {
@@ -75,7 +75,7 @@ $(document).ready(function(){
 		$('.action-icons').removeClass('open');
 	})
 	
-	deleteEmail.on('click', function() {
+	deleteEmail.on('click', function() { 
 		var numSelectedEmails = $('.selected').length;
 		var emails = numSelectedEmails > 1 ? ' emails' : ' email';
 		$('li.email.selected').fadeOut( "slow", function() {

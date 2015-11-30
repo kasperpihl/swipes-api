@@ -6,12 +6,12 @@ var ChatItem = React.createClass({
 		return (
 			<div className="chat-message">
 				<div className="chat-left-side-container">
-					
+					<p className="name">kristjan</p>
 				</div>
 				<div className="chat-right-side-container">
-					<div className="message-container">
+					<p className="message-container">
 						{this.props.data.text}
-					</div>
+					</p>
 				</div>
 			</div>
 		);
