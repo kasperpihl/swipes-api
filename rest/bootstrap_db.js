@@ -9,61 +9,46 @@ let Promise = require('bluebird'); // we should use native promises one day
 let generateId = util.generateSlackLikeId;
 let moment = require('moment');
 
-let tables = ['users', 'teams', 'channels', 'messages', 'events', 'stars', 'apps'];
-// T_TODO: Indexes is not setting properly here because you double define users below. Should be array structure
-let indexes = {
-  channels: 'name',
-  users: 'email',
-  users: 'name'
-}
+require('rethinkdb-init')(r);
+
+let tables = [
+  {
+    name: 'channels',
+    indexes: ['name']
+  },
+  {
+    name: 'users',
+    indexes: ['name', 'email']
+  },
+  'teams',
+  'messages',
+  'events',
+  'stars',
+  'apps'
+];
+
 let teamDoc = {
   id: TEAM_ID,
   name: 'Swipes HQ',
   parent: null,
   users: [],
   channels: []
-}
+};
 
-r.connect({host: 'localhost', port: 28015 })
-  .then(conn => {
-    r.dbCreate('swipes').run(conn)
-      .then(res => {
-        conn.close();
-        console.log('creating tables');
+r.init({
+    host: 'localhost',
+    port: 28015,
+    db: 'swipes'
+  },
+  tables
+).then((conn) => {
+  let query = r.table('teams').insert(teamDoc);
 
-        let tablesCreateArray = [];
-
-        tables.forEach(item => {
-          let query = r.tableCreate(item);
-          let promise = db.rethinkQuery(query);
-
-          tablesCreateArray.push(promise);
-        })
-
-        Promise.all(tablesCreateArray).then(res => {
-          console.log('creating indexes');
-
-          let tablesCreateIndexArray = [];
-
-          Object.keys(indexes).forEach(key => {
-            let val = indexes[key];
-            let query = r.table(key).indexCreate(val);
-            let promise = db.rethinkQuery(query);
-
-            tablesCreateIndexArray.push(promise);
-          })
-
-          Promise.all(tablesCreateIndexArray).then(res => {
-            let query = r.table('teams').insert(teamDoc);
-
-            db.rethinkQuery(query).then(res => {
-              createChannels();
-              createApps();
-            })
-          })
-        })
-      })
+  db.rethinkQuery(query).then(res => {
+    createChannels();
+    createApps();
   })
+})
 
 
 let createChannels = () => {
@@ -104,7 +89,10 @@ let createApps = () => {
       "manifest_id": "admin",
       "version": "0.1",
       "description": "The Admin App For Swipes",
-      admin_only: true
+      admin_only: true,
+      required: true,
+      is_installed: true,
+      has_main_app: true
     }
   ];
 
