@@ -45,8 +45,10 @@ ChatList.Input = React.createClass({
 		//console.log(e.keyCode, e.shiftKey, e.target);
 		if(e.keyCode === 13){
 			var message = $(e.target).val();
-			if(message && message.length > 0)
+			if(message && message.length > 0){
+				$(e.target).val("");
 				chatActions.sendMessage(message);
+			}
 		}
 	},
 	render: function() {
