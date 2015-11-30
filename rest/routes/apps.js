@@ -434,7 +434,7 @@ router.get('/apps.load', (req, res, next) => {
   let insertString = '';
   console.log(req.headers);
   var referer = req.headers.referer ? req.headers.referer : false;
-  insertString += '<script src="' + apiHost + '/v1/sdk.load?manifest_id=' + manifestId+ '&referer=' + referer + '&token=' + req.query.token + '"></script>\r\n';
+  insertString += '<script src="' + apiHost + '/v1/sdk.load?app_id=' + manifestId+ '&referer=' + referer + '&token=' + req.query.token + '"></script>\r\n';
   
   insertString += '<script>\r\n';
   if(appId)
@@ -443,6 +443,8 @@ router.get('/apps.load', (req, res, next) => {
     insertString += 'swipes.info.channelId = "' + channelId + '";\r\n';
     insertString += 'swipes.setDefaultScope("' + channelId + '");\r\n';
   }
+  if(req.userId)
+    insertString += 'swipes.info.userId = "' + req.userId + '";';
   insertString += '</script>\r\n';
 
   // Locate <head> and insert our code as the very first

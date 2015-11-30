@@ -26,7 +26,15 @@ let isActive = (userId, appId) => {
       })
   })
 }
-
+router.post('/users.me', (req, res, next) =>{
+  let meQ = r.table('users').get(req.userId).without('password');
+   db.rethinkQuery(meQ)
+    .then((results) => {
+        return res.status(200).json({ok: true, user: results});
+    }).catch((err) => {
+      return next(err);
+    });
+});
 router.post('/users.list', (req, res, next) => {
   let query = r.table('users').pluck('name', 'id', 'email', 'created');
 
