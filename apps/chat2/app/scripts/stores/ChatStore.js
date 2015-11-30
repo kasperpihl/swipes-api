@@ -16,11 +16,15 @@ var ChatStore = Reflux.createStore({
 		console.log(this.users);
 		var self = this;
 		var groups = _.groupBy(this.messages, function(model, i){
+			var defUser = {
+				name: "unknown"	
+			};
 			var user = self.users[model.user_id];
 			if(user){
 				console.log(user);
 				model.user = user;
 			}
+			else model.user = defUser;
 			var date = new Date(parseInt(model.ts)*1000);
 			return moment(date).startOf('day').unix();
 		});
