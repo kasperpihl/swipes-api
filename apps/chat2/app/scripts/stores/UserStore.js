@@ -8,19 +8,12 @@ var TimeUtility = require('../utilities/time_util');
 var ChatStore = Reflux.createStore({
 	listenables: [chatActions],
 	sortedSections: [],
-	users: {},
 	onSendMessage: function(message){
 		
 	},
 	sortMessages: function(){
-		console.log(this.users);
-		var self = this;
 		var groups = _.groupBy(this.messages, function(model, i){
-			var user = self.users[model.user_id];
-			if(user){
-				console.log(user);
-				model.user = user;
-			}
+			console.log(model.get("email"));
 			var date = new Date(parseInt(model.ts)*1000);
 			return moment(date).startOf('day').unix();
 		});
@@ -28,9 +21,6 @@ var ChatStore = Reflux.createStore({
 		var sortedSections = [];
 		for(var i = 0 ; i < sortedKeys.length ; i++){
 			var key = sortedKeys[i];
-			for(var j = 0 ; j < groups[key].length ; j++){
-				//console.log(groups[key][j]);
-			}
 			schedule = new Date(parseInt(key)*1000);
 			var title = TimeUtility.dayStringForDate(schedule);
 			sortedSections.push({"title": title, "messages": groups[key]});
@@ -47,18 +37,6 @@ var ChatStore = Reflux.createStore({
 	init: function() {
 		this.messages = data;
 		this.sortMessages();
-		var self = this;
-		swipes._client.callSwipesApi('users.list',function(users){
-			console.log(users);
-			users = users.results;
-			users = [{"apps":[{"id":"AJNJJP6EB","is_active":true},{"id":"AWNDZKT1Y","is_active":true},{"id":"APZDT0ZYM","is_active":true},{"id":"AREKBEQTU","is_active":true},{"id":"AEUKNV78W","is_active":true}],"channels":[{"id":"CJEBYCG1Z","last_read":"1448468906.417626"},{"id":"DDD4FDO9P","is_open":true,"user_id":"UG1P6BA7R"},{"id":"DHQ4SIXA5","is_open":true,"is_starred":true,"last_read":"1448468914.154438","user_id":"UWPTM4N9M"},{"id":"DMGUMTGSJ","is_open":true,"last_read":"1448467740.638617","user_id":"USNDZDT1T"}],"created":1446759394,"email":"kasper@swipesapp.com","id":"UAD4XVDQJ","is_admin":true,"name":"kasper","me":true},{"apps":[],"channels":[{"id":"CJEBYCG1Z","last_read":"1447263815.909261"},{"id":"DANVY7GWY","is_open":true,"user_id":"UAD4XVDQJ"},{"id":"DFK5L6AF8","is_open":true,"user_id":"UAD4XVDQJ"},{"id":"DDD4FDO9P","user_id":"UAD4XVDQJ"},{"id":"D1VCNEXLN","user_id":"USNDZDT1T"}],"created":1446759427,"email":"peter@swipesapp.com","id":"UG1P6BA7R","name":"peter"},{"apps":[{"id":"AWNDZKT1Y","is_active":true}],"channels":[{"id":"CJEBYCG1Z","last_read":"1448468906.417626"},{"id":"DKRAW8CDN","is_open":true,"last_read":"1446812248.052028","user_id":"UAD4XVDQJ"},{"id":"DHQ4SIXA5","is_open":true,"user_id":"UAD4XVDQJ"},{"id":"DNOQKXK2T","is_open":true,"last_read":"1448467715.020462","user_id":"USNDZDT1T"}],"created":1446807321,"email":"t@tt.com","id":"UWPTM4N9M","name":"thinklinux","is_admin":true},{"apps":[],"channels":[{"id":"CJEBYCG1Z","last_read":"1447426131.380367"},{"id":"DDAAEZML7","user_id":"USNDZDT1T"}],"created":1447261164,"email":"miro@swipesapp.com","id":"UR9P0RBZW","name":"thats_what_she_said"},{"apps":[{"id":"AWNDZKT1Y","is_active":true},{"id":"AEUKNV78W","is_active":true},{"id":"A9BTBGIXE","is_active":true}],"channels":[{"id":"CJEBYCG1Z","last_read":"1448468906.417626"},{"id":"DMGUMTGSJ","is_open":true,"last_read":"1448467740.638617","user_id":"UAD4XVDQJ"},{"id":"D1VCNEXLN","is_open":true,"user_id":"UG1P6BA7R"},{"id":"DNOQKXK2T","is_open":true,"last_read":"1447784405.174960","user_id":"UWPTM4N9M"},{"id":"DDAAEZML7","is_open":true,"user_id":"UR9P0RBZW"},{"id":"DBDSBFYV4","is_open":true,"user_id":"UF5EXM9L6"},{"id":"DXQUI6CC6","is_open":true,"user_id":"U51S3JQGX"},{"id":"DSHINRPUQ","is_open":true,"user_id":"UTJDHCGVF"}],"created":1447333266,"email":"stanimir@swipesapp.com","id":"USNDZDT1T","name":"stanimir","is_admin":true},{"apps":[{"id":"AREKBEQTU","is_active":true},{"id":"AWNDZKT1Y","is_active":true}],"channels":[{"id":"CJEBYCG1Z","last_read":"1448468906.417626"},{"id":"DBDSBFYV4","user_id":"USNDZDT1T"}],"created":1447399570,"email":"kristjan@swipesapp.com","id":"UF5EXM9L6","is_admin":true,"name":"kristjan"},{"apps":[],"channels":[{"id":"CJEBYCG1Z","last_read":"1448372185.992803"},{"id":"DXQUI6CC6","user_id":"USNDZDT1T"},{"id":"DHMDRRRKO","is_open":true,"last_read":"1448283855.377089","user_id":"UTJDHCGVF"}],"created":1447428475,"email":"mitko@swipesapp.com","id":"U51S3JQGX","name":"mitko"},{"channels":[{"id":"CJEBYCG1Z","last_read":123},{"id":"DSHINRPUQ","is_open":true,"last_read":"1448283887.326558","user_id":"USNDZDT1T"},{"id":"DHMDRRRKO","is_open":true,"user_id":"U51S3JQGX"}],"created":1448283690,"email":"suliopulev@yahoo.com","id":"UTJDHCGVF","name":"sulio","apps":[]}];
-			self.users = _.indexBy(users, 'id');
-			swipes.currentApp().get("messages", function(messages){
-				console.log(messages);
-				self.sortMessages();
-			});
-		});
-
 		console.log('ChatStore initialized');
 		// This funciton will be called when the store will be first initialized
 	}

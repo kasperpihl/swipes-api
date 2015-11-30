@@ -30,6 +30,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.3.1",
     "grunt-usemin": "^3.1.1",
+    "grunt-open": "0.2.3",
     "load-grunt-tasks": "^3.3.0",
     "reactify": "^1.1.1",
     "serve-static": "^1.10.0",

@@ -165,6 +165,11 @@ module.exports = function (grunt) {
           src: '.tmp/concat/styles/*.css'
         }
       },
+      open: {
+          server: {
+              path: 'http://localhost:<%= connect.options.port %>'
+          }
+      },
       copy: {
         dist: {
           files: [{
@@ -195,6 +200,7 @@ module.exports = function (grunt) {
     'compass:dev',
     'autoprefixer:dev',
     'connect:livereload',
+    'open',
     'watch'
   ]);
 
