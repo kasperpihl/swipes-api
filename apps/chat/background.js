@@ -11,6 +11,7 @@ background.beforeHandlers = {
 		
 	}
 };
+
 background.eventHandlers = {
 	newMessages: function(data){
 		swipes.currentApp().up
@@ -26,6 +27,7 @@ background.afterHandlers = {
 
 background.methods = {
 	start: function(data, callback){
+
 		console.log("method run", data);
 		callback("yeah")
 	}

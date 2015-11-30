@@ -1,6 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var chatStore = require('../stores/ChatStore');
+var chatActions = require('../actions/ChatActions');
 var ChatItem = require('./chat_item');
 
 var ChatList = React.createClass({
@@ -41,7 +42,12 @@ ChatList.Section = React.createClass({
 
 ChatList.Input = React.createClass({
 	onKeyUp: function(e){
-		console.log(e.keyCode, e.shiftKey, e.target);
+		//console.log(e.keyCode, e.shiftKey, e.target);
+		if(e.keyCode === 13){
+			var message = $(e.target).val();
+			if(message && message.length > 0)
+				chatActions.sendMessage(message);
+		}
 	},
 	render: function() {
 		return (

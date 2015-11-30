@@ -515,6 +515,7 @@ router.post('/apps.method', (req, res, next) => {
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
+  console.log(queryObject);
   let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
   let app, tableWithoutPrefix, background;
   let handlerTimeout = 3000;
@@ -542,6 +543,7 @@ router.post('/apps.saveData', (req, res, next) => {
 
     // Check if app has background script setup
     if(manifest.background){
+
       background = require(appDir + manifest.identifier + "/" + manifest.background);
       if (!background) {
         return res.status(200).json({ok: false, err: 'background_script_not_found'});
@@ -549,10 +551,9 @@ router.post('/apps.saveData', (req, res, next) => {
     }
 
     // If data is not an array, create it as array, this is for our loops to work
-    if(!queryObject.data instanceof Array)
+    if(!(queryObject.data instanceof Array))
       queryObject.data = [queryObject.data];
-
-
+    
     // Define the beforeHandler function if any exist for current app
     let beforeHandler = (data, callback) => {
       if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
@@ -616,7 +617,7 @@ router.post('/apps.saveData', (req, res, next) => {
     return db.rethinkQuery(rethinkQ);
 
   }).then( result => {
-
+    console.log(result);
     let afterHandler = (newData, oldData) => {
       return new Promise((resolve, reject) => {
         if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
@@ -632,10 +633,13 @@ router.post('/apps.saveData', (req, res, next) => {
         }
       });
     };
-    var promises = []
-    for(var i = 0 ; i < result.changes.length ; i++){
-      promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
+    var promises = [];
+    if(result.changes){
+      for(var i = 0 ; i < result.changes.length ; i++){
+        promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
+      }
     }
+    else promises.push(new Promise(function(resolve){resolve();} ));
 
     return Promise.all(promises);
   }).then(() =>{

@@ -50,9 +50,9 @@ let hook = (socket, userId) => {
           .eqJoin("id", r.table('apps'))
           .zip()
           .withFields("id", "manifest_id")
-
       db.rethinkQuery(listAppsQ)
         .then((apps) => {
+          console.log("apps", apps);
           let changesPromises = [];
           let tableName;
 

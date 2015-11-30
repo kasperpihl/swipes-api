@@ -43,6 +43,7 @@ router.get('/sdk.load', (req, res, next) => {
 
 	// Temporary solution, server shouldn't include them, they should be packed together
 	insertString += getAppFile('app-loader', 'jquery.min.js');
+	insertString += getAppFile('app-loader', 'socket.io.js');
 	insertString += getAppFile('app-loader', 'underscore.min.js');
 	insertString += getAppFile('app-loader', 'q.min.js');
 	insertString += getAppFile('app-loader', 'swipes-api-connector.js');

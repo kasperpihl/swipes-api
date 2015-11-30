@@ -10,15 +10,14 @@ var ChatStore = Reflux.createStore({
 	sortedSections: [],
 	users: {},
 	onSendMessage: function(message){
-		
+		console.log("sending message", message);
+		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
 	},
 	sortMessages: function(){
-		console.log(this.users);
 		var self = this;
 		var groups = _.groupBy(this.messages, function(model, i){
 			var user = self.users[model.user_id];
 			if(user){
-				console.log(user);
 				model.user = user;
 			}
 			var date = new Date(parseInt(model.ts)*1000);
