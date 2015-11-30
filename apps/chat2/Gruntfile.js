@@ -2,6 +2,7 @@
 
 var livereload = require('connect-livereload'),
     path = require('path');
+  var serveStatic = require('serve-static');
 
 module.exports = function (grunt) {
 
@@ -28,8 +29,8 @@ module.exports = function (grunt) {
               middleware: function (connect) {
                 return [
                   livereload({port: 35729}),
-                  connect.static(path.resolve('.tmp')),
-                  connect.static(path.resolve(yeomanConfig.app))
+                  serveStatic(path.resolve('.tmp')),
+                  serveStatic(path.resolve(yeomanConfig.app))
                 ];
               }
             }
