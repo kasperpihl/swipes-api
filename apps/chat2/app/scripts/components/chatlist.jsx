@@ -45,9 +45,9 @@ ChatList.Input = React.createClass({
 	render: function() {
 		return (
 			<div className="input-container">
-				<input type="file" id="file-input" />
+				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
-				</div>
+				</div>*/}
 				<textarea data-autoresize tabIndex="1" onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1" placeholder="Your message"></textarea>  
 			</div>
 		);
