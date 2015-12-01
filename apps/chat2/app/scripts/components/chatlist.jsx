@@ -7,12 +7,6 @@ var ChatItem = require('./chat_item');
 var ChatList = React.createClass({
 	mixins: [Reflux.connect(chatStore, "sections")],
 	shouldScrollToBottom: true,
-	statics: {
-		scrollBottom: function(){
-			console.log(this);
-			this.scrollToBottom();
-		}	
-	},
 	onScroll: function(e){
 		
 		var contentHeight = $('.chat-list').outerHeight()
@@ -35,6 +29,10 @@ var ChatList = React.createClass({
 		}
 		
 	},
+	onChangedTextHeight: function(height){
+		$("#content").css("paddingBottom", height);
+		this.scrollToBottom();
+	},
 	componentDidUpdate: function(){
 		this.scrollToBottom();
 	},
@@ -48,7 +46,7 @@ var ChatList = React.createClass({
 				<div className="chat-list">
 					{sections}
 				</div>
-				<ChatList.Input />
+				<ChatList.Input onChangedTextHeight={this.onChangedTextHeight} />
 			</div>
 		);
 	}
@@ -94,9 +92,7 @@ ChatList.Input = React.createClass({
 		}
 		
 		$main = this.getEl("input-container");
-		$("#content").css("paddingBottom", $main.outerHeight());
-		console.log(ChatList.constructor);
-		ChatList.scrollBottom();
+		this.props.onChangedTextHeight($main.outerHeight());
 	},
 	onKeyUp: function(e){
 		//console.log(e.keyCode, e.shiftKey, e.target);
