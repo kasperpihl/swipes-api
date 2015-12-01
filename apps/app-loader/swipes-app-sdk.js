@@ -15,6 +15,12 @@ var SwipesAppSDK = (function() {
 		self = this;
 	}
 
+	SwipesAppSDK.prototype.setAppId = function(appId){
+		this.info.app_id = appId;
+		this._client.setAppId(appId);
+		console.log(this.info);
+	}
+
 	SwipesAppSDK.prototype.setToken = function(token){
 		this._client.setToken(token);
 	};
@@ -62,7 +68,10 @@ var SwipesAppSDK = (function() {
 		return self.app();
 	};
 	SwipesAppSDK.prototype.currentApp = function(){
-		return self.app(self.info.manifest.identifier);
+		console.log(self.info, this.info);
+		if(!self.info.app_id)
+			throw new Error('SwipesAppSDK: App Id has not been set');
+		return self.app(self.info.app_id);
 	};
 	SwipesAppSDK.prototype.setDefaultScope = function(scope){
 		self._defaultScope = scope;
@@ -201,7 +210,13 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function(connector, message, callback){
 		if(message){
 			var data = message.data;
-			if(message.command == "event"){
+			if(message.command == "init"){
+				if(data.user_id)
+					this.info.userId = data.user_id;
+				if(data.default_scope)
+					this.setDefaultScope(data.default_scope);
+			}
+			else if(message.command == "event"){
 				var listeners = self._listeners.get(data.type);
 				for(var i = 0 ; i < listeners.length ; i++){
 

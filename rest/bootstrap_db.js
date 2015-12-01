@@ -95,7 +95,7 @@ let createApps = () => {
       admin_only: true,
       required: true,
       is_installed: true,
-      has_main_app: true
+      main_app: {"index": "admin.html"}
     }
   ];
 

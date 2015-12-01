@@ -21,15 +21,6 @@ let getAppFile = (appId, fileName) => {
 
 
 router.get('/sdk.load', (req, res, next) => {
-	let appId = req.query.app_id;
-	let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
-
-
-	// TODO: Do validations and stuff
-	if (!manifest) {
-		return res.status(200).json({ok: false, err: 'no_manifest_found'});
-	}
-
 	let apiHost = 'http://' + req.headers.host;
 
 	let _defUrlDir = apiHost + '/apps/app-loader/';
@@ -53,30 +44,12 @@ router.get('/sdk.load', (req, res, next) => {
 
 
 	// Instantiate objects and add runtime stuff
-	if(req.query.token){
-		insertString += 'swipes.setToken("' + req.query.token + '");';
-	}
 
 	// If apps load sends the referer, use it for parent
-	var referer = req.query.referer ? req.query.referer : 'test';
-	insertString += 'if(parent) swipes._client.setListener(parent, "' + referer + '");';
-	insertString += 'if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.api) swipes._client.setListener(window.webkit.messageHandlers.api, "' + req.headers.referer + '");';
-	insertString += 'swipes._client.setAppId("' + appId + '");';
-	insertString += 'swipes.info.manifest = ' + JSON.stringify(manifest) + ';';
+	insertString += 'if(parent) swipes._client.setListener(parent);';
+	insertString += 'if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.api) swipes._client.setListener(window.webkit.messageHandlers.api);';
 
-/*
-	
-	insertString += wrap('<script src="' + _defUrlDir + 'jquery.min.js"></script>"');
-	insertString += wrap('<script src="' + _defUrlDir + 'underscore.min.js"></script>');
-	insertString += wrap('<script src="' + _defUrlDir + 'q.min.js"></script>');
-	insertString += wrap('<script src="' + _defUrlDir + 'swipes-api-connector.js"></script>');
-	insertString += wrap('<script src="' + _defUrlDir + 'swipes-app-sdk.js"></script>');
-	
-	insertString += wrap('<script src="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.js"></script>');
 
-	insertString += wrap('<script>');
-	
-	insertString += wrap('</script>'); */
 	res.setHeader('Content-Type', 'application/javascript');
 	res.send(insertString);
 });

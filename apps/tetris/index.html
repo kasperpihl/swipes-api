@@ -1,6 +1,6 @@
 <html>
 <head>
-
+<script src="http://localhost:5000/v1/sdk.load"></script>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -10,6 +10,7 @@
 
 <body>
 <script>
+swipes.setAppId("tetris");
 /*swipes.app("core").get("channels").then(function(channels){
   console.log("promises", channels);
 });*/
@@ -18,7 +19,7 @@
 <style>
     body      { font-family: Helvetica, sans-serif; margin: 0; padding:0; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center;-webkit-justify-content: center; -ms-flex-pack: center; justify-content: center; box-shadow: inset -4px 0px 5px -2px rgba(51,51,51,0.44); -webkit-box-shadow: inset -4px 0px 5px -2px rgba(51,51,51,0.44);}
     #tetris   { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
-    #canvas   { display: inline-block; vertical-align: top; background: url(texture.jpg); box-shadow: 10px 10px 10px #999; border: 2px solid #333; }
+    #canvas   { display: inline-block; vertical-align: top; box-shadow: 10px 10px 10px #999; border: 2px solid #333; }
     #menu     { display: inline-block; vertical-align: top; position: relative; }
     #menu p   { margin: 0.5em 0; text-align: center; }
     #menu p a { text-decoration: none; color: black; }

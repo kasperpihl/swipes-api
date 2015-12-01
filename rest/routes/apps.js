@@ -669,14 +669,13 @@ router.post('/apps.getData', (req, res, next) => {
   let app;
   db.rethinkQuery(getAppQ).then((apps) => {
     if (!apps.length) {
-      return res.status(200).json({ok: false, err: 'app_not_found'});
+      return new Promise((re, reject) => { reject('app_not_found')});
     }
     app = apps[0];
 
     if (!queryObject.table) {
-      return res.status(200).json({ok: false, err: 'table_required'});
+      return new Promise((re, reject) => { reject('table_required')});
     }
-
 
     let tableName = util.appTable(appId, queryObject.table);
 
@@ -686,10 +685,14 @@ router.post('/apps.getData', (req, res, next) => {
 
     return db.rethinkQuery(rethinkQ);
 
-  }).then((results) => {
+  }).then((results, error) => {
+
+    console.log("got results", results, error);
     res.status(200).json({ok: true, results: results});
   })
   .catch((err) => {
+    if(typeof err === "string")
+      return res.status(200).json({ok: false, err: err});
     return next(err);
   })
 });
