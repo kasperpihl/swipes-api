@@ -42,14 +42,17 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 $break-small: 320px;
 
 
-html, body {
+html, body, #content {
 	font-family: "Open Sans";
+	height:100%;
 }
-
-.chat-list {
+#content{
 	padding-bottom: 60px;
 }
-
+.chat-list-container{
+	height:100%;
+	overflow-y: scroll;
+}
 
 .section {
 	width: 100%;
