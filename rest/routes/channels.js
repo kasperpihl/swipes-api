@@ -202,11 +202,10 @@ router.post('/channels.join', (req, res, next) => {
 
           let lastTsInChannelQ =
             r.table('messages')
-              .filter({channel_id: channel.id})
+              .getAll(channel.id, {index: 'channel_id'})
               .orderBy(r.desc('ts'))
-              .nth(0)
-              .default({ts: null})
-              .getField('ts');
+              .nth(0)('ts')
+              .default(0);
 
           db.rethinkQuery(lastTsInChannelQ)
             .then((ts) => {
