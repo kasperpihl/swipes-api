@@ -61,7 +61,10 @@ ChatList.Section = React.createClass({
 		});
 		return (
 			<div className="section">
-				<div className="line" title={this.props.data.title}></div>
+				<div className="chat-date-line">
+					<div className="line"></div>
+					<div className="date">{this.props.data.title}</div>
+				</div>
 				
 				{chatItems}
 			</div>
