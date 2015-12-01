@@ -8,6 +8,10 @@ if(!swipes.info.userId){
 	});
 	webSocket.on('message', function(data) {
 		console.log(data);
+		if(data && data.type === "chat2_messages"){
+			chatStore.messages.push(data.data);
+			chatStore.sortMessages();
+		}
 	});
 	swipes._client.callSwipesApi("channels.list",function(res, error){
 		if(res && res.ok){
@@ -22,7 +26,6 @@ if(!swipes.info.userId){
 			swipes._client.callSwipesApi("users.me", function(res, error){
 				if(res && res.ok){
 					swipes.info.userId = res.user.id;
-					console.log(swipes.info);
 					chatStore.start();
 					//
 				}
