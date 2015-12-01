@@ -12,7 +12,7 @@ var ChatItem = React.createClass({
 				</div>
 				<div className="chat-content">
 					<div className="chat-top-side-container">
-						<p className="name">{this.props.data.user.name}</p>
+						<p className="name">{this.props.data.user.name} <span className="chat-timestamp">{this.props.data.timeStr}22:14</span></p>
 					</div>
 					<div className="chat-bottom-side-container">
 						<p className="message-container">

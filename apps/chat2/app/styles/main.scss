@@ -58,6 +58,7 @@ html, body, #content {
 	width: 100%;
 	
 	.chat-date-line {
+		height: 50px;
 		width: calc(100% - 60px);
 		margin-left: 30px;
 		display: flex;
@@ -79,9 +80,9 @@ html, body, #content {
 
 .chat-message {
 	display: flex;
-	padding: 20px 60px;
+	padding: 10px 60px;
 	@media screen and (max-width: $break-small) {
-		padding: 15px 10px;
+		padding: 5px 10px;
 	}
 }
 
@@ -116,7 +117,7 @@ html, body, #content {
 
 p.name {
 	max-width: 650px;
-	font-size: 15px;
+	font-size: 14px;
 	margin: 5px 0px 0px 25px;
 	color: $deepBlue-80;
 	font-weight: 700;
@@ -126,11 +127,17 @@ p.name {
 		margin-right: 15px;
 		margin-top: 0px;
 	}
+	
+	span.chat-timestamp {
+		font-size: 12px;
+		color: $studioGray-120;
+		font-weight: 400;
+	}
 }
 
 p.message-container {
 	max-width: 650px;
-	font-size: 14px;
+	font-size: 13px;
 	margin: 5px 0px 0px 25px;
 	padding-right: 10px;
 	color: $deepBlue-60;
@@ -163,10 +170,9 @@ p.message-container {
 	border-top: 2px solid $studioGray-60;
 	
 	textarea {
-		padding: 8px 25px;
+		padding: 15px 25px;
 		padding-left: 51px;
 		width: 100%;
-		line-height: 35px;
 		font-family: 'Open Sans';
 		font-weight: 600;
 		color: $studioGray-120;
@@ -178,8 +184,9 @@ p.message-container {
 	
 	i.chat-input-attach-icon {
 		position: absolute;
-		height: 51px;
-		line-height: 60px;
+		height: 100%;
+		line-height: 53px;
+		font-size: 20px;
 		width: 51px;
 		text-align: center;
 		color: $studioGray-120;
