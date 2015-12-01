@@ -49,7 +49,12 @@ html, body, #content {
 	line-height: 1.4;
 }
 #content{
-	padding-bottom: 60px;
+	padding-bottom: 65px;
+	
+	@media screen and (max-width: $break-mid) {
+		padding-bottom: 60px;
+	}
+	
 }
 .chat-list-container{
 	height:100%;
