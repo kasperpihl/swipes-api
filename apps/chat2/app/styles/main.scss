@@ -80,15 +80,15 @@ html, body, #content {
 
 .chat-message {
 	display: flex;
-	padding: 15px 60px;
+	padding: 5px 60px;
+	padding-top: 25px;
 	
 	@media screen and (max-width: $break-small) {
 		padding: 5px 10px;
 	}
 	
 	&.extra-message {
-		padding: 5px 60px;
-		
+		padding-top: 5px;
 		.chat-avatar {
 			display: none;
 		}
