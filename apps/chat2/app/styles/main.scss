@@ -75,7 +75,7 @@ html, body {
 
 .chat-message {
 	display: flex;
-	padding: 25px 60px;
+	padding: 20px 60px;
 	@media screen and (max-width: $break-small) {
 		padding: 15px 10px;
 	}
