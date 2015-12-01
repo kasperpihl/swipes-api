@@ -13,13 +13,12 @@ var ChatStore = Reflux.createStore({
 		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
 		var threeRandom = ('000' + Math.random().toFixed(3)*1000).substr(-3);
 		var ts = parseFloat(new Date().getTime() / 1000).toFixed(3) + threeRandom;
-		
+
 		this.sortMessages();
 	},
 	sortMessages: function(){
 		var self = this;
 		var groups = _.groupBy(this.messages, function(model, i){
-			console.log(model.ts);
 			var defUser = {
 				name: "unknown"	
 			};
@@ -63,9 +62,6 @@ var ChatStore = Reflux.createStore({
 				self.sortMessages();
 			});
 		});
-
-		console.log('ChatStore initialized');
-		// This funciton will be called when the store will be first initialized
 	}
 
 });

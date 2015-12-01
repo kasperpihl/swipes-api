@@ -6,13 +6,38 @@ var ChatItem = require('./chat_item');
 
 var ChatList = React.createClass({
 	mixins: [Reflux.connect(chatStore, "sections")],
+	shouldScrollToBottom: true,
+	isScrolledToBottom: false,
+	onScroll: function(e){
+		
+		var contentHeight = $('.chat-list').outerHeight()
+		var scrollPos = $('.chat-list-container').scrollTop()
+		var viewHeight = $('.chat-list-container').outerHeight()
+
+		if( (viewHeight+scrollPos) >= contentHeight ){
+			this.shouldScrollToBottom = true;
+		}
+		else{
+			this.shouldScrollToBottom = false;
+		}
+		
+	},
+	scrollToBottom: function(){
+		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
+		$('.chat-list-container').scrollTop(scrollPosForBottom);
+		this.isScrolledToBottom = true;
+	},
+	componentDidUpdate: function(){
+		if(this.shouldScrollToBottom)
+			this.scrollToBottom();
+	},
 	render: function() {
 
 		var sections = this.state.sections.map(function(section){
 			return <ChatList.Section key={section.title} data={section} />
 		})
 		return (
-			<div className="chat-list-container">
+			<div onScroll={this.onScroll} className="chat-list-container">
 				<div className="chat-list">
 					{sections}
 				</div>
@@ -23,6 +48,7 @@ var ChatList = React.createClass({
 		);
 	}
 });
+
 
 
 ChatList.Section = React.createClass({
