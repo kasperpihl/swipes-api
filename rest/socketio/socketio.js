@@ -19,7 +19,7 @@ let controlFeeds = (command, userScope) => {
   })
 }
 
-let handleScopeChange = (userId) => {
+let handleScopeChange = (socket, userId) => {
   let scopeCheckQ = r.table("users")
     .filter({id: userId})
     .map((user) => {
@@ -30,7 +30,7 @@ let handleScopeChange = (userId) => {
       )
   }).changes({includeInitial: true})
 
-  db.rethinkQuery(scopeCheckQ, {feed: true})
+  db.rethinkQuery(scopeCheckQ, {feed: true, socket: socket})
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {
@@ -69,7 +69,7 @@ module.exports = (io) => {
       messages(socket, userId)
     ];
 
-    handleScopeChange(userId);
+    handleScopeChange(socket, userId);
 
     channels(socket, userId);
     im.channelsIm(socket, userId);

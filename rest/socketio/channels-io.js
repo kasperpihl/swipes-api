@@ -12,7 +12,7 @@ module.exports.channelChanges = (socket, userId) => {
         return doc('teamId').eq(TEAM_ID).and(doc('id').match('^C'))
       }).changes()
 
-    db.rethinkQuery(insertQ, {feed: true})
+    db.rethinkQuery(insertQ, {feed: true, socket: socket})
       .then((cursor) => {
         cursor.each((err, row) => {
           if (err) {
@@ -67,7 +67,7 @@ module.exports.channelChanges = (socket, userId) => {
               };
             }
           }
-          
+
           socket.emit('message', {type: type, data: data});
         })
       })

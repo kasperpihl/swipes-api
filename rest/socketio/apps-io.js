@@ -70,7 +70,7 @@ let hook = (socket, userId) => {
                   return r.expr(userScope).contains(doc('scope'));
                 }).changes();
 
-                changesPromises.push(db.rethinkQuery(changesQ, {feed: true, returnConnection: true}));
+                changesPromises.push(db.rethinkQuery(changesQ, {feed: true, returnConnection: true, socket: socket}));
               })
             }
           })
@@ -102,7 +102,7 @@ let hook = (socket, userId) => {
 let adminApps = (socket, userId) => {
   let listenQ = r.table('apps').changes();
 
-  db.rethinkQuery(listenQ, {feed: true})
+  db.rethinkQuery(listenQ, {feed: true, socket: socket})
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {

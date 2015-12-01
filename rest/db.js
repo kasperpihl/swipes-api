@@ -59,6 +59,13 @@ let rethinkdb = {
         }
 
         if (options.cursor || options.feed) {
+          if (options.socket) {
+            options.socket.on('disconnect', () => {
+              results.close();
+              conn.close();
+            });
+          }
+
           if (options.returnConnection) {
             return resolve([results, conn]);
           } else {
