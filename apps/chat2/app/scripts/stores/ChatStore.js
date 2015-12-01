@@ -29,15 +29,18 @@ var ChatStore = Reflux.createStore({
 			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			model.timeStr = TimeUtility.getTimeStr(date);
 			
-			var user = self.users[model.user_id];
+			user = self.users[model.user_id];
 			if(user && user.id == lastUser && group == lastGroup){
 				model.isExtraMessage = true;
 			}
-			if(user){
-				model.user = lastUser = user;
+			if(!user){
+				user = { name: "unknown" };
 			}
-			else{ 
-				model.user = { name: "unknown", "profile_image": "https://unsplash.it/40/?random"	};
+			
+			model.user = user;
+			if(!model.user.profile){
+				model.user.profile = {};
+				model.user.profile.profile_image = "https://unsplash.it/40/?random"
 			}
 
 			lastGroup = group;

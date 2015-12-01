@@ -36,7 +36,7 @@ router.post('/users.me', (req, res, next) =>{
     });
 });
 router.post('/users.list', (req, res, next) => {
-  let query = r.table('users').pluck('name', 'id', 'email', 'created');
+  let query = r.table('users').pluck('name', 'id', 'email', 'created', 'profile');
 
   db.rethinkQuery(query)
     .then((results) => {
