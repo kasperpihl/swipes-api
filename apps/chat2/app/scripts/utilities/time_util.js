@@ -25,6 +25,14 @@ var TimeUtility = {
 		} else {
 			return fullStr;
 		}
+	},
+	isAmPm: function(){
+		return true;
+	},
+	getTimeStr:function(date){
+		var format;
+		format = this.isAmPm() ? "h:mma" : "H:mm";
+		return moment(date).format(format);
 	}
 }
 
