@@ -14,7 +14,7 @@ let channelsIm = (socket, userId) => {
           .and(channel('user_ids').contains(userId))
       }).changes()
 
-    db.rethinkQuery(listenQ, {feed: true})
+    db.rethinkQuery(listenQ, {feed: true, socket: socket})
       .then((cursor) => {
         cursor.each((err, row) => {
           if (err) {
@@ -59,7 +59,7 @@ let userIm = (socket, userId) => {
       })
       .changes()
 
-  db.rethinkQuery(listenQ, {feed: true})
+  db.rethinkQuery(listenQ, {feed: true, socket: socket})
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {

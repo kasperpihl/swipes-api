@@ -15,7 +15,7 @@ module.exports.channelMessages = (socket, userId) => {
             return r.expr(userScope).contains(doc('scope'));
           }).changes()
 
-      db.rethinkQuery(channelMessagesQ, {feed: true})
+      db.rethinkQuery(channelMessagesQ, {feed: true, socket: socket})
         .then((cursor) => {
           cursor.each((err, row) => {
             if (err) {

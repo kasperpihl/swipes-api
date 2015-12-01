@@ -4,8 +4,8 @@
 	"identifier": "chat2",
 	"version": "0.1",
 	"description": "The Chat App For Swipes",
-	"main_app": {
-		"index": "app/index.html"
+	"channel_view": {
+		"index": "dist/index.html"
 	},
 	"tables":[
 		{

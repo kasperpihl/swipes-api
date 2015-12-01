@@ -99,8 +99,9 @@ var SwipesAppSDK = (function() {
 					else deferred.reject(error);
 				};
 				
-				if(appId == "core")
+				if(appId == "core"){
 					self._client.callListener("getData", data, intCallback);
+				}
 				else
 					self._client.callSwipesApi("apps.getData", data, intCallback);
 				return deferred.promise;

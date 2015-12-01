@@ -143,6 +143,7 @@ var SwipesAPIConnector = (function() {
 
 
 	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
+
 		var message = JSON.parse(msg.data);
 		if (message.app_id && message.app_id != this._appId){
 			return;

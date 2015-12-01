@@ -322,9 +322,9 @@ router.post('/apps.install', (req, res, next) => {
       updateObj.id = generateId('A');
 
     if(manifest.main_app)
-      updateObj.has_main_app = true;
+      updateObj.main_app = manifest.main_app;
     if(manifest.channel_view)
-      updateObj.has_channel_view = true;
+      updateObj.channel_view = manifest.channel_view;
     if(manifest.background)
       updateObj.has_background = true;
 
@@ -420,8 +420,17 @@ router.get('/apps.load', (req, res, next) => {
   if (!manifest) {
     return res.status(200).json({ok: false, err: 'no_manifest_found'});
   }
-
-  let indexFile = getAppFile(manifestId, manifest.main_app.index);
+  let indexFile
+  if(channelId && manifest.channel_view){
+    indexFile = getAppFile(manifestId, manifest.channel_view.index);
+  }
+  else if(manifest.main_view){
+    indexFile = getAppFile(manifestId, manifest.main_view.index);
+  }
+  else{
+    return res.status(200).json({ok:false, err: 'no_app_found'});
+  }
+  
 
   if(!indexFile){
     return res.status(200).json({ok: false, err: 'no_index_found'});

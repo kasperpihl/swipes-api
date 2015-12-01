@@ -114,7 +114,7 @@ html, body, #content {
 						margin: 0px 0px 0px 65px;
 						
 						@media screen and (max-width: $break-small) {
-							margin: 5px 0px 0px 45px;
+							margin: 5px 0px 0px 40px;
 						}
 					}
 				}
@@ -166,6 +166,13 @@ html, body, #content {
 		img {
 			width: 40px;
 			height: 40px;
+			
+			@media screen and (max-width: $break-small) {
+				min-width: 30px !important;
+				max-width: 30px !important;
+				min-height: 30px !important;
+				max-height: 30px !important;
+			}
 		}
 	}
 }
@@ -227,18 +234,26 @@ p.message-container {
 	&.show-hint {
 		
 		&:before {
-			content: attr(data-chat-channel-info);
-			position: absolute;
-			width: 100%;
-			height: 38px;
-			background-color: rgba($studioGray-120, .5);
-			top: -40px;
-			padding-left: 65px;
-			font-size: 12px;
-			color: $deepBlue-60; 
-			line-height: 38px;
-			font-weight: 600;
+			bottom: 49px;
+			transition: .2s ease-in-out;
 		}
+	}
+	
+	&:before {
+		transition: 0.2s;
+		position:absolute;
+		content: attr(data-chat-channel-info);
+		height: 49px;
+		bottom: 0;
+		font-weight: 600;
+		color: $studioGray-120;
+		font-size: 14px;
+		font-weight: 600;
+		padding: 15px 25px;
+		padding-top: 10px;
+		padding-left: 51px;
+		margin-top: -3px;
+		transition: .2s ease-in-out;
 	}
 	
 	textarea {
@@ -268,6 +283,22 @@ p.message-container {
 		&:hover {
 			color: $deepBlue-80;
 			transition: .1s ease-in-out;
+		}
+		
+		&:before {
+			position:absolute;
+			content: attr(data-chat-channel-info);
+			height: 49px;
+			bottom: 0;
+			font-weight: 600;
+			color: $studioGray-120;
+			font-size: 14px;
+			font-weight: 600;
+			padding: 15px 25px;
+			padding-top: 10px;
+			padding-left: 51px;
+			margin-top: -3px;
+			transition: .2s ease-in-out;
 		}
 	}
 }

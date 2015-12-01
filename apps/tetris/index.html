@@ -62,7 +62,6 @@
 
     function sendHighScore(score){
       currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
-        console.log("result from save", res, err);
         fetchHighScores();
       })
     }
@@ -71,7 +70,6 @@
     });
     function fetchHighScores(){
       currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}, function(res, err){
-        console.log("result from high", res, err);
         if(res && res.results){
 
           $("#highscores").html("")
@@ -80,16 +78,19 @@
           for(var i = 0 ; i < res.results.length ; i++){
             var highscore = res.results[i];
             swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-              users[user.id] = user.name;
-              counter++;
+                counter++;
+                if(user){
+                  users[user.id] = user.name;
+                  
 
-              if(counter == res.results.length){
-                for(i = 0 ; i < res.results.length ; i++){
-                  var highscore = res.results[i];
-                  $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                  if(counter == res.results.length){
+                    for(i = 0 ; i < res.results.length ; i++){
+                      var highscore = res.results[i];
+                      $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                    }
+                  }
                 }
-              }
-            })
+              });
             var highscore = res.results[i];
 
 
