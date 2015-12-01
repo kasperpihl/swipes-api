@@ -62,7 +62,6 @@
 
     function sendHighScore(score){
       currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
-        console.log("result from save", res, err);
         fetchHighScores();
       })
     }
@@ -71,7 +70,6 @@
     });
     function fetchHighScores(){
       currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}, function(res, err){
-        console.log("result from high", res, err);
         if(res && res.results){
 
           $("#highscores").html("")
@@ -82,7 +80,6 @@
             swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
                 counter++;
                 if(user){
-                  console.log("user from tetris", user);
                   users[user.id] = user.name;
                   
 
