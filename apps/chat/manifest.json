@@ -1,7 +1,7 @@
 {
 	"manifest_version": 1,
-	"title": "Chat2",
-	"identifier": "chat2",
+	"title": "Chat",
+	"identifier": "chat",
 	"version": "0.1",
 	"description": "The Chat App For Swipes",
 	"channel_view": {
