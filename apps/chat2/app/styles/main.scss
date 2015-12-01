@@ -242,7 +242,7 @@ p.message-container {
 	width: 100%;
 	max-width: 650px;
 	left: 50%;
-	transform: translateX(-50%);
+	transform: translateX(-50%) translateY(-5px);
 	position: fixed;
 	bottom: 0;
 	background-color: white;
@@ -271,7 +271,7 @@ p.message-container {
 		font-size: 14px;
 		font-weight: 600;
 		padding: 15px 25px;
-		padding-top: 18px;
+		padding-top: 20px;
 		padding-left: 65px;
 		transition: .2s ease-in-out;
 		display: flex;
@@ -283,6 +283,7 @@ p.message-container {
 	textarea {
 		padding: 15px 25px;
 		padding-left: 51px;
+		padding-top: 20px;
 		width: 100%;
 		font-family: 'OpenSans';
 		font-weight: 600;
@@ -290,7 +291,6 @@ p.message-container {
 		font-size: 14px;
 		resize: none;
 		outline: none;
-		margin-top: 3px;
 		position: relative;
 		z-index: 2;
 	}
@@ -298,7 +298,7 @@ p.message-container {
 	i.chat-input-attach-icon {
 		position: absolute;
 		height: 100%;
-		line-height: 53px;
+		line-height: 58px;
 		font-size: 20px;
 		width: 51px;
 		text-align: center;
