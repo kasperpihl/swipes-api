@@ -6,6 +6,7 @@ background.beforeHandlers = {
 			var ts = parseFloat(new Date().getTime() / 1000).toFixed(3) + threeRandom;
 			data.ts = ts;
 		}
+		console.log("before", data);
 		callback(data);
 
 		

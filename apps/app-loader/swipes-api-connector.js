@@ -7,17 +7,26 @@ var SwipesAPIConnector = (function() {
 		this._baseURL = baseUrl;
 		this._apiUrl = baseUrl + '/v1/';
 		this._token = token;
+		this._hasInitialized = false;
 
 		this._timeoutTimer = 10;
 
 		this._timers = {};
 		this._callbacks = {};
-
+		this._listenerQueue = [];
+		this._apiQueue = [];
 		window.addEventListener('message', bindedCallback, false);
 		
 	};
 	SwipesAPIConnector.prototype.setToken = function(token){
 		this._token = token;
+		if(this._apiQueue.length > 0){
+			for(var i = 0 ; i < this._apiQueue.length ; i++){
+				request = this._apiQueue[i];
+				this.callSwipesApi(request.options, request.data, request.callback);
+			}
+			this._apiQueue = [];
+		}
 	};
 	SwipesAPIConnector.prototype.setAppId = function(appId){
 		this._appId = appId;
@@ -26,8 +35,14 @@ var SwipesAPIConnector = (function() {
 		var connector = new SwipesAPIConnector(this._baseURL, this._token);
 		return connector;
 	};
+	SwipesAPIConnector.prototype.getBaseURL = function(){
+		return this._baseURL;
+	};
 	SwipesAPIConnector.prototype.getAPIURL = function(){
 		return this._apiUrl;
+	};
+	SwipesAPIConnector.prototype.setTargetURL = function(targetUrl){
+		this._targetUrl = targetUrl;
 	};
 	SwipesAPIConnector.prototype.setListener = function(listener, targetUrl){
 		// Test if listener is an object
@@ -39,11 +54,10 @@ var SwipesAPIConnector = (function() {
 		if(typeof listener.postMessage !== 'function'){
 			throw new Error('SwipesAPIConnector: Listener not responding to postMessage');
 		}
-		if(!targetUrl){
-			throw new Error('SwipesAPIConnector: Must include targetUrl to use listener');
-		}
-		this._targetUrl = targetUrl;
+
 		this._listener = listener;
+		if(targetUrl)
+			this.setTargetURL(targetUrl);
 	};
 
 	/* 
@@ -64,6 +78,10 @@ var SwipesAPIConnector = (function() {
 	};
 
 	SwipesAPIConnector.prototype.callSwipesApi = function(options, data, callback) {
+		if(!this._token){
+			console.log("queing request", options);
+			return this._apiQueue.push({options: options, data: data, callback: callback});
+		}
 		var command, method = 'POST';
 		if(typeof options === 'string')
 			command = options;
@@ -80,9 +98,7 @@ var SwipesAPIConnector = (function() {
 		if ((data == null) || typeof data !== 'object') {
 			data = {};
 		}
-		if(this._token){
-			data.token = this._token;
-		}
+		data.token = this._token;
 
 		var serData = JSON.stringify(data);
 		var settings = {
@@ -116,7 +132,11 @@ var SwipesAPIConnector = (function() {
 	
 	 */
 	SwipesAPIConnector.prototype.callListener = function(command, data, callback) {
-		
+		if(!this._token || !this._listener){
+			console.log("listener queue", command);
+			return this._listenerQueue.push({command: command, data: data, callback: callback});
+		}
+
 		var identifier = this._generateId();
 		var callJson = {
 			'identifier': identifier,
@@ -143,8 +163,24 @@ var SwipesAPIConnector = (function() {
 
 
 	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
-
+		console.log(msg);
 		var message = JSON.parse(msg.data);
+		if(message.identifier && message.command === "init"){
+			console.log("init", message);
+			if(message.data.target_url)
+				this.setTargetURL(message.data.target_url);
+			if(message.data.manifest_id)
+				this.setAppId(message.data.manifest_id);
+			if(message.data.token)
+				this.setToken(message.data.token);
+			if(this._listenerQueue.length > 0){
+				for(var i = 0 ; i < this._listenerQueue.length ; i++){
+					listenObj = this._listenerQueue[i];
+					this.callListener(listenObj.command, listenObj.data, listenObj.callback);
+				}
+				this._listenerQueue = [];
+			}
+		}
 		if (message.app_id && message.app_id != this._appId){
 			return;
 		}

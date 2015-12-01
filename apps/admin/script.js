@@ -1,3 +1,4 @@
+swipes.setAppId("admin");
 $(document).ready(function() {
 	var adminTabsWidth = $('.nav').width();
 	var translatePercentage = (100 / 3) / 3;

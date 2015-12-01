@@ -1,7 +1,7 @@
 var Router = require('./router');
 var chatStore = require('./stores/ChatStore');
 Router.start();
-
+swipes.setAppId("chat");
 if(!swipes.info.userId){
 	window.webSocket = io.connect("http://localhost:5000", {
 		query: 'token=' + token
