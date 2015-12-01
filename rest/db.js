@@ -73,10 +73,7 @@ let rethinkdb = {
             });
         }
       }).error((err) => {
-
-        conn.close();
         return reject(err);
-
       });
     });
   }
