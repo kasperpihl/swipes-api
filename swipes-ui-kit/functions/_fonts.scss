@@ -35,15 +35,18 @@
 	}
 }
 
-//Example
 
-/* Font Variables
-$fontBold: sf-ui-text-bold-webfont;
-$fontMedium: sf-ui-text-medium-webfont;
-$fontRegular: sf-ui-text-regular-webfont;
+$font: OpenSans;
 
- Font-Face Import
-@include font-face($fontBold, '../assets/fonts/sf-ui-text-bold-webfont');
-@include font-face($fontMedium, '../assets/fonts/sf-ui-text-medium-webfont');
-@include font-face($fontRegular, '../assets/fonts/sf-ui-text-regular-webfont');
-*/
+//Font-Face Import
+
+@include font-face($font, 'fonts/OpenSans-ExtraBold-webfont', 800, normal);
+@include font-face($font, 'fonts/OpenSans-ExtraBoldItalic-webfont', 800, italic);
+@include font-face($font, 'fonts/OpenSans-Bold-webfont', 700, normal);
+@include font-face($font, 'fonts/OpenSans-BoldItalic-webfont', 700, italic);
+@include font-face($font, 'fonts/OpenSans-SemiBold-webfont', 600, normal);
+@include font-face($font, 'fonts/OpenSans-SemiBoldItalic-webfont', 600, italic);
+@include font-face($font, 'fonts/OpenSans-Regular-webfont', 400, normal);
+@include font-face($font, 'fonts/OpenSans-Italic-webfont', 400, italic);
+@include font-face($font, 'fonts/OpenSans-Light-webfont', 300, normal);
+@include font-face($font, 'fonts/OpenSans-LightItalic-webfont', 300, italic);

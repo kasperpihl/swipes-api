@@ -13,6 +13,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: "OpenSans";
 }
 
 .col {
@@ -271,16 +272,66 @@ html, body {
     width: 100%;
   }
 }
-/* Font Variables
-$fontBold: sf-ui-text-bold-webfont;
-$fontMedium: sf-ui-text-medium-webfont;
-$fontRegular: sf-ui-text-regular-webfont;
-
- Font-Face Import
-@include font-face($fontBold, '../assets/fonts/sf-ui-text-bold-webfont');
-@include font-face($fontMedium, '../assets/fonts/sf-ui-text-medium-webfont');
-@include font-face($fontRegular, '../assets/fonts/sf-ui-text-regular-webfont');
-*/
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 800;
+  src: url("fonts/OpenSans-ExtraBold-webfont.eot?") format("eot"), url("fonts/OpenSans-ExtraBold-webfont.woff") format("woff"), url("fonts/OpenSans-ExtraBold-webfont.ttf") format("truetype"), url("fonts/OpenSans-ExtraBold-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 800;
+  src: url("fonts/OpenSans-ExtraBoldItalic-webfont.eot?") format("eot"), url("fonts/OpenSans-ExtraBoldItalic-webfont.woff") format("woff"), url("fonts/OpenSans-ExtraBoldItalic-webfont.ttf") format("truetype"), url("fonts/OpenSans-ExtraBoldItalic-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 700;
+  src: url("fonts/OpenSans-Bold-webfont.eot?") format("eot"), url("fonts/OpenSans-Bold-webfont.woff") format("woff"), url("fonts/OpenSans-Bold-webfont.ttf") format("truetype"), url("fonts/OpenSans-Bold-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 700;
+  src: url("fonts/OpenSans-BoldItalic-webfont.eot?") format("eot"), url("fonts/OpenSans-BoldItalic-webfont.woff") format("woff"), url("fonts/OpenSans-BoldItalic-webfont.ttf") format("truetype"), url("fonts/OpenSans-BoldItalic-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 600;
+  src: url("fonts/OpenSans-SemiBold-webfont.eot?") format("eot"), url("fonts/OpenSans-SemiBold-webfont.woff") format("woff"), url("fonts/OpenSans-SemiBold-webfont.ttf") format("truetype"), url("fonts/OpenSans-SemiBold-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 600;
+  src: url("fonts/OpenSans-SemiBoldItalic-webfont.eot?") format("eot"), url("fonts/OpenSans-SemiBoldItalic-webfont.woff") format("woff"), url("fonts/OpenSans-SemiBoldItalic-webfont.ttf") format("truetype"), url("fonts/OpenSans-SemiBoldItalic-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/OpenSans-Regular-webfont.eot?") format("eot"), url("fonts/OpenSans-Regular-webfont.woff") format("woff"), url("fonts/OpenSans-Regular-webfont.ttf") format("truetype"), url("fonts/OpenSans-Regular-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 400;
+  src: url("fonts/OpenSans-Italic-webfont.eot?") format("eot"), url("fonts/OpenSans-Italic-webfont.woff") format("woff"), url("fonts/OpenSans-Italic-webfont.ttf") format("truetype"), url("fonts/OpenSans-Italic-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 300;
+  src: url("fonts/OpenSans-Light-webfont.eot?") format("eot"), url("fonts/OpenSans-Light-webfont.woff") format("woff"), url("fonts/OpenSans-Light-webfont.ttf") format("truetype"), url("fonts/OpenSans-Light-webfont.svg#OpenSans") format("svg");
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 300;
+  src: url("fonts/OpenSans-LightItalic-webfont.eot?") format("eot"), url("fonts/OpenSans-LightItalic-webfont.woff") format("woff"), url("fonts/OpenSans-LightItalic-webfont.ttf") format("truetype"), url("fonts/OpenSans-LightItalic-webfont.svg#OpenSans") format("svg");
+}
 h1 {
   font-size: 66px;
 }

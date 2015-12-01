@@ -12,7 +12,7 @@ var ChatList = React.createClass({
 		var contentHeight = $('.chat-list').outerHeight()
 		var scrollPos = $('.chat-list-container').scrollTop()
 		var viewHeight = $('.chat-list-container').outerHeight()
-
+		console.log(viewHeight, scrollPos, viewHeight+scrollPos, contentHeight);
 		if( (viewHeight+scrollPos) >= contentHeight ){
 			this.shouldScrollToBottom = true;
 		}
@@ -111,7 +111,7 @@ ChatList.Input = React.createClass({
 	},
 	render: function() {
 		return (
-			<div ref="input-container" className="input-container">
+			<div ref="input-container" className="input-container" data-chat-channel-info="You're typing in #general">
 				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
 				</div>*/}
