@@ -55,6 +55,11 @@ html, body, #content {
 	overflow-y: scroll;
 }
 
+.chat-list {
+	max-width: 650px;
+	margin: 0 auto;
+}
+
 .section {
 	width: 100%;
 	
@@ -65,6 +70,7 @@ html, body, #content {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		position: relative;
 		
 		.line {
 			width: 100%;
@@ -73,9 +79,18 @@ html, body, #content {
 		}
 		
 		.date {
+			position: absolute;
+			line-height: 50px;
 			font-weight: 400;
-			padding-left: 30px;
 			color: $studioGray-100;
+			width: 100%;
+			text-align: center;
+			left: 0;
+			
+			span {
+				padding: 0 15px;	
+				background-color: white;		
+			}
 		}
 	}
 }
@@ -225,54 +240,65 @@ p.message-container {
 
 .input-container {
 	width: 100%;
+	max-width: 650px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-5px);
 	position: fixed;
 	bottom: 0;
-	left: 0;
 	background-color: white;
-	border-top: 2px solid $studioGray-60;
+	border: 2px solid $studioGray-60;
+	border-radius: 10px;
+	transition: .2s ease-in-out;
 	
 	&.show-hint {
 		
-		&:before {
-			bottom: 49px;
+		padding-top: 15px;
+		transition: .2s ease-in-out;
+		
+		.hint {
+			font-size: 10px;
+			transform: translateY(-5px) translateX(-15px);
 			transition: .2s ease-in-out;
 		}
 	}
 	
-	&:before {
-		transition: 0.2s;
-		position:absolute;
-		content: attr(data-chat-channel-info);
-		height: 49px;
-		bottom: 0;
+	.hint {
+		position:absolute; 
+		//height: 100%;
+		top: 0;
 		font-weight: 600;
 		color: $studioGray-120;
 		font-size: 14px;
 		font-weight: 600;
 		padding: 15px 25px;
-		padding-top: 10px;
-		padding-left: 51px;
-		margin-top: -3px;
+		padding-top: 20px;
+		padding-left: 65px;
 		transition: .2s ease-in-out;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1;
 	}
 	
 	textarea {
 		padding: 15px 25px;
 		padding-left: 51px;
+		padding-top: 20px;
 		width: 100%;
 		font-family: 'OpenSans';
 		font-weight: 600;
-		color: $studioGray-120;
+		color: $deepBlue-100;
 		font-size: 14px;
 		resize: none;
 		outline: none;
-		margin-top: 3px;
+		position: relative;
+		z-index: 2;
 	}
 	
 	i.chat-input-attach-icon {
 		position: absolute;
 		height: 100%;
-		line-height: 53px;
+		line-height: 58px;
 		font-size: 20px;
 		width: 51px;
 		text-align: center;
@@ -283,22 +309,6 @@ p.message-container {
 		&:hover {
 			color: $deepBlue-80;
 			transition: .1s ease-in-out;
-		}
-		
-		&:before {
-			position:absolute;
-			content: attr(data-chat-channel-info);
-			height: 49px;
-			bottom: 0;
-			font-weight: 600;
-			color: $studioGray-120;
-			font-size: 14px;
-			font-weight: 600;
-			padding: 15px 25px;
-			padding-top: 10px;
-			padding-left: 51px;
-			margin-top: -3px;
-			transition: .2s ease-in-out;
 		}
 	}
 }
