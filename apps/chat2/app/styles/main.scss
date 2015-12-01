@@ -230,30 +230,36 @@ p.message-container {
 	left: 0;
 	background-color: white;
 	border-top: 2px solid $studioGray-60;
+	transition: .2s ease-in-out;
 	
 	&.show-hint {
 		
-		&:before {
-			bottom: 49px;
+		padding-top: 15px;
+		transition: .2s ease-in-out;
+		
+		.hint {
+			font-size: 10px;
+			transform: translateY(-5px) translateX(-15px);
 			transition: .2s ease-in-out;
 		}
 	}
 	
-	&:before {
-		transition: 0.2s;
-		position:absolute;
-		content: attr(data-chat-channel-info);
-		height: 49px;
-		bottom: 0;
+	.hint {
+		position:absolute; 
+		//height: 100%;
+		top: 0;
 		font-weight: 600;
 		color: $studioGray-120;
 		font-size: 14px;
 		font-weight: 600;
 		padding: 15px 25px;
-		padding-top: 10px;
-		padding-left: 51px;
-		margin-top: -3px;
+		padding-top: 18px;
+		padding-left: 65px;
 		transition: .2s ease-in-out;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1;
 	}
 	
 	textarea {
@@ -262,11 +268,13 @@ p.message-container {
 		width: 100%;
 		font-family: 'OpenSans';
 		font-weight: 600;
-		color: $studioGray-120;
+		color: $deepBlue-100;
 		font-size: 14px;
 		resize: none;
 		outline: none;
 		margin-top: 3px;
+		position: relative;
+		z-index: 2;
 	}
 	
 	i.chat-input-attach-icon {
@@ -283,22 +291,6 @@ p.message-container {
 		&:hover {
 			color: $deepBlue-80;
 			transition: .1s ease-in-out;
-		}
-		
-		&:before {
-			position:absolute;
-			content: attr(data-chat-channel-info);
-			height: 49px;
-			bottom: 0;
-			font-weight: 600;
-			color: $studioGray-120;
-			font-size: 14px;
-			font-weight: 600;
-			padding: 15px 25px;
-			padding-top: 10px;
-			padding-left: 51px;
-			margin-top: -3px;
-			transition: .2s ease-in-out;
 		}
 	}
 }

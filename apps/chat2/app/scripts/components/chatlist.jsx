@@ -86,14 +86,6 @@ ChatList.Input = React.createClass({
 		return {};
 	},
 	onTextChange: function(){
-		if(!this.hasShownHint){
-			var self = this;
-			this.setState({showHint:true});
-			this.hasShownHint = true;
-			setTimeout(function(){
-				self.setState({showHint:false});
-			},3000);
-		}
 		var $textarea = this.getEl("textarea");
 		var text = $textarea.val(); 
 		var lines = text.split(/\r|\r\n|\n/);
@@ -106,7 +98,7 @@ ChatList.Input = React.createClass({
 		} else if (text.length == 0 ) {
 			$textarea.attr('rows', '1');
 		}
-		
+		this.setState({showHint:(text.length > 0)})
 		$main = this.getEl("input-container");
 		this.props.onChangedTextHeight($main.outerHeight());
 	},
@@ -122,18 +114,28 @@ ChatList.Input = React.createClass({
 			}
 		}
 	},
+	
+	onFocus: function(e){
+		//console.log(e.keyCode, e.shiftKey, e.target);
+		$('.hint').toggleClass('show-hint', true);
+	},
+	onBlur: function(e){
+		//console.log(e.keyCode, e.shiftKey, e.target);
+		$('.hint').toggleClass('show-hint', false);
+	},
 	render: function() {
 		var hintClass = "input-container ";
 		console.log(this.state);
 		if(this.state.showHint)
 			hintClass += "show-hint";
 		return (
-			<div ref="input-container" className={hintClass} data-chat-channel-info="You're typing in #general">
+			<div ref="input-container" className={hintClass} >
 				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
 				</div>*/}
-				<i className="material-icons chat-input-attach-icon">attach_file</i>
-				<textarea ref="textarea" data-autoresize tabIndex="1" onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
+				<i className="material-icons chat-input-attach-icon" >attach_file</i>
+				<div className="hint">You're typing in #general</div>
+				<textarea ref="textarea" data-autoresize tabIndex="1"  onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
 			</div>
 		);
 	}
