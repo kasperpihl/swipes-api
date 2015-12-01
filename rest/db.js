@@ -52,27 +52,33 @@ let rethinkdb = {
         conn = localConn;
 
         return query.run(conn);
-      }).then((results) => {
+      }).then((cursor) => {
 
         if (!options.feed) {
           conn.close();
         }
 
         if (options.cursor || options.feed) {
-          if (options.socket) {
-            options.socket.on('disconnect', () => {
-              results.close();
-              conn.close();
-            });
+          if (options.feed) {
+            if (options.socket) {
+              options.socket.on('disconnect', () => {
+                cursor.close();
+                conn.close();
+              });
+            }
+
+            if (options.returnConnection) {
+              return resolve([cursor, conn]);
+            } else {
+              return resolve(cursor);
+            }
           }
 
-          if (options.returnConnection) {
-            return resolve([results, conn]);
-          } else {
-            return resolve(results);
+          if (options.cursor) {
+            return resolve(cursor);
           }
         } else {
-          handleCursors(results)
+          handleCursors(cursor)
             .then((results) => {
               return resolve(results);
             }).error((err) => {
