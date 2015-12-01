@@ -22,6 +22,7 @@ var ChatStore = Reflux.createStore({
 			var defUser = {
 				name: "unknown"	
 			};
+			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			var user = self.users[model.user_id];
 			if(user){
 				model.user = user;
