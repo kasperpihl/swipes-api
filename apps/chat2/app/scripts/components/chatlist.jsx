@@ -7,7 +7,12 @@ var ChatItem = require('./chat_item');
 var ChatList = React.createClass({
 	mixins: [Reflux.connect(chatStore, "sections")],
 	shouldScrollToBottom: true,
-	isScrolledToBottom: false,
+	statics: {
+		scrollBottom: function(){
+			console.log(this);
+			this.scrollToBottom();
+		}	
+	},
 	onScroll: function(e){
 		
 		var contentHeight = $('.chat-list').outerHeight()
@@ -23,14 +28,15 @@ var ChatList = React.createClass({
 
 	},
 	scrollToBottom: function(){
-		console.log($(this.refs["scroll-container"].getDOMNode()));
-		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
-		$('.chat-list-container').scrollTop(scrollPosForBottom);
-		this.isScrolledToBottom = true;
+		if(this.shouldScrollToBottom){
+			console.log($(this.refs["scroll-container"].getDOMNode()));
+			var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
+			$('.chat-list-container').scrollTop(scrollPosForBottom);
+		}
+		
 	},
 	componentDidUpdate: function(){
-		if(this.shouldScrollToBottom)
-			this.scrollToBottom();
+		this.scrollToBottom();
 	},
 	render: function() {
 
@@ -86,6 +92,11 @@ ChatList.Input = React.createClass({
 		} else if (text.length == 0 ) {
 			$textarea.attr('rows', '1');
 		}
+		
+		$main = this.getEl("input-container");
+		$("#content").css("paddingBottom", $main.outerHeight());
+		console.log(ChatList.constructor);
+		ChatList.scrollBottom();
 	},
 	onKeyUp: function(e){
 		//console.log(e.keyCode, e.shiftKey, e.target);
@@ -101,7 +112,7 @@ ChatList.Input = React.createClass({
 	},
 	render: function() {
 		return (
-			<div className="input-container">
+			<div ref="input-container" className="input-container">
 				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
 				</div>*/}
