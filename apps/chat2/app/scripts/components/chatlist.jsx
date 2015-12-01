@@ -22,9 +22,9 @@ var ChatList = React.createClass({
 
 	},
 	scrollToBottom: function(){
-		if(this.shouldScrollToBottom){
-			console.log($(this.refs["scroll-container"].getDOMNode()));
-			var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
+		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
+		if(this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
+			
 			$('.chat-list-container').scrollTop(scrollPosForBottom);
 		}
 		
@@ -73,6 +73,7 @@ ChatList.Section = React.createClass({
 });
 
 ChatList.Input = React.createClass({
+	hasShownHint: false,
 	getEl:function(name){
 		return $(this.refs[name].getDOMNode());	
 	},
@@ -80,7 +81,19 @@ ChatList.Input = React.createClass({
 		if(e.keyCode === 13 && !e.shiftKey)
 			e.preventDefault();
 	},
+	getInitialState:function(){
+		console.log("getting initial state");
+		return {};
+	},
 	onTextChange: function(){
+		if(!this.hasShownHint){
+			var self = this;
+			this.setState({showHint:true});
+			this.hasShownHint = true;
+			setTimeout(function(){
+				self.setState({showHint:false});
+			},3000);
+		}
 		var $textarea = this.getEl("textarea");
 		var text = $textarea.val(); 
 		var lines = text.split(/\r|\r\n|\n/);
@@ -110,8 +123,12 @@ ChatList.Input = React.createClass({
 		}
 	},
 	render: function() {
+		var hintClass = "input-container ";
+		console.log(this.state);
+		if(this.state.showHint)
+			hintClass += "show-hint";
 		return (
-			<div ref="input-container" className="input-container" data-chat-channel-info="You're typing in #general">
+			<div ref="input-container" className={hintClass} data-chat-channel-info="You're typing in #general">
 				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
 				</div>*/}
