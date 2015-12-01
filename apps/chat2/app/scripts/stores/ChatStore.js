@@ -22,7 +22,6 @@ var ChatStore = Reflux.createStore({
 		var lastUser, lastGroup, lastDate;
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
-
 			var group = moment(date).startOf('day').unix();
 
 
@@ -36,7 +35,7 @@ var ChatStore = Reflux.createStore({
 			if(!user){
 				user = { name: "unknown" };
 			}
-			
+
 			model.user = user;
 			if(!model.user.profile){
 				model.user.profile = {};
