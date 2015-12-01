@@ -24,7 +24,6 @@ var ChatList = React.createClass({
 	scrollToBottom: function(){
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
 		if(this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
-			
 			$('.chat-list-container').scrollTop(scrollPosForBottom);
 		}
 		

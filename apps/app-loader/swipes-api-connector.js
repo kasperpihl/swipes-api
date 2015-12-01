@@ -26,6 +26,9 @@ var SwipesAPIConnector = (function() {
 		var connector = new SwipesAPIConnector(this._baseURL, this._token);
 		return connector;
 	};
+	SwipesAPIConnector.prototype.getBaseURL = function(){
+		return this._baseURL;
+	}
 	SwipesAPIConnector.prototype.getAPIURL = function(){
 		return this._apiUrl;
 	};
