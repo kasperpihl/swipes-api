@@ -20,9 +20,10 @@ var ChatList = React.createClass({
 		else{
 			this.shouldScrollToBottom = false;
 		}
-		
+
 	},
 	scrollToBottom: function(){
+		console.log($(this.refs["scroll-container"].getDOMNode()));
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
 		$('.chat-list-container').scrollTop(scrollPosForBottom);
 		this.isScrolledToBottom = true;
@@ -37,7 +38,7 @@ var ChatList = React.createClass({
 			return <ChatList.Section key={section.title} data={section} />
 		})
 		return (
-			<div onScroll={this.onScroll} className="chat-list-container">
+			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 				<div className="chat-list">
 					{sections}
 				</div>
