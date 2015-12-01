@@ -9,7 +9,7 @@ var ChatItem = React.createClass({
 			<div className={className}>
 				<div className="chat-avatar">
 					<div className="avatar">
-						<img src="https://unsplash.it/50/?random" />
+						<img src={this.props.data.user.profile_image} />
 					</div>
 				</div>
 				<div className="chat-content">

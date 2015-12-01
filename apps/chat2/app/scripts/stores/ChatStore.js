@@ -30,18 +30,18 @@ var ChatStore = Reflux.createStore({
 			model.timeStr = TimeUtility.getTimeStr(date);
 			
 			var user = self.users[model.user_id];
-			if(user && user == lastUser && group == lastGroup){
+			if(user && user.id == lastUser && group == lastGroup){
 				model.isExtraMessage = true;
 			}
 			if(user){
 				model.user = lastUser = user;
 			}
 			else{ 
-				model.user = { name: "unknown"	};
+				model.user = { name: "unknown", "profile_image": "https://unsplash.it/40/?random"	};
 			}
 
 			lastGroup = group;
-			lastUser = user;
+			lastUser = user.id;
 			lastDate = date;
 			return group;
 		});
