@@ -18,10 +18,14 @@ var ChatStore = Reflux.createStore({
 	},
 	sortMessages: function(){
 		var self = this;
+
 		var groups = _.groupBy(this.messages, function(model, i){
 			var defUser = {
 				name: "unknown"	
 			};
+			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+			model.timeStr = TimeUtility.getTimeStr(new Date(parseInt(model.ts)) * 1000);
+			
 			var user = self.users[model.user_id];
 			if(user){
 				model.user = user;

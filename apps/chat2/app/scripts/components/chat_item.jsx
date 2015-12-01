@@ -15,9 +15,7 @@ var ChatItem = React.createClass({
 						<p className="name">{this.props.data.user.name} <span className="chat-timestamp">{this.props.data.timeStr}22:14</span></p>
 					</div>
 					<div className="chat-bottom-side-container">
-						<p className="message-container">
-							{this.props.data.text}
-						</p>
+						<p className="message-container" dangerouslySetInnerHTML={{__html: this.props.data.text}}/>
 					</div>
 				</div>
 			</div>
