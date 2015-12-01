@@ -18,21 +18,32 @@ var ChatStore = Reflux.createStore({
 	},
 	sortMessages: function(){
 		var self = this;
+		var sortedMessages = _.sortBy(this.messages, 'ts');
+		var lastUser, lastGroup, lastDate;
+		var groups = _.groupBy(sortedMessages, function(model, i){
+			var date = new Date(parseInt(model.ts)*1000);
 
-		var groups = _.groupBy(this.messages, function(model, i){
-			var defUser = {
-				name: "unknown"	
-			};
+			var group = moment(date).startOf('day').unix();
+
+
 			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-			model.timeStr = TimeUtility.getTimeStr(new Date(parseInt(model.ts)) * 1000);
+			model.timeStr = TimeUtility.getTimeStr(date);
 			
 			var user = self.users[model.user_id];
-			if(user){
-				model.user = user;
+			if(user && user == lastUser && group == lastGroup){
+				model.isExtraMessage = true;
 			}
-			else model.user = defUser;
-			var date = new Date(parseInt(model.ts)*1000);
-			return moment(date).startOf('day').unix();
+			if(user){
+				model.user = lastUser = user;
+			}
+			else{ 
+				model.user = { name: "unknown"	};
+			}
+
+			lastGroup = group;
+			lastUser = user;
+			lastDate = date;
+			return group;
 		});
 		sortedKeys = _.keys(groups).sort()
 		var sortedSections = [];
