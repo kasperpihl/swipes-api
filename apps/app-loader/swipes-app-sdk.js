@@ -219,6 +219,8 @@ var SwipesAppSDK = (function() {
 						this.info.userId = data.data.user_id;
 					if(data.data.default_scope)
 						this.setDefaultScope(data.data.default_scope);
+					else
+						this.setDefaultScope(data.data.manifest.id);
 				}
 				var listeners = self._listeners.get(data.type);
 				for(var i = 0 ; i < listeners.length ; i++){
