@@ -5,18 +5,13 @@ Router.start();
 swipes.onReady(function(){
 	console.log("on ready fired");
 	chatStore.start();
-	swipes.currentApp().on("messages", function(message){
-		console.log("message in chat", message.data);
-		chatStore.messages.push(message.data.data);
-		chatStore.sortMessages();
-	});
 })
 	/*window.webSocket = io.connect("http://localhost:5000", {
 		query: 'token=' + token
 	});
 	webSocket.on('message', function(data) {
 		console.log(data);
-		if(data && data.type === "chat2_messages"){
+		if(data && data.type === "chat_messages"){
 			
 		}
 	});

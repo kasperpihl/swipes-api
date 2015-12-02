@@ -32,6 +32,9 @@ var ChatStore = Reflux.createStore({
 			if(user && user.id == lastUser && group == lastGroup){
 				model.isExtraMessage = true;
 			}
+			else{
+				model.isExtraMessage = false;
+			}
 			if(!user){
 				user = { name: "unknown" };
 			}
@@ -71,6 +74,13 @@ var ChatStore = Reflux.createStore({
 		this.messages = [];
 		this.sortMessages();
 		var self = this;
+		// Hook up the sockets
+		swipes.currentApp().on("messages", function(message){
+			console.log("message in chat", message.data);
+			message.data.data.isNewMessage = true;
+			self.messages.push(message.data.data);
+			self.sortMessages();
+		});
 		swipes._client.callSwipesApi('users.list',function(users){
 			users = users.results;
 			self.users = _.indexBy(users, 'id');

@@ -5,6 +5,8 @@ var ChatItem = React.createClass({
 		var className = "chat-message ";
 		if(this.props.data.isExtraMessage)
 			className += "extra-message ";
+		if(this.props.data.isNewMessage)
+			className += "new-message ";
 		return (
 			<div className={className}>
 				<div className="chat-avatar">

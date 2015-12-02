@@ -19,9 +19,8 @@ var ChatList = React.createClass({
 		else{
 			this.shouldScrollToBottom = false;
 		}
-
 	},
-	scrollToBottom: function(){
+	scrollToBottom: function(force){
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
 		if(this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
 			$('.chat-list-container').scrollTop(scrollPosForBottom);
@@ -38,6 +37,9 @@ var ChatList = React.createClass({
 	onChangedTextHeight: function(height){
 		$("#content").css("paddingBottom", height);
 		this.scrollToBottom();
+	},
+	onSendingMessage:function(){
+		this.shouldScrollToBottom = true;
 	},
 	componentDidUpdate: function(){
 		this.scrollToBottom();
@@ -58,7 +60,7 @@ var ChatList = React.createClass({
 				<div className="chat-list">
 					{sections}
 				</div>
-				<ChatList.Input onChangedTextHeight={this.onChangedTextHeight} />
+				<ChatList.Input onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
 			</div>
 		);
 	}
@@ -124,13 +126,17 @@ ChatList.Input = React.createClass({
 		//console.log(e.keyCode, e.shiftKey, e.target);
 		
 		if (e.keyCode === 13 && !e.shiftKey ) {
-			var message = $(e.target).val();
+			var message = this.getEl("textarea").val();
 			if(message && message.length > 0){
-				$(e.target).val("");
-				this.onTextChange();
-				chatActions.sendMessage(message);
+				this.sendMessage(message);
 			}
 		}
+	},
+	sendMessage: function(message){
+		this.getEl("textarea").val("");
+		this.props.onSendingMessage();
+		this.onTextChange();
+		chatActions.sendMessage(message);
 	},
 	onBlur: function(e){
 		//console.log(e.keyCode, e.shiftKey, e.target);
