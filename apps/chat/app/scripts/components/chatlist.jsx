@@ -21,10 +21,13 @@ var ChatList = React.createClass({
 			this.shouldScrollToBottom = false;
 		}
 	},
-	scrollToBottom: function(force){
+	scrollToBottom: function(dontAnimate){
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
 		if(this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
-			$('.chat-list-container').scrollTop(scrollPosForBottom);
+			if(dontAnimate)
+				$('.chat-list-container').scrollTop(scrollPosForBottom);
+			else
+				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 200);
 		}
 		var topPadding = 0;
 		if($('.chat-list').outerHeight() < $('.chat-list-container').outerHeight())
