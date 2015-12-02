@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="http://192.168.1.100:5000/v1/sdk.load"></script>
+<script src="http://localhost:5000/v1/sdk.load"></script>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -60,16 +60,17 @@
     //-------------------------------------------------------------------------
     // swipes inserted methods
     //-------------------------------------------------------------------------
+    function sendHighScore(score){
+      swipes.currentApp().save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
+        fetchHighScores();
+      })
+    }
     swipes.onReady(function(){
       var highscores = [];
       var users = {};
       var currentApp = swipes.currentApp();
 
-      function sendHighScore(score){
-        currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
-          fetchHighScores();
-        })
-      }
+      
       currentApp.on("highscore", function(e){
         fetchHighScores();
       });
@@ -106,7 +107,6 @@
           console.log(res,err);
           if(res && res.results){
 
-            $("#highscores2").html("")
             var users = {}
             var counter = 0;
             for(var i = 0 ; i < res.results.length ; i++){
@@ -120,7 +120,7 @@
                     if(counter == res.results.length){
                       for(i = 0 ; i < res.results.length ; i++){
                         var highscore = res.results[i];
-                        $("#highscores2").append("<li>" + highscore.score + "</li>");
+                        $("#highscores2").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
                       }
                     }
                   }

@@ -8,6 +8,7 @@ var ChatInput = require('./chat_input');
 var ChatList = React.createClass({
 	mixins: [Reflux.connect(chatStore, "sections")],
 	shouldScrollToBottom: true,
+	hasRendered: false,
 	onScroll: function(e){
 		
 		var contentHeight = $('.chat-list').outerHeight()
@@ -21,13 +22,18 @@ var ChatList = React.createClass({
 			this.shouldScrollToBottom = false;
 		}
 	},
-	scrollToBottom: function(dontAnimate){
+	scrollToBottom: function(animate){
+
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
-		if(this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
-			if(dontAnimate)
-				$('.chat-list-container').scrollTop(scrollPosForBottom);
-			else
+		console.log(scrollPosForBottom);
+		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
+			this.hasRendered = true;
+			console.log("did scroll to bottom");
+			if(animate)
 				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 200);
+			else
+				$('.chat-list-container').scrollTop(scrollPosForBottom);
+				
 		}
 		var topPadding = 0;
 		if($('.chat-list').outerHeight() < $('.chat-list-container').outerHeight())
@@ -36,17 +42,21 @@ var ChatList = React.createClass({
 		
 	},
 	handleResize: function(){
-		this.scrollToBottom();
+		console.log("handleResize");
+		this.scrollToBottom(this.hasRendered);
 	},
 	onChangedTextHeight: function(height){
+		console.log("changing text height");
 		$("#content").css("paddingBottom", height);
 		this.scrollToBottom();
 	},
 	onSendingMessage:function(){
+		this.shouldAnimateScroll = true;
 		this.shouldScrollToBottom = true;
 	},
 	componentDidUpdate: function(){
-		this.scrollToBottom();
+		console.log("componentDidUpdate");
+		this.scrollToBottom(this.hasRendered);
 	},
 	componentDidMount: function(){
 		window.addEventListener('resize', this.handleResize);
