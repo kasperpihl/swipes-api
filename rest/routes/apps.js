@@ -18,6 +18,13 @@ let generateId = util.generateSlackLikeId;
 
 require('rethinkdb-init')(r);
 let dbConfig = config.get('dbConfig');
+if(process.env.DB_HOST){
+  dbConfig = {
+    host: process.env.DB_HOST,
+    port: dbConfig.port,
+    db: 'swipes'
+  };
+}
 
 let updateApp = (appId, updateObj, res, next) => {
   let deletePerUserQ;
