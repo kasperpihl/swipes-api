@@ -105,6 +105,7 @@ html, body, #content {
 	display: flex;
 	padding: 5px 60px;
 	padding-top: 12px;
+	opacity: 0;
 	
 	&:last-child{
 		padding-bottom: 20px;
@@ -112,6 +113,12 @@ html, body, #content {
 	
 	@media screen and (max-width: $break-small) {
 		padding: 5px 10px;
+	}
+	
+	&.newMessage {
+		animation: newMessage .2s ease-in-out forwards;
+		animation-delay: .2s;
+		opacity: 0;
 	}
 	
 	&.extra-message {
@@ -325,4 +332,9 @@ p.message-container {
 			transition: .1s ease-in-out;
 		}
 	}
+}
+
+@keyframes newMessage {
+	0% {transform: translateY(20px); opacity: 0;}
+	100% {transform: translateY(0px); opacity: 1;}
 }
