@@ -19,6 +19,7 @@ var ChatStore = Reflux.createStore({
 	sortMessages: function(){
 		var self = this;
 		var sortedMessages = _.sortBy(this.messages, 'ts');
+		
 		var lastUser, lastGroup, lastDate;
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
