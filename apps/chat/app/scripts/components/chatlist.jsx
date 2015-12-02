@@ -90,11 +90,9 @@ ChatList.Input = React.createClass({
 		var $textarea = this.getEl("textarea");
 		var text = $textarea.val();
 		var extraPadding = 0;
-		if(this.state.showHint !== (text.length > 0)){
-			extraPadding = -15;
-			this.setState({showHint:(text.length > 0)})
-			if(text.length > 0)
-				extraPadding = 15;
+		if((text.length > 0) && !this.state.showHint){
+			extraPadding = 15;
+			this.setState({showHint:true});
 		}
 		var lines = text.split(/\r|\r\n|\n/);
 		var count = lines.length;
@@ -122,14 +120,14 @@ ChatList.Input = React.createClass({
 			}
 		}
 	},
-	
-	onFocus: function(e){
-		//console.log(e.keyCode, e.shiftKey, e.target);
-		$('.hint').toggleClass('show-hint', true);
-	},
 	onBlur: function(e){
 		//console.log(e.keyCode, e.shiftKey, e.target);
-		$('.hint').toggleClass('show-hint', false);
+		//$('.hint').toggleClass('show-hint', false);
+		
+		var $textarea = this.getEl("textarea");
+		var text = $textarea.val();
+		if((!text || text.length == 0) && this.state.showHint )
+			this.setState({showHint:false});
 	},
 	componentDidUpdate: function(){
 		
@@ -145,8 +143,8 @@ ChatList.Input = React.createClass({
 				<div className="attach-button-container">
 				</div>*/}
 				<i className="material-icons chat-input-attach-icon" >attach_file</i>
-				<div className="hint">You're typing in #general</div>
-				<textarea ref="textarea" data-autoresize tabIndex="1"  onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
+				<div className="hint">Write message</div>
+				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
 			</div>
 		);
 	}
