@@ -213,10 +213,13 @@ var SwipesAppSDK = (function() {
 			var data = message.data;
 			if(message.command == "event"){
 				if(message.data.type == "init"){
+					if(data.data.channel_id)
+						this.info.channelId = data.data.channel_id;
 					if(data.data.manifest.manifest_id)
 						this.setAppId(data.data.manifest.manifest_id);
 					if(data.data.user_id)
 						this.info.userId = data.data.user_id;
+					
 					if(data.data.default_scope)
 						this.setDefaultScope(data.data.default_scope);
 					else

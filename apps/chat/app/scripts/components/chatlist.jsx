@@ -26,7 +26,14 @@ var ChatList = React.createClass({
 		if(this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
 			$('.chat-list-container').scrollTop(scrollPosForBottom);
 		}
+		var topPadding = 0;
+		if($('.chat-list').outerHeight() < $('.chat-list-container').outerHeight())
+			topPadding = $('.chat-list-container').outerHeight() - $('.chat-list').outerHeight();
+		$('.chat-list-container').css("paddingTop", topPadding + "px");
 		
+	},
+	handleResize: function(){
+		this.scrollToBottom();
 	},
 	onChangedTextHeight: function(height){
 		$("#content").css("paddingBottom", height);
@@ -34,6 +41,12 @@ var ChatList = React.createClass({
 	},
 	componentDidUpdate: function(){
 		this.scrollToBottom();
+	},
+	componentDidMount: function(){
+		window.addEventListener('resize', this.handleResize);
+	},
+	componentWillUnmount: function() {
+		window.removeEventListener('resize', this.handleResize);
 	},
 	render: function() {
 
@@ -125,8 +138,11 @@ ChatList.Input = React.createClass({
 		
 		var $textarea = this.getEl("textarea");
 		var text = $textarea.val();
-		if((!text || text.length == 0) && this.state.showHint )
+		if((!text || text.length == 0) && this.state.showHint ){
 			this.setState({showHint:false});
+			$main = this.getEl("input-container");
+			this.props.onChangedTextHeight($main.outerHeight() - 15);
+		}
 	},
 	componentDidUpdate: function(){
 		
