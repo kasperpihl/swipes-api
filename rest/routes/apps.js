@@ -175,7 +175,10 @@ router.post('/apps.list', (req, res, next) => {
             fsApps = fsApps.map((fsApp) => {
               if (app.manifest_id === fsApp.identifier) {
                 fsApp.id = app.id;
-                fsApp.url = util.appUrl(req, app);
+                if(fsApp.channel_view)
+                  fsApp.channel_view_url = util.appUrl(req, fsApp, "channel_view");
+                if(fsApp.main_app)
+                  fsApp.main_app_url = util.appUrl(req, fsApp, "main_app");
 
                 if (app.is_installed) {
                   fsApp.is_installed = true;
