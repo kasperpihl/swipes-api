@@ -1,4 +1,4 @@
-$(function(){
+swipes.onReady(function(){
 	swipes.stani = {};
 
 	swipes.currentApp().get("stanimir").then(function(stanimirs){

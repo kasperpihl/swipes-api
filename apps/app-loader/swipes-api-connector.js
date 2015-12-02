@@ -163,16 +163,16 @@ var SwipesAPIConnector = (function() {
 
 
 	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
-		console.log(msg);
 		var message = JSON.parse(msg.data);
-		if(message.identifier && message.command === "init"){
-			console.log("init", message);
-			if(message.data.target_url)
-				this.setTargetURL(message.data.target_url);
-			if(message.data.manifest_id)
-				this.setAppId(message.data.manifest_id);
-			if(message.data.token)
-				this.setToken(message.data.token);
+		if(message.identifier && message.command === "event" && message.data.type === "init"){
+			var data = message.data.data;
+			if(data.target_url)
+				this.setTargetURL(data.target_url);
+			if(data.manifest.manifest_id)
+				this.setAppId(data.manifest.manifest_id);
+			if(data.token)
+				this.setToken(data.token);
+
 			if(this._listenerQueue.length > 0){
 				for(var i = 0 ; i < this._listenerQueue.length ; i++){
 					listenObj = this._listenerQueue[i];

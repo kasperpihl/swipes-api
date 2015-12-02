@@ -18,6 +18,13 @@ let generateId = util.generateSlackLikeId;
 
 require('rethinkdb-init')(r);
 let dbConfig = config.get('dbConfig');
+if(process.env.DB_HOST){
+  dbConfig = {
+    host: process.env.DB_HOST,
+    port: dbConfig.port,
+    db: 'swipes'
+  };
+}
 
 let updateApp = (appId, updateObj, res, next) => {
   let deletePerUserQ;
@@ -175,7 +182,10 @@ router.post('/apps.list', (req, res, next) => {
             fsApps = fsApps.map((fsApp) => {
               if (app.manifest_id === fsApp.identifier) {
                 fsApp.id = app.id;
-                fsApp.url = util.appUrl(req, app);
+                if(fsApp.channel_view)
+                  fsApp.channel_view_url = util.appUrl(req, fsApp, "channel_view");
+                if(fsApp.main_app)
+                  fsApp.main_app_url = util.appUrl(req, fsApp, "main_app");
 
                 if (app.is_installed) {
                   fsApp.is_installed = true;
@@ -378,13 +388,14 @@ router.post('/apps.delete', (req, res, next) => {
   db.rethinkQuery(getAppQ)
     .then((app) => {
       if (!app) {
-        return res.status(200).json({ok: false, err: 'no_app_found'});
+        return new Promise((re, reject) => { reject('no_app_found')});
+        
       }
 
       let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
 
       if (!manifest) {
-        return res.status(200).json({ok: false, err: 'no_manifest_found'});
+        return new Promise((re, reject) => { reject('no_manifest_found')});
       }
 
       let tables = manifest.tables;
@@ -406,69 +417,13 @@ router.post('/apps.delete', (req, res, next) => {
       deleteApp(appId, res, next);
     })
     .catch((err) => {
+      if(typeof err === "string")
+        return res.status(200).json({ok: false, err: err});
       return next(err)
     })
 });
 
-router.get('/apps.load', (req, res, next) => {
-  let appId = req.query.app_id;
-  let manifestId = req.query.manifest_id;
-  let manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
-  let channelId = req.query.channel_id;
 
-  // TODO: Do validations and stuff
-  if (!manifest) {
-    return res.status(200).json({ok: false, err: 'no_manifest_found'});
-  }
-  let indexFile
-  if(channelId && manifest.channel_view){
-    indexFile = getAppFile(manifestId, manifest.channel_view.index);
-  }
-  else if(manifest.main_view){
-    indexFile = getAppFile(manifestId, manifest.main_view.index);
-  }
-  else{
-    return res.status(200).json({ok:false, err: 'no_app_found'});
-  }
-  
-
-  if(!indexFile){
-    return res.status(200).json({ok: false, err: 'no_index_found'});
-  }
-
-  let apiHost = 'http://' + req.headers.host
-  let appUrlDir = apiHost + '/apps/' + manifestId
-
-  // Insert dependencies, SwipesSDK and other scripts right after head
-  let insertString = '';
-  console.log(req.headers);
-  var referer = req.headers.referer ? req.headers.referer : false;
-  insertString += '<script src="' + apiHost + '/v1/sdk.load?app_id=' + manifestId+ '&referer=' + referer + '&token=' + req.query.token + '"></script>\r\n';
-  
-  insertString += '<script>\r\n';
-  if(appId)
-    insertString += 'swipes.setDefaultScope("' + appId + '");\r\n';
-  if(channelId){
-    insertString += 'swipes.info.channelId = "' + channelId + '";\r\n';
-    insertString += 'swipes.setDefaultScope("' + channelId + '");\r\n';
-  }
-  if(req.userId)
-    insertString += 'swipes.info.userId = "' + req.userId + '";';
-  insertString += '</script>\r\n';
-
-  // Locate <head> and insert our code as the very first
-  var index = indexFile.indexOf('<head>')
-  if(index != -1){
-    index += 6
-    indexFile = indexFile.slice(0, index) + insertString + indexFile.slice(index);
-  }
-
-  // Replace <{appDir}}> with actual host for apps to target their folder
-  indexFile = indexFile.replace(new RegExp('<{appDir}>', 'g'), appUrlDir );
-
-
-  res.status(200).send(indexFile);
-});
 
 router.post('/apps.method', (req, res, next) => {
   let method = req.body.method;
@@ -564,7 +519,9 @@ router.post('/apps.saveData', (req, res, next) => {
     // If data is not an array, create it as array, this is for our loops to work
     if(!(queryObject.data instanceof Array))
       queryObject.data = [queryObject.data];
-    
+
+
+
     // Define the beforeHandler function if any exist for current app
     let beforeHandler = (data, callback) => {
       if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
@@ -580,6 +537,7 @@ router.post('/apps.saveData', (req, res, next) => {
         callback(data);
       }
     }
+
 
     // Define validation function, this will call any beforeHandler, and then validate data from our side
     let validateFunction = (data) => {
@@ -628,7 +586,7 @@ router.post('/apps.saveData', (req, res, next) => {
     return db.rethinkQuery(rethinkQ);
 
   }).then( result => {
-    console.log(result);
+
     let afterHandler = (newData, oldData) => {
       return new Promise((resolve, reject) => {
         if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
@@ -687,7 +645,6 @@ router.post('/apps.getData', (req, res, next) => {
 
   }).then((results, error) => {
 
-    console.log("got results", results, error);
     res.status(200).json({ok: true, results: results});
   })
   .catch((err) => {

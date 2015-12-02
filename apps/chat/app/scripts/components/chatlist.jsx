@@ -12,7 +12,7 @@ var ChatList = React.createClass({
 		var contentHeight = $('.chat-list').outerHeight()
 		var scrollPos = $('.chat-list-container').scrollTop()
 		var viewHeight = $('.chat-list-container').outerHeight()
-		console.log(viewHeight, scrollPos, viewHeight+scrollPos, contentHeight);
+		
 		if( (viewHeight+scrollPos) >= contentHeight ){
 			this.shouldScrollToBottom = true;
 		}
@@ -83,7 +83,6 @@ ChatList.Input = React.createClass({
 			e.preventDefault();
 	},
 	getInitialState:function(){
-		console.log("getting initial state");
 		return {};
 	},
 	onTextChange: function(){
@@ -134,7 +133,6 @@ ChatList.Input = React.createClass({
 	},
 	render: function() {
 		var hintClass = "input-container ";
-		console.log(this.state);
 		if(this.state.showHint)
 			hintClass += "show-hint";
 		return (

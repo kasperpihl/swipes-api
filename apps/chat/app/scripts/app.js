@@ -1,16 +1,23 @@
 var Router = require('./router');
 var chatStore = require('./stores/ChatStore');
 Router.start();
-swipes.setAppId("chat");
-if(!swipes.info.userId){
-	window.webSocket = io.connect("http://localhost:5000", {
+
+swipes.onReady(function(){
+	console.log("on ready fired");
+	chatStore.start();
+	swipes.currentApp().on("messages", function(message){
+		console.log("message in chat", message.data);
+		chatStore.messages.push(message.data.data);
+		chatStore.sortMessages();
+	});
+})
+	/*window.webSocket = io.connect("http://localhost:5000", {
 		query: 'token=' + token
 	});
 	webSocket.on('message', function(data) {
 		console.log(data);
 		if(data && data.type === "chat2_messages"){
-			chatStore.messages.push(data.data);
-			chatStore.sortMessages();
+			
 		}
 	});
 	swipes._client.callSwipesApi("channels.list",function(res, error){
@@ -31,9 +38,4 @@ if(!swipes.info.userId){
 				}
 			});
 		}
-	})
-	
-}
-else{
-	chatStore.start();
-}
+	})*/

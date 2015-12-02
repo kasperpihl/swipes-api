@@ -18,7 +18,6 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.setAppId = function(appId){
 		this.info.app_id = appId;
 		this._client.setAppId(appId);
-		console.log(this.info);
 	}
 
 	SwipesAppSDK.prototype.setToken = function(token){
@@ -68,13 +67,15 @@ var SwipesAppSDK = (function() {
 		return self.app();
 	};
 	SwipesAppSDK.prototype.currentApp = function(){
-		console.log(self.info, this.info);
 		if(!self.info.app_id)
 			throw new Error('SwipesAppSDK: App Id has not been set');
 		return self.app(self.info.app_id);
 	};
 	SwipesAppSDK.prototype.setDefaultScope = function(scope){
 		self._defaultScope = scope;
+	};
+	SwipesAppSDK.prototype.onReady = function(callback){
+		self._listeners.add("init", callback);
 	};
 
 	// API for handling data from apps
@@ -179,7 +180,7 @@ var SwipesAppSDK = (function() {
 			on:function(event, handler){
 				eventName = event
 				if(appId && appId !== "core")
-					eventName = appId + "_" + event
+					eventName = appId + "_" + event;
 				self._listeners.add(eventName, handler);
 				self._client.callListener("listenTo", {event: eventName});
 			}
@@ -210,13 +211,17 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function(connector, message, callback){
 		if(message){
 			var data = message.data;
-			if(message.command == "init"){
-				if(data.user_id)
-					this.info.userId = data.user_id;
-				if(data.default_scope)
-					this.setDefaultScope(data.default_scope);
-			}
-			else if(message.command == "event"){
+			if(message.command == "event"){
+				if(message.data.type == "init"){
+					if(data.data.manifest.manifest_id)
+						this.setAppId(data.data.manifest.manifest_id);
+					if(data.data.user_id)
+						this.info.userId = data.data.user_id;
+					if(data.data.default_scope)
+						this.setDefaultScope(data.data.default_scope);
+					else
+						this.setDefaultScope(data.data.manifest.id);
+				}
 				var listeners = self._listeners.get(data.type);
 				for(var i = 0 ; i < listeners.length ; i++){
 
