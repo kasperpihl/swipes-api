@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="http://localhost:5000/v1/sdk.load"></script>
+<script src="http://192.168.1.100:5000/v1/sdk.load"></script>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -10,7 +10,6 @@
 
 <body>
 <script>
-swipes.setAppId("tetris");
 /*swipes.app("core").get("channels").then(function(channels){
   console.log("promises", channels);
 });*/
@@ -47,6 +46,10 @@ swipes.setAppId("tetris");
       <ul id="highscores">
 
       </ul>
+      You'r personal best:
+      <ul id="highscores2">
+
+      </ul>
     </div>
     <canvas id="canvas">
       Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
@@ -57,49 +60,80 @@ swipes.setAppId("tetris");
     //-------------------------------------------------------------------------
     // swipes inserted methods
     //-------------------------------------------------------------------------
-    var highscores = [];
-    var users = {};
-    var currentApp = swipes.currentApp();
+    swipes.onReady(function(){
+      var highscores = [];
+      var users = {};
+      var currentApp = swipes.currentApp();
 
-    function sendHighScore(score){
-      currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
+      function sendHighScore(score){
+        currentApp.save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
+          fetchHighScores();
+        })
+      }
+      currentApp.on("highscore", function(e){
         fetchHighScores();
-      })
-    }
-    currentApp.on("highscore", function(e){
-      fetchHighScores();
-    });
-    function fetchHighScores(){
-      currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}, function(res, err){
-        if(res && res.results){
+      });
+      function fetchHighScores(){
+        currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}).then(function(res, err){
+          if(res && res.results){
 
-          $("#highscores").html("")
-          var users = {}
-          var counter = 0;
-          for(var i = 0 ; i < res.results.length ; i++){
-            var highscore = res.results[i];
-            swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-                counter++;
-                if(user){
-                  users[user.id] = user.name;
-                  
+            $("#highscores").html("")
+            var users = {}
+            var counter = 0;
+            for(var i = 0 ; i < res.results.length ; i++){
+              var highscore = res.results[i];
+              swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
+                  counter++;
+                  if(user){
+                    users[user.id] = user.name;
+                    
 
-                  if(counter == res.results.length){
-                    for(i = 0 ; i < res.results.length ; i++){
-                      var highscore = res.results[i];
-                      $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                    if(counter == res.results.length){
+                      for(i = 0 ; i < res.results.length ; i++){
+                        var highscore = res.results[i];
+                        $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                      }
                     }
                   }
-                }
-              });
-            var highscore = res.results[i];
+                });
+              var highscore = res.results[i];
 
+            }
 
+            return currentApp.get({table:"highscore", query: {limit: 1, order: "-score", filter: {"user_id": swipes.info.userId }}})
           }
-        }
-      })
-    }
-    fetchHighScores();
+        }).then(function(res, err){
+          console.log(res,err);
+          if(res && res.results){
+
+            $("#highscores2").html("")
+            var users = {}
+            var counter = 0;
+            for(var i = 0 ; i < res.results.length ; i++){
+              var highscore = res.results[i];
+              swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
+                  counter++;
+                  if(user){
+                    users[user.id] = user.name;
+                    
+
+                    if(counter == res.results.length){
+                      for(i = 0 ; i < res.results.length ; i++){
+                        var highscore = res.results[i];
+                        $("#highscores2").append("<li>" + highscore.score + "</li>");
+                      }
+                    }
+                  }
+                });
+              var highscore = res.results[i];
+
+            }
+          }
+        });
+      }
+      fetchHighScores();
+    })
+    
     //-------------------------------------------------------------------------
     // base helper methods
     //-------------------------------------------------------------------------

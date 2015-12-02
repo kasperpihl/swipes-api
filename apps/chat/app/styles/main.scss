@@ -271,12 +271,12 @@ p.message-container {
 	
 	&.show-hint {
 		
-		padding-top: 15px;
+		//padding-top: 15px;
 		transition: .2s ease-in-out;
 		
 		.hint {
 			font-size: 10px;
-			transform: translateY(-5px) translateX(-15px);
+			transform: translateY(-12px) translateX(-15px);
 			transition: .2s ease-in-out;
 		}
 	}
