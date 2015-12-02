@@ -115,8 +115,8 @@ html, body, #content {
 	}
 	
 	&.new-message {
-		animation: newMessage .2s ease-in-out forwards;
-		animation-delay: .2s;
+		animation: newMessage 1.5s ease-in-out forwards;
+		animation-delay: .1s;
 		opacity: 0;
 	}
 	
