@@ -50,8 +50,10 @@ let getApps = (userId, isAdmin, req) => {
         apps.forEach((app) => {
           let found = false;
           let len = userApps.length;
-
-          app.url = util.appUrl(req, app);
+          if(app.channel_view)
+            app.channel_view_url = util.appUrl(req, app, "channel_view");
+          if(app.main_app)
+            app.main_app_url = util.appUrl(req, app, "main_app");
 
           for (let i=0; i<len; i++) {
             let userApp = userApps[i];

@@ -12,7 +12,7 @@ var ChatList = React.createClass({
 		var contentHeight = $('.chat-list').outerHeight()
 		var scrollPos = $('.chat-list-container').scrollTop()
 		var viewHeight = $('.chat-list-container').outerHeight()
-		console.log(viewHeight, scrollPos, viewHeight+scrollPos, contentHeight);
+		
 		if( (viewHeight+scrollPos) >= contentHeight ){
 			this.shouldScrollToBottom = true;
 		}
@@ -83,7 +83,6 @@ ChatList.Input = React.createClass({
 			e.preventDefault();
 	},
 	getInitialState:function(){
-		console.log("getting initial state");
 		return {};
 	},
 	onTextChange: function(){
@@ -136,7 +135,6 @@ ChatList.Input = React.createClass({
 	},
 	render: function() {
 		var hintClass = "input-container ";
-		console.log(this.state);
 		if(this.state.showHint)
 			hintClass += "show-hint";
 		return (
@@ -145,7 +143,7 @@ ChatList.Input = React.createClass({
 				<div className="attach-button-container">
 				</div>*/}
 				<i className="material-icons chat-input-attach-icon" >attach_file</i>
-				<div className="hint">You're typing in #general</div>
+				<div className="hint">You are typing in #general</div>
 				<textarea ref="textarea" data-autoresize tabIndex="1"  onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
 			</div>
 		);

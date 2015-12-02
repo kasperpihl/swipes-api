@@ -687,7 +687,6 @@ router.post('/apps.getData', (req, res, next) => {
 
   }).then((results, error) => {
 
-    console.log("got results", results, error);
     res.status(200).json({ok: true, results: results});
   })
   .catch((err) => {
