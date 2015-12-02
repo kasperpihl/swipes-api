@@ -19,7 +19,6 @@ var ChatStore = Reflux.createStore({
 	sortMessages: function(){
 		var self = this;
 		var sortedMessages = _.sortBy(this.messages, 'ts');
-		
 		var lastUser, lastGroup, lastDate;
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
@@ -60,7 +59,7 @@ var ChatStore = Reflux.createStore({
 			}
 			schedule = new Date(parseInt(key)*1000);
 			var title = TimeUtility.dayStringForDate(schedule);
-			sortedSections.push({"title": title, "messages": groups[key]});
+			sortedSections.push({"title": title, "messages": _.sortBy(groups[key], 'ts')});
 		}
 		this.sortedSections = sortedSections;
 
