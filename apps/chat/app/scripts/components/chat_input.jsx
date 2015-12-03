@@ -35,6 +35,15 @@ var ChatInput = React.createClass({
 			$textarea.attr('rows', '1');
 		}
 		
+		var offset = this.offsetHeight - this.clientHeight;
+	
+		var resizeTextarea = function(el) {
+			$textarea.css('height', 'auto').css('height', $textarea.scrollHeight + offset);
+			console.log('do you even fucking work?')
+		};
+	
+		resizeTextarea();
+		
 		$main = this.getEl("input-container");
 		this.props.onChangedTextHeight($main.outerHeight());
 	},
