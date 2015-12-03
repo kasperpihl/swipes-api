@@ -30,9 +30,9 @@ let ChangeFeedManager = (options) => {
     start: (...args) => {
       return _start(...args);
     },
-    restart: () => {
+    restart: (...args) => {
       _stop();
-      _start();
+      _start(...args);
     }
   }
 }

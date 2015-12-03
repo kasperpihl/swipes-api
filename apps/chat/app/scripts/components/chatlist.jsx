@@ -10,11 +10,10 @@ var ChatList = React.createClass({
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	onScroll: function(e){
-		
 		var contentHeight = $('.chat-list').outerHeight()
 		var scrollPos = $('.chat-list-container').scrollTop()
 		var viewHeight = $('.chat-list-container').outerHeight()
-		
+
 		if( (viewHeight+scrollPos) >= contentHeight ){
 			this.shouldScrollToBottom = true;
 		}
@@ -23,8 +22,7 @@ var ChatList = React.createClass({
 		}
 	},
 	scrollToBottom: function(animate){
-
-		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight() 
+		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
 		console.log(scrollPosForBottom);
 		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
 			this.hasRendered = true;
@@ -33,13 +31,11 @@ var ChatList = React.createClass({
 				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 200);
 			else
 				$('.chat-list-container').scrollTop(scrollPosForBottom);
-				
 		}
 		var topPadding = 0;
 		if($('.chat-list').outerHeight() < $('.chat-list-container').outerHeight())
 			topPadding = $('.chat-list-container').outerHeight() - $('.chat-list').outerHeight();
 		$('.chat-list-container').css("paddingTop", topPadding + "px");
-		
 	},
 	handleResize: function(){
 		console.log("handleResize");
@@ -65,28 +61,27 @@ var ChatList = React.createClass({
 		window.removeEventListener('resize', this.handleResize);
 	},
 	render: function() {
-
 		var sections = this.state.sections.map(function(section){
 			return <ChatList.Section key={section.title} data={section} />
 		})
+
 		return (
 			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 				<div className="chat-list">
 					{sections}
 				</div>
-				<ChatList.Input onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
+				<ChatInput onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
 			</div>
 		);
 	}
 });
 
-
-
 ChatList.Section = React.createClass({
 	render: function() {
 		var chatItems = this.props.data.messages.map(function(item){
-			return <ChatList.ChatItem key={item.ts} data={item} />;
+			return <ChatItem key={item.ts} data={item} />;
 		});
+
 		return (
 			<div className="section">
 				<div className="chat-date-line">
@@ -95,16 +90,10 @@ ChatList.Section = React.createClass({
 						<span>{this.props.data.title}</span>
 					</div>
 				</div>
-				
 				{chatItems}
 			</div>
 		);
 	}
 });
-ChatList.Input = ChatInput;
-
-
-ChatList.ChatItem = ChatItem;
-
 
 module.exports = ChatList;

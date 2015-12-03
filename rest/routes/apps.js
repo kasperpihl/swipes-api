@@ -389,7 +389,6 @@ router.post('/apps.delete', (req, res, next) => {
     .then((app) => {
       if (!app) {
         return new Promise((re, reject) => { reject('no_app_found')});
-        
       }
 
       let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
