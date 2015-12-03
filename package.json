@@ -6,11 +6,11 @@
   "dependencies": {
     "asana": "^0.11.0",
     "async": "1.4.2",
-    "aws-sdk": "*",
+    "aws-sdk": "^2.2.20",
     "backbone": "1.1.x",
     "bluebird": "2.10.2",
     "body-parser": "1.x",
-    "config": "^1.16.0",
+    "config": "^1.17.1",
     "contextio": "*",
     "cookie-parser": "1.4.0",
     "cors": "^2.7.1",
@@ -22,7 +22,7 @@
     "moment": "^2.10.6",
     "parse": "1.3.5",
     "pg": "4.3.0",
-    "q": "*",
+    "q": "^2.0.3",
     "randomstring": "^1.1.0",
     "request": "~2.51.0",
     "rethinkdb": "^2.2.0",
@@ -32,7 +32,7 @@
     "speakingurl": "^6.0.0",
     "sql": "0.47.0",
     "underscore": "1.8.x",
-    "validator": "^4.1.0"
+    "validator": "^4.3.0"
   },
   "engines": {
     "node": "4.2.x"

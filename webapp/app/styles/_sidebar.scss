@@ -1,0 +1,327 @@
+.sidebar-closed {
+
+	.sidebar.left {
+		//transform: translate3d(-100%, 0px, 0px);
+		//transition: .4s ease-in-out;
+		
+	}
+}
+
+
+// Structure holder
+.sidebar {
+
+	width:$sidebar-width;
+	z-index: 3000;
+	
+	
+	@include user-select(none);
+
+	&.left{
+		left: 0;
+		top: 0;
+		position: fixed;
+		height: 100%;
+		transition: all .4s ease-in-out;
+		transition-delay: .05s;
+	}
+	&_content::-webkit-scrollbar {
+		display: none;
+	}
+	
+	// Base content wrapper
+	&_content {
+		&::-webkit-scrollbar { 
+		    display: none;
+		}
+		overflow-y:scroll;
+		width: inherit;
+		text-align: center;
+		background-color: $dark-background;
+		z-index: 4999;
+		.left & {
+			@include centerBlock(0, auto, 0, 0, 0, absolute);
+		}
+	}
+}
+
+.sidebar_content {
+  overflow-y: scroll;
+}
+
+.sidebar {
+
+	.sidebar-controls {
+		
+		color: $unselected-text-color;
+		padding-top: 0px;
+		padding-bottom: 100px; 
+		text-align: left;
+		#sidebar-my-tasks{
+		}
+		.sidebar-section{
+			position:relative;
+			.more-button{
+				padding-left:20px;
+				font-size: 12px;
+				color: rgba($unselected-text-color, .4);
+				display: none;
+				text-decoration: underline;
+				&:hover{
+					text-decoration: none;
+				}
+				&.shown{
+					display: block;
+				}
+			}
+			.add-button{
+
+				position:absolute;
+				width: 25px;
+				right: 2px;
+				height:25px;
+				top: 6px;
+				opacity: 0.6;
+				padding: 0;
+				svg{
+					height:25px;
+					width:25px;
+					fill: $unselected-text-color;
+				}
+				
+				&:hover {
+					opacity: 1;
+				}
+			}
+			ul .empty{
+				font-size: 14px;
+				color: rgba(255,255,255,0.5);
+				padding-left: 20px;
+				&:hover{
+					background: rgba(255, 255, 255, 0);
+				}
+			}
+			/*h1.title{
+				display: inline-block;
+				float:left;
+			}*/
+		}
+		
+		.row{
+			text-decoration: none;
+			display:block;
+			color: $unselected-text-color;
+			width:100%;
+			&:hover, &:active, &:visited{
+				text-decoration: none;
+			}
+		}
+		.button-container a{
+			&:hover{	
+				color: white;
+				.icon{
+					fill: white;
+				}
+			}
+		}
+		h1{
+			padding-top: 10px;
+			font-size: 14px;
+			color: rgba($unselected-text-color,.5);
+			letter-spacing: 0px;
+			padding-left: 19px;
+			margin-top:8px;
+			margin-bottom:6px;
+		}
+		.row{
+			$block-height: 25px;
+			$dot-size: 6px;
+			padding-left:20px;
+			height: $block-height;
+			cursor: pointer;
+			
+			
+			// Status icon for team members
+			.status-container{
+				height:$dot-size;
+				position: absolute;
+				width:$dot-size;
+				left: 7px;
+				top:50%;
+				margin-top: -$dot-size/2;
+
+				.status{
+					@include border-radius(50%);
+					display:inline-block;
+					position: absolute;
+
+					left: 0;
+					top: 50%;
+					margin-top: -$dot-size/2;
+					width: $dot-size;
+					height: $dot-size;
+					background-color: $unselected-color;
+					&.online{
+						background-color: $online-green;
+					}
+					&.busy{
+						background-color: $busy-yellow;
+					}
+				}
+			}
+			.icon-container{
+				float:left;
+				$icon-spacing: 8px;
+				$icon-height: $block-height - 2 * $icon-spacing;
+				height: $block-height;
+				margin-right: $icon-spacing;
+				.icon{
+					margin-top: $icon-spacing - 1;
+					fill: $unselected-color;
+					width: $icon-height;
+					height: $icon-height;
+				}
+			}
+
+			
+			.text{
+				width: 165px;
+				float:left;
+				font-size: 13px;
+				line-height: 25px;
+				letter-spacing: 1px;
+				text-align: left;
+				@include transition(padding 0.1s ease-out);
+				padding-left:0px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+  				overflow: hidden;
+				color: rgba($unselected-text-color, .4);
+				cursor: pointer;
+			}
+
+			
+			&:hover{
+				.status-container{
+					display: none;
+				}
+				.close-container{
+					display:block;
+				}
+				.action-container{
+					display: block;
+				}
+			}
+			.action-container{
+				position: absolute;
+				left: 4px;
+				$actionSize: 12px;
+				width:$actionSize;
+				height:$actionSize;
+				top: 50%;
+				margin-top: -6px;
+				display:none;
+				line-height: $actionSize;
+				color: $sidebar-dark-color;
+				z-index: 100;
+				font-size:$actionSize;
+				&.isStarred{
+					display: block;
+					color: rgba(255,255,255,0.5);
+					opacity: 1.0;
+				}
+				&.online{
+					color: $online-green;
+				}
+				&:hover{
+					color: white;
+					opacity: 0.8;
+					svg{
+						opacity: 1.0;
+					}
+				}
+				svg{
+					opacity: 0.5;
+					width: $actionSize;
+					height:$actionSize;
+				}
+			}
+			.close-container{
+				position: absolute;
+				right: 3px;
+				width:20px;
+				height:20px;
+				top: 50%;
+				margin-top: -10px;
+				display:none;
+				&:hover{
+					svg{
+						opacity: 1.0;
+					}
+				}
+				svg{
+					opacity: 0.5;
+					width: 20px;
+					height:20px;
+				}
+			}
+
+		}
+
+		.unread{
+			.row{
+				.text{
+					font-size: 14px;
+					color: $unselected-text-color;
+					line-height: 25px;
+				}
+				$notification-size: 25px;
+				.notification{
+					position:absolute;
+					right: 0;
+					padding: 5px;
+					text-align:center;
+					
+					
+					&.chat {
+						font-size: 12px;
+						height:25px;
+						min-width:25px;
+						color: $white-background;
+						background-color: $orange;
+						line-height: 15px;
+						//-webkit-animation: notification-in .3s forwards ease-in-out;
+						//animation: notification-in .3s forwards ease-in-out;
+					}
+				}
+			}
+		}
+		ul{
+			list-style: none;
+			padding-left:0px;
+			margin-bottom: 5px;
+			li {
+				position:relative;
+			}
+			
+			li:hover, li.active, li.drag-hover-entering{
+				background: rgba($white-background, .2);
+				.row{
+					color: $unselected-text-color;
+				}
+				
+				.text {
+					color: $unselected-text-color;
+				}
+			}
+			li.drag-hover-entering{
+				.text{
+					@include transition(padding 0.3s ease-out);
+					@include transition-delay(200ms);
+					padding-left:10px;
+				}
+			}
+		}
+	}
+
+}
