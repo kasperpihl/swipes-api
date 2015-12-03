@@ -60,80 +60,79 @@
     //-------------------------------------------------------------------------
     // swipes inserted methods
     //-------------------------------------------------------------------------
+    function fetchHighScores(){
+      var currentApp = swipes.currentApp();
+      
+      currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}).then(function(res, err){
+        if(res && res.results){
+
+          $("#highscores").html("")
+          var users = {}
+          var counter = 0;
+          for(var i = 0 ; i < res.results.length ; i++){
+            var highscore = res.results[i];
+            swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
+                counter++;
+                if(user){
+                  users[user.id] = user.name;
+
+
+                  if(counter == res.results.length){
+                    for(i = 0 ; i < res.results.length ; i++){
+                      var highscore = res.results[i];
+                      $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                    }
+                  }
+                }
+              });
+            var highscore = res.results[i];
+
+          }
+
+          return currentApp.get({table:"highscore", query: {limit: 1, order: "-score", filter: {"user_id": swipes.info.userId }}})
+        }
+      }).then(function(res, err){
+        console.log(res,err);
+        if(res && res.results){
+
+          var users = {}
+          var counter = 0;
+          for(var i = 0 ; i < res.results.length ; i++){
+            var highscore = res.results[i];
+            swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
+                counter++;
+                if(user){
+                  users[user.id] = user.name;
+
+
+                  if(counter == res.results.length){
+                    for(i = 0 ; i < res.results.length ; i++){
+                      var highscore = res.results[i];
+                      $("#highscores2").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
+                    }
+                  }
+                }
+              });
+            var highscore = res.results[i];
+
+          }
+        }
+      });
+    }
+
     function sendHighScore(score){
       swipes.currentApp().save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
         fetchHighScores();
       })
     }
     swipes.onReady(function(){
-      var highscores = [];
-      var users = {};
-      var currentApp = swipes.currentApp();
-
-      
-      currentApp.on("highscore", function(e){
+      swipes.currentApp().on("highscore", function(e){
         fetchHighScores();
       });
-      function fetchHighScores(){
-        currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}).then(function(res, err){
-          if(res && res.results){
 
-            $("#highscores").html("")
-            var users = {}
-            var counter = 0;
-            for(var i = 0 ; i < res.results.length ; i++){
-              var highscore = res.results[i];
-              swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-                  counter++;
-                  if(user){
-                    users[user.id] = user.name;
-                    
-
-                    if(counter == res.results.length){
-                      for(i = 0 ; i < res.results.length ; i++){
-                        var highscore = res.results[i];
-                        $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
-                      }
-                    }
-                  }
-                });
-              var highscore = res.results[i];
-
-            }
-
-            return currentApp.get({table:"highscore", query: {limit: 1, order: "-score", filter: {"user_id": swipes.info.userId }}})
-          }
-        }).then(function(res, err){
-          console.log(res,err);
-          if(res && res.results){
-
-            var users = {}
-            var counter = 0;
-            for(var i = 0 ; i < res.results.length ; i++){
-              var highscore = res.results[i];
-              swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-                  counter++;
-                  if(user){
-                    users[user.id] = user.name;
-                    
-
-                    if(counter == res.results.length){
-                      for(i = 0 ; i < res.results.length ; i++){
-                        var highscore = res.results[i];
-                        $("#highscores2").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
-                      }
-                    }
-                  }
-                });
-              var highscore = res.results[i];
-
-            }
-          }
-        });
-      }
       fetchHighScores();
     })
-    
+
     //-------------------------------------------------------------------------
     // base helper methods
     //-------------------------------------------------------------------------
@@ -307,7 +306,7 @@
       if (playing) {
         var action = -1;
         switch(ev.keyCode) {
-          case KEY.LEFT:{   
+          case KEY.LEFT:{
             action = DIR.LEFT;
             if(ev.ctrlKey || ev.metaKey)
               action = DIR.LONGLEFT;
@@ -318,14 +317,14 @@
             if(ev.ctrlKey || ev.metaKey)
               action = DIR.LONGRIGHT;
             break;
-          }  
+          }
           case KEY.UP:     action = DIR.UP; break;
           case KEY.DOWN:{
-            action = DIR.DOWN; 
+            action = DIR.DOWN;
             if(ev.ctrlKey || ev.metaKey)
               action = DIR.TELEPORT;
             break;
-          }   
+          }
           case KEY.SPACE:  action = DIR.TELEPORT; break;
           case KEY.ESC:    lose(); handled = true; break;
         }
