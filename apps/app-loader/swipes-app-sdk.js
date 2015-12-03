@@ -23,6 +23,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.setToken = function(token){
 		this._client.setToken(token);
 	};
+	SwipesAppSDK.prototype.getToken = function(){
+		return this._client._token;
+	};
 
 
 	// API for handling navigation bar in main app

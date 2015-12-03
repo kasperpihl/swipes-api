@@ -1,3 +1,4 @@
+
 var SwipesAPIConnector = (function() {
 	function SwipesAPIConnector(baseUrl, token) {
 		var bindedCallback = this._receivedMessageFromListener.bind(this);
@@ -8,13 +9,13 @@ var SwipesAPIConnector = (function() {
 		this._apiUrl = baseUrl + '/v1/';
 		this._token = token;
 		this._hasInitialized = false;
-
 		this._timeoutTimer = 10;
 
 		this._timers = {};
 		this._callbacks = {};
 		this._listenerQueue = [];
 		this._apiQueue = [];
+
 		window.addEventListener('message', bindedCallback, false);
 		
 	};
@@ -23,7 +24,7 @@ var SwipesAPIConnector = (function() {
 		if(this._apiQueue.length > 0){
 			for(var i = 0 ; i < this._apiQueue.length ; i++){
 				request = this._apiQueue[i];
-				this.callSwipesApi(request.options, request.data, request.callback);
+				this.callSwipesApi(request.options, request.data, request.callback, request.deferred);
 			}
 			this._apiQueue = [];
 		}
@@ -77,18 +78,27 @@ var SwipesAPIConnector = (function() {
 		this._delegate = delegate;
 	};
 
-	SwipesAPIConnector.prototype.callSwipesApi = function(options, data, callback) {
-		if(!this._token){
-			console.log("queing request", options);
-			return this._apiQueue.push({options: options, data: data, callback: callback});
-		}
-		var command, method = 'POST';
+	SwipesAPIConnector.prototype.callSwipesApi = function(options, data, callback, deferred) {
+		if(!deferred && window.Q)
+			deferred = Q.defer();
+
+		var command, force, method = 'POST';
 		if(typeof options === 'string')
 			command = options;
 		if(typeof options === 'object'){
 			if(options.method)
 				method = options.method;
+			if(options.command)
+				command = options.command;
+			if(options.force)
+				force = true;
 		}
+
+		if(!this._token && !force){
+			this._apiQueue.push({options: options, data: data, callback: callback, deferred: deferred});
+			return deferred.promise;
+		}
+		
 		// If no data is send, but only a callback set those
 		if(typeof data === 'function'){
 			callback = data;
@@ -109,14 +119,19 @@ var SwipesAPIConnector = (function() {
 				if (data && data.ok) {
 					if(typeof callback === 'function')
 						callback(data);
+					if(deferred) deferred.resolve(data);
 				} else {
 					if(typeof callback === 'function')
 						callback(false, data);
+					if(deferred) deferred.reject(data);
 				}
 			},
 			error: function(error) {
-				console.log('/' + command + ' error', error);
-				return typeof callback === 'function' ? callback(false, error) : void 0;
+				if(error.responseJSON)
+					error = error.responseJSON;
+				if(typeof callback === 'function')
+					callback(false, error);
+				if(deferred) deferred.reject(error);
 			},
 			crossDomain: true,
 			contentType: 'application/json; charset=utf-8',
@@ -124,8 +139,8 @@ var SwipesAPIConnector = (function() {
 			data: serData,
 			processData: true
 		};
-
-		return $.ajax(settings);
+		$.ajax(settings);
+		return deferred ? deferred.promise : false;
 	};
 
 	/*
