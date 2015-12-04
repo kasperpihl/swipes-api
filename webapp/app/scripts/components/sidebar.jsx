@@ -23,16 +23,14 @@ Sidebar.Section = React.createClass({
 		console.log(this.props.data.section);
 	},
 	render: function(){
-		var renderRows = [];
-		for(var i = 0 ; i < this.props.data.rows ; i++){
-			var row = this.props.data.rows[i];
-			renderRows.push()
-		}
+		var rows = this.props.data.rows.map(function(row){
+			return <Sidebar.Row key={row.id} data={row} />
+		})
 		return (
 			<div className="sidebar-section">
 				<h1 onClick={this.onSectionHeader}>{this.props.data.title}</h1>
 				<ul className="rows">
-					{renderRows}
+					{rows}
 				</ul>
 			</div>
 		);
