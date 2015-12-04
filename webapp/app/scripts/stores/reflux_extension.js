@@ -9,6 +9,13 @@ Reflux.StoreMethods._checkForWarnings = function(){
 		console.warn("Reflux Swipes: If you need to overwrite getInitialState, please call and return this.manualLoadData()");
 	
 }
+Reflux.StoreMethods.connect = function(property){
+	return Reflux.connect(this, property);
+};
+Reflux.StoreMethods.connectFilter = function(property, filterFn){
+	return Reflux.connectFilter(this, property, filterFn);
+};
+
 Reflux.StoreMethods.get = function(id){
 	this._checkForWarnings();
 
@@ -36,8 +43,20 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	var dataToTrigger = this._dataById;
 	
 	// Persist to localStorage if key is set, defaults to YES
-	if(persist && this.localStorage)
-		localStorage.setItem(this.localStorage, JSON.stringify(this._dataById));
+	if(persist && this.localStorage){
+		var dataToPersist = this._dataById;
+		if((this.persistOnly && this.persistOnly instanceof Array) || (this.dontPersist && this.dontPersist instanceof Array)){
+			dataToPersist = {};
+			for(var key in this._dataById){
+				if(this.persistOnly && _.indexOf(this.persistOnly, key) !== -1)
+					dataToPersist[key] = this._dataById[key];
+				else if(this.dontPersist && _.indexOf(this.dontPersist, key) === -1)
+					dataToPersist[key] = this._dataById[key];
+			}
+		}
+		
+		localStorage.setItem(this.localStorage, JSON.stringify(dataToPersist));
+	}
 
 	// Sort data before sending, can take both string and functions.
 	if(sort && this.sort){
@@ -114,15 +133,13 @@ Reflux.StoreMethods.manualLoadData = function(){
 
 Reflux.StoreMethods._loadData = function(){
 	this._didLoadData = true;
-	var dataFromStorage;
-	if(this.localStorage){
+	var dataFromStorage = this._dataById;
+	if(this.localStorage && _.size(dataFromStorage) == 0){
 		dataFromStorage = localStorage.getItem(this.localStorage);
-	}
-	if(dataFromStorage){
-		dataFromStorage = JSON.parse(dataFromStorage);
-	}
-	else{
-		dataFromStorage = {};
+		if(dataFromStorage)
+			dataFromStorage = JSON.parse(dataFromStorage);
+		else
+			dataFromStorage = {};
 	}
 
 	// Check for defaults, and only set them if no data was present on their place

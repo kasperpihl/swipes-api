@@ -2,8 +2,16 @@ var React = require('react');
 var Reflux = require('reflux');
 var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
+var stateStore = require('../stores/StateStore');
 var Sidebar = React.createClass({
-	mixins: [Reflux.connect(channelStore, "channels"), Reflux.connect(appStore, "apps")],
+	mixins: [Reflux.ListenerMixin, channelStore.connect("channels"), appStore.connect("apps")],
+	onStateChange: function(states){
+		var toggle = states["sidebarClosed"] ? true : false;
+		$("body").toggleClass("sidebar-closed", toggle);
+	},
+	componentWillMount: function(){
+		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
+	},
 	render: function() {
 		return (
 			<aside className="sidebar left">
@@ -42,8 +50,8 @@ Sidebar.Section = React.createClass({
 					row.hidden = true;
 			}
 			return <Sidebar.Row key={row.id} data={row} />
-		})
-		console.log(rows);
+		});
+
 		return (
 			<div className="sidebar-section">
 				<h1 onClick={this.onSectionHeader}>{this.props.data.title}</h1>

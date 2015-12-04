@@ -10,6 +10,9 @@ var Login = require('./components/login');
 var routes = (
 	<Route name="layout" path="/" handler={Layout}>
 		<Route path="login" handler={Login}/>
+		<Route path="app/:appId" handler={Home}/>
+		<Route path="group/:groupId" handler={Home} />
+		<Route path="group/:groupId/:appId" handler={Home} />
 		<DefaultRoute handler={Home} />
 	</Route>
 );

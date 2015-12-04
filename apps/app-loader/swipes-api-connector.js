@@ -127,6 +127,7 @@ var SwipesAPIConnector = (function() {
 				}
 			},
 			error: function(error) {
+				console.log('/' + command + ' error', error);
 				if(error.responseJSON)
 					error = error.responseJSON;
 				if(typeof callback === 'function')

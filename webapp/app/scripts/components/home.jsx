@@ -3,25 +3,40 @@ var Reflux = require('reflux');
 var Sidebar = require('./sidebar');
 var Topbar = require('./topbar');
 var AppLoader = require('./app_loader');
-var Router = require('react-router');
-var homeStore = require('../stores/HomeStore');
-var socketHandler = require('../handlers/SocketHandler');
+var Loading = require('./loading');
 
+var Router = require('react-router');
+var stateStore = require('../stores/StateStore');
 var Navigation = Router.Navigation;
 var Home = React.createClass({
-	mixins: [ Navigation, Reflux.connect(homeStore) ],
-	componentDidMount: function(){
-		if(!this.state.swipesToken){
-			return this.transitionTo("/login");
+	mixins: [ Navigation, Reflux.ListenerMixin ],
+	onStateChange: function(states){
+		if(!states.isLoggedIn){
+			localStorage.clear();
+			return this.transitionTo('/login');
 		}
-		else{
-			socketHandler.start();
-		}
-		
+		var newStates = {};
+		if(!this.state.isLoggedIn)
+			newStates.isLoggedIn = true;
+		if(states.isStarted !== this.state.isStarted)
+			newStates.isStarted = states.isStarted;
+		if(_.size(newStates) > 0)
+			this.setState(newStates);
+
+	},
+	componentWillMount:function(){
+		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
+	},
+	componentDidMount:function(){
+		stateStore.actions.init();
+	},
+	getInitialState: function(){
+		return {};
 	},
 	render: function() {
-		var toggle = this.state["sidebar-closed"] ? true : false;
-		$("body").toggleClass("sidebar-closed", toggle);
+		if(!this.state.isStarted){
+			return ( <Loading /> );
+		}
 		return (
 			<div className="main">
 				<Sidebar />
@@ -29,15 +44,15 @@ var Home = React.createClass({
 					<div className="content-container" idName="main">
 						<div className="app-view-controller">
 							<Topbar data={{screen:1}}/>
-							<AppLoader data={{app_src:"test"}}/>
+							<AppLoader data={{screen:1}}/>
 						</div> 
 						<div className="app-view-controller">
 							<Topbar data={{screen:2}}/>
-							<AppLoader data={{app_src:"test"}} />
+							<AppLoader data={{screen:2}} />
 						</div>
 						<div className="app-view-controller">
 							<Topbar data={{screen:3}}/>
-							<AppLoader data={{}} />
+							<AppLoader data={{screen:3}} />
 						</div> 
 					</div>
 				</div>
