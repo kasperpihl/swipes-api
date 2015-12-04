@@ -20,7 +20,7 @@ var HomeStore = Reflux.createStore({
 	},
 	getInitialState: function(){
 		var data = this.manualLoadData();
-		this.checkForAndSetToken();		
+		this.checkForAndSetToken();
 		return data;
 	},
 	init: function() {

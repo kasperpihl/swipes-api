@@ -109,7 +109,6 @@
 		
 		.row{
 			text-decoration: none;
-			display:block;
 			color: $unselected-text-color;
 			width:100%;
 			&:hover, &:active, &:visited{
@@ -267,33 +266,28 @@
 			}
 
 		}
-
-		.unread{
-			.row{
-				.text{
-					font-size: 14px;
-					color: $unselected-text-color;
-					line-height: 25px;
-				}
-				$notification-size: 25px;
-				.notification{
-					position:absolute;
-					right: 0;
-					padding: 5px;
-					text-align:center;
-					
-					
-					&.chat {
-						font-size: 12px;
-						height:25px;
-						min-width:25px;
-						color: $white-background;
-						background-color: $orange;
-						line-height: 15px;
-						//-webkit-animation: notification-in .3s forwards ease-in-out;
-						//animation: notification-in .3s forwards ease-in-out;
-					}
-				}
+		.unread.row{
+			.text{
+				font-size: 14px;
+				color: $unselected-text-color;
+				line-height: 25px;
+			}
+			$notification-size: 25px;
+			.notification{
+				position:absolute;
+				right: 0;
+				padding: 5px;
+				text-align:center;
+				
+				
+				font-size: 12px;
+				height:25px;
+				min-width:25px;
+				color: $white-background;
+				background-color: $orange;
+				line-height: 15px;
+					//-webkit-animation: notification-in .3s forwards ease-in-out;
+					//animation: notification-in .3s forwards ease-in-out;
 			}
 		}
 		ul{

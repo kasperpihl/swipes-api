@@ -23,9 +23,27 @@ Sidebar.Section = React.createClass({
 		console.log(this.props.data.section);
 	},
 	render: function(){
+		var self = this;
 		var rows = this.props.data.rows.map(function(row){
+			if(self.props.data.section === "apps"){
+				if(!row.main_app || !row.is_active)
+					row.hidden = true;
+			}
+			else if(self.props.data.section === "groups"){
+				if(row.type === "direct" || row.is_archived)
+					return false;
+				if(!row.is_member)
+					row.hidden = true;
+			}
+			else if(self.props.data.section === "people"){
+				if(row.type !== "direct")
+					return false;
+				if(!row.is_open)
+					row.hidden = true;
+			}
 			return <Sidebar.Row key={row.id} data={row} />
 		})
+		console.log(rows);
 		return (
 			<div className="sidebar-section">
 				<h1 onClick={this.onSectionHeader}>{this.props.data.title}</h1>
@@ -37,9 +55,24 @@ Sidebar.Section = React.createClass({
 	}
 });
 Sidebar.Row = React.createClass({
+	clickedRow: function(){
+		console.log("clicked row", this.props.data);
+	},
 	render: function(){
+		var className = "row ";
+		if(this.props.data.hidden)
+			className += "hidden ";
+		if(this.props.data.unread_count)
+			className += "unread ";
+		if(this.props.data.is_active_menu)
+			className += "active ";
 		return (
-			<li>{this.props.data.name}</li>
+			<li className={ className } onClick={this.clickedRow}>
+				<div className="text">
+					{this.props.data.name}
+				</div>
+				<span className="notification chat">{this.props.data.unread_count_display}</span>
+			</li>
 		);
 	}
 });
