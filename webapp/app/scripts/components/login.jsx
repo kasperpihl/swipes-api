@@ -3,12 +3,9 @@ var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Login = React.createClass({
 	mixins: [ Navigation ],
-	getEl:function(name){
-		return $(this.refs[name].getDOMNode());
-	},
 	onLogin: function(){
-		email = this.getEl("email").val();
-		password = this.getEl("password").val();
+		email = $(this.refs.email).val();
+		password = $(this.refs.password).val();
 		var data = {
 			email: email,
 			password: password
