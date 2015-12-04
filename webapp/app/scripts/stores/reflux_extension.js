@@ -114,12 +114,24 @@ Reflux.StoreMethods.manualLoadData = function(){
 
 Reflux.StoreMethods._loadData = function(){
 	this._didLoadData = true;
-	if(this.localStorage)
-		var dataFromStorage = localStorage.getItem(this.localStorage);
-	if(!dataFromStorage)
-		dataFromStorage = {};
-	else
+	var dataFromStorage;
+	if(this.localStorage){
+		dataFromStorage = localStorage.getItem(this.localStorage);
+	}
+	if(dataFromStorage){
 		dataFromStorage = JSON.parse(dataFromStorage);
+	}
+	else{
+		dataFromStorage = {};
+	}
+
+	// Check for defaults, and only set them if no data was present on their place
+	if(this.defaults && typeof this.defaults === "object"){
+		for(var key in this.defaults){
+			if(this.defaults.hasOwnProperty(key) && typeof dataFromStorage[key] === 'undefined')
+				dataFromStorage[key] = this.defaults[key];
+		}
+	}
 	this._dataById = dataFromStorage;
 	if(this.sort){
 		dataFromStorage = this.sortBy(this.sort);
