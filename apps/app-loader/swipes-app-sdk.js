@@ -106,16 +106,18 @@ var SwipesAppSDK = (function() {
 				else if(typeof id === 'function')
 					callback = id;
 
-				var filter = data.query.query.filter || {};
-				// If defaultscope is set
-				if(self._defaultScope){
-					filter.scope = self._defaultScope;
-				}
-				if(typeof options.scope === 'string'){
-					filter.scope = options.scope;
-				}
+				if (appId !== 'core') {
+					var filter = data.query.query.filter || {};
+					// If defaultscope is set
+					if(self._defaultScope){
+						filter.scope = self._defaultScope;
+					}
+					if(typeof options.scope === 'string'){
+						filter.scope = options.scope;
+					}
 
-				data.query.query.filter = filter;
+					data.query.query.filter = filter;
+				}
 
 				var intCallback = function(res, error){
 					if(callback) callback(res,error);
@@ -126,9 +128,10 @@ var SwipesAppSDK = (function() {
 
 				if(appId == "core"){
 					self._client.callListener("getData", data, intCallback);
-				}
-				else
+				} else {
 					self._client.callSwipesApi("apps.getData", data, intCallback);
+				}
+
 				return deferred.promise;
 			},
 

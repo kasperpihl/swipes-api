@@ -34,3 +34,8 @@ node_modules
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+
+# Ignore the runscripts from now on
+runscript.sh
+win-runscript.bat

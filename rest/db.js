@@ -4,14 +4,8 @@ let config = require('config');
 let r = require('rethinkdb');
 let Promise = require('bluebird');
 
-let dbConfig = config.get('dbConfig');
-if(process.env.DB_HOST){
-  dbConfig = {
-    host: process.env.DB_HOST,
-    port: dbConfig.port,
-    db: 'swipes'
-  };
-}
+let dbConfig = config.get('database');
+
 let isCursor = (obj) => {
   // TODO: Suggest an r.isCursor() API or something similar.
   return obj != null && obj._conn != null;
