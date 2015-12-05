@@ -12,12 +12,11 @@ var Topbar = React.createClass({
 		if(states.connectionStatus != this.state.connectionStatus)
 			newState.connectionStatus = states.connectionStatus;
 		if(_.size(newState)){
-			console.log("setting state");
 			this.setState(newState);
 		}
 	},
 	onMenuButton:function(e){
-		stateActions.toggleSidebar();
+		stateStore.actions.toggleSidebar();
 	},
 	getInitialState: function(){
 		return {};

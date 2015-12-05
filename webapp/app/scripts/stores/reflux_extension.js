@@ -199,7 +199,7 @@ var addUnderscoreMethods = function(Class, methods, attribute) {
 // Support `collection.sortBy('attr')` and `collection.findWhere({id: 1})`.
 var cb = function(iteratee, instance) {
 	if (_.isFunction(iteratee)) return iteratee;
-	if (_.isObject(iteratee) && !instance._isModel(iteratee)) return modelMatcher(iteratee);
+	if (_.isObject(iteratee)) return modelMatcher(iteratee);
 	if (_.isString(iteratee)) return function(model) { return model[iteratee]; };
 	return iteratee;
 };

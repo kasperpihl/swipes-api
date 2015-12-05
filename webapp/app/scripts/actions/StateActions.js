@@ -4,6 +4,7 @@ var StateActions = Reflux.createActions([
 	'login',
 	'init',
 	'changeStarted',
+	'loadApp',
 	'changeConnection',
 	'toggleSidebar'
 

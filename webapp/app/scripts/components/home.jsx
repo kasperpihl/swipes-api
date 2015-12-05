@@ -20,15 +20,24 @@ var Home = React.createClass({
 			newStates.isLoggedIn = true;
 		if(states.isStarted !== this.state.isStarted)
 			newStates.isStarted = states.isStarted;
-		if(_.size(newStates) > 0)
+		if(_.size(newStates) > 0){
 			this.setState(newStates);
+		}
 
+	},
+	forwardParamsFromRouter: function(){
+		stateStore.actions.loadApp(this.props.params);
+	},
+	componentDidUpdate: function(){
+		this.forwardParamsFromRouter();
 	},
 	componentWillMount:function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
 	componentDidMount:function(){
 		stateStore.actions.init();
+		this.forwardParamsFromRouter();
+
 	},
 	getInitialState: function(){
 		return {};
@@ -41,7 +50,7 @@ var Home = React.createClass({
 			<div className="main">
 				<Sidebar />
 				<div className="right-side-container">
-					<div className="content-container" idName="main">
+					<div className="dual-apps content-container" idName="main">
 						<div className="app-view-controller">
 							<Topbar data={{screen:1}}/>
 							<AppLoader data={{screen:1}}/>

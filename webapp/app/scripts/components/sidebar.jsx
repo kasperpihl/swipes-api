@@ -3,11 +3,17 @@ var Reflux = require('reflux');
 var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
 var stateStore = require('../stores/StateStore');
+
+var Router = require('react-router');
+var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
 	mixins: [Reflux.ListenerMixin, channelStore.connect("channels"), appStore.connect("apps")],
 	onStateChange: function(states){
 		var toggle = states["sidebarClosed"] ? true : false;
 		$("body").toggleClass("sidebar-closed", toggle);
+		if(states.active_menu_id !== this.state.activeMenuId){
+			this.setState({activeMenuId:states.active_menu_id});
+		}
 	},
 	componentWillMount: function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
@@ -17,7 +23,7 @@ var Sidebar = React.createClass({
 			<aside className="sidebar left">
 				<div className="sidebar_content">
 					<div className="sidebar-controls">
-						<Sidebar.Section data={{title:"My Apps", section:"apps", rows:this.state.apps}}/>
+						<Sidebar.Section data={{title:"My Apps", section:"apps", rows: this.state.apps}}/>
 						<Sidebar.Section data={{title:"Groups", section:"groups", rows: this.state.channels}}/>
 						<Sidebar.Section data={{title:"People", section:"people", rows: this.state.channels}}/>
 					</div>
@@ -49,7 +55,7 @@ Sidebar.Section = React.createClass({
 				if(!row.is_open)
 					row.hidden = true;
 			}
-			return <Sidebar.Row key={row.id} data={row} />
+			return <Sidebar.Row key={row.id} section={self.props.data.section} data={row} />
 		});
 
 		return (
@@ -63,8 +69,15 @@ Sidebar.Section = React.createClass({
 	}
 });
 Sidebar.Row = React.createClass({
+	mixins: [ Navigation ],
+
 	clickedRow: function(){
-		console.log("clicked row", this.props.data);
+		console.log("clicked row", this.props);
+		if(this.props.section === "apps")
+			this.transitionTo('/app/' + this.props.data.manifest_id);
+		else if(this.props.section === "groups"){
+			this.transitionTo('/group/' + this.props.data.name + '/chat');
+		}
 	},
 	render: function(){
 		var className = "row ";
@@ -72,7 +85,7 @@ Sidebar.Row = React.createClass({
 			className += "hidden ";
 		if(this.props.data.unread_count)
 			className += "unread ";
-		if(this.props.data.is_active_menu)
+		if(this.props.data.id === stateStore.get("active_menu_id"))
 			className += "active ";
 		return (
 			<li className={ className } onClick={this.clickedRow}>

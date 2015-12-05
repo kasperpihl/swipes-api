@@ -1,5 +1,4 @@
 var Reflux = require('reflux');
-
 var data = [];
 
 var ChannelStore = Reflux.createStore({
