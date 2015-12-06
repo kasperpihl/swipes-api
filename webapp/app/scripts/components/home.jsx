@@ -4,6 +4,7 @@ var Sidebar = require('./sidebar');
 var Topbar = require('./topbar');
 var AppLoader = require('./app_loader');
 var Loading = require('./loading');
+var Modal = require('./modal');
 
 var Router = require('react-router');
 var stateStore = require('../stores/StateStore');
@@ -65,6 +66,7 @@ var Home = React.createClass({
 						</div> 
 					</div>
 				</div>
+				<Modal />
 			</div>
 		);
 	}

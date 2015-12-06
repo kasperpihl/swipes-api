@@ -3,9 +3,8 @@ var Reflux = require('reflux');
 Reflux.StoreMethods.defaults = {};
 Reflux.StoreMethods.idAttribute = "id";
 Reflux.StoreMethods._checkForWarnings = function(){
-	if(this.localStorage && !this._didLoadData && this.getInitialState !== Reflux.StoreMethods.getInitialState)
-		console.warn("Reflux Swipes: If you need to overwrite getInitialState, please call and return this.manualLoadData()");
-	
+	if(!this._didLoadData)
+		throw new Error("Reflux Swipes: If you override init or getInitialState, please call this.manualLoadData()");
 }
 Reflux.StoreMethods.connect = function(property){
 	return Reflux.connect(this, property);
@@ -44,13 +43,13 @@ Reflux.StoreMethods.get = function(id){
 	
 };
 Reflux.StoreMethods._reset = function(){
-	this._dataById = {};
+	this._dataById = this.defaults || {};
 	if(this.localStorage)
 		localStorage.removeItem(this.localStorage);
 };
 Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	
-	var persist = true, trigger = true, sort = true;
+	var persist = true, trigger = true;
 
 	// Checking for options
 	if(options && typeof options === 'object'){
@@ -58,13 +57,11 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 			persist = options.persist;
 		if(typeof options.trigger !== 'undefined')
 			trigger = options.trigger;
-		if(typeof options.sort !== 'undefined')
-			sort = options.sort;
 	}
 
-	var dataToTrigger = this._dataById;
 	
-	// Persist to localStorage if key is set, defaults to YES
+	
+	// Persist to localStorage if localstorage key is set, defaults to YES
 	if(persist && this.localStorage){
 		var dataToPersist = this._dataById;
 		// Check if any keys should be avoided
@@ -79,14 +76,8 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 		}
 		localStorage.setItem(this.localStorage, JSON.stringify(dataToPersist));
 	}
-
-	// Sort data before sending, can take both string and functions.
-	if(sort && this.sort){
-		dataToTrigger = this.sortBy(this.sort);
-	}
-
 	if(trigger){
-		this.trigger(dataToTrigger);
+		this.manualTrigger();
 	}
 
 };
@@ -122,7 +113,7 @@ Reflux.StoreMethods.batchLoad = function(items, options){
 			continue;
 		}
 
-		this.set(idAttribute, item, {trigger: false, persist: false, sort: false});
+		this.set(idAttribute, item, {trigger: false, persist: false });
 		
 	}
 	
@@ -131,6 +122,7 @@ Reflux.StoreMethods.batchLoad = function(items, options){
 }
 Reflux.StoreMethods.set = function(id, data, options){
 	this._checkForWarnings();
+
 	// Checking for options
 	if(options && typeof options === 'object'){
 		// Flush the whole store before setting, defaults to NO
@@ -147,10 +139,11 @@ Reflux.StoreMethods.set = function(id, data, options){
 
 	this._dataById[id] = data;
 
-	// Sort and trigger to all listeners
+	// Save and trigger to all listeners
 	this._saveDataAndTrigger(options);
 	
 };
+
 Reflux.StoreMethods.init = function(){
 	return this.manualLoadData();
 };
@@ -169,6 +162,18 @@ Reflux.StoreMethods.manualLoadData = function(){
 	}
 
 };
+Reflux.StoreMethods.manualTrigger = function(){
+	
+
+	var dataToTrigger = this._dataById;
+	// Sort data before sending, can take both string and functions.
+	if(this.sort){
+		dataToTrigger = this.sortBy(this.sort);
+	}
+
+	this.trigger(dataToTrigger);
+}
+
 
 Reflux.StoreMethods._loadData = function(){
 	this._didLoadData = true;
@@ -191,11 +196,12 @@ Reflux.StoreMethods._loadData = function(){
 		}
 	}
 	this._dataById = dataFromStorage;
+	
+
 	if(this.sort){
 		dataFromStorage = this.sortBy(this.sort);
 	}
-	if(this.name)
-		console.log(this, dataFromStorage);
+
 	return dataFromStorage;
 };
 

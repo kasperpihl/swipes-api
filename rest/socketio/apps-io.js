@@ -62,7 +62,7 @@ let hook = (socket, userId) => {
 
                 item.table = tableName;
 
-                var changesQ = jsonToQuery(item, {feed: true});
+                let changesQ = jsonToQuery(item, {feed: true});
                 changesQ = changesQ.filter((doc) => {
                   return r.expr(userScope).contains(doc('scope'));
                 }).changes();
