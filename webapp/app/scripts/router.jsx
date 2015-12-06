@@ -13,6 +13,8 @@ var routes = (
 		<Route path="app/:appId" handler={Home} />
 		<Route path="group/:groupId" handler={Home} />
 		<Route path="group/:groupId/:appId" handler={Home} />
+		<Route path="im/:groupId" handler={Home} />
+		<Route path="im/:groupId/:appId" handler={Home} />
 		<DefaultRoute handler={Home} />
 	</Route>
 );

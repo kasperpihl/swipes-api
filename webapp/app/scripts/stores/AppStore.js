@@ -3,7 +3,7 @@ var Reflux = require('reflux');
 var data = [];
 
 var AppStore = Reflux.createStore({
-	localStorage: "app_store",
+	localStorage: "AppStore",
 	sort: "name"
 });
 

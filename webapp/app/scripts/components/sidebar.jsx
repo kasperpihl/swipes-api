@@ -34,7 +34,6 @@ var Sidebar = React.createClass({
 });
 Sidebar.Section = React.createClass({
 	onSectionHeader: function(){
-		console.log(this.props.data.section);
 	},
 	render: function(){
 		var self = this;
@@ -72,11 +71,13 @@ Sidebar.Row = React.createClass({
 	mixins: [ Navigation ],
 
 	clickedRow: function(){
-		console.log("clicked row", this.props);
 		if(this.props.section === "apps")
 			this.transitionTo('/app/' + this.props.data.manifest_id);
 		else if(this.props.section === "groups"){
 			this.transitionTo('/group/' + this.props.data.name + '/chat');
+		}
+		else if(this.props.section === "people"){
+			this.transitionTo('/im/' + this.props.data.name + '/chat');
 		}
 	},
 	render: function(){

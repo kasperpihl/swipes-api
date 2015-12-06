@@ -1,9 +1,7 @@
 var Reflux = require('reflux');
 
-Reflux.StoreMethods._dataById = {};
+Reflux.StoreMethods.defaults = {};
 Reflux.StoreMethods.idAttribute = "id";
-Reflux.StoreMethods._sortedData = [];
-Reflux.StoreMethods._didLoadData = false;
 Reflux.StoreMethods._checkForWarnings = function(){
 	if(this.localStorage && !this._didLoadData && this.getInitialState !== Reflux.StoreMethods.getInitialState)
 		console.warn("Reflux Swipes: If you need to overwrite getInitialState, please call and return this.manualLoadData()");
@@ -16,10 +14,34 @@ Reflux.StoreMethods.connectFilter = function(property, filterFn){
 	return Reflux.connectFilter(this, property, filterFn);
 };
 
-Reflux.StoreMethods.get = function(id){
+Reflux.StoreMethods.unset = function(id, options){
 	this._checkForWarnings();
 
-	return this._dataById[id];
+	// Checking for options
+	if(options && typeof options === 'object'){
+		// Flush the whole store before setting, defaults to NO
+		if(options.flush)
+			this._reset();
+	}
+
+	if(this._dataById[id])
+		delete this._dataById[id];
+
+	// Sort and trigger to all listeners
+	this._saveDataAndTrigger(options);
+};
+Reflux.StoreMethods.get = function(id){
+	this._checkForWarnings();
+	if(id){
+		return this._dataById[id];
+	}
+	if(this.sort){
+		return this.sortBy(this.sort);
+	}
+	return this._dataById;
+		// Sort data before sending, can take both string and functions.
+	
+	
 };
 Reflux.StoreMethods._reset = function(){
 	this._dataById = {};
@@ -45,6 +67,7 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	// Persist to localStorage if key is set, defaults to YES
 	if(persist && this.localStorage){
 		var dataToPersist = this._dataById;
+		// Check if any keys should be avoided
 		if((this.persistOnly && this.persistOnly instanceof Array) || (this.dontPersist && this.dontPersist instanceof Array)){
 			dataToPersist = {};
 			for(var key in this._dataById){
@@ -54,7 +77,6 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 					dataToPersist[key] = this._dataById[key];
 			}
 		}
-		
 		localStorage.setItem(this.localStorage, JSON.stringify(dataToPersist));
 	}
 
@@ -68,6 +90,7 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	}
 
 };
+
 Reflux.StoreMethods.batchLoad = function(items, options){
 	this._checkForWarnings();
 	
@@ -108,14 +131,19 @@ Reflux.StoreMethods.batchLoad = function(items, options){
 }
 Reflux.StoreMethods.set = function(id, data, options){
 	this._checkForWarnings();
-
 	// Checking for options
 	if(options && typeof options === 'object'){
 		// Flush the whole store before setting, defaults to NO
 		if(options.flush)
 			this._reset();
 	}
-
+	if(this.beforeSaveHandler && typeof this.beforeSaveHandler === 'function'){
+		data = this.beforeSaveHandler(data, this.get(id));
+		if(!data){
+			console.warn("Swipes Reflux: beforeHandler prevented the save");
+			return;
+		}
+	}
 
 	this._dataById[id] = data;
 
@@ -123,17 +151,31 @@ Reflux.StoreMethods.set = function(id, data, options){
 	this._saveDataAndTrigger(options);
 	
 };
-
+Reflux.StoreMethods.init = function(){
+	return this.manualLoadData();
+};
 Reflux.StoreMethods.getInitialState = function(){
-	return this._loadData();
+	return this.manualLoadData();
 };
 Reflux.StoreMethods.manualLoadData = function(){
-	return this._loadData();
+	if(!this._didLoadData)
+		return this._loadData();
+	else {
+		var dataFromStorage = this._dataById;
+		if(this.sort){
+			dataFromStorage = this.sortBy(this.sort);
+		}
+		return dataFromStorage;
+	}
+
 };
 
 Reflux.StoreMethods._loadData = function(){
 	this._didLoadData = true;
+
 	var dataFromStorage = this._dataById;
+	if(!dataFromStorage)
+		dataFromStorage = {};
 	if(this.localStorage && _.size(dataFromStorage) == 0){
 		dataFromStorage = localStorage.getItem(this.localStorage);
 		if(dataFromStorage)
@@ -141,7 +183,6 @@ Reflux.StoreMethods._loadData = function(){
 		else
 			dataFromStorage = {};
 	}
-
 	// Check for defaults, and only set them if no data was present on their place
 	if(this.defaults && typeof this.defaults === "object"){
 		for(var key in this.defaults){
@@ -153,6 +194,8 @@ Reflux.StoreMethods._loadData = function(){
 	if(this.sort){
 		dataFromStorage = this.sortBy(this.sort);
 	}
+	if(this.name)
+		console.log(this, dataFromStorage);
 	return dataFromStorage;
 };
 

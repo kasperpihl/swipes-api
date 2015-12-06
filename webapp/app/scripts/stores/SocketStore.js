@@ -1,18 +1,21 @@
+var Reflux = require('reflux');
+var socketActions = require('../actions/SocketActions');
 var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
 var userStore = require('../stores/UserStore');
 var stateActions = require('../actions/StateActions');
-
-var SocketHandler = {
-	start: function(){
+var eventActions = require('../actions/EventActions');
+var eventStore = require('../stores/EventStore');
+var SocketStore = Reflux.createStore({
+	listenables: [ socketActions ],
+	onStart: function(){
 		var self = this;
 		swipes._client.callSwipesApi("rtm.start").then(function(res){
 			if(res.ok){
+				userStore.batchLoad(res.users, {flush:true});
 				channelStore.batchLoad(res.channels,{flush:true, trigger: false, persist: false});
 				channelStore.batchLoad(res.ims, {trigger: false});
 				appStore.batchLoad(res.apps, {flush:true, trigger:false});
-				userStore.batchLoad(res.users, {flush:true});
-				console.log(appStore.size());
 				self.connect(res.url);
 				stateActions.changeStarted(true);
 			}
@@ -21,25 +24,31 @@ var SocketHandler = {
 		})
 	},
 	connect: function(url){
-		console.log("connecting websocket", swipes.getToken());
-		stateActions.changeConnection("connecting");
+		var self = this;
+		self.set("status", "connecting");
 		this.webSocket = io.connect(url, {
 			query: 'token=' + swipes.getToken(),
 			reconnectionDelay: 5000
 		});
+		this.webSocket.on('message', function(data){
+			console.log("websocket", data);
+			if(data.type)
+				eventActions.fire("websocket_" + data.type, data);
+		});
 		this.webSocket.on('connect', function(){
-			stateActions.changeConnection("online");
+			self.set("status", "online");
 		});
 		this.webSocket.on('connect_error', function(err){
-			stateActions.changeConnection("offline");
+			self.set("status", "offline");
 		})
 		this.webSocket.on('reconnect_attempt', function(number){
-			stateActions.changeConnection("connecting");
+			self.set("status","connecting");
 		});
 		this.webSocket.on('disconnect', function () {
-			stateActions.changeConnection("offline");
+			self.set("status", "offline");
 		});
 	}
-};
 
-module.exports = SocketHandler;
+});
+
+module.exports = SocketStore;

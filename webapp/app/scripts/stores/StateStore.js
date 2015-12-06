@@ -1,19 +1,19 @@
 var Reflux = require('reflux');
 var stateActions = require('../actions/StateActions');
 var data = [];
-var socketHandler = require('../handlers/SocketHandler');
+var socketActions = require('../actions/SocketActions');
 var appStore = require('../stores/AppStore');
 var channelStore = require('../stores/ChannelStore');
 var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
-	dontPersist: ["connectionStatus", "screen1", "screen2", "screen3", "active_menu_id"],
-	defaults: {
-		"connectionStatus": "offline"
-	},
+	dontPersist: [ "screen1", "screen2", "screen3", "active_menu_id", "backgroundColor"],
 	onInit: function(){
 		swipes.setToken(this.get("swipesToken"));
-		socketHandler.start();
+		socketActions.start();
+	},
+	onChangeBackgroundColor:function(color){
+		this.set("backgroundColor", color)
 	},
 	onToggleSidebar: function(){
 		this.set("sidebarClosed", !this.get("sidebarClosed"));
@@ -21,13 +21,11 @@ var StateStore = Reflux.createStore({
 	onChangeStarted: function(isStarted){
 		this.set('isStarted', isStarted);
 	},
-	onChangeConnection: function(status){
-		this.set("connectionStatus", status);
-	},
 	onLoadApp: function(params, options){
+		this.unset("backgroundColor", {trigger: false});
+		this.unset("foregroundColor", {trigger: false});
 		var app, channel, screen1 = {};
 		var activeMenuId;
-		console.log("loading app", params);
 
 		if(params.appId){
 			app = appStore.find({"manifest_id":params.appId});
@@ -41,7 +39,8 @@ var StateStore = Reflux.createStore({
 			channel = channelStore.find({"name":params.groupId});
 			if(channel){
 				screen1.channel = channel;
-				screen1.url = app.channel_view_url;
+				// Adding a get parameter to hack react, otherwise iFrame won't update when switching between channels
+				screen1.url = app.channel_view_url + "?cId=" + channel.id;
 				activeMenuId = channel.id;
 			}
 		}

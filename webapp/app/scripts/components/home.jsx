@@ -50,7 +50,7 @@ var Home = React.createClass({
 			<div className="main">
 				<Sidebar />
 				<div className="right-side-container">
-					<div className="dual-apps content-container" idName="main">
+					<div className="content-container" idName="main">
 						<div className="app-view-controller">
 							<Topbar data={{screen:1}}/>
 							<AppLoader data={{screen:1}}/>

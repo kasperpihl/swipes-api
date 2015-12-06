@@ -1,5 +1,4 @@
 var React = require('react');
-var socketHandler = require('../handlers/SocketHandler');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Loading = React.createClass({

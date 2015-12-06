@@ -36,7 +36,6 @@ let emitEvents = (cursor, socket, eventType) => {
     }
 
     let data = row.new_val;
-
     socket.emit('message', {type: eventType, data: data});
   })
 }
@@ -61,11 +60,10 @@ let hook = (socket, userId) => {
             if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
               manifest.listenTo.forEach((item) => {
                 tableName = util.appTable(app.manifest_id, item.table);
-
+                
                 item.table = tableName;
 
                 let changesQ = jsonToQuery(item, {feed: true});
-
                 changesQ = changesQ.filter((doc) => {
                   return r.expr(userScope).contains(doc('scope'));
                 }).changes();
