@@ -230,6 +230,8 @@ var SwipesAPIConnector = (function() {
 			'ok': true,
 			'reply_to': identifier
 		};
+		if(this._appId)
+			callJson.app_id = this._appId;
 		if(data){
 			callJson.data = data;
 		}
