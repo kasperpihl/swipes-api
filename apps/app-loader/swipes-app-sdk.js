@@ -124,7 +124,6 @@ var SwipesAppSDK = (function() {
 					if(res) deferred.resolve(res);
 					else deferred.reject(error);
 				};
-				console.log("get query", data);
 
 				if(appId == "core"){
 					self._client.callListener("getData", data, intCallback);

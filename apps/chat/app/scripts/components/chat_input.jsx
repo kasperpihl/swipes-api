@@ -13,7 +13,6 @@ var ChatInput = React.createClass({
 	},
 	componentDidMount: function(){
 		this.debouncedCheck = _.debounce(this.hideHint, 2000);
-		console.log("debounced", this.debouncedCheck);
 	},
 	getInitialState:function(){
 		return {};

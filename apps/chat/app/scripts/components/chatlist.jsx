@@ -23,10 +23,8 @@ var ChatList = React.createClass({
 	},
 	scrollToBottom: function(animate){
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
-		console.log(scrollPosForBottom);
 		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
 			this.hasRendered = true;
-			console.log("did scroll to bottom");
 			if(animate)
 				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 200);
 			else
@@ -38,11 +36,9 @@ var ChatList = React.createClass({
 		$('.chat-list-container').css("paddingTop", topPadding + "px");
 	},
 	handleResize: function(){
-		console.log("handleResize");
 		this.scrollToBottom(this.hasRendered);
 	},
 	onChangedTextHeight: function(height){
-		console.log("changing text height");
 		$("#content").css("paddingBottom", height);
 		this.scrollToBottom();
 	},
@@ -51,7 +47,6 @@ var ChatList = React.createClass({
 		this.shouldScrollToBottom = true;
 	},
 	componentDidUpdate: function(){
-		console.log("componentDidUpdate");
 		this.scrollToBottom(this.hasRendered);
 	},
 	componentDidMount: function(){
