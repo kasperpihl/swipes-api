@@ -52,22 +52,21 @@ let hook = (socket, userId) => {
       db.rethinkQuery(listAppsQ)
         .then((apps) => {
           let changesPromises = [];
-          let tableName;
-
+          let tableNames = [];
           apps.forEach((app) => {
             let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
 
             if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
               manifest.listenTo.forEach((item) => {
-                tableName = util.appTable(app.manifest_id, item.table);
-                
+                let tableName = util.appTable(app.manifest_id, item.table);
+
                 item.table = tableName;
 
-                let changesQ = jsonToQuery(item, {feed: true});
+                var changesQ = jsonToQuery(item, {feed: true});
                 changesQ = changesQ.filter((doc) => {
                   return r.expr(userScope).contains(doc('scope'));
                 }).changes();
-
+                tableNames.push(tableName);
                 changesPromises.push(db.rethinkQuery(changesQ, {feed: true, returnConnection: true, socket: socket}));
               })
             }
@@ -75,12 +74,12 @@ let hook = (socket, userId) => {
 
           Promise.all(changesPromises).then((feeds) => {
             let connections = [];
-
+            let counter = 0;
             feeds.forEach((feed) => {
               let cursor = feed[0];
 
               connections.push(feed[1]);
-              emitEvents(cursor, socket, tableName);
+              emitEvents(cursor, socket, tableNames[counter++]);
             })
 
             return resolve(connections);
