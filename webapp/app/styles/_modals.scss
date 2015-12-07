@@ -22,13 +22,17 @@
 		}
 		&.dark-opaque {
 			@include transition(opacity 0.2s ease-out);
-			background-color: rgba($dark-background, .3);
+			background-color: rgba($dark-background, .6);
 			opacity: 0.5;
 		}
 	}
 	.modal-overlay-content{
 		z-index: 9001;
 		opacity: 0;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
 		position: absolute;
 		display: inline-block;
 		&.level2{
@@ -56,5 +60,17 @@
 
 
 .search-modal{
-	// Here you can do the styling 
+	width: 100%;
+	max-width: 600px;
+	background-color: white;
+	margin-left: 50%;
+	transform: translateX(-50%);
+	margin-top: 150px;
+	
+	input {
+		width: 100%;
+		height: 60px;
+		padding: 5px;
+		padding-left: 60px;
+	}
 }
