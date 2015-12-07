@@ -27,7 +27,7 @@ var ChatStore = Reflux.createStore({
 
 			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			model.timeStr = TimeUtility.getTimeStr(date);
-			
+
 			user = self.users[model.user_id];
 			if(user && user.id == lastUser && group == lastGroup){
 				model.isExtraMessage = true;
@@ -64,10 +64,9 @@ var ChatStore = Reflux.createStore({
 		this.sortedSections = sortedSections;
 
 		this.trigger(sortedSections);
-		
+
 	},
 	getInitialState: function(){
-		
 		return this.sortedSections;
 	},
 	start: function() {
@@ -90,7 +89,6 @@ var ChatStore = Reflux.createStore({
 			});
 		});
 	}
-
 });
 
 module.exports = ChatStore;

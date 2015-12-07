@@ -20,7 +20,6 @@ $(function(){
 	function loadApps(){
 		swipes._client.callSwipesApi("apps.list", function(res, error){
 			if(res && res.ok){
-				console.log(res);
 				window._apps = res.apps;
 				render();
 				attachEvents();
