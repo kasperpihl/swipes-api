@@ -5,20 +5,20 @@ var modalActions = require('../actions/ModalActions');
 var Modal = React.createClass({
 	mixins: [modalStore.connect()],
 	componentDidMount: function(){
-		//this.recalculateContent();
-		window.addEventListener('resize'/*, this.recalculateContent*/);
+		this.recalculateContent();
+		window.addEventListener('resize', this.recalculateContent);
 		setTimeout(function(){
 			modalActions.loadModal(SearchModal);
 		}, 500);
 	},
 	componentWillUnmount:function(){
-		window.removeEventListener('resize'/*, this.recalculateContent*/);
+		window.removeEventListener('resize', this.recalculateContent);
 	},
 	componentDidUpdate: function(){
-		//this.recalculateContent();
+		this.recalculateContent();
 	},
 
-	/*recalculateContent: function(){
+	recalculateContent: function(){
 		var $contentEl = $(this.refs.content);
 		var contentWidth = $contentEl.outerWidth();
 		var contentHeight = $contentEl.outerHeight();
@@ -74,7 +74,7 @@ var Modal = React.createClass({
         cssProps["marginTop"] = marginTop;
 
         $contentEl.css(cssProps);
-	},*/
+	},
 	onClickedBackground: function(){
 		modalActions.hide();
 	},
