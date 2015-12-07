@@ -52,7 +52,7 @@ var Modal = React.createClass({
 				cssProps["left"] = "auto";
 				cssProps["right"] = 0;
 				marginLeft = 0;
-			} 
+			}
 		}
 		if(this.state.top !== null){
 			var actualTop = parseInt(this.state.top, 10);
@@ -66,14 +66,13 @@ var Modal = React.createClass({
 				cssProps["top"] = "auto";
 				cssProps["bottom"] = 0;
 				marginTop = 0;
-			} 
+			}
 		}
-		
 
 		cssProps["marginLeft"] = marginLeft;
-        cssProps["marginTop"] = marginTop;
+			cssProps["marginTop"] = marginTop;
 
-        $contentEl.css(cssProps);
+			$contentEl.css(cssProps);
 	},
 	onClickedBackground: function(){
 		modalActions.hide();
@@ -97,7 +96,6 @@ var Modal = React.createClass({
 		var contentClass = "modal-overlay-content ";
 		if(this.state.show)
 			contentClass += "shown ";
-
 
 		return (
 			<div ref="container" className={containerClass}>
