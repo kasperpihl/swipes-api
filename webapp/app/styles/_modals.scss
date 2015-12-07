@@ -56,14 +56,16 @@
 
 
 .search-modal{
-	width: 600px;
+	width: 750px;
 	background-color: white;
 	position: relative;
+	box-shadow: $swipes-shadow-four;
 	
 	.search-input-wrapper {
 		width: 100%;
 		justify-content: 100%;
 		position: relative;
+		box-shadow: $swipes-shadow-one;
 		
 		input {
 			width: 100%;
@@ -71,6 +73,19 @@
 			padding: 5px;
 			padding-left: 60px;
 			position: relative;
+			font-family: 'OpenSans';
+			font-weight: 400;
+			font-size: 16px;
+			color: $deepBlue-80;
+			
+			&::-webkit-input-placeholder {
+				color: $deepBlue-40;
+				transition: .1s ease-in-out;
+			}
+			
+			&:focus + label > svg {
+				fill: $deepBlue-80;
+			}
 		}
 		
 		label {
@@ -80,8 +95,78 @@
 			transform: translate(-50%, -50%);
 			
 			svg {
-				stroke: $deepBlue-60;
+				fill: $deepBlue-40;
+				transition: .1s ease-in-out;
 			}
+		}
+	}
+	
+	.search-results-wrapper {
+		width: 100%;
+		height: 450px;
+		display: flex;
+		transition: .2s ease-in-out;
+		
+		.results-list {
+			width: 50%;
+			height: 100%;
+			//background-color: red;
+			overflow-y: auto;
+			
+			&::-webkit-scrollbar-thumb {
+				border-radius: 0px;
+				background-color: rgba(0,0,0,.2);
+			}
+			
+			.result-title {
+				padding: 10px;
+				padding-left: 30px;
+				font-size: 15px;
+				font-weight: 600;
+				color: $deepBlue-80;
+			}
+			
+			ul.results-specific-list {
+				width: 100%;
+				
+				li.result {
+					width: 100%;
+					font-size: 15px;
+					font-weight: 400;
+					color: $deepBlue-80;
+					padding: 10px 40px;
+					padding-right: 10px;
+					transition: .1s ease-in-out;
+					position: relative;
+					
+					.icon {
+						width: 40px;
+						height: 40px;
+						position: absolute;
+						top: 0;
+						left: 0;
+						//background-color: yellow;
+						text-align: center;
+						
+						i {
+							//text-align: center;
+							line-height: 42px;
+						}
+					}
+					
+					&:hover {
+						background-color: $studioGray-40;
+						transition: .1s ease-in-out;
+					}
+				}
+			}
+		}
+		
+		.result-preview {
+			width: 50%;
+			height:100%;
+			background-color: #f0f0f0;
+			margin-left: 0px;
 		}
 	}
 }
