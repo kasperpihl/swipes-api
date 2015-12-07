@@ -2,7 +2,59 @@ var React = require('react');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
 
+var Results = React.createClass({
+	render: function () {
+		var realResponse = this.props.data.realResponse;
+		var i = 0;
+		var rows = realResponse.map(function (row) {
+			return <Results.Wrapper key={++i} data={row} />
+		});
+
+		return (
+			<div className="results-list">
+				{rows}
+			</div>
+		);
+	}
+});
+
+Results.Wrapper = React.createClass({
+	render: function () {
+		var name = this.props.data.name;
+		var icon = this.props.data.icon;
+		var list = this.props.data.list;
+		var i = 0;
+		var rows = list.map(function (row) {
+			return <Results.Row key={++i} icon={icon} data={row} />
+		});
+
+
+		return (
+			<div className="result-wrapper">
+				<div className="result-title">{name}</div>
+				{rows}
+			</div>
+		);
+	}
+});
+
+Results.Row = React.createClass({
+	render: function () {
+		return (
+			<ul className="results-specific-list">
+				<li className="result">
+				<div className="icon">
+					<i className="material-icons">{this.props.icon}</i>
+				</div>
+				{this.props.data.text}
+				</li>
+			</ul>
+		);
+	}
+});
+
 var SearchModal = React.createClass({
+	mixins: [SearchModalStore.connect("realResponse")],
 	onSearch: function () {
 		var value = $(this.refs.search).val();
 
@@ -19,106 +71,10 @@ var SearchModal = React.createClass({
 						</svg>
 					</label>
 				</div>
-				
+
 				<div className="search-results-wrapper">
-					<div className="results-list">
-					
-					<div className="result-wrapper">
-						<div className="result-title">PEOPLE</div>
-						<ul className="results-specific-list">
-							
-							<li className="result">
-							<div className="icon">
-								<i className="material-icons">person</i>
-							</div>
-							Stefan Vladimirov, CCO
-							</li>
-						</ul> 
-						</div>
-						
-						<div className="result-wrapper">
-							<div className="result-title">Emails</div>
-							<ul className="results-specific-list">
-								<li className="result">
-									<div className="icon">
-										<i className="material-icons">email</i>
-									</div>
-									Design specifications for email app
-								</li>
-								<li className="result">
-									<div className="icon">
-										<i className="material-icons">email</i>
-									</div>
-									Designer needed
-								</li>
-								<li className="result">
-									<div className="icon">
-										<i className="material-icons">email</i>
-									</div>
-									Create more content around design
-								</li>
-							</ul> 
-						</div>
-						
-						<div className="result-wrapper">
-							<div className="result-title">Messages</div>
-							<ul className="results-specific-list">
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">message</i>
-								</div>
-								We need to iterate on the design style</li>
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">message</i>
-								</div>
-								Did you see the design I sent you?</li>
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">message</i>
-								</div>
-								I like the new design</li>
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">message</i>
-								</div>
-								Check this dribbble design</li>
-							</ul> 
-						</div>
-						
-						<div className="result-wrapper">
-							<div className="result-title">Notes</div>
-							<ul className="results-specific-list">
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">view_headline</i>
-								</div>
-								Design brief</li>
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">view_headline</i>
-								</div>
-								Material design findings</li>
-							</ul> 
-						</div>
-						
-						<div className="result-wrapper">
-							<div className="result-title">Actions</div>
-							<ul className="results-specific-list">
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">fiber_manual_record</i>
-								</div>
-								Design brief</li>
-								<li className="result">
-								<div className="icon">
-									<i className="material-icons">fiber_manual_record</i>
-								</div>
-								Material design findings</li>
-							</ul> 
-						</div>
-						
-					</div>
+					<Results data={this.state.realResponse} />
+
 					<div className="result-preview"></div>
 				</div>
 			</div>

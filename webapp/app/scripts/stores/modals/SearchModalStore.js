@@ -3,7 +3,18 @@ var Actions = require('../../actions/modals/SearchModalActions');
 
 var realData = [
   {
+    name: 'People',
+    icon: 'person',
+    list: [
+      {title: 'Swipes', text: 'Kasper'},
+      {title: 'Swipes', text: 'Stefan'},
+      {title: 'Swipes', text: 'Stanimir'},
+      {title: 'Swipes', text: 'Yana'} // Okaaay I will put a female name in the people's array
+    ]
+  },
+  {
     name: 'Email',
+    icon: 'email',
     list: [
       {title: 'This is fake', text: 'the title is misleading'},
       {title: 'Kasper!', text: '...nothing ha-ha'},
@@ -11,7 +22,8 @@ var realData = [
     ]
   },
   {
-    name: 'Chat',
+    name: 'Messages',
+    icon: 'message',
     list: [
       {title: 'general', text: 'why general?'},
       {title: 'general', text: 'because we have only general'},
@@ -20,10 +32,30 @@ var realData = [
   },
   {
     name: 'Tetris',
+    icon: 'view_headline',
     list: [
       {title: 'Kasper', text: '234829432942'},
       {title: 'Mitko', text: '234829432941'},
       {title: 'Tihomir', text: '-∞'} // he will get better!
+    ]
+  },
+  {
+    name: 'Notes',
+    icon: 'view_headline',
+    list: [
+      {title: 'Tetris', text: 'Train every day!'},
+      {title: 'Tetris', text: 'I will get better'},
+      {title: 'Tetris', text: 'Kasper and Mitko are still only humans!'},
+      {title: 'Tetris', text: 'Tetris is a lifestyle'}
+    ]
+  },
+  {
+    name: 'Actions',
+    icon: 'fiber_manual_record',
+    list: [
+      {title: 'Swipes', text: 'I have no idea what am I doing'},
+      {title: 'Swipes', text: 'I write about action in an action?!'},
+      {title: 'Swipes', text: 'Find my first favourite action movie'}
     ]
   }
 ]
@@ -38,7 +70,7 @@ var realSearch = function (value) {
       continue;
     }
 
-    var category = {name: realData[i].name, list: []};
+    var category = {name: realData[i].name, icon: realData[i].icon,  list: []};
 
     realData[i].list.forEach(function (item) {
       if (item.title.indexOf(value) !== -1 || item.text.indexOf(value) !== -1) {
@@ -56,9 +88,11 @@ var realSearch = function (value) {
 
 var SearchStore = Reflux.createStore({
   listenables: [Actions],
-	//sort: "name"
+  defaults: {
+    realResponse: realData
+  },
   onSearch: function (value) {
-    console.log(realSearch(value));
+    this.set("realResponse", realSearch(value));
   }
 });
 
