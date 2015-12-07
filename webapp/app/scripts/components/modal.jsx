@@ -1,11 +1,15 @@
 var React = require('react');
 var modalStore = require('../stores/ModalStore');
-
+var SearchModal = require('./modals/search_modal');
+var modalActions = require('../actions/ModalActions');
 var Modal = React.createClass({
 	mixins: [modalStore.connect()],
 	componentDidMount: function(){
 		this.recalculateContent();
 		window.addEventListener('resize', this.recalculateContent);
+		setTimeout(function(){
+			modalActions.loadModal(SearchModal);
+		}, 5000);
 	},
 	componentWillUnmount:function(){
 		window.removeEventListener('resize', this.recalculateContent);
@@ -13,6 +17,7 @@ var Modal = React.createClass({
 	componentDidUpdate: function(){
 		this.recalculateContent();
 	},
+
 	recalculateContent: function(){
 		var $contentEl = $(this.refs.content);
 		var contentWidth = $contentEl.outerWidth();
@@ -71,12 +76,17 @@ var Modal = React.createClass({
         $contentEl.css(cssProps);
 	},
 	onClickedBackground: function(){
-
+		modalActions.hide();
 	},
 	render: function() {
+		var Modal = "div";
+
 		var containerClass = "modal-overlay-container ";
-		if(this.state.show)
-			containerClass += "shown";
+		console.log("render", this.state.modalView);
+		if(this.state.modalView){
+			containerClass += "shown ";
+			Modal = this.state.modalView;
+		}
 
 		var backgroundClass = "modal-clickable-background ";
 		if(this.state.showBackground)
@@ -86,23 +96,15 @@ var Modal = React.createClass({
 
 		var contentClass = "modal-overlay-content ";
 		if(this.state.show)
-			contentClass += "shown "
+			contentClass += "shown ";
+
+
 		return (
 			<div ref="container" className={containerClass}>
 				<div ref="background" onClick={this.onClickedBackground} className={backgroundClass}></div>
 				<div ref="content" className={contentClass}>
-					<Modal.SearchModal />
+					<Modal />
 				</div>
-			</div>
-		);
-	}
-});
-
-Modal.SearchModal = React.createClass({
-	render: function(){
-		return (
-			<div style={{background:'red'}} className="search-modal">
-				<input type="text" />
 			</div>
 		);
 	}

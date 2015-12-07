@@ -1,6 +1,15 @@
 var Reflux = require('reflux');
+var modalActions = require('../actions/ModalActions');
 
 var ModalStore = Reflux.createStore({
+	listenables: [modalActions],
+	onLoadModal: function(modal){
+		this.set("modalView", modal);
+	},
+	onHide: function(){
+		console.log("hiding");
+		this.unset("modalView");
+	},
 	defaults: {
 		show: true,
 		showBackground: true,
@@ -10,6 +19,7 @@ var ModalStore = Reflux.createStore({
 		centerX: true,
 		centerY: true
 	},
+
 	init: function() {
 		this.manualLoadData();
 		console.log('ModalStore initialized');

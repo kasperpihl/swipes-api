@@ -22,9 +22,9 @@ Reflux.StoreMethods.unset = function(id, options){
 		if(options.flush)
 			this._reset();
 	}
-
+	
 	if(this._dataById[id])
-		delete this._dataById[id];
+		this._dataById[id] = null;
 
 	// Sort and trigger to all listeners
 	this._saveDataAndTrigger(options);
