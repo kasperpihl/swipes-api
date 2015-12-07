@@ -30,7 +30,7 @@ var ChatList = React.createClass({
 			this.hasRendered = true;
 			console.log("did scroll to bottom");
 			if(animate)
-				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 200);
+				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 300);
 			else
 				$('.chat-list-container').scrollTop(scrollPosForBottom);
 				
@@ -46,7 +46,7 @@ var ChatList = React.createClass({
 		this.scrollToBottom(this.hasRendered);
 	},
 	onChangedTextHeight: function(height){
-		console.log("changing text height");
+		//console.log("changing text height");
 		$("#content").css("paddingBottom", height);
 		this.scrollToBottom();
 	},
