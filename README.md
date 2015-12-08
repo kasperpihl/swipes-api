@@ -1,5 +1,6 @@
 ### Server part is in the rest folder
 Node 5.x.x is required. Npm is required.
+
 1. `cd rest`
 2. `npm install` On some systems you will need `sudo`.
 3. `sudo npm install nodemon -g`
