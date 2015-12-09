@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	console.log('thisshit');
+	
 	$.swButtonFullHover = function() {
         // hover for .outline
         $('.swipes-button.hover-full').mouseenter(function() {

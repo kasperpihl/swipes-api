@@ -1,7 +1,6 @@
 var React = require('react');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
-
 var Results = React.createClass({
 	render: function () {
 		var realResponse = this.props.data.realResponse;
@@ -9,7 +8,7 @@ var Results = React.createClass({
 		var rows = realResponse.map(function (row) {
 			return <Results.Wrapper key={++i} data={row} />
 		});
-
+		
 		return (
 			<div className="results-list">
 				{rows}
@@ -39,10 +38,21 @@ Results.Wrapper = React.createClass({
 });
 
 Results.Row = React.createClass({
+	getEl:function(name){
+		return $(this.refs[name].getDOMNode());	
+	},
+	onClick: function() {
+		var $result = this.getEl("result");
+		$('.result').removeClass('active');
+		$result.addClass('active');
+	},
+	onKeyDown: function() {
+		
+	}
 	render: function () {
 		return (
 			<ul className="results-specific-list">
-				<li className="result">
+				<li className="result" ref="result" onClick={this.onClick} >
 				<div className="icon">
 					<i className="material-icons">{this.props.icon}</i>
 				</div>

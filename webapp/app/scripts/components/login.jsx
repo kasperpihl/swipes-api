@@ -74,7 +74,7 @@ var Login = React.createClass({
 					<h5>Hi, logging in?</h5>
 					<div className="swipes-floating-label" data-error-message="Error message">
 						<input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
-						<label for="email">Enter your username</label>
+						<label htmlFor="email">Enter your username</label>
 					</div>
 					
 					{/* <div className="input-wrapper" error-attribute="">
