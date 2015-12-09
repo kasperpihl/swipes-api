@@ -10,6 +10,7 @@ var SocketStore = Reflux.createStore({
 	listenables: [ socketActions ],
 	onStart: function(){
 		var self = this;
+
 		swipes._client.callSwipesApi("rtm.start").then(function(res){
 			if(res.ok){
 				userStore.batchLoad(res.users, {flush:true});
@@ -17,7 +18,7 @@ var SocketStore = Reflux.createStore({
 				channelStore.batchLoad(res.ims, {trigger: false});
 				appStore.batchLoad(res.apps, {flush:true, trigger:false});
 				self.connect(res.url);
-				stateActions.changeStarted(true);
+				stateActions.changeStarted(true, res.self);
 			}
 		}).fail(function(err){
 			console.log("rtm start err", err);

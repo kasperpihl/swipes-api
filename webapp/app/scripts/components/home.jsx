@@ -47,6 +47,7 @@ var Home = React.createClass({
 		if(!this.state.isStarted){
 			return ( <Loading /> );
 		}
+
 		return (
 			<div className="main">
 				<Sidebar />
@@ -55,7 +56,7 @@ var Home = React.createClass({
 						<div className="app-view-controller">
 							<Topbar data={{screen:1}}/>
 							<AppLoader data={{screen:1}}/>
-						</div> 
+						</div>
 						<div className="app-view-controller">
 							<Topbar data={{screen:2}}/>
 							<AppLoader data={{screen:2}} />
@@ -63,7 +64,7 @@ var Home = React.createClass({
 						<div className="app-view-controller">
 							<Topbar data={{screen:3}}/>
 							<AppLoader data={{screen:3}} />
-						</div> 
+						</div>
 					</div>
 				</div>
 				<Modal />

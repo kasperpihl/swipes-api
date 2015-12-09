@@ -18,7 +18,8 @@ var StateStore = Reflux.createStore({
 	onToggleSidebar: function(){
 		this.set("sidebarClosed", !this.get("sidebarClosed"));
 	},
-	onChangeStarted: function(isStarted){
+	onChangeStarted: function(isStarted, currentUser){
+		this.set('currentUser', currentUser);
 		this.set('isStarted', isStarted);
 	},
 	onLoadApp: function(params, options){
