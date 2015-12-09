@@ -616,7 +616,7 @@ button.primary.red-120 {
 }
 .swipes-floating-label input:focus {
   outline: none;
-  border-bottom-color: #3ECDFD;
+  border-bottom: 2px solid #3ECDFD;
 }
 .swipes-floating-label input:focus + label {
   color: #3ECDFD;
