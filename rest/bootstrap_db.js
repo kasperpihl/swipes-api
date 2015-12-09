@@ -2,12 +2,14 @@
 
 const TEAM_ID = 'TSMFYIEKK';
 
+let config = require('config');
 let r = require('rethinkdb');
 let util = require('./util.js');
 let db = require('./db.js');
 let Promise = require('bluebird'); // we should use native promises one day
 let generateId = util.generateSlackLikeId;
 let moment = require('moment');
+let dbConfig = config.get('database');
 
 require('rethinkdb-init')(r);
 
@@ -38,11 +40,7 @@ let teamDoc = {
   channels: []
 };
 
-r.init({
-    host: 'localhost',
-    port: 28015,
-    db: 'swipes'
-  },
+r.init(dbConfig,
   tables
 ).then((conn) => {
   let query = r.table('teams').insert(teamDoc);

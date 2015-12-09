@@ -1,0 +1,158 @@
+html {
+    width: 100%;
+    height:100%;
+    overflow: hidden;
+    body{
+        width: 100%;
+        height:100%;
+        overflow: hidden;
+        font-smooth: always;
+        transform: rotate(-0.0000000001deg);
+        text-rendering: optimizeLegibility !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+}
+* {
+    cursor:default;
+}
+
+*,*:before,*:after,form,input {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+input{
+    cursor: text;
+    border:0;
+}
+input:focus{
+    border:0;
+    outline: 0;
+    outline-offset: 0;
+}
+html.touch body {
+    @include breakpoint(tablet-horizontal) {
+        min-width: 1180px;
+    }
+}
+ul{
+    list-style:none;
+    padding-left:0;
+    li{
+        list-style:none;
+    }
+}
+.row {
+    margin-left:0px;
+    margin-right:0px;
+}
+::-webkit-scrollbar { 
+    width: 10px;
+    background-color: rgba(black,0);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(black,.1);
+    border-radius: 50px;
+}
+
+.app-frame-class{
+    width:100%;
+    height:100%;
+}
+#content{
+    height: 100%;
+    .main{
+        height: 100%;
+    }
+}
+
+body {
+    transition: .4s ease-in-out;
+    
+    &.sidebar-closed {
+        width: calc(100% + 210px);
+        transform: translate3d(-210px, 0px, 0px);
+        transition: .4s ease-in-out;
+        .right-side-container {
+            width: calc(100% - 210px);
+            transition: .4s ease-in-out;
+            
+            
+        }
+        
+    }
+}
+
+// Topbar + Content
+.right-side-container {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    //overflow:hidden;
+    height:100%;
+    width:calc(100% - 210px);
+    transform: translate3d(210px, 0px, 0px);
+    transition: .4s ease-in-out;
+    
+    .content-container{
+
+        height:100%;
+        .app-view-controller{
+            height:100%;
+            display: none; 
+            position:relative;
+            padding-top: $top-bar-height;
+            .app-content-container {
+                height: 100%; 
+            }
+        }
+        .app-view-controller:nth-child(1){
+            display: block;
+        }
+        &.dual-apps, &.tri-apps {
+            .app-view-controller {
+                float:left;
+                width:50%;              
+            }
+            .app-view-controller:nth-child(2){
+                display: block;
+            }
+        }
+        &.tri-apps{
+            .app-view-controller {
+                float:left;
+                width:33%;              
+            }
+            .app-view-controller:nth-child(3){
+                display: block;
+            }
+        }
+
+
+    }
+
+}
+svg {
+    pointer-events: none;
+}
+a:focus { 
+    outline: none; 
+}
+button::-moz-focus-inner {
+  border: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}

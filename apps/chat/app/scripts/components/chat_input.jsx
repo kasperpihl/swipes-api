@@ -13,7 +13,6 @@ var ChatInput = React.createClass({
 	},
 	componentDidMount: function(){
 		this.debouncedCheck = _.debounce(this.hideHint, 2000);
-		console.log("debounced", this.debouncedCheck);
 	},
 	getInitialState:function(){
 		return {};
@@ -39,6 +38,7 @@ var ChatInput = React.createClass({
 		this.props.onChangedTextHeight($main.outerHeight());
 	},
 	onKeyUp: function(e){
+		var $textarea = this.getEl("textarea");
 		//console.log(e.keyCode, e.shiftKey, e.target);
 		if(e.keyCode === 27){
 			this.getEl("textarea").blur();	

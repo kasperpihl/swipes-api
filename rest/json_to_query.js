@@ -25,10 +25,11 @@ let jsonToQuery = (json, options) => {
   let data = json.data;
 
   if (data) {
-    
     var queryOptions= {conflict: "update"};
-    if(options.returnChanges)
+
+    if(options.returnChanges) {
       queryOptions.returnChanges = true;
+    }
     // The user wants to perform an insert or update
     rethinkQ = rethinkQ.insert(data, queryOptions);
   } else {

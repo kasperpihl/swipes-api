@@ -3,7 +3,6 @@ var chatStore = require('./stores/ChatStore');
 Router.start();
 
 swipes.onReady(function(){
-	console.log("on ready fired");
 	chatStore.start();
 })
 	/*window.webSocket = io.connect("http://localhost:5000", {

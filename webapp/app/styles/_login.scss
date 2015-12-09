@@ -1,0 +1,80 @@
+$deepBlue-20: #CCCED5;
+$deepBlue-40: #999EAC;
+$deepBlue-60: #666D82;
+$deepBlue-80: #333D59;
+$deepBlue-100: #000C2F;
+$deepBlue-120: #000923;
+
+$blue-20: #D8F5FF;
+$blue-40: #B2EBFE;
+$blue-60: #8BE1FE;
+$blue-80: #65D7FD;
+$blue-100: #3ECDFD;
+$blue-120: #2F9ABE;
+
+$green-color: #4CAF50;
+$red-color: #FC461E; 
+$yellow-color: #FFCA28; 
+
+
+$swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
+$swipes-shadow-two: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+$swipes-shadow-three: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+$swipes-shadow-four: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+$swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+
+%flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.login-wrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	z-index: 1;
+	background-color: #f0f0f0;
+	
+	@extend %flex;
+}
+
+.login {
+	width: 350px;
+	//height: 500px;
+	background-color: white;
+	box-shadow: $swipes-shadow-one;
+	border-radius: 2px;
+	padding: 0 50px;
+	padding-bottom: 50px;
+	position: relative;
+	
+	h5 {
+		font-weight: 300;
+		color: $blue-120;
+		text-align: center;
+		padding: 40px 0;
+	}
+	
+	.swipes-floating-label {
+		margin-top: 60px; 
+	}
+	
+	input[type="button"] {
+		width: 90%;
+		background-color: $deepBlue-100;
+		color: white;
+		position: absolute;
+		bottom: -25px;
+		height: 50px;
+		left: 5%;
+		cursor: pointer;
+		font-weight: 700;
+		font-size: 1.2em;
+		box-shadow: $swipes-shadow-two;
+		
+		&:hover {
+			background-color: $deepBlue-80;
+		}
+	}
+}

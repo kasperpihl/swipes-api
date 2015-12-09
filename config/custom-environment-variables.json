@@ -1,0 +1,7 @@
+{
+  "database": {
+    "host": "SW_DATABASE_HOST",
+    "port": "SW_DATABASE_PORT",
+    "db": "SW_DATABASE_NAME"
+  }
+}

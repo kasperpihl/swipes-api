@@ -17,14 +17,7 @@ let appDir = __dirname + '/../../apps/';
 let generateId = util.generateSlackLikeId;
 
 require('rethinkdb-init')(r);
-let dbConfig = config.get('dbConfig');
-if(process.env.DB_HOST){
-  dbConfig = {
-    host: process.env.DB_HOST,
-    port: dbConfig.port,
-    db: 'swipes'
-  };
-}
+let dbConfig = config.get('database');
 
 let updateApp = (appId, updateObj, res, next) => {
   let deletePerUserQ;
@@ -389,7 +382,6 @@ router.post('/apps.delete', (req, res, next) => {
     .then((app) => {
       if (!app) {
         return new Promise((re, reject) => { reject('no_app_found')});
-        
       }
 
       let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));

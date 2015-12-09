@@ -23,6 +23,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.setToken = function(token){
 		this._client.setToken(token);
 	};
+	SwipesAppSDK.prototype.getToken = function(){
+		return this._client._token;
+	};
 
 
 	// API for handling navigation bar in main app
@@ -103,18 +106,31 @@ var SwipesAppSDK = (function() {
 				else if(typeof id === 'function')
 					callback = id;
 
+				if (appId !== 'core') {
+					var filter = data.query.query.filter || {};
+					// If defaultscope is set
+					if(self._defaultScope){
+						filter.scope = self._defaultScope;
+					}
+					if(typeof options.scope === 'string'){
+						filter.scope = options.scope;
+					}
+
+					data.query.query.filter = filter;
+				}
+
 				var intCallback = function(res, error){
 					if(callback) callback(res,error);
 					if(res) deferred.resolve(res);
 					else deferred.reject(error);
 				};
-				console.log("get query", data);
-				
+
 				if(appId == "core"){
 					self._client.callListener("getData", data, intCallback);
-				}
-				else
+				} else {
 					self._client.callSwipesApi("apps.getData", data, intCallback);
+				}
+
 				return deferred.promise;
 			},
 
@@ -128,7 +144,7 @@ var SwipesAppSDK = (function() {
 				if(typeof options === 'string'){
 					options = {table: options};
 				}
-				
+
 				if(typeof options !== 'object'){
 					throw new Error("SwipesAppSDK: save: options must be included");
 				}
@@ -220,7 +236,7 @@ var SwipesAppSDK = (function() {
 						this.setAppId(data.data.manifest.manifest_id);
 					if(data.data.user_id)
 						this.info.userId = data.data.user_id;
-					
+
 					if(data.data.default_scope)
 						this.setDefaultScope(data.data.default_scope);
 					else

@@ -31,7 +31,7 @@
 		
 		&:focus {
 			outline: none;
-			border-bottom-color: $blue-100;
+			border-bottom: 2px solid $blue-100;
 			
 			& + label {
 				color: $blue-100;

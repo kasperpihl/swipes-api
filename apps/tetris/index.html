@@ -1,8 +1,6 @@
 <html>
 <head>
 <script src="http://localhost:5000/v1/sdk.load"></script>
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -60,80 +58,55 @@
     //-------------------------------------------------------------------------
     // swipes inserted methods
     //-------------------------------------------------------------------------
+    window.users = {};
+    function fetchHighScores(){
+      var currentApp = swipes.currentApp();
+
+      currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}).then(function(res, err){
+        if(res && res.results){
+          $("#highscores").html("")
+          for(var i = 0 ; i < res.results.length ; i++){
+            var highscore = res.results[i];
+            var user = window.users[highscore.user_id];
+            if(user){
+              $("#highscores").append("<li>" + user.name + ": " + highscore.score + "</li>");
+            }
+          }
+
+          return currentApp.get({table:"highscore", query: {limit: 1, order: "-score", filter: {"user_id": swipes.info.userId }}})
+        }
+      }).then(function(res, err){
+        if(res && res.results){
+          for(var i = 0 ; i < res.results.length ; i++){
+            var highscore = res.results[i];
+            var user = window.users[highscore.user_id];
+            if(user){
+              $("#highscores2").html("").append("<li>" + user.name + ": " + highscore.score + "</li>");
+            }
+          }
+        }
+      });
+    }
+
     function sendHighScore(score){
       swipes.currentApp().save({table:"highscore"}, {user_id: swipes.info.userId , score: score}, function(res, err){
         fetchHighScores();
       })
     }
-    swipes.onReady(function(){
-      var highscores = [];
-      var users = {};
-      var currentApp = swipes.currentApp();
 
-      
-      currentApp.on("highscore", function(e){
+    swipes.onReady(function(){
+      swipes.currentApp().on("highscore", function(e){
         fetchHighScores();
       });
-      function fetchHighScores(){
-        currentApp.get({table:"highscore", query: {limit: 5, order: "-score"}}).then(function(res, err){
-          if(res && res.results){
+      swipes.app("core").get({table: "users"}).then(function(res){
 
-            $("#highscores").html("")
-            var users = {}
-            var counter = 0;
-            for(var i = 0 ; i < res.results.length ; i++){
-              var highscore = res.results[i];
-              swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-                  counter++;
-                  if(user){
-                    users[user.id] = user.name;
-                    
-
-                    if(counter == res.results.length){
-                      for(i = 0 ; i < res.results.length ; i++){
-                        var highscore = res.results[i];
-                        $("#highscores").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
-                      }
-                    }
-                  }
-                });
-              var highscore = res.results[i];
-
-            }
-
-            return currentApp.get({table:"highscore", query: {limit: 1, order: "-score", filter: {"user_id": swipes.info.userId }}})
-          }
-        }).then(function(res, err){
-          console.log(res,err);
-          if(res && res.results){
-
-            var users = {}
-            var counter = 0;
-            for(var i = 0 ; i < res.results.length ; i++){
-              var highscore = res.results[i];
-              swipes.app("core").get({table:"users","id":highscore.user_id}, function(user){
-                  counter++;
-                  if(user){
-                    users[user.id] = user.name;
-                    
-
-                    if(counter == res.results.length){
-                      for(i = 0 ; i < res.results.length ; i++){
-                        var highscore = res.results[i];
-                        $("#highscores2").append("<li>" + users[highscore.user_id] + ": " + highscore.score + "</li>");
-                      }
-                    }
-                  }
-                });
-              var highscore = res.results[i];
-
-            }
-          }
-        });
-      }
-      fetchHighScores();
+        window.users = _.indexBy(res, "id");
+        console.log("users", window.users);
+        fetchHighScores();
+      })
+      //fetchHighScores();
     })
-    
+
     //-------------------------------------------------------------------------
     // base helper methods
     //-------------------------------------------------------------------------
@@ -161,7 +134,7 @@
     // game constants
     //-------------------------------------------------------------------------
 
-    var KEY     = { ENTER: 13, ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
+    var KEY     = { A: 65, ENTER: 13, ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
         DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, TELEPORT: 4, LONGRIGHT: 5, LONGLEFT: 6, MIN: 0, MAX: 3 },
         canvas  = get('canvas'),
         ctx     = canvas.getContext('2d'),
@@ -307,7 +280,7 @@
       if (playing) {
         var action = -1;
         switch(ev.keyCode) {
-          case KEY.LEFT:{   
+          case KEY.LEFT:{
             action = DIR.LEFT;
             if(ev.ctrlKey || ev.metaKey)
               action = DIR.LONGLEFT;
@@ -318,14 +291,15 @@
             if(ev.ctrlKey || ev.metaKey)
               action = DIR.LONGRIGHT;
             break;
-          }  
+          }
+          case KEY.A:     action = DIR.UP; break;
           case KEY.UP:     action = DIR.UP; break;
           case KEY.DOWN:{
-            action = DIR.DOWN; 
+            action = DIR.DOWN;
             if(ev.ctrlKey || ev.metaKey)
               action = DIR.TELEPORT;
             break;
-          }   
+          }
           case KEY.SPACE:  action = DIR.TELEPORT; break;
           case KEY.ESC:    lose(); handled = true; break;
         }
@@ -379,10 +353,8 @@
         handle(actions.shift());
         dt = dt + idt;
         if (dt > step) {
-          console.log("dropping", dt);
           dt = dt - step;
           drop();
-          console.log("dropped", dt);
         }
       }
     }

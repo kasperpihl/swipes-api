@@ -55,15 +55,15 @@ let handleScopeChange = (socket, userId) => {
 }
 
 module.exports = (io) => {
-  // Prevent memory leak detection
-  io.sockets.setMaxListeners(0);
-
   io.sockets.on('connection', (socket) => {
     let userId = socket.request.userId;
 
     if (!userId) {
       return;
     }
+
+    // Prevent memory leak detection
+    socket.setMaxListeners(0);
 
     socket.emit('message', {type: 'hello'});
 
