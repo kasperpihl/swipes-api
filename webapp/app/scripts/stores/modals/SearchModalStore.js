@@ -9,7 +9,7 @@ var realData = [
       {title: 'Swipes', text: 'Kasper'},
       {title: 'Swipes', text: 'Stefan'},
       {title: 'Swipes', text: 'Stanimir'},
-      {title: 'Swipes', text: 'Yana'} // Okaaay I will put a female name in the people's array
+      {title: 'Swipes', text: 'Yana'} // Okaaay I will put a female name in the people's array // Haha
     ]
   },
   {
