@@ -11,18 +11,13 @@
 
 <body>
 
-    <button type='button' onclick='alert("Alert!")'>Alert!</button><br><br>
-     
-    <button type='button' onclick='confirm("Do you agree?")'>Confirm?</button><br><br>
-
-    <button type='button' onclick='prompt("Say something please", "bau")'>Prompt</button><br><br>
-    
-    <button type='button' onclick='doPush()'>Push it!</button><br><br>
-    
-    <button type='button' onclick='window.webkit.messageHandlers.api.postMessage("{\"ok\":true}")'>Post to parent</button><br><br>
-
-    <button type='button' onclick='console.log("hello from JS")'>Console</button><br><br>
-
+    <button type='button' onclick='doSetButtons()'>Set buttons</button><br>
+    <button type='button' onclick='alert("Alert!")'>Alert!</button><br>
+    <button type='button' onclick='confirm("Do you agree?")'>Confirm?</button><br>
+    <button type='button' onclick='prompt("Say something please", "bau")'>Prompt</button><br>
+    <button type='button' onclick='doPush()'>Push it!</button><br>
+    <button type='button' onclick='window.webkit.messageHandlers.api.postMessage("{\"ok\":true}")'>Post to parent</button><br>
+    <button type='button' onclick='console.log("hello from JS")'>Console</button><br>
     <a href="http://www.google.com">Now go to google!</a>
 	
 </body>
