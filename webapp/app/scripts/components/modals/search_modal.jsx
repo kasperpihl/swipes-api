@@ -57,6 +57,12 @@ var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect("realResponse")],
 	onSearch: function () {
 		var value = $(this.refs.search).val();
+		
+		if (value.length > 0) {
+			$('.search-results-wrapper').addClass('open');
+		} else {
+			$('.search-results-wrapper').removeClass('open');
+		}
 
 		SearchModalActions.search(value);
 	},
@@ -72,7 +78,7 @@ var SearchModal = React.createClass({
 					</label>
 				</div>
 
-				<div className="search-results-wrapper">
+				<div className="search-results-wrapper" ref="results">
 					<Results data={this.state.realResponse} />
 
 					<div className="result-preview"></div>
