@@ -46,9 +46,6 @@ Results.Row = React.createClass({
 		$('.result').removeClass('active');
 		$result.addClass('active');
 	},
-	onKeyDown: function() {
-		
-	}
 	render: function () {
 		return (
 			<ul className="results-specific-list">
@@ -76,9 +73,32 @@ var SearchModal = React.createClass({
 
 		SearchModalActions.search(value);
 	},
+	onKeyDown: function(e) {
+		var first = $('li.result').first();
+		var ul = $('ul.results-specific-list');
+		var UP = 38;
+		var DOWN = 40;
+		
+		if (e.keyCode === DOWN) {
+			e.preventDefault();
+			if (ul.find('li.active').is(':last-child')) {
+				ul.find('li.active').removeClass('active').parent().next().children().first('li').addClass('active');
+			} else {	
+				ul.find('li.active').removeClass('active').next('li').addClass('active');
+			}	
+		} else if (e.keyCode === UP) {
+			e.preventDefault();
+			
+			if (ul.find('li.active').is(':first-child')) {
+				ul.find('li.active').removeClass('active').parent().prev().children().last('li').addClass('active');
+			} else {	
+				ul.find('li.active').removeClass('active').prev('li').addClass('active');
+			}	
+		}
+	},
 	render: function () {
 		return (
-			<div className="search-modal">
+			<div className="search-modal" onKeyDown={this.onKeyDown}>
 				<div className="search-input-wrapper">
 					<input type="text" placeholder="Search" id="main-search" ref="search" onKeyUp={this.onSearch} />
 					<label htmlFor="main-search">
@@ -88,7 +108,7 @@ var SearchModal = React.createClass({
 					</label>
 				</div>
 
-				<div className="search-results-wrapper" ref="results">
+				<div className="search-results-wrapper" ref="results-wrapper" >
 					<Results data={this.state.realResponse} />
 
 					<div className="result-preview"></div>
