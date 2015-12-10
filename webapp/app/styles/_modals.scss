@@ -109,6 +109,7 @@
 		
 		&.open {
 			height: 450px;
+			transition: .2s ease-in-out;
 		}
 		
 		.results-list {

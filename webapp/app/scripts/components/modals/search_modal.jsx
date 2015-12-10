@@ -74,26 +74,35 @@ var SearchModal = React.createClass({
 		SearchModalActions.search(value);
 	},
 	onKeyDown: function(e) {
-		var first = $('li.result').first();
-		var ul = $('ul.results-specific-list');
+
 		var UP = 38;
 		var DOWN = 40;
-		
+	
+		var result = $('li.result');
+		//console.log(result);
+		var resultLenght = result.length;
+		var current = result.filter('.active');
+		var CurrentIndex = result.index(current);
+		//console.log("Does this motherfucker even work");
+		var nextResult = CurrentIndex + 1;
+		var prevResult = CurrentIndex - 1;
+			
 		if (e.keyCode === DOWN) {
 			e.preventDefault();
-			if (ul.find('li.active').is(':last-child')) {
-				ul.find('li.active').removeClass('active').parent().next().children().first('li').addClass('active');
-			} else {	
-				ul.find('li.active').removeClass('active').next('li').addClass('active');
-			}	
+			if (!result.hasClass('active')) {
+				result.first().addClass('active');
+			} else {
+				if (CurrentIndex < (resultLenght - 1)) {
+					$(result[CurrentIndex]).removeClass('active');
+					$(result[nextResult]).addClass('active');
+				}
+			} 
 		} else if (e.keyCode === UP) {
 			e.preventDefault();
-			
-			if (ul.find('li.active').is(':first-child')) {
-				ul.find('li.active').removeClass('active').parent().prev().children().last('li').addClass('active');
-			} else {	
-				ul.find('li.active').removeClass('active').prev('li').addClass('active');
-			}	
+			if (CurrentIndex >= 1) {
+				$(result[CurrentIndex]).removeClass('active');
+				$(result[prevResult]).addClass('active');
+			}
 		}
 	},
 	render: function () {
