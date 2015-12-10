@@ -79,11 +79,9 @@ var SearchModal = React.createClass({
 		var DOWN = 40;
 	
 		var result = $('li.result');
-		//console.log(result);
-		var resultLenght = result.length;
+		var resultLength = result.length;
 		var current = result.filter('.active');
 		var CurrentIndex = result.index(current);
-		//console.log("Does this motherfucker even work");
 		var nextResult = CurrentIndex + 1;
 		var prevResult = CurrentIndex - 1;
 			
@@ -92,7 +90,7 @@ var SearchModal = React.createClass({
 			if (!result.hasClass('active')) {
 				result.first().addClass('active');
 			} else {
-				if (CurrentIndex < (resultLenght - 1)) {
+				if (CurrentIndex < (resultLength - 1)) {
 					$(result[CurrentIndex]).removeClass('active');
 					$(result[nextResult]).addClass('active');
 				}
