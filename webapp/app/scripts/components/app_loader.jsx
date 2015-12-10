@@ -1,12 +1,9 @@
 var React = require('react');
 var stateStore = require('../stores/StateStore');
 var Reflux = require('reflux');
-var socketActions = require('../actions/SocketActions');
-var socketStore = require('../stores/SocketStore');
 var stateActions = require('../actions/StateActions');
 
 var eventActions = require('../actions/EventActions');
-var eventStore = require('../stores/EventStore');
 
 var userStore = require('../stores/UserStore');
 var channelStore = require('../stores/ChannelStore');
@@ -37,16 +34,16 @@ var AppLoader = React.createClass({
 				if (data.title) {
 					stateActions.setTopbarTitle(this.props.data.screen, data.title);
 				}
-			} 
-			else if (message.command === "navigation.setBackgroundColor") {	
+			}
+			else if (message.command === "navigation.setBackgroundColor") {
 				if(this.props.data.screen === 1)
 					stateActions.changeBackgroundColor(data.color);
-			
-			} 
+
+			}
 			else if (message.command === "navigation.setForegroundColor") {
 				if(this.props.data.screen === 1)
 					stateActions.changeForegroundColor(data.color);
-			} 
+			}
 			else if (message.command === "navigation.enableBoxShadow") {
 				if(this.props.data.screen === 1){
 					stateActions.setTopbarTitle(this.props.data.screen, data.title);
@@ -73,7 +70,7 @@ var AppLoader = React.createClass({
 						return callback(store.get(data.query.id));
 					return callback(store.get());
 				}
-			} 
+			}
 			else if (message.command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "screen" + this.props.data.screen);
 				//return this.listeners[data.event] = connector;
@@ -91,6 +88,7 @@ var AppLoader = React.createClass({
 			data: {
 				manifest: this.state.app,
 				token: stateStore.get("swipesToken"),
+				user_id: stateStore.get("currentUser").id,
 				target_url: document.location.protocol + "//" + document.location.host,
 				default_scope: this.state.app.id
 			}
@@ -109,8 +107,10 @@ var AppLoader = React.createClass({
 		this.apiCon.setDelegate(this);
 	},
 	render: function() {
-		if(!this.state.app)
+		if(!this.state.app) {
 			return ( <div>No app set.</div> );
+		}
+
 		return (
 			<iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className="app-frame-class" frameBorder="0"/>
 		);

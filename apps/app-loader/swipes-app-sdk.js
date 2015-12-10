@@ -228,6 +228,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function(connector, message, callback){
 		if(message){
 			var data = message.data;
+
 			if(message.command == "event"){
 				if(message.data.type == "init"){
 					if(data.data.channel_id)
