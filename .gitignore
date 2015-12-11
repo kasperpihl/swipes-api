@@ -1,4 +1,5 @@
 .elasticbeanstalk/
+.vscode/
 .DS_Store
 rethinkdb_data
 # Logs

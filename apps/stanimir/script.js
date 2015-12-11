@@ -3,11 +3,12 @@ swipes.onReady(function(){
 	//swipes.navigation.setTitle('Title test');
 	swipes.stani = {};
 
-	swipes.currentApp().get("stanimir").then(function(stanimirs){
-		return swipes.currentApp().save({table:"stanimir"}, {"test": "hello"});	
-	}).then(function(){
+	// swipes.currentApp().get("stanimir").then(function(stanimirs){
+	// 	return swipes.currentApp().save({table:"stanimir"}, {"test": "hello"});	
+	// }).then(function(){
 
-	});
+	// });
+	
 	swipes.navigation.onButtonPressed(function(data){
 		console.log("button was pressed");
 		console.log(data);
@@ -21,6 +22,7 @@ swipes.onReady(function(){
 	
 	doSetButtons();
 
+	swipes.navigation.setTitle('Best App Ever');
 })
 
 function doPush() {
