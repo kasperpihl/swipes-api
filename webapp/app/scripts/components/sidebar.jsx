@@ -23,7 +23,7 @@ var Sidebar = React.createClass({
 			<aside className="sidebar left">
 				<div className="sidebar_content">
 					<div className="sidebar-controls">
-						<Sidebar.Section data={{title:"My Apps", section:"apps", rows: this.state.apps}}/>
+						{/*<Sidebar.Section data={{title:"My Apps", section:"apps", rows: this.state.apps}}/>*/}
 						<Sidebar.Section data={{title:"Groups", section:"groups", rows: this.state.channels}}/>
 						<Sidebar.Section data={{title:"People", section:"people", rows: this.state.channels}}/>
 					</div>
