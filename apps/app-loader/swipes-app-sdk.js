@@ -203,7 +203,19 @@ var SwipesAppSDK = (function() {
 			}
 		}
 	};
-
+	SwipesAppSDK.prototype.modals = {
+		search: function(options, callback){
+			this.load("search", options);
+		},
+		load: function(name, options, callback){
+			options = options || {};
+			if(typeof options === 'function'){
+				callback = options;
+				options = {};
+			}
+			self._client.callListener("modal.load", {modal: name, options: options}, callback);
+		}
+	}
 	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
 			var currentListeners = self._listenersObj[eventName];
