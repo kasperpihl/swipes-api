@@ -2,7 +2,7 @@ var React = require('react');
 var stateStore = require('../stores/StateStore');
 var Reflux = require('reflux');
 var stateActions = require('../actions/StateActions');
-
+var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 
 var userStore = require('../stores/UserStore');
@@ -50,7 +50,7 @@ var AppLoader = React.createClass({
 				}
 			}
 			else if (message.command === "modal.load"){
-				modalActions.loadModal(data);
+				modalActions.loadModal(data.modal, data.options, callback);
 			}
 			else if (message.command === "getData") {
 				if(data.query && data.query.table){
@@ -86,12 +86,13 @@ var AppLoader = React.createClass({
 	},
 	onLoad:function(){
 		eventActions.remove(null,null, "screen" + this.props.data.screen);
+		
 		var initObj = {
 			type: "init",
+			// TODO_K: Add current user from userstore
 			data: {
 				manifest: this.state.app,
 				token: stateStore.get("swipesToken"),
-				user_id: stateStore.get("currentUser").id,
 				target_url: document.location.protocol + "//" + document.location.host,
 				default_scope: this.state.app.id
 			}

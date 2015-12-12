@@ -1,15 +1,14 @@
 var React = require('react');
 var modalStore = require('../stores/ModalStore');
-var SearchModal = require('./modals/search_modal');
 var modalActions = require('../actions/ModalActions');
 var Modal = React.createClass({
 	mixins: [modalStore.connect()],
 	componentDidMount: function(){
 		this.recalculateContent();
 		window.addEventListener('resize', this.recalculateContent);
-		setTimeout(function(){
-			modalActions.loadModal(SearchModal);
-		}, 500);
+		/*setTimeout(function(){
+			modalActions.loadModal(SearchModal, {top:"20%", centerY:false});
+		}, 500);*/
 	},
 	componentWillUnmount:function(){
 		window.removeEventListener('resize', this.recalculateContent);
@@ -81,27 +80,23 @@ var Modal = React.createClass({
 		var Modal = "div";
 
 		var containerClass = "modal-overlay-container ";
-		console.log("render", this.state.modalView);
+
 		if(this.state.modalView){
 			containerClass += "shown ";
 			Modal = this.state.modalView;
 		}
 
-		var backgroundClass = "modal-clickable-background ";
-		if(this.state.showBackground)
-			backgroundClass += "shown ";
+		var backgroundClass = "modal-clickable-background shown";
 		if(this.state.opaqueBackground)
 			backgroundClass += "dark-opaque ";
 
-		var contentClass = "modal-overlay-content ";
-		if(this.state.show)
-			contentClass += "shown ";
+		var contentClass = "modal-overlay-content shown";
 
 		return (
 			<div ref="container" className={containerClass}>
 				<div ref="background" onClick={this.onClickedBackground} className={backgroundClass}></div>
 				<div ref="content" className={contentClass}>
-					<Modal />
+					<Modal data={{options: this.state.modalData, callback: this.state.modalCallback}}/>
 				</div>
 			</div>
 		);

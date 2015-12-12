@@ -90,6 +90,9 @@ var SearchStore = Reflux.createStore({
   defaults: {
     realResponse: realData
   },
+  onLoad:function(options){
+    console.log("loaded search store", options);
+  },
   onSearch: function (value) {
     this.set("realResponse", realSearch(value));
   }
