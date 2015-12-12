@@ -205,7 +205,7 @@ var SwipesAppSDK = (function() {
 	};
 	SwipesAppSDK.prototype.modals = {
 		search: function(options, callback){
-			this.load("search", options);
+			this.load("search", options, callback);
 		},
 		load: function(name, options, callback){
 			options = options || {};
