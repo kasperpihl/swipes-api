@@ -18,7 +18,7 @@ var SocketStore = Reflux.createStore({
 				channelStore.batchLoad(res.ims, {trigger: false});
 				appStore.batchLoad(res.apps, {flush:true, trigger:false});
 				self.connect(res.url);
-				stateActions.changeStarted(true, res.self);
+				stateActions.changeStarted(true);
 			}
 		}).fail(function(err){
 			console.log("rtm start err", err);

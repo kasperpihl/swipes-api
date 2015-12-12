@@ -7,7 +7,7 @@ var channelStore = require('../stores/ChannelStore');
 var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
-	dontPersist: [ "screen1", "screen2", "screen3", "active_menu_id", "backgroundColor"],
+	persistNot: [ "screen1", "screen2", "screen3", "active_menu_id", "backgroundColor"],
 	onInit: function(){
 		swipes.setToken(this.get("swipesToken"));
 		socketActions.start();
@@ -18,8 +18,7 @@ var StateStore = Reflux.createStore({
 	onToggleSidebar: function(){
 		this.set("sidebarClosed", !this.get("sidebarClosed"));
 	},
-	onChangeStarted: function(isStarted, currentUser){
-		this.set('currentUser', currentUser);
+	onChangeStarted: function(isStarted){
 		this.set('isStarted', isStarted);
 	},
 	onLoadApp: function(params, options){
