@@ -76,6 +76,11 @@ var Modal = React.createClass({
 	onClickedBackground: function(){
 		modalActions.hide();
 	},
+	onModalCallback: function(res){
+		if(this.state.modalCallback)
+			this.state.modalCallback(res);
+		modalActions.hide();
+	},
 	render: function() {
 		var Modal = "div";
 
@@ -96,7 +101,7 @@ var Modal = React.createClass({
 			<div ref="container" className={containerClass}>
 				<div ref="background" onClick={this.onClickedBackground} className={backgroundClass}></div>
 				<div ref="content" className={contentClass}>
-					<Modal data={{options: this.state.modalData, callback: this.state.modalCallback}}/>
+					<Modal data={{options: this.state.modalData, callback: this.onModalCallback}}/>
 				</div>
 			</div>
 		);

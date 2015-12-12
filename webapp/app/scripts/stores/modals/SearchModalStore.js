@@ -72,7 +72,7 @@ var realSearch = function (value) {
     var category = {name: realData[i].name, icon: realData[i].icon,  list: []};
 
     realData[i].list.forEach(function (item) {
-      if (item.title.indexOf(value) !== -1 || item.text.indexOf(value) !== -1) {
+      if (item.title.toLowerCase().indexOf(value.toLowerCase()) !== -1 || item.text.toLowerCase().indexOf(value.toLowerCase()) !== -1) {
         category.list.push(item);
       }
     })

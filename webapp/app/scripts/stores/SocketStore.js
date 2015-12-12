@@ -14,6 +14,8 @@ var SocketStore = Reflux.createStore({
 		swipes._client.callSwipesApi("rtm.start").then(function(res){
 			if(res.ok){
 				userStore.batchLoad(res.users, {flush:true});
+				res.self.me = true;
+				userStore.set(res.self.id, res.self);
 				channelStore.batchLoad(res.channels,{flush:true, trigger: false, persist: false});
 				channelStore.batchLoad(res.ims, {trigger: false});
 				appStore.batchLoad(res.apps, {flush:true, trigger:false});

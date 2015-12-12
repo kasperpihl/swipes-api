@@ -4,7 +4,10 @@ var data = [];
 
 var UserStore = Reflux.createStore({
 	localStorage: "UserStore",
-	sort: "name"
+	sort: "name",
+	me: function(){
+		return this.find({me: true});
+	}
 });
 
 module.exports = UserStore;

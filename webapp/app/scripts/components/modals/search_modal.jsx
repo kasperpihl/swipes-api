@@ -6,6 +6,8 @@ var Results = React.createClass({
 		var realResponse = this.props.data.realResponse;
 		var i = 0;
 		var rows = realResponse.map(function (row) {
+			if(i == 0)
+				row.is_active = true;
 			return <Results.Wrapper key={++i} data={row} />
 		});
 
@@ -23,7 +25,10 @@ Results.Wrapper = React.createClass({
 		var icon = this.props.data.icon;
 		var list = this.props.data.list;
 		var i = 0;
+		var self = this;
 		var rows = list.map(function (row) {
+			if(i == 0 && self.props.data.is_active)
+				row.is_active = true;
 			return <Results.Row key={++i} icon={icon} data={row} />
 		});
 
@@ -44,9 +49,12 @@ Results.Row = React.createClass({
 		$result.addClass('active');
 	},
 	render: function () {
+		var resultClass = "result ";
+		if(this.props.data.is_active)
+			resultClass += "active";
 		return (
 			<ul className="results-specific-list">
-				<li className="result" ref="result" onClick={this.onClick} >
+				<li className={resultClass} ref="result" onClick={this.onClick} >
 				<div className="icon">
 					<i className="material-icons">{this.props.icon}</i>
 				</div>
@@ -61,17 +69,36 @@ var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect("realResponse")],
 	componentDidMount: function(){
 		$(this.refs.search).focus();
+		this.didBackspace = true;
 	},
-	onSearch: function () {
+	didBackspace: true,
+	onSearch: function (e) {
 		var value = $(this.refs.search).val();
-
-		if (value.length > 0) {
-			$('.search-results-wrapper').addClass('open');
-		} else {
-			$('.search-results-wrapper').removeClass('open');
+		if(e.keyCode === 13){
+			if(this.props.data && this.props.data.callback){
+				this.props.data.callback();
+			}
 		}
+		else if((e.keyCode === 8 && !value.length) || e.keyCode === 27){
+			if(e.keyCode === 8 && !this.didBackspace){
+				this.didBackspace = true;
+				return;
+			}
+			if(this.props.data && this.props.data.callback){
+				this.props.data.callback($(this.refs.search).val());
+			}
+		}
+		else{
+			if (value.length > 0) {
+				this.didBackspace = false;
+				$('.search-results-wrapper').addClass('open');
+			} else {
+				$('.search-results-wrapper').removeClass('open');
+			}
 
-		SearchModalActions.search(value);
+
+			SearchModalActions.search(value);
+		}
 	},
 	onKeyDown: function(e) {
 		var UP = 38;
@@ -103,7 +130,7 @@ var SearchModal = React.createClass({
 		}
 	},
 	render: function () {
-		console.log(this.props.data);
+
 		var defVal = "";
 		if(this.props.data.options && typeof this.props.data.options.prefix === 'string')
 			defVal = this.props.data.options.prefix;

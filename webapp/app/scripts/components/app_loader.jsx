@@ -86,12 +86,12 @@ var AppLoader = React.createClass({
 	},
 	onLoad:function(){
 		eventActions.remove(null,null, "screen" + this.props.data.screen);
-		
 		var initObj = {
 			type: "init",
 			// TODO_K: Add current user from userstore
 			data: {
 				manifest: this.state.app,
+				user_id: userStore.me().id,
 				token: stateStore.get("swipesToken"),
 				target_url: document.location.protocol + "//" + document.location.host,
 				default_scope: this.state.app.id
