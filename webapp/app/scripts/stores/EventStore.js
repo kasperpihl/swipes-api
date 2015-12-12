@@ -23,15 +23,18 @@ var EventStore = Reflux.createStore({
 	},
 	_clearEventName:function(name, callback, context){
 		var currentListeners = this.get(name);
+
 		// If only event name is provided, remove all
 		if(!callback && !context)
 			return this.unset(name);
 
 		var newListeners = [];
-		for(var i = 0 ; i < currentListeners.length ; i++){
-			var listener = currentListeners[i];
-			if(listener.callback !== callback && listener.context !== context)
-				newListeners.push(listener);
+		if(currentListeners){
+			for(var i = 0 ; i < currentListeners.length ; i++){
+				var listener = currentListeners[i];
+				if(listener.callback !== callback && listener.context !== context)
+					newListeners.push(listener);
+			}
 		}
 		if(!newListeners.length)
 			this.unset(name);

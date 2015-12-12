@@ -38,11 +38,8 @@ Results.Wrapper = React.createClass({
 });
 
 Results.Row = React.createClass({
-	getEl:function(name){
-		return $(this.refs[name].getDOMNode());	
-	},
 	onClick: function() {
-		var $result = this.getEl("result");
+		var $result = $(this.refs.result);
 		$('.result').removeClass('active');
 		$result.addClass('active');
 	},
@@ -62,6 +59,9 @@ Results.Row = React.createClass({
 
 var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect("realResponse")],
+	componentDidMount: function(){
+		$(this.refs.search).focus();
+	},
 	onSearch: function () {
 		var value = $(this.refs.search).val();
 		

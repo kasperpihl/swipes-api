@@ -49,6 +49,9 @@ var AppLoader = React.createClass({
 					stateActions.setTopbarTitle(this.props.data.screen, data.title);
 				}
 			}
+			else if (message.command === "modal.load"){
+				modalActions.loadModal(data);
+			}
 			else if (message.command === "getData") {
 				if(data.query && data.query.table){
 					var store;

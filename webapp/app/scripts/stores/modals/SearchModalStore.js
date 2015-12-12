@@ -63,7 +63,6 @@ var realData = [
 var realSearch = function (value) {
   var realResponse = [];
   var len = realData.length;
-
   for (var i=0; i<len; i++) {
     if (realData[i].name.indexOf(value) !== -1) {
       realResponse.push(realData[i]);
