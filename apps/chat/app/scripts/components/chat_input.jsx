@@ -3,9 +3,6 @@ var chatActions = require('../actions/ChatActions');
 
 var ChatInput = React.createClass({
 	hasShownHint: false,
-	getEl:function(name){
-		return $(this.refs[name].getDOMNode());	
-	},
 	onKeyDown: function(e){
 		if(e.keyCode === 13 && !e.shiftKey)
 			e.preventDefault();
@@ -18,10 +15,16 @@ var ChatInput = React.createClass({
 		return {};
 	},
 	onTextChange: function(){
-		var $textarea = this.getEl("textarea");
+		var $textarea = $(this.refs.textarea);
 		var text = $textarea.val();
-		if((text.length > 0) && !this.state.showHint){
-			this.setState({showHint:true});
+
+		if(text.length > 0){
+			if(!this.state.showHint)
+				this.setState({showHint:true});
+			if(text.slice(-1) === "@"){
+				console.log('trying to do search');
+				swipes.modals.search();
+			}
 		}
 		var lines = text.split(/\r|\r\n|\n/);
 		var count = lines.length;
@@ -34,17 +37,17 @@ var ChatInput = React.createClass({
 			$textarea.attr('rows', '1');
 		}
 		
-		$main = this.getEl("input-container");
+		$main = $(this.refs["input-container"]);
 		this.props.onChangedTextHeight($main.outerHeight());
 	},
 	onKeyUp: function(e){
-		var $textarea = this.getEl("textarea");
+		var $textarea = $(this.refs.textarea);
 		//console.log(e.keyCode, e.shiftKey, e.target);
 		if(e.keyCode === 27){
-			this.getEl("textarea").blur();	
+			$textarea.blur();	
 		}
 		if (e.keyCode === 13 && !e.shiftKey ) {
-			var message = this.getEl("textarea").val();
+			var message = $textarea.val();
 			if(message && message.length > 0){
 				this.sendMessage(message);
 			}
@@ -52,13 +55,13 @@ var ChatInput = React.createClass({
 		this.debouncedCheck();
 	},
 	sendMessage: function(message){
-		this.getEl("textarea").val("");
+		$(this.refs.textarea).val("");
 		this.props.onSendingMessage();
 		this.onTextChange();
 		chatActions.sendMessage(message);
 	},
 	hideHint: function(){
-		var $textarea = this.getEl("textarea");
+		var $textarea = $(this.refs.textarea);
 		var text = $textarea.val();
 		if((!text || text.length == 0) && this.state.showHint ){
 			this.setState({showHint:false});
