@@ -65,12 +65,12 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	if(persist && this.localStorage){
 		var dataToPersist = this._dataById;
 		// Check if any keys should be avoided
-		if((this.persistOnly && this.persistOnly instanceof Array) || (this.dontPersist && this.dontPersist instanceof Array)){
+		if((this.persistOnly && this.persistOnly instanceof Array) || (this.persistNot && this.persistNot instanceof Array)){
 			dataToPersist = {};
 			for(var key in this._dataById){
 				if(this.persistOnly && _.indexOf(this.persistOnly, key) !== -1)
 					dataToPersist[key] = this._dataById[key];
-				else if(this.dontPersist && _.indexOf(this.dontPersist, key) === -1)
+				else if(this.persistNot && _.indexOf(this.persistNot, key) === -1)
 					dataToPersist[key] = this._dataById[key];
 			}
 		}
