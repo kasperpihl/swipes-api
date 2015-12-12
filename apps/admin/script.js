@@ -1,4 +1,3 @@
-swipes.setAppId("admin");
 $(document).ready(function() {
 	var adminTabsWidth = $('.nav').width();
 	var translatePercentage = (100 / 3) / 3;
@@ -8,7 +7,10 @@ $(document).ready(function() {
 })
 
 
-$(function(){
+swipes.onReady(function(){
+	swipes.modals.search(function(res,err){
+		console.log("callback from sdk", res, err);
+	});
 	// Holder for the apps objects
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
