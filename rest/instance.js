@@ -91,8 +91,12 @@ require('./socketio/socketio.js')(io);
 
 let logErrors = (err, req, res, next) => {
   // We can use some service like loggy to log errors
-  console.error(err.stack);
-  next(err);
+  if (err) {
+    console.error(err.stack);
+    next(err);
+  } else {
+    next();
+  }
 }
 
 let unhandledServerError = (err, req, res, next) => {

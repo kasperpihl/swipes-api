@@ -56,7 +56,7 @@ let rethinkdb = {
           if (options.feed) {
             if (options.socket) {
               options.socket.on('disconnect', () => {
-                conn.close();
+                conn.close({noreplyWait: false});
               });
             }
 

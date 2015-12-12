@@ -8,7 +8,7 @@ var Results = React.createClass({
 		var rows = realResponse.map(function (row) {
 			return <Results.Wrapper key={++i} data={row} />
 		});
-		
+
 		return (
 			<div className="results-list">
 				{rows}
@@ -64,7 +64,7 @@ var SearchModal = React.createClass({
 	},
 	onSearch: function () {
 		var value = $(this.refs.search).val();
-		
+
 		if (value.length > 0) {
 			$('.search-results-wrapper').addClass('open');
 		} else {
@@ -74,31 +74,30 @@ var SearchModal = React.createClass({
 		SearchModalActions.search(value);
 	},
 	onKeyDown: function(e) {
-
 		var UP = 38;
 		var DOWN = 40;
-	
+
 		var result = $('li.result');
 		var resultLength = result.length;
 		var current = result.filter('.active');
-		var CurrentIndex = result.index(current);
-		var nextResult = CurrentIndex + 1;
-		var prevResult = CurrentIndex - 1;
-			
+		var currentIndex = result.index(current);
+		var nextResult = currentIndex + 1;
+		var prevResult = currentIndex - 1;
+
 		if (e.keyCode === DOWN) {
 			e.preventDefault();
 			if (!result.hasClass('active')) {
 				result.first().addClass('active');
 			} else {
-				if (CurrentIndex < (resultLength - 1)) {
-					$(result[CurrentIndex]).removeClass('active');
+				if (currentIndex < (resultLength - 1)) {
+					$(result[currentIndex]).removeClass('active');
 					$(result[nextResult]).addClass('active');
 				}
-			} 
+			}
 		} else if (e.keyCode === UP) {
 			e.preventDefault();
-			if (CurrentIndex >= 1) {
-				$(result[CurrentIndex]).removeClass('active');
+			if (currentIndex >= 1) {
+				$(result[currentIndex]).removeClass('active');
 				$(result[prevResult]).addClass('active');
 			}
 		}

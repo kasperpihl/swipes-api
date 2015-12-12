@@ -66,20 +66,19 @@ var Login = React.createClass({
 		return;
 	},
 	render: function() {
-
 		return (
 			<div className="login-wrapper">
-				
+
 				<div className="login">
 					<h5>Hi, logging in?</h5>
 					<div className="swipes-floating-label" data-error-message="Error message">
 						<input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
 						<label htmlFor="email">Enter your username</label>
 					</div>
-					
+
 					{/* <div className="input-wrapper" error-attribute="">
 						<input ref="username" type="text" className="username borderless" placeholder="Enter your username" />
-					</div>*/} 
+					</div>*/}
 					<div >
 						<input type="radio" name="choice" defaultChecked/>Login
 						<input ref="create" type="radio" id="create-choice" name="choice" />Create Account

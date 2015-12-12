@@ -74,9 +74,28 @@ var ChatList = React.createClass({
 
 ChatList.Section = React.createClass({
 	render: function() {
-		var chatItems = this.props.data.messages.map(function(item){
-			return <ChatItem key={item.ts} data={item} />;
+		var chatItemsGroups = [];
+		var chatItemMessages = [];
+
+		this.props.data.messages.forEach(function (item) {
+			if (item.isExtraMessage === false) {
+				if (chatItemMessages.length > 0) {
+					chatItemsGroups.push(chatItemMessages);
+					chatItemMessages = [];
+				}
+
+				chatItemMessages.push(item);
+			} else {
+				chatItemMessages.push(item);
+			}
 		});
+
+		// Push the last messages to a group
+		chatItemsGroups.push(chatItemMessages);
+
+		var chatItems  = chatItemsGroups.map(function (item) {
+			return <ChatItem key={item[0].ts} data={item} />;
+		})
 
 		return (
 			<div className="section">

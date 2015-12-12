@@ -1,49 +1,40 @@
 var React = require('react');
 
-var BottomSideContainer = React.createClass({
+var ChatMessage = React.createClass({
 	render: function () {
 		return (
-			<div className="chat-bottom-side-container" data-time={this.props.data.timeStr}>
-				<p className="message-container">
-				 <span dangerouslySetInnerHTML={{__html: this.props.data.text}}/>
-				</p>
+			<div className="message-wrapper">
+				<div className="message">
+					{this.props.data.text}
+				</div>
 			</div>
 		);
 	}
-})
+});
 
 var ChatItem = React.createClass({
-	render: function() {
-		var className = "chat-message ";
-		// if(this.props.data.isExtraMessage)
-		// 	className += "extra-message ";
-		// T TODO delete that when we dont need it anymore
-		// if(this.props.data.user.name == "kristjan")
-		// 	className += "me-right";
-		if(this.props.data.isNewMessage)
-			className += "new-message ";
+	render: function () {
+		var firstMessage = this.props.data[0];
+		var lastMessage = this.props.data[this.props.data.length-1];
+		var meClassName = swipes.info.userId === firstMessage.user.id ? ' me' : '';
+		var chatWrapperClassName = 'chat-wrapper' + meClassName;
+		var messages = this.props.data.map(function (message) {
+			return <ChatMessage key={message.ts} data={message} />
+		});
 
-		if (this.props.data.isExtraMessage) {
-			return (
-				<BottomSideContainer data={this.props.data} />
-			);
-		} else {
-			return (
-				<div className={className}>
-					<div className="chat-avatar">
-						<div className="avatar">
-							<img src={this.props.data.user.profile.profile_image} />
-						</div>
-					</div>
-					<div className="chat-content">
-						<div className="chat-top-side-container">
-							<p className="name">{this.props.data.user.name} <span className="chat-timestamp">{this.props.data.timeStr}</span></p>
-						</div>
-						<BottomSideContainer data={this.props.data} />
-					</div>
+		return (
+			<div className={chatWrapperClassName}>
+				<div className="avatar">
+					<img src={firstMessage.user.profile.profile_image} />
 				</div>
-			);
-		}
+				<div className="message-details">
+					{lastMessage.user.name} {lastMessage.timeStr}
+				</div>
+				<div className="chat-messages">
+					{messages}
+				</div>
+			</div>
+		);
 	}
 });
 
