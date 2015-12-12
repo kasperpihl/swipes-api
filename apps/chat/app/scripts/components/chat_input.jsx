@@ -3,6 +3,7 @@ var chatActions = require('../actions/ChatActions');
 
 var ChatInput = React.createClass({
 	hasShownHint: false,
+	currentLength: 0,
 	onKeyDown: function(e){
 		if(e.keyCode === 13 && !e.shiftKey)
 			e.preventDefault();
@@ -17,13 +18,16 @@ var ChatInput = React.createClass({
 	onTextChange: function(){
 		var $textarea = $(this.refs.textarea);
 		var text = $textarea.val();
-
 		if(text.length > 0){
 			if(!this.state.showHint)
 				this.setState({showHint:true});
-			if(text.slice(-1) === "@"){
+			if(text.slice(-1) === "@" && text.length > this.currentLength){
 				console.log('trying to do search');
-				swipes.modals.search();
+				swipes.modals.search(function(res){
+					if(res)
+						$textarea.val(text += res);
+					$textarea.focus();
+				});
 			}
 		}
 		var lines = text.split(/\r|\r\n|\n/);
@@ -36,7 +40,7 @@ var ChatInput = React.createClass({
 		} else if (text.length == 0 ) {
 			$textarea.attr('rows', '1');
 		}
-		
+		this.currentLength = text.length;
 		$main = $(this.refs["input-container"]);
 		this.props.onChangedTextHeight($main.outerHeight());
 	},
