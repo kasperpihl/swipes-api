@@ -13,15 +13,47 @@ Reflux.StoreMethods.connectFilter = function(property, filterFn){
 	return Reflux.connectFilter(this, property, filterFn);
 };
 
-Reflux.StoreMethods.unset = function(id, options){
-	this._checkForWarnings();
+Reflux.StoreMethods.set = function(id, data, options){
+	this._handleOptions(options);
 
-	// Checking for options
-	if(options && typeof options === 'object'){
-		// Flush the whole store before setting, defaults to NO
-		if(options.flush)
-			this._reset();
+	
+	if(this.beforeSaveHandler && typeof this.beforeSaveHandler === 'function'){
+		data = this.beforeSaveHandler(data, this.get(id));
+		if(!data){
+			console.warn("Swipes Reflux: beforeHandler prevented the save");
+			return;
+		}
 	}
+
+	this._dataById[id] = data;
+
+	// Save and trigger to all listeners
+	this._saveDataAndTrigger(options);
+	
+};
+
+Reflux.StoreMethods.update = function(id, data, options){
+	this._handleOptions(options);
+
+	var currentObj = this.get(id);
+	if(!currentObj)
+		return this.set(id, data, options);
+	if(typeof currentObj !== 'object' || typeof data !== 'object')
+		return console.warn("Reflux Swipes: update should only be used on objects.");
+
+	var didUpdate = false;
+	for(var key in data){
+		var value = data[key];
+		if(value !== currentObj[key]){
+			currentObj[key] = value;
+			didUpdate = true;
+		}
+	}
+	if(didUpdate)
+		this.set(id, currentObj, options);
+};
+Reflux.StoreMethods.unset = function(id, options){
+	this._handleOptions(options);
 	
 	if(this._dataById[id])
 		this._dataById[id] = null;
@@ -30,7 +62,7 @@ Reflux.StoreMethods.unset = function(id, options){
 	this._saveDataAndTrigger(options);
 };
 Reflux.StoreMethods.get = function(id){
-	this._checkForWarnings();
+
 	if(id){
 		return this._dataById[id];
 	}
@@ -47,6 +79,18 @@ Reflux.StoreMethods._reset = function(){
 	if(this.localStorage)
 		localStorage.removeItem(this.localStorage);
 };
+
+Reflux.StoreMethods._handleOptions = function(options){
+	this._checkForWarnings();
+
+	// Checking for options
+	if(options && typeof options === 'object'){
+		// Flush the whole store before setting, defaults to NO
+		if(options.flush)
+			this._reset();
+	}
+};
+
 Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	
 	var persist = true, trigger = true;
@@ -58,7 +102,6 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 		if(typeof options.trigger !== 'undefined')
 			trigger = options.trigger;
 	}
-
 	
 	
 	// Persist to localStorage if localstorage key is set, defaults to YES
@@ -83,7 +126,7 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 };
 
 Reflux.StoreMethods.batchLoad = function(items, options){
-	this._checkForWarnings();
+
 	
 	if(!this.idAttribute || typeof this.idAttribute !== 'string')
 		return console.warn("Swipes Reflux: batchLoad requires idAttribute to be set on store [string]");
@@ -92,13 +135,7 @@ Reflux.StoreMethods.batchLoad = function(items, options){
 		return console.warn("Swipes Reflux: batchLoad must have an array of items");
 
 	
-	// Checking for options
-	if(options && typeof options === 'object'){
-		// Flush the whole store before setting, defaults to NO
-		if(options.flush)
-			this._reset();
-	}
-
+	this._handleOptions(options);
 
 	for(var i = 0 ; i < items.length ; i++){
 		var item = items[i];
@@ -120,29 +157,7 @@ Reflux.StoreMethods.batchLoad = function(items, options){
 	// Save and trigger to all listeners
 	this._saveDataAndTrigger(options);
 }
-Reflux.StoreMethods.set = function(id, data, options){
-	this._checkForWarnings();
 
-	// Checking for options
-	if(options && typeof options === 'object'){
-		// Flush the whole store before setting, defaults to NO
-		if(options.flush)
-			this._reset();
-	}
-	if(this.beforeSaveHandler && typeof this.beforeSaveHandler === 'function'){
-		data = this.beforeSaveHandler(data, this.get(id));
-		if(!data){
-			console.warn("Swipes Reflux: beforeHandler prevented the save");
-			return;
-		}
-	}
-
-	this._dataById[id] = data;
-
-	// Save and trigger to all listeners
-	this._saveDataAndTrigger(options);
-	
-};
 
 Reflux.StoreMethods.init = function(){
 	return this.manualLoadData();
