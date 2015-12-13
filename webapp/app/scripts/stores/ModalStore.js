@@ -55,7 +55,6 @@ var ModalStore = Reflux.createStore({
 		
 	},
 	onHide: function(){
-		console.log("hiding");
 		this.unset("modalView");
 	}
 });

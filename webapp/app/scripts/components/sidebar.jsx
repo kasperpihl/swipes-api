@@ -3,7 +3,7 @@ var Reflux = require('reflux');
 var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
 var stateStore = require('../stores/StateStore');
-
+var modalActions = require('../actions/ModalActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
@@ -34,6 +34,7 @@ var Sidebar = React.createClass({
 });
 Sidebar.Section = React.createClass({
 	onSectionHeader: function(){
+		modalActions.loadModal("list", {"title": "Install apps"});
 	},
 	render: function(){
 		var self = this;
