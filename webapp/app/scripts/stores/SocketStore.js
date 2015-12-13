@@ -14,8 +14,8 @@ var SocketStore = Reflux.createStore({
 		swipes._client.callSwipesApi("rtm.start").then(function(res){
 			if(res.ok){
 				userStore.batchLoad(res.users, {flush:true});
-				res.self.me = true;
-				userStore.set(res.self.id, res.self);
+				userStore.update(res.self.id, {me:true});
+				console.log(userStore.get(res.self.id));
 				channelStore.batchLoad(res.channels,{flush:true, trigger: false, persist: false});
 				channelStore.batchLoad(res.ims, {trigger: false});
 				appStore.batchLoad(res.apps, {flush:true, trigger:false});
@@ -33,10 +33,20 @@ var SocketStore = Reflux.createStore({
 			query: 'token=' + swipes.getToken(),
 			reconnectionDelay: 5000
 		});
-		this.webSocket.on('message', function(data){
-			console.log("websocket", data);
-			if(data.type)
-				eventActions.fire("websocket_" + data.type, data);
+		this.webSocket.on('message', function(msg){
+			console.log("websocket", msg);
+			if(!msg.type)
+				return;
+			if (msg.type === 'app_installed'){
+				appStore.set(msg.data.id, msg.data);
+			}
+			else if (msg.type === 'app_uninstalled'){
+				appStore.unset(msg.data.id);
+			}
+			else if (msg.type === 'app_activated'){
+				
+			}
+			eventActions.fire("websocket_" + msg.type, msg);
 		});
 		this.webSocket.on('connect', function(){
 			self.set("status", "online");
