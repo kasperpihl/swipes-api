@@ -11,6 +11,7 @@ let db = require('../db.js');
 let jsonToQuery = require('../json_to_query.js').jsonToQuery;
 let util = require('../util.js');
 let utilDB = require('../util_db.js');
+let appsUtils = require('../utils/apps.js');
 
 // relative directory to installed apps
 let appDir = __dirname + '/../../apps/';
@@ -418,76 +419,49 @@ router.post('/apps.delete', (req, res, next) => {
 
 
 router.post('/apps.method', (req, res, next) => {
+  let manifestId = req.body.manifest_id;
   let method = req.body.method;
-  let data = req.body.data;
-  let methodTimeout = 15000;
-  if(!data){
-    data = {};
-  }
-  let app, appId = req.body.app_id;
+  let data = req.body.data || {};
 
-  let getAppQ = r.table('apps').filter({manifest_id: appId});
-
-  db.rethinkQuery(getAppQ).then((apps) => {
-    if (!apps.length) {
-      return res.status(200).json({ok: false, err: 'app_not_found'});
-    }
-    app = apps[0];
-
-    let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
-    if (!manifest) {
-      return res.status(200).json({ok: false, err: 'no_manifest_found'});
-    }
-
-    if(!manifest.background){
-      return res.status(200).json({ok: false, err: 'manifest_no_background_defined'});
-    }
-    // Check if app has background script setup
-    var background = require(appDir + manifest.identifier + "/" + manifest.background);
-    if (!background) {
-      return res.status(200).json({ok: false, err: 'background_script_not_found'});
-    }
-
-    if(!background.methods || !background.methods[method] || typeof background.methods[method] !== 'function'){
-      return res.status(200).json({ok: false, err: 'method_not_found'});
-    }
-
-    var didReturn = false;
-    var timer = setTimeout(() => { didReturn = true; res.status(200).json({ok: false, err: 'method_error'}); }, methodTimeout);
-    background.methods[method](data, (result, error) => {
-      clearTimeout(timer);
-      if(didReturn) return;
-      if(error){
-        return res.status(200).json({ok: false, err: 'method_error'});
+  appsUtils.callAppMethod(manifestId, method, data)
+    .then((result) => {
+      if (result.err) {
+        return res.status(200).json({ok: false, err: result.err});
       }
-      res.status(200).json({ok: true, res: result});
-    });
 
-  })
-  .catch((err) => {
-    return next(err);
-  })
+      return res.status(200).json({ok: true, res: result.res});
+    })
+    .catch((err) => {
+      return next(err);
+    })
 });
 
 
 router.post('/apps.saveData', (req, res, next) => {
   let appId = req.body.app_id;
   let queryObject = req.body.query;
+
   console.log(queryObject);
+
   let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
-  let app, tableWithoutPrefix, background;
   let handlerTimeout = 3000;
+  let tableWithoutPrefix;
+  let background;
+
   db.rethinkQuery(getAppQ).then((apps) => {
     // Run validations for request
     if (!apps.length) {
       return res.status(200).json({ok: false, err: 'app_not_found'});
     }
-    app = apps[0];
+
+    let app = apps[0];
 
     if (!queryObject.table) {
       return res.status(200).json({ok: false, err: 'table_required'});
     }
+
     tableWithoutPrefix = queryObject.table;
+
     if (!queryObject.data) {
       return res.status(200).json({ok: false, err: 'data_required'});
     }
@@ -501,46 +475,53 @@ router.post('/apps.saveData', (req, res, next) => {
 
     // Check if app has background script setup
     if(manifest.background){
-
       background = require(appDir + manifest.identifier + "/" + manifest.background);
+
       if (!background) {
         return res.status(200).json({ok: false, err: 'background_script_not_found'});
       }
     }
 
     // If data is not an array, create it as array, this is for our loops to work
-    if(!(queryObject.data instanceof Array))
+    if(!(queryObject.data instanceof Array)) {
       queryObject.data = [queryObject.data];
-
-
+    }
 
     // Define the beforeHandler function if any exist for current app
     let beforeHandler = (data, callback) => {
-      if(background && background.beforeHandlers && background.beforeHandlers[queryObject.table] ){
+      if (background && background.beforeHandlers && background.beforeHandlers[queryObject.table]) {
         // A beforeHandler should call its callback with the data
-        var didReturn = false;
-        var timer = setTimeout(() =>{ didReturn = true; callback(false, "before_handler_timeout") }, handlerTimeout)
-        background.beforeHandlers[queryObject.table](data, (newData, error) => {
+        let didReturn = false;
+        let timer = setTimeout(() =>{
+          didReturn = true;
+          callback(null, "before_handler_timeout")
+        }, handlerTimeout)
+
+        background.beforeHandlers[queryObject.table](data, (error, newData) => {
           clearTimeout(timer);
-          if(!didReturn) callback(newData, error);
+
+          if(!didReturn) {
+            callback(error, newData);
+          }
         })
       }
-      else{
-        callback(data);
+      else {
+        callback(null, data);
       }
     }
-
 
     // Define validation function, this will call any beforeHandler, and then validate data from our side
     let validateFunction = (data) => {
       return new Promise((resolve, reject) => {
-        beforeHandler(data, function(newData, error){
+        beforeHandler(data, function(error, newData){
           if(error){
             return reject(error);
           }
+
           if(!newData){
             return reject("before_handler_failed");
           }
+
           if(!newData.scope){
             if(queryObject.scope){
               newData.scope = queryObject.scope;
@@ -549,9 +530,11 @@ router.post('/apps.saveData', (req, res, next) => {
               return reject("scope_not_provided");
             }
           }
+
           if(req.scopes.indexOf(newData.scope) == -1){
             return reject("scope_not_allowed");
           }
+
           return resolve(newData);
         });
 
@@ -559,15 +542,14 @@ router.post('/apps.saveData', (req, res, next) => {
     }
 
     // Create promises to validate for each objects to save
-    var promises = [];
-    for(var i = 0 ; i < queryObject.data.length ; i++){
+    let promises = [];
+
+    for (let i = 0 ; i < queryObject.data.length ; i++) {
       promises.push(validateFunction(queryObject.data[i]));
     }
 
     return Promise.all(promises);
-
-  }).then( dataSet => {
-
+  }).then(dataSet => {
     let tableName = util.appTable(appId, queryObject.table);
 
     queryObject.table = tableName;
@@ -576,17 +558,22 @@ router.post('/apps.saveData', (req, res, next) => {
     let rethinkQ = jsonToQuery(queryObject, {returnChanges: true});
 
     return db.rethinkQuery(rethinkQ);
-
-  }).then( result => {
-
+  }).then((result) => {
     let afterHandler = (newData, oldData) => {
       return new Promise((resolve, reject) => {
-        if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix] ){
-          var didReturn = false;
-          var timer = setTimeout(() =>{ didReturn = true; reject("after_handler_timeout") }, handlerTimeout)
+        if(background && background.afterHandlers && background.afterHandlers[tableWithoutPrefix]) {
+          let didReturn = false;
+          let timer = setTimeout(() =>{
+            didReturn = true;
+            reject("after_handler_timeout");
+          }, handlerTimeout)
+
           background.afterHandlers[tableWithoutPrefix](newData, oldData, (error) => {
             clearTimeout(timer);
-            if(!didReturn) resolve();
+
+            if(!didReturn) {
+              resolve();
+            }
           })
         }
         else{
@@ -594,20 +581,27 @@ router.post('/apps.saveData', (req, res, next) => {
         }
       });
     };
-    var promises = [];
+
+    let promises = [];
+
     if(result.changes){
-      for(var i = 0 ; i < result.changes.length ; i++){
+      for(let i = 0 ; i < result.changes.length ; i++){
         promises.push(afterHandler(result.changes[i].new_val, result.changes[i].old_val));
       }
     }
-    else promises.push(new Promise(function(resolve){resolve();} ));
+    else {
+      // T_TODO can't we have empty array for Promise.all ?!
+      promises.push(new Promise(function(resolve){resolve();}));
+    }
 
     return Promise.all(promises);
   }).then(() =>{
     res.status(200).json({ok: true});
   }).catch((err) => {
-    if(typeof err === 'string')
+    if(typeof err === 'string') {
       return res.status(200).json({ok: false, err: err});
+    }
+
     return next(err);
   });
 })
@@ -617,14 +611,15 @@ router.post('/apps.getData', (req, res, next) => {
   let queryObject = req.body.query;
   let getAppQ = r.table('apps').filter({manifest_id: appId, is_installed: true});
   let app;
+
   db.rethinkQuery(getAppQ).then((apps) => {
     if (!apps.length) {
-      return new Promise((re, reject) => { reject('app_not_found')});
+      return new Promise((re, reject) => {reject('app_not_found')});
     }
     app = apps[0];
 
     if (!queryObject.table) {
-      return new Promise((re, reject) => { reject('table_required')});
+      return new Promise((re, reject) => {reject('table_required')});
     }
 
     let tableName = util.appTable(appId, queryObject.table);
@@ -636,12 +631,13 @@ router.post('/apps.getData', (req, res, next) => {
     return db.rethinkQuery(rethinkQ);
 
   }).then((results, error) => {
-
     res.status(200).json({ok: true, results: results});
   })
   .catch((err) => {
-    if(typeof err === "string")
+    if(typeof err === "string") {
       return res.status(200).json({ok: false, err: err});
+    }
+
     return next(err);
   })
 });

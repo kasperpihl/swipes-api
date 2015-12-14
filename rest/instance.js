@@ -46,6 +46,7 @@ let chatRouter = require('./routes/chat.js');
 let imRouter = require('./routes/im.js');
 let starsRouter = require('./routes/stars.js');
 let sdkRouter = require('./routes/sdk.js');
+let searchRouter = require('./routes/search.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -76,6 +77,7 @@ app.use('/v1', rtmRouter);
 app.use('/v1', chatRouter);
 app.use('/v1', imRouter);
 app.use('/v1', starsRouter);
+app.use('/v1', searchRouter);
 
 // We want req.userId to the socket.io stuff too
 io.use((socket, next) => {

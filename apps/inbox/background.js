@@ -8,6 +8,6 @@
  */
 swipes.handlers.searchHandler = function(string, callback){
 	Gmail.search(string, function(res){
-		callback(res)
+		callback(null, res)
 	})
 }

@@ -1,10 +1,9 @@
 var background = {};
+
 background.beforeHandlers = {
 	stanimir: function(data, callback){
 		console.log("this is called before saving stanimir rows");
-		callback(data);
-
-		
+		callback(null, data);
 	}
 };
 
@@ -18,7 +17,7 @@ background.afterHandlers = {
 background.methods = {
 	start: function(data, callback){
 		console.log("method run", data);
-		callback("yeah")
+		callback(null, "yeah");
 	}
 }
 

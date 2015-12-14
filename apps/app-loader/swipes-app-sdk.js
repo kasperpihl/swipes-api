@@ -176,8 +176,8 @@ var SwipesAppSDK = (function() {
 			method: function(methodName, methodData, callback){
 				var deferred = Q.defer();
 				var data = {
-					app_id: appId,
-					method:methodName
+					manifest_id: appId,
+					method: methodName
 				};
 				if(typeof methodData === 'object'){
 					data.data = methodData;
@@ -186,12 +186,20 @@ var SwipesAppSDK = (function() {
 					callback = methodData;
 				}
 
-				var intCallback = function(res, error){
-					if(callback) callback(res,error);
-					if(res) deferred.resolve(res);
-					else deferred.reject(error);
+				var intCallback = function(error, res){
+					if(callback) {
+						callback(res, error);
+					}
+
+					if(res) {
+						deferred.resolve(res);
+					} else {
+						deferred.reject(error);
+					}
 				};
+
 				self._client.callSwipesApi("apps.method", data, intCallback);
+
 				return deferred.promise;
 			},
 			on:function(event, handler){
