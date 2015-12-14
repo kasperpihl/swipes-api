@@ -357,7 +357,19 @@ html, body, #content {
 		
 		.hint {
 			font-size: 10px;
-			transform: translateY(-12px) translateX(-15px);
+			transform: translateY(0px) translateX(50px);
+			width: calc(100% - 70px);
+			background-color: #FAFAFA;
+			padding: 6px 0px 6px 0px;
+			justify-content: flex-start;
+			transition: .2s ease-in-out;
+			z-index: 3;
+		}
+		
+		textarea {
+			padding: 10px 25px;
+			padding-left: 51px;
+			padding-top: 25px;
 			transition: .2s ease-in-out;
 		}
 	}
@@ -392,6 +404,7 @@ html, body, #content {
 		outline: none;
 		position: relative;
 		z-index: 2;
+		transition: .2s ease-in-out;
 	}
 	
 	i.chat-input-attach-icon {
