@@ -22,14 +22,21 @@ var ChatInput = React.createClass({
 			if(!this.state.showHint)
 				this.setState({showHint:true});
 			if(text.slice(-1) === "@" && text.length > this.currentLength){
-				console.log('trying to do search');
-				swipes.modals.search(function(res){
-					if(res)
-						$textarea.val(text += res);
-					$textarea.focus();
-				});
+				var testString = text.substr(0,text.length-1);
+				if(text.length == 1 || /\s+$/.test(testString)){
+					console.log('trying to do search');
+
+					swipes.modals.search(function(res){
+						if(res)
+							$textarea.val(text += res);
+						$textarea.focus();
+					});
+				}
+				
+				
 			}
 		}
+
 		var lines = text.split(/\r|\r\n|\n/);
 		var count = lines.length;
 
