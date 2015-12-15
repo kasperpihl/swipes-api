@@ -114,21 +114,6 @@ let dropTables = (tables) => {
   });
 }
 
-let getAppFile = (appId, fileName) => {
-  let file;
-
-  try {
-    let dest = appDir + appId + '/' + fileName;
-
-    file = fs.readFileSync(dest, 'utf8');
-  } catch (err) {
-    console.log(err);
-    file = null;
-  }
-
-  return file;
-}
-
 let getFolderNames = (dir, filter) => {
   return new Promise(function(resolve, reject) {
     let folderNames = [];
@@ -153,7 +138,7 @@ router.post('/apps.list', (req, res, next) => {
       let fsApps = [];
 
       folders.forEach((folder) => {
-        fsApps.push(JSON.parse(getAppFile(folder, 'manifest.json')));
+        fsApps.push(JSON.parse(util.getAppFile(appDir + folder + '/manifest.json')));
       })
 
       let isAdmin = req.isAdmin;
@@ -269,7 +254,7 @@ router.post('/apps.install', (req, res, next) => {
         return res.status(200).json({ok: false, err: 'no_app_found'});
     }
 
-    manifest = JSON.parse(getAppFile(manifestId, 'manifest.json'));
+    manifest = JSON.parse(util.getAppFile(appDir + manifestId + '/manifest.json'));
 
     if (!manifest) {
       return res.status(200).json({ok: false, err: 'no_manifest_found'});
@@ -385,7 +370,7 @@ router.post('/apps.delete', (req, res, next) => {
         return new Promise((re, reject) => { reject('no_app_found')});
       }
 
-      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+      let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
 
       if (!manifest) {
         return new Promise((re, reject) => { reject('no_manifest_found')});
@@ -470,7 +455,7 @@ router.post('/apps.saveData', (req, res, next) => {
       return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
     }
 
-    let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+    let manifest = JSON.parse(util.getAppFile(appDir + appId + '/manifest.json'));
 
     if (!manifest) {
       return res.status(200).json({ok: false, err: 'no_manifest_found'});

@@ -4,28 +4,12 @@ const TEAM_ID = process.env.TEAM_ID;
 
 let r = require('rethinkdb');
 let db = require('../db.js');
-let fs = require('fs');
 let Promise = require('bluebird');
 let jsonToQuery = require('../json_to_query.js').jsonToQuery;
 let util = require('../util.js');
 // relative directory to installed apps
 let appDir = __dirname + '/../../apps/';
 let ChangeFeedManager = require('./ChangeFeedManager.js');
-
-let getAppFile = (appId, fileName) => {
-  let file;
-
-  try {
-    let dest = appDir + appId + '/' + fileName;
-
-    file = fs.readFileSync(dest, 'utf8');
-  } catch (err) {
-    console.log(err);
-    file = null;
-  }
-
-  return file;
-}
 
 let emitEvents = (cursor, socket, eventType) => {
   cursor.each((err, row) => {
@@ -54,7 +38,7 @@ let hook = (socket, userId) => {
           let changesPromises = [];
           let tableNames = [];
           apps.forEach((app) => {
-            let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+            let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
 
             if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
               manifest.listenTo.forEach((item) => {

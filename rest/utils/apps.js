@@ -1,8 +1,11 @@
 "use strict";
 
 let r = require('rethinkdb');
+let util = require('../util.js');
 let db = require('../db.js');
 let Promise = require('bluebird');
+
+let appDir = __dirname + '/../../apps/';
 
 let callAppMethod = (manifestId, method, data) => {
   // T_TODO do we really need that?
@@ -18,7 +21,7 @@ let callAppMethod = (manifestId, method, data) => {
 
       let app = apps[0];
 
-      let manifest = JSON.parse(getAppFile(app.manifest_id, 'manifest.json'));
+      let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
 
       if (!manifest) {
         return resolve({err: 'no_manifest_found'});

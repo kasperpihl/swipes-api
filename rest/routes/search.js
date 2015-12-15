@@ -5,6 +5,7 @@ let router = express.Router();
 let Promise = require('bluebird');
 let r = require('rethinkdb');
 let db = require('../db.js');
+let util = require('../util.js');
 let utilDB = require('../util_db.js');
 
 router.post('/search', (req, res, next) => {

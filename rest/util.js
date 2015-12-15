@@ -3,6 +3,7 @@
 let config = require('config');
 let randomstring = require('randomstring');
 let moment = require('moment');
+let fs = require('fs');
 
 let randomNumber = (length) => {
   let number = randomstring.generate({
@@ -44,6 +45,18 @@ let util = {
       getString = '/apps/' + app.manifest_id + '/' + app[type].index;
 
     return hostUrl + getString;
+  },
+  getAppFile: (dest) => {
+    let file;
+
+    try {
+      file = fs.readFileSync(dest, 'utf8');
+    } catch (err) {
+      console.log(err);
+      file = null;
+    }
+
+    return file;
   }
 };
 

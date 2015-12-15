@@ -6,6 +6,8 @@ let r = require('rethinkdb');
 // so we will not need the relative path
 let db = require('../../rest/db.js');
 
+// relative directory to installed apps
+let appDir = __dirname + '/../../apps/';
 let background = {};
 
 background.beforeHandlers = {

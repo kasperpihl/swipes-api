@@ -1,24 +1,10 @@
 "use strict";
 let express = require( 'express' );
-let router = express.Router(); 
+let router = express.Router();
+let fs = require('fs');
+let util = require('../util.js');
 
 let appDir = __dirname + '/../../apps/';
-let fs = require('fs');
-let getAppFile = (appId, fileName) => {
-  let file;
-
-  try {
-    let dest = appDir + appId + '/' + fileName;
-
-    file = fs.readFileSync(dest, 'utf8');
-  } catch (err) {
-    console.log(err);
-    file = null;
-  }
-
-  return file;
-}
-
 
 router.get('/sdk.load', (req, res, next) => {
 	let apiHost = 'http://' + req.headers.host;
@@ -26,19 +12,19 @@ router.get('/sdk.load', (req, res, next) => {
 	let _defUrlDir = apiHost + '/apps/app-loader/';
 	// Insert dependencies, SwipesSDK and other scripts right after head
 	let insertString = '';
-	
+
 	function wrap(text){
 		return 'document.write(\'' + text + '\');\r\n';
 	}
 
 	// Temporary solution, server shouldn't include them, they should be packed together
-	insertString += getAppFile('app-loader', 'jquery.min.js');
-	insertString += getAppFile('app-loader', 'socket.io.js');
-	insertString += getAppFile('app-loader', 'underscore.min.js');
-	insertString += getAppFile('app-loader', 'q.min.js');
-	insertString += getAppFile('app-loader', 'swipes-api-connector.js');
-	insertString += getAppFile('app-loader', 'swipes-app-sdk.js');
-	insertString += getAppFile('app-loader', 'swipes-ui-kit/ui-kit-main.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/jquery.min.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/socket.io.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/underscore.min.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/q.min.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-api-connector.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-app-sdk.js');
+	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
 	insertString += wrap('<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css" />');
 	insertString += 'window.swipes = new SwipesAppSDK("' + apiHost + '");';
 
