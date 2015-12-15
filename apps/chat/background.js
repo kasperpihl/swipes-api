@@ -50,7 +50,7 @@ background.methods = {
 		// for future Tihomir to figure this out
 		// - Tihomir from 14.12.2015 send you greetings
 		let searchQ = r.table('chat_messages').filter((message) => {
-			return message('text').match(text)
+			return message('text').match('(?i)' + text)
 		});
 
 		db.rethinkQuery(searchQ)
