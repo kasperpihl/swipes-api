@@ -5,9 +5,12 @@ var Results = React.createClass({
 	render: function () {
 		var realResponse = this.props.data.realResponse;
 		var i = 0;
+
 		var rows = realResponse.map(function (row) {
-			if(i == 0)
+			if(i == 0) {
 				row.is_active = true;
+			}
+
 			return <Results.Wrapper key={++i} data={row} />
 		});
 
@@ -22,14 +25,16 @@ var Results = React.createClass({
 Results.Wrapper = React.createClass({
 	render: function () {
 		var name = this.props.data.name;
-		var icon = this.props.data.icon;
-		var list = this.props.data.list;
+		var list = this.props.data.results;
 		var i = 0;
 		var self = this;
+
 		var rows = list.map(function (row) {
-			if(i == 0 && self.props.data.is_active)
+			if(i == 0 && self.props.data.is_active) {
 				row.is_active = true;
-			return <Results.Row key={++i} icon={icon} data={row} />
+			}
+
+			return <Results.Row key={++i} data={row} />
 		});
 
 
@@ -56,7 +61,7 @@ Results.Row = React.createClass({
 			<ul className="results-specific-list">
 				<li className={resultClass} ref="result" onClick={this.onClick} >
 				<div className="icon">
-					<i className="material-icons">{this.props.icon}</i>
+					<i className="material-icons">{this.props.data.icon}</i>
 				</div>
 				{this.props.data.text}
 				</li>
@@ -74,6 +79,7 @@ var SearchModal = React.createClass({
 	didBackspace: true,
 	onSearch: function (e) {
 		var value = $(this.refs.search).val();
+
 		if(e.keyCode === 13){
 			if(this.props.data && this.props.data.callback){
 				this.props.data.callback();
@@ -88,16 +94,15 @@ var SearchModal = React.createClass({
 				this.props.data.callback($(this.refs.search).val());
 			}
 		}
-		else{
+		else {
+			SearchModalActions.search(value);
+
 			if (value.length > 0) {
 				this.didBackspace = false;
 				$('.search-results-wrapper').addClass('open');
 			} else {
 				$('.search-results-wrapper').removeClass('open');
 			}
-
-
-			SearchModalActions.search(value);
 		}
 	},
 	onKeyDown: function(e) {
@@ -130,10 +135,12 @@ var SearchModal = React.createClass({
 		}
 	},
 	render: function () {
-
 		var defVal = "";
-		if(this.props.data.options && typeof this.props.data.options.prefix === 'string')
+
+		if(this.props.data.options && typeof this.props.data.options.prefix === 'string') {
 			defVal = this.props.data.options.prefix;
+		}
+
 		return (
 			<div className="search-modal" onKeyDown={this.onKeyDown}>
 				<div className="search-input-wrapper">

@@ -46,6 +46,7 @@ router.post('/search', (req, res, next) => {
 
                   resolve({
                     appId: app.id,
+                    name: app.name,
                     results: results
                   });
                 })
