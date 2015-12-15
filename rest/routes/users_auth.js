@@ -20,7 +20,7 @@ router.post('/users.login', (req, res, next) => {
   let password = req.body.password ? sha1(req.body.password) : '';
 
   if (!validator.isEmail(email)) {
-    return res.status(409).json({ok:false,errors: [{field: 'email', message: 'Invalid email!'}]});
+    return res.status(200).json({ok: false, errors: [{field: 'email', message: 'Invalid email!'}]});
   }
 
   let query = r.table('users').filter({
@@ -38,9 +38,9 @@ router.post('/users.login', (req, res, next) => {
       let user = users[0];
 
       if (users.length === 0) {
-        res.status(409).json({errors: [{field: 'email', message: 'Incorrect email.'}]});
+        res.status(200).json({ok: false, errors: [{field: 'email', message: 'Incorrect email.'}]});
       } else if (password !== user.password) {
-        res.status(409).json({errors: [{field: 'password', message: 'Incorrect password.'}]});
+        res.status(200).json({ok: false, errors: [{field: 'password', message: 'Incorrect password.'}]});
       } else {
         let userId = user.id;
         let isAdmin = user.is_admin;
@@ -92,7 +92,7 @@ router.post('/users.create', (req, res, next) => {
   }
 
   if (errors.length > 0) {
-    return res.status(409).json({errors: errors});
+    return res.status(200).json({ok: false, errors: errors});
   }
 
   let userId = generateId("U");
@@ -150,11 +150,13 @@ router.post('/users.create', (req, res, next) => {
   db.rethinkQuery(checkQ)
     .then((results) => {
       if (!results[0]) {
-        res.status(409).json({
+        res.status(200).json({
+          ok: false,
           errors: [{field: 'email', message: 'There is a user with that email.'}]
         });
       } else if (!results[1]) {
-        res.status(409).json({
+        res.status(200).json({
+          ok: false,
           errors: [{field: 'username', message: 'This username is not available.'}]
         });
       } else {
