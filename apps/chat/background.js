@@ -50,12 +50,12 @@ background.methods = {
 		// for future Tihomir to figure this out
 		// - Tihomir from 14.12.2015 send you greetings
 		let searchQ = r.table('chat_messages').filter((message) => {
-			message('text').match(text)
+			return message('text').match(text)
 		});
 
 		db.rethinkQuery(searchQ)
 			.then((messages) => {
-				let results;
+				let results = [];
 
 				messages.forEach((message) => {
 					let result = {
@@ -70,14 +70,7 @@ background.methods = {
 					results.push(result);
 				})
 
-				// T_TODO oh boy... future Tihomir should make this go away!!!
-				if (callback) {
-					callback(null, results);
-				} else {
-					return new Promise((resolve, reject) => {
-						resolve(results)
-					})
-				}
+				callback(null, results);
 			})
 			.catch((err) => {
 				console.log(err);

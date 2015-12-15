@@ -8,9 +8,12 @@ let db = require('../db.js');
 let util = require('../util.js');
 let utilDB = require('../util_db.js');
 
+let appDir = __dirname + '/../../apps/';
+
 router.post('/search', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
+  let text = req.body.text;
   // T_TODO optimize that query for bandwidth
   let listApps =
     r.table('users')
@@ -18,9 +21,49 @@ router.post('/search', (req, res, next) => {
       .eqJoin('id', r.table('apps'))
       .zip()
 
+  if (!text) {
+    return res.status(200).json({ok: false, err: 'Text parameter is required'});
+  }
+
   db.rethinkQuery(listApps)
     .then((apps) => {
-      return res.status(200).json({ok: true, apps: apps});
+      let primiseArray = [];
+
+      apps.forEach((app) => {
+        let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
+
+        if (manifest) {
+          if (manifest.background) {
+            let background = require(appDir + manifest.identifier + "/" + manifest.background);
+
+            if (background && background.methods && background.methods.search) {
+              let method = background.methods.search;
+              let promise = new Promise((resolve, reject) => {
+                method(text, (error, results) => {
+                  if (error) {
+                    return reject(error);
+                  }
+
+                  resolve({
+                    appId: app.id,
+                    results: results
+                  });
+                })
+              })
+
+              primiseArray.push(promise);
+            }
+          }
+        }
+      })
+
+      // T_TODO Promise.all it maybe not the right one here
+      // We need the search to work even if there is an error
+      // with some of the applications
+      return Promise.all(primiseArray);
+    })
+    .then((results) => {
+      return res.status(200).json({ok: true, results: results});
     })
     .catch((err) => {
       return next(err);
