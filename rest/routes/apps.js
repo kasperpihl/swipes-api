@@ -465,16 +465,19 @@ router.post('/apps.saveData', (req, res, next) => {
     if (!queryObject.data) {
       return res.status(200).json({ok: false, err: 'data_required'});
     }
+
     if( typeof queryObject.data !== 'object'){
       return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
     }
+
     let manifest = JSON.parse(getAppFile(appId, 'manifest.json'));
+
     if (!manifest) {
       return res.status(200).json({ok: false, err: 'no_manifest_found'});
     }
 
     // Check if app has background script setup
-    if(manifest.background){
+    if (manifest.background) {
       background = require(appDir + manifest.identifier + "/" + manifest.background);
 
       if (!background) {

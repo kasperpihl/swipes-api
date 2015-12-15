@@ -1,6 +1,10 @@
+"use strict";
+
 let Promise = require('bluebird');
 let r = require('rethinkdb');
-let db = require('../db.js');
+// T_TODO Should make our madules local for npm
+// so we will not need the relative path
+let db = require('../../rest/db.js');
 
 let background = {};
 
@@ -9,6 +13,7 @@ background.beforeHandlers = {
 		if (!data.ts) {
 			let threeRandom = ('000' + Math.random().toFixed(3)*1000).substr(-3);
 			let ts = parseFloat(new Date().getTime() / 1000).toFixed(3) + threeRandom;
+
 			data.ts = ts;
 		}
 
@@ -72,7 +77,7 @@ background.methods = {
 					})
 				}
 			})
-			.catch((err) {
+			.catch((err) => {
 				console.log(err);
 			})
 	}
