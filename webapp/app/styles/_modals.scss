@@ -56,10 +56,12 @@
 
 
 .search-modal{
-	width: 750px;
+	width: 800px;
 	background-color: white;
 	position: relative;
 	box-shadow: $swipes-shadow-four;
+	border-radius: 5px;
+	overflow: hidden;
 	
 	.search-input-wrapper {
 		width: 100%;
@@ -113,7 +115,7 @@
 		}
 		
 		.results-list {
-			width: 50%;
+			width: 40%;
 			height: 100%;
 			//background-color: red;
 			overflow-y: scroll;
@@ -143,6 +145,9 @@
 					padding-right: 10px;
 					transition: .1s ease-in-out;
 					position: relative;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
 					
 					&.active {
 						background-color: $studioGray-40;
@@ -171,12 +176,75 @@
 				}
 			}
 		}
+	}
+}
 		
-		.result-preview {
-			width: 50%;
-			height:100%;
-			background-color: #f0f0f0;
-			margin-left: 0px;
+.result-preview {
+	width: 60%;
+	height:100%;
+	background-color: #fAfAfA;
+	margin-left: 0px;
+}
+
+.chat-result-wrapper {
+	width: 100%;
+	height: 100%;
+	
+	.info {
+		width: 100%;
+		height: 60px;
+		padding: 0 50px;
+		background-color: #FAFAFA;
+		span {
+			line-height: 60px;
+			color: $deepBlue-100;
+			font-weight: 500;
+			text-transform: uppercase;
+			font-size: .9em;
+			
+			&.where {
+				float: left;
+			}
+			
+			&.when {
+				float: right;
+			}
 		}
 	}
+	
+	.preview-card {
+		height: calc(100% - 120px);
+		width: calc(100% - 80px);
+		margin: 0 auto;
+		padding: 0 20px;
+		padding-top: 10px;
+		background-color: white;
+		border-radius: 5px;
+		box-shadow: $swipes-shadow-one;
+		
+		@extend %flex;
+		flex-direction: column;
+	}
+	
+	.actions {
+		width: 100%;
+		height: 60px;
+		
+		.mention {
+			line-height: 60px;
+			text-align: right;
+			padding: 0 50px;
+			font-weight: 500;
+			color: $deepBlue-100;
+			cursor: pointer;
+		}
+	}
+}
+
+.opacity {
+	opacity: .7 !important;
+}
+					
+.target-result {
+	background-color: $blue-40 !important;
 }
