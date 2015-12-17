@@ -12,7 +12,7 @@ let background = {};
 
 // Private methods
 let getContext = (word, message) => {
-	let maxChars = 50;
+	let maxChars = 35;
 
 	if (message.length <= maxChars) {
 			return message;
@@ -46,7 +46,7 @@ let getContext = (word, message) => {
 		}
 
 		if (availableCharsBefore !== beforeLen) {
-			beforeString = message.substring(index-availableCharsBefore, index);
+			beforeString = '...' + message.substring(index-availableCharsBefore, index);
 		}
 
 		if (availableCharsAfter !== afterLen) {
