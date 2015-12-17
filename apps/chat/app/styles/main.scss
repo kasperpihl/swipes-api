@@ -402,6 +402,10 @@ html, body, #content {
 			justify-content: flex-start;
 			transition: .2s ease-in-out;
 			z-index: 3;
+			
+			@media screen and (max-width: $break-mid) {
+				display: none;
+			}
 		}
 		
 		textarea {
@@ -409,6 +413,13 @@ html, body, #content {
 			padding-left: 51px;
 			padding-top: 25px;
 			transition: .2s ease-in-out;
+			
+			@media screen and (max-width: $break-mid) {
+				padding: 15px 25px;
+				padding-left: 51px;
+				padding-right: 51px;
+				padding-top: 20px;
+			}
 		}
 	}
 	
@@ -432,6 +443,7 @@ html, body, #content {
 	textarea {
 		padding: 15px 25px;
 		padding-left: 51px;
+		padding-right: 51px;
 		padding-top: 20px;
 		width: 100%;
 		font-family: 'Roboto';
@@ -460,6 +472,24 @@ html, body, #content {
 		&:hover {
 			color: $deepBlue-80;
 			transition: .1s ease-in-out;
+		}
+	}
+	
+	i.chat-input-mobile-send {
+		display: none;
+		
+		@media screen and (max-width: $break-mid) {
+			display: inline;
+			position: absolute;
+			height: 100%;
+			line-height: 58px;
+			font-size: 20px;
+			width: 51px;
+			text-align: center;
+			color: $studioGray-120;
+			cursor: pointer;
+			z-index: 3;
+			right: 0;
 		}
 	}
 }
