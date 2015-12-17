@@ -200,14 +200,15 @@
 			color: $deepBlue-100;
 			font-weight: 500;
 			text-transform: uppercase;
-			font-size: .9em;
 			
 			&.where {
 				float: left;
+				font-size: 10px;
 			}
 			
 			&.when {
 				float: right;
+				font-size: 12px;
 			}
 		}
 	}
