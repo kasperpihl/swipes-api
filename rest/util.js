@@ -57,6 +57,10 @@ let util = {
     }
 
     return file;
+  },
+  // Escape strings to use in regexp
+  escapeRegExp: (str) => {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   }
 };
 

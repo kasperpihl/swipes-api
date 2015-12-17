@@ -2,8 +2,9 @@
 
 let Promise = require('bluebird');
 let r = require('rethinkdb');
-// T_TODO Should make our madules local for npm
+// T_TODO Should make our modules local for npm
 // so we will not need the relative path
+let util = require('../../rest/util.js');
 let db = require('../../rest/db.js');
 
 // relative directory to installed apps
@@ -93,11 +94,13 @@ background.methods = {
 		callback(null, "yeah");
 	},
 	search: (query, callback) => {
+		let escapedQuery = util.escapeRegExp(query);
+
 		// T_TODO make the search with our SDK
 		// for future Tihomir to figure this out
 		// - Tihomir from 14.12.2015 send you greetings
 		let searchQ = r.table('chat_messages').filter((message) => {
-			return message('text').match('(?i)' + query)
+			return message('text').match('(?i)' + escapedQuery)
 		});
 
 		db.rethinkQuery(searchQ)
