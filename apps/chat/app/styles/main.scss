@@ -52,6 +52,9 @@ html, body, #content {
 	height:100%;
 	font-family: 'Roboto';
 	line-height: 1.4;
+	@media screen and (max-width: $break-mid) {
+		overflow-x: hidden;
+	}
 }
 #content{
 	background-color: #FAFAFA;
