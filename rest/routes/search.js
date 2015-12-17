@@ -67,7 +67,7 @@ router.post('/search', (req, res, next) => {
     .then((results) => {
       return res.status(200).json({
         ok: true,
-        timestamp: moment().valueOf(),
+        ts: moment().valueOf(),
         results: results
       });
     })
