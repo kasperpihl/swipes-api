@@ -1,7 +1,14 @@
 var React = require('react');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
+require('../../third-party/highlight-plugin');
+
+var searchValue = '';
+
 var Results = React.createClass({
+	componentDidUpdate: function () {
+		$("#results-list .result span").highlight(searchValue);
+	},
 	render: function () {
 		var realResponse = this.props.data.realResponse;
 		var i = 0;
@@ -15,7 +22,7 @@ var Results = React.createClass({
 		});
 
 		return (
-			<div className="results-list">
+			<div id="results-list" className="results-list">
 				{rows}
 			</div>
 		);
@@ -79,6 +86,8 @@ var SearchModal = React.createClass({
 	didBackspace: true,
 	onSearch: function (e) {
 		var value = $(this.refs.search).val();
+
+		searchValue = value;
 
 		if(e.keyCode === 13){
 			if(this.props.data && this.props.data.callback){

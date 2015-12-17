@@ -62,13 +62,13 @@
 	box-shadow: $swipes-shadow-four;
 	border-radius: 5px;
 	overflow: hidden;
-	
+
 	.search-input-wrapper {
 		width: 100%;
 		justify-content: 100%;
 		position: relative;
 		box-shadow: $swipes-shadow-one;
-		
+
 		input {
 			width: 100%;
 			height: 60px;
@@ -79,52 +79,52 @@
 			font-weight: 400;
 			font-size: 16px;
 			color: $deepBlue-80;
-			
+
 			&::-webkit-input-placeholder {
 				color: $deepBlue-40;
 				transition: .1s ease-in-out;
 			}
-			
+
 			&:focus + label > svg {
 				fill: $deepBlue-80;
 			}
 		}
-		
+
 		label {
 			position: absolute;
 			left: 30px;
 			top: calc(50% + 2px);
 			transform: translate(-50%, -50%);
-			
+
 			svg {
 				fill: $deepBlue-40;
 				transition: .1s ease-in-out;
 			}
 		}
 	}
-	
+
 	.search-results-wrapper {
 		width: 100%;
 		height: 0px;
 		display: flex;
 		transition: .2s ease-in-out;
-		
+
 		&.open {
 			height: 450px;
 			transition: .2s ease-in-out;
 		}
-		
+
 		.results-list {
 			width: 40%;
 			height: 100%;
 			//background-color: red;
 			overflow-y: scroll;
-			
+
 			&::-webkit-scrollbar-thumb {
 				border-radius: 0px;
 				background-color: rgba(0,0,0,.2);
 			}
-			
+
 			.result-title {
 				padding: 15px;
 				padding-left: 40px;
@@ -132,10 +132,10 @@
 				font-weight: 600;
 				color: $deepBlue-80;
 			}
-			
+
 			ul.results-specific-list {
 				width: 100%;
-				
+
 				li.result {
 					width: 100%;
 					font-size: 15px;
@@ -148,12 +148,12 @@
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					
+
 					&.active {
 						background-color: $blue-40;
 						transition: .1s ease-in-out;
 					}
-					
+
 					.icon {
 						width: 40px;
 						height: 40px;
@@ -162,13 +162,13 @@
 						left: 0;
 						//background-color: yellow;
 						text-align: center;
-						
+
 						i {
 							//text-align: center;
 							line-height: 42px;
 						}
 					}
-					
+
 					&:hover {
 						background-color: $blue-40;
 						transition: .1s ease-in-out;
@@ -178,7 +178,7 @@
 		}
 	}
 }
-		
+
 .result-preview {
 	width: 60%;
 	height:100%;
@@ -189,7 +189,7 @@
 .chat-result-wrapper {
 	width: 100%;
 	height: 100%;
-	
+
 	.info {
 		width: 100%;
 		height: 60px;
@@ -200,19 +200,19 @@
 			color: $deepBlue-100;
 			font-weight: 500;
 			text-transform: uppercase;
-			
+
 			&.where {
 				float: left;
 				font-size: 10px;
 			}
-			
+
 			&.when {
 				float: right;
 				font-size: 12px;
 			}
 		}
 	}
-	
+
 	.preview-card {
 		height: calc(100% - 120px);
 		width: calc(100% - 80px);
@@ -222,15 +222,15 @@
 		background-color: white;
 		border-radius: 5px;
 		box-shadow: $swipes-shadow-one;
-		
+
 		@extend %flex;
 		flex-direction: column;
 	}
-	
+
 	.actions {
 		width: 100%;
 		height: 60px;
-		
+
 		.mention {
 			line-height: 60px;
 			text-align: right;
@@ -245,7 +245,11 @@
 .opacity {
 	opacity: .7 !important;
 }
-					
+
 .target-result {
 	background-color: $blue-40 !important;
+}
+
+.highlight {
+    background-color: #FFCA28 !important;
 }
