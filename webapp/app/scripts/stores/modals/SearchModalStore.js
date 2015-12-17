@@ -20,7 +20,7 @@ var SearchStore = Reflux.createStore({
     that.prevValue = value;
 
     that.timer = window.setTimeout(() => {
-      swipes._client.callSwipesApi("search", {text: value}, function (res, error) {
+      swipes._client.callSwipesApi("search", {query: value}, function (res, error) {
         if (res.ok === true) {
           var results = res.results.filter(function (result) {
             if (result.results.length > 0) {

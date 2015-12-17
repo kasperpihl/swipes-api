@@ -92,12 +92,12 @@ background.methods = {
 
 		callback(null, "yeah");
 	},
-	search: (text, callback) => {
+	search: (query, callback) => {
 		// T_TODO make the search with our SDK
 		// for future Tihomir to figure this out
 		// - Tihomir from 14.12.2015 send you greetings
 		let searchQ = r.table('chat_messages').filter((message) => {
-			return message('text').match('(?i)' + text)
+			return message('text').match('(?i)' + query)
 		});
 
 		db.rethinkQuery(searchQ)
@@ -107,7 +107,7 @@ background.methods = {
 				messages.forEach((message) => {
 					let result = {
 						id: message.id,
-						text: getContext(text, message.text),
+						text: getContext(query, message.text),
 						user_id: message.user_id,
 						scope: message.scope,
 						ts: message.ts,
