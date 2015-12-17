@@ -2,8 +2,9 @@
 
 let Promise = require('bluebird');
 let r = require('rethinkdb');
-// T_TODO Should make our madules local for npm
+// T_TODO Should make our modules local for npm
 // so we will not need the relative path
+let util = require('../../rest/util.js');
 let db = require('../../rest/db.js');
 
 // relative directory to installed apps
@@ -12,7 +13,7 @@ let background = {};
 
 // Private methods
 let getContext = (word, message) => {
-	let maxChars = 50;
+	let maxChars = 35;
 
 	if (message.length <= maxChars) {
 			return message;
@@ -46,7 +47,7 @@ let getContext = (word, message) => {
 		}
 
 		if (availableCharsBefore !== beforeLen) {
-			beforeString = message.substring(index-availableCharsBefore, index);
+			beforeString = '...' + message.substring(index-availableCharsBefore, index);
 		}
 
 		if (availableCharsAfter !== afterLen) {
@@ -92,12 +93,14 @@ background.methods = {
 
 		callback(null, "yeah");
 	},
-	search: (text, callback) => {
+	search: (query, callback) => {
+		let escapedQuery = util.escapeRegExp(query);
+
 		// T_TODO make the search with our SDK
 		// for future Tihomir to figure this out
 		// - Tihomir from 14.12.2015 send you greetings
 		let searchQ = r.table('chat_messages').filter((message) => {
-			return message('text').match('(?i)' + text)
+			return message('text').match('(?i)' + escapedQuery)
 		});
 
 		db.rethinkQuery(searchQ)
@@ -107,7 +110,7 @@ background.methods = {
 				messages.forEach((message) => {
 					let result = {
 						id: message.id,
-						text: getContext(text, message.text),
+						text: getContext(query, message.text),
 						user_id: message.user_id,
 						scope: message.scope,
 						ts: message.ts,

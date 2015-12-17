@@ -4,6 +4,7 @@ let express = require('express');
 let router = express.Router();
 let Promise = require('bluebird');
 let r = require('rethinkdb');
+let moment = require('moment');
 let db = require('../db.js');
 let util = require('../util.js');
 let utilDB = require('../util_db.js');
@@ -13,7 +14,7 @@ let appDir = __dirname + '/../../apps/';
 router.post('/search', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
-  let text = req.body.text;
+  let query = req.body.query;
   // T_TODO optimize that query for bandwidth
   let listApps =
     r.table('users')
@@ -21,8 +22,8 @@ router.post('/search', (req, res, next) => {
       .eqJoin('id', r.table('apps'))
       .zip()
 
-  if (!text) {
-    return res.status(200).json({ok: false, err: 'Text parameter is required'});
+  if (!query) {
+    return res.status(200).json({ok: false, err: 'Query parameter is required'});
   }
 
   db.rethinkQuery(listApps)
@@ -39,7 +40,7 @@ router.post('/search', (req, res, next) => {
             if (background && background.methods && background.methods.search) {
               let method = background.methods.search;
               let promise = new Promise((resolve, reject) => {
-                method(text, (error, results) => {
+                method(query, (error, results) => {
                   if (error) {
                     return reject(error);
                   }
@@ -64,7 +65,11 @@ router.post('/search', (req, res, next) => {
       return Promise.all(primiseArray);
     })
     .then((results) => {
-      return res.status(200).json({ok: true, results: results});
+      return res.status(200).json({
+        ok: true,
+        ts: moment().valueOf(),
+        results: results
+      });
     })
     .catch((err) => {
       return next(err);
