@@ -10,6 +10,53 @@ let db = require('../../rest/db.js');
 let appDir = __dirname + '/../../apps/';
 let background = {};
 
+// Private methods
+let getContext = (word, message) => {
+	let maxChars = 50;
+
+	if (message.length <= maxChars) {
+			return message;
+  } else if (word.length > maxChars) {
+		return word;
+  } else {
+		let index = message.indexOf(word);
+		let endIndex = index + word.length;
+		let beforeString;
+
+		if (index > 0) {
+			beforeString = message.substring(0, index);
+		} else {
+			beforeString = ''
+		}
+
+		let afterString = message.substring(endIndex, message.length -1);
+		let availableChars = maxChars - word.length;
+		let availableCharsForSide = parseInt(availableChars / 2);
+		let availableCharsBefore = availableCharsForSide;
+		let availableCharsAfter = availableCharsForSide;
+		let beforeLen = beforeString.length;
+		let afterLen = afterString.length;
+
+		if (availableCharsForSide > beforeLen) {
+			availableCharsBefore = beforeLen;
+			availableCharsAfter = availableCharsForSide + (availableCharsForSide - beforeLen)
+		} else if (availableCharsForSide > afterLen) {
+			availableCharsAfter = afterLen;
+			availableCharsBefore = availableCharsForSide + (availableCharsForSide - afterLen)
+		}
+
+		if (availableCharsBefore !== beforeLen) {
+			beforeString = message.substring(index-availableCharsBefore, index);
+		}
+
+		if (availableCharsAfter !== afterLen) {
+			afterString = message.substring(endIndex, endIndex + availableCharsAfter);
+		}
+
+		return beforeString + word + afterString;
+	}
+}
+
 background.beforeHandlers = {
 	messages: (data, callback) => {
 		if (!data.ts) {
@@ -60,7 +107,7 @@ background.methods = {
 				messages.forEach((message) => {
 					let result = {
 						id: message.id,
-						text: message.text,
+						text: getContext(text, message.text),
 						user_id: message.user_id,
 						scope: message.scope,
 						ts: message.ts,
