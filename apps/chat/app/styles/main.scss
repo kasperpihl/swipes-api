@@ -54,8 +54,7 @@ html, body, #content {
 	line-height: 1.4;
 	
 	@media screen and (max-width: $break-mid) {
-		max-width: 320px !important;
-		overflow-x: hidden;
+		//overflow-x: hidden;
 	}
 }
 #content{
@@ -127,7 +126,7 @@ html, body, #content {
 	
 	@media screen and (max-width: $break-mid) {
 		padding: 0 10px;
-		padding-bottom: 20px;
+		padding-bottom: 10px;
 	}
 }
 
@@ -138,7 +137,7 @@ html, body, #content {
 	
 	@media screen and (max-width: $break-mid) {
 			padding: 15px 0;
-			padding-bottom: 25px;
+			padding-bottom: 24px;
 	}
 	
 	img {
@@ -299,10 +298,11 @@ html, body, #content {
 	color: rgba(0,0,0,.4);
 	margin-left: 0px;
 	font-size: 12px;
-	transform: translateY(-10px);
+	transform: translateY(-15px);
 	
 	@media screen and (max-width: $break-mid) {
 		margin-left: 10px;
+		transform: translateY(-10px);
 	}
 }
 
