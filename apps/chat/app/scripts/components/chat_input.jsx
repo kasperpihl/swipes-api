@@ -65,16 +65,13 @@ var ChatInput = React.createClass({
 		}
 		this.debouncedCheck();
 	},
-	onClick: function(e){
+	onClick: function(){
 		var $textarea = $(this.refs.textarea);
 		var message = $textarea.val();
 		if(message && message.length > 0){
 			this.sendMessage(message);
 			$textarea.focus();
 		}
-	},
-	onFocus: function() {
-		return false;
 	},
 	sendMessage: function(message){
 		$(this.refs.textarea).val("");
@@ -110,7 +107,7 @@ var ChatInput = React.createClass({
 				<i className="material-icons chat-input-attach-icon" >attach_file</i>
 				<div className="hint">Write message</div>
 				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
-				<i className="material-icons chat-input-mobile-send" onClick={this.onClick} onFocus={this.onFocus}>send</i>
+				<i className="material-icons chat-input-mobile-send" onClick={this.onClick}>send</i>
 			</div>
 		);
 	}

@@ -166,6 +166,9 @@ html, body, #content {
 		align-items: center;
 		padding: 0 20px;
 		
+		&.new-message {
+			animation: newMessageLeft .4s cubic-bezier(.57,-0.04,.51,1.89) forwards; 
+		}
 		@media screen and (max-width: $break-mid) {
 			min-height: 30px;
 			padding: 0 5px;
@@ -182,7 +185,6 @@ html, body, #content {
 			font-size: 14px;
 			word-break: break-word;
 			//box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-			animation: newMessage .4s ease-in-out forwards; 
 		}
 		
 		&:last-child {
@@ -241,6 +243,11 @@ html, body, #content {
 			.message-wrapper {
 				display: flex;
 				justify-content: flex-end;
+				
+				&.new-message {
+					animation-name: none;
+					animation: newMessageRight .4s cubic-bezier(.57,-0.04,.51,1.89) forwards; 
+				}
 				
 				.message {
 					//background-color: #9EF2C3;
@@ -532,17 +539,4 @@ html, body, #content {
 		transform: translateY(0px) scale(1); 
 		opacity: 1; 
 		transform-origin: 100% 100%;}
-}
-
-
-@keyframes newMessage {
-	0% {
-		transform: translateY(20px) scale(.5); 
-		opacity: 0; 
-		transform-origin: 50% 50%;
-	}
-	100% {
-		transform: translateY(0px) scale(1); 
-		opacity: 1; 
-		transform-origin: 50% 50%;}
 }

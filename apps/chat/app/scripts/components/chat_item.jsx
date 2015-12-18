@@ -2,8 +2,11 @@ var React = require('react');
 
 var ChatMessage = React.createClass({
 	render: function () {
+		var className = "message-wrapper";
+		if(this.props.data.isNewMessage)
+			className += " new-message";
 		return (
-			<div className="message-wrapper">
+			<div className={className}>
 				<div className="message">
 					{this.props.data.text}
 				</div>
