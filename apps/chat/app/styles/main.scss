@@ -54,6 +54,7 @@ html, body, #content {
 	line-height: 1.4;
 	
 	@media screen and (max-width: $break-mid) {
+		max-width: 320px !important;
 		overflow-x: hidden;
 	}
 }
