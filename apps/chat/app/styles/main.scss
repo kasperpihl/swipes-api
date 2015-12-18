@@ -52,6 +52,7 @@ html, body, #content {
 	height:100%;
 	font-family: 'Roboto';
 	line-height: 1.4;
+	
 	@media screen and (max-width: $break-mid) {
 		overflow-x: hidden;
 	}
@@ -70,6 +71,7 @@ html, body, #content {
 	overflow-y: scroll;
 	overflow-x: hidden;
 	background-color: #FAFAFA;
+	//padding-bottom: 20px;
 }
 
 .chat-list {
@@ -131,6 +133,7 @@ html, body, #content {
 .avatar {
 	height: 100%;
 	align-self: flex-end;
+	padding-bottom: 20px;
 	
 	@media screen and (max-width: $break-mid) {
 			padding: 15px 0;
@@ -151,6 +154,7 @@ html, body, #content {
 	width: 100%;
 	max-width: calc(650px - 70px);
 	padding: 15px 0;
+	padding-bottom: 25px; 
 	display: flex;
 	flex-direction: column;
 	
@@ -287,10 +291,7 @@ html, body, #content {
 	color: rgba(0,0,0,.4);
 	margin-left: 10px;
 	font-size: 12px;
-	
-	@media screen and (max-width: $break-mid) {
-		transform: translateY(-10px);
-	}
+	transform: translateY(-10px);
 	
 	&.right-side-details {
 		left: auto;
@@ -472,9 +473,12 @@ html, body, #content {
 		z-index: 3;
 		transition: .1s ease-in-out;
 		
-		&:hover {
-			color: $deepBlue-80;
-			transition: .1s ease-in-out;
+		@media screen and (min-width: $break-mid) {
+			
+			&:hover {
+				color: $deepBlue-80;
+				transition: .1s ease-in-out;
+			}
 		}
 	}
 	
