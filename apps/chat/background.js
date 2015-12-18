@@ -99,9 +99,12 @@ background.methods = {
 		// T_TODO make the search with our SDK
 		// for future Tihomir to figure this out
 		// - Tihomir from 14.12.2015 send you greetings
-		let searchQ = r.table('chat_messages').filter((message) => {
-			return message('text').match('(?i)' + escapedQuery)
-		});
+		let searchQ =
+			r.table('chat_messages')
+				.filter((message) => {
+					return message('text').match('(?i)' + escapedQuery)
+				})
+				.orderBy(r.desc('ts'));
 
 		db.rethinkQuery(searchQ)
 			.then((messages) => {
