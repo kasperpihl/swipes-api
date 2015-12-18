@@ -115,6 +115,8 @@ var AppLoader = React.createClass({
 			return ( <div>No app set.</div> );
 		}
 
+		console.log(this.state.url);
+
 		return (
 			<iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className="app-frame-class" frameBorder="0"/>
 		);

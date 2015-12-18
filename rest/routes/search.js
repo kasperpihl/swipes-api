@@ -19,6 +19,9 @@ router.post('/search', (req, res, next) => {
   let listApps =
     r.table('users')
       .get(userId)('apps')
+      .filter((app) => {
+        return app('is_active').eq(true);
+      })
       .eqJoin('id', r.table('apps'))
       .zip()
 
@@ -28,7 +31,7 @@ router.post('/search', (req, res, next) => {
 
   db.rethinkQuery(listApps)
     .then((apps) => {
-      let primiseArray = [];
+      let promiseArray = [];
 
       apps.forEach((app) => {
         let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
@@ -53,7 +56,7 @@ router.post('/search', (req, res, next) => {
                 })
               })
 
-              primiseArray.push(promise);
+              promiseArray.push(promise);
             }
           }
         }
@@ -62,7 +65,7 @@ router.post('/search', (req, res, next) => {
       // T_TODO Promise.all it maybe not the right one here
       // We need the search to work even if there is an error
       // with some of the applications
-      return Promise.all(primiseArray);
+      return Promise.all(promiseArray);
     })
     .then((results) => {
       return res.status(200).json({

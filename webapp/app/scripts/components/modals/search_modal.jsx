@@ -1,13 +1,28 @@
 var React = require('react');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
+var AppStore = require('../../stores/AppStore');
 require('../../third-party/highlight-plugin');
 
 var searchValue = '';
 
+var changePreview = function ($resultElement) {
+	var appId = $resultElement.attr('data-appid') || null;
+	var resultId = $resultElement.attr('data-id') || null;
+	var resultScope = $resultElement.attr('data-scope') || null;
+	var app = AppStore.get(appId);
+
+	if (app.preview_view_url) {
+		$('#result-preview').attr('src', app.preview_view_url + '?id=' + resultId + '&scope=' + resultScope);
+	}
+}
+
+var debouncedChangePreview = _.debounce(changePreview, 300);
+
 var Results = React.createClass({
 	componentDidUpdate: function () {
 		$("#results-list .result span").highlight(searchValue);
+		changePreview($("#results-list .result").first());
 	},
 	render: function () {
 		var realResponse = this.props.data.realResponse;
@@ -31,7 +46,8 @@ var Results = React.createClass({
 
 Results.Wrapper = React.createClass({
 	render: function () {
-		var name = this.props.data.name;
+		var app = AppStore.get(this.props.data.appId);
+		var name = app.name || 'Unknown';
 		var list = this.props.data.results;
 		var i = 0;
 		var self = this;
@@ -41,9 +57,10 @@ Results.Wrapper = React.createClass({
 				row.is_active = true;
 			}
 
+			row.appId = app.id;
+
 			return <Results.Row key={++i} data={row} />
 		});
-
 
 		return (
 			<div className="result-wrapper">
@@ -57,16 +74,27 @@ Results.Wrapper = React.createClass({
 Results.Row = React.createClass({
 	onClick: function() {
 		var $result = $(this.refs.result);
+
 		$('.result').removeClass('active');
 		$result.addClass('active');
+		debouncedChangePreview($result);
 	},
 	render: function () {
 		var resultClass = "result ";
-		if(this.props.data.is_active)
+
+		if(this.props.data.is_active) {
 			resultClass += "active";
+		}
+
 		return (
 			<ul className="results-specific-list">
-				<li className={resultClass} ref="result" onClick={this.onClick} >
+				<li
+					className={resultClass}
+					ref="result"
+					onClick={this.onClick}
+					data-appid={this.props.data.appId}
+					data-id={this.props.data.id}
+					data-scope={this.props.data.scope} >
 				<div className="icon">
 					<i className="material-icons">{this.props.data.icon}</i>
 				</div>
@@ -127,21 +155,24 @@ var SearchModal = React.createClass({
 
 		if (e.keyCode === DOWN) {
 			e.preventDefault();
-			if (!result.hasClass('active')) {
-				result.first().addClass('active');
-			} else {
-				if (currentIndex < (resultLength - 1)) {
-					$(result[currentIndex]).removeClass('active');
-					$(result[nextResult]).addClass('active');
-				}
+
+			if (currentIndex < (resultLength - 1)) {
+				$(result[currentIndex]).removeClass('active');
+				$(result[nextResult]).addClass('active');
+				debouncedChangePreview($(result[nextResult]));
 			}
 		} else if (e.keyCode === UP) {
 			e.preventDefault();
+
 			if (currentIndex >= 1) {
 				$(result[currentIndex]).removeClass('active');
 				$(result[prevResult]).addClass('active');
+				debouncedChangePreview($(result[prevResult]));
 			}
 		}
+	},
+	onLoadPreview: function () {
+		console.log('preview loaded!');
 	},
 	render: function () {
 		var defVal = "";
@@ -164,7 +195,9 @@ var SearchModal = React.createClass({
 				<div className="search-results-wrapper" ref="results-wrapper" >
 					<Results data={this.state.realResponse} />
 
-					<div className="result-preview"></div>
+					<div className="result-preview">
+						<iframe ref="iframe" onLoad={this.onLoadPreview} id="result-preview" className="app-frame-class" frameBorder="0"/>
+					</div>
 				</div>
 			</div>
 		);

@@ -7,6 +7,9 @@
 	"channel_view": {
 		"index": "dist/index.html"
 	},
+	"preview_view": {
+		"index": "app/preview.html"
+	},
 	"tables":[
 		{
 			"name": "messages",

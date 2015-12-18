@@ -133,7 +133,6 @@ var SwipesAppSDK = (function() {
 
 				return deferred.promise;
 			},
-
 			save: function(options, saveData, callback){
 				var deferred = Q.defer();
 				var data = {

@@ -17,7 +17,7 @@ var SwipesAPIConnector = (function() {
 		this._apiQueue = [];
 
 		window.addEventListener('message', bindedCallback, false);
-		
+
 	};
 	SwipesAPIConnector.prototype.setToken = function(token){
 		this._token = token;
@@ -61,7 +61,7 @@ var SwipesAPIConnector = (function() {
 			this.setTargetURL(targetUrl);
 	};
 
-	/* 
+	/*
 		Delegate is the object that will handle calls through the listener ()
 	*/
 	SwipesAPIConnector.prototype.setDelegate = function(delegate){
@@ -98,7 +98,7 @@ var SwipesAPIConnector = (function() {
 			this._apiQueue.push({options: options, data: data, callback: callback, deferred: deferred});
 			return deferred.promise;
 		}
-		
+
 		// If no data is send, but only a callback set those
 		if(typeof data === 'function'){
 			callback = data;
@@ -145,7 +145,7 @@ var SwipesAPIConnector = (function() {
 	};
 
 	/*
-	
+
 	 */
 	SwipesAPIConnector.prototype.callListener = function(command, data, callback) {
 		if(!this._token || !this._listener){
@@ -165,7 +165,7 @@ var SwipesAPIConnector = (function() {
 			this._addCallback(identifier, callback);
 		}
 
-		
+
 		this._sendMessageToListener(callJson);
 	};
 
@@ -178,7 +178,7 @@ var SwipesAPIConnector = (function() {
 	};
 
 
-	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {		
+	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
 		try{
 			var message = msg.data;
 			if(typeof message === 'string')
@@ -242,7 +242,7 @@ var SwipesAPIConnector = (function() {
 		this._sendMessageToListener(callJson);
 	}
 	/*
-		
+
 	 */
 	SwipesAPIConnector.prototype._runLocalCallback = function(identifier, res, err) {
 		var callback = this._callbacks[identifier];
