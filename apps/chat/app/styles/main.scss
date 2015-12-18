@@ -137,6 +137,7 @@ html, body, #content {
 	
 	@media screen and (max-width: $break-mid) {
 			padding: 15px 0;
+			padding-bottom: 25px;
 	}
 	
 	img {
@@ -146,6 +147,7 @@ html, body, #content {
 		@media screen and (max-width: $break-mid) {
 			max-width: 30px !important;
 			min-width: 30px !important;
+			margin-left: -5px;
 		}
 	}
 }
@@ -220,11 +222,16 @@ html, body, #content {
 		
 		.avatar {
 			order: 2;
+			margin-left: 5px;
 		}
 		
 		.message-details {
 			left: auto;
-			right: 10px;
+			right: 0px;
+			
+			@media screen and (max-width: $break-mid) {
+				right: 10px;
+			}
 		}
 		
 		.chat-messages {
@@ -289,13 +296,12 @@ html, body, #content {
 	left: 0;
 	bottom: 0;
 	color: rgba(0,0,0,.4);
-	margin-left: 10px;
+	margin-left: 0px;
 	font-size: 12px;
 	transform: translateY(-10px);
 	
-	&.right-side-details {
-		left: auto;
-		right: 0 !important;
+	@media screen and (max-width: $break-mid) {
+		margin-left: 10px;
 	}
 }
 
