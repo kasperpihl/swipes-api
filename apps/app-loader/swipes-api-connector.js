@@ -162,7 +162,7 @@ var SwipesAPIConnector = (function() {
 		if(this._appId)
 			callJson.app_id = this._appId;
 		if (callback && typeof callback === 'function') {
-			this._addCallback(identifier, callback);
+			this._callbacks[identifier] = callback;
 		}
 
 
@@ -252,20 +252,6 @@ var SwipesAPIConnector = (function() {
 		this._clearCallback(identifier);
 	};
 
-
-
-	/*
-		Add callback for an identifier and set timeout to clear if not called before
-	*/
-	SwipesAPIConnector.prototype._addCallback = function(identifier, callback) {
-		this._callbacks[identifier] = callback;
-		var _this = this;
-		this._timers[identifier] = setTimeout(function() {
-			if ((_this != null) && _this._callbacks[identifier]) {
-				_this._runLocalCallback(identifier, null, 'Timed out');
-			}
-		}, this._timeoutTimer * 1000);
-	};
 
 
 	/*
