@@ -1,7 +1,5 @@
 var React = require('react');
 var ListModal = React.createClass({
-	componentDidMount: function(){
-	},
 	didClickRow: function(row){
 		console.log(row, this.props);
 		this.props.data.callback(row);
@@ -26,7 +24,7 @@ var ListModal = React.createClass({
 		var title = options.title || this.defaults.title;
 
 		return (
-			<div className="list-modal">
+			<div className="modal-full">
 				<h1>{title}</h1>
 				<ul className="list-results">
 					{rows}
