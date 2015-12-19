@@ -76,6 +76,7 @@ var AppLoader = React.createClass({
 			}
 			else if (message.command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "screen" + this.props.data.screen);
+
 				//return this.listeners[data.event] = connector;
 			}
 		}
@@ -100,8 +101,10 @@ var AppLoader = React.createClass({
 			initObj.data.default_scope = this.state.channel.id;
 			initObj.data.channel_id = this.state.channel.id;
 		}
-
-		this.apiCon = swipes._client.copyConnector();
+		// Lazy instantiate
+		if(!this.apiCon){
+			this.apiCon = swipes._client.copyConnector();
+		}
 		this.apiCon.setAppId(this.state.app.manifest_id);
 		var doc = $(this.refs.iframe)[0].contentWindow;
 		var apiUrl = this.apiCon.getBaseURL();
