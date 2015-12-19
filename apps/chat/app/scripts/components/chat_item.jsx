@@ -7,9 +7,7 @@ var ChatMessage = React.createClass({
 			className += " new-message";
 		return (
 			<div className={className}>
-				<div className="message">
-					{this.props.data.text}
-				</div>
+				<div className="message" dangerouslySetInnerHTML={{__html: this.props.data.text}} />
 			</div>
 		);
 	}
