@@ -7,6 +7,9 @@ var UserStore = Reflux.createStore({
 	sort: "name",
 	me: function(){
 		return this.find({me: true});
+	},
+	search:function(string, options){
+		return [];
 	}
 });
 

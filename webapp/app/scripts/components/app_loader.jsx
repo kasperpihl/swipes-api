@@ -88,7 +88,6 @@ var AppLoader = React.createClass({
 		eventActions.remove(null,null, "screen" + this.props.data.screen);
 		var initObj = {
 			type: "init",
-			// TODO_K: Add current user from userstore
 			data: {
 				manifest: this.state.app,
 				user_id: userStore.me().id,
@@ -114,8 +113,6 @@ var AppLoader = React.createClass({
 		if(!this.state.app) {
 			return ( <div>No app set.</div> );
 		}
-
-		console.log(this.state.url);
 
 		return (
 			<iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className="app-frame-class" frameBorder="0"/>

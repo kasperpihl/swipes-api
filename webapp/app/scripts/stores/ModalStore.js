@@ -8,7 +8,7 @@ var ModalStore = Reflux.createStore({
 		this._reset();
 	},
 	defaults: {
-		opaqueBackground: false,
+		opaqueBackground: true,
 		left: "50%",
 		top: "50%",
 		centerX: true,

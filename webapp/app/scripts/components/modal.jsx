@@ -18,6 +18,9 @@ var Modal = React.createClass({
 	},
 
 	recalculateContent: function(){
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
+		
 		var $contentEl = $(this.refs.content);
 		var contentWidth = $contentEl.outerWidth();
 		var contentHeight = $contentEl.outerHeight();
@@ -36,8 +39,7 @@ var Modal = React.createClass({
 			"left": this.state.left
 		};
 
-		var windowWidth = $(window).width();
-		var windowHeight = $(window).height();
+		
 
 		if(this.state.left !== null){
 			var actualLeft = parseInt(this.state.left, 10);
@@ -74,6 +76,8 @@ var Modal = React.createClass({
 			$contentEl.css(cssProps);
 	},
 	onClickedBackground: function(){
+		if(this.state.modalCallback)
+			this.state.modalCallback(null);
 		modalActions.hide();
 	},
 	onModalCallback: function(res){
@@ -91,7 +95,7 @@ var Modal = React.createClass({
 			Modal = this.state.modalView;
 		}
 
-		var backgroundClass = "modal-clickable-background shown";
+		var backgroundClass = "modal-clickable-background shown ";
 		if(this.state.opaqueBackground)
 			backgroundClass += "dark-opaque ";
 

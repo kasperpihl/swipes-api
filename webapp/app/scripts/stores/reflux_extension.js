@@ -1,6 +1,5 @@
 var Reflux = require('reflux');
 
-Reflux.StoreMethods.defaults = {};
 Reflux.StoreMethods.idAttribute = "id";
 Reflux.StoreMethods._checkForWarnings = function(){
 	if(!this._didLoadData)
@@ -126,8 +125,6 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 };
 
 Reflux.StoreMethods.batchLoad = function(items, options){
-
-	
 	if(!this.idAttribute || typeof this.idAttribute !== 'string')
 		return console.warn("Swipes Reflux: batchLoad requires idAttribute to be set on store [string]");
 

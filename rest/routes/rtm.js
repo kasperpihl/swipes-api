@@ -74,7 +74,7 @@ let getApps = (userId, isAdmin, req) => {
             }
           }
 
-          if (isAdmin && app.admin_only && app.required) {
+          if (app.required) {
             response.push(_.extend(app, {is_active: true}));
           } else if (!found) {
             response.push(_.extend(app, {is_active: false}));

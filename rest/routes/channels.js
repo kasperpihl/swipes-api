@@ -216,7 +216,7 @@ router.post('/channels.join', (req, res, next) => {
                     return {
                       channels: user('channels').append({
                         id: channel.id,
-                        ts, ts
+                        'last_read': ts
                       })
                     }
                   });
