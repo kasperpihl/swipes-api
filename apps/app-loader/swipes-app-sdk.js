@@ -214,6 +214,9 @@ var SwipesAppSDK = (function() {
 		search: function(options, callback){
 			this.load("search", options, callback);
 		},
+		alert: function(options, callback){
+			this.load("alert", options, callback);
+		},
 		load: function(name, options, callback){
 			options = options || {};
 			if(typeof options === 'function'){

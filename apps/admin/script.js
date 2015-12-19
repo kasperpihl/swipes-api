@@ -8,7 +8,11 @@ $(document).ready(function() {
 
 
 swipes.onReady(function(){
-	swipes.modals.search(function(res,err){
+	swipes.modals.alert({
+		title: "This is the title",
+		message: "This is the message",
+		buttons: ["Yes", "No"]
+	}, function(res,err){
 		console.log("callback from sdk", res, err);
 	});
 	// Holder for the apps objects
