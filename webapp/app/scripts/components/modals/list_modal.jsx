@@ -1,7 +1,6 @@
 var React = require('react');
 var ListModal = React.createClass({
 	didClickRow: function(row){
-		console.log(row, this.props);
 		this.props.data.callback(row);
 	},
 	defaults: {

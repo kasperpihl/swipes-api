@@ -23,8 +23,7 @@ var ChatStore = Reflux.createStore({
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
 			var group = moment(date).startOf('day').unix();
-
-
+			
 			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			model.timeStr = TimeUtility.getTimeStr(date);
 

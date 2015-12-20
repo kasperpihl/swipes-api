@@ -8,13 +8,12 @@ $(document).ready(function() {
 
 
 swipes.onReady(function(){
-	swipes.modals.alert({
-		title: "This is the title",
-		message: "This is the message",
-		buttons: ["Yes", "No"]
-	}, function(res,err){
-		console.log("callback from sdk", res, err);
+	swipes.modal.confirm( "This is the title", "This is the message" , function(res){
+		if(res){
+			alert("confirmed");
+		}
 	});
+	swipes.modal.alert("Hey", "You're cool");
 	// Holder for the apps objects
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
