@@ -18,7 +18,12 @@ var ChatInput = React.createClass({
 	onTextChange: function(){
 		var $textarea = $(this.refs.textarea);
 		var text = $textarea.val();
+        
 		if(text.length > 0){
+            
+            $('i.chat-input-mobile-send').addClass('active');
+            $('i.chat-input-attach-icon').addClass('active');
+            
 			if(!this.state.showHint)
 				this.setState({showHint:true});
 			if(text.slice(-1) === "@" && text.length > this.currentLength){
@@ -35,7 +40,10 @@ var ChatInput = React.createClass({
 				
 				
 			}
-		}
+		} else if (text.length === 0) {
+            $('i.chat-input-mobile-send').removeClass('active');
+            $('i.chat-input-attach-icon').removeClass('active');
+        }
 
 		var lines = text.split(/\r|\r\n|\n/);
 		var count = lines.length;
@@ -104,10 +112,11 @@ var ChatInput = React.createClass({
 				{/* <input type="file" id="file-input" /> 
 				<div className="attach-button-container">
 				</div>*/}
-				<i className="material-icons chat-input-attach-icon" >attach_file</i>
+                <div className="mobile-search-at-sign">@</div>
+				<i className="material-icons chat-input-attach-icon" ref="attach-icon">attach_file</i>
 				<div className="hint">Write message</div>
 				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
-				<i className="material-icons chat-input-mobile-send" onClick={this.onClick}>send</i>
+				<i className="material-icons chat-input-mobile-send" onClick={this.onClick} ref="send-icon">send</i>
 			</div>
 		);
 	}
