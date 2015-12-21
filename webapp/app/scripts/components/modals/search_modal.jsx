@@ -99,6 +99,8 @@ Results.Row = React.createClass({
 					<i className="material-icons">{this.props.data.icon}</i>
 				</div>
 				{this.props.data.text}
+                
+                <i className="material-icons mention">launch</i>
 				</li>
 			</ul>
 		);

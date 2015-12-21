@@ -157,8 +157,8 @@
 					font-weight: 400;
 					color: $deepBlue-80;
 					padding: 10px 40px;
-					padding-right: 10px;
-					transition: .1s ease-in-out;
+					padding-right: 50px;
+					//transition: .1s ease-in-out;
 					position: relative;
 					white-space: nowrap;
 					overflow: hidden;
@@ -166,7 +166,15 @@
 
 					&.active {
 						background-color: $blue-40;
-						transition: .1s ease-in-out;
+						//transition: .1s ease-in-out;
+                        
+                        .mention {
+                            display: inline;
+                            
+                            &:hover {
+                                color: rgba($deepBlue-100, 1);
+                            }
+                        }
 					}
 
 					.icon {
@@ -183,10 +191,32 @@
 							line-height: 42px;
 						}
 					}
+                    
+                    .mention {
+                        position: absolute;
+                        width: 40px;
+                        height: 40px;
+                        right: 0;
+                        top: 0;
+                        line-height: 42px;
+                        background-color: $blue-40;
+                        cursor: pointer;
+                        color: rgba($deepBlue-100, .5);
+                        display: none; 
+                        text-align: center;                       
+                    }
 
 					&:hover {
 						background-color: $blue-40;
-						transition: .1s ease-in-out;
+						//transition: .1s ease-in-out;
+                        
+                        .mention {
+                            display: inline;
+                            
+                            &:hover {
+                                 color: rgba($deepBlue-100, 1);
+                            }
+                        }
 					}
 				}
 			}
