@@ -94,6 +94,10 @@ background.methods = {
 		callback(null, "yeah");
 	},
 	search: (query, callback) => {
+		if (!query || typeof query !== 'string') {
+			callback(new Error("Query should be a string!"));
+		}
+
 		let escapedQuery = util.escapeRegExp(query);
 
 		// T_TODO make the search with our SDK
@@ -127,6 +131,69 @@ background.methods = {
 			})
 			.catch((err) => {
 				console.log(err);
+				callback(new Error("Ooops!"));
+			})
+	},
+	preview: (data, callback) => {
+		if (!data.id || !data.scope) {
+			callback(new Error("You should provide id and scope!"));
+		}
+
+		let messageContextParamsQ =
+			r.table('chat_messages')
+				.filter({scope: data.scope})
+				.orderBy('ts')
+				.concatMap((message) => {return [message('id')]})
+				.do((map) => {
+					return {
+						count: map.count(),
+						offset: map.offsetsOf(data.id).nth(0)
+					}
+				})
+
+		db.rethinkQuery(messageContextParamsQ)
+			.then((contextParams) => {
+				let count = contextParams.count;
+				let offset = contextParams.offset;
+				let startOffset = offset - 2;
+				let endOffset = offset + 2;
+
+				if (startOffset < 0) {
+					endOffset = endOffset + Math.abs(startOffset);
+					startOffset = 0;
+				} else if (endOffset > count) {
+					// I need that magic -1 there for now.
+					// I think I found a bug with the rethinkdb implementation of slice
+					startOffset = startOffset - (endOffset - count) - 1;
+					endOffset = count;
+
+					if (startOffset < 0) {
+						startOffset = 0;
+					}
+				}
+
+				let contextQ =
+					r.table('chat_messages')
+						.filter({scope: data.scope})
+						.orderBy('ts')
+						.slice(startOffset, endOffset, {rightBound:'closed'})
+
+				return db.rethinkQuery(contextQ)
+			})
+			.then((context) => {
+				context.map((element) => {
+					if (element.id === data.id) {
+						element.highlight = true;
+					}
+
+					return element;
+				})
+
+				callback(null, context);
+			})
+			.catch((err) => {
+				console.log(err);
+				callback(new Error("Ooops!"));
 			})
 	}
 }
