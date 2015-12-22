@@ -46,7 +46,15 @@
 		}
 	}
 }
-.list-modal{
+.list-results{
+	li{
+		h3{
+			font-size:15px;
+			padding:10px;
+			padding-left: 10%;
+			font-weight: 400;
+		}
+	}
 	background-color: white;
 }
 .modal-full{
@@ -58,6 +66,16 @@
 	outline: none;
 	padding-top: 1px;
 	padding-bottom: 50px;
+	h2 {
+		margin: 25px 10%;
+		font-size: 16px;
+		color: $sidebar-dark-color;
+	}
+	.message{
+		margin: 5px 10%;
+		font-size: 14px;
+		color: $sidebar-dark-color;
+	}
 	.buttons {
 		position:absolute;
 		right: 0;

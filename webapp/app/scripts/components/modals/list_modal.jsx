@@ -5,6 +5,7 @@ var ListModal = React.createClass({
 	},
 	defaults: {
 		title: "Find an item in this list",
+		emptyText: "No items left",
 		enableSearch: false, // doesn't work
 		multiSelect: false, // doesn't work
 		rows: [],
@@ -20,11 +21,15 @@ var ListModal = React.createClass({
 			return <ListModal.Row key={row.id} onClickRow={self.didClickRow} data={row} />
 		});
 
+		var emptyText = options.emptyText || this.defaults.emptyText;
+		if(!rows.length){
+			rows.push(<li className="empty-text"><h3>{emptyText}</h3></li>);
+		}
 		var title = options.title || this.defaults.title;
 
 		return (
 			<div className="modal-full">
-				<h1>{title}</h1>
+				<h2>{title}</h2>
 				<ul className="list-results">
 					{rows}
 				</ul>

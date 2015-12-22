@@ -97,6 +97,7 @@ var AppLoader = React.createClass({
 				default_scope: this.state.app.id
 			}
 		};
+		console.log(initObj);
 		if(this.state.channel){
 			initObj.data.default_scope = this.state.channel.id;
 			initObj.data.channel_id = this.state.channel.id;

@@ -32,7 +32,7 @@ var AlertModal = React.createClass({
 		}
 		return (
 			<div className="modal-full">
-				<h1>{title}</h1>
+				<h2>{title}</h2>
 				{message}
 				<div className="buttons">
 					{buttons}

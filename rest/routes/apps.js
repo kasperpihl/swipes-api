@@ -518,7 +518,7 @@ router.post('/apps.saveData', (req, res, next) => {
               return reject("scope_not_provided");
             }
           }
-
+          console.log("scoping", app, newData.scope);
           if(req.scopes.indexOf(newData.scope) == -1){
             return reject("scope_not_allowed");
           }
