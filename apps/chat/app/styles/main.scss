@@ -395,6 +395,7 @@ html, body, #content {
 	left: 50%;
 	transform: translateX(-50%) translateY(-5px);
 	position: fixed;
+    overflow: hidden;
 	bottom: 0;
 	background-color: #FAFAFA;
 	border: 2px solid $studioGray-60;
@@ -476,6 +477,24 @@ html, body, #content {
 		z-index: 2;
 		transition: .2s ease-in-out;
 	}
+    
+    .mobile-search-at-sign {
+        position: absolute;
+		height: 100%;
+		line-height: 58px;
+		font-size: 20px;
+		width: 51px;
+		text-align: center;
+		color: $studioGray-120;
+		cursor: pointer;
+		z-index: 3;
+        left: 0;
+        top: 0;
+        
+        @media screen and (min-width: $break-mid) {
+		  display: none;
+	   }
+    }
 	
 	i.chat-input-attach-icon {
 		position: absolute;
@@ -496,6 +515,16 @@ html, body, #content {
 				transition: .1s ease-in-out;
 			}
 		}
+        
+        @media screen and (max-width: $break-mid) {
+            right: 0;
+            transition: .2s cubic-bezier(.39,-0.74,.53,1.61);
+            
+            &.active {
+                transform: translateY(-100%);
+                transition: .2s cubic-bezier(.39,-0.74,.53,1.61);
+            }
+        }
 	}
 	
 	i.chat-input-mobile-send {
@@ -513,6 +542,13 @@ html, body, #content {
 			cursor: pointer;
 			z-index: 3;
 			right: 0;
+            transform: translateY(100%);
+            transition: .2s cubic-bezier(.39,-0.74,.53,1.61);
+            
+            &.active {
+                transform: translateY(0%);
+                transition: .2s cubic-bezier(.39,-0.74,.53,1.61);
+            }
 		}
 	}
 }

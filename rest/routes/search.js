@@ -70,7 +70,7 @@ router.post('/search', (req, res, next) => {
     .then((results) => {
       return res.status(200).json({
         ok: true,
-        ts: moment().valueOf(),
+        ts: moment().valueOf() / 1000,
         results: results
       });
     })
