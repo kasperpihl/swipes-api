@@ -295,6 +295,8 @@ var SwipesAppSDK = (function() {
 
 			if(message.command == "event"){
 				if(message.data.type == "init"){
+					if(data.data.preview_obj)
+						this.info.previewObj = data.data.preview_obj;
 					if(data.data.channel_id)
 						this.info.channelId = data.data.channel_id;
 					if(data.data.manifest.manifest_id)

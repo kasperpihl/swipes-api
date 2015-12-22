@@ -8,12 +8,14 @@ $(document).ready(function() {
 
 
 swipes.onReady(function(){
-	swipes.modal.confirm( "This is the title", "This is the message" , function(res){
+
+	swipes.modal.confirm( {title:"Hey Stanimir"}, function(res){
 		if(res){
 			alert("confirmed");
 		}
 	});
-	swipes.modal.alert("Hey", "You're cool");
+	
+	//swipes.modal.alert("Hey", "You're cool");
 	// Holder for the apps objects
 	window._apps = [];
 	// Underscore rendered template, check admin.html for app-row-template
