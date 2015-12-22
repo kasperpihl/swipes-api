@@ -9,6 +9,7 @@ let appDir = __dirname + '/../../apps/';
 
 let callAppMethod = (manifestId, method, data) => {
   // T_TODO do we really need that?
+  // T_ANSWER Yes we do. Anything less would be bad practice, since we're relying on external API's.
   let methodTimeout = 15000;
 
   return new Promise((resolve, reject) => {
