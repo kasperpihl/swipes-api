@@ -11,8 +11,6 @@ var ChatStore = Reflux.createStore({
 	onSendMessage: function(message){
 		console.log("sending message", message);
 		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
-		var threeRandom = ('000' + Math.random().toFixed(3)*1000).substr(-3);
-		var ts = parseFloat(new Date().getTime() / 1000).toFixed(3) + threeRandom;
 
 		this.sortMessages();
 	},
@@ -23,7 +21,6 @@ var ChatStore = Reflux.createStore({
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
 			var group = moment(date).startOf('day').unix();
-
 
 			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			model.timeStr = TimeUtility.getTimeStr(date);
