@@ -36,6 +36,7 @@ var SearchModal = React.createClass({
 	mixins: [Reflux.ListenerMixin],
 	componentDidMount: function(){
 		$(this.refs.search).focus();
+		SearchModalActions.resetCache();
 		this.didBackspace = true;
 	},
 	onSearchModalChange: function (state) {
@@ -151,7 +152,8 @@ var SearchModal = React.createClass({
 
 var ResultList = React.createClass({
 	componentDidUpdate: function () {
-		$("#results-list .result span").highlight(this.props.data.searchValue);
+		if(this.props.data.searchValue)
+			$("#results-list .result span").highlight(this.props.data.searchValue);
 	},
 	render: function () {
 		var searchResults = this.props.data.searchResults || [];

@@ -1,7 +1,8 @@
 var Reflux = require('reflux');
 
 var SeachModalActions = Reflux.createActions([
-	'search'
+	'search',
+	'resetCache'
 ]);
 
 module.exports = SeachModalActions;

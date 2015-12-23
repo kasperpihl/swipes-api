@@ -6,6 +6,7 @@ var SearchStore = Reflux.createStore({
 	searchValue: null,
 	init: function () {
 		this.manualLoadData();
+		this.set('cache', {});
 		this.bouncedExtSearch = _.debounce(this.externalSearch, 500);
 	},
 	externalSearch: function (value, callback) {
@@ -15,9 +16,9 @@ var SearchStore = Reflux.createStore({
 			}
 		});
 	},
-	defaults: {
-		cache: {},
-		results: []
+	onResetCache: function(){
+		this.set('cache', {});
+		console.log('reset cache');
 	},
 	onSearch: function (value) {
 		this.searchValue = value;
