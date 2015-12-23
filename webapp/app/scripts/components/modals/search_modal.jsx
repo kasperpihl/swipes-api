@@ -51,7 +51,8 @@ var SearchModal = React.createClass({
 		var value = $(this.refs.search).val();
 
 		this.searchValue = value;
-
+		if(this.state.searchValue != value)
+			this.setState({searchValue: value});
 		if(e.keyCode === 13){
 			if(this.props.data && this.props.data.callback){
 				this.props.data.callback();
@@ -138,7 +139,7 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<ResultList data={{searchResults: this.state.results, searchValue: this.searchValue}} />
+					<ResultList data={{searchResults: this.state.results, searchValue: this.state.searchValue}} />
 
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
@@ -164,9 +165,9 @@ var ResultList = React.createClass({
 
 			return <ResultList.Category key={++i} data={row} />
 		});
-
+		
 		return (
-			<div id="results-list" className="results-list">
+			<div data-value={this.props.data.searchValue} id="results-list" className="results-list">
 				{rows}
 			</div>
 		);
