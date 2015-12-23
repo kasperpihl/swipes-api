@@ -40,7 +40,6 @@ var SearchModal = React.createClass({
 	},
 	onSearchModalChange: function (state) {
 		var currentResults = state['results'] || [];
-
 		this.setState({"results": currentResults});
 	},
 	componentWillMount: function () {
