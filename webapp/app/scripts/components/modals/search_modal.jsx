@@ -3,7 +3,7 @@ var Reflux = require('reflux');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
 var StateActions = require('../../actions/StateActions');
-var AppStore = require('../../stores/AppStore');
+
 var PreviewLoader = require('../preview_loader');
 var Highlight = require('react-highlighter');
 
@@ -53,27 +53,24 @@ var SearchModal = React.createClass({
 
 		if(e.keyCode === 13){
 			if(this.props.data && this.props.data.callback){
-				this.props.data.callback();
+				return this.props.data.callback();
 			}
 		}
 		else if((e.keyCode === 8 && !value.length) || e.keyCode === 27){
 			if(e.keyCode === 8 && !this.didBackspace){
 				this.didBackspace = true;
-				return;
 			}
-			if(this.props.data && this.props.data.callback){
-				this.props.data.callback($(this.refs.search).val());
+			else if(this.props.data && this.props.data.callback){
+				return this.props.data.callback($(this.refs.search).val());
 			}
 		}
-		else {
-			SearchModalActions.search(value);
+		SearchModalActions.search(value);
 
-			if (value.length > 0) {
-				this.didBackspace = false;
-				$('.search-results-wrapper').addClass('open');
-			} else {
-				$('.search-results-wrapper').removeClass('open');
-			}
+		if (value.length > 0) {
+			this.didBackspace = false;
+			$('.search-results-wrapper').addClass('open');
+		} else {
+			$('.search-results-wrapper').removeClass('open');
 		}
 	},
 	prevItem: function() {
@@ -166,13 +163,13 @@ var ResultList = React.createClass({
 
 ResultList.Category = React.createClass({
 	render: function () {
-		var app = AppStore.get(this.props.data.category.appId);
-		var name = app.name || 'Unknown';
+
+		var name = this.props.data.category.name || 'Unknown';
 		var list = this.props.data.category.results;
 		var self = this;
 
 		var rows = list.map(function (row) {
-			row.appId = app.id;
+			row.appId = self.props.data.category.appId;
 
 			return <ResultList.Row key={row.id} data={{row:row, searchValue: self.props.data.searchValue}} />
 		});

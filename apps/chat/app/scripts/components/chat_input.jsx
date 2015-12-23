@@ -31,8 +31,6 @@ var ChatInput = React.createClass({
 				var testString = text.substr(0,text.length-1);
 
 				if (text.length == 1 || /\s+$/.test(testString)) {
-					console.log('trying to do search');
-
 					swipes.modal.search(function(res){
 						if(res)
 							$textarea.val(text += res);

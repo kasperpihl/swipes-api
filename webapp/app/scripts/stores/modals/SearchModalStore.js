@@ -1,6 +1,10 @@
 var Reflux = require('reflux');
 var Actions = require('../../actions/modals/SearchModalActions');
 
+var appStore = require('../AppStore');
+var userStore = require('../UserStore');
+var channelStore = require('../ChannelStore');
+
 var SearchStore = Reflux.createStore({
 	listenables: [Actions],
 	searchValue: null,
@@ -17,23 +21,37 @@ var SearchStore = Reflux.createStore({
 		});
 	},
 	onResetCache: function(){
-		this.set('cache', {});
-		console.log('reset cache');
+		this.set('cache', {}, {trigger: false});
 	},
 	onSearch: function (value) {
-		this.searchValue = value;
-		var that = this;
 
+		var that = this;
+		
+		if(value === this.searchValue)
+			return;
+		this.searchValue = value;
 		if (value.length === 0) {
 			this.set("results", []);
 			return;
 		}
+		
+
 		var cache = this.get("cache")[value]
 		if(cache && cache !== this.get('results')){
 			this.set('results', cache);
 			return;
 		}
+		var localResults = [userStore.search(value), appStore.search(value), channelStore.search(value)];
+		localResults = localResults.filter(function (locRes) {
+			if (locRes.results.length > 0) {
+				return locRes;
+			}
+		})
 
+		this.set('results', localResults);
+		return;
+		// K_TODO - fix the external results and the UX
+		console.log("localResults", localResults);
 		this.bouncedExtSearch(value, function (res, error) {
 			if (res.ok === true) {
 				var results = res.results.filter(function (result) {
@@ -44,7 +62,7 @@ var SearchStore = Reflux.createStore({
 				console.log(results);
 				var updateObj = {};
 				updateObj[value] = results;
-				that.update("cache", updateObj);
+				that.update("cache", updateObj, {trigger: false});
 				if(value === that.searchValue){
 					that.set('results', results);
 				}
