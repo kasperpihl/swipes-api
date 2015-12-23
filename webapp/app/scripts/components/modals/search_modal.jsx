@@ -1,4 +1,5 @@
 var React = require('react');
+var Reflux = require('reflux');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
 var StateActions = require('../../actions/StateActions');
@@ -8,7 +9,6 @@ var PreviewLoader = require('../preview_loader');
 var searchValue = '';
 
 var changePreview = function ($resultElement) {
-	console.log("change preview", $resultElement);
 	var appId = $resultElement.attr('data-appid') || null;
 	var resultId = $resultElement.attr('data-id') || null;
 	var resultScope = $resultElement.attr('data-scope') || null;
@@ -20,16 +20,26 @@ var debouncedChangePreview = _.debounce(changePreview, 300);
 
 
 var SearchModal = React.createClass({
-	mixins: [SearchModalStore.connect("realResponse")],
+	mixins: [Reflux.ListenerMixin],
 	componentDidMount: function(){
 		$(this.refs.search).focus();
 		this.didBackspace = true;
+	},
+	onSearchModalChange: function(searches){
+		console.log(searches);
+		var currentResults = searches[this.searchValue] || [];
+		if(currentResults !== this.state.results){
+			this.setState({"results": currentResults});
+		}
+	},
+	componentWillMount: function(){
+		this.listenTo(SearchModalStore, this.onSearchModalChange, this.onSearchModalChange);
 	},
 	didBackspace: true,
 	onSearch: function (e) {
 		var value = $(this.refs.search).val();
 
-		searchValue = value;
+		this.searchValue = value;
 
 		if(e.keyCode === 13){
 			if(this.props.data && this.props.data.callback){
@@ -69,12 +79,14 @@ var SearchModal = React.createClass({
 	},
 	changeToItem: function(index){
 		var result = $('li.result');
+		StateActions.unloadPreview();
+		
 		if(!result.length)
 			return;
+
 		result.filter('.active').removeClass('active');
-		console.log("change to item", index);
 		$(result[index]).addClass('active');
-		StateActions.unloadPreview();
+		
 		debouncedChangePreview($(result[index]));
 	},
 	nextItem: function(){
@@ -100,8 +112,8 @@ var SearchModal = React.createClass({
 			this.prevItem();
 		}
 	},
-	onLoadPreview: function () {
-		console.log('preview loaded!');
+	getInitialState: function(){
+		return {};
 	},
 	componentDidUpdate: function () {
 		this.changeToItem(0);
@@ -125,7 +137,7 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<ResultList data={this.state.realResponse} />
+					<ResultList data={{searchResults: this.state.results, searchValue: this.searchValue}} />
 
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
@@ -138,13 +150,13 @@ var SearchModal = React.createClass({
 
 var ResultList = React.createClass({
 	componentDidUpdate: function () {
-		$("#results-list .result span").highlight(searchValue);
+		$("#results-list .result span").highlight(this.props.data.searchValue);
 	},
 	render: function () {
-		var realResponse = this.props.data.realResponse;
+		var searchResults = this.props.data.searchResults || [];
 		var i = 0;
 
-		var rows = realResponse.map(function (row) {
+		var rows = searchResults.map(function (row) {
 			if(i == 0) {
 				row.is_active = true;
 			}

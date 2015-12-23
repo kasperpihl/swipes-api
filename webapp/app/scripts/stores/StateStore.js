@@ -22,7 +22,6 @@ var StateStore = Reflux.createStore({
 		this.set('isStarted', isStarted);
 	},
 	onUnloadPreview: function(){
-		console.log('unloading');
 		this.set("preview1", {});
 	},
 	onLoadPreview: function(appId, scope, id){
@@ -35,9 +34,11 @@ var StateStore = Reflux.createStore({
 			}
 			var self = this;
 			swipes._client.callSwipesApi("apps.method", {manifest_id: app.manifest_id, method: "preview", data:{scope:scope, id:id}}, function(res, err){
-				console.log("result from preview method", res);
-				appObj.previewObj = res.res;
-				self.set("preview1", appObj);
+				if(res && res.ok){
+					appObj.previewObj = res.res;
+					self.set("preview1", appObj);
+				}
+				
 			});
 		}
 	},

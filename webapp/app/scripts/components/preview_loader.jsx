@@ -77,7 +77,6 @@ var PreviewLoader = React.createClass({
 		this.apiCon.setDelegate(this);
 	},
 	render: function() {
-		console.log("render iframe for preview", this.state);
 		if(!this.state.app) {
 			return ( <div>Loading</div> );
 		}
