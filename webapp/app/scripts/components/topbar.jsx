@@ -29,12 +29,9 @@ var Topbar = React.createClass({
             $('.connection-status').css('background-color', 'yellow');
         };
         
-        // change .app-frame-class to the correct class 
         if ($('.connection-status').css('display') == 'flex') {
-            console.log('inline');
             $('.app-view-controller').css('padding-top', '90px');
-        } else if ($('.connection-status').css('display') == 'none') {
-            console.log('none');            
+        } else if ($('.connection-status').css('display') == 'none') {        
             $('.app-view-controller').css('padding-top', '60px');
         }
 	},
