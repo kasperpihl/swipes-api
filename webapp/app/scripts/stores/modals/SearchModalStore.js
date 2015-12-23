@@ -14,7 +14,7 @@ var SearchStore = Reflux.createStore({
 	defaults: {
 		realResponse: []
 	},
-	timer: null,
+	prevValue: null,
 	externalSearch: function(value, callback){
 		swipes._client.callSwipesApi("search", {query: value}, function (res, error) {
 			if(callback){
@@ -24,11 +24,13 @@ var SearchStore = Reflux.createStore({
 	},
 	onSearch: function (value) {
 		var that = this;
-		
-		if (value.length === 0) {
+
+		if (value.length === 0 || value === that.prevValue) {
 			return;
 		}
-		
+
+		that.prevValue = value;
+
 		this.bouncedExtSearch(value, function(res, error){
 			if (res.ok === true) {
 				var results = res.results.filter(function (result) {

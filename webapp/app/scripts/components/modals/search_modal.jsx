@@ -4,8 +4,10 @@ var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
 var StateActions = require('../../actions/StateActions');
 var AppStore = require('../../stores/AppStore');
-require('../../third-party/highlight-plugin');
 var PreviewLoader = require('../preview_loader');
+
+require('../../third-party/highlight-plugin');
+
 var searchValue = '';
 
 var changePreview = function ($resultElement) {
@@ -17,7 +19,20 @@ var changePreview = function ($resultElement) {
 
 var debouncedChangePreview = _.debounce(changePreview, 300);
 
+var changeToItem = function (index) {
+	var result = $('li.result');
 
+	StateActions.unloadPreview();
+
+	if(!result.length) {
+		return;
+	}
+
+	result.filter('.active').removeClass('active');
+	$(result[index]).addClass('active');
+
+	debouncedChangePreview($(result[index]));
+};
 
 var SearchModal = React.createClass({
 	mixins: [Reflux.ListenerMixin],
@@ -66,47 +81,37 @@ var SearchModal = React.createClass({
 			}
 		}
 	},
-	prevItem: function(){
+	prevItem: function() {
 		var result = $('li.result');
-
 		var current = result.filter('.active');
 		var currentIndex = result.index(current);
 		var prevResult = currentIndex - 1;
-		if(prevResult < 0)
-			prevResult = result.length - 1;
-	
-		this.changeToItem(prevResult);
-	},
-	changeToItem: function(index){
-		var result = $('li.result');
-		StateActions.unloadPreview();
-		
-		if(!result.length)
-			return;
 
-		result.filter('.active').removeClass('active');
-		$(result[index]).addClass('active');
-		
-		debouncedChangePreview($(result[index]));
+		if (prevResult < 0) {
+			prevResult = result.length - 1;
+		}
+
+		changeToItem(prevResult);
 	},
 	nextItem: function(){
 		var result = $('li.result');
 		var currentIndex = result.index(result.filter('.active'));
 		var nextResult = currentIndex + 1;
-		if(nextResult >= result.length || nextResult < 0){
+
+		if (nextResult >= result.length || nextResult < 0) {
 			nextResult = 0;
 		}
-		this.changeToItem(nextResult);
 
+		changeToItem(nextResult);
 	},
 	onKeyDown: function(e) {
 		var UP = 38;
 		var DOWN = 40;
-	
+
 		if (e.keyCode === DOWN) {
 			e.preventDefault();
 			this.nextItem();
-			
+
 		} else if (e.keyCode === UP) {
 			e.preventDefault();
 			this.prevItem();
@@ -116,7 +121,7 @@ var SearchModal = React.createClass({
 		return {};
 	},
 	componentDidUpdate: function () {
-		this.changeToItem(0);
+		changeToItem(0);
 	},
 	render: function () {
 		var defVal = "";
@@ -201,11 +206,11 @@ ResultList.Category = React.createClass({
 
 ResultList.Row = React.createClass({
 	onClick: function() {
-		var $result = $(this.refs.result);
+		var result = $('li.result');
+		var $row = $(this.refs.result);
+		var currentIndex = result.index($row);
 
-		$('.result').removeClass('active');
-		$result.addClass('active');
-		debouncedChangePreview($result);
+		changeToItem(currentIndex);
 	},
 	render: function () {
 		var resultClass = "result ";
@@ -227,14 +232,12 @@ ResultList.Row = React.createClass({
 					<i className="material-icons">{this.props.data.icon}</i>
 				</div>
 				{this.props.data.text}
-                
-                <i className="material-icons mention">launch</i>
+        <i className="material-icons mention">launch</i>
 				</li>
 			</ul>
 		);
 	}
 });
-
 
 SearchModal.actions = SearchModalActions;
 
