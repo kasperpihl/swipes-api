@@ -3,21 +3,18 @@ var Actions = require('../../actions/modals/SearchModalActions');
 
 var SearchStore = Reflux.createStore({
 	listenables: [Actions],
+	prevValue: null,
 	cachedResponses: {},
-	init: function(){
+	init: function () {
 		this.manualLoadData();
 		this.bouncedExtSearch = _.debounce(this.externalSearch, 500);
 	},
-	resetCache: function(){
+	resetCache: function () {
 		this.cachedResponses = {};
 	},
-	defaults: {
-		realResponse: []
-	},
-	prevValue: null,
-	externalSearch: function(value, callback){
+	externalSearch: function (value, callback) {
 		swipes._client.callSwipesApi("search", {query: value}, function (res, error) {
-			if(callback){
+			if (callback) {
 				callback(res, error);
 			}
 		});
@@ -31,7 +28,20 @@ var SearchStore = Reflux.createStore({
 
 		that.prevValue = value;
 
-		this.bouncedExtSearch(value, function(res, error){
+		var cache = that.cachedResponses[value];
+
+		if (cache) {
+			var now = parseInt(new Date().getTime() / 1000, 10);
+			var cacheTs = parseInt(cache.ts, 10);
+
+			if (now - cacheTs <= 60) {
+				that.set('results', cache.results);
+
+				return;
+			}
+		}
+
+		this.bouncedExtSearch(value, function (res, error) {
 			if (res.ok === true) {
 				var results = res.results.filter(function (result) {
 					if (result.results.length > 0) {
@@ -39,7 +49,12 @@ var SearchStore = Reflux.createStore({
 					}
 				})
 
-				that.set(value, results);
+				that.cachedResponses[value] = {
+					ts: res.ts,
+					results: results
+				};
+
+				that.set('results', results);
 			} else {
 				console.log('Search error ' + res.err);
 			}

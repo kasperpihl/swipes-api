@@ -8,8 +8,6 @@ var PreviewLoader = require('../preview_loader');
 
 require('../../third-party/highlight-plugin');
 
-var searchValue = '';
-
 var changePreview = function ($resultElement) {
 	var appId = $resultElement.attr('data-appid') || null;
 	var resultId = $resultElement.attr('data-id') || null;
@@ -40,14 +38,12 @@ var SearchModal = React.createClass({
 		$(this.refs.search).focus();
 		this.didBackspace = true;
 	},
-	onSearchModalChange: function(searches){
-		console.log(searches);
-		var currentResults = searches[this.searchValue] || [];
-		if(currentResults !== this.state.results){
-			this.setState({"results": currentResults});
-		}
+	onSearchModalChange: function (state) {
+		var currentResults = state['results'] || [];
+
+		this.setState({"results": currentResults});
 	},
-	componentWillMount: function(){
+	componentWillMount: function () {
 		this.listenTo(SearchModalStore, this.onSearchModalChange, this.onSearchModalChange);
 	},
 	didBackspace: true,
