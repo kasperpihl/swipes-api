@@ -5,8 +5,8 @@ var SearchModalStore = require('../../stores/modals/SearchModalStore');
 var StateActions = require('../../actions/StateActions');
 var AppStore = require('../../stores/AppStore');
 var PreviewLoader = require('../preview_loader');
+var Highlight = require('react-highlighter');
 
-require('../../third-party/highlight-plugin');
 
 var changePreview = function ($resultElement) {
 	var appId = $resultElement.attr('data-appid') || null;
@@ -15,7 +15,7 @@ var changePreview = function ($resultElement) {
 	StateActions.loadPreview(appId, resultScope, resultId);
 }
 
-var debouncedChangePreview = _.debounce(changePreview, 300);
+var debouncedChangePreview = _.debounce(changePreview, 700);
 
 var changeToItem = function (index) {
 	var result = $('li.result');
@@ -51,8 +51,7 @@ var SearchModal = React.createClass({
 		var value = $(this.refs.search).val();
 
 		this.searchValue = value;
-		if(this.state.searchValue != value)
-			this.setState({searchValue: value});
+
 		if(e.keyCode === 13){
 			if(this.props.data && this.props.data.callback){
 				this.props.data.callback();
@@ -139,7 +138,7 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<ResultList data={{searchResults: this.state.results, searchValue: this.state.searchValue}} />
+					<ResultList data={{searchValue: this.searchValue, searchResults: this.state.results}} />
 
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
@@ -151,25 +150,16 @@ var SearchModal = React.createClass({
 });
 
 var ResultList = React.createClass({
-	componentDidUpdate: function () {
-		if(this.props.data.searchValue)
-			$("#results-list .result span").highlight(this.props.data.searchValue);
-	},
 	render: function () {
 		var searchResults = this.props.data.searchResults || [];
-		var i = 0;
-
-		var rows = searchResults.map(function (row) {
-			if(i == 0) {
-				row.is_active = true;
-			}
-
-			return <ResultList.Category key={++i} data={row} />
+		var self = this;
+		var categories = searchResults.map(function (category) {
+			return <ResultList.Category key={category.appId} data={{searchValue:self.props.data.searchValue, category: category}} />
 		});
 		
 		return (
-			<div data-value={this.props.data.searchValue} id="results-list" className="results-list">
-				{rows}
+			<div id="results-list" className="results-list">
+				{categories}
 			</div>
 		);
 	}
@@ -177,20 +167,15 @@ var ResultList = React.createClass({
 
 ResultList.Category = React.createClass({
 	render: function () {
-		var app = AppStore.get(this.props.data.appId);
+		var app = AppStore.get(this.props.data.category.appId);
 		var name = app.name || 'Unknown';
-		var list = this.props.data.results;
-		var i = 0;
+		var list = this.props.data.category.results;
 		var self = this;
 
 		var rows = list.map(function (row) {
-			if(i == 0 && self.props.data.is_active) {
-				row.is_active = true;
-			}
-
 			row.appId = app.id;
 
-			return <ResultList.Row key={++i} data={row} />
+			return <ResultList.Row key={row.id} data={{row:row, searchValue: self.props.data.searchValue}} />
 		});
 
 		return (
@@ -212,25 +197,25 @@ ResultList.Row = React.createClass({
 	},
 	render: function () {
 		var resultClass = "result ";
-
-		if(this.props.data.is_active) {
+		var row = this.props.data.row;
+		if(row.is_active) {
 			resultClass += "active";
 		}
-
 		return (
 			<ul className="results-specific-list">
 				<li
 					className={resultClass}
 					ref="result"
 					onClick={this.onClick}
-					data-appid={this.props.data.appId}
-					data-id={this.props.data.id}
-					data-scope={this.props.data.scope} >
+					data-appid={row.appId}
+					data-id={row.id}
+					data-scope={row.scope} >
 				<div className="icon">
-					<i className="material-icons">{this.props.data.icon}</i>
+					<i className="material-icons">{row.icon}</i>
 				</div>
-				{this.props.data.text}
-        <i className="material-icons mention">launch</i>
+				<Highlight search={this.props.data.searchValue || ""}>{row.text}</Highlight>
+
+        		<i className="material-icons mention">launch</i>
 				</li>
 			</ul>
 		);

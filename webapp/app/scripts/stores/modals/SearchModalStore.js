@@ -28,9 +28,9 @@ var SearchStore = Reflux.createStore({
 			this.set("results", []);
 			return;
 		}
-		console.log('cache', this.get('cache'));
-		if(this.get("cache")[value]){
-			this.set('results', this.get("cache")[value]);
+		var cache = this.get("cache")[value]
+		if(cache && cache !== this.get('results')){
+			this.set('results', cache);
 			return;
 		}
 
@@ -41,6 +41,7 @@ var SearchStore = Reflux.createStore({
 						return result;
 					}
 				})
+				console.log(results);
 				var updateObj = {};
 				updateObj[value] = results;
 				that.update("cache", updateObj);
