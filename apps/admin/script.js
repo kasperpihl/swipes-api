@@ -30,7 +30,7 @@ swipes.onReady(function(){
 			}
 		});
 	}
-	
+
 	function render(){
 		$(".app-list").html("");
 		$(".app-list.active").append("<h5>enabled</h5>");
@@ -106,7 +106,7 @@ swipes.onReady(function(){
 			}
 		});
 	}
-	
+
 	$(window).resize(function() {
 		var adminTabs = $('.nav');
 		var selectedLine = $('.selected-line');

@@ -18,17 +18,19 @@ var ChatInput = React.createClass({
 	onTextChange: function(){
 		var $textarea = $(this.refs.textarea);
 		var text = $textarea.val();
-        
-		if(text.length > 0){
-            
-            $('i.chat-input-mobile-send').addClass('active');
-            $('i.chat-input-attach-icon').addClass('active');
-            
-			if(!this.state.showHint)
+
+		if (text.length > 0) {
+      $('i.chat-input-mobile-send').addClass('active');
+      $('i.chat-input-attach-icon').addClass('active');
+
+			if (!this.state.showHint) {
 				this.setState({showHint:true});
-			if(text.slice(-1) === "@" && text.length > this.currentLength){
+			}
+
+			if (text.slice(-1) === "@" && text.length > this.currentLength) {
 				var testString = text.substr(0,text.length-1);
-				if(text.length == 1 || /\s+$/.test(testString)){
+
+				if (text.length == 1 || /\s+$/.test(testString)) {
 					console.log('trying to do search');
 
 					swipes.modal.search(function(res){
@@ -37,8 +39,6 @@ var ChatInput = React.createClass({
 						$textarea.focus();
 					});
 				}
-				
-				
 			}
 		} else if (text.length === 0) {
             $('i.chat-input-mobile-send').removeClass('active');
@@ -63,7 +63,7 @@ var ChatInput = React.createClass({
 		var $textarea = $(this.refs.textarea);
 		//console.log(e.keyCode, e.shiftKey, e.target);
 		if(e.keyCode === 27){
-			$textarea.blur();	
+			$textarea.blur();
 		}
 		if (e.keyCode === 13 && !e.shiftKey ) {
 			var message = $textarea.val();
@@ -98,10 +98,10 @@ var ChatInput = React.createClass({
 		//console.log(e.keyCode, e.shiftKey, e.target);
 		//$('.hint').toggleClass('show-hint', false);
 		this.hideHint();
-		
+
 	},
 	componentDidUpdate: function(){
-		
+
 	},
 	render: function() {
 		var hintClass = "input-container ";
@@ -109,13 +109,13 @@ var ChatInput = React.createClass({
 			hintClass += "show-hint";
 		return (
 			<div ref="input-container" className={hintClass} >
-				{/* <input type="file" id="file-input" /> 
+				{/* <input type="file" id="file-input" />
 				<div className="attach-button-container">
 				</div>*/}
                 <div className="mobile-search-at-sign">@</div>
 				<i className="material-icons chat-input-attach-icon" ref="attach-icon">attach_file</i>
 				<div className="hint">Write message</div>
-				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>  
+				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>
 				<i className="material-icons chat-input-mobile-send" onClick={this.onClick} ref="send-icon">send</i>
 			</div>
 		);
