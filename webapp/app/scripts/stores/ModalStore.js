@@ -19,7 +19,7 @@ var ModalStore = Reflux.createStore({
 		// Defaults are set above
 		var options = {};
 		if(modal === "search"){
-			options.top = "150px";
+			options.top = "15%";
 			options.centerY = false;
 		}
 		return options;

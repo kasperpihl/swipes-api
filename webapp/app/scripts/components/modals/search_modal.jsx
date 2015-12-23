@@ -14,7 +14,6 @@ var changePreview = function ($resultElement) {
 	var resultScope = $resultElement.attr('data-scope') || null;
 	StateActions.loadPreview(appId, resultScope, resultId);
 }
-
 var debouncedChangePreview = _.debounce(changePreview, 700);
 
 var changeToItem = function (index) {
