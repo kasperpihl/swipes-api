@@ -1,18 +1,15 @@
 var React = require('react');
-var stateStore = require('../stores/StateStore');
 var Reflux = require('reflux');
-var stateActions = require('../actions/StateActions');
-var modalActions = require('../actions/ModalActions');
-var eventActions = require('../actions/EventActions');
 
 var userStore = require('../stores/UserStore');
 var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
+var stateStore = require('../stores/StateStore');
 
-var AppLoader = React.createClass({
+var PreviewLoader = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	onStateChange:function(states){
-		var appForThisLoader = states["screen" + this.props.data.screen];
+		var appForThisLoader = states["preview" + this.props.data.preview];
 		if(appForThisLoader !== this.state){
 			if(!appForThisLoader)
 				appForThisLoader = {};
@@ -22,9 +19,6 @@ var AppLoader = React.createClass({
 	componentWillMount: function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
-	componentWillUnmount:function(){
-		eventActions.remove(null, null, "screen" + this.props.data.screen);
-	},
 	getInitialState:function(){
 		return {};
 	},
@@ -32,29 +26,7 @@ var AppLoader = React.createClass({
 		var data, userInfo;
 		if (message && message.command) {
 			data = message.data;
-			if (message.command === "navigation.setTitle") {
-				if (data.title) {
-					stateActions.setTopbarTitle(this.props.data.screen, data.title);
-				}
-			}
-			else if (message.command === "navigation.setBackgroundColor") {
-				if(this.props.data.screen === 1)
-					stateActions.changeBackgroundColor(data.color);
-
-			}
-			else if (message.command === "navigation.setForegroundColor") {
-				if(this.props.data.screen === 1)
-					stateActions.changeForegroundColor(data.color);
-			}
-			else if (message.command === "navigation.enableBoxShadow") {
-				if(this.props.data.screen === 1){
-					stateActions.setTopbarTitle(this.props.data.screen, data.title);
-				}
-			}
-			else if (message.command === "modal.load"){
-				modalActions.loadModal(data.modal, data.options, callback);
-			}
-			else if (message.command === "getData") {
+			if (message.command === "getData") {
 				if(data.query && data.query.table){
 					var store;
 					switch(data.query.table){
@@ -76,19 +48,9 @@ var AppLoader = React.createClass({
 					return callback(store.get());
 				}
 			}
-			else if (message.command === "listenTo") {
-				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "screen" + this.props.data.screen);
-
-				//return this.listeners[data.event] = connector;
-			}
 		}
 	},
-	receivedSocketEvent: function(e){
-		console.log("received socket event", e);
-		this.apiCon.callListener("event", e);
-	},
 	onLoad:function(){
-		eventActions.remove(null,null, "screen" + this.props.data.screen);
 		var initObj = {
 			type: "init",
 			data: {
@@ -100,11 +62,9 @@ var AppLoader = React.createClass({
 			}
 		};
 		
-		if(this.state.channel){
-			initObj.data.default_scope = this.state.channel.id;
-			initObj.data.channel_id = this.state.channel.id;
+		if(this.state.previewObj){
+			initObj.data.preview_obj = this.state.previewObj;
 		}
-
 		// Lazy instantiate
 		if(!this.apiCon){
 			this.apiCon = swipes._client.copyConnector();
@@ -118,7 +78,7 @@ var AppLoader = React.createClass({
 	},
 	render: function() {
 		if(!this.state.app) {
-			return ( <div>Loading.</div> );
+			return ( <div>Loading</div> );
 		}
 
 		return (
@@ -127,4 +87,4 @@ var AppLoader = React.createClass({
 	}
 });
 
-module.exports = AppLoader;
+module.exports = PreviewLoader;

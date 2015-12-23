@@ -210,12 +210,54 @@ var SwipesAppSDK = (function() {
 			}
 		}
 	};
-	SwipesAppSDK.prototype.modals = {
+	SwipesAppSDK.prototype.modal = {
+		_getOptions: function(options, title, message){
+			if(typeof title === 'object'){
+				options = title;
+			}
+			if(typeof title === 'string'){
+				options.title = title;
+			}
+			if(typeof message === 'string'){
+				options.message = message;
+			}
+			return options;
+		},
 		search: function(options, callback){
 			this.load("search", options, callback);
 		},
-		alert: function(options, callback){
-			this.load("alert", options, callback);
+		alert: function(title, message, callback){
+			var options = {buttons: ["Okay"]};
+			options = this._getOptions(options, title, message);
+
+			if(typeof title === 'function'){
+				callback = title;
+			}
+			if(typeof message === 'function'){
+				callback = message;
+			}
+
+			this.load("alert", options, function(res){
+				if(typeof callback === 'function')
+					callback(res);
+			})
+		},
+		confirm: function(title, message, callback){
+			var options = {buttons: ["No", "Yes"]};
+			options = this._getOptions(options, title, message);
+
+			if(typeof title === 'function'){
+				callback = title;
+			}
+			if(typeof message === 'function'){
+				callback = message;
+			}
+
+			this.load("alert", options, function(res){
+				var confirmed = (res && res.button === 2);
+				if(typeof callback === 'function')
+					callback(confirmed);
+			})
 		},
 		load: function(name, options, callback){
 			options = options || {};
@@ -253,6 +295,8 @@ var SwipesAppSDK = (function() {
 
 			if(message.command == "event"){
 				if(message.data.type == "init"){
+					if(data.data.preview_obj)
+						this.info.previewObj = data.data.preview_obj;
 					if(data.data.channel_id)
 						this.info.channelId = data.data.channel_id;
 					if(data.data.manifest.manifest_id)

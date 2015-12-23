@@ -95,9 +95,9 @@ var Modal = React.createClass({
 			Modal = this.state.modalView;
 		}
 
-		var backgroundClass = "modal-clickable-background shown ";
+		var backgroundClass = "modal-clickable-background ";
 		if(this.state.opaqueBackground)
-			backgroundClass += "dark-opaque ";
+			backgroundClass += "opaque ";
 
 		var contentClass = "modal-overlay-content shown";
 

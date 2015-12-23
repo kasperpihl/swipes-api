@@ -26,7 +26,7 @@ var SidebarStore = Reflux.createStore({
 				return true; 
 			return false; 
 		});
-		modalActions.loadModal("list", {"title": "Join a channel", "rows": filteredChannels }, function(row){
+		modalActions.loadModal("list", {"title": "Join a channel", "emptyText": "No channels to join", "rows": filteredChannels }, function(row){
 			console.log("callback row", row);
 			if(row){
 				swipes._client.callSwipesApi("channels.join", {"channel_name": row.name}, function(res,error){
@@ -43,7 +43,7 @@ var SidebarStore = Reflux.createStore({
 				return true;
 			return false; 
 		});
-		modalActions.loadModal("list", {"title": "Activate an app", "rows": filteredApps }, function(row){
+		modalActions.loadModal("list", {"title": "Activate an app", "emptyText": "No apps to activate", "rows": filteredApps }, function(row){
 			console.log("callback row", row);
 			if(row){
 				swipes._client.callSwipesApi("users.activateApp", {"app_id": row.id}, function(res,error){

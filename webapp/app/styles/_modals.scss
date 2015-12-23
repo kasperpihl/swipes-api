@@ -5,7 +5,7 @@
 	}
 	.modal-clickable-background{
 		position: fixed;
-		display: none;
+		display: black;
 		top: 0;
 		left:0;
 		width: 100%;
@@ -13,14 +13,7 @@
 		background-color: white;
 		z-index: 9000;
 		opacity: 0;
-		&.shown{
-			display: block;
-		}
 		&.opaque{
-			@include transition(opacity 0.2s ease-out);
-			opacity: 0.5;
-		}
-		&.dark-opaque {
 			@include transition(opacity 0.2s ease-out);
 			background-color: rgba($dark-background, .6);
 			opacity: 0.5;
@@ -53,7 +46,15 @@
 		}
 	}
 }
-.list-modal{
+.list-results{
+	li{
+		h3{
+			font-size:15px;
+			padding:10px;
+			padding-left: 10%;
+			font-weight: 400;
+		}
+	}
 	background-color: white;
 }
 .modal-full{
@@ -64,9 +65,48 @@
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 1px 6px rgba(0,0,0,0.23);
 	outline: none;
 	padding-top: 1px;
-	padding-bottom: 15px;
+	padding-bottom: 50px;
+	h2 {
+		margin: 25px 10%;
+		font-size: 16px;
+		color: $sidebar-dark-color;
+	}
+	.message{
+		margin: 5px 10%;
+		font-size: 14px;
+		color: $sidebar-dark-color;
+	}
 	.buttons {
-		
+		position:absolute;
+		right: 0;
+		bottom: 0;
+		height: 50px;
+		padding-right: 10px;
+		button {
+			padding: 15px;
+			position: relative;
+			width:auto;
+			outline: none;
+			color: $sidebar-dark-color;
+			border: none;
+			font-size: 15px;
+			&:hover{
+				color: rgba($sidebar-dark-color, .7);
+			}
+			&:after {
+				content: "";
+				position: absolute;
+				width: 1px;
+				height: 18px;
+				right: 0;
+				background-color: rgba($sidebar-dark-color, .5);
+			}
+		}
+		button:last-child{
+			&:after{
+				width:0;
+			}
+		}
 	}
 }
 
