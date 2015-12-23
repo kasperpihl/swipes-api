@@ -1,111 +1,23 @@
 var React = require('react');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
+var StateActions = require('../../actions/StateActions');
 var AppStore = require('../../stores/AppStore');
 require('../../third-party/highlight-plugin');
-
+var PreviewLoader = require('../preview_loader');
 var searchValue = '';
 
 var changePreview = function ($resultElement) {
+	console.log("change preview", $resultElement);
 	var appId = $resultElement.attr('data-appid') || null;
 	var resultId = $resultElement.attr('data-id') || null;
 	var resultScope = $resultElement.attr('data-scope') || null;
-	var app = AppStore.get(appId);
-
-	if (app.preview_view_url) {
-		$('#result-preview').attr('src', app.preview_view_url + '?id=' + resultId + '&scope=' + resultScope);
-	}
+	StateActions.loadPreview(appId, resultScope, resultId);
 }
 
 var debouncedChangePreview = _.debounce(changePreview, 300);
 
-var Results = React.createClass({
-	componentDidUpdate: function () {
-		$("#results-list .result span").highlight(searchValue);
-		changePreview($("#results-list .result").first());
-	},
-	render: function () {
-		var realResponse = this.props.data.realResponse;
-		var i = 0;
 
-		var rows = realResponse.map(function (row) {
-			if(i == 0) {
-				row.is_active = true;
-			}
-
-			return <Results.Wrapper key={++i} data={row} />
-		});
-
-		return (
-			<div id="results-list" className="results-list">
-				{rows}
-			</div>
-		);
-	}
-});
-
-Results.Wrapper = React.createClass({
-	render: function () {
-		var app = AppStore.get(this.props.data.appId);
-		var name = app.name || 'Unknown';
-		var list = this.props.data.results;
-		var i = 0;
-		var self = this;
-
-		var rows = list.map(function (row) {
-			if(i == 0 && self.props.data.is_active) {
-				row.is_active = true;
-			}
-
-			row.appId = app.id;
-
-			return <Results.Row key={++i} data={row} />
-		});
-
-		return (
-			<div className="result-wrapper">
-				<div className="result-title">{name}</div>
-				{rows}
-			</div>
-		);
-	}
-});
-
-Results.Row = React.createClass({
-	onClick: function() {
-		var $result = $(this.refs.result);
-
-		$('.result').removeClass('active');
-		$result.addClass('active');
-		debouncedChangePreview($result);
-	},
-	render: function () {
-		var resultClass = "result ";
-
-		if(this.props.data.is_active) {
-			resultClass += "active";
-		}
-
-		return (
-			<ul className="results-specific-list">
-				<li
-					className={resultClass}
-					ref="result"
-					onClick={this.onClick}
-					data-appid={this.props.data.appId}
-					data-id={this.props.data.id}
-					data-scope={this.props.data.scope} >
-				<div className="icon">
-					<i className="material-icons">{this.props.data.icon}</i>
-				</div>
-				{this.props.data.text}
-                
-                <i className="material-icons mention">launch</i>
-				</li>
-			</ul>
-		);
-	}
-});
 
 var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect("realResponse")],
@@ -144,37 +56,55 @@ var SearchModal = React.createClass({
 			}
 		}
 	},
+	prevItem: function(){
+		var result = $('li.result');
+
+		var current = result.filter('.active');
+		var currentIndex = result.index(current);
+		var prevResult = currentIndex - 1;
+		if(prevResult < 0)
+			prevResult = result.length - 1;
+	
+		this.changeToItem(prevResult);
+	},
+	changeToItem: function(index){
+		var result = $('li.result');
+		if(!result.length)
+			return;
+		result.filter('.active').removeClass('active');
+		console.log("change to item", index);
+		$(result[index]).addClass('active');
+		StateActions.unloadPreview();
+		debouncedChangePreview($(result[index]));
+	},
+	nextItem: function(){
+		var result = $('li.result');
+		var currentIndex = result.index(result.filter('.active'));
+		var nextResult = currentIndex + 1;
+		if(nextResult >= result.length || nextResult < 0){
+			nextResult = 0;
+		}
+		this.changeToItem(nextResult);
+
+	},
 	onKeyDown: function(e) {
 		var UP = 38;
 		var DOWN = 40;
-
-		var result = $('li.result');
-		var resultLength = result.length;
-		var current = result.filter('.active');
-		var currentIndex = result.index(current);
-		var nextResult = currentIndex + 1;
-		var prevResult = currentIndex - 1;
-
+	
 		if (e.keyCode === DOWN) {
 			e.preventDefault();
-
-			if (currentIndex < (resultLength - 1)) {
-				$(result[currentIndex]).removeClass('active');
-				$(result[nextResult]).addClass('active');
-				debouncedChangePreview($(result[nextResult]));
-			}
+			this.nextItem();
+			
 		} else if (e.keyCode === UP) {
 			e.preventDefault();
-
-			if (currentIndex >= 1) {
-				$(result[currentIndex]).removeClass('active');
-				$(result[prevResult]).addClass('active');
-				debouncedChangePreview($(result[prevResult]));
-			}
+			this.prevItem();
 		}
 	},
 	onLoadPreview: function () {
 		console.log('preview loaded!');
+	},
+	componentDidUpdate: function () {
+		this.changeToItem(0);
 	},
 	render: function () {
 		var defVal = "";
@@ -195,16 +125,104 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<Results data={this.state.realResponse} />
+					<ResultList data={this.state.realResponse} />
 
 					<div className="result-preview">
-						<iframe ref="iframe" onLoad={this.onLoadPreview} id="result-preview" className="app-frame-class" frameBorder="0"/>
+						<PreviewLoader data={{preview:1}}/>
 					</div>
 				</div>
 			</div>
 		);
 	}
 });
+
+var ResultList = React.createClass({
+	componentDidUpdate: function () {
+		$("#results-list .result span").highlight(searchValue);
+	},
+	render: function () {
+		var realResponse = this.props.data.realResponse;
+		var i = 0;
+
+		var rows = realResponse.map(function (row) {
+			if(i == 0) {
+				row.is_active = true;
+			}
+
+			return <ResultList.Category key={++i} data={row} />
+		});
+
+		return (
+			<div id="results-list" className="results-list">
+				{rows}
+			</div>
+		);
+	}
+});
+
+ResultList.Category = React.createClass({
+	render: function () {
+		var app = AppStore.get(this.props.data.appId);
+		var name = app.name || 'Unknown';
+		var list = this.props.data.results;
+		var i = 0;
+		var self = this;
+
+		var rows = list.map(function (row) {
+			if(i == 0 && self.props.data.is_active) {
+				row.is_active = true;
+			}
+
+			row.appId = app.id;
+
+			return <ResultList.Row key={++i} data={row} />
+		});
+
+		return (
+			<div className="result-wrapper">
+				<div className="result-title">{name}</div>
+				{rows}
+			</div>
+		);
+	}
+});
+
+ResultList.Row = React.createClass({
+	onClick: function() {
+		var $result = $(this.refs.result);
+
+		$('.result').removeClass('active');
+		$result.addClass('active');
+		debouncedChangePreview($result);
+	},
+	render: function () {
+		var resultClass = "result ";
+
+		if(this.props.data.is_active) {
+			resultClass += "active";
+		}
+
+		return (
+			<ul className="results-specific-list">
+				<li
+					className={resultClass}
+					ref="result"
+					onClick={this.onClick}
+					data-appid={this.props.data.appId}
+					data-id={this.props.data.id}
+					data-scope={this.props.data.scope} >
+				<div className="icon">
+					<i className="material-icons">{this.props.data.icon}</i>
+				</div>
+				{this.props.data.text}
+                
+                <i className="material-icons mention">launch</i>
+				</li>
+			</ul>
+		);
+	}
+});
+
 
 SearchModal.actions = SearchModalActions;
 

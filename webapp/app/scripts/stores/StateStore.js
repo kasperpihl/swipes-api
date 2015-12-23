@@ -7,7 +7,7 @@ var channelStore = require('../stores/ChannelStore');
 var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
-	persistNot: [ "screen1", "screen2", "screen3", "active_menu_id", "backgroundColor"],
+	persistOnly: [ "swipesToken", "sidebarClosed", "isLoggedIn", "isStarted" ],
 	onInit: function(){
 		swipes.setToken(this.get("swipesToken"));
 		socketActions.start();
@@ -21,31 +21,54 @@ var StateStore = Reflux.createStore({
 	onChangeStarted: function(isStarted){
 		this.set('isStarted', isStarted);
 	},
+	onUnloadPreview: function(){
+		console.log('unloading');
+		this.set("preview1", {});
+	},
+	onLoadPreview: function(appId, scope, id){
+
+		var app = appStore.get(appId);
+		if(app){
+			var appObj = {
+				url: app.preview_view_url + "?id=" + id,
+				app: app
+			}
+			var self = this;
+			swipes._client.callSwipesApi("apps.method", {manifest_id: app.manifest_id, method: "preview", data:{scope:scope, id:id}}, function(res, err){
+				console.log("result from preview method", res);
+				appObj.previewObj = res.res;
+				self.set("preview1", appObj);
+			});
+		}
+	},
 	onLoadApp: function(params, options){
+		options = options || {};
+
 		this.unset("backgroundColor", {trigger: false});
 		this.unset("foregroundColor", {trigger: false});
-		var app, channel, screen1 = {};
+		var index = options.index || "screen1";
+		var app, channel, appObj = {};
 		var activeMenuId;
 
 		if(params.appId){
 			app = appStore.find({"manifest_id":params.appId});
 			if(app){
-				screen1.url = app.main_app_url;
-				screen1.app = app;
+				appObj.url = app.main_app_url;
+				appObj.app = app;
 				activeMenuId = app.id;
 			}
 		}
 		if(params.groupId){
 			channel = channelStore.find({"name":params.groupId});
 			if(channel){
-				screen1.channel = channel;
+				appObj.channel = channel;
 				// Adding a get parameter to hack react, otherwise iFrame won't update when switching between channels
-				screen1.url = app.channel_view_url + "?cId=" + channel.id;
+				appObj.url = app.channel_view_url + "?cId=" + channel.id;
 				activeMenuId = channel.id;
 			}
 		}
 
-		this.set("screen1", screen1);
+		this.set(index, appObj);
 		this.set("active_menu_id", activeMenuId);
 	},
 	onLogin:function(token){
