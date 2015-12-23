@@ -15,6 +15,28 @@ var Topbar = React.createClass({
 		if(_.size(newState)){
 			this.setState(newState);
 		}
+        if (this.state.connectionStatus === 'online') {
+            $('.connection-icon').html('check');
+            $('.connection-status').css('background-color', 'green').delay(3000).queue(function(){
+                $('.app-view-controller').css('padding-top', '60px');
+                $('.connection-status').css('display', 'none').dequeue();
+            });
+        } else if (this.state.connectionStatus === 'offline') {
+             $('.connection-icon').html('close');
+            $('.connection-status').css('display', 'flex').css('background-color', 'red');
+        } else if (this.state.connectionStatus === 'connecting') {
+            $('.connection-icon').html('wifi_tethering');
+            $('.connection-status').css('background-color', 'yellow');
+        };
+        
+        // change .app-frame-class to the correct class 
+        if ($('.connection-status').css('display') == 'flex') {
+            console.log('inline');
+            $('.app-view-controller').css('padding-top', '90px');
+        } else if ($('.connection-status').css('display') == 'none') {
+            console.log('none');            
+            $('.app-view-controller').css('padding-top', '60px');
+        }
 	},
 	onStateChange: function(states){
 		var newState = {};
@@ -48,11 +70,6 @@ var Topbar = React.createClass({
 		var status = "";
 		if(this.state && this.state.connectionStatus)
 			status = this.state.connectionStatus;
-		var labelStyle = {
-			color:"white",
-			right: "0",
-			position: "absolute"
-		};
 		var styles = {};
 		if(this.state.backgroundColor)
 			styles.backgroundColor = this.state.backgroundColor;
@@ -61,16 +78,19 @@ var Topbar = React.createClass({
 		
 		return (
 			<div style={styles} className="top-bar-container">
-				<span style={labelStyle}>{status}</span>
+				<div className="connection-status">
+                <i className="material-icons connection-icon"></i>
+                {status}
+                </div>
 				<div onClick={this.onMenuButton} className="menu-icon-container">
 					<div className="menu-icon open"></div>
 				</div>
-				<div onClick={this.onDualButton} className={"icon-dual-view-container " + openOrCloseButton}>
+				{/*<div onClick={this.onDualButton} className={"icon-dual-view-container " + openOrCloseButton}>
 					<div className="icon-dual-view">
 						<div className="box"></div>
 						<div className="box"></div>
 					</div>
-				</div>
+				</div>*/}
 			</div>
 		);
 	}
