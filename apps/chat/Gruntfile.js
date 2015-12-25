@@ -64,23 +64,24 @@ module.exports = function (grunt) {
         options: {
           transform: ['reactify']
         },
+        dev: {
+          files: {
+            '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js',
+            '.tmp/scripts/preview_app.js': '<%= yeoman.app %>/scripts/preview_app.js'
+          },
+          options: {
+            browserifyOptions: {
+              debug: true,
+              extensions: '.jsx'
+            }
+          }
+        },
         dist: {
           files: {
             '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js'
           },
           options: {
             browserifyOptions: {
-              extensions: '.jsx'
-            }
-          }
-        },
-        dev: {
-          files: {
-            '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js',
-          },
-          options: {
-            browserifyOptions: {
-              debug: true,
               extensions: '.jsx'
             }
           }
