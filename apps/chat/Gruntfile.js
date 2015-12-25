@@ -1,8 +1,8 @@
 'use strict';
 
-var livereload = require('connect-livereload'),
-    path = require('path');
-  var serveStatic = require('serve-static');
+var livereload = require('connect-livereload');
+var path = require('path');
+var serveStatic = require('serve-static');
 
 module.exports = function (grunt) {
 
@@ -14,50 +14,51 @@ module.exports = function (grunt) {
 
   var yeomanConfig = {
       app: 'app',
+      tmp: '.tmp',
+      dev: 'dev',
       dist: 'dist'
   };
 
   grunt.initConfig({
       yeoman: yeomanConfig,
-      connect: {
-          options: {
-            port: 3000,
-            hostname: '0.0.0.0' //change to 'localhost' to disable outside connections
-          },
-          livereload: {
-            options: {
-              middleware: function (connect) {
-                return [
-                  livereload({port: 35729}),
-                  serveStatic(path.resolve('.tmp')),
-                  serveStatic(path.resolve(yeomanConfig.app))
-                ];
-              }
-            }
-          }
-      },
+      // connect: {
+      //     options: {
+      //       port: 5000,
+      //       hostname: '0.0.0.0' //change to 'localhost' to disable outside connections
+      //     },
+      //     livereload: {
+      //       options: {
+      //         middleware: function (connect) {
+      //           return [
+      //             livereload({port: 35730}),
+      //             //serveStatic(path.resolve('.tmp')),
+      //             serveStatic(path.resolve(yeomanConfig.dev))
+      //           ];
+      //         }
+      //       }
+      //     }
+      // },
       watch: {
         options: {
-          livereload: 35729
+          livereload: 35730,
+          livereloadOnError: false
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:dev']
+          tasks: ['browserify:dev', 'copy:dev']
         },
         styles: {
           files: ['<%= yeoman.app %>/styles/**/*.{sass,scss}'],
-          tasks: ['compass:dev', 'autoprefixer:dev']
+          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev']
         },
-        images: {
-          files: [
-            '<%= yeoman.app %>/*.html',
-            '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-          ]
+        html: {
+          files: ['<%= yeoman.app %>/*.html'],
+          tasks: ['copy:dev']
         }
       },
       clean: {
-        dist: ['.tmp', '<%= yeoman.dist %>/*'],
-        serve: '.tmp'
+        dev: ['.tmp', '<%= yeoman.dev %>/*'],
+        dist: ['.tmp', '<%= yeoman.dist %>/*']
       },
       browserify: {
         options: {
@@ -65,7 +66,7 @@ module.exports = function (grunt) {
         },
         dist: {
           files: {
-            '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js'
+            '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js'
           },
           options: {
             browserifyOptions: {
@@ -75,7 +76,7 @@ module.exports = function (grunt) {
         },
         dev: {
           files: {
-            '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js',
+            '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js',
           },
           options: {
             browserifyOptions: {
@@ -165,12 +166,25 @@ module.exports = function (grunt) {
           src: '.tmp/concat/styles/*.css'
         }
       },
-      open: {
-          server: {
-              path: 'http://localhost:<%= connect.options.port %>'
-          }
-      },
       copy: {
+        dev: {
+          files: [{
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.dev %>',
+            src: [
+              '*.html',
+              '*.{ico,txt}',
+              'images/{,*/}*.{webp,gif}'
+            ]
+          }, {
+            expand: true,
+            cwd: '<%= yeoman.tmp %>',
+            dest: '<%= yeoman.dev %>',
+            src: ['**']
+          }]
+        },
         dist: {
           files: [{
             expand: true,
@@ -195,30 +209,30 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('serve', [
-    'clean:serve',
+    'clean:dev',
     'browserify:dev',
     'compass:dev',
     'autoprefixer:dev',
-    'connect:livereload',
-    'open',
+    'copy:dev',
+    //'connect:livereload',
     'watch'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'browserify:dist',
-    'compass:dist',
-    'useminPrepare',
-    'concat',
-    'autoprefixer:dist',
-    'imagemin',
-    'cssmin',
-    'uglify',
-    'copy',
-    'filerev',
-    'usemin'
-    //'htmlmin'
-  ]);
+  // grunt.registerTask('build', [
+  //   'clean:dist',
+  //   'browserify:dist',
+  //   'compass:dist',
+  //   'useminPrepare',
+  //   'concat',
+  //   'autoprefixer:dist',
+  //   'imagemin:dist',
+  //   'cssmin',
+  //   'uglify',
+  //   'copy:dist',
+  //   'filerev',
+  //   'usemin'
+  //   //'htmlmin'
+  // ]);
 
-  grunt.registerTask('default', 'build');
+  grunt.registerTask('default', 'serve');
 };

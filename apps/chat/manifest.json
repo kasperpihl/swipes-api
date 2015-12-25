@@ -5,10 +5,10 @@
 	"version": "0.1",
 	"description": "The Chat App For Swipes",
 	"channel_view": {
-		"index": "dist/index.html"
+		"index": "dev/index.html"
 	},
 	"preview_view": {
-		"index": "app/preview.html"
+		"index": "dev/preview.html"
 	},
 	"tables":[
 		{
