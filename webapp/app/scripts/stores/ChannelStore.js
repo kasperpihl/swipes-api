@@ -27,7 +27,7 @@ var ChannelStore = Reflux.createStore({
 		})
 		return {
 			appId: "ACHANNEL",
-			name: "Channels",
+			name: "Groups",
 			results: results
 		};
 	}

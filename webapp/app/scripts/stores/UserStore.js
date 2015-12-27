@@ -22,7 +22,7 @@ var UserStore = Reflux.createStore({
 		})
 		return {
 			appId: "AUSER",
-			name: "Users",
+			name: "People",
 			results: results
 		};
 	}
