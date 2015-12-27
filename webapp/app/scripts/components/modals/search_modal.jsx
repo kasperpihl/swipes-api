@@ -32,20 +32,19 @@ var changeToItem = function (index) {
 };
 
 var SearchModal = React.createClass({
-	mixins: [Reflux.ListenerMixin],
+	mixins: [SearchModalStore.connect()],
 	componentDidMount: function(){
 		$(this.refs.search).focus();
 		SearchModalActions.resetCache();
 		this.didBackspace = true;
 	},
-	onSearchModalChange: function (state) {
-		var currentResults = state['results'] || [];
-		this.setState({"results": currentResults});
+	clickedRow: function(row){
+		var result = $('li.result');
+		var $row = $(row.refs.result);
+		var currentIndex = result.index($row);
+
+		changeToItem(currentIndex);
 	},
-	componentWillMount: function () {
-		this.listenTo(SearchModalStore, this.onSearchModalChange, this.onSearchModalChange);
-	},
-	didBackspace: true,
 	onSearch: function (e) {
 		var value = $(this.refs.search).val();
 
@@ -122,6 +121,13 @@ var SearchModal = React.createClass({
 			defVal = this.props.data.options.prefix;
 		}
 
+		var searchResults = this.state.results || [];
+		console.log(this.state.results);
+		var self = this;
+		var categories = searchResults.map(function (category) {
+			return <ResultList key={category.appId} data={{searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />
+		});
+
 		return (
 			<div className="search-modal" onKeyDown={this.onKeyDown}>
 				<div className="search-input-wrapper">
@@ -134,8 +140,9 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<ResultList data={{searchValue: this.searchValue, searchResults: this.state.results}} />
-
+					<div id="results-list" className="results-list">
+						{categories}
+					</div>
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
 					</div>
@@ -147,22 +154,6 @@ var SearchModal = React.createClass({
 
 var ResultList = React.createClass({
 	render: function () {
-		var searchResults = this.props.data.searchResults || [];
-		var self = this;
-		var categories = searchResults.map(function (category) {
-			return <ResultList.Category key={category.appId} data={{searchValue:self.props.data.searchValue, category: category}} />
-		});
-		
-		return (
-			<div id="results-list" className="results-list">
-				{categories}
-			</div>
-		);
-	}
-});
-
-ResultList.Category = React.createClass({
-	render: function () {
 
 		var name = this.props.data.category.name || 'Unknown';
 		var list = this.props.data.category.results;
@@ -171,13 +162,15 @@ ResultList.Category = React.createClass({
 		var rows = list.map(function (row) {
 			row.appId = self.props.data.category.appId;
 
-			return <ResultList.Row key={row.id} data={{row:row, searchValue: self.props.data.searchValue}} />
+			return <ResultList.Row key={row.id} data={{row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
 		});
 
 		return (
 			<div className="result-wrapper">
 				<div className="result-title">{name}</div>
-				{rows}
+				<ul className="results-specific-list">
+					{rows}
+				</ul>
 			</div>
 		);
 	}
@@ -185,11 +178,7 @@ ResultList.Category = React.createClass({
 
 ResultList.Row = React.createClass({
 	onClick: function() {
-		var result = $('li.result');
-		var $row = $(this.refs.result);
-		var currentIndex = result.index($row);
-
-		changeToItem(currentIndex);
+		this.props.data.onClickedRow(this);
 	},
 	render: function () {
 		var resultClass = "result ";
@@ -197,23 +186,22 @@ ResultList.Row = React.createClass({
 		if(row.is_active) {
 			resultClass += "active";
 		}
+
+		var appId = row.appId || "";
+		var id = row.id || "";
+		var scope = row.scope || "";
+		var icon = row.icon || "";
+
 		return (
-			<ul className="results-specific-list">
-				<li
-					className={resultClass}
-					ref="result"
-					onClick={this.onClick}
-					data-appid={row.appId}
-					data-id={row.id}
-					data-scope={row.scope} >
+			<li className={resultClass} ref="result" onClick={this.onClick} data-appid={appId} data-id={id} data-scope={scope}>
 				<div className="icon">
-					<i className="material-icons">{row.icon}</i>
+					<i className="material-icons">{icon}</i>
 				</div>
 				<Highlight search={this.props.data.searchValue || ""}>{row.text}</Highlight>
 
         		<i className="material-icons mention">launch</i>
-				</li>
-			</ul>
+			</li>
+			
 		);
 	}
 });
