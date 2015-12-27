@@ -7,43 +7,41 @@ var StateActions = require('../../actions/StateActions');
 var PreviewLoader = require('../preview_loader');
 var Highlight = require('react-highlighter');
 
-
-var changePreview = function ($resultElement) {
-	var appId = $resultElement.attr('data-appid') || null;
-	var resultId = $resultElement.attr('data-id') || null;
-	var resultScope = $resultElement.attr('data-scope') || null;
-	StateActions.loadPreview(appId, resultScope, resultId);
-}
-var debouncedChangePreview = _.debounce(changePreview, 700);
-
-var changeToItem = function (index) {
-	var result = $('li.result');
-
-	StateActions.unloadPreview();
-
-	if(!result.length) {
-		return;
-	}
-
-	result.filter('.active').removeClass('active');
-	$(result[index]).addClass('active');
-
-	debouncedChangePreview($(result[index]));
-};
-
 var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect()],
 	componentDidMount: function(){
 		$(this.refs.search).focus();
 		SearchModalActions.resetCache();
 		this.didBackspace = true;
+		this.debouncedChangePreview = _.debounce(this.changePreview, 700);
+
 	},
 	clickedRow: function(row){
 		var result = $('li.result');
 		var $row = $(row.refs.result);
 		var currentIndex = result.index($row);
 
-		changeToItem(currentIndex);
+		this.changeToItemWithIndex(currentIndex);
+	},
+	changePreview: function($resultElement){
+		var appId = $resultElement.attr('data-appid') || null;
+		var resultId = $resultElement.attr('data-id') || null;
+		var resultScope = $resultElement.attr('data-scope') || null;
+		StateActions.loadPreview(appId, resultScope, resultId);
+	},
+	changeToItemWithIndex: function(index){
+		var result = $('li.result');
+
+		StateActions.unloadPreview();
+
+		if(!result.length) {
+			return;
+		}
+
+		result.filter('.active').removeClass('active');
+		$(result[index]).addClass('active');
+
+		this.debouncedChangePreview($(result[index]));
 	},
 	onSearch: function (e) {
 		var value = $(this.refs.search).val();
@@ -82,7 +80,7 @@ var SearchModal = React.createClass({
 			prevResult = result.length - 1;
 		}
 
-		changeToItem(prevResult);
+		this.changeToItemWithIndex(prevResult);
 	},
 	nextItem: function(){
 		var result = $('li.result');
@@ -93,7 +91,7 @@ var SearchModal = React.createClass({
 			nextResult = 0;
 		}
 
-		changeToItem(nextResult);
+		this.changeToItemWithIndex(nextResult);
 	},
 	onKeyDown: function(e) {
 		var UP = 38;
@@ -112,7 +110,7 @@ var SearchModal = React.createClass({
 		return {};
 	},
 	componentDidUpdate: function () {
-		changeToItem(0);
+		this.changeToItemWithIndex(0);
 	},
 	render: function () {
 		var defVal = "";
