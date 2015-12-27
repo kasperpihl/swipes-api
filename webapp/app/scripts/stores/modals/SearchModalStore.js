@@ -11,9 +11,9 @@ var SearchStore = Reflux.createStore({
 	init: function () {
 		this.manualLoadData();
 		this.set('cache', {});
-		this.bouncedExtSearch = _.debounce(this.externalSearch, 500);
+		this.bouncedExtSearch = _.debounce(this.doExternalSearch, 500);
 	},
-	externalSearch: function (value, callback) {
+	doExternalSearch: function (value, callback) {
 		swipes._client.callSwipesApi("search", {query: value}, function (res, error) {
 			if (callback) {
 				callback(res, error);
@@ -21,7 +21,11 @@ var SearchStore = Reflux.createStore({
 		});
 	},
 	onResetCache: function(){
+		this.set('state', 'local');
 		this.set('cache', {}, {trigger: false});
+	},
+	defaults: {
+		state: 'local'
 	},
 	onSearch: function (value) {
 
@@ -31,14 +35,8 @@ var SearchStore = Reflux.createStore({
 			return;
 		this.searchValue = value;
 		if (value.length === 0) {
-			this.set("results", []);
-			return;
-		}
-		
-
-		var cache = this.get("cache")[value]
-		if(cache && cache !== this.get('results')){
-			this.set('results', cache);
+			this.set('state', 'local', {trigger: false});
+			this.set('results', []);
 			return;
 		}
 		var localResults = [userStore.search(value), appStore.search(value), channelStore.search(value)];
@@ -47,11 +45,23 @@ var SearchStore = Reflux.createStore({
 				return locRes;
 			}
 		})
-
+		this.set('state', 'local', {trigger: false});
 		this.set('results', localResults);
-		return;
-		// K_TODO - fix the external results and the UX
-		console.log("localResults", localResults);
+		
+	},
+	onExternalSearch: function(value){
+		this.searchValue = value;
+		
+		var cache = this.get('cache')[value]
+		if(cache && cache !== this.get('results')){
+			this.set('state', 'external', {trigger: false});
+			this.set('results', cache);
+			return;
+		}
+		this.set('state', 'searching', {trigger: false});
+		this.set('results', []);
+
+		var that = this;
 		this.bouncedExtSearch(value, function (res, error) {
 			if (res.ok === true) {
 				var results = res.results.filter(function (result) {
@@ -64,6 +74,7 @@ var SearchStore = Reflux.createStore({
 				updateObj[value] = results;
 				that.update("cache", updateObj, {trigger: false});
 				if(value === that.searchValue){
+					that.set('state', 'external', {trigger: false});
 					that.set('results', results);
 				}
 			} else {
