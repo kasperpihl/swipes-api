@@ -8,15 +8,18 @@ var stateStore = require('../stores/StateStore');
 
 var PreviewLoader = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
-	onStateChange:function(states){
+	onStateChange: function(states) {
 		var appForThisLoader = states["preview" + this.props.data.preview];
-		if(appForThisLoader !== this.state){
-			if(!appForThisLoader)
+
+		if (appForThisLoader !== this.state) {
+			if (!appForThisLoader) {
 				appForThisLoader = {};
+			}
+
 			this.replaceState(appForThisLoader);
 		}
 	},
-	componentWillMount: function(){
+	componentWillMount: function () {
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
 	getInitialState:function(){
@@ -61,7 +64,7 @@ var PreviewLoader = React.createClass({
 				default_scope: this.state.app.id
 			}
 		};
-		
+
 		if(this.state.previewObj){
 			initObj.data.preview_obj = this.state.previewObj;
 		}

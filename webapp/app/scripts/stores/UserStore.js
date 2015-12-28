@@ -9,7 +9,22 @@ var UserStore = Reflux.createStore({
 		return this.find({me: true});
 	},
 	search:function(string, options){
-		return [];
+		var results = [];
+		this.each(function(user){
+			var searchResult = {
+				appId: "AUSER",
+				text: user.name,
+				id: user.id
+			};
+			if(user.name.toLowerCase().startsWith(string.toLowerCase())){
+				results.push(searchResult);
+			}
+		})
+		return {
+			appId: "AUSER",
+			name: "People",
+			results: results
+		};
 	}
 });
 

@@ -31,7 +31,6 @@ var Modal = React.createClass({
 		if(this.state.centerY){
 			marginTop = -contentHeight / 2;
 		}
-
 		var cssProps = {
 			"bottom": "auto",
 			"right": "auto",
@@ -104,8 +103,7 @@ var Modal = React.createClass({
 		return (
 			<div ref="container" className={containerClass}>
 				<div ref="background" onClick={this.onClickedBackground} className={backgroundClass}></div>
-                {/* Had to make modal-overlay-content clickable because it's 100% w&h for responsive reasons */}
-				<div ref="content" className={contentClass} onClick={this.onClickedBackground} >
+				<div ref="content" className={contentClass} >
 					<Modal data={{options: this.state.modalData, callback: this.onModalCallback}}/>
 				</div>
 			</div>

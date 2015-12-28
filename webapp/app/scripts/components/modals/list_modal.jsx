@@ -23,7 +23,7 @@ var ListModal = React.createClass({
 
 		var emptyText = options.emptyText || this.defaults.emptyText;
 		if(!rows.length){
-			rows.push(<li className="empty-text"><h3>{emptyText}</h3></li>);
+			rows.push(<li key="empty-text" className="empty-text"><h3>{emptyText}</h3></li>);
 		}
 		var title = options.title || this.defaults.title;
 

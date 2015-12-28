@@ -3,132 +3,179 @@ var Reflux = require('reflux');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
 var StateActions = require('../../actions/StateActions');
-var AppStore = require('../../stores/AppStore');
-require('../../third-party/highlight-plugin');
+
 var PreviewLoader = require('../preview_loader');
-var searchValue = '';
-
-var changePreview = function ($resultElement) {
-	var appId = $resultElement.attr('data-appid') || null;
-	var resultId = $resultElement.attr('data-id') || null;
-	var resultScope = $resultElement.attr('data-scope') || null;
-	StateActions.loadPreview(appId, resultScope, resultId);
-}
-
-var debouncedChangePreview = _.debounce(changePreview, 300);
-
-
+var Highlight = require('react-highlighter');
 
 var SearchModal = React.createClass({
-	mixins: [Reflux.ListenerMixin],
+	mixins: [SearchModalStore.connect()],
 	componentDidMount: function(){
 		$(this.refs.search).focus();
-		this.didBackspace = true;
+		SearchModalActions.resetCache();
+		this.didEnterText = false;
+		this.currentIndex = 0;
+		this.resultsByIndex = [];
+		this.debouncedChangePreview = _.debounce(this.changePreview, 700);
+
 	},
-	onSearchModalChange: function(searches){
-		console.log(searches);
-		var currentResults = searches[this.searchValue] || [];
-		if(currentResults !== this.state.results){
-			this.setState({"results": currentResults});
+	clickedRow: function(row){
+		this.selectRowWithIndex(row.props.data.index);
+	},
+	selectRowWithIndex: function(index){
+		var row = this.resultsByIndex[index];
+		if(!row)
+			return;
+		console.log("select row", index, row);
+		if(row.appId == 'ACORE'){
+			if(row.id == 'search-all'){
+				SearchModalActions.externalSearch(this.searchValue);
+			}
+		}
+		else{
+			if(this.props.data && this.props.data.callback){
+				this.props.data.callback(row.text + " ");
+			}
 		}
 	},
-	componentWillMount: function(){
-		this.listenTo(SearchModalStore, this.onSearchModalChange, this.onSearchModalChange);
+	changePreview: function($resultElement){
+		/*var appId = $resultElement.attr('data-appid') || null;
+		var resultId = $resultElement.attr('data-id') || null;
+		var resultScope = $resultElement.attr('data-scope') || null;
+		StateActions.loadPreview(appId, resultScope, resultId);*/
 	},
-	didBackspace: true,
+	changeToItemWithIndex: function(index){
+		if(!this.resultsByIndex.length) {
+			return;
+		}
+
+		// Jump to top or bottom on overflow
+		if (index < 0) {
+			index = this.resultsByIndex.length - 1;
+		}
+		if (index >= this.resultsByIndex.length) {
+			index = 0;
+		}
+		this.currentIndex = index;
+		
+
+		StateActions.unloadPreview();
+		
+		$(this.refs["results-list"]).find('.active').removeClass('active');
+		var $el = $(this.refs["results-list"]).find('[data-index=' + index + ']')
+
+		$el.addClass('active');
+	},
 	onSearch: function (e) {
+		if(this.state.state === 'searching'){
+			e.preventDefault();
+			return;
+		}
 		var value = $(this.refs.search).val();
 
 		this.searchValue = value;
-
-		if(e.keyCode === 13){
+		if(value.length > 0)
+			this.didEnterText = true;
+		var BACKSPACE = 8, ESC = 27, ENTER = 13;
+		if(e.keyCode === ENTER && !e.shiftKey){
+			return this.selectRowWithIndex(this.currentIndex);
+		}
+		if((e.keyCode === BACKSPACE && !value.length && !this.didEnterText) || e.keyCode === ESC){
 			if(this.props.data && this.props.data.callback){
-				this.props.data.callback();
+				return this.props.data.callback($(this.refs.search).val());
 			}
 		}
-		else if((e.keyCode === 8 && !value.length) || e.keyCode === 27){
-			if(e.keyCode === 8 && !this.didBackspace){
-				this.didBackspace = true;
-				return;
-			}
-			if(this.props.data && this.props.data.callback){
-				this.props.data.callback($(this.refs.search).val());
-			}
+		SearchModalActions.search(value);
+
+		if (value.length > 0) {
+			this.didBackspace = false;
+			$('.search-results-wrapper').addClass('open');
+		} else {
+			$('.search-results-wrapper').removeClass('open');
 		}
-		else {
-			SearchModalActions.search(value);
-
-			if (value.length > 0) {
-				this.didBackspace = false;
-				$('.search-results-wrapper').addClass('open');
-			} else {
-				$('.search-results-wrapper').removeClass('open');
-			}
-		}
-	},
-	prevItem: function(){
-		var result = $('li.result');
-
-		var current = result.filter('.active');
-		var currentIndex = result.index(current);
-		var prevResult = currentIndex - 1;
-		if(prevResult < 0)
-			prevResult = result.length - 1;
-	
-		this.changeToItem(prevResult);
-	},
-	changeToItem: function(index){
-		var result = $('li.result');
-		StateActions.unloadPreview();
-		
-		if(!result.length)
-			return;
-
-		result.filter('.active').removeClass('active');
-		$(result[index]).addClass('active');
-		
-		debouncedChangePreview($(result[index]));
-	},
-	nextItem: function(){
-		var result = $('li.result');
-		var currentIndex = result.index(result.filter('.active'));
-		var nextResult = currentIndex + 1;
-		if(nextResult >= result.length || nextResult < 0){
-			nextResult = 0;
-		}
-		this.changeToItem(nextResult);
-
 	},
 	onKeyDown: function(e) {
-		var UP = 38;
-		var DOWN = 40;
-	
-		if (e.keyCode === DOWN) {
+		if(this.state.state === 'searching'){
 			e.preventDefault();
-			this.nextItem();
-			
-		} else if (e.keyCode === UP) {
+			return;
+		}
+
+		var UP = 38, DOWN = 40, TAB = 9, ENTER = 13;
+		if(e.keyCode === ENTER && e.shiftKey){
+			return this.selectRowWithIndex(this.currentIndex);
+		}
+		else if (e.keyCode === UP || (e.keyCode === TAB && e.shiftKey)) {
 			e.preventDefault();
-			this.prevItem();
+			this.changeToItemWithIndex(this.currentIndex - 1);
+		}
+		else if (e.keyCode === DOWN || e.keyCode === TAB) {
+			e.preventDefault();
+			this.changeToItemWithIndex(this.currentIndex + 1);
+
 		}
 	},
 	getInitialState: function(){
 		return {};
 	},
-	componentDidUpdate: function () {
-		this.changeToItem(0);
+	componentDidUpdate:function(prevProps, prevState){
+		/* 
+		Whenever an update was run
+		If new results, set to 0, but if local results, jump to 1 (this is to skip the action to search deep)
+		*/
+		var newIndex = this.currentIndex;
+		if(this.state.results != prevState.results)
+			newIndex = 0;
+		if(this.state.state == 'local')
+			newIndex = 1;
+		this.changeToItemWithIndex(newIndex);
+		$(this.refs.search).focus();
+	},
+	onBlur:function(){
+		$(this.refs.search).focus();
 	},
 	render: function () {
-		var defVal = "";
+		this.resultsByIndex = [];
+		var preLabel = '', postLabel = ''; 
+		var searchResults = this.state.results || [];
+		var self = this;
+		var counter = 0;
+		var categories = [];
+		function addCategory(category){
+			var dCounter = counter;
+			counter += category.results.length;
+			self.resultsByIndex = self.resultsByIndex.concat(category.results);
+			
+			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
+		}
 
-		if(this.props.data.options && typeof this.props.data.options.prefix === 'string') {
-			defVal = this.props.data.options.prefix;
+
+		if(this.searchValue && this.searchValue.length > 0){
+			if(this.state.state == 'local'){
+				var category = { 
+					appId: 'APREACTIONS',
+					results: [{
+						appId: 'ACORE',
+						id: 'search-all',
+						disableHighlight: true,
+						text: 'Search all apps for: ' + this.searchValue
+					}] 
+				};
+				addCategory(category);
+			}
+
+			if(this.state.state == 'searching'){
+				preLabel = <div>Searching...</div>;
+			}
+			else if(!searchResults.length){
+				preLabel = <div>No results found</div>;
+			}
+
+			_.each(searchResults, addCategory);
 		}
 
 		return (
-			<div className="search-modal" onKeyDown={this.onKeyDown}>
+			<div className="search-modal">
 				<div className="search-input-wrapper">
-					<input type="text" placeholder="Search" defaultValue={defVal} id="main-search" ref="search" onKeyUp={this.onSearch} />
+					<input type="text" placeholder="Search" defaultValue="" id="main-search" onKeyDown={this.onKeyDown} onBlur={this.onBlur} ref="search" onKeyUp={this.onSearch} />
 					<label htmlFor="main-search">
 						<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 							<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -137,8 +184,11 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<ResultList data={{searchResults: this.state.results, searchValue: this.searchValue}} />
-
+					<div id="results-list" className="results-list" ref="results-list">
+						{preLabel}
+						{categories}
+						{postLabel}
+					</div>
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
 					</div>
@@ -149,51 +199,25 @@ var SearchModal = React.createClass({
 });
 
 var ResultList = React.createClass({
-	componentDidUpdate: function () {
-		$("#results-list .result span").highlight(this.props.data.searchValue);
-	},
 	render: function () {
-		var searchResults = this.props.data.searchResults || [];
-		var i = 0;
 
-		var rows = searchResults.map(function (row) {
-			if(i == 0) {
-				row.is_active = true;
-			}
-
-			return <ResultList.Category key={++i} data={row} />
-		});
-
-		return (
-			<div id="results-list" className="results-list">
-				{rows}
-			</div>
-		);
-	}
-});
-
-ResultList.Category = React.createClass({
-	render: function () {
-		var app = AppStore.get(this.props.data.appId);
-		var name = app.name || 'Unknown';
-		var list = this.props.data.results;
-		var i = 0;
+		var nameHtml = '';
+		if(this.props.data.category.name)
+			nameHtml = <div className="result-title">{this.props.data.category.name}</div>
+		var list = this.props.data.category.results;
 		var self = this;
-
+		var counter = this.props.data.startCounter;
+		
 		var rows = list.map(function (row) {
-			if(i == 0 && self.props.data.is_active) {
-				row.is_active = true;
-			}
-
-			row.appId = app.id;
-
-			return <ResultList.Row key={++i} data={row} />
+			return <ResultList.Row key={row.id} data={{index: counter++, row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
 		});
 
 		return (
 			<div className="result-wrapper">
-				<div className="result-title">{name}</div>
-				{rows}
+				{nameHtml}
+				<ul className="results-specific-list">
+					{rows}
+				</ul>
 			</div>
 		);
 	}
@@ -201,40 +225,32 @@ ResultList.Category = React.createClass({
 
 ResultList.Row = React.createClass({
 	onClick: function() {
-		var $result = $(this.refs.result);
-
-		$('.result').removeClass('active');
-		$result.addClass('active');
-		debouncedChangePreview($result);
+		this.props.data.onClickedRow(this);
 	},
 	render: function () {
-		var resultClass = "result ";
+		var row = this.props.data.row;
 
-		if(this.props.data.is_active) {
-			resultClass += "active";
-		}
+		var icon = row.icon || "";
+		var searchValue = this.props.data.searchValue || "";
+		// If disableHighlight is enabled for row, then ignore searchstring to not highlight
+		if(row.disableHighlight)
+			searchValue = "";
 
+		var index = this.props.data.index || 0;
+		
 		return (
-			<ul className="results-specific-list">
-				<li
-					className={resultClass}
-					ref="result"
-					onClick={this.onClick}
-					data-appid={this.props.data.appId}
-					data-id={this.props.data.id}
-					data-scope={this.props.data.scope} >
+			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
-					<i className="material-icons">{this.props.data.icon}</i>
+					<i className="material-icons">{icon}</i>
 				</div>
-				{this.props.data.text}
-                
-                <i className="material-icons mention">launch</i>
-				</li>
-			</ul>
+				<Highlight search={searchValue}>{row.text}</Highlight>
+
+        		{/*<i className="material-icons mention">launch</i>*/}
+			</li>
+			
 		);
 	}
 });
-
 
 SearchModal.actions = SearchModalActions;
 

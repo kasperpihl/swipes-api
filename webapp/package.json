@@ -9,6 +9,7 @@
     "modernizr": "~3.2.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-highlighter": "^0.2.2",
     "react-router": "~0.13.2",
     "reflux": "~0.3.0"
   },

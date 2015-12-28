@@ -14,7 +14,22 @@ var ChannelStore = Reflux.createStore({
 		return data;
 	},
 	search:function(string, options){
-		return [];
+		var results = [];
+		this.each(function(channel){
+			var searchResult = {
+				appId: "ACHANNEL",
+				text: channel.name,
+				id: channel.id
+			};
+			if(channel.type != 'direct' && channel.name.toLowerCase().startsWith(string.toLowerCase())){
+				results.push(searchResult);
+			}
+		})
+		return {
+			appId: "ACHANNEL",
+			name: "Groups",
+			results: results
+		};
 	}
 });
 

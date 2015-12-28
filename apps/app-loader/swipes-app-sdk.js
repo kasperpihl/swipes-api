@@ -289,7 +289,7 @@ var SwipesAppSDK = (function() {
 	}
 
 	// API for handling calls from main app
-	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function(connector, message, callback){
+	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function (connector, message, callback) {
 		if(message){
 			var data = message.data;
 

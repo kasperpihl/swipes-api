@@ -74,7 +74,7 @@ Reflux.StoreMethods.get = function(id){
 	
 };
 Reflux.StoreMethods._reset = function(){
-	this._dataById = this.defaults || {};
+	this._dataById = _.defaults({}, this.defaults);
 	if(this.localStorage)
 		localStorage.removeItem(this.localStorage);
 };
@@ -193,6 +193,7 @@ Reflux.StoreMethods._loadData = function(){
 	var dataFromStorage = this._dataById;
 	if(!dataFromStorage)
 		dataFromStorage = {};
+
 	if(this.localStorage && _.size(dataFromStorage) == 0){
 		dataFromStorage = localStorage.getItem(this.localStorage);
 		if(dataFromStorage)
@@ -200,14 +201,7 @@ Reflux.StoreMethods._loadData = function(){
 		else
 			dataFromStorage = {};
 	}
-	// Check for defaults, and only set them if no data was present on their place
-	if(this.defaults && typeof this.defaults === "object"){
-		for(var key in this.defaults){
-			if(this.defaults.hasOwnProperty(key) && typeof dataFromStorage[key] === 'undefined')
-				dataFromStorage[key] = this.defaults[key];
-		}
-	}
-	this._dataById = dataFromStorage;
+	this._dataById = _.defaults(dataFromStorage,  this.defaults);
 	
 
 	if(this.sort){

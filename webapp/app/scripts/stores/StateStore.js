@@ -8,48 +8,49 @@ var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
 	persistOnly: [ "swipesToken", "sidebarClosed", "isLoggedIn", "isStarted" ],
-	onInit: function(){
+	onInit: function() {
 		swipes.setToken(this.get("swipesToken"));
 		socketActions.start();
 	},
-	onChangeBackgroundColor:function(color){
+	onChangeBackgroundColor: function (color) {
 		this.set("backgroundColor", color)
 	},
-	onToggleSidebar: function(){
+	onToggleSidebar: function () {
 		this.set("sidebarClosed", !this.get("sidebarClosed"));
 	},
-	onChangeStarted: function(isStarted){
+	onChangeStarted: function (isStarted) {
 		this.set('isStarted', isStarted);
 	},
-	onUnloadPreview: function(){
+	onUnloadPreview: function () {
 		this.set("preview1", {});
 	},
 	onLoadPreview: function(appId, scope, id){
-
 		var app = appStore.get(appId);
-		if(app){
+
+		if (app) {
 			var appObj = {
 				url: app.preview_view_url + "?id=" + id,
 				app: app
-			}
+			};
 			var self = this;
-			swipes._client.callSwipesApi("apps.method", {manifest_id: app.manifest_id, method: "preview", data:{scope:scope, id:id}}, function(res, err){
+
+			swipes._client.callSwipesApi("apps.method", {manifest_id: app.manifest_id, method: "preview", data: {scope: scope, id: id}}, function (res, err) {
 				if(res && res.ok){
 					appObj.previewObj = res.res;
 					self.set("preview1", appObj);
 				}
-				
 			});
 		}
 	},
 	onLoadApp: function(params, options){
 		options = options || {};
 
-		this.unset("backgroundColor", {trigger: false});
-		this.unset("foregroundColor", {trigger: false});
 		var index = options.index || "screen1";
 		var app, channel, appObj = {};
 		var activeMenuId;
+
+		this.unset("backgroundColor", {trigger: false});
+		this.unset("foregroundColor", {trigger: false});
 
 		if(params.appId){
 			app = appStore.find({"manifest_id":params.appId});

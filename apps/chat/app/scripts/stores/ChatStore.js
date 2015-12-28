@@ -12,7 +12,7 @@ var ChatStore = Reflux.createStore({
 		console.log("sending message", message);
 		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
 
-		this.sortMessages();
+		//this.sortMessages();
 	},
 	sortMessages: function(){
 		var self = this;
