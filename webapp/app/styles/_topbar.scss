@@ -10,7 +10,7 @@
     .connection-status {
         width: 100%;
         height: 30px;
-        text-align: center;
+        //text-align: center;
         position: absolute;
         left: 0;
         top: 60px;
@@ -19,6 +19,59 @@
         display: none;
         align-items: center;
         justify-content: center;
+        
+        &.online {
+            
+        }
+        
+        &.offline {
+            
+        }
+        
+        .connecting {
+            
+        }
+        
+        .loader {
+            clip: rect(0, 20px, 20px, 10px); 
+            height: 20px;
+            width: 20px;
+            position: absolute;
+            left: calc(50% - 75px);
+            top: calc(50% - 10px);
+            margin-right: 50px;
+            animation: loader-one 1.05s linear infinite;
+            
+            &:after {
+                clip: rect(0, 20px, 20px, 10px);
+                content:'';
+                border-radius: 50%; 
+                height: 20px;
+                width: 20px;
+                position: absolute; 
+                animation: loader-two 1.05s linear infinite;
+            }
+            
+            @keyframes loader-one {
+                0% {
+                    transform: rotate(0deg)
+                }
+                100% { 
+                    transform: rotate(220deg)
+                }
+            }
+
+            @keyframes loader-two {
+                0% {
+                    box-shadow: inset #2c3e50 0 0 0 2px;
+                    transform: rotate(-140deg);
+                }
+                100% {
+                    box-shadow: inset #2c3e50 0 0 0 2px;
+                    transform: rotate(140deg);
+                }
+            }
+        } 
         
         span {
             line-height: 30px;

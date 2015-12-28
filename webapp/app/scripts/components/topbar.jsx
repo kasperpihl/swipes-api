@@ -16,16 +16,19 @@ var Topbar = React.createClass({
 			this.setState(newState);
 		}
         if (this.state.connectionStatus === 'online') {
+            $('.loader').css('display', 'none');
             $('.connection-icon').html('check');
             $('.connection-status').css('background-color', 'green').delay(3000).queue(function(){
                 $('.app-view-controller').css('padding-top', '60px');
                 $('.connection-status').css('display', 'none').dequeue();
             });
         } else if (this.state.connectionStatus === 'offline') {
+            $('.loader').css('display', 'none');
              $('.connection-icon').html('close');
             $('.connection-status').css('display', 'flex').css('background-color', 'red');
         } else if (this.state.connectionStatus === 'connecting') {
-            $('.connection-icon').html('wifi_tethering');
+            $('.loader').css('display', 'inline');
+            $('.connection-icon').html('');
             $('.connection-status').css('background-color', 'yellow');
         };
         
@@ -77,6 +80,7 @@ var Topbar = React.createClass({
 			<div style={styles} className="top-bar-container">
 				<div className="connection-status">
                 <i className="material-icons connection-icon"></i>
+                <div className="loader"></div>
                 {status}
                 </div>
 				<div onClick={this.onMenuButton} className="menu-icon-container">
