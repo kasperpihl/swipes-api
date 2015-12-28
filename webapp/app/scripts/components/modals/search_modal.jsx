@@ -13,45 +13,65 @@ var SearchModal = React.createClass({
 		$(this.refs.search).focus();
 		SearchModalActions.resetCache();
 		this.didBackspace = true;
+		this.currentIndex = 0;
+		this.resultsByIndex = [];
 		this.debouncedChangePreview = _.debounce(this.changePreview, 700);
 
 	},
 	clickedRow: function(row){
-		var result = $('li.result');
-		var $row = $(row.refs.result);
-		var currentIndex = result.index($row);
-
-		this.changeToItemWithIndex(currentIndex);
+		this.selectRowWithIndex(row.props.data.index);
+	},
+	selectRowWithIndex: function(index){
+		var row = this.resultsByIndex[index];
+		console.log("select row", index, row);
+		if(row.appId == 'ACORE'){
+			if(row.id == 'search-all'){
+				SearchModalActions.externalSearch(this.searchValue);
+			}
+		}
+		else{
+			if(this.props.data && this.props.data.callback){
+				this.props.data.callback(row.text + " ");
+			}
+		}
 	},
 	changePreview: function($resultElement){
-		var appId = $resultElement.attr('data-appid') || null;
+		/*var appId = $resultElement.attr('data-appid') || null;
 		var resultId = $resultElement.attr('data-id') || null;
 		var resultScope = $resultElement.attr('data-scope') || null;
-		StateActions.loadPreview(appId, resultScope, resultId);
+		StateActions.loadPreview(appId, resultScope, resultId);*/
 	},
 	changeToItemWithIndex: function(index){
-		var result = $('li.result');
-
-		StateActions.unloadPreview();
-
-		if(!result.length) {
+		if(!this.resultsByIndex.length) {
 			return;
 		}
 
-		result.filter('.active').removeClass('active');
-		$(result[index]).addClass('active');
+		// Jump to top or bottom on overflow
+		if (index < 0) {
+			index = this.resultsByIndex.length - 1;
+		}
+		if (index >= this.resultsByIndex.length) {
+			index = 0;
+		}
+		this.currentIndex = index;
+		
 
-		this.debouncedChangePreview($(result[index]));
+		StateActions.unloadPreview();
+		
+		$(this.refs["results-list"]).find('.active').removeClass('active');
+		$(this.refs["results-list"]).find('[data-index=' + index + ']').addClass('active');
 	},
 	onSearch: function (e) {
+		if(this.state.state === 'searching'){
+			e.preventDefault();
+			return;
+		}
 		var value = $(this.refs.search).val();
 
 		this.searchValue = value;
 
 		if(e.keyCode === 13){
-			if(this.props.data && this.props.data.callback){
-				return this.props.data.callback();
-			}
+			return this.selectRowWithIndex(this.currentIndex);
 		}
 		else if((e.keyCode === 8 && !value.length) || e.keyCode === 27){
 			if(e.keyCode === 8 && !this.didBackspace){
@@ -70,66 +90,86 @@ var SearchModal = React.createClass({
 			$('.search-results-wrapper').removeClass('open');
 		}
 	},
-	prevItem: function() {
-		var result = $('li.result');
-		var current = result.filter('.active');
-		var currentIndex = result.index(current);
-		var prevResult = currentIndex - 1;
-
-		if (prevResult < 0) {
-			prevResult = result.length - 1;
-		}
-
-		this.changeToItemWithIndex(prevResult);
-	},
-	nextItem: function(){
-		var result = $('li.result');
-		var currentIndex = result.index(result.filter('.active'));
-		var nextResult = currentIndex + 1;
-
-		if (nextResult >= result.length || nextResult < 0) {
-			nextResult = 0;
-		}
-
-		this.changeToItemWithIndex(nextResult);
-	},
 	onKeyDown: function(e) {
+		if(this.state.state === 'searching'){
+			e.preventDefault();
+			return;
+		}
 		var UP = 38;
 		var DOWN = 40;
 
 		if (e.keyCode === DOWN) {
 			e.preventDefault();
-			this.nextItem();
+			this.changeToItemWithIndex(++this.currentIndex);
 
 		} else if (e.keyCode === UP) {
 			e.preventDefault();
-			this.prevItem();
+			this.changeToItemWithIndex(--this.currentIndex);
 		}
 	},
 	getInitialState: function(){
 		return {};
 	},
-	componentDidUpdate: function () {
-		this.changeToItemWithIndex(0);
+	componentDidUpdate:function(prevProps, prevState){
+		/* 
+		Whenever an update was run
+		If new results, set to 0, but if local results, jump to 1 (this is to skip the action to search deep)
+		*/
+		var newIndex = this.currentIndex;
+		if(this.state.results != prevState.results)
+			newIndex = 0;
+		if(this.state.state == 'local')
+			newIndex = 1;
+		this.changeToItemWithIndex(newIndex);
+	},
+	onBlur:function(){
+		$(this.refs.search).focus();
 	},
 	render: function () {
-		var defVal = "";
-
-		if(this.props.data.options && typeof this.props.data.options.prefix === 'string') {
-			defVal = this.props.data.options.prefix;
+		this.resultsByIndex = [];
+		var preLabel = '', postLabel = ''; 
+		var searchResults = this.state.results || [];
+		var self = this;
+		var counter = 0;
+		var categories = [];
+		function addCategory(category){
+			var dCounter = counter;
+			counter += category.results.length;
+			console.log(self.resultsByIndex, category, category.results);
+			self.resultsByIndex = self.resultsByIndex.concat(category.results);
+			
+			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
 		}
 
-		var searchResults = this.state.results || [];
-		console.log(this.state.results);
-		var self = this;
-		var categories = searchResults.map(function (category) {
-			return <ResultList key={category.appId} data={{searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />
-		});
+
+		if(this.searchValue && this.searchValue.length > 0){
+			if(this.state.state == 'local'){
+				var category = { 
+					appId: 'APREACTIONS',
+					results: [{
+						appId: 'ACORE',
+						id: 'search-all',
+						disableHighlight: true,
+						text: 'Search all apps for: ' + this.searchValue
+					}] 
+				};
+				addCategory(category);
+			}
+
+			if(this.state.state == 'searching'){
+				preLabel = <div>Searching...</div>;
+			}
+			else if(!searchResults.length){
+				preLabel = <div>No results found</div>;
+			}
+
+			_.each(searchResults, addCategory);
+		}
 
 		return (
 			<div className="search-modal" onKeyDown={this.onKeyDown}>
 				<div className="search-input-wrapper">
-					<input type="text" placeholder="Search" defaultValue={defVal} id="main-search" ref="search" onKeyUp={this.onSearch} />
+					<input type="text" placeholder="Search" id="main-search" onBlur={this.onBlur} ref="search" onKeyUp={this.onSearch} />
 					<label htmlFor="main-search">
 						<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 							<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -138,8 +178,10 @@ var SearchModal = React.createClass({
 				</div>
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
-					<div id="results-list" className="results-list">
+					<div id="results-list" className="results-list" ref="results-list">
+						{preLabel}
 						{categories}
+						{postLabel}
 					</div>
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
@@ -153,19 +195,20 @@ var SearchModal = React.createClass({
 var ResultList = React.createClass({
 	render: function () {
 
-		var name = this.props.data.category.name || 'Unknown';
+		var nameHtml = '';
+		if(this.props.data.category.name)
+			nameHtml = <div className="result-title">{this.props.data.category.name}</div>
 		var list = this.props.data.category.results;
 		var self = this;
-
+		var counter = this.props.data.startCounter;
+		
 		var rows = list.map(function (row) {
-			row.appId = self.props.data.category.appId;
-
-			return <ResultList.Row key={row.id} data={{row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
+			return <ResultList.Row key={row.id} data={{index: counter++, row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
 		});
 
 		return (
 			<div className="result-wrapper">
-				<div className="result-title">{name}</div>
+				{nameHtml}
 				<ul className="results-specific-list">
 					{rows}
 				</ul>
@@ -179,25 +222,24 @@ ResultList.Row = React.createClass({
 		this.props.data.onClickedRow(this);
 	},
 	render: function () {
-		var resultClass = "result ";
 		var row = this.props.data.row;
-		if(row.is_active) {
-			resultClass += "active";
-		}
 
-		var appId = row.appId || "";
-		var id = row.id || "";
-		var scope = row.scope || "";
 		var icon = row.icon || "";
+		var searchValue = this.props.data.searchValue || "";
+		// If disableHighlight is enabled for row, then ignore searchstring to not highlight
+		if(row.disableHighlight)
+			searchValue = "";
 
+		var index = this.props.data.index || 0;
+		
 		return (
-			<li className={resultClass} ref="result" onClick={this.onClick} data-appid={appId} data-id={id} data-scope={scope}>
+			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
 					<i className="material-icons">{icon}</i>
 				</div>
-				<Highlight search={this.props.data.searchValue || ""}>{row.text}</Highlight>
+				<Highlight search={searchValue}>{row.text}</Highlight>
 
-        		<i className="material-icons mention">launch</i>
+        		{/*<i className="material-icons mention">launch</i>*/}
 			</li>
 			
 		);

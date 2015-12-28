@@ -27,6 +27,10 @@ var SearchStore = Reflux.createStore({
 	defaults: {
 		state: 'local'
 	},
+	setResults: function(results, state){
+		this.set('state', state, {trigger: false});
+		this.set('results', results);
+	},
 	onSearch: function (value) {
 
 		var that = this;
@@ -35,8 +39,7 @@ var SearchStore = Reflux.createStore({
 			return;
 		this.searchValue = value;
 		if (value.length === 0) {
-			this.set('state', 'local', {trigger: false});
-			this.set('results', []);
+			this.setResults([], 'local');
 			return;
 		}
 		var localResults = [userStore.search(value), appStore.search(value), channelStore.search(value)];
@@ -45,21 +48,18 @@ var SearchStore = Reflux.createStore({
 				return locRes;
 			}
 		})
-		this.set('state', 'local', {trigger: false});
-		this.set('results', localResults);
+		this.setResults(localResults, 'local');
 		
 	},
 	onExternalSearch: function(value){
 		this.searchValue = value;
-		
+
 		var cache = this.get('cache')[value]
 		if(cache && cache !== this.get('results')){
-			this.set('state', 'external', {trigger: false});
-			this.set('results', cache);
+			this.setResults(cache, 'external');
 			return;
 		}
-		this.set('state', 'searching', {trigger: false});
-		this.set('results', []);
+		this.setResults([], 'searching');
 
 		var that = this;
 		this.bouncedExtSearch(value, function (res, error) {
@@ -74,8 +74,7 @@ var SearchStore = Reflux.createStore({
 				updateObj[value] = results;
 				that.update("cache", updateObj, {trigger: false});
 				if(value === that.searchValue){
-					that.set('state', 'external', {trigger: false});
-					that.set('results', results);
+					that.setResults(results, 'external');
 				}
 			} else {
 				console.log('Search error ' + res.err);
