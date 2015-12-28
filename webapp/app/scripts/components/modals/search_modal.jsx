@@ -12,7 +12,7 @@ var SearchModal = React.createClass({
 	componentDidMount: function(){
 		$(this.refs.search).focus();
 		SearchModalActions.resetCache();
-		this.didBackspace = true;
+		this.didEnterText = false;
 		this.currentIndex = 0;
 		this.resultsByIndex = [];
 		this.debouncedChangePreview = _.debounce(this.changePreview, 700);
@@ -59,7 +59,9 @@ var SearchModal = React.createClass({
 		StateActions.unloadPreview();
 		
 		$(this.refs["results-list"]).find('.active').removeClass('active');
-		$(this.refs["results-list"]).find('[data-index=' + index + ']').addClass('active');
+		var $el = $(this.refs["results-list"]).find('[data-index=' + index + ']')
+
+		$el.addClass('active');
 	},
 	onSearch: function (e) {
 		if(this.state.state === 'searching'){
@@ -69,15 +71,14 @@ var SearchModal = React.createClass({
 		var value = $(this.refs.search).val();
 
 		this.searchValue = value;
+		if(value.length > 0)
+			this.didEnterText = true;
 
 		if(e.keyCode === 13){
 			return this.selectRowWithIndex(this.currentIndex);
 		}
-		else if((e.keyCode === 8 && !value.length) || e.keyCode === 27){
-			if(e.keyCode === 8 && !this.didBackspace){
-				this.didBackspace = true;
-			}
-			else if(this.props.data && this.props.data.callback){
+		else if((e.keyCode === 8 && !value.length && !this.didEnterText) || e.keyCode === 27){
+			if(this.props.data && this.props.data.callback){
 				return this.props.data.callback($(this.refs.search).val());
 			}
 		}
@@ -95,16 +96,19 @@ var SearchModal = React.createClass({
 			e.preventDefault();
 			return;
 		}
+		
 		var UP = 38;
 		var DOWN = 40;
+		var TAB = 9;
 
-		if (e.keyCode === DOWN) {
+		if (e.keyCode === UP || (e.keyCode === TAB && e.shiftKey)) {
 			e.preventDefault();
-			this.changeToItemWithIndex(++this.currentIndex);
+			this.changeToItemWithIndex(this.currentIndex - 1);
+		}
+		else if (e.keyCode === DOWN || e.keyCode === TAB) {
+			e.preventDefault();
+			this.changeToItemWithIndex(this.currentIndex + 1);
 
-		} else if (e.keyCode === UP) {
-			e.preventDefault();
-			this.changeToItemWithIndex(--this.currentIndex);
 		}
 	},
 	getInitialState: function(){
@@ -121,8 +125,10 @@ var SearchModal = React.createClass({
 		if(this.state.state == 'local')
 			newIndex = 1;
 		this.changeToItemWithIndex(newIndex);
+		$(this.refs.search).focus();
 	},
 	onBlur:function(){
+		console.log('blurred search');
 		$(this.refs.search).focus();
 	},
 	render: function () {
@@ -135,7 +141,6 @@ var SearchModal = React.createClass({
 		function addCategory(category){
 			var dCounter = counter;
 			counter += category.results.length;
-			console.log(self.resultsByIndex, category, category.results);
 			self.resultsByIndex = self.resultsByIndex.concat(category.results);
 			
 			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
@@ -167,9 +172,9 @@ var SearchModal = React.createClass({
 		}
 
 		return (
-			<div className="search-modal" onKeyDown={this.onKeyDown}>
+			<div className="search-modal">
 				<div className="search-input-wrapper">
-					<input type="text" placeholder="Search" id="main-search" onBlur={this.onBlur} ref="search" onKeyUp={this.onSearch} />
+					<input type="text" placeholder="Search" defaultValue="" id="main-search" onKeyDown={this.onKeyDown} onBlur={this.onBlur} ref="search" onKeyUp={this.onSearch} />
 					<label htmlFor="main-search">
 						<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 							<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>

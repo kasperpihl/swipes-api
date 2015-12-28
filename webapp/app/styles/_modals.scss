@@ -204,11 +204,13 @@ $break-mid: 650px;
 			}
 
 			.result-title {
-				padding: 15px;
-				padding-left: 40px;
-				font-size: 15px;
+				padding: 3px;
+				padding-left: 20px;
+				font-size: 13px;
 				font-weight: 600;
-				color: $deepBlue-80;
+				color: rgba(99, 99, 99, 0.92);
+				background: #E0E0E0;
+				padding-top: 4px;
 			}
 
 			ul.results-specific-list {
