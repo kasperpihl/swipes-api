@@ -23,6 +23,8 @@ var SearchModal = React.createClass({
 	},
 	selectRowWithIndex: function(index){
 		var row = this.resultsByIndex[index];
+		if(!row)
+			return;
 		console.log("select row", index, row);
 		if(row.appId == 'ACORE'){
 			if(row.id == 'search-all'){
@@ -73,11 +75,11 @@ var SearchModal = React.createClass({
 		this.searchValue = value;
 		if(value.length > 0)
 			this.didEnterText = true;
-
-		if(e.keyCode === 13){
+		var BACKSPACE = 8, ESC = 27, ENTER = 13;
+		if(e.keyCode === ENTER && !e.shiftKey){
 			return this.selectRowWithIndex(this.currentIndex);
 		}
-		else if((e.keyCode === 8 && !value.length && !this.didEnterText) || e.keyCode === 27){
+		if((e.keyCode === BACKSPACE && !value.length && !this.didEnterText) || e.keyCode === ESC){
 			if(this.props.data && this.props.data.callback){
 				return this.props.data.callback($(this.refs.search).val());
 			}
@@ -96,12 +98,12 @@ var SearchModal = React.createClass({
 			e.preventDefault();
 			return;
 		}
-		
-		var UP = 38;
-		var DOWN = 40;
-		var TAB = 9;
 
-		if (e.keyCode === UP || (e.keyCode === TAB && e.shiftKey)) {
+		var UP = 38, DOWN = 40, TAB = 9, ENTER = 13;
+		if(e.keyCode === ENTER && e.shiftKey){
+			return this.selectRowWithIndex(this.currentIndex);
+		}
+		else if (e.keyCode === UP || (e.keyCode === TAB && e.shiftKey)) {
 			e.preventDefault();
 			this.changeToItemWithIndex(this.currentIndex - 1);
 		}
@@ -128,7 +130,6 @@ var SearchModal = React.createClass({
 		$(this.refs.search).focus();
 	},
 	onBlur:function(){
-		console.log('blurred search');
 		$(this.refs.search).focus();
 	},
 	render: function () {
