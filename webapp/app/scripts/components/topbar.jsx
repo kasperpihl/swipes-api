@@ -18,18 +18,18 @@ var Topbar = React.createClass({
         if (this.state.connectionStatus === 'online') {
             $('.loader').css('display', 'none');
             $('.connection-icon').html('check');
-            $('.connection-status').css('background-color', 'green').delay(3000).queue(function(){
+            $('.connection-status').css('background-color', '#4CAF50').delay(3000).queue(function(){
                 $('.app-view-controller').css('padding-top', '60px');
                 $('.connection-status').css('display', 'none').dequeue();
             });
         } else if (this.state.connectionStatus === 'offline') {
             $('.loader').css('display', 'none');
              $('.connection-icon').html('close');
-            $('.connection-status').css('display', 'flex').css('background-color', 'red');
+            $('.connection-status').css('display', 'flex').css('background-color', '#FC461E');
         } else if (this.state.connectionStatus === 'connecting') {
             $('.loader').css('display', 'inline');
             $('.connection-icon').html('');
-            $('.connection-status').css('background-color', 'yellow');
+            $('.connection-status').css('background-color', '#FFCA28');
         };
         
         if ($('.connection-status').css('display') == 'flex') {
