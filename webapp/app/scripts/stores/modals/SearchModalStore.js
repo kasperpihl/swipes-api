@@ -20,48 +20,55 @@ var SearchStore = Reflux.createStore({
 			}
 		});
 	},
-	onResetCache: function(){
+	onResetCache: function() {
 		this.set('state', 'local');
 		this.set('cache', {}, {trigger: false});
 	},
 	defaults: {
 		state: 'local'
 	},
-	setResults: function(results, state){
+	setResults: function(results, state) {
 		this.set('state', state, {trigger: false});
 		this.set('results', results);
 	},
 	onSearch: function (value) {
-
 		var that = this;
-		
-		if(value === this.searchValue)
+
+		if(value === this.searchValue) {
 			return;
+		}
+
 		this.searchValue = value;
+
 		if (value.length === 0) {
 			this.setResults([], 'local');
 			return;
 		}
+
 		var localResults = [userStore.search(value), appStore.search(value), channelStore.search(value)];
+
 		localResults = localResults.filter(function (locRes) {
 			if (locRes.results.length > 0) {
 				return locRes;
 			}
 		})
+
 		this.setResults(localResults, 'local');
-		
 	},
 	onExternalSearch: function(value){
 		this.searchValue = value;
 
-		var cache = this.get('cache')[value]
-		if(cache && cache !== this.get('results')){
+		var cache = this.get('cache')[value];
+
+		if (cache && cache !== this.get('results')) {
 			this.setResults(cache, 'external');
 			return;
 		}
+
 		this.setResults([], 'searching');
 
 		var that = this;
+
 		this.bouncedExtSearch(value, function (res, error) {
 			if (res.ok === true) {
 				var results = res.results.filter(function (result) {
@@ -73,7 +80,7 @@ var SearchStore = Reflux.createStore({
 				var updateObj = {};
 				updateObj[value] = results;
 				that.update("cache", updateObj, {trigger: false});
-				if(value === that.searchValue){
+				if (value === that.searchValue) {
 					that.setResults(results, 'external');
 				}
 			} else {
