@@ -56,10 +56,10 @@ var SearchModal = React.createClass({
 			index = 0;
 		}
 		this.currentIndex = index;
-		
+
 
 		StateActions.unloadPreview();
-		
+
 		$(this.refs["results-list"]).find('.active').removeClass('active');
 		var $el = $(this.refs["results-list"]).find('[data-index=' + index + ']')
 
@@ -117,7 +117,7 @@ var SearchModal = React.createClass({
 		return {};
 	},
 	componentDidUpdate:function(prevProps, prevState){
-		/* 
+		/*
 		Whenever an update was run
 		If new results, set to 0, but if local results, jump to 1 (this is to skip the action to search deep)
 		*/
@@ -134,7 +134,7 @@ var SearchModal = React.createClass({
 	},
 	render: function () {
 		this.resultsByIndex = [];
-		var preLabel = '', postLabel = ''; 
+		var label = '';
 		var searchResults = this.state.results || [];
 		var self = this;
 		var counter = 0;
@@ -143,30 +143,30 @@ var SearchModal = React.createClass({
 			var dCounter = counter;
 			counter += category.results.length;
 			self.resultsByIndex = self.resultsByIndex.concat(category.results);
-			
+
 			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
 		}
 
 
 		if(this.searchValue && this.searchValue.length > 0){
 			if(this.state.state == 'local'){
-				var category = { 
+				var category = {
 					appId: 'APREACTIONS',
 					results: [{
 						appId: 'ACORE',
 						id: 'search-all',
 						disableHighlight: true,
 						text: 'Search all apps for: ' + this.searchValue
-					}] 
+					}]
 				};
 				addCategory(category);
 			}
 
 			if(this.state.state == 'searching'){
-				preLabel = <div>Searching...</div>;
+				label = <div>Searching...</div>;
 			}
 			else if(!searchResults.length){
-				preLabel = <div>No results found</div>;
+				label = <div>No results found</div>;
 			}
 
 			_.each(searchResults, addCategory);
@@ -185,9 +185,8 @@ var SearchModal = React.createClass({
 
 				<div className="search-results-wrapper" ref="results-wrapper" >
 					<div id="results-list" className="results-list" ref="results-list">
-						{preLabel}
 						{categories}
-						{postLabel}
+						{label}
 					</div>
 					<div className="result-preview">
 						<PreviewLoader data={{preview:1}}/>
@@ -207,7 +206,7 @@ var ResultList = React.createClass({
 		var list = this.props.data.category.results;
 		var self = this;
 		var counter = this.props.data.startCounter;
-		
+
 		var rows = list.map(function (row) {
 			return <ResultList.Row key={row.id} data={{index: counter++, row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
 		});
@@ -223,6 +222,10 @@ var ResultList = React.createClass({
 	}
 });
 
+// ResultList.SearchButton = React.createClass({
+//
+// })
+
 ResultList.Row = React.createClass({
 	onClick: function() {
 		this.props.data.onClickedRow(this);
@@ -237,7 +240,7 @@ ResultList.Row = React.createClass({
 			searchValue = "";
 
 		var index = this.props.data.index || 0;
-		
+
 		return (
 			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
@@ -247,7 +250,7 @@ ResultList.Row = React.createClass({
 
         		{/*<i className="material-icons mention">launch</i>*/}
 			</li>
-			
+
 		);
 	}
 });
