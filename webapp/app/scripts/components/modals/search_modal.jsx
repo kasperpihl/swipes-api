@@ -108,7 +108,7 @@ var SearchModal = React.createClass({
 		}
 
 		// To get an understanding of these mechanics try log below and do a search for "kas" in all apps 
-		//console.log("elY", elY, "scrollY", scrollY, "height", height, "contentHeight", contentHeight, "newScrollPos", newScrollPos);
+		//console.log("elUpperY", elUpperY, 'elLowerY', elLowerY, "scrollY", scrollY, "height", height, "contentHeight", contentHeight, "newScrollPos", newScrollPos);
 
 	},
 	onKeyUp: function (e) {
