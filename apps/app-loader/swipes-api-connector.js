@@ -1,51 +1,61 @@
-
-var SwipesAPIConnector = (function() {
+var SwipesAPIConnector = (function () {
 	function SwipesAPIConnector(baseUrl, token) {
 		var bindedCallback = this._receivedMessageFromListener.bind(this);
-		if (!baseUrl){
+
+		if (!baseUrl) {
 			throw new Error('SwipesAPIConnector: No baseUrl set in constructor');
 		}
+
 		this._baseURL = baseUrl;
 		this._apiUrl = baseUrl + '/v1/';
 		this._token = token;
 		this._hasInitialized = false;
 		this._timeoutTimer = 10;
-
 		this._timers = {};
 		this._callbacks = {};
 		this._listenerQueue = [];
 		this._apiQueue = [];
 
 		window.addEventListener('message', bindedCallback, false);
-
 	};
-	SwipesAPIConnector.prototype.setToken = function(token){
+
+	SwipesAPIConnector.prototype.setToken = function (token) {
 		this._token = token;
-		if(this._apiQueue.length > 0){
-			for(var i = 0 ; i < this._apiQueue.length ; i++){
-				request = this._apiQueue[i];
+
+		if (this._apiQueue.length > 0) {
+			for (var i = 0; i < this._apiQueue.length; i++) {
+				var request = this._apiQueue[i];
+
 				this.callSwipesApi(request.options, request.data, request.callback, request.deferred);
 			}
+
 			this._apiQueue = [];
 		}
 	};
-	SwipesAPIConnector.prototype.setAppId = function(appId){
+
+	SwipesAPIConnector.prototype.setAppId = function (appId) {
 		this._appId = appId;
 	};
-	SwipesAPIConnector.prototype.copyConnector = function(){
+
+	SwipesAPIConnector.prototype.copyConnector = function () {
 		var connector = new SwipesAPIConnector(this._baseURL, this._token);
+
 		return connector;
 	};
-	SwipesAPIConnector.prototype.getBaseURL = function(){
+
+	SwipesAPIConnector.prototype.getBaseURL = function () {
 		return this._baseURL;
 	};
-	SwipesAPIConnector.prototype.getAPIURL = function(){
+
+	SwipesAPIConnector.prototype.getAPIURL = function () {
 		return this._apiUrl;
 	};
-	SwipesAPIConnector.prototype.setTargetURL = function(targetUrl){
+
+	SwipesAPIConnector.prototype.setTargetURL = function (targetUrl) {
 		this._targetUrl = targetUrl;
 	};
-	SwipesAPIConnector.prototype.setListener = function(listener, targetUrl){
+
+	SwipesAPIConnector.prototype.setListener = function (listener, targetUrl) {
 		// Test if listener is an object
 		if(typeof listener !== 'object'){
 			throw new Error('SwipesAPIConnector: Listener not an object');
@@ -64,8 +74,7 @@ var SwipesAPIConnector = (function() {
 	/*
 		Delegate is the object that will handle calls through the listener ()
 	*/
-	SwipesAPIConnector.prototype.setDelegate = function(delegate){
-
+	SwipesAPIConnector.prototype.setDelegate = function (delegate) {
 		// Test if delegate is an object
 		if(typeof delegate !== 'object'){
 			throw new Error('SwipesAPIConnector: Delegate not an object');
@@ -78,36 +87,40 @@ var SwipesAPIConnector = (function() {
 		this._delegate = delegate;
 	};
 
-	SwipesAPIConnector.prototype.callSwipesApi = function(options, data, callback, deferred) {
-		if(!deferred && window.Q)
+	SwipesAPIConnector.prototype.callSwipesApi = function (options, data, callback, deferred) {
+		if(!deferred && window.Q) {
 			deferred = Q.defer();
-
-		var command, force, method = 'POST';
-		if(typeof options === 'string')
-			command = options;
-		if(typeof options === 'object'){
-			if(options.method)
-				method = options.method;
-			if(options.command)
-				command = options.command;
-			if(options.force)
-				force = true;
 		}
 
-		if(!this._token && !force){
+		var command,
+				force;
+
+		if(typeof options === 'string') {
+			command = options;
+		}
+
+		if (typeof options === 'object') {
+			command = options.command || null;
+			force = options.force || false;
+		}
+
+		if (!this._token && !force) {
 			this._apiQueue.push({options: options, data: data, callback: callback, deferred: deferred});
+
 			return deferred.promise;
 		}
 
 		// If no data is send, but only a callback set those
-		if(typeof data === 'function'){
+		if (typeof data === 'function') {
 			callback = data;
 		}
 
 		var url = this._apiUrl + command;
+
 		if ((data == null) || typeof data !== 'object') {
 			data = {};
 		}
+
 		data.token = this._token;
 
 		var serData = JSON.stringify(data);
@@ -144,9 +157,6 @@ var SwipesAPIConnector = (function() {
 		return deferred ? deferred.promise : false;
 	};
 
-	/*
-
-	 */
 	SwipesAPIConnector.prototype.callListener = function(command, data, callback) {
 		if(!this._token || !this._listener){
 			console.log("listener queue", command);
@@ -159,16 +169,17 @@ var SwipesAPIConnector = (function() {
 			'command': command,
 			'data': data
 		};
-		if(this._appId)
+
+		if (this._appId) {
 			callJson.app_id = this._appId;
+		}
+
 		if (callback && typeof callback === 'function') {
 			this._callbacks[identifier] = callback;
 		}
 
-
 		this._sendMessageToListener(callJson);
 	};
-
 
 	SwipesAPIConnector.prototype._sendMessageToListener = function(json){
 		if (!this._listener) {
@@ -177,43 +188,58 @@ var SwipesAPIConnector = (function() {
 		this._listener.postMessage(JSON.stringify(json), this._targetUrl);
 	};
 
-
 	SwipesAPIConnector.prototype._receivedMessageFromListener = function(msg) {
 		try{
 			var message = msg.data;
-			if(typeof message === 'string')
-				message = JSON.parse(msg.data);
-			if(typeof message !== 'object')
-				return;
-			if(message.identifier && message.command === "event" && message.data.type === "init"){
-				var data = message.data.data;
-				if(data.target_url)
-					this.setTargetURL(data.target_url);
-				if(data.manifest.manifest_id)
-					this.setAppId(data.manifest.manifest_id);
-				if(data.token)
-					this.setToken(data.token);
 
-				if(this._listenerQueue.length > 0){
-					for(var i = 0 ; i < this._listenerQueue.length ; i++){
-						listenObj = this._listenerQueue[i];
+			if(typeof message === 'string') {
+				message = JSON.parse(msg.data);
+			}
+
+			if(typeof message !== 'object') {
+				return;
+			}
+
+			if (message.identifier && message.command === "event" && message.data.type === "init") {
+				var data = message.data.data;
+
+				if(data.target_url) {
+					this.setTargetURL(data.target_url);
+				}
+
+				if(data.manifest.manifest_id) {
+					this.setAppId(data.manifest.manifest_id);
+				}
+
+				if(data.token) {
+					this.setToken(data.token);
+				}
+
+				if (this._listenerQueue.length > 0) {
+					for (var i = 0; i < this._listenerQueue.length; i++) {
+						var listenObj = this._listenerQueue[i];
+
 						this.callListener(listenObj.command, listenObj.data, listenObj.callback);
 					}
+
 					this._listenerQueue = [];
 				}
 			}
-			if (message.app_id && message.app_id != this._appId){
+
+			if (message.app_id && message.app_id != this._appId) {
 				return;
 			}
+
 			if (message.reply_to) {
 				this._runLocalCallback(message.reply_to, message.data, message.error);
 			}
-			else if(message.identifier){
-				if(!this._delegate){
+			else if (message.identifier) {
+				if (!this._delegate) {
 					return console.warn('SwipesAPIConnector: delegate not set when receiving message from app')
 				}
 				else{
 					var _this = this;
+
 					this._delegate.connectorHandleResponseReceivedFromListener(this, message, function(result, error){
 						_this._respondMessageToListener(message.identifier, result, error);
 					});
@@ -225,11 +251,12 @@ var SwipesAPIConnector = (function() {
 		}
 	};
 
-	SwipesAPIConnector.prototype._respondMessageToListener = function(identifier, data, error){
+	SwipesAPIConnector.prototype._respondMessageToListener = function (identifier, data, error) {
 		var callJson = {
 			'ok': true,
 			'reply_to': identifier
 		};
+
 		if(this._appId)
 			callJson.app_id = this._appId;
 		if(data){
@@ -244,11 +271,13 @@ var SwipesAPIConnector = (function() {
 	/*
 
 	 */
-	SwipesAPIConnector.prototype._runLocalCallback = function(identifier, res, err) {
+	SwipesAPIConnector.prototype._runLocalCallback = function (identifier, res, err) {
 		var callback = this._callbacks[identifier];
+
 		if (callback) {
 			callback(res, err);
 		}
+
 		this._clearCallback(identifier);
 	};
 
@@ -261,6 +290,7 @@ var SwipesAPIConnector = (function() {
 		if (this._callbacks[identifier]) {
 			delete this._callbacks[identifier];
 		}
+
 		if (this._timers[identifier]) {
 			clearTimeout(this._timers[identifier]);
 			delete this._timers[identifier];
@@ -282,7 +312,7 @@ var SwipesAPIConnector = (function() {
 		return text;
 	};
 
-	SwipesAPIConnector.prototype.destroy = function(){
+	SwipesAPIConnector.prototype.destroy = function () {
 		window.removeEventListener("message", this._receivedMessageFromApp, false);
 		for (timer in this._timers) {
 			if (!this._timers.hasOwnProperty(timer)) {
@@ -292,6 +322,6 @@ var SwipesAPIConnector = (function() {
 			//Do your logic with the property here
 		}
 	}
-	return SwipesAPIConnector;
 
+	return SwipesAPIConnector;
 })();

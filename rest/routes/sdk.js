@@ -7,9 +7,9 @@ let util = require('../util.js');
 let appDir = __dirname + '/../../apps/';
 
 router.get('/sdk.load', (req, res, next) => {
-	let apiHost = 'http://' + req.headers.host;
+	let apiUrl = 'http://' + req.headers.host;
 
-	let _defUrlDir = apiHost + '/apps/app-loader/';
+	let _defUrlDir = apiUrl + '/apps/app-loader/';
 	// Insert dependencies, SwipesSDK and other scripts right after head
 	let insertString = '';
 
@@ -26,7 +26,7 @@ router.get('/sdk.load', (req, res, next) => {
 	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-app-sdk.js');
 	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
 	insertString += wrap('<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css" />');
-	insertString += 'window.swipes = new SwipesAppSDK("' + apiHost + '");';
+	insertString += 'window.swipes = new SwipesAppSDK("' + apiUrl + '");';
 
 
 	// Instantiate objects and add runtime stuff

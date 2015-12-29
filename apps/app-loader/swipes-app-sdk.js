@@ -268,6 +268,7 @@ var SwipesAppSDK = (function() {
 			self._client.callListener("modal.load", {modal: name, options: options}, callback);
 		}
 	}
+
 	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
 			var currentListeners = self._listenersObj[eventName];
@@ -309,22 +310,28 @@ var SwipesAppSDK = (function() {
 					else
 						this.setDefaultScope(data.data.manifest.id);
 				}
+
 				var listeners = self._listeners.get(data.type);
-				for(var i = 0 ; i < listeners.length ; i++){
+
+				for (var i = 0 ; i < listeners.length ; i++) {
 
 					var handler = listeners[i];
 
-					if(handler)
+					if(handler) {
 						handler(message);
+					}
 				}
 			}
 		}
-		if(callback)
+
+		if(callback) {
 			callback("yeah");
+		}
 	};
+
 	SwipesAppSDK.prototype.update = {
 
 	};
-	return SwipesAppSDK;
 
+	return SwipesAppSDK;
 })();
