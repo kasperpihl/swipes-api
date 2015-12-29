@@ -74,7 +74,7 @@ var SearchModal = React.createClass({
 		var elLowerY = el.position().top + el.outerHeight(); // The Y for the lower edge of the item row
 
 		var scrollY = $listEl.scrollTop(); // The current scroll position, needed because the positions are relative
-		var height = $listEl.innerHeight(); // height of the showing list view (not the content/scroll)
+		var height = $listEl.outerHeight(); // height of the showing list view (not the content/scroll)
 		var contentHeight = $listEl.prop('scrollHeight'); // The whole content height inside the scroll container
 
 		var newScrollPos; // 
@@ -110,6 +110,10 @@ var SearchModal = React.createClass({
 		// To get an understanding of these mechanics try log below and do a search for "kas" in all apps 
 		//console.log("elUpperY", elUpperY, 'elLowerY', elLowerY, "scrollY", scrollY, "height", height, "contentHeight", contentHeight, "newScrollPos", newScrollPos);
 
+		// Hack to add/remove scrollbars when not needed
+		var minHeight = 250;
+		var overflow = (height < minHeight || contentHeight <= height) ? "auto" : "scroll";
+		$listEl.css("overflowY", overflow);
 	},
 	onKeyUp: function (e) {
 		if(this.state.state === 'searching'){

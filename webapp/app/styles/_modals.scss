@@ -297,7 +297,7 @@ $break-mid: 650px;
 	height:100%;
 	background-color: #fAfAfA;
 	margin-left: 0px;
-    
+    position: relative;
     @media screen and (max-width: $break-mid) {
         width: 0%;
         display: none;
