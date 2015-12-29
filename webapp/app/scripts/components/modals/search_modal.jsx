@@ -61,9 +61,55 @@ var SearchModal = React.createClass({
 		StateActions.unloadPreview();
 
 		$(this.refs["results-list"]).find('.active').removeClass('active');
-		var $el = $(this.refs["results-list"]).find('[data-index=' + index + ']')
+		var $el = $(this.refs["results-list"]).find('[data-index=' + index + ']');
 
 		$el.addClass('active');
+		this.autoScrollToEl($el);
+	},
+	autoScrollToEl:function(el){
+		var $listEl = $(this.refs["results-list"]);
+
+		// iten coordinates, relative to current scroll position, so if above scroll this will be -Xpx etc
+		var elUpperY = el.position().top; // The Y for the upper edge of the item row
+		var elLowerY = el.position().top + el.outerHeight(); // The Y for the lower edge of the item row
+
+		var scrollY = $listEl.scrollTop(); // The current scroll position, needed because the positions are relative
+		var height = $listEl.innerHeight(); // height of the showing list view (not the content/scroll)
+		var contentHeight = $listEl.prop('scrollHeight'); // The whole content height inside the scroll container
+
+		var newScrollPos; // 
+		var extraBuffer = 0; // How much of the next row to show on autoscroll
+		var edgeSnap = 30; // How long from the top/bottom should scroll be to snap to either top/bottom (used to snap above the category header on the way up)
+
+		// If element is above the shown content in the view, scroll up to fit
+		if(elUpperY < 0){
+			newScrollPos = scrollY + elUpperY - extraBuffer;
+		}
+		// If element is above the shown content in the view, scroll down to fit at the bottom 
+		else if(elLowerY > height){
+			newScrollPos = scrollY + elLowerY - height + extraBuffer;
+		}
+
+
+		// if a new scroll position has been set, scroll there
+		if(typeof newScrollPos != 'undefined'){
+			var maxScrollPos = contentHeight - height;
+			// Avoid overscroll and snap at the top
+			if(newScrollPos < 0 || newScrollPos < edgeSnap ){
+				newScrollPos = 0;
+			}
+			
+			// Avoid overscroll and snap at the bottom
+			if(newScrollPos > maxScrollPos || (maxScrollPos-newScrollPos) < edgeSnap ){
+				newScrollPos = maxScrollPos;
+			}
+
+			$listEl.scrollTop(newScrollPos);
+		}
+
+		// To get an understanding of these mechanics try log below and do a search for "kas" in all apps 
+		//console.log("elY", elY, "scrollY", scrollY, "height", height, "contentHeight", contentHeight, "newScrollPos", newScrollPos);
+
 	},
 	onKeyUp: function (e) {
 		if(this.state.state === 'searching'){
