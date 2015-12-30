@@ -229,6 +229,49 @@ $break-mid: 650px;
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
+                    
+                    &.search-all-button {
+                        height: 50px;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        line-height: 50px;
+                        
+                        &.active {
+                            background-color: $green-color;
+                            color: white;
+                        }
+                        
+                        i {
+                            position: absolute;
+                            width: 40px;
+                            height: 50px;
+                            top: 0;
+                            text-align: center;
+                            line-height: 50px;
+                            
+                            &.eye {
+                                left: 0;
+                            }
+                            
+                            &.arrow {
+                                width: 50px;
+                                right: 0;
+                                
+                                &.attention {
+                                    transform: translateX(-5px);
+                                    transition: .75s;
+                                    animation: bouncyArrow 1.5s ease-in-out infinite;
+			                        animation-delay: .75s;
+                                    
+                                    @keyframes bouncyArrow {
+                                        50% {
+                                            transform: translateX(5px)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
 					&.active {
 						background-color: $blue-40;

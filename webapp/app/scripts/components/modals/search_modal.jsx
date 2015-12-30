@@ -6,6 +6,8 @@ var StateActions = require('../../actions/StateActions');
 
 var PreviewLoader = require('../preview_loader');
 var Highlight = require('react-highlighter');
+var GlobalState = {}; //So I could get the state in another react class
+var resultsLength = {};
 
 var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect()],
@@ -196,8 +198,9 @@ var SearchModal = React.createClass({
 
 			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
 		}
-
-
+        
+        GlobalState = this.state.state; //setting global state
+        
 		if(this.searchValue && this.searchValue.length > 0){
 			if(this.state.state == 'local'){
 				var category = {
@@ -211,7 +214,7 @@ var SearchModal = React.createClass({
 				};
 				addCategory(category);
 			}
-
+            resultsLength = this.state.results;
 			if(this.state.state == 'searching'){
 				label = <div>Searching...</div>;
 			}
@@ -280,6 +283,22 @@ ResultList.Row = React.createClass({
 	onClick: function() {
 		this.props.data.onClickedRow(this);
 	},
+    searchIcon: function() {
+        var index = this.props.data.index || 0;
+        if (GlobalState == 'local' && index == 0) {
+            return <i className="material-icons eye">visibility</i>;
+        }
+    },
+    doSearchIcon: function() {
+        var index = this.props.data.index || 0;
+        if (GlobalState == 'local' && index == 0) {
+            if(!resultsLength.length){
+                return <i className="material-icons arrow attention">arrow_forward</i>;
+            } else {
+                return <i className="material-icons arrow">arrow_forward</i>;
+            }
+        }
+    },
 	render: function () {
 		var row = this.props.data.row;
 
@@ -291,13 +310,18 @@ ResultList.Row = React.createClass({
 
 		var index = this.props.data.index || 0;
 
+        var searchClass = "result ";
+        if(GlobalState == 'local' && index == 0)
+			searchClass += "search-all-button";
+            
 		return (
-			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
+			<li className={searchClass} ref="result" onClick={this.onClick} data-index={index}>
+                {this.searchIcon()}
 				<div className="icon">
 					<i className="material-icons">{icon}</i>
 				</div>
 				<Highlight search={searchValue}>{row.text}</Highlight>
-
+                {this.doSearchIcon()}
         		{/*<i className="material-icons mention">launch</i>*/}
 			</li>
 
