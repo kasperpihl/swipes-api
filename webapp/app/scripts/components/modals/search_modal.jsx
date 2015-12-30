@@ -141,7 +141,9 @@ var SearchModal = React.createClass({
 		if (value.length > 0) {
 			this.didBackspace = false;
 			$('.search-results-wrapper').addClass('open');
+            $('.preview-wrapper').css('display', 'flex');
 		} else {
+            $('.preview-wrapper').css('display', 'none');
 			$('.search-results-wrapper').removeClass('open');
 		}
 	},
@@ -216,11 +218,15 @@ var SearchModal = React.createClass({
 			}
             resultsLength = this.state.results;
 			if(this.state.state == 'searching'){
-				label = <div>Searching...</div>;
+				label = <div className="searching-loader">
+                            <p>Searching...</p>
+                        </div>;
 			}
-			else if(!searchResults.length){
-				label = <div>No results found</div>;
-			}
+			else if(!searchResults.length && this.state.state == 'local'){
+				label = <div className="no-results-copy">No results found :( <br/> Try searching all apps</div>;
+			} else if(!searchResults.length) {
+                label = <div className="no-results-copy">No results found :(</div>
+            }
 
 			_.each(searchResults, addCategory);
 		}
@@ -242,7 +248,9 @@ var SearchModal = React.createClass({
 						{label}
 					</div>
 					<div className="result-preview">
-						<PreviewLoader data={{preview:1}}/>
+                        <div className="preview-wrapper">
+						  <PreviewLoader data={{preview:1}}/>
+                        </div>
 					</div>
 				</div>
 			</div>

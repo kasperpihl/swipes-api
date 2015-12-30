@@ -81,7 +81,19 @@ var PreviewLoader = React.createClass({
 	},
 	render: function() {
 		if(!this.state.app) {
-			return ( <div>Loading</div> );
+			return ( <div className="preview-loader">
+                <div className="loader">
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div className="loader-text">Loading</div>
+            </div> );
 		}
 
 		return (
