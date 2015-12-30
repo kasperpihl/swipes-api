@@ -102,6 +102,8 @@ var ChatInput = React.createClass({
 
 	},
 	render: function() {
+        var $textarea = $(this.refs.textarea);
+        $textarea.focus();
 		var hintClass = "input-container ";
 		if(this.state.showHint)
 			hintClass += "show-hint";
