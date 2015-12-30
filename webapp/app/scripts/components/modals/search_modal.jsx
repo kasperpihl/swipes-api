@@ -5,13 +5,14 @@ var SearchModalStore = require('../../stores/modals/SearchModalStore');
 var StateActions = require('../../actions/StateActions');
 
 var PreviewLoader = require('../preview_loader');
+var Previews = require('../previews/previews');
 var Highlight = require('react-highlighter');
-var GlobalState = {}; //So I could get the state in another react class
-var resultsLength = {};
+
 
 var SearchModal = React.createClass({
 	mixins: [SearchModalStore.connect()],
 	componentDidMount: function(){
+
 		$(this.refs.search).focus();
 		SearchModalActions.resetCache();
 		this.didEnterText = false;
@@ -203,30 +204,24 @@ var SearchModal = React.createClass({
 		var self = this;
 		var counter = 0;
 		var categories = [];
+
+		function addSearchButton(){
+			var dCounter = counter++;
+			var noResults = (searchResults.length === 0);
+			self.resultsByIndex.push({appId: 'ACORE', id:'search-all'});
+			categories.push(<SearchModal.SearchButton key="search-all-button" data={{title:'Search all apps for: ' + self.searchValue, index: dCounter, noResults: noResults, state: self.state.state}} />);
+
+		}
 		function addCategory(category){
 			var dCounter = counter;
 			counter += category.results.length;
 			self.resultsByIndex = self.resultsByIndex.concat(category.results);
-
 			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
 		}
         
-        GlobalState = this.state.state; //setting global state
         
 		if(this.searchValue && this.searchValue.length > 0){
-			if(this.state.state == 'local'){
-				var category = {
-					appId: 'APREACTIONS',
-					results: [{
-						appId: 'ACORE',
-						id: 'search-all',
-						disableHighlight: true,
-						text: 'Search all apps for: ' + this.searchValue
-					}]
-				};
-				addCategory(category);
-			}
-            resultsLength = this.state.results;
+			addSearchButton();
 			if(this.state.state == 'searching'){
 				label = <div className="searching-loader">
                             <p>Searching...</p>
@@ -259,9 +254,9 @@ var SearchModal = React.createClass({
 						{label}
 					</div>
 					<div className="result-preview">
-                        <div className="preview-wrapper">
-						  <PreviewLoader data={{preview:1}}/>
-                        </div>
+						<div className="preview-wrapper">
+							<PreviewLoader data={{preview:1}}/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -269,9 +264,24 @@ var SearchModal = React.createClass({
 	}
 });
 
+SearchModal.SearchButton = React.createClass({
+	render: function(){
+		var arrowClass = "material-icons arrow ";
+		if(this.props.data.state === 'local' && this.props.data.noResults)
+			arrowClass += 'attention';
+
+		return (
+			<div data-index={this.props.data.index} className="search-all-button">
+				<i className="material-icons eye">visibility</i>
+				{this.props.data.title}
+				<i className={arrowClass}>arrow_forward</i>
+			</div>
+		);
+	}
+});
+
 var ResultList = React.createClass({
 	render: function () {
-
 		var nameHtml = '';
 		if(this.props.data.category.name)
 			nameHtml = <div className="result-title">{this.props.data.category.name}</div>
@@ -294,30 +304,11 @@ var ResultList = React.createClass({
 	}
 });
 
-// ResultList.SearchButton = React.createClass({
-//
-// })
 
 ResultList.Row = React.createClass({
 	onClick: function() {
 		this.props.data.onClickedRow(this);
 	},
-    searchIcon: function() {
-        var index = this.props.data.index || 0;
-        if (GlobalState == 'local' && index == 0) {
-            return <i className="material-icons eye">visibility</i>;
-        }
-    },
-    doSearchIcon: function() {
-        var index = this.props.data.index || 0;
-        if (GlobalState == 'local' && index == 0) {
-            if(!resultsLength.length){
-                return <i className="material-icons arrow attention">arrow_forward</i>;
-            } else {
-                return <i className="material-icons arrow">arrow_forward</i>;
-            }
-        }
-    },
 	render: function () {
 		var row = this.props.data.row;
 
@@ -329,18 +320,13 @@ ResultList.Row = React.createClass({
 
 		var index = this.props.data.index || 0;
 
-        var searchClass = "result ";
-        if(GlobalState == 'local' && index == 0)
-			searchClass += "search-all-button";
             
 		return (
-			<li className={searchClass} ref="result" onClick={this.onClick} data-index={index}>
-                {this.searchIcon()}
+			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
 					<i className="material-icons">{icon}</i>
 				</div>
 				<Highlight search={searchValue}>{row.text}</Highlight>
-                {this.doSearchIcon()}
         		{/*<i className="material-icons mention">launch</i>*/}
 			</li>
 
