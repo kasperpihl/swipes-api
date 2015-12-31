@@ -5,13 +5,15 @@ var chatActions = require('../actions/ChatActions');
 var TimeUtility = require('../utilities/time_util');
 
 var ChatStore = Reflux.createStore({
+	init: function(){
+		this.manualLoadData();
+	},
 	listenables: [chatActions],
 	sortedSections: [],
 	users: {},
 	onSendMessage: function(message){
 		console.log("sending message", message);
 		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
-
 		//this.sortMessages();
 	},
 	sortMessages: function(){
@@ -80,7 +82,7 @@ var ChatStore = Reflux.createStore({
 		swipes._client.callSwipesApi('users.list',function(users){
 			users = users.results;
 			self.users = _.indexBy(users, 'id');
-			swipes.currentApp().get({table: "messages", query: {order: "ts"}}, function(messages){
+			swipes.currentApp().get({table: "messages", query: {limit:50, order: "-ts"}}, function(messages){
 				self.messages = messages.results;
 				self.sortMessages();
 			});

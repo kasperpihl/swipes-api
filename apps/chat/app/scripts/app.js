@@ -1,5 +1,8 @@
+require('reflux-model-extension');
 var Router = require('./router');
+
 var chatStore = require('./stores/ChatStore');
+
 Router.start();
 
 swipes.onReady(function(){

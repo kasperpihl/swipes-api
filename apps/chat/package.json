@@ -10,8 +10,9 @@
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-router": "^0.13.5",
-    "reflux": "^0.2.13",
-    "underscore": "^1.8.3"
+    "reflux": "~0.3.0",
+    "underscore": "^1.8.3",
+    "reflux-model-extension": "~0.0.2"
   },
   "devDependencies": {
     "connect-livereload": "^0.5.3",
