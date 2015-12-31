@@ -80,6 +80,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onReady = function(callback){
 		self._listeners.add("init", callback);
 	};
+	SwipesAppSDK.prototype.onPreview = function(callback){
+		self._listeners.add("preview", callback);
+	}
 
 	// API for handling data from apps
 	SwipesAppSDK.prototype.app = function(appId){
