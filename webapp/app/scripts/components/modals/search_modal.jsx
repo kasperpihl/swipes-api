@@ -21,8 +21,11 @@ var SearchModal = React.createClass({
 		this.debouncedChangePreview = _.debounce(this.changePreview, 700);
 
 	},
-	clickedRow: function(row){
-		this.changeToItemWithIndex(row.props.data.index);
+	clickedRow: function(row, dblClick){
+		if(dblClick)
+			this.selectRowWithIndex(row.props.data.index);
+		else
+			this.changeToItemWithIndex(row.props.data.index);
 	},
 	selectRowWithIndex: function(index){
 		var row = this.resultsByIndex[index];
@@ -310,7 +313,13 @@ var ResultList = React.createClass({
 
 ResultList.Row = React.createClass({
 	onClick: function() {
-		this.props.data.onClickedRow(this);
+		var dblClick = false;
+		var clickTime = new Date().getTime();
+		var diffTime = clickTime - this.lastClickTime;
+		if(typeof diffTime === 'number' && diffTime < 500)
+			dblClick = true;
+		this.lastClickTime = clickTime;
+		this.props.data.onClickedRow(this, dblClick);
 	},
 	render: function () {
 		var row = this.props.data.row;
