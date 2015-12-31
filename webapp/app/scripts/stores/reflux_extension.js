@@ -73,10 +73,11 @@ Reflux.StoreMethods.get = function(id){
 	
 	
 };
-Reflux.StoreMethods._reset = function(){
+Reflux.StoreMethods._reset = function(options){
 	this._dataById = _.defaults({}, this.defaults);
 	if(this.localStorage)
 		localStorage.removeItem(this.localStorage);
+	this._saveDataAndTrigger(options);
 };
 
 Reflux.StoreMethods._handleOptions = function(options){
@@ -106,16 +107,13 @@ Reflux.StoreMethods._saveDataAndTrigger = function(options){
 	// Persist to localStorage if localstorage key is set, defaults to YES
 	if(persist && this.localStorage){
 		var dataToPersist = this._dataById;
-		// Check if any keys should be avoided
-		if((this.persistOnly && this.persistOnly instanceof Array) || (this.persistNot && this.persistNot instanceof Array)){
-			dataToPersist = {};
-			for(var key in this._dataById){
-				if(this.persistOnly && _.indexOf(this.persistOnly, key) !== -1)
-					dataToPersist[key] = this._dataById[key];
-				else if(this.persistNot && _.indexOf(this.persistNot, key) === -1)
-					dataToPersist[key] = this._dataById[key];
-			}
+		if(this.persistOnly && this.persistOnly instanceof Array){
+			dataToPersist = _.pick(dataToPersist, this.persistOnly);
 		}
+		else if(this.persistNot && this.persistNot instanceof Array){
+			dataToPersist = _.omit(dataToPersist, this.persistNot);
+		}
+		
 		localStorage.setItem(this.localStorage, JSON.stringify(dataToPersist));
 	}
 	if(trigger){
