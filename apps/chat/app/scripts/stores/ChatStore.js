@@ -5,9 +5,6 @@ var chatActions = require('../actions/ChatActions');
 var TimeUtility = require('../utilities/time_util');
 
 var ChatStore = Reflux.createStore({
-	init: function(){
-		this.manualLoadData();
-	},
 	listenables: [chatActions],
 	sortedSections: [],
 	users: {},
@@ -16,9 +13,12 @@ var ChatStore = Reflux.createStore({
 		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
 		//this.sortMessages();
 	},
+	onSetThread: function(thread){
+
+	},
 	sortMessages: function(){
 		var self = this;
-		var sortedMessages = _.sortBy(this.messages, 'ts');
+		var sortedMessages = _.sortBy(this.get('messages'), 'ts');
 		var lastUser, lastGroup, lastDate;
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
@@ -62,29 +62,26 @@ var ChatStore = Reflux.createStore({
 		}
 		this.sortedSections = sortedSections;
 
-		this.trigger(sortedSections);
+		this.set("sections", sortedSections);
 
 	},
-	getInitialState: function(){
-		return this.sortedSections;
-	},
 	start: function() {
-		this.messages = [];
-		this.sortMessages();
+		this.set('messages', [], {trigger:false});
+		//this.sortMessages();
 		var self = this;
 		// Hook up the sockets
-		swipes.currentApp().on("messages", function(message){
-			console.log("message in chat", message.data);
-			message.data.data.isNewMessage = true;
-			self.messages.push(message.data.data);
-			self.sortMessages();
-		});
+		
 		swipes._client.callSwipesApi('users.list',function(users){
-			users = users.results;
-			self.users = _.indexBy(users, 'id');
+			self.set("users",_.indexBy(users.results, 'id'), {trigger:false});
 			swipes.currentApp().get({table: "messages", query: {limit:50, order: "-ts"}}, function(messages){
-				self.messages = messages.results;
+				self.set("messages", messages.results, {trigger:false});
 				self.sortMessages();
+				swipes.currentApp().on("messages", function(message){
+					console.log("message in chat", message.data);
+					message.data.data.isNewMessage = true;
+					self.get('messages').push(message.data.data);
+					self.sortMessages();
+				});
 			});
 		});
 	}

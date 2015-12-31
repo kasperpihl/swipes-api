@@ -6,7 +6,7 @@ var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 
 var ChatList = React.createClass({
-	mixins: [Reflux.connect(chatStore, "sections")],
+	mixins: [chatStore.connect()],
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	onScroll: function(e){
@@ -56,15 +56,32 @@ var ChatList = React.createClass({
 	componentWillUnmount: function() {
 		window.removeEventListener('resize', this.handleResize);
 	},
-	render: function() {
-		var sections = this.state.sections.map(function(section){
-			return <ChatList.Section key={section.title} data={section} />
-		})
+	renderLoading: function(){
+		if(this.state.sections){
+			return '';
+		}
+		
+		return <div>Loading</div>
+	
+	},
+	renderSections: function(){
+		if(!this.state.sections){
+			return '';
+		}
 
+		return this.state.sections.map(function(section){
+			return <ChatList.Section key={section.title} data={section} />
+		});
+
+	},
+	render: function() {
+		
 		return (
 			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 				<div className="chat-list">
-					{sections}
+					{this.renderLoading()}
+					{this.renderSections()}
+					
 				</div>
 				<ChatInput onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
 			</div>
@@ -112,3 +129,4 @@ ChatList.Section = React.createClass({
 });
 
 module.exports = ChatList;
+;
