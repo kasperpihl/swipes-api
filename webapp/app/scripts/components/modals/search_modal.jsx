@@ -208,7 +208,7 @@ var SearchModal = React.createClass({
 			var dCounter = counter++;
 			var noResults = (searchResults.length === 0);
 			self.resultsByIndex.push({appId: 'ACORE', id:'search-all'});
-			categories.push(<SearchModal.SearchButton key="search-all-button" data={{title:'Search all apps for: ' + self.searchValue, index: dCounter, noResults: noResults, state: self.state.state}} />);
+			categories.push(<SearchModal.SearchButton key="search-all-button" data={{title:'Search all apps for: ' + self.searchValue, index: dCounter, noResults: noResults, state: self.state.state, onClickedRow: self.selectRowWithIndex }} />);
 
 		}
 		function addCategory(category){
@@ -262,13 +262,16 @@ var SearchModal = React.createClass({
 });
 
 SearchModal.SearchButton = React.createClass({
+	onClick: function(){
+		this.props.data.onClickedRow(this.props.data.index);
+	},
 	render: function(){
 		var arrowClass = "material-icons arrow ";
 		if(this.props.data.state === 'local' && this.props.data.noResults)
 			arrowClass += 'attention';
 
 		return (
-			<div data-index={this.props.data.index} className="search-all-button">
+			<div onClick={this.onClick} data-index={this.props.data.index} className="search-all-button">
 				<i className="material-icons eye">visibility</i>
 				{this.props.data.title}
 				<i className={arrowClass}>arrow_forward</i>
@@ -278,6 +281,7 @@ SearchModal.SearchButton = React.createClass({
 });
 
 var ResultList = React.createClass({
+
 	render: function () {
 		var nameHtml = '';
 		if(this.props.data.category.name)
