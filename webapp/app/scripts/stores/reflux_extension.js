@@ -60,17 +60,17 @@ Reflux.StoreMethods.unset = function(id, options){
 	// Sort and trigger to all listeners
 	this._saveDataAndTrigger(options);
 };
-Reflux.StoreMethods.get = function(id){
-
-	if(id){
-		return this._dataById[id];
-	}
+Reflux.StoreMethods.getAll = function(){
 	if(this.sort){
 		return this.sortBy(this.sort);
 	}
 	return this._dataById;
-		// Sort data before sending, can take both string and functions.
-	
+};
+Reflux.StoreMethods.get = function(id){
+	if(id){
+		return this._dataById[id];
+	}
+	return null;
 	
 };
 Reflux.StoreMethods._reset = function(options){

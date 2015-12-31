@@ -2,10 +2,10 @@ var React = require('react');
 var Reflux = require('reflux');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
-var StateActions = require('../../actions/StateActions');
+var PreviewAppActions = require('../../actions/PreviewAppActions');
 
 var PreviewLoader = require('../preview_loader');
-var Previews = require('../previews/previews');
+
 var Highlight = require('react-highlighter');
 
 
@@ -22,7 +22,7 @@ var SearchModal = React.createClass({
 
 	},
 	clickedRow: function(row){
-		this.selectRowWithIndex(row.props.data.index);
+		this.changeToItemWithIndex(row.props.data.index);
 	},
 	selectRowWithIndex: function(index){
 		var row = this.resultsByIndex[index];
@@ -40,12 +40,6 @@ var SearchModal = React.createClass({
 			}
 		}
 	},
-	changePreview: function($resultElement){
-		/*var appId = $resultElement.attr('data-appid') || null;
-		var resultId = $resultElement.attr('data-id') || null;
-		var resultScope = $resultElement.attr('data-scope') || null;
-		StateActions.loadPreview(appId, resultScope, resultId);*/
-	},
 	changeToItemWithIndex: function(index){
 		if(!this.resultsByIndex.length) {
 			return;
@@ -61,13 +55,18 @@ var SearchModal = React.createClass({
 		this.currentIndex = index;
 
 
-		StateActions.unloadPreview();
+		var row = this.resultsByIndex[index];
+		PreviewAppActions.loadPreview(row);
+
 
 		$(this.refs["results-list"]).find('.active').removeClass('active');
 		var $el = $(this.refs["results-list"]).find('[data-index=' + index + ']');
 
 		$el.addClass('active');
 		this.autoScrollToEl($el);
+
+		
+
 	},
 	autoScrollToEl:function(el){
 		var $listEl = $(this.refs["results-list"]);
@@ -254,9 +253,7 @@ var SearchModal = React.createClass({
 						{label}
 					</div>
 					<div className="result-preview">
-						<div className="preview-wrapper">
-							<PreviewLoader data={{preview:1}}/>
-						</div>
+						<PreviewLoader />
 					</div>
 				</div>
 			</div>
@@ -290,6 +287,8 @@ var ResultList = React.createClass({
 		var counter = this.props.data.startCounter;
 
 		var rows = list.map(function (row) {
+			if(!row.appId)
+				row.appId = self.props.data.category.appId;
 			return <ResultList.Row key={row.id} data={{index: counter++, row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
 		});
 

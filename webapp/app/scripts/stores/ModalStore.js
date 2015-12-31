@@ -3,7 +3,6 @@ var modalActions = require('../actions/ModalActions');
 var Modals = require('../components/modals/modals');
 var ModalStore = Reflux.createStore({
 	listenables: [modalActions],
-	persistNot: [ 'modalView', 'modalData', 'modalCallback'],
 	reset:function(){
 		this._reset();
 	},
