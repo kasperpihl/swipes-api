@@ -11,6 +11,7 @@ var StateStore = Reflux.createStore({
 	onInit: function() {
 		swipes.setToken(this.get("swipesToken"));
 		socketActions.start();
+		this.debouncedLoadAppPreview = _.debounce(this.loadAppPreview, 700);
 	},
 	onChangeBackgroundColor: function (color) {
 		this.set("backgroundColor", color)
@@ -20,27 +21,6 @@ var StateStore = Reflux.createStore({
 	},
 	onChangeStarted: function (isStarted) {
 		this.set('isStarted', isStarted);
-	},
-	onUnloadPreview: function () {
-		this.set("preview1", {});
-	},
-	onLoadPreview: function(appId, scope, id){
-		var app = appStore.get(appId);
-
-		if (app) {
-			var appObj = {
-				url: app.preview_view_url + "?id=" + id,
-				app: app
-			};
-			var self = this;
-
-			swipes._client.callSwipesApi("apps.method", {manifest_id: app.manifest_id, method: "preview", data: {scope: scope, id: id}}, function (res, err) {
-				if(res && res.ok){
-					appObj.previewObj = res.res;
-					self.set("preview1", appObj);
-				}
-			});
-		}
 	},
 	onLoadApp: function(params, options){
 		options = options || {};
