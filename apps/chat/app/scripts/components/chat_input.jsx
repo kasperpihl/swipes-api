@@ -20,8 +20,8 @@ var ChatInput = React.createClass({
 		var text = $textarea.val();
 
 		if (text.length > 0) {
-      $('i.chat-input-mobile-send').addClass('active');
-      $('i.chat-input-attach-icon').addClass('active');
+			$('i.chat-input-mobile-send').addClass('active');
+			$('i.chat-input-attach-icon').addClass('active');
 
 			if (!this.state.showHint) {
 				this.setState({showHint:true});
@@ -32,8 +32,16 @@ var ChatInput = React.createClass({
 
 				if (text.length == 1 || /\s+$/.test(testString)) {
 					swipes.modal.search(function(res){
-						if(res)
-							$textarea.val(text += res);
+						if(res){
+							if(typeof res === 'string'){
+								$textarea.val(text += res);
+							}
+							else if(typeof res === 'object'){
+								chatActions.setThread({appId:res.appId, id: res.id, title: res.text});
+							}
+							console.log("res", res);
+							
+						}
 						$textarea.focus();
 					});
 				}

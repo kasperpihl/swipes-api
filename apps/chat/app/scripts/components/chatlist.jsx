@@ -56,6 +56,11 @@ var ChatList = React.createClass({
 	componentWillUnmount: function() {
 		window.removeEventListener('resize', this.handleResize);
 	},
+	renderThreadHeader: function(){
+		if(!this.state.thread)
+			return '';
+		return <ChatList.ThreadHeader data={{thread: this.state.thread}} />
+	},
 	renderLoading: function(){
 		if(this.state.sections){
 			return '';
@@ -78,6 +83,7 @@ var ChatList = React.createClass({
 		
 		return (
 			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
+				{this.renderThreadHeader()}
 				<div className="chat-list">
 					{this.renderLoading()}
 					{this.renderSections()}
@@ -88,7 +94,19 @@ var ChatList = React.createClass({
 		);
 	}
 });
-
+ChatList.ThreadHeader = React.createClass({
+	onClick: function(){
+		chatActions.unsetThread();
+	},
+	render: function(){
+		return (
+			<div className="thread-header">
+				<a onClick={this.onClick}>Clear</a>
+				Thread: {this.props.data.thread.title}
+			</div>
+		);
+	}
+});
 ChatList.Section = React.createClass({
 	render: function() {
 		var chatItemsGroups = [];

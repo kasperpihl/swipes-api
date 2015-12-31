@@ -113,6 +113,13 @@ html, body, #content {
 		}
 	}
 }
+.thread-header{
+	position:absolute;
+	top:0;
+	width: 100%;
+	background: $blue-20;
+	z-index: 1000;
+}
 
 .chat-wrapper {
 	width: 100%;

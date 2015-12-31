@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var ChatActions = Reflux.createActions([
 	'sendMessage',
 	'setThread',
+	'unsetThread',
 	'editMessage',
 	'deleteMessage'
 	// Here you can list your actions

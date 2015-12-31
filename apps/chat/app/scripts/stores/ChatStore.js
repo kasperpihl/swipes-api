@@ -10,11 +10,20 @@ var ChatStore = Reflux.createStore({
 	users: {},
 	onSendMessage: function(message){
 		console.log("sending message", message);
-		swipes.currentApp().save({table:"messages"}, {"text": message, "user_id": swipes.info.userId});
+		var data = {"text": message, "user_id": swipes.info.userId};
+		if(this.get('thread'))
+			data.thread = this.get('thread');
+		swipes.currentApp().save({table:"messages"}, data);
 		//this.sortMessages();
 	},
+	onUnsetThread: function(){
+		this.unset('thread');
+		this.loadMessages();
+	},
 	onSetThread: function(thread){
-
+		console.log('setting thread', thread);
+		this.set("thread", thread);
+		this.loadMessages();
 	},
 	sortMessages: function(){
 		var self = this;
@@ -27,7 +36,7 @@ var ChatStore = Reflux.createStore({
 			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			model.timeStr = TimeUtility.getTimeStr(date);
 
-			user = self.users[model.user_id];
+			user = self.get('users')[model.user_id];
 			if(user && user.id == lastUser && group == lastGroup){
 				model.isExtraMessage = true;
 			}
@@ -65,24 +74,40 @@ var ChatStore = Reflux.createStore({
 		this.set("sections", sortedSections);
 
 	},
+	loadMessages: function(options){
+		this.set('messages', [], {trigger:false});
+		this.sortMessages();
+		options = (typeof options === 'object') ? options : {};
+
+		var self = this;
+		var data = {table: "messages", query: {limit:50, order: "-ts"}};
+		if(options.skip){
+			data.query.skip = options.skip;
+		}
+		if(this.get('thread')){
+			var thread = this.get('thread');
+			data.query.filter = {thread: {appId: thread.appId, id: thread.id}};
+		}
+
+		swipes.currentApp().get(data, function(messages){
+			self.set("messages", messages.results, {trigger:false});
+			self.sortMessages();
+		});
+	},
 	start: function() {
 		this.set('messages', [], {trigger:false});
 		//this.sortMessages();
 		var self = this;
 		// Hook up the sockets
-		
+		swipes.currentApp().on("messages", function(message){
+			console.log("message in chat", message.data);
+			message.data.data.isNewMessage = true;
+			self.get('messages').push(message.data.data);
+			self.sortMessages();
+		});
 		swipes._client.callSwipesApi('users.list',function(users){
 			self.set("users",_.indexBy(users.results, 'id'), {trigger:false});
-			swipes.currentApp().get({table: "messages", query: {limit:50, order: "-ts"}}, function(messages){
-				self.set("messages", messages.results, {trigger:false});
-				self.sortMessages();
-				swipes.currentApp().on("messages", function(message){
-					console.log("message in chat", message.data);
-					message.data.data.isNewMessage = true;
-					self.get('messages').push(message.data.data);
-					self.sortMessages();
-				});
-			});
+			self.loadMessages();
 		});
 	}
 });

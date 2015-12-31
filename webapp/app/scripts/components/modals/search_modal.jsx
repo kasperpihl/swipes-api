@@ -31,7 +31,6 @@ var SearchModal = React.createClass({
 		var row = this.resultsByIndex[index];
 		if(!row)
 			return;
-		console.log("select row", index, row);
 		if(row.appId == 'ACORE'){
 			if(row.id == 'search-all'){
 				SearchModalActions.externalSearch(this.searchValue);
@@ -39,7 +38,7 @@ var SearchModal = React.createClass({
 		}
 		else{
 			if(this.props.data && this.props.data.callback){
-				this.props.data.callback(row.text + " ");
+				this.props.data.callback(row);
 			}
 		}
 	},
