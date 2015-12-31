@@ -1,34 +1,36 @@
 var Reflux = require('reflux');
-var previewAppActions = require('../actions/PreviewAppActions');
-
+var PreviewAppActions = require('../actions/PreviewAppActions');
 var Previews = require('../components/previews/previews');
-var appStore = require('./AppStore');
+var AppStore = require('./AppStore');
 
 var PreviewAppStore = Reflux.createStore({
-	listenables: [ previewAppActions ],
-	onLoadPreview: function(item){
-		var app = appStore.get(item.appId);
+	listenables: [ PreviewAppActions ],
+	onLoadPreview: function (item) {
+		var app = AppStore.get(item.appId);
+
 		this.set('obj', item, {trigger:false});
+
 		if (app && app.preview_view_url) {
 			this.set("app", app, {trigger:false});
 			this.set("url", app.preview_view_url);
-		}
-		else{
+		}	else {
 			this.unset("app");
 			this.unset("url");
-			var Preview = Previews.default;
+
+			var preview = Previews.default;
+
 			if(item.appId === "AUSER"){
-				Preview = Previews.user;
+				preview = Previews.user;
 			}
 			if(item.appId === "AAPP"){
-				Preview = Previews.app;
+				preview = Previews.app;
 			}
 			if(item.appId === 'ACHANNEL'){
-				Preview = Previews.channel;
+				preview = Previews.channel;
 			}
-			this.set('localPreview', Preview);
+
+			this.set('localPreview', preview);
 		}
-		
 	}
 
 

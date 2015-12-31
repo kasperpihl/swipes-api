@@ -65,7 +65,7 @@ var SearchModal = React.createClass({
 		$el.addClass('active');
 		this.autoScrollToEl($el);
 
-		
+
 
 	},
 	autoScrollToEl:function(el){
@@ -79,7 +79,7 @@ var SearchModal = React.createClass({
 		var height = $listEl.outerHeight(); // height of the showing list view (not the content/scroll)
 		var contentHeight = $listEl.prop('scrollHeight'); // The whole content height inside the scroll container
 
-		var newScrollPos; // 
+		var newScrollPos; //
 		var extraBuffer = 0; // How much of the next row to show on autoscroll
 		var edgeSnap = 30; // How long from the top/bottom should scroll be to snap to either top/bottom (used to snap above the category header on the way up)
 
@@ -87,7 +87,7 @@ var SearchModal = React.createClass({
 		if(elUpperY < 0){
 			newScrollPos = scrollY + elUpperY - extraBuffer;
 		}
-		// If element is above the shown content in the view, scroll down to fit at the bottom 
+		// If element is above the shown content in the view, scroll down to fit at the bottom
 		else if(elLowerY > height){
 			newScrollPos = scrollY + elLowerY - height + extraBuffer;
 		}
@@ -100,7 +100,7 @@ var SearchModal = React.createClass({
 			if(newScrollPos < 0 || newScrollPos < edgeSnap ){
 				newScrollPos = 0;
 			}
-			
+
 			// Avoid overscroll and snap at the bottom
 			if(newScrollPos > maxScrollPos || (maxScrollPos-newScrollPos) < edgeSnap ){
 				newScrollPos = maxScrollPos;
@@ -109,7 +109,7 @@ var SearchModal = React.createClass({
 			$listEl.scrollTop(newScrollPos);
 		}
 
-		// To get an understanding of these mechanics try log below and do a search for "kas" in all apps 
+		// To get an understanding of these mechanics try log below and do a search for "kas" in all apps
 		//console.log("elUpperY", elUpperY, 'elLowerY', elLowerY, "scrollY", scrollY, "height", height, "contentHeight", contentHeight, "newScrollPos", newScrollPos);
 
 		// Hack to add/remove scrollbars when not needed
@@ -187,7 +187,7 @@ var SearchModal = React.createClass({
 		$(this.refs.search).focus();
 	},
     searchStateIcon: function() {
-        
+
         if(this.state.state == 'external') {
             return <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
         } else if (this.state.state == 'local') {
@@ -217,8 +217,8 @@ var SearchModal = React.createClass({
 			self.resultsByIndex = self.resultsByIndex.concat(category.results);
 			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
 		}
-        
-        
+
+
 		if(this.searchValue && this.searchValue.length > 0){
 			addSearchButton();
 			if(this.state.state == 'searching'){
@@ -319,7 +319,7 @@ ResultList.Row = React.createClass({
 
 		var index = this.props.data.index || 0;
 
-            
+
 		return (
 			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
