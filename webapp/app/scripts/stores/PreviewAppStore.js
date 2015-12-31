@@ -20,6 +20,12 @@ var PreviewAppStore = Reflux.createStore({
 			if(item.appId === "AUSER"){
 				Preview = Previews.user;
 			}
+			if(item.appId === "AAPP"){
+				Preview = Previews.app;
+			}
+			if(item.appId === 'ACHANNEL'){
+				Preview = Previews.channel;
+			}
 			this.set('localPreview', Preview);
 		}
 		

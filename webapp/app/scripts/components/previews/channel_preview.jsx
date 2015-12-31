@@ -2,9 +2,10 @@ var React = require('react');
 
 
 var ChannelPreview = React.createClass({
-	render: function() {
+	render: function () {
 		return (
-			<div>
+			<div className="channel-preview">
+				channel: {this.props.data.obj.text}
 			</div>
 		);
 	}
