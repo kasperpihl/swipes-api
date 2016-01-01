@@ -47,7 +47,9 @@ var ChatList = React.createClass({
 		this.shouldAnimateScroll = true;
 		this.shouldScrollToBottom = true;
 	},
-	componentDidUpdate: function(){
+	componentDidUpdate: function(prevProps, prevState){
+		if(this.state.thread != prevState.thread)
+			this.hasRendered = false;
 		this.scrollToBottom(this.hasRendered);
 	},
 	componentDidMount: function(){
