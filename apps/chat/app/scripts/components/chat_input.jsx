@@ -31,7 +31,7 @@ var ChatInput = React.createClass({
 				var testString = text.substr(0,text.length-1);
 
 				if (text.length == 1 || /\s+$/.test(testString)) {
-					swipes.modal.search(function(res){
+					swipes.modal.search({title:'Find and start thread'},function(res){
 						if(res){
 							if(typeof res === 'string'){
 								$textarea.val(text += res);
