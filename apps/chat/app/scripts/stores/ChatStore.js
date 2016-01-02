@@ -19,6 +19,7 @@ var ChatStore = Reflux.createStore({
 	onClickedLink: function(clickObj){
 		console.log('clicked link in store', clickObj);
 		if(clickObj.command === '!thread'){
+			// Do the split here and only split the first time (appId and identifier will be here)
 			var res = clickObj.identifier.split(/-_-(.+)?/, 2);
 			var threadObj = {
 				appId: res[0],
@@ -33,7 +34,6 @@ var ChatStore = Reflux.createStore({
 		this.loadMessages();
 	},
 	onSetThread: function(thread){
-		console.log('setting thread', thread);
 		this.set("thread", thread);
 		this.loadMessages();
 	},
@@ -131,7 +131,7 @@ var ChatStore = Reflux.createStore({
 			sortedSections.push({"title": title, "messages": messages.reverse() });
 		}
 		this.sortedSections = sortedSections;
-
+		
 		this.set("sections", sortedSections);
 
 	},

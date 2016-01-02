@@ -26,18 +26,26 @@ var ChatInput = React.createClass({
 			if (!this.state.showHint) {
 				this.setState({showHint:true});
 			}
-
-			if (text.slice(-1) === "@" && text.length > this.currentLength) {
+			// Check if last character is @ or #, and make sure we are not deleting back to it.
+			// K_TODO make this work with where the cursor is
+			var lastChar = text.slice(-1);
+			if ((lastChar === "@" || lastChar === "#") && text.length > this.currentLength) {
 				var testString = text.substr(0,text.length-1);
-
+				var title = 'Find thread';
+				if(lastChar === '@')
+					title = 'Mention';
 				if (text.length == 1 || /\s+$/.test(testString)) {
-					swipes.modal.search({title:'Find and start thread'},function(res){
+					swipes.modal.search({title:title},function(res){
 						if(res){
 							if(typeof res === 'string'){
 								$textarea.val(text += res);
 							}
-							else if(typeof res === 'object'){
+							else if(typeof res === 'object' && lastChar === "#"){
+								$textarea.val(text.slice(0,-1));
 								chatActions.setThread({appId:res.appId, id: res.id, title: res.text});
+							}
+							else if(typeof res === 'object' && lastChar === "@"){
+								$textarea.val(text += res.text);
 							}
 							console.log("res", res);
 							

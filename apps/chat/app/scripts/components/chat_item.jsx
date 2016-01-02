@@ -11,7 +11,7 @@ var ChatMessage = React.createClass({
 		if(res[2])
 			clickObj.title = res[2]; 
 		chatActions.clickedLink(clickObj);
-		console.log("clicked link", match, this);
+
 	},
 	renderTextWithLinks: function(text){
 		text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
@@ -22,7 +22,7 @@ var ChatMessage = React.createClass({
 		if ((matches != null) && matches.length) {
 			var splits = text.split(/<(.*?)>/g);
 			var counter = 0;
-			console.log(text, matches, splits);
+			
 			// Adding the text before the first match
 			replaced.push(splits.shift());
 			for(var i = 0 ; i < matches.length ; i++ ){
