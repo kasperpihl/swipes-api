@@ -54,10 +54,10 @@ var ChatInput = React.createClass({
 					});
 				}
 			}
-		} else if (text.length === 0) {
-            $('i.chat-input-mobile-send').removeClass('active');
-            $('i.chat-input-attach-icon').removeClass('active');
-        }
+			} else if (text.length === 0) {
+				$('i.chat-input-mobile-send').removeClass('active');
+				$('i.chat-input-attach-icon').removeClass('active');
+			}
 
 		var lines = text.split(/\r|\r\n|\n/);
 		var count = lines.length;
