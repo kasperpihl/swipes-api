@@ -172,7 +172,16 @@ var ChatStore = Reflux.createStore({
 			console.log("message in chat", message.data);
 			message.data.data.isNewMessage = true;
 			self.get('messages').push(message.data.data);
-			self.sortMessages();
+			if(self.get('thread')){
+				if(message.data.data.thread && message.data.data.thread.appId === self.get('thread').appId && message.data.data.thread.id === self.get('thread').id){
+					self.get('thread-messages').push(message.data.data);
+					self.sortMessages();
+				}
+			}
+			else{
+				self.sortMessages();
+			}
+			
 		});
 		swipes._client.callSwipesApi('users.list',function(users){
 			self.set("users",_.indexBy(users.results, 'id'), {trigger:false});
