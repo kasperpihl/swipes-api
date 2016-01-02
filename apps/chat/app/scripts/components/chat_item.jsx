@@ -45,8 +45,8 @@ var ChatMessage = React.createClass({
 			}
 			if(replaced.length)
 				return replaced;
-        	return text;
 		}
+		return text;
 	},
 	render: function () {
 		var className = "message-wrapper";
