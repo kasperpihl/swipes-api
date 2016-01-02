@@ -31,7 +31,7 @@ var ChatStore = Reflux.createStore({
 	},
 	onUnsetThread: function(){
 		this.unset('thread');
-		this.loadMessages();
+		this.sortMessages();
 	},
 	onSetThread: function(thread){
 		this.set("thread", thread);
@@ -40,6 +40,9 @@ var ChatStore = Reflux.createStore({
 	sortMessages: function(){
 		var self = this;
 		var sortedMessages = _.sortBy(this.get('messages'), 'ts');
+		if(this.get('thread'))
+			sortedMessages = _.sortBy(this.get('thread-messages'), 'ts');
+
 		var lastUser, lastGroup, lastDate;
 		var groups = _.groupBy(sortedMessages, function(model, i){
 			var date = new Date(parseInt(model.ts)*1000);
@@ -136,7 +139,7 @@ var ChatStore = Reflux.createStore({
 
 	},
 	loadMessages: function(options){
-		this.set('messages', [], {trigger:false});
+		this.set('thread-messages', [], {trigger:false});
 		this.sortMessages();
 		options = (typeof options === 'object') ? options : {};
 
@@ -151,7 +154,12 @@ var ChatStore = Reflux.createStore({
 		}
 
 		swipes.currentApp().get(data, function(messages){
-			self.set("messages", messages.results, {trigger:false});
+			if(self.get('thread')){
+				self.set('thread-messages', messages.results, {trigger:false})
+			}
+			else{
+				self.set("messages", messages.results, {trigger:false});
+			}
 			self.sortMessages();
 		});
 	},
