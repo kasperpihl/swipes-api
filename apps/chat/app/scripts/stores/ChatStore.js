@@ -33,7 +33,7 @@ var ChatStore = Reflux.createStore({
 			var date = new Date(parseInt(model.ts)*1000);
 			var group = moment(date).startOf('day').unix();
 
-			model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+			//model.text = model.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 			model.timeStr = TimeUtility.getTimeStr(date);
 
 			user = self.get('users')[model.user_id];
@@ -72,14 +72,14 @@ var ChatStore = Reflux.createStore({
 				// Only if we are not inside a thread should we try to mask threads
 				if(!this.get('thread') && message.thread){
 					// Unique Index should be appId and id combined
-					var index = message.thread.appId + message.thread.id;
+					var index = message.thread.appId + '-_-' + message.thread.id;
 					var thread = threads[index];
 					
 					if(!thread){
 						// Creating the thread object, used to (re)generate the message
 						thread = {
 							index: messages.length,
-							title: message.thread.title,
+							thread: message.thread,
 							extraUsers: [],
 							user: message.user,
 							messages: []
@@ -104,10 +104,11 @@ var ChatStore = Reflux.createStore({
 							newMessage += "s";
 					}
 					// K_TODO make thread title clickable
-					newMessage += " commented on " + thread.title;
+					newMessage += " commented on \"<!thread|" + index + "|" + thread.thread.title + ">\""; 
 
 					// Replace the message with the new at the thread message index position
 					messages[thread.index].text = newMessage
+
 				}
 				else{
 					messages.push(message);
