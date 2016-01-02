@@ -1,11 +1,16 @@
 var React = require('react');
-
+var chatActions = require('../actions/ChatActions');
 var ChatMessage = React.createClass({
 	clickedLink:function(match){
 		var res = match.split("|");
-		var command = res[0];
-		var identifier = res[1];
-		var title = res[2];
+		var clickObj = {};
+		if(res[0])
+			clickObj.command = res[0];
+		if(res[1])
+			clickObj.identifier = res[1];
+		if(res[2])
+			clickObj.title = res[2]; 
+		chatActions.clickedLink(clickObj);
 		console.log("clicked link", match, this);
 	},
 	renderTextWithLinks: function(text){
@@ -25,22 +30,23 @@ var ChatMessage = React.createClass({
 				var innerMatch = splits.shift();
 				var placement = '';
 				
-
+				// If break, just add that as the placement
 				if(innerMatch === 'br'){
 					var key = 'break' + (counter++);
 					placement = <br key={key}/>;
 				}
+				// Else add the link with the proper title
 				else{
 					var res = innerMatch.split("|");
-					var command = res[0];
-					var placement = "";
 					var title = res[res.length -1];
 					var key = 'link' + (counter++);
 					placement = <a key={key} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{title}</a>;
 				}
 
+				// Adding the replacements
 				replaced.push(placement);
-				
+
+				// Adding the after text between the matches
 				replaced.push(splits.shift());
 			}
 			if(replaced.length)

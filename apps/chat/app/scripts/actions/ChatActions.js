@@ -4,6 +4,7 @@ var ChatActions = Reflux.createActions([
 	'sendMessage',
 	'setThread',
 	'unsetThread',
+	'clickedLink',
 	'editMessage',
 	'deleteMessage'
 	// Here you can list your actions

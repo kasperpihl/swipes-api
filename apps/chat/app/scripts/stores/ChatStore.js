@@ -16,6 +16,18 @@ var ChatStore = Reflux.createStore({
 		swipes.currentApp().save({table:"messages"}, data);
 		//this.sortMessages();
 	},
+	onClickedLink: function(clickObj){
+		console.log('clicked link in store', clickObj);
+		if(clickObj.command === '!thread'){
+			var res = clickObj.identifier.split(/-_-(.+)?/, 2);
+			var threadObj = {
+				appId: res[0],
+				id: res[1],
+				title: clickObj.title
+			};
+			chatActions.setThread(threadObj);
+		}
+	},
 	onUnsetThread: function(){
 		this.unset('thread');
 		this.loadMessages();
