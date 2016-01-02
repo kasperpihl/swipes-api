@@ -43,11 +43,8 @@ router.post('/search', (req, res, next) => {
             if (background && background.methods && background.methods.search) {
               let method = background.methods.search;
               let promise = new Promise((resolve, reject) => {
-                method(query, (error, results) => {
-                  if (error) {
-                    return reject(error);
-                  }
-
+                // Only ask for results, and resolve no matter what.
+                method(query, (results) => {
                   resolve({
                     appId: app.id,
                     name: app.name,
