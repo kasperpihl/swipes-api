@@ -62,12 +62,50 @@ var ChatStore = Reflux.createStore({
 		var sortedSections = [];
 		for(var i = 0 ; i < sortedKeys.length ; i++){
 			var key = sortedKeys[i];
-			for(var j = 0 ; j < groups[key].length ; j++){
-				//console.log(groups[key][j]);
+			// Key for looking up existing thread collection the this day
+			var threads = {};
+			var messages = [];
+			// We go backwards because of the thread order / the newest message should be where it's positioned
+			for(var j = groups[key].length-1 ; j >= 0 ; j--){
+				var message = groups[key][j];
+				if(!this.get('thread') && message.thread){
+					var index = message.thread.appId + message.thread.id;
+					var thread = threads[index];
+					if(!thread){
+						thread = {
+							index: messages.length,
+							title: message.thread.title,
+							extraUsers: [],
+							user: message.user,
+							messages: []
+						};
+
+						messages.push({ ts: message.ts, timeStr: message.timeStr, user: message.user });
+					}
+					if(message.user != thread.user && _.indexOf(thread.extraUsers, message.user) === -1)
+						thread.extraUsers.push(message.user);
+					thread.messages.push(message);
+					
+					threads[index] = thread;
+
+					var newMessage = message.user.name;
+					if(thread.extraUsers.length){
+						newMessage += " and " + thread.extraUsers.length + " other";
+						if(thread.extraUsers.length > 1)
+							newMessage += "s";
+					}
+					newMessage += " commented on " + thread.title;
+
+					messages[thread.index].text = newMessage
+				}
+				else{
+					messages.push(message);
+				}
+				console.log();
 			}
 			schedule = new Date(parseInt(key)*1000);
 			var title = TimeUtility.dayStringForDate(schedule);
-			sortedSections.push({"title": title, "messages": _.sortBy(groups[key], 'ts')});
+			sortedSections.push({"title": title, "messages": messages.reverse() });
 		}
 		this.sortedSections = sortedSections;
 
