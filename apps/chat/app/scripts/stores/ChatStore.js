@@ -62,16 +62,21 @@ var ChatStore = Reflux.createStore({
 		var sortedSections = [];
 		for(var i = 0 ; i < sortedKeys.length ; i++){
 			var key = sortedKeys[i];
-			// Key for looking up existing thread collection the this day
+			// Key for looking up existing thread collections this day
 			var threads = {};
 			var messages = [];
 			// We go backwards because of the thread order / the newest message should be where it's positioned
 			for(var j = groups[key].length-1 ; j >= 0 ; j--){
 				var message = groups[key][j];
+				// Masking thread to kasper commented on etc..
+				// Only if we are not inside a thread should we try to mask threads
 				if(!this.get('thread') && message.thread){
+					// Unique Index should be appId and id combined
 					var index = message.thread.appId + message.thread.id;
 					var thread = threads[index];
+					
 					if(!thread){
+						// Creating the thread object, used to (re)generate the message
 						thread = {
 							index: messages.length,
 							title: message.thread.title,
@@ -79,29 +84,34 @@ var ChatStore = Reflux.createStore({
 							user: message.user,
 							messages: []
 						};
-
+						// Pushing the replacement message, index to this will now be in the thread object
 						messages.push({ ts: message.ts, timeStr: message.timeStr, user: message.user });
+						threads[index] = thread;
 					}
+					// If user is different from the first add as an extra user to include in this thread message
 					if(message.user != thread.user && _.indexOf(thread.extraUsers, message.user) === -1)
 						thread.extraUsers.push(message.user);
+
 					thread.messages.push(message);
 					
-					threads[index] = thread;
-
+					
+					// Start the message with the first user's name
+					
 					var newMessage = message.user.name;
 					if(thread.extraUsers.length){
-						newMessage += " and " + thread.extraUsers.length + " other";
+						newMessage += " & " + thread.extraUsers.length + " other";
 						if(thread.extraUsers.length > 1)
 							newMessage += "s";
 					}
+					// K_TODO make thread title clickable
 					newMessage += " commented on " + thread.title;
 
+					// Replace the message with the new at the thread message index position
 					messages[thread.index].text = newMessage
 				}
 				else{
 					messages.push(message);
 				}
-				console.log();
 			}
 			schedule = new Date(parseInt(key)*1000);
 			var title = TimeUtility.dayStringForDate(schedule);
