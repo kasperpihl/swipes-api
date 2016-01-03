@@ -9,7 +9,6 @@ background.methods = {
 		}
 
 		let escapedQuery = util.escapeRegExp(query);
-
 		var jira = new JiraClient( {
 			host: 'swipes.atlassian.net',
 			basic_auth: {
@@ -18,9 +17,8 @@ background.methods = {
 			}
 		});
 
-		var searchString = '(summary~' + query + '\\u002a OR description~' + query + '\\u002a)';
-		jira.search.search({jql: searchString}, function(err, result){
-			console.log(result,err);
+		var searchString = '(summary~"' + escapedQuery + '\\u002a" OR description~"' + escapedQuery + '\\u002a")';
+		jira.search.search({jql: searchString, fields: ['id','key', 'summary'], maxResults: 5}, function(err, result){
 			if(!err){
 				var returnArr = [];
 				for(var i = 0 ; i < result.issues.length ; i++){
