@@ -236,7 +236,6 @@ var SearchModal = React.createClass({
 
 			_.each(searchResults, addCategory);
 		}
-		console.log("this", this.props.data.options.title);
 		return (
 			<div className="search-modal">
 				<div className="search-input-wrapper">

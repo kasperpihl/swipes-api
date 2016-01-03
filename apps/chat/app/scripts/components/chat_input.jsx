@@ -47,7 +47,6 @@ var ChatInput = React.createClass({
 							else if(typeof res === 'object' && lastChar === "@"){
 								$textarea.val(text += res.text);
 							}
-							console.log("res", res);
 							
 						}
 						$textarea.focus();
