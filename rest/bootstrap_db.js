@@ -29,7 +29,8 @@ let tables = [
   'teams',
   'events',
   'stars',
-  'apps'
+  'apps',
+  'mentions'
 ];
 
 let teamDoc = {
