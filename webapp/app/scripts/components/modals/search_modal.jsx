@@ -324,6 +324,7 @@ ResultList.Row = React.createClass({
 			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
 					<i className="material-icons">{icon}</i>
+                    <img src={this.props.data.obj.image} />
 				</div>
 				<Highlight search={searchValue}>{row.text}</Highlight>
         		{/*<i className="material-icons mention">launch</i>*/}
