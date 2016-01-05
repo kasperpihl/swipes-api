@@ -7,7 +7,6 @@ let express = require( 'express' );
 let r = require('rethinkdb');
 let util = require('../util.js');
 let db = require('../db.js');
-let utilDB = require('../util_db.js');
 let Promise = require('bluebird');
 let _ = require('underscore');
 
