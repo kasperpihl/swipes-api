@@ -1,5 +1,4 @@
-// T_K_TODO We should be able to just require a preview_router here and star building
-// the preview application for the chat
+// On preview is called everytime a new preview is selected. This style allows us to reuse the iframe without loading it again.
 swipes.onPreview(function(previewObj){
 	$("#content").html(JSON.stringify(previewObj));
 });

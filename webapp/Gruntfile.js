@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 'use strict';
 
 var livereload = require('connect-livereload'),

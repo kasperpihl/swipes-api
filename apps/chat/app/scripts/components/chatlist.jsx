@@ -6,7 +6,7 @@ var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 
 var ChatList = React.createClass({
-	mixins: [Reflux.connect(chatStore, "sections")],
+	mixins: [chatStore.connect()],
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	onScroll: function(e){
@@ -47,7 +47,9 @@ var ChatList = React.createClass({
 		this.shouldAnimateScroll = true;
 		this.shouldScrollToBottom = true;
 	},
-	componentDidUpdate: function(){
+	componentDidUpdate: function(prevProps, prevState){
+		if(this.state.thread != prevState.thread)
+			this.hasRendered = false;
 		this.scrollToBottom(this.hasRendered);
 	},
 	componentDidMount: function(){
@@ -56,22 +58,57 @@ var ChatList = React.createClass({
 	componentWillUnmount: function() {
 		window.removeEventListener('resize', this.handleResize);
 	},
-	render: function() {
-		var sections = this.state.sections.map(function(section){
-			return <ChatList.Section key={section.title} data={section} />
-		})
+	renderThreadHeader: function(){
+		if(!this.state.thread)
+			return '';
+		return <ChatList.ThreadHeader data={{thread: this.state.thread}} />
+	},
+	renderLoading: function(){
+		if(this.state.sections){
+			return '';
+		}
+		
+		return <div>Loading</div>
+	
+	},
+	renderSections: function(){
+		if(!this.state.sections){
+			return '';
+		}
 
+		return this.state.sections.map(function(section){
+			return <ChatList.Section key={section.title} data={section} />
+		});
+
+	},
+	render: function() {
+		
 		return (
 			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
+				{this.renderThreadHeader()}
 				<div className="chat-list">
-					{sections}
+					{this.renderLoading()}
+					{this.renderSections()}
+					
 				</div>
 				<ChatInput onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
 			</div>
 		);
 	}
 });
-
+ChatList.ThreadHeader = React.createClass({
+	onClick: function(){
+		chatActions.unsetThread();
+	},
+	render: function(){
+		return (
+			<div className="thread-header">
+				<a onClick={this.onClick}>Clear</a>
+				Thread: {this.props.data.thread.title}
+			</div>
+		);
+	}
+});
 ChatList.Section = React.createClass({
 	render: function() {
 		var chatItemsGroups = [];
@@ -112,3 +149,4 @@ ChatList.Section = React.createClass({
 });
 
 module.exports = ChatList;
+;

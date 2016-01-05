@@ -20,28 +20,43 @@ var ChatInput = React.createClass({
 		var text = $textarea.val();
 
 		if (text.length > 0) {
-      $('i.chat-input-mobile-send').addClass('active');
-      $('i.chat-input-attach-icon').addClass('active');
+			$('i.chat-input-mobile-send').addClass('active');
+			$('i.chat-input-attach-icon').addClass('active');
 
 			if (!this.state.showHint) {
 				this.setState({showHint:true});
 			}
-
-			if (text.slice(-1) === "@" && text.length > this.currentLength) {
+			// Check if last character is @ or #, and make sure we are not deleting back to it.
+			// K_TODO make this work with where the cursor is
+			var lastChar = text.slice(-1);
+			if ((lastChar === "@" || lastChar === "#") && text.length > this.currentLength) {
 				var testString = text.substr(0,text.length-1);
-
+				var title = 'Find thread';
+				if(lastChar === '@')
+					title = 'Mention';
 				if (text.length == 1 || /\s+$/.test(testString)) {
-					swipes.modal.search(function(res){
-						if(res)
-							$textarea.val(text += res);
+					swipes.modal.search({title:title},function(res){
+						if(res){
+							if(typeof res === 'string'){
+								$textarea.val(text += res);
+							}
+							else if(typeof res === 'object' && lastChar === "#"){
+								$textarea.val(text.slice(0,-1));
+								chatActions.setThread({appId:res.appId, id: res.id, title: res.text});
+							}
+							else if(typeof res === 'object' && lastChar === "@"){
+								$textarea.val(text += res.text);
+							}
+							
+						}
 						$textarea.focus();
 					});
 				}
 			}
-		} else if (text.length === 0) {
-            $('i.chat-input-mobile-send').removeClass('active');
-            $('i.chat-input-attach-icon').removeClass('active');
-        }
+			} else if (text.length === 0) {
+				$('i.chat-input-mobile-send').removeClass('active');
+				$('i.chat-input-attach-icon').removeClass('active');
+			}
 
 		var lines = text.split(/\r|\r\n|\n/);
 		var count = lines.length;

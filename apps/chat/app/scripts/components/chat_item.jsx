@@ -1,13 +1,68 @@
 var React = require('react');
-
+var chatActions = require('../actions/ChatActions');
 var ChatMessage = React.createClass({
+	clickedLink:function(match){
+		var res = match.split("|");
+		var clickObj = {};
+		if(res[0])
+			clickObj.command = res[0];
+		if(res[1])
+			clickObj.identifier = res[1];
+		if(res[2])
+			clickObj.title = res[2]; 
+		chatActions.clickedLink(clickObj);
+
+	},
+	renderTextWithLinks: function(text){
+		text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+		var matches = text.match(/<(.*?)>/g);
+		
+		var replaced = [];
+
+		if ((matches != null) && matches.length) {
+			var splits = text.split(/<(.*?)>/g);
+			var counter = 0;
+			
+			// Adding the text before the first match
+			replaced.push(splits.shift());
+			for(var i = 0 ; i < matches.length ; i++ ){
+				// The match is now the next object				
+				var innerMatch = splits.shift();
+				var placement = '';
+				
+				// If break, just add that as the placement
+				if(innerMatch === 'br'){
+					var key = 'break' + (counter++);
+					placement = <br key={key}/>;
+				}
+				// Else add the link with the proper title
+				else{
+					var res = innerMatch.split("|");
+					var title = res[res.length -1];
+					var key = 'link' + (counter++);
+					placement = <a key={key} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{title}</a>;
+				}
+
+				// Adding the replacements
+				replaced.push(placement);
+
+				// Adding the after text between the matches
+				replaced.push(splits.shift());
+			}
+			if(replaced.length)
+				return replaced;
+		}
+		return text;
+	},
 	render: function () {
 		var className = "message-wrapper";
 		if(this.props.data.isNewMessage)
 			className += " new-message";
 		return (
 			<div className={className}>
-				<div className="message" dangerouslySetInnerHTML={{__html: this.props.data.text}} />
+				<div className="message">
+				{this.renderTextWithLinks(this.props.data.text)}
+				</div>
 			</div>
 		);
 	}

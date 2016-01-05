@@ -127,11 +127,12 @@ background.methods = {
 					results.push(result);
 				})
 
-				callback(null, results);
+				callback(results);
 			})
 			.catch((err) => {
 				console.log(err);
-				callback(new Error("Ooops!"));
+				// Don't crash the whole search because of an error!
+				callback([]);
 			})
 	},
 	preview: (data, callback) => {

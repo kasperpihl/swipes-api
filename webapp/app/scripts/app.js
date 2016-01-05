@@ -1,5 +1,5 @@
 // Reflux extension for easier handling data/localstorage etc.
-require('./stores/reflux_extension');
+require('reflux-model-extension');
 
 var Router = require('./router');
 
