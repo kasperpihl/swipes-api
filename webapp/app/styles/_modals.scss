@@ -366,7 +366,19 @@ $break-mid: 650px;
 							//text-align: center;
 							line-height: 42px;
 						}
+                        
+                        img {
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                            //margin-left: 5px;
+                            margin-top: 4px;
+                            
+                            // CSS sucks so bad sometimes, so I just realized that text-align: center on the parent element centers this image as well. 
+                        }
 					}
+                    
+                    
 
                     .mention {
                         position: absolute;

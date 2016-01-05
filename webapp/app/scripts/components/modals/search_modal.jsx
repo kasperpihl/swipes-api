@@ -284,8 +284,12 @@ var ResultList = React.createClass({
 
 	render: function () {
 		var nameHtml = '';
+        var icon = this.props.data.category.icon || "";
 		if(this.props.data.category.name)
-			nameHtml = <div className="result-title">{this.props.data.category.name}</div>
+			nameHtml = <div className="result-title">
+                <i className="material-icons">{icon}</i>
+                {this.props.data.category.name}
+            </div>
 		var list = this.props.data.category.results;
 		var self = this;
 		var counter = this.props.data.startCounter;
@@ -318,10 +322,16 @@ ResultList.Row = React.createClass({
 		this.lastClickTime = clickTime;
 		this.props.data.onClickedRow(this, dblClick);
 	},
+    resultImage: function() {
+        var row = this.props.data.row;
+        if(row.image) {
+            return <img src={row.image} />
+        } 
+    },
 	render: function () {
 		var row = this.props.data.row;
 
-		var icon = row.icon || "";
+		
 		var searchValue = this.props.data.searchValue || "";
 		// If disableHighlight is enabled for row, then ignore searchstring to not highlight
 		if(row.disableHighlight)
@@ -333,11 +343,10 @@ ResultList.Row = React.createClass({
 		return (
 			<li className="result" ref="result" onClick={this.onClick} data-index={index}>
 				<div className="icon">
-					<i className="material-icons">{icon}</i>
-                    <img src={this.props.data.obj.image} />
+					
+                    {this.resultImage()}
 				</div>
 				<Highlight search={searchValue}>{row.text}</Highlight>
-        		{/*<i className="material-icons mention">launch</i>*/}
 			</li>
 
 		);

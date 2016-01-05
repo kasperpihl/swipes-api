@@ -119,6 +119,7 @@ html, body, #content {
 	width: 100%;
 	background: $blue-20;
 	z-index: 1000;
+    cursor: pointer;
 }
 
 .chat-wrapper {
@@ -192,9 +193,11 @@ html, body, #content {
 			font-size: 14px;
 			word-break: break-word;
 			.link{
+                color: $blue-120;
 				text-decoration: underline;
 				cursor:pointer;
 				&:hover{
+                    color: lighten($blue-120, 10%);
 					text-decoration: none;
 				}
 			}

@@ -103,7 +103,7 @@ ChatList.ThreadHeader = React.createClass({
 	render: function(){
 		return (
 			<div className="thread-header">
-				<a onClick={this.onClick}>Clear</a>
+				<a onClick={this.onClick}>Clear </a>
 				Thread: {this.props.data.thread.title}
 			</div>
 		);
