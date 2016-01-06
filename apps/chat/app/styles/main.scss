@@ -575,6 +575,53 @@ html, body, #content {
 	}
 }
 
+.chat-input-wrapper {
+	width: 650px;
+	min-height: 65px;
+	max-height: 200px;
+	border: 2px solid $studioGray-80;
+	border-radius: 10px;
+	position: relative;
+	padding: 25px 0;
+	@extend %flex;
+	
+	.chat-input-attachment {
+		width: 65px;
+		height: 100%;
+		position: absolute;
+		cursor: pointer;
+		color: $studioGray-120;
+		
+		&:hover {
+			color: $deepBlue-60;
+		}
+		
+		i.attach {
+			width: 100%;
+			height: calc(100% - 50px);
+			
+			@extend %flex;
+		}
+	}
+}
+
+.chat-input {
+	width: calc(100% - 65px);
+	max-height: 100px;
+	margin-left: 65px;
+	overflow-y: scroll;
+	//background-color: red;
+	
+	&:focus {
+		outline: none;
+	}
+	
+	.tag {
+		color: blue;
+		background-color: $blue-40;
+	}
+}
+
 @keyframes newMessageLeft {
 	0% {
 		transform: translateY(20px) scale(.5); 
