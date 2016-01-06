@@ -271,7 +271,24 @@ var SwipesAppSDK = (function() {
 			self._client.callListener("modal.load", {modal: name, options: options}, callback);
 		}
 	}
-
+	SwipesAppSDK.prototype.service = function(service){
+		if(!appId)
+			appId = "core";
+		return {
+			request:function(method, parameters, callback){
+				if(!method || typeof method !== 'string' || !method.length)
+					throw new Error("SwipesAppSDK: service:request method required");
+				if(typeof parameters === 'function')
+					callback = parameters;
+				parameters = (typeof parameters === 'object') ? parameters : {};
+				var options = {
+					method: method,
+					params: parameters
+				};
+				self._client.callSwipesApi("service.request", options, callback);
+			}
+		};
+	};
 	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
 			var currentListeners = self._listenersObj[eventName];
