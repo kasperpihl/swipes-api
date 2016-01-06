@@ -13,19 +13,10 @@ require('rethinkdb-init')(r);
 
 let tables = [
   {
-    name: 'channels',
-    indexes: ['name']
-  },
-  {
     name: 'users',
     indexes: ['name', 'email']
   },
-  {
-    name: 'messages',
-    indexes: ['channel_id']
-  },
   'events',
-  'stars',
   'apps',
   'mentions'
 ];
@@ -33,36 +24,9 @@ let tables = [
 r.init(dbConfig,
   tables
 ).then((conn) => {
-  createChannels();
   createApps();
 })
 
-
-let createChannels = () => {
-  console.log('creating some channels');
-
-  let channels = [
-    {
-      id: generateId('C'),
-      name: "general",
-      type: "public",
-      is_general: true,
-      created: moment().unix()
-    },
-    {
-      id: generateId('C'),
-      name: "random",
-      type: "public",
-      created: moment().unix()
-    }
-  ]
-
-  let query = r.table('channels').insert(channels);
-
-  db.rethinkQuery(query).then(res => {
-    console.log('DONE adding Channels');
-  })
-}
 
 let createApps = () => {
   console.log('creating some apps');

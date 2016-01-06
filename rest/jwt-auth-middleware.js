@@ -29,14 +29,7 @@ let restAuth = (req, res, next) => {
               scopes.push(app.id);
             }
           }
-
-          // Finding channels that user is part of
-          if(user.channels){
-            for( var i = 0 ; i < user.channels.length ; i++ ){
-              var channel = user.channels[i];
-              scopes.push(channel.id);
-            }
-          }
+          
           req.scopes = scopes;
 
           next()

@@ -129,27 +129,8 @@ router.post('/users.create', (req, res, next) => {
     }
   )
 
-  let insertUserQ =
-    r.table('channels')
-      .filter((doc) => {
-        return doc('is_general').eq(true)
-      })
-      .coerceTo('array')
-      .do((channel) => {
-        return r.table('users')
-          .insert(
-            r.expr(userDoc)
-              .merge({
-                channels: [
-                  {
-                    id: channel('id').nth(0),
-                    last_read: 123 // long long ago :D :D
-                  }
-                ]
-              })
-          )
-      })
-
+  let insertUserQ = r.table('users').insert(userDoc)
+  
   db.rethinkQuery(checkQ)
     .then((results) => {
       if (!results[0]) {
