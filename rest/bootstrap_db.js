@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = 'TSMFYIEKK';
-
 let config = require('config');
 let r = require('rethinkdb');
 let util = require('./util.js');
@@ -26,30 +24,17 @@ let tables = [
     name: 'messages',
     indexes: ['channel_id']
   },
-  'teams',
   'events',
   'stars',
   'apps',
   'mentions'
 ];
 
-let teamDoc = {
-  id: TEAM_ID,
-  name: 'Swipes HQ',
-  parent: null,
-  users: [],
-  channels: []
-};
-
 r.init(dbConfig,
   tables
 ).then((conn) => {
-  let query = r.table('teams').insert(teamDoc);
-
-  db.rethinkQuery(query).then(res => {
-    createChannels();
-    createApps();
-  })
+  createChannels();
+  createApps();
 })
 
 
@@ -62,14 +47,12 @@ let createChannels = () => {
       name: "general",
       type: "public",
       is_general: true,
-      teamId: TEAM_ID,
       created: moment().unix()
     },
     {
       id: generateId('C'),
       name: "random",
       type: "public",
-      teamId: TEAM_ID,
       created: moment().unix()
     }
   ]

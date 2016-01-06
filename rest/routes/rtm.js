@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let config = require('config');
 let express = require( 'express' );
 let r = require('rethinkdb');
@@ -176,27 +174,13 @@ router.post('/rtm.start', (req, res, next) => {
     })
     .eqJoin('id', r.table('channels')).zip().without('user_ids')
 
-  // All the users in the team that are not the current logged user
-  let notMeQ =
-    r.db('swipes')
-    .table('teams')
-    .getAll(TEAM_ID)
-    .withFields("users")
-    .concatMap((x) => {
-      return x('users').map((user) => {
-        return x.merge({users: user})
-      })
-      .filter((row) => { return row("users") })
-    })
-    .eqJoin("users", r.db('swipes').table('users'))
-    .zip()
-    .without("users", "password")
+  let users = r.table('users').without("password")
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     getChannels(userId),
     db.rethinkQuery(imsQ),
-    db.rethinkQuery(notMeQ),
+    db.rethinkQuery(users),
     getApps(userId, isAdmin, req)
   ]
 

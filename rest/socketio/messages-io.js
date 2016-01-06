@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let r = require('rethinkdb');
 let db = require('../db.js');
 let ChangeFeedManager = require('./ChangeFeedManager.js');

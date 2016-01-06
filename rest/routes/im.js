@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let express = require( 'express' );
 let r = require('rethinkdb');
 let moment = require('moment');
@@ -31,7 +29,6 @@ let createChannel = (creatorId, receiverId) => {
     let doc = {
       id: generateId('D'),
       created: moment().unix(),
-      teamId: TEAM_ID,
       creator_id: creatorId,
       user_ids: [creatorId, receiverId],
       type: 'direct'

@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let express = require( 'express' );
 let r = require('rethinkdb');
 let util = require('../util.js');
