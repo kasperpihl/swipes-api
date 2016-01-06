@@ -444,6 +444,7 @@ html, body, #content {
 			@media screen and (max-width: $break-mid) {
 				display: none;
 			}
+			
 		}
 		
 		textarea {
@@ -476,6 +477,10 @@ html, body, #content {
 		align-items: center;
 		justify-content: center;
 		z-index: 1;
+		.input-thread{
+			// KV_TODO: Add animation here to this class
+			color: black; 
+		}
 	}
 	
 	textarea {

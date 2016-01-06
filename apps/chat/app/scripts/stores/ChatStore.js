@@ -100,7 +100,7 @@ var ChatStore = Reflux.createStore({
 							messages: []
 						};
 						// Pushing the replacement message, index to this will now be in the thread object
-						messages.push({ ts: message.ts, timeStr: message.timeStr, user: message.user });
+						messages.push({ ts: message.ts, isExtraMessage: false, timeStr: message.timeStr, user: message.user });
 						threads[index] = thread;
 					}
 					// If user is different from the first add as an extra user to include in this thread message
@@ -110,9 +110,9 @@ var ChatStore = Reflux.createStore({
 					thread.messages.push(message);
 					
 					
+
 					// Start the message with the first user's name
-					
-					var newMessage = message.user.name;
+					var newMessage = thread.user.name;
 					if(thread.extraUsers.length){
 						newMessage += " & " + thread.extraUsers.length + " other";
 						if(thread.extraUsers.length > 1)

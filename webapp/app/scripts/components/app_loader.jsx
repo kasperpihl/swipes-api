@@ -102,7 +102,7 @@ var AppLoader = React.createClass({
 		
 		if(this.state.channel){
 			initObj.data.default_scope = this.state.channel.id;
-			initObj.data.channel_id = this.state.channel.id;
+			initObj.data.channel = this.state.channel;
 		}
 
 		// Lazy instantiate
