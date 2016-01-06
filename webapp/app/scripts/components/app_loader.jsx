@@ -6,7 +6,6 @@ var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 
 var userStore = require('../stores/UserStore');
-var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
 
 var AppLoader = React.createClass({
@@ -60,9 +59,6 @@ var AppLoader = React.createClass({
 					switch(data.query.table){
 						case "users":
 							store = userStore;
-							break;
-						case "channels":
-							store = channelStore;
 							break;
 						case "apps":
 							store = appStore;

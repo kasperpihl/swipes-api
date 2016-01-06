@@ -4,7 +4,7 @@
 	"identifier": "chat",
 	"version": "0.1",
 	"description": "The Chat App For Swipes",
-	"channel_view": {
+	"main_app": {
 		"index": "dev/index.html"
 	},
 	"preview_view": {

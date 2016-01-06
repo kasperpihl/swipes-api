@@ -3,7 +3,6 @@ var Actions = require('../../actions/modals/SearchModalActions');
 
 var appStore = require('../AppStore');
 var userStore = require('../UserStore');
-var channelStore = require('../ChannelStore');
 
 var SearchStore = Reflux.createStore({
 	listenables: [Actions],
@@ -45,7 +44,7 @@ var SearchStore = Reflux.createStore({
 			return;
 		}
 
-		var localResults = [userStore.search(value), appStore.search(value), channelStore.search(value)];
+		var localResults = [userStore.search(value), appStore.search(value)];
 
 		localResults = localResults.filter(function (locRes) {
 			if (locRes.results.length > 0) {

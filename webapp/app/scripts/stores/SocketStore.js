@@ -1,6 +1,5 @@
 var Reflux = require('reflux');
 var socketActions = require('../actions/SocketActions');
-var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
 var userStore = require('../stores/UserStore');
 var stateActions = require('../actions/StateActions');
@@ -18,9 +17,6 @@ var SocketStore = Reflux.createStore({
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
 				userStore.update(res.self.id, {me:true});
 				
-				channelStore.batchLoad(res.channels,{flush:true, trigger: false, persist: false});
-				channelStore.batchLoad(res.ims, {trigger: true});
-
 				appStore.batchLoad(res.apps, {flush:true});
 
 				self.connect(res.url);
@@ -51,19 +47,6 @@ var SocketStore = Reflux.createStore({
 			else if (msg.type === 'app_activated' || msg.type === 'app_deactivated'){
 				var activated = (msg.type === 'app_activated') ? true : false;
 				appStore.update(msg.data.id, {is_active: activated});
-			}
-
-			else if(msg.type === "channel_joined"){
-				
-				channelStore.update(msg.data.channel.id, {is_member:true});
-				console.log(msg.type, msg.data.channel.id, channelStore.get(msg.data.channel.id));
-			}
-
-			else if(msg.type === "im_created"){
-				channelStore.update(msg.data.channel.id, msg.data.channel);
-			}
-			else if(msg.type === "im_open"){
-				channelStore.update(msg.data.channel_id, {is_open: true, user_id: msg.data.user_id});
 			}
 
 

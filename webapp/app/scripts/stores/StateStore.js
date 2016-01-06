@@ -3,7 +3,6 @@ var stateActions = require('../actions/StateActions');
 var data = [];
 var socketActions = require('../actions/SocketActions');
 var appStore = require('../stores/AppStore');
-var channelStore = require('../stores/ChannelStore');
 var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
@@ -26,7 +25,7 @@ var StateStore = Reflux.createStore({
 		options = options || {};
 
 		var index = options.index || "screen1";
-		var app, channel, appObj = {};
+		var app,  appObj = {};
 		var activeMenuId;
 
 		this.unset("backgroundColor", {trigger: false});
@@ -38,15 +37,6 @@ var StateStore = Reflux.createStore({
 				appObj.url = app.main_app_url;
 				appObj.app = app;
 				activeMenuId = app.id;
-			}
-		}
-		if(params.groupId){
-			channel = channelStore.find({"name":params.groupId});
-			if(channel){
-				appObj.channel = channel;
-				// Adding a get parameter to hack react, otherwise iFrame won't update when switching between channels
-				appObj.url = app.channel_view_url + "?cId=" + channel.id;
-				activeMenuId = channel.id;
 			}
 		}
 

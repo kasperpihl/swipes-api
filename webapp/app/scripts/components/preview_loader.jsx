@@ -2,7 +2,6 @@ var React = require('react');
 var Reflux = require('reflux');
 
 var userStore = require('../stores/UserStore');
-var channelStore = require('../stores/ChannelStore');
 var appStore = require('../stores/AppStore');
 var previewAppStore = require('../stores/PreviewAppStore');
 var stateStore = require('../stores/StateStore');
@@ -19,9 +18,6 @@ var PreviewLoader = React.createClass({
 					switch(data.query.table){
 						case "users":
 							store = userStore;
-							break;
-						case "channels":
-							store = channelStore;
 							break;
 						case "apps":
 							store = appStore;

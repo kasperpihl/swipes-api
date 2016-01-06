@@ -86,100 +86,16 @@ let getApps = (userId, isAdmin, req) => {
   })
 }
 
-let getChannels = (userId) => {
-  let channelsQ =
-    r.table('channels')
-      .filter((channel) => {
-        return channel('id').match('^C')
-      })
-      .coerceTo('Array');
-
-  let userChannelsQ =
-    r.table('users')
-      .get(userId)('channels')
-      .filter((channel) => {
-        return channel('id').match('^C')
-      })
-      .coerceTo('Array');
-
-  let channelListQ =
-    r.do(channelsQ, userChannelsQ, (channels, userChannels) => {
-      return r.expr([channels, userChannels])
-    });
-
-  return new Promise((resolve, reject) => {
-    db.rethinkQuery(channelListQ)
-      .then((results) => {
-        let channels = results[0];
-        let userChannels = results[1];
-        let unreadCountPromises = [];
-        let response = [];
-
-        channels.forEach((channel) => {
-          let found = false;
-          let len = userChannels.length;
-
-          for (let i=0; i<len; i++) {
-            let userChannel = userChannels[i];
-
-            if (channel.id === userChannel.id) {
-              let unreadCountQ =
-                r.table('messages')
-                  .getAll(channel.id, {index: 'channel_id'})
-                  .filter(r.row("ts").gt(userChannel.last_read))
-                  .count();
-
-              unreadCountPromises.push(db.rethinkQuery(unreadCountQ));
-              response.push(_.extend(channel, userChannel, {is_member: true}));
-              found = true;
-
-              break;
-            }
-          }
-
-          if (!found) {
-            response.push(_.extend(channel, {is_member: false}));
-          }
-        })
-
-        Promise.all(unreadCountPromises).then((unreadCountRes) => {
-          response.forEach((item, idx) => {
-            let unreadCount = unreadCountRes[idx] || 0;
-
-            response[idx].unread_count = unreadCount;
-          })
-
-          return resolve(response);
-        })
-        .catch((err) => {
-          return reject(err);
-        })
-      })
-      .catch((err) => {
-        return reject(err);
-      })
-  })
-}
-
 router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
 
   let meQ = r.table('users').get(userId).without('password');
 
-  let imsQ = r.table('users')
-    .get(userId)('channels')
-    .filter((channel) => {
-      return channel('id').match('^D')
-    })
-    .eqJoin('id', r.table('channels')).zip().without('user_ids')
-
   let users = r.table('users').without("password")
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
-    getChannels(userId),
-    db.rethinkQuery(imsQ),
     db.rethinkQuery(users),
     getApps(userId, isAdmin, req)
   ]
@@ -190,10 +106,8 @@ router.post('/rtm.start', (req, res, next) => {
         ok: true,
         url: config.get('hostname') + ':' + config.get('port'),
         self: data[0],
-        channels: data[1],
-        ims: data[2],
-        users: data[3],
-        apps: data[4]
+        users: data[1],
+        apps: data[2]
       }
 
       res.status(200).json(rtmResponse);

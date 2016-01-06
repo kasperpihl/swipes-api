@@ -40,11 +40,7 @@ app.use(parseErrorHandler);
 let appsRouter = require('./routes/apps.js');
 let usersAuth = require('./routes/users_auth.js');
 let usersRouter = require('./routes/users.js');
-let channelsRouter = require('./routes/channels.js');
 let rtmRouter = require('./routes/rtm.js');
-let chatRouter = require('./routes/chat.js');
-let imRouter = require('./routes/im.js');
-let starsRouter = require('./routes/stars.js');
 let sdkRouter = require('./routes/sdk.js');
 let searchRouter = require('./routes/search.js');
 let mentionsRouter = require('./routes/mentions.js');
@@ -73,11 +69,7 @@ app.use('/v1', jwtMiddleware.restAuth);
 // Routes for which we need authentication
 app.use('/v1', appsRouter);
 app.use('/v1', usersRouter);
-app.use('/v1', channelsRouter);
 app.use('/v1', rtmRouter);
-app.use('/v1', chatRouter);
-app.use('/v1', imRouter);
-app.use('/v1', starsRouter);
 app.use('/v1', searchRouter);
 app.use('/v1', mentionsRouter);
 

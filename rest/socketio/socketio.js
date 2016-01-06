@@ -1,10 +1,6 @@
 "use strict";
 
 let r = require('rethinkdb');
-let channels = require('./channels-io.js').channelChanges;
-let messages = require('./messages-io.js').channelMessages;
-let im = require('./im-io.js');
-let stars = require('./stars-io.js');
 let apps = require('./apps-io.js');
 let common = require('./common-events-io.js');
 let db = require('../db.js');
@@ -23,7 +19,6 @@ let handleScopeChange = (socket, userId) => {
     .map((user) => {
       return r.union(
         r.expr([user('id')]),
-        user('channels').map((ch) => {return ch('id')}),
         user('apps').map((app) => {return app('id')})
       )
   }).changes({includeInitial: true})
@@ -66,16 +61,11 @@ module.exports = (io) => {
     socket.emit('message', {type: 'hello'});
 
     scopes = [
-      apps.hook(socket, userId),
-      messages(socket, userId)
+      apps.hook(socket, userId)
     ];
 
     handleScopeChange(socket, userId);
 
-    channels(socket, userId);
-    im.channelsIm(socket, userId);
-    im.userIm(socket, userId);
-    stars.stars(socket, userId);
     apps.adminApps(socket, userId);
     common.commonEvents(socket, userId);
   });
