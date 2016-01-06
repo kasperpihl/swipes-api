@@ -132,6 +132,8 @@ var ChatInput = React.createClass({
 				<div className="hint">Write message</div>
 				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>
 				<i className="material-icons chat-input-mobile-send" onClick={this.onClick} ref="send-icon">send</i>
+                
+                // http://codepen.io/iremlopsum/pen/JGWbjV contenteditable
 			</div>
 		);
 	}
