@@ -81,6 +81,9 @@ var ChatList = React.createClass({
 		});
 
 	},
+	renderInput: function(){
+		return <ChatInput data={{channel: swipes.info.channel, thread: this.state.thread}} onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
+	},
 	render: function() {
 		
 		return (
@@ -91,7 +94,7 @@ var ChatList = React.createClass({
 					{this.renderSections()}
 					
 				</div>
-				<ChatInput onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
+				{this.renderInput()}
 			</div>
 		);
 	}

@@ -303,6 +303,8 @@ var SwipesAppSDK = (function() {
 						this.info.previewObj = data.data.preview_obj;
 					if(data.data.channel_id)
 						this.info.channelId = data.data.channel_id;
+					if(data.data.channel)
+						this.info.channel = data.data.channel;
 					if(data.data.manifest.manifest_id)
 						this.setAppId(data.data.manifest.manifest_id);
 					if(data.data.user_id)

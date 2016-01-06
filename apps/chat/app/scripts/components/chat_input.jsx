@@ -11,6 +11,8 @@ var ChatInput = React.createClass({
 	},
 	componentDidMount: function(){
 		this.debouncedCheck = _.debounce(this.hideHint, 2000);
+		var $textarea = $(this.refs.textarea);
+        $textarea.focus();
 	},
 	getInitialState:function(){
 		return {};
@@ -117,11 +119,21 @@ var ChatInput = React.createClass({
 
 	},
 	render: function() {
-        var $textarea = $(this.refs.textarea);
-        $textarea.focus();
 		var hintClass = "input-container ";
 		if(this.state.showHint)
 			hintClass += "show-hint";
+		
+		var placeholder = "Message";
+		
+		var threadHtml = "";
+		var channelName = this.props.data.channel ? this.props.data.channel.name : "";
+		
+		if(this.props.data.thread)
+			threadHtml = <span className="input-thread">{" # " + this.props.data.thread.title}</span>;
+		if(channelName.length > 0)
+			placeholder +=  " " + channelName;
+
+		
 		return (
 			<div ref="input-container" className={hintClass} >
 				{/* <input type="file" id="file-input" />
@@ -129,7 +141,7 @@ var ChatInput = React.createClass({
 				</div>*/}
                 <div className="mobile-search-at-sign">@</div>
 				<i className="material-icons chat-input-attach-icon" ref="attach-icon">attach_file</i>
-				<div className="hint">Write message</div>
+				<div className="hint">{placeholder}&nbsp;{threadHtml}</div>
 				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>
 				<i className="material-icons chat-input-mobile-send" onClick={this.onClick} ref="send-icon">send</i>
 			</div>
