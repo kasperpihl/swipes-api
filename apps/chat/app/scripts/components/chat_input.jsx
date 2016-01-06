@@ -136,14 +136,18 @@ var ChatInput = React.createClass({
 		
 		return (
 			<div ref="input-container" className={hintClass} >
-				{/* <input type="file" id="file-input" />
-				<div className="attach-button-container">
-				</div>*/}
                 <div className="mobile-search-at-sign">@</div>
-				<i className="material-icons chat-input-attach-icon" ref="attach-icon">attach_file</i>
-				<div className="hint">{placeholder}&nbsp;{threadHtml}</div>
-				<textarea ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea" rows="1"></textarea>
-				<i className="material-icons chat-input-mobile-send" onClick={this.onClick} ref="send-icon">send</i>
+				{/*<div className="hint">{placeholder}&nbsp;{threadHtml}</div>*/}
+				<div className="chat-input-wrapper">
+                    <div className="chat-input-attachment">
+                        <i className="material-icons attach">attach_file</i>
+                    </div>
+                    <div className="chat-input" contentEditable="true" value="write something" ref="textarea" data-autoresize tabIndex="1" onBlur={this.onBlur} onChange={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} id="new-message-textarea">
+
+                    </div>
+                </div>
+                
+                <i className="material-icons chat-input-mobile-send" onClick={this.onClick} ref="send-icon">send</i>
 			</div>
 		);
 	}

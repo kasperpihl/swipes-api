@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let express = require( 'express' );
 let getSlug = require('speakingurl');
 let r = require('rethinkdb');
@@ -95,7 +93,6 @@ router.post('/channels.create', (req, res, next) => {
   doc.name = name;
   doc.is_archived = false;
   doc.created = moment().unix();
-  doc.teamId = TEAM_ID;
   doc.creator_id = userId;
 
   let query = r.branch(

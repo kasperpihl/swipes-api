@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let r = require('rethinkdb');
 let db = require('../db.js');
 
@@ -9,7 +7,7 @@ module.exports.channelChanges = (socket, userId) => {
   let insertQ =
     r.table('channels')
       .filter((doc) => {
-        return doc('teamId').eq(TEAM_ID).and(doc('id').match('^C'))
+        return doc('id').match('^C')
       }).changes()
 
     db.rethinkQuery(insertQ, {feed: true, socket: socket})

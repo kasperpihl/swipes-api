@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let r = require('rethinkdb');
 let db = require('../db.js');
 
@@ -9,9 +7,7 @@ let channelsIm = (socket, userId) => {
   let listenQ =
     r.table('channels')
       .filter((channel) => {
-        return channel('teamId').eq(TEAM_ID)
-          .and(channel('id').match('^D'))
-          .and(channel('user_ids').contains(userId))
+        return channel('id').match('^D').and(channel('user_ids').contains(userId))
       }).changes()
 
     db.rethinkQuery(listenQ, {feed: true, socket: socket})

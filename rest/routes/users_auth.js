@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let express = require( 'express' );
 let r = require('rethinkdb');
 let validator = require('validator');
@@ -119,7 +117,8 @@ router.post('/users.create', (req, res, next) => {
     email: email,
     name: name,
     password: sha1(password),
-    created: moment().unix()
+    created: moment().unix(),
+    team: 'swipes'
   }
 
   let checkQ = r.do(
@@ -151,18 +150,6 @@ router.post('/users.create', (req, res, next) => {
           )
       })
 
-  let appendUserToTeamQ = r.table('teams').get(TEAM_ID).update((team) => {
-    return {
-      users: team('users').append(userId)
-    }
-  });
-
-  let insertUpdateQ =
-    r.do(
-      insertUserQ,
-      appendUserToTeamQ
-    )
-
   db.rethinkQuery(checkQ)
     .then((results) => {
       if (!results[0]) {
@@ -178,7 +165,7 @@ router.post('/users.create', (req, res, next) => {
           errors: [{field: 'username', message: 'This username is not available.'}]
         });
       } else {
-        db.rethinkQuery(insertUpdateQ)
+        db.rethinkQuery(insertUserQ)
           .then(() => {
             let token = jwt.encode({
               iss: userId

@@ -1,7 +1,5 @@
 "use strict";
 
-const TEAM_ID = process.env.TEAM_ID;
-
 let r = require('rethinkdb');
 let channels = require('./channels-io.js').channelChanges;
 let messages = require('./messages-io.js').channelMessages;
