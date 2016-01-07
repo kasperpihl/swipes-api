@@ -1,0 +1,9 @@
+{
+	"manifest_version": 1,
+	"type": "service",
+	"title": "Slack",
+	"identifier": "slack",
+	"version": "0.1",
+	"description": "The Slack Service For Swipes",
+	"script": "slack.js"
+}
