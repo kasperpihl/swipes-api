@@ -1,5 +1,5 @@
 var Reflux = require('reflux');
-var serviceActions = require('../actions/serviceActions');
+var serviceActions = require('../actions/ServiceActions');
 var ServiceStore = Reflux.createStore({
 	listenables: [ serviceActions ],
 	onAuthorize: function(serviceName){
