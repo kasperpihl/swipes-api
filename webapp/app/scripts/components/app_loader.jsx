@@ -95,11 +95,6 @@ var AppLoader = React.createClass({
 				default_scope: this.state.app.id
 			}
 		};
-		
-		if(this.state.channel){
-			initObj.data.default_scope = this.state.channel.id;
-			initObj.data.channel = this.state.channel;
-		}
 
 		// Lazy instantiate
 		if(!this.apiCon){

@@ -18,6 +18,7 @@ let tables = [
   },
   'events',
   'apps',
+  'services',
   'mentions'
 ];
 
