@@ -43,6 +43,7 @@ let usersRouter = require('./routes/users.js');
 let rtmRouter = require('./routes/rtm.js');
 let sdkRouter = require('./routes/sdk.js');
 let searchRouter = require('./routes/search.js');
+let servicesRouter = require('./routes/services.js');
 let mentionsRouter = require('./routes/mentions.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
@@ -71,6 +72,7 @@ app.use('/v1', appsRouter);
 app.use('/v1', usersRouter);
 app.use('/v1', rtmRouter);
 app.use('/v1', searchRouter);
+app.use('/v1', servicesRouter);
 app.use('/v1', mentionsRouter);
 
 // We want req.userId to the socket.io stuff too
