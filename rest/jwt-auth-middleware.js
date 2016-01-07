@@ -14,6 +14,7 @@ let restAuth = (req, res, next) => {
 
       req.userId = decoded.iss;
       req.isAdmin = decoded.adm;
+      req.isSysAdmin = decoded.sysAdm;
 
       db.rethinkQuery(r.table('users').get(req.userId))
         .then((user) => {

@@ -52,11 +52,10 @@ router.post('/users.login', (req, res, next) => {
           errors: [{field: 'password', message: 'Incorrect password.'}]
         });
       } else {
-        let userId = user.id;
-        let isAdmin = user.is_admin;
         let token = jwt.encode({
-          iss: userId,
-          adm: isAdmin
+          iss: user.id,
+          adm: user.is_admin,
+          sysAdm: user.is_sysadmin
         }, config.get('jwtTokenSecret'))
 
         res.status(200).json({ok: true, token: token});
