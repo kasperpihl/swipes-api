@@ -271,10 +271,14 @@ var SwipesAppSDK = (function() {
 			self._client.callListener("modal.load", {modal: name, options: options}, callback);
 		}
 	}
-	SwipesAppSDK.prototype.service = function(service){
-		if(!appId)
-			appId = "core";
+	SwipesAppSDK.prototype.service = function(serviceName){
 		return {
+			authorize: function(callback){
+				var options = {
+					service: service
+				};
+				self._client.callSwipesApi("service.authorize", options, callback);
+			},
 			request:function(method, parameters, callback){
 				if(!method || typeof method !== 'string' || !method.length)
 					throw new Error("SwipesAppSDK: service:request method required");
