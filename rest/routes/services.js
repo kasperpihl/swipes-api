@@ -8,7 +8,7 @@ let db = require('../db.js');
 let util = require('../util.js');
 let generateId = util.generateSlackLikeId;
 let serviceDir = __dirname + '/../../services/';
-
+let serviceUtil = require('../utils/services_util.js');
 router.post('/services.list', (req, res, next) => {
 
 });
@@ -16,22 +16,61 @@ router.post('/services.list', (req, res, next) => {
 router.post('/services.call', (req, res, next) => {
 
 });
+/*
+	authsuccess should be called after 
+ */
+router.post('/services.authsuccess', (req, res, next) => {
+	let data, service;
+	// Validate params service and data
+	Promise.all([ 
+		serviceUtil.getServiceFromReq(req), 
+		serviceUtil.getDataFromReq(req)
+		
+	]).then((arr) => {
+		service = arr[0];
+		data = arr[1];
 
-router.post('/services.authorize', (req, res, next) => {
-	let service = req.body.service;
-	if (!service) {
-		return res.status(200).json({ok: false, err: 'service_required'});
-	}
+		return serviceUtil.getScriptFileFromServiceObj(service);
 
-	let getServiceQ = r.table('services').filter((ser) => {
-		return ser('manifest_id').eq(service);
+	}).then((scriptFile) => {
+		
+		return serviceUtil.getAuthDataToSaveForServiceAndData(scriptFile, service, data);
+
+	}).then((authData) => {
+
+		return serviceUtil.saveAuthDataToUserForService(authData, req.userId, service);
+
+	}).then((result) => {
+
+		res.send({ok:true, res: result});
+
+	}).catch((err) => {
+		if(typeof err === "string"){
+			return res.status(200).json({ok: false, err: err});
+		}
+		return next(err);
 	});
 
-	db.rethinkQuery(getServiceQ).then((foundService) => {
-		if(!(foundService instanceof Array) || !foundService.length){
-			return new Promise((resolve, reject) =>{ reject('service_not_found') });
-		}
+});
+
+router.post('/services.authorize', (req, res, next) => {
+	serviceUtil.getServiceFromReq(req).then((service) => {
 		
+		return serviceUtil.getScriptFileFromServiceObj(service);
+	}).then((scriptFile) => {
+
+		if(typeof scriptFile.authorize !== 'function'){
+			return Promise.reject('authorize_function_not_found');
+		}
+		var authObj = scriptFile.authorize({
+			redirect_uri: 'http://dev.swipesapp.com/oauth-success.html',
+			client_id: '2345135970.9201204242'
+		});
+		res.send({
+			ok:true,
+			auth: authObj
+		});
+
 	}).catch((err) => {
 		if(typeof err === "string"){
 			return res.status(200).json({ok: false, err: err});
@@ -66,7 +105,7 @@ router.post('/services.install', (req, res, next) => {
 
 		let manifest = JSON.parse(util.getAppFile(serviceDir + folderName + '/manifest.json'));
 		if(!manifest){
-			return new Promise((resolve, reject) =>{ reject('no_manifest_found') });
+			return Promise.reject('no_manifest_found');
 		}
 		let updateObj = {
 			id: idForService,
@@ -89,5 +128,9 @@ router.post('/services.install', (req, res, next) => {
 		return next(err);
 	});
 });
+
+
+
+
 
 module.exports = router;
