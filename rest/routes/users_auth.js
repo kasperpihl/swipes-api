@@ -113,6 +113,7 @@ router.post('/users.create', (req, res, next) => {
   let userDoc = {
     id: userId,
     apps: [],
+    services:[],
     email: email,
     name: name,
     password: sha1(password),
