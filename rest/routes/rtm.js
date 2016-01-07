@@ -48,10 +48,6 @@ let getApps = (userId, isAdmin, req) => {
           let found = false;
           let len = userApps.length;
 
-          if(app.channel_view) {
-            app.channel_view_url = util.appUrl(req, app, "channel_view");
-          }
-
           if(app.preview_view) {
             app.preview_view_url = util.appUrl(req, app, "preview_view");
           }
@@ -92,12 +88,15 @@ router.post('/rtm.start', (req, res, next) => {
 
   let meQ = r.table('users').get(userId).without('password');
 
-  let users = r.table('users').without("password")
+  let users = r.table('users').without("password");
+
+  let servicesQ = r.table('services');
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(users),
-    getApps(userId, isAdmin, req)
+    getApps(userId, isAdmin, req),
+    db.rethinkQuery(servicesQ)
   ]
 
   Promise.all(promiseArrayQ)
@@ -107,7 +106,8 @@ router.post('/rtm.start', (req, res, next) => {
         url: config.get('hostname') + ':' + config.get('port'),
         self: data[0],
         users: data[1],
-        apps: data[2]
+        apps: data[2],
+        services: data[3]
       }
 
       res.status(200).json(rtmResponse);
