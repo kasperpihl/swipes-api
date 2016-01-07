@@ -41,13 +41,13 @@
         @include grid_first;
     }
         
-    .grid_1 {
+    .sm_1 {
         @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_2 {
+    .sm_2 {
         @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_3 {
+    .sm_3 {
         @include grid_first;
         width:100%;
     }
@@ -70,22 +70,22 @@
         @include grid_first;
     }
         
-    .grid_1 {
+    .md_1 {
         @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_2 {
+    .md_2 {
         @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_3 {
+    .md_3 {
         @include grid(3, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_4 {
+    .md_4 {
         @include grid(4, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_5 {
+    .md_5 {
         @include grid(5, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_6 {
+    .md_6 {
         @include grid_first;
         width:100%;
     }
@@ -107,34 +107,34 @@
         @include grid_first;
     }
         
-    .grid_1 {
+    .lg_1 {
         @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_2 {
+    .lg_2 {
         @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_3 {
+    .lg_3 {
         @include grid(3, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_4 {
+    .lg_4 {
         @include grid(4, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_5 {
+    .lg_5 {
         @include grid(5, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_6 {
+    .lg_6 {
         @include grid(6, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_7 {
+    .lg_7 {
         @include grid(7, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_8 {
+    .lg_8 {
         @include grid(8, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_9 {
+    .lg_9 {
         @include grid(9, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_10 {
+    .lg_10 {
         @include grid_first;
         width:100%;
     }
@@ -156,40 +156,40 @@
         @include grid_first;
     }
         
-    .grid_1 {
+    .xlg_1 {
         @include grid(1, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_2 {
+    .xlg_2 {
         @include grid(2, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_3 {
+    .xlg_3 {
         @include grid(3, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_4 {
+    .xlg_4 {
         @include grid(4, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_5 {
+    .xlg_5 {
         @include grid(5, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_6 {
+    .xlg_6 {
         @include grid(6, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_7 {
+    .xlg_7 {
         @include grid(7, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_8 {
+    .xlg_8 {
         @include grid(8, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_9 {
+    .xlg_9 {
         @include grid(9, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_10 {
+    .xlg_10 {
         @include grid(10, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_11 {
+    .xlg_11 {
         @include grid(11, $gutter_pc, $gutter_px, $padding, $max_columns);
     }
-    .grid_12 {
+    .xlg_12 {
         @include grid_first;
         width:100%;
     }

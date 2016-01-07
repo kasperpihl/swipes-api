@@ -33,21 +33,21 @@ html, body {
     margin-left: 0;
   }
 
-  .grid_1 {
+  .sm_1 {
     width: 32%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_2 {
+  .sm_2 {
     width: 66%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_3 {
+  .sm_3 {
     margin-left: 0;
     width: 100%;
   }
@@ -62,42 +62,42 @@ html, body {
     margin-left: 0;
   }
 
-  .grid_1 {
+  .md_1 {
     width: 15%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_2 {
+  .md_2 {
     width: 32%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_3 {
+  .md_3 {
     width: 49%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_4 {
+  .md_4 {
     width: 66%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_5 {
+  .md_5 {
     width: 83%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_6 {
+  .md_6 {
     margin-left: 0;
     width: 100%;
   }
@@ -112,70 +112,70 @@ html, body {
     margin-left: 0;
   }
 
-  .grid_1 {
+  .lg_1 {
     width: 8.2%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_2 {
+  .lg_2 {
     width: 18.4%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_3 {
+  .lg_3 {
     width: 28.6%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_4 {
+  .lg_4 {
     width: 38.8%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_5 {
+  .lg_5 {
     width: 49%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_6 {
+  .lg_6 {
     width: 59.2%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_7 {
+  .lg_7 {
     width: 69.4%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_8 {
+  .lg_8 {
     width: 79.6%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_9 {
+  .lg_9 {
     width: 89.8%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_10 {
+  .lg_10 {
     margin-left: 0;
     width: 100%;
   }
@@ -190,84 +190,84 @@ html, body {
     margin-left: 0;
   }
 
-  .grid_1 {
+  .xlg_1 {
     width: 6.5%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_2 {
+  .xlg_2 {
     width: 15%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_3 {
+  .xlg_3 {
     width: 23.5%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_4 {
+  .xlg_4 {
     width: 32%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_5 {
+  .xlg_5 {
     width: 40.5%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_6 {
+  .xlg_6 {
     width: 49%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_7 {
+  .xlg_7 {
     width: 57.5%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_8 {
+  .xlg_8 {
     width: 66%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_9 {
+  .xlg_9 {
     width: 74.5%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_10 {
+  .xlg_10 {
     width: 83%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_11 {
+  .xlg_11 {
     width: 91.5%;
     border-left-width: 0;
     padding: 0 1.6%;
     margin-left: 2%;
   }
 
-  .grid_12 {
+  .xlg_12 {
     margin-left: 0;
     width: 100%;
   }
