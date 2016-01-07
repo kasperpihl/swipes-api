@@ -1,11 +1,17 @@
 var Reflux = require('reflux');
-var socketActions = require('../actions/SocketActions');
-var appStore = require('../stores/AppStore');
-var userStore = require('../stores/UserStore');
+
+// Stores
+var appStore = require('./AppStore');
+var userStore = require('./UserStore');
+var serviceStore = require('./ServiceStore');
+var stateStore = require('./StateStore');
+var eventStore = require('./EventStore');
+
+// Actions
 var stateActions = require('../actions/StateActions');
-var stateStore = require('../stores/StateStore');
+var socketActions = require('../actions/SocketActions');
 var eventActions = require('../actions/EventActions');
-var eventStore = require('../stores/EventStore');
+
 var SocketStore = Reflux.createStore({
 	listenables: [ socketActions ],
 	onStart: function(){
@@ -19,8 +25,10 @@ var SocketStore = Reflux.createStore({
 				
 				appStore.batchLoad(res.apps, {flush:true});
 
+				serviceStore.batchLoad(res.services, {flush:true});
 				self.connect(res.url);
 				stateActions.changeStarted(true);
+				
 			}
 		}).fail(function(err){
 			console.log("rtm start err", err);

@@ -9,7 +9,7 @@ var Services = React.createClass({
 	render: function() {
 		return (
 			<div onClick={this.clickedAuthorize} className="service-container">
-				HAHAHAHAHA
+				Click to start auth (In progress/not working)
 			</div>
 		);
 	}

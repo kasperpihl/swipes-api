@@ -6,6 +6,7 @@ var userStore = require('../stores/UserStore');
 var modalActions = require('../actions/ModalActions');
 var sidebarStore = require('../stores/SidebarStore');
 var sidebarActions = require('../actions/SidebarActions');
+var overlayActions = require('../actions/OverlayActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
@@ -17,6 +18,9 @@ var Sidebar = React.createClass({
 			this.setState({activeMenuId:states.active_menu_id});
 		}
 	},
+	openServicesOverlay: function(){
+		overlayActions.loadOverlay('services');
+	},
 	componentWillMount: function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
@@ -25,8 +29,10 @@ var Sidebar = React.createClass({
 			<aside className="sidebar left">
 				<div className="sidebar_content">
 					<div className="sidebar-controls">
-						<Sidebar.Section data={{title:"My Apps", section:"apps", rows: this.state.apps}}/>
+						<Sidebar.Section data={{title:"My Workflows", section:"apps", rows: this.state.apps}}/>
+						<div onClick={this.openServicesOverlay} style={{color: "white"}}>Open Services</div>
 					</div>
+
 				</div>
 			</aside>
 		);
