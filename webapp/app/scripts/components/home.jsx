@@ -5,7 +5,7 @@ var Topbar = require('./topbar');
 var AppLoader = require('./app_loader');
 var Loading = require('./loading');
 var Modal = require('./modal');
-
+var Overlay = require('./overlay');
 var Router = require('react-router');
 var stateStore = require('../stores/StateStore');
 var Navigation = Router.Navigation;
@@ -68,6 +68,7 @@ var Home = React.createClass({
 					</div>
 				</div>
 				<Modal />
+				<Overlay />
 			</div>
 		);
 	}
