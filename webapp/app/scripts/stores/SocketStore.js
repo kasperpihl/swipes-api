@@ -21,7 +21,8 @@ var SocketStore = Reflux.createStore({
 			if(res.ok){
 
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
-				userStore.update(res.self.id, {me:true});
+				res.self.me = true;
+				userStore.update(res.self.id, res.self);
 				
 				appStore.batchLoad(res.apps, {flush:true});
 

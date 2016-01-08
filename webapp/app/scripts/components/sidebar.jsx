@@ -6,11 +6,11 @@ var userStore = require('../stores/UserStore');
 var modalActions = require('../actions/ModalActions');
 var sidebarStore = require('../stores/SidebarStore');
 var sidebarActions = require('../actions/SidebarActions');
-var overlayActions = require('../actions/OverlayActions');
+
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
-	mixins: [Reflux.ListenerMixin, appStore.connect("apps")],
+	mixins: [Reflux.ListenerMixin, appStore.connect("apps"), Navigation ],
 	onStateChange: function(states){
 		var toggle = states["sidebarClosed"] ? true : false;
 		$("body").toggleClass("sidebar-closed", toggle);
@@ -19,7 +19,7 @@ var Sidebar = React.createClass({
 		}
 	},
 	openServicesOverlay: function(){
-		overlayActions.loadOverlay('services');
+		this.transitionTo('/overlay/services');
 	},
 	componentWillMount: function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);

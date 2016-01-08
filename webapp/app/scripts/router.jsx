@@ -11,6 +11,7 @@ var routes = (
 	<Route name="layout" path="/" handler={Layout}>
 		<Route path="login" handler={Login} />
 		<Route path="app/:appId" handler={Home} />
+		<Route path="overlay/:overlayId" handler={Home} />
 		<DefaultRoute handler={Home} />
 	</Route>
 );

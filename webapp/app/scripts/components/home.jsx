@@ -8,6 +8,7 @@ var Modal = require('./modal');
 var Overlay = require('./overlay');
 var Router = require('react-router');
 var stateStore = require('../stores/StateStore');
+var overlayActions = require('../actions/OverlayActions');
 var Navigation = Router.Navigation;
 var Home = React.createClass({
 	mixins: [ Navigation, Reflux.ListenerMixin ],
@@ -27,7 +28,12 @@ var Home = React.createClass({
 
 	},
 	forwardParamsFromRouter: function(){
-		stateStore.actions.loadApp(this.props.params);
+		if(this.props.params.appId){
+			stateStore.actions.loadApp(this.props.params);
+		}
+		if(this.props.params.overlayId){
+			overlayActions.loadOverlay(this.props.params.overlayId);
+		}
 	},
 	componentDidUpdate: function(){
 		this.forwardParamsFromRouter();

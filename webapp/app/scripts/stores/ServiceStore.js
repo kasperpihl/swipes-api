@@ -15,8 +15,8 @@ var ServiceStore = Reflux.createStore({
 					}
 					var timer = setInterval(function() {   
 						if(win.closed) {  
-							clearInterval(timer);  
-							alert('closed');  
+							clearInterval(timer);
+							// K_TODO: 
 						}  
 					}, 1000);
 				}
