@@ -275,9 +275,16 @@ var SwipesAppSDK = (function() {
 		return {
 			authorize: function(callback){
 				var options = {
-					service: service
+					service: serviceName
 				};
-				self._client.callSwipesApi("service.authorize", options, callback);
+				self._client.callSwipesApi("services.authorize", options, callback);
+			},
+			authSuccess: function(data, callback){
+				var options = {
+					service: serviceName,
+					data: data
+				};
+				self._client.callSwipesApi("services.authsuccess", options, callback);
 			},
 			request:function(method, parameters, callback){
 				if(!method || typeof method !== 'string' || !method.length)
@@ -286,10 +293,13 @@ var SwipesAppSDK = (function() {
 					callback = parameters;
 				parameters = (typeof parameters === 'object') ? parameters : {};
 				var options = {
-					method: method,
-					params: parameters
+					service: serviceName,
+					data: {
+						method: method,
+						parameters: parameters
+					}
 				};
-				self._client.callSwipesApi("service.request", options, callback);
+				self._client.callSwipesApi("services.request", options, callback);
 			}
 		};
 	};
