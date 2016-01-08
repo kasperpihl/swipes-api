@@ -293,8 +293,11 @@ var SwipesAppSDK = (function() {
 					callback = parameters;
 				parameters = (typeof parameters === 'object') ? parameters : {};
 				var options = {
-					method: method,
-					params: parameters
+					service: serviceName,
+					data: {
+						method: method,
+						parameters: parameters
+					}
 				};
 				self._client.callSwipesApi("services.request", options, callback);
 			}
