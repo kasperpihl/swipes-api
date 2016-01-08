@@ -1,12 +1,17 @@
 var https 		= require('https');
 var _			= require('underscore');
 var SlackConnector = {};
-SlackConnector.request = function(path, params, callback){
+SlackConnector.request = function(token, path, params, callback){
 	var fullURL = "/api/" + path;
 	var sign = '?'
-	for(var key in params){
-		fullURL += sign + key + "=" + params[key];
-		sign = '&';
+	if(typeof params === 'object'){
+		for(var key in params){
+			fullURL += sign + key + "=" + params[key];
+			sign = '&';
+		}
+	}
+	if(token){
+		fullURL += sign + "token" + "=" + token;
 	}
 	var options = {
 		method: "POST",
