@@ -13,7 +13,7 @@ serviceUtil.getDataFromReq = (req) => {
 	if (!data) {
 		return Promise.reject('data_required');
 	}
-	Promise.resolve(data);
+	return Promise.resolve(data);
 }
 
 serviceUtil.getServiceFromReq = (req) => {
@@ -25,6 +25,7 @@ serviceUtil.getServiceFromReq = (req) => {
 	let getServiceQ = r.table('services').filter((ser) => {
 		return ser('manifest_id').eq(service);
 	});
+	
 	return new Promise(function(resolve, reject){
 		db.rethinkQuery(getServiceQ).then((foundService) => {
 			// If the service didn't exist in the database
@@ -48,14 +49,15 @@ serviceUtil.getScriptFileFromServiceObj = (service) => {
 	return Promise.resolve(scriptFile);
 };
 
-serviceUtil.getAuthDataToSaveForServiceAndData = (scriptFile, service, data) => {
+serviceUtil.getAuthDataToSaveForScriptFileAndData = (scriptFile, data) => {
 	if(typeof scriptFile.beforeAuthSave === 'function'){
 		return new Promise((resolve, reject) => {
-			scriptFile.beforeAuthSave(service.auth, data, (err, res) => {
+			scriptFile.beforeAuthSave(data, (err, res) => {
 				if(!err){
 					resolve(res);
 				}
 				else{
+					console.log('error is here', err);
 					reject(err);
 				}
 			});
@@ -65,7 +67,8 @@ serviceUtil.getAuthDataToSaveForServiceAndData = (scriptFile, service, data) => 
 	return Promise.resolve(data);
 };
 
-serviceUtil.saveAuthDataToUserForService = (authData, userId, serviceObj) => {
+serviceUtil.saveAuthDataToUser = (authData, userId) => {
+	// FUTURE T_TODO: if user exist, replace? We need some kind of identification from each account to not duplicate
 	let query = r.table('users').get(userId).update((user) => {
 		return {
 			services: user('services').default([]).append(authData)

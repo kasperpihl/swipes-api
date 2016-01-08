@@ -25,6 +25,13 @@ let util = {
 
     return type + id;
   },
+  // Require admin from request
+  requireAdminFromReq: (req) => {
+    let isAdmin = req.isAdmin;
+    if (!isAdmin) {
+      return Promise.reject('not_admin');
+    }
+  },
   generateSlackLikeTs: () => {
     let rNumber = randomNumber(3);
     let ts = moment().valueOf() + rNumber;

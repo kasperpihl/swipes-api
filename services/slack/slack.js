@@ -6,7 +6,7 @@ var slack = {
 		client_id: '2345135970.9201204242',
 		client_secret: '306fd7099a762968aa876d53579fa694'
 	},
-	serviceCall:function(method, options, callback){
+	request:function(method, options, callback){
 		SlackConnector.request(method, options, function(err, res){
 
 		});
