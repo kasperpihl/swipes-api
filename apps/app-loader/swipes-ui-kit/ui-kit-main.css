@@ -424,29 +424,59 @@ p {
   font-style: italic;
 }
 
-.font-light {
+.fw-100 {
+  font-weight: 100;
+}
+
+.fw-300 {
   font-weight: 300;
 }
 
-.font-normal {
+.fw-400 {
   font-weight: 400;
 }
 
-.font-semibold {
-  font-weight: 600;
+.fw-500 {
+  font-weight: 500;
 }
 
-.font-bold {
+.fw-700 {
   font-weight: 700;
 }
 
-.font-extrabold {
-  font-weight: 800;
+.fw-900 {
+  font-weight: 900;
+}
+
+blockquote {
+  width: 100%;
+  min-height: 50px;
+  padding: 20px 0;
+  background-color: #F4F4F5;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-left: 30px;
+  position: relative;
+}
+blockquote:before {
+  content: "";
+  height: 100%;
+  width: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #C6C8CC;
 }
 
 button {
   width: 100%;
-  padding: 10px 20px;
+  padding: 10px 20px !important;
   -webkit-transition: .1s ease-in-out;
           transition: .1s ease-in-out;
 }
@@ -687,7 +717,7 @@ button.primary.red-120 {
           transition: .2s ease-in-out;
 }
 
-input:not[type="submit"] .swipes-input, input:not[type="range"] .swipes-input, input:not[type="radio"] .swipes-input, input:not[type="button"] .swipes-input, input:not[type="checkbox"] .swipes-input {
+input:not[type="submit"].swipes-input, input:not[type="range"].swipes-input, input:not[type="radio"].swipes-input, input:not[type="button"].swipes-input, input:not[type="checkbox"].swipes-input {
   padding: 5px 0;
   width: 350px;
   border: none;
@@ -698,7 +728,7 @@ input:not[type="submit"] .swipes-input, input:not[type="range"] .swipes-input, i
   color: #333D59;
   position: relative;
 }
-input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-input:focus, input:not[type="radio"] .swipes-input:focus, input:not[type="button"] .swipes-input:focus, input:not[type="checkbox"] .swipes-input:focus {
+input:not[type="submit"].swipes-input:focus, input:not[type="range"].swipes-input:focus, input:not[type="radio"].swipes-input:focus, input:not[type="button"].swipes-input:focus, input:not[type="checkbox"].swipes-input:focus {
   outline: none;
   border-bottom-color: #3ECDFD;
 }
@@ -795,7 +825,6 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
 .swipes-checkbox {
   width: 21px;
   height: 21px;
-  margin: 100px auto;
   border: 3px solid #959699;
   position: relative;
   box-sizing: border-box;
@@ -880,6 +909,13 @@ input:not[type="submit"] .swipes-input:focus, input:not[type="range"] .swipes-in
   margin: 0;
   margin-right: 25px;
   padding: 0;
+}
+.swipes-radio label {
+  width: 250px;
+  position: absolute;
+  left: 25px;
+  height: 20px;
+  top: -2px;
 }
 
 .swipes-dropdown {
