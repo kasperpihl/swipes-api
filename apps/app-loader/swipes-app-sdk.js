@@ -188,16 +188,10 @@ var SwipesAppSDK = (function() {
 					callback = methodData;
 				}
 
-				var intCallback = function(error, res){
-					if(callback) {
-						callback(res, error);
-					}
-
-					if(res) {
-						deferred.resolve(res);
-					} else {
-						deferred.reject(error);
-					}
+				var intCallback = function(res, error){
+					if(callback) callback(res,error);
+					if(res) deferred.resolve(res);
+					else deferred.reject(error);
 				};
 
 				self._client.callSwipesApi("apps.method", data, intCallback);
@@ -287,6 +281,8 @@ var SwipesAppSDK = (function() {
 				self._client.callSwipesApi("services.authsuccess", options, callback);
 			},
 			request:function(method, parameters, callback){
+				var deferred = Q.defer();
+
 				if(!method || typeof method !== 'string' || !method.length)
 					throw new Error("SwipesAppSDK: service:request method required");
 				if(typeof parameters === 'function')
@@ -299,7 +295,15 @@ var SwipesAppSDK = (function() {
 						parameters: parameters
 					}
 				};
-				self._client.callSwipesApi("services.request", options, callback);
+
+				var intCallback = function(res, error){
+					if(callback) callback(res,error);
+					if(res) deferred.resolve(res);
+					else deferred.reject(error);
+				};
+
+				self._client.callSwipesApi("services.request", options, intCallback);
+				return deferred.promise;
 			}
 		};
 	};

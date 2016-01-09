@@ -7,3 +7,22 @@
 	background: white;
 	z-index: 5000;
 }
+.service-overlay-container{
+	max-width: 600px;
+	margin: 100px auto;
+	.row{
+		position: relative;
+		button{
+			height: 20px;
+			width: auto;
+			position:absolute;
+			top: 50%;
+			right: 10px;
+			margin-top:-10px;
+			background: blue;
+			color: white;
+			padding: 0;
+			padding: 2px;
+		}
+	}
+}

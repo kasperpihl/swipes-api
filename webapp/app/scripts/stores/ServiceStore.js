@@ -4,6 +4,7 @@ var ServiceStore = Reflux.createStore({
 	listenables: [ serviceActions ],
 	onAuthorize: function(serviceName){
 		var self = this;
+		
 		swipes.service(serviceName).authorize(function(res, err){
 			if(res && res.ok){
 				var auth = res.auth;
@@ -15,8 +16,8 @@ var ServiceStore = Reflux.createStore({
 					}
 					var timer = setInterval(function() {   
 						if(win.closed) {  
-							clearInterval(timer);  
-							alert('closed');  
+							clearInterval(timer);
+							// K_TODO: 
 						}  
 					}, 1000);
 				}

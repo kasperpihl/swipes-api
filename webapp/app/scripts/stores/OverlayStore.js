@@ -4,7 +4,8 @@ var Overlays = require('../components/overlays/overlays');
 var OverlayStore = Reflux.createStore({
 	listenables: [OverlayActions],
 	reset:function(){
-		this._reset();
+		this.unset("overlayCallback");
+		this.unset("overlayView");
 	},
 	onLoadOverlay: function(overlay, options, callback){
 		var overlayObj = Overlays[overlay];
@@ -23,7 +24,7 @@ var OverlayStore = Reflux.createStore({
 		
 	},
 	onHide: function(){
-		this.unset("overlayView");
+		this.reset();
 	}
 });
 
