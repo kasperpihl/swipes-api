@@ -12,7 +12,6 @@ var ChatList = React.createClass({
 		if(!channels || !_.size(channels))
 			return [];
 		channels = _.values(channels);
-		console.log('filt');
 		return channels.filter(function(channel) {
 			if(!channel.is_archived && channel.unread_count){
 				if(channel.is_member || channel.is_open){
@@ -25,9 +24,8 @@ var ChatList = React.createClass({
 	renderChannels: function(){
 
 		return this.state.channels.map(function(channel){
-			var text = channel.messages[channel.messages.length - 1].text;
 
-			return <div key={channel.id}>{text}</div>
+			return <ChatList.Section key={channel.id} data={channel} />
 		});
 	},
 	render: function() {
@@ -44,6 +42,7 @@ ChatList.Section = React.createClass({
 	render: function(){
 		return (
 			<div className="section">
+				<h2>{this.props.data.title}</h2>
 			</div>
 		);
 	}

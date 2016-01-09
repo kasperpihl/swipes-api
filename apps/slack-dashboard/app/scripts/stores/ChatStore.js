@@ -17,23 +17,22 @@ var ChatStore = Reflux.createStore({
 			
 			obj.self.me = true;
 			UserStore.update(obj.self.id, obj.self);
-			console.log('Channels in a store', UserStore.getAll(), ChannelStore.getAll());
 			self.connect(obj.url);
 		});
 	},
 	connect: function(url){
 		this.webSocket = new WebSocket(url);
 		this.webSocket.onopen = function(){
-			console.log("status", "open");
+			console.log("slack socket", "open");
 		}
 		this.webSocket.onclose = function () {
-			console.log("status", "close");
+			console.log("slack socket", "close");
 		}
 		this.webSocket.onmessage = function(msg){
-			console.log("websocket", JSON.parse(msg.data));
+			console.log("slack socket", JSON.parse(msg.data));
 		}
 		this.webSocket.onerror = function(){
-			console.log('status', 'error');
+			console.log('slack socket', 'error');
 		}
 	}
 });
