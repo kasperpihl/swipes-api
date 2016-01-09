@@ -1,0 +1,11 @@
+{
+	"manifest_version": 1,
+	"title": "Slack Dashboard",
+	"identifier": "slack-dashboard",
+	"version": "0.1",
+	"description": "Slack Dashboard for better workflow",
+	"main_app": {
+		"index": "dev/index.html"
+	}
+}
+
