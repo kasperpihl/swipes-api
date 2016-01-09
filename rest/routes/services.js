@@ -13,16 +13,14 @@ let serviceUtil = require('../utils/services_util.js');
 
 
 router.post('/services.request', (req, res, next) => {
-	let data, service, method;
+	let data, service;
 	// Validate params service and data
 	Promise.all([ 
 		serviceUtil.getDataFromReq(req),
-		serviceUtil.getMethodFromReq(req),
 		serviceUtil.getServiceWithAuthFromReq(req)
 	]).then((arr, ex) => {
 		data = arr[0];
-		method = arr[1];
-		service = arr[2];
+		service = arr[1];
 
 		return serviceUtil.getScriptFileFromServiceObj(service);
 	
@@ -31,7 +29,7 @@ router.post('/services.request', (req, res, next) => {
 			return Promise.reject('request_function_not_found');
 		}
 		return new Promise((resolve, reject) => {
-			scriptFile.request(service.authData, method, data, function(err, result){
+			scriptFile.request(service.authData, data.method, data.parameters, function(err, result){
 				if(!err){
 					return resolve(result);
 				}
