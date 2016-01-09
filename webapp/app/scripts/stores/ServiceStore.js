@@ -4,6 +4,7 @@ var ServiceStore = Reflux.createStore({
 	listenables: [ serviceActions ],
 	onAuthorize: function(serviceName){
 		var self = this;
+		
 		swipes.service(serviceName).authorize(function(res, err){
 			if(res && res.ok){
 				var auth = res.auth;

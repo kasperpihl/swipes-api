@@ -20,6 +20,7 @@ SlackConnector.request = function(token, path, params, callback){
 		headers: { 'Content-Type': 'application/json' }
 	};
 	try {
+		console.log(options);
 		var req = https.request(options, function(res) {
 			res.setEncoding('utf8');
 			var output = '';
