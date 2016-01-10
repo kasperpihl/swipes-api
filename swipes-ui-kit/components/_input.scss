@@ -58,7 +58,7 @@
 
 input:not[type="submit"], input:not[type="range"], input:not[type="radio"], input:not[type="button"], input:not[type="checkbox"] {
 	
-	.swipes-input {	
+	&.swipes-input {	
 		padding: 5px 0;
 		width: 350px;
 		border: none;
@@ -154,7 +154,7 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 .swipes-checkbox {
 	width: 21px;
 	height: 21px;
-	margin: 100px auto;
+	//margin: 100px auto;
 	border: 3px solid $studioGray-120;
 	position: relative;
 	box-sizing: border-box;
@@ -232,4 +232,13 @@ input:not[type="submit"], input:not[type="range"], input:not[type="radio"], inpu
 		margin-right: 25px;
 		padding: 0;
 	}
+    
+    label {
+        width: 250px;
+        position: absolute;
+        left: 25px;
+        height: 20px;
+            top: -2px;
+        //line-height: 25px;
+    }
 }

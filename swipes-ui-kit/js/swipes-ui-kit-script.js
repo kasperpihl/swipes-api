@@ -49,6 +49,13 @@ $(document).ready(function() {
 				$(this).next('label').removeClass('active');
 			}
 		})
+        
+        $(window).resize(function() {
+            var floatSizeW = $('.swipes-floating-label').children('input').width;
+            var floatSizeH = $('.swipes-floating-label').children('input').height();
+		    $('.swipes-floating-label').css('width', floatSizeW);	
+		    $('.swipes-floating-label').css('height', floatSizeH);
+        });
 	}; 
 	
 	$.swDropdown = function() {

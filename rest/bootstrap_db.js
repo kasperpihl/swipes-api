@@ -19,7 +19,8 @@ let tables = [
   'events',
   'apps',
   'services',
-  'mentions'
+  'mentions',
+  'organizations'
 ];
 
 r.init(dbConfig,
