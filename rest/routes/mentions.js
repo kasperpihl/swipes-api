@@ -15,7 +15,7 @@ router.post('/mentions.get', (req, res, next) => {
   let itemId = req.body.item_id;
 
   if (validator.isNull(mentionId) && validator.isNull(itemId)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'mentionId or itemId is required!'
     });
@@ -43,7 +43,7 @@ router.post('/mentions.getAllInApp', (req, res, next) => {
   let appId = req.body.app_id;
 
   if (validator.isNull(appId)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'appId is required!'
     });
@@ -95,35 +95,35 @@ router.post('/mentions.add', (req, res, next) => {
   let targetItemInfo = req.body.target_item_info || {};
 
   if (validator.isNull(appId)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'appId is required!'
     });
   }
 
   if (validator.isNull(itemId)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'itemId is required!'
     });
   }
 
   if (validator.isNull(targetAppId)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'targetAppId is required!'
     });
   }
 
   if (validator.isNull(targetScope)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'targetScope is required!'
     });
   }
 
   if (validator.isNull(targetItemId)) {
-    res.status(200).json({
+    return res.status(200).json({
       ok: false,
       err: 'targetItemId is required!'
     });

@@ -114,6 +114,7 @@ router.post('/users.create', (req, res, next) => {
     id: userId,
     apps: [],
     services:[],
+    organizations: [],
     email: email,
     name: name,
     password: sha1(password),
@@ -130,7 +131,7 @@ router.post('/users.create', (req, res, next) => {
   )
 
   let insertUserQ = r.table('users').insert(userDoc)
-  
+
   db.rethinkQuery(checkQ)
     .then((results) => {
       if (!results[0]) {
