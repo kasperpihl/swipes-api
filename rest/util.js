@@ -30,9 +30,9 @@ let util = {
   isAdmin: (req, res, next) => {
     let isAdmin = req.isAdmin;
 
-    // if (!isAdmin) {
-    //   return res.status(200).json({ok: false, err: 'not_admin'});
-    // }
+    if (!isAdmin) {
+      return res.status(200).json({ok: false, err: 'not_admin'});
+    }
 
     next();
   },
