@@ -46,15 +46,27 @@ var ChatList = React.createClass({
 
 
 ChatList.Section = React.createClass({
-
+    getInitialState: function() {
+       return {
+           replyState: 'hidden'
+       }  
+    },
 	markChannel: function(){
 		channelActions.markAsRead(this.props.data.channel);
 	},
+    reply: function() {
+        this.setState({replyState: "reply-input"});
+    },
 	renderMessages:function(){
 		return this.props.data.channel.messages.map(function(message){
 			return <ChatList.Item key={message.ts} data={message} />;
 		});
 	},
+    renderInput: function() {
+        return <div className={this.state.replyState}>
+                    <input type="text" className="chat-reply-input" placeholder="Here you can reply" />
+                </div>
+    },
 	renderActions: function(){
 		return (
 			<div className="channel-actions">
@@ -67,18 +79,23 @@ ChatList.Section = React.createClass({
 		var channel = this.props.data.channel;
         var channelClass = "channel-section";
         if (channel.id.charAt(0) === "D") {
-            channelClass += " direct-message"
+            channelClass += " direct-message";
+            channelName = '@' + channel.name;
         } else if (channel.id.charAt(0) === "C") {
-            channelClass += " channel-message"
+            channelClass += " channel-message";
+            channelName = '#' + channel.name;
         } else if (channel.id.charAt(0) === "G") {
             channelClass += " group-message"
+            channelName = channel.name;            
         }
         
 		return (
 			<div className={channelClass}>
-				{this.renderActions()}
-				<h6>{channel.unread_count} {channel.name} </h6>
+                <h5>{channelName}</h5>
+				<h6>{channel.unread_count}</h6>
 				{this.renderMessages()}
+                {this.renderActions()}
+                {this.renderInput()}
 			</div>
 		);
 	}

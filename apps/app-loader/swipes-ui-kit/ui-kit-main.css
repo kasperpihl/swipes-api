@@ -16,6 +16,10 @@ html, body {
   font-family: "Roboto";
 }
 
+.hidden {
+  display: none;
+}
+
 .col {
   border: 0px solid transparent;
   float: left;
