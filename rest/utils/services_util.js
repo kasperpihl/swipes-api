@@ -36,7 +36,8 @@ serviceUtil.getServiceWithAuthFromReq = (req) => {
 	// Query the users services for auths that fit the current service and join with the service object
 	let userServiceQ = r.table("users")
 						.get(req.userId)("services")
-						.filter({"service_name":service})
+						.default([])
+						.filter({"service_name": service})
 						.limit(1)
 						.pluck('authData', 'service_id') //  // Add user settings here
 						.eqJoin('service_id', r.table('services'), {index: 'id'})
@@ -64,7 +65,7 @@ serviceUtil.getServiceFromReq = (req) => {
 	let getServiceQ = r.table('services').filter((ser) => {
 		return ser('manifest_id').eq(service);
 	});
-	
+
 	return new Promise(function(resolve, reject){
 		db.rethinkQuery(getServiceQ).then((foundService) => {
 			// If the service didn't exist in the database

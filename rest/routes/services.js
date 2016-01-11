@@ -10,12 +10,12 @@ let generateId = util.generateSlackLikeId;
 let serviceDir = __dirname + '/../../services/';
 let serviceUtil = require('../utils/services_util.js');
 
-
+let isAdmin = util.isAdmin;
 
 router.post('/services.request', (req, res, next) => {
 	let data, service;
 	// Validate params service and data
-	Promise.all([ 
+	Promise.all([
 		serviceUtil.getDataFromReq(req),
 		serviceUtil.getServiceWithAuthFromReq(req)
 	]).then((arr, ex) => {
@@ -23,7 +23,7 @@ router.post('/services.request', (req, res, next) => {
 		service = arr[1];
 
 		return serviceUtil.getScriptFileFromServiceObj(service);
-	
+
 	}).then((scriptFile) => {
 		if(typeof scriptFile.request !== 'function'){
 			return Promise.reject('request_function_not_found');
@@ -37,10 +37,10 @@ router.post('/services.request', (req, res, next) => {
 					// K_TODO: Make smart error handling from API
 					return reject(err);
 				}
-			
+
 			});
 		})
-		
+
 	}).then((result) => {
 		res.send(result);
 	}).catch((err) => {
@@ -52,15 +52,15 @@ router.post('/services.request', (req, res, next) => {
 });
 
 /*
-	authsuccess should be called after 
+	authsuccess should be called after
  */
 router.post('/services.authsuccess', (req, res, next) => {
 	let data, service, saveObj;
 	// Validate params service and data
-	Promise.all([ 
-		serviceUtil.getServiceFromReq(req), 
+	Promise.all([
+		serviceUtil.getServiceFromReq(req),
 		serviceUtil.getDataFromReq(req)
-		
+
 	]).then((arr, ex) => {
 		service = arr[0];
 		data = arr[1];
@@ -93,7 +93,7 @@ router.post('/services.authsuccess', (req, res, next) => {
 
 		res.send({ok:true, res: saveObj});
 
-	// Error handler 
+	// Error handler
 	}).catch((err) => {
 		if(typeof err === "string"){
 			return res.status(200).json({ok: false, err: err});
@@ -113,7 +113,7 @@ router.post('/services.authorize', (req, res, next) => {
 		if(typeof scriptFile.authorize !== 'function'){
 			return Promise.reject('authorize_function_not_found');
 		}
-		
+
 		var authObj = scriptFile.authorize();
 		res.send({
 			ok:true,
@@ -128,38 +128,39 @@ router.post('/services.authorize', (req, res, next) => {
 	});
 });
 
-
-
 /*
 	This is for sysadmin only!
 */
-router.post('/services.install', (req, res, next) => {
-	let serviceName;
-	util.requireAdminFromReq(req).then(() => {
-		serviceName = req.body && req.body.service;
-		if (!serviceName) {
-			return Promise.reject('service_required');
+router.post('/services.install', isAdmin, (req, res, next) => {
+	let manifestId = req.body && req.body.manifest_id;
+
+	if (!manifestId) {
+		return res.status(200).json({ok: false, err: 'manifest_id is required'});
+	}
+
+	let getServiceQ =
+		r.table('services')
+			.getAll(manifestId, {index: 'manifest_id'})
+			.nth(0)
+			.default(null);
+
+	db.rethinkQuery(getServiceQ).then((service) => {
+		let serviceId;
+
+		if (service) {
+			serviceId = service.id;
+		} else {
+			serviceId = generateId('S');
 		}
 
-		let getServiceQ = r.table('services').filter((ser) => {
-			return ser('manifest_id').eq(serviceName)
-		});
-		return db.rethinkQuery(getServiceQ);
-	}).then((foundService) => {
-		let idForService = generateId('S');
-		if(foundService instanceof Array){
-			if(foundService.length){
-				idForService = foundService[0].id;
-			}
+		let manifest = JSON.parse(util.getAppFile(serviceDir + manifestId + '/manifest.json'));
+
+		if (!manifest) {
+			return res.status(200).json({ok: false, err: 'no_manifest_found'});
 		}
 
-		let manifest = JSON.parse(util.getAppFile(serviceDir + serviceName + '/manifest.json'));
-		if(!manifest){
-			return Promise.reject('no_manifest_found');
-		}
-		
 		let updateObj = {
-			id: idForService,
+			id: serviceId,
 			title: manifest.title,
 			manifest_id: manifest.identifier,
 			folder_name: manifest.identifier,
@@ -169,14 +170,9 @@ router.post('/services.install', (req, res, next) => {
 		}
 
 		return db.rethinkQuery(r.table('services').insert(updateObj, {'conflict': 'update'}));
-	}).then((result) => {
-
-		res.status(200).json({ok: true});
-	
+	}).then(() => {
+		return res.status(200).json({ok: true});
 	}).catch((err) => {
-		if(typeof err === "string"){
-			return res.status(200).json({ok: false, err: err});
-		}
 		return next(err);
 	});
 });

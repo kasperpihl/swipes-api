@@ -16,9 +16,12 @@ let tables = [
     name: 'users',
     indexes: ['name', 'email']
   },
+  {
+    name: 'services',
+    indexes: ['manifest_id']
+  },
   'events',
   'apps',
-  'services',
   'mentions',
   'organizations'
 ];
