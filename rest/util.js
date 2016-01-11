@@ -31,6 +31,7 @@ let util = {
     if (!isAdmin) {
       return Promise.reject('not_admin');
     }
+    return Promise.resolve();
   },
   generateSlackLikeTs: () => {
     let rNumber = randomNumber(3);

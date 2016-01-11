@@ -162,7 +162,7 @@ router.post('/services.install', (req, res, next) => {
 			id: idForService,
 			title: manifest.title,
 			manifest_id: manifest.identifier,
-			folder_name: folderName,
+			folder_name: manifest.identifier,
 			version: manifest.version,
 			description: manifest.description,
 			script: manifest.script

@@ -82,6 +82,7 @@ serviceUtil.getScriptFileFromServiceObj = (service) => {
 		scriptFile = require(serviceDir + service.folder_name + '/' + service.script);
 	}
 	catch(e){
+		console.log(e);
 		return Promise.reject('script_not_found');
 	}
 
