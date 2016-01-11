@@ -25,13 +25,16 @@ let util = {
 
     return type + id;
   },
-  // Require admin from request
-  requireAdminFromReq: (req) => {
+  // Callback for router
+  // Use that for router that require admin permisions
+  isAdmin: (req, res, next) => {
     let isAdmin = req.isAdmin;
+
     if (!isAdmin) {
-      return Promise.reject('not_admin');
+      return res.status(200).json({ok: false, err: 'not_admin'});
     }
-    return Promise.resolve();
+
+    next();
   },
   generateSlackLikeTs: () => {
     let rNumber = randomNumber(3);
