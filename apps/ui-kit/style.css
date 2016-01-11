@@ -79,6 +79,11 @@ html, body {
           flex-wrap: wrap;
 }
 
+.demo-container .demo-wrapper .display-demo .row button {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
 .demo-container .demo-wrapper .display-demo .row .grid-demo {
   height: 30px;
   background-color: #C6C8CC;

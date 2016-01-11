@@ -2,7 +2,7 @@ $(document).ready(function() {
 	
 	$.swButtonFullHover = function() {
         // hover for .outline
-        $('.swipes-button.hover-full').mouseenter(function() {
+        $('.hover-full').mouseenter(function() {
             var borderColor = $(this).css('border-color');
             $(this).css('background-color', borderColor);    
             $(this).css('color', 'white'); 

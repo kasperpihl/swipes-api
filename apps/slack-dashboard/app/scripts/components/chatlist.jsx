@@ -65,8 +65,17 @@ ChatList.Section = React.createClass({
 	},
 	render: function(){
 		var channel = this.props.data.channel;
+        var channelClass = "channel-section";
+        if (channel.id.charAt(0) === "D") {
+            channelClass += " direct-message"
+        } else if (channel.id.charAt(0) === "C") {
+            channelClass += " channel-message"
+        } else if (channel.id.charAt(0) === "G") {
+            channelClass += " group-message"
+        }
+        
 		return (
-			<div className="channel-section">
+			<div className={channelClass}>
 				{this.renderActions()}
 				<h6>{channel.unread_count} {channel.name} </h6>
 				{this.renderMessages()}

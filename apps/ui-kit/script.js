@@ -10,6 +10,8 @@ swipes.onReady(function() {
     $.swInputRange();
     $.swDropdown();
     $.swContextMenu();
+    $.swButtonLightenHover();
+    $.swButtonFullHover();
 
     gridDemo.each(function() {
         var colWidth = $(this).css('width');
