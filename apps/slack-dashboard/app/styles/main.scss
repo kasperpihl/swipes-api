@@ -1,0 +1,16 @@
+.chat-list-container{
+	max-width: 600px;
+	margin: 0 auto;
+	.channel-section{
+		padding: 10px;
+	}
+	.channel-actions{
+		a{
+			padding: 5px;
+			text-decoration: underline;
+		}
+		a:hover{
+			text-decoration: none;
+		}
+	}
+}

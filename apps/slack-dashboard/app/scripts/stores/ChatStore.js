@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var _ = require('underscore');
 var chatActions = require('../actions/ChatActions');
+var ChannelActions = require('../actions/ChannelActions');
 var TimeUtility = require('../utilities/time_util');
 var ChannelStore = require('./ChannelStore');
 var UserStore = require('./UserStore');
@@ -29,7 +30,8 @@ var ChatStore = Reflux.createStore({
 			console.log("slack socket", "close");
 		}
 		this.webSocket.onmessage = function(msg){
-			console.log("slack socket", JSON.parse(msg.data));
+			var data = JSON.parse(msg.data);
+			ChannelActions.handleMessage(data);
 		}
 		this.webSocket.onerror = function(){
 			console.log('slack socket', 'error');

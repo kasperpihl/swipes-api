@@ -11,6 +11,9 @@ var slack = {
 			return callback('no_access_token');
 		}
 		SlackConnector.request(authData.access_token, method, options, function(err, res){
+			if(err){
+				console.log(err);
+			}
 			callback(err, res);
 		});
 	},

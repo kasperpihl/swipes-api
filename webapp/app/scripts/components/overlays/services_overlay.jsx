@@ -32,6 +32,7 @@ var Services = React.createClass({
 		}
 
 		var sortedServices = _.sortBy(this.state.services, 'title');
+
 		return sortedServices.map(function (service) {
 			return <Services.ConnectRow key={service.id} data={service} />;
 		})
