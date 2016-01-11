@@ -156,7 +156,7 @@ router.post('/services.install', isAdmin, (req, res, next) => {
 		let manifest = JSON.parse(util.getAppFile(serviceDir + manifestId + '/manifest.json'));
 
 		if (!manifest) {
-			return res.status(200).json({ok: false, err: 'no_manifest_found'});
+			return Promise.reject({ok: false, err: 'no_manifest_found'});
 		}
 
 		let updateObj = {
@@ -173,6 +173,10 @@ router.post('/services.install', isAdmin, (req, res, next) => {
 	}).then(() => {
 		return res.status(200).json({ok: true});
 	}).catch((err) => {
+		if (err.ok === false) {
+			return res.status(200).json(err);
+		}
+
 		return next(err);
 	});
 });
