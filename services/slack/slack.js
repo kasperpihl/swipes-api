@@ -20,7 +20,7 @@ var slack = {
 	beforeAuthSave: function(data, callback){
 		/*
 		data is the return from oauth and will be:
-		{ 
+		{
 			code: '1230123.1231231',
 			state: 'something'
 		}
