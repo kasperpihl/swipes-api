@@ -4,6 +4,7 @@ var appStore = require('../stores/AppStore');
 var stateStore = require('../stores/StateStore');
 var userStore = require('../stores/UserStore');
 var modalActions = require('../actions/ModalActions');
+var overlayActions = require('../actions/OverlayActions');
 var sidebarStore = require('../stores/SidebarStore');
 var sidebarActions = require('../actions/SidebarActions');
 
@@ -19,7 +20,7 @@ var Sidebar = React.createClass({
 		}
 	},
 	openServicesOverlay: function(){
-		this.transitionTo('/overlay/services');
+		overlayActions.loadOverlay('services', {title: 'Services'});
 	},
 	componentWillMount: function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);

@@ -6,6 +6,25 @@
 	height: 100%;
 	background: white;
 	z-index: 5000;
+	.close-button{
+		position: absolute;
+		left: 10px;
+		top:10px;
+		border: 2px solid;
+		border-radius: 15px;
+		width: 30px;
+		height: 30px;
+		padding-top: 4px;
+		text-align: center;
+		&:hover{
+			background: black;
+			color: white;
+		}
+	}
+	h3.title{
+		text-align: center;
+		padding: 0px 50px;
+	}
 }
 .service-overlay-container{
 	max-width: 600px;

@@ -30,11 +30,11 @@ var Home = React.createClass({
 	forwardParamsFromRouter: function(){
 		if(this.props.params.appId){
 			stateStore.actions.loadApp(this.props.params);
-			overlayActions.hide();
+			//overlayActions.hide();
 		}
-		if(this.props.params.overlayId){
+		/*if(this.props.params.overlayId){
 			overlayActions.loadOverlay(this.props.params.overlayId);
-		}
+		}*/
 	},
 	componentDidUpdate: function(){
 		this.forwardParamsFromRouter();

@@ -19,6 +19,7 @@ var OverlayStore = Reflux.createStore({
 
 		this.reset();
 
+		this.set('overlayData', options, {trigger: false});
 		this.set("overlayCallback", callback, {trigger: false});
 		this.set("overlayView", overlayObj);
 		
