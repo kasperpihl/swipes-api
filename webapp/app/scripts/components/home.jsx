@@ -14,6 +14,7 @@ var Home = React.createClass({
 	mixins: [ Navigation, Reflux.ListenerMixin ],
 	onStateChange: function(states){
 		if(!states.isLoggedIn){
+			amplitude.setUserId(null); // Log out user from analytics
 			localStorage.clear();
 			return this.transitionTo('/login');
 		}

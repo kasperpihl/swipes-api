@@ -22,6 +22,7 @@ var SocketStore = Reflux.createStore({
 
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
 				res.self.me = true;
+				amplitude.setUserId(res.self.id);
 				userStore.update(res.self.id, res.self);
 				
 				appStore.batchLoad(res.apps, {flush:true});
