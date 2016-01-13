@@ -25,7 +25,6 @@ var ChatList = React.createClass({
 		}), function(channel){
 			// Sort function
 			if(!channel.messages || !channel.messages.length){
-				console.warn('NO MESSAGES', channel);
 				return 0;
 			}
 			return -_.last(channel.messages).ts;
@@ -41,10 +40,20 @@ var ChatList = React.createClass({
 			return <ChatList.Section key={channel.id} data={{me: me, channel:channel}} />
 		});
 	},
+	renderEmptyChat: function(){
+		if(!this.state.channels.length){
+			return (
+				<div className="no-new-messages">
+					<h1>No new messages. Add the trumpet here maybe</h1>
+				</div>
+			);
+		}
+	},
 	render: function() {
 		return (
 			<div ref="scroll-container" className="chat-list-container">
 				{this.renderChannels()}
+				{this.renderEmptyChat()}
 			</div>
 		);
 	}
@@ -136,6 +145,12 @@ ChatList.Section = React.createClass({
 });
 
 ChatList.Item = React.createClass({
+	renderProfilePicture: function(){
+
+	},
+	renderName: function(){
+
+	},
 	render:function(){
 		var name = 'unknown';
 		var message = this.props.data.message;
