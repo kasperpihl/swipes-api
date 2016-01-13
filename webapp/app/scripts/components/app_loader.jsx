@@ -84,6 +84,9 @@ var AppLoader = React.createClass({
 		this.apiCon.callListener("event", e);
 	},
 	onLoad:function(){
+		if(this.state.app)
+			amplitude.logEvent('Session - Opened Workflow', {'Workflow': this.state.app.manifest_id});
+
 		eventActions.remove(null,null, "screen" + this.props.data.screen);
 		var initObj = {
 			type: "init",

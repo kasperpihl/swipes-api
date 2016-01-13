@@ -17,6 +17,7 @@ var Login = React.createClass({
 		}
 	},
 	componentDidMount:function() {
+		amplitude.logEvent('Session - Opened Login');
 		$(document).ready(function() {
 			$.swFloatingLabelInput();
 		})
@@ -39,6 +40,7 @@ var Login = React.createClass({
 		swipes._client.callSwipesApi({force:true, command:"users.create"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
+				amplitude.logEvent('Session - Created Account');
 				stateStore.actions.login(res.token);
 			}
 			else
@@ -58,6 +60,7 @@ var Login = React.createClass({
 		swipes._client.callSwipesApi({force:true, command:"users.login"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
+				amplitude.logEvent('Session - Signed In');
 				stateStore.actions.login(res.token);
 			}
 			else

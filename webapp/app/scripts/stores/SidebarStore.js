@@ -16,6 +16,9 @@ var SidebarStore = Reflux.createStore({
 			console.log("callback row", row);
 			if(row){
 				swipes._client.callSwipesApi("users.activateApp", {"app_id": row.id}, function(res,error){
+					if(res && res.ok){
+						amplitude.logEvent('Engagement - Added Workflow', {'Workflow': row.manifest_id});
+					}
 					console.log("res from app", res);
 				})
 			}

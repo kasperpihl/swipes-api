@@ -44,6 +44,7 @@ var Home = React.createClass({
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
 	componentDidMount:function(){
+		amplitude.logEvent('Session - Opened App');
 		stateStore.actions.init();
 		this.forwardParamsFromRouter();
 
