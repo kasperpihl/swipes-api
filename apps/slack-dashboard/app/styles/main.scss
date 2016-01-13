@@ -200,10 +200,10 @@ html, body {
 
 input.chat-reply-input {
     width: 100%;
-    margin: 15px auto;
+    margin: 0px auto 0;
     padding: 10px 20px;
-    border: 1px solid $studioGray-60;
-    border-radius: 10px;
+    border-top: 1px solid $studioGray-60;
+    border-radius: 0px;
     font-size: 15px;
     font-family: 'Roboto';
     font-weight: 400;

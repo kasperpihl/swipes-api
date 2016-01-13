@@ -35,12 +35,14 @@ var ChannelStore = Reflux.createStore({
 				
 				updateObj = {};
 				var curUnread = channel.unread_count_display;
-				if(me && me.id !== msg.user)
+				if(me && me.id !== msg.user){
 					updateObj.unread_count_display = curUnread + 1;
-
+				}
 				var currMessages = channel.messages || [];
-				currMessages.push(msg);
-				updateObj.messages = currMessages;
+				var newMessage = currMessages.concat([msg]);
+				updateObj.messages = newMessage;
+				console.log(currMessages.length, newMessage.length, updateObj);
+				
 				this.update(channel.id, updateObj);
 			}
 		}
@@ -57,6 +59,11 @@ var ChannelStore = Reflux.createStore({
 			}
 		}
 		console.log('store handler', msg.type, msg);
+	},
+	onSendMessage: function(channel, message){
+		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel.id, as_user: true}, function(err, res){
+			console.log('message res', err, res);
+		});
 	},
 	fetchChannel: function(channel){
 		var self = this;

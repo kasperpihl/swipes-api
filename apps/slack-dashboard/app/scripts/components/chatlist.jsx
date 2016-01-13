@@ -52,11 +52,6 @@ var ChatList = React.createClass({
 
 
 ChatList.Section = React.createClass({
-	getInitialState: function() {
-		return {
-			replyState: 'hidden'
-		}  
-	},
 	markChannel: function(){
 		var channel = this.props.data.channel;
 		var channelID = this.props.data.channel.id;
@@ -64,11 +59,8 @@ ChatList.Section = React.createClass({
 		$('#' + channelID).css('height', channelHeight + 'px');
 		$('#' + channelID).animate({height:0},400);
 		$('#' + channelID).addClass('read').delay(350).queue(function(){
-			channelActions.markAsRead(channel);  
+			channelActions.markAsRead(channel);
 		});
-	},
-	reply: function() {
-		this.setState({replyState: "reply-input"});
 	},
 	renderMessages:function(){
 		var me = this.props.data.me;
@@ -86,13 +78,6 @@ ChatList.Section = React.createClass({
 		</div>
 		{channel.name}</h5>
 	},
-	renderInput: function() {
-		return (
-			<div className={this.state.replyState}>
-				<input type="text" className="chat-reply-input" placeholder="Here you can reply" />
-			</div>
-		)
-	},
 	renderMarkRead: function(){
 		var channel = this.props.data.channel;
 		return (
@@ -103,10 +88,27 @@ ChatList.Section = React.createClass({
 	},
 	renderReply: function(){
 		return (
-			<div className="channel-reply">
-				<a onClick={this.reply}>Reply</a>
+			<div className="quick-reply">
+				<input type="text" ref="replyField" onKeyUp={this.onKeyUp} className="chat-reply-input" placeholder="Quick reply" />
 			</div>
 		);
+	},
+	sendMessage: function(message){
+		$(this.refs.replyField).val("");
+		channelActions.sendMessage(this.props.data.channel, message);
+	},
+	onKeyUp: function(e){
+		var $textField = $(this.refs.replyField);
+		//console.log(e.keyCode, e.shiftKey, e.target);
+		if(e.keyCode === 27){
+			$textField.blur();
+		}
+		if (e.keyCode === 13 && !e.shiftKey ) {
+			var message = $textField.val();
+			if(message && message.length > 0){
+				this.sendMessage(message);
+			}
+		}
 	},
 	render: function(){
 
@@ -128,7 +130,6 @@ ChatList.Section = React.createClass({
 				</div>
 				{this.renderMessages()}
 				{this.renderReply()}
-				{this.renderInput()}
 			</div>
 		);
 	}

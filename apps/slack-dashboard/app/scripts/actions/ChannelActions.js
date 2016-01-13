@@ -2,7 +2,8 @@ var Reflux = require('reflux');
 
 var ChannelActions = Reflux.createActions([
 	'markAsRead',
-	'handleMessage'
+	'handleMessage',
+	'sendMessage'
 	// Here you can list your actions
 ]);
 
