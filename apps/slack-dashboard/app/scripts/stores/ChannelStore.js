@@ -39,7 +39,8 @@ var ChannelStore = Reflux.createStore({
 					updateObj.unread_count_display = curUnread + 1;
 
 				var currMessages = channel.messages || [];
-				updateObj.messages = currMessages.push(msg);
+				currMessages.push(msg);
+				updateObj.messages = currMessages;
 				this.update(channel.id, updateObj);
 			}
 		}
@@ -55,7 +56,7 @@ var ChannelStore = Reflux.createStore({
 				this.update(channel.id, updateObj);
 			}
 		}
-		console.log('store handler', msg);
+		console.log('store handler', msg.type, msg);
 	},
 	fetchChannel: function(channel){
 		var self = this;
