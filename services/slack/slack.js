@@ -43,16 +43,13 @@ var slack = {
 			callback(err);
 		})
 	},
-	authorize: function(callback){
+	authorize: function (data, callback) {
 		var URL = 'https://slack.com/oauth/authorize';
 		URL += '?client_id=' + this.connectionData.client_id;
 		URL += '&scope=client';
 		URL += '&redirect_uri=' + this.connectionData.redirect_uri;
-		return {
-			type: 'oauth',
-			service: 'slack',
-			url: URL
-		};
+
+		callback(null, {type: 'oauth', service: 'slack', url: URL});
 	}
 };
 

@@ -44,6 +44,7 @@ let rtmRouter = require('./routes/rtm.js');
 let sdkRouter = require('./routes/sdk.js');
 let searchRouter = require('./routes/search.js');
 let servicesRouter = require('./routes/services.js');
+let servicesNoAuthRouter = require('./routes/services_no_auth.js');
 let mentionsRouter = require('./routes/mentions.js');
 let organizationsRouter = require('./routes/organizations.js');
 
@@ -64,6 +65,7 @@ app.route('/').get((req,res,next) => {
 // Routes for which we don't need authentication
 app.use('/v1', usersAuth);
 app.use('/v1', sdkRouter);
+app.use('/v1', servicesNoAuthRouter);
 
 // Middleware to check if a valid token is provided from the user
 app.use('/v1', jwtMiddleware.restAuth);

@@ -1,6 +1,5 @@
 "use strict";
 
-
 let express = require( 'express' );
 let router = express.Router();
 let r = require('rethinkdb');
@@ -53,7 +52,8 @@ router.post('/services.request', (req, res, next) => {
 
 /*
 	authsuccess should be called after
- */
+*/
+
 router.post('/services.authsuccess', (req, res, next) => {
 	let data, service, saveObj;
 	// Validate params service and data
@@ -68,7 +68,8 @@ router.post('/services.authsuccess', (req, res, next) => {
 		return serviceUtil.getScriptFileFromServiceObj(service);
 
 	}).then((scriptFile) => {
-
+		// T_TODO Hack to get this working.. Kasper will be proud with me
+		data.userId = req.userId;
 		return serviceUtil.getAuthDataToSaveForScriptFileAndData(scriptFile, data);
 
 	}).then((authData) => {
@@ -104,22 +105,23 @@ router.post('/services.authsuccess', (req, res, next) => {
 });
 
 router.post('/services.authorize', (req, res, next) => {
-	let service;
-	serviceUtil.getServiceFromReq(req).then((ser) => {
-		service = ser;
-		return serviceUtil.getScriptFileFromServiceObj(ser);
+	serviceUtil.getServiceFromReq(req).then((service) => {
+		return serviceUtil.getScriptFileFromServiceObj(service);
 	}).then((scriptFile) => {
-
 		if(typeof scriptFile.authorize !== 'function'){
 			return Promise.reject('authorize_function_not_found');
 		}
 
-		var authObj = scriptFile.authorize();
-		res.send({
-			ok:true,
-			auth: authObj
+		scriptFile.authorize({userId: req.userId}, (error, result) => {
+			if (!error) {
+				res.send({
+					ok:true,
+					auth: result
+				});
+			} else {
+				return Promise.reject(error);
+			}
 		});
-
 	}).catch((err) => {
 		if(typeof err === "string"){
 			return res.status(200).json({ok: false, err: err});
