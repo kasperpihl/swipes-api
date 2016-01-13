@@ -52,7 +52,15 @@ ChatList.Section = React.createClass({
        }  
     },
 	markChannel: function(){
-		channelActions.markAsRead(this.props.data.channel);
+        var channel = this.props.data.channel;
+        var channelID = this.props.data.channel.id;
+        var channelHeight =  $('#' + channelID).height();
+        console.log(channelHeight);
+        $('#' + channelID).css('height', channelHeight + 'px');
+        $('#' + channelID).animate({height:0},400);
+        $('#' + channelID).addClass('read').delay(350).queue(function(){
+            channelActions.markAsRead(channel);  
+        });
 	},
     reply: function() {
         this.setState({replyState: "reply-input"});
@@ -62,16 +70,32 @@ ChatList.Section = React.createClass({
 			return <ChatList.Item key={message.ts} data={message} />;
 		});
 	},
+    channelName: function() {
+        var channel = this.props.data.channel;
+      
+        return <h5 className="channel-name">
+        <div className="channel-sign">#
+             <p className="unread-count">{channel.unread_count}</p>
+        </div>
+        {channel.name}</h5>
+    },
     renderInput: function() {
         return <div className={this.state.replyState}>
                     <input type="text" className="chat-reply-input" placeholder="Here you can reply" />
                 </div>
     },
-	renderActions: function(){
+    renderMarkRead: function(){
+        var channel = this.props.data.channel;
 		return (
-			<div className="channel-actions">
-				<a onClick={this.reply}>Reply</a>
+			<div className="channel-mark-read">
 				<a onClick={this.markChannel}>Mark read</a>
+			</div>
+		);
+	},
+	renderReply: function(){
+		return (
+			<div className="channel-reply">
+				<a onClick={this.reply}>Reply</a>
 			</div>
 		);
 	},
@@ -80,21 +104,20 @@ ChatList.Section = React.createClass({
         var channelClass = "channel-section";
         if (channel.id.charAt(0) === "D") {
             channelClass += " direct-message";
-            channelName = '@' + channel.name;
         } else if (channel.id.charAt(0) === "C") {
             channelClass += " channel-message";
-            channelName = '#' + channel.name;
         } else if (channel.id.charAt(0) === "G") {
-            channelClass += " group-message"
-            channelName = channel.name;            
+            channelClass += " group-message"        
         }
         
 		return (
-			<div className={channelClass}>
-                <h5>{channelName}</h5>
-				<h6>{channel.unread_count}</h6>
+			<div className={channelClass} id={channel.id}>
+                <div className="channel-header">
+                    {this.channelName()}
+                    {this.renderMarkRead()}
+                </div>
 				{this.renderMessages()}
-                {this.renderActions()}
+                {this.renderReply()}
                 {this.renderInput()}
 			</div>
 		);
@@ -110,7 +133,7 @@ ChatList.Item = React.createClass({
 		}
 		return (
 			<div className="item">
-				<span>{this.props.data.ts}: {this.props.data.text}</span>
+				<span><span className="username fw-500">{name}:</span> <span className="message-content">{this.props.data.text}</span></span>
 
 			</div>
 		);
