@@ -173,7 +173,9 @@ html, body {
             &.my-message {
                 background-color: rgba($blue-20, .5);
             }
-            
+            &.old-message{
+                opacity: 0.5;
+            }
             .username {
                 color: $deepBlue-100;
             }

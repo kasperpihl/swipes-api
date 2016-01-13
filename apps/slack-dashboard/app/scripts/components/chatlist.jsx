@@ -71,12 +71,27 @@ ChatList.Section = React.createClass({
 			channelActions.markAsRead(channel);
 		});
 	},
-	renderMessages:function(){
+	renderNewMessageHeader: function(){
+		return <div key="new-message-header" className='new-message-header'>----- New Messages ------</div>;
+	},
+	renderMessageList:function(){
 		var me = this.props.data.me;
-		
-		return this.props.data.channel.messages.map(function(message){
-			return <ChatList.Item key={message.ts} data={{me:me, message:message}} />;
+		var self = this;
+		var isNew = false;
+		var channel = this.props.data.channel;
+		var messageList = [];
+		_.each(channel.messages, function(message){
+			console.log(messageList.length);
+			var isOldMessage = !isNew;
+			if(!isNew && message.ts > channel.last_read){
+				isOldMessage = false;
+				isNew = true;
+				messageList.push(self.renderNewMessageHeader());
+			}
+
+			messageList.push(<ChatList.Item key={message.ts} data={{isOld: isOldMessage, me:me, message:message}} />);	
 		});
+		return messageList;
 	},
 	renderChannelName: function() {
 		var channel = this.props.data.channel;
@@ -137,7 +152,7 @@ ChatList.Section = React.createClass({
 					{this.renderChannelName()}
 					{this.renderMarkRead()}
 				</div>
-				{this.renderMessages()}
+				{this.renderMessageList()}
 				{this.renderReply()}
 			</div>
 		);
@@ -154,17 +169,22 @@ ChatList.Item = React.createClass({
 	render:function(){
 		var name = 'unknown';
 		var message = this.props.data.message;
-		var user = userStore.get(message.user);
+		
 		var className = "item ";
+		// The message was already read (we always include the last read message to provide context of what the response was for)
+		if(this.props.data.isOld){
+			className += 'old-message ';
+		}
+		var user = userStore.get(message.user);
 		if(user){
 			if(user.id === this.props.data.me)
-				className += 'my-message';
+				className += 'my-message ';
 			name = user.name;
 		}
+
 		return (
 			<div className={className}>
-				<span><span className="username fw-500">{name}:</span> <span className="message-content">{message.text}</span></span>
-
+				<span><span className="message-content">{message.text}</span></span>
 			</div>
 		);
 	}
