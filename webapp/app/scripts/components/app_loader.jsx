@@ -53,6 +53,11 @@ var AppLoader = React.createClass({
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
+			else if (message.command === 'analytics.action'){
+				if(this.state.app){
+					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.app.manifest_id, 'Action': data.name});
+				}
+			}
 			else if (message.command === "getData") {
 				if(data.query && data.query.table){
 					var store;

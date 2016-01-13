@@ -307,6 +307,11 @@ var SwipesAppSDK = (function() {
 			}
 		};
 	};
+	SwipesAppSDK.prototype.analytics = {
+		action:function(name){
+			self._client.callListener("analytics.action", {name: name});
+		}
+	};
 	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
 			var currentListeners = self._listenersObj[eventName];
