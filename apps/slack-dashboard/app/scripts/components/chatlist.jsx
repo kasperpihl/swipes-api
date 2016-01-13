@@ -15,17 +15,20 @@ var ChatList = React.createClass({
 			return [];
 		channels = _.values(channels);
 		return _.sortBy(channels.filter(function(channel) {
-			if(!channel.is_archived && channel.unread_count){ // && channel.unread_count 
+			// Filter function
+			if(!channel.is_archived && channel.unread_count_display){
 				if(channel.is_member || channel.is_open){
 					return true;
 				}
 			}
 			return false;
 		}), function(channel){
+			// Sort function
 			if(!channel.messages || !channel.messages.length){
+				console.warn('NO MESSAGES', channel);
 				return 0;
 			}
-			return -channel.messages[0].ts;
+			return -_.last(channel.messages).ts;
 		});
 	})],
 	renderChannels: function(){
@@ -55,7 +58,6 @@ ChatList.Section = React.createClass({
         var channel = this.props.data.channel;
         var channelID = this.props.data.channel.id;
         var channelHeight =  $('#' + channelID).height();
-        console.log(channelHeight);
         $('#' + channelID).css('height', channelHeight + 'px');
         $('#' + channelID).animate({height:0},400);
         $('#' + channelID).addClass('read').delay(350).queue(function(){
@@ -75,7 +77,7 @@ ChatList.Section = React.createClass({
       
         return <h5 className="channel-name">
         <div className="channel-sign">#
-             <p className="unread-count">{channel.unread_count}</p>
+             <p className="unread-count">{channel.unread_count_display}</p>
         </div>
         {channel.name}</h5>
     },
@@ -100,6 +102,7 @@ ChatList.Section = React.createClass({
 		);
 	},
 	render: function(){
+
 		var channel = this.props.data.channel;
         var channelClass = "channel-section";
         if (channel.id.charAt(0) === "D") {

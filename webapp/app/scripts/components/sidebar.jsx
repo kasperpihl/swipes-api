@@ -78,7 +78,7 @@ Sidebar.Row = React.createClass({
 		var className = "row ";
 		if(this.props.data.hidden)
 			className += "hidden ";
-		if(this.props.data.unread_count)
+		if(this.props.data.unread_count_display)
 			className += "unread ";
 		if(this.props.data.id === stateStore.get("active_menu_id"))
 			className += "active ";

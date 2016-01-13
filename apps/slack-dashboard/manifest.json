@@ -6,6 +6,6 @@
 	"description": "Slack Dashboard for better workflow",
 	"main_app": {
 		"index": "dev/index.html"
-	}
+	},
+	"required_services": ["slack"]
 }
-

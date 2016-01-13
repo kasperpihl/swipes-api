@@ -17,11 +17,11 @@ var ChannelStore = Reflux.createStore({
 	},
 	onMarkAsRead:function(channel){
 		var prefix = this.apiPrefixForChannel(channel);
-		console.log('marking', channel.messages[0].ts);
+		console.log('marking', _.last(channel.messages).ts);
 		swipes.service('slack').request(prefix + "mark", 
 			{
 				channel: channel.id, 
-				ts: channel.messages[0].ts
+				ts: _.last(channel.messages).ts
 		})
 		.then(function(){
 		})
@@ -34,12 +34,12 @@ var ChannelStore = Reflux.createStore({
 			if(channel){
 				
 				updateObj = {};
-				var curUnread = channel.unread_count;
+				var curUnread = channel.unread_count_display;
 				if(me && me.id !== msg.user)
-					updateObj.unread_count = updateObj.unread_count_display = curUnread + 1;
+					updateObj.unread_count_display = curUnread + 1;
 
 				var currMessages = channel.messages || [];
-				updateObj.messages = [msg].concat(currMessages);
+				updateObj.messages = currMessages.push(msg);
 				this.update(channel.id, updateObj);
 			}
 		}
@@ -47,12 +47,11 @@ var ChannelStore = Reflux.createStore({
 			var channel = this.get(msg.channel);
 			if(channel){
 				updateObj = {};
-				updateObj.unread_count = msg.unread_count;
 				updateObj.unread_count_display = msg.unread_count_display;
 				updateObj.last_read = msg.ts;
 				var currMessages = channel.messages || [];
 				if(currMessages.length > 0)
-					updateObj.messages = [currMessages[0]];
+					updateObj.messages = [_.last(currMessages)];
 				this.update(channel.id, updateObj);
 			}
 		}
@@ -61,13 +60,13 @@ var ChannelStore = Reflux.createStore({
 	fetchChannel: function(channel){
 		var self = this;
 		swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id, inclusive: 1, oldest: channel.last_read }).then(function(res){
-			self.update(channel.id, {has_fetched:true, fetching: false, messages: res.messages});
+			self.update(channel.id, {has_fetched:true, fetching: false, messages: res.messages.reverse()});
 		}).catch(function(error){
 		});
 	},
 	beforeSaveHandler: function(newObj, oldObj){
 		if(newObj && !oldObj && !newObj.is_archived){
-			if(!newObj.unread_count){
+			if(!newObj.unread_count_display){
 				newObj.has_fetched = true;
 				
 			}
