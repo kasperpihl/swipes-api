@@ -74,6 +74,19 @@ ChatList.Section = React.createClass({
 	renderNewMessageHeader: function(){
 		return <div key="new-message-header" className='new-message-header'>----- New Messages ------</div>;
 	},
+	renderHeaderForMessage: function(message){
+		if(this.lastUser && message.user === this.lastUser){
+			return null;
+		}
+
+		this.lastUser = message.user;
+		var name = 'unknown';
+		var user = userStore.get(message.user);
+		if(user){
+			name = user.name;
+		}
+		return <div key={"message-header-"+message.ts} className="chat-user-header">{name}</div>;
+	},
 	renderMessageList:function(){
 		var me = this.props.data.me;
 		var self = this;
@@ -81,15 +94,20 @@ ChatList.Section = React.createClass({
 		var channel = this.props.data.channel;
 		var messageList = [];
 		_.each(channel.messages, function(message){
-			console.log(messageList.length);
 			var isOldMessage = !isNew;
 			if(!isNew && message.ts > channel.last_read){
 				isOldMessage = false;
 				isNew = true;
 				messageList.push(self.renderNewMessageHeader());
 			}
+			var header = self.renderHeaderForMessage(message);
+			if(header){
+				messageList.push(header);
+			}
 
-			messageList.push(<ChatList.Item key={message.ts} data={{isOld: isOldMessage, me:me, message:message}} />);	
+			var isMe = (message.user === me);
+
+			messageList.push(<ChatList.Item key={message.ts} data={{isMe: isMe, isOld: isOldMessage, message:message}} />);	
 		});
 		return messageList;
 	},
@@ -160,14 +178,8 @@ ChatList.Section = React.createClass({
 });
 
 ChatList.Item = React.createClass({
-	renderProfilePicture: function(){
-
-	},
-	renderName: function(){
-
-	},
 	render:function(){
-		var name = 'unknown';
+		
 		var message = this.props.data.message;
 		
 		var className = "item ";
@@ -175,11 +187,8 @@ ChatList.Item = React.createClass({
 		if(this.props.data.isOld){
 			className += 'old-message ';
 		}
-		var user = userStore.get(message.user);
-		if(user){
-			if(user.id === this.props.data.me)
-				className += 'my-message ';
-			name = user.name;
+		if(this.props.data.isMe){
+			className += 'my-message ';
 		}
 
 		return (
