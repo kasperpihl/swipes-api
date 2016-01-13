@@ -169,7 +169,7 @@ html, body {
             font-size: 14px;
             line-height: 1.4;
             
-            &:nth-child(even) {
+            &.my-message {
                 background-color: rgba($blue-20, .5);
             }
             
