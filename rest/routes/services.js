@@ -1,5 +1,6 @@
 "use strict";
 
+let SwipesError = require( '../swipes-error' );
 let express = require( 'express' );
 let router = express.Router();
 let r = require('rethinkdb');
@@ -104,29 +105,22 @@ router.post('/services.authsuccess', (req, res, next) => {
 
 });
 
-router.post('/services.authorize', (req, res, next) => {
-	serviceUtil.getServiceFromReq(req).then((service) => {
-		return serviceUtil.getScriptFileFromServiceObj(service);
-	}).then((scriptFile) => {
-		if(typeof scriptFile.authorize !== 'function'){
-			return Promise.reject('authorize_function_not_found');
+router.post('/services.authorize', serviceUtil.getService, serviceUtil.requireService, (req, res, next) => {
+	let service = res.locals.service;
+	let file = res.locals.file;
+
+	if(typeof file.authorize !== 'function') {
+		return next(new SwipesError('authorize_function_not_found'));
+	}
+
+	file.authorize({userId: req.userId}, (error, result) => {
+		if (error) {
+			return next(error);
 		}
 
-		scriptFile.authorize({userId: req.userId}, (error, result) => {
-			if (!error) {
-				res.send({
-					ok:true,
-					auth: result
-				});
-			} else {
-				return Promise.reject(error);
-			}
-		});
-	}).catch((err) => {
-		if(typeof err === "string"){
-			return res.status(200).json({ok: false, err: err});
-		}
-		return next(err);
+		res.locals.response = result;
+
+		return next();
 	});
 });
 

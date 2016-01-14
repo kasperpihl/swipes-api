@@ -58,6 +58,9 @@ var jira = {
 		        private_key: privateKeyData
 		    }
 		}, function (error, oauth) {
+				if (error) {
+					return callback(error);
+				}
 				//T_TODO I will make this better
 				// I just have to keep this thing somewhere for now...
 				// OMG JIRA... WHAT HAVE YOU DONE

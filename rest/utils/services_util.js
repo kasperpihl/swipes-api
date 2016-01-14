@@ -55,6 +55,34 @@ serviceUtil.getServiceWithAuthFromReq = (req) => {
 
 };
 
+serviceUtil.getService = (req, res, next) => {
+	// Kasper how should I know that service is manifest_id ??? Keep it consistent.
+	let manifestId = req.body.service;
+
+	if (!manifestId) {
+		return next('manifest_id_required!');
+	}
+
+	let getServiceQ =
+		r.table('services')
+			.getAll(manifestId, {index: 'manifest_id'})
+			.nth(0)
+			.default(null);
+
+	db.rethinkQuery(getServiceQ)
+		.then((service) => {
+			if (!service) {
+				return next('service_not_found');
+			}
+
+			res.locals.service = service;
+
+			return next();
+		})
+		.catch((err) => {
+			return next(err);
+		})
+}
 
 serviceUtil.getServiceFromReq = (req) => {
 	let service = req.body.service;
@@ -76,6 +104,23 @@ serviceUtil.getServiceFromReq = (req) => {
 		});
 	})
 };
+
+serviceUtil.requireService = (req, res, next) => {
+	let service = res.locals.service;
+	let file;
+
+	try {
+		file = require(serviceDir + service.folder_name + '/' + service.script);
+	}
+	catch (e) {
+		console.log(e);
+		return next(e);
+	}
+
+	res.locals.file = file;
+
+	return next();
+}
 
 serviceUtil.getScriptFileFromServiceObj = (service) => {
 	let scriptFile;

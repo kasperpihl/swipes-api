@@ -7,7 +7,7 @@ var ServiceStore = Reflux.createStore({
 
 		swipes.service(serviceName).authorize(function(res, err){
 			if(res && res.ok){
-				var auth = res.auth;
+				var auth = res.result;
 				if(auth.type === 'oauth'){
 					window.OAuthHandler = serviceActions;
 					var win = window.open(auth.url, serviceName, "height=700,width=500");
