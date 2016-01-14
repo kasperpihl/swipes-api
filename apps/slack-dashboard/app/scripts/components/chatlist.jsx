@@ -104,6 +104,7 @@ ChatList.Section = React.createClass({
 		var isNew = false;
 		var channel = this.props.data.channel;
 		var messageList = [];
+		this.lastUser = null;
 		_.each(channel.messages, function(message){
 			var isOldMessage = !isNew;
 			if(!isNew && message.ts > channel.last_read){
@@ -160,7 +161,6 @@ ChatList.Section = React.createClass({
 		}
 	},
 	render: function(){
-
 		var channel = this.props.data.channel;
 		var channelClass = "channel-section";
 		if (channel.id.charAt(0) === "D") {
