@@ -6,6 +6,7 @@ var userStore = require('../stores/UserStore');
 var channelStore = require('../stores/ChannelStore');
 var channelActions = require('../actions/ChannelActions');
 var _ = require('underscore');
+var TimeAgo = require('./time_ago');
 var ChatList = React.createClass({
 	mixins: [channelStore.connectFilter('channels', function(channels){
 		/*
@@ -71,10 +72,20 @@ ChatList.Section = React.createClass({
 			channelActions.markAsRead(channel);
 		});
 	},
+	renderTimeAgo: function(){
+		var date = new Date(parseInt(_.last(this.props.data.channel.messages).ts)*1000);
+
+		return (
+			<div className="channel-timeago">
+				<TimeAgo className="timeago" date={date} />
+			</div>
+		)
+	},
 	renderNewMessageHeader: function(){
 		return <div key="new-message-header" className='new-message-header'>----- New Messages ------</div>;
 	},
 	renderHeaderForMessage: function(message){
+
 		if(this.lastUser && message.user === this.lastUser){
 			return null;
 		}
@@ -85,7 +96,7 @@ ChatList.Section = React.createClass({
 		if(user){
 			name = user.name;
 		}
-		return <div key={"message-header-"+message.ts} className="chat-user-header">{name}</div>;
+		return <div key={"message-header-"+message.ts} className="chat-user-header">{name} wrote:</div>;
 	},
 	renderMessageList:function(){
 		var me = this.props.data.me;
@@ -114,11 +125,7 @@ ChatList.Section = React.createClass({
 	renderChannelName: function() {
 		var channel = this.props.data.channel;
 
-		return <h5 className="channel-name">
-		<div className="channel-sign">#
-			<p className="unread-count">{channel.unread_count_display}</p>
-		</div>
-		{channel.name}</h5>
+		return <h5 className="channel-name">{channel.name}</h5>
 	},
 	renderMarkRead: function(){
 		var channel = this.props.data.channel;
@@ -167,6 +174,7 @@ ChatList.Section = React.createClass({
 		return (
 			<div className={channelClass} id={channel.id}>
 				<div className="channel-header">
+					{this.renderTimeAgo()}
 					{this.renderChannelName()}
 					{this.renderMarkRead()}
 				</div>
@@ -178,6 +186,12 @@ ChatList.Section = React.createClass({
 });
 
 ChatList.Item = React.createClass({
+	renderText: function(){
+
+	},
+	renderAttachment: function(){
+
+	},
 	render:function(){
 		
 		var message = this.props.data.message;

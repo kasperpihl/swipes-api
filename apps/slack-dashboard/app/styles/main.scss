@@ -88,13 +88,20 @@ html, body {
             position: relative;
             display: flex;
             align-items: center;
-            
+            border-bottom: 1px solid $studioGray-40;
+            margin-bottom: 5px;
             .channel-name {
+                width:100%;
+                height: 100%;
+                position:absolute;
+                left:0;
+                top:0;
+                padding-top: 5px;
                 font-size: 20px;
-                display: flex;
-                align-items: center;
+                //display: flex;
+                text-align: center;
                 font-weight: 300;
-                
+                /*
                 .channel-sign {
                     width: 20px;
                     height: 20px;
@@ -127,9 +134,30 @@ html, body {
                             50% {font-size: 12px}
                         }
                     }
-                }
+                }*/
             }
-            
+            .channel-timeago{
+                position: absolute;
+                top:0;
+                left:0;
+                height: 40px;
+                line-height: 40px;
+                padding: 0 15px;
+                color: $deepBlue-40;
+                font-weight: 400;
+                font-size: 14px;
+                transition: .1s linear;
+                /*&:after {
+                    content: "";
+                    position: absolute;
+                    width: 1px;
+                    height: 20px;
+                    right: 0;
+                    top: 10px;
+                    background-color: $studioGray-40;
+                    transition: .1s linear;
+                }*/
+            }
             .channel-mark-read {
                 position: absolute;
                 top: 0;
@@ -143,7 +171,7 @@ html, body {
                 font-size: 14px;
                 transition: .1s linear;
                 
-                &:before {
+                /*&:before {
                     content: "";
                     position: absolute;
                     width: 1px;
@@ -152,7 +180,7 @@ html, body {
                     top: 10px;
                     background-color: $studioGray-40;
                     transition: .1s linear;
-                }
+                }*/
                 
                 &:hover {
                     color: $deepBlue-60;
