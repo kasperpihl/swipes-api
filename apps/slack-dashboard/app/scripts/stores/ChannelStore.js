@@ -15,13 +15,13 @@ var ChannelStore = Reflux.createStore({
 		}
 		return "channels.";
 	},
-	onMarkAsRead:function(channel){
+	onMarkAsRead:function(channel, ts){
+		ts = ts || _.last(channel.messages).ts;
 		var prefix = this.apiPrefixForChannel(channel);
-		console.log('marking', _.last(channel.messages).ts);
 		swipes.service('slack').request(prefix + "mark", 
 			{
 				channel: channel.id, 
-				ts: _.last(channel.messages).ts
+				ts: ts
 		})
 		.then(function(){
 		})
@@ -39,10 +39,9 @@ var ChannelStore = Reflux.createStore({
 					updateObj.unread_count_display = curUnread + 1;
 				}
 				var currMessages = channel.messages || [];
-				var newMessage = currMessages.concat([msg]);
-				updateObj.messages = newMessage;
-				console.log(currMessages.length, newMessage.length, updateObj);
-				
+				var newMessages = currMessages.concat([msg]);
+				updateObj.messages = newMessages;
+
 				this.update(channel.id, updateObj);
 			}
 		}
@@ -61,8 +60,11 @@ var ChannelStore = Reflux.createStore({
 		console.log('store handler', msg.type, msg);
 	},
 	onSendMessage: function(channel, message){
-		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel.id, as_user: true}, function(err, res){
-			console.log('message res', err, res);
+		var self = this;
+		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel.id, as_user: true}, function(res, err){
+			if(res.ok){
+				//channelActions.markAsRead(channel, res.ts);
+			}
 		});
 	},
 	fetchChannel: function(channel){
@@ -76,12 +78,11 @@ var ChannelStore = Reflux.createStore({
 		if(newObj && !oldObj && !newObj.is_archived){
 			if(!newObj.unread_count_display){
 				newObj.has_fetched = true;
-				
 			}
 			else{
 				newObj.fetching = true;
 				newObj.messageQueue = [];
-				this.fetchChannel(newObj);
+				//this.fetchChannel(newObj);
 			}
 			newObj.messages = [newObj.latest];
 		}

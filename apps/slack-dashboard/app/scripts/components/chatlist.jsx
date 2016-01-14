@@ -24,11 +24,7 @@ var ChatList = React.createClass({
 			}
 			return false;
 		}), function(channel){
-			// Sort function
-			if(!channel.messages || !channel.messages.length){
-				return 0;
-			}
-			return -_.last(channel.messages).ts;
+			return channel.name;
 		});
 	})],
 	renderChannels: function(){
@@ -62,6 +58,16 @@ var ChatList = React.createClass({
 
 
 ChatList.Section = React.createClass({
+	getInitialState: function(){
+		return {
+			'showReply': false
+		};
+	},
+	componentDidUpdate: function(){
+		if(this.state.showReply){
+			$(this.refs.replyField).focus();
+		}
+	},
 	markChannel: function(){
 		var channel = this.props.data.channel;
 		var channelID = this.props.data.channel.id;
@@ -72,6 +78,9 @@ ChatList.Section = React.createClass({
 			channelActions.markAsRead(channel);
 		});
 	},
+	openReplyField: function(){
+		this.setState({showReply: true});
+	},
 	renderTimeAgo: function(){
 		var date = new Date(parseInt(_.last(this.props.data.channel.messages).ts)*1000);
 
@@ -81,22 +90,26 @@ ChatList.Section = React.createClass({
 			</div>
 		)
 	},
+
 	renderNewMessageHeader: function(){
 		return <div key="new-message-header" className='new-message-header'>----- New Messages ------</div>;
 	},
-	renderHeaderForMessage: function(message){
+	renderHeaderForMessage: function(message, isOldMessage){
 
 		if(this.lastUser && message.user === this.lastUser){
 			return null;
 		}
-
+		var className = "chat-user-header ";
+		if(isOldMessage){
+			className += 'old-message';
+		}
 		this.lastUser = message.user;
 		var name = 'unknown';
 		var user = userStore.get(message.user);
 		if(user){
 			name = user.name;
 		}
-		return <div key={"message-header-"+message.ts} className="chat-user-header">{name} wrote:</div>;
+		return <div key={"message-header-"+message.ts} className={className}>{name} wrote:</div>;
 	},
 	renderMessageList:function(){
 		var me = this.props.data.me;
@@ -112,7 +125,7 @@ ChatList.Section = React.createClass({
 				isNew = true;
 				messageList.push(self.renderNewMessageHeader());
 			}
-			var header = self.renderHeaderForMessage(message);
+			var header = self.renderHeaderForMessage(message, isOldMessage);
 			if(header){
 				messageList.push(header);
 			}
@@ -131,21 +144,29 @@ ChatList.Section = React.createClass({
 	renderMarkRead: function(){
 		var channel = this.props.data.channel;
 		return (
-			<div className="channel-mark-read">
+			<div className="channel-actions">
+				<a onClick={this.openReplyField}>Reply</a>
 				<a onClick={this.markChannel}>Mark read</a>
 			</div>
 		);
 	},
 	renderReply: function(){
+		var className = "quick-reply ";
+		if(!this.state.showReply){
+			className += 'hidden';
+		}
 		return (
-			<div className="quick-reply">
-				<input type="text" ref="replyField" onKeyUp={this.onKeyUp} className="chat-reply-input" placeholder="Quick reply" />
+			<div className={className}>
+				<input type="text" ref="replyField" onBlur={this.onBlur} onKeyUp={this.onKeyUp} className="chat-reply-input" placeholder="Reply" />
 			</div>
 		);
 	},
 	sendMessage: function(message){
 		$(this.refs.replyField).val("");
 		channelActions.sendMessage(this.props.data.channel, message);
+	},
+	onBlur: function(){
+		this.setState({showReply: false});
 	},
 	onKeyUp: function(e){
 		var $textField = $(this.refs.replyField);
@@ -157,6 +178,9 @@ ChatList.Section = React.createClass({
 			var message = $textField.val();
 			if(message && message.length > 0){
 				this.sendMessage(message);
+			}
+			else{
+				this.markChannel();
 			}
 		}
 	},
@@ -178,8 +202,8 @@ ChatList.Section = React.createClass({
 					{this.renderChannelName()}
 					{this.renderMarkRead()}
 				</div>
-				{this.renderMessageList()}
 				{this.renderReply()}
+				{this.renderMessageList()}
 			</div>
 		);
 	}
@@ -190,7 +214,7 @@ ChatList.Item = React.createClass({
 
 	},
 	renderAttachment: function(){
-
+		
 	},
 	render:function(){
 		

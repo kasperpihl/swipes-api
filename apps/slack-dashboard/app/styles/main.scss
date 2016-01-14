@@ -57,7 +57,9 @@ html, body {
         background: white;
         box-shadow: $swipes-shadow-one;
         transition: .4s ease-in-out;
-        
+        .old-message{
+            opacity: 0.5;
+        }
         &.read {
             margin: 0px;
             opacity: 0;
@@ -158,7 +160,7 @@ html, body {
                     transition: .1s linear;
                 }*/
             }
-            .channel-mark-read {
+            .channel-actions {
                 position: absolute;
                 top: 0;
                 right: 0;
@@ -182,12 +184,17 @@ html, body {
                     transition: .1s linear;
                 }*/
                 
-                &:hover {
-                    color: $deepBlue-60;
-                    transition: .1s linear;
+                a{
+                    padding: 5px;
+                    text-decoration: underline;
+                    cursor: pointer;
+                    &:hover {
+                        color: $deepBlue-60;
+                        transition: .1s linear;
                     
-                    a {
-                        text-decoration: underline;
+                        a {
+                            text-decoration: none;
+                        }
                     }
                 }
             }
@@ -199,10 +206,7 @@ html, body {
             line-height: 1.4;
             
             &.my-message {
-                background-color: rgba($blue-20, .3);
-            }
-            &.old-message{
-                opacity: 0.5;
+                //background-color: rgba($blue-20, .3);
             }
             .username {
                 color: $deepBlue-100;
@@ -214,25 +218,14 @@ html, body {
         }
         
 	}
-    
-	.channel-actions {
-		a {
-			padding: 5px;
-			text-decoration: underline;
-            cursor: pointer;
-		}
-        
-		a:hover {
-			text-decoration: none;
-		}
-	}
+
 }
 
 input.chat-reply-input {
     width: 100%;
     margin: 0px auto 0;
     padding: 10px 20px;
-    border-top: 1px solid $studioGray-60;
+    border-bottom: 1px solid $studioGray-60;
     border-radius: 0px;
     font-size: 15px;
     font-family: 'Roboto';
