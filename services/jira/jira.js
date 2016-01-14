@@ -11,13 +11,21 @@ var jira = {
 		consumerKey: 'SwipesUnicorns',
 		host: 'swipes.atlassian.net'
 	},
+	// request: function (authData, method, options, callback) {
+	// 	if (typeof authData !== 'object' || !authData.access_token) {
+	// 		return callback('no_access_token');
+	// 	}
+	//
+	//
+	// },
 	beforeAuthSave: function (data, callback) {
 		var that = this;
 		var userId = data.userId;
+		var tokenSecret;
 
 		db.rethinkQuery(r.table('users').get(userId))
 			.then(function (user) {
-				token_secret = user.jira_token_secret
+				tokenSecret = user.jira_token_secret
 
 				JiraClient.oauth_util.swapRequestTokenWithAccessToken({
 					host: that.connectionData.host,
@@ -25,7 +33,7 @@ var jira = {
 						// T_TODO find out why
 						// data.oauth_token SHOULD NOT BE AN ARRAY???
 							token: data.oauth_token[0],
-							token_secret: token_secret,
+							token_secret: tokenSecret,
 							oauth_verifier: data.oauth_token[1],
 							consumer_key: that.connectionData.consumerKey,
 							private_key: privateKeyData
@@ -37,7 +45,8 @@ var jira = {
 
 					// T_TODO I should find something unique to identify the service
 					var data = {
-						accessToken: accessToken
+						access_token: accessToken,
+						token_secret: tokenSecret
 					}
 
 					callback(null, data);
