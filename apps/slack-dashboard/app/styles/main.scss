@@ -96,7 +96,7 @@ html, body {
                 position:absolute;
                 left:0;
                 top:0;
-                padding-top: 5px;
+                padding-top: 7px;
                 font-size: 20px;
                 //display: flex;
                 text-align: center;
@@ -199,7 +199,7 @@ html, body {
             line-height: 1.4;
             
             &.my-message {
-                background-color: rgba($blue-20, .5);
+                background-color: rgba($blue-20, .3);
             }
             &.old-message{
                 opacity: 0.5;

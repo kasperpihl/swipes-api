@@ -15,7 +15,7 @@ module.exports = React.createClass(
                 if(unit === 'second'){
                   if(value < 10)
                     return 'Just now';
-                  else return 'Seconds ' + suffix;
+                  else return 'A few seconds ' + suffix;
                 }
                  if(value !== 1){
                    unit += 's'
