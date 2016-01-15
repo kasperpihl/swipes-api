@@ -2,6 +2,7 @@ var fs = require('fs');
 var serviceDir = __dirname;
 var r = require('rethinkdb');
 var db = require('../../rest/db.js'); // T_TODO I should make this one a local npm module
+var SwipesError = require( '../../rest/swipes-error' );
 var JiraClient = require('jira-connector');
 
 var privateKeyData = fs.readFileSync(serviceDir + '/jira-swipes.pem', 'utf8');
@@ -56,7 +57,7 @@ var jira = {
 		var jiraMethod = getJiraApiMethod(method, jiraClient);
 
 		if (!jiraMethod) {
-			return callback('jira-connector_not_supported_method');
+			return callback(new SwipesError('jira-connector_not_supported_method'));
 		}
 
 		jiraMethod(params, function (error, result) {
