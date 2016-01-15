@@ -17,7 +17,7 @@ var Services = React.createClass({
         <div className="right-side-container">
 					<div className="content-container" idName="main">
 						<div className="app-view-controller">
-							<Topbar data={}/>
+							<Topbar data={{screen: 1}}/>
               <div>Services goes here</div>
 						</div>
 					</div>
