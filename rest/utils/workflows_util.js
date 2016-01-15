@@ -44,8 +44,8 @@ let callWorkflowMethod = (manifestId, method, data) => {
         return resolve({err: 'manifest_no_background_defined'});
       }
 
-      // Check if app has background script setup
-      let background = require(appDir + manifest.identifier + "/" + manifest.background);
+      // Check if workflow has background script setup
+      let background = require(workflowDir + manifest.identifier + "/" + manifest.background);
 
       if (!background) {
         return resolve({err: 'background_script_not_found'});
@@ -71,7 +71,7 @@ let callWorkflowMethod = (manifestId, method, data) => {
 
         if (error) {
           // T_TODO maybe return the error object too
-          // or create some convention for app method to return errors
+          // or create some convention for workflow method to return errors
           // in a structured way
           return resolve({err: 'method_error'});
         }

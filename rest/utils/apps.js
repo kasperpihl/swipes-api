@@ -22,7 +22,7 @@ let callAppMethod = (manifestId, method, data) => {
 
       let app = apps[0];
 
-      let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
+      let manifest = JSON.parse(util.getFile(appDir + app.manifest_id + '/manifest.json'));
 
       if (!manifest) {
         return resolve({err: 'no_manifest_found'});

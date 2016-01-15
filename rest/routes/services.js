@@ -128,6 +128,7 @@ router.post('/services.authorize', serviceUtil.getService, serviceUtil.requireSe
 	This is for sysadmin only!
 */
 router.post('/services.install', isAdmin, (req, res, next) => {
+	console.log('service');
 	let manifestId = req.body && req.body.manifest_id;
 
 	if (!manifestId) {
@@ -149,7 +150,7 @@ router.post('/services.install', isAdmin, (req, res, next) => {
 			serviceId = generateId('S');
 		}
 
-		let manifest = JSON.parse(util.getAppFile(serviceDir + manifestId + '/manifest.json'));
+		let manifest = JSON.parse(util.getFile(serviceDir + manifestId + '/manifest.json'));
 
 		if (!manifest) {
 			return Promise.reject({ok: false, err: 'no_manifest_found'});

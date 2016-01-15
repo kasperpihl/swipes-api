@@ -56,7 +56,7 @@ let util = {
 
     return hostUrl + getString;
   },
-  getAppFile: (dest) => {
+  getFile: (dest) => {
     let file;
 
     try {

@@ -18,13 +18,13 @@ router.get('/sdk.load', (req, res, next) => {
 	}
 
 	// Temporary solution, server shouldn't include them, they should be packed together
-	insertString += util.getAppFile(appDir + 'app-loader' + '/jquery.min.js');
-	insertString += util.getAppFile(appDir + 'app-loader' + '/socket.io.js');
-	insertString += util.getAppFile(appDir + 'app-loader' + '/underscore.min.js');
-	insertString += util.getAppFile(appDir + 'app-loader' + '/q.min.js');
-	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-api-connector.js');
-	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-app-sdk.js');
-	insertString += util.getAppFile(appDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/jquery.min.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/socket.io.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/underscore.min.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/q.min.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/swipes-api-connector.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/swipes-app-sdk.js');
+	insertString += util.getFile(appDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
 	insertString += wrap('<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css" />');
 	insertString += 'window.swipes = new SwipesAppSDK("' + apiUrl + '");';
 

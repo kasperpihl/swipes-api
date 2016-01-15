@@ -36,7 +36,7 @@ let hook = (socket, userId) => {
           let changesPromises = [];
           let tableNames = [];
           apps.forEach((app) => {
-            let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
+            let manifest = JSON.parse(util.getFile(appDir + app.manifest_id + '/manifest.json'));
 
             if (manifest && manifest.listenTo && manifest.listenTo.length > 0) {
               manifest.listenTo.forEach((item) => {

@@ -74,7 +74,7 @@ router.post('/workflows.install', (req, res, next) => {
         return res.status(200).json({ok: false, err: 'no_app_found'});
     }
 
-    manifest = JSON.parse(util.getAppFile(appDir + manifestId + '/manifest.json'));
+    manifest = JSON.parse(util.getFile(appDir + manifestId + '/manifest.json'));
 
     if (!manifest) {
       return res.status(200).json({ok: false, err: 'no_manifest_found'});
@@ -199,7 +199,7 @@ router.post('/workflows.saveData', (req, res, next) => {
       return res.status(200).json({ok: false, err: 'data_must_be_array_or_object'});
     }
 
-    let manifest = JSON.parse(util.getAppFile(appDir + appId + '/manifest.json'));
+    let manifest = JSON.parse(util.getFile(appDir + appId + '/manifest.json'));
 
     if (!manifest) {
       return res.status(200).json({ok: false, err: 'no_manifest_found'});

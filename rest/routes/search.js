@@ -34,7 +34,7 @@ router.post('/search', (req, res, next) => {
       let promiseArray = [];
 
       apps.forEach((app) => {
-        let manifest = JSON.parse(util.getAppFile(appDir + app.manifest_id + '/manifest.json'));
+        let manifest = JSON.parse(util.getFile(appDir + app.manifest_id + '/manifest.json'));
 
         if (manifest) {
           if (manifest.background) {
