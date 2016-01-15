@@ -45,12 +45,12 @@ var jira = {
 
 		var jiraClient = new JiraClient({
 			host: this.connectionData.host,
-	    oauth: {
-	        consumer_key: this.connectionData.consumerKey,
-	        private_key: privateKeyData,
-	        token: authData.access_token,
-	        token_secret: authData.token_secret
-	    }
+			oauth: {
+				consumer_key: this.connectionData.consumerKey,
+				private_key: privateKeyData,
+				token: authData.access_token,
+				token_secret: authData.token_secret
+			}
 		});
 
 		var jiraMethod = getJiraApiMethod(method, jiraClient);
@@ -59,12 +59,12 @@ var jira = {
 			return callback('jira-connector_not_supported_method');
 		}
 
-		jiraMethod(params, function (error, issue) {
+		jiraMethod(params, function (error, result) {
 			if (error) {
 				return callback(error);
 			}
 
-			return callback(null, issue);
+			return callback(null, result);
 		});
 	},
 	beforeAuthSave: function (data, callback) {
