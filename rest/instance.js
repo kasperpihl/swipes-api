@@ -24,6 +24,7 @@ app.use(cors({
   allowedHeader: 'Content-Type, Accept, X-Requested-With, Session, Content-Length, X-Requested-With'
 }));
 app.use('/apps', express.static(__dirname + '/../apps'));
+app.use('/services', express.static(__dirname + '/../services'));
 
 app.use(bodyParser.json( { limit: 3000000 } ) );
 let parseErrorHandler = (err, req, res, next) => {
