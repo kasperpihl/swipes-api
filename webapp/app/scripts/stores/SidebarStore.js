@@ -5,15 +5,13 @@ var appStore = require('./AppStore');
 var SidebarStore = Reflux.createStore({
 	listenables: [ sidebarActions ],
 	onLoadAppModal:function(){
-		console.log('loading app modal');
-		var filteredApps = appStore.filter(function(app){ 
-			console.log(app);
+		var filteredApps = _.filter(appStore.getAll(), function(app){ 
 			if(!app.is_active)
 				return true;
 			return false; 
 		});
+		console.log('filter', filteredApps);
 		modalActions.loadModal("list", {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": filteredApps }, function(row){
-			console.log("callback row", row);
 			if(row){
 				swipes._client.callSwipesApi("users.activateApp", {"app_id": row.id}, function(res,error){
 					if(res && res.ok){

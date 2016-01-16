@@ -75,6 +75,7 @@ var Modal = React.createClass({
 			$contentEl.css(cssProps);
 	},
 	onClickedBackground: function(){
+		console.log('clicked background', this.state.modalCallback);
 		if(this.state.modalCallback)
 			this.state.modalCallback(null);
 		modalActions.hide();
@@ -85,6 +86,7 @@ var Modal = React.createClass({
 		modalActions.hide();
 	},
 	render: function() {
+		console.log('rendering', this.state);
 		var Modal = "div";
 
 		var containerClass = "modal-overlay-container ";

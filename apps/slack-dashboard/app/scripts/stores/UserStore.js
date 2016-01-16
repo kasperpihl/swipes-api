@@ -2,7 +2,7 @@ var Reflux = require('reflux');
 
 var UserStore = Reflux.createStore({
 	me: function(){
-		return this.find({me: true});
+		return _.findWhere(this.getAll(), {me: true});
 	}
 });
 

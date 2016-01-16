@@ -14,6 +14,9 @@ var ListModal = React.createClass({
 	render: function () {
 		
 		var options = this.props.data.options;
+		if(!options || typeof options !== 'object'){
+			options = {};
+		}
 		options.rows = options.rows || this.defaults.rows;
 		var self = this;
 		var rows = options.rows.map(function(row){

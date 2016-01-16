@@ -6,11 +6,11 @@ var UserStore = Reflux.createStore({
 	localStorage: "UserStore",
 	sort: "name",
 	me: function(){
-		return this.find({me: true});
+		return _.findWhere(this.getAll(), {me: true});
 	},
 	search:function(string, options){
 		var results = [];
-		this.each(function(user){
+		_.each(this.getAll(), function(user){
 			user.info = user.info || {};
 
 			var searchResult = {

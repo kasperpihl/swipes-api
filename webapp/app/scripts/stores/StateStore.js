@@ -32,7 +32,7 @@ var StateStore = Reflux.createStore({
 		this.unset("foregroundColor", {trigger: false});
 
 		if(params.appId){
-			app = appStore.find({"manifest_id":params.appId});
+			app = _.findWhere(appStore.getAll(), {"manifest_id":params.appId});
 			if(app){
 				appObj.url = app.main_app_url;
 				appObj.app = app;

@@ -13,7 +13,7 @@
     "react-highlighter": "^0.2.2",
     "react-router": "~0.13.2",
     "reflux": "~0.3.0",
-    "reflux-model-extension": "~0.0.6"
+    "reflux-model-extension": "*"
   },
   "devDependencies": {
     "connect-livereload": "~0.5.3",
