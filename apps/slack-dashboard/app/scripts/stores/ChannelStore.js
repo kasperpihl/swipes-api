@@ -4,6 +4,7 @@ var channelActions = require('../actions/ChannelActions');
 var moment = require('moment');
 var TimeUtility = require('../utilities/time_util');
 var userStore = require('./UserStore');
+var botStore = require('./BotStore');
 var ChannelStore = Reflux.createStore({
 	listenables: [channelActions],
 	// Making sure that DM's get name set on the channel property
@@ -54,6 +55,19 @@ var ChannelStore = Reflux.createStore({
 				if(user && user.id == lastUser && group == lastGroup){
 					model.isExtraMessage = true;
 				}
+			}
+			else if(model.bot_id){
+				var bot = botStore.get(model.bot_id);
+				if(bot){
+					model.bot = bot;
+				}
+			}
+			else{
+				var bot = {};
+				if(model.username){
+					bot.name = model.username;
+				}
+				model.bot = bot;
 			}
 			
 
