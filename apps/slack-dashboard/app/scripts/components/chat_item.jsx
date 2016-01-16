@@ -100,9 +100,25 @@ ChatMessage.Attachment = React.createClass({
 			return <div className="attachment-pretext">{renderTextWithLinks(this.props.data.pretext)}</div>;
 		}
 	},
+	renderServiceName: function(){
+		if(this.props.data.service_name){
+			return <div className="attachment-service-name">{this.props.data.service_name}</div>
+		}
+	},
 	renderTitle: function(){
 		if(this.props.data.title){
 			return <div className="attachment-title">{renderTextWithLinks(this.props.data.title)}</div>;
+		}
+	},
+	renderText: function(){
+		if(this.props.data.text){
+			return <div className="attachment-body">{renderTextWithLinks(this.props.data.text)}</div>;
+		}
+	},
+	renderImage: function(){
+		if(this.props.data.image_url){
+			// KRIS_TODO: Render lightbox
+			return <div className="attachment-image"><img src={this.props.data.image_url} /></div>;
 		}
 	},
 	renderAuthor: function(){
@@ -112,7 +128,7 @@ ChatMessage.Attachment = React.createClass({
 		console.log(this.props.data);
 		var styles = {};
 		if(this.props.data.color){
-			styles.backgroundColor = this.props.data.color;
+			styles.background = '#' + this.props.data.color;
 		}
 		return <div style={styles} className="attachment-bar" />;
 	},
@@ -122,7 +138,10 @@ ChatMessage.Attachment = React.createClass({
 				{this.renderPretext()}
 				{this.renderBar()}
 				<div className="attachment-content">
+					{this.renderServiceName()}
 					{this.renderTitle()}
+					{this.renderText()}
+					{this.renderImage()}
 				</div>
 			</div>
 		);

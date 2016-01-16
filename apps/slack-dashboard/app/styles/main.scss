@@ -178,7 +178,10 @@ html, body, #content {
     }
 }
 .chat-attachment{
-    max-width: 400px;
+    max-width: 650px;
+    .attachment-pretext{
+
+    }
     .attachment-bar{
         background: #e3e4e6;
         width: 4px;
@@ -188,6 +191,20 @@ html, body, #content {
     .attachment-content{
         display: table-cell;
         padding-left: 4px;
+        .attachment-title{
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .attachment-body{
+
+        }
+        .attachment-image{
+            img{
+                max-width: 400px;
+                border: 1px solid #e3e4e6;
+            }
+           
+        }
     }
 }
 

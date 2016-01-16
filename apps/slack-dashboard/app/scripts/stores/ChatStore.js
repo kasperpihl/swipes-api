@@ -14,7 +14,7 @@ var ChatStore = Reflux.createStore({
 			BotStore.batchLoad(obj.bots, {flush:true});
 			for( var i = 0 ; i < obj.channels.length ; i++ ){
 				var channel = obj.channels[i];
-				if(channel.name === 'dev-report'){
+				if(channel.name === 'general'){
 					ChannelStore.setChannel(channel);
 				}
 			}
