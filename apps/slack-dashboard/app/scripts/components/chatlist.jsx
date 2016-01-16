@@ -1,240 +1,133 @@
 var React = require('react');
 var Reflux = require('reflux');
-var chatStore = require('../stores/ChatStore');
-var chatActions = require('../actions/ChatActions');
-var userStore = require('../stores/UserStore');
 var channelStore = require('../stores/ChannelStore');
 var channelActions = require('../actions/ChannelActions');
-var _ = require('underscore');
-var TimeAgo = require('./time_ago');
-var ChatList = React.createClass({
-	mixins: [channelStore.connectFilter('channels', function(channels){
-		/*
-			Filter only to the channels that has 
-		*/
-		if(!channels || !_.size(channels))
-			return [];
-		channels = _.values(channels);
-		return _.sortBy(channels.filter(function(channel) {
-			// Filter function
-			if(!channel.is_archived && channel.unread_count_display){
-				if(channel.is_member || channel.is_open){
-					return true;
-				}
-			}
-			return false;
-		}), function(channel){
-			return channel.name;
-		});
-	})],
-	renderChannels: function(){
-		var me = userStore.me();
-		if(me){
-			me = me.id;
-		}
-		return this.state.channels.map(function(channel){
+var ChatItem = require('./chat_item');
+var ChatInput = require('./chat_input');
 
-			return <ChatList.Section key={channel.id} data={{me: me, channel:channel}} />
-		});
-	},
-	renderEmptyChat: function(){
-		if(!this.state.channels.length){
-			return (
-				<div className="no-new-messages">
-					<h1>No new messages. Add the trumpet here maybe</h1>
-				</div>
-			);
+var ChatList = React.createClass({
+	mixins: [channelStore.connect()],
+	shouldScrollToBottom: true,
+	hasRendered: false,
+	onScroll: function(e){
+		var contentHeight = $('.chat-list').outerHeight()
+		var scrollPos = $('.chat-list-container').scrollTop()
+		var viewHeight = $('.chat-list-container').outerHeight()
+
+		if( (viewHeight+scrollPos) >= contentHeight ){
+			this.shouldScrollToBottom = true;
 		}
+		else{
+			this.shouldScrollToBottom = false;
+		}
+	},
+	scrollToBottom: function(animate){
+		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
+		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
+			this.hasRendered = true;
+			if(animate)
+				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 300);
+			else
+				$('.chat-list-container').scrollTop(scrollPosForBottom);
+		}
+		var topPadding = 0;
+		if($('.chat-list').outerHeight() < $('.chat-list-container').outerHeight())
+			topPadding = $('.chat-list-container').outerHeight() - $('.chat-list').outerHeight();
+		$('.chat-list-container').css("paddingTop", topPadding + "px");
+	},
+	handleResize: function(){
+		this.scrollToBottom(this.hasRendered);
+	},
+	onChangedTextHeight: function(height){
+		//console.log("changing text height");
+		$("#content").css("paddingBottom", height);
+		this.scrollToBottom();
+	},
+	onSendingMessage:function(){
+		this.shouldAnimateScroll = true;
+		this.shouldScrollToBottom = true;
+	},
+	componentDidUpdate: function(prevProps, prevState){
+		this.scrollToBottom(this.hasRendered);
+	},
+	componentDidMount: function(){
+		window.addEventListener('resize', this.handleResize);
+	},
+	componentWillUnmount: function() {
+		window.removeEventListener('resize', this.handleResize);
+	},
+	renderLoading: function(){
+		if(this.state.sections){
+			return '';
+		}
+		
+		return <div>Loading</div>
+	
+	},
+	renderSections: function(){
+		if(!this.state.sections){
+			return '';
+		}
+
+		return this.state.sections.map(function(section){
+			return <ChatList.Section key={section.title} data={section} />
+		});
+
+	},
+	renderInput: function(){
+		return <ChatInput data={{channel: swipes.info.channel}} onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
 	},
 	render: function() {
 		return (
-			<div ref="scroll-container" className="chat-list-container">
-				{this.renderChannels()}
-				{this.renderEmptyChat()}
-			</div>
-		);
-	}
-});
-
-
-ChatList.Section = React.createClass({
-	getInitialState: function(){
-		return {
-			'showReply': false
-		};
-	},
-	componentDidUpdate: function(){
-		if(this.state.showReply){
-			$(this.refs.replyField).focus();
-		}
-	},
-	markChannel: function(){
-		var channel = this.props.data.channel;
-		var channelID = this.props.data.channel.id;
-		var channelHeight =  $('#' + channelID).height();
-		$('#' + channelID).css('height', channelHeight + 'px');
-		$('#' + channelID).animate({height:0},400);
-		$('#' + channelID).addClass('read').delay(350).queue(function(){
-			channelActions.markAsRead(channel);
-		});
-	},
-	openReplyField: function(){
-		this.setState({showReply: true});
-	},
-	renderTimeAgo: function(){
-		var date = new Date(parseInt(_.last(this.props.data.channel.messages).ts)*1000);
-
-		return (
-			<div className="channel-timeago">
-				<TimeAgo className="timeago" date={date} />
-			</div>
-		)
-	},
-
-	renderNewMessageHeader: function(){
-		return <div key="new-message-header" className='new-message-header'>----- New Messages ------</div>;
-	},
-	renderHeaderForMessage: function(message, isOldMessage){
-
-		if(this.lastUser && message.user === this.lastUser){
-			return null;
-		}
-		var className = "chat-user-header ";
-		if(isOldMessage){
-			className += 'old-message';
-		}
-		this.lastUser = message.user;
-		var name = 'unknown';
-		var user = userStore.get(message.user);
-		if(user){
-			name = user.name;
-		}
-		return <div key={"message-header-"+message.ts} className={className}>{name} wrote:</div>;
-	},
-	renderMessageList:function(){
-		var me = this.props.data.me;
-		var self = this;
-		var isNew = false;
-		var channel = this.props.data.channel;
-		var messageList = [];
-		this.lastUser = null;
-		_.each(channel.messages, function(message){
-			var isOldMessage = !isNew;
-			if(!isNew && message.ts > channel.last_read){
-				isOldMessage = false;
-				isNew = true;
-				messageList.push(self.renderNewMessageHeader());
-			}
-			var header = self.renderHeaderForMessage(message, isOldMessage);
-			if(header){
-				messageList.push(header);
-			}
-
-			var isMe = (message.user === me);
-
-			messageList.push(<ChatList.Item key={message.ts} data={{isMe: isMe, isOld: isOldMessage, message:message}} />);	
-		});
-		return messageList;
-	},
-	renderChannelName: function() {
-		var channel = this.props.data.channel;
-
-		return <h5 className="channel-name">{channel.name}</h5>
-	},
-	renderMarkRead: function(){
-		var channel = this.props.data.channel;
-		return (
-			<div className="channel-actions">
-				<a onClick={this.openReplyField}>Reply</a>
-				<a onClick={this.markChannel}>Mark read</a>
-			</div>
-		);
-	},
-	renderReply: function(){
-		var className = "quick-reply ";
-		if(!this.state.showReply){
-			className += 'hidden';
-		}
-		return (
-			<div className={className}>
-				<input type="text" ref="replyField" onBlur={this.onBlur} onKeyUp={this.onKeyUp} className="chat-reply-input" placeholder="Reply" />
-			</div>
-		);
-	},
-	sendMessage: function(message){
-		$(this.refs.replyField).val("");
-		channelActions.sendMessage(this.props.data.channel, message);
-	},
-	onBlur: function(){
-		this.setState({showReply: false});
-	},
-	onKeyUp: function(e){
-		var $textField = $(this.refs.replyField);
-		//console.log(e.keyCode, e.shiftKey, e.target);
-		if(e.keyCode === 27){
-			$textField.blur();
-		}
-		if (e.keyCode === 13 && !e.shiftKey ) {
-			var message = $textField.val();
-			if(message && message.length > 0){
-				this.sendMessage(message);
-			}
-			else{
-				this.markChannel();
-			}
-		}
-	},
-	render: function(){
-		var channel = this.props.data.channel;
-		var channelClass = "channel-section";
-		if (channel.id.charAt(0) === "D") {
-			channelClass += " direct-message";
-		} else if (channel.id.charAt(0) === "C") {
-			channelClass += " channel-message";
-		} else if (channel.id.charAt(0) === "G") {
-			channelClass += " group-message"        
-		}
-
-		return (
-			<div className={channelClass} id={channel.id}>
-				<div className="channel-header">
-					{this.renderTimeAgo()}
-					{this.renderChannelName()}
-					{this.renderMarkRead()}
+			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
+				<div className="chat-list">
+					{this.renderLoading()}
+					{this.renderSections()}
+					
 				</div>
-				{this.renderReply()}
-				{this.renderMessageList()}
+				{this.renderInput()}
 			</div>
 		);
 	}
 });
+ChatList.Section = React.createClass({
+	render: function() {
+		var chatItemsGroups = [];
+		var chatItemMessages = [];
 
-ChatList.Item = React.createClass({
-	renderText: function(){
+		this.props.data.messages.forEach(function (item) {
+			if (item.isExtraMessage === false) {
+				if (chatItemMessages.length > 0) {
+					chatItemsGroups.push(chatItemMessages);
+					chatItemMessages = [];
+				}
 
-	},
-	renderAttachment: function(){
-		
-	},
-	render:function(){
-		
-		var message = this.props.data.message;
-		
-		var className = "item ";
-		// The message was already read (we always include the last read message to provide context of what the response was for)
-		if(this.props.data.isOld){
-			className += 'old-message ';
-		}
-		if(this.props.data.isMe){
-			className += 'my-message ';
-		}
+				chatItemMessages.push(item);
+			} else {
+				chatItemMessages.push(item);
+			}
+		});
+
+		// Push the last messages to a group
+		chatItemsGroups.push(chatItemMessages);
+
+		var chatItems  = chatItemsGroups.map(function (item) {
+			return <ChatItem key={item[0].ts} data={item} />;
+		})
 
 		return (
-			<div className={className}>
-				<span><span className="message-content">{message.text}</span></span>
+			<div className="section">
+				<div className="chat-date-line">
+					<div className="line"></div>
+					<div className="date">
+						<span>{this.props.data.title}</span>
+					</div>
+				</div>
+				{chatItems}
 			</div>
 		);
 	}
-})
+});
 
 module.exports = ChatList;
+;

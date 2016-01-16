@@ -1,23 +1,27 @@
 var Reflux = require('reflux');
-var _ = require('underscore');
-var chatActions = require('../actions/ChatActions');
+
 var ChannelActions = require('../actions/ChannelActions');
-var TimeUtility = require('../utilities/time_util');
 var ChannelStore = require('./ChannelStore');
 var UserStore = require('./UserStore');
-
+var BotStore = require('./BotStore');
 var ChatStore = Reflux.createStore({
-	listenables: [chatActions],
 	start: function() {
 		var self = this;
-		swipes.service("slack").request('rtm.start').then(function(obj){
-			UserStore.batchLoad(obj.users, {flush:true})
-			ChannelStore.batchLoad(obj.channels, {flush:true, trigger:false});
-			ChannelStore.batchLoad(obj.ims, {trigger:false});
-			ChannelStore.batchLoad(obj.groups, {trigger:true});
+		swipes.service("slack").request('rtm.start', function(obj, err){
+
+			console.log('rtm', obj, err);
+			UserStore.batchLoad(obj.users, {flush:true});
+			BotStore.batchLoad(obj.bots, {flush:true});
+			for( var i = 0 ; i < obj.channels.length ; i++ ){
+				var channel = obj.channels[i];
+				if(channel.name === 'dev-report'){
+					ChannelStore.setChannel(channel);
+				}
+			}
 			
 			obj.self.me = true;
 			UserStore.update(obj.self.id, obj.self);
+
 			self.connect(obj.url);
 		});
 	},

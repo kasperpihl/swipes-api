@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var _ = require('underscore');
 var channelActions = require('../actions/ChannelActions');
+var moment = require('moment');
 var TimeUtility = require('../utilities/time_util');
 var userStore = require('./UserStore');
 var ChannelStore = Reflux.createStore({
@@ -15,6 +16,68 @@ var ChannelStore = Reflux.createStore({
 		}
 		return "channels.";
 	},
+	setChannel: function(channel){
+		this._reset();
+		this.set('channel', channel);
+		this.fetchChannel(channel);
+	},
+	setMessages:function(messages){
+		this.set('messages', messages, {trigger: false});
+		this.sortMessages();
+	},
+	addMessage:function(message){
+		var newMessages = this.get('messages') || [];
+		newMessages.push(message);
+		this.update('messages', newMessages);
+	},
+	editMessage: function(message){
+
+	},
+	sortMessages: function(){
+		
+		var self = this;
+		var sortedMessages = _.sortBy(this.get('messages'), 'ts');
+		var lastUser, lastGroup, lastDate;
+		var groups = _.groupBy(sortedMessages, function(model, i){
+
+			var date = new Date(parseInt(model.ts)*1000);
+			var group = moment(date).startOf('day').unix();
+
+			model.timeStr = TimeUtility.getTimeStr(date);
+			model.isExtraMessage = false;
+			var user;
+			if(model.user){
+				user = userStore.get(model.user);
+				if(user){
+					model.user = user;
+				}
+				if(user && user.id == lastUser && group == lastGroup){
+					model.isExtraMessage = true;
+				}
+			}
+			
+
+			lastGroup = group;
+			lastUser = user ? user.id : null;
+			lastDate = date;
+			return group;
+		});
+
+		sortedKeys = _.keys(groups).sort()
+		var sortedSections = [];
+		for(var i = 0 ; i < sortedKeys.length ; i++){
+			var key = sortedKeys[i];
+
+			schedule = new Date(parseInt(key)*1000);
+			var title = TimeUtility.dayStringForDate(schedule);
+			sortedSections.push({"title": title, "messages": groups[key] });
+		}
+
+		this.set("sections", sortedSections);
+
+	},
+
+
 	onMarkAsRead:function(channel, ts){
 		ts = ts || _.last(channel.messages).ts;
 		var prefix = this.apiPrefixForChannel(channel);
@@ -26,6 +89,10 @@ var ChannelStore = Reflux.createStore({
 		.then(function(){
 		})
 	},
+	
+
+
+
 	onHandleMessage:function(msg){
 		
 		if(msg.type === 'message'){
@@ -69,30 +136,10 @@ var ChannelStore = Reflux.createStore({
 	},
 	fetchChannel: function(channel){
 		var self = this;
-		swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id, inclusive: 1, oldest: channel.last_read }).then(function(res){
-			self.update(channel.id, {has_fetched:true, fetching: false, messages: res.messages.reverse()});
+		swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id }).then(function(res){
+			self.setMessages(res.messages);
 		}).catch(function(error){
 		});
-	},
-	beforeSaveHandler: function(newObj, oldObj){
-		if(newObj && !oldObj && !newObj.is_archived){
-			if(!newObj.unread_count_display){
-				newObj.has_fetched = true;
-			}
-			else{
-				newObj.fetching = true;
-				newObj.messageQueue = [];
-				//this.fetchChannel(newObj);
-			}
-			newObj.messages = [newObj.latest];
-		}
-		if(!newObj.name && newObj.is_im){
-			var user = userStore.get(newObj.user);
-			if(user && user.name){
-				newObj.name = user.name
-			}
-		}
-		return newObj;
 	}
 });
 

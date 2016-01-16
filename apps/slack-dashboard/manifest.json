@@ -1,9 +1,9 @@
 {
 	"manifest_version": 1,
-	"title": "Slack Dashboard",
-	"identifier": "slack-dashboard",
+	"title": "Slack Channel",
+	"identifier": "slack-channel",
 	"version": "0.1",
-	"description": "Slack Dashboard for better workflow",
+	"description": "Slack Channel workflow",
 	"main_app": {
 		"index": "dev/index.html"
 	},
