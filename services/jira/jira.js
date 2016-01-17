@@ -59,14 +59,23 @@ var jira = {
 		if (!jiraMethod) {
 			return callback(new SwipesError('jira-connector_not_supported_method'));
 		}
+		try{
+			jiraMethod(params, function (error, result) {
+				if (error) {
+					if(error.errorMessages){
+						error = error.errorMessages[0];
+					}
+					return callback(error);
+				}
 
-		jiraMethod(params, function (error, result) {
-			if (error) {
-				return callback(error);
-			}
-
-			return callback(null, result);
-		});
+				return callback(null, result);
+			});
+		}
+		catch(e){
+			console.log('catching', e);
+			callback(e);
+		};
+		
 	},
 	beforeAuthSave: function (data, callback) {
 		var that = this;
