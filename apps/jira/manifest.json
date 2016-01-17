@@ -1,8 +1,0 @@
-{
-	"manifest_version": 1,
-	"title": "JIRA",
-	"identifier": "jira",
-	"version": "0.1",
-	"description": "The JIRA App For Swipes",
-	"background": "background.js"
-}
