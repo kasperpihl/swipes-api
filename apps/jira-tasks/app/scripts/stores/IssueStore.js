@@ -6,11 +6,11 @@ var IssueStore = Reflux.createStore({
 		var self = this;
 		swipes.service('jira').request('search.search', {
 			jql: 'project = SWIP AND sprint is not EMPTY ORDER BY Rank ASC'
-		}, function(err, res){
+		}, function(res, err){
 			console.log('jira2', res, err);
-			if(res && res.issues){
-				console.log('loading all these', res.issues);
-				self.batchLoad(res.issues, {flush:true});
+			if(res && res.ok){
+				console.log('loading all these', res.data.issues);
+				self.batchLoad(res.data.issues, {flush:true});
 			}
 		});
 	},

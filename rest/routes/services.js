@@ -42,7 +42,7 @@ router.post('/services.request', (req, res, next) => {
 		})
 
 	}).then((result) => {
-		res.send(result);
+		res.send({ok:true, data:result});
 	}).catch((err) => {
 		if(typeof err === "string"){
 			return res.status(200).json({ok: false, err: err});

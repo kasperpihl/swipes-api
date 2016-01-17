@@ -9,10 +9,10 @@ var UserStore = Reflux.createStore({
 		var self = this;
 		swipes.service('jira').request('user.searchAssignable', {
 			project: 'SWIP' 
-		}, function(err, res){
+		}, function(res, err){
 			console.log('jira1', res, err);
-			if(res){
-				self.batchLoad(res, {flush:true});
+			if(res && res.ok){
+				self.batchLoad(res.data, {flush:true});
 			}
 		});
 	}

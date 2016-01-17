@@ -7,8 +7,8 @@ var BotStore = require('./BotStore');
 var ChatStore = Reflux.createStore({
 	start: function() {
 		var self = this;
-		swipes.service("slack").request('rtm.start', function(obj, err){
-
+		swipes.service("slack").request('rtm.start', function(res, err){
+			var obj = res.data;
 			console.log('rtm', obj, err);
 			UserStore.batchLoad(obj.users, {flush:true});
 			BotStore.batchLoad(obj.bots, {flush:true});
