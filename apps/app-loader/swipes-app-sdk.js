@@ -82,8 +82,12 @@ var SwipesAppSDK = (function() {
 	};
 	SwipesAppSDK.prototype.onPreview = function(callback){
 		self._listeners.add("preview", callback);
-	}
-
+	};
+	SwipesAppSDK.prototype.api = {
+		request: function(options, data, callback){
+			self._client.callSwipesApi(options, data, callback);
+		}
+	};
 	// API for handling data from apps
 	SwipesAppSDK.prototype.app = function(appId){
 		if(!appId)
@@ -339,21 +343,13 @@ var SwipesAppSDK = (function() {
 
 			if(message.command == "event"){
 				if(message.data.type == "init"){
-					if(data.data.preview_obj)
-						this.info.previewObj = data.data.preview_obj;
-					if(data.data.channel_id)
-						this.info.channelId = data.data.channel_id;
-					if(data.data.channel)
-						this.info.channel = data.data.channel;
-					if(data.data.manifest.manifest_id)
+					if(data.data.manifest.manifest_id){
 						this.setAppId(data.data.manifest.manifest_id);
-					if(data.data.user_id)
+					}
+					if(data.data.user_id){
 						this.info.userId = data.data.user_id;
-
-					if(data.data.default_scope)
-						this.setDefaultScope(data.data.default_scope);
-					else
-						this.setDefaultScope(data.data.manifest.id);
+						this.setDefaultScope(data.data.user_id);
+					}
 				}
 
 				var listeners = self._listeners.get(data.type);
@@ -372,10 +368,6 @@ var SwipesAppSDK = (function() {
 		if(callback) {
 			callback("yeah");
 		}
-	};
-
-	SwipesAppSDK.prototype.update = {
-
 	};
 
 	return SwipesAppSDK;
