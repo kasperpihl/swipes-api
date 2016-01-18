@@ -11,7 +11,7 @@ var sidebarActions = require('../actions/SidebarActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
-	mixins: [Reflux.ListenerMixin, WorkflowStore.connect("apps"), Navigation ],
+	mixins: [Reflux.ListenerMixin, WorkflowStore.connect("workflows"), Navigation ],
 	onStateChange: function(states){
 		var toggle = states["sidebarClosed"] ? true : false;
 		$("body").toggleClass("sidebar-closed", toggle);
@@ -30,7 +30,7 @@ var Sidebar = React.createClass({
 			<aside className="sidebar left">
 				<div className="sidebar_content">
 					<div className="sidebar-controls">
-						<Sidebar.Section data={{title:"My Workflows", section:"apps", rows: this.state.apps}}/>
+						<Sidebar.Section data={{title:"My Workflows", rows: this.state.workflows}}/>
 						<div onClick={this.openServicesOverlay} style={{color: "white"}}>Open Services</div>
 					</div>
 
@@ -41,20 +41,12 @@ var Sidebar = React.createClass({
 });
 Sidebar.Section = React.createClass({
 	onSectionHeader: function(){
-		console.log(this.props.data.section);
-		if(this.props.data.section === "apps"){
-			sidebarActions.loadAppModal();
-		}
+		sidebarActions.loadWorkflowModal();
 	},
 	render: function(){
 		var self = this;
 		var rows = this.props.data.rows.map(function(row){
-			row.hidden = false;
-			if(self.props.data.section === "apps"){
-				if(!row.main_app || !row.is_active)
-					row.hidden = true;
-			}
-			return <Sidebar.Row key={row.id} section={self.props.data.section} data={row} />
+			return <Sidebar.Row key={row.id} data={row} />
 		});
 
 		return (
@@ -75,7 +67,7 @@ Sidebar.Row = React.createClass({
 			//this.setState({editMode:true});
 		}
 		else{
-			this.transitionTo('/app/' + this.props.data.manifest_id);
+			this.transitionTo('/workflow/' + this.props.data.id);
 		}
 	},
 	getInitialState:function(){

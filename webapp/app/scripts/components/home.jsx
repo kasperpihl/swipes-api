@@ -2,7 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var Sidebar = require('./sidebar');
 var Topbar = require('./topbar');
-var AppLoader = require('./app_loader');
+var WorkflowLoader = require('./workflow_loader');
 var Loading = require('./loading');
 var Modal = require('./modal');
 var Overlay = require('./overlay');
@@ -29,8 +29,8 @@ var Home = React.createClass({
 
 	},
 	forwardParamsFromRouter: function(){
-		if(this.props.params.appId){
-			stateStore.actions.loadApp(this.props.params);
+		if(this.props.params.workflowId){
+			stateStore.actions.loadWorkflow(this.props.params);
 			//overlayActions.hide();
 		}
 		/*if(this.props.params.overlayId){
@@ -62,17 +62,17 @@ var Home = React.createClass({
 				<Sidebar />
 				<div className="right-side-container">
 					<div className="content-container" idName="main">
-						<div className="app-view-controller">
+						<div className="workflow-view-controller">
 							<Topbar data={{screen:1}}/>
-							<AppLoader data={{screen:1}}/>
+							<WorkflowLoader data={{screen:1}}/>
 						</div>
-						<div className="app-view-controller">
+						<div className="workflow-view-controller">
 							<Topbar data={{screen:2}}/>
-							<AppLoader data={{screen:2}} />
+							<WorkflowLoader data={{screen:2}} />
 						</div>
-						<div className="app-view-controller">
+						<div className="workflow-view-controller">
 							<Topbar data={{screen:3}}/>
-							<AppLoader data={{screen:3}} />
+							<WorkflowLoader data={{screen:3}} />
 						</div>
 					</div>
 				</div>

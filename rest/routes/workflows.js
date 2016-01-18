@@ -17,6 +17,15 @@ let isAdmin = util.isAdmin;
 // T_TODO Change the folder to workflows
 let workflowsDir = __dirname + '/../../apps/';
 
+router.post('/workflows.list', (req, res, next) => {
+  let workflowQ = r.table('workflows');
+  db.rethinkQuery(workflowQ).then((workflows) => {
+    res.status(200).json({ok: true, res: workflows});
+  }).catch((err) => {
+    return next(err);
+  })
+});
+
 router.post('/workflows.install', isAdmin, (req, res, next) => {
   let manifestId = req.body && req.body.manifest_id;
 
@@ -58,16 +67,11 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
         name: manifest.name,
         manifest_id: manifestId,
         description: manifest.description,
-        version: manifest.version,
-        is_installed: true
+        version: manifest.version
       };
 
-      if (manifest.main_app) {
-        updateDoc.main_app = manifest.main_app;
-      }
-
-      if (manifest.preview_app) {
-        updateDoc.preview_app = manifest.preview_app;
+      if (manifest.index) {
+        updateDoc.index = manifest.index;
       }
 
       return db.rethinkQuery(r.table('workflows').insert(updateDoc, {'conflict': 'update'}));

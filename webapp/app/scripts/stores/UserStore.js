@@ -14,7 +14,7 @@ var UserStore = Reflux.createStore({
 			user.info = user.info || {};
 
 			var searchResult = {
-				appId: "AUSER",
+				workflowId: "AUSER",
 				text: user.name,
 				id: user.id,
 				// T_TODO
@@ -32,7 +32,7 @@ var UserStore = Reflux.createStore({
 			}
 		})
 		return {
-			appId: "AUSER",
+			workflowId: "AUSER",
 			name: "People",
 			results: results
 		};

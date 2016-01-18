@@ -5,7 +5,7 @@ var StateActions = Reflux.createActions([
 	'init',
 	'changeStarted',
 	'changeBackgroundColor',
-	'loadApp',
+	'loadWorkflow',
 	'loadPreview',
 	'unloadPreview',
 	'toggleSidebar'

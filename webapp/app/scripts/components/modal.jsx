@@ -86,7 +86,6 @@ var Modal = React.createClass({
 		modalActions.hide();
 	},
 	render: function() {
-		console.log('rendering', this.state);
 		var Modal = "div";
 
 		var containerClass = "modal-overlay-container ";

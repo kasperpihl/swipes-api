@@ -30,7 +30,7 @@ var SearchModal = React.createClass({
 		var row = this.resultsByIndex[index];
 		if(!row)
 			return;
-		if(row.appId == 'ACORE'){
+		if(row.workflowId == 'ACORE'){
 			if(row.id == 'search-all'){
 				SearchModalActions.externalSearch(this.searchValue);
 			}
@@ -209,7 +209,7 @@ var SearchModal = React.createClass({
 		function addSearchButton(){
 			var dCounter = counter++;
 			var noResults = (searchResults.length === 0);
-			self.resultsByIndex.push({appId: 'ACORE', id:'search-all'});
+			self.resultsByIndex.push({workflowId: 'ACORE', id:'search-all'});
 			categories.push(<SearchModal.SearchButton key="search-all-button" data={{title:'Search all apps for: ' + self.searchValue, index: dCounter, noResults: noResults, state: self.state.state, onClickedRow: self.selectRowWithIndex }} />);
 
 		}
@@ -217,7 +217,7 @@ var SearchModal = React.createClass({
 			var dCounter = counter;
 			counter += category.results.length;
 			self.resultsByIndex = self.resultsByIndex.concat(category.results);
-			categories.push(<ResultList key={category.appId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
+			categories.push(<ResultList key={category.workflowId} data={{startCounter: dCounter, searchValue:self.searchValue, category: category, onClickedRow: self.clickedRow }} />);
 		}
 
 
@@ -295,8 +295,8 @@ var ResultList = React.createClass({
 		var counter = this.props.data.startCounter;
 
 		var rows = list.map(function (row) {
-			if(!row.appId)
-				row.appId = self.props.data.category.appId;
+			if(!row.workflowId)
+				row.workflowId = self.props.data.category.workflowId;
 			return <ResultList.Row key={row.id} data={{index: counter++, row:row, searchValue: self.props.data.searchValue, onClickedRow: self.props.data.onClickedRow }} />
 		});
 

@@ -1,5 +1,4 @@
 var Reflux = require('reflux');
-
 var WorkflowStore = Reflux.createStore({
 	localStorage: "WorkflowStore",
 	sort: "name",
@@ -7,7 +6,7 @@ var WorkflowStore = Reflux.createStore({
 		var results = [];
 		this.each(function(app){
 			var searchResult = {
-				appId: "AAPP",
+				workflowId: "AAPP",
 				text: app.name,
 				id: app.id
 			};
@@ -16,11 +15,17 @@ var WorkflowStore = Reflux.createStore({
 			}
 		})
 		return {
-			appId: "AWORKFLOW",
+			workflowId: "AWORKFLOW",
 			name: "Workflows",
 			results: results
 		};
-	}
+	},
+	beforeSaveHandler:function(newObj){
+		if(!newObj.index_url && newObj.index){
+			newObj.index_url = this.workflow_base_url + newObj.manifest_id + '/' + newObj.index;
+		}
+		return newObj;
+	}	
 });
 
 module.exports = WorkflowStore;

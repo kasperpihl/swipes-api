@@ -19,7 +19,7 @@ var Topbar = React.createClass({
             $('.loader').css('display', 'none');
             $('.connection-icon').html('check');
             $('.connection-status').css('background-color', '#4CAF50').delay(3000).queue(function(){
-                $('.app-view-controller').css('padding-top', '60px');
+                $('.workflow-view-controller').css('padding-top', '60px');
                 $('.connection-status').css('display', 'none').dequeue();
             });
         } else if (this.state.connectionStatus === 'offline') {
@@ -33,9 +33,9 @@ var Topbar = React.createClass({
         };
         
         if ($('.connection-status').css('display') == 'flex') {
-            $('.app-view-controller').css('padding-top', '90px');
+            $('.workflow-view-controller').css('padding-top', '90px');
         } else if ($('.connection-status').css('display') == 'none') {        
-            $('.app-view-controller').css('padding-top', '60px');
+            $('.workflow-view-controller').css('padding-top', '60px');
         }
 	},
 	onStateChange: function(states){

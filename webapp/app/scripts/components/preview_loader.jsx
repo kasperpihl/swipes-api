@@ -19,7 +19,7 @@ var PreviewLoader = React.createClass({
 						case "users":
 							store = userStore;
 							break;
-						case "apps":
+						case "workflows":
 							store = WorkflowStore;
 							break;
 					}
@@ -37,11 +37,11 @@ var PreviewLoader = React.createClass({
 		var initObj = {
 			type: "init",
 			data: {
-				manifest: this.state.app,
+				manifest: this.state.workflow,
+				_id: this.state.workflow.id,
 				user_id: userStore.me().id,
 				token: stateStore.get("swipesToken"),
-				target_url: document.location.protocol + "//" + document.location.host,
-				default_scope: this.state.app.id
+				target_url: document.location.protocol + "//" + document.location.host
 			}
 		};
 
@@ -52,7 +52,7 @@ var PreviewLoader = React.createClass({
 		if(!this.apiCon){
 			this.apiCon = swipes._client.copyConnector();
 		}
-		this.apiCon.setAppId(this.state.app.manifest_id);
+		this.apiCon.setId(this.state.workflow.id);
 		var doc = $(this.refs.iframe)[0].contentWindow;
 		var apiUrl = this.apiCon.getBaseURL();
 		this.apiCon.setListener(doc, apiUrl);
@@ -76,13 +76,13 @@ var PreviewLoader = React.createClass({
 			this.apiCon.callListener("event", previewEv);
 	},
 	renderLocalPreview:function(){
-		if(!this.state.localPreview || this.state.app)
+		if(!this.state.localPreview || this.state.workflow)
 			return "";
 		var Preview = this.state.localPreview;
 		return <Preview data={{obj:this.state.obj}} />
 	},
 	renderLoading: function(){
-		if(this.state.app && this.state.loading){
+		if(this.state.workflow && this.state.loading){
 			return (
 				<div className="preview-loader ">
 					<div className="loader">
@@ -107,14 +107,14 @@ var PreviewLoader = React.createClass({
 		}
 	},
 	componentDidUpdate: function(prevProps, prevState){
-		if(this.state.app && this.state.obj != prevState.obj && !this.state.loading){
+		if(this.state.workflow && this.state.obj != prevState.obj && !this.state.loading){
 			this.sendPreviewObj()
 		}
 	},
 	renderIframe:function(){
 		if(!this.state.url)
 			return "";
-		var iframeClass = "app-frame-class ";
+		var iframeClass = "workflow-frame-class ";
 		if(this.state.loading)
 			iframeClass += "hidden ";
 		return <iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className={iframeClass} frameBorder="0"/>

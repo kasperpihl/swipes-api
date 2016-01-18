@@ -59,7 +59,7 @@ ul{
     border-radius: 50px;
 }
 
-.app-frame-class{
+.workflow-frame-class{
     width:100%;
     height:100%;
 }
@@ -101,7 +101,7 @@ body {
     .content-container{
 
         height:100%;
-        .app-view-controller{
+        .workflow-view-controller{
             height:100%;
             display: none; 
             position:relative;
@@ -110,24 +110,24 @@ body {
                 height: 100%; 
             }
         }
-        .app-view-controller:nth-child(1){
+        .workflow-view-controller:nth-child(1){
             display: block;
         }
         &.dual-apps, &.tri-apps {
-            .app-view-controller {
+            .workflow-view-controller {
                 float:left;
                 width:50%;              
             }
-            .app-view-controller:nth-child(2){
+            .workflow-view-controller:nth-child(2){
                 display: block;
             }
         }
         &.tri-apps{
-            .app-view-controller {
+            .workflow-view-controller {
                 float:left;
                 width:33%;              
             }
-            .app-view-controller:nth-child(3){
+            .workflow-view-controller:nth-child(3){
                 display: block;
             }
         }

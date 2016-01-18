@@ -33,8 +33,8 @@ var SwipesAPIConnector = (function () {
 		}
 	};
 
-	SwipesAPIConnector.prototype.setAppId = function (appId) {
-		this._appId = appId;
+	SwipesAPIConnector.prototype.setId = function (id) {
+		this._id = id;
 	};
 
 	SwipesAPIConnector.prototype.copyConnector = function () {
@@ -170,8 +170,8 @@ var SwipesAPIConnector = (function () {
 			'data': data
 		};
 
-		if (this._appId) {
-			callJson.app_id = this._appId;
+		if (this._id) {
+			callJson._id = this._id;
 		}
 
 		if (callback && typeof callback === 'function') {
@@ -200,15 +200,15 @@ var SwipesAPIConnector = (function () {
 				return;
 			}
 
-			if (message.identifier && message.command === "event" && message.data.type === "init") {
+			if (!this._id && message.identifier && message.command === "event" && message.data.type === "init") {
 				var data = message.data.data;
 
 				if(data.target_url) {
 					this.setTargetURL(data.target_url);
 				}
 
-				if(data.manifest.manifest_id) {
-					this.setAppId(data.manifest.manifest_id);
+				if(data._id) {
+					this.setId(data._id);
 				}
 
 				if(data.token) {
@@ -225,8 +225,7 @@ var SwipesAPIConnector = (function () {
 					this._listenerQueue = [];
 				}
 			}
-
-			if (message.app_id && message.app_id != this._appId) {
+			if (message._id && message._id != this._id) {
 				return;
 			}
 
@@ -257,8 +256,8 @@ var SwipesAPIConnector = (function () {
 			'reply_to': identifier
 		};
 
-		if(this._appId)
-			callJson.app_id = this._appId;
+		if(this._id)
+			callJson._id = this._id;
 		if(data){
 			callJson.data = data;
 		}

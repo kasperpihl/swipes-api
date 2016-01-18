@@ -24,7 +24,7 @@ var SocketStore = Reflux.createStore({
 				res.self.me = true;
 				amplitude.setUserId(res.self.id);
 				userStore.update(res.self.id, res.self);
-				
+				WorkflowStore.workflow_base_url = res.workflow_base_url;
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
 
 				serviceStore.batchLoad(res.services, {flush:true});

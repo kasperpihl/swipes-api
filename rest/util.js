@@ -48,11 +48,11 @@ let util = {
   appTable: (appId, table) => {
     return appId + '_' + table;
   },
-  workflowUrl: (req, app, type) => {
+  workflowUrl: (req, workflow, type) => {
     let hostUrl = config.get('protocol') + req.hostname + ':' + config.get('port');
     let getString;
-    if(app[type].index)
-      getString = '/apps/' + app.manifest_id + '/' + app[type].index;
+    if(workflow[type])
+      getString = '/apps/' + workflow.manifest_id + '/' + workflow[type];
 
     return hostUrl + getString;
   },

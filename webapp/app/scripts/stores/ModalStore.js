@@ -33,7 +33,7 @@ var ModalStore = Reflux.createStore({
 			options = {};
 		}
 
-		this.reset();
+		this.reset({trigger:false});
 
 		var modalOptions = this.getModalOptions(modal);
 		if(typeof modalOptions.opaqueBackground !== 'undefined')

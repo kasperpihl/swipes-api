@@ -4,8 +4,6 @@
 	"identifier": "jira-tasks",
 	"version": "0.1",
 	"description": "The JIRA Tasks App For Swipes",
-	"main_app": {
-		"index": "dev/index.html"
-	},
+	"index": "dev/index.html",
 	"required_services": ["jira"]
 }

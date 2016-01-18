@@ -11,7 +11,7 @@ var Login = require('./components/login');
 var routes = (
 	<Route name="layout" path="/" handler={Layout}>
 		<Route path="login" handler={Login} />
-		<Route path="app/:appId" handler={Home} />
+		<Route path="workflow/:workflowId" handler={Home} />
 		<Route path="overlay/:overlayId" handler={Home} />
 		<Route path="services" handler={Services} />
 		<DefaultRoute handler={Home} />

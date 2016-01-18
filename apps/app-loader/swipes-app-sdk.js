@@ -15,11 +15,6 @@ var SwipesAppSDK = (function() {
 		self = this;
 	}
 
-	SwipesAppSDK.prototype.setAppId = function(appId){
-		this.info.app_id = appId;
-		this._client.setAppId(appId);
-	}
-
 	SwipesAppSDK.prototype.setToken = function(token){
 		this._client.setToken(token);
 	};
@@ -66,14 +61,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.info = {
 		// Manifest will be loaded in here
 	};
-	SwipesAppSDK.prototype.mainApp = function(){
-		return self.app();
-	};
-	SwipesAppSDK.prototype.currentApp = function(){
-		if(!self.info.app_id)
-			throw new Error('SwipesAppSDK: App Id has not been set');
-		return self.app(self.info.app_id);
-	};
+
 	SwipesAppSDK.prototype.setDefaultScope = function(scope){
 		self._defaultScope = scope;
 	};
@@ -89,14 +77,12 @@ var SwipesAppSDK = (function() {
 		}
 	};
 	// API for handling data from apps
-	SwipesAppSDK.prototype.app = function(appId){
-		if(!appId)
-			appId = "core";
+	SwipesAppSDK.prototype.workflow = function(workflowId){
 		return {
 			get:function(options, id, callback){
 				var deferred = Q.defer();
 				var data = {
-					app_id: appId,
+					workflow_id: workflowId,
 					query: {}
 				};
 				if(typeof options === 'string')
@@ -113,18 +99,16 @@ var SwipesAppSDK = (function() {
 				else if(typeof id === 'function')
 					callback = id;
 
-				if (appId !== 'core') {
-					var filter = data.query.query.filter || {};
-					// If defaultscope is set
-					if(self._defaultScope){
-						filter.scope = self._defaultScope;
-					}
-					if(typeof options.scope === 'string'){
-						filter.scope = options.scope;
-					}
-
-					data.query.query.filter = filter;
+				var filter = data.query.query.filter || {};
+				// If defaultscope is set
+				if(self._defaultScope){
+					filter.scope = self._defaultScope;
 				}
+				if(typeof options.scope === 'string'){
+					filter.scope = options.scope;
+				}
+
+				data.query.query.filter = filter;
 
 				var intCallback = function(res, error){
 					if(callback) callback(res,error);
@@ -132,18 +116,14 @@ var SwipesAppSDK = (function() {
 					else deferred.reject(error);
 				};
 
-				if(appId == "core"){
-					self._client.callListener("getData", data, intCallback);
-				} else {
-					self._client.callSwipesApi("apps.getData", data, intCallback);
-				}
+				self._client.callSwipesApi("workflows.getData", data, intCallback);
 
 				return deferred.promise;
 			},
 			save: function(options, saveData, callback){
 				var deferred = Q.defer();
 				var data = {
-					app_id: appId,
+					workflow_id: workflowId,
 					query: { data: saveData }
 				};
 
@@ -176,13 +156,13 @@ var SwipesAppSDK = (function() {
 					if(res) deferred.resolve(res);
 					else deferred.reject(error);
 				};
-				self._client.callSwipesApi("apps.saveData", data, intCallback);
+				self._client.callSwipesApi("workflows.saveData", data, intCallback);
 				return deferred.promise;
 			},
 			method: function(methodName, methodData, callback){
 				var deferred = Q.defer();
 				var data = {
-					manifest_id: appId,
+					workflow_id: workflowId,
 					method: methodName
 				};
 				if(typeof methodData === 'object'){
@@ -198,14 +178,14 @@ var SwipesAppSDK = (function() {
 					else deferred.reject(error);
 				};
 
-				self._client.callSwipesApi("apps.method", data, intCallback);
+				self._client.callSwipesApi("workflows.method", data, intCallback);
 
 				return deferred.promise;
 			},
 			on:function(event, handler){
 				eventName = event
-				if(appId && appId !== "core")
-					eventName = appId + "_" + event;
+				if(workflowId)
+					eventName = workflowId + "_" + event;
 				self._listeners.add(eventName, handler);
 				self._client.callListener("listenTo", {event: eventName});
 			}
@@ -343,8 +323,8 @@ var SwipesAppSDK = (function() {
 
 			if(message.command == "event"){
 				if(message.data.type == "init"){
-					if(data.data.manifest.manifest_id){
-						this.setAppId(data.data.manifest.manifest_id);
+					if(data.data._id){
+						this._client.setId(data.data._id);
 					}
 					if(data.data.user_id){
 						this.info.userId = data.data.user_id;

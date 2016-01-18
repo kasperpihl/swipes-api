@@ -6,26 +6,26 @@ var WorkflowStore = require('./WorkflowStore');
 var PreviewAppStore = Reflux.createStore({
 	listenables: [ PreviewAppActions ],
 	onLoadPreview: function (item) {
-		var app = WorkflowStore.get(item.appId);
+		var workflow = WorkflowStore.get(item.workflowId);
 
 		this.set('obj', item, {trigger:false});
 
-		if (app && app.preview_view_url) {
-			this.set("app", app, {trigger:false});
-			this.set("url", app.preview_view_url);
+		if (workflow && workflow.preview_view_url) {
+			this.set("workflow", workflow, {trigger:false});
+			this.set("url", workflow.preview_view_url);
 		}	else {
-			this.unset("app");
+			this.unset("workflow");
 			this.unset("url");
 
 			var preview = Previews.default;
 
-			if(item.appId === "AUSER"){
+			if(item.workflowId === "AUSER"){
 				preview = Previews.user;
 			}
-			if(item.appId === "AAPP"){
-				preview = Previews.app;
+			if(item.workflowId === "AWORKFLOW"){
+				preview = Previews.workflow;
 			}
-			if(item.appId === 'ACHANNEL'){
+			if(item.workflowId === 'ACHANNEL'){
 				preview = Previews.channel;
 			}
 

@@ -21,26 +21,26 @@ var StateStore = Reflux.createStore({
 	onChangeStarted: function (isStarted) {
 		this.set('isStarted', isStarted);
 	},
-	onLoadApp: function(params, options){
+	onLoadWorkflow: function(params, options){
 		options = options || {};
 
 		var index = options.index || "screen1";
-		var app,  appObj = {};
+		var workflow,  workflowObj = {};
 		var activeMenuId;
 
 		this.unset("backgroundColor", {trigger: false});
 		this.unset("foregroundColor", {trigger: false});
 
-		if(params.appId){
-			app = _.findWhere(WorkflowStore.getAll(), {"manifest_id":params.appId});
-			if(app){
-				appObj.url = app.main_app_url;
-				appObj.app = app;
-				activeMenuId = app.id;
+		if(params.workflowId){
+			workflow = WorkflowStore.get(params.workflowId);
+			if(workflow){
+				workflowObj.url = workflow.index_url;
+				workflowObj.workflow = workflow;
+				activeMenuId = workflow.id;
 			}
 		}
 
-		this.set(index, appObj);
+		this.set(index, workflowObj);
 		this.set("active_menu_id", activeMenuId);
 	},
 	onLogin:function(token){

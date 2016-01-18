@@ -38,6 +38,7 @@ router.post('/users.addWorkflow', (req, res, next) => {
   // especially on different servers. We can change it with id whenever we want
   let manifestId = req.body.manifest_id;
   // T: Optional param mainly for initial settings. I'm not even sure if we need it.
+  // K: We do need it... Cool!
   let settings = req.body.settings || {};
   let getWorkflowQ =
     r.table('workflows')

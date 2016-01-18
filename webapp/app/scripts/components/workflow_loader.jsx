@@ -8,14 +8,14 @@ var eventActions = require('../actions/EventActions');
 var userStore = require('../stores/UserStore');
 var WorkflowStore = require('../stores/WorkflowStore');
 
-var AppLoader = React.createClass({
+var WorkflowLoader = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	onStateChange:function(states){
-		var appForThisLoader = states["screen" + this.props.data.screen];
-		if(appForThisLoader !== this.state){
-			if(!appForThisLoader)
-				appForThisLoader = {};
-			this.replaceState(appForThisLoader);
+		var workflowForThisLoader = states["screen" + this.props.data.screen];
+		if(workflowForThisLoader !== this.state){
+			if(!workflowForThisLoader)
+				workflowForThisLoader = {};
+			this.replaceState(workflowForThisLoader);
 		}
 	},
 	componentWillMount: function(){
@@ -54,8 +54,8 @@ var AppLoader = React.createClass({
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
 			else if (message.command === 'analytics.action'){
-				if(this.state.app){
-					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.app.manifest_id, 'Action': data.name});
+				if(this.state.workflow){
+					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.workflow.manifest_id, 'Action': data.name});
 				}
 			}
 			else if (message.command === "getData") {
@@ -65,7 +65,7 @@ var AppLoader = React.createClass({
 						case "users":
 							store = userStore;
 							break;
-						case "apps":
+						case "workflows":
 							store = WorkflowStore;
 							break;
 					}
@@ -89,18 +89,18 @@ var AppLoader = React.createClass({
 		this.apiCon.callListener("event", e);
 	},
 	onLoad:function(){
-		if(this.state.app)
-			amplitude.logEvent('Session - Opened Workflow', {'Workflow': this.state.app.manifest_id});
+		if(this.state.workflow)
+			amplitude.logEvent('Session - Opened Workflow', {'Workflow': this.state.workflow.manifest_id});
 
 		eventActions.remove(null,null, "screen" + this.props.data.screen);
 		var initObj = {
 			type: "init",
 			data: {
-				manifest: this.state.app,
+				manifest: this.state.workflow,
+				_id: this.state.workflow.id,
 				user_id: userStore.me().id,
 				token: stateStore.get("swipesToken"),
-				target_url: document.location.protocol + "//" + document.location.host,
-				default_scope: this.state.app.id
+				target_url: document.location.protocol + "//" + document.location.host
 			}
 		};
 
@@ -108,7 +108,7 @@ var AppLoader = React.createClass({
 		if(!this.apiCon){
 			this.apiCon = swipes._client.copyConnector();
 		}
-		this.apiCon.setAppId(this.state.app.manifest_id);
+		this.apiCon.setId(this.state.workflow.id);
 		var doc = $(this.refs.iframe)[0].contentWindow;
 		var apiUrl = this.apiCon.getBaseURL();
 		this.apiCon.setListener(doc, apiUrl);
@@ -116,14 +116,14 @@ var AppLoader = React.createClass({
 		this.apiCon.setDelegate(this);
 	},
 	render: function() {
-		if(!this.state.app) {
+		if(!this.state.workflow) {
 			return ( <div>Loading.</div> );
 		}
 
 		return (
-			<iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className="app-frame-class" frameBorder="0"/>
+			<iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className="workflow-frame-class" frameBorder="0"/>
 		);
 	}
 });
 
-module.exports = AppLoader;
+module.exports = WorkflowLoader;
