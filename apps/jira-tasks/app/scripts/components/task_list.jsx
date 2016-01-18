@@ -1,16 +1,21 @@
 var React = require('react');
 var Reflux = require('reflux');
 var IssueStore = require('../stores/IssueStore');
+var IssueActions = require('../actions/IssueActions');
 var TaskListItem = require('./task_list_item');
 var TaskItem = require('./task_item');
 var TaskList = React.createClass({
 	mixins: [IssueStore.connect('issues')],
 	clickedIssue: function(issueId){
+
 		console.log('clicked');
-		this.setState({issueId: issueId});
+		IssueActions.workOnIssue(issueId);
 	},
-	clickedGoBack: function(){
-		this.setState({issueId: null});
+	clickedGoBack: function(issueId){
+		IssueActions.stopWorkOnIssue(issueId);
+	},
+	renderHeader:function(){
+
 	},
 	renderIssues: function(){
 		var self = this;
@@ -26,6 +31,7 @@ var TaskList = React.createClass({
 	render: function() {
 		return (
 			<div ref="scroll-container" className="task-list-container">
+				{this.renderHeader()}
 				<div className="task-list">
 					{this.renderIssues()}
 				</div>

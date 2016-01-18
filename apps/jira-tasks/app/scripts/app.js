@@ -7,7 +7,5 @@ ReactDOM.render(<TaskList />, document.getElementById('content'));
 
 swipes.onReady(function(){
 	mainStore.start();
-	swipes.service('jira').request('issue.transitionIssue', {issueKey: 'SWIP-29', transition: "21"}, function(res, err){
-		console.log('transitioned', res, err);
-	})
+	
 })

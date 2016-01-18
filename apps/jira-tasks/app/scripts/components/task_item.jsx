@@ -12,7 +12,7 @@ var TaskItem = React.createClass({
 	})],
 	onClick: function(){
 		if(typeof this.props.onClickHandler === 'function'){
-			this.props.onClickHandler();
+			this.props.onClickHandler(this.props.id);
 		}
 	},
 	renderSummary: function(){
