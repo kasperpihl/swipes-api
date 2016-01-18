@@ -48,7 +48,7 @@ let util = {
   appTable: (appId, table) => {
     return appId + '_' + table;
   },
-  appUrl: (req, app, type) => {
+  workflowUrl: (req, app, type) => {
     let hostUrl = config.get('protocol') + req.hostname + ':' + config.get('port');
     let getString;
     if(app[type].index)

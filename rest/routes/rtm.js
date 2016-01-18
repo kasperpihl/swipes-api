@@ -10,67 +10,63 @@ let _ = require('underscore');
 
 let router = express.Router();
 
-let getApps = (userId, isAdmin, req) => {
+let getWorkflows = (userId, isAdmin, req) => {
   let filter;
 
   if (isAdmin) {
     filter = {is_installed: true};
   } else {
-    filter = (app) => {
-      return app('is_installed').eq(true).and(app.hasFields('admin_only').not());
+    filter = (wf) => {
+      return wf('is_installed').eq(true).and(wf.hasFields('admin_only').not());
     }
   }
 
-  let appsQ =
-    r.table('apps')
+  let workflowsQ =
+    r.table('workflows')
       .filter(filter)
       .without('is_installed')
       .coerceTo('Array');
 
-  let userAppsQ =
+  let userWorkflowsQ =
     r.table('users')
-      .get(userId)('apps')
+      .get(userId)('workflows')
       .default([]);
 
-  let appsListQ =
-    r.do(appsQ, userAppsQ, (apps, userApps) => {
-      return r.expr([apps, userApps])
+  let workflowsListQ =
+    r.do(workflowsQ, userWorkflowsQ, (workflows, userWorkflows) => {
+      return r.expr([workflows, userWorkflows])
     });
 
   return new Promise((resolve, reject) => {
-    db.rethinkQuery(appsListQ)
+    db.rethinkQuery(workflowsListQ)
       .then((results) => {
-        let apps = results[0];
-        let userApps = results[1];
+        let workflows = results[0];
+        let userWorkflows = results[1];
         let response = [];
 
-        apps.forEach((app) => {
-          let found = false;
-          let len = userApps.length;
+        workflows.forEach((wf) => {
+          let len = userWorkflows.length;
 
-          if(app.preview_view) {
-            app.preview_view_url = util.appUrl(req, app, "preview_view");
+          if(wf.preview_view) {
+            wf.preview_app_url = util.workflowUrl(req, wf, "preview_app");
           }
 
-          if(app.main_app) {
-            app.main_app_url = util.appUrl(req, app, "main_app");
+          if(wf.main_app) {
+            wf.main_app_url = util.workflowUrl(req, wf, "main_app");
           }
 
           for (let i=0; i<len; i++) {
-            let userApp = userApps[i];
+            let userWf = userWorkflows[i];
 
-            if (app.id === userApp.id) {
-              response.push(_.extend(app, userApp));
-              found = true;
+            if (wf.id === userWf.parent_id) {
+              response.push(_.extend(wf, userWf));
 
               break;
             }
           }
 
-          if (app.required) {
-            response.push(_.extend(app, {is_active: true}));
-          } else if (!found) {
-            response.push(_.extend(app, {is_active: false}));
+          if (wf.required) {
+            response.push(wf);
           }
         })
 
@@ -95,7 +91,7 @@ router.post('/rtm.start', (req, res, next) => {
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(users),
-    getApps(userId, isAdmin, req),
+    getWorkflows(userId, isAdmin, req),
     db.rethinkQuery(servicesQ)
   ]
 
@@ -106,7 +102,7 @@ router.post('/rtm.start', (req, res, next) => {
         url: config.get('hostname') + ':' + config.get('port'),
         self: data[0],
         users: data[1],
-        apps: data[2],
+        workflows: data[2],
         services: data[3]
       }
 

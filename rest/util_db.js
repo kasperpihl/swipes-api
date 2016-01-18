@@ -19,17 +19,17 @@ let appsList = (isAdmin) => {
   return listQ;
 }
 
-let updateUserAppQ = (userId, appId, updateObj) => {
+let updateUserWorkflowsQ = (userId, wfId, updateDoc) => {
   let query =
     r.table('users')
       .get(userId)
       .update((user) => {
         return {
-          apps: user('apps').map((app) => {
+          workflows: user('workflows').map((wf) => {
             return r.branch(
-              app('id').eq(appId),
-              app.merge(updateObj),
-              app
+              wf('id').eq(wfId),
+              wf.merge(updateDoc),
+              wf
             )
           })
         }
@@ -40,5 +40,5 @@ let updateUserAppQ = (userId, appId, updateObj) => {
 
 module.exports = {
   appsList: appsList,
-  updateUserAppQ: updateUserAppQ
+  updateUserWorkflowsQ: updateUserWorkflowsQ
 };

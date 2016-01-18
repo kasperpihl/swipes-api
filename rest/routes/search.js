@@ -7,7 +7,6 @@ let r = require('rethinkdb');
 let moment = require('moment');
 let db = require('../db.js');
 let util = require('../util.js');
-let utilDB = require('../util_db.js');
 
 let appDir = __dirname + '/../../apps/';
 

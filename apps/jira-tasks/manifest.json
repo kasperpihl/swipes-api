@@ -1,6 +1,6 @@
 {
 	"manifest_version": 1,
-	"title": "JIRA Tasks",
+	"name": "JIRA Tasks",
 	"identifier": "jira-tasks",
 	"version": "0.1",
 	"description": "The JIRA Tasks App For Swipes",

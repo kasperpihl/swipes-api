@@ -3,29 +3,14 @@
 let express = require( 'express' );
 let r = require('rethinkdb');
 let db = require('../db.js');
+let util = require('../util.js');
 let utilDB = require('../util_db.js');
 let Promise = require('bluebird');
+let SwipesError = require( '../swipes-error' );
 
 let router = express.Router();
+let generateId = util.generateSlackLikeId;
 
-let isActive = (userId, appId) => {
-  return new Promise((resolve, reject) => {
-    let isActiveQ =
-      r.table('users')
-        .get(userId)('apps')
-        .filter((app) => {
-          return app('id').eq(appId)
-        })
-
-    db.rethinkQuery(isActiveQ)
-      .then((app) => {
-        return resolve(app);
-      })
-      .catch((err) => {
-        return reject(err);
-      })
-  })
-}
 router.post('/users.me', (req, res, next) =>{
   let meQ = r.table('users').get(req.userId).without('password');
    db.rethinkQuery(meQ)
@@ -35,6 +20,7 @@ router.post('/users.me', (req, res, next) =>{
       return next(err);
     });
 });
+
 router.post('/users.list', (req, res, next) => {
   let query = r.table('users').pluck('name', 'id', 'email', 'created', 'profile');
 
@@ -46,75 +32,109 @@ router.post('/users.list', (req, res, next) => {
     });
 });
 
-router.post('/users.activateApp', (req, res, next) => {
+router.post('/users.activateWorkflow', (req, res, next) => {
   let userId = req.userId;
-  let appId = req.body.app_id;
-
-  //T_TODO check if the user can activate that app
-
-  isActive(userId, appId)
-    .then((app) => {
-      if(app.length > 0 && app[0].is_active === true) {
-        return res.status(200).json({ok: false, err: 'already_activated'});
-      }
-
-      let updateAppsQ;
-
-      if(app.length > 0 && app[0].is_active === false) {
-        updateAppsQ = utilDB.updateUserAppQ(userId, appId, {is_active: true});
-      } else {
-        updateAppsQ =
-          r.table('users')
-            .get(userId)
-            .update((user) => {
-              return {
-                apps: user('apps').default([]).append({
-                  id: appId,
-                  is_active: true
-                })
-              }
-            })
-      }
-
-      let eventQ = r.table('events').insert({
-        app_id: appId,
-        type: 'app_activated',
-        user_id: userId
+  // T: I'm not sure if this is right but it will be more easy for us to make requests
+  // especially on different servers. We can change it with id whenever we want
+  let manifestId = req.body.manifest_id;
+  // T: Optional param mainly for initial settings. I'm not even sure if we need it.
+  let settings = req.body.settings || {};
+  let getWorkflowQ =
+    r.table('workflows')
+      .filter((wf) => {
+        return wf('manifest_id').eq(manifestId)
       })
+      .nth(0).default(null);
 
-      db.rethinkQuery(updateAppsQ)
-        .then(() => {
-          db.rethinkQuery(eventQ)
+  db.rethinkQuery(getWorkflowQ)
+    .then((workflow) => {
+      if (!workflow) {
+        return Promise.reject(new SwipesError('workflow_not_found'));
+      }
 
-          return res.status(200).json({ok: true});
-        })
-        .catch((err) => {
-          return next(err);
-        })
+      let appendWorkflowQ =
+        r.table('users')
+          .get(userId)
+          .update((user) => {
+            return {
+              workflows: user('workflows').default([]).append({
+                id: generateId('W'),
+                parent_id: workflow.id,
+                name: workflow.name,
+                settings: settings
+              })
+            }
+          });
+
+      return db.rethinkQuery(appendWorkflowQ);
+    })
+    .then(() => {
+      return res.status(200).json({ok: true});
     })
     .catch((err) => {
       return next(err);
     })
 });
 
-router.post('/users.deactivateApp', (req, res, next) => {
+router.post('/users.deactivateWorkflow', (req, res, next) => {
   let userId = req.userId;
-  let appId = req.body.app_id;
+  let workflow_id = req.body.workflow_id;
 
-  //T_TODO check if the user can unactivate that app
+  if (!workflow_id) {
+    return next(new SwipesError('workflow_id_required'));
+  }
 
-  let unActivateQ = utilDB.updateUserAppQ(userId, appId, {is_active: false});
+  let updateQ =
+    r.table('users')
+      .get(userId)
+      .update((user) => {
+        return {
+          workflows: user('workflows').filter((wf) => {
+            return wf('id').ne(workflow_id);
+          })
+        }
+      });
 
-  let eventQ = r.table('events').insert({
-    app_id: appId,
-    type: 'app_deactivated',
-    user_id: userId
-  })
-
-  db.rethinkQuery(unActivateQ)
+  db.rethinkQuery(updateQ)
     .then(() => {
-      db.rethinkQuery(eventQ)
+      return res.status(200).json({ok: true});
+    })
+    .catch((err) => {
+      return next(err);
+    })
+});
 
+router.post('/users.renameWorkflow', (req, res, next) => {
+  let userId = req.userId;
+  let workflowId = req.body.workflow_id;
+  let name = req.body.name;
+  let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {name: name});
+
+  if (!workflowId && !name) {
+    return next(new SwipesError('workflow_id_and_name_required'));
+  }
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+      return res.status(200).json({ok: true});
+    })
+    .catch((err) => {
+      return next(err);
+    })
+});
+
+router.post('/users.settingsWorkflow', (req, res, next) => {
+  let userId = req.userId;
+  let workflowId = req.body.workflow_id;
+  let settings = req.body.settings;
+  let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {settings: settings});
+
+  if (!workflowId && !settings) {
+    return next(new SwipesError('workflow_id_and_settings_required'));
+  }
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
       return res.status(200).json({ok: true});
     })
     .catch((err) => {
