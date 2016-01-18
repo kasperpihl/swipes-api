@@ -8,7 +8,7 @@ let moment = require('moment');
 let db = require('../db.js');
 let util = require('../util.js');
 
-let appDir = __dirname + '/../../apps/';
+let appDir = __dirname + '/../../workflows/';
 
 router.post('/search', (req, res, next) => {
   let userId = req.userId;

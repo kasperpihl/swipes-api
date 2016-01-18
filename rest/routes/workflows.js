@@ -15,7 +15,7 @@ let isAdmin = util.isAdmin;
 
 // Relative directory to installed workflows
 // T_TODO Change the folder to workflows
-let workflowsDir = __dirname + '/../../apps/';
+let workflowsDir = __dirname + '/../../workflows/';
 
 router.post('/workflows.list', (req, res, next) => {
   let workflowQ = r.table('workflows');

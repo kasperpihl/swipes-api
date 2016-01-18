@@ -4,12 +4,12 @@ let router = express.Router();
 let fs = require('fs');
 let util = require('../util.js');
 
-let appDir = __dirname + '/../../apps/';
+let workflowDir = __dirname + '/../../workflows/';
 
 router.get('/sdk.load', (req, res, next) => {
 	let apiUrl = 'http://' + req.headers.host;
 
-	let _defUrlDir = apiUrl + '/apps/app-loader/';
+	let _defUrlDir = apiUrl + '/workflows/app-loader/';
 	// Insert dependencies, SwipesSDK and other scripts right after head
 	let insertString = '';
 
@@ -18,13 +18,13 @@ router.get('/sdk.load', (req, res, next) => {
 	}
 
 	// Temporary solution, server shouldn't include them, they should be packed together
-	insertString += util.getFile(appDir + 'app-loader' + '/jquery.min.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/socket.io.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/underscore.min.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/q.min.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/swipes-api-connector.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/swipes-app-sdk.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/jquery.min.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/socket.io.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/underscore.min.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/q.min.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-api-connector.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-app-sdk.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
 	insertString += wrap('<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css" />');
 	insertString += 'window.swipes = new SwipesAppSDK("' + apiUrl + '");';
 
@@ -42,7 +42,7 @@ router.get('/sdk.load', (req, res, next) => {
 router.get('/sdk.worker.load', (req, res, next) => {
 	let apiUrl = 'http://' + req.headers.host;
 
-	let _defUrlDir = apiUrl + '/apps/app-loader/';
+	let _defUrlDir = apiUrl + '/workflows/app-loader/';
 	// Insert dependencies, SwipesSDK and other scripts right after head
 	let insertString = '';
 
@@ -51,9 +51,9 @@ router.get('/sdk.worker.load', (req, res, next) => {
 	}
 
 	// Temporary solution, server shouldn't include them, they should be packed together
-	insertString += util.getFile(appDir + 'app-loader' + '/q.min.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/swipes-api-connector.js');
-	insertString += util.getFile(appDir + 'app-loader' + '/swipes-app-sdk.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/q.min.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-api-connector.js');
+	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-app-sdk.js');
 	insertString += 'var window = this; var swipes = new SwipesAppSDK("' + apiUrl + '");';
 
 

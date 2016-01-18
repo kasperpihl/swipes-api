@@ -41,7 +41,7 @@ router.post('/rtm.start', (req, res, next) => {
       let rtmResponse = {
         ok: true,
         url: config.get('hostname') + ':' + config.get('port'),
-        workflow_base_url: config.get('hostname') + ':' + config.get('port') + '/apps/',
+        workflow_base_url: config.get('hostname') + ':' + config.get('port') + '/workflows/',
         self: data[0],
         users: data[1],
         workflows: data[2],

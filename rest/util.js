@@ -52,7 +52,7 @@ let util = {
     let hostUrl = config.get('protocol') + req.hostname + ':' + config.get('port');
     let getString;
     if(workflow[type])
-      getString = '/apps/' + workflow.manifest_id + '/' + workflow[type];
+      getString = '/workflows/' + workflow.manifest_id + '/' + workflow[type];
 
     return hostUrl + getString;
   },
