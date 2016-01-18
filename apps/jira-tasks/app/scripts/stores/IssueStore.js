@@ -15,6 +15,10 @@ var IssueStore = Reflux.createStore({
 		});
 	},
 	beforeSaveHandler: function(newObj, oldObj){
+		// Don't have subtasks in the main store, they will be available under each issue
+		if(newObj.fields.parent){
+			return null;
+		}
 		if(typeof newObj.index === 'undefined'){
 			newObj.index = _.size(this.getAll());
 		}
