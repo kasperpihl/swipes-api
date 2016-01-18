@@ -18,19 +18,13 @@ let isAdmin = util.isAdmin;
 let workflowsDir = __dirname + '/../../apps/';
 
 router.post('/workflows.install', isAdmin, (req, res, next) => {
-  let workflowId = req.body && req.body.workflow_id;
   let manifestId = req.body && req.body.manifest_id;
 
-  if (!workflowId && !manifestId) {
-    return next(new SwipesError('workflow_id_or_manifest_id_required'));
+  if (!manifestId) {
+    return next(new SwipesError('manifest_id_required'));
   }
 
-  let getWorkFlowQ;
-
-  if (workflowId) {
-    getWorkFlowQ = r.table('workflows').get(workflowId);
-  } else {
-    getWorkFlowQ =
+  let getWorkFlowQ =
       r.table('workflows')
       .filter((wf) => {
         return wf('manifest_id')
@@ -39,7 +33,6 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
       })
       .nth(0)
       .default(null);
-  }
 
   let workflow, manifest;
 
