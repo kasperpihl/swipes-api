@@ -32,7 +32,7 @@ router.post('/users.list', (req, res, next) => {
     });
 });
 
-router.post('/users.activateWorkflow', (req, res, next) => {
+router.post('/users.addWorkflow', (req, res, next) => {
   let userId = req.userId;
   // T: I'm not sure if this is right but it will be more easy for us to make requests
   // especially on different servers. We can change it with id whenever we want
@@ -76,7 +76,7 @@ router.post('/users.activateWorkflow', (req, res, next) => {
     })
 });
 
-router.post('/users.deactivateWorkflow', (req, res, next) => {
+router.post('/users.removeWorkflow', (req, res, next) => {
   let userId = req.userId;
   let workflow_id = req.body.workflow_id;
 
@@ -123,7 +123,7 @@ router.post('/users.renameWorkflow', (req, res, next) => {
     })
 });
 
-router.post('/users.settingsWorkflow', (req, res, next) => {
+router.post('/users.updateWorkflowSettings', (req, res, next) => {
   let userId = req.userId;
   let workflowId = req.body.workflow_id;
   let settings = req.body.settings;
