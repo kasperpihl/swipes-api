@@ -119,9 +119,9 @@ var WorkflowLoader = React.createClass({
 		if(!this.state.workflow) {
 			return ( <div>Loading.</div> );
 		}
-
+		var url = this.state.url + '?id=' + this.state.workflow.id;
 		return (
-			<iframe ref="iframe" onLoad={this.onLoad} src={this.state.url} className="workflow-frame-class" frameBorder="0"/>
+			<iframe ref="iframe" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
 		);
 	}
 });
