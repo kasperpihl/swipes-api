@@ -110,7 +110,7 @@ router.post('/users.renameWorkflow', (req, res, next) => {
   let name = req.body.name;
   let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {name: name});
 
-  if (!workflowId && !name) {
+  if (!workflowId || !name) {
     return next(new SwipesError('workflow_id_and_name_required'));
   }
 
@@ -129,7 +129,7 @@ router.post('/users.settingsWorkflow', (req, res, next) => {
   let settings = req.body.settings;
   let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {settings: settings});
 
-  if (!workflowId && !settings) {
+  if (!workflowId || !settings) {
     return next(new SwipesError('workflow_id_and_settings_required'));
   }
 
