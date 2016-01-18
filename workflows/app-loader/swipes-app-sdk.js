@@ -73,7 +73,7 @@ var SwipesAppSDK = (function() {
 	};
 	SwipesAppSDK.prototype.api = {
 		request: function(options, data, callback){
-			self._client.callSwipesApi(options, data, callback);
+			return self._client.callSwipesApi(options, data, callback);
 		}
 	};
 	// API for handling data from apps

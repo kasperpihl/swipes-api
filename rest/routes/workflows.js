@@ -20,7 +20,7 @@ let workflowsDir = __dirname + '/../../workflows/';
 router.post('/workflows.list', (req, res, next) => {
   let workflowQ = r.table('workflows');
   db.rethinkQuery(workflowQ).then((workflows) => {
-    res.status(200).json({ok: true, res: workflows});
+    res.status(200).json({ok: true, data: workflows});
   }).catch((err) => {
     return next(err);
   })

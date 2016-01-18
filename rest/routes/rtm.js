@@ -15,7 +15,7 @@ router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
 
-  let meQ = r.table('users').get(userId).without(['password', {'services': "authData"}]);
+  let meQ = r.table('users').get(userId).without(['password', 'workflows', {'services': "authData"}]);
 
   let users = r.table('users').without(["password", "services", "workflows"]);
 

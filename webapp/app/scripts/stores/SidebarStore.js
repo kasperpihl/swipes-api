@@ -5,16 +5,21 @@ var WorkflowStore = require('./WorkflowStore');
 var SidebarStore = Reflux.createStore({
 	listenables: [ sidebarActions ],
 	onLoadWorkflowModal:function(){
-		modalActions.loadModal("list", {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": WorkflowStore.getAll() }, function(row){
-			if(row){
-				swipes._client.callSwipesApi("users.addWorkflow", {"manifest_id": row.manifest_id}, function(res,error){
-					if(res && res.ok){
-						amplitude.logEvent('Engagement - Added Workflow', {'Workflow': row.manifest_id});
-					}
-					console.log("res from app", res);
-				})
-			}
+		swipes.api.request('workflows.list').then(function(res){
+			modalActions.loadModal("list", {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": res.data }, function(row){
+				if(row){
+					swipes._client.callSwipesApi("users.addWorkflow", {"manifest_id": row.manifest_id}, function(res,error){
+						if(res && res.ok){
+							amplitude.logEvent('Engagement - Added Workflow', {'Workflow': row.manifest_id});
+						}
+						console.log("res from app", res);
+					})
+				}
+			});
+		}).catch(function(err){
+
 		});
+		
 	}
 });
 
