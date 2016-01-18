@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 var Actions = require('../../actions/modals/SearchModalActions');
 
-var appStore = require('../AppStore');
+var WorkflowStore = require('../WorkflowStore');
 var userStore = require('../UserStore');
 
 var SearchStore = Reflux.createStore({
@@ -44,7 +44,7 @@ var SearchStore = Reflux.createStore({
 			return;
 		}
 
-		var localResults = [userStore.search(value), appStore.search(value)];
+		var localResults = [userStore.search(value), WorkflowStore.search(value)];
 
 		localResults = localResults.filter(function (locRes) {
 			if (locRes.results.length > 0) {

@@ -2,7 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 
 var userStore = require('../stores/UserStore');
-var appStore = require('../stores/AppStore');
+var WorkflowStore = require('../stores/WorkflowStore');
 var previewAppStore = require('../stores/PreviewAppStore');
 var stateStore = require('../stores/StateStore');
 
@@ -20,7 +20,7 @@ var PreviewLoader = React.createClass({
 							store = userStore;
 							break;
 						case "apps":
-							store = appStore;
+							store = WorkflowStore;
 							break;
 					}
 

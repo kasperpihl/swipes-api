@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 
-var AppStore = Reflux.createStore({
-	localStorage: "AppStore",
+var WorkflowStore = Reflux.createStore({
+	localStorage: "WorkflowStore",
 	sort: "name",
 	search:function(string, options){
 		var results = [];
@@ -16,11 +16,11 @@ var AppStore = Reflux.createStore({
 			}
 		})
 		return {
-			appId: "AAPP",
-			name: "Apps",
+			appId: "AWORKFLOW",
+			name: "Workflows",
 			results: results
 		};
 	}
 });
 
-module.exports = AppStore;
+module.exports = WorkflowStore;

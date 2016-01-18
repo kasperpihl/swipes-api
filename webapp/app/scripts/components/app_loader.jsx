@@ -6,7 +6,7 @@ var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 
 var userStore = require('../stores/UserStore');
-var appStore = require('../stores/AppStore');
+var WorkflowStore = require('../stores/WorkflowStore');
 
 var AppLoader = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
@@ -66,7 +66,7 @@ var AppLoader = React.createClass({
 							store = userStore;
 							break;
 						case "apps":
-							store = appStore;
+							store = WorkflowStore;
 							break;
 					}
 

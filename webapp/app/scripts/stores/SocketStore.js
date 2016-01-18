@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 
 // Stores
-var appStore = require('./AppStore');
+var WorkflowStore = require('./WorkflowStore');
 var userStore = require('./UserStore');
 var serviceStore = require('./ServiceStore');
 var stateStore = require('./StateStore');
@@ -25,7 +25,7 @@ var SocketStore = Reflux.createStore({
 				amplitude.setUserId(res.self.id);
 				userStore.update(res.self.id, res.self);
 				
-				appStore.batchLoad(res.apps, {flush:true});
+				WorkflowStore.batchLoad(res.workflows, {flush:true});
 
 				serviceStore.batchLoad(res.services, {flush:true});
 				self.connect(res.url);
@@ -49,14 +49,14 @@ var SocketStore = Reflux.createStore({
 				return;
 
 			if (msg.type === 'app_installed'){
-				appStore.update(msg.data.id, msg.data);
+				WorkflowStore.update(msg.data.id, msg.data);
 			}
 			else if (msg.type === 'app_uninstalled'){
-				appStore.unset(msg.data.id);
+				WorkflowStore.unset(msg.data.id);
 			}
 			else if (msg.type === 'app_activated' || msg.type === 'app_deactivated'){
 				var activated = (msg.type === 'app_activated') ? true : false;
-				appStore.update(msg.data.id, {is_active: activated});
+				WorkflowStore.update(msg.data.id, {is_active: activated});
 			}
 
 

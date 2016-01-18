@@ -1,11 +1,11 @@
 var Reflux = require('reflux');
 var sidebarActions = require('../actions/SidebarActions');
 var modalActions = require('../actions/ModalActions');
-var appStore = require('./AppStore');
+var WorkflowStore = require('./WorkflowStore');
 var SidebarStore = Reflux.createStore({
 	listenables: [ sidebarActions ],
 	onLoadAppModal:function(){
-		var filteredApps = _.filter(appStore.getAll(), function(app){ 
+		var filteredApps = _.filter(WorkflowStore.getAll(), function(app){ 
 			if(!app.is_active)
 				return true;
 			return false; 

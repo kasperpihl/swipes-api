@@ -1,6 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
-var appStore = require('../stores/AppStore');
+var WorkflowStore = require('../stores/WorkflowStore');
 var stateStore = require('../stores/StateStore');
 var userStore = require('../stores/UserStore');
 var modalActions = require('../actions/ModalActions');
@@ -11,7 +11,7 @@ var sidebarActions = require('../actions/SidebarActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
-	mixins: [Reflux.ListenerMixin, appStore.connect("apps"), Navigation ],
+	mixins: [Reflux.ListenerMixin, WorkflowStore.connect("apps"), Navigation ],
 	onStateChange: function(states){
 		var toggle = states["sidebarClosed"] ? true : false;
 		$("body").toggleClass("sidebar-closed", toggle);

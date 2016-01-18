@@ -1,12 +1,12 @@
 var Reflux = require('reflux');
 var PreviewAppActions = require('../actions/PreviewAppActions');
 var Previews = require('../components/previews/previews');
-var AppStore = require('./AppStore');
+var WorkflowStore = require('./WorkflowStore');
 
 var PreviewAppStore = Reflux.createStore({
 	listenables: [ PreviewAppActions ],
 	onLoadPreview: function (item) {
-		var app = AppStore.get(item.appId);
+		var app = WorkflowStore.get(item.appId);
 
 		this.set('obj', item, {trigger:false});
 
