@@ -18,11 +18,17 @@ var TaskItem = React.createClass({
 	renderSummary: function(){
 		return <div className="task-summary">{this.state.issue.fields.summary}</div>
 	},
+	renderAssignee: function(){
+
+	},
+	renderSubtasks: function(){
+
+	},
 	render: function() {
 		return (
 			<div onClick={this.onClick} className="item-container">
 				<div className="task-item">
-					Item: {this.renderSummary()}
+					{this.renderSummary()}
 				</div>
 			</div>
 		);

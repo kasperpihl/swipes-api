@@ -1,6 +1,6 @@
 /*
 	This is the card in the list view / check taskitem.jsx for the edit mode
- */
+*/
 var React = require('react');
 var Reflux = require('reflux');
 var TaskListItem = React.createClass({

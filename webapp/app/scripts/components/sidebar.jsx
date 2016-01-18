@@ -71,8 +71,24 @@ Sidebar.Row = React.createClass({
 	mixins: [ Navigation ],
 
 	clickedRow: function(){
-		if(this.props.section === "apps")
+		if(this.props.data.id === stateStore.get("active_menu_id")){
+			//this.setState({editMode:true});
+		}
+		else{
 			this.transitionTo('/app/' + this.props.data.manifest_id);
+		}
+	},
+	getInitialState:function(){
+		return {};
+	},
+	renderNameOrInput:function(){
+		if(this.state.editMode){
+			return <input type="text" defaultValue={this.props.data.name} />;
+		}
+		else{
+			return this.props.data.name;
+		}
+		
 	},
 	render: function(){
 		var className = "row ";
@@ -85,7 +101,7 @@ Sidebar.Row = React.createClass({
 		return (
 			<li className={ className } onClick={this.clickedRow}>
 				<div className="text">
-					{this.props.data.name}
+					{this.renderNameOrInput()}
 				</div>
 				<span className="notification chat">{this.props.data.unread_count_display}</span>
 			</li>
