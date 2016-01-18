@@ -151,7 +151,7 @@ var ChannelStore = Reflux.createStore({
 	fetchChannel: function(channel){
 		var self = this;
 		swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id }).then(function(res){
-			self.setMessages(res.messages);
+			self.setMessages(res.data.messages);
 		}).catch(function(error){
 		});
 	}
