@@ -58,7 +58,7 @@ $(document).ready(function() {
         });
 	}; 
 	
-	$.swDropdown = function() {
+	$.swDropdown = function(callback) {
 		// Dropdown
 		var swipesDropdown = $('.swipes-dropdown');
 		var swipesDropdownInit = $('.swipes-dropdown').find('.init').text();

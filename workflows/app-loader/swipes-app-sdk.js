@@ -323,8 +323,9 @@ var SwipesAppSDK = (function() {
 
 			if(message.command == "event"){
 				if(message.data.type == "init"){
-					if(data.data._id){
-						this._client.setId(data.data._id);
+					if(data.data.manifest){
+						this.info.workflow = data.data.manifest;
+						this._client.setId(data.data.manifest.id);
 					}
 					if(data.data.user_id){
 						this.info.userId = data.data.user_id;

@@ -22,15 +22,29 @@ var Sidebar = React.createClass({
 	openServicesOverlay: function(){
 		overlayActions.loadOverlay('services', {title: 'Services'});
 	},
+	openWorkflowModal: function(){
+		sidebarActions.loadWorkflowModal();
+	},
 	componentWillMount: function(){
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
+	},
+	renderWorkflows: function(){
+		var rows = this.state.workflows.map(function(row){
+			return <Sidebar.Row key={row.id} data={row} />
+		});
+		return (
+			<ul className="rows">
+				{rows}
+			</ul>
+		);
 	},
 	render: function() {
 		return (
 			<aside className="sidebar left">
 				<div className="sidebar_content">
 					<div className="sidebar-controls">
-						<Sidebar.Section data={{title:"My Workflows", rows: this.state.workflows}}/>
+						{this.renderWorkflows()}
+						<div onClick={this.openWorkflowModal}>Add Workflow</div>
 						<div onClick={this.openServicesOverlay} style={{color: "white"}}>Open Services</div>
 					</div>
 
@@ -39,29 +53,8 @@ var Sidebar = React.createClass({
 		);
 	}
 });
-Sidebar.Section = React.createClass({
-	onSectionHeader: function(){
-		sidebarActions.loadWorkflowModal();
-	},
-	render: function(){
-		var self = this;
-		var rows = this.props.data.rows.map(function(row){
-			return <Sidebar.Row key={row.id} data={row} />
-		});
-
-		return (
-			<div className="sidebar-section">
-				<h1 onClick={this.onSectionHeader}>{this.props.data.title}</h1>
-				<ul className="rows">
-					{rows}
-				</ul>
-			</div>
-		);
-	}
-});
 Sidebar.Row = React.createClass({
 	mixins: [ Navigation ],
-
 	clickedRow: function(){
 		if(this.props.data.id === stateStore.get("active_menu_id")){
 			//this.setState({editMode:true});
@@ -84,8 +77,6 @@ Sidebar.Row = React.createClass({
 	},
 	render: function(){
 		var className = "row ";
-		if(this.props.data.hidden)
-			className += "hidden ";
 		if(this.props.data.unread_count_display)
 			className += "unread ";
 		if(this.props.data.id === stateStore.get("active_menu_id"))
