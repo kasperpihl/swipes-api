@@ -50,6 +50,7 @@ var Topbar = React.createClass({
 	},
 	onMenuButton:function(e){
 		stateStore.actions.toggleSidebar();
+        $('.menu-icon').toggleClass('open');
 	},
 	getInitialState: function(){
 		return {};
