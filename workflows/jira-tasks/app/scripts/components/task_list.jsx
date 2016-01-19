@@ -18,26 +18,34 @@ var TaskList = React.createClass({
 	clickedGoBack: function(issueId){
 		IssueActions.stopWorkOnIssue(issueId);
 	},
-	renderHeader:function(){
-
+	renderHeader:function(currentIssue){
+		if(currentIssue){
+			return <h3>You are currently working on this task</h3>
+		}
+		else{
+			return <h3>Which task do you want to work on?</h3>
+		}
 	},
-	renderIssues: function(){
+	renderIssues: function(currentIssue){
 		var self = this;
-		if(!this.state.issueId){
+		
+		console.log('current', currentIssue);
+		if(!currentIssue){
 			return this.state.issues.map(function(issue){
 				return <TaskListItem data={issue} key={issue.id} onClickHandler={self.clickedIssue} />
 			});
 		}
 		else{
-			return <TaskItem id={this.state.issueId} onClickHandler={self.clickedGoBack} />
+			return <TaskItem id={currentIssue.id} onClickHandler={self.clickedGoBack} />
 		}
 	},
 	render: function() {
+		var currentIssue = IssueStore.getCurrentIssue();
 		return (
 			<div ref="scroll-container" className="task-list-container">
-				{this.renderHeader()}
 				<div className="task-list">
-					{this.renderIssues()}
+					{this.renderHeader(currentIssue)}
+					{this.renderIssues(currentIssue)}
 				</div>
 			</div>
 		);
