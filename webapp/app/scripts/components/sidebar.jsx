@@ -19,6 +19,11 @@ var Sidebar = React.createClass({
 			this.setState({activeMenuId:states.active_menu_id});
 		}
 	},
+    componentDidMount:function() {
+		$(document).ready(function() {
+			$.swContextMenu();
+		})
+	},
 	openServicesOverlay: function(){
 		overlayActions.loadOverlay('services', {title: 'Services'});
 	},
@@ -38,11 +43,29 @@ var Sidebar = React.createClass({
 			</ul>
 		);
 	},
+    logOut: function() {
+      localStorage.clear();
+      window.location.reload();  //Did not manage to use routes
+    },
+    profile: function() {
+        return  <div className="profile-wrapper">
+                    <div className="profile-image">{userStore.me().name.charAt(0)}</div>
+                    <div className="username">{userStore.me().name}</div>
+                    <div className="swipes-context-btn">
+                        <i className="material-icons">more_vert</i>
+                        <ul className="swipes-context">
+                            <div className="context-ripple"></div>
+                            <li className="swipes-context-list" onClick={this.logOut}>Log Out</li>
+                        </ul>
+                    </div>
+                </div> 
+    },
 	render: function() {
 		return (
 			<aside className="sidebar left">
 				<div className="sidebar_content">
 					<div className="sidebar-controls">
+                        {this.profile()}
 						{this.renderWorkflows()}
 						<div onClick={this.openWorkflowModal}>Add Workflow</div>
 						<div onClick={this.openServicesOverlay} style={{color: "white"}}>Open Services</div>
