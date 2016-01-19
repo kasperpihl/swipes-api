@@ -148,11 +148,11 @@ h3 {
 	top: 0;
 	left: 0;
 	overflow: hidden;
-	filter: blur(1px);
+	//filter: blur(1px);
 	
 	path {
 		fill: none;
-		stroke: rgba($blue-80,.6);
+		stroke: rgba($blue-80,.4);
 	}
 }
 
