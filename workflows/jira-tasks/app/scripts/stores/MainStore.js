@@ -1,10 +1,23 @@
 var Reflux = require('reflux');
-var UserStore = require('./UserStore');
-var IssueStore = require('./IssueStore');
+var MainActions = require('../actions/MainActions');
 var MainStore = Reflux.createStore({
-	start: function(){
-		IssueStore.fetch();
-		UserStore.fetch();
+	listenables: [MainActions],
+	onGoToApp:function(){
+		MainActions.updateSettings({'isReady': true});
+	},
+	onUpdateSettings:function(newSettings){
+		console.log('new', newSettings);
+		this.update('settings', newSettings);
+		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err){
+			console.log('trying to update settings', res, err);
+		})
+	},
+	onLoadStatuses:function(){
+
+	},
+	fetch: function(){
+		var self = this;
+		this.set('settings', swipes.info.workflow.settings);
 	}
 });
 

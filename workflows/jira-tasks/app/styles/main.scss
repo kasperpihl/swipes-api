@@ -1,3 +1,16 @@
+.setup{
+	max-width: 600px;
+	margin: 0 auto;
+	.column-pickers{
+		height:200px;
+	}
+	.project-picker{
+		height: 100px;
+	}
+	.button-picker{
+		height:100px;
+	}
+}
 .task-list-container{
     .task-list{
         max-width: 400px;
@@ -15,3 +28,4 @@
         
     }
 }
+@import "select";

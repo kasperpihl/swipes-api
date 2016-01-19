@@ -1,13 +1,17 @@
 var React = require('react');
 var Reflux = require('reflux');
 var IssueStore = require('../stores/IssueStore');
+var UserStore = require('../stores/UserStore');
 var IssueActions = require('../actions/IssueActions');
 var TaskListItem = require('./task_list_item');
 var TaskItem = require('./task_item');
 var TaskList = React.createClass({
 	mixins: [IssueStore.connect('issues')],
+	componentDidMount: function(){
+		IssueStore.fetch();
+		UserStore.fetch();
+	},
 	clickedIssue: function(issueId){
-
 		console.log('clicked');
 		IssueActions.workOnIssue(issueId);
 	},

@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var me;
 var IssueActions = require('../actions/IssueActions');
+var MainStore = require('./MainStore');
 var IssueStore = Reflux.createStore({
 	listenables: [IssueActions],
 	sort: 'index',
@@ -8,8 +9,9 @@ var IssueStore = Reflux.createStore({
 		var self = this;
 		swipes.service('jira').request('myself.getMyself').then(function(res){
 			me = res.data;
+			console.log(me.name);
 			return swipes.service('jira').request('search.search', {
-				jql: 'project = SWIP AND sprint is not EMPTY ORDER BY Rank ASC'
+				jql: 'project = ' + MainStore.get('settings').projectKey + ' AND sprint is not EMPTY ORDER BY Rank ASC'
 			});
 		}).then(function(res){
 
@@ -21,17 +23,17 @@ var IssueStore = Reflux.createStore({
 
 	},
 	onWorkOnIssue:function(issueId){
-		var progressId = "3"; // T_TODO:/K_TODO: Make this part of the settings, which id is the progress one 
+		var progressId = MainStore.get('settings').progressId; // T_TODO:/K_TODO: Make this part of the settings, which id is the progress one 
 		this.transitionToId(issueId, progressId);
 		this.update(issueId, {'state': 'inprogress'});
 	},
 	onStopWorkOnIssue: function(issueId){
-		var todoId = "10000";
+		var todoId = MainStore.get('settings').todoId;
 		this.transitionToId(issueId, todoId);
 		this.update(issueId, {'state': 'todo'});
 	},
 	onCompleteWorkOnIssue: function(issueId){
-		var doneId = "10001";
+		var doneId = MainStore.get('settings').doneId;
 		this.transitionToId(issueId, doneId);
 		this.update(issueId, {'state': 'done'});
 	},
