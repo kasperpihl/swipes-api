@@ -8,7 +8,7 @@ var Login = React.createClass({
 	mixins: [ Navigation, Reflux.ListenerMixin ],
 	onContinue: function(){
         //console.log('button clicked');
-        this.login();
+        this.signup();
 		//if($(this.refs.create).is(":checked")) {
             //console.log('button signup');
 			//this.signup();
@@ -93,8 +93,8 @@ var Login = React.createClass({
 		});
 		return;
 	},
-    routeToSignup: function() {
-        window.location.assign("/#/signup");
+    routeToSignin: function() {
+        window.location.assign("/#/login");
     },
 	render: function() {
 		return (
@@ -135,8 +135,12 @@ var Login = React.createClass({
                     <div className="logo"></div>
                     <h1>Welcome to your Swipes</h1>
                     <div className="sign-up-card">
-                        <h2>sign in to swipes</h2>
+                        <h2>sign up to swipes</h2>
                         <form action="">
+                            <div className="swipes-floating-label" error-message="Error message">
+                                <input className="swipes-floating-input username borderless" type="text" id="email"/>
+                                <label htmlFor="email">Your Name</label>
+                            </div>
                             <div className="swipes-floating-label" error-message="Error message">
                                 <input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
                                 <label htmlFor="email">Email address</label>
@@ -145,11 +149,15 @@ var Login = React.createClass({
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
                             </div>
-                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.onContinue}/>
+                            <div className="swipes-floating-label" error-message="Error message">
+                                <input className="swipes-floating-input" type="password" id="password"/>
+                                <label htmlFor="password">Password</label>
+                            </div>
+                            <input type="button" className="login-submit" value="SIGN UP" onClick={this.onContinue}/>
                         </form>
                     </div>
-                    <h3>You don't have an account yet?</h3>
-                    <div className="signup-button" onClick={this.routeToSignup}>SIGN UP</div>
+                    <h3>Already have an account?</h3>
+                    <div className="signup-button" onClick={this.routeToSignin}>SIGN IN</div>
                 </div>
             </div>
 		);
