@@ -101,13 +101,16 @@ h3 {
 	font-weight: 400;
 	font-size: 1em;
 	//margin-top: -10px;
-	cursor: pointer;
     margin-top: 15px;
-	
-	&:hover {
-		color: $studioGray-100;
-		text-decoration: underline;
-	}
+    
+    span {
+        cursor: pointer;
+        
+        &:hover {
+            color: $studioGray-100;
+            text-decoration: underline;
+        }
+    }
 }
 
 .logo {

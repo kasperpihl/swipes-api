@@ -157,7 +157,7 @@ var Login = React.createClass({
                         </form>
                     </div>
                     <h3>Already have an account?</h3>
-                    <div className="signup-button" onClick={this.routeToSignin}>SIGN IN</div>
+                    <div className="signup-button"><span onClick={this.routeToSignin}>SIGN IN</span></div>
                 </div>
             </div>
 		);
