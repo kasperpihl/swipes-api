@@ -1,12 +1,10 @@
 {
 	"manifest_version": 1,
-	"title": "Tetris App",
+	"name": "Tetris App",
 	"identifier": "tetris",
 	"version": "0.1",
 	"description": "A Tetris game for Swipes",
-	"main_app": {
-		"index": "index.html"
-	},
+	"index": "index.html",
 	"tables":[
 		{
 			"name": "highscore",

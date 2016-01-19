@@ -19,20 +19,19 @@ router.post('/rtm.start', (req, res, next) => {
 
   let users = r.table('users').without(["password", "services", "workflows"]);
 
-  // K_TODO: also only add 
+  // K_TODO: also only add
   let servicesQ = r.table('services');
-  
-  // Workflows should contain only my added workflows / we should add the whole stack in /workflows.list
-  let workflowQ = r.table('users')
-                  .get(userId)('workflows')
-                  .eqJoin('parent_id', r.table('workflows'), {index: 'id'})
+
+  let workflowsQ = r.table('users')
+                  .get(userId)('workflows').default([])
+                  .eqJoin('parent_id', r.table('workflows'))
                   .without({right: ['id', 'name']}) // No id, nor name from the original service.
                   .zip();
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(users),
-    db.rethinkQuery(workflowQ),
+    db.rethinkQuery(workflowsQ),
     db.rethinkQuery(servicesQ)
   ]
 
