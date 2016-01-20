@@ -1,5 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
+var Router = require('react-router');
 var WorkflowStore = require('../stores/WorkflowStore');
 var stateStore = require('../stores/StateStore');
 var userStore = require('../stores/UserStore');
@@ -27,7 +28,8 @@ var Sidebar = React.createClass({
 		}
 	},
 	openServicesOverlay: function(){
-		overlayActions.loadOverlay('services', {title: 'Services'});
+		//overlayActions.loadOverlay('services', {title: 'Services'});
+        window.location.assign("/#/services"); // line 52 same stuff
 	},
 	openWorkflowModal: function(){
 		sidebarActions.loadWorkflowModal();
