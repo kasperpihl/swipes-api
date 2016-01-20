@@ -7,11 +7,13 @@ var modalActions = require('../actions/ModalActions');
 var overlayActions = require('../actions/OverlayActions');
 var sidebarStore = require('../stores/SidebarStore');
 var sidebarActions = require('../actions/SidebarActions');
-var IconMenu = require('material-ui/lib').IconMenu; 
-var MenuItem = require('material-ui/lib').MenuItem; 
-var IconButton = require('material-ui/lib').IconButton; 
-var FontIcon = require('material-ui/lib').FontIcon;
-var Divider = require('material-ui/lib').Divider;
+var MenuItem = require('material-ui/lib/menus/menu-item');
+var IconMenu = require('material-ui/lib/menus/icon-menu');
+var IconButton = require('material-ui/lib/icon-button');
+var Colors = require('material-ui/lib/styles/colors');
+var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
+var injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
 
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -53,15 +55,18 @@ var Sidebar = React.createClass({
       window.location.reload();  //Did not manage to use routes
     },
     profile: function() {
-        
+        var button = (
+            <IconButton touch={true}>
+                <MoreVertIcon color={Colors.grey400} />
+            </IconButton>
+        );
         return  <div className="profile-wrapper">
                     <div className="profile-image">{userStore.me().name.charAt(0)}</div>
                     <div className="username">{userStore.me().name}</div>
-                    <IconMenu iconButtonElement={<i className="material-icons">more_vert</i>}>
-                        <MenuItem primaryText="Refresh" />
-                        <MenuItem primaryText="Send feedback" />
-                        <MenuItem primaryText="Settings" />
-                        <MenuItem primaryText="Help" />
+                    <IconMenu 
+                        iconButtonElement={button} 
+                        anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                        targetOrigin={{horizontal: 'right', vertical: 'top'}} >
                         <MenuItem primaryText="Sign out" />
                     </IconMenu>
                 </div> 

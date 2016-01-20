@@ -12,7 +12,7 @@
 .sidebar {
 
 	width:$sidebar-width;
-	z-index: 3000;
+	z-index: 10;
 	
 	
 	@include user-select(none);

@@ -13,6 +13,7 @@
     "react-dom": "^0.14.3",
     "react-highlighter": "^0.2.2",
     "react-router": "~0.13.2",
+    "react-tap-event-plugin": "^0.2.1",
     "reflux": "~0.3.0",
     "reflux-model-extension": "*",
     "vivus": "^0.2.3"
