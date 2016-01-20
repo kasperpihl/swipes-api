@@ -3,28 +3,88 @@ var Reflux = require('reflux');
 var Sidebar = require('./sidebar');
 var Topbar = require('./topbar');
 var Router = require('react-router');
+var ServiceStore = require('../stores/ServiceStore');
+var UserStore = require('../stores/UserStore');
+var ServiceActions = require('../actions/ServiceActions');
+var Reflux = require('reflux');
 
 var Navigation = Router.Navigation;
 
 var Services = React.createClass({
-    getInitialState: function() {
-        return {};
+	mixins: [ServiceStore.connect("services"), Reflux.connectFilter(UserStore, "user", function(users) {
+		return users.filter(function(user) {
+			return user.me;
+		}.bind(this))[0];
+	})],
+	renderConnectedServices: function(){
+		var sortedServices = _.sortBy(this.state.user.services, 'service_name');
+		if(!sortedServices.length){
+			return "No services connected";
+		}
+		var self = this;
+		return sortedServices.map(function(service){
+			var realService = self.state.services[service.service_id];
+			return <Services.ConnectedRow key={service.id} data={realService} />;
+		})
 	},
-    render: function () {
-        return (
-            <div className="main">
-                <Sidebar />
-                <div className="right-side-container">
-		            <div className="content-container" idName="main">
-		                <div className="app-view-controller">
-			            <Topbar data={{screen: 1}}/>
-                            <div>Services goes here Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, accusantium, architecto. Et eius culpa labore doloribus excepturi repellendus aperiam fuga error numquam quas accusamus dolore, itaque saepe, id quos fugiat, neque officia placeat nesciunt odio, dolorem iste non molestiae. Harum commodi corporis iure maxime. Tempore quod placeat, quisquam quos dolorum ad fugiat sed ipsum ratione dolor, error animi, blanditiis veniam, ex assumenda ducimus expedita sunt sequi! Repudiandae maxime similique aliquid officia temporibus enim mollitia, commodi expedita in iusto nulla non velit cupiditate laudantium numquam quam odio asperiores veniam, beatae inventore deserunt exercitationem voluptatem quaerat. Voluptates possimus consequuntur, iure consectetur, suscipit quisquam aperiam at sit tempora eos, iste cumque rerum est? Accusamus dolorum aut nam repudiandae at sint voluptatibus molestias enim, maxime laborum temporibus optio possimus est veritatis, vel quis, beatae tempore. Possimus rerum provident asperiores suscipit temporibus, quidem aliquid hic illum harum, iste. Eligendi necessitatibus, unde dolores itaque consequuntur quo omnis tempore! Aperiam labore doloribus praesentium suscipit est eius, quae magni tenetur ad in voluptate, animi aliquam magnam sint, quis dolores quia tempore minus quisquam nesciunt laboriosam asperiores. Eligendi repellat deleniti quibusdam vel eius, iusto explicabo distinctio rem voluptates quae, mollitia, sequi doloremque, ipsum magni corporis odit a recusandae delectus voluptate est veniam hic! Alias voluptate dolorum nihil, omnis quibusdam, quae fugiat, accusantium aperiam ea reprehenderit deleniti? Ducimus, nobis, possimus doloremque ad esse nostrum rerum animi dolor omnis beatae veniam enim, incidunt! Libero aspernatur magni sed laboriosam dicta possimus culpa illum officia, incidunt voluptates, iure accusantium optio laudantium quas quaerat quasi nemo nulla ad quos et sunt a iusto ex in. Omnis temporibus possimus earum quis ratione debitis minus iusto animi eos asperiores! Placeat fugit sapiente eligendi iste quod temporibus, aperiam tempore blanditiis sint. Enim deleniti quae fugit asperiores modi officia sunt autem quaerat! Enim porro consectetur libero, assumenda facere reiciendis itaque voluptates possimus veritatis labore numquam nemo, illo vitae iusto optio voluptate voluptatem sit, officiis magni corporis cupiditate est doloribus ipsa. Libero minima vel doloremque voluptatibus molestiae expedita vero ratione odit corrupti, consectetur eius, dolor fugiat earum tempore dolorem consequatur iusto soluta excepturi veritatis blanditiis illum! Impedit accusamus dicta ipsa temporibus ut in quidem sed possimus voluptas minima delectus unde cum aliquid assumenda et vero itaque, cumque provident officiis reprehenderit. Iste et doloremque, aspernatur dolorum accusantium officiis libero veritatis nobis fugiat molestias, laboriosam nihil doloribus, cumque! Quis est nostrum laudantium rerum accusamus, quod assumenda nemo omnis dolores facilis dolorem atque id iure nobis, consectetur dignissimos aut dolorum dolore labore cumque non recusandae. Assumenda voluptatum officia rerum blanditiis quam. Fuga officiis repellat eos, temporibus, debitis quasi, possimus eaque mollitia expedita dignissimos dolor odit accusamus cupiditate. Minima voluptas quasi unde quas, in molestiae natus corporis eius inventore nobis maxime repudiandae, ea odit beatae fugit placeat autem ullam mollitia error perspiciatis magni consequatur cupiditate. Praesentium, architecto ducimus. Quas ratione quisquam rem aliquid reiciendis temporibus vitae saepe soluta nam iure, molestias eligendi deserunt alias obcaecati tempora ea! Totam, libero. Accusantium, praesentium nihil, doloremque hic tenetur harum saepe recusandae minus quae iure! Suscipit, blanditiis, incidunt. Quos minima deleniti aliquam debitis aperiam iusto, quo aliquid molestiae. Atque delectus repellat omnis quod asperiores! Eligendi deserunt dolorem deleniti blanditiis aliquam labore officia sapiente? Voluptas expedita, aperiam voluptate consectetur aliquam quasi iure ut esse dolorem ex deserunt dolor earum possimus vitae, perferendis cum assumenda dolorum omnis eum ipsa error natus impedit eius amet est? Asperiores, tenetur reprehenderit voluptates ullam quo at illum eligendi porro ut incidunt, dolorem adipisci libero. Porro libero tempore error ducimus quo officiis itaque pariatur dolores nemo dolor obcaecati nam sunt facilis ipsam quos aliquam harum dolorum nobis inventore neque earum ea, ab quam blanditiis, eius. Non eligendi ducimus reiciendis tempora, incidunt tenetur voluptatem officiis architecto odit. Similique libero, et eaque iure dolorem vitae veniam officiis cumque delectus culpa earum ducimus velit accusamus blanditiis non aliquam, eum. Saepe sapiente ullam quod laboriosam natus, voluptatem quisquam cumque commodi hic voluptatum ducimus accusamus nihil distinctio cupiditate numquam quis illum nisi nesciunt totam. Ea quibusdam in necessitatibus sit sunt, soluta voluptates quidem inventore officiis pariatur provident repellat perspiciatis ipsam illo dolorem nostrum hic odio asperiores facere accusantium, mollitia tempore placeat dicta laborum. Tenetur eos dignissimos nam esse sed illum placeat cumque labore odit mollitia quisquam deleniti, ab harum deserunt at debitis error reiciendis excepturi quo, quia molestiae reprehenderit. Earum molestiae voluptatum, officia sapiente accusamus, aut doloribus eius impedit autem nobis odio tempora, perferendis id delectus vel. Praesentium eaque exercitationem iure fugiat, itaque aut placeat temporibus numquam, necessitatibus expedita officiis! Nulla quisquam, eum voluptate officiis, fugit neque repellat minima porro. Aspernatur commodi dolores adipisci repellat, dolore optio quidem dolorem necessitatibus labore veritatis perspiciatis amet incidunt nostrum eaque, alias esse quae voluptates ratione provident reiciendis excepturi eos cumque nihil tenetur ullam! Rerum dignissimos incidunt laudantium iusto, neque dolores nesciunt sit praesentium autem. Molestias, est delectus excepturi dolores eveniet qui facilis facere, incidunt, neque laborum aperiam earum sed. Aperiam fugit autem similique iure, asperiores rem cupiditate qui harum beatae modi nam. Illo officia, tempore numquam necessitatibus earum soluta, ab fugiat dolore! Minus repellendus cumque mollitia temporibus aliquid incidunt maxime distinctio sint officia pariatur, dolorem quos excepturi beatae tempora fugiat doloremque repellat, perferendis odio. Iste distinctio alias et magnam doloremque at voluptate, maxime fuga sapiente. Nulla eum commodi pariatur saepe quae quos id quaerat ab quo, repellat sit rerum nobis ducimus. Ipsa iusto eum perspiciatis fugiat voluptate vel autem obcaecati pariatur consequuntur eius quibusdam doloribus, illum fugit saepe omnis temporibus! Omnis quo quaerat ipsum tempore numquam temporibus neque pariatur, qui deleniti nihil fugiat dolores, officiis quibusdam laborum ipsam magnam aspernatur. Explicabo consectetur, minus odit non molestias fuga optio reiciendis vitae minima iusto laborum perferendis nihil ut sequi, nisi officiis tempora quaerat. Reiciendis itaque suscipit iure sapiente ducimus quos incidunt illum. Placeat quas, at repellat cupiditate omnis facere quia nesciunt ipsum! Accusamus itaque ipsum expedita explicabo libero nobis excepturi quasi ea officia, voluptas, amet veniam sit facere reprehenderit voluptatem ab obcaecati. Nemo aliquam numquam facilis deserunt! Quibusdam voluptatem, molestias numquam amet cupiditate modi impedit maxime illo. Non sunt neque numquam consequuntur impedit iste.</div>
-						</div>
-					</div>
-				</div>
+	renderServicesToConnect: function(){
+		var sortedServices = _.sortBy(this.state.services, 'title');
+
+		return sortedServices.map(function (service) {
+			return <Services.ConnectRow key={service.id} data={service} />;
+		})
+	},
+
+	renderAddServiceButton:function(){
+		return <button onClick={this.clickedAddService}>Connect new service</button>;
+	},
+	render: function() {
+    return (
+      <div className="main">
+      <Sidebar />
+        <div className="right-side-container">
+          <div className="content-container" idName="main">
+            <div className="app-view-controller">
+              <Topbar data={{screen: 1}}/>
+              {this.renderServicesToConnect()}
+      				{this.renderConnectedServices()}
+      				{this.renderAddServiceButton()}
             </div>
-        );
-    }
+          </div>
+        </div>
+      </div>
+    );
+	}
+});
+
+Services.ConnectRow = React.createClass({
+	clickedAuthorize: function(){
+		ServiceActions.authorize(this.props.data.manifest_id);
+	},
+	render: function(){
+		console.log(this.props.data);
+		return(
+			<div className="row connect">
+				<h3>{this.props.data.title}</h3>
+				<button onClick={this.clickedAuthorize}>Connect</button>
+			</div>
+		);
+	}
+});
+
+Services.ConnectedRow = React.createClass({
+	clickedRemove: function(){
+		//ServiceActions.remove()
+	},
+	render: function(){
+		console.log(this.props.data);
+		return(
+			<div className="row connected">
+				<h3>Connected: {this.props.data.title}</h3>
+				{/*<button onClick={this.clickedRemove}>Remove</button>*/}
+			</div>
+		);
+	}
 });
 
 module.exports = Services;
