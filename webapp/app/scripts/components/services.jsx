@@ -49,9 +49,11 @@ var Services = React.createClass({
             <div className="app-view-controller">
               <Topbar data={{screen: 1}}/>
               <div className="services-wrapper">
+                <h3>Available Flows</h3>
                 <Card className="services-card">
                   {this.renderServicesToConnect()}
                 </Card>
+                <h3>Connected Flows</h3>
                 <Card className="services-card">
       			  {this.renderConnectedServices()}
                 </Card>
@@ -73,7 +75,7 @@ Services.ConnectRow = React.createClass({
 		return(
 			<div className="row connect">
 				<h3>{this.props.data.title}</h3>
-                <FlatButton onClick={this.clickedAuthorize} label="Connect" />
+                <FlatButton onClick={this.clickedAuthorize} label="Connect" style={{color: '#4BAE4F'}}/>
 			</div>
 		);
 	}
@@ -87,7 +89,7 @@ Services.ConnectedRow = React.createClass({
 		console.log(this.props.data);
 		return(
 			<div className="row connected">
-				<h3>Connected: {this.props.data.title}</h3>
+				<h3>{this.props.data.title}</h3>
 				<FlatButton onClick={this.clickedRemove} label="Disconnect" disabled={true} />
 			</div>
 		);
