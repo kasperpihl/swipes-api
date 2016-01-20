@@ -7,6 +7,8 @@ var ServiceStore = require('../stores/ServiceStore');
 var UserStore = require('../stores/UserStore');
 var ServiceActions = require('../actions/ServiceActions');
 var Reflux = require('reflux');
+var Card = require('material-ui/lib/card/card');
+var FlatButton = require('material-ui/lib/flat-button');
 
 var Navigation = Router.Navigation;
 
@@ -46,9 +48,14 @@ var Services = React.createClass({
           <div className="content-container" idName="main">
             <div className="app-view-controller">
               <Topbar data={{screen: 1}}/>
-              {this.renderServicesToConnect()}
-      				{this.renderConnectedServices()}
-      				{this.renderAddServiceButton()}
+              <div className="services-wrapper">
+                <Card className="services-card">
+                  {this.renderServicesToConnect()}
+                </Card>
+                <Card className="services-card">
+      			  {this.renderConnectedServices()}
+                </Card>
+              </div>
             </div>
           </div>
         </div>
@@ -66,7 +73,7 @@ Services.ConnectRow = React.createClass({
 		return(
 			<div className="row connect">
 				<h3>{this.props.data.title}</h3>
-				<button onClick={this.clickedAuthorize}>Connect</button>
+                <FlatButton onClick={this.clickedAuthorize} label="Connect" />
 			</div>
 		);
 	}
@@ -81,7 +88,7 @@ Services.ConnectedRow = React.createClass({
 		return(
 			<div className="row connected">
 				<h3>Connected: {this.props.data.title}</h3>
-				{/*<button onClick={this.clickedRemove}>Remove</button>*/}
+				<FlatButton onClick={this.clickedRemove} label="Disconnect" disabled={true} />
 			</div>
 		);
 	}
