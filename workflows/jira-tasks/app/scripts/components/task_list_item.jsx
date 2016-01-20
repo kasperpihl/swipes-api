@@ -3,9 +3,11 @@
 */
 var React = require('react');
 var Reflux = require('reflux');
+var Card = require('material-ui/lib').Card;
+var CardText = require('material-ui/lib').CardText;
 var TaskListItem = React.createClass({
 	renderSummary: function(){
-		return <div className="task-summary">{this.props.data.fields.summary}</div>
+		return <div className="task-summary"></div>
 	},
 	onClick: function(){
 		if(typeof this.props.onClickHandler === 'function'){
@@ -14,11 +16,11 @@ var TaskListItem = React.createClass({
 	},
 	render: function() {
 		return (
-			<div onClick={this.onClick} className="list-item-container">
-				<div className="list-item">
-					{this.renderSummary()}
-				</div>
-			</div>
+			<Card onClick={this.onClick} className="card-container">
+				<CardText>
+					{this.props.data.fields.summary}
+				</CardText>
+			</Card>
 		);
 	}
 });

@@ -4,6 +4,7 @@ var TaskList = require('./task_list');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var Setup = require('./setup');
+
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
 	renderProjectPicker: function(){

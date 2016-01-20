@@ -24,8 +24,10 @@ router.get('/sdk.load', (req, res, next) => {
 	insertString += util.getFile(workflowDir + 'app-loader' + '/q.min.js');
 	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-api-connector.js');
 	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-app-sdk.js');
-	insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
-	insertString += wrap('<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css" />');
+	if(!req.query.disableuikit){
+		insertString += util.getFile(workflowDir + 'app-loader' + '/swipes-ui-kit/ui-kit-main.js');
+		insertString += wrap('<link type="text/css" rel="stylesheet" href="' + _defUrlDir + 'swipes-ui-kit/ui-kit-main.css" />');
+	}
 	insertString += 'window.swipes = new SwipesAppSDK("' + apiUrl + '");';
 
 

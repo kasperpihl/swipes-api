@@ -15,12 +15,9 @@ var TaskList = React.createClass({
 		console.log('clicked');
 		IssueActions.workOnIssue(issueId);
 	},
-	clickedGoBack: function(issueId){
-		IssueActions.stopWorkOnIssue(issueId);
-	},
 	renderHeader:function(currentIssue){
 		if(currentIssue){
-			return <h3>You are currently working on this task</h3>
+			return '';//<h3>You are currently working on this task</h3>
 		}
 		else{
 			return <h3>Which task do you want to work on?</h3>
@@ -36,7 +33,7 @@ var TaskList = React.createClass({
 			});
 		}
 		else{
-			return <TaskItem id={currentIssue.id} onClickHandler={self.clickedGoBack} />
+			return <TaskItem id={currentIssue.id} />
 		}
 	},
 	render: function() {
