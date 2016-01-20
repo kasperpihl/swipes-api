@@ -8,9 +8,11 @@ var Layout = require('./components/layout');
 var Home = require('./components/home');
 var Services = require('./components/services');
 var Login = require('./components/login');
+var Signup = require('./components/signup');
 var routes = (
 	<Route name="layout" path="/" handler={Layout}>
 		<Route path="login" handler={Login} />
+		<Route path="signup" handler={Signup} />
 		<Route path="workflow/:workflowId" handler={Home} />
 		<Route path="overlay/:overlayId" handler={Home} />
 		<Route path="services" handler={Services} />

@@ -5,7 +5,8 @@
 	z-index: 1999;
 	top:0;
 	// This is the default background color of navbar
-	background: $sidebar-dark-color;
+	background: $studioGray-20;
+    box-shadow: $swipes-shadow-one;
     
     .connection-status {
         width: 100%;
@@ -187,7 +188,7 @@
 			width: 16px;
 			left: calc(40px / 2);
 			top: 20px;
-			border: 2px solid white;
+			border: 2px solid $deepBlue-60;
 			border-radius: 2px;
 			position: absolute;
 			cursor: pointer;
@@ -200,7 +201,7 @@
 				left: -7px;
 				top: 0px;
 				border-radius: 2px;
-				background-color: white;
+				background-color: $deepBlue-60;
 				transform-origin: 50% 0%;
 				transition: .2s cubic-bezier(.87,.23,.51,2);
 				transition-delay: .1s;
@@ -213,7 +214,7 @@
 				width: 0px;
 				left: -2px;
 				top: 0px;
-				background-color: white;
+				background-color: $deepBlue-60;
 				transform-origin: 50% 0%;
 				transition: .2s cubic-bezier(.54,-0.78,.83,.67);
 			}

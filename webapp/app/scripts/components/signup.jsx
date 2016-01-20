@@ -8,7 +8,7 @@ var Login = React.createClass({
 	mixins: [ Navigation, Reflux.ListenerMixin ],
 	onContinue: function(){
         //console.log('button clicked');
-        this.login();
+        this.signup();
 		//if($(this.refs.create).is(":checked")) {
             //console.log('button signup');
 			//this.signup();
@@ -93,14 +93,14 @@ var Login = React.createClass({
 		});
 		return;
 	},
-    routeToSignup: function() {
-        window.location.assign("/#/signup");
+    routeToSignin: function() {
+        window.location.assign("/#/login");
     },
 	render: function() {
 		return (
             <div className="main-log-wrapper">
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440">
-                    <g> 
+                    <g>
                         <path data-start="100" data-duration="200" d="M2459.51,1440c-159.52-86.32-303.59-207.33-420.17-361.41-145.45-192.23-419.2-230.14-611.43-84.69C1286.41,1101,1228.53,1277.58,1265.86,1440" />
                         <path data-start="150" data-duration="120" d="M2560,1393.06c-172.32-81.49-328.06-204.61-451-367.14-174.55-230.67-503-276.17-733.71-101.63-164.13,124.19-234.51,326.33-198.58,515.71" />
                         <path data-start="60" data-duration="230" d="M2560,1295.62c-145.13-75.31-276.2-183.3-381.43-322.37a608.27,608.27,0,0,0-303.71-214.17c-182.2-57.21-388.4-28.41-552.29,95.6C1135.8,996,1053.09,1223.84,1088,1440" />
@@ -135,8 +135,12 @@ var Login = React.createClass({
                     <div className="logo"></div>
                     <h1>Welcome to your Swipes</h1>
                     <div className="sign-up-card">
-                        <h2>sign in to swipes</h2>
+                        <h2>sign up to swipes</h2>
                         <form action="">
+                            <div className="swipes-floating-label" error-message="Error message">
+                                <input className="swipes-floating-input username borderless" type="text" id="email"/>
+                                <label htmlFor="email">Your Name</label>
+                            </div>
                             <div className="swipes-floating-label" error-message="Error message">
                                 <input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
                                 <label htmlFor="email">Email address</label>
@@ -145,11 +149,15 @@ var Login = React.createClass({
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
                             </div>
-                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.onContinue}/>
+                            <div className="swipes-floating-label" error-message="Error message">
+                                <input className="swipes-floating-input" type="password" id="password"/>
+                                <label htmlFor="password">Password</label>
+                            </div>
+                            <input type="button" className="login-submit" value="SIGN UP" onClick={this.onContinue}/>
                         </form>
                     </div>
-                    <h3>You don't have an account yet?</h3>
-                    <div className="signup-button"><span onClick={this.routeToSignup}>SIGN UP</span></div>
+                    <h3>Already have an account?</h3>
+                    <div className="signup-button"><span onClick={this.routeToSignin}>SIGN IN</span></div>
                 </div>
             </div>
 		);

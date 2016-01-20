@@ -37,7 +37,7 @@
 		overflow-y:scroll;
 		width: inherit;
 		text-align: center;
-		background-color: $dark-background;
+		background-color: $deepBlue-100;
 		z-index: 4999;
 		.left & {
 			@include centerBlock(0, auto, 0, 0, 0, absolute);
@@ -54,7 +54,6 @@
 	.sidebar-controls {
 		
 		color: $unselected-text-color;
-		padding-top: 50px;
 		padding-bottom: 100px; 
 		text-align: left;
 		
@@ -270,4 +269,65 @@
 		}
 	}
 
+}
+
+.profile-wrapper {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    border-bottom: 1px solid $deepBlue-80;
+    
+    .profile-image {
+        width: 40px;
+        height: 40px;
+        font-weight: 500;
+        background-color: $matBlue;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+    }
+    
+    .username {
+        width: 100px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .swipes-context-btn {
+        
+        &:hover {
+            background-color: $deepBlue-100;
+        }
+        
+        &.open {
+            background-color: $deepBlue-100;
+        }
+        
+        ul {
+            width: 180px;
+            left: auto;
+            right: 10px;
+            
+            li {
+                color: $deepBlue-80;
+                font-weight: 400;
+                cursor: pointer;
+                
+                &:hover {
+                    color: $deepBlue-100;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+    
+    i {
+        color: $studioGray-20;
+    }
 }

@@ -14,16 +14,17 @@ let generateId = util.generateSlackLikeId;
 let isAdmin = util.isAdmin;
 
 // Relative directory to installed workflows
-// T_TODO Change the folder to workflows
 let workflowsDir = __dirname + '/../../workflows/';
 
 router.post('/workflows.list', (req, res, next) => {
   let workflowQ = r.table('workflows');
-  db.rethinkQuery(workflowQ).then((workflows) => {
-    res.status(200).json({ok: true, data: workflows});
-  }).catch((err) => {
-    return next(err);
-  })
+
+  db.rethinkQuery(workflowQ)
+    .then((workflows) => {
+      res.status(200).json({ok: true, data: workflows});
+    }).catch((err) => {
+      return next(err);
+    });
 });
 
 router.post('/workflows.install', isAdmin, (req, res, next) => {

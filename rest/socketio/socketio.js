@@ -2,6 +2,7 @@
 
 let r = require('rethinkdb');
 let apps = require('./apps-io.js');
+let workflows = require('./workflows-io.js');
 let common = require('./common-events-io.js');
 let db = require('../db.js');
 let scopes = [];
@@ -60,13 +61,14 @@ module.exports = (io) => {
 
     socket.emit('message', {type: 'hello'});
 
-    scopes = [
-      apps.hook(socket, userId)
-    ];
+    // scopes = [
+    //   apps.hook(socket, userId)
+    // ];
+    //
+    // handleScopeChange(socket, userId);
 
-    handleScopeChange(socket, userId);
-
-    apps.adminApps(socket, userId);
+    //apps.adminApps(socket, userId);
+    workflows.userWorkflows(socket, userId);
     common.commonEvents(socket, userId);
   });
 };

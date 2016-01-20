@@ -1089,13 +1089,13 @@ input:not[type="submit"].swipes-input:focus, input:not[type="range"].swipes-inpu
 @-webkit-keyframes context-list-open {
   100% {
     opacity: 1;
-    background-color: #000C2F;
+    background-color: white;
   }
 }
 @keyframes context-list-open {
   100% {
     opacity: 1;
-    background-color: #000C2F;
+    background-color: white;
   }
 }
 @-webkit-keyframes context-ripple {
