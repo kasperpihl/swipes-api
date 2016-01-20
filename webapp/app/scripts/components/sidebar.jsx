@@ -26,11 +26,6 @@ var Sidebar = React.createClass({
 			this.setState({activeMenuId:states.active_menu_id});
 		}
 	},
-    componentDidMount:function() {
-		$(document).ready(function() {
-			$.swContextMenu();
-		})
-	},
 	openServicesOverlay: function(){
 		overlayActions.loadOverlay('services', {title: 'Services'});
 	},
@@ -57,7 +52,7 @@ var Sidebar = React.createClass({
     profile: function() {
         var button = (
             <IconButton touch={true}>
-                <MoreVertIcon color={Colors.grey400} />
+                <MoreVertIcon color={Colors.grey50} />
             </IconButton>
         );
         return  <div className="profile-wrapper">
