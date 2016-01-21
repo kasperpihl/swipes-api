@@ -331,3 +331,51 @@
         color: $studioGray-20;
     }
 }
+
+.sidebar-actions {
+    height: 60px;
+    width: 100%;
+    //background-color: red;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    
+    .sidebar-action {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        
+        &:hover {
+            
+            &:before {
+                border-radius: 2px;
+                transform: scale(1);
+                transition: .2s ease-in-out;
+            }
+        }
+        
+        &:before {
+            content: attr(data-description);
+            position: absolute;
+            background-color: rgba($studioGray-100,.6);
+            color: white;
+            padding: 5px 10px;
+            font-size: 10px;
+            border-radius: 50%;
+            width: 90%;
+            left: 5%;
+            top: -25px;
+            cursor: default;
+            text-align: center;
+            transform: scale(0);
+            transition: .2s ease-in-out;
+        }
+        
+        svg {
+            width: 32px;
+        }
+    }
+}
