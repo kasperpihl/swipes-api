@@ -1,35 +1,19 @@
 var React = require('react');
 var Router = require('react-router');
+var Link = require('react-router').Link;
 var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
-var Navigation = Router.Navigation;
 var Login = React.createClass({
-	mixins: [ Navigation, Reflux.ListenerMixin ],
-	onContinue: function(){
-        //console.log('button clicked');
-        this.login();
-		//if($(this.refs.create).is(":checked")) {
-            //console.log('button signup');
-			//this.signup();
-        //} else {
-            //console.log('button login');
-			//this.login();
-        //}
-	},
-	onStateChange: function(states){
-		if(states.isLoggedIn){
-			return this.transitionTo('/');
-		}
-	},
+	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
 		$(document).ready(function() {
-            
+
 			$.swFloatingLabelInput();
-            
+
             var direction = 1;
-            
+
             var Layer_1 = new Vivus('Layer_1', {
                 type: 'scenario'
             });
@@ -37,18 +21,15 @@ var Login = React.createClass({
             function animation() {
                 Layer_1.play(direction);
             };
-            
+
             animation(direction);
-            
+
             setInterval(function() {
                 direction = direction > 0 ? -1 : 1;
 
                 animation();
             }, 13500)
 		})
-	},
-	componentWillMount:function(){
-		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
 	signup: function(){
 		var username = $(this.refs.username).val();
@@ -93,14 +74,11 @@ var Login = React.createClass({
 		});
 		return;
 	},
-    routeToSignup: function() {
-        window.location.assign("/#/signup");
-    },
 	render: function() {
 		return (
             <div className="main-log-wrapper">
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440">
-                    <g> 
+                    <g>
                         <path data-start="100" data-duration="200" d="M2459.51,1440c-159.52-86.32-303.59-207.33-420.17-361.41-145.45-192.23-419.2-230.14-611.43-84.69C1286.41,1101,1228.53,1277.58,1265.86,1440" />
                         <path data-start="150" data-duration="120" d="M2560,1393.06c-172.32-81.49-328.06-204.61-451-367.14-174.55-230.67-503-276.17-733.71-101.63-164.13,124.19-234.51,326.33-198.58,515.71" />
                         <path data-start="60" data-duration="230" d="M2560,1295.62c-145.13-75.31-276.2-183.3-381.43-322.37a608.27,608.27,0,0,0-303.71-214.17c-182.2-57.21-388.4-28.41-552.29,95.6C1135.8,996,1053.09,1223.84,1088,1440" />
@@ -129,7 +107,7 @@ var Login = React.createClass({
                         <path d="M2560,482.2C2135.77,52.47,1448.45-6.85,953.85,367.4,608.46,628.76,441,1038,473,1440" />
                         <path d="M2560,361.94a1301.11,1301.11,0,0,0-313.78-206.17c-425.67-198.7-944.37-161.16-1345,142C533.12,576.3,353.65,1011.58,385.41,1440" />
                     </g>
-                </svg> 
+                </svg>
 
                 <div className="wrapper">
                     <div className="logo"></div>
@@ -145,11 +123,11 @@ var Login = React.createClass({
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
                             </div>
-                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.onContinue}/>
+                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.login}/>
                         </form>
                     </div>
                     <h3>You don't have an account yet?</h3>
-                    <div className="signup-button"><span onClick={this.routeToSignup}>SIGN UP</span></div>
+										<div className="signup-button"><Link to="/signup">SIGN UP</Link></div>
                 </div>
             </div>
 		);

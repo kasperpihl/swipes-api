@@ -1,6 +1,8 @@
 'use strict';
 
 var livereload = require('connect-livereload'),
+    modRewrite = require('connect-modrewrite'),
+    serveStatic = require('serve-static'),
     path = require('path');
 
 module.exports = function (grunt) {
@@ -19,18 +21,36 @@ module.exports = function (grunt) {
   grunt.initConfig({
       yeoman: yeomanConfig,
       connect: {
-          options: {
-            port: 3000,
-            hostname: '0.0.0.0' //change to 'localhost' to disable outside connections
-          },
           livereload: {
             options: {
-              middleware: function (connect) {
-                return [
-                  livereload({port: 35729}),
-                  connect.static(path.resolve('.tmp')),
-                  connect.static(path.resolve(yeomanConfig.app))
-                ];
+              port: 3000,
+              livereload: true,
+              hostname: '0.0.0.0', //change to 'localhost' to disable outside connections
+              base: ['.tmp', yeomanConfig.app],
+              middleware: function (connect, options) {
+                  var middlewares = [];
+                  var rules = [
+                    '!\\.html|\\.js|\\.css|\\.svg|\\.jp(e?)g|\\.png|\\.gif$ /index.html'
+                  ];
+
+                  // RewriteRules support
+                  middlewares.push(modRewrite(rules));
+
+                  if (!Array.isArray(options.base)) {
+                      options.base = [options.base];
+                  }
+
+                  var directory = options.directory || options.base[options.base.length - 1];
+
+                  options.base.forEach(function (base) {
+                      // Serve static files.
+                      middlewares.push(serveStatic(base));
+                  });
+
+                  // Make directory browse-able.
+                  //middlewares.push(connect.directory(directory));
+
+                  return middlewares;
               }
             }
           }

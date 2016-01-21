@@ -1,8 +1,11 @@
+var React = require('react');
 var Reflux = require('reflux');
 var stateActions = require('../actions/StateActions');
 var data = [];
 var socketActions = require('../actions/SocketActions');
 var WorkflowStore = require('../stores/WorkflowStore');
+var browserHistory = require('react-router').browserHistory;
+
 var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
@@ -43,9 +46,9 @@ var StateStore = Reflux.createStore({
 		this.set(index, workflowObj);
 		this.set("active_menu_id", activeMenuId);
 	},
-	onLogin:function(token){
+	onLogin: function(token) {
 		this.set("swipesToken", token, {trigger: false});
-		this.set("isLoggedIn", true);
+		return browserHistory.push('/');
 	}
 
 });

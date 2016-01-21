@@ -1,6 +1,13 @@
 var React = require('react');
 var Reflux = require('reflux');
 var Router = require('react-router');
+var Link = require('react-router').Link;
+var MenuItem = require('material-ui/lib/menus/menu-item');
+var IconMenu = require('material-ui/lib/menus/icon-menu');
+var IconButton = require('material-ui/lib/icon-button');
+var Colors = require('material-ui/lib/styles/colors');
+var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
+var injectTapEventPlugin = require("react-tap-event-plugin");
 var WorkflowStore = require('../stores/WorkflowStore');
 var stateStore = require('../stores/StateStore');
 var userStore = require('../stores/UserStore');
@@ -8,28 +15,19 @@ var modalActions = require('../actions/ModalActions');
 var overlayActions = require('../actions/OverlayActions');
 var sidebarStore = require('../stores/SidebarStore');
 var sidebarActions = require('../actions/SidebarActions');
-var MenuItem = require('material-ui/lib/menus/menu-item');
-var IconMenu = require('material-ui/lib/menus/icon-menu');
-var IconButton = require('material-ui/lib/icon-button');
-var Colors = require('material-ui/lib/styles/colors');
-var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
-var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-var Router = require('react-router');
-var Navigation = Router.Navigation;
 var Sidebar = React.createClass({
-	mixins: [Reflux.ListenerMixin, WorkflowStore.connect("workflows"), Navigation ],
+	mixins: [Reflux.ListenerMixin, WorkflowStore.connect("workflows")],
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
 	onStateChange: function(states){
 		var toggle = states["sidebarClosed"] ? true : false;
 		$("body").toggleClass("sidebar-closed", toggle);
 		if(states.active_menu_id !== this.state.activeMenuId){
 			this.setState({activeMenuId:states.active_menu_id});
 		}
-	},
-	openServicesOverlay: function(){
-		//overlayActions.loadOverlay('services', {title: 'Services'});
-        window.location.assign("/#/services"); // line 52 same stuff
 	},
 	openWorkflowModal: function(){
 		sidebarActions.loadWorkflowModal();
@@ -48,8 +46,10 @@ var Sidebar = React.createClass({
 		);
 	},
     logOut: function() {
+			stateStore.unset("swipesToken", {trigger: false});
       localStorage.clear();
-      window.location.reload();  //Did not manage to use routes
+			amplitude.setUserId(null); // Log out user from analytics
+      this.context.router.push('/login');
     },
     profile: function() {
         var button = (
@@ -60,13 +60,13 @@ var Sidebar = React.createClass({
         return  <div className="profile-wrapper">
                     <div className="profile-image">{userStore.me().name.charAt(0)}</div>
                     <div className="username">{userStore.me().name}</div>
-                    <IconMenu 
-                        iconButtonElement={button} 
+                    <IconMenu
+                        iconButtonElement={button}
                         anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                         targetOrigin={{horizontal: 'right', vertical: 'top'}} >
-                        <MenuItem primaryText="Sign out" />
+                        <MenuItem primaryText="Sign out" onClick={this.logOut} />
                     </IconMenu>
-                </div> 
+                </div>
     },
 	render: function() {
 		return (
@@ -77,7 +77,7 @@ var Sidebar = React.createClass({
 						{this.renderWorkflows()}
                         <div className="sidebar-actions">
                           <div className="sidebar-action add-workflow" onClick={this.openWorkflowModal} data-description="Add a Workflow">
-                            
+
                             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                               <g>
                                 <circle cx="16" cy="16" r="15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
@@ -88,8 +88,8 @@ var Sidebar = React.createClass({
                             </svg>
 
                           </div>
-                          <div className="sidebar-action open-services" onClick={this.openServicesOverlay} data-description="Open Services">
-                            
+													<Link to="/services" className="sidebar-action open-services" data-description="Open Services">
+
                             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                               <g>
                                 <g>
@@ -104,7 +104,7 @@ var Sidebar = React.createClass({
                               </g>
                             </svg>
 
-                          </div>
+                          </Link>
                         </div>
 					</div>
 
@@ -114,13 +114,15 @@ var Sidebar = React.createClass({
 	}
 });
 Sidebar.Row = React.createClass({
-	mixins: [ Navigation ],
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
 	clickedRow: function(){
 		if(this.props.data.id === stateStore.get("active_menu_id")){
 			//this.setState({editMode:true});
 		}
 		else{
-			this.transitionTo('/workflow/' + this.props.data.id);
+			this.context.router.push('/workflow/' + this.props.data.id);
 		}
 	},
 	getInitialState:function(){
@@ -133,7 +135,7 @@ Sidebar.Row = React.createClass({
 		else{
 			return this.props.data.name;
 		}
-		
+
 	},
 	render: function(){
 		var className = "row ";

@@ -6,36 +6,21 @@ var WorkflowLoader = require('./workflow_loader');
 var Loading = require('./loading');
 var Modal = require('./modal');
 var Overlay = require('./overlay');
-var Router = require('react-router');
 var stateStore = require('../stores/StateStore');
 var overlayActions = require('../actions/OverlayActions');
-var Navigation = Router.Navigation;
 var Home = React.createClass({
-	mixins: [ Navigation, Reflux.ListenerMixin ],
-	onStateChange: function(states){
-		if(!states.isLoggedIn){
-			amplitude.setUserId(null); // Log out user from analytics
-			localStorage.clear();
-			return this.transitionTo('/login');
+	mixins: [ Reflux.ListenerMixin ],
+	onStateChange: function (states) {
+		if(states.isStarted !== this.state.isStarted) {
+			this.setState({
+				isStarted: states.isStarted
+			});
 		}
-		var newStates = {};
-		if(!this.state.isLoggedIn)
-			newStates.isLoggedIn = true;
-		if(states.isStarted !== this.state.isStarted)
-			newStates.isStarted = states.isStarted;
-		if(_.size(newStates) > 0){
-			this.setState(newStates);
-		}
-
 	},
 	forwardParamsFromRouter: function(){
 		if(this.props.params.workflowId){
 			stateStore.actions.loadWorkflow(this.props.params);
-			//overlayActions.hide();
 		}
-		/*if(this.props.params.overlayId){
-			overlayActions.loadOverlay(this.props.params.overlayId);
-		}*/
 	},
 	componentDidUpdate: function(){
 		this.forwardParamsFromRouter();

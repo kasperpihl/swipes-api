@@ -1,28 +1,27 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
-var Router = require('react-router');
-var Route = Router.Route;
-var DefaultRoute = Router.DefaultRoute;
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var IndexRoute = require('react-router').IndexRoute;
+var browserHistory = require('react-router').browserHistory;
+var render = require('react-dom').render;
 
-var Layout = require('./components/layout');
 var Home = require('./components/home');
 var Services = require('./components/services');
 var Login = require('./components/login');
 var Signup = require('./components/signup');
-var routes = (
-	<Route name="layout" path="/" handler={Layout}>
-		<Route path="login" handler={Login} />
-		<Route path="signup" handler={Signup} />
-		<Route path="workflow/:workflowId" handler={Home} />
-		<Route path="overlay/:overlayId" handler={Home} />
-		<Route path="services" handler={Services} />
-		<DefaultRoute handler={Home} />
-	</Route>
-);
+var redirect = require('./components/redirect_flow');
+
 
 exports.start = function() {
-
-  Router.run(routes, function (Handler) {
-		ReactDOM.render(<Handler />, document.getElementById('content'));
-	});
+  render ((
+		<Router history={browserHistory}>
+			<Route path="/">
+				<IndexRoute component={Home} onEnter={redirect.toLogin} />
+				<Route path="login" component={Login} onEnter={redirect.toHome} />
+				<Route path="signup" component={Signup} />
+				<Route path="workflow/:workflowId" component={Home} onEnter={redirect.toLogin} />
+				<Route path="services" component={Services} onEnter={redirect.toLogin} />
+			</Route>
+		</Router>
+	), document.getElementById('content'));
 }

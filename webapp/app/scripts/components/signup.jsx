@@ -1,35 +1,19 @@
 var React = require('react');
 var Router = require('react-router');
+var Link = require('react-router').Link;
 var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
-var Navigation = Router.Navigation;
 var Login = React.createClass({
-	mixins: [ Navigation, Reflux.ListenerMixin ],
-	onContinue: function(){
-        //console.log('button clicked');
-        this.signup();
-		//if($(this.refs.create).is(":checked")) {
-            //console.log('button signup');
-			//this.signup();
-        //} else {
-            //console.log('button login');
-			//this.login();
-        //}
-	},
-	onStateChange: function(states){
-		if(states.isLoggedIn){
-			return this.transitionTo('/');
-		}
-	},
+	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
 		$(document).ready(function() {
-            
+
 			$.swFloatingLabelInput();
-            
+
             var direction = 1;
-            
+
             var Layer_1 = new Vivus('Layer_1', {
                 type: 'scenario'
             });
@@ -37,18 +21,15 @@ var Login = React.createClass({
             function animation() {
                 Layer_1.play(direction);
             };
-            
+
             animation(direction);
-            
+
             setInterval(function() {
                 direction = direction > 0 ? -1 : 1;
 
                 animation();
             }, 13500)
 		})
-	},
-	componentWillMount:function(){
-		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
 	signup: function(){
 		var username = $(this.refs.username).val();
@@ -93,9 +74,6 @@ var Login = React.createClass({
 		});
 		return;
 	},
-    routeToSignin: function() {
-        window.location.assign("/#/login");
-    },
 	render: function() {
 		return (
             <div className="main-log-wrapper">
@@ -129,7 +107,7 @@ var Login = React.createClass({
                         <path d="M2560,482.2C2135.77,52.47,1448.45-6.85,953.85,367.4,608.46,628.76,441,1038,473,1440" />
                         <path d="M2560,361.94a1301.11,1301.11,0,0,0-313.78-206.17c-425.67-198.7-944.37-161.16-1345,142C533.12,576.3,353.65,1011.58,385.41,1440" />
                     </g>
-                </svg> 
+                </svg>
 
                 <div className="wrapper">
                     <div className="logo"></div>
@@ -153,11 +131,11 @@ var Login = React.createClass({
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
                             </div>
-                            <input type="button" className="login-submit" value="SIGN UP" onClick={this.onContinue}/>
+                            <input type="button" className="login-submit" value="SIGN UP" onClick={this.signup}/>
                         </form>
                     </div>
                     <h3>Already have an account?</h3>
-                    <div className="signup-button"><span onClick={this.routeToSignin}>SIGN IN</span></div>
+                    <div className="signup-button"><Link to="/login">SIGN IN</Link></div>
                 </div>
             </div>
 		);
