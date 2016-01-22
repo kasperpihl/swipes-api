@@ -11,9 +11,10 @@ var StateStore = Reflux.createStore({
 	localStorage: "StateStore",
 	persistOnly: [ "swipesToken", "sidebarClosed", "isLoggedIn", "isStarted" ],
 	onInit: function() {
-		swipes.setToken(this.get("swipesToken"));
-		socketActions.start();
-		this.debouncedLoadAppPreview = _.debounce(this.loadAppPreview, 700);
+		if(!swipes.getToken()){
+			swipes.setToken(this.get("swipesToken"));
+			socketActions.start();
+		}
 	},
 	onChangeBackgroundColor: function (color) {
 		this.set("backgroundColor", color)
