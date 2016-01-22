@@ -5,9 +5,7 @@ var Topbar = require('./topbar');
 var WorkflowLoader = require('./workflow_loader');
 var Loading = require('./loading');
 var Modal = require('./modal');
-var Overlay = require('./overlay');
 var stateStore = require('../stores/StateStore');
-var overlayActions = require('../actions/OverlayActions');
 var Home = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	onStateChange: function (states) {
@@ -29,6 +27,8 @@ var Home = React.createClass({
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
 	componentDidMount:function(){
+		// T_TODO: This causes trouble (stateStore get init twice!! Check redirect_flow.jsx as well for second place)
+		console.log('mounted home and initing statestore');
 		amplitude.logEvent('Session - Opened App');
 		stateStore.actions.init();
 		this.forwardParamsFromRouter();
@@ -62,7 +62,6 @@ var Home = React.createClass({
 					</div>
 				</div>
 				<Modal />
-				<Overlay />
 			</div>
 		);
 	}
