@@ -49,7 +49,7 @@ var Sidebar = React.createClass({
 			stateStore.unset("swipesToken", {trigger: false});
       localStorage.clear();
 			amplitude.setUserId(null); // Log out user from analytics
-      this.context.router.push('/login');
+      this.context.router.push('/signin');
     },
     profile: function() {
         var button = (

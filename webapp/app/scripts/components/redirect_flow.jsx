@@ -4,7 +4,7 @@ var stateStore = require('../stores/StateStore');
 module.exports = {
   toLogin: function (nextState, replace) {
     if (!stateStore.get("swipesToken")) {
-      return replace('/login');
+      return replace('/signin');
     }
 
     stateStore.actions.init();

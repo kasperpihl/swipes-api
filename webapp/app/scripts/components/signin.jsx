@@ -4,7 +4,7 @@ var Link = require('react-router').Link;
 var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
-var Login = React.createClass({
+var Signin = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
@@ -31,30 +31,7 @@ var Login = React.createClass({
             }, 13500)
 		})
 	},
-	signup: function(){
-		var username = $(this.refs.username).val();
-		var email = username + "@swipesapp.com";
-
-		var password = username;
-		var data = {
-			email: email,
-			name: username,
-			password: password,
-			repassword: password
-		};
-		var self = this;
-		swipes._client.callSwipesApi({force:true, command:"users.create"}, data, function(res,error){
-			console.log(res,error);
-			if(res && res.ok){
-				amplitude.logEvent('Session - Created Account');
-				stateStore.actions.login(res.token);
-			}
-			else
-				alert("Login failed");
-		});
-		return;
-	},
-	login: function(){
+	signin: function(){
 		var username = $(this.refs.username).val();
 		var email = username + "@swipesapp.com";
 		var password = username;
@@ -123,7 +100,7 @@ var Login = React.createClass({
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
                             </div>
-                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.login}/>
+                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.signin}/>
                         </form>
                     </div>
                     <h3>You don't have an account yet?</h3>
@@ -134,4 +111,4 @@ var Login = React.createClass({
 	}
 });
 
-module.exports = Login;
+module.exports = Signin;

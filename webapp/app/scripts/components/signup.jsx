@@ -4,7 +4,7 @@ var Link = require('react-router').Link;
 var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
-var Login = React.createClass({
+var Signup = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
@@ -47,26 +47,6 @@ var Login = React.createClass({
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Created Account');
-				stateStore.actions.login(res.token);
-			}
-			else
-				alert("Login failed");
-		});
-		return;
-	},
-	login: function(){
-		var username = $(this.refs.username).val();
-		var email = username + "@swipesapp.com";
-		var password = username;
-		var data = {
-			email: email,
-			password: password
-		};
-		var self = this;
-		swipes._client.callSwipesApi({force:true, command:"users.login"}, data, function(res,error){
-			console.log(res,error);
-			if(res && res.ok){
-				amplitude.logEvent('Session - Signed In');
 				stateStore.actions.login(res.token);
 			}
 			else
@@ -135,11 +115,11 @@ var Login = React.createClass({
                         </form>
                     </div>
                     <h3>Already have an account?</h3>
-                    <div className="signup-button"><Link to="/login">SIGN IN</Link></div>
+                    <div className="signup-button"><Link to="/signin">SIGN IN</Link></div>
                 </div>
             </div>
 		);
 	}
 });
 
-module.exports = Login;
+module.exports = Signup;
