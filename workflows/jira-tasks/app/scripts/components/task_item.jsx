@@ -84,6 +84,16 @@ var TaskItem = React.createClass({
 						<FlatButton onClick={this.onCompleteWork} label="Complete" secondary={true}/>
 					</CardActions>
 				</Card>
+				<Card className="card-container">
+					<CardHeader
+						title="Issue details"
+						subtitle={this.state.issue.fields.description}
+						showExpandableButton={true}
+						actAsExpander={true}/>
+					<CardText expandable={true}>
+						This is a hidden gem.
+					</CardText>
+				</Card>
 			</div>
 		);
 	}

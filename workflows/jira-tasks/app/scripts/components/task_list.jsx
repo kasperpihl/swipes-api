@@ -52,7 +52,6 @@ var TaskList = React.createClass({
 		}
 	},
 	renderNotification: function(){
-		console.log('rend notif', this.state.notifications);
 		var open = false;
 		var message = "";
 		var duration = 3000;
