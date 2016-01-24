@@ -13,7 +13,7 @@ var redirect = require('./components/redirect_flow');
 
 
 exports.start = function() {
-  render ((
+	render ((
 		<Router history={browserHistory}>
 			<Route path="/">
 				<IndexRoute component={Home} onEnter={redirect.toLogin} />

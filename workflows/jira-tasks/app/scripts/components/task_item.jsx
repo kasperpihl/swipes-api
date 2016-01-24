@@ -52,13 +52,15 @@ var TaskItem = React.createClass({
 		
 		
 	},
-	renderSummary: function(){
-		return <div className="task-summary">{this.state.issue.fields.summary}</div>
-	},
+	
 	componentDidMount: function(){
 		swipes.service('jira').request('issue.getIssue', {issueId: this.props.id}, function(res,err){
-			console.log('getIssue', res, err);
-		});
+			console.log('getIssue', res.data.fields.comment.comments, err);
+			this.setState({
+				comments: res.data.fields.comment.comments,
+				attachments: res.data.fields.attachment
+			});
+		}.bind(this));
 	},
 	onNoteExpand:function(expanded){
 		if(expanded){
@@ -68,6 +70,24 @@ var TaskItem = React.createClass({
 			setTimeout(function(){
 				self.refs['notes-field'].focus();
 			}, 0);
+		}
+	},
+	renderAttachments: function(){
+		if(this.state.attachments){
+			
+		}
+	},
+	renderComments: function(){
+		if(this.state.comments){
+			return this.state.comments.map(function(comment){
+				return (
+					<CardHeader 
+						expandable={true}
+						key={comment.id}
+						title={comment.created + ' ' + comment.author.name + ':'}
+						subtitle={comment.body} />
+				)
+			});
 		}
 	},
 	render: function() {
@@ -90,9 +110,8 @@ var TaskItem = React.createClass({
 						subtitle={this.state.issue.fields.description}
 						showExpandableButton={true}
 						actAsExpander={true}/>
-					<CardText expandable={true}>
-						This is a hidden gem.
-					</CardText>
+					{this.renderAttachments()}
+					{this.renderComments()}
 				</Card>
 			</div>
 		);
