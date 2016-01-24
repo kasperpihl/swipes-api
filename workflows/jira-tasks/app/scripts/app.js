@@ -1,4 +1,4 @@
-require('reflux-model-extension');
+require('./reflux');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var injectTapEventPlugin = require("react-tap-event-plugin");

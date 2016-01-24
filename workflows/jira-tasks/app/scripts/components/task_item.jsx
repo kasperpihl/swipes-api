@@ -8,17 +8,23 @@ var CardText = require('material-ui/lib').CardText;
 var CardHeader = require('material-ui/lib').CardHeader;
 var CardActions = require('material-ui/lib').CardActions;
 var TextField = require('material-ui/lib').TextField;
-var RaisedButton = require('material-ui/lib').RaisedButton;
+var FlatButton = require('material-ui/lib').FlatButton;
+var UserStore = require('../stores/UserStore');
 var IssueStore = require('../stores/IssueStore');
 var IssueActions = require('../actions/IssueActions');
 var TaskItem = React.createClass({
 	mixins: [IssueStore.connectFilter('issue', function(issues){
 		return issues.filter(function(issue) {
-           return issue.id === this.props.id;
-        }.bind(this))[0];
+			return issue.id === this.props.id;
+		}.bind(this))[0];
 	})],
 	onCompleteWork: function(){
-		IssueActions.completeWorkOnIssue(this.props.id);
+		swipes.modal.confirm('Complete Issue?', 'Do you complete this issue and move it to Done in JIRA.', function(confirmed){
+			if(confirmed){
+				IssueActions.completeWorkOnIssue(this.props.id);
+			}
+		}.bind(this));
+		
 	},
 	onStopWorking: function(){
 		swipes.modal.confirm('Stop working on Issue?', 'Do you want to stop working on this issue and move it back to ToDo?', function(confirmed){
@@ -28,14 +34,26 @@ var TaskItem = React.createClass({
 		}.bind(this));
 		
 	},
+	onAssignAnotherPerson: function(){
+		var rows = _.sortBy(UserStore.getAll(), 'name').map(function(user){
+			user.id = user.key;
+			return user;
+		})
+		var self = this;
+		swipes.modal.load("list", {"title": "Assign a person", "emptyText": "No people to assign. You'll have to do it yourself.", "rows": rows }, function(row){
+			if(row){
+				swipes.modal.confirm('Assign ' + row.name + ' to this issue?', 'Do you want to assign ' + row.name + ' to this issue and move it back to ToDo?', function(confirmed){
+					if(confirmed){
+						IssueActions.assignPersonToIssue(self.props.id, row);
+					}
+				});
+			}
+		});
+		
+		
+	},
 	renderSummary: function(){
 		return <div className="task-summary">{this.state.issue.fields.summary}</div>
-	},
-	renderAssignee: function(){
-
-	},
-	renderSubtasks: function(){
-
 	},
 	componentDidMount: function(){
 		swipes.service('jira').request('issue.getIssue', {issueId: this.props.id}, function(res,err){
@@ -43,7 +61,6 @@ var TaskItem = React.createClass({
 		});
 	},
 	onNoteExpand:function(expanded){
-		console.log('changed exp', expanded);
 		if(expanded){
 			var self = this;
 			// Hack to focus on field,
@@ -51,41 +68,20 @@ var TaskItem = React.createClass({
 			setTimeout(function(){
 				self.refs['notes-field'].focus();
 			}, 0);
-			
-			//this.refs['notes-field'].focus();
 		}
 	},
 	render: function() {
-		console.log(this.state.issue);
 		return (
 			<div>
 				<Card className="card-container">
 					<CardHeader title={this.state.issue.fields.summary}
-						subtitle={this.state.issue.fields.description} />
-					<CardActions>
-						<RaisedButton onClick={this.onStopWorking} label="Stop working"/>
-						<RaisedButton onClick={this.onCompleteWork} label="Complete" secondary={true}/>
-					</CardActions>
-				</Card>
-				<Card onExpandChange={this.onNoteExpand} className="card-container">
-					<CardHeader
-						title="Personal Notes" 
-						subtitle="Here you can write all your thoughts" 
-						actAsExpander={true}
-						showExpandableButton={true} />
-					<CardText onExpandChange={this.onNoteExpand} expandable={true}>
-						<TextField 
-							fullWidth={true}
-							style={{fontSize: '14px'}}
-							ref="notes-field"
-							expandable={true}
-							hintText="Enter your notes here"
-							multiLine={true} />
-					</CardText>
+						subtitle={this.state.issue.fields.status.name} />
 				</Card>
 				<Card className="card-container">
 					<CardActions>
-						<RaisedButton onClick={this.onCompleteWork} label="Complete" secondary={true}/>
+						<FlatButton onClick={this.onStopWorking} label="Stop working on this issue" primary={true}/>
+						<FlatButton onClick={this.onAssignAnotherPerson} label="Assign next person"/>
+						<FlatButton onClick={this.onCompleteWork} label="Complete" secondary={true}/>
 					</CardActions>
 				</Card>
 			</div>

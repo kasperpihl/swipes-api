@@ -5,13 +5,6 @@ var Select = require('react-select');
 var MainActions = require('../actions/MainActions');
 var Setup = React.createClass({
 	mixins: [MainStore.connect()],
-	componentDidUpdate:function(){
-		$.swDropdown();
-	},
-	componentDidMount:function(){
-		//MainActions.loadProjects();
-		$.swDropdown();
-	},
 	selectedProject: function(e){
 		var value = e ? e.value : null;
 		MainActions.updateSettings({projectKey: value});

@@ -11,7 +11,6 @@ var Home = React.createClass({
 	},
 	render: function() {
 		var settings = this.state.settings;
-		console.log('sett', settings);
 		if(!settings){
 			return <div>Loading</div>;
 		}

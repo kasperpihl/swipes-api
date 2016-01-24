@@ -1,21 +1,20 @@
 var Reflux = require('reflux');
 var me;
 var IssueActions = require('../actions/IssueActions');
+var NotificationActions = require('../actions/NotificationActions');
 var MainStore = require('./MainStore');
 var IssueStore = Reflux.createStore({
 	listenables: [IssueActions],
 	sort: 'index',
 	getCurrentIssue: function(){
-
 		return _.find(this.getAll(), {isCurrent: true});
 	},
 	fetch: function(){
 		var self = this;
-		swipes.service('jira').request('myself.getMyself').then(function(res){
+		return swipes.service('jira').request('myself.getMyself').then(function(res){
 			me = res.data;
-			console.log(me.name);
 			return swipes.service('jira').request('search.search', {
-				jql: 'project = ' + MainStore.get('settings').projectKey + ' AND sprint is not EMPTY ORDER BY Rank ASC'
+				jql: 'project = ' + MainStore.get('settings').projectKey + ' AND assignee = currentUser() AND sprint is not EMPTY ORDER BY Rank ASC'
 			});
 		}).then(function(res){
 
@@ -28,26 +27,37 @@ var IssueStore = Reflux.createStore({
 	},
 	onWorkOnIssue:function(issueId){
 		var progressId = MainStore.get('settings').progressId; // T_TODO:/K_TODO: Make this part of the settings, which id is the progress one 
-		this.transitionToId(issueId, progressId);
-		this.update(issueId, {'state': 'inprogress'});
+		return this.transitionToId(issueId, progressId);
+		
 	},
 	onStopWorkOnIssue: function(issueId){
 		var todoId = MainStore.get('settings').todoId;
-		this.transitionToId(issueId, todoId);
-		this.update(issueId, {'state': 'todo'});
+		return this.transitionToId(issueId, todoId);
 	},
 	onCompleteWorkOnIssue: function(issueId){
 		var doneId = MainStore.get('settings').doneId;
-		this.transitionToId(issueId, doneId);
-		this.update(issueId, {'state': 'done'});
+		return this.transitionToId(issueId, doneId);
+	},
+	onAssignPersonToIssue: function(issueId, assignee){
+		var self = this;
+		swipes.service('jira').request('issue.assignIssue', {
+			issueId: issueId,
+			assignee: assignee.name
+		}).then(function(res){
+			NotificationActions.sendNotification('Assigned person: ' + assignee.name);
+			var issue = self.get(issueId);
+
+			self.onStopWorkOnIssue(issueId);
+		}).catch(function(err){
+			console.log('err assigning', err);
+		})
 	},
 	transitionToId: function(issueId, columnId){
 		var self = this;
 		var transObj;
-		swipes.service('jira').request('issue.getTransitions', { 
+		return swipes.service('jira').request('issue.getTransitions', { 
 			issueId: issueId
 		}).then(function(res){
-			console.log(res.data);
 			var transitionId;
 			for(var i = 0 ; i < res.data.transitions.length ; i++){
 				var trans = res.data.transitions[i];
@@ -61,9 +71,11 @@ var IssueStore = Reflux.createStore({
 			});
 		}).then(function(res){
 			var issue = self.get(issueId);
-			issue.fields.status = transObj;
-			console.log(issueId, transObj, issue);
-			self.set(issueId, issue);
+			NotificationActions.sendNotification('Moved issue: ' + transObj.name);
+			if(issue){
+				issue.fields.status = transObj;
+				self.set(issueId, issue);	
+			}
 		}).catch(function(err){
 			console.log('err work on issue', err);
 		});
@@ -82,9 +94,8 @@ var IssueStore = Reflux.createStore({
 		if(_.indexOf([todoId, progressId], newObj.fields.status.id) === -1){
 			return null;
 		}
-		newObj.isCurrent = (progressId === newObj.fields.status.id)
+		newObj.isCurrent = (progressId === newObj.fields.status.id);
 
-		console.log(newObj.isCurrent);
 		// This is a hack to keep a sorted index, jira doesn't provide any indexes
 		if(typeof newObj.index === 'undefined'){
 			newObj.index = _.size(this.getAll());
