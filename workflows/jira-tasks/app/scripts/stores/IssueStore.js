@@ -46,7 +46,7 @@ var IssueStore = Reflux.createStore({
 		}).then(function(res){
 			NotificationActions.sendNotification('Assigned person: ' + assignee.name);
 			var issue = self.get(issueId);
-
+			self.unset(issueId);
 			self.onStopWorkOnIssue(issueId);
 		}).catch(function(err){
 			console.log('err assigning', err);
