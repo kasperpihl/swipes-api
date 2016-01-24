@@ -9,21 +9,35 @@ var IssueStore = Reflux.createStore({
 	getCurrentIssue: function(){
 		return _.find(this.getAll(), {isCurrent: true});
 	},
+	refetch: function(){
+		if(this.refetchTimer){
+			clearTimeout(this.refetchTimer);
+		}
+		console.log('refetching');
+		this.fetch();
+	},
 	fetch: function(){
 		var self = this;
+		if(this.isFetching){
+			return;
+		}
+		this.isFetching = true;
 		return swipes.service('jira').request('myself.getMyself').then(function(res){
 			me = res.data;
 			return swipes.service('jira').request('search.search', {
 				jql: 'project = ' + MainStore.get('settings').projectKey + ' AND assignee = currentUser() AND sprint is not EMPTY ORDER BY Rank ASC'
 			});
 		}).then(function(res){
-
-			self.batchLoad(res.data.issues, {flush:true});
-		
+			self.isFetching = false;
+			if(!self.lockFetching){
+				self.batchLoad(res.data.issues, {flush:true});
+			}
+			self.refetchTimer = setTimeout(self.refetch.bind(self)
+			, 10000);
 		}).catch(function(err){
+			self.isFetching = false;
 			console.log('err issue stor', err);
 		})
-
 	},
 	onWorkOnIssue:function(issueId){
 		var progressId = MainStore.get('settings').progressId; // T_TODO:/K_TODO: Make this part of the settings, which id is the progress one 
@@ -40,6 +54,7 @@ var IssueStore = Reflux.createStore({
 	},
 	onAssignPersonToIssue: function(issueId, assignee){
 		var self = this;
+		this.lockFetching = true;
 		swipes.service('jira').request('issue.assignIssue', {
 			issueId: issueId,
 			assignee: assignee.name
@@ -49,12 +64,14 @@ var IssueStore = Reflux.createStore({
 			self.unset(issueId);
 			self.onStopWorkOnIssue(issueId);
 		}).catch(function(err){
+			self.lockFetching = false;
 			console.log('err assigning', err);
 		})
 	},
 	transitionToId: function(issueId, columnId){
 		var self = this;
 		var transObj;
+		this.lockFetching = true;
 		return swipes.service('jira').request('issue.getTransitions', { 
 			issueId: issueId
 		}).then(function(res){
@@ -70,6 +87,7 @@ var IssueStore = Reflux.createStore({
 				issueId: issueId, transition: transitionId
 			});
 		}).then(function(res){
+			self.lockFetching = false;
 			var issue = self.get(issueId);
 			NotificationActions.sendNotification('Moved issue: ' + transObj.name);
 			if(issue){
@@ -77,6 +95,7 @@ var IssueStore = Reflux.createStore({
 				self.set(issueId, issue);	
 			}
 		}).catch(function(err){
+			self.lockFetching = false;
 			console.log('err work on issue', err);
 		});
 	},

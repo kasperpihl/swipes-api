@@ -57,7 +57,6 @@ var TaskItem = React.createClass({
 	
 	componentDidMount: function(){
 		swipes.service('jira').request('issue.getIssue', {issueId: this.props.id}, function(res,err){
-			console.log('getIssue', res.data.fields.comment.comments, err);
 			this.setState({
 				comments: res.data.fields.comment.comments,
 				attachments: res.data.fields.attachment
@@ -72,6 +71,15 @@ var TaskItem = React.createClass({
 			setTimeout(function(){
 				self.refs['notes-field'].focus();
 			}, 0);
+		}
+	},
+	renderDescription: function(){
+		if(this.state.issue.fields.description){
+			return (
+				<CardText expandable={true}>
+					{renderTextWithLinks(this.state.issue.fields.description)}
+				</CardText>
+			);
 		}
 	},
 	renderAttachments: function(){
@@ -141,11 +149,15 @@ var TaskItem = React.createClass({
 					</CardActions>
 				</Card>
 				<Card className="card-container">
-					<CardHeader
-						title="Issue details"
-						subtitle={this.state.issue.fields.description}
+					<CardTitle
+						titleStyle={{
+							fontSize: '15px',
+							fontWeight: 500
+						}}
+						title="See issue details"
 						showExpandableButton={true}
 						actAsExpander={true}/>
+					{this.renderDescription()}
 					{this.renderAttachments()}
 					{this.renderComments()}
 				</Card>
@@ -153,6 +165,67 @@ var TaskItem = React.createClass({
 		);
 	}
 });
+
+
+
+var clickedLink = function(match){
+	var res = match.split("|");
+	var clickObj = {};
+	if(res[0])
+		clickObj.command = res[0];
+	if(res[1])
+		clickObj.identifier = res[1];
+	if(res[2])
+		clickObj.title = res[2]; 
+	console.log('clicked', clickObj);
+	//channelActions.clickedLink(clickObj);
+
+};
+var renderTextWithLinks = function(text){
+	if(!text || !text.length)
+		return text;
+
+	text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+	var matches = text.match(/<(.*?)>/g);
+	
+	var replaced = [];
+
+	if ((matches != null) && matches.length) {
+		var splits = text.split(/<(.*?)>/g);
+		var counter = 0;
+		
+		// Adding the text before the first match
+		replaced.push(splits.shift());
+		for(var i = 0 ; i < matches.length ; i++ ){
+			// The match is now the next object				
+			var innerMatch = splits.shift();
+			var placement = '';
+			
+			// If break, just add that as the placement
+			if(innerMatch === 'br'){
+				var key = 'break' + (counter++);
+				placement = <br key={key}/>;
+			}
+			// Else add the link with the proper title
+			else{
+				var res = innerMatch.split("|");
+				var title = res[res.length -1];
+				var key = 'link' + (counter++);
+				placement = <a key={key} className='link' onClick={clickedLink.bind(null, innerMatch)}>{title}</a>;
+			}
+
+			// Adding the replacements
+			replaced.push(placement);
+
+			// Adding the after text between the matches
+			replaced.push(splits.shift());
+		}
+		if(replaced.length)
+			return replaced;
+	}
+	return text;
+};
+
 
 
 module.exports = TaskItem;
