@@ -17,7 +17,7 @@ var SocketStore = Reflux.createStore({
 	onStart: function(){
 		var self = this;
 
-		swipes._client.callSwipesApi("rtm.start").then(function(res){
+		swipes.api.request("rtm.start").then(function(res){
 			if(res.ok){
 
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
@@ -48,15 +48,11 @@ var SocketStore = Reflux.createStore({
 			if(!msg.type)
 				return;
 
-			if (msg.type === 'app_installed'){
+			if(msg.type === 'workflow_added' || msg.type === 'workflow_changed'){
 				WorkflowStore.update(msg.data.id, msg.data);
 			}
-			else if (msg.type === 'app_uninstalled'){
+			else if (msg.type === 'workflow_removed'){
 				WorkflowStore.unset(msg.data.id);
-			}
-			else if (msg.type === 'app_activated' || msg.type === 'app_deactivated'){
-				var activated = (msg.type === 'app_activated') ? true : false;
-				WorkflowStore.update(msg.data.id, {is_active: activated});
 			}
 
 
