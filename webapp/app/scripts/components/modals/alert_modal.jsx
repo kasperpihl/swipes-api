@@ -1,7 +1,6 @@
 var React = require('react');
 var AlertModal = React.createClass({
 	didClickButton: function(button){
-		console.log("clicked button", button);
 		this.props.data.callback({button: button});
 	},
 	defaults: {
@@ -11,7 +10,6 @@ var AlertModal = React.createClass({
 	},
 	render: function () {
 		var options = this.props.data.options;
-		console.log(options);
 
 		var title = options.title || this.defaults.title;
 		options.buttons = options.buttons || this.defaults.buttons;
@@ -43,7 +41,6 @@ var AlertModal = React.createClass({
 });
 AlertModal.Button = React.createClass({
 	onClick: function(){
-		console.log(this.props);
 		this.props.didClickButton(this.props.data.key);
 	},
 	defaults: {
