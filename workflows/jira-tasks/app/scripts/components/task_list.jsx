@@ -34,8 +34,8 @@ var TaskList = React.createClass({
 		else{
 			return (
 				<div>
-					<h3>This is your issues in the current Sprint of JIRA</h3>
-					Select a task to work on.
+					<h3>This is your issues in the current JIRA Sprint</h3>
+					Select an issue to work on.
 				</div>
 			);
 		}
@@ -81,6 +81,9 @@ var TaskList = React.createClass({
 				<div className="task-list">
 					{this.renderHeader(currentIssue)}
 					{this.renderIssues(currentIssue)}
+					<div className="open-sprint-button">
+						<a target="_blank" href="https://swipes.atlassian.net/secure/RapidBoard.jspa?rapidView=1">Open Sprint in JIRA</a>
+					</div>
 				</div>
 				{this.renderNotification()}
 				
