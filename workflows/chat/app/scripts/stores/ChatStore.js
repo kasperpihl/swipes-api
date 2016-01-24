@@ -183,7 +183,7 @@ var ChatStore = Reflux.createStore({
 			}
 			
 		});
-		swipes._client.callSwipesApi('users.list',function(users){
+		swipes.api.request('users.list',function(users){
 			self.set("users",_.indexBy(users.results, 'id'), {trigger:false});
 			self.loadMessages();
 		});

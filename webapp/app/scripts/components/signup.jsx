@@ -43,7 +43,7 @@ var Signup = React.createClass({
 			repassword: password
 		};
 		var self = this;
-		swipes._client.callSwipesApi({force:true, command:"users.create"}, data, function(res,error){
+		swipes.api.request({force:true, command:"users.create"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Created Account');

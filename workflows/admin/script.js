@@ -17,7 +17,7 @@ swipes.onReady(function(){
 
 	// Call underlying swipes api
 	function loadApps(){
-		swipes._client.callSwipesApi("apps.list", function(res, error){
+		swipes.api.request("apps.list", function(res, error){
 			if(res && res.ok){
 				window._apps = res.apps;
 				render();
@@ -96,7 +96,7 @@ swipes.onReady(function(){
 	function changeAppState(endpoint, reqObj, element){
 		element.addClass('loading');
 
-		swipes._client.callSwipesApi(endpoint, reqObj, function(res, error){
+		swipes.api.request(endpoint, reqObj, function(res, error){
 			if(res && res.ok){
 				loadApps();
 			}

@@ -17,7 +17,7 @@ swipes.onReady(function(){
 			
 		}
 	});
-	swipes._client.callSwipesApi("channels.list",function(res, error){
+	swipes.api.request("channels.list",function(res, error){
 		if(res && res.ok){
 			for(var i = 0 ; i < res.results.length ; i++ ){
 				var channel = res.results[i];
@@ -27,7 +27,7 @@ swipes.onReady(function(){
 					break;
 				}
 			}
-			swipes._client.callSwipesApi("users.me", function(res, error){
+			swipes.api.request("users.me", function(res, error){
 				if(res && res.ok){
 					swipes.info.userId = res.user.id;
 					chatStore.start();
