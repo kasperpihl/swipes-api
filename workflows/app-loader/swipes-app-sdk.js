@@ -191,6 +191,10 @@ var SwipesAppSDK = (function() {
 			}
 		}
 	};
+	SwipesAppSDK.prototype.addEventListener = function(eventName, callback){
+		self._listeners.add(eventName, callback);
+	}
+
 	SwipesAppSDK.prototype.modal = {
 		_getOptions: function(options, title, message){
 			if(typeof title === 'object'){
