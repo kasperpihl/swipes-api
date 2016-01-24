@@ -13,7 +13,7 @@ var SearchStore = Reflux.createStore({
 		this.bouncedExtSearch = _.debounce(this.doExternalSearch, 500);
 	},
 	doExternalSearch: function (value, callback) {
-		swipes._client.callSwipesApi("search", {query: value}, function (res, error) {
+		swipes.api.request("search", {query: value}, function (res, error) {
 			if (callback) {
 				callback(res, error);
 			}
