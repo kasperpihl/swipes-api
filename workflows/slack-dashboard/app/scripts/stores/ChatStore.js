@@ -152,7 +152,7 @@ var ChatStore = Reflux.createStore({
 	onHandleMessage:function(msg){
 		
 		if(msg.type === 'message'){
-			var me = userStore.me();
+			var me = UserStore.me();
 			var channel = this.get(msg.channel);
 			if(channel){
 				
