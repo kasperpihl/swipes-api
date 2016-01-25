@@ -15,6 +15,7 @@ module.exports = function (grunt) {
 
   var yeomanConfig = {
       app: 'app',
+      dev: 'dev',
       dist: 'dist'
   };
 
@@ -75,8 +76,16 @@ module.exports = function (grunt) {
         }
       },
       clean: {
+
         dist: ['.tmp', '<%= yeoman.dist %>/*'],
-        serve: '.tmp'
+        serve: {
+          dot: true,
+          src: ['.tmp']
+        },
+        dev: {
+          dot: true,
+          src: ['<%= yeoman.dev %>/*']
+        }
       },
       browserify: {
         options: {
@@ -197,6 +206,24 @@ module.exports = function (grunt) {
               'images/{,*/}*.{webp,gif}'
             ]
           }]
+        },
+        dev: {
+          files: [{
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.dev %>',
+            src: [
+              '*.html',
+              '*.{ico,txt}'
+            ]
+          }, {
+            expand: true,
+            dot: true,
+            cwd: '.tmp',
+            dest: '<%= yeoman.dev %>',
+            src: ['**']
+          }]
         }
       },
       usemin: {
@@ -215,6 +242,14 @@ module.exports = function (grunt) {
     'autoprefixer:dev',
     'connect:livereload',
     'watch'
+  ]);
+
+  grunt.registerTask('dev', [
+    'clean:dev',
+    'browserify:dev',
+    'compass:dev',
+    'autoprefixer:dev',
+    'copy:dev'
   ]);
 
   grunt.registerTask('build', [
