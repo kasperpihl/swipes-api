@@ -11,7 +11,9 @@ var ChatStore = Reflux.createStore({
 		var self = this;
 		swipes.service("slack").request('rtm.start', function(res, err){
 			var obj = res.data;
-			console.log('rtm', obj, err);
+			if(err){
+				return;
+			}
 			UserStore.batchLoad(obj.users, {flush:true});
 			BotStore.batchLoad(obj.bots, {flush:true});
 			
@@ -25,7 +27,7 @@ var ChatStore = Reflux.createStore({
 			UserStore.update(obj.self.id, obj.self);
 
 			self.connectSocket(obj.url);
-			console.log('init settings', swipes.info.workflow.settings.channelId);
+
 			if(swipes.info.workflow.settings.channelId){
 				ChatActions.setChannel(swipes.info.workflow.settings.channelId)
 			}
@@ -59,7 +61,6 @@ var ChatStore = Reflux.createStore({
 		return "channels.";
 	},
 	onSetChannel: function(channelId){
-		console.log('setting channel');
 		var channel = ChannelStore.get(channelId);
 		this.set('channel', channel);
 		this.fetchChannel(channel);
@@ -180,7 +181,7 @@ var ChatStore = Reflux.createStore({
 				this.update(channel.id, updateObj);
 			}
 		}
-		console.log('store handler', msg.type, msg);
+		console.log('slack socket handler', msg.type, msg);
 	},
 	onSendMessage: function(channel, message){
 		var self = this;

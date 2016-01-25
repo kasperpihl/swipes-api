@@ -105,7 +105,6 @@ var ChatList = React.createClass({
 			return <div>"LOADING..."</div>;
 		}
 		else if(!this.state.chat.channel){
-			console.log(this.state.chat);
 			return (
 				<div>
 					<h3>Select Channel</h3>

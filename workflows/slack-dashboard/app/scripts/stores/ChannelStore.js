@@ -13,7 +13,6 @@ var ChannelStore = Reflux.createStore({
 		}
 		if(!newObj.name && newObj.user){
 			var user = UserStore.get(newObj.user);
-			console.log(user);
 			if(user){
 				if(user.deleted){
 					return null;
