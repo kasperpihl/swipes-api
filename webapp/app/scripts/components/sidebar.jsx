@@ -123,8 +123,14 @@ Sidebar.Row = React.createClass({
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
 	},
+	onContextRow: function(e){
+		e.preventDefault();
+		sidebarActions.editWorkflow(this.props.data);
+		return false;
+	},
 	clickedRow: function(){
 		if(this.props.data.id === stateStore.get("active_menu_id")){
+			
 			//this.setState({editMode:true});
 		}
 		else{
@@ -150,7 +156,7 @@ Sidebar.Row = React.createClass({
 		if(this.props.data.id === stateStore.get("active_menu_id"))
 			className += "active ";
 		return (
-			<li className={ className } onClick={this.clickedRow}>
+			<li className={ className } onContextMenu={this.onContextRow} onClick={this.clickedRow}>
 				<div className="text">
 					{this.renderNameOrInput()}
 				</div>
