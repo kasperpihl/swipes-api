@@ -1,5 +1,5 @@
 var React = require('react');
-var channelActions = require('../actions/ChannelActions');
+var chatActions = require('../actions/ChatActions');
 
 var ChatInput = React.createClass({
 	hasShownHint: false,
@@ -100,7 +100,7 @@ var ChatInput = React.createClass({
 		$(this.refs.textarea).val("");
 		this.props.onSendingMessage();
 		this.onTextChange();
-		channelActions.sendMessage(message);
+		chatActions.sendMessage(message);
 	},
 	hideHint: function(){
 		var $textarea = $(this.refs.textarea);

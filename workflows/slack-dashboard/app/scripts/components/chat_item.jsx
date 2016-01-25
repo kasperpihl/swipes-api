@@ -1,5 +1,5 @@
 var React = require('react');
-var channelActions = require('../actions/ChannelActions');
+var chatActions = require('../actions/ChatActions');
 
 
 var ChatItem = React.createClass({
@@ -170,7 +170,6 @@ var clickedLink = function(match){
 	if(res[2])
 		clickObj.title = res[2]; 
 	console.log('clicked', clickObj);
-	//channelActions.clickedLink(clickObj);
 
 };
 var renderTextWithLinks = function(text){

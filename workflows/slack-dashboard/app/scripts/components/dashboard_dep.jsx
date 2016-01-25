@@ -4,7 +4,7 @@ var chatStore = require('../stores/ChatStore');
 var chatActions = require('../actions/ChatActions');
 var userStore = require('../stores/UserStore');
 var channelStore = require('../stores/ChannelStore');
-var channelActions = require('../actions/ChannelActions');
+var chatActions = require('../actions/ChatActions');
 var _ = require('underscore');
 var TimeAgo = require('./time_ago');
 var ChatList = React.createClass({
@@ -75,7 +75,7 @@ ChatList.Section = React.createClass({
 		$('#' + channelID).css('height', channelHeight + 'px');
 		$('#' + channelID).animate({height:0},400);
 		$('#' + channelID).addClass('read').delay(350).queue(function(){
-			channelActions.markAsRead(channel);
+			chatActions.markAsRead(channel);
 		});
 	},
 	openReplyField: function(){
@@ -163,7 +163,7 @@ ChatList.Section = React.createClass({
 	},
 	sendMessage: function(message){
 		$(this.refs.replyField).val("");
-		channelActions.sendMessage(this.props.data.channel, message);
+		chatActions.sendMessage(this.props.data.channel, message);
 	},
 	onBlur: function(){
 		this.setState({showReply: false});

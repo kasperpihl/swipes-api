@@ -1,12 +1,14 @@
 var React = require('react');
 var Reflux = require('reflux');
-var channelStore = require('../stores/ChannelStore');
-var channelActions = require('../actions/ChannelActions');
+var chatStore = require('../stores/ChatStore');
+var chatActions = require('../actions/ChatActions');
 var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
-
+var channelStore = require('../stores/ChannelStore');
+var SelectField = require('material-ui/lib').SelectField;
+var MenuItem = require('material-ui/lib').MenuItem;
 var ChatList = React.createClass({
-	mixins: [channelStore.connect()],
+	mixins: [chatStore.connect('chat'), channelStore.connect('channels')],
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	onScroll: function(e){
@@ -57,27 +59,60 @@ var ChatList = React.createClass({
 		window.removeEventListener('resize', this.handleResize);
 	},
 	renderLoading: function(){
-		if(this.state.sections){
+		if(this.state.chat.sections){
 			return '';
 		}
 		
-		return <div>Loading</div>
+		return <div>Loading Messages</div>
 	
 	},
 	renderSections: function(){
-		if(!this.state.sections){
+		if(!this.state.chat.sections){
 			return '';
 		}
 
-		return this.state.sections.map(function(section){
+		return this.state.chat.sections.map(function(section){
 			return <ChatList.Section key={section.title} data={section} />
 		});
 
+	},
+	onChangedChannel: function(e, i, row){
+		chatActions.setChannel(row);
+		var newSettings = {channelId: row};
+		var self = this;
+		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err){
+		})
+		
+	},
+	renderChannelSelector: function(){
+		var channels = [];
+		if(this.state.channels){
+			channels = this.state.channels.map(function(channel){
+				return <MenuItem key={channel.id} value={channel.id} primaryText={channel.name} />
+			});
+		}
+		return (
+			<SelectField value={this.state.channelId} onChange={this.onChangedChannel}>
+				{channels}
+			</SelectField>
+		)
 	},
 	renderInput: function(){
 		return <ChatInput data={{channel: swipes.info.channel}} onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
 	},
 	render: function() {
+		if(!swipes.info.workflow){
+			return <div>"LOADING..."</div>;
+		}
+		else if(!this.state.chat.channel){
+			console.log(this.state.chat);
+			return (
+				<div>
+					<h3>Select Channel</h3>
+					{this.renderChannelSelector()}
+				</div>
+			);
+		}
 		return (
 			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 				<div className="chat-list">
