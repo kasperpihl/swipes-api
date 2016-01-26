@@ -362,5 +362,3 @@ var SwipesAppSDK = (function() {
 
 	return SwipesAppSDK;
 })();
-
-window.swipes = new SwipesAppSDK();

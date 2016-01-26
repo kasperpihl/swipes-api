@@ -153,7 +153,8 @@ module.exports = function (grunt) {
               '<%= yeoman.sdk %>/underscore.min.js',
               '<%= yeoman.sdk %>/q.min.js',
               '<%= yeoman.sdk %>/swipes-api-connector.js',
-              '<%= yeoman.sdk %>/swipes-app-sdk.js'
+              '<%= yeoman.sdk %>/swipes-app-sdk.js',
+              '<%= yeoman.sdk %>/swipes-sdk-init.js'
             ],
             '.tmp/scripts/bundle/swipes-ui-kit-main.js': [
               '<%= yeoman.uikit %>/ui-kit-main.js'
