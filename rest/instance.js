@@ -38,7 +38,7 @@ app.use(parseErrorHandler);
 // ===========================================================================================================
 // Require routes
 // ===========================================================================================================
-let appsRouter = require('./routes/apps.js');
+//let appsRouter = require('./routes/apps.js');
 let usersAuth = require('./routes/users_auth.js');
 let usersRouter = require('./routes/users.js');
 let rtmRouter = require('./routes/rtm.js');
@@ -73,7 +73,7 @@ app.use('/v1', servicesNoAuthRouter);
 app.use('/v1', jwtMiddleware.restAuth);
 
 // Routes for which we need authentication
-app.use('/v1', appsRouter);
+//app.use('/v1', appsRouter);
 app.use('/v1', usersRouter);
 app.use('/v1', rtmRouter);
 app.use('/v1', searchRouter);

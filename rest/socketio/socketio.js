@@ -1,7 +1,7 @@
 "use strict";
 
 let r = require('rethinkdb');
-let apps = require('./apps-io.js');
+//let apps = require('./apps-io.js');
 let workflows = require('./workflows-io.js');
 let common = require('./common-events-io.js');
 let db = require('../db.js');

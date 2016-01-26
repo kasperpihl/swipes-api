@@ -1,0 +1,35 @@
+{
+  "manifest_version": 1,
+  "title": "New Manifest Card",
+  "identifier": "new-manifest-card",
+  "version": "0.1",
+  "description": "An example of the new manifest for cards",
+  "card": {
+    "width": {
+      "min": 2,
+      "default": 4,
+      "max": 6 
+    },
+    "height":{ // Number from 1-12 (Grid)
+      "min": 2,
+      "default": 3,
+      "max": 4
+    }
+  },
+  "settings": {
+
+  },
+  "settings_script": "settings.js",
+  "settings_structure": [{
+    "": ""
+  }],
+  "card_script": "script.js",
+  "card_structure": [{
+    "type": "text",
+    "text": "Create Issue"
+  },
+  {
+    "type": "input",
+    "placeholder": ""
+  }]
+}
