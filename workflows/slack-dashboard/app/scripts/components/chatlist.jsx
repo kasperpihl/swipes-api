@@ -6,6 +6,7 @@ var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 var channelStore = require('../stores/ChannelStore');
 var Card = require('material-ui/lib').Card;
+var CardTitle = require('material-ui/lib').CardTitle;
 
 var SelectField = require('material-ui/lib').SelectField;
 
@@ -42,11 +43,6 @@ var ChatList = React.createClass({
 	},
 	handleResize: function(){
 		this.scrollToBottom(this.hasRendered);
-	},
-	onChangedTextHeight: function(height){
-		//console.log("changing text height");
-		$("#content").css("paddingBottom", height);
-		this.scrollToBottom();
 	},
 	onSendingMessage:function(){
 		this.shouldAnimateScroll = true;
@@ -101,7 +97,24 @@ var ChatList = React.createClass({
 		)
 	},
 	renderInput: function(){
-		return <ChatInput data={{channel: swipes.info.channel}} onSendingMessage={this.onSendingMessage} onChangedTextHeight={this.onChangedTextHeight} />
+		return <ChatInput onSendingMessage={this.onSendingMessage} />
+	},
+	renderChannelHeader: function(){
+		return (
+			<div style={{
+				position: 'absolute',
+				height: '30px',
+				borderBottom: '1px solid #d5d5d5',
+				width: '100%',
+				textAlign: 'center',
+				fontSize: '18px',
+				lineHeight: '30px',
+				top: 0,
+				left: 0
+			}}>
+			{this.state.chat.channel.name}
+			</div>
+		)
 	},
 	render: function() {
 		if(!swipes.info.workflow){
@@ -119,6 +132,7 @@ var ChatList = React.createClass({
 		return (
 
 			<Card className="card-container">
+				{this.renderChannelHeader()}
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					<div className="chat-list">
 						{this.renderLoading()}

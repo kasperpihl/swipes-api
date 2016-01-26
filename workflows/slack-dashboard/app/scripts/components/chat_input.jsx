@@ -55,6 +55,7 @@ var ChatInput = React.createClass({
 					bottom: 0,
 					paddingLeft: '10px',
 					paddingRight: '60px',
+					borderTop: '1px solid #d5d5d5',
 					height: '50px',
 					width: '100%'
 				}}>
