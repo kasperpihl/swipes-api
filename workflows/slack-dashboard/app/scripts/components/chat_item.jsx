@@ -127,9 +127,12 @@ ChatMessage.Attachment = React.createClass({
 	renderImage: function(){
 		if(this.props.data.image_url){
 			// KRIS_TODO: Render lightbox
-			// K_TODO: if width is bigger than max-width, calculate the height based on proportion...
-			console.log(this.props.data);
-			return <div className="attachment-image"><img height={this.props.data.image_height} src={this.props.data.image_url} /></div>;
+			var calcHeight = this.props.data.image_height;
+			if(this.props.data.image_width > 400){
+				var proportion = this.props.data.image_width / 400;
+				calcHeight = calcHeight / proportion;
+			}
+			return <div className="attachment-image"><img height={calcHeight} src={this.props.data.image_url} /></div>;
 		}
 	},
 	renderAuthor: function(){
