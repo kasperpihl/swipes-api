@@ -71,8 +71,20 @@ var ChatStore = Reflux.createStore({
 	},
 	addMessage:function(message){
 		var newMessages = this.get('messages') || [];
-		newMessages.push(message);
-		this.update('messages', newMessages);
+		var found = false;
+		for(var i = 0 ; i < newMessages.length ; i++){
+			var msg = newMessages[i];
+			if(msg.ts === message.ts){
+				found = true;
+				newMessages[i] = message;
+				break;
+			}
+		}
+		if(!found){
+			newMessages.push(message);
+		}
+		this.update('messages', newMessages, {trigger: false});
+		this.sortMessages();
 	},
 	editMessage: function(message){
 
@@ -156,19 +168,9 @@ var ChatStore = Reflux.createStore({
 		
 		if(msg.type === 'message'){
 			var me = UserStore.me();
-			var channel = this.get(msg.channel);
-			if(channel){
-				
-				updateObj = {};
-				var curUnread = channel.unread_count_display;
-				if(me && me.id !== msg.user){
-					updateObj.unread_count_display = curUnread + 1;
-				}
-				var currMessages = channel.messages || [];
-				var newMessages = currMessages.concat([msg]);
-				updateObj.messages = newMessages;
-
-				this.update(channel.id, updateObj);
+			if(msg.channel && msg.channel === this.get('channel').id){
+				var currMessages = this.get('messages') || [];
+				this.addMessage(msg);
 			}
 		}
 		else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){
@@ -185,9 +187,9 @@ var ChatStore = Reflux.createStore({
 		}
 		console.log('slack socket handler', msg.type, msg);
 	},
-	onSendMessage: function(channel, message){
+	onSendMessage: function(message){
 		var self = this;
-		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel.id, as_user: true}, function(res, err){
+		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channel').id, as_user: true}, function(res, err){
 			if(res.ok){
 			}
 		});

@@ -5,7 +5,10 @@ var chatActions = require('../actions/ChatActions');
 var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 var channelStore = require('../stores/ChannelStore');
+var Card = require('material-ui/lib').Card;
+
 var SelectField = require('material-ui/lib').SelectField;
+
 var MenuItem = require('material-ui/lib').MenuItem;
 var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat'), channelStore.connect('channels')],
@@ -112,15 +115,18 @@ var ChatList = React.createClass({
 				</div>
 			);
 		}
+		
 		return (
-			<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
-				<div className="chat-list">
-					{this.renderLoading()}
-					{this.renderSections()}
-					
+
+			<Card className="card-container">
+				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
+					<div className="chat-list">
+						{this.renderLoading()}
+						{this.renderSections()}
+					</div>
 				</div>
 				{this.renderInput()}
-			</div>
+			</Card>
 		);
 	}
 });
