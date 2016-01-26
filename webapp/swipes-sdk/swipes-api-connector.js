@@ -67,8 +67,9 @@ var SwipesAPIConnector = (function () {
 		}
 
 		this._listener = listener;
-		if(targetUrl)
-			this.setTargetURL(targetUrl);
+		if(!targetUrl)
+			targetUrl = window.location.origin;
+		this.setTargetURL(targetUrl);
 	};
 
 	/*
