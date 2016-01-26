@@ -8,6 +8,7 @@ var CardText = require('material-ui/lib').CardText;
 var CardHeader = require('material-ui/lib').CardHeader;
 var CardActions = require('material-ui/lib').CardActions;
 var CardMedia = require('material-ui/lib').CardMedia;
+var Divider = require('material-ui/lib').Divider;
 var CardTitle = require('material-ui/lib').CardTitle;
 var TextField = require('material-ui/lib').TextField;
 var FlatButton = require('material-ui/lib').FlatButton;
@@ -140,15 +141,13 @@ var TaskItem = React.createClass({
 				<Card className="card-container">
 					<CardHeader title={this.state.issue.fields.summary}
 						subtitle={this.state.issue.fields.status.name} />
-				</Card>
-				<Card className="card-container">
+					<Divider />
 					<CardActions>
 						<FlatButton onClick={this.onStopWorking} label="Stop working on this issue" primary={true}/>
 						<FlatButton onClick={this.onAssignAnotherPerson} label="Assign next person"/>
 						<FlatButton onClick={this.onCompleteWork} label="Complete" secondary={true}/>
 					</CardActions>
-				</Card>
-				<Card className="card-container">
+					<Divider />
 					<CardTitle
 						titleStyle={{
 							fontSize: '15px',
