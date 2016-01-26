@@ -90,12 +90,22 @@ var ChatStore = Reflux.createStore({
 
 	},
 	sortMessages: function(){
-		
+		console.log('channel...', this.get('channel'));
+
+		var lastRead = this.get('channel').last_read;
 		var self = this;
 		var sortedMessages = _.sortBy(this.get('messages'), 'ts');
 		var lastUser, lastGroup, lastDate;
+		var lastWasLatest = false;
 		var groups = _.groupBy(sortedMessages, function(model, i){
-
+			if(lastWasLatest){
+				model.isFirstNewMessage = true;
+				lastWasLatest = false;
+			}
+			if(model.ts == lastRead){
+				lastWasLatest = true;
+			}
+			
 			var date = new Date(parseInt(model.ts)*1000);
 			var group = moment(date).startOf('day').unix();
 
@@ -174,15 +184,13 @@ var ChatStore = Reflux.createStore({
 			}
 		}
 		else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){
-			var channel = this.get(msg.channel);
-			if(channel){
+			if(msg.channel && msg.channel === this.get('channel').id){
 				updateObj = {};
 				updateObj.unread_count_display = msg.unread_count_display;
 				updateObj.last_read = msg.ts;
-				var currMessages = channel.messages || [];
-				if(currMessages.length > 0)
-					updateObj.messages = [_.last(currMessages)];
-				this.update(channel.id, updateObj);
+				console.log('marking channel');
+				this.update('channel', updateObj, {trigger: false});
+				this.sortMessages();
 			}
 		}
 		console.log('slack socket handler', msg.type, msg);

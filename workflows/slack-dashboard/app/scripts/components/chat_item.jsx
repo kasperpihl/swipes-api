@@ -40,9 +40,17 @@ var ChatItem = React.createClass({
 		
 		var meClassName = swipes.info.userId === firstMessage.user.id ? ' me' : '';
 		var chatWrapperClassName = 'chat-wrapper' + meClassName;*/
-		var messages = this.props.data.map(function (message) {
-			return <ChatMessage key={message.ts} data={message} />
+		var messages = [];
+
+		_.each(this.props.data, function (message) {
+			if(message.isFirstNewMessage){
+				console.log("rendering new message");
+				messages.push(<div className="new-message-header" key="new-message-header"><span>new messages</span></div>);
+				messages.push(<div key="new-message-post-header" className="new-message-post-header" />);
+			}
+			messages.push(<ChatMessage key={message.ts} data={message} />);
 		});
+
 		return (
 			<div className='chat-wrapper'>
 				{this.renderProfileImage()}
@@ -78,12 +86,11 @@ var ChatMessage = React.createClass({
 			className += " new-message";
 		}
 		return (
-
 			<div className={className}>
 				<div className="message">
-				{renderTextWithLinks(this.props.data.text)}
-				{this.renderFile()}
-				{this.renderAttachments()}
+					{renderTextWithLinks(this.props.data.text)}
+					{this.renderFile()}
+					{this.renderAttachments()}
 				</div>
 			</div>
 		);

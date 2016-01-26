@@ -164,10 +164,14 @@ ChatList.Section = React.createClass({
 
 		// Push the last messages to a group
 		chatItemsGroups.push(chatItemMessages);
+		var chatItems = [];
 
-		var chatItems  = chatItemsGroups.map(function (item) {
-			return <ChatItem key={item[0].ts} data={item} />;
-		})
+		_.each(chatItemsGroups, function (item, i) {
+			/*if(item[0].isFirstNewMessage){
+				chatItems.push(<div key="new-message-header">New messages below</div>);
+			}*/
+			chatItems.push(<ChatItem key={item[0].ts} data={item} />);
+		});
 
 		return (
 			<div className="section">
