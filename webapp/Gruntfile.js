@@ -16,23 +16,54 @@ module.exports = function (grunt) {
   var yeomanConfig = {
       app: 'app',
       dev: 'dev',
-      dist: 'dist'
+      dist: 'dist',
+      sdk: 'swipes-sdk',
+      uikit: 'swipes-ui-kit'
   };
 
   grunt.initConfig({
       yeoman: yeomanConfig,
       connect: {
+          options: {
+            port: 3000,
+            livereload: true,
+            hostname: '0.0.0.0', //change to 'localhost' to disable outside connections
+            base: ['.tmp', yeomanConfig.app]
+          },
+          proxies: [
+              {
+                  context: '/v1',
+                  host: '0.0.0.0',
+                  port: 5000,
+                  https: false,
+                  xforward: false
+              },
+              {
+                context: '/workflows',
+                host: '0.0.0.0',
+                port: 5000,
+                https: false,
+                xforward: false
+              },
+              {
+                context: '/socket.io',
+                host: '0.0.0.0',
+                port: 5000,
+                https: false,
+                xforward: false
+              }
+          ],
           livereload: {
             options: {
-              port: 3000,
-              livereload: true,
-              hostname: '0.0.0.0', //change to 'localhost' to disable outside connections
-              base: ['.tmp', yeomanConfig.app],
+              open: true,
               middleware: function (connect, options) {
                   var middlewares = [];
                   var rules = [
-                    '!\\.html|\\.js|\\.css|\\.svg|\\.jp(e?)g|\\.png|\\.gif$ /index.html'
+                    '!\\.html|\\.js|\\.css|\\.svg|\\.jp(e?)g|\\.png|\\.ttf|\\.woff|\\.woff2|\\.gif$ /index.html'
                   ];
+
+                  // Proxy all requests related to the api
+                  middlewares.push(require('grunt-connect-proxy/lib/utils').proxyRequest);
 
                   // RewriteRules support
                   middlewares.push(modRewrite(rules));
@@ -110,6 +141,26 @@ module.exports = function (grunt) {
               debug: true,
               extensions: '.jsx'
             }
+          }
+        }
+      },
+      concat: {
+        serve: {
+          files: {
+            '.tmp/scripts/bundle/swipes-sdk.js': [
+              '<%= yeoman.sdk %>/jquery.min.js',
+              '<%= yeoman.sdk %>/socket.io.js',
+              '<%= yeoman.sdk %>/underscore.min.js',
+              '<%= yeoman.sdk %>/q.min.js',
+              '<%= yeoman.sdk %>/swipes-api-connector.js',
+              '<%= yeoman.sdk %>/swipes-app-sdk.js'
+            ],
+            '.tmp/scripts/bundle/swipes-ui-kit-main.js': [
+              '<%= yeoman.uikit %>/ui-kit-main.js'
+            ],
+            '.tmp/styles/swipes-ui-kit.css': [
+              '<%= yeoman.uikit %>/ui-kit-main.css'
+            ]
           }
         }
       },
@@ -207,6 +258,17 @@ module.exports = function (grunt) {
             ]
           }]
         },
+        serve: {
+          files: [
+            {
+              expand: true,
+              dot: true,
+              cwd: __dirname + '/swipes-ui-kit',
+              dest: '.tmp/styles',
+              src: ['fonts/**']
+            }
+          ]
+        },
         dev: {
           files: [{
             expand: true,
@@ -238,8 +300,11 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', [
     'clean:serve',
     'browserify:dev',
+    'concat:serve',
+    'copy:serve',
     'compass:dev',
     'autoprefixer:dev',
+    'configureProxies',
     'connect:livereload',
     'watch'
   ]);

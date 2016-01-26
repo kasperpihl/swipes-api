@@ -49,7 +49,7 @@ let util = {
     return appId + '_' + table;
   },
   workflowUrl: (req, workflow, type) => {
-    let hostUrl = config.get('protocol') + req.hostname + ':' + config.get('port');
+    let hostUrl = config.get('protocol') + req.hostname + ':' + config.get('apiPort');
     let getString;
     if(workflow[type])
       getString = '/workflows/' + workflow.manifest_id + '/' + workflow[type];

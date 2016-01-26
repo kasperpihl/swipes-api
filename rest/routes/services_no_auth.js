@@ -1,6 +1,7 @@
 "use strict";
 
 let express = require( 'express' );
+let config = require('config');
 let router = express.Router();
 
 /*
@@ -14,7 +15,7 @@ router.get('/services.authsuccess', (req, res, next) => {
   let oauthToken = 'oauth_token=' + req.query.oauth_token + '&';
   let oauthVerifier = 'oauth_token=' + req.query.oauth_verifier;
 
-  return res.redirect('http://localhost:3000/oauth-success.html?' + oauthToken + oauthVerifier);
+  return res.redirect(config.get('hostname') + ':' + config.get('clientPort') + '/oauth-success.html?' + oauthToken + oauthVerifier);
 });
 
 module.exports = router;

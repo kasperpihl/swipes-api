@@ -40,7 +40,7 @@ module.exports = function (grunt) {
       // },
       watch: {
         options: {
-          livereload: 35730,
+          livereload: 35731,
           livereloadOnError: false
         },
         react: {

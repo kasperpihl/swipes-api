@@ -5,8 +5,8 @@
     "db": "swipes"
   },
   "hostname": "http://localhost",
-  "port": 5000,
-  "webPort" :9000,
+  "apiPort": 5000,
+  "clientPort" :3000,
   "protocol": "http://",
   "origin": "*",
   "jwtTokenSecret": "swipy the dinocat"

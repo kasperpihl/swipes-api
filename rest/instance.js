@@ -4,7 +4,7 @@
 // Setup
 // ===========================================================================================================
 let config = require('config');
-let PORT = Number(config.get('port') || 5000);
+let PORT = Number(config.get('apiPort') || 5000);
 
 let express = require( 'express' );
 let app = express();

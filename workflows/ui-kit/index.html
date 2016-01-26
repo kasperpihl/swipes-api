@@ -1,10 +1,12 @@
 <html>
     <head>
-        <script src="http://localhost:5000/v1/sdk.load"></script>
+        <script src="/scripts/bundle/swipes-sdk.js"></script>
+        <script src="/scripts/bundle/swipes-ui-kit-main.js"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <link href="style.css" rel="stylesheet">
+        <link rel="stylesheet" href="/styles/swipes-ui-kit.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/9.1.0/styles/monokai.min.css">
         <script src="https://cdn.jsdelivr.net/highlight.js/9.1.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
@@ -13,37 +15,37 @@
     </head>
 
     <body>
-        
+
         <div class="demo-container grid col sm_3 md_6 lg_10 xlg_12">
             <h2 class="header fw-900">The Grid</h2>
             <button class="rounded primary deepblue-120 grid-show-code-btn">Show Code</button>
             <div class="demo-wrapper col sm_3 md_6 lg_10 xlg_12">
                 <div class="display-demo col sm_3 md_6 lg_10 xlg_12">
-                    
+
                     <div class="row">
                         <div class="grid-demo col sm_3 md_2 lg_4 xlg_5"></div>
                         <div class="grid-demo col sm_3 md_4 lg_6 xlg_7"></div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="grid-demo col sm_3 md_3 lg_5 xlg_4"></div>
                         <div class="grid-demo col sm_3 md_3 lg_5 xlg_4"></div>
                         <div class="grid-demo col sm_3 md_6 lg_10 xlg_4"></div>
 
                     </div>
-                    
+
                     <div class="row">
                         <div class="grid-demo col sm_3 md_6 lg_10 xlg_12"></div>
                     </div>
-                    
+
                     <blockquote>Breakpoints <br>
 - min-width 1200px * 12 columns <br>
 - min-width 960px * 10 columns <br>
 - min-width 620px * 6 columns <br>
 - min-width 0px * 3 columns</blockquote>
-                    
+
                 </div>
-                
+
                 <div class="code-demo col sm_3 md_6 lg_10 xlg_12">
                     <pre>
                         <code class="html">
@@ -51,29 +53,29 @@
     &lt;div class=&quot;col sm_3 md_2 lg_4 xlg_5&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;col sm_3 md_4 lg_6 xlg_7&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
-                                        
+
 &lt;div class=&quot;row&quot;&gt;
     &lt;div class=&quot;col sm_3 md_3 lg_5 xlg_4&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;col sm_3 md_3 lg_5 xlg_4&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;col sm_3 md_6 lg_10 xlg_4&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
-                                        
+
 &lt;div class=&quot;row&quot;&gt;
     &lt;div class=&quot;col sm_3 md_6 lg_10 xlg_12&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
                         </code>
                     </pre>
                 </div>
-                
+
             </div>
         </div>
-        
+
         <div class="demo-container typography col sm_3 md_6 lg_10 xlg_12">
             <h2 class="header fw-900">Typography</h2>
             <button class="rounded primary deepblue-120 grid-show-code-btn">Show Code</button>
             <div class="demo-wrapper col sm_3 md_6 lg_10 xlg_12">
                 <div class="display-demo col sm_3 md_6 lg_10 xlg_12">
-                    
+
                     <h1>H1 - Heading 1 - font-size: 66px</h1>
                     <h2>H2 - Heading 2 - font-size: 56px</h2>
                     <h3>H3 - Heading 3 - font-size: 45px</h3>
@@ -81,19 +83,19 @@
                     <h5>H5 - Heading 5 - font-size: 24px</h5>
                     <h6>H6 - Heading 6 - font-size: 20px</h6>
                     <p>Paragraph - font-size: 15px</p>
-                    
-                    <blockquote>You can change the font-weight by adding one of the following classes 
-                        <span class="fw-100"> .fw-100</span>  
-                        <span class="fw-300"> .fw-300</span>  
-                        <span class="fw-400"> .fw-400</span>  
-                        <span class="fw-500"> .fw-500</span>  
-                        <span class="fw-700"> .fw-700</span>  
+
+                    <blockquote>You can change the font-weight by adding one of the following classes
+                        <span class="fw-100"> .fw-100</span>
+                        <span class="fw-300"> .fw-300</span>
+                        <span class="fw-400"> .fw-400</span>
+                        <span class="fw-500"> .fw-500</span>
+                        <span class="fw-700"> .fw-700</span>
                         <span class="fw-900"> .fw-900 </span>
                         <span class="italic"> or add .italic</span>
                     </blockquote>
-                    
-                </div>       
-                
+
+                </div>
+
                 <div class="code-demo col sm_3 md_6 lg_10 xlg_12">
                     <pre>
                         <code class="html">
@@ -104,33 +106,33 @@
 &lt;h5&gt;H5 - Heading 5 - font-size: 24px&lt;/h5&gt;
 &lt;h6&gt;H6 - Heading 6 - font-size: 20px&lt;/h6&gt;
 &lt;p&gt;Paragraph - font-size: 15px&lt;/p&gt;
-                    
-&lt;blockquote&gt;You can change the font-weight by adding one of the following classes 
-    &lt;span class=&quot;fw-100&quot;&gt; .fw-100&lt;/span&gt;  
-    &lt;span class=&quot;fw-300&quot;&gt; .fw-300&lt;/span&gt;  
-    &lt;span class=&quot;fw-400&quot;&gt; .fw-400&lt;/span&gt;  
-    &lt;span class=&quot;fw-500&quot;&gt; .fw-500&lt;/span&gt;  
-    &lt;span class=&quot;fw-700&quot;&gt; .fw-700&lt;/span&gt;  
+
+&lt;blockquote&gt;You can change the font-weight by adding one of the following classes
+    &lt;span class=&quot;fw-100&quot;&gt; .fw-100&lt;/span&gt;
+    &lt;span class=&quot;fw-300&quot;&gt; .fw-300&lt;/span&gt;
+    &lt;span class=&quot;fw-400&quot;&gt; .fw-400&lt;/span&gt;
+    &lt;span class=&quot;fw-500&quot;&gt; .fw-500&lt;/span&gt;
+    &lt;span class=&quot;fw-700&quot;&gt; .fw-700&lt;/span&gt;
     &lt;span class=&quot;fw-900&quot;&gt; .fw-900&lt;/span&gt;
 &lt;/blockquote&gt;
                         </code>
                     </pre>
-                </div>         
+                </div>
             </div>
         </div>
-        
+
         <div class="demo-container buttons col sm_3 md_6 lg_10 xlg_12">
             <h2 class="header fw-900">Buttons</h2>
             <button class="rounded primary deepblue-120 grid-show-code-btn">Show Code</button>
             <div class="demo-wrapper col sm_3 md_6 lg_10 xlg_12">
                 <div class="display-demo col sm_3 md_6 lg_10 xlg_12">
-                    
+
                     <div class="row">
                         <button class="col sm_3 md_2 lg_5 xlg_4 primary deepblue-100 rounded hover-lighten">primary rounded</button>
                         <button class="col sm_3 md_2 lg_5 xlg_4 outline deepblue-100 radial hover-full">outline radial</button>
-                        <button class="sm_3 md_2 lg_10 xlg_4 outline deepblue-100 col disabled">outline</button>  
+                        <button class="sm_3 md_2 lg_10 xlg_4 outline deepblue-100 col disabled">outline</button>
                     </div>
-                    
+
                     <blockquote>
                         Main styles <br><br>
 
@@ -148,29 +150,29 @@ Hovers <br><br>
 
 Text color <br><br>
 
-By default is set automatically by checking the bg color. If the bg is dark, gives light text and vice versa 
+By default is set automatically by checking the bg color. If the bg is dark, gives light text and vice versa
                     </blockquote>
-                    
-                </div>         
-                
+
+                </div>
+
                 <div class="code-demo col sm_3 md_6 lg_10 xlg_12">
                     <pre>
                         <code class="html">
 &lt;button class=&quot;col sm_3 md_3 lg_ xlg_4 primary deepblue-100 rounded&quot;&gt;primary rounded&lt;/button&gt;
 &lt;button class=&quot;col sm_3 md_3 lg_ xlg_4 outline deepblue-100 radial &quot;&gt;outline radial&lt;/button&gt;
-&lt;button class=&quot;sm_3 md_3 lg_ xlg_4 outline deepblue-100 col &quot;&gt;outline&lt;/button&gt;  
+&lt;button class=&quot;sm_3 md_3 lg_ xlg_4 outline deepblue-100 col &quot;&gt;outline&lt;/button&gt;
                         </code>
                     </pre>
-                </div>       
+                </div>
             </div>
         </div>
-        
+
         <div class="demo-container buttons col sm_3 md_6 lg_10 xlg_12">
             <h2 class="header fw-900">Inputs</h2>
             <button class="rounded primary deepblue-120 grid-show-code-btn">Show Code</button>
             <div class="demo-wrapper col sm_3 md_6 lg_10 xlg_12">
                 <div class="display-demo col sm_3 md_6 lg_10 xlg_12">
-                    
+
                     <div class="row">
                         <div class="col lg_2 xlg_3"></div>
                        <form action="" class="col sm_3 md_6 lg_6 xlg_6">
@@ -178,50 +180,50 @@ By default is set automatically by checking the bg color. If the bg is dark, giv
                                 <input class="swipes-floating-input" type="text" id="email"/>
                                 <label for="email">Email address</label>
                             </div>
-                            
+
                             <blockquote>
                                 error-message=""; Can display the error message using .floating-label:after. Need to add .error to .floating-label to display the error message and change bottom-border to $red; <br> <br>
 id of the input has to be the same as label for=""
                             </blockquote>
-                            
-                            
+
+
                             <div class="swipes-range">
                                 <input type="range" class="swipes-slider"/>
                             </div>
                        </form>
                        <div class="col lg_2 xlg_3"></div>
                     </div>
-                    
-                </div>         
-                
+
+                </div>
+
                 <div class="code-demo col sm_3 md_6 lg_10 xlg_12">
                     <pre>
                         <code>
 &lt;script&gt;$.swFloatingLabelInput();&lt;/script&gt;  // For floating input label
-&lt;script&gt;$.swInputRange();&lt;/script&gt;  // For input range                            
-                            
+&lt;script&gt;$.swInputRange();&lt;/script&gt;  // For input range
+
 &lt;form action=&quot;&quot; class=&quot;col sm_3 md_6 lg_6 xlg_6&quot;&gt;
      &lt;div class=&quot;swipes-floating-label&quot; error-message=&quot;Error message&quot;&gt;
          &lt;input class=&quot;swipes-floating-input&quot; type=&quot;text&quot; id=&quot;email&quot;/&gt;
          &lt;label for=&quot;email&quot;&gt;Email address&lt;/label&gt;
      &lt;/div&gt;
-                      
+
     &lt;div class=&quot;swipes-range&quot;&gt;
         &lt;input type=&quot;range&quot; class=&quot;swipes-slider&quot;/&gt;
     &lt;/div&gt;
 &lt;/form&gt;
                         </code>
                     </pre>
-                </div>       
+                </div>
             </div>
         </div>
-        
+
         <div class="demo-container buttons col sm_3 md_6 lg_10 xlg_12">
             <h2 class="header fw-900">Dropdown</h2>
             <button class="rounded primary deepblue-120 grid-show-code-btn">Show Code</button>
             <div class="demo-wrapper col sm_3 md_6 lg_10 xlg_12">
                 <div class="display-demo col sm_3 md_6 lg_10 xlg_12">
-                    
+
                     <div class="row">
                         <div class="col lg_2 xlg_3"></div>
                        <ul class="swipes-dropdown sm_3 md_6 lg_6 xlg_6">
@@ -236,20 +238,20 @@ id of the input has to be the same as label for=""
                         </ul>
                         <div class="col lg_2 xlg_3"></div>
                     </div>
-                    
+
                     <blockquote>
                         li.init is the the first shown item. If it's empty it will take the first li.selected (has to be manually defined), otherwise you can write what ever there. <br><br>
 to get value you need to $('.swipes-dropdown').find('.selected').data('value');
-                        
+
                     </blockquote>
-                    
-                </div>         
-                
+
+                </div>
+
                 <div class="code-demo col sm_3 md_6 lg_10 xlg_12">
                     <pre>
                         <code class="html">
-&lt;script&gt;$.swDropdown();&lt;/script&gt;                        
-                            
+&lt;script&gt;$.swDropdown();&lt;/script&gt;
+
 &lt;ul class=&quot;swipes-dropdown&quot;&gt;
 	&lt;li class=&quot;init&quot;&gt;&lt;/li&gt;
 	&lt;i class=&quot;material-icons&quot;&gt;keyboard_arrow_down&lt;/i&gt;
@@ -262,16 +264,16 @@ to get value you need to $('.swipes-dropdown').find('.selected').data('value');
 &lt;/ul&gt;
                         </code>
                     </pre>
-                </div>       
+                </div>
             </div>
         </div>
-        
+
         <div class="demo-container buttons col sm_3 md_6 lg_10 xlg_12">
             <h2 class="header fw-900">Context-menu</h2>
             <button class="rounded primary deepblue-120 grid-show-code-btn">Show Code</button>
             <div class="demo-wrapper col sm_3 md_6 lg_10 xlg_12">
                 <div class="display-demo col sm_3 md_6 lg_10 xlg_12">
-                    
+
                     <div class="row">
                         <div class="col lg_2 xlg_3"></div>
                        <div class="swipes-context-btn">
@@ -288,14 +290,14 @@ to get value you need to $('.swipes-dropdown').find('.selected').data('value');
                         <div class="col lg_2 xlg_3"></div>
                     </div>
 
-                    
-                </div>         
-                
+
+                </div>
+
                 <div class="code-demo col sm_3 md_6 lg_10 xlg_12">
                     <pre>
                         <code class="html">
-&lt;script&gt;$.swContextMenu();&lt;/script&gt;                              
-                            
+&lt;script&gt;$.swContextMenu();&lt;/script&gt;
+
 &lt;div class=&quot;swipes-context-btn&quot;&gt;
 	&lt;i class=&quot;material-icons&quot;&gt;more_vert&lt;/i&gt;
 	&lt;ul class=&quot;swipes-context&quot;&gt;
@@ -309,9 +311,9 @@ to get value you need to $('.swipes-dropdown').find('.selected').data('value');
 &lt;/div&gt;
                         </code>
                     </pre>
-                </div>       
+                </div>
             </div>
         </div>
-        
+
     </body>
 </html>
