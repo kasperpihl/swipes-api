@@ -320,6 +320,12 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
+	SwipesAppSDK.prototype.actions = {
+		openURL: function(url){
+			self._client.callListener("actions.openURL", {url: url});
+		}
+	};
+
 	// API for handling calls from main app
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function (connector, message, callback) {
 		if(message){

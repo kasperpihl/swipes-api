@@ -170,6 +170,7 @@ var clickedLink = function(match){
 	if(res[2])
 		clickObj.title = res[2]; 
 	console.log('clicked', clickObj);
+	chatActions.clickLink(clickObj.command);
 
 };
 var renderTextWithLinks = function(text){

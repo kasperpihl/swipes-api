@@ -148,7 +148,9 @@ var ChatStore = Reflux.createStore({
 	},
 	
 
-
+	onClickLink:function(url){
+		swipes.actions.openURL(url);
+	},
 
 	onHandleMessage:function(msg){
 		

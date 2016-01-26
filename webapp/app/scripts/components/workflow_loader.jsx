@@ -53,6 +53,9 @@ var WorkflowLoader = React.createClass({
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
+			else if (message.command === "actions.openURL"){
+				window.open(data.url, "_blank");
+			}
 			else if (message.command === 'analytics.action'){
 				if(this.state.workflow){
 					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.workflow.manifest_id, 'Action': data.name});

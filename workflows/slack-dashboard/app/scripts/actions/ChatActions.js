@@ -4,7 +4,8 @@ var ChatActions = Reflux.createActions([
 	'markAsRead',
 	'handleMessage',
 	'sendMessage',
-	'setChannel'
+	'setChannel',
+	'clickLink'
 	// Here you can list your actions
 ]);
 
