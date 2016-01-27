@@ -1,6 +1,6 @@
 var React = require('react');
 var chatActions = require('../actions/ChatActions');
-
+var ReactEmoji = require('react-emoji');
 
 var ChatItem = React.createClass({
 	renderNameHeader: function(){
@@ -71,6 +71,9 @@ var ChatItem = React.createClass({
 
 
 var ChatMessage = React.createClass({
+	mixins: [
+		ReactEmoji
+	],
 	renderAttachments:function(){
 		if(!this.props.data.attachments){
 			return;
@@ -94,7 +97,7 @@ var ChatMessage = React.createClass({
 		return (
 			<div className={className}>
 				<div className="message">
-					{renderTextWithLinks(this.props.data.text)}
+					{this.emojify(renderTextWithLinks(this.props.data.text), {emojiType: 'emojione'})}
 					{this.renderFile()}
 					{this.renderAttachments()}
 				</div>
