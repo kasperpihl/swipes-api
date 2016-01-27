@@ -212,12 +212,13 @@ var ChatStore = Reflux.createStore({
 		}
 		console.log('slack socket handler', msg.type, msg);
 	},
-	onSendMessage: function(message){
+	onSendMessage: function(message, callback){
 		var self = this;
 		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channel').id, as_user: true}, function(res, err){
 			if(res.ok){
 				self.onMarkAsRead(res.data.ts);
 			}
+			callback();
 		});
 	},
 	fetchChannel: function(channel){

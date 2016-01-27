@@ -2,6 +2,7 @@ var React = require('react');
 var chatActions = require('../actions/ChatActions');
 
 var FontIcon = require('material-ui/lib').FontIcon;
+var IconButton = require('material-ui/lib').IconButton;
 var TextField = require('material-ui/lib').TextField;
 
 var ChatInput = React.createClass({
@@ -21,7 +22,7 @@ var ChatInput = React.createClass({
 		}
 		if (e.keyCode === 13 && !e.shiftKey ) {
 			var message = this.refs.textfield.getValue();
-			if(message && message.length > 0){
+			if(message && message.length > 0 && !this.state.isSending){
 				this.sendMessage(message);
 			}
 		}
@@ -38,15 +39,17 @@ var ChatInput = React.createClass({
 	sendMessage: function(message){
 		//this.refs.textfield.clearValue();
 		this.props.onSendingMessage();
-		chatActions.sendMessage(message);
-		this.setState({text: ''});
+		chatActions.sendMessage(message, function(){
+			this.setState({isSending: false});
+		}.bind(this));
+		this.setState({text: '', isSending: true});
 	},
 	onChange: function(event, v2){
 		this.setState({text: event.target.value})
 	},
 	render: function() {
 		var sendIcon = (this.state.text.length > 0) ? "send" : "thumb_up";
-
+		var disabled = this.state.isSending ? true : false;
 		return (
 
 			<div ref="input-container" >
@@ -70,20 +73,19 @@ var ChatInput = React.createClass({
 						style={{
 					}}/>
 				</div>
-				<div style={{
+				<IconButton style={{
 						position: 'absolute',
 						bottom: 0,
+						padding: '0 !important',
 						width: '50px',
 						height: '50px',
-						right: 0,
-						paddingTop: '14px',
-						textAlign: 'center'
+						right: 0
 					}}
-					onClick={this.onClick} >
-					<FontIcon className="material-icons" style={{
-
-					}}>{sendIcon}</FontIcon>
-				</div>
+					onClick={this.onClick}
+					disabled={disabled}>
+					
+      				<FontIcon className="material-icons">{sendIcon}</FontIcon>
+    			</IconButton>
             </div>
 		);
 	}
