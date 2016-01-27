@@ -193,8 +193,9 @@ ChatList.Section = React.createClass({
 	render: function() {
 		var chatItems = [];
 		_.each(this.props.data.section.messages, function (item, i) {
-			
-			chatItems.push(<ChatItem key={item.ts} data={item} />);
+			if(!item.hidden){
+				chatItems.push(<ChatItem key={item.ts} data={item} />);
+			}
 			if(item.ts === this.props.data.showingUnread && !item.isLastMessage){
 				var className = "new-message-header";
 				if(this.props.data.isMarked){

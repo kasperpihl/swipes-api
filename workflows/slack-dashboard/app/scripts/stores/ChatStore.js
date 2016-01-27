@@ -159,6 +159,18 @@ var ChatStore = Reflux.createStore({
 		this.set('messages', messages, {trigger: false});
 		this.sortMessages();
 	},
+	removeMessage:function(ts){
+		var currentMessages = this.get('messages') || [];
+		for(var i = 0 ; i < currentMessages.length ; i++){
+			var msg = currentMessages[i];
+			if(msg.ts === ts){
+				currentMessages = currentMessages.splice(i, 1);
+				break;
+			}
+		}
+		this.update('message', currentMessages, {trigger:false});
+		this.sortMessages();
+	},
 	addMessage:function(message){
 		var newMessages = this.get('messages') || [];
 		var found = false;
@@ -197,6 +209,9 @@ var ChatStore = Reflux.createStore({
 				var message = msg;
 				if(msg.subtype === 'message_changed'){
 					message = msg.message;
+				}
+				else if(msg.subtype === 'message_deleted'){
+					return this.removeMessage(msg.deleted_ts);
 				}
 				if(message){
 					this.addMessage(message);	
