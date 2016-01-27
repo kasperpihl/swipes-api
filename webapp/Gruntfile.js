@@ -133,7 +133,7 @@ module.exports = function (grunt) {
             }
           }
         },
-        dev: {
+        serve: {
           files: {
             '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js',
           },
@@ -287,6 +287,13 @@ module.exports = function (grunt) {
             cwd: '.tmp',
             dest: '<%= yeoman.dev %>',
             src: ['**']
+          },
+          {
+            expand: true,
+            dot: true,
+            cwd: __dirname + '/swipes-ui-kit',
+            dest: '<%= yeoman.dev %>/styles',
+            src: ['fonts/**']
           }]
         }
       },
@@ -301,7 +308,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', [
     'clean:serve',
-    'browserify:dev',
+    'browserify:serve',
     'concat:serve',
     'copy:serve',
     'compass:dev',
@@ -313,7 +320,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dev', [
     'clean:dev',
-    'browserify:dev',
+    'browserify:serve',
     'concat:serve',
     'compass:dev',
     'autoprefixer:dev',
