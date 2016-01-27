@@ -1,7 +1,7 @@
 var React = require('react');
 var chatActions = require('../actions/ChatActions');
 var ReactEmoji = require('react-emoji');
-
+var UserStore = require('../stores/UserStore');
 var ChatItem = React.createClass({
 	renderNameHeader: function(){
 		var name = 'unknown';
@@ -89,6 +89,14 @@ var ChatMessage = React.createClass({
 		}
 		//return < console.log('file', this.props.data.file);
 	},
+	renderMessage:function(message){
+		try{
+			return renderTextWithLinks(message, this.emojify);
+		}
+		catch(e){
+			console.log('emojis', message);
+		}
+	},
 	render: function () {
 		var className = "message-wrapper";
 		if(this.props.data.isNewMessage){
@@ -97,7 +105,7 @@ var ChatMessage = React.createClass({
 		return (
 			<div className={className}>
 				<div className="message">
-					{this.emojify(renderTextWithLinks(this.props.data.text), {emojiType: 'emojione'})}
+					{this.renderMessage(this.props.data.text)}
 					{this.renderFile()}
 					{this.renderAttachments()}
 				</div>
@@ -194,10 +202,12 @@ var clickedLink = function(match){
 	chatActions.clickLink(clickObj.command);
 
 };
-var renderTextWithLinks = function(text){
+var renderTextWithLinks = function(text, emojiFunction){
 	if(!text || !text.length)
 		return text;
-
+	if(typeof emojiFunction !== 'function'){
+		emojiFunction = function(par){ return par; };
+	}
 	text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 	var matches = text.match(/<(.*?)>/g);
 	
@@ -208,7 +218,7 @@ var renderTextWithLinks = function(text){
 		var counter = 0;
 		
 		// Adding the text before the first match
-		replaced.push(splits.shift());
+		replaced.push(emojiFunction(splits.shift()));
 		for(var i = 0 ; i < matches.length ; i++ ){
 			// The match is now the next object				
 			var innerMatch = splits.shift();
@@ -222,7 +232,15 @@ var renderTextWithLinks = function(text){
 			// Else add the link with the proper title
 			else{
 				var res = innerMatch.split("|");
+				var command = res[0];
 				var title = res[res.length -1];
+				if(title.startsWith("@U")){
+					var user = UserStore.get(title.substr(1));
+					if(user){
+						title = "@" + user.name;
+					}
+				}
+				
 				var key = 'link' + (counter++);
 				placement = <a key={key} className='link' onClick={clickedLink.bind(null, innerMatch)}>{title}</a>;
 			}
@@ -231,12 +249,12 @@ var renderTextWithLinks = function(text){
 			replaced.push(placement);
 
 			// Adding the after text between the matches
-			replaced.push(splits.shift());
+			replaced.push(emojiFunction(splits.shift()));
 		}
 		if(replaced.length)
 			return replaced;
 	}
-	return text;
+	return emojiFunction(text);
 };
 
 
