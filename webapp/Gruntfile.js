@@ -164,7 +164,7 @@ module.exports = function (grunt) {
               '<%= yeoman.uikit %>/ui-kit-main.css'
             ]
           }
-        }
+        },
       },
       compass: {
         options: {
@@ -314,6 +314,7 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', [
     'clean:dev',
     'browserify:dev',
+    'concat:serve',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev'

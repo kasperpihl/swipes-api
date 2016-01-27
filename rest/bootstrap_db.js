@@ -30,4 +30,5 @@ r.init(dbConfig,
   tables
 ).then(function(){
   console.log("DONE")
+  process.exit();
 })
