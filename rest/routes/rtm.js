@@ -39,12 +39,12 @@ router.post('/rtm.start', (req, res, next) => {
     .then(data => {
       let rtmResponse = {
         ok: true,
-        url: config.get('clientPort') === '80' ? 
-            config.get('hostname') :
-            config.get('hostname') + ':' + config.get('clientPort'),
+        url: config.get('clientPort') === '80' ?
+            config.get('origin') :
+            config.get('origin') + ':' + config.get('clientPort'),
         workflow_base_url: config.get('clientPort') === '80' ?
-                          config.get('hostname')  + '/workflows/' :
-                          config.get('hostname') + ':' + config.get('clientPort')  + '/workflows/',
+                          config.get('origin')  + '/workflows/' :
+                          config.get('origin') + ':' + config.get('clientPort')  + '/workflows/',
         self: data[0],
         users: data[1],
         workflows: data[2],

@@ -4,7 +4,7 @@
     "port": 28015,
     "db": "swipes"
   },
-  "hostname": "http://localhost",
+  "origin": "http://localhost",
   "apiPort": 5000,
   "clientPort" :3000,
   "protocol": "http://",
