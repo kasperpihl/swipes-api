@@ -62,50 +62,21 @@ var ChatStore = Reflux.createStore({
 	},
 	onSetChannel: function(channelId){
 		var channel = ChannelStore.get(channelId);
+		channel.showingUnread = channel.last_read;
 		this.set('channel', channel);
 		this.fetchChannel(channel);
 	},
-	setMessages:function(messages){
-		this.set('messages', messages, {trigger: false});
-		this.sortMessages();
-	},
-	addMessage:function(message){
-		var newMessages = this.get('messages') || [];
-		var found = false;
-		for(var i = 0 ; i < newMessages.length ; i++){
-			var msg = newMessages[i];
-			if(msg.ts === message.ts){
-				found = true;
-				newMessages[i] = message;
-				break;
-			}
-		}
-		if(!found){
-			newMessages.push(message);
-		}
-		this.update('messages', newMessages, {trigger: false});
-		this.sortMessages();
-	},
-	editMessage: function(message){
-
-	},
+	
 	sortMessages: function(){
-		console.log('channel...', this.get('channel'));
 
 		var lastRead = this.get('channel').last_read;
 		var self = this;
-		var sortedMessages = _.sortBy(this.get('messages'), 'ts');
+		var sortedMessages = this.get('messages');
 		var lastUser, lastGroup, lastDate;
-		var lastWasLatest = false;
+		var length = sortedMessages.length;
+		var me = UserStore.me();
 		var groups = _.groupBy(sortedMessages, function(model, i){
-			if(lastWasLatest){
-				model.isFirstNewMessage = true;
-				lastWasLatest = false;
-			}
-			if(model.ts == lastRead){
-				lastWasLatest = true;
-			}
-			
+
 			var date = new Date(parseInt(model.ts)*1000);
 			var group = moment(date).startOf('day').unix();
 
@@ -115,11 +86,15 @@ var ChatStore = Reflux.createStore({
 			if(model.user){
 				user = UserStore.get(model.user);
 				if(user){
-					model.user = user;
+					model.userObj = user;
+					if(user.id == lastUser && group == lastGroup){
+						model.isExtraMessage = true;
+					}
+					if(user.id === me.id){
+						model.isMyMessage = true;
+					}
 				}
-				if(user && user.id == lastUser && group == lastGroup){
-					model.isExtraMessage = true;
-				}
+				
 			}
 			else if(model.bot_id){
 				var bot = BotStore.get(model.bot_id);
@@ -134,7 +109,7 @@ var ChatStore = Reflux.createStore({
 				}
 				model.bot = bot;
 			}
-			
+			model.isLastMessage = (i === length - 1);
 
 			lastGroup = group;
 			lastUser = user ? user.id : null;
@@ -156,30 +131,70 @@ var ChatStore = Reflux.createStore({
 
 	},
 
-
-	onMarkAsRead:function(channel, ts){
-		ts = ts || _.last(channel.messages).ts;
+	onMarkAsRead:function(ts, force){
+		var channel = this.get('channel');
+		ts = ts || _.last(this.get('messages')).ts;
+		console.log('mark', ts);
+		if(!force && ts === channel.last_read){
+			return;
+		}
 		var prefix = this.apiPrefixForChannel(channel);
 		swipes.service('slack').request(prefix + "mark", 
 			{
-				channel: channel.id, 
+				channel: channel.id,
 				ts: ts
 		})
 		.then(function(){
 		})
 	},
 	
-
+	clearOldLastRead: function(){
+		if(this){
+			this.update('channel', {old_last_read: null});
+		}
+	},
 	onClickLink:function(url){
 		swipes.actions.openURL(url);
 	},
-
+	setMessages:function(messages){
+		this.set('messages', messages, {trigger: false});
+		this.sortMessages();
+	},
+	addMessage:function(message){
+		var newMessages = this.get('messages') || [];
+		var found = false;
+		for(var i = 0 ; i < newMessages.length ; i++){
+			var msg = newMessages[i];
+			if(msg.ts === message.ts){
+				found = true;
+				newMessages[i] = message;
+				break;
+			}
+		}
+		if(!found){
+			var updateObj = {};
+			if(message.user === UserStore.me().id){
+				updateObj.showingUnread = null;
+				updateObj.showingIsRead = false;
+				console.log('this is it!');
+			}
+			else if(!this.get('channel').showingUnread){
+				updateObj.showingUnread = this.get('channel').last_read;
+			}
+			console.log('updating', updateObj);
+			this.update('channel', updateObj, {trigger: false});
+			newMessages.push(message);
+		}
+		this.update('messages', newMessages, {trigger: false});
+		this.sortMessages();
+	},
 	onHandleMessage:function(msg){
 		
 		if(msg.type === 'message'){
 			var me = UserStore.me();
 			if(msg.channel && msg.channel === this.get('channel').id){
 				var currMessages = this.get('messages') || [];
+				
 				this.addMessage(msg);
 			}
 		}
@@ -188,9 +203,14 @@ var ChatStore = Reflux.createStore({
 				updateObj = {};
 				updateObj.unread_count_display = msg.unread_count_display;
 				updateObj.last_read = msg.ts;
-				console.log('marking channel');
-				this.update('channel', updateObj, {trigger: false});
-				this.sortMessages();
+				updateObj.showingIsRead = true;
+				// If a user marks a channel as unread back in time. Make sure to update the unread line.
+				if(this.get('channel').showingUnread > msg.ts){
+					updateObj.showingUnread = this.get('channel').last_read;
+					updateObj.showingIsRead = false;
+				}
+				
+				this.update('channel', updateObj);
 			}
 		}
 		console.log('slack socket handler', msg.type, msg);
@@ -199,13 +219,14 @@ var ChatStore = Reflux.createStore({
 		var self = this;
 		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channel').id, as_user: true}, function(res, err){
 			if(res.ok){
+				self.onMarkAsRead(res.data.ts);
 			}
 		});
 	},
 	fetchChannel: function(channel){
 		var self = this;
 		swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id }).then(function(res){
-			self.setMessages(res.data.messages);
+			self.setMessages(_.sortBy(res.data.messages, 'ts'));
 		}).catch(function(error){
 		});
 	}

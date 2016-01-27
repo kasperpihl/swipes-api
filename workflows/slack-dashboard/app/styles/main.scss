@@ -84,12 +84,14 @@ html, body, #content {
     overflow-x: hidden;
     background-color: #FAFAFA;
     //padding-bottom: 20px;
+    position: relative;
 }
 
 .chat-list {
     max-width: 650px;
     padding: 10px;
     margin: 0 auto;
+    position: relative;
 }
 .new-message-header{
     &.read{
@@ -159,12 +161,15 @@ html, body, #content {
     display: flex;
     //flex-wrap: wrap;
     align-items: strech;
-    padding-bottom: 3px;
     padding-top: 3px;
+    &.extra-message{
+        padding-top:0px;
+    }
 }
 
-.avatar {
-    height: 36px;
+.left-side-container {
+    //height: 36px;
+    width: 36px;
     img {
         height:36px;
         width:36px;
@@ -172,7 +177,7 @@ html, body, #content {
     }
 }
 
-.chat-messages {
+.right-side-container {
     width: 100%;
     max-width: calc(650px - 70px);
     display: flex;
@@ -187,7 +192,6 @@ html, body, #content {
     .message-wrapper {
         display: flex;
         align-items: center;
-        padding-bottom: 5px;
         
         &.new-message {
             animation: newMessageLeft .4s cubic-bezier(.57,-0.04,.51,1.89) forwards; 

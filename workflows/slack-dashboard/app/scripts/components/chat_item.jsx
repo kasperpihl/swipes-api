@@ -5,58 +5,64 @@ var chatActions = require('../actions/ChatActions');
 var ChatItem = React.createClass({
 	renderNameHeader: function(){
 		var name = 'unknown';
-		var lastMessage = this.props.data[this.props.data.length-1];
-		if(lastMessage.user){
-			name = lastMessage.user.name;
+		var message = this.props.data;
+		if(message.isExtraMessage){
+			return;
 		}
-		else if(lastMessage.bot){
-			name = lastMessage.bot.name;
+
+		if(message.userObj){
+			name = message.userObj.name;
+		}
+		else if(message.bot){
+			name = message.bot.name;
 		}
 		return (
 			<div className="message-details">
-				{name} {lastMessage.timeStr}
+				{name} {message.timeStr}
 			</div>
 		);
 	},
 	renderProfileImage:function(){
-		var firstMessage = this.props.data[0];
-		var profile_image = 'https://i0.wp.com/slack-assets2.s3-us-west-2.amazonaws.com/8390/img/avatars/ava_0002-48.png?ssl=1';
-		if(firstMessage.user && firstMessage.user.profile){
-			profile_image = firstMessage.user.profile.image_48;
+		var message = this.props.data;
+		if(message.isExtraMessage){
+			return;
 		}
-		else if(firstMessage.bot && firstMessage.bot.icons){
-			if(firstMessage.bot.icons.image_48){
-				profile_image = firstMessage.bot.icons.image_48;
+
+		var profile_image = 'https://i0.wp.com/slack-assets2.s3-us-west-2.amazonaws.com/8390/img/avatars/ava_0002-48.png?ssl=1';
+		if(message.userObj && message.userObj.profile){
+			profile_image = message.userObj.profile.image_48;
+		}
+		else if(message.bot && message.bot.icons){
+			if(message.bot.icons.image_48){
+				profile_image = message.bot.icons.image_48;
 			}
 		}
 		return (
-			<div className="avatar">
-				<img src={profile_image} />
-			</div>
+			<img src={profile_image} />
 		);
+	},
+	renderMessage:function(){
+		var message = this.props.data;
+		return <ChatMessage key={message.ts} data={message} />;
 	},
 	render: function () {
 		/*
 		
 		var meClassName = swipes.info.userId === firstMessage.user.id ? ' me' : '';
 		var chatWrapperClassName = 'chat-wrapper' + meClassName;*/
-		var messages = [];
-
-		_.each(this.props.data, function (message) {
-			if(message.isFirstNewMessage){
-				console.log("rendering new message");
-				messages.push(<div className="new-message-header" key="new-message-header"><span>new messages</span></div>);
-				messages.push(<div key="new-message-post-header" className="new-message-post-header" />);
-			}
-			messages.push(<ChatMessage key={message.ts} data={message} />);
-		});
+		var className = "chat-wrapper";
+		if(this.props.data.isExtraMessage){
+			className += " extra-message";
+		}
 
 		return (
-			<div className='chat-wrapper'>
-				{this.renderProfileImage()}
-				<div className="chat-messages">
+			<div className={className}>
+				<div className="left-side-container">
+					{this.renderProfileImage()}
+				</div>
+				<div className="right-side-container">
 					{this.renderNameHeader()}
-					{messages}
+					{this.renderMessage()}
 				</div>
 			</div>
 		);

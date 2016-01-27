@@ -85,7 +85,6 @@ var TaskItem = React.createClass({
 	},
 	renderAttachments: function(){
 		if(this.state.attachments){
-			console.log('tachnent', this.state.attachments);
 			return this.state.attachments.map(function(attachment){
 				return (
 					<CardMedia 

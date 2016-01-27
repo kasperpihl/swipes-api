@@ -26,6 +26,15 @@ var ChatList = React.createClass({
 		else{
 			this.shouldScrollToBottom = false;
 		}
+
+		// Check for unread marker
+		if($('.new-message-header').length){
+			var posForUnread = $('.new-message-header').position().top - scrollPos;
+			if(posForUnread > 0 && posForUnread < viewHeight){
+				this.bouncedMarkAsRead()
+			}
+		}
+		//console.log($('.new-message-header').position(), )
 	},
 	scrollToBottom: function(animate){
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
@@ -42,7 +51,7 @@ var ChatList = React.createClass({
 		$('.chat-list-container').css("paddingTop", topPadding + "px");
 	},
 	handleResize: function(){
-		this.scrollToBottom(this.hasRendered);
+		this.bouncedScroll(this.hasRendered);
 	},
 	onSendingMessage:function(){
 		this.shouldAnimateScroll = true;
@@ -52,6 +61,8 @@ var ChatList = React.createClass({
 		this.scrollToBottom(this.hasRendered);
 	},
 	componentDidMount: function(){
+		this.bouncedScroll = _.debounce(this.scrollToBottom, 100);
+		this.bouncedMarkAsRead = _.debounce(chatActions.markAsRead, 500);
 		window.addEventListener('resize', this.handleResize);
 	},
 	componentWillUnmount: function() {
@@ -69,9 +80,10 @@ var ChatList = React.createClass({
 		if(!this.state.chat.sections){
 			return '';
 		}
-
+		var showingUnread = this.state.chat.channel.showingUnread;
+		var isMarked = this.state.chat.channel.showingIsRead;
 		return this.state.chat.sections.map(function(section){
-			return <ChatList.Section key={section.title} data={section} />
+			return <ChatList.Section key={section.title} data={{isMarked: isMarked, showingUnread: showingUnread, section: section}} />
 		});
 
 	},
@@ -146,39 +158,26 @@ var ChatList = React.createClass({
 });
 ChatList.Section = React.createClass({
 	render: function() {
-		var chatItemsGroups = [];
-		var chatItemMessages = [];
-
-		this.props.data.messages.forEach(function (item) {
-			if (item.isExtraMessage === false) {
-				if (chatItemMessages.length > 0) {
-					chatItemsGroups.push(chatItemMessages);
-					chatItemMessages = [];
-				}
-
-				chatItemMessages.push(item);
-			} else {
-				chatItemMessages.push(item);
-			}
-		});
-
-		// Push the last messages to a group
-		chatItemsGroups.push(chatItemMessages);
 		var chatItems = [];
-
-		_.each(chatItemsGroups, function (item, i) {
-			/*if(item[0].isFirstNewMessage){
-				chatItems.push(<div key="new-message-header">New messages below</div>);
-			}*/
-			chatItems.push(<ChatItem key={item[0].ts} data={item} />);
-		});
+		_.each(this.props.data.section.messages, function (item, i) {
+			
+			chatItems.push(<ChatItem key={item.ts} data={item} />);
+			if(item.ts === this.props.data.showingUnread && !item.isLastMessage){
+				var className = "new-message-header";
+				if(this.props.data.isMarked){
+					className += " read";
+				}
+				chatItems.push(<div className={className} key="new-message-header"><span>new messages</span></div>);
+				chatItems.push(<div key="new-message-post-header" className="new-message-post-header" />);
+			}
+		}.bind(this));
 
 		return (
 			<div className="section">
 				<div className="chat-date-line">
 					<div className="line"></div>
 					<div className="date">
-						<span>{this.props.data.title}</span>
+						<span>{this.props.data.section.title}</span>
 					</div>
 				</div>
 				{chatItems}
