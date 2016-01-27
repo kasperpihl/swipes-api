@@ -134,7 +134,6 @@ var ChatStore = Reflux.createStore({
 	onMarkAsRead:function(ts, force){
 		var channel = this.get('channel');
 		ts = ts || _.last(this.get('messages')).ts;
-		console.log('mark', ts);
 		if(!force && ts === channel.last_read){
 			return;
 		}
@@ -176,12 +175,10 @@ var ChatStore = Reflux.createStore({
 			if(message.user === UserStore.me().id){
 				updateObj.showingUnread = null;
 				updateObj.showingIsRead = false;
-				console.log('this is it!');
 			}
 			else if(!this.get('channel').showingUnread){
 				updateObj.showingUnread = this.get('channel').last_read;
 			}
-			console.log('updating', updateObj);
 			this.update('channel', updateObj, {trigger: false});
 			newMessages.push(message);
 		}
@@ -205,8 +202,8 @@ var ChatStore = Reflux.createStore({
 				updateObj.last_read = msg.ts;
 				updateObj.showingIsRead = true;
 				// If a user marks a channel as unread back in time. Make sure to update the unread line.
-				if(this.get('channel').showingUnread > msg.ts){
-					updateObj.showingUnread = this.get('channel').last_read;
+				if(!this.get('channel').showingUnread || this.get('channel').showingUnread > msg.ts){
+					updateObj.showingUnread = msg.ts;
 					updateObj.showingIsRead = false;
 				}
 				
