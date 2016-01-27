@@ -7,7 +7,7 @@ var ChatInput = require('./chat_input');
 var channelStore = require('../stores/ChannelStore');
 var Card = require('material-ui/lib').Card;
 var CardTitle = require('material-ui/lib').CardTitle;
-
+var CircularProgress = require('material-ui/lib').CircularProgress;
 var SelectField = require('material-ui/lib').SelectField;
 
 var MenuItem = require('material-ui/lib').MenuItem;
@@ -27,14 +27,19 @@ var ChatList = React.createClass({
 			this.shouldScrollToBottom = false;
 		}
 
+		this.checkForMarkingAsRead();
+		//console.log($('.new-message-header').position(), )
+	},
+	checkForMarkingAsRead: function(){
 		// Check for unread marker
+		var scrollPos = $('.chat-list-container').scrollTop()
+		var viewHeight = $('.chat-list-container').outerHeight()
 		if($('.new-message-header').length){
 			var posForUnread = $('.new-message-header').position().top - scrollPos;
 			if(posForUnread > 0 && posForUnread < viewHeight){
 				this.bouncedMarkAsRead()
 			}
 		}
-		//console.log($('.new-message-header').position(), )
 	},
 	scrollToBottom: function(animate){
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
@@ -69,23 +74,28 @@ var ChatList = React.createClass({
 		window.removeEventListener('resize', this.handleResize);
 	},
 	renderLoading: function(){
-		if(this.state.chat.sections){
-			return '';
+		if(!this.state.chat.sections){
+			return <CircularProgress style={{
+				position: 'absolute',
+				left: '50%',
+				top: '50%',
+				margin: 0,
+				marginTop: '-25px',
+				marginLeft: '-25px'
+			}}/>;
 		}
 		
-		return <div>Loading Messages</div>
+		
 	
 	},
 	renderSections: function(){
-		if(!this.state.chat.sections){
-			return '';
+		if(this.state.chat.sections){
+			var showingUnread = this.state.chat.channel.showingUnread;
+			var isMarked = this.state.chat.channel.showingIsRead;
+			return this.state.chat.sections.map(function(section){
+				return <ChatList.Section key={section.title} data={{isMarked: isMarked, showingUnread: showingUnread, section: section}} />
+			});
 		}
-		var showingUnread = this.state.chat.channel.showingUnread;
-		var isMarked = this.state.chat.channel.showingIsRead;
-		return this.state.chat.sections.map(function(section){
-			return <ChatList.Section key={section.title} data={{isMarked: isMarked, showingUnread: showingUnread, section: section}} />
-		});
-
 	},
 	onChangedChannel: function(e, i, row){
 		chatActions.setChannel(row);
@@ -130,7 +140,14 @@ var ChatList = React.createClass({
 	},
 	render: function() {
 		if(!swipes.info.workflow){
-			return <div>"LOADING..."</div>;
+			return <CircularProgress size={0.05} style={{
+				position: 'absolute',
+				left: '50%',
+				top: '50%',
+				margin: 0,
+				marginTop: '-25px',
+				marginLeft: '-25px'
+			}}/>;
 		}
 		else if(!this.state.chat.channel){
 			return (
@@ -145,9 +162,10 @@ var ChatList = React.createClass({
 
 			<Card className="card-container">
 				{this.renderChannelHeader()}
+
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
+					{this.renderLoading()}
 					<div className="chat-list">
-						{this.renderLoading()}
 						{this.renderSections()}
 					</div>
 				</div>
