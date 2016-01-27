@@ -219,6 +219,14 @@ module.exports = function (grunt) {
     'watch'
   ]);
 
+  grunt.registerTask('dev', [
+    'clean:dev',
+    'browserify:dev',
+    'compass:dev',
+    'autoprefixer:dev',
+    'copy:dev'
+  ]);
+
   // grunt.registerTask('build', [
   //   'clean:dist',
   //   'browserify:dist',
