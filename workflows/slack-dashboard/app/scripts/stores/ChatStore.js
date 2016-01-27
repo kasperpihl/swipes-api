@@ -176,8 +176,11 @@ var ChatStore = Reflux.createStore({
 				updateObj.showingUnread = null;
 				updateObj.showingIsRead = false;
 			}
-			else if(!this.get('channel').showingUnread){
-				updateObj.showingUnread = this.get('channel').last_read;
+			else{
+				updateObj.unread_count_display = this.get('channel').unread_count_display + 1;
+				if(!this.get('channel').showingUnread){
+					updateObj.showingUnread = this.get('channel').last_read;
+				}
 			}
 			this.update('channel', updateObj, {trigger: false});
 			newMessages.push(message);
@@ -191,8 +194,13 @@ var ChatStore = Reflux.createStore({
 			var me = UserStore.me();
 			if(msg.channel && msg.channel === this.get('channel').id){
 				var currMessages = this.get('messages') || [];
-				
-				this.addMessage(msg);
+				var message = msg;
+				if(msg.subtype === 'message_changed'){
+					message = msg.message;
+				}
+				if(message){
+					this.addMessage(message);	
+				}
 			}
 		}
 		else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){

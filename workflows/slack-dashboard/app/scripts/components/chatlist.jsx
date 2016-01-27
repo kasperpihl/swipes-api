@@ -9,7 +9,7 @@ var Card = require('material-ui/lib').Card;
 var CardTitle = require('material-ui/lib').CardTitle;
 var CircularProgress = require('material-ui/lib').CircularProgress;
 var SelectField = require('material-ui/lib').SelectField;
-
+var Badge = require('material-ui/lib').Badge;
 var MenuItem = require('material-ui/lib').MenuItem;
 var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat'), channelStore.connect('channels')],
@@ -46,7 +46,7 @@ var ChatList = React.createClass({
 		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
 			this.hasRendered = true;
 			if(animate)
-				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 300);
+				$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 50);
 			else
 				$('.chat-list-container').scrollTop(scrollPosForBottom);
 		}
@@ -121,6 +121,18 @@ var ChatList = React.createClass({
 	renderInput: function(){
 		return <ChatInput onSendingMessage={this.onSendingMessage} />
 	},
+	renderBadge:function(){
+		if(this.state.chat.channel.unread_count_display){
+			return ( <Badge
+				style={{
+					position: 'absolute',
+					top: '3px'
+				}}
+				badgeContent={this.state.chat.channel.unread_count_display}
+				primary={true}>
+			</Badge> );
+		}
+	},
 	renderChannelHeader: function(){
 		return (
 			<div style={{
@@ -128,13 +140,16 @@ var ChatList = React.createClass({
 				height: '30px',
 				borderBottom: '1px solid #d5d5d5',
 				width: '100%',
-				textAlign: 'center',
-				fontSize: '18px',
-				lineHeight: '30px',
+				
 				top: 0,
 				left: 0
 			}}>
-			{this.state.chat.channel.name}
+				{this.renderBadge()}
+				<div style={{
+					textAlign: 'center',
+					fontSize: '18px',
+					lineHeight: '30px',
+				}}>{this.state.chat.channel.name}</div>
 			</div>
 		)
 	},
