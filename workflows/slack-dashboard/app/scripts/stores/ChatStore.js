@@ -219,7 +219,7 @@ var ChatStore = Reflux.createStore({
 			}
 		}
 		else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){
-			if(msg.channel && msg.channel === this.get('channel').id){
+			if(this.get('channel') && msg.channel && msg.channel === this.get('channel').id){
 				updateObj = {};
 				updateObj.unread_count_display = msg.unread_count_display;
 				updateObj.last_read = msg.ts;
