@@ -47,7 +47,7 @@ ul{
     margin-left:0px;
     margin-right:0px;
 }
-::-webkit-scrollbar { 
+::-webkit-scrollbar {
     width: 10px;
     background-color: rgba(black,0);
     border-radius: 50px;
@@ -72,7 +72,7 @@ ul{
 
 body {
     transition: .4s ease-in-out;
-    
+
     &.sidebar-closed {
         width: calc(100% + 210px);
         transform: translate3d(-210px, 0px, 0px);
@@ -80,10 +80,10 @@ body {
         .right-side-container {
             width: calc(100% - 210px);
             transition: .4s ease-in-out;
-            
-            
+
+
         }
-        
+
     }
 }
 
@@ -97,17 +97,17 @@ body {
     width:calc(100% - 210px);
     transform: translate3d(210px, 0px, 0px);
     transition: .4s ease-in-out;
-    
+
     .content-container{
 
         height:100%;
         .workflow-view-controller{
             height:100%;
-            display: none; 
+            display: none;
             position:relative;
             padding-top: $top-bar-height;
             .app-content-container {
-                height: 100%; 
+                height: 100%;
             }
         }
         .workflow-view-controller:nth-child(1){
@@ -116,7 +116,7 @@ body {
         &.dual-apps, &.tri-apps {
             .workflow-view-controller {
                 float:left;
-                width:50%;              
+                width:50%;
             }
             .workflow-view-controller:nth-child(2){
                 display: block;
@@ -125,7 +125,7 @@ body {
         &.tri-apps{
             .workflow-view-controller {
                 float:left;
-                width:33%;              
+                width:33%;
             }
             .workflow-view-controller:nth-child(3){
                 display: block;
@@ -139,8 +139,8 @@ body {
 svg {
     pointer-events: none;
 }
-a:focus { 
-    outline: none; 
+a:focus {
+    outline: none;
 }
 button::-moz-focus-inner {
   border: 0;
@@ -155,4 +155,11 @@ button::-moz-focus-inner {
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
+}
+
+.main-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

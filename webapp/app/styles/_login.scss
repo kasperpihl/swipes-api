@@ -119,16 +119,22 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		font-weight: 400;
 		font-size: 1em;
 		//margin-top: -10px;
-	    margin-top: 15px;
+	  margin-top: 15px;
 
-	    span {
-	        cursor: pointer;
+		a {
+			color: $deepBlue-40;
+			font-weight: 400;
+			font-size: 1em;
 
-	        &:hover {
-	            color: $studioGray-100;
-	            text-decoration: underline;
-	        }
-	    }
+			&:visited {
+				color: $deepBlue-40;
+			}
+
+			&:hover {
+				color: $studioGray-100;
+				text-decoration: underline;
+			}
+		}
 	}
 
 	.logo {
@@ -186,68 +192,6 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		path {
 			fill: none;
 			stroke: rgba($deepBlue-80,.6);
-		}
-	}
-
-
-
-	.swipes-floating-label {
-		width: 100%;
-		position: relative;
-		margin: 50px 0;
-
-		&.error {
-
-			& > input {
-				border-color: $red;
-			}
-				&:after {
-				content: attr(error-message);
-				position: absolute;
-				left: 0;
-				bottom: -30px;
-				color: $red;
-				font-size: 12px;
-			}
-		}
-
-		input {
-			padding: 15px 0;
-			width: 100%;
-			border: none;
-			border-bottom: 2px solid $deepBlue-40;
-			background-color: transparent;
-			font-weight: 400;
-			font-size: 16px;
-			color: $deepBlue-80;
-			position: relative;
-
-			&:focus {
-				outline: none;
-				border-bottom: 2px solid $blue-100;
-
-				& + label {
-					color: $blue-100;
-				}
-			}
-		}
-
-		label {
-			position: absolute;
-			bottom: -15px;
-			left: 15px;
-			font-weight: 400;
-			font-family: 'Roboto';
-			font-weight: 400;
-			color: $deepBlue-40;
-			transition: .2s ease-in-out;
-
-			&.active {
-				transform: translate3d(0px,-25px, 0px);
-				font-size: 12px;
-				color: $deepBlue-40;
-				transition: .2s ease-in-out;
-			}
 		}
 	}
 }
