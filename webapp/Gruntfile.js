@@ -94,7 +94,7 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:dev']
+          tasks: ['browserify:serve']
         },
         styles: {
           files: ['<%= yeoman.app %>/styles/**/*.{sass,scss}'],
