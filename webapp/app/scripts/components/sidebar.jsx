@@ -44,10 +44,11 @@ var Sidebar = React.createClass({
 			</ul>
 		);
 	},
-	logOut: function() {
-		stateStore.unset("swipesToken", {trigger: false});
-		localStorage.clear();
+	signout: function () {
 		amplitude.setUserId(null); // Log out user from analytics
+		stateStore._reset({trigger: false});
+		localStorage.clear();
+		swipes.setToken(null);
 		this.context.router.push('/signin');
 	},
 	renderProfile: function() {
@@ -64,7 +65,7 @@ var Sidebar = React.createClass({
 					iconButtonElement={button}
 					anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
 					targetOrigin={{horizontal: 'right', vertical: 'top'}} >
-					<MenuItem primaryText="Sign out" onClick={this.logOut} />
+					<MenuItem primaryText="Sign out" onClick={this.signout} />
 				</IconMenu>
 			</div>
 		);
@@ -130,7 +131,7 @@ Sidebar.Row = React.createClass({
 	},
 	clickedRow: function(){
 		if(this.props.data.id === stateStore.get("active_menu_id")){
-			
+
 			//this.setState({editMode:true});
 		}
 		else{

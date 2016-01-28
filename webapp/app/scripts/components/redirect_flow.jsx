@@ -6,7 +6,7 @@ module.exports = {
     if (!stateStore.get("swipesToken")) {
       return replace('/signin');
     }
-    // T_TODO: This causes trouble (stateStore get init twice!! Check home.jsx as well for second place)
+
     console.log('redirect to login and initing statestore');
     stateStore.actions.init();
   },
