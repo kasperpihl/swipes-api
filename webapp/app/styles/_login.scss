@@ -30,8 +30,8 @@ $red: #F44336;
 $matBlue: #2E90EB;
 
 $green-color: #4CAF50;
-$red-color: #FC461E; 
-$yellow-color: #FFCA28; 
+$red-color: #FC461E;
+$yellow-color: #FFCA28;
 
 $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
 $swipes-shadow-two: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -54,7 +54,7 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 	background-color: $deepBlue-100;
 	overflow: hidden;
 	font-family: 'Roboto';
-	
+
 	@extend %flex;
 		h1 {
 		text-align: center;
@@ -73,21 +73,13 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 	}
 	form {
 		width: 100%;
-	    margin-top: -60px;
+	  margin-top: -30px;
 		position: relative;
-		
-		.swipes-floating-label {
-			width: 90%;
-	        margin: 60px 0;
-			margin-left: 5%;
-	        
-	        input {
-	            margin-left: 5%;
-	            padding: 15px;
-	            border-bottom: 1px solid $studioGray-40;
-	        }
-		}
-		
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
 		.login-submit {
 			width: 100%;
 			border: 0px solid black;
@@ -107,11 +99,11 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 	    //background-color: $deepBlue-100;
 	    opacity: 0;
 	    transform: translateY(50px);
-	    
+
 	    animation: signFadeIn .6s ease-in-out forwards;
-	    
+
 	    @keyframes signFadeIn {
-	        
+
 	        100% {
 	            opacity: 1;
 	            transform: translateY(0px);
@@ -128,10 +120,10 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		font-size: 1em;
 		//margin-top: -10px;
 	    margin-top: 15px;
-	    
+
 	    span {
 	        cursor: pointer;
-	        
+
 	        &:hover {
 	            color: $studioGray-100;
 	            text-decoration: underline;
@@ -159,7 +151,7 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		border-radius: 5px;
 		overflow: hidden;
 		box-shadow: $swipes-shadow-five;
-		
+
 		h2 {
 			text-align: center;
 			color: $deepBlue-80;
@@ -178,7 +170,7 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		left: 0;
 		overflow: hidden;
 		//filter: blur(1px);
-		
+
 		path {
 			fill: none;
 			stroke: rgba($blue-80,.4);
@@ -203,9 +195,9 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		width: 100%;
 		position: relative;
 		margin: 50px 0;
-		
+
 		&.error {
-			
+
 			& > input {
 				border-color: $red;
 			}
@@ -218,7 +210,7 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 				font-size: 12px;
 			}
 		}
-		
+
 		input {
 			padding: 15px 0;
 			width: 100%;
@@ -229,11 +221,11 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 			font-size: 16px;
 			color: $deepBlue-80;
 			position: relative;
-			
+
 			&:focus {
 				outline: none;
 				border-bottom: 2px solid $blue-100;
-				
+
 				& + label {
 					color: $blue-100;
 				}
@@ -259,4 +251,3 @@ $swipes-shadow-five: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 		}
 	}
 }
-

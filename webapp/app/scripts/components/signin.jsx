@@ -4,6 +4,7 @@ var Link = require('react-router').Link;
 var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
+var TextField = require('material-ui/lib/text-field');
 var Signin = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
@@ -32,7 +33,7 @@ var Signin = React.createClass({
 		})
 	},
 	signin: function(){
-		var username = $(this.refs.username).val();
+		var username = this.refs.username.getValue();
 		var email = username + "@swipesapp.com";
 		var password = username;
 		var data = {
@@ -92,14 +93,18 @@ var Signin = React.createClass({
                     <div className="sign-up-card">
                         <h2>sign in to swipes</h2>
                         <form action="">
-                            <div className="swipes-floating-label" error-message="Error message">
+                            {/*<div className="swipes-floating-label" error-message="Error message">
                                 <input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
                                 <label htmlFor="email">Email address</label>
                             </div>
                             <div className="swipes-floating-label" error-message="Error message">
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
-                            </div>
+                            </div>*/}
+														<br/>
+														<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
+	    											<TextField floatingLabelText="Password" type="password" disabled={true}/>
+														<br/>
                             <input type="button" className="login-submit" value="SIGN IN" onClick={this.signin}/>
                         </form>
                     </div>
