@@ -74,13 +74,13 @@ var Sidebar = React.createClass({
 			<svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 				<g>
 					<g>
-						<circle cx="16" cy="16" r="3.75" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-						<path d="M1860-3186.75a15,15,0,0,1-15-15,15,15,0,0,1,15-15,15,15,0,0,1,15,15" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+						<circle cx="16" cy="16" r="3.75" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
+						<path d="M1860-3186.75a15,15,0,0,1-15-15,15,15,0,0,1,15-15,15,15,0,0,1,15,15" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
 					</g>
 					<g>
-						<path d="M1875-3201.75q0,0.5,0,1" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-						<path d="M1874.2-3196.91a15,15,0,0,1-11.27,9.88" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke-dasharray="1.96 3.92"/>
-						<path d="M1861-3186.78q-0.5,0-1,0" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+						<path d="M1875-3201.75q0,0.5,0,1" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
+						<path d="M1874.2-3196.91a15,15,0,0,1-11.27,9.88" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" strokeDasharray="1.96 3.92"/>
+						<path d="M1861-3186.78q-0.5,0-1,0" transform="translate(-1844 3217.75)" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
 					</g>
 				</g>
 			</svg>
@@ -90,10 +90,10 @@ var Sidebar = React.createClass({
 		return (
 			<svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 				<g>
-					<circle cx="16" cy="16" r="15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-					<line x1="10.7" y1="21.3" x2="21.3" y2="10.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-					<line x1="17.06" y1="22.36" x2="22.36" y2="17.06" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-					<line x1="9.64" y1="14.94" x2="14.94" y2="9.64" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+					<circle cx="16" cy="16" r="15" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
+					<line x1="10.7" y1="21.3" x2="21.3" y2="10.7" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
+					<line x1="17.06" y1="22.36" x2="22.36" y2="17.06" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
+					<line x1="9.64" y1="14.94" x2="14.94" y2="9.64" fill="none" stroke="#fff" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2"/>
 				</g>
 			</svg>
 		)

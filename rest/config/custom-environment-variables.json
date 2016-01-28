@@ -4,7 +4,7 @@
     "port": "SW_DATABASE_PORT",
     "db": "SW_DATABASE_NAME"
   },
-  "hostname": "SW_HOSTNAME",
+  "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
   "clientPort": "SW_CLIENT_PORT"
 }

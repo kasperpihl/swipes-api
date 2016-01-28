@@ -4,11 +4,8 @@
     "script"      : "instance.js",
     "watch"       : true,
     "node_args"   : "--harmony_rest_parameters",
-    "env": {
-      "SW_DATABASE_HOST": "52.0.154.56"
-    },
     "env_dev" : {
-       "SW_HOSTNAME": "dev.swipesapp.com",
+       "SW_ORIGIN": "http://dev.swipesapp.com",
        "SW_API_PORT": "5000",
        "SW_CLIENT_PORT": "80"
     }

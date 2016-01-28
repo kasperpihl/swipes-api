@@ -4,6 +4,8 @@ var Link = require('react-router').Link;
 var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
+var stateStore = require('../stores/StateStore');
+var TextField = require('material-ui/lib/text-field');
 var Signup = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
@@ -95,23 +97,13 @@ var Signup = React.createClass({
                     <div className="sign-up-card">
                         <h2>sign up to swipes</h2>
                         <form action="">
-                            <div className="swipes-floating-label" error-message="Error message">
-                                <input className="swipes-floating-input username borderless" type="text" id="email"/>
-                                <label htmlFor="email">Your Name</label>
-                            </div>
-                            <div className="swipes-floating-label" error-message="Error message">
-                                <input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
-                                <label htmlFor="email">Email address</label>
-                            </div>
-                            <div className="swipes-floating-label" error-message="Error message">
-                                <input className="swipes-floating-input" type="password" id="password"/>
-                                <label htmlFor="password">Password</label>
-                            </div>
-                            <div className="swipes-floating-label" error-message="Error message">
-                                <input className="swipes-floating-input" type="password" id="password"/>
-                                <label htmlFor="password">Password</label>
-                            </div>
-                            <input type="button" className="login-submit" value="SIGN UP" onClick={this.signup}/>
+													<br/>
+													<TextField floatingLabelText="Your Name"/>
+													<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
+													<TextField floatingLabelText="Password" type="password" disabled={true}/>
+													<TextField floatingLabelText="Password" type="password" disabled={true}/>
+													<br/>
+                          <input type="button" className="login-submit" value="SIGN UP" onClick={this.signup}/>
                         </form>
                     </div>
                     <h3>Already have an account?</h3>

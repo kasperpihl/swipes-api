@@ -5,6 +5,7 @@ var IndexRoute = require('react-router').IndexRoute;
 var browserHistory = require('react-router').browserHistory;
 var render = require('react-dom').render;
 
+var App = require('./components/app');
 var Home = require('./components/home');
 var Services = require('./components/services');
 var Signin = require('./components/signin');
@@ -15,10 +16,10 @@ var redirect = require('./components/redirect_flow');
 exports.start = function() {
 	render ((
 		<Router history={browserHistory}>
-			<Route path="/">
+			<Route path="signin" component={Signin} onEnter={redirect.toHome} />
+			<Route path="signup" component={Signup} onEnter={redirect.toHome} />
+			<Route path="/" component={App}>
 				<IndexRoute component={Home} onEnter={redirect.toLogin} />
-				<Route path="signin" component={Signin} onEnter={redirect.toHome} />
-				<Route path="signup" component={Signup} />
 				<Route path="workflow/:workflowId" component={Home} onEnter={redirect.toLogin} />
 				<Route path="services" component={Services} onEnter={redirect.toLogin} />
 			</Route>

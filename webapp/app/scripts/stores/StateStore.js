@@ -9,7 +9,7 @@ var browserHistory = require('react-router').browserHistory;
 var StateStore = Reflux.createStore({
 	listenables: [ stateActions ],
 	localStorage: "StateStore",
-	persistOnly: [ "swipesToken", "sidebarClosed", "isLoggedIn", "isStarted" ],
+	persistOnly: [ "swipesToken", "sidebarClosed", "isLoggedIn"],
 	onInit: function() {
 		if(!swipes.getToken()){
 			swipes.setToken(this.get("swipesToken"));

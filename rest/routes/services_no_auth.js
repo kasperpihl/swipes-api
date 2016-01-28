@@ -15,7 +15,7 @@ router.get('/services.authsuccess', (req, res, next) => {
   let oauthToken = 'oauth_token=' + req.query.oauth_token + '&';
   let oauthVerifier = 'oauth_token=' + req.query.oauth_verifier;
 
-  return res.redirect(config.get('hostname') + ':' + config.get('clientPort') + '/oauth-success.html?' + oauthToken + oauthVerifier);
+  return res.redirect(config.get('origin') + ':' + config.get('clientPort') + '/oauth-success.html?' + oauthToken + oauthVerifier);
 });
 
 module.exports = router;
