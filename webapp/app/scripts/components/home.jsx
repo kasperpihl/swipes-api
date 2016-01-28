@@ -15,10 +15,8 @@ var Home = React.createClass({
 		this.forwardParamsFromRouter();
 	},
 	componentDidMount:function () {
-		// T_TODO: This causes trouble (stateStore get init twice!! Check redirect_flow.jsx as well for second place)
-		console.log('mounted home and initing statestore');
+		console.log('mounted home');
 		amplitude.logEvent('Session - Opened App');
-		stateStore.actions.init();
 		this.forwardParamsFromRouter();
 
 	},
