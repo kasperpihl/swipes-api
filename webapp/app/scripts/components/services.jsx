@@ -1,6 +1,5 @@
 var React = require('react');
 var Reflux = require('reflux');
-var Sidebar = require('./sidebar');
 var Topbar = require('./topbar');
 var Router = require('react-router');
 var ServiceStore = require('../stores/ServiceStore');
@@ -41,28 +40,18 @@ var Services = React.createClass({
 		return <button onClick={this.clickedAddService}>Connect new service</button>;
 	},
 	render: function() {
-    return (
-      <div className="main">
-      <Sidebar />
-        <div className="right-side-container">
-          <div className="content-container" idName="main">
-            <div className="app-view-controller">
-              <Topbar data={{screen: 1}}/>
-              <div className="services-wrapper">
+        return (
+            <div className="services-wrapper">
                 <h6>Available Flows</h6>
                 <Card className="services-card">
-                  {this.renderServicesToConnect()}
+                    {this.renderServicesToConnect()}
                 </Card>
                 <h6>Connected Flows</h6>
                 <Card className="services-card">
-      			  {this.renderConnectedServices()}
+                    {this.renderConnectedServices()}
                 </Card>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    );
+        );
 	}
 });
 

@@ -2,6 +2,8 @@ var React = require('react');
 var Reflux = require('reflux');
 var Loading = require('./loading');
 var stateStore = require('../stores/StateStore');
+var Modal = require('./modal');
+var Topbar = require('./topbar');
 
 var App = React.createClass({
   mixins: [ Reflux.ListenerMixin ],
@@ -23,7 +25,14 @@ var App = React.createClass({
 			return ( <Loading /> );
 		}
 
-    return (<div>{this.props.children}</div>);
+    return (
+    	<div className="main">
+    		<Topbar />
+    		<div className="active-app">
+    			{this.props.children}
+    		</div>
+    		<Modal />
+    	</div>);
   }
 });
 

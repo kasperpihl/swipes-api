@@ -57,26 +57,11 @@ html, body, #content {
         //overflow-x: hidden;
     }
 }
-#content{
-    background-color: #FAFAFA;
-    padding-bottom: 65px;
-    padding-top: 65px;
-    
-    @media screen and (max-width: $break-mid) {
-        padding-bottom: 60px;
-    }
-    
-}
 .card-container{
-    margin: 0 auto;
-    max-width: 600px;
+    position:relative;
     height: 100%;
-    > div{
-        position:relative;
-        height: 100%;
-        padding-top: 30px !important;
-        padding-bottom: 50px !important;
-    }
+   // padding-top: 30px !important;
+    padding-bottom: 50px !important;
 }
 .chat-list-container{
     height:100%;

@@ -2,9 +2,6 @@ var React = require('react');
 var Reflux = require('reflux');
 var SearchModalActions = require('../../actions/modals/SearchModalActions');
 var SearchModalStore = require('../../stores/modals/SearchModalStore');
-var PreviewAppActions = require('../../actions/PreviewAppActions');
-
-var PreviewLoader = require('../preview_loader');
 
 var Highlight = require('react-highlighter');
 
@@ -57,7 +54,7 @@ var SearchModal = React.createClass({
 
 
 		var row = this.resultsByIndex[index];
-		PreviewAppActions.loadPreview(row);
+		// TODO: some code to load a preview;
 
 
 		$(this.refs["results-list"]).find('.active').removeClass('active');
@@ -253,7 +250,7 @@ var SearchModal = React.createClass({
 						{label}
 					</div>
 					<div className="result-preview">
-						<PreviewLoader />
+						{/*Insert some preview app handling here*/}
 					</div>
 				</div>
 			</div>

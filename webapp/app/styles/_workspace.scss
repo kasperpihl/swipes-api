@@ -3,11 +3,37 @@
   > div{
     height: 100%;
   }
+  padding-bottom: 10px;
+}
+body{
+  background: #eee;
+}
+.card-container{
+  height: 100%;
+  position: relative;
+  .card-top-bar{
+    height:30px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid $studioGray-60;
+  }
+  .workflow-frame-class{
+    width:100%;
+    height:100%;
+    position: absolute;
+    top:0;
+    padding-top: 30px;
+  }
 }
 
+.grid-scroll-container{
+  height: 100%;
+  overflow-y: scroll;
+}
 .react-grid-layout {
   position: relative;
   transition: height 200ms ease;
+
 }
 .react-grid-item {
   transition: all 200ms ease;

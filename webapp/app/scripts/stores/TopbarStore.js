@@ -1,9 +1,9 @@
 var Reflux = require('reflux');
-var sidebarActions = require('../actions/SidebarActions');
+var topbarActions = require('../actions/TopbarActions');
 var modalActions = require('../actions/ModalActions');
 var WorkflowStore = require('./WorkflowStore');
-var SidebarStore = Reflux.createStore({
-	listenables: [ sidebarActions ],
+var TopbarStore = Reflux.createStore({
+	listenables: [ topbarActions ],
 	onLoadWorkflowModal:function(){
 		swipes.api.request('workflows.list').then(function(res){
 			modalActions.loadModal("list", {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": res.data }, function(row){
@@ -44,4 +44,4 @@ var SidebarStore = Reflux.createStore({
 	}
 });
 
-module.exports = SidebarStore;
+module.exports = TopbarStore;

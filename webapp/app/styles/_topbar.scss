@@ -5,9 +5,19 @@
 	z-index: 1999;
 	top:0;
 	// This is the default background color of navbar
-	background: $studioGray-20;
-    box-shadow: $swipes-shadow-one;
-    
+    h5{
+    	text-align: center;
+    	line-height: $top-bar-height;
+    }
+    .add-button{
+    	position:absolute;
+    	cursor: pointer;
+    	top: 0;
+    	right: 0;
+    	width:60px;
+    	padding: 10px;
+    	height: $top-bar-height;
+    }
     .connection-status {
         width: 100%;
         height: 30px;
@@ -176,7 +186,7 @@
 	}
 	
 	.menu-icon-container {
-		height: 60px;
+		height: $top-bar-height;
 		width: 60px;
 		left: 0;
 		top: 0;
@@ -187,7 +197,7 @@
 			height: 20px;
 			width: 16px;
 			left: calc(40px / 2);
-			top: 20px;
+			top: 12px;
 			border: 2px solid $deepBlue-60;
 			border-radius: 2px;
 			position: absolute;
@@ -236,35 +246,7 @@
 			}
 		}
 	}
-	/*i {
-		width: 60px;
-		height: 60px;
-		text-align: center;
-		line-height: 60px;
-		position: absolute;
-		left: 56px;
-		cursor: pointer;
-		
-		&:before {
-			content: '';
-			position: absolute;
-			width: 1px;
-			height: 30px;
-			left: 0;
-			top: 15px;
-			background-color: rgba($white-background, .2);
-		}
-	}*/
-	
-	&.navigation-boxshadow {
-		box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
-	}	
-	&.navigation-foreground-light {
-		color: #F4F4F5;
-	}
-	&.navigation-foreground-dark {
-		color: #000C2F;
-	}
+
 	h1{
 		margin: 0;
 		margin-left: 116px;

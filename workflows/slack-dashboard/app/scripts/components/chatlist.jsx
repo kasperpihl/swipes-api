@@ -174,9 +174,8 @@ var ChatList = React.createClass({
 		}
 		
 		return (
-
-			<Card className="card-container">
-				{this.renderChannelHeader()}
+			<div className="card-container">
+				{/*this.renderChannelHeader()*/}
 
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
@@ -185,7 +184,7 @@ var ChatList = React.createClass({
 					</div>
 				</div>
 				{this.renderInput()}
-			</Card>
+			</div>
 		);
 	}
 });
