@@ -59,7 +59,7 @@ router.post('/users.addWorkflow', (req, res, next) => {
           .update((user) => {
             return {
               workflows: user('workflows').default([]).append({
-                id: generateId('W'),
+                id: generateId('C'),
                 parent_id: workflow.id,
                 name: workflow.name,
                 settings: settings
