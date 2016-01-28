@@ -44,7 +44,7 @@ var Sidebar = React.createClass({
 			</ul>
 		);
 	},
-	logout: function () {
+	signout: function () {
 		amplitude.setUserId(null); // Log out user from analytics
 		stateStore._reset({trigger: false});
 		localStorage.clear();
@@ -65,7 +65,7 @@ var Sidebar = React.createClass({
 					iconButtonElement={button}
 					anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
 					targetOrigin={{horizontal: 'right', vertical: 'top'}} >
-					<MenuItem primaryText="Sign out" onClick={this.logout} />
+					<MenuItem primaryText="Sign out" onClick={this.signout} />
 				</IconMenu>
 			</div>
 		);
