@@ -33,21 +33,21 @@ module.exports = function (grunt) {
           proxies: [
               {
                   context: '/v1',
-                  host: '0.0.0.0',
+                  host: 'localhost',
                   port: 5000,
                   https: false,
                   xforward: false
               },
               {
                 context: '/workflows',
-                host: '0.0.0.0',
+                host: 'localhost',
                 port: 5000,
                 https: false,
                 xforward: false
               },
               {
                 context: '/socket.io',
-                host: '0.0.0.0',
+                host: 'localhost',
                 port: 5000,
                 https: false,
                 xforward: false,
