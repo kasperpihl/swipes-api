@@ -19,7 +19,7 @@ let jwtMiddleware = require('./jwt-auth-middleware.js');
 let errResMiddleware = require('./err-res-middleware.js');
 
 app.use(cors({
-  origin: config.get('origin'),
+  origin: config.get('cors'),
   methods: 'HEAD, GET, POST',
   allowedHeader: 'Content-Type, Accept, X-Requested-With, Session, Content-Length, X-Requested-With'
 }));

@@ -8,6 +8,6 @@
   "apiPort": 5000,
   "clientPort" :3000,
   "protocol": "http://",
-  "origin": "*",
+  "cors": "*",
   "jwtTokenSecret": "swipy the dinocat"
 }
