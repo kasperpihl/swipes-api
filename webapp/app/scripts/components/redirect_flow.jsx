@@ -15,7 +15,7 @@ module.exports = {
       // T_TODO This stupid thing have a bug so I will use a stupid workaroud for now
       // and I will fire an issue on github
       //return replace('/');
-      window.location.assign("/");
+      return window.location.assign("/");
     }
   }
 };

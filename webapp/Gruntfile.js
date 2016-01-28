@@ -27,7 +27,7 @@ module.exports = function (grunt) {
           options: {
             port: 3000,
             livereload: true,
-            hostname: '0.0.0.0', //change to 'localhost' to disable outside connections
+            hostname: 'localhost', //change to '0.0.0.0' to enable outside connections
             base: ['.tmp', yeomanConfig.app]
           },
           proxies: [

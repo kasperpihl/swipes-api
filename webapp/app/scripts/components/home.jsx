@@ -3,30 +3,18 @@ var Reflux = require('reflux');
 var Sidebar = require('./sidebar');
 var Topbar = require('./topbar');
 var WorkflowLoader = require('./workflow_loader');
-var Loading = require('./loading');
 var Modal = require('./modal');
 var stateStore = require('../stores/StateStore');
 var Home = React.createClass({
-	mixins: [ Reflux.ListenerMixin ],
-	onStateChange: function (states) {
-		if(states.isStarted !== this.state.isStarted) {
-			this.setState({
-				isStarted: states.isStarted
-			});
-		}
-	},
-	forwardParamsFromRouter: function(){
-		if(this.props.params.workflowId){
+	forwardParamsFromRouter: function () {
+		if (this.props.params.workflowId) {
 			stateStore.actions.loadWorkflow(this.props.params);
 		}
 	},
-	componentDidUpdate: function(){
+	componentDidUpdate: function () {
 		this.forwardParamsFromRouter();
 	},
-	componentWillMount:function(){
-		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
-	},
-	componentDidMount:function(){
+	componentDidMount:function () {
 		// T_TODO: This causes trouble (stateStore get init twice!! Check redirect_flow.jsx as well for second place)
 		console.log('mounted home and initing statestore');
 		amplitude.logEvent('Session - Opened App');
@@ -34,14 +22,10 @@ var Home = React.createClass({
 		this.forwardParamsFromRouter();
 
 	},
-	getInitialState: function(){
+	getInitialState: function () {
 		return {};
 	},
-	render: function() {
-		if(!this.state.isStarted){
-			return ( <Loading /> );
-		}
-
+	render: function () {
 		return (
 			<div className="main">
 				<Sidebar />
