@@ -6,6 +6,7 @@ var WorkspaceStore = Reflux.createStore({
 	localStorage: "WorkspaceStore2",
 	sort: function(el){ return el._grid.i },
 	getAvailableI:function(){
+		// Get the next available i, this is to provide the grid system.
 		var sortedI = _.map(_.sortBy(this.getAll(), function(el){ return el._grid.i; }), function(el) { return el._grid.i });
 		for(var i = 0 ; i <= sortedI.length ; i++){
 			if(i === sortedI.length){
@@ -28,9 +29,15 @@ var WorkspaceStore = Reflux.createStore({
 
 		this.manualTrigger();
 	},
-	onWorkflowStore: function(workflows){
-		// Everytime the store updates, make sure to insert new workflows
-		// K_TODO: Fix that it also unset a workflow if it no longer exists
+	onWorkflowStore: function(workflows, workflow2){
+		// Hack to not run on first call, reflux stores send an empty array on initialize
+		if(!this.hasGottenFirstLoad){
+			this.hasGottenFirstLoad = true;
+			return;
+		}
+
+
+		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.workflow_id });
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
 			if(!this.get(workflow.id)){
@@ -47,7 +54,16 @@ var WorkspaceStore = Reflux.createStore({
 				}
 				this.set(workflow.id, insertObj, {trigger: false});
 			}
+			else{
+				delete testForRemovals[workflow.id];
+			}
 		}
+
+		var keysToRemove = _.keys(testForRemovals);
+		if(keysToRemove.length){
+			this.unset(keysToRemove, {trigger:false});
+		}
+		
 		this.manualTrigger();
 	},
 	init:function(){
