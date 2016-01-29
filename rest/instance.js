@@ -16,7 +16,7 @@ let bodyParser = require( 'body-parser' );
 let _ = require( 'underscore' );
 let util = require('./util.js');
 let jwtMiddleware = require('./jwt-auth-middleware.js');
-let errResMiddleware = require('./err-res-middleware.js');
+let swipesErrMiddleware = require('./swipes-err-middleware.js');
 
 app.use(cors({
   origin: config.get('cors'),
@@ -82,11 +82,6 @@ app.use('/v1', mentionsRouter);
 app.use('/v1', organizationsRouter);
 app.use('/v1', workflowsRouter);
 
-/*
-  General response middleware
-*/
-app.use(errResMiddleware.res);
-
 // We want req.userId to the socket.io stuff too
 io.use((socket, next) => {
   jwtMiddleware.ioAuth(socket.request, socket.request.res, next);
@@ -116,7 +111,7 @@ let unhandledServerError = (err, req, res, next) => {
   	next()
 }
 
-app.use(errResMiddleware.err);
+app.use(swipesErrMiddleware);
 app.use(logErrors);
 app.use(unhandledServerError);
 

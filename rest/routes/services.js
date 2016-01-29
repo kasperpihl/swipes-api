@@ -118,9 +118,7 @@ router.post('/services.authorize', serviceUtil.getService, serviceUtil.requireSe
 			return next(error);
 		}
 
-		res.locals.response = result;
-
-		return next();
+		return res.status(200).json({ok: true, result: result});
 	});
 });
 
