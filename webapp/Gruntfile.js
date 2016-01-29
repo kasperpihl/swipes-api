@@ -307,8 +307,8 @@ module.exports = function (grunt) {
           {
             expand: true,
             dot: true,
-            cwd: __dirname + '/swipes-ui-kit',
-            dest: '<%= yeoman.dev %>/styles',
+            cwd: __dirname + '/global-styles/roboto',
+            dest: '.tmp/styles',
             src: ['fonts/**']
           }]
         }
