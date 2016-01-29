@@ -1,8 +1,0 @@
-{
-  "manifest_version": 1,
-  "name": "UI Kit",
-  "identifier": "ui-kit",
-  "version": "0.1",
-  "description": "UI kit documentation",
-  "index": "index.html"
-}

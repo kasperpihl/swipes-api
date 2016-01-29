@@ -1,9 +1,0 @@
-@mixin size($width, $height: $width) {
-      width: $width;
-      height: $height;
-}
-
-// example
-%foo {
-    @include size(40px 20px); // or @include size(40px)
-}
