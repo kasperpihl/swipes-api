@@ -18,7 +18,7 @@ module.exports = function (grunt) {
       dev: 'dev',
       dist: 'dist',
       sdk: 'swipes-sdk',
-      uikit: 'swipes-ui-kit'
+      globalStyles: 'global-styles'
   };
 
   grunt.initConfig({
@@ -97,8 +97,15 @@ module.exports = function (grunt) {
           tasks: ['browserify:serve']
         },
         styles: {
-          files: ['<%= yeoman.app %>/styles/**/*.{sass,scss}'],
-          tasks: ['compass:dev', 'autoprefixer:dev']
+          files: [
+            '<%= yeoman.app %>/styles/**/*.{sass,scss}',
+            '<%= yeoman.globalStyles %>/**/*.{sass,scss}'
+          ],
+          tasks: [
+            'compass:dev',
+            'compass:devGlobal',
+            'autoprefixer:dev'
+          ]
         },
         images: {
           files: [
@@ -157,17 +164,11 @@ module.exports = function (grunt) {
               '<%= yeoman.sdk %>/swipes-app-sdk.js',
               '<%= yeoman.sdk %>/swipes-sdk-init.js'
             ]
-            // '.tmp/scripts/bundle/swipes-ui-kit-main.js': [
-            //   '<%= yeoman.uikit %>/ui-kit-main.js'
-            // ],
-            // '.tmp/styles/swipes-ui-kit.css': [
-            //   '<%= yeoman.uikit %>/ui-kit-main.css'
-            // ]
           }
         },
       },
       compass: {
-        options: {
+        dist: {
           sassDir: '<%= yeoman.app %>/styles',
           cssDir: '.tmp/styles',
           specify: '<%= yeoman.app %>/styles/main.scss',
@@ -176,9 +177,24 @@ module.exports = function (grunt) {
           fontsDir: '<%= yeoman.app %>/fonts',
           relativeAssets: true
         },
-        dist: {},
         dev: {
           options: {
+            sassDir: '<%= yeoman.app %>/styles',
+            cssDir: '.tmp/styles',
+            specify: '<%= yeoman.app %>/styles/main.scss',
+            imagesDir: '<%= yeoman.app %>/images',
+            javascriptsDir: '<%= yeoman.app %>/scripts',
+            fontsDir: '<%= yeoman.app %>/fonts',
+            relativeAssets: true,
+            debugInfo: true
+          }
+        },
+        devGlobal: {
+          options: {
+            sassDir: '<%= yeoman.globalStyles %>',
+            cssDir: '.tmp/styles',
+            specify: '<%= yeoman.globalStyles %>/global-styles.scss',
+            relativeAssets: true,
             debugInfo: true
           }
         }
@@ -265,7 +281,7 @@ module.exports = function (grunt) {
             {
               expand: true,
               dot: true,
-              cwd: __dirname + '/swipes-ui-kit',
+              cwd: __dirname + '/global-styles/roboto',
               dest: '.tmp/styles',
               src: ['fonts/**']
             }
@@ -311,6 +327,7 @@ module.exports = function (grunt) {
     'browserify:serve',
     'concat:serve',
     'copy:serve',
+    'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
     'configureProxies',
@@ -322,6 +339,7 @@ module.exports = function (grunt) {
     'clean:dev',
     'browserify:serve',
     'concat:serve',
+    'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev'
