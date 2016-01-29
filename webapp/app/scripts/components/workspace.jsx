@@ -14,8 +14,10 @@ var Workspace = React.createClass({
         return {
             className: "layout",
             cols: 12,
+            draggableCancel: '.card-top-bar',
             items: 3,
             rowHeight: 50,
+            isDraggable: true,
             isResizable: true
             // This turns off compaction so you can place items wherever.
             //verticalCompact: false
@@ -29,16 +31,6 @@ var Workspace = React.createClass({
                 _grid: {
                     i: 0,
                     x: 0,
-                    y: 0,
-                    w: 4,
-                    h: 8
-                }
-            },
-            {
-                workflow_id: "WX5CR217T",
-                _grid: {
-                    i: 1,
-                    x: 4,
                     y: 0,
                     w: 4,
                     h: 8
@@ -63,6 +55,7 @@ var Workspace = React.createClass({
         }
     },
     generateDOM() {
+        var self = this;
         return _.map(this.state.workspace.layout, function(workflow, i) {
             return (
                 <Card key={workflow._grid.i}>

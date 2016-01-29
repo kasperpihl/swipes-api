@@ -6,7 +6,9 @@ var Loading = React.createClass({
 	mixins: [ Navigation ],
 	render: function() {
 		return (
-			<CircularProgress size={2} className="main-loader"/>
+			<div className="main-loader">
+				<CircularProgress size={2}/>
+			</div>
 		);
 	}
 });

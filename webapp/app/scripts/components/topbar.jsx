@@ -1,67 +1,72 @@
 var React = require('react');
-
+var Router = require('react-router');
 var Reflux = require('reflux');
 var socketStore = require('../stores/SocketStore');
 var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
+
+// Icon Menu dependencies
+var MenuItem = require('material-ui/lib/menus/menu-item');
+var IconMenu = require('material-ui/lib/menus/icon-menu');
+var IconButton = require('material-ui/lib/icon-button');
+var Colors = require('material-ui/lib/styles/colors');
+var FontIcon = require('material-ui/lib').FontIcon;
+
+var injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
+
+
 var Topbar = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
-	onSocketChange: function(states){
-		var newState = {};
-		if(states.status != this.state.connectionStatus)
-			newState.connectionStatus = states.status;
-		if(_.size(newState)){
-			this.setState(newState);
-		}
-        if (this.state.connectionStatus === 'online') {
-            $('.loader').css('display', 'none');
-            $('.connection-icon').html('check');
-            $('.connection-status').css('background-color', '#4CAF50').delay(3000).queue(function(){
-                $('.workflow-view-controller').css('padding-top', '60px');
-                $('.connection-status').css('display', 'none').dequeue();
-            });
-        } else if (this.state.connectionStatus === 'offline') {
-            $('.loader').css('display', 'none');
-             $('.connection-icon').html('close');
-            $('.connection-status').css('display', 'flex').css('background-color', '#FC461E');
-        } else if (this.state.connectionStatus === 'connecting') {
-            $('.loader').css('display', 'inline');
-            $('.connection-icon').html('');
-            $('.connection-status').css('background-color', '#FFCA28');
-        };
-        
-        if ($('.connection-status').css('display') == 'flex') {
-            $('.workflow-view-controller').css('padding-top', '90px');
-        } else if ($('.connection-status').css('display') == 'none') {        
-            $('.workflow-view-controller').css('padding-top', '60px');
-        }
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
 	},
-
 	getInitialState: function(){
 		return {};
-	},
-	componentWillMount: function(){
-		this.listenTo(socketStore, this.onSocketChange, this.onSocketChange);
 	},
 	clickedAdd: function(){
 		topbarActions.loadWorkflowModal();
 	},
-	render: function() {
-		var status = "";
-		if(this.state && this.state.connectionStatus)
-			status = this.state.connectionStatus;
+	signout: function () {
+		amplitude.setUserId(null); // Log out user from analytics
+		stateStore._reset({trigger: false});
+		localStorage.clear();
+		swipes.setToken(null);
+		this.context.router.push('/signin');
+	},
+	workspace: function(){
+		this.context.router.push('/workspace');
+	},
+	services: function(){
+		this.context.router.push('/services');
+	},
+	renderIconMenu:function(){
+		var button = (
 
-		
+			<IconButton 
+				style={{padding: '12px !important'}} 
+				touch={true}>
+			<FontIcon className="material-icons">menu</FontIcon>
+			</IconButton>
+		);
+		return (
+			<IconMenu
+				style={{position: 'absolute', left: 0, top: 0, width: '44px', height: '44px'}}
+				iconButtonElement={button}
+				anchorOrigin={{horizontal: 'left', vertical: 'center'}}
+				targetOrigin={{horizontal: 'right', vertical: 'top'}} >
+				<MenuItem primaryText="Workspace" onClick={this.workspace} />
+				<MenuItem primaryText="Services" onClick={this.services} />
+				<MenuItem primaryText="Sign out" onClick={this.signout} />
+			</IconMenu>
+		);
+	},
+	
+	render: function() {
+
 		return (
 			<div className="top-bar-container">
-				<div className="connection-status">
-					<i className="material-icons connection-icon"></i>
-					<div className="loader"></div>
-					{status}
-				</div>
-				<div onClick={this.onMenuButton} className="menu-icon-container">
-					<div className="menu-icon open"></div>
-				</div>
+				{this.renderIconMenu()}
 				<h5>Workspace</h5>
 				<div className="add-button" onClick={this.clickedAdd}>
 					<i className="material-icons">library_add</i>

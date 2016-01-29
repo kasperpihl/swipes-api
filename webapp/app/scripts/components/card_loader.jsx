@@ -7,9 +7,18 @@ var WorkflowStore = require('../stores/WorkflowStore');
 var stateActions = require('../actions/StateActions');
 var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
+var topbarActions = require('../actions/TopbarActions');
+var workflowActions = require('../actions/WorkflowActions');
 
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
+
+var AppBar = require('material-ui/lib').AppBar;
+var IconButton = require('material-ui/lib').IconButton;
+var FontIcon = require('material-ui/lib').FontIcon;
+var MenuItem = require('material-ui/lib/menus/menu-item');
+var IconMenu = require('material-ui/lib/menus/icon-menu');
+
 
 var CardLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
@@ -46,6 +55,12 @@ var CardLoader = React.createClass({
 		console.log("received socket event", e);
 		this.apiCon.callListener("event", e);
 	},
+	onContextMenu: function(e){
+		console.log('on context!')
+        e.preventDefault();
+        topbarActions.editWorkflow(this.state.workflow);
+        return false;
+    },
 	onLoad:function(){
 		// Clear any listeners for this card.
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -75,6 +90,25 @@ var CardLoader = React.createClass({
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
 	},
+	onRenameWorkflow: function(){
+		var newName = prompt('Rename workflow', this.state.workflow.name);
+		if(newName){
+			workflowActions.renameWorkflow(this.state.workflow, newName);
+		}
+	},
+	renderCardBar: function(){
+		var menu = (<IconMenu
+			iconButtonElement={<IconButton style={{padding: '12px !important'}} 
+				touch={true}><FontIcon color="white" className="material-icons">settings</FontIcon></IconButton>}
+			targetOrigin={{horizontal: 'right', vertical: 'top'}}
+			anchorOrigin={{horizontal: 'left', vertical: 'top'}}>
+			<MenuItem primaryText="Rename" onTouchTap={this.onRenameWorkflow} />
+			<MenuItem primaryText="Remove" onTouchTap={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
+		</IconMenu>);
+		return <AppBar
+			title={<span>{this.state.workflow.name}</span>}
+			iconElementLeft={menu}/>
+	},
 	render: function() {
 		
 		if(!this.state.workflow) {
@@ -83,11 +117,12 @@ var CardLoader = React.createClass({
 		var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 		return (				
 			<div className="card-container">
-				<div className="card-top-bar">{this.state.workflow.name}</div>
+				{this.renderCardBar()}
 				<iframe ref="iframe" sandbox="allow-scripts allow-same-origin" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
 			</div>
 		);
 	}
 });
+//		<div onContextMenu={this.onContextMenu} onClick={this.onContextMenu} className="card-top-bar">{this.state.workflow.name}</div>
 
 module.exports = CardLoader;
