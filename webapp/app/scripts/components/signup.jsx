@@ -34,7 +34,7 @@ var Signup = React.createClass({
 		})
 	},
 	signup: function(){
-		var username = $(this.refs.username).val();
+		var username = this.refs.username.getValue();
 		var email = username + "@swipesapp.com";
 
 		var password = username;
