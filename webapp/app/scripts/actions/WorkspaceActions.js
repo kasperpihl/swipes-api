@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 
 var WorkspaceActions = Reflux.createActions([
-  'queryAll'
+  'saveLayout'
   // Here you can list your actions
 ]);
 

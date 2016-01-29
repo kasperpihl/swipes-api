@@ -5,7 +5,7 @@ var PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin');
 var ReactGridLayout = require('react-grid-layout');
 
 var WorkspaceStore = require('../stores/WorkspaceStore');
-
+var WorkspaceActions = require('../actions/WorkspaceActions');
 var CardLoader = require('./card_loader');
 var Card = require('material-ui/lib').Card;
 
@@ -26,7 +26,6 @@ var Workspace = React.createClass({
     generateDOM() {
         var self = this;
         return _.map(this.state.workflows, function(workflow, i) {
-            console.log(i, workflow);
             return (
                 <Card key={workflow._grid.i}>
                     <CardLoader data={{id: workflow.workflow_id}} />
@@ -35,7 +34,7 @@ var Workspace = React.createClass({
         });
     },
     onLayoutChange(layout) {
-        console.log(layout);
+        WorkspaceActions.saveLayout(layout);
     },
 
     render() {

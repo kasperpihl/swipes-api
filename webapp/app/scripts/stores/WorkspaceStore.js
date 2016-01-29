@@ -1,7 +1,10 @@
 var Reflux = require('reflux');
 var WorkflowStore = require('./WorkflowStore');
+var WorkspaceActions = require('../actions/WorkspaceActions');
 var WorkspaceStore = Reflux.createStore({
+	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore2",
+	sort: function(el){ return el._grid.i },
 	getAvailableI:function(){
 		var sortedI = _.map(_.sortBy(this.getAll(), function(el){ return el._grid.i; }), function(el) { return el._grid.i });
 		for(var i = 0 ; i <= sortedI.length ; i++){
@@ -12,6 +15,18 @@ var WorkspaceStore = Reflux.createStore({
 				return i;
 			}
 		}
+	},
+	onSaveLayout:function(layout){ 
+		// First make a key we can lookup objects based on the grid system's "i"
+		var indexedByI = _.indexBy(this.getAll(), function(el){
+			return el._grid.i;
+		});
+		_.each(layout, function(el){
+			var workflowObj = indexedByI[el.i];
+			this.update(workflowObj.workflow_id, {_grid: el}, {trigger:false});
+		}.bind(this));
+
+		this.manualTrigger();
 	},
 	onWorkflowStore: function(workflows){
 		for(var i = 0 ; i < workflows.length ; i++){
