@@ -155,7 +155,7 @@ var ChatList = React.createClass({
 	},
 	render: function() {
 		if(!swipes.info.workflow){
-			return <CircularProgress size={0.05} style={{
+			return <CircularProgress size={2} style={{
 				position: 'absolute',
 				left: '50%',
 				top: '50%',
