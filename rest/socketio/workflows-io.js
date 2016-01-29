@@ -87,8 +87,19 @@ let userWorkflows = (socket, userId) => {
         if (data.length === 1) {
           data = data[0];
         }
-
-        socket.emit('message', {type: type, data: data});
+        if(type === "workflow_added"){
+          let workflowQuery = r.table('workflows').get(data.parent_id).without(['id', 'name']);
+          db.rethinkQuery(workflowQuery)
+            .then((workflow) => {
+              if(workflow){
+                data = _.extend(data, workflow);
+                socket.emit('message', {type: type, data: data})
+              }
+            })
+        }
+        else {
+          socket.emit('message', {type: type, data: data});
+        }
       });
     })
 };
