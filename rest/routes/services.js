@@ -12,42 +12,17 @@ let serviceUtil = require('../utils/services_util.js');
 
 let isAdmin = util.isAdmin;
 
-router.post('/services.request', (req, res, next) => {
-	let data, service;
-	// Validate params service and data
-	Promise.all([
-		serviceUtil.getDataFromReq(req),
-		serviceUtil.getServiceWithAuthFromReq(req)
-	]).then((arr, ex) => {
-		data = arr[0];
-		service = arr[1];
+router.post('/services.request', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
+	let data = res.locals.data;
+	let service = res.locals.service;
+	let file = res.locals.file;
 
-		return serviceUtil.getScriptFileFromServiceObj(service);
-
-	}).then((scriptFile) => {
-		if(typeof scriptFile.request !== 'function'){
-			return Promise.reject('request_function_not_found');
+	file.request(service.authData, data.method, data.parameters, function (err, result) {
+		if (err) {
+			return next(err);
 		}
-		return new Promise((resolve, reject) => {
-			scriptFile.request(service.authData, data.method, data.parameters, function(err, result){
-				if(!err){
-					return resolve(result);
-				}
-				else{
-					// K_TODO: Make smart error handling from API
-					return reject(err);
-				}
 
-			});
-		})
-
-	}).then((result) => {
-		res.send({ok:true, data:result});
-	}).catch((err) => {
-		if(typeof err === "string"){
-			return res.status(200).json({ok: false, err: err});
-		}
-		return next(err);
+		res.send({ok: true, data: result});
 	});
 });
 
@@ -55,55 +30,7 @@ router.post('/services.request', (req, res, next) => {
 	authsuccess should be called after
 */
 
-router.post('/services.authsuccess', (req, res, next) => {
-	let data, service, saveObj;
-	// Validate params service and data
-	Promise.all([
-		serviceUtil.getServiceFromReq(req),
-		serviceUtil.getDataFromReq(req)
-
-	]).then((arr, ex) => {
-		service = arr[0];
-		data = arr[1];
-
-		return serviceUtil.getScriptFileFromServiceObj(service);
-
-	}).then((scriptFile) => {
-		// T_TODO Hack to get this working.. Kasper will be proud with me
-		data.userId = req.userId;
-		return serviceUtil.getAuthDataToSaveForScriptFileAndData(scriptFile, data);
-
-	}).then((authData) => {
-
-		// To allow multiple accounts, each account should provide unique id so we don't get double auth from an account
-		if(!authData.id){
-			// If no id is provided (or no handler was set), use the service id. Multiple accounts won't work then.
-			authData.id = service.id;
-		}
-		console.log('authData', authData);
-		saveObj = {
-			id: authData.id,
-			service_id: service.id,
-			service_name: service.manifest_id,
-			authData: authData
-		};
-		delete saveObj.authData.id;
-
-		return serviceUtil.saveAuthDataToUser(saveObj, req.userId);
-
-	}).then((result) => {
-
-		res.send({ok:true, res: saveObj});
-
-	// Error handler
-	}).catch((err) => {
-		if(typeof err === "string"){
-			return res.status(200).json({ok: false, err: err});
-		}
-		return next(err);
-	});
-
-});
+router.post('/services.authsuccess', serviceUtil.validateData, serviceUtil.getService, serviceUtil.requireService, serviceUtil.getAuthData, serviceUtil.updateAuthData);
 
 router.post('/services.authorize', serviceUtil.getService, serviceUtil.requireService, (req, res, next) => {
 	let service = res.locals.service;
