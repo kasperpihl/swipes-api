@@ -29,6 +29,8 @@ var WorkspaceStore = Reflux.createStore({
 		this.manualTrigger();
 	},
 	onWorkflowStore: function(workflows){
+		// Everytime the store updates, make sure to insert new workflows
+		// K_TODO: Fix that it also unset a workflow if it no longer exists
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
 			if(!this.get(workflow.id)){
@@ -43,14 +45,12 @@ var WorkspaceStore = Reflux.createStore({
 					}
 
 				}
-				console.log('insert', insertObj);
 				this.set(workflow.id, insertObj, {trigger: false});
 			}
 		}
 		this.manualTrigger();
 	},
 	init:function(){
-		console.log('init workspace');
 		this.manualLoadData();
 		this.listenTo(WorkflowStore, this.onWorkflowStore);
 	}
