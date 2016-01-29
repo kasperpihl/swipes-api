@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var socketStore = require('../stores/SocketStore');
 var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
+var stateStore = require('../stores/StateStore');
 
 // Icon Menu dependencies
 var MenuItem = require('material-ui/lib/menus/menu-item');
@@ -43,8 +44,8 @@ var Topbar = React.createClass({
 	renderIconMenu:function(){
 		var button = (
 
-			<IconButton 
-				style={{padding: '12px !important'}} 
+			<IconButton
+				style={{padding: '12px !important'}}
 				touch={true}>
 			<FontIcon className="material-icons">menu</FontIcon>
 			</IconButton>
@@ -61,7 +62,7 @@ var Topbar = React.createClass({
 			</IconMenu>
 		);
 	},
-	
+
 	render: function() {
 
 		return (
