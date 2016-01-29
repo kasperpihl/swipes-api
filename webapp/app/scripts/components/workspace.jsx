@@ -15,7 +15,6 @@ var Workspace = React.createClass({
         return {
             className: "layout",
             cols: 12,
-            items: 3,
             rowHeight: 50,
             isDraggable: true,
             isResizable: true
@@ -39,7 +38,7 @@ var Workspace = React.createClass({
 
     render() {
         return (
-            <div className="grid-scroll-container">
+            <div className="scroll-container">
                 <ReactGridLayout
                 layout={_.pluck(this.state.workflows, '_grid')} 
                 onLayoutChange={this.onLayoutChange}

@@ -41,16 +41,18 @@ var Services = React.createClass({
 	},
 	render: function() {
         return (
-            <div className="services-wrapper">
-                <h6>Available Flows</h6>
-                <Card className="services-card">
-                    {this.renderServicesToConnect()}
-                </Card>
-                <h6>Connected Flows</h6>
-                <Card className="services-card">
-                    {this.renderConnectedServices()}
-                </Card>
-            </div>
+        	<div className="scroll-container">
+	            <div className="services-wrapper">
+	                <h6>Available Flows</h6>
+	                <Card className="services-card">
+	                    {this.renderServicesToConnect()}
+	                </Card>
+	                <h6>Connected Flows</h6>
+	                <Card className="services-card">
+	                    {this.renderConnectedServices()}
+	                </Card>
+	            </div>
+	        </div>
         );
 	}
 });

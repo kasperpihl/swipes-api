@@ -7,11 +7,14 @@ var WorkspaceStore = Reflux.createStore({
 	sort: function(el){ return el._grid.i },
 	getAvailableI:function(){
 		// Get the next available i, this is to provide the grid system.
+		// sort the i's and provide an array with them.
 		var sortedI = _.map(_.sortBy(this.getAll(), function(el){ return el._grid.i; }), function(el) { return el._grid.i });
 		for(var i = 0 ; i <= sortedI.length ; i++){
+			// If we are at the end, return the length
 			if(i === sortedI.length){
 				return i;
 			}
+			// Otherwise, find the in betweens of free spots
 			if(i != sortedI[i]){
 				return i;
 			}
@@ -22,6 +25,7 @@ var WorkspaceStore = Reflux.createStore({
 		var indexedByI = _.indexBy(this.getAll(), function(el){
 			return el._grid.i;
 		});
+		// Iterate and update the _grid key for the workspace.
 		_.each(layout, function(el){
 			var workflowObj = indexedByI[el.i];
 			this.update(workflowObj.workflow_id, {_grid: el}, {trigger:false});
@@ -36,11 +40,14 @@ var WorkspaceStore = Reflux.createStore({
 			return;
 		}
 
-
+		// Object indexed by the workflow_id to test if any has been removed from store.
 		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.workflow_id });
+		
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
+			// If the workflow is not found, insert a new record with the grid info.
 			if(!this.get(workflow.id)){
+				// K OR T_TODO: Make a better way to calculate x/y of new object!
 				var insertObj = {
 					workflow_id: workflow.id,
 					_grid: {
@@ -55,10 +62,12 @@ var WorkspaceStore = Reflux.createStore({
 				this.set(workflow.id, insertObj, {trigger: false});
 			}
 			else{
+				// Mark this as being here
 				delete testForRemovals[workflow.id];
 			}
 		}
 
+		// If any keys are left in the removal object, unset them!
 		var keysToRemove = _.keys(testForRemovals);
 		if(keysToRemove.length){
 			this.unset(keysToRemove, {trigger:false});
