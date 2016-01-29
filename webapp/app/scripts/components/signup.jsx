@@ -12,8 +12,6 @@ var Signup = React.createClass({
 		amplitude.logEvent('Session - Opened Login');
 		$(document).ready(function() {
 
-			$.swFloatingLabelInput();
-
             var direction = 1;
 
             var Layer_1 = new Vivus('Layer_1', {
