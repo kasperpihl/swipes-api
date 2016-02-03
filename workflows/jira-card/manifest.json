@@ -1,0 +1,9 @@
+{
+	"manifest_version": 1,
+	"name": "JIRA Card",
+	"identifier": "jira-card",
+	"version": "0.1",
+	"description": "The JIRA Tasks App For Swipes",
+	"index": "dev/index.html",
+	"required_services": ["jira"]
+}
