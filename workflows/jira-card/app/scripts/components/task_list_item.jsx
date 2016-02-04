@@ -30,7 +30,7 @@ var TaskListItem = React.createClass({
 			}
 		});
 
-		return elements;8;
+		return elements;
 	},
 	children: function () {
 		var data = this.props.data;
