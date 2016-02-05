@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var Promise = require('bluebird');
 var ProjectActions = require('../actions/ProjectActions');
 var MainStore = require('../stores/MainStore');
+var UserStore = require('../stores/UserStore');
 var objectAssign = require('object-assign');
 
 var _issueTypes = [];
@@ -53,38 +54,45 @@ var fetchData = function (options) {
 	var issuesReq = swipes.service('jira').request('search.search', {
 		//jql: 'project = ' + projectKey + ' AND assignee = currentUser() AND sprint is not EMPTY ORDER BY Rank ASC'
 		jql: 'project = ' + projectKey + ' AND sprint is not EMPTY ORDER BY Rank ASC'
+	});;
+	var assignableReq = swipes.service('jira').request('user.searchAssignable', {
+		project: projectKey
 	});
 
 	return new Promise(function(resolve, reject) {
 		Promise.all([
 			statusesReq,
-			issuesReq
+			issuesReq,
+			assignableReq
 		])
 		.then(function (res) {
 			_issueTypes = res[0].data;
 			_issues = res[1].data.issues;
 			_statuses = uniqueStatuses(_issueTypes);
 			var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
+			var assignable = res[2].data;
+
+			UserStore.batchLoad(assignable, {flush:true});
 
 			resolve(statusesWithIssues);
 		})
 	});
 }
 
-var transitionIssueOnClient = function (issue, status) {
+var changeIssueFieldOnClient = function (issue, field, newValue) {
 	var len = _issues.length;
 
-	// Move the issue client side first
+	// Change the issue client side first
 	// Most of the time rest requests are successful
 	// No need for the user to wait
 	for (var i=0; i<len; i++) {
 		if (issue.id === _issues[i].id) {
-			_issues[i].fields.status = status;
+			_issues[i].fields[field] = newValue;
 			break;
 		}
 	}
 
-	// Reset the issues property to prevent dublication when transition issues
+	// Reset the issues property to prevent dublication when doing the change
 	_statuses = uniqueStatuses(_issueTypes);
 
 	return matchIssues(_statuses, _issues, _issueTypes);
@@ -110,6 +118,13 @@ var transitionIssueOnJira = function (issue, status) {
 	});
 }
 
+var assignIssueOnJira = function (issue, assignee) {
+	return swipes.service('jira').request('issue.assignIssue', {
+		issueId: issue.id,
+		assignee: assignee.name
+	});
+}
+
 var ProjectStore = Reflux.createStore({
 	listenables: [ProjectActions],
 	onFetchData: function () {
@@ -128,7 +143,7 @@ var ProjectStore = Reflux.createStore({
 		var issue = options.issue;
 		var status = options.status;
 		var oldStatus = issue.fields.status;
-		var newStatuses = transitionIssueOnClient(issue, status);
+		var newStatuses = changeIssueFieldOnClient(issue, 'status', status);
 
 		self.set('statuses', newStatuses);
 
@@ -140,7 +155,28 @@ var ProjectStore = Reflux.createStore({
 			.catch(function (err) {
 				// T_TODO We want Kasper's notifications here
 				// Well our transition failed so return the old state
-				var oldStatuses = transitionIssueOnClient(issue, oldStatus);
+				var oldStatuses = changeIssueFieldOnClient(issue, 'status', oldStatus);
+				self.set('statuses', oldStatuses);
+			})
+	},
+	onAssignPerson: function (options) {
+		var self = this;
+		var issue = options.issue;
+		var assignee = options.assignee;
+		var oldAssignee = issue.fields.assignee;
+		var newStatuses = changeIssueFieldOnClient(issue, 'assignee', assignee);
+
+		self.set('statuses', newStatuses);
+
+		assignIssueOnJira(issue, assignee)
+			.then(function () {
+				// T_TODO We want Kasper's notifications here
+				console.log('GOOD');
+			})
+			.catch(function (err) {
+				// T_TODO We want Kasper's notifications here
+				// Well our assignment failed so return the old state
+				var oldStatuses = changeIssueFieldOnClient(issue, 'assignee', oldAssignee);
 				self.set('statuses', oldStatuses);
 			})
 	}

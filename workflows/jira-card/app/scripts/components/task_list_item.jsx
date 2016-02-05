@@ -6,11 +6,45 @@ var IconMenu = require('material-ui/lib').IconMenu;
 var IconButton = require('material-ui/lib').IconButton;
 var MenuItem = require('material-ui/lib').MenuItem;
 var Colors = require('material-ui/lib/styles/colors');
+var UserStore = require('../stores/UserStore');
 var ProjectActions = require('../actions/ProjectActions');
-;2
+
 var TaskListItem = React.createClass({
 	moreVertOnClick: function (options) {
 		ProjectActions.transitionIssue(options);
+	},
+	personAddOnClick: function (options) {
+		ProjectActions.assignPerson(options);
+	},
+	personAddMenuItems: function () {
+		var self = this;
+		var issue = this.props.data;
+		var issueAssignee = issue.fields.assignee || {};
+		var users = UserStore.getAll();
+		var keys = Object.keys(users);
+		var elements = [];
+
+		keys.forEach(function (key, index) {
+			var assignee = users[key];
+
+			if (issueAssignee.key !== key) {
+				var options = {
+					assignee: assignee,
+					issue: issue,
+				}
+
+				var menuItem = <MenuItem
+								key={index}
+								value={assignee.key}
+								primaryText={assignee.displayName}
+								onClick={self.personAddOnClick.bind(self, options)}
+							/>
+
+				elements.push(menuItem);
+			}
+		});
+
+		return elements;
 	},
 	moreVertMenuItems: function () {
 		var self = this;
@@ -54,7 +88,7 @@ var TaskListItem = React.createClass({
 																	}}
 																/>}
 					>
-						<MenuItem primaryText="I like to move it move it" />
+						{this.personAddMenuItems()}
 					</IconMenu>
 					<IconMenu
 						iconButtonElement={<IconButton
