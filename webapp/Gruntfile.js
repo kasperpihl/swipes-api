@@ -112,6 +112,10 @@ module.exports = function (grunt) {
             '<%= yeoman.app %>/*.html',
             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
           ]
+        },
+        sdk: {
+          files: ['./swipes-sdk/**/*'],
+          tasks: ['concat:serve']
         }
       },
       clean: {
