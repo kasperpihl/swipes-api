@@ -11,15 +11,12 @@ var Home = React.createClass({
 	},
 	render: function() {
 		var settings = this.state.settings;
+
 		if (!settings) {
 			return <div>Loading</div>;
 		}
-		else if (!settings.isReady) {
-			return <Setup data={this.state.settings} />
-		}
-		else {
-			return <TaskList />;
-		}
+
+		return <Setup data={this.state.settings} />
 	}
 });
 

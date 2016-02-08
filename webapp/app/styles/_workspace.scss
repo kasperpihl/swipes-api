@@ -1,28 +1,23 @@
-.react-grid-item{
+.react-grid-item {
   height: 100%;
-  > div{
+  > div {
     height: 100%;
   }
   padding-bottom: 10px;
 }
-body{
+
+body {
   background: #eee;
 }
-.card-container{
+
+.card-container {
   height: 100%;
-  position: relative;
-  .card-top-bar{
-    height:30px;
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid $studioGray-60;
-  }
-  .workflow-frame-class{
+  display: flex;
+  flex-direction: column;
+
+  .workflow-frame-class {
     width:100%;
     height:100%;
-    position: absolute;
-    top:34px;
-    padding-top: 30px;
   }
 }
 
