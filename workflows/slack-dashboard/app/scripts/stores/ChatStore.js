@@ -33,8 +33,12 @@ var ChatStore = Reflux.createStore({
 			if(swipes.info.workflow.settings.channelId){
 				ChatActions.setChannel(swipes.info.workflow.settings.channelId)
 			}
+
+			ChatActions.updateBadge();
+
 		});
 	},
+
 	connectSocket: function(url){
 		if(!this.webSocket){
 			this.webSocket = new WebSocket(url);
@@ -249,6 +253,12 @@ var ChatStore = Reflux.createStore({
 			}
 			callback();
 		});
+	},
+	onUpdateBadge: function(){
+		// Update notification count - get total number from store
+		var total = ChannelStore.getTotalNotificationCount();
+		var badge = total ? total : "";
+		swipes.actions.setBadge(badge);
 	},
 	fetchChannel: function(channel){
 		var self = this;

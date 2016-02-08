@@ -1,12 +1,14 @@
 var Reflux = require('reflux');
 var UserStore = require('./UserStore');
 var BotStore = require('./BotStore');
+var ChatActions = require('../actions/ChatActions');
 
 var ChannelStore = Reflux.createStore({
 	// Making sure that DM's get name set on the channel property
 	sort: 'name',
 	updateChannel: function(channelId, data, options){
 		this.update(channelId, data, options);
+		ChatActions.updateBadge();
 	},
 	getTotalNotificationCount:function(){
 		var total = 0;
