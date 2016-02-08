@@ -31,9 +31,8 @@ var Signin = React.createClass({
 		})
 	},
 	signin: function(){
-		var username = this.refs.username.getValue();
-		var email = username + "@swipesapp.com";
-		var password = username;
+		var email = this.refs.username.getValue();
+		var password = this.refs.password.getValue();
 		var data = {
 			email: email,
 			password: password
@@ -101,7 +100,7 @@ var Signin = React.createClass({
                             </div>*/}
 														<br/>
 														<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
-	    											<TextField floatingLabelText="Password" type="password" disabled={true}/>
+	    											<TextField floatingLabelText="Password" ref="password" type="password" />
 														<br/>
                             <input type="button" className="login-submit" value="SIGN IN" onClick={this.signin}/>
                         </form>

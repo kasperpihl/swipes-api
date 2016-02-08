@@ -32,15 +32,16 @@ var Signup = React.createClass({
 		})
 	},
 	signup: function(){
-		var username = this.refs.username.getValue();
-		var email = username + "@swipesapp.com";
+		var name = this.refs.name.getValue();
+        var email = this.refs.email.getValue();
+        var password = this.refs.password.getValue();
+        var repassword = this.refs.repassword.getValue();
 
-		var password = username;
 		var data = {
 			email: email,
-			name: username,
+			name: name,
 			password: password,
-			repassword: password
+			repassword: repassword
 		};
 		var self = this;
 		swipes.api.request({force:true, command:"users.create"}, data, function(res,error){
@@ -96,10 +97,10 @@ var Signup = React.createClass({
                         <h2>sign up to swipes</h2>
                         <form action="">
 													<br/>
-													<TextField floatingLabelText="Your Name"/>
-													<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
-													<TextField floatingLabelText="Password" type="password" disabled={true}/>
-													<TextField floatingLabelText="Password" type="password" disabled={true}/>
+													<TextField floatingLabelText="Your Name" ref="name"/>
+													<TextField floatingLabelText="Email" ref="email" id="email" className="username"/>
+													<TextField floatingLabelText="Password" ref="password" type="password" />
+													<TextField floatingLabelText="Password" ref="repassword" type="password" />
 													<br/>
                           <input type="button" className="login-submit" value="SIGN UP" onClick={this.signup}/>
                         </form>
