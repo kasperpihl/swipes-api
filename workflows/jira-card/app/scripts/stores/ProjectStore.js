@@ -8,6 +8,8 @@ var objectAssign = require('object-assign');
 var _issueTypes = [];
 var _issues = [];
 var _statuses = [];
+var _fetchDataTimeout = null;
+var _fetchLock = false;
 
 var uniqueStatuses = function (issueTypes) {
 	var statuses = [];
@@ -48,7 +50,19 @@ var matchIssues = function (statuses, issues, issueTypes) {
 	return statuses;
 }
 
-var fetchData = function (options) {
+var refetchData = function (init) {
+	if (!_fetchLock && !init) {
+		ProjectActions.fetchData();
+	}
+
+	if (_fetchDataTimeout) {
+		clearTimeout(_fetchDataTimeout);
+	}
+
+	_fetchDataTimeout = setTimeout(refetchData, 10000);
+}
+
+var fetchData = function () {
 	var projectKey = MainStore.get('settings').projectKey;
 	var statusesReq = swipes.service('jira').request('project.getStatuses', {projectIdOrKey: projectKey});
 	var issuesReq = swipes.service('jira').request('search.search', {
@@ -73,6 +87,8 @@ var fetchData = function (options) {
 			var assignable = res[2].data;
 
 			UserStore.batchLoad(assignable, {flush:true});
+
+			refetchData(true);
 
 			resolve(statusesWithIssues);
 		})
@@ -146,6 +162,7 @@ var ProjectStore = Reflux.createStore({
 		var newStatuses = changeIssueFieldOnClient(issue, 'status', status);
 
 		self.set('statuses', newStatuses);
+		_fetchLock = true;
 
 		transitionIssueOnJira(issue, status)
 			.then(function () {
@@ -158,6 +175,9 @@ var ProjectStore = Reflux.createStore({
 				var oldStatuses = changeIssueFieldOnClient(issue, 'status', oldStatus);
 				self.set('statuses', oldStatuses);
 			})
+			.finally(function () {
+				_fetchLock = false;
+			})
 	},
 	onAssignPerson: function (options) {
 		var self = this;
@@ -167,6 +187,7 @@ var ProjectStore = Reflux.createStore({
 		var newStatuses = changeIssueFieldOnClient(issue, 'assignee', assignee);
 
 		self.set('statuses', newStatuses);
+		_fetchLock = true;
 
 		assignIssueOnJira(issue, assignee)
 			.then(function () {
@@ -178,6 +199,9 @@ var ProjectStore = Reflux.createStore({
 				// Well our assignment failed so return the old state
 				var oldStatuses = changeIssueFieldOnClient(issue, 'assignee', oldAssignee);
 				self.set('statuses', oldStatuses);
+			})
+			.finally(function () {
+				_fetchLock = false;
 			})
 	}
 });

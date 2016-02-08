@@ -14,7 +14,7 @@ var StatusesList = React.createClass({
 	},
 	componentWillReceiveProps: function (nextProps) {
 		if (this.props.projectKey !== nextProps.projectKey) {
-			ProjectActions.fetchData({projectKey: nextProps.projectKey});
+			ProjectActions.fetchData();
 		}
 	},
 	renderStatuses: function () {
