@@ -1,3 +1,7 @@
+body {
+	font-family: Roboto;
+}
+
 .setup{
 	width: 100%;
 	box-sizing: border-box;
@@ -64,5 +68,9 @@
 	opacity: 0;
 }
 
-@import "select";
+a {
+	color: #E91E63;
+	text-decoration: none;
+}
+
 @import "icons";

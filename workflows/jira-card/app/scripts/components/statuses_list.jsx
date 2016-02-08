@@ -30,11 +30,31 @@ var StatusesList = React.createClass({
 
 		return elements;
 	},
+	renderProjectLink: function () {
+		var projectKey = this.props.projectKey;
+		var textStyles = {
+			display: 'inline-block',
+			marginTop: '5px',
+			fontSize: '14px',
+			color: 'rgba(0, 0, 0, 0.498039)'
+		};
+		var href = 'https://swipes.atlassian.net/secure/RapidBoard.jspa?rapidView=1&projectKey=' + projectKey;
+
+		return (
+			<span style={textStyles}>
+				If you want to create new item you can go to
+				<a href={href} target="_blank"> JIRA</a>
+			</span>
+		);
+	},
 	render: function () {
 		return (
 			<div>
 				{this.state.statuses.length > 0 ? (
-					<div>{this.renderStatuses()}</div>
+					<div>
+						{this.renderStatuses()}
+						{this.renderProjectLink()}
+					</div>
 				) : (
 					<div>Loading...</div>
 				)}
