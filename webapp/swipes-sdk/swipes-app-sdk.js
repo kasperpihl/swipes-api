@@ -28,6 +28,9 @@ var SwipesAppSDK = (function() {
 		setTitle:function(title){
 			self._client.callListener("navigation.setTitle",{"title":title});
 		},
+		setBadge: function(badge){
+			self._client.callListener('navigation.setBadge', {badge: badge});
+		},
 		// Push new title (view), will show a backbutton.
 		push: function(title, identifier){
 			self._client.callListener("navigation.push", {title: title, identifier: identifier})
@@ -329,8 +332,8 @@ var SwipesAppSDK = (function() {
 		openURL: function(url){
 			self._client.callListener("actions.openURL", {url: url});
 		},
-		setBadge: function(badge){
-			self._client.callListener('actions.setBadge', {badge: badge});
+		share: function(){
+
 		}
 	};
 

@@ -258,7 +258,7 @@ var ChatStore = Reflux.createStore({
 		// Update notification count - get total number from store
 		var total = ChannelStore.getTotalNotificationCount();
 		var badge = total ? total : "";
-		swipes.actions.setBadge(badge);
+		swipes.navigation.setBadge(badge);
 	},
 	fetchChannel: function(channel){
 		var self = this;

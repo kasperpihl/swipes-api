@@ -55,7 +55,7 @@ var CardLoader = React.createClass({
 			else if(message.command === 'leftNav.load'){
 				leftNavActions.load(data, callback);
 			}
-			else if(message.command === 'actions.setBadge'){
+			else if(message.command === 'navigation.setBadge'){
 				console.log('badging', data.badge);
 				this.setState({badge: data.badge});
 			}
