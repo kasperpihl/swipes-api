@@ -7,14 +7,12 @@ var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
 var Colors = require('material-ui/lib/styles/colors');
 var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
-var injectTapEventPlugin = require("react-tap-event-plugin");
 var WorkflowStore = require('../stores/WorkflowStore');
 var stateStore = require('../stores/StateStore');
 var userStore = require('../stores/UserStore');
 var modalActions = require('../actions/ModalActions');
 var sidebarStore = require('../stores/SidebarStore');
 var sidebarActions = require('../actions/SidebarActions');
-injectTapEventPlugin();
 
 var Sidebar = React.createClass({
 	mixins: [Reflux.ListenerMixin, WorkflowStore.connect("workflows")],

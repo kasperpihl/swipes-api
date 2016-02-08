@@ -13,9 +13,6 @@ var IconButton = require('material-ui/lib/icon-button');
 var Colors = require('material-ui/lib/styles/colors');
 var FontIcon = require('material-ui/lib').FontIcon;
 
-var injectTapEventPlugin = require("react-tap-event-plugin");
-injectTapEventPlugin();
-
 
 var Topbar = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
