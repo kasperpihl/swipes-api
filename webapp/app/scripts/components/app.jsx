@@ -4,6 +4,7 @@ var Loading = require('./loading');
 var stateStore = require('../stores/StateStore');
 var Modal = require('./modal');
 var Topbar = require('./topbar');
+var LeftNav = require('./left_nav');
 
 var App = React.createClass({
   mixins: [ Reflux.ListenerMixin ],
@@ -32,6 +33,7 @@ var App = React.createClass({
     			{this.props.children}
     		</div>
     		<Modal />
+        <LeftNav />
     	</div>);
   }
 });
