@@ -15,6 +15,7 @@ var Workspace = React.createClass({
         return {
             className: "layout",
             cols: 12,
+            margin: [20,20],
             rowHeight: 50,
             isDraggable: true,
             isResizable: true

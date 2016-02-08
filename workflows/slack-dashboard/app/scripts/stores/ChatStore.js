@@ -8,6 +8,8 @@ var BotStore = require('./BotStore');
 var ChatStore = Reflux.createStore({
 	listenables: [ChatActions],
 	start: function() {
+
+
 		var self = this;
 		swipes.service("slack").request('rtm.start', function(res, err){
 			var obj = res.data;
@@ -62,9 +64,14 @@ var ChatStore = Reflux.createStore({
 	},
 	onSetChannel: function(channelId){
 		var channel = ChannelStore.get(channelId);
-		channel.showingUnread = channel.last_read;
-		this.set('channel', channel);
-		this.fetchChannel(channel);
+		if(channel){
+			this.unset(['messages', 'sections']);
+			channel.showingUnread = channel.last_read;
+			swipes.navigation.setTitle(channel.name);
+			this.set('channel', channel);
+			this.fetchChannel(channel);
+		}
+		
 	},
 	
 	sortMessages: function(){
@@ -126,7 +133,7 @@ var ChatStore = Reflux.createStore({
 			var title = TimeUtility.dayStringForDate(schedule);
 			sortedSections.push({"title": title, "messages": groups[key] });
 		}
-
+		
 		this.set("sections", sortedSections);
 
 	},

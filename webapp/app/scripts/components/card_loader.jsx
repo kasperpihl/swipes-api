@@ -14,17 +14,20 @@ var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
 
 var AppBar = require('material-ui/lib').AppBar;
+var Badge = require('material-ui/lib').Badge;
 var IconButton = require('material-ui/lib').IconButton;
 var FontIcon = require('material-ui/lib').FontIcon;
 var MenuItem = require('material-ui/lib/menus/menu-item');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 
 
+var leftNavActions = require('../actions/LeftNavActions');
+
 var CardLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
 		return workflows.filter(function(workflow) {
-           return workflow.id === this.props.data.id;
-        }.bind(this))[0];
+			return workflow.id === this.props.data.id;
+		}.bind(this))[0];
 	}) ],
 	getInitialState:function(){
 		return {};
@@ -33,7 +36,12 @@ var CardLoader = React.createClass({
 		var data, userInfo;
 		if (message && message.command) {
 			data = message.data;
-			if (message.command === "modal.load"){
+			if (message.command === "navigation.setTitle") {
+				if (data.title) {
+					this.setState({"titleFromCard": data.title});
+				}
+			}
+			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
 			else if (message.command === "actions.openURL"){
@@ -43,6 +51,13 @@ var CardLoader = React.createClass({
 				if(this.state.workflow){
 					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.workflow.manifest_id, 'Action': data.name});
 				}
+			}
+			else if(message.command === 'leftNav.load'){
+				leftNavActions.load(data, callback);
+			}
+			else if(message.command === 'actions.setBadge'){
+				console.log('badging', data.badge);
+				this.setState({badge: data.badge});
 			}
 			else if (message.command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "card" + this.props.data.id);
@@ -57,10 +72,10 @@ var CardLoader = React.createClass({
 	},
 	onContextMenu: function(e){
 		console.log('on context!')
-        e.preventDefault();
-        topbarActions.editWorkflow(this.state.workflow);
-        return false;
-    },
+		e.preventDefault();
+		topbarActions.editWorkflow(this.state.workflow);
+		return false;
+	},
 	onLoad:function(){
 		// Clear any listeners for this card.
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -96,6 +111,12 @@ var CardLoader = React.createClass({
 			workflowActions.renameWorkflow(this.state.workflow, newName);
 		}
 	},
+	onCardMenuButtonClick:function(){
+		var e = {
+			type: 'menu.button'
+		};
+		this.apiCon.callListener("event", e);
+	},
 	renderCardBar: function(){
 		var menu = (<IconMenu
 			iconButtonElement={<IconButton style={{padding: '12px !important'}} 
@@ -105,8 +126,26 @@ var CardLoader = React.createClass({
 			<MenuItem primaryText="Rename" onTouchTap={this.onRenameWorkflow} />
 			<MenuItem primaryText="Remove" onTouchTap={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
 		</IconMenu>);
+
+		var menuButton = menu = <IconButton style={{}} 
+			touch={true} onTouchTap={this.onCardMenuButtonClick}>
+			<FontIcon color="white" className="material-icons">menu</FontIcon>
+		</IconButton>;
+		
+		if(this.state.badge){
+			menu = (<Badge
+				badgeContent={this.state.badge}
+				style={{padding: 0, margin:0}}
+				badgeStyle={{backgroundColor: 'red', top: 3, color:'white', right: 3, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
+					{menuButton}
+				</Badge>);
+		}
+		var title = this.state.workflow.name;
+		if(this.state.titleFromCard){
+			title = this.state.titleFromCard;
+		}
 		return <AppBar
-			title={<span>{this.state.workflow.name}</span>}
+			title={<span>{title}</span>}
 			iconElementLeft={menu}/>
 	},
 	render: function() {
