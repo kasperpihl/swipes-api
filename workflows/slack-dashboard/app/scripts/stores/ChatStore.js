@@ -208,7 +208,7 @@ var ChatStore = Reflux.createStore({
 				else if(msg.subtype === 'message_deleted'){
 					return this.removeMessage(msg.deleted_ts);
 				}
-				channelStore.updateChannel(message.channel, channel.unread_count_display + 1);
+				channelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
 
 				// If message is in the current channel we should handle the unread handler
 				if(message && msg.channel === this.get('channelId')){
