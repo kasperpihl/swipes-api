@@ -5,6 +5,16 @@ var BotStore = require('./BotStore');
 var ChannelStore = Reflux.createStore({
 	// Making sure that DM's get name set on the channel property
 	sort: 'name',
+	updateChannel: function(channelId, data, options){
+		this.update(channelId, data, options);
+	},
+	getTotalNotificationCount:function(){
+		var total = 0;
+		_.each(this.getAll(), function(channel){
+			total += channel.unread_count_display;
+		});
+		return total;
+	},
 	beforeSaveHandler: function(newObj, oldObj){
 		if((newObj.is_channel || newObj.is_group)){
 			if(newObj.is_archived){

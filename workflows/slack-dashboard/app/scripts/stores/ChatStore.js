@@ -66,9 +66,9 @@ var ChatStore = Reflux.createStore({
 		var channel = ChannelStore.get(channelId);
 		if(channel){
 			this.unset(['messages', 'sections']);
-			channel.showingUnread = channel.last_read;
+			this.set('showingUnread', channel.last_read, {trigger:false});
 			swipes.navigation.setTitle(channel.name);
-			this.set('channel', channel);
+			this.set('channelId', channel.id);
 			this.fetchChannel(channel);
 		}
 		
@@ -76,7 +76,6 @@ var ChatStore = Reflux.createStore({
 	
 	sortMessages: function(){
 
-		var lastRead = this.get('channel').last_read;
 		var self = this;
 		var sortedMessages = this.get('messages');
 		var lastUser, lastGroup, lastDate;
@@ -138,10 +137,10 @@ var ChatStore = Reflux.createStore({
 
 	},
 
-	onMarkAsRead:function(ts, force){
-		var channel = this.get('channel');
+	onMarkAsRead:function(ts){
+		var channel = ChannelStore.get(this.get('channelId'));
 		ts = ts || _.last(this.get('messages')).ts;
-		if(!force && ts === channel.last_read){
+		if(!channel || ts === channel.last_read){
 			return;
 		}
 		var prefix = this.apiPrefixForChannel(channel);
@@ -153,12 +152,7 @@ var ChatStore = Reflux.createStore({
 		.then(function(){
 		})
 	},
-	
-	clearOldLastRead: function(){
-		if(this){
-			this.update('channel', {old_last_read: null});
-		}
-	},
+
 	onClickLink:function(url){
 		swipes.actions.openURL(url);
 	},
@@ -175,7 +169,7 @@ var ChatStore = Reflux.createStore({
 				break;
 			}
 		}
-		this.update('message', currentMessages, {trigger:false});
+		this.update('messages', currentMessages, {trigger:false});
 		this.sortMessages();
 	},
 	addMessage:function(message){
@@ -190,18 +184,6 @@ var ChatStore = Reflux.createStore({
 			}
 		}
 		if(!found){
-			var updateObj = {};
-			if(message.user === UserStore.me().id){
-				updateObj.showingUnread = null;
-				updateObj.showingIsRead = false;
-			}
-			else{
-				updateObj.unread_count_display = this.get('channel').unread_count_display + 1;
-				if(!this.get('channel').showingUnread){
-					updateObj.showingUnread = this.get('channel').last_read;
-				}
-			}
-			this.update('channel', updateObj, {trigger: false});
 			newMessages.push(message);
 		}
 		this.update('messages', newMessages, {trigger: false});
@@ -211,7 +193,9 @@ var ChatStore = Reflux.createStore({
 		
 		if(msg.type === 'message'){
 			var me = UserStore.me();
-			if(msg.channel && msg.channel === this.get('channel').id){
+			if(msg.channel){
+				var channel = channelStore.get(message.channel);
+
 				var currMessages = this.get('messages') || [];
 				var message = msg;
 				if(msg.subtype === 'message_changed'){
@@ -220,31 +204,46 @@ var ChatStore = Reflux.createStore({
 				else if(msg.subtype === 'message_deleted'){
 					return this.removeMessage(msg.deleted_ts);
 				}
-				if(message){
-					this.addMessage(message);	
+				channelStore.updateChannel(message.channel, channel.unread_count_display + 1);
+
+				// If message is in the current channel we should handle the unread handler
+				if(message && msg.channel === this.get('channelId')){
+
+					// If the latest message is your own, channel should be unread
+					if(message.user === UserStore.me().id){
+						this.set('showingUnread', null, {trigger: false});
+						this.set('showingIsRead', false, {trigger: false});
+					}
+					else{
+						if(channel && !channel.showingUnread){
+							this.set('showingUnread', channel.last_read, {trigger: false});
+						}
+					}
+
+					this.addMessage(message);
 				}
 			}
 		}
 		else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){
-			if(this.get('channel') && msg.channel && msg.channel === this.get('channel').id){
-				updateObj = {};
-				updateObj.unread_count_display = msg.unread_count_display;
-				updateObj.last_read = msg.ts;
-				updateObj.showingIsRead = true;
-				// If a user marks a channel as unread back in time. Make sure to update the unread line.
-				if(!this.get('channel').showingUnread || this.get('channel').showingUnread > msg.ts){
-					updateObj.showingUnread = msg.ts;
-					updateObj.showingIsRead = false;
+			// If a user marks a channel as unread back in time. Make sure to update the unread line.
+			if(msg.channel === this.get('channelId')){
+				this.set('showingIsRead', true, {trigger: false});
+				if(!this.get('showingUnread') || this.get('showingUnread') > msg.ts){
+					this.set('showingUnread', msg.ts, {trigger:false});
+					this.set('showingIsRead', false, {trigger:false});
 				}
-				
-				this.update('channel', updateObj);
 			}
+			var updateObj = {};
+			updateObj.unread_count_display = msg.unread_count_display;
+			updateObj.last_read = msg.ts;
+			
+			channelStore.updateChannel(msg.channel, updateObj);			
 		}
 		console.log('slack socket handler', msg.type, msg);
 	},
 	onSendMessage: function(message, callback){
 		var self = this;
-		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channel').id, as_user: true}, function(res, err){
+		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channelId'), as_user: true}, function(res, err){
 			if(res.ok){
 				self.onMarkAsRead(res.data.ts);
 			}

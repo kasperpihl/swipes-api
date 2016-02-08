@@ -12,7 +12,7 @@ var SelectField = require('material-ui/lib').SelectField;
 var Badge = require('material-ui/lib').Badge;
 var MenuItem = require('material-ui/lib').MenuItem;
 var ChatList = React.createClass({
-	mixins: [chatStore.connect('chat'), channelStore.connect('channels')],
+	mixins: [chatStore.connect('chat')],
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	onScroll: function(e){
@@ -90,8 +90,8 @@ var ChatList = React.createClass({
 	},
 	renderSections: function(){
 		if(this.state.chat.sections){
-			var showingUnread = this.state.chat.channel.showingUnread;
-			var isMarked = this.state.chat.channel.showingIsRead;
+			var showingUnread = this.state.chat.showingUnread;
+			var isMarked = this.state.chat.showingIsRead;
 			return this.state.chat.sections.map(function(section){
 				return <ChatList.Section key={section.title} data={{isMarked: isMarked, showingUnread: showingUnread, section: section}} />
 			});
@@ -105,53 +105,8 @@ var ChatList = React.createClass({
 		})
 		
 	},
-	renderChannelSelector: function(){
-		var channels = [];
-		if(this.state.channels){
-			channels = this.state.channels.map(function(channel){
-				return <MenuItem key={channel.id} value={channel.id} primaryText={channel.name} />
-			});
-		}
-		return (
-			<SelectField value={this.state.channelId} onChange={this.onChangedChannel}>
-				{channels}
-			</SelectField>
-		)
-	},
 	renderInput: function(){
 		return <ChatInput onSendingMessage={this.onSendingMessage} />
-	},
-	renderBadge:function(){
-		if(this.state.chat.channel.unread_count_display){
-			return ( <Badge
-				style={{
-					position: 'absolute',
-					top: '3px'
-				}}
-				badgeContent={this.state.chat.channel.unread_count_display}
-				primary={true}>
-			</Badge> );
-		}
-	},
-	renderChannelHeader: function(){
-		return (
-			<div style={{
-				position: 'absolute',
-				height: '30px',
-				borderBottom: '1px solid #d5d5d5',
-				width: '100%',
-				
-				top: 0,
-				left: 0
-			}}>
-				{this.renderBadge()}
-				<div style={{
-					textAlign: 'center',
-					fontSize: '18px',
-					lineHeight: '30px',
-				}}>{this.state.chat.channel.name}</div>
-			</div>
-		)
 	},
 	render: function() {
 		if(!swipes.info.workflow){
@@ -164,19 +119,9 @@ var ChatList = React.createClass({
 				marginLeft: '-25px'
 			}}/>;
 		}
-		else if(!this.state.chat.channel){
-			return (
-				<div>
-					<h3>Select Channel</h3>
-					{this.renderChannelSelector()}
-				</div>
-			);
-		}
-		
+		// K_TODO: Test if this works without channel
 		return (
 			<div className="card-container">
-				{/*this.renderChannelHeader()*/}
-
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
 					<div className="chat-list">
@@ -220,4 +165,3 @@ ChatList.Section = React.createClass({
 });
 
 module.exports = ChatList;
-;
