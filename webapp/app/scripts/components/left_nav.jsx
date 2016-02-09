@@ -12,7 +12,6 @@ var MenuItem = require('material-ui/lib').MenuItem;
 var LeftNavModal = React.createClass({
 	mixins: [ leftNavStore.connect('leftNav') ],
 	onRequestChange: function(open){
-		console.log('onRequest', open);
 		if(!open){
 			leftNavActions.hide(false);
 		}
@@ -23,7 +22,7 @@ var LeftNavModal = React.createClass({
 	renderItems:function(){
 		var items = this.state.leftNav.items;
 		var renderedItems = [];
-		console.log('items', items);
+
 		_.each(items, function(item){
 			var style = {lineHeight: '30px'};
 			if(!item || typeof item.id !== 'string' || typeof item.title !== 'string' ){
@@ -51,7 +50,6 @@ var LeftNavModal = React.createClass({
 		return renderedItems;
 	},
 	render: function() {
-		console.log('render', this.state.leftNav);
 		return (
 			<LeftNav
 				docked={false}
