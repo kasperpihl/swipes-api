@@ -123,9 +123,9 @@ var CardLoader = React.createClass({
 		this.apiCon.callListener("event", e);
 	},
 	renderCardBar: function(){
-		var menu = (<IconMenu
-			iconButtonElement={<IconButton style={{padding: '12px !important'}}
-				touch={true}><FontIcon color="white" className="material-icons">settings</FontIcon></IconButton>}
+		var iconMenu = (<IconMenu
+			iconButtonElement={<IconButton
+				touch={true}><FontIcon color="white" className="material-icons">arrow_drop_down</FontIcon></IconButton>}
 			targetOrigin={{horizontal: 'right', vertical: 'top'}}
 			anchorOrigin={{horizontal: 'left', vertical: 'top'}}>
 			<MenuItem primaryText="Rename" onTouchTap={this.onRenameWorkflow} />
@@ -151,6 +151,7 @@ var CardLoader = React.createClass({
 		}
 		return <AppBar
 			title={<span>{title}</span>}
+			iconElementRight={iconMenu}
 			iconElementLeft={menu}/>
 	},
 	render: function() {
