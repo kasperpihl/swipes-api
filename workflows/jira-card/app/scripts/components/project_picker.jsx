@@ -7,6 +7,12 @@ var MainActions = require('../actions/MainActions');
 var ProjectActions = require('../actions/ProjectActions');
 var StatusesList = require('./statuses_list');
 
+var _indexByProjectKeys = {};
+
+function get_host(url) {
+    return url.replace(/^((\w+:)?\/\/[^\/]+\/?).*$/,'$1');
+}
+
 var ProjectPicker = React.createClass({
 	mixins: [MainStore.connect()],
 	handleChange: function (e, index, value) {
@@ -28,6 +34,7 @@ var ProjectPicker = React.createClass({
 
 		swipes.service('jira').request('project.getAllProjects', function (res, err) {
 			if (res) {
+				_indexByProjectKeys = _.indexBy(res.data, 'key');
 				var items = res.data.map( function (project, idx) {
 					return <MenuItem key={idx} value={project.key} primaryText={project.name} />
 				});
@@ -48,10 +55,15 @@ var ProjectPicker = React.createClass({
 		})
 	},
 	render: function () {
+		var projectKey = this.state.value;
+		var project = _indexByProjectKeys[projectKey];
+		var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey
+															: '#';
+
 		return (
 			<div>
 				<SelectField
-					value={this.state.value}
+					value={projectKey}
 					onChange={this.handleChange}
 					fullWidth={true}
 					autoWidth={true}
@@ -60,7 +72,7 @@ var ProjectPicker = React.createClass({
 					{this.state.items}
 				</SelectField>
 
-				<StatusesList projectKey={this.state.value} />
+				<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
 			</div>
 		)
 	}
