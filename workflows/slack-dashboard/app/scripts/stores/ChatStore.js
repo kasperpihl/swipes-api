@@ -198,7 +198,7 @@ var ChatStore = Reflux.createStore({
 		if(msg.type === 'message'){
 			var me = UserStore.me();
 			if(msg.channel){
-				var channel = channelStore.get(message.channel);
+				var channel = ChannelStore.get(msg.channel);
 
 				var currMessages = this.get('messages') || [];
 				var message = msg;
@@ -208,7 +208,7 @@ var ChatStore = Reflux.createStore({
 				else if(msg.subtype === 'message_deleted'){
 					return this.removeMessage(msg.deleted_ts);
 				}
-				channelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
+				ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
 
 				// If message is in the current channel we should handle the unread handler
 				if(message && msg.channel === this.get('channelId')){
@@ -241,7 +241,7 @@ var ChatStore = Reflux.createStore({
 			updateObj.unread_count_display = msg.unread_count_display;
 			updateObj.last_read = msg.ts;
 			
-			channelStore.updateChannel(msg.channel, updateObj);			
+			ChannelStore.updateChannel(msg.channel, updateObj);			
 		}
 		console.log('slack socket handler', msg.type, msg);
 	},

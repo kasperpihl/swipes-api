@@ -57,6 +57,7 @@ var LeftNavModal = React.createClass({
 				docked={false}
 				width={200}
 				disableSwipeToOpen={true}
+				style={{paddingTop: '100px'}}
 				open={this.state.leftNav.open}
 				onRequestChange={this.onRequestChange}>
 				{this.renderItems()}
