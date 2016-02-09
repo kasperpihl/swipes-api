@@ -9,6 +9,17 @@ var ChannelStore = Reflux.createStore({
 	general: function(){
 		return _.findWhere(this.getAll(), {is_general: true});
 	},
+	getActive: function(){
+		return _.filter(this.getAll(), function(channel){
+			if( channel.is_archived || 
+				(channel.is_im && !channel.is_open) || 
+				(channel.is_channel && !channel.is_member) ||
+				(channel.is_group && !channel.is_open)){
+				return false;
+			}
+			return true;
+		})
+	},
 	updateChannel: function(channelId, data, options){
 		this.update(channelId, data, options);
 		ChatActions.updateBadge();

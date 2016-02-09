@@ -13,10 +13,11 @@ swipes.onReady(function(){
 	chatStore.start();
 })
 swipes.onMenuButton(function(){
-	var channels = channelStore.getAll();
+	var channels = channelStore.getActive();
 	if(channels.length){
 		var navItems = [];
 		_.each(channels, function(channel){
+			
 			var item = { id: channel.id, title: channel.name };
 			if(channel.unread_count_display){
 				if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
