@@ -124,7 +124,7 @@ var CardLoader = React.createClass({
 	},
 	renderCardBar: function(){
 		var menu = (<IconMenu
-			iconButtonElement={<IconButton style={{padding: '12px !important'}} 
+			iconButtonElement={<IconButton style={{padding: '12px !important'}}
 				touch={true}><FontIcon color="white" className="material-icons">settings</FontIcon></IconButton>}
 			targetOrigin={{horizontal: 'right', vertical: 'top'}}
 			anchorOrigin={{horizontal: 'left', vertical: 'top'}}>
@@ -154,15 +154,15 @@ var CardLoader = React.createClass({
 			iconElementLeft={menu}/>
 	},
 	render: function() {
-		
+
 		if(!this.state.workflow) {
 			return ( <Loading /> );
 		}
 		var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
-		return (				
+		return (
 			<div className="card-container">
 				{this.renderCardBar()}
-				<iframe ref="iframe" sandbox="allow-scripts allow-same-origin" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
+				<iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
 			</div>
 		);
 	}
