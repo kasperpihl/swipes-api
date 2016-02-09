@@ -201,7 +201,9 @@ var ChatStore = Reflux.createStore({
 		if(msg.type === 'message'){
 			var me = UserStore.me();
 			if(msg.channel){
+				console.log('msg', msg);
 				var channel = ChannelStore.get(msg.channel);
+				var me = UserStore.me();
 
 				var currMessages = this.get('messages') || [];
 				var message = msg;
@@ -211,13 +213,15 @@ var ChatStore = Reflux.createStore({
 				else if(msg.subtype === 'message_deleted'){
 					return this.removeMessage(msg.deleted_ts);
 				}
-				ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
+				if(message.user !== me.id){
+					ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
+				}
 
 				// If message is in the current channel we should handle the unread handler
 				if(message && msg.channel === this.get('channelId')){
 
 					// If the latest message is your own, channel should be unread
-					if(message.user === UserStore.me().id){
+					if(message.user === me.id){
 						this.set('showingUnread', null, {trigger: false});
 						this.set('showingIsRead', false, {trigger: false});
 					}

@@ -16,7 +16,9 @@ var ChannelStore = Reflux.createStore({
 	getTotalNotificationCount:function(){
 		var total = 0;
 		_.each(this.getAll(), function(channel){
-			total += channel.unread_count_display;
+			if(channel.unread_count_display && channel.unread_count_display > 0){
+				total += channel.unread_count_display;	
+			}
 		});
 		return total;
 	},
