@@ -61,7 +61,6 @@ var CardLoader = React.createClass({
 				leftNavActions.load(data, callback);
 			}
 			else if(message.command === 'navigation.setBadge'){
-				console.log('badging', data.badge);
 				this.setState({badge: data.badge});
 			}
 			else if (message.command === "listenTo") {
@@ -74,12 +73,6 @@ var CardLoader = React.createClass({
 	receivedSocketEvent: function(e){
 		console.log("received socket event", e);
 		this.apiCon.callListener("event", e);
-	},
-	onContextMenu: function(e){
-		console.log('on context!')
-		e.preventDefault();
-		topbarActions.editWorkflow(this.state.workflow);
-		return false;
 	},
 	onLoad:function(){
 		// Clear any listeners for this card.
@@ -168,6 +161,5 @@ var CardLoader = React.createClass({
 		);
 	}
 });
-//		<div onContextMenu={this.onContextMenu} onClick={this.onContextMenu} className="card-top-bar">{this.state.workflow.name}</div>
 
 module.exports = CardLoader;

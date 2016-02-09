@@ -97,14 +97,6 @@ var ChatList = React.createClass({
 			});
 		}
 	},
-	onChangedChannel: function(e, i, row){
-		chatActions.setChannel(row);
-		var newSettings = {channelId: row};
-		var self = this;
-		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err){
-		})
-		
-	},
 	renderInput: function(){
 		return <ChatInput onSendingMessage={this.onSendingMessage} />
 	},

@@ -19,7 +19,9 @@ swipes.onMenuButton(function(){
 		_.each(channels, function(channel){
 			var item = { id: channel.id, title: channel.name };
 			if(channel.unread_count_display){
-				item.badge = channel.unread_count_display;
+				if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
+					item.badge = channel.unread_count_display;
+				}
 				item.bold = true;
 			}
 			navItems.push(item);
