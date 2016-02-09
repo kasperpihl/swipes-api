@@ -6,6 +6,9 @@ var ChatActions = require('../actions/ChatActions');
 var ChannelStore = Reflux.createStore({
 	// Making sure that DM's get name set on the channel property
 	sort: 'name',
+	general: function(){
+		return _.findWhere(this.getAll(), {is_general: true});
+	},
 	updateChannel: function(channelId, data, options){
 		this.update(channelId, data, options);
 		ChatActions.updateBadge();

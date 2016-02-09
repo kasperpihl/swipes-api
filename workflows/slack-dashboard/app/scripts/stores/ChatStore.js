@@ -30,9 +30,12 @@ var ChatStore = Reflux.createStore({
 
 			self.connectSocket(obj.url);
 
-			if(swipes.info.workflow.settings.channelId){
-				ChatActions.setChannel(swipes.info.workflow.settings.channelId)
+			var channelId = swipes.info.workflow.settings.channelId;
+			if(!channelId){
+				channelId = ChannelStore.general().id;
 			}
+
+			ChatActions.setChannel(channelId);
 
 			ChatActions.updateBadge();
 
