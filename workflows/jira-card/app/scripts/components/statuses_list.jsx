@@ -41,7 +41,7 @@ var StatusesList = React.createClass({
 
 		return (
 			<span style={textStyles}>
-				If you want to create new item you can go to
+				If you want to do something more specific you can go to
 				<a href={projectUrl} target="_blank"> JIRA</a>
 			</span>
 		);

@@ -6,6 +6,7 @@ var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var ProjectActions = require('../actions/ProjectActions');
 var StatusesList = require('./statuses_list');
+var ExpandedIssue = require('./expanded_issue');
 
 var _indexByProjectKeys = {};
 
@@ -15,18 +16,12 @@ function get_host(url) {
 
 var ProjectPicker = React.createClass({
 	mixins: [MainStore.connect()],
-	handleChange: function (e, index, value) {
-		var value = value || null;
-
-		ProjectActions.reset();
-		MainActions.updateSettings({projectKey: value});
-		this.setState({value: value});
-	},
 	getInitialState: function () {
 		return {
 			value: null,
 			floatingLabelText: 'Loading...',
-			items: []
+			items: [],
+      expandedIssueId: null
 		}
 	},
 	componentDidMount: function () {
@@ -54,14 +49,20 @@ var ProjectPicker = React.createClass({
 			}
 		})
 	},
-	render: function () {
-		var projectKey = this.state.value;
-		var project = _indexByProjectKeys[projectKey];
-		var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey
-															: '#';
+  handleChange: function (e, index, value) {
+		var value = value || null;
 
-		return (
-			<div>
+		ProjectActions.reset();
+		MainActions.updateSettings({projectKey: value});
+		this.setState({value: value});
+	},
+  renderStatuses: function () {
+    var projectKey = this.state.value;
+		var project = _indexByProjectKeys[projectKey];
+		var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey : '#';
+
+    return (
+      <div>
 				<SelectField
 					value={projectKey}
 					onChange={this.handleChange}
@@ -73,6 +74,24 @@ var ProjectPicker = React.createClass({
 				</SelectField>
 
 				<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
+			</div>
+    )
+  },
+  renderExpanedView: function (expandedIssueId) {
+    return (
+      <ExpandedIssue issueId={expandedIssueId} />
+    )
+  },
+	render: function () {
+    var expandedIssueId = this.state.expandedIssueId;
+
+    return (
+			<div>
+				{expandedIssueId ? (
+					<div>{this.renderExpanedView(expandedIssueId)}</div>
+				) : (
+					<div>{this.renderStatuses()}</div>
+				)}
 			</div>
 		)
 	}

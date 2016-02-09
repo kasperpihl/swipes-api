@@ -9,8 +9,8 @@ var MainStore = Reflux.createStore({
 			console.log('trying to update settings', res, err);
 		})
 	},
-	onLoadStatuses: function () {
-
+	onExpandIssue: function (issueId) {
+		this.set('expandedIssueId', issueId);
 	},
 	fetch: function () {
 		var self = this;

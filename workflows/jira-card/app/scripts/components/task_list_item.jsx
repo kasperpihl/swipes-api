@@ -7,14 +7,18 @@ var IconButton = require('material-ui/lib').IconButton;
 var MenuItem = require('material-ui/lib').MenuItem;
 var Colors = require('material-ui/lib/styles/colors');
 var UserStore = require('../stores/UserStore');
+var MainActions = require('../actions/MainActions');
 var ProjectActions = require('../actions/ProjectActions');
 
 var TaskListItem = React.createClass({
-	moreVertOnClick: function (options) {
+	transitionIssueOnClick: function (options) {
 		ProjectActions.transitionIssue(options);
 	},
-	personAddOnClick: function (options) {
+	assignPersonOnClick: function (options) {
 		ProjectActions.assignPerson(options);
+	},
+	expandOnClick: function (issueId) {
+		MainActions.expandIssue(issueId);
 	},
 	personAddMenuItems: function () {
 		var self = this;
@@ -37,7 +41,7 @@ var TaskListItem = React.createClass({
 								key={index}
 								value={assignee.key}
 								primaryText={assignee.displayName}
-								onClick={self.personAddOnClick.bind(self, options)}
+								onClick={self.assignPersonOnClick.bind(self, options)}
 							/>
 
 				elements.push(menuItem);
@@ -58,11 +62,20 @@ var TaskListItem = React.createClass({
 				return <MenuItem
 								key={index}
 								value={status.id}
-								primaryText={status.name}
-								onClick={self.moreVertOnClick.bind(self, options)}
+								primaryText={'Move to ' + status.name}
+								onClick={self.transitionIssueOnClick.bind(self, options)}
 							/>
 			}
 		});
+
+		elements.unshift(
+			<MenuItem
+				key={'details'}
+				value={issue.id}
+				primaryText={'View details'}
+				onClick={self.expandOnClick.bind(self, issue.id)}
+			/>
+	);
 
 		return elements;
 	},
@@ -106,7 +119,7 @@ var TaskListItem = React.createClass({
 	},
 	render: function () {
 		return (
-			<Paper className="card-container" children={this.children()} zDepth={1}/>
+			<Paper className="card-container" children={this.children()} zDepth={1} />
 		);
 	}
 });
