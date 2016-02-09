@@ -47,6 +47,11 @@ var CardLoader = React.createClass({
 			else if (message.command === "actions.openURL"){
 				window.open(data.url, "_blank");
 			}
+			else if(message.command === "actions.share"){
+				// K_TODO: this should load a share overlay, rendering all the actions from the cards.
+				// After selection, it should callback:
+				// this.apiCon.callListener('event', { type: 'share'})
+			}
 			else if (message.command === 'analytics.action'){
 				if(this.state.workflow){
 					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.workflow.manifest_id, 'Action': data.name});

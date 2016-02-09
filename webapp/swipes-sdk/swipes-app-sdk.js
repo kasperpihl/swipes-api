@@ -73,6 +73,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onMenuButton = function(callback){
 		self._listeners.add('menu.button', callback);
 	};
+	SwipesAppSDK.prototype.onShare = function(callback){
+		self._listeners.add('share', callback);
+	}
 	SwipesAppSDK.prototype.onPreview = function(callback){
 		self._listeners.add("preview", callback);
 	};
@@ -332,8 +335,8 @@ var SwipesAppSDK = (function() {
 		openURL: function(url){
 			self._client.callListener("actions.openURL", {url: url});
 		},
-		share: function(){
-
+		share: function(data){
+			self._client.callListener('actions.share', data);
 		}
 	};
 
