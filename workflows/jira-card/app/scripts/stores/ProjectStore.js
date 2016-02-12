@@ -3,7 +3,6 @@ var Promise = require('bluebird');
 var ProjectActions = require('../actions/ProjectActions');
 var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
-var objectAssign = require('object-assign');
 
 var _issueTypes = [];
 var _issues = [];
@@ -143,6 +142,11 @@ var assignIssueOnJira = function (issue, assignee) {
 
 var ProjectStore = Reflux.createStore({
 	listenables: [ProjectActions],
+	getInitialState: function () {
+		return {
+			statuses: []
+		}
+	},
 	onFetchData: function () {
 		var self = this;
 

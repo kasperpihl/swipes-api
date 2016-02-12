@@ -1,9 +1,11 @@
+var config = require('config');
 var fs = require('fs');
-var serviceDir = __dirname;
 var r = require('rethinkdb');
+var JiraClient = require('jira-connector');
 var db = require('../../rest/db.js'); // T_TODO I should make this one a local npm module
 var SwipesError = require( '../../rest/swipes-error' );
-var JiraClient = require('jira-connector');
+var serviceDir = __dirname;
+var jiraConfig = config.get('jira');
 
 var privateKeyData = fs.readFileSync(serviceDir + '/jira-swipes.pem', 'utf8');
 
@@ -32,7 +34,7 @@ var getJiraApiMethod = function (method, jiraClient) {
 
 var jira = {
 	connectionData: {
-		consumerKey: 'SwipesUnicorns',
+		consumerKey: jiraConfig.consumerKey,
 		host: 'swipes.atlassian.net'
 	},
 	request: function (authData, method, params, callback) {

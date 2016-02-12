@@ -1,24 +1,47 @@
 var React = require('react');
 var Reflux = require('reflux');
-var TaskList = require('./task_list');
 var MainStore = require('../stores/MainStore');
-var MainActions = require('../actions/MainActions');
-var Setup = require('./setup');
+var ProjectActions = require('../actions/ProjectActions');
+var StatusesList = require('./statuses_list');
+var ExpandedIssue = require('./expanded_issue');
+
+function get_host(url) {
+    return url.replace(/^((\w+:)?\/\/[^\/]+\/?).*$/,'$1');
+}
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
-	renderProjectPicker: function () {
-	},
-	render: function() {
-		var settings = this.state.settings;
+  renderStatuses: function () {
+    var settings = MainStore.get('settings');
 
-		if (!settings) {
-			return <div>Loading</div>;
-		}
+    if (settings) {
+      var projectKey = MainStore.get('settings').projectKey;
+  		var project = MainStore.getAll()[projectKey];
+  		var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey : '#';
 
-		return <Setup data={this.state.settings} />
+      return (
+        <StatusesList projectKey={projectKey} projectUrl={projectUrl} />
+      )
+    }
+  },
+  renderExpanedView: function (expandedIssueId) {
+    return (
+      <ExpandedIssue issueId={expandedIssueId} />
+    )
+  },
+	render: function () {
+    var expandedIssueId = this.state.expandedIssueId;
+
+    return (
+			<div>
+				{expandedIssueId ? (
+					<div>{this.renderExpanedView(expandedIssueId)}</div>
+				) : (
+					<div>{this.renderStatuses()}</div>
+				)}
+			</div>
+		)
 	}
 });
-
 
 module.exports = Home;

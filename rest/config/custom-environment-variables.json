@@ -4,6 +4,9 @@
     "port": "SW_DATABASE_PORT",
     "db": "SW_DATABASE_NAME"
   },
+  "jira": {
+    "consumerKey": "SW_JIRA_CONSUMER_KEY"
+  },
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
   "clientPort": "SW_CLIENT_PORT"

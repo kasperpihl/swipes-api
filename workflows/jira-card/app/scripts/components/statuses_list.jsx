@@ -1,34 +1,36 @@
 var React = require('react');
 var Reflux = require('reflux');
-var MainStore = require('../stores/MainStore');
+var Tabs = require('material-ui/lib').Tabs;
+var Tab = require('material-ui/lib').Tab;
 var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
-var StatusCard = require('./status_card');
+var TaskListItem = require('./task_list_item');
 
 var StatusesList = React.createClass({
 	mixins: [ProjectStore.connect()],
-	getInitialState: function () {
-		return {
-			statuses: []
-		}
-	},
 	componentWillReceiveProps: function (nextProps) {
 		if (this.props.projectKey !== nextProps.projectKey) {
 			ProjectActions.fetchData();
 		}
 	},
+	componentDidMount: function () {
+		ProjectActions.fetchData();
+	},
 	renderStatuses: function () {
 		var statuses = this.state.statuses;
-		var elements = statuses.map(function (item, index) {
-			return <StatusCard
-								key={index}
-								id={item.id}
-								name={item.name}
-								issues={item.issues}
-							/>
+		var tabs = statuses.map(function (item, index) {
+			var issues = item.issues.map(function (item, index) {
+				return <TaskListItem key={index} data={item} />
+			});
+
+			return <Tab label={item.name} key={index}>
+				<div>
+					{issues}
+				</div>
+			</Tab>
 		});
 
-		return elements;
+		return <Tabs children={tabs}></Tabs>
 	},
 	renderProjectLink: function () {
 		var projectUrl = this.props.projectUrl;
