@@ -1,21 +1,18 @@
 var React = require('react');
 var Reflux = require('reflux');
-var MainStore = require('../stores/MainStore');
 var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
 var StatusCard = require('./status_card');
 
 var StatusesList = React.createClass({
 	mixins: [ProjectStore.connect()],
-	getInitialState: function () {
-		return {
-			statuses: []
-		}
-	},
 	componentWillReceiveProps: function (nextProps) {
 		if (this.props.projectKey !== nextProps.projectKey) {
 			ProjectActions.fetchData();
 		}
+	},
+	componentDidMount: function () {
+		ProjectActions.fetchData();
 	},
 	renderStatuses: function () {
 		var statuses = this.state.statuses;

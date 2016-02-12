@@ -1,7 +1,14 @@
 var Reflux = require('reflux');
 var MainActions = require('../actions/MainActions');
+
 var MainStore = Reflux.createStore({
 	listenables: [MainActions],
+	idAttribute: 'key',
+	getInitialState: function () {
+		return {
+      expandedIssueId: null
+		}
+	},
 	onUpdateSettings: function (newSettings) {
 		console.log('new', newSettings);
 		this.update('settings', newSettings);
@@ -14,7 +21,26 @@ var MainStore = Reflux.createStore({
 	},
 	fetch: function () {
 		var self = this;
-		this.set('settings', swipes.info.workflow.settings);
+
+		swipes.service('jira').request('project.getAllProjects', function (res, err) {
+			if (res) {
+				var projects = res.data;
+				var projectKey = swipes.info.workflow.settings.projectKey;
+
+				self.batchLoad(projects);
+
+				if (!projectKey && projects[0]) {
+					projectKey = projects[0].key;
+
+					return MainActions.updateSettings({projectKey: projectKey});
+				}
+
+				self.set('settings', swipes.info.workflow.settings);
+			}
+			else {
+				console.log(err);
+			}
+		});
 	}
 });
 
