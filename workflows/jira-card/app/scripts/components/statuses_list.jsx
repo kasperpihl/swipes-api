@@ -23,14 +23,14 @@ var StatusesList = React.createClass({
 				return <TaskListItem key={index} data={item} />
 			});
 
-			return <Tab label={item.name} key={index}>
+			return <Tab style={{color: 'black'}} label={item.name} key={index}>
 				<div>
 					{issues}
 				</div>
 			</Tab>
 		});
 
-		return <Tabs children={tabs}></Tabs>
+		return <Tabs tabItemContainerStyle={{background:'none'}} children={tabs}></Tabs>
 	},
 	renderProjectLink: function () {
 		var projectUrl = this.props.projectUrl;
