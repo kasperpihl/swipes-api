@@ -16,9 +16,13 @@ swipes.onMenuButton(function(){
 	var channels = channelStore.getActive();
 	if(channels.length){
 		var navItems = [];
+		var currentChatId = chatStore.get('channelId');
 		_.each(channels, function(channel){
 			
 			var item = { id: channel.id, title: channel.name };
+			if(currentChatId === channel.id){
+				item.current = true;
+			}
 			if(channel.unread_count_display){
 				if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
 					item.badge = channel.unread_count_display;

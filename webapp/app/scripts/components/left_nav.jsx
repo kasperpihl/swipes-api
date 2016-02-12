@@ -32,6 +32,9 @@ var LeftNavModal = React.createClass({
 			if(item.bold){
 				style.fontWeight = 800;
 			}
+			if(item.current){
+				style.backgroundColor = "#ddd";
+			}
 			var badge;
 			if(item.badge){
 				var badge = <Badge badgeContent={item.badge}
