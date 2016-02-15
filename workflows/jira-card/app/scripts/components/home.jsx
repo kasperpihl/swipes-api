@@ -19,6 +19,8 @@ var Home = React.createClass({
   		var project = MainStore.getAll()[projectKey];
   		var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey : '#';
 
+      swipes.navigation.setTitle(project.name);
+
       return (
         <StatusesList projectKey={projectKey} projectUrl={projectUrl} />
       )
