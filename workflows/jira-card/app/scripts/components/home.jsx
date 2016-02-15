@@ -1,7 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var MainStore = require('../stores/MainStore');
-var ProjectActions = require('../actions/ProjectActions');
 var StatusesList = require('./statuses_list');
 var ExpandedIssue = require('./expanded_issue');
 

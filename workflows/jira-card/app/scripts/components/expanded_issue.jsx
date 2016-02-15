@@ -9,6 +9,7 @@ var Divider = require('material-ui/lib').Divider;
 var CardTitle = require('material-ui/lib').CardTitle;
 var RaisedButton = require('material-ui/lib').RaisedButton;
 var MainActions = require('../actions/MainActions');
+var Loading = require('./loading');
 
 var ExpandedIssue = React.createClass({
   getInitialState: function () {
@@ -147,7 +148,7 @@ var ExpandedIssue = React.createClass({
     				</Card>
 					</div>
 				) : (
-					<div>Loading...</div>
+					<Loading />
 				)}
 			</div>
 		);

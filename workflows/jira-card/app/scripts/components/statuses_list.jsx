@@ -5,6 +5,7 @@ var Tab = require('material-ui/lib').Tab;
 var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
 var TaskListItem = require('./task_list_item');
+var Loading = require('./loading');
 
 var StatusesList = React.createClass({
 	mixins: [ProjectStore.connect()],
@@ -57,7 +58,7 @@ var StatusesList = React.createClass({
 						{this.renderProjectLink()}
 					</div>
 				) : (
-					<div>Loading...</div>
+					<Loading />
 				)}
 			</div>
 		)
