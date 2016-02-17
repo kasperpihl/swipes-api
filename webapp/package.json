@@ -16,7 +16,7 @@
     "react-router": "~2.0.0-rc5",
     "react-tap-event-plugin": "^0.2.1",
     "reflux": "~0.3.0",
-    "reflux-model-extension": "*",
+    "reflux-model-extension": "~0.0.20",
     "vivus": "^0.2.3"
   },
   "devDependencies": {
