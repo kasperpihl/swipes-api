@@ -25,6 +25,9 @@ var ServiceStore = Reflux.createStore({
 		});
 	},
 	onHandleOAuthSuccess: function(serviceName, query){
+		if(typeof query === "string"){
+			query = JSON.parse(query);
+		}
 		swipes.service(serviceName).authSuccess(query, function(res, err){
 			amplitude.logEvent('Engagement - Added Service', {'Service': serviceName});
 			console.log('oauth success!', res, err);
