@@ -61,7 +61,7 @@ var SocketStore = Reflux.createStore({
 				user.services = user.services || [];
 				// T_TODO if it's updated we should replace not push to the array
 				user.services.push(msg.data);
-				// K_TODO why it does not update?
+				// The update of reflux model extension will fix this.
 				userStore.update(user.id, user);
 			}
 
