@@ -1,8 +1,10 @@
 var Reflux = require('reflux');
+var userActions = require('../actions/UserActions');
 
 var data = [];
 
 var UserStore = Reflux.createStore({
+	listenables: [ userActions ],
 	localStorage: "UserStore",
 	sort: "name",
 	me: function(){
@@ -36,6 +38,12 @@ var UserStore = Reflux.createStore({
 			name: "People",
 			results: results
 		};
+	},
+	onServiceDisconnect: function (serviceId) {
+		swipes.api.request('users.serviceDisconnect', {id: serviceId}, function () {
+			// K_TODO update UserStore
+			console.log('Service disconnected');
+		});
 	}
 });
 

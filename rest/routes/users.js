@@ -145,4 +145,26 @@ router.post('/users.updateWorkflowSettings', (req, res, next) => {
     })
 });
 
+router.post('/users.serviceDisconnect', (req, res, next) => {
+  let userId = req.userId;
+  let serviceId = req.body.id;
+
+  let updateQ =
+    r.table('users')
+      .get(userId)
+      .update({services: r.row('services')
+        .filter((service) => {
+          return service('id').ne(serviceId)
+        })
+      })
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+      return res.status(200).json({ok: true});
+    })
+    .catch((err) => {
+      return next(err);
+    })
+});
+
 module.exports = router;

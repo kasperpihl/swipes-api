@@ -1,8 +1,7 @@
 var Reflux = require('reflux');
 
 var ServiceActions = Reflux.createActions([
-	'authorize',
-	'handleOAuthSuccess'
+	'serviceDisconnect'
 ]);
 
 module.exports = ServiceActions;

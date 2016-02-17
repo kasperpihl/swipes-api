@@ -30,7 +30,7 @@ var SocketStore = Reflux.createStore({
 				serviceStore.batchLoad(res.services, {flush:true});
 				self.connect(res.url);
 				stateActions.changeStarted(true);
-				
+
 			}
 		}).fail(function(err){
 			console.log("rtm start err", err);
@@ -53,6 +53,20 @@ var SocketStore = Reflux.createStore({
 			}
 			else if (msg.type === 'workflow_removed'){
 				WorkflowStore.unset(msg.data.id);
+			}
+
+			if (msg.type === 'service_added' || msg.type === 'service_changed') {
+				var user = userStore.me();
+
+				user.services = user.services || [];
+				// T_TODO if it's updated we should replace not push to the array
+				user.services.push(msg.data);
+				// K_TODO why it does not update?
+				userStore.update(user.id, user);
+			}
+
+			if (msg.type === 'service_removed') {
+				// Update userStore
 			}
 
 

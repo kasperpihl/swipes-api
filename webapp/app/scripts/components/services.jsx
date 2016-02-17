@@ -4,6 +4,7 @@ var Topbar = require('./topbar');
 var Router = require('react-router');
 var ServiceStore = require('../stores/ServiceStore');
 var UserStore = require('../stores/UserStore');
+var UserActions = require('../actions/UserActions');
 var ServiceActions = require('../actions/ServiceActions');
 var Reflux = require('reflux');
 var Card = require('material-ui/lib/card/card');
@@ -73,15 +74,16 @@ Services.ConnectRow = React.createClass({
 });
 
 Services.ConnectedRow = React.createClass({
-	clickedRemove: function(){
-		//ServiceActions.remove()
+	clickedRemove: function () {
+		console.log(this.props.data);
+		UserActions.serviceDisconnect(this.props.data.id);
 	},
-	render: function(){
+	render: function () {
 		console.log(this.props.data);
 		return(
 			<div className="row connected">
 				<h6>{this.props.data.title}</h6>
-				<FlatButton onClick={this.clickedRemove} label="Disconnect" disabled={true} />
+				<FlatButton onClick={this.clickedRemove} label="Disconnect" />
 			</div>
 		);
 	}
