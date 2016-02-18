@@ -115,6 +115,14 @@ var CardLoader = React.createClass({
 		};
 		this.apiCon.callListener("event", e);
 	},
+	onShareCall:function(callback){
+		var e = {
+			type: 'share.request'
+		};
+		this.apiCon.callListener("event", e, function(actions){
+			callback(actions);
+		});
+	},
 	renderCardBar: function(){
 		var iconMenu = (<IconMenu
 			iconButtonElement={<IconButton
