@@ -2,6 +2,7 @@ var React = require('react');
 var chatActions = require('../actions/ChatActions');
 var ReactEmoji = require('react-emoji');
 var UserStore = require('../stores/UserStore');
+var FontIcon = require('material-ui/lib').FontIcon;
 var ChatItem = React.createClass({
 	renderNameHeader: function(){
 		var name = 'unknown';
@@ -47,7 +48,7 @@ var ChatItem = React.createClass({
 	},
 	render: function () {
 		/*
-		
+
 		var meClassName = swipes.info.userId === firstMessage.user.id ? ' me' : '';
 		var chatWrapperClassName = 'chat-wrapper' + meClassName;*/
 		var className = "chat-wrapper";
@@ -74,6 +75,9 @@ var ChatMessage = React.createClass({
 	mixins: [
 		ReactEmoji
 	],
+	share: function (text) {
+		swipes.actions.share({text: text});
+	},
 	renderAttachments:function(){
 		if(!this.props.data.attachments){
 			return;
@@ -97,6 +101,16 @@ var ChatMessage = React.createClass({
 			console.log('emojis', message);
 		}
 	},
+	renderShareIcon: function (text) {
+		if (text) {
+			return <div className="share-icon">
+				<FontIcon
+					className="material-icons share"
+					onClick={this.share.bind(this, text)}
+				/>
+			</div>
+		}
+	},
 	render: function () {
 		var className = "message-wrapper";
 		if(this.props.data.isNewMessage){
@@ -105,6 +119,7 @@ var ChatMessage = React.createClass({
 		return (
 			<div className={className}>
 				<div className="message">
+					{this.renderShareIcon(renderTextWithLinks(this.props.data.text))}
 					{this.renderMessage(this.props.data.text)}
 					{this.renderFile()}
 					{this.renderAttachments()}
@@ -118,7 +133,7 @@ ChatMessage.File = React.createClass({
 	render: function(){
 		return (
 			<div className="file-container">
-				
+
 			</div>
 		);
 	}
@@ -197,7 +212,7 @@ var clickedLink = function(match){
 	if(res[1])
 		clickObj.identifier = res[1];
 	if(res[2])
-		clickObj.title = res[2]; 
+		clickObj.title = res[2];
 	console.log('clicked', clickObj);
 	chatActions.clickLink(clickObj.command);
 
@@ -210,20 +225,20 @@ var renderTextWithLinks = function(text, emojiFunction){
 	}
 	text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 	var matches = text.match(/<(.*?)>/g);
-	
+
 	var replaced = [];
 
 	if ((matches != null) && matches.length) {
 		var splits = text.split(/<(.*?)>/g);
 		var counter = 0;
-		
+
 		// Adding the text before the first match
 		replaced.push(emojiFunction(splits.shift()));
 		for(var i = 0 ; i < matches.length ; i++ ){
-			// The match is now the next object				
+			// The match is now the next object
 			var innerMatch = splits.shift();
 			var placement = '';
-			
+
 			// If break, just add that as the placement
 			if(innerMatch === 'br'){
 				var key = 'break' + (counter++);
@@ -240,7 +255,7 @@ var renderTextWithLinks = function(text, emojiFunction){
 						title = "@" + user.name;
 					}
 				}
-				
+
 				var key = 'link' + (counter++);
 				placement = <a key={key} className='link' onClick={clickedLink.bind(null, innerMatch)}>{title}</a>;
 			}
