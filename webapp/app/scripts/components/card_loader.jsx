@@ -48,6 +48,7 @@ var CardLoader = React.createClass({
 				window.open(data.url, "_blank");
 			}
 			else if(message.command === "actions.share"){
+				console.log(message);
 				// K_TODO: this should load a share overlay, rendering all the actions from the cards.
 				// After selection, it should callback:
 				// this.apiCon.callListener('event', { type: 'share'})
@@ -133,11 +134,11 @@ var CardLoader = React.createClass({
 			<MenuItem primaryText="Remove" onTouchTap={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
 		</IconMenu>);
 
-		var menuButton = menu = <IconButton style={{}} 
+		var menuButton = menu = <IconButton style={{}}
 			touch={true} onTouchTap={this.onCardMenuButtonClick}>
 			<FontIcon color="white" className="material-icons">menu</FontIcon>
 		</IconButton>;
-		
+
 		if(this.state.badge){
 			menu = (<Badge
 				badgeContent={this.state.badge}
