@@ -9,9 +9,17 @@ var ChatStore = Reflux.createStore({
 	listenables: [ChatActions],
 	start: function() {
 
+		if(this.isStarting){
+			return;
+		}
+		if(!this.timer){
+			this.timer = setInterval(this.checkForConnect.bind(this), 6000);
+		}
+		this.isStarting = true;
 
 		var self = this;
 		swipes.service("slack").request('rtm.start', function(res, err){
+			self.isStarting = false;
 			var obj = res.data;
 			if(err){
 				return;
@@ -41,16 +49,26 @@ var ChatStore = Reflux.createStore({
 
 		});
 	},
-
+	checkForConnect: function(){
+		if(!this.webSocket || this.webSocket.readyState > 1){
+			this.start();
+		}
+	},
 	connectSocket: function(url){
 		if(!this.webSocket){
 			this.webSocket = new WebSocket(url);
 			this.webSocket.onopen = function(){
 				console.log("slack socket", "open");
-			}
+				setTimeout(function(){
+					console.log('closing socket', this.webSocket);
+					//this.webSocket.close();
+				}.bind(this), 2000);
+			}.bind(this);
 			this.webSocket.onclose = function () {
 				console.log("slack socket", "close");
-			}
+				this.webSocket = null;
+				this.start();
+			}.bind(this);
 			this.webSocket.onmessage = function(msg){
 				var data = JSON.parse(msg.data);
 				this.onHandleMessage(data);
