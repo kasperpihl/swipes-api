@@ -9,8 +9,13 @@ var MainStore = Reflux.createStore({
 		return {
 			button: {
 				disabled: false
-			}
+			},
+			issueTitle: {value: ''},
+			issueDescription: {value: ''}
 		}
+	},
+	onUpdateInputValue: function (type, value) {
+		this.update(type, {value: value});
 	},
 	onCreateIssue: function (issue, refs) {
 		var self = this;
@@ -21,8 +26,8 @@ var MainStore = Reflux.createStore({
 			.then(function (res) {
 				console.log('ISSUE ADDED');
 				console.log(res);
-				refs.issueTitle.setValue('');
-				refs.issueDescription.setValue('');
+				self.update('issueTitle', {value: refs.issueTitle.props.defaultValue});
+				self.update('issueDescription', {value: refs.issueDescription.props.defaultValue});
 			})
 			.catch(function (err) {
 				console.log('Creating issue failed');

@@ -14,8 +14,8 @@ var Home = React.createClass({
   createIssue: function () {
     var projectKey = MainStore.get('settings').projectKey;
     var project = MainStore.getAll()[projectKey];
-    var issueTitle = this.refs.issueTitle.getValue();
-    var issueDescription = this.refs.issueDescription.getValue();
+    var issueTitle = this.refs.issueTitle.props.value;
+    var issueDescription = this.refs.issueDescription.props.value;
     var issue = {
       fields: {
         project: {
@@ -34,20 +34,33 @@ var Home = React.createClass({
 
     MainActions.createIssue(issue, this.refs);
   },
+  handleInputChange: function (e) {
+    var inputType = e.target.name;
+
+    MainActions.updateInputValue(inputType, e.target.value);
+  },
 	render: function () {
     return (
 			<div>
         <TextField
+          defaultValue={''}
+          value={this.state.issueTitle.value}
+          name="issueTitle"
           ref="issueTitle"
           floatingLabelText="Issue title"
           style={commonStyles}
+          onChange={this.handleInputChange}
         />
         <TextField
+          defaultValue={''}
+          value={this.state.issueDescription.value}
+          name="issueDescription"
           ref="issueDescription"
           floatingLabelText="Issue description"
           multiLine={true}
           rowsMax={6}
           style={commonStyles}
+          onChange={this.handleInputChange}
         />
         <RaisedButton label="Create Issue" primary={true} style={commonStyles} onClick={this.createIssue} disabled={this.state.button.disabled} />
 			</div>
