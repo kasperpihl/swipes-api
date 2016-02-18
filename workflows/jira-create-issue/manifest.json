@@ -1,0 +1,9 @@
+{
+	"manifest_version": 1,
+	"name": "JIRA Create Issue",
+	"identifier": "jira-create-issue",
+	"version": "0.1",
+	"description": "Creating JIRA issues never been easier",
+	"index": "dev/index.html",
+	"required_services": ["jira"]
+}
