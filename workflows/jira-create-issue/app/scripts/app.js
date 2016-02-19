@@ -13,10 +13,10 @@ swipes.onReady (function () {
 	MainStore.fetch();
 });
 
-swipes.onShareRequest(function(message, callback) {
+swipes.onShareRequest(function(message) {
 	console.log(message);
 	console.log('Message received - Create Issue Card');
-	callback([{title: 'Create Issue Card'}]);
+	return [{title: 'Create Issue Card'}];
 });
 
 swipes.onMenuButton(function () {
