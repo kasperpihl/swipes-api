@@ -9,9 +9,11 @@ var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
+var CardActions = require('../actions/CardActions');
 
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
+var CardStore = require('../stores/CardStore');
 
 var AppBar = require('material-ui/lib').AppBar;
 var Badge = require('material-ui/lib').Badge;
@@ -47,8 +49,9 @@ var CardLoader = React.createClass({
 			else if (message.command === "actions.openURL"){
 				window.open(data.url, "_blank");
 			}
-			else if(message.command === "actions.share"){
+			else if (message.command === "share.request") {
 				console.log(message);
+				CardActions.broadCast(message);
 				// K_TODO: this should load a share overlay, rendering all the actions from the cards.
 				// After selection, it should callback:
 				// this.apiCon.callListener('event', { type: 'share'})
@@ -100,6 +103,7 @@ var CardLoader = React.createClass({
 		this.apiCon.setListener(doc, apiUrl);
 		this.apiCon.callListener("event", initObj);
 		this.apiCon.setDelegate(this);
+		CardActions.addCard(this);
 	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -115,14 +119,6 @@ var CardLoader = React.createClass({
 			type: 'menu.button'
 		};
 		this.apiCon.callListener("event", e);
-	},
-	onShareCall:function(callback){
-		var e = {
-			type: 'share.request'
-		};
-		this.apiCon.callListener("event", e, function(actions){
-			callback(actions);
-		});
 	},
 	renderCardBar: function(){
 		var iconMenu = (<IconMenu

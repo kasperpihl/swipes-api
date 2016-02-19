@@ -41,7 +41,7 @@ var Workspace = React.createClass({
         return (
             <div className="scroll-container">
                 <ReactGridLayout
-                layout={_.pluck(this.state.workflows, '_grid')} 
+                layout={_.pluck(this.state.workflows, '_grid')}
                 onLayoutChange={this.onLayoutChange}
                 {...this.props}>
                     {this.generateDOM()}

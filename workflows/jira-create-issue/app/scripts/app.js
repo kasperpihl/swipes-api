@@ -13,6 +13,12 @@ swipes.onReady (function () {
 	MainStore.fetch();
 });
 
+swipes.onShareRequest(function(message, callback) {
+	console.log(message);
+	console.log('Message received - Create Issue Card');
+	callback([{title: 'Create Issue Card'}]);
+});
+
 swipes.onMenuButton(function () {
 	var projects = MainStore.getAll();
 	var navItems = [];

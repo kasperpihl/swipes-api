@@ -12,9 +12,6 @@ ReactDOM.render(<Home />, document.getElementById('content'));
 swipes.onReady (function () {
 	MainStore.fetch();
 });
-swipes.onShareRequest(function(callback){
-	callback(["Post to JIRA"]);
-});
 swipes.onMenuButton(function () {
 	var projects = MainStore.getAll();
 	var navItems = [];

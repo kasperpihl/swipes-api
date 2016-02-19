@@ -76,7 +76,7 @@ var ChatMessage = React.createClass({
 		ReactEmoji
 	],
 	share: function (text) {
-		swipes.actions.share({text: text});
+		swipes.share.request({text: text});
 	},
 	renderAttachments:function(){
 		if(!this.props.data.attachments){

@@ -73,9 +73,6 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onMenuButton = function(callback){
 		self._listeners.add('menu.button', callback);
 	};
-	SwipesAppSDK.prototype.onShare = function(callback){
-		self._listeners.add('share', callback);
-	}
 	SwipesAppSDK.prototype.onPreview = function(callback){
 		self._listeners.add("preview", callback);
 	};
@@ -333,13 +330,19 @@ var SwipesAppSDK = (function() {
 			return currentListeners;
 		}
 	}
-	
+
+	SwipesAppSDK.prototype.share = {
+		request: function (data) {
+			self._client.callListener("share.request", data);
+		},
+		transmit: function(data){
+			self._client.callListener('share.transmit', data);
+		}
+	};
+
 	SwipesAppSDK.prototype.actions = {
 		openURL: function(url){
 			self._client.callListener("actions.openURL", {url: url});
-		},
-		share: function(data){
-			self._client.callListener('actions.share', data);
 		}
 	};
 
