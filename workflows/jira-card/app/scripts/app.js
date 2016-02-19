@@ -21,7 +21,9 @@ swipes.onMenuButton(function () {
 		// so this cause some problems with the nav menu when the key is undefined
 		if (project && project.key) {
 			var item = { id: project.key, title: project.name };
-
+			if(project.key === MainStore.get('settings').projectKey){
+				item.current = true;
+			}
 			navItems.push(item);
 		}
 	});
