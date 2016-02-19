@@ -95,7 +95,7 @@ var CardLoader = React.createClass({
 			this.apiCon = swipes._client.copyConnector();
 		}
 		this.apiCon.setId(this.state.workflow.id);
-		var doc = $(this.refs.iframe)[0].contentWindow;
+		var doc = this.refs.iframe.contentWindow;
 		var apiUrl = this.apiCon.getBaseURL();
 		this.apiCon.setListener(doc, apiUrl);
 		this.apiCon.callListener("event", initObj);
