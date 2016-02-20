@@ -13,10 +13,15 @@ swipes.onReady (function () {
 	MainStore.fetch();
 });
 
-swipes.onShareRequest(function(message) {
-	console.log(message);
-	console.log('Message received - Create Issue Card');
-	return [{title: 'Create Issue Card'}];
+swipes.onShareTransmit(function(e) {
+	console.log(e);
+	var data = e.data.data;
+
+	if (data.action === 'Create an issue') { // We have to do something smarter here
+		var text = data.data.text || ''; // e.data.data.data.data...
+
+		MainActions.updateInputValue('issueTitle', text);
+	}
 });
 
 swipes.onMenuButton(function () {

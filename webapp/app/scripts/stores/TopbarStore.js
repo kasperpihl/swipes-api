@@ -19,7 +19,7 @@ var TopbarStore = Reflux.createStore({
 		}).catch(function(err){
 
 		});
-		
+
 	},
 	onEditWorkflow: function(workflow){
 		modalActions.loadModal('alert', {buttons: ["Cancel", "Rename", "Remove"], title: 'Workflow', message: 'What do you want to do with this workflow?'}, function(res){
@@ -40,7 +40,7 @@ var TopbarStore = Reflux.createStore({
 				}
 			}
 		});
-		
+
 	}
 });
 

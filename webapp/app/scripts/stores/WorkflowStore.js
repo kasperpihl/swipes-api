@@ -23,6 +23,26 @@ var WorkflowStore = Reflux.createStore({
 			results: results
 		};
 	},
+	shareList: function () {
+		var list = [];
+		var workflows = this.getAll();
+
+		workflows.forEach(function (wf) {
+			if (wf.share_actions && wf.share_actions.length > 0) {
+				wf.share_actions.forEach(function (action) {
+					var item = {
+						name: wf.name + ' - ' + action,
+						id: wf.id,
+						action: action
+					}
+
+					list.push(item);
+				})
+			}
+		});
+
+		return list;
+	},
 	onRenameWorkflow: function(workflow, name){
 		swipes.api.request('users.renameWorkflow', {'workflow_id': workflow.id, name: name}, function(res, error){
 
@@ -41,7 +61,7 @@ var WorkflowStore = Reflux.createStore({
 			newObj.index_url = this.workflow_base_url + newObj.manifest_id + '/' + newObj.index;
 		}
 		return newObj;
-	}	
+	}
 });
 
 module.exports = WorkflowStore;

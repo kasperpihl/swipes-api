@@ -9,11 +9,9 @@ var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
-var CardActions = require('../actions/CardActions');
 
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
-var CardStore = require('../stores/CardStore');
 
 var AppBar = require('material-ui/lib').AppBar;
 var Badge = require('material-ui/lib').Badge;
@@ -35,7 +33,9 @@ var CardLoader = React.createClass({
 		return {};
 	},
 	connectorHandleResponseReceivedFromListener: function(connector, message, callback){
-		var data, userInfo;
+		var self = this,
+				data, userInfo;
+
 		if (message && message.command) {
 			data = message.data;
 			if (message.command === "navigation.setTitle") {
@@ -50,11 +50,20 @@ var CardLoader = React.createClass({
 				window.open(data.url, "_blank");
 			}
 			else if (message.command === "share.request") {
-				console.log(message);
-				CardActions.broadCast(message);
-				// K_TODO: this should load a share overlay, rendering all the actions from the cards.
-				// After selection, it should callback:
-				// this.apiCon.callListener('event', { type: 'share'})
+				var shareList = WorkflowStore.shareList();
+				var modalData = {
+					title: "Add a workflow",
+					emptyText: "We're working on adding more workflows.",
+					rows: shareList
+				};
+
+				modalActions.loadModal('list', modalData, function (row) {
+					eventActions.fire("share.transmit", {
+						cardId: row.id,
+						action: row.action,
+						data: message.data
+					});
+				});
 			}
 			else if (message.command === 'analytics.action'){
 				if(this.state.workflow){
@@ -78,9 +87,20 @@ var CardLoader = React.createClass({
 		console.log("received socket event", e);
 		this.apiCon.callListener("event", e);
 	},
+	onShareTransmit: function (e) {
+		if (e.cardId === this.props.data.id) {
+			this.apiCon.callListener('event', {
+				type: 'share.transmit',
+				data: e
+			});
+		}
+	},
 	onLoad:function(){
 		// Clear any listeners for this card.
 		eventActions.remove(null, null, "card" + this.props.data.id);
+
+		// Add a listeners for share
+		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
 
 		var initObj = {
 			type: "init",
@@ -103,7 +123,6 @@ var CardLoader = React.createClass({
 		this.apiCon.setListener(doc, apiUrl);
 		this.apiCon.callListener("event", initObj);
 		this.apiCon.setDelegate(this);
-		CardActions.addCard(this);
 	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);

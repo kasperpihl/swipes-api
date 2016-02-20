@@ -5,5 +5,6 @@
 	"version": "0.1",
 	"description": "Creating JIRA issues never been easier",
 	"index": "dev/index.html",
-	"required_services": ["jira"]
+	"required_services": ["jira"],
+	"share_actions": ["Create an issue"]
 }

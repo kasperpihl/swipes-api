@@ -79,6 +79,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onShareRequest = function(callback){
 		self._listeners.add("share.request", callback);
 	};
+	SwipesAppSDK.prototype.onShareTransmit = function(callback){
+		self._listeners.add("share.transmit", callback);
+	};
 	SwipesAppSDK.prototype.api = {
 		request: function(options, data, callback){
 			return self._client.callSwipesApi(options, data, callback);
