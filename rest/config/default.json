@@ -7,6 +7,11 @@
   "jira": {
     "consumerKey": "SwipesUnicorns"
   },
+  "dropbox": {
+    "appId": "wh02j5prwflysc2",
+    "appSecret": "uzq5he1dv12608f",
+    "redirectURI": "http://localhost:3000/oauth-success.html"
+  },
   "origin": "http://localhost",
   "apiPort": 5000,
   "clientPort" :3000,

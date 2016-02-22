@@ -2,7 +2,16 @@
 <head>
 	<script>
 		var query_string = {};
-		var vars = window.location.search.substring(1).split("&");
+		var vars = [];
+
+		if (window.location.search.length > 0) {
+			var vars = window.location.search.substring(1).split("&");
+		} else if (window.location.hash.length > 0) {
+			vars = window.location.hash.substring(1).split("&");
+		}
+
+		console.log(vars);
+
 		for (var i=0;i<vars.length;i++) {
 			var pair = vars[i].split("=");
 			if (typeof query_string[pair[0]] === "undefined") {
