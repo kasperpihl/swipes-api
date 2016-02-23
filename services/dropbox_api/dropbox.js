@@ -1,8 +1,5 @@
 var config = require('config');
-var r = require('rethinkdb');
 var request = require('request');
-var db = require('../../rest/db.js'); // T_TODO I should make this one a local npm module
-var SwipesError = require( '../../rest/swipes-error' );
 var serviceDir = __dirname;
 var dropboxConfig = config.get('dropbox');
 
@@ -56,7 +53,7 @@ var dropbox = {
     URL += '&force_reapprove=true'; // this is only for testing
     // It will be good to implement the state parameter for better security
 
-		callback(null, {type: 'oauth', service: 'dropbox', url: URL});
+		callback(null, {type: 'oauth', url: URL});
 	}
 };
 
