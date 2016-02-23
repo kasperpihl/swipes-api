@@ -7,6 +7,11 @@
   "jira": {
     "consumerKey": "SW_JIRA_CONSUMER_KEY"
   },
+  "asana": {
+    "clientId": "SW_ASANA_CLIENT_ID",
+    "clientSecret": "SW_ASANA_CLIENT_SECRET",
+    "redirectUri": "SW_ASANA_REDIRECT_URI"
+  },
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
   "clientPort": "SW_CLIENT_PORT"

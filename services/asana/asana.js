@@ -1,47 +1,100 @@
+var config = require('config');
 var Asana = require('asana');
+var SwipesError = require( '../../rest/swipes-error' );
+
+var asanaConfig = config.get('asana');
+
+var createClient = function () {
+	return Asana.Client.create({
+		clientId: asanaConfig.clientId,
+		clientSecret: asanaConfig.clientSecret,
+		redirectUri: asanaConfig.redirectUri
+	});
+}
+
+var getAsanaApiMethod = function (method, client) {
+	var arr = method.split('.');
+	var len = arr.length;
+	var asanaMethod = client;
+	var prevAsanaMethod = asanaMethod;
+
+	for (var i=0; i<len; i++) {
+		if (!asanaMethod[arr[i]]) {
+			return null;
+		}
+
+		if (!asanaMethod[arr[i]].bind) {
+			asanaMethod = asanaMethod[arr[i]];
+		} else {
+			asanaMethod = asanaMethod[arr[i]].bind(prevAsanaMethod);
+		}
+
+		prevAsanaMethod = asanaMethod;
+	}
+
+	return asanaMethod;
+}
 
 var asana = {
-	// This should be dynamically set from database, but for now this is okay
-	connectionData: {
-		redirect_uri: 'http://dev.swipesapp.com/oauth-success.html',
-		client_id: 79054685042235,
-		client_secret: 'eeac87abedd54540813d0eba2901bdad'
-	},
-	request: function (authData, method, options, callback) {
-		// authData is the data that was saved in beforeAuthSave
-		var err = false;
-		var res = 'success';
-		callback(err, res);
+	request: function (authData, method, params, callback) {
+		var id, asanaPromise, asanaMethod;
+		var client = createClient();
+
+		client.useOauth({
+			credentials: authData.access_token
+		})
+
+		asanaMethod = getAsanaApiMethod(method, client);
+
+		// T_TODO We have to return null if the method don't exist
+		if (!asanaMethod) {
+			return callback(new SwipesError('asana_sdk_not_supported_method'));
+		}
+
+		if (params.id) {
+			id = params.id;
+			delete(params.id);
+		}
+
+		if (id) {
+			asanaPromise = asanaMethod(id, params);
+		} else {
+			asanaPromise = asanaMethod(params);
+		}
+
+		// T_TODO error handling
+		asanaPromise
+			.then(function (response) {
+				callback(null, response.data);
+			})
 	},
 	beforeAuthSave: function (data, callback) {
-		var asanaClient = Asana.Client.create({
-			clientId: this.connectionData.client_id,
-			clientSecret: this.connectionData.client_secret,
-			redirectUri: this.connectionData.redirect_uri
-		});
+		var client = createClient();
 
-		asanaClient.useOauth();
-		asanaClient.app.accessTokenFromCode(data.code).then(function (credentials) {
-			console.log('success asana', credentials);
-			callback(null, credentials);
-		}).catch(function(e){
-			callback('error asana', e);
-			console.log('eer', e);
-		});
+		client.useOauth({
+			credentials: data.access_token
+		})
+
+		client.users.me()
+			.then(function (user) {
+				// make this one a string
+				// because we will have a problem to dissconnect it after that
+				data.id = user.id + '';
+
+				callback(null, data);
+			})
 	},
-	authorize: function (callback) {
+	authorize: function (data, callback) {
 		var URL = 'https://app.asana.com/-/oauth_authorize';
-		URL += '?client_id=' + this.connectionData.client_id;
-		URL += '&response_type=code';
-		URL += '&scope=default';
-		URL += '&redirect_uri=' + this.connectionData.redirect_uri;
-		URL += '&state=hahaha2';
+		URL += '?client_id=' + asanaConfig.clientId;
+		URL += '&redirect_uri=' + asanaConfig.redirectUri;
+		URL += '&response_type=token';
+		URL += '&state=notrandomstuff';
 
-		return {
+		callback(null, {
 			type: 'oauth',
-			service: 'asana',
 			url: URL
-		};
+		});
 	}
 };
 
