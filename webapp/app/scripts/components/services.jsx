@@ -26,6 +26,10 @@ var Services = React.createClass({
 		var self = this;
 		return sortedServices.map(function(service){
 			var realService = self.state.services[service.service_id];
+
+			realService.service_id = realService.id;
+			realService.id = service.id;
+
 			return <Services.ConnectedRow key={service.id} data={realService} />;
 		})
 	},
