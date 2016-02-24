@@ -13,8 +13,8 @@
     "redirectURI": "http://localhost:3000/oauth-success.html"
   },
   "asana": {
-    "clientId": "55104337606444",
-    "clientSecret": "ef862c7ddea4a517d61e5c345812e9eb",
+    "clientId": "93722876544112",
+    "clientSecret": "07cf42d4b1190acb4333d66229fb080b",
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "origin": "http://localhost",
