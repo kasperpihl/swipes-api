@@ -7,6 +7,9 @@
   "jira": {
     "consumerKey": "SW_JIRA_CONSUMER_KEY"
   },
+  "dropbox": {
+    "redirectURI": "SW_DROPBOX_REDIRECT_URI"
+  },
   "asana": {
     "clientId": "SW_ASANA_CLIENT_ID",
     "clientSecret": "SW_ASANA_CLIENT_SECRET",

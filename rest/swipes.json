@@ -10,6 +10,8 @@
        "SW_CLIENT_PORT": "443",
        "SW_JIRA_CONSUMER_KEY": "DevSwipesUnicorns",
 
+       "SW_DROPBOX_REDIRECT_URI": "https://dev.swipesapp.com/oauth-success.html",
+
        "SW_ASANA_CLIENT_ID": "93722876544114",
        "SW_ASANA_CLIENT_SECRET": "bb0c3dc1e9041f442e60834b5bf98934",
        "SW_ASANA_REDIRECT_URI": "http://dev.swipesapp.com/oauth-success.html"
