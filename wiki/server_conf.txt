@@ -1,0 +1,10 @@
+# Here we will collect some resources that we use to configure our servers
+
+# git deploy with git hooks
+# In addition to the link we have to have a special user with the right permissions
+# on our web directory
+http://krisjordan.com/essays/setting-up-push-to-deploy-with-git
+https://www.digitalocean.com/community/tutorials/how-to-use-git-hooks-to-automate-development-and-deployment-tasks
+
+# letencrypt + nginx
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04
