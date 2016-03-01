@@ -8,6 +8,8 @@ var LeftNav = require('material-ui/lib').LeftNav;
 var Badge = require('material-ui/lib').Badge;
 
 var MenuItem = require('material-ui/lib').MenuItem;
+var List = require('material-ui/lib').List;
+var ListItem = require('material-ui/lib').ListItem;
 
 var LeftNavModal = React.createClass({
 	mixins: [ leftNavStore.connect('leftNav') ],
@@ -19,37 +21,59 @@ var LeftNavModal = React.createClass({
 	clicked: function(itemId){
 		leftNavActions.hide(itemId);
 	},
-	renderItems:function(){
-		var items = this.state.leftNav.items;
+	renderItems:function(items){
+		var items = items || this.state.leftNav.items;
 		var renderedItems = [];
 
 		_.each(items, function(item){
-			var style = {lineHeight: '30px'};
+			var nestedItems = [];
+			var style = {};
+			var initiallyOpen = false;
+			var badge;
+
 			if(!item || typeof item.id !== 'string' || typeof item.title !== 'string' ){
 				console.log('invalid item for left nav', item);
 				return;
 			}
+
 			if(item.bold){
 				style.fontWeight = 800;
 			}
+
 			if(item.current){
 				style.backgroundColor = "#ddd";
 			}
-			var badge;
+
+
 			if(item.badge){
 				var badge = <Badge badgeContent={item.badge}
 					style={{padding: 0, margin:0}}
 					badgeStyle={{backgroundColor: 'red', top: '-15px', left: '3px', color: 'white', fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
 				</Badge>
 			}
-			renderedItems.push( <MenuItem 
-					key={item.id} 
+
+			if (item.nested && item.nested.length > 0) {
+				nestedItems = this.renderItems(item.nested);
+				item.nested.forEach(function (item) {
+					if (item.current) {
+						initiallyOpen = true;
+					}
+				})
+			}
+
+			var primaryText = <div>{item.title}{badge}</div>;
+
+			renderedItems.push( <ListItem
+					key={item.id}
 					style={style}
-					onTouchTap={this.clicked.bind(this, item.id)}>
-					{item.title}
-					{badge}
-				</MenuItem>);
+					onTouchTap={this.clicked.bind(this, item.id)}
+					primaryText={primaryText}
+					nestedItems={nestedItems}
+					initiallyOpen={initiallyOpen}
+					>
+				</ListItem>);
 		}.bind(this));
+
 		return renderedItems;
 	},
 	render: function() {
@@ -61,7 +85,7 @@ var LeftNavModal = React.createClass({
 				style={{paddingTop: '100px'}}
 				open={this.state.leftNav.open}
 				onRequestChange={this.onRequestChange}>
-				{this.renderItems()}
+				<List children={this.renderItems()}></List>
 			</LeftNav>
 		);
 	}
