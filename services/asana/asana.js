@@ -1,5 +1,8 @@
 var config = require('config');
 var Asana = require('asana');
+var Promise = require('bluebird');
+var r = require('rethinkdb');
+var db = require('../../rest/db.js'); // T_TODO I should make this one a local npm module
 var SwipesError = require( '../../rest/swipes-error' );
 
 var asanaConfig = config.get('asana');
@@ -35,65 +38,113 @@ var getAsanaApiMethod = function (method, client) {
 	return asanaMethod;
 }
 
+var refreshAccessToken = function (authData, user, service) {
+	return new Promise(function (resolve, reject) {
+		var now = new Date().getTime() / 1000;
+		var expires_in = expires_in - 30; // 30 seconds margin of error
+		var ts_last_token = authData.ts_last_token;
+		var client = createClient();
+		var userId = user.userId;
+		var serviceId = service.id;
+		var accessToken;
+
+		if (now - ts_last_token > expires_in) {
+			client.app.accessTokenFromRefreshToken(authData.refresh_token)
+				.then(function (response) {
+					accessToken = response.access_token;
+					// T_TODO we have to seperate this from the services code
+					// if we want devs to build services one day
+					var query = r.table('users').get(userId)
+						.update({services: r.row('services')
+							.map((service) => {
+								return r.branch(
+									service('id').eq(serviceId),
+									service.merge({
+										authData: {access_token: accessToken},
+										ts_last_token: now
+									}),
+									service
+								)
+							})
+						});
+
+					return db.rethinkQuery(query);
+				})
+				.then(function () {
+					resolve(accessToken);
+				})
+				.catch(function (error) {
+					reject(error);
+				})
+		} else {
+			resolve(authData.access_token);
+		}
+	});
+}
+
 var asana = {
-	request: function (authData, method, params, callback) {
+	request: function ({authData, method, params, user, service}, callback) {
 		var id, asanaPromise, asanaMethod;
 		var client = createClient();
 
-		client.useOauth({
-			credentials: authData.access_token
-		})
+		refreshAccessToken(authData, user, service)
+			.then(function (accessToken) {
+				client.useOauth({
+					credentials: accessToken
+				});
 
-		asanaMethod = getAsanaApiMethod(method, client);
+				asanaMethod = getAsanaApiMethod(method, client);
 
-		// T_TODO We have to return null if the method don't exist
-		if (!asanaMethod) {
-			return callback(new SwipesError('asana_sdk_not_supported_method'));
-		}
+				// T_TODO We have to return null if the method don't exist
+				if (!asanaMethod) {
+					return Promise.reject(new SwipesError('asana_sdk_not_supported_method'));
+				}
 
-		if (params.id) {
-			id = params.id;
-			delete(params.id);
-		}
+				if (params.id) {
+					id = params.id;
+					delete(params.id);
+				}
 
-		if (id) {
-			asanaPromise = asanaMethod(id, params);
-		} else {
-			asanaPromise = asanaMethod(params);
-		}
+				if (id) {
+					asanaPromise = asanaMethod(id, params);
+				} else {
+					asanaPromise = asanaMethod(params);
+				}
 
-		// T_TODO error handling
-		asanaPromise
+				return asanaPromise;
+			})
 			.then(function (response) {
 				callback(null, response.data);
+			})
+			.catch(function (error) {
+				callback(error);
 			})
 	},
 	beforeAuthSave: function (data, callback) {
 		var client = createClient();
+		var code = data.code;
+		var data;
 
-		client.useOauth({
-			credentials: data.access_token
-		})
-
-		client.users.me()
-			.then(function (user) {
-				// make this one a string
-				// because we will have a problem to dissconnect it after that
-				data.id = user.id + '';
-
+		client.app.accessTokenFromCode(code)
+			.then(function (response) {
+				data = response;
+				data.id = response.data.id;
+				// Need that for the refresh roken
+				data.ts_last_token = new Date().getTime() / 1000;
 				callback(null, data);
+			})
+			.catch(function (error) {
+				console.log(error);
+				callback(error);
 			})
 	},
 	authorize: function (data, callback) {
-		var URL = 'https://app.asana.com/-/oauth_authorize';
-		URL += '?client_id=' + asanaConfig.clientId;
-		URL += '&redirect_uri=' + asanaConfig.redirectUri;
-		URL += '&response_type=token';
-		URL += '&state=notrandomstuff';
+		var client = createClient();
+		var url = client.app.asanaAuthorizeUrl();
 
 		callback(null, {
 			type: 'oauth',
-			url: URL
+			url: url
 		});
 	}
 };
