@@ -41,11 +41,11 @@ var getAsanaApiMethod = function (method, client) {
 var refreshAccessToken = function (authData, user, service) {
 	return new Promise(function (resolve, reject) {
 		var now = new Date().getTime() / 1000;
-		var expires_in = expires_in - 30; // 30 seconds margin of error
+		var expires_in = authData.expires_in - 30; // 30 seconds margin of error
 		var ts_last_token = authData.ts_last_token;
 		var client = createClient();
 		var userId = user.userId;
-		var serviceId = service.id;
+		var serviceId = service.serviceId;
 		var accessToken;
 
 		if (now - ts_last_token > expires_in) {
