@@ -16,8 +16,15 @@ router.post('/services.request', serviceUtil.validateData, serviceUtil.getServic
 	let data = res.locals.data;
 	let service = res.locals.service;
 	let file = res.locals.file;
+	let user = {userId: req.userId};
+	let options = {
+		authData: service.authData,
+		method: data.method,
+		params: data.parameters,
+		user: user
+	};
 
-	file.request(service.authData, data.method, data.parameters, function (err, result) {
+	file.request(options, function (err, result) {
 		if (err) {
 			return next(err);
 		}

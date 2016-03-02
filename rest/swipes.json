@@ -3,7 +3,7 @@
     "name"        : "swipes-server",
     "script"      : "instance.js",
     "watch"       : true,
-    "node_args"   : "--harmony_rest_parameters",
+    "node_args"   : "--harmony --harmony_destructuring",
     "env_dev" : {
        "SW_ORIGIN": "https://dev.swipesapp.com",
        "SW_API_PORT": "5000",

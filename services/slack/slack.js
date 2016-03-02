@@ -6,11 +6,11 @@ var slack = {
 		client_id: '2345135970.9201204242',
 		client_secret: '306fd7099a762968aa876d53579fa694'
 	},
-	request:function(authData, method, options, callback){
+	request:function({authData, method, params}, callback){
 		if(typeof authData !== 'object' || !authData.access_token){
 			return callback('no_access_token');
 		}
-		SlackConnector.request(authData.access_token, method, options, function(err, res){
+		SlackConnector.request(authData.access_token, method, params, function(err, res){
 			if(err){
 				console.log(err);
 			}

@@ -20,7 +20,7 @@ var getDropboxApiMethod = function (method) {
 }
 
 var dropbox = {
-	request: function (authData, method, params, callback) {
+	request: function ({authData, method, params}, callback) {
 		var options = {
 			method: 'post',
 			body: params,

@@ -37,7 +37,7 @@ var jira = {
 		consumerKey: jiraConfig.consumerKey,
 		host: 'swipes.atlassian.net'
 	},
-	request: function (authData, method, params, callback) {
+	request: function ({authData, method, params}, callback) {
 		if (!authData && !authData.access_token) {
 			return callback('no_access_token');
 		}
