@@ -16,12 +16,12 @@ router.post('/services.request', serviceUtil.validateData, serviceUtil.getServic
 	let data = res.locals.data;
 	let service = res.locals.service;
 	let file = res.locals.file;
-	let user = {userId: req.userId};
 	let options = {
 		authData: service.authData,
 		method: data.method,
 		params: data.parameters,
-		user: user
+		user: {userId: req.userId},
+		service: {serviceId: service.id}
 	};
 
 	file.request(options, function (err, result) {
