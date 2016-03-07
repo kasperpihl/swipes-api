@@ -62,35 +62,33 @@ var refetchData = function (init) {
 }
 
 var fetchData = function () {
-	var projectKey = MainStore.get('settings').projectKey;
-	var statusesReq = swipes.service('jira').request('project.getStatuses', {projectIdOrKey: projectKey});
-	var issuesReq = swipes.service('jira').request('search.search', {
-		//jql: 'project = ' + projectKey + ' AND assignee = currentUser() AND sprint is not EMPTY ORDER BY Rank ASC'
-		jql: 'project = ' + projectKey + ' AND sprint is not EMPTY ORDER BY Rank ASC'
-	});;
-	var assignableReq = swipes.service('jira').request('user.searchAssignable', {
-		project: projectKey
-	});
+	var workspaceId = MainStore.get('settings').workspaceId;
+	// Todo tasks and completed tasks req
+	// users req
+
+	return Promise.resolve();
+	
+	var tasksReq = swipes.service('asana').request('tasks.findAll', {workspace: workspaceId});
 
 	return new Promise(function(resolve, reject) {
 		Promise.all([
-			statusesReq,
-			issuesReq,
-			assignableReq
+			tasksReq
 		])
 		.then(function (res) {
-			_issueTypes = res[0].data;
-			_issues = res[1].data.issues;
-			_statuses = uniqueStatuses(_issueTypes);
-			var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
-			var assignable = res[2].data;
+			console.log(res);
+			// _issueTypes = res[0].data;
+			// _issues = res[1].data.issues;
+			// _statuses = uniqueStatuses(_issueTypes);
+			// var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
+			// var assignable = res[2].data;
 
-			UserStore.batchLoad(assignable, {flush:true});
+			//UserStore.batchLoad(assignable, {flush:true});
 
 			refetchData(true);
 
-			resolve(statusesWithIssues);
-		})
+			//resolve(statusesWithIssues);
+			resolve();
+	 	})
 	});
 }
 
@@ -152,7 +150,7 @@ var ProjectStore = Reflux.createStore({
 
 		fetchData()
 			.then(function (res) {
-				self.set('statuses', res);
+				self.set('statuses', [{name: 'In progress', issues: []}, {name: 'Completed', issues: []}]);
 			});
 	},
 	onReset: function () {

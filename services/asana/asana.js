@@ -114,7 +114,12 @@ var asana = {
 				return asanaPromise;
 			})
 			.then(function (response) {
-				callback(null, response.data);
+				// For some reason sometimes the response is without .data
+				// In the web explorer where one can test the api
+				// there is no such a problem.
+				var data = response.data || response;
+
+				callback(null, data);
 			})
 			.catch(function (error) {
 				callback(error);

@@ -10,7 +10,7 @@ var Loading = require('./loading');
 var StatusesList = React.createClass({
 	mixins: [ProjectStore.connect()],
 	componentWillReceiveProps: function (nextProps) {
-		if (this.props.projectKey !== nextProps.projectKey) {
+		if (this.props.workspaceId !== nextProps.workspaceId) {
 			ProjectActions.fetchData();
 		}
 	},
@@ -20,42 +20,41 @@ var StatusesList = React.createClass({
 	renderStatuses: function () {
 		var statuses = this.state.statuses;
 		var tabs = statuses.map(function (item, index) {
-			var issues = item.issues.map(function (item, index) {
-				return <TaskListItem key={index} data={item} />
-			});
+			// var issues = item.issues.map(function (item, index) {
+			// 	return <TaskListItem key={index} data={item} />
+			// });
 
 			return <Tab style={{color: 'black'}} label={item.name} key={index}>
 				<div>
-					{issues}
+					dada
 				</div>
 			</Tab>
 		});
 
 		return <Tabs tabItemContainerStyle={{background:'none'}} children={tabs}></Tabs>
 	},
-	renderProjectLink: function () {
-		var projectUrl = this.props.projectUrl;
-		var textStyles = {
-			display: 'inline-block',
-			marginTop: '5px',
-			fontSize: '14px',
-			color: 'rgba(0, 0, 0, 0.498039)'
-		};
-
-		return (
-			<span style={textStyles}>
-				If you want to do something more specific you can go to
-				<a href={projectUrl} target="_blank"> JIRA</a>
-			</span>
-		);
-	},
+	// renderProjectLink: function () {
+	// 	var projectUrl = this.props.projectUrl;
+	// 	var textStyles = {
+	// 		display: 'inline-block',
+	// 		marginTop: '5px',
+	// 		fontSize: '14px',
+	// 		color: 'rgba(0, 0, 0, 0.498039)'
+	// 	};
+	//
+	// 	return (
+	// 		<span style={textStyles}>
+	// 			If you want to do something more specific you can go to
+	// 			<a href={projectUrl} target="_blank"> JIRA</a>
+	// 		</span>
+	// 	);
+	// },
 	render: function () {
 		return (
 			<div>
 				{this.state.statuses.length > 0 ? (
 					<div>
 						{this.renderStatuses()}
-						{this.renderProjectLink()}
 					</div>
 				) : (
 					<Loading />

@@ -7,7 +7,7 @@ var Home = require('./components/home');
 var MainStore = require('./stores/MainStore');
 var MainActions = require('./actions/MainActions');
 
-//ReactDOM.render(<Home />, document.getElementById('content'));
+ReactDOM.render(<Home />, document.getElementById('content'));
 
 swipes.onReady (function () {
 	MainStore.fetch();

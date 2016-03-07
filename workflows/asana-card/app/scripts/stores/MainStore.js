@@ -55,10 +55,22 @@ var MainStore = Reflux.createStore({
 						if (!workspaceId && workspaces[0]) {
 							workspaceId = workspaces[0].id;
 
-							return MainActions.updateSettings({workspaceId: workspaceId});
+							MainActions.updateSettings({workspaceId: workspaceId});
+						} else {
+							self.set('settings', swipes.info.workflow.settings);
 						}
 
-						self.set('settings', swipes.info.workflow.settings);
+						return swipes.service('asana').request('users.me', {});
+					})
+					.then(function (me) {
+						// T_TODO it would be better if the information for the user
+						// is already in the settings when you installed the card
+						// this would be pretty easy once we implement for all services
+						// to add the user data to them.
+						delete me.data.photo;
+						delete me.data.workspaces;
+
+						MainActions.updateSettings({user: me});
 					})
 					.catch(function (error) {
 						console.log(error);

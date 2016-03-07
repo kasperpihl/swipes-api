@@ -2,46 +2,52 @@ var React = require('react');
 var Reflux = require('reflux');
 var MainStore = require('../stores/MainStore');
 var StatusesList = require('./statuses_list');
-var ExpandedIssue = require('./expanded_issue');
+//var ExpandedIssue = require('./expanded_issue');
 
-function get_host(url) {
-    return url.replace(/^((\w+:)?\/\/[^\/]+\/?).*$/,'$1');
-}
+// function get_host(url) {
+//     return url.replace(/^((\w+:)?\/\/[^\/]+\/?).*$/,'$1');
+// }
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
   renderStatuses: function () {
     var settings = MainStore.get('settings');
-
+    
     if (settings) {
-      var projectKey = MainStore.get('settings').projectKey;
-  		var project = MainStore.getAll()[projectKey];
-  		var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey : '#';
+      var workspaceId = MainStore.get('settings').workspaceId;
+  		var project = MainStore.getAll()[workspaceId];
+  		//var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey : '#';
 
       swipes.navigation.setTitle(project.name);
 
       return (
-        <StatusesList projectKey={projectKey} projectUrl={projectUrl} />
+        //<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
+        <StatusesList workspaceId={workspaceId} />
       )
     }
   },
-  renderExpanedView: function (expandedIssueId) {
-    return (
-      <ExpandedIssue issueId={expandedIssueId} />
-    )
-  },
+  // renderExpanedView: function (expandedIssueId) {
+  //   return (
+  //     <ExpandedIssue issueId={expandedIssueId} />
+  //   )
+  //},
 	render: function () {
-    var expandedIssueId = this.state.expandedIssueId;
+    //var expandedIssueId = this.state.expandedIssueId;
 
     return (
-			<div>
-				{expandedIssueId ? (
-					<div>{this.renderExpanedView(expandedIssueId)}</div>
-				) : (
-					<div>{this.renderStatuses()}</div>
-				)}
-			</div>
-		)
+      <div>
+        {this.renderStatuses()}
+      </div>
+    );
+    // return (
+		// 	<div>
+		// 		{expandedIssueId ? (
+		// 			<div>{this.renderExpanedView(expandedIssueId)}</div>
+		// 		) : (
+		// 			<div>{this.renderStatuses()}</div>
+		// 		)}
+		// 	</div>
+		// )
 	}
 });
 
