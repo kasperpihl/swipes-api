@@ -60,8 +60,10 @@ var refreshAccessToken = function (authData, user, service) {
 								return r.branch(
 									service('id').eq(serviceId),
 									service.merge({
-										authData: {access_token: accessToken},
-										ts_last_token: now
+										authData: {
+											access_token: accessToken,
+											ts_last_token: now
+										}
 									}),
 									service
 								)
