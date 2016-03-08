@@ -4,33 +4,10 @@ var ProjectActions = require('../actions/ProjectActions');
 var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
 
-var _issueTypes = [];
-var _issues = [];
-var _statuses = [];
+var _tasks = [];
+var _projects = [];
 var _fetchDataTimeout = null;
 var _fetchLock = false;
-
-var uniqueStatuses = function (issueTypes) {
-	var statuses = [];
-	var keyCheck = {};
-
-	for (var i = 0 ; i < issueTypes.length ; i++) {
-		var type = issueTypes[i];
-
-		for (var j = 0 ; j < type.statuses.length ; j++) {
-			var status = type.statuses[j];
-
-			if (!keyCheck[status.id]) {
-				var obj = {id: status.id, name: status.name, issues: []};
-
-				statuses.push(obj);
-				keyCheck[status.id] = true;
-			}
-		}
-	}
-
-	return statuses;
-}
 
 var matchIssues = function (statuses, issues, issueTypes) {
 	issues.forEach(function (issue) {
@@ -49,6 +26,23 @@ var matchIssues = function (statuses, issues, issueTypes) {
 	return statuses;
 }
 
+var matchTasks = function (tasks) {
+	var statuses = [
+		{name: 'Incomplete', tasks: []},
+		{name: 'Completed', tasks: []},
+	];
+
+	tasks.forEach(function (task) {
+		if (task.completed) {
+			statuses[1].tasks.push(task);
+		} else {
+			statuses[0].tasks.push(task);
+		}
+	})
+
+	return statuses;
+}
+
 var refetchData = function (init) {
 	if (!_fetchLock && !init) {
 		ProjectActions.fetchData();
@@ -62,13 +56,14 @@ var refetchData = function (init) {
 }
 
 var fetchData = function () {
-	// T_TODO one could optimize things here so when the workspace is not change
+	// T_TODO one could optimize things here so when the workspace is not changed
 	// one do not need to request users and projects. Only tasks.
 	var workspaceId = MainStore.get('settings').workspaceId;
 	var projectId = MainStore.get('settings').projectId;
 	var projectType = MainStore.get('settings').projectType;
 	var user = MainStore.get('settings').user;
 	var taskOptFields = [
+		'name',
 		'assignee',
 		'projects',
 		'completed',
@@ -110,8 +105,10 @@ var fetchData = function () {
 			console.log(res[1].data);
 			console.log('PROJECTS');
 			console.log(res[2].data);
-			// _issueTypes = res[0].data;
-			// _issues = res[1].data.issues;
+
+			_tasks = res[0].data;
+
+			var statuses = matchTasks(_tasks);
 			// _statuses = uniqueStatuses(_issueTypes);
 			// var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
 			// var assignable = res[2].data;
@@ -121,7 +118,7 @@ var fetchData = function () {
 			//refetchData(true);
 
 			//resolve(statusesWithIssues);
-			resolve();
+			resolve(statuses);
 	 	})
 	});
 }
@@ -184,7 +181,7 @@ var ProjectStore = Reflux.createStore({
 
 		fetchData()
 			.then(function (res) {
-				self.set('statuses', [{name: 'Incomplete', issues: []}, {name: 'Completed', issues: []}]);
+				self.set('statuses', res);
 			});
 	},
 	onReset: function () {

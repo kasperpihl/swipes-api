@@ -4,7 +4,7 @@ var Tabs = require('material-ui/lib').Tabs;
 var Tab = require('material-ui/lib').Tab;
 var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
-var TaskListItem = require('./task_list_item');
+var TaskItem = require('./task_list_item');
 var Loading = require('./loading');
 
 var StatusesList = React.createClass({
@@ -20,13 +20,13 @@ var StatusesList = React.createClass({
 	renderStatuses: function () {
 		var statuses = this.state.statuses;
 		var tabs = statuses.map(function (item, index) {
-			// var issues = item.issues.map(function (item, index) {
-			// 	return <TaskListItem key={index} data={item} />
-			// });
+			var tasks = item.tasks.map(function (item, index) {
+				return <TaskItem key={index} data={item} />
+			});
 
 			return <Tab style={{color: 'black'}} label={item.name} key={index}>
 				<div>
-					dada
+					{tasks}
 				</div>
 			</Tab>
 		});

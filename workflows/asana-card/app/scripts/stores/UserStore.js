@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 
 var UserStore = Reflux.createStore({
-	idAttribute: 'key'
+	idAttribute: 'id'
 });
 
 module.exports = UserStore;
