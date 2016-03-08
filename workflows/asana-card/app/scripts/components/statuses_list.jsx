@@ -10,7 +10,7 @@ var Loading = require('./loading');
 var StatusesList = React.createClass({
 	mixins: [ProjectStore.connect()],
 	componentWillReceiveProps: function (nextProps) {
-		if (this.props.workspaceId !== nextProps.workspaceId) {
+		if (this.props.projectId !== nextProps.projectId) {
 			ProjectActions.fetchData();
 		}
 	},

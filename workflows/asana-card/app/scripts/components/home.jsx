@@ -33,7 +33,7 @@ var Home = React.createClass({
 
       return (
         //<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
-        <StatusesList workspaceId={workspaceId} />
+        <StatusesList projectId={projectId} />
       )
     } else {
 			return (

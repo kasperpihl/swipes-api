@@ -62,6 +62,8 @@ var refetchData = function (init) {
 }
 
 var fetchData = function () {
+	// T_TODO one could optimize things here so when the workspace is not change
+	// one do not need to request users and projects. Only tasks.
 	var workspaceId = MainStore.get('settings').workspaceId;
 	var projectId = MainStore.get('settings').projectId;
 	var projectType = MainStore.get('settings').projectType;
