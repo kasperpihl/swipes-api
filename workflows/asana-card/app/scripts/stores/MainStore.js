@@ -35,7 +35,7 @@ var MainStore = Reflux.createStore({
 				workspaces.forEach(function (workspace) {
 					var promise;
 
-					workspace.id = '' + workspace.id;
+					workspace.id = workspace.id.toString();
 					promise = swipes.service('asana').request('projects.findByWorkspace', {
 						id: workspace.id
 					});
@@ -46,7 +46,14 @@ var MainStore = Reflux.createStore({
 				Promise.all(projectsPromises)
 					.then(function (projects) {
 						workspaces.forEach(function (workspace, index) {
-							workspace.projects = projects[index].data;
+							var singleProjects = projects[index].data;
+
+							singleProjects.unshift({
+								id: workspace.id,
+								name: 'My Tasks'
+							});
+
+							workspace.projects = singleProjects;
 						});
 
 						var workspaceId = swipes.info.workflow.settings.workspaceId;
@@ -57,6 +64,8 @@ var MainStore = Reflux.createStore({
 							workspaceId = workspaces[0].id;
 
 							newSettings.workspaceId = workspaceId;
+							newSettings.projectId = workspaceId;
+							newSettings.projectType = 'mytasks';
 						} else {
 							newSettings = swipes.info.workflow.settings;
 						}

@@ -15,11 +15,21 @@ var Home = React.createClass({
     var settings = MainStore.get('settings');
 
     if (settings) {
-      var workspaceId = MainStore.get('settings').workspaceId;
-  		var project = MainStore.getAll()[workspaceId];
-  		//var projectUrl = project ? get_host(project.self) + 'browse/' + projectKey : '#';
+      var workspaceId = settings.workspaceId;
+			var projectId = settings.projectId;
+  		var workspace = MainStore.getAll()[workspaceId];
+			var projects = workspace.projects;
+			var navName = '';
 
-      swipes.navigation.setTitle(project.name);
+			projects.forEach(function (project) {
+				if (project.id.toString() === projectId) {
+					navName = project.name;
+				}
+			})
+
+			navName = navName + ' - ' + workspace.name;
+
+      swipes.navigation.setTitle(navName);
 
       return (
         //<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
