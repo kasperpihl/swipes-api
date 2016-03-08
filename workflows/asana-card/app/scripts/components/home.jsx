@@ -2,6 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var MainStore = require('../stores/MainStore');
 var StatusesList = require('./statuses_list');
+var Loading = require('./loading');
 //var ExpandedIssue = require('./expanded_issue');
 
 // function get_host(url) {
@@ -12,7 +13,7 @@ var Home = React.createClass({
 	mixins: [MainStore.connect()],
   renderStatuses: function () {
     var settings = MainStore.get('settings');
-    
+
     if (settings) {
       var workspaceId = MainStore.get('settings').workspaceId;
   		var project = MainStore.getAll()[workspaceId];
@@ -24,7 +25,11 @@ var Home = React.createClass({
         //<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
         <StatusesList workspaceId={workspaceId} />
       )
-    }
+    } else {
+			return (
+        <Loading />
+      )
+		}
   },
   // renderExpanedView: function (expandedIssueId) {
   //   return (

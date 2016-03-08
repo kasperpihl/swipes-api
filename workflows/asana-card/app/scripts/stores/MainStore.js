@@ -25,6 +25,7 @@ var MainStore = Reflux.createStore({
 	fetch: function () {
 		var self = this;
 		var projectsPromises = [];
+		var newSettings = {};
 
 		swipes.service('asana').request('workspaces.findAll', function (res, err) {
 			if (res) {
@@ -55,9 +56,9 @@ var MainStore = Reflux.createStore({
 						if (!workspaceId && workspaces[0]) {
 							workspaceId = workspaces[0].id;
 
-							MainActions.updateSettings({workspaceId: workspaceId});
+							newSettings.workspaceId = workspaceId;
 						} else {
-							self.set('settings', swipes.info.workflow.settings);
+							newSettings = swipes.info.workflow.settings;
 						}
 
 						return swipes.service('asana').request('users.me', {});
@@ -70,7 +71,8 @@ var MainStore = Reflux.createStore({
 						delete me.data.photo;
 						delete me.data.workspaces;
 
-						MainActions.updateSettings({user: me});
+						newSettings.user = me;
+						MainActions.updateSettings(newSettings);
 					})
 					.catch(function (error) {
 						console.log(error);
