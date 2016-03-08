@@ -65,7 +65,7 @@ var fetchData = function () {
 	var workspaceId = MainStore.get('settings').workspaceId;
 	var projectId = MainStore.get('settings').projectId;
 	var projectType = MainStore.get('settings').projectType;
-	var user = MainStore.get('settings').user.data;
+	var user = MainStore.get('settings').user;
 	var tasksReq;
 
 	if (projectType === 'mytasks') {

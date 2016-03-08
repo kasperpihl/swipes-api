@@ -77,10 +77,11 @@ var MainStore = Reflux.createStore({
 						// is already in the settings when you installed the card
 						// this would be pretty easy once we implement for all services
 						// to add the user data to them.
-						delete me.data.photo;
-						delete me.data.workspaces;
+						var user = me.data;
+						delete user.photo;
+						delete user.workspaces;
 
-						newSettings.user = me;
+						newSettings.user = user;
 						MainActions.updateSettings(newSettings);
 					})
 					.catch(function (error) {
