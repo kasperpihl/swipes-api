@@ -1,0 +1,132 @@
+.card-content{
+  padding-top: 50px;
+  height: 100%;
+}
+.card-app-bar {
+  width: 100%;
+  height: 50px;
+  //background-color: red;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 99;
+  border-bottom: 1px solid $studioGray-20;
+  display: flex;
+
+  .card-actions {
+    width: 80px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .card-action {
+      width: 14px;
+      height: 14px;
+      background-color: $studioGray-40;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+  }
+
+  .card-title {
+    width: calc(100% - 80px - 50px);
+    cursor: pointer;
+    color: $deepBlue-60;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > * {
+      cursor: inherit !important;
+    }
+
+    .material-icons {
+      color: $deepBlue-40 !important;
+      margin-top: -2px;
+      cursor: pointer;
+    }
+  }
+}
+
+.card-nav {
+  width: 100%;
+  height: calc(100% - 50px);
+  background-color: white;
+  position: fixed;
+  overflow-y: auto;
+  top: 50px;
+  left: 0;
+  z-index: 909;
+  box-shadow: $swipes-shadow-one;
+  transform-origin: 50% 0%;
+  transform: scale3d(1,0,1);
+  transition: .3s ease-in-out;
+  transition-delay: .1s;
+
+  &.opened {
+    transform: scale3d(1,1,1);
+    transform-origin: 50% 0%;
+    transition: .3s ease-in-out;
+
+    .nav-wrap {
+      opacity: 1;
+      transition-property: opacity;
+      transition-duration: .1s;
+      transition-delay: .3s;
+
+
+      .nav-element:hover {
+        background-color: $studioGray-20;
+      }
+    }
+  }
+
+  .nav-wrap {
+    width: 100%;
+    opacity: 0;
+
+    &:first-child {
+
+      .nav-title {
+        border-top: 0px solid $studioGray-20;
+      }
+    }
+
+    .nav-title {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 15px;
+      color: $deepBlue-60;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      border-top: 1px solid $studioGray-40;
+      border-bottom: 1px solid $studioGray-40;
+    }
+
+    .nav-element {
+      text-align: center;
+      padding: 15px 0;
+      font-size: 13px;
+      color: $deepBlue-60;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  }
+
+  li {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 13px;
+    color: $deepBlue-60;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: .1s ease-in-out;
+  }
+}

@@ -18,6 +18,7 @@ var Badge = require('material-ui/lib').Badge;
 var IconButton = require('material-ui/lib').IconButton;
 var FontIcon = require('material-ui/lib').FontIcon;
 var MenuItem = require('material-ui/lib/menus/menu-item');
+var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 
 
@@ -140,36 +141,38 @@ var CardLoader = React.createClass({
 		this.apiCon.callListener("event", e);
 	},
 	renderCardBar: function(){
-		var iconMenu = (<IconMenu
-			iconButtonElement={<IconButton
-				touch={true}><FontIcon color="white" className="material-icons">arrow_drop_down</FontIcon></IconButton>}
-			targetOrigin={{horizontal: 'right', vertical: 'top'}}
-			anchorOrigin={{horizontal: 'left', vertical: 'top'}}>
-			<MenuItem primaryText="Rename" onTouchTap={this.onRenameWorkflow} />
-			<MenuItem primaryText="Remove" onTouchTap={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
-		</IconMenu>);
-
-		var menuButton = menu = <IconButton style={{}}
-			touch={true} onTouchTap={this.onCardMenuButtonClick}>
-			<FontIcon color="white" className="material-icons">menu</FontIcon>
-		</IconButton>;
-
-		if(this.state.badge){
-			menu = (<Badge
-				badgeContent={this.state.badge}
-				style={{padding: 0, margin:0}}
-				badgeStyle={{backgroundColor: 'red', top: 3, color:'white', right: 3, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
-					{menuButton}
-				</Badge>);
-		}
 		var title = this.state.workflow.name;
 		if(this.state.titleFromCard){
 			title = this.state.titleFromCard;
 		}
-		return <AppBar
-			title={<span>{title}</span>}
-			iconElementRight={iconMenu}
-			iconElementLeft={menu}/>
+		var fontObj = <FontIcon className="material-icons">arrow_drop_down</FontIcon>;
+		if(this.state.badge){
+			fontObj = (<Badge
+				badgeContent={this.state.badge}
+				style={{padding: 0, margin:0}}
+				badgeStyle={{backgroundColor: 'red', top: 0, color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
+					<FontIcon className="material-icons">arrow_drop_down</FontIcon>
+				</Badge>);
+		}
+		return <div className="card-app-bar">
+			<div className="card-actions">
+			</div>
+			<div className="card-title" onTouchTap={this.onCardMenuButtonClick}>
+				{title}
+				{fontObj}
+			</div>
+			<div className="card-context-menu">
+				<IconMenu
+					iconStyle={{fill: '#D1D3D6', height: '20px', width: '20px', cursor: 'pointer'}}
+					iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+					anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+					targetOrigin={{horizontal: 'right', vertical: 'top'}}>
+					<MenuItem primaryText="Rename" onTouchTap={this.onRenameWorkflow} />
+					<MenuItem primaryText="Remove" onTouchTap={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
+				</IconMenu>
+			</div>
+		</div>
+
 	},
 	render: function() {
 
@@ -180,7 +183,9 @@ var CardLoader = React.createClass({
 		return (
 			<div className="card-container">
 				{this.renderCardBar()}
-				<iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
+				<div className="card-content" style={{height:'100%'}}>
+					<iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
+				</div>
 			</div>
 		);
 	}
