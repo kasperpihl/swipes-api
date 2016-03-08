@@ -63,18 +63,28 @@ var refetchData = function (init) {
 
 var fetchData = function () {
 	var workspaceId = MainStore.get('settings').workspaceId;
-	// Todo tasks and completed tasks req
-	// users req
+	var projectId = MainStore.get('settings').projectId;
+	var projectType = MainStore.get('settings').projectType;
+	var user = MainStore.get('settings').user.data;
+	var tasksReq;
 
-	return Promise.resolve();
-	
-	var tasksReq = swipes.service('asana').request('tasks.findAll', {workspace: workspaceId});
+	if (projectType === 'mytasks') {
+		tasksReq = swipes.service('asana').request('tasks.findAll', {
+			assignee: user.email,
+			workspace: workspaceId
+		});
+	} else {
+		tasksReq = swipes.service('asana').request('tasks.findByProject', {
+			id: projectId
+		})
+	}
 
 	return new Promise(function(resolve, reject) {
 		Promise.all([
 			tasksReq
 		])
 		.then(function (res) {
+			console.log('TASKS');
 			console.log(res);
 			// _issueTypes = res[0].data;
 			// _issues = res[1].data.issues;
@@ -84,7 +94,7 @@ var fetchData = function () {
 
 			//UserStore.batchLoad(assignable, {flush:true});
 
-			refetchData(true);
+			//refetchData(true);
 
 			//resolve(statusesWithIssues);
 			resolve();
@@ -150,7 +160,7 @@ var ProjectStore = Reflux.createStore({
 
 		fetchData()
 			.then(function (res) {
-				self.set('statuses', [{name: 'In progress', issues: []}, {name: 'Completed', issues: []}]);
+				self.set('statuses', [{name: 'Incomplete', issues: []}, {name: 'Completed', issues: []}]);
 			});
 	},
 	onReset: function () {
