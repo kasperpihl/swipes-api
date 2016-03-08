@@ -6,7 +6,6 @@ var ReactDOM = require('react-dom');
 var Home = require('./components/home');
 var MainStore = require('./stores/MainStore');
 var MainActions = require('./actions/MainActions');
-var projects = [];
 
 ReactDOM.render(<Home />, document.getElementById('content'));
 
@@ -20,8 +19,8 @@ swipes.onMenuButton(function () {
 
 	_.each(workspaces, function (workspace) {
 		if (workspace && workspace.id) {
-			projects = workspace.projects;
-			projectItems = [];
+			var projects = workspace.projects;
+			var projectItems = [];
 
 			// The default one is 'My Tasks' and it equals to the whole workspace
 			if (projects[0].name !== 'My Tasks') {
