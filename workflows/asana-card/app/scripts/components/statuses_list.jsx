@@ -7,6 +7,23 @@ var ProjectActions = require('../actions/ProjectActions');
 var TaskItem = require('./task_list_item');
 var Loading = require('./loading');
 
+var tabsStyles = {
+  singleTab: {
+    backgroundColor: 'transparent',
+		color: '#333D59',
+		borderBottom: '1px solid #F4F4F5',
+		position: 'relative',
+		zIndex: '99'
+  },
+	inkBarStyle: {
+		height: '48px',
+		marginTop: '-48px',
+		position: 'relative',
+		zIndex: '1',
+		backgroundColor: '#CCCED5'
+	}
+};
+
 var StatusesList = React.createClass({
 	mixins: [ProjectStore.connect()],
 	componentWillReceiveProps: function (nextProps) {
@@ -24,14 +41,17 @@ var StatusesList = React.createClass({
 				return <TaskItem key={index} data={item} />
 			});
 
-			return <Tab style={{color: 'black'}} label={item.name} key={index}>
+			return <Tab style={tabsStyles.singleTab} label={item.name} key={index}>
 				<div>
 					{tasks}
 				</div>
 			</Tab>
 		});
 
-		return <Tabs tabItemContainerStyle={{background:'none'}} children={tabs}></Tabs>
+		return <Tabs
+			tabItemContainerStyle={{background:'none'}}
+			inkBarStyle={tabsStyles.inkBarStyle}
+			children={tabs}></Tabs>
 	},
 	// renderProjectLink: function () {
 	// 	var projectUrl = this.props.projectUrl;
