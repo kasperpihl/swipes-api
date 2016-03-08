@@ -21,9 +21,9 @@ var LeftNavModal = React.createClass({
 	clicked: function(itemId){
 		leftNavActions.hide(itemId);
 	},
-	renderItems:function(items, nested){
+	renderItems:function(items, toggleFromPrimary){
 		var items = items || this.state.leftNav.items;
-		var nested = nested || false;
+		var toggleFromPrimary = toggleFromPrimary || false;
 		var renderedItems = [];
 
 		_.each(items, function(item){
@@ -54,7 +54,8 @@ var LeftNavModal = React.createClass({
 			}
 
 			if (item.nested && item.nested.length > 0) {
-				nestedItems = this.renderItems(item.nested, true);
+				toggleFromPrimary = true;
+				nestedItems = this.renderItems(item.nested, false);
 				item.nested.forEach(function (item) {
 					if (item.current) {
 						initiallyOpen = true;
@@ -71,7 +72,7 @@ var LeftNavModal = React.createClass({
 					primaryText={primaryText}
 					nestedItems={nestedItems}
 					initiallyOpen={initiallyOpen}
-					primaryTogglesNestedList={!nested}
+					primaryTogglesNestedList={toggleFromPrimary}
 					>
 				</ListItem>);
 		}.bind(this));
@@ -87,7 +88,7 @@ var LeftNavModal = React.createClass({
 				style={{paddingTop: '100px'}}
 				open={this.state.leftNav.open}
 				onRequestChange={this.onRequestChange}>
-				<List children={this.renderItems()}></List>
+				<List children={this.renderItems(null, false)}></List>
 			</LeftNav>
 		);
 	}
