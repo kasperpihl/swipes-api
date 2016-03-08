@@ -66,26 +66,48 @@ var fetchData = function () {
 	var projectId = MainStore.get('settings').projectId;
 	var projectType = MainStore.get('settings').projectType;
 	var user = MainStore.get('settings').user;
+	var taskOptFields = [
+		'assignee',
+		'projects',
+		'completed',
+		'due_on'
+	];
+	var usersReq = swipes.service('asana').request('users.findByWorkspace', {
+		id: workspaceId,
+		opt_fields: 'name,photo'
+	});
+	var projectsReq = swipes.service('asana').request('projects.findByWorkspace', {
+		id: workspaceId,
+		opt_fields: 'name'
+	});
 	var tasksReq;
 
 	if (projectType === 'mytasks') {
 		tasksReq = swipes.service('asana').request('tasks.findAll', {
 			assignee: user.email,
-			workspace: workspaceId
+			workspace: workspaceId,
+			opt_fields: taskOptFields.join(',')
 		});
 	} else {
 		tasksReq = swipes.service('asana').request('tasks.findByProject', {
-			id: projectId
+			id: projectId,
+			opt_fields: taskOptFields.join(',')
 		})
 	}
 
 	return new Promise(function(resolve, reject) {
 		Promise.all([
-			tasksReq
+			tasksReq,
+			usersReq,
+			projectsReq
 		])
 		.then(function (res) {
 			console.log('TASKS');
-			console.log(res);
+			console.log(res[0].data);
+			console.log('USERS');
+			console.log(res[1].data);
+			console.log('PROJECTS');
+			console.log(res[2].data);
 			// _issueTypes = res[0].data;
 			// _issues = res[1].data.issues;
 			// _statuses = uniqueStatuses(_issueTypes);
