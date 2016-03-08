@@ -70,6 +70,7 @@ var LeftNavModal = React.createClass({
 					primaryText={primaryText}
 					nestedItems={nestedItems}
 					initiallyOpen={initiallyOpen}
+					primaryTogglesNestedList={true}
 					>
 				</ListItem>);
 		}.bind(this));
