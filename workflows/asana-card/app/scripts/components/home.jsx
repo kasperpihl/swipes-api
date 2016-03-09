@@ -1,8 +1,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 var MainStore = require('../stores/MainStore');
+var MainActions = require('../actions/MainActions');
 var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
+var FontIcon = require('material-ui/lib/font-icon');
 //var ExpandedIssue = require('./expanded_issue');
 
 // function get_host(url) {
@@ -11,6 +13,21 @@ var Loading = require('./loading');
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
+	addActions: function() {
+    var input = this.refs.input;
+
+    if (input.value.length > 0) {
+			MainActions.changeState({
+				addNewTaskIcon: 'active',
+				todoInput: 'active'
+			})
+    } else {
+			MainActions.changeState({
+				addNewTaskIcon: 'inactive',
+				todoInput: 'inactive'
+			})
+    }
+  },
   renderStatuses: function () {
     var settings = MainStore.get('settings');
 
@@ -41,6 +58,16 @@ var Home = React.createClass({
       )
 		}
   },
+	renderInput: function() {
+		return (
+			<div className={"todo-input " + this.state.todoInput}>
+				<input ref="input" type="text" placeholder="Create a new task" onChange={this.addActions} />
+				<div className={"task-add-icon " + this.state.addNewTaskIcon}>
+					<FontIcon color="#fff" className="material-icons">add</FontIcon>
+				</div>
+			</div>
+		)
+	},
   // renderExpanedView: function (expandedIssueId) {
   //   return (
   //     <ExpandedIssue issueId={expandedIssueId} />
@@ -52,6 +79,7 @@ var Home = React.createClass({
     return (
       <div>
         {this.renderStatuses()}
+				{this.renderInput()}
       </div>
     );
     // return (

@@ -8,7 +8,9 @@ var MainStore = Reflux.createStore({
 	idAttribute: 'id',
 	getInitialState: function () {
 		return {
-      expandedIssueId: null
+      //expandedIssueId: null
+			addNewTaskIcon: 'inactive',
+			todoInput: 'inactive'
 		}
 	},
 	onUpdateSettings: function (newSettings) {
@@ -21,6 +23,14 @@ var MainStore = Reflux.createStore({
 	},
 	onExpandIssue: function (issueId) {
 		this.set('expandedIssueId', issueId);
+	},
+	onChangeState: function (newState) {
+		// Workaround for magic code here and there
+		for (var state in newState) {
+			this.set(state, newState[state], {trigger: false});
+		}
+
+		this.manualTrigger();
 	},
 	fetch: function () {
 		var self = this;
