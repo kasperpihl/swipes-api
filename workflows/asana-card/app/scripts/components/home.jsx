@@ -13,21 +13,34 @@ var FontIcon = require('material-ui/lib/font-icon');
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
-	addActions: function() {
+	inputOnChange: function() {
     var input = this.refs.input;
+		var newValue = input.value;
+		var newState = {};
 
     if (input.value.length > 0) {
-			MainActions.changeState({
+			newState = {
 				addNewTaskIcon: 'active',
-				todoInput: 'active'
-			})
+				todoInput: 'active',
+				createInputValue: newValue
+			};
     } else {
-			MainActions.changeState({
+			newState = {
 				addNewTaskIcon: 'inactive',
-				todoInput: 'inactive'
-			})
+				todoInput: 'inactive',
+				createInputValue: newValue
+			};
     }
+
+		// Workaround for jumping caret
+		this.setState({createInputValue: newValue});
+		MainActions.changeState(newState);
   },
+	createTask: function () {
+		MainActions.createTask({
+			name: this.state.createInputValue
+		})
+	},
   renderStatuses: function () {
     var settings = MainStore.get('settings');
 
@@ -61,9 +74,9 @@ var Home = React.createClass({
 	renderInput: function() {
 		return (
 			<div className={"todo-input " + this.state.todoInput}>
-				<input ref="input" type="text" placeholder="Create a new task" onChange={this.addActions} />
+				<input ref="input" type="text" value={this.state.createInputValue} placeholder="Create a new task" onChange={this.inputOnChange} />
 				<div className={"task-add-icon " + this.state.addNewTaskIcon}>
-					<FontIcon color="#fff" className="material-icons">add</FontIcon>
+					<FontIcon color="#fff" className="material-icons" onClick={this.createTask}>add</FontIcon>
 				</div>
 			</div>
 		)
