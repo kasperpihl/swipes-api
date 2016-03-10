@@ -50,7 +50,7 @@
     }
 
     .task-details-wrap {
-      width: calc(100% - 50px - 35px);
+      width: calc(100% - 50px);
       @extend %flex;
       flex-direction: column;
       align-items: flex-start;
@@ -80,19 +80,6 @@
         }
       }
     }
-
-    .task-assign-avatar {
-      width: 35px;
-      height: 100%;
-
-      @extend %flex;
-
-      img {
-        border-radius: 50%;
-        width: 35px;
-        height: 35px;
-      }
-    }
   }
 
   .task-action-bars {
@@ -102,7 +89,7 @@
     position: relative;
     overflow: hidden;
     transition: .4s ease-in-out;
-    transition-delay: -.25s;
+    transition-delay: -.15s;
 
     .shadow-box {
       width: 120%;
@@ -152,16 +139,6 @@
   }
 }
 
-.avatar-name {
-	width: 35px;
-	height: 35px;
-	border: 2px solid $blue-100;
-	border-radius: 50%;
-	color: $blue-100;
-
-	@extend %flex;
-}
-
 .task-assignees {
   width: 100%;
   padding: 0 21px;
@@ -196,6 +173,33 @@
 
       > * {
         opacity: 1;
+      }
+    }
+  }
+
+  .action-bar-assign {
+    width: 35px;
+    height: 35px;
+    padding: 15px 0;
+    margin: 0 5px;
+    border: 1px solid $deepBlue-60;
+    border-radius: 50%;
+    cursor: pointer;
+
+    @extend %flex;
+
+    .material-icons {
+      margin-left: -2px;
+      color: $deepBlue-60 !important;
+      font-size: 16px !important;
+      cursor: pointer !important;
+    }
+
+    &:hover {
+      background-color: $deepBlue-60;
+
+      .material-icons {
+        color: white !important;
       }
     }
   }
@@ -339,33 +343,6 @@
       height: 100%;
 
       @extend %flex;
-
-      .action-bar-assign {
-        width: 35px;
-        height: 35px;
-        padding: 15px 0;
-        margin: 0 5px;
-        border: 1px solid $deepBlue-60;
-        border-radius: 50%;
-        cursor: pointer;
-
-        @extend %flex;
-
-        .material-icons {
-          margin-left: -2px;
-          color: $deepBlue-60 !important;
-          font-size: 16px !important;
-          cursor: pointer !important;
-        }
-
-        &:hover {
-          background-color: $deepBlue-60;
-
-          .material-icons {
-            color: white !important;
-          }
-        }
-      }
     }
   }
 

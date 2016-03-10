@@ -8,7 +8,7 @@ var React = require('react');
 // var Colors = require('material-ui/lib/styles/colors');
  var UserStore = require('../stores/UserStore');
 // var MainActions = require('../actions/MainActions');
-// var ProjectActions = require('../actions/ProjectActions');
+var ProjectActions = require('../actions/ProjectActions');
 var FontIcon = require('material-ui/lib/font-icon');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
@@ -64,6 +64,9 @@ var TaksItem = React.createClass({
       </IconMenu>
     )
   },
+  completeTask: function (task) {
+    ProjectActions.completeTask(task);
+  },
 	render: function() {
 		var task = this.props.data;
 		var taskState = task.completed ? 'done' : 'todo';
@@ -89,6 +92,18 @@ var TaksItem = React.createClass({
               and if no image then <div class="avatar-name"></div>
             */}
           </div>
+        </div>
+
+        <div className={"task-action-bars " + this.state.actionBar}>
+          <div className="shadow-box"></div>
+            <div className="task-actions">
+              <div className="task-action-icon" onClick={this.completeTask.bind(this, task)}>
+                <FontIcon className="material-icons">check</FontIcon>
+              </div>
+              <div className="task-action-icon">
+                <FontIcon className="material-icons">link</FontIcon>
+              </div>
+            </div>
         </div>
 			</div>
 		)

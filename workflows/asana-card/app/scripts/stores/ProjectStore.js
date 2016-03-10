@@ -5,6 +5,7 @@ var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
 
 var _tasks = [];
+var _users = [];
 var _projects = [];
 var _fetchDataTimeout = null;
 var _fetchLock = false;
@@ -52,7 +53,7 @@ var refetchData = function (init) {
 		clearTimeout(_fetchDataTimeout);
 	}
 
-	_fetchDataTimeout = setTimeout(refetchData, 10000);
+	_fetchDataTimeout = setTimeout(refetchData, 15000);
 }
 
 var fetchData = function () {
@@ -128,23 +129,17 @@ var fetchData = function () {
 	});
 }
 
-var changeIssueFieldOnClient = function (issue, field, newValue) {
-	var len = _issues.length;
+var changeTaskFieldOnClient = function (task, field, newValue) {
+	var len = _tasks.length;
 
-	// Change the issue client side first
-	// Most of the time rest requests are successful
-	// No need for the user to wait
 	for (var i=0; i<len; i++) {
-		if (issue.id === _issues[i].id) {
-			_issues[i].fields[field] = newValue;
+		if (task.id === _tasks[i].id) {
+			_tasks[i][field] = newValue;
 			break;
 		}
 	}
 
-	// Reset the issues property to prevent dublication when doing the change
-	_statuses = uniqueStatuses(_issueTypes);
-
-	return matchIssues(_statuses, _issues, _issueTypes);
+	return matchTasks(_tasks);
 }
 
 var transitionIssueOnJira = function (issue, status) {
@@ -191,6 +186,28 @@ var ProjectStore = Reflux.createStore({
 	},
 	onReset: function () {
 		this.set('statuses', []);
+	},
+	onCompleteTask: function (task) {
+		var taskId = task.id;
+
+		// update the task client side
+		this.set('statuses', changeTaskFieldOnClient(task, 'completed', true));
+
+		_fetchLock = true;
+
+		swipes.service('asana').request('tasks.update', {
+			id: taskId,
+			completed: true
+		})
+		.then(function () {
+			console.log('Done!');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
 	},
 	onCreateTask: function (task) {
 		var settings = MainStore.get('settings');
