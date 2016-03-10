@@ -77,7 +77,7 @@ var Home = React.createClass({
     //var expandedIssueId = this.state.expandedIssueId;
 
     return (
-      <div>
+      <div style={{maxHeight: '100%', overflowY: 'auto'}}>
         {this.renderStatuses()}
 				{this.renderInput()}
       </div>

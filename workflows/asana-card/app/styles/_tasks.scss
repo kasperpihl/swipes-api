@@ -7,7 +7,7 @@
 .task-list-wrapper {
   width: 100%;
   padding-top: 0px;
-  padding-bottom: 90px;
+  padding-bottom: 70px;
   //padding-right: 10px;
 }
 
@@ -58,6 +58,7 @@
       .task-title {
         color: $deepBlue-100;
         font-weight: 400;
+        word-break: break-all;
       }
 
       .task-details {

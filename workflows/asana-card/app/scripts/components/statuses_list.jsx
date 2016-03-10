@@ -13,7 +13,9 @@ var tabsStyles = {
 		color: '#333D59',
 		borderBottom: '1px solid #F4F4F5',
 		position: 'relative',
-		zIndex: '99'
+		zIndex: '99',
+    maxHeight: '100%',
+    overflowY: 'auto'
   },
 	inkBarStyle: {
 		height: '48px',
@@ -42,7 +44,7 @@ var StatusesList = React.createClass({
 			});
 
 			return <Tab style={tabsStyles.singleTab} label={item.name} key={index}>
-				<div>
+				<div className="task-list-wrapper">
 					{tasks}
 				</div>
 			</Tab>
