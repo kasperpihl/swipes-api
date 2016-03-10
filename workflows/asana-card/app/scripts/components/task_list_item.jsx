@@ -83,6 +83,9 @@ var TaskItem = React.createClass({
   completeTask: function (task) {
     ProjectActions.completeTask(task);
   },
+  stopPropagation: function (event) {
+    event.stopPropagation();
+  },
 	render: function() {
 		var task = this.props.data;
 		var taskState = task.completed ? 'done' : 'todo';
@@ -98,7 +101,7 @@ var TaskItem = React.createClass({
   					<div className="task-title">{task.name}</div>
   				</div>
 
-          <div className="task-assign-avatar" title="">
+          <div className="task-assign-avatar" title=""  onClick={this.stopPropagation}>
             {this.assignChoices()}
             {this.renderAssign()}
             {/* if has not been assigned yet substitute img tag with
