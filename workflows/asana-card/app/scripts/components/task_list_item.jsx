@@ -6,6 +6,7 @@ var React = require('react');
 // var IconButton = require('material-ui/lib').IconButton;
 // var MenuItem = require('material-ui/lib').MenuItem;
 // var Colors = require('material-ui/lib/styles/colors');
+var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
 // var MainActions = require('../actions/MainActions');
 var ProjectActions = require('../actions/ProjectActions');
@@ -95,6 +96,8 @@ var TaskItem = React.createClass({
 		var task = this.props.data;
 		var taskState = task.completed ? 'done' : 'todo';
 		var dotColor = "dot " + taskState;
+    var settings = MainStore.get('settings');
+    var taskHref = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
 		return (
 			<div className="task-wrapper">
@@ -125,9 +128,11 @@ var TaskItem = React.createClass({
               <div className="task-action-icon" onClick={this.completeTask.bind(this, task)}>
                 <FontIcon className="material-icons">check</FontIcon>
               </div>
-              <div className="task-action-icon">
-                <FontIcon className="material-icons">link</FontIcon>
-              </div>
+                <div className="task-action-icon">
+                  <a href={taskHref} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
+                    <FontIcon className="material-icons">link</FontIcon>
+                  </a>
+                </div>
             </div>
         </div>
 			</div>
