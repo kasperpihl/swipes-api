@@ -6,26 +6,9 @@ var UserStore = require('../stores/UserStore');
 
 var _tasks = [];
 var _users = [];
-var _projects = [];
+//var _projects = [];
 var _fetchDataTimeout = null;
 var _fetchLock = false;
-
-var matchIssues = function (statuses, issues, issueTypes) {
-	issues.forEach(function (issue) {
-		statuses.forEach(function (status, index) {
-			if (issue.fields.status.id === status.id) {
-				issueTypes.forEach(function (issueType) {
-					if (issue.fields.issuetype.id === issueType.id) {
-						issue.statuses = issueType.statuses;
-						status.issues.push(issue);
-					}
-				});
-			}
-		});
-	});
-
-	return statuses;
-}
 
 var matchTasks = function (tasks) {
 	var statuses = [
@@ -42,6 +25,19 @@ var matchTasks = function (tasks) {
 	})
 
 	return statuses;
+}
+
+var changeTaskFieldOnClient = function (task, field, newValue) {
+	var len = _tasks.length;
+
+	for (var i=0; i<len; i++) {
+		if (task.id === _tasks[i].id) {
+			_tasks[i][field] = newValue;
+			break;
+		}
+	}
+
+	return matchTasks(_tasks);
 }
 
 var refetchData = function (init) {
@@ -129,19 +125,6 @@ var fetchData = function () {
 	});
 }
 
-var changeTaskFieldOnClient = function (task, field, newValue) {
-	var len = _tasks.length;
-
-	for (var i=0; i<len; i++) {
-		if (task.id === _tasks[i].id) {
-			_tasks[i][field] = newValue;
-			break;
-		}
-	}
-
-	return matchTasks(_tasks);
-}
-
 var transitionIssueOnJira = function (issue, status) {
 	return swipes.service('jira').request('issue.getTransitions', {
 		issueId: issue.id
@@ -187,13 +170,35 @@ var ProjectStore = Reflux.createStore({
 	onReset: function () {
 		this.set('statuses', []);
 	},
+	onAssignPerson: function (task, userId) {
+		var taskId = task.id;
+
+		_fetchLock = true;
+
+		// update the task client side
+		this.set('statuses', changeTaskFieldOnClient(task, 'assignee', {id: userId}));
+
+		swipes.service('asana').request('tasks.update', {
+			id: taskId,
+			assignee: {id: userId}
+		})
+		.then(function () {
+			console.log('Done!');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+	},
 	onCompleteTask: function (task) {
 		var taskId = task.id;
 
+		_fetchLock = true;
+
 		// update the task client side
 		this.set('statuses', changeTaskFieldOnClient(task, 'completed', true));
-
-		_fetchLock = true;
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -260,56 +265,6 @@ var ProjectStore = Reflux.createStore({
 			})
 
 		this.set('createInputValue', '');
-	},
-	onTransitionIssue: function (options) {
-		var self = this;
-		var issue = options.issue;
-		var status = options.status;
-		var oldStatus = issue.fields.status;
-		var newStatuses = changeIssueFieldOnClient(issue, 'status', status);
-
-		self.set('statuses', newStatuses);
-		_fetchLock = true;
-
-		transitionIssueOnJira(issue, status)
-			.then(function () {
-				// T_TODO We want Kasper's notifications here
-				console.log('GOOD');
-			})
-			.catch(function (err) {
-				// T_TODO We want Kasper's notifications here
-				// Well our transition failed so return the old state
-				var oldStatuses = changeIssueFieldOnClient(issue, 'status', oldStatus);
-				self.set('statuses', oldStatuses);
-			})
-			.finally(function () {
-				_fetchLock = false;
-			})
-	},
-	onAssignPerson: function (options) {
-		var self = this;
-		var issue = options.issue;
-		var assignee = options.assignee;
-		var oldAssignee = issue.fields.assignee;
-		var newStatuses = changeIssueFieldOnClient(issue, 'assignee', assignee);
-
-		self.set('statuses', newStatuses);
-		_fetchLock = true;
-
-		assignIssueOnJira(issue, assignee)
-			.then(function () {
-				// T_TODO We want Kasper's notifications here
-				console.log('GOOD');
-			})
-			.catch(function (err) {
-				// T_TODO We want Kasper's notifications here
-				// Well our assignment failed so return the old state
-				var oldStatuses = changeIssueFieldOnClient(issue, 'assignee', oldAssignee);
-				self.set('statuses', oldStatuses);
-			})
-			.finally(function () {
-				_fetchLock = false;
-			})
 	}
 });
 

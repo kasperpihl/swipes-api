@@ -4,7 +4,7 @@ var ProjectActions = Reflux.createActions([
 	'fetchData',
 	'reset',
 	// 'transitionIssue',
-	// 'assignPerson',
+	'assignPerson',
 	'createTask',
 	'completeTask' // This is my fav action
 ]);

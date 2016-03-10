@@ -6,7 +6,7 @@ var React = require('react');
 // var IconButton = require('material-ui/lib').IconButton;
 // var MenuItem = require('material-ui/lib').MenuItem;
 // var Colors = require('material-ui/lib/styles/colors');
- var UserStore = require('../stores/UserStore');
+var UserStore = require('../stores/UserStore');
 // var MainActions = require('../actions/MainActions');
 var ProjectActions = require('../actions/ProjectActions');
 var FontIcon = require('material-ui/lib/font-icon');
@@ -27,6 +27,9 @@ var TaskItem = React.createClass({
         this.setState({actionBar: 'inactive'});
     }
   },
+  handleMenuItemClick: function (task, userId) {
+    ProjectActions.assignPerson(task, userId);
+  },
   assignChoices: function() {
     var task = this.props.data;
     var allUsers = UserStore.getAll();
@@ -45,9 +48,9 @@ var TaskItem = React.createClass({
 
       if (!allUsers[task.assignee.id].photo) {
         var name = allUsers[task.assignee.id].name;
-
         var matches = name.match(/\b(\w)/g);
         var acronym = matches.join('');
+
         return (
           <div className="assign-layer">
             <div className="avatar-name">{acronym}</div>
@@ -55,6 +58,7 @@ var TaskItem = React.createClass({
         )
       } else {
         var image = allUsers[task.assignee.id].photo.image_36x36;
+
         return (
           <div className="assign-layer">
             <img src={image} />
@@ -64,10 +68,11 @@ var TaskItem = React.createClass({
     }
   },
   renderAssign: function() {
+    var task = this.props.data;
     var allUsers = UserStore.getAll();
     var names = [];
     for (var prop in allUsers) {
-       names.push(<MenuItem key={prop} primaryText={allUsers[prop].name} />)
+       names.push(<MenuItem key={prop} primaryText={allUsers[prop].name} onClick={this.handleMenuItemClick.bind(this, task, allUsers[prop].id)} />)
     }
     return (
       <IconMenu
