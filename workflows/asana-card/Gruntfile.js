@@ -48,7 +48,7 @@ module.exports = function (grunt) {
           tasks: ['browserify:dev', 'copy:dev']
         },
         styles: {
-          files: ['<%= yeoman.app %>/styles/**/*.{sass,scss}'],
+          files: ['<%= yeoman.app %>/styles/*.{sass,scss}'],
           tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev']
         },
         html: {

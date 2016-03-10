@@ -9,6 +9,7 @@ var React = require('react');
 // var UserStore = require('../stores/UserStore');
 // var MainActions = require('../actions/MainActions');
 // var ProjectActions = require('../actions/ProjectActions');
+var FontIcon = require('material-ui/lib/font-icon');
 
 var TaksItem = React.createClass({
   getInitialState: function(){
@@ -37,6 +38,19 @@ var TaksItem = React.createClass({
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>
   				</div>
+
+          <div className="task-assign-avatar" title="">
+            <div className="task-assign" title="Assign to a person">
+              <FontIcon className="material-icons">person_add</FontIcon>
+            </div>
+            {/* if has not been assigned yet substitute img tag with
+              <div className="action-bar-assign" title="Assign to a person">
+                <FontIcon className="material-icons">person_add</FontIcon>
+              </div>
+              <img src="https://unsplash.it/35/?random"/>
+              and if no image then <div class="avatar-name"></div>
+            */}
+          </div>
         </div>
 			</div>
 		)
