@@ -19,7 +19,7 @@ var ChatItem = React.createClass({
 		}
 		return (
 			<div className="message-details">
-				{name} {message.timeStr}
+				<span className="message-author">{name}</span> <span className="message-time">{message.timeStr}</span>
 			</div>
 		);
 	},

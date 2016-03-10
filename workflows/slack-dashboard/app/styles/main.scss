@@ -63,13 +63,13 @@ html, body, #content {
     position:relative;
     height: 100%;
    // padding-top: 30px !important;
-    padding-bottom: 50px !important;
+    padding-bottom: 70px !important;
 }
 .chat-list-container{
     height:100%;
     overflow-y: scroll;
     overflow-x: hidden;
-    background-color: #FAFAFA;
+    background-color: #FFF;
     //padding-bottom: 20px;
     position: relative;
 }
@@ -134,7 +134,7 @@ html, body, #content {
 
             span {
                 padding: 0 15px;
-                background-color: #FAFAFA;
+                background-color: #FFF;
             }
         }
     }
@@ -171,10 +171,20 @@ html, body, #content {
     flex-direction: column;
     padding-left: 9px;
     .message-details {
-        color: rgba(0,0,0,.4);
         margin-left: 0px;
-        font-size: 13px;
-        font-weight: 500;
+
+        .message-author {
+          color: $deepBlue-80;
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .message-time {
+          color: $studioGray-80;
+          font-size: 12px;
+          margin-left: 10px;
+          font-weight: 400;
+        }
     }
     .message-wrapper {
         display: flex;
@@ -194,7 +204,7 @@ html, body, #content {
           &:hover .share-icon {
             display: inline-block;
           }
-            color: $deepBlue-100;
+            color: $deepBlue-60;
             font-size: 14px;
             word-break: break-word;
             .link{
@@ -480,4 +490,73 @@ html, body, #content {
         transform: translateY(0px) scale(1);
         opacity: 1;
         transform-origin: 100% 100%;}
+}
+
+.todo-input {
+  width: 100%;
+  height: 70px;
+  background-color: $studioGray-20;
+  position: fixed;
+  //z-index: 10;
+  bottom: 0;
+  left: 0;
+  //z-index: 1000;
+  //overflow: hidden;
+
+  &.active {
+    z-index: 1000;
+  }
+
+  .task-add-icon {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    @extend %flex;
+
+    .material-icons {
+      font-size:  20px !important;
+      color: $deepBlue-60 !important;
+    }
+
+    &:hover {
+      background-color: $deepBlue-20;
+    }
+  }
+
+  input {
+    width: 100%;
+    height: 100%;
+    background-color: $studioGray-20;
+    font-size: 14px;
+    padding: 0 15px;
+    padding-right: 70px;
+    color: $deepBlue-60;
+    letter-spacing: 1px;
+    transition: .1s ease-in-out;
+
+    &::-webkit-input-placeholder {
+       color: $deepBlue-60;
+       font-family: 'Roboto';
+       font-weight: 400;
+    }
+
+    &:focus {
+      color: white;
+      background-color: $deepBlue-100;
+      transition: .1s ease-in-out;
+
+      & + .task-add-icon {
+
+        &:hover {
+          background-color: $deepBlue-80;
+        }
+
+        .material-icons {
+          color: white !important;
+        }
+      }
+    }
+  }
 }

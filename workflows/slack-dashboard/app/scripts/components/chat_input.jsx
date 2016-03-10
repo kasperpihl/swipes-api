@@ -21,7 +21,8 @@ var ChatInput = React.createClass({
 			this.refs.textfield.blur();
 		}
 		if (e.keyCode === 13 && !e.shiftKey ) {
-			var message = this.refs.textfield.getValue();
+			var message = this.refs.textfield.value;
+			console.log(message);
 			if(message && message.length > 0 && !this.state.isSending){
 				this.sendMessage(message);
 			}
@@ -52,41 +53,17 @@ var ChatInput = React.createClass({
 		var disabled = this.state.isSending ? true : false;
 		return (
 
-			<div ref="input-container" >
-				<div style={{
-					position: 'absolute',
-					bottom: 0,
-					paddingLeft: '10px',
-					paddingRight: '60px',
-					borderTop: '1px solid #d5d5d5',
-					height: '50px',
-					width: '100%'
-				}}>
-					<TextField
-						placeholder="Quick Reply" 
-						onChange={this.onChange} 
-						value={this.state.text} 
-						ref="textfield"
-						onKeyDown={this.onKeyDown} 
-						onKeyUp={this.onKeyUp} 
-						fullWidth={true} 
-						style={{
-					}}/>
+			<div className="todo-input">
+
+				<input ref="input" type="text" placeholder="Quick reply" onChange={this.onChange}
+	      value={this.state.text}
+	      ref="textfield"
+	      onKeyDown={this.onKeyDown}
+	      onKeyUp={this.onKeyUp}/>
+				<div className={"task-add-icon"}>
+					<FontIcon className="material-icons" onClick={this.onClick}>{sendIcon}</FontIcon>
 				</div>
-				<IconButton style={{
-						position: 'absolute',
-						bottom: 0,
-						padding: '0 !important',
-						width: '50px',
-						height: '50px',
-						right: 0
-					}}
-					onClick={this.onClick}
-					disabled={disabled}>
-					
-      				<FontIcon className="material-icons">{sendIcon}</FontIcon>
-    			</IconButton>
-            </div>
+			</div>
 		);
 	}
 });
