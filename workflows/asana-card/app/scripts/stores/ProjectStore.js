@@ -107,13 +107,19 @@ var fetchData = function () {
 			console.log(res[2].data);
 
 			_tasks = res[0].data;
+			_users = res[1].data;
 
 			var statuses = matchTasks(_tasks);
 			// _statuses = uniqueStatuses(_issueTypes);
 			// var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
 			// var assignable = res[2].data;
 
-			//UserStore.batchLoad(assignable, {flush:true});
+			// HACK because reflux-model-extension wants strings for idAttribute
+			_users.forEach(function (user) {
+				user.id = user.id.toString();
+			})
+
+			UserStore.batchLoad(_users, {flush:true});
 
 			refetchData(true);
 
