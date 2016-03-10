@@ -7,7 +7,7 @@
 .task-list-wrapper {
   width: 100%;
   padding-top: 0px;
-  padding-bottom: 90px;
+  padding-bottom: 70px;
   //padding-right: 10px;
 }
 
@@ -421,11 +421,24 @@
   width: 35px;
   height: 35px;
   border: 1px solid $deepBlue-60;
+  border-radius: 50%;
+  cursor: pointer;
+
+  @extend %flex;
 
   .material-icons {
-    color: $deepBlue-60 !important;
-    font-size: 20px !important;
     margin-left: -2px;
+    color: $deepBlue-60 !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+  }
+
+  &:hover {
+    background-color: $deepBlue-60;
+
+    .material-icons {
+      color: white !important;
+    }
   }
 }
 /* DayPicker styles */
