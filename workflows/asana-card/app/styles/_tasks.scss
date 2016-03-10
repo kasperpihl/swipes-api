@@ -50,7 +50,7 @@
     }
 
     .task-details-wrap {
-      width: calc(100% - 50px - 35px);
+      width: calc(100% - 50px);
       @extend %flex;
       flex-direction: column;
       align-items: flex-start;
@@ -112,7 +112,7 @@
     position: relative;
     overflow: hidden;
     transition: .4s ease-in-out;
-    transition-delay: -.25s;
+    transition-delay: -.15s;
 
     .shadow-box {
       width: 120%;
@@ -210,6 +210,33 @@
 
       > * {
         opacity: 1;
+      }
+    }
+  }
+
+  .action-bar-assign {
+    width: 35px;
+    height: 35px;
+    padding: 15px 0;
+    margin: 0 5px;
+    border: 1px solid $deepBlue-60;
+    border-radius: 50%;
+    cursor: pointer;
+
+    @extend %flex;
+
+    .material-icons {
+      margin-left: -2px;
+      color: $deepBlue-60 !important;
+      font-size: 16px !important;
+      cursor: pointer !important;
+    }
+
+    &:hover {
+      background-color: $deepBlue-60;
+
+      .material-icons {
+        color: white !important;
       }
     }
   }
@@ -353,33 +380,6 @@
       height: 100%;
 
       @extend %flex;
-
-      .action-bar-assign {
-        width: 35px;
-        height: 35px;
-        padding: 15px 0;
-        margin: 0 5px;
-        border: 1px solid $deepBlue-60;
-        border-radius: 50%;
-        cursor: pointer;
-
-        @extend %flex;
-
-        .material-icons {
-          margin-left: -2px;
-          color: $deepBlue-60 !important;
-          font-size: 16px !important;
-          cursor: pointer !important;
-        }
-
-        &:hover {
-          background-color: $deepBlue-60;
-
-          .material-icons {
-            color: white !important;
-          }
-        }
-      }
     }
   }
 
