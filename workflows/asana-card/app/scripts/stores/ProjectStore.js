@@ -186,6 +186,58 @@ var ProjectStore = Reflux.createStore({
 	onReset: function () {
 		this.set('statuses', []);
 	},
+	onCreateTask: function (task) {
+		var settings = MainStore.get('settings');
+		var workspaceId = settings.workspaceId;
+		var projectId = settings.projectId;
+		var projectType = settings.projectType;
+		var workspace = {workspace: workspaceId};
+		var assignee = {};
+
+		_fetchLock = true;
+
+		// If the tasks is in mytasks it should be private and assigned to me
+		// otherwise it should be public and assigned to no one
+		// the public property is handled automaticly by the API
+		if (projectType === 'mytasks') {
+			assignee = {assignee: {id: settings.user.id}};
+		}
+
+		var taskData = Object.assign(
+			{},
+			task,
+			assignee,
+			workspace
+		);
+
+		console.log('Adding task!');
+		swipes.service('asana').request('tasks.create', taskData)
+			.then(function (response) {
+				var addedTask = response.data;
+				var taskId = addedTask.id;
+				// Now we need to add the project with another request.
+				// T_TODO Ask the support for this one because in the API docs
+				// they say that you can do it with one request when creating the task.
+				if (projectType !== 'mytasks') {
+					console.log('Adding task to a project!');
+					return swipes.service('asana').request('tasks.addProject', {
+						id: taskId,
+						project: projectId
+					})
+				}
+			})
+			.then(function () {
+				console.log('Done!');
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
+			.finally(function () {
+				_fetchLock = false;
+			})
+
+		this.set('createInputValue', '');
+	},
 	onTransitionIssue: function (options) {
 		var self = this;
 		var issue = options.issue;

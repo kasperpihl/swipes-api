@@ -2,6 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
+var ProjectActions = require('../actions/ProjectActions');
 var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
 var FontIcon = require('material-ui/lib/font-icon');
@@ -37,7 +38,7 @@ var Home = React.createClass({
 		MainActions.changeState(newState);
   },
 	createTask: function () {
-		MainActions.createTask({
+		ProjectActions.createTask({
 			name: this.state.createInputValue
 		})
 	},

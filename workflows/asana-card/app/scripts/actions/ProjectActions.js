@@ -3,8 +3,9 @@ var Reflux = require('reflux');
 var ProjectActions = Reflux.createActions([
 	'fetchData',
 	'reset',
-	'transitionIssue',
-	'assignPerson'
+	// 'transitionIssue',
+	// 'assignPerson',
+	'createTask'
 	// Here you can list your actions
 ]);
 
