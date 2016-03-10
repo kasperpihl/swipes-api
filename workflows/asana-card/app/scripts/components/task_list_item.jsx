@@ -86,8 +86,28 @@ var TaskItem = React.createClass({
       </IconMenu>
     )
   },
+  renderCompleteOrUndo: function () {
+    var task = this.props.data;
+
+    if (task.completed) {
+      return (
+        <div className="task-action-icon" onClick={this.undoCompleteTask.bind(this, task)}>
+          <FontIcon className="material-icons">undo</FontIcon>
+        </div>
+      )
+    } else {
+      return (
+        <div className="task-action-icon" onClick={this.completeTask.bind(this, task)}>
+          <FontIcon className="material-icons">check</FontIcon>
+        </div>
+      )
+    }
+  },
   completeTask: function (task) {
     ProjectActions.completeTask(task);
+  },
+  undoCompleteTask: function (task) {
+    ProjectActions.undoCompleteTask(task);
   },
   stopPropagation: function (event) {
     event.stopPropagation();
@@ -125,14 +145,12 @@ var TaskItem = React.createClass({
         <div className={"task-action-bars " + this.state.actionBar}>
           <div className="shadow-box"></div>
             <div className="task-actions">
-              <div className="task-action-icon" onClick={this.completeTask.bind(this, task)}>
-                <FontIcon className="material-icons">check</FontIcon>
+              {this.renderCompleteOrUndo()}
+              <div className="task-action-icon">
+                <a href={taskHref} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
+                  <FontIcon className="material-icons">link</FontIcon>
+                </a>
               </div>
-                <div className="task-action-icon">
-                  <a href={taskHref} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
-                    <FontIcon className="material-icons">link</FontIcon>
-                  </a>
-                </div>
             </div>
         </div>
 			</div>

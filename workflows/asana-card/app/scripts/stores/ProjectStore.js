@@ -194,15 +194,39 @@ var ProjectStore = Reflux.createStore({
 	},
 	onCompleteTask: function (task) {
 		var taskId = task.id;
+		var completed = true;
 
 		_fetchLock = true;
 
 		// update the task client side
-		this.set('statuses', changeTaskFieldOnClient(task, 'completed', true));
+		this.set('statuses', changeTaskFieldOnClient(task, 'completed', completed));
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
-			completed: true
+			completed: completed
+		})
+		.then(function () {
+			console.log('Done!');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+	},
+	onUndoCompleteTask: function (task) {
+		var taskId = task.id;
+		var completed = false;
+
+		_fetchLock = true;
+
+		// update the task client side
+		this.set('statuses', changeTaskFieldOnClient(task, 'completed', completed));
+
+		swipes.service('asana').request('tasks.update', {
+			id: taskId,
+			completed: completed
 		})
 		.then(function () {
 			console.log('Done!');

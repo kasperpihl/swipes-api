@@ -6,7 +6,8 @@ var ProjectActions = Reflux.createActions([
 	// 'transitionIssue',
 	'assignPerson',
 	'createTask',
-	'completeTask' // This is my fav action
+	'completeTask', // This is my fav action
+	'undoCompleteTask'
 ]);
 
 module.exports = ProjectActions;
