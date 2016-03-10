@@ -34,37 +34,40 @@ var TaskItem = React.createClass({
   assignChoices: function() {
     var task = this.props.data;
     var allUsers = UserStore.getAll();
+    var assigneeId = task.assignee ? task.assignee.id : 'undefined';
 
-    if (!task.assignee) {
-
-      return (
-        <div className="assign-layer">
-          <div className="task-assign" title="Assign to a person">
-            <FontIcon className="material-icons">person_add</FontIcon>
-          </div>
-        </div>
-      )
-
-    } else {
-
-      if (!allUsers[task.assignee.id].photo) {
-        var name = allUsers[task.assignee.id].name;
-        var matches = name.match(/\b(\w)/g);
-        var acronym = matches.join('');
+    if (allUsers[assigneeId]) {
+      if (!task.assignee) {
 
         return (
           <div className="assign-layer">
-            <div className="avatar-name">{acronym}</div>
+            <div className="task-assign" title="Assign to a person">
+              <FontIcon className="material-icons">person_add</FontIcon>
+            </div>
           </div>
         )
+
       } else {
-        var image = allUsers[task.assignee.id].photo.image_36x36;
 
-        return (
-          <div className="assign-layer">
-            <img src={image} />
-          </div>
-        )
+        if (!allUsers[assigneeId].photo) {
+          var name = allUsers[assigneeId].name;
+          var matches = name.match(/\b(\w)/g);
+          var acronym = matches.join('');
+
+          return (
+            <div className="assign-layer">
+              <div className="avatar-name">{acronym}</div>
+            </div>
+          )
+        } else {
+          var image = allUsers[assigneeId].photo.image_36x36;
+
+          return (
+            <div className="assign-layer">
+              <img src={image} />
+            </div>
+          )
+        }
       }
     }
   },
