@@ -55,6 +55,7 @@ var MainStore = Reflux.createStore({
 			workspace
 		);
 
+		console.log('Adding task!');
 		swipes.service('asana').request('tasks.create', taskData)
 			.then(function (response) {
 				var addedTask = response.data;
@@ -63,16 +64,15 @@ var MainStore = Reflux.createStore({
 				// T_TODO Ask the support for this one because in the API docs
 				// they say that you can do it with one request when creating the task.
 				if (projectType !== 'mytasks') {
+					console.log('Adding task to a project!');
 					return swipes.service('asana').request('tasks.addProject', {
 						id: taskId,
 						project: projectId
 					})
-				} else {
-					console.log('Task added in My tasks!');
 				}
 			})
-			.then(function (task) {
-				console.log('Task added in some project');
+			.then(function () {
+				console.log('Done!');
 			})
 			.catch(function (error) {
 				console.log(error);
