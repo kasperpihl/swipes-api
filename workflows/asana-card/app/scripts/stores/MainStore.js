@@ -10,7 +10,8 @@ var MainStore = Reflux.createStore({
 		return {
       //expandedIssueId: null
 			addNewTaskIcon: 'inactive',
-			todoInput: 'inactive'
+			todoInput: 'inactive',
+			createInputValue: ''
 		}
 	},
 	onUpdateSettings: function (newSettings) {
