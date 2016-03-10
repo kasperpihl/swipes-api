@@ -14,7 +14,7 @@ var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
 var MenuItem = require('material-ui/lib/menus/menu-item');
 
-var TaksItem = React.createClass({
+var TaskItem = React.createClass({
   getInitialState: function(){
 	    return {
         actionBar: 'inactive'
@@ -27,35 +27,51 @@ var TaksItem = React.createClass({
         this.setState({actionBar: 'inactive'});
     }
   },
-  renderAssignIcon: function() {
-    return(
-      <div className="task-assign" title="Assign to a person">
-        <FontIcon className="material-icons">person_add</FontIcon>
-      </div>
-    )
-  },
-  renderAvatarImg: function() {
+  assignChoices: function() {
+    var task = this.props.data;
+    var allUsers = UserStore.getAll();
+
+    if (!task.assignee) {
 
       return (
-        <div>i</div>
+        <div className="assign-layer">
+          <div className="task-assign" title="Assign to a person">
+            <FontIcon className="material-icons">person_add</FontIcon>
+          </div>
+        </div>
       )
-  },
-  renderAvatarLetters: function() {
 
-    return (
-      <div>l</div>
-    )
+    } else {
+
+      if (!allUsers[task.assignee.id].photo) {
+        var name = allUsers[task.assignee.id].name;
+
+        var matches = name.match(/\b(\w)/g);
+        var acronym = matches.join('');
+        return (
+          <div className="assign-layer">
+            <div className="avatar-name">{acronym}</div>
+          </div>
+        )
+      } else {
+        var image = allUsers[task.assignee.id].photo.image_36x36;
+        return (
+          <div className="assign-layer">
+            <img src={image} />
+          </div>
+        )
+      }
+    }
   },
   renderAssign: function() {
     var allUsers = UserStore.getAll();
     var names = [];
     for (var prop in allUsers) {
-       names.push(<MenuItem value="AL" primaryText={allUsers[prop].name} />)
+       names.push(<MenuItem key={prop} primaryText={allUsers[prop].name} />)
     }
-
     return (
-      <IconMenu useLayerForClickAway={true}
-      iconButtonElement={<IconButton>{this.renderAssignIcon() }</IconButton>}
+      <IconMenu
+      iconButtonElement={<IconButton><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
       maxHeight={250}
@@ -80,6 +96,7 @@ var TaksItem = React.createClass({
   				</div>
 
           <div className="task-assign-avatar" title="">
+            {this.assignChoices()}
             {this.renderAssign()}
             {/* if has not been assigned yet substitute img tag with
               <div className="action-bar-assign" title="Assign to a person">
@@ -96,4 +113,4 @@ var TaksItem = React.createClass({
 })
 
 
-module.exports = TaksItem;
+module.exports = TaskItem;

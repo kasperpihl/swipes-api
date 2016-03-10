@@ -81,6 +81,16 @@
       }
     }
 
+    .assign-layer {
+      position: absolute;
+      width: 35px;
+      height: 100%;
+      top: 0;
+      right: 21px;
+
+      @extend %flex;
+    }
+
     .task-assign-avatar {
       width: 35px;
       height: 100%;
@@ -150,6 +160,10 @@
       }
     }
   }
+}
+
+.inv-icon {
+  opacity: 0 !important;
 }
 
 .avatar-name {
