@@ -1,13 +1,17 @@
 .top-bar-container{
 	height:$top-bar-height;
 	position:absolute;
+	background-color: #fff;
+	box-shadow: $swipes-shadow-one;
 	width:100%;
 	z-index: 1999;
 	top:0;
 	// This is the default background color of navbar
     h5{
-    	text-align: center;
-    	line-height: $top-bar-height;
+			text-align: center;
+      line-height: $top-bar-height;
+			color: #555;
+			font-weight: 300;
     }
     .add-button{
     	position:absolute;
@@ -17,6 +21,13 @@
     	width:60px;
     	padding: 10px;
     	height: $top-bar-height;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			i {
+				color: #555;
+			}
     }
     .connection-status {
         width: 100%;
@@ -30,21 +41,21 @@
         display: none;
         align-items: center;
         justify-content: center;
-        
+
         &.online {
-            
+
         }
-        
+
         &.offline {
-            
+
         }
-        
+
         .connecting {
-            
+
         }
-        
+
         .loader {
-            clip: rect(0, 20px, 20px, 10px); 
+            clip: rect(0, 20px, 20px, 10px);
             height: 20px;
             width: 20px;
             position: absolute;
@@ -52,22 +63,22 @@
             top: calc(50% - 10px);
             margin-right: 50px;
             animation: loader-one 1.05s linear infinite;
-            
+
             &:after {
                 clip: rect(0, 20px, 20px, 10px);
                 content:'';
-                border-radius: 50%; 
+                border-radius: 50%;
                 height: 20px;
                 width: 20px;
-                position: absolute; 
+                position: absolute;
                 animation: loader-two 1.05s linear infinite;
             }
-            
+
             @keyframes loader-one {
                 0% {
                     transform: rotate(0deg)
                 }
-                100% { 
+                100% {
                     transform: rotate(220deg)
                 }
             }
@@ -82,19 +93,19 @@
                     transform: rotate(140deg);
                 }
             }
-        } 
-        
+        }
+
         span {
             line-height: 30px;
         }
-        
+
         i {
             line-height: 30px;
             margin: 0;
             padding: 0;
         }
     }
-	
+
 	.icon-dual-view-container {
 		height: 60px;
 		width: 60px;
@@ -103,7 +114,7 @@
 		position: absolute;
 		cursor: pointer;
 		display: none;
-		
+
 		&.open:hover > .icon-dual-view > .box:last-child {
 			animation: showingIcon .5s cubic-bezier(.36,-0.69,.69,1.58) forwards;
 		}
@@ -112,7 +123,7 @@
 			transform: scale(1.4);
 			transition: .2s ease-in-out;
 		}
-		
+
 		&.close:hover > .icon-dual-view > .box:last-child {
 			transform: scale(.7);
 			opacity: .5;
@@ -127,7 +138,7 @@
 			display: flex;
 			justify-content: space-around;
 			cursor: pointer;
-			
+
 			.box {
 				width: 16px;
 				height: 20px;
@@ -137,15 +148,15 @@
 				cursor: pointer;
 			}
 		}
-		&.close{ 
+		&.close{
 			display: block;
 			.box:first-child {
 				transition: .2s ease-in-out;
 			}
-			
+
 			.box:last-child {
 				transition: .2s ease-in-out;
-				
+
 				&:before {
 					content: "";
 					position: absolute;
@@ -156,7 +167,7 @@
 					top: calc(50% - 5px);
 					left: calc(50% - 1px);
 				}
-				
+
 				&:after {
 					content: "";
 					position: absolute;
@@ -175,16 +186,16 @@
 				z-index: 10;
 				box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 			}
-			
+
 			.box:last-child {
 				z-index: 1;
 				transform: translateX(-14px) scale(.8);
 				background-color: white;
 				transition: .5s cubic-bezier(.36,-0.69,.69,1.58);
 			}
-		} 
+		}
 	}
-	
+
 	.menu-icon-container {
 		height: $top-bar-height;
 		width: 60px;
@@ -192,7 +203,7 @@
 		top: 0;
 		position: absolute;
 		cursor: pointer;
-		
+
 		.menu-icon {
 			height: 20px;
 			width: 16px;
@@ -202,7 +213,7 @@
 			border-radius: 2px;
 			position: absolute;
 			cursor: pointer;
-			
+
 			&:before {
 				content: "";
 				position: absolute;
@@ -216,7 +227,7 @@
 				transition: .2s cubic-bezier(.87,.23,.51,2);
 				transition-delay: .1s;
 			}
-			
+
 			&:after {
 				content: "";
 				position: absolute;
@@ -228,15 +239,15 @@
 				transform-origin: 50% 0%;
 				transition: .2s cubic-bezier(.54,-0.78,.83,.67);
 			}
-			
+
 			&.open {
-				
+
 				&:before {
 					transform-origin: 50% 0%;
 					transform: translateX(7px);
 					transition: .2s cubic-bezier(.54,-0.78,.83,.67);
 				}
-		
+
 				&:after {
 					width: 6px;
 					transform: translateX(2px);
@@ -267,9 +278,9 @@
 			margin-right: 20px;
 			width: 20px;
 			fill: $white-background;
-		
+
 		}
-		
+
 		&:hover  {
 			background-color: rgba($white-background, .3);
 		}
@@ -291,11 +302,11 @@ $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
 	position: relative;
 	//box-shadow: $swipes-shadow-one;
 	border-bottom: 1px solid $studioGray-60;
-	
+
 	&:hover {
 		background-color: rgba(255,255,255,.1);
 	}
-	
+
 	.dropdown-arrow {
 		position: absolute;
 		top: 0;
@@ -304,33 +315,33 @@ $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
 		padding-right: 15px;
 		cursor: pointer;
 	}
-	
+
 	& * {
 		user-select: none;
 	}
-	
-	li { 
+
+	li {
 		width: 100%;
-		padding: 5px 10px; 
+		padding: 5px 10px;
 		padding-right: 20px;
-		z-index: 2; 
+		z-index: 2;
 		color: white;
 		cursor: default;
-		
-		&:not(.init) { 
-			float: left; 
+
+		&:not(.init) {
+			float: left;
 			height: 50px;
-			width: 100%; 
-			display: none; 
-			background: white; 
+			width: 100%;
+			display: none;
+			background: white;
 			color: $deepBlue-100;
 			box-shadow: $swipes-shadow-one;
-			
-			&:hover, ul li.selected:not(.init) { 
+
+			&:hover, ul li.selected:not(.init) {
 				background: $studioGray-20;
 			}
 		}
-		
+
 		&.init {
 			cursor: pointer;
 		}
@@ -341,11 +352,11 @@ $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
 	0% {
 		transform: translateX(-14px) scale(.8);
 	}
-	
+
 	50% {
 		transform: translateX(0px) scale(.8);
 	}
-	
+
 	100% {
 		transform: translateX(0px) scale(1);
 	}

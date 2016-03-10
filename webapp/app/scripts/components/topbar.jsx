@@ -49,7 +49,7 @@ var Topbar = React.createClass({
 		);
 		return (
 			<IconMenu
-				style={{position: 'absolute', left: 0, top: 0, width: '44px', height: '44px'}}
+				style={{position: 'absolute', left: '6px', top: '6px', width: '44px', height: '44px'}}
 				iconButtonElement={button}
 				anchorOrigin={{horizontal: 'left', vertical: 'center'}}
 				targetOrigin={{horizontal: 'right', vertical: 'top'}} >
@@ -67,7 +67,7 @@ var Topbar = React.createClass({
 				{this.renderIconMenu()}
 				<h5>Workspace</h5>
 				<div className="add-button" onClick={this.clickedAdd}>
-					<i className="material-icons">library_add</i>
+					<i className="material-icons">add_box</i>
 				</div>
 			</div>
 		);
