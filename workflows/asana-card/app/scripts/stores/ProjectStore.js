@@ -115,9 +115,8 @@ var fetchData = function () {
 
 			//UserStore.batchLoad(assignable, {flush:true});
 
-			//refetchData(true);
+			refetchData(true);
 
-			//resolve(statusesWithIssues);
 			resolve(statuses);
 	 	})
 	});
