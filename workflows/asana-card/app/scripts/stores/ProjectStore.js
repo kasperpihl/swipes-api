@@ -219,6 +219,7 @@ var ProjectStore = Reflux.createStore({
 		var projectType = settings.projectType;
 		var workspace = {workspace: workspaceId};
 		var assignee = {};
+		var self = this;
 
 		_fetchLock = true;
 
@@ -248,6 +249,14 @@ var ProjectStore = Reflux.createStore({
 			.then(function (response) {
 				var addedTask = response.data;
 				var taskId = addedTask.id;
+
+				_tasks.push(addedTask);
+				self.set('statuses', matchTasks(_tasks));
+
+				MainActions.changeState({
+					disabledInput: false
+				});
+
 				// Now we need to add the project with another request.
 				// T_TODO Ask the support for this one because in the API docs
 				// they say that you can do it with one request when creating the task.
@@ -267,10 +276,6 @@ var ProjectStore = Reflux.createStore({
 			})
 			.finally(function () {
 				_fetchLock = false;
-
-				MainActions.changeState({
-					disabledInput: false
-				});
 			})
 
 		this.set('createInputValue', '');
