@@ -126,33 +126,6 @@ var fetchData = function () {
 	});
 }
 
-var transitionIssueOnJira = function (issue, status) {
-	return swipes.service('jira').request('issue.getTransitions', {
-		issueId: issue.id
-	})
-	.then(function (res) {
-		var transitions = res.data.transitions;
-		var promise;
-
-		transitions.forEach(function (transition) {
-			if (transition.to.id === status.id) {
-				promise = swipes.service('jira').request('issue.transitionIssue', {
-					issueId: issue.id, transition: transition.id
-				})
-			}
-		});
-
-		return promise;
-	});
-}
-
-var assignIssueOnJira = function (issue, assignee) {
-	return swipes.service('jira').request('issue.assignIssue', {
-		issueId: issue.id,
-		assignee: assignee.name
-	});
-}
-
 var ProjectStore = Reflux.createStore({
 	listenables: [ProjectActions],
 	getInitialState: function () {
