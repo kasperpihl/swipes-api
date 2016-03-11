@@ -212,6 +212,30 @@ var ProjectStore = Reflux.createStore({
 			_fetchLock = false;
 		})
 	},
+	onRemoveTask: function (task) {
+		var taskId = task.id;
+
+		_fetchLock = true;
+
+		_tasks = _tasks.filter(function (task) {
+			return task.id !== taskId;
+		})
+
+		this.set('statuses', matchTasks(_tasks));
+
+		swipes.service('asana').request('tasks.delete', {
+			id: taskId
+		})
+		.then(function () {
+			console.log('Done!');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+	},
 	onCreateTask: function (task) {
 		var settings = MainStore.get('settings');
 		var workspaceId = settings.workspaceId;

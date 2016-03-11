@@ -109,6 +109,9 @@ var TaskItem = React.createClass({
   undoCompleteTask: function (task) {
     ProjectActions.undoCompleteTask(task);
   },
+  removeTask: function (task) {
+    ProjectActions.removeTask(task);
+  },
   stopPropagation: function (event) {
     event.stopPropagation();
   },
@@ -146,6 +149,9 @@ var TaskItem = React.createClass({
           <div className="shadow-box"></div>
             <div className="task-actions">
               {this.renderCompleteOrUndo()}
+              <div className="task-action-icon" onClick={this.removeTask.bind(this, task)}>
+                <FontIcon className="material-icons">delete</FontIcon>
+              </div>
               <div className="task-action-icon">
                 <a href={taskHref} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
                   <FontIcon className="material-icons">link</FontIcon>
