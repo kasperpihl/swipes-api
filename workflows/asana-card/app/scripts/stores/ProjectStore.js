@@ -97,6 +97,14 @@ var fetchData = function () {
 			projectsReq
 		])
 		.then(function (res) {
+			// Sometimes the queries are allready fired when we lock the fetching process
+			// To prevent wierd behavior we will not do anything with the result
+			// if the _fetchLock is true
+
+			if (_fetchLock) {
+				resolve(null);
+			}
+
 			console.log('TASKS');
 			console.log(res[0].data);
 			console.log('USERS');
@@ -138,7 +146,9 @@ var ProjectStore = Reflux.createStore({
 
 		fetchData()
 			.then(function (res) {
-				self.set('statuses', res);
+				if (res) {
+					self.set('statuses', res);
+				}
 			});
 	},
 	onReset: function () {
