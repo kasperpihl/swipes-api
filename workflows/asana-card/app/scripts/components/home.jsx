@@ -18,21 +18,22 @@ var Home = React.createClass({
     var input = this.refs.input;
 		var newValue = input.value;
 		var newState = {};
-
     if (input.value.length > 0) {
+		if(MainStore.get('todoInput') != 'active'){
 			newState = {
 				addNewTaskIcon: 'active',
 				todoInput: 'active'
 			};
+		}
     } else {
 			newState = {
 				addNewTaskIcon: 'inactive',
 				todoInput: 'inactive'
 			};
     }
-
 		MainActions.changeInputValue(newValue);
-		MainActions.changeState(newState);
+		if(_.size(newState) > 0)
+			MainActions.changeState(newState);
   },
 	createTask: function () {
 		ProjectActions.createTask({
