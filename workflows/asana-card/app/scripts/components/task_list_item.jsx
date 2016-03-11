@@ -34,10 +34,11 @@ var TaskItem = React.createClass({
   assignChoices: function() {
     var task = this.props.data;
     var allUsers = UserStore.getAll();
-    var assigneeId = task.assignee ? task.assignee.id : 'undefined';
+    var assigneeId = task.assignee ? task.assignee.id : null;
+    var userSize = Object.keys(allUsers).length;
 
-    if (allUsers[assigneeId]) {
-      if (!task.assignee) {
+    if (userSize > 0) {
+      if (!assigneeId) {
 
         return (
           <div className="assign-layer">
@@ -47,9 +48,7 @@ var TaskItem = React.createClass({
           </div>
         )
 
-      } else {
-
-        if (!allUsers[assigneeId].photo) {
+      } else if (assigneeId && !allUsers[assigneeId].photo) {
           var name = allUsers[assigneeId].name;
           var matches = name.match(/\b(\w)/g);
           var acronym = matches.join('');
@@ -59,21 +58,27 @@ var TaskItem = React.createClass({
               <div className="avatar-name">{acronym}</div>
             </div>
           )
-        } else {
-          var image = allUsers[assigneeId].photo.image_36x36;
+      } else {
+        var image = allUsers[assigneeId].photo.image_36x36;
 
-          return (
-            <div className="assign-layer">
-              <img src={image} />
-            </div>
-          )
-        }
+        return (
+          <div className="assign-layer">
+            <img src={image} />
+          </div>
+        )
       }
     }
   },
   renderAssign: function() {
     var task = this.props.data;
     var allUsers = UserStore.getAll();
+    var userSize = Object.keys(allUsers).length;
+
+    if (userSize <= 0) {
+      return;
+    }
+
+
     var names = [];
     for (var prop in allUsers) {
        names.push(<MenuItem key={prop} primaryText={allUsers[prop].name} onClick={this.handleMenuItemClick.bind(this, task, allUsers[prop].id)} />)
