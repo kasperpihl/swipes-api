@@ -1,20 +1,20 @@
 var React = require('react');
+var ChatInputStore = require('../stores/ChatInputStore');
 var chatActions = require('../actions/ChatActions');
+var chatInputActions = require('../actions/ChatInputActions');
 
 var FontIcon = require('material-ui/lib').FontIcon;
 var IconButton = require('material-ui/lib').IconButton;
 var TextField = require('material-ui/lib').TextField;
 
 var ChatInput = React.createClass({
+	mixins: [ChatInputStore.connect()],
 	hasShownHint: false,
 	currentLength: 0,
 	onKeyDown: function(e){
 		if(e.keyCode === 13 && !e.shiftKey)
 			e.preventDefault();
 
-	},
-	getInitialState:function(){
-		return { text: "" };
 	},
 	onKeyUp: function(e){
 		if(e.keyCode === 27){
@@ -30,7 +30,7 @@ var ChatInput = React.createClass({
 	},
 	onClick: function(){
 		console.log('clicked');
-		var message = this.state.text;
+		var message = this.state.inputValue;
 		if(!message.length){
 			message = ":+1:";
 		}
@@ -43,20 +43,20 @@ var ChatInput = React.createClass({
 		chatActions.sendMessage(message, function(){
 			this.setState({isSending: false});
 		}.bind(this));
-		this.setState({text: '', isSending: true});
+		chatInputActions.changeInputValue('');
 	},
-	onChange: function(event, v2){
-		this.setState({text: event.target.value})
+	onChange: function(event){
+		chatInputActions.changeInputValue(event.target.value);
 	},
 	render: function() {
-		var sendIcon = (this.state.text.length > 0) ? "send" : "thumb_up";
+		var sendIcon = (this.state.inputValue.length > 0) ? "send" : "thumb_up";
 		var disabled = this.state.isSending ? true : false;
 		return (
 
 			<div className="todo-input">
 
 				<input ref="input" type="text" placeholder="Quick reply" onChange={this.onChange}
-	      value={this.state.text}
+	      value={this.state.inputValue}
 	      ref="textfield"
 	      onKeyDown={this.onKeyDown}
 	      onKeyUp={this.onKeyUp}/>

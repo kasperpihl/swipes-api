@@ -115,12 +115,15 @@ var TaskItem = React.createClass({
   stopPropagation: function (event) {
     event.stopPropagation();
   },
+  shareTaskUrl: function (taskUrl) {
+    swipes.share.request({url: taskUrl});
+  },
 	render: function() {
 		var task = this.props.data;
 		var taskState = task.completed ? 'done' : 'todo';
 		var dotColor = "dot " + taskState;
     var settings = MainStore.get('settings');
-    var taskHref = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
 		return (
 			<div className="task-wrapper">
@@ -153,9 +156,12 @@ var TaskItem = React.createClass({
                 <FontIcon className="material-icons">delete</FontIcon>
               </div>
               <div className="task-action-icon">
-                <a href={taskHref} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
+                <a href={taskUrl} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
                   <FontIcon className="material-icons">link</FontIcon>
                 </a>
+              </div>
+              <div className="task-action-icon" onClick={this.shareTaskUrl.bind(this, taskUrl)}>
+                <FontIcon className="material-icons">share</FontIcon>
               </div>
             </div>
         </div>
