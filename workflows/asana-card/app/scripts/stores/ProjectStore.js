@@ -102,7 +102,7 @@ var fetchData = function () {
 			// if the _fetchLock is true
 
 			if (_fetchLock) {
-				resolve(null);
+				return resolve(null);
 			}
 
 			console.log('TASKS');
