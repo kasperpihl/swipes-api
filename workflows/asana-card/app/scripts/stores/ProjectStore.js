@@ -284,7 +284,7 @@ var ProjectStore = Reflux.createStore({
 				var addedTask = response.data;
 				var taskId = addedTask.id;
 
-				_tasks.push(addedTask);
+				_tasks.unshift(addedTask);
 				self.set('statuses', matchTasks(_tasks));
 
 				MainActions.changeState({
