@@ -22,14 +22,12 @@ var Home = React.createClass({
     if (input.value.length > 0) {
 			newState = {
 				addNewTaskIcon: 'active',
-				todoInput: 'active',
-				createInputValue: newValue
+				todoInput: 'active'
 			};
     } else {
 			newState = {
 				addNewTaskIcon: 'inactive',
-				todoInput: 'inactive',
-				createInputValue: newValue
+				todoInput: 'inactive'
 			};
     }
 

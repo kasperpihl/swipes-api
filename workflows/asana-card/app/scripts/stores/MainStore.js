@@ -11,6 +11,7 @@ var MainStore = Reflux.createStore({
       //expandedIssueId: null
 			addNewTaskIcon: 'inactive',
 			todoInput: 'inactive',
+			// We will need this state only for sharing
 			createInputValue: ''
 		}
 	},
