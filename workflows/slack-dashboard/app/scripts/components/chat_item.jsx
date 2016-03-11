@@ -102,7 +102,10 @@ var ChatMessage = React.createClass({
 		}
 	},
 	renderShareIcon: function (text) {
-		if (text) {
+		//text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+		var matches = text.match(/<(.*?)>/g);
+
+		if (text && (matches === null || matches.length <= 0)) {
 			return <div className="share-icon">
 				<FontIcon
 					className="material-icons share"
@@ -119,7 +122,7 @@ var ChatMessage = React.createClass({
 		return (
 			<div className={className}>
 				<div className="message">
-					{this.renderShareIcon(renderTextWithLinks(this.props.data.text))}
+					{this.renderShareIcon(this.props.data.text)}
 					{this.renderMessage(this.props.data.text)}
 					{this.renderFile()}
 					{this.renderAttachments()}
