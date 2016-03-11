@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var Promise = require('bluebird');
 var ProjectActions = require('../actions/ProjectActions');
 var MainStore = require('../stores/MainStore');
+var MainActions = require('../actions/MainActions');
 var UserStore = require('../stores/UserStore');
 
 var _tasks = [];
@@ -248,6 +249,13 @@ var ProjectStore = Reflux.createStore({
 
 		_fetchLock = true;
 
+		MainActions.changeInputValue('');
+		MainActions.changeState({
+			addNewTaskIcon: 'inactive',
+			todoInput: 'inactive',
+			disabledInput: true
+		});
+
 		// If the tasks is in mytasks it should be private and assigned to me
 		// otherwise it should be public and assigned to no one
 		// the public property is handled automaticly by the API
@@ -286,6 +294,10 @@ var ProjectStore = Reflux.createStore({
 			})
 			.finally(function () {
 				_fetchLock = false;
+
+				MainActions.changeState({
+					disabledInput: false
+				});
 			})
 
 		this.set('createInputValue', '');

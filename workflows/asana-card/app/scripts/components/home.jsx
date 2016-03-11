@@ -31,8 +31,7 @@ var Home = React.createClass({
 			};
     }
 
-		// Workaround for jumping caret
-		this.setState({createInputValue: newValue});
+		MainActions.changeInputValue(newValue);
 		MainActions.changeState(newState);
   },
 	createTask: function () {
@@ -73,7 +72,7 @@ var Home = React.createClass({
 	renderInput: function() {
 		return (
 			<div className={"todo-input " + this.state.todoInput}>
-				<input ref="input" type="text" value={this.state.createInputValue} placeholder="Create a new task" onChange={this.inputOnChange} />
+				<input ref="input" type="text" value={this.state.createInputValue} disabled={this.state.disabledInput} placeholder="Create a new task" onChange={this.inputOnChange} />
 				<div className={"task-add-icon " + this.state.addNewTaskIcon} onClick={this.createTask}>
 					<FontIcon color="#fff" className="material-icons">add</FontIcon>
 				</div>

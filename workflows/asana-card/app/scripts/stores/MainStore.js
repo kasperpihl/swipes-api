@@ -11,8 +11,8 @@ var MainStore = Reflux.createStore({
       //expandedIssueId: null
 			addNewTaskIcon: 'inactive',
 			todoInput: 'inactive',
-			// We will need this state only for sharing
-			createInputValue: ''
+			createInputValue: '',
+			disabledInput: false
 		}
 	},
 	onUpdateSettings: function (newSettings) {
@@ -25,6 +25,9 @@ var MainStore = Reflux.createStore({
 	},
 	onExpandIssue: function (issueId) {
 		this.set('expandedIssueId', issueId);
+	},
+	onChangeInputValue: function (newValue) {
+		this.set('createInputValue', newValue);
 	},
 	onChangeState: function (newState) {
 		// Workaround for magic code here and there
