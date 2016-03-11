@@ -74,8 +74,8 @@ var Home = React.createClass({
 		return (
 			<div className={"todo-input " + this.state.todoInput}>
 				<input ref="input" type="text" value={this.state.createInputValue} placeholder="Create a new task" onChange={this.inputOnChange} />
-				<div className={"task-add-icon " + this.state.addNewTaskIcon}>
-					<FontIcon color="#fff" className="material-icons" onClick={this.createTask}>add</FontIcon>
+				<div className={"task-add-icon " + this.state.addNewTaskIcon} onClick={this.createTask}>
+					<FontIcon color="#fff" className="material-icons">add</FontIcon>
 				</div>
 			</div>
 		)
