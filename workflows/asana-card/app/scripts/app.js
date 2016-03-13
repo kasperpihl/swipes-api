@@ -13,6 +13,20 @@ swipes.onReady (function () {
 	MainStore.fetch();
 });
 
+swipes.onShareTransmit(function(e) {
+	var data = e.data.data;
+
+	if (data.action === 'Create a task') { // We have to do something smarter here
+		var text = data.data.text || ''; // e.data.data.data.data...
+
+		MainActions.changeInputValue(text);
+		MainActions.changeState({
+			addNewTaskIcon: 'active',
+			todoInput: 'active'
+		});
+	}
+});
+
 swipes.onMenuButton(function () {
 	var workspaces = MainStore.getAll();
 	var navItems = [];

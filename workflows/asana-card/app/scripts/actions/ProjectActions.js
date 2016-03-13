@@ -4,9 +4,11 @@ var ProjectActions = Reflux.createActions([
 	'fetchData',
 	'reset',
 	// 'transitionIssue',
-	// 'assignPerson',
+	'assignPerson',
 	'createTask',
-	'completeTask' // This is my fav action
+	'completeTask', // This is my fav action
+	'undoCompleteTask',
+	'removeTask'
 ]);
 
 module.exports = ProjectActions;

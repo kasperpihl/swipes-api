@@ -119,7 +119,12 @@ var asana = {
 				// For some reason sometimes the response is without .data
 				// In the web explorer where one can test the api
 				// there is no such a problem.
-				var data = response.data || response;
+				// When we delete things there is no response at all...
+				var data = {};
+
+				if (response) {
+					data = response.data || response;
+				}
 
 				callback(null, data);
 			})

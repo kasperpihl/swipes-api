@@ -18,24 +18,22 @@ var Home = React.createClass({
     var input = this.refs.input;
 		var newValue = input.value;
 		var newState = {};
-
     if (input.value.length > 0) {
+		if(MainStore.get('todoInput') != 'active'){
 			newState = {
 				addNewTaskIcon: 'active',
-				todoInput: 'active',
-				createInputValue: newValue
+				todoInput: 'active'
 			};
+		}
     } else {
 			newState = {
 				addNewTaskIcon: 'inactive',
-				todoInput: 'inactive',
-				createInputValue: newValue
+				todoInput: 'inactive'
 			};
     }
-
-		// Workaround for jumping caret
-		this.setState({createInputValue: newValue});
-		MainActions.changeState(newState);
+		MainActions.changeInputValue(newValue);
+		if(_.size(newState) > 0)
+			MainActions.changeState(newState);
   },
 	createTask: function () {
 		ProjectActions.createTask({
@@ -72,12 +70,17 @@ var Home = React.createClass({
       )
 		}
   },
+  onKeyDown: function(e){
+  	if(e.keyCode === 13){
+  		this.createTask();
+  	}
+  },
 	renderInput: function() {
 		return (
 			<div className={"todo-input " + this.state.todoInput}>
-				<input ref="input" type="text" value={this.state.createInputValue} placeholder="Create a new task" onChange={this.inputOnChange} />
-				<div className={"task-add-icon " + this.state.addNewTaskIcon}>
-					<FontIcon color="#fff" className="material-icons" onClick={this.createTask}>add</FontIcon>
+				<input ref="input" type="text" value={this.state.createInputValue} onKeyDown={this.onKeyDown} disabled={this.state.disabledInput} placeholder="Create a new task" onChange={this.inputOnChange} />
+				<div className={"task-add-icon " + this.state.addNewTaskIcon} onClick={this.createTask}>
+					<FontIcon color="#fff" className="material-icons">add</FontIcon>
 				</div>
 			</div>
 		)
