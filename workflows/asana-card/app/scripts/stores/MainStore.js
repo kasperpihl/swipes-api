@@ -9,9 +9,6 @@ var MainStore = Reflux.createStore({
 	getInitialState: function () {
 		return {
       //expandedIssueId: null
-			createInputValue: '',
-			creatTaskLoader: 'inactive',
-			disabledInput: false
 		}
 	},
 	onUpdateSettings: function (newSettings) {
@@ -22,20 +19,9 @@ var MainStore = Reflux.createStore({
 			console.log('trying to update settings', res, err);
 		})
 	},
-	onExpandIssue: function (issueId) {
-		this.set('expandedIssueId', issueId);
-	},
-	onChangeInputValue: function (newValue) {
-		this.set('createInputValue', newValue);
-	},
-	onChangeState: function (newState) {
-		// Workaround for magic code here and there
-		for (var state in newState) {
-			this.set(state, newState[state], {trigger: false});
-		}
-
-		this.manualTrigger();
-	},
+	// onExpandIssue: function (issueId) {
+	// 	this.set('expandedIssueId', issueId);
+	// },
 	fetch: function () {
 		var self = this;
 		var projectsPromises = [];

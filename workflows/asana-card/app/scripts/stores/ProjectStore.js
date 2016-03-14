@@ -2,7 +2,7 @@ var Reflux = require('reflux');
 var Promise = require('bluebird');
 var ProjectActions = require('../actions/ProjectActions');
 var MainStore = require('../stores/MainStore');
-var MainActions = require('../actions/MainActions');
+var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 var UserStore = require('../stores/UserStore');
 
 var _tasks = [];
@@ -257,8 +257,8 @@ var ProjectStore = Reflux.createStore({
 
 		_fetchLock = true;
 
-		MainActions.changeInputValue('');
-		MainActions.changeState({
+		CreateTaskInputActions.changeInputValue('');
+		CreateTaskInputActions.changeState({
 			creatTaskLoader: 'active',
 			disabledInput: true
 		});
@@ -286,7 +286,7 @@ var ProjectStore = Reflux.createStore({
 				_tasks.unshift(addedTask);
 				self.set('statuses', matchTasks(_tasks));
 
-				MainActions.changeState({
+				CreateTaskInputActions.changeState({
 					creatTaskLoader: 'inactive',
 					disabledInput: false
 				});
