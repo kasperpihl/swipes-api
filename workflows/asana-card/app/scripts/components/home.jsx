@@ -58,22 +58,24 @@ var Home = React.createClass({
   	}
   },
 	renderInput: function() {
+		var inputLength = this.state.createInputValue.length;
 		var inputWrapperClass = classNames({
 			'todo-input': true,
 			// Kris_TODO make it with only active class
-			'active': this.state.createInputValue.length > 0,
-			'inactive': this.state.createInputValue.length <= 0
+			'active': inputLength > 0,
+			'inactive': inputLength <= 0
 		});
 		var addIconClass = classNames({
 			'task-add-icon': true,
 			// Kris_TODO make it with only active class
-			'active': this.state.createInputValue.length > 0,
-			'inactive': this.state.createInputValue.length <= 0
+			'active': inputLength > 0,
+			'inactive': inputLength <= 0
 		});
 
 		return (
 			<div className={inputWrapperClass}>
 				<input
+					id="create-task-input"
 					ref="input"
 					type="text"
 					value={this.state.createInputValue}

@@ -22,6 +22,7 @@ swipes.onShareTransmit(function(e) {
 
 		if (text) {
 			chatInputActions.changeInputValue(text);
+			document.getElementById('chat-input').focus();
 		}
 	}
 });
