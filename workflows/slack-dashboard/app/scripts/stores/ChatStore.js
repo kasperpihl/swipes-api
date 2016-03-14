@@ -275,7 +275,7 @@ var ChatStore = Reflux.createStore({
 	},
 	onSendMessage: function(message, callback){
 		var self = this;
-		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channelId'), as_user: true}, function(res, err){
+		swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: this.get('channelId'), as_user: true, link_names: 1}, function(res, err){
 			if(res.ok){
 				self.onMarkAsRead(res.data.ts);
 			}
