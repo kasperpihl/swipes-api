@@ -10,10 +10,6 @@ var CircularProgress = require('material-ui/lib/circular-progress');
 var classNames = require('classnames');
 //var ExpandedIssue = require('./expanded_issue');
 
-// function get_host(url) {
-//     return url.replace(/^((\w+:)?\/\/[^\/]+\/?).*$/,'$1');
-// }
-
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
 	inputOnChange: function() {
@@ -48,7 +44,6 @@ var Home = React.createClass({
       swipes.navigation.setTitle(navName);
 
       return (
-        //<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
         <StatusesList projectId={projectId} />
       )
     } else {
