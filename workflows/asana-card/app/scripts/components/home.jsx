@@ -7,6 +7,7 @@ var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
 var FontIcon = require('material-ui/lib/font-icon');
 var CircularProgress = require('material-ui/lib/circular-progress');
+var classNames = require('classnames');
 //var ExpandedIssue = require('./expanded_issue');
 
 // function get_host(url) {
@@ -18,23 +19,8 @@ var Home = React.createClass({
 	inputOnChange: function() {
     var input = this.refs.input;
 		var newValue = input.value;
-		var newState = {};
-    if (input.value.length > 0) {
-		if(MainStore.get('todoInput') != 'active'){
-			newState = {
-				addNewTaskIcon: 'active',
-				todoInput: 'active'
-			};
-		}
-    } else {
-			newState = {
-				addNewTaskIcon: 'inactive',
-				todoInput: 'inactive'
-			};
-    }
+
 		MainActions.changeInputValue(newValue);
-		if(_.size(newState) > 0)
-			MainActions.changeState(newState);
   },
 	createTask: function () {
 		ProjectActions.createTask({
@@ -77,12 +63,34 @@ var Home = React.createClass({
   	}
   },
 	renderInput: function() {
+		var inputWrapperClass = classNames({
+			'todo-input': true,
+			// Kris_TODO make it with only active class
+			'active': this.state.createInputValue.length > 0,
+			'inactive': this.state.createInputValue.length <= 0
+		});
+		var addIconClass = classNames({
+			'task-add-icon': true,
+			// Kris_TODO make it with only active class
+			'active': this.state.createInputValue.length > 0,
+			'inactive': this.state.createInputValue.length <= 0
+		});
+
 		return (
-			<div className={"todo-input " + this.state.todoInput}>
-				<input ref="input" type="text" value={this.state.createInputValue} onKeyDown={this.onKeyDown} disabled={this.state.disabledInput} placeholder="Create a new task" onChange={this.inputOnChange} />
-				<div className={"task-add-icon " + this.state.addNewTaskIcon} onClick={this.createTask}>
+			<div className={inputWrapperClass}>
+				<input
+					ref="input"
+					type="text"
+					value={this.state.createInputValue}
+					onKeyDown={this.onKeyDown}
+					disabled={this.state.disabledInput}
+					placeholder="Create a new task"
+					onChange={this.inputOnChange} />
+
+				<div className={addIconClass} onClick={this.createTask}>
 					<FontIcon color="#fff" className="material-icons">add</FontIcon>
 				</div>
+
 				<div className={"new-task-loader " + this.state.creatTaskLoader}>
 					<CircularProgress size={0.5} color="#777" />
 				</div>
