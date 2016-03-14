@@ -142,6 +142,8 @@
         width: 100%;
         height: 100%;
         cursor: pointer;
+        overflow: hidden;
+        position: relative;
 
         @extend %flex;
 
@@ -162,6 +164,19 @@
   }
 }
 
+.link-action-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  > * {
+    @extend %flex;
+  }
+}
+
+.action-button {
+  margin: 0 !important;
+  color: $deepBlue-60 !important;
+}
 .new-task-loader {
   width: 70px;
   height: 70px;

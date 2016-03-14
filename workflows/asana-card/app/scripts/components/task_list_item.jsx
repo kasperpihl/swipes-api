@@ -6,6 +6,7 @@ var FontIcon = require('material-ui/lib/font-icon');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
 var MenuItem = require('material-ui/lib/menus/menu-item');
+var FlatButton = require('material-ui/lib/flat-button');
 
 var TaskItem = React.createClass({
   getInitialState: function(){
@@ -92,15 +93,15 @@ var TaskItem = React.createClass({
 
     if (task.completed) {
       return (
-        <div className="task-action-icon" onClick={this.undoCompleteTask.bind(this, task)}>
-          <FontIcon className="material-icons">undo</FontIcon>
-        </div>
+        <FlatButton onClick={this.undoCompleteTask.bind(this, task)} style={{width: '100%', height: '100%'}}
+          icon={<FontIcon className="material-icons action-button">undo</FontIcon>}
+        />
       )
     } else {
       return (
-        <div className="task-action-icon" onClick={this.completeTask.bind(this, task)}>
-          <FontIcon className="material-icons">check</FontIcon>
-        </div>
+        <FlatButton onClick={this.completeTask.bind(this, task)} rippleColor="green" style={{width: '100%', height: '100%'}}
+          icon={<FontIcon className="material-icons action-button">check</FontIcon>}
+        />
       )
     }
   },
@@ -122,7 +123,7 @@ var TaskItem = React.createClass({
   shareTaskUrl: function (taskUrl) {
     swipes.share.request({url: taskUrl});
   },
-	render: function() {
+  render: function() {
 		var task = this.props.data;
 		var taskState = task.completed ? 'done' : 'todo';
 		var dotColor = "dot " + taskState;
@@ -156,17 +157,15 @@ var TaskItem = React.createClass({
           <div className="shadow-box"></div>
             <div className="task-actions">
               {this.renderCompleteOrUndo()}
-              <div className="task-action-icon" onClick={this.removeTask.bind(this, task)}>
-                <FontIcon className="material-icons">delete</FontIcon>
-              </div>
-              <div className="task-action-icon">
-                <a href={taskUrl} target="_blank" style={{width: '100%', textAlign: 'center', cursor: 'pointer'}}>
-                  <FontIcon className="material-icons">link</FontIcon>
-                </a>
-              </div>
-              <div className="task-action-icon" onClick={this.shareTaskUrl.bind(this, taskUrl)}>
-                <FontIcon className="material-icons">share</FontIcon>
-              </div>
+              <FlatButton onClick={this.removeTask.bind(this, task)} rippleColor="red" style={{width: '100%', height: '100%'}}
+                icon={<FontIcon className="material-icons action-button">delete</FontIcon>}
+              />
+            <FlatButton className="link-action-button" linkButton={true} href={taskUrl} style={{width: '100%', height: '100%'}}
+                icon={<FontIcon className="material-icons action-button">link</FontIcon>}
+              />
+              <FlatButton onClick={this.shareTaskUrl.bind(this, taskUrl)} style={{width: '100%', height: '100%'}}
+                icon={<FontIcon className="material-icons action-button">share</FontIcon>}
+              />
             </div>
         </div>
 			</div>
