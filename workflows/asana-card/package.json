@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.2.1",
+    "classnames": "^2.2.3",
     "jquery": "^2.1.4",
     "material-ui": "^0.14.4",
     "object-assign": "^4.0.1",

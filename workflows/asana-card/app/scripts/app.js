@@ -24,6 +24,7 @@ swipes.onShareTransmit(function(e) {
 			addNewTaskIcon: 'active',
 			todoInput: 'active'
 		});
+		document.getElementById('create-task-input').focus();
 	}
 });
 

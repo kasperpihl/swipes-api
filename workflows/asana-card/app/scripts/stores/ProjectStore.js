@@ -259,8 +259,6 @@ var ProjectStore = Reflux.createStore({
 
 		MainActions.changeInputValue('');
 		MainActions.changeState({
-			addNewTaskIcon: 'inactive',
-			todoInput: 'inactive',
 			creatTaskLoader: 'active',
 			disabledInput: true
 		});

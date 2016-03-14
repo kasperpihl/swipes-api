@@ -55,7 +55,7 @@ var ChatInput = React.createClass({
 
 			<div className="todo-input">
 
-				<input ref="input" type="text" placeholder="Quick reply" onChange={this.onChange}
+				<input id="chat-input" ref="input" type="text" placeholder="Quick reply" onChange={this.onChange}
 	      value={this.state.inputValue}
 	      ref="textfield"
 	      onKeyDown={this.onKeyDown}
