@@ -14,6 +14,7 @@ var TaskItem = React.createClass({
 	    };
 	},
   activate: function() {
+
     if (this.state.actionBar == 'inactive') {
         this.setState({actionBar: 'active'});
     } else {
@@ -105,12 +106,15 @@ var TaskItem = React.createClass({
   },
   completeTask: function (task) {
     ProjectActions.completeTask(task);
+    this.replaceState(this.getInitialState());
   },
   undoCompleteTask: function (task) {
     ProjectActions.undoCompleteTask(task);
+    this.replaceState(this.getInitialState());
   },
   removeTask: function (task) {
     ProjectActions.removeTask(task);
+    this.replaceState(this.getInitialState());
   },
   stopPropagation: function (event) {
     event.stopPropagation();
