@@ -6,6 +6,7 @@ var ReactDOM = require('react-dom');
 var Home = require('./components/home');
 var MainStore = require('./stores/MainStore');
 var MainActions = require('./actions/MainActions');
+var CreateTaskInputActions = require('./actions/CreateTaskInputActions');
 
 ReactDOM.render(<Home />, document.getElementById('content'));
 
@@ -19,11 +20,7 @@ swipes.onShareTransmit(function(e) {
 	if (data.action === 'Create a task') { // We have to do something smarter here
 		var text = data.data.text || ''; // e.data.data.data.data...
 
-		MainActions.changeInputValue(text);
-		MainActions.changeState({
-			addNewTaskIcon: 'active',
-			todoInput: 'active'
-		});
+		CreateTaskInputActions.changeInputValue(text);
 		document.getElementById('create-task-input').focus();
 	}
 });

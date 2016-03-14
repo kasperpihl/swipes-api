@@ -1,5 +1,5 @@
 var React = require('react');
-var CircularProgress = require('material-ui/lib').CircularProgress;
+var CircularProgress = require('material-ui/lib/circular-progress');
 
 var Loading = React.createClass({
 	render: function() {

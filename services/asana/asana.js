@@ -102,6 +102,8 @@ var asana = {
 					return Promise.reject(new SwipesError('asana_sdk_not_supported_method'));
 				}
 
+				var id = null;
+
 				if (params.id) {
 					id = params.id;
 					delete(params.id);
