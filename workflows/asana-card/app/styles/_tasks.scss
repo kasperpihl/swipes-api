@@ -162,6 +162,24 @@
   }
 }
 
+.new-task-loader {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  @extend %flex;
+
+  &.inactive {
+    display: none;
+  }
+
+  &.active {
+    display: flex;
+  }
+}
+
 .inv-icon {
   opacity: 0 !important;
 }

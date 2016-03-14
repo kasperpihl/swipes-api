@@ -261,6 +261,7 @@ var ProjectStore = Reflux.createStore({
 		MainActions.changeState({
 			addNewTaskIcon: 'inactive',
 			todoInput: 'inactive',
+			creatTaskLoader: 'active',
 			disabledInput: true
 		});
 
@@ -288,6 +289,7 @@ var ProjectStore = Reflux.createStore({
 				self.set('statuses', matchTasks(_tasks));
 
 				MainActions.changeState({
+					creatTaskLoader: 'inactive',
 					disabledInput: false
 				});
 

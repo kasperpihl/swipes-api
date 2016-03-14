@@ -6,6 +6,7 @@ var ProjectActions = require('../actions/ProjectActions');
 var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
 var FontIcon = require('material-ui/lib/font-icon');
+var CircularProgress = require('material-ui/lib/circular-progress');
 //var ExpandedIssue = require('./expanded_issue');
 
 // function get_host(url) {
@@ -81,6 +82,9 @@ var Home = React.createClass({
 				<input ref="input" type="text" value={this.state.createInputValue} onKeyDown={this.onKeyDown} disabled={this.state.disabledInput} placeholder="Create a new task" onChange={this.inputOnChange} />
 				<div className={"task-add-icon " + this.state.addNewTaskIcon} onClick={this.createTask}>
 					<FontIcon color="#fff" className="material-icons">add</FontIcon>
+				</div>
+				<div className={"new-task-loader " + this.state.creatTaskLoader}>
+					<CircularProgress size={0.5} color="#777" />
 				</div>
 			</div>
 		)
