@@ -160,7 +160,7 @@ var TaskItem = React.createClass({
               <FlatButton onClick={this.removeTask.bind(this, task)} rippleColor="red" style={{width: '100%', height: '100%'}}
                 icon={<FontIcon className="material-icons action-button">delete</FontIcon>}
               />
-            <FlatButton className="link-action-button" linkButton={true} href={taskUrl} style={{width: '100%', height: '100%'}}
+            <FlatButton className="link-action-button" target="_blank" linkButton={true} href={taskUrl} style={{width: '100%', height: '100%'}}
                 icon={<FontIcon className="material-icons action-button">link</FontIcon>}
               />
               <FlatButton onClick={this.shareTaskUrl.bind(this, taskUrl)} style={{width: '100%', height: '100%'}}
