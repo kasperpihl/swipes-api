@@ -5,12 +5,12 @@ var chatActions = require('../actions/ChatActions');
 var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 var channelStore = require('../stores/ChannelStore');
-var Card = require('material-ui/lib').Card;
-var CardTitle = require('material-ui/lib').CardTitle;
-var CircularProgress = require('material-ui/lib').CircularProgress;
-var SelectField = require('material-ui/lib').SelectField;
-var Badge = require('material-ui/lib').Badge;
-var MenuItem = require('material-ui/lib').MenuItem;
+var Card = require('material-ui/lib/card');
+var CardTitle = require('material-ui/lib/card/card-title');
+var CircularProgress = require('material-ui/lib/circular-progress');
+var SelectField = require('material-ui/lib/select-field');
+var Badge = require('material-ui/lib/badge');
+var MenuItem = require('material-ui/lib/menus/menu-item');
 var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat')],
 	shouldScrollToBottom: true,

@@ -2,7 +2,7 @@ var React = require('react');
 var chatActions = require('../actions/ChatActions');
 var ReactEmoji = require('react-emoji');
 var UserStore = require('../stores/UserStore');
-var FontIcon = require('material-ui/lib').FontIcon;
+var FontIcon = require('material-ui/lib/font-icon');
 var ChatItem = React.createClass({
 	renderNameHeader: function(){
 		var name = 'unknown';

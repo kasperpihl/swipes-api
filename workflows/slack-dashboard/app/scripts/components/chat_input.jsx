@@ -3,9 +3,9 @@ var ChatInputStore = require('../stores/ChatInputStore');
 var chatActions = require('../actions/ChatActions');
 var chatInputActions = require('../actions/ChatInputActions');
 
-var FontIcon = require('material-ui/lib').FontIcon;
-var IconButton = require('material-ui/lib').IconButton;
-var TextField = require('material-ui/lib').TextField;
+var FontIcon = require('material-ui/lib/font-icon');
+var IconButton = require('material-ui/lib/icon-button');
+var TextField = require('material-ui/lib/text-field');
 
 var ChatInput = React.createClass({
 	mixins: [ChatInputStore.connect()],
