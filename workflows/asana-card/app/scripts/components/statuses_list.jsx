@@ -55,22 +55,6 @@ var StatusesList = React.createClass({
 			inkBarStyle={tabsStyles.inkBarStyle}
 			children={tabs}></Tabs>
 	},
-	// renderProjectLink: function () {
-	// 	var projectUrl = this.props.projectUrl;
-	// 	var textStyles = {
-	// 		display: 'inline-block',
-	// 		marginTop: '5px',
-	// 		fontSize: '14px',
-	// 		color: 'rgba(0, 0, 0, 0.498039)'
-	// 	};
-	//
-	// 	return (
-	// 		<span style={textStyles}>
-	// 			If you want to do something more specific you can go to
-	// 			<a href={projectUrl} target="_blank"> JIRA</a>
-	// 		</span>
-	// 	);
-	// },
 	render: function () {
 		return (
 			<div>
