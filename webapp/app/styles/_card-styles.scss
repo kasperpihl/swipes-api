@@ -2,6 +2,11 @@
   padding-top: 50px;
   height: 100%;
 }
+.active-app.dragging{
+  iframe{
+    pointer-events: none;
+  }
+}
 .card{
   position: 'absolute';
   background: white;

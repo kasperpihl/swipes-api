@@ -139,6 +139,8 @@ var CardLoader = React.createClass({
 	},
 	onDragMouseDown:function( side, e){
 		this.onMouseDown();
+		// Add dragging class (preventing iframes from receiving mouse events)
+		$('.active-app').addClass('dragging');
 		this.side = side;
 		this.isResizing = true;
 		this.originalClientX = e.clientX;
@@ -193,6 +195,7 @@ var CardLoader = React.createClass({
 	},
 	onMouseUp: function(e){
 		this.isResizing = false;
+		$('.active-app').removeClass('dragging');
 	},
 	componentWillMount() {
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 10);
@@ -302,11 +305,15 @@ var CardLoader = React.createClass({
 
 var cardSource = {
 	beginDrag: function (props) {
+		// Add dragging class (preventing iframes from receiving mouse events)
+		$('.active-app').addClass('dragging');
 		// Return the data describing the dragged item
 		var item = { id: props.data.id };
 		return item;
 	},
 	endDrag: function (props, monitor, component) {
+		// Remove dragging class
+		$('.active-app').removeClass('dragging');
 		var item = monitor.getItem();
 		var delta = monitor.getDifferenceFromInitialOffset();
     	var itemObj = WorkspaceStore.get(item.id);
