@@ -97,6 +97,10 @@ ul{
         .active-app{
             height:100%;
             padding-top: 60px;
+            .actual-app{
+                height:100%;
+                position: relative;
+            }
         }
     }
 }

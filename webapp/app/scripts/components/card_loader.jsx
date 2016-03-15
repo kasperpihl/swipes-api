@@ -3,12 +3,14 @@ var Reflux = require('reflux');
 
 var Loading = require('./loading');
 var WorkflowStore = require('../stores/WorkflowStore');
+var WorkspaceStore = require('../stores/WorkspaceStore');
 
 var stateActions = require('../actions/StateActions');
 var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
+var workspaceActions = require('../actions/WorkspaceActions');
 
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
@@ -22,12 +24,19 @@ var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 
 
+var DragSource = require('react-dnd').DragSource;
+
+
 var leftNavActions = require('../actions/LeftNavActions');
 
 var CardLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
 		return workflows.filter(function(workflow) {
 			return workflow.id === this.props.data.id;
+		}.bind(this))[0];
+	}), WorkspaceStore.connectFilter('card', function(cards){
+		return cards.filter(function(card) {
+			return card.id === this.props.data.id;
 		}.bind(this))[0];
 	}) ],
 	getInitialState:function(){
@@ -125,8 +134,75 @@ var CardLoader = React.createClass({
 		this.apiCon.callListener("event", initObj);
 		this.apiCon.setDelegate(this);
 	},
+	onMouseDown: function(){
+		workspaceActions.sendCardToFront(this.props.data.id);
+	},
+	onDragMouseDown:function( side, e){
+		this.onMouseDown();
+		this.side = side;
+		this.isResizing = true;
+		this.originalClientX = e.clientX;
+		this.originalW = this.props.data.w;
+		this.originalX = this.props.data.x;
+		this.originalClientY = e.clientY;
+		this.originalY = this.props.data.y;
+		this.originalH = this.props.data.h;
+		
+		e.stopPropagation();
+		e.preventDefault();
+		console.log('d start', this.originalY);
+	},
+	onMouseMove: function(e){
+		
+		if(this.isResizing){
+
+			var diffX = (e.clientX - this.originalClientX);
+			var diffY = (e.clientY - this.originalClientY);
+			var newX, newY, newW, newH;
+			if(['top', 'bottom'].indexOf(this.side) === -1){
+				newW = diffX + this.originalW;
+				
+			}
+			if(['left', 'right'].indexOf(this.side) === -1){
+				newH = diffY + this.originalH;
+			}
+
+			if(['top', 'top-left', 'top-right'].indexOf(this.side) !== -1){
+				newY = (this.originalY - 60 + diffY);
+				newH = this.originalH - diffY;
+			}
+			if(['left', 'top-left', 'bottom-left'].indexOf(this.side) !== -1){
+				newX = (this.originalX + diffX);
+				newW = this.originalW - diffX;
+			}
+
+			var updateObj = {};
+			if(newX)
+				updateObj.x = newX;
+			if(newY)
+				updateObj.y = newY;
+			if(newW)
+				updateObj.w = newW;
+			if(newH)
+				updateObj.h = newH;
+			//Actions.updateCardSize(this.props.data.id, updateObj);
+			this.bouncedUpdateCardSize(this.props.data.id, updateObj);
+		}
+		
+		
+	},
+	onMouseUp: function(e){
+		this.isResizing = false;
+	},
+	componentWillMount() {
+		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 10);
+	    window.addEventListener('mouseup', this.onMouseUp);
+    	window.addEventListener('mousemove', this.onMouseMove);  
+	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
+		window.removeEventListener('mouseup', this.onMouseUp);
+		window.removeEventListener('mousemove', this.onMouseMove);
 	},
 	onRenameWorkflow: function(){
 		var newName = prompt('Rename workflow', this.state.workflow.name);
@@ -141,6 +217,8 @@ var CardLoader = React.createClass({
 		this.apiCon.callListener("event", e);
 	},
 	renderCardBar: function(){
+		if(!this.state.workflow)
+			return;
 		var title = this.state.workflow.name;
 		if(this.state.titleFromCard){
 			title = this.state.titleFromCard;
@@ -175,20 +253,75 @@ var CardLoader = React.createClass({
 
 	},
 	render: function() {
+		var cardContent = <Loading />;
 
-		if(!this.state.workflow) {
-			return ( <Loading /> );
+		var connectDragSource = this.props.connectDragSource;
+		var connectDragPreview = this.props.connectDragPreview;
+		var style = {
+			position: 'absolute',
+			zIndex: 0
+		};
+		if(this.props.isDragging){
+			style.display = 'none';
 		}
-		var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
-		return (
-			<div className="card-container">
-				{this.renderCardBar()}
-				<div className="card-content" style={{height:'100%'}}>
-					<iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>
+		console.log(this.state);
+		if(this.state.card){
+			style.left = this.state.card.x;
+			style.top = this.state.card.y;
+			style.width = this.state.card.w;
+			style.height = this.state.card.h;
+			style.zIndex = 1000 + this.state.card.z;
+		}
+		if(this.state.workflow){
+			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
+			cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
+		}
+		
+		return connectDragPreview(
+			<div className="card" style={style} onMouseDown={this.onMouseDown}>
+				<div className="card-container">
+					<div className="resize-bar left" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'left')}/>
+					<div className="resize-bar right" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'right')}/>
+					<div className="resize-bar top" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'top')}/>
+					<div className="resize-bar bottom" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'bottom')}/>
+					<div className="resize-bar corner bottom-right" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'bottom-right')}/>
+					<div className="resize-bar corner bottom-left" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'bottom-left')}/>
+					<div className="resize-bar corner top-right" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'top-right')}/>
+					<div className="resize-bar corner top-left" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'top-left')}/>
+					{connectDragSource(this.renderCardBar())}
+					<div className="card-content">
+						{cardContent}
+					</div>
 				</div>
 			</div>
 		);
 	}
 });
 
-module.exports = CardLoader;
+
+
+var cardSource = {
+	beginDrag: function (props) {
+		// Return the data describing the dragged item
+		var item = { id: props.data.id };
+		return item;
+	},
+	endDrag: function (props, monitor, component) {
+		var item = monitor.getItem();
+		var delta = monitor.getDifferenceFromInitialOffset();
+    	var itemObj = WorkspaceStore.get(item.id);
+    	WorkspaceStore.update(itemObj.id, {x: itemObj.x + delta.x, y: itemObj.y + delta.y});
+	}
+};
+function collect(connect, monitor) {
+	return {
+		// to let React DnD handle the drag events:
+		connectDragSource: connect.dragSource(),
+		connectDragPreview: connect.dragPreview(),
+		// You can ask the monitor about the current drag state:
+		isDragging: monitor.isDragging()
+	};
+}
+
+
+module.exports = DragSource('card', cardSource, collect)(CardLoader);
