@@ -10,18 +10,8 @@ var FlatButton = require('material-ui/lib/flat-button');
 
 var TaskItem = React.createClass({
   getInitialState: function(){
-	    return {
-        actionBar: 'inactive'
-	    };
+	    return {};
 	},
-  activate: function() {
-
-    if (this.state.actionBar == 'inactive') {
-        this.setState({actionBar: 'active'});
-    } else {
-        this.setState({actionBar: 'inactive'});
-    }
-  },
   handleMenuItemClick: function (task, userId) {
     ProjectActions.assignPerson(task, userId);
   },
@@ -88,23 +78,6 @@ var TaskItem = React.createClass({
       </IconMenu>
     )
   },
-  renderCompleteOrUndo: function () {
-    var task = this.props.data;
-
-    if (task.completed) {
-      return (
-        <FlatButton onClick={this.undoCompleteTask.bind(this, task)} style={{width: '100%', height: '100%'}}
-          icon={<FontIcon className="material-icons action-button">undo</FontIcon>}
-        />
-      )
-    } else {
-      return (
-        <FlatButton onClick={this.completeTask.bind(this, task)} rippleColor="green" style={{width: '100%', height: '100%'}}
-          icon={<FontIcon className="material-icons action-button">check</FontIcon>}
-        />
-      )
-    }
-  },
   renderCompleteOrUndoHover: function () {
     var task = this.props.data;
 
@@ -118,23 +91,20 @@ var TaskItem = React.createClass({
       )
     }
   },
-  completeTask: function (task) {
+  completeTask: function (task, event) {
     ProjectActions.completeTask(task);
-    this.replaceState(this.getInitialState());
+    event.stopPropagation();
   },
-  undoCompleteTask: function (task) {
+  undoCompleteTask: function (task, event) {
     ProjectActions.undoCompleteTask(task);
-    this.replaceState(this.getInitialState());
-  },
-  removeTask: function (task) {
-    ProjectActions.removeTask(task);
-    this.replaceState(this.getInitialState());
+    event.stopPropagation();
   },
   stopPropagation: function (event) {
     event.stopPropagation();
   },
-  shareTaskUrl: function (taskUrl) {
+  shareTaskUrl: function (taskUrl, event) {
     swipes.share.request({url: taskUrl});
+    event.stopPropagation();
   },
   render: function() {
 		var task = this.props.data;
@@ -145,7 +115,7 @@ var TaskItem = React.createClass({
 
 		return (
 			<div className="task-wrapper">
-        <div className="task" onClick={this.activate}>
+        <div className="task">
           <div className="task-list-element">
   					<div className={dotColor}></div>
   				</div>
@@ -169,22 +139,6 @@ var TaskItem = React.createClass({
               and if no image then <div class="avatar-name"></div>
             */}
           </div>
-        </div>
-
-        <div className={"task-action-bars " + this.state.actionBar}>
-          <div className="shadow-box"></div>
-            <div className="task-actions">
-              {this.renderCompleteOrUndo()}
-              <FlatButton onClick={this.removeTask.bind(this, task)} rippleColor="red" style={{width: '100%', height: '100%'}}
-                icon={<FontIcon className="material-icons action-button">delete</FontIcon>}
-              />
-            <FlatButton className="link-action-button" target="_blank" linkButton={true} href={taskUrl} style={{width: '100%', height: '100%'}}
-                icon={<FontIcon className="material-icons action-button">link</FontIcon>}
-              />
-              <FlatButton onClick={this.shareTaskUrl.bind(this, taskUrl)} style={{width: '100%', height: '100%'}}
-                icon={<FontIcon className="material-icons action-button">share</FontIcon>}
-              />
-            </div>
         </div>
 			</div>
 		)
