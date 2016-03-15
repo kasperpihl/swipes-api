@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var MainActions = require('../actions/MainActions');
-var ProjectActions = require('../actions/ProjectActions');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var Promise = require('bluebird');
 
 var MainStore = Reflux.createStore({
@@ -13,7 +13,7 @@ var MainStore = Reflux.createStore({
 	},
 	onUpdateSettings: function (newSettings) {
 		console.log('new', newSettings);
-		ProjectActions.reset();
+		ProjectDataActions.reset();
 		this.update('settings', newSettings);
 		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err) {
 			console.log('trying to update settings', res, err);

@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 
-var ProjectActions = Reflux.createActions([
+var ProjectDataActions = Reflux.createActions([
 	'fetchData',
 	'reset',
 	// 'transitionIssue',
@@ -11,4 +11,4 @@ var ProjectActions = Reflux.createActions([
 	'removeTask'
 ]);
 
-module.exports = ProjectActions;
+module.exports = ProjectDataActions;

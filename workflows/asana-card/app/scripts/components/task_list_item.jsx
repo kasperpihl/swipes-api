@@ -1,7 +1,7 @@
 var React = require('react');
 var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
-var ProjectActions = require('../actions/ProjectActions');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var FontIcon = require('material-ui/lib/font-icon');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
@@ -13,7 +13,7 @@ var TaskItem = React.createClass({
 	    return {};
 	},
   handleMenuItemClick: function (task, userId) {
-    ProjectActions.assignPerson(task, userId);
+    ProjectDataActions.assignPerson(task, userId);
   },
   assignChoices: function() {
     var task = this.props.data;
@@ -92,11 +92,11 @@ var TaskItem = React.createClass({
     }
   },
   completeTask: function (task, event) {
-    ProjectActions.completeTask(task);
+    ProjectDataActions.completeTask(task);
     event.stopPropagation();
   },
   undoCompleteTask: function (task, event) {
-    ProjectActions.undoCompleteTask(task);
+    ProjectDataActions.undoCompleteTask(task);
     event.stopPropagation();
   },
   stopPropagation: function (event) {
