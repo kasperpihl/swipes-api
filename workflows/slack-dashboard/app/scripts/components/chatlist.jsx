@@ -75,7 +75,7 @@ var ChatList = React.createClass({
 	},
 	renderLoading: function(){
 		if(!this.state.chat.sections){
-			return <CircularProgress style={{
+			return <CircularProgress color="#777" size={1} style={{
 				position: 'absolute',
 				left: '50%',
 				top: '50%',
@@ -84,9 +84,9 @@ var ChatList = React.createClass({
 				marginLeft: '-25px'
 			}}/>;
 		}
-		
-		
-	
+
+
+
 	},
 	renderSections: function(){
 		if(this.state.chat.sections){
@@ -102,7 +102,7 @@ var ChatList = React.createClass({
 	},
 	render: function() {
 		if(!swipes.info.workflow){
-			return <CircularProgress size={2} style={{
+			return <CircularProgress size={1} color="#777" style={{
 				position: 'absolute',
 				left: '50%',
 				top: '50%',

@@ -105,6 +105,19 @@ var TaskItem = React.createClass({
       )
     }
   },
+  renderCompleteOrUndoHover: function () {
+    var task = this.props.data;
+
+    if (task.completed) {
+      return (
+        <div className="main-actions" onClick={this.undoCompleteTask.bind(this, task)}><FontIcon className="material-icons">undo</FontIcon></div>
+      )
+    } else {
+      return (
+        <div className="main-actions" onClick={this.completeTask.bind(this, task)}><FontIcon className="material-icons">check</FontIcon></div>
+      )
+    }
+  },
   completeTask: function (task) {
     ProjectActions.completeTask(task);
     this.replaceState(this.getInitialState());
@@ -138,6 +151,11 @@ var TaskItem = React.createClass({
   				</div>
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>
+              <div className="task-details">
+                <div className="task-project">Project name</div>
+                {this.renderCompleteOrUndoHover()}
+                <div className="main-actions"><FontIcon className="material-icons">share</FontIcon></div>
+              </div>
   				</div>
 
           <div className="task-assign-avatar" title=""  onClick={this.stopPropagation}>
