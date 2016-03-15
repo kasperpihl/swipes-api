@@ -7,7 +7,7 @@ var ReactGridLayout = require('react-grid-layout');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
 var CardLoader = require('./card_loader');
-var Card = require('material-ui/lib').Card;
+var Card = require('material-ui/lib/card');
 
 var Workspace = React.createClass({
     mixins: [PureRenderMixin, WorkspaceStore.connect('workflows')],

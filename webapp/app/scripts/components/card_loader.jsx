@@ -13,10 +13,10 @@ var workflowActions = require('../actions/WorkflowActions');
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
 
-var AppBar = require('material-ui/lib').AppBar;
-var Badge = require('material-ui/lib').Badge;
-var IconButton = require('material-ui/lib').IconButton;
-var FontIcon = require('material-ui/lib').FontIcon;
+var AppBar = require('material-ui/lib/app-bar');
+var Badge = require('material-ui/lib/badge');
+var IconButton = require('material-ui/lib/icon-button');
+var FontIcon = require('material-ui/lib/font-icon');
 var MenuItem = require('material-ui/lib/menus/menu-item');
 var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
