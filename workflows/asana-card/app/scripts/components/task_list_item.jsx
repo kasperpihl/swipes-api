@@ -124,7 +124,7 @@ var TaskItem = React.createClass({
               <div className="task-details">
                 <div className="task-project">Project name</div>
                 {this.renderCompleteOrUndoHover()}
-                <div className="main-actions"><FontIcon className="material-icons">share</FontIcon></div>
+                <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
               </div>
   				</div>
 
