@@ -4,6 +4,7 @@ var ProjectDataActions = require('../actions/ProjectDataActions');
 var MainStore = require('../stores/MainStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 var UserStore = require('../stores/UserStore');
+var ProjectsStore = require('../stores/ProjectsStore');
 
 var _tasks = [];
 var _users = [];
@@ -114,6 +115,7 @@ var fetchData = function () {
 
 			_tasks = res[0].data;
 			_users = res[1].data;
+			_projects = res[2].data;
 
 			var statuses = matchTasks(_tasks);
 			// _statuses = uniqueStatuses(_issueTypes);
@@ -125,7 +127,12 @@ var fetchData = function () {
 				user.id = user.id.toString();
 			})
 
+			_projects.forEach(function (project) {
+				project.id = project.id.toString();
+			})
+
 			UserStore.batchLoad(_users, {flush:true});
+			ProjectsStore.batchLoad(_projects, {flush:true});
 
 			refetchData(true);
 

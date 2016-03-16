@@ -1,6 +1,7 @@
 var React = require('react');
 var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
+var ProjectsStore = require('../stores/ProjectsStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var FontIcon = require('material-ui/lib/font-icon');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
@@ -106,12 +107,25 @@ var TaskItem = React.createClass({
     swipes.share.request({url: taskUrl});
     event.stopPropagation();
   },
+  renderProjectName: function (taskProjectName) {
+    if (taskProjectName) {
+      return (
+        <div className="task-project">{taskProjectName}</div>
+      )
+    }
+  },
   render: function() {
 		var task = this.props.data;
 		var taskState = task.completed ? 'done' : 'todo';
 		var dotColor = "dot " + taskState;
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+    var allProjects = ProjectsStore.getAll();
+    var taskProjects = task.projects;
+    // We will show only the first one fow now
+    var taskProjectId = taskProjects.length > 0 ? taskProjects[0].id : null;
+    var taskProject = allProjects[taskProjectId] || {};
+    var taskProjectName = taskProject.name || null;
 
 		return (
 			<div className="task-wrapper">
@@ -122,7 +136,7 @@ var TaskItem = React.createClass({
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>
               <div className="task-details">
-                <div className="task-project">Project name</div>
+                {this.renderProjectName(taskProjectName)}
                 {this.renderCompleteOrUndoHover()}
                 <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
               </div>
