@@ -60,8 +60,8 @@ var ChatInput = React.createClass({
 	      ref="textfield"
 	      onKeyDown={this.onKeyDown}
 	      onKeyUp={this.onKeyUp}/>
-				<div className={"task-add-icon"}>
-					<FontIcon className="material-icons" onClick={this.onClick}>{sendIcon}</FontIcon>
+				<div onClick={this.onClick} className={"task-add-icon"}>
+					<FontIcon className="material-icons">{sendIcon}</FontIcon>
 				</div>
 			</div>
 		);
