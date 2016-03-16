@@ -87,9 +87,6 @@ var fetchData = function () {
 		tasks = res[0].data;
 		users = res[1].data;
 		projects = res[2].data;
-		// _statuses = uniqueStatuses(_issueTypes);
-		// var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
-		// var assignable = res[2].data;
 
 		// HACK because reflux-model-extension wants strings for idAttribute
 		tasks.forEach(function (task) {
