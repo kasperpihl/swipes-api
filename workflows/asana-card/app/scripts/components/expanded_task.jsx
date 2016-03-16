@@ -8,6 +8,11 @@ var ExpandedTask = React.createClass({
 			task: null
 		}
 	},
+  componentWillMount: function () {
+    var taskId = this.props.taskId;
+
+    console.log(taskId);
+  },
   render: function () {
     var task = this.state.task;
 
