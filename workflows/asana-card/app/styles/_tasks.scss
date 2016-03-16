@@ -7,8 +7,28 @@
 .task-list-wrapper {
   width: 100%;
   padding-top: 0px;
-  padding-bottom: 70px;
+  padding-bottom: 90px;
   //padding-right: 10px;
+}
+
+.main-actions {
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+
+  @extend %flex;
+
+  .material-icons {
+    font-size: 20px !important;
+    color: $deepBlue-20 !important;
+  }
+
+  &:hover {
+
+    .material-icons {
+      color: $deepBlue-60 !important;
+    }
+  }
 }
 
 .task-wrapper {
@@ -51,10 +71,17 @@
           background-color: $green-color;
         }
       }
+
+      .sub-dot {
+        width: 8px;
+        height: 8px;
+        border: 2px solid $deepBlue-100;
+        border-radius: 50%;
+      }
     }
 
     .task-details-wrap {
-      width: calc(100% - 50px);
+      width: calc(100% - 50px - 35px);
       @extend %flex;
       flex-direction: column;
       align-items: flex-start;
@@ -69,26 +96,6 @@
         align-items: center;
         margin-top: 5px;
 
-        .main-actions {
-          width: 30px;
-          height: 30px;
-          opacity: 0;
-
-          @extend %flex;
-
-          .material-icons {
-            font-size: 20px !important;
-            color: $deepBlue-20 !important;
-          }
-
-          &:hover {
-
-            .material-icons {
-              color: $deepBlue-60 !important;
-            }
-          }
-        }
-
         .task-date {
           font-size: 13px;
           color: $deepBlue-40;
@@ -100,20 +107,9 @@
           border: 1px solid $deepBlue-80;
           padding: 2px 8px;
           border-radius: 20px;
-          margin-right: 10px;
-          //margin-left: 10px; Add back when we a due date
+          margin-left: 10px;
         }
       }
-    }
-
-    .assign-layer {
-      position: absolute;
-      width: 35px;
-      height: 100%;
-      top: 0;
-      right: 21px;
-
-      @extend %flex;
     }
 
     .task-assign-avatar {
@@ -137,7 +133,7 @@
     position: relative;
     overflow: hidden;
     transition: .4s ease-in-out;
-    transition-delay: -.15s;
+    transition-delay: -.25s;
 
     .shadow-box {
       width: 120%;
@@ -167,8 +163,6 @@
         width: 100%;
         height: 100%;
         cursor: pointer;
-        overflow: hidden;
-        position: relative;
 
         @extend %flex;
 
@@ -187,41 +181,6 @@
       }
     }
   }
-}
-
-.link-action-button {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  > * {
-    @extend %flex;
-  }
-}
-
-.action-button {
-  margin: 0 !important;
-  color: $deepBlue-60 !important;
-}
-.new-task-loader {
-  width: 70px;
-  height: 70px;
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  @extend %flex;
-
-  &.inactive {
-    display: none;
-  }
-
-  &.active {
-    display: flex;
-  }
-}
-
-.inv-icon {
-  opacity: 0 !important;
 }
 
 .avatar-name {
@@ -272,33 +231,6 @@
     }
   }
 
-  .action-bar-assign {
-    width: 35px;
-    height: 35px;
-    padding: 15px 0;
-    margin: 0 5px;
-    border: 1px solid $deepBlue-60;
-    border-radius: 50%;
-    cursor: pointer;
-
-    @extend %flex;
-
-    .material-icons {
-      margin-left: -2px;
-      color: $deepBlue-60 !important;
-      font-size: 16px !important;
-      cursor: pointer !important;
-    }
-
-    &:hover {
-      background-color: $deepBlue-60;
-
-      .material-icons {
-        color: white !important;
-      }
-    }
-  }
-
   img {
     box-sizing: content-box;
     padding: 15px 0;
@@ -328,11 +260,11 @@
   width: 100%;
   height: 70px;
   background-color: $studioGray-20;
-  position: fixed;
+  position: absolute;
   //z-index: 10;
   bottom: 0;
   left: 0;
-  z-index: 9;
+  //z-index: 1000;
   //overflow: hidden;
 
   &.active {
@@ -438,6 +370,33 @@
       height: 100%;
 
       @extend %flex;
+
+      .action-bar-assign {
+        width: 35px;
+        height: 35px;
+        padding: 15px 0;
+        margin: 0 5px;
+        border: 1px solid $deepBlue-60;
+        border-radius: 50%;
+        cursor: pointer;
+
+        @extend %flex;
+
+        .material-icons {
+          margin-left: -2px;
+          color: $deepBlue-60 !important;
+          font-size: 16px !important;
+          cursor: pointer !important;
+        }
+
+        &:hover {
+          background-color: $deepBlue-60;
+
+          .material-icons {
+            color: white !important;
+          }
+        }
+      }
     }
   }
 
@@ -447,7 +406,6 @@
     background-color: $studioGray-20;
     font-size: 14px;
     padding: 0 15px;
-    padding-right: 70px;
     color: $deepBlue-60;
     letter-spacing: 1px;
     transition: .1s ease-in-out;
@@ -477,43 +435,7 @@
   }
 }
 
-.task-assign-avatar {
-  width: 35px;
-  height: 100%;
 
-  @extend %flex;
-
-  img {
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-  }
-}
-
-.task-assign {
-  width: 35px;
-  height: 35px;
-  border: 1px solid $deepBlue-60;
-  border-radius: 50%;
-  cursor: pointer;
-
-  @extend %flex;
-
-  .material-icons {
-    margin-left: -2px;
-    color: $deepBlue-60 !important;
-    font-size: 16px !important;
-    cursor: pointer !important;
-  }
-
-  &:hover {
-    background-color: $deepBlue-60;
-
-    .material-icons {
-      color: white !important;
-    }
-  }
-}
 /* DayPicker styles */
 
 //colors
@@ -625,4 +547,92 @@ $color_havelock_blue_approx: #4a90e2;
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
 	color: $white;
 	background-color: $color_havelock_blue_approx;
+}
+
+///////////// DETAILS VIEW
+
+.header-wrapper {
+  background-color: $deepBlue-80;
+  padding: 15px 0;
+  padding-bottom: 0;
+  display: flex;
+
+  .back-arrow {
+    width: 60px;
+    height: 100%;
+
+    @extend %flex;
+
+    .material-icons {
+      color: white !important;
+      margin-top: 3px;
+    }
+  }
+
+  .header-details {
+    width: calc(100% - 60px - 80px);
+    display: flex;
+    flex-direction: column;
+
+    .header-title {
+      color: white;
+      font-size: 1.5em;
+      font-weight: 300;
+      letter-spacing: 0.01rem;
+    }
+
+    .header-description {
+      color: white;
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-weight: 300;
+      line-height: 1.4;
+      opacity: .7;
+      margin: 10px 0;
+    }
+
+    .header-actions {
+      width: 100%;
+      height: 50px;
+
+      @extend %flex;
+      justify-content: space-between;
+
+      .header-action {
+        width: 100%;
+        height: 100%;
+
+        @extend %flex;
+
+        &:hover {
+
+          .material-icons {
+            opacity: 1;
+          }
+        }
+
+        .material-icons {
+          color: white !important;
+          opacity: .4;
+          font-size: 20px !important;
+        }
+      }
+
+    }
+  }
+
+  .header-avatar {
+    width: 80px;
+    height: 100%;
+
+    @extend %flex;
+
+    img {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      border: 2px solid white;
+      margin-top: 3px;
+    }
+  }
 }
