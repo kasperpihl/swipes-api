@@ -67,11 +67,13 @@ var CardLoader = React.createClass({
 				};
 
 				modalActions.loadModal('list', modalData, function (row) {
-					eventActions.fire("share.transmit", {
-						cardId: row.id,
-						action: row.action,
-						data: message.data
-					});
+					if(row){
+						eventActions.fire("share.transmit", {
+							cardId: row.id,
+							action: row.action,
+							data: message.data
+						});
+					}
 				});
 			}
 			else if (message.command === 'analytics.action'){
