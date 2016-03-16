@@ -4,7 +4,7 @@ var WorkspaceActions = require('../actions/WorkspaceActions');
 var WorkspaceStore = Reflux.createStore({
 	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore3",
-	sort: function(el){ return el.z },
+	sort: function(el){ return el.id },
 	onWorkflowStore: function(workflows, workflow2){
 		// Hack to not run on first call, reflux stores send an empty array on initialize
 		if(!this.hasGottenFirstLoad){
@@ -90,7 +90,7 @@ var WorkspaceStore = Reflux.createStore({
 		var paddingForAutoAdjusting = 5;
 		var didUpdate = false;
 		var counter = 0;
-		_.each(this.getAll(), function(el){
+		_.each(_.sortBy(this.getAll(), function(el){return el.z; }), function(el){
 			var x = el.x;
 			var y = el.y;
 			var w = el.w;

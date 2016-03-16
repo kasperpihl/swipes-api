@@ -26,7 +26,6 @@ var IconMenu = require('material-ui/lib/menus/icon-menu');
 
 var DragSource = require('react-dnd').DragSource;
 
-
 var leftNavActions = require('../actions/LeftNavActions');
 
 var CardLoader = React.createClass({
@@ -152,7 +151,6 @@ var CardLoader = React.createClass({
 		
 		e.stopPropagation();
 		e.preventDefault();
-		console.log('d start', this.originalY);
 	},
 	onMouseMove: function(e){
 		
@@ -190,8 +188,6 @@ var CardLoader = React.createClass({
 			//Actions.updateCardSize(this.props.data.id, updateObj);
 			this.bouncedUpdateCardSize(this.props.data.id, updateObj);
 		}
-		
-		
 	},
 	onMouseUp: function(e){
 		this.isResizing = false;
@@ -262,12 +258,12 @@ var CardLoader = React.createClass({
 		var connectDragPreview = this.props.connectDragPreview;
 		var style = {
 			position: 'absolute',
-			zIndex: 0
+			zIndex: 1000
 		};
 		if(this.props.isDragging){
 			style.display = 'none';
 		}
-		console.log(this.state);
+
 		if(this.state.card){
 			style.left = this.state.card.x;
 			style.top = this.state.card.y;
@@ -279,7 +275,7 @@ var CardLoader = React.createClass({
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 		}
-		
+
 		return connectDragPreview(
 			<div className="card" style={style} onMouseDown={this.onMouseDown}>
 				<div className="card-container">
