@@ -1,5 +1,6 @@
 var React = require('react');
 var MainStore = require('../stores/MainStore');
+var MainActions = require('../actions/MainActions');
 var UserStore = require('../stores/UserStore');
 var ProjectsStore = require('../stores/ProjectsStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
@@ -107,6 +108,9 @@ var TaskItem = React.createClass({
     swipes.share.request({url: taskUrl});
     event.stopPropagation();
   },
+  expandTask: function (taskId) {
+    MainActions.expandTask(taskId);
+  },
   renderProjectName: function (taskProjectName) {
     if (taskProjectName) {
       return (
@@ -128,7 +132,7 @@ var TaskItem = React.createClass({
     var taskProjectName = taskProject.name || null;
 
 		return (
-			<div className="task-wrapper">
+			<div className="task-wrapper" onClick={this.expandTask.bind(this, task.id)}>
         <div className="task">
           <div className="task-list-element">
   					<div className={dotColor}></div>

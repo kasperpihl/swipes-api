@@ -8,7 +8,7 @@ var MainStore = Reflux.createStore({
 	idAttribute: 'id',
 	getInitialState: function () {
 		return {
-      //expandedIssueId: null
+      expandedTaskId: null
 		}
 	},
 	onUpdateSettings: function (newSettings) {
@@ -19,9 +19,9 @@ var MainStore = Reflux.createStore({
 			console.log('trying to update settings', res, err);
 		})
 	},
-	// onExpandIssue: function (issueId) {
-	// 	this.set('expandedIssueId', issueId);
-	// },
+	onExpandTask: function (taskId) {
+		this.set('expandedTaskId', taskId);
+	},
 	fetch: function () {
 		var self = this;
 		var projectsPromises = [];
