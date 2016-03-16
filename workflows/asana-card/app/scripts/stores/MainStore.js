@@ -14,6 +14,7 @@ var MainStore = Reflux.createStore({
 	onUpdateSettings: function (newSettings) {
 		console.log('new', newSettings);
 		TasksActions.reset();
+		MainActions.closeExpandedTask();
 		this.update('settings', newSettings);
 		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err) {
 			console.log('trying to update settings', res, err);
@@ -21,6 +22,9 @@ var MainStore = Reflux.createStore({
 	},
 	onExpandTask: function (taskId) {
 		this.set('expandedTaskId', taskId);
+	},
+	onCloseExpandedTask: function () {
+		this.set('expandedTaskId', null);
 	},
 	fetch: function () {
 		var self = this;

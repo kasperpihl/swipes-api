@@ -39,7 +39,7 @@ var Home = React.createClass({
   },
   renderExpanedView: function (expandedTaskId) {
     return (
-      <ExpandedTask issueId={expandedTaskId} />
+      <ExpandedTask taskId={expandedTaskId} />
     )
   },
 	render: function () {
