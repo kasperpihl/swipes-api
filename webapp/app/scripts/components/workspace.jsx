@@ -8,7 +8,7 @@ var HTML5Backend = require('react-dnd-html5-backend');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
 var CardLoader = require('./card_loader');
-var Card = require('material-ui/lib').Card;
+var Card = require('material-ui/lib/card/card');
 
 var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],

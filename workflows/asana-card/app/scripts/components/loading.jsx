@@ -5,7 +5,7 @@ var Loading = React.createClass({
 	render: function() {
 		return (
 			<div className="main-loader">
-				<CircularProgress size={2} style={{maxWidth: '50%'}}/>
+				<CircularProgress color="#777" size={1}/>
 			</div>
 		);
 	}

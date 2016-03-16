@@ -2,7 +2,7 @@ var React = require('react');
 var classNames = require('classnames');
 var FontIcon = require('material-ui/lib/font-icon');
 var CircularProgress = require('material-ui/lib/circular-progress');
-var ProjectActions = require('../actions/ProjectActions');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var CreateTaskInputStore = require('../stores/CreateTaskInputStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 
@@ -12,7 +12,7 @@ var CreateTaskInput = React.createClass({
 		CreateTaskInputActions.changeInputValue(e.target.value);
   },
 	createTask: function () {
-		ProjectActions.createTask({
+		ProjectDataActions.createTask({
 			name: this.state.inputValue
 		})
 	},

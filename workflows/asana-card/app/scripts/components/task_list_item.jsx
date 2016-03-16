@@ -1,7 +1,7 @@
 var React = require('react');
 var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
-var ProjectActions = require('../actions/ProjectActions');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var FontIcon = require('material-ui/lib/font-icon');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
@@ -10,20 +10,10 @@ var FlatButton = require('material-ui/lib/flat-button');
 
 var TaskItem = React.createClass({
   getInitialState: function(){
-	    return {
-        actionBar: 'inactive'
-	    };
+	    return {};
 	},
-  activate: function() {
-
-    if (this.state.actionBar == 'inactive') {
-        this.setState({actionBar: 'active'});
-    } else {
-        this.setState({actionBar: 'inactive'});
-    }
-  },
   handleMenuItemClick: function (task, userId) {
-    ProjectActions.assignPerson(task, userId);
+    ProjectDataActions.assignPerson(task, userId);
   },
   assignChoices: function() {
     var task = this.props.data;
@@ -88,40 +78,33 @@ var TaskItem = React.createClass({
       </IconMenu>
     )
   },
-  renderCompleteOrUndo: function () {
+  renderCompleteOrUndoHover: function () {
     var task = this.props.data;
 
     if (task.completed) {
       return (
-        <FlatButton onClick={this.undoCompleteTask.bind(this, task)} style={{width: '100%', height: '100%'}}
-          icon={<FontIcon className="material-icons action-button">undo</FontIcon>}
-        />
+        <div className="main-actions" onClick={this.undoCompleteTask.bind(this, task)}><FontIcon className="material-icons">undo</FontIcon></div>
       )
     } else {
       return (
-        <FlatButton onClick={this.completeTask.bind(this, task)} rippleColor="green" style={{width: '100%', height: '100%'}}
-          icon={<FontIcon className="material-icons action-button">check</FontIcon>}
-        />
+        <div className="main-actions" onClick={this.completeTask.bind(this, task)}><FontIcon className="material-icons">check</FontIcon></div>
       )
     }
   },
-  completeTask: function (task) {
-    ProjectActions.completeTask(task);
-    this.replaceState(this.getInitialState());
+  completeTask: function (task, event) {
+    ProjectDataActions.completeTask(task);
+    event.stopPropagation();
   },
-  undoCompleteTask: function (task) {
-    ProjectActions.undoCompleteTask(task);
-    this.replaceState(this.getInitialState());
-  },
-  removeTask: function (task) {
-    ProjectActions.removeTask(task);
-    this.replaceState(this.getInitialState());
+  undoCompleteTask: function (task, event) {
+    ProjectDataActions.undoCompleteTask(task);
+    event.stopPropagation();
   },
   stopPropagation: function (event) {
     event.stopPropagation();
   },
-  shareTaskUrl: function (taskUrl) {
+  shareTaskUrl: function (taskUrl, event) {
     swipes.share.request({url: taskUrl});
+    event.stopPropagation();
   },
   render: function() {
 		var task = this.props.data;
@@ -132,12 +115,17 @@ var TaskItem = React.createClass({
 
 		return (
 			<div className="task-wrapper">
-        <div className="task" onClick={this.activate}>
+        <div className="task">
           <div className="task-list-element">
   					<div className={dotColor}></div>
   				</div>
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>
+              <div className="task-details">
+                <div className="task-project">Project name</div>
+                {this.renderCompleteOrUndoHover()}
+                <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
+              </div>
   				</div>
 
           <div className="task-assign-avatar" title=""  onClick={this.stopPropagation}>
@@ -151,22 +139,6 @@ var TaskItem = React.createClass({
               and if no image then <div class="avatar-name"></div>
             */}
           </div>
-        </div>
-
-        <div className={"task-action-bars " + this.state.actionBar}>
-          <div className="shadow-box"></div>
-            <div className="task-actions">
-              {this.renderCompleteOrUndo()}
-              <FlatButton onClick={this.removeTask.bind(this, task)} rippleColor="red" style={{width: '100%', height: '100%'}}
-                icon={<FontIcon className="material-icons action-button">delete</FontIcon>}
-              />
-            <FlatButton className="link-action-button" target="_blank" linkButton={true} href={taskUrl} style={{width: '100%', height: '100%'}}
-                icon={<FontIcon className="material-icons action-button">link</FontIcon>}
-              />
-              <FlatButton onClick={this.shareTaskUrl.bind(this, taskUrl)} style={{width: '100%', height: '100%'}}
-                icon={<FontIcon className="material-icons action-button">share</FontIcon>}
-              />
-            </div>
         </div>
 			</div>
 		)

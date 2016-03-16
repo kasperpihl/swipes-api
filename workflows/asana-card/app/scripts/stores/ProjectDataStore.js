@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var Promise = require('bluebird');
-var ProjectActions = require('../actions/ProjectActions');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var MainStore = require('../stores/MainStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 var UserStore = require('../stores/UserStore');
@@ -43,7 +43,7 @@ var changeTaskFieldOnClient = function (task, field, newValue) {
 
 var refetchData = function (init) {
 	if (!_fetchLock && !init) {
-		ProjectActions.fetchData();
+		ProjectDataActions.fetchData();
 	}
 
 	if (_fetchDataTimeout) {
@@ -134,8 +134,8 @@ var fetchData = function () {
 	});
 }
 
-var ProjectStore = Reflux.createStore({
-	listenables: [ProjectActions],
+var ProjectDataStore = Reflux.createStore({
+	listenables: [ProjectDataActions],
 	getInitialState: function () {
 		return {
 			statuses: []
@@ -316,4 +316,4 @@ var ProjectStore = Reflux.createStore({
 	}
 });
 
-module.exports = ProjectStore;
+module.exports = ProjectDataStore;

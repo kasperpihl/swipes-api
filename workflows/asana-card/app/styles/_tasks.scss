@@ -25,6 +25,10 @@
 
     &:hover {
       background-color: rgba($studioGray-20, .4);
+
+      & > .task-details-wrap > .task-details > .main-actions {
+        opacity: 1;
+      }
     }
 
     .task-list-element {
@@ -65,6 +69,26 @@
         align-items: center;
         margin-top: 5px;
 
+        .main-actions {
+          width: 30px;
+          height: 30px;
+          opacity: 0;
+
+          @extend %flex;
+
+          .material-icons {
+            font-size: 20px !important;
+            color: $deepBlue-20 !important;
+          }
+
+          &:hover {
+
+            .material-icons {
+              color: $deepBlue-60 !important;
+            }
+          }
+        }
+
         .task-date {
           font-size: 13px;
           color: $deepBlue-40;
@@ -76,7 +100,8 @@
           border: 1px solid $deepBlue-80;
           padding: 2px 8px;
           border-radius: 20px;
-          margin-left: 10px;
+          margin-right: 10px;
+          //margin-left: 10px; Add back when we a due date
         }
       }
     }
