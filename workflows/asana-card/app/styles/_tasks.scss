@@ -51,13 +51,13 @@
   position: relative;
   opacity: 0;
   transform: translateY(100%);
-  animation: pullUp .25s cubic-bezier(.7,.33,.53,.93) forwards;
-
-  @for $i from 1 through 12 {
-		&:nth-child(#{$i}) {
-			@include animation-delay((.05s * $i) - .05s);
-		}
-	}
+  // animation: pullUp .25s cubic-bezier(.7,.33,.53,.93) forwards;
+  //
+  // @for $i from 1 through 12 {
+	// 	&:nth-child(#{$i}) {
+	// 		@include animation-delay((.05s * $i) - .05s);
+	// 	}
+	// }
 
   .task {
     width: 100%;
