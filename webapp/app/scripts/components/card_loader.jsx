@@ -153,12 +153,12 @@ var CardLoader = React.createClass({
 		this.originalClientY = e.clientY;
 		this.originalY = this.props.data.y;
 		this.originalH = this.props.data.h;
-		
+
 		e.stopPropagation();
 		e.preventDefault();
 	},
 	onMouseMove: function(e){
-		
+
 		if(this.isResizing){
 
 			var diffX = (e.clientX - this.originalClientX);
@@ -199,7 +199,7 @@ var CardLoader = React.createClass({
 		$('.active-app').removeClass('dragging');
 	},
 	componentWillMount() {
-		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 10);
+		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 	    window.addEventListener('mouseup', this.onMouseUp);
     	window.addEventListener('mousemove', this.onMouseMove);  
 	},
