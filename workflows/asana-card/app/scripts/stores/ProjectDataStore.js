@@ -74,7 +74,7 @@ var fetchData = function () {
 		// To prevent wierd behavior we will not do anything with the result
 		// if the _fetchLock is true
 		if (_fetchLock) {
-			return resolve(null);
+			return;
 		}
 
 		console.log('TASKS');

@@ -1,30 +1,19 @@
 var React = require('react');
 var Reflux = require('reflux');
+var FontIcon = require('material-ui/lib/font-icon');
 var Loading = require('./loading');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var TasksStore = require('../stores/TasksStore');
+var TaskStore = require('../stores/TaskStore');
+var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
-var FontIcon = require('material-ui/lib/font-icon');
+var AssigneeMenu = require('./assignee_menu');
+
+var MAX_DESC_LEN = 140;
 
 var ExpandedTask = React.createClass({
-  getInitialState: function () {
-		return {
-			task: null
-		}
-	},
-  componentWillMount: function () {
-    var tasks = TasksStore.get('tasks');
-    var taskId = this.props.taskId;
-    var task = tasks.filter(function (task) {
-      return task.id === taskId;
-    })[0]
-
-    this.setState({task: task});
-  },
-  renderDescription: function () {
-    return (<div>Desciption will be here</div>);
-  },
+  mixins: [TasksStore.connect(), TaskStore.connect()],
   goBack: function () {
     MainActions.closeExpandedTask();
   },
@@ -32,8 +21,8 @@ var ExpandedTask = React.createClass({
     swipes.share.request({url: taskUrl});
   },
   removeTask: function (task) {
-    MainActions.closeExpandedTask();
     ProjectDataActions.removeTask(task);
+    MainActions.closeExpandedTask();
   },
   completeTask: function (task) {
     ProjectDataActions.completeTask(task);
@@ -42,8 +31,6 @@ var ExpandedTask = React.createClass({
     ProjectDataActions.undoCompleteTask(task);
   },
   renderCompleteOrUndo: function (task) {
-    var task = this.state.task;
-
     if (task.completed) {
       return (
         <div className="header-action" onClick={this.undoCompleteTask.bind(this, task)}>
@@ -58,6 +45,20 @@ var ExpandedTask = React.createClass({
       )
     }
   },
+  expandDescription: function () {
+    TaskActions.expandDesc(!this.state.expandDesc);
+  },
+  renderDescription: function (task) {
+    var description = task.notes;
+
+    if (description.length > MAX_DESC_LEN && !this.state.expandDesc) {
+      description = description.substring(0,140) + '...';
+    }
+
+    return (
+      <div className="header-description" ref="desci" onClick={this.expandDescription}>{description}</div>
+    );
+  },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
@@ -69,9 +70,9 @@ var ExpandedTask = React.createClass({
         </div>
         <div className="header-details">
           <div className="header-title">{task.name}</div>
-          {this.renderDescription()}
+          {this.renderDescription(task)}
           <div className="header-actions">
-            {this.renderCompleteOrUndo()}
+            {this.renderCompleteOrUndo(task)}
             <div className="header-action" onClick={this.removeTask.bind(this, task)}>
               <FontIcon className="material-icons">delete</FontIcon>
             </div>
@@ -85,21 +86,21 @@ var ExpandedTask = React.createClass({
         </div>
         {/* when implementing, use the structure for the api, with checking if is assigned, has image etc */}
         <div className="header-avatar">
-          <img src="https://unsplash.it/35/?random" />
+          <AssigneeMenu task={task} />
         </div>
       </div>
     )
   },
   render: function () {
-    var task = this.state.task;
+    var tasks = TasksStore.get('tasks');
+    var taskId = this.props.taskId;
+    var task = tasks.filter(function (task) {
+      return task.id === taskId;
+    })[0]
 
     return (
       <div>
-        {task ? (
-          <div>{this.renderHeader(task)}</div>
-        ) : (
-          <Loading />
-        )}
+        <div>{this.renderHeader(task)}</div>
       </div>
     )
   }
