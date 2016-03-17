@@ -232,6 +232,21 @@
 	@extend %flex;
 }
 
+.task-assign {
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  border: 2px solid $deepBlue-80;
+
+  @extend %flex;
+
+  .material-icons {
+    font-size: 20px !important;
+    color: $deepBlue-80 !important;
+    margin-left: -1px;
+  }
+}
+
 .task-assignees {
   width: 100%;
   padding: 0 21px;
