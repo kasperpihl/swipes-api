@@ -14,7 +14,7 @@ let generateId = util.generateSlackLikeId;
 let router = express.Router();
 
 router.post('/users.login', (req, res, next) => {
-  let email = validator.trim(req.body.email);
+  let email = req.body.email ? validator.trim(req.body.email.toLowerCase()) : '';
   let password = req.body.password ? sha1(req.body.password) : '';
 
   if (!validator.isEmail(email)) {
@@ -66,7 +66,7 @@ router.post('/users.login', (req, res, next) => {
 });
 
 router.post('/users.create', (req, res, next) => {
-  let email = validator.trim(req.body.email);
+  let email = req.body.email ? validator.trim(req.body.email.toLowerCase()) : '';
   let name = validator.trim(req.body.name);
   let password = req.body.password;
   let repassword = req.body.repassword;
