@@ -183,6 +183,21 @@
   }
 }
 
+.assign-layer {
+  width: 35px;
+  height: 35px;
+  right: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+
+  @extend %flex;
+}
+
+.inv-icon {
+  opacity: 0;
+}
+
 .avatar-name {
 	width: 35px;
 	height: 35px;
