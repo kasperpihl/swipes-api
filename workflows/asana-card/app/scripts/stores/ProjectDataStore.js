@@ -77,12 +77,12 @@ var fetchData = function () {
 			return;
 		}
 
-		console.log('TASKS');
+		/*console.log('TASKS');
 		console.log(res[0].data);
 		console.log('USERS');
 		console.log(res[1].data);
 		console.log('PROJECTS');
-		console.log(res[2].data);
+		console.log(res[2].data);*/
 
 		tasks = res[0].data;
 		users = res[1].data;
@@ -131,7 +131,6 @@ var ProjectDataStore = Reflux.createStore({
 		})
 		.then(function () {
 			swipes.analytics.action('Assign person');
-			console.log('Done!');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -155,7 +154,6 @@ var ProjectDataStore = Reflux.createStore({
 		})
 		.then(function () {
 			swipes.analytics.action('Complete task');
-			console.log('Done!');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -178,7 +176,7 @@ var ProjectDataStore = Reflux.createStore({
 			completed: completed
 		})
 		.then(function () {
-			console.log('Done!');
+			swipes.analytics.action('Uncomplete task');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -200,7 +198,6 @@ var ProjectDataStore = Reflux.createStore({
 		})
 		.then(function () {
 			swipes.analytics.action('Delete task');
-			console.log('Done!');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -240,7 +237,6 @@ var ProjectDataStore = Reflux.createStore({
 			workspace
 		);
 
-		console.log('Adding task!');
 		swipes.service('asana').request('tasks.create', taskData)
 			.then(function (response) {
 				var addedTask = response.data;
@@ -257,7 +253,6 @@ var ProjectDataStore = Reflux.createStore({
 				// T_TODO Ask the support for this one because in the API docs
 				// they say that you can do it with one request when creating the task.
 				if (projectType !== 'mytasks') {
-					console.log('Adding task to a project!');
 					return swipes.service('asana').request('tasks.addProject', {
 						id: taskId,
 						project: projectId
@@ -266,7 +261,6 @@ var ProjectDataStore = Reflux.createStore({
 				swipes.analytics.action('Create task');
 			})
 			.then(function () {
-				console.log('Done!');
 			})
 			.catch(function (error) {
 				console.log(error);
