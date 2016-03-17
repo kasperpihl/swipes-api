@@ -1,5 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
+var FontIcon = require('material-ui/lib/font-icon');
 var Loading = require('./loading');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
@@ -7,7 +8,7 @@ var TasksStore = require('../stores/TasksStore');
 var TaskStore = require('../stores/TaskStore');
 var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
-var FontIcon = require('material-ui/lib/font-icon');
+var AssigneeMenu = require('./assignee_menu');
 
 var MAX_DESC_LEN = 140;
 
@@ -85,7 +86,7 @@ var ExpandedTask = React.createClass({
         </div>
         {/* when implementing, use the structure for the api, with checking if is assigned, has image etc */}
         <div className="header-avatar">
-          <img src="https://unsplash.it/35/?random" />
+          <AssigneeMenu task={task} />
         </div>
       </div>
     )

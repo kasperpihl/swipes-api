@@ -1,85 +1,16 @@
 var React = require('react');
+var AssigneeMenu = require('./assignee_menu');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
-var UserStore = require('../stores/UserStore');
 var ProjectsStore = require('../stores/ProjectsStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var FontIcon = require('material-ui/lib/font-icon');
-var IconMenu = require('material-ui/lib/menus/icon-menu');
-var IconButton = require('material-ui/lib/icon-button');
-var MenuItem = require('material-ui/lib/menus/menu-item');
 var FlatButton = require('material-ui/lib/flat-button');
 
 var TaskItem = React.createClass({
   getInitialState: function(){
 	    return {};
 	},
-  handleMenuItemClick: function (task, userId) {
-    ProjectDataActions.assignPerson(task, userId);
-  },
-  assignChoices: function() {
-    var task = this.props.data;
-    var allUsers = UserStore.getAll();
-    var assigneeId = task.assignee ? task.assignee.id : null;
-    var userSize = Object.keys(allUsers).length;
-
-    if (userSize > 0) {
-      if (!assigneeId) {
-
-        return (
-          <div className="assign-layer">
-            <div className="task-assign" title="Assign to a person">
-              <FontIcon className="material-icons">person_add</FontIcon>
-            </div>
-          </div>
-        )
-
-      } else if (assigneeId && !allUsers[assigneeId].photo) {
-          var name = allUsers[assigneeId].name;
-          var matches = name.match(/\b(\w)/g);
-          var acronym = matches.join('');
-
-          return (
-            <div className="assign-layer">
-              <div className="avatar-name">{acronym}</div>
-            </div>
-          )
-      } else {
-        var image = allUsers[assigneeId].photo.image_36x36;
-
-        return (
-          <div className="assign-layer">
-            <img src={image} />
-          </div>
-        )
-      }
-    }
-  },
-  renderAssign: function() {
-    var task = this.props.data;
-    var allUsers = UserStore.getAll();
-    var userSize = Object.keys(allUsers).length;
-
-    if (userSize <= 0) {
-      return;
-    }
-
-
-    var names = [];
-    for (var prop in allUsers) {
-       names.push(<MenuItem key={prop} primaryText={allUsers[prop].name} onClick={this.handleMenuItemClick.bind(this, task, allUsers[prop].id)} />)
-    }
-    return (
-      <IconMenu
-      iconButtonElement={<IconButton><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
-      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-      targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      maxHeight={250}
-      >
-      {names}
-      </IconMenu>
-    )
-  },
   renderCompleteOrUndoHover: function () {
     var task = this.props.data;
 
@@ -99,9 +30,6 @@ var TaskItem = React.createClass({
   },
   undoCompleteTask: function (task, event) {
     ProjectDataActions.undoCompleteTask(task);
-    event.stopPropagation();
-  },
-  stopPropagation: function (event) {
     event.stopPropagation();
   },
   shareTaskUrl: function (taskUrl, event) {
@@ -145,17 +73,8 @@ var TaskItem = React.createClass({
                 <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
               </div>
   				</div>
-
-          <div className="task-assign-avatar" title=""  onClick={this.stopPropagation}>
-            {this.assignChoices()}
-            {this.renderAssign()}
-            {/* if has not been assigned yet substitute img tag with
-              <div className="action-bar-assign" title="Assign to a person">
-                <FontIcon className="material-icons">person_add</FontIcon>
-              </div>
-              <img src="https://unsplash.it/35/?random"/>
-              and if no image then <div class="avatar-name"></div>
-            */}
+          <div className="task-assign-avatar">
+            <AssigneeMenu task={task} />
           </div>
         </div>
 			</div>
