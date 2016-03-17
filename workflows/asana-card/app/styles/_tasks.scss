@@ -663,6 +663,7 @@ $color_havelock_blue_approx: #4a90e2;
   .header-avatar {
     width: 80px;
     height: 100%;
+    position: relative;
 
     @extend %flex;
 
