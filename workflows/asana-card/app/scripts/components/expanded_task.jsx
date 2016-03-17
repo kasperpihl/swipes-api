@@ -8,20 +8,7 @@ var ProjectDataActions = require('../actions/ProjectDataActions');
 var FontIcon = require('material-ui/lib/font-icon');
 
 var ExpandedTask = React.createClass({
-  getInitialState: function () {
-		return {
-			task: null
-		}
-	},
-  componentWillMount: function () {
-    var tasks = TasksStore.get('tasks');
-    var taskId = this.props.taskId;
-    var task = tasks.filter(function (task) {
-      return task.id === taskId;
-    })[0]
-
-    this.setState({task: task});
-  },
+  mixins: [TasksStore.connect()],
   renderDescription: function () {
     return (<div>Desciption will be here</div>);
   },
@@ -32,8 +19,8 @@ var ExpandedTask = React.createClass({
     swipes.share.request({url: taskUrl});
   },
   removeTask: function (task) {
-    MainActions.closeExpandedTask();
     ProjectDataActions.removeTask(task);
+    MainActions.closeExpandedTask();
   },
   completeTask: function (task) {
     ProjectDataActions.completeTask(task);
@@ -42,8 +29,6 @@ var ExpandedTask = React.createClass({
     ProjectDataActions.undoCompleteTask(task);
   },
   renderCompleteOrUndo: function (task) {
-    var task = this.state.task;
-
     if (task.completed) {
       return (
         <div className="header-action" onClick={this.undoCompleteTask.bind(this, task)}>
@@ -71,7 +56,7 @@ var ExpandedTask = React.createClass({
           <div className="header-title">{task.name}</div>
           {this.renderDescription()}
           <div className="header-actions">
-            {this.renderCompleteOrUndo()}
+            {this.renderCompleteOrUndo(task)}
             <div className="header-action" onClick={this.removeTask.bind(this, task)}>
               <FontIcon className="material-icons">delete</FontIcon>
             </div>
@@ -91,15 +76,15 @@ var ExpandedTask = React.createClass({
     )
   },
   render: function () {
-    var task = this.state.task;
+    var tasks = TasksStore.get('tasks');
+    var taskId = this.props.taskId;
+    var task = tasks.filter(function (task) {
+      return task.id === taskId;
+    })[0]
 
     return (
       <div>
-        {task ? (
-          <div>{this.renderHeader(task)}</div>
-        ) : (
-          <Loading />
-        )}
+        <div>{this.renderHeader(task)}</div>
       </div>
     )
   }
