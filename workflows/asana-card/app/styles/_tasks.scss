@@ -11,6 +11,21 @@
   //padding-right: 10px;
 }
 
+@mixin animation-delay($time) {
+	animation-delay: $time;
+}
+
+@keyframes pullUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .main-actions {
   width: 30px;
   height: 30px;
@@ -34,6 +49,15 @@
 .task-wrapper {
   width: 100%;
   position: relative;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: pullUp .25s cubic-bezier(.7,.33,.53,.93) forwards;
+
+  @for $i from 1 through 12 {
+		&:nth-child(#{$i}) {
+			@include animation-delay((.05s * $i) - .05s);
+		}
+	}
 
   .task {
     width: 100%;
@@ -107,7 +131,7 @@
           border: 1px solid $deepBlue-80;
           padding: 2px 8px;
           border-radius: 20px;
-          margin-left: 10px;
+          //margin-left: 10px;
         }
       }
     }
