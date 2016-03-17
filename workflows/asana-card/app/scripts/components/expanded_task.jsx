@@ -4,14 +4,15 @@ var Loading = require('./loading');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var TasksStore = require('../stores/TasksStore');
+var TaskStore = require('../stores/TaskStore');
+var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var FontIcon = require('material-ui/lib/font-icon');
 
+var MAX_DESC_LEN = 140;
+
 var ExpandedTask = React.createClass({
-  mixins: [TasksStore.connect()],
-  renderDescription: function () {
-    return (<div>Desciption will be here</div>);
-  },
+  mixins: [TasksStore.connect(), TaskStore.connect()],
   goBack: function () {
     MainActions.closeExpandedTask();
   },
@@ -43,6 +44,20 @@ var ExpandedTask = React.createClass({
       )
     }
   },
+  expandDescription: function () {
+    TaskActions.expandDesc(!this.state.expandDesc);
+  },
+  renderDescription: function (task) {
+    var description = task.notes;
+
+    if (description.length > MAX_DESC_LEN && !this.state.expandDesc) {
+      description = description.substring(0,140) + '...';
+    }
+
+    return (
+      <div className="header-description" ref="desci" onClick={this.expandDescription}>{description}</div>
+    );
+  },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
@@ -54,7 +69,7 @@ var ExpandedTask = React.createClass({
         </div>
         <div className="header-details">
           <div className="header-title">{task.name}</div>
-          {this.renderDescription()}
+          {this.renderDescription(task)}
           <div className="header-actions">
             {this.renderCompleteOrUndo(task)}
             <div className="header-action" onClick={this.removeTask.bind(this, task)}>
