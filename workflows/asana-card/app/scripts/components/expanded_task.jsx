@@ -79,9 +79,9 @@ var ExpandedTask = React.createClass({
             <div className="header-action" onClick={this.shareTaskUrl.bind(this, taskUrl)}>
               <FontIcon className="material-icons">share</FontIcon>
             </div>
-            <div className="header-action">
+            <a className="header-action" target="_blank" href={taskUrl}>
               <FontIcon className="material-icons">link</FontIcon>
-            </div>
+            </a>
           </div>
         </div>
         {/* when implementing, use the structure for the api, with checking if is assigned, has image etc */}
