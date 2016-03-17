@@ -51,7 +51,7 @@ var Signup = React.createClass({
 				stateStore.actions.login(res.token);
 			}
 			else
-				alert("Login failed");
+				alert("Signup failed");
 		});
 		return;
 	},
