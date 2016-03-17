@@ -3,43 +3,12 @@ var Promise = require('bluebird');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var MainStore = require('../stores/MainStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
+var TasksActions = require('../actions/TasksActions');
 var UserStore = require('../stores/UserStore');
+var ProjectsStore = require('../stores/ProjectsStore');
 
-var _tasks = [];
-var _users = [];
-//var _projects = [];
 var _fetchDataTimeout = null;
 var _fetchLock = false;
-
-var matchTasks = function (tasks) {
-	var statuses = [
-		{name: 'Incomplete', tasks: []},
-		{name: 'Completed', tasks: []},
-	];
-
-	tasks.forEach(function (task) {
-		if (task.completed) {
-			statuses[1].tasks.push(task);
-		} else {
-			statuses[0].tasks.push(task);
-		}
-	})
-
-	return statuses;
-}
-
-var changeTaskFieldOnClient = function (task, field, newValue) {
-	var len = _tasks.length;
-
-	for (var i=0; i<len; i++) {
-		if (task.id === _tasks[i].id) {
-			_tasks[i][field] = newValue;
-			break;
-		}
-	}
-
-	return matchTasks(_tasks);
-}
 
 var refetchData = function (init) {
 	if (!_fetchLock && !init) {
@@ -65,7 +34,8 @@ var fetchData = function () {
 		'assignee',
 		'projects',
 		'completed',
-		'due_on'
+		'due_on',
+		'notes'
 	];
 	var usersReq = swipes.service('asana').request('users.findByWorkspace', {
 		id: workspaceId,
@@ -90,81 +60,74 @@ var fetchData = function () {
 		})
 	}
 
-	return new Promise(function(resolve, reject) {
-		Promise.all([
-			tasksReq,
-			usersReq,
-			projectsReq
-		])
-		.then(function (res) {
-			// Sometimes the queries are allready fired when we lock the fetching process
-			// To prevent wierd behavior we will not do anything with the result
-			// if the _fetchLock is true
+	Promise.all([
+		tasksReq,
+		usersReq,
+		projectsReq
+	])
+	.then(function (res) {
+		var tasks = [],
+				users = [],
+				projects = [];
 
-			if (_fetchLock) {
-				return resolve(null);
-			}
+		// Sometimes the queries are allready fired when we lock the fetching process
+		// To prevent wierd behavior we will not do anything with the result
+		// if the _fetchLock is true
+		if (_fetchLock) {
+			return;
+		}
 
-			console.log('TASKS');
-			console.log(res[0].data);
-			console.log('USERS');
-			console.log(res[1].data);
-			console.log('PROJECTS');
-			console.log(res[2].data);
+		console.log('TASKS');
+		console.log(res[0].data);
+		console.log('USERS');
+		console.log(res[1].data);
+		console.log('PROJECTS');
+		console.log(res[2].data);
 
-			_tasks = res[0].data;
-			_users = res[1].data;
+		tasks = res[0].data;
+		users = res[1].data;
+		projects = res[2].data;
 
-			var statuses = matchTasks(_tasks);
-			// _statuses = uniqueStatuses(_issueTypes);
-			// var statusesWithIssues = matchIssues(_statuses, _issues, _issueTypes);
-			// var assignable = res[2].data;
+		// HACK because reflux-model-extension wants strings for idAttribute
+		tasks.forEach(function (task) {
+			task.id = task.id.toString();
+		})
 
-			// HACK because reflux-model-extension wants strings for idAttribute
-			_users.forEach(function (user) {
-				user.id = user.id.toString();
-			})
+		users.forEach(function (user) {
+			user.id = user.id.toString();
+		})
 
-			UserStore.batchLoad(_users, {flush:true});
+		projects.forEach(function (project) {
+			project.id = project.id.toString();
+		})
 
-			refetchData(true);
+		UserStore.batchLoad(users, {flush:true});
+		ProjectsStore.batchLoad(projects, {flush:true});
+		TasksActions.loadTasks(tasks);
 
-			resolve(statuses);
-	 	})
-	});
+		refetchData(true);
+ 	})
 }
 
 var ProjectDataStore = Reflux.createStore({
 	listenables: [ProjectDataActions],
-	getInitialState: function () {
-		return {
-			statuses: []
-		}
-	},
 	onFetchData: function () {
 		var self = this;
 
-		fetchData()
-			.then(function (res) {
-				if (res) {
-					self.set('statuses', res);
-				}
-			});
-	},
-	onReset: function () {
-		this.set('statuses', []);
+		fetchData();
 	},
 	onAssignPerson: function (task, userId) {
 		var taskId = task.id;
+		var assignee = {id: userId};
 
 		_fetchLock = true;
 
 		// update the task client side
-		this.set('statuses', changeTaskFieldOnClient(task, 'assignee', {id: userId}));
+		TasksActions.updateTask(taskId, 'assignee', assignee);
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
-			assignee: {id: userId}
+			assignee: assignee
 		})
 		.then(function () {
 			swipes.analytics.action('Assign person');
@@ -184,7 +147,7 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// update the task client side
-		this.set('statuses', changeTaskFieldOnClient(task, 'completed', completed));
+		TasksActions.updateTask(taskId, 'completed', completed);
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -208,7 +171,7 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// update the task client side
-		this.set('statuses', changeTaskFieldOnClient(task, 'completed', completed));
+		TasksActions.updateTask(taskId, 'completed', completed);
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -229,11 +192,8 @@ var ProjectDataStore = Reflux.createStore({
 
 		_fetchLock = true;
 
-		_tasks = _tasks.filter(function (task) {
-			return task.id !== taskId;
-		})
-
-		this.set('statuses', matchTasks(_tasks));
+		// Remove the task client side
+		TasksActions.removeTask(taskId);
 
 		swipes.service('asana').request('tasks.delete', {
 			id: taskId
@@ -286,8 +246,7 @@ var ProjectDataStore = Reflux.createStore({
 				var addedTask = response.data;
 				var taskId = addedTask.id;
 
-				_tasks.unshift(addedTask);
-				self.set('statuses', matchTasks(_tasks));
+				TasksActions.createTask(addedTask);
 
 				CreateTaskInputActions.changeState({
 					creatTaskLoader: 'inactive',

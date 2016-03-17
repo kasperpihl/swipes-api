@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var MainActions = require('../actions/MainActions');
-var ProjectDataActions = require('../actions/ProjectDataActions');
+var TasksActions = require('../actions/TasksActions');
 var Promise = require('bluebird');
 
 var MainStore = Reflux.createStore({
@@ -8,20 +8,24 @@ var MainStore = Reflux.createStore({
 	idAttribute: 'id',
 	getInitialState: function () {
 		return {
-      //expandedIssueId: null
+      expandedTaskId: null
 		}
 	},
 	onUpdateSettings: function (newSettings) {
 		console.log('new', newSettings);
-		ProjectDataActions.reset();
+		TasksActions.reset();
+		MainActions.closeExpandedTask();
 		this.update('settings', newSettings);
 		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err) {
 			console.log('trying to update settings', res, err);
 		})
 	},
-	// onExpandIssue: function (issueId) {
-	// 	this.set('expandedIssueId', issueId);
-	// },
+	onExpandTask: function (taskId) {
+		this.set('expandedTaskId', taskId);
+	},
+	onCloseExpandedTask: function () {
+		this.set('expandedTaskId', null);
+	},
 	fetch: function () {
 		var self = this;
 		var projectsPromises = [];

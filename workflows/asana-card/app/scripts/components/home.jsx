@@ -4,7 +4,7 @@ var MainStore = require('../stores/MainStore');
 var CreateTaskInput = require('./create_task_input');
 var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
-//var ExpandedIssue = require('./expanded_issue');
+var ExpandedTask = require('./expanded_task');
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
@@ -37,29 +37,26 @@ var Home = React.createClass({
       )
 		}
   },
-  // renderExpanedView: function (expandedIssueId) {
-  //   return (
-  //     <ExpandedIssue issueId={expandedIssueId} />
-  //   )
-  //},
+  renderExpanedView: function (expandedTaskId) {
+    return (
+      <ExpandedTask taskId={expandedTaskId} />
+    )
+  },
 	render: function () {
-    //var expandedIssueId = this.state.expandedIssueId;
+    var expandedTaskId = this.state.expandedTaskId;
 
     return (
-      <div style={{maxHeight: '100%', overflowY: 'auto'}}>
-        {this.renderStatuses()}
-				<CreateTaskInput />
-      </div>
-    );
-    // return (
-		// 	<div>
-		// 		{expandedIssueId ? (
-		// 			<div>{this.renderExpanedView(expandedIssueId)}</div>
-		// 		) : (
-		// 			<div>{this.renderStatuses()}</div>
-		// 		)}
-		// 	</div>
-		// )
+			<div style={{maxHeight: '100%', overflowY: 'auto'}}>
+				{expandedTaskId ? (
+					<div>{this.renderExpanedView(expandedTaskId)}</div>
+				) : (
+					<div>
+						{this.renderStatuses()}
+						<CreateTaskInput />
+					</div>
+				)}
+			</div>
+		)
 	}
 });
 
