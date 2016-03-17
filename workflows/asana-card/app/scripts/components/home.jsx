@@ -50,10 +50,11 @@ var Home = React.createClass({
 				{expandedTaskId ? (
 					<div>{this.renderExpanedView(expandedTaskId)}</div>
 				) : (
-					<div>{this.renderStatuses()}</div>
+					<div>
+						{this.renderStatuses()}
+						<CreateTaskInput />
+					</div>
 				)}
-
-				<CreateTaskInput />
 			</div>
 		)
 	}
