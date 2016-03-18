@@ -268,7 +268,11 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// Remove the task client side
-		TasksActions.removeTask(taskId);
+		if (task.parent) {
+			SubtasksActions.remove(taskId);
+		} else {
+			TasksActions.removeTask(taskId);
+		}
 
 		swipes.service('asana').request('tasks.delete', {
 			id: taskId

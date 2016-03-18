@@ -21,6 +21,15 @@ var SubtasksStore = Reflux.createStore({
 
     this.set('subtasks', subtasks);
   },
+  onRemove: function (taskId) {
+    var subtasks = this.get('subtasks');
+
+    subtasks = subtasks.filter(function (subtask) {
+			return subtask.id !== taskId;
+		})
+
+    this.set('subtasks', subtasks);
+  },
   onCreate: function (subtask) {
     var subtasks = this.get('subtasks');
 

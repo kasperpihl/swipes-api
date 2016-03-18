@@ -71,6 +71,9 @@ var Subtask = React.createClass({
   shareTaskUrl: function (taskUrl) {
     swipes.share.request({url: taskUrl});
   },
+  removeTask: function (task) {
+    ProjectDataActions.removeTask(task);
+  },
   renderCompleteOrUndo: function () {
     var task = this.props.subtask;
 
@@ -106,6 +109,7 @@ var Subtask = React.createClass({
               <div className="task-details">
                   {this.renderCompleteOrUndo()}
                   <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
+                  <div className="main-actions"><FontIcon onClick={this.removeTask.bind(this, subtask)} className="material-icons">delete</FontIcon></div>
               </div>
   				</div>
 
