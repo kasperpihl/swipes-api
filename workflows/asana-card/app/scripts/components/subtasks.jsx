@@ -2,6 +2,7 @@ var React = require('react');
 var classNames = require('classnames');
 var FontIcon = require('material-ui/lib/font-icon');
 
+var MainStore = require('../stores/MainStore');
 var SubtasksStore = require('../stores/SubtasksStore');
 var SubtasksActions = require('../actions/SubtasksActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
@@ -67,6 +68,9 @@ var Subtask = React.createClass({
   undoCompleteTask: function (task) {
     ProjectDataActions.undoCompleteTask(task);
   },
+  shareTaskUrl: function (taskUrl) {
+    swipes.share.request({url: taskUrl});
+  },
   renderCompleteOrUndo: function () {
     var task = this.props.subtask;
 
@@ -87,6 +91,8 @@ var Subtask = React.createClass({
       'todo': !subtask.completed,
       'done': subtask.completed
     });
+    var settings = MainStore.get('settings');
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
 
 
     return (
@@ -99,7 +105,7 @@ var Subtask = React.createClass({
               <div className="task-title">{subtask.name}</div>
               <div className="task-details">
                   {this.renderCompleteOrUndo()}
-                  <div className="main-actions"><FontIcon className="material-icons">share</FontIcon></div>
+                  <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
               </div>
   				</div>
 
