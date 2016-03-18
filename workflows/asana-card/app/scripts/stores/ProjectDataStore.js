@@ -130,6 +130,7 @@ var ProjectDataStore = Reflux.createStore({
 			assignee: assignee
 		})
 		.then(function () {
+			swipes.analytics.action('Assign person');
 			console.log('Done!');
 		})
 		.catch(function (error) {
@@ -153,6 +154,7 @@ var ProjectDataStore = Reflux.createStore({
 			completed: completed
 		})
 		.then(function () {
+			swipes.analytics.action('Complete task');
 			console.log('Done!');
 		})
 		.catch(function (error) {
@@ -197,6 +199,7 @@ var ProjectDataStore = Reflux.createStore({
 			id: taskId
 		})
 		.then(function () {
+			swipes.analytics.action('Delete task');
 			console.log('Done!');
 		})
 		.catch(function (error) {
@@ -260,6 +263,7 @@ var ProjectDataStore = Reflux.createStore({
 						project: projectId
 					})
 				}
+				swipes.analytics.action('Create task');
 			})
 			.then(function () {
 				console.log('Done!');

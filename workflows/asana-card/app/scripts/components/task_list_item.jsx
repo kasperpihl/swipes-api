@@ -40,7 +40,13 @@ var TaskItem = React.createClass({
     MainActions.expandTask(taskId);
   },
   renderProjectName: function (taskProjectName) {
-    if (taskProjectName) {
+    // Hide project name if it is not the "My tasks" view
+    // It does not make sense for the other views because we
+    // show only one project for now
+    var settings = MainStore.get('settings');
+    var projectType = settings.projectType;
+
+    if (taskProjectName && projectType == 'mytasks') {
       return (
         <div className="task-project">{taskProjectName}</div>
       )

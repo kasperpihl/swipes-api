@@ -69,7 +69,8 @@ var CardLoader = React.createClass({
 				modalActions.loadModal('list', modalData, function (row) {
 					if(row){
 						eventActions.fire("share.transmit", {
-							cardId: row.id,
+							fromCardId: self.state.workflow.id,
+							toCardId: row.id,
 							action: row.action,
 							data: message.data
 						});
@@ -78,7 +79,7 @@ var CardLoader = React.createClass({
 			}
 			else if (message.command === 'analytics.action'){
 				if(this.state.workflow){
-					amplitude.logEvent('Engagement - Workflow Action', {'Workflow': this.state.workflow.manifest_id, 'Action': data.name});
+					amplitude.logEvent('Engagement - Workflow Action', {'Card': this.state.workflow.manifest_id, 'Action': data.name});
 				}
 			}
 			else if(message.command === 'leftNav.load'){
@@ -99,7 +100,9 @@ var CardLoader = React.createClass({
 		this.apiCon.callListener("event", e);
 	},
 	onShareTransmit: function (e) {
-		if (e.cardId === this.props.data.id) {
+		if (e.toCardId === this.props.data.id) {
+			console.log('share', e);
+			amplitude.logEvent('Engagement - Share Action', {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id});
 			this.apiCon.callListener('event', {
 				type: 'share.transmit',
 				data: e
