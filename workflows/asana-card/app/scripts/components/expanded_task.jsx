@@ -9,6 +9,7 @@ var TaskStore = require('../stores/TaskStore');
 var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var AssigneeMenu = require('./assignee_menu');
+var Subtasks = require('./subtasks');
 
 var MAX_DESC_LEN = 140;
 
@@ -121,7 +122,8 @@ var ExpandedTask = React.createClass({
 
     return (
       <div>
-        <div>{this.renderHeader(task)}</div>
+        {this.renderHeader(task)}
+        <Subtasks task={task} />
       </div>
     )
   }

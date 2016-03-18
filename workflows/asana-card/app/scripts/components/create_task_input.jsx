@@ -12,9 +12,18 @@ var CreateTaskInput = React.createClass({
 		CreateTaskInputActions.changeInputValue(e.target.value);
   },
 	createTask: function () {
-		ProjectDataActions.createTask({
-			name: this.state.inputValue
-		})
+		var expandedTaskId = this.props.expandedTaskId;
+		var subtask = expandedTaskId ? true : false;
+		var task = {
+			name: this.state.inputValue,
+			subtask: subtask
+		}
+
+		if (subtask) {
+			task.parent = expandedTaskId
+		}
+
+		ProjectDataActions.createTask(task, subtask);
 	},
   onKeyDown: function(e){
   	if(e.keyCode === 13){
@@ -35,6 +44,9 @@ var CreateTaskInput = React.createClass({
 			'active': inputLength > 0,
 			'inactive': inputLength <= 0
 		});
+		var placeholder = this.props.expandedTaskId ?
+										'Create a new subtask' :
+										'Create a new task'
 
 		return (
 			<div className={inputWrapperClass}>
@@ -45,7 +57,7 @@ var CreateTaskInput = React.createClass({
 					value={this.state.inputValue}
 					onKeyDown={this.onKeyDown}
 					disabled={this.state.disabledInput}
-					placeholder="Create a new task"
+					placeholder={placeholder}
 					onChange={this.inputOnChange} />
 
 				<div className={addIconClass} onClick={this.createTask}>
