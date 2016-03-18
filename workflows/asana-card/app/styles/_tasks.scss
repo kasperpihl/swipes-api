@@ -92,6 +92,13 @@
 
         &.done {
           background-color: $green-color;
+          animation: pulse .4s forwards;
+
+          @keyframes pulse {
+            50% {
+              transform: scale(2)
+            }
+          }
         }
       }
 
