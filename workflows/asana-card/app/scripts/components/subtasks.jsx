@@ -1,8 +1,10 @@
 var React = require('react');
+var classNames = require('classnames');
 var FontIcon = require('material-ui/lib/font-icon');
 
 var SubtasksStore = require('../stores/SubtasksStore');
 var SubtasksActions = require('../actions/SubtasksActions');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var Loading = require('./loading');
 var AssigneeMenu = require('./assignee_menu');
 
@@ -59,19 +61,44 @@ var Subtasks = React.createClass({
 });
 
 var Subtask = React.createClass({
+  completeTask: function (task) {
+    ProjectDataActions.completeTask(task);
+  },
+  undoCompleteTask: function (task) {
+    ProjectDataActions.undoCompleteTask(task);
+  },
+  renderCompleteOrUndo: function () {
+    var task = this.props.subtask;
+
+    if (task.completed) {
+      return (
+        <div className="main-actions" onClick={this.undoCompleteTask.bind(this, task)}><FontIcon className="material-icons">undo</FontIcon></div>
+      )
+    } else {
+      return (
+        <div className="main-actions" onClick={this.completeTask.bind(this, task)}><FontIcon className="material-icons">check</FontIcon></div>
+      )
+    }
+  },
   render: function () {
     var subtask = this.props.subtask;
+    var dotClass = classNames({
+      'dot': true,
+      'todo': !subtask.completed,
+      'done': subtask.completed
+    });
+
 
     return (
       <div className="task-wrapper">
         <div className="task">
           <div className="task-list-element">
-  					<div className="sub-dot"></div>
+  					<div className={dotClass}></div>
   				</div>
   				<div className="task-details-wrap">
               <div className="task-title">{subtask.name}</div>
               <div className="task-details">
-                  <div className="main-actions"><FontIcon className="material-icons">check</FontIcon></div>
+                  {this.renderCompleteOrUndo()}
                   <div className="main-actions"><FontIcon className="material-icons">share</FontIcon></div>
               </div>
   				</div>

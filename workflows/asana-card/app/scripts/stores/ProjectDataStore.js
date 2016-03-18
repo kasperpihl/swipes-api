@@ -214,8 +214,11 @@ var ProjectDataStore = Reflux.createStore({
 
 		_fetchLock = true;
 
-		// update the task client side
-		TasksActions.updateTask(taskId, 'completed', completed);
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'completed', completed);
+		} else {
+			TasksActions.updateTask(taskId, 'completed', completed);
+		}
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -239,7 +242,11 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// update the task client side
-		TasksActions.updateTask(taskId, 'completed', completed);
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'completed', completed);
+		} else {
+			TasksActions.updateTask(taskId, 'completed', completed);
+		}
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
