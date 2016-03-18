@@ -45,8 +45,26 @@ var ExpandedTask = React.createClass({
       )
     }
   },
+  renderExpander: function(description) {
+
+    if (description && description.length > 0 && description.length > 140) {
+      return (
+        <div className="expand-description" onClick={this.expandDescription}>
+          <FontIcon className="material-icons">{this.state.expandedState}</FontIcon>
+        </div>
+      )
+    } else {
+      console.log('no description');
+    }
+  },
   expandDescription: function () {
     TaskActions.expandDesc(!this.state.expandDesc);
+    console.log('shit better work');
+    if (!this.state.expandDesc) {
+      this.setState({expandedState: 'keyboard_arrow_up'})
+    } else {
+      this.setState({expandedState: 'keyboard_arrow_down'})
+    }
   },
   renderDescription: function (task) {
     var description = task.notes;
@@ -56,7 +74,10 @@ var ExpandedTask = React.createClass({
     }
 
     return (
-      <div className="header-description" ref="desci" onClick={this.expandDescription}>{description}</div>
+      <div className="header-description" ref="desci">
+        {description}
+        {this.renderExpander(description)}
+      </div>
     );
   },
   renderHeader: function(task) {
