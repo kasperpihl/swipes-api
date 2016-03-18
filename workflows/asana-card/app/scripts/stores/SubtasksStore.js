@@ -5,7 +5,7 @@ var SubtasksStore = Reflux.createStore({
   listenables: [SubtasksActions],
   getInitialState: function () {
     return {
-      subtasks: []
+      subtasks: null
     }
   },
   onUpdate: function (taskId, field, newValue) {

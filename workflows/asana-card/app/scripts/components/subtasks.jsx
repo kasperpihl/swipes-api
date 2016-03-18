@@ -49,12 +49,12 @@ var Subtasks = React.createClass({
 
     return (
       <div>
-        {subtasks.length > 0 ? (
-					<div>
+        {subtasks === null ? (
+          <Loading />
+				) : (
+          <div>
             {this.renderSubtasks()}
 					</div>
-				) : (
-					<Loading />
 				)}
       </div>
     )
