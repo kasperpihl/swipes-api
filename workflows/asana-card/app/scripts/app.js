@@ -6,11 +6,23 @@ var ReactDOM = require('react-dom');
 var Home = require('./components/home');
 var MainStore = require('./stores/MainStore');
 var MainActions = require('./actions/MainActions');
+var CreateTaskInputActions = require('./actions/CreateTaskInputActions');
 
 ReactDOM.render(<Home />, document.getElementById('content'));
 
 swipes.onReady (function () {
 	MainStore.fetch();
+});
+
+swipes.onShareTransmit(function(e) {
+	var data = e.data.data;
+
+	if (data.action === 'Create a task') { // We have to do something smarter here
+		var text = data.data.text || ''; // e.data.data.data.data...
+
+		CreateTaskInputActions.changeInputValue(text);
+		document.getElementById('create-task-input').focus();
+	}
 });
 
 swipes.onMenuButton(function () {

@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var MainActions = require('../actions/MainActions');
-var ProjectActions = require('../actions/ProjectActions');
+var TasksActions = require('../actions/TasksActions');
 var Promise = require('bluebird');
 
 var MainStore = Reflux.createStore({
@@ -8,30 +8,23 @@ var MainStore = Reflux.createStore({
 	idAttribute: 'id',
 	getInitialState: function () {
 		return {
-      //expandedIssueId: null
-			addNewTaskIcon: 'inactive',
-			todoInput: 'inactive',
-			createInputValue: ''
+      expandedTaskId: null
 		}
 	},
 	onUpdateSettings: function (newSettings) {
 		console.log('new', newSettings);
-		ProjectActions.reset();
+		TasksActions.reset();
+		MainActions.closeExpandedTask();
 		this.update('settings', newSettings);
 		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err) {
 			console.log('trying to update settings', res, err);
 		})
 	},
-	onExpandIssue: function (issueId) {
-		this.set('expandedIssueId', issueId);
+	onExpandTask: function (taskId) {
+		this.set('expandedTaskId', taskId);
 	},
-	onChangeState: function (newState) {
-		// Workaround for magic code here and there
-		for (var state in newState) {
-			this.set(state, newState[state], {trigger: false});
-		}
-
-		this.manualTrigger();
+	onCloseExpandedTask: function () {
+		this.set('expandedTaskId', null);
 	},
 	fetch: function () {
 		var self = this;

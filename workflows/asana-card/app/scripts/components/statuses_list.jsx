@@ -1,9 +1,10 @@
 var React = require('react');
 var Reflux = require('reflux');
-var Tabs = require('material-ui/lib').Tabs;
-var Tab = require('material-ui/lib').Tab;
-var ProjectStore = require('../stores/ProjectStore');
-var ProjectActions = require('../actions/ProjectActions');
+var Tabs = require('material-ui/lib/tabs/tabs');
+var Tab = require('material-ui/lib/tabs/tab');
+var TasksStore = require('../stores/TasksStore');
+var ProjectDataStore = require('../stores/ProjectDataStore');
+var ProjectDataActions = require('../actions/ProjectDataActions');
 var TaskItem = require('./task_list_item');
 var Loading = require('./loading');
 
@@ -26,18 +27,35 @@ var tabsStyles = {
 	}
 };
 
+var matchTasks = function (tasks) {
+	var statuses = [
+		{name: 'Incomplete', tasks: []},
+		{name: 'Completed', tasks: []},
+	];
+
+  tasks.forEach(function (task) {
+    if (task.completed) {
+			statuses[1].tasks.push(task);
+		} else {
+			statuses[0].tasks.push(task);
+		}
+  })
+
+	return statuses;
+}
+
 var StatusesList = React.createClass({
-	mixins: [ProjectStore.connect()],
+	mixins: [TasksStore.connect()],
 	componentWillReceiveProps: function (nextProps) {
 		if (this.props.projectId !== nextProps.projectId) {
-			ProjectActions.fetchData();
+			ProjectDataActions.fetchData();
 		}
 	},
 	componentDidMount: function () {
-		ProjectActions.fetchData();
+		ProjectDataActions.fetchData();
 	},
-	renderStatuses: function () {
-		var statuses = this.state.statuses;
+	renderStatuses: function (tasks) {
+		var statuses = matchTasks(tasks);
 		var tabs = statuses.map(function (item, index) {
 			var tasks = item.tasks.map(function (item, index) {
 				return <TaskItem key={index} data={item} />
@@ -55,28 +73,14 @@ var StatusesList = React.createClass({
 			inkBarStyle={tabsStyles.inkBarStyle}
 			children={tabs}></Tabs>
 	},
-	// renderProjectLink: function () {
-	// 	var projectUrl = this.props.projectUrl;
-	// 	var textStyles = {
-	// 		display: 'inline-block',
-	// 		marginTop: '5px',
-	// 		fontSize: '14px',
-	// 		color: 'rgba(0, 0, 0, 0.498039)'
-	// 	};
-	//
-	// 	return (
-	// 		<span style={textStyles}>
-	// 			If you want to do something more specific you can go to
-	// 			<a href={projectUrl} target="_blank"> JIRA</a>
-	// 		</span>
-	// 	);
-	// },
 	render: function () {
+    var tasks = this.state.tasks;
+
 		return (
 			<div>
-				{this.state.statuses.length > 0 ? (
+				{tasks.length > 0 ? (
 					<div>
-						{this.renderStatuses()}
+						{this.renderStatuses(tasks)}
 					</div>
 				) : (
 					<Loading />

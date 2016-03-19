@@ -6,19 +6,35 @@ injectTapEventPlugin();
 var chatStore = require('./stores/ChatStore');
 var chatActions = require('./actions/ChatActions');
 var channelStore = require('./stores/ChannelStore');
+var chatInputActions = require('./actions/ChatInputActions');
 var ChatList = require('./components/chatlist');
 ReactDOM.render(<ChatList />, document.getElementById('content'));
 
 swipes.onReady(function(){
 	chatStore.start();
 })
+
+swipes.onShareTransmit(function(e) {
+	var data = e.data.data;
+
+	if (data.action === 'Post to channel') { // We have to do something smarter here
+		var text = data.data.text || data.data.url; // e.data.data.data.data...
+
+		if (text) {
+			chatInputActions.changeInputValue(text);
+			document.getElementById('chat-input').focus();
+		}
+	}
+});
+
+
 swipes.onMenuButton(function(){
 	var channels = channelStore.getActive();
 	if(channels.length){
 		var navItems = [];
 		var currentChatId = chatStore.get('channelId');
 		_.each(channels, function(channel){
-			
+
 			var item = { id: channel.id, title: channel.name };
 			if(currentChatId === channel.id){
 				item.current = true;

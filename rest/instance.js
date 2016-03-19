@@ -107,7 +107,8 @@ let logErrors = (err, req, res, next) => {
 let unhandledServerError = (err, req, res, next) => {
   if(err){
     console.log(err);
-  	res.status(500).send({ err: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
+  	//res.status(500).send({ err: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
+    res.status(500).send({ err: err });
   }
   else
   	next()

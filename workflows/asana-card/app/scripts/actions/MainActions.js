@@ -2,8 +2,8 @@ var Reflux = require('reflux');
 
 var MainActions = Reflux.createActions([
 	'updateSettings',
-	'expandIssue',
-	'changeState'
+	'expandTask',
+	'closeExpandedTask'
 	// Here you can list your actions
 ]);
 

@@ -1,47 +1,13 @@
 var React = require('react');
 var Reflux = require('reflux');
 var MainStore = require('../stores/MainStore');
-var MainActions = require('../actions/MainActions');
-var ProjectActions = require('../actions/ProjectActions');
+var CreateTaskInput = require('./create_task_input');
 var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
-var FontIcon = require('material-ui/lib/font-icon');
-//var ExpandedIssue = require('./expanded_issue');
-
-// function get_host(url) {
-//     return url.replace(/^((\w+:)?\/\/[^\/]+\/?).*$/,'$1');
-// }
+var ExpandedTask = require('./expanded_task');
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
-	inputOnChange: function() {
-    var input = this.refs.input;
-		var newValue = input.value;
-		var newState = {};
-
-    if (input.value.length > 0) {
-			newState = {
-				addNewTaskIcon: 'active',
-				todoInput: 'active',
-				createInputValue: newValue
-			};
-    } else {
-			newState = {
-				addNewTaskIcon: 'inactive',
-				todoInput: 'inactive',
-				createInputValue: newValue
-			};
-    }
-
-		// Workaround for jumping caret
-		this.setState({createInputValue: newValue});
-		MainActions.changeState(newState);
-  },
-	createTask: function () {
-		ProjectActions.createTask({
-			name: this.state.createInputValue
-		})
-	},
   renderStatuses: function () {
     var settings = MainStore.get('settings');
 
@@ -63,7 +29,6 @@ var Home = React.createClass({
       swipes.navigation.setTitle(navName);
 
       return (
-        //<StatusesList projectKey={projectKey} projectUrl={projectUrl} />
         <StatusesList projectId={projectId} />
       )
     } else {
@@ -72,39 +37,27 @@ var Home = React.createClass({
       )
 		}
   },
-	renderInput: function() {
-		return (
-			<div className={"todo-input " + this.state.todoInput}>
-				<input ref="input" type="text" value={this.state.createInputValue} placeholder="Create a new task" onChange={this.inputOnChange} />
-				<div className={"task-add-icon " + this.state.addNewTaskIcon}>
-					<FontIcon color="#fff" className="material-icons" onClick={this.createTask}>add</FontIcon>
-				</div>
-			</div>
-		)
-	},
-  // renderExpanedView: function (expandedIssueId) {
-  //   return (
-  //     <ExpandedIssue issueId={expandedIssueId} />
-  //   )
-  //},
+  renderExpanedView: function (expandedTaskId) {
+    return (
+      <ExpandedTask taskId={expandedTaskId} />
+    )
+  },
 	render: function () {
-    //var expandedIssueId = this.state.expandedIssueId;
+    var expandedTaskId = this.state.expandedTaskId;
 
     return (
-      <div style={{maxHeight: '100%', overflowY: 'auto'}}>
-        {this.renderStatuses()}
-				{this.renderInput()}
-      </div>
-    );
-    // return (
-		// 	<div>
-		// 		{expandedIssueId ? (
-		// 			<div>{this.renderExpanedView(expandedIssueId)}</div>
-		// 		) : (
-		// 			<div>{this.renderStatuses()}</div>
-		// 		)}
-		// 	</div>
-		// )
+			<div style={{maxHeight: '100%', overflowY: 'auto'}}>
+				{expandedTaskId ? (
+					<div>{this.renderExpanedView(expandedTaskId)}</div>
+				) : (
+					<div>
+						{this.renderStatuses()}
+					</div>
+				)}
+
+				<CreateTaskInput expandedTaskId={expandedTaskId} />
+			</div>
+		)
 	}
 });
 

@@ -5,12 +5,12 @@ var chatActions = require('../actions/ChatActions');
 var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 var channelStore = require('../stores/ChannelStore');
-var Card = require('material-ui/lib').Card;
-var CardTitle = require('material-ui/lib').CardTitle;
-var CircularProgress = require('material-ui/lib').CircularProgress;
-var SelectField = require('material-ui/lib').SelectField;
-var Badge = require('material-ui/lib').Badge;
-var MenuItem = require('material-ui/lib').MenuItem;
+var Card = require('material-ui/lib/card');
+var CardTitle = require('material-ui/lib/card/card-title');
+var CircularProgress = require('material-ui/lib/circular-progress');
+var SelectField = require('material-ui/lib/select-field');
+var Badge = require('material-ui/lib/badge');
+var MenuItem = require('material-ui/lib/menus/menu-item');
 var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat')],
 	shouldScrollToBottom: true,
@@ -75,7 +75,7 @@ var ChatList = React.createClass({
 	},
 	renderLoading: function(){
 		if(!this.state.chat.sections){
-			return <CircularProgress style={{
+			return <CircularProgress color="#777" size={1} style={{
 				position: 'absolute',
 				left: '50%',
 				top: '50%',
@@ -84,9 +84,9 @@ var ChatList = React.createClass({
 				marginLeft: '-25px'
 			}}/>;
 		}
-		
-		
-	
+
+
+
 	},
 	renderSections: function(){
 		if(this.state.chat.sections){
@@ -102,7 +102,7 @@ var ChatList = React.createClass({
 	},
 	render: function() {
 		if(!swipes.info.workflow){
-			return <CircularProgress size={2} style={{
+			return <CircularProgress size={1} color="#777" style={{
 				position: 'absolute',
 				left: '50%',
 				top: '50%',

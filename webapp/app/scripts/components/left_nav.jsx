@@ -4,12 +4,12 @@ var Reflux = require('reflux');
 var leftNavStore = require('../stores/LeftNavStore');
 var leftNavActions = require('../actions/LeftNavActions');
 // Icon Menu dependencies
-var LeftNav = require('material-ui/lib').LeftNav;
-var Badge = require('material-ui/lib').Badge;
+var LeftNav = require('material-ui/lib/left-nav');
+var Badge = require('material-ui/lib/badge');
 
-var MenuItem = require('material-ui/lib').MenuItem;
-var List = require('material-ui/lib').List;
-var ListItem = require('material-ui/lib').ListItem;
+var MenuItem = require('material-ui/lib/menus/menu-item');
+var List = require('material-ui/lib/lists/list');
+var ListItem = require('material-ui/lib/lists/list-item');
 
 var LeftNavModal = React.createClass({
 	mixins: [ leftNavStore.connect('leftNav') ],

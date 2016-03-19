@@ -11,7 +11,7 @@ var MenuItem = require('material-ui/lib/menus/menu-item');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
 var Colors = require('material-ui/lib/styles/colors');
-var FontIcon = require('material-ui/lib').FontIcon;
+var FontIcon = require('material-ui/lib/font-icon');
 
 
 var Topbar = React.createClass({
