@@ -14,7 +14,7 @@ var WorkspaceStore = Reflux.createStore({
 
 		// Object indexed by the workflow_id to test if any has been removed from store.
 		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.id });
-		
+	
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
 			// If the workflow is not found, insert a new record with the grid info.
@@ -33,6 +33,7 @@ var WorkspaceStore = Reflux.createStore({
 
 		// If any keys are left in the removal object, unset them!
 		var keysToRemove = _.keys(testForRemovals);
+
 		if(keysToRemove.length){
 			this.unset(keysToRemove, {trigger:false});
 		}
@@ -92,6 +93,7 @@ var WorkspaceStore = Reflux.createStore({
 		var paddingForAutoAdjusting = 5;
 		var didUpdate = false;
 		var counter = 0;
+
 		_.each(_.sortBy(this.getAll(), function(el){return el.z; }), function(el){
 			var x = el.x;
 			var y = el.y;
@@ -145,16 +147,16 @@ var WorkspaceStore = Reflux.createStore({
 		this.manualLoadData();
 		this.listenTo(WorkflowStore, this.onWorkflowStore);
 	},
-	beforeSaveHandler:function(obj, oldObj){
-		if(!oldObj){
+	beforeSaveHandler:function(newObj, oldObj){
+		if(!oldObj && newObj.id){
 			var num = _.size(this.getAll());
-			obj.z = num;
-			obj.x = 0;
-			obj.y = 0;
-			obj.w = 300;
-			obj.h = 300;
+			newObj.z = num;
+			newObj.x = 0;
+			newObj.y = 0;
+			newObj.w = 300;
+			newObj.h = 300;
 		}
-		return obj;
+		return newObj;
 	}
 });
 
