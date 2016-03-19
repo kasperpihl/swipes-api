@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var socketStore = require('../stores/SocketStore');
 var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
+var workspaceActions = require('../actions/WorkspaceActions');
 var stateStore = require('../stores/StateStore');
 
 // Icon Menu dependencies
@@ -66,6 +67,9 @@ var Topbar = React.createClass({
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
 				<h5>Workspace</h5>
+				<div className="grid-button" onClick={workspaceActions.gridButton}>
+					<i className="material-icons">dashboard</i>
+				</div>
 				<div className="add-button" onClick={this.clickedAdd}>
 					<i className="material-icons">add_box</i>
 				</div>

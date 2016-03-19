@@ -63,16 +63,18 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	onGridButton: function(){
 		var i = 0;
-		var screenWidth = window.innerWidth;
-		var screenHeight = window.innerHeight;
-		var eachWidth = screenWidth / 3;
+		var el = document.getElementById('actual-app');
+		var screenWidth = el.clientWidth;
+		var screenHeight = el.clientHeight;
+		var eachWidth = screenWidth / _.size(this.getAll());
 		var padding = 10;
-		_.each(this.getAll(), function(el){
+		var sortedCards = _.sortBy(this.getAll(), function(el){ return el.x });
+		_.each(sortedCards, function(el){
 			var newSize = {
 				x: eachWidth*i + padding,
 				y: padding,
 				w: eachWidth - 2*padding,
-				h: screenHeight-60-2*padding
+				h: screenHeight-2*padding
 			};
 			this.update(el.id, newSize, {trigger:false});
 			i++;
