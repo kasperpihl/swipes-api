@@ -173,7 +173,7 @@ var CardLoader = React.createClass({
 			}
 
 			if(['top', 'top-left', 'top-right'].indexOf(this.side) !== -1){
-				newY = (this.originalY - 60 + diffY);
+				newY = (this.originalY + diffY);
 				newH = this.originalH - diffY;
 			}
 			if(['left', 'top-left', 'bottom-left'].indexOf(this.side) !== -1){

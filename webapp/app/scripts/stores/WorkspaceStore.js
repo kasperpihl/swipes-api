@@ -106,6 +106,12 @@ var WorkspaceStore = Reflux.createStore({
 			// Only run these if screen size was forwarded
 			if(screenWidth && screenHeight){
 				// Check if offscreen to the right off the screen
+				if(x < 0){
+					newSize.x = x = paddingForAutoAdjusting;
+				}
+				if(y < 0){
+					newSize.y = y = paddingForAutoAdjusting;
+				}
 				if((x + w) > screenWidth){
 					newSize.x = Math.max(screenWidth - w, paddingForAutoAdjusting);
 				}
