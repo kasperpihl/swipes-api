@@ -52,6 +52,9 @@ var CardLoader = React.createClass({
 					this.setState({"titleFromCard": data.title});
 				}
 			}
+			else if (message.command === "event.focus"){
+				this.onMouseDown();
+			}
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
