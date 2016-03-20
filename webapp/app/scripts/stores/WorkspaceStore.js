@@ -110,19 +110,47 @@ var WorkspaceStore = Reflux.createStore({
 			// Only run these if screen size was forwarded
 			if(screenWidth && screenHeight){
 				// Check if offscreen to the right off the screen
+				var minWidth = 400;
+				var minHeight = 300;
+
+				var underflowX = -x;
+				var underflowY = -y;
+				var overflowX = w - (screenWidth - x);
+				var overflowY = h - (screenHeight - y);
+
+
+				if(underflowX > 0){
+					newSize.w = w = Math.max(minWidth, w - underflowX - paddingForAutoAdjusting);
+				}
 				if(x < 0){
 					newSize.x = x = paddingForAutoAdjusting;
+				}
+
+
+				if(underflowY > 0){
+					newSize.h = h = Math.max(minHeight, h - underflowY - paddingForAutoAdjusting);
 				}
 				if(y < 0){
 					newSize.y = y = paddingForAutoAdjusting;
 				}
+
+
+				if(overflowX > 0){
+					newSize.w = w = Math.max(minWidth, (w - overflowX - paddingForAutoAdjusting) );
+				}
 				if((x + w) > screenWidth){
 					newSize.x = Math.max(screenWidth - w, paddingForAutoAdjusting);
 				}
+				
 				// Check if offscreen in the bottom off the screen
+				if(overflowY > 0){
+					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) ); 
+				}
 				if((y + h) > screenHeight){
 					newSize.y = Math.max(screenHeight - h, paddingForAutoAdjusting);
 				}
+
+
 				// Check if wider than the screen.
 				if(w > (screenWidth - 2*paddingForAutoAdjusting)){
 					newSize.w = (screenWidth - 2*paddingForAutoAdjusting);
