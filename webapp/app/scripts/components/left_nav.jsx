@@ -29,7 +29,7 @@ var LeftNavModal = React.createClass({
 		_.each(items, function(item){
 			var nestedItems = [];
 			var style = {};
-			var initiallyOpen = false;
+			var initiallyOpen = true;
 			var badge;
 
 			if(!item || typeof item.id !== 'string' || typeof item.title !== 'string' ){
@@ -47,7 +47,7 @@ var LeftNavModal = React.createClass({
 
 
 			if(item.badge){
-				var badge = <Badge badgeContent={item.badge}
+				badge = <Badge badgeContent={item.badge}
 					style={{padding: 0, margin:0}}
 					badgeStyle={{backgroundColor: 'red', top: '-15px', left: '3px', color: 'white', fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
 				</Badge>
@@ -56,18 +56,18 @@ var LeftNavModal = React.createClass({
 			if (item.nested && item.nested.length > 0) {
 				toggleFromPrimary = true;
 				nestedItems = this.renderItems(item.nested, false);
-				item.nested.forEach(function (item) {
-					if (item.current) {
-						initiallyOpen = true;
-					}
-				})
+				style.paddingLeft = "16px";
 			}
+			
 
 			var primaryText = <div>{item.title}{badge}</div>;
 
 			renderedItems.push( <ListItem
 					key={item.id}
 					style={style}
+					autoGenerateNestedIndicator={false}
+					nestedListStyle={{padding: 0}}
+					innerDivStyle={{paddingTop: '8px', paddingBottom: '8px', paddingLeft: '0px'}}
 					onTouchTap={this.clicked.bind(this, item.id)}
 					primaryText={primaryText}
 					nestedItems={nestedItems}
@@ -85,7 +85,7 @@ var LeftNavModal = React.createClass({
 				docked={false}
 				width={200}
 				disableSwipeToOpen={true}
-				style={{paddingTop: '100px'}}
+				style={{paddingTop: '60px'}}
 				open={this.state.leftNav.open}
 				onRequestChange={this.onRequestChange}>
 				<List children={this.renderItems(null, false)}></List>
