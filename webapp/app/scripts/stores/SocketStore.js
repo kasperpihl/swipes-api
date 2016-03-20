@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 
 // Stores
 var WorkflowStore = require('./WorkflowStore');
+var WorkspaceStore = require('./WorkspaceStore');
 var userStore = require('./UserStore');
 var serviceStore = require('./ServiceStore');
 var stateStore = require('./StateStore');
@@ -52,6 +53,7 @@ var SocketStore = Reflux.createStore({
 				WorkflowStore.update(msg.data.id, msg.data);
 			}
 			else if (msg.type === 'workflow_removed'){
+				WorkspaceStore.unset(msg.data.id);
 				WorkflowStore.unset(msg.data.id);
 			}
 
