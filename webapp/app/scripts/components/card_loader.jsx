@@ -115,11 +115,25 @@ var CardLoader = React.createClass({
 
 		// Add a listeners for share
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
+		console.log('autho', userStore.me().services);
+		var workflow = this.state.workflow;
+
+		// K_TODO || T_TODO : WARNING, This is a super hack hahaha
+		var services = userStore.me().services || [];
+		var slackToken = null;
+		for(var i = 0 ; i < services.length ; i++){
+			var serv = services[i];
+			if(serv.service_name === "slack" && serv.authData){
+				workflow.slackToken = serv.authData.access_token;
+			}
+		}
+		
 
 		var initObj = {
 			type: "init",
 			data: {
-				manifest: this.state.workflow,
+				manifest: workflow,
+				slackToken: slackToken,
 				_id: this.state.workflow.id,
 				user_id: userStore.me().id,
 				token: stateStore.get("swipesToken"),
