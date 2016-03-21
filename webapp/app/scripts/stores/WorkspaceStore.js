@@ -14,7 +14,7 @@ var WorkspaceStore = Reflux.createStore({
 
 		// Object indexed by the workflow_id to test if any has been removed from store.
 		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.id });
-		
+	
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
 			// If the workflow is not found, insert a new record with the grid info.
@@ -33,6 +33,7 @@ var WorkspaceStore = Reflux.createStore({
 
 		// If any keys are left in the removal object, unset them!
 		var keysToRemove = _.keys(testForRemovals);
+
 		if(keysToRemove.length){
 			this.unset(keysToRemove, {trigger:false});
 		}
@@ -63,16 +64,18 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	onGridButton: function(){
 		var i = 0;
-		var screenWidth = window.innerWidth;
-		var screenHeight = window.innerHeight;
-		var eachWidth = screenWidth / 3;
+		var el = document.getElementById('actual-app');
+		var screenWidth = el.clientWidth;
+		var screenHeight = el.clientHeight;
+		var eachWidth = screenWidth / _.size(this.getAll());
 		var padding = 10;
-		_.each(this.getAll(), function(el){
+		var sortedCards = _.sortBy(this.getAll(), function(el){ return el.x });
+		_.each(sortedCards, function(el){
 			var newSize = {
 				x: eachWidth*i + padding,
 				y: padding,
 				w: eachWidth - 2*padding,
-				h: screenHeight-60-2*padding
+				h: screenHeight-2*padding
 			};
 			this.update(el.id, newSize, {trigger:false});
 			i++;
@@ -90,6 +93,7 @@ var WorkspaceStore = Reflux.createStore({
 		var paddingForAutoAdjusting = 5;
 		var didUpdate = false;
 		var counter = 0;
+
 		_.each(_.sortBy(this.getAll(), function(el){return el.z; }), function(el){
 			var x = el.x;
 			var y = el.y;
@@ -106,13 +110,47 @@ var WorkspaceStore = Reflux.createStore({
 			// Only run these if screen size was forwarded
 			if(screenWidth && screenHeight){
 				// Check if offscreen to the right off the screen
+				var minWidth = 400;
+				var minHeight = 300;
+
+				var underflowX = -x;
+				var underflowY = -y;
+				var overflowX = w - (screenWidth - x);
+				var overflowY = h - (screenHeight - y);
+
+
+				if(underflowX > 0){
+					newSize.w = w = Math.max(minWidth, w - underflowX - paddingForAutoAdjusting);
+				}
+				if(x < 0){
+					newSize.x = x = paddingForAutoAdjusting;
+				}
+
+
+				if(underflowY > 0){
+					newSize.h = h = Math.max(minHeight, h - underflowY - paddingForAutoAdjusting);
+				}
+				if(y < 0){
+					newSize.y = y = paddingForAutoAdjusting;
+				}
+
+
+				if(overflowX > 0){
+					newSize.w = w = Math.max(minWidth, (w - overflowX - paddingForAutoAdjusting) );
+				}
 				if((x + w) > screenWidth){
 					newSize.x = Math.max(screenWidth - w, paddingForAutoAdjusting);
 				}
+				
 				// Check if offscreen in the bottom off the screen
+				if(overflowY > 0){
+					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) ); 
+				}
 				if((y + h) > screenHeight){
 					newSize.y = Math.max(screenHeight - h, paddingForAutoAdjusting);
 				}
+
+
 				// Check if wider than the screen.
 				if(w > (screenWidth - 2*paddingForAutoAdjusting)){
 					newSize.w = (screenWidth - 2*paddingForAutoAdjusting);
@@ -137,16 +175,16 @@ var WorkspaceStore = Reflux.createStore({
 		this.manualLoadData();
 		this.listenTo(WorkflowStore, this.onWorkflowStore);
 	},
-	beforeSaveHandler:function(obj, oldObj){
-		if(!oldObj){
+	beforeSaveHandler:function(newObj, oldObj){
+		if(!oldObj && newObj.id){
 			var num = _.size(this.getAll());
-			obj.z = num;
-			obj.x = 0;
-			obj.y = 0;
-			obj.w = 300;
-			obj.h = 300;
+			newObj.z = num;
+			newObj.x = 0;
+			newObj.y = 0;
+			newObj.w = 300;
+			newObj.h = 300;
 		}
-		return obj;
+		return newObj;
 	}
 });
 

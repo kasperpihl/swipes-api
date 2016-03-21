@@ -33,6 +33,9 @@ swipes.onMenuButton(function(){
 	if(channels.length){
 		var navItems = [];
 		var currentChatId = chatStore.get('channelId');
+		
+		var channelsCol = [];
+		var peopleCol = [];
 		_.each(channels, function(channel){
 
 			var item = { id: channel.id, title: channel.name };
@@ -45,8 +48,27 @@ swipes.onMenuButton(function(){
 				}
 				item.bold = true;
 			}
-			navItems.push(item);
-		})
+			console.log('item', channel);
+			if(channel.is_im){
+				peopleCol.push(item);
+			}
+			else{
+				channelsCol.push(item);
+			}
+		});
+		navItems.push({
+			id: "channels",
+			title: "Channels",
+			nested: channelsCol
+		});
+		if(peopleCol.length){
+			navItems.push({
+				id: "people",
+				title: "People",
+				nested: peopleCol
+			});
+		}
+
 		swipes.modal.leftNav({items: navItems}, function(res, err){
 			if(res){
 				chatActions.setChannel(res);

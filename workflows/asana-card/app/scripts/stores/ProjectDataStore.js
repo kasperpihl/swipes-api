@@ -4,6 +4,7 @@ var ProjectDataActions = require('../actions/ProjectDataActions');
 var MainStore = require('../stores/MainStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 var TasksActions = require('../actions/TasksActions');
+var SubtasksActions = require('../actions/SubtasksActions');
 var UserStore = require('../stores/UserStore');
 var ProjectsStore = require('../stores/ProjectsStore');
 
@@ -109,6 +110,69 @@ var fetchData = function () {
  	})
 }
 
+var createTask = function (taskData, projectType, projectId) {
+	console.log('Adding task!');
+	swipes.service('asana').request('tasks.create', taskData)
+		.then(function (response) {
+			var addedTask = response.data;
+			var taskId = addedTask.id;
+
+			TasksActions.createTask(addedTask);
+
+			CreateTaskInputActions.changeState({
+				creatTaskLoader: 'inactive',
+				disabledInput: false
+			});
+
+			// Now we need to add the project with another request.
+			// T_TODO Ask the support for this one because in the API docs
+			// they say that you can do it with one request when creating the task.
+			if (projectType !== 'mytasks') {
+				console.log('Adding task to a project!');
+				return swipes.service('asana').request('tasks.addProject', {
+					id: taskId,
+					project: projectId
+				})
+			}
+			swipes.analytics.action('Create task');
+		})
+		.then(function () {
+			console.log('Done!');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+}
+
+var createSubTask = function (taskData) {
+	console.log('Adding subtask!');
+	swipes.service('asana').request('tasks.addSubtask', taskData)
+		.then(function (response) {
+			var addedTask = response.data;
+
+			SubtasksActions.create(addedTask);
+
+			CreateTaskInputActions.changeState({
+				creatTaskLoader: 'inactive',
+				disabledInput: false
+			});
+
+			swipes.analytics.action('Create subtask');
+		})
+		.then(function () {
+			console.log('Done!');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+}
+
 var ProjectDataStore = Reflux.createStore({
 	listenables: [ProjectDataActions],
 	onFetchData: function () {
@@ -123,7 +187,11 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// update the task client side
-		TasksActions.updateTask(taskId, 'assignee', assignee);
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'assignee', assignee);
+		} else {
+			TasksActions.updateTask(taskId, 'assignee', assignee);
+		}
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -145,8 +213,11 @@ var ProjectDataStore = Reflux.createStore({
 
 		_fetchLock = true;
 
-		// update the task client side
-		TasksActions.updateTask(taskId, 'completed', completed);
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'completed', completed);
+		} else {
+			TasksActions.updateTask(taskId, 'completed', completed);
+		}
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -169,7 +240,11 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// update the task client side
-		TasksActions.updateTask(taskId, 'completed', completed);
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'completed', completed);
+		} else {
+			TasksActions.updateTask(taskId, 'completed', completed);
+		}
 
 		swipes.service('asana').request('tasks.update', {
 			id: taskId,
@@ -191,7 +266,11 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		// Remove the task client side
-		TasksActions.removeTask(taskId);
+		if (task.parent) {
+			SubtasksActions.remove(taskId);
+		} else {
+			TasksActions.removeTask(taskId);
+		}
 
 		swipes.service('asana').request('tasks.delete', {
 			id: taskId
@@ -206,7 +285,7 @@ var ProjectDataStore = Reflux.createStore({
 			_fetchLock = false;
 		})
 	},
-	onCreateTask: function (task) {
+	onCreateTask: function (task, subtask) {
 		var settings = MainStore.get('settings');
 		var workspaceId = settings.workspaceId;
 		var projectId = settings.projectId;
@@ -226,48 +305,32 @@ var ProjectDataStore = Reflux.createStore({
 		// If the tasks is in mytasks it should be private and assigned to me
 		// otherwise it should be public and assigned to no one
 		// the public property is handled automaticly by the API
-		if (projectType === 'mytasks') {
+		if (projectType === 'mytasks' && !subtask) {
 			assignee = {assignee: {id: settings.user.id}};
 		}
 
-		var taskData = Object.assign(
-			{},
-			task,
-			assignee,
-			workspace
-		);
+		if (!subtask) {
+			var taskData = Object.assign(
+				{},
+				task,
+				assignee,
+				workspace
+			);
 
-		swipes.service('asana').request('tasks.create', taskData)
-			.then(function (response) {
-				var addedTask = response.data;
-				var taskId = addedTask.id;
+			createTask(taskData, projectType, projectId);
+		} else {
+			var parent = {id : task.parent};
 
-				TasksActions.createTask(addedTask);
+			delete task.parent;
 
-				CreateTaskInputActions.changeState({
-					creatTaskLoader: 'inactive',
-					disabledInput: false
-				});
+			var taskData = Object.assign(
+				{},
+				parent,
+				task
+			);
 
-				// Now we need to add the project with another request.
-				// T_TODO Ask the support for this one because in the API docs
-				// they say that you can do it with one request when creating the task.
-				if (projectType !== 'mytasks') {
-					return swipes.service('asana').request('tasks.addProject', {
-						id: taskId,
-						project: projectId
-					})
-				}
-				swipes.analytics.action('Create task');
-			})
-			.then(function () {
-			})
-			.catch(function (error) {
-				console.log(error);
-			})
-			.finally(function () {
-				_fetchLock = false;
-			})
+			createSubTask(taskData);
+		}
 
 		this.set('createInputValue', '');
 	}

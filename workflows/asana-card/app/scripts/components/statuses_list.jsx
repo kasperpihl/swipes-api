@@ -74,11 +74,11 @@ var StatusesList = React.createClass({
 			children={tabs}></Tabs>
 	},
 	render: function () {
-    var tasks = TasksStore.get('tasks');
+    var tasks = this.state.tasks;
 
 		return (
 			<div>
-				{tasks && (tasks.length > 0) ? (
+				{tasks.length > 0 ? (
 					<div>
 						{this.renderStatuses(tasks)}
 					</div>

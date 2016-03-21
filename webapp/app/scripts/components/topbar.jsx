@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var socketStore = require('../stores/SocketStore');
 var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
+var workspaceActions = require('../actions/WorkspaceActions');
 var stateStore = require('../stores/StateStore');
 
 // Icon Menu dependencies
@@ -33,6 +34,7 @@ var Topbar = React.createClass({
 		this.context.router.push('/signin');
 	},
 	workspace: function(){
+
 		this.context.router.push('/workspace');
 	},
 	services: function(){
@@ -61,11 +63,14 @@ var Topbar = React.createClass({
 	},
 
 	render: function() {
-
+		var title = (document.location.pathname.startsWith("/workspace")) ? "Workspace" : "Services";
 		return (
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
-				<h5>Workspace</h5>
+				<h5 style={{textAlign: 'left', paddingLeft: '60px'}}>{title}</h5>
+				<div className="grid-button" onClick={workspaceActions.gridButton}>
+					<i className="material-icons">dashboard</i>
+				</div>
 				<div className="add-button" onClick={this.clickedAdd}>
 					<i className="material-icons">add_box</i>
 				</div>

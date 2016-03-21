@@ -39,7 +39,9 @@ var CardLoader = React.createClass({
 		}.bind(this))[0];
 	}) ],
 	getInitialState:function(){
-		return {};
+		return {
+			cardMenuState: 'inactive'
+		};
 	},
 	connectorHandleResponseReceivedFromListener: function(connector, message, callback){
 		var self = this,
@@ -51,6 +53,9 @@ var CardLoader = React.createClass({
 				if (data.title) {
 					this.setState({"titleFromCard": data.title});
 				}
+			}
+			else if (message.command === "event.focus"){
+				this.onMouseDown();
 			}
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
@@ -180,14 +185,14 @@ var CardLoader = React.createClass({
 			var newX, newY, newW, newH;
 			if(['top', 'bottom'].indexOf(this.side) === -1){
 				newW = diffX + this.originalW;
-				
+
 			}
 			if(['left', 'right'].indexOf(this.side) === -1){
 				newH = diffY + this.originalH;
 			}
 
 			if(['top', 'top-left', 'top-right'].indexOf(this.side) !== -1){
-				newY = (this.originalY - 60 + diffY);
+				newY = (this.originalY + diffY);
 				newH = this.originalH - diffY;
 			}
 			if(['left', 'top-left', 'bottom-left'].indexOf(this.side) !== -1){
@@ -215,7 +220,7 @@ var CardLoader = React.createClass({
 	componentWillMount() {
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 	    window.addEventListener('mouseup', this.onMouseUp);
-    	window.addEventListener('mousemove', this.onMouseMove);  
+    	window.addEventListener('mousemove', this.onMouseMove);
 	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -233,6 +238,14 @@ var CardLoader = React.createClass({
 			type: 'menu.button'
 		};
 		this.apiCon.callListener("event", e);
+	},
+	openCardMenu: function() {
+
+		if (this.state.cardMenuState == 'active') {
+			this.setState({cardMenuState: 'inactive'})
+		} else {
+			this.setState({cardMenuState: 'active'})
+		}
 	},
 	renderCardBar: function(){
 		if(!this.state.workflow)
@@ -253,7 +266,7 @@ var CardLoader = React.createClass({
 		return <div className="card-app-bar">
 			<div className="card-actions">
 			</div>
-			<div className="card-title" onTouchTap={this.onCardMenuButtonClick}>
+			<div className="card-title" onClick={this.openCardMenu} onTouchTap={this.onCardMenuButtonClick}>
 				{title}
 				{fontObj}
 			</div>
@@ -269,6 +282,14 @@ var CardLoader = React.createClass({
 			</div>
 		</div>
 
+	},
+	renderCardMenu: function() {
+
+		return (
+			<div className={"card-menu-overlay " + this.state.cardMenuState}>
+
+			</div>
+		)
 	},
 	render: function() {
 		var cardContent = <Loading />;

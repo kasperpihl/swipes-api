@@ -52,9 +52,10 @@ var Home = React.createClass({
 				) : (
 					<div>
 						{this.renderStatuses()}
-						<CreateTaskInput />
 					</div>
 				)}
+
+				<CreateTaskInput expandedTaskId={expandedTaskId} />
 			</div>
 		)
 	}

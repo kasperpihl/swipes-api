@@ -70,7 +70,9 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
         description: manifest.description,
         version: manifest.version
       };
-
+      if(manifest.share_actions){
+        updateDoc.share_actions = manifest.share_actions;
+      }
       if (manifest.index) {
         updateDoc.index = manifest.index;
       }

@@ -4,6 +4,11 @@ var TasksActions = require('../actions/TasksActions');
 var TasksStore = Reflux.createStore({
   listenables: [TasksActions],
 	idAttribute: 'id',
+  getInitialState: function () {
+    return {
+      tasks: []
+    }
+  },
   onCreateTask: function (task) {
     var tasks = this.get('tasks');
 

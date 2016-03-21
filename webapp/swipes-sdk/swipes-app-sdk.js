@@ -11,6 +11,7 @@ var SwipesAppSDK = (function() {
 		// set the sdk property on client so it can call this class
 		this._client.setDelegate(this);
 		this._listenersObj = {};
+		window.addEventListener('focus', function(){ this._client.callListener('event.focus'); }.bind(this));
 		self = this;
 	}
 
@@ -20,7 +21,6 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.getToken = function(){
 		return this._client._token;
 	};
-
 
 	// API for handling navigation bar in main app
 	SwipesAppSDK.prototype.navigation = {

@@ -13,6 +13,23 @@
 			color: #555;
 			font-weight: 300;
     }
+    .grid-button{
+    	position:absolute;
+    	cursor: pointer;
+    	top: 0;
+    	right: 60px;
+    	width:60px;
+    	padding: 10px;
+    	padding-right: 0px;
+    	height: $top-bar-height;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		i {
+			color: #555;
+		}
+    }
     .add-button{
     	position:absolute;
     	cursor: pointer;
@@ -20,6 +37,7 @@
     	right: 0;
     	width:60px;
     	padding: 10px;
+    	padding-left: 0px;
     	height: $top-bar-height;
 			display: flex;
 			align-items: center;

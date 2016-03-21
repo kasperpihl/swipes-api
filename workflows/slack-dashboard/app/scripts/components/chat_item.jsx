@@ -91,7 +91,10 @@ var ChatMessage = React.createClass({
 		if(!this.props.data.file){
 			return;
 		}
-		//return < console.log('file', this.props.data.file);
+		// T_TODO: Render files here
+		// Check file structure here by switching between channels
+		// Then check slack client in same channels to get idea about how they are structured
+		// console.log('file found', this.props.data.file);
 	},
 	renderMessage:function(message){
 		try{

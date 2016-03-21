@@ -92,14 +92,14 @@
 
         &.done {
           background-color: $green-color;
-        }
-      }
+          animation: pulse .4s forwards;
 
-      .sub-dot {
-        width: 8px;
-        height: 8px;
-        border: 2px solid $deepBlue-100;
-        border-radius: 50%;
+          @keyframes pulse {
+            50% {
+              transform: scale(2)
+            }
+          }
+        }
       }
     }
 
@@ -110,8 +110,9 @@
       align-items: flex-start;
 
       .task-title {
-        color: $deepBlue-100;
-        font-weight: 400;
+        font-size: 15px;
+        color: $deepBlue-80;
+        font-weight: 500;
       }
 
       .task-details {
@@ -125,11 +126,12 @@
         }
 
         .task-project {
-          font-size: 13px;
-          color: $deepBlue-80;
-          border: 1px solid $deepBlue-80;
-          padding: 2px 8px;
-          border-radius: 20px;
+          font-size: 14px;
+          color: $deepBlue-40;
+          font-weight: 400;
+          //border: 1px solid $deepBlue-80;
+          //padding: 2px 8px;
+          //border-radius: 20px;
           //margin-left: 10px;
         }
       }
@@ -215,6 +217,10 @@
   position: absolute;
 
   @extend %flex;
+
+  img {
+
+  }
 }
 
 .inv-icon {
@@ -318,7 +324,7 @@
   bottom: 0;
   left: 0;
   //z-index: 1000;
-  //overflow: hidden;
+  overflow: hidden;
 
   &.active {
     z-index: 1000;
@@ -330,20 +336,29 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    transform: scale(0) rotate(0deg);
+    opacity: 0;
+    transform: scale(0);
     @extend %flex;
-    transition: .2s ease-in-out;
+    transition:opacity .1s ease-in-out;
+
+    .material-icons {
+      transform: rotate(360deg);
+      transition: transform .2s .1s ease-in-out;
+    }
 
     &.active {
-      transform: scale(1) rotate(360deg);
-      transition: .2s ease-in-out;
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity .1s .2s ease-in-out;
 
       .material-icons {
+        transform: rotate(0deg);
         color: $deepBlue-60 !important;
+        transition: .2s ease-in-out;
       }
 
       &:hover {
-        background-color: $deepBlue-20;
+        background-color: $deepBlue-60;
       }
     }
   }
@@ -471,14 +486,17 @@
 
     &:focus {
       color: white;
-      background-color: $deepBlue-100;
+      background-color: $blue-100;
       transition: .1s ease-in-out;
 
-      & + .task-add-icon {
+      &::-webkit-input-placeholder {
+         color: white;
+         font-family: 'Roboto';
+         font-weight: 300;
+      }
 
-        &:hover {
-          background-color: $deepBlue-80;
-        }
+      & + .task-add-icon {
+        background-color: $deepBlue-80;
 
         .material-icons {
           color: white !important;
@@ -642,6 +660,28 @@ $color_havelock_blue_approx: #4a90e2;
       line-height: 1.4;
       opacity: .7;
       margin: 10px 0;
+      position: relative;
+      padding-bottom: 1.4em;
+
+      .expand-description {
+        width: 100%;
+        height: 20px;
+        background-color: $deepBlue-80;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        @extend %flex;
+
+        &:hover {
+          background-color: $deepBlue-60;
+        }
+
+        .material-icons {
+          color: white !important;
+          font-size: 13px !important;
+        }
+      }
     }
 
     .header-actions {
@@ -683,7 +723,7 @@ $color_havelock_blue_approx: #4a90e2;
 
     img {
       width: 39px;
-      height: 39px;
+      //height: 39px;
       border-radius: 50%;
       border: 2px solid white;
       margin-top: 3px;
