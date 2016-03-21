@@ -59,11 +59,13 @@ html, body, #content {
         //overflow-x: hidden;
     }
 }
+$inputHeight: 60px;
+
 .card-container{
     position:relative;
     height: 100%;
    // padding-top: 30px !important;
-    padding-bottom: 70px !important;
+    padding-bottom: $inputHeight !important;
 }
 .chat-list-container{
     height:100%;
@@ -507,7 +509,7 @@ html, body, #content {
 
 .todo-input {
   width: 100%;
-  height: 70px;
+  height: $inputHeight;
   background-color: $studioGray-20;
   position: fixed;
   //z-index: 10;
@@ -519,12 +521,13 @@ html, body, #content {
   &.active {
     z-index: 1000;
   }
-
-  .task-add-icon {
-    width: 70px;
-    height: 70px;
+  .file-input{
+    display: none;
+  }
+  .send-button, .attach-icon {
+    width: $inputHeight;
+    height: $inputHeight;
     position: absolute;
-    right: 0;
     bottom: 0;
     @extend %flex;
 
@@ -537,14 +540,20 @@ html, body, #content {
       background-color: $deepBlue-20;
     }
   }
+  .attach-icon{
+    left: 0;
+  }
+  .send-button{
+    right: 0;
+  }
 
   input {
     width: 100%;
     height: 100%;
     background-color: $studioGray-20;
     font-size: 14px;
-    padding: 0 15px;
-    padding-right: 70px;
+    padding: 0 $inputHeight + 5px;
+    padding-right: $inputHeight;
     color: $deepBlue-60;
     letter-spacing: 1px;
     transition: .1s ease-in-out;
@@ -559,8 +568,16 @@ html, body, #content {
       color: white;
       background-color: $deepBlue-100;
       transition: .1s ease-in-out;
+      & + .attach-icon {
+        &:hover {
+          background-color: $deepBlue-80;
+        }
 
-      & + .task-add-icon {
+        .material-icons {
+          color: white !important;
+        }
+      }
+      & + .send-button { 
 
         &:hover {
           background-color: $deepBlue-80;
