@@ -49,6 +49,9 @@ var Signin = React.createClass({
 		});
 		return;
 	},
+	preventSubmit: function(e) {
+		e.preventDefault();
+	},
 	render: function() {
 		return (
             <div className="main-log-wrapper">
@@ -89,7 +92,7 @@ var Signin = React.createClass({
                     <h1>Welcome to your Swipes</h1>
                     <div className="sign-up-card">
                         <h2>sign in to swipes</h2>
-                        <form action="">
+                        <form action="" onSubmit={this.preventSubmit}>
                             {/*<div className="swipes-floating-label" error-message="Error message">
                                 <input ref="username" className="swipes-floating-input username borderless" type="text" id="email"/>
                                 <label htmlFor="email">Email address</label>
@@ -102,7 +105,7 @@ var Signin = React.createClass({
 														<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
 	    											<TextField floatingLabelText="Password" ref="password" type="password" />
 														<br/>
-                            <input type="button" className="login-submit" value="SIGN IN" onClick={this.signin}/>
+                            <input type="submit" className="login-submit" value="SIGN IN" onClick={this.signin}/>
                         </form>
                     </div>
                     <h3>You don't have an account yet?</h3>
