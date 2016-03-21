@@ -42,6 +42,19 @@ var ChatItem = React.createClass({
 			<img src={profile_image} />
 		);
 	},
+	renderSecondaryTime: function(){
+		var message = this.props.data;
+		if(!message.isExtraMessage){
+			return;
+		}
+		return (
+			<div className="secondary-time">
+				<span className="message-time">
+					{message.timeStr}
+				</span>
+			</div>
+		);
+	},
 	renderMessage:function(){
 		var message = this.props.data;
 		return <ChatMessage key={message.ts} data={message} />;
@@ -60,6 +73,7 @@ var ChatItem = React.createClass({
 			<div className={className}>
 				<div className="left-side-container">
 					{this.renderProfileImage()}
+					{this.renderSecondaryTime()}
 				</div>
 				<div className="right-side-container">
 					{this.renderNameHeader()}
