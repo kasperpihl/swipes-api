@@ -26,7 +26,9 @@ swipes.onShareTransmit(function(e) {
 		}
 	}
 });
-
+swipes.onWindowFocus(function(e){
+	chatActions.checkSocket(e);
+});
 
 swipes.onMenuButton(function(){
 	var channels = channelStore.getActive();

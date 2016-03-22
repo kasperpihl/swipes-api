@@ -13,10 +13,10 @@ var ChatStore = Reflux.createStore({
 			return;
 		}
 		if(!this.timer){
-			this.timer = setInterval(this.checkForConnect.bind(this), 6000);
+			this.timer = setInterval(this.onCheckSocket.bind(this), 6000);
 		}
 		this.isStarting = true;
-
+		window.onbeforeunload = this.closeWebSocket.bind(this);
 		var self = this;
 		swipes.service("slack").request('rtm.start', function(res, err){
 			self.isStarting = false;
@@ -49,11 +49,6 @@ var ChatStore = Reflux.createStore({
 
 		});
 	},
-	checkForConnect: function(){
-		if(!this.webSocket || this.webSocket.readyState > 1){
-			this.start();
-		}
-	},
 	connectSocket: function(url){
 		if(!this.webSocket){
 			this.webSocket = new WebSocket(url);
@@ -77,6 +72,27 @@ var ChatStore = Reflux.createStore({
 				console.log('slack socket', 'error');
 			}
 		}
+	},
+	closeWebSocket:function(){
+		if( this.webSocket ){
+			console.log('closing the socket manually!');
+			this.webSocket.onclose = function () {};
+			this.webSocket.close();
+			this.webSocket = null;
+		}
+	},
+	onCheckSocket:function(){
+		if(!this.webSocket || this.webSocket.readyState > 1){
+			return this.start();
+		}
+		this.webSocket.send(JSON.stringify({'id':'1234', 'type': 'ping'}));
+		var ping = new Date().getTime();
+		setTimeout(function(){
+			if(!this.lastPong || this.lastPong < ping){
+				this.closeWebSocket();
+				this.start();
+			}
+		}.bind(this), 1000);
 	},
 	apiPrefixForChannel:function(channel){
 		if(channel.is_im){
@@ -214,7 +230,9 @@ var ChatStore = Reflux.createStore({
 		this.sortMessages();
 	},
 	onHandleMessage:function(msg){
-		
+		if(msg.type === 'pong'){
+			this.lastPong = new Date().getTime();	
+		}
 		if(msg.type === 'message'){
 			var me = UserStore.me();
 			if(msg.channel){

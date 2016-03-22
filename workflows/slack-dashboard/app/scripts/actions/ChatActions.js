@@ -7,7 +7,8 @@ var ChatActions = Reflux.createActions([
 	'setChannel',
 	'clickLink',
 	'uploadFile',
-	'updateBadge'
+	'updateBadge',
+	'checkSocket'
 	// Here you can list your actions
 ]);
 
