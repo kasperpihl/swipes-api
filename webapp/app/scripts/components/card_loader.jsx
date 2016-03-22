@@ -266,20 +266,21 @@ var CardLoader = React.createClass({
 		if(this.state.titleFromCard){
 			title = this.state.titleFromCard;
 		}
+		var titleObj = <span style={{cursor: 'pointer'}} onTouchTap={this.onCardMenuButtonClick}>{title}</span>
 		var fontObj = <FontIcon className="material-icons">arrow_drop_down</FontIcon>;
 		if(this.state.badge){
 			fontObj = (<Badge
 				badgeContent={this.state.badge}
-				style={{padding: 0, margin:0}}
+				style={{padding: 0, margin:0, cursor: 'pointer'}}
 				badgeStyle={{backgroundColor: 'red', top: 0, color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
-					<FontIcon className="material-icons">arrow_drop_down</FontIcon>
+					<FontIcon onTouchTap={this.onCardMenuButtonClick} className="material-icons">arrow_drop_down</FontIcon>
 				</Badge>);
 		}
 		return <div className="card-app-bar">
 			<div className="card-actions">
 			</div>
-			<div className="card-title" onClick={this.openCardMenu} onTouchTap={this.onCardMenuButtonClick}>
-				{title}
+			<div className="card-title" onClick={this.openCardMenu}>
+				{titleObj}
 				{fontObj}
 			</div>
 			<div className="card-context-menu">

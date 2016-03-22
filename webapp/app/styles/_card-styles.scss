@@ -148,7 +148,6 @@
 
   .card-title {
     width: calc(100% - 80px - 50px);
-    cursor: pointer;
     color: $deepBlue-80;
     font-weight: 500;
     font-size: 13px;
@@ -157,10 +156,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    > * {
-      cursor: inherit !important;
-    }
 
     .material-icons {
       color: $deepBlue-40 !important;
