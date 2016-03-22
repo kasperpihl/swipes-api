@@ -77,10 +77,10 @@ var ChatInput = React.createClass({
 		var defaultTextHeight = 60;
 		var textHeight = this.state.inputTextHeight || 0;
 		var height = Math.max(defaultTextHeight, textHeight);
-	    this.props.onRenderingInputHeight(height);  
+	    this.props.onRenderingInputHeight(height);
 	},
 	render: function() {
-		var defaultTextHeight = 60;
+		var defaultTextHeight = 70;
 		var textHeight = this.state.inputTextHeight || 0;
 		var height = Math.max(defaultTextHeight, textHeight);
 
@@ -89,7 +89,7 @@ var ChatInput = React.createClass({
 		var uploadButton = <FontIcon className="material-icons">attach_file</FontIcon>;
 		if( this.state.isUploading )
 			uploadButton = <CircularProgress color="#777" size={0.5} />;
-		
+
 		var className = "todo-input";
 		if(this.state.isFocused){
 			className += " focused";
@@ -97,9 +97,9 @@ var ChatInput = React.createClass({
 		return (
 			<div className={className} style={{height: height + 'px'}}>
 				<input ref="file" type="file" onChange={this.onFileChange} className="file-input" />
-				<Textarea 
+				<Textarea
 					placeholder="Quick reply"
-					id="chat-input" 
+					id="chat-input"
 					ref="input"
 					onFocus={this.onFocus}
 					onBlur={this.onBlur}

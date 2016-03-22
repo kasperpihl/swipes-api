@@ -59,7 +59,7 @@ html, body, #content {
         //overflow-x: hidden;
     }
 }
-$inputHeight: 60px;
+$inputHeight: 70px;
 
 .card-container{
     position:relative;
@@ -185,7 +185,7 @@ $inputHeight: 60px;
             font-weight: 400;
         }
     }
-    
+
 }
 
 .right-side-container {
@@ -587,49 +587,75 @@ $inputHeight: 60px;
 
   textarea {
     width: calc(100% - 2 * #{$inputHeight});
-    resize:none;
+    resize: none;
     outline: none;
     min-height: 100%;
     margin-left: $inputHeight;
     font-size: 13px;
-    font-weight: 200;
-    padding: 22px 5px;
-    color: $deepBlue-60;
+    padding: 27px 5px;
+    padding-left: 25px;
+    font-weight: 300;
+    color: $deepBlue-80;
     letter-spacing: 1px;
+    font-family: 'Roboto';
+    line-height: 15px;
     transition: .1s ease-in-out;
+
+    &::-webkit-input-placeholder {
+       color: $deepBlue-60;
+       font-family: 'Roboto';
+       font-weight: 400;
+    }
   }
   &.focused{
     background-color: $blue-100;
+
     textarea{
-        &::selection{
-            background-color: white;
-            color: $blue-120;
-        }
-        &::-moz-selection{
-            background-color: white;
-            color: $blue-120;
-        }
+      color: white;
+
+      &::selection{
+          background-color: white;
+          color: $blue-120;
+      }
+      &::-moz-selection{
+          background-color: white;
+          color: $blue-120;
+      }
+
+      &::-webkit-input-placeholder {
+         color: white;
+         font-family: 'Roboto';
+         font-weight: 300;
+      }
+      &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
         color: white;
-        &::-webkit-input-placeholder { /* WebKit browsers */
-            color:    white;
-        }
-        &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-            color:    white;
-        }
-        &::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color:    white;
-        }
-        &:-ms-input-placeholder { /* Internet Explorer 10+ */
-            color:    white;
-        }
+        font-family: 'Roboto';
+        font-weight: 300;
+      }
+      &::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: white;
+        font-family: 'Roboto';
+        font-weight: 300;
+      }
+      &:-ms-input-placeholder { /* Internet Explorer 10+ */
+        color: white;
+        font-family: 'Roboto';
+        font-weight: 300;
+      }
     }
     .action-button {
-        &:hover {
-            background-color: $blue-120;
-        }
-        .material-icons {
-            color: white !important;
-        }
+      background-color: $deepBlue-80;
+
+      &.attach-icon {
+        background-color: $blue-120;
+      }
+
+      &:hover {
+          background-color: $deepBlue-60;
+      }
+      .material-icons {
+          color: white !important;
+      }
     }
   }
 }
