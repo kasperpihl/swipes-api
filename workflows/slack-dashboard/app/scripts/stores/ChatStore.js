@@ -92,7 +92,7 @@ var ChatStore = Reflux.createStore({
 				this.closeWebSocket();
 				this.start();
 			}
-		}.bind(this), 1000);
+		}.bind(this), 4000);
 	},
 	apiPrefixForChannel:function(channel){
 		if(channel.is_im){
