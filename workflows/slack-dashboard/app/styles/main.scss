@@ -60,6 +60,7 @@ html, body, #content {
     }
 }
 $inputHeight: 70px;
+$inputButtonWidth: 50px; 
 
 .card-container{
     position:relative;
@@ -563,7 +564,7 @@ $inputHeight: 70px;
   }
   .send-button, .attach-icon {
     cursor: pointer;
-    width: $inputHeight;
+    width: $inputButtonWidth;
     height: 100%;
     position: absolute;
     top: 0;
@@ -586,14 +587,14 @@ $inputHeight: 70px;
   }
 
   textarea {
-    width: calc(100% - 2 * #{$inputHeight});
+    width: calc(100% - 2 * #{$inputButtonWidth});
     resize: none;
     outline: none;
     min-height: 100%;
-    margin-left: $inputHeight;
+    margin-left: $inputButtonWidth;
     font-size: 13px;
     padding: 27px 5px;
-    padding-left: 25px;
+    padding-left: 7px;
     font-weight: 300;
     color: $deepBlue-80;
     letter-spacing: 1px;
@@ -644,18 +645,8 @@ $inputHeight: 70px;
       }
     }
     .action-button {
-      background-color: $deepBlue-80;
-
-      &.attach-icon {
-        background-color: $blue-120;
-
-        &:hover {
-          background-color: darken($blue-120, 10%);
-        }
-      }
-
       &:hover {
-          background-color: $deepBlue-60;
+          background-color: $blue-120;
       }
       .material-icons {
           color: white !important;
