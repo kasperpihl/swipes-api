@@ -262,6 +262,21 @@ $inputHeight: 60px;
     }
   }
 }
+.file-container{
+    margin-top: 3px;
+    margin-left: 5px;
+    margin-bottom: 7px;
+    .image-container{
+        .image-bg{
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        img{
+            opacity: 0;
+            border-radius: 5px;
+        }
+    }
+}
 .chat-attachment{
     max-width: 650px;
     .attachment-pretext{

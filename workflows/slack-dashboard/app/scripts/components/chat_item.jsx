@@ -102,13 +102,11 @@ var ChatMessage = React.createClass({
 		return attachments;
 	},
 	renderFile: function(){
-		if(!this.props.data.file){
+		var file = this.props.data.file;
+		if(!file){
 			return;
 		}
-		// T_TODO: Render files here
-		// Check file structure here by switching between channels
-		// Then check slack client in same channels to get idea about how they are structured
-		// console.log('file found', this.props.data.file);
+		return <ChatMessage.File key={file.id} data={file} />
 	},
 	renderMessage:function(message){
 		try{
@@ -150,10 +148,30 @@ var ChatMessage = React.createClass({
 });
 
 ChatMessage.File = React.createClass({
+	renderPreview: function(){
+		if(this.props.data.thumb_360){
+			return this.renderImagePreview();
+		}
+		else{
+			return this.renderDefaultPreview();
+		}
+	},
+	renderImagePreview: function(){
+		return (
+			<div className="image-container">
+				<div className="image-bg" style={{width: this.props.data.thumb_360_w + 'px', height: this.props.data.thumb_360_h, backgroundImage: 'url(' + this.props.data.thumb_360 + ')'}}>
+					<img src={this.props.data.thumb_360} />
+				</div>
+			</div>
+		);
+	},
+	renderDefaultPreview: function(){
+
+	},
 	render: function(){
 		return (
 			<div className="file-container">
-
+				{this.renderPreview()}
 			</div>
 		);
 	}
