@@ -217,8 +217,14 @@ var CardLoader = React.createClass({
 		this.isResizing = false;
 		$('.active-app').removeClass('dragging');
 	},
+	onWindowFocus: function(e){
+		if(this.apiCon){
+			this.apiCon.callListener("event", {type: 'window.focus'});
+		}
+	},
 	componentWillMount() {
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
+		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
 	    window.addEventListener('mouseup', this.onMouseUp);
     	window.addEventListener('mousemove', this.onMouseMove);
 	},

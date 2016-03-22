@@ -70,6 +70,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onReady = function(callback){
 		self._listeners.add("init", callback);
 	};
+	SwipesAppSDK.prototype.onWindowFocus = function(callback){
+		self._listeners.add('window.focus', callback);
+	};
 	SwipesAppSDK.prototype.onMenuButton = function(callback){
 		self._listeners.add('menu.button', callback);
 	};
@@ -82,6 +85,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onShareTransmit = function(callback){
 		self._listeners.add("share.transmit", callback);
 	};
+
 	SwipesAppSDK.prototype.api = {
 		request: function(options, data, callback){
 			return self._client.callSwipesApi(options, data, callback);

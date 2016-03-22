@@ -7,6 +7,8 @@ var HTML5Backend = require('react-dnd-html5-backend');
 
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
+var eventActions = require('../actions/EventActions');
+
 var CardLoader = require('./card_loader');
 var Card = require('material-ui/lib/card/card');
 
@@ -24,16 +26,20 @@ var Workspace = React.createClass({
         var height = document.getElementById("actual-app").clientHeight;
         this.bouncedAdjusting(width,height);
     },
+    onWindowFocus() {
+        eventActions.fire('window.focus');
+    },
     componentDidMount(prevProps, prevState) {
         this.bouncedAdjusting = _.debounce(WorkspaceActions.adjustForScreenSize, 300);
         this.runAdjustments();
-        
+        window.addEventListener("focus", this.onWindowFocus);
         window.addEventListener("resize", this.runAdjustments);
     },
     componentDidUpdate(prevProps, prevState) {
         this.runAdjustments();
     },
     componentWillUnmount() {
+        window.removeEventListener("focus", this.onWindowFocus);
         window.removeEventListener("resize", this.runAdjustments);
     },
     render() {
