@@ -66,7 +66,7 @@ var CardLoader = React.createClass({
 			else if (message.command === "share.request") {
 				var shareList = WorkflowStore.shareList();
 				var modalData = {
-					title: "Add a workflow",
+					title: "Share to",
 					emptyText: "We're working on adding more workflows.",
 					rows: shareList
 				};

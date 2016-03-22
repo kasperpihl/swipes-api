@@ -12,7 +12,7 @@ var ListModal = React.createClass({
 
 	},
 	render: function () {
-		
+
 		var options = this.props.data.options;
 		if(!options || typeof options !== 'object'){
 			options = {};
@@ -47,7 +47,7 @@ ListModal.Row = React.createClass({
 	},
 	render:function(){
 		var data = this.props.data;
-
+		console.log('here is data ' + data.name);
 		// Setting the name/title
 		var name = this.props.data.name;
 
@@ -57,12 +57,12 @@ ListModal.Row = React.createClass({
 			image = <img src={data.imageUrl} />
 		}
 
-		
+
 		return (
 			<li onClick={this.onClick}>
 				{image}
 				<h3 className="name">{name}</h3>
-				
+
 			</li>
 		);
 	}

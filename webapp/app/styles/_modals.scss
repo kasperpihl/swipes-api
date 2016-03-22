@@ -53,10 +53,18 @@ $break-mid: 650px;
 .list-results{
 	li{
 		h3{
-			font-size:15px;
-			padding:10px;
-			padding-left: 10%;
+			height: 70px;
+			line-height: 70px;
+			color: $deepBlue-60;
+			font-size: 14px;
+			padding-left: 5%;
 			font-weight: 400;
+			border-bottom: 1px solid $studioGray-20;
+
+			&:hover {
+				color: $deepBlue-100;
+				background-color: $studioGray-20;
+			}
 		}
 	}
 	background-color: white;
@@ -65,15 +73,30 @@ $break-mid: 650px;
 	width: 400px;
 	min-height: 100px;
 	background-color: $white-background;
-	border-radius: 10px;
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 1px 6px rgba(0,0,0,0.23);
+	border-radius: 3px;
+	box-shadow: $swipes-shadow-two;
+	overflow: hidden;
 	outline: none;
-	padding-top: 1px;
-	padding-bottom: 50px;
+	opacity: 0;
+	transform: translateY(50px);
+	animation: pullUp .25s ease-out forwards;
+
+	@keyframes pullUp {
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	h2 {
-		margin: 25px 10%;
-		font-size: 16px;
-		color: $sidebar-dark-color;
+		color: $deepBlue-80;
+		height: 50px;
+		font-size: 13px;
+		line-height: 50px;
+		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		border-bottom: 1px solid $studioGray-20;
 	}
 	.message{
 		margin: 5px 10%;
@@ -366,19 +389,19 @@ $break-mid: 650px;
 							//text-align: center;
 							line-height: 42px;
 						}
-                        
+
                         img {
                             width: 30px;
                             height: 30px;
                             border-radius: 50%;
                             //margin-left: 5px;
                             margin-top: 4px;
-                            
-                            // CSS sucks so bad sometimes, so I just realized that text-align: center on the parent element centers this image as well. 
+
+                            // CSS sucks so bad sometimes, so I just realized that text-align: center on the parent element centers this image as well.
                         }
 					}
-                    
-                    
+
+
 
                     .mention {
                         position: absolute;
