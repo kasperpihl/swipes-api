@@ -648,6 +648,10 @@ $inputHeight: 70px;
 
       &.attach-icon {
         background-color: $blue-120;
+
+        &:hover {
+          background-color: darken($blue-120, 10%);
+        }
       }
 
       &:hover {
