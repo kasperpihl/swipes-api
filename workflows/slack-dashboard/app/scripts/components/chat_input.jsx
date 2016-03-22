@@ -98,6 +98,7 @@ var ChatInput = React.createClass({
 			<div className={className} style={{height: height + 'px'}}>
 				<input ref="file" type="file" onChange={this.onFileChange} className="file-input" />
 				<Textarea 
+					placeholder="Quick reply"
 					id="chat-input" 
 					ref="input"
 					onFocus={this.onFocus}

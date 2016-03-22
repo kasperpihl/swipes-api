@@ -591,8 +591,9 @@ $inputHeight: 60px;
     outline: none;
     min-height: 100%;
     margin-left: $inputHeight;
-    font-size: 14px;
-    padding: 21px 5px;
+    font-size: 13px;
+    font-weight: 200;
+    padding: 22px 5px;
     color: $deepBlue-60;
     letter-spacing: 1px;
     transition: .1s ease-in-out;
@@ -609,10 +610,17 @@ $inputHeight: 60px;
             color: $blue-120;
         }
         color: white;
-        &::-webkit-input-placeholder {
-            color: $deepBlue-60;
-            font-family: 'Roboto';
-            font-weight: 400;
+        &::-webkit-input-placeholder { /* WebKit browsers */
+            color:    white;
+        }
+        &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:    white;
+        }
+        &::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:    white;
+        }
+        &:-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:    white;
         }
     }
     .action-button {
