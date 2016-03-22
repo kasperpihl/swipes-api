@@ -29,10 +29,14 @@ var Workspace = React.createClass({
     onWindowFocus() {
         eventActions.fire('window.focus');
     },
+    onWindowBlur() {
+        eventActions.fire('window.blur');
+    },
     componentDidMount(prevProps, prevState) {
         this.bouncedAdjusting = _.debounce(WorkspaceActions.adjustForScreenSize, 300);
         this.runAdjustments();
         window.addEventListener("focus", this.onWindowFocus);
+        window.addEventListener("blur", this.onWindowBlur);
         window.addEventListener("resize", this.runAdjustments);
     },
     componentDidUpdate(prevProps, prevState) {
@@ -40,6 +44,7 @@ var Workspace = React.createClass({
     },
     componentWillUnmount() {
         window.removeEventListener("focus", this.onWindowFocus);
+        window.removeEventListener("blur", this.onWindowBlur);
         window.removeEventListener("resize", this.runAdjustments);
     },
     render() {

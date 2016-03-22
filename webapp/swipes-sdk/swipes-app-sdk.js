@@ -70,8 +70,11 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onReady = function(callback){
 		self._listeners.add("init", callback);
 	};
-	SwipesAppSDK.prototype.onWindowFocus = function(callback){
-		self._listeners.add('window.focus', callback);
+	SwipesAppSDK.prototype.onAppFocus = function(callback){
+		self._listeners.add('app.focus', callback);
+	};
+	SwipesAppSDK.prototype.onAppBlur = function(callback){
+		self._listeners.add('app.blur', callback);
 	};
 	SwipesAppSDK.prototype.onMenuButton = function(callback){
 		self._listeners.add('menu.button', callback);

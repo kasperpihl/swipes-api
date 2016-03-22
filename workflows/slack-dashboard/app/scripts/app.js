@@ -26,7 +26,7 @@ swipes.onShareTransmit(function(e) {
 		}
 	}
 });
-swipes.onWindowFocus(function(e){
+swipes.onAppFocus(function(e){
 	chatActions.checkSocket(e);
 });
 

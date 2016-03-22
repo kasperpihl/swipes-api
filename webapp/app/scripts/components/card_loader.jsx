@@ -219,11 +219,17 @@ var CardLoader = React.createClass({
 	},
 	onWindowFocus: function(e){
 		if(this.apiCon){
-			this.apiCon.callListener("event", {type: 'window.focus'});
+			this.apiCon.callListener("event", {type: 'app.focus'});
+		}
+	},
+	onWindowBlur: function(e){
+		if(this.apiCon){
+			this.apiCon.callListener("event", {type: 'app.blur'});
 		}
 	},
 	componentWillMount() {
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
+		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
 	    window.addEventListener('mouseup', this.onMouseUp);
     	window.addEventListener('mousemove', this.onMouseMove);
