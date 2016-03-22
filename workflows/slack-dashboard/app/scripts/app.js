@@ -74,6 +74,7 @@ swipes.onMenuButton(function(){
 		swipes.modal.leftNav({items: navItems}, function(res, err){
 			if(res){
 				chatActions.setChannel(res);
+				document.getElementById('chat-input').focus();
 				var newSettings = {channelId: res};
 				swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings})
 			}
