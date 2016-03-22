@@ -15,6 +15,11 @@ var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat')],
 	shouldScrollToBottom: true,
 	hasRendered: false,
+	getInitialState() {
+	    return {
+	        inputHeight:60  
+	    };
+	},
 	onScroll: function(e){
 		var contentHeight = $('.chat-list').outerHeight()
 		var scrollPos = $('.chat-list-container').scrollTop()
@@ -97,8 +102,15 @@ var ChatList = React.createClass({
 			});
 		}
 	},
+	onRenderInputHeight: function(height){
+		if(height !== this.state.inputHeight){
+			this.shouldAnimateScroll = true;
+			this.shouldScrollToBottom = true;
+			this.setState({inputHeight: height});
+		}
+	},
 	renderInput: function(){
-		return <ChatInput onSendingMessage={this.onSendingMessage} />
+		return <ChatInput onRenderingInputHeight={this.onRenderInputHeight} onSendingMessage={this.onSendingMessage} />
 	},
 	render: function() {
 		if(!swipes.info.workflow){
@@ -113,7 +125,7 @@ var ChatList = React.createClass({
 		}
 		// K_TODO: Test if this works without channel
 		return (
-			<div className="card-container">
+			<div className="card-container" style={{paddingBottom: this.state.inputHeight + 'px' }}>
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
 					<div className="chat-list">

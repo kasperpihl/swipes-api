@@ -98,7 +98,6 @@ var ChatStore = Reflux.createStore({
 		}
 		
 	},
-	
 	sortMessages: function(){
 
 		var self = this;
@@ -219,7 +218,7 @@ var ChatStore = Reflux.createStore({
 		if(msg.type === 'message'){
 			var me = UserStore.me();
 			if(msg.channel){
-				console.log('msg', msg);
+				//console.log('msg', msg);
 				var channel = ChannelStore.get(msg.channel);
 				var me = UserStore.me();
 
@@ -271,7 +270,19 @@ var ChatStore = Reflux.createStore({
 			
 			ChannelStore.updateChannel(msg.channel, updateObj);			
 		}
-		console.log('slack socket handler', msg.type, msg);
+		//console.log('slack socket handler', msg.type, msg);
+	},
+	onUploadFile: function(file, callback){
+		var token = swipes.info.workflow.slackToken;
+		var formData = new FormData();
+		formData.append("token", token);
+		formData.append("channels", this.get('channelId'));
+		formData.append("filename", file.name);
+		formData.append("title", file.name);
+		formData.append("file", file);
+		this.__tempSlackRequest('files.upload', {}, function(result, error){
+			callback(result, error);
+		}.bind(this), formData);
 	},
 	onSendMessage: function(message, callback){
 		var self = this;
@@ -295,6 +306,39 @@ var ChatStore = Reflux.createStore({
 			self.setMessages(_.sortBy(res.data.messages, 'ts'));
 		}).catch(function(error){
 		});
+	},
+	/* T_INFO // We should replace these once we can upload directly through our service
+	// Though, the request might come in handy for how to send the request since they use formData for files.
+	*/
+
+	__tempSlackRequest:function(command, options, callback, formData){
+		var url = 'https://slack.com/api/' + command;
+		var token = swipes.info.workflow.slackToken;
+		options = options || {};
+		options.token = swipes
+		var settings = {
+			url : url,
+			type: "POST",
+			success: function(res){
+				console.log('res slack upload', res);
+				callback(true); 
+			},
+			error: function(err){ 
+				console.log('err slack upload', err);
+				callback(false, err);
+			},
+			crossDomain: true,
+			context: this,
+			data: options,
+			processData: true
+		};
+		if(formData){
+			settings.data = formData;
+			settings.processData = false;
+			settings.contentType = false;
+
+		}
+		$.ajax(settings);
 	}
 });
 

@@ -13,6 +13,7 @@
     "react-dom": "^0.14.3",
     "react-emoji": "^0.4.1",
     "react-tap-event-plugin": "^0.2.1",
+    "react-textarea-autosize": "^3.3.0",
     "reflux": "~0.3.0",
     "reflux-model-extension": "~0.0.2",
     "underscore": "^1.8.3"

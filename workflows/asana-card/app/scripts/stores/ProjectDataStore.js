@@ -78,12 +78,12 @@ var fetchData = function () {
 			return;
 		}
 
-		console.log('TASKS');
+		/*console.log('TASKS');
 		console.log(res[0].data);
 		console.log('USERS');
 		console.log(res[1].data);
 		console.log('PROJECTS');
-		console.log(res[2].data);
+		console.log(res[2].data);*/
 
 		tasks = res[0].data;
 		users = res[1].data;
@@ -199,7 +199,6 @@ var ProjectDataStore = Reflux.createStore({
 		})
 		.then(function () {
 			swipes.analytics.action('Assign person');
-			console.log('Done!');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -226,7 +225,6 @@ var ProjectDataStore = Reflux.createStore({
 		})
 		.then(function () {
 			swipes.analytics.action('Complete task');
-			console.log('Done!');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -253,7 +251,7 @@ var ProjectDataStore = Reflux.createStore({
 			completed: completed
 		})
 		.then(function () {
-			console.log('Done!');
+			swipes.analytics.action('Uncomplete task');
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -279,7 +277,6 @@ var ProjectDataStore = Reflux.createStore({
 		})
 		.then(function () {
 			swipes.analytics.action('Delete task');
-			console.log('Done!');
 		})
 		.catch(function (error) {
 			console.log(error);
