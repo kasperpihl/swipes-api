@@ -8,6 +8,7 @@ var IconButton = require('material-ui/lib/icon-button');
 var TextField = require('material-ui/lib/text-field');
 
 var CircularProgress = require('material-ui/lib/circular-progress');
+var Textarea = require('react-textarea-autosize');
 
 var ChatInput = React.createClass({
 	mixins: [ChatInputStore.connect()],
@@ -20,24 +21,22 @@ var ChatInput = React.createClass({
 	},
 	onKeyUp: function(e){
 		if(e.keyCode === 27){
-			this.refs.textfield.blur();
+			this.refs.input.blur();
 		}
 		if (e.keyCode === 13 && !e.shiftKey ) {
-			var message = this.refs.textfield.value;
-			console.log(message);
+			var message = this.refs.input.value;
 			if(message && message.length > 0 && !this.state.isSending){
 				this.sendMessage(message);
 			}
 		}
 	},
 	onClick: function(){
-		console.log('clicked');
 		var message = this.state.inputValue;
 		if(!message.length){
 			message = ":+1:";
 		}
 		this.sendMessage(message);
-		this.refs.textfield.focus();
+		this.refs.input.focus();
 	},
 	onAttach: function(){
 		if(this.state.isUplading){
@@ -65,29 +64,67 @@ var ChatInput = React.createClass({
 	onChange: function(event){
 		chatInputActions.changeInputValue(event.target.value);
 	},
+	onHeightChange: function(height){
+		chatInputActions.changeInputTextHeight(height);
+	},
+	onFocus:function(){
+		chatInputActions.focus();
+	},
+	onBlur: function(){
+		chatInputActions.blur();
+	},
+	componentDidUpdate(prevProps, prevState) {
+		var defaultTextHeight = 60;
+		var textHeight = this.state.inputTextHeight || 0;
+		var height = Math.max(defaultTextHeight, textHeight);
+	    this.props.onRenderingInputHeight(height);  
+	},
 	render: function() {
+		var defaultTextHeight = 60;
+		var textHeight = this.state.inputTextHeight || 0;
+		var height = Math.max(defaultTextHeight, textHeight);
+
 		var sendIcon = (this.state.inputValue.length > 0) ? "send" : "thumb_up";
 		var disabled = this.state.isSending ? true : false;
 		var uploadButton = <FontIcon className="material-icons">attach_file</FontIcon>;
 		if( this.state.isUploading )
 			uploadButton = <CircularProgress color="#777" size={0.5} />;
+		
+		var className = "todo-input";
+		if(this.state.isFocused){
+			className += " focused";
+		}
 		return (
-			<div className="todo-input">
+			<div className={className} style={{height: height + 'px'}}>
 				<input ref="file" type="file" onChange={this.onFileChange} className="file-input" />
-				<div onClick={this.onAttach} className="attach-icon">
+				<Textarea 
+					id="chat-input" 
+					ref="input"
+					onFocus={this.onFocus}
+					onBlur={this.onBlur}
+					onChange={this.onChange}
+					onKeyDown={this.onKeyDown}
+	     			onKeyUp={this.onKeyUp}
+					onHeightChange={this.onHeightChange}
+					value={this.state.inputValue}
+					minRows={1}
+					maxRows={6}>
+				</Textarea>
+				<div onClick={this.onAttach} className="action-button attach-icon">
 					{uploadButton}
 				</div>
-				<input id="chat-input" ref="input" type="text" placeholder="Quick reply" onChange={this.onChange}
-	      value={this.state.inputValue}
-	      ref="textfield"
-	      onKeyDown={this.onKeyDown}
-	      onKeyUp={this.onKeyUp}/>
-				<div onClick={this.onClick} className="send-button">
+				<div onClick={this.onClick} className="action-button send-button">
 					<FontIcon className="material-icons">{sendIcon}</FontIcon>
 				</div>
 			</div>
 		);
 	}
 });
-
+/*
+<input id="chat-input" ref="input" type="text" placeholder="Quick reply" onChange={this.onChange}
+	      value={this.state.inputValue}
+	      ref="textfield"
+	      onKeyDown={this.onKeyDown}
+	      onKeyUp={this.onKeyUp}/>
+ */
 module.exports = ChatInput;

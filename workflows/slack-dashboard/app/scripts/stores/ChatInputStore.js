@@ -9,6 +9,15 @@ var ChatInputStore = Reflux.createStore({
 			inputValue: ''
 		}
 	},
+	onBlur: function(){
+		this.set('isFocused', false);
+	},
+	onFocus: function(){
+		this.set('isFocused', true);
+	},
+	onChangeInputTextHeight:function(newHeight){
+		this.set('inputTextHeight', newHeight);
+	},
   onChangeInputValue: function (newValue) {
     this.set('inputValue', newValue);
   }
