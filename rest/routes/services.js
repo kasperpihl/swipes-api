@@ -23,10 +23,9 @@ router.post('/services.request', serviceUtil.validateData, serviceUtil.getServic
 		user: {userId: req.userId},
 		service: {serviceId: service.id}
 	};
-
 	file.request(options, function (err, result) {
 		if (err) {
-			return next(err);
+			return res.status(200).json({ok:false, err: err});
 		}
 
 		res.send({ok: true, data: result});
@@ -49,7 +48,7 @@ router.post('/services.authorize', serviceUtil.getService, serviceUtil.requireSe
 
 	file.authorize({userId: req.userId}, (error, result) => {
 		if (error) {
-			return next(error);
+			return res.status(200).json({ok:false, err: error});
 		}
 
 		return res.status(200).json({ok: true, result: result});

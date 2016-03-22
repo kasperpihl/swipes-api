@@ -3,7 +3,6 @@ var _			= require('underscore');
 var SlackConnector = {};
 SlackConnector.request = function(token, path, params, callback){
 	var fullURL = "/api/" + path;
-	console.log(path, params);
 	var sign = '?'
 	if(typeof params === 'object'){
 		for(var key in params){
@@ -21,7 +20,6 @@ SlackConnector.request = function(token, path, params, callback){
 		headers: { 'Content-Type': 'application/json' }
 	};
 	try {
-		console.log(options);
 		var req = https.request(options, function(res) {
 			res.setEncoding('utf8');
 			var output = '';
@@ -40,9 +38,13 @@ SlackConnector.request = function(token, path, params, callback){
 					callback(jsonObject.error);
 	        });
 		});
+		req.on('error', function(err){
+			callback(err);
+		});
 		req.end();
 	}
 	catch(err) {
+		console.log('eeeeee', err);
 		callback(err);
 	}
 }
