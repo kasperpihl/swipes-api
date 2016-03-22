@@ -48,13 +48,14 @@ var Services = React.createClass({
         return (
         	<div className="scroll-container">
 	            <div className="services-wrapper">
-	                <h6>Available Flows</h6>
 	                <Card className="services-card">
-	                    {this.renderServicesToConnect()}
+										<div className="services-card-title">Connect new Services</div>
+                    {this.renderServicesToConnect()}
 	                </Card>
-	                <h6>Connected Flows</h6>
+
 	                <Card className="services-card">
-	                    {this.renderConnectedServices()}
+										<div className="services-card-title">Connected Services</div>
+                    {this.renderConnectedServices()}
 	                </Card>
 	            </div>
 	        </div>
@@ -71,7 +72,7 @@ Services.ConnectRow = React.createClass({
 		return(
 			<div className="row connect">
 				<h6>{this.props.data.title}</h6>
-                <FlatButton onClick={this.clickedAuthorize} label="Connect" style={{color: '#4BAE4F'}}/>
+				<div className="services-button" onClick={this.clickedAuthorize}>Connect</div>
 			</div>
 		);
 	}
@@ -87,7 +88,7 @@ Services.ConnectedRow = React.createClass({
 		return(
 			<div className="row connected">
 				<h6>{this.props.data.title}</h6>
-				<FlatButton onClick={this.clickedRemove} label="Disconnect" />
+				<div className="services-button" onClick={this.clickedRemove}>Disconnect</div>
 			</div>
 		);
 	}
