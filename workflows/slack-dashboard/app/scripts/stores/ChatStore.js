@@ -218,7 +218,7 @@ var ChatStore = Reflux.createStore({
 		if(msg.type === 'message'){
 			var me = UserStore.me();
 			if(msg.channel){
-				console.log('msg', msg);
+				//console.log('msg', msg);
 				var channel = ChannelStore.get(msg.channel);
 				var me = UserStore.me();
 
@@ -270,7 +270,7 @@ var ChatStore = Reflux.createStore({
 			
 			ChannelStore.updateChannel(msg.channel, updateObj);			
 		}
-		console.log('slack socket handler', msg.type, msg);
+		//console.log('slack socket handler', msg.type, msg);
 	},
 	onUploadFile: function(file, callback){
 		var token = swipes.info.workflow.slackToken;

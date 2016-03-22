@@ -87,7 +87,6 @@ var WorkspaceStore = Reflux.createStore({
 		this.onAdjustForScreenSize();
 	},
 	onAdjustForScreenSize: function(screenWidth, screenHeight){
-		console.log('adjusting');
 		var minimumWidthOnScreen = 100;
 		var minimumHeightOnScreen = 50;
 		var paddingForAutoAdjusting = 5;

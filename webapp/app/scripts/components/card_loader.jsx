@@ -120,7 +120,7 @@ var CardLoader = React.createClass({
 
 		// Add a listeners for share
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
-		console.log('autho', userStore.me().services);
+		
 		var workflow = this.state.workflow;
 
 		// K_TODO || T_TODO : WARNING, This is a super hack hahaha
