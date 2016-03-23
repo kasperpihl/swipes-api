@@ -121,12 +121,7 @@ var ChatMessage = React.createClass({
 		var matches = text.match(/<(.*?)>/g);
 
 		if (text && (matches === null || matches.length <= 0)) {
-			return <div className="share-icon">
-				<FontIcon
-					className="material-icons share"
-					onClick={this.share.bind(this, text)}
-				/>
-			</div>
+			return <ChatMessage.ShareComp shareCallback={this.share} text={text}/>
 		}
 	},
 	render: function () {
@@ -238,6 +233,54 @@ ChatMessage.Attachment = React.createClass({
 	}
 });
 
+
+// onClick={this.share.bind(this, text)}
+ChatMessage.ShareComp = React.createClass({
+	onMouseDown: function(e){
+		// Stop default + propagation to not start marking text etc and forward event
+		e.stopPropagation();
+		e.preventDefault();
+
+		// Simple time test, if after 300 ms mouse up or click hasn't been fired, start the drag.
+		this.isTestingForDrag = true;
+		setTimeout(this.testForDrag, 300);
+	},
+	testForDrag:function(){
+		if(this.isTestingForDrag){
+			this.activateDrag();
+		}
+	},
+	activateDrag:function(){
+		this.isTestingForDrag = false;
+		console.log('let the dragging begin');
+		// T_TODO: Pass on the right data for the drag (should be the same data as for share)
+		swipes.dot.startDrag("insertShareDataAsObject...", function(){
+			console.log('callback from drag');
+		})
+	},
+	
+	onMouseUp:function(e){
+		// If mouse goes up on the item (equal to a click), no drag needed
+		this.isTestingForDrag = false;
+	},
+	onClick: function(e){
+		// If the dot is clicked, make sure dot is not activated.
+		this.isTestingForDrag = false;
+		// T_TODO: This should be replaced with activating the dot menu...
+		this.props.shareCallback(this.props.text);
+	},
+	onDragStart:function(e){
+		// Test if dragging is relevant (if drag happens after timer, to not double start)
+		this.testForDrag();
+	},
+	render: function(){
+		return (<div className="share-icon" onDragStart={this.onDragStart} onMouseUp={this.onMouseUp} onMouseDown={this.onMouseDown} onClick={this.onClick}>
+			<FontIcon
+				className="material-icons share"
+			/>
+		</div>);
+	}
+});
 
 
 

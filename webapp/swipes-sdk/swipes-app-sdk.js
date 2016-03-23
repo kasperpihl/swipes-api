@@ -355,6 +355,11 @@ var SwipesAppSDK = (function() {
 			self._client.callListener("actions.openURL", {url: url});
 		}
 	};
+	SwipesAppSDK.prototype.dot = {
+		startDrag: function(data, callback){
+			self._client.callListener('actions.startDrag', data, callback);
+		}
+	}
 
 	// API for handling calls from main app
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function (connector, message, callback) {
