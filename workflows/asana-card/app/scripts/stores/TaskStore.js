@@ -7,7 +7,9 @@ var TaskStore = Reflux.createStore({
   getInitialState: function () {
     return {
       expandDesc: false,
-      expandedState: 'keyboard_arrow_down'
+      expandedState: 'keyboard_arrow_down',
+      descEditingState: 'inactive',
+      titleEditingState: 'inactive'
     }
   },
   onExpandDesc: function (newValue) {

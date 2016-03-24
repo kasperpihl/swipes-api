@@ -120,7 +120,7 @@ var CardLoader = React.createClass({
 
 		// Add a listeners for share
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
-		
+
 		var workflow = this.state.workflow;
 
 		// K_TODO || T_TODO : WARNING, This is a super hack hahaha
@@ -132,7 +132,7 @@ var CardLoader = React.createClass({
 				workflow.slackToken = serv.authData.access_token;
 			}
 		}
-		
+
 
 		var initObj = {
 			type: "init",
@@ -266,14 +266,14 @@ var CardLoader = React.createClass({
 		if(this.state.titleFromCard){
 			title = this.state.titleFromCard;
 		}
-		var titleObj = <span style={{cursor: 'pointer'}} onTouchTap={this.onCardMenuButtonClick}>{title}</span>
+		var titleObj = <span style={{cursor: 'pointer'}} onClick={this.onCardMenuButtonClick}>{title}</span>
 		var fontObj = <FontIcon className="material-icons">arrow_drop_down</FontIcon>;
 		if(this.state.badge){
 			fontObj = (<Badge
 				badgeContent={this.state.badge}
 				style={{padding: 0, margin:0, cursor: 'pointer'}}
 				badgeStyle={{backgroundColor: 'red', top: 0, color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
-					<FontIcon onTouchTap={this.onCardMenuButtonClick} className="material-icons">arrow_drop_down</FontIcon>
+					<FontIcon onClick={this.onCardMenuButtonClick} className="material-icons">arrow_drop_down</FontIcon>
 				</Badge>);
 		}
 		return <div className="card-app-bar">
@@ -289,8 +289,8 @@ var CardLoader = React.createClass({
 					iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
 					anchorOrigin={{horizontal: 'right', vertical: 'top'}}
 					targetOrigin={{horizontal: 'right', vertical: 'top'}}>
-					<MenuItem primaryText="Rename" onTouchTap={this.onRenameWorkflow} />
-					<MenuItem primaryText="Remove" onTouchTap={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
+					<MenuItem primaryText="Rename" onClick={this.onRenameWorkflow} />
+					<MenuItem primaryText="Remove" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
 				</IconMenu>
 			</div>
 		</div>

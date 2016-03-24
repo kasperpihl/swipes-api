@@ -63,7 +63,7 @@ var Topbar = React.createClass({
 	},
 
 	render: function() {
-		var title = (document.location.pathname.startsWith("/workspace")) ? "Workspace" : "Services";
+		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
 		return (
 			<div className="top-bar-container">
 				{this.renderIconMenu()}

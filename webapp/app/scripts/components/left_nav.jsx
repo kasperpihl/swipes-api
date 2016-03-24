@@ -58,7 +58,7 @@ var LeftNavModal = React.createClass({
 				nestedItems = this.renderItems(item.nested, false);
 				style.paddingLeft = "16px";
 			}
-			
+
 
 			var primaryText = <div>{item.title}{badge}</div>;
 
@@ -68,7 +68,7 @@ var LeftNavModal = React.createClass({
 					autoGenerateNestedIndicator={false}
 					nestedListStyle={{padding: 0}}
 					innerDivStyle={{paddingTop: '8px', paddingBottom: '8px', paddingLeft: '0px'}}
-					onTouchTap={this.clicked.bind(this, item.id)}
+					onClick={this.clicked.bind(this, item.id)}
 					primaryText={primaryText}
 					nestedItems={nestedItems}
 					initiallyOpen={initiallyOpen}

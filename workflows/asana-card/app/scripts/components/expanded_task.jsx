@@ -46,6 +46,30 @@ var ExpandedTask = React.createClass({
       )
     }
   },
+  saveDescripton: function() {
+    var newDescription = this.refs.desci.textContent;
+    var taskId = this.props.taskId;
+
+    this.setState({descEditingState: 'inactive'});
+
+    swipes.service('asana').request('tasks.update', {
+      id: taskId,
+      notes: newDescription
+    })
+    // TODO handle errors
+  },
+  saveTitle: function() {
+    var newTitle = this.refs.headerTitle.textContent;
+    var taskId = this.props.taskId;
+
+    this.setState({titleEditingState: 'inactive'});
+
+    swipes.service('asana').request('tasks.update', {
+      id: taskId,
+      name: newTitle
+    })
+    // TODO handle errors
+  },
   renderExpander: function(description) {
 
     if (description && description.length > 0 && description.length > 140) {
@@ -55,31 +79,40 @@ var ExpandedTask = React.createClass({
         </div>
       )
     } else {
-      console.log('no description');
     }
   },
   expandDescription: function () {
     TaskActions.expandDesc(!this.state.expandDesc);
-    console.log('shit better work');
     if (!this.state.expandDesc) {
       this.setState({expandedState: 'keyboard_arrow_up'})
     } else {
       this.setState({expandedState: 'keyboard_arrow_down'})
     }
   },
+  expandDescriptionOnFocus: function() {
+    TaskActions.expandDesc(true);
+    this.setState({expandedState: 'keyboard_arrow_up', descEditingState: 'active'});
+  },
   renderDescription: function (task) {
     var description = task.notes;
 
     if (description.length > MAX_DESC_LEN && !this.state.expandDesc) {
       description = description.substring(0,140) + '...';
+    } else if (!description.length) {
+      description = "No description"
     }
 
     return (
-      <div className="header-description" ref="desci">
-        {description}
+      <div className="header-description" onFocus={this.expandDescriptionOnFocus} onBlur={this.saveDescripton}>
+        <div className={"content-editable-wrapper " + this.state.descEditingState} ref="desci" contentEditable="true">
+          {description}
+        </div>
         {this.renderExpander(description)}
       </div>
     );
+  },
+  editTitle: function() {
+    this.setState({titleEditingState: 'active'});
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
@@ -91,7 +124,7 @@ var ExpandedTask = React.createClass({
           <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>
         </div>
         <div className="header-details">
-          <div className="header-title">{task.name}</div>
+          <div className={"header-title " + this.state.titleEditingState} ref="headerTitle" contentEditable="true" onClick={this.editTitle} onBlur={this.saveTitle}>{task.name}</div>
           {this.renderDescription(task)}
           <div className="header-actions">
             {this.renderCompleteOrUndo(task)}
