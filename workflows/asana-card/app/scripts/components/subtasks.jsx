@@ -87,6 +87,24 @@ var Subtask = React.createClass({
       )
     }
   },
+  saveSubTitle: function() {
+    var newTitle = this.refs.subTitle.textContent;
+    var taskId = this.props.subtask.id;
+
+    this.setState({editingSubTitleState: 'inactive'});
+
+    console.log(newTitle);
+    console.log(taskId);
+
+    swipes.service('asana').request('tasks.update', {
+      id: taskId,
+      name: newTitle
+    })
+    // TODO handle errors
+  },
+  editSubTitle: function() {
+    this.setState({editingSubTitleState: 'active'});
+  },
   render: function () {
     var subtask = this.props.subtask;
     var dotClass = classNames({
@@ -97,7 +115,6 @@ var Subtask = React.createClass({
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
 
-
     return (
       <div className="task-wrapper">
         <div className="task">
@@ -105,7 +122,7 @@ var Subtask = React.createClass({
   					<div className={dotClass}></div>
   				</div>
   				<div className="task-details-wrap">
-              <div className="task-title">{subtask.name}</div>
+              <div className="task-title sub-task" ref="subTitle" onClick={this.editSubTitle} onBlur={this.saveSubTitle} contentEditable="true">{subtask.name}</div>
               <div className="task-details">
                   {this.renderCompleteOrUndo()}
                   <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
