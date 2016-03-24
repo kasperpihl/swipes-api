@@ -63,6 +63,9 @@ var CardLoader = React.createClass({
 			else if (message.command === "actions.openURL"){
 				window.open(data.url, "_blank");
 			}
+			else if (message.command === "actions.startDrag"){
+				this.props.dotDragBegin(data, callback);
+			}
 			else if (message.command === "share.request") {
 				var shareList = WorkflowStore.shareList();
 				var modalData = {
@@ -163,7 +166,7 @@ var CardLoader = React.createClass({
 	onDragMouseDown:function( side, e){
 		this.onMouseDown();
 		// Add dragging class (preventing iframes from receiving mouse events)
-		$('.active-app').addClass('dragging');
+		$('.active-app').addClass('resizing');
 		this.side = side;
 		this.isResizing = true;
 		this.originalClientX = e.clientX;
@@ -177,9 +180,10 @@ var CardLoader = React.createClass({
 		e.preventDefault();
 	},
 	onMouseMove: function(e){
-
 		if(this.isResizing){
-
+			if(!e.which){
+				return this.onMouseUp();
+			}
 			var diffX = (e.clientX - this.originalClientX);
 			var diffY = (e.clientY - this.originalClientY);
 			var newX, newY, newW, newH;
@@ -214,8 +218,10 @@ var CardLoader = React.createClass({
 		}
 	},
 	onMouseUp: function(e){
-		this.isResizing = false;
-		$('.active-app').removeClass('dragging');
+		if(this.isResizing){
+			this.isResizing = false;
+			$('.active-app').removeClass('resizing');
+		}
 	},
 	onWindowFocus: function(e){
 		if(this.apiCon){
@@ -231,13 +237,11 @@ var CardLoader = React.createClass({
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
-	    window.addEventListener('mouseup', this.onMouseUp);
-    	window.addEventListener('mousemove', this.onMouseMove);
+	    eventActions.add("window.mouseup", this.onMouseUp, "card" + this.props.data.id);
+	    eventActions.add("window.mousemove", this.onMouseMove, "card" + this.props.data.id);
 	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
-		window.removeEventListener('mouseup', this.onMouseUp);
-		window.removeEventListener('mousemove', this.onMouseMove);
 	},
 	onRenameWorkflow: function(){
 		var newName = prompt('Rename workflow', this.state.workflow.name);
@@ -266,14 +270,16 @@ var CardLoader = React.createClass({
 		if(this.state.titleFromCard){
 			title = this.state.titleFromCard;
 		}
-		var titleObj = <span style={{cursor: 'pointer'}} onClick={this.onCardMenuButtonClick}>{title}</span>
-		var fontObj = <FontIcon className="material-icons">arrow_drop_down</FontIcon>;
+
+		var titleObj = <span style={{cursor: 'pointer'}} onTouchTap={this.onCardMenuButtonClick}>{title}</span>
+		var fontObj = <FontIcon onTouchTap={this.onCardMenuButtonClick} className="material-icons">arrow_drop_down</FontIcon>;
 		if(this.state.badge){
 			fontObj = (<Badge
+				onTouchTap={this.onCardMenuButtonClick}
 				badgeContent={this.state.badge}
 				style={{padding: 0, margin:0, cursor: 'pointer'}}
 				badgeStyle={{backgroundColor: 'red', top: 0, color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
-					<FontIcon onClick={this.onCardMenuButtonClick} className="material-icons">arrow_drop_down</FontIcon>
+					<FontIcon  className="material-icons">arrow_drop_down</FontIcon>
 				</Badge>);
 		}
 		return <div className="card-app-bar">
@@ -297,12 +303,22 @@ var CardLoader = React.createClass({
 
 	},
 	renderCardMenu: function() {
-
+		var title = this.state.workflow.name;
 		return (
 			<div className={"card-menu-overlay " + this.state.cardMenuState}>
 
 			</div>
 		)
+	},
+	renderDropOverlay: function(){
+		var title = "";
+		if(this.state.workflow)
+			title = this.state.workflow.name;
+		return (
+			<div className="drop-overlay">
+				<h6>Share to {title}</h6>
+			</div>
+		);
 	},
 	render: function() {
 		var cardContent = <Loading />;
@@ -331,7 +347,9 @@ var CardLoader = React.createClass({
 
 		return connectDragPreview(
 			<div className="card" style={style} onMouseDown={this.onMouseDown}>
+				
 				<div className="card-container">
+					{this.renderDropOverlay()}
 					<div className="resize-bar left" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'left')}/>
 					<div className="resize-bar right" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'right')}/>
 					<div className="resize-bar top" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'top')}/>
