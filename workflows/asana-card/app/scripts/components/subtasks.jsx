@@ -93,9 +93,6 @@ var Subtask = React.createClass({
 
     this.setState({editingSubTitleState: 'inactive'});
 
-    console.log(newTitle);
-    console.log(taskId);
-
     swipes.service('asana').request('tasks.update', {
       id: taskId,
       name: newTitle

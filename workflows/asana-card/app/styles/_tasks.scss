@@ -121,7 +121,7 @@
           cursor: text;
 
           &:focus {
-            background-color: $blue-40;
+            background-color: rgba($blue-40, .4);
             transition: .1s ease-in-out;
           }
         }

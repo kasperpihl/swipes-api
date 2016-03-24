@@ -64,9 +64,6 @@ var ExpandedTask = React.createClass({
 
     this.setState({titleEditingState: 'inactive'});
 
-    console.log(newTitle);
-    console.log(taskId);
-
     swipes.service('asana').request('tasks.update', {
       id: taskId,
       name: newTitle
@@ -82,7 +79,6 @@ var ExpandedTask = React.createClass({
         </div>
       )
     } else {
-      console.log('no description');
     }
   },
   expandDescription: function () {
