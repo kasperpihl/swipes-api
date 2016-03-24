@@ -639,8 +639,12 @@ $color_havelock_blue_approx: #4a90e2;
     @extend %flex;
 
     .material-icons {
-      color: $deepBlue-80 !important;
+      color: $deepBlue-40 !important;
       margin-top: 3px;
+    }
+
+    &:hover > .material-icons {
+      color: $deepBlue-80 !important;
     }
   }
 
@@ -665,7 +669,7 @@ $color_havelock_blue_approx: #4a90e2;
       opacity: .7;
       margin: 10px 0;
       position: relative;
-      padding-bottom: 1.4em;
+      padding-bottom: 10px;
 
       .expand-description {
         width: 100%;

@@ -46,6 +46,16 @@ var ExpandedTask = React.createClass({
       )
     }
   },
+  saveDescripton: function() {
+    var newDescription = this.refs.desci.textContent;
+    var taskId = this.props.taskId;
+
+    swipes.service('asana').request('tasks.update', {
+      id: taskId,
+      notes: newDescription
+    })
+    // TODO handle errors
+  },
   renderExpander: function(description) {
 
     if (description && description.length > 0 && description.length > 140) {
@@ -60,23 +70,30 @@ var ExpandedTask = React.createClass({
   },
   expandDescription: function () {
     TaskActions.expandDesc(!this.state.expandDesc);
-    console.log('shit better work');
     if (!this.state.expandDesc) {
       this.setState({expandedState: 'keyboard_arrow_up'})
     } else {
       this.setState({expandedState: 'keyboard_arrow_down'})
     }
   },
+  expandDescriptionOnFocus: function() {
+    TaskActions.expandDesc(true);
+    this.setState({expandedState: 'keyboard_arrow_up'});
+  },
   renderDescription: function (task) {
     var description = task.notes;
 
     if (description.length > MAX_DESC_LEN && !this.state.expandDesc) {
       description = description.substring(0,140) + '...';
+    } else if (!description.length) {
+      description = "No description"
     }
 
     return (
-      <div className="header-description" ref="desci">
-        {description}
+      <div className="header-description" onFocus={this.expandDescriptionOnFocus} onBlur={this.saveDescripton}>
+        <div className="content-editable-wrapper" ref="desci" contentEditable="true">
+          {description}
+        </div>
         {this.renderExpander(description)}
       </div>
     );
