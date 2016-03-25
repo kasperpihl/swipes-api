@@ -347,7 +347,7 @@ var CardLoader = React.createClass({
 
 		return connectDragPreview(
 			<div className="card" style={style} onMouseDown={this.onMouseDown}>
-				
+
 				<div className="card-container">
 					{this.renderDropOverlay()}
 					<div className="resize-bar left" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'left')}/>

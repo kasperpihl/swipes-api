@@ -5,7 +5,7 @@ var Loading = React.createClass({
 	render: function() {
 		return (
 			<div className="main-loader">
-				<CircularProgress color="#777" size={1}/>
+				<CircularProgress className="testing-this-two" color="#777" size={1}/>
 			</div>
 		);
 	}
