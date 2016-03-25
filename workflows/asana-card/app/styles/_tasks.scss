@@ -119,6 +119,7 @@
           padding: 5px;
           outline: none;
           cursor: text;
+          border-radius: 5px;
 
           &:focus {
             background-color: rgba($blue-40, .4);
@@ -676,11 +677,12 @@ $color_havelock_blue_approx: #4a90e2;
       cursor: text;
       transition: .1s ease-in-out;
       border-radius: 5px;
+      
       > * {
         cursor: inherit;
       }
 
-      &.active {
+      &:focus {
         background-color: rgba($blue-40, .4);
         transition: .1s ease-in-out;
       }
@@ -706,7 +708,7 @@ $color_havelock_blue_approx: #4a90e2;
         transition: .1s ease-in-out;
         border-radius: 5px;
 
-        &.active {
+        &:focus {
           background-color: rgba($blue-40, .4);
           color: $deepBlue-80;
           transition: .1s ease-in-out;

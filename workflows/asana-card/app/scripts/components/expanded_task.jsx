@@ -91,7 +91,7 @@ var ExpandedTask = React.createClass({
   },
   expandDescriptionOnFocus: function() {
     TaskActions.expandDesc(true);
-    this.setState({expandedState: 'keyboard_arrow_up', descEditingState: 'active'});
+    this.setState({expandedState: 'keyboard_arrow_up'});
   },
   renderDescription: function (task) {
     var description = task.notes;
@@ -104,15 +104,12 @@ var ExpandedTask = React.createClass({
 
     return (
       <div className="header-description" onFocus={this.expandDescriptionOnFocus} onBlur={this.saveDescripton}>
-        <div className={"content-editable-wrapper " + this.state.descEditingState} ref="desci" contentEditable="true">
+        <div className="content-editable-wrapper" ref="desci" contentEditable="true">
           {description}
         </div>
         {this.renderExpander(description)}
       </div>
     );
-  },
-  editTitle: function() {
-    this.setState({titleEditingState: 'active'});
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
@@ -124,7 +121,7 @@ var ExpandedTask = React.createClass({
           <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>
         </div>
         <div className="header-details">
-          <div className={"header-title " + this.state.titleEditingState} ref="headerTitle" contentEditable="true" onClick={this.editTitle} onBlur={this.saveTitle}>{task.name}</div>
+          <div className="header-title" ref="headerTitle" contentEditable="true" onBlur={this.saveTitle}>{task.name}</div>
           {this.renderDescription(task)}
           <div className="header-actions">
             {this.renderCompleteOrUndo(task)}
