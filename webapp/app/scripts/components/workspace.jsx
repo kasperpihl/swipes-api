@@ -17,24 +17,50 @@ var Workspace = React.createClass({
     renderCards(){
         return _.map(this.state.workspace, function(card, i) {
             return (
-                <CardLoader key={card.id} data={card} />
+                <CardLoader key={card.id} data={card} dotDragBegin={this.dotDragBegin}/>
             );
-        });
+        }.bind(this));
     },
     runAdjustments() {
         var width = document.getElementById("actual-app").clientWidth;
         var height = document.getElementById("actual-app").clientHeight;
         this.bouncedAdjusting(width,height);
     },
-    onWindowFocus() {
-        eventActions.fire('window.focus');
+    dotDragBegin(data, callback){
+        console.log('dragging ffs');
+        this.isDraggingDot = true;
+        $('.active-app').addClass('draggingDot');
+        if(callback){
+            this.draggingCallback = callback;
+        }
     },
-    onWindowBlur() {
-        eventActions.fire('window.blur');
+    onWindowFocus(e) {
+        eventActions.fire('window.focus', e);
+    },
+    onWindowBlur(e) {
+        eventActions.fire('window.blur', e);
+    },
+    onMouseUp(e) {
+        if(this.isDraggingDot){
+            $('.active-app').removeClass('draggingDot');
+        }
+        eventActions.fire('window.onmouseup', e);
+    },
+    onMouseMove(e) {
+        if(this.isDraggingDot){
+
+        }
+        eventActions.fire('window.mousemove', e);
+    },
+    onMouseDown(e) {
+        eventActions.fire('window.onmousedown', e);
     },
     componentDidMount(prevProps, prevState) {
         this.bouncedAdjusting = _.debounce(WorkspaceActions.adjustForScreenSize, 300);
         this.runAdjustments();
+        window.addEventListener('mouseup', this.onMouseUp);
+        window.addEventListener('mousemove', this.onMouseMove);
+        window.addEventListener('mousedown', this.onMouseDown);
         window.addEventListener("focus", this.onWindowFocus);
         window.addEventListener("blur", this.onWindowBlur);
         window.addEventListener("resize", this.runAdjustments);
@@ -43,6 +69,9 @@ var Workspace = React.createClass({
         this.runAdjustments();
     },
     componentWillUnmount() {
+        window.removeEventListener('mouseup', this.onMouseUp);
+        window.removeEventListener('mousemove', this.onMouseMove);
+        window.removeEventListener('mousedown', this.onMouseDown);
         window.removeEventListener("focus", this.onWindowFocus);
         window.removeEventListener("blur", this.onWindowBlur);
         window.removeEventListener("resize", this.runAdjustments);

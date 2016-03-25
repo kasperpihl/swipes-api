@@ -50,7 +50,6 @@ swipes.onMenuButton(function(){
 				}
 				item.bold = true;
 			}
-			console.log('item', channel);
 			if(channel.is_im){
 				peopleCol.push(item);
 			}

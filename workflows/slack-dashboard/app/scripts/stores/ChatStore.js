@@ -54,10 +54,6 @@ var ChatStore = Reflux.createStore({
 			this.webSocket = new WebSocket(url);
 			this.webSocket.onopen = function(){
 				console.log("slack socket", "open");
-				setTimeout(function(){
-					console.log('closing socket', this.webSocket);
-					//this.webSocket.close();
-				}.bind(this), 2000);
 			}.bind(this);
 			this.webSocket.onclose = function () {
 				console.log("slack socket", "close");
