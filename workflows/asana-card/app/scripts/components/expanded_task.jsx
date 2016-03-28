@@ -10,6 +10,7 @@ var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var AssigneeMenu = require('./assignee_menu');
 var Subtasks = require('./subtasks');
+var SwipesDot = require('swipes-dot').default;
 
 var MAX_DESC_LEN = 140;
 
@@ -31,20 +32,57 @@ var ExpandedTask = React.createClass({
   undoCompleteTask: function (task) {
     ProjectDataActions.undoCompleteTask(task);
   },
-  renderCompleteOrUndo: function (task) {
+  dotItems: function (task) {
+    var that = this;
+    var items = [];
+    //var task = this.props.task;
+    var settings = MainStore.get('settings');
+    //var taskId = this.props.taskId;
+    //var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
+
     if (task.completed) {
-      return (
-        <div className="header-action" onClick={this.undoCompleteTask.bind(this, task)}>
-          <FontIcon className="material-icons">undo</FontIcon>
-        </div>
-      )
+      items.push({
+        label: 'Undo',
+        icon: 'undo',
+        callback: function () {
+          that.undoCompleteTask(task);
+        }
+      })
     } else {
-      return (
-        <div className="header-action" onClick={this.completeTask.bind(this, task)}>
-          <FontIcon className="material-icons">check</FontIcon>
-        </div>
-      )
+      items.push({
+        label: 'Complete',
+        icon: 'check',
+        callback: function () {
+          that.completeTask(task);
+        }
+      })
     }
+
+    items = items.concat([
+      {
+        label: 'Remove',
+        icon: 'delete',
+        callback: function () {
+          that.removeTask(task);
+        }
+      },
+      {
+        label: 'Share the task',
+        icon: 'share',
+        callback: function () {
+          //that.shareTaskUrl(taskUrl);
+        }
+      },
+      {
+        label: 'Jump to asana',
+        icon: 'link',
+        callback: function () {
+          //window.open(taskUrl, '_blank');
+        }
+      }
+    ]);
+
+    return items;
   },
   saveDescripton: function() {
     var newDescription = this.refs.desci.textContent;
@@ -114,31 +152,47 @@ var ExpandedTask = React.createClass({
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+    var taskId = this.props.taskId;
+    var dotItems = this.dotItems(task);
 
     return (
-      <div className="header-wrapper">
+      <div id={taskId} className="header-wrapper">
         <div className="back-arrow" onClick={this.goBack}>
           <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>
         </div>
         <div className="header-details">
           <div className="header-title" ref="headerTitle" contentEditable="true" onBlur={this.saveTitle}>{task.name}</div>
           {this.renderDescription(task)}
-          <div className="header-actions">
-            {this.renderCompleteOrUndo(task)}
-            <div className="header-action" onClick={this.removeTask.bind(this, task)}>
-              <FontIcon className="material-icons">delete</FontIcon>
-            </div>
-            <div className="header-action" onClick={this.shareTaskUrl.bind(this, taskUrl)}>
-              <FontIcon className="material-icons">share</FontIcon>
-            </div>
-            <a className="header-action" target="_blank" href={taskUrl}>
-              <FontIcon className="material-icons">link</FontIcon>
-            </a>
-          </div>
         </div>
         {/* when implementing, use the structure for the api, with checking if is assigned, has image etc */}
         <div className="header-avatar">
-          <AssigneeMenu task={task} />
+            <AssigneeMenu task={task} />
+        </div>
+
+        <div className="header-dot-wrapper">
+          <SwipesDot
+            reverse="true"
+            className="dot"
+            hoverParentId={taskId}
+            elements={dotItems}
+            menuColors={{
+              borderColor: 'transparent',
+              hoverBorderColor: '#1DB1FC',
+              backgroundColor: '#1DB1FC',
+              hoverBackgroundColor: 'white',
+              iconColor: 'white',
+              hoverIconColor: '#1DB1FC'
+            }}
+            labelStyles={{
+              transition: '.1s',
+              boxShadow: 'none',
+              backgroundColor: 'rgba(0, 12, 47, .8)',
+              padding: '5px 10px',
+              top: '-12px',
+              fontSize: '16px',
+              letterSpacing: '1px'
+            }}
+          />
         </div>
       </div>
     )

@@ -10,7 +10,7 @@
   padding-bottom: 90px;
   //padding-right: 10px;
   // height: 100%;
-  // overflow-y: auto; 
+  // overflow-y: auto;
 }
 
 @mixin animation-delay($time) {
@@ -798,5 +798,19 @@ $color_havelock_blue_approx: #4a90e2;
       border: 2px solid white;
       margin-top: 3px;
     }
+  }
+}
+
+.header-dot-wrapper {
+  position: absolute;
+  right: 21px; 
+  top: 60px;
+  //background-color: red;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    margin-left: 13.5px;
+    margin-top: 13.5px;
   }
 }
