@@ -3,6 +3,8 @@ exports.keys = {
 	mandrillToken:"57qNzppc1FU7BdYnuF6GXw",
 	subscribeList:"c08c034fd4",
 	userList:"cfd40b73c7",
+	octopusToken: "b4c9ce72-f2e7-11e5-ad39-0a4287b2e8c5",
+	octopusUserList: "6822bd55-f50f-11e5-ad39-0a4287b2e8c5",
 
 	mailjetAPIToken:"0b7060208dd74c1f9f48aa22f223a558",
 	mailjetSecretToken:"e844af6cac6dd42a0b9a732905e1936f",

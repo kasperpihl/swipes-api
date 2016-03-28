@@ -71,6 +71,20 @@ Parse.Cloud.define("unsubscribe",function(request,response){
     else response.success(result);
   });
 });
+
+Parse.Cloud.define("test",function(request,response){
+  var email = request.params.email;
+  if(!email) return response.error('Must include email');
+  var octopus = req('octopus');
+  var conf = require('cloud/conf.js');
+  var keys = conf.keys;
+  octopus.subscribe(keys.octopusUserList,email,function(result,error){
+    if(error) response.error(error);
+    else response.success(result);
+  });
+});
+
+
 Parse.Cloud.beforeSave("Signup",function(request,response){
   var object = request.object;
   var mailjet = req('mailjet');
@@ -99,8 +113,8 @@ Parse.Cloud.beforeSave(Parse.User,function(request,response){
     if(validateEmail(object.get('username'))){
       var conf = require('cloud/conf.js');
       var keys = conf.keys;
-      var mailjet = req('mailjet');
-      mailjet.request("listsAddcontact",{"id":"370097","contact":object.get('username')}, function(result,error){
+      var octopus = req('octopus');
+      octopus.subscribe(keys.octopusUserList,object.get('username'),function(result,error){
         response.success();
       });
     } else response.success();
