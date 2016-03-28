@@ -8,10 +8,10 @@ var CommentsStore = Reflux.createStore({
       comments: null
     }
   },
-  onCreate: function (comment) {
+  onAdd: function (comment) {
     var comments = this.get('comments');
 
-    comments.unshift(comment);
+    comments.push(comment);
     this.set('comments', comments);
   },
   onLoad: function (comments) {

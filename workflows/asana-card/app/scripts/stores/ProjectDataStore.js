@@ -5,6 +5,7 @@ var MainStore = require('../stores/MainStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 var TasksActions = require('../actions/TasksActions');
 var SubtasksActions = require('../actions/SubtasksActions');
+var CommentsActions = require('../actions/CommentsActions');
 var UserStore = require('../stores/UserStore');
 var ProjectsStore = require('../stores/ProjectsStore');
 
@@ -108,6 +109,34 @@ var fetchData = function () {
 
 		refetchData(true);
  	})
+}
+
+var writeComment = function (taskId, comment) {
+	console.log('Writing a comment!');
+
+	swipes.service('asana').request('tasks.addComment', {
+		id: taskId,
+		text: comment
+	})
+	.then(function (response) {
+		var addedComment = response.data;
+
+		CommentsActions.add(addedComment);
+
+		swipes.analytics.action('Write comment');
+	})
+	.then(function () {
+		console.log('Done!');
+	})
+	.catch(function (error) {
+		console.log(error);
+	})
+	.finally(function () {
+		CreateTaskInputActions.changeState({
+			creatTaskLoader: 'inactive',
+			disabledInput: false
+		});
+	})
 }
 
 var createTask = function (taskData, projectType, projectId) {
@@ -333,6 +362,15 @@ var ProjectDataStore = Reflux.createStore({
 		}
 
 		this.set('createInputValue', '');
+	},
+	onWriteComment: function (taskId, comment) {
+		CreateTaskInputActions.changeInputValue('');
+		CreateTaskInputActions.changeState({
+			creatTaskLoader: 'active',
+			disabledInput: true
+		});
+
+		writeComment(taskId, comment);
 	}
 });
 

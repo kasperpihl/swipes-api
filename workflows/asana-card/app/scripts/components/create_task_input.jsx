@@ -25,11 +25,38 @@ var CreateTaskInput = React.createClass({
 
 		ProjectDataActions.createTask(task, subtask);
 	},
-  onKeyDown: function(e){
-  	if(e.keyCode === 13){
-  		this.createTask();
+	writeComment: function () {
+		var taskId = this.props.expandedTaskId;
+		var comment = this.state.inputValue;
+
+		ProjectDataActions.writeComment(taskId, comment);
+	},
+  onKeyDown: function(e) {
+		var commentsView = this.props.commentsView;
+
+  	if (e.keyCode === 13) {
+			if (commentsView) {
+				this.writeComment();
+			} else {
+				this.createTask();
+			}
   	}
   },
+	placeholder: function () {
+		var expandedTaskId = this.props.expandedTaskId;
+		var commentsView = this.props.commentsView;
+		var placeholder = 'Create a new task';
+
+		if (expandedTaskId) {
+			placeholder = 'Create a new subtask';
+
+			if (commentsView) {
+				placeholder = 'Write a comment';
+			}
+		}
+
+		return placeholder;
+	},
 	render: function () {
     var inputLength = this.state.inputValue.length;
 		var inputWrapperClass = classNames({
@@ -44,9 +71,7 @@ var CreateTaskInput = React.createClass({
 			'active': inputLength > 0,
 			'inactive': inputLength <= 0
 		});
-		var placeholder = this.props.expandedTaskId ?
-										'Create a new subtask' :
-										'Create a new task'
+		var placeholder = this.placeholder();
 
 		return (
 			<div className={inputWrapperClass}>

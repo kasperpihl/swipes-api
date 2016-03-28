@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 
 var CommentsActions = Reflux.createActions([
-  'create',
+  'add',
   'remove',
 	'update',
   'load'

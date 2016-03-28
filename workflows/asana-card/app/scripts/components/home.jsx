@@ -44,6 +44,7 @@ var Home = React.createClass({
   },
 	render: function () {
     var expandedTaskId = this.state.expandedTaskId;
+		var commentsView = this.state.commentsView;
 
     return (
 			<div className="height-100" style={{maxHeight: '100%', overflowY: 'auto'}}>
@@ -55,7 +56,7 @@ var Home = React.createClass({
 					</div>
 				)}
 
-				<CreateTaskInput expandedTaskId={expandedTaskId} />
+				<CreateTaskInput expandedTaskId={expandedTaskId} commentsView={commentsView} />
 			</div>
 		)
 	}

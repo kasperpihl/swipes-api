@@ -153,6 +153,13 @@ var ExpandedTask = React.createClass({
     TaskActions.expandDesc(true);
     this.setState({expandedState: 'keyboard_arrow_up'});
   },
+  onChangeTab: function (label) {
+    if (label === 'Comments') {
+      MainActions.commentsView(true);
+    } else {
+      MainActions.commentsView(false);
+    }
+  },
   renderDescription: function (task) {
     var description = task.notes;
 
@@ -220,7 +227,9 @@ var ExpandedTask = React.createClass({
     )
   },
   renderTabs: function (task) {
+    var that = this;
     var labels = ['Subtasks', 'Comments'];
+
     var tabs = labels.map(function (label, index) {
       var children;
 
@@ -230,7 +239,12 @@ var ExpandedTask = React.createClass({
         children = <Comments task={task} />;
       }
 
-      return <Tab style={tabsStyles.singleTab} label={label} key={index}>
+      return <Tab
+        style={tabsStyles.singleTab}
+        label={label}
+        key={index}
+        onClick={that.onChangeTab.bind(that, label)}
+      >
 				{children}
 			</Tab>
     })

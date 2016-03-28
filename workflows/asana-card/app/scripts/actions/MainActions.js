@@ -3,7 +3,8 @@ var Reflux = require('reflux');
 var MainActions = Reflux.createActions([
 	'updateSettings',
 	'expandTask',
-	'closeExpandedTask'
+	'closeExpandedTask',
+	'commentsView'
 	// Here you can list your actions
 ]);
 

@@ -8,7 +8,8 @@ var MainStore = Reflux.createStore({
 	idAttribute: 'id',
 	getInitialState: function () {
 		return {
-      expandedTaskId: null
+      expandedTaskId: null,
+			commentsView: false
 		}
 	},
 	onUpdateSettings: function (newSettings) {
@@ -24,7 +25,11 @@ var MainStore = Reflux.createStore({
 		this.set('expandedTaskId', taskId);
 	},
 	onCloseExpandedTask: function () {
+		this.set('commentsView', false, {trigger: false});
 		this.set('expandedTaskId', null);
+	},
+	onCommentsView: function (newValue) {
+		this.set('commentsView', newValue);
 	},
 	fetch: function () {
 		var self = this;
