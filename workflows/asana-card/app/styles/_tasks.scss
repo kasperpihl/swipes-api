@@ -335,15 +335,10 @@
   height: 70px;
   background-color: $studioGray-20;
   position: absolute;
-  //z-index: 10;
+  z-index: 9998;
   bottom: 0;
   left: 0;
-  //z-index: 1000;
   overflow: hidden;
-
-  &.active {
-    z-index: 9999;
-  }
 
   .task-add-icon {
     width: 50px;
