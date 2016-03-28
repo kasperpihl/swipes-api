@@ -12,19 +12,6 @@ var TaskItem = React.createClass({
   getInitialState: function(){
 	    return {};
 	},
-  renderCompleteOrUndoHover: function () {
-    var task = this.props.data;
-
-    if (task.completed) {
-      return (
-        <div className="main-actions" onClick={this.undoCompleteTask.bind(this, task)}><FontIcon className="material-icons">undo</FontIcon></div>
-      )
-    } else {
-      return (
-        <div className="main-actions" onClick={this.completeTask.bind(this, task)}><FontIcon className="material-icons">check</FontIcon></div>
-      )
-    }
-  },
   completeTask: function (task) {
     ProjectDataActions.completeTask(task);
   },
