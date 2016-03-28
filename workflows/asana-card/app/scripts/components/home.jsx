@@ -46,7 +46,7 @@ var Home = React.createClass({
     var expandedTaskId = this.state.expandedTaskId;
 
     return (
-			<div className="height-100">
+			<div className="height-100" style={{maxHeight: '100%', overflowY: 'auto'}}>
 				{expandedTaskId ? (
 					<div>{this.renderExpanedView(expandedTaskId)}</div>
 				) : (
