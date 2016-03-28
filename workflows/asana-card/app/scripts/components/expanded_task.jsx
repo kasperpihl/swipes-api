@@ -37,8 +37,8 @@ var ExpandedTask = React.createClass({
     var items = [];
     //var task = this.props.task;
     var settings = MainStore.get('settings');
-    //var taskId = this.props.taskId;
-    //var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
+    var taskId = this.props.taskId;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
     if (task.completed) {
       items.push({
@@ -70,14 +70,14 @@ var ExpandedTask = React.createClass({
         label: 'Share the task',
         icon: 'share',
         callback: function () {
-          //that.shareTaskUrl(taskUrl);
+          that.shareTaskUrl(taskUrl);
         }
       },
       {
         label: 'Jump to asana',
         icon: 'link',
         callback: function () {
-          //window.open(taskUrl, '_blank');
+          window.open(taskUrl, '_blank');
         }
       }
     ]);
