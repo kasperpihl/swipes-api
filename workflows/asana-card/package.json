@@ -18,7 +18,7 @@
     "reflux": "~0.3.0",
     "reflux-model-extension": "*",
     "underscore": "^1.8.3",
-    "swipes-dot": "^0.1.4"
+    "swipes-dot": "^0.1.5"
   },
   "devDependencies": {
     "connect-livereload": "^0.5.3",
