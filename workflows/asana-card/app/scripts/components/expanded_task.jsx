@@ -186,7 +186,7 @@ var ExpandedTask = React.createClass({
             labelStyles={{
               transition: '.1s',
               boxShadow: 'none',
-              backgroundColor: 'rgba(0, 12, 47, .8)',
+              backgroundColor: 'rgba(0, 12, 47, 1)',
               padding: '5px 10px',
               top: '-12px',
               fontSize: '16px',
