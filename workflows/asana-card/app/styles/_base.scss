@@ -119,6 +119,10 @@ ul{
 
 #content{
     height: 100%;
+
+		> * {
+			height: inherit !important;
+		}
     .main{
         height: 100%;
         .active-app{
@@ -128,6 +132,9 @@ ul{
     }
 }
 
+.height-100 {
+	height: 100%;
+}
 
 svg {
     pointer-events: none;

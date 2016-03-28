@@ -7,8 +7,10 @@
 .task-list-wrapper {
   width: 100%;
   padding-top: 0px;
-  padding-bottom: 90px;
+  //padding-bottom: 90px;
   //padding-right: 10px;
+  height: 100%;
+  overflow-y: auto;
 }
 
 @mixin animation-delay($time) {
@@ -340,7 +342,7 @@
   overflow: hidden;
 
   &.active {
-    z-index: 1000;
+    z-index: 9999;
   }
 
   .task-add-icon {
@@ -522,7 +524,22 @@
     }
   }
 }
+.height-100 { //targeting stuff this way
+	height: 100%;
+}
 
+
+.height-100 {  // check dev tools for understanding this. need to target correct things and MUI is being incredibly hard to work with
+
+  > div:nth-child(3) {
+    height: 100%;
+
+    > * {
+      height: calc(100% - 50px - 70px); //Minus tabs and input area
+      overflow: hidden;
+    }
+  }
+}
 
 /* DayPicker styles */
 
@@ -677,7 +694,7 @@ $color_havelock_blue_approx: #4a90e2;
       cursor: text;
       transition: .1s ease-in-out;
       border-radius: 5px;
-      
+
       > * {
         cursor: inherit;
       }

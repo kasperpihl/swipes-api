@@ -68,7 +68,7 @@ var StatusesList = React.createClass({
 			</Tab>
 		});
 
-		return <Tabs
+		return <Tabs className="height-100"
 			tabItemContainerStyle={{background:'none'}}
 			inkBarStyle={tabsStyles.inkBarStyle}
 			children={tabs}></Tabs>
@@ -77,9 +77,9 @@ var StatusesList = React.createClass({
     var tasks = this.state.tasks;
 
 		return (
-			<div>
+			<div className="height-100">
 				{tasks.length > 0 ? (
-					<div>
+					<div className="height-100">
 						{this.renderStatuses(tasks)}
 					</div>
 				) : (
