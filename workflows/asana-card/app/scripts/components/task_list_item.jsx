@@ -109,7 +109,25 @@ var TaskItem = React.createClass({
             <SwipesDot
               className="dot"
               hoverParentId={taskId}
-              elements={dotItems} />
+              elements={dotItems}
+              menuColors={{
+                borderColor: 'transparent',
+                hoverBorderColor: '#1DB1FC',
+                backgroundColor: '#1DB1FC',
+                hoverBackgroundColor: 'white',
+                iconColor: 'white',
+                hoverIconColor: '#1DB1FC'
+              }}
+              labelStyles={{
+                transition: '.1s',
+                boxShadow: 'none',
+                backgroundColor: 'rgba(0, 12, 47, .8)',
+                padding: '5px 10px',
+                top: '-12px',
+                fontSize: '16px',
+                letterSpacing: '1px'
+              }}
+              />
   				</div>
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>
