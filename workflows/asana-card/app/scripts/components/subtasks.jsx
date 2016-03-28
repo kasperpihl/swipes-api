@@ -6,8 +6,11 @@ var MainStore = require('../stores/MainStore');
 var SubtasksStore = require('../stores/SubtasksStore');
 var SubtasksActions = require('../actions/SubtasksActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
+var MainActions = require('../actions/MainActions');
+var ProjectsStore = require('../stores/ProjectsStore');
 var Loading = require('./loading');
 var AssigneeMenu = require('./assignee_menu');
+var SwipesDot = require('swipes-dot').default;
 
 var Subtasks = React.createClass({
   mixins: [SubtasksStore.connect()],
@@ -74,18 +77,56 @@ var Subtask = React.createClass({
   removeTask: function (task) {
     ProjectDataActions.removeTask(task);
   },
-  renderCompleteOrUndo: function () {
+  dotItems: function () {
+    var that = this;
+    var items = [];
     var task = this.props.subtask;
+    var settings = MainStore.get('settings');
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
     if (task.completed) {
-      return (
-        <div className="main-actions" onClick={this.undoCompleteTask.bind(this, task)}><FontIcon className="material-icons">undo</FontIcon></div>
-      )
+      items.push({
+        label: 'Undo',
+        icon: 'undo',
+        callback: function () {
+          that.undoCompleteTask(task);
+        }
+      })
     } else {
-      return (
-        <div className="main-actions" onClick={this.completeTask.bind(this, task)}><FontIcon className="material-icons">check</FontIcon></div>
-      )
+      items.push({
+        label: 'Complete',
+        icon: 'check',
+        callback: function () {
+          that.completeTask(task);
+        }
+      })
     }
+
+    items = items.concat([
+      {
+        label: 'Remove',
+        icon: 'delete',
+        callback: function () {
+          that.removeTask(task);
+        }
+      },
+      {
+        label: 'Share the task',
+        icon: 'share',
+        callback: function () {
+          that.shareTaskUrl(taskUrl);
+        }
+      },
+      {
+        label: 'Jump to asana',
+        icon: 'link',
+        callback: function () {
+          window.open(taskUrl, '_blank');
+        }
+      }
+    ]);
+
+    return items;
   },
   saveSubTitle: function() {
     var newTitle = this.refs.subTitle.textContent;
@@ -104,27 +145,41 @@ var Subtask = React.createClass({
   },
   render: function () {
     var subtask = this.props.subtask;
-    var dotClass = classNames({
-      'dot': true,
-      'todo': !subtask.completed,
-      'done': subtask.completed
-    });
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
+    var subtaskId = subtask.id;
+    var dotItems = this.dotItems();
+
 
     return (
-      <div className="task-wrapper">
+      <div id={subtaskId} className="task-wrapper">
         <div className="task">
           <div className="task-list-element">
-  					<div className={dotClass}></div>
+            <SwipesDot
+              className="dot"
+              hoverParentId={subtaskId}
+              elements={dotItems}
+              menuColors={{
+                borderColor: 'transparent',
+                hoverBorderColor: '#1DB1FC',
+                backgroundColor: '#1DB1FC',
+                hoverBackgroundColor: 'white',
+                iconColor: 'white',
+                hoverIconColor: '#1DB1FC'
+              }}
+              labelStyles={{
+                transition: '.1s',
+                boxShadow: 'none',
+                backgroundColor: 'rgba(0, 12, 47, .8)',
+                padding: '5px 10px',
+                top: '-12px',
+                fontSize: '16px',
+                letterSpacing: '1px'
+              }}
+              />
   				</div>
   				<div className="task-details-wrap">
               <div className="task-title sub-task" ref="subTitle" onClick={this.editSubTitle} onBlur={this.saveSubTitle} contentEditable="true">{subtask.name}</div>
-              <div className="task-details">
-                  {this.renderCompleteOrUndo()}
-                  <div className="main-actions"><FontIcon onClick={this.shareTaskUrl.bind(this, taskUrl)} className="material-icons">share</FontIcon></div>
-                  <div className="main-actions"><FontIcon onClick={this.removeTask.bind(this, subtask)} className="material-icons">delete</FontIcon></div>
-              </div>
   				</div>
 
 
