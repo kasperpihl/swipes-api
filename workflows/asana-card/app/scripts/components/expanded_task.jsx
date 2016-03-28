@@ -1,6 +1,8 @@
 var React = require('react');
 var Reflux = require('reflux');
 var FontIcon = require('material-ui/lib/font-icon');
+var Tabs = require('material-ui/lib/tabs/tabs');
+var Tab = require('material-ui/lib/tabs/tab');
 var Loading = require('./loading');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
@@ -11,8 +13,28 @@ var ProjectDataActions = require('../actions/ProjectDataActions');
 var AssigneeMenu = require('./assignee_menu');
 var Subtasks = require('./subtasks');
 var SwipesDot = require('swipes-dot').default;
+var Comments = require('./comments');
 
 var MAX_DESC_LEN = 140;
+
+var tabsStyles = {
+  singleTab: {
+    backgroundColor: 'transparent',
+		color: '#333D59',
+		borderBottom: '1px solid #F4F4F5',
+		position: 'relative',
+		zIndex: '99',
+    maxHeight: '100%',
+    overflowY: 'auto'
+  },
+	inkBarStyle: {
+		height: '48px',
+		marginTop: '-48px',
+		position: 'relative',
+		zIndex: '1',
+		backgroundColor: '#CCCED5'
+	}
+};
 
 var ExpandedTask = React.createClass({
   mixins: [TasksStore.connect(), TaskStore.connect()],
@@ -197,6 +219,27 @@ var ExpandedTask = React.createClass({
       </div>
     )
   },
+  renderTabs: function (task) {
+    var labels = ['Subtasks', 'Comments'];
+    var tabs = labels.map(function (label, index) {
+      var children;
+
+      if (label === 'Subtasks') {
+        children = <Subtasks task={task} />;
+      } else {
+        children = <Comments task={task} />;
+      }
+
+      return <Tab style={tabsStyles.singleTab} label={label} key={index}>
+				{children}
+			</Tab>
+    })
+
+    return <Tabs className="height-100"
+			tabItemContainerStyle={{background:'none'}}
+			inkBarStyle={tabsStyles.inkBarStyle}
+			children={tabs}></Tabs>
+  },
   render: function () {
     var tasks = TasksStore.get('tasks');
     var taskId = this.props.taskId;
@@ -207,7 +250,7 @@ var ExpandedTask = React.createClass({
     return (
       <div>
         {this.renderHeader(task)}
-        <Subtasks task={task} />
+        {this.renderTabs(task)}
       </div>
     )
   }

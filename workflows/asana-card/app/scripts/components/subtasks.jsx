@@ -1,5 +1,4 @@
 var React = require('react');
-var classNames = require('classnames');
 var FontIcon = require('material-ui/lib/font-icon');
 
 var MainStore = require('../stores/MainStore');
@@ -53,7 +52,7 @@ var Subtasks = React.createClass({
     return (
       <div>
         {subtasks === null ? (
-          <Loading />
+          <Loading style={{marginTop: '20%'}} />
 				) : (
           <div>
             {this.renderSubtasks()}
