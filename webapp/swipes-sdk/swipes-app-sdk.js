@@ -232,6 +232,14 @@ var SwipesAppSDK = (function() {
 		leftNav: function(options, callback){
 			self._client.callListener('leftNav.load', options, callback);
 		},
+		edit: function(title, message, callback){
+			var options = {};
+			options = this._getOptions(options, title, message);
+			this.load("textarea", options, function(res){
+				if(typeof callback === 'function')
+					callback(res);
+			})
+		},
 		alert: function(title, message, callback){
 			var options = {buttons: ["Okay"]};
 			options = this._getOptions(options, title, message);
