@@ -17,6 +17,8 @@ var Comments = require('./comments');
 
 var MAX_DESC_LEN = 140;
 
+var Textarea = require('react-textarea-autosize');
+
 var tabsStyles = {
   singleTab: {
     backgroundColor: 'transparent',
@@ -107,7 +109,7 @@ var ExpandedTask = React.createClass({
     return items;
   },
   saveDescripton: function() {
-    var newDescription = this.refs.desci.textContent;
+    var newDescription = this.refs.desci.value;
     var taskId = this.props.taskId;
 
     this.setState({descEditingState: 'inactive'});
@@ -162,21 +164,36 @@ var ExpandedTask = React.createClass({
   },
   renderDescription: function (task) {
     var description = task.notes;
-
-    if (description.length > MAX_DESC_LEN && !this.state.expandDesc) {
-      description = description.substring(0,140) + '...';
-    } else if (!description.length) {
-      description = "No description"
+    var value = this.state.titleInputValue;
+    var maxRows = 2;
+    // Increase max number of rows if expanded.
+    if(this.state.expandDesc){
+      maxRows = 15;
     }
+    /*if (description.length > MAX_DESC_LEN && !this.state.expandDesc) {
+      description = description.substring(0,140) + '...';
+      value = description;
+    }*/
 
     return (
       <div className="header-description" onFocus={this.expandDescriptionOnFocus} onBlur={this.saveDescripton}>
-        <div className="content-editable-wrapper" ref="desci" contentEditable="true">
-          {description}
-        </div>
+        <Textarea
+          ref="desci"
+          defaultValue={description}
+          onChange={this.onDescriptionChange}
+          onBlur={this.saveDescripton}
+          placeholder="No description"
+          value={value}
+          minRows={1}
+          maxRows={maxRows}/>
         {this.renderExpander(description)}
       </div>
     );
+  },
+  onDescriptionChange: function(event){
+    if(this.state.expandDesc){
+      this.setState({'titleInputValue': event.target.value});
+    }
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');

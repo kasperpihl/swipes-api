@@ -750,12 +750,18 @@ $color_havelock_blue_approx: #4a90e2;
         cursor: inherit;
       }
 
-      .content-editable-wrapper {
+      textarea {
         padding: 8px 10px;
         outline: none;
         transition: .1s ease-in-out;
         border-radius: 5px;
-
+        font-size: 13px;
+        font-family: 'Roboto';
+        resize: none;
+        line-height: 19px;
+        outline: none;
+        width: 100%;
+        max-width: 500px;
         &:focus {
           background-color: rgba($blue-40, .4);
           color: $deepBlue-80;
