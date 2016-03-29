@@ -16,6 +16,7 @@ var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
     renderCards(){
         return _.map(this.state.workspace, function(card, i) {
+        //return _.map([], function(card, i) {
             return (
                 <CardLoader key={card.id} data={card} dotDragBegin={this.dotDragBegin}/>
             );
@@ -66,7 +67,12 @@ var Workspace = React.createClass({
         window.addEventListener("resize", this.runAdjustments);
     },
     componentDidUpdate(prevProps, prevState) {
-        this.runAdjustments();
+        // K_TODO
+        // you are making infinite loop with that one here.
+        // It will call WorkspaceActions.adjustForScreenSize
+        // which will trigger manualUpdate
+        // and this code will be called again and again
+        //this.runAdjustments();
     },
     componentWillUnmount() {
         window.removeEventListener('mouseup', this.onMouseUp);

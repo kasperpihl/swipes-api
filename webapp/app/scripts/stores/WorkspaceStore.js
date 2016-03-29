@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var WorkflowStore = require('./WorkflowStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
+
 var WorkspaceStore = Reflux.createStore({
 	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore3",
@@ -14,7 +15,7 @@ var WorkspaceStore = Reflux.createStore({
 
 		// Object indexed by the workflow_id to test if any has been removed from store.
 		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.id });
-	
+
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
 			// If the workflow is not found, insert a new record with the grid info.
@@ -37,7 +38,7 @@ var WorkspaceStore = Reflux.createStore({
 		if(keysToRemove.length){
 			this.unset(keysToRemove, {trigger:false});
 		}
-		
+
 		this.manualTrigger();
 	},
 	onMoveCard:function(id, deltaCordinates){
@@ -100,7 +101,7 @@ var WorkspaceStore = Reflux.createStore({
 			var h = el.h;
 			var z = el.z;
 			var newSize = {};
-			
+
 			// Check if something has been moved to the front
 			if(z != counter){
 				newSize.z = counter;
@@ -140,10 +141,10 @@ var WorkspaceStore = Reflux.createStore({
 				if((x + w) > screenWidth){
 					newSize.x = Math.max(screenWidth - w, paddingForAutoAdjusting);
 				}
-				
+
 				// Check if offscreen in the bottom off the screen
 				if(overflowY > 0){
-					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) ); 
+					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) );
 				}
 				if((y + h) > screenHeight){
 					newSize.y = Math.max(screenHeight - h, paddingForAutoAdjusting);
