@@ -11,6 +11,8 @@ var Loading = require('./loading');
 var AssigneeMenu = require('./assignee_menu');
 var SwipesDot = require('swipes-dot').default;
 
+var Textarea = require('react-textarea-autosize');
+
 var Subtasks = React.createClass({
   mixins: [SubtasksStore.connect()],
   componentDidMount: function () {
@@ -64,6 +66,10 @@ var Subtasks = React.createClass({
 });
 
 var Subtask = React.createClass({
+  getInitialState:function() {
+      return {  
+      };
+  },
   completeTask: function (task) {
     ProjectDataActions.completeTask(task);
   },
@@ -128,7 +134,7 @@ var Subtask = React.createClass({
     return items;
   },
   saveSubTitle: function() {
-    var newTitle = this.refs.subTitle.textContent;
+    var newTitle = this.refs.subTitle.value;
     var taskId = this.props.subtask.id;
 
     this.setState({editingSubTitleState: 'inactive'});
@@ -142,13 +148,20 @@ var Subtask = React.createClass({
   editSubTitle: function() {
     this.setState({editingSubTitleState: 'active'});
   },
+  onTitleChange: function(event){
+    this.setState({subtitleInputValue: event.target.value});
+  },
+  onKeyDown: function(e){
+    if(e.keyCode === 13 || e.keyCode === 27){
+      this.refs.subTitle.blur();
+    }
+  },
   render: function () {
     var subtask = this.props.subtask;
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
     var subtaskId = subtask.id;
     var dotItems = this.dotItems();
-
 
     return (
       <div id={subtaskId} className="task-wrapper">
@@ -178,7 +191,18 @@ var Subtask = React.createClass({
               />
   				</div>
   				<div className="task-details-wrap">
-              <div className="task-title sub-task" ref="subTitle" onClick={this.editSubTitle} onBlur={this.saveSubTitle} contentEditable="true">{subtask.name}</div>
+              <Textarea
+                ref="subTitle" 
+                className="task-title sub-task"
+                defaultValue={subtask.name}
+                onChange={this.onTitleChange}
+                onFocus={this.editSubTitle}
+                onBlur={this.saveSubTitle}
+                onKeyDown={this.onKeyDown}
+                placeholder="No title"
+                value={this.state.subtitleInputValue}
+                minRows={1}
+                maxRows={10}/>
   				</div>
 
 
