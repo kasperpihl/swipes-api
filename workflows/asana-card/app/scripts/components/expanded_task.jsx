@@ -291,6 +291,7 @@ var ExpandedTask = React.createClass({
 
       return <Tab
         style={tabsStyles.singleTab}
+        className="asana-tab"
         label={label}
         key={index}
         onClick={that.onChangeTab.bind(that, label)}
