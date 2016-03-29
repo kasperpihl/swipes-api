@@ -59,8 +59,21 @@ html, body, #content {
         //overflow-x: hidden;
     }
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: rgba(black,0);
+    //border-radius: 50px;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(black,.1);
+    //border-radius: 50px;
+}
+
 $inputHeight: 70px;
-$inputButtonWidth: 50px; 
+$inputButtonWidth: 50px;
 
 .card-container{
     position:relative;
