@@ -201,7 +201,7 @@ var ExpandedTask = React.createClass({
   renderDescription: function (task) {
     var description = task.notes;
     var value = this.state.descriptionInputValue;
-    var maxRows = 2;
+    var maxRows = 1;
     // Increase max number of rows if expanded.
     if(this.state.expandDesc){
       maxRows = 15;
