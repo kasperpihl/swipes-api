@@ -212,10 +212,12 @@ var ExpandedTask = React.createClass({
     }*/
 
     return (
-      <div className="header-description" onFocus={this.expandDescriptionOnFocus} onBlur={this.saveDescripton}>
+      <div>
         <Textarea
+          className="header-description"
           ref="desci"
           defaultValue={description}
+          onFocus={this.expandDescriptionOnFocus}
           onChange={this.onDescriptionChange}
           onBlur={this.saveDescripton}
           onKeyDown={this.onDescriptionKeyDown}
