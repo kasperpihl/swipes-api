@@ -761,22 +761,22 @@ $color_havelock_blue_approx: #4a90e2;
       > * {
         cursor: inherit;
       }
+    }
 
-      .expand-description {
-        width: 100%;
-        height: 20px;
-        background-color: #FAFAFA;
+    .expand-description {
+      width: 100%;
+      height: 20px;
+      background-color: #FAFAFA;
 
-        @extend %flex;
+      @extend %flex;
 
-        &:hover {
-          background-color: $studioGray-40;
-        }
+      &:hover {
+        background-color: $studioGray-40;
+      }
 
-        .material-icons {
-          color: $deepBlue-60 !important;
-          font-size: 13px !important;
-        }
+      .material-icons {
+        color: $deepBlue-60 !important;
+        font-size: 13px !important;
       }
     }
 
@@ -824,6 +824,14 @@ $color_havelock_blue_approx: #4a90e2;
       border: 2px solid white;
       margin-top: 3px;
     }
+  }
+}
+
+.asana-tab {
+  > * {
+    height: 100%;
+
+    @extend %flex;
   }
 }
 
