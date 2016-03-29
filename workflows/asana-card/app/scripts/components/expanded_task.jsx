@@ -121,7 +121,7 @@ var ExpandedTask = React.createClass({
     // TODO handle errors
   },
   saveTitle: function() {
-    var newTitle = this.refs.headerTitle.textContent;
+    var newTitle = this.refs.headerTitle.value;
     var taskId = this.props.taskId;
 
     this.setState({titleEditingState: 'inactive'});
@@ -131,6 +131,25 @@ var ExpandedTask = React.createClass({
       name: newTitle
     })
     // TODO handle errors
+  },
+  onTitleChange: function(event){
+    this.setState({'titleInputValue': event.target.value});
+  },
+  onDescriptionChange: function(event){
+    this.setState({'descriptionInputValue': event.target.value});
+  },
+  onDescriptionKeyDown: function(e){
+    if(e.keyCode === 27){
+      this.refs.desci.blur();
+    }
+  },
+  onTitleKeyDown: function(e){
+    if(e.keyCode === 13 || e.keyCode === 27){
+      this.refs.headerTitle.blur();
+    }
+  },
+  onTitleKeyUp: function(e){
+
   },
   renderExpander: function(description) {
 
@@ -162,9 +181,26 @@ var ExpandedTask = React.createClass({
       MainActions.commentsView(false);
     }
   },
+  renderTitle: function(task){
+    /*<div className="header-title" ref="headerTitle" contentEditable="true" onBlur={this.saveTitle}>{task.name}</div>*/
+    return (
+      <Textarea
+        ref="headerTitle"
+        className="header-title"
+        defaultValue={task.name}
+        onKeyUp={this.onTitleKeyUp}
+        onKeyDown={this.onTitleKeyDown}
+        onChange={this.onTitleChange}
+        onBlur={this.saveTitle}
+        placeholder="Add title"
+        value={this.state.titleInputValue}
+        minRows={1}
+        maxRows={10}/>
+    );
+  },
   renderDescription: function (task) {
     var description = task.notes;
-    var value = this.state.titleInputValue;
+    var value = this.state.descriptionInputValue;
     var maxRows = 2;
     // Increase max number of rows if expanded.
     if(this.state.expandDesc){
@@ -182,6 +218,7 @@ var ExpandedTask = React.createClass({
           defaultValue={description}
           onChange={this.onDescriptionChange}
           onBlur={this.saveDescripton}
+          onKeyDown={this.onDescriptionKeyDown}
           placeholder="No description"
           value={value}
           minRows={1}
@@ -190,24 +227,18 @@ var ExpandedTask = React.createClass({
       </div>
     );
   },
-  onDescriptionChange: function(event){
-    if(this.state.expandDesc){
-      this.setState({'titleInputValue': event.target.value});
-    }
-  },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
     var taskId = this.props.taskId;
     var dotItems = this.dotItems(task);
-
     return (
       <div id={taskId} className="header-wrapper">
         <div className="back-arrow" onClick={this.goBack}>
           <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>
         </div>
         <div className="header-details">
-          <div className="header-title" ref="headerTitle" contentEditable="true" onBlur={this.saveTitle}>{task.name}</div>
+          {this.renderTitle(task)}
           {this.renderDescription(task)}
         </div>
         {/* when implementing, use the structure for the api, with checking if is assigned, has image etc */}
