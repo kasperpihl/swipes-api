@@ -14,7 +14,7 @@ var WorkspaceStore = Reflux.createStore({
 		}
 
 		// Object indexed by the workflow_id to test if any has been removed from store.
-		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.id });
+		var testForRemovals = _.indexBy(this._dataById, function(el, index){ return index; });
 
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
@@ -180,6 +180,7 @@ var WorkspaceStore = Reflux.createStore({
 	init: function(){
 		this.manualLoadData();
 		this.listenTo(WorkflowStore, this.onWorkflowStore);
+		this.bouncedGridPress = _.debounce(this.onGridButton, 50);
 	},
 	beforeSaveHandler:function(newObj, oldObj){
 		if(!oldObj && newObj.id){
@@ -189,6 +190,7 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.y = 0;
 			newObj.w = 300;
 			newObj.h = 300;
+			this.bouncedGridPress();
 		}
 		return newObj;
 	}
