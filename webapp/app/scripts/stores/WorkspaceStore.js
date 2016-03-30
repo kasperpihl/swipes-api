@@ -45,7 +45,9 @@ var WorkspaceStore = Reflux.createStore({
 		var obj = this.get(id);
 		var x = obj.x + deltaCordinates.x;
 		var y = obj.y + deltaCordinates.y;
-		this.update(id, {x:x, y:y});
+		if(id){
+			this.update(id, {x:x, y:y});
+		}
 	},
 	onUpdateCardSize: function(id, obj){
 		var newSize = {};
@@ -61,7 +63,9 @@ var WorkspaceStore = Reflux.createStore({
 		if(obj.y){
 			newSize.y = obj.y;
 		}
-		this.update(id, newSize);
+		if(id){
+			this.update(id, newSize);
+		}
 	},
 	onGridButton: function(){
 		var i = 0;
@@ -84,8 +88,10 @@ var WorkspaceStore = Reflux.createStore({
 		this.manualTrigger();
 	},
 	onSendCardToFront: function(id){
-		this.update(id, {z: _.size(this.getAll())}, {trigger:false});
-		this.onAdjustForScreenSize();
+		if(id){
+			this.update(id, {z: _.size(this.getAll())}, {trigger:false});
+			this.onAdjustForScreenSize();
+		}
 	},
 	onAdjustForScreenSize: function(screenWidth, screenHeight){
 		var minimumWidthOnScreen = 100;
@@ -161,7 +167,7 @@ var WorkspaceStore = Reflux.createStore({
 				}
 			}
 
-			if(_.size(newSize) > 0){
+			if(_.size(newSize) > 0 && el.id){
 				this.update(el.id, newSize, {trigger: false});
 				didUpdate = true;
 			}
