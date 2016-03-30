@@ -174,7 +174,9 @@ var ExpandedTask = React.createClass({
     TaskActions.expandDesc(true);
     this.setState({expandedState: 'keyboard_arrow_up'});
   },
-  onChangeTab: function (label) {
+  onActiveTab: function (tab) {
+    var label = tab.props.label;
+
     if (label === 'Comments') {
       MainActions.commentsView(true);
     } else {
@@ -231,8 +233,8 @@ var ExpandedTask = React.createClass({
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
-    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
-    var taskId = this.props.taskId;
+    var taskId = task.id;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
     var dotItems = this.dotItems(task);
     return (
       <div id={taskId} className="header-wrapper">
@@ -294,7 +296,7 @@ var ExpandedTask = React.createClass({
         className="asana-tab"
         label={label}
         key={index}
-        onClick={that.onChangeTab.bind(that, label)}
+        onActive={that.onActiveTab}
       >
 				{children}
 			</Tab>
@@ -303,7 +305,8 @@ var ExpandedTask = React.createClass({
     return <Tabs className="height-100"
 			tabItemContainerStyle={{background:'none'}}
 			inkBarStyle={tabsStyles.inkBarStyle}
-			children={tabs}></Tabs>
+			children={tabs}>
+    </Tabs>
   },
   render: function () {
     var tasks = TasksStore.get('tasks');
