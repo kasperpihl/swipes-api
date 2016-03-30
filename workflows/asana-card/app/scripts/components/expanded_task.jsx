@@ -231,8 +231,8 @@ var ExpandedTask = React.createClass({
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
-    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
-    var taskId = this.props.taskId;
+    var taskId = task.id;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
     var dotItems = this.dotItems(task);
     return (
       <div id={taskId} className="header-wrapper">
