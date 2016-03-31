@@ -125,7 +125,8 @@ var TaskItem = React.createClass({
                 padding: '5px 10px',
                 top: '-12px',
                 fontSize: '16px',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
+                zIndex: '99'
               }}
               />
   				</div>

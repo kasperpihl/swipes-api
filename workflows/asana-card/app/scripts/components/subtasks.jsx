@@ -67,7 +67,7 @@ var Subtasks = React.createClass({
 
 var Subtask = React.createClass({
   getInitialState:function() {
-      return {  
+      return {
       };
   },
   completeTask: function (task) {
@@ -186,13 +186,14 @@ var Subtask = React.createClass({
                 padding: '5px 10px',
                 top: '-12px',
                 fontSize: '16px',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
+                zIndex: '99'
               }}
               />
   				</div>
   				<div className="task-details-wrap">
               <Textarea
-                ref="subTitle" 
+                ref="subTitle"
                 className="task-title sub-task"
                 defaultValue={subtask.name}
                 onChange={this.onTitleChange}
