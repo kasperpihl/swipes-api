@@ -156,13 +156,34 @@ var Subtask = React.createClass({
       this.refs.subTitle.blur();
     }
   },
+  renderTextarea: function () {
+    var subtask = this.props.subtask;
+    var subtaskCompletedState = 'inactive';
+    if (!subtask.completed) {
+    } else {
+      subtaskCompletedState = 'active';
+    }
+    return (
+      <Textarea
+        ref="subTitle"
+        className={"task-title sub-task " + subtaskCompletedState}
+        defaultValue={subtask.name}
+        onChange={this.onTitleChange}
+        onFocus={this.editSubTitle}
+        onBlur={this.saveSubTitle}
+        onKeyDown={this.onKeyDown}
+        placeholder="No title"
+        value={this.state.subtitleInputValue}
+        minRows={1}
+        maxRows={10}/>
+    )
+  },
   render: function () {
     var subtask = this.props.subtask;
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
     var subtaskId = subtask.id;
     var dotItems = this.dotItems();
-
     return (
       <div id={subtaskId} className="task-wrapper">
         <div className="task">
@@ -192,18 +213,7 @@ var Subtask = React.createClass({
               />
   				</div>
   				<div className="task-details-wrap">
-              <Textarea
-                ref="subTitle"
-                className="task-title sub-task"
-                defaultValue={subtask.name}
-                onChange={this.onTitleChange}
-                onFocus={this.editSubTitle}
-                onBlur={this.saveSubTitle}
-                onKeyDown={this.onKeyDown}
-                placeholder="No title"
-                value={this.state.subtitleInputValue}
-                minRows={1}
-                maxRows={10}/>
+            {this.renderTextarea()}
   				</div>
 
 

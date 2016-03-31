@@ -101,7 +101,6 @@ var TaskItem = React.createClass({
     var taskProject = allProjects[taskProjectId] || {};
     var taskProjectName = taskProject.name || null;
     var dotItems = this.dotItems();
-
 		return (
 			<div id={taskId} className="task-wrapper" onClick={this.expandTask.bind(this, taskId)}>
         <div className="task">

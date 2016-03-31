@@ -5,7 +5,8 @@ var SubtasksStore = Reflux.createStore({
   listenables: [SubtasksActions],
   getInitialState: function () {
     return {
-      subtasks: null
+      subtasks: null,
+      completedState: 'inactive'
     }
   },
   onUpdate: function (taskId, field, newValue) {
@@ -39,6 +40,7 @@ var SubtasksStore = Reflux.createStore({
   onLoad: function (subtasks) {
     this.set('subtasks', subtasks);
   }
+  
 });
 
 module.exports = SubtasksStore;

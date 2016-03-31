@@ -40,6 +40,17 @@ var tabsStyles = {
 
 var ExpandedTask = React.createClass({
   mixins: [TasksStore.connect(), TaskStore.connect()],
+  componentDidMount: function() {
+    var taskId = this.props.taskId;
+
+    var storyPromise = swipes.service('asana').request('stories.findByTask', {
+      id: taskId
+    }).then(function(story) {
+      TaskActions.addAuthor(story.data[0].created_by.name);
+    })
+
+
+  },
   goBack: function () {
     MainActions.closeExpandedTask();
   },
@@ -236,16 +247,22 @@ var ExpandedTask = React.createClass({
     var taskId = task.id;
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
     var dotItems = this.dotItems(task);
+    var headerCompletedState = '';
+    if (task.completed) {
+      headerCompletedState = 'completed'
+    } else {
+
+    }
     return (
-      <div id={taskId} className="header-wrapper">
+      <div id={taskId} className={"header-wrapper " + headerCompletedState}>
         <div className="back-arrow" onClick={this.goBack}>
           <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>
         </div>
         <div className="header-details">
           {this.renderTitle(task)}
           {this.renderDescription(task)}
+          {this.state.createdByState}
         </div>
-        {/* when implementing, use the structure for the api, with checking if is assigned, has image etc */}
         <div className="header-avatar">
             <AssigneeMenu task={task} />
         </div>
@@ -302,7 +319,6 @@ var ExpandedTask = React.createClass({
 				{children}
 			</Tab>
     })
-
     return <Tabs className="height-100 tabs-child-selector"
       contentContainerClassName="tabs-wrapper"
 			tabItemContainerStyle={{background:'none'}}
@@ -313,10 +329,10 @@ var ExpandedTask = React.createClass({
   render: function () {
     var tasks = TasksStore.get('tasks');
     var taskId = this.props.taskId;
+    var settings = MainStore.get('settings');
     var task = tasks.filter(function (task) {
       return task.id === taskId;
-    })[0]
-
+    })[0];
     return (
       <div>
         {this.renderHeader(task)}

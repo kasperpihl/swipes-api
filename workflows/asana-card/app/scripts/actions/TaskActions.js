@@ -1,7 +1,8 @@
 var Reflux = require('reflux');
 
 var TaskActions = Reflux.createActions([
-  'expandDesc'
+  'expandDesc',
+  'addAuthor'
 	// Here you can list your actions
 ]);
 
