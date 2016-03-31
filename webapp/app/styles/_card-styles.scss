@@ -24,7 +24,7 @@
       }
     }
   }
-  
+
 }
 .active-app.draggingDot{
   .card:hover{
@@ -34,7 +34,7 @@
       }
     }
   }
-  
+
 }
 
 .card-menu-overlay {
@@ -74,11 +74,11 @@
   overflow: hidden;
   border: 1px solid #eee;
   box-shadow: 1px 4px 18px -5px #ccc;
-  
+
   .card-container{
 
     position: relative;
-    /* 
+    /*
       Drop overlay
     */
     .drop-overlay{
@@ -102,7 +102,7 @@
         opacity: 1.0;
       }
     }
-    /* 
+    /*
       Resize bar!
     */
     .resize-bar{
@@ -203,7 +203,7 @@
     color: $deepBlue-80;
     font-weight: 500;
     font-size: 13px;
-    letter-spacing: 2px;
+    //letter-spacing: 2px;
     text-transform: uppercase;
     display: flex;
     align-items: center;
