@@ -303,6 +303,7 @@ var ExpandedTask = React.createClass({
     })
 
     return <Tabs className="height-100"
+      contentContainerClassName="tabs-wrapper"
 			tabItemContainerStyle={{background:'none'}}
 			inkBarStyle={tabsStyles.inkBarStyle}
 			children={tabs}>
