@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var WorkflowStore = require('./WorkflowStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
+
 var WorkspaceStore = Reflux.createStore({
 	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore3",
@@ -13,8 +14,8 @@ var WorkspaceStore = Reflux.createStore({
 		}
 
 		// Object indexed by the workflow_id to test if any has been removed from store.
-		var testForRemovals = _.indexBy(this.getAll(), function(el){ return el.id });
-	
+		var testForRemovals = _.indexBy(this._dataById, function(el, index){ return index; });
+
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
 			// If the workflow is not found, insert a new record with the grid info.
@@ -37,14 +38,16 @@ var WorkspaceStore = Reflux.createStore({
 		if(keysToRemove.length){
 			this.unset(keysToRemove, {trigger:false});
 		}
-		
+
 		this.manualTrigger();
 	},
 	onMoveCard:function(id, deltaCordinates){
 		var obj = this.get(id);
 		var x = obj.x + deltaCordinates.x;
 		var y = obj.y + deltaCordinates.y;
-		this.update(id, {x:x, y:y});
+		if(id){
+			this.update(id, {x:x, y:y});
+		}
 	},
 	onUpdateCardSize: function(id, obj){
 		var newSize = {};
@@ -60,7 +63,9 @@ var WorkspaceStore = Reflux.createStore({
 		if(obj.y){
 			newSize.y = obj.y;
 		}
-		this.update(id, newSize);
+		if(id){
+			this.update(id, newSize);
+		}
 	},
 	onGridButton: function(){
 		var i = 0;
@@ -83,8 +88,10 @@ var WorkspaceStore = Reflux.createStore({
 		this.manualTrigger();
 	},
 	onSendCardToFront: function(id){
-		this.update(id, {z: _.size(this.getAll())}, {trigger:false});
-		this.onAdjustForScreenSize();
+		if(id){
+			this.update(id, {z: _.size(this.getAll())}, {trigger:false});
+			this.onAdjustForScreenSize();
+		}
 	},
 	onAdjustForScreenSize: function(screenWidth, screenHeight){
 		var minimumWidthOnScreen = 100;
@@ -100,7 +107,7 @@ var WorkspaceStore = Reflux.createStore({
 			var h = el.h;
 			var z = el.z;
 			var newSize = {};
-			
+
 			// Check if something has been moved to the front
 			if(z != counter){
 				newSize.z = counter;
@@ -140,10 +147,10 @@ var WorkspaceStore = Reflux.createStore({
 				if((x + w) > screenWidth){
 					newSize.x = Math.max(screenWidth - w, paddingForAutoAdjusting);
 				}
-				
+
 				// Check if offscreen in the bottom off the screen
 				if(overflowY > 0){
-					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) ); 
+					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) );
 				}
 				if((y + h) > screenHeight){
 					newSize.y = Math.max(screenHeight - h, paddingForAutoAdjusting);
@@ -160,7 +167,7 @@ var WorkspaceStore = Reflux.createStore({
 				}
 			}
 
-			if(_.size(newSize) > 0){
+			if(_.size(newSize) > 0 && el.id){
 				this.update(el.id, newSize, {trigger: false});
 				didUpdate = true;
 			}
@@ -173,6 +180,7 @@ var WorkspaceStore = Reflux.createStore({
 	init: function(){
 		this.manualLoadData();
 		this.listenTo(WorkflowStore, this.onWorkflowStore);
+		this.bouncedGridPress = _.debounce(this.onGridButton, 50);
 	},
 	beforeSaveHandler:function(newObj, oldObj){
 		if(!oldObj && newObj.id){
@@ -182,6 +190,7 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.y = 0;
 			newObj.w = 300;
 			newObj.h = 300;
+			this.bouncedGridPress();
 		}
 		return newObj;
 	}
