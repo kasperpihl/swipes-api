@@ -832,6 +832,13 @@ $color_havelock_blue_approx: #4a90e2;
   padding-bottom: 70px;
 }
 
+.tabs-child-selector {
+
+  > div:first-child {
+    height: 40px;
+  }
+}
+
 .asana-tab {
   > * {
     height: 100%;
@@ -852,4 +859,28 @@ $color_havelock_blue_approx: #4a90e2;
     margin-left: 13.5px;
     margin-top: 13.5px;
   }
+}
+
+
+.new-task-loader {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  @extend %flex;
+
+  &.inactive {
+      display: none;
+  }
+
+  &.active {
+    display: flex;
+  }
+}
+
+
+.inv-icon {
+ opacity: 0 !important;
 }

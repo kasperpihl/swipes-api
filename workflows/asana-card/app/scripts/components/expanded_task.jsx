@@ -30,11 +30,11 @@ var tabsStyles = {
     overflowY: 'auto'
   },
 	inkBarStyle: {
-		height: '48px',
-		marginTop: '-48px',
+		height: '40px',
+		marginTop: '-40px',
 		position: 'relative',
 		zIndex: '1',
-		backgroundColor: '#CCCED5'
+		backgroundColor: '#F4F4F5'
 	}
 };
 
@@ -302,7 +302,7 @@ var ExpandedTask = React.createClass({
 			</Tab>
     })
 
-    return <Tabs className="height-100"
+    return <Tabs className="height-100 tabs-child-selector"
       contentContainerClassName="tabs-wrapper"
 			tabItemContainerStyle={{background:'none'}}
 			inkBarStyle={tabsStyles.inkBarStyle}
