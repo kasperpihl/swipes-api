@@ -860,6 +860,10 @@ $color_havelock_blue_approx: #4a90e2;
       color: $deepBlue-40;
       font-size: 14px;
       font-weight: 300;
+
+      span.heavy {
+        font-weight: 500;
+      }
     }
   }
 
