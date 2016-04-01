@@ -703,7 +703,7 @@ $color_havelock_blue_approx: #4a90e2;
   transition: .2s;
 
   &.completed {
-    background-color: #2ecc71;
+    background-color: #3aaf83;
     transition: .2s;
 
     .back-arrow {
@@ -740,15 +740,19 @@ $color_havelock_blue_approx: #4a90e2;
       }
 
       .expand-description {
-        background-color: #2ecc71;
+        background-color: #3aaf83;
 
         &:hover {
-          background-color: $studioGray-40;
+          background-color: lighten(#3aaf83, 5%);
         }
 
         .material-icons {
           color: #FAFAFA !important;
         }
+      }
+
+      .created-by {
+        color: #FAFAFA;
       }
     }
 
