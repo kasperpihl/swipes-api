@@ -854,6 +854,13 @@ $color_havelock_blue_approx: #4a90e2;
         font-size: 13px !important;
       }
     }
+
+    .created-by {
+      padding: 10px 5px;
+      color: $deepBlue-40;
+      font-size: 14px;
+      font-weight: 300;
+    }
   }
 
   .header-avatar {

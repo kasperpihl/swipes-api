@@ -261,7 +261,7 @@ var ExpandedTask = React.createClass({
         <div className="header-details">
           {this.renderTitle(task)}
           {this.renderDescription(task)}
-          {this.state.createdByState}
+          <div className="created-by">Task created by {this.state.createdByState}</div>
         </div>
         <div className="header-avatar">
             <AssigneeMenu task={task} />
