@@ -125,7 +125,7 @@ var ChatList = React.createClass({
 		}
 		// K_TODO: Test if this works without channel
 		return (
-			<div className="card-container" style={{paddingBottom: '70px' }}> 
+			<div className="card-container" style={{paddingBottom: this.state.inputHeight + 'px' }}> 
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
 					<div className="chat-list">
