@@ -37,7 +37,16 @@ var Comments = React.createClass({
       elements.push(<Comment key={comment.id} comment={comment} />);
     })
 
-    return elements;
+    if (elements.length > 0) {
+      return elements;
+    } else {
+      return (
+        <div className="empty-state asana">
+          <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
+          <p>No comments yet. <br /> Why don't you get this conversation rocking?</p>
+        </div>
+      )
+    }
   },
   render: function () {
     var comments = this.state.comments;

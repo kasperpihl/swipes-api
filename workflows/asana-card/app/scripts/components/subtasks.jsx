@@ -44,9 +44,18 @@ var Subtasks = React.createClass({
 
     subtasks.forEach(function (subtask) {
       elements.push(<Subtask key={subtask.id} subtask={subtask} />);
-    })
-
-    return elements;
+    });
+    // TODO dynamic links
+    if (elements.length > 0) {
+      return elements;
+    } else {
+      return (
+        <div className="empty-state asana">
+          <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
+          <p>No subtasks yet. <br /> Why don't you get this party poppin?</p>
+        </div>
+      )
+    }
   },
   render: function () {
     var subtasks = this.state.subtasks;
