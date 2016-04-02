@@ -1,8 +1,7 @@
 var Reflux = require('reflux');
 
 var TopbarActions = Reflux.createActions([
-	'loadWorkflowModal',
-	'editWorkflow'
+	'loadWorkflowModal'
 ]);
 
 module.exports = TopbarActions;

@@ -30,7 +30,7 @@ var ServiceStore = Reflux.createStore({
 		}
 		swipes.service(serviceName).authSuccess(query, function(res, err){
 			amplitude.logEvent('Engagement - Added Service', {'Service': serviceName});
-			mixpanel.track('Engagement - Added Service', {'Service': serviceName});
+			mixpanel.track('Added Service', {'Service': serviceName});
 			console.log('oauth success!', res, err);
 		})
 	}

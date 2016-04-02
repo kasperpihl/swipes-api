@@ -89,7 +89,7 @@ var CardLoader = React.createClass({
 				if(this.state.workflow){
 					var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
 					amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
-					mixpanel.track('Engagement - Card Action', analyticsProps);
+					mixpanel.track('Card Action', analyticsProps);
 
 				}
 			}
@@ -115,7 +115,7 @@ var CardLoader = React.createClass({
 			console.log('share', e);
 			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
 			amplitude.logEvent('Engagement - Share Action', analyticsProps);
-			mixpanel.track('Engagement - Share Action', analyticsProps);
+			mixpanel.track('Share Action', analyticsProps);
 			this.apiCon.callListener('event', {
 				type: 'share.transmit',
 				data: e

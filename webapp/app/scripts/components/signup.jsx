@@ -10,7 +10,7 @@ var Signup = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Signup');
-        mixpanel.track('Session - Opened Signup');
+        mixpanel.track('Opened Signup');
 		$(document).ready(function() {
 
             var direction = 1;
@@ -49,7 +49,7 @@ var Signup = React.createClass({
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Created Account');
-                mixpanel.track('Session - Created Account');
+                mixpanel.track('Created Account');
 				stateStore.actions.login(res.token);
 			}
 			else
