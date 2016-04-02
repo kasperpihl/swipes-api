@@ -11,6 +11,7 @@ var TopbarStore = Reflux.createStore({
 					swipes.api.request("users.addWorkflow", {"manifest_id": row.manifest_id}, function(res,error){
 						if(res && res.ok){
 							amplitude.logEvent('Engagement - Added Workflow', {'Workflow': row.manifest_id});
+							mixpanel.track('Engagement - Added Card', {'Card': row.manifest_id});
 						}
 						console.log("res from app", res);
 					})
@@ -27,6 +28,7 @@ var TopbarStore = Reflux.createStore({
 				swipes.api.request("users.removeWorkflow", {"workflow_id": workflow.id}, function(res,error){
 					if(res && res.ok){
 						amplitude.logEvent('Engagement - Removed Workflow', {'Workflow': workflow.manifest_id});
+						mixpanel.track('Engagement - Removed Card', {'Card': workflow.manifest_id});
 					}
 					console.log("res from app", res);
 				})

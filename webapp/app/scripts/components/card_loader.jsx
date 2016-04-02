@@ -87,7 +87,10 @@ var CardLoader = React.createClass({
 			}
 			else if (message.command === 'analytics.action'){
 				if(this.state.workflow){
-					amplitude.logEvent('Engagement - Workflow Action', {'Card': this.state.workflow.manifest_id, 'Action': data.name});
+					var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
+					amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
+					mixpanel.track('Engagement - Card Action', analyticsProps);
+
 				}
 			}
 			else if(message.command === 'leftNav.load'){
@@ -110,7 +113,9 @@ var CardLoader = React.createClass({
 	onShareTransmit: function (e) {
 		if (e.toCardId === this.props.data.id) {
 			console.log('share', e);
-			amplitude.logEvent('Engagement - Share Action', {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id});
+			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
+			amplitude.logEvent('Engagement - Share Action', analyticsProps);
+			mixpanel.track('Engagement - Share Action', analyticsProps);
 			this.apiCon.callListener('event', {
 				type: 'share.transmit',
 				data: e

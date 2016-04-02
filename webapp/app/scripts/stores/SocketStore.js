@@ -24,6 +24,7 @@ var SocketStore = Reflux.createStore({
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
 				res.self.me = true;
 				amplitude.setUserId(res.self.id);
+				mixpanel.identify(res.self.id);
 				userStore.update(res.self.id, res.self);
 				WorkflowStore.workflow_base_url = res.workflow_base_url;
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
