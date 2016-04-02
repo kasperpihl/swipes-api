@@ -226,6 +226,7 @@ var CardLoader = React.createClass({
 		if(this.isResizing){
 			this.isResizing = false;
 			$('.active-app').removeClass('resizing');
+			workspaceActions.adjustForScreenSize();
 		}
 	},
 	onWindowFocus: function(e){
@@ -391,6 +392,7 @@ var cardSource = {
 		var delta = monitor.getDifferenceFromInitialOffset();
     	var itemObj = WorkspaceStore.get(item.id);
     	WorkspaceStore.update(itemObj.id, {x: itemObj.x + delta.x, y: itemObj.y + delta.y});
+        workspaceActions.adjustForScreenSize();
 	}
 };
 function collect(connect, monitor) {
