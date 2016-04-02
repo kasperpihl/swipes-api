@@ -6,7 +6,7 @@ var TasksStore = Reflux.createStore({
 	idAttribute: 'id',
   getInitialState: function () {
     return {
-      tasks: []
+      tasks: null
     }
   },
   onCreateTask: function (task) {

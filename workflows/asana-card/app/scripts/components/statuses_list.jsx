@@ -31,7 +31,7 @@ var tabsStyles = {
 var matchTasks = function (tasks) {
 	var statuses = [
 		{name: 'Incomplete', tasks: []},
-		{name: 'Completed', tasks: []},
+		{name: 'Completed', tasks: []}
 	];
 
   tasks.forEach(function (task) {
@@ -69,22 +69,31 @@ var StatusesList = React.createClass({
 			</Tab>
 		});
 
-		return <Tabs className="height-100 tabs-child-selector"
-			tabItemContainerStyle={{background:'none'}}
-			inkBarStyle={tabsStyles.inkBarStyle}
-			children={tabs}></Tabs>
+    if (tasks.length > 0) {
+      return <Tabs className="height-100 tabs-child-selector"
+  			tabItemContainerStyle={{background:'none'}}
+  			inkBarStyle={tabsStyles.inkBarStyle}
+  			children={tabs}></Tabs>
+    } else {
+      <div className="empty-state asana">
+        <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
+        <p>No subtasks yet. <br /> Why don't you get this party poppin?</p>
+      </div>
+    }
 	},
 	render: function () {
     var tasks = this.state.tasks;
-
+    console.log(tasks);
 		return (
 			<div className="height-100">
-				{tasks.length > 0 ? (
-					<div className="height-100">
-						{this.renderStatuses(tasks)}
-					</div>
+        {tasks === null ? (
+          <Loading />
 				) : (
-					<Loading />
+          <div>
+            <div className="height-100">
+  						{this.renderStatuses(tasks)}
+  					</div>
+					</div>
 				)}
 			</div>
 		)

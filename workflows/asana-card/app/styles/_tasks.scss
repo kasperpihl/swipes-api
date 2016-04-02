@@ -343,7 +343,7 @@
   height: 70px;
   background-color: $studioGray-20;
   position: fixed;
-  z-index: 9998;
+  z-index: 9999;
   bottom: 0;
   left: 0;
   overflow: hidden;
@@ -703,7 +703,7 @@ $color_havelock_blue_approx: #4a90e2;
   transition: .2s;
 
   &.completed {
-    background-color: #2ecc71;
+    background-color: #3FBC8C;
     transition: .2s;
 
     .back-arrow {
@@ -740,15 +740,19 @@ $color_havelock_blue_approx: #4a90e2;
       }
 
       .expand-description {
-        background-color: #2ecc71;
+        background-color: #3FBC8C;
 
         &:hover {
-          background-color: $studioGray-40;
+          background-color: lighten(#3FBC8C, 5%);
         }
 
         .material-icons {
           color: #FAFAFA !important;
         }
+      }
+
+      .created-by {
+        color: #FAFAFA;
       }
     }
 
@@ -854,6 +858,17 @@ $color_havelock_blue_approx: #4a90e2;
         font-size: 13px !important;
       }
     }
+
+    .created-by {
+      padding: 10px 5px;
+      color: $deepBlue-40;
+      font-size: 14px;
+      font-weight: 300;
+
+      span.heavy {
+        font-weight: 500;
+      }
+    }
   }
 
   .header-avatar {
@@ -928,4 +943,23 @@ $color_havelock_blue_approx: #4a90e2;
 
 .inv-icon {
  opacity: 0 !important;
+}
+
+.empty-state {
+  padding-top: 15%;
+  width: 100%;
+  @extend %flex;
+  flex-direction: column;
+
+  img {
+    width: 50%;
+  }
+
+  p {
+    color: $deepBlue-60;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.4;
+    margin-top: 20px;
+  }
 }
