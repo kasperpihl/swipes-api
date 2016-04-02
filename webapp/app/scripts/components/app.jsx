@@ -15,6 +15,10 @@ var App = React.createClass({
 			});
 		}
 	},
+  componentDidMount:function() {
+    amplitude.logEvent('Session - Opened App');
+    mixpanel.track('Opened App');
+  },
   componentWillMount: function () {
 		this.listenTo(stateStore, this.onStateChange, this.onStateChange);
 	},
