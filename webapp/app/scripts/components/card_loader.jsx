@@ -284,7 +284,7 @@ var CardLoader = React.createClass({
 				onTouchTap={this.onCardMenuButtonClick}
 				badgeContent={this.state.badge}
 				style={{padding: 0, margin:0, cursor: 'pointer'}}
-				badgeStyle={{backgroundColor: 'red', top: 0, color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
+				badgeStyle={{backgroundColor: 'red', top: '14px', color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
 					<FontIcon  className="material-icons">arrow_drop_down</FontIcon>
 				</Badge>);
 		}

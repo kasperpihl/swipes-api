@@ -96,7 +96,7 @@ $inputButtonWidth: 50px;
 }
 .new-message-header{
     &.read{
-        opacity: 0.5;
+        opacity: 0.2;
     }
     width: 100%;
     height: 4px;
@@ -144,6 +144,7 @@ $inputButtonWidth: 50px;
             color: $studioGray-100;
             width: 100%;
             text-align: center;
+            font-size: 13px;
             left: 0;
 
             span {
@@ -163,8 +164,16 @@ $inputButtonWidth: 50px;
     //flex-wrap: wrap;
     align-items: strech;
     padding-top: 3px;
+
+    &:nth-child(3) {
+
+      .right-side-container {
+        padding-left: 6px;
+      }
+    }
+
     &.extra-message{
-        padding-top:0px;
+        padding: 0;
     }
     &:hover{
         .left-side-container{
@@ -237,9 +246,11 @@ $inputButtonWidth: 50px;
         color: $deepBlue-60;
         font-size: 14px;
         word-break: break-word;
+        padding: 3px;
+        border-radius: 5px;
 
         &:hover {
-          background-color: #eee;
+          background-color: $studioGray-20;
 
           .share-icon {
             opacity: 1;
