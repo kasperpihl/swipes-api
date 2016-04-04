@@ -13,28 +13,13 @@
     pointer-events: none;
   }
 }
-.active-app.draggingDot{
-  .card{
-    .card-container{
-      .drop-overlay{
-        display: block;
-        &:hover{
-          opacity: 1.0;
-        }
-      }
-    }
-  }
 
-}
-.active-app.draggingDot{
-  .card:hover{
-    .card-container{
-      .drop-overlay{
-        opacity: 1.0;
-      }
-    }
-  }
+.active-app.draggingDot div.drop-overlay {
+  display: block;
 
+  &.hover {
+    opacity: 1.0;
+  }
 }
 
 .card-menu-overlay {
@@ -97,9 +82,6 @@
         position:absolute;
         top: 50%;
         margin-top: -30px;
-      }
-      &:hover{
-        opacity: 1.0;
       }
     }
     /*

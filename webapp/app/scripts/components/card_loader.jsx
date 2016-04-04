@@ -64,7 +64,12 @@ var CardLoader = React.createClass({
 				window.open(data.url, "_blank");
 			}
 			else if (message.command === "actions.startDrag"){
-				this.props.dotDragBegin(data, callback);
+				var newData = {
+					fromCardId: this.props.data.id,
+					data: data
+				};
+
+				this.props.dotDragBegin(newData, callback);
 			}
 			else if (message.command === "share.request") {
 				var shareList = WorkflowStore.shareList();
@@ -128,6 +133,7 @@ var CardLoader = React.createClass({
 
 		// Add a listeners for share
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
+		eventActions.add("share.ondrop", this.onShareTransmit, "card" + this.props.data.id);
 
 		var workflow = this.state.workflow;
 
@@ -243,8 +249,8 @@ var CardLoader = React.createClass({
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
-	    eventActions.add("window.mouseup", this.onMouseUp, "card" + this.props.data.id);
-	    eventActions.add("window.mousemove", this.onMouseMove, "card" + this.props.data.id);
+	  eventActions.add("window.mouseup", this.onMouseUp, "card" + this.props.data.id);
+	  eventActions.add("window.mousemove", this.onMouseMove, "card" + this.props.data.id);
 	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -317,12 +323,37 @@ var CardLoader = React.createClass({
 			</div>
 		)
 	},
+	onMouseEnterDropOverlay: function () {
+		if (this.state.workflow) {
+			var id = this.state.workflow.id;
+
+			workspaceActions.enterLeaveDropOverlay(id, true);
+			this.props.onEnterLeaveDropOverlay(id);
+		};
+	},
+	onMouseLeaveDropOverlay: function () {
+		if (this.state.workflow) {
+			var id = this.state.workflow.id;
+
+			workspaceActions.enterLeaveDropOverlay(id, false);
+		};
+
+		this.props.onEnterLeaveDropOverlay(null);
+	},
 	renderDropOverlay: function(){
 		var title = "";
-		if(this.state.workflow)
+		var className = this.state.card.hoverDropOverlay ? 'drop-overlay hover' : 'drop-overlay';
+
+		if (this.state.workflow) {
 			title = this.state.workflow.name;
+		}
+
 		return (
-			<div className="drop-overlay">
+			<div
+				className={className}
+				onMouseEnter={this.onMouseEnterDropOverlay}
+				onMouseLeave={this.onMouseLeaveDropOverlay}
+			>
 				<h6>Share to {title}</h6>
 			</div>
 		);
