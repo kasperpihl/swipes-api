@@ -198,7 +198,7 @@
   }
 
   .card-actions {
-    width: 80px;
+    width: 50px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -219,7 +219,7 @@
       &.minimize {
 
         .material-icons {
-          font-size: 11px !important;
+          font-size: 10px !important;
           color: $deepBlue-40;
           opacity: 0;
         }
@@ -236,20 +236,21 @@
   }
 
   .card-title {
-    width: calc(100% - 80px - 50px);
+    width: calc(100% - 50px - 50px);
+    padding: 0 30px;
     color: $deepBlue-80;
     font-weight: 500;
     font-size: 13px;
-    //letter-spacing: 2px;
+    line-height: 50px;
     text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     .material-icons {
       color: $deepBlue-40 !important;
-      margin-top: -2px;
-      cursor: pointer;
+      transform: translateY(6px);
     }
   }
 
