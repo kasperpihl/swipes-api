@@ -295,21 +295,16 @@ var CardLoader = React.createClass({
 
 		return <div className="card-app-bar">
 			<div className="card-actions">
-			<img src={splitURL + '/' + this.state.workflow.icon} />
+				<div className="card-action minimize" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
+					<FontIcon className="material-icons">close</FontIcon>
+				</div>
 			</div>
 			<div className="card-title" onClick={this.openCardMenu}>
 				{titleObj}
 				{fontObj}
 			</div>
-			<div className="card-context-menu">
-				<IconMenu
-					iconStyle={{fill: '#D1D3D6', height: '20px', width: '20px', cursor: 'pointer'}}
-					iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-					anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-					targetOrigin={{horizontal: 'right', vertical: 'top'}}>
-					<MenuItem primaryText="Rename" onClick={this.onRenameWorkflow} />
-					<MenuItem primaryText="Remove" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)} />
-				</IconMenu>
+			<div className="card-icon">
+				<img src={splitURL + '/' + this.state.workflow.icon} />
 			</div>
 		</div>
 
