@@ -23,9 +23,7 @@ var Workspace = React.createClass({
         }.bind(this));
     },
     runAdjustments() {
-        var width = document.getElementById("actual-app").clientWidth;
-        var height = document.getElementById("actual-app").clientHeight;
-        this.bouncedAdjusting(width,height);
+        this.bouncedAdjusting();
     },
     dotDragBegin(data, callback){
         console.log('dragging ffs');

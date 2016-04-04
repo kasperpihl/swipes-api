@@ -9,6 +9,7 @@ var Signin = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
+        mixpanel.track('Opened Login');
 		$(document).ready(function() {
 
             var direction = 1;
@@ -42,6 +43,7 @@ var Signin = React.createClass({
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Signed In');
+                mixpanel.track('Signed In');
 				stateStore.actions.login(res.token);
 			}
 			else

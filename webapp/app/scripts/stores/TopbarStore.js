@@ -11,6 +11,7 @@ var TopbarStore = Reflux.createStore({
 					swipes.api.request("users.addWorkflow", {"manifest_id": row.manifest_id}, function(res,error){
 						if(res && res.ok){
 							amplitude.logEvent('Engagement - Added Workflow', {'Workflow': row.manifest_id});
+							mixpanel.track('Added Card', {'Card': row.manifest_id});
 						}
 						console.log("res from app", res);
 					})
@@ -18,27 +19,6 @@ var TopbarStore = Reflux.createStore({
 			});
 		}).catch(function(err){
 
-		});
-
-	},
-	onEditWorkflow: function(workflow){
-		modalActions.loadModal('alert', {buttons: ["Cancel", "Rename", "Remove"], title: 'Workflow', message: 'What do you want to do with this workflow?'}, function(res){
-			if(res && res.button === 3){
-				swipes.api.request("users.removeWorkflow", {"workflow_id": workflow.id}, function(res,error){
-					if(res && res.ok){
-						amplitude.logEvent('Engagement - Removed Workflow', {'Workflow': workflow.manifest_id});
-					}
-					console.log("res from app", res);
-				})
-			}
-			else if(res && res.button === 2){
-				var newName = prompt('Rename workflow', workflow.name);
-				if(newName){
-					swipes.api.request('users.renameWorkflow', {'workflow_id': workflow.id, name: newName}, function(res, error){
-
-					})
-				}
-			}
 		});
 
 	}

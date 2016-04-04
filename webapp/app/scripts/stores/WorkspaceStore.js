@@ -93,13 +93,14 @@ var WorkspaceStore = Reflux.createStore({
 			this.onAdjustForScreenSize();
 		}
 	},
-	onAdjustForScreenSize: function(screenWidth, screenHeight){
+	onAdjustForScreenSize: function(){
 		var minimumWidthOnScreen = 100;
 		var minimumHeightOnScreen = 50;
 		var paddingForAutoAdjusting = 5;
 		var didUpdate = false;
 		var counter = 0;
-
+		var screenWidth = document.getElementById("actual-app").clientWidth;
+        var screenHeight = document.getElementById("actual-app").clientHeight;
 		_.each(_.sortBy(this.getAll(), function(el){return el.z; }), function(el){
 			var x = el.x;
 			var y = el.y;

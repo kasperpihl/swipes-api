@@ -87,7 +87,10 @@ var CardLoader = React.createClass({
 			}
 			else if (message.command === 'analytics.action'){
 				if(this.state.workflow){
-					amplitude.logEvent('Engagement - Workflow Action', {'Card': this.state.workflow.manifest_id, 'Action': data.name});
+					var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
+					amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
+					mixpanel.track('Card Action', analyticsProps);
+
 				}
 			}
 			else if(message.command === 'leftNav.load'){
@@ -110,7 +113,9 @@ var CardLoader = React.createClass({
 	onShareTransmit: function (e) {
 		if (e.toCardId === this.props.data.id) {
 			console.log('share', e);
-			amplitude.logEvent('Engagement - Share Action', {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id});
+			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
+			amplitude.logEvent('Engagement - Share Action', analyticsProps);
+			mixpanel.track('Share Action', analyticsProps);
 			this.apiCon.callListener('event', {
 				type: 'share.transmit',
 				data: e
@@ -221,6 +226,7 @@ var CardLoader = React.createClass({
 		if(this.isResizing){
 			this.isResizing = false;
 			$('.active-app').removeClass('resizing');
+			workspaceActions.adjustForScreenSize();
 		}
 	},
 	onWindowFocus: function(e){
@@ -386,6 +392,7 @@ var cardSource = {
 		var delta = monitor.getDifferenceFromInitialOffset();
     	var itemObj = WorkspaceStore.get(item.id);
     	WorkspaceStore.update(itemObj.id, {x: itemObj.x + delta.x, y: itemObj.y + delta.y});
+        workspaceActions.adjustForScreenSize();
 	}
 };
 function collect(connect, monitor) {

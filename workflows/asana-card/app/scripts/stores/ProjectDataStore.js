@@ -156,6 +156,7 @@ var createTask = function (taskData, projectType, projectId) {
 			// Now we need to add the project with another request.
 			// T_TODO Ask the support for this one because in the API docs
 			// they say that you can do it with one request when creating the task.
+			swipes.analytics.action('Create task');
 			if (projectType !== 'mytasks') {
 				console.log('Adding task to a project!');
 				return swipes.service('asana').request('tasks.addProject', {
@@ -163,7 +164,7 @@ var createTask = function (taskData, projectType, projectId) {
 					project: projectId
 				})
 			}
-			swipes.analytics.action('Create task');
+			
 		})
 		.then(function () {
 			console.log('Done!');
