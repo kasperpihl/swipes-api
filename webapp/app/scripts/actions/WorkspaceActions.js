@@ -5,7 +5,8 @@ var WorkspaceActions = Reflux.createActions([
 	'updateCardSize',
 	'gridButton',
 	'sendCardToFront',
-	'adjustForScreenSize'  // Here you can list your actions
+	'adjustForScreenSize',
+	'enterLeaveDropOverlay'  // Here you can list your actions
 ]);
 
 module.exports = WorkspaceActions;

@@ -13,28 +13,13 @@
     pointer-events: none;
   }
 }
-.active-app.draggingDot{
-  .card{
-    .card-container{
-      .drop-overlay{
-        display: block;
-        &:hover{
-          opacity: 1.0;
-        }
-      }
-    }
-  }
 
-}
-.active-app.draggingDot{
-  .card:hover{
-    .card-container{
-      .drop-overlay{
-        opacity: 1.0;
-      }
-    }
-  }
+.active-app.draggingDot div.drop-overlay {
+  display: block;
 
+  &.hover {
+    opacity: 1.0;
+  }
 }
 
 .card-menu-overlay {
@@ -97,9 +82,6 @@
         position:absolute;
         top: 50%;
         margin-top: -30px;
-      }
-      &:hover{
-        opacity: 1.0;
       }
     }
     /*
@@ -181,8 +163,24 @@
   border-bottom: 1px solid $studioGray-20;
   display: flex;
 
+  &:hover {
+
+    .card-actions {
+
+      .card-action {
+
+        &.minimize {
+
+          .material-icons {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
   .card-actions {
-    width: 80px;
+    width: 50px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -195,24 +193,58 @@
       border-radius: 50%;
       margin: 0 5px;
       cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.minimize {
+
+        .material-icons {
+          font-size: 10px !important;
+          color: $deepBlue-40;
+          opacity: 0;
+        }
+
+        &:hover {
+          background-color: $red-color;
+
+          .material-icons {
+            color: white !important;
+          }
+        }
+      }
     }
   }
 
   .card-title {
-    width: calc(100% - 80px - 50px);
+    width: calc(100% - 50px - 50px);
+    padding: 0 30px;
     color: $deepBlue-80;
     font-weight: 500;
     font-size: 13px;
-    //letter-spacing: 2px;
+    line-height: 50px;
     text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .material-icons {
+      color: $deepBlue-40 !important;
+      transform: translateY(6px);
+    }
+  }
+
+  .card-icon {
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .material-icons {
-      color: $deepBlue-40 !important;
-      margin-top: -2px;
-      cursor: pointer;
+    img {
+      width: 30px;
     }
   }
 }

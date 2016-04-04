@@ -83,7 +83,6 @@ var StatusesList = React.createClass({
 	},
 	render: function () {
     var tasks = this.state.tasks;
-    console.log(tasks);
 		return (
 			<div className="height-100">
         {tasks === null ? (
