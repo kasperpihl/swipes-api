@@ -288,8 +288,14 @@ var CardLoader = React.createClass({
 					<FontIcon  className="material-icons">arrow_drop_down</FontIcon>
 				</Badge>);
 		}
+
+		// T_TODO instead of spliting and slicing
+		var url = this.state.workflow.index_url;
+		var splitURL = url.split('/').slice(0,-1).join('/');
+
 		return <div className="card-app-bar">
 			<div className="card-actions">
+			<img src={splitURL + '/' + this.state.workflow.icon} />
 			</div>
 			<div className="card-title" onClick={this.openCardMenu}>
 				{titleObj}
@@ -355,7 +361,7 @@ var CardLoader = React.createClass({
 			<div className="card" style={style} onMouseDown={this.onMouseDown}>
 
 				<div className="card-container">
-					
+
 					<div className="resize-bar left" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'left')}/>
 					<div className="resize-bar right" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'right')}/>
 					<div className="resize-bar top" style={{zIndex:style.zIndex+1}} onMouseDown={this.onDragMouseDown.bind(this, 'top')}/>
