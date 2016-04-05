@@ -177,6 +177,7 @@ var ChatMessage = React.createClass({
 					<SwipesDot
 						className="dot"
 						reverse="true"
+						showOnHover={true}
 						hoverParentId={message.ts}
 						elements={dotItems}
 						menuColors={{
