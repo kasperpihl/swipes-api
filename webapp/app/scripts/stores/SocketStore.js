@@ -81,7 +81,15 @@ var SocketStore = Reflux.createStore({
 			}
 
 			if (msg.type === 'service_removed') {
-				// Update userStore
+				var user = userStore.me();
+
+				user.services = _.filter(user.services, function(service){
+					if(service.id === msg.data.id && service.service_name === msg.data.service_name){
+						return false;
+					}
+					return true;
+				});
+				userStore.update(user.id, user);
 			}
 
 
