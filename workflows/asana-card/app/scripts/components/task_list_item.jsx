@@ -127,7 +127,7 @@ var TaskItem = React.createClass({
                 letterSpacing: '1px',
                 zIndex: '99'
               }}
-              />
+            />
   				</div>
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>

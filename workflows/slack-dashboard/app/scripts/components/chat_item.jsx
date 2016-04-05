@@ -3,6 +3,8 @@ var chatActions = require('../actions/ChatActions');
 var ReactEmoji = require('react-emoji');
 var UserStore = require('../stores/UserStore');
 var FontIcon = require('material-ui/lib/font-icon');
+var SwipesDot = require('swipes-dot').default;
+
 var ChatItem = React.createClass({
 	renderNameHeader: function(){
 		var name = 'unknown';
@@ -116,6 +118,44 @@ var ChatMessage = React.createClass({
 			console.log('emojis', message);
 		}
 	},
+	dotItems: function () {
+    var that = this;
+    var items = [];
+
+		var message = this.props.data;
+
+		if (!message.userObj) {
+		} else {
+			if (message.userObj.me) {
+				items.push({
+					label: 'Edit',
+	        icon: 'edit',
+					callback: function () {
+						chatActions.editMessage(message.text, message.ts);
+					}
+	      });
+				items.push({
+					label: 'Delete',
+					icon: 'delete',
+					callback: function () {
+						chatActions.deleteMessage(message.ts);
+					}
+				})
+			}
+		}
+
+    items = items.concat([
+			{
+				label: 'Share',
+				icon: 'share',
+				callback: function () {
+					that.share(message.text);
+				}
+			}
+    ]);
+
+    return items;
+  },
 	renderShareIcon: function (text) {
 		//text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 		var matches = text.match(/<(.*?)>/g);
@@ -125,14 +165,39 @@ var ChatMessage = React.createClass({
 		}
 	},
 	render: function () {
+		var message = this.props.data;
 		var className = "message-wrapper";
 		if(this.props.data.isNewMessage){
 			className += " new-message";
 		}
+		var dotItems = this.dotItems();
 		return (
-			<div className={className}>
+			<div id={message.ts} className={className}>
 				<div className="message">
-					{this.renderShareIcon(this.props.data.text)}
+					<SwipesDot
+						className="dot"
+						reverse="true"
+						hoverParentId={message.ts}
+						elements={dotItems}
+						menuColors={{
+							borderColor: 'transparent',
+							hoverBorderColor: '#1DB1FC',
+							backgroundColor: '#1DB1FC',
+							hoverBackgroundColor: 'white',
+							iconColor: 'white',
+							hoverIconColor: '#1DB1FC'
+						}}
+						labelStyles={{
+							transition: '.1s',
+							boxShadow: 'none',
+							backgroundColor: 'rgba(0, 12, 47, 1)',
+							padding: '5px 10px',
+							top: '-12px',
+							fontSize: '16px',
+							letterSpacing: '1px',
+							zIndex: '99'
+						}}
+					/>
 					{this.renderMessage(this.props.data.text)}
 					{this.renderFile()}
 					{this.renderAttachments()}
@@ -262,7 +327,7 @@ ChatMessage.ShareComp = React.createClass({
 			console.log('callback from drag');
 		})
 	},
-	
+
 	onMouseUp:function(e){
 		// If mouse goes up on the item (equal to a click), no drag needed
 		this.isTestingForDrag = false;

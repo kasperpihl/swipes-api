@@ -11,7 +11,6 @@ var TextareaModal = React.createClass({
 	},
 	defaults: {
 		title: "Edit Text"
-
 	},
 	getInitialState() {
 	    var initialData = {};

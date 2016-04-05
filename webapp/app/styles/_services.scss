@@ -54,18 +54,18 @@
   border-bottom: 1px solid $studioGray-20;
 
   &.connected > .services-button {
-    background-color: #84c688;
-
-    &:hover {
-      background-color: lighten(#84c688, 5%);
-    }
-  }
-
-  &.connect > .services-button {
     background-color: #fb8571;
 
     &:hover {
       background-color: lighten(#fb8571, 5%);
+    }
+  }
+
+  &.connect > .services-button {
+    background-color: #84c688;
+
+    &:hover {
+      background-color: lighten(#84c688, 5%);
     }
   }
 

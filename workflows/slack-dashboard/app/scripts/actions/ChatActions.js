@@ -4,6 +4,8 @@ var ChatActions = Reflux.createActions([
 	'markAsRead',
 	'handleMessage',
 	'sendMessage',
+	'deleteMessage',
+	'editMessage',
 	'setChannel',
 	'clickLink',
 	'uploadFile',

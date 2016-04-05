@@ -26,13 +26,13 @@ var ChatStore = Reflux.createStore({
 			}
 			UserStore.batchLoad(obj.users, {flush:true});
 			BotStore.batchLoad(obj.bots, {flush:true});
-			
+
 			ChannelStore.batchLoad(obj.channels, {flush:true});
 			ChannelStore.batchLoad(obj.groups);
 			ChannelStore.batchLoad(obj.ims);
-			
 
-			
+
+
 			obj.self.me = true;
 			UserStore.update(obj.self.id, obj.self);
 
@@ -108,7 +108,7 @@ var ChatStore = Reflux.createStore({
 			this.set('channelId', channel.id);
 			this.fetchChannel(channel);
 		}
-		
+
 	},
 	sortMessages: function(){
 
@@ -136,7 +136,7 @@ var ChatStore = Reflux.createStore({
 						model.isMyMessage = true;
 					}
 				}
-				
+
 			}
 			else if(model.bot_id){
 				var bot = BotStore.get(model.bot_id);
@@ -168,7 +168,7 @@ var ChatStore = Reflux.createStore({
 			var title = TimeUtility.dayStringForDate(schedule);
 			sortedSections.push({"title": title, "messages": groups[key] });
 		}
-		
+
 		this.set("sections", sortedSections);
 
 	},
@@ -180,7 +180,7 @@ var ChatStore = Reflux.createStore({
 			return;
 		}
 		var prefix = this.apiPrefixForChannel(channel);
-		swipes.service('slack').request(prefix + "mark", 
+		swipes.service('slack').request(prefix + "mark",
 			{
 				channel: channel.id,
 				ts: ts
@@ -198,13 +198,12 @@ var ChatStore = Reflux.createStore({
 	},
 	removeMessage:function(ts){
 		var currentMessages = this.get('messages') || [];
-		for(var i = 0 ; i < currentMessages.length ; i++){
-			var msg = currentMessages[i];
-			if(msg.ts === ts){
-				currentMessages = currentMessages.splice(i, 1);
-				break;
+
+		currentMessages = currentMessages.filter(
+			function (el) {
+				return el.ts != ts
 			}
-		}
+		)
 		this.update('messages', currentMessages, {trigger:false});
 		this.sortMessages();
 	},
@@ -227,7 +226,7 @@ var ChatStore = Reflux.createStore({
 	},
 	onHandleMessage:function(msg){
 		if(msg.type === 'pong'){
-			this.lastPong = new Date().getTime();	
+			this.lastPong = new Date().getTime();
 		}
 		if(msg.type === 'message'){
 			var me = UserStore.me();
@@ -281,8 +280,8 @@ var ChatStore = Reflux.createStore({
 			var updateObj = {};
 			updateObj.unread_count_display = msg.unread_count_display;
 			updateObj.last_read = msg.ts;
-			
-			ChannelStore.updateChannel(msg.channel, updateObj);			
+
+			ChannelStore.updateChannel(msg.channel, updateObj);
 		}
 		//console.log('slack socket handler', msg.type, msg);
 	},
@@ -307,6 +306,29 @@ var ChatStore = Reflux.createStore({
 			}
 			callback();
 		});
+	},
+	onDeleteMessage: function(timestamp){
+		var newMessages = this.get('messages') || [];
+		swipes.service('slack').request('chat.delete', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: this.get('channelId')}, function(res, err){
+			if (err) {
+				console.log(err);
+			}
+		});
+
+		this.removeMessage(timestamp)
+	},
+	onEditMessage: function(message, timestamp) {
+		var that = this;
+		swipes.modal.edit('Edit Message', message, function(res) {
+			if (res) {
+				var newText = res;
+				swipes.service('slack').request('chat.update', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: that.get('channelId'), text: encodeURIComponent(res)}, function(res, err) {
+					if (err) {
+						console.log(err);
+					}
+				})
+			}
+		})
 	},
 	onUpdateBadge: function(){
 		// Update notification count - get total number from store
@@ -335,9 +357,9 @@ var ChatStore = Reflux.createStore({
 			type: "POST",
 			success: function(res){
 				console.log('res slack upload', res);
-				callback(true); 
+				callback(true);
 			},
-			error: function(err){ 
+			error: function(err){
 				console.log('err slack upload', err);
 				callback(false, err);
 			},
