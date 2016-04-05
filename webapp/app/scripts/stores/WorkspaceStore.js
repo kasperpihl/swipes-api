@@ -41,6 +41,9 @@ var WorkspaceStore = Reflux.createStore({
 
 		this.manualTrigger();
 	},
+	onEnterLeaveDropOverlay: function (id, enter) {
+		this.update(id, {hoverDropOverlay: enter});
+	},
 	onMoveCard:function(id, deltaCordinates){
 		var obj = this.get(id);
 		var x = obj.x + deltaCordinates.x;

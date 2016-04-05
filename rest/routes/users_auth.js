@@ -153,7 +153,7 @@ router.post('/users.create', (req, res, next) => {
               iss: userId
             }, config.get('jwtTokenSecret'))
 
-            res.status(200).json({ok: true, token: token});
+            res.status(200).json({ok: true, token: token, userId: userId});
           }).catch((err) => {
             return next(err);
           });

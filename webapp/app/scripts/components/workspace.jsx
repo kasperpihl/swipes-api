@@ -16,19 +16,26 @@ var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
     renderCards(){
         return _.map(this.state.workspace, function(card, i) {
-        //return _.map([], function(card, i) {
             return (
-                <CardLoader key={card.id} data={card} dotDragBegin={this.dotDragBegin}/>
+                <CardLoader
+                  key={card.id}
+                  data={card}
+                  dotDragBegin={this.dotDragBegin}
+                  onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
             );
         }.bind(this));
     },
     runAdjustments() {
         this.bouncedAdjusting();
     },
-    dotDragBegin(data, callback){
-        console.log('dragging ffs');
+    onEnterLeaveDropOverlay(cardId) {
+      this._dropZoneId = cardId;
+    },
+    dotDragBegin(data, callback) {
+        this._dotDragData = data;
         this.isDraggingDot = true;
         $('.active-app').addClass('draggingDot');
+
         if(callback){
             this.draggingCallback = callback;
         }
@@ -41,9 +48,20 @@ var Workspace = React.createClass({
     },
     onMouseUp(e) {
         if(this.isDraggingDot){
-            $('.active-app').removeClass('draggingDot');
+          if (this._dropZoneId) {
+            var customEventData = this._dotDragData;
+
+            customEventData.toCardId = this._dropZoneId;
+            eventActions.fire('share.ondrop', customEventData);
+          }
+
+          $('.active-app').removeClass('draggingDot');
         }
+
         eventActions.fire('window.onmouseup', e);
+
+        this.isDraggingDot = false;
+        this._dotDragData = null;
     },
     onMouseMove(e) {
         if(this.isDraggingDot){

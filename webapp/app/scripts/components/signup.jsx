@@ -36,18 +36,25 @@ var Signup = React.createClass({
 		var name = this.refs.name.getValue();
         var email = this.refs.email.getValue();
         var password = this.refs.password.getValue();
-        var repassword = this.refs.repassword.getValue();
-
+        var invcode = this.refs.invcode.getValue();
+        if(!invcode){
+            return alert("Please use invitation code");
+        }
+        // Congratulations, if you found this, you deserve to create an account.
+        if(!invcode.startsWith("SW319-")){
+            return alert("Wrong invitation code");
+        }
 		var data = {
 			email: email,
 			name: name,
 			password: password,
-			repassword: repassword
+			repassword: password
 		};
 		var self = this;
 		swipes.api.request({force:true, command:"users.create"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
+                mixpanel.alias(res.userId);
 				amplitude.logEvent('Session - Created Account');
                 mixpanel.track('Created Account');
 				stateStore.actions.login(res.token);
@@ -105,7 +112,7 @@ var Signup = React.createClass({
 													<TextField floatingLabelText="Your Name" ref="name"/>
 													<TextField floatingLabelText="Email" ref="email" id="email" className="username"/>
 													<TextField floatingLabelText="Password" ref="password" type="password" />
-													<TextField floatingLabelText="Password" ref="repassword" type="password" />
+													<TextField floatingLabelText="Invitation Code" ref="invcode" />
 													<br/>
                           <input type="submit" className="login-submit" value="SIGN UP" onClick={this.signup}/>
                         </form>
