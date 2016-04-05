@@ -167,6 +167,7 @@ var createTask = function (taskData, projectType, projectId) {
 			
 		})
 		.then(function () {
+			fetchData();
 			console.log('Done!');
 		})
 		.catch(function (error) {
@@ -193,6 +194,7 @@ var createSubTask = function (taskData) {
 			swipes.analytics.action('Create subtask');
 		})
 		.then(function () {
+			fetchData();
 			console.log('Done!');
 		})
 		.catch(function (error) {
