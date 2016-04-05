@@ -55,7 +55,14 @@ var ExpandedTask = React.createClass({
     MainActions.closeExpandedTask();
   },
   shareTaskUrl: function (taskUrl) {
-    swipes.share.request({url: taskUrl});
+    shareData = this.shareData(taskUrl);
+
+    swipes.share.request(shareData);
+  },
+  shareData: function (taskUrl) {
+    return {
+      url: taskUrl
+    }
   },
   removeTask: function (task) {
     ProjectDataActions.removeTask(task);
@@ -70,7 +77,6 @@ var ExpandedTask = React.createClass({
   dotItems: function (task) {
     var that = this;
     var items = [];
-    //var task = this.props.task;
     var settings = MainStore.get('settings');
     var taskId = this.props.taskId;
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
@@ -253,6 +259,7 @@ var ExpandedTask = React.createClass({
     } else {
 
     }
+
     return (
       <div id={taskId} className={"header-wrapper " + headerCompletedState}>
         <div className="back-arrow" onClick={this.goBack}>
@@ -273,6 +280,7 @@ var ExpandedTask = React.createClass({
             className="dot"
             hoverParentId={taskId}
             elements={dotItems}
+            onDragData={this.shareData.bind(this, taskUrl)}
             menuColors={{
               borderColor: 'transparent',
               hoverBorderColor: '#1DB1FC',
@@ -299,9 +307,8 @@ var ExpandedTask = React.createClass({
   renderTabs: function (task) {
     var that = this;
     var labels = ['Subtasks', 'Comments'];
-
     var tabs = labels.map(function (label, index) {
-      var children;
+    var children;
 
       if (label === 'Subtasks') {
         children = <Subtasks task={task} />;
@@ -319,6 +326,7 @@ var ExpandedTask = React.createClass({
 				{children}
 			</Tab>
     })
+
     return <Tabs className="height-100 tabs-child-selector"
       contentContainerClassName="tabs-wrapper"
 			tabItemContainerStyle={{background:'none'}}
@@ -333,6 +341,7 @@ var ExpandedTask = React.createClass({
     var task = tasks.filter(function (task) {
       return task.id === taskId;
     })[0];
+
     return (
       <div>
         {this.renderHeader(task)}

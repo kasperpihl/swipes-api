@@ -88,6 +88,16 @@ var Subtask = React.createClass({
   shareTaskUrl: function (taskUrl) {
     swipes.share.request({url: taskUrl});
   },
+  shareTaskUrl: function (taskUrl) {
+    shareData = this.shareData(taskUrl);
+
+    swipes.share.request(shareData);
+  },
+  shareData: function (taskUrl) {
+    return {
+      url: taskUrl
+    }
+  },
   removeTask: function (task) {
     ProjectDataActions.removeTask(task);
   },
@@ -201,6 +211,7 @@ var Subtask = React.createClass({
               className="dot"
               hoverParentId={subtaskId}
               elements={dotItems}
+              onDragData={this.shareData.bind(this, taskUrl)}
               menuColors={{
                 borderColor: 'transparent',
                 hoverBorderColor: '#1DB1FC',
