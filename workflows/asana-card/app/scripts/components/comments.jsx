@@ -23,7 +23,7 @@ var Comments = React.createClass({
       comments = stories.filter(function (story) {
         return story.type === 'comment';
       })
-      console.log(comments)
+
       CommentsActions.load(comments);
     })
     .catch(function (err) {
@@ -73,6 +73,7 @@ var Comment = React.createClass({
     var createdBy = comment['created_by'] || {};
     var user = allUsers[createdBy.id] || null;
     var time = moment(comment.created_at).format("h:mm a, d MMM YYYY");
+    
     return (
       <div className="task-comment-wrapper">
         <div className="task-comment-avatar" title={user.name}>
