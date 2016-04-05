@@ -34,7 +34,14 @@ var SocketStore = Reflux.createStore({
 				WorkflowStore.workflow_base_url = res.workflow_base_url;
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
 
-				serviceStore.batchLoad(res.services, {flush:true});
+				var serviceFiltered = _.filter(res.services, function(service, i){
+					if(service.manifest_id == "dropbox"){
+						return false;
+					}
+					return true;
+				});
+				console.log(serviceFiltered, res.services);
+				serviceStore.batchLoad(serviceFiltered, {flush:true});
 				self.connect(res.url);
 				stateActions.changeStarted(true);
 
