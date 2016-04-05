@@ -64,7 +64,10 @@ serviceUtil.getService = (req, res, next) => {
 	let manifestId = req.body.service;
 
 	if (!manifestId) {
-		return next('manifest_id_required!');
+		manifestId = req.query.service;
+	}
+	if (!manifestId) {
+		return next('service_required!');
 	}
 
 	let getServiceQ =

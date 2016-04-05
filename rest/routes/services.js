@@ -38,23 +38,6 @@ router.post('/services.request', serviceUtil.validateData, serviceUtil.getServic
 
 router.post('/services.authsuccess', serviceUtil.validateData, serviceUtil.getService, serviceUtil.requireService, serviceUtil.getAuthData, serviceUtil.updateAuthData);
 
-router.post('/services.authorize', serviceUtil.getService, serviceUtil.requireService, (req, res, next) => {
-	let service = res.locals.service;
-	let file = res.locals.file;
-
-	if(typeof file.authorize !== 'function') {
-		return next(new SwipesError('authorize_function_not_found'));
-	}
-
-	file.authorize({userId: req.userId}, (error, result) => {
-		if (error) {
-			return res.status(200).json({ok:false, err: error});
-		}
-
-		return res.status(200).json({ok: true, result: result});
-	});
-});
-
 /*
 	This is for sysadmin only!
 */

@@ -2,7 +2,30 @@
 
 let express = require( 'express' );
 let config = require('config');
+let serviceUtil = require('../utils/services_util.js');
 let router = express.Router();
+
+
+/*
+	Forward authorize request.
+*/
+router.get('/services.authorize', serviceUtil.getService, serviceUtil.requireService,  (req, res, next) => {
+	let service = res.locals.service;
+	let file = res.locals.file;
+
+	if(typeof file.authorize !== 'function') {
+		return next(new SwipesError('authorize_function_not_found'));
+	}
+
+	file.authorize({userId: req.userId}, (error, result) => {
+		if (error) {
+			return res.status(200).json({ok:false, err: error});
+		}
+		res.writeHead(302, {'Location': result.url});
+       	res.end();
+		//return res.status(200).json({ok: true, result: result});
+	});
+})
 
 /*
   Work around for the stupid jira
