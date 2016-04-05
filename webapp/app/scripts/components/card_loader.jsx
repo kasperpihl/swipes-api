@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var Loading = require('./loading');
 var WorkflowStore = require('../stores/WorkflowStore');
 var WorkspaceStore = require('../stores/WorkspaceStore');
+var UserStore = require('../stores/UserStore');
 
 var stateActions = require('../actions/StateActions');
 var modalActions = require('../actions/ModalActions');
@@ -28,6 +29,8 @@ var DragSource = require('react-dnd').DragSource;
 
 var leftNavActions = require('../actions/LeftNavActions');
 
+var Services = require('./services');
+
 var CardLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
 		return workflows.filter(function(workflow) {
@@ -36,6 +39,10 @@ var CardLoader = React.createClass({
 	}), WorkspaceStore.connectFilter('card', function(cards){
 		return cards.filter(function(card) {
 			return card.id === this.props.data.id;
+		}.bind(this))[0];
+	}), Reflux.connectFilter(UserStore, "user", function(users) {
+		return users.filter(function(user) {
+			return user.me;
 		}.bind(this))[0];
 	}) ],
 	getInitialState:function(){
@@ -386,6 +393,22 @@ var CardLoader = React.createClass({
 		if(this.state.workflow){
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
+
+			// Determine if the 
+			if(this.state.workflow.required_services){
+				var connectedServices = this.state.user.services;
+				// Later we should add support for multiple services.... Maybe.
+				var requiredService = this.state.workflow.required_services[0];
+				var foundService;
+				_.each(connectedServices, function(service){
+					if(service.service_name === requiredService){
+						foundService = service;
+					}
+				});
+				if(!foundService){
+					cardContent = <Services.ConnectRow data={{title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
+				}
+			}
 		}
 
 		return connectDragPreview(
