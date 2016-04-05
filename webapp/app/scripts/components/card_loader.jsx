@@ -275,6 +275,15 @@ var CardLoader = React.createClass({
 			this.setState({cardMenuState: 'active'})
 		}
 	},
+	renderAppbarLogo: function() {
+		// T_TODO instead of spliting and slicing
+		var url = this.state.workflow.index_url;
+		var splitURL = url.split('/').slice(0,-1).join('/');
+
+		if (this.state.workflow.icon) {
+			return <img src={splitURL + '/' + this.state.workflow.icon} />
+		}
+	},
 	renderCardBar: function(){
 		if(!this.state.workflow)
 			return;
@@ -295,10 +304,6 @@ var CardLoader = React.createClass({
 				</Badge>);
 		}
 
-		// T_TODO instead of spliting and slicing
-		var url = this.state.workflow.index_url;
-		var splitURL = url.split('/').slice(0,-1).join('/');
-
 		return <div className="card-app-bar">
 			<div className="card-actions">
 				<div className="card-action minimize" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
@@ -310,7 +315,7 @@ var CardLoader = React.createClass({
 				{fontObj}
 			</div>
 			<div className="card-icon">
-				<img src={splitURL + '/' + this.state.workflow.icon} />
+				{this.renderAppbarLogo()}
 			</div>
 		</div>
 
