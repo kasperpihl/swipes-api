@@ -6,6 +6,7 @@ var CommentsActions = require('../actions/CommentsActions');
 var Loading = require('./loading');
 var Avatar = require('./avatar');
 var SwipesDot = require('swipes-dot').default;
+var moment = require('moment');
 
 var Comments = React.createClass({
   mixins: [CommentsStore.connect()],
@@ -22,7 +23,7 @@ var Comments = React.createClass({
       comments = stories.filter(function (story) {
         return story.type === 'comment';
       })
-
+      console.log(comments)
       CommentsActions.load(comments);
     })
     .catch(function (err) {
@@ -71,14 +72,19 @@ var Comment = React.createClass({
     var allUsers = UserStore.getAll();
     var createdBy = comment['created_by'] || {};
     var user = allUsers[createdBy.id] || null;
-
+    var time = moment(comment.created_at).format("h:mm a, d MMM YYYY");
     return (
       <div className="task-comment-wrapper">
         <div className="task-comment-avatar" title={user.name}>
           <Avatar user={user} />
         </div>
         <div className="task-comment">
-          {comment.text}
+          <div className="comment">
+            {comment.text}
+          </div>
+          <div className="time">
+            {time}
+          </div>
         </div>
       </div>
     )

@@ -549,14 +549,25 @@
 
   .task-comment {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    //align-items: center;
+    justify-content: center;
+    flex-direction: column;
     width: calc(100% - 80px);
     min-height: 70px;
     padding: 10px 0;
     padding-right: 22.5px;
     font-size: 14px;
     color: $deepBlue-80;
+
+    .comment {
+
+    }
+
+    .time {
+      padding-top: 5px;
+      font-size: 11px;
+      color: $deepBlue-40;
+    }
   }
 }
 
