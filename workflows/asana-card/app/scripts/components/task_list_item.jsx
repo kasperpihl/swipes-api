@@ -22,7 +22,7 @@ var TaskItem = React.createClass({
     ProjectDataActions.removeTask(task);
   },
   shareTaskUrl: function (taskUrl) {
-    shareData = this.shareData(taskUrl);
+    var shareData = this.shareData(taskUrl);
 
     swipes.share.request(shareData);
   },

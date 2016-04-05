@@ -55,7 +55,7 @@ var ExpandedTask = React.createClass({
     MainActions.closeExpandedTask();
   },
   shareTaskUrl: function (taskUrl) {
-    shareData = this.shareData(taskUrl);
+    var shareData = this.shareData(taskUrl);
 
     swipes.share.request(shareData);
   },

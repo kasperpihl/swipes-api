@@ -89,7 +89,7 @@ var Subtask = React.createClass({
     swipes.share.request({url: taskUrl});
   },
   shareTaskUrl: function (taskUrl) {
-    shareData = this.shareData(taskUrl);
+    var shareData = this.shareData(taskUrl);
 
     swipes.share.request(shareData);
   },

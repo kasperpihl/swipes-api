@@ -17,9 +17,9 @@ swipes.onReady (function () {
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
 
-	if (data.action === 'Create a task') { // We have to do something smarter here
-		var text = data.data.text || ''; // e.data.data.data.data...
+	var text = data.data.text || ''; // e.data.data.data.data...
 
+	if (text) {
 		CreateTaskInputActions.changeInputValue(text);
 		document.getElementById('create-task-input').focus();
 	}
