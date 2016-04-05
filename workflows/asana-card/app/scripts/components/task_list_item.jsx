@@ -22,7 +22,14 @@ var TaskItem = React.createClass({
     ProjectDataActions.removeTask(task);
   },
   shareTaskUrl: function (taskUrl) {
-    swipes.share.request({url: taskUrl});
+    shareData = this.shareData(taskUrl);
+
+    swipes.share.request(shareData);
+  },
+  shareData: function (taskUrl) {
+    return {
+      url: taskUrl
+    }
   },
   expandTask: function (taskId) {
     MainActions.expandTask(taskId);
@@ -100,7 +107,10 @@ var TaskItem = React.createClass({
     var taskProjectId = taskProjects.length > 0 ? taskProjects[0].id : null;
     var taskProject = allProjects[taskProjectId] || {};
     var taskProjectName = taskProject.name || null;
+    var settings = MainStore.get('settings');
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
     var dotItems = this.dotItems();
+
 		return (
 			<div id={taskId} className="task-wrapper" onClick={this.expandTask.bind(this, taskId)}>
         <div className="task">
@@ -109,6 +119,7 @@ var TaskItem = React.createClass({
               className="dot"
               hoverParentId={taskId}
               elements={dotItems}
+              onDragData={this.shareData.bind(this, taskUrl)}
               menuColors={{
                 borderColor: 'transparent',
                 hoverBorderColor: '#1DB1FC',
