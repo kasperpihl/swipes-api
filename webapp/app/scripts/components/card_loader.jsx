@@ -347,7 +347,7 @@ var CardLoader = React.createClass({
 	},
 	renderDropOverlay: function(){
 		var title = "";
-		var className = this.state.card.hoverDropOverlay ? 'drop-overlay hover' : 'drop-overlay';
+		var className = (this.state.card && this.state.card.hoverDropOverlay) ? 'drop-overlay hover' : 'drop-overlay';
 
 		if (this.state.workflow) {
 			title = this.state.workflow.name;
