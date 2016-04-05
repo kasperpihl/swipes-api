@@ -17,13 +17,11 @@ swipes.onReady(function(){
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
 
-	if (data.action === 'Post to channel') { // We have to do something smarter here
-		var text = data.data.text || data.data.url; // e.data.data.data.data...
+	var text = data.data.text || data.data.url; // e.data.data.data.data...
 
-		if (text) {
-			chatInputActions.changeInputValue(text);
-			document.getElementById('chat-input').focus();
-		}
+	if (text) {
+		chatInputActions.changeInputValue(text);
+		document.getElementById('chat-input').focus();
 	}
 });
 swipes.onAppFocus(function(e){
@@ -35,7 +33,7 @@ swipes.onMenuButton(function(){
 	if(channels.length){
 		var navItems = [];
 		var currentChatId = chatStore.get('channelId');
-		
+
 		var channelsCol = [];
 		var peopleCol = [];
 		_.each(channels, function(channel){
