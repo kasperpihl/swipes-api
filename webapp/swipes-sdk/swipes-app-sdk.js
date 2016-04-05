@@ -284,11 +284,8 @@ var SwipesAppSDK = (function() {
 	}
 	SwipesAppSDK.prototype.service = function(serviceName){
 		return {
-			authorize: function(callback){
-				var options = {
-					service: serviceName
-				};
-				self._client.callSwipesApi("services.authorize", options, callback);
+			getAuthorizeURL: function(callback){
+				return self._client.getAPIURL() + 'services.authorize?service=' + serviceName;
 			},
 			authSuccess: function(data, callback){
 				var options = {

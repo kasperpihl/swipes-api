@@ -65,7 +65,20 @@ var Services = React.createClass({
 
 Services.ConnectRow = React.createClass({
 	clickedAuthorize: function(){
-		ServiceActions.authorize(this.props.data.manifest_id);
+		//ServiceActions.authorize(this.props.data.manifest_id);
+		var serviceName = this.props.data.manifest_id;
+		var url = swipes.service(serviceName).getAuthorizeURL();
+		window.OAuthHandler = ServiceActions;
+		var win = window.open(url, serviceName, "height=700,width=500");
+		if(!win || win.closed || typeof win.closed=='undefined'){
+			return alert('Please allow popups to authorize services');
+		}
+		var timer = setInterval(function() {
+			if(win.closed) {
+				clearInterval(timer);
+				// K_TODO:
+			}
+		}, 1000);
 	},
 	render: function(){
 		console.log(this.props.data);
