@@ -16,7 +16,14 @@ var ChatStore = Reflux.createStore({
 			this.timer = setInterval(this.onCheckSocket.bind(this), 6000);
 		}
 		this.isStarting = true;
-		window.onbeforeunload = this.closeWebSocket.bind(this);
+
+		// When window onload, close websocket and make sure not to try to reopen. (reset onclose)
+		window.onbeforeunload = function(){
+			if(this.webSocket){
+				this.webSocket.onclose = function(){};
+			}
+			this.closeWebSocket.bind(this);
+		}.bind(this)
 		var self = this;
 		swipes.service("slack").request('rtm.start', function(res, err){
 			self.isStarting = false;
@@ -56,7 +63,7 @@ var ChatStore = Reflux.createStore({
 				console.log("slack socket", "open");
 			}.bind(this);
 			this.webSocket.onclose = function () {
-				console.log("slack socket", "close");
+				console.log("slack socket", "close", "now let's reopen");
 				this.webSocket = null;
 				this.start();
 			}.bind(this);
@@ -70,23 +77,38 @@ var ChatStore = Reflux.createStore({
 		}
 	},
 	closeWebSocket:function(){
-		if( this.webSocket ){
+		// If the websocket exist and is in state OPEN or CONNECTING
+		if( this.webSocket && this.webSocket.readyState <= 1 ){
 			console.log('closing the socket manually!');
-			this.webSocket.onclose = function () {};
 			this.webSocket.close();
 			this.webSocket = null;
 		}
 	},
 	onCheckSocket:function(){
-		if(!this.webSocket || this.webSocket.readyState > 1){
+		// Don't double ping.
+		if(this.isPinging){
+			return;
+		}
+		// If no websocket, or state is CLOSED - run rtm.start again.
+		if(!this.webSocket){
 			return this.start();
 		}
+		// State is CONNECTING or CLOSING - Don't interfere
+		if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
+			return;
+		}
+		if(this.webSocket.readyState === 3){
+			this.webSocket = null;
+			return;
+		}
+		// Send a ping to the socket, expect return.
 		this.webSocket.send(JSON.stringify({'id':'1234', 'type': 'ping'}));
+		this.isPinging = true;
 		var ping = new Date().getTime();
 		setTimeout(function(){
+			this.isPinging = false;
 			if(!this.lastPong || this.lastPong < ping){
 				this.closeWebSocket();
-				this.start();
 			}
 		}.bind(this), 4000);
 	},
