@@ -89,7 +89,7 @@ var ChatStore = Reflux.createStore({
 		if(this.isPinging){
 			return;
 		}
-		// If no websocket, or state is CLOSED - run rtm.start again.
+		// If no websocket - run rtm.start again.
 		if(!this.webSocket){
 			return this.start();
 		}
@@ -97,9 +97,10 @@ var ChatStore = Reflux.createStore({
 		if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
 			return;
 		}
+		// If state is CLOSED, remove webSocket variable and run rtm.start again. 
 		if(this.webSocket.readyState === 3){
 			this.webSocket = null;
-			return;
+			return this.start();
 		}
 		// Send a ping to the socket, expect return.
 		this.webSocket.send(JSON.stringify({'id':'1234', 'type': 'ping'}));
