@@ -36,6 +36,7 @@ var Workspace = React.createClass({
         this._dotDragData = data;
         this.isDraggingDot = true;
         $('.active-app').addClass('draggingDot');
+        $('.card').not("#" + this._dotDragData.fromCardId).addClass('draggingDot');
 
         if(callback){
             this.draggingCallback = callback;
@@ -63,10 +64,14 @@ var Workspace = React.createClass({
             var customEventData = this._dotDragData;
 
             customEventData.toCardId = this._dropZoneId;
-            eventActions.fire('share.ondrop', customEventData);
+
+            if (customEventData.fromCardId !== customEventData.toCardId) {
+              eventActions.fire('share.ondrop', customEventData);
+            }
           }
 
           $('.active-app').removeClass('draggingDot');
+          $('.card').not("#" + this._dotDragData.fromCardId).removeClass('draggingDot');
           this._dragDotHandler.parentNode.removeChild(this._dragDotHandler);
           this._dragDotHandler = null;
         }

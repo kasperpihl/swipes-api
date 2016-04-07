@@ -394,7 +394,7 @@ var CardLoader = React.createClass({
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 
-			// Determine if the 
+			// Determine if the
 			if(this.state.workflow.required_services){
 				var connectedServices = this.state.user.services;
 				// Later we should add support for multiple services.... Maybe.
@@ -412,7 +412,7 @@ var CardLoader = React.createClass({
 		}
 
 		return connectDragPreview(
-			<div className="card" style={style} onMouseDown={this.onMouseDown}>
+			<div id={this.state.workflow.id} className="card" style={style} onMouseDown={this.onMouseDown}>
 
 				<div className="card-container">
 
