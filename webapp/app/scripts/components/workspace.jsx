@@ -14,6 +14,7 @@ var Card = require('material-ui/lib/card/card');
 
 var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
+    _dragDotHandler: null,
     renderCards(){
         return _.map(this.state.workspace, function(card, i) {
             return (
@@ -40,6 +41,16 @@ var Workspace = React.createClass({
             this.draggingCallback = callback;
         }
     },
+    createDotDragHandler() {
+      var handler = document.createElement('div');
+
+      handler.setAttribute('class', 'dot-drag-handler');
+      this._dragDotHandler = handler;
+      document.body.appendChild(handler);
+    },
+    positionDotDragHandler(x, y) {
+      this._dragDotHandler.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+    },
     onWindowFocus(e) {
         eventActions.fire('window.focus', e);
     },
@@ -56,6 +67,8 @@ var Workspace = React.createClass({
           }
 
           $('.active-app').removeClass('draggingDot');
+          this._dragDotHandler.parentNode.removeChild(this._dragDotHandler);
+          this._dragDotHandler = null;
         }
 
         eventActions.fire('window.onmouseup', e);
@@ -64,9 +77,15 @@ var Workspace = React.createClass({
         this._dotDragData = null;
     },
     onMouseMove(e) {
-        if(this.isDraggingDot){
+        if (this.isDraggingDot) {
+          if (!this._dragDotHandler) {
+            this.createDotDragHandler();
+          }
 
+          // -25 to center the dot on the mouse cursor. With of the dot is 50
+          this.positionDotDragHandler(e.clientX - 25, e.clientY - 25);
         }
+
         eventActions.fire('window.mousemove', e);
     },
     onMouseDown(e) {

@@ -81,8 +81,6 @@ body {
   -moz-transform: none !important;
 }
 
-
-
 .react-grid-layout {
   background: #FAFAFA;
 }
@@ -112,4 +110,20 @@ body {
 }
 .react-grid-item .add {
   cursor: pointer;
+}
+
+.dot-drag-handler {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  width: 50px;
+  height: 50px;
+  background: #FFCA28;
+  border-radius: 50%;
+  opacity: 0.5;
+  transform: translate3d(0px, 0px, 0px);
+	transform-style: preserve-3d;
+  backface-visibility: visible;
+  pointer-events: none;
 }
