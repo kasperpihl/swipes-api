@@ -131,35 +131,38 @@ var ChatMessage = React.createClass({
 
 		var message = this.props.data;
 
-		if (!message.userObj) {
-		} else {
-			if (message.userObj.me) {
-				items.push({
-					label: 'Edit',
-	        icon: 'edit',
-					callback: function () {
-						chatActions.editMessage(message.text, message.ts);
-					}
-	      });
-				items.push({
-					label: 'Delete',
-					icon: 'delete',
-					callback: function () {
-						chatActions.deleteMessage(message.ts);
-					}
-				})
+		var shareItem = {
+			label: 'Share',
+			icon: 'share',
+			callback: function () {
+				that.share(message.text);
 			}
+		};
+
+		if (!message.userObj) {
+			items.push(shareItem);
+
+			return items;
 		}
 
-    items = items.concat([
-			{
-				label: 'Share',
-				icon: 'share',
+		if (message.userObj.me) {
+			items.push({
+				label: 'Edit',
+				icon: 'edit',
 				callback: function () {
-					that.share(message.text);
+					chatActions.editMessage(message.text, message.ts);
 				}
-			}
-    ]);
+			});
+			items.push({
+				label: 'Delete',
+				icon: 'delete',
+				callback: function () {
+					chatActions.deleteMessage(message.ts);
+				}
+			})
+		}
+
+    items = items.concat([ shareItem ]);
 
     return items;
   },

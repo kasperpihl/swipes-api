@@ -10,6 +10,7 @@ var ProjectsStore = require('../stores/ProjectsStore');
 var Loading = require('./loading');
 var AssigneeMenu = require('./assignee_menu');
 var SwipesDot = require('swipes-dot').default;
+var moment = require('moment');
 
 var Textarea = require('react-textarea-autosize');
 
@@ -22,7 +23,8 @@ var Subtasks = React.createClass({
   		'assignee',
   		'completed',
   		'due_on',
-      'parent'
+      'parent',
+      'created_at'
   	];
 
     swipes.service('asana').request('tasks.subtasks', {
@@ -77,7 +79,19 @@ var Subtasks = React.createClass({
 var Subtask = React.createClass({
   getInitialState:function() {
       return {
+        story: []
       };
+  },
+  componentDidMount: function () {
+    var subtask = this.props.subtask;
+    console.log(subtask);
+    var storyPromise = swipes.service('asana').request('stories.findByTask', {
+      id: subtask.id
+    }).then(function(story) {
+      SubTaskActions.addCreatedAt(story);
+      console.log(story);
+      console.log(story.data[0]);
+    })
   },
   completeTask: function (task) {
     ProjectDataActions.completeTask(task);
@@ -203,6 +217,8 @@ var Subtask = React.createClass({
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
     var subtaskId = subtask.id;
     var dotItems = this.dotItems();
+    var time = moment(subtask.created_at).format("h:mm a, d MMM YYYY");
+
     return (
       <div id={subtaskId} className="task-wrapper">
         <div className="task">
@@ -234,6 +250,7 @@ var Subtask = React.createClass({
   				</div>
   				<div className="task-details-wrap">
             {this.renderTextarea()}
+            <div className="subtask-created-at">{time}</div>
   				</div>
 
 

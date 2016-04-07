@@ -14,6 +14,7 @@ var AssigneeMenu = require('./assignee_menu');
 var Subtasks = require('./subtasks');
 var SwipesDot = require('swipes-dot').default;
 var Comments = require('./comments');
+var moment = require('moment');
 
 var MAX_DESC_LEN = 140;
 
@@ -47,6 +48,7 @@ var ExpandedTask = React.createClass({
       id: taskId
     }).then(function(story) {
       TaskActions.addAuthor(story.data[0].created_by.name);
+      TaskActions.addCreatedAt(story.data[0].created_at);
     })
 
 
@@ -259,7 +261,7 @@ var ExpandedTask = React.createClass({
     } else {
 
     }
-
+    var time = moment(this.state.createdAt).format("h:mm a, d MMM YYYY");
     return (
       <div id={taskId} className={"header-wrapper " + headerCompletedState}>
         <div className="back-arrow" onClick={this.goBack}>
@@ -268,7 +270,7 @@ var ExpandedTask = React.createClass({
         <div className="header-details">
           {this.renderTitle(task)}
           {this.renderDescription(task)}
-          <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span></div>
+          <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> on {time}</div>
         </div>
         <div className="header-avatar">
             <AssigneeMenu task={task} />

@@ -5,7 +5,8 @@ var SubtasksActions = Reflux.createActions([
   'remove',
 	'update',
   'load',
-  'reset'
+  'reset',
+  'addCreatedAt'
 	// Here you can list your actions
 ]);
 

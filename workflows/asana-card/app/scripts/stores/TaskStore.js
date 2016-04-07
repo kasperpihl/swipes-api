@@ -10,7 +10,8 @@ var TaskStore = Reflux.createStore({
       expandedState: 'keyboard_arrow_down',
       descEditingState: 'inactive',
       titleEditingState: 'inactive',
-      createdByState: ''
+      createdByState: '',
+      createdAt: ''
     }
   },
   onExpandDesc: function (newValue) {
@@ -18,6 +19,9 @@ var TaskStore = Reflux.createStore({
   },
   addAuthor: function (newValue) {
     this.set('createdByState', newValue);
+  },
+  addCreatedAt: function (newValue) {
+    this.set('createdAt', newValue);
   }
 });
 
