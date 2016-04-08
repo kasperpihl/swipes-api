@@ -1,6 +1,9 @@
 var Reflux = require('reflux');
 var TasksActions = require('../actions/TasksActions');
 
+// It's a hack but our structure of the app is just wrong
+_cacheTasks = [];
+
 var TasksStore = Reflux.createStore({
   listenables: [TasksActions],
 	idAttribute: 'id',
@@ -13,7 +16,7 @@ var TasksStore = Reflux.createStore({
     var tasks = this.get('tasks');
 
     tasks.unshift(task);
-    this.set('tasks', tasks);
+    this.setTasks(tasks);
   },
   onUpdateTask: function (taskId, field, newValue) {
     var tasks = this.get('tasks');
@@ -26,7 +29,7 @@ var TasksStore = Reflux.createStore({
   		}
   	}
 
-    this.set('tasks', tasks);
+    this.setTasks(tasks);
   },
   onRemoveTask: function (taskId) {
     var tasks = this.get('tasks');
@@ -35,13 +38,20 @@ var TasksStore = Reflux.createStore({
 			return task.id !== taskId;
 		})
 
-    this.set('tasks', tasks);
+    this.setTasks(tasks);
   },
   onLoadTasks: function (tasks) {
-    this.set('tasks', tasks);
+    this.setTasks(tasks);
   },
   onReset: function () {
-    this.set('tasks', []);
+    this.setTasks([]);
+  },
+  setTasks: function (tasks) {
+    _cacheTasks = tasks;
+    this.set('tasks', tasks);
+  },
+  getCachedTasks: function () {
+    return _cacheTasks;
   }
 });
 

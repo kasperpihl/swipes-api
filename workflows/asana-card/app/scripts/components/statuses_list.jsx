@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var Tabs = require('material-ui/lib/tabs/tabs');
 var Tab = require('material-ui/lib/tabs/tab');
 var TasksStore = require('../stores/TasksStore');
+var TasksActions = require('../actions/TasksActions');
 var ProjectDataStore = require('../stores/ProjectDataStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var TaskItem = require('./task_list_item');
@@ -53,7 +54,13 @@ var StatusesList = React.createClass({
 		}
 	},
 	componentDidMount: function () {
-		ProjectDataActions.fetchData();
+    var tasksCache = TasksStore.getCachedTasks();
+
+    if (tasksCache.length > 0) {
+      TasksActions.loadTasks(tasksCache);
+    } else {
+      ProjectDataActions.fetchData();
+    }
 	},
 	renderStatuses: function (tasks) {
 		var statuses = matchTasks(tasks);
@@ -77,12 +84,13 @@ var StatusesList = React.createClass({
     } else {
       <div className="empty-state asana">
         <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
-        <p>No subtasks yet. <br /> Why don't you get this party poppin?</p>
+        <p>No tasks yet. <br /> Why don't you get this party poppin?</p>
       </div>
     }
 	},
 	render: function () {
     var tasks = this.state.tasks;
+
 		return (
 			<div className="height-100">
         {tasks === null ? (

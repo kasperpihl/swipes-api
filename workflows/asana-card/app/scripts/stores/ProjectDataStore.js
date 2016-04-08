@@ -79,13 +79,6 @@ var fetchData = function () {
 			return;
 		}
 
-		/*console.log('TASKS');
-		console.log(res[0].data);
-		console.log('USERS');
-		console.log(res[1].data);
-		console.log('PROJECTS');
-		console.log(res[2].data);*/
-
 		tasks = res[0].data;
 		users = res[1].data;
 		projects = res[2].data;
@@ -164,10 +157,9 @@ var createTask = function (taskData, projectType, projectId) {
 					project: projectId
 				})
 			}
-			
+
 		})
 		.then(function () {
-			fetchData();
 			console.log('Done!');
 		})
 		.catch(function (error) {
@@ -194,7 +186,6 @@ var createSubTask = function (taskData) {
 			swipes.analytics.action('Create subtask');
 		})
 		.then(function () {
-			fetchData();
 			console.log('Done!');
 		})
 		.catch(function (error) {
