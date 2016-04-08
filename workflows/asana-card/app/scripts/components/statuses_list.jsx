@@ -61,16 +61,47 @@ var StatusesList = React.createClass({
     } else {
       ProjectDataActions.fetchData();
     }
+
+    this._placeholder = document.createElement("div");
+    this._placeholder.className = "drag-placeholder";
 	},
+  onDragOver: function (e) {
+    console.log('OVER?!!??!!');
+    e.preventDefault();
+    this._dragged.style.display = "none";
+    if(e.target.className !== "task-wrapper") return;
+    this._over = e.target;
+    e.target.parentNode.insertBefore(this._placeholder, e.target);
+  },
+  onDragStart: function (e) {
+    console.log('WTF?!?!')
+    this._dragged = e.currentTarget;
+    //e.dataTransfer.effectAllowed = 'move';
+  },
+  onDragEnd: function (e) {
+    console.log('WTF?!?!')
+    this._dragged.style.display = "block";
+    this._dragged.parentNode.removeChild(this._placeholder);
+
+    console.log('UPDATE STATE');
+  },
 	renderStatuses: function (tasks) {
+    var that = this;
 		var statuses = matchTasks(tasks);
 		var tabs = statuses.map(function (item, index) {
-			var tasks = item.tasks.map(function (item, index) {
-				return <TaskItem key={index} data={item} />
-			});
+    var tasks = item.tasks.map(function (item, index) {
+      return <TaskItem
+        key={index}
+        data={item}
+        onDragStart={that.onDragStart}
+        onDragEnd={that.onDragEnd}
+        onDragOver={that.onDragOver}
+        onDragEnter={that.onDragEnter}
+      />
+    });
 
 			return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
-				<div className="task-list-wrapper">
+				<div onDragOver={this.onDragOver} className="task-list-wrapper">
 					{tasks}
 				</div>
 			</Tab>

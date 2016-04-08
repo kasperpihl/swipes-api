@@ -112,7 +112,16 @@ var TaskItem = React.createClass({
     var dotItems = this.dotItems();
 
 		return (
-			<div id={taskId} className="task-wrapper" onClick={this.expandTask.bind(this, taskId)}>
+			<div
+        draggable={true}
+        onDragStart={this.props.onDragStart}
+        onDragEnd={this.props.onDragEnd}
+        onDragOver={this.props.onDragOver}
+        onDragEnter={this.props.onDragEnter}
+        id={taskId}
+        className="task-wrapper"
+        onClick={this.expandTask.bind(this, taskId)}
+      >
         <div className="task">
           <div className="task-list-element">
             <SwipesDot
