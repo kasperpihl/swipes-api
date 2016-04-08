@@ -371,6 +371,7 @@ var CardLoader = React.createClass({
 		);
 	},
 	render: function() {
+		var workflowId = '';
 		var cardContent = <Loading />;
 
 		var connectDragSource = this.props.connectDragSource;
@@ -392,6 +393,7 @@ var CardLoader = React.createClass({
 		}
 		if(this.state.workflow){
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
+			workflowId = this.state.workflow.id;
 			cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 
 			// Determine if the
@@ -412,7 +414,7 @@ var CardLoader = React.createClass({
 		}
 
 		return connectDragPreview(
-			<div id={this.state.workflow.id} className="card" style={style} onMouseDown={this.onMouseDown}>
+			<div id={workflowId} className="card" style={style} onMouseDown={this.onMouseDown}>
 
 				<div className="card-container">
 
