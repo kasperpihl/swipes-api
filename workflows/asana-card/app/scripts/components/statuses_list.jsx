@@ -67,7 +67,6 @@ var StatusesList = React.createClass({
 	},
   onDragOver: function (e) {
     e.preventDefault();
-    this._dragged.style.display = "none";
     if(e.target.className === "drag-placeholder") return;
     this._over = e.target;
     e.target.parentNode.insertBefore(this._placeholder, e.target);
@@ -79,7 +78,6 @@ var StatusesList = React.createClass({
   onDragEnd: function (e) {
     TasksActions.dragEnd();
     ProjectDataActions.reorderTasks(this._dragged.getAttribute('id'), this._over.getAttribute('id'));
-    this._dragged.style.display = "block";
     this._dragged.parentNode.removeChild(this._placeholder);
   },
 	renderStatuses: function (tasks) {
