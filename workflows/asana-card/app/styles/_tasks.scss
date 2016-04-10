@@ -14,8 +14,9 @@
 
   .drag-placeholder {
     width: 100%;
-    height: 2px;
-    background: rgb(255,240,120);
+    height: 4px;
+    border-radius: 2px;
+    background: $blue-100;
   }
 }
 
