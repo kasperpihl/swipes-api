@@ -67,17 +67,34 @@ var StatusesList = React.createClass({
 	},
   onDragOver: function (e) {
     e.preventDefault();
-    if(e.target.className === "drag-placeholder") return;
+
     this._over = e.target;
-    e.target.parentNode.insertBefore(this._placeholder, e.target);
+    elementRect = this._over.getBoundingClientRect();
+    var mousePosPercent_Y = ((e.clientY-elementRect.top) /(elementRect.height))*100;
+    var parent = e.target.parentNode;
+
+    if(e.target.className === "drag-placeholder") return;
+
+    if(mousePosPercent_Y > 50) {
+      this._dragPlaceholderPlacement = "after";
+      parent.insertBefore(this._placeholder, e.target.nextElementSibling);
+    }
+    else {
+      this._dragPlaceholderPlacement = "before"
+      parent.insertBefore(this._placeholder, e.target);
+    }
   },
   onDragStart: function (e) {
     TasksActions.dragStart();
     this._dragged = e.currentTarget;
   },
   onDragEnd: function (e) {
+    var draggedId = this._dragged.getAttribute('id');
+    var overId = this._over.getAttribute('id');
+    var placement = this._dragPlaceholderPlacement;
+
     TasksActions.dragEnd();
-    ProjectDataActions.reorderTasks(this._dragged.getAttribute('id'), this._over.getAttribute('id'));
+    ProjectDataActions.reorderTasks(draggedId, overId, placement);
     this._dragged.parentNode.removeChild(this._placeholder);
   },
 	renderStatuses: function (tasks) {

@@ -357,7 +357,7 @@ var ProjectDataStore = Reflux.createStore({
 
 		this.set('createInputValue', '');
 	},
-	onReorderTasks: function (draggedId, overId) {
+	onReorderTasks: function (draggedId, overId, placement) {
 		if (draggedId === overId) {
 			return;
 		}
@@ -365,24 +365,31 @@ var ProjectDataStore = Reflux.createStore({
 		_fetchLock = true;
 
 		var projectId = MainStore.get('settings').projectId;
-		console.log('PROJECT ID +++++++++++++++++')
-		console.log(projectId);
+		var data = {
+			id: draggedId,
+      project: projectId
+		};
+
+		if (placement === 'after') {
+			data.insert_after = overId;
+		} else {
+			data.insert_before = overId;
+		}
+		// console.log('PROJECT ID +++++++++++++++++')
+		// console.log(projectId);
 
 		TasksActions.reorderTasks(draggedId, overId);
 
-		swipes.service('asana').request('tasks.addProject', {
-      id: draggedId,
-      project: projectId,
-      insert_before: overId
-  	}).then(function () {
-			swipes.analytics.action('Reorder task');
-		})
-		.catch(function (error) {
-			console.log(error);
-		})
-		.finally(function () {
-			_fetchLock = false;
-		})
+		swipes.service('asana').request('tasks.addProject', data)
+			.then(function () {
+				swipes.analytics.action('Reorder task');
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
+			.finally(function () {
+				_fetchLock = false;
+			})
 	},
 	onWriteComment: function (taskId, comment) {
 		CreateTaskInputActions.changeInputValue('');
