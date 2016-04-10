@@ -110,6 +110,7 @@ var TaskItem = React.createClass({
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
     var dotItems = this.dotItems();
+    var taskClass = this.props.dragging ? 'task dragging' : 'task';
 
 		return (
 			<div
@@ -122,7 +123,7 @@ var TaskItem = React.createClass({
         className="task-wrapper"
         onClick={this.expandTask.bind(this, taskId)}
       >
-        <div className="task">
+        <div className={taskClass}>
           <div className="task-list-element">
             <SwipesDot
               className="dot"

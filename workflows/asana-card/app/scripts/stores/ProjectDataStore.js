@@ -357,6 +357,27 @@ var ProjectDataStore = Reflux.createStore({
 
 		this.set('createInputValue', '');
 	},
+	onReorderTasks: function (draggedId, overId) {
+		_fetchLock = true;
+
+		var projectId = MainStore.get('settings').projectId;
+
+		TasksActions.reorderTasks(draggedId, overId);
+
+		swipes.service('asana').request('tasks.addProject', {
+      id: draggedId,
+      project: projectId,
+      insert_before: overId
+  	}).then(function () {
+			swipes.analytics.action('Reorder task');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+	},
 	onWriteComment: function (taskId, comment) {
 		CreateTaskInputActions.changeInputValue('');
 		CreateTaskInputActions.changeState({

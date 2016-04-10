@@ -9,7 +9,8 @@ var TasksStore = Reflux.createStore({
 	idAttribute: 'id',
   getInitialState: function () {
     return {
-      tasks: null
+      tasks: null,
+      dragging: false
     }
   },
   onCreateTask: function (task) {
@@ -52,6 +53,22 @@ var TasksStore = Reflux.createStore({
   },
   getCachedTasks: function () {
     return _cacheTasks;
+  },
+  onDragStart: function () {
+    this.set('dragging', true);
+  },
+  onDragEnd: function () {
+    this.set('dragging', false);
+  },
+  onReorderTasks: function (draggedId, overId) {
+    var tasks = this.get('tasks');
+    var mappedTasks = tasks.map(function(task) {return task.id; });
+
+    var draggedIdx = mappedTasks.indexOf(draggedId);
+    var overIdx = mappedTasks.indexOf(overId);
+
+    tasks.splice(overIdx, 0, tasks.splice(draggedIdx, 1)[0]);
+    this.set('tasks', tasks);
   }
 });
 

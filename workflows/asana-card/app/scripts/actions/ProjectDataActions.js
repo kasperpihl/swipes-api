@@ -10,4 +10,7 @@ var ProjectDataActions = Reflux.createActions([
 	'writeComment'
 ]);
 
+//Sync actions
+ProjectDataActions.reorderTasks = Reflux.createAction({sync: true});
+
 module.exports = ProjectDataActions;

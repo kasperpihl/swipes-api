@@ -66,24 +66,21 @@ var StatusesList = React.createClass({
     this._placeholder.className = "drag-placeholder";
 	},
   onDragOver: function (e) {
-    console.log('OVER?!!??!!');
     e.preventDefault();
     this._dragged.style.display = "none";
-    if(e.target.className !== "task-wrapper") return;
+    if(e.target.className === "drag-placeholder") return;
     this._over = e.target;
     e.target.parentNode.insertBefore(this._placeholder, e.target);
   },
   onDragStart: function (e) {
-    console.log('WTF?!?!')
+    TasksActions.dragStart();
     this._dragged = e.currentTarget;
-    //e.dataTransfer.effectAllowed = 'move';
   },
   onDragEnd: function (e) {
-    console.log('WTF?!?!')
+    TasksActions.dragEnd();
+    ProjectDataActions.reorderTasks(this._dragged.getAttribute('id'), this._over.getAttribute('id'));
     this._dragged.style.display = "block";
     this._dragged.parentNode.removeChild(this._placeholder);
-
-    console.log('UPDATE STATE');
   },
 	renderStatuses: function (tasks) {
     var that = this;
@@ -93,6 +90,7 @@ var StatusesList = React.createClass({
       return <TaskItem
         key={index}
         data={item}
+        dragging={that.state.dragging}
         onDragStart={that.onDragStart}
         onDragEnd={that.onDragEnd}
         onDragOver={that.onDragOver}
