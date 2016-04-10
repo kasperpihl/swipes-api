@@ -377,10 +377,16 @@ var ProjectDataStore = Reflux.createStore({
 
 		if (placement === 'after') {
 			data.insert_after = overId;
-			overIdx++;
+
+			if (draggedIdx > overIdx) {
+				overIdx++;
+			}
 		} else {
 			data.insert_before = overId;
-			overIdx--;
+
+			if (draggedIdx < overIdx) {
+				overIdx--;
+			}
 		}
 		// console.log('PROJECT ID +++++++++++++++++')
 		// console.log(projectId);
