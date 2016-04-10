@@ -359,6 +359,10 @@ var ProjectDataStore = Reflux.createStore({
 		this.set('createInputValue', '');
 	},
 	onReorderTasks: function (draggedId, overId, placement) {
+		if (draggedId === overId) {
+			return;
+		}
+
 		_fetchLock = true;
 
 		var tasks = TasksStore.get('tasks');
