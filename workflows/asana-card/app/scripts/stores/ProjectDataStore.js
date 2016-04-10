@@ -3,6 +3,7 @@ var Promise = require('bluebird');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var MainStore = require('../stores/MainStore');
 var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
+var TasksStore = require('../stores/TasksStore');
 var TasksActions = require('../actions/TasksActions');
 var SubtasksActions = require('../actions/SubtasksActions');
 var CommentsActions = require('../actions/CommentsActions');
@@ -358,12 +359,12 @@ var ProjectDataStore = Reflux.createStore({
 		this.set('createInputValue', '');
 	},
 	onReorderTasks: function (draggedId, overId, placement) {
-		if (draggedId === overId) {
-			return;
-		}
-
 		_fetchLock = true;
 
+		var tasks = TasksStore.get('tasks');
+    var mappedTasks = tasks.map(function(task) {return task.id; });
+    var draggedIdx = mappedTasks.indexOf(draggedId);
+    var overIdx = mappedTasks.indexOf(overId);
 		var projectId = MainStore.get('settings').projectId;
 		var data = {
 			id: draggedId,
@@ -372,13 +373,19 @@ var ProjectDataStore = Reflux.createStore({
 
 		if (placement === 'after') {
 			data.insert_after = overId;
+			overIdx++;
 		} else {
 			data.insert_before = overId;
+			overIdx--;
 		}
 		// console.log('PROJECT ID +++++++++++++++++')
 		// console.log(projectId);
 
-		TasksActions.reorderTasks(draggedId, overId);
+		if (draggedIdx === overIdx) {
+			return;
+		}
+
+		TasksActions.reorderTasks(draggedIdx, overIdx);
 
 		swipes.service('asana').request('tasks.addProject', data)
 			.then(function () {
