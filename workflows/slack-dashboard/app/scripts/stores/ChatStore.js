@@ -267,9 +267,8 @@ var ChatStore = Reflux.createStore({
 					return this.removeMessage(msg.deleted_ts);
 				}
 
-				// If message is from someone else, and is not a subtype
-				// K_TODO, check Slack API if some subtypes should increment counter...
-				if(message.user !== me.id && !msg.subtype){
+				// If message is from someone else, and is not hidden
+				if(message.user !== me.id && !msg.hidden){
 					ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
 				}
 
