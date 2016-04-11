@@ -262,11 +262,6 @@ $inputButtonWidth: 50px;
 
         &:hover {
           background-color: $studioGray-20;
-
-          .dot{
-            opacity: 1;
-            transition: .1s;
-          }
         }
 
         span {
@@ -280,9 +275,7 @@ $inputButtonWidth: 50px;
           right: 0px;
           top: 50%;
           transform: translateY(-50%);
-          opacity: 0;
-          transition: .3s;
-          transition-delay: .01s;
+          opacity: 1;
           z-index: 99999;
         }
 
