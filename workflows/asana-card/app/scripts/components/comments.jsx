@@ -70,11 +70,27 @@ var Comment = React.createClass({
   // http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
   urlify: function () {
     var text = this.props.comment.text;
+    var words = text.split(' ');
     var urlRegex = /(https?:\/\/[^\s]+)/g;
+    var elements = [];
 
-    return text.replace(urlRegex, function(url) {
-        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    words.forEach(function (word, index) {
+      var url = null;
+
+      word = word.replace(urlRegex, function(match) {
+        url = match;
+        return '';
+      })
+
+      elements.push(word + ' ');
+
+      if (url !== null) {
+        elements.push(<a target="_blank" href={url}>{url}</a>);
+        elements.push(' ');
+      }
     })
+
+    return elements;
   },
   render: function () {
     var comment = this.props.comment;
@@ -82,7 +98,7 @@ var Comment = React.createClass({
     var createdBy = comment['created_by'] || {};
     var user = allUsers[createdBy.id] || null;
     var time = moment(comment.created_at).format("h:mm a, d MMM YYYY");
-    var text = this.urlify();
+    var textElements = this.urlify();
 
     return (
       <div className="task-comment-wrapper">
@@ -90,7 +106,9 @@ var Comment = React.createClass({
           <Avatar user={user} />
         </div>
         <div className="task-comment">
-          <div className="comment" dangerouslySetInnerHTML={{__html: text}}></div>
+          <div className="comment">
+            {textElements}
+          </div>
           <div className="time">
             {time}
           </div>
