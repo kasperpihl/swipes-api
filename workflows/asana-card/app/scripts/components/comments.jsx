@@ -67,22 +67,30 @@ var Comments = React.createClass({
 });
 
 var Comment = React.createClass({
+  // http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+  urlify: function () {
+    var text = this.props.comment.text;
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+  },
   render: function () {
     var comment = this.props.comment;
     var allUsers = UserStore.getAll();
     var createdBy = comment['created_by'] || {};
     var user = allUsers[createdBy.id] || null;
     var time = moment(comment.created_at).format("h:mm a, d MMM YYYY");
-    
+    var text = this.urlify();
+
     return (
       <div className="task-comment-wrapper">
         <div className="task-comment-avatar" title={user.name}>
           <Avatar user={user} />
         </div>
         <div className="task-comment">
-          <div className="comment">
-            {comment.text}
-          </div>
+          <div className="comment" dangerouslySetInnerHTML={{__html: text}}></div>
           <div className="time">
             {time}
           </div>
