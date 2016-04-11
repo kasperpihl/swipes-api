@@ -395,7 +395,8 @@ var ProjectDataStore = Reflux.createStore({
 			return;
 		}
 
-		TasksActions.reorderTasks(draggedIdx, overIdx);
+		tasks.splice(overIdx, 0, tasks.splice(draggedIdx, 1)[0]);
+		TasksActions.reorderTasks(tasks);
 
 		swipes.service('asana').request('tasks.addProject', data)
 			.then(function () {

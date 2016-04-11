@@ -60,10 +60,7 @@ var TasksStore = Reflux.createStore({
   onDragEnd: function () {
     this.set('dragging', false);
   },
-  onReorderTasks: function (draggedIdx, overIdx) {
-    var tasks = this.get('tasks');
-
-    tasks.splice(overIdx, 0, tasks.splice(draggedIdx, 1)[0]);
+  onReorderTasks: function (tasks) {
     this.set('tasks', tasks);
   }
 });
