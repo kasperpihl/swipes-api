@@ -97,7 +97,7 @@ var ChatStore = Reflux.createStore({
 		if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
 			return;
 		}
-		// If state is CLOSED, remove webSocket variable and run rtm.start again. 
+		// If state is CLOSED, remove webSocket variable and run rtm.start again.
 		if(this.webSocket.readyState === 3){
 			this.webSocket = null;
 			return this.start();
@@ -133,10 +133,10 @@ var ChatStore = Reflux.createStore({
 		}
 
 	},
-	sortMessages: function(){
+	sortMessages: function(messages){
 
 		var self = this;
-		var sortedMessages = this.get('messages');
+		var sortedMessages = messages || this.get('messages');
 		var lastUser, lastGroup, lastDate;
 		var length = sortedMessages.length;
 		var me = UserStore.me();
@@ -224,11 +224,12 @@ var ChatStore = Reflux.createStore({
 
 		currentMessages = currentMessages.filter(
 			function (el) {
-				return el.ts != ts
+				return el.ts !== ts
 			}
 		)
-		this.update('messages', currentMessages, {trigger:false});
-		this.sortMessages();
+
+		this.update('messages', currentMessages, {trigger: false});
+		this.sortMessages(currentMessages);
 	},
 	addMessage:function(message){
 		var newMessages = this.get('messages') || [];
@@ -331,13 +332,14 @@ var ChatStore = Reflux.createStore({
 	},
 	onDeleteMessage: function(timestamp){
 		var newMessages = this.get('messages') || [];
+
+		this.removeMessage(timestamp);
+
 		swipes.service('slack').request('chat.delete', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: this.get('channelId')}, function(res, err){
 			if (err) {
 				console.log(err);
 			}
 		});
-
-		this.removeMessage(timestamp)
 	},
 	onEditMessage: function(message, timestamp) {
 		var that = this;
