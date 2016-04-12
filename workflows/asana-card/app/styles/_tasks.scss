@@ -562,7 +562,7 @@
     //align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: calc(100% - 80px);
+    width: calc(100% - 80px - 40px);
     min-height: 70px;
     padding: 10px 0;
     padding-right: 22.5px;
@@ -581,6 +581,18 @@
       padding-top: 5px;
       font-size: 11px;
       color: $deepBlue-40;
+    }
+  }
+
+  .task-comment-dot {
+    width: 40px;
+    height: 100%;
+    
+    @extend %flex;
+
+    .dot {
+      width: 8px;
+      height: 8px;
     }
   }
 }

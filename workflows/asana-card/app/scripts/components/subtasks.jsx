@@ -89,8 +89,6 @@ var Subtask = React.createClass({
       id: subtask.id
     }).then(function(story) {
       SubTaskActions.addCreatedAt(story);
-      console.log(story);
-      console.log(story.data[0]);
     })
   },
   completeTask: function (task) {
@@ -149,7 +147,7 @@ var Subtask = React.createClass({
         }
       },
       {
-        label: 'Share the task',
+        label: 'Share the subtask',
         icon: 'share',
         callback: function () {
           that.shareTaskUrl(taskUrl);

@@ -7,6 +7,7 @@ var Loading = require('./loading');
 var Avatar = require('./avatar');
 var SwipesDot = require('swipes-dot').default;
 var moment = require('moment');
+var uuid = require('uuid');
 
 var Comments = React.createClass({
   mixins: [CommentsStore.connect()],
@@ -33,9 +34,10 @@ var Comments = React.createClass({
   renderComments: function () {
     var comments = this.state.comments;
     var elements = [];
+    var task = this.props.task;
 
     comments.forEach(function (comment) {
-      elements.push(<Comment key={comment.id} comment={comment} />);
+      elements.push(<Comment key={comment.id} comment={comment} task={task} />);
     })
 
     if (elements.length > 0) {
@@ -68,6 +70,7 @@ var Comments = React.createClass({
 
 var Comment = React.createClass({
   // http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+  mixins: [CommentsStore.connect()],
   urlify: function () {
     var text = this.props.comment.text;
     var words = text.split(' ');
@@ -85,12 +88,83 @@ var Comment = React.createClass({
       elements.push(word + ' ');
 
       if (url !== null) {
-        elements.push(<a target="_blank" href={url}>{url}</a>);
-        elements.push(' ');
+        elements.push(<a target="_blank" key={uuid.v4()} href={url}>{url}</a>);
+        elements.push(<span key={uuid.v4()}>' '</span>);
       }
     })
 
     return elements;
+  },
+  shareTaskUrl: function (taskUrl) {
+    var shareData = this.shareData(taskUrl);
+
+    swipes.share.request(shareData);
+  },
+  shareData: function (taskUrl) {
+    return {
+      url: taskUrl
+    }
+  },
+  dotItems: function () {
+    var that = this;
+    var items = [];
+    var comment = this.props.comment;
+    var task = this.props.task;
+    var taskUrl = 'https://app.asana.com/0/' + task.projects[0].id + '/' + task.id;
+
+
+    items = items.concat([
+      {
+        label: 'Share the comment',
+        icon: 'share',
+        callback: function () {
+          that.shareTaskUrl(comment.text);
+        }
+      },
+      {
+        label: 'Jump to asana',
+        icon: 'link',
+        callback: function () {
+          window.open(taskUrl, '_blank');
+        }
+      }
+    ]);
+
+    return items;
+  },
+  renderSwipesDot: function() {
+    var dotItems = this.dotItems();
+    var comment = this.props.comment;
+    var task = this.props.task;
+    var taskUrl = 'https://app.asana.com/0/' + task.projects[0].id + '/' + task.id;
+
+    return (
+      <SwipesDot
+        className="dot"
+        reverse="true"
+        onDragData={this.shareData.bind(this, comment.text)}
+        hoverParentId={comment.id}
+        elements={dotItems}
+        menuColors={{
+          borderColor: 'transparent',
+          hoverBorderColor: '#1DB1FC',
+          backgroundColor: '#1DB1FC',
+          hoverBackgroundColor: 'white',
+          iconColor: 'white',
+          hoverIconColor: '#1DB1FC'
+        }}
+        labelStyles={{
+          transition: '.1s',
+          boxShadow: 'none',
+          backgroundColor: 'rgba(0, 12, 47, 1)',
+          padding: '5px 10px',
+          top: '-12px',
+          fontSize: '16px',
+          letterSpacing: '1px',
+          zIndex: '99'
+        }}
+      />
+    )
   },
   render: function () {
     var comment = this.props.comment;
@@ -101,18 +175,28 @@ var Comment = React.createClass({
     var textElements = this.urlify();
 
     return (
-      <div className="task-comment-wrapper">
+      <div id={comment.id} className="task-comment-wrapper">
+
         <div className="task-comment-avatar" title={user.name}>
           <Avatar user={user} />
         </div>
+
         <div className="task-comment">
+
           <div className="comment">
             {textElements}
           </div>
+
           <div className="time">
             {time}
           </div>
+
         </div>
+
+        <div className="task-comment-dot">
+          {this.renderSwipesDot()}
+        </div>
+
       </div>
     )
   }
