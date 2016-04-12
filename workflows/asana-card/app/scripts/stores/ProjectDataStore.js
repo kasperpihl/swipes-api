@@ -138,7 +138,9 @@ var createTask = function (taskData, projectType, projectId) {
 	swipes.service('asana').request('tasks.create', taskData)
 		.then(function (response) {
 			var addedTask = response.data;
-			// convert to a string again because the reflux extention thing
+			// Asana is a bitch. A little cheeky bastard.
+			// When we are fetching all the tasks the id is a strings
+			// but right here is a number.... WHAT THE FUCK
 			addedTask.id = addedTask.id + '';
 			var taskId = addedTask.id;
 
