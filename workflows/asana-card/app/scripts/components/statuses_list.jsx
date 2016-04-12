@@ -6,6 +6,7 @@ var TasksStore = require('../stores/TasksStore');
 var TasksActions = require('../actions/TasksActions');
 var ProjectDataStore = require('../stores/ProjectDataStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
+var MainStore = require('../stores/MainStore');
 var TaskItem = require('./task_list_item');
 var Loading = require('./loading');
 
@@ -85,6 +86,16 @@ var StatusesList = React.createClass({
     }
   },
   onDragStart: function (e) {
+    // If it 'mytasks' we disable the drag because
+    // asana don't support reordering on mytasks list
+    var projectType = MainStore.get('settings').projectType;
+
+    if (projectType === 'mytasks') {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+
     TasksActions.dragStart();
     this._dragged = e.currentTarget;
   },
