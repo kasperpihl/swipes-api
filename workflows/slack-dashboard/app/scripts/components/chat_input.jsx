@@ -2,7 +2,7 @@ var React = require('react');
 var ChatInputStore = require('../stores/ChatInputStore');
 var chatActions = require('../actions/ChatActions');
 var chatInputActions = require('../actions/ChatInputActions');
-
+var moment = require('moment');
 var FontIcon = require('material-ui/lib/font-icon');
 var IconButton = require('material-ui/lib/icon-button');
 var TextField = require('material-ui/lib/text-field');
@@ -79,6 +79,17 @@ var ChatInput = React.createClass({
 		var height = Math.max(defaultTextHeight, textHeight);
 	    this.props.onRenderingInputHeight(height);
 	},
+	onPaste: function(e) {
+		var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+  	for (index in items) {
+    	var item = items[index];
+    	if (item.kind === 'file') {
+      	var blob = item.getAsFile();
+				chatActions.uploadClipboard(blob, function(){
+				}.bind(this))
+    	}
+  	}
+	},
 	render: function() {
 		var defaultTextHeight = 70;
 		var textHeight = this.state.inputTextHeight || 0;
@@ -94,6 +105,7 @@ var ChatInput = React.createClass({
 		if(this.state.isFocused){
 			className += " focused";
 		}
+
 		return (
 			<div className={className} style={{height: height + 'px'}}>
 				<input ref="file" type="file" onChange={this.onFileChange} className="file-input" />
@@ -105,8 +117,9 @@ var ChatInput = React.createClass({
 					onBlur={this.onBlur}
 					onChange={this.onChange}
 					onKeyDown={this.onKeyDown}
-	     			onKeyUp={this.onKeyUp}
+	     		onKeyUp={this.onKeyUp}
 					onHeightChange={this.onHeightChange}
+					onPaste={this.onPaste}
 					value={this.state.inputValue}
 					minRows={1}
 					maxRows={6}>
