@@ -47,13 +47,6 @@ var TasksStore = Reflux.createStore({
   onReset: function () {
     this.setTasks([]);
   },
-  setTasks: function (tasks) {
-    _cacheTasks = tasks;
-    this.set('tasks', tasks);
-  },
-  getCachedTasks: function () {
-    return _cacheTasks;
-  },
   onDragStart: function () {
     this.set('dragging', true);
   },
@@ -61,7 +54,14 @@ var TasksStore = Reflux.createStore({
     this.set('dragging', false);
   },
   onReorderTasks: function (tasks) {
+    this.setTasks(tasks);
+  },
+  setTasks: function (tasks) {
+    _cacheTasks = tasks;
     this.set('tasks', tasks);
+  },
+  getCachedTasks: function () {
+    return _cacheTasks;
   }
 });
 

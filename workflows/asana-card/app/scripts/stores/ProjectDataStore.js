@@ -138,6 +138,8 @@ var createTask = function (taskData, projectType, projectId) {
 	swipes.service('asana').request('tasks.create', taskData)
 		.then(function (response) {
 			var addedTask = response.data;
+			// convert to a string again because the reflux extention thing
+			addedTask.id = addedTask.id + '';
 			var taskId = addedTask.id;
 
 			TasksActions.createTask(addedTask);
@@ -388,8 +390,6 @@ var ProjectDataStore = Reflux.createStore({
 				overIdx--;
 			}
 		}
-		// console.log('PROJECT ID +++++++++++++++++')
-		// console.log(projectId);
 
 		if (draggedIdx === overIdx) {
 			return;
