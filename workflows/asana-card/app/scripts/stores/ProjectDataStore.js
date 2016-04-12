@@ -139,7 +139,7 @@ var createTask = function (taskData, projectType, projectId) {
 		.then(function (response) {
 			var addedTask = response.data;
 			// Asana is a bitch. A little cheeky bastard.
-			// When we are fetching all the tasks the id is a strings
+			// When we are fetching all the tasks the id is a string
 			// but right here is a number.... WHAT THE FUCK
 			addedTask.id = addedTask.id + '';
 			var taskId = addedTask.id;
