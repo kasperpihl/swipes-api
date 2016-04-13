@@ -13,14 +13,16 @@ var stateActions = require('../actions/StateActions');
 var socketActions = require('../actions/SocketActions');
 var eventActions = require('../actions/EventActions');
 
+var browserHistory = require('react-router').browserHistory;
+
 var SocketStore = Reflux.createStore({
 	listenables: [ socketActions ],
 	onStart: function(){
 		var self = this;
 
 		swipes.api.request("rtm.start").then(function(res){
-			if(res.ok){
-
+			console.log(res);
+			if(res.ok) {
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
 				res.self.me = true;
 				amplitude.setUserId(res.self.id);
@@ -44,10 +46,13 @@ var SocketStore = Reflux.createStore({
 				serviceStore.batchLoad(serviceFiltered, {flush:true});
 				self.connect(res.url);
 				stateActions.changeStarted(true);
-
 			}
-		}).fail(function(err){
-			console.log("rtm start err", err);
+		}).fail(function (error) {
+			if (!error.ok && error.err === 'not_authed') {
+				localStorage.clear();
+
+				return browserHistory.push('/signin');
+			}
 		})
 	},
 	connect: function(url){

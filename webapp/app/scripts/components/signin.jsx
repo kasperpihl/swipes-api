@@ -43,7 +43,7 @@ var Signin = React.createClass({
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Signed In');
-                mixpanel.track('Signed In');
+        mixpanel.track('Signed In');
 				stateStore.actions.login(res.token);
 			}
 			else
