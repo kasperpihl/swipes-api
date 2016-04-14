@@ -320,14 +320,22 @@ var ChatStore = Reflux.createStore({
 			callback(result, error);
 		}.bind(this), formData);
 	},
-	onUploadClipboard: function(blob, callback) {
+	onUploadClipboard: function(blob, message, callback) {
 		var token = swipes.info.workflow.slackToken;
 		var formData = new FormData();
 		var date = moment().format('YYYY-MM-DD, h:mm A');
+		var imageTitle;
+
+		if (!message) {
+			imageTitle = 'Pasted image at' + date;
+		} else {
+			imageTitle = message;
+		}
+
 		formData.append("token", token);
 		formData.append("channels", this.get('channelId'));
 		formData.append("filename", 'Pasted image at ' + date);
-		formData.append("title", 'Pasted image at ' + date);
+		formData.append("title", imageTitle);
 		formData.append("file", blob);
 		this.__tempSlackRequest('files.upload', {}, function(result, error){
 			callback(result, error);
