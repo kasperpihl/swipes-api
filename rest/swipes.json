@@ -9,7 +9,7 @@
        "SW_API_PORT": "5000",
        "SW_CLIENT_PORT": "443",
 
-       "SW_DATABASE_HOST": "52.0.154.56",
+       "SW_DATABASE_HOST": "localhost",
 
        "SW_JIRA_CONSUMER_KEY": "DevSwipesUnicorns",
 
