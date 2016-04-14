@@ -320,7 +320,7 @@ var ChatStore = Reflux.createStore({
 			callback(result, error);
 		}.bind(this), formData);
 	},
-	onUploadClipboard: function(blob) {
+	onUploadClipboard: function(blob, callback) {
 		var token = swipes.info.workflow.slackToken;
 		var formData = new FormData();
 		var date = moment().format('YYYY-MM-DD, h:mm A');
@@ -330,7 +330,7 @@ var ChatStore = Reflux.createStore({
 		formData.append("title", 'Pasted image at ' + date);
 		formData.append("file", blob);
 		this.__tempSlackRequest('files.upload', {}, function(result, error){
-
+			callback(result, error);
 		}.bind(this), formData);
 	},
 	onSendMessage: function(message, callback){
