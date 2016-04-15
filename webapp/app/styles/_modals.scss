@@ -877,6 +877,7 @@ $color_havelock_blue_approx: #4a90e2;
     font-size: 16px;
     border-left: 1px solid $studioGray-40;
     font-weight: 400;
+		user-select: none;
 
     @extend %flex;
   }

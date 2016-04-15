@@ -140,11 +140,10 @@ var ScheduleModal = React.createClass({
     }
   },
   glowTimeDisplay: function() {
-    if (this.state.glow == 'inactive') {
       this.setState({glow: 'active'})
-    } else {
+  },
+  fadeTimeDisplay: function() {
       this.setState({glow: 'inactive'})
-    }
   },
   renderTimeDisplay: function() {
     var sliderVal = this.state.sliderValue;
@@ -155,7 +154,7 @@ var ScheduleModal = React.createClass({
 
     return (
       <div className={"time-display " + this.state.glow}>
-        <div className="time-numbers">{parseTime}</div> <div className="time-of-day" onClick={this.changeTime} onMouseDown={this.glowTimeDisplay} onMouseUp={this.glowTimeDisplay}>{this.state.timeOfDay}</div>
+        <div className="time-numbers">{parseTime}</div> <div className="time-of-day" onClick={this.changeTime} onMouseDown={this.glowTimeDisplay} onMouseUp={this.fadeTimeDisplay}>{this.state.timeOfDay}</div>
       </div>
     )
   },
@@ -181,7 +180,7 @@ var ScheduleModal = React.createClass({
         {this.renderTimeDisplay()}
 
         <ReactSlider className="react-slider" ref='slider' defaultValue={[360]} min={0} max={705} step={15} onChange={this.sliderValue}>
-          <div className='react-slider-handle' onMouseDown={this.glowTimeDisplay} onMouseUp={this.glowTimeDisplay}></div>
+          <div className='react-slider-handle' onMouseDown={this.glowTimeDisplay} onMouseUp={this.fadeTimeDisplay}></div>
         </ReactSlider>
 
         {this.renderSelectedTime()}
