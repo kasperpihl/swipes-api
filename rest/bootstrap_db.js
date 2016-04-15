@@ -20,6 +20,10 @@ let tables = [
     name: 'workflows',
     indexes: ['manifest_id']
   },
+  {
+    name: 'links',
+    indexes: ['checksum']
+  },
   'events',
   'mentions',
   'organizations'
