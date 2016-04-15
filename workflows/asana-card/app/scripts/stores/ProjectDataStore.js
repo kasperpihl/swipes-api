@@ -421,9 +421,16 @@ var ProjectDataStore = Reflux.createStore({
 
 		writeComment(taskId, comment);
 	},
-	onScheduleTask: function(taskId) {
-
+	onScheduleTask: function(task, taskId) {
+		var task = task;
+		
 		swipes.modal.schedule( function(res) {
+			if (task.parent) {
+				SubtasksActions.update(taskId, 'due_at', res);
+			} else {
+				TasksActions.updateTask(taskId, 'due_at', res);
+			}
+
 			if (res) {
 				swipes.service('asana').request('tasks.update', {
 					id: taskId,

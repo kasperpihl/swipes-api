@@ -32,8 +32,8 @@ var TaskItem = React.createClass({
       url: taskUrl
     }
   },
-  scheduleTask: function(taskId) {
-    ProjectDataActions.scheduleTask(taskId);
+  scheduleTask: function(task, taskId) {
+    ProjectDataActions.scheduleTask(task, taskId);
   },
   expandTask: function (taskId) {
     MainActions.expandTask(taskId);
@@ -75,7 +75,7 @@ var TaskItem = React.createClass({
         label: 'Schedule task',
         icon: 'schedule',
         callback: function() {
-          that.scheduleTask(task.id);
+          that.scheduleTask(task, task.id);
         }
       },
       {
@@ -114,15 +114,12 @@ var TaskItem = React.createClass({
 
     var dueOnText;
 
-
     if (!task.due_at) {
-      console.log('render nothing')
     } else {
-      console.log('render something' + task.name);
       var taskDue = task.due_at;
       var parseDate = moment(taskDue).format('hh:mma, Do MMMM YYYY');
       return (
-        <div className="task-due-on">{'The task is due on ' + parseDate}</div>
+        <div className="task-due-on">{'The task is due at ' + parseDate}</div>
       )
     }
   },

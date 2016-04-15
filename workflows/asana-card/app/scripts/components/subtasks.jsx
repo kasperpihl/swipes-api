@@ -114,8 +114,8 @@ var Subtask = React.createClass({
   removeTask: function (task) {
     ProjectDataActions.removeTask(task);
   },
-  scheduleTask: function(taskId) {
-    ProjectDataActions.scheduleTask(taskId);
+  scheduleTask: function(task, taskId) {
+    ProjectDataActions.scheduleTask(task, taskId);
   },
   dotItems: function () {
     var that = this;
@@ -161,7 +161,7 @@ var Subtask = React.createClass({
         label: 'Schedule the task',
         icon: 'schedule',
         callback: function() {
-          that.scheduleTask(task.id);
+          that.scheduleTask(task, task.id);
         }
       },
       {
@@ -220,6 +220,20 @@ var Subtask = React.createClass({
         maxRows={10}/>
     )
   },
+  renderDueOnDate: function() {
+    var subtask = this.props.subtask;
+
+    var dueOnText;
+
+    if (!subtask.due_at) {
+    } else {
+      var taskDue = subtask.due_at;
+      var parseDate = moment(taskDue).format('hh:mma, Do MMMM YYYY');
+      return (
+        <div className="task-due-on">{'The task is due at ' + parseDate}</div>
+      )
+    }
+  },
   render: function () {
     var subtask = this.props.subtask;
     var settings = MainStore.get('settings');
@@ -259,7 +273,7 @@ var Subtask = React.createClass({
   				</div>
   				<div className="task-details-wrap">
             {this.renderTextarea()}
-            <div className="subtask-created-at">{time}</div>
+            {this.renderDueOnDate()}
   				</div>
 
 
