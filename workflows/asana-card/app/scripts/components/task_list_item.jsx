@@ -117,9 +117,9 @@ var TaskItem = React.createClass({
     if (!task.due_at) {
     } else {
       var taskDue = task.due_at;
-      var parseDate = moment(taskDue).format('hh:mma, Do MMMM YYYY');
+      var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
       return (
-        <div className="task-due-on">{'The task is due at ' + parseDate}</div>
+        <div className="task-due-on">{'Due on ' + parseDate}</div>
       )
     }
   },

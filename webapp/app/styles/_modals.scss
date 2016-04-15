@@ -734,8 +734,8 @@ $color_havelock_blue_approx: #4a90e2;
 /// Custom DayPicker styles
 
 .DayPicker {
-  width: 230px;
-  margin-left: calc(50% - (230px / 2));
+  //width: 230px;
+  //margin-left: calc(50% - (230px / 2));
 
   div {
     outline : none;
@@ -747,8 +747,10 @@ $color_havelock_blue_approx: #4a90e2;
 }
 
 .DayPicker-NavBar {
-  height: 1.5rem;
-  padding-top: 20px;
+	height: 1.5rem;
+	padding-top: 20px;
+	width: 230px;
+	margin-left: calc(50% - (230px / 2));
 }
 
 .DayPicker-NavButton {
