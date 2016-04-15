@@ -88,7 +88,6 @@ var ChatInput = React.createClass({
     	if (item.kind === 'file') {
       	var blob = item.getAsFile();
 				chatActions.uploadClipboard(blob, message, function(){
-					console.log('remove state');
 					this.setState({isUploading: false});
 					chatInputActions.changeInputValue('');
 				}.bind(this))
