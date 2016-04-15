@@ -76,6 +76,9 @@ var ExpandedTask = React.createClass({
   undoCompleteTask: function (task) {
     ProjectDataActions.undoCompleteTask(task);
   },
+  scheduleTask: function(taskId) {
+    ProjectDataActions.scheduleTask(taskId);
+  },
   dotItems: function (task) {
     var that = this;
     var items = [];
@@ -114,6 +117,13 @@ var ExpandedTask = React.createClass({
         icon: 'share',
         callback: function () {
           that.shareTaskUrl(taskUrl);
+        }
+      },
+      {
+        label: 'Schedule the task',
+        icon: 'schedule',
+        callback: function() {
+          that.scheduleTask(task.id);
         }
       },
       {

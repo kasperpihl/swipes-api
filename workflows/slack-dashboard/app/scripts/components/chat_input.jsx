@@ -82,10 +82,10 @@ var ChatInput = React.createClass({
 	onPaste: function(e) {
 		var items = (e.clipboardData || e.originalEvent.clipboardData).items;
 		var message = this.state.inputValue;
-		this.setState({isUploading: true});
   	for (index in items) {
     	var item = items[index];
     	if (item.kind === 'file') {
+				this.setState({isUploading: true});
       	var blob = item.getAsFile();
 				chatActions.uploadClipboard(blob, message, function(){
 					this.setState({isUploading: false});

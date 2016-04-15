@@ -7,6 +7,7 @@ var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var ProjectsStore = require('../stores/ProjectsStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
+var moment = require('moment');
 
 var TaskItem = React.createClass({
   getInitialState: function(){
@@ -30,6 +31,9 @@ var TaskItem = React.createClass({
     return {
       url: taskUrl
     }
+  },
+  scheduleTask: function(taskId) {
+    ProjectDataActions.scheduleTask(taskId);
   },
   expandTask: function (taskId) {
     MainActions.expandTask(taskId);
@@ -68,6 +72,13 @@ var TaskItem = React.createClass({
         }
       },
       {
+        label: 'Schedule task',
+        icon: 'schedule',
+        callback: function() {
+          that.scheduleTask(task.id);
+        }
+      },
+      {
         label: 'Share the task',
         icon: 'share',
         callback: function () {
@@ -95,6 +106,23 @@ var TaskItem = React.createClass({
     if (taskProjectName && projectType == 'mytasks') {
       return (
         <div className="task-project">{taskProjectName}</div>
+      )
+    }
+  },
+  renderDueOnDate: function() {
+    var task = this.props.data;
+
+    var dueOnText;
+
+
+    if (!task.due_at) {
+      console.log('render nothing')
+    } else {
+      console.log('render something' + task.name);
+      var taskDue = task.due_at;
+      var parseDate = moment(taskDue).format('hh:mma, Do MMMM YYYY');
+      return (
+        <div className="task-due-on">{'The task is due on ' + parseDate}</div>
       )
     }
   },
@@ -152,6 +180,7 @@ var TaskItem = React.createClass({
   				</div>
   				<div className="task-details-wrap">
   					<div className="task-title">{task.name}</div>
+            {this.renderDueOnDate()}
   				</div>
           <div className="task-assign-avatar">
             <AssigneeMenu task={task} />

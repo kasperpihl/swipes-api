@@ -240,6 +240,13 @@ var SwipesAppSDK = (function() {
 					callback(res);
 			})
 		},
+		schedule: function(callback) {
+			this.load("schedule", function(res) {
+				if(typeof callback === 'function') {
+					callback(res)
+				}
+			})
+		},
 		alert: function(title, message, callback){
 			var options = {buttons: ["Okay"]};
 			options = this._getOptions(options, title, message);

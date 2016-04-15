@@ -38,6 +38,7 @@ var fetchData = function () {
 		'projects',
 		'completed',
 		'due_on',
+		'due_at',
 		'notes'
 	];
 	var usersReq = swipes.service('asana').request('users.findByWorkspace', {
@@ -419,6 +420,26 @@ var ProjectDataStore = Reflux.createStore({
 		});
 
 		writeComment(taskId, comment);
+	},
+	onScheduleTask: function(taskId) {
+
+		swipes.modal.schedule( function(res) {
+			if (res) {
+				swipes.service('asana').request('tasks.update', {
+					id: taskId,
+					due_at: res
+				})
+				.then(function () {
+					 swipes.analytics.action('Scheduling a task');
+				})
+				.catch(function (error) {
+					console.log(error);
+				})
+				.finally(function () {
+					_fetchLock = false;
+				})
+			}
+		})
 	}
 });
 

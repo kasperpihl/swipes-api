@@ -23,6 +23,7 @@ var Subtasks = React.createClass({
   		'assignee',
   		'completed',
   		'due_on',
+      'due_at',
       'parent',
       'created_at'
   	];
@@ -113,6 +114,9 @@ var Subtask = React.createClass({
   removeTask: function (task) {
     ProjectDataActions.removeTask(task);
   },
+  scheduleTask: function(taskId) {
+    ProjectDataActions.scheduleTask(taskId);
+  },
   dotItems: function () {
     var that = this;
     var items = [];
@@ -151,6 +155,13 @@ var Subtask = React.createClass({
         icon: 'share',
         callback: function () {
           that.shareTaskUrl(taskUrl);
+        }
+      },
+      {
+        label: 'Schedule the task',
+        icon: 'schedule',
+        callback: function() {
+          that.scheduleTask(task.id);
         }
       },
       {

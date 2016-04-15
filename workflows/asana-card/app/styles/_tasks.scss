@@ -141,6 +141,12 @@
         }
       }
 
+      .task-due-on {
+        font-size: 13px;
+        color: $deepBlue-40;
+        margin: 5px 0;
+      }
+
       .task-details {
         display: flex;
         align-items: center;
@@ -587,7 +593,7 @@
   .task-comment-dot {
     width: 40px;
     height: 100%;
-    
+
     @extend %flex;
 
     .dot {
