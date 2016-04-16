@@ -8,3 +8,7 @@ https://www.digitalocean.com/community/tutorials/how-to-use-git-hooks-to-automat
 
 # letencrypt + nginx
 https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04
+
+# nginx basic auth for our rethinkdb instance
+https://www.digitalocean.com/community/tutorials/how-to-set-up-http-authentication-with-nginx-on-ubuntu-12-10
+https://gist.github.com/thinklinux/ad66d90700966f981318ea38055901b7 - this config is working
