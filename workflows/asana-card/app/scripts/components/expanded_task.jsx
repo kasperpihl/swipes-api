@@ -50,8 +50,19 @@ var ExpandedTask = React.createClass({
       TaskActions.addAuthor(story.data[0].created_by.name);
       TaskActions.addCreatedAt(story.data[0].created_at);
     })
+  },
+  shouldComponentUpdate: function (nextProps, nextState) {
+    var tasks = TasksStore.get('tasks');
+    var taskId = nextProps.taskId;
+    var task = tasks.filter(function (task) {
+      return task.id === taskId;
+    })[0];
 
+    if (!task) {
+      return false;
+    }
 
+    return true;
   },
   goBack: function () {
     MainActions.closeExpandedTask();

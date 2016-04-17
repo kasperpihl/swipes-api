@@ -1,5 +1,6 @@
 var React = require('react');
 var FontIcon = require('material-ui/lib/font-icon');
+var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
 var CommentsStore = require('../stores/CommentsStore');
 var CommentsActions = require('../actions/CommentsActions');
@@ -70,7 +71,6 @@ var Comments = React.createClass({
 
 var Comment = React.createClass({
   // http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
-  mixins: [CommentsStore.connect()],
   urlify: function () {
     var text = this.props.comment.text;
     var words = text.split(' ');
@@ -107,10 +107,11 @@ var Comment = React.createClass({
   },
   dotItems: function () {
     var that = this;
+    var settings = MainStore.get('settings');
     var items = [];
     var comment = this.props.comment;
     var task = this.props.task;
-    var taskUrl = 'https://app.asana.com/0/' + task.projects[0].id + '/' + task.id;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
 
     items = items.concat([
@@ -135,8 +136,6 @@ var Comment = React.createClass({
   renderSwipesDot: function() {
     var dotItems = this.dotItems();
     var comment = this.props.comment;
-    var task = this.props.task;
-    var taskUrl = 'https://app.asana.com/0/' + task.projects[0].id + '/' + task.id;
 
     return (
       <SwipesDot
