@@ -145,6 +145,10 @@
         font-size: 13px;
         color: $deepBlue-40;
         margin: 5px 0px;
+
+        &.past {
+          color: $red-color;
+        }
       }
 
       .task-details {
