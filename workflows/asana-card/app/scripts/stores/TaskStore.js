@@ -7,15 +7,20 @@ var TaskStore = Reflux.createStore({
   getInitialState: function () {
     return {
       expandDesc: false,
-      expandedState: 'keyboard_arrow_down',
-      descEditingState: 'inactive',
-      titleEditingState: 'inactive',
+      titleInputValue: null,
+      descriptionInputValue: null,
       createdByState: '',
       createdAt: ''
     }
   },
   onExpandDesc: function (newValue) {
     this.set('expandDesc', newValue);
+  },
+  onTitleChange: function (newValue) {
+    this.set('titleInputValue', newValue);
+  },
+  onDescriptionChange: function (newValue) {
+    this.set('descriptionInputValue', newValue);
   },
   addAuthor: function (newValue) {
     this.set('createdByState', newValue);

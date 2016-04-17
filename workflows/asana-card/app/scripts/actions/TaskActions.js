@@ -4,7 +4,10 @@ var TaskActions = Reflux.createActions([
   'expandDesc',
   'addAuthor',
   'addCreatedAt'
-	// Here you can list your actions
 ]);
+
+//Sync actions
+TaskActions.titleChange = Reflux.createAction({sync: true});
+TaskActions.descriptionChange = Reflux.createAction({sync: true});
 
 module.exports = TaskActions;

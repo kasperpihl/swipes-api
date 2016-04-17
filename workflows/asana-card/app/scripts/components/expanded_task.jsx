@@ -50,8 +50,19 @@ var ExpandedTask = React.createClass({
       TaskActions.addAuthor(story.data[0].created_by.name);
       TaskActions.addCreatedAt(story.data[0].created_at);
     })
+  },
+  shouldComponentUpdate: function (nextProps, nextState) {
+    var tasks = TasksStore.get('tasks');
+    var taskId = nextProps.taskId;
+    var task = tasks.filter(function (task) {
+      return task.id === taskId;
+    })[0];
 
+    if (!task) {
+      return false;
+    }
 
+    return true;
   },
   goBack: function () {
     MainActions.closeExpandedTask();
@@ -141,8 +152,6 @@ var ExpandedTask = React.createClass({
     var newDescription = this.refs.desci.value;
     var taskId = this.props.taskId;
 
-    this.setState({descEditingState: 'inactive'});
-
     swipes.service('asana').request('tasks.update', {
       id: taskId,
       notes: newDescription
@@ -153,8 +162,6 @@ var ExpandedTask = React.createClass({
     var newTitle = this.refs.headerTitle.value;
     var taskId = this.props.taskId;
 
-    this.setState({titleEditingState: 'inactive'});
-
     swipes.service('asana').request('tasks.update', {
       id: taskId,
       name: newTitle
@@ -162,10 +169,10 @@ var ExpandedTask = React.createClass({
     // TODO handle errors
   },
   onTitleChange: function(event){
-    this.setState({'titleInputValue': event.target.value});
+    TaskActions.titleChange(event.target.value);
   },
   onDescriptionChange: function(event){
-    this.setState({'descriptionInputValue': event.target.value});
+    TaskActions.descriptionChange(event.target.value);
   },
   onDescriptionKeyDown: function(e){
     if(e.keyCode === 27){
@@ -177,31 +184,30 @@ var ExpandedTask = React.createClass({
       this.refs.headerTitle.blur();
     }
   },
-  onTitleKeyUp: function(e){
-
-  },
   renderExpander: function(description) {
+    if (description && description.length > 0) {
+      var expandIcon = this.state.expandDesc ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
 
-    if (description && description.length > 0 && description.length > 140) {
       return (
         <div className="expand-description" onClick={this.expandDescription}>
-          <FontIcon className="material-icons">{this.state.expandedState}</FontIcon>
+          <FontIcon className="material-icons">{expandIcon}</FontIcon>
         </div>
       )
-    } else {
     }
   },
   expandDescription: function () {
-    TaskActions.expandDesc(!this.state.expandDesc);
-    if (!this.state.expandDesc) {
-      this.setState({expandedState: 'keyboard_arrow_up'})
-    } else {
-      this.setState({expandedState: 'keyboard_arrow_down'})
+    var expandState = !this.state.expandDesc;
+
+    if (expandState === true) {
+      this.refs.desci.focus();
     }
   },
   expandDescriptionOnFocus: function() {
     TaskActions.expandDesc(true);
-    this.setState({expandedState: 'keyboard_arrow_up'});
+  },
+  descriptionOnBlur: function() {
+    TaskActions.expandDesc(false);
+    this.saveDescripton();
   },
   onActiveTab: function (tab) {
     var label = tab.props.label;
@@ -262,7 +268,7 @@ var ExpandedTask = React.createClass({
           defaultValue={description}
           onFocus={this.expandDescriptionOnFocus}
           onChange={this.onDescriptionChange}
-          onBlur={this.saveDescripton}
+          onBlur={this.descriptionOnBlur}
           onKeyDown={this.onDescriptionKeyDown}
           placeholder="No description"
           value={value}
@@ -285,6 +291,7 @@ var ExpandedTask = React.createClass({
     }
     var time = moment(this.state.createdAt).format("h:mm a, d MMM YYYY");
     var verboseTime = moment(this.state.createdAt).fromNow();
+
     return (
       <div id={taskId} className={"header-wrapper " + headerCompletedState}>
         <div className="back-arrow" onClick={this.goBack}>
