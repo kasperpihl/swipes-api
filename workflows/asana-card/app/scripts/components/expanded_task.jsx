@@ -229,6 +229,18 @@ var ExpandedTask = React.createClass({
         maxRows={10}/>
     );
   },
+  renderDueOnDate: function(task) {
+
+    var dueOnText;
+    if (!task.due_at) {
+    } else {
+      var taskDue = task.due_at;
+      var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
+      return (
+        <div className="task-due-on">{'Due on ' + parseDate}</div>
+      )
+    }
+  },
   renderDescription: function (task) {
     var description = task.notes;
     var value = this.state.descriptionInputValue;
@@ -280,6 +292,7 @@ var ExpandedTask = React.createClass({
         <div className="header-details">
           {this.renderTitle(task)}
           {this.renderDescription(task)}
+          {this.renderDueOnDate(task)}
           <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> at {time}</div>
         </div>
         <div className="header-avatar">

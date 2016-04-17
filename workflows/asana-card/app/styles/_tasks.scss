@@ -144,7 +144,7 @@
       .task-due-on {
         font-size: 13px;
         color: $deepBlue-40;
-        margin: 5px 0;
+        margin: 5px 5px;
       }
 
       .task-details {
@@ -797,6 +797,10 @@ $color_havelock_blue_approx: #4a90e2;
       .created-by {
         color: #FAFAFA;
       }
+
+      .task-due-on {
+        color: #FAFAFA;
+      }
     }
 
     .header-avatar {
@@ -900,6 +904,13 @@ $color_havelock_blue_approx: #4a90e2;
         color: $deepBlue-60 !important;
         font-size: 13px !important;
       }
+    }
+
+    .task-due-on {
+      padding: 0 5px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #999EAC;
     }
 
     .created-by {
