@@ -284,6 +284,7 @@ var ExpandedTask = React.createClass({
 
     }
     var time = moment(this.state.createdAt).format("h:mm a, d MMM YYYY");
+    var verboseTime = moment(this.state.createdAt).fromNow();
     return (
       <div id={taskId} className={"header-wrapper " + headerCompletedState}>
         <div className="back-arrow" onClick={this.goBack}>
@@ -293,7 +294,7 @@ var ExpandedTask = React.createClass({
           {this.renderTitle(task)}
           {this.renderDescription(task)}
           {this.renderDueOnDate(task)}
-          <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> at {time}</div>
+          <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> {verboseTime}</div>
         </div>
         <div className="header-avatar">
             <AssigneeMenu task={task} />
