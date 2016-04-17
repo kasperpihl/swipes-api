@@ -869,6 +869,10 @@ $color_havelock_blue_approx: #4a90e2;
     height: 100%;
 
     @extend %flex;
+
+		&:focus {
+			outline: none;
+		}
   }
 
   .time-of-day {

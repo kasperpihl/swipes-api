@@ -85,7 +85,6 @@ var Subtask = React.createClass({
   },
   componentDidMount: function () {
     var subtask = this.props.subtask;
-    console.log(subtask);
     var storyPromise = swipes.service('asana').request('stories.findByTask', {
       id: subtask.id
     }).then(function(story) {

@@ -145,6 +145,11 @@ var ScheduleModal = React.createClass({
   fadeTimeDisplay: function() {
       this.setState({glow: 'inactive'})
   },
+  changeTimeInput: function() {
+    console.log('yoyoy');
+    var timeInput = this.refs.timeinput;
+    this.setState({timeFromSlider: timeInput.innerText})
+  },
   renderTimeDisplay: function() {
     var sliderVal = this.state.sliderValue;
 
@@ -152,9 +157,12 @@ var ScheduleModal = React.createClass({
 
     var parseTime = moment(fullTime, ['HH:mm']).format('hh:mm');
 
+
+
     return (
       <div className={"time-display " + this.state.glow}>
-        <div className="time-numbers">{parseTime}</div> <div className="time-of-day" onClick={this.changeTime} onMouseDown={this.glowTimeDisplay} onMouseUp={this.fadeTimeDisplay}>{this.state.timeOfDay}</div>
+        <div className="time-numbers" ref="timeinput" contentEditable="true" onInput={this.changeTimeInput} onFocus={this.glowTimeDisplay} onBlur={this.fadeTimeDisplay}>{parseTime}</div>
+        <div className="time-of-day" onClick={this.changeTime} onMouseDown={this.glowTimeDisplay} onMouseUp={this.fadeTimeDisplay}>{this.state.timeOfDay}</div>
       </div>
     )
   },
