@@ -875,6 +875,33 @@ $color_havelock_blue_approx: #4a90e2;
 		}
   }
 
+	.input-wrapper {
+		width: 70%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		p {
+			font-size: 30px;
+		  font-weight: 300;
+		  color: $deepBlue-100;
+		}
+
+		input {
+			width: 45px;
+			//border: red 1px solid;
+			text-align: center;
+			font-size: 30px;
+		  font-weight: 300;
+		  color: $deepBlue-100;
+			font-family: 'Roboto';
+
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+
   .time-of-day {
     width: 30%;
     //height: 100%;
@@ -885,6 +912,16 @@ $color_havelock_blue_approx: #4a90e2;
 
     @extend %flex;
   }
+}
+
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    cursor:pointer;
+    display:block;
+    width:0px;
+    color: #333;
+    text-align:center;
+    position:relative;
 }
 
 .schedule-button {
