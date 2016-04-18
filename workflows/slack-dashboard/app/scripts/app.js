@@ -12,7 +12,14 @@ ReactDOM.render(<ChatList />, document.getElementById('content'));
 
 swipes.onReady(function(){
 	chatStore.start();
-})
+	/*
+	setTimeout(function(){
+		swipes.notifications.send({title: "New Message", "message": "testing"});
+	}, 500);
+	setTimeout(function(){
+		swipes.notifications.send({title: "New Message", "message": "testing"});
+	}, 1500);*/
+});
 
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
