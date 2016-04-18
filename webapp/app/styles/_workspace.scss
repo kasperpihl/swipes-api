@@ -127,3 +127,28 @@ body {
   backface-visibility: visible;
   pointer-events: none;
 }
+
+.empty-workspace-state {
+  width: 100%;
+  padding-top: 20px;
+
+  img {
+    width: calc(55.5% - 30px);
+    margin-left: 44.5%;
+  }
+
+  p.workspace-empty-text {
+    text-align: center;
+    margin-top: 20px;
+    color: $deepBlue-40;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+
+    span.strong {
+      font-size: 24px;
+      font-weight: 400;
+      color: $deepBlue-80;
+    }
+  }
+}

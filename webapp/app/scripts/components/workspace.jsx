@@ -16,6 +16,19 @@ var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
     _dragDotHandler: null,
     renderCards(){
+      if (this.state.workspace.length < 1) {
+        console.log('--------------------------- Nothing');
+        return (
+          <div className="empty-workspace-state">
+            <img src="styles/img/1234.svg"/>
+            <p className="workspace-empty-text">
+              <span className="strong">No active cards</span> <br />
+              Add your first card!
+            </p>
+          </div>
+        )
+      }
+
         return _.map(this.state.workspace, function(card, i) {
             return (
                 <CardLoader
@@ -24,6 +37,7 @@ var Workspace = React.createClass({
                   dotDragBegin={this.dotDragBegin}
                   onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
             );
+
         }.bind(this));
     },
     runAdjustments() {
