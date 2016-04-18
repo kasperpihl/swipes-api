@@ -109,6 +109,11 @@ var TaskItem = React.createClass({
       )
     }
   },
+  removeScheduling: function(e) {
+    e.stopPropagation();
+    var task = this.props.data;
+    ProjectDataActions.removeScheduling(task);
+  },
   renderDueOnDate: function() {
     var task = this.props.data;
     var dueOnText;
@@ -127,11 +132,21 @@ var TaskItem = React.createClass({
 
       if (moment().diff(task.due_at) > 0 || moment().diff(task.due_on, 'days') >= 1) {
         return (
-          <div className="task-due-on past">{'Due on ' + parseDate}</div>
+          <div className="task-due-on past">
+            {'Due on ' + parseDate}
+            <div className="remove-schedule" onClick={this.removeScheduling}>
+              <i className="material-icons">close</i>
+            </div>
+          </div>
         )
       } else {
         return (
-          <div className="task-due-on">{'Due on ' + parseDate}</div>
+          <div className="task-due-on">
+            {'Due on ' + parseDate}
+            <div className="remove-schedule" onClick={this.removeScheduling}>
+              <i className="material-icons">close</i>
+            </div>
+          </div>
         )
       }
 

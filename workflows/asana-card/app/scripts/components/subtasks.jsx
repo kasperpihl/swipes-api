@@ -219,17 +219,60 @@ var Subtask = React.createClass({
         maxRows={10}/>
     )
   },
+  removeScheduling: function() {
+    var subtask = this.props.subtask;
+    ProjectDataActions.removeScheduling(subtask);
+  },
   renderDueOnDate: function() {
     var subtask = this.props.subtask;
 
     var dueOnText;
+
+    if (subtask.due_on || subtask.due_at) {
+
+      var taskDue;
+
+      if (subtask.due_at) {
+        taskDue = subtask.due_at;
+      } else if (subtask.due_on) {
+        taskDue = subtask.due_on;
+      }
+
+      var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
+
+      if (moment().diff(subtask.due_at) > 0 || moment().diff(subtask.due_on, 'days') >= 1) {
+        return (
+          <div className="task-due-on subtask past">
+            {'Due on ' + parseDate}
+            <div className="remove-schedule" onClick={this.removeScheduling}>
+              <i className="material-icons">close</i>
+            </div>
+          </div>
+        )
+      } else {
+        return (
+          <div className="task-due-on subtask">
+            {'Due on ' + parseDate}
+            <div className="remove-schedule" onClick={this.removeScheduling}>
+              <i className="material-icons">close</i>
+            </div>
+          </div>
+        )
+      }
+
+    }
 
     if (!subtask.due_at) {
     } else {
       var taskDue = subtask.due_at;
       var parseDate = moment(taskDue).format('hh:mma, Do MMMM YYYY');
       return (
-        <div className="task-due-on">{'The task is due at ' + parseDate}</div>
+        <div className="task-due-on subtask">
+          {'The task is due at ' + parseDate}
+          <div className="remove-schedule" onClick={this.removeScheduling}>
+            <i className="material-icons">close</i>
+          </div>
+        </div>
       )
     }
   },

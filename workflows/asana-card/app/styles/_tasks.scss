@@ -117,7 +117,7 @@
       .task-title {
         font-size: 15px;
         color: $deepBlue-80;
-        padding-right: 5px;
+        padding: 5px;
         font-weight: 400;
 
         &.sub-task {
@@ -144,10 +144,37 @@
       .task-due-on {
         font-size: 13px;
         color: $deepBlue-40;
-        margin: 5px 0px;
+        padding: 5px;
+
+        @extend %flex;
+
+        &:hover {
+          background-color: $studioGray-40;
+          border-radius: 5px;
+
+          .remove-schedule {
+            @extend %flex;
+          }
+        }
+
+        &.subtask {
+          padding: 5px;
+        }
 
         &.past {
           color: $red-color;
+        }
+
+        .remove-schedule {
+          display: none;
+          margin-left: 5px;
+          cursor: pointer;
+
+          i.material-icons {
+            font-size: 15px;
+            color: $deepBlue-40;
+            cursor: pointer;
+          }
         }
       }
 

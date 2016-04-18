@@ -236,6 +236,36 @@ var ProjectDataStore = Reflux.createStore({
 			_fetchLock = false;
 		})
 	},
+	onRemoveScheduling: function(task) {
+		var taskId = task.id;
+		var res = null;
+
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'due_at', res, false);
+			SubtasksActions.update(taskId, 'due_on', res, true);
+
+		} else {
+			TasksActions.updateTask(taskId, 'due_at', res, false);
+			TasksActions.updateTask(taskId, 'due_on', res, true);
+		}
+
+		_fetchLock = true;
+
+		swipes.service('asana').request('tasks.update', {
+			id: taskId,
+			due_at: null,
+			due_on: null
+		})
+		.then(function () {
+			//swipes.analytics.action('Assign person');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+	},
 	onCompleteTask: function (task) {
 		var taskId = task.id;
 		var completed = true;
@@ -423,7 +453,7 @@ var ProjectDataStore = Reflux.createStore({
 	},
 	onScheduleTask: function(task, taskId) {
 		var task = task;
-		
+
 		swipes.modal.schedule( function(res) {
 			if (task.parent) {
 				SubtasksActions.update(taskId, 'due_at', res);

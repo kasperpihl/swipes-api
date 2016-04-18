@@ -10,6 +10,8 @@ var ScheduleModal = React.createClass({
       selectedDay: null,
       sliderValue: '360',
       timeFromSlider: '06:00',
+      hours: '06',
+      minutes: '00',
       timeOfDay: 'PM',
       glow: 'inactive',
       completeTime: null
@@ -27,7 +29,7 @@ var ScheduleModal = React.createClass({
       curDate = newDate.toString();
     }
 
-    var addedTime = this.state.timeFromSlider + this.state.timeOfDay;
+    var addedTime = this.state.hours + ':' + this.state.minutes + this.state.timeOfDay;
     var parseTime = moment(addedTime, ['HH:mma']).format('hh:mma');
 
     var timeToParse = curDate + ' ' + parseTime;
@@ -98,9 +100,11 @@ var ScheduleModal = React.createClass({
 
     var fullTime = this.parseTime(sliderVal);
 
-    var parseTime = moment(fullTime, ['HH:mm']).format('hh:mm');
+    var parseHours = moment(fullTime, ['HH:mm']).format('hh');
+    var parseMinutes = moment(fullTime, ['HH:mm']).format('mm');
 
-    this.setState({timeFromSlider: parseTime});
+    this.setState({hours: parseHours});
+    this.setState({minutes: parseMinutes});
 
   },
   renderSelectedTime: function() {
@@ -117,7 +121,7 @@ var ScheduleModal = React.createClass({
       curDate = newDate
     }
 
-    var addedTime = this.state.timeFromSlider + this.state.timeOfDay;
+    var addedTime = this.state.hours + ':' + this.state.minutes + this.state.timeOfDay;
     var parseTime = moment(addedTime, ['HH:mma']).format('hh:mma');
 
     var timeToParse = {curDate} + ' ' + {parseTime};
@@ -145,24 +149,40 @@ var ScheduleModal = React.createClass({
   fadeTimeDisplay: function() {
       this.setState({glow: 'inactive'})
   },
-  changeTimeInput: function() {
+  changeTimeHours: function(e) {
+    var newVal = e.target.value;
     var inputHours = this.refs.inputHours;
-    var inputMinutes = this.refs.inputMinutes;
-
+    // var inputMinutes = this.refs.inputMinutes;
+    //
     if (inputHours.value.length < 2) {
-      inputHours.value = '0' + inputHours.value;
+      this.setState({hours: '0' + e.target.value});
+    } else {
+      this.setState({hours: e.target.value});
     }
-
-    if (inputMinutes.value.length < 2) {
-      inputMinutes.value = '0' + inputMinutes.value;
-    }
-
-    var getTime = inputHours.value + ':' + inputMinutes.value;
-
-    this.setState({timeFromSlider: getTime})
+    //
+    // if (inputMinutes.value.length < 2) {
+    //   inputMinutes.value = '0' + inputMinutes.value;
+    // }
+    //
+    // var getTime = inputHours.value + ':' + inputMinutes.value;
+    //
+    // this.setState({timeFromSlider: getTime})
 
   },
+  changeTimeMinutes: function(e) {
+    var newVal = e.target.value;
+    var inputMinutes = this.refs.inputMinutes;
+    // var inputMinutes = this.refs.inputMinutes;
+    //
+    if (inputMinutes.value.length < 2) {
+      this.setState({minutes: '0' + e.target.value});
+    } else {
+      this.setState({minutes: e.target.value});
+    }
+  },
   renderTimeDisplay: function() {
+    var hours = this.state.hours;
+    var minutes = this.state.minutes;
     var sliderVal = this.state.sliderValue;
 
     var fullTime = this.parseTime(sliderVal);
@@ -173,9 +193,9 @@ var ScheduleModal = React.createClass({
     return (
       <div className={"time-display " + this.state.glow}>
         <div className="input-wrapper">
-          <input className="input-number" ref="inputHours" type="number" min="1" max="12" defaultValue={parseHours} onChange={this.changeTimeInput} onFocus={this.glowTimeDisplay} onBlur={this.fadeTimeDisplay}/>
+          <input className="input-number" ref="inputHours" type="number" min="1" max="12" value={this.state.hours} onChange={this.changeTimeHours} onFocus={this.glowTimeDisplay} onBlur={this.fadeTimeDisplay}/>
           <p>:</p>
-          <input className="input-number" ref="inputMinutes" type="number" min="0" max="59" defaultValue={parseMinutes} onChange={this.changeTimeInput} onFocus={this.glowTimeDisplay} onBlur={this.fadeTimeDisplay}/>
+          <input className="input-number" ref="inputMinutes" type="number" min="0" max="59" value={this.state.minutes} onChange={this.changeTimeMinutes} onFocus={this.glowTimeDisplay} onBlur={this.fadeTimeDisplay}/>
         </div>
         <div className="time-of-day" onClick={this.changeTime} onMouseDown={this.glowTimeDisplay} onMouseUp={this.fadeTimeDisplay}>{this.state.timeOfDay}</div>
       </div>

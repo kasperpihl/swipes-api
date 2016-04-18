@@ -10,9 +10,10 @@ var SubtasksStore = Reflux.createStore({
       createdAt: ''
     }
   },
-  onUpdate: function (taskId, field, newValue) {
+  onUpdate: function (taskId, field, newValue, trigger) {
     var subtasks = this.get('subtasks');
     var len = subtasks.length;
+    var trigger = trigger || true;
 
     for (var i=0; i<len; i++) {
   		if (taskId === subtasks[i].id) {
@@ -21,7 +22,7 @@ var SubtasksStore = Reflux.createStore({
   		}
   	}
 
-    this.set('subtasks', subtasks);
+    this.set('subtasks', subtasks, {trigger: trigger});
   },
   onRemove: function (taskId) {
     var subtasks = this.get('subtasks');

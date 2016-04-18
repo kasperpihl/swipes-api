@@ -8,7 +8,8 @@ var ProjectDataActions = Reflux.createActions([
 	'undoCompleteTask',
 	'removeTask',
 	'writeComment',
-	'scheduleTask'
+	'scheduleTask',
+	'removeScheduling'
 ]);
 
 //Sync actions

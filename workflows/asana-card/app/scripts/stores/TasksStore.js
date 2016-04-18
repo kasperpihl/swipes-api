@@ -20,9 +20,10 @@ var TasksStore = Reflux.createStore({
     tasks.unshift(task);
     this.setTasks(tasks);
   },
-  onUpdateTask: function (taskId, field, newValue) {
+  onUpdateTask: function (taskId, field, newValue, trigger) {
     var tasks = this.get('tasks');
     var len = tasks.length;
+    var trigger = trigger || true;
 
     for (var i=0; i<len; i++) {
   		if (taskId === tasks[i].id) {
@@ -31,7 +32,7 @@ var TasksStore = Reflux.createStore({
   		}
   	}
 
-    this.setTasks(tasks);
+    this.setTasks(tasks, trigger);
   },
   onRemoveTask: function (taskId) {
     var tasks = this.get('tasks');
@@ -58,9 +59,9 @@ var TasksStore = Reflux.createStore({
   onReorderTasks: function (tasks) {
     this.setTasks(tasks);
   },
-  setTasks: function (tasks) {
+  setTasks: function (tasks, trigger) {
     _cacheTasks = tasks;
-    this.set('tasks', tasks);
+    this.set('tasks', tasks, {trigger: trigger});
   },
   getCachedTasks: function () {
     return _cacheTasks;
