@@ -150,17 +150,17 @@ var Subtask = React.createClass({
         }
       },
       {
-        label: 'Share the subtask',
-        icon: 'share',
-        callback: function () {
-          that.shareTaskUrl(taskUrl);
-        }
-      },
-      {
         label: 'Schedule the task',
         icon: 'schedule',
         callback: function() {
           that.scheduleTask(task, task.id);
+        }
+      },
+      {
+        label: 'Share the subtask',
+        icon: 'share',
+        callback: function () {
+          that.shareTaskUrl(taskUrl);
         }
       },
       {

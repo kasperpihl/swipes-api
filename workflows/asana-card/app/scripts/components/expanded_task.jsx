@@ -128,17 +128,17 @@ var ExpandedTask = React.createClass({
         }
       },
       {
-        label: 'Share the task',
-        icon: 'share',
-        callback: function () {
-          that.shareTaskUrl(taskUrl);
-        }
-      },
-      {
         label: 'Schedule the task',
         icon: 'schedule',
         callback: function() {
           that.scheduleTask(task.id);
+        }
+      },
+      {
+        label: 'Share the task',
+        icon: 'share',
+        callback: function () {
+          that.shareTaskUrl(taskUrl);
         }
       },
       {
