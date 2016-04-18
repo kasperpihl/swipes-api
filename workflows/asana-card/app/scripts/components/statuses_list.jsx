@@ -145,10 +145,11 @@ var StatusesList = React.createClass({
 	},
 	render: function () {
     var tasks = this.state.tasks;
+    var loaded = this.state.loaded;
 
 		return (
 			<div className="height-100">
-        {tasks === null ? (
+        {loaded === false ? (
           <Loading />
 				) : (
           <div>

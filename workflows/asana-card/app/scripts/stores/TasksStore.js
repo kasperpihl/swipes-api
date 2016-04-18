@@ -9,7 +9,8 @@ var TasksStore = Reflux.createStore({
 	idAttribute: 'id',
   getInitialState: function () {
     return {
-      tasks: null,
+      loaded: false,
+      tasks: [],
       dragging: false
     }
   },
@@ -42,6 +43,7 @@ var TasksStore = Reflux.createStore({
     this.setTasks(tasks);
   },
   onLoadTasks: function (tasks) {
+    this.set('loaded', true, {trigger: false});
     this.setTasks(tasks);
   },
   onReset: function () {

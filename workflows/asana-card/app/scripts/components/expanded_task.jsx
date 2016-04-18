@@ -51,6 +51,10 @@ var ExpandedTask = React.createClass({
       TaskActions.addCreatedAt(story.data[0].created_at);
     })
   },
+  componentWillUnmount: function () {
+    TaskActions.titleChange(null);
+    TaskActions.descriptionChange(null);
+  },
   shouldComponentUpdate: function (nextProps, nextState) {
     var tasks = TasksStore.get('tasks');
     var taskId = nextProps.taskId;
@@ -219,25 +223,23 @@ var ExpandedTask = React.createClass({
     }
   },
   renderTitle: function(task){
-    /*<div className="header-title" ref="headerTitle" contentEditable="true" onBlur={this.saveTitle}>{task.name}</div>*/
     return (
       <Textarea
         ref="headerTitle"
         className="header-title"
-        defaultValue={task.name}
         onKeyUp={this.onTitleKeyUp}
         onKeyDown={this.onTitleKeyDown}
         onChange={this.onTitleChange}
         onBlur={this.saveTitle}
         placeholder="Add title"
-        value={this.state.titleInputValue}
+        value={this.state.titleInputValue || task.name}
         minRows={1}
         maxRows={10}/>
     );
   },
   renderDueOnDate: function(task) {
-
     var dueOnText;
+
     if (!task.due_at) {
     } else {
       var taskDue = task.due_at;
@@ -250,6 +252,7 @@ var ExpandedTask = React.createClass({
   renderDescription: function (task) {
     var description = task.notes;
     var value = this.state.descriptionInputValue;
+    console.log(value);
     var maxRows = 1;
     // Increase max number of rows if expanded.
     if(this.state.expandDesc){
@@ -265,13 +268,12 @@ var ExpandedTask = React.createClass({
         <Textarea
           className="header-description"
           ref="desci"
-          defaultValue={description}
           onFocus={this.expandDescriptionOnFocus}
           onChange={this.onDescriptionChange}
           onBlur={this.descriptionOnBlur}
           onKeyDown={this.onDescriptionKeyDown}
           placeholder="No description"
-          value={value}
+          value={value || description}
           minRows={1}
           maxRows={maxRows}/>
         {this.renderExpander(description)}
@@ -368,6 +370,7 @@ var ExpandedTask = React.createClass({
     </Tabs>
   },
   render: function () {
+    console.log(this.state);
     var tasks = TasksStore.get('tasks');
     var taskId = this.props.taskId;
     var settings = MainStore.get('settings');
