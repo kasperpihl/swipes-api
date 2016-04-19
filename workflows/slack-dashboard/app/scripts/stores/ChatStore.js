@@ -271,6 +271,10 @@ var ChatStore = Reflux.createStore({
 				// If message is from someone else, and is not hidden
 				if(message.user !== me.id && !msg.hidden){
 					ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
+					// K_TODO: Test if msg.text
+					var text = msg.text;
+
+					swipes.notifications.send({title: channel.name, message: text})
 				}
 
 				// If message is in the current channel we should handle the unread handler
