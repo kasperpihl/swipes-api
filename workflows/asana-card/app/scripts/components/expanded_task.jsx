@@ -252,7 +252,6 @@ var ExpandedTask = React.createClass({
   renderDescription: function (task) {
     var description = task.notes;
     var value = this.state.descriptionInputValue;
-    console.log(value);
     var maxRows = 1;
     // Increase max number of rows if expanded.
     if(this.state.expandDesc){
@@ -339,6 +338,9 @@ var ExpandedTask = React.createClass({
       </div>
     )
   },
+  getMeThis: function() {
+    console.log('yo, this kinda works');
+  },
   renderTabs: function (task) {
     var that = this;
     var labels = ['Subtasks', 'Comments'];
@@ -347,19 +349,28 @@ var ExpandedTask = React.createClass({
 
       if (label === 'Subtasks') {
         children = <Subtasks task={task} />;
+          return <Tab
+            style={tabsStyles.singleTab}
+            className="asana-tab"
+            label={label}
+            key={index}
+            onActive={that.onActiveTab}
+          >
+    				{children}
+    			</Tab>
       } else {
         children = <Comments task={task} />;
+          return <Tab
+            style={tabsStyles.singleTab}
+            className="asana-tab"
+            label={label}
+            key={index}
+            onActive={that.onActiveTab}
+            onClick={that.getMeThis}
+          >
+    				{children}
+    			</Tab>
       }
-
-      return <Tab
-        style={tabsStyles.singleTab}
-        className="asana-tab"
-        label={label}
-        key={index}
-        onActive={that.onActiveTab}
-      >
-				{children}
-			</Tab>
     })
 
     return <Tabs className="height-100 tabs-child-selector"
@@ -370,7 +381,6 @@ var ExpandedTask = React.createClass({
     </Tabs>
   },
   render: function () {
-    console.log(this.state);
     var tasks = TasksStore.get('tasks');
     var taskId = this.props.taskId;
     var settings = MainStore.get('settings');
