@@ -9,6 +9,7 @@ var UserStore = require('../stores/UserStore');
 var stateActions = require('../actions/StateActions');
 var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
+var notificationActions = require('../actions/NotificationActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
 var workspaceActions = require('../actions/WorkspaceActions');
@@ -110,6 +111,9 @@ var CardLoader = React.createClass({
 			}
 			else if(message.command === 'navigation.setBadge'){
 				this.setState({badge: data.badge});
+			}
+			else if(message.command === 'notifications.send'){
+				notificationActions.send(data);
 			}
 			else if (message.command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "card" + this.props.data.id);

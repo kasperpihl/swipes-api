@@ -43,15 +43,6 @@ var SwipesAppSDK = (function() {
 			// TODO: prefix any images with url.
 			self._client.callListener("navigation.setButtons", buttons);
 		},
-		setBackgroundColor:function(backgroundColor){
-			self._client.callListener("navigation.setBackgroundColor", {"color": backgroundColor});
-		},
-		setForegroundColor: function(foreground){
-			self._client.callListener("navigation.setForegroundColor", {"color": foreground});
-		},
-		enableBoxShadow: function(enable){
-			self._client.callListener("navigation.enableBoxShadow", {"enable": enable})
-		},
 		onPop: function(callback){
 			self._listeners.add("navigation.pop", callback);
 		},
@@ -365,6 +356,11 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.actions = {
 		openURL: function(url){
 			self._client.callListener("actions.openURL", {url: url});
+		}
+	};
+	SwipesAppSDK.prototype.notifications = {
+		send: function(options){
+			self._client.callListener("notifications.send", options);
 		}
 	};
 	SwipesAppSDK.prototype.dot = {

@@ -6,7 +6,6 @@ var WorkspaceStore = require('./WorkspaceStore');
 var userStore = require('./UserStore');
 var serviceStore = require('./ServiceStore');
 var stateStore = require('./StateStore');
-var eventStore = require('./EventStore');
 
 // Actions
 var stateActions = require('../actions/StateActions');
@@ -21,7 +20,6 @@ var SocketStore = Reflux.createStore({
 		var self = this;
 
 		swipes.api.request("rtm.start").then(function(res){
-			console.log(res);
 			if(res.ok) {
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
 				res.self.me = true;
@@ -42,7 +40,7 @@ var SocketStore = Reflux.createStore({
 					}
 					return true;
 				});
-				console.log(serviceFiltered, res.services);
+				
 				serviceStore.batchLoad(serviceFiltered, {flush:true});
 				self.connect(res.url);
 				stateActions.changeStarted(true);

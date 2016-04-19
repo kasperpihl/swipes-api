@@ -1,7 +1,17 @@
 var Reflux = require('reflux');
 var BridgeStore = Reflux.createStore({
 	init: function(){
-		this.setupWebViewJavascriptBridge(function(bridge){ this.bridge = bridge; }.bind(this));
+		this.setupWebViewJavascriptBridge(function(bridge){ 
+			this.bridge = bridge;
+			bridge.registerHandler("notification-clicked", function(data, responseCallback) {
+				// Do something on handling notifications
+			})
+		}.bind(this));
+	},
+	callBridge:function(command, options, callback){
+		if(this.bridge){
+			this.bridge.callHandler(command, options, callback);
+		}
 	},
 	setupWebViewJavascriptBridge(callback) {
 		if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
