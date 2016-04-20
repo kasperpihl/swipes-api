@@ -68,9 +68,13 @@ var CreateTaskInput = React.createClass({
 		var addIconClass = classNames({
 			'task-add-icon': true,
 			// Kris_TODO make it with only active class
-			'active': inputLength > 0,
-			'inactive': inputLength <= 0
+			'active': true
 		});
+		var addIcon = "add";
+		var commentsView = this.props.commentsView;
+		if(commentsView){
+			addIcon = "send";
+		}
 		var placeholder = this.placeholder();
 
 		return (
@@ -86,7 +90,7 @@ var CreateTaskInput = React.createClass({
 					onChange={this.inputOnChange} />
 
 				<div className={addIconClass} onClick={this.createTask}>
-					<FontIcon color="#fff" className="material-icons">add</FontIcon>
+					<FontIcon color="#fff" className="material-icons">{addIcon}</FontIcon>
 				</div>
 
 				<div className={"new-task-loader " + this.state.creatTaskLoader}>
