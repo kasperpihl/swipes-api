@@ -94,7 +94,7 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:serve']
+          tasks: ['browserify:serve', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: [
@@ -104,19 +104,22 @@ module.exports = function (grunt) {
           tasks: [
             'compass:dev',
             'compass:devGlobal',
-            'autoprefixer:dev'
+            'autoprefixer:dev',
+            'copy:dev',
+            'cacheBust:dev'
           ]
         },
         images: {
           files: [
             '<%= yeoman.app %>/*.html',
             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-          ]
+          ],
+          tasks: ['copy:dev']
         },
         sdk: {
           files: ['./swipes-sdk/**/*'],
-          tasks: ['concat:serve']
-        }
+          tasks: ['concat:serve', 'copy:dev', 'cacheBust:dev']
+        },
       },
       clean: {
         dist: ['.tmp', '<%= yeoman.dist %>/*'],
