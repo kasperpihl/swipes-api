@@ -225,8 +225,11 @@ var Subtask = React.createClass({
   },
   renderDueOnDate: function() {
     var subtask = this.props.subtask;
-
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    console.log(subtask);
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     var dueOnText;
+
 
     if (subtask.due_on || subtask.due_at) {
 
@@ -240,7 +243,8 @@ var Subtask = React.createClass({
 
       var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
 
-      if (moment().diff(subtask.due_at) > 0 || moment().diff(subtask.due_on, 'days') >= 1) {
+      if (!subtask.completed && (moment().diff(subtask.due_at) > 0 || moment().diff(subtask.due_on, 'days') >= 1)) {
+
         return (
           <div className="task-due-on subtask past">
             {'Due on ' + parseDate}
