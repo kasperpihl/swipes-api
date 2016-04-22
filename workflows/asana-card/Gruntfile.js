@@ -28,15 +28,15 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:dev', 'copy:dev']
+          tasks: ['browserify:dev', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: ['<%= yeoman.app %>/styles/*.{sass,scss}'],
-          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev']
+          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev', 'cacheBust:dev']
         },
         html: {
           files: ['<%= yeoman.app %>/*.html'],
-          tasks: ['copy:dev']
+          tasks: ['copy:dev', 'cacheBust:dev']
         }
       },
       clean: {
