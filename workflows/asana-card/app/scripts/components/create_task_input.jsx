@@ -65,11 +65,19 @@ var CreateTaskInput = React.createClass({
 			'active': inputLength > 0,
 			'inactive': inputLength <= 0
 		});
-		var addIconClass = classNames({
-			'task-add-icon': true,
-			// Kris_TODO make it with only active class
-			'active': true
-		});
+		if (this.state.creatTaskLoader === 'active') {
+			var addIconClass = classNames({
+				'task-add-icon': true,
+				// Kris_TODO make it with only active class
+				'active': false
+			});
+		} else {
+			var addIconClass = classNames({
+				'task-add-icon': true,
+				// Kris_TODO make it with only active class
+				'active': true
+			});
+		}
 		var addIcon = "add";
 		var commentsView = this.props.commentsView;
 		if(commentsView){
