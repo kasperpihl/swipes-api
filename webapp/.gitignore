@@ -4,4 +4,5 @@ test/temp
 .sass-cache
 app/vendor
 .tmp
+dev
 test/scripts/

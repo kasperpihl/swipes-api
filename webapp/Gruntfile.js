@@ -28,7 +28,7 @@ module.exports = function (grunt) {
             port: 3000,
             livereload: true,
             hostname: 'localhost', //change to '0.0.0.0' to enable outside connections
-            base: ['.tmp', yeomanConfig.app]
+            base: ['dev']
           },
           proxies: [
               {
@@ -119,11 +119,10 @@ module.exports = function (grunt) {
         }
       },
       clean: {
-
         dist: ['.tmp', '<%= yeoman.dist %>/*'],
         serve: {
           dot: true,
-          src: ['.tmp']
+          src: ['.tmp', 'dev']
         },
         dev: {
           dot: true,
@@ -307,12 +306,11 @@ module.exports = function (grunt) {
             cwd: '.tmp',
             dest: '<%= yeoman.dev %>',
             src: ['**']
-          },
-          {
+          }, {
             expand: true,
             dot: true,
             cwd: __dirname + '/global-styles/roboto',
-            dest: '.tmp/styles',
+            dest: '<%= yeoman.dev %>/styles',
             src: ['fonts/**']
           }]
         }
@@ -323,17 +321,35 @@ module.exports = function (grunt) {
         options: {
           dirs: ['<%= yeoman.dist %>']
         }
+      },
+      cacheBust: {
+        dev: {
+          options: {
+            baseDir: '<%= yeoman.dev %>',
+            deleteOriginals: true,
+            assets: ['**/*.js', '**/*.css'],
+            queryString: true
+          },
+          files: [
+            {
+              expand: true,
+              cwd: '<%= yeoman.dev %>',
+              src: ['index.html']
+            }
+          ]
+        }
       }
   });
 
   grunt.registerTask('serve', [
-    'clean:serve',
+    'clean:dev',
     'browserify:serve',
     'concat:serve',
-    'copy:serve',
     'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
+    'copy:dev',
+    'cacheBust:dev',
     'configureProxies',
     'connect:livereload',
     'watch'
