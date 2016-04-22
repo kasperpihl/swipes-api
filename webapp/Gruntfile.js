@@ -326,7 +326,6 @@ module.exports = function (grunt) {
         dev: {
           options: {
             baseDir: '<%= yeoman.dev %>',
-            deleteOriginals: true,
             assets: ['**/*.js', '**/*.css'],
             queryString: true
           },
@@ -362,7 +361,8 @@ module.exports = function (grunt) {
     'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
-    'copy:dev'
+    'copy:dev',
+    'cacheBust:dev'
   ]);
 
   grunt.registerTask('build', [
