@@ -42,6 +42,7 @@ var Comments = React.createClass({
     })
 
     if (elements.length > 0) {
+      elements.reverse();
       return elements;
     } else {
       return (
@@ -170,7 +171,7 @@ var Comment = React.createClass({
     var allUsers = UserStore.getAll();
     var createdBy = comment['created_by'] || {};
     var user = allUsers[createdBy.id] || null;
-    var time = moment(comment.created_at).format("h:mm a, d MMM YYYY");
+    var time = moment(comment.created_at).fromNow();
     var textElements = this.urlify();
 
     return (

@@ -338,9 +338,6 @@ var ExpandedTask = React.createClass({
       </div>
     )
   },
-  getMeThis: function() {
-    console.log('yo, this kinda works');
-  },
   renderTabs: function (task) {
     var that = this;
     var labels = ['Subtasks', 'Comments'];
@@ -365,9 +362,7 @@ var ExpandedTask = React.createClass({
             className="asana-tab"
             label={label}
             key={index}
-            onActive={that.onActiveTab}
-            onClick={that.getMeThis}
-          >
+            onActive={that.onActiveTab} >
     				{children}
     			</Tab>
       }
