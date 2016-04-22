@@ -28,7 +28,7 @@ module.exports = function (grunt) {
             port: 3000,
             livereload: true,
             hostname: 'localhost', //change to '0.0.0.0' to enable outside connections
-            base: ['.tmp', yeomanConfig.app]
+            base: ['dev']
           },
           proxies: [
               {
@@ -94,7 +94,7 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:serve']
+          tasks: ['browserify:serve', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: [
@@ -104,26 +104,28 @@ module.exports = function (grunt) {
           tasks: [
             'compass:dev',
             'compass:devGlobal',
-            'autoprefixer:dev'
+            'autoprefixer:dev',
+            'copy:dev',
+            'cacheBust:dev'
           ]
         },
         images: {
           files: [
             '<%= yeoman.app %>/*.html',
             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-          ]
+          ],
+          tasks: ['copy:dev']
         },
         sdk: {
           files: ['./swipes-sdk/**/*'],
-          tasks: ['concat:serve']
-        }
+          tasks: ['concat:serve', 'copy:dev', 'cacheBust:dev']
+        },
       },
       clean: {
-
         dist: ['.tmp', '<%= yeoman.dist %>/*'],
         serve: {
           dot: true,
-          src: ['.tmp']
+          src: ['.tmp', 'dev']
         },
         dev: {
           dot: true,
@@ -307,12 +309,11 @@ module.exports = function (grunt) {
             cwd: '.tmp',
             dest: '<%= yeoman.dev %>',
             src: ['**']
-          },
-          {
+          }, {
             expand: true,
             dot: true,
             cwd: __dirname + '/global-styles/roboto',
-            dest: '.tmp/styles',
+            dest: '<%= yeoman.dev %>/styles',
             src: ['fonts/**']
           }]
         }
@@ -323,17 +324,34 @@ module.exports = function (grunt) {
         options: {
           dirs: ['<%= yeoman.dist %>']
         }
+      },
+      cacheBust: {
+        dev: {
+          options: {
+            baseDir: '<%= yeoman.dev %>',
+            assets: ['**/*.js', '**/*.css'],
+            queryString: true
+          },
+          files: [
+            {
+              expand: true,
+              cwd: '<%= yeoman.dev %>',
+              src: ['index.html']
+            }
+          ]
+        }
       }
   });
 
   grunt.registerTask('serve', [
-    'clean:serve',
+    'clean:dev',
     'browserify:serve',
     'concat:serve',
-    'copy:serve',
     'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
+    'copy:dev',
+    'cacheBust:dev',
     'configureProxies',
     'connect:livereload',
     'watch'
@@ -346,7 +364,8 @@ module.exports = function (grunt) {
     'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
-    'copy:dev'
+    'copy:dev',
+    'cacheBust:dev'
   ]);
 
   grunt.registerTask('build', [

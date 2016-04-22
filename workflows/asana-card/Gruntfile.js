@@ -21,23 +21,6 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
       yeoman: yeomanConfig,
-      // connect: {
-      //     options: {
-      //       port: 5000,
-      //       hostname: 'localhost' //change to '0.0.0.0' to enable outside connections
-      //     },
-      //     livereload: {
-      //       options: {
-      //         middleware: function (connect) {
-      //           return [
-      //             livereload({port: 35799}),
-      //             //serveStatic(path.resolve('.tmp')),
-      //             serveStatic(path.resolve(yeomanConfig.dev))
-      //           ];
-      //         }
-      //       }
-      //     }
-      // },
       watch: {
         options: {
           livereload: 35799,
@@ -45,15 +28,15 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:dev', 'copy:dev']
+          tasks: ['browserify:dev', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: ['<%= yeoman.app %>/styles/*.{sass,scss}'],
-          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev']
+          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev', 'cacheBust:dev']
         },
         html: {
           files: ['<%= yeoman.app %>/*.html'],
-          tasks: ['copy:dev']
+          tasks: ['copy:dev', 'cacheBust:dev']
         }
       },
       clean: {
@@ -206,6 +189,22 @@ module.exports = function (grunt) {
         options: {
           dirs: ['<%= yeoman.dist %>']
         }
+      },
+      cacheBust: {
+        dev: {
+          options: {
+            baseDir: '<%= yeoman.dev %>',
+            assets: ['**/*.js', '**/*.css'],
+            queryString: true
+          },
+          files: [
+            {
+              expand: true,
+              cwd: '<%= yeoman.dev %>',
+              src: ['index.html']
+            }
+          ]
+        }
       }
   });
 
@@ -215,7 +214,7 @@ module.exports = function (grunt) {
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',
-    //'connect:livereload',
+    'cacheBust:dev',
     'watch'
   ]);
 
@@ -224,7 +223,8 @@ module.exports = function (grunt) {
     'browserify:dev',
     'compass:dev',
     'autoprefixer:dev',
-    'copy:dev'
+    'copy:dev',
+    'cacheBust:dev'
   ]);
 
   // grunt.registerTask('build', [

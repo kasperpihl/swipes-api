@@ -17,7 +17,6 @@ var Workspace = React.createClass({
     _dragDotHandler: null,
     renderCards(){
       if (this.state.workspace.length < 1) {
-        console.log('--------------------------- Nothing');
         return (
           <div className="empty-workspace-state">
             <img src="styles/img/1234.svg"/>
@@ -29,16 +28,15 @@ var Workspace = React.createClass({
         )
       }
 
-        return _.map(this.state.workspace, function(card, i) {
-            return (
-                <CardLoader
-                  key={card.id}
-                  data={card}
-                  dotDragBegin={this.dotDragBegin}
-                  onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
-            );
-
-        }.bind(this));
+      return _.map(this.state.workspace, function(card, i) {
+        return (
+          <CardLoader
+            key={card.id}
+            data={card}
+            dotDragBegin={this.dotDragBegin}
+            onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
+        );
+      }.bind(this));
     },
     runAdjustments() {
         this.bouncedAdjusting();
