@@ -39,7 +39,10 @@ var fetchData = function () {
 		'completed',
 		'due_on',
 		'due_at',
-		'notes'
+		'notes',
+		'projects.section',
+		'projects.section.name',
+		'projects.section.id'
 	];
 	var usersReq = swipes.service('asana').request('users.findByWorkspace', {
 		id: workspaceId,

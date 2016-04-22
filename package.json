@@ -4,7 +4,7 @@
   "description": "Swipes Sync + API",
   "author": "Kasper Pihl Tornøe <kasper@swipesapp.com>",
   "dependencies": {
-    "asana": "^0.11.0",
+    "asana": "^0.14.1",
     "async": "1.4.2",
     "aws-sdk": "^2.2.20",
     "backbone": "1.1.x",

@@ -166,6 +166,17 @@ var TaskItem = React.createClass({
     var dotItems = this.dotItems();
     var taskClass = this.props.dragging ? 'task dragging' : 'task';
 
+    // GETTING SECTIONS IN MYTASKS
+    // if (task.projects.length > 0) {
+    //   if (task.projects[0].section) {
+    //     console.log(task.projects[0].section.name + ' ' + task.name);
+    //     if (task.projects[0].section.id === taskId) {
+    //       console.log(task.name)
+    //     }
+    //   }
+    // }
+
+
 		return (
 			<div
         draggable={true}

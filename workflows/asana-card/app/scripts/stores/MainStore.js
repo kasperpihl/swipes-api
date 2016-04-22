@@ -48,7 +48,6 @@ var MainStore = Reflux.createStore({
 					promise = swipes.service('asana').request('projects.findByWorkspace', {
 						id: workspace.id
 					});
-
 					projectsPromises.push(promise);
 				});
 

@@ -80,7 +80,7 @@ var Comment = React.createClass({
 
     words.forEach(function (word, index) {
       var url = null;
-
+      var space = ' ';
       word = word.replace(urlRegex, function(match) {
         url = match;
         return '';
@@ -89,8 +89,8 @@ var Comment = React.createClass({
       elements.push(word + ' ');
 
       if (url !== null) {
-        elements.push(<a target="_blank" key={uuid.v4()} href={url}>{url}</a>);
-        elements.push(<span key={uuid.v4()}>' '</span>);
+        elements.push(<a className="comments-url" target="_blank" key={uuid.v4()} href={url}>{url}</a>);
+        elements.push(<span key={uuid.v4()}>{space}</span>);
       }
     })
 
