@@ -113,7 +113,16 @@ var CardLoader = React.createClass({
 				this.setState({badge: data.badge});
 			}
 			else if(message.command === 'notifications.send'){
-				notificationActions.send(data);
+
+				var notification = {
+					title: this.state.workflow.name,
+					message: data.message	
+				};
+				if(data.title){
+					notification.title += ": " + data.title;
+				}
+				if(!document.hasFocus())
+					notificationActions.send(notification);
 			}
 			else if (message.command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "card" + this.props.data.id);
@@ -123,12 +132,12 @@ var CardLoader = React.createClass({
 		}
 	},
 	receivedSocketEvent: function(e){
-		console.log("received socket event", e);
-		this.apiCon.callListener("event", e);
+		if(this.apiCon){
+			this.apiCon.callListener("event", e);
+		}
 	},
 	onShareTransmit: function (e) {
 		if (e.toCardId === this.props.data.id) {
-			console.log('share', e);
 			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
 			amplitude.logEvent('Engagement - Share Action', analyticsProps);
 			mixpanel.track('Share Action', analyticsProps);

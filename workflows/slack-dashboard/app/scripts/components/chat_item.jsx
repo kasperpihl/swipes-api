@@ -257,7 +257,7 @@ ChatMessage.Attachment = React.createClass({
 	},
 	renderTitle: function(){
 		if(this.props.data.title){
-			var innerObj = <div className="attachment-title">{renderTextWithLinks(this.props.data.title)}</div>;
+			var innerObj = <div className="attachment-title">{this.props.data.title}</div>;
 			if(this.props.data.title_link){
 				return <a className='link' onClick={clickedLink.bind(null, this.props.data.title_link)}>{innerObj}</a>
 			}
