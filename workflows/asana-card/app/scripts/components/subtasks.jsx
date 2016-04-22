@@ -225,9 +225,6 @@ var Subtask = React.createClass({
   },
   renderDueOnDate: function() {
     var subtask = this.props.subtask;
-    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    console.log(subtask);
-    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     var dueOnText;
 
 

@@ -130,7 +130,7 @@ var TaskItem = React.createClass({
 
       var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
 
-      if (moment().diff(task.due_at) > 0 || moment().diff(task.due_on, 'days') >= 1) {
+      if (!task.completed && (moment().diff(task.due_at) > 0 || moment().diff(task.due_on, 'days') >= 1)) {
         return (
           <div className="task-due-on past">
             {'Due on ' + parseDate}
