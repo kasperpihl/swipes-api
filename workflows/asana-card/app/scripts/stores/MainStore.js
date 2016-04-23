@@ -12,6 +12,42 @@ var MainStore = Reflux.createStore({
 			commentsView: false
 		}
 	},
+	getShareAction: function () {
+		var expandedTaskId = this.get('expandedTaskId');
+		var commentsView = this.get('commentsView');
+		var action = 'Create a new task';
+
+		if (commentsView) {
+			action = 'Write a comment';
+		} else if (expandedTaskId) {
+			action = 'Create a new subtask';
+		}
+
+		return action;
+	},
+	currentProjectName: function () {
+		var workspaceId = this.get('settings').workspaceId;
+		var projectId = this.get('settings').projectId;
+
+		if (workspaceId === projectId) {
+			return 'My Tasks';
+		} else {
+			var workspaces = this.getAll();
+			var projects = workspaces[workspaceId].projects;
+
+			if (projects.length > 0) {
+				var currentProject = projects.find(function (project) {
+					return project.id === projectId;
+				})
+
+				if (currentProject !== undefined) {
+					return currentProject.name;
+				} else {
+					return null;
+				}
+			}
+		}
+	},
 	onUpdateSettings: function (newSettings) {
 		console.log('new', newSettings);
 		TasksActions.reset();

@@ -14,6 +14,18 @@ swipes.onReady (function () {
 	MainStore.fetch();
 });
 
+swipes.onShareInit(function(e) {
+	var projectName = MainStore.currentProjectName();
+	var action = MainStore.getShareAction();
+
+	if (projectName) {
+		return {
+			name: 'Asana '+ projectName +' - ' + action,
+			action: action
+		}
+	}
+});
+
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
 

@@ -6,6 +6,5 @@
 	"description": "Slack Channel workflow",
 	"index": "dev/index.html",
 	"required_services": ["slack"],
-	"share_actions": ["Post to channel"],
 	"icon": "images/logo-slack.svg"
 }

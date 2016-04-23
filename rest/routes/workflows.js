@@ -73,9 +73,6 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
       if(manifest.required_services){
         updateDoc.required_services = manifest.required_services;
       }
-      if(manifest.share_actions){
-        updateDoc.share_actions = manifest.share_actions;
-      }
       if (manifest.index) {
         updateDoc.index = manifest.index;
       }

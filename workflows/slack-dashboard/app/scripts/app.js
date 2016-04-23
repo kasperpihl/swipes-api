@@ -14,6 +14,22 @@ swipes.onReady(function(){
 	chatStore.start();
 });
 
+swipes.onShareInit(function(e) {
+	var channels = channelStore.getActive();
+	var currentChatId = chatStore.get('channelId');
+
+	if (channels.length > 0) {
+		var currentChannel = channels.find(function (channel) {
+			return channel.id === currentChatId;
+		})
+
+		return {
+			name: 'Slack #'+ currentChannel.name +' - Send a message',
+			action: 'send message'
+		}
+	}
+});
+
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
 
@@ -24,6 +40,7 @@ swipes.onShareTransmit(function(e) {
 		document.getElementById('chat-input').focus();
 	}
 });
+
 swipes.onAppFocus(function(e){
 	chatActions.checkSocket(e);
 });

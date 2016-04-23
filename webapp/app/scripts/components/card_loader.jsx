@@ -13,6 +13,7 @@ var notificationActions = require('../actions/NotificationActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
 var workspaceActions = require('../actions/WorkspaceActions');
+var cardActions = require('../actions/CardActions');
 
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
@@ -80,22 +81,25 @@ var CardLoader = React.createClass({
 				this.props.dotDragBegin(newData, callback);
 			}
 			else if (message.command === "share.request") {
-				var shareList = WorkflowStore.shareList();
-				var modalData = {
-					title: "Share to",
-					emptyText: "We're working on adding more workflows.",
-					rows: shareList
-				};
+				cardActions.broadcast('share.init', {
+					sourceCardId: message._id
+				}, function (list) {
+					var modalData = {
+						title: "Share to",
+						emptyText: "Seems that you have one lonely card there. Add another one!",
+						rows: list
+					};
 
-				modalActions.loadModal('list', modalData, function (row) {
-					if(row){
-						eventActions.fire("share.transmit", {
-							fromCardId: self.state.workflow.id,
-							toCardId: row.id,
-							action: row.action,
-							data: message.data
-						});
-					}
+					modalActions.loadModal('list', modalData, function (row) {
+						if(row){
+							eventActions.fire("share.transmit", {
+								fromCardId: self.state.workflow.id,
+								toCardId: row.id,
+								action: row.action,
+								data: message.data
+							});
+						}
+					});
 				});
 			}
 			else if (message.command === 'analytics.action'){
@@ -116,7 +120,7 @@ var CardLoader = React.createClass({
 
 				var notification = {
 					title: this.state.workflow.name,
-					message: data.message	
+					message: data.message
 				};
 				if(data.title){
 					notification.title += ": " + data.title;
@@ -136,6 +140,14 @@ var CardLoader = React.createClass({
 			this.apiCon.callListener("event", e);
 		}
 	},
+	onShareInit: function (e) {
+		if (e.toCardId === this.props.data.id) {
+			this.apiCon.callListener('event', {
+				type: 'share.init',
+				data: e
+			}, e.callback);
+		}
+	},
 	onShareTransmit: function (e) {
 		if (e.toCardId === this.props.data.id) {
 			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
@@ -152,6 +164,7 @@ var CardLoader = React.createClass({
 		eventActions.remove(null, null, "card" + this.props.data.id);
 
 		// Add a listeners for share
+		eventActions.add("share.init", this.onShareInit, "card" + this.props.data.id);
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
 		eventActions.add("share.ondrop", this.onShareTransmit, "card" + this.props.data.id);
 

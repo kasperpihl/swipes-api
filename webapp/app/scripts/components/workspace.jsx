@@ -9,6 +9,10 @@ var WorkspaceStore = require('../stores/WorkspaceStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
 var eventActions = require('../actions/EventActions');
 
+// Including the cardstore only because of browserify
+var CardStore = require('../stores/CardStore');
+var cardActions = require('../actions/CardActions');
+
 var CardLoader = require('./card_loader');
 var Card = require('material-ui/lib/card/card');
 
@@ -29,6 +33,8 @@ var Workspace = React.createClass({
       }
 
       return _.map(this.state.workspace, function(card, i) {
+        cardActions.add(card);
+
         return (
           <CardLoader
             key={card.id}

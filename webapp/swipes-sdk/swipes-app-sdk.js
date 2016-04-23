@@ -76,6 +76,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onShareRequest = function(callback){
 		self._listeners.add("share.request", callback);
 	};
+	SwipesAppSDK.prototype.onShareInit = function(callback){
+		self._listeners.add("share.init", callback);
+	};
 	SwipesAppSDK.prototype.onShareTransmit = function(callback){
 		self._listeners.add("share.transmit", callback);
 	};
@@ -347,6 +350,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.share = {
 		request: function (data) {
 			self._client.callListener("share.request", data);
+		},
+		init: function (data) {
+			self._client.callListener('share.init', data);
 		},
 		transmit: function(data){
 			self._client.callListener('share.transmit', data);
