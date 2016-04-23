@@ -301,7 +301,7 @@ module.exports = function (grunt) {
             dest: '<%= yeoman.dev %>',
             src: [
               '*.html',
-              '*.{ico,txt,png,svg}'
+              './**/*.{ico,txt,png,svg}'
             ]
           }, {
             expand: true,
