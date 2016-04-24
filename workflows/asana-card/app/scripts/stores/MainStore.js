@@ -37,7 +37,7 @@ var MainStore = Reflux.createStore({
 
 			if (projects.length > 0) {
 				var currentProject = projects.find(function (project) {
-					return project.id === projectId;
+					return project.id.toString() === projectId;
 				})
 
 				if (currentProject !== undefined) {
