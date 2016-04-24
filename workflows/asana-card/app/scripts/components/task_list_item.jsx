@@ -45,54 +45,100 @@ var TaskItem = React.createClass({
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
-    if (task.completed) {
-      items.push({
-        label: 'Undo',
-        icon: 'undo',
-        callback: function () {
-          that.undoCompleteTask(task);
-        }
-      })
-    } else {
-      items.push({
-        label: 'Complete',
-        icon: 'check',
-        callback: function () {
-          that.completeTask(task);
-        }
-      })
-    }
+    var scheduleTask;
 
-    items = items.concat([
-      {
-        label: 'Remove',
-        icon: 'delete',
-        callback: function () {
-          that.removeTask(task);
-        }
-      },
-      {
-        label: 'Schedule task',
-        icon: 'schedule',
-        callback: function() {
-          that.scheduleTask(task, task.id);
-        }
-      },
-      {
-        label: 'Share the task',
-        icon: 'share',
-        callback: function () {
-          that.shareTaskUrl(taskUrl);
-        }
-      },
-      {
-        label: 'Jump to asana',
-        icon: 'link',
-        callback: function () {
-          window.open(taskUrl, '_blank');
-        }
+    if (task.name.slice(-1) === ':') {
+      if (task.completed) {
+        items.push({
+          label: 'Undo',
+          icon: 'undo',
+          callback: function () {
+            that.undoCompleteTask(task);
+          }
+        })
+      } else {
+        items.push({
+          label: 'Complete',
+          icon: 'check',
+          callback: function () {
+            that.completeTask(task);
+          }
+        })
       }
-    ]);
+
+      items = items.concat([
+        {
+          label: 'Remove',
+          icon: 'delete',
+          callback: function () {
+            that.removeTask(task);
+          }
+        },
+        {
+          label: 'Share section',
+          icon: 'share',
+          callback: function () {
+            that.shareTaskUrl(taskUrl);
+          }
+        },
+        {
+          label: 'Jump to asana',
+          icon: 'link',
+          callback: function () {
+            window.open(taskUrl, '_blank');
+          }
+        }
+      ]);
+    } else {
+      if (task.completed) {
+        items.push({
+          label: 'Undo',
+          icon: 'undo',
+          callback: function () {
+            that.undoCompleteTask(task);
+          }
+        })
+      } else {
+        items.push({
+          label: 'Complete',
+          icon: 'check',
+          callback: function () {
+            that.completeTask(task);
+          }
+        })
+      }
+
+      items = items.concat([
+        {
+          label: 'Remove',
+          icon: 'delete',
+          callback: function () {
+            that.removeTask(task);
+          }
+        },
+        {
+          label: 'Schedule task',
+          icon: 'schedule',
+          callback: function() {
+            that.scheduleTask(task, task.id);
+          }
+        },
+        {
+          label: 'Share the task',
+          icon: 'share',
+          callback: function () {
+            that.shareTaskUrl(taskUrl);
+          }
+        },
+        {
+          label: 'Jump to asana',
+          icon: 'link',
+          callback: function () {
+            window.open(taskUrl, '_blank');
+          }
+        }
+      ]);
+    }
 
     return items;
   },
@@ -152,6 +198,48 @@ var TaskItem = React.createClass({
 
     }
   },
+  renderSwipesDot: function() {
+    var task = this.props.data;
+    var taskId = task.id;
+    var dotItems = this.dotItems();
+    var allProjects = ProjectsStore.getAll();
+    var taskProjects = task.projects;
+    var taskProjectId = taskProjects.length > 0 ? taskProjects[0].id : null;
+    var taskProject = allProjects[taskProjectId] || {};
+    var taskProjectName = taskProject.name || null;
+    var settings = MainStore.get('settings');
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+    var taskClass = this.props.dragging ? 'task dragging' : 'task';
+
+    return(
+      <div className="task-list-element">
+        <SwipesDot
+          className="dot"
+          hoverParentId={taskId}
+          elements={dotItems}
+          onDragData={this.shareData.bind(this, taskUrl)}
+          menuColors={{
+            borderColor: 'transparent',
+            hoverBorderColor: '#1DB1FC',
+            backgroundColor: '#1DB1FC',
+            hoverBackgroundColor: 'white',
+            iconColor: 'white',
+            hoverIconColor: '#1DB1FC'
+          }}
+          labelStyles={{
+            transition: '.1s',
+            boxShadow: 'none',
+            backgroundColor: 'rgba(0, 12, 47, 1)',
+            padding: '5px 10px',
+            top: '-12px',
+            fontSize: '16px',
+            letterSpacing: '1px',
+            zIndex: '99'
+          }}
+        />
+     </div>
+    )
+  },
   render: function() {
 		var task = this.props.data;
     var taskId = task.id;
@@ -163,68 +251,55 @@ var TaskItem = React.createClass({
     var taskProjectName = taskProject.name || null;
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
-    var dotItems = this.dotItems();
     var taskClass = this.props.dragging ? 'task dragging' : 'task';
 
-    // GETTING SECTIONS IN MYTASKS
-    // if (task.projects.length > 0) {
-    //   if (task.projects[0].section) {
-    //     console.log(task.projects[0].section.name + ' ' + task.name);
-    //     if (task.projects[0].section.id === taskId) {
-    //       console.log(task.name)
-    //     }
-    //   }
-    // }
+    if (task.name.slice(-1) === ':') {
+      return (
+  			<div
+          draggable={true}
+          onDragStart={this.props.onDragStart}
+          onDragEnd={this.props.onDragEnd}
+          onDragOver={this.props.onDragOver}
+          onDragEnter={this.props.onDragEnter}
+          id={taskId}
+          className="task-wrapper section"
+          onClick={this.expandTask.bind(this, taskId)} >
 
-
-		return (
-			<div
-        draggable={true}
-        onDragStart={this.props.onDragStart}
-        onDragEnd={this.props.onDragEnd}
-        onDragOver={this.props.onDragOver}
-        onDragEnter={this.props.onDragEnter}
-        id={taskId}
-        className="task-wrapper"
-        onClick={this.expandTask.bind(this, taskId)}
-      >
-        <div className={taskClass}>
-          <div className="task-list-element">
-            <SwipesDot
-              className="dot"
-              hoverParentId={taskId}
-              elements={dotItems}
-              onDragData={this.shareData.bind(this, taskUrl)}
-              menuColors={{
-                borderColor: 'transparent',
-                hoverBorderColor: '#1DB1FC',
-                backgroundColor: '#1DB1FC',
-                hoverBackgroundColor: 'white',
-                iconColor: 'white',
-                hoverIconColor: '#1DB1FC'
-              }}
-              labelStyles={{
-                transition: '.1s',
-                boxShadow: 'none',
-                backgroundColor: 'rgba(0, 12, 47, 1)',
-                padding: '5px 10px',
-                top: '-12px',
-                fontSize: '16px',
-                letterSpacing: '1px',
-                zIndex: '99'
-              }}
-            />
-  				</div>
-  				<div className="task-details-wrap">
-  					<div className="task-title">{task.name}</div>
-            {this.renderDueOnDate()}
-  				</div>
-          <div className="task-assign-avatar">
-            <AssigneeMenu task={task} />
+          <div className={taskClass}>
+            {this.renderSwipesDot()}
+    				<div className="task-details-wrap">
+    					<div className="task-title">{task.name}</div>
+    				</div>
           </div>
-        </div>
-			</div>
-		)
+
+  			</div>
+      )
+    } else {
+      return (
+       <div
+          draggable={true}
+          onDragStart={this.props.onDragStart}
+          onDragEnd={this.props.onDragEnd}
+          onDragOver={this.props.onDragOver}
+          onDragEnter={this.props.onDragEnter}
+          id={taskId}
+          className="task-wrapper"
+          onClick={this.expandTask.bind(this, taskId)} >
+
+          <div className={taskClass}>
+            {this.renderSwipesDot()}
+            <div className="task-details-wrap">
+              <div className="task-title">{task.name}</div>
+              {this.renderDueOnDate()}
+            </div>
+            <div className="task-assign-avatar">
+              <AssigneeMenu task={task} />
+            </div>
+          </div>
+
+       </div>
+       )
+    }
 	}
 })
 

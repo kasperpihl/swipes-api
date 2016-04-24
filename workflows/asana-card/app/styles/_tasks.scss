@@ -58,8 +58,24 @@
   width: 100%;
   position: relative;
 
-  &.sections {
-    background-color: red;
+  &.section {
+    background-color: darken(#FAFAFA, 3%);
+
+    .task {
+      min-height: 60px;
+      //padding: 0 21px;
+
+      .task-details-wrap {
+        width: 100%;
+
+        .task-title {
+          font-weight: 500;
+          font-size: 17px;
+          //padding: 0;
+          padding-left: 10px;
+        }
+      }
+    }
   }
 
   .task {
