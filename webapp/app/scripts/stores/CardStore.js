@@ -20,10 +20,14 @@ var CardStore = Reflux.createStore({
 
     this._cards.forEach(function (card) {
       if (card.id !== data.sourceCardId) {
-
-        eventActions.fire("share.init", {
+        eventActions.fire(event, {
           toCardId: card.id,
           callback: function (data) {
+            // T_TODO make it in a way that if the developer didn't
+            // put a handler on the other side
+            // this callback would be called immediately with null as data
+            //console.log('where are you');
+
             // T_TODO || K_TODO
             // Checking for dublication because if we reload only the card iframe
             // not the whole app, the card is subscribed to the main app as a new card

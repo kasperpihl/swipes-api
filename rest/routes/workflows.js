@@ -73,6 +73,9 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
       if(manifest.required_services){
         updateDoc.required_services = manifest.required_services;
       }
+      if(manifest.domains){
+        updateDoc.domains = manifest.domains;
+      }
       if (manifest.index) {
         updateDoc.index = manifest.index;
       }

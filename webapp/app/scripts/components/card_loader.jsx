@@ -70,6 +70,14 @@ var CardLoader = React.createClass({
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
 			else if (message.command === "actions.openURL"){
+				// cardActions.broadcast('link.init', {}, function(list) {
+				// 	console.log(list);
+				// 	if (list && list.length > 0) {
+				// 		console.log('show modal here');
+				// 	} else {
+				// 		window.open(data.url, "_blank");
+				// 	}
+				// })
 				window.open(data.url, "_blank");
 			}
 			else if (message.command === "actions.startDrag"){
