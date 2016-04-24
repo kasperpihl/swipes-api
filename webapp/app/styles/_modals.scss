@@ -52,6 +52,13 @@ $break-mid: 650px;
 }
 .list-results{
 	li{
+		display: flex;
+		padding-left: 10px;
+
+		img {
+			width: 35px;
+		}
+
 		h3{
 			height: 70px;
 			line-height: 70px;

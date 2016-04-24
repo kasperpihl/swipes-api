@@ -20,7 +20,7 @@ swipes.onShareInit(function(e) {
 
 	if (projectName) {
 		return {
-			name: 'Asana '+ projectName +' - ' + action,
+			name: projectName +' - ' + action,
 			action: action
 		}
 	}

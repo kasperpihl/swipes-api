@@ -20,6 +20,7 @@ var CardStore = Reflux.createStore({
 
     this._cards.forEach(function (card) {
       if (card.id !== data.sourceCardId) {
+
         eventActions.fire("share.init", {
           toCardId: card.id,
           callback: function (data) {
@@ -35,6 +36,10 @@ var CardStore = Reflux.createStore({
               count--;
 
               if (data) {
+                var url = card.index_url;
+            		var splitURL = url.split('/').slice(0,-1).join('/');
+
+                data.imageUrl = splitURL + '/' + card.icon;
                 data.id = card.id;
                 finalData.push(data);
               }

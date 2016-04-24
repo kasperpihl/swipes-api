@@ -24,9 +24,19 @@ var WorkspaceStore = Reflux.createStore({
 				var insertObj = {
 					id: workflow.id
 				}
+
 				this.set(workflow.id, insertObj, {trigger: false});
 			}
 			else{
+				// This is an ugly hack, but it works
+				// Kasper, where do you set the init workflow?
+				var insertObj = {
+					parent_id: workflow.parent_id,
+					index_url: workflow.index_url,
+					icon: workflow.icon
+				}
+
+				this.update(workflow.id, insertObj, {trigger: false});
 				// Mark this as being here
 				delete testForRemovals[workflow.id];
 			}
