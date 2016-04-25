@@ -82,6 +82,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onShareTransmit = function(callback){
 		self._listeners.add("share.transmit", callback);
 	};
+	SwipesAppSDK.prototype.onRequestPreOpenUrl = function(callback){
+		self._listeners.add("request.preOpenUrl", callback);
+	};
 
 	SwipesAppSDK.prototype.api = {
 		request: function(options, data, callback){
@@ -364,6 +367,15 @@ var SwipesAppSDK = (function() {
 		}
 	};
 
+	SwipesAppSDK.prototype.request = {
+		preOpenUrl: function (data) {
+			self._client.callListener('request.preOpenUrl', data);
+		},
+		openUrl: function(data){
+			self._client.callListener('request.openUrl', data);
+		}
+	};
+
 	SwipesAppSDK.prototype.actions = {
 		openURL: function(url){
 			self._client.callListener("actions.openURL", {url: url});
@@ -382,8 +394,9 @@ var SwipesAppSDK = (function() {
 
 	// API for handling calls from main app
 	SwipesAppSDK.prototype.connectorHandleResponseReceivedFromListener = function (connector, message, callback) {
-		var res;
-		if(message){
+		var res = null;
+
+		if (message) {
 			var data = message.data;
 
 			if(message.command == "event"){

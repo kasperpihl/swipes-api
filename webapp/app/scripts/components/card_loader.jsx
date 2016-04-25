@@ -70,15 +70,34 @@ var CardLoader = React.createClass({
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
 			else if (message.command === "actions.openURL"){
-				// cardActions.broadcast('link.init', {}, function(list) {
-				// 	console.log(list);
-				// 	if (list && list.length > 0) {
-				// 		console.log('show modal here');
-				// 	} else {
-				// 		window.open(data.url, "_blank");
-				// 	}
-				// })
-				window.open(data.url, "_blank");
+				cardActions.broadcast('request.preOpenUrl', {
+					url: data.url
+				}, function(list) {
+					if (list && list.length > 0) {
+						list.push({id: 'beproductive', name: 'New tab', new_tab: true});
+
+						var modalData = {
+							title: "Open with",
+							emptyText: "Oops... something went wrong!",
+							rows: list
+						};
+
+						modalActions.loadModal('list', modalData, function (row) {
+							if(row){
+								if (!row.new_tab) {
+									eventActions.fire("request.openURL", {
+										toCardId: row.id,
+										data: message.data
+									});
+								} else {
+									window.open(data.url, "_blank");
+								}
+							}
+						});
+					} else {
+						window.open(data.url, "_blank");
+					}
+				})
 			}
 			else if (message.command === "actions.startDrag"){
 				var newData = {
@@ -167,6 +186,14 @@ var CardLoader = React.createClass({
 			});
 		}
 	},
+	onRequestPreOpenUrl: function (e) {
+		if (e.toCardId === this.props.data.id) {
+			this.apiCon.callListener('event', {
+				type: 'request.preOpenUrl',
+				data: e
+			}, e.callback);
+		}
+	},
 	onLoad:function(){
 		// Clear any listeners for this card.
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -175,6 +202,7 @@ var CardLoader = React.createClass({
 		eventActions.add("share.init", this.onShareInit, "card" + this.props.data.id);
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
 		eventActions.add("share.ondrop", this.onShareTransmit, "card" + this.props.data.id);
+		eventActions.add("request.preOpenUrl", this.onRequestPreOpenUrl, "card" + this.props.data.id);
 
 		var workflow = this.state.workflow;
 
