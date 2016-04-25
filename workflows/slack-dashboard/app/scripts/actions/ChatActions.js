@@ -11,7 +11,8 @@ var ChatActions = Reflux.createActions([
 	'uploadFile',
 	'updateBadge',
 	'checkSocket',
-	'uploadClipboard'
+	'uploadClipboard',
+	'openImage'
 	// Here you can list your actions
 ]);
 

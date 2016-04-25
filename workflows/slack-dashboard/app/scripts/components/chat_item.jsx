@@ -220,11 +220,16 @@ ChatMessage.File = React.createClass({
 			return this.renderDefaultPreview();
 		}
 	},
+	openImage: function() {
+		var imgLink = this.props.data.url_private_download;
+		var title = this.props.data.title;
+		chatActions.openImage(imgLink, title);
+	},
 	renderImagePreview: function(){
 		return (
 			<div className="image-container">
 				<div className="image-bg" style={{width: this.props.data.thumb_360_w + 'px', height: this.props.data.thumb_360_h, backgroundImage: 'url(' + this.props.data.thumb_360 + ')'}}>
-					<img src={this.props.data.thumb_360} />
+					<img onClick={this.openImage} src={this.props.data.thumb_360} />
 				</div>
 			</div>
 		);

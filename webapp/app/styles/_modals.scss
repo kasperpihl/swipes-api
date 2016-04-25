@@ -965,3 +965,26 @@ input[type=number]::-webkit-inner-spin-button {
     font-weight: 500;
   }
 }
+
+.lightbox {
+	background-color: rgba($deepBlue-100, .8);
+	pointer-events: none;
+
+	@extend %flex;
+	flex-direction: column;
+
+	h2.image-title {
+		color: white;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 15px 0;
+    letter-spacing: 0.02rem;
+	}
+
+	img {
+		max-height: 70%;
+		max-width: 70%;
+		border-radius: 5px;
+		box-sizing: $swipes-shadow-five;
+	}
+}

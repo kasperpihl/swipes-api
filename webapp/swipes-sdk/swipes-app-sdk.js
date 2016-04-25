@@ -241,6 +241,11 @@ var SwipesAppSDK = (function() {
 				}
 			})
 		},
+		lightbox: function(url, title, callback) {
+			var options = {};
+			options = this._getOptions(options, url, title);
+			this.load("lightbox", options)
+		},
 		alert: function(title, message, callback){
 			var options = {buttons: ["Okay"]};
 			options = this._getOptions(options, title, message);
