@@ -279,6 +279,22 @@ var ExpandedTask = React.createClass({
       </div>
     );
   },
+  renderExtraData: function(task) {
+    var time = moment(this.state.createdAt).format("h:mm a, d MMM YYYY");
+    var verboseTime = moment(this.state.createdAt).fromNow();
+
+    var completedTime = moment(task.completed_at).fromNow();
+
+    if (task.completed) {
+      return (
+        <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> {verboseTime} and completed {completedTime}</div>
+      )
+    } else {
+      return(
+        <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> {verboseTime}</div>
+      )
+    }
+  },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
     var taskId = task.id;
@@ -302,7 +318,7 @@ var ExpandedTask = React.createClass({
           {this.renderTitle(task)}
           {this.renderDescription(task)}
           {this.renderDueOnDate(task)}
-          <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> {verboseTime}</div>
+          {this.renderExtraData(task)}
         </div>
         <div className="header-avatar">
             <AssigneeMenu task={task} />

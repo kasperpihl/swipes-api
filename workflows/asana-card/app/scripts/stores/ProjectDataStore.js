@@ -40,6 +40,7 @@ var fetchData = function () {
 		'due_on',
 		'due_at',
 		'notes',
+		'completed_at',
 		'projects.section',
 		'projects.section.name',
 		'projects.section.id'

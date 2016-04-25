@@ -44,6 +44,10 @@ var matchTasks = function (tasks) {
 		}
   })
 
+  statuses[1].tasks.sort(function(a,b) {
+    return new Date(b.completed_at) - new Date(a.completed_at)
+  })
+
 	return statuses;
 }
 
