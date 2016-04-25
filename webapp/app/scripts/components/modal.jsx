@@ -9,9 +9,15 @@ var Modal = React.createClass({
 		/*setTimeout(function(){
 			modalActions.loadModal(SearchModal, {top:"20%", centerY:false});
 		}, 500);*/
+		window.addEventListener('keyup', function(e) {
+				if(e.keyCode === 27) {
+					modalActions.hide();
+				}
+		})
 	},
 	componentWillUnmount:function(){
 		window.removeEventListener('resize', this.recalculateContent);
+		window.removeEventListener('keyup', function(e) {})
 	},
 	componentDidUpdate: function(){
 		this.recalculateContent();
@@ -20,7 +26,7 @@ var Modal = React.createClass({
 	recalculateContent: function(){
 		var windowWidth = $(window).width();
 		var windowHeight = $(window).height();
-		
+
 		var $contentEl = $(this.refs.content);
 		var contentWidth = $contentEl.outerWidth();
 		var contentHeight = $contentEl.outerHeight();
@@ -38,7 +44,7 @@ var Modal = React.createClass({
 			"left": this.state.modal.left
 		};
 
-		
+
 
 		if(this.state.modal.left !== null){
 			var actualLeft = parseInt(this.state.modal.left, 10);
@@ -104,7 +110,7 @@ var Modal = React.createClass({
 		return (
 			<div ref="container" className={containerClass}>
 				<div ref="background" onClick={this.onClickedBackground} className={backgroundClass}></div>
-				<div ref="content" className={contentClass} >
+				<div ref="content" className={contentClass}>
 					<Modal data={{options: this.state.modal.modalData, callback: this.onModalCallback}}/>
 				</div>
 			</div>
