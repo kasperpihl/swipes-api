@@ -240,6 +240,32 @@ var ProjectDataStore = Reflux.createStore({
 			_fetchLock = false;
 		})
 	},
+	onRemoveAssignee: function(task) {
+		var taskId = task.id;
+
+		_fetchLock = true;
+
+		// update the task client side
+		if (task.parent) {
+			SubtasksActions.update(taskId, 'assignee', null);
+		} else {
+			TasksActions.updateTask(taskId, 'assignee', null);
+		}
+
+		swipes.service('asana').request('tasks.update', {
+			id: taskId,
+			assignee: null
+		})
+		.then(function () {
+			swipes.analytics.action('Remove assignee');
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+		.finally(function () {
+			_fetchLock = false;
+		})
+	},
 	onRemoveScheduling: function(task) {
 		var taskId = task.id;
 		var res = null;

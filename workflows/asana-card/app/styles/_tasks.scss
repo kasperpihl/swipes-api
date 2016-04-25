@@ -238,6 +238,30 @@
         width: 35px;
         height: 35px;
       }
+
+      .remove-assignee {
+        width: 35px;
+        height: 35px;
+        transform: translateX(-8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        span.material-icons {
+          color: white !important;
+          font-size: 16px !important;
+          opacity: 0;
+        }
+
+        &:hover {
+          background-color: rgba($deepBlue-100,.8);
+
+          span.material-icons {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 
@@ -332,6 +356,7 @@
   height: 35px;
   border-radius: 50px;
   border: 2px solid $deepBlue-80;
+  transform: translateX(-8px);
 
   @extend %flex;
 

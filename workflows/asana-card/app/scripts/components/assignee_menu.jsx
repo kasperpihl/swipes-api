@@ -13,6 +13,9 @@ var AssigneeMenu = React.createClass({
   handleMenuItemClick: function (task, userId) {
     ProjectDataActions.assignPerson(task, userId);
   },
+  removeAssignee: function(task) {
+    ProjectDataActions.removeAssignee(task);
+  },
   assignChoices: function() {
     var task = this.props.task;
     var allUsers = UserStore.getAll();
@@ -55,6 +58,7 @@ var AssigneeMenu = React.createClass({
     var task = this.props.task;
     var allUsers = UserStore.getAll();
     var userSize = Object.keys(allUsers).length;
+    var assigneeId = task.assignee ? task.assignee.id : null;
 
     if (userSize <= 0) {
       return;
@@ -65,20 +69,29 @@ var AssigneeMenu = React.createClass({
     for (var prop in allUsers) {
        names.push(<MenuItem key={prop} primaryText={allUsers[prop].name} onClick={this.handleMenuItemClick.bind(this, task, allUsers[prop].id)} />)
     }
-    return (
-      <IconMenu
-      iconButtonElement={<IconButton style={{height: '40px'}}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
-      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-      targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      maxHeight={250}
-      >
-      {names}
-      </IconMenu>
-    )
+
+    if (!assigneeId) {
+      return (
+        <IconMenu
+        iconButtonElement={<IconButton style={{height: '40px'}}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
+        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        maxHeight={250}
+        >
+        {names}
+        </IconMenu>
+      )
+    } else {
+      return (
+        <div className="remove-assignee" onClick={this.removeAssignee.bind(this, task)}>
+          <FontIcon className="material-icons">close</FontIcon>
+        </div>
+      )
+    }
   },
   render: function () {
     return (
-      <div title=""  onClick={this.stopPropagation}>
+      <div onClick={this.stopPropagation}>
         {this.assignChoices()}
         {this.renderAssign()}
       </div>
