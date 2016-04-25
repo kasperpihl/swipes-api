@@ -58,7 +58,7 @@ ListModal.Row = React.createClass({
 
 
 		return (
-			<li onClick={this.onClick}>
+			<li className="modal-list" onClick={this.onClick}>
 				{image}
 				<h3 className="name">{name}</h3>
 

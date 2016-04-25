@@ -55,6 +55,17 @@ $break-mid: 650px;
 		display: flex;
 		padding-left: 10px;
 
+		&.modal-list {
+
+			&:hover {
+				background-color: $studioGray-20;
+
+				h3 {
+					color: $deepBlue-100;
+				}
+			}
+		}
+
 		img {
 			width: 35px;
 		}
@@ -67,11 +78,6 @@ $break-mid: 650px;
 			padding-left: 5%;
 			font-weight: 400;
 			border-bottom: 1px solid $studioGray-20;
-
-			&:hover {
-				color: $deepBlue-100;
-				background-color: $studioGray-20;
-			}
 		}
 	}
 	background-color: white;
