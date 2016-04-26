@@ -24,7 +24,7 @@ swipes.onShareInit(function(e) {
 		})
 
 		return {
-			name: 'Slack #'+ currentChannel.name +' - Send a message',
+			name: '#'+ currentChannel.name +' - Send a message',
 			action: 'send message'
 		}
 	}

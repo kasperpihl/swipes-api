@@ -14,6 +14,21 @@ swipes.onReady (function () {
 	MainStore.fetch();
 });
 
+swipes.onRequestPreOpenUrl(function(e) {
+	var url = e.data.data.url;
+	var projectName = MainStore.currentProjectName();
+
+	// T_TODO this is no the right place to do that check...
+	// just a fast test
+	if (url.match(/https:\/\/app\.asana\.com\/0\/\d+\/\d+/)) {
+		return {
+			name: 'Asana - ' + projectName
+		};
+	}
+
+	return null;
+});
+
 swipes.onShareInit(function(e) {
 	var projectName = MainStore.currentProjectName();
 	var action = MainStore.getShareAction();
