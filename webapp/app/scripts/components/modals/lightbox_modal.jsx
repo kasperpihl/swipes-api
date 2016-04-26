@@ -18,10 +18,8 @@ var LightboxModal = React.createClass({
     var lightboxWrapper = this.refs.lightboxwrapper;
     var lightboxButton = this.refs.lightboxbutton;
 
-    if((e.target === lightboxWrapper) || (e.target === lightboxButton)) {
+    if(e.target === lightboxWrapper || (e.target === lightboxButton)) {
       modalActions.hide();
-    } else {
-      return;
     }
   },
   imgLoaded: function() {
