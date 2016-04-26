@@ -44,10 +44,10 @@ swipes.onShareInit(function(e) {
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
 
-	var text = data.data.text || ''; // e.data.data.data.data...
+	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
 
-	if (text) {
-		CreateTaskInputActions.changeInputValue(text);
+	if (input) {
+		CreateTaskInputActions.changeInputValue(input);
 		document.getElementById('create-task-input').focus();
 	}
 });
