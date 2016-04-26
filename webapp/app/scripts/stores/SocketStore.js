@@ -21,6 +21,7 @@ var SocketStore = Reflux.createStore({
 
 		swipes.api.request("rtm.start").then(function(res){
 			if(res.ok) {
+				self.connect(res.url);
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
 				res.self.me = true;
 				amplitude.setUserId(res.self.id);
@@ -40,9 +41,8 @@ var SocketStore = Reflux.createStore({
 					}
 					return true;
 				});
-				
+
 				serviceStore.batchLoad(serviceFiltered, {flush:true});
-				self.connect(res.url);
 				stateActions.changeStarted(true);
 			}
 		}).fail(function (error) {

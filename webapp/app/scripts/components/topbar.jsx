@@ -31,7 +31,7 @@ var Topbar = React.createClass({
 		stateStore._reset({trigger: false});
 		localStorage.clear();
 		swipes.setToken(null);
-		this.context.router.push('/signin');
+		window.location.replace('/');
 	},
 	workspace: function(){
 
