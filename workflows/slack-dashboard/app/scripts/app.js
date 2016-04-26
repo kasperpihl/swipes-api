@@ -33,10 +33,10 @@ swipes.onShareInit(function(e) {
 swipes.onShareTransmit(function(e) {
 	var data = e.data.data;
 
-	var text = data.data.text || data.data.url; // e.data.data.data.data...
+	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
 
-	if (text) {
-		chatInputActions.changeInputValue(text);
+	if (input) {
+		chatInputActions.changeInputValue(input);
 		document.getElementById('chat-input').focus();
 	}
 });
