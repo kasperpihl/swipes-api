@@ -221,9 +221,11 @@ ChatMessage.File = React.createClass({
 		}
 	},
 	openImage: function() {
-		var imgLink = this.props.data.url_private_download;
+		var src = this.props.data.url_private_download;
 		var title = this.props.data.title;
-		chatActions.openImage(imgLink, title);
+		var url = this.props.data.permalink;
+
+		chatActions.openImage(src, title, url);
 	},
 	renderImagePreview: function(){
 		return (

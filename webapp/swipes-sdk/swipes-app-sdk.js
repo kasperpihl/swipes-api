@@ -244,9 +244,22 @@ var SwipesAppSDK = (function() {
 				}
 			})
 		},
-		lightbox: function(url, title, callback) {
-			var options = {};
-			options = this._getOptions(options, url, title);
+		lightbox: function(src, title, url) {
+
+			if (!title) {
+				title = '';
+			}
+
+			if (!url) {
+				url = ''
+			}
+
+			var options = {
+				src: src,
+				title: title,
+				url: url
+			};
+
 			this.load("lightbox", options)
 		},
 		alert: function(title, message, callback){

@@ -379,8 +379,8 @@ var ChatStore = Reflux.createStore({
 			}
 		})
 	},
-	onOpenImage: function(url, title) {
-		swipes.modal.lightbox(url, title)
+	onOpenImage: function(src, title, url) {
+		swipes.modal.lightbox(src, title, url)
 	},
 	onUpdateBadge: function(){
 		// Update notification count - get total number from store

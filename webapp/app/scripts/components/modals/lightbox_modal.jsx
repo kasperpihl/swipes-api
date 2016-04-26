@@ -12,23 +12,30 @@ var LightboxModal = React.createClass({
     }
   },
   componentDidMount: function(){
-
     window.focus();
 	},
   closeModal: function(e) {
     var lightboxWrapper = this.refs.lightboxwrapper;
+    var lightboxButton = this.refs.lightboxbutton;
 
-    if(e.target !== lightboxWrapper) {
-       return;
+    if((e.target === lightboxWrapper) || (e.target === lightboxButton)) {
+      modalActions.hide();
+    } else {
+      return;
     }
-
-    modalActions.hide();
   },
   imgLoaded: function() {
     this.setState({lightboxImg: 'active'});
     this.setState({loading: 'inactive'});
   },
-  renderImage: function() {
+  renderOpenImage: function() {
+    var options = this.props.data.options;
+
+    if(this.state.lightboxImg === 'active' && (options.url.length > 0)) {
+      return (
+        <a className="lightbox-button" href={options.url} target="_blank" ref="lightboxbutton" onClick={this.closeModal}>Open image</a>
+      )
+    }
   },
   render: function() {
     var options = this.props.data.options;
@@ -38,11 +45,12 @@ var LightboxModal = React.createClass({
 
     return (
       <div className="lightbox" ref="lightboxwrapper" style={{width: ww, height: wh}} onClick={this.closeModal} >
-        <h2 className="image-title">{options.message}</h2>
-        <img src={options.title} className={'lightbox-image ' + this.state.lightboxImg} ref='lightboxImage' onLoad={this.imgLoaded}/>
+        <h2 className="image-title">{options.title}</h2>
+        <img src={options.src} className={'lightbox-image ' + this.state.lightboxImg} ref='lightboxImage' onLoad={this.imgLoaded}/>
         <div className={'lightbox-loader ' + this.state.loading}>
   				<CircularProgress color="#fff" size={1}/>
   			</div>
+        {this.renderOpenImage()}
       </div>
     )
   }
