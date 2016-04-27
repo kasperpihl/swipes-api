@@ -42,7 +42,18 @@ var tabsStyles = {
 var ExpandedTask = React.createClass({
   mixins: [TasksStore.connect(), TaskStore.connect()],
   componentDidMount: function() {
+    var loaded = TasksStore.get('loaded');
     var taskId = this.props.taskId;
+
+    if (!loaded) {
+      var tasksCache = TasksStore.getCachedTasks();
+
+      if (tasksCache.length > 0) {
+        TasksActions.loadTasks(tasksCache);
+      } else {
+        ProjectDataActions.fetchData();
+      }
+    }
 
     var storyPromise = swipes.service('asana').request('stories.findByTask', {
       id: taskId
@@ -392,6 +403,7 @@ var ExpandedTask = React.createClass({
     </Tabs>
   },
   render: function () {
+    var loaded = TasksStore.get('loaded');
     var tasks = TasksStore.get('tasks');
     var taskId = this.props.taskId;
     var settings = MainStore.get('settings');
@@ -399,12 +411,20 @@ var ExpandedTask = React.createClass({
       return task.id === taskId;
     })[0];
 
-    return (
-      <div>
-        {this.renderHeader(task)}
-        {this.renderTabs(task)}
-      </div>
-    )
+    if (loaded) {
+      return (
+        <div>
+          {this.renderHeader(task)}
+          {this.renderTabs(task)}
+        </div>
+      )
+    } else {
+      return (
+        <div className="height-100">
+          <Loading />
+        </div>
+      )
+    }
   }
 });
 

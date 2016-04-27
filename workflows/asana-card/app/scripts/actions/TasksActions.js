@@ -6,11 +6,11 @@ var TasksActions = Reflux.createActions([
 	'updateTask',
   'loadTasks',
   'dragStart',
-  'dragEnd',
-  'reset'
+  'dragEnd'
 ]);
 
 //Sync actions
 TasksActions.reorderTasks = Reflux.createAction({sync: true});
+TasksActions.reset = Reflux.createAction({sync: true});
 
 module.exports = TasksActions;

@@ -85,6 +85,9 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.onRequestPreOpenUrl = function(callback){
 		self._listeners.add("request.preOpenUrl", callback);
 	};
+	SwipesAppSDK.prototype.onRequestOpenUrl = function(callback){
+		self._listeners.add("request.openUrl", callback);
+	};
 
 	SwipesAppSDK.prototype.api = {
 		request: function(options, data, callback){

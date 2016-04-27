@@ -19,7 +19,6 @@ var EventStore = Reflux.createStore({
 
 		currentListeners.push({callback: callback, context: ctx});
 		this.set(name, currentListeners);
-		
 	},
 	_clearEventName:function(name, callback, context){
 		var currentListeners = this.get(name);
