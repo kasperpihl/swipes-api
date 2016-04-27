@@ -263,6 +263,7 @@ var ExpandedTask = React.createClass({
   renderDescription: function (task) {
     var description = task.notes;
     var value = this.state.descriptionInputValue;
+    var finalDescription = value !== null ? value : description;
     var maxRows = 1;
     // Increase max number of rows if expanded.
     if(this.state.expandDesc){
@@ -283,7 +284,7 @@ var ExpandedTask = React.createClass({
           onBlur={this.descriptionOnBlur}
           onKeyDown={this.onDescriptionKeyDown}
           placeholder="No description"
-          value={value || description}
+          value={finalDescription}
           minRows={1}
           maxRows={maxRows}/>
         {this.renderExpander(description)}
@@ -411,7 +412,7 @@ var ExpandedTask = React.createClass({
       return task.id === taskId;
     })[0];
 
-    if (loaded) {
+    if (loaded && task) {
       return (
         <div>
           {this.renderHeader(task)}

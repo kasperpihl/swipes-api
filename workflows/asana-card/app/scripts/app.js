@@ -35,7 +35,6 @@ swipes.onRequestOpenUrl(function(e) {
 	var projectId = urlParts[urlParts.length-2];
 	var taskId = urlParts[urlParts.length-1];
 
-
 	if (projectId.match(/\d+/) && taskId.match(/\d+/)) {
 		var context = MainStore.compareContext(projectId, taskId);
 
