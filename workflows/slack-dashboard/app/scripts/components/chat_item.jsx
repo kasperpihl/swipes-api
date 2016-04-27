@@ -213,7 +213,12 @@ var ChatMessage = React.createClass({
 
 ChatMessage.File = React.createClass({
 	renderPreview: function(){
+
+		
 		if(this.props.data.thumb_360){
+			console.log("file",this.props.data);
+			// T_TODO: Check the this.props.data.thumb_360
+			// The issue is that if the user is not logged in, this link won't work. Try open in incognito
 			return this.renderImagePreview();
 		}
 		else{
