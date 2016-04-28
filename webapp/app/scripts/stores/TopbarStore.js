@@ -24,12 +24,13 @@ var TopbarStore = Reflux.createStore({
 
 	},
 	onSendFeedback: function() {
-		modalActions.loadModal('textarea', {'title': 'Send us your feedback', 'placeholder': 'Your feedback'}, function(res) {
+		modalActions.loadModal('textarea', {'title': 'Send us your feedback', 'placeholder': 'Write what you are thinking'}, function(res) {
 			if (res) {
 				var feedbackMessage = res;
 				swipes.api.request('feedback.add', {'feedback': res}).then(function(res) {
 					if(res.ok) {
-						modalActions.loadModal('alert', {'title': 'Feedback sent', 'message': 'Thank you for sending feedback'})
+						mixpanel.track('Feedback Sent');
+						modalActions.loadModal('alert', {'title': 'Thank you', 'message': 'We appreciate you taking time to send us your thoughts on Swipes!'})
 					} else {
 						console.log(res.err);
 						return;

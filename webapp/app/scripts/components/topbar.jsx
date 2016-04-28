@@ -39,6 +39,7 @@ var Topbar = React.createClass({
 		this.context.router.push('/services');
 	},
 	feedbackForm: function() {
+		mixpanel.track('Feedback Init');
 		topbarActions.sendFeedback();
 	},
 	renderIconMenu:function(){
