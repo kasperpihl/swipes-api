@@ -48,7 +48,7 @@ var TasksStore = Reflux.createStore({
     this.setTasks(tasks);
   },
   onReset: function () {
-    this.set('loaded', false, {trigger: false});
+    this.set('loaded', false);
     this.setTasks([]);
   },
   onDragStart: function () {

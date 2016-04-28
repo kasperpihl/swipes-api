@@ -10,7 +10,8 @@ var Signup = React.createClass({
 	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Signup');
-        mixpanel.track('Opened Signup');
+    mixpanel.track('Opened Signup');
+
 		$(document).ready(function() {
 
             var direction = 1;
@@ -54,9 +55,9 @@ var Signup = React.createClass({
 		swipes.api.request({force:true, command:"users.create"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
-                mixpanel.alias(res.userId);
+        mixpanel.alias(res.userId);
 				amplitude.logEvent('Session - Created Account');
-                mixpanel.track('Created Account');
+      	mixpanel.track('Created Account');
 				stateStore.actions.login(res.token);
 			}
 			else

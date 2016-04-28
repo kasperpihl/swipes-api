@@ -48,17 +48,60 @@ var MainStore = Reflux.createStore({
 			}
 		}
 	},
-	onUpdateSettings: function (newSettings) {
-		console.log('new', newSettings);
+	compareContext: function (projectId, taskId) {
+		//var currentWorkspaceId = this.get('settings').workspaceId;
+		var currentProjectId = this.get('settings').projectId;
+
+		if (currentProjectId === projectId) {
+			return {same: true};
+		} else {
+			var workspaces = MainStore.getAll();
+			var newWorkspaceId = false;
+
+			_.some(workspaces, function (workspace) {
+				if (workspace && workspace.id) {
+					var projects = workspace.projects;
+					var pLen = projects.length;
+
+					for (var i=0; i < pLen; i++) {
+						if (projects[i] && projects[i].id.toString() === projectId) {
+							newWorkspaceId = workspace.id;
+							break;
+						}
+					}
+
+					if (newWorkspaceId) {
+						// break the _.some loop
+						return true;
+					}
+				}
+			});
+
+			var projectType = newWorkspaceId === projectId ? 'mytasks' : null;
+
+			return {
+				workspaceId: newWorkspaceId,
+				projectId: projectId,
+				projectType: projectType
+			}
+		}
+	},
+	onUpdateSettings: function (newSettings, closeExpandTask) {
+		closeExpandTask = closeExpandTask || false;
 		TasksActions.reset();
-		MainActions.closeExpandedTask();
+		this.onCloseExpandedTask();
+
 		this.update('settings', newSettings);
 		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings}, function(res, err) {
 			console.log('trying to update settings', res, err);
 		})
 	},
-	onExpandTask: function (taskId) {
-		this.set('expandedTaskId', taskId);
+	onExpandTask: function (taskId, trigger) {
+		trigger = trigger === undefined ? true : trigger;
+		// K_TODO for some reason this one still triggers
+		// and I had to put additional check in expanded_task
+		// just to be sure that the taskId is not invalid
+		this.set('expandedTaskId', taskId, {trigger: trigger});
 	},
 	onCloseExpandedTask: function () {
 		this.set('commentsView', false, {trigger: false});
@@ -126,7 +169,7 @@ var MainStore = Reflux.createStore({
 						delete user.workspaces;
 
 						newSettings.user = user;
-						MainActions.updateSettings(newSettings);
+						MainActions.updateSettings(newSettings, true);
 					})
 					.catch(function (error) {
 						console.log(error);

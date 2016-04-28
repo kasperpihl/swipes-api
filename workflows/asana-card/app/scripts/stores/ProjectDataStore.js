@@ -12,20 +12,36 @@ var ProjectsStore = require('../stores/ProjectsStore');
 
 var _fetchDataTimeout = null;
 var _fetchLock = false;
+var _lastFetchDate = Date.now();
+
+var clearFetchTimeout = function () {
+	if (_fetchDataTimeout) {
+		clearTimeout(_fetchDataTimeout);
+	}
+}
 
 var refetchData = function (init) {
 	if (!_fetchLock && !init) {
 		ProjectDataActions.fetchData();
 	}
 
-	if (_fetchDataTimeout) {
-		clearTimeout(_fetchDataTimeout);
-	}
+	clearFetchTimeout();
 
 	_fetchDataTimeout = setTimeout(refetchData, 15000);
 }
 
 var fetchData = function () {
+	var now = Date.now();
+
+	// For some reason we are calling this function too often
+	// so we want to prevent hitting asana too much
+	if (now - _lastFetchDate < 200) {
+		return;
+	}
+
+	_lastFetchDate = now;
+
+	clearFetchTimeout();
 	// T_TODO one could optimize things here so when the workspace is not changed
 	// one do not need to request users and projects. Only tasks.
 	var workspaceId = MainStore.get('settings').workspaceId;

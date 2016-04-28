@@ -1,5 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
+var objectAssign = require('object-assign');
 
 var Loading = require('./loading');
 var WorkflowStore = require('../stores/WorkflowStore');
@@ -85,10 +86,9 @@ var CardLoader = React.createClass({
 						modalActions.loadModal('list', modalData, function (row) {
 							if(row){
 								if (!row.new_tab) {
-									eventActions.fire("request.openURL", {
-										toCardId: row.id,
-										data: message.data
-									});
+									var newData = objectAssign({toCardId: row.id}, data);
+
+									eventActions.fire("request.openUrl", newData);
 								} else {
 									window.open(data.url, "_blank");
 								}
@@ -194,6 +194,14 @@ var CardLoader = React.createClass({
 			}, e.callback);
 		}
 	},
+	onRequestOpenUrl: function (e) {
+		if (e.toCardId === this.props.data.id) {
+			this.apiCon.callListener('event', {
+				type: 'request.openUrl',
+				data: e
+			});
+		}
+	},
 	onLoad:function(){
 		// Clear any listeners for this card.
 		eventActions.remove(null, null, "card" + this.props.data.id);
@@ -203,6 +211,7 @@ var CardLoader = React.createClass({
 		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
 		eventActions.add("share.ondrop", this.onShareTransmit, "card" + this.props.data.id);
 		eventActions.add("request.preOpenUrl", this.onRequestPreOpenUrl, "card" + this.props.data.id);
+		eventActions.add("request.openUrl", this.onRequestOpenUrl, "card" + this.props.data.id);
 
 		var workflow = this.state.workflow;
 

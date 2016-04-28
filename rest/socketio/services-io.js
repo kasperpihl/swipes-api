@@ -12,8 +12,8 @@ let types = {
 };
 
 let getType = (o, n) => {
-  let oL = o.length;
-  let nL = n.length;
+  let oL = o ? o.length : 0;
+  let nL = n ? n.length : 0;
   let type = 'service_';
 
   if (nL > oL) {

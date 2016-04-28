@@ -42,7 +42,18 @@ var tabsStyles = {
 var ExpandedTask = React.createClass({
   mixins: [TasksStore.connect(), TaskStore.connect()],
   componentDidMount: function() {
+    var loaded = TasksStore.get('loaded');
     var taskId = this.props.taskId;
+
+    if (!loaded) {
+      var tasksCache = TasksStore.getCachedTasks();
+
+      if (tasksCache.length > 0) {
+        TasksActions.loadTasks(tasksCache);
+      } else {
+        ProjectDataActions.fetchData();
+      }
+    }
 
     var storyPromise = swipes.service('asana').request('stories.findByTask', {
       id: taskId
@@ -252,6 +263,7 @@ var ExpandedTask = React.createClass({
   renderDescription: function (task) {
     var description = task.notes;
     var value = this.state.descriptionInputValue;
+    var finalDescription = value !== null ? value : description;
     var maxRows = 1;
     // Increase max number of rows if expanded.
     if(this.state.expandDesc){
@@ -272,7 +284,7 @@ var ExpandedTask = React.createClass({
           onBlur={this.descriptionOnBlur}
           onKeyDown={this.onDescriptionKeyDown}
           placeholder="No description"
-          value={value || description}
+          value={finalDescription}
           minRows={1}
           maxRows={maxRows}/>
         {this.renderExpander(description)}
@@ -392,6 +404,7 @@ var ExpandedTask = React.createClass({
     </Tabs>
   },
   render: function () {
+    var loaded = TasksStore.get('loaded');
     var tasks = TasksStore.get('tasks');
     var taskId = this.props.taskId;
     var settings = MainStore.get('settings');
@@ -399,12 +412,20 @@ var ExpandedTask = React.createClass({
       return task.id === taskId;
     })[0];
 
-    return (
-      <div>
-        {this.renderHeader(task)}
-        {this.renderTabs(task)}
-      </div>
-    )
+    if (loaded && task) {
+      return (
+        <div>
+          {this.renderHeader(task)}
+          {this.renderTabs(task)}
+        </div>
+      )
+    } else {
+      return (
+        <div className="height-100">
+          <Loading />
+        </div>
+      )
+    }
   }
 });
 

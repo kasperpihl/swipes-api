@@ -29,6 +29,24 @@ swipes.onRequestPreOpenUrl(function(e) {
 	return null;
 });
 
+swipes.onRequestOpenUrl(function(e) {
+	var url = e.data.data.url;
+	var urlParts = url.split('/');
+	var projectId = urlParts[urlParts.length-2];
+	var taskId = urlParts[urlParts.length-1];
+
+	if (projectId.match(/\d+/) && taskId.match(/\d+/)) {
+		var context = MainStore.compareContext(projectId, taskId);
+
+		if (context.same) {
+			MainActions.expandTask(taskId);
+		} else {
+			MainActions.updateSettings(context);
+			MainActions.expandTask(taskId);
+		}
+	}
+});
+
 swipes.onShareInit(function(e) {
 	var projectName = MainStore.currentProjectName();
 	var action = MainStore.getShareAction();
@@ -114,7 +132,7 @@ swipes.onMenuButton(function () {
 				newSettings.projectType = 'mytasks'
 			}
 
-			MainActions.updateSettings(newSettings);
+			MainActions.updateSettings(newSettings, true);
 		}
 	})
 });
