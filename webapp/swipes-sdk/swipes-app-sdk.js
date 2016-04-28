@@ -248,14 +248,8 @@ var SwipesAppSDK = (function() {
 			})
 		},
 		lightbox: function(src, title, url) {
-
-			if (!title) {
-				title = '';
-			}
-
-			if (!url) {
-				url = ''
-			}
+			title = title || '';
+			url = url || '';
 
 			var options = {
 				src: src,

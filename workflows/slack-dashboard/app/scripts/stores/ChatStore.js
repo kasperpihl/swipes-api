@@ -370,6 +370,7 @@ var ChatStore = Reflux.createStore({
 		var that = this;
 		swipes.modal.edit('Edit Message', message, function(res) {
 			if (res) {
+				console.log(res);
 				var newText = res;
 				swipes.service('slack').request('chat.update', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: that.get('channelId'), text: encodeURIComponent(res)}, function(res, err) {
 					if (err) {

@@ -40,6 +40,13 @@ var Topbar = React.createClass({
 	services: function(){
 		this.context.router.push('/services');
 	},
+	feedbackForm: function() {
+		swipes.modal.edit('Send us your feedback', 'Your feedback', function(res) {
+			if(res) {
+				console.log(res)
+			}
+		})
+	},
 	renderIconMenu:function(){
 		var button = (
 
@@ -68,6 +75,9 @@ var Topbar = React.createClass({
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
 				<h5 style={{textAlign: 'left', paddingLeft: '60px'}}>{title}</h5>
+				<div className="feedback-button" onClick={this.feedbackForm}>
+					<i className="material-icons">favorite</i> Feedback
+				</div>
 				<div className="grid-button" onClick={workspaceActions.gridButton}>
 					<i className="material-icons">dashboard</i>
 				</div>
