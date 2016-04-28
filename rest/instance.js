@@ -50,6 +50,7 @@ let mentionsRouter = require('./routes/mentions.js');
 let organizationsRouter = require('./routes/organizations.js');
 let workflowsRouter = require('./routes/workflows.js');
 let linksRouter = require('./routes/links.js');
+let feedbackRouter = require('./routes/feedback.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -83,6 +84,7 @@ app.use('/v1', mentionsRouter);
 app.use('/v1', organizationsRouter);
 app.use('/v1', workflowsRouter);
 app.use('/v1', linksRouter);
+app.use('/v1', feedbackRouter);
 
 // We want req.userId to the socket.io stuff too
 io.use((socket, next) => {

@@ -16,7 +16,7 @@ let restAuth = (req, res, next) => {
       req.isAdmin = decoded.adm;
       req.isSysAdmin = decoded.sysAdm;
 
-      db.rethinkQuery(r.table('users').get(req.userId))
+      db.rethinkQuery(r.table('users').get(req.userId).without('password'))
         .then((user) => {
           // Create scopes that a user can save/read from
           var scopes = [ req.userId ];
@@ -30,8 +30,9 @@ let restAuth = (req, res, next) => {
               scopes.push(app.id);
             }
           }
-          
+
           req.scopes = scopes;
+          req.user = user;
 
           next()
         }).catch((err) => {
