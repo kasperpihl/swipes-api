@@ -41,11 +41,7 @@ var Topbar = React.createClass({
 		this.context.router.push('/services');
 	},
 	feedbackForm: function() {
-		swipes.modal.edit('Send us your feedback', 'Your feedback', function(res) {
-			if(res) {
-				console.log(res)
-			}
-		})
+		topbarActions.sendFeedback();
 	},
 	renderIconMenu:function(){
 		var button = (

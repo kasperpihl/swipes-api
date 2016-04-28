@@ -24,6 +24,11 @@ var TextareaModal = React.createClass({
 	},
 	render: function () {
 		var options = this.props.data.options;
+		var placeholder = 'Edit text';
+
+		if (options.placeholder && options.placeholder.length > 0) {
+			placeholder = options.placeholder
+		}
 
 		var title = options.title || this.defaults.title;
 		options.buttons = ["Cancel", "Submit"];
@@ -47,7 +52,7 @@ var TextareaModal = React.createClass({
 						ref="message"
 						className="edit-textarea"
 						onChange={this.onMessageChange}
-						placeholder="Edit text"
+						placeholder={placeholder}
 						value={this.state.message}
 						minRows={4}
 						maxRows={4}/>

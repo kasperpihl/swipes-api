@@ -21,7 +21,23 @@ var TopbarStore = Reflux.createStore({
 
 		});
 
+	},
+	onSendFeedback: function() {
+
+		modalActions.loadModal('textarea', {'title': 'Send us your feedback', 'placeholder': 'Your feedback'}, function(res) {
+			if (res) {
+				swipes.api.request('feedback.add', {'feedback': res}).then(function(res) {
+					if(!res.ok) {
+						console.log(res.err);
+						return;
+					}
+				}).catch(function(err) {
+
+				})
+			}
+		})
 	}
+
 });
 
 module.exports = TopbarStore;

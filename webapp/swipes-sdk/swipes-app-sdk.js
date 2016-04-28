@@ -238,6 +238,23 @@ var SwipesAppSDK = (function() {
 			this.load("textarea", options, function(res){
 				if(typeof callback === 'function')
 					callback(res);
+					console.log(res);
+			})
+		},
+		feedback: function(title, placeholder, callback) {
+			title = title || '';
+			placeholder = placeholder || '';
+
+			var options = {
+				title: title,
+				placeholder: placeholder
+			};
+
+			this.load('textarea', options, function(res) {
+				if(typeof callback === 'function') {
+					callback(res);
+					console.log('yoyoyoyoyooy');
+				}
 			})
 		},
 		schedule: function(callback) {
