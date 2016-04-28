@@ -23,7 +23,7 @@ var Workspace = React.createClass({
       if (this.state.workspace.length < 1) {
         return (
           <div className="empty-workspace-state">
-            <img src="styles/img/1234.svg"/>
+            <img src="styles/img/emptystate-workspace.svg"/>
             <p className="workspace-empty-text">
               <span className="strong">No active cards</span> <br />
               Add your first card!

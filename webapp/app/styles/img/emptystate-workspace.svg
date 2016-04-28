@@ -1,0 +1,15 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 132">
+  <title>swipes-workspace-illustrations-emptystate-workspace</title>
+  <g>
+    <rect x="5155" y="3380" width="90" height="130" rx="4.30946" ry="4.30946" transform="translate(5309 3511) rotate(180)" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+    <line x1="148" y1="113" x2="68" y2="113" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+    <g>
+      <line x1="116" y1="66" x2="102" y2="66" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="109" y1="59" x2="109" y2="73" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+    <path d="M5091,3380h49.69054A4.30946,4.30946,0,0,1,5145,3384.30946v121.38108A4.30946,4.30946,0,0,1,5140.69054,3510H5091" transform="translate(-5091 -3379)" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
+    <line x1="48" y1="113" x2="20" y2="113" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
+    <path d="M5309,3380h-49.69054A4.30946,4.30946,0,0,0,5255,3384.30946v121.38108A4.30946,4.30946,0,0,0,5259.30946,3510H5309" transform="translate(-5091 -3379)" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
+    <line x1="170" y1="113" x2="198" y2="113" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>

@@ -116,17 +116,17 @@ var StatusesList = React.createClass({
     var that = this;
 		var statuses = matchTasks(tasks);
 		var tabs = statuses.map(function (item, index) {
-    var tasks = item.tasks.map(function (item, index) {
-      return <TaskItem
-        key={index}
-        data={item}
-        dragging={that.state.dragging}
-        onDragStart={that.onDragStart}
-        onDragEnd={that.onDragEnd}
-        onDragOver={that.onDragOver}
-        onDragEnter={that.onDragEnter}
-      />
-    });
+      var tasks = item.tasks.map(function (item, index) {
+        return <TaskItem
+          key={index}
+          data={item}
+          dragging={that.state.dragging}
+          onDragStart={that.onDragStart}
+          onDragEnd={that.onDragEnd}
+          onDragOver={that.onDragOver}
+          onDragEnter={that.onDragEnter}
+        />
+      });
 
 			return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
 				<div onDragOver={this.onDragOver} className="task-list-wrapper">
@@ -141,10 +141,12 @@ var StatusesList = React.createClass({
   			inkBarStyle={tabsStyles.inkBarStyle}
   			children={tabs}></Tabs>
     } else {
-      <div className="empty-state asana">
-        <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
-        <p>No tasks yet. <br /> Why don't you get this party poppin?</p>
-      </div>
+      return (
+        <div className="empty-state asana">
+          <img src="./images/emptystate-tasklist.svg" />
+          <p><span className="bold">This is a fresh tasklist</span> <br /> Create the first task</p>
+        </div>
+      )
     }
 	},
 	render: function () {

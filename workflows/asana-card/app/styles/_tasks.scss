@@ -1117,20 +1117,30 @@ $color_havelock_blue_approx: #4a90e2;
 }
 
 .empty-state {
-  padding-top: 15%;
+  //padding-top: 15%;
   width: 100%;
+  margin-top: 50%;
+  transform: translateY(-50%);
   @extend %flex;
   flex-direction: column;
 
   img {
-    width: 50%;
+    width: 96px;
   }
 
   p {
-    color: $deepBlue-60;
+    color: $deepBlue-40;
+    font-weight: 300;
     font-size: 14px;
     text-align: center;
     line-height: 1.4;
     margin: 20px 0;
+
+    span.bold {
+      font-size: 15px;
+      font-weight: 400;
+      color: $deepBlue-80;
+      letter-spacing: .5px
+    }
   }
 }

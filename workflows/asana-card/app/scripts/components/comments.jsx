@@ -47,8 +47,8 @@ var Comments = React.createClass({
     } else {
       return (
         <div className="empty-state asana">
-          <p>No comments yet. <br /> Why don't you get this conversation rocking?</p>
-          <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
+          <img src="./images/emptystate-asana-comments.svg" />
+          <p><span className="bold">This is a place to leave comments</span> <br /> Write down your thoughts</p>
         </div>
       )
     }

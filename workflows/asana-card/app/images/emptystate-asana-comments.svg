@@ -1,0 +1,13 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97 94.17262">
+  <title>swipes-workspace-illustrations-emptystate-comment</title>
+  <g>
+    <g>
+      <path d="M4980,3409h-68a6,6,0,0,0-6,6v38a6,6,0,0,0,6,6h49l17,16v-16h2a6,6,0,0,0,6-6v-38A6,6,0,0,0,4980,3409Z" transform="translate(-4897.5 -3400.5)" fill="#fff"/>
+      <path d="M4980,3409h-68a6,6,0,0,0-6,6v38a6,6,0,0,0,6,6h49l17,16v-16h2a6,6,0,0,0,6-6v-38A6,6,0,0,0,4980,3409Z" transform="translate(-4897.5 -3400.5)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="17"/>
+      <path d="M4980,3409a6,6,0,0,1,6,6v38a6,6,0,0,1-6,6h-2v16l-17-16h-49a6,6,0,0,1-6-6v-38a6,6,0,0,1,6-6h68m0-2h-68a8.00913,8.00913,0,0,0-8,8v38a8.00913,8.00913,0,0,0,8,8h48.20679l16.42261,15.45642L4980,3479.62885V3461a8.00913,8.00913,0,0,0,8-8v-38a8.00913,8.00913,0,0,0-8-8h0Z" transform="translate(-4897.5 -3400.5)" fill="#9bdffd"/>
+    </g>
+    <circle cx="32.5" cy="33.5" r="3" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+    <circle cx="48.5" cy="33.5" r="3" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+    <circle cx="64.5" cy="33.5" r="3" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>

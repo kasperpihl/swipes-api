@@ -54,8 +54,8 @@ var Subtasks = React.createClass({
     } else {
       return (
         <div className="empty-state asana">
-          <p>No subtasks yet. <br /> Why don't you get this party poppin?</p>
-          <img src="./images/swipes-ui-workspace-emptystate-task.svg" />
+          <img src="./images/emptystate-asana-subtasks.svg" />
+          <p><span className="bold">There are no subtasks</span> <br /> Create a new subtask</p>
         </div>
       )
     }
