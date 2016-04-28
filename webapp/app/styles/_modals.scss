@@ -116,9 +116,13 @@ $break-mid: 650px;
 		padding-bottom: 50px;
 	}
 	.message{
-		margin: 5px 10%;
-		font-size: 14px;
-		color: $sidebar-dark-color;
+		margin: 15px 10%;
+		min-height: 50px;
+		font-size: 15px;
+		color: $deepBlue-80;
+		font-weight: 400;
+		display: flex;
+		align-items: center;
 	}
 	.buttons {
 		position:absolute;
