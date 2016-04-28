@@ -26,7 +26,8 @@ let tables = [
   },
   'events',
   'mentions',
-  'organizations'
+  'organizations',
+  'feedback'
 
 ];
 
