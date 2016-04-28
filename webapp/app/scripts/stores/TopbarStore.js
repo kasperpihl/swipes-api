@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var topbarActions = require('../actions/TopbarActions');
+var notificationActions = require('../actions/NotificationActions');
 var modalActions = require('../actions/ModalActions');
 var WorkflowStore = require('./WorkflowStore');
 var TopbarStore = Reflux.createStore({
@@ -23,13 +24,12 @@ var TopbarStore = Reflux.createStore({
 
 	},
 	onSendFeedback: function() {
-
 		modalActions.loadModal('textarea', {'title': 'Send us your feedback', 'placeholder': 'Your feedback'}, function(res) {
 			if (res) {
 				var feedbackMessage = res;
 				swipes.api.request('feedback.add', {'feedback': res}).then(function(res) {
 					if(res.ok) {
-						modalActions.loadModal('alert', {'title': 'Feedback sent', 'message': feedbackMessage})
+						modalActions.loadModal('alert', {'title': 'Feedback sent', 'message': 'Thank you for sending feedback'})
 					} else {
 						console.log(res.err);
 						return;
@@ -39,8 +39,10 @@ var TopbarStore = Reflux.createStore({
 				})
 			}
 		})
+	},
+	onSetNotifications: function() {
+		notificationActions.setNotifications();
 	}
-
 });
 
 module.exports = TopbarStore;

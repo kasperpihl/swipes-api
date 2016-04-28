@@ -6,6 +6,8 @@ var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
 var workspaceActions = require('../actions/WorkspaceActions');
 var stateStore = require('../stores/StateStore');
+var notificationStore = require('../stores/NotificationStore');
+var notificationActions = require('../actions/NotificationActions');
 
 // Icon Menu dependencies
 var MenuItem = require('material-ui/lib/menus/menu-item');
@@ -16,12 +18,9 @@ var FontIcon = require('material-ui/lib/font-icon');
 
 
 var Topbar = React.createClass({
-	mixins: [ Reflux.ListenerMixin ],
+	mixins: [notificationStore.connect() ],
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
-	},
-	getInitialState: function(){
-		return {};
 	},
 	clickedAdd: function(){
 		topbarActions.loadWorkflowModal();
@@ -34,7 +33,6 @@ var Topbar = React.createClass({
 		window.location.replace('/');
 	},
 	workspace: function(){
-
 		this.context.router.push('/workspace');
 	},
 	services: function(){
@@ -64,15 +62,28 @@ var Topbar = React.createClass({
 			</IconMenu>
 		);
 	},
-
+	setNotifications: function() {
+		notificationActions.setNotifications();
+	},
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
+		console.log(this.state.notificationState);
+
+		var notificationIcon = 'notifications';
+
+		if (!this.state.notificationState) {
+			notificationIcon = 'notifications_off'
+		}
+
 		return (
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
 				<h5 style={{textAlign: 'left', paddingLeft: '60px'}}>{title}</h5>
 				<div className="feedback-button" onClick={this.feedbackForm}>
 					<i className="material-icons">favorite</i> Feedback
+				</div>
+				<div className="notifications-button" onClick={this.setNotifications}>
+					<i className="material-icons">{notificationIcon}</i>
 				</div>
 				<div className="grid-button" onClick={workspaceActions.gridButton}>
 					<i className="material-icons">dashboard</i>

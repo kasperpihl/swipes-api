@@ -18,7 +18,7 @@
 			position:absolute;
     	//cursor: pointer;
     	top: 0;
-    	right: 120px;
+    	right: 180px;
     	//width:60px;
     	padding: 10px;
     	//padding-right: 0px;
@@ -38,6 +38,27 @@
 			}
 		}
 
+		.notifications-button{
+    	position:absolute;
+    	//cursor: pointer;
+    	top: 0;
+    	right: 120px;
+    	width:60px;
+    	padding: 10px;
+    	height: $top-bar-height;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&:hover {
+				background-color: $studioGray-20;
+			}
+
+			i {
+				color: $deepBlue-60 !important;
+			}
+    }
+
     .grid-button{
     	position:absolute;
     	//cursor: pointer;
@@ -55,7 +76,7 @@
 			}
 
 			i {
-				color: #555;
+				color: $deepBlue-60 !important;
 			}
     }
     .add-button{
@@ -75,7 +96,7 @@
 			}
 
 			i {
-				color: #555;
+				color: $deepBlue-60 !important;
 			}
     }
     .connection-status {

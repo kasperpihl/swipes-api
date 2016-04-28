@@ -9,9 +9,23 @@ var NotificationStore = Reflux.createStore({
 		this.a1 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.a2 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.set("history", []);
+		this.set('notificationState', true)
+	},
+	getInitialState: function() {
+		return {
+			notificationState: true,
+			whatThe: 'yoyoy'
+		}
+	},
+	onSetNotifications: function() {
+		var notif = this.get('notificationState');
+		this.set('notificationState', !notif)
 	},
 	onSend: function(options){
 		if(this.isDuplicate(options)){
+			return;
+		}
+		if(!this.get('notificationState')) {
 			return;
 		}
 		if(bridgeStore.bridge){
@@ -41,7 +55,7 @@ var NotificationStore = Reflux.createStore({
 					sliceFrom = true;
 					break;
 				}
-				
+
 			}
 		}
 		if(sliceFrom){
@@ -55,9 +69,9 @@ var NotificationStore = Reflux.createStore({
 	},
 	playSound: function(){
 		this.a1.play();
-		setTimeout(function(){
+		setTimeout(function() {
 			this.a2.play();
-		}.bind(this), 100);
+		}.bind(this), 100)
 	}
 });
 

@@ -1,7 +1,8 @@
 var Reflux = require('reflux');
 
 var NotificationActions = Reflux.createActions([
-	'send'
+	'send',
+	'setNotifications'
 	// Here you can list your actions
 ]);
 

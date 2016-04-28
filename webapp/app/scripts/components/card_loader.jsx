@@ -152,8 +152,9 @@ var CardLoader = React.createClass({
 				if(data.title){
 					notification.title += ": " + data.title;
 				}
-				if(!document.hasFocus())
+				if(!document.hasFocus()) {
 					notificationActions.send(notification);
+				}
 			}
 			else if (message.command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "card" + this.props.data.id);
