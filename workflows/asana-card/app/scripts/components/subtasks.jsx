@@ -53,7 +53,7 @@ var Subtasks = React.createClass({
       return elements;
     } else {
       return (
-        <div className="empty-state asana">
+        <div className="empty-state asana" style={{marginTop: '10%'}}>
           <img src="./images/emptystate-asana-subtasks.svg" />
           <p><span className="bold">There are no subtasks</span> <br /> Create a new subtask</p>
         </div>
