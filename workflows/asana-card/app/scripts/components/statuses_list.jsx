@@ -114,9 +114,11 @@ var StatusesList = React.createClass({
   },
 	renderStatuses: function (tasks) {
     var that = this;
+    var emptyStateText;
 		var statuses = matchTasks(tasks);
 		var tabs = statuses.map(function (item, index) {
       var tasks = item.tasks.map(function (item, index) {
+
         return <TaskItem
           key={index}
           data={item}
@@ -128,26 +130,33 @@ var StatusesList = React.createClass({
         />
       });
 
-			return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
+      if (index === 0) {
+        emptyStateText = <p><span className="bold">There are no tasks</span> <br /> Create a new task</p>
+      } else if (index === 1) {
+        emptyStateText = <p><span className="bold">There are no completed tasks</span> <br /> Complete your first task</p>
+      }
+
+      var centerImage = (document.body.scrollHeight / 2) - 40 - 90;
+
+      if (tasks.length < 1) {
+        tasks = <div className="empty-state asana" style={{marginTop: centerImage + 'px'}}>
+          <img src="./images/emptystate-asana-tasklist.svg" />
+          {emptyStateText}
+        </div>
+      }
+
+
+      return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
 				<div onDragOver={this.onDragOver} className="task-list-wrapper">
 					{tasks}
 				</div>
 			</Tab>
 		});
 
-    if (tasks.length > 0) {
-      return <Tabs className="height-100 tabs-child-selector"
+    return <Tabs className="height-100 tabs-child-selector"
   			tabItemContainerStyle={{background:'none'}}
   			inkBarStyle={tabsStyles.inkBarStyle}
   			children={tabs}></Tabs>
-    } else {
-      return (
-        <div className="empty-state asana">
-          <img src="./images/emptystate-tasklist.svg" />
-          <p><span className="bold">This is a fresh tasklist</span> <br /> Create the first task</p>
-        </div>
-      )
-    }
 	},
 	render: function () {
     var tasks = this.state.tasks;

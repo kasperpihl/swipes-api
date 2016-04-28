@@ -1,15 +1,24 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 132">
-  <title>swipes-workspace-illustrations-emptystate-workspace</title>
-  <g>
-    <rect x="5155" y="3380" width="90" height="130" rx="4.30946" ry="4.30946" transform="translate(5309 3511) rotate(180)" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
-    <line x1="148" y1="113" x2="68" y2="113" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
-    <g>
-      <line x1="116" y1="66" x2="102" y2="66" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
-      <line x1="109" y1="59" x2="109" y2="73" fill="#fff" stroke="#fd9078" stroke-miterlimit="10" stroke-width="2"/>
-    </g>
-    <path d="M5091,3380h49.69054A4.30946,4.30946,0,0,1,5145,3384.30946v121.38108A4.30946,4.30946,0,0,1,5140.69054,3510H5091" transform="translate(-5091 -3379)" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
-    <line x1="48" y1="113" x2="20" y2="113" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
-    <path d="M5309,3380h-49.69054A4.30946,4.30946,0,0,0,5255,3384.30946v121.38108A4.30946,4.30946,0,0,0,5259.30946,3510H5309" transform="translate(-5091 -3379)" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
-    <line x1="170" y1="113" x2="198" y2="113" fill="#fff" stroke="#b2ebfe" stroke-miterlimit="10" stroke-width="2"/>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 218 132" style="enable-background:new 0 0 218 132;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#FD9078;stroke-width:2;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#B2EBFE;stroke-width:2;stroke-miterlimit:10;}
+</style>
+<title>swipes-workspace-illustrations-emptystate-workspace</title>
+<g>
+	<path class="st0" d="M149.7,131H68.3c-2.4,0-4.3-1.9-4.3-4.3V5.3C64,2.9,65.9,1,68.3,1h81.4c2.4,0,4.3,1.9,4.3,4.3v121.4
+		C154,129.1,152.1,131,149.7,131z"/>
+	<line class="st0" x1="148" y1="113" x2="68" y2="113"/>
+	<g>
+		<line class="st0" x1="116" y1="66" x2="102" y2="66"/>
+		<line class="st0" x1="109" y1="59" x2="109" y2="73"/>
+	</g>
+	<path class="st1" d="M0,1h49.7C52.1,1,54,2.9,54,5.3v0v121.4c0,2.4-1.9,4.3-4.3,4.3H0"/>
+	<line class="st1" x1="48" y1="113" x2="20" y2="113"/>
+	<path class="st1" d="M218,1h-49.7c-2.4,0-4.3,1.9-4.3,4.3v0v121.4c0,2.4,1.9,4.3,4.3,4.3H218"/>
+	<line class="st1" x1="170" y1="113" x2="198" y2="113"/>
+</g>
 </svg>
