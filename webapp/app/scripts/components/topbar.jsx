@@ -67,8 +67,6 @@ var Topbar = React.createClass({
 	},
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
-		console.log(this.state.notificationState);
-
 		var notificationIcon = 'notifications';
 
 		if (!this.state.notificationState) {
