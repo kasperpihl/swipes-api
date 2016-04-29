@@ -10,7 +10,8 @@ var ProjectDataActions = Reflux.createActions([
 	'writeComment',
 	'scheduleTask',
 	'removeScheduling',
-	'removeAssignee'
+	'removeAssignee',
+  'getDueDate'
 ]);
 
 //Sync actions

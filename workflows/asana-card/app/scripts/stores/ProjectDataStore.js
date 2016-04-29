@@ -9,6 +9,7 @@ var SubtasksActions = require('../actions/SubtasksActions');
 var CommentsActions = require('../actions/CommentsActions');
 var UserStore = require('../stores/UserStore');
 var ProjectsStore = require('../stores/ProjectsStore');
+var moment = require('moment');
 
 var _fetchDataTimeout = null;
 var _fetchLock = false;
@@ -523,7 +524,35 @@ var ProjectDataStore = Reflux.createStore({
 				})
 			}
 		})
-	}
+	},
+  getTime: function(time) {
+    return moment(time).format('hh:mma')
+  },
+  getDueDate: function(time) {
+    var timeString;
+    var color;
+
+    if (moment().diff(time, 'days') === -1) {
+  		timeString = 'Tomorrow at ' + this.getTime(time);
+  		color = 'green';
+  	} else if (moment().diff(time, 'days') === 1) {
+  		timeString = 'Yesterday at ' + this.getTime(time);
+  		color = 'red';
+  	} else if (moment().diff(time, 'days') === 0) {
+  		timeString = 'Today at ' + this.getTime(time);
+  		color = 'green'
+  	} else {
+  		if (moment().diff(time) > 0) {
+  			timeString = 'Due on ' + moment(time).format('Do MMMM YYYY, hh:mma');
+  			color = 'red';
+  		} else {
+  			timeString = 'Due on ' + moment(time).format('Do MMMM YYYY, hh:mma');
+        color = ''
+  		}
+  	}
+
+    return [timeString, color]
+  }
 });
 
 module.exports = ProjectDataStore;

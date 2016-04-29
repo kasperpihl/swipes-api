@@ -282,8 +282,8 @@ ChatMessage.Attachment = React.createClass({
 		}
 	},
 	renderImage: function(){
+
 		if(this.props.data.image_url){
-			// KRIS_TODO: Render lightbox
 			var calcHeight = this.props.data.image_height;
 			if(this.props.data.image_width > 400){
 				var proportion = this.props.data.image_width / 400;
@@ -302,16 +302,23 @@ ChatMessage.Attachment = React.createClass({
 		}
 		return <div style={styles} className="attachment-bar" />;
 	},
-	render: function(){
-		return (
-			<div className="chat-attachment">
-				{this.renderImage()}
-				{this.renderPretext()}
+	renderAttachmentContent: function() {
+		if (this.props.data.service_name || this.props.data.title || this.props.data.text) {
+			return (
 				<div className="attachment-content">
 					{this.renderServiceName()}
 					{this.renderTitle()}
 					{this.renderText()}
 				</div>
+			)
+		}
+	},
+	render: function(){
+		return (
+			<div className="chat-attachment">
+				{this.renderImage()}
+				{this.renderPretext()}
+				{this.renderAttachmentContent()}
 			</div>
 		);
 	}

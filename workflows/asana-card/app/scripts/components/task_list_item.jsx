@@ -7,9 +7,11 @@ var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var ProjectsStore = require('../stores/ProjectsStore');
 var ProjectDataActions = require('../actions/ProjectDataActions');
+var ProjectDataStore = require('../stores/ProjectDataStore');
 var moment = require('moment');
 
 var TaskItem = React.createClass({
+  mixins: [ProjectDataStore.connect()],
   getInitialState: function(){
 	    return {};
 	},
@@ -174,28 +176,16 @@ var TaskItem = React.createClass({
         taskDue = task.due_on;
       }
 
-      var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
+      var parseDate = ProjectDataStore.getDueDate(taskDue);
 
-      if (!task.completed && (moment().diff(task.due_at) > 0 || moment().diff(task.due_on, 'days') >= 1)) {
-        return (
-          <div className="task-due-on past">
-            {'Due on ' + parseDate}
-            <div className="remove-schedule" onClick={this.removeScheduling}>
-              <i className="material-icons">close</i>
-            </div>
+      return (
+        <div className={"task-due-on " + parseDate[1]}>
+          {parseDate[0]}
+          <div className="remove-schedule" onClick={this.removeScheduling}>
+            <i className="material-icons">close</i>
           </div>
-        )
-      } else {
-        return (
-          <div className="task-due-on">
-            {'Due on ' + parseDate}
-            <div className="remove-schedule" onClick={this.removeScheduling}>
-              <i className="material-icons">close</i>
-            </div>
-          </div>
-        )
-      }
-
+        </div>
+      )
     }
   },
   renderSwipesDot: function() {
@@ -210,6 +200,8 @@ var TaskItem = React.createClass({
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
     var taskClass = this.props.dragging ? 'task dragging' : 'task';
+
+    console.log(task)
 
     return(
       <div className="task-list-element">

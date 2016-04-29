@@ -181,8 +181,12 @@
           padding: 5px;
         }
 
-        &.past {
+        &.red {
           color: $red-color;
+        }
+
+        &.green {
+          color: $green-color;
         }
 
         .remove-schedule {
