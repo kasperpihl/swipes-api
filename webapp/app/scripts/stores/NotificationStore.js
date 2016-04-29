@@ -12,7 +12,6 @@ var NotificationStore = Reflux.createStore({
 		this.a2 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.set("history", []);
 		if(this.get('notificationState') === 'undefind') {
-			console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ if gets called')
 			this.set('notificationState', true);
 		}
 	},

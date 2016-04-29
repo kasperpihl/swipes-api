@@ -334,7 +334,7 @@ $inputButtonWidth: 50px;
     margin: 25px 0;
 
     .attachment-pretext{
-
+      padding: 10px;
     }
     .attachment-bar{
         background: #e3e4e6;
@@ -354,7 +354,7 @@ $inputButtonWidth: 50px;
         .attachment-title{
             font-size: 16px;
             font-weight: 500;
-            padding: 10px 0;
+            padding-bottom: 10px;
         }
       }
         .attachment-body{
