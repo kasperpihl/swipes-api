@@ -201,8 +201,6 @@ var TaskItem = React.createClass({
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
     var taskClass = this.props.dragging ? 'task dragging' : 'task';
 
-    console.log(task)
-
     return(
       <div className="task-list-element">
         <SwipesDot

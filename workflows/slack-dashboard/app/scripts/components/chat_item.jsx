@@ -282,14 +282,14 @@ ChatMessage.Attachment = React.createClass({
 		}
 	},
 	renderImage: function(){
-
 		if(this.props.data.image_url){
+			// KRIS_TODO: Render lightbox
 			var calcHeight = this.props.data.image_height;
 			if(this.props.data.image_width > 400){
 				var proportion = this.props.data.image_width / 400;
 				calcHeight = calcHeight / proportion;
 			}
-			return <div className="attachment-image"><img src={this.props.data.image_url} /></div>;
+			return <div className="attachment-image"><img height={calcHeight} src={this.props.data.image_url} /></div>;
 		}
 	},
 	renderAuthor: function(){
@@ -302,23 +302,17 @@ ChatMessage.Attachment = React.createClass({
 		}
 		return <div style={styles} className="attachment-bar" />;
 	},
-	renderAttachmentContent: function() {
-		if (this.props.data.service_name || this.props.data.title || this.props.data.text) {
-			return (
+	render: function(){
+		return (
+			<div className="chat-attachment">
+				{this.renderPretext()}
+				{this.renderBar()}
 				<div className="attachment-content">
 					{this.renderServiceName()}
 					{this.renderTitle()}
 					{this.renderText()}
+					{this.renderImage()}
 				</div>
-			)
-		}
-	},
-	render: function(){
-		return (
-			<div className="chat-attachment">
-				{this.renderImage()}
-				{this.renderPretext()}
-				{this.renderAttachmentContent()}
 			</div>
 		);
 	}
