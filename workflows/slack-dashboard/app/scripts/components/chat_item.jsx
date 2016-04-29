@@ -214,7 +214,7 @@ var ChatMessage = React.createClass({
 ChatMessage.File = React.createClass({
 	renderPreview: function(){
 
-		
+
 		if(this.props.data.thumb_360){
 			console.log("file",this.props.data);
 			// T_TODO: Check the this.props.data.thumb_360
@@ -289,7 +289,7 @@ ChatMessage.Attachment = React.createClass({
 				var proportion = this.props.data.image_width / 400;
 				calcHeight = calcHeight / proportion;
 			}
-			return <div className="attachment-image"><img height={calcHeight} src={this.props.data.image_url} /></div>;
+			return <div className="attachment-image"><img src={this.props.data.image_url} /></div>;
 		}
 	},
 	renderAuthor: function(){
@@ -305,13 +305,12 @@ ChatMessage.Attachment = React.createClass({
 	render: function(){
 		return (
 			<div className="chat-attachment">
+				{this.renderImage()}
 				{this.renderPretext()}
-				{this.renderBar()}
 				<div className="attachment-content">
 					{this.renderServiceName()}
 					{this.renderTitle()}
 					{this.renderText()}
-					{this.renderImage()}
 				</div>
 			</div>
 		);
