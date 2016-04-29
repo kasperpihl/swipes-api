@@ -4,17 +4,16 @@ var bridgeStore = require('./BridgeStore');
 
 var NotificationStore = Reflux.createStore({
 	listenables: [ notificationActions ],
+	localStorage: "NotificationStore",
+	persistOnly: [ "notificationState"],
 	init: function(){
 		this.manualLoadData();
 		this.a1 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.a2 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.set("history", []);
-		this.set('notificationState', true)
-	},
-	getInitialState: function() {
-		return {
-			notificationState: true,
-			whatThe: 'yoyoy'
+		if(this.get('notificationState') === 'undefind') {
+			console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ if gets called')
+			this.set('notificationState', true);
 		}
 	},
 	onSetNotifications: function() {
