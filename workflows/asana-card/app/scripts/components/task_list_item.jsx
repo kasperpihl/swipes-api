@@ -167,20 +167,33 @@ var TaskItem = React.createClass({
     var dueOnText;
 
     if (task.due_on || task.due_at) {
-
       var taskDue;
-
-      if (task.due_at) {
-        taskDue = task.due_at;
-      } else if (task.due_on) {
-        taskDue = task.due_on;
-      }
-
+      var parsedTime;
+      var farTimeParsed = '';
+      taskDue = task.due_on;
       var parseDate = ProjectDataStore.getDueDate(taskDue);
 
+      if (parseDate.farDays === true) {
+        var farTime;
+
+        if (task.due_at) {
+          farTime = task.due_at;
+        } else {
+          farTime = task.due_on;
+        }
+        
+        farTimeParsed = 'Due on ' + moment(farTime).format('Do MMM YYYY, hh:mma');
+        parseDate.timeString = '';
+      } else {
+        if (task.due_at) {
+          var timeToAdd = moment(task.due_at).format('hh:mma')
+          parseDate.timeString = parseDate.timeString + timeToAdd;
+        }
+      }
+
       return (
-        <div className={"task-due-on " + parseDate[1]}>
-          {parseDate[0]}
+        <div className={"task-due-on " + parseDate.color}>
+          {parseDate.timeString + farTimeParsed}
           <div className="remove-schedule" onClick={this.removeScheduling}>
             <i className="material-icons">close</i>
           </div>

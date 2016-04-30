@@ -531,27 +531,35 @@ var ProjectDataStore = Reflux.createStore({
   getDueDate: function(time) {
     var timeString;
     var color;
+		var farDays = false;
+		var timeNow = moment([]);
 
-    if (moment().diff(time, 'days') === -1) {
-  		timeString = 'Tomorrow at ' + this.getTime(time);
+    if (timeNow.diff(time, 'days') === -1) {
+  		timeString = 'Tomorrow at ';
   		color = 'green';
-  	} else if (moment().diff(time, 'days') === 1) {
-  		timeString = 'Yesterday at ' + this.getTime(time);
+  	} else if (timeNow.diff(time, 'days') === 1) {
+  		timeString = 'Yesterday at ';
   		color = 'red';
-  	} else if (moment().diff(time, 'days') === 0) {
-  		timeString = 'Today at ' + this.getTime(time);
+  	} else if (timeNow.diff(time, 'days') === 0) {
+  		timeString = 'Today at ';
   		color = 'green'
   	} else {
   		if (moment().diff(time) > 0) {
-  			timeString = 'Due on ' + moment(time).format('Do MMMM YYYY, hh:mma');
+  			timeString = '';
+				farDays = true;
   			color = 'red';
   		} else {
-  			timeString = 'Due on ' + moment(time).format('Do MMMM YYYY, hh:mma');
+  			timeString = '';
+				farDays = true;
         color = ''
   		}
   	}
 
-    return [timeString, color]
+    return {
+			timeString: timeString,
+			color: color,
+			farDays: farDays
+		}
   }
 });
 

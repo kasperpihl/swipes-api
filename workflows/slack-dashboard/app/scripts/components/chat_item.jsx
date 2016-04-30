@@ -1,5 +1,6 @@
 var React = require('react');
 var chatActions = require('../actions/ChatActions');
+var chatStore = require('../stores/ChatStore');
 var ReactEmoji = require('react-emoji');
 var UserStore = require('../stores/UserStore');
 var FontIcon = require('material-ui/lib/font-icon');
@@ -213,8 +214,6 @@ var ChatMessage = React.createClass({
 
 ChatMessage.File = React.createClass({
 	renderPreview: function(){
-
-
 		if(this.props.data.thumb_360){
 			console.log("file",this.props.data);
 			// T_TODO: Check the this.props.data.thumb_360
@@ -233,11 +232,17 @@ ChatMessage.File = React.createClass({
 		chatActions.openImage(src, title, url);
 	},
 	renderImagePreview: function(){
+		var src = this.props.data.thumb_360;
+
 		return (
 			<div className="image-container">
-				<div className="image-bg" style={{width: this.props.data.thumb_360_w + 'px', height: this.props.data.thumb_360_h, backgroundImage: 'url(' + this.props.data.thumb_360 + ')'}}>
-					<img onClick={this.openImage} src={this.props.data.thumb_360} />
-				</div>
+				<img
+					onClick={this.openImage}
+					src={src}
+					style={{
+						width: this.props.data.thumb_360_w + 'px',
+						height: this.props.data.thumb_360_h
+					}} />
 			</div>
 		);
 	},

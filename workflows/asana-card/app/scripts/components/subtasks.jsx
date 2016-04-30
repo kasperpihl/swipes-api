@@ -5,6 +5,7 @@ var MainStore = require('../stores/MainStore');
 var SubtasksStore = require('../stores/SubtasksStore');
 var SubtasksActions = require('../actions/SubtasksActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
+var ProjectDataStore = require('../stores/ProjectDataStore');
 var MainActions = require('../actions/MainActions');
 var ProjectsStore = require('../stores/ProjectsStore');
 var Loading = require('./loading');
@@ -224,52 +225,37 @@ var Subtask = React.createClass({
     ProjectDataActions.removeScheduling(subtask);
   },
   renderDueOnDate: function() {
-    var subtask = this.props.subtask;
+    var task = this.props.subtask;
     var dueOnText;
 
-
-    if (subtask.due_on || subtask.due_at) {
-
+    if (task.due_on || task.due_at) {
       var taskDue;
+      var parsedTime;
+      var farTimeParsed = '';
+      taskDue = task.due_on;
+      var parseDate = ProjectDataStore.getDueDate(taskDue);
 
-      if (subtask.due_at) {
-        taskDue = subtask.due_at;
-      } else if (subtask.due_on) {
-        taskDue = subtask.due_on;
-      }
+      if (parseDate.farDays === true) {
+        var farTime;
 
-      var parseDate = moment(taskDue).format('Do MMMM YYYY, hh:mma');
+        if (task.due_at) {
+          farTime = task.due_at;
+        } else {
+          farTime = task.due_on;
+        }
 
-      if (!subtask.completed && (moment().diff(subtask.due_at) > 0 || moment().diff(subtask.due_on, 'days') >= 1)) {
-
-        return (
-          <div className="task-due-on subtask past">
-            {'Due on ' + parseDate}
-            <div className="remove-schedule" onClick={this.removeScheduling}>
-              <i className="material-icons">close</i>
-            </div>
-          </div>
-        )
+        farTimeParsed = 'Due on ' + moment(farTime).format('Do MMM YYYY, hh:mma');
+        parseDate.timeString = '';
       } else {
-        return (
-          <div className="task-due-on subtask">
-            {'Due on ' + parseDate}
-            <div className="remove-schedule" onClick={this.removeScheduling}>
-              <i className="material-icons">close</i>
-            </div>
-          </div>
-        )
+        if (task.due_at) {
+          var timeToAdd = moment(task.due_at).format('hh:mma')
+          parseDate.timeString = parseDate.timeString + timeToAdd;
+        }
       }
 
-    }
-
-    if (!subtask.due_at) {
-    } else {
-      var taskDue = subtask.due_at;
-      var parseDate = moment(taskDue).format('hh:mma, Do MMMM YYYY');
       return (
-        <div className="task-due-on subtask">
-          {'The task is due at ' + parseDate}
+        <div className={"task-due-on subtask " + parseDate.color}>
+          {parseDate.timeString + farTimeParsed}
           <div className="remove-schedule" onClick={this.removeScheduling}>
             <i className="material-icons">close</i>
           </div>

@@ -1,4 +1,6 @@
+var request = require('request');
 var SlackConnector = require('./slack_connector.js');
+
 var slack = {
 	// This should be dynamically set from database, but for now this is okay
 	connectionData: {
@@ -16,6 +18,22 @@ var slack = {
 			}
 			callback(err, res);
 		});
+	},
+	stream: function({authData, method, params}, stream, callback) {
+		if (method === 'file') {
+			if (!params.url) {
+				return callback("URL is required for the file method");
+			}
+
+			request({
+				url: params.url,
+				headers: {
+					'Authorization': 'Bearer ' + authData.access_token
+				}
+			}).pipe(stream);
+		} else {
+			return callback("Method not supported");
+		}
 	},
 	beforeAuthSave: function(data, callback){
 		/*

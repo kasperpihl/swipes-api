@@ -142,13 +142,13 @@ body {
   flex-direction: column;
 
   img.empty-workspace-illustration {
-    width: 150px;
+    width: 250px;
   }
 
   img.empty-workspace-arrow {
     position: absolute;
     top: 15px;
-    right: 14px;
+    right: 8px;
     width: 40px;
     animation: hoverArrow 2s ease-in-out infinite;
 

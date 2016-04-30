@@ -1,6 +1,6 @@
 "use strict";
 
-let SwipesError = require( '../swipes-error' );
+let stream = require('stream');
 let express = require( 'express' );
 let router = express.Router();
 let r = require('rethinkdb');
@@ -9,6 +9,7 @@ let util = require('../util.js');
 let generateId = util.generateSlackLikeId;
 let serviceDir = __dirname + '/../../services/';
 let serviceUtil = require('../utils/services_util.js');
+let SwipesError = require( '../swipes-error' );
 
 let isAdmin = util.isAdmin;
 
@@ -31,6 +32,28 @@ router.post('/services.request', serviceUtil.validateData, serviceUtil.getServic
 		res.send({ok: true, data: result});
 	});
 });
+
+router.post('/services.stream', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
+	let data = res.locals.data;
+	let service = res.locals.service;
+	let file = res.locals.file;
+	let options = {
+		authData: service.authData,
+		method: data.method,
+		params: data.parameters || {},
+		user: {userId: req.userId},
+		service: {serviceId: service.id}
+	};
+	let passStream = new stream.PassThrough();
+
+	file.stream(options, passStream, function (err) {
+		if (err) {
+			res.status(200).json({ok: false, error: err});
+		}
+	});
+
+	passStream.pipe(res);
+})
 
 /*
 	authsuccess should be called after
