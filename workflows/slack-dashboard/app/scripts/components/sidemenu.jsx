@@ -7,6 +7,7 @@ var React = require('react');
 		unread: int // number of unread messages (shows indicator)
 		notification: int // number of notification to show (shows number)
 		active: BOOL // if is current active, only 1 allowed
+		user: BOOL // if is a user or not (e.g. bot, channel etc.)
 	}
  */
 
@@ -55,6 +56,7 @@ Sidemenu.Item = React.createClass({
 		var count = parseInt(this.props.data.unread, 10);
 		var even = (count % 2 == 0) ? "even" : "odd";
 		var className = "indicator ";
+
 		if(count){
 			className += even;
 		}
@@ -62,16 +64,21 @@ Sidemenu.Item = React.createClass({
 	},
 	render: function(){
 		var className = "menu-item";
+		var presence = '';
 		if(this.props.data.unread){
 			className += " unread";
 		}
 		if(this.props.data.active){
 			className += " active";
 		}
+		if(this.props.data.user && this.props.data.presence === 'active') {
+			presence = 'presence'
+		}
+		
 		return (<div onClick={this.onClick} className={className}>
 			{this.renderIndicator()}
 			{this.renderNotification()}
-			<div className="name">{this.props.data.name}</div>
+			<div className={"name " + presence}>{this.props.data.name}</div>
 		</div>);
 	},
 	onClick: function(){
