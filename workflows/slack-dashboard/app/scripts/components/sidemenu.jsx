@@ -44,13 +44,22 @@ var Sidemenu = React.createClass({
 
 Sidemenu.Item = React.createClass({
 	renderNotification:function(){
-		var count = parseInt(this.props.data.notificationCount, 10);
+		var count = parseInt(this.props.data.notification, 10);
 		var even = (count % 2 == 0) ? "even" : "odd";
 
 		if(count){
 			var className = "notification " + even;
 			return <div className={className}>{count}</div>;
 		}
+	},
+	renderIndicator:function(){
+		var count = parseInt(this.props.data.unread, 10);
+		var even = (count % 2 == 0) ? "even" : "odd";
+		var className = "indicator ";
+		if(count){
+			className += even;
+		}
+		return <div className={className} />
 	},
 	render: function(){
 		var className = "menu-item";
@@ -61,7 +70,7 @@ Sidemenu.Item = React.createClass({
 			className += " active";
 		}
 		return (<div onClick={this.onClick} className={className}>
-			<div className="indicator" />
+			{this.renderIndicator()}
 			{this.renderNotification()}
 			<div className="name">{this.props.data.name}</div>
 		</div>);

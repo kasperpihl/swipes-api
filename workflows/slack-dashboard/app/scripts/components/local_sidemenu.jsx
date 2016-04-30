@@ -20,10 +20,9 @@ var LocalSidemenu = React.createClass({
 					item.active = true;
 				}
 				if(channel.unread_count_display){
-					item.unread = true;
-					item.notificationCount = channel.unread_count_display;
+					item.unread = channel.unread_count_display;
 					if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
-						
+						item.notification = channel.unread_count_display;
 					}
 				}
 				if(channel.is_im){

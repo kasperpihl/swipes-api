@@ -65,6 +65,12 @@ $expandedWidth: 200px;
 			width: $indicatorWidth;
 			height: $indicatorHeight;
 		}
+		.indicator.even {
+			animation: indicator-glow-even 1.5s 1;
+		}
+		.indicator.odd {
+			animation: indicator-glow 1.5s 1;
+		}
 		.notification{
 			position: absolute;
 			height: $notificationHeight;
@@ -80,16 +86,10 @@ $expandedWidth: 200px;
 			font-size: 9px;
 		}
 		.notification.even {
-			-webkit-animation: notification-glow-even 1.5s 1; /* Safari 4+ */
-			-moz-animation:    notification-glow-even 1.5s 1; /* Fx 5+ */
-			-o-animation:      notification-glow-even 1.5s 1; /* Opera 12+ */
-			animation:         notification-glow-even 1.5s 1; /* IE 10+, Fx 29+ */
+			animation: notification-glow-even 1.5s 1;
 		}
 		.notification.odd {
-			-webkit-animation: notification-glow 1.5s 1; /* Safari 4+ */
-			-moz-animation:    notification-glow 1.5s 1; /* Fx 5+ */
-			-o-animation:      notification-glow 1.5s 1; /* Opera 12+ */
-			animation:         notification-glow 1.5s 1; /* IE 10+, Fx 29+ */
+			animation: notification-glow 1.5s 1;
 		}
 		.name{
 			opacity: 0;
@@ -112,43 +112,27 @@ $expandedWidth: 200px;
 			}
 			.indicator{
 				background: $hoverColor;
+				border-bottom-right-radius: 1px;
+				border-top-right-radius: 1px;
 				width: $indicatorWidth + 4px;
-				//height: $indicatorUnreadHeight;
+				height: $indicatorUnreadHeight;
 			}
 		}
 	}
 }
+@keyframes indicator-glow {
+	15%, 90%  {
+		background: $unreadColor;
+	}
+}
 
-@-webkit-keyframes notification-glow {
-	0%, 100%   { 
-		background: none;
-	}
-	15%, 90%  { 
+@keyframes indicator-glow-even {
+	15%, 90%  {
 		background: $unreadColor;
-		border: 1px solid $unreadColor;
-		color: white;
 	}
 }
-@-moz-keyframes notification-glow {
-	0%, 100%   { 
-		background: none;
-	}
-	15%, 90%  { 
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
-		color: white;
-	}
-}
-@-o-keyframes notification-glow {
-	0%, 100%   { 
-		background: none;
-	}
-	15%, 90%  { 
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
-		color: white;
-	}
-}
+
+
 @keyframes notification-glow {
 	0%, 100%   { 
 		background: none;
@@ -160,36 +144,6 @@ $expandedWidth: 200px;
 	}
 }
 
-@-webkit-keyframes notification-glow-even {
-	0%, 100%   { 
-		background: none;
-	}
-	15%, 90%  { 
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
-		color: white;
-	}
-}
-@-moz-keyframes notification-glow-even {
-	0%, 100%   { 
-		background: none;
-	}
-	15%, 90%  { 
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
-		color: white;
-	}
-}
-@-o-keyframes notification-glow-even {
-	0%, 100%   { 
-		background: none;
-	}
-	15%, 90%  { 
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
-		color: white;
-	}
-}
 @keyframes notification-glow-even {
 	0%, 100%   { 
 		background: none;
