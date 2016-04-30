@@ -11,8 +11,8 @@ var ChannelStore = Reflux.createStore({
 	},
 	getActive: function(){
 		return _.filter(this.getAll(), function(channel){
-			if( channel.is_archived || 
-				(channel.is_im && !channel.is_open) || 
+			if( channel.is_archived ||
+				(channel.is_im && !channel.is_open) ||
 				(channel.is_channel && !channel.is_member) ||
 				(channel.is_group && !channel.is_open)){
 				return false;
@@ -28,7 +28,7 @@ var ChannelStore = Reflux.createStore({
 		var total = 0;
 		_.each(this.getAll(), function(channel){
 			if(channel.unread_count_display && channel.unread_count_display > 0){
-				total += channel.unread_count_display;	
+				total += channel.unread_count_display;
 			}
 		});
 		return total;

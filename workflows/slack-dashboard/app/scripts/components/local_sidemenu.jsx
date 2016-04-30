@@ -10,6 +10,7 @@ var LocalSidemenu = React.createClass({
 	mixins: [channelStore.connect('channels')],
 	render: function() {
 		var channels = channelStore.getActive();
+
 		if(channels.length){
 			var navItems = [];
 			var currentChatId = chatStore.get('channelId');
@@ -19,6 +20,10 @@ var LocalSidemenu = React.createClass({
 			_.each(channels, function(channel){
 
 				var item = { id: channel.id, name: channel.name };
+				if(channel.is_im === true && !channel.user.is_bot) {
+					item.user = true;
+					item.presence = channel.user.presence;
+				}
 				if(currentChatId === channel.id){
 					item.active = true;
 				}

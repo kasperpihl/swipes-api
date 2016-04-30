@@ -10,7 +10,7 @@ $unreadColor: #F44336;
 $activeColor: #1581e2;
 
 $notificationHeight: 18px;
-$expandedWidth: 200px;
+$expandedWidth: 210px;
 $minWidth: 30px;
 .swipes-sidemenu{
 	position: absolute;
@@ -36,7 +36,7 @@ $minWidth: 30px;
 			overflow-y: scroll;
 		}
 		transform: translateX(0);
-		transition: 0.1s ease-in-out;	
+		transition: 0.1s ease-in-out;
 		.menu-item{
 			&.active{
 				background: #f4f4f4;
@@ -73,7 +73,7 @@ $minWidth: 30px;
 			width: $notificationHeight;
 			border-radius: $notificationHeight/2;
 			text-align: center;
-			top: ($itemHeight - $notificationHeight) / 2; 
+			top: ($itemHeight - $notificationHeight) / 2;
 			right: 4px;
 			font-weight: 400;
 			border: 1px solid $hoverColor;
@@ -98,6 +98,21 @@ $minWidth: 30px;
 			line-height: 24px;
 			font-size: 14px;
 			font-weight: 300;
+
+			&.presence {
+
+				&:after {
+					content: "";
+					position: absolute;
+					right: 2px;
+					width: 8px;
+					height: 8px;
+					background-color: #3ed37d;
+					border-radius: 50%;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+			}
 		}
 		&:hover{
 			background: #efefef;
@@ -130,10 +145,10 @@ $minWidth: 30px;
 
 
 @keyframes notification-glow {
-	0%, 100%   { 
+	0%, 100%   {
 		background: none;
 	}
-	15%, 90%  { 
+	15%, 90%  {
 		background: $unreadColor;
 		border: 1px solid $unreadColor;
 		color: white;
@@ -141,10 +156,10 @@ $minWidth: 30px;
 }
 
 @keyframes notification-glow-even {
-	0%, 100%   { 
+	0%, 100%   {
 		background: none;
 	}
-	15%, 90%  { 
+	15%, 90%  {
 		background: $unreadColor;
 		border: 1px solid $unreadColor;
 		color: white;
