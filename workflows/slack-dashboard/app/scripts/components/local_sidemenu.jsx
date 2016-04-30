@@ -2,7 +2,10 @@ var React = require('react');
 var Sidemenu = require('./sidemenu');
 var channelStore = require('../stores/ChannelStore');
 var chatStore = require('../stores/ChatStore');
-
+/*
+	Purpose of this class is to handle all channels,
+	I've seperated this part so later we can easier make the sidemenu standalone, so others can integrate it.
+ */
 var LocalSidemenu = React.createClass({
 	mixins: [channelStore.connect('channels')],
 	render: function() {
@@ -19,10 +22,12 @@ var LocalSidemenu = React.createClass({
 				if(currentChatId === channel.id){
 					item.active = true;
 				}
-				if(channel.unread_count_display){
-					item.unread = channel.unread_count_display;
-					if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
-						item.notification = channel.unread_count_display;
+				else{
+					if(channel.unread_count_display){
+						item.unread = channel.unread_count_display;
+						if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
+							item.notification = channel.unread_count_display;
+						}
 					}
 				}
 				if(channel.is_im){

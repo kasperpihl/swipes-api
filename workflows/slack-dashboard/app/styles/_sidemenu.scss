@@ -11,18 +11,17 @@ $activeColor: #1581e2;
 
 $notificationHeight: 18px;
 $expandedWidth: 200px;
-
+$minWidth: 30px;
 .swipes-sidemenu{
 	position: absolute;
-	width:30px;
+	width:$expandedWidth;
 	height:100%;
 	background:white;
 	overflow: hidden;
 	top:0;
 	left:0;
 	z-index: 99999;
-	-webkit-transition: width .25s; /* Safari */
-	transition: width .25s;
+	transform: translateX( - ($expandedWidth -  $minWidth) );
 	.scroller{
 		width:100%;
 		height:100%;
@@ -35,21 +34,14 @@ $expandedWidth: 200px;
 		.scroller{
 			overflow-y: scroll;
 		}
-		width:$expandedWidth;
-		-webkit-transition: width .25s; /* Safari */
-		transition: width .25s;
+		transform: translateX(0);
+		transition: 0.1s ease-in-out;	
 		.menu-item{
 			&.active{
 				background: #f4f4f4;
 			}
-			
-			.name{
-				opacity: 1;
-				-webkit-transition: opacity .1s; /* Safari */
-				transition: opacity .1s;
-				-webkit-transition-delay: .25s; /* Safari */
-				transition-delay: .25s;
-
+			.indicator{
+				display: none;
 			}
 		}
 	}
@@ -58,7 +50,7 @@ $expandedWidth: 200px;
 		position: relative;
 		.indicator{
 			position: absolute;
-			left: 0;
+			left: $expandedWidth - $minWidth;
 			top:50%;
 			margin-top: - $indicatorUnreadHeight / 2;
 			background: $color;
@@ -92,7 +84,6 @@ $expandedWidth: 200px;
 			animation: notification-glow 1.5s 1;
 		}
 		.name{
-			opacity: 0;
 			width: $expandedWidth - $notificationHeight;
 			padding-left: 9px;
 			white-space: nowrap;

@@ -1,27 +1,35 @@
 var React = require('react');
 
+/*
+	JSON Structure
+	{
+		name: string
+		unread: int // number of unread messages (shows indicator)
+		notification: int // number of notification to show (shows number)
+		active: BOOL // if is current active, only 1 allowed
+	}
+ */
+
 var Sidemenu = React.createClass({
-	renderItems: function(){
-		var items = this.props.data.rows || [];
-		//items = fakeItems;
-		return items.map(function(item, i){
-			return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
-		}.bind(this));
-	},
-	componentWillUpdate: function(nextProps, nextState) {
-		if(!this.didTry){
-			this.setState({"new": []});
-			this.didTry = true;
-		}
+	componentDidUpdate: function(prevProps, prevState) {
 
 	},
 	render: function() {
 		var className = "swipes-sidemenu";
+
+		var items = this.props.data.rows || [];
+		var renderedItems = items.map(function(item, i){
+			return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
+		}.bind(this));
+
+		var overlayAbove, overlayBelow;
 		return (
 			<div className={className} onMouseLeave={this.onMouseLeave} onMouseEnter={this.onMouseEnter} style={this.props.style}>
-				<div className="scroller">
-					{this.renderItems()}
+				{overlayAbove}
+				<div ref="scroller" className="scroller">
+					{renderedItems}
 				</div>
+				{overlayBelow}
 			</div>
 		);
 	},
@@ -32,15 +40,6 @@ var Sidemenu = React.createClass({
 	}
 });
 
-/*
-	JSON Structure
-	{
-		name: string
-		unread: BOOL
-		notificationCount: int
-		active: BOOL // if is current active, only 1 allowed
-	}
- */
 
 Sidemenu.Item = React.createClass({
 	renderNotification:function(){
@@ -79,25 +78,4 @@ Sidemenu.Item = React.createClass({
 		this.props.onClick(this.props.data);
 	}
 })
-var fakeItems = [{
-	name: "creative",
-	unread: true,
-	notificationCount: 0
-},
-{
-	name: "dev-report",
-	unread: false,
-	notificationCount: 0,
-	active: true
-},
-{
-	name: "general",
-	unread: true,
-	notificationCount: 2
-},
-{
-	name: "product-discussion",
-	unread: false,
-	notificationCount: 0
-}];
 module.exports = Sidemenu;

@@ -131,7 +131,7 @@ var ChatList = React.createClass({
 			}}/>;
 		}
 		// K_TODO: Test if this works without channel
-		var paddingLeft = "30px";
+		var paddingLeft = "44px";
 		var sideHeight = "calc(100% - " + this.state.inputHeight + "px)";
 		return (
 			<div className="card-container" style={{paddingLeft: paddingLeft, paddingBottom: this.state.inputHeight + 'px' }}>
