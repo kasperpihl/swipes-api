@@ -11,6 +11,8 @@ var CircularProgress = require('material-ui/lib/circular-progress');
 var SelectField = require('material-ui/lib/select-field');
 var Badge = require('material-ui/lib/badge');
 var MenuItem = require('material-ui/lib/menus/menu-item');
+var Sidemenu = require('./local_sidemenu');
+
 var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat')],
 	shouldScrollToBottom: true,
@@ -78,6 +80,11 @@ var ChatList = React.createClass({
 	componentWillUnmount: function() {
 		window.removeEventListener('resize', this.handleResize);
 	},
+	onSelectedRow: function(row){
+		chatActions.setChannel(row.id);
+		var newSettings = {channelId: row.id};
+		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings})
+	},
 	renderLoading: function(){
 		if(!this.state.chat.sections){
 			return <CircularProgress color="#777" size={1} style={{
@@ -124,8 +131,11 @@ var ChatList = React.createClass({
 			}}/>;
 		}
 		// K_TODO: Test if this works without channel
+		var paddingLeft = "30px";
+		var sideHeight = "calc(100% - " + this.state.inputHeight + "px)";
 		return (
-			<div className="card-container" style={{paddingBottom: this.state.inputHeight + 'px' }}>
+			<div className="card-container" style={{paddingLeft: paddingLeft, paddingBottom: this.state.inputHeight + 'px' }}>
+				<Sidemenu onSelectedRow={this.onSelectedRow} style={{height: sideHeight}}/>
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
 					<div className="chat-list">

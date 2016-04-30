@@ -52,7 +52,7 @@ var ChatStore = Reflux.createStore({
 
 			ChatActions.setChannel(channelId);
 
-			ChatActions.updateBadge();
+			//ChatActions.updateBadge();
 
 		});
 	},
@@ -270,7 +270,7 @@ var ChatStore = Reflux.createStore({
 
 				// If message is from someone else, and is not hidden
 				if(message.user !== me.id && !msg.hidden){
-					ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 }, {trigger: false});
+					ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 });
 					// K_TODO: Test if msg.text
 					var text = msg.text;
 

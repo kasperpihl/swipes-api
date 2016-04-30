@@ -1,0 +1,202 @@
+$itemHeight: 26px;
+$indicatorWidth: 4px;
+$indicatorHeight: 1px;
+$indicatorUnreadHeight: 2px;
+
+$color: #d0d4d9;
+$hoverColor: #a0a4a9;
+$unreadColor: #F44336;
+
+$activeColor: #1581e2;
+
+$notificationHeight: 18px;
+$expandedWidth: 200px;
+
+.swipes-sidemenu{
+	position: absolute;
+	width:30px;
+	height:100%;
+	background:white;
+	overflow: hidden;
+	top:0;
+	left:0;
+	z-index: 99999;
+	-webkit-transition: width .25s; /* Safari */
+	transition: width .25s;
+	.scroller{
+		width:100%;
+		height:100%;
+		overflow: hidden;
+	}
+	.content-container{
+		height:100%;
+	}
+	&:hover{
+		.scroller{
+			overflow-y: scroll;
+		}
+		width:$expandedWidth;
+		-webkit-transition: width .25s; /* Safari */
+		transition: width .25s;
+		.menu-item{
+			&.active{
+				background: #f4f4f4;
+			}
+			
+			.name{
+				opacity: 1;
+				-webkit-transition: opacity .1s; /* Safari */
+				transition: opacity .1s;
+				-webkit-transition-delay: .25s; /* Safari */
+				transition-delay: .25s;
+
+			}
+		}
+	}
+	.menu-item{
+		height:$itemHeight;
+		position: relative;
+		.indicator{
+			position: absolute;
+			left: 0;
+			top:50%;
+			margin-top: - $indicatorUnreadHeight / 2;
+			background: $color;
+			width: $indicatorWidth;
+			height: $indicatorHeight;
+		}
+		.notification{
+			position: absolute;
+			height: $notificationHeight;
+			width: $notificationHeight;
+			border-radius: $notificationHeight/2;
+			text-align: center;
+			top: ($itemHeight - $notificationHeight) / 2; 
+			right: 4px;
+			font-weight: 600;
+			border: 1px solid $hoverColor;
+			color: $hoverColor;
+			line-height: 16px;
+			font-size: 9px;
+		}
+		.notification.even {
+			-webkit-animation: notification-glow-even 1.5s 1; /* Safari 4+ */
+			-moz-animation:    notification-glow-even 1.5s 1; /* Fx 5+ */
+			-o-animation:      notification-glow-even 1.5s 1; /* Opera 12+ */
+			animation:         notification-glow-even 1.5s 1; /* IE 10+, Fx 29+ */
+		}
+		.notification.odd {
+			-webkit-animation: notification-glow 1.5s 1; /* Safari 4+ */
+			-moz-animation:    notification-glow 1.5s 1; /* Fx 5+ */
+			-o-animation:      notification-glow 1.5s 1; /* Opera 12+ */
+			animation:         notification-glow 1.5s 1; /* IE 10+, Fx 29+ */
+		}
+		.name{
+			opacity: 0;
+			width: $expandedWidth - $notificationHeight;
+			padding-left: 9px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			color: $hoverColor;
+			line-height: 24px;
+			font-size: 14px;
+			font-weight: 400;
+		}
+		&:hover{
+			background: #efefef;
+		}
+		&.unread{
+			.name{
+				font-weight: 500;
+			}
+			.indicator{
+				background: $hoverColor;
+				width: $indicatorWidth + 4px;
+				//height: $indicatorUnreadHeight;
+			}
+		}
+	}
+}
+
+@-webkit-keyframes notification-glow {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+@-moz-keyframes notification-glow {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+@-o-keyframes notification-glow {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+@keyframes notification-glow {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+
+@-webkit-keyframes notification-glow-even {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+@-moz-keyframes notification-glow-even {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+@-o-keyframes notification-glow-even {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}
+@keyframes notification-glow-even {
+	0%, 100%   { 
+		background: none;
+	}
+	15%, 90%  { 
+		background: $unreadColor;
+		border: 1px solid $unreadColor;
+		color: white;
+	}
+}

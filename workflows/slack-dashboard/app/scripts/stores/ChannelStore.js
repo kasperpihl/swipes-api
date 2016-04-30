@@ -22,7 +22,7 @@ var ChannelStore = Reflux.createStore({
 	},
 	updateChannel: function(channelId, data, options){
 		this.update(channelId, data, options);
-		ChatActions.updateBadge();
+		//ChatActions.updateBadge();
 	},
 	getTotalNotificationCount:function(){
 		var total = 0;
