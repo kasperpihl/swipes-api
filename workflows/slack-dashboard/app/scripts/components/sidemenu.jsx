@@ -42,7 +42,7 @@ var Sidemenu = React.createClass({
 			else{
 				renderedUsers.push(<Sidemenu.Item onClick={this.onClick} data={item} key={i}/>);
 			}
-		})
+		}.bind(this))
 
 		var overlayAbove, overlayBelow;
 		return (
