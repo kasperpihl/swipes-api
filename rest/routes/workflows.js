@@ -79,6 +79,9 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
       if (manifest.index) {
         updateDoc.index = manifest.index;
       }
+      if(manifest.icon){
+        updateDoc.icon = manifest.icon;
+      }
 
       return db.rethinkQuery(r.table('workflows').insert(updateDoc, {'conflict': 'update'}));
   })
