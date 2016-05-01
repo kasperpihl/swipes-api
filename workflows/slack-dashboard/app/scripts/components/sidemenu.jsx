@@ -29,8 +29,17 @@ var Sidemenu = React.createClass({
 		}
 
 		var items = this.props.data.rows || [];
-		var renderedItems = items.map(function(item, i){
-			return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
+
+		var renderedChannels = items.map(function(item, i){
+			if (!item.user) {
+				return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
+			}
+		}.bind(this));
+
+		var renderedUsers = items.map(function(item, i){
+			if (item.user) {
+				return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
+			}
 		}.bind(this));
 
 		var overlayAbove, overlayBelow;
@@ -38,7 +47,10 @@ var Sidemenu = React.createClass({
 			<div className={className} onMouseLeave={this.onMouseLeave} onMouseEnter={this.onMouseEnter} style={this.props.style}>
 				{overlayAbove}
 				<div ref="scroller" className="scroller">
-					{renderedItems}
+					<h3>Channels</h3>
+					{renderedChannels}
+					<h3>People</h3>
+					{renderedUsers}
 				</div>
 				{overlayBelow}
 			</div>
@@ -88,12 +100,17 @@ Sidemenu.Item = React.createClass({
 		if(this.props.data.user && this.props.data.presence === 'active') {
 			presence = 'presence'
 		}
-		
-		return (<div onClick={this.onClick} className={className}>
-			{this.renderIndicator()}
-			{this.renderNotification()}
-			<div className={"name " + presence}>{this.props.data.name}</div>
-		</div>);
+
+
+		return (
+			<div onClick={this.onClick} className={className}>
+				{this.renderIndicator()}
+				{this.renderNotification()}
+				<div className={"name " + presence}>{this.props.data.name}</div>
+		</div>
+	);
+
+
 	},
 	onClick: function(){
 		this.props.onClick(this.props.data);

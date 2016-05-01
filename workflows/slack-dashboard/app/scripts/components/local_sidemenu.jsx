@@ -24,7 +24,7 @@ var LocalSidemenu = React.createClass({
 			var peopleCol = [];
 			_.each(channels, function(channel){
 
-				var item = { id: channel.id, name: channel.name };
+				var item = { id: channel.id, name: channel.name, user: channel.is_im };
 				if(channel.is_im === true && !channel.user.is_bot) {
 					item.user = true;
 					item.presence = channel.user.presence;
