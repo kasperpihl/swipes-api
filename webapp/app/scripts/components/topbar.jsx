@@ -48,12 +48,12 @@ var Topbar = React.createClass({
 			<IconButton
 				style={{padding: '12px !important'}}
 				touch={true}>
-			<FontIcon className="material-icons">menu</FontIcon>
+			<FontIcon className="material-icons" color='#666D82'>menu</FontIcon>
 			</IconButton>
 		);
 		return (
 			<IconMenu
-				style={{position: 'absolute', left: '6px', top: '6px', width: '44px', height: '44px'}}
+				style={{position: 'absolute', left: '1px', top: '1px', width: '48px', height: '48px'}}
 				iconButtonElement={button}
 				anchorOrigin={{horizontal: 'left', vertical: 'center'}}
 				targetOrigin={{horizontal: 'right', vertical: 'top'}} >
@@ -77,9 +77,9 @@ var Topbar = React.createClass({
 		return (
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
-				<h5 style={{textAlign: 'left', paddingLeft: '60px'}}>{title}</h5>
+				<h5>{title}</h5>
 				<div className="feedback-button" onClick={this.feedbackForm}>
-					<i className="material-icons">favorite</i> Feedback
+					Feedback
 				</div>
 				<div className="notifications-button" onClick={this.setNotifications}>
 					<i className="material-icons">{notificationIcon}</i>
@@ -88,7 +88,7 @@ var Topbar = React.createClass({
 					<i className="material-icons">dashboard</i>
 				</div>
 				<div className="add-button" onClick={this.clickedAdd}>
-					<i className="material-icons">add_box</i>
+					<i className="material-icons">add</i>
 				</div>
 			</div>
 		);

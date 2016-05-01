@@ -1,42 +1,31 @@
 .top-bar-container{
 	height:$top-bar-height;
 	position:absolute;
-	background-color: #fff;
-	box-shadow: $swipes-shadow-one;
 	width:100%;
 	z-index: 1999;
 	top:0;
 	// This is the default background color of navbar
     h5{
-			text-align: center;
-      line-height: $top-bar-height;
-			color: #555;
-			font-weight: 300;
+		text-align: center;
+      	line-height: $top-bar-height;
+		//color: #555;
+		color: $deepBlue-60;
+		font-size: 18px;
+		font-weight: 400;
     }
-
-		.feedback-button {
-			position:absolute;
-    	//cursor: pointer;
+    .material-icons{
+    	font-size: 22px;
+    }
+	.feedback-button {
+		position:absolute;
     	top: 0;
-    	right: 200px;
-    	//width:60px;
+    	right: 3 * $top-bar-height;
     	padding: 10px;
-    	//padding-right: 0px;
-			color: $deepBlue-60;
+		color: $deepBlue-60;
     	height: $top-bar-height;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			&:after {
-				content: "";
-				position: absolute;
-				right: -10px;
-				height: 30px;
-				top: 15px;
-				width: 1px;
-				background-color: $studioGray-40;
-			}
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 			&:hover {
 				background-color: $studioGray-20;
@@ -48,12 +37,12 @@
 			}
 		}
 
-		.notifications-button{
+	.notifications-button{
     	position:absolute;
     	//cursor: pointer;
     	top: 0;
-    	right: 120px;
-    	width:60px;
+    	right: 2 * $top-bar-height;
+    	width:$top-bar-height;
     	padding: 10px;
     	height: $top-bar-height;
 			display: flex;
@@ -65,7 +54,7 @@
 			}
 
 			i {
-				color: $deepBlue-60 !important;
+				color: $deepBlue-40 !important;
 			}
     }
 
@@ -73,8 +62,8 @@
     	position:absolute;
     	//cursor: pointer;
     	top: 0;
-    	right: 60px;
-    	width:60px;
+    	right: $top-bar-height;
+    	width:$top-bar-height;
     	padding: 10px;
     	height: $top-bar-height;
 			display: flex;
@@ -86,7 +75,7 @@
 			}
 
 			i {
-				color: $deepBlue-60 !important;
+				color: $deepBlue-40 !important;
 			}
     }
     .add-button{
@@ -94,7 +83,7 @@
     	//cursor: pointer;
     	top: 0;
     	right: 0;
-    	width:60px;
+    	width:$top-bar-height;
     	padding: 10px;
     	height: $top-bar-height;
 			display: flex;
@@ -105,8 +94,9 @@
 				background-color: $studioGray-20;
 			}
 
-			i {
-				color: $deepBlue-60 !important;
+			i.material-icons {
+				font-size: 26px;
+				color: $deepBlue-40 !important;
 			}
     }
     .connection-status {
@@ -186,185 +176,6 @@
         }
     }
 
-	.icon-dual-view-container {
-		height: 60px;
-		width: 60px;
-		right: 0;
-		top: 0;
-		position: absolute;
-		cursor: pointer;
-		display: none;
-
-		&.open:hover > .icon-dual-view > .box:last-child {
-			animation: showingIcon .5s cubic-bezier(.36,-0.69,.69,1.58) forwards;
-		}
-
-		&.close:hover > .icon-dual-view > .box:first-child {
-			transform: scale(1.4);
-			transition: .2s ease-in-out;
-		}
-
-		&.close:hover > .icon-dual-view > .box:last-child {
-			transform: scale(.7);
-			opacity: .5;
-			transition: .2s ease-in-out;
-		}
-
-		.icon-dual-view {
-			width: 40px;
-			height: 20px;
-			margin-top: 20px;
-			margin-right: 10px;
-			display: flex;
-			justify-content: space-around;
-			cursor: pointer;
-
-			.box {
-				width: 16px;
-				height: 20px;
-				background-color: white;
-				border-radius: 2px;
-				position: relative;
-				cursor: pointer;
-			}
-		}
-		&.close{
-			display: block;
-			.box:first-child {
-				transition: .2s ease-in-out;
-			}
-
-			.box:last-child {
-				transition: .2s ease-in-out;
-
-				&:before {
-					content: "";
-					position: absolute;
-					width: 2px;
-					height: 10px;
-					background-color: #1B1E23;
-					transform: rotate(-35deg);
-					top: calc(50% - 5px);
-					left: calc(50% - 1px);
-				}
-
-				&:after {
-					content: "";
-					position: absolute;
-					width: 2px;
-					height: 10px;
-					background-color: #1B1E23;
-					transform: rotate(35deg);
-					top: calc(50% - 5px);
-					left: calc(50% - 1px);
-				}
-			}
-		}
-		&.open{
-			display: block;
-			.box:first-child {
-				z-index: 10;
-				box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-			}
-
-			.box:last-child {
-				z-index: 1;
-				transform: translateX(-14px) scale(.8);
-				background-color: white;
-				transition: .5s cubic-bezier(.36,-0.69,.69,1.58);
-			}
-		}
-	}
-
-	.menu-icon-container {
-		height: $top-bar-height;
-		width: 60px;
-		left: 0;
-		top: 0;
-		position: absolute;
-		cursor: pointer;
-
-		.menu-icon {
-			height: 20px;
-			width: 16px;
-			left: calc(40px / 2);
-			top: 12px;
-			border: 2px solid $deepBlue-60;
-			border-radius: 2px;
-			position: absolute;
-			cursor: pointer;
-
-			&:before {
-				content: "";
-				position: absolute;
-				height: 100%;
-				width: 2px;
-				left: -7px;
-				top: 0px;
-				border-radius: 2px;
-				background-color: $deepBlue-60;
-				transform-origin: 50% 0%;
-				transition: .2s cubic-bezier(.87,.23,.51,2);
-				transition-delay: .1s;
-			}
-
-			&:after {
-				content: "";
-				position: absolute;
-				height: 100%;
-				width: 0px;
-				left: -2px;
-				top: 0px;
-				background-color: $deepBlue-60;
-				transform-origin: 50% 0%;
-				transition: .2s cubic-bezier(.54,-0.78,.83,.67);
-			}
-
-			&.open {
-
-				&:before {
-					transform-origin: 50% 0%;
-					transform: translateX(7px);
-					transition: .2s cubic-bezier(.54,-0.78,.83,.67);
-				}
-
-				&:after {
-					width: 6px;
-					transform: translateX(2px);
-					transition: .2s cubic-bezier(.87,.23,.51,2);
-					transition-delay: .1s;
-				}
-			}
-		}
-	}
-
-	h1{
-		margin: 0;
-		margin-left: 116px;
-		font-size: 1.1em;
-		text-align:left;
-		line-height: 60px;
-	}
-	.search-button{
-		position: absolute;
-		width:60px;
-		height:60px;
-		right: 0;
-		top: 0;
-		cursor: pointer;
-		svg{
-			height:20px;
-			margin-top: 20px;
-			margin-right: 20px;
-			width: 20px;
-			fill: $white-background;
-
-		}
-
-		&:hover  {
-			background-color: rgba($white-background, .3);
-		}
-	}
 }
 
 $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);

@@ -86,7 +86,7 @@ var WorkspaceStore = Reflux.createStore({
 		var screenWidth = el.clientWidth;
 		var screenHeight = el.clientHeight;
 		var eachWidth = screenWidth / _.size(this.getAll());
-		var padding = 10;
+		var padding = 5;
 		var sortedCards = _.sortBy(this.getAll(), function(el){ return el.x });
 
 		var hasSlack = false;
@@ -117,13 +117,13 @@ var WorkspaceStore = Reflux.createStore({
 				var twoThirds = screenWidth / 3 * 2;
 				var slackSize = {
 					x: padding,
-					y: padding,
+					y: 0,
 					w: twoThirds - 2*padding,
 					h: screenHeight-2*padding
 				};
 				var asanaSize = {
 					x: twoThirds + padding,
-					y: padding,
+					y: 0,
 					w: oneThird - 2*padding,
 					h: screenHeight - 2*padding
 				};
@@ -135,7 +135,7 @@ var WorkspaceStore = Reflux.createStore({
 			else{
 				newSize = {
 					x: eachWidth*i + padding,
-					y: padding,
+					y: 0,
 					w: eachWidth - 2*padding,
 					h: screenHeight-2*padding
 				};
@@ -196,7 +196,7 @@ var WorkspaceStore = Reflux.createStore({
 					newSize.h = h = Math.max(minHeight, h - underflowY - paddingForAutoAdjusting);
 				}
 				if(y < 0){
-					newSize.y = y = paddingForAutoAdjusting;
+					newSize.y = y = 0;
 				}
 
 

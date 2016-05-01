@@ -1,5 +1,6 @@
+$app-bar-height: 44px;
 .card-content{
-  padding-top: 50px;
+  padding-top: $app-bar-height;
   height: 100%;
   transition: filter .2s ease-in-out;
   position: relative;
@@ -24,11 +25,11 @@
 
 .card-menu-overlay {
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100% - #{$app-bar-height});
   position: absolute;
   z-index: 999;
   left: 0;
-  top: 50px;
+  top: $app-bar-height;
   background-color: rgba(255,255,255,1);
   transform-origin: 50% 0%;
   transform: scale3d(1,0,1);
@@ -154,7 +155,7 @@
 }
 .card-app-bar {
   width: 100%;
-  height: 50px;
+  height: $app-bar-height;
   //background-color: red;
   position: absolute;
   left: 0;
@@ -180,8 +181,8 @@
   }
 
   .card-actions {
-    width: 50px;
-    height: 50px;
+    width: $app-bar-height;
+    height: $app-bar-height;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -218,12 +219,12 @@
   }
 
   .card-title {
-    width: calc(100% - 50px - 50px);
+    width: calc(100% - #{$app-bar-height} - #{$app-bar-height});
     padding: 0 30px;
     color: $deepBlue-80;
     font-weight: 500;
     font-size: 13px;
-    line-height: 50px;
+    line-height: $app-bar-height;
     text-transform: uppercase;
     text-align: center;
     white-space: nowrap;
@@ -237,8 +238,8 @@
   }
 
   .card-icon {
-    width: 50px;
-    height: 50px;
+    width: $app-bar-height;
+    height: $app-bar-height;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,11 +252,11 @@
 
 .card-nav {
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100% - #{$app-bar-height});
   background-color: white;
   position: fixed;
   overflow-y: auto;
-  top: 50px;
+  top: $app-bar-height;
   left: 0;
   z-index: 909;
   box-shadow: $swipes-shadow-one;
