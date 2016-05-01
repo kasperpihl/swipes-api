@@ -35,7 +35,7 @@ var tabsStyles = {
 		marginTop: '-40px',
 		position: 'relative',
 		zIndex: '1',
-		backgroundColor: '#F4F4F5'
+		backgroundColor: 'white'
 	}
 };
 
@@ -398,7 +398,7 @@ var ExpandedTask = React.createClass({
 
     return <Tabs className="height-100 tabs-child-selector"
       contentContainerClassName="tabs-wrapper"
-			tabItemContainerStyle={{background:'none'}}
+			tabItemContainerStyle={{background:'#F4F4F5'}}
 			inkBarStyle={tabsStyles.inkBarStyle}
 			children={tabs}>
     </Tabs>
