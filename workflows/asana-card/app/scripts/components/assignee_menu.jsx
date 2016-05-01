@@ -28,7 +28,7 @@ var AssigneeMenu = React.createClass({
         return (
           <div className="assign-layer">
             <div className="task-assign" title="Assign to a person">
-              <FontIcon className="material-icons">person_add</FontIcon>
+              <FontIcon style={{fontSize: '18px'}} className="material-icons">person_add</FontIcon>
             </div>
           </div>
         )
