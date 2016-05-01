@@ -74,7 +74,7 @@ var ChatInput = React.createClass({
 		chatInputActions.blur();
 	},
 	componentDidUpdate(prevProps, prevState) {
-		var defaultTextHeight = 70;
+		var defaultTextHeight = 60;
 		var textHeight = this.state.inputTextHeight || 0;
 		var height = Math.max(defaultTextHeight, textHeight);
 	    this.props.onRenderingInputHeight(height);
@@ -95,7 +95,7 @@ var ChatInput = React.createClass({
   	}
 	},
 	render: function() {
-		var defaultTextHeight = 70;
+		var defaultTextHeight = 60;
 		var textHeight = this.state.inputTextHeight || 0;
 		var height = Math.max(defaultTextHeight, textHeight);
 
