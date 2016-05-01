@@ -36,7 +36,7 @@ $minWidth: 30px;
 			overflow-y: scroll;
 		}
 		transform: translateX(0);
-		transition: 0.1s ease-in-out;
+		transition: 0.2s ease-in;
 		.menu-item{
 			&.active{
 				background: #f4f4f4;
