@@ -32,6 +32,12 @@ $minWidth: 30px;
 	.content-container{
 		height:100%;
 	}
+	&.pinned + .chat-list-container {
+		width: calc(100% - 180px);
+		transform: translateX(180px);
+		transition: 0.3s ease-in;
+		transition-delay: .1s; 
+	}
 	&:hover:not(.force-close), &.pinned {
 		.scroller{
 			overflow-y: auto;
@@ -50,12 +56,6 @@ $minWidth: 30px;
 			.name{
 				opacity: 1;
 			}
-		}
-
-		& + .chat-list-container {
-			width: calc(100% - 180px);
-			transform: translateX(180px);
-			transition: 0.3s ease-in;
 		}
 	}
 	.menu-item{
