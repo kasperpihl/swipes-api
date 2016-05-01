@@ -29,24 +29,28 @@ var Sidemenu = React.createClass({
 		}
 
 		var items = this.props.data.rows || [];
-
-		var renderedChannels = items.map(function(item, i){
-			if (!item.user) {
-				return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
+		var renderedChannels = [];
+		var renderedUsers = [];
+		var renderedStarred = [];
+		_.each(items, function(item, i ){
+			if(item.starred){
+				renderedStarred.push(<Sidemenu.Item onClick={this.onClick} data={item} key={i}/>)
 			}
-		}.bind(this));
-
-		var renderedUsers = items.map(function(item, i){
-			if (item.user) {
-				return <Sidemenu.Item onClick={this.onClick} data={item} key={i}/>;
+			else if(!item.user) {
+				renderedChannels.push(<Sidemenu.Item onClick={this.onClick} data={item} key={i}/>);
 			}
-		}.bind(this));
+			else{
+				renderedUsers.push(<Sidemenu.Item onClick={this.onClick} data={item} key={i}/>);
+			}
+		})
 
 		var overlayAbove, overlayBelow;
 		return (
 			<div className={className} onMouseLeave={this.onMouseLeave} onMouseEnter={this.onMouseEnter} style={this.props.style}>
 				{overlayAbove}
 				<div ref="scroller" className="scroller">
+					{(renderedStarred.length) ? (<h3>Starred</h3>) : null}
+					{(renderedStarred.length) ? renderedStarred : null}
 					<h3>Channels</h3>
 					{renderedChannels}
 					<h3>Direct Messages</h3>
