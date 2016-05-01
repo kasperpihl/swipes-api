@@ -145,9 +145,16 @@ var StatusesList = React.createClass({
         </div>
       }
 
+      var className = "task-list-wrapper";
+      if(tasks.length > 19){
+        className += " compact";
+      }
+      else if(tasks.length > 9){
+        className += " semi-compact";
+      }
 
       return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
-				<div onDragOver={this.onDragOver} className="task-list-wrapper">
+				<div onDragOver={this.onDragOver} className={className}>
 					{tasks}
 				</div>
 			</Tab>

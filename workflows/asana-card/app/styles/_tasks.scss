@@ -1,4 +1,6 @@
-$min-height: 50px;
+$min-height: 70px;
+$semi-compact-min-height: 60px; 
+$compact-min-height: 50px;
 $avatar-size: 28px;
 %flex {
   display: flex;
@@ -22,6 +24,21 @@ $avatar-size: 28px;
     border-radius: 2px;
     background: $blue-100;
   }
+  &.semi-compact{
+    .task-wrapper{
+      .task{
+        min-height: $semi-compact-min-height;
+      }
+    }
+  }
+  &.compact{
+    .task-wrapper{
+      .task{
+        min-height: $compact-min-height;
+      }
+    }
+  }
+  
 }
 
 @mixin animation-delay($time) {
@@ -66,7 +83,6 @@ $avatar-size: 28px;
     background-color: darken(#FAFAFA, 3%);
 
     .task {
-      min-height: $min-height;
       //padding: 0 21px;
 
       .task-details-wrap {
@@ -106,7 +122,7 @@ $avatar-size: 28px;
 
     .task-list-element {
       width: 50px;
-      min-height: $min-height;
+      min-height: 100%;
 
       @extend %flex;
 
@@ -141,7 +157,7 @@ $avatar-size: 28px;
       align-items: flex-start;
 
       .task-title {
-        font-size: 13px;
+        font-size: 14px;
         color: $deepBlue-80;
         padding: 0px;
         padding-right: 10px;
@@ -392,7 +408,7 @@ $avatar-size: 28px;
 
   &.new-assign {
     position: fixed;
-    min-height: $min-height;
+    min-height: 100%;
     left: 0;
     bottom: 120px;
     background-color: white;
