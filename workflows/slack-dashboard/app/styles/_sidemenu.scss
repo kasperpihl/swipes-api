@@ -23,7 +23,11 @@ $minWidth: 30px;
 	z-index: 99999;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
-
+	.relative-wrapper{
+		height:100%;
+		width:100%;
+		position:relative;
+	}
 	.scroller{
 		width:100%;
 		height:100%;

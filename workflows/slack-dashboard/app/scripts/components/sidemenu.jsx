@@ -19,6 +19,108 @@ var Sidemenu = React.createClass({
 		console.log("pinning", !(this.state.pinned));
 		this.setState({pinned: !(this.state.pinned)});
 	},
+	componentDidUpdate:function(prevProps, prevState) {
+		this.calculateBeforeAndAfter();    
+	},
+	componentDidMount:function() {
+		this.bouncedCalculate = _.debounce(this.calculateBeforeAndAfter, 50);
+		this.calculateBeforeAndAfter();
+	},
+	onScroll: function(){
+		this.bouncedCalculate();
+	},
+	onScrollToTop: function(){
+		this.refs.scroller.scrollTop = 0;
+	},
+	onScrollToBottom: function(){
+		var height = this.refs.scroller.clientHeight;
+		var scrollHeight = this.refs.scroller.scrollHeight;
+		this.refs.scroller.scrollTop = Math.max(0, scrollHeight - height);
+	},
+	calculateBeforeAndAfter:function(){
+		var itemEls = this.refs.scroller.getElementsByClassName("menu-item");
+		var items = this.props.data.rows || [];
+		var height = this.refs.scroller.clientHeight;
+		var itemHeight = 26;
+		var unreadAbove = 0;
+		var notificationAbove = 0;
+		var i;
+
+		// above scroll (saving loops by breaking)
+		for(i = 0 ; i < itemEls.length ; i++){
+			var el = itemEls[i];
+			var top = el.getBoundingClientRect().top;
+			if(top < 0){
+				var item = items[i];
+				if(item.unread){ 
+					unreadAbove += item.unread;
+				}
+				if(item.notification){ 
+					notificationAbove += item.notification;
+				}
+			}
+			else break;
+		}
+		// below scroll (saving loops by breaking)
+		var unreadBelow = 0;
+		var notificationBelow = 0;
+		for(i = (itemEls.length -1) ; i > 0 ; i--){
+			var el = itemEls[i];
+			var top = el.getBoundingClientRect().top;
+			if(top + itemHeight > height){
+				var item = items[i];
+				if(item.unread){ 
+					unreadBelow += item.unread;
+				}
+				if(item.notification){ 
+					notificationBelow += item.notification;
+				}
+			}
+			else break;
+		}
+		if( unreadAbove != this.state.unreadAbove ||
+			notificationAbove != this.state.notificationAbove ||
+			unreadBelow != this.state.unreadBelow || 
+			notificationBelow != this.state.notificationBelow ){
+
+			this.setState({
+				unreadAbove: unreadAbove,
+				unreadBelow: unreadBelow,
+				notificationAbove: notificationAbove,
+				notificationBelow: notificationBelow
+			});
+		}
+	},
+	renderNotificationAbove:function(){
+		var data = {
+			name: "- Unread above -",
+			unread: this.state.unreadAbove,
+			notification: this.state.notificationAbove
+		};
+		if(!this.state.unreadAbove && !this.state.notificationAbove){
+			return;
+		}
+		return (
+			<div style={{position: 'absolute', zIndex: 1000, boxShadow: '0px 0px 8px -4px rgba(0,0,0,0.75)', top: 0, left: 0, background: 'white', height: '26px', width: '100%'}}>
+				<Sidemenu.Item onClick={this.onScrollToTop} data={data} />
+			</div>
+		);
+	},
+	renderNotificationBelow: function(){
+		var data = {
+			name: "- Unread below -",
+			unread: this.state.unreadBelow,
+			notification: this.state.notificationBelow
+		};
+		if(!this.state.unreadBelow && !this.state.notificationBelow){
+			return;
+		}
+		return (
+			<div style={{position: 'absolute', zIndex: 1000, boxShadow: '0px 0px 8px -4px rgba(0,0,0,0.75)', bottom: 0, left: 0, background: 'white', height: '26px', width: '100%'}}>
+				<Sidemenu.Item onClick={this.onScrollToBottom} data={data} />
+			</div>
+		);
+	},
 	render: function() {
 		var className = "swipes-sidemenu";
 		if(this.state.pinned){
@@ -47,16 +149,18 @@ var Sidemenu = React.createClass({
 		var overlayAbove, overlayBelow;
 		return (
 			<div className={className} onMouseLeave={this.onMouseLeave} onMouseEnter={this.onMouseEnter} style={this.props.style}>
-				{overlayAbove}
-				<div ref="scroller" className="scroller">
-					{(renderedStarred.length) ? (<h3>Starred</h3>) : null}
-					{(renderedStarred.length) ? renderedStarred : null}
-					<h3>Channels</h3>
-					{renderedChannels}
-					<h3>Direct Messages</h3>
-					{renderedUsers}
+				<div className="relative-wrapper">
+					{this.renderNotificationAbove()}
+					<div ref="scroller" onScroll={this.onScroll} className="scroller">
+						{(renderedStarred.length) ? (<h3>Starred</h3>) : null}
+						{(renderedStarred.length) ? renderedStarred : null}
+						<h3>Channels</h3>
+						{renderedChannels}
+						<h3>Direct Messages</h3>
+						{renderedUsers}
+					</div>
 				</div>
-				{overlayBelow}
+				{this.renderNotificationBelow()}
 			</div>
 		);
 	},

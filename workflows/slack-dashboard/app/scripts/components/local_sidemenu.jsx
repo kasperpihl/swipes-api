@@ -19,14 +19,11 @@ var LocalSidemenu = React.createClass({
 		if(channels.length){
 			var navItems = [];
 			var currentChatId = chatStore.get('channelId');
-
+			var starsCol = [];
 			var channelsCol = [];
 			var peopleCol = [];
 			_.each(channels, function(channel){
 				var item = { id: channel.id, name: channel.name, user: channel.is_im };
-				if(channel.is_starred){
-					item.starred = true;
-				}
 				if(channel.is_im === true && !channel.user.is_bot) {
 					item.user = true;
 					item.presence = channel.user.presence;
@@ -42,14 +39,18 @@ var LocalSidemenu = React.createClass({
 						}
 					}
 				}
-				if(channel.is_im){
+				if(channel.is_starred){
+					item.starred = true;
+					starsCol.push(item);
+				}
+				else if(channel.is_im){
 					peopleCol.push(item);
 				}
 				else{
 					channelsCol.push(item);
 				}
 			});
-			var channels = channelsCol.concat(peopleCol);
+			var channels = starsCol.concat(channelsCol.concat(peopleCol));
 		}
 		return (
 			<Sidemenu ref="sidemenu" data={{rows: channels}} {...this.props} />
