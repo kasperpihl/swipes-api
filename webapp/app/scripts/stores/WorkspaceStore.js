@@ -212,7 +212,7 @@ var WorkspaceStore = Reflux.createStore({
 					newSize.w = w = Math.max(minWidth, (w - overflowX - paddingForAutoAdjusting) );
 				}
 				if((x + w) > screenWidth){
-					newSize.x = Math.max(screenWidth - w, paddingForAutoAdjusting);
+					newSize.x = Math.max(screenWidth - w - paddingForAutoAdjusting, paddingForAutoAdjusting);
 				}
 
 				// Check if offscreen in the bottom off the screen
