@@ -49,7 +49,7 @@ var Sidemenu = React.createClass({
 				<div ref="scroller" className="scroller">
 					<h3>Channels</h3>
 					{renderedChannels}
-					<h3>People</h3>
+					<h3>Direct Messages</h3>
 					{renderedUsers}
 				</div>
 				{overlayBelow}
@@ -98,7 +98,11 @@ Sidemenu.Item = React.createClass({
 			className += " active";
 		}
 		if(this.props.data.user && this.props.data.presence === 'active') {
+			presence = 'presence active'
+		} else if (this.props.data.user) {
 			presence = 'presence'
+		} else if (!this.props.data.user) {
+			presence = ''
 		}
 
 
