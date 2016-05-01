@@ -64,11 +64,19 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	onUpdateCardSize: function(id, obj){
 		var newSize = {};
+		var minWidth = 400;
+		var minHeight = 300;
 		if(obj.w){
 			newSize.w = obj.w;
+			if(newSize.w < minWidth){
+				newSize.w = minWidth;
+			}
 		}
 		if(obj.h){
 			newSize.h = obj.h;
+			if(newSize.h < minHeight){
+				newSize.h = minHeight;
+			}
 		}
 		if(obj.x){
 			newSize.x = obj.x;
