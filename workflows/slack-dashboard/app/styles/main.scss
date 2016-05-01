@@ -1,6 +1,3 @@
-@import "icons";
-@import "sidemenu";
-
 $deepBlue-20: #CCCED5;
 $deepBlue-40: #999EAC;
 $deepBlue-60: #666D82;
@@ -51,6 +48,11 @@ $break-mid: 650px;
     align-items: center;
     justify-content: center;
 }
+
+@import "icons";
+@import "sidemenu";
+
+
 html, body, #content {
     height:100%;
     font-family: 'Roboto';
@@ -81,12 +83,14 @@ $inputButtonWidth: 50px;
     height: 100%;
 }
 .chat-list-container{
+  width: 100%;
     height:100%;
     overflow-y: scroll;
     overflow-x: hidden;
     background-color: #FFF;
     //padding-bottom: 20px;
     position: relative;
+    transition: .1s;
 }
 
 .chat-list {
