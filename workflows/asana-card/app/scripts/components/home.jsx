@@ -24,7 +24,7 @@ var Home = React.createClass({
 				}
 			})
 
-			navName = navName + ' - ' + workspace.name;
+			navName = navName;
 
       swipes.navigation.setTitle(navName);
 

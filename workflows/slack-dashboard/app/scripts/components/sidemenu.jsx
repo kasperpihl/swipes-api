@@ -12,11 +12,21 @@ var React = require('react');
  */
 
 var Sidemenu = React.createClass({
-	componentDidUpdate: function(prevProps, prevState) {
-
+	getInitialState: function() {
+		return {};
+	},
+	togglePin:function(){
+		console.log("pinning", !(this.state.pinned));
+		this.setState({pinned: !(this.state.pinned)});
 	},
 	render: function() {
 		var className = "swipes-sidemenu";
+		if(this.state.pinned){
+			className += " pinned";
+		}
+		if(this.state.forceClose){
+			className += " force-close";
+		}
 
 		var items = this.props.data.rows || [];
 		var renderedItems = items.map(function(item, i){
@@ -37,6 +47,10 @@ var Sidemenu = React.createClass({
 	onClick: function(data){
 		if(typeof this.props.onSelectedRow === 'function'){
 			this.props.onSelectedRow(data);
+			this.setState({forceClose: true});
+			setTimeout(function(){
+				this.setState({forceClose: false});
+			}.bind(this), 1500);
 		}
 	}
 });

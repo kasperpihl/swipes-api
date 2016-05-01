@@ -88,13 +88,58 @@ var WorkspaceStore = Reflux.createStore({
 		var eachWidth = screenWidth / _.size(this.getAll());
 		var padding = 10;
 		var sortedCards = _.sortBy(this.getAll(), function(el){ return el.x });
+
+		var hasSlack = false;
+		var hasAsana = false;
+		var firstIsSlack = false;
+		if(sortedCards.length === 2){
+			
+			if(sortedCards[0].id && sortedCards[1].id){
+				var firstCard = WorkflowStore.get(sortedCards[0].id);
+				var secondCard = WorkflowStore.get(sortedCards[1].id);
+				if(firstCard.manifest_id === "slack-dashboard" || secondCard.manifest_id === "slack-dashboard"){
+					hasSlack = true;
+					if(firstCard.manifest_id === "slack-dashboard"){
+						firstIsSlack = true;
+					}
+				}
+				if(firstCard.manifest_id === "asana-card" || secondCard.manifest_id === "asana-card"){
+					hasAsana = true;
+				}
+			}
+			
+
+		}
 		_.each(sortedCards, function(el){
-			var newSize = {
-				x: eachWidth*i + padding,
-				y: padding,
-				w: eachWidth - 2*padding,
-				h: screenHeight-2*padding
-			};
+			var newSize;
+			if(hasAsana && hasSlack){
+				var oneThird = screenWidth / 3;
+				var twoThirds = screenWidth / 3 * 2;
+				var slackSize = {
+					x: padding,
+					y: padding,
+					w: twoThirds - 2*padding,
+					h: screenHeight-2*padding
+				};
+				var asanaSize = {
+					x: twoThirds + padding,
+					y: padding,
+					w: oneThird - 2*padding,
+					h: screenHeight - 2*padding
+				};
+				newSize = asanaSize;
+				if(i === 0 && firstIsSlack || i === 1 && !firstIsSlack){
+					newSize = slackSize;
+				}
+			}
+			else{
+				newSize = {
+					x: eachWidth*i + padding,
+					y: padding,
+					w: eachWidth - 2*padding,
+					h: screenHeight-2*padding
+				};
+			}
 			this.update(el.id, newSize, {trigger:false});
 			i++;
 		}.bind(this));

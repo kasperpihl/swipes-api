@@ -8,6 +8,11 @@ var chatStore = require('../stores/ChatStore');
  */
 var LocalSidemenu = React.createClass({
 	mixins: [channelStore.connect('channels')],
+	componentDidMount:function() {
+		swipes.onMenuButton(function(){
+			this.refs.sidemenu.togglePin();
+		}.bind(this));
+	},
 	render: function() {
 		var channels = channelStore.getActive();
 
@@ -45,7 +50,7 @@ var LocalSidemenu = React.createClass({
 			var channels = channelsCol.concat(peopleCol);
 		}
 		return (
-			<Sidemenu data={{rows: channels}} {...this.props} />
+			<Sidemenu ref="sidemenu" data={{rows: channels}} {...this.props} />
 		);
 	}
 });

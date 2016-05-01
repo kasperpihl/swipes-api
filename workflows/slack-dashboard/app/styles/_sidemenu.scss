@@ -1,7 +1,7 @@
 $itemHeight: 26px;
-$indicatorWidth: 4px;
-$indicatorHeight: 1px;
-$indicatorUnreadHeight: 2px;
+$indicatorWidth: 5px;
+$indicatorHeight: 0px;
+$indicatorUnreadHeight: 1px;
 
 $color: #d0d4d9;
 $hoverColor: #a0a4a9;
@@ -14,7 +14,6 @@ $expandedWidth: 210px;
 $minWidth: 30px;
 .swipes-sidemenu{
 	position: absolute;
-	box-shadow: 3px 0px 7px -6px rgba(0,0,0,0.75);
 	width:$expandedWidth;
 	height:100%;
 	background:white;
@@ -31,7 +30,7 @@ $minWidth: 30px;
 	.content-container{
 		height:100%;
 	}
-	&:hover{
+	&:hover:not(.force-close), &.pinned{
 		.scroller{
 			overflow-y: scroll;
 		}
