@@ -39,6 +39,9 @@ $minWidth: 30px;
 	.content-container{
 		height:100%;
 	}
+	/*
+		K_TODO: Remove this and make a delegate method on sidemenu instead.
+	 */
 	&.pinned + .chat-list-container {
 		width: calc(100% - 180px);
 		transform: translateX(180px);
@@ -115,7 +118,9 @@ $minWidth: 30px;
 			font-size: 14px;
 			font-weight: 400;
 			cursor: default;
-
+			/*
+				K_TODO: Rewrite this to be a generic icon that can be added from local_sidemenu somehow.
+			 */
 			&.presence {
 
 				&:after {
@@ -180,9 +185,6 @@ $minWidth: 30px;
 
 
 @keyframes notification-glow {
-	0%, 100%   {
-		background: none;
-	}
 	15%, 90%  {
 		background: $unreadColor;
 		border: 1px solid $unreadColor;
@@ -191,9 +193,6 @@ $minWidth: 30px;
 }
 
 @keyframes notification-glow-even {
-	0%, 100%   {
-		background: none;
-	}
 	15%, 90%  {
 		background: $unreadColor;
 		border: 1px solid $unreadColor;
