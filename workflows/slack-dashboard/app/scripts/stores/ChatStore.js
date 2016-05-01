@@ -273,8 +273,9 @@ var ChatStore = Reflux.createStore({
 					ChannelStore.updateChannel(message.channel, {'unread_count_display': channel.unread_count_display + 1 });
 					// K_TODO: Test if msg.text
 					var text = msg.text;
-
-					swipes.notifications.send({title: channel.name, message: text})
+					if(channel.is_im){
+						swipes.notifications.send({title: channel.name, message: text})
+					}
 				}
 
 				// If message is in the current channel we should handle the unread handler

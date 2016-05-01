@@ -22,6 +22,9 @@ var TextareaModal = React.createClass({
 	onMessageChange: function(e){
 		this.setState({'message': e.target.value});
 	},
+	componentDidMount:function() {
+		this.refs.message.focus();
+	},
 	render: function () {
 		var options = this.props.data.options;
 		var placeholder = 'Edit text';

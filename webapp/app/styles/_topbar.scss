@@ -19,11 +19,12 @@
 	.feedback-button {
 		position:absolute;
     	top: 0;
-    	right: 3 * $top-bar-height;
+    	right: 2 * $top-bar-height;
     	padding: 10px;
 		color: $deepBlue-60;
     	height: $top-bar-height;
 		display: flex;
+		font-size: 13px;
 		align-items: center;
 		justify-content: center;
 
@@ -37,26 +38,6 @@
 			}
 		}
 
-	.notifications-button{
-    	position:absolute;
-    	//cursor: pointer;
-    	top: 0;
-    	right: 2 * $top-bar-height;
-    	width:$top-bar-height;
-    	padding: 10px;
-    	height: $top-bar-height;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			&:hover {
-				background-color: $studioGray-20;
-			}
-
-			i {
-				color: $deepBlue-40 !important;
-			}
-    }
 
     .grid-button{
     	position:absolute;

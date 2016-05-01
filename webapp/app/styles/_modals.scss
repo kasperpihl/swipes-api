@@ -160,19 +160,12 @@ $break-mid: 650px;
 .edit-textarea{
 	padding: 4px 8px;
 	outline: none;
-    transition: .1s ease-in-out;
-    border-radius: 5px;
     font-size: 13px;
     font-family: 'Roboto';
     resize: none;
     line-height: 19px;
-    outline: none;
     width: 100%;
-	&:focus {
-		background-color: rgba($blue-40, .4);
-		color: $deepBlue-80;
-		transition: .1s ease-in-out;
-	}
+
 }
 .search-modal{
 	width:400px;

@@ -79,10 +79,7 @@ var Topbar = React.createClass({
 				{this.renderIconMenu()}
 				<h5>{title}</h5>
 				<div className="feedback-button" onClick={this.feedbackForm}>
-					Feedback
-				</div>
-				<div className="notifications-button" onClick={this.setNotifications}>
-					<i className="material-icons">{notificationIcon}</i>
+					Send Feedback
 				</div>
 				<div className="grid-button" onClick={workspaceActions.gridButton}>
 					<i className="material-icons">dashboard</i>

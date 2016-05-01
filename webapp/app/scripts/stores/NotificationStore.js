@@ -11,7 +11,7 @@ var NotificationStore = Reflux.createStore({
 		this.a1 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.a2 = new Audio('https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3');
 		this.set("history", []);
-		if(this.get('notificationState') === 'undefind') {
+		if(this.get('notificationState') === 'undefined') {
 			this.set('notificationState', true);
 		}
 	},
@@ -21,9 +21,6 @@ var NotificationStore = Reflux.createStore({
 	},
 	onSend: function(options){
 		if(this.isDuplicate(options)){
-			return;
-		}
-		if(!this.get('notificationState')) {
 			return;
 		}
 		if(bridgeStore.bridge){
