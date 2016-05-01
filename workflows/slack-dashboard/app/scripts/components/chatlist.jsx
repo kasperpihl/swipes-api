@@ -11,7 +11,7 @@ var CircularProgress = require('material-ui/lib/circular-progress');
 var SelectField = require('material-ui/lib/select-field');
 var Badge = require('material-ui/lib/badge');
 var MenuItem = require('material-ui/lib/menus/menu-item');
-var Sidemenu = require('./local_sidemenu');
+var LocalSidemenu = require('./local_sidemenu');
 
 var ChatList = React.createClass({
 	mixins: [chatStore.connect('chat')],
@@ -135,7 +135,7 @@ var ChatList = React.createClass({
 		var sideHeight = "calc(100% - " + this.state.inputHeight + "px)";
 		return (
 			<div className="card-container" style={{paddingLeft: paddingLeft, paddingBottom: this.state.inputHeight + 'px' }}>
-				<Sidemenu onSelectedRow={this.onSelectedRow} style={{height: sideHeight}}/>
+				<LocalSidemenu onSelectedRow={this.onSelectedRow} style={{height: sideHeight}}/>
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
 					<div className="chat-list">
