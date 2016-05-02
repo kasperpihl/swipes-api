@@ -85,6 +85,7 @@ var ChatList = React.createClass({
 		document.getElementById('chat-input').focus();
 		var newSettings = {channelId: row.id};
 		swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings})
+		swipes.info.workflow.settings.channelId = row.id;
 	},
 	renderLoading: function(){
 		if(!this.state.chat.sections){
