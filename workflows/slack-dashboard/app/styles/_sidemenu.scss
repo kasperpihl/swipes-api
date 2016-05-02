@@ -11,7 +11,11 @@ $activeColor: #1581e2;
 
 $notificationHeight: 18px;
 $expandedWidth: 210px;
-$minWidth: 30px;
+$minWidth: 40px;
+
+$returnDelay: .2s;
+$pushDelay: .1s;
+
 .swipes-sidemenu {
 	position: absolute;
 	width:$expandedWidth;
@@ -23,7 +27,7 @@ $minWidth: 30px;
 	z-index: 99999;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
-	transition-delay: .15s;
+	transition-delay: $returnDelay;
 
 	.relative-wrapper{
 		height:100%;
@@ -41,6 +45,8 @@ $minWidth: 30px;
 			text-transform: uppercase;
 			padding: 10px 20px;
 			letter-spacing: .5px;
+			transition: .1s;
+			transition-delay: $returnDelay;
 		}
 	}
 	.content-container{
@@ -61,7 +67,8 @@ $minWidth: 30px;
 		}
 		border-right: 1px solid #eee;
 		transform: translateX(0);
-		transition: 0.3s ease-in;
+		transition: 0.1s ease-in;
+		transition-delay: $returnDelay;
 
 		h3 {
 			opacity: 1;
@@ -90,6 +97,7 @@ $minWidth: 30px;
 			background: $color;
 			width: $indicatorWidth;
 			height: $indicatorHeight;
+			transition-delay: $returnDelay;
 		}
 		.indicator.even {
 			animation: indicator-glow-even 1.5s 1;
@@ -104,7 +112,7 @@ $minWidth: 30px;
 			border-radius: $notificationHeight/2;
 			text-align: center;
 			top: ($itemHeight - $notificationHeight) / 2;
-			right: 4px;
+			right: 14px;
 			font-weight: 400;
 			border: 1px solid $hoverColor;
 			color: $hoverColor;
@@ -129,6 +137,7 @@ $minWidth: 30px;
 			font-size: 14px;
 			font-weight: 400;
 			cursor: default;
+			transition-delay: $returnDelay;
 			/*
 				K_TODO: Rewrite this to be a generic icon that can be added from local_sidemenu somehow.
 			 */
