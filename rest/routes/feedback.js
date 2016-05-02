@@ -12,8 +12,18 @@ const router = express.Router();
 router.get('/secret.feedback', (req, res, next) => {
   const getFeedbackQ = r.table('feedback');
   db.rethinkQuery(getFeedbackQ)
-  .then((res) => {
-      return res.status(200).send(res);
+  .then((result) => {
+      var html = "";
+      if(result && result.length){
+        for(var i = 0 ; i < result.length ; i++){
+          var feed = result[i];
+          var date = new Date(feed.ts);
+
+          html += "<h5>" + date.toString() + " : " + feed.name + " : " + feed.email + " : " + feed.userId + "</h5>";
+          html += "<div>" + feed.feedback + "</div>";
+        }
+      }
+      return res.send(html);
     })
     .catch((e) => {
       return next(e);
@@ -31,6 +41,7 @@ router.post('/feedback.add', (req, res, next) => {
     userId: user.id,
     email: user.email,
     name: user.name,
+    ts: new Date().getTime(),
     feedback: feedback
   };
 
