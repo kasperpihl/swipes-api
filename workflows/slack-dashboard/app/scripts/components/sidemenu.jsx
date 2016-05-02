@@ -16,8 +16,22 @@ var Sidemenu = React.createClass({
 		return {};
 	},
 	togglePin:function(){
+		
 		console.log("pinning", !(this.state.pinned));
 		this.setState({pinned: !(this.state.pinned)});
+		if(typeof this.props.onWidthChanged === 'function'){
+			var newWidth = 210;
+			if(!this.state.pinned){
+				newWidth = 30;
+				setTimeout(function(){
+					this.props.onWidthChanged(newWidth);
+				}.bind(this), 300);
+			}
+			else{
+				this.props.onWidthChanged(newWidth);
+			}
+			
+		}
 	},
 	componentDidUpdate:function(prevProps, prevState) {
 		this.calculateBeforeAndAfter();    

@@ -55,12 +55,12 @@ $pushDelay: .1s;
 	/*
 		K_TODO: Remove this and make a delegate method on sidemenu instead.
 	 */
-	&.pinned + .chat-list-container {
+	/*&.pinned + .chat-list-container {
 		width: calc(100% - 180px);
 		transform: translateX(180px);
 		transition: 0.3s ease-in;
 		transition-delay: .1s;
-	}
+	}*/
 	&:hover:not(.force-close), &.pinned {
 		.scroller{
 			overflow-y: auto;
@@ -68,7 +68,7 @@ $pushDelay: .1s;
 		border-right: 1px solid #eee;
 		transform: translateX(0);
 		transition: 0.1s ease-in;
-		transition-delay: $returnDelay;
+		transition-delay: 0.05s;
 
 		h3 {
 			opacity: 1;

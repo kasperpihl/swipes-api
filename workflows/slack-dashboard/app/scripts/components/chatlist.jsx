@@ -48,7 +48,18 @@ var ChatList = React.createClass({
 			}
 		}
 	},
+	checkForcedSidemenu: function(){
+		var forcedSmallSidemenu = false;
+		if(document.body.clientWidth < 600){
+			forcedSmallSidemenu = true;
+		}
+		if(this.state.forcedSmallSidemenu != forcedSmallSidemenu){
+			this.setState({forcedSmallSidemenu: forcedSmallSidemenu});
+		}
+	},
 	scrollToBottom: function(animate){
+		
+
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
 		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
 			this.hasRendered = true;
@@ -64,6 +75,7 @@ var ChatList = React.createClass({
 	},
 	handleResize: function(){
 		this.bouncedScroll(this.hasRendered);
+		this.bouncedSidemenuCheck();
 	},
 	onSendingMessage:function(){
 		this.shouldAnimateScroll = true;
@@ -73,6 +85,7 @@ var ChatList = React.createClass({
 		this.scrollToBottom(this.hasRendered);
 	},
 	componentDidMount: function(){
+		this.bouncedSidemenuCheck = _.debounce(this.checkForcedSidemenu, 30);
 		this.bouncedScroll = _.debounce(this.scrollToBottom, 100);
 		this.bouncedMarkAsRead = _.debounce(chatActions.markAsRead, 500);
 		window.addEventListener('resize', this.handleResize);
@@ -121,6 +134,9 @@ var ChatList = React.createClass({
 	renderInput: function(){
 		return <ChatInput onRenderingInputHeight={this.onRenderInputHeight} onSendingMessage={this.onSendingMessage} />
 	},
+	onSidemenuWidthChanged:function(newWidth){
+		this.setState({sidemenuWidth: newWidth});
+	},
 	render: function() {
 		if(!swipes.info.workflow){
 			return <CircularProgress size={1} color="#777" style={{
@@ -133,11 +149,17 @@ var ChatList = React.createClass({
 			}}/>;
 		}
 		// K_TODO: Test if this works without channel
-		var paddingLeft = "30px";
+		var paddingLeft = 30;
+		if(this.state.sidemenuWidth){
+			paddingLeft = this.state.sidemenuWidth + "px";	
+		}
+		if(this.state.forcedSmallSidemenu){				
+			paddingLeft = "30px";
+		}
 		var sideHeight = "calc(100% - " + this.state.inputHeight + "px)";
 		return (
 			<div className="card-container" style={{paddingLeft: paddingLeft, paddingBottom: this.state.inputHeight + 'px' }}>
-				<LocalSidemenu onSelectedRow={this.onSelectedRow} style={{height: sideHeight}}/>
+				<LocalSidemenu onWidthChanged={this.onSidemenuWidthChanged} onSelectedRow={this.onSelectedRow} style={{height: sideHeight}}/>
 				<div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
 					{this.renderLoading()}
 					<div className="chat-list">
