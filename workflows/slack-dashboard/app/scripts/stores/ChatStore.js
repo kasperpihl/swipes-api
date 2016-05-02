@@ -51,9 +51,6 @@ var ChatStore = Reflux.createStore({
 			}
 
 			ChatActions.setChannel(channelId);
-			setTimeout(function(){
-				UserStore.update("U0C4VRYS1", {presence: "active"});
-			}.bind(this), 5000);
 			//ChatActions.updateBadge();
 
 		});
