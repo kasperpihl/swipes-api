@@ -23,6 +23,8 @@ $minWidth: 30px;
 	z-index: 99999;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
+	transition-delay: .15s;
+
 	.relative-wrapper{
 		height:100%;
 		width:100%;
@@ -34,6 +36,7 @@ $minWidth: 30px;
 		overflow: hidden;
 
 		h3 {
+			opacity: 0;
 			font-size: 12px;
 			text-transform: uppercase;
 			padding: 10px 20px;
@@ -59,6 +62,10 @@ $minWidth: 30px;
 		border-right: 1px solid #eee;
 		transform: translateX(0);
 		transition: 0.3s ease-in;
+
+		h3 {
+			opacity: 1;
+		}
 
 		.menu-item{
 			&.active{
