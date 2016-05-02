@@ -1,5 +1,5 @@
 $min-height: 70px;
-$semi-compact-min-height: 60px; 
+$semi-compact-min-height: 60px;
 $compact-min-height: 50px;
 $avatar-size: 28px;
 
@@ -41,7 +41,7 @@ $input-height: 60px;
       }
     }
   }
-  
+
 }
 
 @mixin animation-delay($time) {
@@ -478,7 +478,7 @@ $input-height: 60px;
     right: 0;
     bottom: 0;
     @extend %flex;
-    
+
 
     &.active {
       .material-icons {
@@ -1052,12 +1052,16 @@ $color_havelock_blue_approx: #4a90e2;
       border: 2px solid white;
       margin-top: 3px;
     }
+
+    .task-assign {
+      opacity: 1 !important;
+    }
   }
 }
 
 .remove-assignee {
-  width: 35px;
-  height: 35px;
+  width: 28px;
+  height: 28px;
   transform: translateX(-8px);
   display: flex;
   align-items: center;

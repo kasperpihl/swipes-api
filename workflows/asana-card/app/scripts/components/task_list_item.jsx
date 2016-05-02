@@ -181,7 +181,7 @@ var TaskItem = React.createClass({
         } else {
           farTime = task.due_on;
         }
-        
+
         farTimeParsed = 'Due on ' + moment(farTime).format('Do MMM YYYY, hh:mma');
         parseDate.timeString = '';
       } else {

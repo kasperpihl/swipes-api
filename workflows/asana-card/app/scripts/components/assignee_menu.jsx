@@ -74,8 +74,8 @@ var AssigneeMenu = React.createClass({
       return (
         <IconMenu
         iconButtonElement={<IconButton style={{height: '40px'}}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
-        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+        targetOrigin={{horizontal: 'right', vertical: 'top'}}
         maxHeight={250}
         >
         {names}
