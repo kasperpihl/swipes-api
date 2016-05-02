@@ -2,12 +2,14 @@ var React = require('react');
 var Sidemenu = require('./sidemenu');
 var channelStore = require('../stores/ChannelStore');
 var chatStore = require('../stores/ChatStore');
+var userStore = require('../stores/UserStore');
+
 /*
 	Purpose of this class is to handle all channels,
 	I've seperated this part so later we can easier make the sidemenu standalone, so others can integrate it.
  */
 var LocalSidemenu = React.createClass({
-	mixins: [channelStore.connect('channels')],
+	mixins: [channelStore.connect('channels'), userStore.connect('users')],
 	componentDidMount:function() {
 		swipes.onMenuButton(function(){
 			this.refs.sidemenu.togglePin();
@@ -25,7 +27,6 @@ var LocalSidemenu = React.createClass({
 			_.each(channels, function(channel){
 				var item = { id: channel.id, name: channel.name, user: channel.is_im };
 				if(channel.is_im === true && !channel.user.is_bot) {
-					item.user = true;
 					item.presence = channel.user.presence;
 				}
 				if(currentChatId === channel.id){

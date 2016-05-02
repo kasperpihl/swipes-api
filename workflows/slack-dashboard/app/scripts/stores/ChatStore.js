@@ -51,7 +51,9 @@ var ChatStore = Reflux.createStore({
 			}
 
 			ChatActions.setChannel(channelId);
-
+			setTimeout(function(){
+				UserStore.update("U0C4VRYS1", {presence: "active"});
+			}.bind(this), 5000);
 			//ChatActions.updateBadge();
 
 		});
@@ -295,6 +297,9 @@ var ChatStore = Reflux.createStore({
 					this.addMessage(message);
 				}
 			}
+		}
+		else if(msg.type === 'presence_change'){
+			UserStore.update(msg.user, {presence: msg.presence});
 		}
 		else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){
 			// If a user marks a channel as unread back in time. Make sure to update the unread line.
