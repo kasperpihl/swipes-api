@@ -142,7 +142,9 @@ var asana = {
 		client.app.accessTokenFromCode(code)
 			.then(function (response) {
 				data = response;
-				data.id = response.data.id;
+				data.uniq_id = response.data.id;
+				data.show_name = response.data.email;
+				
 				// Need that for the refresh roken
 				data.ts_last_token = new Date().getTime() / 1000;
 				callback(null, data);

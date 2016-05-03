@@ -55,7 +55,8 @@ var slack = {
 			if(!err && res.ok){
 				delete res.ok;
 				// Setting a unique ID that should prevent double auth
-				res.id = res.team_id;
+				res.uniq_id = res.team_id;
+				res.show_name = res.team_name;
 				return callback(null, res);
 			}
 			callback(err);

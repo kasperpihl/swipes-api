@@ -122,19 +122,23 @@ serviceUtil.getAuthData = (req, res, next) => {
 			let authData = result;
 
 			// To allow multiple accounts, each account should provide unique id so we don't get double auth from an account
-			if (!authData.id) {
+			if (!authData.uniq_id) {
 				// If no id is provided (or no handler was set), use the service id. Multiple accounts won't work then.
-				authData.id = service.id;
+				authData.uniq_id = service.id;
 			}
 			console.log('authData', authData);
 			let serviceToAppend = {
-				id: authData.id,
+				id: authData.uniq_id,
 				service_id: service.id,
 				service_name: service.manifest_id,
 				authData: authData
 			};
+			if(authData.show_name){
+				serviceToAppend.show_name = authData.show_name;
+				delete serviceToAppend.authData.show_name;
+			}
 
-			delete serviceToAppend.authData.id;
+			delete serviceToAppend.authData.uniq_id;
 
 			res.locals.serviceToAppend = serviceToAppend;
 

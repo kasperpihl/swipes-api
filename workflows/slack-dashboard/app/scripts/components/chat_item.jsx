@@ -343,6 +343,7 @@ var renderTextWithLinks = function(text, emojiFunction){
 		emojiFunction = function(par){ return par; };
 	}
 	text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
 	var matches = text.match(/<(.*?)>/g);
 
 	var replaced = [];
@@ -376,19 +377,19 @@ var renderTextWithLinks = function(text, emojiFunction){
 				}
 
 				var key = 'link' + (counter++);
-				placement = <a key={key} className='link' onClick={clickedLink.bind(null, innerMatch)}>{title}</a>;
+				placement = <a key={key} className='link' onClick={clickedLink.bind(null, innerMatch)}>{unescape(title)}</a>;
 			}
 
 			// Adding the replacements
 			replaced.push(placement);
 
 			// Adding the after text between the matches
-			replaced.push(emojiFunction(splits.shift()));
+			replaced.push(emojiFunction(unescape(splits.shift())));
 		}
 		if(replaced.length)
 			return replaced;
 	}
-	return emojiFunction(text);
+	return emojiFunction(unescape(text));
 };
 
 
