@@ -3,7 +3,7 @@
     "host": "localhost",
     "port": 28015,
     "db": "swipes",
-    "username": "admin",
+    "user": "admin",
     "password": ""
   },
   "jira": {

@@ -4,7 +4,8 @@ var CommentsActions = Reflux.createActions([
   'add',
   'remove',
 	'update',
-  'load'
+  'load',
+  'getAttachments'
 	// Here you can list your actions
 ]);
 
