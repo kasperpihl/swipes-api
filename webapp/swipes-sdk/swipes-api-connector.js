@@ -158,6 +158,63 @@ var SwipesAPIConnector = (function () {
 		return deferred ? deferred.promise : false;
 	};
 
+	SwipesAPIConnector.prototype.callSwipesStreamApi = function (options, data, callback, deferred) {
+		if(!deferred && window.Q) {
+			deferred = Q.defer();
+		}
+
+		var command,
+				force;
+
+		if(typeof options === 'string') {
+			command = options;
+		}
+
+		if (typeof options === 'object') {
+			command = options.command || null;
+			force = options.force || false;
+		}
+
+		// If no data is send, but only a callback set those
+		if (typeof data === 'function') {
+			callback = data;
+		}
+
+		var url = this._apiUrl + command;
+
+		if ((data == null) || typeof data !== 'object') {
+			data = {};
+		}
+
+		data.token = this._token;
+
+		var serData = JSON.stringify(data);
+
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', url, true);
+		xhr.responseType = 'arraybuffer';
+		xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+		xhr.onload = function(e) {
+			var data = e.currentTarget.response;
+
+			if(typeof callback === 'function')
+				callback(data);
+			if(deferred) deferred.resolve(data);
+		};
+
+		xhr.onerror = function(e) {
+			console.log('/' + command + ' error', error);
+			if(error.responseJSON)
+				error = error.responseJSON;
+			if(typeof callback === 'function')
+				callback(false, error);
+			if(deferred) deferred.reject(error);
+		};
+
+		xhr.send(serData);
+	};
+
 	SwipesAPIConnector.prototype.callListener = function(command, data, callback) {
 		if(!this._token || !this._listener){
 			console.log("listener queue", command);

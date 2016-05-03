@@ -233,15 +233,22 @@ ChatMessage.File = React.createClass({
 	},
 	renderImagePreview: function(){
 		var src = this.props.data.thumb_360;
+		var width = this.props.data.thumb_360_w;
+		var height = this.props.data.thumb_360_h;
 
 		return (
 			<div className="image-container">
 				<img
+					ref={function (image) {
+						if (image !== null) {
+							chatActions.loadPrivateImage(image, src)}
+						}
+					}
 					onClick={this.openImage}
-					src={src}
+					src={this.state.src}
 					style={{
-						width: this.props.data.thumb_360_w + 'px',
-						height: this.props.data.thumb_360_h
+						width: width + 'px',
+						height: height + 'px'
 					}} />
 			</div>
 		);
