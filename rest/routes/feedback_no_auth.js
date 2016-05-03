@@ -13,8 +13,6 @@ router.get('/secret.feedback', (req, res, next) => {
   const getFeedbackQ = r.table('feedback');
   const pass = req.query.p;
 
-  console.log(pass);
-
   if (pass !== 'kittens') {
     return res.send('<h3>You have much to learn young padawan</h3>');
   }
