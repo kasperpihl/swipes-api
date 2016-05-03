@@ -151,9 +151,6 @@ var TaskItem = React.createClass({
     var settings = MainStore.get('settings');
     var projectType = settings.projectType;
 
-    console.log(taskProjectName);
-    console.log(projectType);
-
     if (taskProjectName && projectType == 'mytasks') {
       return (
         <div className="task-project">{taskProjectName}</div>
