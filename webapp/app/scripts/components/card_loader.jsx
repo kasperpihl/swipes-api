@@ -445,6 +445,12 @@ var CardLoader = React.createClass({
 			</div>
 		);
 	},
+	onConnectNew: function(){
+		eventActions.add("websocket_service_added", function(data){
+			this.onSelectedAccount(data.data);
+			eventActions.remove(null,null, "connect_service");
+		}.bind(this), "connect_service");
+	},
 	onSelectedAccount: function(selectedAccount){
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
@@ -490,7 +496,7 @@ var CardLoader = React.createClass({
 				});
 
 				if(!this.state.workflow.selectedAccountId || !foundSelectedAccount){
-					cardContent = <Services.SelectRow onSelectedAccount={this.onSelectedAccount} data={{services: connectedServices, title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
+					cardContent = <Services.SelectRow onConnectNew={this.onConnectNew} onSelectedAccount={this.onSelectedAccount} data={{services: connectedServices, title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
 				}
 			}
 		}

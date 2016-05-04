@@ -33,10 +33,8 @@ var Services = React.createClass({
 			}
 			realService.service_id = realService.id;
 			realService.id = service.id;
-			if(service.show_name){
-				realService.show_name = service.show_name;
-			}
-			return <Services.ConnectedRow key={service.id} data={realService} />;
+
+			return <Services.ConnectedRow key={service.id} showName={service.show_name} data={realService} />;
 		})
 	},
 	renderServicesToConnect: function(){
@@ -75,6 +73,9 @@ Services.SelectRow = React.createClass({
 	},
 	clickedAuthorize: function(){
 		//ServiceActions.authorize(this.props.data.manifest_id);
+		if(typeof this.props.onConnectNew === 'function'){
+			this.props.onConnectNew();
+		}
 		var serviceName = this.props.data.manifest_id;
 		var url = swipes.service(serviceName).getAuthorizeURL();
 		window.OAuthHandler = ServiceActions;
@@ -117,7 +118,7 @@ Services.SelectRow = React.createClass({
 	},
 	render: function(){
 		return(
-			<div className="row select">
+			<div className="row connect">
 				<h6>{this.props.data.title}</h6>
 				{this.renderSelector()}
 			</div>
@@ -161,8 +162,8 @@ Services.ConnectedRow = React.createClass({
 	render: function () {
 		console.log(this.props.data);
 		var showName = "";
-		if(this.props.data.show_name){
-			showName = "(" + this.props.data.show_name + ")";
+		if(this.props.showName){
+			showName = "(" + this.props.showName + ")";
 		}
 		return(
 			<div className="row connected">
