@@ -28,6 +28,11 @@ var WorkflowStore = Reflux.createStore({
 
 		})
 	},
+	onSelectAccount:function(workflow, accountId){
+		this.update(workflow.id, {selectedAccountId: accountId});
+		swipes.api.request('users.selectWorkflowAccountId', {"workflow_id": workflow.id, "account_id": accountId}, function(res, error){
+		});
+	},
 	onRemoveWorkflow: function(workflow){
 		swipes.api.request("users.removeWorkflow", {"workflow_id": workflow.id}, function(res,error){
 			if(res && res.ok){

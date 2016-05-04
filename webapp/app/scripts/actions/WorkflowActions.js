@@ -2,7 +2,8 @@ var Reflux = require('reflux');
 
 var WorkflowActions = Reflux.createActions([
   'removeWorkflow',
-  'renameWorkflow'
+  'renameWorkflow',
+  'selectAccount'
   // Here you can list your actions
 ]);
 
