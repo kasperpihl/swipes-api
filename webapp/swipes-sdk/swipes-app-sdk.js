@@ -346,6 +346,10 @@ var SwipesAppSDK = (function() {
 					}
 				};
 
+				if(self.info.selectedAccountId){
+					options.account_id = self.info.selectedAccountId;
+				}
+				
 				var intCallback = function(res, error){
 					if(callback) callback(res,error);
 					if(res) deferred.resolve(res);
@@ -431,6 +435,9 @@ var SwipesAppSDK = (function() {
 					if(data.data.manifest){
 						this.info.workflow = data.data.manifest;
 						this._client.setId(data.data.manifest.id);
+					}
+					if(data.data.selectedAccountId){
+						this.info.selectedAccountId = data.data.selectedAccountId;
 					}
 					if(data.data.user_id){
 						this.info.userId = data.data.user_id;

@@ -238,6 +238,9 @@ var CardLoader = React.createClass({
 				target_url: document.location.protocol + "//" + document.location.host
 			}
 		};
+		if(this.state.workflow.selectedAccountId){
+			initObj.data.selectedAccountId = this.state.workflow.selectedAccountId;
+		}
 
 		// Lazy instantiate
 		if(!this.apiCon){
