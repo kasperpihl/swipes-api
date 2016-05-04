@@ -15,6 +15,23 @@ var Comments = React.createClass({
   componentDidMount: function () {
     var task = this.props.task;
 
+    // Get Attachments
+    swipes.service('asana').request('attachments.findByTask', {
+      id: task.id,
+      opt_fields: 'download_url, name, view_url, created_at'
+    })
+    .then(function (res) {
+      var stuff = res.data;
+      var attachments = [];
+      attachments = stuff;
+
+      CommentsActions.getAttachments(attachments);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
+    // Get comments
     swipes.service('asana').request('tasks.stories', {
       id: task.id
     })
@@ -30,10 +47,23 @@ var Comments = React.createClass({
     })
     .catch(function (err) {
       console.log(err);
+    });
+  },
+  renderAttachments: function() {
+    var attachments = this.state.attachments;
+    var elements = [];
+    var task = this.props.task;
+
+    attachments.forEach(function (attachment) {
+      elements.push(<Attachment key={attachment.id} attachment={attachment} task={task}/>)
     })
+
+    return elements;
+
   },
   renderComments: function () {
     var comments = this.state.comments;
+    //var attachments = this.state.attachments;
     var elements = [];
     var task = this.props.task;
 
@@ -41,7 +71,7 @@ var Comments = React.createClass({
       elements.push(<Comment key={comment.id} comment={comment} task={task} />);
     })
 
-    if (elements.length > 0) {
+    if (this.state.comments.length > 0 || this.state.attachments > 0) {
       elements.reverse();
       return elements;
     } else {
@@ -62,6 +92,7 @@ var Comments = React.createClass({
           <Loading style={{marginTop: '20%'}} />
 				) : (
           <div>
+            {this.renderAttachments()}
             {this.renderComments()}
 					</div>
 				)}
@@ -185,6 +216,196 @@ var Comment = React.createClass({
 
           <div className="comment">
             {textElements}
+          </div>
+
+          <div className="time">
+            {time}
+          </div>
+
+        </div>
+
+        <div className="task-comment-dot">
+          {this.renderSwipesDot()}
+        </div>
+
+      </div>
+    )
+  }
+});
+
+var Attachment = React.createClass({
+  shareTaskUrl: function (taskUrl) {
+    var shareData = this.shareData(taskUrl);
+
+    swipes.share.request(shareData);
+  },
+  shareData: function (taskUrl) {
+    return {
+      url: taskUrl
+    }
+  },
+  dotItems: function () {
+    var that = this;
+    var settings = MainStore.get('settings');
+    var items = [];
+    var comment = this.props.comment;
+    var task = this.props.task;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+
+
+    items = items.concat([
+      {
+        label: 'Share the comment',
+        icon: 'share',
+        callback: function () {
+          that.shareTaskUrl(taskUrl);
+        }
+      }
+    ]);
+
+    return items;
+  },
+  renderSwipesDot: function() {
+    var dotItems = this.dotItems();
+    var attachment = this.props.attachment;
+    var that = this;
+    var settings = MainStore.get('settings');
+    var task = this.props.task;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+
+    return (
+      <SwipesDot
+        className="dot"
+        reverse="true"
+        onDragData={this.shareData.bind(this, taskUrl)}
+        hoverParentId={attachment.id}
+        elements={dotItems}
+        menuColors={{
+          borderColor: 'transparent',
+          hoverBorderColor: '#1DB1FC',
+          backgroundColor: '#1DB1FC',
+          hoverBackgroundColor: 'white',
+          iconColor: 'white',
+          hoverIconColor: '#1DB1FC'
+        }}
+        labelStyles={{
+          transition: '.1s',
+          boxShadow: 'none',
+          backgroundColor: 'rgba(0, 12, 47, 1)',
+          padding: '5px 10px',
+          top: '-12px',
+          fontSize: '16px',
+          letterSpacing: '1px',
+          zIndex: '99'
+        }}
+      />
+    )
+  },
+  getFileType: function (fileExt) {
+    var icon = './images/default.svg';
+
+    var fileTypes = [
+    	{
+    		type: 'image',
+    		fileType: [
+    			'jpeg',
+    	  	'jpg',
+    	  	'png',
+    	  	'gif',
+    	  	'svg'
+    		]
+      },
+    	{
+    		type: 'audio',
+    		fileType: [
+    			'mp3',
+    			'flac',
+    			'm4a',
+    			'ogg',
+    			'wav',
+    			'wma'
+    		]
+      },
+    	{
+    		type: 'video',
+    		fileType: [
+    			'webm',
+    			'mkv',
+    			'flv',
+    			'mov',
+    			'wmv',
+    			'avi',
+    			'mp4',
+    			'mpeg',
+    			'm4v'
+    		]
+      },
+    	{
+    		type: 'documents',
+    		fileType: [
+    			'pdf',
+    			'doc',
+    			'docx',
+    			'xls',
+    			'xlsx',
+    			'ptt',
+    			'pttx',
+    			'txt',
+    			'rtf',
+    			'key',
+    			'pages',
+    			'numbers'
+    		]
+      },
+    	{
+    		type: 'code',
+    		fileType: [
+    			'js',
+    			'html',
+    			'css',
+    			'php'
+    		]
+      },
+    	{
+    		type: 'design',
+    		fileType: [
+    			'ai',
+    			'psd',
+    			'sketch',
+    			'prd',
+    			'aep',
+    			'prproj'
+    		]
+      },
+    ]
+
+    fileTypes.forEach( function(item) {
+    	if(item.fileType.indexOf(fileExt) > -1) {
+    		icon = './images/' + item.type + '.svg';
+    	}
+    })
+
+    return icon;
+  },
+  render: function () {
+    var attachment = this.props.attachment;
+    var time = moment(attachment.created_at).fromNow();
+    var getExt = attachment.name.split('.')[1].toLowerCase();
+    var icon = this.getFileType(getExt);
+
+    return (
+      <div id={attachment.id} className="task-comment-wrapper">
+        
+        <div className="task-comment-avatar">
+          <img />
+        </div>
+
+        <div className="task-comment">
+
+          <div className="comment">
+            <a href={attachment.download_url} target="_blank">
+              {attachment.name}
+            </a>
           </div>
 
           <div className="time">

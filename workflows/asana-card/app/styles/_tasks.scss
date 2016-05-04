@@ -97,6 +97,17 @@ $input-height: 60px;
           //padding: 0;
           padding-left: 0px;
         }
+
+        .task-project {
+          font-size: 12px;
+          color: $deepBlue-40;
+          font-weight: 400;
+          padding-left: 10px;
+          //border: 1px solid $deepBlue-80;
+          //padding: 2px 8px;
+          //border-radius: 20px;
+          //margin-left: 10px;
+        }
       }
     }
   }
@@ -162,7 +173,7 @@ $input-height: 60px;
       .task-title {
         font-size: 14px;
         color: $deepBlue-80;
-        padding: 0px;
+        padding-left: 5px;
         padding-right: 10px;
         font-weight: 400;
 
@@ -187,44 +198,60 @@ $input-height: 60px;
         }
       }
 
-      .task-due-on {
-        font-size: 13px;
-        color: $deepBlue-40;
-        padding: 5px;
+      .details {
+        display: flex;
 
-        @extend %flex;
+        .task-due-on {
+          font-size: 13px;
+          color: $deepBlue-60;
+          padding: 5px;
 
-        &:hover {
-          background-color: $studioGray-40;
-          border-radius: 5px;
+          @extend %flex;
+
+          &:hover {
+            background-color: $studioGray-40;
+            border-radius: 5px;
+
+            .remove-schedule {
+              @extend %flex;
+            }
+          }
+
+          &.subtask {
+            padding: 5px;
+          }
+
+          &.red {
+            color: $red-color;
+          }
+
+          &.green {
+            color: $green-color;
+          }
 
           .remove-schedule {
-            @extend %flex;
-          }
-        }
-
-        &.subtask {
-          padding: 5px;
-        }
-
-        &.red {
-          color: $red-color;
-        }
-
-        &.green {
-          color: $green-color;
-        }
-
-        .remove-schedule {
-          display: none;
-          margin-left: 5px;
-          cursor: pointer;
-
-          i.material-icons {
-            font-size: 15px;
-            color: $deepBlue-40;
+            display: none;
+            margin-left: 5px;
             cursor: pointer;
+
+            i.material-icons {
+              font-size: 15px;
+              color: $deepBlue-40;
+              cursor: pointer;
+            }
           }
+        }
+
+        .task-project {
+          font-size: 12px;
+          color: $deepBlue-40;
+          font-weight: 400;
+          padding: 5px;
+          padding-top: 6px;
+          //border: 1px solid $deepBlue-80;
+          //padding: 2px 8px;
+          //border-radius: 20px;
+          //margin-left: 10px;
         }
       }
 
@@ -239,9 +266,10 @@ $input-height: 60px;
         }
 
         .task-project {
-          font-size: 14px;
+          font-size: 12px;
           color: $deepBlue-40;
           font-weight: 400;
+          padding-left: 10px;
           //border: 1px solid $deepBlue-80;
           //padding: 2px 8px;
           //border-radius: 20px;

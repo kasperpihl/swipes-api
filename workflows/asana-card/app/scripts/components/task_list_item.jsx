@@ -293,7 +293,10 @@ var TaskItem = React.createClass({
             {this.renderSwipesDot()}
             <div className="task-details-wrap">
               <div className="task-title">{task.name}</div>
-              {this.renderDueOnDate()}
+              <div className="details">
+                {this.renderDueOnDate()}
+                {this.renderProjectName(taskProjectName)}
+              </div>
             </div>
             <div className="task-assign-avatar">
               <AssigneeMenu task={task} />

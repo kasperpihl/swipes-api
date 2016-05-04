@@ -3,7 +3,7 @@
     "host": "SW_DATABASE_HOST",
     "port": "SW_DATABASE_PORT",
     "db": "SW_DATABASE_NAME",
-    "username": "SW_DATABASE_USERNAME",
+    "user": "SW_DATABASE_USER",
     "password": "SW_DATABASE_PASSWORD"
   },
   "jira": {

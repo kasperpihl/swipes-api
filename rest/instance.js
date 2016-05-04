@@ -51,6 +51,7 @@ let organizationsRouter = require('./routes/organizations.js');
 let workflowsRouter = require('./routes/workflows.js');
 let linksRouter = require('./routes/links.js');
 let feedbackRouter = require('./routes/feedback.js');
+let feedbackNoAuthRouter = require('./routes/feedback_no_auth.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -70,6 +71,7 @@ app.route('/').get((req,res,next) => {
 app.use('/v1', usersAuth);
 app.use('/v1', sdkRouter);
 app.use('/v1', servicesNoAuthRouter);
+app.use('/v1', feedbackNoAuthRouter);
 
 // Middleware to check if a valid token is provided from the user
 app.use('/v1', jwtMiddleware.restAuth);

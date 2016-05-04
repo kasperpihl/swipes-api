@@ -358,6 +358,31 @@ var SwipesAppSDK = (function() {
 
 				self._client.callSwipesApi("services.request", options, intCallback);
 				return deferred.promise;
+			},
+			stream:function(method, parameters, callback){
+				var deferred = Q.defer();
+
+				if(!method || typeof method !== 'string' || !method.length)
+					throw new Error("SwipesAppSDK: service:stream method required");
+				if(typeof parameters === 'function')
+					callback = parameters;
+				parameters = (typeof parameters === 'object') ? parameters : {};
+				var options = {
+					service: serviceName,
+					data: {
+						method: method,
+						parameters: parameters
+					}
+				};
+
+				var intCallback = function(res, error){
+					if(callback) callback(res,error);
+					if(res) deferred.resolve(res);
+					else deferred.reject(error);
+				};
+
+				self._client.callSwipesStreamApi("services.stream", options, intCallback);
+				return deferred.promise;
 			}
 		};
 	};

@@ -10,7 +10,7 @@
        "SW_CLIENT_PORT": "443",
 
        "SW_DATABASE_HOST": "localhost",
-       "SW_DATABASE_USERNAME": "sw1p3ss",
+       "SW_DATABASE_USER": "sw1p3ss",
        "SW_DATABASE_PASSWORD": "st@ypr0duct1v3",
 
        "SW_JIRA_CONSUMER_KEY": "DevSwipesUnicorns",
