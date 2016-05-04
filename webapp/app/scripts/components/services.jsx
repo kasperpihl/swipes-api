@@ -9,6 +9,8 @@ var ServiceActions = require('../actions/ServiceActions');
 var Reflux = require('reflux');
 var Card = require('material-ui/lib/card/card');
 var FlatButton = require('material-ui/lib/flat-button');
+var SelectField = require('material-ui/lib/SelectField');
+var MenuItem = require('material-ui/lib/menus/menu-item');
 
 var Navigation = Router.Navigation;
 
@@ -31,7 +33,9 @@ var Services = React.createClass({
 			}
 			realService.service_id = realService.id;
 			realService.id = service.id;
-
+			if(service.show_name){
+				realService.show_name = service.show_name;
+			}
 			return <Services.ConnectedRow key={service.id} data={realService} />;
 		})
 	},
@@ -62,6 +66,62 @@ var Services = React.createClass({
 	            </div>
 	        </div>
         );
+	}
+});
+
+Services.SelectRow = React.createClass({
+	getInitialState: function(){
+		return {value: null};
+	},
+	clickedAuthorize: function(){
+		//ServiceActions.authorize(this.props.data.manifest_id);
+		var serviceName = this.props.data.manifest_id;
+		var url = swipes.service(serviceName).getAuthorizeURL();
+		window.OAuthHandler = ServiceActions;
+		var win = window.open(url, serviceName, "height=700,width=500");
+		if(!win || win.closed || typeof win.closed=='undefined'){
+			return alert('Please allow popups to authorize services');
+		}
+		var timer = setInterval(function() {
+			if(win.closed) {
+				clearInterval(timer);
+				// K_TODO:
+			}
+		}, 1000);
+	},
+	handleChange: function(event, index, value){
+		if(value === this.props.data.services.length){
+			this.clickedAuthorize();
+		}
+		else{
+			var selectedAccount = this.props.data.services[value];
+			if(typeof this.props.onSelectedAccount === 'function'){
+				this.props.onSelectedAccount(selectedAccount);
+			}
+		}
+	},
+	renderSelector: function(){
+		if(!this.props.data.services || !this.props.data.services.length){
+			return <div className="services-button" onClick={this.clickedAuthorize}>Connect</div>
+		}
+		var items = this.props.data.services.map(function(service, i){
+			return <MenuItem value={i} key={i} primaryText={service.show_name}/>
+		});
+		items = items.concat(<MenuItem value={this.props.data.services.length} key={"-1"} primaryText="Add New Account"/>);
+
+		return (
+			<SelectField floatingLabelStyle={{color: 'black'}} floatingLabelText="Select Account..." value={this.state.value} onChange={this.handleChange}>
+        		{items}
+      		</SelectField>
+      	);
+	},
+	render: function(){
+		return(
+			<div className="row select">
+				<h6>{this.props.data.title}</h6>
+				{this.renderSelector()}
+			</div>
+		);
 	}
 });
 
@@ -100,9 +160,13 @@ Services.ConnectedRow = React.createClass({
 	},
 	render: function () {
 		console.log(this.props.data);
+		var showName = "";
+		if(this.props.data.show_name){
+			showName = "(" + this.props.data.show_name + ")";
+		}
 		return(
 			<div className="row connected">
-				<h6>{this.props.data.title}</h6>
+				<h6>{this.props.data.title} {showName}</h6>
 				<div className="services-button" onClick={this.clickedRemove}>Disconnect</div>
 			</div>
 		);
