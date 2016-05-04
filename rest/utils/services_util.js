@@ -30,6 +30,12 @@ serviceUtil.getServiceWithAuth = (req, res, next) => {
 	if (!service) {
 		return next(new SwipesError('service_required'));
 	}
+	
+	let filter = {"service_name": service};
+	let selectedAccountId = req.body.account_id;
+	if(selectedAccountId){
+		filter.id = selectedAccountId;
+	}
 
 	//T_TODO fix this query. Possible for multiple accounts - filtering by id
 	// merging information from right to left. User's information is more
@@ -37,7 +43,7 @@ serviceUtil.getServiceWithAuth = (req, res, next) => {
 	let userServiceQ = r.table("users")
 						.get(req.userId)("services")
 						.default([])
-						.filter({"service_name": service})
+						.filter(filter)
 						.limit(1)
 						.pluck('authData', 'service_id', 'id', 'service_name') // Add user settings here
 						.eqJoin('service_id', r.table('services'), {index: 'id'})
