@@ -5,6 +5,7 @@ var ChatActions = require('../actions/ChatActions');
 var ChannelStore = require('./ChannelStore');
 var UserStore = require('./UserStore');
 var BotStore = require('./BotStore');
+
 var ChatStore = Reflux.createStore({
 	listenables: [ChatActions],
 	start: function() {
@@ -133,19 +134,18 @@ var ChatStore = Reflux.createStore({
 
 	},
 	sortMessages: function(messages){
-
 		var self = this;
 		var sortedMessages = messages || this.get('messages');
 		var lastUser, lastGroup, lastDate;
 		var length = sortedMessages.length;
 		var me = UserStore.me();
 		var groups = _.groupBy(sortedMessages, function(model, i){
-
 			var date = new Date(parseInt(model.ts)*1000);
 			var group = moment(date).startOf('day').unix();
 
 			model.timeStr = TimeUtility.getTimeStr(date);
 			model.isExtraMessage = false;
+
 			var user;
 			if(model.user){
 				user = UserStore.get(model.user);
@@ -181,12 +181,12 @@ var ChatStore = Reflux.createStore({
 			return group;
 		});
 
-		sortedKeys = _.keys(groups).sort()
+		var sortedKeys = _.keys(groups).sort();
 		var sortedSections = [];
 		for(var i = 0 ; i < sortedKeys.length ; i++){
 			var key = sortedKeys[i];
 
-			schedule = new Date(parseInt(key)*1000);
+			var schedule = new Date(parseInt(key)*1000);
 			var title = TimeUtility.dayStringForDate(schedule);
 			sortedSections.push({"title": title, "messages": groups[key] });
 		}

@@ -242,7 +242,6 @@ ChatMessage.File = React.createClass({
 						}
 					}
 					onClick={this.openImage}
-					src=''
 					style={{
 						width: width + 'px',
 						height: height + 'px'

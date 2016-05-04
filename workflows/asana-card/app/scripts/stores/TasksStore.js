@@ -2,7 +2,7 @@ var Reflux = require('reflux');
 var TasksActions = require('../actions/TasksActions');
 
 // It's a hack but our structure of the app is just wrong
-_cacheTasks = [];
+var _cacheTasks = [];
 
 var TasksStore = Reflux.createStore({
   listenables: [TasksActions],

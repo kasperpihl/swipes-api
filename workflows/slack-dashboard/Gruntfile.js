@@ -3,6 +3,7 @@
 var livereload = require('connect-livereload');
 var path = require('path');
 var serveStatic = require('serve-static');
+var webpack = require('webpack');
 
 module.exports = function (grunt) {
 
@@ -28,7 +29,7 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:dev', 'copy:dev', 'cacheBust:dev']
+          tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: ['<%= yeoman.app %>/styles/**/*.{sass,scss}'],
@@ -43,30 +44,36 @@ module.exports = function (grunt) {
         dev: ['.tmp', '<%= yeoman.dev %>/*'],
         dist: ['.tmp', '<%= yeoman.dist %>/*']
       },
-      browserify: {
-        options: {
-          transform: ['reactify']
-        },
+      webpack: {
         dev: {
-          files: {
-            '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js',
-            '.tmp/scripts/preview_app.js': '<%= yeoman.app %>/scripts/preview_app.js'
+          entry: './<%= yeoman.app %>/scripts/app',
+          resolve: {
+            root: path.resolve(__dirname, 'node_modules'),
+            fallback: {root: path.join(__dirname, 'node_modules')},
+            extensions: ['', '.js', '.jsx']
           },
-          options: {
-            browserifyOptions: {
-              debug: true,
-              extensions: '.jsx'
-            }
-          }
-        },
-        dist: {
-          files: {
-            '.tmp/scripts/app.js': '<%= yeoman.app %>/scripts/app.js'
+          resolveLoader: {
+            root: path.resolve(__dirname, 'node_modules'),
+            fallback: {root: path.join(__dirname, 'node_modules')}
           },
-          options: {
-            browserifyOptions: {
-              extensions: '.jsx'
-            }
+          output: {
+            path: '<%= yeoman.dev %>/scripts/',
+            filename: 'app.js'
+          },
+          plugins: [
+            new webpack.optimize.DedupePlugin()
+          ],
+          module: {
+            loaders: [
+              {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel-loader',
+                query: {
+                  presets: ['es2015']
+                }
+              }
+            ]
           }
         }
       },
@@ -210,7 +217,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', [
     'clean:dev',
-    'browserify:dev',
+    'webpack:dev',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',
@@ -220,7 +227,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dev', [
     'clean:dev',
-    'browserify:dev',
+    'webpack:dev',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',

@@ -154,7 +154,7 @@ var StatusesList = React.createClass({
       }
 
       return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
-				<div onDragOver={this.onDragOver} className={className}>
+				<div onDragOver={that.onDragOver} className={className}>
 					{tasks}
 				</div>
 			</Tab>

@@ -29,8 +29,8 @@ var Home = React.createClass({
       swipes.navigation.setTitle(navName);
 
       return (
-        <StatusesList projectId={projectId} />
-      )
+				<StatusesList projectId={projectId} />
+			)
     } else {
 			return (
         <Loading />

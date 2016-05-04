@@ -1,13 +1,14 @@
 require('reflux-model-extension');
+require("react-tap-event-plugin")();
+
 var React = require('react');
 var ReactDOM = require('react-dom');
-var injectTapEventPlugin = require("react-tap-event-plugin");
-injectTapEventPlugin();
 var chatStore = require('./stores/ChatStore');
 var chatActions = require('./actions/ChatActions');
 var channelStore = require('./stores/ChannelStore');
 var chatInputActions = require('./actions/ChatInputActions');
 var ChatList = require('./components/chatlist');
+
 ReactDOM.render(<ChatList />, document.getElementById('content'));
 
 swipes.onReady(function(){

@@ -58,7 +58,7 @@ var ChatList = React.createClass({
 		}
 	},
 	scrollToBottom: function(animate){
-		
+
 
 		var scrollPosForBottom = $('.chat-list').outerHeight() - $('.chat-list-container').outerHeight()
 		if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != $('.chat-list-container').scrollTop() ){
@@ -102,18 +102,15 @@ var ChatList = React.createClass({
 	},
 	renderLoading: function(){
 		if(!this.state.chat.sections){
-			return <CircularProgress color="#777" size={1} style={{
+			return (<CircularProgress color="#777" size={1} style={{
 				position: 'absolute',
 				left: '50%',
 				top: '50%',
 				margin: 0,
 				marginTop: '-25px',
 				marginLeft: '-25px'
-			}}/>;
+			}}/>)
 		}
-
-
-
 	},
 	renderSections: function(){
 		if(this.state.chat.sections){
@@ -151,9 +148,9 @@ var ChatList = React.createClass({
 		// K_TODO: Test if this works without channel
 		var paddingLeft = 30;
 		if(this.state.sidemenuWidth){
-			paddingLeft = this.state.sidemenuWidth + "px";	
+			paddingLeft = this.state.sidemenuWidth + "px";
 		}
-		if(this.state.forcedSmallSidemenu){				
+		if(this.state.forcedSmallSidemenu){
 			paddingLeft = "30px";
 		}
 		var sideHeight = "calc(100% - " + this.state.inputHeight + "px)";

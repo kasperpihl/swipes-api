@@ -2,7 +2,7 @@ var React = require('react');
 
 var UserAvatar = React.createClass({
   render: function () {
-    user = this.props.user;
+    var user = this.props.user;
 
     if (!user.photo) {
       var name = user.name;
