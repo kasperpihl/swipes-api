@@ -125,6 +125,25 @@ router.post('/users.renameWorkflow', (req, res, next) => {
     })
 });
 
+router.post('/users.selectWorkflowAccountId', (req, res, next) => {
+  let userId = req.userId;
+  let workflowId = req.body.workflow_id;
+  let accountId = req.body.account_id;
+  if(!workflowId || !accountId){
+    return next(new SwipesError('workflow_id_and_account_id_required'));
+  }
+
+  let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {selectedAccountId: accountId});
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+      return res.status(200).json({ok: true});
+    })
+    .catch((err) => {
+      return next(err);
+    })
+})
+
 router.post('/users.updateWorkflowSettings', (req, res, next) => {
   let userId = req.userId;
   let workflowId = req.body.workflow_id;
