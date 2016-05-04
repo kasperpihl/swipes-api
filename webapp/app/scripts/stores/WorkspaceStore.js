@@ -165,6 +165,9 @@ var WorkspaceStore = Reflux.createStore({
 		var paddingForAutoAdjusting = 5;
 		var didUpdate = false;
 		var counter = 0;
+		if(!document.getElementById("actual-app")){
+			return;
+		}
 		var screenWidth = document.getElementById("actual-app").clientWidth;
         var screenHeight = document.getElementById("actual-app").clientHeight;
 		_.each(_.sortBy(this.getAll(), function(el){return el.z; }), function(el){
