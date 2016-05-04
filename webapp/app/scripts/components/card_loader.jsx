@@ -442,6 +442,9 @@ var CardLoader = React.createClass({
 			</div>
 		);
 	},
+	onSelectedAccount: function(selectedAccount){
+		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
+	},
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
@@ -470,17 +473,21 @@ var CardLoader = React.createClass({
 
 			// Determine if the
 			if(this.state.workflow.required_services){
-				var connectedServices = this.state.user.services;
-				// Later we should add support for multiple services.... Maybe.
 				var requiredService = this.state.workflow.required_services[0];
-				var foundService;
-				_.each(connectedServices, function(service){
+				var selectedAccountId = this.state.workflow.selectedAccountId;
+				var foundSelectedAccount = false;
+				var connectedServices = _.filter(this.state.user.services, function(service){
 					if(service.service_name === requiredService){
-						foundService = service;
+						if(selectedAccountId && selectedAccountId === service.id){
+							foundSelectedAccount = true;
+						}
+						return true;
 					}
+					return false;
 				});
-				if(!foundService){
-					cardContent = <Services.ConnectRow data={{title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
+
+				if(!this.state.workflow.selectedAccountId || !foundSelectedAccount){
+					cardContent = <Services.SelectRow onSelectedAccount={this.onSelectedAccount} data={{services: connectedServices, title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
 				}
 			}
 		}
