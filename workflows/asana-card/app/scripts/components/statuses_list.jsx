@@ -22,8 +22,8 @@ var tabsStyles = {
     overflowY: 'auto'
   },
 	inkBarStyle: {
-		height: '40px',
-		marginTop: '-40px',
+		height: '30px',
+		marginTop: '-30px',
 		position: 'relative',
 		zIndex: '1',
 		backgroundColor: 'white'
