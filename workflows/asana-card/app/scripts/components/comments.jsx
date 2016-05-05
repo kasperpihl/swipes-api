@@ -341,7 +341,7 @@ var Attachment = React.createClass({
     		]
       },
     	{
-    		type: 'documents',
+    		type: 'document',
     		fileType: [
     			'pdf',
     			'doc',
@@ -395,9 +395,9 @@ var Attachment = React.createClass({
 
     return (
       <div id={attachment.id} className="task-comment-wrapper">
-        
+
         <div className="task-comment-avatar">
-          <img />
+          <img src={icon}/>
         </div>
 
         <div className="task-comment">
