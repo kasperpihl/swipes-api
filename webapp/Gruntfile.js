@@ -3,7 +3,8 @@
 var livereload = require('connect-livereload'),
     modRewrite = require('connect-modrewrite'),
     serveStatic = require('serve-static'),
-    path = require('path');
+    path = require('path'),
+    webpack = require('webpack');
 
 module.exports = function (grunt) {
 
@@ -94,7 +95,7 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['browserify:serve', 'copy:dev', 'cacheBust:dev']
+          tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: [
@@ -132,32 +133,65 @@ module.exports = function (grunt) {
           src: ['<%= yeoman.dev %>/*']
         }
       },
-      browserify: {
-        options: {
-          transform: ['reactify']
-        },
-        dist: {
-          files: {
-            '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js'
+      webpack: {
+        dev: {
+          entry: './<%= yeoman.app %>/scripts/app',
+          resolve: {
+            root: path.resolve(__dirname, 'node_modules'),
+            fallback: {root: path.join(__dirname, 'node_modules')},
+            extensions: ['', '.js', '.jsx']
           },
-          options: {
-            browserifyOptions: {
-              extensions: '.jsx'
-            }
-          }
-        },
-        serve: {
-          files: {
-            '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js',
+          resolveLoader: {
+            root: path.resolve(__dirname, 'node_modules'),
+            fallback: {root: path.join(__dirname, 'node_modules')}
           },
-          options: {
-            browserifyOptions: {
-              debug: true,
-              extensions: '.jsx'
-            }
+          output: {
+            path: '<%= yeoman.dev %>/scripts/',
+            filename: 'app.js'
+          },
+          plugins: [
+            new webpack.optimize.DedupePlugin()
+          ],
+          module: {
+            loaders: [
+              {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel-loader',
+                query: {
+                  presets: ['es2015']
+                }
+              }
+            ]
           }
         }
       },
+      // browserify: {
+      //   options: {
+      //     transform: ['reactify']
+      //   },
+      //   dist: {
+      //     files: {
+      //       '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js'
+      //     },
+      //     options: {
+      //       browserifyOptions: {
+      //         extensions: '.jsx'
+      //       }
+      //     }
+      //   },
+      //   serve: {
+      //     files: {
+      //       '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js',
+      //     },
+      //     options: {
+      //       browserifyOptions: {
+      //         debug: true,
+      //         extensions: '.jsx'
+      //       }
+      //     }
+      //   }
+      // },
       concat: {
         serve: {
           files: {
@@ -345,7 +379,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', [
     'clean:dev',
-    'browserify:serve',
+    'webpack:dev',
     'concat:serve',
     'compass:devGlobal',
     'compass:dev',
@@ -359,7 +393,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dev', [
     'clean:dev',
-    'browserify:serve',
+    'webpack:dev',
     'concat:serve',
     'compass:devGlobal',
     'compass:dev',
@@ -368,21 +402,21 @@ module.exports = function (grunt) {
     'cacheBust:dev'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'browserify:dist',
-    'compass:dist',
-    'useminPrepare',
-    'concat',
-    'autoprefixer:dist',
-    'imagemin',
-    'cssmin',
-    'uglify',
-    'copy',
-    'filerev',
-    'usemin',
-    'htmlmin'
-  ]);
+  // grunt.registerTask('build', [
+  //   'clean:dist',
+  //   'browserify:dist',
+  //   'compass:dist',
+  //   'useminPrepare',
+  //   'concat',
+  //   'autoprefixer:dist',
+  //   'imagemin',
+  //   'cssmin',
+  //   'uglify',
+  //   'copy',
+  //   'filerev',
+  //   'usemin',
+  //   'htmlmin'
+  // ]);
 
   grunt.registerTask('default', 'build');
 };
