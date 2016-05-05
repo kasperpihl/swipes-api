@@ -301,8 +301,8 @@ var Subtask = React.createClass({
               />
   				</div>
   				<div className="task-details-wrap">
+            {this.renderTextarea()}
             <div className="details">
-              {this.renderTextarea()}
               {this.renderDueOnDate()}
             </div>
   				</div>

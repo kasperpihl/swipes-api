@@ -306,7 +306,8 @@ var Attachment = React.createClass({
 
     var fileTypes = [
     	{
-    		type: 'image',
+        // Actually image, but need to figure out how to display the image in a nice way
+    		type: 'default',
     		fileType: [
     			'jpeg',
     	  	'jpg',
