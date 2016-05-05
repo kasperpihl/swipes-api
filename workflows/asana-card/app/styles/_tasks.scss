@@ -641,7 +641,7 @@ $input-height: 60px;
 
     &::-webkit-input-placeholder {
        color: $deepBlue-60;
-       font-family: 'Roboto';
+       font-family: 'Roboto', Arial, Helvetica, sans-serif;
        font-weight: 400;
     }
 
@@ -652,7 +652,7 @@ $input-height: 60px;
 
       &::-webkit-input-placeholder {
          color: white;
-         font-family: 'Roboto';
+         font-family: 'Roboto', Arial, Helvetica, sans-serif;
          font-weight: 300;
       }
 
@@ -1015,7 +1015,7 @@ $color_havelock_blue_approx: #4a90e2;
       padding: 9px 5px;
       position: relative;
       cursor: text;
-      font-family: 'Roboto';
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
 
       &:focus {
         background-color: rgba($blue-40, .4);

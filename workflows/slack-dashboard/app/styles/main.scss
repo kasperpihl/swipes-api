@@ -55,7 +55,7 @@ $break-mid: 650px;
 
 html, body, #content {
     height:100%;
-    font-family: 'Roboto';
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     line-height: 1.4;
 
     @media screen and (max-width: $break-mid) {
@@ -442,7 +442,7 @@ $inputButtonWidth: 50px;
         padding-right: 51px;
         padding-top: 20px;
         width: 100%;
-        font-family: 'Roboto';
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
         font-weight: 500;
         color: $deepBlue-100;
         font-size: 14px;
@@ -649,13 +649,13 @@ $inputButtonWidth: 50px;
     font-weight: 300;
     color: $deepBlue-80;
     letter-spacing: 1px;
-    font-family: 'Roboto';
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     line-height: 15px;
     transition: .1s ease-in-out;
 
     &::-webkit-input-placeholder {
        color: $deepBlue-60;
-       font-family: 'Roboto';
+       font-family: 'Roboto', Arial, Helvetica, sans-serif;
        font-weight: 400;
     }
   }
@@ -676,22 +676,22 @@ $inputButtonWidth: 50px;
 
       &::-webkit-input-placeholder {
          color: white;
-         font-family: 'Roboto';
+         font-family: 'Roboto', Arial, Helvetica, sans-serif;
          font-weight: 300;
       }
       &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
         color: white;
-        font-family: 'Roboto';
+        font-family: 'Roboto', Arial, Helvetica, sans-serif
         font-weight: 300;
       }
       &::-moz-placeholder { /* Mozilla Firefox 19+ */
         color: white;
-        font-family: 'Roboto';
+        font-family: 'Roboto', Arial, Helvetica, sans-serif
         font-weight: 300;
       }
       &:-ms-input-placeholder { /* Internet Explorer 10+ */
         color: white;
-        font-family: 'Roboto';
+        font-family: 'Roboto', Arial, Helvetica, sans-serif
         font-weight: 300;
       }
     }
