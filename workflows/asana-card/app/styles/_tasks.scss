@@ -1,6 +1,6 @@
 $min-height: 70px;
-$semi-compact-min-height: 60px;
-$compact-min-height: 50px;
+$semi-compact-min-height: 50px;
+$compact-min-height: 45px;
 $avatar-size: 28px;
 
 $input-height: 60px;
@@ -42,40 +42,6 @@ $input-height: 60px;
     }
   }
 
-}
-
-@mixin animation-delay($time) {
-	animation-delay: $time;
-}
-
-@keyframes pullUp {
-  0% {
-    opacity: 0;
-    transform: translateY(50%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.main-actions {
-  width: 30px;
-  height: 30px;
-
-  @extend %flex;
-
-  .material-icons {
-    font-size: 20px !important;
-    color: $deepBlue-20 !important;
-  }
-
-  &:hover {
-
-    .material-icons {
-      color: $deepBlue-60 !important;
-    }
-  }
 }
 
 .task-wrapper {
@@ -172,10 +138,11 @@ $input-height: 60px;
 
       .task-title {
         font-size: 14px;
-        color: $deepBlue-80;
+        color: $deepBlue-100;
         padding-left: 5px;
         padding-right: 10px;
         font-weight: 400;
+        letter-spacing: .5px;
 
         &.sub-task {
           width: calc(100% - 21px);
