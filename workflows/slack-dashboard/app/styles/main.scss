@@ -681,17 +681,17 @@ $inputButtonWidth: 50px;
       }
       &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
         color: white;
-        font-family: 'Roboto', Arial, Helvetica, sans-serif
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
         font-weight: 300;
       }
       &::-moz-placeholder { /* Mozilla Firefox 19+ */
         color: white;
-        font-family: 'Roboto', Arial, Helvetica, sans-serif
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
         font-weight: 300;
       }
       &:-ms-input-placeholder { /* Internet Explorer 10+ */
         color: white;
-        font-family: 'Roboto', Arial, Helvetica, sans-serif
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
         font-weight: 300;
       }
     }

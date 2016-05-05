@@ -680,6 +680,16 @@ $input-height: 60px;
 
     @extend %flex;
 
+    &.attachment {
+      width: 60px;
+
+      img {
+        width: 24px;
+        height: 24px;
+        border-radius: 0px;
+      }
+    }
+
     img {
       width: 35px;
       height: 35px;

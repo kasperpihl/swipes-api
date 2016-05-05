@@ -71,7 +71,7 @@ var Comments = React.createClass({
       elements.push(<Comment key={comment.id} comment={comment} task={task} />);
     })
 
-    if (this.state.comments.length > 0 || this.state.attachments > 0) {
+    if (this.state.comments.length > 0 || this.state.attachments.length > 0) {
       elements.reverse();
       return elements;
     } else {
@@ -397,7 +397,7 @@ var Attachment = React.createClass({
     return (
       <div id={attachment.id} className="task-comment-wrapper">
 
-        <div className="task-comment-avatar">
+        <div className="task-comment-avatar attachment">
           <img src={icon}/>
         </div>
 
