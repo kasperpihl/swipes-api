@@ -6,7 +6,8 @@ var TasksActions = Reflux.createActions([
 	'updateTask',
   'loadTasks',
   'dragStart',
-  'dragEnd'
+  'dragEnd',
+  'activeTab'
 ]);
 
 //Sync actions

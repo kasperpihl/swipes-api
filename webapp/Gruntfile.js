@@ -195,7 +195,7 @@ module.exports = function (grunt) {
       concat: {
         serve: {
           files: {
-            '.tmp/scripts/bundle/swipes-sdk.js': [
+            '<%= yeoman.dev %>/scripts/swipes-sdk.js': [
               '<%= yeoman.sdk %>/jquery.min.js',
               '<%= yeoman.sdk %>/socket.io.js',
               '<%= yeoman.sdk %>/underscore.min.js',

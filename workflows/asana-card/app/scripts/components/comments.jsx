@@ -63,7 +63,7 @@ var Comments = React.createClass({
   },
   renderComments: function () {
     var comments = this.state.comments;
-    //var attachments = this.state.attachments;
+    var attachments = this.state.attachments;
     var elements = [];
     var task = this.props.task;
 
@@ -71,7 +71,7 @@ var Comments = React.createClass({
       elements.push(<Comment key={comment.id} comment={comment} task={task} />);
     })
 
-    if (this.state.comments.length > 0 || this.state.attachments.length > 0) {
+    if (comments.length > 0 || attachments.length > 0) {
       elements.reverse();
       return elements;
     } else {

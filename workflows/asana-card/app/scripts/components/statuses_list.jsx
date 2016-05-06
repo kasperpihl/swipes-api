@@ -69,6 +69,8 @@ var StatusesList = React.createClass({
 
     this._placeholder = document.createElement("div");
     this._placeholder.className = "drag-placeholder";
+
+
 	},
   onDragOver: function (e) {
     e.preventDefault();
@@ -153,7 +155,13 @@ var StatusesList = React.createClass({
         className += " semi-compact";
       }
 
-      return <Tab className="asana-tab" style={tabsStyles.singleTab} label={item.name} key={index}>
+      // if (tab.props.selected === 'true') {
+      //   TasksActions.activeTab('active');
+      // } else {
+      //   TasksActions.activeTab('inactive');
+      // }
+
+      return <Tab className={"asana-tab " + that.state.activeTab} ref="asanaTab" style={tabsStyles.singleTab} label={item.name} key={index}>
 				<div onDragOver={that.onDragOver} className={className}>
 					{tasks}
 				</div>

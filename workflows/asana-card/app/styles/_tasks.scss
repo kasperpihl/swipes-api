@@ -1110,6 +1110,10 @@ $color_havelock_blue_approx: #4a90e2;
 
     @extend %flex;
   }
+
+  &.inactive {
+    color: red
+  }
 }
 
 .header-dot-wrapper {

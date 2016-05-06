@@ -159,15 +159,18 @@ Services.ConnectedRow = React.createClass({
 		console.log(this.props.data);
 		UserActions.serviceDisconnect(this.props.data.id);
 	},
+	renderName: function() {
+
+	},
 	render: function () {
 		console.log(this.props.data);
 		var showName = "";
 		if(this.props.showName){
-			showName = "(" + this.props.showName + ")";
+			showName = this.props.showName;
 		}
 		return(
 			<div className="row connected">
-				<h6>{this.props.data.title} {showName}</h6>
+				<h6>{this.props.data.title} <p>{showName}</p></h6>
 				<div className="services-button" onClick={this.clickedRemove}>Disconnect</div>
 			</div>
 		);
