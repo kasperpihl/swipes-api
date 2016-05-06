@@ -74,7 +74,7 @@ var StatusesList = React.createClass({
     e.preventDefault();
 
     this._over = e.target;
-    elementRect = this._over.getBoundingClientRect();
+    var elementRect = this._over.getBoundingClientRect();
     var mousePosPercent_Y = ((e.clientY-elementRect.top) /(elementRect.height))*100;
     var parent = e.target.parentNode;
 
