@@ -82,7 +82,7 @@ var ChatInput = React.createClass({
 	onPaste: function(e) {
 		var items = (e.clipboardData || e.originalEvent.clipboardData).items;
 		var message = this.state.inputValue;
-  	for (index in items) {
+  	for (var index in items) {
     	var item = items[index];
     	if (item.kind === 'file') {
 				this.setState({isUploading: true});
