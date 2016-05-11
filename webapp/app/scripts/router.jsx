@@ -19,9 +19,9 @@ exports.start = function() {
 			<Route path="signin" component={Signin} onEnter={redirect.toHome} />
 			<Route path="signup" component={Signup} onEnter={redirect.toHome} />
 			<Route path="/" component={App}>
-				<IndexRoute component={Workspace} onEnter={redirect.toLogin} />
-				<Route path="workspace" component={Workspace} onEnter={redirect.toLogin} />
-				<Route path="services" component={Services} onEnter={redirect.toLogin} />
+				<IndexRoute component={Workspace} onEnter={redirect.toSignUp} />
+				<Route path="workspace" component={Workspace} onEnter={redirect.toSignUp} />
+				<Route path="services" component={Services} onEnter={redirect.toSignUp} />
 			</Route>
 		</Router>
 	), document.getElementById('content'));

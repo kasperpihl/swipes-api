@@ -12,9 +12,7 @@ var TasksStore = Reflux.createStore({
       loaded: false,
       tasks: [],
       dragging: false,
-      activeTab: 'inactive',
-      commentsNumber: 0,
-      attachmentsNumber: 0
+      activeTab: 'inactive'
     }
   },
   onCreateTask: function (task) {
@@ -72,9 +70,6 @@ var TasksStore = Reflux.createStore({
   },
   activeTab: function(newValue) {
     this.set('activeTab', newValue)
-  },
-  onCommentsNum: function(comments) {
-    this.set('commentsNumber', comments);
   }
 });
 

@@ -2,9 +2,9 @@ var Reflux = require('reflux');
 var stateStore = require('../stores/StateStore');
 
 module.exports = {
-  toLogin: function (nextState, replace) {
+  toSignUp: function (nextState, replace) {
     if (!stateStore.get("swipesToken")) {
-      return replace('/signin');
+      return replace('/signup');
     }
 
     console.log('redirect to login and initing statestore');

@@ -90,7 +90,7 @@ var Comments = React.createClass({
 
     return (
       <div>
-        {comments.length === 0 ? (
+        {comments.length === null ? (
           <Loading style={{marginTop: '20%'}} />
 				) : (
           <div>
