@@ -69,8 +69,6 @@ var StatusesList = React.createClass({
 
     this._placeholder = document.createElement("div");
     this._placeholder.className = "drag-placeholder";
-
-
 	},
   onDragOver: function (e) {
     e.preventDefault();

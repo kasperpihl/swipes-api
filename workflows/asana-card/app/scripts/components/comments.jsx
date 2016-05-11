@@ -4,6 +4,8 @@ var MainStore = require('../stores/MainStore');
 var UserStore = require('../stores/UserStore');
 var CommentsStore = require('../stores/CommentsStore');
 var CommentsActions = require('../actions/CommentsActions');
+var TasksStore = require('../stores/TasksStore');
+var TasksActions = require('../actions/TasksActions');
 var Loading = require('./loading');
 var Avatar = require('./avatar');
 var SwipesDot = require('swipes-dot').default;
@@ -88,7 +90,7 @@ var Comments = React.createClass({
 
     return (
       <div>
-        {comments === null ? (
+        {comments.length === 0 ? (
           <Loading style={{marginTop: '20%'}} />
 				) : (
           <div>

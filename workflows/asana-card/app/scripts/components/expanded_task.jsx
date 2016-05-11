@@ -7,6 +7,7 @@ var Loading = require('./loading');
 var MainStore = require('../stores/MainStore');
 var MainActions = require('../actions/MainActions');
 var TasksStore = require('../stores/TasksStore');
+var CommentsStore = require('../stores/CommentsStore');
 var TaskStore = require('../stores/TaskStore');
 var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
@@ -31,8 +32,8 @@ var tabsStyles = {
     overflowY: 'auto'
   },
 	inkBarStyle: {
-		height: '40px',
-		marginTop: '-40px',
+		height: '30px',
+		marginTop: '-30px',
 		position: 'relative',
 		zIndex: '1',
 		backgroundColor: 'white'
@@ -40,7 +41,7 @@ var tabsStyles = {
 };
 
 var ExpandedTask = React.createClass({
-  mixins: [TasksStore.connect(), TaskStore.connect()],
+  mixins: [TasksStore.connect(), CommentsStore.connect(), TaskStore.connect()],
   componentDidMount: function() {
     var loaded = TasksStore.get('loaded');
     var taskId = this.props.taskId;
@@ -227,10 +228,10 @@ var ExpandedTask = React.createClass({
   onActiveTab: function (tab) {
     var label = tab.props.label;
 
-    if (label === 'Comments') {
-      MainActions.commentsView(true);
-    } else {
+    if (label === 'Subtasks') {
       MainActions.commentsView(false);
+    } else {
+      MainActions.commentsView(true);
     }
   },
   renderTitle: function(task){
@@ -371,6 +372,7 @@ var ExpandedTask = React.createClass({
     var labels = ['Subtasks', 'Comments'];
     var tabs = labels.map(function (label, index) {
     var children;
+    var commentsAmount = that.state.comments.length + that.state.attachments.length;
 
       if (label === 'Subtasks') {
         children = <Subtasks task={task} />;
@@ -385,6 +387,7 @@ var ExpandedTask = React.createClass({
     			</Tab>
       } else {
         children = <Comments task={task} />;
+        label = 'Comments (' + commentsAmount + ')';
           return <Tab
             style={tabsStyles.singleTab}
             className="asana-tab"

@@ -5,7 +5,7 @@ var CommentsStore = Reflux.createStore({
   listenables: [CommentsActions],
   getInitialState: function () {
     return {
-      comments: null,
+      comments: [],
       attachments: [],
     }
   },
