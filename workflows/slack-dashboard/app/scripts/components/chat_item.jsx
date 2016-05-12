@@ -142,7 +142,7 @@ var ChatMessage = React.createClass({
 			}
 		};
 
-		if (message.userObj && message.userObj.me) {
+		if (message.userObj && message.userObj.me && message.subtype != 'group_join') {
 			actionsRow.push({
 				label: 'Edit',
 				icon: 'edit',
@@ -189,6 +189,7 @@ var ChatMessage = React.createClass({
 				<div className="message">
 					<SwipesDot
 						className="dot"
+						radial={false}
 						reverse={true}
 						showOnHover={true}
 						hoverParentId={message.ts}
