@@ -37,7 +37,7 @@ var Workspace = React.createClass({
       if (this.state.video) {
         return (
           <div className={"video-box " + videoBox} onClick={this.openVideo}>
-            <iframe src="https://www.youtube.com/embed/vHACsg4QbMg?rel=0&amp;showinfo=0" frameBorder="0" allowFullScreen></iframe>
+            <iframe src="https://www.youtube.com/embed/vHACsg4QbMg?rel=0&amp&loop=1;showinfo=0" frameBorder="0" allowFullScreen></iframe>
           </div>
         )
       }

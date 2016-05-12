@@ -30,7 +30,7 @@ html, body {
 	animation-timing-function: linear;
 
 	@keyframes fontfix {
-		from { opacity: 1; }
+		from { opacity: 0; }
 		to   { opacity: 1; }
 	}
 }
@@ -50,7 +50,7 @@ html {
         overflow: hidden;
         font-smooth: always;
         transform: rotate(-0.0000000001deg);
-        text-rendering: optimizeLegibility !important;
+        text-rendering: auto !important;
         -webkit-font-smoothing: antialiased !important;
     }
 }
