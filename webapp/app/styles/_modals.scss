@@ -54,6 +54,7 @@ $break-mid: 650px;
 	li{
 		display: flex;
 		padding-left: 10px;
+		border-bottom: 1px solid #F4F4F5;
 
 		&.modal-list {
 
@@ -77,7 +78,6 @@ $break-mid: 650px;
 			font-size: 14px;
 			padding-left: 5%;
 			font-weight: 400;
-			border-bottom: 1px solid $studioGray-20;
 		}
 	}
 	background-color: white;

@@ -318,6 +318,8 @@ var ChatStore = Reflux.createStore({
 	onUploadFile: function(file, callback){
 		var token = swipes.info.workflow.slackToken;
 		var formData = new FormData();
+		console.log('==============================================');
+		console.log(file);
 		formData.append("token", token);
 		formData.append("channels", this.get('channelId'));
 		formData.append("filename", file.name);
