@@ -6,7 +6,8 @@ var WorkspaceActions = Reflux.createActions([
 	'gridButton',
 	'sendCardToFront',
 	'adjustForScreenSize',
-	'enterLeaveDropOverlay'  // Here you can list your actions
+	'enterLeaveDropOverlay',
+	'introVideo'  // Here you can list your actions
 ]);
 
 module.exports = WorkspaceActions;

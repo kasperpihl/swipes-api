@@ -111,15 +111,31 @@ Services.SelectRow = React.createClass({
 		items = items.concat(<MenuItem value={this.props.data.services.length} key={"-1"} primaryText="Add New Account"/>);
 
 		return (
-			<SelectField floatingLabelStyle={{color: 'black'}} floatingLabelText="Select Account..." value={this.state.value} onChange={this.handleChange}>
+			<SelectField floatingLabelStyle={{color: '#666D82'}} floatingLabelText="Select Account..." value={this.state.value} onChange={this.handleChange}>
         		{items}
       		</SelectField>
       	);
 	},
 	render: function(){
+		var text;
+		var src;
+
+		if (this.props.data.title === 'slack') {
+			src = 'styles/img/emptystate-slack.svg'
+		} else {
+			src = 'styles/img/emptystate-asana-subtasks.svg'
+		}
+
+		if (!this.props.data.services || !this.props.data.services.length) {
+			text = 'Connect to ' + this.props.data.title;
+		} else {
+			text = 'Pick a team'
+		}
 		return(
-			<div className="row connect">
-				<h6>{this.props.data.title}</h6>
+			<div className="row connect in-card">
+				<img src={src} />
+				<h6>{text}</h6>
+				<p>We never store any of your information</p>
 				{this.renderSelector()}
 			</div>
 		);

@@ -19,16 +19,43 @@ var Card = require('material-ui/lib/card/card');
 var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
     _dragDotHandler: null,
+    getInitialState: function() {
+      return {
+        video: false
+      }
+    },
+    openVideo: function() {
+      this.setState({'video': !this.state.video});
+    },
+    renderVideo: function() {
+      var videoBox = '';
+
+      if (this.state.video) {
+        videoBox = 'open'
+      }
+
+      if (this.state.video) {
+        return (
+          <div className={"video-box " + videoBox} onClick={this.openVideo}>
+            <iframe src="https://www.youtube.com/embed/vHACsg4QbMg?rel=0&amp;showinfo=0" frameBorder="0" allowFullScreen></iframe>
+          </div>
+        )
+      }
+    },
     renderCards(){
       if (this.state.workspace.length < 1) {
         return (
           <div className="empty-workspace-state">
-            <img className="empty-workspace-arrow" src="styles/img/emptystate-workspace-arrow.svg" />
-            <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg"/>
             <p className="workspace-empty-text">
-              <span className="strong">No active cards</span> <br />
-              Add your first card!
+              <span className="strong">Welcome to your workspace</span> <br />
             </p>
+            <img className="empty-workspace-arrow" src="styles/img/emptystate-workspace-arrow.svg" />
+            <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg" onClick={this.openVideo} />
+            <div className="play-button" onClick={this.openVideo}></div>
+              <p className="workspace-empty-text">
+                Play the video to get started
+              </p>
+            {this.renderVideo()}
           </div>
         )
       }

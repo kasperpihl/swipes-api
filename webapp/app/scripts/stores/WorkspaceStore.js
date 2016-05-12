@@ -101,7 +101,7 @@ var WorkspaceStore = Reflux.createStore({
 		var hasAsana = false;
 		var firstIsSlack = false;
 		if(sortedCards.length === 2){
-			
+
 			if(sortedCards[0].id && sortedCards[1].id){
 				var firstCard = WorkflowStore.get(sortedCards[0].id);
 				var secondCard = WorkflowStore.get(sortedCards[1].id);
@@ -115,7 +115,7 @@ var WorkspaceStore = Reflux.createStore({
 					hasAsana = true;
 				}
 			}
-			
+
 
 		}
 		_.each(sortedCards, function(el){
