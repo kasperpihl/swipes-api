@@ -120,16 +120,14 @@ Services.SelectRow = React.createClass({
 		var text;
 		var src;
 
-		if (this.props.data.title === 'slack') {
-			src = 'styles/img/emptystate-slack.svg'
-		} else {
-			src = 'styles/img/emptystate-asana-subtasks.svg'
-		}
+
 
 		if (!this.props.data.services || !this.props.data.services.length) {
 			text = 'Connect to ' + this.props.data.title;
+			src = 'styles/img/swipes-workspace-illustrations-emptystate-connect.svg'
 		} else {
 			text = 'Pick a team'
+			src = 'styles/img/swipes-workspace-illustrations-emptystate-pickteam.svg'
 		}
 		return(
 			<div className="row connect in-card">
