@@ -129,41 +129,51 @@ var ChatMessage = React.createClass({
 	dotItems: function () {
     var that = this;
     var items = [];
+		var actionsRow = [];
 
 		var message = this.props.data;
 
 		var shareItem = {
 			label: 'Share',
 			icon: 'share',
+			bgColor: 'rgb(255,197,37)',
 			callback: function () {
 				that.share(message.text);
 			}
 		};
 
-		if (!message.userObj) {
-			items.push(shareItem);
-
-			return items;
-		}
-
-		if (message.userObj.me) {
-			items.push({
+		if (message.userObj && message.userObj.me) {
+			actionsRow.push({
 				label: 'Edit',
 				icon: 'edit',
+				bgColor: 'rgb(56,182,131)',
 				callback: function () {
 					chatActions.editMessage(message.text, message.ts);
 				}
 			});
-			items.push({
+
+			actionsRow.push(shareItem);
+
+			actionsRow.push({
 				label: 'Delete',
 				icon: 'delete',
+				bgColor: 'rgb(252,58,28)',
 				callback: function () {
 					chatActions.deleteMessage(message.ts);
 				}
 			})
-		}
 
-    items = items.concat([ shareItem ]);
+			var actionsRow2 = [];
+			actionsRow2.push(shareItem);
+			actionsRow2.push(shareItem);
+			actionsRow2.push(shareItem);
+
+	    items.push(actionsRow);
+			items.push(actionsRow2);
+		} else {
+			actionsRow.push(shareItem);
+			items.push(actionsRow);
+		}
 
     return items;
   },
@@ -179,29 +189,11 @@ var ChatMessage = React.createClass({
 				<div className="message">
 					<SwipesDot
 						className="dot"
-						reverse="true"
+						reverse={true}
 						showOnHover={true}
 						hoverParentId={message.ts}
 						elements={dotItems}
 						onDragData={this.shareData.bind(this, message.text)}
-						menuColors={{
-							borderColor: 'transparent',
-							hoverBorderColor: '#1DB1FC',
-							backgroundColor: '#1DB1FC',
-							hoverBackgroundColor: 'white',
-							iconColor: 'white',
-							hoverIconColor: '#1DB1FC'
-						}}
-						labelStyles={{
-							transition: '.1s',
-							boxShadow: 'none',
-							backgroundColor: 'rgba(0, 12, 47, 1)',
-							padding: '5px 10px',
-							top: '-12px',
-							fontSize: '16px',
-							letterSpacing: '1px',
-							zIndex: '99'
-						}}
 					/>
 					{this.renderMessage(this.props.data.text)}
 					{this.renderFile()}

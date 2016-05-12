@@ -282,10 +282,9 @@ $inputButtonWidth: 50px;
           height: 8px;
           position: absolute !important;
           right: 0px;
-          top: 50%;
-          transform: translateY(-50%);
+          top: calc(50% - 4px);
           opacity: 1;
-          z-index: 99999;
+          z-index: 9998;
         }
 
         .share-icon {

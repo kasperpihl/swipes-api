@@ -410,6 +410,7 @@ var ChatStore = Reflux.createStore({
 		swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id }).then(function(res){
 			self.setMessages(_.sortBy(res.data.messages, 'ts'));
 		}).catch(function(error){
+			console.log(error);
 		});
 	},
 	/* T_INFO // We should replace these once we can upload directly through our service
