@@ -442,7 +442,7 @@ $break-mid: 650px;
                         top: 0;
                         line-height: 42px;
                         background-color: $blue-40;
-                        cursor: pointer;
+                        cursor: default;
                         color: rgba($deepBlue-100, .5);
                         display: none;
                         text-align: center;
@@ -531,7 +531,7 @@ $break-mid: 650px;
 			padding: 0 50px;
 			font-weight: 500;
 			color: $deepBlue-100;
-			cursor: pointer;
+			cursor: default;
 		}
 	}
 }
@@ -673,7 +673,7 @@ $color_havelock_blue_approx: #4a90e2;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
-	cursor: pointer;
+	cursor: default;
 }
 .DayPicker-NavButton--prev {
 	left: 1rem;
@@ -712,7 +712,7 @@ $color_havelock_blue_approx: #4a90e2;
 	padding: .5rem;
 	border: 1px solid $color_cararra_approx;
 	text-align: center;
-	cursor: pointer;
+	cursor: default;
 	vertical-align: middle;
 }
 .DayPicker-Day--today {

@@ -41,7 +41,7 @@
 
     .grid-button{
     	position:absolute;
-    	//cursor: pointer;
+    	//cursor: default;
     	top: 0;
     	right: $top-bar-height;
     	width:$top-bar-height;
@@ -61,7 +61,7 @@
     }
     .add-button{
     	position:absolute;
-    	//cursor: pointer;
+    	//cursor: default;
     	top: 0;
     	right: 0;
     	width:$top-bar-height;
@@ -185,7 +185,7 @@ $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
 		right: 0;
 		padding-top: 15px;
 		padding-right: 15px;
-		cursor: pointer;
+		cursor: default;
 	}
 
 	& * {
@@ -215,7 +215,7 @@ $swipes-shadow-one: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
 		}
 
 		&.init {
-			cursor: pointer;
+			cursor: default;
 		}
 	}
 }

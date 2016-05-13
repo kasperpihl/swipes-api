@@ -199,12 +199,12 @@ $input-height: 60px;
           .remove-schedule {
             display: none;
             margin-left: 5px;
-            cursor: pointer;
+            cursor: default;
 
             i.material-icons {
               font-size: 15px;
               color: $deepBlue-40;
-              cursor: pointer;
+              cursor: default;
             }
           }
         }
@@ -326,13 +326,13 @@ $input-height: 60px;
       .task-action-icon {
         width: 100%;
         height: 100%;
-        cursor: pointer;
+        cursor: default;
 
         @extend %flex;
 
         .material-icons {
           color: $deepBlue-60 !important;
-          cursor: pointer !important;
+          cursor: default !important;
         }
 
         &:hover {
@@ -390,6 +390,7 @@ $input-height: 60px;
     font-size: 20px !important;
     color: $deepBlue-80 !important;
     margin-left: -10px;
+    pointer-events: none;
   }
 }
 
@@ -571,7 +572,7 @@ $input-height: 60px;
         margin: 0 5px;
         border: 1px solid $deepBlue-60;
         border-radius: 50%;
-        cursor: pointer;
+        cursor: default;
 
         @extend %flex;
 
@@ -579,7 +580,7 @@ $input-height: 60px;
           margin-left: -2px;
           color: $deepBlue-60 !important;
           font-size: 16px !important;
-          cursor: pointer !important;
+          cursor: default !important;
         }
 
         &:hover {
@@ -683,7 +684,7 @@ $input-height: 60px;
     color: $deepBlue-80;
 
     a {
-      cursor: pointer;
+      cursor: default;
     }
 
     .comment {
@@ -793,7 +794,7 @@ $color_havelock_blue_approx: #4a90e2;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
-	cursor: pointer;
+	cursor: default;
 }
 .DayPicker-NavButton--prev {
 	left: 1rem;
@@ -832,7 +833,7 @@ $color_havelock_blue_approx: #4a90e2;
 	padding: .5rem;
 	border: 1px solid $color_cararra_approx;
 	text-align: center;
-	cursor: pointer;
+	cursor: default;
 	vertical-align: middle;
 }
 .DayPicker-Day--today {

@@ -47,7 +47,7 @@ html, body {
 		font-weight: 600;
 		text-transform: uppercase;
 		overflow: hidden;
-		cursor: pointer;
+		cursor: default;
 		position: relative;
 		transition: .2s ease-in-out;
 		
@@ -201,7 +201,7 @@ html, body {
 					border-radius: 5px;
 					line-height: 31px;
 					text-transform: uppercase;
-					cursor: pointer;
+					cursor: default;
 					position: relative;
 					overflow: hidden;
 					font-size: 14px;

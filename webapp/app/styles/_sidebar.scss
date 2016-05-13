@@ -88,7 +88,7 @@
 			$dot-size: 6px;
 			padding-left:20px;
 			height: $block-height;
-			cursor: pointer;
+			cursor: default;
 			
 			
 			// Status icon for team members
@@ -147,7 +147,7 @@
 				white-space: nowrap;
   				overflow: hidden;
 				color: rgba($unselected-text-color, .4);
-				cursor: pointer;
+				cursor: default;
 			}
 
 			
@@ -317,7 +317,7 @@
             li {
                 color: $deepBlue-80;
                 font-weight: 400;
-                cursor: pointer;
+                cursor: default;
                 
                 &:hover {
                     color: $deepBlue-100;
@@ -345,7 +345,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
+        cursor: default;
         position: relative;
         
         &:hover {

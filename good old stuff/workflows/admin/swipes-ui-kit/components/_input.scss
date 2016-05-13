@@ -95,7 +95,7 @@ input {
 	input[type=range]::-webkit-slider-runnable-track {
 		width: 100%;
 		height: 4px;
-		cursor: pointer;
+		cursor: default;
 		animate: 0.2s;
 		background: $deepBlue-80;
 		border-radius: 20px;
@@ -108,7 +108,7 @@ input {
 		width: 14px;
 		border-radius: 50px;
 		background: $deepBlue-80;
-		cursor: pointer;
+		cursor: default;
 		-webkit-appearance: none;
 		margin-top: calc(-14px / 2 + 2px);
 		transition: .2s cubic-bezier(.39,.01,.5,5);

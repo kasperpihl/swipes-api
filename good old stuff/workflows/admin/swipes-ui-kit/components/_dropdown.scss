@@ -15,7 +15,7 @@
 		right: 0;
 		padding-top: 15px;
 		padding-right: 15px;
-		cursor: pointer;
+		cursor: default;
 	}
 	
 	& * {
@@ -42,7 +42,7 @@
 		}
 		
 		&.init {
-			cursor: pointer;
+			cursor: default;
 		}
 	}
 }

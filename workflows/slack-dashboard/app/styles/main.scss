@@ -460,7 +460,7 @@ $inputButtonWidth: 50px;
         width: 51px;
         text-align: center;
         color: $studioGray-120;
-        cursor: pointer;
+        cursor: default;
         z-index: 3;
         left: 0;
         top: 0;
@@ -478,7 +478,7 @@ $inputButtonWidth: 50px;
         width: 51px;
         text-align: center;
         color: $studioGray-120;
-        cursor: pointer;
+        cursor: default;
         z-index: 3;
         transition: .1s ease-in-out;
 
@@ -513,7 +513,7 @@ $inputButtonWidth: 50px;
             width: 51px;
             text-align: center;
             color: $studioGray-120;
-            cursor: pointer;
+            cursor: default;
             z-index: 3;
             right: 0;
             transform: translateY(100%);
@@ -538,7 +538,7 @@ $inputButtonWidth: 50px;
         width: 65px;
         height: 100%;
         position: absolute;
-        cursor: pointer;
+        cursor: default;
         color: $studioGray-120;
 
         &:hover {
@@ -613,7 +613,7 @@ $inputButtonWidth: 50px;
     display: none;
   }
   .send-button, .attach-icon {
-    cursor: pointer;
+    cursor: default;
     width: $inputButtonWidth;
     height: 100%;
     position: absolute;

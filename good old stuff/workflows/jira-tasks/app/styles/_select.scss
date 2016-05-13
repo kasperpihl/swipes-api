@@ -85,7 +85,7 @@
 }
 .has-value:not(.Select--multi) > .Select-control > .Select-value a.Select-value-label,
 .has-value.is-pseudo-focused:not(.Select--multi) > .Select-control > .Select-value a.Select-value-label {
-  cursor: pointer;
+  cursor: default;
   text-decoration: none;
 }
 .has-value:not(.Select--multi) > .Select-control > .Select-value a.Select-value-label:hover,
@@ -126,7 +126,7 @@
   outline: none;
 }
 .Select-loading-zone {
-  cursor: pointer;
+  cursor: default;
   display: table-cell;
   position: relative;
   text-align: center;
@@ -152,7 +152,7 @@
   -o-animation: Select-animation-fadeIn 200ms;
   animation: Select-animation-fadeIn 200ms;
   color: #999;
-  cursor: pointer;
+  cursor: default;
   display: table-cell;
   position: relative;
   text-align: center;
@@ -171,7 +171,7 @@
   width: 17px;
 }
 .Select-arrow-zone {
-  cursor: pointer;
+  cursor: default;
   display: table-cell;
   position: relative;
   text-align: center;
@@ -231,7 +231,7 @@
   box-sizing: border-box;
   background-color: #fff;
   color: #666666;
-  cursor: pointer;
+  cursor: default;
   display: block;
   padding: 8px 10px;
 }
@@ -287,14 +287,14 @@
 }
 .Select--multi a.Select-value-label {
   color: #007eff;
-  cursor: pointer;
+  cursor: default;
   text-decoration: none;
 }
 .Select--multi a.Select-value-label:hover {
   text-decoration: underline;
 }
 .Select--multi .Select-value-icon {
-  cursor: pointer;
+  cursor: default;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
   border-right: 1px solid rgba(0, 126, 255, 0.24);
@@ -489,7 +489,7 @@ h6,
 }
 .switcher .link {
   color: #007eff;
-  cursor: pointer;
+  cursor: default;
   font-weight: bold;
   margin-left: 10px;
 }

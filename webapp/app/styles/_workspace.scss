@@ -109,7 +109,7 @@ body {
   font-size: 12px;
 }
 .react-grid-item .add {
-  cursor: pointer;
+  cursor: default;
 }
 
 .dot-drag-handler {
@@ -151,7 +151,7 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-40%, -50%);
-    cursor: pointer;
+    cursor: default;
 
     animation: attentionWhore-wait1 2s linear infinite;
   	transform-origin: 50% 50%;
@@ -192,7 +192,7 @@ body {
 
   img.empty-workspace-illustration {
     width: 250px;
-    cursor: pointer;
+    cursor: default;
   }
 
   img.empty-workspace-arrow {

@@ -6,7 +6,7 @@
 	align-items: center;
 	justify-content: center;
 	position: relative;
-	cursor: pointer;
+	cursor: default;
 	user-select: none;
 	transition: .1s ease-in-out;
 	
@@ -28,7 +28,7 @@
 	
 	i {
 		color: $deepBlue-100;
-		cursor: pointer;
+		cursor: default;
 	}
 	
 	ul {

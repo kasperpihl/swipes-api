@@ -106,7 +106,7 @@ html, body {
 	left: 35%;
 	z-index: 9999;
 	transform: rotate(45deg);
-	cursor: pointer;
+	cursor: default;
 	
 	i {
 		left: 50%;
@@ -115,7 +115,7 @@ html, body {
 		transform-origin: 50% 50%;
     	transform: translate(-50%, -50%);
 		color: white;
-		cursor: pointer;
+		cursor: default;
 	}
 }
 
@@ -141,7 +141,7 @@ html, body {
 		i {
 			color: $lightGray;
 			padding: 10px;
-			cursor: pointer;
+			cursor: default;
 			
 			&:first-child {
 				margin-right: 100px;
@@ -171,7 +171,7 @@ html, body {
 			border-bottom: 1px solid rgba($lightGray, .3);
 			padding: 8px 0;
 			position: relative;
-			cursor: pointer;
+			cursor: default;
 			display: flex;
 			align-items: center;
 			
@@ -309,7 +309,7 @@ html, body {
 			i {
 				line-height: 50px;
 				color: $lightGray;
-				cursor: pointer;
+				cursor: default;
 				
 				&:hover {
 					color: $darkGray;
@@ -398,7 +398,7 @@ html, body {
 				
 				i {
 					padding: 0 10px;
-					cursor: pointer;
+					cursor: default;
 					font-size: 16px;
 					color: rgba($darkGray, .6);
 				}
@@ -462,7 +462,7 @@ html, body {
 				right: 0;
 				top: 0;
 				text-align: center;
-				cursor: pointer;
+				cursor: default;
 			}
 			
 			.getImg {
@@ -473,7 +473,7 @@ html, body {
 				left: 0;
 				top: 0;
 				text-align: center;
-				cursor: pointer;
+				cursor: default;
 				
 				i {
 					line-height: 50px;
