@@ -162,7 +162,7 @@ $app-bar-height: 44px;
   top: 0;
   z-index: 99;
   border-bottom: 1px solid $studioGray-20;
-  cursor: move;
+  cursor: grab;
   display: flex;
 
   &:hover {
@@ -228,7 +228,7 @@ $app-bar-height: 44px;
     line-height: $app-bar-height;
     text-transform: uppercase;
     text-align: center;
-    cursor: move;
+    cursor: grab;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
