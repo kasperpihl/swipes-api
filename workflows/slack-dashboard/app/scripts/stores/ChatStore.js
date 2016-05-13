@@ -76,17 +76,6 @@ var ChatStore = Reflux.createStore({
 				console.log('slack socket', 'error');
 			}
 		}
-
-		this.setPresence();
-	},
-	setPresence: function() {
-		var me = UserStore.me();
-
-		if (!this.webSocket) {
-			UserStore.update(me.id, {presence: "auto"});
-		} else {
-			UserStore.update(me.id, {presence: "active"});
-		}
 	},
 	closeWebSocket:function(){
 		// If the websocket exist and is in state OPEN or CONNECTING
