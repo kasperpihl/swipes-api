@@ -47,7 +47,7 @@ var Home = React.createClass({
 		var commentsView = this.state.commentsView;
 
     return (
-			<div className="height-100" style={{maxHeight: '100%', overflowY: 'auto'}}>
+			<div className="height-100" style={{maxHeight: '100%', overflowY: 'auto', overflowX: 'hidden'}}>
 				{expandedTaskId ? (
 					<div className="height-100">
 						{this.renderExpanedView(expandedTaskId)}

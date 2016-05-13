@@ -75,7 +75,7 @@ var StatusesList = React.createClass({
 
     this._over = e.target;
     var elementRect = this._over.getBoundingClientRect();
-    var mousePosPercent_Y = ((e.clientY-elementRect.top) /(elementRect.height))*100;
+    var mousePosPercent_Y = ((e.clientY - elementRect.top) / (elementRect.height)) * 100;
     var parent = e.target.parentNode;
 
     if(e.target.className === "drag-placeholder") return;
