@@ -143,27 +143,30 @@ var Comment = React.createClass({
     var that = this;
     var settings = MainStore.get('settings');
     var items = [];
+    var firstRow = [];
     var comment = this.props.comment;
     var task = this.props.task;
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
-
-    items = items.concat([
-      {
-        label: 'Share the comment',
-        icon: 'share',
-        callback: function () {
-          that.shareTaskUrl(comment.text);
-        }
-      },
-      {
-        label: 'Jump to asana',
-        icon: 'link',
-        callback: function () {
-          window.open(taskUrl, '_blank');
-        }
+    firstRow.push({
+      label: 'Share',
+      icon: 'share',
+      bgColor: 'rgb(255,197,37)',
+      callback: function () {
+        that.shareTaskUrl(comment.text);
       }
-    ]);
+    });
+
+    firstRow.push({
+      label: 'Jump to asana',
+      icon: 'link',
+      bgColor: 'rgb(255,197,37)',
+      callback: function () {
+        window.open(taskUrl, '_blank');
+      }
+    });
+
+    items.push(firstRow);
 
     return items;
   },
@@ -250,20 +253,21 @@ var Attachment = React.createClass({
     var that = this;
     var settings = MainStore.get('settings');
     var items = [];
+    var firstRow = [];
     var comment = this.props.comment;
     var task = this.props.task;
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
-
-    items = items.concat([
-      {
-        label: 'Share the comment',
-        icon: 'share',
-        callback: function () {
-          that.shareTaskUrl(taskUrl);
-        }
+    firstRow.push({
+      label: 'Share',
+      icon: 'share',
+      bgColor: 'rgb(255,197,37)',
+      callback: function () {
+        that.shareTaskUrl(taskUrl);
       }
-    ]);
+    });
+
+    items.push(firstRow);
 
     return items;
   },
@@ -282,24 +286,6 @@ var Attachment = React.createClass({
         onDragData={this.shareData.bind(this, taskUrl)}
         hoverParentId={attachment.id}
         elements={dotItems}
-        menuColors={{
-          borderColor: 'transparent',
-          hoverBorderColor: '#1DB1FC',
-          backgroundColor: '#1DB1FC',
-          hoverBackgroundColor: 'white',
-          iconColor: 'white',
-          hoverIconColor: '#1DB1FC'
-        }}
-        labelStyles={{
-          transition: '.1s',
-          boxShadow: 'none',
-          backgroundColor: 'rgba(0, 12, 47, 1)',
-          padding: '5px 10px',
-          top: '-12px',
-          fontSize: '16px',
-          letterSpacing: '1px',
-          zIndex: '99'
-        }}
       />
     )
   },

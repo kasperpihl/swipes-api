@@ -120,58 +120,70 @@ var Subtask = React.createClass({
   dotItems: function () {
     var that = this;
     var items = [];
+    var firstRow = [];
+    var secondRow = [];
     var task = this.props.subtask;
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
 
     if (task.completed) {
-      items.push({
+      firstRow.push({
         label: 'Undo',
         icon: 'undo',
+        bgColor: 'rgb(56,182,131)',
         callback: function () {
           that.undoCompleteTask(task);
         }
-      })
+      });
     } else {
-      items.push({
+      firstRow.push({
         label: 'Complete',
         icon: 'check',
+        bgColor: 'rgb(56,182,131)',
         callback: function () {
           that.completeTask(task);
         }
-      })
+      });
     }
 
-    items = items.concat([
-      {
-        label: 'Remove',
-        icon: 'delete',
-        callback: function () {
-          that.removeTask(task);
-        }
-      },
-      {
-        label: 'Schedule the task',
-        icon: 'schedule',
-        callback: function() {
-          that.scheduleTask(task, task.id);
-        }
-      },
-      {
-        label: 'Share the subtask',
-        icon: 'share',
-        callback: function () {
-          that.shareTaskUrl(taskUrl);
-        }
-      },
-      {
-        label: 'Jump to asana',
-        icon: 'link',
-        callback: function () {
-          window.open(taskUrl, '_blank');
-        }
+    firstRow.push({
+      label: 'Schedule task',
+      icon: 'schedule',
+      bgColor: 'rgb(26,168,252)',
+      callback: function () {
+        that.scheduleTask(task, task.id);
       }
-    ]);
+    })
+
+    firstRow.push({
+      label: 'Remove',
+      icon: 'delete',
+      bgColor: 'rgb(252,58,28)',
+      callback: function () {
+        that.removeTask(task);
+      }
+    });
+
+    secondRow.push({
+      label: 'Share section',
+      icon: 'share',
+      bgColor: 'rgb(255,197,37)',
+      callback: function () {
+        that.shareTaskUrl(taskUrl);
+      }
+    });
+
+    secondRow.push({
+      label: 'Jump to asana',
+      icon: 'link',
+      bgColor: 'rgb(255,197,37)',
+      callback: function () {
+        window.open(taskUrl, '_blank');
+      }
+    });
+
+    items.push(firstRow);
+    items.push(secondRow);
 
     return items;
   },
@@ -280,24 +292,6 @@ var Subtask = React.createClass({
               hoverParentId={subtaskId}
               elements={dotItems}
               onDragData={this.shareData.bind(this, taskUrl)}
-              menuColors={{
-                borderColor: 'transparent',
-                hoverBorderColor: '#1DB1FC',
-                backgroundColor: '#1DB1FC',
-                hoverBackgroundColor: 'white',
-                iconColor: 'white',
-                hoverIconColor: '#1DB1FC'
-              }}
-              labelStyles={{
-                transition: '.1s',
-                boxShadow: 'none',
-                backgroundColor: 'rgba(0, 12, 47, 1)',
-                padding: '5px 10px',
-                top: '-12px',
-                fontSize: '16px',
-                letterSpacing: '1px',
-                zIndex: '99'
-              }}
               />
   				</div>
   				<div className="task-details-wrap">

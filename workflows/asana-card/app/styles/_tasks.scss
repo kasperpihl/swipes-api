@@ -716,7 +716,7 @@ $input-height: 60px;
   }
 
   .task-comment-dot {
-    width: 40px;
+    width: 65px;
     height: 100%;
 
     @extend %flex;
@@ -1120,7 +1120,7 @@ $color_havelock_blue_approx: #4a90e2;
 
 .header-dot-wrapper {
   position: absolute;
-  right: 21px;
+  right: 28px;
   top: 60px;
   //background-color: red;
 
