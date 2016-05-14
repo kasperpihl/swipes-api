@@ -71,33 +71,34 @@ var CardLoader = React.createClass({
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
 			else if (message.command === "actions.openURL"){
-				cardActions.broadcast('request.preOpenUrl', {
-					url: data.url
-				}, function(list) {
-					if (list && list.length > 0) {
-						list.push({id: 'beproductive', name: 'New tab', new_tab: true});
-
-						var modalData = {
-							title: "Open with",
-							emptyText: "Oops... something went wrong!",
-							rows: list
-						};
-
-						modalActions.loadModal('list', modalData, function (row) {
-							if(row){
-								if (!row.new_tab) {
-									var newData = objectAssign({toCardId: row.id}, data);
-
-									eventActions.fire("request.openUrl", newData);
-								} else {
-									window.open(data.url, "_blank");
-								}
-							}
-						});
-					} else {
-						window.open(data.url, "_blank");
-					}
-				})
+				window.open(data.url, "_blank");
+				// cardActions.broadcast('request.preOpenUrl', {
+				// 	url: data.url
+				// }, function(list) {
+				// 	if (list && list.length > 0) {
+				// 		list.push({id: 'beproductive', name: 'New tab', new_tab: true});
+				//
+				// 		var modalData = {
+				// 			title: "Open with",
+				// 			emptyText: "Oops... something went wrong!",
+				// 			rows: list
+				// 		};
+				//
+				// 		modalActions.loadModal('list', modalData, function (row) {
+				// 			if(row){
+				// 				if (!row.new_tab) {
+				// 					var newData = objectAssign({toCardId: row.id}, data);
+				//
+				// 					eventActions.fire("request.openUrl", newData);
+				// 				} else {
+				// 					window.open(data.url, "_blank");
+				// 				}
+				// 			}
+				// 		});
+				// 	} else {
+				// 		window.open(data.url, "_blank");
+				// 	}
+				// })
 			}
 			else if (message.command === "actions.startDrag"){
 				var newData = {
