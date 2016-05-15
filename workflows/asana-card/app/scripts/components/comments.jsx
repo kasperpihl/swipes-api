@@ -181,24 +181,6 @@ var Comment = React.createClass({
         onDragData={this.shareData.bind(this, comment.text)}
         hoverParentId={comment.id}
         elements={dotItems}
-        menuColors={{
-          borderColor: 'transparent',
-          hoverBorderColor: '#1DB1FC',
-          backgroundColor: '#1DB1FC',
-          hoverBackgroundColor: 'white',
-          iconColor: 'white',
-          hoverIconColor: '#1DB1FC'
-        }}
-        labelStyles={{
-          transition: '.1s',
-          boxShadow: 'none',
-          backgroundColor: 'rgba(0, 12, 47, 1)',
-          padding: '5px 10px',
-          top: '-12px',
-          fontSize: '16px',
-          letterSpacing: '1px',
-          zIndex: '99'
-        }}
       />
     )
   },
