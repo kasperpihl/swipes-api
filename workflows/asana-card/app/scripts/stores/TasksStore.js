@@ -69,7 +69,7 @@ var TasksStore = Reflux.createStore({
     return _cacheTasks;
   },
   activeTab: function(newValue) {
-    this.set('activeTab', newValue)
+    this.set('activeTab', newValue);
   }
 });
 
