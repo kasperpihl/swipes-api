@@ -275,7 +275,11 @@ var TaskItem = React.createClass({
 
   			</div>
       )
-    } else {
+    } else if (task.name.length === 0) {
+      return (
+        <div></div>
+      )
+    } else  {
       return (
        <div
           draggable={true}
