@@ -8,6 +8,14 @@ var CreateTaskInputActions = require('../actions/CreateTaskInputActions');
 
 var CreateTaskInput = React.createClass({
 	mixins: [CreateTaskInputStore.connect()],
+	componentDidUpdate: function(prevProps, prevState) {
+		var input = this.refs.input;
+
+		if (!this.state.disabledInput) {
+			input.focus()
+		}
+
+	},
 	inputOnChange: function(e) {
 		CreateTaskInputActions.changeInputValue(e.target.value);
   },
@@ -57,6 +65,12 @@ var CreateTaskInput = React.createClass({
 
 		return placeholder;
 	},
+	enableInput: function() {
+		CreateTaskInputActions.changeState({
+			creatTaskLoader: 'inactive',
+			disabledInput: false
+		});
+	},
 	render: function () {
     var inputLength = this.state.inputValue.length;
 		var inputWrapperClass = classNames({
@@ -95,7 +109,9 @@ var CreateTaskInput = React.createClass({
 					onKeyDown={this.onKeyDown}
 					disabled={this.state.disabledInput}
 					placeholder={placeholder}
-					onChange={this.inputOnChange} />
+					onChange={this.inputOnChange}
+					onClick={this.enableInput}
+					/>
 
 				<div className={addIconClass} onClick={this.createTask}>
 					<FontIcon color="#fff" className="material-icons">{addIcon}</FontIcon>

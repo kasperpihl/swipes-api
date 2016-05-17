@@ -473,10 +473,13 @@ $input-height: 60px;
     position: absolute;
     right: 0;
     bottom: 0;
+    opacity: 0;
     @extend %flex;
 
 
     &.active {
+      opacity: 1;
+      
       .material-icons {
         transform: rotate(0deg);
         color: $deepBlue-60 !important;

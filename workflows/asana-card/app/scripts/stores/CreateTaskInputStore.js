@@ -7,7 +7,7 @@ var CreateTaskInputStore = Reflux.createStore({
 		return {
 			inputValue: '',
       creatTaskLoader: 'inactive',
-      disabledInput: false
+      disabledInput: true
 		}
 	},
   onChangeInputValue: function (newValue) {
