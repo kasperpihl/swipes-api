@@ -251,147 +251,11 @@ $input-height: 60px;
         font-weight: 400;
       }
     }
-
-    .task-assign-avatar {
-      width: $avatar-size;
-      //height: 100%;
-
-      @extend %flex;
-
-      img {
-        border-radius: 50%;
-        width: $avatar-size;
-        height: $avatar-size;
-      }
-
-      .remove-assignee {
-        width: $avatar-size;
-        height: $avatar-size;
-        transform: translateX(-8px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-
-        span.material-icons {
-          color: white !important;
-          font-size: 16px !important;
-          opacity: 0;
-        }
-
-        &:hover {
-          background-color: rgba($deepBlue-100,.8);
-
-          span.material-icons {
-            opacity: 1;
-          }
-        }
-      }
-    }
-  }
-
-  .task-action-bars {
-    width: 100%;
-    max-height: 0px;
-    background-color: rgba($studioGray-20, .3);
-    position: relative;
-    overflow: hidden;
-    transition: .4s ease-in-out;
-    transition-delay: -.25s;
-
-    .shadow-box {
-      width: 120%;
-      height: 100%;
-      position: absolute;
-      left: -10%;
-      top: 0;
-      z-index: 1;
-      box-shadow: inset 0px 0px 12px 1px rgba(0,0,0,0.15);
-    }
-
-    &.active {
-      width: 100%;
-      max-height: 200px;
-      transition: .4s ease-in-out;
-    }
-
-    .task-actions {
-      width: 100%;
-      height: 50px;
-      position: relative;
-      z-index: 5;
-
-      @extend %flex;
-
-      .task-action-icon {
-        width: 100%;
-        height: 100%;
-        cursor: default;
-
-        @extend %flex;
-
-        .material-icons {
-          color: $deepBlue-60 !important;
-          cursor: default !important;
-        }
-
-        &:hover {
-          background-color: rgba($deepBlue-20, .5);
-
-          .material-icons {
-            color: $deepBlue-80 !important;
-          }
-        }
-      }
-    }
-  }
-}
-
-.assign-layer {
-  width: $avatar-size;
-  height: $avatar-size;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  position: absolute;
-
-  @extend %flex;
-
-  img {
-
   }
 }
 
 .inv-icon {
   opacity: 0;
-}
-
-.avatar-name {
-	width: $avatar-size;
-	height: $avatar-size;
-	border: 2px solid $blue-100;
-	border-radius: 50%;
-	color: $blue-100;
-  font-size: 13px;
-	@extend %flex;
-}
-
-.task-assign {
-  opacity: 0;
-  width: $avatar-size;
-  height: $avatar-size;
-  border-radius: 50px;
-  border: 0;
-  transform: translateX(-8px);
-
-  @extend %flex;
-
-  .material-icons {
-    font-size: 20px !important;
-    color: $deepBlue-80 !important;
-    margin-left: -10px;
-    pointer-events: none;
-  }
 }
 
 .task-assignees {
@@ -479,7 +343,7 @@ $input-height: 60px;
 
     &.active {
       opacity: 1;
-      
+
       .material-icons {
         transform: rotate(0deg);
         color: $deepBlue-60 !important;
@@ -1074,30 +938,6 @@ $color_havelock_blue_approx: #4a90e2;
   }
 }
 
-.remove-assignee {
-  width: 28px;
-  height: 28px;
-  transform: translateX(-8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-
-  span.material-icons {
-    color: white !important;
-    font-size: 16px !important;
-    opacity: 0;
-  }
-
-  &:hover {
-    background-color: rgba($deepBlue-100,.8);
-
-    span.material-icons {
-      opacity: 1;
-    }
-  }
-}
-
 .tabs-wrapper {
   padding-bottom: 60px;
 }
@@ -1154,7 +994,6 @@ $color_havelock_blue_approx: #4a90e2;
   }
 }
 
-
 .inv-icon {
  opacity: 0 !important;
 }
@@ -1187,3 +1026,215 @@ $color_havelock_blue_approx: #4a90e2;
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.task-assign-avatar {
+  width: $avatar-size;
+  min-height: 100%;
+  background-color: yellow;
+  position: relative;
+
+  .assigning-task {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: red;
+    @extend %flex;
+
+    .assign-layer {
+
+      .avatar-name {
+        // no avatar
+
+        width: $avatar-size;
+        height: $avatar-size;
+        border: 2px solid $blue-100;
+        border-radius: 50%;
+        color: $blue-100;
+        font-size: 13px;
+
+        @extend %flex;
+      }
+
+      .task-assign {
+        // assign icon
+        pointer-events: none;
+        span.material-icons {
+          pointer-events: none;
+        }
+      }
+
+      img {
+        // img
+
+        width: $avatar-size;
+        border-radius: 50%;
+      }
+    }
+
+    .assign-menu {
+      // button for assign
+      height: 28px;
+
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .remove-assignee {
+      //remove assign
+      width: $avatar-size;
+      height: $avatar-size;
+      border: 50%;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 99;
+
+      @extend %flex;
+
+      span.material-icons {
+        color: green !important;
+        font-size: 16px !important;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+// .task-assign-avatar {
+//   width: $avatar-size;
+//
+//   @extend %flex;
+//
+//   img {
+//     border-radius: 50%;
+//     width: $avatar-size;
+//     height: $avatar-size;
+//   }
+//
+//   .remove-assignee {
+//     width: $avatar-size;
+//     height: $avatar-size;
+//     transform: translateX(-8px);
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     border-radius: 50%;
+//
+//     span.material-icons {
+//       color: white !important;
+//       font-size: 16px !important;
+//       opacity: 0;
+//     }
+//
+//     &:hover {
+//       background-color: rgba($deepBlue-100,.8);
+//
+//       span.material-icons {
+//         opacity: 1;
+//       }
+//     }
+//   }
+// }
+
+
+// .assign-layer {
+//   width: $avatar-size;
+//   height: $avatar-size;
+//   right: 8px;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   position: absolute;
+//
+//   @extend %flex;
+//
+//   img {
+//
+//   }
+// }
+
+
+// .avatar-name {
+	// width: $avatar-size;
+	// height: $avatar-size;
+	// border: 2px solid $blue-100;
+	// border-radius: 50%;
+	// color: $blue-100;
+  // font-size: 13px;
+	// @extend %flex;
+// }
+//
+// .task-assign {
+//   opacity: 0;
+//   width: $avatar-size;
+//   height: $avatar-size;
+//   border-radius: 50px;
+//   border: 0;
+//   transform: translateX(-8px);
+//
+//   @extend %flex;
+//
+//   .material-icons {
+//     font-size: 20px !important;
+//     color: $deepBlue-80 !important;
+//     margin-left: -10px;
+//     pointer-events: none;
+//   }
+// }
+
+
+// .remove-assignee {
+//   width: 28px;
+//   height: 28px;
+//   transform: translateX(-8px);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   border-radius: 50%;
+//
+//   span.material-icons {
+//     color: white !important;
+//     font-size: 16px !important;
+//     opacity: 0;
+//   }
+//
+//   &:hover {
+//     background-color: rgba($deepBlue-100,.8);
+//
+//     span.material-icons {
+//       opacity: 1;
+//     }
+//   }
+// }

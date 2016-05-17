@@ -72,8 +72,8 @@ var AssigneeMenu = React.createClass({
 
     if (!assigneeId) {
       return (
-        <IconMenu
-        iconButtonElement={<IconButton style={{height: '40px'}}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
+        <IconMenu className="assign-menu" style={{height: '28px', width: '28px', position: 'absolute'}}
+        iconButtonElement={<IconButton style={{height: '28px', height: '28px', margin: '0', padding: '0'}}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         maxHeight={250}
@@ -91,7 +91,7 @@ var AssigneeMenu = React.createClass({
   },
   render: function () {
     return (
-      <div onClick={this.stopPropagation}>
+      <div className="assigning-task" onClick={this.stopPropagation}>
         {this.assignChoices()}
         {this.renderAssign()}
       </div>
