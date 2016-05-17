@@ -162,14 +162,7 @@ var ChatMessage = React.createClass({
 					chatActions.deleteMessage(message.ts);
 				}
 			})
-
-			var actionsRow2 = [];
-			actionsRow2.push(shareItem);
-			actionsRow2.push(shareItem);
-			actionsRow2.push(shareItem);
-
 	    items.push(actionsRow);
-			items.push(actionsRow2);
 		} else {
 			actionsRow.push(shareItem);
 			items.push(actionsRow);

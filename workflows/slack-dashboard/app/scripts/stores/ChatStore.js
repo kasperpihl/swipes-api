@@ -386,7 +386,18 @@ var ChatStore = Reflux.createStore({
 		})
 	},
 	onOpenImage: function(src, title, url) {
-		swipes.modal.lightbox(src, title, url)
+		swipes.modal.lightbox('', title, url);
+
+		swipes.service('slack').stream('file', {url: src})
+		.then(function (arraybuffer) {
+			var blob = new Blob([arraybuffer], {type: "application/octet-stream"});
+			var blobSrc = URL.createObjectURL(blob);
+
+			swipes.modal.lightbox(blobSrc, title, url);
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
 	},
 	onLoadPrivateImage: function (domElement, src) {
 		swipes.service('slack').stream('file', {url: src})
