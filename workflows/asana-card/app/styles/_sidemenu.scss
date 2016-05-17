@@ -1,0 +1,58 @@
+.sidebar {
+  width: 210px;
+  height: calc(100% - 60px);
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: white;
+  z-index: 9999999;
+  border-right: 1px solid #eee;
+  transform: translateX(-100%);
+  overflow: hidden;
+  transition: .2s ease-in;
+
+  &.open {
+    transform: translateX(0%);
+    transition: .2s ease-out;
+  }
+
+  .sidebar--section {
+
+
+    .sidebar--section__projects {
+
+      .project {
+
+      }
+    }
+  }
+
+  h6 {
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    letter-spacing: .5px;
+    transition: .1s;
+  }
+
+  .project {
+    width: 100%;
+    padding-left: 30px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: $deepBlue-80;
+    line-height: 25px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: default;
+
+    &:hover {
+      background-color: $studioGray-40;
+    }
+
+    &.active {
+      background-color: #ecf1f6;
+    }
+  }
+}

@@ -50,7 +50,7 @@ html {
         overflow: hidden;
         font-smooth: always;
         transform: rotate(-0.0000000001deg);
-        text-rendering: auto !important;
+        text-rendering: optimizeLegibility !important;
         -webkit-font-smoothing: antialiased !important;
     }
 }

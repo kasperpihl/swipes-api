@@ -9,7 +9,9 @@ var MainStore = Reflux.createStore({
 	getInitialState: function () {
 		return {
       expandedTaskId: null,
-			commentsView: false
+			commentsView: false,
+			workspaces: [],
+			sideMenu: false
 		}
 	},
 	getShareAction: function () {
@@ -114,11 +116,12 @@ var MainStore = Reflux.createStore({
 		var self = this;
 		var projectsPromises = [];
 		var newSettings = {};
+		var workspaces;
 
 		swipes.service('asana').request('workspaces.findAll', function (res, err) {
 			if (res) {
-				var workspaces = res.data;
-
+				workspaces = res.data;
+				self.set('workspaces', workspaces);
 				// HACK because reflux-model-extension wants strings for idAttribute
 				workspaces.forEach(function (workspace) {
 					var promise;
@@ -179,6 +182,15 @@ var MainStore = Reflux.createStore({
 				console.log(err);
 			}
 		});
+	},
+	toggleSideMenu: function(newValue) {
+		var state = this.get('sideMenu');
+
+		if (newValue) {
+			this.set('sideMenu', newValue);
+		} else {
+			this.set('sideMenu', !state);
+		}
 	}
 });
 

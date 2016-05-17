@@ -4,7 +4,8 @@ var MainActions = Reflux.createActions([
 	'updateSettings',
 	'expandTask',
 	'closeExpandedTask',
-	'commentsView'
+	'commentsView',
+	'toggleSideMenu'
 	// Here you can list your actions
 ]);
 

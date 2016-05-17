@@ -5,6 +5,7 @@ var CreateTaskInput = require('./create_task_input');
 var StatusesList = require('./statuses_list');
 var Loading = require('./loading');
 var ExpandedTask = require('./expanded_task');
+var SideMenu = require('./sidemenu');
 
 var Home = React.createClass({
 	mixins: [MainStore.connect()],
@@ -19,7 +20,7 @@ var Home = React.createClass({
 			var navName = '';
 
 			projects.forEach(function (project) {
-				if (project.id.toString() === projectId) {
+				if (project.id === projectId) {
 					navName = project.name;
 				}
 			})
@@ -54,6 +55,7 @@ var Home = React.createClass({
 					</div>
 				) : (
 					<div className="height-100">
+						<SideMenu />
 						{this.renderStatuses()}
 					</div>
 				)}

@@ -72,10 +72,10 @@ var StatusesList = React.createClass({
 	},
   onDragOver: function (e) {
     e.preventDefault();
-    console.log(e.target);
+
     this._over = e.target;
     var elementRect = this._over.getBoundingClientRect();
-    var mousePosPercent_Y = ((e.clientY - elementRect.top) / (elementRect.height)) * 100;
+    var mousePosPercent_Y = ((e.clientY-elementRect.top) /(elementRect.height))*100;
     var parent = e.target.parentNode;
 
     if(e.target.className === "drag-placeholder") return;
