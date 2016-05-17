@@ -183,14 +183,10 @@ var MainStore = Reflux.createStore({
 			}
 		});
 	},
-	toggleSideMenu: function(newValue) {
+	toggleSideMenu: function() {
 		var state = this.get('sideMenu');
 
-		if (newValue) {
-			this.set('sideMenu', newValue);
-		} else {
-			this.set('sideMenu', !state);
-		}
+		this.set('sideMenu', !state);
 	}
 });
 
