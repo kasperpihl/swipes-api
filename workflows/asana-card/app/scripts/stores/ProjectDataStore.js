@@ -70,28 +70,47 @@ var fetchData = function () {
 		id: workspaceId,
 		opt_fields: 'name'
 	});
-	var tasksReq;
+	var incompleteTasksReq;
+	var completedTasksReq;
 
 	if (projectType === 'mytasks') {
-		tasksReq = swipes.service('asana').request('tasks.findAll', {
+		incompleteTasksReq = swipes.service('asana').request('tasks.findAll', {
 			assignee: user.email,
 			workspace: workspaceId,
+			completed_since: 'now',
+			limit: 100,
+			opt_fields: taskOptFields.join(',')
+		});
+		completedTasksReq = swipes.service('asana').request('tasks.findAll', {
+			assignee: user.email,
+			workspace: workspaceId,
+			limit: 100,
 			opt_fields: taskOptFields.join(',')
 		});
 	} else {
-		tasksReq = swipes.service('asana').request('tasks.findByProject', {
+		incompleteTasksReq = swipes.service('asana').request('tasks.findByProject', {
 			id: projectId,
+			completed_since: 'now',
+			limit: 100,
+			opt_fields: taskOptFields.join(',')
+		})
+		completedTasksReq = swipes.service('asana').request('tasks.findByProject', {
+			id: projectId,
+			limit: 100,
 			opt_fields: taskOptFields.join(',')
 		})
 	}
 
 	Promise.all([
-		tasksReq,
+		incompleteTasksReq,
+		completedTasksReq,
 		usersReq,
 		projectsReq
 	])
 	.then(function (res) {
 		var tasks = [],
+				incompleteTasks = [],
+				completedTasks = [],
 				users = [],
 				projects = [];
 
@@ -102,12 +121,17 @@ var fetchData = function () {
 			return;
 		}
 
-		tasks = res[0].data;
-		users = res[1].data;
-		projects = res[2].data;
+		incompleteTasks = res[0].data;
+		completedTasks = res[1].data;
+		users = res[2].data;
+		projects = res[3].data;
 
 		// HACK because reflux-model-extension wants strings for idAttribute
-		tasks.forEach(function (task) {
+		incompleteTasks.forEach(function (task) {
+			task.id = task.id.toString();
+		})
+
+		completedTasks.forEach(function (task) {
 			task.id = task.id.toString();
 		})
 
@@ -118,6 +142,13 @@ var fetchData = function () {
 		projects.forEach(function (project) {
 			project.id = project.id.toString();
 		})
+
+		// Filter only completed tasks from completedTasks because Asana API is just wrong
+		var filteredCompletedTasks = completedTasks.filter(function (task) {
+			return task.completed;
+		})
+
+		tasks = incompleteTasks.concat(filteredCompletedTasks);
 
 		UserStore.batchLoad(users, {flush:true});
 		ProjectsStore.batchLoad(projects, {flush:true});
