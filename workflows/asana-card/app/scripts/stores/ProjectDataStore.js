@@ -388,6 +388,25 @@ var ProjectDataStore = Reflux.createStore({
 			completed: completed
 		})
 		.then(function () {
+			var projectType = MainStore.get('settings').projectType;
+
+			if (projectType === 'mytasks') {
+				return Promise.resolve(true);
+			}
+
+			var tasks = TasksStore.get('tasks');
+			var projectId = MainStore.get('settings').projectId;
+			var data = {
+				id: taskId,
+	      project: projectId,
+				// tasks[1] because 0 is the actual task that we are trying to move.
+				// We moved it client side first in the TasksStore
+				insert_before: tasks[1].id
+			};
+
+			return swipes.service('asana').request('tasks.addProject', data);
+		})
+		.then(function () {
 			swipes.analytics.action('Uncomplete task');
 		})
 		.catch(function (error) {

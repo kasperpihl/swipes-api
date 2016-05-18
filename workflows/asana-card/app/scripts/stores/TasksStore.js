@@ -29,6 +29,19 @@ var TasksStore = Reflux.createStore({
     for (var i=0; i<len; i++) {
   		if (taskId === tasks[i].id) {
   			tasks[i][field] = newValue;
+
+        if (field === 'completed') {
+          if (newValue === true) {
+            tasks[i]['completed_at'] = new Date();
+          } else {
+            var task;
+
+            tasks[i]['completed_at'] = null;
+            task = tasks.splice(i, 1)[0];
+            tasks.unshift(task);
+          }
+        }
+
   			break;
   		}
   	}
