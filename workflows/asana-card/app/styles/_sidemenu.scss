@@ -1,6 +1,22 @@
+$sidebarWidth: 210px;
+
+.overlay {
+  width: calc(100% - #{$sidebarWidth});
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: $sidebarWidth;
+  background-color: transparent;
+  z-index: 9999999;
+  display: none;
+
+  &.open {
+    display: block;
+  }
+}
 .sidebar {
-  width: 210px;
-  height: calc(100% - 60px);
+  width: $sidebarWidth;
+  height: 100%;
   position: fixed;
   left: 0;
   top: 0;

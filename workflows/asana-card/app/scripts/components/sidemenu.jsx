@@ -5,6 +5,9 @@ var MainActions = require('../actions/MainActions');
 
 var SideMenu = React.createClass({
   mixins: [MainStore.connect()],
+  toggleSideMenu: function() {
+    MainActions.toggleSideMenu();
+  },
   renderSection: function() {
     var workspaces = this.state.workspaces;
     var sections = [];
@@ -18,14 +21,19 @@ var SideMenu = React.createClass({
   render: function() {
     var workspaces = this.state.workspaces;
     var sidebarClass = 'sidebar';
+    var overlayClass = 'overlay';
 
     if (this.state.sideMenu) {
-      sidebarClass += ' open'
+      sidebarClass += ' open';
+      overlayClass += ' open';
     }
 
     return (
-      <div className={sidebarClass}>
-        {this.renderSection()}
+      <div>
+        <div className={sidebarClass}>
+          {this.renderSection()}
+        </div>
+        <div className={overlayClass} onClick={this.toggleSideMenu}></div>
       </div>
     )
   }
