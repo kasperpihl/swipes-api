@@ -44,9 +44,7 @@ var SubtasksStore = Reflux.createStore({
   },
   addCreatedAt: function (newValue) {
     this.set('createdAt', newValue);
-    console.log(this.state.createdAt)
   }
-
 });
 
 module.exports = SubtasksStore;
