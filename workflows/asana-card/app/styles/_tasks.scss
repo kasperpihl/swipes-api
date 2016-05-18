@@ -510,6 +510,18 @@ $input-height: 60px;
       }
     }
 
+    .avatar-name {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      border: 2px solid $deepBlue-100;
+      color: $deepBlue-100;
+      font-size: 11px;
+      font-weight: 500;
+
+      @extend %flex;
+    }
+
     img {
       width: 35px;
       height: 35px;
@@ -556,7 +568,7 @@ $input-height: 60px;
   }
 
   .task-comment-dot {
-    width: 65px;
+    width: 50px;
     height: 100%;
 
     @extend %flex;
@@ -655,7 +667,7 @@ $input-height: 60px;
       }
     }
     .header-avatar > .assigning-task > .assign-layer > .avatar-name {
-      border: 1px solid white;
+      border: 2px solid white;
       color: white;
     }
   }
@@ -787,12 +799,12 @@ $input-height: 60px;
         .avatar-name {
           width: $size;
           height: $size;
-          border: 1px solid $deepBlue-100;
+          border: 2px solid $deepBlue-100;
           border-radius: 50%;
           color: $deepBlue-100;
           font-size: 11px;
-          font-weight: 400;
-          padding-top: 2px;
+          font-weight: 500;
+          padding-top: 1px;
           letter-spacing: .5px;
 
           @extend %flex;
@@ -964,12 +976,12 @@ $input-height: 60px;
       .avatar-name {
         width: $avatar-size;
         height: $avatar-size;
-        border: 1px solid $deepBlue-100;
+        border: 2px solid $deepBlue-100;
         border-radius: 50%;
         color: $deepBlue-100;
         font-size: 11px;
-        font-weight: 400;
-        padding-top: 2px;
+        font-weight: 500;
+        padding-top: 1px;
         letter-spacing: .5px;
 
         @extend %flex;
