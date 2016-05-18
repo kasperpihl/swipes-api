@@ -654,6 +654,10 @@ $input-height: 60px;
         color: #FAFAFA;
       }
     }
+    .header-avatar > .assigning-task > .assign-layer > .avatar-name {
+      border: 1px solid white;
+      color: white;
+    }
   }
 
   .back-arrow {
@@ -802,7 +806,7 @@ $input-height: 60px;
           border-radius: 50%;
 
           @extend %flex;
-          
+
           span.material-icons {
             pointer-events: none;
             font-size: 15px;
