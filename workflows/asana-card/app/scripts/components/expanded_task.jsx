@@ -103,8 +103,8 @@ var ExpandedTask = React.createClass({
   undoCompleteTask: function (task) {
     ProjectDataActions.undoCompleteTask(task);
   },
-  scheduleTask: function(taskId) {
-    ProjectDataActions.scheduleTask(taskId);
+  scheduleTask: function(task, taskId) {
+    ProjectDataActions.scheduleTask(task, taskId);
   },
   dotItems: function (task) {
     var that = this;
@@ -140,7 +140,7 @@ var ExpandedTask = React.createClass({
       icon: 'schedule',
       bgColor: 'rgb(26,168,252)',
       callback: function () {
-        that.scheduleTask(task);
+        that.scheduleTask(task, task.id);
       }
     })
 
