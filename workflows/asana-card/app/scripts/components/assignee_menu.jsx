@@ -72,8 +72,8 @@ var AssigneeMenu = React.createClass({
 
     if (!assigneeId) {
       return (
-        <IconMenu className="assign-menu" style={{height: '28px', width: '28px', position: 'absolute'}}
-        iconButtonElement={<IconButton style={{height: '28px', height: '28px', margin: '0', padding: '0'}}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
+        <IconMenu className="assign-menu" style={{height: '28px', width: '28px', position: 'absolute'}} menuStyle={{width: '350px'}}
+        iconButtonElement={<IconButton style={{height: '28px', height: '28px', margin: '0', padding: '0', cursor: 'default'}} disableTouchRipple={true}><FontIcon className="material-icons inv-icon">person_add</FontIcon></IconButton>}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         maxHeight={250}
