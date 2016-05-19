@@ -99,6 +99,15 @@ $inputButtonWidth: 50px;
     margin: 0 auto;
     position: relative;
 }
+
+.typing-indicator {
+  width: 650px;
+  margin: 0 auto;
+  font-size: 11px;
+  color: $deepBlue-40;
+  padding: 5px 50px;
+}
+
 .new-message-header{
     &.read{
         opacity: 0.2;

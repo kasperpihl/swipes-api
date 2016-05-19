@@ -14,7 +14,7 @@ var MenuItem = require('material-ui/lib/menus/menu-item');
 var LocalSidemenu = require('./local_sidemenu');
 
 var ChatList = React.createClass({
-	mixins: [chatStore.connect('chat')],
+	mixins: [chatStore.connect('chat'), chatStore.connect()],
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	getInitialState() {
@@ -134,6 +134,13 @@ var ChatList = React.createClass({
 	onSidemenuWidthChanged:function(newWidth){
 		this.setState({sidemenuWidth: newWidth});
 	},
+	renderTyping: function() {
+		if(this.state.typing) {
+			return (
+				<div className="typing-indicator">{this.state.typing}</div>
+			)
+		}
+	},
 	render: function() {
 		if(!swipes.info.workflow){
 			return <CircularProgress size={1} color="#777" style={{
@@ -161,6 +168,7 @@ var ChatList = React.createClass({
 					{this.renderLoading()}
 					<div className="chat-list">
 						{this.renderSections()}
+						{this.renderTyping()}
 					</div>
 				</div>
 				{this.renderInput()}

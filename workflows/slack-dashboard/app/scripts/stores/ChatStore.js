@@ -6,6 +6,8 @@ var ChannelStore = require('./ChannelStore');
 var UserStore = require('./UserStore');
 var BotStore = require('./BotStore');
 
+var typingUsers = {};
+
 var ChatStore = Reflux.createStore({
 	listenables: [ChatActions],
 	start: function() {
@@ -314,13 +316,53 @@ var ChatStore = Reflux.createStore({
 
 			ChannelStore.updateChannel(msg.channel, updateObj);
 		}
-		//console.log('slack socket handler', msg.type, msg);
+
+		if (msg.type === 'user_typing' && msg.channel === this.get('channelId')) {
+			this.userTyping(msg);
+		}
+
+		// console.log('slack socket handler', msg.type, msg);
+	},
+	userTyping: function (data) {
+		var self = this;
+
+		if (typingUsers[data.user]) {
+			clearTimeout(typingUsers[data.user]);
+		}
+
+		var timeout = setTimeout(function() {
+			delete typingUsers[data.user];
+			self.userTypingLabel();
+		}, 5000);
+
+		typingUsers[data.user] = timeout;
+		this.userTypingLabel();
+	},
+	userTypingLabel: function() {
+		var userIds = Object.keys(typingUsers);
+		var users = [];
+		var content = '';
+
+		userIds.forEach(function(userId) {
+			users.push(UserStore.get(userId).name);
+		});
+
+		content = users.join(', ');
+
+		if (users.length > 1) {
+			content += ' are typing..';
+			this.set('typing', content);
+		} else if (users.length === 1) {
+			content += ' is typing..'
+			this.set('typing', content);
+		} else {
+			content = '';
+			this.set('typing', false);
+		}
 	},
 	onUploadFile: function(file, callback){
 		var token = swipes.info.workflow.slackToken;
 		var formData = new FormData();
-		console.log('==============================================');
-		console.log(file);
 		formData.append("token", token);
 		formData.append("channels", this.get('channelId'));
 		formData.append("filename", file.name);
