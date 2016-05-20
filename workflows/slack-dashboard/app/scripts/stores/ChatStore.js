@@ -74,6 +74,7 @@ var ChatStore = Reflux.createStore({
 				var data = JSON.parse(msg.data);
 				this.onHandleMessage(data);
 			}.bind(this);
+
 			this.webSocket.onerror = function(){
 				console.log('slack socket', 'error');
 			}
@@ -499,6 +500,26 @@ var ChatStore = Reflux.createStore({
 
 		}
 		$.ajax(settings);
+	},
+	onSendTypingEvent: function() {
+		var currentChannel = ChannelStore.get(this.get('channelId'));
+
+		if(this.isPinging){
+			return;
+		}
+		if(!this.webSocket){
+			return this.start();
+		}
+		if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
+			return;
+		}
+		if(this.webSocket.readyState === 3){
+			this.webSocket = null;
+			return this.start();
+		}
+		console.log('here is store');
+		this.webSocket.send(JSON.stringify({'id': '1', 'type': 'typing', 'channel': currentChannel.id}));
+
 	}
 });
 

@@ -13,7 +13,8 @@ var ChatActions = Reflux.createActions([
 	'checkSocket',
 	'uploadClipboard',
 	'openImage',
-	'loadPrivateImage'
+	'loadPrivateImage',
+	'sendTypingEvent'
 	// Here you can list your actions
 ]);
 

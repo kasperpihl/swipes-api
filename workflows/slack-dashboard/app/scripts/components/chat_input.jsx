@@ -6,6 +6,7 @@ var moment = require('moment');
 var FontIcon = require('material-ui/lib/font-icon');
 var IconButton = require('material-ui/lib/icon-button');
 var TextField = require('material-ui/lib/text-field');
+var _ = require('underscore');
 
 var CircularProgress = require('material-ui/lib/circular-progress');
 var Textarea = require('react-textarea-autosize');
@@ -14,12 +15,17 @@ var ChatInput = React.createClass({
 	mixins: [ChatInputStore.connect()],
 	hasShownHint: false,
 	currentLength: 0,
+	componentDidMount: function() {
+		this.sendTypingEvent = _.throttle(chatActions.sendTypingEvent, 3000, [{leading: true}]);
+	},
 	onKeyDown: function(e){
-		if(e.keyCode === 13 && !e.shiftKey)
+		if(e.keyCode === 13 && !e.shiftKey) {
 			e.preventDefault();
-
+		}
 	},
 	onKeyUp: function(e){
+		var input = this.refs.input;
+
 		if(e.keyCode === 27){
 			this.refs.input.blur();
 		}
@@ -28,6 +34,9 @@ var ChatInput = React.createClass({
 			if(message && message.length > 0 && !this.state.isSending){
 				this.sendMessage(message);
 			}
+		}
+		if (this.refs.input.value.length > 0) {
+			 this.sendTypingEvent();
 		}
 	},
 	onClick: function(){
