@@ -517,7 +517,7 @@ var ChatStore = Reflux.createStore({
 			this.webSocket = null;
 			return this.start();
 		}
-
+		console.log('we are in store, we made it')
 		this.webSocket.send(JSON.stringify({'id': '1', 'type': 'typing', 'channel': currentChannel.id}));
 
 	}

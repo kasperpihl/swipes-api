@@ -51,6 +51,7 @@ var Home = React.createClass({
 			<div className="height-100" style={{maxHeight: '100%', overflowY: 'auto', overflowX: 'hidden'}}>
 				{expandedTaskId ? (
 					<div className="height-100">
+						<SideMenu />
 						{this.renderExpanedView(expandedTaskId)}
 					</div>
 				) : (
