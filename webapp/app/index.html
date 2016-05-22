@@ -34,6 +34,16 @@
         for(var p=0;p<l.length;p++){u(l[p])}e.amplitude=n})(window,document);
 
         amplitude.init("e2ebab68062945a6eb8e217b245e99f4");
+
+        // Doing this because of electron and webpack don't like each other
+        // so when we want to require something in electron we should use nodeRequire
+        // to fool webpack
+        if (window.process && window.process.versions.electron) {
+          window.nodeRequire = require;
+          delete window.require;
+          delete window.exports;
+          delete window.module;
+        }
     </script>
 </head>
   <body>

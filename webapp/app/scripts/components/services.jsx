@@ -72,23 +72,33 @@ Services.SelectRow = React.createClass({
 		return {value: null};
 	},
 	clickedAuthorize: function(){
-		//ServiceActions.authorize(this.props.data.manifest_id);
 		if(typeof this.props.onConnectNew === 'function'){
 			this.props.onConnectNew();
 		}
 		var serviceName = this.props.data.manifest_id;
 		var url = swipes.service(serviceName).getAuthorizeURL();
-		window.OAuthHandler = ServiceActions;
-		var win = window.open(url, serviceName, "height=700,width=500");
-		if(!win || win.closed || typeof win.closed=='undefined'){
-			return alert('Please allow popups to authorize services');
-		}
-		var timer = setInterval(function() {
-			if(win.closed) {
-				clearInterval(timer);
-				// K_TODO:
+
+		if ((window.process != null) && (process.versions['electron'])) {
+			var {ipcRenderer} = nodeRequire('electron');
+
+			ipcRenderer.send('oauth-init', {
+				serviceName: serviceName,
+				url: url
+			});
+		} else {
+			window.OAuthHandler = ServiceActions;
+			var win = window.open(url, serviceName, "height=700,width=500");
+			if(!win || win.closed || typeof win.closed=='undefined'){
+				return alert('Please allow popups to authorize services');
 			}
-		}, 1000);
+		}
+		// K_TODO
+		// var timer = setInterval(function() {
+		// 	if(win.closed) {
+		// 		clearInterval(timer);
+		// 		// K_TODO:
+		// 	}
+		// }, 1000);
 	},
 	handleChange: function(event, index, value){
 		if(value === this.props.data.services.length){
@@ -142,20 +152,29 @@ Services.SelectRow = React.createClass({
 
 Services.ConnectRow = React.createClass({
 	clickedAuthorize: function(){
-		//ServiceActions.authorize(this.props.data.manifest_id);
 		var serviceName = this.props.data.manifest_id;
 		var url = swipes.service(serviceName).getAuthorizeURL();
-		window.OAuthHandler = ServiceActions;
-		var win = window.open(url, serviceName, "height=700,width=500");
-		if(!win || win.closed || typeof win.closed=='undefined'){
-			return alert('Please allow popups to authorize services');
-		}
-		var timer = setInterval(function() {
-			if(win.closed) {
-				clearInterval(timer);
-				// K_TODO:
+
+		if (window.process && window.process.versions.electron) {
+			var {ipcRenderer} = nodeRequire('electron');
+
+			ipcRenderer.send('oauth-init', {
+				serviceName: serviceName,
+				url: url
+			});
+		} else {
+			window.OAuthHandler = ServiceActions;
+			var win = window.open(url, serviceName, "height=700,width=500");
+			if(!win || win.closed || typeof win.closed=='undefined'){
+				return alert('Please allow popups to authorize services');
 			}
-		}, 1000);
+		}
+		// var timer = setInterval(function() {
+		// 	if(win.closed) {
+		// 		clearInterval(timer);
+		// 		// K_TODO:
+		// 	}
+		// }, 1000);
 	},
 	render: function(){
 		console.log(this.props.data);

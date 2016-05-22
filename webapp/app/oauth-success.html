@@ -26,15 +26,11 @@
 			}
 		}
 
-
-		if ((window.process != null) && (process.versions['electron'])) {
-			require('ipc').sendSync('oauth_success', window.name , query_string);
-		}
-		else if(window.opener.OAuthHandler){
+		// For electron oauth is handled in oauth-electron-handler
+		if(window.opener && window.opener.OAuthHandler){
 			window.opener.OAuthHandler.handleOAuthSuccess(window.name, query_string);
+			window.close();
 		}
-
-		window.close()
 	</script>
 </head>
 <body>
