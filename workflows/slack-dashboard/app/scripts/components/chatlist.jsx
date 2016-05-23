@@ -199,7 +199,6 @@ ChatList.Section = React.createClass({
 
 		return (
 			<div className="section">
-				<a href="#"><div className="unread-bar">you have unread messages <i className="material-icons">arrow_upward</i> </div></a>
 				<div className="chat-date-line">
 					<div className="line"></div>
 					<div className="date">
