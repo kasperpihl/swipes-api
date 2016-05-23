@@ -100,6 +100,41 @@ $inputButtonWidth: 50px;
     position: relative;
 }
 
+a {
+  cursor: default;
+
+  &:hover > .unread-bar {
+    background-color: $blue-120;
+  }
+
+  .unread-bar {
+    width: 100%;
+    max-width: 650px;
+    height: 30px;
+    background-color: $blue-100;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i.material-icons {
+      padding: 0 8px;
+      color: white !important;
+      font-size: 16px !important;
+    }
+
+    &.read {
+      display: none;
+    }
+  }
+}
+
 .typing-indicator {
   width: 650px;
   margin: 0 auto;

@@ -14,7 +14,7 @@ var MenuItem = require('material-ui/lib/menus/menu-item');
 var LocalSidemenu = require('./local_sidemenu');
 
 var ChatList = React.createClass({
-	mixins: [chatStore.connect('chat'), chatStore.connect()],
+	mixins: [chatStore.connect('chat'), chatStore.connect(), channelStore.connect()],
 	shouldScrollToBottom: true,
 	hasRendered: false,
 	getInitialState() {
@@ -176,6 +176,7 @@ var ChatList = React.createClass({
 		);
 	}
 });
+
 ChatList.Section = React.createClass({
 	render: function() {
 		var chatItems = [];
@@ -185,16 +186,20 @@ ChatList.Section = React.createClass({
 			}
 			if(item.ts === this.props.data.showingUnread && !item.isLastMessage){
 				var className = "new-message-header";
+				var unreadClass = "unread-bar";
 				if(this.props.data.isMarked){
 					className += " read";
+					unreadClass += " read";
 				}
 				chatItems.push(<div className={className} key="new-message-header"><span>new messages</span></div>);
 				chatItems.push(<div key="new-message-post-header" className="new-message-post-header" />);
+				chatItems.push(<a href={'#' + item.ts}><div className={unreadClass}>you have unread messages <i className="material-icons">arrow_upward</i> </div></a>);
 			}
 		}.bind(this));
 
 		return (
 			<div className="section">
+				<a href="#"><div className="unread-bar">you have unread messages <i className="material-icons">arrow_upward</i> </div></a>
 				<div className="chat-date-line">
 					<div className="line"></div>
 					<div className="date">
