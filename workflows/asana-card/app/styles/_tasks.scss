@@ -673,31 +673,126 @@ $input-height: 60px;
   }
 
   .back-arrow {
-    width: 40px;
-    height: 100%;
-    padding-top: 5px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid $deepBlue-20;
+    border-radius: 50%;
+    margin: 7px 10px;
 
     @extend %flex;
 
     .material-icons {
-      color: $deepBlue-40 !important;
-      margin-top: 3px;
+      font-size: 15px !important;
+      color: $deepBlue-60 !important;
     }
 
-    &:hover > .material-icons {
-      color: $deepBlue-80 !important;
+    &:hover {
+      border: 1px solid $deepBlue-60;
+      background-color: $deepBlue-60;
+
+      & > .material-icons {
+        color: #FAFAFA !important;
+      }
     }
   }
 
   .header-details {
     width: calc(100% - 40px - 48px);
+    padding-left: 8px;
     display: flex;
     flex-direction: column;
 
+    .data-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      padding-bottom: 15px;
+
+      .header-avatar {
+        margin: 0;
+        padding: 0;
+        width: auto;
+
+        display: flex;
+        align-items: center;
+        padding-right: 10px;
+        font-size: 12px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        color: #959699;
+        margin-right: 10px;
+
+        .assigning-task {
+          width: 100%;
+          width: 25px;
+          position: relative;
+          padding: 2px 5px;
+          box-sizing: content-box;
+
+          .assign-layer {
+
+            & > img {
+              height: 20px;
+              width: 20px;
+            }
+
+            & > .task-assign {
+              height: 20px;
+              width: 20px;
+
+              .material-icons {
+                font-size: 12px !important;
+              }
+            }
+
+            & > .avatar-name {
+              width: 20px;
+              height: 20px;
+              font-size: 8px;
+              padding-top: 0;
+              color: #FAFAFA;
+              background-color: $deepBlue-100;
+              padding-left: 1px;
+            }
+          }
+
+          .assign-menu {
+            width: 20px;
+            height: 20px;
+
+            button {
+              width: 20px !important;
+              height: 20px !important;
+            }
+          }
+
+          .remove-assignee {
+            width: 20px;
+            height: 20px;
+            left: 8px;
+            font-size: 11px;
+          }
+        }
+      }
+
+
+      .task-due-on {
+        height: 29px;
+        padding: 0 5px;
+        font-size: 14px;
+        font-weight: 300;
+        color: #959699;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+      }
+    }
+
     .header-title {
-      color: $deepBlue-80;
+      color: $deepBlue-100;
       font-size: 1.2em;
-      font-weight: 300;
+      font-weight: 400;
       letter-spacing: 0.01rem;
       padding: 9px 5px;
       outline: none;
@@ -713,12 +808,18 @@ $input-height: 60px;
       &:focus {
         background-color: rgba($blue-40, .4);
         transition: .1s ease-in-out;
-      }
+
+        & + .created-by {
+          opacity: 0;
+        }
+       }
     }
+
+
 
     .header-description {
       width: 100%;
-      color: $deepBlue-60;
+      color: $deepBlue-80;
       font-size: 13px;
       letter-spacing: 1px;
       font-weight: 400;
@@ -727,6 +828,11 @@ $input-height: 60px;
       position: relative;
       cursor: text;
       font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      margin: 5px 0;
+
+      &::-webkit-input-placeholder {
+        color: $deepBlue-60;
+      }
 
       &:focus {
         background-color: rgba($blue-40, .4);
@@ -759,21 +865,20 @@ $input-height: 60px;
     }
 
     .task-due-on {
-      padding: 0 5px;
+      padding: 10px 5px;
       font-size: 14px;
       font-weight: 400;
       color: #999EAC;
     }
 
     .created-by {
-      padding: 10px 5px;
-      color: $deepBlue-40;
-      font-size: 14px;
-      font-weight: 300;
-
-      .heavy {
-        font-weight: 500;
-      }
+      padding: 0 5px;
+      color: $studioGray-120;
+      font-size: 12px;
+      font-weight: 400;
+      font-style: italic;
+      opacity: .7;
+      margin-top: -7px;
     }
   }
 
@@ -897,15 +1002,13 @@ $input-height: 60px;
 }
 
 .header-dot-wrapper {
-  position: absolute;
-  right: 20px;
-  top: 60px;
+  width: 15px;
 
   .dot {
     width: 8px;
     height: 8px;
-    margin-left: 13.5px;
-    margin-top: 13.5px;
+    margin-left: calc(15px / 2 - 4px);
+    margin-top: 16px;
   }
 }
 

@@ -9,6 +9,7 @@ var MainActions = require('../actions/MainActions');
 var TasksStore = require('../stores/TasksStore');
 var CommentsStore = require('../stores/CommentsStore');
 var TaskStore = require('../stores/TaskStore');
+var UserStore = require('../stores/UserStore');
 var TaskActions = require('../actions/TaskActions');
 var ProjectDataActions = require('../actions/ProjectDataActions');
 var AssigneeMenu = require('./assignee_menu');
@@ -41,7 +42,7 @@ var tabsStyles = {
 };
 
 var ExpandedTask = React.createClass({
-  mixins: [TasksStore.connect(), CommentsStore.connect(), TaskStore.connect()],
+  mixins: [TasksStore.connect(), CommentsStore.connect(), TaskStore.connect(), UserStore.connect()],
   componentDidMount: function() {
     var loaded = TasksStore.get('loaded');
     var taskId = this.props.taskId;
@@ -312,20 +313,23 @@ var ExpandedTask = React.createClass({
 
     if (task.completed) {
       return (
-        <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> {verboseTime} and completed {completedTime}</div>
+        <div className="created-by">Created by {this.state.createdByState} {verboseTime} and completed {completedTime}</div>
       )
     } else {
       return(
-        <div className="created-by">Created by <span className="heavy">{this.state.createdByState}</span> {verboseTime}</div>
+        <div className="created-by">Created by {this.state.createdByState} {verboseTime}</div>
       )
     }
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
     var taskId = task.id;
+    var allUsers = UserStore.getAll();
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
     var dotItems = this.dotItems(task);
     var headerCompletedState = '';
+    var name;
+    var keepName;
     if (task.completed) {
       headerCompletedState = 'completed'
     } else {
@@ -333,30 +337,43 @@ var ExpandedTask = React.createClass({
     }
     var time = moment(this.state.createdAt).format("h:mm a, d MMM YYYY");
     var verboseTime = moment(this.state.createdAt).fromNow();
+    
+    if (task.assignee) {
+      if (allUsers[task.assignee.id] && allUsers[task.assignee.id].name) {
+        keepName = allUsers[task.assignee.id].name;
+        name = allUsers[task.assignee.id].name;
+      } else {
+        name = keepName;
+      }
+    } else {
+      name = 'Assign'
+    }
+
 
     return (
       <div id={taskId} className={"header-wrapper " + headerCompletedState}>
         <div className="back-arrow" onClick={this.goBack}>
           <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>
         </div>
-        <div className="header-details">
-          {this.renderTitle(task)}
-          {this.renderDescription(task)}
-          {this.renderDueOnDate(task)}
-          {this.renderExtraData(task)}
-        </div>
-        <div className="header-avatar">
-            <AssigneeMenu task={task} />
-        </div>
-
         <div className="header-dot-wrapper">
           <SwipesDot
-            reverse="true"
             className="dot"
             hoverParentId={taskId}
             elements={dotItems}
             onDragData={this.shareData.bind(this, taskUrl)}
           />
+        </div>
+        <div className="header-details">
+          {this.renderTitle(task)}
+          {this.renderExtraData(task)}
+          {this.renderDescription(task)}
+          <div className="data-wrapper">
+            <div className="header-avatar">
+                <AssigneeMenu task={task} />
+                {name}
+            </div>
+            {this.renderDueOnDate(task)}
+          </div>
         </div>
       </div>
     )
