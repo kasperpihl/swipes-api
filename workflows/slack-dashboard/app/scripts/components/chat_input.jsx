@@ -62,6 +62,7 @@ var ChatInput = React.createClass({
 		chatInputActions.changeInputValue('');
 	},
 	onFileChange:function(e){
+		var fileInput = this.refs.file;
 		console.log(e.target.files);
 		console.log('file changed hahaha', e);
 		this.setState({isUploading: true});
@@ -69,6 +70,7 @@ var ChatInput = React.createClass({
 			console.log('remove state');
 			this.setState({isUploading: false});
 		}.bind(this));
+		fileInput.value = "";
 	},
 	onChange: function(event){
 		chatInputActions.changeInputValue(event.target.value);
