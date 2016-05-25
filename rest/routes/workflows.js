@@ -82,6 +82,9 @@ router.post('/workflows.install', isAdmin, (req, res, next) => {
       if(manifest.icon){
         updateDoc.icon = manifest.icon;
       }
+      if(manifest.external_url){
+        updateDoc.external_url = manifest.external_url;
+      }
 
       return db.rethinkQuery(r.table('workflows').insert(updateDoc, {'conflict': 'update'}));
   })

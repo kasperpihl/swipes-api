@@ -1,23 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var objectAssign = require('object-assign');
-
-var Loading = require('./loading');
-var WorkflowStore = require('../stores/WorkflowStore');
-var WorkspaceStore = require('../stores/WorkspaceStore');
-var UserStore = require('../stores/UserStore');
-
-var stateActions = require('../actions/StateActions');
-var modalActions = require('../actions/ModalActions');
-var eventActions = require('../actions/EventActions');
-var notificationActions = require('../actions/NotificationActions');
-var topbarActions = require('../actions/TopbarActions');
-var workflowActions = require('../actions/WorkflowActions');
-var workspaceActions = require('../actions/WorkspaceActions');
-var cardActions = require('../actions/CardActions');
-
-var userStore = require('../stores/UserStore');
-var stateStore = require('../stores/StateStore');
+var DragSource = require('react-dnd').DragSource;
 
 var AppBar = require('material-ui/lib/app-bar');
 var Badge = require('material-ui/lib/badge');
@@ -27,11 +11,25 @@ var MenuItem = require('material-ui/lib/menus/menu-item');
 var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 
+// Node requires
+var http = nodeRequire('http');
+var https = nodeRequire('https');
 
-var DragSource = require('react-dnd').DragSource;
-
+var Loading = require('./loading');
+var WorkflowStore = require('../stores/WorkflowStore');
+var WorkspaceStore = require('../stores/WorkspaceStore');
+var UserStore = require('../stores/UserStore');
+var stateActions = require('../actions/StateActions');
+var modalActions = require('../actions/ModalActions');
+var eventActions = require('../actions/EventActions');
+var notificationActions = require('../actions/NotificationActions');
+var topbarActions = require('../actions/TopbarActions');
+var workflowActions = require('../actions/WorkflowActions');
+var workspaceActions = require('../actions/WorkspaceActions');
+var cardActions = require('../actions/CardActions');
+var userStore = require('../stores/UserStore');
+var stateStore = require('../stores/StateStore');
 var leftNavActions = require('../actions/LeftNavActions');
-
 var Services = require('./services');
 
 var CardLoader = React.createClass({
@@ -328,6 +326,47 @@ var CardLoader = React.createClass({
 			this.apiCon.callListener("event", {type: 'app.blur'});
 		}
 	},
+	componentDidMount() {
+		// Load dropbox css
+		var webview = this.refs.webview;
+
+		if (webview) {
+			var url = this.state.workflow.index_url;
+			var splitURL = url.split('/').slice(0,-1).join('/');
+			var cssContent = '';
+
+			webview.addEventListener('dom-ready', () => {
+				webview.openDevTools();
+
+				if (splitURL.startsWith('https')) {
+					https.get(splitURL + '/styles/main.css').on('response', function (response) {
+						response.on('data', function (chunk) {
+			        cssContent += chunk;
+			    	});
+
+						response.on('end', function (chunk) {
+							webview.insertCSS(cssContent);
+			    	});
+					})
+				} else {
+					http.get(splitURL + '/styles/main.css').on('response', function (response) {
+				    response.on('data', function (chunk) {
+			        cssContent += chunk;
+			    	});
+
+						response.on('end', function (chunk) {
+							console.log(cssContent)
+							webview.insertCSS(cssContent);
+			    	});
+					})
+				}
+			});
+
+			webview.addEventListener('did-navigate', () => {
+				webview.insertCSS(cssContent);
+			})
+		}
+	},
 	componentWillMount() {
 		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
@@ -478,8 +517,14 @@ var CardLoader = React.createClass({
 		}
 		if(this.state.workflow){
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
+			var externalUrl = this.state.workflow.external_url;
 			workflowId = this.state.workflow.id;
-			cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
+
+			if (externalUrl) {
+				cardContent = <webview ref="webview" src={externalUrl} className="workflow-frame-class"></webview>;
+			} else {
+				cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
+			}
 
 			// Determine if the
 			if(this.state.workflow.required_services){
@@ -496,7 +541,7 @@ var CardLoader = React.createClass({
 					return false;
 				});
 
-				if(!this.state.workflow.selectedAccountId || !foundSelectedAccount){
+				if(!externalUrl && (!this.state.workflow.selectedAccountId || !foundSelectedAccount)){
 					cardContent = <Services.SelectRow onConnectNew={this.onConnectNew} onSelectedAccount={this.onSelectedAccount} data={{services: connectedServices, title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
 				}
 			}
