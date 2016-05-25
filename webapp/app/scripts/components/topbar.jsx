@@ -6,8 +6,8 @@ var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
 var workspaceActions = require('../actions/WorkspaceActions');
 var stateStore = require('../stores/StateStore');
-var notificationStore = require('../stores/NotificationStore');
-var notificationActions = require('../actions/NotificationActions');
+// var notificationStore = require('../stores/NotificationStore');
+// var notificationActions = require('../actions/NotificationActions');
 
 // Icon Menu dependencies
 var MenuItem = require('material-ui/lib/menus/menu-item');
@@ -18,7 +18,7 @@ var FontIcon = require('material-ui/lib/font-icon');
 
 
 var Topbar = React.createClass({
-	mixins: [notificationStore.connect() ],
+	//mixins: [notificationStore.connect() ],
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
 	},
@@ -63,16 +63,16 @@ var Topbar = React.createClass({
 			</IconMenu>
 		);
 	},
-	setNotifications: function() {
-		notificationActions.setNotifications();
-	},
+	// setNotifications: function() {
+	// 	notificationActions.setNotifications();
+	// },
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
-		var notificationIcon = 'notifications';
-
-		if (!this.state.notificationState) {
-			notificationIcon = 'notifications_off'
-		}
+		// var notificationIcon = 'notifications';
+		//
+		// if (!this.state.notificationState) {
+		// 	notificationIcon = 'notifications_off'
+		// }
 
 		return (
 			<div className="top-bar-container">

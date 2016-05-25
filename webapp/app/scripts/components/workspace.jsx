@@ -170,9 +170,9 @@ var Workspace = React.createClass({
     },
     render() {
         return (
-            <div id="actual-app" className="actual-app">
-                {this.renderCards()}
-            </div>
+          <div id="actual-app" className="actual-app">
+            {this.renderCards()}
+          </div>
         );
     }
 });

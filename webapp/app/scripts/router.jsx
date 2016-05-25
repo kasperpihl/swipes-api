@@ -12,7 +12,6 @@ var Signin = require('./components/signin');
 var Signup = require('./components/signup');
 var redirect = require('./components/redirect_flow');
 
-
 exports.start = function() {
 	render ((
 		<Router history={browserHistory}>
