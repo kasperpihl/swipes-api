@@ -33,7 +33,8 @@ img.login-or-register-img {
 }
 
 .remember-me {
-  display: none !important; // is checked by default anyways
+  position: fixed !important; // so that it would not mess with positioning
+  opacity: 0 !important; // is checked by default, but seems dumb for us to display it
 }
 
 .login-need-help {
