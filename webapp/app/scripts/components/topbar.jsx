@@ -1,24 +1,27 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
-var socketStore = require('../stores/SocketStore');
-var topbarStore = require('../stores/TopbarStore');
-var topbarActions = require('../actions/TopbarActions');
-var workspaceActions = require('../actions/WorkspaceActions');
-var stateStore = require('../stores/StateStore');
-// var notificationStore = require('../stores/NotificationStore');
-// var notificationActions = require('../actions/NotificationActions');
 
-// Icon Menu dependencies
+// Material ui dependencies
 var MenuItem = require('material-ui/lib/menus/menu-item');
 var IconMenu = require('material-ui/lib/menus/icon-menu');
 var IconButton = require('material-ui/lib/icon-button');
 var Colors = require('material-ui/lib/styles/colors');
 var FontIcon = require('material-ui/lib/font-icon');
 
+var socketStore = require('../stores/SocketStore');
+var topbarStore = require('../stores/TopbarStore');
+var topbarActions = require('../actions/TopbarActions');
+var workspaceActions = require('../actions/WorkspaceActions');
+var WorkspaceStore = require('../stores/WorkspaceStore');
+var stateStore = require('../stores/StateStore');
+var CardStore = require('../stores/CardStore');
+// var notificationStore = require('../stores/NotificationStore');
+// var notificationActions = require('../actions/NotificationActions');
 
 var Topbar = React.createClass({
 	//mixins: [notificationStore.connect() ],
+	mixins: [WorkspaceStore.connect('workspace')],
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
 	},
@@ -66,6 +69,11 @@ var Topbar = React.createClass({
 	// setNotifications: function() {
 	// 	notificationActions.setNotifications();
 	// },
+	renderDock: function () {
+		return (
+			<div>blabla</div>
+		)
+	},
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
 		// var notificationIcon = 'notifications';
@@ -78,6 +86,7 @@ var Topbar = React.createClass({
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
 				<div className="topbar-title"><span>{title}</span></div>
+				{this.renderDock()}
 				<div className="feedback-button" onClick={this.feedbackForm}>
 					Send Feedback
 				</div>

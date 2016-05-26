@@ -22,7 +22,7 @@ var CardStore = Reflux.createStore({
     this._cards.forEach(function (card) {
       var receivingCallback = function (data) {
         // T_TODO || K_TODO
-        // Checking for dublication because if we reload only the card iframe
+        // Checking for dublication because if we reload only the card iframe but
         // not the whole app, the card is subscribed to the main app as a new card
         // that is true for every event not only for share.init
         var dublicate = finalData.find(function (item) {
@@ -49,8 +49,10 @@ var CardStore = Reflux.createStore({
       var newData = objectAssign({toCardId: card.id, callback: receivingCallback}, data);
 
       //T_TODO make smarter filtering
-      // the app should choose it where it makes sense to include itself of
-      // card of the same type
+      // Make some kind of broadcast scoping
+      // - all the cards
+      // - all the cards but current card type
+      // - only the current card type
       //if (card.id !== data.sourceCardId) {
       eventActions.fire(event, newData);
       //}
