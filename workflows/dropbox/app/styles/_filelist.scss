@@ -6,12 +6,16 @@
   width: 100% !important;
   max-width: 90% !important;
   margin-left: 0 !important;
+  margin-top: 10px;
 
   @media screen and (max-width: 1010px) {
     position: absolute !important;
     width: 100% !important;
     max-width: 100% !important;
   }
+}
+#breadcrumbs-box {
+  margin-right: 10px !important;
 }
 
 // Hiding showing the members

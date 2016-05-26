@@ -5,13 +5,34 @@
 	z-index: 1999;
 	top:0;
 	// This is the default background color of navbar
-    h5{
-		text-align: center;
+
+	.topbar-title {
+		position: absolute;
+		top: 0;
+		left: 50px;
+	}
+
+	.topbar-iconmenu {
+
+		button {
+			padding: 0 !important;
+
+			div {
+
+				span {
+					margin-top: -12px;
+				}
+			}
+		}
+	}
+    span{
+		// text-align: center;
       	line-height: $top-bar-height;
 		//color: #555;
 		color: $deepBlue-60;
 		font-size: 18px;
 		font-weight: 400;
+		height: 50px;
     }
     .material-icons{
     	font-size: 22px;

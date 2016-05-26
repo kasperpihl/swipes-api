@@ -52,7 +52,7 @@ var Topbar = React.createClass({
 			</IconButton>
 		);
 		return (
-			<IconMenu
+			<IconMenu className="topbar-iconmenu"
 				style={{position: 'absolute', left: '1px', top: '1px', width: '48px', height: '48px'}}
 				iconButtonElement={button}
 				anchorOrigin={{horizontal: 'left', vertical: 'center'}}
@@ -77,7 +77,7 @@ var Topbar = React.createClass({
 		return (
 			<div className="top-bar-container">
 				{this.renderIconMenu()}
-				<h5>{title}</h5>
+				<div className="topbar-title"><span>{title}</span></div>
 				<div className="feedback-button" onClick={this.feedbackForm}>
 					Send Feedback
 				</div>

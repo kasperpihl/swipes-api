@@ -17,6 +17,7 @@ html {
   width: 90% !important;
   margin: 0 auto !important; // center the frame
   position: relative !important; // so the percentage based sizes would be inherited
+  z-index: 2 !important; // some weird overlapping is happening with the user header
 }
 
 // Removing header when signed in
