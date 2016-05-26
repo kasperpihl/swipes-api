@@ -71,7 +71,23 @@ var Topbar = React.createClass({
 	// },
 	renderDock: function () {
 		return (
-			<div>blabla</div>
+			<div className="dock-wrapper">
+				<div className="dock_item">
+					<img src="https://unsplash.it/60/?random" alt="" />
+				</div>
+				<div className="dock_item">
+					<img src="https://unsplash.it/60/?random" alt="" />
+				</div>
+				<div className="dock_item">
+					<img src="https://unsplash.it/60/?random" alt="" />
+				</div>
+				<div className="dock_item">
+					<img src="https://unsplash.it/60/?random" alt="" />
+				</div>
+				<div className="dock_item">
+					<img src="https://unsplash.it/60/?random" alt="" />
+				</div>
+			</div>
 		)
 	},
 	render: function() {

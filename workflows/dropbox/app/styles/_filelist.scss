@@ -6,7 +6,7 @@
   width: 100% !important;
   max-width: 90% !important;
   margin-left: 0 !important;
-  margin-top: 10px;
+  margin-top: 10px !important; //overlapping of elements issue
 
   @media screen and (max-width: 1010px) {
     position: absolute !important;
@@ -15,7 +15,7 @@
   }
 }
 #breadcrumbs-box {
-  margin-right: 10px !important;
+  margin-right: 10px !important; // when icon, spacing was wrong
 }
 
 // Hiding showing the members
