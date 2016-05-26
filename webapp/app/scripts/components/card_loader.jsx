@@ -355,7 +355,6 @@ var CardLoader = React.createClass({
 			    	});
 
 						response.on('end', function (chunk) {
-							console.log(cssContent)
 							webview.insertCSS(cssContent);
 			    	});
 					})

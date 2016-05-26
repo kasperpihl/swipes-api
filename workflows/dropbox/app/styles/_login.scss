@@ -1,0 +1,51 @@
+// removing things from the header
+
+header.mast-head {
+  border-bottom: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+ul.nav-list {
+  display: none !important;
+}
+
+// removing illustration from login screen
+
+img.login-or-register-img {
+  display: none !important;
+}
+
+// Centering the login
+
+#login-or-register-page-content {
+  padding-top: 0 !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+//removing things from the login form
+
+.login-register-switch {
+  display: none !important; // can only login, not register
+}
+
+.remember-me {
+  display: none !important; // is checked by default anyways
+}
+
+.login-need-help {
+  display: none !important; // can't remember password
+}
+
+.login-promo-upgrade {
+  display: none !important; // when you signout dropbox offers to download desktop app
+}
+
+// Styling login
+
+.login-register-header {
+
+}

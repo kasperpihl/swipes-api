@@ -1,0 +1,39 @@
+// removing forced scroll
+
+html {
+  overflow-y: auto !important;
+}
+
+// removing the footer
+
+#page-full-footer {
+  display: none !important;
+}
+
+
+// Responsive everything
+
+#outer-frame {
+  width: 90% !important;
+  margin: 0 auto !important; // center the frame
+  position: relative !important; // so the percentage based sizes would be inherited
+}
+
+// Removing header when signed in
+
+li#notification-feed-nav-link.top-level-nav-item {
+  display: none !important; // Removing notifications
+}
+
+#inner-page-header {
+  width: 90% !important; // setting user header to be responsive
+}
+
+// From user dropdown menu keep logout
+.account-dropdown {
+  ul {
+    li:not(:last-child) {
+      display: none !important;
+    }
+  }
+}

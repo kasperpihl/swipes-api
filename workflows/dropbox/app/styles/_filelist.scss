@@ -1,0 +1,74 @@
+
+// filelist header styles
+
+#browse-header {
+  top: 40px !important;
+  width: 100% !important;
+  max-width: 90% !important;
+  margin-left: 0 !important;
+
+  @media screen and (max-width: 1010px) {
+    position: absolute !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+// Hiding showing the members
+
+.preview-sf-members-box {
+  display: none !important;
+}
+
+// Forcing the header to be in a column
+
+#browse-global-actions-bar {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 75px !important;
+}
+
+#browse-rightmenu {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-direction: column !important;
+  min-height: 75px !important;
+  float: clear !important;
+
+  // setting the search to be the last element in the column
+
+  form#search-input-holder {
+    order: 2 !important;
+  }
+}
+
+// responsive reasons
+
+#browse-location {
+  width: auto !important;
+}
+
+// Temporary, so elements wouldn't overlap
+
+#browse-sort {
+  margin-top: 50px !important;
+}
+
+// Temporary, so elements wouldn't overlap
+
+ol#browse-files {
+  padding-top: 300px !important;
+}
+
+// Sharing button vertical align
+
+.sharing__actions {
+  top: 0 !important;
+}
+
+// removing padding due to removing sidebar
+
+#page-content {
+  padding-left: 0 !important;
+}

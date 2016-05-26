@@ -33,7 +33,8 @@ module.exports = function (grunt) {
         // },
         styles: {
           files: ['<%= yeoman.app %>/styles/*.{sass,scss}'],
-          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev', 'cacheBust:dev']
+          // tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev', 'cacheBust:dev']
+          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev']
         },
         html: {
           files: ['<%= yeoman.app %>/*.html'],
