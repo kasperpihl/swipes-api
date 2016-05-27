@@ -163,7 +163,8 @@ var WorkspaceStore = Reflux.createStore({
 	onShowHideCard: function(id) {
 		var card = this.get(id);
 
-		this.update(id, {hidden: !card.hidden});
+		this.update(id, {hidden: !card.hidden}, {trigger:false});
+		this.onSendCardToFront(id);
 	},
 	onAdjustForScreenSize: function(){
 		var minimumWidthOnScreen = 100;
