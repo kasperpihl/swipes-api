@@ -47,28 +47,65 @@
   }
 }
 
+
+// search input, there is a fat chance this is reused somewhere
+
+input.text-input-input {
+
+  &.focused {
+    width: 230px !important; //focused mode
+  }
+}
+
 // responsive reasons
 
 #browse-location {
   width: auto !important;
 }
 
-// Temporary, so elements wouldn't overlap
-
-#browse-sort {
+#browse-sort, #browse-root-actions {
   margin-top: 50px !important;
+  padding: 0 !important;
+  padding-right: 5px !important;
 }
 
 // Temporary, so elements wouldn't overlap
 
 ol#browse-files {
-  padding-top: 300px !important;
+  padding-top: 205px !important;
+}
+
+// Remove third col in the file list and making other cols wider
+
+a#sharing-sorter.sortable-column-header {
+  display: none !important;
+}
+
+.sharing {
+  width: 85px !important;
+}
+
+.modified, #modified-sorter {
+  width: calc(40% - 85px) !important;
+}
+
+.sharing > span {
+  display: none !important;
+}
+
+.filename-col, #name-sorter {
+  width: 60% !important;
+}
+
+#kind-sorter, #location-sorter, .kind {
+  display: none !important; // I have no idea what these do, they were display none to begin with, could not find a usecase for them
 }
 
 // Sharing button vertical align
 
 .sharing__actions {
   top: 0 !important;
+  width: 85px !important;
 }
 
 // removing padding due to removing sidebar
