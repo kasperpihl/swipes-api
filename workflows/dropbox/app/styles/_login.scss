@@ -4,6 +4,7 @@ header.mast-head {
   border-bottom: none !important;
   box-shadow: none !important;
   background-color: transparent !important;
+  display: none !important;
 }
 
 ul.nav-list {
@@ -46,7 +47,93 @@ img.login-or-register-img {
 }
 
 // Styling login
+#regular-login-forms {
+  width: 300px !important;
+  margin: 0 auto;
+}
 
 .login-register-header {
+  width: 100% !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  color: $deepBlue-100 !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  padding-bottom: 50px !important;
+}
 
+.text-input-wrapper {
+
+  input.text-input-input[type="email"], input.text-input-input[type="password"] {
+    border: 0 !important;
+    border-bottom: 1px solid $deepBlue-40 !important;
+    border-radius: 0 !important;
+    color: $deepBlue-100;
+
+    &:focus {
+      box-shadow: none !important;
+      border-bottom: 1px solid $blue-100 !important;
+
+      & + label {
+        color: $blue-100 !important;
+        font-size: 10px !important;
+        font-weight: 400 !important;
+        transform: translateY(-20px) !important;
+        transition: .2s ease-in-out !important;
+        display: block !important;
+      }
+    }
+  }
+
+  label {
+    font-size: 16px !important;
+    color: $deepBlue-40 !important;
+    font-weight: 300 !important;
+    transition: .2s ease-in-out !important;
+  }
+}
+
+button.login-button[type="submit"] {
+  background: none !important;
+  border: none !important;
+  background-color: $blue-100 !important;
+  text-transform: uppercase !important;
+  margin-top: 40px !important;
+  float: none !important;
+  width: 100% !important;
+}
+
+
+// Need to change the location of the loader-rotate
+
+span.login-loading-indicator {
+  position: absolute !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+  bottom: 12px !important;
+  left: 5px !important;
+
+  &:after {
+    content: "" !important;
+    width: 20px !important;
+    height: 20px !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    background-image: url('https://dl.dropboxusercontent.com/u/47663272/swipes-ui-workspace-loader.svg');
+    background-size: 20px;
+    animation: loader-rotate .7s linear infinite;
+
+    @keyframes loader-rotate {
+      to {
+        transform: rotate(-360deg);
+      }
+    }
+  }
+
+  img {
+    display: none !important;
+    position: absolute !important;
+  }
 }
