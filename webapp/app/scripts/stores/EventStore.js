@@ -58,9 +58,7 @@ var EventStore = Reflux.createStore({
 		for(var i = 0 ; i < currentListeners.length ; i++){
 			var listener = currentListeners[i];
 			listener.callback(data);
-
 		}
-
 	}
 });
 

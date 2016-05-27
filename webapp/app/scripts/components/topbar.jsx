@@ -15,7 +15,6 @@ var topbarActions = require('../actions/TopbarActions');
 var workspaceActions = require('../actions/WorkspaceActions');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var stateStore = require('../stores/StateStore');
-var CardStore = require('../stores/CardStore');
 // var notificationStore = require('../stores/NotificationStore');
 // var notificationActions = require('../actions/NotificationActions');
 
@@ -70,23 +69,25 @@ var Topbar = React.createClass({
 	// 	notificationActions.setNotifications();
 	// },
 	renderDock: function () {
+		var cards = this.state.workspace;
+		var dockItems = [];
+
+		cards.forEach(function (card) {
+			dockItems.push(
+				<div className="dock_item">
+					<img
+						src={card.icon_url}
+						onClick={function () {
+							workspaceActions.showHideCard(card.id);
+						}}
+					/>
+				</div>
+			)
+		})
+
 		return (
 			<div className="dock-wrapper">
-				<div className="dock_item">
-					<img src="https://unsplash.it/60/?random" alt="" />
-				</div>
-				<div className="dock_item">
-					<img src="https://unsplash.it/60/?random" alt="" />
-				</div>
-				<div className="dock_item">
-					<img src="https://unsplash.it/60/?random" alt="" />
-				</div>
-				<div className="dock_item">
-					<img src="https://unsplash.it/60/?random" alt="" />
-				</div>
-				<div className="dock_item">
-					<img src="https://unsplash.it/60/?random" alt="" />
-				</div>
+				{dockItems}
 			</div>
 		)
 	},

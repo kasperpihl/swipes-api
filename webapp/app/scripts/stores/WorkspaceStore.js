@@ -33,7 +33,8 @@ var WorkspaceStore = Reflux.createStore({
 				var insertObj = {
 					parent_id: workflow.parent_id,
 					index_url: workflow.index_url,
-					icon: workflow.icon
+					icon: workflow.icon,
+					icon_url: workflow.icon_url
 				}
 
 				this.update(workflow.id, insertObj, {trigger: false});
@@ -159,6 +160,11 @@ var WorkspaceStore = Reflux.createStore({
 			this.onAdjustForScreenSize();
 		}
 	},
+	onShowHideCard: function(id) {
+		var card = this.get(id);
+
+		this.update(id, {hidden: !card.hidden});
+	},
 	onAdjustForScreenSize: function(){
 		var minimumWidthOnScreen = 100;
 		var minimumHeightOnScreen = 50;
@@ -260,6 +266,7 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.y = 0;
 			newObj.w = 300;
 			newObj.h = 300;
+			newObj.hidden = false;
 			this.bouncedGridPress();
 		}
 		return newObj;

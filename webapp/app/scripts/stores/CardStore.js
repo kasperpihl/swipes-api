@@ -57,6 +57,11 @@ var CardStore = Reflux.createStore({
       eventActions.fire(event, newData);
       //}
     })
+  },
+  onSendToCard: function (cardId, eventType, eventData) {
+    var newData = objectAssign({toCardId: cardId, callback: receivingCallback}, eventData);
+
+    eventActions.fire(eventType, newData);
   }
 });
 

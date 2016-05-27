@@ -46,6 +46,15 @@ var WorkflowStore = Reflux.createStore({
 		if(!newObj.index_url && newObj.index){
 			newObj.index_url = this.workflow_base_url + newObj.manifest_id + '/' + newObj.index;
 		}
+
+		if(!newObj.icon_url && newObj.icon){
+			var indexUrl = newObj.index_url;
+			var splitURL = indexUrl.split('/').slice(0,-1).join('/');
+			var icon = newObj.icon;
+
+			newObj.icon_url = splitURL + '/' + icon;
+		}
+
 		return newObj;
 	}
 });
