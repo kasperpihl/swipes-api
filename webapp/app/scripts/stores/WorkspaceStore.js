@@ -2,11 +2,23 @@ var Reflux = require('reflux');
 var WorkflowStore = require('./WorkflowStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
 
+// Moves and element to the end of the array
+function arrayMoveToEnd(index, arr) {
+	var element = arr[index];
+
+	arr.splice(index, 1);
+	arr.push(element);
+}
+
 var WorkspaceStore = Reflux.createStore({
+	// LIFO stack
+	_zStack: [],
 	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore3",
 	sort: function(el){ return el.id },
 	onWorkflowStore: function(workflows, workflow2){
+		var self = this;
+
 		// Hack to not run on first call, reflux stores send an empty array on initialize
 		if(!this.hasGottenFirstLoad){
 			this.hasGottenFirstLoad = true;
@@ -49,6 +61,13 @@ var WorkspaceStore = Reflux.createStore({
 		if(keysToRemove.length){
 			this.unset(keysToRemove, {trigger:false});
 		}
+
+		// Build the zStack
+		_.each(_.sortBy(this.getAll(), function (card) {return card.z;}), function (card) {
+			if (!card.hidden) {
+				self._zStack.push(card.id);
+			}
+		})
 
 		this.manualTrigger();
 	},
@@ -156,39 +175,65 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	onSendCardToFront: function(id){
 		if(id){
-			this.update(id, {z: _.size(this.getAll())}, {trigger:false});
-			this.onAdjustForScreenSize();
+			var cards = this.getAll();
+			var index = this._zStack.indexOf(id);
+
+			arrayMoveToEnd(index, this._zStack);
+
+			for (var card of cards) {
+					var focused = card.id === id ? true : false;
+
+					card.focused = focused;
+					card.z = this._zStack.indexOf(card.id);
+			}
+
+			this.onAdjustForScreenSize(cards);
 		}
 	},
 	onShowHideCard: function(id) {
 		var card = this.get(id);
 
-		this.update(id, {hidden: !card.hidden}, {trigger:false});
-		this.onSendCardToFront(id);
+		if (card.focused !== true) {
+			if (card.hidden === true) {
+				// Return the card to the stack
+				this._zStack.push(card.id);
+			}
+			this.update(id, {hidden: false, focused: true}, {trigger:false});
+			this.onSendCardToFront(id);
+		} else {
+			this._zStack.pop();
+			this.update(id, {hidden: true, focused: false}, {trigger:false});
+			this.update(this._zStack[this._zStack.length-1], {hidden: false, focused: true}, {trigger:false});
+		}
+
+		this.manualTrigger();
 	},
-	onAdjustForScreenSize: function(){
+	onAdjustForScreenSize: function(cards){
 		var minimumWidthOnScreen = 100;
 		var minimumHeightOnScreen = 50;
 		var paddingForAutoAdjusting = 5;
 		var didUpdate = false;
 		var counter = 0;
+		var cards = cards || this.getAll();
 		if(!document.getElementById("actual-app")){
 			return;
 		}
 		var screenWidth = document.getElementById("actual-app").clientWidth;
         var screenHeight = document.getElementById("actual-app").clientHeight;
-		_.each(_.sortBy(this.getAll(), function(el){return el.z; }), function(el){
+		_.each(_.sortBy(cards, function(el){return el.z; }), function(el){
 			var x = el.x;
 			var y = el.y;
 			var w = el.w;
 			var h = el.h;
-			var z = el.z;
-			var newSize = {};
+			var newSize = {
+				z: el.z,
+				focused: el.focused
+			};
 
 			// Check if something has been moved to the front
-			if(z != counter){
-				newSize.z = counter;
-			}
+			// if(z != counter){
+			// 	newSize.z = counter;
+			// }
 
 			// Only run these if screen size was forwarded
 			if(screenWidth && screenHeight){
@@ -261,17 +306,18 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	beforeSaveHandler:function(newObj, oldObj){
 		if(!oldObj && newObj.id){
-			var num = _.size(this.getAll());
-			newObj.z = num;
+			this._zStack.push(newObj.id);
+			newObj.z = this._zStack.length;
 			newObj.x = 0;
 			newObj.y = 0;
 			newObj.w = 300;
 			newObj.h = 300;
 			newObj.hidden = false;
+			newObj.focused = true;
 			this.bouncedGridPress();
 		}
 		return newObj;
-	}
+	},
 });
 
 module.exports = WorkspaceStore;

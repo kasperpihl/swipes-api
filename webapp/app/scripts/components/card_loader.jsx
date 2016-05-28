@@ -63,7 +63,8 @@ var CardLoader = React.createClass({
 				}
 			}
 			else if (message.command === "event.focus"){
-				this.onMouseDown();
+				// K_TODO why we are doing this?
+				//this.onMouseDown();
 			}
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
