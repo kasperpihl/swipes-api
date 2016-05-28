@@ -27,10 +27,11 @@ module.exports = function (grunt) {
           livereload: 35799,
           livereloadOnError: false
         },
-        // react: {
-        //   files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-        //   tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
-        // },
+        react: {
+          files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
+          //tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
+          tasks: ['webpack:dev', 'copy:dev']
+        },
         styles: {
           files: ['<%= yeoman.app %>/styles/*.{sass,scss}'],
           // tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev', 'cacheBust:dev']
@@ -218,7 +219,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', [
     'clean:dev',
-    //'webpack:dev',
+    'webpack:dev',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',
@@ -228,7 +229,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dev', [
     'clean:dev',
-    //'webpack:dev',
+    'webpack:dev',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',
