@@ -26,6 +26,14 @@ li#notification-feed-nav-link.top-level-nav-item {
   display: none !important; // Removing notifications
 }
 
+#page-header {
+  width: 200px !important;
+  left: auto !important;
+  right: 5% !important;
+  height: 40px !important;
+  padding: 13px 0 !important;
+}
+
 #inner-page-header {
   width: 90% !important; // setting user header to be responsive
 }
