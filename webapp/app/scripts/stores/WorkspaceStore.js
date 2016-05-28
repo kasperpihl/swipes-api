@@ -200,7 +200,10 @@ var WorkspaceStore = Reflux.createStore({
 		} else {
 			this._zStack.pop();
 			this.update(id, {hidden: true, focused: false}, {trigger:false});
-			this.update(this._zStack[this._zStack.length-1], {hidden: false, focused: true}, {trigger:false});
+
+			if (this._zStack.length > 0) {
+				this.update(this._zStack[this._zStack.length-1], {hidden: false, focused: true}, {trigger:false});
+			}
 		}
 
 		this.manualTrigger();
