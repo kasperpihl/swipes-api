@@ -113,15 +113,15 @@ var WorkspaceStore = Reflux.createStore({
 		var el = document.getElementById('actual-app');
 		var screenWidth = el.clientWidth;
 		var screenHeight = el.clientHeight;
-		var eachWidth = screenWidth / _.size(this.getAll());
 		var padding = 5;
-		var sortedCards = _.sortBy(this.getAll(), function(el){ return el.x });
+		var filteredCards = _.filter(this.getAll(), function (card) {return card.hidden === false});
+		var sortedCards = _.sortBy(filteredCards, function(el){ return el.x });
+		var eachWidth = screenWidth / _.size(filteredCards);
 
 		var hasSlack = false;
 		var hasAsana = false;
 		var firstIsSlack = false;
 		if(sortedCards.length === 2){
-
 			if(sortedCards[0].id && sortedCards[1].id){
 				var firstCard = WorkflowStore.get(sortedCards[0].id);
 				var secondCard = WorkflowStore.get(sortedCards[1].id);
