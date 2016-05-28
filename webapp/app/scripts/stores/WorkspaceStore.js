@@ -235,8 +235,8 @@ var WorkspaceStore = Reflux.createStore({
 			// Only run these if screen size was forwarded
 			if(screenWidth && screenHeight){
 				// Check if offscreen to the right off the screen
-				var minWidth = 400;
-				var minHeight = 300;
+				var minWidth = 500;
+				var minHeight = 400;
 
 				var underflowX = -x;
 				var underflowY = -y;
