@@ -30,6 +30,12 @@ var WorkspaceStore = Reflux.createStore({
 
 		for(var i = 0 ; i < workflows.length ; i++){
 			var workflow = workflows[i];
+			var extraData = {
+				parent_id: workflow.parent_id,
+				index_url: workflow.index_url,
+				icon: workflow.icon,
+				icon_url: workflow.icon_url
+			}
 			// If the workflow is not found, insert a new record with the grid info.
 			if(!this.get(workflow.id)){
 				// K OR T_TODO: Make a better way to calculate x/y of new object!
@@ -37,19 +43,10 @@ var WorkspaceStore = Reflux.createStore({
 					id: workflow.id
 				}
 
-				this.set(workflow.id, insertObj, {trigger: false});
+				this.set(workflow.id, Object.assign({}, insertObj, extraData), {trigger: false});
 			}
 			else{
-				// This is an ugly hack, but it works
-				// Kasper, where do you set the init workflow?
-				var insertObj = {
-					parent_id: workflow.parent_id,
-					index_url: workflow.index_url,
-					icon: workflow.icon,
-					icon_url: workflow.icon_url
-				}
-
-				this.update(workflow.id, insertObj, {trigger: false});
+				this.update(workflow.id, extraData, {trigger: false});
 				// Mark this as being here
 				delete testForRemovals[workflow.id];
 			}
