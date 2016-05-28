@@ -10,8 +10,8 @@
   background-color: #fff !important;
 
   @media screen and (max-width: 1010px) {
-    position: absolute !important;
-    width: 100% !important;
+    position: fixed !important;
+    width: 90% !important;
     max-width: 100% !important;
   }
 }
