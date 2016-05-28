@@ -1,4 +1,19 @@
 
+//search view styles
+
+#browse.fulltext_search {
+  #browse-root-actions, #browse-header-wrapper {
+    margin-top: 80px !important;
+  }
+  ol#browse-files {
+    padding-top: 180px !important;
+  }
+
+  .sharing__actions {
+    top: 50% !important;
+  }
+}
+
 // filelist header styles
 
 #browse-header {
@@ -110,6 +125,7 @@ img.breadcrumb_spacer {
           border-radius: 0 !important;
           background-color: #E6F7FE !important;
           border: none !important;
+          box-shadow: none !important;
 
           &.focused {
             width: 100% !important;

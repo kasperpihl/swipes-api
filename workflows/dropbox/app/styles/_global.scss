@@ -36,6 +36,10 @@ li#notification-feed-nav-link.top-level-nav-item {
 
 #inner-page-header {
   width: 90% !important; // setting user header to be responsive
+
+  .main-skip-link {
+    display: none !important;
+  }
 }
 .top-level-nav-item:not(#header-account-menu) {
   display: none !important;
