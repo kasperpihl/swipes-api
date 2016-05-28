@@ -105,9 +105,11 @@ img.breadcrumb_spacer {
           width: 99.9% !important; //this is shit. for some fucking reason autocomplete stops working if width is 100%
           margin: 0 !important;
           height: 60px !important;
-          padding: 5px 10px !important;
+          padding: 5px 15px !important;
           box-sizing: border-box !important;
           border-radius: 0 !important;
+          background-color: #E6F7FE !important;
+          border: none !important;
 
           &.focused {
             width: 100% !important;
@@ -122,6 +124,8 @@ img.breadcrumb_spacer {
           padding-left: 10px !important;
           top: 0 !important;
           left: 0 !important;
+          padding-left: 15px !important;
+          color: #666 !important;
         }
       }
     }
@@ -131,11 +135,18 @@ img.breadcrumb_spacer {
       height: 40px !important;
       width: 40px !important;
       top: 10px !important;
-      right: 10px !important;
+      right: 15px !important;
       position: absolute !important;
       // border: 1px solid red !important;
       border-radius: 50% !important;
       background-position: 50% 60% !important;
+      background-color: #fff !important;
+    }
+
+    &.active {
+      button#search-button[type="submit"] {
+        background-color: #007ee5 !important;
+      }
     }
   }
 }

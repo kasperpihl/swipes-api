@@ -37,7 +37,9 @@ li#notification-feed-nav-link.top-level-nav-item {
 #inner-page-header {
   width: 90% !important; // setting user header to be responsive
 }
-
+.top-level-nav-item:not(#header-account-menu) {
+  display: none !important;
+}
 // From user dropdown menu keep logout
 .account-dropdown {
   ul {
