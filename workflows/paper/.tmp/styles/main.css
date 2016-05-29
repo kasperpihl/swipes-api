@@ -1,0 +1,93 @@
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_empty-classes\.scss}line{font-family:\000031}}
+.paper-header, .dbox-app-promo-container, .notes-dbox-app-promo, .notes-footer-container, .notes-signin-banner-container, .notes-signin-text-container, .notes-login-form-top .notes-login-form-create-account {
+  display: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_empty-classes\.scss}line{font-family:\000035}}
+.notes-signin-container {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-align-items: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+  -webkit-justify-content: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_reset\.scss}line{font-family:\000032}}
+html ::-webkit-scrollbar, body ::-webkit-scrollbar {
+  width: 10px !important;
+  background-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_reset\.scss}line{font-family:\000039}}
+html ::-webkit-scrollbar-thumb, body ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\000039}}
+.notes-signin-container {
+  position: absolute !important;
+  top: 50% !important;
+  -webkit-transform: translateY(-50%) !important;
+      -ms-transform: translateY(-50%) !important;
+          transform: translateY(-50%) !important;
+  background-color: white !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\0000317}}
+.notes-signin-container:after {
+  content: "SIGN IN";
+  position: absolute;
+  width: 100%;
+  left: 0;
+  text-align: center;
+  top: 15%;
+  color: #000C2F;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\0000332}}
+.notes-login-form-top input.text-input-input[type="email"], .notes-login-form-top input.text-input-input[type="password"] {
+  border: 0 !important;
+  border-bottom: 1px solid #999EAC !important;
+  border-radius: 0 !important;
+  color: #000C2F !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\0000338}}
+.notes-login-form-top input.text-input-input[type="email"]:focus, .notes-login-form-top input.text-input-input[type="password"]:focus {
+  box-shadow: none !important;
+  border-bottom: 1px solid #1DB1FC !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\0000342}}
+.notes-login-form-top input.text-input-input[type="email"]:focus + label, .notes-login-form-top input.text-input-input[type="password"]:focus + label {
+  color: #1DB1FC !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  -webkit-transform: translateY(-20px) !important;
+      -ms-transform: translateY(-20px) !important;
+          transform: translateY(-20px) !important;
+  transition: .2s ease-in-out !important;
+  display: block !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\0000353}}
+.notes-login-form-top label {
+  font-size: 16px !important;
+  color: #999EAC !important;
+  font-weight: 300 !important;
+  transition: .2s ease-in-out !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/a\/swipes-api\/workflows\/paper\/app\/styles\/_login\.scss}line{font-family:\0000360}}
+.notes-login-form-top button.login-button[type="submit"] {
+  background: none !important;
+  border: none !important;
+  background-color: #1DB1FC !important;
+  text-transform: uppercase !important;
+  margin-top: 40px !important;
+  float: none !important;
+  width: 100% !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  font-size: 14px !important;
+}
