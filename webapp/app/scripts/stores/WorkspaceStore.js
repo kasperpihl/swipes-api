@@ -11,7 +11,6 @@ function arrayMoveToEnd(index, arr) {
 }
 
 var WorkspaceStore = Reflux.createStore({
-	// LIFO stack
 	_zStack: [],
 	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore3",
