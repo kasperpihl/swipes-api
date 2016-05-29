@@ -1,0 +1,11 @@
+{
+	"manifest_version": 1,
+	"name": "Dropbox Paper",
+	"identifier": "paper",
+	"version": "0.1",
+	"description": "Paper",
+	"index": "dev/index.html",
+  "external_url": "https://www.dropbox.com/paper",
+	"required_services": [],
+	"icon": "images/logo-dropbox.svg"
+}
