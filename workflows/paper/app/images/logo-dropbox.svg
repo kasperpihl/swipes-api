@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 170 170" enable-background="new 0 0 170 170" xml:space="preserve">
-<g>
-	<polygon fill="#007EE5" points="63.387,36.169 32.5,56.336 53.857,73.438 85,54.208 	"/>
-	<polygon fill="#007EE5" points="32.5,90.542 63.387,110.709 85,92.669 53.857,73.438 	"/>
-	<polygon fill="#007EE5" points="85,92.669 106.613,110.709 137.5,90.542 116.143,73.438 	"/>
-	<polygon fill="#007EE5" points="137.5,56.336 106.613,36.169 85,54.208 116.143,73.438 	"/>
-	<polygon fill="#007EE5" points="85.064,96.55 63.387,114.537 54.112,108.481 54.112,115.27 85.064,133.831 116.015,115.27 
-		116.015,108.481 106.74,114.537 	"/>
-</g>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <title>swipes-workspace-logos-30</title>
+  <g>
+    <path d="M14.99951,11.5H28A2.5,2.5,0,0,1,30.5,14V28.99951A2.50049,2.50049,0,0,1,27.99951,31.5h-13a2.5,2.5,0,0,1-2.5-2.5V14A2.5,2.5,0,0,1,14.99951,11.5Z" fill="#007ee5"/>
+    <path d="M27.99969,12A2.00028,2.00028,0,0,1,30,14V29a2,2,0,0,1-2,2H14.99969a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h13m0-1h-13a3.00338,3.00338,0,0,0-3,3V29a3.00338,3.00338,0,0,0,3,3H28a3.0034,3.0034,0,0,0,3-3V14a3.00356,3.00356,0,0,0-3.00031-3h0Z" fill="#fff"/>
+  </g>
+  <g>
+    <rect x="9.5" y="8.5" width="18.00024" height="20" rx="2.5" ry="2.5" fill="#007ee5"/>
+    <path d="M25,9a2,2,0,0,1,2,2l0.00031,15a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V11a2,2,0,0,1,2-2H25m0-1H12a3.00338,3.00338,0,0,0-3,3V26a3.00338,3.00338,0,0,0,3,3H25.00031a3.0034,3.0034,0,0,0,3-3L28,10.99994A3.00337,3.00337,0,0,0,25,8h0Z" fill="#fff"/>
+  </g>
+  <line x1="13" y1="14" x2="24" y2="14" fill="#007ee5" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
+  <line x1="13" y1="17" x2="24" y2="17" fill="#007ee5" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
+  <line x1="13" y1="20" x2="19" y2="20" fill="#007ee5" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
 </svg>
