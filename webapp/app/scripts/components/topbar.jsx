@@ -68,9 +68,17 @@ var Topbar = React.createClass({
 	// setNotifications: function() {
 	// 	notificationActions.setNotifications();
 	// },
+	dockMouseEnter: function (cardId) {
+		WorkspaceStore.setIlluminatedCardId(cardId);
+	},
+	dockMouseLeave: function () {
+		WorkspaceStore.setIlluminatedCardId(null);
+	},
 	renderDock: function () {
+		var self = this;
 		var cards = this.state.workspace;
 		var dockItems = [];
+		var illuminatedCardId = WorkspaceStore.getIlluminatedCardId();
 
 		cards.forEach(function (card, index) {
 			var className = 'dock_item';
@@ -82,7 +90,14 @@ var Topbar = React.createClass({
 			}
 
 			dockItems.push(
-				<div className={className} key={index}>
+				<div
+					onMouseEnter={function () {
+						self.dockMouseEnter(card.id);
+					}}
+					onMouseLeave={self.dockMouseLeave}
+					onClick={self.dockMouseLeave}
+					className={className}
+					key={index} >
 					<img
 						src={card.icon_url}
 						onClick={function () {

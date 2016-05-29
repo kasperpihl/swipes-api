@@ -12,9 +12,17 @@ function arrayMoveToEnd(index, arr) {
 
 var WorkspaceStore = Reflux.createStore({
 	_zStack: [],
+	_illuminatedCardId: null,
 	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore3",
 	sort: function(el){ return el.id },
+	setIlluminatedCardId: function (value) {
+		this._illuminatedCardId = value;
+		this.manualTrigger();
+	},
+	getIlluminatedCardId: function () {
+		return this._illuminatedCardId;
+	},
 	onWorkflowStore: function(workflows, workflow2){
 		var self = this;
 
