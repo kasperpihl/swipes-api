@@ -337,7 +337,7 @@ var CardLoader = React.createClass({
 			var cssContent = '';
 
 			webview.addEventListener('dom-ready', () => {
-				webview.openDevTools();
+				// webview.openDevTools();
 
 				if (splitURL.startsWith('https')) {
 					https.get(splitURL + '/styles/main.css').on('response', function (response) {

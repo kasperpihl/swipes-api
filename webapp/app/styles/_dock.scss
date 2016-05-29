@@ -1,0 +1,46 @@
+%flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.dock-wrapper {
+	$item-size: 30px;
+
+	position: absolute;
+	top: 5px;
+	left: 15%;
+	width: 70%;
+
+	@extend %flex;
+
+	.dock_item {
+		height: $item-size;
+		width: $item-size;
+		margin: 0 5px;
+    position: relative;
+		transition: .2s ease-in-out;
+
+		img {
+			height: $item-size;
+			width: $item-size;
+			border-radius: 50%;
+		}
+
+    &.minimized {
+      opacity: 0.4;
+    }
+
+    &.focused {
+      &:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        background-color: $blue-100;
+        left: 0;
+        bottom: -10px;
+      }
+    }
+	}
+}

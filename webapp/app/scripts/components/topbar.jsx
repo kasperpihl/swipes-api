@@ -72,9 +72,17 @@ var Topbar = React.createClass({
 		var cards = this.state.workspace;
 		var dockItems = [];
 
-		cards.forEach(function (card) {
+		cards.forEach(function (card, index) {
+			var className = 'dock_item';
+
+			if (card.hidden) {
+				className += ' minimized'
+			} else if (card.focused) {
+				className += ' focused'
+			}
+
 			dockItems.push(
-				<div className="dock_item">
+				<div className={className} key={index}>
 					<img
 						src={card.icon_url}
 						onClick={function () {
