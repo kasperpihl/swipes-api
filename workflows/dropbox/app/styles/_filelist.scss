@@ -207,7 +207,7 @@ input.text-input-input {
 // responsive reasons
 
 #browse-location {
-  width: auto !important;
+  width: calc(100% - 150px) !important;
   min-height: 40px !important;
   max-height: 40px !important;
   margin: 0 !important;
@@ -217,7 +217,11 @@ input.text-input-input {
   align-items: center !important;
   padding-left: 5px !important;
   font-size: 13px !important;
-  border-bottom: 1px solid $deepBlue-20 !important;
+  // border-bottom: 1px solid $deepBlue-20 !important;
+
+  @media screen and (min-width: 1000px) {
+    width: calc(100% - 400px) !important;
+  }
 }
 
 #browse-sort, #browse-root-actions {
