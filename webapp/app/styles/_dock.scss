@@ -27,8 +27,39 @@
 			border-radius: 50%;
 		}
 
+		&:hover {
+			&:before {
+				width: 110%;
+				height: 110%;
+				left: -5%;
+				top: -5%;
+				opacity: 1;
+				transition: .1s ease-in-out;
+			}
+		}
+
+		&:before {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			border: 1px solid $red-color;
+			border-radius: 50%;
+			left: 0;
+			top: 0;
+			opacity: 0;
+			transition: .1s ease-in-out;
+			pointer-events: none;
+		}
+
     &.minimized {
-      opacity: 0.4;
+			img {
+				opacity: 0.4;
+			}
+
+			&:before {
+				border: 1px solid $blue-100;
+			}
     }
 
     &.focused {
@@ -39,7 +70,7 @@
         height: 3px;
         background-color: $blue-100;
         left: 0;
-        bottom: -10px;
+        bottom: -6px;
       }
     }
 	}
