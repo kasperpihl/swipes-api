@@ -32,6 +32,8 @@ var WorkspaceStore = Reflux.createStore({
 			return;
 		}
 
+		self._zStack = [];
+
 		// Object indexed by the workflow_id to test if any has been removed from store.
 		var testForRemovals = _.indexBy(this._dataById, function(el, index){ return index; });
 
@@ -73,7 +75,13 @@ var WorkspaceStore = Reflux.createStore({
 			}
 		})
 
-		this.manualTrigger();
+		var lastCardId = self._zStack[self._zStack.length-1];
+
+		if (lastCardId) {
+			this.onSendCardToFront(lastCardId);
+		} else {
+			this.manualTrigger();
+		}
 	},
 	onEnterLeaveDropOverlay: function (id, enter) {
 		this.update(id, {hoverDropOverlay: enter});
@@ -313,14 +321,12 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	beforeSaveHandler:function(newObj, oldObj){
 		if(!oldObj && newObj.id){
-			this._zStack.push(newObj.id);
-			newObj.z = this._zStack.length;
+			newObj.z = this._zStack.length+1;
 			newObj.x = 0;
 			newObj.y = 0;
-			newObj.w = 300;
-			newObj.h = 300;
+			newObj.w = 500;
+			newObj.h = 400;
 			newObj.hidden = false;
-			newObj.focused = true;
 			this.bouncedGridPress();
 		}
 		return newObj;
