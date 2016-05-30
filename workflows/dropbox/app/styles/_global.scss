@@ -10,7 +10,6 @@ html {
   display: none !important;
 }
 
-
 // Responsive everything
 
 #outer-frame {
@@ -38,11 +37,22 @@ li#notification-feed-nav-link.top-level-nav-item {
   margin-right: 5px !important;
   padding-top: 8px !important;
   border: none !important;
+  position: fixed !important;
   // border-bottom: 1px solid $deepBlue-20 !important;
+  @media screen and (max-width: 1005px) {
+    position: fixed !important;
+  }
 
   @media screen and (min-width: 1000px) {
     width: 400px !important;
     margin-top: 3px !important;
+  }
+
+  .account-header__avatar {
+
+    img {
+      transform: rotateX(1px);
+    }
   }
 }
 
