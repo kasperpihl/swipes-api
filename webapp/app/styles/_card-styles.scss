@@ -61,6 +61,11 @@ $app-bar-height: 44px;
   border: 1px solid #eee;
   box-shadow: 1px 4px 18px -5px #ccc;
 
+  &.focused {
+    border: 1px solid rgba($blue-100, .1);
+    box-shadow: 2px 4px 18px -5px rgba($deepBlue-100, .6);
+  }
+
   .card-container{
 
     position: relative;

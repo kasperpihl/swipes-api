@@ -78,7 +78,6 @@ var Topbar = React.createClass({
 		var self = this;
 		var cards = this.state.workspace;
 		var dockItems = [];
-		var illuminatedCardId = WorkspaceStore.getIlluminatedCardId();
 
 		cards.forEach(function (card, index) {
 			var className = 'dock_item';

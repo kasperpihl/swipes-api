@@ -497,6 +497,8 @@ var CardLoader = React.createClass({
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
+		var illuminatedCardId = WorkspaceStore.getIlluminatedCardId();
+		var cardClass = 'card';
 
 		var connectDragSource = this.props.connectDragSource;
 		var connectDragPreview = this.props.connectDragPreview;
@@ -548,8 +550,12 @@ var CardLoader = React.createClass({
 			}
 		}
 
+		if (this.state.card.focused) {
+			cardClass += ' focused';
+		}
+
 		return connectDragPreview(
-			<div id={workflowId} className="card" style={style} onMouseDown={this.onMouseDown}>
+			<div id={workflowId} className={cardClass} style={style} onMouseDown={this.onMouseDown}>
 
 				<div className="card-container">
 
