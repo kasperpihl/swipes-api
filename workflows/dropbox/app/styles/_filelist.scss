@@ -237,6 +237,13 @@ ol#browse-files {
   padding-bottom: 14px !important;
 }
 
+.browse-file.fulltext_search {
+
+  .modified {
+    display: none !important;
+  }
+}
+
 // Remove third col in the file list and making other cols wider
 
 a#sharing-sorter.sortable-column-header {
@@ -268,6 +275,7 @@ a#sharing-sorter.sortable-column-header {
 .sharing__actions {
   top: 0 !important;
   width: 85px !important;
+  z-index: 10;
 }
 
 // removing padding due to removing sidebar
