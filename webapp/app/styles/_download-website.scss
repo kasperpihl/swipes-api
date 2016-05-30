@@ -1,0 +1,139 @@
+%flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dl-page-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #FAFAFA;
+
+  @extend %flex;
+
+  @media screen and (max-width: 800px) {
+    overflow-y: auto;
+  }
+}
+
+.dl-card {
+  width: 70%;
+  max-width: 1200px;
+  min-height: 200px;
+  background-color: white;
+  box-shadow: 0px 0px 15px 0px rgba(31,31,31,0.15);
+  border-radius: 3px;
+
+  @media screen and (max-width: 800px) {
+    align-self: flex-start;
+    min-height: 100vh;
+    padding: 0 30px;
+  }
+
+  img {
+    width: 64px;
+    height: 64px;
+    margin-top: 20px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+
+  h6 {
+    font-weight: 400;
+    color: $deepBlue-100;
+    text-align: center;
+    padding: 50px 0;
+    padding-top: 20px;
+    font-size: 26px;
+    padding-bottom: 20px;
+  }
+
+  p {
+    font-weight: 400;
+    color: $deepBlue-80;
+    text-align: center;
+    padding-bottom: 40px;
+    line-height: 1.6;
+  }
+}
+
+.btn-wrap {
+  width: 100%;
+  padding-bottom: 100px;
+
+  @extend %flex;
+  flex-wrap: wrap;
+
+  .btn-group {
+    margin: 0 10px;
+
+    @extend %flex;
+    flex-direction: column;
+
+    @media screen and (max-width: 800px) {
+      width: 100%;
+    }
+
+    a {
+      color: $deepBlue-80;
+      font-weight: 500;
+
+      @media screen and (max-width: 800px) {
+        width: 80%;
+      }
+    }
+
+    a > button {
+      padding: 15px 20px;
+      border: 1px solid $deepBlue-20;
+      border-radius: 3px;
+      color: $deepBlue-80;
+      font-weight: 500;
+      margin: 10px 10px;
+      transition: .2s;
+
+      @extend %flex;
+
+      @media screen and (max-width: 800px) {
+        width: 100%;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+        fill: $deepBlue-40;
+        transition: .2s;
+      }
+
+      &:hover {
+        border: 1px solid $blue-100;
+        background-color: $blue-100;
+        color: white;
+        transition: .2s;
+
+        svg {
+          fill: white;
+          transition: .2s;
+        }
+      }
+    }
+
+    &:nth-child(2) {
+      transform: translateY(-50%);
+
+      @media screen and (max-width: 800px) {
+        transform: translateY(0%);
+        width: 100%;
+
+        a {
+          width: 80%;
+        }
+
+        a > button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
