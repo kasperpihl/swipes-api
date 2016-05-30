@@ -550,7 +550,7 @@ var CardLoader = React.createClass({
 			}
 		}
 
-		if (this.state.card.focused) {
+		if (this.state.card && this.state.card.focused) {
 			cardClass += ' focused';
 		}
 
