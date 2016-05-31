@@ -2,6 +2,7 @@ var electron = nodeRequire('electron');
 var app = electron.app;
 
 module.exports = function() {
+  console.log('asfadfad');
   var template = [
     {
       label: 'Edit',
