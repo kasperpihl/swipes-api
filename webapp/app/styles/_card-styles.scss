@@ -341,3 +341,22 @@ $app-bar-height: 44px;
     transition: .1s ease-in-out;
   }
 }
+
+.webview-loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .main-loader {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
+}
