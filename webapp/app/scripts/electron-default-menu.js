@@ -1,8 +1,7 @@
-var electron = nodeRequire('electron');  // this should work if you're in the elctron environment
+var electron = nodeRequire('electron');
 var app = electron.app;
 
 module.exports = function() {
-
   var template = [
     {
       label: 'Edit',
