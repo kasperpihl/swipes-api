@@ -1,12 +1,11 @@
-// Reflux extension for easier handling data/localstorage etc.
-require('reflux-model-extension');
-// Geting events from the oauth popup
-require('./oauth-electron-handler');
-require("react-tap-event-plugin")();
-
-const Router = require('./router');
-
 if (window.process && window.process.versions.electron) {
+  // Reflux extension for easier handling data/localstorage etc.
+  require('reflux-model-extension');
+  // Geting events from the oauth popup
+  require('./oauth-electron-handler');
+  require("react-tap-event-plugin")();
+  
+  const Router = require('./router');
   const defaultMenu = require('./electron-default-menu');
   // Set a top-level application menu
   const {Menu} = nodeRequire('electron').remote;
