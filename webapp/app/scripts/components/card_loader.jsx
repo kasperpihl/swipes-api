@@ -339,7 +339,7 @@ var CardLoader = React.createClass({
 			var jsContent = '';
 
 			webview.addEventListener('dom-ready', () => {
-				webview.openDevTools();
+				// webview.openDevTools();
 
 				// Build this with promises
 				if (splitURL.startsWith('https')) {
@@ -473,8 +473,16 @@ var CardLoader = React.createClass({
 
 		return <div className="card-app-bar">
 			<div className="card-actions">
-				<div className="card-action minimize" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
+				<div className="card-action close" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
 					<FontIcon className="material-icons">close</FontIcon>
+				</div>
+
+				<div className="card-action minimize" onClick={workspaceActions.showHideCard.bind(null, this.state.workflow.id)}>
+					<div className="minimize-icon"></div>
+				</div>
+
+				<div className="card-action maximize" onClick={workspaceActions.maximize.bind(null, this.state.workflow.id)}>
+					<FontIcon className="material-icons">add</FontIcon>
 				</div>
 			</div>
 			<div className="card-title" onClick={this.openCardMenu}>
@@ -629,6 +637,7 @@ var CardLoader = React.createClass({
 
 var cardSource = {
 	beginDrag: function (props) {
+		workspaceActions.resizeOnDrag(props.data.id);
 		// Add dragging class (preventing iframes from receiving mouse events)
 		$('.active-app').addClass('dragging');
 		// Return the data describing the dragged item

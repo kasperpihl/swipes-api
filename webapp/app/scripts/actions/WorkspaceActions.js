@@ -8,7 +8,9 @@ var WorkspaceActions = Reflux.createActions([
 	'adjustForScreenSize',
 	'enterLeaveDropOverlay',
 	'introVideo',
-	'showHideCard'  // Here you can list your actions
+	'showHideCard',
+	'maximize',
+	'resizeOnDrag'  // Here you can list your actions
 ]);
 
 module.exports = WorkspaceActions;

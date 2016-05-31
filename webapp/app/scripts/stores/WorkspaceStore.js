@@ -223,6 +223,33 @@ var WorkspaceStore = Reflux.createStore({
 
 		this.manualTrigger();
 	},
+	onMaximize: function(id) {
+		var card = this.get(id);
+		var cardEl = document.getElementById(id);
+		var newW = window.innerWidth - 10;
+		var newH = document.getElementById("actual-app").clientHeight - 5;
+		var oldSize = {
+			w: cardEl.clientWidth,
+			h: cardEl.clientHeight
+		};
+		var oldPos = {
+			x: cardEl.offsetLeft,
+			y: cardEl.offsetTop
+		};
+
+		if (card.maximized) {
+			this.update(id, {x: card.oldX, y: card.oldY, w: card.oldW, h: card.oldH, maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
+		} else {
+			this.update(id, {x: 5, y: 0, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
+		}
+	},
+	onResizeOnDrag: function(id) {
+		var card = this.get(id);
+
+		if (card.maximized) {
+			this.update(id, {w: card.oldW, h: card.oldH, maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
+		}
+	},
 	onAdjustForScreenSize: function(cards){
 		var minimumWidthOnScreen = 100;
 		var minimumHeightOnScreen = 50;
@@ -327,6 +354,11 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.w = 500;
 			newObj.h = 400;
 			newObj.hidden = false;
+			newObj.maximized = false;
+			newObj.oldX = 0;
+			newObj.oldY = 0;
+			newObj.oldW = 0;
+			newObj.oldH = 0;
 			this.bouncedGridPress();
 		}
 		return newObj;

@@ -183,18 +183,21 @@ $app-bar-height: 44px;
 
       .card-action {
 
-        &.minimize {
-
           .material-icons {
             opacity: 1;
+            transition: 0s;
           }
-        }
+
+          .minimize-icon {
+            opacity: 1 !important;
+            transition: 0s;
+          }
       }
     }
   }
 
   .card-actions {
-    width: $app-bar-height;
+    width: calc(30px * 3);
     height: $app-bar-height;
     display: flex;
     align-items: center;
@@ -211,20 +214,59 @@ $app-bar-height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: 0s;
 
-      &.minimize {
+      .material-icons {
+        font-size: 10px !important;
+        color: $deepBlue-40;
+        opacity: 0;
+        transition: 0s;
+      }
 
-        .material-icons {
-          font-size: 10px !important;
-          color: $deepBlue-40;
-          opacity: 0;
-        }
+
+      &.close {
 
         &:hover {
           background-color: $red-color;
+          transition: 0s;
 
           .material-icons {
             color: white !important;
+            transition: 0s;
+          }
+        }
+      }
+
+      &.minimize {
+
+        .minimize-icon {
+          width: 6px;
+          height: 2px;
+          background-color: $deepBlue-40;
+          opacity: 0;
+          transition: 0s;
+        }
+
+        &:hover {
+          background-color: $yellow-color;
+          transition: 0s;
+
+          .minimize-icon {
+            background-color: white !important;
+            transition: 0s;
+          }
+        }
+      }
+
+      &.maximize {
+
+        &:hover {
+          background-color: $green-color;
+          transition: 0s;
+
+          .material-icons {
+            color: white !important;
+            transition: 0s;
           }
         }
       }
@@ -232,7 +274,7 @@ $app-bar-height: 44px;
   }
 
   .card-title {
-    width: calc(100% - #{$app-bar-height} - #{$app-bar-height});
+    width: calc(100% - (30px * 3) - #{$app-bar-height});
     padding: 0 30px;
     color: $deepBlue-80;
     font-weight: 500;
