@@ -48,7 +48,7 @@ module.exports = function (grunt) {
       },
       webpack: {
         dev: {
-          entry: './<%= yeoman.app %>/scripts/app',
+          entry: './<%= yeoman.app %>/scripts/main',
           resolve: {
             root: path.resolve(__dirname, 'node_modules'),
             fallback: {root: path.join(__dirname, 'node_modules')},
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
           },
           output: {
             path: '<%= yeoman.dev %>/scripts/',
-            filename: 'app.js'
+            filename: 'main.js'
           },
           plugins: [
             new webpack.optimize.DedupePlugin()

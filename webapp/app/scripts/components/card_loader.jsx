@@ -336,10 +336,12 @@ var CardLoader = React.createClass({
 			var url = this.state.workflow.index_url;
 			var splitURL = url.split('/').slice(0,-1).join('/');
 			var cssContent = '';
+			var jsContent = '';
 
 			webview.addEventListener('dom-ready', () => {
 				// webview.openDevTools();
 
+				// Build this with promises
 				if (splitURL.startsWith('https')) {
 					https.get(splitURL + '/styles/main.css').on('response', function (response) {
 						response.on('data', function (chunk) {
@@ -348,6 +350,16 @@ var CardLoader = React.createClass({
 
 						response.on('end', function (chunk) {
 							webview.insertCSS(cssContent);
+			    	});
+					})
+
+					https.get(splitURL + '/scripts/main.js').on('response', function (response) {
+				    response.on('data', function (chunk) {
+			        jsContent += chunk;
+			    	});
+
+						response.on('end', function (chunk) {
+							webview.executeJavaScript(jsContent);
 			    	});
 					})
 				} else {
@@ -364,6 +376,16 @@ var CardLoader = React.createClass({
 							// setTimeout(function(){
 							// 	that.setState({webviewLoading: false});
 							// }, 1000);
+			    	});
+					})
+
+					http.get(splitURL + '/scripts/main.js').on('response', function (response) {
+				    response.on('data', function (chunk) {
+			        jsContent += chunk;
+			    	});
+
+						response.on('end', function (chunk) {
+							webview.executeJavaScript(jsContent);
 			    	});
 					})
 				}
