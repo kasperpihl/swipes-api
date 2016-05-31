@@ -373,9 +373,9 @@ var CardLoader = React.createClass({
 							webview.insertCSS(cssContent);
 
 							// just because there is a delay between injection and actually applying CSS, this is probably really dumb
-							// setTimeout(function(){
-							// 	that.setState({webviewLoading: false});
-							// }, 1000);
+							setTimeout(function(){
+								that.setState({webviewLoading: false});
+							}, 1000);
 			    	});
 					})
 
@@ -391,7 +391,7 @@ var CardLoader = React.createClass({
 				}
 			});
 			webview.addEventListener('will-navigate', () => {
-				// this.setState({webviewLoading: true})
+				this.setState({webviewLoading: true})
 			})
 
 			webview.addEventListener('did-navigate', () => {
@@ -550,7 +550,7 @@ var CardLoader = React.createClass({
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
-		// var webviewLoader = <div />;
+		var webviewLoader = <div />;
 		var illuminatedCardId = WorkspaceStore.getIlluminatedCardId();
 		var cardClass = 'card';
 
@@ -579,7 +579,7 @@ var CardLoader = React.createClass({
 
 			if (externalUrl) {
 				cardContent = <webview ref="webview" src={externalUrl} className="workflow-frame-class"></webview>;
-				// webviewLoader = this.renderWebviewLoader();
+				webviewLoader = this.renderWebviewLoader();
 			} else {
 				cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 			}
@@ -626,6 +626,7 @@ var CardLoader = React.createClass({
 					<div className="card-content">
 						{this.renderDropOverlay()}
 						{cardContent}
+						{webviewLoader}
 					</div>
 				</div>
 			</div>
