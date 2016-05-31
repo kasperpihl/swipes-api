@@ -592,7 +592,6 @@ var CardLoader = React.createClass({
 					<div className="card-content">
 						{this.renderDropOverlay()}
 						{cardContent}
-						// {webviewLoader}
 					</div>
 				</div>
 			</div>
