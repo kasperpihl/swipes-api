@@ -339,7 +339,7 @@ var CardLoader = React.createClass({
 			var jsContent = '';
 
 			webview.addEventListener('dom-ready', () => {
-				// webview.openDevTools();
+				webview.openDevTools();
 
 				// Build this with promises
 				if (splitURL.startsWith('https')) {
@@ -396,6 +396,10 @@ var CardLoader = React.createClass({
 
 			webview.addEventListener('did-navigate', () => {
 				webview.insertCSS(cssContent);
+			})
+
+			webview.addEventListener('page-title-updated', () => {
+				webview.executeJavaScript(jsContent);
 			})
 		}
 	},

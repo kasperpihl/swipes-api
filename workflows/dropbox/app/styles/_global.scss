@@ -33,7 +33,7 @@ li#notification-feed-nav-link.top-level-nav-item {
   height: 40px !important;
   padding: 13px 0 !important;
   z-index: 5 !important;
-  margin-top: 4px !important;
+  margin-top: 3px !important;
   margin-right: 5px !important;
   padding-top: 8px !important;
   border: none !important;
@@ -51,7 +51,7 @@ li#notification-feed-nav-link.top-level-nav-item {
   .account-header__avatar {
 
     img {
-      transform: translateX(1px);
+      // transform: translateX(1px);
     }
   }
 }
