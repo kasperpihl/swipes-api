@@ -5,9 +5,9 @@ require('./oauth-electron-handler');
 require("react-tap-event-plugin")();
 
 const Router = require('./router');
-const defaultMenu = require('./electron-default-menu');
 
 if (window.process && window.process.versions.electron) {
+  const defaultMenu = require('./electron-default-menu');
   // Set a top-level application menu
   const {Menu} = nodeRequire('electron').remote;
   const menu = defaultMenu();
