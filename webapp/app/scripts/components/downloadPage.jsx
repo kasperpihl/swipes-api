@@ -3,9 +3,11 @@ var browser = require('detect-browser');
 
 var DownloadPage = React.createClass({
   componentDidMount: function() {
-    var dLink = document.getElementById('safari-download-link');
-    dLink.focus();
-    dLink.setSelectionRange(0, dLink.value.length)
+    if (browser.name === 'safari') {
+      var dLink = document.getElementById('safari-download-link');
+      dLink.focus();
+      dLink.setSelectionRange(0, dLink.value.length)
+    }
   },
   renderButtons: function() {
     return (
