@@ -92,7 +92,7 @@ var DownloadPage = React.createClass({
     var downloadOptions;
     var microCopy = 'Download it below.';
 
-    if (browser.name === 'chrome') {
+    if (browser.name === 'safari') {
       downloadOptions = this.renderLink();
       microCopy = 'Copy the link below'
     } else {
