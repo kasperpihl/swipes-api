@@ -123,22 +123,34 @@ var Topbar = React.createClass({
 		// 	notificationIcon = 'notifications_off'
 		// }
 
-		return (
-			<div className="top-bar-container">
-				{this.renderIconMenu()}
-				<div className="topbar-title"><span>{title}</span></div>
-				{this.renderDock()}
-				<div className="feedback-button" onClick={this.feedbackForm}>
-					Send Feedback
+		if (title === "Services") {
+			return (
+				<div className="top-bar-container">
+					{this.renderIconMenu()}
+					<div className="topbar-title"><span>{title}</span></div>
+					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
+						Send Feedback
+					</div>
 				</div>
-				<div className="grid-button" onClick={workspaceActions.gridButton}>
-					<i className="material-icons">dashboard</i>
+			)
+		} else {
+			return (
+				<div className="top-bar-container">
+					{this.renderIconMenu()}
+					<div className="topbar-title"><span>{title}</span></div>
+					{this.renderDock()}
+					<div className="feedback-button" onClick={this.feedbackForm}>
+						Send Feedback
+					</div>
+					<div className="grid-button" onClick={workspaceActions.gridButton}>
+						<i className="material-icons">dashboard</i>
+					</div>
+					<div className="add-button" onClick={this.clickedAdd}>
+						<i className="material-icons">add</i>
+					</div>
 				</div>
-				<div className="add-button" onClick={this.clickedAdd}>
-					<i className="material-icons">add</i>
-				</div>
-			</div>
-		);
+			);
+		}
 	}
 });
 
