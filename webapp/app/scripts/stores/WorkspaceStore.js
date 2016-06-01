@@ -240,7 +240,7 @@ var WorkspaceStore = Reflux.createStore({
 		if (card.maximized) {
 			this.update(id, {x: card.oldX, y: card.oldY, w: card.oldW, h: card.oldH, maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
 		} else {
-			this.update(id, {x: 5, y: 0, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
+			this.update(id, {x: 5, y: 5, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
 		}
 	},
 	onResizeOnDrag: function(id) {

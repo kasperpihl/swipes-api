@@ -53,26 +53,71 @@ $app-bar-height: 44px;
   }
 }
 
-.card{
+.card {
   position: 'absolute';
   background: white;
   border-radius: 7px;
   overflow: hidden;
-  border: 1px solid #eee;
   box-shadow: 1px 4px 18px -5px #ccc;
 
   &.focused {
     box-shadow: 2px 4px 18px -5px rgba($deepBlue-100, .6);
+
+    .card-icon {
+      img {
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid rgba(0,0,0,.14);
+      }
+    }
+
+    .card-container > .card-app-bar {
+      background-color: rgba($deepBlue-20, .2);
+
+      & > .card-actions > .card-action {
+
+        &.close {
+          background-color: $red-color;
+
+          &:hover {
+            i.material-icons {
+              opacity: 1 !important;
+            }
+          }
+        }
+
+        &.minimize {
+          background-color: $yellow-color;
+
+          &:hover {
+            .minimize-icon {
+              opacity: 1 !important;
+            }
+          }
+        }
+
+        &.maximize {
+          background-color: $green-color;
+
+          &:hover {
+            i.material-icons {
+              opacity: 1 !important;
+            }
+          }
+        }
+      }
+    }
   }
 
   &.illumination:not(.illuminated) {
-    opacity: .2;
-    z-index: 1 !important;
+    opacity: 0;
+    // z-index: 1 !important;
+    transition: opacity .3s ease-in-out .3s;
   }
 
   &.illuminated {
-    box-shadow: 2px 4px 18px -5px rgba($red-100, .6);
-    z-index: 99 !important;
+    box-shadow: 2px 4px 22px -5px rgba($deepBlue-100, .9);
+    transition: box-shadow .01s ease-in-out .3s;
   }
 
   .card-container{
@@ -179,11 +224,11 @@ $app-bar-height: 44px;
   cursor: grab;
   display: flex;
 
-  &:hover {
-
     .card-actions {
 
       .card-action {
+
+        &:hover {
 
           .material-icons {
             opacity: 1;
@@ -194,8 +239,8 @@ $app-bar-height: 44px;
             opacity: 1 !important;
             transition: 0s;
           }
+        }
       }
-    }
   }
 
   .card-actions {
