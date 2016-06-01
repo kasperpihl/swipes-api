@@ -1,6 +1,12 @@
 var React = require('react');
+var browser = require('detect-browser');
 
 var DownloadPage = React.createClass({
+  componentDidMount: function() {
+    var dLink = document.getElementById('safari-download-link');
+    dLink.focus();
+    dLink.setSelectionRange(0, dLink.value.length)
+  },
   renderButtons: function() {
     return (
       <div className="btn-wrap">
@@ -71,13 +77,34 @@ var DownloadPage = React.createClass({
       </div>
     )
   },
+  selectText: function() {
+    var dLink = document.getElementById('safari-download-link');
+    dLink.focus();
+    dLink.setSelectionRange(0, dLink.value.length)
+  },
+  renderLink: function() {
+
+    return (
+      <input ref="downloadLink" id="safari-download-link" type="text" value="http://swipesapp.com/mac" readOnly="true" onClick={this.selectText}/>
+    )
+  },
   renderWebsite: function() {
+    var downloadOptions;
+    var microCopy = 'Download it below.';
+
+    if (browser.name === 'chrome') {
+      downloadOptions = this.renderLink();
+      microCopy = 'Copy the link below'
+    } else {
+      downloadOptions = this.renderButtons()
+    }
+
     return (
       <div className="dl-card">
         <img src="styles/img/swipes-logo.png"/>
         <h6>NEW VERSION OF SWIPES</h6>
-        <p>Great news! Swipes is now available for your operating system. <br /> Download it below.</p>
-        {this.renderButtons()}
+        <p>Great news! Swipes is now available for your operating system. <br /> {microCopy}</p>
+        {downloadOptions}
       </div>
     )
   },
