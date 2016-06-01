@@ -342,7 +342,7 @@ var CardLoader = React.createClass({
 				// webview.openDevTools();
 
 				// Build this with promises
-				if (splitURL.startsWith('https')) {
+				if (splitURL.startsWith('https')) { // production env
 					https.get(splitURL + '/styles/main.css').on('response', function (response) {
 						response.on('data', function (chunk) {
 			        cssContent += chunk;
@@ -350,6 +350,11 @@ var CardLoader = React.createClass({
 
 						response.on('end', function (chunk) {
 							webview.insertCSS(cssContent);
+
+              // just because there is a delay between injection and actually applying CSS, this is probably really dumb
+							setTimeout(function(){
+								that.setState({webviewLoading: false});
+							}, 1000);
 			    	});
 					})
 
@@ -362,7 +367,7 @@ var CardLoader = React.createClass({
 							webview.executeJavaScript(jsContent);
 			    	});
 					})
-				} else {
+				} else { // Dev env
 					var that = this;
 					http.get(splitURL + '/styles/main.css').on('response', function (response) {
 				    response.on('data', function (chunk) {
@@ -372,9 +377,8 @@ var CardLoader = React.createClass({
 						response.on('end', function (chunk) {
 							webview.insertCSS(cssContent);
 
-							// just because there is a delay between injection and actually applying CSS, this is probably really dumb
+              // just because there is a delay between injection and actually applying CSS, this is probably really dumb
 							setTimeout(function(){
-								console.log('setTimeout, sets loader to false');
 								that.setState({webviewLoading: false});
 							}, 1000);
 			    	});
@@ -392,7 +396,6 @@ var CardLoader = React.createClass({
 				}
 			});
 			webview.addEventListener('will-navigate', () => {
-				console.log('will-navigate, sets loader to true');
 				this.setState({webviewLoading: true})
 			})
 
@@ -407,7 +410,6 @@ var CardLoader = React.createClass({
 	},
 	renderWebviewLoader: function() {
 		if(this.state.webviewLoading) {
-			console.log('loader render');
 			return (
 				<div className="webview-loader">
 					<Loading />
