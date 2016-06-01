@@ -603,7 +603,15 @@ var CardLoader = React.createClass({
 				});
 
 				if(!externalUrl && (!this.state.workflow.selectedAccountId || !foundSelectedAccount)){
-					cardContent = <Services.SelectRow onConnectNew={this.onConnectNew} onSelectedAccount={this.onSelectedAccount} data={{services: connectedServices, title: this.state.workflow.required_services[0], manifest_id: this.state.workflow.required_services[0]}} />
+					cardContent = <Services.SelectRow 
+													onConnectNew={this.onConnectNew}
+													onSelectedAccount={this.onSelectedAccount}
+													data={{
+														services: connectedServices,
+														title: this.state.workflow.required_services[0],
+														manifest_id: this.state.workflow.required_services[0]
+													}}
+												/>
 				}
 			}
 		}

@@ -77,28 +77,12 @@ Services.SelectRow = React.createClass({
 		}
 		var serviceName = this.props.data.manifest_id;
 		var url = swipes.service(serviceName).getAuthorizeURL();
+		var {ipcRenderer} = nodeRequire('electron');
 
-		if ((window.process != null) && (process.versions['electron'])) {
-			var {ipcRenderer} = nodeRequire('electron');
-
-			ipcRenderer.send('oauth-init', {
-				serviceName: serviceName,
-				url: url
-			});
-		} else {
-			window.OAuthHandler = ServiceActions;
-			var win = window.open(url, serviceName, "height=700,width=500");
-			if(!win || win.closed || typeof win.closed=='undefined'){
-				return alert('Please allow popups to authorize services');
-			}
-		}
-		// K_TODO
-		// var timer = setInterval(function() {
-		// 	if(win.closed) {
-		// 		clearInterval(timer);
-		// 		// K_TODO:
-		// 	}
-		// }, 1000);
+		ipcRenderer.send('oauth-init', {
+			serviceName: serviceName,
+			url: url
+		});
 	},
 	handleChange: function(event, index, value){
 		if(value === this.props.data.services.length){
@@ -154,27 +138,12 @@ Services.ConnectRow = React.createClass({
 	clickedAuthorize: function(){
 		var serviceName = this.props.data.manifest_id;
 		var url = swipes.service(serviceName).getAuthorizeURL();
+		var {ipcRenderer} = nodeRequire('electron');
 
-		if (window.process && window.process.versions.electron) {
-			var {ipcRenderer} = nodeRequire('electron');
-
-			ipcRenderer.send('oauth-init', {
-				serviceName: serviceName,
-				url: url
-			});
-		} else {
-			window.OAuthHandler = ServiceActions;
-			var win = window.open(url, serviceName, "height=700,width=500");
-			if(!win || win.closed || typeof win.closed=='undefined'){
-				return alert('Please allow popups to authorize services');
-			}
-		}
-		// var timer = setInterval(function() {
-		// 	if(win.closed) {
-		// 		clearInterval(timer);
-		// 		// K_TODO:
-		// 	}
-		// }, 1000);
+		ipcRenderer.send('oauth-init', {
+			serviceName: serviceName,
+			url: url
+		});
 	},
 	render: function(){
 		console.log(this.props.data);
