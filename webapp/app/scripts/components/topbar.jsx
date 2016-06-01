@@ -91,7 +91,9 @@ var Topbar = React.createClass({
 			dockItems.push(
 				<div
 					onMouseEnter={function () {
-						self.dockMouseEnter(card.id);
+						if(!card.hidden) {
+							self.dockMouseEnter(card.id);
+						}
 					}}
 					onMouseLeave={self.dockMouseLeave}
 					onClick={self.dockMouseLeave}

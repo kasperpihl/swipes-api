@@ -66,11 +66,13 @@ $app-bar-height: 44px;
   }
 
   &.illumination:not(.illuminated) {
-    opacity: .6;
+    opacity: .2;
+    z-index: 1 !important;
   }
 
   &.illuminated {
     box-shadow: 2px 4px 18px -5px rgba($red-100, .6);
+    z-index: 99 !important;
   }
 
   .card-container{

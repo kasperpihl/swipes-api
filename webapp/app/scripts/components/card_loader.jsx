@@ -609,6 +609,14 @@ var CardLoader = React.createClass({
 			cardClass += ' focused';
 		}
 
+		if (illuminatedCardId) {
+			cardClass += ' illumination'
+
+			if (illuminatedCardId === workflowId) {
+				cardClass += ' illuminated'
+			}
+		}
+
 		return connectDragPreview(
 			<div id={workflowId} className={cardClass} style={style} onMouseDown={this.onMouseDown}>
 
