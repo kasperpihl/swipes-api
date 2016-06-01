@@ -1,4 +1,4 @@
-var React = require('react');
+ var React = require('react');
 var Reflux = require('reflux');
 var objectAssign = require('object-assign');
 var DragSource = require('react-dnd').DragSource;
@@ -374,6 +374,7 @@ var CardLoader = React.createClass({
 
 							// just because there is a delay between injection and actually applying CSS, this is probably really dumb
 							setTimeout(function(){
+								console.log('setTimeout, sets loader to false');
 								that.setState({webviewLoading: false});
 							}, 1000);
 			    	});
@@ -391,6 +392,7 @@ var CardLoader = React.createClass({
 				}
 			});
 			webview.addEventListener('will-navigate', () => {
+				console.log('will-navigate, sets loader to true');
 				this.setState({webviewLoading: true})
 			})
 
@@ -405,6 +407,7 @@ var CardLoader = React.createClass({
 	},
 	renderWebviewLoader: function() {
 		if(this.state.webviewLoading) {
+			console.log('loader render');
 			return (
 				<div className="webview-loader">
 					<Loading />
