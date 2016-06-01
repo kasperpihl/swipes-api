@@ -6,3 +6,4 @@ app/vendor
 .tmp
 dev
 test/scripts/
+app/styles/_my-awesome-theme.scss
