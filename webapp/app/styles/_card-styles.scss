@@ -1,4 +1,4 @@
-$app-bar-height: 44px;
+$app-bar-height: 40px;
 .card-content{
   padding-top: $app-bar-height;
   height: 100%;
@@ -59,9 +59,12 @@ $app-bar-height: 44px;
   border-radius: 7px;
   overflow: hidden;
   box-shadow: 1px 4px 18px -5px #ccc;
+  opacity: 1;
+  transition: box-shadow .4s, opacity .3s .1s;
 
   &.focused {
     box-shadow: 2px 4px 18px -5px rgba($deepBlue-100, .6);
+    transition: box-shadow .4s, opacity .3s .15s;
 
     .card-icon {
       img {
@@ -75,6 +78,7 @@ $app-bar-height: 44px;
       background-color: rgba($deepBlue-20, .2);
 
       & > .card-actions > .card-action {
+        transition: .3s;
 
         &.close {
           background-color: $red-color;
@@ -121,7 +125,6 @@ $app-bar-height: 44px;
   }
 
   .card-container{
-
     position: relative;
     /*
       Drop overlay
@@ -244,18 +247,19 @@ $app-bar-height: 44px;
   }
 
   .card-actions {
-    width: calc(30px * 3);
+    width: calc(22px * 3 + 18px);
+    padding-left: 18px;
     height: $app-bar-height;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 
     .card-action {
       width: 14px;
       height: 14px;
       background-color: $studioGray-40;
       border-radius: 50%;
-      margin: 0 5px;
+      // margin: 0 5px;
       //cursor: default;
 
       display: flex;

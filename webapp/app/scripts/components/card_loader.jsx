@@ -603,7 +603,7 @@ var CardLoader = React.createClass({
 				});
 
 				if(!externalUrl && (!this.state.workflow.selectedAccountId || !foundSelectedAccount)){
-					cardContent = <Services.SelectRow 
+					cardContent = <Services.SelectRow
 													onConnectNew={this.onConnectNew}
 													onSelectedAccount={this.onSelectedAccount}
 													data={{
@@ -614,6 +614,10 @@ var CardLoader = React.createClass({
 												/>
 				}
 			}
+		}
+
+		if (this.state.card && this.state.card.hidden) {
+			cardClass += ' minimized'
 		}
 
 		if (this.state.card && this.state.card.focused) {

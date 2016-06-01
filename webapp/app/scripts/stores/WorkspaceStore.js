@@ -237,10 +237,49 @@ var WorkspaceStore = Reflux.createStore({
 			y: cardEl.offsetTop
 		};
 
+		var style = window.getComputedStyle(cardEl);
+		var transitionStyle = style.getPropertyValue('transition');
+
 		if (card.maximized) {
+			// removing event listener
+			cardEl.removeEventListener('transitionend', function() {});
+			// adding styles for maximize transition
+			cardEl.style.transition = transitionStyle + ', left .3s, top .3s, width .3s, height .3s';
+			// hiding content while transition
+			cardEl.childNodes[0].querySelector('.card-content').style.opacity = '0';
+			cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s';
+
+			// Setting new position and dimensions
 			this.update(id, {x: card.oldX, y: card.oldY, w: card.oldW, h: card.oldH, maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
+
+			// Listening to transition end
+			cardEl.addEventListener("transitionend", function(e) {
+
+				// Checking if correct transition end (lots of transitions happening)
+				if (e.propertyName === "left") {
+					// Reseting transitions for other events
+					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
+					// Showing content again
+					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
+					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s';
+				}
+			});
 		} else {
+			// Check if, follows the same logic
+			cardEl.removeEventListener('transitionend', function() {});
+			cardEl.style.transition = transitionStyle + ', left .3s, top .3s, width .3s, height .3s';
+			cardEl.childNodes[0].querySelector('.card-content').style.opacity = '0';
+			cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s';
+
 			this.update(id, {x: 5, y: 5, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
+
+			cardEl.addEventListener("transitionend", function(e) {
+				if (e.propertyName === "left") {
+					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
+					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
+					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s';
+				}
+			});
 		}
 	},
 	onResizeOnDrag: function(id) {
@@ -359,6 +398,7 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.oldY = 0;
 			newObj.oldW = 0;
 			newObj.oldH = 0;
+			newObj.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 			this.bouncedGridPress();
 		}
 		return newObj;
