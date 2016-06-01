@@ -1,4 +1,4 @@
- var React = require('react');
+var React = require('react');
 var Reflux = require('reflux');
 var objectAssign = require('object-assign');
 var DragSource = require('react-dnd').DragSource;
@@ -64,8 +64,7 @@ var CardLoader = React.createClass({
 				}
 			}
 			else if (message.command === "event.focus"){
-				// K_TODO why we are doing this?
-				//this.onMouseDown();
+				this.onMouseDown();
 			}
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);

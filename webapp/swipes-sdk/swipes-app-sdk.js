@@ -11,7 +11,11 @@ var SwipesAppSDK = (function() {
 		// set the sdk property on client so it can call this class
 		this._client.setDelegate(this);
 		this._listenersObj = {};
-		window.addEventListener('focus', function(){ this._client.callListener('event.focus'); }.bind(this));
+
+		if (window.location.pathname.startsWith('/workflows')) {
+			window.addEventListener('focus', function(){ this._client.callListener('event.focus'); }.bind(this));
+		}
+		
 		self = this;
 	}
 
@@ -349,7 +353,7 @@ var SwipesAppSDK = (function() {
 				if(self.info.selectedAccountId){
 					options.account_id = self.info.selectedAccountId;
 				}
-				
+
 				var intCallback = function(res, error){
 					if(callback) callback(res,error);
 					if(res) deferred.resolve(res);
