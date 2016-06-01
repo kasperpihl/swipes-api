@@ -328,7 +328,7 @@ var CardLoader = React.createClass({
 		}
 	},
 	componentDidMount() {
-		// Load dropbox css
+		var that = this;
 		var webview = this.refs.webview;
 
 		if (webview) {
@@ -367,7 +367,6 @@ var CardLoader = React.createClass({
 			    	});
 					})
 				} else { // Dev env
-					var that = this;
 					http.get(splitURL + '/styles/main.css').on('response', function (response) {
 				    response.on('data', function (chunk) {
 			        cssContent += chunk;
