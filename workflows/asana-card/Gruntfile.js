@@ -202,7 +202,7 @@ module.exports = function (grunt) {
           options: {
             baseDir: '<%= yeoman.dev %>',
             assets: ['**/*.js', '**/*.css'],
-            queryString: true
+            deleteOriginals: true
           },
           files: [
             {

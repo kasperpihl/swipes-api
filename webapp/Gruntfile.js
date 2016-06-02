@@ -363,8 +363,7 @@ module.exports = function (grunt) {
         dev: {
           options: {
             baseDir: '<%= yeoman.dev %>',
-            assets: ['**/*.js', '**/*.css'],
-            queryString: true
+            assets: ['**/*.js', '**/*.css']
           },
           files: [
             {
