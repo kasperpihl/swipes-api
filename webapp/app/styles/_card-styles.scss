@@ -60,9 +60,16 @@ $app-bar-height: 40px;
   overflow: hidden;
   box-shadow: 1px 4px 18px -5px #ccc;
   opacity: 1;
-  will-change: left, top;
-  will-change: width, height;
+  will-change: left, top, width, height;
   transition: box-shadow .4s, opacity .3s .1s;
+
+  &.minimized {
+    transition: box-shadow .4s, opacity .3s .1s;
+    &.illuminated {
+      box-shadow: 2px 4px 22px -5px rgba($deepBlue-100, .9);
+      transition: box-shadow .01s ease-in-out .3s, opacity .1s ease-in-out .3s;
+    }
+  }
 
   &.focused {
     box-shadow: 2px 4px 18px -5px rgba($deepBlue-100, .6);

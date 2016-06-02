@@ -68,11 +68,29 @@ var Topbar = React.createClass({
 	// setNotifications: function() {
 	// 	notificationActions.setNotifications();
 	// },
+	illuminateHidden: function(id) {
+		var cardEl = document.getElementById(id);
+		if (cardEl.classList.contains('minimized')) {
+			cardEl.style.transform = 'scale(1)';
+			cardEl.style.visibility = 'visible';
+			cardEl.style.opacity = '1';
+		}
+	},
+	removeIlluminationFromHidden: function(id) {
+		var cardEl = document.getElementById(id);
+		if (cardEl.classList.contains('minimized')) {
+			cardEl.style.transform = 'scale(0)';
+			cardEl.style.visibility = 'hidden';
+			cardEl.style.opacity = '0';
+		}
+	},
 	dockMouseEnter: function (cardId) {
 		WorkspaceStore.setIlluminatedCardId(cardId);
+		this.illuminateHidden(cardId);
 	},
-	dockMouseLeave: function () {
+	dockMouseLeave: function (cardId) {
 		WorkspaceStore.setIlluminatedCardId(null);
+		this.removeIlluminationFromHidden(cardId);
 	},
 	renderDock: function () {
 		var self = this;
@@ -91,11 +109,12 @@ var Topbar = React.createClass({
 			dockItems.push(
 				<div
 					onMouseEnter={function () {
-						if(!card.hidden) {
 							self.dockMouseEnter(card.id);
-						}
 					}}
-					onMouseLeave={self.dockMouseLeave}
+					onMouseLeave={function () {
+						self.dockMouseLeave(card.id);
+						}
+					}
 					onClick={self.dockMouseLeave}
 					className={className}
 					key={index} >

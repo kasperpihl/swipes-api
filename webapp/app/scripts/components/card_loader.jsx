@@ -576,7 +576,11 @@ var CardLoader = React.createClass({
 		}
 
 		if (this.state.card.hidden && this.state.card) {
-			style.display = 'none';
+
+			// make scale(0) and visibility hidden instead of none
+			style.transform = 'scale(0)';
+			style.visibility = 'hidden';
+			style.opacity = '0';
 			cardClass += ' minimized';
 		}
 
