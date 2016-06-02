@@ -20,7 +20,8 @@ var ListModal = React.createClass({
 		options.rows = options.rows || this.defaults.rows;
 		var self = this;
 		var rows = options.rows.map(function(row){
-			if(!row.id) return false;
+			// force remove tetris for the time being
+			if(!row.id || row.manifest_id === 'tetris') return false;
 			return <ListModal.Row key={row.id} onClickRow={self.didClickRow} data={row} />
 		});
 

@@ -7,7 +7,6 @@ var TopbarStore = Reflux.createStore({
 	listenables: [ topbarActions ],
 	onLoadWorkflowModal:function(){
 		swipes.api.request('workflows.list').then(function(res){
-			console.log(res);
 			modalActions.loadModal("list", {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": res.data }, function(row){
 				if(row){
 					swipes.api.request("users.addWorkflow", {"manifest_id": row.manifest_id}, function(res,error){

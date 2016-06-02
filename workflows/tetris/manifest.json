@@ -5,6 +5,7 @@
 	"version": "0.1",
 	"description": "A Tetris game for Swipes",
 	"index": "index.html",
+	"icon": "images/logo-tetris.svg"
 	"tables":[
 		{
 			"name": "highscore",
