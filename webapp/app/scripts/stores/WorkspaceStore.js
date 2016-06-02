@@ -263,7 +263,7 @@ var WorkspaceStore = Reflux.createStore({
 					// Showing content again
 					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
 					cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'visible';
-					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s, visibility .0s .2s';
+					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .2s .25s, visibility .0s .2s';
 				}
 			});
 		} else {
@@ -281,7 +281,7 @@ var WorkspaceStore = Reflux.createStore({
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
 					cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'visible';
-					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s, visibility .0s .2s';
+					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .2s .25s, visibility .0s .2s';
 				}
 			});
 		}
