@@ -575,9 +575,9 @@ var CardLoader = React.createClass({
 			style.zIndex = 1000 + this.state.card.z;
 		}
 
-		if (this.state.card.hidden && this.state.card) {
+		if (this.state.card && this.state.card.hidden) {
 
-			// make scale(0) and visibility hidden instead of none
+			// display none sucks
 			style.transform = 'scale(0)';
 			style.visibility = 'hidden';
 			style.opacity = '0';

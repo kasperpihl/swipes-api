@@ -57,6 +57,7 @@ $break-mid: 650px;
 		border-bottom: 1px solid #F4F4F5;
 
 		&.modal-list {
+			align-items: center;
 
 			&:hover {
 				background-color: $studioGray-20;
@@ -69,6 +70,7 @@ $break-mid: 650px;
 
 		img {
 			width: 35px;
+			height: 35px;
 		}
 
 		h3{

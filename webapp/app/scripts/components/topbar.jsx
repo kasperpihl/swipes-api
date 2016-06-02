@@ -1,6 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var uuid = require('uuid');
 
 // Material ui dependencies
 var MenuItem = require('material-ui/lib/menus/menu-item');
@@ -70,7 +71,7 @@ var Topbar = React.createClass({
 	// },
 	illuminateHidden: function(id) {
 		var cardEl = document.getElementById(id);
-		if (cardEl.classList.contains('minimized')) {
+		if (cardEl && cardEl.classList.contains('minimized')) {
 			cardEl.style.transform = 'scale(1)';
 			cardEl.style.visibility = 'visible';
 			cardEl.style.opacity = '1';
@@ -78,7 +79,7 @@ var Topbar = React.createClass({
 	},
 	removeIlluminationFromHidden: function(id) {
 		var cardEl = document.getElementById(id);
-		if (cardEl.classList.contains('minimized')) {
+		if (cardEl && cardEl.classList.contains('minimized')) {
 			cardEl.style.transform = 'scale(0)';
 			cardEl.style.visibility = 'hidden';
 			cardEl.style.opacity = '0';
@@ -128,6 +129,12 @@ var Topbar = React.createClass({
 			)
 		})
 
+		dockItems.push(
+			<div className="dock_item-add" onClick={this.clickedAdd} key={uuid.v4()}>
+				<FontIcon className="material-icons">add</FontIcon>
+			</div>
+		)
+
 		return (
 			<div className="dock-wrapper">
 				{dockItems}
@@ -158,14 +165,8 @@ var Topbar = React.createClass({
 					{this.renderIconMenu()}
 					<div className="topbar-title"><span>{title}</span></div>
 					{this.renderDock()}
-					<div className="feedback-button" onClick={this.feedbackForm}>
+					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
 						Send Feedback
-					</div>
-					<div className="grid-button" onClick={workspaceActions.gridButton}>
-						<i className="material-icons">dashboard</i>
-					</div>
-					<div className="add-button" onClick={this.clickedAdd}>
-						<i className="material-icons">add</i>
 					</div>
 				</div>
 			);
