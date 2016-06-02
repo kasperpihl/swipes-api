@@ -573,8 +573,13 @@ var CardLoader = React.createClass({
 			style.width = this.state.card.w;
 			style.height = this.state.card.h;
 			style.zIndex = 1000 + this.state.card.z;
-			style.display = this.state.card.hidden ? 'none' : '';
 		}
+
+		if (this.state.card.hidden && this.state.card) {
+			style.display = 'none';
+			cardClass += ' minimized';
+		}
+
 		if(this.state.workflow){
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			var externalUrl = this.state.workflow.external_url;
@@ -614,10 +619,6 @@ var CardLoader = React.createClass({
 												/>
 				}
 			}
-		}
-
-		if (this.state.card && this.state.card.hidden) {
-			cardClass += ' minimized'
 		}
 
 		if (this.state.card && this.state.card.focused) {

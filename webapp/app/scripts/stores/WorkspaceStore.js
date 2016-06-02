@@ -247,7 +247,8 @@ var WorkspaceStore = Reflux.createStore({
 			cardEl.style.transition = transitionStyle + ', left .3s, top .3s, width .3s, height .3s';
 			// hiding content while transition
 			cardEl.childNodes[0].querySelector('.card-content').style.opacity = '0';
-			cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s';
+			cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'hidden';
+			cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s, visibility .0s .05s';
 
 			// Setting new position and dimensions
 			this.update(id, {x: card.oldX, y: card.oldY, w: card.oldW, h: card.oldH, maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
@@ -261,7 +262,8 @@ var WorkspaceStore = Reflux.createStore({
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					// Showing content again
 					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
-					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s';
+					cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'visible';
+					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s, visibility .0s .2s';
 				}
 			});
 		} else {
@@ -269,7 +271,8 @@ var WorkspaceStore = Reflux.createStore({
 			cardEl.removeEventListener('transitionend', function() {});
 			cardEl.style.transition = transitionStyle + ', left .3s, top .3s, width .3s, height .3s';
 			cardEl.childNodes[0].querySelector('.card-content').style.opacity = '0';
-			cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s';
+			cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'hidden';
+			cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s, visibility .0s .05s';
 
 			this.update(id, {x: 5, y: 5, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
 
@@ -277,7 +280,8 @@ var WorkspaceStore = Reflux.createStore({
 				if (e.propertyName === "left") {
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
-					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s';
+					cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'visible';
+					cardEl.childNodes[0].querySelector('.card-content').style.transition = 'opacity .1s .15s, visibility .0s .2s';
 				}
 			});
 		}

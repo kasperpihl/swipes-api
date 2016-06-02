@@ -60,6 +60,8 @@ $app-bar-height: 40px;
   overflow: hidden;
   box-shadow: 1px 4px 18px -5px #ccc;
   opacity: 1;
+  will-change: left, top;
+  will-change: width, height;
   transition: box-shadow .4s, opacity .3s .1s;
 
   &.focused {
