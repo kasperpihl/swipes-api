@@ -43,7 +43,8 @@ var WorkspaceStore = Reflux.createStore({
 				parent_id: workflow.parent_id,
 				index_url: workflow.index_url,
 				icon: workflow.icon,
-				icon_url: workflow.icon_url
+				icon_url: workflow.icon_url,
+				external_url: workflow.external_url
 			}
 			// If the workflow is not found, insert a new record with the grid info.
 			if(!this.get(workflow.id)){

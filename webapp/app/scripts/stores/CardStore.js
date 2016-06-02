@@ -17,9 +17,12 @@ var CardStore = Reflux.createStore({
   },
   onBroadcast: function (event, data, callback) {
     var finalData = [];
-    var count = this._cards.length;
+    var filteredCards = this._cards.filter(function (card) {
+      return !card.external_url;
+    });
+    var count = filteredCards.length;
 
-    this._cards.forEach(function (card) {
+    filteredCards.forEach(function (card) {
       var receivingCallback = function (data) {
         // T_TODO || K_TODO
         // Checking for dublication because if we reload only the card iframe but
@@ -57,11 +60,6 @@ var CardStore = Reflux.createStore({
       eventActions.fire(event, newData);
       //}
     })
-  },
-  onSendToCard: function (cardId, eventType, eventData) {
-    var newData = objectAssign({toCardId: cardId, callback: receivingCallback}, eventData);
-
-    eventActions.fire(eventType, newData);
   }
 });
 
