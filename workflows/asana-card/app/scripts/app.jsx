@@ -66,7 +66,7 @@ swipes.onShareTransmit(function(e) {
 
 	if (input) {
 		CreateTaskInputActions.changeInputValue(input);
-		document.getElementById('create-task-input').focus();
+		// document.getElementById('create-task-input').focus();
 	}
 });
 

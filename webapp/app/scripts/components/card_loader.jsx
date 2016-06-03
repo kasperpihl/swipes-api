@@ -178,6 +178,11 @@ var CardLoader = React.createClass({
 	},
 	onShareTransmit: function (e) {
 		if (e.toCardId === this.props.data.id) {
+			if (this.state.card.hidden) {
+				workspaceActions.showHideCard(this.props.data.id);
+			} else {
+				this.onMouseDown()
+			}
 			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
 			amplitude.logEvent('Engagement - Share Action', analyticsProps);
 			mixpanel.track('Share Action', analyticsProps);

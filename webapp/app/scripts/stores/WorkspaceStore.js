@@ -403,7 +403,6 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.oldY = 0;
 			newObj.oldW = 0;
 			newObj.oldH = 0;
-			newObj.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 			this.bouncedGridPress();
 		}
 		return newObj;

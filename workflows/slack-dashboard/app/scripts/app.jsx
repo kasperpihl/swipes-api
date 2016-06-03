@@ -38,7 +38,7 @@ swipes.onShareTransmit(function(e) {
 
 	if (input) {
 		chatInputActions.changeInputValue(input);
-		document.getElementById('chat-input').focus();
+		// document.getElementById('chat-input').focus();
 	}
 });
 
