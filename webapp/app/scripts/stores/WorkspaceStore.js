@@ -224,6 +224,9 @@ var WorkspaceStore = Reflux.createStore({
 
 		this.manualTrigger();
 	},
+	onRemoveMaximize: function(id) {
+		this.update(id, {maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
+	},
 	onMaximize: function(id) {
 		var card = this.get(id);
 		var cardEl = document.getElementById(id);
@@ -258,8 +261,7 @@ var WorkspaceStore = Reflux.createStore({
 			cardEl.addEventListener("transitionend", function(e) {
 
 				// Checking if correct transition end (lots of transitions happening)
-				if (e.propertyName === "left" || e.propertyName === "width") {
-					console.log('left');
+				if (e.propertyName === "left" || e.propertyName === "width" || e.propertyName === "top" || e.propertyName === "height") {
 					// Reseting transitions for other events
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					// Showing content again
@@ -279,7 +281,7 @@ var WorkspaceStore = Reflux.createStore({
 			this.update(id, {x: 5, y: 5, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
 
 			cardEl.addEventListener("transitionend", function(e) {
-				if (e.propertyName === "left" || e.propertyName === "width") {
+				if (e.propertyName === "left" || e.propertyName === "width" || e.propertyName === "top" || e.propertyName === "height") {
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
 					cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'visible';

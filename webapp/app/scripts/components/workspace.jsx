@@ -61,7 +61,6 @@ var Workspace = React.createClass({
 
       return _.map(this.state.workspace, function(card, i) {
         cardActions.add(card);
-
         return (
           <CardLoader
             key={card.id}
@@ -72,7 +71,15 @@ var Workspace = React.createClass({
       }.bind(this));
     },
     runAdjustments() {
+        var cards = this.state.workspace;
         this.bouncedAdjusting();
+
+        cards.forEach(function(card) {
+          if (card.maximized) {
+            console.log('removing maximize')
+            WorkspaceActions.removeMaximize(card.id)
+          }
+        })
     },
     onEnterLeaveDropOverlay(cardId) {
       this._dropZoneId = cardId;
