@@ -96,6 +96,7 @@ var Topbar = React.createClass({
 	renderDock: function () {
 		var self = this;
 		var cards = this.state.workspace;
+		var addClassName = 'dock_item-add';
 		var dockItems = [];
 
 		cards.forEach(function (card, index) {
@@ -129,8 +130,12 @@ var Topbar = React.createClass({
 			)
 		})
 
+		if (dockItems.length === 0) {
+			addClassName += ' pulsate'
+		}
+
 		dockItems.push(
-			<div className="dock_item-add" onClick={this.clickedAdd} key={uuid.v4()}>
+			<div className={addClassName} onClick={this.clickedAdd} key={uuid.v4()}>
 				<FontIcon className="material-icons">add</FontIcon>
 			</div>
 		)

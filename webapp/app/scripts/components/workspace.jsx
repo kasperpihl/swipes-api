@@ -49,7 +49,6 @@ var Workspace = React.createClass({
             <p className="workspace-empty-text">
               <span className="strong">Welcome to your workspace</span> <br />
             </p>
-            <img className="empty-workspace-arrow" src="styles/img/emptystate-workspace-arrow.svg" />
             <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg" onClick={this.openVideo} />
             <div className="play-button" onClick={this.openVideo}></div>
               <p className="workspace-empty-text">
