@@ -95,7 +95,7 @@ module.exports = function (grunt) {
         },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
-          tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
+          tasks: ['clean:dev', 'webpack:dev', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
           files: [
@@ -103,6 +103,7 @@ module.exports = function (grunt) {
             '<%= yeoman.globalStyles %>/**/*.{sass,scss}'
           ],
           tasks: [
+            'clean:dev',
             'compass:dev',
             'compass:devGlobal',
             'autoprefixer:dev',
@@ -115,11 +116,11 @@ module.exports = function (grunt) {
             '<%= yeoman.app %>/*.html',
             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
           ],
-          tasks: ['copy:dev']
+          tasks: ['clean:dev', 'copy:dev']
         },
         sdk: {
           files: ['./swipes-sdk/**/*'],
-          tasks: ['concat:serve', 'copy:dev', 'cacheBust:dev']
+          tasks: ['clean:dev', 'concat:serve', 'copy:dev', 'cacheBust:dev']
         },
       },
       clean: {
