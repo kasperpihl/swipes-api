@@ -4,7 +4,7 @@ if (window.process && window.process.versions.electron) {
   // Geting events from the oauth popup
   require('./oauth-electron-handler');
   require("react-tap-event-plugin")();
-  
+
   const Router = require('./router');
   const defaultMenu = require('./electron-default-menu');
   // Set a top-level application menu

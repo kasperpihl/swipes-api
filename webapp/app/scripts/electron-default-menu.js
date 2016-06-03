@@ -1,5 +1,5 @@
-var electron = nodeRequire('electron');
-var app = electron.app;
+var remote = nodeRequire('electron').remote;
+var app = remote.app;
 
 module.exports = function() {
   var template = [
@@ -55,7 +55,7 @@ module.exports = function() {
         {
           label: 'Toggle Full Screen',
           accelerator: (function() {
-            if (process.platform == 'darwin')
+            if (window.process.platform == 'darwin')
               return 'Ctrl+Command+F';
             else
               return 'F11';
@@ -68,7 +68,7 @@ module.exports = function() {
         {
           label: 'Toggle Developer Tools',
           accelerator: (function() {
-            if (process.platform == 'darwin')
+            if (window.process.platform == 'darwin')
               return 'Alt+Command+I';
             else
               return 'Ctrl+Shift+I';
@@ -98,7 +98,7 @@ module.exports = function() {
     }
   ];
 
-  if (process.platform == 'darwin') {
+  if (window.process.platform == 'darwin') {
     var name = app.getName();
     template.unshift({
       label: name,
