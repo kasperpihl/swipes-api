@@ -343,7 +343,7 @@ var CardLoader = React.createClass({
 			var jsContent = '';
 
 			webview.addEventListener('dom-ready', () => {
-				// webview.openDevTools();
+				webview.openDevTools();
 
 				// Build this with promises
 				if (splitURL.startsWith('https')) { // production env
@@ -409,6 +409,16 @@ var CardLoader = React.createClass({
 			webview.addEventListener('page-title-updated', () => {
 				webview.executeJavaScript(jsContent);
 			})
+			// Handle analytics
+			// webview.addEventListener('ipc-message', (event) => {
+			//   console.log(event);
+			//
+			//   return;
+			// 	mixpanel.track('Card Action', {
+	    //     Card: arg.manifest_id,
+	    //     Action: arg.name
+	    //   });
+			// });
 		}
 	},
 	renderWebviewLoader: function() {
