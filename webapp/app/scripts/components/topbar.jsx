@@ -170,8 +170,12 @@ var Topbar = React.createClass({
 					{this.renderIconMenu()}
 					<div className="topbar-title"><span>{title}</span></div>
 					{this.renderDock()}
-					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
+					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '60px'}}>
 						Send Feedback
+					</div>
+
+					<div className="grid-button" onClick={workspaceActions.gridButton} style={{right: '10px'}}>
+						<i className="material-icons">dashboard</i>
 					</div>
 				</div>
 			);
