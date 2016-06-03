@@ -258,7 +258,8 @@ var WorkspaceStore = Reflux.createStore({
 			cardEl.addEventListener("transitionend", function(e) {
 
 				// Checking if correct transition end (lots of transitions happening)
-				if (e.propertyName === "left") {
+				if (e.propertyName === "left" || e.propertyName === "width") {
+					console.log('left');
 					// Reseting transitions for other events
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					// Showing content again
@@ -278,7 +279,7 @@ var WorkspaceStore = Reflux.createStore({
 			this.update(id, {x: 5, y: 5, w: newW, h: newH, maximized: true, oldX: oldPos.x, oldY: oldPos.y, oldW: oldSize.w, oldH: oldSize.h} );
 
 			cardEl.addEventListener("transitionend", function(e) {
-				if (e.propertyName === "left") {
+				if (e.propertyName === "left" || e.propertyName === "width") {
 					cardEl.style.transition = 'box-shadow 0.4s ease 0s, opacity 0.3s ease 0.15s';
 					cardEl.childNodes[0].querySelector('.card-content').style.opacity = '1';
 					cardEl.childNodes[0].querySelector('.card-content').style.visibility = 'visible';
@@ -316,6 +317,11 @@ var WorkspaceStore = Reflux.createStore({
 				focused: el.focused
 			};
 
+			// if (el.maximized) {
+			// 	console.log('yo');
+			// 	this.update(el.id, {maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
+			// }
+
 			// Check if something has been moved to the front
 			// if(z != counter){
 			// 	newSize.z = counter;
@@ -334,7 +340,7 @@ var WorkspaceStore = Reflux.createStore({
 
 
 				if(underflowX > 0){
-					newSize.w = w = Math.max(minWidth, w - underflowX - paddingForAutoAdjusting);
+					// newSize.w = w = Math.max(minWidth, w - underflowX - paddingForAutoAdjusting);
 				}
 				if(x < 0){
 					newSize.x = x = paddingForAutoAdjusting;
@@ -342,7 +348,7 @@ var WorkspaceStore = Reflux.createStore({
 
 
 				if(underflowY > 0){
-					newSize.h = h = Math.max(minHeight, h - underflowY - paddingForAutoAdjusting);
+					// newSize.h = h = Math.max(minHeight, h - underflowY - paddingForAutoAdjusting);
 				}
 				if(y < 0){
 					newSize.y = y = 0;
@@ -350,7 +356,7 @@ var WorkspaceStore = Reflux.createStore({
 
 
 				if(overflowX > 0){
-					newSize.w = w = Math.max(minWidth, (w - overflowX - paddingForAutoAdjusting) );
+					// newSize.w = w = Math.max(minWidth, (w - overflowX - paddingForAutoAdjusting) );
 				}
 				if((x + w) > screenWidth){
 					newSize.x = Math.max(screenWidth - w - paddingForAutoAdjusting, paddingForAutoAdjusting);
@@ -358,7 +364,7 @@ var WorkspaceStore = Reflux.createStore({
 
 				// Check if offscreen in the bottom off the screen
 				if(overflowY > 0){
-					newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) );
+					// newSize.h = h = Math.max(minHeight, (h - overflowY - paddingForAutoAdjusting) );
 				}
 				if((y + h) > screenHeight){
 					newSize.y = Math.max(screenHeight - h, paddingForAutoAdjusting);
