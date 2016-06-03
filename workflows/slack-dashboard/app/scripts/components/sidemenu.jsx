@@ -16,7 +16,7 @@ var Sidemenu = React.createClass({
 		return {};
 	},
 	togglePin:function(){
-		
+
 		console.log("pinning", !(this.state.pinned));
 		this.setState({pinned: !(this.state.pinned)});
 		if(typeof this.props.onWidthChanged === 'function'){
@@ -30,11 +30,11 @@ var Sidemenu = React.createClass({
 			else{
 				this.props.onWidthChanged(newWidth);
 			}
-			
+
 		}
 	},
 	componentDidUpdate:function(prevProps, prevState) {
-		this.calculateBeforeAndAfter();    
+		this.calculateBeforeAndAfter();
 	},
 	componentDidMount:function() {
 		this.bouncedCalculate = _.debounce(this.calculateBeforeAndAfter, 50);
@@ -66,10 +66,10 @@ var Sidemenu = React.createClass({
 			var top = el.getBoundingClientRect().top;
 			if(top < 0){
 				var item = items[i];
-				if(item.unread){ 
+				if(item.unread){
 					unreadAbove += item.unread;
 				}
-				if(item.notification){ 
+				if(item.notification){
 					notificationAbove += item.notification;
 				}
 			}
@@ -83,10 +83,10 @@ var Sidemenu = React.createClass({
 			var top = el.getBoundingClientRect().top;
 			if(top + itemHeight > height){
 				var item = items[i];
-				if(item.unread){ 
+				if(item.unread){
 					unreadBelow += item.unread;
 				}
-				if(item.notification){ 
+				if(item.notification){
 					notificationBelow += item.notification;
 				}
 			}
@@ -94,7 +94,7 @@ var Sidemenu = React.createClass({
 		}
 		if( unreadAbove != this.state.unreadAbove ||
 			notificationAbove != this.state.notificationAbove ||
-			unreadBelow != this.state.unreadBelow || 
+			unreadBelow != this.state.unreadBelow ||
 			notificationBelow != this.state.notificationBelow ){
 
 			this.setState({

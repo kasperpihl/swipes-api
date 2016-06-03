@@ -297,6 +297,9 @@ var WorkspaceStore = Reflux.createStore({
 			this.update(id, {w: card.oldW, h: card.oldH, maximized: false, oldX: 0, oldY: 0, oldW: 0, oldH: 0} );
 		}
 	},
+	onSetNotifications: function(id, number) {
+		this.update(id, {notifications: number} );
+	},
 	onAdjustForScreenSize: function(cards){
 		var minimumWidthOnScreen = 100;
 		var minimumHeightOnScreen = 50;
@@ -411,6 +414,7 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.oldY = 0;
 			newObj.oldW = 0;
 			newObj.oldH = 0;
+			newObj.notifications = 0;
 			this.bouncedGridPress();
 		}
 		return newObj;

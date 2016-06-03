@@ -141,7 +141,8 @@ var CardLoader = React.createClass({
 				leftNavActions.load(data, callback);
 			}
 			else if(message.command === 'navigation.setBadge'){
-				this.setState({badge: data.badge});
+				// this.setState({badge: data.badge});
+				workspaceActions.setNotifications(this.state.workflow.id, data.badge);
 			}
 			else if(message.command === 'notifications.send'){
 

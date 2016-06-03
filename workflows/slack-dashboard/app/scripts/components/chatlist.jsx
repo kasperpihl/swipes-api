@@ -83,6 +83,7 @@ var ChatList = React.createClass({
 	},
 	componentDidUpdate: function(prevProps, prevState){
 		this.scrollToBottom(this.hasRendered);
+		chatActions.updateBadge();
 	},
 	componentDidMount: function(){
 		this.bouncedSidemenuCheck = _.debounce(this.checkForcedSidemenu, 30);

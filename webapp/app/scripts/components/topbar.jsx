@@ -108,6 +108,10 @@ var Topbar = React.createClass({
 				className += ' focused'
 			}
 
+			if (card.notifications > 0) {
+				className += ' notification';
+			}
+
 			dockItems.push(
 				<div
 					onMouseEnter={function () {
