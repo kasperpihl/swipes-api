@@ -15,7 +15,7 @@ var SwipesAppSDK = (function() {
 		if (window.location.pathname.startsWith('/workflows')) {
 			window.addEventListener('focus', function(){ this._client.callListener('event.focus'); }.bind(this));
 		}
-		
+
 		self = this;
 	}
 

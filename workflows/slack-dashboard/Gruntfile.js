@@ -201,8 +201,10 @@ module.exports = function (grunt) {
         dev: {
           options: {
             baseDir: '<%= yeoman.dev %>',
-            assets: ['**/*.js', '**/*.css'],
-            deleteOriginals: true
+            assets: [
+              'scripts/app.js',
+              'styles/main.css'
+            ]
           },
           files: [
             {
