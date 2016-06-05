@@ -14,6 +14,9 @@ var IconMenu = require('material-ui/lib/menus/icon-menu');
 // Node requires
 var http = nodeRequire('http');
 var https = nodeRequire('https');
+var remote = nodeRequire('electron').remote;
+var app = remote.app;
+var path = nodeRequire('path');
 
 var Loading = require('./loading');
 var WorkflowStore = require('../stores/WorkflowStore');
@@ -411,15 +414,16 @@ var CardLoader = React.createClass({
 				webview.executeJavaScript(jsContent);
 			})
 			// Handle analytics
-			// webview.addEventListener('ipc-message', (event) => {
-			//   console.log(event);
-			//
-			//   return;
-			// 	mixpanel.track('Card Action', {
-	    //     Card: arg.manifest_id,
-	    //     Action: arg.name
-	    //   });
-			// });
+			webview.addEventListener('ipc-message', (event) => {
+			  var arg = event.args[0];
+
+				if (event.channel === 'mixpanel') {
+					mixpanel.track('Card Action', {
+		        Card: arg.manifest_id,
+		        Action: arg.action
+		      });
+				}
+			});
 		}
 	},
 	renderWebviewLoader: function() {
@@ -606,7 +610,12 @@ var CardLoader = React.createClass({
 			workflowId = this.state.workflow.id;
 
 			if (externalUrl) {
-				cardContent = <webview ref="webview" src={externalUrl} className="workflow-frame-class"></webview>;
+				cardContent = <webview
+					preload={'file://' + path.join(app.getAppPath(), 'preload/' + this.state.workflow.manifest_id + '.js')}
+					ref="webview"
+					src={externalUrl}
+					className="workflow-frame-class">
+				</webview>;
 				webviewLoader = this.renderWebviewLoader();
 			} else {
 				cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
