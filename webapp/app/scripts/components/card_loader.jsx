@@ -402,9 +402,18 @@ var CardLoader = React.createClass({
 					})
 				}
 			});
-			webview.addEventListener('will-navigate', () => {
+			webview.addEventListener('did-start-loading', () => {
 				this.setState({webviewLoading: true})
 			})
+
+			webview.addEventListener('did-stop-loading', () => {
+				console.log('stop loading');
+				// just because there is a delay between injection and actually applying CSS, this is probably really dumb
+				setTimeout(function(){
+					that.setState({webviewLoading: false});
+				}, 1000);
+			})
+
 
 			webview.addEventListener('did-navigate', () => {
 				webview.insertCSS(cssContent);
