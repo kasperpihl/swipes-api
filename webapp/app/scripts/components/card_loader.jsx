@@ -618,6 +618,11 @@ var CardLoader = React.createClass({
 			var externalUrl = this.state.workflow.external_url;
 			workflowId = this.state.workflow.id;
 
+			// For Tiho
+			// preload={'file://' + path.join(app.getAppPath(), 'preload/' + this.state.workflow.manifest_id + '.js')}
+			// For Kris
+			// preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\' + this.state.workflow.manifest_id + '.js'}
+
 			if (externalUrl) {
 				cardContent = <webview
 					preload={'file://' + path.join(app.getAppPath(), 'preload/' + this.state.workflow.manifest_id + '.js')}
