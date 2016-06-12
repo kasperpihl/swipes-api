@@ -226,13 +226,8 @@ var CardLoader = React.createClass({
 		var workflow = this.state.workflow;
 
 		// K_TODO || T_TODO : WARNING, This is a super hack hahaha
-		var services = userStore.me().services || [];
-		var slackToken = null;
-		for(var i = 0 ; i < services.length ; i++){
-			var serv = services[i];
-			if(serv.service_name === "slack" && serv.authData){
-				workflow.slackToken = serv.authData.access_token;
-			}
+		if(workflow && this.slackToken){
+			workflow.slackToken = this.slackToken;
 		}
 
 
@@ -240,7 +235,6 @@ var CardLoader = React.createClass({
 			type: "init",
 			data: {
 				manifest: workflow,
-				slackToken: slackToken,
 				_id: this.state.workflow.id,
 				user_id: userStore.me().id,
 				token: stateStore.get("swipesToken"),
@@ -640,10 +634,15 @@ var CardLoader = React.createClass({
 				var requiredService = this.state.workflow.required_services[0];
 				var selectedAccountId = this.state.workflow.selectedAccountId;
 				var foundSelectedAccount = false;
+				var self = this;
 				var connectedServices = _.filter(this.state.user.services, function(service){
 					if(service.service_name === requiredService){
 						if(selectedAccountId && selectedAccountId === service.id){
 							foundSelectedAccount = true;
+							// K_TODO || T_TODO : WARNING, This is a super hack hahaha
+							if(service.service_name === "slack" && service.authData){
+								self.slackToken = service.authData.access_token;
+							}
 						}
 						return true;
 					}
