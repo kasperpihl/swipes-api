@@ -91,9 +91,7 @@ var WorkspaceStore = Reflux.createStore({
 		var obj = this.get(id);
 		var x = obj.x + deltaCordinates.x;
 		var y = obj.y + deltaCordinates.y;
-		if(id){
-			this.update(id, {x:x, y:y});
-		}
+		this.update(id, {x:x, y:y});
 	},
 	onUpdateCardSize: function(id, obj){
 		var newSize = {};
@@ -117,9 +115,7 @@ var WorkspaceStore = Reflux.createStore({
 		if(obj.y){
 			newSize.y = obj.y;
 		}
-		if(id){
-			this.update(id, newSize);
-		}
+		this.update(id, newSize);
 	},
 	onGridButton: function(){
 		var i = 0;
@@ -386,7 +382,7 @@ var WorkspaceStore = Reflux.createStore({
 				}
 			}
 
-			if(_.size(newSize) > 0 && el.id){
+			if(_.size(newSize) > 0){
 				this.update(el.id, newSize, {trigger: false});
 				didUpdate = true;
 			}
@@ -416,6 +412,12 @@ var WorkspaceStore = Reflux.createStore({
 			newObj.oldH = 0;
 			newObj.notifications = 0;
 			this.bouncedGridPress();
+		}
+		if(!WorkflowStore.get(newObj.id)){
+			setTimeout(function(){
+				this.unset(newObj.id);
+			}.bind(this), 1);
+			return null;
 		}
 		return newObj;
 	},
