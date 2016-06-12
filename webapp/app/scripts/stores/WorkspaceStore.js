@@ -414,9 +414,6 @@ var WorkspaceStore = Reflux.createStore({
 			this.bouncedGridPress();
 		}
 		if(!WorkflowStore.get(newObj.id)){
-			setTimeout(function(){
-				this.unset(newObj.id);
-			}.bind(this), 1);
 			return null;
 		}
 		return newObj;
