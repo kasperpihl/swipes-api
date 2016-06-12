@@ -12,7 +12,7 @@ if (fileViewer && pageHeader) {
 var browseHeader = document.getElementById('browse-header');
 var sendEvent = window.sendEvent; // that is defined in the preload script
 var downloadActionButtonClick = function (e) {
-  sendEvent('download');
+  sendEvent('donwload');
 }
 
 // Disconnect and delete the observer if exists
