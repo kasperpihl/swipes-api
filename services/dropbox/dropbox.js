@@ -37,21 +37,54 @@ var dropbox = {
 		    console.log(err);
 		  }
 
-			callback(err, res);
+			callback(err, body);
 		});
 	},
 	beforeAuthSave: function (data, callback) {
-		data.id = data.uid;
+		var self = this;
+		var options = {
+			method: 'post',
+			form: {
+				code: data.code,
+				grant_type: 'authorization_code',
+				client_id: dropboxConfig.appId,
+				client_secret: dropboxConfig.appSecret,
+				redirect_uri: dropboxConfig.redirectURI
+			},
+			url: 'https://api.dropboxapi.com/oauth2/token'
+		}
 
-		return callback(null, data);
+		request(options, function (err, res, body) {
+			if (err) {
+				console.log(err);
+			}
+
+			var jsonBody = JSON.parse(body);
+			var account_id = jsonBody.account_id;
+			var access_token = jsonBody.access_token;
+			var authData = {access_token: access_token};
+			var method = 'users.getAccount';
+			var params = {account_id: account_id};
+			var data = jsonBody;
+
+			self.request({authData, method, params}, function (err, res) {
+				if (err) {
+					console.log(err);
+				}
+
+				data.uniq_id = res.account_id;
+				data.show_name = res.email;
+
+				return callback(null, data);
+			})
+		})
 	},
 	authorize: function (data, callback) {
-    var URL = 'https://www.dropbox.com/1/oauth2/authorize';
-    URL += '?response_type=token'
+    var URL = 'https://www.dropbox.com/oauth2/authorize';
+    URL += '?response_type=code'
 		URL += '&client_id=' + dropboxConfig.appId;
 		URL += '&redirect_uri=' + dropboxConfig.redirectURI;
-    URL += '&force_reapprove=true'; // this is only for testing
-    // It will be good to implement the state parameter for better security
+		// T_TODO state for better security
 
 		callback(null, {type: 'oauth', url: URL});
 	}

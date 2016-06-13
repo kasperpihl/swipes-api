@@ -34,15 +34,7 @@ var SocketStore = Reflux.createStore({
 				userStore.update(res.self.id, res.self);
 				WorkflowStore.workflow_base_url = res.workflow_base_url;
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
-
-				var serviceFiltered = _.filter(res.services, function(service, i){
-					if(service.manifest_id == "dropbox"){
-						return false;
-					}
-					return true;
-				});
-
-				serviceStore.batchLoad(serviceFiltered, {flush:true});
+				serviceStore.batchLoad(res.services, {flush:true});
 				stateActions.changeStarted(true);
 			}
 		}).fail(function (error) {

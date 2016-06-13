@@ -30,7 +30,7 @@ serviceUtil.getServiceWithAuth = (req, res, next) => {
 	if (!service) {
 		return next(new SwipesError('service_required'));
 	}
-	
+
 	let filter = {"service_name": service};
 	let selectedAccountId = req.body.account_id;
 	if(selectedAccountId){

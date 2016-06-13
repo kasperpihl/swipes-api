@@ -44,7 +44,6 @@ SlackConnector.request = function(token, path, params, callback){
 		req.end();
 	}
 	catch(err) {
-		console.log('eeeeee', err);
 		callback(err);
 	}
 }
