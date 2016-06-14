@@ -1,7 +1,7 @@
 "use strict";
 
 const config = require('config');
-const express = require( 'express' );
+const express = require('express');
 const r = require('rethinkdb');
 const Promise = require('bluebird');
 const validator = require('validator');
@@ -9,7 +9,7 @@ const shortid = require('shortid');
 const hash = require('object-hash');
 const util = require('../util.js');
 const db = require('../db.js');
-const SwipesError = require( '../swipes-error' );
+const SwipesError = require('../swipes-error');
 
 const generateId = util.generateSlackLikeId;
 const router = express.Router();
