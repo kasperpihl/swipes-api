@@ -26,7 +26,7 @@ const router = express.Router();
       title: name,
       description: notes
     },
-    actions: {
+    actions: [
       title: 'complete',
       icon: 'check',
       method: 'tasks.update',
@@ -34,33 +34,38 @@ const router = express.Router();
         id: '1234567',
         completed: true
       }
-    }
+    ]
   }
 **/
 router.post('/link.add', (req, res, next) => {
-  const service = req.body.service;
-  const method = req.body.method;
-  const data = req.body.data;
-  const fields = req.body.fields;
-  const actions = req.body.actions;
-
   //T_TODO validating the service object
-
-  // T_TODO check for a the checksum
-  // if it there just return the url without making a new one
+  const service = req.body.service;
   const checksum = hash(service);
-  const shortUrl = 'SW-' + shortid.generate();
-  const link = {
-    checksum: checksum,
-    service: service,
-    shortUrl: shortUrl
-  };
+  const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
 
-  const insertLinkQ = r.table('links').insert(link);
+  let shortUrl = null;
 
-  db.rethinkQuery(insertLinkQ)
+  db.rethinkQuery(checkSumQ)
+    .then((res) => {
+      if (res.length > 0) {
+        shortUrl = res[0].short_url;
+
+        return Promise.resolve();
+      }
+
+      shortUrl = 'SW-' + shortid.generate();
+      const link = {
+        checksum: checksum,
+        service: service,
+        short_url: shortUrl
+      };
+
+      const insertLinkQ = r.table('links').insert(link);
+
+      return db.rethinkQuery(insertLinkQ);
+    })
     .then(() => {
-      return res.status(200).json({ok: true});
+      return res.status(200).json({ok: true, short_url: shortUrl});
     })
     .catch((e) => {
       return next(e);
