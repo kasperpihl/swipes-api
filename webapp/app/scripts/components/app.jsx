@@ -9,7 +9,6 @@ var LeftNav = require('./left_nav');
 // Requiring the stores
 var eventStore = require('../stores/EventStore');
 //var notificationStore = require('../stores/NotificationStore');
-var bridgeStore = require('../stores/BridgeStore');
 
 var App = React.createClass({
   mixins: [ Reflux.ListenerMixin ],
