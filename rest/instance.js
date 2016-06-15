@@ -52,6 +52,7 @@ let workflowsRouter = require('./routes/workflows.js');
 let linksRouter = require('./routes/links.js');
 let feedbackRouter = require('./routes/feedback.js');
 let feedbackNoAuthRouter = require('./routes/feedback_no_auth.js');
+let swipesCardRouter = require('./routes/swipes_card.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -68,6 +69,7 @@ app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
 // Routes for which we don't need authentication
+app.use('/SW-*', swipesCardRouter);
 app.use('/v1', usersAuth);
 app.use('/v1', sdkRouter);
 app.use('/v1', servicesNoAuthRouter);
