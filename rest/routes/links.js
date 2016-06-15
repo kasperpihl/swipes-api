@@ -38,9 +38,10 @@ const router = express.Router();
   }
 **/
 router.post('/link.add', (req, res, next) => {
+  const userId = req.userId;
   //T_TODO validating the service object
   const service = req.body.service;
-  const checksum = hash(service);
+  const checksum = hash({service: service, userId: userId});
   const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
 
   let shortUrl = null;
@@ -57,7 +58,8 @@ router.post('/link.add', (req, res, next) => {
       const link = {
         checksum: checksum,
         service: service,
-        short_url: shortUrl
+        short_url: shortUrl,
+        userId: userId
       };
 
       const insertLinkQ = r.table('links').insert(link);
