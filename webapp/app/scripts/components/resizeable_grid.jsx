@@ -7,16 +7,46 @@ var dataSource = {
 };
 
 var Grid = React.createClass({
+  // ======================================================
+  // Life Cycle methods
+  // ======================================================
   getInitialState() {
       return {
           columns: this.props.columns  
       };
   },
+  componentWillUpdate(nextProps, nextState){
+
+  },
+  componentDidUpdate(prevProps, prevState) {
+        
+  },
+
+  // ======================================================
+  // Render methods
+  // ======================================================
+  render(){
+
+    var columns = this.state.columns.map(function(column, i){
+      return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"column-" + i} data={column} />;
+    }.bind(this));
+
+    return (
+      <div className="sw-resizeable-grid">
+        {columns}
+      </div>
+    )
+  },
+
   // ======================================================
   // Resize Delegate
   // ======================================================
   columnWillResize(columnIndex){
     this.resizingColumnIndex = columnIndex;
+  },
+  rowWillResize(columnIndex, rowIndex){
+    this.resizingColumnIndex = columnIndex;
+    this.resizingRowIndex = rowIndex;
   },
   columnResize(diffX){
     
@@ -29,31 +59,46 @@ var Grid = React.createClass({
     var newSize = pixels[this.resizingColumnIndex] + addedWidth;
 
 
-    percentages[this.resizingColumnIndex] = this.percentageFromPixels(newSize);
+    percentages[this.resizingColumnIndex] = this.percentageWidthFromPixels(newSize);
 
     var prevI = this.resizingColumnIndex - 1;
-    percentages[prevI] = this.percentageFromPixels(pixels[prevI] - addedWidth);
+    percentages[prevI] = this.percentageWidthFromPixels(pixels[prevI] - addedWidth);
 
     
     // Add percentages to columns and check if 100%
-    var total = 0;
-    var columns = this.state.columns;
-    console.log(percentages);
-    percentages.forEach(function(percent, i){
-      total += percent;
-      columns[i].w = percent;
-    })
-    total = this.roundedDecimal(total);
-    if(total != 100){
-      console.log(total);
-      columns[this.resizingColumnIndex - 1].w += (100 - total);
-    }
-    
-
-    this.setState({columns: columns});
+    this.saveColumnPercentagesToState(percentages, prevI);
 
   },
+  rowResize(diffY){
+    var colI = this.resizingColumnIndex;
+    var rowI = this.resizingRowIndex;
+
+    var percentages = this.rowsArrayPercentages(colI);
+    var pixels = this.rowsArrayPixels(colI);
+    
+
+    var addedHeight = -diffY;
+    var newSize = pixels[rowI] + addedHeight;
+
+
+    percentages[rowI] = this.percentageWidthFromPixels(newSize);
+
+    var prevI = this.resizingRowIndex - 1;
+    percentages[prevI] = this.percentageWidthFromPixels(pixels[prevI] - addedHeight);
+
+    
+    // Add percentages to rows and check if 100%
+    this.saveRowPercentagesToState(colI, percentages, prevI);
+  },
+  rowDidResize(){
+
+  },
+  rowDidResize(){
+    this.columnDidResize();
+  },
   columnDidResize(){
+    var obj = JSON.parse(JSON.stringify(this.state.columns));
+    this.callDelegate('gridDidUpdate', obj);
   },
 
 
@@ -67,19 +112,33 @@ var Grid = React.createClass({
   // ======================================================
   // Conversions
   // ======================================================
-  percentageFromPixels(pixels){
+  percentageWidthFromPixels(pixels){
     // K_TODO: Cache the width to not query grid all the time.
-    const grid = document.querySelector('.grid');
+    const grid = document.querySelector('.sw-resizeable-grid');
     const gw = grid.clientWidth;
     var percentage = (pixels / gw * 100);
     
     return this.roundedDecimal(percentage);
   },
-  pixelsFromPercentage(percentage){
+  pixelsWidthFromPercentage(percentage){
     // K_TODO: Cache the width to not query grid all the time.
-    const grid = document.querySelector('.grid');
+    const grid = document.querySelector('.sw-resizeable-grid');
     const gw = grid.clientWidth;
     return Math.round(gw / 100 * percentage);
+  },
+  percentageHeightFromPixels(pixels){
+    // K_TODO: Cache the height to not query grid all the time.
+    const grid = document.querySelector('.sw-resizeable-grid');
+    const gh = grid.clientHeight;
+    var percentage = (pixels / gh * 100);
+    
+    return this.roundedDecimal(percentage);
+  },
+  pixelsHeightFromPercentage(percentage){
+    // K_TODO: Cache the height to not query grid all the time.
+    const grid = document.querySelector('.sw-resizeable-grid');
+    const gh = grid.clientHeight;
+    return Math.round(gh / 100 * percentage);
   },
   roundedDecimal(number){
     return Math.round( number * 1e2 ) / 1e2;
@@ -101,7 +160,46 @@ var Grid = React.createClass({
   // ======================================================
   // Setters
   // ======================================================
+  saveColumnPercentagesToState(percentages, overflowI){
+    if(!percentages){
+      percentages = this.columnsArrayPercentages();
+    }
+    var total = 0;
+    var columns = this.state.columns;
+    percentages.forEach(function(percent, i){
+      total += percent;
+      columns[i].w = percent;
+    })
+    total = this.roundedDecimal(total);
+    if(total != 100){
+      var width = columns[overflowI].w;
+      columns[overflowI].w = this.roundedDecimal(width + (100 - total));
+    }
 
+    this.setState({columns: columns});
+
+  },
+  saveRowPercentagesToState(columnIndex, percentages, overflowI){
+    if(!percentages){
+      percentages = this.rowsArrayPercentages(columnIndex);
+    }
+    var total = 0;
+    var columns = this.state.columns;
+    var rows = this.state.columns[columnIndex].rows;
+    percentages.forEach(function(percent, i){
+      total += percent;
+      rows[i].h = percent;
+    })
+    total = this.roundedDecimal(total);
+    if(total != 100){
+      var height = rows[overflowI].h;
+      console.log(total);
+      //columns[columnIndex].rows[overflowI].h = this.roundedDecimal(height + (100 - total));
+    }
+
+    this.setState({columns: columns});
+
+  },
 
 
   // ======================================================
@@ -117,9 +215,24 @@ var Grid = React.createClass({
   columnsArrayPixels(){
     var arr = [];
     this.state.columns.forEach(function(column){
-      arr.push(this.pixelsFromPercentage(column.w));
+      arr.push(this.pixelsWidthFromPercentage(column.w));
     }.bind(this))
     return arr;
+  },
+  rowsArrayPercentages(columnIndex){
+    var arr = [];
+    this.state.columns[columnIndex].rows.forEach(function(row){
+      arr.push(row.h);
+    })
+    return arr;
+  },
+  rowsArrayPixels(columnIndex){
+    var arr = [];
+    this.state.columns[columnIndex].rows.forEach(function(row){
+      arr.push(this.pixelsHeightFromPercentage(row.h));
+    }.bind(this))
+    return arr;
+
   },
   rowFromColumn(columnIndex, rowIndex){
     var columns = this.state.columns;
@@ -141,7 +254,7 @@ var Grid = React.createClass({
     } = this.props;
     const columnLength = this.state.columns.length;
     const rowsInColumn = this.state.columns[columnIndex].rows.length;
-    const grid = document.querySelector('.grid');
+    const grid = document.querySelector('.sw-resizeable-grid');
     const gw = grid.clientWidth;    
     const gh = grid.clientHeight;
     const rw = row.clientWidth;
@@ -189,22 +302,6 @@ var Grid = React.createClass({
       row.style.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
     }
 
-  },
-
-  // ======================================================
-  // Render methods
-  // ======================================================
-  render(){
-
-    var columns = this.state.columns.map(function(column, i){
-      return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"column-" + i} data={column} />;
-    }.bind(this));
-
-    return (
-      <div className="grid">
-        {columns}
-      </div>
-    )
   }
 });
 
@@ -217,14 +314,22 @@ Grid.Resizer = React.createClass({
     dragImgEl.setAttribute('style', 'position: absolute; display: block; top: 0; left: 0; width: 0; height: 0;' );
     document.body.appendChild(dragImgEl);
     e.dataTransfer.setDragImage(dragImgEl, 0, 0);
-    this.props.delegate.columnWillResize(this.props.columnIndex);
+    if(this.props.isRow){
+      this.props.delegate.rowWillResize(this.props.columnIndex, this.props.rowIndex);
+    }else{
+      this.props.delegate.columnWillResize(this.props.columnIndex);
+    }
+    
   },
   onDrag(e){
     if(e.clientX && e.clientY){
       
       var diffX = (e.clientX - this.lastX);
       var diffY = (e.clientY - this.lastY);
-      if(diffX){
+      if(this.props.isRow && diffY){
+        this.props.delegate.rowResize(diffY);
+      }
+      if(!this.props.isRow && diffX){
         this.props.delegate.columnResize(diffX);
       }
       
@@ -234,10 +339,19 @@ Grid.Resizer = React.createClass({
     
   },
   onDragEnd(e){
-    this.props.delegate.columnDidResize();
+    if(this.props.isRow){
+      this.props.delegate.rowDidResize();
+    } else{
+      this.props.delegate.columnDidResize();
+    }
+    
   },
   render(){
-    return <div onDragStart={this.onDragStart} onDrag={this.onDrag} onDragEnd={this.onDragEnd} draggable="true" className="resize-vertical"/>;
+    var className = "sw-resize-vertical";
+    if(this.props.isRow){
+      className = "sw-resize-horizontal";
+    }
+    return <div onDragStart={this.onDragStart} onDrag={this.onDrag} onDragEnd={this.onDragEnd} draggable="true" className={className}/>;
   }
 });
 
@@ -260,7 +374,7 @@ Grid.Column = React.createClass({
     }.bind(this));
 
     return (
-      <div className="column" style={styles}>
+      <div className="sw-resizeable-column" style={styles}>
         {this.renderResizer()}
         {rows}
       </div>
@@ -272,7 +386,7 @@ Grid.Column = React.createClass({
 Grid.Row = React.createClass({
   renderResizer(){
     if(this.props.rowIndex > 0){
-      return <div className="resize-horizontal" />;
+      return <Grid.Resizer isRow={true} columnIndex={this.props.columnIndex} rowIndex={this.props.rowIndex} delegate={this.props.delegate} />;
     }
   },
   onMaximize(e){
@@ -283,11 +397,14 @@ Grid.Row = React.createClass({
       data
     } = this.props;
     const styles = {
-      height: data.height
+      height: data.h + '%'
     };
     var child = this.props.callGridDelegate('renderGridRowForId', data.id);
+    if(data.minimized){
+      child = <div style={{background:"gray", width: '100%', height: "100%"}} />;
+    }
     return (
-      <div className="row" ref="row" style={styles} onClick={this.onMaximize}>
+      <div className="sw-resizeable-row" ref="row" style={styles} onClick={this.onMaximize}>
         {this.renderResizer()}
         {child}
       </div>
