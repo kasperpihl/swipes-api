@@ -11,17 +11,19 @@ var Services = require('./components/services');
 var Signin = require('./components/signin');
 var Signup = require('./components/signup');
 var redirect = require('./components/redirect_flow');
-
+var Test = require('./components/test');
 exports.start = function() {
 	render ((
 		<Router history={browserHistory}>
 			<Route path="signin" component={Signin} onEnter={redirect.toHome} />
 			<Route path="signup" component={Signup} onEnter={redirect.toHome} />
-			<Route path="/" component={App}>
+			<Route path="/" component={Test} />
+			<Route path="test" component={App}>
 				<IndexRoute component={Workspace} onEnter={redirect.toSignUp} />
 				<Route path="workspace" component={Workspace} onEnter={redirect.toSignUp} />
 				<Route path="services" component={Services} onEnter={redirect.toSignUp} />
 			</Route>
+
 		</Router>
 	), document.getElementById('content'));
 }
