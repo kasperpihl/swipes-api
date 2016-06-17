@@ -14,7 +14,7 @@ $transitionTime: .5s;
     will-change: transform, z-index;
     position: relative;
     z-index: 1;
-    transition: z-index $transitionTime $transitionTime;
+    transition: z-index $transitionTime $transitionTime, transform $transitionTime ease-in-out;
     display: flex;
     flex-direction: column;
     // align-content: space-between;
