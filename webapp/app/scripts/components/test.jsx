@@ -46,6 +46,7 @@ var data = {
       rows: [
         {
           h: 100,
+          minimized: true,
           id: "child7"
         }
       ]
@@ -69,8 +70,8 @@ var Test = React.createClass({
 	updateFromOutside(){
 		this.refs.grid.update();
 	},
-	gridDidUpdate(grid ){
-
+	gridDidUpdate(ref, grid){
+		console.log('grid', grid);
 	},
 	renderGridRowForId(grid, id){
 		if(id === "child1"){
@@ -89,13 +90,13 @@ var Test = React.createClass({
       return <div style={{background:"orange", width: '100%', height: "100%"}} />;
     }      
     if(id === "child6"){
-      return <div style={{background:"gray", width: '100%', height: "100%"}} />;
+      return <div style={{background:"yellow", width: '100%', height: "100%"}} />;
     }   
     if(id === "child7"){
-      return <div style={{background:"lightblue", width: '100%', height: "100%"}} />;
+      return <div style={{background:"green", width: '100%', height: "100%"}} />;
     }   
     else{
-      return <div style={{background:"green", width: '100%', height: "100%"}} />;
+      return <div style={{background:"lightblue", width: '100%', height: "100%"}} />;
     }
 	},
 	render(){
