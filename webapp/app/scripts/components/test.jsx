@@ -54,11 +54,6 @@ var data = {
   ]
 };
 
-var delegate = {
-	"willResizeRow": function(grid, size){
-
-	}
-}
 
 var Test = React.createClass({
 	numberOfRowsInColumns(column){

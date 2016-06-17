@@ -86,7 +86,6 @@ var Grid = React.createClass({
     var prevI = this.resizingRowIndex - 1;
     percentages[prevI] = this.percentageHeightFromPixels(pixels[prevI] - addedHeight);
 
-
     // Add percentages to rows and check if 100%
     this.saveRowPercentagesToState(colI, percentages, prevI);
   },
@@ -252,6 +251,7 @@ var Grid = React.createClass({
       initData
     } = this.props;
     const columnLength = this.state.columns.length;
+
     const rowsInColumn = this.state.columns[columnIndex].rows.length;
     const grid = document.querySelector('.sw-resizeable-grid');
     const gw = grid.clientWidth;
@@ -266,15 +266,11 @@ var Grid = React.createClass({
 
     let originX = 50;
     let originY = 50;
-
+    var shouldMaximize = !this.isMaximized;
     row.parentNode.classList.toggle('maximize');
     row.classList.toggle('maximize');
 
-    if(currentScale) {
-      row.style.transform = '';
-      // row.style.transformOrigin = '';
-    } else {
-
+    if(shouldMaximize) {
       // column logic
       if (columnIndex === 0) { // First Column
         originX = 0;
@@ -300,7 +296,63 @@ var Grid = React.createClass({
       row.style.transformOrigin = originX + '% ' + originY + '%';
       row.style.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
     }
+    else {
+      row.style.transform = '';
+    }
 
+
+    console.log('should maximize', shouldMaximize, columnIndex);
+    var columns = this.state.columns;
+    columns.forEach(function(column, i){
+      
+      var columnEl = document.getElementById("column-"+i);
+      var newLeft;
+      var colX = columnEl.getBoundingClientRect().left;
+      var colW = columnEl.clientWidth
+      if( i < columnIndex ){
+        newLeft = -rPos.left;
+      }
+      else if( i > columnIndex){
+        newLeft = (gw - rPos.right);
+      }
+      console.log('col', i, newLeft);
+      if(newLeft){
+        columnEl.style.transformOrigin = '50% 50%';
+        columnEl.style.transform = 'translateX(' + newLeft + 'px)';
+      }
+      
+      if( i === columnIndex){
+        var rows = column.rows;
+        rows.forEach(function(row, j){
+          var rowEl = document.getElementById('row-' + row.id);
+          var rowY = rowEl.getBoundingClientRect().top;
+          var rowH = rowEl.clientHeight;
+          var newTop;
+          
+          if(j != rowIndex){
+            if(j < rowIndex){
+              newTop = -rPos.top;
+            }
+            else if(j > rowIndex){
+              newTop = (gh - rPos.bottom);
+            }
+            if(shouldMaximize){
+              rowEl.style.transformOrigin ='50% 50%';
+              rowEl.style.transform = 'translateY(' + newTop + 'px)';
+            }
+            else{
+              rowEl.style.transform = '';
+            }
+          }
+
+        }.bind(this));
+      }
+      else if(!shouldMaximize){
+        columnEl.style.transform = '';
+      }
+      
+    }.bind(this));
+    this.isMaximized = !this.isMaximized;
   }
 });
 
@@ -373,7 +425,7 @@ Grid.Column = React.createClass({
     }.bind(this));
 
     return (
-      <div className="sw-resizeable-column" style={styles}>
+      <div id={"column-" + this.props.columnIndex} className="sw-resizeable-column" style={styles}>
         {this.renderResizer()}
         {rows}
       </div>
@@ -403,7 +455,7 @@ Grid.Row = React.createClass({
       child = <div style={{background:"gray", width: '100%', height: "100%"}} />;
     }
     return (
-      <div className="sw-resizeable-row" ref="row" style={styles} onClick={this.onMaximize}>
+      <div className="sw-resizeable-row" id={"row-" + data.id } ref="row" style={styles} onClick={this.onMaximize}>
         {this.renderResizer()}
         {child}
       </div>
