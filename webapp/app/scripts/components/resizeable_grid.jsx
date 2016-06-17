@@ -74,16 +74,17 @@ var Grid = React.createClass({
     var rowI = this.resizingRowIndex;
 
     var percentages = this.rowsArrayPercentages(colI);
+
     var pixels = this.rowsArrayPixels(colI);
 
     var addedHeight = -diffY;
     var newSize = pixels[rowI] + addedHeight;
 
 
-    percentages[rowI] = this.percentageWidthFromPixels(newSize);
+    percentages[rowI] = this.percentageHeightFromPixels(newSize);
 
     var prevI = this.resizingRowIndex - 1;
-    percentages[prevI] = this.percentageWidthFromPixels(pixels[prevI] - addedHeight);
+    percentages[prevI] = this.percentageHeightFromPixels(pixels[prevI] - addedHeight);
 
 
     // Add percentages to rows and check if 100%
@@ -192,8 +193,7 @@ var Grid = React.createClass({
     total = this.roundedDecimal(total);
     if(total != 100){
       var height = rows[overflowI].h;
-      console.log(total);
-      //columns[columnIndex].rows[overflowI].h = this.roundedDecimal(height + (100 - total));
+      rows[overflowI].h = this.roundedDecimal(height + (100 - total));
     }
 
     this.setState({columns: columns});
