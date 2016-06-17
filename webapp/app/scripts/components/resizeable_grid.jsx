@@ -19,25 +19,36 @@ var Grid = React.createClass({
     this.resizingColumnIndex = columnIndex;
   },
   columnResize(diffX){
+    
+
+    var percentages = this.columnsArrayPercentages();
+    var pixels = this.columnsArrayPixels();
+    
+
     var addedWidth = -diffX;
-    var column = this.columnForIndex(this.resizingColumnIndex);
-    var size = this.pixelsFromPercentage(column.w);
-    var newSize = size + addedWidth;
+    var newSize = pixels[this.resizingColumnIndex] + addedWidth;
+
+
+    percentages[this.resizingColumnIndex] = this.percentageFromPixels(newSize);
+
+    var prevI = this.resizingColumnIndex - 1;
+    percentages[prevI] = this.percentageFromPixels(pixels[prevI] - addedWidth);
+
     
+    // Add percentages to columns and check if 100%
+    var total = 0;
     var columns = this.state.columns;
-    var i = this.resizingColumnIndex - 1;
-    columns[this.resizingColumnIndex].w = this.percentageFromPixels(newSize);
-    do{
-      var column = columns[i];
-      var cw = this.pixelsFromPercentage(column.w);
-      
-      columns[i].w = this.percentageFromPixels(cw - addedWidth);
-      i--;
-      console.log('cw', cw, 'nw', (cw - addedWidth), 'c%', this.percentageFromPixels(cw - addedWidth));
+    console.log(percentages);
+    percentages.forEach(function(percent, i){
+      total += percent;
+      columns[i].w = percent;
+    })
+    total = this.roundedDecimal(total);
+    if(total != 100){
+      console.log(total);
+      columns[this.resizingColumnIndex - 1].w += (100 - total);
     }
-    while (i >= 0);
     
-    // Check if percentages is 100%
 
     this.setState({columns: columns});
 
@@ -60,13 +71,18 @@ var Grid = React.createClass({
     // K_TODO: Cache the width to not query grid all the time.
     const grid = document.querySelector('.grid');
     const gw = grid.clientWidth;
-    return (pixels / gw * 100).toFixed(2);
+    var percentage = (pixels / gw * 100);
+    
+    return this.roundedDecimal(percentage);
   },
   pixelsFromPercentage(percentage){
     // K_TODO: Cache the width to not query grid all the time.
     const grid = document.querySelector('.grid');
     const gw = grid.clientWidth;
     return Math.round(gw / 100 * percentage);
+  },
+  roundedDecimal(number){
+    return Math.round( number * 1e2 ) / 1e2;
   },
   calcScale(gw, gh, rw, rh) {
     var curSizeX = (rw * 100) / gw;
@@ -80,6 +96,30 @@ var Grid = React.createClass({
     }; 
     
     return sizeToBe
+  },
+
+  // ======================================================
+  // Setters
+  // ======================================================
+
+
+
+  // ======================================================
+  // Getters
+  // ======================================================
+  columnsArrayPercentages(){
+    var arr = [];
+    this.state.columns.forEach(function(column){
+      arr.push(column.w);
+    })
+    return arr;
+  },
+  columnsArrayPixels(){
+    var arr = [];
+    this.state.columns.forEach(function(column){
+      arr.push(this.pixelsFromPercentage(column.w));
+    }.bind(this))
+    return arr;
   },
   rowFromColumn(columnIndex, rowIndex){
     var columns = this.state.columns;
