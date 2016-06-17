@@ -65,6 +65,7 @@ router.get('/', (req, res, next) => {
     		user: {userId: shortUrl.userId},
     		service: {serviceId: shortUrl.service.service_id}
     	};
+      
     	file.request(options, function (err, result) {
     		if (err) {
     			return res.status(200).json({ok:false, err: err});
