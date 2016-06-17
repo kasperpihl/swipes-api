@@ -9,7 +9,7 @@ var dataSource = {
 var Grid = React.createClass({
   getInitialState() {
       return {
-          columns: this.props.columns  
+          columns: this.props.columns
       };
   },
   // ======================================================
@@ -23,20 +23,20 @@ var Grid = React.createClass({
     var column = this.columnForIndex(this.resizingColumnIndex);
     var size = this.pixelsFromPercentage(column.w);
     var newSize = size + addedWidth;
-    
+
     var columns = this.state.columns;
     var i = this.resizingColumnIndex - 1;
     columns[this.resizingColumnIndex].w = this.percentageFromPixels(newSize);
     do{
       var column = columns[i];
       var cw = this.pixelsFromPercentage(column.w);
-      
+
       columns[i].w = this.percentageFromPixels(cw - addedWidth);
       i--;
       console.log('cw', cw, 'nw', (cw - addedWidth), 'c%', this.percentageFromPixels(cw - addedWidth));
     }
     while (i >= 0);
-    
+
     // Check if percentages is 100%
 
     this.setState({columns: columns});
@@ -122,17 +122,17 @@ Grid.Resizer = React.createClass({
   },
   onDrag(e){
     if(e.clientX && e.clientY){
-      
+
       var diffX = (e.clientX - this.lastX);
       var diffY = (e.clientY - this.lastY);
       if(diffX){
         this.props.delegate.columnResize(diffX);
       }
-      
+
       this.lastX = e.clientX;
       this.lastY = e.clientY;
     }
-    
+
   },
   onDragEnd(e){
     this.props.delegate.columnDidResize();
@@ -155,7 +155,7 @@ Grid.Column = React.createClass({
     var styles = {
       width: data.w + '%'
     };
-    
+
     var rows = data.rows.map(function(row, i){
       return <Grid.Row columnIndex={this.props.columnIndex} rowIndex={i} delegate={this.props.delegate} callGridDelegate={this.props.callGridDelegate} data={row} key={"row-" + i }/>;
     }.bind(this));
@@ -166,7 +166,7 @@ Grid.Column = React.createClass({
         {rows}
       </div>
     )
-      
+
   }
 });
 
@@ -185,8 +185,8 @@ Grid.Row = React.createClass({
     var sizeToBe = {
       w: 100 / curSizeX,
       h : 100 / curSizeY
-    }; 
-    
+    };
+
     return sizeToBe
   },
   onMaximize(e) {
@@ -195,9 +195,9 @@ Grid.Row = React.createClass({
       initData
     } = this.props;
     const row = this.refs.row;
-    const columnLength = initData.columns.length;
+    const columnLength = 4;
     const grid = document.querySelector('.grid');
-    const gw = grid.clientWidth;    
+    const gw = grid.clientWidth;
     const gh = grid.clientHeight;
     const rw = row.clientWidth;
     const rh = row.clientHeight;
@@ -209,18 +209,18 @@ Grid.Row = React.createClass({
 
     let originX = 50;
     let originY = 50;
-    
+
     row.parentNode.classList.toggle('maximize');
     row.classList.toggle('maximize');
-    
+
     if(currentScale) {
-      row.style.transform = '';   
-      // row.style.transformOrigin = '';  
+      row.style.transform = '';
+      // row.style.transformOrigin = '';
     } else {
-      
+
       // column logic
       if (columnIndex === 0) { // First Column
-        originX = 0;       
+        originX = 0;
       }
       if (columnIndex === (columnLength - 1)) { // Last column
         originX = 100;
@@ -228,7 +228,7 @@ Grid.Row = React.createClass({
       if (columnIndex > 0 && columnIndex < (columnLength - 1)) { // Columns in the middle
         originX = centerXPercentage;
       }
-      
+
       // Row logic
       if (rowIndex === 0 && (rowsInColumn - 1) > 0) { // first row, but more than one
         originY = 0;
@@ -239,7 +239,7 @@ Grid.Row = React.createClass({
       if (rowIndex > 0 && rowIndex < (rowsInColumn - 1)) { // Rows in the middle
         originY = centerYPercentage;
       }
-      
+
       row.style.transformOrigin = originX + '% ' + originY + '%';
       row.style.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
     }
