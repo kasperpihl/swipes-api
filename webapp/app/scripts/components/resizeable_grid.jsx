@@ -285,6 +285,9 @@ var Grid = React.createClass({
   // ======================================================
   // Maximize row
   // ======================================================
+  minimizeColumnWithRow(row, columnIndex, rowIndex) {
+    // KRIS_TODO: Fix the minimize animation.
+  },
   maximizeColumnWithRow(row, columnIndex, rowIndex) {
      const {
       data,
@@ -482,6 +485,9 @@ Grid.Row = React.createClass({
   },
   onMaximize(e){
     this.props.delegate.maximizeColumnWithRow(this.refs.row, this.props.columnIndex, this.props.rowIndex);
+  },
+  onMinimize(e){
+    this.props.delegate.minimizeColumnWithRow(this.refs.row, this.props.columnIndex, this.props.rowIndex);
   },
   render(){
     const {
