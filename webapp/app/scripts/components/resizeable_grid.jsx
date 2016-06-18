@@ -58,7 +58,7 @@ var Grid = React.createClass({
     var colI = this.resizingColumnIndex;
 
     var percentages = this.rowsArrayPercentages(colI);
-    var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffY));
+    var percentageToMove = Math.abs(this.percentageHeightFromPixels(diffY));
     var minHeights = this.minHeightsForRowsInColumn(colI);
     var newPercentages = this._moveWithPercentages(percentages, minHeights, percentageToMove, this.resizingRowIndex, (diffY < 0));
 
@@ -70,8 +70,6 @@ var Grid = React.createClass({
       index = this.reverseIndexFromArray(index, percentages) + 1; // Add to move on the right side of resizebar.
     }
     var prevIndex = index - 1;
-
-
 
 
     var remainingPercentageToAdd = percentageToMove;
@@ -178,7 +176,7 @@ var Grid = React.createClass({
     return Math.round(gh / 100 * percentage);
   },
   roundedDecimal(number){
-    return Math.round( number * 1e3 ) / 1e3;
+    return Math.round( number * 1e9 ) / 1e9;
   },
   calcScale(gw, gh, rw, rh) {
     var curSizeX = (rw * 100) / gw;
