@@ -19,6 +19,7 @@ var data = {
       w: 20,
       rows: [
         {
+        	minW: 300,
           h: 100,
           id: "child3"
         }

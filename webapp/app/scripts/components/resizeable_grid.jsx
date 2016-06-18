@@ -1,11 +1,5 @@
 var React = require('react');
 
-var dataSource = {
-  "renderGridRowForId": {
-    required: true
-  }
-};
-
 var Grid = React.createClass({
   // ======================================================
   // Life Cycle methods
@@ -43,55 +37,95 @@ var Grid = React.createClass({
   // ======================================================
   columnWillResize(columnIndex){
     this.resizingColumnIndex = columnIndex;
+    this.resizingSavedPercentages = this.columnsArrayPercentages();
   },
   rowWillResize(columnIndex, rowIndex){
     this.resizingColumnIndex = columnIndex;
     this.resizingRowIndex = rowIndex;
+    this.resizingSavedPercentages = this.rowsArrayPercentages(columnIndex);
   },
   columnResize(diffX){
-
-
+    // Moving column, (diff < 0) means it should reverse the order.
+    // var columns = this.state.columns;
     var percentages = this.columnsArrayPercentages();
-    var pixels = this.columnsArrayPixels();
+    var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
+    var minWidths = this.minWidthsForColumns();
+    var newPercentages = this._moveWithPercentages(percentages, minWidths, percentageToMove, this.resizingColumnIndex, (diffX < 0));
 
-
-    var addedWidth = -diffX;
-    var newSize = pixels[this.resizingColumnIndex] + addedWidth;
-
-
-    percentages[this.resizingColumnIndex] = this.percentageWidthFromPixels(newSize);
-
-    var prevI = this.resizingColumnIndex - 1;
-    percentages[prevI] = this.percentageWidthFromPixels(pixels[prevI] - addedWidth);
-
-
-    // Add percentages to columns and check if 100%
-    this.saveColumnPercentagesToState(percentages, prevI);
-
+    this.saveColumnPercentagesToState(newPercentages);
   },
   rowResize(diffY){
     var colI = this.resizingColumnIndex;
-    var rowI = this.resizingRowIndex;
 
     var percentages = this.rowsArrayPercentages(colI);
-
-    var pixels = this.rowsArrayPixels(colI);
-
-    var addedHeight = -diffY;
-    var newSize = pixels[rowI] + addedHeight;
-
-
-    percentages[rowI] = this.percentageHeightFromPixels(newSize);
-
-    var prevI = this.resizingRowIndex - 1;
-    percentages[prevI] = this.percentageHeightFromPixels(pixels[prevI] - addedHeight);
+    var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffY));
+    var minHeights = this.minHeightsForRowsInColumn(colI);
+    var newPercentages = this._moveWithPercentages(percentages, minHeights, percentageToMove, this.resizingRowIndex, (diffY < 0));
 
     // Add percentages to rows and check if 100%
-    this.saveRowPercentagesToState(colI, percentages, prevI);
+    this.saveRowPercentagesToState(colI, newPercentages);
   },
-  rowDidResize(){
+  _moveWithPercentages(percentages, minSizes, percentageToMove, index, reverse){
+    if(reverse){
+      index = this.reverseIndexFromArray(index, percentages) + 1; // Add to move on the right side of resizebar.
+    }
+    var prevIndex = index - 1;
 
+
+
+
+    var remainingPercentageToAdd = percentageToMove;
+    var remainingPercentageToRemove = percentageToMove;
+
+    var newPercentages = [];
+
+    for(var i = 0 ; i < percentages.length ; i++){
+      // The realIndex is to make sure we don't mess up the order of the data.
+      var realIndex = i;
+      if(reverse){
+        realIndex = this.reverseIndexFromArray(i, percentages);
+      }
+      var percentage = percentages[realIndex];
+      var orgPercentage = this.resizingSavedPercentages[realIndex];
+
+      var minSize = minSizes[realIndex];
+
+      // All rows before the one that is connected to the resizer
+      if(i < prevIndex){
+        // Check if row was moved out earlier
+        if(percentage < orgPercentage){
+          // If 
+          percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
+          remainingPercentageToAdd = 0;
+          if(percentage > orgPercentage){
+            remainingPercentageToAdd = percentage - orgPercentage;
+            percentage = orgPercentage;
+          }
+
+        }
+      }
+      if(i === prevIndex){
+        percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
+      }
+      if(i >= index){
+        percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
+        remainingPercentageToRemove = 0;
+        if(percentage < minSize){
+          remainingPercentageToRemove = minSize - percentage;
+          percentage = minSize;
+        }
+      }
+
+      newPercentages.push(percentage);
+
+    }
+    
+    if(reverse){
+      newPercentages.reverse();
+    }
+    return newPercentages;
   },
+
   rowDidResize(){
     this.columnDidResize();
   },
@@ -111,6 +145,10 @@ var Grid = React.createClass({
   // ======================================================
   // Conversions
   // ======================================================
+  reverseIndexFromArray(i, array){
+    var highestIndex = array.length - 1;
+    return highestIndex - i;
+  },
   percentageWidthFromPixels(pixels){
     // K_TODO: Cache the width to not query grid all the time.
     const grid = document.querySelector('.sw-resizeable-grid');
@@ -140,7 +178,7 @@ var Grid = React.createClass({
     return Math.round(gh / 100 * percentage);
   },
   roundedDecimal(number){
-    return Math.round( number * 1e2 ) / 1e2;
+    return Math.round( number * 1e3 ) / 1e3;
   },
   calcScale(gw, gh, rw, rh) {
     var curSizeX = (rw * 100) / gw;
@@ -156,45 +194,25 @@ var Grid = React.createClass({
     return sizeToBe
   },
 
+
+
   // ======================================================
   // Setters
   // ======================================================
   saveColumnPercentagesToState(percentages, overflowI){
-    if(!percentages){
-      percentages = this.columnsArrayPercentages();
-    }
-    var total = 0;
     var columns = this.state.columns;
     percentages.forEach(function(percent, i){
-      total += percent;
       columns[i].w = percent;
-    })
-    total = this.roundedDecimal(total);
-    if(total != 100){
-      var width = columns[overflowI].w;
-      columns[overflowI].w = this.roundedDecimal(width + (100 - total));
-    }
-
+    });
     this.setState({columns: columns});
 
   },
   saveRowPercentagesToState(columnIndex, percentages, overflowI){
-    if(!percentages){
-      percentages = this.rowsArrayPercentages(columnIndex);
-    }
-    var total = 0;
     var columns = this.state.columns;
     var rows = this.state.columns[columnIndex].rows;
     percentages.forEach(function(percent, i){
-      total += percent;
       rows[i].h = percent;
     })
-    total = this.roundedDecimal(total);
-    if(total != 100){
-      var height = rows[overflowI].h;
-      rows[overflowI].h = this.roundedDecimal(height + (100 - total));
-    }
-
     this.setState({columns: columns});
 
   },
@@ -203,6 +221,30 @@ var Grid = React.createClass({
   // ======================================================
   // Getters
   // ======================================================
+  minWidthsForColumns(){
+    var arr = [];
+    this.state.columns.forEach(function(column){
+      var minWidth = 50;
+      column.rows.forEach(function(row){
+        if(row.minW && row.minW > minWidth){
+          minWidth = row.minW;
+        }
+      });
+      arr.push(this.percentageWidthFromPixels(minWidth));
+    }.bind(this))
+    return arr;
+  },
+  minHeightsForRowsInColumn(columnIndex){
+    var arr = [];
+    this.state.columns[columnIndex].rows.forEach(function(row){
+      var minHeight = 50;
+      if(row.minH && row.minH > minHeight){
+        minHeight = row.minH;
+      }
+      arr.push(this.percentageHeightFromPixels(minHeight));
+    }.bind(this))
+    return arr;
+  },
   columnsArrayPercentages(){
     var arr = [];
     this.state.columns.forEach(function(column){
