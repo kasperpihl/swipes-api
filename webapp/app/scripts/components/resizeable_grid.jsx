@@ -132,7 +132,7 @@ var Grid = React.createClass({
     }
     var className = 'sw-resizeable-grid';
     if(this.state.isResizing){
-      className += ' resizing';
+      className += ' sw-grid-resizing';
     }
     return (
       <div className={className}>
