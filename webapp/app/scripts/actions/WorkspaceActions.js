@@ -3,9 +3,6 @@ var Reflux = require('reflux');
 var WorkspaceActions = Reflux.createActions([
 	'moveCard',
 	'updateCardSize',
-	'gridButton',
-	'sendCardToFront',
-	'adjustForScreenSize',
 	'enterLeaveDropOverlay',
 	'introVideo',
 	'showHideCard',

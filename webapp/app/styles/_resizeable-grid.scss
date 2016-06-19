@@ -8,6 +8,11 @@ $transitionTime: .5s;
 
   @extend %flex;
   justify-content: space-between;
+  &.resizing{
+    .sw-resizeable-row{
+      pointer-events:none;
+    }
+  }
   .sw-resizeable-column {
     // width: 100%;
     height: 100%;
@@ -33,6 +38,7 @@ $transitionTime: .5s;
   .sw-resizeable-row {
     height: 100%;
     width: 100%;
+    overflow: hidden;
     will-change: transform, z-index;
     position: relative;
     z-index: 1;

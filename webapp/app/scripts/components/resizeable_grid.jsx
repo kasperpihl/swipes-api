@@ -5,9 +5,14 @@ var Grid = React.createClass({
   // Life Cycle methods
   // ======================================================
   getInitialState() {
-      return {
-          columns: this.props.columns
-      };
+    return {};
+  },
+  componentDidMount() {
+      this.debug = true;
+      this.setState({columns: this.validateColumns(this.props.columns)});
+  },
+  componentWillReceiveProps(nextProps) {
+    this.setState({columns: this.validateColumns(nextProps)});
   },
   componentWillUpdate(nextProps, nextState){
 
@@ -17,39 +22,136 @@ var Grid = React.createClass({
   },
 
   // ======================================================
+  // Validation methods
+  // ======================================================
+  validateColumns(columns){
+    if(this.debug) 
+      console.log('starting validation');
+    /*
+      [ ] Check that all properties are valid
+      [X] Check if all columns have a width
+      [ ] Check total width used
+      [ ] Check if all rows have height
+      [X] Check if all columns have the same width
+      [X] Assign equal width if width was the same
+     */
+    
+    // Test what need to be fixed.
+    var columnsThatNeedWidth = [];
+    var totalWidthUsed = 0;
+    var testColumnWidth = 0;
+    var columnsHaveEqualWidth = true;
+    var tempColumns = []; // Used to mutate, replace and return the existing array.
+    columns.forEach(function(column, colI){
+
+      var colWidth = column.w ? column.w : 0;
+      if(colI > 0 && colWidth != testColumnWidth){
+        columnsHaveEqualWidth = false;
+      }
+      testColumnWidth = colWidth;
+      if(!colWidth){
+        columnsThatNeedWidth.push(colI);
+      }
+      totalWidthUsed += colWidth;
+      tempColumns.push(column);
+    }.bind(this));
+
+    // If width is different from 100 or something hasn't got width yet.
+    if(Math.abs(totalWidthUsed - 100) > 0.01 || columnsThatNeedWidth.length){
+      tempColumns = this.validateOverflowAndAdjustWidths(columns, columnsThatNeedWidth, columnsHaveEqualWidth);
+    }
+    
+    
+    if(this.debug) 
+      console.log( 'tempCols', tempColumns, 'needWidth', columnsThatNeedWidth.length, 'haveEqual', columnsHaveEqualWidth);
+    
+    return tempColumns;
+  },
+  validatePropertiesOfColumns(columns){
+    return columns;
+  },
+  validateOverflowAndAdjustWidths(columns, columnsThatNeedWidth, columnsHaveEqualWidth){
+    var tempColumns = []; // Used to mutate, replace and return the existing array.
+
+    var minWidths = this.minWidthsForColumns(columns);
+    var totalWidthUsed = 0;
+    
+    columns.forEach(function(column, colI){
+      if(columnsThatNeedWidth.length > 0){
+        if(columnsHaveEqualWidth){
+          column.w = this.roundedDecimal(100 / columns.length);
+        }
+        else{
+          column.w = minWidths[colI];
+        }
+      }
+
+      // Make sure to respect minWidth
+      if(column.w < minWidths[colI]){
+        column.w = minWidths[colI];
+      }
+      totalWidthUsed += column.w;
+      tempColumns.push(column);
+    }.bind(this));
+
+
+    var additionalWidth = totalWidthUsed - 100;
+    if(Math.abs(additionalWidth ) > 0.01){
+      // K_TODO: 
+    }
+
+    return tempColumns;
+  },
+
+  // ======================================================
   // Render methods
   // ======================================================
   render(){
-
-    var columns = this.state.columns.map(function(column, i){
-      return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"column-" + i} data={column} />;
-    }.bind(this));
-
+    var columns = null;
+    if(this.state.columns){
+      columns = this.state.columns.map(function(column, i){
+        return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"column-" + i} data={column} />;
+      }.bind(this));
+    }
+    var className = 'sw-resizeable-grid';
+    if(this.state.isResizing){
+      className += ' resizing';
+    }
     return (
-      <div className="sw-resizeable-grid">
+      <div className={className}>
         {columns}
       </div>
     )
   },
 
   // ======================================================
-  // Resize Delegate
+  // Resizing
   // ======================================================
   columnWillResize(columnIndex){
     this.resizingColumnIndex = columnIndex;
     this.resizingSavedPercentages = this.columnsArrayPercentages();
+    this.setState({isResizing: true});
   },
   rowWillResize(columnIndex, rowIndex){
-    this.resizingColumnIndex = columnIndex;
+    this.columnWillResize(columnIndex);
     this.resizingRowIndex = rowIndex;
-    this.resizingSavedPercentages = this.rowsArrayPercentages(columnIndex);
   },
+  rowDidResize(){
+    this.columnDidResize();
+  },
+  columnDidResize(){
+    var obj = JSON.parse(JSON.stringify(this.state.columns));
+    this.callDelegate('gridDidUpdate', obj);
+    this.setState({isResizing: false});
+  },
+
   columnResize(diffX){
-    // Moving column, (diff < 0) means it should reverse the order.
-    // var columns = this.state.columns;
+    
     var percentages = this.columnsArrayPercentages();
     var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
     var minWidths = this.minWidthsForColumns();
+
+    // Moving column, (diff < 0) means it should reverse the order it goes through the tiles.
     var newPercentages = this._moveWithPercentages(percentages, minWidths, percentageToMove, this.resizingColumnIndex, (diffX < 0));
 
     this.saveColumnPercentagesToState(newPercentages);
@@ -65,6 +167,10 @@ var Grid = React.createClass({
     // Add percentages to rows and check if 100%
     this.saveRowPercentagesToState(colI, newPercentages);
   },
+
+  // ======================================================
+  // Main Resize function to calculate the layout
+  // ======================================================
   _moveWithPercentages(percentages, minSizes, percentageToMove, index, reverse){
     if(reverse){
       index = this.reverseIndexFromArray(index, percentages) + 1; // Add to move on the right side of resizebar.
@@ -78,7 +184,7 @@ var Grid = React.createClass({
     var newPercentages = [];
 
     for(var i = 0 ; i < percentages.length ; i++){
-      // The realIndex is to make sure we don't mess up the order of the data.
+      // The realIndex is to make sure we don't mess up the order of the data when reversing.
       var realIndex = i;
       if(reverse){
         realIndex = this.reverseIndexFromArray(i, percentages);
@@ -124,21 +230,8 @@ var Grid = React.createClass({
     return newPercentages;
   },
 
-  rowDidResize(){
-    this.columnDidResize();
-  },
-  columnDidResize(){
-    var obj = JSON.parse(JSON.stringify(this.state.columns));
-    this.callDelegate('gridDidUpdate', obj);
-  },
 
 
-
-  callDelegate(name){
-    if(this.props.delegate && typeof this.props.delegate[name] === "function"){
-      return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-  },
 
   // ======================================================
   // Conversions
@@ -241,9 +334,12 @@ var Grid = React.createClass({
   // ======================================================
   // Getters
   // ======================================================
-  minWidthsForColumns(){
+  minWidthsForColumns(columns){
     var arr = [];
-    this.state.columns.forEach(function(column){
+    if(!columns){
+      columns = this.state.columns;
+    }
+    columns.forEach(function(column){
       var minWidth = 50;
       column.rows.forEach(function(row){
         if(row.minW && row.minW > minWidth){
@@ -304,6 +400,16 @@ var Grid = React.createClass({
     return columns[index];
   },
 
+
+  // ======================================================
+  // Delegation Setup
+  // ======================================================
+  callDelegate(name){
+    if(this.props.delegate && typeof this.props.delegate[name] === "function"){
+      return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
+  },
+
   // ======================================================
   // Maximize row
   // ======================================================
@@ -321,7 +427,7 @@ var Grid = React.createClass({
 
   },
   maximizeColumnWithRow(row, columnIndex, rowIndex) {
-     const {
+    const {
       data,
       initData
     } = this.props;
@@ -434,6 +540,7 @@ var Grid = React.createClass({
 
 Grid.Resizer = React.createClass({
   onDragStart(e){
+    e.stopPropagation();
     this.lastX = e.clientX;
     this.lastY = e.clientY;
     var dragImgEl = document.createElement('span');
@@ -448,6 +555,7 @@ Grid.Resizer = React.createClass({
 
   },
   onDrag(e){
+    e.stopPropagation();
     if(e.clientX && e.clientY){
 
       var diffX = (e.clientX - this.lastX);
@@ -465,6 +573,7 @@ Grid.Resizer = React.createClass({
 
   },
   onDragEnd(e){
+    e.stopPropagation();
     if(this.props.isRow){
       this.props.delegate.rowDidResize();
     } else{
