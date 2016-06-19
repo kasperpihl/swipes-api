@@ -36,77 +36,88 @@ var Grid = React.createClass({
       [X] Check if all columns have the same width
       [X] Assign equal width if width was the same
      */
+    
+    var valObj = this.validateInitialDetermination(columns);
+    
 
+    // If width used is different from 100 or a new column is here.
+    if(Math.abs(valObj.totalWidthUsed - 100) > 0.01 || valObj.columnsThatNeedWidth.length){
+      valObj = this.validateOverflowAndAdjustWidths(columns, valObj);
+    }
+
+
+    if(this.debug)
+      console.log( 'tempCols', valObj.tempColumns, 'needWidth', valObj.columnsThatNeedWidth.length, 'haveEqual', valObj.columnsHaveEqualWidth);
+
+    return valObj.tempColumns;
+  },
+  validatePropertiesOfColumns(columns){
+    return columns;
+  },
+  validateInitialDetermination(columns){
     // Test what need to be fixed.
-    var columnsThatNeedWidth = [];
-    var totalWidthUsed = 0;
     var testColumnWidth = 0;
-    var columnsHaveEqualWidth = true;
-    var tempColumns = []; // Used to mutate, replace and return the existing array.
+
+    // Validation object, passed along the different validation functions.
+    var valObj = {
+      totalWidthUsed: 0,
+      columnsHaveEqualWidth: true,
+      columnsThatNeedWidth: [],
+      tempColumns: []
+    };
     columns.forEach(function(column, colI){
-      console.log('testW', colI, column.w);
       var colWidth = column.w ? column.w : 0;
+
       if(colWidth){
         if(colI > 0 && colWidth != testColumnWidth){
-          columnsHaveEqualWidth = false;
+          valObj.columnsHaveEqualWidth = false;
         }
         testColumnWidth = colWidth;
       }
 
 
       if(!colWidth){
-        columnsThatNeedWidth.push(colI);
+        valObj.columnsThatNeedWidth.push(colI);
       }
-      totalWidthUsed += colWidth;
-      tempColumns.push(column);
+      valObj.totalWidthUsed += colWidth;
+      valObj.tempColumns.push(column);
     }.bind(this));
 
-    // If width is different from 100 or something hasn't got width yet.
-    if(Math.abs(totalWidthUsed - 100) > 0.01 || columnsThatNeedWidth.length){
-      tempColumns = this.validateOverflowAndAdjustWidths(columns, columnsThatNeedWidth, columnsHaveEqualWidth);
-    }
-
-
-    if(this.debug)
-      console.log( 'tempCols', tempColumns, 'needWidth', columnsThatNeedWidth.length, 'haveEqual', columnsHaveEqualWidth);
-
-    return tempColumns;
+    return valObj;
   },
-  validatePropertiesOfColumns(columns){
-    return columns;
-  },
-  validateOverflowAndAdjustWidths(columns, columnsThatNeedWidth, columnsHaveEqualWidth){
-    var tempColumns = []; // Used to mutate, replace and return the existing array.
+  
+  validateOverflowAndAdjustWidths(columns, valObj){
+    
 
-    var minWidths = this.minWidthsForColumns(columns);
-    var totalWidthUsed = 0;
+    valObj.minWidths = this.minWidthsForColumns(columns);
+    valObj.totalWidthUsed = 0;
+    valObj.tempColumns = [];
 
     columns.forEach(function(column, colI){
-      if(columnsThatNeedWidth.length > 0){
-        if(columnsHaveEqualWidth){
+      if(valObj.columnsThatNeedWidth.length > 0){
+        if(valObj.columnsHaveEqualWidth){
           column.w = this.roundedDecimal(100 / columns.length);
         }
         else{
-          column.w = minWidths[colI];
+          column.w = valObj.minWidths[colI];
         }
       }
 
       // Make sure to respect minWidth
-      console.log('min', colI, column.w, minWidths[colI]);
-      if(column.w < minWidths[colI]){
-        column.w = minWidths[colI];
+      if(column.w < valObj.minWidths[colI]){
+        column.w = valObj.minWidths[colI];
       }
-      totalWidthUsed += column.w;
-      tempColumns.push(column);
+      valObj.totalWidthUsed += column.w;
+      valObj.tempColumns.push(column);
     }.bind(this));
 
 
-    var additionalWidth = totalWidthUsed - 100;
+    var additionalWidth = valObj.totalWidthUsed - 100;
     if(Math.abs(additionalWidth ) > 0.01){
       // K_TODO:
     }
 
-    return tempColumns;
+    return valObj;
   },
 
   // ======================================================
@@ -277,6 +288,11 @@ var Grid = React.createClass({
   roundedDecimal(number){
     return Math.round( number * 1e9 ) / 1e9;
   },
+
+
+  // ======================================================
+  // Calculations
+  // ======================================================
   calcScale(gw, gh, rw, rh) {
     var curSizeX = (rw * 100) / gw;
     var curSizeY = 1;
@@ -644,11 +660,12 @@ Grid.Row = React.createClass({
       height: data.h + '%'
     };
     var child = this.props.callGridDelegate('renderGridRowForId', data.id);
-    if(data.minimized){
-      child = <div style={{background:"gray", width: '100%', height: "100%"}} />;
+    var className = "sw-resizeable-row";
+    if(data.collapsed){
+      className += " sw-row-collapsed";
     }
     return (
-      <div className="sw-resizeable-row" id={"row-" + data.id } ref="row" style={styles} onClick={this.onMinimize}>
+      <div className={className} id={"row-" + data.id } ref="row" style={styles} onClick={this.onMinimize}>
         {this.renderResizer()}
         {child}
       </div>
