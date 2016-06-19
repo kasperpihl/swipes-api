@@ -92,7 +92,7 @@ var Grid = React.createClass({
       if(i < prevIndex){
         // Check if row was moved out earlier
         if(percentage < orgPercentage){
-          // If 
+          // If
           percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
           remainingPercentageToAdd = 0;
           if(percentage > orgPercentage){
@@ -117,7 +117,7 @@ var Grid = React.createClass({
       newPercentages.push(percentage);
 
     }
-    
+
     if(reverse){
       newPercentages.reverse();
     }
@@ -191,8 +191,30 @@ var Grid = React.createClass({
 
     return sizeToBe
   },
+  calcMinimizeHorizontalScale(currentColWidth) { // Scale col that is being minimized
+    const minimizedSize = 40;
+    const minimizedSizePercentages = ((minimizedSize * 100) / currentColWidth) / 100;
 
+    return minimizedSizePercentages;
+  },
+  calcMinimizeVerticalScale(currentRowHeight) { // Scale row that is being minimized
+    const minimizedSize = 40;
+    const minimizedSizePercentages = ((minimizedSize * 100) / currentRowHeight) / 100;
 
+    return minimizedSizePercentages;
+  },
+  calcMinimizeSiblingHorizontalScale(prevColumnEl, currentColWidth) { // Scale col that sibling of minimized col
+    const prevColExpandWidth = prevColumnEl.clientWidth + currentColWidth - 40;
+    const prevColExpandScale = ((prevColExpandWidth * 100) / prevColumnEl.clientWidth) / 100;
+
+    return prevColExpandScale;
+  },
+  calcMinimizeSiblingVerticalScale(prevRowEl, currentRowHeight) { // Scale row that sibling of minimized row
+    const prevRowExpandHeight = prevRowEl.clientHeight + currentRowHeight - 40;
+    const prevRowExpandScale = ((prevRowExpandHeight * 100) / prevRowEl.clientHeight) / 100;
+
+    return prevRowExpandScale;
+  },
 
   // ======================================================
   // Setters
@@ -286,7 +308,13 @@ var Grid = React.createClass({
   // Maximize row
   // ======================================================
   minimizeColumnWithRow(row, columnIndex, rowIndex) {
-    // KRIS_TODO: Fix the minimize animation.
+    const that = this;
+    const columns = this.state.columns;
+    let currentColWidth = 0;
+    let currentRowHeight = 0;
+    let rowsLength = 0;
+
+
   },
   maximizeColumnWithRow(row, columnIndex, rowIndex) {
      const {
@@ -347,7 +375,7 @@ var Grid = React.createClass({
     console.log('should maximize', shouldMaximize, columnIndex);
     var columns = this.state.columns;
     columns.forEach(function(column, i){
-      
+
       var columnEl = document.getElementById("column-"+i);
       var newLeft;
       var colX = columnEl.getBoundingClientRect().left;
@@ -363,7 +391,7 @@ var Grid = React.createClass({
         columnEl.style.transformOrigin = '50% 50%';
         columnEl.style.transform = 'translateX(' + newLeft + 'px)';
       }
-      
+
       if( i === columnIndex){
         var rows = column.rows;
         rows.forEach(function(row, j){
@@ -371,7 +399,7 @@ var Grid = React.createClass({
           var rowY = rowEl.getBoundingClientRect().top;
           var rowH = rowEl.clientHeight;
           var newTop;
-          
+
           if(j != rowIndex){
             if(j < rowIndex){
               newTop = -rPos.top;
@@ -393,7 +421,7 @@ var Grid = React.createClass({
       else if(!shouldMaximize){
         columnEl.style.transform = '';
       }
-      
+
     }.bind(this));
     this.isMaximized = !this.isMaximized;
   }
@@ -501,7 +529,7 @@ Grid.Row = React.createClass({
       child = <div style={{background:"gray", width: '100%', height: "100%"}} />;
     }
     return (
-      <div className="sw-resizeable-row" id={"row-" + data.id } ref="row" style={styles} onClick={this.onMaximize}>
+      <div className="sw-resizeable-row" id={"row-" + data.id } ref="row" style={styles} onClick={this.onMinimize}>
         {this.renderResizer()}
         {child}
       </div>
