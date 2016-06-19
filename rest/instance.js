@@ -3,7 +3,10 @@
 // A babel require hook
 // All subsequent files required by node with the extensions
 // .es6, .es, .jsx and .js will be transformed by Babel.
-require("babel-register");
+require("babel-register")({
+  only: './utils',
+  extensions: [".es6", ".es", ".jsx", ".js"]
+});
 // ===========================================================================================================
 // Setup
 // ===========================================================================================================
@@ -73,7 +76,7 @@ app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
 // Routes for which we don't need authentication
-app.use('/SW-*', swipesCardRouter);
+app.use('/share', swipesCardRouter);
 app.use('/v1', usersAuth);
 app.use('/v1', sdkRouter);
 app.use('/v1', servicesNoAuthRouter);

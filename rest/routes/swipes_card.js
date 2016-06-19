@@ -6,13 +6,13 @@ const r = require('rethinkdb');
 const Promise = require('bluebird');
 const db = require('../db.js');
 const SwipesError = require('../swipes-error');
-
+const swipesCardSsr = require('../utils/swipes_card_ssr.jsx');
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  const path = req.originalUrl;
-  const swipesUrl = path.substring(1);
+router.get('/SW-*', (req, res, next) => {
+  const pathParts = req.originalUrl.split('/');
+  const swipesUrl = pathParts[2];
   const getSwipesUrlQ = r.table('links').getAll(swipesUrl, {index: 'short_url'});
 
   let shortUrl = null;
@@ -65,13 +65,14 @@ router.get('/', (req, res, next) => {
     		user: {userId: shortUrl.userId},
     		service: {serviceId: shortUrl.service.service_id}
     	};
-      
+
     	file.request(options, function (err, result) {
     		if (err) {
     			return res.status(200).json({ok:false, err: err});
     		}
 
-    		res.send({ok: true, data: result});
+        res.send(swipesCardSsr.renderIndex());
+    		//res.send({ok: true, data: result});
     	});
     })
     .catch((e) => {

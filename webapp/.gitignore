@@ -5,5 +5,6 @@ test/temp
 app/vendor
 .tmp
 dev
+ssr_card_dev
 test/scripts/
 app/styles/_my-awesome-theme.scss

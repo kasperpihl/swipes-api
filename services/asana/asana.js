@@ -91,8 +91,6 @@ var asana = {
 
 		refreshAccessToken(authData, user, service)
 			.then(function (accessToken) {
-				console.log(method)
-				console.log(params)
 				client.useOauth({
 					credentials: accessToken
 				});
@@ -106,8 +104,6 @@ var asana = {
 
 				var id = null;
 
-				console.log('ID')
-				console.log(params.id);
 				if (params.id) {
 					id = params.id;
 					delete(params.id);
