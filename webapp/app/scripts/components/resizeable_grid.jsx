@@ -12,6 +12,7 @@ var Grid = React.createClass({
       this.setState({columns: this.validateColumns(this.props.columns)});
   },
   componentWillReceiveProps(nextProps) {
+    console.log('next', nextProps);
     this.setState({columns: this.validateColumns(nextProps)});
   },
   componentWillUpdate(nextProps, nextState){
@@ -25,7 +26,7 @@ var Grid = React.createClass({
   // Validation methods
   // ======================================================
   validateColumns(columns){
-    if(this.debug) 
+    if(this.debug)
       console.log('starting validation');
     /*
       [ ] Check that all properties are valid
@@ -35,7 +36,7 @@ var Grid = React.createClass({
       [X] Check if all columns have the same width
       [X] Assign equal width if width was the same
      */
-    
+
     // Test what need to be fixed.
     var columnsThatNeedWidth = [];
     var totalWidthUsed = 0;
@@ -43,12 +44,16 @@ var Grid = React.createClass({
     var columnsHaveEqualWidth = true;
     var tempColumns = []; // Used to mutate, replace and return the existing array.
     columns.forEach(function(column, colI){
-
+      console.log('testW', colI, column.w);
       var colWidth = column.w ? column.w : 0;
-      if(colI > 0 && colWidth != testColumnWidth){
-        columnsHaveEqualWidth = false;
+      if(colWidth){
+        if(colI > 0 && colWidth != testColumnWidth){
+          columnsHaveEqualWidth = false;
+        }
+        testColumnWidth = colWidth;
       }
-      testColumnWidth = colWidth;
+
+
       if(!colWidth){
         columnsThatNeedWidth.push(colI);
       }
@@ -60,11 +65,11 @@ var Grid = React.createClass({
     if(Math.abs(totalWidthUsed - 100) > 0.01 || columnsThatNeedWidth.length){
       tempColumns = this.validateOverflowAndAdjustWidths(columns, columnsThatNeedWidth, columnsHaveEqualWidth);
     }
-    
-    
-    if(this.debug) 
+
+
+    if(this.debug)
       console.log( 'tempCols', tempColumns, 'needWidth', columnsThatNeedWidth.length, 'haveEqual', columnsHaveEqualWidth);
-    
+
     return tempColumns;
   },
   validatePropertiesOfColumns(columns){
@@ -75,7 +80,7 @@ var Grid = React.createClass({
 
     var minWidths = this.minWidthsForColumns(columns);
     var totalWidthUsed = 0;
-    
+
     columns.forEach(function(column, colI){
       if(columnsThatNeedWidth.length > 0){
         if(columnsHaveEqualWidth){
@@ -87,6 +92,7 @@ var Grid = React.createClass({
       }
 
       // Make sure to respect minWidth
+      console.log('min', colI, column.w, minWidths[colI]);
       if(column.w < minWidths[colI]){
         column.w = minWidths[colI];
       }
@@ -97,7 +103,7 @@ var Grid = React.createClass({
 
     var additionalWidth = totalWidthUsed - 100;
     if(Math.abs(additionalWidth ) > 0.01){
-      // K_TODO: 
+      // K_TODO:
     }
 
     return tempColumns;
@@ -146,7 +152,7 @@ var Grid = React.createClass({
   },
 
   columnResize(diffX){
-    
+
     var percentages = this.columnsArrayPercentages();
     var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
     var minWidths = this.minWidthsForColumns();

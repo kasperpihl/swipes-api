@@ -401,7 +401,7 @@ var CardLoader = React.createClass({
 					src={externalUrl}
 					className="workflow-frame-class">
 				</webview>;
-				webviewLoader = this.renderWebviewLoader();
+				// webviewLoader = this.renderWebviewLoader();
 			} else {
 				cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 			}
