@@ -9,13 +9,37 @@ var Grid = React.createClass({
           columns: this.props.columns
       };
   },
+  componentWillReceiveProps(nextProps) {
+    console.log('setting props');
+      this.setState({columns: nextProps});
+  },
   componentWillUpdate(nextProps, nextState){
 
   },
   componentDidUpdate(prevProps, prevState) {
 
   },
+  validateColumns(columns){
+    var totalWidthUsed = 0;
+    var columnsThatNeedWidth = [];
+    columns.forEach(function(column, colI){
+      if(!column.w){ 
+        columnsThatNeedWidth.push(colI);
+      }
+      else totalWidthUsed += column.w;
+      var rowsThatNeedHeight = [];
+      var minWidth = 50;
+      column.rows.forEach(function(row, rowI){
+        if(!row.h){
+          rowsThatNeedHeight.push(rowI);
+        }  
+        if(row.minW && row.minW > minWidth){
 
+        }
+      }.bind(this));
+
+    }.bind(this));
+  },
   // ======================================================
   // Render methods
   // ======================================================
@@ -24,7 +48,6 @@ var Grid = React.createClass({
     var columns = this.state.columns.map(function(column, i){
       return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"column-" + i} data={column} />;
     }.bind(this));
-
     return (
       <div className="sw-resizeable-grid">
         {columns}
@@ -33,7 +56,7 @@ var Grid = React.createClass({
   },
 
   // ======================================================
-  // Resize Delegate
+  // Resizing
   // ======================================================
   columnWillResize(columnIndex){
     this.resizingColumnIndex = columnIndex;
@@ -44,12 +67,21 @@ var Grid = React.createClass({
     this.resizingRowIndex = rowIndex;
     this.resizingSavedPercentages = this.rowsArrayPercentages(columnIndex);
   },
+  rowDidResize(){
+    this.columnDidResize();
+  },
+  columnDidResize(){
+    var obj = JSON.parse(JSON.stringify(this.state.columns));
+    this.callDelegate('gridDidUpdate', obj);
+  },
+
   columnResize(diffX){
-    // Moving column, (diff < 0) means it should reverse the order.
-    // var columns = this.state.columns;
+    
     var percentages = this.columnsArrayPercentages();
     var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
     var minWidths = this.minWidthsForColumns();
+
+    // Moving column, (diff < 0) means it should reverse the order it goes through the tiles.
     var newPercentages = this._moveWithPercentages(percentages, minWidths, percentageToMove, this.resizingColumnIndex, (diffX < 0));
 
     this.saveColumnPercentagesToState(newPercentages);
@@ -65,6 +97,10 @@ var Grid = React.createClass({
     // Add percentages to rows and check if 100%
     this.saveRowPercentagesToState(colI, newPercentages);
   },
+
+  // ======================================================
+  // Main Resize function to calculate the layout
+  // ======================================================
   _moveWithPercentages(percentages, minSizes, percentageToMove, index, reverse){
     if(reverse){
       index = this.reverseIndexFromArray(index, percentages) + 1; // Add to move on the right side of resizebar.
@@ -124,21 +160,8 @@ var Grid = React.createClass({
     return newPercentages;
   },
 
-  rowDidResize(){
-    this.columnDidResize();
-  },
-  columnDidResize(){
-    var obj = JSON.parse(JSON.stringify(this.state.columns));
-    this.callDelegate('gridDidUpdate', obj);
-  },
 
 
-
-  callDelegate(name){
-    if(this.props.delegate && typeof this.props.delegate[name] === "function"){
-      return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-  },
 
   // ======================================================
   // Conversions
@@ -302,6 +325,16 @@ var Grid = React.createClass({
   columnForIndex(index){
     var columns = this.state.columns;
     return columns[index];
+  },
+
+
+  // ======================================================
+  // Delegation Setup
+  // ======================================================
+  callDelegate(name){
+    if(this.props.delegate && typeof this.props.delegate[name] === "function"){
+      return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
   },
 
   // ======================================================

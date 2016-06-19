@@ -2,8 +2,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var DragDropContext = require('react-dnd').DragDropContext;
-var HTML5Backend = require('react-dnd-html5-backend');
+
 
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var WorkspaceActions = require('../actions/WorkspaceActions');
@@ -13,8 +12,8 @@ var eventActions = require('../actions/EventActions');
 var CardStore = require('../stores/CardStore');
 var cardActions = require('../actions/CardActions');
 
-var CardLoader = require('./card_loader');
-var Card = require('material-ui/lib/card/card');
+var Grid = require('./resizeable_grid');
+var TileLoader = require('./tile_loader');
 
 var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
@@ -43,7 +42,7 @@ var Workspace = React.createClass({
       }
     },
     renderCards(){
-      if (this.state.workspace.length < 1) {
+      if (this.state.workspace._columns.length < 1) {
         return (
           <div className="empty-workspace-state">
             <p className="workspace-empty-text">
@@ -59,27 +58,16 @@ var Workspace = React.createClass({
         )
       }
 
-      return _.map(this.state.workspace, function(card, i) {
-        cardActions.add(card);
-        return (
-          <CardLoader
-            key={card.id}
-            data={card}
-            dotDragBegin={this.dotDragBegin}
-            onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
-        );
-      }.bind(this));
+      return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
-    runAdjustments() {
-        var cards = this.state.workspace;
-        this.bouncedAdjusting();
-
-        cards.forEach(function(card) {
-          if (card.maximized) {
-            console.log('removing maximize')
-            WorkspaceActions.removeMaximize(card.id)
-          }
-        })
+    renderGridRowForId(grid, id){
+      return (
+        <TileLoader
+          key={id}
+          data={{id: id}}
+          dotDragBegin={this.dotDragBegin}
+          onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
+      );
     },
     onEnterLeaveDropOverlay(cardId) {
       this._dropZoneId = cardId;
@@ -150,21 +138,12 @@ var Workspace = React.createClass({
     },
     componentDidMount(prevProps, prevState) {
         this.bouncedAdjusting = _.debounce(WorkspaceActions.adjustForScreenSize, 300);
-        this.runAdjustments();
         window.addEventListener('mouseup', this.onMouseUp);
         window.addEventListener('mousemove', this.onMouseMove);
         window.addEventListener('mousedown', this.onMouseDown);
         window.addEventListener("focus", this.onWindowFocus);
         window.addEventListener("blur", this.onWindowBlur);
-        window.addEventListener("resize", this.runAdjustments);
-    },
-    componentDidUpdate(prevProps, prevState) {
-        // K_TODO
-        // you are making infinite loop with that one here.
-        // It will call WorkspaceActions.adjustForScreenSize
-        // which will trigger manualUpdate
-        // and this code will be called again and again
-        //this.runAdjustments();
+        window.addEventListener("resize", this.bouncedAdjusting);
     },
     componentWillUnmount() {
         window.removeEventListener('mouseup', this.onMouseUp);
@@ -183,4 +162,4 @@ var Workspace = React.createClass({
     }
 });
 
-module.exports = DragDropContext(HTML5Backend)(Workspace);
+module.exports = Workspace;

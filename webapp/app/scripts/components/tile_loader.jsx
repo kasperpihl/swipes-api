@@ -1,15 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var objectAssign = require('object-assign');
-var DragSource = require('react-dnd').DragSource;
-
-var AppBar = require('material-ui/lib/app-bar');
-var Badge = require('material-ui/lib/badge');
-var IconButton = require('material-ui/lib/icon-button');
-var FontIcon = require('material-ui/lib/font-icon');
-var MenuItem = require('material-ui/lib/menus/menu-item');
-var MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
-var IconMenu = require('material-ui/lib/menus/icon-menu');
 
 // Node requires
 var http = nodeRequire('http');
@@ -39,10 +30,6 @@ var CardLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
 		return workflows.filter(function(workflow) {
 			return workflow.id === this.props.data.id;
-		}.bind(this))[0];
-	}), WorkspaceStore.connectFilter('card', function(cards){
-		return cards.filter(function(card) {
-			return card.id === this.props.data.id;
 		}.bind(this))[0];
 	}), Reflux.connectFilter(UserStore, "user", function(users) {
 		return users.filter(function(user) {
@@ -74,33 +61,6 @@ var CardLoader = React.createClass({
 			}
 			else if (message.command === "actions.openURL"){
 				window.open(data.url, "_blank");
-				// cardActions.broadcast('request.preOpenUrl', {
-				// 	url: data.url
-				// }, function(list) {
-				// 	if (list && list.length > 0) {
-				// 		list.push({id: 'beproductive', name: 'New tab', new_tab: true});
-				//
-				// 		var modalData = {
-				// 			title: "Open with",
-				// 			emptyText: "Oops... something went wrong!",
-				// 			rows: list
-				// 		};
-				//
-				// 		modalActions.loadModal('list', modalData, function (row) {
-				// 			if(row){
-				// 				if (!row.new_tab) {
-				// 					var newData = objectAssign({toCardId: row.id}, data);
-				//
-				// 					eventActions.fire("request.openUrl", newData);
-				// 				} else {
-				// 					window.open(data.url, "_blank");
-				// 				}
-				// 			}
-				// 		});
-				// 	} else {
-				// 		window.open(data.url, "_blank");
-				// 	}
-				// })
 			}
 			else if (message.command === "actions.startDrag"){
 				var newData = {
@@ -257,52 +217,10 @@ var CardLoader = React.createClass({
 		this.side = side;
 		this.isResizing = true;
 		this.originalClientX = e.clientX;
-		this.originalW = this.props.data.w;
-		this.originalX = this.props.data.x;
 		this.originalClientY = e.clientY;
-		this.originalY = this.props.data.y;
-		this.originalH = this.props.data.h;
 
 		e.stopPropagation();
 		e.preventDefault();
-	},
-	onMouseMove: function(e){
-		if(this.isResizing){
-			if(!e.which){
-				return this.onMouseUp();
-			}
-			var diffX = (e.clientX - this.originalClientX);
-			var diffY = (e.clientY - this.originalClientY);
-			var newX, newY, newW, newH;
-			if(['top', 'bottom'].indexOf(this.side) === -1){
-				newW = diffX + this.originalW;
-
-			}
-			if(['left', 'right'].indexOf(this.side) === -1){
-				newH = diffY + this.originalH;
-			}
-
-			if(['top', 'top-left', 'top-right'].indexOf(this.side) !== -1){
-				newY = (this.originalY + diffY);
-				newH = this.originalH - diffY;
-			}
-			if(['left', 'top-left', 'bottom-left'].indexOf(this.side) !== -1){
-				newX = (this.originalX + diffX);
-				newW = this.originalW - diffX;
-			}
-
-			var updateObj = {};
-			if(newX)
-				updateObj.x = newX;
-			if(newY)
-				updateObj.y = newY;
-			if(newW)
-				updateObj.w = newW;
-			if(newH)
-				updateObj.h = newH;
-			//Actions.updateCardSize(this.props.data.id, updateObj);
-			this.bouncedUpdateCardSize(this.props.data.id, updateObj);
-		}
 	},
 	onWindowFocus: function(e){
 		if(this.apiCon){
@@ -413,105 +331,12 @@ var CardLoader = React.createClass({
 			});
 		}
 	},
-	renderWebviewLoader: function() {
-		if(this.state.webviewLoading) {
-			return (
-				<div className="webview-loader">
-					<Loading />
-				</div>
-			)
-		}
-	},
 	componentWillMount() {
-		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
-	  eventActions.add("window.mouseup", this.onMouseUp, "card" + this.props.data.id);
-	  eventActions.add("window.mousemove", this.onMouseMove, "card" + this.props.data.id);
 	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
-	},
-	onRenameWorkflow: function(){
-		var newName = prompt('Rename workflow', this.state.workflow.name);
-		if(newName){
-			workflowActions.renameWorkflow(this.state.workflow, newName);
-		}
-	},
-	onCardMenuButtonClick:function(){
-		var e = {
-			type: 'menu.button'
-		};
-		this.apiCon.callListener("event", e);
-	},
-	openCardMenu: function() {
-
-		if (this.state.cardMenuState == 'active') {
-			this.setState({cardMenuState: 'inactive'})
-		} else {
-			this.setState({cardMenuState: 'active'})
-		}
-	},
-	renderAppbarLogo: function() {
-		// T_TODO instead of spliting and slicing
-		var url = this.state.workflow.index_url;
-		var splitURL = url.split('/').slice(0,-1).join('/');
-
-		if (this.state.workflow.icon) {
-			return <img src={splitURL + '/' + this.state.workflow.icon} />
-		}
-	},
-	renderCardBar: function(){
-		if(!this.state.workflow)
-			return;
-		var title = this.state.workflow.name;
-		if(this.state.titleFromCard){
-			title = this.state.titleFromCard;
-		}
-
-		var titleObj = <span style={{cursor: 'pointer', padding: '20px 0'}} onTouchTap={this.onCardMenuButtonClick}>{title}</span>
-		var fontObj = <FontIcon onTouchTap={this.onCardMenuButtonClick} className="material-icons">arrow_drop_down</FontIcon>;
-		if(this.state.badge){
-			fontObj = (<Badge
-				onTouchTap={this.onCardMenuButtonClick}
-				badgeContent={this.state.badge}
-				style={{padding: 0, margin:0, cursor: 'pointer'}}
-				badgeStyle={{backgroundColor: 'red', top: '14px', color:'white', right: 0, fontSize: '10px', paddingLeft: '3px', paddingRight: '3px', height: '20px', minWidth:'20px', width: 'auto'}}>
-					<FontIcon  className="material-icons">arrow_drop_down</FontIcon>
-				</Badge>);
-		}
-
-		return <div className="card-app-bar">
-			<div className="card-actions">
-				<div className="card-action close" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
-					<FontIcon className="material-icons">close</FontIcon>
-				</div>
-
-				<div className="card-action minimize" onClick={workspaceActions.showHideCard.bind(null, this.state.workflow.id)}>
-					<div className="minimize-icon"></div>
-				</div>
-
-				<div className="card-action maximize" onClick={workspaceActions.maximize.bind(null, this.state.workflow.id)}>
-					<FontIcon className="material-icons">add</FontIcon>
-				</div>
-			</div>
-			<div className="card-title" onClick={this.openCardMenu}>
-				{titleObj}
-				{fontObj}
-			</div>
-			<div className="card-icon">
-				{this.renderAppbarLogo()}
-			</div>
-		</div>
-
-	},
-	renderCardMenu: function() {
-		var title = this.state.workflow.name;
-		return (
-			<div className={"card-menu-overlay " + this.state.cardMenuState}>
-
-			</div>
-		)
 	},
 	onMouseEnterDropOverlay: function () {
 		if (this.state.workflow) {
@@ -532,8 +357,9 @@ var CardLoader = React.createClass({
 	},
 	renderDropOverlay: function(){
 		var title = "";
-		var className = (this.state.card && this.state.card.hoverDropOverlay) ? 'drop-overlay hover' : 'drop-overlay';
-
+		// Make this in a different way, card is no longer available here. All unique properties should be in workflow.
+		//var className = (this.state.card && this.state.card.hoverDropOverlay) ? 'drop-overlay hover' : 'drop-overlay';
+		var className = 'drop-overlay';
 		if (this.state.workflow) {
 			title = this.state.workflow.name;
 		}
@@ -561,19 +387,12 @@ var CardLoader = React.createClass({
 		var workflowId = '';
 		var cardContent = <Loading />;
 		var webviewLoader = <div />;
-		var cardClass = 'card';
-
 
 
 		if(this.state.workflow){
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			var externalUrl = this.state.workflow.external_url;
 			workflowId = this.state.workflow.id;
-
-			// For Tiho
-			// preload={'file://' + path.join(app.getAppPath(), 'preload/' + this.state.workflow.manifest_id + '.js')}
-			// For Kris
-			// preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\' + this.state.workflow.manifest_id + '.js'}
 
 			if (externalUrl) {
 				cardContent = <webview
@@ -622,10 +441,9 @@ var CardLoader = React.createClass({
 		}
 
 		return (
-			<div id={workflowId} className={cardClass}>
-				{this.renderDropOverlay()}
+			<div id={workflowId} className="tile">
 				{cardContent}
-				{webviewLoader}
+				{/*webviewLoader*/}
 			</div>
 		);
 	}
