@@ -383,6 +383,22 @@ var CardLoader = React.createClass({
 	onSelectedAccount: function(selectedAccount){
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
+	renderTopbar: function() {
+
+		return (
+			<div className="tile-topbar">
+				<div className="tile-topbar_content">
+					<div className="tile-topbar_content-title">Chat</div>
+					<div className="tile-topbar_content-seperator"></div>
+					<div className="tile-topbar_content-account">Swipes Team</div>
+				</div>
+				<div className="tile-topbar_actions">
+					<div className="tile-topbar_actions-collapse"></div>
+					<div className="tile-topbar_actions-fullscreen" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}></div>
+				</div>
+			</div>
+		)
+	},
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
@@ -442,6 +458,7 @@ var CardLoader = React.createClass({
 
 		return (
 			<div id={workflowId} className="tile">
+				{this.renderTopbar()}
 				{cardContent}
 				{/*webviewLoader*/}
 			</div>

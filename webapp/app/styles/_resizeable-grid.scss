@@ -62,7 +62,7 @@ $transitionTime: .5s;
     background-color: yellow;
     cursor: col-resize;
     position: absolute;
-    left: calc(0 - 2px);
+    left: calc(0px - 2px);
     top: 0;
     will-change: left;
     z-index: 2;

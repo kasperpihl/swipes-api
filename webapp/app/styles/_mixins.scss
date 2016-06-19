@@ -39,3 +39,14 @@
 	left: $left;
 	margin: $margin;
 }
+
+@mixin size($width, $height) {
+	width: $width;
+	height: $height;
+}
+
+%flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
