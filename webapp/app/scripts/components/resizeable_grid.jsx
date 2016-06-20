@@ -199,6 +199,9 @@ var Grid = React.createClass({
 
     return valObj;
   },
+  validatorAdjustRowOverflows(valObj){
+    
+  },
   validatorMinimizeOverflows(columns, valObj){
 
   },
@@ -231,7 +234,7 @@ var Grid = React.createClass({
   columnWillResize(columnIndex){
     this.resizingColumnIndex = columnIndex;
     this.resizingSavedPercentages = this.columnsArrayPercentages();
-    
+    this.setState({isResizing: true});
   },
   rowWillResize(columnIndex, rowIndex){
     this.resizingSavedPercentages = this.rowsArrayPercentages(columnIndex);
