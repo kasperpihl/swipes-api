@@ -544,7 +544,7 @@ var Grid = React.createClass({
   // ======================================================
   onFullscreen(id){
     console.log('clicked fullscreen', id);
-    this.setState({"transitionToFullscreen": })
+    //this.setState({"transitionToFullscreen": })
   },
   onCollapse(id){
 
