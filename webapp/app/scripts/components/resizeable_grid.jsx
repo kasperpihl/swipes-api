@@ -135,7 +135,7 @@ var Grid = React.createClass({
       className += ' sw-grid-resizing';
     }
     return (
-      <div className={className}>
+      <div ref="grid" className={className}>
         {columns}
       </div>
     )
@@ -259,7 +259,7 @@ var Grid = React.createClass({
   },
   percentageWidthFromPixels(pixels){
     // K_TODO: Cache the width to not query grid all the time.
-    const grid = document.querySelector('.sw-resizeable-grid');
+    const grid = this.refs.grid;
     const gw = grid.clientWidth;
     var percentage = (pixels / gw * 100);
 
@@ -267,13 +267,13 @@ var Grid = React.createClass({
   },
   pixelsWidthFromPercentage(percentage){
     // K_TODO: Cache the width to not query grid all the time.
-    const grid = document.querySelector('.sw-resizeable-grid');
+    const grid = this.refs.grid;
     const gw = grid.clientWidth;
     return Math.round(gw / 100 * percentage);
   },
   percentageHeightFromPixels(pixels){
     // K_TODO: Cache the height to not query grid all the time.
-    const grid = document.querySelector('.sw-resizeable-grid');
+    const grid = this.refs.grid;
     const gh = grid.clientHeight;
     var percentage = (pixels / gh * 100);
 
@@ -281,7 +281,7 @@ var Grid = React.createClass({
   },
   pixelsHeightFromPercentage(percentage){
     // K_TODO: Cache the height to not query grid all the time.
-    const grid = document.querySelector('.sw-resizeable-grid');
+    const grid = this.refs.grid;
     const gh = grid.clientHeight;
     return Math.round(gh / 100 * percentage);
   },

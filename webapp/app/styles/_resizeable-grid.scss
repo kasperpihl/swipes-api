@@ -8,7 +8,7 @@ $transitionTime: .5s;
 
   @extend %flex;
   justify-content: space-between;
-  &.resizing{
+  &.sw-grid-resizing{
     .sw-resizeable-row{
       pointer-events:none;
     }
