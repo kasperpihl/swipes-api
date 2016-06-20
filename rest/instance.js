@@ -1,5 +1,12 @@
 "use strict";
 
+// A babel require hook
+// All subsequent files required by node with the extensions
+// .es6, .es, .jsx and .js will be transformed by Babel.
+require("babel-register")({
+  only: './utils',
+  extensions: [".es6", ".es", ".jsx", ".js"]
+});
 // ===========================================================================================================
 // Setup
 // ===========================================================================================================
@@ -52,6 +59,7 @@ let workflowsRouter = require('./routes/workflows.js');
 let linksRouter = require('./routes/links.js');
 let feedbackRouter = require('./routes/feedback.js');
 let feedbackNoAuthRouter = require('./routes/feedback_no_auth.js');
+let swipesCardRouter = require('./routes/swipes_card.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -68,6 +76,7 @@ app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
 // Routes for which we don't need authentication
+app.use('/share', swipesCardRouter);
 app.use('/v1', usersAuth);
 app.use('/v1', sdkRouter);
 app.use('/v1', servicesNoAuthRouter);

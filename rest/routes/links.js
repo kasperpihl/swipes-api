@@ -1,7 +1,7 @@
 "use strict";
 
 const config = require('config');
-const express = require( 'express' );
+const express = require('express');
 const r = require('rethinkdb');
 const Promise = require('bluebird');
 const validator = require('validator');
@@ -9,7 +9,7 @@ const shortid = require('shortid');
 const hash = require('object-hash');
 const util = require('../util.js');
 const db = require('../db.js');
-const SwipesError = require( '../swipes-error' );
+const SwipesError = require('../swipes-error');
 
 const generateId = util.generateSlackLikeId;
 const router = express.Router();
@@ -18,6 +18,7 @@ const router = express.Router();
   example
   {JSON} service
   {
+    service_account_id: 93149587458564
     name: 'asana',
     method: 'tasks.findById',
     data: {id: '1234567'},
@@ -26,7 +27,7 @@ const router = express.Router();
       title: name,
       description: notes
     },
-    actions: {
+    actions: [
       title: 'complete',
       icon: 'check',
       method: 'tasks.update',
@@ -34,33 +35,40 @@ const router = express.Router();
         id: '1234567',
         completed: true
       }
-    }
+    ]
   }
 **/
 router.post('/link.add', (req, res, next) => {
-  const service = req.body.service;
-  const method = req.body.method;
-  const data = req.body.data;
-  const fields = req.body.fields;
-  const actions = req.body.actions;
-
+  const userId = req.userId;
   //T_TODO validating the service object
+  const service = req.body.service;
+  const checksum = hash({service: service, userId: userId});
+  const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
 
-  // T_TODO check for a the checksum
-  // if it there just return the url without making a new one
-  const checksum = hash(service);
-  const shortUrl = 'SW-' + shortid.generate();
-  const link = {
-    checksum: checksum,
-    service: service,
-    shortUrl: shortUrl
-  };
+  let shortUrl = null;
 
-  const insertLinkQ = r.table('links').insert(link);
+  db.rethinkQuery(checkSumQ)
+    .then((res) => {
+      if (res.length > 0) {
+        shortUrl = res[0].short_url;
 
-  db.rethinkQuery(insertLinkQ)
+        return Promise.resolve();
+      }
+
+      shortUrl = 'SW-' + shortid.generate();
+      const link = {
+        checksum: checksum,
+        service: service,
+        short_url: shortUrl,
+        userId: userId
+      };
+
+      const insertLinkQ = r.table('links').insert(link);
+
+      return db.rethinkQuery(insertLinkQ);
+    })
     .then(() => {
-      return res.status(200).json({ok: true});
+      return res.status(200).json({ok: true, short_url: shortUrl});
     })
     .catch((e) => {
       return next(e);

@@ -15,92 +15,16 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   var yeomanConfig = {
-      app: 'app',
-      dev: 'dev',
-      dist: 'dist',
+      app: 'ssr_card_app',
+      dev: 'ssr_card_dev',
+      dist: 'ssr_card_dist',
       sdk: 'swipes-sdk',
       globalStyles: 'global-styles'
   };
 
   grunt.initConfig({
       yeoman: yeomanConfig,
-      connect: {
-          options: {
-            port: 3000,
-            livereload: true,
-            hostname: 'localhost', //change to '0.0.0.0' to enable outside connections
-            base: ['dev', 'ssr_card_dev']
-          },
-          proxies: [
-              {
-                context: '/share',
-                host: 'localhost',
-                port: 5000,
-                https: false,
-                xforward: false
-              },
-              {
-                  context: '/v1',
-                  host: 'localhost',
-                  port: 5000,
-                  https: false,
-                  xforward: false
-              },
-              {
-                context: '/workflows',
-                host: 'localhost',
-                port: 5000,
-                https: false,
-                xforward: false
-              },
-              {
-                context: '/socket.io',
-                host: 'localhost',
-                port: 5000,
-                https: false,
-                xforward: false,
-                ws: true
-              }
-          ],
-          livereload: {
-            options: {
-              open: true,
-              middleware: function (connect, options) {
-                  var middlewares = [];
-                  var rules = [
-                    '!\\.html|\\.js|\\.css|\\.svg|\\.jp(e?)g|\\.png|\\.ttf|\\.woff|\\.woff2|\\.gif$ /index.html'
-                  ];
-
-                  // Proxy all requests related to the api
-                  middlewares.push(require('grunt-connect-proxy/lib/utils').proxyRequest);
-
-                  // RewriteRules support
-                  middlewares.push(modRewrite(rules));
-
-                  if (!Array.isArray(options.base)) {
-                      options.base = [options.base];
-                  }
-
-                  var directory = options.directory || options.base[options.base.length - 1];
-
-                  options.base.forEach(function (base) {
-                      console.log(base);
-                      // Serve static files.
-                      middlewares.push(serveStatic(base));
-                  });
-
-                  // Make directory browse-able.
-                  //middlewares.push(connect.directory(directory));
-
-                  return middlewares;
-              }
-            }
-          }
-      },
       watch: {
-        options: {
-          livereload: 35729
-        },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
           tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
@@ -174,32 +98,6 @@ module.exports = function (grunt) {
           }
         }
       },
-      // browserify: {
-      //   options: {
-      //     transform: ['reactify']
-      //   },
-      //   dist: {
-      //     files: {
-      //       '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js'
-      //     },
-      //     options: {
-      //       browserifyOptions: {
-      //         extensions: '.jsx'
-      //       }
-      //     }
-      //   },
-      //   serve: {
-      //     files: {
-      //       '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js',
-      //     },
-      //     options: {
-      //       browserifyOptions: {
-      //         debug: true,
-      //         extensions: '.jsx'
-      //       }
-      //     }
-      //   }
-      // },
       concat: {
         serve: {
           files: {
@@ -398,8 +296,6 @@ module.exports = function (grunt) {
     'autoprefixer:dev',
     'copy:dev',
     'cacheBust:dev',
-    'configureProxies',
-    'connect:livereload',
     'watch'
   ]);
 
@@ -413,22 +309,6 @@ module.exports = function (grunt) {
     'copy:dev',
     'cacheBust:dev'
   ]);
-
-  // grunt.registerTask('build', [
-  //   'clean:dist',
-  //   'browserify:dist',
-  //   'compass:dist',
-  //   'useminPrepare',
-  //   'concat',
-  //   'autoprefixer:dist',
-  //   'imagemin',
-  //   'cssmin',
-  //   'uglify',
-  //   'copy',
-  //   'filerev',
-  //   'usemin',
-  //   'htmlmin'
-  // ]);
 
   grunt.registerTask('default', 'build');
 };

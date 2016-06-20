@@ -146,7 +146,6 @@ Services.ConnectRow = React.createClass({
 		});
 	},
 	render: function(){
-		console.log(this.props.data);
 		return(
 			<div className="row connect">
 				<h6>{this.props.data.title}</h6>
@@ -158,14 +157,12 @@ Services.ConnectRow = React.createClass({
 
 Services.ConnectedRow = React.createClass({
 	clickedRemove: function () {
-		console.log(this.props.data);
 		UserActions.serviceDisconnect(this.props.data.id);
 	},
 	renderName: function() {
 
 	},
 	render: function () {
-		console.log(this.props.data);
 		var showName = "";
 		if(this.props.showName){
 			showName = this.props.showName;

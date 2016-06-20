@@ -2,7 +2,7 @@
 	"manifest_version": 1,
 	"type": "service",
 	"title": "Dropbox",
-	"identifier": "dropbox_api",
+	"identifier": "dropbox",
 	"version": "0.1",
 	"description": "The Dropbox Service For Swipes",
 	"script": "dropbox.js"
