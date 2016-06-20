@@ -11,13 +11,10 @@ $transitionTime: .5s;
 
   &.sw-grid-resizing {
 
-    .sw-resizeable-row { // pointer events for iframe
+    .sw-resizeable-row > .sw-row-content { // no pointer events for row-content
       pointer-events: none;
     }
 
-    iframe {
-      visibility: hidden;
-    }
   }
 
   .sw-resizeable-column {
@@ -50,7 +47,10 @@ $transitionTime: .5s;
     transition:z-index $transitionTime $transitionTime, transform $transitionTime ease-in-out;
     display: flex;
     flex-direction: column;
-
+    .sw-row-content{
+      height:100%;
+      width: 100%;
+    }
     &.maximize {
       z-index: 999;
       transition: z-index $transitionTime, transform $transitionTime ease-in-out;

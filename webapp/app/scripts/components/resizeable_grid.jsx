@@ -39,38 +39,46 @@ var Grid = React.createClass({
     
     // Validation object, passed along the different validation functions and returned with updated values.
     var valObj = {
-      minWidths: this.minWidthsForColumns(columns),
+      columns: columns,
+      minWidths: this.minWidthsForColumns(columns), // Array with minWidths as values []
+      minHeights: this.minHeightsForRows(columns), 
       totalWidthUsed: 0
     };
     
-    valObj = this.validatorInitialDetermination(columns, valObj);
-    
-    valObj = this.validatorAssignWidths(columns, valObj);
+    valObj = this.validatorInitialColumnDetermination(valObj); 
+    if(this.debug) console.log('initial column determination', valObj);
+
+    valObj = this.validatorInitialRowDetermination(valObj);
+    if(this.debug) console.log('initial row determination', valObj);
+
+    valObj = this.validatorAssignWidths(valObj);
+    if(this.debug) console.log('assign widths', valObj);
+
+    valObj = this.validatorAssignHeights(valObj);
+    if(this.debug) console.log('assign heights', valObj);
 
     // If width used is different from 100 or a new column is here.
     if(Math.abs(valObj.totalWidthUsed - 100) > 0.01){
-      valObj = this.validatorAdjustOverflows(valObj.tempColumns, valObj);
+      valObj = this.validatorAdjustOverflows(valObj);
+      if(this.debug) console.log('adjust overflows', valObj);
     }
+    
 
-
-    if(this.debug)
-      console.log( 'tempCols', valObj.tempColumns, 'needWidth', valObj.columnsThatNeedWidth.length, 'haveEqual', valObj.columnsHaveEqualWidth);
-
-    return valObj.tempColumns;
+    return valObj.columns;
   },
   validatorPropertiesOfColumns(columns){
     return columns;
   },
-  validatorInitialDetermination(columns, valObj){
+  validatorInitialColumnDetermination(valObj){
   
     valObj.columnsHaveEqualWidth = true;
     valObj.columnsThatNeedWidth = [];
-    valObj.tempColumns = [];
+    var rowsThatNeedHeight = {}
 
     var testColumnWidth = 0;
-    columns.forEach(function(column, colI){
+    valObj.columns.forEach(function(column, colI){
       var colWidth = column.w ? column.w : 0;
-      console.log('before', colI, colWidth);
+
       if(colWidth){
         if(colI > 0 && colWidth != testColumnWidth){
           valObj.columnsHaveEqualWidth = false;
@@ -83,66 +91,112 @@ var Grid = React.createClass({
         valObj.columnsThatNeedWidth.push(colI);
       }
       valObj.totalWidthUsed += colWidth;
-      valObj.tempColumns.push(column);
     }.bind(this));
 
     return valObj;
   },
-  validatorAssignWidths(columns, valObj){
+  validatorInitialRowDetermination(valObj){
+
+    valObj.rowsThatNeedHeight = [];
+    valObj.columnsEqualRowHeight = [];
+    valObj.columnsTotalRowsHeight = [];
+
+    valObj.columns.forEach(function(column, colI){
+
+      var rowsHaveEqualHeight = true;
+      var testRowHeight = 0;
+      var totalRowHeight = 0;
+      column.rows.forEach(function(row, rowI){
+        var rowHeight = row.h ? row.h : 0;
+        if(rowHeight){
+          if(rowI > 0 && rowHeight != testRowHeight){
+            rowsHaveEqualHeight = false;
+          }
+          testRowHeight = rowHeight;
+        }
+        if(!rowHeight){
+          valObj.rowsThatNeedHeight.push(row.id);
+        }
+        totalRowHeight += rowHeight;
+
+      }.bind(this));
+      
+      valObj.columnsEqualRowHeight.push(rowsHaveEqualHeight);
+      valObj.columnsTotalRowsHeight.push(totalRowHeight);
+      
+      
+    }.bind(this));
+    
+    return valObj;
+  },
+  validatorAssignWidths(valObj){
 
     valObj.totalWidthUsed = 0;
-    valObj.tempColumns = [];
-
-    columns.forEach(function(column, colI){
-      if(valObj.columnsThatNeedWidth.length > 0 || valObj.columnsHaveEqualWidth){
-        if(valObj.columnsHaveEqualWidth){
-          column.w = this.roundedDecimal(100 / columns.length);
-        }
-        else if(valObj.columnsThatNeedWidth.indexOf(colI) > -1){
-          column.w = valObj.minWidths[colI];
-        }
+    valObj.columns.forEach(function(column, colI){
+      var minWidth = valObj.minWidths[colI];
+      if(valObj.columnsHaveEqualWidth){
+        column.w = Math.max(minWidth, this.roundedDecimal(100 / valObj.columns.length));
+      }
+      else if(valObj.columnsThatNeedWidth.indexOf(colI) > -1){
+        column.w = minWidth;
       }
 
-      // Make sure to respect minWidth
-      if(column.w < valObj.minWidths[colI]){
-        column.w = valObj.minWidths[colI];
-      }
       valObj.totalWidthUsed += column.w;
-      valObj.tempColumns.push(column);
+    
     }.bind(this));
 
     return valObj;
   },
-  validatorAssignHeights(){
+
+  validatorAssignHeights(valObj){
+
+    valObj.columns.forEach(function(column, colI){
+      var totalHeight = 0;
+      column.rows.forEach(function(row, rowI){
+        var minHeight = valObj.minHeights[colI][rowI];
+        if(valObj.columnsEqualRowHeight[colI]){
+          row.h = Math.max(minHeight, this.roundedDecimal(100 / column.rows.length));
+        }
+        else if(valObj.rowsThatNeedHeight.indexOf(row.id) > -1){
+          row.h = minHeight;
+        }
+        totalHeight += row.h;
+        valObj.columnsTotalRowsHeight[colI] = totalHeight;
+      }.bind(this));
+
+    }.bind(this));
+
+    return valObj;
   },
-  validatorAdjustOverflows(columns, valObj){
+  validatorAdjustOverflows(valObj){
     var reverse = true; // K_TODO: make dynamic here
 
     var additionalWidth = valObj.totalWidthUsed - 100;
+
     var remainingPercentageToAdd = additionalWidth;
 
-    for(var i = 0 ; i < columns.length ; i++){
+    for(var i = 0 ; i < valObj.columns.length ; i++){
       if(!remainingPercentageToAdd){
         break;
       }
       var realIndex = i;
       if(reverse){
-        realIndex = this.reverseIndexFromArray(i, columns);
+        realIndex = this.reverseIndexFromArray(i, valObj.columns);
       }
       var minWidth = valObj.minWidths[realIndex];
-      var width = columns[realIndex].w;
+      var width = valObj.columns[realIndex].w;
       width = width - remainingPercentageToAdd;
+
       remainingPercentageToAdd = 0;
       if(width < minWidth){
         remainingPercentageToAdd = minWidth - width;
         width = minWidth;
       }
-      columns[realIndex].w = width;
+      valObj.columns[realIndex].w = width;
 
     }
     valObj.totalWidthUsed = 100 + remainingPercentageToAdd;
-    console.log('additional witdh', remainingPercentageToAdd, _.pluck(columns, 'w'));
-    
+
     return valObj;
   },
   validatorMinimizeOverflows(columns, valObj){
@@ -177,15 +231,18 @@ var Grid = React.createClass({
   columnWillResize(columnIndex){
     this.resizingColumnIndex = columnIndex;
     this.resizingSavedPercentages = this.columnsArrayPercentages();
-    this.setState({isResizing: true});
+    
   },
   rowWillResize(columnIndex, rowIndex){
-    this.columnWillResize(columnIndex);
+    this.resizingSavedPercentages = this.rowsArrayPercentages(columnIndex);
+    this.resizingColumnIndex = columnIndex;
     this.resizingRowIndex = rowIndex;
+    this.setState({isResizing: true});
   },
   rowDidResize(){
     this.columnDidResize();
   },
+
   columnDidResize(){
     var obj = JSON.parse(JSON.stringify(this.state.columns));
     this.callDelegate('gridDidUpdate', obj);
@@ -205,12 +262,10 @@ var Grid = React.createClass({
   },
   rowResize(diffY){
     var colI = this.resizingColumnIndex;
-
     var percentages = this.rowsArrayPercentages(colI);
     var percentageToMove = Math.abs(this.percentageHeightFromPixels(diffY));
     var minHeights = this.minHeightsForRowsInColumn(colI);
     var newPercentages = this._moveWithPercentages(percentages, minHeights, percentageToMove, this.resizingRowIndex, (diffY < 0));
-
     // Add percentages to rows and check if 100%
     this.saveRowPercentagesToState(colI, newPercentages);
   },
@@ -402,6 +457,25 @@ var Grid = React.createClass({
     }.bind(this))
     return arr;
   },
+  minHeightsForRows(columns){
+    var res = {};
+    if(!columns){
+      columns = this.state.columns;
+    }
+    columns.forEach(function(column, colI){
+      res[colI] = [];
+      column.rows.forEach(function(row){
+        var minHeight = DEFAULT_MINHEIGHT;
+        if(row.minH && row.minH > minHeight){
+          minHeight = row.minH;
+        }
+        res[colI].push(this.percentageHeightFromPixels(minHeight));
+      }.bind(this));
+      
+    }.bind(this))
+
+    return res;
+  },
   minHeightsForRowsInColumn(columnIndex){
     var arr = [];
     this.state.columns[columnIndex].rows.forEach(function(row){
@@ -460,6 +534,25 @@ var Grid = React.createClass({
     if(this.props.delegate && typeof this.props.delegate[name] === "function"){
       return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
+  },
+
+  // ======================================================
+  // Custom Props Handlers
+  // ======================================================
+  onFullscreen(id){
+
+  },
+  onCollapse(id){
+
+  },
+  onReorderStart(id){
+
+  },
+  onReorder(){
+
+  },
+  onReorderEnd(){
+
   },
 
   // ======================================================
@@ -592,7 +685,6 @@ var Grid = React.createClass({
 
 Grid.Resizer = React.createClass({
   onDragStart(e){
-    e.stopPropagation();
     this.lastX = e.clientX;
     this.lastY = e.clientY;
     var dragImgEl = document.createElement('span');
@@ -607,7 +699,6 @@ Grid.Resizer = React.createClass({
 
   },
   onDrag(e){
-    e.stopPropagation();
     if(e.clientX && e.clientY){
 
       var diffX = (e.clientX - this.lastX);
@@ -622,7 +713,7 @@ Grid.Resizer = React.createClass({
       this.lastX = e.clientX;
       this.lastY = e.clientY;
     }
-
+    e.stopPropagation();
   },
   onDragEnd(e){
     e.stopPropagation();
@@ -697,7 +788,7 @@ Grid.Row = React.createClass({
     return (
       <div className={className} id={"row-" + data.id } ref="row" style={styles} onClick={this.onMinimize}>
         {this.renderResizer()}
-        {child}
+        <div className="sw-row-content">{child}</div>
       </div>
     )
   }
