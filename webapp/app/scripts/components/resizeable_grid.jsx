@@ -200,7 +200,7 @@ var Grid = React.createClass({
     return valObj;
   },
   validatorAdjustRowOverflows(valObj){
-    
+
   },
   validatorMinimizeOverflows(columns, valObj){
 
@@ -543,7 +543,8 @@ var Grid = React.createClass({
   // Custom Props Handlers
   // ======================================================
   onFullscreen(id){
-
+    console.log('clicked fullscreen', id);
+    this.setState({"transitionToFullscreen": })
   },
   onCollapse(id){
 
@@ -574,6 +575,14 @@ var Grid = React.createClass({
     // translateX for minimized rowHeight - minimizedSize;
 
   },
+  transformStylesForFullscreen(){
+    return {
+      scaleX: 0,
+      scaleY: 0,
+      originX: 0,
+      originY: 0
+    };
+  },
   maximizeColumnWithRow(row, columnIndex, rowIndex) {
     const {
       data,
@@ -582,7 +591,7 @@ var Grid = React.createClass({
     const columnLength = this.state.columns.length;
 
     const rowsInColumn = this.state.columns[columnIndex].rows.length;
-    const grid = document.querySelector('.sw-resizeable-grid');
+    const grid = this.refs.grid;
     const gw = grid.clientWidth;
     const gh = grid.clientHeight;
     const rw = row.clientWidth;
@@ -634,10 +643,7 @@ var Grid = React.createClass({
     var columns = this.state.columns;
     columns.forEach(function(column, i){
 
-      var columnEl = document.getElementById("column-"+i);
       var newLeft;
-      var colX = columnEl.getBoundingClientRect().left;
-      var colW = columnEl.clientWidth
       if( i < columnIndex ){
         newLeft = -rPos.left;
       }
