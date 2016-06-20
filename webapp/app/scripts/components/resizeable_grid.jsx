@@ -1,5 +1,6 @@
 var React = require('react');
-
+var DEFAULT_MINWIDTH = 200;
+var DEFAULT_MINHEIGHT = 200;
 var Grid = React.createClass({
   // ======================================================
   // Life Cycle methods
@@ -12,8 +13,7 @@ var Grid = React.createClass({
       this.setState({columns: this.validateColumns(this.props.columns)});
   },
   componentWillReceiveProps(nextProps) {
-    console.log('next', nextProps);
-    this.setState({columns: this.validateColumns(nextProps)});
+    this.setState({columns: this.validateColumns(nextProps.columns)});
   },
   componentWillUpdate(nextProps, nextState){
 
@@ -28,21 +28,28 @@ var Grid = React.createClass({
   validateColumns(columns){
     if(this.debug)
       console.log('starting validation');
+
     /*
-      [ ] Check that all properties are valid
-      [X] Check if all columns have a width
-      [ ] Check total width used
-      [ ] Check if all rows have height
-      [X] Check if all columns have the same width
-      [X] Assign equal width if width was the same
-     */
+      [ ] validateProperties // Go through columns/rows to make sure no invalid properties are used
+      [ ] initialDetermination // check if columns have widths and rows have height
+      [ ] assignWidthsAndHeights // If heights/widths were missing, assign them.
+      [ ] adjustOverflows // If size is too big/small, adjust it
+      [ ] determineAnimations
+    */
     
-    var valObj = this.validateInitialDetermination(columns);
+    // Validation object, passed along the different validation functions and returned with updated values.
+    var valObj = {
+      minWidths: this.minWidthsForColumns(columns),
+      totalWidthUsed: 0
+    };
     
+    valObj = this.validatorInitialDetermination(columns, valObj);
+    
+    valObj = this.validatorAssignWidths(columns, valObj);
 
     // If width used is different from 100 or a new column is here.
-    if(Math.abs(valObj.totalWidthUsed - 100) > 0.01 || valObj.columnsThatNeedWidth.length){
-      valObj = this.validateOverflowAndAdjustWidths(columns, valObj);
+    if(Math.abs(valObj.totalWidthUsed - 100) > 0.01){
+      valObj = this.validatorAdjustOverflows(valObj.tempColumns, valObj);
     }
 
 
@@ -51,23 +58,19 @@ var Grid = React.createClass({
 
     return valObj.tempColumns;
   },
-  validatePropertiesOfColumns(columns){
+  validatorPropertiesOfColumns(columns){
     return columns;
   },
-  validateInitialDetermination(columns){
-    // Test what need to be fixed.
-    var testColumnWidth = 0;
+  validatorInitialDetermination(columns, valObj){
+  
+    valObj.columnsHaveEqualWidth = true;
+    valObj.columnsThatNeedWidth = [];
+    valObj.tempColumns = [];
 
-    // Validation object, passed along the different validation functions.
-    var valObj = {
-      totalWidthUsed: 0,
-      columnsHaveEqualWidth: true,
-      columnsThatNeedWidth: [],
-      tempColumns: []
-    };
+    var testColumnWidth = 0;
     columns.forEach(function(column, colI){
       var colWidth = column.w ? column.w : 0;
-
+      console.log('before', colI, colWidth);
       if(colWidth){
         if(colI > 0 && colWidth != testColumnWidth){
           valObj.columnsHaveEqualWidth = false;
@@ -85,11 +88,8 @@ var Grid = React.createClass({
 
     return valObj;
   },
-  
-  validateOverflowAndAdjustWidths(columns, valObj){
-    
+  validatorAssignWidths(columns, valObj){
 
-    valObj.minWidths = this.minWidthsForColumns(columns);
     valObj.totalWidthUsed = 0;
     valObj.tempColumns = [];
 
@@ -98,7 +98,7 @@ var Grid = React.createClass({
         if(valObj.columnsHaveEqualWidth){
           column.w = this.roundedDecimal(100 / columns.length);
         }
-        else{
+        else if(valObj.columnsThatNeedWidth.indexOf(colI) > -1){
           column.w = valObj.minWidths[colI];
         }
       }
@@ -111,14 +111,44 @@ var Grid = React.createClass({
       valObj.tempColumns.push(column);
     }.bind(this));
 
-
-    var additionalWidth = valObj.totalWidthUsed - 100;
-    if(Math.abs(additionalWidth ) > 0.01){
-      // K_TODO:
-    }
-
     return valObj;
   },
+  validatorAssignHeights(){
+  },
+  validatorAdjustOverflows(columns, valObj){
+    var reverse = true; // K_TODO: make dynamic here
+
+    var additionalWidth = valObj.totalWidthUsed - 100;
+    var remainingPercentageToAdd = additionalWidth;
+
+    for(var i = 0 ; i < columns.length ; i++){
+      if(!remainingPercentageToAdd){
+        break;
+      }
+      var realIndex = i;
+      if(reverse){
+        realIndex = this.reverseIndexFromArray(i, columns);
+      }
+      var minWidth = valObj.minWidths[realIndex];
+      var width = columns[realIndex].w;
+      width = width - remainingPercentageToAdd;
+      remainingPercentageToAdd = 0;
+      if(width < minWidth){
+        remainingPercentageToAdd = minWidth - width;
+        width = minWidth;
+      }
+      columns[realIndex].w = width;
+
+    }
+    valObj.totalWidthUsed = 100 + remainingPercentageToAdd;
+    console.log('additional witdh', remainingPercentageToAdd, _.pluck(columns, 'w'));
+    
+    return valObj;
+  },
+  validatorMinimizeOverflows(columns, valObj){
+
+  },
+
 
   // ======================================================
   // Render methods
@@ -127,7 +157,7 @@ var Grid = React.createClass({
     var columns = null;
     if(this.state.columns){
       columns = this.state.columns.map(function(column, i){
-        return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"column-" + i} data={column} />;
+        return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"row-" + column.rows[0].id} data={column} />;
       }.bind(this));
     }
     var className = 'sw-resizeable-grid';
@@ -362,7 +392,7 @@ var Grid = React.createClass({
       columns = this.state.columns;
     }
     columns.forEach(function(column){
-      var minWidth = 50;
+      var minWidth = DEFAULT_MINWIDTH;
       column.rows.forEach(function(row){
         if(row.minW && row.minW > minWidth){
           minWidth = row.minW;
@@ -375,7 +405,7 @@ var Grid = React.createClass({
   minHeightsForRowsInColumn(columnIndex){
     var arr = [];
     this.state.columns[columnIndex].rows.forEach(function(row){
-      var minHeight = 50;
+      var minHeight = DEFAULT_MINHEIGHT;
       if(row.minH && row.minH > minHeight){
         minHeight = row.minH;
       }
@@ -627,7 +657,7 @@ Grid.Column = React.createClass({
     };
 
     var rows = data.rows.map(function(row, i){
-      return <Grid.Row columnIndex={this.props.columnIndex} rowIndex={i} delegate={this.props.delegate} callGridDelegate={this.props.callGridDelegate} data={row} key={"row-" + i }/>;
+      return <Grid.Row columnIndex={this.props.columnIndex} rowIndex={i} delegate={this.props.delegate} callGridDelegate={this.props.callGridDelegate} data={row} key={"row-" + row.id }/>;
     }.bind(this));
 
     return (

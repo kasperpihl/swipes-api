@@ -145,7 +145,7 @@ var CardLoader = React.createClass({
 			}
 			else if(message.command === 'navigation.setBadge'){
 				// this.setState({badge: data.badge});
-				workspaceActions.setNotifications(this.state.workflow.id, data.badge);
+				//workspaceActions.setNotifications(this.state.workflow.id, data.badge);
 			}
 			else if(message.command === 'notifications.send'){
 
@@ -301,7 +301,7 @@ var CardLoader = React.createClass({
 			if(newH)
 				updateObj.h = newH;
 			//Actions.updateCardSize(this.props.data.id, updateObj);
-			this.bouncedUpdateCardSize(this.props.data.id, updateObj);
+			//this.bouncedUpdateCardSize(this.props.data.id, updateObj);
 		}
 	},
 	onWindowFocus: function(e){
@@ -423,7 +423,6 @@ var CardLoader = React.createClass({
 		}
 	},
 	componentWillMount() {
-		this.bouncedUpdateCardSize = _.debounce(workspaceActions.updateCardSize, 1);
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
 	  eventActions.add("window.mouseup", this.onMouseUp, "card" + this.props.data.id);

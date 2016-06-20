@@ -137,13 +137,11 @@ var Workspace = React.createClass({
         eventActions.fire('window.onmousedown', e);
     },
     componentDidMount(prevProps, prevState) {
-        this.bouncedAdjusting = _.debounce(WorkspaceActions.adjustForScreenSize, 300);
         window.addEventListener('mouseup', this.onMouseUp);
         window.addEventListener('mousemove', this.onMouseMove);
         window.addEventListener('mousedown', this.onMouseDown);
         window.addEventListener("focus", this.onWindowFocus);
         window.addEventListener("blur", this.onWindowBlur);
-        window.addEventListener("resize", this.bouncedAdjusting);
     },
     componentWillUnmount() {
         window.removeEventListener('mouseup', this.onMouseUp);
@@ -151,7 +149,6 @@ var Workspace = React.createClass({
         window.removeEventListener('mousedown', this.onMouseDown);
         window.removeEventListener("focus", this.onWindowFocus);
         window.removeEventListener("blur", this.onWindowBlur);
-        window.removeEventListener("resize", this.runAdjustments);
     },
     render() {
         return (
