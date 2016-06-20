@@ -91,19 +91,34 @@ $transitionTime: .5s;
   }
 
   .sw-resize-horizontal { // figure out how to do the trigger zones when we have rows
-    height: 2px;
+    height: 30px;
     width: 100%;
-    background-color: $deepBlue-40;
-    cursor: row-resize;
     position: absolute;
     left: 0;
-    top: calc(0 - 1px);
-    will-change: top;
+    top: calc(0px - 15px);
     z-index: 2;
 
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      height: 2px;
+      left: 0;
+      transform: translateY(-50%);
+      transform-origin: 50% 50%;
+      background-color: $deepBlue-20;
+      cursor: row-resize;
+      will-change: height;
+      transition: .2s ease-in-out;
+    }
+
     &:hover {
-      width: 8px;
-      top: calc(0px - 4px);
+      &:after {
+        transform-origin: 50% 50%;
+        transform: translateY(-50%) scaleY(4);
+        transition: .2s ease-in-out;
+      }
     }
   }
 }
