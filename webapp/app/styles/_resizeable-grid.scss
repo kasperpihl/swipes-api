@@ -8,13 +8,12 @@ $transitionTime: .5s;
 
   @extend %flex;
   justify-content: space-between;
-  &.sw-grid-resizing{
-    .sw-resizeable-row{
-      pointer-events:none;
-    }
+
+  &.sw-grid-resizing > .sw-resizeable-row * {
+    pointer-events: none !important;
   }
+
   .sw-resizeable-column {
-    // width: 100%;
     height: 100%;
     will-change: transform, z-index, width;
     position: relative;
@@ -22,7 +21,6 @@ $transitionTime: .5s;
     transition: z-index $transitionTime $transitionTime, transform $transitionTime ease-in-out;
     display: flex;
     flex-direction: column;
-    // align-content: space-between;
 
     &.maximize {
       z-index: 99;
@@ -45,7 +43,6 @@ $transitionTime: .5s;
     transition:z-index $transitionTime $transitionTime, transform $transitionTime ease-in-out;
     display: flex;
     flex-direction: column;
-    // display: none !important;
 
     &.maximize {
       z-index: 999;

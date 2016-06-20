@@ -392,7 +392,7 @@ var CardLoader = React.createClass({
 					<div className="tile-topbar_content-seperator"></div>
 					<div className="tile-topbar_content-account">Swipes Team</div>
 				</div>
-				<div className="tile-topbar_actions">
+				<div className="tile-topbar_actions">	
 					<div className="tile-topbar_actions-collapse"></div>
 					<div className="tile-topbar_actions-fullscreen" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}></div>
 				</div>
