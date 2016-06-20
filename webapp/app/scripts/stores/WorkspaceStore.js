@@ -22,7 +22,12 @@ var WorkspaceStore = Reflux.createStore({
 	},
 	addRowToGrid(row, options){
 		var columns = this.get('_columns');
-		columns.push({rows: [row]});
+		if(columns.length && columns[columns.length-1].rows.length < 3){
+			columns[columns.length-1].rows.push(row);
+		}
+		else{
+			columns.push({rows: [row]});
+		}
 		this.set('_columns', columns, options);
 	},
 	removeFromGrid(ids, options){

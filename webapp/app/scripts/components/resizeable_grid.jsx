@@ -94,7 +94,7 @@ var Grid = React.createClass({
     valObj.tempColumns = [];
 
     columns.forEach(function(column, colI){
-      if(valObj.columnsThatNeedWidth.length > 0){
+      if(valObj.columnsThatNeedWidth.length > 0 || valObj.columnsHaveEqualWidth){
         if(valObj.columnsHaveEqualWidth){
           column.w = this.roundedDecimal(100 / columns.length);
         }
