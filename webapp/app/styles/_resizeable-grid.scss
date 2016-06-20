@@ -9,8 +9,15 @@ $transitionTime: .5s;
   @extend %flex;
   justify-content: space-between;
 
-  &.sw-grid-resizing > .sw-resizeable-row * {
-    pointer-events: none !important;
+  &.sw-grid-resizing {
+
+    .sw-resizeable-row { // pointer events for iframe
+      pointer-events: none;
+    }
+
+    iframe {
+      visibility: hidden;
+    }
   }
 
   .sw-resizeable-column {
