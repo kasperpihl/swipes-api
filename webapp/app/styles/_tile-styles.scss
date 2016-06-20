@@ -53,12 +53,14 @@
       @include size($action-button-size, $action-button-size);
       border-radius: 50%;
       border: 1px solid $studioGray-100;
+      background-color: yellow;
     }
 
     &-fullscreen {
       @include size($action-button-size, $action-button-size);
       border-radius: 50%;
       border: 1px solid $studioGray-100;
+      background-color: red;
     }
   }
 }

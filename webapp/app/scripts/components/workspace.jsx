@@ -65,6 +65,7 @@ var Workspace = React.createClass({
         <TileLoader
           key={id}
           data={{id: id}}
+          onFullscreen={Grid.onFullscreen.bind(this, id)}
           dotDragBegin={this.dotDragBegin}
           onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
       );
