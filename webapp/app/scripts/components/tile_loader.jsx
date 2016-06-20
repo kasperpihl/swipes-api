@@ -399,6 +399,14 @@ var CardLoader = React.createClass({
 			</div>
 		)
 	},
+	renderResizingOverlay: function() {
+
+		return (
+			<div className="tile-resizing-overlay">
+
+			</div>
+		)
+	},
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
@@ -460,6 +468,7 @@ var CardLoader = React.createClass({
 			<div id={workflowId} className="tile">
 				{this.renderTopbar()}
 				{cardContent}
+				{this.renderResizingOverlay()}
 				{/*webviewLoader*/}
 			</div>
 		);

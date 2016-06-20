@@ -1,18 +1,15 @@
 .tile {
-  width: 100%;
-  height: 100%;
+  @include size(100%, 100%);
 
   iframe {
-  	height:100%;
-    width: 100%;
+    @include size(100%, 100%);
   }
 }
 
 .tile-topbar {
   $action-button-size: 25px;
 
-  width: 100%;
-  height: 50px;
+  @include size(100%, 50px);
   background-color: transparent;
   padding: 0 10px;
   position: relative;
@@ -29,8 +26,7 @@
     }
 
     &-seperator {
-      width: 1px;
-      height: 20px;
+      @include size(1px, 20px);
       background-color: $deepBlue-40;
       margin: 0 7px;
     }
@@ -43,8 +39,7 @@
   }
 
   &_actions {
-    width: 60px;
-    height: 100%;
+    @include size(60px, 100%);
 
     @extend %flex;
     justify-content: space-around !important;
@@ -69,9 +64,20 @@
 
 // If resizing
 
+.tile-resizing-overlay {
+  display: none;
+}
+
 .sw-grid-resizing {
 
   iframe {
     display: none;
+  }
+
+  .tile-resizing-overlay {
+    @include size(100%, 100%);
+    background-color: #333ddd;
+
+    @extend %flex;
   }
 }
