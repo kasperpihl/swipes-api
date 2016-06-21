@@ -26,7 +26,7 @@ $transitionTime: .5s;
     display: flex;
     flex-direction: column;
 
-    &.maximize {
+    &.transition-to-fullscreen {
       z-index: 99;
       transition: z-index $transitionTime;
 
@@ -41,23 +41,21 @@ $transitionTime: .5s;
     height: 100%;
     width: 100%;
     overflow: hidden;
-    will-change: transform, z-index, width;
+    will-change: transform, z-index, height;
     position: relative;
     z-index: 1;
     transition:z-index $transitionTime $transitionTime, transform $transitionTime ease-in-out;
     display: flex;
     flex-direction: column;
-    .sw-row-content{
+
+    .sw-row-content {
       height:100%;
       width: 100%;
     }
-    &.maximize {
+
+    &.transition-to-fullscreen {
       z-index: 999;
       transition: z-index $transitionTime, transform $transitionTime ease-in-out;
-    }
-
-    &.move-away {
-      transition: transform $transitionTime ease-in-out;
     }
   }
 

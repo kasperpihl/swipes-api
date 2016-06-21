@@ -388,13 +388,20 @@ var CardLoader = React.createClass({
 		return (
 			<div className="tile-topbar">
 				<div className="tile-topbar_content">
+					<div className="tile-topbar_content-menu">
+						<div className="menu-icon"></div>
+					</div>
 					<div className="tile-topbar_content-title">Chat</div>
 					<div className="tile-topbar_content-seperator"></div>
 					<div className="tile-topbar_content-account">Swipes Team</div>
 				</div>
 				<div className="tile-topbar_actions">
-					<div className="tile-topbar_actions-collapse" onClick={this.props.onFullscreen}></div>
-					<div className="tile-topbar_actions-fullscreen" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}></div>
+					<div className="tile-topbar_actions-collapse" onClick={this.props.onFullscreen}>
+						<div className="collapse-icon"></div>
+					</div>
+					<div className="tile-topbar_actions-fullscreen" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
+						<div className="fullscreen-icon"></div>
+					</div>
 				</div>
 			</div>
 		)
