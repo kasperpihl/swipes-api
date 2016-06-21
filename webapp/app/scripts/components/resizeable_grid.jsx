@@ -727,7 +727,7 @@ var Grid = React.createClass({
           
 
           styles.transformOrigin = originX + '% ' + originY + '%';
-          if(trans.step.isOneOf("scalingUp", "prepareScaleDown")){ 
+          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){ 
             styles.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
           }
 
@@ -745,7 +745,7 @@ var Grid = React.createClass({
             classes.push("sw-fullscreen-row");
           }
           
-          if(trans.step === "prepareScaleDown"){
+          if(trans.step === "beforeScaleDown"){
             classes.push("fullscreen-prepare-scaledown");
           }
         }
