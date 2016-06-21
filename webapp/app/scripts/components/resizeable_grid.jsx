@@ -654,8 +654,12 @@ var Grid = React.createClass({
     if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex === this.state.fullscreen.rowIndex){
       transitions.marginLeft = -this.state.fullscreen.rowPos.left + 'px';
       transitions.marginTop = -this.state.fullscreen.rowPos.top + 'px';
+      transitions.position = "absolute";
       transitions.width = this.refs.grid.clientWidth + 'px';
       transitions.height = '100%';
+    }
+    if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex > this.state.fullscreen.rowIndex){
+      transitions.marginTop = this.state.fullscreen.rowSize.height + 'px';
     }
     return transitions;
   },
