@@ -26,7 +26,7 @@ $transitionTime: 5s;
     display: flex;
     flex-direction: column;
 
-    &.transition-to-fullscreen, &.fullscreen {
+    &.transition-to-fullscreen, &.sw-fullscreen-column {
       z-index: 99;
       transition: z-index $transitionTime;
 
@@ -65,8 +65,12 @@ $transitionTime: 5s;
       height:100%;
       width: 100%;
     }
+    &.sw-fullscreen-row {
+      z-index: 99;
+      transition: 0s !important;
+    }
 
-    &.transition-to-fullscreen {
+    &.sw-fullscreen-transition-row {
       z-index: 99;
       transition: z-index $transitionTime, transform $transitionTime ease-in-out;
     }

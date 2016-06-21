@@ -382,10 +382,14 @@ var Grid = React.createClass({
   // Calculations
   // ======================================================
   calcScale(gw, gh, rw, rh) {
-    var curSizeX = (rw * 100) / gw;
-    var curSizeY = 1;
+
+    var curSizeX = 100;
+    if(rw < gw){
+      curSizeX = (rw * 100) / gw;
+    }
+    var curSizeY = 100;
     if (rh < gw) {
-      var curSizeY = (rh * 100) / gh;
+      curSizeY = (rh * 100) / gh;
     }
     var sizeToBe = {
       w: 100 / curSizeX,
@@ -546,33 +550,47 @@ var Grid = React.createClass({
   onTransitionEnd(e){
     
     if(this.state.fullscreenTransition){
-      console.log('e', e.target.id);
-      console.log('on transition End', e.propertyName);
+      
       if(e.target.id === "row-" + this.state.fullscreenTransition.id){
-        
-        this.setState({fullscreenTransition: null});
+        console.log('on transition End', e.propertyName);
+        var fullScreen = this.state.fullscreenTransition;
+        this.setState({fullscreenTransition: null, fullscreen: fullScreen});
       }
       
     }
   },
   classesForColumn(columnIndex){
     var className = "";
-    if(this.state.fullscreenTransition && columnIndex === this.state.fullscreenTransition.colIndex){
-      className += " transition-to-fullscreen";
+    var fsTrans = this.state.fullscreenTransition || this.state.fullscreen;
+    if(fsTrans && columnIndex === fsTrans.colIndex){
+      if(this.state.fullscreen){
+        className += " sw-fullscreen-column";
+      }
+      else {
+        className += " sw-fullscreen-transition";
+      }
     }
     return className;
   },
   classesForRow(columnIndex, rowIndex){
     var className = "";
-    if(this.state.fullscreenTransition && columnIndex === this.state.fullscreenTransition.colIndex && rowIndex === this.state.fullscreenTransition.rowIndex){
-      className += " transition-to-fullscreen";
+    var fsTrans = this.state.fullscreenTransition || this.state.fullscreen;
+    if(fsTrans && columnIndex === fsTrans.colIndex && rowIndex === fsTrans.rowIndex){
+      if(this.state.fullscreen){
+        className += " sw-fullscreen-row";
+      }
+      else {
+        className += " sw-fullscreen-transition-row";
+      }
+      
     }
+    
     return className;
   },
   transitionForColumn(columnIndex){
     var transitions = {};
-    if(this.state.fullscreenTransition){
-      var transObj = this.state.fullscreenTransition;
+    if(this.state.fullscreenTransition || this.state.fullscreen){
+      var transObj = this.state.fullscreenTransition || this.state.fullscreen;
       var gw = this.refs.grid.clientWidth;
       if(transObj.colIndex != columnIndex){
         transitions.transformOrigin = "50% 50%";
@@ -591,8 +609,8 @@ var Grid = React.createClass({
     var columns = this.state.columns;
     
     // Fullscreen transitions
-    if(this.state.fullscreenTransition){
-      var transObj = this.state.fullscreenTransition;
+    if(this.state.fullscreenTransition || this.state.fullscreen){
+      var transObj = this.state.fullscreenTransition || this.state.fullscreen;
       var gh = this.refs.grid.clientHeight;
       var gw = this.refs.grid.clientWidth;
 
@@ -607,10 +625,12 @@ var Grid = React.createClass({
           transitions.transformOrigin = "50% 50%";
           transitions.transform = "translateY(" + (gh - transObj.rowPos.bottom) + 'px)';
         }
-        if(rowIndex === transObj.rowIndex){
+        if(rowIndex === transObj.rowIndex && !this.state.fullscreen){
           const centerXPercentage = (transObj.rowPos.left * 100) / ((gw - transObj.rowPos.right) + transObj.rowPos.left);
           const centerYPercentage = (transObj.rowPos.top * 100) / ((gh - transObj.rowPos.bottom) + transObj.rowPos.top);
+          console.log(gh, transObj.rowSize.height);
           const scaleTo = this.calcScale(gw, gh, transObj.rowSize.width, transObj.rowSize.height);
+          console.log('scale', scaleTo.h);
           var originX = centerXPercentage;
           
           if(columnIndex === 0) 
@@ -619,9 +639,9 @@ var Grid = React.createClass({
             originX = 100;
 
           var originY = centerYPercentage;
-          if(rowIndex = 0 && numberOfRowsInColumn === 1)
+          if(rowIndex === 0 && numberOfRowsInColumn === 1)
             originY = 50;
-          else if(rowIndex = 0)
+          else if(rowIndex === 0)
             originY = 0;
           else if(rowIndex === numberOfRowsInColumn - 1)
             originY = 100;
@@ -630,6 +650,12 @@ var Grid = React.createClass({
           transitions.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
         }
       }
+    }
+    if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex === this.state.fullscreen.rowIndex){
+      transitions.marginLeft = -this.state.fullscreen.rowPos.left + 'px';
+      transitions.marginTop = -this.state.fullscreen.rowPos.top + 'px';
+      transitions.width = this.refs.grid.clientWidth + 'px';
+      transitions.height = '100%';
     }
     return transitions;
   },
@@ -903,8 +929,13 @@ Grid.Row = React.createClass({
       data
     } = this.props;
     
-    const styles = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex)
-    styles.height = data.h + '%';
+    var styles = {
+      height: data.h + '%'
+    };
+    var transitions = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex);
+    if(transitions){
+      styles = Object.assign(styles, transitions);
+    }
 
     var child = this.props.callGridDelegate('renderGridRowForId', data.id);
 

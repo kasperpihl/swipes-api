@@ -1,4 +1,5 @@
 .tile {
+  background: green;
   @include size(100%, 100%);
 
   iframe {
@@ -129,7 +130,11 @@
 .tile-resizing-overlay {
   display: none;
 }
-
+.sw-fullscreen-transition-row{
+  .tile * {
+    display:none;
+  }
+}
 .sw-grid-resizing {
 
   iframe {
