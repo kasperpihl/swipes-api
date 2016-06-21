@@ -543,6 +543,18 @@ var Grid = React.createClass({
   // ======================================================
   // Transitions handling
   // ======================================================
+  onTransitionEnd(e){
+    
+    if(this.state.fullscreenTransition){
+      console.log('e', e.target.id);
+      console.log('on transition End', e.propertyName);
+      if(e.target.id === "row-" + this.state.fullscreenTransition.id){
+        
+        this.setState({fullscreenTransition: null});
+      }
+      
+    }
+  },
   classesForColumn(columnIndex){
     var className = "";
     if(this.state.fullscreenTransition && columnIndex === this.state.fullscreenTransition.colIndex){
@@ -647,7 +659,7 @@ var Grid = React.createClass({
       fullscreen: true,
       rowIndex: rowIndex,
       colIndex: colIndex,
-
+      id: id,
       rowPos: {
         left: colEl.offsetLeft,
         top: rowEl.offsetTop,
@@ -871,7 +883,7 @@ Grid.Column = React.createClass({
       className += " " + classes;
 
     return (
-      <div id={"column-" + this.props.columnIndex} className={className} style={styles}>
+      <div id={"column-" + this.props.columnIndex} onTransitionEnd={this.props.delegate.onTransitionEnd} className={className} style={styles}>
         {this.renderResizer()}
         {rows}
       </div>
@@ -905,7 +917,7 @@ Grid.Row = React.createClass({
       className += " " + classes;
 
     return (
-      <div className={className} id={"row-" + data.id } ref="row" style={styles}>
+      <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
         {this.renderResizer()}
         <div className="sw-row-content">{child}</div>
       </div>
