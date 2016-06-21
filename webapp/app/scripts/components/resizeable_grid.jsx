@@ -615,7 +615,6 @@ var Grid = React.createClass({
       var gw = this.refs.grid.clientWidth;
 
       if(transObj.colIndex === columnIndex){
-        console.log(rowIndex, transObj, gh);
         var numberOfRowsInColumn = columns[columnIndex].rows.length;
         if(rowIndex < transObj.rowIndex){
           transitions.transformOrigin = "50% 50%";
@@ -625,12 +624,11 @@ var Grid = React.createClass({
           transitions.transformOrigin = "50% 50%";
           transitions.transform = "translateY(" + (gh - transObj.rowPos.bottom) + 'px)';
         }
-        if(rowIndex === transObj.rowIndex && !this.state.fullscreen){
+        if(rowIndex === transObj.rowIndex && (!this.state.fullscreen || this.state.fullscreen.prepareScaleDown)){
           const centerXPercentage = (transObj.rowPos.left * 100) / ((gw - transObj.rowPos.right) + transObj.rowPos.left);
           const centerYPercentage = (transObj.rowPos.top * 100) / ((gh - transObj.rowPos.bottom) + transObj.rowPos.top);
-          console.log(gh, transObj.rowSize.height);
           const scaleTo = this.calcScale(gw, gh, transObj.rowSize.width, transObj.rowSize.height);
-          console.log('scale', scaleTo.h);
+
           var originX = centerXPercentage;
           
           if(columnIndex === 0) 
@@ -645,6 +643,7 @@ var Grid = React.createClass({
             originY = 0;
           else if(rowIndex === numberOfRowsInColumn - 1)
             originY = 100;
+          
 
           transitions.transformOrigin = originX + '% ' + originY + '%';
           transitions.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
@@ -652,14 +651,18 @@ var Grid = React.createClass({
       }
     }
     if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex === this.state.fullscreen.rowIndex){
-      transitions.marginLeft = -this.state.fullscreen.rowPos.left + 'px';
-      transitions.marginTop = -this.state.fullscreen.rowPos.top + 'px';
-      transitions.position = "absolute";
-      transitions.width = this.refs.grid.clientWidth + 'px';
-      transitions.height = '100%';
+      if(!this.state.fullscreen.prepareScaleDown){
+        transitions.marginLeft = -this.state.fullscreen.rowPos.left + 'px';
+        transitions.marginTop = -this.state.fullscreen.rowPos.top + 'px';
+        transitions.position = "absolute";
+        transitions.width = this.refs.grid.clientWidth + 'px';
+        transitions.height = '100%';
+      }
     }
     if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex > this.state.fullscreen.rowIndex){
-      transitions.marginTop = this.state.fullscreen.rowSize.height + 'px';
+      if(!this.state.fullscreen.prepareScaleDown){
+        transitions.marginTop = this.state.fullscreen.rowSize.height + 'px';
+      }
     }
     return transitions;
   },
@@ -673,6 +676,15 @@ var Grid = React.createClass({
   },
   _onFullscreenClick(id){
     console.log('clicked fullscreen', id);
+    if(this.state.fullscreen){
+      var fullscreen = this.state.fullscreen;
+      fullscreen.prepareScaleDown = true;
+      this.setState({fullscreen: fullscreen});
+      setTimeout(function(){
+        this.setState({fullscreen: null});
+      }.bind(this), 1);
+      return;
+    }
     var colIndex, rowIndex, foundRow;
     this.state.columns.forEach(function(column, colI){
       column.rows.forEach(function(row, rowI){
@@ -686,7 +698,6 @@ var Grid = React.createClass({
     var rowEl = document.getElementById('row-'+ id);
     var colEl = rowEl.parentNode;
     var fullscreenTransition = {
-      fullscreen: true,
       rowIndex: rowIndex,
       colIndex: colIndex,
       id: id,
@@ -731,109 +742,6 @@ var Grid = React.createClass({
 
     // translateX for minimized rowHeight - minimizedSize;
 
-  },
-  maximizeColumnWithRow(row, columnIndex, rowIndex) {
-    const {
-      data,
-      initData
-    } = this.props;
-    const columnLength = this.state.columns.length;
-
-    const rowsInColumn = this.state.columns[columnIndex].rows.length;
-    const grid = this.refs.grid;
-    const gw = grid.clientWidth;
-    const gh = grid.clientHeight;
-    const rw = row.clientWidth;
-    const rh = row.clientHeight;
-    const rPos = row.getBoundingClientRect();
-    const currentScale = row.style.transform;
-    const scaleTo = this.calcScale(gw, gh, rw, rh);
-    const centerXPercentage = (rPos.left * 100) / ((gw - rPos.right) + rPos.left);
-    const centerYPercentage = (rPos.top * 100) / ((gh - rPos.bottom) + rPos.top);
-
-    let originX = 50;
-    let originY = 50;
-    var shouldMaximize = !this.isMaximized;
-    row.parentNode.classList.toggle('maximize');
-    row.classList.toggle('maximize');
-
-    if(shouldMaximize) {
-      // column logic
-      if (columnIndex === 0) { // First Column
-        originX = 0;
-      }
-      if (columnIndex === (columnLength - 1)) { // Last column
-        originX = 100;
-      }
-      if (columnIndex > 0 && columnIndex < (columnLength - 1)) { // Columns in the middle
-        originX = centerXPercentage;
-      }
-
-      // Row logic
-      if (rowIndex === 0 && (rowsInColumn - 1) > 0) { // first row, but more than one
-        originY = 0;
-      }
-      if (rowIndex === (rowsInColumn - 1) && (rowsInColumn - 1) > 0) { // last row, but more than one
-        originY = 100;
-      }
-      if (rowIndex > 0 && rowIndex < (rowsInColumn - 1)) { // Rows in the middle
-        originY = centerYPercentage;
-      }
-
-      row.style.transformOrigin = originX + '% ' + originY + '%';
-      row.style.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
-    }
-    else {
-      row.style.transform = '';
-    }
-
-
-    console.log('should maximize', shouldMaximize, columnIndex);
-    var columns = this.state.columns;
-    columns.forEach(function(column, i){
-
-      var newLeft;
-      if( i < columnIndex ){
-        newLeft = -rPos.left;
-      }
-      else if( i > columnIndex){
-        newLeft = (gw - rPos.right);
-      }
-      if(newLeft){
-        columnEl.style.transformOrigin = '50% 50%';
-        columnEl.style.transform = 'translateX(' + newLeft + 'px)';
-      }
-
-      if( i === columnIndex){
-        var rows = column.rows;
-        rows.forEach(function(row, j){
-          var rowEl = document.getElementById('row-' + row.id);
-          var newTop;
-
-          if(j != rowIndex){
-            if(j < rowIndex){
-              newTop = -rPos.top;
-            }
-            else if(j > rowIndex){
-              newTop = (gh - rPos.bottom);
-            }
-            if(shouldMaximize){
-              rowEl.style.transformOrigin ='50% 50%';
-              rowEl.style.transform = 'translateY(' + newTop + 'px)';
-            }
-            else{
-              rowEl.style.transform = '';
-            }
-          }
-
-        }.bind(this));
-      }
-      else if(!shouldMaximize){
-        columnEl.style.transform = '';
-      }
-
-    }.bind(this));
-    this.isMaximized = !this.isMaximized;
   }
 });
 
