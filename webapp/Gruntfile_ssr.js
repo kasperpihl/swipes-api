@@ -79,7 +79,7 @@ module.exports = function (grunt) {
           },
           output: {
             path: '<%= yeoman.dev %>/scripts/',
-            filename: 'app.js'
+            filename: 'app_ssr.js'
           },
           plugins: [
             new webpack.optimize.DedupePlugin()
@@ -270,9 +270,9 @@ module.exports = function (grunt) {
           options: {
             baseDir: '<%= yeoman.dev %>',
             assets: [
-              'scripts/app_srr.js',
+              'scripts/app_ssr.js',
               'scripts/swipes-sdk.js',
-              'styles/main_srr.css',
+              'styles/main_ssr.css',
               'styles/global-styles.css'
             ]
           },
