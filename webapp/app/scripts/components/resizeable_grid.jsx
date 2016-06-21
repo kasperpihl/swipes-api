@@ -556,7 +556,11 @@ var Grid = React.createClass({
         var fullScreen = this.state.fullscreenTransition;
         this.setState({fullscreenTransition: null, fullscreen: fullScreen});
       }
-      
+    }
+    if(this.state.fullscreen && this.state.fullscreen.scaleDown){
+      if(e.target.id === "row-" + this.state.fullscreen.id){
+        this.setState({fullscreen: null});
+      }
     }
   },
   classesForColumn(columnIndex){
@@ -564,7 +568,9 @@ var Grid = React.createClass({
     var fsTrans = this.state.fullscreenTransition || this.state.fullscreen;
     if(fsTrans && columnIndex === fsTrans.colIndex){
       if(this.state.fullscreen){
-        className += " sw-fullscreen-column";
+        if(!this.state.fullscreen.prepareScaleDown){
+          className += " sw-fullscreen-column";
+        }
       }
       else {
         className += " sw-fullscreen-transition";
@@ -577,7 +583,12 @@ var Grid = React.createClass({
     var fsTrans = this.state.fullscreenTransition || this.state.fullscreen;
     if(fsTrans && columnIndex === fsTrans.colIndex && rowIndex === fsTrans.rowIndex){
       if(this.state.fullscreen){
-        className += " sw-fullscreen-row";
+        if(!this.state.fullscreen.prepareScaleDown){
+          className += " sw-fullscreen-row";
+        }
+        else if(!this.state.fullscreen.scaleDown){
+          className += " fullscreen-prepare-scaledown";
+        }
       }
       else {
         className += " sw-fullscreen-transition-row";
@@ -589,7 +600,7 @@ var Grid = React.createClass({
   },
   transitionForColumn(columnIndex){
     var transitions = {};
-    if(this.state.fullscreenTransition || this.state.fullscreen){
+    if(this.state.fullscreenTransition || (this.state.fullscreen && !this.state.fullscreen.scaleDown)){
       var transObj = this.state.fullscreenTransition || this.state.fullscreen;
       var gw = this.refs.grid.clientWidth;
       if(transObj.colIndex != columnIndex){
@@ -624,6 +635,9 @@ var Grid = React.createClass({
           transitions.transformOrigin = "50% 50%";
           transitions.transform = "translateY(" + (gh - transObj.rowPos.bottom) + 'px)';
         }
+        if(this.state.fullscreen && this.state.fullscreen.scaleDown){
+          transitions = {};
+        }
         if(rowIndex === transObj.rowIndex && (!this.state.fullscreen || this.state.fullscreen.prepareScaleDown)){
           const centerXPercentage = (transObj.rowPos.left * 100) / ((gw - transObj.rowPos.right) + transObj.rowPos.left);
           const centerYPercentage = (transObj.rowPos.top * 100) / ((gh - transObj.rowPos.bottom) + transObj.rowPos.top);
@@ -646,8 +660,11 @@ var Grid = React.createClass({
           
 
           transitions.transformOrigin = originX + '% ' + originY + '%';
-          transitions.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
+          if(!this.state.fullscreen || !this.state.fullscreen.scaleDown){ 
+            transitions.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
+          }
         }
+
       }
     }
     if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex === this.state.fullscreen.rowIndex){
@@ -681,7 +698,8 @@ var Grid = React.createClass({
       fullscreen.prepareScaleDown = true;
       this.setState({fullscreen: fullscreen});
       setTimeout(function(){
-        this.setState({fullscreen: null});
+        fullscreen.scaleDown = true;
+        this.setState({fullscreen: fullscreen});
       }.bind(this), 1);
       return;
     }

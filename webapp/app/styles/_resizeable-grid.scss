@@ -1,4 +1,4 @@
-$transitionTime: 4s;
+$transitionTime: .4s;
 
 .sw-resizeable-grid {
   width: 100%;
@@ -60,7 +60,9 @@ $transitionTime: 4s;
     transition:z-index $transitionTime $transitionTime, transform $transitionTime ease-in-out;
     display: flex;
     flex-direction: column;
-
+    &.fullscreen-prepare-scaledown{
+      transition: 0s !important;
+    }
     .sw-row-content {
       height:100%;
       width: 100%;
