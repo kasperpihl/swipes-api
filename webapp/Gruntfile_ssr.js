@@ -67,7 +67,7 @@ module.exports = function (grunt) {
       },
       webpack: {
         dev: {
-          entry: './<%= yeoman.app %>/scripts/app',
+          entry: './<%= yeoman.app %>/scripts/app_ssr',
           resolve: {
             root: path.resolve(__dirname, 'node_modules'),
             fallback: {root: path.join(__dirname, 'node_modules')},
@@ -117,7 +117,7 @@ module.exports = function (grunt) {
         dist: {
           sassDir: '<%= yeoman.app %>/styles',
           cssDir: '.tmp/styles',
-          specify: '<%= yeoman.app %>/styles/main.scss',
+          specify: '<%= yeoman.app %>/styles/main_ssr.scss',
           imagesDir: '<%= yeoman.app %>/images',
           javascriptsDir: '<%= yeoman.app %>/scripts',
           fontsDir: '<%= yeoman.app %>/fonts',
@@ -127,7 +127,7 @@ module.exports = function (grunt) {
           options: {
             sassDir: '<%= yeoman.app %>/styles',
             cssDir: '.tmp/styles',
-            specify: '<%= yeoman.app %>/styles/main.scss',
+            specify: '<%= yeoman.app %>/styles/main_ssr.scss',
             imagesDir: '<%= yeoman.app %>/images',
             javascriptsDir: '<%= yeoman.app %>/scripts',
             fontsDir: '<%= yeoman.app %>/fonts',
@@ -270,9 +270,9 @@ module.exports = function (grunt) {
           options: {
             baseDir: '<%= yeoman.dev %>',
             assets: [
-              'scripts/app.js',
+              'scripts/app_srr.js',
               'scripts/swipes-sdk.js',
-              'styles/main.css',
+              'styles/main_srr.css',
               'styles/global-styles.css'
             ]
           },
