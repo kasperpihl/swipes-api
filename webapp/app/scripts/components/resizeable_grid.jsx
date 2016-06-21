@@ -1,6 +1,16 @@
 var React = require('react');
 var DEFAULT_MINWIDTH = 200;
 var DEFAULT_MINHEIGHT = 200;
+// define the steps of transitions here.
+var TRANSITIONS_STEPS = {
+  fullscreen: ["scalingUp", "isFullscreen", "beforeScaleDown", "scalingDown"]
+};
+
+String.prototype.isOneOf = function(){
+  
+  var args = Array.prototype.slice.call(arguments);
+  return (args.indexOf(this.toString()) > -1);
+};
 var Grid = React.createClass({
   // ======================================================
   // Life Cycle methods
@@ -217,12 +227,22 @@ var Grid = React.createClass({
         return <Grid.Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"row-" + column.rows[0].id} data={column} />;
       }.bind(this));
     }
+    var styles = {};
     var className = 'sw-resizeable-grid';
     if(this.state.isResizing){
       className += ' sw-grid-resizing';
     }
+    var transitions = this.transitionForGrid();
+    if(transitions){
+      if(transitions.styles){
+        styles = Object.assign(styles, transitions.styles);
+      }
+      if(transitions.classes.length){
+        className += " " + transitions.classes.join(' ');
+      }
+    }
     return (
-      <div ref="grid" className={className}>
+      <div ref="grid" className={className} styles={styles}>
         {columns}
       </div>
     )
@@ -521,7 +541,6 @@ var Grid = React.createClass({
       arr.push(this.pixelsHeightFromPercentage(row.h));
     }.bind(this))
     return arr;
-
   },
   rowFromColumn(columnIndex, rowIndex){
     var columns = this.state.columns;
@@ -531,6 +550,20 @@ var Grid = React.createClass({
   columnForIndex(index){
     var columns = this.state.columns;
     return columns[index];
+  },
+  indexesForRowId(id){
+    var index = null;
+    this.state.columns.forEach(function(column, colI){
+      column.rows.forEach(function(row, rowI){
+        if(row.id === id){
+          index = {
+            col: colI,
+            row: rowI
+          }
+        }
+      });
+    });
+    return index;
   },
 
 
@@ -547,107 +580,141 @@ var Grid = React.createClass({
   // ======================================================
   // Transitions handling
   // ======================================================
-  onTransitionEnd(e){
+  // name, array of steps, optional index to start in the middle etc
+  transitionStart(name, info, index){
+    var currentIndex = index || 0;
+    if(!TRANSITIONS_STEPS[name] || index < 0 || index > TRANSITIONS_STEPS[name].length - 1){
+      return new Error("transitionStart: unknown name or wrong index");
+    }
+    var transition = {
+      name: name,
+      step: TRANSITIONS_STEPS[name][currentIndex],
+      info: info,
+      _currentIndex: currentIndex
+    };
+    this.setState({transition: transition});
+  },
+  transitionNext(){
+    var transition = this.state.transition;
     
-    if(this.state.fullscreenTransition){
-      
-      if(e.target.id === "row-" + this.state.fullscreenTransition.id){
-        console.log('on transition End', e.propertyName);
-        var fullScreen = this.state.fullscreenTransition;
-        this.setState({fullscreenTransition: null, fullscreen: fullScreen});
+    if(transition){
+      var lastIndex = TRANSITIONS_STEPS[transition.name].length - 1;
+      if(transition._currentIndex < lastIndex){
+        transition._currentIndex++;
+        transition.step = TRANSITIONS_STEPS[transition.name][transition._currentIndex];
+        this.setState({transition: transition});
+      }
+      else{
+        // Make a queue for transitions to check if next one is up.
+        this.setState({transition: null});
       }
     }
-    if(this.state.fullscreen && this.state.fullscreen.scaleDown){
-      if(e.target.id === "row-" + this.state.fullscreen.id){
-        this.setState({fullscreen: null});
-      }
-    }
-  },
-  classesForColumn(columnIndex){
-    var className = "";
-    var fsTrans = this.state.fullscreenTransition || this.state.fullscreen;
-    if(fsTrans && columnIndex === fsTrans.colIndex){
-      if(this.state.fullscreen){
-        if(!this.state.fullscreen.prepareScaleDown){
-          className += " sw-fullscreen-column";
-        }
-      }
-      else {
-        className += " sw-fullscreen-transition";
-      }
-    }
-    return className;
-  },
-  classesForRow(columnIndex, rowIndex){
-    var className = "";
-    var fsTrans = this.state.fullscreenTransition || this.state.fullscreen;
-    if(fsTrans && columnIndex === fsTrans.colIndex && rowIndex === fsTrans.rowIndex){
-      if(this.state.fullscreen){
-        if(!this.state.fullscreen.prepareScaleDown){
-          className += " sw-fullscreen-row";
-        }
-        else if(!this.state.fullscreen.scaleDown){
-          className += " fullscreen-prepare-scaledown";
-        }
-      }
-      else {
-        className += " sw-fullscreen-transition-row";
-      }
-      
-    }
-    
-    return className;
-  },
-  transitionForColumn(columnIndex){
-    var transitions = {};
-    if(this.state.fullscreenTransition || (this.state.fullscreen && !this.state.fullscreen.scaleDown)){
-      var transObj = this.state.fullscreenTransition || this.state.fullscreen;
-      var gw = this.refs.grid.clientWidth;
-      if(transObj.colIndex != columnIndex){
-        transitions.transformOrigin = "50% 50%";
-        if(columnIndex < transObj.colIndex){
-          transitions.transform = "translateX(" + (-transObj.rowPos.left) + "px)";
-        }
-        if(columnIndex > transObj.colIndex){
-          transitions.transform = "translateX(" + (gw - transObj.rowPos.right) + 'px)';
-        }
-      }
-    }
-    return transitions;
-  },
-  transitionForRow(columnIndex, rowIndex){
-    var transitions = {};
-    var columns = this.state.columns;
-    
-    // Fullscreen transitions
-    if(this.state.fullscreenTransition || this.state.fullscreen){
-      var transObj = this.state.fullscreenTransition || this.state.fullscreen;
-      var gh = this.refs.grid.clientHeight;
-      var gw = this.refs.grid.clientWidth;
 
-      if(transObj.colIndex === columnIndex){
-        var numberOfRowsInColumn = columns[columnIndex].rows.length;
-        if(rowIndex < transObj.rowIndex){
-          transitions.transformOrigin = "50% 50%";
-          transitions.transform = "translateY(" + (-transObj.rowPos.top) + "px)";
+  },
+
+  onTransitionEnd(e){
+    var trans = this.state.transition;
+    if(!trans){
+      return;
+    }
+    if(trans.name === "fullscreen"){
+      if(e.target.id === "row-" + trans.info.id){
+        if(trans.step.isOneOf("scalingUp", "scalingDown")){
+          this.transitionNext();
         }
-        if(rowIndex > transObj.rowIndex){
-          transitions.transformOrigin = "50% 50%";
-          transitions.transform = "translateY(" + (gh - transObj.rowPos.bottom) + 'px)';
+      }
+    }
+  },
+  transitionForGrid(){
+    var trans = this.state.transition;
+    if(!trans){
+      return;
+    }
+    var classes = [];
+    var styles = {};
+    classes.push("sw-" + trans.name);
+    classes.push("sw-" + trans.name + "-" + trans.step);
+
+    return {styles: styles, classes: classes};
+  },
+  transitionForColumn(colIndex){
+    var trans = this.state.transition;
+    if(!trans){
+      return;
+    }
+    var columns = this.state.columns;
+    var classes = [];
+
+    var styles = {};
+
+    if(trans.name === "fullscreen"){
+      if(trans.info.col === colIndex){ // The column with the row to fullscreen
+        if(trans.step === "scalingUp"){
+          classes.push("sw-fullscreen-transition");
         }
-        if(this.state.fullscreen && this.state.fullscreen.scaleDown){
-          transitions = {};
+        if(trans.step === "isFullscreen"){
+          classes.push("sw-fullscreen-column");
         }
-        if(rowIndex === transObj.rowIndex && (!this.state.fullscreen || this.state.fullscreen.prepareScaleDown)){
-          const centerXPercentage = (transObj.rowPos.left * 100) / ((gw - transObj.rowPos.right) + transObj.rowPos.left);
-          const centerYPercentage = (transObj.rowPos.top * 100) / ((gh - transObj.rowPos.bottom) + transObj.rowPos.top);
-          const scaleTo = this.calcScale(gw, gh, transObj.rowSize.width, transObj.rowSize.height);
+      }
+      else { // The columns without the row to fullscreen
+        var gw = this.refs.grid.clientWidth;
+        styles.transformOrigin = "50% 50%";
+        if(colIndex < trans.info.col){
+          if(trans.step.isOneOf("scalingUp","isFullscreen", "prepareScaleDown")){
+            styles.transform = "translateX(" + (-trans.info.rowPos.left) + "px)";
+          }
+        }
+        if(colIndex > trans.info.col){
+          if(trans.step.isOneOf("scalingUp","isFullscreen", "prepareScaleDown")){
+            styles.transform = "translateX(" + (gw - trans.info.rowPos.right) + 'px)';
+          }
+        }
+      }
+    }
+    return {styles: styles, classes: classes};
+  },
+  transitionForRow(colIndex, rowIndex){
+    var trans = this.state.transition;
+    if(!trans){
+      return;
+    }
+    var columns = this.state.columns;
+    var classes = [];
+    var styles = {};
+
+    if(trans.name === "fullscreen"){
+      if(trans.info.col === colIndex){
+
+        var gh = this.refs.grid.clientHeight;
+        var gw = this.refs.grid.clientWidth;
+        if(rowIndex > trans.info.row){
+          if(trans.step.isOneOf("scalingUp", "isFullscreen", "beforeScaleDown")){
+            styles.transformOrigin = "50% 50%";
+            styles.transform = "translateY(" + (gh - trans.info.rowPos.bottom) + 'px)';
+          }
+          if(trans.step === "isFullscreen"){
+            styles.marginTop = trans.info.rowSize.height + 'px';
+          }
+        }
+        if(rowIndex < trans.info.row){
+          if(trans.step.isOneOf("scalingUp", "isFullscreen", "beforeScaleDown")){
+            styles.transformOrigin = "50% 50%";
+            styles.transform = "translateY(" + (-trans.info.rowPos.top) + "px)";
+          }
+        }
+        
+        
+        if(rowIndex === trans.info.row){
+          var numberOfRowsInColumn = columns[colIndex].rows.length;
+          const centerXPercentage = (trans.info.rowPos.left * 100) / ((gw - trans.info.rowPos.right) + trans.info.rowPos.left);
+          const centerYPercentage = (trans.info.rowPos.top * 100) / ((gh - trans.info.rowPos.bottom) + trans.info.rowPos.top);
+          const scaleTo = this.calcScale(gw, gh, trans.info.rowSize.width, trans.info.rowSize.height);
 
           var originX = centerXPercentage;
           
-          if(columnIndex === 0) 
+          if(colIndex === 0) 
             originX = 0;
-          if(columnIndex === columns.length - 1)
+          if(colIndex === columns.length - 1)
             originX = 100;
 
           var originY = centerYPercentage;
@@ -659,31 +726,36 @@ var Grid = React.createClass({
             originY = 100;
           
 
-          transitions.transformOrigin = originX + '% ' + originY + '%';
-          if(!this.state.fullscreen || !this.state.fullscreen.scaleDown){ 
-            transitions.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
+          styles.transformOrigin = originX + '% ' + originY + '%';
+          if(trans.step.isOneOf("scalingUp", "prepareScaleDown")){ 
+            styles.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
+          }
+
+
+          if(trans.step === "scalingUp"){
+            classes.push("sw-fullscreen-transition-row");
+          }
+          if(trans.step === "isFullscreen"){
+            styles.marginLeft = -trans.info.rowPos.left + 'px';
+            styles.marginTop = -trans.info.rowPos.top + 'px';
+            styles.position = "absolute";
+            styles.width = gw + 'px';
+            styles.height = '100%';
+
+            classes.push("sw-fullscreen-row");
+          }
+          
+          if(trans.step === "prepareScaleDown"){
+            classes.push("fullscreen-prepare-scaledown");
           }
         }
-
       }
-    }
-    if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex === this.state.fullscreen.rowIndex){
-      if(!this.state.fullscreen.prepareScaleDown){
-        transitions.marginLeft = -this.state.fullscreen.rowPos.left + 'px';
-        transitions.marginTop = -this.state.fullscreen.rowPos.top + 'px';
-        transitions.position = "absolute";
-        transitions.width = this.refs.grid.clientWidth + 'px';
-        transitions.height = '100%';
-      }
-    }
-    if(this.state.fullscreen && columnIndex === this.state.fullscreen.colIndex && rowIndex > this.state.fullscreen.rowIndex){
-      if(!this.state.fullscreen.prepareScaleDown){
-        transitions.marginTop = this.state.fullscreen.rowSize.height + 'px';
-      }
-    }
-    return transitions;
+    } // End transition fullscreen
+    return {styles: styles, classes: classes};
   },
+  realTransForCol(colI){
 
+  },
 
   // ======================================================
   // Custom Props Handlers
@@ -693,31 +765,25 @@ var Grid = React.createClass({
   },
   _onFullscreenClick(id){
     console.log('clicked fullscreen', id);
-    if(this.state.fullscreen){
-      var fullscreen = this.state.fullscreen;
-      fullscreen.prepareScaleDown = true;
-      this.setState({fullscreen: fullscreen});
+    var trans = this.state.transition;
+
+    // If fullscreen is already on, jump to prepareScaleDown and then scalingDown 
+    if(trans && trans.name === "fullscreen"){ // trans.step is "isFullscreen"
+      this.transitionNext();
       setTimeout(function(){
-        fullscreen.scaleDown = true;
-        this.setState({fullscreen: fullscreen});
+        this.transitionNext();
       }.bind(this), 1);
       return;
     }
-    var colIndex, rowIndex, foundRow;
-    this.state.columns.forEach(function(column, colI){
-      column.rows.forEach(function(row, rowI){
-        if(row.id === id){
-          colIndex = colI;
-          rowIndex = rowI;
-          foundRow = true;
-        }
-      });
-    });
+
+
+
+    var indexes = this.indexesForRowId(id);
     var rowEl = document.getElementById('row-'+ id);
     var colEl = rowEl.parentNode;
-    var fullscreenTransition = {
-      rowIndex: rowIndex,
-      colIndex: colIndex,
+    var transitionInfo = {
+      row: indexes.row,
+      col: indexes.col,
       id: id,
       rowPos: {
         left: colEl.offsetLeft,
@@ -730,7 +796,7 @@ var Grid = React.createClass({
         height: rowEl.clientHeight
       }
     };
-    this.setState({"fullscreenTransition": fullscreenTransition});
+    this.transitionStart("fullscreen", transitionInfo);
   },
   onCollapse(id){
 
@@ -825,18 +891,27 @@ Grid.Column = React.createClass({
   render(){
     var data = this.props.data;
     // Find transitions for style from grid, if any.
-    var styles = this.props.delegate.transitionForColumn(this.props.columnIndex) || {};
-    styles.width = data.w + '%';
+    var styles = {
+      width: data.w + '%'
+    };
+    var className = "sw-resizeable-column";
+
+    var transitions = this.props.delegate.transitionForColumn(this.props.columnIndex);
+    if(transitions){
+      if(transitions.styles){
+        styles = Object.assign(styles, transitions.styles);
+      }
+      if(transitions.classes.length){
+        className += " " + transitions.classes.join(' ');
+      }
+    }
     
 
     var rows = data.rows.map(function(row, i){
       return <Grid.Row columnIndex={this.props.columnIndex} rowIndex={i} delegate={this.props.delegate} callGridDelegate={this.props.callGridDelegate} data={row} key={"row-" + row.id }/>;
     }.bind(this));
 
-    var className = "sw-resizeable-column";
-    var classes = this.props.delegate.classesForColumn(this.props.columnIndex);
-    if(classes && classes.length)
-      className += " " + classes;
+    
 
     return (
       <div id={"column-" + this.props.columnIndex} onTransitionEnd={this.props.delegate.onTransitionEnd} className={className} style={styles}>
@@ -859,23 +934,29 @@ Grid.Row = React.createClass({
       data
     } = this.props;
     
-    var styles = {
-      height: data.h + '%'
-    };
-    var transitions = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex);
-    if(transitions){
-      styles = Object.assign(styles, transitions);
-    }
-
-    var child = this.props.callGridDelegate('renderGridRowForId', data.id);
-
     var className = "sw-resizeable-row";
     if(data.collapsed){
       className += " sw-row-collapsed";
     }
-    var classes = this.props.delegate.classesForRow(this.props.columnIndex, this.props.rowIndex);
-    if(classes && classes.length)
-      className += " " + classes;
+
+    var styles = {
+      height: data.h + '%'
+    };
+
+    var transitions = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex);
+    if(transitions){
+      if(transitions.styles){
+        styles = Object.assign(styles, transitions.styles);
+      }
+      if(transitions.classes.length){
+        className += " " + transitions.classes.join(' ');
+      }
+    }
+
+    var child = this.props.callGridDelegate('renderGridRowForId', data.id);
+
+    
+    
 
     return (
       <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
