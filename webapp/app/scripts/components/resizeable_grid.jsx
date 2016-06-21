@@ -539,12 +539,127 @@ var Grid = React.createClass({
     }
   },
 
+
+  // ======================================================
+  // Transitions handling
+  // ======================================================
+  classesForColumn(columnIndex){
+    var className = "";
+    if(this.state.fullscreenTransition && columnIndex === this.state.fullscreenTransition.colIndex){
+      className += " transition-to-fullscreen";
+    }
+    return className;
+  },
+  classesForRow(columnIndex, rowIndex){
+    var className = "";
+    if(this.state.fullscreenTransition && columnIndex === this.state.fullscreenTransition.colIndex && rowIndex === this.state.fullscreenTransition.rowIndex){
+      className += " transition-to-fullscreen";
+    }
+    return className;
+  },
+  transitionForColumn(columnIndex){
+    var transitions = {};
+    if(this.state.fullscreenTransition){
+      var transObj = this.state.fullscreenTransition;
+      var gw = this.refs.grid.clientWidth;
+      if(transObj.colIndex != columnIndex){
+        transitions.transformOrigin = "50% 50%";
+        if(columnIndex < transObj.colIndex){
+          transitions.transform = "translateX(" + (-transObj.rowPos.left) + "px)";
+        }
+        if(columnIndex > transObj.colIndex){
+          transitions.transform = "translateX(" + (gw - transObj.rowPos.right) + 'px)';
+        }
+      }
+    }
+    return transitions;
+  },
+  transitionForRow(columnIndex, rowIndex){
+    var transitions = {};
+    var columns = this.state.columns;
+    
+    // Fullscreen transitions
+    if(this.state.fullscreenTransition){
+      var transObj = this.state.fullscreenTransition;
+      var gh = this.refs.grid.clientHeight;
+      var gw = this.refs.grid.clientWidth;
+
+      if(transObj.colIndex === columnIndex){
+        console.log(rowIndex, transObj, gh);
+        var numberOfRowsInColumn = columns[columnIndex].rows.length;
+        if(rowIndex < transObj.rowIndex){
+          transitions.transformOrigin = "50% 50%";
+          transitions.transform = "translateY(" + (-transObj.rowPos.top) + "px)";
+        }
+        if(rowIndex > transObj.rowIndex){
+          transitions.transformOrigin = "50% 50%";
+          transitions.transform = "translateY(" + (gh - transObj.rowPos.bottom) + 'px)';
+        }
+        if(rowIndex === transObj.rowIndex){
+          const centerXPercentage = (transObj.rowPos.left * 100) / ((gw - transObj.rowPos.right) + transObj.rowPos.left);
+          const centerYPercentage = (transObj.rowPos.top * 100) / ((gh - transObj.rowPos.bottom) + transObj.rowPos.top);
+          const scaleTo = this.calcScale(gw, gh, transObj.rowSize.width, transObj.rowSize.height);
+          var originX = centerXPercentage;
+          
+          if(columnIndex === 0) 
+            originX = 0;
+          if(columnIndex === columns.length - 1)
+            originX = 100;
+
+          var originY = centerYPercentage;
+          if(rowIndex = 0 && numberOfRowsInColumn === 1)
+            originY = 50;
+          else if(rowIndex = 0)
+            originY = 0;
+          else if(rowIndex === numberOfRowsInColumn - 1)
+            originY = 100;
+
+          transitions.transformOrigin = originX + '% ' + originY + '%';
+          transitions.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
+        }
+      }
+    }
+    return transitions;
+  },
+
+
   // ======================================================
   // Custom Props Handlers
   // ======================================================
   onFullscreen(id){
+    this._onFullscreenClick(id);
+  },
+  _onFullscreenClick(id){
     console.log('clicked fullscreen', id);
-    //this.setState({"transitionToFullscreen": })
+    var colIndex, rowIndex, foundRow;
+    this.state.columns.forEach(function(column, colI){
+      column.rows.forEach(function(row, rowI){
+        if(row.id === id){
+          colIndex = colI;
+          rowIndex = rowI;
+          foundRow = true;
+        }
+      });
+    });
+    var rowEl = document.getElementById('row-'+ id);
+    var colEl = rowEl.parentNode;
+    var fullscreenTransition = {
+      fullscreen: true,
+      rowIndex: rowIndex,
+      colIndex: colIndex,
+
+      rowPos: {
+        left: colEl.offsetLeft,
+        top: rowEl.offsetTop,
+        right: colEl.offsetLeft + rowEl.clientWidth,
+        bottom: rowEl.offsetTop + rowEl.clientHeight
+      },
+      rowSize: {
+        width: rowEl.clientWidth,
+        height: rowEl.clientHeight
+      }
+    };
+    this.setState({"fullscreenTransition": fullscreenTransition});
   },
   onCollapse(id){
 
@@ -574,14 +689,6 @@ var Grid = React.createClass({
 
     // translateX for minimized rowHeight - minimizedSize;
 
-  },
-  transformStylesForFullscreen(){
-    return {
-      scaleX: 0,
-      scaleY: 0,
-      originX: 0,
-      originY: 0
-    };
   },
   maximizeColumnWithRow(row, columnIndex, rowIndex) {
     const {
@@ -650,7 +757,6 @@ var Grid = React.createClass({
       else if( i > columnIndex){
         newLeft = (gw - rPos.right);
       }
-      console.log('col', i, newLeft);
       if(newLeft){
         columnEl.style.transformOrigin = '50% 50%';
         columnEl.style.transform = 'translateX(' + newLeft + 'px)';
@@ -660,8 +766,6 @@ var Grid = React.createClass({
         var rows = column.rows;
         rows.forEach(function(row, j){
           var rowEl = document.getElementById('row-' + row.id);
-          var rowY = rowEl.getBoundingClientRect().top;
-          var rowH = rowEl.clientHeight;
           var newTop;
 
           if(j != rowIndex){
@@ -752,16 +856,22 @@ Grid.Column = React.createClass({
   },
   render(){
     var data = this.props.data;
-    var styles = {
-      width: data.w + '%'
-    };
+    // Find transitions for style from grid, if any.
+    var styles = this.props.delegate.transitionForColumn(this.props.columnIndex) || {};
+    styles.width = data.w + '%';
+    
 
     var rows = data.rows.map(function(row, i){
       return <Grid.Row columnIndex={this.props.columnIndex} rowIndex={i} delegate={this.props.delegate} callGridDelegate={this.props.callGridDelegate} data={row} key={"row-" + row.id }/>;
     }.bind(this));
 
+    var className = "sw-resizeable-column";
+    var classes = this.props.delegate.classesForColumn(this.props.columnIndex);
+    if(classes && classes.length)
+      className += " " + classes;
+
     return (
-      <div id={"column-" + this.props.columnIndex} className="sw-resizeable-column" style={styles}>
+      <div id={"column-" + this.props.columnIndex} className={className} style={styles}>
         {this.renderResizer()}
         {rows}
       </div>
@@ -776,26 +886,26 @@ Grid.Row = React.createClass({
       return <Grid.Resizer isRow={true} columnIndex={this.props.columnIndex} rowIndex={this.props.rowIndex} delegate={this.props.delegate} />;
     }
   },
-  onMaximize(e){
-    this.props.delegate.maximizeColumnWithRow(this.refs.row, this.props.columnIndex, this.props.rowIndex);
-  },
-  onMinimize(e){
-    this.props.delegate.minimizeColumnWithRow(this.refs.row, this.props.columnIndex, this.props.rowIndex);
-  },
   render(){
     const {
       data
     } = this.props;
-    const styles = {
-      height: data.h + '%'
-    };
+    
+    const styles = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex)
+    styles.height = data.h + '%';
+
     var child = this.props.callGridDelegate('renderGridRowForId', data.id);
+
     var className = "sw-resizeable-row";
     if(data.collapsed){
       className += " sw-row-collapsed";
     }
+    var classes = this.props.delegate.classesForRow(this.props.columnIndex, this.props.rowIndex);
+    if(classes && classes.length)
+      className += " " + classes;
+
     return (
-      <div className={className} id={"row-" + data.id } ref="row" style={styles} onClick={this.onMinimize}>
+      <div className={className} id={"row-" + data.id } ref="row" style={styles}>
         {this.renderResizer()}
         <div className="sw-row-content">{child}</div>
       </div>
