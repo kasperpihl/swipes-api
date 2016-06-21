@@ -1,4 +1,4 @@
-$transitionTime: .5s;
+$transitionTime: 5s;
 
 .sw-resizeable-grid {
   width: 100%;
@@ -30,9 +30,22 @@ $transitionTime: .5s;
       z-index: 99;
       transition: z-index $transitionTime;
 
-     .sw-resizeable-row > .sw-resize-horizontal {
-        visibility: hidden;
-        transition: 0s;
+      .sw-resizeable-row > .sw-resize-horizontal {
+        display: none;
+      }
+
+      .sw-resize-vertical {
+        display: none;
+      }
+
+      & + .sw-resizeable-column {
+        .sw-resizeable-row > .sw-resize-horizontal {
+          display: none;
+        }
+
+        .sw-resize-vertical {
+          display: none;
+        }
       }
     }
   }
@@ -56,6 +69,10 @@ $transitionTime: .5s;
     &.transition-to-fullscreen {
       z-index: 999;
       transition: z-index $transitionTime, transform $transitionTime ease-in-out;
+
+      & > * {
+        // display: none;
+      }
     }
   }
 
