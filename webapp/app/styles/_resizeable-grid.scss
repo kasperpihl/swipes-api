@@ -1,4 +1,4 @@
-$transitionTime: .4s;
+$transitionTime: 5s;
 
 .sw-resizeable-grid {
   width: 100%;
@@ -17,6 +17,14 @@ $transitionTime: .4s;
 
   }
 
+  &.sw-fullscreen {
+
+    .sw-resize-vertical, .sw-resize-horizontal {
+      opacity: 0;
+      transition: .3s;
+    }
+  }
+
   .sw-resizeable-column {
     height: 100%;
     will-change: transform, z-index, width;
@@ -29,24 +37,6 @@ $transitionTime: .4s;
     &.sw-fullscreen-transition, &.sw-fullscreen-column {
       z-index: 99;
       transition: z-index $transitionTime;
-
-      .sw-resizeable-row > .sw-resize-horizontal {
-        display: none;
-      }
-
-      .sw-resize-vertical {
-        display: none;
-      }
-
-      & + .sw-resizeable-column {
-        .sw-resizeable-row > .sw-resize-horizontal {
-          display: none;
-        }
-
-        .sw-resize-vertical {
-          display: none;
-        }
-      }
     }
   }
 
@@ -79,12 +69,13 @@ $transitionTime: .4s;
   }
 
   .sw-resize-vertical {
-    width: 30px;
+    width: 16px;
     height: 100%;
     position: absolute;
-    left: calc(0px - 15px);
+    left: calc(0px - 8px);
     top: 0;
     z-index: 2;
+    transition: .1s $transitionTime;
 
     &:after {
       content: "";
@@ -108,12 +99,13 @@ $transitionTime: .4s;
   }
 
   .sw-resize-horizontal { // figure out how to do the trigger zones when we have rows
-    height: 30px;
+    height: 16px;
     width: 100%;
     position: absolute;
     left: 0;
-    top: calc(0px - 15px);
+    top: calc(0px - 8px);
     z-index: 2;
+    transition: .1s $transitionTime;
 
     &:after {
       content: "";
