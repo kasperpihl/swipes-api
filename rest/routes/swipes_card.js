@@ -10,6 +10,13 @@ const swipesCardSsr = require('../utils/swipes_card_ssr');
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
+const mapCardFields = (cardData, map) => {
+
+  return {
+    title: cardData[map.title]
+  }
+}
+
 router.get('/SW-*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
   const swipesUrl = pathParts[2];
@@ -18,6 +25,7 @@ router.get('/SW-*', (req, res, next) => {
   let shortUrl = null;
   let userServiceData = null;
   let serviceData = null;
+  let workflow = null;
 
   db.rethinkQuery(getSwipesUrlQ)
     .then((data) => {
@@ -25,21 +33,26 @@ router.get('/SW-*', (req, res, next) => {
       // T_TODO handle if there is no service like that
 
       const userId = shortUrl.userId;
-      const serviceId = shortUrl.service.service_id;
+      const serviceId = shortUrl.service.id;
       const serviceName = shortUrl.service.service_name;
+      const workflowId = shortUrl.service.workflow_id;
       const getServiceQ =
         r.table('users')
           .get(userId)('services')
           .filter((service) => {
             return service('id').eq(serviceId).and(service('service_name').eq(serviceName))
           })
+      const getWorkflowQ =
+        r.table('workflows').get(workflowId);
+      const promisesQ = [db.rethinkQuery(getServiceQ), db.rethinkQuery(getWorkflowQ)];
 
-      return db.rethinkQuery(getServiceQ);
+      return Promise.all(promisesQ);
     })
     .then((data) => {
       // T_TODO handle if there is no authed service in the user record
       // or there is no a user anymore
-      userServiceData = data[0];
+      userServiceData = data[0][0]; // user service object
+      workflow = data[1];
       const serviceQ = r.table('services').get(userServiceData.service_id);
 
       return db.rethinkQuery(serviceQ);
@@ -54,7 +67,7 @@ router.get('/SW-*', (req, res, next) => {
     	}
     	catch (e) {
         // T_TODO nicer error if there is no file
-    		return next(e);
+    		return Promise.reject(e);
     	}
 
       // T_TODO error if there is no file
@@ -63,15 +76,20 @@ router.get('/SW-*', (req, res, next) => {
     		method: shortUrl.service.method,
     		params: shortUrl.service.data,
     		user: {userId: shortUrl.userId},
-    		service: {serviceId: shortUrl.service.service_id}
+    		service: {serviceId: shortUrl.service.id}
     	};
 
     	file.request(options, function (err, result) {
     		if (err) {
-    			return res.status(200).json({ok:false, err: err});
+    			return res.status(200).json({ok: false, err: err});
     		}
 
-        res.send(swipesCardSsr.renderIndex(result));
+        const map = shortUrl.service.fieldsMap;
+        const mappedResult = mapCardFields(result, map);
+
+        mappedResult.workflow = workflow;
+
+        res.send(swipesCardSsr.renderIndex(mappedResult));
     	});
     })
     .catch((e) => {

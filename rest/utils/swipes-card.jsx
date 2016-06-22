@@ -16,6 +16,7 @@ const SwipesCard = class extends React.Component {
     const {
       data
     } = this.props;
+    const iconUrl = '/workflows/' + data.workflow.manifest_id + '/dev/' + data.workflow.icon;
 
     return <div className="shared-card">
       <div className="dot-wrapper">
@@ -23,7 +24,7 @@ const SwipesCard = class extends React.Component {
       </div>
       <div className="title">{data.title}</div>
       <div className="service-icon-wrapper">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/170179/logo-dropbox.svg" alt="" />
+        <img src={iconUrl} alt="" />
       </div>
     </div>
   }

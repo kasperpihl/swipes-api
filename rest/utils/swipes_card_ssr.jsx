@@ -12,11 +12,6 @@ import {
 const indexPath = path.join(__dirname, '../../webapp/ssr_card_dev/index.html');
 
 const renderIndex = (data) => {
-  // T_TODO map data to card format
-  data = {
-    title: 'swipes-icons.png'
-  }
-
   const SwipesCard = new Provider(Card);
   const cardHtml = renderToString(<SwipesCard data={data} />)
 
