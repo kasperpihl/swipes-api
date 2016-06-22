@@ -7,7 +7,7 @@ var TRANSITIONS_STEPS = {
 };
 
 String.prototype.isOneOf = function(){
-  
+
   var args = Array.prototype.slice.call(arguments);
   return (args.indexOf(this.toString()) > -1);
 };
@@ -46,16 +46,16 @@ var Grid = React.createClass({
       [ ] adjustOverflows // If size is too big/small, adjust it
       [ ] determineAnimations
     */
-    
+
     // Validation object, passed along the different validation functions and returned with updated values.
     var valObj = {
       columns: columns,
       minWidths: this.minWidthsForColumns(columns), // Array with minWidths as values []
-      minHeights: this.minHeightsForRows(columns), 
+      minHeights: this.minHeightsForRows(columns),
       totalWidthUsed: 0
     };
-    
-    valObj = this.validatorInitialColumnDetermination(valObj); 
+
+    valObj = this.validatorInitialColumnDetermination(valObj);
     if(this.debug) console.log('initial column determination', valObj);
 
     valObj = this.validatorInitialRowDetermination(valObj);
@@ -72,7 +72,7 @@ var Grid = React.createClass({
       valObj = this.validatorAdjustOverflows(valObj);
       if(this.debug) console.log('adjust overflows', valObj);
     }
-    
+
 
     return valObj.columns;
   },
@@ -80,7 +80,7 @@ var Grid = React.createClass({
     return columns;
   },
   validatorInitialColumnDetermination(valObj){
-  
+
     valObj.columnsHaveEqualWidth = true;
     valObj.columnsThatNeedWidth = [];
     var rowsThatNeedHeight = {}
@@ -130,13 +130,13 @@ var Grid = React.createClass({
         totalRowHeight += rowHeight;
 
       }.bind(this));
-      
+
       valObj.columnsEqualRowHeight.push(rowsHaveEqualHeight);
       valObj.columnsTotalRowsHeight.push(totalRowHeight);
-      
-      
+
+
     }.bind(this));
-    
+
     return valObj;
   },
   validatorAssignWidths(valObj){
@@ -152,7 +152,7 @@ var Grid = React.createClass({
       }
 
       valObj.totalWidthUsed += column.w;
-    
+
     }.bind(this));
 
     return valObj;
@@ -498,7 +498,7 @@ var Grid = React.createClass({
         }
         res[colI].push(this.percentageHeightFromPixels(minHeight));
       }.bind(this));
-      
+
     }.bind(this))
 
     return res;
@@ -596,7 +596,7 @@ var Grid = React.createClass({
   },
   transitionNext(){
     var transition = this.state.transition;
-    
+
     if(transition){
       var lastIndex = TRANSITIONS_STEPS[transition.name].length - 1;
       if(transition._currentIndex < lastIndex){
@@ -709,8 +709,8 @@ var Grid = React.createClass({
             styles.transform = "translateY(" + (-trans.info.rowPos.top) + "px)";
           }
         }
-        
-        
+
+
         if(rowIndex === trans.info.row){
           classes.push("sw-fullscreen-row");
 
@@ -730,8 +730,8 @@ var Grid = React.createClass({
           const scaleTo = this.calcScale(gw, gh, trans.info.rowSize.width, trans.info.rowSize.height);
 
           var originX = centerXPercentage;
-          
-          if(colIndex === 0) 
+
+          if(colIndex === 0)
             originX = 0;
           if(colIndex === columns.length - 1)
             originX = 100;
@@ -743,10 +743,10 @@ var Grid = React.createClass({
             originY = 0;
           else if(rowIndex === numberOfRowsInColumn - 1)
             originY = 100;
-          
+
 
           styles.transformOrigin = originX + '% ' + originY + '%';
-          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){ 
+          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){
             styles.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
           }
 
@@ -759,7 +759,7 @@ var Grid = React.createClass({
             styles.width = gw + 'px';
             styles.height = '100%';
           }
-          
+
         }
       }
     } // End transition fullscreen
@@ -779,7 +779,7 @@ var Grid = React.createClass({
     console.log('clicked fullscreen', id);
     var trans = this.state.transition;
 
-    // If fullscreen is already on, jump to prepareScaleDown and then scalingDown 
+    // If fullscreen is already on, jump to prepareScaleDown and then scalingDown
     if(trans && trans.name === "fullscreen"){ // trans.step is "isFullscreen"
       this.transitionNext();
       return;
@@ -808,7 +808,7 @@ var Grid = React.createClass({
     this.transitionStart("fullscreen", transitionInfo);
     setTimeout(function(){
       this.transitionNext();
-    }.bind(this), 300);
+    }.bind(this), 330);
   },
   onCollapse(id){
 
@@ -917,13 +917,13 @@ Grid.Column = React.createClass({
         className += " " + transitions.classes.join(' ');
       }
     }
-    
+
 
     var rows = data.rows.map(function(row, i){
       return <Grid.Row columnIndex={this.props.columnIndex} rowIndex={i} delegate={this.props.delegate} callGridDelegate={this.props.callGridDelegate} data={row} key={"row-" + row.id }/>;
     }.bind(this));
 
-    
+
 
     return (
       <div id={"column-" + this.props.columnIndex} onTransitionEnd={this.props.delegate.onTransitionEnd} className={className} style={styles}>
@@ -945,7 +945,7 @@ Grid.Row = React.createClass({
     const {
       data
     } = this.props;
-    
+
     var className = "sw-resizeable-row";
     if(data.collapsed){
       className += " sw-row-collapsed";
@@ -972,8 +972,8 @@ Grid.Row = React.createClass({
 
     var child = this.props.callGridDelegate('renderGridRowForId', data.id);
 
-    
-    
+
+
 
     return (
       <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
