@@ -1,4 +1,4 @@
-$transitionTime: .45s;
+$transitionTime: .25s;
 $rippleTransitionTime: .35s;
 .sw-resizeable-grid {
   width: 100%;
@@ -82,7 +82,7 @@ $rippleTransitionTime: .35s;
     right: 55px;
     top: 27px;
     transform: translate(50%, -50%) scale3d(0, 0, 0);
-    background-color: #333ddd;
+    background-color: $blue-60;
     border-radius: 50%;
     transition: $rippleTransitionTime cubic-bezier(.22,.49,.33,.94);
     will-change: transform;
@@ -120,7 +120,7 @@ $rippleTransitionTime: .35s;
     left: calc(0px - 8px);
     top: 0;
     z-index: 2;
-    transition: .1s $transitionTime;
+    transition: .1s calc(#{$transitionTime} - .2);
 
     &:after {
       content: "";
@@ -150,7 +150,7 @@ $rippleTransitionTime: .35s;
     left: 0;
     top: calc(0px - 8px);
     z-index: 2;
-    transition: .1s $transitionTime;
+    transition: .1s calc(#{$transitionTime} - .2);
 
     &:after {
       content: "";
