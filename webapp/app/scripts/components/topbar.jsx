@@ -71,15 +71,26 @@ var Topbar = React.createClass({
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
 
+		// return (
+		// 	<div className="top-bar-container">
+		// 		{this.renderIconMenu()}
+		// 		<div className="topbar-title"><span>{title}</span></div>
+		// 		<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
+		// 			Send Feedback
+		// 		</div>
+		// 	</div>
+		// );
+
 		return (
-			<div className="top-bar-container">
-				{this.renderIconMenu()}
-				<div className="topbar-title"><span>{title}</span></div>
-				<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
-					Send Feedback
+			<div className="sw-topbar">
+				<div className="sw-topbar__content">
+					<div className="topbar-title"><span>{title}</span></div>
+					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
+						Send Feedback
+					</div>
 				</div>
 			</div>
-		);
+		)
 	}
 });
 
