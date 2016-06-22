@@ -83,15 +83,6 @@ var Topbar = React.createClass({
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
 
-		// return (
-		// 	<div className="top-bar-container">
-		// 		{this.renderIconMenu()}
-		// 		<div className="topbar-title"><span>{title}</span></div>
-		// 		<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
-		// 			Send Feedback
-		// 		</div>
-		// 	</div>
-		// );
 		var styles = {};
 		if(this.state.gradientPos){
 			styles.backgroundPosition = this.state.gradientPos + '% 50%';
@@ -147,9 +138,9 @@ var getGradientPos = function(percentOfDay, daySegments) {
 
 	for (var i=0; i<segLen; i++) {
 		var seg = daySegments[i];
-		
+
 		segTimeSum = segTimeSum + seg.time;
-		
+
 		if (percentOfDay >= segTimeSum) {
 			currentWidth = currentWidth + seg.width;
 		} else {
@@ -157,15 +148,15 @@ var getGradientPos = function(percentOfDay, daySegments) {
 			var portionOfDay = percentOfDay - prevSegSum;
 			var percentOfSeg = portionOfDay / seg.time * 100;
 			var width = seg.width * percentOfSeg / 100;
-			
+
 			currentWidth = currentWidth + width;
 			break;
 		}
 	}
-	
+
 	//var currentTimePercentage = percentOfDay / prevSegSum * 100;
 	var currentGradientPosition = (100 * currentWidth) / 100;
-	
+
 	return currentGradientPosition;
 }
 
@@ -176,6 +167,6 @@ function precentOfCurrentDay() {
 	var seconds = today.getSeconds();
 	var currentTimeSeconds = hoursSeconds + minutesSeconds + seconds;
 	var percentOfCurrentDay = currentTimeSeconds / fullDaySeconds * 100;
-	
+
 	return percentOfCurrentDay;
 }

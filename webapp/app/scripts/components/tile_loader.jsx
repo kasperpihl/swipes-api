@@ -384,14 +384,15 @@ var CardLoader = React.createClass({
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
 	renderTopbar: function() {
-
+		var title = this.state.workflow.name;
+		console.log(this.state.workflow)
 		return (
 			<div className="tile-topbar">
 				<div className="tile-topbar_content">
 					<div className="tile-topbar_content-menu">
 						<div className="menu-icon"></div>
 					</div>
-					<div className="tile-topbar_content-title">Chat</div>
+					<div className="tile-topbar_content-title">{title}</div>
 					<div className="tile-topbar_content-seperator"></div>
 					<div className="tile-topbar_content-account">Swipes Team</div>
 				</div>
