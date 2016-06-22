@@ -834,9 +834,7 @@ var Grid = React.createClass({
     let rowsLength = 0;
 
     // if column:not(first-child) transOrigin 0% 50%; else 100% 50%
-    // if row:not(first-child) transOrigin 50% 100% else 50% 100%
-
-    // translateX for minimized rowHeight - minimizedSize;
+    // if row:not(first-child) transOrigin 50% 0% else 50% 100%
 
   }
 });

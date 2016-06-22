@@ -385,7 +385,7 @@ var CardLoader = React.createClass({
 	},
 	renderTopbar: function() {
 		var title = this.state.workflow.name;
-		console.log(this.state.workflow)
+
 		return (
 			<div className="tile-topbar">
 				<div className="tile-topbar_content">
@@ -409,9 +409,18 @@ var CardLoader = React.createClass({
 	},
 	renderResizingOverlay: function() {
 
+		var title = this.state.workflow.name;
+		var url = this.state.workflow.index_url;
+		var splitURL = url.split('/').slice(0,-1).join('/');
+		
 		return (
 			<div className="tile-resizing-overlay">
-
+				<div className="tile-resizing-overlay__content">
+					<div className="app-icon">
+						<img src={splitURL + '/' + this.state.workflow.icon} />
+					</div>
+					<div className="app-title">{title}</div>
+				</div>
 			</div>
 		)
 	},
