@@ -24,6 +24,9 @@ var Topbar = React.createClass({
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
 	},
+	componentDidMount() {
+	    this.gradientStep();
+	},
 	clickedAdd: function(){
 		topbarActions.loadWorkflowModal();
 	},
@@ -67,6 +70,15 @@ var Topbar = React.createClass({
 			</IconMenu>
 		);
 	},
+	gradientStep:function(){
+		var percentOfDay = precentOfCurrentDay();
+		var gradientPos = getGradientPos(percentOfDay, daySegments);
+		gradientPos = Math.round( gradientPos * 1e2 ) / 1e2;
+		if(this.state.gradientPos != gradientPos){
+			this.setState({gradientPos: gradientPos});
+		}
+		setTimeout(this.gradientStep, 3000);
+	},
 
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
@@ -80,9 +92,12 @@ var Topbar = React.createClass({
 		// 		</div>
 		// 	</div>
 		// );
-
+		var styles = {};
+		if(this.state.gradientPos){
+			styles.backgroundPosition = this.state.gradientPos + '% 50%';
+		}
 		return (
-			<div className="sw-topbar">
+			<div className="sw-topbar" style={styles}>
 				<div className="sw-topbar__content">
 					<div className="topbar-title"><span>{title}</span></div>
 					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
@@ -95,3 +110,72 @@ var Topbar = React.createClass({
 });
 
 module.exports = Topbar;
+
+
+
+
+var oldTime = null;
+var fullDaySeconds = 86400;
+var gradientSegmentPercentage = 100 / 11;
+var daySegments = [
+	{
+		time: 37.5, // 00:00 - 09:00
+		width: gradientSegmentPercentage / 2
+	},
+	{
+		time: 4.166666, // 09:00 - 10:00
+		width: gradientSegmentPercentage * 2 + (gradientSegmentPercentage / 2)
+	},
+	{
+		time: 33.333333, // 10:00 - 18:00
+		width: gradientSegmentPercentage * 2 - (gradientSegmentPercentage / 2)
+	},
+	{
+		time: 6.25, // 18:00 - 19:30
+		width: gradientSegmentPercentage * 4 + (gradientSegmentPercentage / 2)
+	},
+	{
+		time: 18.75, // 19:30 - 00:00
+		width: gradientSegmentPercentage * 2
+	}
+];
+
+var getGradientPos = function(percentOfDay, daySegments) {
+	var segLen = daySegments.length;
+	var segTimeSum = 0;
+	var currentWidth = 0;
+
+	for (var i=0; i<segLen; i++) {
+		var seg = daySegments[i];
+		
+		segTimeSum = segTimeSum + seg.time;
+		
+		if (percentOfDay >= segTimeSum) {
+			currentWidth = currentWidth + seg.width;
+		} else {
+			var prevSegSum = segTimeSum - seg.time;
+			var portionOfDay = percentOfDay - prevSegSum;
+			var percentOfSeg = portionOfDay / seg.time * 100;
+			var width = seg.width * percentOfSeg / 100;
+			
+			currentWidth = currentWidth + width;
+			break;
+		}
+	}
+	
+	//var currentTimePercentage = percentOfDay / prevSegSum * 100;
+	var currentGradientPosition = (100 * currentWidth) / 100;
+	
+	return currentGradientPosition;
+}
+
+function precentOfCurrentDay() {
+	var today = new Date();
+	var hoursSeconds = today.getHours() * 60 * 60;
+	var minutesSeconds = today.getMinutes() * 60;
+	var seconds = today.getSeconds();
+	var currentTimeSeconds = hoursSeconds + minutesSeconds + seconds;
+	var percentOfCurrentDay = currentTimeSeconds / fullDaySeconds * 100;
+	
+	return percentOfCurrentDay;
+}
