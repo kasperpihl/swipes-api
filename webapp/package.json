@@ -25,7 +25,7 @@
     "reflux": "~0.3.0",
     "reflux-model-extension": "~0.0.20",
     "vivus": "^0.2.3",
-    "swipes-dot": "^0.3.3"
+    "swipes-dot": "^0.3.4"
   },
   "devDependencies": {
     "babel": "6.5.2",
