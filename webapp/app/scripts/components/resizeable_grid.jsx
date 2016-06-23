@@ -695,18 +695,21 @@ var Grid = React.createClass({
         var gh = this.refs.grid.clientHeight;
         var gw = this.refs.grid.clientWidth;
         if(rowIndex > trans.info.row){
-          if(trans.step.isOneOf("scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown")){
+          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){
             styles.transformOrigin = "50% 50%";
             styles.transform = "translateY(" + (gh - trans.info.rowPos.bottom) + 'px)';
           }
           if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
-            styles.marginTop = trans.info.rowSize.height + 'px';
+            styles.display = 'none';
           }
         }
         if(rowIndex < trans.info.row){
-          if(trans.step.isOneOf("scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown")){
+          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){
             styles.transformOrigin = "50% 50%";
             styles.transform = "translateY(" + (-trans.info.rowPos.top) + "px)";
+          }
+          if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
+            styles.display = 'none';
           }
         }
 
@@ -754,7 +757,8 @@ var Grid = React.createClass({
 
           if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
             styles.marginLeft = -trans.info.rowPos.left + 'px';
-            styles.marginTop = -trans.info.rowPos.top + 'px';
+            styles.top = 0;
+            styles.left = 0;
             styles.position = "absolute";
             styles.width = gw + 'px';
             styles.height = '100%';
