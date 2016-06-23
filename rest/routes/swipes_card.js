@@ -89,6 +89,24 @@ router.get('/SW-*', (req, res, next) => {
 
         mappedResult.workflow = workflow;
 
+        // T_TODO replace this with dynamic actions from the service
+        const actions = [
+          [
+            {
+              label: 'Say Hello',
+              icon: 'check',
+              bgColor: 'green',
+              method: 'tasks.update',
+              data: {
+                id: '1234567',
+                completed: true
+              }
+            }
+          ]
+        ];
+
+        mappedResult.swipesDotActions = actions;
+
         res.send(swipesCardSsr.renderIndex(mappedResult));
     	});
     })

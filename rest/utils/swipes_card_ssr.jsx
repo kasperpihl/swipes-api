@@ -24,10 +24,17 @@ const renderIndex = (data) => {
     console.log(e);
   }
 
-  const idContentIndex = indexHtml.indexOf('<div id="content"></div>');
+  const divContentString = '<div id="content">';
+  const divContentStringLen = divContentString.length;
+  const firstJsTagIndex = indexHtml.indexOf('<script type="text/javascript">');
+  const embededScript = '<script type="text/javascript">window.__swipes_data = ' + JSON.stringify(data) + ';</script>'
   // http://stackoverflow.com/questions/4364881/inserting-string-at-position-x-of-another-string
   // Inserting the card html to the div within indexHtml that is with class content
-  const finalHtml = [indexHtml.slice(0, idContentIndex), cardHtml, indexHtml.slice(idContentIndex)].join('');
+  let finalHtml = indexHtml;
+  finalHtml = [finalHtml.slice(0, firstJsTagIndex), embededScript, finalHtml.slice(firstJsTagIndex)].join('');
+
+  const idContentIndex = finalHtml.indexOf(divContentString) + divContentStringLen;
+  finalHtml = [finalHtml.slice(0, idContentIndex), cardHtml, finalHtml.slice(idContentIndex)].join('');
 
   return finalHtml;
 }
