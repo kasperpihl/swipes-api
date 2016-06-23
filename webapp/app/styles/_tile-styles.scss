@@ -136,7 +136,7 @@
 }
 .sw-grid-resizing {
 
-  iframe {
+  .tile > *:not(.tile-resizing-overlay) {
     display: none;
   }
 

@@ -66,6 +66,7 @@ var Workspace = React.createClass({
           key={id}
           data={{id: id}}
           onFullscreen={grid.onFullscreen.bind(null, id)}
+          onResizeForOverlay={grid.onResizeForOverlay}
           dotDragBegin={this.dotDragBegin}
           onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
       );

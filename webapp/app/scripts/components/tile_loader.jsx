@@ -105,7 +105,7 @@ var CardLoader = React.createClass({
 			}
 			else if(message.command === 'navigation.setBadge'){
 				// this.setState({badge: data.badge});
-				workspaceActions.setNotifications(this.state.workflow.id, data.badge);
+				// workspaceActions.setNotifications(this.state.workflow.id, data.badge);
 			}
 			else if(message.command === 'notifications.send'){
 
@@ -384,7 +384,7 @@ var CardLoader = React.createClass({
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
 	renderTopbar: function() {
-		var title = this.state.workflow.name;
+		var title = this.state.titleFromCard || this.state.workflow.name;
 
 		return (
 			<div className="tile-topbar">
@@ -412,7 +412,8 @@ var CardLoader = React.createClass({
 		var title = this.state.workflow.name;
 		var url = this.state.workflow.index_url;
 		var splitURL = url.split('/').slice(0,-1).join('/');
-		
+		var minWidth = this.props.onResizeForOverlay();
+
 		return (
 			<div className="tile-resizing-overlay">
 				<div className="tile-resizing-overlay__content">
