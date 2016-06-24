@@ -20,7 +20,7 @@ var Topbar = React.createClass({
     return (
       <div className={className} onClick={onclickHandler}>
         <div className="sw-grid-topbar_content">
-          <div className="sw-grid-topbar_content-menu">
+          <div className="sw-grid-topbar_content-menu" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>
             <div className="menu-icon"></div>
           </div>
           <div className="sw-grid-topbar_content-title">Chat</div>
