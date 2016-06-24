@@ -488,6 +488,12 @@ var Grid = React.createClass({
   // ======================================================
   // Getters
   // ======================================================
+  collapsedWidth(){
+    return this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+  },
+  collapsedHeight(){
+    return this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
+  },
   columnIsCollapsed(column){
     var allRowsCollapsed = true;
     column.rows.forEach(function(row, i){
@@ -877,9 +883,9 @@ var Grid = React.createClass({
   _onCollapseClick(id){
     console.log('collapsing');
     var columns = this.state.columns;
-    columns[1].collapsed = true;
-    columns[1].rows[0].collapsed = true;
-    console.log(columns[1]);
+    var indexes = this.indexesForRowId(id);
+    columns[indexes.col].collapsed = true;
+    columns[indexes.col].rows[indexes.row].collapsed = true;
     this.setState({columns: this.validateColumns(columns)});
   },
   onReorderStart(id){

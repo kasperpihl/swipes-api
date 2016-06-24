@@ -17,7 +17,7 @@ var Column = React.createClass({
 
     if(data.collapsed){
       className += " sw-collapsed-column";
-      styles.width = this.props.delegate.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH) + '%';
+      styles.width = this.props.delegate.collapsedWidth() + '%';
     }
 
     

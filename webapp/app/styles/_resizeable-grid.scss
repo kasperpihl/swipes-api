@@ -17,62 +17,123 @@ $rippleTransitionTime: .35s;
 
   }
 
-  &.sw-fullscreen {
+  
 
-    .sw-resize-vertical, .sw-resize-horizontal {
-      opacity: 0;
-      transition: .3s;
-    }
-    .sw-fullscreen-column{
-      z-index: 99;
-      transition: z-index $transitionTime;
-    }
-    &.sw-fullscreen-isFullscreen, &.sw-fullscreen-beforeScaleDown {
-      .sw-fullscreen-row{
-        transition: 0s !important;
-      }
-    }
-    &.sw-fullscreen-scalingUp{
-      .sw-fullscreen-row{
-        z-index: 99;
-        transition: z-index $transitionTime, transform $transitionTime cubic-bezier(.21,.6,.51,.85);
+  .sw-grid-topbar {
+    $action-button-size: 22px;
+
+    @include size(100%, 55px);
+    background-color: transparent;
+    padding: 0 10px;
+    position: relative;
+
+    @extend %flex;
+    justify-content: space-between !important;
+
+    &_content {
+      height: 100%;
+
+      @extend %flex;
+
+      &-menu {
+        @include size($action-button-size, $action-button-size);
+        border-radius: 50%;
+        border: 1px solid $deepBlue-20;
+        transition: 0s;
+
+        @extend %flex;
+
+        .menu-icon {
+          @include menu-icon(9px, 2px, 2px, $deepBlue-20);
+        }
+
+        &:hover {
+          border: 1px solid $deepBlue-90;
+          background-color: $deepBlue-90;
+
+          .menu-icon {
+            @include menu-icon(11px, 2px, 1px, white);
+          }
+        }
       }
 
-      .sw-fullscreen-column{
-        transition: z-index $transitionTime $transitionTime, transform $transitionTime cubic-bezier(.21,.6,.51,.85);
+      &-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: $deepBlue-100;
+        margin-left: 10px;
+      }
+
+      &-seperator {
+        @include size(1px, 15px);
+        background-color: $deepBlue-40;
+        margin: 0 10px;
+      }
+
+      &-subtitile {
+        color: $deepBlue-40;
+        letter-spacing: 1px;
+        font-size: .7em;
       }
     }
-    &.sw-fullscreen-rippleStart, &.sw-fullscreen-scalingUp, &.sw-fullscreen-isFullscreen, &.sw-fullscreen-beforeScaleDown, &.sw-fullscreen-scalingDown {
-      .transition-ripple{
-        opacity: 1;
-        transform: translate(50%, -50%) scale3d(1.6, 1.6, 1.6);
-        transition: transform $rippleTransitionTime cubic-bezier(.91,.2,.86,.65);
+
+    &_actions {
+      @include size(60px, 100%);
+
+      @extend %flex;
+      justify-content: space-around !important;
+
+      &-collapse {
+        @include size($action-button-size, $action-button-size);
+        border-radius: 50%;
+        border: 1px solid $deepBlue-20;
+        transition: 0s;
+
+        @extend %flex;
+
+        .collapse-icon {
+          @include collapse-icon(8px, 2px, $deepBlue-20);
+          transition: 0s;
+        }
+
+        &:hover {
+          border: 1px solid $deepBlue-90;
+          background-color: $deepBlue-90;
+          transition: 0s;
+
+          .collapse-icon {
+            @include collapse-icon(8px, 2px, white);
+            transition: 0s;
+          }
+        }
       }
-    }
-    &.sw-fullscreen-isFullscreen{
-      .transition-ripple{
-        opacity: 0;
-        visibility: hidden;
-        transition: transform $rippleTransitionTime cubic-bezier(.91,.2,.86,.65), opacity $rippleTransitionTime 0s, visibility 0s $rippleTransitionTime;
-      }
-    }
-    &.sw-fullscreen-rippleEnd,{
-      .transition-ripple{
-        opacity: .5;
-        visibility: visible;
-        transform: translate(50%, -50%) scale3d(1.6, 1.6, 1.6);
-        transition: transform $rippleTransitionTime cubic-bezier(.91,.2,.86,.65), opacity 0.1s 0s, visibility 0s;
-      }
-    }
-    &.sw-fullscreen-removeRipple{
-      .transition-ripple{
-        transform: translate(50%, -50%) scale3d(0, 0, 0);
-        transition: transform $rippleTransitionTime cubic-bezier(.55,.43,.33,1);
+
+      &-fullscreen {
+        @include size($action-button-size, $action-button-size);
+        border-radius: 50%;
+        border: 1px solid $studioGray-100;
+        transition: 0s;
+
+        @extend %flex;
+
+        .fullscreen-icon {
+          @include fullscreen-icon(10px, 4px, $deepBlue-20, white);
+          transition: 0s;
+        }
+
+        &:hover {
+          border: 1px solid $deepBlue-90;
+          background-color: $deepBlue-90;
+          transition: 0s;
+
+          .fullscreen-icon {
+            @include fullscreen-icon(10px, 4px, white, $deepBlue-90);
+            transition: 0s;
+          }
+        }
       }
     }
   }
-
-
 
 
 
@@ -108,8 +169,9 @@ $rippleTransitionTime: .35s;
     display: flex;
     flex-direction: column;
     .sw-row-content {
-      height:100%;
+      height:calc(100% - 55px);
       width: 100%;
+
     }
   }
 
@@ -172,6 +234,64 @@ $rippleTransitionTime: .35s;
         transform-origin: 50% 50%;
         transform: translateY(-50%) scaleY(4);
         transition: .2s ease-in-out;
+      }
+    }
+  }
+
+
+  
+
+  &.sw-fullscreen {
+
+    .sw-resize-vertical, .sw-resize-horizontal {
+      opacity: 0;
+      transition: .3s;
+    }
+    .sw-fullscreen-column{
+      z-index: 99;
+      transition: z-index $transitionTime;
+    }
+    &.sw-fullscreen-isFullscreen, &.sw-fullscreen-beforeScaleDown {
+      .sw-fullscreen-row{
+        transition: 0s !important;
+      }
+    }
+    &.sw-fullscreen-scalingUp{
+      .sw-fullscreen-row{
+        z-index: 99;
+        transition: z-index $transitionTime, transform $transitionTime cubic-bezier(.21,.6,.51,.85);
+      }
+
+      .sw-fullscreen-column{
+        transition: z-index $transitionTime $transitionTime, transform $transitionTime cubic-bezier(.21,.6,.51,.85);
+      }
+    }
+    &.sw-fullscreen-rippleStart, &.sw-fullscreen-scalingUp, &.sw-fullscreen-isFullscreen, &.sw-fullscreen-beforeScaleDown, &.sw-fullscreen-scalingDown {
+      .transition-ripple{
+        opacity: 1;
+        transform: translate(50%, -50%) scale3d(1.6, 1.6, 1.6);
+        transition: transform $rippleTransitionTime cubic-bezier(.91,.2,.86,.65);
+      }
+    }
+    &.sw-fullscreen-isFullscreen{
+      .transition-ripple{
+        opacity: 0;
+        visibility: hidden;
+        transition: transform $rippleTransitionTime cubic-bezier(.91,.2,.86,.65), opacity $rippleTransitionTime 0s, visibility 0s $rippleTransitionTime;
+      }
+    }
+    &.sw-fullscreen-rippleEnd,{
+      .transition-ripple{
+        opacity: .5;
+        visibility: visible;
+        transform: translate(50%, -50%) scale3d(1.6, 1.6, 1.6);
+        transition: transform $rippleTransitionTime cubic-bezier(.91,.2,.86,.65), opacity 0.1s 0s, visibility 0s;
+      }
+    }
+    &.sw-fullscreen-removeRipple{
+      .transition-ripple{
+        transform: translate(50%, -50%) scale3d(0, 0, 0);
+        transition: transform $rippleTransitionTime cubic-bezier(.55,.43,.33,1);
       }
     }
   }

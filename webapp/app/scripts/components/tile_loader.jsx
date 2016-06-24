@@ -385,11 +385,11 @@ var CardLoader = React.createClass({
 	},
 	renderTopbar: function() {
 		var title = this.state.titleFromCard || this.state.workflow.name;
-
+		return;
 		return (
 			<div className="tile-topbar">
 				<div className="tile-topbar_content">
-					<div className="tile-topbar_content-menu">
+					<div className="tile-topbar_content-menu" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
 						<div className="menu-icon"></div>
 					</div>
 					<div className="tile-topbar_content-title">{title}</div>
