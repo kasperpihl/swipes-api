@@ -20,7 +20,7 @@ var stateStore = require('../stores/StateStore');
 
 var Topbar = React.createClass({
 	//mixins: [notificationStore.connect() ],
-	mixins: [WorkspaceStore.connect('workspace')],
+	mixins: [WorkspaceStore.connect('workspace'), topbarStore.connect('topbar')],
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
 	},
@@ -86,7 +86,7 @@ var Topbar = React.createClass({
 		var styles = {};
 		if(this.state.gradientPos){
 			styles.backgroundPosition = this.state.gradientPos + '% 50%';
-		}
+		} t
 		return (
 			<div className="sw-topbar" style={styles}>
 				<div className="sw-topbar__content">

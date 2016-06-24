@@ -11,6 +11,7 @@ var eventActions = require('../actions/EventActions');
 // Including the cardstore only because of browserify
 var CardStore = require('../stores/CardStore');
 var cardActions = require('../actions/CardActions');
+var topbarActions = require('../actions/TopbarActions');
 
 var Grid = require('./resizeable-grid/grid');
 var TileLoader = require('./tile_loader');
@@ -59,6 +60,11 @@ var Workspace = React.createClass({
       }
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
+    },
+    gridDidTransitionStep(grid, name, step){
+      if(name === "fullscreen" && step === "scalingUp"){
+        topbarActions.changeFullscreen(true);
+      }
     },
     gridDidUpdate(grid, columns){
       console.log('grid update', columns);

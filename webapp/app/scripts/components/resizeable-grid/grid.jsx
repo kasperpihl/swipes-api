@@ -131,7 +131,7 @@ var Grid = React.createClass({
     valObj.rowsThatNeedHeight = [];
     valObj.columnsEqualRowHeight = [];
     valObj.columnsTotalRowsHeight = [];
-    
+
     valObj.columns.forEach(function(column, colI){
 
       var rowsHaveEqualHeight = true;
@@ -723,6 +723,7 @@ var Grid = React.createClass({
       if(typeof callback === "function"){
         callback(step);
       }
+      this.callDelegate('gridDidTransitionStep', transition.name, transition.step);
     }
 
   },
@@ -955,7 +956,7 @@ var Grid = React.createClass({
         columns[indexes.col].rows[indexes.row].fullscreen = (step === 'isFullscreen');
         this.setState({columns: columns});
       }
-      console.log('trans callback', step);
+      
 
     }.bind(this));
   },
@@ -975,18 +976,8 @@ var Grid = React.createClass({
 
     };
     
-    //columns[indexes.col].collapsed = transformTo;
     columns[indexes.col].rows[indexes.row].collapsed = transformTo;
     this.setState({columns: this.validateColumns(columns)});
-  },
-  onReorderStart(id){
-
-  },
-  onReorder(){
-
-  },
-  onReorderEnd(){
-
   },
 
   // ======================================================
