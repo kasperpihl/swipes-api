@@ -12,6 +12,7 @@ var eventActions = require('../actions/EventActions');
 var CardStore = require('../stores/CardStore');
 var cardActions = require('../actions/CardActions');
 var topbarActions = require('../actions/TopbarActions');
+var workflowActions = require('../actions/WorkflowActions');
 
 var Grid = require('./resizeable-grid/grid');
 var TileLoader = require('./tile_loader');
@@ -65,6 +66,9 @@ var Workspace = React.createClass({
       if(name === "fullscreen" && step === "scalingUp"){
         topbarActions.changeFullscreen(true);
       }
+    },
+    gridRowPressedMenu(grid, id){
+      workflowActions.removeWorkflow({id: id});
     },
     gridDidUpdate(grid, columns){
       console.log('grid update', columns);

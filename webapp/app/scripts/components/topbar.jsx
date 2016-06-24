@@ -86,7 +86,7 @@ var Topbar = React.createClass({
 		var styles = {};
 		if(this.state.gradientPos){
 			styles.backgroundPosition = this.state.gradientPos + '% 50%';
-		} t
+		};
 		return (
 			<div className="sw-topbar" style={styles}>
 				<div className="sw-topbar__content">

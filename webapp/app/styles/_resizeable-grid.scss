@@ -1,5 +1,6 @@
 $transitionTime: .25s;
 $rippleTransitionTime: .35s;
+
 .sw-resizeable-grid {
   width: 100%;
   height: 100%;
@@ -247,7 +248,40 @@ $rippleTransitionTime: .35s;
     }
   }
 
-
+  &.sw-collapse {
+    
+    &.sw-collapse-overlayIn, &.sw-collapse-scaling, &.sw-collapse-afterScaling {
+      .sw-collapse-affected-column{
+        opacity: 0;
+        visibility: hidden;
+        transition: visibility 0s .1s, opacity .1s;
+      }
+      .sw-collapse-row {
+        background-color: gray;
+        transition: background-color .1s;
+        > * {
+          opacity: 0;
+          visibility: hidden;
+          transition: visibility 0s .1s, opacity .1s;
+        }
+      }
+    }
+    &.sw-collapse-overlayOut {
+      .sw-collapse-affected-column{
+        opacity: 1;
+        visibility: visible;
+        transition: visibility 0s, opacity .3s;
+      }
+      .sw-collapse-row {
+        transition: background-color .3s;
+        > * {
+          opacity: 1;
+          visibility: visible;
+          transition: visibility 0s, opacity .3s;
+        }
+      }
+    }
+  }
 
 
   &.sw-fullscreen {
