@@ -383,30 +383,6 @@ var CardLoader = React.createClass({
 	onSelectedAccount: function(selectedAccount){
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
-	renderTopbar: function() {
-		var title = this.state.titleFromCard || this.state.workflow.name;
-		return;
-		return (
-			<div className="tile-topbar">
-				<div className="tile-topbar_content">
-					<div className="tile-topbar_content-menu" onClick={workflowActions.removeWorkflow.bind(null, this.state.workflow)}>
-						<div className="menu-icon"></div>
-					</div>
-					<div className="tile-topbar_content-title">{title}</div>
-					<div className="tile-topbar_content-seperator"></div>
-					<div className="tile-topbar_content-account">Swipes Team</div>
-				</div>
-				<div className="tile-topbar_actions">
-					<div className="tile-topbar_actions-collapse" onClick={this.props.onCollapse}>
-						<div className="collapse-icon"></div>
-					</div>
-					<div className="tile-topbar_actions-fullscreen" onClick={this.props.onFullscreen}>
-						<div className="fullscreen-icon"></div>
-					</div>
-				</div>
-			</div>
-		)
-	},
 	renderResizingOverlay: function() {
 
 		var title = this.state.workflow.name;
@@ -484,7 +460,6 @@ var CardLoader = React.createClass({
 
 		return (
 			<div id={workflowId} className="tile">
-				{this.renderTopbar()}
 				{cardContent}
 				{this.renderResizingOverlay()}
 				{/*webviewLoader*/}

@@ -1,5 +1,10 @@
 var React = require('react');
 var Topbar = React.createClass({
+  onClick(e){
+    if(this.props.data.collapsed){
+      this.props.delegate.onCollapse(this.props.data.id);
+    }
+  },
   render(){
     const {
       data
@@ -7,9 +12,13 @@ var Topbar = React.createClass({
 
 
     var className = "sw-grid-topbar";
+    var onclickHandler;
+    if(this.props.data.collapsed){
+      onclickHandler = this.onClick;
+    }
     
     return (
-      <div className={className}>
+      <div className={className} onClick={onclickHandler}>
         <div className="sw-grid-topbar_content">
           <div className="sw-grid-topbar_content-menu">
             <div className="menu-icon"></div>

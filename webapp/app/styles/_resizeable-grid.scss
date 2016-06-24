@@ -70,7 +70,7 @@ $rippleTransitionTime: .35s;
         margin: 0 10px;
       }
 
-      &-subtitile {
+      &-subtitle {
         color: $deepBlue-40;
         letter-spacing: 1px;
         font-size: .7em;
@@ -171,7 +171,16 @@ $rippleTransitionTime: .35s;
     .sw-row-content {
       height:calc(100% - 55px);
       width: 100%;
-
+    }
+    &.sw-collapsed-row{
+      .sw-row-content{
+        display: none;
+      }
+      .sw-grid-topbar{
+        height:100%;
+        width:100%;
+        background-color: gray;
+      }
     }
   }
 
@@ -239,7 +248,7 @@ $rippleTransitionTime: .35s;
   }
 
 
-  
+
 
   &.sw-fullscreen {
 

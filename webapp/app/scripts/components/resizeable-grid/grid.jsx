@@ -7,7 +7,11 @@ var Column = require('./grid_column');
 
 // define the steps of transitions here.
 var TRANSITIONS_STEPS = {
-  fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"]
+  fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"],
+  toFullscreen: ["rippleStart", "scalingUp"],
+  fromFullscreen: ["rippleEnd", "beforeScalingDown", "scalingDown", "removeRipple"],
+  collapsing: [],
+  expanding: []
 };
 
 String.prototype.isOneOf = function(){
@@ -23,7 +27,7 @@ var Grid = React.createClass({
     return {};
   },
   componentDidMount() {
-      this.debug = true;
+      this.debug = false;
       this.setState({columns: this.validateColumns(this.props.columns)});
   },
   componentWillReceiveProps(nextProps) {
@@ -497,7 +501,6 @@ var Grid = React.createClass({
   columnIsCollapsed(column){
     var allRowsCollapsed = true;
     column.rows.forEach(function(row, i){
-      console.log(i, row);
       if(!row.collapsed){
         allRowsCollapsed = false;
       }
@@ -586,6 +589,18 @@ var Grid = React.createClass({
     var rows = columns[columnIndex];
     return rows[rowIndex];
   },
+  rowFromId(id){
+    var res;
+    this.state.columns.forEach(function(column, colI){
+      column.rows.forEach(function(row){
+        if(row.id === id){
+          res = row;
+        }
+      }.bind(this));
+
+    }.bind(this))
+    return res;
+  },
   columnForIndex(index){
     var columns = this.state.columns;
     return columns[index];
@@ -620,32 +635,40 @@ var Grid = React.createClass({
   // Transitions handling
   // ======================================================
   // name, array of steps, optional index to start in the middle etc
-  transitionStart(name, info, index){
-    var currentIndex = index || 0;
-    if(!TRANSITIONS_STEPS[name] || index < 0 || index > TRANSITIONS_STEPS[name].length - 1){
-      return new Error("transitionStart: unknown name or wrong index");
+  transitionStart(name, info, callback){
+    var currentIndex = -1;
+    if(!TRANSITIONS_STEPS[name]){
+      return new Error("transitionStart: unknown name");
     }
     var transition = {
       name: name,
       step: TRANSITIONS_STEPS[name][currentIndex],
       info: info,
-      _currentIndex: currentIndex
+      _currentIndex: currentIndex,
+      _callback: callback
     };
-    this.setState({transition: transition});
+    this.transitionNext(transition);
   },
-  transitionNext(){
-    var transition = this.state.transition;
+  transitionNext(transition){
+    if(!transition){
+      transition = this.state.transition;
+    }
 
     if(transition){
       var lastIndex = TRANSITIONS_STEPS[transition.name].length - 1;
+      var step = null, callback = transition._callback;
       if(transition._currentIndex < lastIndex){
         transition._currentIndex++;
         transition.step = TRANSITIONS_STEPS[transition.name][transition._currentIndex];
+        step = transition.step;
         this.setState({transition: transition});
       }
       else{
         // Make a queue for transitions to check if next one is up.
         this.setState({transition: null});
+      }
+      if(typeof callback === "function"){
+        callback(step);
       }
     }
 
@@ -663,9 +686,6 @@ var Grid = React.createClass({
           setTimeout(function(){
             this.transitionNext();
           }.bind(this), 1);
-        }
-        else if(trans.step === "removeRipple"){
-          this.transitionNext();
         }
       }
       if(e.target.id === "row-" + trans.info.id){
@@ -761,7 +781,6 @@ var Grid = React.createClass({
             if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
               rippleSize = 2 * Math.max(gw, gh);
             }
-            console.log('size', trans.info.rowSize.height, trans.info.rowSize.width, rippleSize);
             rippleStyles.width = rippleSize + 'px';
             rippleStyles.height = rippleSize + 'px';
           }
@@ -872,20 +891,37 @@ var Grid = React.createClass({
         height: rowEl.clientHeight
       }
     };
-    this.transitionStart("fullscreen", transitionInfo);
-    setTimeout(function(){
-      this.transitionNext();
-    }.bind(this), 330);
+    this.transitionStart("fullscreen", transitionInfo, function(step){
+      var columns = this.state.columns;
+      if(step === "rippleStart" || step === "removeRipple"){
+        setTimeout(function(){
+          this.transitionNext();
+        }.bind(this), 330);
+      }
+      if(!step || step === 'isFullscreen'){
+        columns[indexes.col].rows[indexes.row].fullscreen = (step === 'isFullscreen');
+        this.setState({columns: columns});
+      }
+      console.log('trans callback', step);
+
+    }.bind(this));
   },
   onCollapse(id){
     this._onCollapseClick(id);
   },
   _onCollapseClick(id){
     console.log('collapsing');
+    var row = this.rowFromId(id);
     var columns = this.state.columns;
     var indexes = this.indexesForRowId(id);
-    columns[indexes.col].collapsed = true;
-    columns[indexes.col].rows[indexes.row].collapsed = true;
+    
+    var transformTo = true;
+    if(row.collapsed){
+      transformTo = false;
+    }
+    
+    columns[indexes.col].collapsed = transformTo;
+    columns[indexes.col].rows[indexes.row].collapsed = transformTo;
     this.setState({columns: this.validateColumns(columns)});
   },
   onReorderStart(id){

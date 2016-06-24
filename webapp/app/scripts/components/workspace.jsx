@@ -60,7 +60,7 @@ var Workspace = React.createClass({
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
-    renderGridRowForId(grid, id){
+    gridRenderRowForId(grid, id){
       return (
         <TileLoader
           key={id}

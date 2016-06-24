@@ -21,7 +21,7 @@ var Row = React.createClass({
 
     var className = "sw-resizeable-row";
     if(data.collapsed){
-      className += " sw-row-collapsed";
+      className += " sw-collapsed-row";
     }
 
     
@@ -41,7 +41,7 @@ var Row = React.createClass({
       }
     }
 
-    var child = this.props.callGridDelegate('renderGridRowForId', data.id);
+    var child = this.props.callGridDelegate('gridRenderRowForId', data.id);
 
     return (
       <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
