@@ -4,6 +4,7 @@ var DEFAULT_MINHEIGHT = 200;
 var DEFAULT_COLLAPSED_WIDTH = 40;
 var DEFAULT_COLLAPSED_HEIGHT = 40;
 var Column = require('./grid_column');
+var helper = require('./helper');
 
 // define the steps of transitions here.
 var TRANSITIONS_STEPS = {
@@ -11,11 +12,7 @@ var TRANSITIONS_STEPS = {
   collapse: ["overlayIn", "scaling", "afterScaling", "overlayOut"],
   expand: ["scaling", "afterScaling"]
 };
-// Helper function to make animation states more readable, "test".indexOf("hey", "there", "test") === true
-String.prototype.isOneOf = function(){
-  var args = Array.prototype.slice.call(arguments);
-  return (args.indexOf(this.toString()) > -1);
-};
+
 
 var Grid = React.createClass({
   // ======================================================
@@ -495,7 +492,7 @@ var Grid = React.createClass({
     return sizeToBe
   },
   calcingScale(fromSize, toSize){
-    return ((toSize * 100) / fromSize) / 100;
+    return (toSize / fromSize);
   },
   calcCollapsedHorizontalScale(currentColWidth) { // Scale col that is being minimized
     const minimizedSize = DEFAULT_COLLAPSED_WIDTH;
@@ -775,17 +772,31 @@ var Grid = React.createClass({
     var styles = {};
     if(trans.name === "collapse"){
       var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+      var diff = trans.info.col.width - collapsedWidth;
+
       var affectedWidth = trans.info.affectedCol.width;
       if(trans.info.col.i === colIndex){
         if(trans.step === "scaling"){
           styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '100% 50%' : '0% 50%';
           styles.transform = 'scaleX(' + this.calcingScale(trans.info.col.width, collapsedWidth) + ')';
         }
-        
+      }
+      // If column in between is minimized
+      if(colIndex > trans.info.col.i && colIndex < trans.info.affectedCol.i){
+        if(trans.step === "scaling"){
+          styles.transformOrigin = "50% 50%";
+          styles.transform = 'translateX(' + (-this.pixelsWidthFromPercentage(diff)) + 'px)';
+        } 
+      }
+      // If column in between is minimized
+      if(colIndex < trans.info.col.i && colIndex > trans.info.affectedCol.i){
+        if(trans.step === "scaling"){
+          styles.transformOrigin = "50% 50%";
+          styles.transform = 'translateX(' + this.pixelsWidthFromPercentage(diff) + 'px)';
+        } 
       }
       if(trans.info.affectedCol.i === colIndex){
         classes.push("sw-collapse-affected-column");
-        var diff = trans.info.col.width - collapsedWidth;
         if(trans.step === "scaling"){
           styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '0% 50%' : '100% 50%';
           styles.transform = 'scaleX(' + this.calcingScale(affectedWidth, affectedWidth + diff) + ')';
@@ -933,9 +944,7 @@ var Grid = React.createClass({
       })
     }
   },
-  realTransForCol(colI){
 
-  },
 
   // ======================================================
   // Custom Props Handlers
@@ -997,13 +1006,16 @@ var Grid = React.createClass({
   },
   _onCollapseClick(id){
     var indexes = this.indexesForRowId(id);
-    var affectedColI = indexes.col - 1;
-    if(indexes.col === 0){
-      affectedColI = indexes.col + 1;
-    }
+    var affectedColI = helper.findClosest(this.state.columns, indexes.col, function(column, i){
+      return (!column.collapsed);
+    })
 
     var affectedColumn = this.state.columns[affectedColI];
     var column = this.state.columns[indexes.col];
+    var shouldMinimizeRow = true;
+    column.rows.forEach(function(row, rowI){
+
+    }.bind(this));
     var row = column.rows[indexes.row];
     var transitionInfo = {
       col: {
@@ -1022,7 +1034,6 @@ var Grid = React.createClass({
 
 
     this.transitionStart("collapse", transitionInfo, function(step){
-      console.log('step', step);
       var timer = 0;
       switch(step){
         case "overlayIn":
@@ -1056,16 +1067,6 @@ var Grid = React.createClass({
         
       }
     }.bind(this));
-
-
-    return;
-    var transformTo = true;
-    if(row.collapsed){
-      transformTo = false;
-    }
-    var transition = {
-
-    };
   },
 
   // ======================================================
