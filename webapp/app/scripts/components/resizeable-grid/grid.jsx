@@ -725,7 +725,6 @@ var Grid = React.createClass({
       }
       this.callDelegate('gridDidTransitionStep', transition.name, transition.step);
     }
-
   },
 
   onTransitionEnd(e){

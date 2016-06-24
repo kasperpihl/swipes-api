@@ -152,12 +152,16 @@ var Workspace = React.createClass({
     onMouseDown(e) {
         eventActions.fire('window.onmousedown', e);
     },
+    onCloseFullscreen(){
+      this.refs.grid.onFullscreen();
+    },
     componentDidMount(prevProps, prevState) {
-        window.addEventListener('mouseup', this.onMouseUp);
-        window.addEventListener('mousemove', this.onMouseMove);
-        window.addEventListener('mousedown', this.onMouseDown);
-        window.addEventListener("focus", this.onWindowFocus);
-        window.addEventListener("blur", this.onWindowBlur);
+      eventActions.add('closeFullscreen', this.onCloseFullscreen);  
+      window.addEventListener('mouseup', this.onMouseUp);
+      window.addEventListener('mousemove', this.onMouseMove);
+      window.addEventListener('mousedown', this.onMouseDown);
+      window.addEventListener("focus", this.onWindowFocus);
+      window.addEventListener("blur", this.onWindowBlur);
     },
     componentWillUnmount() {
         window.removeEventListener('mouseup', this.onMouseUp);

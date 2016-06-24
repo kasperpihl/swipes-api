@@ -13,6 +13,7 @@ var FontIcon = require('material-ui/lib/font-icon');
 var socketStore = require('../stores/SocketStore');
 var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
+var eventActions = require('../actions/EventActions');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var stateStore = require('../stores/StateStore');
 // var notificationStore = require('../stores/NotificationStore');
@@ -94,7 +95,11 @@ var Topbar = React.createClass({
 	    this.gradientStep();
 	},
 	clickedAdd: function(){
-		topbarActions.loadWorkflowModal();
+		if(this.state.topbar.isFullscreen) {
+			eventActions.fire("closeFullscreen");
+		} else {
+			topbarActions.loadWorkflowModal();
+		}
 	},
 	signout: function () {
 		amplitude.setUserId(null); // Log out user from analytics
@@ -108,12 +113,6 @@ var Topbar = React.createClass({
 	},
 	services: function(){
 		this.context.router.push('/services');
-	},
-	feedbackForm: function() {
-		topbarActions.loadWorkflowModal();
-		return;
-		mixpanel.track('Feedback Init');
-		topbarActions.sendFeedback();
 	},
 	renderIconMenu:function(){
 		var button = (
@@ -176,7 +175,7 @@ var Topbar = React.createClass({
 						<div className="sw-topbar__button sw-topbar__button--search">
 							<i className="material-icons">search</i>
 						</div>
-						<div className="sw-topbar__button sw-topbar__button--add" onClick={this.feedbackForm}>
+						<div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd}>
 							<i className="material-icons">add</i>
 						</div>
 					</div>
