@@ -1,24 +1,22 @@
 var React = require('react');
 var DEFAULT_MINWIDTH = 200;
 var DEFAULT_MINHEIGHT = 200;
-var DEFAULT_COLLAPSED_WIDTH = 50;
-var DEFAULT_COLLAPSED_HEIGHT = 50;
+var DEFAULT_COLLAPSED_WIDTH = 40;
+var DEFAULT_COLLAPSED_HEIGHT = 40;
 var Column = require('./grid_column');
 
 // define the steps of transitions here.
 var TRANSITIONS_STEPS = {
   fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"],
-  toFullscreen: ["rippleStart", "scalingUp"],
-  fromFullscreen: ["rippleEnd", "beforeScalingDown", "scalingDown", "removeRipple"],
   collapsing: [],
   expanding: []
 };
-
+// Helper function to make animation states more readable, "test".indexOf("hey", "there", "test") === true
 String.prototype.isOneOf = function(){
-
   var args = Array.prototype.slice.call(arguments);
   return (args.indexOf(this.toString()) > -1);
 };
+
 var Grid = React.createClass({
   // ======================================================
   // Life Cycle methods
@@ -49,7 +47,7 @@ var Grid = React.createClass({
 
     /*
       [ ] validateProperties // Go through columns/rows to make sure no invalid properties are used
-      [ ] initialDetermination // check if columns have widths and rows have height
+      [X] initialDetermination // check if columns have widths and rows have height
       [ ] assignWidthsAndHeights // If heights/widths were missing, assign them.
       [ ] adjustOverflows // If size is too big/small, adjust it
       [ ] determineAnimations
@@ -64,6 +62,7 @@ var Grid = React.createClass({
       minHeights: this.minHeightsForRows(columns),
       totalWidthUsed: 0
     };
+    valObj = this.validatorPropertiesOfColumns(valObj);
 
     valObj = this.validatorInitialColumnDetermination(valObj);
     if(this.debug) console.log('did initial column determination', valObj);
@@ -83,11 +82,16 @@ var Grid = React.createClass({
       if(this.debug) console.log('did adjust column overflows', valObj);
     }
 
+    valObj = this.validatorAdjustRowOverflows(valObj);
+    if(this.debug) console.log('did adjust row overflow', valObj);
 
     return valObj.columns;
   },
-  validatorPropertiesOfColumns(columns){
-    return columns;
+  validatorPropertiesOfColumns(valObj){
+    /*
+      [] Check if all rows is collapsed and add/remove .collapsed on column
+    */
+    return valObj;
   },
   validatorInitialColumnDetermination(valObj){
 
@@ -99,7 +103,11 @@ var Grid = React.createClass({
     var testColumnWidth = 0;
     valObj.columns.forEach(function(column, colI){
       var colWidth = column.w ? column.w : 0;
-      if(this.columnIsCollapsed(column)){
+      var isCollapsed = this.columnIsCollapsed(column);
+      if(column.collapsed != isCollapsed){
+        column.collapsed = isCollapsed;
+      } 
+      if(isCollapsed){
         colWidth = valObj.collapsedWidth;
         valObj.collapsedColumns.push(colI);
       }
@@ -123,7 +131,7 @@ var Grid = React.createClass({
     valObj.rowsThatNeedHeight = [];
     valObj.columnsEqualRowHeight = [];
     valObj.columnsTotalRowsHeight = [];
-
+    
     valObj.columns.forEach(function(column, colI){
 
       var rowsHaveEqualHeight = true;
@@ -134,13 +142,13 @@ var Grid = React.createClass({
         if(row.collapsed){
           rowHeight = DEFAULT_MINHEIGHT;
         }
-        if(rowHeight){
+        else if(rowHeight){
           if(rowI > 0 && rowHeight != testRowHeight){
             rowsHaveEqualHeight = false;
           }
           testRowHeight = rowHeight;
         }
-        if(!rowHeight){
+        else {
           valObj.rowsThatNeedHeight.push(row.id);
         }
         totalRowHeight += rowHeight;
@@ -165,11 +173,12 @@ var Grid = React.createClass({
         valObj.totalWidthUsed += valObj.collapsedWidth;
       } else {
         if(valObj.columnsHaveEqualWidth){
-          column.w = Math.max(minWidth, this.roundedDecimal(100 / numberOfNonCollapsedColumns));
+          column.w = this.roundedDecimal((100 - valObj.collapsedColumns.length*valObj.collapsedWidth) / numberOfNonCollapsedColumns);
         }
         else if(valObj.columnsThatNeedWidth.indexOf(colI) > -1){
           column.w = minWidth;
         }
+        column.w = Math.max(minWidth, column.w);
         valObj.totalWidthUsed += column.w;
       }
 
@@ -184,16 +193,22 @@ var Grid = React.createClass({
       var totalHeight = 0;
       column.rows.forEach(function(row, rowI){
         var minHeight = valObj.minHeights[colI][rowI];
-        if(valObj.columnsEqualRowHeight[colI]){
-          row.h = Math.max(minHeight, this.roundedDecimal(100 / column.rows.length));
+        if(row.collapsed && !column.collapsed){
+          totalHeight += valObj.collapsedHeight;
         }
-        else if(valObj.rowsThatNeedHeight.indexOf(row.id) > -1){
-          row.h = minHeight;
+        else{
+          if(valObj.columnsEqualRowHeight[colI]){
+            row.h = this.roundedDecimal(100 / column.rows.length);
+          }
+          else if(valObj.rowsThatNeedHeight.indexOf(row.id) > -1){
+            row.h = minHeight;
+          }
+          row.h = Math.max(minHeight, row.h);
+          totalHeight += row.h;
         }
-        totalHeight += row.h;
-        valObj.columnsTotalRowsHeight[colI] = totalHeight;
+        
       }.bind(this));
-
+      valObj.columnsTotalRowsHeight[colI] = totalHeight;
     }.bind(this));
 
     return valObj;
@@ -234,7 +249,44 @@ var Grid = React.createClass({
     return valObj;
   },
   validatorAdjustRowOverflows(valObj){
+    var reverse = true; // K_TODO: make dynamic here
 
+    
+    valObj.columns.forEach(function(column, colI){
+
+      var additionalHeight = valObj.columnsTotalRowsHeight[colI] - 100;
+      var remainingPercentageToAdd = additionalHeight;
+
+      for(var i = 0 ; i < column.rows.length ; i++){
+        if(!remainingPercentageToAdd){
+          break;
+        }
+        var realIndex = i;
+        if(reverse){
+          realIndex = this.reverseIndexFromArray(i, column.rows);
+        }
+        var row = column.rows[realIndex];
+        var minHeight = valObj.minHeights[colI][realIndex];
+        var height = row.h;
+        if(!row.collapsed){
+
+          height = height - remainingPercentageToAdd;
+          
+          remainingPercentageToAdd = 0;
+          if(height < minHeight){
+            remainingPercentageToAdd = minHeight - height;
+            height = minHeight;
+          }
+          row.h = height;
+        }
+        
+
+      }
+      valObj.columnsTotalRowsHeight[colI] = 100 + remainingPercentageToAdd;
+
+    }.bind(this));
+    
+    return valObj;
   },
   validatorMinimizeOverflows(columns, valObj){
 
@@ -495,7 +547,11 @@ var Grid = React.createClass({
   collapsedWidth(){
     return this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
   },
-  collapsedHeight(){
+  collapsedHeight(columnIndex){
+    var column = this.state.columns[columnIndex];
+    if(this.columnIsCollapsed(column)){
+      return this.roundedDecimal(100 / column.rows.length);
+    }
     return this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
   },
   columnIsCollapsed(column){
@@ -505,9 +561,6 @@ var Grid = React.createClass({
         allRowsCollapsed = false;
       }
     });
-    if(column.collapsed){
-      allRowsCollapsed = true;
-    }
     return allRowsCollapsed;
   },
   minWidthsForColumns(columns){
@@ -635,8 +688,8 @@ var Grid = React.createClass({
   // Transitions handling
   // ======================================================
   // name, array of steps, optional index to start in the middle etc
-  transitionStart(name, info, callback){
-    var currentIndex = -1;
+  transitionStart(name, info, callback, index){
+    var currentIndex = (index || 0) - 1;
     if(!TRANSITIONS_STEPS[name]){
       return new Error("transitionStart: unknown name");
     }
@@ -910,7 +963,6 @@ var Grid = React.createClass({
     this._onCollapseClick(id);
   },
   _onCollapseClick(id){
-    console.log('collapsing');
     var row = this.rowFromId(id);
     var columns = this.state.columns;
     var indexes = this.indexesForRowId(id);
@@ -919,8 +971,11 @@ var Grid = React.createClass({
     if(row.collapsed){
       transformTo = false;
     }
+    var transition = {
+
+    };
     
-    columns[indexes.col].collapsed = transformTo;
+    //columns[indexes.col].collapsed = transformTo;
     columns[indexes.col].rows[indexes.row].collapsed = transformTo;
     this.setState({columns: this.validateColumns(columns)});
   },

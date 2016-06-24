@@ -60,13 +60,14 @@ var Workspace = React.createClass({
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
+    gridDidUpdate(grid, columns){
+      console.log('grid update', columns);
+    },
     gridRenderRowForId(grid, id){
       return (
         <TileLoader
           key={id}
           data={{id: id}}
-          onFullscreen={grid.onFullscreen.bind(null, id)}
-          onCollapse={grid.onCollapse.bind(null, id)}
           onResizeForOverlay={grid.onResizeForOverlay}
           dotDragBegin={this.dotDragBegin}
           onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />

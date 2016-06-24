@@ -22,6 +22,7 @@ var Row = React.createClass({
     var className = "sw-resizeable-row";
     if(data.collapsed){
       className += " sw-collapsed-row";
+      styles.height = this.props.delegate.collapsedHeight(this.props.columnIndex) + '%';
     }
 
     
