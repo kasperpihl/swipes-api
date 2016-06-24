@@ -1,5 +1,5 @@
 var React = require('react');
-var Grid = require('./resizeable_grid');
+var Grid = require('./resizeable-grid/grid');
 var data = {
   columns: [
     {

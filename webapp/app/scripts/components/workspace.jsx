@@ -12,7 +12,7 @@ var eventActions = require('../actions/EventActions');
 var CardStore = require('../stores/CardStore');
 var cardActions = require('../actions/CardActions');
 
-var Grid = require('./resizeable_grid');
+var Grid = require('./resizeable-grid/grid');
 var TileLoader = require('./tile_loader');
 
 var Workspace = React.createClass({
