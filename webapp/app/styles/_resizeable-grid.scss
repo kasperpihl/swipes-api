@@ -169,7 +169,7 @@ $rippleTransitionTime: .35s;
     display: flex;
     flex-direction: column;
     .sw-row-content {
-      height:calc(100% - 55px);
+      height:calc(100% - 50px);
       width: 100%;
     }
     &.sw-collapsed-row{
@@ -262,7 +262,16 @@ $rippleTransitionTime: .35s;
     }
     &.sw-fullscreen-isFullscreen, &.sw-fullscreen-beforeScaleDown {
       .sw-fullscreen-row{
+        padding-top: 20px;
         transition: 0s !important;
+
+        .sw-row-content {
+          height: 100%;
+        }
+      }
+
+      .sw-grid-topbar {
+        display: none;
       }
     }
     &.sw-fullscreen-scalingUp{

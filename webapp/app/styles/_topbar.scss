@@ -7,6 +7,7 @@ $fullscreenTopbarSize: 70px;
 	position: absolute;
 	left: 0;
 	top: 0;
+	z-index: 9999;
 	background: linear-gradient(
 		to right,
 		#141562,
@@ -23,40 +24,75 @@ $fullscreenTopbarSize: 70px;
 	background-size: 1000% 1000%;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transform: translateY(calc((#{$searchbarSize} - #{$topbarSize}) * -1));
+	transition: .3s ease-in-out;
 
-	@extend %flex;
-	align-items: flex-end !important;
+	@include flex(flex-end, center);
 
 	&__content {
 		@include size(100%, $topbarSize);
-		padding: 0 15px;
 		color: white;
+		transition: .3s ease-in-out;
 
-		@extend %flex;
-		justify-content: space-between !important;
+		@include flex(center, space-between);
+	}
 
-		&--info {
-			@extend %flex;
+	&__info {
+		@include flex(center, center);
 
-			.topbar-icon {
+		&__icon {
+			@include size(50px, 50px);
+			@include flex(center, center);
+
+			img {
 				@include size(30px, 30px);
-
-				img {
-					@include size(30px, 30px);
-				}
 			}
+		}
 
-			.topbar-title {
-				margin-left: 10px;
-			}
+		&__title {
+
+		}
+	}
+
+	&__actions {
+		@include flex(center, center);
+	}
+
+	&__button {
+		width: 50px;
+		height: 50px;
+
+		@include flex(center, center);
+
+		&--search {
+			color: white;
+			font-size: 20px !important;
+		}
+
+		&--add {
+			color: white;
+			font-size: 20px !important;
+			transition: .3s ease-in-out;
 		}
 	}
 
 	&.fullscreen {
 		transform: translateY(calc((#{$searchbarSize} - #{$fullscreenTopbarSize}) * -1));
+		transition: .3s ease-in-out;
+	}
+
+	&.fullscreen & {
 
 		&__content {
 			@include size(100%, $fullscreenTopbarSize);
+			transition: .3s ease-in-out;
+		}
+
+		&__button {
+
+			&--add {
+				transform: rotate(45deg);
+				transition: .3s ease-in-out;
+			}
 		}
 	}
 }

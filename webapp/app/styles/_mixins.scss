@@ -45,8 +45,9 @@
 	height: $height;
 }
 
-%flex {
+@mixin flex($vertical, $horizontal, $direction:row) {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	align-items: $vertical;
+	justify-content: $horizontal;
+	flex-direction: $direction;
 }

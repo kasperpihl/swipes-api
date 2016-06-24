@@ -18,100 +18,6 @@ var stateStore = require('../stores/StateStore');
 // var notificationStore = require('../stores/NotificationStore');
 // var notificationActions = require('../actions/NotificationActions');
 
-var Topbar = React.createClass({
-	//mixins: [notificationStore.connect() ],
-	mixins: [WorkspaceStore.connect('workspace'), topbarStore.connect('topbar')],
-	contextTypes: {
-		router: React.PropTypes.object.isRequired
-	},
-	componentDidMount() {
-	    this.gradientStep();
-	},
-	clickedAdd: function(){
-		topbarActions.loadWorkflowModal();
-	},
-	signout: function () {
-		amplitude.setUserId(null); // Log out user from analytics
-		stateStore._reset({trigger: false});
-		localStorage.clear();
-		swipes.setToken(null);
-		window.location.replace('/');
-	},
-	workspace: function(){
-		this.context.router.push('/workspace');
-	},
-	services: function(){
-		this.context.router.push('/services');
-	},
-	feedbackForm: function() {
-		topbarActions.loadWorkflowModal();
-		return;
-		mixpanel.track('Feedback Init');
-		topbarActions.sendFeedback();
-	},
-	renderIconMenu:function(){
-		var button = (
-
-			<IconButton
-				style={{padding: '12px !important'}}
-				touch={true}>
-			<FontIcon className="material-icons" color='#666D82'>menu</FontIcon>
-			</IconButton>
-		);
-		return (
-			<IconMenu className="topbar-iconmenu"
-				style={{position: 'absolute', left: '1px', top: '1px', width: '48px', height: '48px'}}
-				iconButtonElement={button}
-				anchorOrigin={{horizontal: 'left', vertical: 'center'}}
-				targetOrigin={{horizontal: 'right', vertical: 'top'}} >
-				<MenuItem primaryText="Workspace" onClick={this.workspace} />
-				<MenuItem primaryText="Services" onClick={this.services} />
-				<MenuItem primaryText="Sign out" onClick={this.signout} />
-			</IconMenu>
-		);
-	},
-	gradientStep:function(){
-		var percentOfDay = precentOfCurrentDay();
-		var gradientPos = getGradientPos(percentOfDay, daySegments);
-		gradientPos = Math.round( gradientPos * 1e2 ) / 1e2;
-		if(this.state.gradientPos != gradientPos){
-			this.setState({gradientPos: gradientPos});
-		}
-		setTimeout(this.gradientStep, 3000);
-	},
-
-	render: function() {
-		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
-
-		var styles = {};
-		if(this.state.gradientPos){
-			styles.backgroundPosition = this.state.gradientPos + '% 50%';
-		} t
-		return (
-			<div className="sw-topbar" style={styles}>
-				<div className="sw-topbar__content">
-					<div className="sw-topbar__content--info">
-						<div className="topbar-icon">
-							<img src="styles/img/swipes-logo.png" alt=""/>
-						</div>
-						<div className="topbar-title"><span>{title}</span></div>
-					</div>
-					<div className="sw-topbar__content--actions">
-						<div className="feedback-button" onClick={this.feedbackForm} >
-							Send Feedback
-						</div>
-					</div>
-				</div>
-			</div>
-		)
-	}
-});
-
-module.exports = Topbar;
-
-
-
-
 var oldTime = null;
 var fullDaySeconds = 86400;
 var gradientSegmentPercentage = 100 / 11;
@@ -177,3 +83,108 @@ function precentOfCurrentDay() {
 
 	return percentOfCurrentDay;
 }
+
+var Topbar = React.createClass({
+	//mixins: [notificationStore.connect() ],
+	mixins: [WorkspaceStore.connect('workspace'), topbarStore.connect('topbar')],
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
+	componentDidMount() {
+	    this.gradientStep();
+	},
+	clickedAdd: function(){
+		topbarActions.loadWorkflowModal();
+	},
+	signout: function () {
+		amplitude.setUserId(null); // Log out user from analytics
+		stateStore._reset({trigger: false});
+		localStorage.clear();
+		swipes.setToken(null);
+		window.location.replace('/');
+	},
+	workspace: function(){
+		this.context.router.push('/workspace');
+	},
+	services: function(){
+		this.context.router.push('/services');
+	},
+	feedbackForm: function() {
+		topbarActions.loadWorkflowModal();
+		return;
+		mixpanel.track('Feedback Init');
+		topbarActions.sendFeedback();
+	},
+	renderIconMenu:function(){
+		var button = (
+
+			<IconButton
+				style={{padding: '12px !important'}}
+				touch={true}>
+			<FontIcon className="material-icons" color='#666D82'>menu</FontIcon>
+			</IconButton>
+		);
+		return (
+			<IconMenu className="topbar-iconmenu"
+				style={{position: 'absolute', left: '1px', top: '1px', width: '48px', height: '48px'}}
+				iconButtonElement={button}
+				anchorOrigin={{horizontal: 'left', vertical: 'center'}}
+				targetOrigin={{horizontal: 'right', vertical: 'top'}} >
+				<MenuItem primaryText="Workspace" onClick={this.workspace} />
+				<MenuItem primaryText="Services" onClick={this.services} />
+				<MenuItem primaryText="Sign out" onClick={this.signout} />
+			</IconMenu>
+		);
+	},
+	gradientStep:function(){
+		var percentOfDay = precentOfCurrentDay();
+		var gradientPos = getGradientPos(percentOfDay, daySegments);
+		gradientPos = Math.round( gradientPos * 1e2 ) / 1e2;
+		if(this.state.gradientPos != gradientPos){
+			this.setState({gradientPos: gradientPos});
+		}
+		setTimeout(this.gradientStep, 3000);
+	},
+
+	render: function() {
+		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
+		var topbarClass = 'sw-topbar';
+		var buttonClass = 'add';
+		var styles = {};
+
+		if(this.state.gradientPos) {
+			styles.backgroundPosition = this.state.gradientPos + '% 50%';
+		}
+
+		if(this.state.topbar.isFullscreen) {
+			topbarClass += ' fullscreen'
+			buttonClass += ' close'
+		}
+
+		return (
+			<div className={topbarClass} style={styles}>
+				<div className="sw-topbar__content">
+
+					<div className="sw-topbar__info">
+						<div className="sw-topbar__info__icon">
+							<img src="styles/img/swipes-logo.png" alt=""/>
+						</div>
+						<div className="sw-topbar__info__title"><span>{title}</span></div>
+					</div>
+
+					<div className="sw-topbar__actions">
+						<div className="sw-topbar__button sw-topbar__button--search">
+							<i className="material-icons">search</i>
+						</div>
+						<div className="sw-topbar__button sw-topbar__button--add" onClick={this.feedbackForm}>
+							<i className="material-icons">add</i>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		)
+	}
+});
+
+module.exports = Topbar;

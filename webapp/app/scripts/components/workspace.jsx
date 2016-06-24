@@ -62,8 +62,10 @@ var Workspace = React.createClass({
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
     gridDidTransitionStep(grid, name, step){
-      if(name === "fullscreen" && step === "scalingUp"){
+      if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
         topbarActions.changeFullscreen(true);
+      } else {
+        topbarActions.changeFullscreen(false);
       }
     },
     gridDidUpdate(grid, columns){
