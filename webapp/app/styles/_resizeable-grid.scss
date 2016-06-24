@@ -251,14 +251,14 @@ $rippleTransitionTime: .35s;
   &.sw-collapse {
     
     &.sw-collapse-overlayIn, &.sw-collapse-scaling, &.sw-collapse-afterScaling {
-      .sw-collapse-affected-column{
+      .sw-collapse-affected-column, .sw-collapse-affected-row{
         opacity: 0;
         visibility: hidden;
         transition: visibility 0s .1s, opacity .1s;
       }
       .sw-collapse-row {
         background-color: gray;
-        transition: background-color .1s;
+        transition:z-index $transitionTime $transitionTime, transform $transitionTime cubic-bezier(.76,.33,.76,.88), background-color .1s;
         > * {
           opacity: 0;
           visibility: hidden;
@@ -267,7 +267,7 @@ $rippleTransitionTime: .35s;
       }
     }
     &.sw-collapse-overlayOut {
-      .sw-collapse-affected-column{
+      .sw-collapse-affected-column, .sw-collapse-affected-row{
         opacity: 1;
         visibility: visible;
         transition: visibility 0s, opacity .3s;
