@@ -90,9 +90,16 @@ var Topbar = React.createClass({
 		return (
 			<div className="sw-topbar" style={styles}>
 				<div className="sw-topbar__content">
-					<div className="topbar-title"><span>{title}</span></div>
-					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
-						Send Feedback
+					<div className="sw-topbar__content--info">
+						<div className="topbar-icon">
+							<img src="styles/img/swipes-logo.png" alt=""/>
+						</div>
+						<div className="topbar-title"><span>{title}</span></div>
+					</div>
+					<div className="sw-topbar__content--actions">
+						<div className="feedback-button" onClick={this.feedbackForm} >
+							Send Feedback
+						</div>
 					</div>
 				</div>
 			</div>

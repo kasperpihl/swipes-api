@@ -17,7 +17,7 @@ $rippleTransitionTime: .35s;
 
   }
 
-  
+
 
   .sw-grid-topbar {
     $action-button-size: 22px;
@@ -140,7 +140,7 @@ $rippleTransitionTime: .35s;
   .transition-ripple {
     position: absolute;
     z-index: 99;
-    right: 27px;
+    right: 25px;
     top: 27px;
     transform: translate(50%, -50%) scale3d(0, 0, 0);
     background-color: $blue-60;
