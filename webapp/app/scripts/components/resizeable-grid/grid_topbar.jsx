@@ -2,7 +2,7 @@ var React = require('react');
 var Topbar = React.createClass({
   onClick(e){
     if(this.props.data.collapsed){
-      this.props.delegate.onCollapse(this.props.data.id);
+      this.props.delegate.onExpand(this.props.data.id);
     }
   },
   render(){

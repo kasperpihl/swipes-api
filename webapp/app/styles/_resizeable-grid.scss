@@ -250,6 +250,53 @@ $rippleTransitionTime: .35s;
       }
     }
   }
+  &.sw-expand {
+
+    &.sw-expand-overlayIn,
+    &.sw-expand-scaling,
+    &.sw-expand-afterScaling {
+
+      .sw-collapse-affected-column,
+      .sw-collapse-affected-row {
+        opacity: 0;
+        visibility: hidden;
+        transition: visibility 0s .1s, opacity .1s;
+      }
+
+      .sw-collapse-row {
+        background-color: gray;
+        transition:z-index $transitionTime $transitionTime, transform $transitionTime cubic-bezier(.76,.33,.76,.88), background-color .1s;
+
+        > * {
+          opacity: 0;
+          visibility: hidden;
+          transition: visibility 0s .1s, opacity .1s;
+        }
+      }
+    }
+
+    &.sw-expand-overlayOut {
+
+      .sw-collapse-affected-column,
+      .sw-collapse-affected-row {
+        opacity: 1;
+        visibility: visible;
+        transition: visibility 0s, opacity .3s;
+      }
+
+      .sw-collapse-row {
+        transition: background-color .3s;
+
+        > * {
+          opacity: 1;
+          visibility: visible;
+          transition: visibility 0s, opacity .3s;
+        }
+      }
+    }
+  }
+
+
 
   &.sw-collapse {
 

@@ -10,7 +10,7 @@ var helper = require('./helper');
 var TRANSITIONS_STEPS = {
   fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"],
   collapse: ["overlayIn", "scaling", "afterScaling", "overlayOut"],
-  expand: ["scaling", "afterScaling"]
+  expand: ["overlayIn", "scaling", "afterScaling", "overlayOut"]
 };
 
 
@@ -439,31 +439,21 @@ var Grid = React.createClass({
     return highestIndex - i;
   },
   percentageWidthFromPixels(pixels){
-    // K_TODO: Cache the width to not query grid all the time.
-    const grid = this.refs.grid;
-    const gw = grid.clientWidth;
+    const gw = this.refs.grid.clientWidth;
     var percentage = (pixels / gw * 100);
-
     return this.roundedDecimal(percentage);
   },
   pixelsWidthFromPercentage(percentage){
-    // K_TODO: Cache the width to not query grid all the time.
-    const grid = this.refs.grid;
-    const gw = grid.clientWidth;
+    const gw = this.refs.grid.clientWidth;
     return Math.round(gw / 100 * percentage);
   },
   percentageHeightFromPixels(pixels){
-    // K_TODO: Cache the height to not query grid all the time.
-    const grid = this.refs.grid;
-    const gh = grid.clientHeight;
+    const gh = this.refs.grid.clientHeight;
     var percentage = (pixels / gh * 100);
-
     return this.roundedDecimal(percentage);
   },
   pixelsHeightFromPercentage(percentage){
-    // K_TODO: Cache the height to not query grid all the time.
-    const grid = this.refs.grid;
-    const gh = grid.clientHeight;
+    const gh = this.refs.grid.clientHeight;
     return Math.round(gh / 100 * percentage);
   },
   roundedDecimal(number){
@@ -490,33 +480,6 @@ var Grid = React.createClass({
     };
 
     return sizeToBe
-  },
-  calcingScale(fromSize, toSize){
-    return (toSize / fromSize);
-  },
-  calcCollapsedHorizontalScale(currentColWidth) { // Scale col that is being minimized
-    const minimizedSize = DEFAULT_COLLAPSED_WIDTH;
-    const minimizedSizePercentages = ((minimizedSize * 100) / currentColWidth) / 100;
-
-    return minimizedSizePercentages;
-  },
-  calcCollapsedVerticalScale(currentRowHeight) { // Scale row that is being minimized
-    const minimizedSize = DEFAULT_COLLAPSED_HEIGHT;
-    const minimizedSizePercentages = ((minimizedSize * 100) / currentRowHeight) / 100;
-
-    return minimizedSizePercentages;
-  },
-  calcCollapseSiblingHorizontalScale(prevColumnEl, currentColWidth) { // Scale col that sibling of minimized col
-    const prevColExpandWidth = prevColumnEl.clientWidth + currentColWidth - DEFAULT_COLLAPSED_WIDTH;
-    const prevColExpandScale = ((prevColExpandWidth * 100) / prevColumnEl.clientWidth) / 100;
-
-    return prevColExpandScale;
-  },
-  calcCollapseSiblingVerticalScale(currentRowHeight, newRowHeight) { // Scale row that sibling of minimized row
-    const prevRowExpandHeight = prevRowEl.clientHeight + currentRowHeight - DEFAULT_COLLAPSED_HEIGHT;
-    const prevRowExpandScale = ((prevRowExpandHeight * 100) / prevRowEl.clientHeight) / 100;
-
-    return prevRowExpandScale;
   },
 
   // ======================================================
@@ -710,20 +673,20 @@ var Grid = React.createClass({
     if(transition){
       var lastIndex = TRANSITIONS_STEPS[transition.name].length - 1;
       var step = null, callback = transition._callback;
+      var newTransition = null;
       if(transition._currentIndex < lastIndex){
         transition._currentIndex++;
         transition.step = TRANSITIONS_STEPS[transition.name][transition._currentIndex];
         step = transition.step;
-        this.setState({transition: transition});
+        newTransition = transition;
       }
-      else{
-        // Make a queue for transitions to check if next one is up.
-        this.setState({transition: null});
-      }
+
+      this.setState({transition: newTransition});
       if(typeof callback === "function"){
         callback(step);
       }
       this.callDelegate('gridDidTransitionStep', transition.name, transition.step);
+
     }
   },
 
@@ -778,7 +741,7 @@ var Grid = React.createClass({
         if(trans.info.col.i === colIndex){
           if(trans.step === "scaling"){
             styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '100% 50%' : '0% 50%';
-            styles.transform = 'scaleX(' + this.calcingScale(trans.info.col.width, collapsedWidth) + ')';
+            styles.transform = 'scaleX(' + helper.calcScale(trans.info.col.width, collapsedWidth) + ')';
           }
         }
         // Collapsed columns in between the affected and the row
@@ -786,7 +749,7 @@ var Grid = React.createClass({
           ( colIndex < trans.info.col.i && colIndex > trans.info.affectedCol.i ) ) {
 
           var translateX = this.pixelsWidthFromPercentage(diff);
-          if((colIndex < trans.info.col.i && colIndex > trans.info.affectedCol.i))
+          if(colIndex > trans.info.col.i)
             translateX = -translateX;
           if(trans.step === "scaling"){
             styles.transformOrigin = "50% 50%";
@@ -798,7 +761,43 @@ var Grid = React.createClass({
           classes.push("sw-collapse-affected-column");
           if(trans.step === "scaling"){
             styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '0% 50%' : '100% 50%';
-            styles.transform = 'scaleX(' + this.calcingScale(affectedWidth, affectedWidth + diff) + ')';
+            styles.transform = 'scaleX(' + helper.calcScale(affectedWidth, affectedWidth + diff) + ')';
+          }
+        }
+      }
+
+    }
+
+    if(trans.name === "expand"){
+      
+      if(trans.info.affectedCol){ // Collapsing the column.
+        var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+        var diff = trans.info.col.width - collapsedWidth;
+        var affectedWidth = trans.info.affectedCol.width;
+        if(trans.info.col.i === colIndex){
+          if(trans.step === "scaling"){
+            styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '100% 50%' : '0% 50%';
+            styles.transform = 'scaleX(' + helper.calcScale(collapsedWidth, trans.info.col.width) + ')';
+          }
+        }
+        // Collapsed columns in between the affected and the row
+        if( ( colIndex > trans.info.col.i && colIndex < trans.info.affectedCol.i ) ||
+          ( colIndex < trans.info.col.i && colIndex > trans.info.affectedCol.i ) ) {
+
+          var translateX = this.pixelsWidthFromPercentage(diff);
+          if(colIndex > trans.info.col.i)
+            translateX = -translateX;
+          if(trans.step === "scaling"){
+            styles.transformOrigin = "50% 50%";
+            styles.transform = 'translateX(' + translateX + 'px)';
+          } 
+        }
+
+        if(trans.info.affectedCol.i === colIndex){
+          classes.push("sw-collapse-affected-column");
+          if(trans.step === "scaling"){
+            styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '0% 50%' : '100% 50%';
+            styles.transform = 'scaleX(' + helper.calcScale(affectedWidth, affectedWidth - diff) + ')';
           }
         }
       }
@@ -846,7 +845,7 @@ var Grid = React.createClass({
           if(trans.info.row.i === rowIndex){
             if(trans.step === "scaling"){
               styles.transformOrigin = (trans.info.row.i > trans.info.affectedRow.i) ? '50% 100%' : '50% 0%';
-              styles.transform = 'scaleY(' + this.calcingScale(trans.info.row.height, collapsedHeight) + ')';
+              styles.transform = 'scaleY(' + helper.calcScale(trans.info.row.height, collapsedHeight) + ')';
             }
           }
            // Collapsed columns in between the affected and the row
@@ -854,7 +853,7 @@ var Grid = React.createClass({
             ( rowIndex < trans.info.row.i && rowIndex > trans.info.affectedRow.i ) ) {
 
             var translateY = this.pixelsHeightFromPercentage(diff);
-            if((rowIndex > trans.info.row.i && rowIndex < trans.info.affectedRow.i))
+            if(rowIndex > trans.info.row.i)
               translateY = -translateY;
             if(trans.step === "scaling"){
               styles.transformOrigin = "50% 50%";
@@ -865,9 +864,16 @@ var Grid = React.createClass({
             classes.push("sw-collapse-affected-row");
             if(trans.step === "scaling"){
               styles.transformOrigin = (trans.info.row.i > trans.info.affectedRow.i) ? '50% 0%' : '50% 100%';
-              styles.transform = 'scaleY(' + this.calcingScale(affectedHeight, affectedHeight + diff) + ')';
+              styles.transform = 'scaleY(' + helper.calcScale(affectedHeight, affectedHeight + diff) + ')';
             }
           }
+        }
+      }
+    }
+    if(trans.name === "expand"){
+      if(trans.info.col.i === colIndex){
+        if(trans.info.row.i === rowIndex){
+          classes.push('sw-collapse-row');
         }
       }
     }
@@ -1034,6 +1040,89 @@ var Grid = React.createClass({
   onCollapse(id){
     this._onCollapseClick(id);
   },
+  onExpand(id){
+    this._onExpandClick(id);
+  },
+  _onExpandClick(id){
+    var indexes = this.indexesForRowId(id);
+    var affectedColI = helper.findClosest(this.state.columns, indexes.col, function(column, i){
+      return (!column.collapsed);
+    })
+    var affectedColumn = this.state.columns[affectedColI];
+    var column = this.state.columns[indexes.col];
+    
+    var row = column.rows[indexes.row];
+    var transitionInfo = {
+      col: {
+        i: indexes.col,
+        width: column.w
+      },
+      row: {
+        i: indexes.row,
+        height: row.h
+      }
+    }
+    transitionInfo.expanding = true;
+
+    var affectedRowI = helper.findClosest(column.rows, indexes.row, function(row, i){
+      return (!row.collapsed);
+    });
+    if(affectedRowI > -1){
+      var affectedRow = column.rows[affectedRowI];
+      transitionInfo.affectedRow = {
+        i: affectedRowI,
+        height: affectedRow.h
+      };
+    } else {
+      transitionInfo.affectedCol = {
+        i: affectedColI,
+        width: affectedColumn.w
+      }
+    }
+
+
+    this.transitionStart("expand", transitionInfo, function(step){
+      var timer = 0;
+      switch(step){
+        case "overlayIn":
+          timer = 100;
+          break;
+        case "scaling":
+          timer = 250;
+          break;
+        case "afterScaling":
+          timer = 0;
+          break;
+        case "overlayOut":
+          timer = 300;
+          break;
+      }
+
+      if(timer){
+        setTimeout(function(){
+          this.transitionNext();
+        }.bind(this), timer);
+      }
+
+      if(step === "afterScaling" && transitionInfo.affectedCol){
+        var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+        var newAffectedWidth = affectedColumn.w - (column.w - collapsedWidth);
+        var columns = this.state.columns;
+        columns[indexes.col].rows[indexes.row].collapsed = false;
+        columns[affectedColI].w = newAffectedWidth;
+        console.log('affectedWidth', newAffectedWidth);
+        this.setState({columns: this.validateColumns(columns)}); 
+      }
+      else if(step === "afterScaling" && transitionInfo.affectedRow){
+        var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
+        var newAffectedHeight = transitionInfo.affectedRow.height - (transitionInfo.row.height - collapsedHeight);
+        var columns = this.state.columns;
+        columns[indexes.col].rows[indexes.row].collapsed = false;
+        columns[indexes.col].rows[affectedRowI].h = newAffectedHeight;
+        this.setState({columns: this.validateColumns(columns)}); 
+      }
+    }.bind(this));
+  },
   _onCollapseClick(id){
     var indexes = this.indexesForRowId(id);
     var affectedColI = helper.findClosest(this.state.columns, indexes.col, function(column, i){
@@ -1113,21 +1202,6 @@ var Grid = React.createClass({
         this.setState({columns: this.validateColumns(columns)}); 
       }
     }.bind(this));
-  },
-
-  // ======================================================
-  // Maximize row
-  // ======================================================
-  minimizeColumnWithRow(row, columnIndex, rowIndex) {
-    const that = this;
-    const columns = this.state.columns;
-    let currentColWidth = 0;
-    let currentRowHeight = 0;
-    let rowsLength = 0;
-
-    // if column:not(first-child) transOrigin 0% 50%; else 100% 50%
-    // if row:not(first-child) transOrigin 50% 0% else 50% 100%
-
   }
 });
 
