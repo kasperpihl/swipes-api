@@ -166,9 +166,9 @@ var Topbar = React.createClass({
 
 					<div className="sw-topbar__info">
 						<div className="sw-topbar__info__icon">
-							<img src="styles/img/swipes-logo.png" alt=""/>
+							<img src="styles/img/workspace-icon.svg" alt=""/>
 						</div>
-						<div className="sw-topbar__info__title"><span>{title}</span></div>
+						<div className="sw-topbar__info__title">my workspace</div>
 					</div>
 
 					<div className="sw-topbar__actions">

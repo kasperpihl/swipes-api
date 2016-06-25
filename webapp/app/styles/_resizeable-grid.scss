@@ -7,8 +7,7 @@ $rippleTransitionTime: .35s;
   overflow: hidden;
   position: relative;
 
-  @extend %flex;
-  justify-content: space-between;
+  @include flex(center, space-between);
 
   &.sw-grid-resizing {
 
@@ -16,123 +15,6 @@ $rippleTransitionTime: .35s;
       pointer-events: none;
     }
   }
-
-  .sw-grid-topbar {
-    $action-button-size: 22px;
-
-    @include size(100%, 55px);
-    background-color: transparent;
-    padding: 0 10px;
-    position: relative;
-
-    @extend %flex;
-    justify-content: space-between !important;
-
-    &_content {
-      height: 100%;
-
-      @extend %flex;
-
-      &-menu {
-        @include size($action-button-size, $action-button-size);
-        border-radius: 50%;
-        border: 1px solid $deepBlue-20;
-        transition: 0s;
-
-        @extend %flex;
-
-        .menu-icon {
-          @include menu-icon(9px, 2px, 2px, $deepBlue-20);
-        }
-
-        &:hover {
-          border: 1px solid $deepBlue-90;
-          background-color: $deepBlue-90;
-
-          .menu-icon {
-            @include menu-icon(11px, 2px, 1px, white);
-          }
-        }
-      }
-
-      &-title {
-        font-size: 14px;
-        font-weight: 500;
-        color: $deepBlue-100;
-        margin-left: 10px;
-      }
-
-      &-seperator {
-        @include size(1px, 15px);
-        background-color: $deepBlue-40;
-        margin: 0 10px;
-      }
-
-      &-subtitle {
-        color: $deepBlue-40;
-        letter-spacing: 1px;
-        font-size: .7em;
-      }
-    }
-
-    &_actions {
-      @include size(60px, 100%);
-      @extend %flex;
-      justify-content: space-around !important;
-
-      &-collapse {
-        @include size($action-button-size, $action-button-size);
-        border-radius: 50%;
-        border: 1px solid $deepBlue-20;
-        transition: 0s;
-
-        @extend %flex;
-
-        .collapse-icon {
-          @include collapse-icon(8px, 2px, $deepBlue-20);
-          transition: 0s;
-        }
-
-        &:hover {
-          border: 1px solid $deepBlue-90;
-          background-color: $deepBlue-90;
-          transition: 0s;
-
-          .collapse-icon {
-            @include collapse-icon(8px, 2px, white);
-            transition: 0s;
-          }
-        }
-      }
-
-      &-fullscreen {
-        @include size($action-button-size, $action-button-size);
-        border-radius: 50%;
-        border: 1px solid $studioGray-100;
-        transition: 0s;
-
-        @extend %flex;
-
-        .fullscreen-icon {
-          @include fullscreen-icon(10px, 4px, $deepBlue-20, white);
-          transition: 0s;
-        }
-
-        &:hover {
-          border: 1px solid $deepBlue-90;
-          background-color: $deepBlue-90;
-          transition: 0s;
-
-          .fullscreen-icon {
-            @include fullscreen-icon(10px, 4px, white, $deepBlue-90);
-            transition: 0s;
-          }
-        }
-      }
-    }
-  }
-
-
 
   .transition-ripple {
     position: absolute;
@@ -181,7 +63,7 @@ $rippleTransitionTime: .35s;
       .sw-grid-topbar {
         height:100%;
         width:100%;
-        background-color: gray;
+        background-color: #eee;
       }
     }
   }
@@ -265,8 +147,8 @@ $rippleTransitionTime: .35s;
       }
 
       .sw-collapse-row {
-        background-color: gray;
-        transition:z-index $transitionTime $transitionTime, transform $transitionTime cubic-bezier(.76,.33,.76,.88), background-color .1s;
+        background-color: #eee;
+        transition: transform .2 ease-in-out, background-color .1s;
 
         > * {
           opacity: 0;
@@ -282,7 +164,7 @@ $rippleTransitionTime: .35s;
       .sw-collapse-affected-row {
         opacity: 1;
         visibility: visible;
-        transition: visibility 0s, opacity .3s;
+        transition: visibility 0s, opacity .25s;
       }
 
       .sw-collapse-row {
@@ -291,7 +173,7 @@ $rippleTransitionTime: .35s;
         > * {
           opacity: 1;
           visibility: visible;
-          transition: visibility 0s, opacity .3s;
+          transition: visibility 0s, opacity .25s;
         }
       }
     }
@@ -378,6 +260,120 @@ $rippleTransitionTime: .35s;
       .transition-ripple {
         transform: translate(50%, -50%) scale3d(0, 0, 0);
         transition: transform $rippleTransitionTime cubic-bezier(.55,.43,.33,1);
+      }
+    }
+  }
+}
+
+
+.sw-grid-topbar {
+  $action-button-size: 22px;
+
+  @include size(100%, 55px);
+  background-color: #FBFBFB;
+  padding: 0 10px;
+  position: relative;
+
+  @include flex(center, space-between);
+
+  &_content {
+    height: 100%;
+
+    @include flex(center, center);
+
+    &-menu {
+      @include size($action-button-size, $action-button-size);
+      border-radius: 50%;
+      border: 1px solid $deepBlue-20;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .menu-icon {
+        @include menu-icon(9px, 2px, 2px, $deepBlue-20);
+      }
+
+      &:hover {
+        border: 1px solid $deepBlue-90;
+        background-color: $deepBlue-90;
+
+        .menu-icon {
+          @include menu-icon(11px, 2px, 1px, white);
+        }
+      }
+    }
+
+    &-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: $deepBlue-100;
+      margin-left: 10px;
+    }
+
+    &-seperator {
+      @include size(1px, 15px);
+      background-color: $deepBlue-40;
+      margin: 0 10px;
+    }
+
+    &-subtitle {
+      color: $deepBlue-40;
+      letter-spacing: 1px;
+      font-size: .7em;
+    }
+  }
+
+  &_actions {
+    @include size(60px, 100%);
+    @include flex(center, space-around);
+
+    &-collapse {
+      @include size($action-button-size, $action-button-size);
+      border-radius: 50%;
+      border: 1px solid $deepBlue-20;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .collapse-icon {
+        @include collapse-icon(8px, 2px, $deepBlue-20);
+        transition: 0s;
+      }
+
+      &:hover {
+        border: 1px solid $deepBlue-90;
+        background-color: $deepBlue-90;
+        transition: 0s;
+
+        .collapse-icon {
+          @include collapse-icon(8px, 2px, white);
+          transition: 0s;
+        }
+      }
+    }
+
+    &-fullscreen {
+      @include size($action-button-size, $action-button-size);
+      border-radius: 50%;
+      border: 1px solid $studioGray-100;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .fullscreen-icon {
+        @include fullscreen-icon(10px, 4px, $deepBlue-20, white);
+        transition: 0s;
+      }
+
+      &:hover {
+        border: 1px solid $deepBlue-90;
+        background-color: $deepBlue-90;
+        transition: 0s;
+
+        .fullscreen-icon {
+          @include fullscreen-icon(10px, 4px, white, $deepBlue-90);
+          transition: 0s;
+        }
       }
     }
   }
