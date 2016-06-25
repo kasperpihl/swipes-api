@@ -740,6 +740,7 @@ var Grid = React.createClass({
         var diff = trans.info.col.width - collapsedWidth;
         var affectedWidth = trans.info.affectedCol.width;
         if(trans.info.col.i === colIndex){
+          classes.push("sw-collapse-column");
           if(trans.step === "scaling"){
             styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '100% 50%' : '0% 50%';
             styles.transform = 'scaleX(' + helper.calcScale(trans.info.col.width, collapsedWidth) + ')';
@@ -776,6 +777,7 @@ var Grid = React.createClass({
         var diff = trans.info.col.width - collapsedWidth;
         var affectedWidth = trans.info.affectedCol.width;
         if(trans.info.col.i === colIndex){
+          classes.push("sw-expand-column");
           if(trans.step === "scaling"){
             styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '100% 50%' : '0% 50%';
             styles.transform = 'scaleX(' + helper.calcScale(collapsedWidth, trans.info.col.width) + ')';

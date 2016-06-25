@@ -200,7 +200,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       .sw-resizeable-row {
         transition: $defaultTransformTransition, background-color .1s;
       }
-      .sw-expand-row {
+      .sw-expand-column .sw-resizeable-row, .sw-expand-row {
         background-color: gray;
 
         > * {
