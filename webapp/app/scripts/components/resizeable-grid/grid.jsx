@@ -103,7 +103,7 @@ var Grid = React.createClass({
       var isCollapsed = this.columnIsCollapsed(column);
       if(column.collapsed != isCollapsed){
         column.collapsed = isCollapsed;
-      } 
+      }
       if(isCollapsed){
         colWidth = valObj.collapsedWidth;
         valObj.collapsedColumns.push(colI);
@@ -203,7 +203,7 @@ var Grid = React.createClass({
           row.h = Math.max(minHeight, row.h);
           totalHeight += row.h;
         }
-        
+
       }.bind(this));
       valObj.columnsTotalRowsHeight[colI] = totalHeight;
     }.bind(this));
@@ -230,7 +230,7 @@ var Grid = React.createClass({
       var width = column.w;
       if(!column.collapsed){
         width = width - remainingPercentageToAdd;
-        
+
         remainingPercentageToAdd = 0;
         if(width < minWidth){
           remainingPercentageToAdd = minWidth - width;
@@ -238,7 +238,7 @@ var Grid = React.createClass({
         }
         valObj.columns[realIndex].w = width;
       }
-      
+
 
     }
     valObj.totalWidthUsed = 100 + remainingPercentageToAdd;
@@ -248,7 +248,7 @@ var Grid = React.createClass({
   validatorAdjustRowOverflows(valObj){
     var reverse = true; // K_TODO: make dynamic here
 
-    
+
     valObj.columns.forEach(function(column, colI){
 
       var additionalHeight = valObj.columnsTotalRowsHeight[colI] - 100;
@@ -268,7 +268,7 @@ var Grid = React.createClass({
         if(!row.collapsed){
 
           height = height - remainingPercentageToAdd;
-          
+
           remainingPercentageToAdd = 0;
           if(height < minHeight){
             remainingPercentageToAdd = minHeight - height;
@@ -276,13 +276,13 @@ var Grid = React.createClass({
           }
           row.h = height;
         }
-        
+
 
       }
       valObj.columnsTotalRowsHeight[colI] = 100 + remainingPercentageToAdd;
 
     }.bind(this));
-    
+
     return valObj;
   },
   validatorMinimizeOverflows(columns, valObj){
@@ -733,7 +733,7 @@ var Grid = React.createClass({
 
     var styles = {};
     if(trans.name === "collapse"){
-      
+
       if(trans.info.affectedCol){ // Collapsing the column.
         var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
         var diff = trans.info.col.width - collapsedWidth;
@@ -754,7 +754,7 @@ var Grid = React.createClass({
           if(trans.step === "scaling"){
             styles.transformOrigin = "50% 50%";
             styles.transform = 'translateX(' + translateX + 'px)';
-          } 
+          }
         }
 
         if(trans.info.affectedCol.i === colIndex){
@@ -858,7 +858,7 @@ var Grid = React.createClass({
             if(trans.step === "scaling"){
               styles.transformOrigin = "50% 50%";
               styles.transform = 'translateY(' + translateY + 'px)';
-            } 
+            }
           }
           if(trans.info.affectedRow.i === rowIndex){
             classes.push("sw-collapse-affected-row");
@@ -1032,11 +1032,11 @@ var Grid = React.createClass({
         columns[indexes.col].rows[indexes.row].fullscreen = (step === 'isFullscreen');
         this.setState({columns: columns});
       }
-      
+
 
     }.bind(this));
   },
-  
+
   onCollapse(id){
     this._onCollapseClick(id);
   },
@@ -1130,7 +1130,7 @@ var Grid = React.createClass({
     })
     var affectedColumn = this.state.columns[affectedColI];
     var column = this.state.columns[indexes.col];
-    
+
     var row = column.rows[indexes.row];
     var transitionInfo = {
       col: {
@@ -1168,13 +1168,13 @@ var Grid = React.createClass({
           timer = 100;
           break;
         case "scaling":
-          timer = 250;
+          timer = 200;
           break;
         case "afterScaling":
           timer = 1;
           break;
         case "overlayOut":
-          timer = 300;
+          timer = 250;
           break;
       }
 
@@ -1191,7 +1191,7 @@ var Grid = React.createClass({
         var columns = this.state.columns;
         columns[indexes.col].rows[indexes.row].collapsed = true;
         columns[affectedColI].w = newAffectedWidth;
-        this.setState({columns: this.validateColumns(columns)}); 
+        this.setState({columns: this.validateColumns(columns)});
       }
       else if(step === "afterScaling" && transitionInfo.affectedRow){
         var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
@@ -1199,7 +1199,7 @@ var Grid = React.createClass({
         var columns = this.state.columns;
         columns[indexes.col].rows[indexes.row].collapsed = true;
         columns[indexes.col].rows[affectedRowI].h = newAffectedHeight;
-        this.setState({columns: this.validateColumns(columns)}); 
+        this.setState({columns: this.validateColumns(columns)});
       }
     }.bind(this));
   }
