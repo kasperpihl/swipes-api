@@ -1,0 +1,112 @@
+.sw-grid-topbar {
+  $action-button-size: 22px;
+
+  @include size(100%, 55px);
+  background-color: #FBFBFB;
+  padding: 0 10px;
+  position: relative;
+
+  @include flex(center, space-between);
+
+  &_content {
+    height: 100%;
+
+    @include flex(center, center);
+
+    &-menu {
+      @include size($action-button-size, $action-button-size);
+      border-radius: 50%;
+      border: 1px solid $deepBlue-20;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .menu-icon {
+        @include menu-icon(9px, 2px, 2px, $deepBlue-20);
+      }
+
+      &:hover {
+        border: 1px solid $deepBlue-90;
+        background-color: $deepBlue-90;
+
+        .menu-icon {
+          @include menu-icon(11px, 2px, 1px, white);
+        }
+      }
+    }
+
+    &-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: $deepBlue-100;
+      margin-left: 10px;
+    }
+
+    &-seperator {
+      @include size(1px, 15px);
+      background-color: $deepBlue-40;
+      margin: 0 10px;
+    }
+
+    &-subtitle {
+      color: $deepBlue-40;
+      letter-spacing: 1px;
+      font-size: .7em;
+    }
+  }
+
+  &_actions {
+    @include size(60px, 100%);
+    @include flex(center, space-around);
+
+    &-collapse {
+      @include size($action-button-size, $action-button-size);
+      border-radius: 50%;
+      border: 1px solid $deepBlue-20;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .collapse-icon {
+        @include collapse-icon(8px, 2px, $deepBlue-20);
+        transition: 0s;
+      }
+
+      &:hover {
+        border: 1px solid $deepBlue-90;
+        background-color: $deepBlue-90;
+        transition: 0s;
+
+        .collapse-icon {
+          @include collapse-icon(8px, 2px, white);
+          transition: 0s;
+        }
+      }
+    }
+
+    &-fullscreen {
+      @include size($action-button-size, $action-button-size);
+      border-radius: 50%;
+      border: 1px solid $studioGray-100;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .fullscreen-icon {
+        @include fullscreen-icon(10px, 4px, $deepBlue-20, white);
+        transition: 0s;
+      }
+
+      &:hover {
+        border: 1px solid $deepBlue-90;
+        background-color: $deepBlue-90;
+        transition: 0s;
+
+        .fullscreen-icon {
+          @include fullscreen-icon(10px, 4px, white, $deepBlue-90);
+          transition: 0s;
+        }
+      }
+    }
+  }
+}
