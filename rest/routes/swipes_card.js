@@ -10,13 +10,6 @@ const swipesCardSsr = require('../utils/swipes_card_ssr');
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
-const mapCardFields = (cardData, map) => {
-
-  return {
-    title: cardData[map.title]
-  }
-}
-
 router.get('/SW-*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
   const swipesUrl = pathParts[2];
@@ -73,41 +66,23 @@ router.get('/SW-*', (req, res, next) => {
       // T_TODO error if there is no file
       const options = {
     		authData: userServiceData.authData,
-    		method: shortUrl.service.method,
+    		method: shortUrl.service.method, // T_TODO remove this one from here
     		params: shortUrl.service.data,
     		user: {userId: shortUrl.userId},
-    		service: {serviceId: shortUrl.service.id}
+    		service: {serviceId: shortUrl.service.id},
+        type: shortUrl.service.type
     	};
 
-    	file.request(options, function (err, result) {
+    	file.shareRequest(options, function (err, result) {
     		if (err) {
     			return res.status(200).json({ok: false, err: err});
     		}
 
-        const map = shortUrl.service.fieldsMap;
-        const mappedResult = mapCardFields(result, map);
-
-        mappedResult.workflow = workflow;
-
-        // T_TODO replace this with dynamic actions from the service
-        const actions = [
-          [
-            {
-              label: 'Say Hello',
-              icon: 'check',
-              bgColor: 'green',
-              method: 'tasks.update',
-              data: {
-                id: '1234567',
-                completed: true
-              }
-            }
-          ]
-        ];
-
-        mappedResult.swipesDotActions = actions;
-
-        res.send(swipesCardSsr.renderIndex(mappedResult));
+        res.send(swipesCardSsr.renderIndex({
+          workflow: workflow,
+          serviceData: result.serviceData,
+          serviceActions: result.serviceActions
+        }));
     	});
     })
     .catch((e) => {

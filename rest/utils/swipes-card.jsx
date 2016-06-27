@@ -17,11 +17,23 @@ const SwipesCard = class extends React.Component {
     const {
       data
     } = this.props;
+
+    //console.log(window);
+    //const swipesSDK = swipes || null;
     const iconUrl = '/workflows/' + data.workflow.manifest_id + '/dev/' + data.workflow.icon;
-    const elements = data.swipesDotActions.map((row) => {
+    const elements = data.serviceActions.map((row) => {
       const mappedRow = row.map((action) => {
-        action.callback = () => {
-          console.log('Hey there');
+        // If we are at the client and swipes sdk is defined
+        if (typeof swipes !== 'undefined') {
+            action.callback = () => {
+              swipes.service('asana').request(action.method, action.data)
+                .then(function () {
+                  console.log('YEAH!!!');
+                })
+                .catch(function(err) {
+                  console.log(err);
+                })
+            }
         }
 
         return action;
@@ -39,7 +51,7 @@ const SwipesCard = class extends React.Component {
           hoverParentId='card-container'
           elements={elements} />
       </div>
-      <div className="title">{data.title}</div>
+      <div className="title">{data.serviceData.title}</div>
       <div className="service-icon-wrapper">
         <img src={iconUrl} alt="" />
       </div>
