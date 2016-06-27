@@ -386,15 +386,32 @@ var Grid = React.createClass({
    */
   _moveWithPercentages(percentages, options){
 
+    var overflow = this.state.resizingOverflow;
     var diff = options.percentageToMove;
-
     var reverse = (diff < 0);
+    
+    
+    if(overflow){
+      var newOverflow = overflow + diff;
+      diff = 0;
+      if( (overflow < 0 && newOverflow > 0) || (overflow > 0 && newOverflow < 0)){
+        diff = newOverflow;
+        newOverflow = 0;
+      }
+      this.setState({resizingOverflow: newOverflow});
+      if(!diff){
+        return percentages;
+      }
+    }
+
+
+
     if(reverse){
       options.index = this.reverseIndexFromArray(options.index, percentages) + 1; // Add to move on the right side of resizebar.
       percentages.reverse();
     }
     var prevIndex = options.index - 1;
-    console.log('prev', prevIndex);
+
     var realIndex = function(i){
       if(reverse){
         return this.reverseIndexFromArray(i, percentages);
@@ -418,7 +435,7 @@ var Grid = React.createClass({
       percentages[i] = percentage;
       return false;
     }.bind(this));
-    //console.log('push to minwidth', percentages);
+
     // Start collapsing from the furthest end
     if(remainingPercentageToRemove){
       helper.findNeighbor(percentages, {index: prevIndex, rightOnly: true, furthest: true}, function(percentage, i){
@@ -434,10 +451,18 @@ var Grid = React.createClass({
         percentages[i] = percentage;
       }.bind(this));
     }
-    //console.log('push to collapsing', percentages);
-    var remainingPercentageToAdd = Math.abs(diff) - remainingPercentageToRemove;
 
-    helper.findNeighbor(percentages, {index: options.index, leftOnly: true, furthest: true}, function(percentage, i){
+    // Check for overflow
+    var overflow = remainingPercentageToRemove * (reverse ? -1 : 1);
+    if(overflow){
+      this.setState({resizingOverflow: overflow});
+    }
+
+    var remainingPercentageToAdd = Math.abs(diff) - remainingPercentageToRemove;
+    
+    
+    // Add to all previous up to the original size they had
+    helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: true}, function(percentage, i){
       if( !remainingPercentageToAdd || options.collapsed[realIndex(i)] )
         return false;
 
@@ -452,7 +477,8 @@ var Grid = React.createClass({
         percentages[i] = percentage;
       }
     }.bind(this));
-    //console.log('back original', percentages);
+
+    // Add all remaining to the one right before the resizer
     if(remainingPercentageToAdd){
       percentages[prevIndex] += remainingPercentageToAdd;
     }
