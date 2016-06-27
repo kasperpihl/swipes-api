@@ -336,11 +336,47 @@ var Grid = React.createClass({
     this.setState({isResizing: true});
   },
   rowDidResize(){
-    this.columnDidResize();
+    var colI = this.resizingColumnIndex;
+    var columns = this.state.columns;
+    var orgPercentages = this.resizingSavedPercentages;
+    var minHeights = this.minHeightsForRowsInColumn(colI);
+    columns[colI].rows.forEach(function(row, i){
+      if(row.h === this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT)){
+        row.h = orgPercentages[i];
+        row.collapsed = true;
+      }
+      else if(row.h < minHeights[i]){
+        // Should animate!
+        row.h = orgPercentages[i];
+        row.collapsed = true;
+      }
+    }.bind(this));
+    this.setState({colums: this.validateColumns(columns)});
+    var obj = JSON.parse(JSON.stringify(this.state.columns));
+    this.callDelegate('gridDidUpdate', obj);
+    this.setState({isResizing: false});
   },
 
   columnDidResize(){
-    this.setState({colums: this.validateColumns(this.state.columns)});
+    var columns = this.state.columns;
+    var orgPercentages = this.resizingSavedPercentages;
+    var minWidths = this.minWidthsForColumns();
+    columns.forEach(function(column, i){
+      if(column.w === this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH)){
+        column.w = orgPercentages[i];
+        column.rows.forEach(function(row, i){
+          row.collapsed = true;
+        });
+      }
+      else if(column.w < minWidths[i]){
+        // Should animate!
+        column.w = orgPercentages[i];
+        column.rows.forEach(function(row, i){
+          row.collapsed = true;
+        });
+      }
+    }.bind(this));
+    this.setState({colums: this.validateColumns(columns)});
     var obj = JSON.parse(JSON.stringify(this.state.columns));
     this.callDelegate('gridDidUpdate', obj);
     this.setState({isResizing: false});
@@ -404,8 +440,6 @@ var Grid = React.createClass({
       }
     }
 
-
-
     if(reverse){
       options.index = this.reverseIndexFromArray(options.index, percentages) + 1; // Add to move on the right side of resizebar.
       percentages.reverse();
@@ -439,7 +473,7 @@ var Grid = React.createClass({
     // Start collapsing from the furthest end
     if(remainingPercentageToRemove){
       helper.findNeighbor(percentages, {index: prevIndex, rightOnly: true, furthest: true}, function(percentage, i){
-        if( !remainingPercentageToRemove || options.collapsed[ realIndex(i) ] )
+        if( !remainingPercentageToRemove || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
           return false;
 
         percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
@@ -463,7 +497,7 @@ var Grid = React.createClass({
     
     // Add to all previous up to the original size they had
     helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: true}, function(percentage, i){
-      if( !remainingPercentageToAdd || options.collapsed[realIndex(i)] )
+      if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
         return false;
 
       var orgPercentage = this.resizingSavedPercentages[realIndex(i)];
