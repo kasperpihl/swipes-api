@@ -1,5 +1,5 @@
 var React = require('react');
-var DEFAULT_MINWIDTH = 200;
+var DEFAULT_MINWIDTH = 400;
 var DEFAULT_MINHEIGHT = 200;
 var DEFAULT_COLLAPSED_WIDTH = 40;
 var DEFAULT_COLLAPSED_HEIGHT = 40;
@@ -340,6 +340,7 @@ var Grid = React.createClass({
   },
 
   columnDidResize(){
+    this.setState({colums: this.validateColumns(this.state.columns)});
     var obj = JSON.parse(JSON.stringify(this.state.columns));
     this.callDelegate('gridDidUpdate', obj);
     this.setState({isResizing: false});
@@ -348,24 +349,129 @@ var Grid = React.createClass({
   columnResize(diffX){
 
     var percentages = this.columnsArrayPercentages();
-    var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
-    var minWidths = this.minWidthsForColumns();
+    //var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
 
     // Moving column, (diff < 0) means it should reverse the order it goes through the tiles.
-    var newPercentages = this._moveWithPercentages(percentages, minWidths, percentageToMove, this.resizingColumnIndex, (diffX < 0));
+    var options = { 
+      minSizes: this.minWidthsForColumns(), 
+      percentageToMove: this.percentageWidthFromPixels(diffX), 
+      index: this.resizingColumnIndex,
+      collapsed: this.collapsedColumns(),
+      collapsedSize: this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH)
+    };
 
+    //var newPercentages = this._moveWithPercentages(percentages, minWidths, percentageToMove, this.resizingColumnIndex, (diffX < 0));
+    var newPercentages = this._move2WithPercentages(percentages, options);
     this.saveColumnPercentagesToState(newPercentages);
   },
   rowResize(diffY){
     var colI = this.resizingColumnIndex;
     var percentages = this.rowsArrayPercentages(colI);
-    var percentageToMove = Math.abs(this.percentageHeightFromPixels(diffY));
-    var minHeights = this.minHeightsForRowsInColumn(colI);
-    var newPercentages = this._moveWithPercentages(percentages, minHeights, percentageToMove, this.resizingRowIndex, (diffY < 0));
+    var options = { 
+      minSizes: this.minHeightsForRowsInColumn(colI), 
+      percentageToMove: this.percentageHeightFromPixels(diffY), 
+      index: this.resizingRowIndex,
+      collapsed: this.collapsedRowsInColumn(colI),
+      collapsedSize: this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT)
+    };    
+    var newPercentages = this._move2WithPercentages(percentages, options);
     // Add percentages to rows and check if 100%
     this.saveRowPercentagesToState(colI, newPercentages);
   },
+  /*
+    minSizes, 
+    collapsed, 
+    collapsedSize, 
+    percentageToMove, 
+    index, 
+    reverse
+   */
+  _move2WithPercentages(percentages, options){
 
+    /*
+      findNeighbor (prevIndex rightOnly) - remove space next ones, respect min width
+      findNeighbor (prevIndex rightOnly furthest) - remove additional space and start collapsing
+      findNeighbor (index leftOnly furthest) - add space if smaller than original percentage
+      previous - add remaining space 
+      
+     */
+
+    var diff = options.percentageToMove;
+
+    var reverse = (diff < 0);
+    if(reverse){
+      options.index = this.reverseIndexFromArray(options.index, percentages) + 1; // Add to move on the right side of resizebar.
+      percentages.reverse();
+    }
+    var prevIndex = options.index - 1;
+    console.log('prev', prevIndex);
+    var realIndex = function(i){
+      if(reverse){
+        return this.reverseIndexFromArray(i, percentages);
+      }
+      return i;
+    }.bind(this);
+
+    var remainingPercentageToRemove = Math.abs(diff);
+    // Push all later to their min widths
+    helper.findNeighbor(percentages, {index: prevIndex, rightOnly: true}, function(percentage, i) {
+      if( !remainingPercentageToRemove || options.collapsed[realIndex(i)] )
+        return false;
+      
+      var minSize = options.minSizes[ realIndex(i) ];
+      percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
+      remainingPercentageToRemove = 0;
+      if( percentage < minSize ) {
+        remainingPercentageToRemove = minSize - percentage;
+        percentage = minSize;
+      }
+      percentages[i] = percentage;
+      return false;
+    }.bind(this));
+    //console.log('push to minwidth', percentages);
+    // Start collapsing from the furthest end
+    if(remainingPercentageToRemove){
+      helper.findNeighbor(percentages, {index: prevIndex, rightOnly: true, furthest: true}, function(percentage, i){
+        if( !remainingPercentageToRemove || options.collapsed[ realIndex(i) ] )
+          return false;
+
+        percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
+        remainingPercentageToRemove = 0;
+        if( percentage < options.collapsedSize ) {
+          remainingPercentageToRemove = options.collapsedSize - percentage;
+          percentage = options.collapsedSize;
+        }
+        percentages[i] = percentage;
+      }.bind(this));
+    }
+    //console.log('push to collapsing', percentages);
+    var remainingPercentageToAdd = Math.abs(diff) - remainingPercentageToRemove;
+
+    helper.findNeighbor(percentages, {index: options.index, leftOnly: true, furthest: true}, function(percentage, i){
+      if( !remainingPercentageToAdd || options.collapsed[realIndex(i)] )
+        return false;
+
+      var orgPercentage = this.resizingSavedPercentages[realIndex(i)];
+      if( percentage < orgPercentage ) {
+        percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
+        remainingPercentageToAdd = 0;
+        if(percentage > orgPercentage){
+          remainingPercentageToAdd = percentage - orgPercentage;
+          percentage = orgPercentage;
+        }
+        percentages[i] = percentage;
+      }
+    }.bind(this));
+    //console.log('back original', percentages);
+    if(remainingPercentageToAdd){
+      percentages[prevIndex] += remainingPercentageToAdd;
+    }
+
+    if(reverse){
+      percentages.reverse();
+    }
+    return percentages;
+  },
   // ======================================================
   // Main Resize function to calculate the layout
   // ======================================================
@@ -408,6 +514,7 @@ var Grid = React.createClass({
       }
       if(i === prevIndex){
         percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
+        remainingPercentageToAdd = 0;
       }
       if(i >= index){
         percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
@@ -421,6 +528,7 @@ var Grid = React.createClass({
       newPercentages.push(percentage);
 
     }
+    console.log('add',remainingPercentageToAdd, 'remove', remainingPercentageToRemove);
 
     if(reverse){
       newPercentages.reverse();
@@ -525,6 +633,23 @@ var Grid = React.createClass({
       }
     });
     return allRowsCollapsed;
+  },
+  collapsedColumns(columns){
+    var arr = [];
+    if(!columns){
+      columns = this.state.columns;
+    }
+    columns.forEach(function(column){
+      arr.push((column.collapsed));
+    }.bind(this))
+    return arr;
+  },
+  collapsedRowsInColumn(columnIndex){
+    var arr = [];
+    this.state.columns[columnIndex].rows.forEach(function(row){
+      arr.push((row.collapsed));
+    }.bind(this))
+    return arr;
   },
   minWidthsForColumns(columns){
     var arr = [];
@@ -1079,9 +1204,10 @@ var Grid = React.createClass({
   
   _onCollapseClick(id){
     var indexes = this.indexesForRowId(id);
-    var affectedColI = helper.findClosest(this.state.columns, indexes.col, function(column, i){
+    var affectedColI = helper.findNeighbor(this.state.columns, {index: indexes.col, returnIndex: true}, function(column, i){
       return (!column.collapsed);
     })
+    console.log('closest col', affectedColI);
     var affectedColumn = this.state.columns[affectedColI];
     var column = this.state.columns[indexes.col];
     
@@ -1098,9 +1224,10 @@ var Grid = React.createClass({
     }
 
 
-    var affectedRowI = helper.findClosest(column.rows, indexes.row, function(row, i){
+    var affectedRowI = helper.findNeighbor(column.rows, {index: indexes.row, returnIndex: true}, function(row, i){
       return (!row.collapsed);
     });
+    console.log('closest row', affectedRowI);
     if(affectedRowI > -1){
       var affectedRow = column.rows[affectedRowI];
       transitionInfo.affectedRow = {
@@ -1159,7 +1286,7 @@ var Grid = React.createClass({
   },
   _onExpandClick(id){
     var indexes = this.indexesForRowId(id);
-    var affectedColI = helper.findClosest(this.state.columns, indexes.col, function(column, i){
+    var affectedColI = helper.findNeighbor(this.state.columns, {index: indexes.col, returnIndex: true}, function(column, i){
       return (!column.collapsed);
     })
     var affectedColumn = this.state.columns[affectedColI];
@@ -1177,7 +1304,7 @@ var Grid = React.createClass({
       }
     }
 
-    var affectedRowI = helper.findClosest(column.rows, indexes.row, function(row, i){
+    var affectedRowI = helper.findNeighbor(column.rows, {index: indexes.row, returnIndex: true}, function(row, i){
       return (!row.collapsed);
     });
     if(affectedRowI > -1){

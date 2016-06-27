@@ -460,8 +460,8 @@ var CardLoader = React.createClass({
 
 		return (
 			<div id={workflowId} className="tile">
-				{cardContent}
-				{this.renderResizingOverlay()}
+				{/*cardContent*/}
+				{/*this.renderResizingOverlay()*/}
 				{/*webviewLoader*/}
 			</div>
 		);
