@@ -349,9 +349,7 @@ var Grid = React.createClass({
   columnResize(diffX){
 
     var percentages = this.columnsArrayPercentages();
-    //var percentageToMove = Math.abs(this.percentageWidthFromPixels(diffX));
 
-    // Moving column, (diff < 0) means it should reverse the order it goes through the tiles.
     var options = { 
       minSizes: this.minWidthsForColumns(), 
       percentageToMove: this.percentageWidthFromPixels(diffX), 
@@ -360,8 +358,7 @@ var Grid = React.createClass({
       collapsedSize: this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH)
     };
 
-    //var newPercentages = this._moveWithPercentages(percentages, minWidths, percentageToMove, this.resizingColumnIndex, (diffX < 0));
-    var newPercentages = this._move2WithPercentages(percentages, options);
+    var newPercentages = this._moveWithPercentages(percentages, options);
     this.saveColumnPercentagesToState(newPercentages);
   },
   rowResize(diffY){
@@ -374,27 +371,20 @@ var Grid = React.createClass({
       collapsed: this.collapsedRowsInColumn(colI),
       collapsedSize: this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT)
     };    
-    var newPercentages = this._move2WithPercentages(percentages, options);
-    // Add percentages to rows and check if 100%
+    var newPercentages = this._moveWithPercentages(percentages, options);
     this.saveRowPercentagesToState(colI, newPercentages);
   },
+  // ======================================================
+  // Main Resize function to calculate the layout
+  // ======================================================
   /*
     minSizes, 
     collapsed, 
     collapsedSize, 
     percentageToMove, 
-    index, 
-    reverse
+    index
    */
-  _move2WithPercentages(percentages, options){
-
-    /*
-      findNeighbor (prevIndex rightOnly) - remove space next ones, respect min width
-      findNeighbor (prevIndex rightOnly furthest) - remove additional space and start collapsing
-      findNeighbor (index leftOnly furthest) - add space if smaller than original percentage
-      previous - add remaining space 
-      
-     */
+  _moveWithPercentages(percentages, options){
 
     var diff = options.percentageToMove;
 
@@ -472,71 +462,6 @@ var Grid = React.createClass({
     }
     return percentages;
   },
-  // ======================================================
-  // Main Resize function to calculate the layout
-  // ======================================================
-  _moveWithPercentages(percentages, minSizes, percentageToMove, index, reverse){
-    if(reverse){
-      index = this.reverseIndexFromArray(index, percentages) + 1; // Add to move on the right side of resizebar.
-    }
-    var prevIndex = index - 1;
-
-
-    var remainingPercentageToAdd = percentageToMove;
-    var remainingPercentageToRemove = percentageToMove;
-
-    var newPercentages = [];
-
-    for(var i = 0 ; i < percentages.length ; i++){
-      // The realIndex is to make sure we don't mess up the order of the data when reversing.
-      var realIndex = i;
-      if(reverse){
-        realIndex = this.reverseIndexFromArray(i, percentages);
-      }
-      var percentage = percentages[realIndex];
-      var orgPercentage = this.resizingSavedPercentages[realIndex];
-
-      var minSize = minSizes[realIndex];
-
-      // All rows before the one that is connected to the resizer
-      if(i < prevIndex){
-        // Check if row was moved out earlier
-        if(percentage < orgPercentage){
-          // If
-          percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
-          remainingPercentageToAdd = 0;
-          if(percentage > orgPercentage){
-            remainingPercentageToAdd = percentage - orgPercentage;
-            percentage = orgPercentage;
-          }
-
-        }
-      }
-      if(i === prevIndex){
-        percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
-        remainingPercentageToAdd = 0;
-      }
-      if(i >= index){
-        percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
-        remainingPercentageToRemove = 0;
-        if(percentage < minSize){
-          remainingPercentageToRemove = minSize - percentage;
-          percentage = minSize;
-        }
-      }
-
-      newPercentages.push(percentage);
-
-    }
-    console.log('add',remainingPercentageToAdd, 'remove', remainingPercentageToRemove);
-
-    if(reverse){
-      newPercentages.reverse();
-    }
-    return newPercentages;
-  },
-
-
 
 
   // ======================================================
