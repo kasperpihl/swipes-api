@@ -385,7 +385,6 @@ var Grid = React.createClass({
   columnResize(diffX){
 
     var percentages = this.columnsArrayPercentages();
-
     var options = { 
       minSizes: this.minWidthsForColumns(), 
       percentageToMove: this.percentageWidthFromPixels(diffX), 
@@ -522,7 +521,64 @@ var Grid = React.createClass({
     }
     return percentages;
   },
-
+  _columnTransformations(fromPercentages, toPercentages){
+    var transformations = {};
+    var dOldPercentageX = 0;
+    var dPercentageX = 0;
+    for(var i = 0 ; i < fromPercentages.length ; i++){
+      transformations[i] = {};
+      var from = fromPercentages[i];
+      var to = toPercentages[i];
+      var transform = '';
+      var scale = helper.calcScale(from, to);
+      if(from !== to){
+        var widthPr100 = (scale-1) * from;
+        var origin = (dOldPercentageX - dPercentageX) / widthPr100 * 100;
+        transform += 'scaleX(' + scale + ') ';
+        transformations[i].transformOrigin = origin + '% 50%';
+      }
+      else if(dOldPercentageX !== dPercentageX){
+        var percentage = (dPercentageX - dOldPercentageX);
+        var translateX = this.pixelsWidthFromPercentage(percentage);
+        transform += 'translateX(' + translateX + 'px) ';
+      }
+      if(transform.length){
+        transformations[i].transform = transform;
+      }
+      dOldPercentageX += from;
+      dPercentageX += to;
+    }
+    return transformations;
+  },
+  _rowTransformations(fromPercentages, toPercentages){
+    var transformations = {};
+    var dOldPercentageY = 0;
+    var dPercentageY = 0;
+    for(var i = 0 ; i < fromPercentages.length ; i++){
+      transformations[i] = {};
+      var from = fromPercentages[i];
+      var to = toPercentages[i];
+      var transform = '';
+      var scale = helper.calcScale(from, to);
+      if(from !== to){
+        var heightPr100 = (scale-1) * from;
+        var origin = (dOldPercentageY - dPercentageY) / heightPr100 * 100;
+        transform += 'scaleY(' + scale + ') ';
+        transformations[i].transformOrigin = '50% ' + origin + '%';
+      }
+      else if(dOldPercentageY !== dPercentageY){
+        var percentage = (dPercentageY - dOldPercentageY);
+        var translateY = this.pixelsHeightFromPercentage(percentage);
+        transform += 'translateY(' + translateY + 'px) ';
+      }
+      if(transform.length){
+        transformations[i].transform = transform;
+      }
+      dOldPercentageY += from;
+      dPercentageY += to;
+    }
+    return transformations;
+  },
 
   // ======================================================
   // Conversions
@@ -578,20 +634,26 @@ var Grid = React.createClass({
   // ======================================================
   // Setters
   // ======================================================
-  saveColumnPercentagesToState(percentages, overflowI){
+  saveColumnPercentagesToState(percentages, validate){
     var columns = this.state.columns;
     percentages.forEach(function(percent, i){
       columns[i].w = percent;
     });
+    if(validate){
+      columns = this.validateColumns(columns);
+    }
     this.setState({columns: columns});
 
   },
-  saveRowPercentagesToState(columnIndex, percentages, overflowI){
+  saveRowPercentagesToState(columnIndex, percentages, validate){
     var columns = this.state.columns;
     var rows = this.state.columns[columnIndex].rows;
     percentages.forEach(function(percent, i){
       rows[i].h = percent;
     })
+    if(validate){
+      columns = this.validateColumns(columns);
+    }
     this.setState({columns: columns});
 
   },
@@ -845,36 +907,16 @@ var Grid = React.createClass({
     var styles = {};
     if(trans.name === "collapse"){
       
-      if(trans.info.affectedCol){ // Collapsing the column.
-        var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
-        var diff = trans.info.col.width - collapsedWidth;
-        var affectedWidth = trans.info.affectedCol.width;
-        if(trans.info.col.i === colIndex){
+      if(trans.info.colTransformations){
+        var transformations = trans.info.colTransformations[colIndex];
+        if(trans.step === "scaling"){
+          styles = transformations;
+        }
+        if(trans.info.col === colIndex){
           classes.push("sw-collapse-column");
-          if(trans.step === "scaling"){
-            styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '100% 50%' : '0% 50%';
-            styles.transform = 'scaleX(' + helper.calcScale(trans.info.col.width, collapsedWidth) + ')';
-          }
         }
-        // Collapsed columns in between the affected and the row
-        if( ( colIndex > trans.info.col.i && colIndex < trans.info.affectedCol.i ) ||
-          ( colIndex < trans.info.col.i && colIndex > trans.info.affectedCol.i ) ) {
-
-          var translateX = this.pixelsWidthFromPercentage(diff);
-          if(colIndex > trans.info.col.i)
-            translateX = -translateX;
-          if(trans.step === "scaling"){
-            styles.transformOrigin = "50% 50%";
-            styles.transform = 'translateX(' + translateX + 'px)';
-          } 
-        }
-
-        if(trans.info.affectedCol.i === colIndex){
+        else if(_.size(transformations)){
           classes.push("sw-collapse-affected-column");
-          if(trans.step === "scaling"){
-            styles.transformOrigin = (trans.info.col.i > trans.info.affectedCol.i) ? '0% 50%' : '100% 50%';
-            styles.transform = 'scaleX(' + helper.calcScale(affectedWidth, affectedWidth + diff) + ')';
-          }
         }
       }
 
@@ -947,38 +989,17 @@ var Grid = React.createClass({
     var styles = {};
     var rippleStyles = {};
     if(trans.name === "collapse"){
-      if(trans.info.col.i === colIndex){
-        if(trans.info.row.i === rowIndex){
-          classes.push('sw-collapse-row');
-        }
-        if(trans.info.affectedRow){
-          var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
-          var diff = trans.info.row.height - collapsedHeight;
-          var affectedHeight = trans.info.affectedRow.height;
-          if(trans.info.row.i === rowIndex){
-            if(trans.step === "scaling"){
-              styles.transformOrigin = (trans.info.row.i > trans.info.affectedRow.i) ? '50% 100%' : '50% 0%';
-              styles.transform = 'scaleY(' + helper.calcScale(trans.info.row.height, collapsedHeight) + ')';
-            }
+      if(trans.info.col === colIndex){
+        if(trans.info.rowTransformations){
+          var transformations = trans.info.rowTransformations[rowIndex];
+          if(trans.step === "scaling"){
+            styles = transformations;
           }
-           // Collapsed columns in between the affected and the row
-          if( ( rowIndex > trans.info.row.i && rowIndex < trans.info.affectedRow.i ) ||
-            ( rowIndex < trans.info.row.i && rowIndex > trans.info.affectedRow.i ) ) {
-
-            var translateY = this.pixelsHeightFromPercentage(diff);
-            if(rowIndex > trans.info.row.i)
-              translateY = -translateY;
-            if(trans.step === "scaling"){
-              styles.transformOrigin = "50% 50%";
-              styles.transform = 'translateY(' + translateY + 'px)';
-            } 
+          if(trans.info.row === rowIndex){
+            classes.push('sw-collapse-row');
           }
-          if(trans.info.affectedRow.i === rowIndex){
+          else if(_.size(transformations)){
             classes.push("sw-collapse-affected-row");
-            if(trans.step === "scaling"){
-              styles.transformOrigin = (trans.info.row.i > trans.info.affectedRow.i) ? '50% 0%' : '50% 100%';
-              styles.transform = 'scaleY(' + helper.calcScale(affectedHeight, affectedHeight + diff) + ')';
-            }
           }
         }
       }
@@ -1186,46 +1207,57 @@ var Grid = React.createClass({
   onExpand(id){
     this._onExpandClick(id);
   },
-  
+  _collapseRowInColumns(colIndex, rowIndex){
+
+  },
   _onCollapseClick(id){
+
     var indexes = this.indexesForRowId(id);
-    var affectedColI = helper.findNeighbor(this.state.columns, {index: indexes.col, returnIndex: true}, function(column, i){
-      return (!column.collapsed);
-    })
-    console.log('closest col', affectedColI);
-    var affectedColumn = this.state.columns[affectedColI];
     var column = this.state.columns[indexes.col];
-    
     var row = column.rows[indexes.row];
-    var transitionInfo = {
-      col: {
-        i: indexes.col,
-        width: column.w
-      },
-      row: {
-        i: indexes.row,
-        height: row.h
+    
+    var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+    var colPercentages = this.columnsArrayPercentages();
+    var oldColPercentages = this.columnsArrayPercentages();
+    colPercentages[indexes.col] = collapsedWidth;
+    var colPercentageToMove = column.w - collapsedWidth;
+    var affectedColI = helper.findNeighbor(this.state.columns, {index: indexes.col, returnIndex: true}, function(column, i){
+      if(!column.collapsed){
+        colPercentages[i] = column.w + colPercentageToMove;
+        return true;
       }
-    }
+      return false;
+    })
+    
 
+    var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
+    var rowPercentages = this.rowsArrayPercentages(indexes.col);
+    var oldRowPercentages = this.rowsArrayPercentages(indexes.col);
+    console.log('old', oldRowPercentages[0] + oldRowPercentages[1] + oldRowPercentages[2]);
+    rowPercentages[indexes.row] = collapsedHeight;
 
-    var affectedRowI = helper.findNeighbor(column.rows, {index: indexes.row, returnIndex: true}, function(row, i){
-      return (!row.collapsed);
+    var rowPercentageToMove = row.h - collapsedHeight;
+
+    console.log(rowPercentageToMove);
+    var affectedRowI = helper.findNeighbor(column.rows, {index: indexes.row, returnIndex: true}, function(r, i){
+      if(!r.collapsed){
+        rowPercentages[i] = r.h + rowPercentageToMove;
+        return true;
+      }
+      return false;
     });
-    console.log('closest row', affectedRowI);
+    console.log(rowPercentages[0] + rowPercentages[1] + rowPercentages[2]);
+    var transitionInfo = { row: indexes.row, col: indexes.col };
+    
     if(affectedRowI > -1){
-      var affectedRow = column.rows[affectedRowI];
-      transitionInfo.affectedRow = {
-        i: affectedRowI,
-        height: affectedRow.h
-      };
+      transitionInfo.rowTransformations = this._rowTransformations(oldRowPercentages, rowPercentages);
+      transitionInfo.targetPercentages = rowPercentages;
+      console.log(transitionInfo);
     } else {
-      transitionInfo.affectedCol = {
-        i: affectedColI,
-        width: affectedColumn.w
-      }
+      transitionInfo.colTransformations = this._columnTransformations(oldColPercentages, colPercentages);
+      transitionInfo.targetPercentages = colPercentages;
+      
     }
-
 
     this.transitionStart("collapse", transitionInfo, function(step){
       var timer = 0;
@@ -1251,21 +1283,30 @@ var Grid = React.createClass({
       }
 
 
-      if(step === "afterScaling" && transitionInfo.affectedCol){
-        var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
-        var newAffectedWidth = affectedColumn.w + (column.w - collapsedWidth);
+      if(step === "afterScaling"){
+        var percentages = transitionInfo.targetPercentages;
         var columns = this.state.columns;
+        var rows = columns[indexes.col].rows;
         columns[indexes.col].rows[indexes.row].collapsed = true;
-        columns[affectedColI].w = newAffectedWidth;
-        this.setState({columns: this.validateColumns(columns)}); 
-      }
-      else if(step === "afterScaling" && transitionInfo.affectedRow){
-        var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
-        var newAffectedHeight = transitionInfo.affectedRow.height + (transitionInfo.row.height - collapsedHeight);
-        var columns = this.state.columns;
-        columns[indexes.col].rows[indexes.row].collapsed = true;
-        columns[indexes.col].rows[affectedRowI].h = newAffectedHeight;
-        this.setState({columns: this.validateColumns(columns)}); 
+        if(transitionInfo.colTransformations){
+          percentages.forEach(function(percent, i){
+            // don't set the animated column. We set the collapsed size there for the animation.
+            if(i !== indexes.col){
+              columns[i].w = percent;
+            }
+            
+          });
+        }
+        else if ( transitionInfo.rowTransformations){
+          percentages.forEach(function(percent, i){
+            if(i !== indexes.row){
+              rows[i].h = percent;
+            }
+            
+          })
+          
+        }
+        this.setState({columns: this.validateColumns(columns)});
       }
     }.bind(this));
   },
