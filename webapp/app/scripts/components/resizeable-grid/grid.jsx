@@ -327,8 +327,25 @@ var Grid = React.createClass({
   columnWillResize(columnIndex){
     var transitionInfo = {
       col: columnIndex,
-      savedPercentages: this.columnsArrayPercentages()
+      savedPercentages: this.columnsArrayPercentages(),
+      originallyCollapsed: []
     };
+    var prevIndex = columnIndex - 1;
+    var columns = this.state.columns;
+    var collapsedWidth = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+    for(var i = prevIndex ; i <= columnIndex ; i++){
+      if(columns[i].collapsed){
+        columns[i].collapsed = false;
+        columns[i].rows.forEach(function(row, i){
+          row.collapsed = false;
+        })
+        columns[i].w = collapsedWidth;
+        transitionInfo.originallyCollapsed.push(i);
+      }
+
+
+    }
+    this.setState({columns: columns});
     this.transitionStart('resizing', transitionInfo, function(step){
 
     });
@@ -337,12 +354,69 @@ var Grid = React.createClass({
     var transitionInfo = {
       col: columnIndex,
       row: rowIndex,
+      originallyCollapsed: [],
       savedPercentages: this.rowsArrayPercentages(columnIndex)
     };
+    var prevIndex = rowIndex - 1;
+    var columns = this.state.columns;
+    var rows = columns[columnIndex].rows;
+    console.log('rowy', rows);
+    var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
+    for(var i = prevIndex ; i <= rowIndex ; i++){
+      if(rows[i].collapsed){
+        rows[i].collapsed = false;
+        rows[i].h = collapsedHeight;
+        transitionInfo.originallyCollapsed.push(i);
+      }
+    }
+    this.setState({columns: columns});
     this.transitionStart('resizing', transitionInfo, function(step){
 
     });
   },
+  
+
+  columnResize(diffX){
+    var collapsedSize = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
+    var trans = this.state.transition;
+    var percentages = this.columnsArrayPercentages();
+    var minWidths = this.minWidthsForColumns();
+    trans.info.originallyCollapsed.forEach(function(i){
+      minWidths[i] = collapsedSize;
+    })
+    var options = { 
+      minSizes: minWidths, 
+      percentageToMove: this.percentageWidthFromPixels(diffX), 
+      index: trans.info.col,
+      collapsed: this.collapsedColumns(),
+      orgSizes: trans.info.savedPercentages,
+      collapsedSize: collapsedSize
+    };
+
+    var newPercentages = this._resizeWithPercentages(percentages, options);
+    this.saveColumnPercentagesToState(newPercentages);
+  },
+  rowResize(diffY){
+    var collapsedSize = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
+    var trans = this.state.transition;
+    var colI = trans.info.col;
+    var percentages = this.rowsArrayPercentages(colI);
+    var minHeights = this.minHeightsForRowsInColumn(colI);
+    trans.info.originallyCollapsed.forEach(function(i){
+      minHeights[i] = collapsedSize;
+    });
+    var options = { 
+      minSizes: minHeights, 
+      percentageToMove: this.percentageHeightFromPixels(diffY), 
+      index: trans.info.row,
+      collapsed: this.collapsedRowsInColumn(colI),
+      orgSizes: trans.info.savedPercentages,
+      collapsedSize: collapsedSize
+    };    
+    var newPercentages = this._resizeWithPercentages(percentages, options);
+    this.saveRowPercentagesToState(colI, newPercentages);
+  },
+
   rowDidResize(){
     var trans = this.state.transition;
     var colI = trans.info.col;
@@ -390,37 +464,6 @@ var Grid = React.createClass({
     var obj = JSON.parse(JSON.stringify(this.state.columns));
     this.callDelegate('gridDidUpdate', obj);
     this.transitionNext();
-  },
-
-  columnResize(diffX){
-    var trans = this.state.transition;
-    var percentages = this.columnsArrayPercentages();
-    var options = { 
-      minSizes: this.minWidthsForColumns(), 
-      percentageToMove: this.percentageWidthFromPixels(diffX), 
-      index: trans.info.col,
-      collapsed: this.collapsedColumns(),
-      orgSizes: trans.info.savedPercentages,
-      collapsedSize: this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH)
-    };
-
-    var newPercentages = this._resizeWithPercentages(percentages, options);
-    this.saveColumnPercentagesToState(newPercentages);
-  },
-  rowResize(diffY){
-    var trans = this.state.transition;
-    var colI = trans.info.col;
-    var percentages = this.rowsArrayPercentages(colI);
-    var options = { 
-      minSizes: this.minHeightsForRowsInColumn(colI), 
-      percentageToMove: this.percentageHeightFromPixels(diffY), 
-      index: trans.info.row,
-      collapsed: this.collapsedRowsInColumn(colI),
-      orgSizes: trans.info.savedPercentages,
-      collapsedSize: this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT)
-    };    
-    var newPercentages = this._resizeWithPercentages(percentages, options);
-    this.saveRowPercentagesToState(colI, newPercentages);
   },
   // ======================================================
   // Main Resize function to calculate the layout
@@ -490,7 +533,7 @@ var Grid = React.createClass({
   /*
     minSizes,
     orgSizes,
-    collapsed, 
+    collapsed,
     collapsedSize, 
     percentageToMove, 
     index
@@ -533,7 +576,6 @@ var Grid = React.createClass({
     helper.findNeighbor(percentages, {index: prevIndex, rightOnly: true}, function(percentage, i) {
       if( !remainingPercentageToRemove || options.collapsed[realIndex(i)] )
         return false;
-      
       var minSize = options.minSizes[ realIndex(i) ];
       percentage = this.roundedDecimal(percentage - remainingPercentageToRemove);
       remainingPercentageToRemove = 0;
@@ -569,6 +611,7 @@ var Grid = React.createClass({
 
     var remainingPercentageToAdd = Math.abs(diff) - remainingPercentageToRemove;
     
+    // Add to all previous up to the min size from the middle and out.
     helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: false, includeIndex: true}, function(percentage, i){
       if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
         return false;
@@ -585,7 +628,7 @@ var Grid = React.createClass({
       
     }.bind(this));
     
-    // Add to all previous up to the original size they had
+    // Add to all previous up to the original size they had from the far left towards middle
     helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: true, includeIndex: true }, function(percentage, i){
       if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
         return false;
@@ -1008,6 +1051,15 @@ var Grid = React.createClass({
     var classes = [];
 
     var styles = {};
+    if(trans.name === 'resizing'){
+      if( colIndex === trans.info.col || colIndex === trans.info.col - 1){
+        if(column.collapsed){
+          styles.width = column.w + '%';
+          console.log('forcing width');
+        }
+        
+      }
+    }
     if(trans.name === "collapse"){
       if(trans.info.colTransformations){
         var transformations = trans.info.colTransformations[colIndex];
