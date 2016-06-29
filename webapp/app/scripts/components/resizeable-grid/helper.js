@@ -27,6 +27,7 @@ var Helper = {
     var nextIndex = index + 1;
     var firstIndex = 0;
     var lastIndex = array.length - 1;
+    var didRunIndex = false;
     console.log()
     
     var returnFunction = function(i){
@@ -46,13 +47,21 @@ var Helper = {
       else return false;
       return true;
     }
+    var runIndex = function(){
+      if(options.includeIndex && !didRunIndex){
+        iterator(index);
+        didRunIndex = true;
+      }
+    };
 
     var checkLeft = function(){
+      runIndex();
       for(var i = prevIndex ; i >= 0 ; i--){
         if(iterator(i)) break;
       }
     };
     var checkRight = function(){
+      runIndex();
       for(var i = nextIndex ; i < array.length ; i++){
         if(iterator(i)) break;
       }
@@ -63,11 +72,13 @@ var Helper = {
         for(var i = firstIndex ; i < index ; i++){
           if(iterator(i)) break;
         }
+        runIndex();
       };
       checkRight = function(){
         for(var i = lastIndex ; i > index ; i--){
           if(iterator(i)) break;
         }
+        runIndex();
       };
     }
     

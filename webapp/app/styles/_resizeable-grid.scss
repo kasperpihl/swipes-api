@@ -9,7 +9,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
   @include flex(center, space-between);
 
-  &.sw-grid-resizing {
+  &.sw-resizing {
 
     .sw-resizeable-row > .sw-row-content { // no pointer events for row-content
       pointer-events: none;

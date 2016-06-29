@@ -9,7 +9,8 @@ var helper = require('./helper');
 // define the steps of transitions here.
 var TRANSITIONS_STEPS = {
   fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"],
-  collapse: ["overlayIn", "scaling", "afterScaling", "overlayOut"]
+  collapse: ["overlayIn", "scaling", "afterScaling", "overlayOut"],
+  resizing: ["resizing"]
 };
 
 
@@ -324,20 +325,29 @@ var Grid = React.createClass({
   // Resizing
   // ======================================================
   columnWillResize(columnIndex){
-    this.resizingColumnIndex = columnIndex;
-    this.resizingSavedPercentages = this.columnsArrayPercentages();
-    this.setState({isResizing: true});
+    var transitionInfo = {
+      col: columnIndex,
+      savedPercentages: this.columnsArrayPercentages()
+    };
+    this.transitionStart('resizing', transitionInfo, function(step){
+
+    });
   },
   rowWillResize(columnIndex, rowIndex){
-    this.resizingSavedPercentages = this.rowsArrayPercentages(columnIndex);
-    this.resizingColumnIndex = columnIndex;
-    this.resizingRowIndex = rowIndex;
-    this.setState({isResizing: true});
+    var transitionInfo = {
+      col: columnIndex,
+      row: rowIndex,
+      savedPercentages: this.rowsArrayPercentages(columnIndex)
+    };
+    this.transitionStart('resizing', transitionInfo, function(step){
+
+    });
   },
   rowDidResize(){
-    var colI = this.resizingColumnIndex;
+    var trans = this.state.transition;
+    var colI = trans.info.col;
     var columns = this.state.columns;
-    var orgPercentages = this.resizingSavedPercentages;
+    var orgPercentages = trans.info.savedPercentages;
     var minHeights = this.minHeightsForRowsInColumn(colI);
     columns[colI].rows.forEach(function(row, i){
       if(row.h === this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT)){
@@ -353,12 +363,13 @@ var Grid = React.createClass({
     this.setState({colums: this.validateColumns(columns)});
     var obj = JSON.parse(JSON.stringify(this.state.columns));
     this.callDelegate('gridDidUpdate', obj);
-    this.setState({isResizing: false});
+    this.transitionNext();
   },
 
   columnDidResize(){
+    var trans = this.state.transition;
     var columns = this.state.columns;
-    var orgPercentages = this.resizingSavedPercentages;
+    var orgPercentages = trans.info.savedPercentages;
     var minWidths = this.minWidthsForColumns();
     columns.forEach(function(column, i){
       if(column.w === this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH)){
@@ -378,18 +389,18 @@ var Grid = React.createClass({
     this.setState({colums: this.validateColumns(columns)});
     var obj = JSON.parse(JSON.stringify(this.state.columns));
     this.callDelegate('gridDidUpdate', obj);
-    this.setState({isResizing: false});
+    this.transitionNext();
   },
 
   columnResize(diffX){
-
+    var trans = this.state.transition;
     var percentages = this.columnsArrayPercentages();
     var options = { 
       minSizes: this.minWidthsForColumns(), 
       percentageToMove: this.percentageWidthFromPixels(diffX), 
-      index: this.resizingColumnIndex,
+      index: trans.info.col,
       collapsed: this.collapsedColumns(),
-      orgSizes: this.resizingSavedPercentages,
+      orgSizes: trans.info.savedPercentages,
       collapsedSize: this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH)
     };
 
@@ -397,14 +408,15 @@ var Grid = React.createClass({
     this.saveColumnPercentagesToState(newPercentages);
   },
   rowResize(diffY){
-    var colI = this.resizingColumnIndex;
+    var trans = this.state.transition;
+    var colI = trans.info.col;
     var percentages = this.rowsArrayPercentages(colI);
     var options = { 
       minSizes: this.minHeightsForRowsInColumn(colI), 
       percentageToMove: this.percentageHeightFromPixels(diffY), 
-      index: this.resizingRowIndex,
+      index: trans.info.row,
       collapsed: this.collapsedRowsInColumn(colI),
-      orgSizes: this.resizingSavedPercentages,
+      orgSizes: trans.info.savedPercentages,
       collapsedSize: this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT)
     };    
     var newPercentages = this._resizeWithPercentages(percentages, options);
@@ -557,9 +569,24 @@ var Grid = React.createClass({
 
     var remainingPercentageToAdd = Math.abs(diff) - remainingPercentageToRemove;
     
+    helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: false, includeIndex: true}, function(percentage, i){
+      if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
+        return false;
+      var minSize = options.minSizes[ realIndex(i) ];
+      if( percentage < minSize ) {
+        percentage = this.roundedDecimal(percentage + remainingPercentageToAdd);
+        remainingPercentageToAdd = 0;
+        if(percentage > minSize){
+          remainingPercentageToAdd = percentage - minSize;
+          percentage = minSize;
+        }
+        percentages[i] = percentage;
+      }
+      
+    }.bind(this));
     
     // Add to all previous up to the original size they had
-    helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: true}, function(percentage, i){
+    helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: true, includeIndex: true }, function(percentage, i){
       if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
         return false;
       if(options.orgSizes){
