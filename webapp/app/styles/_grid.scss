@@ -8,7 +8,15 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
   position: relative;
 
   @include flex(center, space-between);
-
+  &.sw-reordering{
+    .sw-resize-vertical,
+    .sw-resize-horizontal {
+      pointer-events: none;
+    }
+    .sw-grid-topbar{
+      display: none;
+    }
+  }
   &.sw-grid-resizing {
 
     .sw-resizeable-row > .sw-row-content { // no pointer events for row-content

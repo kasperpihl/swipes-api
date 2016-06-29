@@ -3,14 +3,24 @@ var DEFAULT_MINWIDTH = 300;
 var DEFAULT_MINHEIGHT = 200;
 var DEFAULT_COLLAPSED_WIDTH = 40;
 var DEFAULT_COLLAPSED_HEIGHT = 40;
+
+var SHADOW_LEFT = 'inset 30px 0px 10px -10px  rgba(97,203,253,0.81)';
+var SHADOW_RIGHT = 'inset -30px 0px 10px -10px  rgba(97,203,253,0.81)';
+var SHADOW_TOP = 'inset 0px 30px 10px -10px  rgba(97,203,253,0.81)';
+var SHADOW_BOTTOM = 'inset 0px -30px 10px -10px  rgba(97,203,253,0.81)';
+
+
+var COLUMN_SIDE_HOVER_SIZE = 40;
 var Column = require('./grid_column');
 var helper = require('./helper');
+var offset = require('document-offset');
 
 // define the steps of transitions here.
 var TRANSITIONS_STEPS = {
   fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"],
   collapse: ["overlayIn", "scaling", "afterScaling", "overlayOut"],
-  resizing: ["resizing"]
+  resizing: ["resizing"],
+  reordering: ["reordering"]
 };
 
 
@@ -24,6 +34,50 @@ var Grid = React.createClass({
   componentDidMount() {
       this.debug = false;
       this.setState({columns: this.validateColumns(this.props.columns)});
+      
+      //this.transitionStart('reordering', {test:true});
+      //this.refs.grid.addEventListener('mousemove', this._onMouseMove);
+  },
+
+  _onMouseMove(e){
+    // Math to find out which row is hovered and where in the row...
+    var gridPos = offset(this.refs.grid);
+    var gridX = e.pageX - gridPos.left;
+    var gridY = e.pageY - gridPos.top;
+    var dX = 0;
+    this.state.columns.forEach(function(column, cI){
+      var width = this.pixelsWidthFromPercentage(column.w);
+      if(gridX >= dX && gridX < (dX + width)){
+        var dY = 0;
+        column.rows.forEach(function(row, rI){
+          var height = this.pixelsHeightFromPercentage(row.h);
+          var extraY = gridY - dY;
+          var extraX = gridX - dX;
+          var info = {}
+          if(gridY >= dY && gridY < (dY + height)){
+            var trans = this.state.transition;
+            if(extraY < height/2){
+              trans.info.direction = 'top';
+            }
+            else{
+              trans.info.direction = 'bottom';
+            }
+            if(extraX < COLUMN_SIDE_HOVER_SIZE){
+              trans.info.direction = 'left';
+            }
+            else if(extraX > (width - COLUMN_SIDE_HOVER_SIZE)){
+              trans.info.direction = 'right';
+            }
+            trans.info.col = cI;
+            trans.info.row = rI;
+            console.log('hover', cI, rI, trans.info.direction);
+            this.setState({transition: trans});
+          }
+          dY += height;
+        }.bind(this));
+      }
+      dX += width;
+    }.bind(this));
   },
   componentWillReceiveProps(nextProps) {
     this.setState({columns: this.validateColumns(nextProps.columns)});
@@ -342,8 +396,6 @@ var Grid = React.createClass({
         columns[i].w = collapsedWidth;
         transitionInfo.originallyCollapsed.push(i);
       }
-
-
     }
     this.setState({columns: columns});
     this.transitionStart('resizing', transitionInfo, function(step){
@@ -360,7 +412,7 @@ var Grid = React.createClass({
     var prevIndex = rowIndex - 1;
     var columns = this.state.columns;
     var rows = columns[columnIndex].rows;
-    console.log('rowy', rows);
+
     var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
     for(var i = prevIndex ; i <= rowIndex ; i++){
       if(rows[i].collapsed){
@@ -1051,6 +1103,16 @@ var Grid = React.createClass({
     var classes = [];
 
     var styles = {};
+    if(trans.name === 'reordering'){
+      if(colIndex === trans.info.col){
+        if(trans.info.direction === 'left'){
+          styles.boxShadow = SHADOW_LEFT;
+        }
+        if(trans.info.direction === 'right'){
+          styles.boxShadow = SHADOW_RIGHT;
+        }
+      }
+    }
     if(trans.name === 'resizing'){
       if( colIndex === trans.info.col || colIndex === trans.info.col - 1){
         if(column.collapsed){
@@ -1105,6 +1167,19 @@ var Grid = React.createClass({
     var classes = [];
     var styles = {};
     var rippleStyles = {};
+    if(trans.name === 'reordering'){
+      if(colIndex === trans.info.col){
+        if(rowIndex === trans.info.row){
+          if(trans.info.direction === 'top'){
+            styles.boxShadow = SHADOW_TOP;
+          }
+          if(trans.info.direction === 'bottom'){
+            styles.boxShadow = SHADOW_BOTTOM;
+          }
+        }
+        
+      }
+    }
     if(trans.name === "collapse"){
       if(trans.info.col === colIndex){
         if(trans.info.rowTransformations){
@@ -1396,6 +1471,9 @@ var Grid = React.createClass({
           percentages.forEach(function(percent, i){
             columns[i].w = percent;
           });
+          columns[indexes.col].rows.forEach(function(row){
+            row.collapsed = !(expandingRow);
+          })
         }
         else if ( transitionInfo.rowTransformations){
           percentages.forEach(function(percent, i){
