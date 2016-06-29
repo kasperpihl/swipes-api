@@ -137,23 +137,25 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
 
   &.sw-collapse {
-
+    &.sw-collapse-overlayIn,
+    &.sw-collapse-scaling{
+      .sw-resizeable-column {
+        transition: $defaultTransformTransition;
+      }
+      .sw-resizeable-row {
+        transition: $defaultTransformTransition, background-color .1s;
+      }
+    }
     &.sw-collapse-overlayIn,
     &.sw-collapse-scaling,
     &.sw-collapse-afterScaling {
-
       .sw-collapse-affected-column,
       .sw-collapse-affected-row {
         opacity: 0;
         visibility: hidden;
       }
-      .sw-resizeable-column{
-        transition: $defaultTransformTransition;
-      }
       .sw-collapse-row {
         background-color: #eee;
-        transition: transform .2s ease-in-out, background-color .1s;
-
         > * {
           opacity: 0;
           visibility: hidden;
@@ -161,9 +163,15 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
         }
       }
     }
-
+    &.sw-collapse-afterScaling {
+      .sw-resizeable-column {
+        transition: transform 0s;
+      }
+      .sw-resizeable-row {
+        transition: transform 0s;
+      }
+    }
     &.sw-collapse-overlayOut {
-
       .sw-collapse-affected-column,
       .sw-collapse-affected-row {
         opacity: 1;
@@ -178,63 +186,6 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
           opacity: 1;
           visibility: visible;
           transition: visibility 0s, opacity .25s;
-        }
-      }
-    }
-  }
-  &.sw-expand {
-
-    &.sw-expand-overlayIn,
-    &.sw-expand-scaling,
-    &.sw-expand-afterScaling {
-
-      .sw-expand-affected-column,
-      .sw-expand-affected-row {
-        opacity: 0;
-        visibility: hidden;
-        transition: visibility 0s .1s, opacity .1s;
-      }
-      .sw-resizeable-column {
-        transition: $defaultTransformTransition;
-      }
-      .sw-resizeable-row {
-        transition: $defaultTransformTransition, background-color .1s;
-      }
-      .sw-expand-column .sw-resizeable-row, .sw-expand-row {
-        background-color: gray;
-
-        * {
-          opacity: 0;
-          visibility: hidden;
-          transition: visibility 0s .1s, opacity .1s;
-        }
-      }
-    }
-    &.sw-expand-afterScaling {
-      .sw-resizeable-column {
-        transition: transform 0s;
-      }
-      .sw-resizeable-row {
-        transition: transform 0s;
-      }
-    }
-
-    &.sw-expand-overlayOut {
-
-      .sw-expand-affected-column,
-      .sw-expand-affected-row {
-        opacity: 1;
-        visibility: visible;
-        transition: visibility 0s, opacity .3s;
-      }
-
-      .sw-expand-row {
-        transition: background-color .3s;
-
-        > * {
-          opacity: 1;
-          visibility: visible;
-          transition: visibility 0s, opacity .3s;
         }
       }
     }

@@ -908,7 +908,7 @@ var Grid = React.createClass({
     };
     this.transitionNext(transition);
   },
-  transitionNext(transition){
+  transitionNext(transition, stateChanges){
     if(!transition){
       transition = this.state.transition;
     }
@@ -923,11 +923,16 @@ var Grid = React.createClass({
         step = transition.step;
         newTransition = transition;
       }
-
-      this.setState({transition: newTransition});
+      var stateChanges;
       if(typeof callback === "function"){
-        callback(step);
+        stateChanges = callback(step);
       }
+      var newState = {transition: newTransition};
+      if(stateChanges){
+        newState = Object.assign(newState, stateChanges);
+      }
+      this.setState(newState);
+      
       this.callDelegate('gridDidTransitionStep', transition.name, transition.step);
 
     }
@@ -977,13 +982,13 @@ var Grid = React.createClass({
 
     var styles = {};
     if(trans.name === "collapse"){
-      if(trans.info.col === colIndex){
-        classes.push("sw-collapse-column");
-      }
       if(trans.info.colTransformations){
         var transformations = trans.info.colTransformations[colIndex];
         if(trans.step === "scaling"){
           styles = transformations;
+        }
+        if(trans.info.col === colIndex){
+          classes.push("sw-collapse-column");
         }
         else if(_.size(transformations)){
           classes.push("sw-collapse-affected-column");
@@ -1031,7 +1036,7 @@ var Grid = React.createClass({
           if(trans.info.row === rowIndex){
             classes.push('sw-collapse-row');
           }
-          else if(_.size(transformations)){
+          if(trans.info.row !== rowIndex && _.size(transformations)){
             classes.push("sw-collapse-affected-row");
           }
         }
@@ -1247,7 +1252,7 @@ var Grid = React.createClass({
         return percentage;
       });
       transitionInfo.targetPercentages = targetPercentages;
-
+      console.log('transform', transitionInfo.colTransformations, targetPercentages);
     } else {
 
       var collapsedHeight = this.percentageHeightFromPixels(DEFAULT_COLLAPSED_HEIGHT);
@@ -1268,6 +1273,7 @@ var Grid = React.createClass({
       rowPercentages = this._moveWithPercentages(rowPercentages, options);
 
       transitionInfo.rowTransformations = this._sizeTransformations(oldRowPercentages, rowPercentages, true);
+      
       var targetPercentages = rowPercentages.map(function(percentage, i){
         if(percentage < minHeights[i]){
           return columns[indexes.col].rows[i].h;
@@ -1275,6 +1281,7 @@ var Grid = React.createClass({
         return percentage;
       });
       transitionInfo.targetPercentages = targetPercentages;
+      console.log('transform', transitionInfo.rowTransformations);
     }
 
     this.transitionStart("collapse", transitionInfo, function(step){
@@ -1316,7 +1323,7 @@ var Grid = React.createClass({
             rows[i].h = percent;
           })
         }
-        this.setState({columns: this.validateColumns(columns)});
+        return {columns: this.validateColumns(columns)};
       }
     }.bind(this));
   }
