@@ -10,80 +10,16 @@ var IconButton = require('material-ui/lib/icon-button');
 var Colors = require('material-ui/lib/styles/colors');
 var FontIcon = require('material-ui/lib/font-icon');
 
-var socketStore = require('../stores/SocketStore');
-var topbarStore = require('../stores/TopbarStore');
-var topbarActions = require('../actions/TopbarActions');
-var eventActions = require('../actions/EventActions');
-var WorkspaceStore = require('../stores/WorkspaceStore');
-var stateStore = require('../stores/StateStore');
+var socketStore = require('../../stores/SocketStore');
+var topbarStore = require('../../stores/TopbarStore');
+var topbarActions = require('../../actions/TopbarActions');
+var eventActions = require('../../actions/EventActions');
+var WorkspaceStore = require('../../stores/WorkspaceStore');
+var stateStore = require('../../stores/StateStore');
+var gradient = require('./gradient');
 // var notificationStore = require('../stores/NotificationStore');
 // var notificationActions = require('../actions/NotificationActions');
 
-var oldTime = null;
-var fullDaySeconds = 86400;
-var gradientSegmentPercentage = 100 / 11;
-var daySegments = [
-	{
-		time: 37.5, // 00:00 - 09:00
-		width: gradientSegmentPercentage / 2
-	},
-	{
-		time: 4.166666, // 09:00 - 10:00
-		width: gradientSegmentPercentage * 2 + (gradientSegmentPercentage / 2)
-	},
-	{
-		time: 33.333333, // 10:00 - 18:00
-		width: gradientSegmentPercentage * 2 - (gradientSegmentPercentage / 2)
-	},
-	{
-		time: 6.25, // 18:00 - 19:30
-		width: gradientSegmentPercentage * 4 + (gradientSegmentPercentage / 2)
-	},
-	{
-		time: 18.75, // 19:30 - 00:00
-		width: gradientSegmentPercentage * 2
-	}
-];
-
-var getGradientPos = function(percentOfDay, daySegments) {
-	var segLen = daySegments.length;
-	var segTimeSum = 0;
-	var currentWidth = 0;
-
-	for (var i=0; i<segLen; i++) {
-		var seg = daySegments[i];
-
-		segTimeSum = segTimeSum + seg.time;
-
-		if (percentOfDay >= segTimeSum) {
-			currentWidth = currentWidth + seg.width;
-		} else {
-			var prevSegSum = segTimeSum - seg.time;
-			var portionOfDay = percentOfDay - prevSegSum;
-			var percentOfSeg = portionOfDay / seg.time * 100;
-			var width = seg.width * percentOfSeg / 100;
-
-			currentWidth = currentWidth + width;
-			break;
-		}
-	}
-
-	//var currentTimePercentage = percentOfDay / prevSegSum * 100;
-	var currentGradientPosition = (100 * currentWidth) / 100;
-
-	return currentGradientPosition;
-}
-
-function precentOfCurrentDay() {
-	var today = new Date();
-	var hoursSeconds = today.getHours() * 60 * 60;
-	var minutesSeconds = today.getMinutes() * 60;
-	var seconds = today.getSeconds();
-	var currentTimeSeconds = hoursSeconds + minutesSeconds + seconds;
-	var percentOfCurrentDay = currentTimeSeconds / fullDaySeconds * 100;
-
-	return percentOfCurrentDay;
-}
 
 var Topbar = React.createClass({
 	//mixins: [notificationStore.connect() ],
@@ -136,9 +72,7 @@ var Topbar = React.createClass({
 		);
 	},
 	gradientStep:function(){
-		var percentOfDay = precentOfCurrentDay();
-		var gradientPos = getGradientPos(percentOfDay, daySegments);
-		gradientPos = Math.round( gradientPos * 1e2 ) / 1e2;
+		var gradientPos = gradient.getGradientPos();
 		if(this.state.gradientPos != gradientPos){
 			this.setState({gradientPos: gradientPos});
 		}

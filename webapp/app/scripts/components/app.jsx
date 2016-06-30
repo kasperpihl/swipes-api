@@ -3,7 +3,7 @@ var Reflux = require('reflux');
 var Loading = require('./loading');
 var stateStore = require('../stores/StateStore');
 var Modal = require('./modal');
-var Topbar = require('./topbar');
+var Topbar = require('./topbar/topbar');
 var LeftNav = require('./left_nav');
 
 // Requiring the stores

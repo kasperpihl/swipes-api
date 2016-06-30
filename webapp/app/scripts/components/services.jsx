@@ -1,6 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
-var Topbar = require('./topbar');
+var Topbar = require('./topbar/topbar');
 var Router = require('react-router');
 var ServiceStore = require('../stores/ServiceStore');
 var UserStore = require('../stores/UserStore');
