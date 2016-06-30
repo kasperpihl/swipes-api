@@ -54,7 +54,7 @@ var CardLoader = React.createClass({
 				}
 			}
 			else if (message.command === "event.focus"){
-				this.onMouseDown();
+				//this.onMouseDown();
 			}
 			else if (message.command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
@@ -442,6 +442,7 @@ var CardLoader = React.createClass({
 
 		return (
 			<div id={workflowId} className="tile">
+				{this.renderDropOverlay()}
 				{cardContent}
 				{/*webviewLoader*/}
 			</div>

@@ -63,6 +63,15 @@ var Workspace = React.createClass({
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
+    gridRenderRowForId(grid, id){
+      return (
+        <TileLoader
+          key={id}
+          data={{id: id}}
+          dotDragBegin={this.dotDragBegin}
+          onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
+      );
+    },
     gridDidTransitionStep(grid, name, step){
       if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
         topbarActions.changeFullscreen(true);
@@ -93,15 +102,7 @@ var Workspace = React.createClass({
         </div>
       )
     },
-    gridRenderRowForId(grid, id){
-      return (
-        <TileLoader
-          key={id}
-          data={{id: id}}
-          dotDragBegin={this.dotDragBegin}
-          onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
-      );
-    },
+    
     onEnterLeaveDropOverlay(cardId) {
       this._dropZoneId = cardId;
     },
@@ -109,7 +110,7 @@ var Workspace = React.createClass({
         this._dotDragData = data;
         this.isDraggingDot = true;
         $('.active-app').addClass('draggingDot');
-        $('.card').not("#" + this._dotDragData.fromCardId).addClass('draggingDot');
+        $('.tile').not("#" + this._dotDragData.fromCardId).addClass('draggingDot');
 
         if(callback){
             this.draggingCallback = callback;
@@ -144,7 +145,7 @@ var Workspace = React.createClass({
           }
 
           $('.active-app').removeClass('draggingDot');
-          $('.card').not("#" + this._dotDragData.fromCardId).removeClass('draggingDot');
+          $('.tile').not("#" + this._dotDragData.fromCardId).removeClass('draggingDot');
           this._dragDotHandler.parentNode.removeChild(this._dragDotHandler);
           this._dragDotHandler = null;
         }

@@ -4,8 +4,38 @@
   iframe {
     @include size(100%, 100%);
   }
+  .drop-overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left:0;
+    display:none;
+    background: #FFCA28;
+    opacity: 0.8;
+    z-index: 100;
+    h6{
+      text-align: center;
+      width: 100%;
+      position:absolute;
+      top: 50%;
+      margin-top: -30px;
+    }
+  }
+}
+.active-app.dragging, .active-app.resizing, .active-app.draggingDot{
+  iframe{
+    pointer-events: none;
+  }
 }
 
+.tile.draggingDot div.drop-overlay {
+  display: block;
+
+  &.hover {
+    opacity: 1.0;
+  }
+}
 
 .tile-resizing-overlay {
   @include size(100%, 100%);
