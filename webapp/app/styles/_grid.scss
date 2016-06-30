@@ -21,6 +21,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
     .sw-resizeable-row > .sw-row-content { // no pointer events for row-content
       pointer-events: none;
+      display: none;
     }
   }
 
@@ -80,11 +81,26 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     background-color: red;
     position: absolute;
     top: 0;
-    z-index: 99;
+    z-index: 2;
     left: 0;
     width: 100%;
     height: 100%;
     display: none;
+  }
+  .sw-resizing-overlay{
+    background-color: green;
+    position:absolute;
+    top: 0;
+    z-index:2;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  &.sw-resizing{
+    .sw-resizing-overlay{
+      display:block;
+    }
   }
   .sw-resizing-collapsing-column{
     > .sw-collapsing-overlay{
@@ -92,7 +108,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     }
   }
   .sw-resizing-collapsing-row{
-    > .sw-collapsing-overlay{
+    > .sw-resizing-overlay > .sw-collapsing-overlay{
       display: block;
     }
   }
@@ -103,7 +119,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     position: absolute;
     left: calc(0px - 8px);
     top: 0;
-    z-index: 2;
+    z-index: 3;
     transition: .1s calc(#{$transitionTime} - .2);
 
     &:after {
@@ -134,7 +150,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     position: absolute;
     left: 0;
     top: calc(0px - 8px);
-    z-index: 2;
+    z-index: 3;
     transition: .1s calc(#{$transitionTime} - .2);
 
     &:after {

@@ -1284,30 +1284,6 @@ var Grid = React.createClass({
     } // End transition fullscreen
     return {styles: styles, classes: classes, rippleStyles: rippleStyles};
   },
-  onResizeForOverlay() {
-    const that = this;
-    const minWidthPercentage = this.minWidthsForColumns();
-    const columns = this.state.columns;
-    let columnData = [];
-
-    minWidthPercentage.forEach(function(minWidth) {
-      const convertedMinWidth = that.pixelsWidthFromPercentage(minWidth);
-      columnData.push({minWidth: convertedMinWidth});
-    })
-
-    columns.forEach(function(column, i) {
-      const colWidth = that.pixelsWidthFromPercentage(column.w);
-      columnData[i].width = colWidth;
-    })
-
-    if (columnData.length > 0) {
-      columnData.forEach(function(column) {
-        if (column.width === column.minWidth) {
-          console.log('baller');
-        }
-      })
-    }
-  },
 
 
   // ======================================================

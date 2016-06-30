@@ -11,6 +11,14 @@ var Row = React.createClass({
   renderTopbar(){
     return <Topbar delegate={this.props.delegate} data={this.props.data} />
   },
+  renderResizingOverlay(){
+    return (
+      <div className="sw-resizing-overlay">
+        <CollapsingOverlay />
+        {this.props.callGridDelegate('gridRenderResizeOverlayForId', this.props.data.id)}
+      </div>
+    );
+  },
   render(){
     const {
       data
@@ -48,7 +56,8 @@ var Row = React.createClass({
     return (
       <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />
-        <CollapsingOverlay />
+        
+        {this.renderResizingOverlay()}
         {this.renderTopbar()}
         {this.renderResizer()}
         <div className="sw-row-content">{child}</div>

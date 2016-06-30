@@ -10,6 +10,7 @@ var eventActions = require('../actions/EventActions');
 
 // Including the cardstore only because of browserify
 var CardStore = require('../stores/CardStore');
+var WorkflowStore = require('../stores/WorkflowStore');
 var cardActions = require('../actions/CardActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
@@ -75,12 +76,28 @@ var Workspace = React.createClass({
     gridDidUpdate(grid, columns){
       console.log('grid update', columns);
     },
+    gridRenderResizeOverlayForId(grid, id){
+      var workflow = WorkflowStore.get(id);
+      var title = workflow.name;
+      var url = workflow.index_url;
+      var splitURL = url.split('/').slice(0,-1).join('/');
+
+      return (
+        <div className="tile-resizing-overlay">
+          <div className="tile-resizing-overlay__content">
+            <div className="app-icon">
+              <img src={splitURL + '/' + workflow.icon} />
+            </div>
+            <div className="app-title">{title}</div>
+          </div>
+        </div>
+      )
+    },
     gridRenderRowForId(grid, id){
       return (
         <TileLoader
           key={id}
           data={{id: id}}
-          onResizeForOverlay={grid.onResizeForOverlay}
           dotDragBegin={this.dotDragBegin}
           onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
       );

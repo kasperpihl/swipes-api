@@ -383,24 +383,6 @@ var CardLoader = React.createClass({
 	onSelectedAccount: function(selectedAccount){
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
-	renderResizingOverlay: function() {
-
-		var title = this.state.workflow.name;
-		var url = this.state.workflow.index_url;
-		var splitURL = url.split('/').slice(0,-1).join('/');
-		var minWidth = this.props.onResizeForOverlay();
-
-		return (
-			<div className="tile-resizing-overlay">
-				<div className="tile-resizing-overlay__content">
-					<div className="app-icon">
-						<img src={splitURL + '/' + this.state.workflow.icon} />
-					</div>
-					<div className="app-title">{title}</div>
-				</div>
-			</div>
-		)
-	},
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
@@ -461,7 +443,6 @@ var CardLoader = React.createClass({
 		return (
 			<div id={workflowId} className="tile">
 				{cardContent}
-				{/*this.renderResizingOverlay()*/}
 				{/*webviewLoader*/}
 			</div>
 		);
