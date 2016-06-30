@@ -1,6 +1,5 @@
 var Reflux = require('reflux');
 var notificationActions = require('../actions/NotificationActions');
-var bridgeStore = require('./BridgeStore');
 
 var NotificationStore = Reflux.createStore({
 	listenables: [ notificationActions ],
@@ -23,12 +22,7 @@ var NotificationStore = Reflux.createStore({
 		if(this.isDuplicate(options)){
 			return;
 		}
-		if(bridgeStore.bridge){
-			bridgeStore.callBridge('notify', options);
-		}
-		else{
-			this.playSound();
-		}
+		this.playSound();
 	},
 	isDuplicate:function(options){
 		var title = options.title || "";
