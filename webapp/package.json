@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "detect-browser": "^1.3.3",
+    "document-offset": "^1.0.4",
     "jquery": "~2.1.3",
     "material-ui": "^0.14.3",
     "modernizr": "~3.2.0",
@@ -20,7 +21,7 @@
     "react-highlighter": "^0.2.2",
     "react-router": "^2.4.1",
     "react-slider": "^0.6.1",
-    "react-tap-event-plugin": "^0.2.1",
+    "react-tap-event-plugin": "^1.0.0",
     "react-textarea-autosize": "^3.3.1",
     "reflux": "~0.3.0",
     "reflux-model-extension": "~0.0.20",
