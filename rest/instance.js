@@ -49,7 +49,6 @@ app.use(parseErrorHandler);
 let usersAuth = require('./routes/users_auth.js');
 let usersRouter = require('./routes/users.js');
 let rtmRouter = require('./routes/rtm.js');
-let sdkRouter = require('./routes/sdk.js');
 let searchRouter = require('./routes/search.js');
 let servicesRouter = require('./routes/services.js');
 let servicesNoAuthRouter = require('./routes/services_no_auth.js');
@@ -78,7 +77,6 @@ app.route('/').get((req,res,next) => {
 // Routes for which we don't need authentication
 app.use('/share', swipesCardRouter);
 app.use('/v1', usersAuth);
-app.use('/v1', sdkRouter);
 app.use('/v1', servicesNoAuthRouter);
 app.use('/v1', feedbackNoAuthRouter);
 
