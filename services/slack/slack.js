@@ -19,6 +19,19 @@ var slack = {
 			callback(err, res);
 		});
 	},
+	search: function({authData, params}, callback){
+		if(typeof authData !== 'object' || !authData.access_token){
+			return callback('no_access_token');
+		}
+		// K_TODO: Make a parsing from our params to Slack params...
+		SlackConnector.request(authData.access_token, 'search.all', params, function(err, res){
+			if(err){
+				console.log(err);
+			}
+			// K_TODO: Parse search results to our format
+			callback(err, res);
+		});
+	},
 	stream: function({authData, method, params}, stream, callback) {
 		if (method === 'file') {
 			if (!params.url) {

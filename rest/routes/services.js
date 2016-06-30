@@ -32,6 +32,24 @@ router.post('/services.request', serviceUtil.validateData, serviceUtil.getServic
 		res.send({ok: true, data: result});
 	});
 });
+router.post('/services.search', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
+	let data = res.locals.data;
+	let service = res.locals.service;
+	let file = res.locals.file;
+	let options = {
+		authData: service.authData,
+		params: data,
+		user: {userId: req.userId},
+		service: {serviceId: service.id}
+	};
+	file.search(options, function (err, result) {
+		if (err) {
+			return res.status(200).json({ok:false, err: err});
+		}
+
+		res.send({ok: true, data: result});
+	});
+});
 
 router.post('/services.stream', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
 	let data = res.locals.data;
