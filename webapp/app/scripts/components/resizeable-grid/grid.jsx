@@ -577,7 +577,6 @@ var Grid = React.createClass({
         if( !percentageToCounter || options.collapsed[i] )
           return false;
 
-
       }.bind(this));
     }
     return percentages;
@@ -1111,15 +1110,6 @@ var Grid = React.createClass({
         if(trans.info.direction === 'right'){
           styles.boxShadow = SHADOW_RIGHT;
         }
-      }
-    }
-    if(trans.name === 'resizing'){
-      if( colIndex === trans.info.col || colIndex === trans.info.col - 1){
-        if(column.collapsed){
-          styles.width = column.w + '%';
-          console.log('forcing width');
-        }
-        
       }
     }
     if(trans.name === "collapse"){

@@ -13,6 +13,7 @@ var Helper = {
     Default starts looking from left, then right
     Options: index (required), rightFirst, leftOnly, rightOnly, returnIndex, furthest
    */
+  
   findNeighbor(array, options, condition){
     if(!options || typeof options !== 'object'){
       options = {index: options};

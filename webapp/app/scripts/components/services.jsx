@@ -128,7 +128,7 @@ Services.SelectRow = React.createClass({
 				<img src={src} />
 				<h6>{text}</h6>
 				<p>We never store any of your information</p>
-				{/*this.renderSelector()*/}
+				{this.renderSelector()}
 			</div>
 		);
 	}
