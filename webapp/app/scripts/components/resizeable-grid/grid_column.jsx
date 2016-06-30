@@ -1,6 +1,7 @@
 var React = require('react');
 var Row = require('./grid_row');
 var Resizer = require('./grid_resizer');
+var CollapsingOverlay = require('./grid_collapsing_overlay');
 var Column = React.createClass({
   renderResizer(){
     if(this.props.columnIndex > 0){
@@ -41,6 +42,7 @@ var Column = React.createClass({
     return (
       <div id={"column-" + this.props.columnIndex} onTransitionEnd={this.props.delegate.onTransitionEnd} className={className} style={styles}>
         {this.renderResizer()}
+        <CollapsingOverlay />
         {rows}
       </div>
     )

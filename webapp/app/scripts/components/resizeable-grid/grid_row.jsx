@@ -1,6 +1,7 @@
 var React = require('react');
 var Resizer = require('./grid_resizer');
 var Topbar = require('./grid_topbar');
+var CollapsingOverlay = require('./grid_collapsing_overlay');
 var Row = React.createClass({
   renderResizer(){
     if(this.props.rowIndex > 0){
@@ -47,6 +48,7 @@ var Row = React.createClass({
     return (
       <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />
+        <CollapsingOverlay />
         {this.renderTopbar()}
         {this.renderResizer()}
         <div className="sw-row-content">{child}</div>

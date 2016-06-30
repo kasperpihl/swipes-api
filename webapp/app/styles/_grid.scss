@@ -76,6 +76,27 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     }
   }
 
+  .sw-collapsing-overlay{
+    background-color: red;
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .sw-resizing-collapsing-column{
+    > .sw-collapsing-overlay{
+      display: block;
+    }
+  }
+  .sw-resizing-collapsing-row{
+    > .sw-collapsing-overlay{
+      display: block;
+    }
+  }
+
   .sw-resize-vertical {
     width: 16px;
     height: 100%;

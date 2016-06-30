@@ -381,6 +381,7 @@ var Grid = React.createClass({
   columnWillResize(columnIndex){
     var transitionInfo = {
       col: columnIndex,
+      resizingRow: false,
       savedPercentages: this.columnsArrayPercentages(),
       originallyCollapsed: []
     };
@@ -406,6 +407,7 @@ var Grid = React.createClass({
     var transitionInfo = {
       col: columnIndex,
       row: rowIndex,
+      resizingRow: true,
       originallyCollapsed: [],
       savedPercentages: this.rowsArrayPercentages(columnIndex)
     };
@@ -1102,6 +1104,12 @@ var Grid = React.createClass({
     var classes = [];
 
     var styles = {};
+    if(trans.name === "resizing" && !trans.info.resizingRow){
+      var minWidths = this.minWidthsForColumns();
+      if(column.w < minWidths[colIndex]){
+        classes.push("sw-resizing-collapsing-column");
+      }
+    }
     if(trans.name === 'reordering'){
       if(colIndex === trans.info.col){
         if(trans.info.direction === 'left'){
@@ -1154,9 +1162,20 @@ var Grid = React.createClass({
       return;
     }
     var columns = this.state.columns;
+    var column = columns[colIndex];
+    var row = column.rows[rowIndex];
     var classes = [];
     var styles = {};
     var rippleStyles = {};
+    if(trans.name === "resizing" && trans.info.resizingRow){
+      if(colIndex === trans.info.col){
+        var minHeights = this.minHeightsForRowsInColumn(colIndex);
+        if(row.h < minHeights[rowIndex]){
+          classes.push("sw-resizing-collapsing-row");
+        }
+      }
+      
+    }
     if(trans.name === 'reordering'){
       if(colIndex === trans.info.col){
         if(rowIndex === trans.info.row){
