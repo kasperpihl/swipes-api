@@ -134,6 +134,76 @@ var asana = {
 				callback(error);
 			})
 	},
+	shareRequest: function ({authData, type, params, user, service}, callback) {
+		var self = this;
+		var method = '';
+		var actions;
+		var mappedData;
+
+		if (type === 'task') {
+			method = 'tasks.findById'
+		}
+
+		this.request({authData, method, params, user, service}, function (err, res) {
+			if (err) {
+				return callback(err);
+			}
+
+			actions = self.cardActions(type, res);
+			mappedData = self.cardData(type, res);
+
+			return callback(null,  {
+				serviceData: mappedData,
+				serviceActions: actions
+			});
+		})
+	},
+	cardData: function (type, data) {
+		var mappedData;
+
+		if (type === 'task') {
+			mappedData = {
+				title: data.name || ''
+			}
+		}
+
+		return mappedData;
+	},
+	cardActions: function (type, data) {
+		var actions = [];
+
+		if (type === 'task') {
+			if (!data.completed) {
+				actions.push([
+					{
+						label: 'Complete',
+						icon: 'check',
+						bgColor: 'green',
+						method: 'tasks.update',
+						data: {
+							id: data.id,
+							completed: true
+						}
+					}
+				])
+			} else {
+				actions.push([
+					{
+						label: 'Undo',
+						icon: 'check',
+						bgColor: 'gray',
+						method: 'tasks.update',
+						data: {
+							id: data.id,
+							completed: false
+						}
+					}
+				])
+			}
+		}
+
+		return actions;
+	},
 	beforeAuthSave: function (data, callback) {
 		var client = createClient();
 		var code = data.code;
