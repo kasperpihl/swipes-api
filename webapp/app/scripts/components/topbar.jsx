@@ -13,20 +13,93 @@ var FontIcon = require('material-ui/lib/font-icon');
 var socketStore = require('../stores/SocketStore');
 var topbarStore = require('../stores/TopbarStore');
 var topbarActions = require('../actions/TopbarActions');
-var workspaceActions = require('../actions/WorkspaceActions');
+var eventActions = require('../actions/EventActions');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var stateStore = require('../stores/StateStore');
 // var notificationStore = require('../stores/NotificationStore');
 // var notificationActions = require('../actions/NotificationActions');
 
+var oldTime = null;
+var fullDaySeconds = 86400;
+var gradientSegmentPercentage = 100 / 11;
+var daySegments = [
+	{
+		time: 37.5, // 00:00 - 09:00
+		width: gradientSegmentPercentage / 2
+	},
+	{
+		time: 4.166666, // 09:00 - 10:00
+		width: gradientSegmentPercentage * 2 + (gradientSegmentPercentage / 2)
+	},
+	{
+		time: 33.333333, // 10:00 - 18:00
+		width: gradientSegmentPercentage * 2 - (gradientSegmentPercentage / 2)
+	},
+	{
+		time: 6.25, // 18:00 - 19:30
+		width: gradientSegmentPercentage * 4 + (gradientSegmentPercentage / 2)
+	},
+	{
+		time: 18.75, // 19:30 - 00:00
+		width: gradientSegmentPercentage * 2
+	}
+];
+
+var getGradientPos = function(percentOfDay, daySegments) {
+	var segLen = daySegments.length;
+	var segTimeSum = 0;
+	var currentWidth = 0;
+
+	for (var i=0; i<segLen; i++) {
+		var seg = daySegments[i];
+
+		segTimeSum = segTimeSum + seg.time;
+
+		if (percentOfDay >= segTimeSum) {
+			currentWidth = currentWidth + seg.width;
+		} else {
+			var prevSegSum = segTimeSum - seg.time;
+			var portionOfDay = percentOfDay - prevSegSum;
+			var percentOfSeg = portionOfDay / seg.time * 100;
+			var width = seg.width * percentOfSeg / 100;
+
+			currentWidth = currentWidth + width;
+			break;
+		}
+	}
+
+	//var currentTimePercentage = percentOfDay / prevSegSum * 100;
+	var currentGradientPosition = (100 * currentWidth) / 100;
+
+	return currentGradientPosition;
+}
+
+function precentOfCurrentDay() {
+	var today = new Date();
+	var hoursSeconds = today.getHours() * 60 * 60;
+	var minutesSeconds = today.getMinutes() * 60;
+	var seconds = today.getSeconds();
+	var currentTimeSeconds = hoursSeconds + minutesSeconds + seconds;
+	var percentOfCurrentDay = currentTimeSeconds / fullDaySeconds * 100;
+
+	return percentOfCurrentDay;
+}
+
 var Topbar = React.createClass({
 	//mixins: [notificationStore.connect() ],
-	mixins: [WorkspaceStore.connect('workspace')],
+	mixins: [WorkspaceStore.connect('workspace'), topbarStore.connect('topbar')],
 	contextTypes: {
 		router: React.PropTypes.object.isRequired
 	},
+	componentDidMount() {
+	    this.gradientStep();
+	},
 	clickedAdd: function(){
-		topbarActions.loadWorkflowModal();
+		if(this.state.topbar.isFullscreen) {
+			eventActions.fire("closeFullscreen");
+		} else {
+			topbarActions.loadWorkflowModal();
+		}
 	},
 	signout: function () {
 		amplitude.setUserId(null); // Log out user from analytics
@@ -40,10 +113,6 @@ var Topbar = React.createClass({
 	},
 	services: function(){
 		this.context.router.push('/services');
-	},
-	feedbackForm: function() {
-		mixpanel.track('Feedback Init');
-		topbarActions.sendFeedback();
 	},
 	renderIconMenu:function(){
 		var button = (
@@ -66,124 +135,54 @@ var Topbar = React.createClass({
 			</IconMenu>
 		);
 	},
-	// setNotifications: function() {
-	// 	notificationActions.setNotifications();
-	// },
-	illuminateHidden: function(id) {
-		var cardEl = document.getElementById(id);
-		if (cardEl && cardEl.classList.contains('minimized')) {
-			cardEl.style.transform = 'scale(1)';
-			cardEl.style.visibility = 'visible';
-			cardEl.style.opacity = '1';
+	gradientStep:function(){
+		var percentOfDay = precentOfCurrentDay();
+		var gradientPos = getGradientPos(percentOfDay, daySegments);
+		gradientPos = Math.round( gradientPos * 1e2 ) / 1e2;
+		if(this.state.gradientPos != gradientPos){
+			this.setState({gradientPos: gradientPos});
 		}
+		setTimeout(this.gradientStep, 3000);
 	},
-	removeIlluminationFromHidden: function(id) {
-		var cardEl = document.getElementById(id);
-		if (cardEl && cardEl.classList.contains('minimized')) {
-			cardEl.style.transform = 'scale(0)';
-			cardEl.style.visibility = 'hidden';
-			cardEl.style.opacity = '0';
-		}
-	},
-	dockMouseEnter: function (cardId) {
-		WorkspaceStore.setIlluminatedCardId(cardId);
-		this.illuminateHidden(cardId);
-	},
-	dockMouseLeave: function (cardId) {
-		WorkspaceStore.setIlluminatedCardId(null);
-		this.removeIlluminationFromHidden(cardId);
-	},
-	renderDock: function () {
-		var self = this;
-		var cards = this.state.workspace;
-		var addClassName = 'dock_item-add';
-		var dockItems = [];
 
-		cards.forEach(function (card, index) {
-			var className = 'dock_item';
-
-			if (card.hidden) {
-				className += ' minimized'
-			} else if (card.focused) {
-				className += ' focused'
-			}
-
-			if (card.notifications > 0) {
-				className += ' notification';
-			}
-
-			dockItems.push(
-				<div
-					onMouseEnter={function () {
-							self.dockMouseEnter(card.id);
-					}}
-					onMouseLeave={function () {
-						self.dockMouseLeave(card.id);
-						}
-					}
-					onClick={self.dockMouseLeave}
-					className={className}
-					key={index} >
-					<img
-						src={card.icon_url}
-						onClick={function () {
-							workspaceActions.showHideCard(card.id);
-						}}
-					/>
-				</div>
-			)
-		})
-
-		if (dockItems.length === 0) {
-			addClassName += ' pulsate'
-		}
-
-		dockItems.push(
-			<div className={addClassName} onClick={this.clickedAdd} key={uuid.v4()}>
-				<FontIcon className="material-icons">add</FontIcon>
-			</div>
-		)
-
-		return (
-			<div className="dock-wrapper">
-				{dockItems}
-			</div>
-		)
-	},
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
-		// var notificationIcon = 'notifications';
-		//
-		// if (!this.state.notificationState) {
-		// 	notificationIcon = 'notifications_off'
-		// }
+		var topbarClass = 'sw-topbar';
+		var buttonClass = 'add';
+		var styles = {};
 
-		if (title === "Services") {
-			return (
-				<div className="top-bar-container">
-					{this.renderIconMenu()}
-					<div className="topbar-title"><span>{title}</span></div>
-					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '10px'}}>
-						Send Feedback
-					</div>
-				</div>
-			)
-		} else {
-			return (
-				<div className="top-bar-container">
-					{this.renderIconMenu()}
-					<div className="topbar-title"><span>{title}</span></div>
-					{this.renderDock()}
-					<div className="feedback-button" onClick={this.feedbackForm} style={{right: '60px'}}>
-						Send Feedback
-					</div>
-
-					<div className="grid-button" onClick={workspaceActions.gridButton} style={{right: '10px'}}>
-						<i className="material-icons">dashboard</i>
-					</div>
-				</div>
-			);
+		if(this.state.gradientPos) {
+			styles.backgroundPosition = this.state.gradientPos + '% 50%';
 		}
+
+		if(this.state.topbar.isFullscreen) {
+			topbarClass += ' fullscreen'
+			buttonClass += ' close'
+		}
+
+		return (
+			<div className={topbarClass} style={styles}>
+				<div className="sw-topbar__content">
+
+					<div className="sw-topbar__info">
+						<div className="sw-topbar__info__icon">
+							<img src="styles/img/workspace-icon.svg" alt=""/>
+						</div>
+						<div className="sw-topbar__info__title">my workspace</div>
+					</div>
+
+					<div className="sw-topbar__actions">
+						<div className="sw-topbar__button sw-topbar__button--search">
+							<i className="material-icons">search</i>
+						</div>
+						<div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd}>
+							<i className="material-icons">add</i>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		)
 	}
 });
 

@@ -33,9 +33,11 @@ var SocketStore = Reflux.createStore({
 				})
 				userStore.update(res.self.id, res.self);
 				WorkflowStore.workflow_base_url = res.workflow_base_url;
+				
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
 				serviceStore.batchLoad(res.services, {flush:true});
 				stateActions.changeStarted(true);
+				console.log('starting huhu');
 			}
 		}).fail(function (error) {
 			if (!error.ok && error.err === 'not_authed') {

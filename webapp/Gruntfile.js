@@ -21,14 +21,14 @@ module.exports = function (grunt) {
       sdk: 'swipes-sdk',
       globalStyles: 'global-styles'
   };
-
+  var host = 'localhost';
   grunt.initConfig({
       yeoman: yeomanConfig,
       connect: {
           options: {
             port: 3000,
             livereload: true,
-            hostname: 'localhost', //change to '0.0.0.0' to enable outside connections
+            hostname: host, //change to '0.0.0.0' to enable outside connections
             base: ['dev', 'ssr_card_dev']
           },
           proxies: [
@@ -41,21 +41,21 @@ module.exports = function (grunt) {
               },
               {
                   context: '/v1',
-                  host: 'localhost',
+                  host: host,
                   port: 5000,
                   https: false,
                   xforward: false
               },
               {
                 context: '/workflows',
-                host: 'localhost',
+                host: host,
                 port: 5000,
                 https: false,
                 xforward: false
               },
               {
                 context: '/socket.io',
-                host: 'localhost',
+                host: host,
                 port: 5000,
                 https: false,
                 xforward: false,

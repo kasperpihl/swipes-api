@@ -23,6 +23,9 @@ var TopbarStore = Reflux.createStore({
 		});
 
 	},
+	onChangeFullscreen: function(isFullscreen){
+		this.set('isFullscreen', isFullscreen);
+	},
 	onSendFeedback: function() {
 		modalActions.loadModal('textarea', {'title': 'Send us your feedback', 'placeholder': 'Write what you are thinking'}, function(res) {
 			if (res) {

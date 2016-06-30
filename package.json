@@ -39,8 +39,9 @@
     "sql": "0.47.0",
     "underscore": "1.8.x",
     "validator": "^4.3.0",
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "swipes-dot": "^0.3.4"
   },
   "engines": {
     "node": "4.2.x"

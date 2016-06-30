@@ -1,0 +1,11 @@
+{
+	"manifest_version": 1,
+	"name": "Asana Card",
+	"identifier": "asana-card",
+	"version": "0.1",
+	"description": "The Asana Tasks App For Swipes",
+	"index": "dev/index.html",
+	"required_services": ["asana"],
+	"domains": ["asana.com", "app.asana.com"],
+	"icon": "images/logo-asana.svg"
+}

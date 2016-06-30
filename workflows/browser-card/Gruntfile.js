@@ -1,10 +1,9 @@
 'use strict';
 
-var livereload = require('connect-livereload'),
-    modRewrite = require('connect-modrewrite'),
-    serveStatic = require('serve-static'),
-    path = require('path'),
-    webpack = require('webpack');
+var livereload = require('connect-livereload');
+var path = require('path');
+var serveStatic = require('serve-static');
+var webpack = require('webpack');
 
 module.exports = function (grunt) {
 
@@ -15,59 +14,39 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   var yeomanConfig = {
-      app: 'ssr_card_app',
-      dev: 'ssr_card_dev',
-      dist: 'ssr_card_dist',
-      sdk: 'swipes-sdk',
-      globalStyles: 'global-styles'
+      app: 'app',
+      tmp: '.tmp',
+      dev: 'dev',
+      dist: 'dist'
   };
 
   grunt.initConfig({
       yeoman: yeomanConfig,
       watch: {
+        options: {
+          livereload: 35799,
+          livereloadOnError: false
+        },
         react: {
           files: ['<%= yeoman.app %>/scripts/**/*.{jsx,js}'],
           tasks: ['webpack:dev', 'copy:dev', 'cacheBust:dev']
         },
         styles: {
-          files: [
-            '<%= yeoman.app %>/styles/**/*.{sass,scss}',
-            '<%= yeoman.globalStyles %>/**/*.{sass,scss}'
-          ],
-          tasks: [
-            'compass:dev',
-            'compass:devGlobal',
-            'autoprefixer:dev',
-            'copy:dev',
-            'cacheBust:dev'
-          ]
+          files: ['<%= yeoman.app %>/styles/*.{sass,scss}'],
+          tasks: ['compass:dev', 'autoprefixer:dev', 'copy:dev', 'cacheBust:dev']
         },
-        images: {
-          files: [
-            '<%= yeoman.app %>/*.html',
-            '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-          ],
-          tasks: ['copy:dev']
-        },
-        sdk: {
-          files: ['./swipes-sdk/**/*'],
-          tasks: ['concat:serve', 'copy:dev', 'cacheBust:dev']
-        },
+        html: {
+          files: ['<%= yeoman.app %>/*.html'],
+          tasks: ['copy:dev', 'cacheBust:dev']
+        }
       },
       clean: {
-        dist: ['.tmp', '<%= yeoman.dist %>/*'],
-        serve: {
-          dot: true,
-          src: ['.tmp', 'dev']
-        },
-        dev: {
-          dot: true,
-          src: ['<%= yeoman.dev %>/*']
-        }
+        dev: ['.tmp', '<%= yeoman.dev %>/*'],
+        dist: ['.tmp', '<%= yeoman.dist %>/*']
       },
       webpack: {
         dev: {
-          entry: './<%= yeoman.app %>/scripts/app_ssr',
+          entry: './<%= yeoman.app %>/scripts/app',
           resolve: {
             root: path.resolve(__dirname, 'node_modules'),
             fallback: {root: path.join(__dirname, 'node_modules')},
@@ -79,7 +58,7 @@ module.exports = function (grunt) {
           },
           output: {
             path: '<%= yeoman.dev %>/scripts/',
-            filename: 'app_ssr.js'
+            filename: 'app.js'
           },
           plugins: [
             new webpack.optimize.DedupePlugin()
@@ -98,49 +77,19 @@ module.exports = function (grunt) {
           }
         }
       },
-      concat: {
-        serve: {
-          files: {
-            '<%= yeoman.dev %>/scripts/swipes-sdk.js': [
-              '<%= yeoman.sdk %>/jquery.min.js',
-              '<%= yeoman.sdk %>/socket.io.js',
-              '<%= yeoman.sdk %>/underscore.min.js',
-              '<%= yeoman.sdk %>/q.min.js',
-              '<%= yeoman.sdk %>/swipes-api-connector.js',
-              '<%= yeoman.sdk %>/swipes-app-sdk.js',
-              '<%= yeoman.sdk %>/swipes-sdk-init.js'
-            ]
-          }
-        },
-      },
       compass: {
-        dist: {
+        options: {
           sassDir: '<%= yeoman.app %>/styles',
           cssDir: '.tmp/styles',
-          specify: '<%= yeoman.app %>/styles/main_ssr.scss',
+          specify: '<%= yeoman.app %>/styles/main.scss',
           imagesDir: '<%= yeoman.app %>/images',
           javascriptsDir: '<%= yeoman.app %>/scripts',
           fontsDir: '<%= yeoman.app %>/fonts',
           relativeAssets: true
         },
+        dist: {},
         dev: {
           options: {
-            sassDir: '<%= yeoman.app %>/styles',
-            cssDir: '.tmp/styles',
-            specify: '<%= yeoman.app %>/styles/main_ssr.scss',
-            imagesDir: '<%= yeoman.app %>/images',
-            javascriptsDir: '<%= yeoman.app %>/scripts',
-            fontsDir: '<%= yeoman.app %>/fonts',
-            relativeAssets: true,
-            debugInfo: true
-          }
-        },
-        devGlobal: {
-          options: {
-            sassDir: '<%= yeoman.globalStyles %>',
-            cssDir: '.tmp/styles',
-            specify: '<%= yeoman.globalStyles %>/global-styles.scss',
-            relativeAssets: true,
             debugInfo: true
           }
         }
@@ -155,9 +104,9 @@ module.exports = function (grunt) {
         dist: {
           files: [{
             expand: true,
-            cwd: '<%= yeoman.app %>/styles/img',
+            cwd: '<%= yeoman.app %>/styles/images',
             src: '{,*/}*.{png,jpg,jpeg}',
-            dest: '<%= yeoman.dist %>/styles/img'
+            dest: '<%= yeoman.dist %>/styles/images'
           }]
         }
       },
@@ -209,6 +158,24 @@ module.exports = function (grunt) {
         }
       },
       copy: {
+        dev: {
+          files: [{
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.dev %>',
+            src: [
+              '*.html',
+              '*.{ico,txt}',
+              'images/{,*/}*.*'
+            ]
+          }, {
+            expand: true,
+            cwd: '<%= yeoman.tmp %>',
+            dest: '<%= yeoman.dev %>',
+            src: ['**']
+          }]
+        },
         dist: {
           files: [{
             expand: true,
@@ -220,41 +187,6 @@ module.exports = function (grunt) {
               '*.{ico,txt}',
               'images/{,*/}*.{webp,gif}'
             ]
-          }]
-        },
-        serve: {
-          files: [
-            {
-              expand: true,
-              dot: true,
-              cwd: __dirname + '/global-styles/roboto',
-              dest: '.tmp/styles',
-              src: ['fonts/**']
-            }
-          ]
-        },
-        dev: {
-          files: [{
-            expand: true,
-            dot: true,
-            cwd: '<%= yeoman.app %>',
-            dest: '<%= yeoman.dev %>',
-            src: [
-              '*.html',
-              './**/*.{ico,txt,png,svg}'
-            ]
-          }, {
-            expand: true,
-            dot: true,
-            cwd: '.tmp',
-            dest: '<%= yeoman.dev %>',
-            src: ['**']
-          }, {
-            expand: true,
-            dot: true,
-            cwd: __dirname + '/global-styles/roboto',
-            dest: '<%= yeoman.dev %>/styles',
-            src: ['fonts/**']
           }]
         }
       },
@@ -270,10 +202,8 @@ module.exports = function (grunt) {
           options: {
             baseDir: '<%= yeoman.dev %>',
             assets: [
-              'scripts/app_ssr.js',
-              'scripts/swipes-sdk.js',
-              'styles/main_ssr.css',
-              'styles/global-styles.css'
+              'scripts/app.js',
+              'styles/main.css'
             ]
           },
           files: [
@@ -290,8 +220,6 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', [
     'clean:dev',
     'webpack:dev',
-    'concat:serve',
-    'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',
@@ -302,13 +230,27 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', [
     'clean:dev',
     'webpack:dev',
-    'concat:serve',
-    'compass:devGlobal',
     'compass:dev',
     'autoprefixer:dev',
     'copy:dev',
     'cacheBust:dev'
   ]);
 
-  grunt.registerTask('default', 'build');
+  // grunt.registerTask('build', [
+  //   'clean:dist',
+  //   'browserify:dist',
+  //   'compass:dist',
+  //   'useminPrepare',
+  //   'concat',
+  //   'autoprefixer:dist',
+  //   'imagemin:dist',
+  //   'cssmin',
+  //   'uglify',
+  //   'copy:dist',
+  //   'filerev',
+  //   'usemin'
+  //   //'htmlmin'
+  // ]);
+
+  grunt.registerTask('default', 'serve');
 };

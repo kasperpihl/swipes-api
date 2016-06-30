@@ -22,13 +22,12 @@ let tables = [
   },
   {
     name: 'links',
-    indexes: ['checksum']
+    indexes: ['checksum', 'short_url']
   },
   'events',
   'mentions',
   'organizations',
   'feedback'
-
 ];
 
 r.init(dbConfig,
