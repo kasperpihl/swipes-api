@@ -81,7 +81,7 @@ var Workspace = React.createClass({
       var title = workflow.name;
       var url = workflow.index_url;
       var splitURL = url.split('/').slice(0,-1).join('/');
-
+      
       return (
         <div className="tile-resizing-overlay">
           <div className="tile-resizing-overlay__content">

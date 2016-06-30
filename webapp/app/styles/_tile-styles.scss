@@ -7,39 +7,21 @@
 }
 
 
-
-// If resizing
-
 .tile-resizing-overlay {
-  display: none;
-}
-.sw-fullscreen-transition-row{
-  .tile * {
-    display:none;
-  }
-}
-.sw-resizing {
+  @include size(100%, 100%);
+  background-color: white;
 
-  .tile > *:not(.tile-resizing-overlay) {
-    display: none;
-  }
+  @extend %flex;
 
-  .tile-resizing-overlay {
+  &__content {
     @include size(100%, 100%);
-    background-color: white;
-
     @extend %flex;
 
-    &__content {
-      @include size(100%, 100%);
-      @extend %flex;
+    .app-icon {
+      @include size(40px, 40px);
 
-      .app-icon {
+      img {
         @include size(40px, 40px);
-
-        img {
-          @include size(40px, 40px);
-        }
       }
     }
   }
