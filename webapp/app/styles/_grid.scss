@@ -44,6 +44,72 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
     display: flex;
     flex-direction: column;
+
+    &.sw-collapsed-column { //vertical
+      .sw-row-content {
+        display: none;
+      }
+
+      .sw-grid-topbar {
+        @include size(100%, 100%);
+        background-color: $deepBlue-5;
+        border: 4px solid #FAFAFA;
+        transition: .2s;
+
+        &_content-title {
+          margin: 0;
+          padding-left: 2px;
+          line-height: 1.4;
+          opacity: .2;
+          font-weight: 900;
+
+          @include flex(center, center, column);
+        }
+
+        &:hover {
+          background-color: $deepBlue-10;
+          transition: .2s;
+        }
+      }
+    }
+
+    &:not(.sw-collapsed-column) { // Horizontal
+      .sw-collapsed-row {
+
+        .sw-row-content {
+          display: none;
+        }
+
+        .sw-grid-topbar {
+          @include size(100%, 100%);
+          background-color: $deepBlue-5;
+          border: 4px solid #FAFAFA;
+          transition: .2s;
+          // background-color: green;
+
+          &_content {
+            width: 100%;
+
+            &-title {
+              width: 100%;
+              margin: 0;
+              padding-left: 2px;
+              line-height: 1.4;
+              opacity: .2;
+              font-weight: 900;
+              letter-spacing: 3px;
+
+              @include flex(center, center);
+            }
+          }
+
+          &:hover {
+            background-color: $deepBlue-10;
+            transition: .2s;
+          }
+        }
+      }
+    }
   }
 
   .sw-resizeable-row {
@@ -58,18 +124,6 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
     .sw-row-content {
       @include size(100%, calc(100% - 50px));
-    }
-
-    &.sw-collapsed-row {
-
-      .sw-row-content {
-        display: none;
-      }
-
-      .sw-grid-topbar {
-        @include size(100%, 100%);
-        background-color: salmon;
-      }
     }
   }
 
@@ -122,7 +176,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       @include size(1px, 100%);
       left: 50%;
       transform: translateX(-50%);
-      background-color: $deepBlue-20;
+      background-color: $deepBlue-10;
       cursor: col-resize;
       transition: .2s ease-in-out;
     }
@@ -152,7 +206,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       left: 0;
       transform: translateY(-50%);
       transform-origin: 50% 50%;
-      background-color: $deepBlue-20;
+      background-color: $deepBlue-10;
       cursor: row-resize;
       will-change: height;
       transition: .2s ease-in-out;

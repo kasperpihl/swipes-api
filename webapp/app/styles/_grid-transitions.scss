@@ -23,7 +23,7 @@ $defaultTransformTransition: transform $transitionTime ease-in-out;
       }
 
       .sw-collapsed-row, .sw-collapse-column, .sw-collapse-row {
-        background-color: salmon;
+        background-color: $deepBlue-5;
 
         > * {
           opacity: 0;
