@@ -34,7 +34,7 @@ var Grid = React.createClass({
   componentDidMount() {
       this.debug = false;
       this.setState({columns: this.validateColumns(this.props.columns)});
-      
+
       //this.transitionStart('reordering', {test:true});
       //this.refs.grid.addEventListener('mousemove', this._onMouseMove);
   },
@@ -157,7 +157,7 @@ var Grid = React.createClass({
       var isCollapsed = this.columnIsCollapsed(column);
       if(column.collapsed != isCollapsed){
         column.collapsed = isCollapsed;
-      } 
+      }
       if(isCollapsed){
         colWidth = valObj.collapsedWidth;
         valObj.collapsedColumns.push(colI);
@@ -257,7 +257,7 @@ var Grid = React.createClass({
           row.h = Math.max(minHeight, row.h);
           totalHeight += row.h;
         }
-        
+
       }.bind(this));
       valObj.columnsTotalRowsHeight[colI] = totalHeight;
     }.bind(this));
@@ -284,7 +284,7 @@ var Grid = React.createClass({
       var width = column.w;
       if(!column.collapsed){
         width = width - remainingPercentageToAdd;
-        
+
         remainingPercentageToAdd = 0;
         if(width < minWidth){
           remainingPercentageToAdd = minWidth - width;
@@ -292,7 +292,7 @@ var Grid = React.createClass({
         }
         valObj.columns[realIndex].w = width;
       }
-      
+
 
     }
     valObj.totalWidthUsed = 100 + remainingPercentageToAdd;
@@ -302,7 +302,7 @@ var Grid = React.createClass({
   validatorAdjustRowOverflows(valObj){
     var reverse = true; // K_TODO: make dynamic here
 
-    
+
     valObj.columns.forEach(function(column, colI){
 
       var additionalHeight = valObj.columnsTotalRowsHeight[colI] - 100;
@@ -322,7 +322,7 @@ var Grid = React.createClass({
         if(!row.collapsed){
 
           height = height - remainingPercentageToAdd;
-          
+
           remainingPercentageToAdd = 0;
           if(height < minHeight){
             remainingPercentageToAdd = minHeight - height;
@@ -330,13 +330,13 @@ var Grid = React.createClass({
           }
           row.h = height;
         }
-        
+
 
       }
       valObj.columnsTotalRowsHeight[colI] = 100 + remainingPercentageToAdd;
 
     }.bind(this));
-    
+
     return valObj;
   },
   validatorMinimizeOverflows(columns, valObj){
@@ -428,7 +428,7 @@ var Grid = React.createClass({
 
     });
   },
-  
+
 
   columnResize(diffX){
     var collapsedSize = this.percentageWidthFromPixels(DEFAULT_COLLAPSED_WIDTH);
@@ -438,9 +438,9 @@ var Grid = React.createClass({
     trans.info.originallyCollapsed.forEach(function(i){
       minWidths[i] = collapsedSize;
     })
-    var options = { 
-      minSizes: minWidths, 
-      percentageToMove: this.percentageWidthFromPixels(diffX), 
+    var options = {
+      minSizes: minWidths,
+      percentageToMove: this.percentageWidthFromPixels(diffX),
       index: trans.info.col,
       collapsed: this.collapsedColumns(),
       orgSizes: trans.info.savedPercentages,
@@ -459,14 +459,14 @@ var Grid = React.createClass({
     trans.info.originallyCollapsed.forEach(function(i){
       minHeights[i] = collapsedSize;
     });
-    var options = { 
-      minSizes: minHeights, 
-      percentageToMove: this.percentageHeightFromPixels(diffY), 
+    var options = {
+      minSizes: minHeights,
+      percentageToMove: this.percentageHeightFromPixels(diffY),
       index: trans.info.row,
       collapsed: this.collapsedRowsInColumn(colI),
       orgSizes: trans.info.savedPercentages,
       collapsedSize: collapsedSize
-    };    
+    };
     var newPercentages = this._resizeWithPercentages(percentages, options);
     this.saveRowPercentagesToState(colI, newPercentages);
   },
@@ -525,7 +525,7 @@ var Grid = React.createClass({
   /*
     minSizes,
     collapsed,
-    collapsedSize, 
+    collapsedSize,
     percentageToMove,
     forceCollapse,
     index
@@ -587,8 +587,8 @@ var Grid = React.createClass({
     minSizes,
     orgSizes,
     collapsed,
-    collapsedSize, 
-    percentageToMove, 
+    collapsedSize,
+    percentageToMove,
     index
    */
   _resizeWithPercentages(percentages, options){
@@ -596,8 +596,8 @@ var Grid = React.createClass({
     var overflow = this.state.resizingOverflow;
     var diff = options.percentageToMove;
     var reverse = (diff < 0);
-    
-    
+
+
     if(overflow){
       var newOverflow = overflow + diff;
       diff = 0;
@@ -663,7 +663,7 @@ var Grid = React.createClass({
     }
 
     var remainingPercentageToAdd = Math.abs(diff) - remainingPercentageToRemove;
-    
+
     // Add to all previous up to the min size from the middle and out.
     helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: false, includeIndex: true}, function(percentage, i){
       if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
@@ -678,9 +678,9 @@ var Grid = React.createClass({
         }
         percentages[i] = percentage;
       }
-      
+
     }.bind(this));
-    
+
     // Add to all previous up to the original size they had from the far left towards middle
     helper.findNeighbor(percentages, {index: prevIndex, leftOnly: true, furthest: true, includeIndex: true }, function(percentage, i){
       if( !remainingPercentageToAdd || ( i !== options.index && options.collapsed[ realIndex(i) ]) )
@@ -697,7 +697,7 @@ var Grid = React.createClass({
           percentages[i] = percentage;
         }
       }
-      
+
     }.bind(this));
 
     // Add all remaining to the one right before the resizer
@@ -731,7 +731,7 @@ var Grid = React.createClass({
           transform += 'scaleX(' + scale + ') ';
           transformations[i].transformOrigin = origin + '% 50%';
         }
-        
+
       }
       else if(dOldPercentage !== dPercentage && Math.abs(dOldPercentage - dPercentage) > 0.1){
         var percentage = (dPercentage - dOldPercentage);
@@ -742,7 +742,7 @@ var Grid = React.createClass({
           var translateX = this.pixelsWidthFromPercentage(percentage);
           transform += 'translateX(' + translateX + 'px) ';
         }
-        
+
       }
       if(transform.length){
         transformations[i].transform = transform;
@@ -938,7 +938,7 @@ var Grid = React.createClass({
       else {
         arr.push(this.pixelsWidthFromPercentage(column.w));
       }
-      
+
     }.bind(this))
     return arr;
   },
@@ -962,7 +962,7 @@ var Grid = React.createClass({
       else {
         arr.push(this.pixelsHeightFromPercentage(row.h));
       }
-      
+
     }.bind(this))
     return arr;
   },
@@ -1055,7 +1055,7 @@ var Grid = React.createClass({
         newState = Object.assign(newState, stateChanges);
       }
       this.setState(newState);
-      
+
       this.callDelegate('gridDidTransitionStep', transition.name, transition.step);
 
     }
@@ -1120,6 +1120,15 @@ var Grid = React.createClass({
         }
       }
     }
+    if(trans.name === 'resizing'){
+      if( colIndex === trans.info.col || colIndex === trans.info.col - 1){
+        if(column.collapsed){
+          styles.width = column.w + '%';
+          console.log('forcing width');
+        }
+
+      }
+    }
     if(trans.name === "collapse"){
       if(trans.info.colTransformations){
         var transformations = trans.info.colTransformations[colIndex];
@@ -1174,7 +1183,7 @@ var Grid = React.createClass({
           classes.push("sw-resizing-collapsing-row");
         }
       }
-      
+
     }
     if(trans.name === 'reordering'){
       if(colIndex === trans.info.col){
@@ -1186,7 +1195,7 @@ var Grid = React.createClass({
             styles.boxShadow = SHADOW_BOTTOM;
           }
         }
-        
+
       }
     }
     if(trans.name === "collapse"){
@@ -1336,11 +1345,11 @@ var Grid = React.createClass({
         columns[indexes.col].rows[indexes.row].fullscreen = (step === 'isFullscreen');
         this.setState({columns: columns});
       }
-      
+
 
     }.bind(this));
   },
-  
+
   onCollapse(id){
     this._collapseRowWithId(id);
   },
@@ -1412,7 +1421,7 @@ var Grid = React.createClass({
       rowPercentages = this._moveWithPercentages(rowPercentages, options);
 
       transitionInfo.rowTransformations = this._sizeTransformations(oldRowPercentages, rowPercentages, true);
-      
+
       var targetPercentages = rowPercentages.map(function(percentage, i){
         if(percentage < minHeights[i]){
           return columns[indexes.col].rows[i].h;
@@ -1430,13 +1439,13 @@ var Grid = React.createClass({
           timer = 100;
           break;
         case "scaling":
-          timer = 250;
+          timer = 200;
           break;
         case "afterScaling":
           timer = 1;
           break;
         case "overlayOut":
-          timer = 300;
+          timer = 350;
           break;
       }
 

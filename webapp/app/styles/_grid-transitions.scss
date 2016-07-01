@@ -1,6 +1,7 @@
 $transitionTime: .25s;
+$opacityTransitionTime: .1s;
 $rippleTransitionTime: .35s;
-$defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,.88);
+$defaultTransformTransition: transform $transitionTime ease-in-out;
 .sw-resizeable-grid {
   &.sw-collapse {
     &.sw-collapse-overlayIn,
@@ -20,12 +21,14 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
         opacity: 0;
         visibility: hidden;
       }
-      .sw-collapse-row {
-        background-color: #eee;
+
+      .sw-collapsed-row, .sw-collapse-column, .sw-collapse-row {
+        background-color: salmon;
+
         > * {
           opacity: 0;
           visibility: hidden;
-          transition: visibility 0s .1s, opacity .1s;
+          transition: visibility 0s $opacityTransitionTime, opacity $opacityTransitionTime;
         }
       }
     }
@@ -42,21 +45,21 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       .sw-collapse-affected-row {
         opacity: 1;
         visibility: visible;
-        transition: visibility 0s, opacity .25s;
+        transition: visibility 0s, opacity .35s;
       }
 
-      .sw-collapse-row {
-        transition: background-color .3s;
+      .sw-collapsed-row, .sw-collapse-column, .sw-collapse-row {
+        transition: background-color .35s;
 
         > * {
           opacity: 1;
           visibility: visible;
-          transition: visibility 0s, opacity .25s;
+          transition: visibility 0s, opacity .35s;
         }
       }
     }
   }
-  
+
   &.sw-fullscreen {
 
     .sw-resize-vertical,
@@ -100,7 +103,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       }
     }
     &.sw-fullscreen-scalingDown {
-      .sw-resizeable-column, .sw-resizeable-row{ 
+      .sw-resizeable-column, .sw-resizeable-row{
         transition: z-index $transitionTime $transitionTime, transform $transitionTime cubic-bezier(.76,.33,.76,.88);
       }
     }
