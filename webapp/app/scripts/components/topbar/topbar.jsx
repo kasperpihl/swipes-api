@@ -10,6 +10,7 @@ var IconButton = require('material-ui/lib/icon-button');
 var Colors = require('material-ui/lib/styles/colors');
 var FontIcon = require('material-ui/lib/font-icon');
 
+
 var socketStore = require('../../stores/SocketStore');
 var topbarStore = require('../../stores/TopbarStore');
 var topbarActions = require('../../actions/TopbarActions');
@@ -33,9 +34,16 @@ var Topbar = React.createClass({
 	clickedAdd: function(){
 		if(this.state.topbar.isFullscreen) {
 			eventActions.fire("closeFullscreen");
-		} else {
+		}
+		else if(this.state.topbar.isSearching){
+			topbarActions.changeSearch(false);
+		}
+		else {
 			topbarActions.loadWorkflowModal();
 		}
+	},
+	clickedSearch:function(){
+		topbarActions.changeSearch(true);
 	},
 	signout: function () {
 		amplitude.setUserId(null); // Log out user from analytics
@@ -78,11 +86,15 @@ var Topbar = React.createClass({
 		}
 		setTimeout(this.gradientStep, 3000);
 	},
-
+	componentDidUpdate(prevProps, prevState) {
+	    if(this.state.topbar.focusOnSearch){
+	    	this.refs.searchInput.focus();
+	    	topbarActions.clearFocusVar();
+	    }  
+	},
 	render: function() {
 		var title = (document.location.pathname.startsWith("/services")) ? "Services" : "Workspace";
 		var topbarClass = 'sw-topbar';
-		var buttonClass = 'add';
 		var styles = {};
 
 		if(this.state.gradientPos) {
@@ -91,7 +103,9 @@ var Topbar = React.createClass({
 
 		if(this.state.topbar.isFullscreen) {
 			topbarClass += ' fullscreen'
-			buttonClass += ' close'
+		}
+		if(this.state.topbar.isSearching){
+			topbarClass += ' search';
 		}
 
 		return (
@@ -104,9 +118,11 @@ var Topbar = React.createClass({
 						</div>
 						<div className="sw-topbar__info__title">my workspace</div>
 					</div>
-
+					<div className="sw-topbar__searchbar">
+						<input ref="searchInput" placeholder="Search your apps" />
+					</div>
 					<div className="sw-topbar__actions">
-						<div className="sw-topbar__button sw-topbar__button--search">
+						<div className="sw-topbar__button sw-topbar__button--search" onClick={this.clickedSearch}>
 							<i className="material-icons">search</i>
 						</div>
 						<div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd}>

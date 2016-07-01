@@ -3,7 +3,9 @@ var Reflux = require('reflux');
 var TopbarActions = Reflux.createActions([
 	'loadWorkflowModal',
 	'changeFullscreen',
-	'sendFeedback'
+	'sendFeedback',
+	'changeSearch',
+	'clearFocusVar'
 ]);
 
 module.exports = TopbarActions;

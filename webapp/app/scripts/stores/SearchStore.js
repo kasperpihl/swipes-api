@@ -1,8 +1,13 @@
 var Reflux = require('reflux');
+var searchActions = require('../actions/SearchActions');
 
 var SearchStore = Reflux.createStore({
-	init: function(){
-		this.manualLoadData();
+	listenables: [ searchActions ],
+	defaults: {
+		searching: false
+	},
+	onOpenSearch:function(open){
+		this.set('searching', (open));
 	},
 	onSearch: function(string, options){
 		

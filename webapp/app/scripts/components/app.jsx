@@ -4,6 +4,7 @@ var Loading = require('./loading');
 var stateStore = require('../stores/StateStore');
 var Modal = require('./modal');
 var Topbar = require('./topbar/topbar');
+var SearchResults = require('./search-results');
 var LeftNav = require('./left_nav');
 
 // Requiring the stores
@@ -40,6 +41,7 @@ var App = React.createClass({
     		<div className="active-app">
     			{this.props.children}
     		</div>
+        <SearchResults />
     		<Modal />
         <LeftNav />
     	</div>);

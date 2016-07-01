@@ -2,6 +2,8 @@ var Reflux = require('reflux');
 var topbarActions = require('../actions/TopbarActions');
 var notificationActions = require('../actions/NotificationActions');
 var modalActions = require('../actions/ModalActions');
+var searchActions = require('../actions/SearchActions');
+
 var WorkflowStore = require('./WorkflowStore');
 var TopbarStore = Reflux.createStore({
 	listenables: [ topbarActions ],
@@ -22,6 +24,17 @@ var TopbarStore = Reflux.createStore({
 
 		});
 
+	},
+	onClearFocusVar:function(){
+		this.set('focusOnSearch', false, {trigger: false});	
+	},
+	onChangeSearch:function(isSearching){
+		if(isSearching){
+			this.set('focusOnSearch', true, {trigger: false});	
+		}
+		this.set('isSearching', isSearching);
+
+		searchActions.openSearch(isSearching);
 	},
 	onChangeFullscreen: function(isFullscreen){
 		this.set('isFullscreen', isFullscreen);

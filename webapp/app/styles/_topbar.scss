@@ -1,5 +1,5 @@
 $topbarSize: 50px;
-$searchbarSize: 120px;
+$searchbarSize: 90px;
 $fullscreenTopbarSize: 70px;
 
 .sw-topbar {
@@ -35,7 +35,36 @@ $fullscreenTopbarSize: 70px;
 
 		@include flex(center, space-between);
 	}
-
+	&__searchbar{
+		position: absolute;
+		height: $searchbarSize;
+		width: 400px;
+		top: 0;
+		left: calc(50% - 200px);
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity .2s, visibility 0s .2s;
+		input{
+			font-weight: 300;
+			color: #fff;
+			line-height: $searchbarSize;
+			font-size: 30px;
+			&::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+			    color:    #fff;
+			}
+			&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+			   color:    #fff;
+			   opacity:  1;
+			}
+			&::-moz-placeholder { /* Mozilla Firefox 19+ */
+			   color:    #fff;
+			   opacity:  1;
+			}
+			&:-ms-input-placeholder { /* Internet Explorer 10-11 */
+			   color:    #fff;
+			}
+		}
+	}
 	&__info {
 		@include flex(center, center);
 
@@ -60,7 +89,11 @@ $fullscreenTopbarSize: 70px;
 	&__actions {
 		@include flex(center, center);
 	}
-
+	&__button--search{
+		opacity: 1;
+		visibility: visible;
+		transition: opacity .2s, visibility 0s;
+	}
 	&__button {
 		@include size(40px, 50px);
 		@include flex(center, center);
@@ -83,6 +116,34 @@ $fullscreenTopbarSize: 70px;
 		}
 	}
 
+	&.search {
+		transform: translateY(0);
+		transition: .3s ease-in-out;
+	}
+	&.search & {
+
+		&__content {
+			@include size(100%, $searchbarSize);
+			transition: .3s ease-in-out;
+		}
+		&__button--search{
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity .2s, visibility 0s .2s;
+		}
+		&__searchbar{
+			opacity: 1;
+			visibility: visible;
+			transition: opacity .2s, visibility 0s;
+		}
+		&__button {
+
+			&--add {
+				transform: rotate(45deg);
+				transition: .3s ease-in-out;
+			}
+		}
+	}
 	&.fullscreen {
 		transform: translateY(calc((#{$searchbarSize} - #{$fullscreenTopbarSize}) * -1));
 		transition: .3s ease-in-out;
