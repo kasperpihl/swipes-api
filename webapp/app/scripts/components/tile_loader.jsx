@@ -442,8 +442,8 @@ var CardLoader = React.createClass({
 
 		return (
 			<div id={workflowId} className="tile">
+				{this.renderDropOverlay()}
 				{cardContent}
-				{this.renderResizingOverlay()}
 				{/*webviewLoader*/}
 			</div>
 		);

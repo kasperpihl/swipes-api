@@ -41,11 +41,11 @@
   @include size(100%, 100%);
   background-color: white;
 
-  @extend %flex;
+  @include flex(center, center);
 
   &__content {
     @include size(100%, 100%);
-    @extend %flex;
+    @include flex(center, center);
 
     .app-icon {
       @include size(40px, 40px);

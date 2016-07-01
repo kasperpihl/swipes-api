@@ -2,8 +2,7 @@ $transitionTime: .25s;
 $rippleTransitionTime: .35s;
 $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,.88);
 .sw-resizeable-grid {
-  width: 100%;
-  height: 100%;
+  @include size(100%, 100%);
   overflow: hidden;
   position: relative;
 
@@ -48,8 +47,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
   }
 
   .sw-resizeable-row {
-    height: 100%;
-    width: 100%;
+    @include size(100%, 100%);
     overflow: hidden;
     will-change: transform, z-index, height;
     position: relative;
@@ -59,8 +57,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     flex-direction: column;
 
     .sw-row-content {
-      height:calc(100% - 50px);
-      width: 100%;
+      @include size(100%, calc(100% - 50px));
     }
 
     &.sw-collapsed-row {
@@ -70,8 +67,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       }
 
       .sw-grid-topbar {
-        height:100%;
-        width:100%;
+        @include size(100%, 100%);
         background-color: salmon;
       }
     }
@@ -83,8 +79,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     top: 0;
     z-index: 2;
     left: 0;
-    width: 100%;
-    height: 100%;
+    @include size(100%, 100%);
     display: none;
   }
   .sw-resizing-overlay{
@@ -93,8 +88,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     top: 0;
     z-index:2;
     left: 0;
-    width: 100%;
-    height: 100%;
+    @include size(100%, 100%);
     display: none;
   }
   &.sw-resizing{
@@ -114,8 +108,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
   }
 
   .sw-resize-vertical {
-    width: 16px;
-    height: 100%;
+    @include size(16px, 100%);
     position: absolute;
     left: calc(0px - 8px);
     top: 0;
@@ -126,8 +119,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       content: "";
       position: absolute;
       top: 0;
-      width: 1px;
-      height: 100%;
+      @include size(1px, 100%);
       left: 50%;
       transform: translateX(-50%);
       background-color: $deepBlue-20;
@@ -145,8 +137,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
   }
 
   .sw-resize-horizontal { // figure out how to do the trigger zones when we have rows
-    height: 16px;
-    width: 100%;
+    @include size(100%, 16px);
     position: absolute;
     left: 0;
     top: calc(0px - 8px);
@@ -157,8 +148,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       content: "";
       position: absolute;
       top: 50%;
-      width: 100%;
-      height: 2px;
+      @include size(100%, 2px);
       left: 0;
       transform: translateY(-50%);
       transform-origin: 50% 50%;
@@ -182,4 +172,3 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
 @import "grid-topbar";
 @import "grid-transitions";
-
