@@ -41,7 +41,7 @@
     "validator": "^4.3.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "swipes-dot": "^0.3.4"
+    "swipes-dot": "^0.3.5"
   },
   "engines": {
     "node": "4.2.x"
