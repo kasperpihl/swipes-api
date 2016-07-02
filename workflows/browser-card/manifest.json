@@ -1,11 +1,11 @@
 {
 	"manifest_version": 1,
-	"name": "Asana Card",
-	"identifier": "asana-card",
+	"name": "Browser Tile",
+	"identifier": "browser-tile",
 	"version": "0.1",
-	"description": "The Asana Tasks App For Swipes",
+	"description": "Browser tile For Swipes",
 	"index": "dev/index.html",
-	"required_services": ["asana"],
-	"domains": ["asana.com", "app.asana.com"],
+	"required_services": [],
+	"domains": [],
 	"icon": "images/logo-asana.svg"
 }

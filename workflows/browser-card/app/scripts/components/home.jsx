@@ -31,14 +31,14 @@ const Home = class extends React.Component {
       ...other
     } = this.props;
 
-    return <div class='home-container'>
-      <form onSubmit={onSubmit.bind(this, this.refs.input.value)}>
+    return <div className='home-container'>
+      <form >
         <input
           ref='input'
           type='text'
           placeholder='browser, browser on the screen... who is the prettiest of them all' />
       </form>
-      <iframe src={url}></iframe>
+      <webview src={url}></webview>
     </div>
   }
 }

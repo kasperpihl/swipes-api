@@ -407,7 +407,7 @@ var CardLoader = React.createClass({
 			}
 
 			// Determine if the
-			if(this.state.workflow.required_services){
+			if(this.state.workflow.required_services.length > 0){
 				var requiredService = this.state.workflow.required_services[0];
 				var selectedAccountId = this.state.workflow.selectedAccountId;
 				var foundSelectedAccount = false;
