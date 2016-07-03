@@ -208,12 +208,12 @@ module.exports = function (grunt) {
               '<%= yeoman.sdk %>/swipes-client-communicator.js'
             ],
             '<%= yeoman.dev %>/scripts/swipes-client-sdk.js': [
-              '<%= yeoman.sdk %>/jquery.min.js',
-              '<%= yeoman.sdk %>/underscore.min.js',
-              '<%= yeoman.sdk %>/q.min.js',
+              '<%= yeoman.sdk %>/dependencies/jquery.min.js',
+              '<%= yeoman.sdk %>/dependencies/underscore.min.js',
+              '<%= yeoman.sdk %>/dependencies/q.min.js',
               '<%= yeoman.sdk %>/swipes-api-connector.js',
               '<%= yeoman.sdk %>/swipes-client-communicator.js',
-              '<%= yeoman.sdk %>/swipes-app-sdk.js',
+              '<%= yeoman.sdk %>/swipes-client-sdk.js',
               '<%= yeoman.sdk %>/swipes-sdk-init.js'
             ]
           }
