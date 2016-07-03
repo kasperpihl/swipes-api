@@ -321,14 +321,15 @@ var TileLoader = React.createClass({
 
 
 		if(this.state.workflow){
+
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			workflowId = this.state.workflow.id;
-			console.log('url', url);
 			// For Tiho
 			// preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')}
 			// For Kris
 			// preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
-			cardContent = <webview preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')} src={url} ref="webview" className="workflow-frame-class"></webview>
+
+			cardContent = <webview preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')} src={url} ref="webview" className="workflow-frame-class"></webview>;
 			//cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 
 			// Determine if the

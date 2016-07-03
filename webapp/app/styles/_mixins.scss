@@ -44,6 +44,12 @@
 	width: $width;
 	height: $height;
 }
+@mixin hide(){
+	flex: 0 1;
+	pointer-events: none;
+	width: 0px;
+	height: 0px;
+}
 
 @mixin flex($vertical, $horizontal, $direction:row) {
 	display: flex;
