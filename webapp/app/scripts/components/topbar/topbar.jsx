@@ -49,7 +49,7 @@ var Topbar = React.createClass({
 		amplitude.setUserId(null); // Log out user from analytics
 		stateStore._reset({trigger: false});
 		localStorage.clear();
-		swipes.setToken(null);
+		swipesApi.setToken(null);
 		window.location.replace('/');
 	},
 	workspace: function(){

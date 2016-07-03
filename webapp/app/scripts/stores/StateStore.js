@@ -11,8 +11,8 @@ var StateStore = Reflux.createStore({
 	localStorage: "StateStore",
 	persistOnly: [ "swipesToken", "sidebarClosed", "isLoggedIn"],
 	onInit: function() {
-		if(!swipes.getToken()){
-			swipes.setToken(this.get("swipesToken"));
+		if(!swipesApi.getToken()){
+			swipesApi.setToken(this.get("swipesToken"));
 			socketActions.start();
 		}
 	},

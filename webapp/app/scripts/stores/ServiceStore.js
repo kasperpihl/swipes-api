@@ -6,11 +6,15 @@ var ServiceStore = Reflux.createStore({
 		if(typeof query === "string"){
 			query = JSON.parse(query);
 		}
-		swipes.service(serviceName).authSuccess(query, function(res, err){
+		var options = {
+			service: serviceName,
+			data: query
+		};
+		swipesApi.request('services.authsuccess', options, function(res, err){
 			amplitude.logEvent('Engagement - Added Service', {'Service': serviceName});
 			mixpanel.track('Added Service', {'Service': serviceName});
 			console.log('oauth success!', res, err);
-		})
+		});
 	}
 });
 

@@ -39,7 +39,7 @@ var Signin = React.createClass({
 			password: password
 		};
 		var self = this;
-		swipes.api.request({force:true, command:"users.login"}, data, function(res,error){
+		swipesApi.request({force:true, command:"users.login"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Signed In');

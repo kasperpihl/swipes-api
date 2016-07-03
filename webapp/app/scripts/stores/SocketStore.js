@@ -19,7 +19,7 @@ var SocketStore = Reflux.createStore({
 	onStart: function(){
 		var self = this;
 
-		swipes.api.request("rtm.start").then(function(res){
+		swipesApi.request("rtm.start").then(function(res){
 			if(res.ok) {
 				self.connect(res.url);
 				userStore.batchLoad(res.users, {flush:true, trigger:false});
@@ -51,7 +51,7 @@ var SocketStore = Reflux.createStore({
 		var self = this;
 		self.set("status", "connecting");
 		this.webSocket = io.connect(url, {
-			query: 'token=' + swipes.getToken(),
+			query: 'token=' + swipesApi.getToken(),
 			reconnectionDelay: 5000
 		});
 		this.webSocket.on('message', function(msg){

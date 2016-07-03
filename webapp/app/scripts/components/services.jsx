@@ -13,7 +13,9 @@ var SelectField = require('material-ui/lib/SelectField');
 var MenuItem = require('material-ui/lib/menus/menu-item');
 
 var Navigation = Router.Navigation;
-
+var getAuthorizeURL = function(serviceName){
+	return swipesApi.getAPIURL() + 'services.authorize?service=' + serviceName;
+};
 var Services = React.createClass({
 	mixins: [ServiceStore.connect("services"), Reflux.connectFilter(UserStore, "user", function(users) {
 		return users.filter(function(user) {
@@ -76,7 +78,7 @@ Services.SelectRow = React.createClass({
 			this.props.onConnectNew();
 		}
 		var serviceName = this.props.data.manifest_id;
-		var url = swipes.service(serviceName).getAuthorizeURL();
+		var url = getAuthorizeURL(serviceName);
 		var {ipcRenderer} = nodeRequire('electron');
 
 		ipcRenderer.send('oauth-init', {
@@ -137,7 +139,7 @@ Services.SelectRow = React.createClass({
 Services.ConnectRow = React.createClass({
 	clickedAuthorize: function(){
 		var serviceName = this.props.data.manifest_id;
-		var url = swipes.service(serviceName).getAuthorizeURL();
+		var url = getAuthorizeURL(serviceName);
 		var {ipcRenderer} = nodeRequire('electron');
 
 		ipcRenderer.send('oauth-init', {

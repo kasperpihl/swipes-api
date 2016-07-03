@@ -24,17 +24,17 @@ var WorkflowStore = Reflux.createStore({
 		};
 	},
 	onRenameWorkflow: function(workflow, name){
-		swipes.api.request('users.renameWorkflow', {'workflow_id': workflow.id, name: name}, function(res, error){
+		swipesApi.request('users.renameWorkflow', {'workflow_id': workflow.id, name: name}, function(res, error){
 
 		})
 	},
 	onSelectAccount:function(workflow, accountId){
 		this.update(workflow.id, {selectedAccountId: accountId});
-		swipes.api.request('users.selectWorkflowAccountId', {"workflow_id": workflow.id, "account_id": accountId}, function(res, error){
+		swipesApi.request('users.selectWorkflowAccountId', {"workflow_id": workflow.id, "account_id": accountId}, function(res, error){
 		});
 	},
 	onRemoveWorkflow: function(workflow){
-		swipes.api.request("users.removeWorkflow", {"workflow_id": workflow.id}, function(res,error){
+		swipesApi.request("users.removeWorkflow", {"workflow_id": workflow.id}, function(res,error){
 			if(res && res.ok){
 				amplitude.logEvent('Engagement - Removed Workflow', {'Workflow': workflow.manifest_id});
 				mixpanel.track('Removed Card', {'Card': workflow.manifest_id})

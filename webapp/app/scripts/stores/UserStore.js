@@ -40,7 +40,7 @@ var UserStore = Reflux.createStore({
 		};
 	},
 	onServiceDisconnect: function (serviceId) {
-		swipes.api.request('users.serviceDisconnect', {id: serviceId}, function () {
+		swipesApi.request('users.serviceDisconnect', {id: serviceId}, function () {
 			// K_TODO update UserStore
 			console.log('Service disconnected');
 		});

@@ -1,7 +1,7 @@
 .tile {
   @include size(100%, 100%);
 
-  iframe {
+  .workflow-frame-class {
     @include size(100%, 100%);
   }
   .drop-overlay{
@@ -24,7 +24,7 @@
   }
 }
 .active-app.dragging, .active-app.resizing, .active-app.draggingDot{
-  iframe{
+  .workflow-frame-class{
     pointer-events: none;
   }
 }

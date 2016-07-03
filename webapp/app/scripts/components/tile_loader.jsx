@@ -1,7 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var objectAssign = require('object-assign');
-
 // Node requires
 var http = nodeRequire('http');
 var https = nodeRequire('https');
@@ -26,7 +25,10 @@ var stateStore = require('../stores/StateStore');
 var leftNavActions = require('../actions/LeftNavActions');
 var Services = require('./services');
 
-var CardLoader = React.createClass({
+var Webview = require('react-electron-webview');
+console.log(Webview);
+
+var TileLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
 		return workflows.filter(function(workflow) {
 			return workflow.id === this.props.data.id;
@@ -38,11 +40,37 @@ var CardLoader = React.createClass({
 	}) ],
 	getInitialState:function(){
 		return {
-			cardMenuState: 'inactive',
-			webviewLoading: true
+			webviewLoading: true,
+			webviewLoaded: false
 		};
 	},
-	connectorHandleResponseReceivedFromListener: function(connector, message, callback){
+	addHandlersForWebview(){
+		var webview = this.refs.webview;
+		if(this.state.webviewLoaded)
+			return;
+
+
+		if (webview) {
+
+			webview.addEventListener('dom-ready', this.onDomReady);
+
+			webview.addEventListener('ipc-message', (event) => {
+				var arg = event.args[0];
+				this.apiCon.receivedMessage(arg);
+				
+			});
+			webview.addEventListener('console-message', (e, stuff) => {
+			  //console.log('Tile:', e, stuff);
+			});
+		}
+		this.setState({webviewLoaded: true});
+	},
+	communicatorSendMessage(com, message){
+		var webview = this.refs.webview;
+		webview.send('message', message);
+	},
+	
+	communicatorReceivedMessage: function(com, message, callback){
 		var self = this,
 				data, userInfo;
 
@@ -102,10 +130,6 @@ var CardLoader = React.createClass({
 			}
 			else if(message.command === 'leftNav.load'){
 				leftNavActions.load(data, callback);
-			}
-			else if(message.command === 'navigation.setBadge'){
-				// this.setState({badge: data.badge});
-				// workspaceActions.setNotifications(this.state.workflow.id, data.badge);
 			}
 			else if(message.command === 'notifications.send'){
 
@@ -192,8 +216,7 @@ var CardLoader = React.createClass({
 				manifest: workflow,
 				_id: this.state.workflow.id,
 				user_id: userStore.me().id,
-				token: stateStore.get("swipesToken"),
-				target_url: document.location.protocol + "//" + document.location.host
+				token: stateStore.get("swipesToken")
 			}
 		};
 		if(this.state.workflow.selectedAccountId){
@@ -202,14 +225,12 @@ var CardLoader = React.createClass({
 
 		// Lazy instantiate
 		if(!this.apiCon){
-			this.apiCon = swipes._client.copyConnector();
+			this.apiCon = new SwClientCom(this);
 		}
-		this.apiCon.setId(this.state.workflow.id);
-		var doc = this.refs.iframe.contentWindow;
-		var apiUrl = this.apiCon.getBaseURL();
-		this.apiCon.setListener(doc, apiUrl);
-		this.apiCon.callListener("event", initObj);
-		this.apiCon.setDelegate(this);
+		this.apiCon.sendMessage(initObj);
+	},
+	postMessage(data){
+		this.refs.webview.send('message', data);
 	},
 	onDragMouseDown:function( side, e){
 		// Add dragging class (preventing iframes from receiving mouse events)
@@ -224,112 +245,19 @@ var CardLoader = React.createClass({
 	},
 	onWindowFocus: function(e){
 		if(this.apiCon){
-			this.apiCon.callListener("event", {type: 'app.focus'});
+			this.apiCon.sendMessage({type: 'app.focus'});
 		}
 	},
 	onWindowBlur: function(e){
 		if(this.apiCon){
-			this.apiCon.callListener("event", {type: 'app.blur'});
+			this.apiCon.sendMessage({type: 'app.blur'});
 		}
 	},
 	componentDidMount() {
-		var that = this;
-		var webview = this.refs.webview;
-
-		if (webview) {
-			var url = this.state.workflow.index_url;
-			var splitURL = url.split('/').slice(0,-1).join('/');
-			var cssContent = '';
-			var jsContent = '';
-
-			webview.addEventListener('dom-ready', () => {
-				//webview.openDevTools();
-
-				// Build this with promises
-				if (splitURL.startsWith('https')) { // production env
-					https.get(splitURL + '/styles/main.css').on('response', function (response) {
-						response.on('data', function (chunk) {
-			        cssContent += chunk;
-			    	});
-
-						response.on('end', function (chunk) {
-							webview.insertCSS(cssContent);
-
-              // just because there is a delay between injection and actually applying CSS, this is probably really dumb
-							setTimeout(function(){
-								that.setState({webviewLoading: false});
-							}, 1000);
-			    	});
-					})
-
-					https.get(splitURL + '/scripts/main.js').on('response', function (response) {
-				    response.on('data', function (chunk) {
-			        jsContent += chunk;
-			    	});
-
-						response.on('end', function (chunk) {
-							webview.executeJavaScript(jsContent);
-			    	});
-					})
-				} else { // Dev env
-					http.get(splitURL + '/styles/main.css').on('response', function (response) {
-				    response.on('data', function (chunk) {
-			        cssContent += chunk;
-			    	});
-
-						response.on('end', function (chunk) {
-							webview.insertCSS(cssContent);
-
-              // just because there is a delay between injection and actually applying CSS, this is probably really dumb
-							setTimeout(function(){
-								that.setState({webviewLoading: false});
-							}, 1000);
-			    	});
-					})
-
-					http.get(splitURL + '/scripts/main.js').on('response', function (response) {
-				    response.on('data', function (chunk) {
-			        jsContent += chunk;
-			    	});
-
-						response.on('end', function (chunk) {
-							webview.executeJavaScript(jsContent);
-			    	});
-					})
-				}
-			});
-			webview.addEventListener('did-start-loading', () => {
-				this.setState({webviewLoading: true})
-			})
-
-			webview.addEventListener('did-stop-loading', () => {
-				console.log('stop loading');
-				// just because there is a delay between injection and actually applying CSS, this is probably really dumb
-				setTimeout(function(){
-					that.setState({webviewLoading: false});
-				}, 1000);
-			})
-
-
-			webview.addEventListener('did-navigate', () => {
-				webview.insertCSS(cssContent);
-			})
-
-			webview.addEventListener('page-title-updated', () => {
-				webview.executeJavaScript(jsContent);
-			})
-			// Handle analytics
-			webview.addEventListener('ipc-message', (event) => {
-			  var arg = event.args[0];
-
-				if (event.channel === 'mixpanel') {
-					mixpanel.track('Card Action', {
-		        Card: arg.manifest_id,
-		        Action: arg.action
-		      });
-				}
-			});
-		}
+		this.addHandlersForWebview();
+	},
+	componentDidUpdate(prevProps, prevState) {
+	    this.addHandlersForWebview();  
 	},
 	componentWillMount() {
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
@@ -383,6 +311,9 @@ var CardLoader = React.createClass({
 	onSelectedAccount: function(selectedAccount){
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
+	onDomReady(e){
+		this.onLoad();
+	},
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
@@ -391,20 +322,14 @@ var CardLoader = React.createClass({
 
 		if(this.state.workflow){
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
-			var externalUrl = this.state.workflow.external_url;
 			workflowId = this.state.workflow.id;
-
-			if (externalUrl) {
-				cardContent = <webview
-					preload={'file://' + path.join(app.getAppPath(), 'preload/' + this.state.workflow.manifest_id + '.js')}
-					ref="webview"
-					src={externalUrl}
-					className="workflow-frame-class">
-				</webview>;
-				// webviewLoader = this.renderWebviewLoader();
-			} else {
-				cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
-			}
+			console.log('url', url);
+			// For Tiho
+			// preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')}
+			// For Kris
+			// preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
+			cardContent = <webview preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')} src={url} ref="webview" className="workflow-frame-class"></webview>
+			//cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 
 			// Determine if the
 			if(this.state.workflow.required_services.length > 0){
@@ -426,7 +351,7 @@ var CardLoader = React.createClass({
 					return false;
 				});
 
-				if(!externalUrl && (!this.state.workflow.selectedAccountId || !foundSelectedAccount)){
+				if(!this.state.workflow.selectedAccountId || !foundSelectedAccount){
 					cardContent = <Services.SelectRow
 													onConnectNew={this.onConnectNew}
 													onSelectedAccount={this.onSelectedAccount}
@@ -452,4 +377,4 @@ var CardLoader = React.createClass({
 
 
 
-module.exports = CardLoader;
+module.exports = TileLoader;

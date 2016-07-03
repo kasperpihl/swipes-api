@@ -52,7 +52,7 @@ var Signup = React.createClass({
 			repassword: password
 		};
 		var self = this;
-		swipes.api.request({force:true, command:"users.create"}, data, function(res,error){
+		swipesApi.request({force:true, command:"users.create"}, data, function(res,error){
 			console.log(res,error);
 			if(res && res.ok){
         mixpanel.alias(res.userId);
