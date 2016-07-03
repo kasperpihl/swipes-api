@@ -54,7 +54,7 @@ var Row = React.createClass({
     var child = this.props.callGridDelegate('gridRenderRowForId', data.id);
 
     return (
-      <div className={className} onTransitionEnd={this.props.delegate.onTransitionEnd} id={"row-" + data.id } ref="row" style={styles}>
+      <div className={className} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />
         
         {this.renderResizingOverlay()}

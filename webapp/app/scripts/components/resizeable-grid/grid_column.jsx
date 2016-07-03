@@ -40,7 +40,7 @@ var Column = React.createClass({
 
 
     return (
-      <div id={"column-" + this.props.columnIndex} onTransitionEnd={this.props.delegate.onTransitionEnd} className={className} style={styles}>
+      <div id={"column-" + this.props.columnIndex} className={className} style={styles}>
         {this.renderResizer()}
         <CollapsingOverlay />
         {rows}

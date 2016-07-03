@@ -17,8 +17,21 @@ var offset = require('document-offset');
 
 // define the steps of transitions here.
 var TRANSITIONS_STEPS = {
-  fullscreen: ["rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple"],
-  collapse: ["overlayIn", "scaling", "afterScaling", "overlayOut"],
+  fullscreen: [
+    {n: "rippleStart", t: 330},
+    {n: "scalingUp", t:250},
+    "isFullscreen",
+    {n: "rippleEnd", t: 100},
+    {n: "beforeScaleDown", t: 1},
+    {n: "scalingDown", t: 250},
+    {n: "removeRipple", t: 330}
+  ],
+  collapse: [
+    {n: "overlayIn", t: 100}, 
+    {n: "scaling", t: 200}, 
+    {n:"afterScaling", t: 1}, 
+    {n: "overlayOut", t: 350}
+  ],
   resizing: ["resizing"],
   reordering: ["reordering"]
 };
@@ -1034,15 +1047,22 @@ var Grid = React.createClass({
   transitionNext(transition, stateChanges){
     if(!transition){
       transition = this.state.transition;
-    }
-
+    } 
+    var timer = 0;
     if(transition){
       var lastIndex = TRANSITIONS_STEPS[transition.name].length - 1;
       var step = null, callback = transition._callback;
       var newTransition = null;
       if(transition._currentIndex < lastIndex){
         transition._currentIndex++;
-        transition.step = TRANSITIONS_STEPS[transition.name][transition._currentIndex];
+        var nextStep = TRANSITIONS_STEPS[transition.name][transition._currentIndex];
+        if(typeof nextStep === "string"){
+          nextStep = {n: nextStep};
+        }
+        if(nextStep.t){
+          timer = nextStep.t;
+        }
+        transition.step = nextStep.n;
         step = transition.step;
         newTransition = transition;
       }
@@ -1057,31 +1077,14 @@ var Grid = React.createClass({
       this.setState(newState);
 
       this.callDelegate('gridDidTransitionStep', transition.name, transition.step);
-
-    }
-  },
-
-  onTransitionEnd(e){
-    var trans = this.state.transition;
-    if(!trans){
-      return;
-    }
-    if(trans.name === "fullscreen"){
-      if(e.target.classList.contains("transition-ripple")){
-        if(trans.step === "rippleEnd"){
+      if(timer){
+        setTimeout(function(){
           this.transitionNext();
-          setTimeout(function(){
-            this.transitionNext();
-          }.bind(this), 1);
-        }
-      }
-      if(e.target.id === "row-" + trans.info.id){
-        if(trans.step.isOneOf("scalingUp", "scalingDown")){
-          this.transitionNext();
-        }
+        }.bind(this), timer);
       }
     }
   },
+
   transitionForGrid(){
     var trans = this.state.transition;
     if(!trans){
@@ -1336,11 +1339,6 @@ var Grid = React.createClass({
     };
     this.transitionStart("fullscreen", transitionInfo, function(step){
       var columns = this.state.columns;
-      if(step === "rippleStart" || step === "removeRipple"){
-        setTimeout(function(){
-          this.transitionNext();
-        }.bind(this), 330);
-      }
       if(!step || step === 'isFullscreen'){
         columns[indexes.col].rows[indexes.row].fullscreen = (step === 'isFullscreen');
         this.setState({columns: columns});
@@ -1433,29 +1431,6 @@ var Grid = React.createClass({
     }
 
     this.transitionStart("collapse", transitionInfo, function(step){
-      var timer = 0;
-      switch(step){
-        case "overlayIn":
-          timer = 100;
-          break;
-        case "scaling":
-          timer = 200;
-          break;
-        case "afterScaling":
-          timer = 1;
-          break;
-        case "overlayOut":
-          timer = 350;
-          break;
-      }
-
-      if(timer){
-        setTimeout(function(){
-          this.transitionNext();
-        }.bind(this), timer);
-      }
-
-
       if(step === "afterScaling"){
         var percentages = transitionInfo.targetPercentages;
         var columns = this.state.columns;
