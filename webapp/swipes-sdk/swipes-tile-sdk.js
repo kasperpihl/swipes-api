@@ -9,9 +9,9 @@ var SwipesAppSDK = (function() {
 		this.api = new SwipesAPIConnector(apiUrl);
 
 		// workspaceSendFunction is defined in the preload
-		this._com = new SwClientCom(workspaceSendFunction);
-		this._com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
-		this._com.addListener('init', function(data){
+		this.com = new SwClientCom(workspaceSendFunction);
+		this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
+		this.com.addListener('init', function(data){
 			if(data.token) {
 				this.api.setToken(data.token);
 			}
@@ -19,8 +19,8 @@ var SwipesAppSDK = (function() {
 				this.info = data.info;
 			}
 			// Now let's unlock the communicator since the connection from the workspace is ready
-			if(this._com.isLocked()){
-				this._com.unlock();
+			if(this.com.isLocked()){
+				this.com.unlock();
 			}
 		}.bind(this));
 
@@ -31,14 +31,14 @@ var SwipesAppSDK = (function() {
 
 	// Send events to the workspace
 	SwipesAppSDK.prototype.sendEvent = function(command, data, callback){
-		this._com.sendCommand(command, data, callback);
+		this.com.sendCommand(command, data, callback);
 	}
 	// Add listener to events sent from workspace
 	SwipesAppSDK.prototype.addListener = function(command, listener, ctx){
-		self._com.addListener(command, listener, ctx);
+		self.com.addListener(command, listener, ctx);
 	}
 	SwipesAppSDK.prototype.removeListener = function(command, listener, ctx){
-		self._com.removeListener(command, listener, ctx);
+		self.com.removeListener(command, listener, ctx);
 	}
 
 	// initObj.info from tile_loader will be this after init.

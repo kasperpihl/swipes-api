@@ -63,6 +63,9 @@ var Workspace = React.createClass({
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
+    sendCommandToAllTiles(command, data, callback){
+
+    },
     sendCommandToTile(id, command, data, callback){
       var tile = this._cachedTiles[id];
       if(tile){

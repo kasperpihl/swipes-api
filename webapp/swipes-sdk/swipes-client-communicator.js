@@ -67,8 +67,8 @@ var SwClientCom = (function () {
 		if(typeof message !== 'object') {
 			return;
 		}
-
-		if (message.identifier && message.command) {
+		// Check if it's a command, or reply to a command.
+		if (message.command) {
 			var res = null;
 			// When receiving a command, check if any listeners have been attached and call them.
 			var listeners = this.getListeners(message.command);
@@ -83,9 +83,11 @@ var SwClientCom = (function () {
 			this._generateAndSendResponseToCommand(message.identifier, res);
 		}
 		// Else if receiving the reply from a command, check the local callbacks.
-		else if (message.reply_to && this._callbacks[message.reply_to]) {
-			this._localCallbacks[message.reply_to](message.data);
-			delete this._localCallbacks[message.reply_to];
+		else if (message.reply_to) {
+			if(this._localCallbacks[message.reply_to]){
+				this._localCallbacks[message.reply_to](message.data);
+				delete this._localCallbacks[message.reply_to];
+			}
 		}
 	};
 
@@ -100,6 +102,7 @@ var SwClientCom = (function () {
 	}
 
 	// Internal listener api, used for handling received events
+	// Supports context as the third parameter, 
 	SwClientCom.prototype.addListener = function(command, listener, ctx){
 		if(!command || typeof command !== 'string'){
 			return console.warn('SwClientCom: addListener param1 (command): not set or not string');
@@ -107,9 +110,11 @@ var SwClientCom = (function () {
 		if(!listener || typeof listener !== 'function'){
 			return console.warn("SwClientCom: addListener param2 (listener): not set or not function");
 		}
-		var currentListeners = this._listenersObj[command] || [];
-		ctx = ctx || "";
+		if(typeof ctx !== 'string'){
+			ctx = '';
+		}
 
+		var currentListeners = this._listenersObj[command] || [];
 		currentListeners.push({listener: listener, context: ctx});
 		this._listenersObj[command] = currentListeners;
 	};

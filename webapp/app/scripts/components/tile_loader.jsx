@@ -61,8 +61,9 @@ var TileLoader = React.createClass({
 			webview.addEventListener('console-message', (e) => {
 			  //console.log(e.line, e.message);
 			});
+			this.setState({webviewLoaded: true});
 		}
-		this.setState({webviewLoaded: true});
+		
 	},
 	// Pass on a command through the communicator
 	sendCommandToTile: function(command, data, callback){
@@ -116,7 +117,7 @@ var TileLoader = React.createClass({
 				fromCardId: this.props.data.id,
 				data: data
 			};
-
+			
 			this.props.dotDragBegin(newData, callback);
 		});
 
@@ -145,10 +146,6 @@ var TileLoader = React.createClass({
 			});
 		})
 	},
-	receivedSocketEvent: function(e){
-		// K_TODO, fix this somehow
-		this.sendCommandToTile(e);
-	},
 	onLoad:function(){
 		var workflow = this.state.workflow;
 
@@ -173,29 +170,19 @@ var TileLoader = React.createClass({
 		// Provide the sendFunction that the communicator will use to send the commands
 		var sendFunction = function(data){ this.refs.webview.send('message', data); }.bind(this);
 		this.com = new SwClientCom(sendFunction, initObj);
-		// Add the listeners for which commands to handle
+		// Add the listeners for which commands to handle from the tile
 		this.addListenersToCommunicator();
 	},
 
-	onWindowFocus: function(e){
-		this.sendCommandToTile('app.focus');
-	},
-	onWindowBlur: function(e){
-		this.sendCommandToTile('app.blur');
-	},
 	componentDidMount() {
-		this.addHandlersForWebview();
-
-		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
-		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
 		this.callDelegate('tileDidLoad', this.props.data.id);
+		this.addHandlersForWebview();
 	},
 	componentDidUpdate(prevProps, prevState) {
 	    this.addHandlersForWebview();  
 	},
 	componentWillUnmount:function(){
 		this.callDelegate('tileWillUnload', this.props.data.id);
-		eventActions.remove(null, null, "card" + this.props.data.id);
 	},
 	renderDropOverlay: function(){
 		var title = "";
@@ -233,8 +220,7 @@ var TileLoader = React.createClass({
 
 			var url = this.state.workflow.index_url + '?id=' + this.state.workflow.id;
 			workflowId = this.state.workflow.id;
-			// For Tiho
-			// preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')}
+
 			// For Kris
 			// preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
 
@@ -245,8 +231,7 @@ var TileLoader = React.createClass({
 				var requiredService = this.state.workflow.required_services[0];
 				var selectedAccountId = this.state.workflow.selectedAccountId;
 				var foundSelectedAccount = false;
-				var self = this;
-				var connectedServices = _.filter(this.state.user.services, function(service){
+				var connectedServices = _.filter(this.state.user.services, (service) => {
 					if(service.service_name === requiredService){
 						if(selectedAccountId && selectedAccountId === service.id){
 							foundSelectedAccount = true;
