@@ -6,23 +6,39 @@ var SwipesAppSDK = (function() {
 		}
 
 		var apiUrl = window.location.origin;
-		this._com = new SwClientCom(this, parent);
-		this._com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
-
 		this.api = new SwipesAPIConnector(apiUrl);
-		this._tempListenerQueue = [];
-		this._listenersObj = {};
 
+		// workspaceSendFunction is defined in the preload
+		this._com = new SwClientCom(workspaceSendFunction);
+		this._com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
+		this._com.addListener('init', function(data){
+			if(data.token) {
+				this.api.setToken(data.token);
+			}
+			if(data.info){
+				this.info = data.info;
+			}
+			// Now let's unlock the communicator since the connection from the workspace is ready
+			if(this._com.isLocked()){
+				this._com.unlock();
+			}
+		}.bind(this));
+
+		
 		self = this;
+
 	}
 
 	// Send events to the workspace
 	SwipesAppSDK.prototype.sendEvent = function(command, data, callback){
-		this._com.sendMessage(command, data, callback);
+		this._com.sendCommand(command, data, callback);
 	}
 	// Add listener to events sent from workspace
-	SwipesAppSDK.prototype.addListener = function(eventName, callback){
-		self._listeners.add(eventName, callback);
+	SwipesAppSDK.prototype.addListener = function(command, listener, ctx){
+		self._com.addListener(command, listener, ctx);
+	}
+	SwipesAppSDK.prototype.removeListener = function(command, listener, ctx){
+		self._com.removeListener(command, listener, ctx);
 	}
 
 	// initObj.info from tile_loader will be this after init.
@@ -196,64 +212,6 @@ var SwipesAppSDK = (function() {
 				return deferred.promise;
 			}
 		};
-	};
-	
-	// Internal listener api, used for handling received events
-	SwipesAppSDK.prototype._listeners = {
-		add: function(eventName, callback){
-			var currentListeners = self._listenersObj[eventName];
-			if(!currentListeners)
-				currentListeners = [];
-			currentListeners.push(callback);
-			self._listenersObj[eventName] = currentListeners;
-		},
-		remove: function(eventName){
-
-		},
-		get: function(eventName){
-			var currentListeners = self._listenersObj[eventName];
-
-			if(!currentListeners)
-				currentListeners = [];
-			return currentListeners;
-		}
-	}
-
-	
-	// Delegate method for communicator whenever receiving a message from the workspace
-	SwipesAppSDK.prototype.handleReceivedMessage = function (message, callback) {
-		var res = null;
-
-		if (message && message.command) {
-			var data = message.data;
-			if(message.command == "init"){
-				if(data.token) {
-					this.api.setToken(data.token);
-				}
-				if(data.info){
-					this.info = data.info;
-				}
-				// Now let's unlock the communicator since the connection from the workspace is ready
-				if(this._com.isLocked()){
-					this._com.unlock();
-				}
-			}
-
-			// When receiving a command, check if any listeners have been attached and call them.
-			var listeners = self._listeners.get(message.command);
-			for (var i = 0 ; i < listeners.length ; i++) {
-				var handler = listeners[i];
-				if(handler) {
-					// Limitation, only the last callback added will return a result to callback
-					res = handler(message);
-				}
-			}
-		}
-
-		if(callback) {
-			// Always callback any result from the listener, if any.
-			callback(res);
-		}
 	};
 
 	return SwipesAppSDK;

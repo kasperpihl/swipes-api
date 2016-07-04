@@ -55,7 +55,8 @@ var TileLoader = React.createClass({
 			webview.addEventListener('dom-ready', this.onLoad);
 			webview.addEventListener('ipc-message', (event) => {
 				var arg = event.args[0];
-				this.passReceivedMessageToCommunicator(arg);
+				// Pass the received message on to the communicator
+				this.com.receivedCommand(arg); 
 			});
 			webview.addEventListener('console-message', (e) => {
 			  //console.log(e.line, e.message);
@@ -63,91 +64,86 @@ var TileLoader = React.createClass({
 		}
 		this.setState({webviewLoaded: true});
 	},
+	// Pass on a command through the communicator
 	sendCommandToTile: function(command, data, callback){
-		if(this._com){
-			this._com.sendMessage(command, data, callback);
+		if(this.com){
+			this.com.sendCommand(command, data, callback);
 		}
 	},
-	receivedCommandFromTile: function(command, data, callback){
-		var self = this,
-				data, userInfo;
-		if (command) {
-			if (command === "navigation.setTitle") {
-				if (data.title) {
-					this.setState({"titleFromCard": data.title});
-				}
+	addListenersToCommunicator(){
+		
+		this.com.addListener('navigation.setTitle', (data) => {
+			if (data.title) {
+				this.setState({"titleFromCard": data.title});
 			}
-			else if (command === "event.focus"){
-				//this.onMouseDown();
-			}
-			else if (command === "modal.load"){
-				modalActions.loadModal(data.modal, data.options, callback);
-			}
-			else if (command === "openURL"){
+		});
+
+		this.com.addListener('modal.load', (data) => {
+			modalActions.loadModal(data.modal, data.options, callback);
+		})
+
+		this.com.addListener('openURL', (data) => {
+			if(data.url){
 				window.open(data.url, "_blank");
 			}
-			else if (command === "dot.startDrag"){
-				var newData = {
-					fromCardId: this.props.data.id,
-					data: data
+		});
+		this.com.addListener('analytics.action', (data) => {
+			if(this.state.workflow){
+				var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
+				amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
+				mixpanel.track('Card Action', analyticsProps);
+
+			}
+		});
+		this.com.addListener('leftNav.load', (data) => {
+			leftNavActions.load(data, callback);
+		});
+		this.com.addListener('notifications.send', (data) => {
+			var notification = {
+				title: this.state.workflow.name,
+				message: data.message
+			};
+			if(data.title){
+				notification.title += ": " + data.title;
+			}
+			if(!document.hasFocus()) {
+				notificationActions.send(notification);
+			}
+		});
+
+		this.com.addListener('dot.startDrag', (data) => {
+			var newData = {
+				fromCardId: this.props.data.id,
+				data: data
+			};
+
+			this.props.dotDragBegin(newData, callback);
+		});
+
+		this.com.addListener('share.request', (data) => {
+			console.log('init share ffs');
+			cardActions.broadcast('share.init', {
+				sourceCardId: message._id
+			}, function (list) {
+				var modalData = {
+					title: "Share to",
+					emptyText: "Seems that you have one lonely card there. Add another one!",
+					rows: list
 				};
 
-				this.props.dotDragBegin(newData, callback);
-			}
-			else if (command === "share.request") {
-				console.log('init share ffs');
-				cardActions.broadcast('share.init', {
-					sourceCardId: message._id
-				}, function (list) {
-					var modalData = {
-						title: "Share to",
-						emptyText: "Seems that you have one lonely card there. Add another one!",
-						rows: list
-					};
+				modalActions.loadModal('list', modalData, function (row) {
+					if(row){
 
-					modalActions.loadModal('list', modalData, function (row) {
-						if(row){
-
-							eventActions.fire("share.transmit", {
-								fromCardId: self.state.workflow.id,
-								toCardId: row.id,
-								action: row.action,
-								data: data
-							});
-						}
-					});
+						eventActions.fire("share.transmit", {
+							fromCardId: self.state.workflow.id,
+							toCardId: row.id,
+							action: row.action,
+							data: data
+						});
+					}
 				});
-			}
-			else if (command === 'analytics.action'){
-				if(this.state.workflow){
-					var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
-					amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
-					mixpanel.track('Card Action', analyticsProps);
-
-				}
-			}
-			else if(command === 'leftNav.load'){
-				leftNavActions.load(data, callback);
-			}
-			else if(command === 'notifications.send'){
-
-				var notification = {
-					title: this.state.workflow.name,
-					message: data.message
-				};
-				if(data.title){
-					notification.title += ": " + data.title;
-				}
-				if(!document.hasFocus()) {
-					notificationActions.send(notification);
-				}
-			}
-			else if (command === "listenTo") {
-				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "card" + this.props.data.id);
-
-				//return this.listeners[data.event] = connector;
-			}
-		}
+			});
+		})
 	},
 	receivedSocketEvent: function(e){
 		// K_TODO, fix this somehow
@@ -172,11 +168,13 @@ var TileLoader = React.createClass({
 		if(this.state.workflow.selectedAccountId){
 			initObj.info.selectedAccountId = this.state.workflow.selectedAccountId;
 		}
-
-		// Lazy instantiate
-		var target = {postMessage: function(data){ this.refs.webview.send('message', data); }.bind(this)};
-		this._com = new SwClientCom(this, target, initObj);
-
+		
+		// Initialize the communicator
+		// Provide the sendFunction that the communicator will use to send the commands
+		var sendFunction = function(data){ this.refs.webview.send('message', data); }.bind(this);
+		this.com = new SwClientCom(sendFunction, initObj);
+		// Add the listeners for which commands to handle
+		this.addListenersToCommunicator();
 	},
 
 	onWindowFocus: function(e){
@@ -184,15 +182,6 @@ var TileLoader = React.createClass({
 	},
 	onWindowBlur: function(e){
 		this.sendCommandToTile('app.blur');
-	},
-	passReceivedMessageToCommunicator(message){
-		this._com.receivedMessageFromTarget(message);
-	},
-	
-	handleReceivedMessage: function(message, callback){
-		var command = message.command;
-		var data = message.data;
-		this.receivedCommandFromTile(command, data, callback);
 	},
 	componentDidMount() {
 		this.addHandlersForWebview();
