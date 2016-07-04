@@ -1,8 +1,9 @@
-
 var SwClientCom = (function () {
-	function SwClientCom(delegate) {
+	function SwClientCom(delegate, isConnected) {
 		this._callbacks = {};
 		this._listenerQueue = [];
+		this._isConnected = (isConnected);
+
 		if(delegate){
 			this.setDelegate(delegate);
 		}
@@ -11,6 +12,17 @@ var SwClientCom = (function () {
 	/*
 		Delegate will be sending messages and handling the parsed received messages
 	*/
+	SwClientCom.prototype.setConnected = function(){
+		this._isConnected = true;
+		if (this._listenerQueue.length > 0) {
+			for (var i = 0; i < this._listenerQueue.length; i++) {
+				var listenObj = this._listenerQueue[i];
+				this.sendMessage(listenObj.command, listenObj.data, listenObj.callback);
+			}
+
+			this._listenerQueue = [];
+		}
+	};
 	SwClientCom.prototype.setDelegate = function (delegate) {
 		// Test if delegate is an object
 		if(typeof delegate !== 'object'){
@@ -28,16 +40,16 @@ var SwClientCom = (function () {
 		this._delegate = delegate;
 	};
 
-	SwClientCom.prototype.sendMessage = function(data, callback) {
-		if(!this._delegate){
-			console.log("listener queue", command);
-			return this._listenerQueue.push({data: data, callback: callback});
+	SwClientCom.prototype.sendMessage = function(command, data, callback) {
+		if(!this._isConnected){
+			return this._listenerQueue.push({command: command, data: data, callback: callback});
 		}
 
 		var identifier = this._generateId();
 		var callJson = {
 			'identifier': identifier,
-			'data': data
+			'data': data,
+			'command': command
 		};
 
 		if (callback && typeof callback === 'function') {
@@ -49,16 +61,6 @@ var SwClientCom = (function () {
 	SwClientCom.prototype.receivedMessage = function(message) {
 		if(typeof message !== 'object') {
 			return;
-		}
-
-		if (this._listenerQueue.length > 0) {
-			for (var i = 0; i < this._listenerQueue.length; i++) {
-				var listenObj = this._listenerQueue[i];
-
-				this.sendMessage(listenObj.data, listenObj.callback);
-			}
-
-			this._listenerQueue = [];
 		}
 
 		if (message.reply_to && this._callbacks[message.reply_to]) {

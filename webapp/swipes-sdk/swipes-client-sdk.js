@@ -8,7 +8,8 @@ var SwipesAppSDK = (function() {
 		var apiUrl = window.location.origin;
 		this._com = new SwClientCom(this);
 		this._api = new SwipesAPIConnector(apiUrl);
-
+		this._tempListenerQueue = [];
+		this._isConnectedToParent = false;
 		this._listenersObj = {};
 
 		self = this;
@@ -262,16 +263,8 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
-	SwipesAppSDK.prototype.share = {
-		request: function (data) {
-			self._com.sendMessage("share.request", data);
-		},
-		init: function (data) {
-			self._com.sendMessage('share.init', data);
-		},
-		transmit: function(data){
-			self._com.sendMessage('share.transmit', data);
-		}
+	SwipesAppSDK.prototype.share = function (data, callback) {
+		self._com.sendMessage("share.request", data, callback);
 	};
 
 	SwipesAppSDK.prototype.request = {
@@ -300,33 +293,32 @@ var SwipesAppSDK = (function() {
 	}
 
 	// API for handling calls from main app
-	SwipesAppSDK.prototype.communicatorSendMessage = function(data){
+	SwipesAppSDK.prototype.communicatorSendMessage = function(com, data){
 		if(parent && typeof parent.postMessage === 'function'){
 			parent.postMessage(data);
 		}
 	}
-	SwipesAppSDK.prototype.communicatorReceivedMessage = function (connector, message, callback) {
+	SwipesAppSDK.prototype.communicatorReceivedMessage = function (com, message, callback) {
 		var res = null;
 
-		if (message) {
+		if (message && message.command) {
 			var data = message.data;
-			console.log(JSON.stringify(data));
-			if(data.type == "init"){
-				if(data.data.token) {
-					this._api.setToken(data.data.token);
+			if(message.command == "init"){
+				if(data.token) {
+					this._api.setToken(data.token);
 				}
-				if(data.data.manifest){
-					this.info.workflow = data.data.manifest;
+				if(data.manifest){
+					this.info.workflow = data.manifest;
 				}
-				if(data.data.selectedAccountId){
-					this.info.selectedAccountId = data.data.selectedAccountId;
+				if(data.selectedAccountId){
+					this.info.selectedAccountId = data.selectedAccountId;
 				}
-				if(data.data.user_id){
-					this.info.userId = data.data.user_id;
+				if(data.user_id){
+					this.info.userId = data.user_id;
 				}
 			}
-
-			var listeners = self._listeners.get(data.type);
+			this._com.setConnected();
+			var listeners = self._listeners.get(message.command);
 
 			for (var i = 0 ; i < listeners.length ; i++) {
 

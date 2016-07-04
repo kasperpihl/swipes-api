@@ -51,16 +51,13 @@ var TileLoader = React.createClass({
 
 
 		if (webview) {
-
 			webview.addEventListener('dom-ready', this.onDomReady);
-
 			webview.addEventListener('ipc-message', (event) => {
 				var arg = event.args[0];
 				this.apiCon.receivedMessage(arg);
-				
 			});
-			webview.addEventListener('console-message', (e, stuff) => {
-			  //console.log('Tile:', e, stuff);
+			webview.addEventListener('console-message', (e) => {
+			  //console.log(e.line, e.message);
 			});
 		}
 		this.setState({webviewLoaded: true});
@@ -73,7 +70,6 @@ var TileLoader = React.createClass({
 	communicatorReceivedMessage: function(com, message, callback){
 		var self = this,
 				data, userInfo;
-
 		if (message && message.command) {
 			data = message.data;
 			if (message.command === "navigation.setTitle") {
@@ -99,6 +95,7 @@ var TileLoader = React.createClass({
 				this.props.dotDragBegin(newData, callback);
 			}
 			else if (message.command === "share.request") {
+				console.log('init share ffs');
 				cardActions.broadcast('share.init', {
 					sourceCardId: message._id
 				}, function (list) {
@@ -153,15 +150,12 @@ var TileLoader = React.createClass({
 	},
 	receivedSocketEvent: function(e){
 		if(this.apiCon){
-			this.apiCon.callListener("event", e);
+			this.apiCon.sendMessage(e);
 		}
 	},
 	onShareInit: function (e) {
 		if (e.toCardId === this.props.data.id) {
-			this.apiCon.callListener('event', {
-				type: 'share.init',
-				data: e
-			}, e.callback);
+			this.apiCon.sendMessage('share.init', e, e.callback);
 		}
 	},
 	onShareTransmit: function (e) {
@@ -169,26 +163,17 @@ var TileLoader = React.createClass({
 			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
 			amplitude.logEvent('Engagement - Share Action', analyticsProps);
 			mixpanel.track('Share Action', analyticsProps);
-			this.apiCon.callListener('event', {
-				type: 'share.transmit',
-				data: e
-			});
+			this.apiCon.sendMessage('share.transmit', e);
 		}
 	},
 	onRequestPreOpenUrl: function (e) {
 		if (e.toCardId === this.props.data.id) {
-			this.apiCon.callListener('event', {
-				type: 'request.preOpenUrl',
-				data: e
-			}, e.callback);
+			this.apiCon.sendMessage('request.preOpenUrl', e, e.callback);
 		}
 	},
 	onRequestOpenUrl: function (e) {
 		if (e.toCardId === this.props.data.id) {
-			this.apiCon.callListener('event', {
-				type: 'request.openUrl',
-				data: e
-			});
+			this.apiCon.sendMessage('request.openUrl', e);
 		}
 	},
 	onLoad:function(){
@@ -211,23 +196,20 @@ var TileLoader = React.createClass({
 
 
 		var initObj = {
-			type: "init",
-			data: {
-				manifest: workflow,
-				_id: this.state.workflow.id,
-				user_id: userStore.me().id,
-				token: stateStore.get("swipesToken")
-			}
+			manifest: workflow,
+			_id: this.state.workflow.id,
+			user_id: userStore.me().id,
+			token: stateStore.get("swipesToken")
 		};
 		if(this.state.workflow.selectedAccountId){
-			initObj.data.selectedAccountId = this.state.workflow.selectedAccountId;
+			initObj.selectedAccountId = this.state.workflow.selectedAccountId;
 		}
 
 		// Lazy instantiate
 		if(!this.apiCon){
-			this.apiCon = new SwClientCom(this);
+			this.apiCon = new SwClientCom(this, true);
 		}
-		this.apiCon.sendMessage(initObj);
+		this.apiCon.sendMessage('init', initObj);
 	},
 	postMessage(data){
 		this.refs.webview.send('message', data);
@@ -245,12 +227,12 @@ var TileLoader = React.createClass({
 	},
 	onWindowFocus: function(e){
 		if(this.apiCon){
-			this.apiCon.sendMessage({type: 'app.focus'});
+			this.apiCon.sendMessage('app.focus');
 		}
 	},
 	onWindowBlur: function(e){
 		if(this.apiCon){
-			this.apiCon.sendMessage({type: 'app.blur'});
+			this.apiCon.sendMessage('app.blur');
 		}
 	},
 	componentDidMount() {
@@ -330,7 +312,6 @@ var TileLoader = React.createClass({
 			// preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
 
 			cardContent = <webview preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')} src={url} ref="webview" className="workflow-frame-class"></webview>;
-			//cardContent = <iframe ref="iframe" sandbox="allow-scripts allow-same-origin allow-popups" onLoad={this.onLoad} src={url} className="workflow-frame-class" frameBorder="0"/>;
 
 			// Determine if the
 			if(this.state.workflow.required_services.length > 0){
