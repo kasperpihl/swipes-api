@@ -23,19 +23,17 @@ var SwClientCom = (function () {
 			this._listenerQueue = [];
 		}
 	};
+
+	SwClientCom.prototype.setTarget = function(target){
+		if(typeof target.postMessage !== 'function'){
+			throw new Error('SwClientCom: Target not responding to postMessage');
+		}
+		this._target = target;
+	}
+
 	SwClientCom.prototype.setDelegate = function (delegate) {
-		// Test if delegate is an object
-		if(typeof delegate !== 'object'){
-			throw new Error('SwClientCom: Delegate not an object');
-		}
-
-		if(typeof delegate.communicatorSendMessage !== 'function'){
-			throw new Error('SwClientCom: Delegate not responding to communicatorSendMessage');
-		}
-
-		// Test for required delegate methods
-		if(typeof delegate.communicatorReceivedMessage !== 'function'){
-			throw new Error('SwClientCom: Delegate not responding to communicatorReceivedMessage');
+		if(typeof delegate.hanleReceivedMessage !== 'function'){
+			throw new Error('SwClientCom: Delegate not responding to handleReceivedMessage');
 		}
 		this._delegate = delegate;
 	};
@@ -55,7 +53,7 @@ var SwClientCom = (function () {
 		if (callback && typeof callback === 'function') {
 			this._callbacks[identifier] = callback;
 		}
-		this._delegate.communicatorSendMessage(this, callJson);
+		this._target.postMessage(callJson);
 	};
 
 	SwClientCom.prototype.receivedMessage = function(message) {
@@ -69,7 +67,7 @@ var SwClientCom = (function () {
 		}
 		else if (message.identifier) {
 			if (this._delegate) {
-				this._delegate.communicatorReceivedMessage(this, message, function(result, error){
+				this._delegate.handleReceivedMessage(this, message, function(result, error){
 					this._replyToMessage(message.identifier, result, error);
 				}.bind(this));
 			}
@@ -90,7 +88,7 @@ var SwClientCom = (function () {
 			callJson.error = error;
 		}
 
-		this._delegate.communicatorSendMessage(this, callJson);
+		this._target.postMessage(callJson);
 	}
 
 	/*

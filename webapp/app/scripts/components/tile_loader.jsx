@@ -59,12 +59,8 @@ var TileLoader = React.createClass({
 		}
 		this.setState({webviewLoaded: true});
 	},
-	communicatorSendMessage(com, message){
-		var webview = this.refs.webview;
-		webview.send('message', message);
-	},
 	
-	communicatorReceivedMessage: function(com, message, callback){
+	handleReceivedMessage: function(com, message, callback){
 		var self = this,
 				data, userInfo;
 		if (message && message.command) {
@@ -172,6 +168,8 @@ var TileLoader = React.createClass({
 		// Lazy instantiate
 		if(!this._com){
 			this._com = new SwClientCom(this, true);
+			var target = {postMessage: function(data){ this.refs.webview.send('message', data); }.bind(this)};
+			this._com.setTarget(target);
 		}
 		this._com.sendMessage('init', initObj);
 	},

@@ -7,6 +7,7 @@ var SwipesAppSDK = (function() {
 
 		var apiUrl = window.location.origin;
 		this._com = new SwClientCom(this);
+		this._com.setDelegate(parent);
 		this._api = new SwipesAPIConnector(apiUrl);
 		this._tempListenerQueue = [];
 		this._isConnectedToParent = false;
@@ -290,12 +291,7 @@ var SwipesAppSDK = (function() {
 	}
 
 	// API for handling calls from main app
-	SwipesAppSDK.prototype.communicatorSendMessage = function(com, data){
-		if(parent && typeof parent.postMessage === 'function'){
-			parent.postMessage(data);
-		}
-	}
-	SwipesAppSDK.prototype.communicatorReceivedMessage = function (com, message, callback) {
+	SwipesAppSDK.prototype.handleReceivedMessage = function (com, message, callback) {
 		var res = null;
 
 		if (message && message.command) {
