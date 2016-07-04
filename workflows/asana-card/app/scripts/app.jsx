@@ -10,11 +10,11 @@ var CreateTaskInputActions = require('./actions/CreateTaskInputActions');
 
 ReactDOM.render(<Home />, document.getElementById('content'));
 
-swipes.onReady (function () {
+swipes.ready (function () {
 	MainStore.fetch();
 });
 
-swipes.onRequestPreOpenUrl(function(e) {
+swipes.addListener('request.preOpenUrl', function(e) {
 	var url = e.data.data.url;
 	var projectName = MainStore.currentProjectName();
 
@@ -29,7 +29,7 @@ swipes.onRequestPreOpenUrl(function(e) {
 	return null;
 });
 
-swipes.onRequestOpenUrl(function(e) {
+swipes.addListener('request.openUrl', function(e) {
 	var url = e.data.data.url;
 	var urlParts = url.split('/');
 	var projectId = urlParts[urlParts.length-2];
@@ -47,7 +47,7 @@ swipes.onRequestOpenUrl(function(e) {
 	}
 });
 
-swipes.onShareInit(function(e) {
+swipes.addListener('share.init', function(e) {
 	var projectName = MainStore.currentProjectName();
 	var action = MainStore.getShareAction();
 
@@ -59,7 +59,7 @@ swipes.onShareInit(function(e) {
 	}
 });
 
-swipes.onShareTransmit(function(e) {
+swipes.addListener('share.transmit', function(e) {
 	var data = e.data.data;
 
 	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
@@ -69,7 +69,6 @@ swipes.onShareTransmit(function(e) {
 		// document.getElementById('create-task-input').focus();
 	}
 });
-
-swipes.onMenuButton(function () {
+swipes.addListener('menu.button', function(){
 	MainActions.toggleSideMenu();
-});
+})

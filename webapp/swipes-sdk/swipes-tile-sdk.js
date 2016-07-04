@@ -32,32 +32,14 @@ var SwipesAppSDK = (function() {
 		// Manifest will be loaded in here
 	};
 
-	SwipesAppSDK.prototype.onReady = function(callback){
-		self.addEventListener("init", callback);
-	};
-	SwipesAppSDK.prototype.onAppFocus = function(callback){
-		self.addEventListener('app.focus', callback);
-	};
-	SwipesAppSDK.prototype.onAppBlur = function(callback){
-		self.addEventListener('app.blur', callback);
-	};
-	SwipesAppSDK.prototype.onMenuButton = function(callback){
-		self.addEventListener('menu.button', callback);
-	};
-	SwipesAppSDK.prototype.onShareInit = function(callback){
-		self.addEventListener("share.init", callback);
-	};
-	SwipesAppSDK.prototype.onShareTransmit = function(callback){
-		self.addEventListener("share.transmit", callback);
-	};
-	SwipesAppSDK.prototype.onRequestPreOpenUrl = function(callback){
-		self.addEventListener("request.preOpenUrl", callback);
-	};
-	SwipesAppSDK.prototype.onRequestOpenUrl = function(callback){
-		self.addEventListener("request.openUrl", callback);
+	SwipesAppSDK.prototype.ready = function(callback){
+		self.addListener("init", callback);
 	};
 
-	SwipesAppSDK.prototype.addEventListener = function(eventName, callback){
+	/*
+		Add listener to events sent from workspace
+	 */
+	SwipesAppSDK.prototype.addListener = function(eventName, callback){
 		self._listeners.add(eventName, callback);
 	}
 

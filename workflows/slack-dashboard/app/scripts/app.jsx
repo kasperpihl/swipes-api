@@ -11,11 +11,11 @@ var ChatList = require('./components/chatlist');
 
 ReactDOM.render(<ChatList />, document.getElementById('content'));
 
-swipes.onReady(function(){
+swipes.ready(function(){
 	chatStore.start();
 });
 
-swipes.onShareInit(function(e) {
+swipes.addListener('share.init', function(e) {
 	var channels = channelStore.getActive();
 	var currentChatId = chatStore.get('channelId');
 
@@ -31,7 +31,7 @@ swipes.onShareInit(function(e) {
 	}
 });
 
-swipes.onShareTransmit(function(e) {
+swipes.addListener('share.transmit', function(e) {
 	var data = e.data.data;
 
 	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
@@ -42,6 +42,6 @@ swipes.onShareTransmit(function(e) {
 	}
 });
 
-swipes.onAppFocus(function(e){
+swipes.addListener('app.focus', function(e){
 	chatActions.checkSocket(e);
 });

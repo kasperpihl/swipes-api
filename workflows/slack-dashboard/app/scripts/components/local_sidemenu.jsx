@@ -11,7 +11,7 @@ var userStore = require('../stores/UserStore');
 var LocalSidemenu = React.createClass({
 	mixins: [channelStore.connect('channels'), userStore.connect('users')],
 	componentDidMount:function() {
-		swipes.onMenuButton(function(){
+		swipes.addListener('menu.button', function(){
 			this.refs.sidemenu.togglePin();
 		}.bind(this));
 	},

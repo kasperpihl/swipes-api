@@ -6,6 +6,6 @@ const HomePage = new HomeProvider(Home);
 
 ReactDOM.render(<HomePage />, document.getElementById('content'));
 
-swipes.onReady (function () {
+swipes.ready (function () {
 	console.log('we are here');
 });
