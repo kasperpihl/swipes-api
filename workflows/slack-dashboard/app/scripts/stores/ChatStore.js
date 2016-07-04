@@ -131,7 +131,7 @@ var ChatStore = Reflux.createStore({
 		if(channel){
 			this.unset(['messages', 'sections']);
 			this.set('showingUnread', channel.last_read, {trigger:false});
-			swipes.navigation.setTitle(channel.name);
+			swipes.sendEvent('navigation.setTitle', {title:channel.name});
 			this.set('channelId', channel.id);
 			this.fetchChannel(channel);
 		}
@@ -458,7 +458,7 @@ var ChatStore = Reflux.createStore({
 		// Update notification count - get total number from store
 		var total = ChannelStore.getTotalNotificationCount();
 		var badge = total ? total : "";
-		swipes.navigation.setBadge(badge);
+		swipes.sendEvent('navigation.setBadge', {badge: badge});
 	},
 	fetchChannel: function(channel){
 		var self = this;

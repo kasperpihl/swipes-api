@@ -6,8 +6,7 @@ var SwipesAppSDK = (function() {
 		}
 
 		var apiUrl = window.location.origin;
-		this._com = new SwClientCom(this);
-		this._com.setTarget(parent);
+		this._com = new SwClientCom(this, parent);
 		this._com.lock(); // Lock until ready from the workspace
 
 		this.api = new SwipesAPIConnector(apiUrl);
@@ -17,16 +16,6 @@ var SwipesAppSDK = (function() {
 		self = this;
 	}
 
-	// API for handling navigation bar in main app
-	SwipesAppSDK.prototype.navigation = {
-		// Setting the title of the navigation bar manually
-		setTitle:function(title){
-			self.sendEvent("navigation.setTitle",{"title":title});
-		},
-		setBadge: function(badge){
-			self.sendEvent('navigation.setBadge', {badge: badge});
-		}
-	};
 
 	SwipesAppSDK.prototype.info = {
 		// Manifest will be loaded in here

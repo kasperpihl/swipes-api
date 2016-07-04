@@ -47,7 +47,8 @@ swipes.addListener('request.openUrl', function(e) {
 	}
 });
 
-swipes.addListener('share.init', function(e) {
+
+swipes.addListener('share.provideDropzones', function(e) {
 	var projectName = MainStore.currentProjectName();
 	var action = MainStore.getShareAction();
 
@@ -59,7 +60,7 @@ swipes.addListener('share.init', function(e) {
 	}
 });
 
-swipes.addListener('share.transmit', function(e) {
+swipes.addListener('share.receivedData', function(e) {
 	var data = e.data.data;
 
 	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
@@ -69,6 +70,7 @@ swipes.addListener('share.transmit', function(e) {
 		// document.getElementById('create-task-input').focus();
 	}
 });
+
 swipes.addListener('menu.button', function(){
 	MainActions.toggleSideMenu();
 })

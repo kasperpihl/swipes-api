@@ -72,7 +72,7 @@ var SideMenuSection = React.createClass({
 		  MainActions.toggleSideMenu();
 		}
 
-    swipes.navigation.setTitle(project.name);
+    swipes.sendEvent('navigation.setTitle', {title:project.name});
   },
   render: function () {
     var workspace = this.props.workspace;

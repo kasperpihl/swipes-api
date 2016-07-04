@@ -72,9 +72,6 @@ var TileLoader = React.createClass({
 		var self = this,
 				data, userInfo;
 		if (command) {
-			if(command === "tile.focus"){
-
-			}
 			if (command === "navigation.setTitle") {
 				if (data.title) {
 					this.setState({"titleFromCard": data.title});
@@ -178,7 +175,6 @@ var TileLoader = React.createClass({
 		var target = {postMessage: function(data){ this.refs.webview.send('message', data); }.bind(this)};
 		this._com = new SwClientCom(this, target, initObj);
 
-		this.getDynamicDropzone();
 	},
 
 	onWindowFocus: function(e){

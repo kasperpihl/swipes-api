@@ -27,7 +27,7 @@ var Home = React.createClass({
 
 			navName = navName;
 
-      swipes.navigation.setTitle(navName);
+      swipes.sendEvent('navigation.setTitle', {title:navName});
 
       return (
 				<StatusesList projectId={projectId} />
