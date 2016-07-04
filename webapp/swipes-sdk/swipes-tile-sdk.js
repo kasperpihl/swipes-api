@@ -18,7 +18,7 @@ var SwipesAppSDK = (function() {
 
 
 	SwipesAppSDK.prototype.info = {
-		// Manifest will be loaded in here
+		// initObj.info will be this after init.
 	};
 
 	SwipesAppSDK.prototype.ready = function(callback){
@@ -261,14 +261,8 @@ var SwipesAppSDK = (function() {
 				if(data.token) {
 					this.api.setToken(data.token);
 				}
-				if(data.manifest){
-					this.info.workflow = data.manifest;
-				}
-				if(data.selectedAccountId){
-					this.info.selectedAccountId = data.selectedAccountId;
-				}
-				if(data.user_id){
-					this.info.userId = data.user_id;
+				if(data.info){
+					this.info = data.info;
 				}
 				if(this._com.isLocked()){
 					this._com.unlock();

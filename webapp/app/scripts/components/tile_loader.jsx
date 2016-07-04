@@ -162,13 +162,15 @@ var TileLoader = React.createClass({
 		}
 
 		var initObj = {
-			manifest: workflow,
-			_id: this.state.workflow.id,
-			user_id: userStore.me().id,
-			token: stateStore.get("swipesToken")
+			// Info object will be available in SDK from swipes.info
+			info: {
+				workflow: workflow,
+				userId: userStore.me().id
+			},
+			token: stateStore.get("swipesToken")			
 		};
 		if(this.state.workflow.selectedAccountId){
-			initObj.selectedAccountId = this.state.workflow.selectedAccountId;
+			initObj.info.selectedAccountId = this.state.workflow.selectedAccountId;
 		}
 
 		// Lazy instantiate
