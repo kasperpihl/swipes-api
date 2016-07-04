@@ -56,7 +56,7 @@ var TileLoader = React.createClass({
 			webview.addEventListener('dom-ready', this.onLoad);
 			webview.addEventListener('ipc-message', (event) => {
 				var arg = event.args[0];
-				this._com.receivedMessageFromTarget(arg);
+				this.passReceivedMessageToCommunicator(arg);
 			});
 			webview.addEventListener('console-message', (e) => {
 			  //console.log(e.line, e.message);
@@ -148,9 +148,7 @@ var TileLoader = React.createClass({
 		}
 	},
 	receivedSocketEvent: function(e){
-		if(this._com){
-			this._com.sendMessage(e);
-		}
+		this.sendMessageToTile(e);
 	},
 	onLoad:function(){
 		var workflow = this.state.workflow;
@@ -171,23 +169,19 @@ var TileLoader = React.createClass({
 		}
 
 		// Lazy instantiate
-		if(!this._com){
-			this._com = new SwClientCom(this, true);
-			var target = {postMessage: function(data){ this.refs.webview.send('message', data); }.bind(this)};
-			this._com.setTarget(target);
-		}
-		this._com.sendMessage('init', initObj);
+		var target = {postMessage: function(data){ this.refs.webview.send('message', data); }.bind(this)};
+		this._com.setTarget(target);
+		this.sendMessageToTile('init', initObj);
 	},
 
 	onWindowFocus: function(e){
-		if(this._com){
-			this._com.sendMessage('app.focus');
-		}
+		this.sendMessageToTile('app.focus');
 	},
 	onWindowBlur: function(e){
-		if(this._com){
-			this._com.sendMessage('app.blur');
-		}
+		this.sendMessageToTile('app.blur');
+	},
+	passReceivedMessageToCommunicator(message){
+		this._com.receivedMessageFromTarget(message);
 	},
 	sendMessageToTile(command, data, callback){
 		this._com.sendMessage(command, data, callback);
@@ -197,6 +191,7 @@ var TileLoader = React.createClass({
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
 		this.callDelegate('tileDidLoad', this.props.data.id);
+		this._com = new SwClientCom(this);
 	},
 	componentDidUpdate(prevProps, prevState) {
 	    this.addHandlersForWebview();  
