@@ -75,20 +75,20 @@ var SwClientCom = (function () {
 	};
 
 	SwClientCom.prototype._generateAndSendCallbackToTarget = function (identifier, data, error) {
-		var callJson = {
+		var responseJson = {
 			'ok': true,
 			'reply_to': identifier
 		};
 
 		if(data){
-			callJson.data = data;
+			responseJson.data = data;
 		}
 		else if(error){
-			callJson.ok = false;
-			callJson.error = error;
+			responseJson.ok = false;
+			responseJson.error = error;
 		}
 
-		this._target.postMessage(callJson);
+		this._target.postMessage(responseJson);
 	}
 
 	/*

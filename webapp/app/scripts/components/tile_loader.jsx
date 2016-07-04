@@ -35,6 +35,11 @@ var TileLoader = React.createClass({
 			return user.me;
 		}.bind(this))[0];
 	}) ],
+	callDelegate(name){
+		if(this.props.delegate && typeof this.props.delegate[name] === "function"){
+			return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
+		}
+	},
 	getInitialState:function(){
 		return {
 			webviewLoading: true,
@@ -184,22 +189,20 @@ var TileLoader = React.createClass({
 			this._com.sendMessage('app.blur');
 		}
 	},
-	onMessageToTile(){
-		//this._com.sendMessage();
+	sendMessageToTile(command, data, callback){
+		this._com.sendMessage(command, data, callback);
 	},
 	componentDidMount() {
 		this.addHandlersForWebview();
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
-		eventActions.add("messageToTile", this.onMessageToTile, "card" + this.props.data.id);
-		if(this.props.delegate && typeof this.props.delegate.tileDidLoad === 'function'){
-			this.props.delegate.tileDidLoad(this, this.props.data.id);
-		}
+		this.callDelegate('tileDidLoad', this.props.data.id);
 	},
 	componentDidUpdate(prevProps, prevState) {
 	    this.addHandlersForWebview();  
 	},
 	componentWillUnmount:function(){
+		this.callDelegate('tileWillUnload', this.props.data.id);
 		eventActions.remove(null, null, "card" + this.props.data.id);
 	},
 	renderDropOverlay: function(){

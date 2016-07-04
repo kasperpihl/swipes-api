@@ -64,7 +64,10 @@ var Workspace = React.createClass({
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
     tileDidLoad(tile, id){
-      console.log('tile registerd', tile, id);
+      this._cachedTiles[id] = tile;
+    },
+    tileWillUnload(tile, id){
+      delete this._cachedTiles[id];
     },
     gridRenderRowForId(grid, id){
       return (
@@ -177,6 +180,7 @@ var Workspace = React.createClass({
       this.refs.grid.onFullscreen();
     },
     componentDidMount(prevProps, prevState) {
+      this._cachedTiles = {};
       eventActions.add('closeFullscreen', this.onCloseFullscreen);
       window.addEventListener('mouseup', this.onMouseUp);
       window.addEventListener('mousemove', this.onMouseMove);
