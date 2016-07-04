@@ -51,7 +51,6 @@ var TileLoader = React.createClass({
 		if(this.state.webviewLoaded)
 			return;
 
-
 		if (webview) {
 			webview.addEventListener('dom-ready', this.onLoad);
 			webview.addEventListener('ipc-message', (event) => {
@@ -64,27 +63,33 @@ var TileLoader = React.createClass({
 		}
 		this.setState({webviewLoaded: true});
 	},
-	
-	handleReceivedMessage: function(message, callback){
+	sendCommandToTile: function(command, data, callback){
+		if(this._com){
+			this._com.sendMessage(command, data, callback);
+		}
+	},
+	receivedCommandFromTile: function(command, data, callback){
 		var self = this,
 				data, userInfo;
-		if (message && message.command) {
-			data = message.data;
-			if (message.command === "navigation.setTitle") {
+		if (command) {
+			if(command === "tile.focus"){
+
+			}
+			if (command === "navigation.setTitle") {
 				if (data.title) {
 					this.setState({"titleFromCard": data.title});
 				}
 			}
-			else if (message.command === "event.focus"){
+			else if (command === "event.focus"){
 				//this.onMouseDown();
 			}
-			else if (message.command === "modal.load"){
+			else if (command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
-			else if (message.command === "actions.openURL"){
+			else if (command === "actions.openURL"){
 				window.open(data.url, "_blank");
 			}
-			else if (message.command === "actions.startDrag"){
+			else if (command === "actions.startDrag"){
 				var newData = {
 					fromCardId: this.props.data.id,
 					data: data
@@ -92,7 +97,7 @@ var TileLoader = React.createClass({
 
 				this.props.dotDragBegin(newData, callback);
 			}
-			else if (message.command === "share.request") {
+			else if (command === "share.request") {
 				console.log('init share ffs');
 				cardActions.broadcast('share.init', {
 					sourceCardId: message._id
@@ -110,13 +115,13 @@ var TileLoader = React.createClass({
 								fromCardId: self.state.workflow.id,
 								toCardId: row.id,
 								action: row.action,
-								data: message.data
+								data: data
 							});
 						}
 					});
 				});
 			}
-			else if (message.command === 'analytics.action'){
+			else if (command === 'analytics.action'){
 				if(this.state.workflow){
 					var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
 					amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
@@ -124,10 +129,10 @@ var TileLoader = React.createClass({
 
 				}
 			}
-			else if(message.command === 'leftNav.load'){
+			else if(command === 'leftNav.load'){
 				leftNavActions.load(data, callback);
 			}
-			else if(message.command === 'notifications.send'){
+			else if(command === 'notifications.send'){
 
 				var notification = {
 					title: this.state.workflow.name,
@@ -140,7 +145,7 @@ var TileLoader = React.createClass({
 					notificationActions.send(notification);
 				}
 			}
-			else if (message.command === "listenTo") {
+			else if (command === "listenTo") {
 				eventActions.add("websocket_" + data.event, this.receivedSocketEvent, "card" + this.props.data.id);
 
 				//return this.listeners[data.event] = connector;
@@ -148,7 +153,8 @@ var TileLoader = React.createClass({
 		}
 	},
 	receivedSocketEvent: function(e){
-		this.sendMessageToTile(e);
+		// K_TODO, fix this somehow
+		this.sendCommandToTile(e);
 	},
 	onLoad:function(){
 		var workflow = this.state.workflow;
@@ -170,28 +176,32 @@ var TileLoader = React.createClass({
 
 		// Lazy instantiate
 		var target = {postMessage: function(data){ this.refs.webview.send('message', data); }.bind(this)};
-		this._com.setTarget(target);
-		this.sendMessageToTile('init', initObj);
+		this._com = new SwClientCom(this, target, initObj);
+
+		this.getDynamicDropzone();
 	},
 
 	onWindowFocus: function(e){
-		this.sendMessageToTile('app.focus');
+		this.sendCommandToTile('app.focus');
 	},
 	onWindowBlur: function(e){
-		this.sendMessageToTile('app.blur');
+		this.sendCommandToTile('app.blur');
 	},
 	passReceivedMessageToCommunicator(message){
 		this._com.receivedMessageFromTarget(message);
 	},
-	sendMessageToTile(command, data, callback){
-		this._com.sendMessage(command, data, callback);
+	
+	handleReceivedMessage: function(message, callback){
+		var command = message.command;
+		var data = message.data;
+		this.receivedCommandFromTile(command, data, callback);
 	},
 	componentDidMount() {
 		this.addHandlersForWebview();
+
 		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
 		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
 		this.callDelegate('tileDidLoad', this.props.data.id);
-		this._com = new SwClientCom(this);
 	},
 	componentDidUpdate(prevProps, prevState) {
 	    this.addHandlersForWebview();  

@@ -1,11 +1,17 @@
 var SwClientCom = (function () {
-	function SwClientCom(delegate) {
+	function SwClientCom(delegate, target, initObj) {
 		this._callbacks = {};
 		this._listenerQueue = [];
 		this._isLocked = false;
 
 		if(delegate){
 			this.setDelegate(delegate);
+		}
+		if(target){
+			this.setTarget(target);
+		}
+		if(initObj){
+			this.sendMessage('init', initObj);
 		}
 	};
 	SwClientCom.prototype.isLocked = function(){
@@ -70,7 +76,7 @@ var SwClientCom = (function () {
 		}
 		else if (message.reply_to && this._callbacks[message.reply_to]) {
 			this._callbacks[message.reply_to](message.data, message.error);
-			delete this._callbacks[identifier];
+			delete this._callbacks[message.reply_to];
 		}
 	};
 

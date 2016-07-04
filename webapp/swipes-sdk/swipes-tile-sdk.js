@@ -9,7 +9,7 @@ var SwipesAppSDK = (function() {
 		this._com = new SwClientCom(this);
 		this._com.setTarget(parent);
 		this._com.lock(); // Lock until ready from the workspace
-		
+
 		this.api = new SwipesAPIConnector(apiUrl);
 		this._tempListenerQueue = [];
 		this._listenersObj = {};
@@ -21,10 +21,10 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.navigation = {
 		// Setting the title of the navigation bar manually
 		setTitle:function(title){
-			self.sendMessageToWorkspace("navigation.setTitle",{"title":title});
+			self.sendEvent("navigation.setTitle",{"title":title});
 		},
 		setBadge: function(badge){
-			self.sendMessageToWorkspace('navigation.setBadge', {badge: badge});
+			self.sendEvent('navigation.setBadge', {badge: badge});
 		}
 	};
 
@@ -35,6 +35,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.ready = function(callback){
 		self.addListener("init", callback);
 	};
+
 
 	/*
 		Add listener to events sent from workspace
@@ -57,7 +58,7 @@ var SwipesAppSDK = (function() {
 			return options;
 		},
 		leftNav: function(options, callback){
-			self.sendMessageToWorkspace('leftNav.load', options, callback);
+			self.sendEvent('leftNav.load', options, callback);
 		},
 		edit: function(title, message, callback){
 			var options = {};
@@ -142,7 +143,7 @@ var SwipesAppSDK = (function() {
 				callback = options;
 				options = {};
 			}
-			self.sendMessageToWorkspace("modal.load", {modal: name, options: options}, callback);
+			self.sendEvent("modal.load", {modal: name, options: options}, callback);
 		}
 	}
 	SwipesAppSDK.prototype.service = function(serviceName){
@@ -205,7 +206,7 @@ var SwipesAppSDK = (function() {
 	};
 	SwipesAppSDK.prototype.analytics = {
 		action:function(name){
-			self.sendMessageToWorkspace("analytics.action", {name: name});
+			self.sendEvent("analytics.action", {name: name});
 		}
 	};
 	SwipesAppSDK.prototype._listeners = {
@@ -229,36 +230,36 @@ var SwipesAppSDK = (function() {
 	}
 
 	SwipesAppSDK.prototype.share = function (data, callback) {
-		self.sendMessageToWorkspace("share.request", data, callback);
+		self.sendEvent("share.request", data, callback);
 	};
 
 	SwipesAppSDK.prototype.request = {
 		preOpenUrl: function (data) {
-			self.sendMessageToWorkspace('request.preOpenUrl', data);
+			self.sendEvent('request.preOpenUrl', data);
 		},
 		openUrl: function(data){
-			self.sendMessageToWorkspace('request.openUrl', data);
+			self.sendEvent('request.openUrl', data);
 		}
 	};
 
 	SwipesAppSDK.prototype.actions = {
 		openURL: function(url){
-			self.sendMessageToWorkspace("actions.openURL", {url: url});
+			self.sendEvent("actions.openURL", {url: url});
 		}
 	};
 	SwipesAppSDK.prototype.notifications = {
 		send: function(options){
-			self.sendMessageToWorkspace("notifications.send", options);
+			self.sendEvent("notifications.send", options);
 		}
 	};
 	SwipesAppSDK.prototype.dot = {
 		startDrag: function(data, callback){
-			self.sendMessageToWorkspace('actions.startDrag', data, callback);
+			self.sendEvent('dot.startDrag', data, callback);
 		}
 	}
 
 	// API for handling calls from main app
-	SwipesAppSDK.prototype.sendMessageToWorkspace = function(command, data, callback){
+	SwipesAppSDK.prototype.sendEvent = function(command, data, callback){
 		this._com.sendMessage(command, data, callback);
 	}
 	// Delegate method for communicator whenever receiving a message from the workspace
