@@ -213,12 +213,6 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
-	SwipesAppSDK.prototype.actions = {
-		openURL: function(url){
-			self.sendEvent("actions.openURL", {url: url});
-		}
-	};
-
 	SwipesAppSDK.prototype.notifications = {
 		send: function(options){
 			self.sendEvent("notifications.send", options);

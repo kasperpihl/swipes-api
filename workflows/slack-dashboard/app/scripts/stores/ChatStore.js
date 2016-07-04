@@ -216,7 +216,7 @@ var ChatStore = Reflux.createStore({
 	},
 
 	onClickLink:function(url){
-		swipes.actions.openURL(url);
+		swipes.sendEvent('openURL', {url: url});
 	},
 	setMessages:function(messages){
 		this.set('messages', messages, {trigger: false});

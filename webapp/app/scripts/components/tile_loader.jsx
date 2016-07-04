@@ -83,7 +83,7 @@ var TileLoader = React.createClass({
 			else if (command === "modal.load"){
 				modalActions.loadModal(data.modal, data.options, callback);
 			}
-			else if (command === "actions.openURL"){
+			else if (command === "openURL"){
 				window.open(data.url, "_blank");
 			}
 			else if (command === "actions.startDrag"){
