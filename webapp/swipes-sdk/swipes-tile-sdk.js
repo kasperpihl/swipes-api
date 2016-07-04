@@ -7,8 +7,9 @@ var SwipesAppSDK = (function() {
 
 		var apiUrl = window.location.origin;
 		this._com = new SwClientCom(this);
+		this._com.setTarget(parent);
 		this._com.lock(); // Lock until ready from the workspace
-		this._com.setDelegate(parent);
+		
 		this._api = new SwipesAPIConnector(apiUrl);
 		this._tempListenerQueue = [];
 		this._listenersObj = {};

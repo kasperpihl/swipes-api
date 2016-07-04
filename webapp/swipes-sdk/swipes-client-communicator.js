@@ -34,7 +34,7 @@ var SwClientCom = (function () {
 	}
 
 	SwClientCom.prototype.setDelegate = function (delegate) {
-		if(typeof delegate.hanleReceivedMessage !== 'function'){
+		if(typeof delegate.handleReceivedMessage !== 'function'){
 			throw new Error('SwClientCom: Delegate not responding to handleReceivedMessage');
 		}
 		this._delegate = delegate;
@@ -44,8 +44,8 @@ var SwClientCom = (function () {
 		if(this._isLocked || !this._target){
 			return this._listenerQueue.push({command: command, data: data, callback: callback});
 		}
-		
-		var identifier = this._generateId();
+
+		var identifier = this._generateRandomSenderId();
 		var callJson = {
 			'identifier': identifier,
 			'data': data,
@@ -94,7 +94,7 @@ var SwClientCom = (function () {
 	/*
 		Function to generate random string to identify calls between frames for callbacks
 	 */
-	SwClientCom.prototype._generateId = function() {
+	SwClientCom.prototype._generateRandomSenderId = function() {
 		var length = 5;
 
 		var text = '';
