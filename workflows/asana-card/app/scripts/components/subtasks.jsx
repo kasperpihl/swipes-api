@@ -99,12 +99,12 @@ var Subtask = React.createClass({
     ProjectDataActions.undoCompleteTask(task);
   },
   shareTaskUrl: function (taskUrl) {
-    swipes.share.request({url: taskUrl});
+    swipes.sendEvent('share', {url: taskUrl});
   },
   shareTaskUrl: function (taskUrl) {
     var shareData = this.shareData(taskUrl);
 
-    swipes.share.request(shareData);
+    swipes.sendEvent('share', shareData);
   },
   shareData: function (taskUrl) {
     return {

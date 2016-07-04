@@ -87,7 +87,7 @@ var ExpandedTask = React.createClass({
   shareTaskUrl: function (taskUrl) {
     var shareData = this.shareData(taskUrl);
 
-    swipes.share.request(shareData);
+    swipes.sendEvent('share', shareData);
   },
   shareData: function (taskUrl) {
     return {

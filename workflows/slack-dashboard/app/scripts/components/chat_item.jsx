@@ -95,7 +95,7 @@ var ChatMessage = React.createClass({
 	share: function (text) {
 		var shareData = this.shareData(text);
 
-		swipes.share.request(shareData);
+		swipes.sendEvent('share', shareData);
 	},
 	shareData: function (text) {
     return {

@@ -132,7 +132,7 @@ var Comment = React.createClass({
   shareTaskUrl: function (taskUrl) {
     var shareData = this.shareData(taskUrl);
 
-    swipes.share(shareData);
+    swipes.sendEvent('share', shareData);
   },
   shareData: function (taskUrl) {
     return {
@@ -228,7 +228,7 @@ var Attachment = React.createClass({
   shareTaskUrl: function (taskUrl) {
     var shareData = this.shareData(taskUrl);
 
-    swipes.share.request(shareData);
+    swipes.sendEvent('share', shareData);
   },
   shareData: function (taskUrl) {
     return {

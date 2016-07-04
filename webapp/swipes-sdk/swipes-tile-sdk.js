@@ -213,10 +213,6 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
-	SwipesAppSDK.prototype.share = function (data, callback) {
-		self.sendEvent("share.request", data, callback);
-	};
-
 	SwipesAppSDK.prototype.request = {
 		preOpenUrl: function (data) {
 			self.sendEvent('request.preOpenUrl', data);
