@@ -14,7 +14,6 @@ var SwipesAPIConnector = (function () {
 
 	SwipesAPIConnector.prototype.setToken = function (token) {
 		this._token = token;
-		console.log('setting that fucking token');
 		if (this._apiQueue.length > 0) {
 			for (var i = 0; i < this._apiQueue.length; i++) {
 				var request = this._apiQueue[i];

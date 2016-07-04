@@ -187,7 +187,7 @@ var TileLoader = React.createClass({
 		}
 	},
 	onMessageToTile(){
-		
+		//this._com.sendMessage();
 	},
 	componentDidMount() {
 		this.addHandlersForWebview();

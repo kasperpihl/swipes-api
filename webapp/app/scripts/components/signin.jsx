@@ -10,26 +10,24 @@ var Signin = React.createClass({
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
         mixpanel.track('Opened Login');
-		$(document).ready(function() {
 
-            var direction = 1;
+        var direction = 1;
 
-            var Layer_1 = new Vivus('Layer_1', {
-                type: 'scenario'
-            });
+        var Layer_1 = new Vivus('Layer_1', {
+            type: 'scenario'
+        });
 
-            function animation() {
-                Layer_1.play(direction);
-            };
+        function animation() {
+            Layer_1.play(direction);
+        };
 
-            animation(direction);
+        animation(direction);
 
-            setInterval(function() {
-                direction = direction > 0 ? -1 : 1;
+        setInterval(function() {
+            direction = direction > 0 ? -1 : 1;
 
-                animation();
-            }, 13500)
-		})
+            animation();
+        }, 13500)
 	},
 	signin: function(){
 		var email = this.refs.username.getValue();

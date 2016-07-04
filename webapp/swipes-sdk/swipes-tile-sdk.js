@@ -88,9 +88,6 @@ var SwipesAppSDK = (function() {
 			}
 			return options;
 		},
-		search: function(options, callback){
-			this.load("search", options, callback);
-		},
 		leftNav: function(options, callback){
 			self._com.sendMessage('leftNav.load', options, callback);
 		},
