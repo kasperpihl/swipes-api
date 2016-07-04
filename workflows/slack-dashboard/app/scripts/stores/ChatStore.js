@@ -277,7 +277,7 @@ var ChatStore = Reflux.createStore({
 					// K_TODO: Test if msg.text
 					var text = msg.text;
 					if(channel.is_im){
-						swipes.notifications.send({title: channel.name, message: text})
+						swipes.sendEvent('notifications.send', {title: channel.name, message: text});
 					}
 				}
 

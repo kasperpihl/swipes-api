@@ -213,11 +213,6 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
-	SwipesAppSDK.prototype.notifications = {
-		send: function(options){
-			self.sendEvent("notifications.send", options);
-		}
-	};
 	SwipesAppSDK.prototype.dot = {
 		startDrag: function(data, callback){
 			self.sendEvent('dot.startDrag', data, callback);
