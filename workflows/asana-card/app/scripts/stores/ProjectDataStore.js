@@ -170,7 +170,7 @@ var writeComment = function (taskId, comment) {
 
 		CommentsActions.add(addedComment);
 
-		swipes.analytics.action('Write comment');
+		swipes.sendEvent('analytics.action', {name: 'Write comment'});
 	})
 	.then(function () {
 		console.log('Done!');
@@ -207,7 +207,7 @@ var createTask = function (taskData, projectType, projectId) {
 			// Now we need to add the project with another request.
 			// T_TODO Ask the support for this one because in the API docs
 			// they say that you can do it with one request when creating the task.
-			swipes.analytics.action('Create task');
+			swipes.sendEvent('analytics.action', {name: 'Create task'});
 			if (projectType !== 'mytasks') {
 				console.log('Adding task to a project!');
 				return swipes.service('asana').request('tasks.addProject', {
@@ -241,7 +241,7 @@ var createSubTask = function (taskData) {
 				disabledInput: false
 			});
 
-			swipes.analytics.action('Create subtask');
+			swipes.sendEvent('analytics.action', {name: 'Create subtask'});
 		})
 		.then(function () {
 			console.log('Done!');
@@ -279,7 +279,7 @@ var ProjectDataStore = Reflux.createStore({
 			assignee: assignee
 		})
 		.then(function () {
-			swipes.analytics.action('Assign person');
+			swipes.sendEvent('analytics.action', {name: 'Assign person'});
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -305,7 +305,7 @@ var ProjectDataStore = Reflux.createStore({
 			assignee: null
 		})
 		.then(function () {
-			swipes.analytics.action('Remove assignee');
+			swipes.sendEvent('analytics.action', {name: 'Remove assignee'});
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -335,7 +335,7 @@ var ProjectDataStore = Reflux.createStore({
 			due_on: null
 		})
 		.then(function () {
-			//swipes.analytics.action('Assign person');
+			swipes.sendEvent('analytics.action', {name: 'Assign person'});
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -361,7 +361,7 @@ var ProjectDataStore = Reflux.createStore({
 			completed: completed
 		})
 		.then(function () {
-			swipes.analytics.action('Complete task');
+			swipes.sendEvent('analytics.action', {name: 'Complete task'});
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -407,7 +407,7 @@ var ProjectDataStore = Reflux.createStore({
 			return swipes.service('asana').request('tasks.addProject', data);
 		})
 		.then(function () {
-			swipes.analytics.action('Uncomplete task');
+			swipes.sendEvent('analytics.action', {name: 'Uncomplete task'});
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -432,7 +432,7 @@ var ProjectDataStore = Reflux.createStore({
 			id: taskId
 		})
 		.then(function () {
-			swipes.analytics.action('Delete task');
+			swipes.sendEvent('analytics.action', {name: 'Delete task'});
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -530,7 +530,7 @@ var ProjectDataStore = Reflux.createStore({
 
 		swipes.service('asana').request('tasks.addProject', data)
 			.then(function () {
-				swipes.analytics.action('Reorder task');
+				swipes.sendEvent('analytics.action', {name: 'Reorder task'});
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -564,7 +564,7 @@ var ProjectDataStore = Reflux.createStore({
 					due_at: res
 				})
 				.then(function () {
-					 swipes.analytics.action('Scheduling a task');
+					 swipes.sendEvent('analytics.action', {name: 'Scheduling a task'});
 				})
 				.catch(function (error) {
 					console.log(error);

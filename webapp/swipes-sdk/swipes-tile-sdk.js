@@ -193,11 +193,6 @@ var SwipesAppSDK = (function() {
 			}
 		};
 	};
-	SwipesAppSDK.prototype.analytics = {
-		action:function(name){
-			self.sendEvent("analytics.action", {name: name});
-		}
-	};
 	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
 			var currentListeners = self._listenersObj[eventName];
@@ -236,6 +231,7 @@ var SwipesAppSDK = (function() {
 			self.sendEvent("actions.openURL", {url: url});
 		}
 	};
+
 	SwipesAppSDK.prototype.notifications = {
 		send: function(options){
 			self.sendEvent("notifications.send", options);
@@ -274,6 +270,7 @@ var SwipesAppSDK = (function() {
 			for (var i = 0 ; i < listeners.length ; i++) {
 				var handler = listeners[i];
 				if(handler) {
+					// Limitation, only the last callback added will return a result to callback
 					res = handler(message);
 				}
 			}
