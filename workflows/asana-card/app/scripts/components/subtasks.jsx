@@ -275,6 +275,12 @@ var Subtask = React.createClass({
       )
     }
   },
+  onDotDragStart: function(){
+    var subtask = this.props.subtask;
+    var settings = MainStore.get('settings');
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
+    swipes.dot.startDrag(this.shareData(taskUrl));
+  },
   render: function () {
     var subtask = this.props.subtask;
     var settings = MainStore.get('settings');
@@ -291,7 +297,7 @@ var Subtask = React.createClass({
               className="dot"
               hoverParentId={subtaskId}
               elements={dotItems}
-              onDragData={this.shareData.bind(this, taskUrl)}
+              onDragStart={this.onDotDragStart}
               />
   				</div>
   				<div className="task-details-wrap">

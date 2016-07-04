@@ -217,6 +217,12 @@ var TaskItem = React.createClass({
       )
     }
   },
+  onDotDragStart: function(){
+    var task = this.props.data;
+    var settings = MainStore.get('settings');
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+    swipes.dot.startDrag(this.shareData(taskUrl));
+  },
   renderSwipesDot: function() {
     var task = this.props.data;
     var taskId = task.id;
@@ -236,7 +242,7 @@ var TaskItem = React.createClass({
           className="dot"
           hoverParentId={taskId}
           elements={dotItems}
-          onDragData={this.shareData.bind(this, taskUrl)}
+          onDragStart={this.onDotDragStart}
         />
      </div>
     )

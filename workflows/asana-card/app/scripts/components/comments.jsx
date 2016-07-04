@@ -178,11 +178,15 @@ var Comment = React.createClass({
       <SwipesDot
         className="dot"
         reverse="true"
-        onDragData={this.shareData.bind(this, comment.text)}
+        onDragStart={this.onDotDragStart}
         hoverParentId={comment.id}
         elements={dotItems}
       />
     )
+  },
+  onDotDragStart: function(){
+    var comment = this.props.comment;
+    swipes.dot.startDrag(this.shareData(comment.text));
   },
   render: function () {
     var comment = this.props.comment;
@@ -253,6 +257,12 @@ var Attachment = React.createClass({
 
     return items;
   },
+  onDotDragStart: function(){
+    var settings = MainStore.get('settings');
+    var task = this.props.task;
+    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
+    swipes.dot.startDrag(this.shareData(taskUrl));
+  },
   renderSwipesDot: function() {
     var dotItems = this.dotItems();
     var attachment = this.props.attachment;
@@ -265,7 +275,7 @@ var Attachment = React.createClass({
       <SwipesDot
         className="dot"
         reverse="true"
-        onDragData={this.shareData.bind(this, taskUrl)}
+        onDragStart={this.onDotDragStart}
         hoverParentId={attachment.id}
         elements={dotItems}
       />
