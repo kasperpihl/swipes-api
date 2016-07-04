@@ -1,19 +1,21 @@
 var SwClientCom = (function () {
-	function SwClientCom(delegate, isConnected) {
+	function SwClientCom(delegate) {
 		this._callbacks = {};
 		this._listenerQueue = [];
-		this._isConnected = (isConnected);
+		this._isLocked = false;
 
 		if(delegate){
 			this.setDelegate(delegate);
 		}
 	};
-
-	/*
-		Delegate will be sending messages and handling the parsed received messages
-	*/
-	SwClientCom.prototype.setConnected = function(){
-		this._isConnected = true;
+	SwClientCom.prototype.isLocked = function(){
+		return this._isLocked;
+	};
+	SwClientCom.prototype.lock = function(){
+		this._isLocked = true;
+	};
+	SwClientCom.prototype.unlock = function(){
+		this._isLocked = false;
 		if (this._listenerQueue.length > 0) {
 			for (var i = 0; i < this._listenerQueue.length; i++) {
 				var listenObj = this._listenerQueue[i];
@@ -39,10 +41,10 @@ var SwClientCom = (function () {
 	};
 
 	SwClientCom.prototype.sendMessage = function(command, data, callback) {
-		if(!this._isConnected){
+		if(this._isLocked || !this._target){
 			return this._listenerQueue.push({command: command, data: data, callback: callback});
 		}
-
+		
 		var identifier = this._generateId();
 		var callJson = {
 			'identifier': identifier,
@@ -56,25 +58,23 @@ var SwClientCom = (function () {
 		this._target.postMessage(callJson);
 	};
 
-	SwClientCom.prototype.receivedMessage = function(message) {
+	SwClientCom.prototype.receivedMessageFromTarget = function(message) {
 		if(typeof message !== 'object') {
 			return;
 		}
 
-		if (message.reply_to && this._callbacks[message.reply_to]) {
+		if (message.identifier && this._delegate) {
+			this._delegate.handleReceivedMessage(message, function(result, error){
+				this._generateAndSendCallbackToTarget(message.identifier, result, error);
+			}.bind(this));
+		}
+		else if (message.reply_to && this._callbacks[message.reply_to]) {
 			this._callbacks[message.reply_to](message.data, message.error);
 			delete this._callbacks[identifier];
 		}
-		else if (message.identifier) {
-			if (this._delegate) {
-				this._delegate.handleReceivedMessage(this, message, function(result, error){
-					this._replyToMessage(message.identifier, result, error);
-				}.bind(this));
-			}
-		}
 	};
 
-	SwClientCom.prototype._replyToMessage = function (identifier, data, error) {
+	SwClientCom.prototype._generateAndSendCallbackToTarget = function (identifier, data, error) {
 		var callJson = {
 			'ok': true,
 			'reply_to': identifier

@@ -7,10 +7,10 @@ var SwipesAppSDK = (function() {
 
 		var apiUrl = window.location.origin;
 		this._com = new SwClientCom(this);
+		this._com.lock(); // Lock until ready from the workspace
 		this._com.setDelegate(parent);
 		this._api = new SwipesAPIConnector(apiUrl);
 		this._tempListenerQueue = [];
-		this._isConnectedToParent = false;
 		this._listenersObj = {};
 
 		self = this;
@@ -291,7 +291,7 @@ var SwipesAppSDK = (function() {
 	}
 
 	// API for handling calls from main app
-	SwipesAppSDK.prototype.handleReceivedMessage = function (com, message, callback) {
+	SwipesAppSDK.prototype.handleReceivedMessage = function (message, callback) {
 		var res = null;
 
 		if (message && message.command) {
@@ -309,8 +309,10 @@ var SwipesAppSDK = (function() {
 				if(data.user_id){
 					this.info.userId = data.user_id;
 				}
+				if(this._com.isLocked()){
+					this._com.unlock();
+				}
 			}
-			this._com.setConnected();
 			var listeners = self._listeners.get(message.command);
 
 			for (var i = 0 ; i < listeners.length ; i++) {

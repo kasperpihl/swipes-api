@@ -51,7 +51,7 @@ var TileLoader = React.createClass({
 			webview.addEventListener('dom-ready', this.onLoad);
 			webview.addEventListener('ipc-message', (event) => {
 				var arg = event.args[0];
-				this._com.receivedMessage(arg);
+				this._com.receivedMessageFromTarget(arg);
 			});
 			webview.addEventListener('console-message', (e) => {
 			  //console.log(e.line, e.message);
@@ -60,7 +60,7 @@ var TileLoader = React.createClass({
 		this.setState({webviewLoaded: true});
 	},
 	
-	handleReceivedMessage: function(com, message, callback){
+	handleReceivedMessage: function(message, callback){
 		var self = this,
 				data, userInfo;
 		if (message && message.command) {
