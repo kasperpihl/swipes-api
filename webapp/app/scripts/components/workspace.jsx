@@ -195,11 +195,11 @@ var Workspace = React.createClass({
       window.addEventListener("blur", this.onWindowBlur);
     },
     componentWillUnmount() {
-        window.removeEventListener('mouseup', this.onMouseUp);
-        window.removeEventListener('mousemove', this.onMouseMove);
-        window.removeEventListener('mousedown', this.onMouseDown);
-        window.removeEventListener("focus", this.onWindowFocus);
-        window.removeEventListener("blur", this.onWindowBlur);
+      window.removeEventListener('mouseup', this.onMouseUp);
+      window.removeEventListener('mousemove', this.onMouseMove);
+      window.removeEventListener('mousedown', this.onMouseDown);
+      window.removeEventListener("focus", this.onWindowFocus);
+      window.removeEventListener("blur", this.onWindowBlur);
     },
     render() {
         return (

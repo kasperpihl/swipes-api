@@ -16,13 +16,6 @@ var SwipesAppSDK = (function() {
 
 		self = this;
 	}
-	
-	SwipesAppSDK.prototype.setToken = function(token){
-		this._api.setToken(token);
-	};
-	SwipesAppSDK.prototype.getToken = function(){
-		return this._api._token;
-	};
 
 	// API for handling navigation bar in main app
 	SwipesAppSDK.prototype.navigation = {
