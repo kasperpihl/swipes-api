@@ -1,3 +1,8 @@
+/*
+	Swipes Client Communicator
+	The purpose of this class is to stucture the communication between tile and workspace.
+
+ */
 var SwClientCom = (function () {
 	function SwClientCom(delegate, target, initObj) {
 		this._callbacks = {};
@@ -45,7 +50,7 @@ var SwClientCom = (function () {
 		}
 		this._delegate = delegate;
 	};
-
+	
 	SwClientCom.prototype.sendMessage = function(command, data, callback) {
 		if(this._isLocked || !this._target){
 			return this._listenerQueue.push({command: command, data: data, callback: callback});

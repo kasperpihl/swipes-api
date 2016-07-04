@@ -7,7 +7,7 @@ var SwipesAppSDK = (function() {
 
 		var apiUrl = window.location.origin;
 		this._com = new SwClientCom(this, parent);
-		this._com.lock(); // Lock until ready from the workspace
+		this._com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
 
 		this.api = new SwipesAPIConnector(apiUrl);
 		this._tempListenerQueue = [];
@@ -16,23 +16,26 @@ var SwipesAppSDK = (function() {
 		self = this;
 	}
 
-
-	SwipesAppSDK.prototype.info = {
-		// initObj.info will be this after init.
-	};
-
-	SwipesAppSDK.prototype.ready = function(callback){
-		self.addListener("init", callback);
-	};
-
-
-	/*
-		Add listener to events sent from workspace
-	 */
+	// Send events to the workspace
+	SwipesAppSDK.prototype.sendEvent = function(command, data, callback){
+		this._com.sendMessage(command, data, callback);
+	}
+	// Add listener to events sent from workspace
 	SwipesAppSDK.prototype.addListener = function(eventName, callback){
 		self._listeners.add(eventName, callback);
 	}
 
+	// initObj.info from tile_loader will be this after init.
+	SwipesAppSDK.prototype.info = {};
+
+	// Shorthand for getting the init event
+	SwipesAppSDK.prototype.ready = function(callback){
+		self.addListener("init", callback);
+	};
+
+	
+
+	// Shorthands for creating modals in the workspace
 	SwipesAppSDK.prototype.modal = {
 		_getOptions: function(options, title, message){
 			if(typeof title === 'object'){
@@ -135,6 +138,7 @@ var SwipesAppSDK = (function() {
 			self.sendEvent("modal.load", {modal: name, options: options}, callback);
 		}
 	}
+	// Shorthands for contacting service api
 	SwipesAppSDK.prototype.service = function(serviceName){
 		return {
 			request:function(method, parameters, callback){
@@ -193,6 +197,8 @@ var SwipesAppSDK = (function() {
 			}
 		};
 	};
+	
+	// Internal listener api, used for handling received events
 	SwipesAppSDK.prototype._listeners = {
 		add: function(eventName, callback){
 			var currentListeners = self._listenersObj[eventName];
@@ -213,10 +219,7 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
-	// API for handling calls from main app
-	SwipesAppSDK.prototype.sendEvent = function(command, data, callback){
-		this._com.sendMessage(command, data, callback);
-	}
+	
 	// Delegate method for communicator whenever receiving a message from the workspace
 	SwipesAppSDK.prototype.handleReceivedMessage = function (message, callback) {
 		var res = null;
@@ -230,13 +233,14 @@ var SwipesAppSDK = (function() {
 				if(data.info){
 					this.info = data.info;
 				}
+				// Now let's unlock the communicator since the connection from the workspace is ready
 				if(this._com.isLocked()){
 					this._com.unlock();
 				}
 			}
 
+			// When receiving a command, check if any listeners have been attached and call them.
 			var listeners = self._listeners.get(message.command);
-
 			for (var i = 0 ; i < listeners.length ; i++) {
 				var handler = listeners[i];
 				if(handler) {
@@ -247,6 +251,7 @@ var SwipesAppSDK = (function() {
 		}
 
 		if(callback) {
+			// Always callback any result from the listener, if any.
 			callback(res);
 		}
 	};
