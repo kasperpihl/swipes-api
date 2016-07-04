@@ -213,12 +213,6 @@ var SwipesAppSDK = (function() {
 		}
 	}
 
-	SwipesAppSDK.prototype.dot = {
-		startDrag: function(data, callback){
-			self.sendEvent('dot.startDrag', data, callback);
-		}
-	}
-
 	// API for handling calls from main app
 	SwipesAppSDK.prototype.sendEvent = function(command, data, callback){
 		this._com.sendMessage(command, data, callback);

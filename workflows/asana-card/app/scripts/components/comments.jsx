@@ -186,7 +186,7 @@ var Comment = React.createClass({
   },
   onDotDragStart: function(){
     var comment = this.props.comment;
-    swipes.dot.startDrag(this.shareData(comment.text));
+    swipes.sendEvent('dot.startDrag', this.shareData(comment.text));
   },
   render: function () {
     var comment = this.props.comment;
@@ -261,7 +261,7 @@ var Attachment = React.createClass({
     var settings = MainStore.get('settings');
     var task = this.props.task;
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
-    swipes.dot.startDrag(this.shareData(taskUrl));
+    swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
   },
   renderSwipesDot: function() {
     var dotItems = this.dotItems();

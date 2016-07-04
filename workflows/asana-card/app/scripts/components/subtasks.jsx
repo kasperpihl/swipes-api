@@ -279,7 +279,7 @@ var Subtask = React.createClass({
     var subtask = this.props.subtask;
     var settings = MainStore.get('settings');
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
-    swipes.dot.startDrag(this.shareData(taskUrl));
+    swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
   },
   render: function () {
     var subtask = this.props.subtask;

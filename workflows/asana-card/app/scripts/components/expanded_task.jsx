@@ -325,7 +325,7 @@ var ExpandedTask = React.createClass({
     var settings = MainStore.get('settings');
     var taskId = task.id;
     var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
-    swipes.dot.startDrag(this.shareData(taskUrl));
+    swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');

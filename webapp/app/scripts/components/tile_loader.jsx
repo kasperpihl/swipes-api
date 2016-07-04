@@ -86,7 +86,7 @@ var TileLoader = React.createClass({
 			else if (command === "openURL"){
 				window.open(data.url, "_blank");
 			}
-			else if (command === "actions.startDrag"){
+			else if (command === "dot.startDrag"){
 				var newData = {
 					fromCardId: this.props.data.id,
 					data: data
