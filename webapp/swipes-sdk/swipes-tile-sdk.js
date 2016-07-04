@@ -10,7 +10,7 @@ var SwipesAppSDK = (function() {
 		this._com.setTarget(parent);
 		this._com.lock(); // Lock until ready from the workspace
 		
-		this._api = new SwipesAPIConnector(apiUrl);
+		this.api = new SwipesAPIConnector(apiUrl);
 		this._tempListenerQueue = [];
 		this._listenersObj = {};
 
@@ -55,15 +55,6 @@ var SwipesAppSDK = (function() {
 	};
 	SwipesAppSDK.prototype.onRequestOpenUrl = function(callback){
 		self.addEventListener("request.openUrl", callback);
-	};
-
-	SwipesAppSDK.prototype.api = {
-		request: function(options, data, callback){
-			return self._api.request(options, data, callback);
-		},
-		streamRequest: function(options, data, callback){
-			return self._api.streamRequest(options, data, callback);
-		}
 	};
 
 	SwipesAppSDK.prototype.addEventListener = function(eventName, callback){
@@ -200,7 +191,7 @@ var SwipesAppSDK = (function() {
 					else deferred.reject(error);
 				};
 
-				self._api.request("services.request", options, intCallback);
+				self.api.request("services.request", options, intCallback);
 				return deferred.promise;
 			},
 			stream:function(method, parameters, callback){
@@ -225,7 +216,7 @@ var SwipesAppSDK = (function() {
 					else deferred.reject(error);
 				};
 
-				self._api.streamRequest("services.stream", options, intCallback);
+				self.api.streamRequest("services.stream", options, intCallback);
 				return deferred.promise;
 			}
 		};
@@ -296,7 +287,7 @@ var SwipesAppSDK = (function() {
 			var data = message.data;
 			if(message.command == "init"){
 				if(data.token) {
-					this._api.setToken(data.token);
+					this.api.setToken(data.token);
 				}
 				if(data.manifest){
 					this.info.workflow = data.manifest;

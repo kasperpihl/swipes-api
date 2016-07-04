@@ -286,6 +286,4 @@ var TileLoader = React.createClass({
 	}
 });
 
-
-
 module.exports = TileLoader;
