@@ -63,13 +63,16 @@ var Workspace = React.createClass({
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
+    tileDidLoad(tile, id){
+      console.log('tile registerd', tile, id);
+    },
     gridRenderRowForId(grid, id){
       return (
         <TileLoader
           key={id}
+          delegate={this}
           data={{id: id}}
-          dotDragBegin={this.dotDragBegin}
-          onEnterLeaveDropOverlay={this.onEnterLeaveDropOverlay} />
+          dotDragBegin={this.dotDragBegin} />
       );
     },
     gridDidTransitionStep(grid, name, step){
@@ -110,7 +113,7 @@ var Workspace = React.createClass({
         this._dotDragData = data;
         this.isDraggingDot = true;
         $('.active-app').addClass('draggingDot');
-        $('.tile').not("#" + this._dotDragData.fromCardId).addClass('draggingDot');
+        $('.tile').not("#tile-" + this._dotDragData.fromCardId).addClass('draggingDot');
 
         if(callback){
             this.draggingCallback = callback;
@@ -174,7 +177,7 @@ var Workspace = React.createClass({
       this.refs.grid.onFullscreen();
     },
     componentDidMount(prevProps, prevState) {
-      eventActions.add('closeFullscreen', this.onCloseFullscreen);  
+      eventActions.add('closeFullscreen', this.onCloseFullscreen);
       window.addEventListener('mouseup', this.onMouseUp);
       window.addEventListener('mousemove', this.onMouseMove);
       window.addEventListener('mousedown', this.onMouseDown);

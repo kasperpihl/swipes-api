@@ -25,9 +25,6 @@ var stateStore = require('../stores/StateStore');
 var leftNavActions = require('../actions/LeftNavActions');
 var Services = require('./services');
 
-var Webview = require('react-electron-webview');
-console.log(Webview);
-
 var TileLoader = React.createClass({
 	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
 		return workflows.filter(function(workflow) {
@@ -51,10 +48,10 @@ var TileLoader = React.createClass({
 
 
 		if (webview) {
-			webview.addEventListener('dom-ready', this.onDomReady);
+			webview.addEventListener('dom-ready', this.onLoad);
 			webview.addEventListener('ipc-message', (event) => {
 				var arg = event.args[0];
-				this.apiCon.receivedMessage(arg);
+				this._com.receivedMessage(arg);
 			});
 			webview.addEventListener('console-message', (e) => {
 			  //console.log(e.line, e.message);
@@ -107,6 +104,7 @@ var TileLoader = React.createClass({
 
 					modalActions.loadModal('list', modalData, function (row) {
 						if(row){
+
 							eventActions.fire("share.transmit", {
 								fromCardId: self.state.workflow.id,
 								toCardId: row.id,
@@ -149,51 +147,17 @@ var TileLoader = React.createClass({
 		}
 	},
 	receivedSocketEvent: function(e){
-		if(this.apiCon){
-			this.apiCon.sendMessage(e);
-		}
-	},
-	onShareInit: function (e) {
-		if (e.toCardId === this.props.data.id) {
-			this.apiCon.sendMessage('share.init', e, e.callback);
-		}
-	},
-	onShareTransmit: function (e) {
-		if (e.toCardId === this.props.data.id) {
-			var analyticsProps = {from: WorkflowStore.get(e.fromCardId).manifest_id, to: this.state.workflow.manifest_id};
-			amplitude.logEvent('Engagement - Share Action', analyticsProps);
-			mixpanel.track('Share Action', analyticsProps);
-			this.apiCon.sendMessage('share.transmit', e);
-		}
-	},
-	onRequestPreOpenUrl: function (e) {
-		if (e.toCardId === this.props.data.id) {
-			this.apiCon.sendMessage('request.preOpenUrl', e, e.callback);
-		}
-	},
-	onRequestOpenUrl: function (e) {
-		if (e.toCardId === this.props.data.id) {
-			this.apiCon.sendMessage('request.openUrl', e);
+		if(this._com){
+			this._com.sendMessage(e);
 		}
 	},
 	onLoad:function(){
-		// Clear any listeners for this card.
-		eventActions.remove(null, null, "card" + this.props.data.id);
-
-		// Add a listeners for share
-		eventActions.add("share.init", this.onShareInit, "card" + this.props.data.id);
-		eventActions.add("share.transmit", this.onShareTransmit, "card" + this.props.data.id);
-		eventActions.add("share.ondrop", this.onShareTransmit, "card" + this.props.data.id);
-		eventActions.add("request.preOpenUrl", this.onRequestPreOpenUrl, "card" + this.props.data.id);
-		eventActions.add("request.openUrl", this.onRequestOpenUrl, "card" + this.props.data.id);
-
 		var workflow = this.state.workflow;
 
 		// K_TODO || T_TODO : WARNING, This is a super hack hahaha
 		if(workflow && this.slackToken){
 			workflow.slackToken = this.slackToken;
 		}
-
 
 		var initObj = {
 			manifest: workflow,
@@ -206,69 +170,43 @@ var TileLoader = React.createClass({
 		}
 
 		// Lazy instantiate
-		if(!this.apiCon){
-			this.apiCon = new SwClientCom(this, true);
+		if(!this._com){
+			this._com = new SwClientCom(this, true);
 		}
-		this.apiCon.sendMessage('init', initObj);
+		this._com.sendMessage('init', initObj);
 	},
-	postMessage(data){
-		this.refs.webview.send('message', data);
-	},
-	onDragMouseDown:function( side, e){
-		// Add dragging class (preventing iframes from receiving mouse events)
-		$('.active-app').addClass('resizing');
-		this.side = side;
-		this.isResizing = true;
-		this.originalClientX = e.clientX;
-		this.originalClientY = e.clientY;
 
-		e.stopPropagation();
-		e.preventDefault();
-	},
 	onWindowFocus: function(e){
-		if(this.apiCon){
-			this.apiCon.sendMessage('app.focus');
+		if(this._com){
+			this._com.sendMessage('app.focus');
 		}
 	},
 	onWindowBlur: function(e){
-		if(this.apiCon){
-			this.apiCon.sendMessage('app.blur');
+		if(this._com){
+			this._com.sendMessage('app.blur');
 		}
+	},
+	onMessageToTile(){
+		
 	},
 	componentDidMount() {
 		this.addHandlersForWebview();
+		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
+		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
+		eventActions.add("messageToTile", this.onMessageToTile, "card" + this.props.data.id);
+		if(this.props.delegate && typeof this.props.delegate.tileDidLoad === 'function'){
+			this.props.delegate.tileDidLoad(this, this.props.data.id);
+		}
 	},
 	componentDidUpdate(prevProps, prevState) {
 	    this.addHandlersForWebview();  
 	},
-	componentWillMount() {
-		eventActions.add("window.blur", this.onWindowBlur, "card" + this.props.data.id);
-		eventActions.add("window.focus", this.onWindowFocus, "card" + this.props.data.id);
-	},
 	componentWillUnmount:function(){
 		eventActions.remove(null, null, "card" + this.props.data.id);
 	},
-	onMouseEnterDropOverlay: function () {
-		if (this.state.workflow) {
-			var id = this.state.workflow.id;
-
-			workspaceActions.enterLeaveDropOverlay(id, true);
-			this.props.onEnterLeaveDropOverlay(id);
-		};
-	},
-	onMouseLeaveDropOverlay: function () {
-		if (this.state.workflow) {
-			var id = this.state.workflow.id;
-
-			workspaceActions.enterLeaveDropOverlay(id, false);
-		};
-
-		this.props.onEnterLeaveDropOverlay(null);
-	},
 	renderDropOverlay: function(){
 		var title = "";
-		// Make this in a different way, card is no longer available here. All unique properties should be in workflow.
-		//var className = (this.state.card && this.state.card.hoverDropOverlay) ? 'drop-overlay hover' : 'drop-overlay';
+
 		var className = 'drop-overlay';
 		if (this.state.workflow) {
 			title = this.state.workflow.name;
@@ -293,13 +231,9 @@ var TileLoader = React.createClass({
 	onSelectedAccount: function(selectedAccount){
 		workflowActions.selectAccount(this.state.workflow, selectedAccount.id);
 	},
-	onDomReady(e){
-		this.onLoad();
-	},
 	render: function() {
 		var workflowId = '';
 		var cardContent = <Loading />;
-		var webviewLoader = <div />;
 
 
 		if(this.state.workflow){
@@ -335,23 +269,22 @@ var TileLoader = React.createClass({
 
 				if(!this.state.workflow.selectedAccountId || !foundSelectedAccount){
 					cardContent = <Services.SelectRow
-													onConnectNew={this.onConnectNew}
-													onSelectedAccount={this.onSelectedAccount}
-													data={{
-														services: connectedServices,
-														title: this.state.workflow.required_services[0],
-														manifest_id: this.state.workflow.required_services[0]
-													}}
-												/>
+						onConnectNew={this.onConnectNew}
+						onSelectedAccount={this.onSelectedAccount}
+						data={{
+							services: connectedServices,
+							title: this.state.workflow.required_services[0],
+							manifest_id: this.state.workflow.required_services[0]
+						}}
+					/>
 				}
 			}
 		}
 
 		return (
-			<div id={workflowId} className="tile">
+			<div id={'tile-' + workflowId} className="tile">
 				{this.renderDropOverlay()}
 				{cardContent}
-				{/*webviewLoader*/}
 			</div>
 		);
 	}
