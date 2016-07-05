@@ -66,25 +66,18 @@ var Workspace = React.createClass({
     },
     sendToAllTiles(command, data, callback){
       var keys = _.keys(this._cachedTiles);
-      var index = -1;
       var returnObj = {};
-      var next = function(){
-        index++;
-        if(index >= keys.length){
-          console.log(returnObj);
-          if(callback){
+      var run = function(key){
+        this.sendToTile(key, command, data, (res) => {
+          returnObj[key] = res || null;
+          if(_.size(returnObj) === keys.length && callback){
             callback(returnObj);
           }
-          return;
-        }
-        var key = keys[index];
-        var tile = this._cachedTiles[key];
-        tile.sendCommandToTile(command, data, (res) => {
-          returnObj[key] = res || null;
-          next();
         });
       }.bind(this);
-      next();
+      for(var i = 0 ; i < keys.length ; i++){
+        run(keys[i]);
+      }
     },
     sendToTile(id, command, data, callback){
       var tile = this._cachedTiles[id];
