@@ -64,10 +64,29 @@ var Workspace = React.createClass({
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
     },
-    sendCommandToAllTiles(command, data, callback){
-
+    sendToAllTiles(command, data, callback){
+      var keys = _.keys(this._cachedTiles);
+      var index = -1;
+      var returnObj = {};
+      var next = function(){
+        index++;
+        if(index >= keys.length){
+          console.log(returnObj);
+          if(callback){
+            callback(returnObj);
+          }
+          return;
+        }
+        var key = keys[index];
+        var tile = this._cachedTiles[key];
+        tile.sendCommandToTile(command, data, (res) => {
+          returnObj[key] = res || null;
+          next();
+        });
+      }.bind(this);
+      next();
     },
-    sendCommandToTile(id, command, data, callback){
+    sendToTile(id, command, data, callback){
       var tile = this._cachedTiles[id];
       if(tile){
         tile.sendCommandToTile(command, data, callback);
@@ -150,33 +169,33 @@ var Workspace = React.createClass({
       this._dragDotHandler.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     },
     onWindowFocus(e) {
-        eventActions.fire('window.focus', e);
+      this.sendToAllTiles('window.focus');
     },
     onWindowBlur(e) {
-        eventActions.fire('window.blur', e);
+      this.sendToAllTiles('window.blur');
     },
     onMouseUp(e) {
-        if(this.isDraggingDot){
-          if (this._dropZoneId) {
-            var customEventData = this._dotDragData;
+      if(this.isDraggingDot){
+        if (this._dropZoneId) {
+          var customEventData = this._dotDragData;
 
-            customEventData.toCardId = this._dropZoneId;
+          customEventData.toCardId = this._dropZoneId;
 
-            if (customEventData.fromCardId !== customEventData.toCardId) {
-              eventActions.fire('share.ondrop', customEventData);
-            }
+          if (customEventData.fromCardId !== customEventData.toCardId) {
+            eventActions.fire('share.ondrop', customEventData);
           }
-
-          $('.active-app').removeClass('draggingDot');
-          $('.tile').not("#" + this._dotDragData.fromCardId).removeClass('draggingDot');
-          this._dragDotHandler.parentNode.removeChild(this._dragDotHandler);
-          this._dragDotHandler = null;
         }
 
-        eventActions.fire('window.onmouseup', e);
+        $('.active-app').removeClass('draggingDot');
+        $('.tile').not("#" + this._dotDragData.fromCardId).removeClass('draggingDot');
+        this._dragDotHandler.parentNode.removeChild(this._dragDotHandler);
+        this._dragDotHandler = null;
+      }
 
-        this.isDraggingDot = false;
-        this._dotDragData = null;
+      eventActions.fire('window.onmouseup', e);
+
+      this.isDraggingDot = false;
+      this._dotDragData = null;
     },
     onMouseMove(e) {
         if (this.isDraggingDot) {
@@ -190,9 +209,7 @@ var Workspace = React.createClass({
 
         eventActions.fire('window.mousemove', e);
     },
-    onMouseDown(e) {
-        eventActions.fire('window.onmousedown', e);
-    },
+
     onToggleVideo() {
       this.setState({'video': !this.state.video});
     },
@@ -204,14 +221,12 @@ var Workspace = React.createClass({
       eventActions.add('closeFullscreen', this.onCloseFullscreen);
       window.addEventListener('mouseup', this.onMouseUp);
       window.addEventListener('mousemove', this.onMouseMove);
-      window.addEventListener('mousedown', this.onMouseDown);
       window.addEventListener("focus", this.onWindowFocus);
       window.addEventListener("blur", this.onWindowBlur);
     },
     componentWillUnmount() {
       window.removeEventListener('mouseup', this.onMouseUp);
       window.removeEventListener('mousemove', this.onMouseMove);
-      window.removeEventListener('mousedown', this.onMouseDown);
       window.removeEventListener("focus", this.onWindowFocus);
       window.removeEventListener("blur", this.onWindowBlur);
     }
