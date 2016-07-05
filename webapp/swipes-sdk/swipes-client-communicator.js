@@ -102,7 +102,7 @@ var SwClientCom = (function () {
 	}
 
 	// Internal listener api, used for handling received events
-	// Supports context as the third parameter, 
+	// Supports context as the third parameter
 	SwClientCom.prototype.addListener = function(command, listener, ctx){
 		if(!command || typeof command !== 'string'){
 			return console.warn('SwClientCom: addListener param1 (command): not set or not string');
@@ -163,12 +163,8 @@ var SwClientCom = (function () {
 		Function to generate random string to identify calls between frames for callbacks
 	 */
 	SwClientCom.prototype._generateRandomSenderId = function() {
-		var length = 5;
-
-		var text = '';
-		var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		var i, j, ref;
-		for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+		var length = 5, text = '', possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		for (var i = 0 ; i < length ; i++) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
 		}
 		return text;

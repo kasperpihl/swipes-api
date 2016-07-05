@@ -1,9 +1,7 @@
 var Reflux = require('reflux');
 var WorkflowStore = require('./WorkflowStore');
-var WorkspaceActions = require('../actions/WorkspaceActions');
 
 var WorkspaceStore = Reflux.createStore({
-	listenables: [WorkspaceActions],
 	localStorage: "WorkspaceStore4",
 	defaults: {
 		_columns: []

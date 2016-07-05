@@ -37,6 +37,7 @@ var SwipesAppSDK = (function() {
 	SwipesAppSDK.prototype.addListener = function(command, listener, ctx){
 		self.com.addListener(command, listener, ctx);
 	}
+	// Remove listener from events sent from workspace
 	SwipesAppSDK.prototype.removeListener = function(command, listener, ctx){
 		self.com.removeListener(command, listener, ctx);
 	}
@@ -65,9 +66,6 @@ var SwipesAppSDK = (function() {
 			}
 			return options;
 		},
-		leftNav: function(options, callback){
-			self.sendEvent('leftNav.load', options, callback);
-		},
 		edit: function(title, message, callback){
 			var options = {};
 			options = this._getOptions(options, title, message);
@@ -75,22 +73,6 @@ var SwipesAppSDK = (function() {
 				if(typeof callback === 'function')
 					callback(res);
 					console.log(res);
-			})
-		},
-		feedback: function(title, placeholder, callback) {
-			title = title || '';
-			placeholder = placeholder || '';
-
-			var options = {
-				title: title,
-				placeholder: placeholder
-			};
-
-			this.load('textarea', options, function(res) {
-				if(typeof callback === 'function') {
-					callback(res);
-					console.log('yoyoyoyoyooy');
-				}
 			})
 		},
 		schedule: function(callback) {

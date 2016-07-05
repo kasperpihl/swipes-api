@@ -2,16 +2,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-
-
 var WorkspaceStore = require('../stores/WorkspaceStore');
-var WorkspaceActions = require('../actions/WorkspaceActions');
 var eventActions = require('../actions/EventActions');
 
-// Including the cardstore only because of browserify
-var CardStore = require('../stores/CardStore');
 var WorkflowStore = require('../stores/WorkflowStore');
-var cardActions = require('../actions/CardActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
 
@@ -21,13 +15,17 @@ var TileLoader = require('./tile_loader');
 var Workspace = React.createClass({
     mixins: [WorkspaceStore.connect('workspace')],
     _dragDotHandler: null,
-    getInitialState: function() {
+    getInitialState() {
       return {
         video: false
       }
     },
-    openVideo: function() {
-      this.setState({'video': !this.state.video});
+    render() {
+        return (
+          <div id="actual-app" className="actual-app">
+            {this.renderCards()}
+          </div>
+        );
     },
     renderVideo: function() {
       var videoBox = '';
@@ -38,27 +36,30 @@ var Workspace = React.createClass({
 
       if (this.state.video) {
         return (
-          <div className={"video-box " + videoBox} onClick={this.openVideo}>
+          <div className={"video-box " + videoBox} onClick={this.onToggleVideo}>
             <iframe src="https://www.youtube.com/embed/vHACsg4QbMg?rel=0&amp&loop=1;showinfo=0" frameBorder="0" allowFullScreen></iframe>
           </div>
         )
       }
     },
-    renderCards(){
-      if (this.state.workspace._columns.length < 1) {
-        return (
+    renderEmptyBackground(){
+      return (
           <div className="empty-workspace-state">
             <p className="workspace-empty-text">
               <span className="strong">Welcome to your workspace</span> <br />
             </p>
-            <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg" onClick={this.openVideo} />
-            <div className="play-button" onClick={this.openVideo}></div>
+            <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg" onClick={this.onToggleVideo} />
+            <div className="play-button" onClick={this.onToggleVideo}></div>
               <p className="workspace-empty-text">
                 Play the video to get started
               </p>
             {this.renderVideo()}
           </div>
         )
+    },
+    renderCards(){
+      if (!this.state.workspace._columns.length) {
+        return this.renderEmptyBackground();
       }
 
       return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
@@ -72,12 +73,19 @@ var Workspace = React.createClass({
         tile.sendCommandToTile(command, data, callback);
       }
     },
+    // ======================================================
+    // Delegate methods from tiles, caching references
+    // ======================================================
     tileDidLoad(tile, id){
       this._cachedTiles[id] = tile;
     },
     tileWillUnload(tile, id){
       delete this._cachedTiles[id];
     },
+
+    // ======================================================
+    // Delegate methods from grid
+    // ======================================================
     gridRenderRowForId(grid, id){
       return (
         <TileLoader
@@ -185,6 +193,9 @@ var Workspace = React.createClass({
     onMouseDown(e) {
         eventActions.fire('window.onmousedown', e);
     },
+    onToggleVideo() {
+      this.setState({'video': !this.state.video});
+    },
     onCloseFullscreen(){
       this.refs.grid.onFullscreen();
     },
@@ -203,13 +214,6 @@ var Workspace = React.createClass({
       window.removeEventListener('mousedown', this.onMouseDown);
       window.removeEventListener("focus", this.onWindowFocus);
       window.removeEventListener("blur", this.onWindowBlur);
-    },
-    render() {
-        return (
-          <div id="actual-app" className="actual-app">
-            {this.renderCards()}
-          </div>
-        );
     }
 });
 

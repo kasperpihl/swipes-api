@@ -15,7 +15,7 @@ var Column = require('./grid_column');
 var helper = require('./helper');
 var offset = require('document-offset');
 
-// define the steps of transitions here.
+// define the steps of transitions here. Pass a string or an object with n/t (name/time) for more control. t: 0, means you should call this.transitionNext manually.
 var TRANSITIONS_STEPS = {
   fullscreen: [
     {n: "rippleStart", t: 330},

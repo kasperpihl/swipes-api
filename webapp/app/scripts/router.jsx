@@ -11,7 +11,7 @@ var Services = require('./components/services');
 var Signin = require('./components/signin');
 var Signup = require('./components/signup');
 var redirect = require('./components/redirect_flow');
-var Test = require('./components/test');
+var Test = require('./components/resizeable-grid/grid_test');
 exports.start = function() {
 	render ((
 		<Router history={browserHistory}>

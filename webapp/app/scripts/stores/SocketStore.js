@@ -37,7 +37,6 @@ var SocketStore = Reflux.createStore({
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
 				serviceStore.batchLoad(res.services, {flush:true});
 				stateActions.changeStarted(true);
-				console.log('starting huhu');
 			}
 		}).fail(function (error) {
 			if (!error.ok && error.err === 'not_authed') {
@@ -62,7 +61,7 @@ var SocketStore = Reflux.createStore({
 			if(msg.type === 'workflow_added' || msg.type === 'workflow_changed'){
 				WorkflowStore.update(msg.data.id, msg.data);
 			}
-			else if (msg.type === 'workflow_removed'){
+			if (msg.type === 'workflow_removed'){
 				WorkspaceStore.unset(msg.data.id);
 				WorkflowStore.unset(msg.data.id);
 			}

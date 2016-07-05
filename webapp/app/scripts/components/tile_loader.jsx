@@ -18,8 +18,6 @@ var eventActions = require('../actions/EventActions');
 var notificationActions = require('../actions/NotificationActions');
 var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
-var workspaceActions = require('../actions/WorkspaceActions');
-var cardActions = require('../actions/CardActions');
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
 var leftNavActions = require('../actions/LeftNavActions');
@@ -117,12 +115,13 @@ var TileLoader = React.createClass({
 				fromCardId: this.props.data.id,
 				data: data
 			};
-			
+
 			this.props.dotDragBegin(newData, callback);
 		});
 
 		this.com.addListener('share.request', (data) => {
 			console.log('init share ffs');
+			var cardActions;
 			cardActions.broadcast('share.init', {
 				sourceCardId: message._id
 			}, function (list) {
