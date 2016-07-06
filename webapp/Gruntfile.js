@@ -40,11 +40,11 @@ module.exports = function (grunt) {
                 xforward: false
               },
               {
-                  context: '/v1',
-                  host: host,
-                  port: 5000,
-                  https: false,
-                  xforward: false
+                context: '/v1',
+                host: host,
+                port: 5000,
+                https: false,
+                xforward: false
               },
               {
                 context: '/workflows',

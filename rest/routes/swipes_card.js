@@ -10,7 +10,7 @@ const swipesCardSsr = require('../utils/swipes_card_ssr');
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
-router.get('/SW-*', (req, res, next) => {
+router.get('/*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
   const swipesUrl = pathParts[2];
   const getSwipesUrlQ = r.table('links').getAll(swipesUrl, {index: 'short_url'});

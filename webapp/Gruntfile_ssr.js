@@ -98,6 +98,25 @@ module.exports = function (grunt) {
           }
         }
       },
+      concat: {
+        serve: {
+          files: {
+            '<%= yeoman.dev %>/scripts/swipes-connectors.js': [
+              '<%= yeoman.sdk %>/swipes-api-connector.js',
+              '<%= yeoman.sdk %>/swipes-client-communicator.js'
+            ],
+            '<%= yeoman.dev %>/scripts/swipes-tile-sdk.js': [
+              '<%= yeoman.sdk %>/dependencies/jquery.min.js',
+              '<%= yeoman.sdk %>/dependencies/underscore.min.js',
+              '<%= yeoman.sdk %>/dependencies/q.min.js',
+              '<%= yeoman.sdk %>/swipes-api-connector.js',
+              '<%= yeoman.sdk %>/swipes-client-communicator.js',
+              '<%= yeoman.sdk %>/swipes-tile-sdk.js',
+              '<%= yeoman.sdk %>/swipes-sdk-init.js'
+            ]
+          }
+        },
+      },
       compass: {
         dist: {
           sassDir: '<%= yeoman.app %>/styles',
