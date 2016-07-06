@@ -55,7 +55,7 @@ router.post('/link.add', (req, res, next) => {
         return Promise.resolve();
       }
 
-      shortUrl = 'SW-' + shortid.generate();
+      shortUrl = shortid.generate();
       const link = {
         checksum: checksum,
         service: service,

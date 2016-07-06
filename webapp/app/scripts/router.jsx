@@ -23,7 +23,6 @@ exports.start = function() {
 				<Route path="workspace" component={Workspace} onEnter={redirect.toSignUp} />
 				<Route path="services" component={Services} onEnter={redirect.toSignUp} />
 			</Route>
-
 		</Router>
 	), document.getElementById('content'));
 }

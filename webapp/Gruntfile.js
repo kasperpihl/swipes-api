@@ -40,11 +40,11 @@ module.exports = function (grunt) {
                 xforward: false
               },
               {
-                  context: '/v1',
-                  host: host,
-                  port: 5000,
-                  https: false,
-                  xforward: false
+                context: '/v1',
+                host: host,
+                port: 5000,
+                https: false,
+                xforward: false
               },
               {
                 context: '/workflows',
@@ -174,46 +174,20 @@ module.exports = function (grunt) {
           }
         }
       },
-      // browserify: {
-      //   options: {
-      //     transform: ['reactify']
-      //   },
-      //   dist: {
-      //     files: {
-      //       '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js'
-      //     },
-      //     options: {
-      //       browserifyOptions: {
-      //         extensions: '.jsx'
-      //       }
-      //     }
-      //   },
-      //   serve: {
-      //     files: {
-      //       '.tmp/scripts/bundle/app.js': '<%= yeoman.app %>/scripts/app.js',
-      //     },
-      //     options: {
-      //       browserifyOptions: {
-      //         debug: true,
-      //         extensions: '.jsx'
-      //       }
-      //     }
-      //   }
-      // },
       concat: {
         serve: {
           files: {
-            '<%= yeoman.dev %>/scripts/swipes-connectors.js': [
-              '<%= yeoman.sdk %>/swipes-api-connector.js',
-              '<%= yeoman.sdk %>/swipes-client-communicator.js'
+            '<%= yeoman.dev %>/scripts/swipes-sdk-main.js': [
+              '<%= yeoman.sdk %>/swipes-sdk-rest-api.js',
+              '<%= yeoman.sdk %>/swipes-sdk-ipc.js'
             ],
-            '<%= yeoman.dev %>/scripts/swipes-tile-sdk.js': [
+            '<%= yeoman.dev %>/scripts/swipes-sdk-tile.js': [
               '<%= yeoman.sdk %>/dependencies/jquery.min.js',
               '<%= yeoman.sdk %>/dependencies/underscore.min.js',
               '<%= yeoman.sdk %>/dependencies/q.min.js',
-              '<%= yeoman.sdk %>/swipes-api-connector.js',
-              '<%= yeoman.sdk %>/swipes-client-communicator.js',
-              '<%= yeoman.sdk %>/swipes-tile-sdk.js',
+              '<%= yeoman.sdk %>/swipes-sdk-rest-api.js',
+              '<%= yeoman.sdk %>/swipes-sdk-ipc.js',
+              '<%= yeoman.sdk %>/swipes-sdk-tile.js',
               '<%= yeoman.sdk %>/swipes-sdk-init.js'
             ]
           }
