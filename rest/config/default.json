@@ -8,7 +8,9 @@
   },
   "xendo": {
     "clientId": "c5fa2fa6b268a58101b6",
-    "clientSecret": "5fd2380cecfac16fff7f0023a8bc093be1ac1a51"
+    "clientSecret": "5fd2380cecfac16fff7f0023a8bc093be1ac1a51",
+    "addUserEndpoint": "https://xen.do/api/v1/provisioning/user/",
+    "addServiceToUserEndpoint": "https://xen.do/api/v1/provisioning/service/"
   },
   "dropbox": {
     "appId": "wh02j5prwflysc2",
