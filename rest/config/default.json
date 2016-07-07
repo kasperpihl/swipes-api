@@ -6,6 +6,10 @@
     "user": "admin",
     "password": ""
   },
+  "xendo": {
+    "clientId": "c5fa2fa6b268a58101b6",
+    "clientSecret": "5fd2380cecfac16fff7f0023a8bc093be1ac1a51"
+  },
   "dropbox": {
     "appId": "wh02j5prwflysc2",
     "appSecret": "uzq5he1dv12608f",
