@@ -6,9 +6,6 @@
     "user": "admin",
     "password": ""
   },
-  "jira": {
-    "consumerKey": "SwipesUnicorns"
-  },
   "dropbox": {
     "appId": "wh02j5prwflysc2",
     "appSecret": "uzq5he1dv12608f",

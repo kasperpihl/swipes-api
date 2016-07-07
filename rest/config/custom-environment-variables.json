@@ -6,9 +6,6 @@
     "user": "SW_DATABASE_USER",
     "password": "SW_DATABASE_PASSWORD"
   },
-  "jira": {
-    "consumerKey": "SW_JIRA_CONSUMER_KEY"
-  },
   "dropbox": {
     "redirectURI": "SW_DROPBOX_REDIRECT_URI"
   },
