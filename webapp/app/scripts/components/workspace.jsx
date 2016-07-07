@@ -169,23 +169,12 @@ var Workspace = React.createClass({
     },
     onMouseUp(e) {
       if(this.isDraggingDot){
-        if (this._dropZoneId) {
-          var customEventData = this._dotDragData;
-
-          customEventData.toCardId = this._dropZoneId;
-
-          if (customEventData.fromCardId !== customEventData.toCardId) {
-            eventActions.fire('share.ondrop', customEventData);
-          }
-        }
 
         $('.active-app').removeClass('draggingDot');
         $('.tile').not("#" + this._dotDragData.fromCardId).removeClass('draggingDot');
         this._dragDotHandler.parentNode.removeChild(this._dragDotHandler);
         this._dragDotHandler = null;
       }
-
-      eventActions.fire('window.onmouseup', e);
 
       this.isDraggingDot = false;
       this._dotDragData = null;
@@ -199,8 +188,6 @@ var Workspace = React.createClass({
           // -25 to center the dot on the mouse cursor. With of the dot is 50
           this.positionDotDragHandler(e.clientX - 25, e.clientY - 25);
         }
-
-        eventActions.fire('window.mousemove', e);
     },
 
     onToggleVideo() {

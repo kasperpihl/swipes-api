@@ -20,7 +20,6 @@ var topbarActions = require('../actions/TopbarActions');
 var workflowActions = require('../actions/WorkflowActions');
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
-var leftNavActions = require('../actions/LeftNavActions');
 var Services = require('./services');
 
 var TileLoader = React.createClass({
@@ -94,9 +93,6 @@ var TileLoader = React.createClass({
 
 			}
 		});
-		this.com.addListener('leftNav.load', (data) => {
-			leftNavActions.load(data, callback);
-		});
 		this.com.addListener('notifications.send', (data) => {
 			var notification = {
 				title: this.state.workflow.name,
@@ -133,13 +129,6 @@ var TileLoader = React.createClass({
 
 				modalActions.loadModal('list', modalData, function (row) {
 					if(row){
-
-						eventActions.fire("share.transmit", {
-							fromCardId: self.state.workflow.id,
-							toCardId: row.id,
-							action: row.action,
-							data: data
-						});
 					}
 				});
 			});

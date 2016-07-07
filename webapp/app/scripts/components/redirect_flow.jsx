@@ -7,7 +7,6 @@ module.exports = {
       return replace('/signup');
     }
 
-    console.log('redirect to login and initing statestore');
     stateStore.actions.init();
   },
   toHome: function (nextState, replace) {

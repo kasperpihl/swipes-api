@@ -1,13 +1,11 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = require('react-router').Link;
-var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
 var stateStore = require('../stores/StateStore');
 var TextField = require('material-ui/lib/text-field');
 var Signup = React.createClass({
-	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Signup');
         mixpanel.track('Opened Signup');

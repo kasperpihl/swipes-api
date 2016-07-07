@@ -18,7 +18,6 @@ var SocketStore = Reflux.createStore({
 	listenables: [ socketActions ],
 	onStart: function(){
 		var self = this;
-
 		swipesApi.request("rtm.start").then(function(res){
 			if(res.ok) {
 				self.connect(res.url);
@@ -36,7 +35,6 @@ var SocketStore = Reflux.createStore({
 				
 				WorkflowStore.batchLoad(res.workflows, {flush:true});
 				serviceStore.batchLoad(res.services, {flush:true});
-				stateActions.changeStarted(true);
 			}
 		}).fail(function (error) {
 			if (!error.ok && error.err === 'not_authed') {

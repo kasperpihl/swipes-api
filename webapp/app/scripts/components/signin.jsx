@@ -1,12 +1,10 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = require('react-router').Link;
-var Reflux = require('reflux');
 var Vivus = require('vivus');
 var stateStore = require('../stores/StateStore');
 var TextField = require('material-ui/lib/text-field');
 var Signin = React.createClass({
-	mixins: [ Reflux.ListenerMixin ],
 	componentDidMount:function() {
 		amplitude.logEvent('Session - Opened Login');
         mixpanel.track('Opened Login');
@@ -41,7 +39,7 @@ var Signin = React.createClass({
 			console.log(res,error);
 			if(res && res.ok){
 				amplitude.logEvent('Session - Signed In');
-        mixpanel.track('Signed In');
+                mixpanel.track('Signed In');
 				stateStore.actions.login(res.token);
 			}
 			else
@@ -101,8 +99,8 @@ var Signin = React.createClass({
                                 <input className="swipes-floating-input" type="password" id="password"/>
                                 <label htmlFor="password">Password</label>
                             </div>*/}
-														<br/>
-														<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
+													<br/>
+													<TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
 	    											<TextField floatingLabelText="Password" ref="password" type="password" />
 														<br/>
                             <input type="submit" className="login-submit" value="SIGN IN" onClick={this.signin}/>

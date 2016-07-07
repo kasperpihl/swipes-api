@@ -11,13 +11,11 @@ var StateStore = Reflux.createStore({
 	localStorage: "StateStore",
 	persistOnly: [ "swipesToken"],
 	onInit: function() {
+		
 		if(!swipesApi.getToken()){
 			swipesApi.setToken(this.get("swipesToken"));
 			socketActions.start();
 		}
-	},
-	onChangeStarted: function (isStarted) {
-		this.set('isStarted', isStarted);
 	},
 	onLogin: function(token) {
 		this.set("swipesToken", token, {trigger: false});
