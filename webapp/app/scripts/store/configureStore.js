@@ -1,4 +1,6 @@
-import { createStore } from 'redux'
+import {compose, createStore} from 'redux';
+import persistState from 'redux-localstorage'
+
 import rootReducer from '../reducers'
 const addLoggingToDispatch = (store) => {
   /* eslint-disable no-console */
@@ -20,9 +22,14 @@ const addLoggingToDispatch = (store) => {
 };
 
 export default function configureStore(preloadedState) {
+  // All the keys to persist to localStorage between opens
+  const enhancer = compose(
+    persistState(['auth'])
+  )
   const store = createStore(
     rootReducer,
-    preloadedState
+    preloadedState,
+    enhancer
   );
   store.dispatch = addLoggingToDispatch(store);
   return store

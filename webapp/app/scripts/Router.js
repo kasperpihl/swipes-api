@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react'
 import { browserHistory, Router, Route, IndexRoute } from 'react-router'
 
 
-import Registration from '../containers/Registration';
-var App = require('../components/App');
+import Registration from './containers/Registration';
+import App from './containers/App'
 
 let SmallComp = (props) => {
   return (<div>Yeah</div>);

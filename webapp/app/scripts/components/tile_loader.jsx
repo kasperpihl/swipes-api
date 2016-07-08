@@ -8,7 +8,6 @@ var remote = nodeRequire('electron').remote;
 var app = remote.app;
 var path = nodeRequire('path');
 
-var Loading = require('./loading');
 var WorkflowStore = require('../stores/WorkflowStore');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var UserStore = require('../stores/UserStore');
@@ -200,7 +199,7 @@ var TileLoader = React.createClass({
 	},
 	render: function() {
 		var workflowId = '';
-		var cardContent = <Loading />;
+		var cardContent = <div>Loading</div>;
 
 
 		if(this.state.workflow){

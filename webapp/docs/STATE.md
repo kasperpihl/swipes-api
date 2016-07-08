@@ -1,5 +1,6 @@
 STATE DESCRIPTION
-
+auth
+	token
 main
 	isFullscreen: bool
 	isSearching: bool

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-import Router from './Router'
+import Router from '../Router'
 import configureStore from '../store/configureStore'
 import { Provider } from 'react-redux'
 
