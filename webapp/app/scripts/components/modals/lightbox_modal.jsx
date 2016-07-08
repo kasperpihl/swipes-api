@@ -1,6 +1,5 @@
 var React = require('react');
 var moment = require('moment');
-var modalActions = require('../../actions/ModalActions');
 var Loading = require('../loading');
 var CircularProgress = require('material-ui/lib/circular-progress');
 
@@ -19,7 +18,7 @@ var LightboxModal = React.createClass({
     var lightboxButton = this.refs.lightboxbutton;
 
     if(e.target === lightboxWrapper || (e.target === lightboxButton)) {
-      modalActions.hide();
+      this.props.hide();
     }
   },
   imgLoaded: function() {

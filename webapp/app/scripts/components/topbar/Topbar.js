@@ -45,7 +45,7 @@ class Topbar extends Component {
   render() {
     var topbarClass = 'sw-topbar';
     var styles = {};
-    console.log('rend', this.props, this.state);
+    
     if(this.state.gradientPos) {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
     }

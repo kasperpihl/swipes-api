@@ -1,8 +1,9 @@
-var Reflux = require('reflux');
+import * as types from '../constants/ActionTypes'
 
-var ModalActions = Reflux.createActions([
-	'loadModal',
-	'hide'
-]);
 
-module.exports = ModalActions;
+export function loadModal(modal, options, callback) {
+  return { type: types.LOAD_MODAL, modal, options, callback }
+}
+export function hideModal() {
+  return { type: types.HIDE_MODAL }
+}

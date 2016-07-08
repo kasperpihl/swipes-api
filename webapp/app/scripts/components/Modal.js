@@ -15,7 +15,7 @@ class Modal extends Component {
     window.addEventListener('resize', this.recalculateContent);
     window.addEventListener('keyup', this.onKeyUp);
     setTimeout(function(){
-      this.props.loadModal("list");
+      this.props.loadModal("alert", {title: "test", buttons: ["Yes"]});
     }.bind(this), 500);
   }
   componentWillUnmount(){
@@ -120,7 +120,7 @@ class Modal extends Component {
       <div ref="container" className={containerClass}>
         <div ref="background" onClick={this.onClickedBackground.bind(this)} className={backgroundClass}></div>
         <div ref="content" className={contentClass}>
-          <Modal data={{options: this.props.modal.data, callback: this.onModalCallback.bind(this)}}/>
+          <Modal data={{options: this.props.modal.data, callback: this.onModalCallback.bind(this)}} hide={this.onClickedBackground.bind(this)}/>
         </div>
       </div>
     );

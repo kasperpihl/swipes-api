@@ -143,7 +143,7 @@ module.exports = function (grunt) {
       },
       webpack: {
         dev: {
-          entry: './<%= yeoman.app %>/scripts/app',
+          entry: './<%= yeoman.app %>/scripts/index',
           resolve: {
             root: path.resolve(__dirname, 'node_modules'),
             fallback: {root: path.join(__dirname, 'node_modules')},

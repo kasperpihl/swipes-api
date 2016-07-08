@@ -6,10 +6,6 @@ require("react-tap-event-plugin")();
 
 import React from 'react'
 import { render } from 'react-dom'
-
-
-
-
 import Root from './containers/Root'
 
 if (window.process && window.process.versions.electron) {
@@ -29,8 +25,10 @@ if (window.process && window.process.versions.electron) {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
 
-  
-  render( <Root />, document.getElementById('content'))
+  render( 
+    <Root />
+    , document.getElementById('content')
+  )
 
 } else {
   const DownloadPage = require('./components/downloadPage');

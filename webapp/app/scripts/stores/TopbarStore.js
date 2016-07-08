@@ -39,24 +39,6 @@ var TopbarStore = Reflux.createStore({
 	onChangeFullscreen: function(isFullscreen){
 		this.set('isFullscreen', isFullscreen);
 	},
-	onSendFeedback: function() {
-		modalActions.loadModal('textarea', {'title': 'Send us your feedback', 'placeholder': 'Write what you are thinking'}, function(res) {
-			if (res) {
-				var feedbackMessage = res;
-				swipesApi.request('feedback.add', {'feedback': res}).then(function(res) {
-					if(res.ok) {
-						mixpanel.track('Feedback Sent');
-						modalActions.loadModal('alert', {'title': 'Thank you', 'message': 'We appreciate you taking time to send us your thoughts on Swipes!'})
-					} else {
-						console.log(res.err);
-						return;
-					}
-				}).catch(function(err) {
-					console.log(err);
-				})
-			}
-		})
-	},
 	onSetNotifications: function() {
 		notificationActions.setNotifications();
 	}

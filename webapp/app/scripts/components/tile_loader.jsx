@@ -13,10 +13,9 @@ var WorkflowStore = require('../stores/WorkflowStore');
 var WorkspaceStore = require('../stores/WorkspaceStore');
 var UserStore = require('../stores/UserStore');
 var stateActions = require('../actions/StateActions');
-var modalActions = require('../actions/ModalActions');
 var eventActions = require('../actions/EventActions');
 var notificationActions = require('../actions/NotificationActions');
-var topbarActions = require('../actions/TopbarActions');
+
 var workflowActions = require('../actions/WorkflowActions');
 var userStore = require('../stores/UserStore');
 var stateStore = require('../stores/StateStore');
@@ -77,7 +76,7 @@ var TileLoader = React.createClass({
 		});
 
 		this.com.addListener('modal.load', (data) => {
-			modalActions.loadModal(data.modal, data.options, callback);
+			//modalActions.loadModal(data.modal, data.options, callback);
 		})
 
 		this.com.addListener('openURL', (data) => {

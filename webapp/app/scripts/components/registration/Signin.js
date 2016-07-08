@@ -1,0 +1,59 @@
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
+import SwipesBackgroundAnimation from './SwipesBackgroundAnimation'
+
+// KRIS_TODO: Replace material ui textfield.
+let TextField = require('material-ui/lib/text-field');
+
+export default class Signin extends Component {
+  componentDidMount() {
+    amplitude.logEvent('Session - Opened Login');
+    mixpanel.track('Opened Login');
+  }
+  signin(){
+    var email = this.refs.username.getValue();
+    var password = this.refs.password.getValue();
+    var data = {
+      email: email,
+      password: password
+    };
+
+    swipesApi.request({force:true, command:"users.login"}, data, function(res,error){
+      console.log(res,error);
+      if(res && res.ok){
+        amplitude.logEvent('Session - Signed In');
+        mixpanel.track('Signed In');
+        this.props.onLogin(res.token)
+      }
+      else
+        alert("Login failed");
+    }.bind(this));
+    return;
+  }
+  preventSubmit(e) {
+    e.preventDefault();
+  }
+  render() {
+    return (
+      <div className="main-log-wrapper">
+        <SwipesBackgroundAnimation />
+        <div className="wrapper">
+          <div className="logo"></div>
+          <h1>Welcome to your Swipes</h1>
+          <div className="sign-up-card">
+            <h2>sign in to swipes</h2>
+            <form action="" onSubmit={this.preventSubmit}>
+              <br/>
+              <TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
+              <TextField floatingLabelText="Password" ref="password" type="password" />
+              <br/>
+              <input type="submit" className="login-submit" value="SIGN IN" onClick={this.signin.bind(this)}/>
+            </form>
+          </div>
+          <h3>No account yet?</h3>
+          <div className="signup-button"><Link to="/signup">SIGN UP</Link></div>
+        </div>
+      </div>
+    );
+  }
+};

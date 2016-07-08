@@ -1,21 +1,20 @@
 import React, { Component, PropTypes } from 'react'
-import { Provider } from 'react-redux'
-import configureStore from '../store/configureStore'
 
-var Reflux = require('reflux');
-import routes from '../routes'
-import { Router } from 'react-router'
-var history = require('react-router').browserHistory;
+import Router from './Router'
+import configureStore from '../store/configureStore'
+import { Provider } from 'react-redux'
 
 const store = configureStore()
+store.subscribe(() => {
+  console.log('store update', store.getState());
+})
 
 export default class Root extends Component {
   render() {
+    // Passing store to router, needs it to check if signed in.
     return (
       <Provider store={store}>
-        <div>
-          <Router routes={routes} history={history} />
-        </div>
+        <Router store={store} />
       </Provider>
     )
   }
