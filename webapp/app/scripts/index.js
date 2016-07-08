@@ -16,7 +16,7 @@ if (window.process && window.process.versions.electron) {
   
   window.swipesApi = new SwipesAPIConnector(window.location.origin);
 
-  
+
 
   const defaultMenu = require('./electron-default-menu');
   // Set a top-level application menu

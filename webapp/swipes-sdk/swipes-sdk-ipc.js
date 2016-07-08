@@ -3,8 +3,8 @@
 	The purpose of this class is to stucture the communication between tile and workspace.
 	sendFunction in the constructor should be a function that take its first parameter and send it to a receiver (workspace/tile)
  */
-var SwClientCom = (function () {
-	function SwClientCom(sendFunction, initObj) {
+class SwClientCom {
+	constructor(sendFunction, initObj) {
 		this._localCallbacks = {}; // 
 		this._commandQueue = []; // Queue of commands, if called while locked
 		this._listenersObj = {}; // Listeners of commands 
@@ -17,14 +17,14 @@ var SwClientCom = (function () {
 		if(initObj){
 			this.sendCommand('init', initObj);
 		}
-	};
-	SwClientCom.prototype.isLocked = function(){
+	}
+	isLocked(){
 		return this._isLocked;
-	};
-	SwClientCom.prototype.lock = function(){
+	}
+	lock(){
 		this._isLocked = true;
-	};
-	SwClientCom.prototype.unlock = function(){
+	}
+	unlock(){
 		this._isLocked = false;
 		if (this._commandQueue.length > 0) {
 			for (var i = 0; i < this._commandQueue.length; i++) {
@@ -34,9 +34,9 @@ var SwClientCom = (function () {
 
 			this._commandQueue = [];
 		}
-	};
+	}
 
-	SwClientCom.prototype.sendCommand = function(command, data, callback) {
+	sendCommand(command, data, callback) {
 		if(this._isLocked){
 			return this._commandQueue.push({command: command, data: data, callback: callback});
 		}
@@ -61,9 +61,9 @@ var SwClientCom = (function () {
 			this._localCallbacks[identifier] = callback;
 		}
 		this._sendFunction(callJson);
-	};
+	}
 
-	SwClientCom.prototype.receivedCommand = function(message) {
+	receivedCommand(message) {
 		if(typeof message !== 'object') {
 			return;
 		}
@@ -89,9 +89,9 @@ var SwClientCom = (function () {
 				delete this._localCallbacks[message.reply_to];
 			}
 		}
-	};
+	}
 
-	SwClientCom.prototype._generateAndSendResponseToCommand = function (identifier, data) {
+	_generateAndSendResponseToCommand(identifier, data) {
 
 		var responseJson = {
 			'reply_to': identifier,
@@ -103,7 +103,7 @@ var SwClientCom = (function () {
 
 	// Internal listener api, used for handling received events
 	// Supports context as the third parameter
-	SwClientCom.prototype.addListener = function(command, listener, ctx){
+	addListener(command, listener, ctx){
 		if(!command || typeof command !== 'string'){
 			return console.warn('SwClientCom: addListener param1 (command): not set or not string');
 		}
@@ -117,12 +117,12 @@ var SwClientCom = (function () {
 		var currentListeners = this._listenersObj[command] || [];
 		currentListeners.push({listener: listener, context: ctx});
 		this._listenersObj[command] = currentListeners;
-	};
-	SwClientCom.prototype.getListeners = function(command){
+	}
+	getListeners(command){
 		var currentListeners = this._listenersObj[command] || [];
 		return currentListeners;
-	};
-	SwClientCom.prototype._removeListenersForCommand = function(command, listener, ctx){
+	}
+	_removeListenersForCommand(command, listener, ctx){
 		var currentListeners = this._listenersObj[command];
 		if(!currentListeners){
 			return;
@@ -144,8 +144,8 @@ var SwClientCom = (function () {
 		else if(newListeners.length && newListeners.length !== currentListeners.length){
 			this._listenersObj[command] = newListeners;
 		}
-	};
-	SwClientCom.prototype.removeListener = function(command, listener, ctx){
+	}
+	removeListener(command, listener, ctx){
 		if(!command && !listener && !ctx){
 			return console.warn('SwClientCom: removeListener: no params provided');
 		}
@@ -157,18 +157,16 @@ var SwClientCom = (function () {
 				this._clearEventName(key, listener, context);
 			}
 		}
-	};
+	}
 	
 	/*
 		Function to generate random string to identify calls between frames for callbacks
 	 */
-	SwClientCom.prototype._generateRandomSenderId = function() {
+	_generateRandomSenderId() {
 		var length = 5, text = '', possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		for (var i = 0 ; i < length ; i++) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
 		}
 		return text;
-	};
-
-	return SwClientCom;
-})();
+	}
+}

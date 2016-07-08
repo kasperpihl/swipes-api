@@ -96,26 +96,6 @@ class SwipesAppSDK {
       }
     };
   }
-  _loadModal(name, options, callback){
-    options = options || {};
-    if(typeof options === 'function'){
-      callback = options;
-      options = {};
-    }
-    this.sendEvent("modal.load", {modal: name, options: options}, callback);
-  }
-  _getModalOptions(options, title, message){
-    if(typeof title === 'object'){
-      options = title;
-    }
-    if(typeof title === 'string'){
-      options.title = title;
-    }
-    if(typeof message === 'string'){
-      options.message = message;
-    }
-    return options;
-  }
   modal: {
     edit: (title, message, callback) => {
       let options = {};
@@ -178,5 +158,25 @@ class SwipesAppSDK {
           callback(confirmed);
       })
     }
+  }
+  _loadModal(name, options, callback){
+    options = options || {};
+    if(typeof options === 'function'){
+      callback = options;
+      options = {};
+    }
+    this.sendEvent("modal.load", {modal: name, options: options}, callback);
+  }
+  _getModalOptions(options, title, message){
+    if(typeof title === 'object'){
+      options = title;
+    }
+    if(typeof title === 'string'){
+      options.title = title;
+    }
+    if(typeof message === 'string'){
+      options.message = message;
+    }
+    return options;
   }
 }
