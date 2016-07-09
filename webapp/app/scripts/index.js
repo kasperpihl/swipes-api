@@ -16,8 +16,6 @@ else{
   require('expose?$!expose?jQuery!jquery');
   require('expose?_!underscore');
 
-  // Geting events from the oauth popup
-  require('./oauth-electron-handler');
   require("react-tap-event-plugin")();
 
   window.swipesApi = new SwipesAPIConnector(window.location.origin);

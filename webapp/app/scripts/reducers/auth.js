@@ -15,9 +15,6 @@ export default function auth (state = initialState, action) {
       // K_TODO: Handle error
       return state;
     }
-    case types.LOGIN:{
-      return Object.assign({}, )
-    }
     case types.LOGOUT:{
       return Object.assign({}, initialState)
     }

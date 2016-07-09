@@ -5,24 +5,10 @@ var WorkflowStore = Reflux.createStore({
 	listenables: [ workflowActions ],
 	localStorage: "WorkflowStore",
 	sort: "name",
-	onRenameWorkflow: function(workflow, name){
-		swipesApi.request('users.renameWorkflow', {'workflow_id': workflow.id, name: name}, function(res, error){
-
-		})
-	},
 	onSelectAccount:function(workflow, accountId){
 		this.update(workflow.id, {selectedAccountId: accountId});
 		swipesApi.request('users.selectWorkflowAccountId', {"workflow_id": workflow.id, "account_id": accountId}, function(res, error){
 		});
-	},
-	onRemoveWorkflow: function(workflow){
-		swipesApi.request("users.removeWorkflow", {"workflow_id": workflow.id}, function(res,error){
-			if(res && res.ok){
-				amplitude.logEvent('Engagement - Removed Workflow', {'Workflow': workflow.manifest_id});
-				mixpanel.track('Removed Card', {'Card': workflow.manifest_id})
-			}
-			console.log("res from app", res);
-		})
 	},
 	beforeSaveHandler:function(newObj){
 		if(!newObj.index_url && newObj.index){

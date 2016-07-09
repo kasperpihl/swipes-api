@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { main } from '../../actions';
+import { main, modal } from '../../actions';
 
 
 //var stateStore = require('../../stores/StateStore');
@@ -23,6 +23,7 @@ class Topbar extends Component {
       this.props.toggleFullscreen();
     }
     else {
+      this.props.loadTilesListModal();
       //topbarActions.loadWorkflowModal();
     }
   }
@@ -93,6 +94,7 @@ function mapStateToProps(state) {
 
 const ConnectedTopbar = connect(mapStateToProps, {
   toggleFullscreen: main.toggleFullscreen,
-  toggleSearching: main.toggleSearching
+  toggleSearching: main.toggleSearching,
+  loadTilesListModal: modal.loadTilesListModal
 })(Topbar)
 export default ConnectedTopbar

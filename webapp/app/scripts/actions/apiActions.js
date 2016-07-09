@@ -35,18 +35,21 @@ export function request(options, data){
     }).then((res) => {
       command = options.resultAction || command
       // Dispatch an action with the command as type
+      if(res.error){
+        res.payload = Object.assign({}, res.payload, {ok: false});
+      }
       dispatch({
         type: command,
         payload: res.payload,
         meta: res.meta
       })
       // Let's return a promise for convenience.
-      return Promise.resolve(null, res.payload);
+      return Promise.resolve(res.payload);
 
     }).catch((err) => {
+      console.log('err', err);
       return Promise.resolve(err);
     });
-    return 
   }
   
 } 

@@ -14,9 +14,6 @@ class Modal extends Component {
     this.recalculateContent();
     window.addEventListener('resize', this.recalculateContent);
     window.addEventListener('keyup', this.onKeyUp);
-    setTimeout(() => {
-      this.props.loadModal("alert", {title: "test", buttons: ["Yes"]});
-    }, 500);
   }
   componentWillUnmount(){
     window.removeEventListener('resize', this.recalculateContent);
