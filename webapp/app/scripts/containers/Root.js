@@ -5,9 +5,6 @@ import configureStore from '../store/configureStore'
 import { Provider } from 'react-redux'
 
 const store = configureStore()
-store.subscribe(() => {
-  console.log('store update', store.getState());
-})
 
 export default class Root extends Component {
   render() {
@@ -19,3 +16,5 @@ export default class Root extends Component {
     )
   }
 }
+
+module.exports = Root;

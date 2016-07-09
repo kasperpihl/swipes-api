@@ -6,8 +6,17 @@ const initialState = {
 
 export default function auth (state = initialState, action) {
   switch (action.type) {
+    case ('users.login'):
+    case ('users.signup'):{
+      if(action.payload && action.payload.ok){
+        return Object.assign({}, {token: action.payload.token});
+      }
+      console.log('result', action, state);
+      // K_TODO: Handle error
+      return state;
+    }
     case types.LOGIN:{
-      return Object.assign({}, {token: action.token})
+      return Object.assign({}, )
     }
     case types.LOGOUT:{
       return Object.assign({}, initialState)

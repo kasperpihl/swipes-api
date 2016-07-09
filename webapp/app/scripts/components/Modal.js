@@ -14,9 +14,9 @@ class Modal extends Component {
     this.recalculateContent();
     window.addEventListener('resize', this.recalculateContent);
     window.addEventListener('keyup', this.onKeyUp);
-    setTimeout(function(){
+    setTimeout(() => {
       this.props.loadModal("alert", {title: "test", buttons: ["Yes"]});
-    }.bind(this), 500);
+    }, 500);
   }
   componentWillUnmount(){
     window.removeEventListener('resize', this.recalculateContent);
@@ -83,9 +83,9 @@ class Modal extends Component {
     }
 
     cssProps["marginLeft"] = marginLeft;
-      cssProps["marginTop"] = marginTop;
+    cssProps["marginTop"] = marginTop;
 
-      $contentEl.css(cssProps);
+    $contentEl.css(cssProps);
   }
   onClickedBackground(){
     console.log('clicked background', this.props.modal.callback);

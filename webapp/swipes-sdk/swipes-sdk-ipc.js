@@ -1,172 +1,167 @@
 /*
-	Swipes Client Communicator
-	The purpose of this class is to stucture the communication between tile and workspace.
-	sendFunction in the constructor should be a function that take its first parameter and send it to a receiver (workspace/tile)
+  Swipes Client Communicator
+  The purpose of this class is to stucture the communication between tile and workspace.
+  sendFunction in the constructor should be a function that take its first parameter and send it to a receiver (workspace/tile)
  */
 class SwClientCom {
-	constructor(sendFunction, initObj) {
-		this._localCallbacks = {}; // 
-		this._commandQueue = []; // Queue of commands, if called while locked
-		this._listenersObj = {}; // Listeners of commands 
-		this._isLocked = false; // Lock state, to not pass on any commands
+  constructor(sendFunction, initObj) {
+    this._localCallbacks = {}; // 
+    this._commandQueue = []; // Queue of commands, if called while locked
+    this._listenersObj = {}; // Listeners of commands 
+    this._isLocked = false; // Lock state, to not pass on any commands
 
-		if(typeof sendFunction !== 'function'){
-			throw new Error('SwClientCom: sendFunction must be a function taking one parameter: data');
-		}
-		this._sendFunction = sendFunction;
-		if(initObj){
-			this.sendCommand('init', initObj);
-		}
-	}
-	isLocked(){
-		return this._isLocked;
-	}
-	lock(){
-		this._isLocked = true;
-	}
-	unlock(){
-		this._isLocked = false;
-		if (this._commandQueue.length > 0) {
-			for (var i = 0; i < this._commandQueue.length; i++) {
-				var listenObj = this._commandQueue[i];
-				this.sendCommand(listenObj.command, listenObj.data, listenObj.callback);
-			}
+    if(typeof sendFunction !== 'function'){
+      throw new Error('SwClientCom: sendFunction must be a function taking one parameter: data');
+    }
+    this._sendFunction = sendFunction;
+    if(initObj){
+      this.sendCommand('init', initObj);
+    }
+  }
+  isLocked(){
+    return this._isLocked
+  }
+  lock(){
+    this._isLocked = true
+  }
+  unlock(){
+    this._isLocked = false
+    this._commandQueue.forEach((listenObj) => {
+      this.sendCommand(listenObj.command, listenObj.data, listenObj.callback)
+    })
+    this._commandQueue = []
+  }
 
-			this._commandQueue = [];
-		}
-	}
+  sendCommand(command, data, callback) {
+    if(this._isLocked){
+      return this._commandQueue.push({command: command, data: data, callback: callback});
+    }
 
-	sendCommand(command, data, callback) {
-		if(this._isLocked){
-			return this._commandQueue.push({command: command, data: data, callback: callback});
-		}
+    if(typeof command !== 'string' || !command.length){
+      return console.warn('SwClientCom: sendCommand first parameter must be a string');
+    }
+    // If data is a function, it's shorthand for the callback
+    if(typeof data === 'function'){
+      callback = data;
+      data = null;
+    }
 
-		if(typeof command !== 'string' || !command.length){
-			return console.warn('SwClientCom: sendCommand first parameter must be a string');
-		}
-		// If data is a function, it's shorthand for the callback
-		if(typeof data === 'function'){
-			callback = data;
-			data = null;
-		}
+    var identifier = this._generateRandomSenderId();
+    var callJson = {
+      'identifier': identifier,
+      'data': data,
+      'command': command
+    };
 
-		var identifier = this._generateRandomSenderId();
-		var callJson = {
-			'identifier': identifier,
-			'data': data,
-			'command': command
-		};
+    if (callback && typeof callback === 'function') {
+      this._localCallbacks[identifier] = callback;
+    }
+    this._sendFunction(callJson);
+  }
 
-		if (callback && typeof callback === 'function') {
-			this._localCallbacks[identifier] = callback;
-		}
-		this._sendFunction(callJson);
-	}
+  receivedCommand(message) {
+    if(typeof message !== 'object') {
+      return;
+    }
+    // Check if it's a command, or reply to a command.
+    if (message.command) {
+      var res = null;
+      // When receiving a command, check if any listeners have been attached and call them.
+      var listeners = this.getListeners(message.command);
+      listeners.forEach((listener) => {
+        if(listener.handler){
+          res = listener.handler(message.data);
+        }
+      })
+      
+      // Then generate a response with whatever result was returned from the last listener
+      this._generateAndSendResponseToCommand(message.identifier, res);
+    }
+    // Else if receiving the reply from a command, check the local callbacks.
+    else if (message.reply_to) {
+      if(this._localCallbacks[message.reply_to]){
+        this._localCallbacks[message.reply_to](message.data);
+        delete this._localCallbacks[message.reply_to];
+      }
+    }
+  }
 
-	receivedCommand(message) {
-		if(typeof message !== 'object') {
-			return;
-		}
-		// Check if it's a command, or reply to a command.
-		if (message.command) {
-			var res = null;
-			// When receiving a command, check if any listeners have been attached and call them.
-			var listeners = this.getListeners(message.command);
-			for (var i = 0 ; i < listeners.length ; i++) {
-				var handler = listeners[i].listener;
-				if(handler) {
-					// Limitation, only the last callback added will return a result to callback
-					res = handler(message.data);
-				}
-			}
-			// Then generate a response with whatever result was returned from the last listener
-			this._generateAndSendResponseToCommand(message.identifier, res);
-		}
-		// Else if receiving the reply from a command, check the local callbacks.
-		else if (message.reply_to) {
-			if(this._localCallbacks[message.reply_to]){
-				this._localCallbacks[message.reply_to](message.data);
-				delete this._localCallbacks[message.reply_to];
-			}
-		}
-	}
+  _generateAndSendResponseToCommand(identifier, data) {
 
-	_generateAndSendResponseToCommand(identifier, data) {
+    var responseJson = {
+      'reply_to': identifier,
+      'data': data
+    };
 
-		var responseJson = {
-			'reply_to': identifier,
-			'data': data
-		};
+    this._sendFunction(responseJson);
+  }
 
-		this._sendFunction(responseJson);
-	}
+  // Internal listener api, used for handling received events
+  // Supports context as the third parameter
+  addListener(command, listener, ctx){
+    if(!command || typeof command !== 'string'){
+      return console.warn('SwClientCom: addListener param1 (command): not set or not string');
+    }
+    if(!listener || typeof listener !== 'function'){
+      return console.warn("SwClientCom: addListener param2 (listener): not set or not function");
+    }
+    if(typeof ctx !== 'string'){
+      ctx = '';
+    }
 
-	// Internal listener api, used for handling received events
-	// Supports context as the third parameter
-	addListener(command, listener, ctx){
-		if(!command || typeof command !== 'string'){
-			return console.warn('SwClientCom: addListener param1 (command): not set or not string');
-		}
-		if(!listener || typeof listener !== 'function'){
-			return console.warn("SwClientCom: addListener param2 (listener): not set or not function");
-		}
-		if(typeof ctx !== 'string'){
-			ctx = '';
-		}
+    var currentListeners = this._listenersObj[command] || [];
+    currentListeners.push({listener: listener, context: ctx});
+    this._listenersObj[command] = currentListeners;
+  }
+  getListeners(command){
+    var currentListeners = this._listenersObj[command] || [];
+    return currentListeners;
+  }
+  _removeListenersForCommand(command, listener, ctx){
+    var currentListeners = this._listenersObj[command];
+    if(!currentListeners){
+      return;
+    }
+    // If only event name is provided, remove all
+    if(!listener && !ctx){
+      return delete this._listenersObj[command];
+    }
 
-		var currentListeners = this._listenersObj[command] || [];
-		currentListeners.push({listener: listener, context: ctx});
-		this._listenersObj[command] = currentListeners;
-	}
-	getListeners(command){
-		var currentListeners = this._listenersObj[command] || [];
-		return currentListeners;
-	}
-	_removeListenersForCommand(command, listener, ctx){
-		var currentListeners = this._listenersObj[command];
-		if(!currentListeners){
-			return;
-		}
-		// If only event name is provided, remove all
-		if(!listener && !ctx){
-			return delete this._listenersObj[command];
-		}
-
-		var newListeners = [];
-		for(var i = 0 ; i < currentListeners.length ; i++){
-			var listener = currentListeners[i];
-			if(listener.listener !== listener && listener.context !== ctx)
-				newListeners.push(listener);
-		}
-		if(!newListeners.length){
-			return delete this._listenersObj[command];
-		}
-		else if(newListeners.length && newListeners.length !== currentListeners.length){
-			this._listenersObj[command] = newListeners;
-		}
-	}
-	removeListener(command, listener, ctx){
-		if(!command && !listener && !ctx){
-			return console.warn('SwClientCom: removeListener: no params provided');
-		}
-		if(command){
-			this._removeListenersForCommand(command, listener, context);
-		}
-		else{
-			for(var key in this._listenersObj){
-				this._clearEventName(key, listener, context);
-			}
-		}
-	}
-	
-	/*
-		Function to generate random string to identify calls between frames for callbacks
-	 */
-	_generateRandomSenderId() {
-		var length = 5, text = '', possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		for (var i = 0 ; i < length ; i++) {
-			text += possible.charAt(Math.floor(Math.random() * possible.length));
-		}
-		return text;
-	}
+    var newListeners = [];
+    for(var i = 0 ; i < currentListeners.length ; i++){
+      var listener = currentListeners[i];
+      if(listener.listener !== listener && listener.context !== ctx)
+        newListeners.push(listener);
+    }
+    if(!newListeners.length){
+      return delete this._listenersObj[command];
+    }
+    else if(newListeners.length && newListeners.length !== currentListeners.length){
+      this._listenersObj[command] = newListeners;
+    }
+  }
+  removeListener(command, listener, ctx){
+    if(!command && !listener && !ctx){
+      return console.warn('SwClientCom: removeListener: no params provided');
+    }
+    if(command){
+      this._removeListenersForCommand(command, listener, context);
+    }
+    else{
+      for(var key in this._listenersObj){
+        this._clearEventName(key, listener, context);
+      }
+    }
+  }
+  
+  /*
+    Function to generate random string to identify calls between frames for callbacks
+   */
+  _generateRandomSenderId() {
+    var length = 5, text = '', possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0 ; i < length ; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
 }

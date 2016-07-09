@@ -32,6 +32,7 @@ class SwipesAPIConnector {
   };
 
   request(options, data, callback, deferred) {
+
     if(!deferred && window.Q) {
       deferred = Q.defer();
     }
@@ -46,13 +47,11 @@ class SwipesAPIConnector {
       command = options.command || null;
       force = options.force || false;
     }
-
     if (!this._token && !force) {
       this._apiQueue.push({options: options, data: data, callback: callback, deferred: deferred});
 
       return deferred.promise;
     }
-
     // If no data is send, but only a callback set those
     if (typeof data === 'function') {
       callback = data;

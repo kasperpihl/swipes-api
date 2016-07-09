@@ -7,8 +7,8 @@ var UserStore = require('../stores/UserStore');
 var UserActions = require('../actions/UserActions');
 var ServiceActions = require('../actions/ServiceActions');
 var Reflux = require('reflux');
+// KRIS_TODO: Replace material here
 var Card = require('material-ui/lib/card/card');
-var FlatButton = require('material-ui/lib/flat-button');
 var SelectField = require('material-ui/lib/SelectField');
 var MenuItem = require('material-ui/lib/menus/menu-item');
 

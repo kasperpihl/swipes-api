@@ -1,8 +1,15 @@
 import * as types from '../constants/ActionTypes'
-import { browserHistory } from 'react-router'
+import { request } from './apiActions'
 
-export function login(token) {
-  return { type: types.LOGIN, token }
+import { browserHistory } from 'react-router'
+console.log(request);
+
+export function login(data) {
+  return request('users.login', data, types.REQ_LOGIN);
+  //return { type: types.LOGIN, token }
+}
+export function signup(data){
+  return request('users.signup', data, types.REQ_LOGIN);
 }
 
 export function logout() {

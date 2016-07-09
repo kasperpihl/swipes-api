@@ -1,22 +1,30 @@
-// Reflux extension for easier handling data/localstorage etc.
-require('reflux-model-extension');
-// Geting events from the oauth popup
-require('./oauth-electron-handler');
-require("react-tap-event-plugin")();
+import 'babel-polyfill'
+const regeneratorRuntime = require('babel-runtime/regenerator');
+if (!regeneratorRuntime.default) {
+  regeneratorRuntime.default = regeneratorRuntime;
+}
 
 import React from 'react'
 import { render } from 'react-dom'
-import Root from './containers/Root'
 
-if (window.process && window.process.versions.electron) {
+if(!window.process || !window.process.versions.electron){
+  const DownloadPage = require('./components/downloadPage');
+
+  render(<DownloadPage />, document.getElementById('content'));
+}
+else{
   require('expose?$!expose?jQuery!jquery');
   require('expose?_!underscore');
   require('expose?Q!q');
   require('expose?io!socket.io-client');
-  
+
+  // Geting events from the oauth popup
+  require('./oauth-electron-handler');
+  require("react-tap-event-plugin")();
+
   window.swipesApi = new SwipesAPIConnector(window.location.origin);
 
-
+  var Root = require('./containers/Root');
 
   const defaultMenu = require('./electron-default-menu');
   // Set a top-level application menu
@@ -29,9 +37,4 @@ if (window.process && window.process.versions.electron) {
     <Root />
     , document.getElementById('content')
   )
-
-} else {
-  const DownloadPage = require('./components/downloadPage');
-
-  render(<DownloadPage />, document.getElementById('content'));
 }

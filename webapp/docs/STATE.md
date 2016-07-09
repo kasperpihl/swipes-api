@@ -18,9 +18,9 @@ modal
 	top
 	centerX
 	centerY
-	modalData
-	modalView
-	modalCallback
+	data
+	modal
+	callback
 services
 
 users

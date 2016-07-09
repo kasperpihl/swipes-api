@@ -6,24 +6,31 @@ import { auth } from '../actions';
 import Signup from '../components/registration/Signup'
 import Signin from '../components/registration/Signin'
 
-export default class Registration extends Component {
+class Registration extends Component {
   constructor(props) {
     super(props)
-    this.onLogin = this.onLogin.bind(this);
   }
-  onLogin(token){
-  	this.props.login(token)
-  	browserHistory.push('/')
+  componentDidUpdate(){
+    if(this.props.token){
+      browserHistory.push('/')
+    }
   }
   render() {
   	if(this.props.route.path === "signin"){
-  		return <Signin onLogin={this.onLogin} />
+  		return <Signin onLogin={this.props.login} />
   	}
-  	return <Signup onLogin={this.onLogin} />
+  	return <Signup onSignup={this.props.signup} />
   }
 }
 
-const ConnectedRegistration = connect(null, {
-  login: auth.login
+function mapStateToProps(state) {
+  return {
+    token: state.auth.token
+  }
+}
+
+const ConnectedRegistration = connect(mapStateToProps, {
+  login: auth.login,
+  signup: auth.signup
 })(Registration)
 export default ConnectedRegistration

@@ -15,7 +15,7 @@ let SmallComp = (props) => {
 export default class Root extends Component {
   constructor(props) {
     super(props)
-    this.didEnterSignup = this.didEnterSignup.bind(this);
+    this.didEnterRegistration = this.didEnterRegistration.bind(this);
     this.didEnterApp = this.didEnterApp.bind(this);
   }
   // Check if signed in, otherwise redirect to signin
@@ -25,7 +25,7 @@ export default class Root extends Component {
     }
   }
   // Check if signed in and redirect to app
-  didEnterSignup(nextState, replace){
+  didEnterRegistration(nextState, replace){
     if(this.props.store.getState().auth.token){
       return window.location.assign("/")
     }
@@ -33,8 +33,8 @@ export default class Root extends Component {
   render() {
     return (
       <Router history={browserHistory} >
-        <Route path="signin" component={Registration} onEnter={this.didEnterSignup} />
-        <Route path="signup" component={Registration} onEnter={this.didEnterSignup} />
+        <Route path="signin" component={Registration} onEnter={this.didEnterRegistration} />
+        <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="/" component={App}>
           <IndexRoute component={SmallComp} onEnter={this.didEnterApp} />
         </Route>

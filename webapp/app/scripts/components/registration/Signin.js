@@ -17,18 +17,7 @@ export default class Signin extends Component {
       email: email,
       password: password
     };
-
-    swipesApi.request({force:true, command:"users.login"}, data, function(res,error){
-      console.log(res,error);
-      if(res && res.ok){
-        amplitude.logEvent('Session - Signed In');
-        mixpanel.track('Signed In');
-        this.props.onLogin(res.token)
-      }
-      else
-        alert("Login failed");
-    }.bind(this));
-    return;
+    return this.props.onLogin(data);
   }
   preventSubmit(e) {
     e.preventDefault();

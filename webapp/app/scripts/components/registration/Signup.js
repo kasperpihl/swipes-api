@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import SwipesBackgroundAnimation from './SwipesBackgroundAnimation'
 
+// KRIS_TODO: Replace material ui textfield.
 let TextField = require('material-ui/lib/text-field');
 
 export default class Signup extends Component {
@@ -27,19 +28,7 @@ export default class Signup extends Component {
       password: password,
       repassword: password
     };
-
-    swipesApi.request({force:true, command:"users.create"}, data, function(res,error){
-      console.log(res,error);
-      if(res && res.ok){
-        mixpanel.alias(res.userId);
-        amplitude.logEvent('Session - Created Account');
-        mixpanel.track('Created Account');
-        this.props.onLogin(res.token)
-      }
-      else
-        alert("Signup failed");
-    }.bind(this));
-    return;
+    this.props.onSignup(data);
   }
   preventSubmit(e) {
     e.preventDefault();
