@@ -1,7 +1,2 @@
-var Reflux = require('reflux');
-
-var ServiceActions = Reflux.createActions([
-	'handleOAuthSuccess'
-]);
-
-module.exports = ServiceActions;
+import * as types from '../constants/ActionTypes'
+import { request } from './apiActions'

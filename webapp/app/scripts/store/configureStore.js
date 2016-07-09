@@ -18,7 +18,7 @@ export default function configureStore(preloadedState) {
     applyMiddleware(
       thunk,
       apiMiddleware,
-      createLogger()
+      createLogger({collapsed: true})
     ),
     persistState(['auth'])
   )

@@ -15,8 +15,6 @@ if(!window.process || !window.process.versions.electron){
 else{
   require('expose?$!expose?jQuery!jquery');
   require('expose?_!underscore');
-  require('expose?Q!q');
-  require('expose?io!socket.io-client');
 
   // Geting events from the oauth popup
   require('./oauth-electron-handler');

@@ -34,14 +34,19 @@ export function request(options, data){
       }
     }).then((res) => {
       command = options.resultAction || command
-      return dispatch({
+      // Dispatch an action with the command as type
+      dispatch({
         type: command,
         payload: res.payload,
         meta: res.meta
       })
+      // Let's return a promise for convenience.
+      return Promise.resolve(null, res.payload);
+
     }).catch((err) => {
-      console.log('api error', err);
+      return Promise.resolve(err);
     });
+    return 
   }
   
 } 
