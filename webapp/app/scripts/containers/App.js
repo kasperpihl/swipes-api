@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { api } from '../actions'
 
 import Topbar from '../components/topbar/Topbar'
 import SearchResults from '../components/SearchResults'
 import Modal from '../components/Modal'
 
-export default class App extends Component {
+class App extends Component {
   componentDidMount() {
-    amplitude.logEvent('Session - Opened App');
-    mixpanel.track('Opened App');
+    this.props.request('rtm.start');
   }
   render() {
     return (
@@ -22,3 +23,14 @@ export default class App extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    hasLoaded: state.main.hasLoaded
+  }
+}
+
+const ConnectedApp = connect(mapStateToProps, {
+  request: api.request
+})(App)
+export default ConnectedApp

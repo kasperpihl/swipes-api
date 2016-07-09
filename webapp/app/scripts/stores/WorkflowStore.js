@@ -5,24 +5,6 @@ var WorkflowStore = Reflux.createStore({
 	listenables: [ workflowActions ],
 	localStorage: "WorkflowStore",
 	sort: "name",
-	search:function(string, options){
-		var results = [];
-		this.each(function(app){
-			var searchResult = {
-				workflowId: "AAPP",
-				text: app.name,
-				id: app.id
-			};
-			if(app.name.toLowerCase().startsWith(string.toLowerCase())){
-				results.push(searchResult);
-			}
-		})
-		return {
-			workflowId: "AWORKFLOW",
-			name: "Workflows",
-			results: results
-		};
-	},
 	onRenameWorkflow: function(workflow, name){
 		swipesApi.request('users.renameWorkflow', {'workflow_id': workflow.id, name: name}, function(res, error){
 

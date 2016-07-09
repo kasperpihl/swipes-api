@@ -5,11 +5,10 @@ import { browserHistory } from 'react-router'
 console.log(request);
 
 export function login(data) {
-  return request('users.login', data, types.REQ_LOGIN);
-  //return { type: types.LOGIN, token }
+  return request('users.login', data);
 }
 export function signup(data){
-  return request('users.signup', data, types.REQ_LOGIN);
+  return request('users.signup', data);
 }
 
 export function logout() {

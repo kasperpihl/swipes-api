@@ -5,6 +5,8 @@ import configureStore from '../store/configureStore'
 import { Provider } from 'react-redux'
 
 const store = configureStore()
+import socket from '../classes/socket'
+const socketObj = new socket(store)
 
 export default class Root extends Component {
   render() {

@@ -24,7 +24,7 @@ export function request(options, data){
     ];
 
     const body = Object.assign({}, {token: getState().auth.token}, data);
-    dispatch({
+    return dispatch({
       [CALL_API]: {
         endpoint: API_URL + command,
         headers: { 'Content-Type': 'application/json' },
@@ -34,7 +34,7 @@ export function request(options, data){
       }
     }).then((res) => {
       command = options.resultAction || command
-      dispatch({
+      return dispatch({
         type: command,
         payload: res.payload,
         meta: res.meta
