@@ -7,5 +7,5 @@
 	"index": "dev/index.html",
 	"required_services": ["asana"],
 	"domains": ["asana.com", "app.asana.com"],
-	"icon": "images/logo-asana.svg"
+	"icon": "dev/images/logo-asana.svg"
 }

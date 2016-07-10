@@ -417,7 +417,7 @@ var ChatStore = Reflux.createStore({
 	},
 	onEditMessage: function(message, timestamp) {
 		var that = this;
-		swipes.modal.edit('Edit Message', message, function(res) {
+		swipes.modal('edit')('Edit Message', message, function(res) {
 			if (res) {
 				var newText = res;
 				swipes.service('slack').request('chat.update', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: that.get('channelId'), text: encodeURIComponent(res)}, function(res, err) {
@@ -429,14 +429,14 @@ var ChatStore = Reflux.createStore({
 		})
 	},
 	onOpenImage: function(src, title, url) {
-		swipes.modal.lightbox('', title, url);
+		swipes.modal('lightbox')('', title, url);
 
 		swipes.service('slack').stream('file', {url: src})
 		.then(function (arraybuffer) {
 			var blob = new Blob([arraybuffer], {type: "application/octet-stream"});
 			var blobSrc = URL.createObjectURL(blob);
 
-			swipes.modal.lightbox(blobSrc, title, url);
+			swipes.modal('lightbox')(blobSrc, title, url);
 		})
 		.catch(function (error) {
 			console.log(error);

@@ -551,7 +551,7 @@ var ProjectDataStore = Reflux.createStore({
 	onScheduleTask: function(task, taskId) {
 		var task = task;
 
-		swipes.modal.schedule( function(res) {
+		swipes.modal('schedule')(function(res) {
 			if (task.parent) {
 				SubtasksActions.update(taskId, 'due_at', res);
 			} else {

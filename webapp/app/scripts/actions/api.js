@@ -24,6 +24,7 @@ export function request(options, data){
     ];
 
     const body = Object.assign({}, {token: getState().auth.token}, data);
+    
     return dispatch({
       [CALL_API]: {
         endpoint: API_URL + command,

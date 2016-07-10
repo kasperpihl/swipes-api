@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { modal, notification } from '../actions'
+import { modal, notification, workspace } from '../actions'
 import * as actions from '../constants/ActionTypes'
 import SelectRow from '../components/services/SelectRow'
 
@@ -13,7 +13,7 @@ class Tile extends Component {
   constructor(props) {
     super(props)
     this.state = { webviewLoaded: false }
-    _.bindAll(this, 'sendCommandToTile', 'addHandlersForWebview', 'onLoad', 'callDelegate','addListenersToCommunicator');
+    _.bindAll(this, 'sendCommandToTile', 'addHandlersForWebview', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount');
   }
   componentDidMount(){
     this.callDelegate('tileDidLoad', this.props.data.id);
@@ -34,6 +34,9 @@ class Tile extends Component {
     if(this.com){
       this.com.sendCommand(command, data, callback);
     }
+  }
+  onSelectedAccount(selectedAccount){
+    this.props.selectAccount(this.props.tile, selectedAccount.id);
   }
   addHandlersForWebview(){
     const webview = this.refs.webview;
@@ -99,15 +102,15 @@ class Tile extends Component {
       var analyticsProps = {'Card': this.props.tile.manifest_id, 'Action': data.name};
     });
     this.com.addListener('notifications.send', (data) => {
-      var notification = {
+      var notif = {
         title: this.state.workflow.name,
         message: data.message
       };
       if(data.title){
-        notification.title += ": " + data.title;
+        notif.title += ": " + data.title;
       }
       if(!document.hasFocus()) {
-        
+        notification.send(notif);
       }
     });
 
@@ -124,43 +127,37 @@ class Tile extends Component {
     var cardContent = <div>Loading</div>;
 
     const tile = this.props.tile;
-    if(this.props.tile){
-
-      const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
-
+    if(tile){
+      
       // For Kris
       // preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
+      const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
 
       cardContent = <webview preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')} src={url} ref="webview" className="workflow-frame-class"></webview>;
 
-      // Determine if the
+      // Determine if the selected account is still a service.
       if(tile.required_services.length > 0){
-        const requiredService = tile.required_services[0];
-        const selectedAccountId = tile.selectedAccountId;
-        let foundSelectedAccount = false;
-        const connectedServices = _.filter(this.props.services, (service) => {
-          if(service.service_name === requiredService){
-            if(selectedAccountId && selectedAccountId === service.id){
-              foundSelectedAccount = true;
-              // K_TODO || T_TODO : WARNING, This is a super hack hahaha
-              if(service.service_name === "slack" && service.authData){
-                this.slackToken = service.authData.access_token;
-              }
-            }
-            return true;
-          }
-          return false;
-        });
+        // Find services from the required services
+        const services = this.props.services.filter( ({service_name}) => (service_name === tile.required_services[0]))
+        // Check if a the selected account exist
+        const selectedAccount = services.find( ({id}) => (id === tile.selectedAccountId) )
 
-        if(!tile.selectedAccountId || !foundSelectedAccount){
+        if(!selectedAccount){
           cardContent = <SelectRow
+            onSelectedAccount={this.onSelectedAccount}
             data={{
-              services: connectedServices,
+              services: services,
               title: tile.required_services[0],
-              manifest_id: tile.required_services[0]
+              service_name: tile.required_services[0]
             }}
           />
         }
+
+        // Hack to pass on the right slack token to the tile for file upload
+        if(selectedAccount && selectedAccount.service_name === 'slack'){
+          this.slackToken = selectedAccount.authData.access_token;
+        }
+
       }
     }
 
@@ -183,6 +180,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 const ConnectedTile = connect(mapStateToProps, {
-  onDoing: actions.doStuff
+  selectAccount: workspace.selectAccount
 })(Tile)
 export default ConnectedTile

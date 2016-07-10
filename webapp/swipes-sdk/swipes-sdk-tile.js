@@ -69,7 +69,7 @@ class SwipesAppSDK {
         this.api.request("services.request", options, intCallback);
         return deferred.promise;
       },
-      stream:: (method, parameters, callback) => {
+      stream: (method, parameters, callback) => {
         var deferred = Q.defer();
 
         if(!method || typeof method !== 'string' || !method.length)
@@ -96,68 +96,71 @@ class SwipesAppSDK {
       }
     };
   }
-  modal: {
-    edit: (title, message, callback) => {
-      let options = {};
-      options = this._getModalOptions(options, title, message);
-      this._loadMdal("textarea", options, function(res){
-        if(typeof callback === 'function')
-          callback(res);
-          console.log(res);
-      })
-    },
-    schedule: (callback) => {
-      this._loadModal("schedule", function(res) {
-        if(typeof callback === 'function') {
-          callback(res)
+  modal(modal){
+    let modals = {
+      edit: (title, message, callback) => {
+        let options = {};
+        options = this._getModalOptions(options, title, message);
+        this._loadMdal("textarea", options, function(res){
+          if(typeof callback === 'function')
+            callback(res);
+            console.log(res);
+        })
+      },
+      schedule: (callback) => {
+        this._loadModal("schedule", function(res) {
+          if(typeof callback === 'function') {
+            callback(res)
+          }
+        })
+      },
+      lightbox: (src, title, url) => {
+        title = title || '';
+        url = url || '';
+
+        var options = {
+          src: src,
+          title: title,
+          url: url
+        };
+
+        this._loadModal("lightbox", options)
+      },
+      alert: (title, message, callback) => {
+        var options = {buttons: ["Okay"]};
+        options = this._getModalOptions(options, title, message);
+
+        if(typeof title === 'function'){
+          callback = title;
         }
-      })
-    },
-    lightbox: (src, title, url) => {
-      title = title || '';
-      url = url || '';
+        if(typeof message === 'function'){
+          callback = message;
+        }
 
-      var options = {
-        src: src,
-        title: title,
-        url: url
-      };
+        this._loadModal("alert", options, function(res){
+          if(typeof callback === 'function')
+            callback(res);
+        })
+      },
+      confirm: (title, message, callback) => {
+        var options = {buttons: ["No", "Yes"]};
+        options = this._getModalOptions(options, title, message);
 
-      this._loadModal("lightbox", options)
-    },
-    alert: (title, message, callback) => {
-      var options = {buttons: ["Okay"]};
-      options = this._getModalOptions(options, title, message);
+        if(typeof title === 'function'){
+          callback = title;
+        }
+        if(typeof message === 'function'){
+          callback = message;
+        }
 
-      if(typeof title === 'function'){
-        callback = title;
+        this._loadModal("alert", options, function(res){
+          var confirmed = (res && res.button === 2);
+          if(typeof callback === 'function')
+            callback(confirmed);
+        })
       }
-      if(typeof message === 'function'){
-        callback = message;
-      }
-
-      this._loadModal("alert", options, function(res){
-        if(typeof callback === 'function')
-          callback(res);
-      })
-    },
-    confirm: (title, message, callback) => {
-      var options = {buttons: ["No", "Yes"]};
-      options = this._getModalOptions(options, title, message);
-
-      if(typeof title === 'function'){
-        callback = title;
-      }
-      if(typeof message === 'function'){
-        callback = message;
-      }
-
-      this._loadModal("alert", options, function(res){
-        var confirmed = (res && res.button === 2);
-        if(typeof callback === 'function')
-          callback(confirmed);
-      })
-    }
+    };
+    return modals[modal] || modals['alert'];
   }
   _loadModal(name, options, callback){
     options = options || {};

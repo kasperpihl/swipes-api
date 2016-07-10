@@ -1,9 +1,5 @@
-var Reflux = require('reflux');
+import * as types from '../constants/ActionTypes'
 
-var NotificationActions = Reflux.createActions([
-	'send',
-	'setNotifications'
-	// Here you can list your actions
-]);
-
-module.exports = NotificationActions;
+export function send(data) {
+  return { type: types.SEND_NOTIFICATION, payload: data }
+}

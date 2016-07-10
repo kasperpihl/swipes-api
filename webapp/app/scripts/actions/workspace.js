@@ -8,6 +8,6 @@ export function removeTile(tile) {
   return request('users.removeWorkflow', { 'workflow_id': tile.id})
 }
 
-export function onSelectAccount(tile, accountId){
+export function selectAccount(tile, accountId){
   return request('users.selectWorkflowAccountId', {'workflow_id': tile.id, 'account_id': accountId});
 }

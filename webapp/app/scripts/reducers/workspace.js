@@ -49,10 +49,11 @@ export default function workspace (state = initialState, action) {
       switch(msg.type){
         case 'workflow_added':
         case 'workflow_changed':
-          tiles = Object.assign({}, state, {[msg.data.id]: msg.data});
+          const combinedData = Object.assign({}, state.tiles[msg.data.id], msg.data);
+          tiles = Object.assign({}, state.tiles, {[msg.data.id]: combinedData});
           break;
         case 'workflow_removed':
-          tiles = Object.assign({}, state);
+          tiles = Object.assign({}, state.tiles);
           delete tiles[msg.data.id];
           break;
       }

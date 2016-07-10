@@ -24,7 +24,6 @@ class Topbar extends Component {
     }
     else {
       this.props.loadTilesListModal();
-      //topbarActions.loadWorkflowModal();
     }
   }
   clickedSearch(){

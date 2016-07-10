@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../constants/ActionTypes'
+import { workspace } from '../actions'
 
 import EmptyBackground from '../components/workspace/EmptyBackground'
 import ResizeOverlay from '../components/workspace/ResizeOverlay'
@@ -37,7 +38,7 @@ class Workspace extends Component {
     }
   }
   gridRowPressedMenu(grid, id){
-    //workflowActions.removeWorkflow({id: id});
+    this.props.removeTile({id: id});
   }
   gridDidUpdate(grid, columns){
     console.log('grid update', columns);
@@ -83,5 +84,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedWorkspace = connect(mapStateToProps, {
+  removeTile: workspace.removeTile
 })(Workspace)
 export default ConnectedWorkspace
