@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { api } from '../actions'
 
 import Topbar from '../components/topbar/Topbar'
-import SearchResults from '../components/SearchResults'
-import Modal from '../components/Modal'
+import SearchResults from './SearchResults'
+import Modal from './Modal'
 
 class App extends Component {
   componentDidMount() {

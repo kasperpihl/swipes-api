@@ -5,10 +5,7 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router'
 
 import Registration from './containers/Registration';
 import App from './containers/App'
-
-let SmallComp = (props) => {
-  return (<div>Yeah</div>);
-}
+import Workspace from './containers/Workspace'
 
 
 
@@ -36,7 +33,7 @@ export default class Root extends Component {
         <Route path="signin" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="/" component={App}>
-          <IndexRoute component={SmallComp} onEnter={this.didEnterApp} />
+          <IndexRoute component={Workspace} onEnter={this.didEnterApp} />
         </Route>
       </Router>
     )

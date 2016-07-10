@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-import { request } from './apiActions'
+import { request } from './api'
 
 export function login(data) {
   return request('users.login', data);

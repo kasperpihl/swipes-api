@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal } from '../actions';
-import modals from './modals'
+import modals from '../components/modals'
 
 class Modal extends Component {
   constructor(props) {

@@ -20,50 +20,6 @@ var Workspace = React.createClass({
         video: false
       }
     },
-    render() {
-        return (
-          <div id="actual-app" className="actual-app">
-            {this.renderCards()}
-          </div>
-        );
-    },
-    renderVideo: function() {
-      var videoBox = '';
-
-      if (this.state.video) {
-        videoBox = 'open'
-      }
-
-      if (this.state.video) {
-        return (
-          <div className={"video-box " + videoBox} onClick={this.onToggleVideo}>
-            <iframe src="https://www.youtube.com/embed/vHACsg4QbMg?rel=0&amp&loop=1;showinfo=0" frameBorder="0" allowFullScreen></iframe>
-          </div>
-        )
-      }
-    },
-    renderEmptyBackground(){
-      return (
-          <div className="empty-workspace-state">
-            <p className="workspace-empty-text">
-              <span className="strong">Welcome to your workspace</span> <br />
-            </p>
-            <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg" onClick={this.onToggleVideo} />
-            <div className="play-button" onClick={this.onToggleVideo}></div>
-              <p className="workspace-empty-text">
-                Play the video to get started
-              </p>
-            {this.renderVideo()}
-          </div>
-        )
-    },
-    renderCards(){
-      if (!this.state.workspace._columns.length) {
-        return this.renderEmptyBackground();
-      }
-
-      return <Grid ref="grid" columns={this.state.workspace._columns} delegate={this} />;
-    },
     sendToAllTiles(command, data, callback){
       var keys = _.keys(this._cachedTiles);
       var returnObj = {};
@@ -85,58 +41,9 @@ var Workspace = React.createClass({
         tile.sendCommandToTile(command, data, callback);
       }
     },
-    // ======================================================
-    // Delegate methods from tiles, caching references
-    // ======================================================
-    tileDidLoad(tile, id){
-      this._cachedTiles[id] = tile;
-    },
-    tileWillUnload(tile, id){
-      delete this._cachedTiles[id];
-    },
+    
 
-    // ======================================================
-    // Delegate methods from grid
-    // ======================================================
-    gridRenderRowForId(grid, id){
-      return (
-        <TileLoader
-          key={id}
-          delegate={this}
-          data={{id: id}}
-          dotDragBegin={this.dotDragBegin} />
-      );
-    },
-    gridDidTransitionStep(grid, name, step){
-      if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
-        topbarActions.changeFullscreen(true);
-      } else {
-        topbarActions.changeFullscreen(false);
-      }
-    },
-    gridRowPressedMenu(grid, id){
-      workflowActions.removeWorkflow({id: id});
-    },
-    gridDidUpdate(grid, columns){
-      console.log('grid update', columns);
-    },
-    gridRenderResizeOverlayForId(grid, id){
-      var workflow = WorkflowStore.get(id);
-      var title = workflow.name;
-      var url = workflow.index_url;
-      var splitURL = url.split('/').slice(0,-1).join('/');
-      
-      return (
-        <div className="tile-resizing-overlay">
-          <div className="tile-resizing-overlay__content">
-            <div className="app-icon">
-              <img src={splitURL + '/' + workflow.icon} />
-            </div>
-            <div className="app-title">{title}</div>
-          </div>
-        </div>
-      )
-    },
+    
     
     onEnterLeaveDropOverlay(cardId) {
       this._dropZoneId = cardId;
@@ -189,16 +96,8 @@ var Workspace = React.createClass({
           this.positionDotDragHandler(e.clientX - 25, e.clientY - 25);
         }
     },
-
-    onToggleVideo() {
-      this.setState({'video': !this.state.video});
-    },
-    onCloseFullscreen(){
-      this.refs.grid.onFullscreen();
-    },
     componentDidMount(prevProps, prevState) {
       this._cachedTiles = {};
-      eventActions.add('closeFullscreen', this.onCloseFullscreen);
       window.addEventListener('mouseup', this.onMouseUp);
       window.addEventListener('mousemove', this.onMouseMove);
       window.addEventListener("focus", this.onWindowFocus);

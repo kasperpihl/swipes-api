@@ -21,143 +21,11 @@ var stateStore = require('../stores/StateStore');
 var Services = require('./services');
 
 var TileLoader = React.createClass({
-	mixins: [ WorkflowStore.connectFilter('workflow', function(workflows){
-		return workflows.filter(function(workflow) {
-			return workflow.id === this.props.data.id;
-		}.bind(this))[0];
-	}), Reflux.connectFilter(UserStore, "user", function(users) {
-		return users.filter(function(user) {
-			return user.me;
-		}.bind(this))[0];
-	}) ],
-	callDelegate(name){
-		if(this.props.delegate && typeof this.props.delegate[name] === "function"){
-			return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
-		}
-	},
-	getInitialState:function(){
-		return {
-			webviewLoading: true,
-			webviewLoaded: false
-		};
-	},
-	addHandlersForWebview(){
-		var webview = this.refs.webview;
-		if(this.state.webviewLoaded)
-			return;
-
-		if (webview) {
-			webview.addEventListener('dom-ready', this.onLoad);
-			webview.addEventListener('ipc-message', (event) => {
-				var arg = event.args[0];
-				// Pass the received message on to the communicator
-				this.com.receivedCommand(arg); 
-			});
-			webview.addEventListener('console-message', (e) => {
-			  //console.log(e.line, e.message);
-			});
-			this.setState({webviewLoaded: true});
-		}
-		
-	},
 	// Pass on a command through the communicator
 	sendCommandToTile: function(command, data, callback){
 		if(this.com){
 			this.com.sendCommand(command, data, callback);
 		}
-	},
-	addListenersToCommunicator(){
-		
-		this.com.addListener('navigation.setTitle', (data) => {
-			if (data.title) {
-				this.setState({"titleFromCard": data.title});
-			}
-		});
-
-		this.com.addListener('modal.load', (data) => {
-			//modalActions.loadModal(data.modal, data.options, callback);
-		})
-
-		this.com.addListener('openURL', (data) => {
-			if(data.url){
-				window.open(data.url, "_blank");
-			}
-		});
-		this.com.addListener('analytics.action', (data) => {
-			if(this.state.workflow){
-				var analyticsProps = {'Card': this.state.workflow.manifest_id, 'Action': data.name};
-				amplitude.logEvent('Engagement - Workflow Action', analyticsProps);
-				mixpanel.track('Card Action', analyticsProps);
-
-			}
-		});
-		this.com.addListener('notifications.send', (data) => {
-			var notification = {
-				title: this.state.workflow.name,
-				message: data.message
-			};
-			if(data.title){
-				notification.title += ": " + data.title;
-			}
-			if(!document.hasFocus()) {
-				notificationActions.send(notification);
-			}
-		});
-
-		this.com.addListener('dot.startDrag', (data) => {
-			var newData = {
-				fromCardId: this.props.data.id,
-				data: data
-			};
-
-			this.props.dotDragBegin(newData, callback);
-		});
-
-		this.com.addListener('share.request', (data) => {
-			console.log('init share ffs');
-			var cardActions;
-			cardActions.broadcast('share.init', {
-				sourceCardId: message._id
-			}, function (list) {
-				var modalData = {
-					title: "Share to",
-					emptyText: "Seems that you have one lonely card there. Add another one!",
-					rows: list
-				};
-
-				modalActions.loadModal('list', modalData, function (row) {
-					if(row){
-					}
-				});
-			});
-		})
-	},
-	onLoad:function(){
-		var workflow = this.state.workflow;
-
-		// K_TODO || T_TODO : WARNING, This is a super hack hahaha
-		if(workflow && this.slackToken){
-			workflow.slackToken = this.slackToken;
-		}
-
-		var initObj = {
-			// Info object will be available in SDK from swipes.info
-			info: {
-				workflow: workflow,
-				userId: userStore.me().id
-			},
-			token: stateStore.get("swipesToken")			
-		};
-		if(this.state.workflow.selectedAccountId){
-			initObj.info.selectedAccountId = this.state.workflow.selectedAccountId;
-		}
-		
-		// Initialize the communicator
-		// Provide the sendFunction that the communicator will use to send the commands
-		var sendFunction = function(data){ this.refs.webview.send('message', data); }.bind(this);
-		this.com = new SwClientCom(sendFunction, initObj);
-		// Add the listeners for which commands to handle from the tile
-		this.addListenersToCommunicator();
 	},
 
 	componentDidMount() {
@@ -169,24 +37,6 @@ var TileLoader = React.createClass({
 	},
 	componentWillUnmount:function(){
 		this.callDelegate('tileWillUnload', this.props.data.id);
-	},
-	renderDropOverlay: function(){
-		var title = "";
-
-		var className = 'drop-overlay';
-		if (this.state.workflow) {
-			title = this.state.workflow.name;
-		}
-
-		return (
-			<div
-				className={className}
-				onMouseEnter={this.onMouseEnterDropOverlay}
-				onMouseLeave={this.onMouseLeaveDropOverlay}
-			>
-				<h6>Share to {title}</h6>
-			</div>
-		);
 	},
 	onConnectNew: function(){
 		eventActions.add("websocket_service_added", function(data){
@@ -214,10 +64,10 @@ var TileLoader = React.createClass({
 
 			// Determine if the
 			if(this.state.workflow.required_services.length > 0){
-				var requiredService = this.state.workflow.required_services[0];
-				var selectedAccountId = this.state.workflow.selectedAccountId;
+				var requiredService = this.props.tile.required_services[0];
+				var selectedAccountId = this.props.tile.selectedAccountId;
 				var foundSelectedAccount = false;
-				var connectedServices = _.filter(this.state.user.services, (service) => {
+				var connectedServices = _.filter(this.props.services, (service) => {
 					if(service.service_name === requiredService){
 						if(selectedAccountId && selectedAccountId === service.id){
 							foundSelectedAccount = true;

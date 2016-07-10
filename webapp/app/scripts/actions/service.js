@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-import { request } from './apiActions'
+import { request } from './api'
 
 export default function handleOAuthSuccess(serviceName, query){
   if(typeof query === "string"){

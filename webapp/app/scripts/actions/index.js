@@ -1,8 +1,9 @@
-let main = require('./mainActions')
-let modal = require('./modalActions')
-let auth = require('./authActions')
-let api = require('./apiActions')
-let me = require('./meActions')
+import * as main from './main'
+import * as modal from './modal'
+import * as auth from './auth'
+console.log('auth', auth)
+import * as api from './api'
+import * as me from './me'
 
 export {
   main,

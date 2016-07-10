@@ -1455,4 +1455,4 @@ var Grid = React.createClass({
   }
 });
 
-module.exports = Grid;
+export default Grid;
