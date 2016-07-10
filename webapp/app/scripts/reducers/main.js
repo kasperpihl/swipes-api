@@ -17,10 +17,10 @@ export default function main (state = initialState, action) {
       return Object.assign({}, state, {
         socketUrl: action.payload.url, 
         tileBaseUrl: action.payload.workflow_base_url,
-        hasLoaded: true
       })
     case types.SET_STATUS:{
-      return Object.assign({}, state, {status: action.status})
+      const hasLoaded = (action.status == 'online') ? {hasLoaded: true} : null
+      return Object.assign({}, state, {status: action.status}, hasLoaded)
     }
     case types.TOGGLE_FULLSCREEN:
       return Object.assign({}, state, {isFullscreen: !state.isFullscreen})

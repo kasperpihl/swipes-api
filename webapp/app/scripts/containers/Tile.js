@@ -76,7 +76,7 @@ class Tile extends Component {
     
     // Initialize the communicator
     // Provide the sendFunction that the communicator will use to send the commands
-    const sendFunction = data => this.refs.webview.send('message', data)
+    const sendFunction = (data) => { this.refs.webview.send('message', data) }
     this.com = new SwClientCom(sendFunction, initObj);
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
@@ -103,7 +103,7 @@ class Tile extends Component {
     });
     this.com.addListener('notifications.send', (data) => {
       var notif = {
-        title: this.state.workflow.name,
+        title: this.props.tile.name,
         message: data.message
       };
       if(data.title){
@@ -115,11 +115,7 @@ class Tile extends Component {
     });
 
     this.com.addListener('dot.startDrag', (data) => {
-      var newData = {
-        fromCardId: this.props.data.id,
-        data: data
-      };
-
+      console.log('start drag', data);
     })
   }
 

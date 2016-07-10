@@ -1304,11 +1304,17 @@ var Grid = React.createClass({
   onMenuButton(id){
     this.callDelegate('gridRowPressedMenu', id);
   },
+  closeFullscreen(){
+    var trans = this.state.transition
+    if(!trans || trans.name !== 'fullscreen' || trans.step !== 'isFullscreen'){
+      return;
+    }
+    this.transitionNext();
+  },
   onFullscreen(id){
     this._onFullscreenClick(id);
   },
   _onFullscreenClick(id){
-    console.log('clicked fullscreen', id);
     var trans = this.state.transition;
 
     // If fullscreen is already on, jump to prepareScaleDown and then scalingDown

@@ -10,15 +10,10 @@ class SwipesAPIConnector {
 
   setToken(token) {
     this._token = token;
-    if (this._apiQueue.length > 0) {
-      for (var i = 0; i < this._apiQueue.length; i++) {
-        var request = this._apiQueue[i];
-
-        this.callSwipesApi(request.options, request.data, request.callback, request.deferred);
-      }
-
-      this._apiQueue = [];
-    }
+    this._apiQueue.forEach( (r) => {
+      this.callSwipesApi(r.options, r.data, r.callback, r.deferred);
+    })
+    this._apiQueue = [];
   };
   getToken() {
     return this._token;
@@ -32,7 +27,7 @@ class SwipesAPIConnector {
   };
 
   request(options, data, callback, deferred) {
-
+    console.log(options, data, callback);
     if(!deferred && window.Q) {
       deferred = Q.defer();
     }

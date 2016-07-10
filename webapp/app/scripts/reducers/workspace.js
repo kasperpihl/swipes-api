@@ -27,7 +27,6 @@ function fillTilesToColumns(columns, tiles){
       columns = [...columns, {rows: [{ id: key }] }];
     }
   }
-  console.log('existing', columns, tiles);
   return columns;
 }
 

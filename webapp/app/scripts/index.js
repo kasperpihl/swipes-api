@@ -22,13 +22,6 @@ else{
 
   var Root = require('./containers/Root');
 
-  const defaultMenu = require('./electron-default-menu');
-  // Set a top-level application menu
-  const {Menu} = nodeRequire('electron').remote;
-  const menu = defaultMenu();
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
-
   render( 
     <Root />
     , document.getElementById('content')

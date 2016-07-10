@@ -8,6 +8,7 @@ class SwipesAppSDK {
     this.com = new SwClientCom(workspaceSendFunction);
     this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
     this.com.addListener('init', (data) => {
+      console.log('recieved init', data);
       if(data.token) {
         this.api.setToken(data.token);
       }
@@ -22,6 +23,7 @@ class SwipesAppSDK {
   }
   // Shorthand for getting the init event
   ready(callback){
+    console.log(this);
     this.addListener("init", callback);
   }
   // Add listener to events sent from workspace

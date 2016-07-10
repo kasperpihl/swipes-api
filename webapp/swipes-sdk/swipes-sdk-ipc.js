@@ -67,11 +67,8 @@ class SwClientCom {
     if (message.command) {
       var res = null;
       // When receiving a command, check if any listeners have been attached and call them.
-      var listeners = this.getListeners(message.command);
-      listeners.forEach((listener) => {
-        if(listener.handler){
-          res = listener.handler(message.data);
-        }
+      this.getListeners(message.command).forEach(({ listener }) => {
+        res = listener(message.data);
       })
       
       // Then generate a response with whatever result was returned from the last listener

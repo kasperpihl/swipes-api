@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../constants/ActionTypes'
-import { workspace } from '../actions'
+import { workspace, main } from '../actions'
 
 import EmptyBackground from '../components/workspace/EmptyBackground'
 import ResizeOverlay from '../components/workspace/ResizeOverlay'
@@ -17,7 +17,12 @@ class Workspace extends Component {
   }
   componentDidMount(){
     this._cachedTiles = {};
-  }  
+  }
+  componentDidUpdate(){
+    if(!this.props.fullscreen){
+      this.refs.grid.closeFullscreen()
+    }
+  }
   // ======================================================
   // Delegate methods from grid
   // ======================================================
@@ -32,9 +37,9 @@ class Workspace extends Component {
   }
   gridDidTransitionStep(grid, name, step){
     if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
-      //topbarActions.changeFullscreen(true);
-    } else {
-      //topbarActions.changeFullscreen(false);
+      if(!this.props.fullscreen){
+        this.props.toggleFullscreen();
+      }
     }
   }
   gridRowPressedMenu(grid, id){
@@ -54,7 +59,6 @@ class Workspace extends Component {
   // Delegate methods from tiles, caching references
   // ======================================================
   tileDidLoad(tile, id){
-    console.log('loading a tile', id);
     this._cachedTiles[id] = tile;
   }
   tileWillUnload(tile, id){
@@ -84,6 +88,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedWorkspace = connect(mapStateToProps, {
-  removeTile: workspace.removeTile
+  removeTile: workspace.removeTile,
+  toggleFullscreen: main.toggleFullscreen
 })(Workspace)
 export default ConnectedWorkspace
