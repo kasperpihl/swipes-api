@@ -7,8 +7,8 @@
     "password": ""
   },
   "xendo": {
-    "clientId": "c5fa2fa6b268a58101b6",
-    "clientSecret": "5fd2380cecfac16fff7f0023a8bc093be1ac1a51",
+    "clientId": "99965e447026eb281dfc",
+    "clientSecret": "2ffed44df0b40c81845780baa74ba57cc0a6f06c",
     "addUserEndpoint": "https://xen.do/api/v1/provisioning/user/",
     "addServiceToUserEndpoint": "https://xen.do/api/v1/provisioning/service/"
   },

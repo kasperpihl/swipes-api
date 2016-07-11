@@ -6,6 +6,8 @@ let validator = require('validator');
 let sha1 = require('sha1');
 let moment = require('moment');
 let jwt = require('jwt-simple');
+let rp = require('request-promise');
+let querystring = require('querystring');
 let config = require('config');
 let util = require('../util.js');
 let db = require('../db.js');
@@ -130,8 +132,6 @@ router.post('/users.create', (req, res, next) => {
     }
   )
 
-  let insertUserQ = r.table('users').insert(userDoc)
-
   db.rethinkQuery(checkQ)
     .then((results) => {
       if (!results[0]) {
@@ -147,18 +147,56 @@ router.post('/users.create', (req, res, next) => {
           errors: [{field: 'username', message: 'This username is not available.'}]
         });
       } else {
-        db.rethinkQuery(insertUserQ)
-          .then(() => {
-            let token = jwt.encode({
-              iss: userId
-            }, config.get('jwtTokenSecret'))
+        // Try to register a user in xendo
+        // T_TODO I'm not sure about the order of things here.
+        // Have to ask Julian about some  things.
+        let xendoConfig = config.get('xendo');
+        let qs = querystring.stringify({
+          email: userDoc.email,
+          client_id: xendoConfig.clientId,
+          client_secret: xendoConfig.clientSecret
+        });
 
-            res.status(200).json({ok: true, token: token, userId: userId});
-          }).catch((err) => {
-            return next(err);
-          });
+        // return rp({
+        //   url: xendoConfig.addUserEndpoint,
+        //   method: 'POST',
+        //   qs: {
+        //     email: userDoc.email,
+        //     client_id: xendoConfig.clientId,
+        //     client_secret: xendoConfig.clientSecret
+        //   }
+        // });
+        // console.log(xendoConfig.addUserEndpoint + '?' + qs);
+        // return rp.get(xendoConfig.addUserEndpoint + '?' + qs);
+        // return rp({
+        //   url: xendoConfig.addUserEndpoint,
+        //   method: 'post',
+        //   body: {
+        //     email: userDoc.email,
+        //     client_id: xendoConfig.clientId,
+        //     client_secret: xendoConfig.clientSecret
+        //   },
+        //   json: true
+        // });
+        return Promise.resolve();
       }
-    }).catch((err) => {
+    })
+    .then((xendoRes) => {
+      console.log(xendoRes);
+      let insertUserQ = r.table('users').insert(userDoc);
+
+      db.rethinkQuery(insertUserQ)
+        .then(() => {
+          let token = jwt.encode({
+            iss: userId
+          }, config.get('jwtTokenSecret'))
+
+          res.status(200).json({ok: true, token: token, userId: userId});
+        }).catch((err) => {
+          return next(err);
+        });
+    })
+    .catch((err) => {
       return next(err);
     });
 });
