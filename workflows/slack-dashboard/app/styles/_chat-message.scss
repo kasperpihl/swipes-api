@@ -68,11 +68,23 @@
 
       span {
         padding-right: 3px;
+
+        &:empty {
+          display: none;
+        }
       }
 
       & > img {
         @include size(17px !important, 17px !important);
         transform: translateY(3px);
+      }
+
+      a {
+        // display: flex;
+        // margin-left: -3px;
+        color: $matBlue;
+        cursor: pointer;
+        text-decoration: underline;
       }
     }
   }
