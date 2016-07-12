@@ -126,6 +126,10 @@ body {
 	transform-style: preserve-3d;
   backface-visibility: visible;
   pointer-events: none;
+  display: none;
+  &.shown{
+    display: block;
+  }
 }
 
 .empty-workspace-state {

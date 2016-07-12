@@ -13,7 +13,10 @@ export function loadTilesListModal(){
     console.log('dispatch');
     dispatch(request('workflows.list')).then((res) =>{  
       if(res.ok){
-        dispatch(loadModal('list', {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": res.data }, (row) => {
+        const rows = res.data.map((row) => {
+          return Object.assign({}, row, {imageUrl: 'workflows/' + row.manifest_id + '/' + row.icon})
+        })
+        dispatch(loadModal('list', {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": rows }, (row) => {
 
           if(row){
             dispatch(request('users.addWorkflow', {manifest_id: row.manifest_id}));

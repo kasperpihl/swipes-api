@@ -4,9 +4,7 @@ import io from 'socket.io-client'
 export default class Socket {
   constructor(store){
     this.store = store;
-    this.message = this.message.bind(this)
-    this.changeStatus = this.changeStatus.bind(this)
-    this.storeChange = this.storeChange.bind(this)
+    _.bindAll(this, 'message', 'changeStatus', 'storeChange')
     store.subscribe(this.storeChange)
   }
   storeChange(){
@@ -17,7 +15,7 @@ export default class Socket {
       this.changeStatus('connecting');
       
       this.socket = io.connect(url, {
-        query: 'token=' + state.auth.token,
+        query: 'token=' + state.main.token,
         reconnectionDelay: 5000
       });
       this.socket.on('message', this.message)

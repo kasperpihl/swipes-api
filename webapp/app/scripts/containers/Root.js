@@ -10,7 +10,7 @@ const store = configureStore()
 import socket from '../classes/socket'
 import ipcListeners from '../classes/ipcListeners'
 
-new socket(store)
+new socket(store);
 new ipcListeners(store);
 
 export default class Root extends Component {

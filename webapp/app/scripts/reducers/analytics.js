@@ -6,4 +6,3 @@ mixpanel.people.set({
   "$created": action.payload.self.created,
   "$name": action.payload.self.name
 })
-

@@ -19,11 +19,11 @@ export function request(options, data){
         type: types.API_REQUEST,
         meta: meta
       },
-      types.API_SUCCESS, 
+      types.API_SUCCESS,
       types.API_ERROR
     ];
 
-    const body = Object.assign({}, {token: getState().auth.token}, data);
+    const body = Object.assign({}, {token: getState().main.token}, data);
     
     return dispatch({
       [CALL_API]: {

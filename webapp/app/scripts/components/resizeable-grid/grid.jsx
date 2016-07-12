@@ -46,13 +46,13 @@ var Grid = React.createClass({
   },
   componentDidMount() {
       this.debug = false;
-      this.setState({columns: this.validateColumns(this.props.columns)});
+      const columns = this.deepCopyColumns(this.props.columns);
+      this.setState({columns: this.validateColumns(columns)});
 
       //this.transitionStart('reordering', {test:true});
       //this.refs.grid.addEventListener('mousemove', this._onMouseMove);
   },
-
-  _onMouseMove(e){
+  indexForPageXY(pageX, pageY){
     // Math to find out which row is hovered and where in the row...
     var gridPos = offset(this.refs.grid);
     var gridX = e.pageX - gridPos.left;
@@ -92,8 +92,18 @@ var Grid = React.createClass({
       dX += width;
     }.bind(this));
   },
+  _onMouseMove(e){
+    
+  },
+  deepCopyColumns(columns){
+    return columns.map( column => {
+      const newRows = column.rows.map( row => Object.assign({}, row) )
+      return Object.assign({}, column, {rows: newRows})
+    })
+  },
   componentWillReceiveProps(nextProps) {
-    this.setState({columns: this.validateColumns(nextProps.columns)});
+    const columns = this.deepCopyColumns(nextProps.columns);
+    this.setState({columns: this.validateColumns(columns)});
   },
   componentWillUpdate(nextProps, nextState){
 
@@ -108,7 +118,6 @@ var Grid = React.createClass({
   validateColumns(columns){
     if(this.debug)
       console.log('starting validation');
-
     /*
       [ ] validateProperties // Go through columns/rows to make sure no invalid properties are used
       [X] initialDetermination // check if columns have widths and rows have height

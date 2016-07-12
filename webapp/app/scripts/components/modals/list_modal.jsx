@@ -57,10 +57,6 @@ ListModal.Row = React.createClass({
 			image = <img src={data.imageUrl} />
 		}
 
-		if(data.icon){
-			image = <img src={'workflows/' + data.manifest_id + '/dev/' + data.icon} />
-		}
-
 
 		return (
 			<li className="modal-list" onClick={this.onClick}>

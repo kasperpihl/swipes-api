@@ -2,23 +2,27 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { api } from '../actions'
 
-import Topbar from '../components/topbar/Topbar'
+import Topbar from './Topbar'
 import SearchResults from './SearchResults'
 import Modal from './Modal'
+import DotDragOverlay from './DotDragOverlay'
 
 class App extends Component {
   componentDidMount() {
     this.props.request('rtm.start');
   }
   render() {
+    let classes = 'main ' + this.props.mainClasses.join(' ');
+
     return (
-      <div className="main">
+      <div className={classes}>
         <Topbar />
         <div className="active-app">
           {this.props.children}
         </div>
         <SearchResults />
         <Modal />
+        <DotDragOverlay />
       </div>
     );
   }
@@ -26,7 +30,8 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    hasLoaded: state.main.hasLoaded
+    hasLoaded: state.main.hasLoaded,
+    mainClasses: state.main.mainClasses || []
   }
 }
 

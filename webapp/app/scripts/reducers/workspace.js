@@ -58,6 +58,10 @@ export default function workspace (state = initialState, action) {
       }
       break;
     }
+    case types.UPDATE_COLUMNS:{
+      columns = action.columns;
+      break;
+    }
     
   }
 

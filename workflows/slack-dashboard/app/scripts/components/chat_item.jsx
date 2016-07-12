@@ -170,6 +170,9 @@ var ChatMessage = React.createClass({
 
     return items;
   },
+  onDotDragStart(message){
+  	swipes.sendEvent('dot.startDrag', this.shareData(message));
+  },
 	render: function () {
 		var message = this.props.data;
 		var className = "message-wrapper";
@@ -187,6 +190,7 @@ var ChatMessage = React.createClass({
 						showOnHover={true}
 						hoverParentId={message.ts}
 						elements={dotItems}
+						onDragStart={this.onDotDragStart.bind(this, message.text)}
 						onDragData={this.shareData.bind(this, message.text)}
 					/>
 					{this.renderMessage(this.props.data.text)}

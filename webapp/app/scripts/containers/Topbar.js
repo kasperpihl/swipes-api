@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { main, modal } from '../../actions';
+import { main, modal } from '../actions';
 
 
 //var stateStore = require('../../stores/StateStore');
-var gradient = require('./gradient');
+var gradient = require('../components/topbar/gradient');
 
 class Topbar extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Topbar extends Component {
     if(this.props.isSearching){
       this.props.toggleSearching();
     }
-    if(this.props.isFullscreen) {
+    else if(this.props.isFullscreen) {
       this.props.toggleFullscreen();
     }
     else {

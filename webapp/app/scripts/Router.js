@@ -17,13 +17,13 @@ export default class Root extends Component {
   }
   // Check if signed in, otherwise redirect to signin
   didEnterApp(nextState, replace){
-    if(!this.props.store.getState().auth.token){
+    if(!this.props.store.getState().main.token){
       return replace('/signin')
     }
   }
   // Check if signed in and redirect to app
   didEnterRegistration(nextState, replace){
-    if(this.props.store.getState().auth.token){
+    if(this.props.store.getState().main.token){
       return window.location.assign("/")
     }
   }

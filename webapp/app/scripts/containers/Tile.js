@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { modal, notification, workspace } from '../actions'
+import { modal, workspace, main } from '../actions'
 import * as actions from '../constants/ActionTypes'
 import SelectRow from '../components/services/SelectRow'
 
@@ -110,11 +110,13 @@ class Tile extends Component {
         notif.title += ": " + data.title;
       }
       if(!document.hasFocus()) {
-        notification.send(notif);
+        this.props.sendNotification(notif);
       }
     });
 
     this.com.addListener('dot.startDrag', (data) => {
+      //this.callDelegate('startDraggingDot', data)
+      this.props.startDraggingDot(data);
       console.log('start drag', data);
     })
   }
@@ -169,13 +171,15 @@ function mapStateToProps(state, ownProps) {
   return {
     baseUrl: state.main.tileBaseUrl,
     tile: state.workspace.tiles[ownProps.data.id],
-    token: state.auth.token,
+    token: state.main.token,
     services: state.me.services,
     me: state.me
   }
 }
 
 const ConnectedTile = connect(mapStateToProps, {
-  selectAccount: workspace.selectAccount
+  selectAccount: workspace.selectAccount,
+  sendNotification: main.sendNotification,
+  startDraggingDot: main.startDraggingDot
 })(Tile)
 export default ConnectedTile
