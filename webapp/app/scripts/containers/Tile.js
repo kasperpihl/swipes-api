@@ -83,8 +83,9 @@ class Tile extends Component {
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
 
-    console.log(process);
-    webview.openDevTools();
+    if (electronConfig.env === 'dev') {
+      webview.openDevTools();
+    }
   }
   addListenersToCommunicator(){
 
