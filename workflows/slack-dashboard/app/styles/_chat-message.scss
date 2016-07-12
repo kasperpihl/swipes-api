@@ -1,0 +1,117 @@
+.chat__message {
+  @include size(100%, auto);
+  padding: 10px 20px;
+  padding-bottom: 0;
+  position: relative;
+
+  &.extra-message {
+    padding: 0 20px;
+  }
+
+  &.extra-message:hover & {
+    &--content:before {
+      opacity: 1;
+		}
+  }
+
+  &--profile-img {
+    @include size(35px, 35px);
+    border-radius: 50%;
+    position: absolute;
+    left: 20px;
+    top: 10px;
+
+    img {
+      @include size();
+      border-radius: inherit;
+    }
+  }
+
+  &__info {
+    margin-left: 50px;
+    line-height: 11px;
+    @include flex(center, flex-start);
+
+    &--author {
+      font-size: 13px;
+      font-weight: 700;
+      color: $deepBlue-80;
+    }
+
+    &--timestamp {
+      margin-left: 5px;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: $deepBlue-40;
+    }
+  }
+
+  &--content {
+    margin: 8px 0;
+    margin-left: 50px;
+    font-size: 14px;
+    color: $deepBlue-60;
+    position: relative;
+
+    &:before {
+			content: attr(data-timestamp);
+			position: absolute;
+      left: -50px;
+      top: 3px;
+			font-size: 10px;
+			text-transform: uppercase;
+			color: $deepBlue-40;
+      opacity: 0;
+		}
+
+    &--text {
+
+      span {
+        padding-right: 3px;
+      }
+
+      & > img {
+        @include size(17px !important, 17px !important);
+        transform: translateY(3px);
+      }
+    }
+  }
+}
+
+.dot {
+  position: absolute !important;
+  right: 0;
+  top: 5px;
+}
+
+a {
+  cursor: default;
+
+  &:hover > .unread-bar {
+    background-color: $blue-120;
+  }
+
+  .unread-bar {
+    @include size(100%, 30px);
+    max-width: 650px;
+    background-color: $blue-100;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    border-radius: 5px;
+    @include flex(center, center);
+
+    i.material-icons {
+      padding: 0 8px;
+      color: white !important;
+      font-size: 16px !important;
+    }
+
+    &.read {
+      display: none;
+    }
+  }
+}

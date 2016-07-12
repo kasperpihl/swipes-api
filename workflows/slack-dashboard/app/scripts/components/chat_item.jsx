@@ -7,7 +7,7 @@ var FontIcon = require('material-ui/lib/font-icon');
 var SwipesDot = require('swipes-dot').default;
 
 var ChatItem = React.createClass({
-	renderNameHeader: function(){
+	renderMessageHeader: function(){
 		var name = 'unknown';
 		var message = this.props.data;
 		if(message.isExtraMessage){
@@ -21,8 +21,9 @@ var ChatItem = React.createClass({
 			name = message.bot.name;
 		}
 		return (
-			<div className="message-details">
-				<span className="message-author">{name}</span> <span className="message-time">{message.timeStr}</span>
+			<div className="chat__message__info">
+				<div className="chat__message__info--author">{name}</div>
+				<div className="chat__message__info--timestamp">{message.timeStr}</div>
 			</div>
 		);
 	},
@@ -45,45 +46,26 @@ var ChatItem = React.createClass({
 			<img src={profile_image} />
 		);
 	},
-	renderSecondaryTime: function(){
-		var message = this.props.data;
-		if(!message.isExtraMessage){
-			return;
-		}
-		return (
-			<div className="secondary-time">
-				<span className="message-time">
-					{message.timeStr}
-				</span>
-			</div>
-		);
-	},
 	renderMessage:function(){
 		var message = this.props.data;
 		return <ChatMessage key={message.ts} data={message} />;
 	},
-	render: function () {
-		/*
+	render() {
+		let className = "chat__message";
 
-		var meClassName = swipes.info.userId === firstMessage.user.id ? ' me' : '';
-		var chatWrapperClassName = 'chat-wrapper' + meClassName;*/
-		var className = "chat-wrapper";
 		if(this.props.data.isExtraMessage){
 			className += " extra-message";
 		}
 
 		return (
 			<div className={className}>
-				<div className="left-side-container">
+				<div className="chat__message--profile-img">
 					{this.renderProfileImage()}
-					{this.renderSecondaryTime()}
 				</div>
-				<div className="right-side-container">
-					{this.renderNameHeader()}
-					{this.renderMessage()}
-				</div>
+				{this.renderMessageHeader()}
+				{this.renderMessage()}
 			</div>
-		);
+		)
 	}
 });
 
@@ -180,9 +162,10 @@ var ChatMessage = React.createClass({
 			className += " new-message";
 		}
 		var dotItems = this.dotItems();
+
 		return (
 			<div id={message.ts} className={className}>
-				<div className="message">
+				<div className="chat__message--content" data-timestamp={message.timeStr}>
 					<SwipesDot
 						className="dot"
 						radial={false}
@@ -193,7 +176,9 @@ var ChatMessage = React.createClass({
 						onDragStart={this.onDotDragStart.bind(this, message.text)}
 						onDragData={this.shareData.bind(this, message.text)}
 					/>
-					{this.renderMessage(this.props.data.text)}
+					<div className="chat__message--content--text">
+						{this.renderMessage(this.props.data.text)}
+					</div>
 					{this.renderFile()}
 					{this.renderAttachments()}
 				</div>

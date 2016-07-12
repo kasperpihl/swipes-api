@@ -1,23 +1,5 @@
-$itemHeight: 26px;
-$indicatorWidth: 5px;
-$indicatorHeight: 0px;
-$indicatorUnreadHeight: 1px;
-
-$color: #d0d4d9;
-$hoverColor: #a0a4a9;
-$unreadColor: #F44336;
-
-$activeColor: #1581e2;
-
-$notificationHeight: 18px;
-$expandedWidth: 210px;
-$minWidth: 40px;
-
-$returnDelay: .2s;
-$pushDelay: .1s;
-
 .swipes-sidemenu {
-	position: absolute;
+	position: fixed;
 	width:$expandedWidth;
 	height:100%;
 	background-color: #fbfbfb;
