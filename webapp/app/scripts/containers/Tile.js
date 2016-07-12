@@ -48,14 +48,15 @@ class Tile extends Component {
       webview.addEventListener('ipc-message', (event) => {
         var arg = event.args[0];
         // Pass the received message on to the communicator
-        this.com.receivedCommand(arg); 
+        this.com.receivedCommand(arg);
       });
       this.setState({webviewLoaded: true});
     }
-    
+
   }
   onLoad(){
     const tile = this.props.tile;
+    const webview = this.refs.webview;
 
     // K_TODO || T_TODO : WARNING, This is a super hack hahaha
     if(tile && this.slackToken){
@@ -68,21 +69,24 @@ class Tile extends Component {
         workflow: tile,
         userId: this.props.me.id
       },
-      token: this.props.token     
+      token: this.props.token
     };
     if(tile.selectedAccountId){
       initObj.info.selectedAccountId = tile.selectedAccountId;
     }
-    
+
     // Initialize the communicator
     // Provide the sendFunction that the communicator will use to send the commands
-    const sendFunction = (data) => { this.refs.webview.send('message', data) }
+    const sendFunction = (data) => { webview.send('message', data) }
     this.com = new SwClientCom(sendFunction, initObj);
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
+
+    console.log(process);
+    webview.openDevTools();
   }
   addListenersToCommunicator(){
-    
+
     this.com.addListener('navigation.setTitle', (data) => {
       if (data.title) {
         this.setState({"titleFromCard": data.title});
@@ -126,7 +130,7 @@ class Tile extends Component {
 
     const tile = this.props.tile;
     if(tile){
-      
+
       // For Kris
       // preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
       const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
