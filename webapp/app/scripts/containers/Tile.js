@@ -7,6 +7,7 @@ import SelectRow from '../components/services/SelectRow'
 const remote = nodeRequire('electron').remote;
 const app = remote.app;
 const path = nodeRequire('path');
+const os = nodeRequire('os');
 
 
 class Tile extends Component {
@@ -130,12 +131,15 @@ class Tile extends Component {
 
     const tile = this.props.tile;
     if(tile){
-
-      // For Kris
-      // preload={'file://' + path.resolve(__dirname) + 'b\\swipes-electron\\preload\\tile-preload.js'}
       const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
+      let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
 
-      cardContent = <webview preload={'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js')} src={url} ref="webview" className="workflow-frame-class"></webview>;
+      if (os.platform() === 'win32') {
+        console.log('windows');
+        preloadUrl = path.resolve('preload/tile-preload.js')
+      }
+
+      cardContent = <webview preload={preloadUrl} src={url} ref="webview" className="workflow-frame-class"></webview>;
 
       // Determine if the selected account is still a service.
       if(tile.required_services.length > 0){
