@@ -30,7 +30,6 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    hasLoaded: state.main.hasLoaded,
     mainClasses: state.main.mainClasses || []
   }
 }

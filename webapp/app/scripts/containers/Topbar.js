@@ -2,14 +2,13 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { main, modal } from '../actions';
 
-
-//var stateStore = require('../../stores/StateStore');
 var gradient = require('../components/topbar/gradient');
 
 class Topbar extends Component {
   constructor(props) {
     super(props)
-    this.state = {};
+    var gradientPos = gradient.getGradientPos();
+    this.state = {gradientPos: gradientPos};
     this.gradientStep = this.gradientStep.bind(this);
   }
   componentDidMount() {

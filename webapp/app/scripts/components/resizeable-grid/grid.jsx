@@ -52,45 +52,49 @@ var Grid = React.createClass({
       //this.transitionStart('reordering', {test:true});
       //this.refs.grid.addEventListener('mousemove', this._onMouseMove);
   },
+
   indexForPageXY(pageX, pageY){
     // Math to find out which row is hovered and where in the row...
     var gridPos = offset(this.refs.grid);
-    var gridX = e.pageX - gridPos.left;
-    var gridY = e.pageY - gridPos.top;
+    var gridX = pageX - gridPos.left;
+    var gridY = pageY - gridPos.top;
     var dX = 0;
-    this.state.columns.forEach(function(column, cI){
+    var index;
+    this.state.columns.forEach((column, cI) => {
       var width = this.pixelsWidthFromPercentage(column.w);
       if(gridX >= dX && gridX < (dX + width)){
         var dY = 0;
-        column.rows.forEach(function(row, rI){
+        column.rows.forEach((row, rI) => {
           var height = this.pixelsHeightFromPercentage(row.h);
           var extraY = gridY - dY;
           var extraX = gridX - dX;
-          var info = {}
+
           if(gridY >= dY && gridY < (dY + height)){
-            var trans = this.state.transition;
+            index = {};
             if(extraY < height/2){
-              trans.info.direction = 'top';
+              index.position = 'top';
             }
             else{
-              trans.info.direction = 'bottom';
+              index.position = 'bottom';
             }
             if(extraX < COLUMN_SIDE_HOVER_SIZE){
-              trans.info.direction = 'left';
+              index.position = 'left';
             }
             else if(extraX > (width - COLUMN_SIDE_HOVER_SIZE)){
-              trans.info.direction = 'right';
+              index.position = 'right';
             }
-            trans.info.col = cI;
-            trans.info.row = rI;
-            console.log('hover', cI, rI, trans.info.direction);
-            this.setState({transition: trans});
+            index.col = cI;
+            index.row = rI;
+            index.id = row.id;
+            //console.log('hover', cI, rI, trans.info.direction);
+            
           }
           dY += height;
-        }.bind(this));
+        })
       }
       dX += width;
-    }.bind(this));
+    })
+    return index;
   },
   _onMouseMove(e){
     

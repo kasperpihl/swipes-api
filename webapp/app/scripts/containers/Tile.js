@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { modal, workspace, main } from '../actions'
 import * as actions from '../constants/ActionTypes'
 import SelectRow from '../components/services/SelectRow'
+import Webview from '../components/workspace/Webview'
 
 const remote = nodeRequire('electron').remote;
 const app = remote.app;
@@ -13,15 +14,11 @@ const os = nodeRequire('os');
 class Tile extends Component {
   constructor(props) {
     super(props)
-    this.state = { webviewLoaded: false }
-    _.bindAll(this, 'sendCommandToTile', 'addHandlersForWebview', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount');
+
+    _.bindAll(this, 'sendCommandToTile', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount', 'receivedCommand');
   }
   componentDidMount(){
     this.callDelegate('tileDidLoad', this.props.data.id);
-    this.addHandlersForWebview();
-  }
-  componentDidUpdate(){
-    this.addHandlersForWebview();
   }
   componentWillUnmount(){
     this.callDelegate('tileWillUnload', this.props.data.id);
@@ -39,25 +36,9 @@ class Tile extends Component {
   onSelectedAccount(selectedAccount){
     this.props.selectAccount(this.props.tile, selectedAccount.id);
   }
-  addHandlersForWebview(){
-    const webview = this.refs.webview;
-    if(this.state.webviewLoaded)
-      return;
-
-    if (webview) {
-      webview.addEventListener('dom-ready', this.onLoad);
-      webview.addEventListener('ipc-message', (event) => {
-        var arg = event.args[0];
-        // Pass the received message on to the communicator
-        this.com.receivedCommand(arg);
-      });
-      this.setState({webviewLoaded: true});
-    }
-
-  }
-  onLoad(){
+  
+  onLoad(sendFunction){
     const tile = this.props.tile;
-    const webview = this.refs.webview;
 
     // K_TODO || T_TODO : WARNING, This is a super hack hahaha
     if(tile && this.slackToken){
@@ -77,21 +58,19 @@ class Tile extends Component {
     }
 
     // Initialize the communicator
-    // Provide the sendFunction that the communicator will use to send the commands
-    const sendFunction = (data) => { webview.send('message', data) }
     this.com = new SwClientCom(sendFunction, initObj);
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
 
     if (electronConfig.env === 'dev') {
-      webview.openDevTools();
+      //webview.openDevTools();
     }
   }
   addListenersToCommunicator(){
 
     this.com.addListener('navigation.setTitle', (data) => {
       if (data.title) {
-        this.setState({"titleFromCard": data.title});
+        //this.setState({"titleFromCard": data.title});
       }
     });
 
@@ -121,50 +100,65 @@ class Tile extends Component {
     });
 
     this.com.addListener('dot.startDrag', (data) => {
-      //this.callDelegate('startDraggingDot', data)
       this.props.startDraggingDot(data);
-      console.log('start drag', data);
     })
   }
+  receivedCommand(command){
+    this.com.receivedCommand(command);
+  }
+  renderServiceSelector(tile){
+    // Determine if the selected account is still a service.
+    if(tile.required_services.length > 0){
+      // Find services from the required services
+      const services = this.props.services.filter( ({service_name}) => (service_name === tile.required_services[0]))
+      // Check if a the selected account exist
+      const selectedAccount = services.find( ({id}) => (id === tile.selectedAccountId) )
 
+      // Hack to pass on the right slack token to the tile for file upload
+      if(selectedAccount && selectedAccount.service_name === 'slack'){
+        this.slackToken = selectedAccount.authData.access_token;
+      }
+      
+      if(!selectedAccount){
+        return ( <SelectRow
+          onSelectedAccount={this.onSelectedAccount}
+          data={{
+            services: services,
+            title: tile.required_services[0],
+            service_name: tile.required_services[0]
+          }}
+        />);
+      }
+
+      
+
+    }
+    return null;
+  }
+  renderWebview(tile){
+    const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
+    let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
+
+    if (os.platform() === 'win32') {
+      console.log('windows');
+      preloadUrl = path.resolve('preload/tile-preload.js')
+    }
+
+    return <Webview onLoad={this.onLoad} receivedCommand={this.receivedCommand} preloadUrl={preloadUrl} url={url} />;
+  }
+  renderLocalTile(){
+
+  }
   render() {
+    // KRIS_TODO: Replace Loading with something dope
     var cardContent = <div>Loading</div>;
 
     const tile = this.props.tile;
     if(tile){
-      const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
-      let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
-
-      if (os.platform() === 'win32') {
-        console.log('windows');
-        preloadUrl = path.resolve('preload/tile-preload.js')
-      }
-
-      cardContent = <webview preload={preloadUrl} src={url} ref="webview" className="workflow-frame-class"></webview>;
-
-      // Determine if the selected account is still a service.
-      if(tile.required_services.length > 0){
-        // Find services from the required services
-        const services = this.props.services.filter( ({service_name}) => (service_name === tile.required_services[0]))
-        // Check if a the selected account exist
-        const selectedAccount = services.find( ({id}) => (id === tile.selectedAccountId) )
-
-        if(!selectedAccount){
-          cardContent = <SelectRow
-            onSelectedAccount={this.onSelectedAccount}
-            data={{
-              services: services,
-              title: tile.required_services[0],
-              service_name: tile.required_services[0]
-            }}
-          />
-        }
-
-        // Hack to pass on the right slack token to the tile for file upload
-        if(selectedAccount && selectedAccount.service_name === 'slack'){
-          this.slackToken = selectedAccount.authData.access_token;
-        }
-
+      cardContent = this.renderServiceSelector(tile);
+      if(!cardContent){
+        cardContent = this.renderWebview(tile);
+        // Render local tiles
       }
     }
 

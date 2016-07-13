@@ -27,7 +27,6 @@ class SwipesAPIConnector {
   };
 
   request(options, data, callback, deferred) {
-    console.log(options, data, callback);
     if(!deferred && window.Q) {
       deferred = Q.defer();
     }

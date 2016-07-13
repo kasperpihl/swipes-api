@@ -18,12 +18,19 @@ class Workspace extends Component {
   }
   onMouseUp(e){
     if(this.props.draggingDot){
+      e.preventDefault();
       this.props.stopDraggingDot();
     }
   }
   onMouseMove(e){
     if(this.props.draggingDot){
-      this.props.dragDot(e.clientX, e.clientY)
+      let { id: hoverTarget } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
+      if(!hoverTarget){
+        // Do additional tests if no row was hovered. Like (topbar etc)
+      }
+      this.props.dragDot(e.clientX, e.clientY, hoverTarget)
+      
+      console.log(dragTarget);
     }
   }
   onWindowFocus(e) {
@@ -95,6 +102,9 @@ class Workspace extends Component {
   }
 
   render() {
+    if(!this.props.hasLoaded){
+      return <div>Loading</div>
+    }
     let content = <EmptyBackground />;
     if (this.props.columns.length) {
       content = <Grid ref="grid" columns={this.props.columns} delegate={this} />
@@ -115,7 +125,7 @@ class Workspace extends Component {
     window.addEventListener("blur", this.onWindowBlur);
   }
   componentDidUpdate(){
-    if(!this.props.fullscreen){
+    if(!this.props.fullscreen && this.refs.grid){
       this.refs.grid.closeFullscreen()
     }
   }
@@ -133,7 +143,7 @@ function mapStateToProps(state) {
     draggingDot: state.main.draggingDot,
     fullscreen: state.main.isFullscreen,
     tiles: state.workspace.tiles,
-
+    hasLoaded: state.main.hasLoaded,
     columns: state.workspace.columns
   }
 }

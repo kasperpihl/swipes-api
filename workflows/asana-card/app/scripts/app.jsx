@@ -9,9 +9,7 @@ var MainActions = require('./actions/MainActions');
 var CreateTaskInputActions = require('./actions/CreateTaskInputActions');
 
 ReactDOM.render(<Home />, document.getElementById('content'));
-console.log('loading');
 swipes.ready(function () {
-	console.log('running');
 	MainStore.fetch();
 });
 
