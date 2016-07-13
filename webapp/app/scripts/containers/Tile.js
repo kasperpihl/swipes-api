@@ -2,8 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal, workspace, main } from '../actions'
 import * as actions from '../constants/ActionTypes'
+
 import SelectRow from '../components/services/SelectRow'
 import Webview from '../components/workspace/Webview'
+import DropzoneOverlay from '../components/workspace/DropzoneOverlay'
 
 const remote = nodeRequire('electron').remote;
 const app = remote.app;
@@ -100,7 +102,7 @@ class Tile extends Component {
     });
 
     this.com.addListener('dot.startDrag', (data) => {
-      this.props.startDraggingDot(data);
+      this.props.startDraggingDot(this.props.tile.id, data);
     })
   }
   receivedCommand(command){
@@ -135,6 +137,13 @@ class Tile extends Component {
     }
     return null;
   }
+  renderDropzoneOverlay(){
+    //return <DropzoneOverlay hover={true} />
+    if(this.props.draggingDot){
+      let { draggingDot, tile } = this.props;
+      return <DropzoneOverlay hover={(tile.id === draggingDot.hoverTarget)} title={"Share to: " + tile.name}/>
+    }
+  }
   renderWebview(tile){
     const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
     let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
@@ -164,6 +173,7 @@ class Tile extends Component {
 
     return (
       <div className="tile">
+        {this.renderDropzoneOverlay()}
         {cardContent}
       </div>
     );
@@ -172,6 +182,7 @@ class Tile extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
+    draggingDot: state.main.draggingDot,
     baseUrl: state.main.tileBaseUrl,
     tile: state.workspace.tiles[ownProps.data.id],
     token: state.main.token,

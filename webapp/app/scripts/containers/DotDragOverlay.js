@@ -11,9 +11,10 @@ class DotDragOverlay extends Component {
     let className = 'dot-drag-handler';
     
     const styles = {};
-    if(this.props.draggingDotPos){
+    const {draggingDot} = this.props;
+    if(draggingDot && draggingDot.pos){
       className += ' shown'
-      const { clientX, clientY } = this.props.draggingDotPos;
+      const { clientX, clientY } = draggingDot.pos;
       const ts = 'translate(' + (clientX-25) + 'px, ' + (clientY-25) + 'px)'
       styles.transform = ts; 
     }
@@ -26,7 +27,7 @@ class DotDragOverlay extends Component {
 
 function mapStateToProps(state) {
   return {
-    draggingDotPos: state.main.draggingDotPos
+    draggingDot: state.main.draggingDot
   }
 }
 

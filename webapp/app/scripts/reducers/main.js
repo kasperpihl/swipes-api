@@ -6,8 +6,7 @@ const initialState = {
   socketUrl: null,
   tileBaseUrl: null,
   token: null,
-  draggingDot: false,
-  draggingDotPos: null,
+  draggingDot: null,
   mainClasses: [],
   hasLoaded: false
 }
@@ -47,10 +46,21 @@ export default function main (state = initialState, action) {
 
     case types.SET_DRAGGING_DOT:{
       let mainClasses = toggleUnique(state.mainClasses, 'draggingDot', action.value);
-      return Object.assign({}, state, {draggingDot: action.value, mainClasses, 'draggingDotPos': null })
+      let draggingDot = action.value ? {
+        draggingId: action.draggingId,
+        data: action.data,
+        pos: null
+      } : null
+
+      return Object.assign({}, state, {draggingDot: draggingDot, mainClasses })
     }
     case types.DRAG_DOT:{
-      return Object.assign({}, state, {draggingDotPos: {clientX: action.clientX, clientY: action.clientY}})
+      const newDragDot = Object.assign({}, state.draggingDot, {
+        pos: {clientX: action.clientX, clientY: action.clientY}, 
+        hoverTarget: action.hoverTarget}
+      )
+
+      return Object.assign({}, state, {draggingDot: newDragDot})
     }
 
     // ======================================================

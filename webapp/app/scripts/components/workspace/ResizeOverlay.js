@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 const ResizeOverlay = ({ imageUrl, title }) => (
   <div className="tile-resizing-overlay">
@@ -13,4 +13,7 @@ const ResizeOverlay = ({ imageUrl, title }) => (
 
 export default ResizeOverlay
 
-
+ResizeOverlay.PropTypes = {
+  'title': PropTypes.string.isRequired,
+  'imageUrl': PropTypes.string.isRequired
+}

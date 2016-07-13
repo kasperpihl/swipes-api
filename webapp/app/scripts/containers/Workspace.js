@@ -5,7 +5,6 @@ import { workspace, main } from '../actions'
 
 import EmptyBackground from '../components/workspace/EmptyBackground'
 import ResizeOverlay from '../components/workspace/ResizeOverlay'
-
 import Tile from './Tile'
 import Grid from '../components/resizeable-grid/grid'
 
@@ -18,19 +17,26 @@ class Workspace extends Component {
   }
   onMouseUp(e){
     if(this.props.draggingDot){
-      e.preventDefault();
-      this.props.stopDraggingDot();
+      e.preventDefault()
+      let { id } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {};
+      if(id){
+        this.sendToTile(id, 'share.receivedData', { data: this.props.draggingDot.data });
+      }
+
+      this.props.stopDraggingDot()
+
     }
   }
   onMouseMove(e){
     if(this.props.draggingDot){
+      e.preventDefault()
       let { id: hoverTarget } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
       if(!hoverTarget){
         // Do additional tests if no row was hovered. Like (topbar etc)
       }
       this.props.dragDot(e.clientX, e.clientY, hoverTarget)
       
-      console.log(dragTarget);
+      //console.log(hoverTarget);
     }
   }
   onWindowFocus(e) {

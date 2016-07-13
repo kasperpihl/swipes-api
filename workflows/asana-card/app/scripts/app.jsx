@@ -59,14 +59,14 @@ swipes.addListener('share.provideDropzones', function(e) {
 	}
 });
 
-swipes.addListener('share.receivedData', function(e) {
-	var data = e.data.data;
+swipes.addListener('share.receivedData', function(msg) {
+	console.log('received share', msg);
 
-	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
+	var input = msg.data.text || msg.data.url || ''; // e.data.data.data.data...
 
 	if (input) {
 		CreateTaskInputActions.changeInputValue(input);
-		// document.getElementById('create-task-input').focus();
+		document.getElementById('create-task-input').focus();
 	}
 });
 

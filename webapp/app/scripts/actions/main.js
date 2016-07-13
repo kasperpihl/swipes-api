@@ -17,8 +17,8 @@ export function sendNotification(data) {
   return { type: types.SEND_NOTIFICATION, payload: data }
 }
 
-export function startDraggingDot(){
-  return { type: types.SET_DRAGGING_DOT, value: true };
+export function startDraggingDot(draggingId, data){
+  return { type: types.SET_DRAGGING_DOT, value: true, draggingId, data };
 }
 export function stopDraggingDot(){
   return { type: types.SET_DRAGGING_DOT, value: false }
