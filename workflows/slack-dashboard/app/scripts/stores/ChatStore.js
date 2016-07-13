@@ -401,7 +401,10 @@ var ChatStore = Reflux.createStore({
 				swipes.sendEvent('analytics.action', {name: "Send message"});
 				self.onMarkAsRead(res.data.ts);
 			}
-			callback();
+			if(callback){
+				callback();
+			}
+			
 		});
 	},
 	onDeleteMessage: function(timestamp){

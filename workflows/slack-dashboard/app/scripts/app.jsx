@@ -32,12 +32,10 @@ swipes.addListener('share.provideDropzones', function(e) {
 });
 
 swipes.addListener('share.receivedData', function(msg) {
-
-	var input = msg.data.text || msg.data.url || ''; // e.data.data.data.data...
+	var input = msg.data.text || msg.data.url || ''; 
 
 	if (input) {
-		chatInputActions.changeInputValue(input);
-		document.getElementById('chat-input').focus();
+		chatActions.sendMessage(input);
 	}
 });
 

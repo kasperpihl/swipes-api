@@ -138,9 +138,9 @@ class Tile extends Component {
     return null;
   }
   renderDropzoneOverlay(){
-    //return <DropzoneOverlay hover={true} />
-    if(this.props.draggingDot){
-      let { draggingDot, tile } = this.props;
+    let { draggingDot, tile } = this.props;
+    if(draggingDot && draggingDot.draggingId !== tile.id){
+      
       return <DropzoneOverlay hover={(tile.id === draggingDot.hoverTarget)} title={"Share to: " + tile.name}/>
     }
   }

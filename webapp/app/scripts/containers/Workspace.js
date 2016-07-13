@@ -18,9 +18,10 @@ class Workspace extends Component {
   onMouseUp(e){
     if(this.props.draggingDot){
       e.preventDefault()
-      let { id } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {};
-      if(id){
-        this.sendToTile(id, 'share.receivedData', { data: this.props.draggingDot.data });
+      const { draggingDot } = this.props;
+      const { id } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {};
+      if(id && id !== draggingDot.draggingId){
+        this.sendToTile(id, 'share.receivedData', { data: draggingDot.data });
       }
 
       this.props.stopDraggingDot()
