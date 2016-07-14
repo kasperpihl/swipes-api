@@ -23,7 +23,6 @@ router.post('/users.login', signInValidate, userSignIn, (req, res, next) => {
   res.status(200).json({ok: true, token});
 });
 
-xendoCredentials,
 router.post('/users.create', signUpValidate, userAvailability, userSignUp, xendoCredentials, xendoUserSignUp, (req, res, next) => {
   const {
     userId,
