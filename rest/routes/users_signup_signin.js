@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.post('/users.login', signInValidate, userSignIn, (req, res, next) => {
+router.post('/users.signin', signInValidate, userSignIn, (req, res, next) => {
   const {
     token
   } = res.locals;
@@ -23,7 +23,7 @@ router.post('/users.login', signInValidate, userSignIn, (req, res, next) => {
   res.status(200).json({ok: true, token});
 });
 
-router.post('/users.create', signUpValidate, userAvailability, userSignUp, xendoCredentials, xendoUserSignUp, (req, res, next) => {
+router.post('/users.signup', signUpValidate, userAvailability, userSignUp, xendoCredentials, xendoUserSignUp, (req, res, next) => {
   const {
     userId,
     token

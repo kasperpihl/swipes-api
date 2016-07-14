@@ -28,8 +28,8 @@ export function dragDot(clientX, clientY, hoverTarget){
 }
 
 
-export function login(data) {
-  return request('users.login', data);
+export function signin(data) {
+  return request('users.signin', data);
 }
 export function signup(data){
   return request('users.signup', data);
