@@ -45,14 +45,15 @@ export default function main (state = initialState, action) {
     }
 
     case types.SET_DRAGGING_DOT:{
-      let mainClasses = toggleUnique(state.mainClasses, 'draggingDot', action.value);
-      let draggingDot = action.value ? {
+      const mainClasses = toggleUnique(state.mainClasses, 'draggingDot', action.value);
+      const closeSearching = action.value ? null : {isSearching: false};
+      const draggingDot = action.value ? {
         draggingId: action.draggingId,
         data: action.data,
         pos: null
       } : null
 
-      return Object.assign({}, state, {draggingDot: draggingDot, mainClasses })
+      return Object.assign({}, state, closeSearching, {draggingDot: draggingDot, mainClasses })
     }
     case types.DRAG_DOT:{
       const newDragDot = Object.assign({}, state.draggingDot, {

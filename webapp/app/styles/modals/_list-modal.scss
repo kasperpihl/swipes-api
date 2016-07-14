@@ -1,0 +1,34 @@
+.list-results{
+  li{
+    display: flex;
+    padding-left: 10px;
+    border-bottom: 1px solid #F4F4F5;
+
+    &.modal-list {
+      align-items: center;
+
+      &:hover {
+        background-color: $studioGray-20;
+
+        h3 {
+          color: $deepBlue-100;
+        }
+      }
+    }
+
+    img {
+      width: 35px;
+      height: 35px;
+    }
+
+    h3{
+      height: 70px;
+      line-height: 70px;
+      color: $deepBlue-60;
+      font-size: 14px;
+      padding-left: 5%;
+      font-weight: 400;
+    }
+  }
+  background-color: white;
+}

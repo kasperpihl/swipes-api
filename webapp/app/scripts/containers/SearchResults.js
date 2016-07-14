@@ -6,22 +6,22 @@ import SwipesCard from '../components/SwipesCard'
 class SearchResults extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.startDraggingDot = this.startDraggingDot.bind(this);
   }
   onClick(e){
-
     if(e.target.classList.contains("search-view-overlay")){
       this.props.toggleSearching()
     }
-    else{
-      
-    }
-  }
-  onMouseDown(){
-    this.props.startDraggingDot("search", {text: "Cool beans"});
   }
   renderEmptyScreen(){
-    return "Type Enter to search"
+    return null; "Type Enter to search"
+  }
+  startDraggingDot(){
+    this.props.toggleSearching();
+    this.props.startDraggingDot("search", {text: "Cool beans"});
+  }
+  clickedActionFromDot(){
+    
   }
   render() {
     const { isSearching, draggingDot } = this.props;
@@ -30,9 +30,17 @@ class SearchResults extends Component {
       className += ' open'
     }
     return (
-      <div className={className} onMouseDown={this.onMouseDown.bind(this)} onClick={this.onClick.bind(this)}>
+      <div className={className} onClick={this.onClick.bind(this)}>
         <div className="search-results">
-          <SwipesCard title="Test" />
+          <SwipesCard 
+            title="Test"
+            onDragStart={this.startDraggingDot}
+            actions={[{
+              label: "Share",
+              icon: "share",
+              bgColor: "black",
+              callback: this.startDraggingDot
+            }]} />
           {this.renderEmptyScreen()}
         </div>
       </div>

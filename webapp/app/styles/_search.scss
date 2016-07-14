@@ -1,3 +1,4 @@
+$searchbarSize: 90px;
 .search-view-overlay{
 	position: absolute;
 	width: 100%;
@@ -11,9 +12,12 @@
 	transition: opacity .3s .15s, visibility 0s .45s;
 	pointer-events: none;
 	.search-results{
+		padding: 5px 10px;
+		padding-top: $searchbarSize + 20;
 		width:96%;
 		height:96%;
 		margin-left:2%;
+		position:relative;
 		background: white;
 		transition: transform .3s;
 		transform: translateY(-100%);

@@ -101,7 +101,7 @@ class Tile extends Component {
       }
     });
 
-    this.com.addListener('dot.startDrag', (data) => {
+    this.com.addListeners(['dot.startDrag', 'share'], (data) => {
       this.props.startDraggingDot(this.props.tile.id, data);
     })
   }

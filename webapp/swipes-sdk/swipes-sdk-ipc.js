@@ -93,6 +93,13 @@ class SwClientCom {
     this._sendFunction(responseJson);
   }
 
+  addListeners(commands, listener, ctx){
+    if(Array.isArray(commands)){
+      commands.forEach((command) => {
+        this.addListener(command, listener, ctx);
+      })
+    }
+  }
   // Internal listener api, used for handling received events
   // Supports context as the third parameter
   addListener(command, listener, ctx){

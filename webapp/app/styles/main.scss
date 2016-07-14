@@ -1,17 +1,12 @@
 @import "compass/css3";
-@import "vars";
-@import "mixins";
-// Base page styles
-@import "base";
-@import "icons";
+@import "base/base";
+
 @import "topbar";
-@import "workspace";
-@import "grid";
+@import "workspace/workspace";
+@import "resizeable-grid/grid";
 @import "search";
-@import "modals";
-@import "tile-styles";
-@import "overlays";
+@import "modals/modals";
 @import "login";
 @import "services";
-@import "typography";
 @import "download-website";
+@import "swipes-card";
