@@ -4,7 +4,7 @@
 // All subsequent files required by node with the extensions
 // .es6, .es, .jsx and .js will be transformed by Babel.
 require("babel-register")({
-  only: './utils',
+  ignore: /node_modules/,
   extensions: [".es6", ".es", ".jsx", ".js"]
 });
 // ===========================================================================================================
@@ -46,7 +46,7 @@ app.use(parseErrorHandler);
 // Require routes
 // ===========================================================================================================
 //let appsRouter = require('./routes/apps.js');
-let usersAuth = require('./routes/users_auth.js');
+let usersAuth = require('./routes/users_signup_signin.js');
 let usersRouter = require('./routes/users.js');
 let rtmRouter = require('./routes/rtm.js');
 let searchRouter = require('./routes/search.js');
@@ -118,13 +118,14 @@ let logErrors = (err, req, res, next) => {
 }
 
 let unhandledServerError = (err, req, res, next) => {
-  if(err){
+  if (err) {
     console.log(err);
   	//res.status(500).send({ err: 'Something blew up! Sorry :/ We will call the dinosaurs from Swipes to fix the problem.' });
     res.status(500).send({ err: err });
   }
-  else
-  	next()
+  else {
+    next();
+  }
 }
 
 app.use(swipesErrMiddleware);
