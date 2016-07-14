@@ -1,12 +1,17 @@
 @import "compass/css3";
 @import "base/base";
 
-@import "topbar";
+@import "modals/modals";
+
 @import "workspace/workspace";
 @import "resizeable-grid/grid";
-@import "search";
-@import "modals/modals";
-@import "login";
-@import "services";
-@import "download-website";
+
+@import "components/topbar";
+@import "components/search-results";
+@import "components/registration";
+@import "components/services";
+@import "components/download-website";
+
+
+
 @import "swipes-card";

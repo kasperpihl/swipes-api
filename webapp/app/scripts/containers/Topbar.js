@@ -29,10 +29,6 @@ class Topbar extends Component {
     this.props.toggleSearching();
   }
   signout() {
-    amplitude.setUserId(null); // Log out user from analytics
-    stateStore._reset({trigger: false});
-    localStorage.clear();
-    swipesApi.setToken(null);
     window.location.replace('/');
   }
   gradientStep(){

@@ -42,6 +42,9 @@ mixpanel.init("b020713357dd0bbb88ba520b1f36f574");</script><!-- end Mixpanel -->
         delete window.exports;
         delete window.module;
       }
+      else{
+        window.nodeRequire = function(){};
+      }
     </script>
   </head>
   <body>

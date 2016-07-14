@@ -1,4 +1,5 @@
 import 'babel-polyfill'
+const getURLParameter = name => decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null
 const regeneratorRuntime = require('babel-runtime/regenerator');
 if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
@@ -6,24 +7,24 @@ if (!regeneratorRuntime.default) {
 
 import React from 'react'
 import { render } from 'react-dom'
+let Page, data;
 
-if(!window.process || !window.process.versions.electron){
-  const DownloadPage = require('./components/downloadPage');
-
-  render(<DownloadPage />, document.getElementById('content'));
+if(getURLParameter('share')){
+  Page = require('./containers/SharePage')
+  data = getURLParameter('share')
+}
+else if(!window.process || !window.process.versions.electron){
+  Page = require('./components/downloadPage');
 }
 else{
   require('expose?$!expose?jQuery!jquery');
   require('expose?_!underscore');
-
   require("react-tap-event-plugin")();
 
-  window.swipesApi = new SwipesAPIConnector(window.location.origin);
-
-  var Root = require('./containers/Root');
-
-  render( 
-    <Root />
-    , document.getElementById('content')
-  )
+  Page = require('./containers/Root');
 }
+
+render( 
+  <Page data={data} />
+  , document.getElementById('content')
+)
