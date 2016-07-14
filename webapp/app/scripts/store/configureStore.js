@@ -1,5 +1,5 @@
 import {compose, applyMiddleware, createStore} from 'redux';
-
+import * as types from '../constants/ActionTypes'
 
 // API middleware + hack to work with Babel 6
 import { apiMiddleware } from 'redux-api-middleware';
@@ -29,11 +29,13 @@ const persist = paths => {
 }
 export default function configureStore(preloadedState) {
   // All the keys to persist to localStorage between opens
+  const ignoredActions = [types.DRAG_DOT]; // Ignore actions from Logger
   const enhancer = compose(
     applyMiddleware(
       thunk,
       apiMiddleware,
-      createLogger({collapsed: true})
+      createLogger({collapsed: true, duration: true, diff: true, predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1)
+      })
     ),
 
     persistState(null, {slicer: persist})

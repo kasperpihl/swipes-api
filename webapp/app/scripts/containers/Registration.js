@@ -17,7 +17,7 @@ class Registration extends Component {
   }
   render() {
   	if(this.props.route.path === "signin"){
-  		return <Signin onLogin={this.props.login} />
+  		return <Signin onLogin={this.props.signin} />
   	}
   	return <Signup onSignup={this.props.signup} />
   }
@@ -30,7 +30,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedRegistration = connect(mapStateToProps, {
-  login: main.login,
+  signin: main.signin,
   signup: main.signup
 })(Registration)
 export default ConnectedRegistration

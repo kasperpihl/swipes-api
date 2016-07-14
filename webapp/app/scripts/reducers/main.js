@@ -66,7 +66,7 @@ export default function main (state = initialState, action) {
     // ======================================================
     // Authorization methods
     // ======================================================
-    case ('users.login'):
+    case ('users.signin'):
     case ('users.signup'):{
       if(action.payload && action.payload.ok){
         return Object.assign({}, {token: action.payload.token});

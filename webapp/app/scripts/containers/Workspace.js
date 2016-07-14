@@ -126,6 +126,7 @@ class Workspace extends Component {
 
   componentDidMount(){
     this._cachedTiles = {};
+    window.addEventListener('click', this.onClick);
     window.addEventListener("focus", this.onWindowFocus);
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);

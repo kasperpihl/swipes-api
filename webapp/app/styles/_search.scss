@@ -9,6 +9,7 @@
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity .3s .15s, visibility 0s .45s;
+	pointer-events: none;
 	.search-results{
 		width:96%;
 		height:96%;
@@ -18,6 +19,7 @@
 		transform: translateY(-100%);
 	}
 	&.open{
+		pointer-events: auto;
 		visibility: visible;
 		opacity: 1;
 		transition: opacity .3s, visibility 0s;

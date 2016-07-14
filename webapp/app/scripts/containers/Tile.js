@@ -138,7 +138,7 @@ class Tile extends Component {
     return null;
   }
   renderDropzoneOverlay(){
-    let { draggingDot, tile } = this.props;
+    const { draggingDot, tile } = this.props;
     if(draggingDot && draggingDot.draggingId !== tile.id){
       
       return <DropzoneOverlay hover={(tile.id === draggingDot.hoverTarget)} title={"Share to: " + tile.name}/>
@@ -160,7 +160,7 @@ class Tile extends Component {
   }
   render() {
     // KRIS_TODO: Replace Loading with something dope
-    var cardContent = <div>Loading</div>;
+    let cardContent = <div>Loading</div>;
 
     const tile = this.props.tile;
     if(tile){
