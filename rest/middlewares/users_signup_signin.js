@@ -125,7 +125,10 @@ const userSignUp = (req, res, next) => {
 
   db.rethinkQuery(createUserQ)
     .then(() => {
-      res.status(200).json({ok: true, token: token, userId: userId});
+      res.locals.userId = userId;
+      res.locals.token = token;
+
+      return next();
     }).catch((err) => {
       return next(err);
     });
@@ -195,7 +198,9 @@ const userSignIn = (req, res, next) => {
           sysAdm: user.is_sysadmin
         }, config.get('jwtTokenSecret'))
 
-        res.status(200).json({ok: true, token: token});
+        res.locals.token = token;
+
+        return next();
       }
     }).catch((err) => {
       return next(err);
