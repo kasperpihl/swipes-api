@@ -2,8 +2,6 @@ const {ipcRenderer} = nodeRequire('electron');
 
 import { me } from '../actions'
 
-console.log(me);
-
 export default class IpcListeners {
   constructor(store) {
     ipcRenderer.on('oauth-success', (event, arg) => {
