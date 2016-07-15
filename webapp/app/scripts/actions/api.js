@@ -1,11 +1,11 @@
 import { CALL_API } from 'redux-api-middleware'
 import * as types from '../constants/ActionTypes'
-const API_URL = window.location.origin + '/v1/'
+const apiUrl = window.location.origin + '/v1/'
 
-export function request(options, data){
+const request = (options, data) => {
   return (dispatch, getState) => {
     // K_TODO: Validate types, check if types is second parameter etc.
-    
+
     let command;
     if(typeof options !== 'object') {
       command = "" + options;
@@ -24,10 +24,10 @@ export function request(options, data){
     ];
 
     const body = Object.assign({}, {token: getState().main.token}, data);
-    
+
     return dispatch({
       [CALL_API]: {
-        endpoint: API_URL + command,
+        endpoint: apiUrl + command,
         headers: { 'Content-Type': 'application/json' },
         types: reqTypes,
         method: 'POST',
@@ -52,5 +52,9 @@ export function request(options, data){
       return Promise.resolve(err);
     });
   }
-  
-} 
+}
+
+export {
+  apiUrl,
+  request
+}
