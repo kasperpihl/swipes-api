@@ -18,24 +18,10 @@ const router = express.Router();
   example
   {JSON} service
   {
-    service_account_id: 93149587458564
-    name: 'asana',
-    method: 'tasks.findById',
-    data: {id: '1234567'},
-    // Fields is for mapping from the API result
-    fields: {
-      title: name,
-      description: notes
-    },
-    actions: [
-      title: 'complete',
-      icon: 'check',
-      method: 'tasks.update',
-      data: {
-        id: '1234567',
-        completed: true
-      }
-    ]
+    name: "service_name"
+    account_id: "Service account id",
+    type: "tasks",
+    item_id: "ID of tasks"
   }
 **/
 router.post('/link.add', (req, res, next) => {

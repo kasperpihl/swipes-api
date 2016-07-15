@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.get('/*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
-  const swipesUrl = pathParts[2];
-  const getSwipesUrlQ = r.table('links').getAll(swipesUrl, {index: 'short_url'});
+  const shareId = pathParts[2];
+  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'});
 
   let shortUrl = null;
   let userServiceData = null;
