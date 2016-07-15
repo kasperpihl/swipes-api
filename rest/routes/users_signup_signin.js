@@ -9,7 +9,7 @@ import {
   userSignIn
 } from '../middlewares/users_signup_signin.js';
 import {
-  xendoCredentials,
+  xendoSwipesCredentials,
   xendoUserSignUp
 } from '../middlewares/xendo.js';
 
@@ -23,7 +23,7 @@ router.post('/users.signin', signInValidate, userSignIn, (req, res, next) => {
   res.status(200).json({ok: true, token});
 });
 
-router.post('/users.signup', signUpValidate, userAvailability, userSignUp, xendoCredentials, xendoUserSignUp, (req, res, next) => {
+router.post('/users.signup', signUpValidate, userAvailability, userSignUp, xendoSwipesCredentials, xendoUserSignUp, (req, res, next) => {
   const {
     userId,
     token

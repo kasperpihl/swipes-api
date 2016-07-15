@@ -7,7 +7,7 @@ import SwipesError from '../swipes-error.js';
 
 const xendoConfig = config.get('xendo');
 
-const xendoCredentials = (req, res, next) => {
+const xendoSwipesCredentials = (req, res, next) => {
   const query = r.table('config').getAll('xendo', {index: 'key'}).nth(0);
 
   db.rethinkQuery(query)
@@ -16,7 +16,26 @@ const xendoCredentials = (req, res, next) => {
         return next('Need to add credentials to the db!!!');
       }
 
-      res.locals.xendoCredentials = result;
+      res.locals.xendoSwipesCredentials = result;
+
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
+    })
+}
+
+const xendoUserCredentials = (req, res, next) => {
+  const userId = req.userId;
+  const query = r.table('users').get(userId);
+
+  db.rethinkQuery(query)
+    .then((result) => {
+      if (!result) {
+        return next('Invalid userId :/');
+      }
+
+      res.locals.xendoUserCredentials = result.xendoCredentials;
 
       return next();
     })
@@ -28,7 +47,7 @@ const xendoCredentials = (req, res, next) => {
 const xendoUserSignUp = (req, res, next) => {
   const {
     userId,
-    xendoCredentials
+    xendoSwipesCredentials
   } = res.locals;
   const xendoEmail = userId + '@swipesapp.com';
   const qs = querystring.stringify({
@@ -41,7 +60,7 @@ const xendoUserSignUp = (req, res, next) => {
 
   rp.get(url, {
     auth: {
-      bearer: xendoCredentials.access_token
+      bearer: xendoSwipesCredentials.access_token
     }
   })
   .then((xendoResult) => {
@@ -51,7 +70,7 @@ const xendoUserSignUp = (req, res, next) => {
 
 
     const updateSwipesUserQ = r.table('users').get(userId).update({
-      xendoCredentials: JSON.parse(xendoResult)
+      xendoSwipesCredentials: JSON.parse(xendoResult)
     });
 
     return db.rethinkQuery(updateSwipesUserQ);
@@ -67,7 +86,7 @@ const xendoUserSignUp = (req, res, next) => {
 const xendoAddServiceToUser = (req, res, next) => {
   const userId = req.userId;
   const {
-    xendoCredentials,
+    xendoSwipesCredentials,
     serviceToAppend
   } = res.locals;
   const xendoEmail = userId + '@swipesapp.com';
@@ -83,7 +102,7 @@ const xendoAddServiceToUser = (req, res, next) => {
 
   rp.get(url, {
     auth: {
-      bearer: xendoCredentials.access_token
+      bearer: xendoSwipesCredentials.access_token
     }
   })
   .then((something) => {
@@ -95,8 +114,37 @@ const xendoAddServiceToUser = (req, res, next) => {
   })
 }
 
+const xendoSearch = (req, res, next) => {
+  const {
+    xendoUserCredentials,
+    query
+  } = res.locals;
+  const qs = querystring.stringify({
+    q: query
+  });
+  const url = xendoConfig.searchEndpoint + '?' + qs;
+
+  rp.get(url, {
+    auth: {
+      bearer: xendoUserCredentials.access_token
+    }
+  })
+  .then((result) => {
+    res.locals.result;
+
+    return next();
+  })
+  .catch((error) => {
+    return next(error);
+  })
+
+  return next();
+}
+
 export {
-  xendoCredentials,
+  xendoSwipesCredentials,
+  xendoUserCredentials,
   xendoUserSignUp,
-  xendoAddServiceToUser
+  xendoAddServiceToUser,
+  xendoSearch
 }
