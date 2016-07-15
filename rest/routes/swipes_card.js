@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
   const shareId = pathParts[2];
-  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'});
+  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0);
 
   let shortUrl = null;
   let userServiceData = null;
@@ -22,30 +22,25 @@ router.get('/*', (req, res, next) => {
 
   db.rethinkQuery(getSwipesUrlQ)
     .then((data) => {
-      shortUrl = data[0];
-      // T_TODO handle if there is no service like that
+      // T_TODO handle if there is no url like that
+      shortUrl = data;
 
       const userId = shortUrl.userId;
-      const serviceId = shortUrl.service.id;
-      const serviceName = shortUrl.service.service_name;
-      const workflowId = shortUrl.service.workflow_id;
+      const serviceId = shortUrl.service.account_id;
+      const serviceName = shortUrl.service.name;
       const getServiceQ =
         r.table('users')
           .get(userId)('services')
           .filter((service) => {
             return service('id').eq(serviceId).and(service('service_name').eq(serviceName))
           })
-      const getWorkflowQ =
-        r.table('workflows').get(workflowId);
-      const promisesQ = [db.rethinkQuery(getServiceQ), db.rethinkQuery(getWorkflowQ)];
 
-      return Promise.all(promisesQ);
+      return db.rethinkQuery(getServiceQ);
     })
     .then((data) => {
       // T_TODO handle if there is no authed service in the user record
       // or there is no a user anymore
-      userServiceData = data[0][0]; // user service object
-      workflow = data[1];
+      userServiceData = data[0]; // user service object
       const serviceQ = r.table('services').get(userServiceData.service_id);
 
       return db.rethinkQuery(serviceQ);
@@ -66,10 +61,9 @@ router.get('/*', (req, res, next) => {
       // T_TODO error if there is no file
       const options = {
     		authData: userServiceData.authData,
-    		method: shortUrl.service.method, // T_TODO remove this one from here
-    		params: shortUrl.service.data,
+    		params: {id: shortUrl.service.item_id},
     		user: {userId: shortUrl.userId},
-    		service: {serviceId: shortUrl.service.id},
+    		service: {serviceId: shortUrl.service.account_id},
         type: shortUrl.service.type
     	};
 
@@ -79,7 +73,6 @@ router.get('/*', (req, res, next) => {
     		}
 
         res.send(swipesCardSsr.renderIndex({
-          workflow: workflow,
           serviceData: result.serviceData,
           serviceActions: result.serviceActions
         }));
