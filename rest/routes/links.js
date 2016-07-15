@@ -14,6 +14,21 @@ const SwipesError = require('../swipes-error');
 const generateId = util.generateSlackLikeId;
 const router = express.Router();
 
+// T_TODO refactor tommorow!!!
+// This is a quick thing just to not block Kasper's work
+const validateData = (req, res, next) => {
+  const service = req.body.service;
+
+  service.name = service.name.toString();
+  service.account_id = service.account_id.toString();
+  service.type = service.type.toString();
+  service.item_id = service.item_id.toString();
+
+  res.locals.service = service;
+
+  return next();
+}
+
 /**
   example
   {JSON} service
@@ -24,10 +39,10 @@ const router = express.Router();
     item_id: "ID of tasks"
   }
 **/
-router.post('/link.add', (req, res, next) => {
+router.post('/link.add', validateData, (req, res, next) => {
   const userId = req.userId;
   //T_TODO validating the service object
-  const service = req.body.service;
+  const service = res.locals.service;
   const checksum = hash({service: service, userId: userId});
   const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
 

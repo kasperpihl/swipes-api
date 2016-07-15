@@ -32,7 +32,14 @@ router.get('/*', (req, res, next) => {
         r.table('users')
           .get(userId)('services')
           .filter((service) => {
-            return service('id').eq(serviceId).and(service('service_name').eq(serviceName))
+            return service('id')
+                    .coerceTo('string')
+                    .eq(serviceId)
+                    .and(
+                      service('service_name')
+                      .coerceTo('string')
+                      .eq(serviceName)
+                    )
           })
 
       return db.rethinkQuery(getServiceQ);
@@ -72,10 +79,13 @@ router.get('/*', (req, res, next) => {
     			return res.status(200).json({ok: false, err: err});
     		}
 
-        res.send(swipesCardSsr.renderIndex({
-          serviceData: result.serviceData,
-          serviceActions: result.serviceActions
-        }));
+        // Kasper you can take from here ;)
+        console.log(result);
+        res.send({ok: true});
+        // res.send(swipesCardSsr.renderIndex({
+        //   serviceData: result.serviceData,
+        //   serviceActions: result.serviceActions
+        // }));
     	});
     })
     .catch((e) => {
