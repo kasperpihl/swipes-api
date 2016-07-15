@@ -64,7 +64,39 @@ const xendoUserSignUp = (req, res, next) => {
   })
 }
 
+const xendoAddServiceToUser = (req, res, next) => {
+  const userId = req.userId;
+  const {
+    xendoCredentials,
+    serviceToAppend
+  } = res.locals;
+  const xendoEmail = userId + '@swipesapp.com';
+  const qs = querystring.stringify({
+    email: xendoEmail,
+    service_name: serviceToAppend.service_name,
+    access_token: serviceToAppend.authData.access_token,
+    refresh_token: serviceToAppend.authData.refresh_token,
+    // client_id: xendoConfig.clientId,
+    // client_secret: xendoConfig.clientSecret
+  });
+  const url = xendoConfig.addServiceToUserEndpoint + '?' + qs;
+
+  rp.get(url, {
+    auth: {
+      bearer: xendoCredentials.access_token
+    }
+  })
+  .then((something) => {
+    console.log(something); // I just want to see what will this return. Someday maybe :/
+    return next();
+  })
+  .catch((error) => {
+    return next(error);
+  })
+}
+
 export {
   xendoCredentials,
-  xendoUserSignUp
+  xendoUserSignUp,
+  xendoAddServiceToUser
 }

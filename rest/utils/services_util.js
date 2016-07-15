@@ -132,13 +132,14 @@ serviceUtil.getAuthData = (req, res, next) => {
 				// If no id is provided (or no handler was set), use the service id. Multiple accounts won't work then.
 				authData.uniq_id = service.id;
 			}
-			console.log('authData', authData);
+
 			let serviceToAppend = {
 				id: authData.uniq_id,
 				service_id: service.id,
 				service_name: service.manifest_id,
 				authData: authData
 			};
+
 			if(authData.show_name){
 				serviceToAppend.show_name = authData.show_name;
 				delete serviceToAppend.authData.show_name;
@@ -157,9 +158,9 @@ serviceUtil.updateAuthData = (req, res, next) => {
 	// T_TODO: if(service_id  === authData.service_id && id === authData.id)
 	// Remove it before inserting the new one (or replace etc.)
 	// This will both allow multi accounts and prevents duplicate accounts
-	let userId = req.userId;
-	let serviceToAppend = res.locals.serviceToAppend;
-	let query = r.table('users').get(userId).update((user) => {
+	const userId = req.userId;
+	const serviceToAppend = res.locals.serviceToAppend;
+	const query = r.table('users').get(userId).update((user) => {
 		return {
 			services: user('services').default([]).append(serviceToAppend)
 		}
@@ -167,7 +168,7 @@ serviceUtil.updateAuthData = (req, res, next) => {
 
 	db.rethinkQuery(query)
 		.then(() => {
-			return res.status(200).json({ok: true, res: serviceToAppend});
+			return next();
 		})
 		.catch((err) => {
 			return next(err);

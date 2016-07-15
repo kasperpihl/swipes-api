@@ -10,6 +10,11 @@ let generateId = util.generateSlackLikeId;
 let serviceDir = __dirname + '/../../services/';
 let serviceUtil = require('../utils/services_util.js');
 let SwipesError = require( '../swipes-error' );
+import {
+	xendoCredentials,
+	xendoAddServiceToUser
+} from '../middlewares/xendo.js';
+
 
 let isAdmin = util.isAdmin;
 
@@ -77,7 +82,18 @@ router.post('/services.stream', serviceUtil.validateData, serviceUtil.getService
 	authsuccess should be called after
 */
 
-router.post('/services.authsuccess', serviceUtil.validateData, serviceUtil.getService, serviceUtil.requireService, serviceUtil.getAuthData, serviceUtil.updateAuthData);
+router.post('/services.authsuccess',
+	serviceUtil.validateData,
+	serviceUtil.getService,
+	serviceUtil.requireService,
+	serviceUtil.getAuthData,
+	serviceUtil.updateAuthData,
+	xendoCredentials,
+	xendoAddServiceToUser,
+	(req, res, next) => {
+		return res.status(200).json({ok: true});
+	}
+);
 
 /*
 	This is for sysadmin only!
