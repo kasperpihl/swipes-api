@@ -174,16 +174,4 @@ serviceUtil.updateAuthData = (req, res, next) => {
 		});
 }
 
-serviceUtil.saveAuthDataToUser = (authData, userId) => {
-	// T_TODO: if(service_id  === authData.service_id && id === authData.id)
-	// Remove it before inserting the new one (or replace etc.)
-	// This will both allow multi accounts and prevents duplicate accounts
-	let query = r.table('users').get(userId).update((user) => {
-		return {
-			services: user('services').default([]).append(authData)
-		}
-	})
-	return db.rethinkQuery(query);
-};
-
 module.exports = serviceUtil;
