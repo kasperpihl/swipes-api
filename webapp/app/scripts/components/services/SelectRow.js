@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-var SelectField = require('material-ui/lib/SelectField');
-var MenuItem = require('material-ui/lib/menus/menu-item');
+const SelectField = require('material-ui/lib/SelectField');
+const MenuItem = require('material-ui/lib/menus/menu-item');
 console.log('mater', MenuItem);
+
+const getAuthorizeURL = function(serviceName){
+	return swipesApi.getAPIURL() + 'services.authorize?service=' + serviceName;
+};
 
 class SelectRow extends Component {
   constructor(props) {
@@ -9,10 +13,10 @@ class SelectRow extends Component {
     this.state = { value: null }
     _.bindAll(this, 'clickedAuthorize', 'handleChange')
   }
-  clickedAuthorize(){
-    var serviceName = this.props.data.service_name;
-    var url = getAuthorizeURL(serviceName);
-    var {ipcRenderer} = nodeRequire('electron');
+  clickedAuthorize() {
+    const serviceName = this.props.data.service_name;
+    const url = getAuthorizeURL(serviceName);
+    const {ipcRenderer} = nodeRequire('electron');
 
     ipcRenderer.send('oauth-init', {
       serviceName: serviceName,

@@ -1,16 +1,23 @@
 import { request } from './api'
 
-export function disconnectService(id) {
+const disconnectService = (id) => {
   return request('users.serviceDisconnect', {id});
 }
 
-export default function handleOAuthSuccess(serviceName, query){
-  if(typeof query === "string"){
+const handleOAuthSuccess = (serviceName, query) => {
+  if (typeof query === 'string') {
     query = JSON.parse(query);
   }
+
   const options = {
     service: serviceName,
     data: query
   };
+
   return request('services.authsuccess', options);
+}
+
+export {
+  disconnectService,
+  handleOAuthSuccess
 }
