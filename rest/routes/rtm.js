@@ -18,7 +18,7 @@ router.post('/rtm.start', (req, res, next) => {
   //let meQ = r.table('users').get(userId).without(['password', 'workflows', {'services': "authData"}]);
   let meQ = r.table('users').get(userId).without(['password']);
 
-  let users = r.table('users').without(["password", "services", "workflows"]);
+  let users = r.table('users').without(["password", "services", "workflows", "xendoCredentials"]);
 
   // K_TODO: also only add
   let servicesQ = r.table('services');
