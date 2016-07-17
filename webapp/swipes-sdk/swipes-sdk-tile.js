@@ -56,8 +56,8 @@ class SwipesAppSDK {
           }
         };
 
-        if(this.info.selectedAccountId){
-          options.account_id = this.info.selectedAccountId;
+        if(this.info.workflow && this.info.workflow.selectedAccountId){
+          options.account_id = this.info.workflow.selectedAccountId;
         }
 
         var intCallback = function(res, error){

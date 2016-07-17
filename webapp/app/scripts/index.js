@@ -9,12 +9,14 @@ import React from 'react'
 import { render } from 'react-dom'
 let Page, data;
 
-if(getURLParameter('share')){
-  Page = require('./containers/SharePage')
-  data = getURLParameter('share')
-}
-else if(!window.process || !window.process.versions.electron){
-  Page = require('./components/downloadPage');
+if(!window.process || !window.process.versions.electron){
+  if(window.__share_data){
+    Page = require('./containers/SharePage')
+    data = window.__share_data;
+  }
+  else {
+    Page = require('./components/downloadPage');
+  }
 }
 else{
   require('expose?$!expose?jQuery!jquery');

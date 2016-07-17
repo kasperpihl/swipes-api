@@ -6,19 +6,16 @@ const r = require('rethinkdb');
 const Promise = require('bluebird');
 const db = require('../db.js');
 const SwipesError = require('../swipes-error');
-const swipesCardSsr = require('../utils/swipes_card_ssr');
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
-router.get('/*', (req, res, next) => {
-  const pathParts = req.originalUrl.split('/');
-  const shareId = pathParts[2];
+router.get('/share.getData', (req, res, next) => {
+  const shareId = req.body.shareId;
   const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0);
 
   let shortUrl = null;
   let userServiceData = null;
   let serviceData = null;
-  let workflow = null;
 
   db.rethinkQuery(getSwipesUrlQ)
     .then((data) => {
@@ -79,13 +76,8 @@ router.get('/*', (req, res, next) => {
     			return res.status(200).json({ok: false, err: err});
     		}
 
-        // Kasper you can take from here ;)
-        console.log(result);
-        res.send({ok: true});
-        // res.send(swipesCardSsr.renderIndex({
-        //   serviceData: result.serviceData,
-        //   serviceActions: result.serviceActions
-        // }));
+        res.send({ok: true, data: result});
+
     	});
     })
     .catch((e) => {

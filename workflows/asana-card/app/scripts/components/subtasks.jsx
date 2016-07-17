@@ -98,17 +98,17 @@ var Subtask = React.createClass({
   undoCompleteTask: function (task) {
     ProjectDataActions.undoCompleteTask(task);
   },
-  shareTaskUrl: function (taskUrl) {
-    swipes.sendEvent('share', {url: taskUrl});
+  shareTask: function () {
+    swipes.sendEvent('share', this.shareData());
   },
-  shareTaskUrl: function (taskUrl) {
-    var shareData = this.shareData(taskUrl);
-
-    swipes.sendEvent('share', shareData);
-  },
-  shareData: function (taskUrl) {
+  shareData: function () {
     return {
-      url: taskUrl
+      service: {
+        name: 'asana',
+        type: 'task',
+        item_id: this.props.subtask.id,
+        account_id: swipes.info.workflow.selectedAccountId
+      }
     }
   },
   removeTask: function (task) {
@@ -169,7 +169,7 @@ var Subtask = React.createClass({
       icon: 'share',
       bgColor: 'rgb(255,197,37)',
       callback: function () {
-        that.shareTaskUrl(taskUrl);
+        that.shareTask();
       }
     });
 
@@ -276,10 +276,7 @@ var Subtask = React.createClass({
     }
   },
   onDotDragStart: function(){
-    var subtask = this.props.subtask;
-    var settings = MainStore.get('settings');
-    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + subtask.id;
-    swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
+    swipes.sendEvent('dot.startDrag', this.shareData());
   },
   render: function () {
     var subtask = this.props.subtask;

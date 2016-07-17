@@ -10,6 +10,7 @@ var CreateTaskInputActions = require('./actions/CreateTaskInputActions');
 
 ReactDOM.render(<Home />, document.getElementById('content'));
 swipes.ready(function () {
+	console.log(swipes.info);
 	MainStore.fetch();
 });
 

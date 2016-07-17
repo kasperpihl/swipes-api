@@ -31,8 +31,8 @@ swipes.addListener('share.provideDropzones', function(e) {
 	}
 });
 
-swipes.addListener('share.receivedData', function(msg) {
-	var input = msg.data.text || msg.data.url || ''; 
+swipes.addListener('share.receivedData', function(data) {
+	var input = data.text || data.url || ''; 
 
 	if (input) {
 		chatActions.sendMessage(input);

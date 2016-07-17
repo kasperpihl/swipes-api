@@ -42,10 +42,7 @@ class Tile extends Component {
   onLoad(sendFunction){
     const tile = this.props.tile;
 
-    // K_TODO || T_TODO : WARNING, This is a super hack hahaha
-    if(tile && this.slackToken){
-      tile.slackToken = this.slackToken;
-    }
+    
 
     const initObj = {
       // Info object will be available in SDK from swipes.info
@@ -55,8 +52,10 @@ class Tile extends Component {
       },
       token: this.props.token
     };
-    if(tile.selectedAccountId){
-      initObj.info.selectedAccountId = tile.selectedAccountId;
+
+    // K_TODO || T_TODO : WARNING, This is a super hack hahaha
+    if(this.slackToken){
+      initObj.info.slackToken = this.slackToken;
     }
 
     // Initialize the communicator
@@ -64,9 +63,6 @@ class Tile extends Component {
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
 
-    if (electronConfig.env === 'dev') {
-      //webview.openDevTools();
-    }
   }
   addListenersToCommunicator(){
 
@@ -102,6 +98,7 @@ class Tile extends Component {
     });
 
     this.com.addListeners(['dot.startDrag', 'share'], (data) => {
+      console.log('start dragging data', data);
       this.props.startDraggingDot(this.props.tile.id, data);
     })
   }

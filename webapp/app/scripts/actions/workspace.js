@@ -12,6 +12,10 @@ export function selectAccount(tile, accountId){
   return request('users.selectWorkflowAccountId', {'workflow_id': tile.id, 'account_id': accountId});
 }
 
+export function generateShareUrl(data){
+  return request('link.add', data);
+}
+
 export function updateColumns(columns){
   return { type: types.UPDATE_COLUMNS, columns: columns }
 }

@@ -21,10 +21,20 @@ class Workspace extends Component {
       const { draggingDot } = this.props;
       const { id } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.draggingId){
-        this.sendToTile(id, 'share.receivedData', { data: draggingDot.data });
+        this.props.generateShareUrl(draggingDot.data).then( (res) => {
+          console.log('res from share url', res);
+          if(res.ok){
+            const shareUrl = window.location.origin + '/share/' + res.short_url;
+            this.sendToTile(id, 'share.receivedData', { url: shareUrl });
+          }
+          this.props.stopDraggingDot()
+        })
+      }
+      else{
+        this.props.stopDraggingDot()
       }
 
-      this.props.stopDraggingDot()
+      
 
     }
   }
@@ -159,6 +169,7 @@ function mapStateToProps(state) {
 const ConnectedWorkspace = connect(mapStateToProps, {
   removeTile: workspace.removeTile,
   updateColumns: workspace.updateColumns,
+  generateShareUrl: workspace.generateShareUrl,
   toggleFullscreen: main.toggleFullscreen,
   dragDot: main.dragDot,
   stopDraggingDot: main.stopDraggingDot

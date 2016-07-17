@@ -84,14 +84,17 @@ var ExpandedTask = React.createClass({
   goBack: function () {
     MainActions.closeExpandedTask();
   },
-  shareTaskUrl: function (taskUrl) {
-    var shareData = this.shareData(taskUrl);
-
-    swipes.sendEvent('share', shareData);
+  shareTask: function (taskUrl) {
+    swipes.sendEvent('share', this.shareData());
   },
-  shareData: function (taskUrl) {
+  shareData: function () {
     return {
-      url: taskUrl
+      service: {
+        name: 'asana',
+        type: 'task',
+        item_id: this.props.taskId,
+        account_id: swipes.info.workflow.selectedAccountId
+      }
     }
   },
   removeTask: function (task) {
@@ -159,7 +162,7 @@ var ExpandedTask = React.createClass({
       icon: 'share',
       bgColor: 'rgb(255,197,37)',
       callback: function () {
-        that.shareTaskUrl(taskUrl);
+        that.shareTask();
       }
     });
 
@@ -322,10 +325,7 @@ var ExpandedTask = React.createClass({
     }
   },
   onDotDragStart: function(){
-    var settings = MainStore.get('settings');
-    var taskId = this.props.taskId;
-    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + taskId;
-    swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
+    swipes.sendEvent('dot.startDrag', this.shareData());
   },
   renderHeader: function(task) {
     var settings = MainStore.get('settings');
