@@ -7,6 +7,43 @@ import SwipesError from '../swipes-error.js';
 
 const xendoConfig = config.get('xendo');
 
+const xendoRefreshSwipesToken = (req, res, next) => {
+  // TODO check the expire time and don't refresh the token evetytime
+  const {
+    xendoSwipesCredentials
+  } = res.locals;
+  const options = {
+    method: 'POST',
+    uri: xendoConfig.accessTokenEndpoint,
+    form: {
+      grant_type: 'refresh_token',
+      client_id: xendoConfig.clientId,
+      client_secret: xendoConfig.clientSecret,
+      refresh_token: xendoSwipesCredentials.refresh_token
+    }
+  }
+
+  rp.post(options)
+    .then((result) => {
+      const newConfig = JSON.parse(result);
+      const query =
+        r.table('config')
+          .getAll('xendo', {index: 'key'})
+          .nth(0)
+          .update(newConfig);
+
+      res.locals.xendoSwipesCredentials = newConfig;
+
+      return db.rethinkQuery(query);
+    })
+    .then(() => {
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
+    })
+}
+
 const xendoSwipesCredentials = (req, res, next) => {
   const query = r.table('config').getAll('xendo', {index: 'key'}).nth(0);
 
@@ -68,9 +105,8 @@ const xendoUserSignUp = (req, res, next) => {
       return next(xendoResult.error);
     }
 
-
     const updateSwipesUserQ = r.table('users').get(userId).update({
-      xendoSwipesCredentials: JSON.parse(xendoResult)
+      xendoCredentials: JSON.parse(xendoResult)
     });
 
     return db.rethinkQuery(updateSwipesUserQ);
@@ -94,9 +130,7 @@ const xendoAddServiceToUser = (req, res, next) => {
     email: xendoEmail,
     service_name: serviceToAppend.service_name,
     access_token: serviceToAppend.authData.access_token,
-    refresh_token: serviceToAppend.authData.refresh_token,
-    // client_id: xendoConfig.clientId,
-    // client_secret: xendoConfig.clientSecret
+    refresh_token: serviceToAppend.authData.refresh_token
   });
   const url = xendoConfig.addServiceToUserEndpoint + '?' + qs;
 
@@ -105,8 +139,14 @@ const xendoAddServiceToUser = (req, res, next) => {
       bearer: xendoSwipesCredentials.access_token
     }
   })
-  .then((something) => {
-    console.log(something); // I just want to see what will this return. Someday maybe :/
+  .then((result) => {
+    result = JSON.parse(result);
+
+    if (result.error) {
+      return next(result.error);
+    }
+
+    console.log(result); // I just want to see what will this return. Someday maybe :/
     return next();
   })
   .catch((error) => {
@@ -143,6 +183,7 @@ const xendoSearch = (req, res, next) => {
 
 export {
   xendoSwipesCredentials,
+  xendoRefreshSwipesToken,
   xendoUserCredentials,
   xendoUserSignUp,
   xendoAddServiceToUser,

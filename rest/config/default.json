@@ -9,6 +9,7 @@
   "xendo": {
     "clientId": "99965e447026eb281dfc",
     "clientSecret": "2ffed44df0b40c81845780baa74ba57cc0a6f06c",
+    "accessTokenEndpoint": "https://xen.do/oauth2/access_token",
     "addUserEndpoint": "https://xen.do/api/v1/provisioning/user/",
     "addServiceToUserEndpoint": "https://xen.do/api/v1/provisioning/service/",
     "searchEndpoint": "https://xen.do/api/v1/search/"
