@@ -129,7 +129,7 @@
 			text-overflow: ellipsis;
 			overflow: hidden;
 			color: $deepBlue-60;
-			line-height: 25px;
+			line-height: $itemHeight;
 			font-size: 14px;
 			font-weight: 400;
 			cursor: default;
