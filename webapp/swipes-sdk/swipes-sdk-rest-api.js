@@ -60,36 +60,38 @@ class SwipesAPIConnector {
     data.token = this._token;
 
     var serData = JSON.stringify(data);
-    var settings = {
-      url: url,
-      type: 'POST',
-      success: function(data) {
-        console.log('/' + command + ' success', data);
-        if (data && data.ok) {
-          if(typeof callback === 'function')
-            callback(data);
-          if(deferred) deferred.resolve(data);
-        } else {
-          if(typeof callback === 'function')
-            callback(false, data);
-          if(deferred) deferred.reject(data);
-        }
-      },
-      error: function(error) {
-        console.log('/' + command + ' error', error);
-        if(error.responseJSON)
-          error = error.responseJSON;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+    xhr.onload = function(e) {
+      var data = e.currentTarget.response;
+
+      console.log('/' + command + ' success', data);
+      if (data && data.ok) {
         if(typeof callback === 'function')
-          callback(false, error);
-        if(deferred) deferred.reject(error);
-      },
-      crossDomain: true,
-      contentType: 'application/json; charset=utf-8',
-      context: this,
-      data: serData,
-      processData: true
+          callback(data);
+        if(deferred) deferred.resolve(data);
+      } else {
+        if(typeof callback === 'function')
+          callback(false, data);
+        if(deferred) deferred.reject(data);
+      }
     };
-    $.ajax(settings);
+
+    xhr.onerror = function(e) {
+      console.log(e);
+      var error = e; //T_TODO make sure that the `e` is actually the error
+      console.log('/' + command + ' error', error);
+      if(error.responseJSON)
+        error = error.responseJSON;
+      if(typeof callback === 'function')
+        callback(false, error);
+      if(deferred) deferred.reject(error);
+    };
+
+    xhr.send(serData);
     return deferred ? deferred.promise : false;
   }
 
