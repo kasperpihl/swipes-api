@@ -63,6 +63,7 @@ class SwipesAPIConnector {
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
+    xhr.responseType = 'json'
     xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
     xhr.onload = function(e) {
