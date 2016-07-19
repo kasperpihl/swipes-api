@@ -11,6 +11,9 @@ let Page, data;
 
 if(!window.process || !window.process.versions.electron){
   if(window.__share_data){
+    require('expose?$!expose?jQuery!jquery');
+    //var SwipesAPIConnector = require('../../swipes-sdk/swipes-api-connector');
+    window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage')
     data = window.__share_data;
   }

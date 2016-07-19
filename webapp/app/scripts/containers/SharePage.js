@@ -1,23 +1,36 @@
 import React, { Component, PropTypes } from 'react'
-export default class SharePage extends Component {
+import SwipesCard from '../components/SwipesCard'
+
+class SharePage extends Component {
   constructor(props) {
     super(props)
+    this.state = {data: null}
   }
-  componentDidMount() {
-    /*
-      Get data from share url
-    */
+  updateAndReloadData(){
+    swipesApi.request({command: 'share.getData', force: true}, {shareId: this.props.data.short_url}, (res, err) => {
+      this.setState({cards: res.data});
+    })
+  }
+  componentDidMount(){
+    this.updateAndReloadData();
+  }
+  renderCards(){
+    if(this.state.cards){
+      const data = this.state.cards.serviceData;
+      const actions = this.state.cards.serviceActions;
+      const title = data.title || "No title!"
+      return <SwipesCard title={title} actions={actions} />
+    }
+    else return "Loading...."
   }
   render() {
     return (
-      <div>Share Share
+      <div>
+        {this.renderCards()}
       </div>
     )
   }
 }
 
-SharePage.propTypes = {
-  data: PropTypes.string.isRequired
-}
 
 module.exports = SharePage;

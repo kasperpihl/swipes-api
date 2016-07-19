@@ -9,7 +9,7 @@ const SwipesError = require('../swipes-error');
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
-router.get('/share.getData', (req, res, next) => {
+router.post('/share.getData', (req, res, next) => {
   const shareId = req.body.shareId;
   const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0);
 
@@ -81,6 +81,7 @@ router.get('/share.getData', (req, res, next) => {
     	});
     })
     .catch((e) => {
+      console.log('e', e);
       return next(e);
     })
 })

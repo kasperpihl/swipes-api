@@ -174,31 +174,27 @@ var asana = {
 
 		if (type === 'task') {
 			if (!data.completed) {
-				actions.push([
-					{
-						label: 'Complete',
-						icon: 'check',
-						bgColor: 'green',
-						method: 'tasks.update',
-						data: {
-							id: data.id,
-							completed: true
-						}
+				actions.push({
+					label: 'Complete',
+					icon: 'check',
+					bgColor: 'green',
+					method: 'tasks.update',
+					data: {
+						id: data.id,
+						completed: true
 					}
-				])
+				})
 			} else {
-				actions.push([
-					{
-						label: 'Undo',
-						icon: 'check',
-						bgColor: 'gray',
-						method: 'tasks.update',
-						data: {
-							id: data.id,
-							completed: false
-						}
+				actions.push({
+					label: 'Undo',
+					icon: 'check',
+					bgColor: 'gray',
+					method: 'tasks.update',
+					data: {
+						id: data.id,
+						completed: false
 					}
-				])
+				})
 			}
 		}
 

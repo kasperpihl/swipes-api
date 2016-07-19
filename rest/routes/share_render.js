@@ -14,7 +14,7 @@ const indexPath = path.join(__dirname, '../../webapp/dev/index.html');
 router.get('/*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
   const shareId = pathParts[2];
-  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0);
+  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0).without('checksum', 'id', 'userId', 'service');
 
 
   db.rethinkQuery(getSwipesUrlQ)
