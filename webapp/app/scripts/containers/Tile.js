@@ -38,11 +38,11 @@ class Tile extends Component {
   onSelectedAccount(selectedAccount){
     this.props.selectAccount(this.props.tile, selectedAccount.id);
   }
-  
+
   onLoad(sendFunction){
     const tile = this.props.tile;
 
-    
+
 
     const initObj = {
       // Info object will be available in SDK from swipes.info
@@ -117,7 +117,7 @@ class Tile extends Component {
       if(selectedAccount && selectedAccount.service_name === 'slack'){
         this.slackToken = selectedAccount.authData.access_token;
       }
-      
+
       if(!selectedAccount){
         return ( <SelectRow
           onSelectedAccount={this.onSelectedAccount}
@@ -129,7 +129,7 @@ class Tile extends Component {
         />);
       }
 
-      
+
 
     }
     return null;
@@ -137,7 +137,7 @@ class Tile extends Component {
   renderDropzoneOverlay(){
     const { draggingDot, tile } = this.props;
     if(draggingDot && draggingDot.draggingId !== tile.id){
-      
+
       return <DropzoneOverlay hover={(tile.id === draggingDot.hoverTarget)} title={"Share to: " + tile.name}/>
     }
   }

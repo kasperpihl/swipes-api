@@ -161,6 +161,7 @@ var Sidemenu = React.createClass({
 		}.bind(this))
 
 		var overlayAbove, overlayBelow;
+
 		return (
 			<div className={className} onMouseLeave={this.onMouseLeave} onMouseEnter={this.onMouseEnter} style={this.props.style}>
 				<div className="relative-wrapper">
@@ -224,7 +225,7 @@ Sidemenu.Item = React.createClass({
 		} else if (this.props.data.user) {
 			presence = 'presence'
 		} else if (!this.props.data.user) {
-			presence = ''
+			presence = 'channel'
 		}
 
 

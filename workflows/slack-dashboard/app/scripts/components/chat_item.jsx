@@ -89,6 +89,7 @@ var ChatMessage = React.createClass({
 			return;
 		}
 		var attachments = this.props.data.attachments.map(function(att){
+			console.log(att);
 			return <ChatMessage.Attachment key={att.id} data={att} />
 		});
 		return attachments;
@@ -98,6 +99,7 @@ var ChatMessage = React.createClass({
 		if(!file){
 			return;
 		}
+		// console.log(file);
 		return <ChatMessage.File key={file.id} data={file} />
 	},
 	renderMessage:function(message){

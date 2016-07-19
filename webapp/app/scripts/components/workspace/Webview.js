@@ -10,6 +10,7 @@ class Webview extends Component {
     const sendFunction = (data) => { webview.send('message', data) }
     webview.addEventListener('dom-ready', () => {
       this.props.onLoad(sendFunction);
+      // webview.openDevTools();
     })
     webview.addEventListener('ipc-message', (event) => {
       var arg = event.args[0];
@@ -18,9 +19,9 @@ class Webview extends Component {
     });
   }
   render() {
-    return <webview 
-          preload={this.props.preloadUrl} 
-          src={this.props.url} 
+    return <webview
+          preload={this.props.preloadUrl}
+          src={this.props.url}
           ref='webview'
           className="workflow-frame-class"></webview>;
   }

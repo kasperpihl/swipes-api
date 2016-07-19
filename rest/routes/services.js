@@ -9,6 +9,7 @@ import serviceUtil from '../utils/services_util.js';
 import SwipesError from '../swipes-error';
 import {
 	xendoSwipesCredentials,
+	xendoRefreshSwipesToken,
 	xendoAddServiceToUser
 } from '../middlewares/xendo.js';
 
@@ -104,6 +105,7 @@ router.post('/services.authsuccess',
 	serviceUtil.getAuthData,
 	serviceUtil.updateAuthData,
 	xendoSwipesCredentials,
+	xendoRefreshSwipesToken,
 	xendoAddServiceToUser,
 	(req, res, next) => {
 		return res.status(200).json({ok: true});
