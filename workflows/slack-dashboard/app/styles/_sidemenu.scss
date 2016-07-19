@@ -6,7 +6,7 @@
 	overflow: hidden;
 	top:0;
 	left:0;
-	z-index: 9999;
+	z-index: 99999;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
 	transition-delay: $returnDelay;
@@ -25,10 +25,17 @@
 			opacity: 0;
 			font-size: 12px;
 			text-transform: uppercase;
-			padding: 10px 20px;
+			padding: 10px 30px;
 			letter-spacing: .5px;
 			transition: .1s;
 			transition-delay: $returnDelay;
+			color: $deepBlue-80;
+			font-weight: 500;
+			margin-bottom: 5px;
+
+			&:not(:first-child) {
+				margin-top: 25px;
+			}
 		}
 	}
 	.content-container{
@@ -67,6 +74,12 @@
 				opacity: 1;
 			}
 		}
+
+		.notification {
+			background-color: $salmon;
+			border-color: $salmon;
+			color: #fbfbfb;
+		}
 	}
 	.menu-item{
 		height:$itemHeight;
@@ -90,15 +103,16 @@
 		.notification{
 			position: absolute;
 			height: $notificationHeight;
-			width: $notificationHeight;
+			// width: $notificationHeight;
+			padding: 0 8px;
 			border-radius: $notificationHeight/2;
 			text-align: center;
 			top: ($itemHeight - $notificationHeight) / 2;
-			right: 14px;
+			right: 8px;
 			font-weight: 400;
 			border: 1px solid $hoverColor;
 			color: $hoverColor;
-			line-height: 16px;
+			line-height: 15px;
 			font-size: 9px;
 		}
 		.notification.even {
@@ -108,18 +122,22 @@
 			animation: notification-glow 1.5s 1;
 		}
 		.name{
-			width: $expandedWidth - $notificationHeight - 10px;
+			width: $expandedWidth - $notificationHeight - 20px;
 			opacity: 0;
-			padding-left: 30px;
+			padding-left: 50px;
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
-			color: #333D59;
+			color: $deepBlue-60;
 			line-height: 25px;
 			font-size: 14px;
 			font-weight: 400;
 			cursor: default;
 			transition-delay: $returnDelay;
+
+			&.channel {
+				padding-left: 30px;
+			}
 			/*
 				K_TODO: Rewrite this to be a generic icon that can be added from local_sidemenu somehow.
 			 */
@@ -129,7 +147,7 @@
 					content: "";
 					position: absolute;
 					/* right: 2px; */
-					left: 12px;
+					left: 30px;
 					width: 6px;
 					height: 6px;
 					background-color: $studioGray-60;
@@ -143,7 +161,7 @@
 						content: "";
 						position: absolute;
 						/* right: 2px; */
-						left: 12px;
+						left: 30px;
 						width: 6px;
 						height: 6px;
 						background-color: #3ed37d;
@@ -161,7 +179,7 @@
 		&.unread{
 			.name{
 				font-weight: 500;
-				color: $deepBlue-100;
+				color: $deepBlue-80;
 			}
 			.indicator{
 				background: $hoverColor;
@@ -175,29 +193,29 @@
 }
 @keyframes indicator-glow {
 	15%, 90%  {
-		background: $unreadColor;
+		background: $salmon;
 	}
 }
 
 @keyframes indicator-glow-even {
 	15%, 90%  {
-		background: $unreadColor;
+		background: $salmon;
 	}
 }
 
 
 @keyframes notification-glow {
 	15%, 90%  {
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
+		background: $salmon;
+		border: 1px solid $salmon;
 		color: white;
 	}
 }
 
 @keyframes notification-glow-even {
 	15%, 90%  {
-		background: $unreadColor;
-		border: 1px solid $unreadColor;
+		background: $salmon;
+		border: 1px solid $salmon;
 		color: white;
 	}
 }

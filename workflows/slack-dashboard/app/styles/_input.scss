@@ -1,7 +1,7 @@
 .todo-input {
   @include size(100%, $inputHeight);
   max-width: 700px;
-  background-color: #fafafa;
+  background-color: #fbfbfb;
   border-top: 2px solid $deepBlue-5;
   position: fixed;
   bottom: 0;
@@ -51,7 +51,7 @@
     padding: 22px 5px;
     padding-left: 7px;
     font-weight: 500;
-    color: $deepBlue-80;
+    color: $deepBlue-60;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
     line-height: 15px;
     transition: .1s ease-in-out;
