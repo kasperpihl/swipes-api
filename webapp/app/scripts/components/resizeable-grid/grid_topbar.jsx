@@ -1,9 +1,46 @@
 var React = require('react');
+
+var initClientX = null;
+var initClientY = null;
+
 var Topbar = React.createClass({
   onClick(e) {
     if (this.props.data.collapsed) {
       this.props.delegate.onExpand(this.props.data.id);
     }
+  },
+  onMouseMove(e){
+    e.stopPropagation();
+
+    if (!initClientX && !initClientY) {
+      initClientX = e.clientX;
+      initClientY = e.clientY;
+    }
+
+    var xDiff = Math.abs(initClientX - e.clientX);
+    var yDiff = Math.abs(initClientY - e.clientY);
+
+    if (xDiff > 5 || yDiff > 5) {
+      this.cleanUp();
+      const {columnIndex, rowIndex } = this.props;
+      this.props.delegate.rowDidStartDragging(columnIndex, rowIndex);
+    }
+  },
+  cleanUp(){
+    initClientX = null;
+    initClientY = null;
+    document.removeEventListener('mousemove', this.onMouseMove, false);
+    document.removeEventListener('mouseup', this.onMouseUp, false);
+  },
+  onMouseUp(e) {
+    e.stopPropagation();
+    this.cleanUp();
+  },
+  onMouseDown(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    document.addEventListener('mousemove', this.onMouseMove, false);
+    document.addEventListener('mouseup', this.onMouseUp);
   },
   render() {
     const {
@@ -18,7 +55,7 @@ var Topbar = React.createClass({
       onclickHandler = this.onClick;
 
       return (
-        <div className={className} onClick={onclickHandler}>
+        <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar_content">
             <div className="sw-grid-topbar_content-title">
               <div className="collapsed__title--letter">C</div>
@@ -31,7 +68,7 @@ var Topbar = React.createClass({
       )
     } else {
       return (
-        <div className={className} onClick={onclickHandler}>
+        <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar_content">
             <div className="sw-grid-topbar_content-menu" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>
               <div className="menu-icon"></div>

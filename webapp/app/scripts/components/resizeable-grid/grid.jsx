@@ -1,6 +1,6 @@
 var React = require('react');
-var DEFAULT_MINWIDTH = 300;
-var DEFAULT_MINHEIGHT = 200;
+var DEFAULT_MINWIDTH = 150;
+var DEFAULT_MINHEIGHT = 150;
 var DEFAULT_COLLAPSED_WIDTH = 40;
 var DEFAULT_COLLAPSED_HEIGHT = 40;
 
@@ -45,15 +45,20 @@ var Grid = React.createClass({
     return {};
   },
   componentDidMount() {
-      this.debug = false;
-      const columns = this.deepCopyColumns(this.props.columns);
-      this.setState({columns: this.validateColumns(columns)});
+    this.debug = false;
+    const columns = this.deepCopyColumns(this.props.columns);
+    this.setState({columns: this.validateColumns(columns)});
 
-      //this.transitionStart('reordering', {test:true});
-      //this.refs.grid.addEventListener('mousemove', this._onMouseMove);
+    //this.transitionStart('reordering', {test:true});
+    //this.refs.grid.addEventListener('mousemove', this._onMouseMove);
   },
-
-  indexForPageXY(pageX, pageY){
+  rowDidStartDragging(colI, rowI){
+    var row = this.rowFromColumn(colI, rowI);
+    this.transitionStart('reordering', {rowId: row.id, row: rowI, col: colI, target: {}});
+    window.addEventListener('mousemove', this._onReorderMouseMove);
+    window.addEventListener('mouseup', this._onReorderMouseUp);
+  },
+  positionForPageXY(pageX, pageY){
     // Math to find out which row is hovered and where in the row...
     var gridPos = offset(this.refs.grid);
     var gridX = pageX - gridPos.left;
@@ -72,16 +77,16 @@ var Grid = React.createClass({
           if(gridY >= dY && gridY < (dY + height)){
             index = {};
             if(extraY < height/2){
-              index.position = 'top';
+              index.direction = 'top';
             }
             else{
-              index.position = 'bottom';
+              index.direction = 'bottom';
             }
             if(extraX < COLUMN_SIDE_HOVER_SIZE){
-              index.position = 'left';
+              index.direction = 'left';
             }
             else if(extraX > (width - COLUMN_SIDE_HOVER_SIZE)){
-              index.position = 'right';
+              index.direction = 'right';
             }
             index.col = cI;
             index.row = rI;
@@ -96,8 +101,87 @@ var Grid = React.createClass({
     })
     return index;
   },
-  _onMouseMove(e){
+  _onReorderMouseMove(e){
+    var trans = this.state.transition;
+    trans.info.target = this.positionForPageXY(e.pageX, e.pageY) || {};
+    this.setState({transition: trans}); 
+  },
+  _onReorderMouseUp(e){
+    window.removeEventListener('mousemove', this._onReorderMouseMove);
+    window.removeEventListener('mouseup', this._onReorderMouseUp);
+
+    var target = this.positionForPageXY(e.pageX, e.pageY);
+    const { rowId } = this.state.transition.info;
+
+    this.moveRowToPosition(rowId, target);
+    this.transitionNext();
     
+  },
+  moveRowToPosition(id, position){
+    var tarIndex = {col: position.col, row: position.row};
+    var srcIndex = this.indexesForRowId(id);
+
+    var newColumns = this.state.columns;
+    var row = this.rowFromId(id);
+    
+    var srcCol = this.state.columns[srcIndex.col];
+    var targetCol = this.state.columns[tarIndex.col];
+
+    var deleteSrcColumn, deleteSrcRow;
+
+    var columnToInsert, rowToInsert;
+
+    if(position.direction === 'left' || position.direction === 'right') {
+      if(position.direction === 'right') {
+        tarIndex.col += 1;
+      }
+
+      if(srcCol.rows.length === 1){
+        deleteSrcColumn = true;
+      }
+      else {
+        deleteSrcRow = true;
+      }
+
+      columnToInsert = { rows: [row] };
+
+    }
+    else if(position.direction === 'top' || position.direction === 'bottom'){
+
+      if(position.direction === 'bottom') {
+        tarIndex.row += 1;
+      }
+      if(srcCol.rows.length === 1 && srcIndex.col !== tarIndex.col){
+        deleteSrcColumn = true;
+      }
+      else{
+        deleteSrcRow = true;
+      }
+
+      rowToInsert = row;
+    }
+
+    if(deleteSrcColumn){ // Remove the column that the row was dragged from
+      newColumns = newColumns.slice(0, srcIndex.col).concat( newColumns.slice(srcIndex.col + 1) );
+      if(tarIndex.col > srcIndex.col){
+        tarIndex.col -= 1; // If we deleted a column before the target, make sure the target col to insert is one less.
+      }
+    }
+    if(deleteSrcRow){
+      newColumns[srcIndex.col].rows = srcCol.rows.slice(0, srcIndex.row).concat( srcCol.rows.slice( srcIndex.row + 1 ) );
+      if(srcIndex.col === tarIndex.col && tarIndex.row > srcIndex.row){
+        tarIndex.row -= 1; // If we will insert in the same col, make target row one less if we just removed a previous one
+      }
+    }
+
+    if(columnToInsert){
+      newColumns = newColumns.slice( 0, tarIndex.col ).concat( [ columnToInsert ] ).concat( newColumns.slice(tarIndex.col) );
+    }
+    if(rowToInsert){
+      newColumns[tarIndex.col].rows = targetCol.rows.slice( 0, tarIndex.row ).concat( [ rowToInsert ] ).concat( targetCol.rows.slice( tarIndex.row ) );
+    }
+
+    this.setState({columns: this.validateColumns(newColumns)});
   },
   deepCopyColumns(columns){
     return columns.map( column => {
@@ -994,7 +1078,7 @@ var Grid = React.createClass({
   },
   rowFromColumn(columnIndex, rowIndex){
     var columns = this.state.columns;
-    var rows = columns[columnIndex];
+    var rows = columns[columnIndex].rows;
     return rows[rowIndex];
   },
   rowFromId(id){
@@ -1115,6 +1199,7 @@ var Grid = React.createClass({
     if(!trans){
       return;
     }
+
     var columns = this.state.columns;
     var column = columns[colIndex];
     var classes = [];
@@ -1127,11 +1212,11 @@ var Grid = React.createClass({
       }
     }
     if(trans.name === 'reordering'){
-      if(colIndex === trans.info.col){
-        if(trans.info.direction === 'left'){
+      if(colIndex === trans.info.target.col){
+        if(trans.info.target.direction === 'left'){
           styles.boxShadow = SHADOW_LEFT;
         }
-        if(trans.info.direction === 'right'){
+        if(trans.info.target.direction === 'right'){
           styles.boxShadow = SHADOW_RIGHT;
         }
       }
@@ -1202,12 +1287,12 @@ var Grid = React.createClass({
 
     }
     if(trans.name === 'reordering'){
-      if(colIndex === trans.info.col){
-        if(rowIndex === trans.info.row){
-          if(trans.info.direction === 'top'){
+      if(colIndex === trans.info.target.col){
+        if(rowIndex === trans.info.target.row){
+          if(trans.info.target.direction === 'top'){
             styles.boxShadow = SHADOW_TOP;
           }
-          if(trans.info.direction === 'bottom'){
+          if(trans.info.target.direction === 'bottom'){
             styles.boxShadow = SHADOW_BOTTOM;
           }
         }

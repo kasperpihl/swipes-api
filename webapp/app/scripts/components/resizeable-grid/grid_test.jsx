@@ -1,5 +1,5 @@
 var React = require('react');
-var Grid = require('./grid');
+import Grid from './grid'
 var data = {
   columns: [
     {
@@ -69,7 +69,7 @@ var Test = React.createClass({
 	gridDidUpdate(ref, grid){
 		console.log('grid', grid);
 	},
-	renderGridRowForId(grid, id){
+	gridRenderRowForId(grid, id){
 		if(id === "child1"){
       return <div style={{background:"red", width: '100%', height: "100%"}} />;
     }
@@ -101,4 +101,5 @@ var Test = React.createClass({
     )
   }
 });
+
 module.exports = Test;

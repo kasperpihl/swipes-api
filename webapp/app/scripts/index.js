@@ -10,7 +10,12 @@ import { render } from 'react-dom'
 let Page, data;
 
 if(!window.process || !window.process.versions.electron){
-  if(window.__share_data){
+  if(true){
+    require('expose?_!underscore');
+    Page = require('./components/resizeable-grid/grid_test');
+    console.log('here I am.')
+  }
+  else if(window.__share_data){
     require('expose?$!expose?jQuery!jquery');
     //var SwipesAPIConnector = require('../../swipes-sdk/swipes-api-connector');
     window.swipesApi = new SwipesAPIConnector(window.location.origin);

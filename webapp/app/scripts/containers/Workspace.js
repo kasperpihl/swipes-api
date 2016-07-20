@@ -19,7 +19,7 @@ class Workspace extends Component {
     if(this.props.draggingDot){
       e.preventDefault()
       const { draggingDot } = this.props;
-      const { id } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {};
+      const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.draggingId){
         this.props.generateShareUrl(draggingDot.data).then( (res) => {
           console.log('res from share url', res);
@@ -41,7 +41,7 @@ class Workspace extends Component {
   onMouseMove(e){
     if(this.props.draggingDot){
       e.preventDefault()
-      let { id: hoverTarget } = this.refs.grid.indexForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
+      let { id: hoverTarget } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
       if(!hoverTarget){
         // Do additional tests if no row was hovered. Like (topbar etc)
       }
