@@ -10,7 +10,7 @@ import { render } from 'react-dom'
 let Page, data;
 
 if(!window.process || !window.process.versions.electron){
-  if(true){
+  if(false){
     require('expose?_!underscore');
     Page = require('./components/resizeable-grid/grid_test');
     console.log('here I am.')
