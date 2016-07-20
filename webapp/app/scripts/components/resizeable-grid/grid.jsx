@@ -121,7 +121,6 @@ var Grid = React.createClass({
     var tarIndex = {col: position.col, row: position.row};
     var srcIndex = this.indexesForRowId(id);
 
-    var newColumns = this.state.columns;
     var row = this.rowFromId(id);
     
     var srcCol = this.state.columns[srcIndex.col];
@@ -131,6 +130,7 @@ var Grid = React.createClass({
 
     var columnToInsert, rowToInsert;
 
+    // Determine what needs to be done 
     if(position.direction === 'left' || position.direction === 'right') {
       if(position.direction === 'right') {
         tarIndex.col += 1;
@@ -138,12 +138,14 @@ var Grid = React.createClass({
 
       if(srcCol.rows.length === 1){
         deleteSrcColumn = true;
+        columnToInsert = Object.assign({}, srcCol, {rows: [ row ]});
       }
       else {
         deleteSrcRow = true;
+        columnToInsert = { rows: [row] }; // 
       }
 
-      columnToInsert = { rows: [row] };
+      
 
     }
     else if(position.direction === 'top' || position.direction === 'bottom'){
@@ -161,6 +163,8 @@ var Grid = React.createClass({
       rowToInsert = row;
     }
 
+    // Now let's start replacing
+    var newColumns = this.state.columns;
     if(deleteSrcColumn){ // Remove the column that the row was dragged from
       newColumns = newColumns.slice(0, srcIndex.col).concat( newColumns.slice(srcIndex.col + 1) );
       if(tarIndex.col > srcIndex.col){
