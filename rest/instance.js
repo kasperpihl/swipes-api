@@ -25,6 +25,14 @@ let util = require('./util.js');
 let jwtMiddleware = require('./jwt-auth-middleware.js');
 let swipesErrMiddleware = require('./swipes-err-middleware.js');
 
+const jsonParseErrorHandler = (err, req, res, next) => {
+  if (err) {
+  	res.status(400).send({ error: 'Invalid json.' });
+  } else {
+  	next()
+  }
+}
+
 app.use(cors({
   origin: config.get('cors'),
   methods: 'HEAD, GET, POST',
@@ -32,20 +40,9 @@ app.use(cors({
 }));
 app.use('/workflows', express.static(__dirname + '/../workflows'));
 
-app.use(bodyParser.json( { limit: 3000000 } ) );
-let parseErrorHandler = (err, req, res, next) => {
-  if(err) {
-  	res.status(400).send({ error: 'Invalid json.' });
-  } else {
-  	next()
-  }
-}
-app.use(parseErrorHandler);
-
 // ===========================================================================================================
 // Require routes
 // ===========================================================================================================
-//let appsRouter = require('./routes/apps.js');
 let usersAuth = require('./routes/users_signup_signin.js');
 let usersRouter = require('./routes/users.js');
 let rtmRouter = require('./routes/rtm.js');
@@ -60,6 +57,7 @@ let feedbackRouter = require('./routes/feedback.js');
 let feedbackNoAuthRouter = require('./routes/feedback_no_auth.js');
 let shareRender = require('./routes/share_render.js');
 let shareNoAuthRouter = require('./routes/share_no_auth.js');
+let webhooksRouter = require('./routes/webhooks.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -76,7 +74,11 @@ app.route('/').get((req,res,next) => {
 	res.send('Swipes synchronization services - online');
 });
 // Routes for which we don't need authentication
+app.use('/webhooks', bodyParser.raw({type: 'application/json'}), webhooksRouter);
 app.use('/share', shareRender);
+
+// Everything going on /v1 is parsed as json
+app.use('/v1', bodyParser.json(), jsonParseErrorHandler);
 app.use('/v1', shareNoAuthRouter);
 app.use('/v1', usersAuth);
 app.use('/v1', servicesNoAuthRouter);
@@ -86,7 +88,6 @@ app.use('/v1', feedbackNoAuthRouter);
 app.use('/v1', jwtMiddleware.restAuth);
 
 // Routes for which we need authentication
-//app.use('/v1', appsRouter);
 app.use('/v1', usersRouter);
 app.use('/v1', rtmRouter);
 app.use('/v1', searchRouter);

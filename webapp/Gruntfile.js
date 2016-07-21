@@ -47,6 +47,13 @@ module.exports = function (grunt) {
                 xforward: false
               },
               {
+                context: '/webhooks',
+                host: host,
+                port: 5000,
+                https: false,
+                xforward: false
+              },
+              {
                 context: '/workflows',
                 host: host,
                 port: 5000,

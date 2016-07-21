@@ -15,8 +15,8 @@
     "searchEndpoint": "https://xen.do/api/v1/search/"
   },
   "dropbox": {
-    "appId": "wh02j5prwflysc2",
-    "appSecret": "uzq5he1dv12608f",
+    "appId": "qhkw8akehpocer3",
+    "appSecret": "gjocjcvalr8xena",
     "redirectURI": "http://localhost:3000/oauth-success.html"
   },
   "asana": {

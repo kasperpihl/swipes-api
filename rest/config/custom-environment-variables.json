@@ -7,6 +7,8 @@
     "password": "SW_DATABASE_PASSWORD"
   },
   "dropbox": {
+    "appId": "SW_DROPBOX_APP_ID",
+    "appSecret": "SW_DROPBOX_APP_SECRET",
     "redirectURI": "SW_DROPBOX_REDIRECT_URI"
   },
   "asana": {
