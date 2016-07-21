@@ -465,7 +465,7 @@ var Grid = React.createClass({
     var columns = null;
     if(this.state.columns){
       columns = this.state.columns.map(function(column, i){
-        return <Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"row-" + column.rows[0].id} data={column} />;
+        return <Column columnIndex={i} delegate={this} callGridDelegate={this.callDelegate} key={"col-" + column.rows[0].id} data={column} />;
       }.bind(this));
     }
     var styles = {};
