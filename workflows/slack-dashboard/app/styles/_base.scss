@@ -23,6 +23,8 @@ html, body, #content {
 .chat-list-container {
     @include size(100%, 100%);
     background-color: #fbfbfb;
+    overflow-y: scroll;
+    overflow-x: hidden;
     position: relative;
     transition: .1s;
 }
@@ -30,7 +32,6 @@ html, body, #content {
 .chat-list {
     max-width: 650px;
     padding: 10px;
-    padding-bottom: 60px;
     margin: 0 auto;
     position: relative;
 }
@@ -89,12 +90,12 @@ html, body, #content {
       line-height: 30px;
       font-weight: 300;
       color: $studioGray-100;
-      text-align: center;
+      text-align: right;
       font-size: 13px;
       left: 0;
 
       span {
-        padding: 0 15px;
+        padding-left: 15px;
         background-color: #fbfbfb;
       }
     }

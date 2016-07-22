@@ -22,6 +22,9 @@ var ChatItem = React.createClass({
 		}
 		return (
 			<div className="chat__message__info">
+				<div className="chat__message__info--profile-img">
+					{this.renderProfileImage()}
+				</div>
 				<div className="chat__message__info--author">{name}</div>
 				<div className="chat__message__info--timestamp">{message.timeStr}</div>
 			</div>
@@ -51,17 +54,14 @@ var ChatItem = React.createClass({
 		return <ChatMessage key={message.ts} data={message} />;
 	},
 	render() {
-		let className = "chat__message";
+		let className = 'chat__message';
 
-		if(this.props.data.isExtraMessage){
-			className += " extra-message";
+		if (this.props.data.isExtraMessage) {
+			className += ' extra-message';
 		}
 
 		return (
 			<div className={className}>
-				<div className="chat__message--profile-img">
-					{this.renderProfileImage()}
-				</div>
 				{this.renderMessageHeader()}
 				{this.renderMessage()}
 			</div>
@@ -89,7 +89,7 @@ var ChatMessage = React.createClass({
 			return;
 		}
 		var attachments = this.props.data.attachments.map(function(att){
-			console.log(att);
+			// console.log(att);
 			return <ChatMessage.Attachment key={att.id} data={att} />
 		});
 		return attachments;
