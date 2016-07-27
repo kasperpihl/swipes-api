@@ -203,16 +203,19 @@ var asana = {
 	beforeAuthSave: function (data, callback) {
 		var client = createClient();
 		var code = data.code;
-		var data;
+		var data = {};
 
 		client.app.accessTokenFromCode(code)
 			.then(function (response) {
-				data = response;
-				data.uniq_id = response.data.id;
-				data.show_name = response.data.email;
+				// Need that for the refresh token
+				response.ts_last_token = new Date().getTime() / 1000;
 
-				// Need that for the refresh roken
-				data.ts_last_token = new Date().getTime() / 1000;
+				data = {
+					authData: response,
+					id: response.data.id,
+					show_name: response.data.email
+				}
+
 				callback(null, data);
 			})
 			.catch(function (error) {

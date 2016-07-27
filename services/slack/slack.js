@@ -48,7 +48,7 @@ var slack = {
 			return callback("Method not supported");
 		}
 	},
-	beforeAuthSave: function(data, callback){
+	beforeAuthSave: function (data, callback) {
 		/*
 		data is the return from oauth and will be:
 		{
@@ -56,23 +56,31 @@ var slack = {
 			state: 'something'
 		}
 		*/
-		if(!data.code)
+		if (!data.code) {
 			return callback('no_code');
+		}
+
 		var params = {
 			client_id: this.connectionData.client_id,
 			client_secret: this.connectionData.client_secret,
 			code: data.code,
 			redirect_uri: this.connectionData.redirect_uri
 		};
-		SlackConnector.request(null, 'oauth.access', params, function(err, res){
-			if(!err && res.ok){
-				delete res.ok;
-				// Setting a unique ID that should prevent double auth
-				res.uniq_id = res.team_id;
-				res.show_name = res.team_name;
-				return callback(null, res);
+
+		SlackConnector.request(null, 'oauth.access', params, function (err, res) {
+			if (err) {
+				return callback(err);
 			}
-			callback(err);
+
+			delete res.ok;
+
+			var data = {
+				authData: res,
+				id: res.team_id,
+				show_name: res.team_name
+			}
+
+			return callback(null, data);
 		})
 	},
 	authorize: function (data, callback) {
