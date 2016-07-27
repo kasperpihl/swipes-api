@@ -52,8 +52,10 @@ var refreshAccessToken = function (authData, user, service) {
 			client.app.accessTokenFromRefreshToken(authData.refresh_token)
 				.then(function (response) {
 					accessToken = response.access_token;
-					// T_TODO we have to seperate this from the services code
-					// if we want devs to build services one day
+					// T_TODO
+					// Update service in our database
+					// This shouldn't be done here ;)
+					// No operations to our database should be allowed from the services
 					var query = r.table('users').get(userId)
 						.update({services: r.row('services')
 							.map((service) => {
