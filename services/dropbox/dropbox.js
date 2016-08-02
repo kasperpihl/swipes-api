@@ -249,7 +249,8 @@ var processFileChange = function ({account, entry}) {
 			modified_by: user.name.display_name || user.email,
 			profile_photo: user.profile_photo_url || '',
 			message: eventMessage,
-			service: 'dropbox'
+			service: 'dropbox',
+			type: 'activity'
 		};
 		var query = r.table('events').insert(event);
 
