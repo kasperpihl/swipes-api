@@ -1,31 +1,33 @@
-var config = require('config');
-var request = require('request');
-var r = require('rethinkdb');
-var db = require('../../rest/db.js'); // T_TODO I should make this one a local npm module
-var ac = require('async');
+"use strict";
 
-var serviceDir = __dirname;
-var dropboxConfig = config.get('dropbox');
+import config from 'config';
+import request from 'request';
+import r from 'rethinkdb';
+import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
+import ac from 'async';
 
-var camelCaseToUnderscore = function (word) {
+const serviceDir = __dirname;
+const dropboxConfig = config.get('dropbox');
+
+const camelCaseToUnderscore = (word) => {
 	// http://stackoverflow.com/questions/30521224/javascript-convert-camel-case-to-underscore-case
-	return word.replace(/([A-Z]+)/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "");
+	return word.replace(/([A-Z]+)/g, (x,y) => {return "_" + y.toLowerCase()}).replace(/^_/, "");
 }
 
-var getDropboxApiMethod = function (method) {
-	var pathItems = method.split('.');
-	var path = '';
+const getDropboxApiMethod = (method) => {
+	const pathItems = method.split('.');
+	let path = '';
 
-	pathItems.forEach(function (item) {
+	pathItems.forEach((item) => {
 		path = path + '/' + camelCaseToUnderscore(item);
 	})
 
 	return path;
 }
 
-var dropbox = {
-	request: function ({authData, method, params}, callback) {
-		var options = {
+const dropbox = {
+	request({authData, method, params}, callback) {
+		const options = {
 			method: 'post',
 			body: params,
 			json: true,
@@ -36,7 +38,7 @@ var dropbox = {
 			}
 		}
 
-		request(options, function (err, res, body) {
+		request(options, (err, res, body) => {
 		  if (err) {
 		    console.log(err);
 				return callback(err);
@@ -45,34 +47,33 @@ var dropbox = {
 			return callback(null, body);
 		});
 	},
-	processWebhook: function (accounts, callback) {
+	processWebhook(accounts, callback) {
 		// Let's try for the first account only
 		// Before making things more crazy
-		var self = this;
-		var account = accounts[0];
-		var authData = account.authData;
-		var method = 'files.listFolder.continue';
-		var params = {
+		const account = accounts[0];
+		const authData = account.authData;
+		const method = 'files.listFolder.continue';
+		const params = {
 			cursor: account.list_folder_cursor
 		};
-		var accountId = account.id;
-		var userId = account.user_id;
+		const accountId = account.id;
+		const userId = account.user_id;
 
 
-		var secondCallback = function (error, result) {
+		const secondCallback = (error, result) => {
 			if (error) {
 				console.log(error);
 			}
 
 			processChanges({account, result});
 
-			var cursor = result.cursor;
+			const cursor = result.cursor;
 
 			// T_TODO
 			// Update cursor in our database
 			// This shouldn't be done here ;)
 			// No operations to our database should be allowed from the services
-			var query = r.table('users').get(userId)
+			const query = r.table('users').get(userId)
 				.update({services: r.row('services')
 					.map((service) => {
 						return r.branch(
@@ -95,21 +96,20 @@ var dropbox = {
 
 			// Repeat until there is no more pages
 			if (result.has_more) {
-				var params = {
+				const params = {
 					cursor: cursor
 				}
 
-				self.request({authData, method, params}, secondCallback);
+				this.request({authData, method, params}, secondCallback);
 			}
 		}
 
-		self.request({authData, method, params}, secondCallback);
+		this.request({authData, method, params}, secondCallback);
 
 		callback(null, 'ok');
 	},
-	beforeAuthSave: function (data, callback) {
-		var self = this;
-		var options = {
+	beforeAuthSave(data, callback) {
+		const options = {
 			method: 'post',
 			form: {
 				code: data.code,
@@ -121,40 +121,36 @@ var dropbox = {
 			url: 'https://api.dropboxapi.com/oauth2/token'
 		}
 
-		request(options, function (err, res, body) {
+		request(options, (err, res, body) => {
 			if (err) {
 				console.log(err);
 			}
 
-			var jsonBody = JSON.parse(body);
-			var account_id = jsonBody.account_id;
-			var access_token = jsonBody.access_token;
-			var token_type = jsonBody.token_type;
-			var authData = {
-				access_token: access_token,
-				token_type: token_type
-			};
-			var method = 'users.getAccount';
-			var params = {account_id: account_id};
-			var data = {
-				authData: authData,
-				id: account_id
-			};
+			const jsonBody = JSON.parse(body);
+			const {
+				account_id,
+				access_token,
+				token_type
+			} = jsonBody;
+			const authData = { access_token, token_type };
+			const method = 'users.getAccount';
+			const params = { account_id };
+			const data = { authData, id: account_id };
 
-			self.request({authData, method, params}, function (err, res) {
+			this.request({authData, method, params}, (err, res) => {
 				if (err) {
 					console.log(err);
 				}
 
 				data.show_name = res.email;
 
-				var method = 'files.listFolder.getLatestCursor';
-				var params = {
+				const method = 'files.listFolder.getLatestCursor';
+				const params = {
 					path: '',
 					recursive: true
 				}
 
-				self.request({authData, method, params}, function (err, res) {
+				this.request({authData, method, params}, (err, res) => {
 					if (err) {
 						console.log(err);
 					}
@@ -166,74 +162,78 @@ var dropbox = {
 			})
 		})
 	},
-	authorize: function (data, callback) {
-    var URL = 'https://www.dropbox.com/oauth2/authorize';
-    URL += '?response_type=code'
-		URL += '&client_id=' + dropboxConfig.appId;
-		URL += '&redirect_uri=' + dropboxConfig.redirectURI;
+	authorize(data, callback) {
+    let url = 'https://www.dropbox.com/oauth2/authorize';
+    url += '?response_type=code'
+		url += '&client_id=' + dropboxConfig.appId;
+		url += '&redirect_uri=' + dropboxConfig.redirectURI;
 		// T_TODO state for better security
 
-		callback(null, {type: 'oauth', url: URL});
+		callback(null, {type: 'oauth', url: url});
 	}
 };
 
-var processChanges = function ({account, result}) {
-	var entries = result.entries;
+const processChanges = ({account, result}) => {
+	const entries = result.entries;
 	// Care only for .tag 'file' just for simplicity
-	var filteredEntries = entries.filter(function (entry) {
+	const filteredEntries = entries.filter((entry) => {
 		return entry['.tag'] === 'file';
 	});
 
-	filteredEntries.forEach(function (entry) {
+	filteredEntries.forEach((entry) => {
 		processFileChange({account, entry});
 	})
 }
 
-var processFileChange = function ({account, entry}) {
-	var authData = account.authData;
-	var callbacks = [];
+const processFileChange = ({account, entry}) => {
+	const authData = account.authData;
+	const callbacks = [];
 
 	// Get revisions
-	var listRevisionsMethod = 'files.listRevisions';
-	var listRevisionsParams = {
+	const listRevisionsMethod = 'files.listRevisions';
+	const listRevisionsParams = {
 		path: entry.path_lower,
 		limit: 2 // We just want to know if it's created or modified file
 	}
 
-	callbacks.push(function (callback) {
-		dropbox.request({authData, method: listRevisionsMethod, params: listRevisionsParams}, function (err, res) {
-			if (err) {return callback(err)};
+	callbacks.push((callback) => {
+		dropbox.request({authData, method: listRevisionsMethod, params: listRevisionsParams}, (err, res) => {
+			if (err) {
+				return callback(err);
+			};
 
 			callback(null, res);
 		})
 	});
 
 	// Get which user modified the file
-	var getAccountMethod = 'users.getAccount';
-	var getAccountParams = {
+	const getAccountMethod = 'users.getAccount';
+	const getAccountParams = {
 		account_id: entry.sharing_info.modified_by
 	}
 
-	callbacks.push(function (callback) {
-		dropbox.request({authData, method: getAccountMethod, params: getAccountParams}, function (err, res) {
-			if (err) {return callback(err)};
+	callbacks.push((callback) => {
+		dropbox.request({authData, method: getAccountMethod, params: getAccountParams}, (err, res) => {
+			if (err) {
+				return callback(err);
+			};
 
 			callback(null, res);
 		})
 	});
 
-	ac.parallel(callbacks, function (error, result) {
+	ac.parallel(callbacks, (error, result) => {
 		if (error) {
 			console.log(error);
 			return;
 		}
 
-		var revisions = result[0];
-		var user = result[1];
+		const revisions = result[0];
+		const user = result[1];
 		// That's a hack just for now
-		var swipesUserId = account.user_id;
-		var changed = revisions.length > 0 ? true : false;
-		var eventMessage = '';
+		const swipesUserId = account.user_id;
+		const changed = revisions.length > 0 ? true : false;
+		let eventMessage = '';
 
 		if (changed) {
 			eventMessage = 'File have been changed';
@@ -241,9 +241,7 @@ var processFileChange = function ({account, entry}) {
 			eventMessage = 'File have been created';
 		}
 
-		console.log('USER INFO',user);
-
-		var event = {
+		const event = {
 			user_id: swipesUserId,
 			date: new Date(),
 			modified_by: user.name.display_name || user.email,
@@ -252,12 +250,11 @@ var processFileChange = function ({account, entry}) {
 			service: 'dropbox',
 			type: 'activity'
 		};
-		var query = r.table('events').insert(event);
+		const query = r.table('events').insert(event);
 
-		console.log('EVENT OBJECT', event);
 		db.rethinkQuery(query)
 			.then(() => {
-				console.log('event inserted')
+				console.log('event inserted', event);
 			})
 			.catch((err) => {
 				console.log(err);
