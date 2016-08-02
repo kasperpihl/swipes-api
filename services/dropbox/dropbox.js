@@ -244,7 +244,7 @@ var processFileChange = function ({account, entry}) {
 		console.log('USER INFO',user);
 
 		var event = {
-			toUser: swipesUserId,
+			user_id: swipesUserId,
 			date: new Date(),
 			modified_by: user.name.display_name || user.email,
 			profile_photo: user.profile_photo_url || '',
