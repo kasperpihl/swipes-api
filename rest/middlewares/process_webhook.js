@@ -40,12 +40,8 @@ const processWebhookMessage = (req, res, next) => {
       		console.log(e);
       	}
 
-        file.processWebhook(accountsAuthData, (error, result) => {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log(result);
-          }
+        accountsAuthData.forEach((accountAuthData) => {
+          file.processWebhook(accountAuthData);
         })
       })
       .catch((error) => {

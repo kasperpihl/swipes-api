@@ -5,6 +5,10 @@ import request from 'request';
 import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import ac from 'async';
+import {
+	updateCursor,
+  insertEvent
+} from '../../rest/utils/webhook_util.js';
 
 const serviceDir = __dirname;
 const dropboxConfig = config.get('dropbox');
@@ -47,66 +51,35 @@ const dropbox = {
 			return callback(null, body);
 		});
 	},
-	processWebhook(accounts, callback) {
-		// Let's try for the first account only
-		// Before making things more crazy
-		const account = accounts[0];
+	processWebhook(account, callback) {
 		const authData = account.authData;
+		const accountId = account.id;
+		const userId = account.user_id;
 		const method = 'files.listFolder.continue';
 		const params = {
 			cursor: account.list_folder_cursor
 		};
-		const accountId = account.id;
-		const userId = account.user_id;
-
 
 		const secondCallback = (error, result) => {
 			if (error) {
 				console.log(error);
 			}
 
-			processChanges({account, result});
-
 			const cursor = result.cursor;
 
-			// T_TODO
-			// Update cursor in our database
-			// This shouldn't be done here ;)
-			// No operations to our database should be allowed from the services
-			const query = r.table('users').get(userId)
-				.update({services: r.row('services')
-					.map((service) => {
-						return r.branch(
-							service('id').eq(accountId),
-							service.merge({
-								list_folder_cursor: cursor
-							}),
-							service
-						)
-					})
-				});
-
-			db.rethinkQuery(query)
-				.then(() => {
-					console.log('Cursor updated!')
-				})
-				.catch((err) => {
-					console.log('Error updating cursor', err);
-				});
+			processChanges({account, result});
 
 			// Repeat until there is no more pages
 			if (result.has_more) {
-				const params = {
-					cursor: cursor
-				}
+				Object.assign(params, {cursor});
 
 				this.request({authData, method, params}, secondCallback);
+			} else {
+				updateCursor({userId, accountId, cursor});
 			}
 		}
 
 		this.request({authData, method, params}, secondCallback);
-
-		callback(null, 'ok');
 	},
 	beforeAuthSave(data, callback) {
 		const options = {
@@ -230,8 +203,6 @@ const processFileChange = ({account, entry}) => {
 
 		const revisions = result[0];
 		const user = result[1];
-		// That's a hack just for now
-		const swipesUserId = account.user_id;
 		const changed = revisions.length > 0 ? true : false;
 		let eventMessage = '';
 
@@ -242,23 +213,18 @@ const processFileChange = ({account, entry}) => {
 		}
 
 		const event = {
-			user_id: swipesUserId,
-			date: new Date(),
 			modified_by: user.name.display_name || user.email,
 			profile_photo: user.profile_photo_url || '',
 			message: eventMessage,
-			service: 'dropbox',
-			type: 'activity'
+			// T_TODO service name iss something that we have to know!
+			// more refactoring is needed
+			service: 'dropbox'
 		};
-		const query = r.table('events').insert(event);
 
-		db.rethinkQuery(query)
-			.then(() => {
-				console.log('event inserted', event);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		insertEvent({
+			userId: account.user_id,
+			eventData: event
+		});
 	})
 }
 
