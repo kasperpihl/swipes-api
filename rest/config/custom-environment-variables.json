@@ -4,8 +4,7 @@
     "port": "SW_DATABASE_PORT",
     "db": "SW_DATABASE_NAME",
     "user": "SW_DATABASE_USER",
-    "password": "SW_DATABASE_PASSWORD",
-    "webhooksHost": "SW_WEBHOOKS_HOST"
+    "password": "SW_DATABASE_PASSWORD"
   },
   "dropbox": {
     "appId": "SW_DROPBOX_APP_ID",
@@ -19,5 +18,6 @@
   },
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
-  "clientPort": "SW_CLIENT_PORT"
+  "clientPort": "SW_CLIENT_PORT",
+  "webhooksHost": "SW_WEBHOOKS_HOST"
 }
