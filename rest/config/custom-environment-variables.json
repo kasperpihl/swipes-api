@@ -4,7 +4,8 @@
     "port": "SW_DATABASE_PORT",
     "db": "SW_DATABASE_NAME",
     "user": "SW_DATABASE_USER",
-    "password": "SW_DATABASE_PASSWORD"
+    "password": "SW_DATABASE_PASSWORD",
+    "webhooksHost": "SW_WEBHOOKS_HOST"
   },
   "dropbox": {
     "appId": "SW_DROPBOX_APP_ID",

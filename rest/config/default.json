@@ -4,7 +4,8 @@
     "port": 28015,
     "db": "swipes",
     "user": "admin",
-    "password": ""
+    "password": "",
+    "webhooksHost": "https://swipesdev.eu.ngrok.io/"
   },
   "xendo": {
     "clientId": "99965e447026eb281dfc",
