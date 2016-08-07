@@ -4,6 +4,7 @@ import Promise from 'bluebird';
 import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import SwipesError from '../../rest/swipes-error';
+import { subscribeToAllProjects } from './webhooks';
 
 const webhooksHost = config.get('webhooksHost');
 const asanaConfig = config.get('asana');
@@ -41,14 +42,13 @@ const getAsanaApiMethod = (method, client) => {
 	return asanaMethod;
 }
 
-const refreshAccessToken = (authData, user, service) => {
+const refreshAccessToken = (authData, user) => {
 	return new Promise((resolve, reject) => {
 		const now = new Date().getTime() / 1000;
 		const expires_in = authData.expires_in - 30; // 30 seconds margin of error
 		const ts_last_token = authData.ts_last_token;
 		const client = createClient();
 		const userId = user.userId;
-		const serviceId = service.serviceId;
 		let accessToken;
 
 		if (now - ts_last_token > expires_in) {
@@ -63,7 +63,7 @@ const refreshAccessToken = (authData, user, service) => {
 						.update({services: r.row('services')
 							.map((service) => {
 								return r.branch(
-									service('id').eq(serviceId),
+									service('authData')('access_token').eq(authData.access_token),
 									service.merge({
 										authData: {
 											access_token: accessToken,
@@ -90,10 +90,10 @@ const refreshAccessToken = (authData, user, service) => {
 }
 
 const asana = {
-	request: ({ authData, method, params, user, service }, callback) => {
+	request: ({ authData, method, params, user }, callback) => {
 		const client = createClient();
 
-		refreshAccessToken(authData, user, service)
+		refreshAccessToken(authData, user)
 			.then((credentials) => {
 				let asanaPromise;
 				client.useOauth({ credentials });
@@ -137,14 +137,14 @@ const asana = {
 				callback(error);
 			})
 	},
-	shareRequest: ({ authData, type, params, user, service }, callback) => {
+	shareRequest: ({ authData, type, params, user }, callback) => {
 		let method = '';
 
 		if (type === 'task') {
 			method = 'tasks.findById'
 		}
 
-		asana.request({authData, method, params, user, service}, (err, res) => {
+		asana.request({authData, method, params, user }, (err, res) => {
 			if (err) {
 				return callback(err);
 			}
@@ -210,6 +210,9 @@ const asana = {
 
 				const data = { authData, id, show_name };
 
+				// T_TODO what if that thing fails miserably?
+				subscribeToAllProjects(authData);
+
 				callback(null, data);
 			})
 			.catch((error) => {
@@ -228,4 +231,5 @@ const asana = {
 	}
 };
 
+// T_TODO for some reason export { asana } does not work here
 module.exports = asana;
