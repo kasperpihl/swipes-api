@@ -90,7 +90,7 @@ const refreshAccessToken = (authData, user) => {
 }
 
 const asana = {
-	request: ({ authData, method, params, user }, callback) => {
+	request({ authData, method, params, user }, callback) {
 		const client = createClient();
 
 		refreshAccessToken(authData, user)
@@ -137,7 +137,7 @@ const asana = {
 				callback(error);
 			})
 	},
-	shareRequest: ({ authData, type, params, user }, callback) => {
+	shareRequest({ authData, type, params, user }, callback) {
 		let method = '';
 
 		if (type === 'task') {
@@ -155,7 +155,7 @@ const asana = {
 			return callback(null,  { serviceData, serviceActions });
 		})
 	},
-	cardData: (type, data) => {
+	cardData(type, data) {
 		let mappedData;
 
 		if (type === 'task') {
@@ -166,7 +166,7 @@ const asana = {
 
 		return mappedData;
 	},
-	cardActions: (type, data) => {
+	cardActions(type, data) {
 		const actions = [];
 
 		if (type === 'task') {
@@ -197,7 +197,7 @@ const asana = {
 
 		return actions;
 	},
-	beforeAuthSave: (data, callback) => {
+	beforeAuthSave(data, callback) {
 		const client = createClient();
 		const code = data.code;
 
@@ -220,7 +220,7 @@ const asana = {
 				callback(error);
 			})
 	},
-	authorize: (data, callback) => {
+	authorize(data, callback) {
 		const client = createClient();
 		const url = client.app.asanaAuthorizeUrl();
 
