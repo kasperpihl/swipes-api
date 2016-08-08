@@ -37,6 +37,16 @@ class SwipesAppSDK {
     this.com.sendCommand(command, data, callback);
   }
 
+  isShareURL(url){
+    url = url || "";
+    const shareURLPrefix = window.location.protocol + '//' + window.location.origin + '/sh';
+    if(url.startsWith(shareURLPrefix)){
+      return true;
+    }
+    return false;
+  }
+
+
   // Shorthands for contacting service api
   service(serviceName){
     return {
