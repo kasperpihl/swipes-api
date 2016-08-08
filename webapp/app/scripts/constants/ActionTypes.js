@@ -19,8 +19,6 @@ export const API_REQUEST = 'API_REQUEST'
 export const API_SUCCESS = 'API_SUCCESS'
 export const API_ERROR = 'API_ERROR'
 
-// Socket
-export const SOCKET_MESSAGE = 'SOCKET_MESSAGE'
 
 // Workspace
 export const UPDATE_COLUMNS = 'UPDATE_COLUMNS'
