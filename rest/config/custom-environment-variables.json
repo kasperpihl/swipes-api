@@ -18,5 +18,6 @@
   },
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
-  "clientPort": "SW_CLIENT_PORT"
+  "clientPort": "SW_CLIENT_PORT",
+  "webhooksHost": "SW_WEBHOOKS_HOST"
 }

@@ -25,6 +25,7 @@
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "origin": "http://localhost",
+  "webhooksHost": "https://swipesdev.eu.ngrok.io/",
   "apiPort": 5000,
   "clientPort" :3000,
   "protocol": "http://",
