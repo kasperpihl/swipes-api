@@ -14,6 +14,6 @@ const ResizeOverlay = ({ imageUrl, title }) => (
 export default ResizeOverlay
 
 ResizeOverlay.PropTypes = {
-  'title': PropTypes.string.isRequired,
-  'imageUrl': PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired
 }

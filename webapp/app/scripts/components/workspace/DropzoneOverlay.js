@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 
 const DropzoneOverlay = ({ hover, title }) => {
   let className = "tile-dropzone-overlay"
+  
   if(hover){
     className += " hover"
   }
@@ -19,5 +20,6 @@ const DropzoneOverlay = ({ hover, title }) => {
 export default DropzoneOverlay
 
 DropzoneOverlay.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  hover: PropTypes.bool
 }
