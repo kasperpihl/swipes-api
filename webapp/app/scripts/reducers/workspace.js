@@ -38,7 +38,7 @@ export default function workspace (state = initialState, action) {
       break;
     }
 
-    case ('rtm.start'):{
+    case ('rtm.start'):{ // API Request
       const res = action.payload;
       if(res.ok){
         tiles = {}
@@ -48,14 +48,14 @@ export default function workspace (state = initialState, action) {
       }
       break;
     }
-    
-    case 'workflow_added':
-    case 'workflow_changed':
+
+    case 'workflow_added': // Socket Event
+    case 'workflow_changed': // Socket Event
       const msg = action.payload;
       const combinedData = Object.assign({}, state.tiles[msg.data.id], msg.data);
       tiles = Object.assign({}, state.tiles, {[msg.data.id]: combinedData});
       break;
-    case 'workflow_removed':
+    case 'workflow_removed': // Socket Event
       const msg = action.payload;
       tiles = Object.assign({}, state.tiles);
       delete tiles[msg.data.id];
