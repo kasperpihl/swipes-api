@@ -1,25 +1,54 @@
+var webpack = require('webpack');
+var path = require('path')
+
 module.exports = {
-  context: __dirname + "/app",
-  entry: "./scripts/index.js",
+  context: __dirname + '/app',
+  devtool: 'eval',
+  entry: [
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    './scripts/index'
+  ],
   output: {
-      path: __dirname + '/dist',
-      filename: "bundle.js"
+      path: path.join(__dirname, 'dist'),
+      filename: "bundle.js",
+      publicPath: '/'
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015', 'stage-0', 'react']
-        },
+        loaders: [ 'react-hot', 'babel?' + JSON.stringify({ presets: ['es2015', 'stage-0', 'react'] }) ],
         exclude: /node_modules/,
-        include: __dirname
+        include: path.join(__dirname, 'app/scripts')
+
+      },
+      {
+        test: /\.(svg)$/,
+        loader: 'file?name=img/[name]-[hash:6].[ext]'
+      }
+      {
+        test: /\.(png|jpg|jpeg|gif|woff)$/,
+        loader: 'url-loader?limit=10000&name=img/[name]-[hash:6].[ext]'
+      },
+      {
+        test: /\.html$/,
+        loader: 'file?name=[name].[ext]'
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loader: 'style!css!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded'
       }
     ]
+  },
+  devServer:{
+    publicPath: '/',
+    hot: true,
+    contentBase: './dist',
+    inline: true,
+    historyApiFallback: true
   }
 };

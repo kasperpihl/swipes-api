@@ -9,11 +9,9 @@
     <title>Swipes</title>
     <meta name="description" content="Swipes Webapp">
     <meta name="viewport" content="width=device-width">
-    <link rel="icon" href="./favicon.png?v=2" />
+    <link rel="icon" href="./img/favicon.png?v=2" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/global-styles.css">
     <!-- endbuild -->
 
     <!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
@@ -51,9 +49,9 @@ mixpanel.init("b020713357dd0bbb88ba520b1f36f574");</script><!-- end Mixpanel -->
     <!--[if lt IE 10]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
     <div id="content"></div>
-    <script src="scripts/swipes-sdk-main.js"></script>
-    <script src="scripts/app.js"></script>
+    <!--<script src="scripts/swipes-sdk-main.js"></script>-->
+    <script src="bundle.js"></script>
+    <script src="/webpack-dev-server.js"></script>
   </body>
 </html>

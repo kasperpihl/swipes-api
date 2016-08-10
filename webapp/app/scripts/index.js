@@ -5,15 +5,19 @@ if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
 
+
+// Include stylesheet (compile sass)
+import '../styles/main.scss'
+
 import React from 'react'
 import { render } from 'react-dom'
 let Page, data;
 
 if(!window.process || !window.process.versions.electron){
-  if(false){
+  if(true){
     require('expose?_!underscore');
     Page = require('./components/resizeable-grid/grid_test');
-    console.log('here I am.')
+    console.log('here I am2.')
   }
   else if(window.__share_data){
     require('expose?$!expose?jQuery!jquery');

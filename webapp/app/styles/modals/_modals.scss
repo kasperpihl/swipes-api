@@ -18,7 +18,7 @@ $break-mid: 650px;
     z-index: 10000; // Appear on top of topbar
     opacity: 0;
     &.opaque{
-      @include transition(opacity 0.2s ease-out);
+      transition: opacity 0.2s ease-out;
       background-color: rgba($dark-background, .6);
       opacity: 0.5;
     }
@@ -43,11 +43,11 @@ $break-mid: 650px;
       border: 1px solid $sidebar-dark-color;
       background: white;
       padding: 10px;
-      @include border-radius(10px);
+      border-radius: 10px;
 
     }
     &.shown  {
-      @include transition(opacity 0.2s ease-out);
+      transition: opacity 0.2s ease-out;
       opacity: 1;
     }
   }
