@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-class EmptyBackground extends Component {
+export default class EmptyBackground extends Component {
   constructor(props) {
     super(props)
     this.state = {openVideo: false}
@@ -34,4 +34,3 @@ class EmptyBackground extends Component {
     )
   }
 }
-export default EmptyBackground

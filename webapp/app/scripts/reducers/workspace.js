@@ -33,7 +33,12 @@ function fillTilesToColumns(columns, tiles){
 export default function workspace (state = initialState, action) {
   let tiles, columns;
   switch(action.type){
-    case ('rtm.start'):{
+    case types.UPDATE_COLUMNS:{
+      columns = action.columns;
+      break;
+    }
+
+    case ('rtm.start'):{ // API Request
       const res = action.payload;
       if(res.ok){
         tiles = {}
@@ -43,25 +48,19 @@ export default function workspace (state = initialState, action) {
       }
       break;
     }
-    case types.SOCKET_MESSAGE:{
+
+    case 'workflow_added': // Socket Event
+    case 'workflow_changed': // Socket Event
       const msg = action.payload;
-      switch(msg.type){
-        case 'workflow_added':
-        case 'workflow_changed':
-          const combinedData = Object.assign({}, state.tiles[msg.data.id], msg.data);
-          tiles = Object.assign({}, state.tiles, {[msg.data.id]: combinedData});
-          break;
-        case 'workflow_removed':
-          tiles = Object.assign({}, state.tiles);
-          delete tiles[msg.data.id];
-          break;
-      }
+      const combinedData = Object.assign({}, state.tiles[msg.data.id], msg.data);
+      tiles = Object.assign({}, state.tiles, {[msg.data.id]: combinedData});
       break;
-    }
-    case types.UPDATE_COLUMNS:{
-      columns = action.columns;
+    case 'workflow_removed': // Socket Event
+      const msg = action.payload;
+      tiles = Object.assign({}, state.tiles);
+      delete tiles[msg.data.id];
       break;
-    }
+    
     
   }
 
