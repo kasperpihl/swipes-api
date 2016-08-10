@@ -31,7 +31,7 @@ function fillTilesToColumns(columns, tiles){
 }
 
 export default function workspace (state = initialState, action) {
-  let tiles, columns;
+  let tiles, columns, msg;
   switch(action.type){
     case types.UPDATE_COLUMNS:{
       columns = action.columns;
@@ -51,12 +51,12 @@ export default function workspace (state = initialState, action) {
 
     case 'workflow_added': // Socket Event
     case 'workflow_changed': // Socket Event
-      const msg = action.payload;
+      msg = action.payload;
       const combinedData = Object.assign({}, state.tiles[msg.data.id], msg.data);
       tiles = Object.assign({}, state.tiles, {[msg.data.id]: combinedData});
       break;
     case 'workflow_removed': // Socket Event
-      const msg = action.payload;
+      msg = action.payload;
       tiles = Object.assign({}, state.tiles);
       delete tiles[msg.data.id];
       break;

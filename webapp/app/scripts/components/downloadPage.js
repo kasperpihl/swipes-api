@@ -1,6 +1,6 @@
 var React = require('react');
 var browser = require('detect-browser');
-import LogoImg from '../../img/'
+import LogoImg from '../../img/swipes-logo.png'
 var DownloadPage = React.createClass({
   componentDidMount: function() {
     if (browser.name === 'safari') {
