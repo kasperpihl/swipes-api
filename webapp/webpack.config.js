@@ -50,14 +50,16 @@ module.exports = {
         loaders: [ 'react-hot', 'babel?' + babelOptions ],
         exclude: /node_modules/,
         include: path.join(__dirname, 'app/scripts')
-
       },
       {
-        test: /\.(svg)$/,
-        loader: 'babel?' + babelOptions + '!svg-react' //'file?name=img/[name]-[hash:6].[ext]'
+        test: /\.svg$/,
+        loader: 'babel?' + babelOptions + '!svg-react'
+      },
+      { test: /\.(ttf|woff|woff2)$/,
+        loader: 'file?name=fonts/[name].[hash:6].[ext]'
       },
       {
-        test: /\.(png|jpg|jpeg|gif|woff)$/,
+        test: /\.(png|jpg|jpeg|gif)$/,
         loader: 'url-loader?limit=10000&name=img/[name]-[hash:6].[ext]'
       },
       {
@@ -70,6 +72,7 @@ module.exports = {
     publicPath: '/',
     hot: true,
     port: 3000,
+    progress:true,
     contentBase: './dist',
     inline: true,
     historyApiFallback: true,

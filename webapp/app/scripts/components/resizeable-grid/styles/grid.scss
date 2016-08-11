@@ -1,3 +1,6 @@
+@import '../../../../styles/base/mixins';
+@import '../../../../styles/base/vars';
+
 $transitionTime: .25s;
 $rippleTransitionTime: .35s;
 $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,.88);

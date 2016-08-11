@@ -1,6 +1,20 @@
-@import "tile";
-@import "dropzone-overlay";
-@import "resizing-overlay";
+@import '../../../styles/base/mixins';
+@import '../../../styles/base/vars';
+
+.tile {
+  @include size(100%, 100%);
+
+  .workflow-frame-class {
+    @include size(100%, 100%);
+    display:flex;
+  }
+}
+// Hide webview when resizing
+.main.draggingDot{
+  .workflow-frame-class{
+    pointer-events: none !important;
+  }
+}
 
 
 .dot-drag-handler {
@@ -151,3 +165,74 @@
     }
   }
 }
+
+.tile-resizing-overlay {
+  @include size(100%, 100%);
+  background-color: white;
+
+  @include flex(center, center);
+
+  &__content {
+    @include size(100%, 100%);
+    @include flex(center, center);
+
+    .app-icon {
+      @include size(40px, 40px);
+
+      img {
+        @include size(40px, 40px);
+      }
+    }
+  }
+}
+
+.tile-dropzone-overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left:0;
+  z-index: 101;
+  .background{
+    height: 100%;
+    opacity: 0.0;
+    background: #FFCA28;
+    transition: opacity 0.15s;
+  }
+  .center{
+    width: 100%;
+    position:absolute;
+    top: 50%;
+    z-index: 102;
+    margin-top: -30px;
+    h6{
+      text-align: center;
+      span{
+        padding: 5px 20px;
+        border-radius: 5px;
+        background: white;
+        //border: 3px solid #FFCA28;
+        -webkit-box-shadow: 0px 0px 12px 8px rgba(255,202,40,0.9);
+        -moz-box-shadow: 0px 0px 12px 8px rgba(255,202,40,0.9);
+        box-shadow: 0px 0px 12px 8px rgba(255,202,40,0.9);
+      }
+    }
+  }
+
+  &.hover{
+    .background{
+      opacity: 0.6;
+      transition: opacity 0.15s;
+      border-radius: 15px;
+    }
+    .center{
+      span{
+        border: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+      }
+    }
+  }
+}
+

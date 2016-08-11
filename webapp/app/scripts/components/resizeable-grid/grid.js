@@ -10,6 +10,7 @@ var SHADOW_TOP = 'inset 0px 30px 10px -10px  rgba(97,203,253,0.81)';
 var SHADOW_BOTTOM = 'inset 0px -30px 10px -10px  rgba(97,203,253,0.81)';
 
 
+import './styles/grid.scss';
 var COLUMN_SIDE_HOVER_SIZE = 40;
 var Column = require('./grid_column');
 var helper = require('./helper');

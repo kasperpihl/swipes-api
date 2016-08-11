@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import * as actions from '../constants/ActionTypes'
 import { workspace, main } from '../actions'
 
+import '../components/workspace/workspace.scss'
+
 import EmptyBackground from '../components/workspace/EmptyBackground'
 import ResizeOverlay from '../components/workspace/ResizeOverlay'
 import Tile from './Tile'
