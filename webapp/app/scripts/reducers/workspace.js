@@ -48,7 +48,7 @@ export default function workspace (state = initialState, action) {
       }
       break;
     }
-
+    
     case 'workflow_added': // Socket Event
     case 'workflow_changed': // Socket Event
       msg = action.payload;

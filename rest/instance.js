@@ -75,7 +75,7 @@ app.route('/').get((req,res,next) => {
 });
 // Routes for which we don't need authentication
 app.use('/webhooks', bodyParser.raw({type: 'application/json'}), webhooksRouter);
-app.use('/share', shareRender);
+app.use('/s', shareRender);
 
 // Everything going on /v1 is parsed as json
 app.use('/v1', bodyParser.json(), jsonParseErrorHandler);

@@ -12,6 +12,7 @@ import '../styles/main.scss'
 import React from 'react'
 import { render } from 'react-dom'
 let Page, data;
+import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
 if(!window.process || !window.process.versions.electron){
   if(false){
@@ -21,7 +22,6 @@ if(!window.process || !window.process.versions.electron){
   }
   else if(window.__share_data){
     require('expose?$!expose?jQuery!jquery');
-    //var SwipesAPIConnector = require('../../swipes-sdk/swipes-api-connector');
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage')
     data = window.__share_data;

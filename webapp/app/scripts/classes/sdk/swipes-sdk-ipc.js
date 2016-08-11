@@ -3,7 +3,7 @@
   The purpose of this class is to stucture the communication between tile and workspace.
   sendFunction in the constructor should be a function that take its first parameter and send it to a receiver (workspace/tile)
  */
-class SwClientCom {
+export default class SwClientCom {
   constructor(sendFunction, initObj) {
     this._localCallbacks = {}; // 
     this._commandQueue = []; // Queue of commands, if called while locked

@@ -189,7 +189,6 @@ module.exports = function (grunt) {
               '<%= yeoman.sdk %>/swipes-sdk-ipc.js'
             ],
             '<%= yeoman.dev %>/scripts/swipes-sdk-tile.js': [
-              '<%= yeoman.sdk %>/dependencies/jquery.min.js',
               '<%= yeoman.sdk %>/dependencies/underscore.min.js',
               '<%= yeoman.sdk %>/dependencies/q.min.js',
               '<%= yeoman.sdk %>/swipes-sdk-rest-api.js',

@@ -3,6 +3,10 @@ import { apiUrl } from '../../actions/api';
 
 const SelectField = require('material-ui/lib/SelectField');
 const MenuItem = require('material-ui/lib/menus/menu-item');
+
+import EmptyStateConnect from './images/swipes-workspace-illustrations-emptystate-connect.svg'
+import EmptyStatePickTeam from './images/swipes-workspace-illustrations-emptystate-pickteam.svg'
+
 console.log('mater', MenuItem);
 
 class SelectRow extends Component {
@@ -48,18 +52,18 @@ class SelectRow extends Component {
     );
   }
   render(){
-    let text, src
+    let text, SVG
 
     if (!this.props.data.services || !this.props.data.services.length) {
       text = 'Connect to ' + this.props.data.title;
-      src = 'styles/img/swipes-workspace-illustrations-emptystate-connect.svg'
+      SVG = EmptyStateConnect
     } else {
       text = 'Pick a team'
-      src = 'styles/img/swipes-workspace-illustrations-emptystate-pickteam.svg'
+      SVG = EmptyStatePickTeam
     }
     return(
       <div className="row connect in-card">
-        <img src={src} />
+        <SVG />
         <h6>{text}</h6>
         <p></p>
         {this.renderSelector()}

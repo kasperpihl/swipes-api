@@ -1,3 +1,5 @@
+import SwipesAppSDK from './swipes-sdk-tile'
+
 window.swipes = new SwipesAppSDK();
 
 // Make listener work on iOS webview

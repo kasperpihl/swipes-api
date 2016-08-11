@@ -1,4 +1,4 @@
-class SwipesAPIConnector {
+export default class SwipesAPIConnector {
   constructor(baseUrl, token) {
 
     this._baseURL = baseUrl;

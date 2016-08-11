@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { main, modal } from '../actions';
 
+import WorkspaceIcon from '../../images/workspace-icon.svg'
 var gradient = require('../components/topbar/gradient');
 
 class Topbar extends Component {
@@ -58,7 +59,7 @@ class Topbar extends Component {
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
             <div className="sw-topbar__info__icon">
-              <img src="styles/img/workspace-icon.svg" alt=""/>
+              <WorkspaceIcon />
             </div>
             <div className="sw-topbar__info__title">my workspace</div>
             </div>

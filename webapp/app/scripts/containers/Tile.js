@@ -6,6 +6,7 @@ import * as actions from '../constants/ActionTypes'
 import SelectRow from '../components/services/SelectRow'
 import Webview from '../components/workspace/Webview'
 import DropzoneOverlay from '../components/workspace/DropzoneOverlay'
+import SwClientCom from '../classes/sdk/swipes-sdk-ipc'
 
 const remote = nodeRequire('electron').remote;
 const app = remote.app;

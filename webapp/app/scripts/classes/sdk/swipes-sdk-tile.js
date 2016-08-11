@@ -1,4 +1,8 @@
-class SwipesAppSDK {
+require('expose?Q!q');
+import SwipesAPIConnector from './swipes-sdk-rest-api'
+import SwClientCom from './swipes-sdk-ipc'
+
+export default class SwipesAppSDK {
   constructor(){
     let apiUrl = window.location.origin;
     this.api = new SwipesAPIConnector(apiUrl);

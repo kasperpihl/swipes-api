@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import EmptyStateWorkspace from './images/emptystate-workspace.svg'
 export default class EmptyBackground extends Component {
   constructor(props) {
     super(props)
@@ -24,7 +25,7 @@ export default class EmptyBackground extends Component {
         <p className="workspace-empty-text">
           <span className="strong">Welcome to your workspace</span> <br />
         </p>
-        <img className="empty-workspace-illustration" src="styles/img/emptystate-workspace.svg" onClick={this.toggleVideo} />
+        <EmptyStateWorkspace className="empty-workspace-illustration" onClick={this.toggleVideo} />
         <div className="play-button" onClick={this.toggleVideo}></div>
           <p className="workspace-empty-text">
             Play the video to get started
