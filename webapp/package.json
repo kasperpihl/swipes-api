@@ -61,7 +61,7 @@
   "scripts": {
     "clean-and-copy": "npm run clean:dist && npm run copy:dist",
     "clean:dist": "rimraf dist",
-    "copy:dist": "ncp app/statics dist",
+    "copy:dist": "ncp statics dist",
     "prestart": "npm run clean-and-copy",
     "start": "webpack-dev-server",
     "prebuild": "npm run clean-and-copy",

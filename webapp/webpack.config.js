@@ -13,20 +13,20 @@ const babelOptions = JSON.stringify({
 
 
 module.exports = {
-  context: __dirname + '/app',
+  context: __dirname,
   devtool: 'eval',
   entry: {
     app: [
       'webpack-dev-server/client?http://localhost:3000',
       'webpack/hot/only-dev-server',
-      './scripts/index'
+      './src/index'
     ],
     vendor: Object.keys(require("./package.json").dependencies),
-    sdk: './scripts/classes/sdk/swipes-sdk-init' // The SDK for the tile-loader
+    sdk: './src/classes/sdk/swipes-sdk-init' // The SDK for the tile-loader
   },
   output: {
       path: path.join(__dirname, 'dist'),
-      filename: "scripts/[name].[hash:8].js",
+      filename: "js/[name].[hash:8].js",
       publicPath: '/'
   },
   plugins: [
@@ -49,7 +49,7 @@ module.exports = {
         test: /\.js$/,
         loaders: [ 'react-hot', 'babel?' + babelOptions ],
         exclude: /node_modules/,
-        include: path.join(__dirname, 'app/scripts')
+        include: path.join(__dirname, 'src')
       },
       {
         test: /\.svg$/,

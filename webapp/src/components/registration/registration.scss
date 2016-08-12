@@ -1,0 +1,160 @@
+
+@import '../global-styles/vars';
+
+
+%flex {
+	display: flex;
+	//align-items: center;
+	justify-content: center;
+	//flex-direction: column;
+}
+
+.main-log-wrapper {
+    width: 100%;
+	margin: 0;
+	height: 100%;
+	padding: 0;
+	background-color: $deepBlue-100;
+	overflow: hidden;
+	font-family: 'Roboto', Arial, Helvetica, sans-serif;
+
+	@extend %flex;
+		h1 {
+		text-align: center;
+		color: white;
+		font-weight: 100;
+		font-size: 3em;
+	    padding-top: calc(272px / 3);
+	}
+
+	h3 {
+		text-align: center;
+		color: $deepBlue-60;
+		font-weight: 400;
+		font-size: 1em;
+	    padding-top: 50px;
+	}
+	form {
+		width: 100%;
+	  margin-top: -30px;
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		.login-submit {
+			width: 100%;
+			border: 0px solid black;
+			height: 70px;
+			background-color: $blue-100;
+			margin-top: 20px;
+			color: white;
+	        cursor: default;
+		}
+	}
+	.wrapper {
+		width: 100%;
+		height: 100%;
+		position: relative;
+		overflow-y: auto;
+		padding: 50px 0;
+	    //background-color: $deepBlue-100;
+	    opacity: 0;
+	    transform: translateY(50px);
+
+	    animation: signFadeIn .6s ease-in-out forwards;
+
+	    @keyframes signFadeIn {
+
+	        100% {
+	            opacity: 1;
+	            transform: translateY(0px);
+	        }
+	    }
+	}
+
+
+
+	.signup-button {
+		text-align: center;
+		color: $deepBlue-40;
+		font-weight: 400;
+		font-size: 1em;
+		//margin-top: -10px;
+	  margin-top: 15px;
+
+		a {
+			color: $deepBlue-40;
+			font-weight: 400;
+			font-size: 1em;
+
+			&:visited {
+				color: $deepBlue-40;
+			}
+
+			&:hover {
+				color: $studioGray-100;
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.logo {
+	    width: calc(272px / 3);
+	    height: calc(272px / 3);
+	    background-image: url("../../../images/swipes-logo.png");
+	    background-size: calc(272px / 3) calc(272px / 3);
+	    position: absolute;
+	    top: 20px;
+	    left: 20px;
+	}
+
+	.sign-up-card {
+		width: 350px;
+		//height: 550px;
+		margin-left: calc(50% - (350px / 2));
+	    margin-top: 50px;
+		background-color: white;
+		position: relative;
+		border-radius: 5px;
+		overflow: hidden;
+		box-shadow: $swipes-shadow-five;
+
+		h2 {
+			text-align: center;
+			color: $deepBlue-80;
+			font-weight: 400;
+	        font-size: 1.2em;
+			text-transform: uppercase;
+			padding: 30px 0;
+	        padding-top: 40px;
+		}
+	}
+
+	#Layer_1 {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		overflow: hidden;
+		//filter: blur(1px);
+
+		path {
+			fill: none;
+			stroke: rgba($blue-80,.4);
+		}
+	}
+
+	#Layer_2 {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		overflow: hidden;
+		path {
+			fill: none;
+			stroke: rgba($deepBlue-80,.6);
+		}
+	}
+}
