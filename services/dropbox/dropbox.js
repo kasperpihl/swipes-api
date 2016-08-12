@@ -6,6 +6,9 @@ import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import ac from 'async';
 import {
+	createSwipesShortUrl
+} from '../../rest/utils/share_url_util.js';
+import {
 	updateCursors,
   insertEvent
 } from '../../rest/utils/webhook_util.js';
@@ -169,6 +172,7 @@ const processChanges = ({account, result}) => {
 
 const processFileChange = ({account, entry}) => {
 	const authData = account.authData;
+	const userId = account.user_id;
 	const callbacks = [];
 
 	// Get revisions
@@ -221,19 +225,31 @@ const processFileChange = ({account, entry}) => {
 			eventMessage = 'File have been created';
 		}
 
-		const event = {
-			modified_by: user.name.display_name || user.email,
-			profile_photo: user.profile_photo_url || '',
-			message: eventMessage,
-			// T_TODO service name iss something that we have to know!
-			// more refactoring is needed
-			service: 'dropbox'
+		const service = {
+			name: 'dropbox',
+			account_id: account.id,
+			type: 'file',
+			item_id: entry.id
 		};
 
-		insertEvent({
-			userId: account.user_id,
-			eventData: event
-		});
+		createSwipesShortUrl({ userId, service })
+			.then((shortUrl) => {
+				const event = {
+					service: 'dropbox',
+					message: eventMessage,
+					profile_photo: user.profile_photo_url || '',
+					modified_by: user.name.display_name || user.email,
+					shortUrl: shortUrl
+				}
+
+				insertEvent({
+					userId: userId,
+					eventData: event
+				});
+			})
+			.catch((err) => {
+				console.log('Failed creating short url for an asana event', err);
+			})
 	})
 }
 

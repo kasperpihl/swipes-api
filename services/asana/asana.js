@@ -8,6 +8,9 @@ import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import SwipesError from '../../rest/swipes-error';
 import {
+	createSwipesShortUrl
+} from '../../rest/utils/share_url_util.js';
+import {
 	unsubscribeFromAll,
 	subscribeToAll
 } from './webhooks';
@@ -105,11 +108,32 @@ const processChanges = (userId, events) => {
 	});
 
 	filteredEvents.forEach((event) => {
-		createEvent(userId, event);
+		createShortUrl(userId, event);
 	})
 }
 
-const createEvent = (userId, event) => {
+const createShortUrl = (userId, event) => {
+	if (event.parent) {
+		const service = {
+			name: 'asana',
+			account_id: event.user.id,
+			type: 'task',
+			item_id: event.parent.id
+		}
+
+		createSwipesShortUrl({ userId, service })
+			.then((shortUrl) => {
+				createEvent(userId, event, shortUrl);
+			})
+			.catch((err) => {
+				console.log('Failed creating short url for an asana event', err);
+			})
+	} else {
+		createEvent(userId, event);
+	}
+}
+
+const createEvent = (userId, event, shortUrl = null) => {
 	const createdBy = event.resource.created_by.name;
 	let text;
 
@@ -121,7 +145,8 @@ const createEvent = (userId, event) => {
 
 	const eventData = {
 		service: 'asana',
-		message: text
+		message: text,
+		shortUrl: shortUrl
 	}
 
 	insertEvent({
