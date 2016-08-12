@@ -22,7 +22,6 @@ if(!window.process || !window.process.versions.electron){
     console.log('here I am2.')
   }
   else if(window.__share_data){
-    require('expose?$!expose?jQuery!jquery');
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage')
     data = window.__share_data;
@@ -32,7 +31,6 @@ if(!window.process || !window.process.versions.electron){
   }
 }
 else{
-  require('expose?$!expose?jQuery!jquery');
   require('expose?_!underscore');
   require("react-tap-event-plugin")();
 

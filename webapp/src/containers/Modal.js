@@ -28,12 +28,12 @@ class Modal extends Component {
     }
   }
   recalculateContent(){
-    let windowWidth = $(window).width();
-    let windowHeight = $(window).height();
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
 
-    let $contentEl = $(this.refs.content);
-    let contentWidth = $contentEl.outerWidth();
-    let contentHeight = $contentEl.outerHeight();
+    let contentEl = this.refs.content;
+    let contentWidth = contentEl.clientWidth;
+    let contentHeight = contentEl.clientHeight;
     let marginLeft = 0, marginTop = 0;
     if(this.props.modal.centerX){
       marginLeft = -contentWidth / 2;
@@ -82,7 +82,7 @@ class Modal extends Component {
     cssProps["marginLeft"] = marginLeft;
     cssProps["marginTop"] = marginTop;
 
-    $contentEl.css(cssProps);
+    this.setState({styles:cssProps});
   }
   onClickedBackground(){
     console.log('clicked background', this.props.modal.callback);
@@ -112,11 +112,12 @@ class Modal extends Component {
     }
 
     var contentClass = "modal-overlay-content shown";
+    styles = this.state.styles || {};
 
     return (
       <div ref="container" className={containerClass}>
         <div ref="background" onClick={this.onClickedBackground.bind(this)} className={backgroundClass}></div>
-        <div ref="content" className={contentClass}>
+        <div style={styles} ref="content" className={contentClass}>
           <Modal data={{options: this.props.modal.data, callback: this.onModalCallback.bind(this)}} hide={this.onClickedBackground.bind(this)}/>
         </div>
       </div>
