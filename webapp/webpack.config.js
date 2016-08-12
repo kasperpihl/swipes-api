@@ -10,8 +10,9 @@ const apiRedirect = {
 const babelOptions = JSON.stringify({ 
   presets: ['es2015', 'react']
 });
-// Awesome code to load all depencies, put in vendor
-// Object.keys(require("./package.json").dependencies)
+
+var swipesStdDep = ['react', 'react-dom', 'redux', 'react-redux']
+var vendorDep = Object.keys(require("./package.json").dependencies).filter( dep => (swipesStdDep.indexOf(dep) == -1) )
 
 module.exports = {
   context: __dirname,
@@ -22,9 +23,9 @@ module.exports = {
       'webpack/hot/only-dev-server',
       './src/index'
     ],
-    vendor: ['react', 'react-dom', 'redux', 'react-redux'],
-    tileLoader: './src/tile-loader',
-    sdk: './src/classes/sdk/swipes-sdk-init' // The SDK for the tile-loader
+    vendor: vendorDep,
+    swipesStd: swipesStdDep,
+    tileLoader: './src/tile-loader'
   },
   output: {
       path: path.join(__dirname, 'dist'),
@@ -33,18 +34,21 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor'
+      names: ['vendor', 'swipesStd']
     }),
     new HtmlWebpackPlugin({
       template: 'statics/tile.html',
       filename: 'tile.html',
-      chunks: ['vendor', 'tileLoader','sdk']
+      inject: 'head',
+      chunks: ['swipesStd', 'tileLoader']
     }),
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
-      chunks: ['vendor', 'app']
+      inject: 'head',
+      chunks: ['vendor', 'swipesStd', 'app']
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin()
   ],
   module: {
     loaders: [
