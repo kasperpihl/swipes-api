@@ -1,4 +1,14 @@
-@import '../global-styles/mixins';
+@mixin size($width, $height) {
+	width: $width;
+	height: $height;
+}
+@mixin flex($vertical, $horizontal, $direction:row) {
+	display: flex;
+	align-items: $vertical;
+	justify-content: $horizontal;
+	flex-direction: $direction;
+}
+
 
 $topbarSize: 50px;
 $searchbarSize: 90px;
@@ -6,6 +16,7 @@ $fullscreenTopbarSize: 70px;
 
 .sw-topbar {
 	@include size(100%, $searchbarSize);
+	user-select: none;
 	position: absolute;
 	left: 0;
 	top: 0;

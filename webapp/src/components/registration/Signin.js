@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import SwipesBackgroundAnimation from './SwipesBackgroundAnimation'
 
-// KRIS_TODO: Replace material ui textfield.
-let TextField = require('material-ui/lib/text-field');
 
 export default class Signin extends Component {
   componentDidMount() {
@@ -33,8 +31,8 @@ export default class Signin extends Component {
             <h2>sign in to swipes</h2>
             <form action="" onSubmit={this.preventSubmit}>
               <br/>
-              <TextField floatingLabelText="Email" ref="username" id="email" className="username"/>
-              <TextField floatingLabelText="Password" ref="password" type="password" />
+              <input type="text" placeholder="Email" ref="username" id="email" className="username"/>
+              <input type="text" placeholder="Password" ref="password" type="password" />
               <br/>
               <input type="submit" className="login-submit" value="SIGN IN" onClick={this.signin.bind(this)}/>
             </form>

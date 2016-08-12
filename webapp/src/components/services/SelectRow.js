@@ -2,13 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import { apiUrl } from '../../actions/api';
 import './services.scss'
 
-const SelectField = require('material-ui/lib/SelectField');
-const MenuItem = require('material-ui/lib/menus/menu-item');
+import Select from 'react-select';
 
 import EmptyStateConnect from './images/swipes-workspace-illustrations-emptystate-connect.svg'
 import EmptyStatePickTeam from './images/swipes-workspace-illustrations-emptystate-pickteam.svg'
-
-console.log('mater', MenuItem);
 
 class SelectRow extends Component {
   constructor(props) {
@@ -26,7 +23,9 @@ class SelectRow extends Component {
       url: url
     });
   }
-  handleChange(event, index, value){
+  handleChange(val){
+    let value = val.value;
+    console.log(value, this.props.data.services);
     if(value === this.props.data.services.length){
       this.clickedAuthorize();
     }
@@ -41,15 +40,16 @@ class SelectRow extends Component {
     if(!this.props.data.services || !this.props.data.services.length){
       return <div className="services-button" onClick={this.clickedAuthorize}>Connect</div>
     }
-    let items = this.props.data.services.map(function(service, i){
-      return <MenuItem value={i} key={i} primaryText={service.show_name}/>
+    let options = this.props.data.services.map(function(service, i){
+      return { value: i, label: service.show_name }
     });
-    items = items.concat(<MenuItem value={this.props.data.services.length} key={"-1"} primaryText="Add New Account"/>);
-
+    options.push({ value: this.props.data.services.length, label: 'Add New Account'});
     return (
-      <SelectField floatingLabelStyle={{color: '#666D82'}} floatingLabelText="Select Account..." value={this.state.value} onChange={this.handleChange}>
-        {items}
-      </SelectField>
+      <Select
+        value={this.state.value}
+        options={options}
+        onChange={this.handleChange}
+      />
     );
   }
   render(){

@@ -32,7 +32,6 @@ if(!window.process || !window.process.versions.electron){
 }
 else{
   require('expose?_!underscore');
-  require("react-tap-event-plugin")();
 
   Page = require('./containers/Root');
 }

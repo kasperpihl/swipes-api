@@ -22,6 +22,7 @@ module.exports = {
       './src/index'
     ],
     vendor: Object.keys(require("./package.json").dependencies),
+    tileLoader: './src/tile-loader',
     sdk: './src/classes/sdk/swipes-sdk-init' // The SDK for the tile-loader
   },
   output: {
@@ -35,7 +36,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'statics/tile.html',
-      chunks: ['sdk']
+      filename: 'tile.html',
+      chunks: ['vendor', 'tileLoader','sdk']
     }),
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
@@ -47,7 +49,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: [ 'react-hot', 'babel?' + babelOptions ],
+        loaders: [ 'react-hot-loader/webpack', 'babel?' + babelOptions ],
         exclude: /node_modules/,
         include: path.join(__dirname, 'src')
       },

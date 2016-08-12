@@ -81,8 +81,10 @@ class Modal extends Component {
 
     cssProps["marginLeft"] = marginLeft;
     cssProps["marginTop"] = marginTop;
-
-    this.setState({styles:cssProps});
+    if(JSON.stringify(cssProps) !== JSON.stringify(this.state.styles || {})){
+      this.setState({styles:cssProps});
+    }
+    
   }
   onClickedBackground(){
     console.log('clicked background', this.props.modal.callback);
@@ -112,7 +114,7 @@ class Modal extends Component {
     }
 
     var contentClass = "modal-overlay-content shown";
-    styles = this.state.styles || {};
+    const styles = this.state.styles || {};
 
     return (
       <div ref="container" className={containerClass}>

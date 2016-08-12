@@ -3,6 +3,8 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { main } from '../actions';
 
+import '../components/registration/registration.scss';
+
 import Signup from '../components/registration/Signup'
 import Signin from '../components/registration/Signin'
 
