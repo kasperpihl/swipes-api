@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { apiUrl } from '../../actions/api';
+import { bindAll } from '../../classes/utils';
+
 import './services.scss'
 
 import Select from 'react-select';
@@ -11,7 +13,7 @@ class SelectRow extends Component {
   constructor(props) {
     super(props)
     this.state = { value: null }
-    _.bindAll(this, 'clickedAuthorize', 'handleChange')
+    bindAll(this, ['clickedAuthorize', 'handleChange'])
   }
   clickedAuthorize() {
     const serviceName = this.props.data.service_name;

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { main, modal } from '../actions';
+import { main, modal } from '../actions'
 import '../components/topbar/topbar.scss'
 
 import WorkspaceIcon from '../components/global-styles/images/workspace-icon.svg'
@@ -56,7 +56,7 @@ class Topbar extends Component {
     }
 
     return (
-      <div className={topbarClass} style={styles}>
+      <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
             <div className="sw-topbar__info__icon">

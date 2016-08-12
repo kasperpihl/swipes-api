@@ -17,7 +17,6 @@ import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
 if(!window.process || !window.process.versions.electron){
   if(false){
-    require('expose?_!underscore');
     Page = require('./components/resizeable-grid/grid_test');
     console.log('here I am2.')
   }
@@ -31,8 +30,6 @@ if(!window.process || !window.process.versions.electron){
   }
 }
 else{
-  require('expose?_!underscore');
-
   Page = require('./containers/Root');
 }
 

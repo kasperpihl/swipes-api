@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../constants/ActionTypes'
 import { workspace, main } from '../actions'
-
+import { size, bindAll } from '../classes/utils'
 import '../components/workspace/workspace.scss'
 
 import EmptyBackground from '../components/workspace/EmptyBackground'
@@ -14,7 +14,7 @@ class Workspace extends Component {
   constructor(props) {
     super(props)
     this._cachedTiles = {};
-    _.bindAll(this, 'gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp')
+    bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
 
   }
   onMouseUp(e){
@@ -64,7 +64,7 @@ class Workspace extends Component {
     for( let key in this._cachedTiles ){
       this.sendToTile(key, command, data, (res) => {
         returnObj[key] = res || null;
-        if(_.size(returnObj) === _.size(this._cachedTiles) && callback){
+        if(size(returnObj) === size(this._cachedTiles) && callback){
           callback(returnObj);
         }
       });

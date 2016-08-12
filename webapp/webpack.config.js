@@ -10,7 +10,8 @@ const apiRedirect = {
 const babelOptions = JSON.stringify({ 
   presets: ['es2015', 'react']
 });
-
+// Awesome code to load all depencies, put in vendor
+// Object.keys(require("./package.json").dependencies)
 
 module.exports = {
   context: __dirname,
@@ -21,7 +22,7 @@ module.exports = {
       'webpack/hot/only-dev-server',
       './src/index'
     ],
-    vendor: Object.keys(require("./package.json").dependencies),
+    vendor: ['react', 'react-dom', 'redux', 'react-redux'],
     tileLoader: './src/tile-loader',
     sdk: './src/classes/sdk/swipes-sdk-init' // The SDK for the tile-loader
   },

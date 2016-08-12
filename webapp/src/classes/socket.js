@@ -1,10 +1,11 @@
 import * as types from '../constants/ActionTypes'
 import io from 'socket.io-client'
+import { bindAll } from './utils'
 
 export default class Socket {
   constructor(store){
     this.store = store;
-    _.bindAll(this, 'message', 'changeStatus', 'storeChange')
+    bindAll(this, ['message', 'changeStatus', 'storeChange'])
     store.subscribe(this.storeChange)
   }
   storeChange(){

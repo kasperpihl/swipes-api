@@ -1,5 +1,5 @@
-$FontPath: "roboto" !default;
-$FontName: "Roboto" !default;
+$FontPath: "roboto";
+$FontName: "Roboto";
 
 @mixin fontdef-woff($FontPath, $FontName, $FontType:"Regular") {
   src:  url('#{$FontPath}/#{$FontType}/#{$FontName}-#{$FontType}.woff2') format('woff2'),

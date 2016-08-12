@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal, workspace, main } from '../actions'
 import * as actions from '../constants/ActionTypes'
+import { bindAll } from '../classes/utils';
 
 import SelectRow from '../components/services/SelectRow'
 import Webview from '../components/workspace/Webview'
@@ -18,7 +19,7 @@ class Tile extends Component {
   constructor(props) {
     super(props)
 
-    _.bindAll(this, 'sendCommandToTile', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount', 'receivedCommand');
+    bindAll(this, ['sendCommandToTile', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount', 'receivedCommand']);
   }
   componentDidMount(){
     this.callDelegate('tileDidLoad', this.props.data.id);

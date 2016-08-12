@@ -3,13 +3,13 @@ import SwipesAPIConnector from './swipes-sdk-rest-api'
 import SwClientCom from './swipes-sdk-ipc'
 
 export default class SwipesAppSDK {
-  constructor(){
+  constructor(sendFunction){
     let apiUrl = window.location.origin;
     this.api = new SwipesAPIConnector(apiUrl);
     this.info = {}; // initObj.info from tile_loader will be this after init.
 
     // workspaceSendFunction is defined in the preload
-    this.com = new SwClientCom(workspaceSendFunction);
+    this.com = new SwClientCom(workspaceSendFunction || sendFunction);
     this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
     this.com.addListener('init', (data) => {
       if(data.token) {

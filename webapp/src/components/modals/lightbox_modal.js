@@ -1,6 +1,5 @@
 var React = require('react');
-var moment = require('moment');
-// KRIS_TODO: Replace material ui here
+
 var CircularProgress = <div>Loading</div>
 
 var LightboxModal = React.createClass({

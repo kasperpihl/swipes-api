@@ -15,7 +15,10 @@ var COLUMN_SIDE_HOVER_SIZE = 40;
 var Column = require('./grid_column');
 var helper = require('./helper');
 var offset = require('document-offset');
-
+const size = (obj) => {
+  if (obj == null) return 0;
+  return Object.keys(obj).length;
+}
 // define the steps of transitions here. Pass a string or an object with n/t (name/time) for more control. t: 0, means you should call this.transitionNext manually.
 var TRANSITIONS_STEPS = {
   fullscreen: [
@@ -1244,7 +1247,7 @@ var Grid = React.createClass({
         if(trans.info.col === colIndex){
           classes.push("sw-collapse-column");
         }
-        else if(_.size(transformations)){
+        else if(size(transformations)){
           classes.push("sw-collapse-affected-column");
         }
       }
@@ -1314,7 +1317,7 @@ var Grid = React.createClass({
           if(trans.info.row === rowIndex){
             classes.push('sw-collapse-row');
           }
-          if(trans.info.row !== rowIndex && _.size(transformations)){
+          if(trans.info.row !== rowIndex && size(transformations)){
             classes.push("sw-collapse-affected-row");
           }
         }
