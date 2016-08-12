@@ -15,7 +15,7 @@ const processWebhookMessage = (req, res, next) => {
   const service = res.locals.service;
   const message = res.locals.message;
 
-  console.log(res.locals.message);
+  //console.log(res.locals.message);
 
   if (service === 'dropbox') {
     const accounts = message.list_folder.accounts;
@@ -41,13 +41,53 @@ const processWebhookMessage = (req, res, next) => {
       	}
 
         accountsAuthData.forEach((accountAuthData) => {
-          file.processWebhook(accountAuthData);
+          file.processWebhook(accountAuthData, (err, res) => {
+            if (err) {
+              console.log('ERROR Processing drobox webhook', err);
+            }
+          });
         })
       })
       .catch((error) => {
-        // T_TODO log errors from proccesing webhooks.
-        // We return 200 OK to the webhook server because we received the message
-        // Everything else is our problem and we should just log the error somewhere
+        console.log(error);
+      })
+  }
+
+  if (service === 'asana') {
+    const {
+      accountId,
+      resourceId
+    } = res.locals;
+
+    const getAuthDataQ =
+      r.table('users')
+        .concatMap((user) => {
+          return user('services').merge({user_id: user('id')})
+	      }).filter((service) => {
+          return service('id').eq(r.expr(accountId).coerceTo('number'));
+        })
+
+    db.rethinkQuery(getAuthDataQ)
+      .then((accountsAuthData) => {
+        // Pass that to the service to provide us with the event data.
+        let file;
+
+      	try {
+      		file = require(serviceDir + service + '/' + service);
+      	}
+      	catch (e) {
+      		console.log(e);
+      	}
+
+        accountsAuthData.forEach((accountAuthData) => {
+          file.processWebhook(accountAuthData, resourceId, accountId, (err, res) => {
+            if (err) {
+              console.log('ERROR Processing asana webhook', err);
+            }
+          });
+        })
+      })
+      .catch((error) => {
         console.log(error);
       })
   }

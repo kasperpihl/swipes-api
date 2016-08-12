@@ -6,7 +6,7 @@ import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import ac from 'async';
 import {
-	updateCursor,
+	updateCursors,
   insertEvent
 } from '../../rest/utils/webhook_util.js';
 
@@ -56,13 +56,19 @@ const dropbox = {
 		const accountId = account.id;
 		const userId = account.user_id;
 		const method = 'files.listFolder.continue';
+		const cursors = account.cursors;
+
+		if (!cursors || !cursors.list_folder_cursor) {
+			return callback('The required cursor is missing. Try reauthorize the service to fix the problem.');
+		}
+
 		const params = {
-			cursor: account.list_folder_cursor
+			cursor: cursors.list_folder_cursor
 		};
 
 		const secondCallback = (error, result) => {
 			if (error) {
-				console.log(error);
+				return console.log(error);
 			}
 
 			const cursor = result.cursor;
@@ -75,7 +81,8 @@ const dropbox = {
 
 				this.request({authData, method, params}, secondCallback);
 			} else {
-				updateCursor({userId, accountId, cursor});
+				const cursors = {list_folder_cursor: cursor};
+				updateCursors({ userId, accountId, cursors });
 			}
 		}
 
@@ -109,6 +116,7 @@ const dropbox = {
 			const method = 'users.getAccount';
 			const params = { account_id };
 			const data = { authData, id: account_id };
+			const cursors = {};
 
 			this.request({authData, method, params}, (err, res) => {
 				if (err) {
@@ -128,7 +136,8 @@ const dropbox = {
 						console.log(err);
 					}
 
-					data.list_folder_cursor = res.cursor;
+					cursors['list_folder_cursor'] = res.cursor;
+					data.cursors = cursors;
 
 					return callback(null, data);
 				});

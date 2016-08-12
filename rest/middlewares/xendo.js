@@ -146,7 +146,7 @@ const xendoAddServiceToUser = (req, res, next) => {
       return next(result.error);
     }
 
-    console.log(result); // I just want to see what will this return. Someday maybe :/
+    console.log('Xendo add service to user', result); // I just want to see what will this return. Someday maybe :/
     return next();
   })
   .catch((error) => {

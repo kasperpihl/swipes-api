@@ -1,12 +1,21 @@
+"use strict";
+
 import config from 'config';
+import util from 'util';
 import Asana from 'asana';
 import Promise from 'bluebird';
 import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import SwipesError from '../../rest/swipes-error';
-import { subscribeToAllProjects } from './webhooks';
+import {
+	unsubscribeFromAll,
+	subscribeToAll
+} from './webhooks';
+import {
+	updateCursors,
+	insertEvent
+} from '../../rest/utils/webhook_util.js';
 
-const webhooksHost = config.get('webhooksHost');
 const asanaConfig = config.get('asana');
 
 const createClient = () => {
@@ -48,10 +57,10 @@ const refreshAccessToken = (authData, user) => {
 		const expires_in = authData.expires_in - 30; // 30 seconds margin of error
 		const ts_last_token = authData.ts_last_token;
 		const client = createClient();
-		const userId = user.userId;
+		const userId = user ? user.userId : null;
 		let accessToken;
 
-		if (now - ts_last_token > expires_in) {
+		if ((now - ts_last_token > expires_in) && user) {
 			client.app.accessTokenFromRefreshToken(authData.refresh_token)
 				.then((response) => {
 					accessToken = response.access_token;
@@ -89,6 +98,38 @@ const refreshAccessToken = (authData, user) => {
 	});
 }
 
+const processChanges = (userId, events) => {
+	// Care only for .tag 'file' just for simplicity
+	const filteredEvents = events.filter((event) => {
+		return event['type'] === 'story' && event['action'] !== 'removed';
+	});
+
+	filteredEvents.forEach((event) => {
+		createEvent(userId, event);
+	})
+}
+
+const createEvent = (userId, event) => {
+	const createdBy = event.resource.created_by.name;
+	let text;
+
+	if (event.resource.type === 'comment') {
+		text = createdBy + ' commented ' + event.resource.text;
+	} else {
+		text = createdBy + ' ' + event.resource.text;
+	}
+
+	const eventData = {
+		service: 'asana',
+		message: text
+	}
+
+	insertEvent({
+		userId,
+		eventData
+	});
+}
+
 const asana = {
 	request({ authData, method, params, user }, callback) {
 		const client = createClient();
@@ -114,6 +155,10 @@ const asana = {
 
 				if (id) {
 					asanaPromise = asanaMethod(id, params);
+				} else if (method === 'webhooks.create') {
+					asanaPromise = asanaMethod(params.resource, params.target);
+				} else if (method === 'events.get') {
+					asanaPromise = asanaMethod(params.resource, params.sync);
 				} else {
 					asanaPromise = asanaMethod(params);
 				}
@@ -128,7 +173,12 @@ const asana = {
 				var data = {};
 
 				if (response) {
-					data = response.data || response;
+					// Absolutely ugly patch. I should return always the whole result back
+					if (response.sync) {
+						data = response;
+					} else {
+						data = response.data || response;
+					}
 				}
 
 				callback(null, data);
@@ -197,21 +247,75 @@ const asana = {
 
 		return actions;
 	},
+	processWebhook(account, resourceId, accountId, callback) {
+    const cursorId = resourceId + '-' + accountId;
+		const {
+			authData,
+			user_id,
+			cursors
+		} = account;
+		const method = 'events.get';
+
+		if (!cursors || !cursors[cursorId]) {
+			return callback('The required cursor is missing. Try reauthorize the service to fix the problem.');
+		}
+
+		const sync = cursors[cursorId];
+		const resourceIdInt = +resourceId;
+		const params = {
+			resource: resourceIdInt,
+			sync: sync
+		};
+
+		const secondCallback = (error, result) => {
+			if (error) {
+				return console.log(error);
+			}
+
+			const errors = result.errors;
+			const data = result.data;
+
+			const sync = result.sync;
+
+			processChanges(user_id, data);
+
+			// Repeat until there is no more pages
+			if (data && data.length > 0) {
+				Object.assign(params, { sync });
+
+				this.request({authData, method, params}, secondCallback);
+			} else {
+				const cursors = {
+					[cursorId]: sync
+				}
+				const userId = user_id;
+
+				updateCursors({ userId, accountId, cursors });
+			}
+		}
+
+		this.request({authData, method, params}, secondCallback);
+	},
 	beforeAuthSave(data, callback) {
 		const client = createClient();
 		const code = data.code;
+		const userId = data.userId;
+		let authData, id, show_name;
 
 		client.app.accessTokenFromCode(code)
 			.then((response) => {
-				const authData = response;
-				const { id, email: show_name } = response.data;
+				authData = response;
+				id = response.data.id;
+				show_name = response.data.email;
 				// Need that for the refresh token
 				response.ts_last_token = new Date().getTime() / 1000;
 
-				const data = { authData, id, show_name };
+				data = { authData, id, show_name };
 
-				// T_TODO what if that thing fails miserably?
-				subscribeToAllProjects(authData);
+				return unsubscribeFromAll({ asana, authData, userId });
+			})
+			.then(() => {
+				subscribeToAll({ asana, authData, userId, accountId: id });
 
 				callback(null, data);
 			})
@@ -231,5 +335,4 @@ const asana = {
 	}
 };
 
-// T_TODO for some reason export { asana } does not work here
 module.exports = asana;

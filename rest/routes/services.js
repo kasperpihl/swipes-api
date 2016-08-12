@@ -30,8 +30,7 @@ router.post('/services.request',
 			authData: service.authData,
 			method: data.method,
 			params: data.parameters,
-			user: {userId: req.userId},
-			service: {serviceId: service.id}
+			user: {userId: req.userId}
 		};
 		file.request(options, function (err, result) {
 			if (err) {
