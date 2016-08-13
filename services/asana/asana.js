@@ -280,6 +280,8 @@ const asana = {
 			cursors
 		} = account;
 		const method = 'events.get';
+		const userId = user_id;
+		const user = { userId };
 
 		if (!cursors || !cursors[cursorId]) {
 			return callback('The required cursor is missing. Try reauthorize the service to fix the problem.');
@@ -308,18 +310,17 @@ const asana = {
 			if (data && data.length > 0) {
 				Object.assign(params, { sync });
 
-				this.request({authData, method, params}, secondCallback);
+				this.request({ authData, method, params, user }, secondCallback);
 			} else {
 				const cursors = {
 					[cursorId]: sync
 				}
-				const userId = user_id;
 
 				updateCursors({ userId, accountId, cursors });
 			}
 		}
 
-		this.request({authData, method, params}, secondCallback);
+		this.request({ authData, method, params, user }, secondCallback);
 	},
 	beforeAuthSave(data, callback) {
 		const client = createClient();
