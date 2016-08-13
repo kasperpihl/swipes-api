@@ -8,7 +8,7 @@ const updateCursors = ({ userId, accountId, cursors }) => {
   	.update({services: r.row('services')
   		.map((service) => {
   			return r.branch(
-  				service('id').eq(accountId).or(service('id').eq(r.expr(accountId).coerceTo('number'))),
+  				service('id').eq(accountId),
           service.merge({cursors: service('cursors').default({}).merge(cursors)}),
   				service
   			)
