@@ -9,7 +9,7 @@ import SelectRow from '../components/services/SelectRow'
 import Webview from '../components/workspace/Webview'
 import DropzoneOverlay from '../components/workspace/DropzoneOverlay'
 
-import Chat from './Chat'
+import LocalTile from '../components/workspace/LocalTile'
 import SwipesAppSDK from '../classes/sdk/swipes-sdk-tile'
 import SwClientCom from '../classes/sdk/swipes-sdk-ipc'
 
@@ -60,11 +60,11 @@ class Tile extends Component {
     if(this.slackToken){
       initObj.info.slackToken = this.slackToken;
     }
-
     this.com = new SwClientCom(sendFunction, initObj);
     
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
+    
 
   }
   addListenersToCommunicator(){
@@ -75,9 +75,13 @@ class Tile extends Component {
       }
     });
 
+    this.com.addListener('tile.saveData', (data) => {
+
+    });
+
     this.com.addListener('modal.load', (data) => {
       modal.loadModal(data.modal, data.options, callback);
-    })
+    });
 
     this.com.addListener('openURL', (data) => {
       if(data.url){
@@ -146,8 +150,8 @@ class Tile extends Component {
   }
   renderWebview(tile){
     const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
-    let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
 
+    let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
     if (os.platform() === 'win32') {
       console.log('windows');
       preloadUrl = path.resolve('preload/tile-preload.js')
@@ -155,13 +159,8 @@ class Tile extends Component {
 
     return <Webview onLoad={this.onLoad} receivedCommand={this.receivedCommand} preloadUrl={preloadUrl} url={url} />;
   }
-  renderLocalTile(LocalTile){
-    // Some hustle here to get the SDK to work on a local tile.
-    // Should probably refactor a little later
-    const swipes = new SwipesAppSDK(this.receivedCommand)
-    // I'm instantiating the ClientCom here, because I need the ref to this.com before onLoad
-    this.com = new SwClientCom(swipes.com.receivedCommand);
-    return <Chat swipes={swipes} tileId={this.props.tile.id}/>
+  renderLocalTile(tile){
+    return <LocalTile tile={tile} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
   }
   render() {
     // KRIS_TODO: Replace Loading with something dope
@@ -172,7 +171,7 @@ class Tile extends Component {
       cardContent = this.renderServiceSelector(tile);
       if(!cardContent){
         //cardContent = this.renderWebview(tile);
-        cardContent = this.renderLocalTile();
+        cardContent = this.renderLocalTile(tile);
       }
     }
 

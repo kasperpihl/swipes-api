@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import * as actions from '../constants/ActionTypes'
 import { bindAll } from '../classes/utils'
 
@@ -10,7 +11,12 @@ class Chat extends Component {
     bindAll(this, [ 'onClick' ])
   }
   componentDidMount(){
-    console.log(this.props);
+    const { swipes, saveData, tileId } = this.props
+    swipes.service('slack').request('rtm.start').then((res, err) => {
+
+      swipes.saveData(res.data);
+    })
+    // services.request
   }
   initialLoad(){
     const { swipes } = this.props;
@@ -27,16 +33,4 @@ class Chat extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    
-  }
-}
-
-Chat.propTypes = {
-  
-}
-
-const ConnectedChat = connect(mapStateToProps, {
-})(Chat)
-export default ConnectedChat
+export default Chat;

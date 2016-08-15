@@ -13,7 +13,6 @@ export default class SwipesAppSDK {
     this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
     this.com.addListener('init', (data) => {
       if(data.token) {
-        console.log('this', this);
         this.api.setToken(data.token);
       }
       if(data.info){
@@ -56,33 +55,33 @@ export default class SwipesAppSDK {
 
 
   // Shorthands for contacting service api
+  getRequestOptions(serviceName, method, parameters) {
+    if(!method || typeof method !== 'string' || !method.length){
+      throw new Error("SwipesAppSDK: service:request method required");
+    }
+    if(typeof parameters === 'function'){
+      callback = parameters;
+    }
+    parameters = (typeof parameters === 'object') ? parameters : {};
+    
+    const options = {
+      service: serviceName,
+      data: {
+        method: method,
+        parameters: parameters
+      }
+    };
+
+    if(this.info.workflow && this.info.workflow.selectedAccountId){
+      options.account_id = this.info.workflow.selectedAccountId;
+    }
+    return options;
+  }
   service(serviceName){
     return {
-      getRequestOptions: (method, parameters) => {
-        if(!method || typeof method !== 'string' || !method.length){
-          throw new Error("SwipesAppSDK: service:request method required");
-        }
-        if(typeof parameters === 'function'){
-          callback = parameters;
-        }
-        parameters = (typeof parameters === 'object') ? parameters : {};
-        
-        var options = {
-          service: serviceName,
-          data: {
-            method: method,
-            parameters: parameters
-          }
-        };
-
-        if(this.info.workflow && this.info.workflow.selectedAccountId){
-          options.account_id = this.info.workflow.selectedAccountId;
-        }
-        return options;
-      }
       request: (method, parameters, callback) => {
         return new Promise((resolve, reject) => {
-          const options = this.getRequestOptions(method, parameters)
+          const options = this.getRequestOptions(serviceName, method, parameters)
 
           var intCallback = function(res, error){
             if(callback) callback(res,error);
@@ -96,9 +95,9 @@ export default class SwipesAppSDK {
       },
       stream: (method, parameters, callback) => {
         return new Promise((resolve, reject) => {
-          const options = this.getRequestOptions(method, parameters);
+          const options = this.getRequestOptions(serviceName, method, parameters);
           options.stream = true;
-          
+
           var intCallback = function(res, error){
             if(callback) callback(res,error);
             if(res) resolve(res);

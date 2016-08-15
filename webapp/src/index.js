@@ -16,11 +16,7 @@ let Page, data;
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
 if(!window.process || !window.process.versions.electron){
-  if(false){
-    Page = require('./components/resizeable-grid/grid_test');
-    console.log('here I am2.')
-  }
-  else if(window.__share_data){
+  if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage')
     data = window.__share_data;

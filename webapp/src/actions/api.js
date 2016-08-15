@@ -55,6 +55,8 @@ const request = (options, data) => {
 }
 
 const serviceRequest = (serviceName, method, parameters, stream) => {
+
+  console.log('args from actions',  serviceName, method, parameters);
   const options = {
     service: serviceName,
     data: {
