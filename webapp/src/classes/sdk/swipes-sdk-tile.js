@@ -5,9 +5,25 @@ export default class SwipesAppSDK {
   constructor(sendFunction){
     let apiUrl = window.location.origin;
     this.api = new SwipesAPIConnector(apiUrl);
+
     this.info = {}; // initObj.info from tile_loader will be this after init.
 
     this.com = new SwClientCom(sendFunction);
+    
+    this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
+    this.com.addListener('init', (data) => {
+      if(data.token) {
+        console.log('this', this);
+        this.api.setToken(data.token);
+      }
+      if(data.info){
+        this.info = data.info;
+      }
+      // Now let's unlock the communicator since the connection from the workspace is ready
+      if(this.com.isLocked()){
+        this.com.unlock();
+      }
+    });
   }
   // Shorthand for getting the init event
   ready(callback){
@@ -42,24 +58,31 @@ export default class SwipesAppSDK {
   // Shorthands for contacting service api
   service(serviceName){
     return {
+      getRequestOptions: (method, parameters) => {
+        if(!method || typeof method !== 'string' || !method.length){
+          throw new Error("SwipesAppSDK: service:request method required");
+        }
+        if(typeof parameters === 'function'){
+          callback = parameters;
+        }
+        parameters = (typeof parameters === 'object') ? parameters : {};
+        
+        var options = {
+          service: serviceName,
+          data: {
+            method: method,
+            parameters: parameters
+          }
+        };
+
+        if(this.info.workflow && this.info.workflow.selectedAccountId){
+          options.account_id = this.info.workflow.selectedAccountId;
+        }
+        return options;
+      }
       request: (method, parameters, callback) => {
         return new Promise((resolve, reject) => {
-          if(!method || typeof method !== 'string' || !method.length)
-          throw new Error("SwipesAppSDK: service:request method required");
-          if(typeof parameters === 'function')
-            callback = parameters;
-          parameters = (typeof parameters === 'object') ? parameters : {};
-          var options = {
-            service: serviceName,
-            data: {
-              method: method,
-              parameters: parameters
-            }
-          };
-
-          if(this.info.workflow && this.info.workflow.selectedAccountId){
-            options.account_id = this.info.workflow.selectedAccountId;
-          }
+          const options = this.getRequestOptions(method, parameters)
 
           var intCallback = function(res, error){
             if(callback) callback(res,error);
@@ -73,27 +96,16 @@ export default class SwipesAppSDK {
       },
       stream: (method, parameters, callback) => {
         return new Promise((resolve, reject) => {
-
-          if(!method || typeof method !== 'string' || !method.length)
-            throw new Error("SwipesAppSDK: service:stream method required");
-          if(typeof parameters === 'function')
-            callback = parameters;
-          parameters = (typeof parameters === 'object') ? parameters : {};
-          var options = {
-            service: serviceName,
-            data: {
-              method: method,
-              parameters: parameters
-            }
-          };
-
+          const options = this.getRequestOptions(method, parameters);
+          options.stream = true;
+          
           var intCallback = function(res, error){
             if(callback) callback(res,error);
             if(res) resolve(res);
             else reject(error);
           };
 
-          this.api.streamRequest("services.stream", options, intCallback);
+          this.api.request("services.stream", options, intCallback);
         })
       }
     };

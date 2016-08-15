@@ -17,7 +17,10 @@ export default class SwClientCom {
 
     this._sendFunction = sendFunction;
     if(initObj){
-      this.sendCommand('init', initObj);
+      // Hack to send initObj after the class has been made, but still leave it in constructor.
+      setTimeout(() => {
+        this.sendCommand('init', initObj);
+      }, 1);
     }
   }
   isLocked(){
@@ -67,6 +70,7 @@ export default class SwClientCom {
     }
     // Check if it's a command, or reply to a command.
     if (message.command) {
+      console.log('received command', message);
       var res = null;
       // When receiving a command, check if any listeners have been attached and call them.
       this.getListeners(message.command).forEach(({ listener }) => {

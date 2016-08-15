@@ -1,3 +1,4 @@
+
 export default class SwipesAPIConnector {
   constructor(baseUrl, token) {
 
@@ -11,7 +12,7 @@ export default class SwipesAPIConnector {
   setToken(token) {
     this._token = token;
     this._apiQueue.forEach( (r) => {
-      this.callSwipesApi(r.options, r.data, r.callback);
+      this.request(r.options, r.data, r.callback);
     })
     this._apiQueue = [];
   };
@@ -27,17 +28,15 @@ export default class SwipesAPIConnector {
   };
 
   request(options, data, callback) {
-    var command, force;
-
-    if(typeof options === 'string') {
-      command = options;
+    if(typeof options !== 'object') {
+      options = {command: options};
     }
 
-    if (typeof options === 'object') {
-      command = options.command || null;
-      force = options.force || false;
+    if(!options.command){
+      throw new Error('SwipesAppSDK: request: command required');
     }
-    if (!this._token && !force) {
+
+    if (!this._token && !options.force) {
       this._apiQueue.push({options: options, data: data, callback: callback});
 
       return;
@@ -47,7 +46,7 @@ export default class SwipesAPIConnector {
       callback = data;
     }
 
-    var url = this._apiUrl + command;
+    var url = this._apiUrl + options.command;
 
     if ((data == null) || typeof data !== 'object') {
       data = {};
@@ -60,75 +59,27 @@ export default class SwipesAPIConnector {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.responseType = 'json'
+    if(options.stream){
+      xhr.responseType = 'arraybuffer';
+    }
     xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
     xhr.onload = function(e) {
       var data = e.currentTarget.response;
-
-      console.log('/' + command + ' success', data);
-      if (data && data.ok) {
-        if(typeof callback === 'function')
-          callback(data);
-      } else {
-        if(typeof callback === 'function')
-          callback(false, data);
+      console.log('/' + options.command + ' success', data);
+      if(typeof callback === 'function'){
+        if(options.stream || (data && data.ok)){
+          callback(data)
+        }
+        else{
+          callback(false, data)
+        }
       }
     };
 
     xhr.onerror = function(e) {
       var error = e; //T_TODO make sure that the `e` is actually the error
-      console.log('/' + command + ' error', error);
-      if(error.responseJSON)
-        error = error.responseJSON;
-      if(typeof callback === 'function')
-        callback(false, error);
-    };
-
-    xhr.send(serData);
-  }
-
-  streamRequest(options, data, callback) {
-    var command,
-        force;
-
-    if(typeof options === 'string') {
-      command = options;
-    }
-
-    if (typeof options === 'object') {
-      command = options.command || null;
-      force = options.force || false;
-    }
-
-    // If no data is send, but only a callback set those
-    if (typeof data === 'function') {
-      callback = data;
-    }
-
-    var url = this._apiUrl + command;
-
-    if ((data == null) || typeof data !== 'object') {
-      data = {};
-    }
-
-    data.token = this._token;
-
-    var serData = JSON.stringify(data);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.responseType = 'arraybuffer';
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-    xhr.onload = function(e) {
-      var data = e.currentTarget.response;
-
-      if(typeof callback === 'function')
-        callback(data);
-    };
-
-    xhr.onerror = function(e) {
-      console.log('/' + command + ' error', error);
+      console.log('/' + options.command + ' error', error);
       if(error.responseJSON)
         error = error.responseJSON;
       if(typeof callback === 'function')
