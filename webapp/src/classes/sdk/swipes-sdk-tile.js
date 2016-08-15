@@ -1,4 +1,3 @@
-import Q from 'q'
 import SwipesAPIConnector from './swipes-sdk-rest-api'
 import SwClientCom from './swipes-sdk-ipc'
 
@@ -26,6 +25,9 @@ export default class SwipesAppSDK {
   sendEvent(command, data, callback){
     this.com.sendCommand(command, data, callback);
   }
+  saveData(data, callback){
+    this.com.sendCommand('tile.saveData', data, callback);
+  }
 
   isShareURL(url){
     url = url || "";
@@ -41,58 +43,58 @@ export default class SwipesAppSDK {
   service(serviceName){
     return {
       request: (method, parameters, callback) => {
-        var deferred = Q.defer();
-
-        if(!method || typeof method !== 'string' || !method.length)
+        return new Promise((resolve, reject) => {
+          if(!method || typeof method !== 'string' || !method.length)
           throw new Error("SwipesAppSDK: service:request method required");
-        if(typeof parameters === 'function')
-          callback = parameters;
-        parameters = (typeof parameters === 'object') ? parameters : {};
-        var options = {
-          service: serviceName,
-          data: {
-            method: method,
-            parameters: parameters
+          if(typeof parameters === 'function')
+            callback = parameters;
+          parameters = (typeof parameters === 'object') ? parameters : {};
+          var options = {
+            service: serviceName,
+            data: {
+              method: method,
+              parameters: parameters
+            }
+          };
+
+          if(this.info.workflow && this.info.workflow.selectedAccountId){
+            options.account_id = this.info.workflow.selectedAccountId;
           }
-        };
 
-        if(this.info.workflow && this.info.workflow.selectedAccountId){
-          options.account_id = this.info.workflow.selectedAccountId;
-        }
+          var intCallback = function(res, error){
+            if(callback) callback(res,error);
+            if(res) resolve(res);
+            else reject(error);
+          };
 
-        var intCallback = function(res, error){
-          if(callback) callback(res,error);
-          if(res) deferred.resolve(res);
-          else deferred.reject(error);
-        };
+          this.api.request("services.request", options, intCallback);
+        })
 
-        this.api.request("services.request", options, intCallback);
-        return deferred.promise;
       },
       stream: (method, parameters, callback) => {
-        var deferred = Q.defer();
+        return new Promise((resolve, reject) => {
 
-        if(!method || typeof method !== 'string' || !method.length)
-          throw new Error("SwipesAppSDK: service:stream method required");
-        if(typeof parameters === 'function')
-          callback = parameters;
-        parameters = (typeof parameters === 'object') ? parameters : {};
-        var options = {
-          service: serviceName,
-          data: {
-            method: method,
-            parameters: parameters
-          }
-        };
+          if(!method || typeof method !== 'string' || !method.length)
+            throw new Error("SwipesAppSDK: service:stream method required");
+          if(typeof parameters === 'function')
+            callback = parameters;
+          parameters = (typeof parameters === 'object') ? parameters : {};
+          var options = {
+            service: serviceName,
+            data: {
+              method: method,
+              parameters: parameters
+            }
+          };
 
-        var intCallback = function(res, error){
-          if(callback) callback(res,error);
-          if(res) deferred.resolve(res);
-          else deferred.reject(error);
-        };
+          var intCallback = function(res, error){
+            if(callback) callback(res,error);
+            if(res) resolve(res);
+            else reject(error);
+          };
 
-        this.api.streamRequest("services.stream", options, intCallback);
-        return deferred.promise;
+          this.api.streamRequest("services.stream", options, intCallback);
+        })
       }
     };
   }

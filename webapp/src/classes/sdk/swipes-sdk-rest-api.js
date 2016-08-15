@@ -1,5 +1,3 @@
-import Q from 'q'
-
 export default class SwipesAPIConnector {
   constructor(baseUrl, token) {
 
@@ -13,7 +11,7 @@ export default class SwipesAPIConnector {
   setToken(token) {
     this._token = token;
     this._apiQueue.forEach( (r) => {
-      this.callSwipesApi(r.options, r.data, r.callback, r.deferred);
+      this.callSwipesApi(r.options, r.data, r.callback);
     })
     this._apiQueue = [];
   };
@@ -28,11 +26,7 @@ export default class SwipesAPIConnector {
     return this._apiUrl;
   };
 
-  request(options, data, callback, deferred) {
-    if(!deferred && window.Q) {
-      deferred = Q.defer();
-    }
-
+  request(options, data, callback) {
     var command, force;
 
     if(typeof options === 'string') {
@@ -44,9 +38,9 @@ export default class SwipesAPIConnector {
       force = options.force || false;
     }
     if (!this._token && !force) {
-      this._apiQueue.push({options: options, data: data, callback: callback, deferred: deferred});
+      this._apiQueue.push({options: options, data: data, callback: callback});
 
-      return deferred.promise;
+      return;
     }
     // If no data is send, but only a callback set those
     if (typeof data === 'function') {
@@ -75,34 +69,25 @@ export default class SwipesAPIConnector {
       if (data && data.ok) {
         if(typeof callback === 'function')
           callback(data);
-        if(deferred) deferred.resolve(data);
       } else {
         if(typeof callback === 'function')
           callback(false, data);
-        if(deferred) deferred.reject(data);
       }
     };
 
     xhr.onerror = function(e) {
-      console.log(e);
       var error = e; //T_TODO make sure that the `e` is actually the error
       console.log('/' + command + ' error', error);
       if(error.responseJSON)
         error = error.responseJSON;
       if(typeof callback === 'function')
         callback(false, error);
-      if(deferred) deferred.reject(error);
     };
 
     xhr.send(serData);
-    return deferred ? deferred.promise : false;
   }
 
-  streamRequest(options, data, callback, deferred) {
-    if(!deferred && window.Q) {
-      deferred = Q.defer();
-    }
-
+  streamRequest(options, data, callback) {
     var command,
         force;
 
@@ -140,7 +125,6 @@ export default class SwipesAPIConnector {
 
       if(typeof callback === 'function')
         callback(data);
-      if(deferred) deferred.resolve(data);
     };
 
     xhr.onerror = function(e) {
@@ -149,7 +133,6 @@ export default class SwipesAPIConnector {
         error = error.responseJSON;
       if(typeof callback === 'function')
         callback(false, error);
-      if(deferred) deferred.reject(error);
     };
 
     xhr.send(serData);
