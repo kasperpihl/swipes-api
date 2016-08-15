@@ -11,9 +11,6 @@ const babelOptions = JSON.stringify({
   presets: ['es2015', 'react']
 });
 
-var swipesStdDep = ['react', 'react-dom', 'redux', 'react-redux']
-var vendorDep = Object.keys(require("./package.json").dependencies).filter( dep => (swipesStdDep.indexOf(dep) == -1) )
-
 module.exports = {
   context: __dirname,
   devtool: 'eval',
@@ -23,9 +20,7 @@ module.exports = {
       'webpack/hot/only-dev-server',
       './src/index'
     ],
-    vendor: vendorDep,
-    swipesStd: swipesStdDep,
-    tileLoader: './src/tile-loader'
+    vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
       path: path.join(__dirname, 'dist'),
@@ -34,18 +29,11 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'swipesStd']
-    }),
-    new HtmlWebpackPlugin({
-      template: 'statics/tile.html',
-      filename: 'tile.html',
-      inject: 'head',
-      chunks: ['swipesStd', 'tileLoader']
+      name: 'vendor'
     }),
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
-      inject: 'head',
-      chunks: ['vendor', 'swipesStd', 'app']
+      chunks: ['vendor', 'app']
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin()
@@ -80,6 +68,7 @@ module.exports = {
     hot: true,
     port: 3000,
     progress:true,
+    open: true,
     contentBase: './dist',
     inline: true,
     historyApiFallback: true,

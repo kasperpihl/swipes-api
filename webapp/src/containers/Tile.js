@@ -4,9 +4,13 @@ import { modal, workspace, main } from '../actions'
 import * as actions from '../constants/ActionTypes'
 import { bindAll } from '../classes/utils';
 
+
 import SelectRow from '../components/services/SelectRow'
 import Webview from '../components/workspace/Webview'
 import DropzoneOverlay from '../components/workspace/DropzoneOverlay'
+
+import Chat from './Chat'
+import SwipesAppSDK from '../classes/sdk/swipes-sdk-tile'
 import SwClientCom from '../classes/sdk/swipes-sdk-ipc'
 
 const remote = nodeRequire('electron').remote;
@@ -43,9 +47,6 @@ class Tile extends Component {
 
   onLoad(sendFunction){
     const tile = this.props.tile;
-
-
-
     const initObj = {
       // Info object will be available in SDK from swipes.info
       info: {
@@ -60,8 +61,8 @@ class Tile extends Component {
       initObj.info.slackToken = this.slackToken;
     }
 
-    // Initialize the communicator
     this.com = new SwClientCom(sendFunction, initObj);
+    
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
 
@@ -154,8 +155,13 @@ class Tile extends Component {
 
     return <Webview onLoad={this.onLoad} receivedCommand={this.receivedCommand} preloadUrl={preloadUrl} url={url} />;
   }
-  renderLocalTile(){
-
+  renderLocalTile(LocalTile){
+    // Some hustle here to get the SDK to work on a local tile.
+    // Should probably refactor a little later
+    const swipes = new SwipesAppSDK(this.receivedCommand)
+    // I'm instantiating the ClientCom here, because I need the ref to this.com before onLoad
+    this.com = new SwClientCom(swipes.com.receivedCommand);
+    return <Chat swipes={swipes} tileId={this.props.tile.id}/>
   }
   render() {
     // KRIS_TODO: Replace Loading with something dope
@@ -165,8 +171,8 @@ class Tile extends Component {
     if(tile){
       cardContent = this.renderServiceSelector(tile);
       if(!cardContent){
-        cardContent = this.renderWebview(tile);
-        // Render local tiles
+        //cardContent = this.renderWebview(tile);
+        cardContent = this.renderLocalTile();
       }
     }
 

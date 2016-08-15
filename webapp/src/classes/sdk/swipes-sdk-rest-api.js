@@ -1,3 +1,5 @@
+import Q from 'q'
+
 export default class SwipesAPIConnector {
   constructor(baseUrl, token) {
 

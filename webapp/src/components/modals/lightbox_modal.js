@@ -9,15 +9,18 @@ var LightboxModal = React.createClass({
       lightboxImg: 'inactive'
     }
   },
+  propTypes: {
+    hide: React.PropTypes.func
+  },
   componentDidMount: function(){
     window.focus();
 	},
   closeModal: function(e) {
     var lightboxWrapper = this.refs.lightboxwrapper;
     var lightboxButton = this.refs.lightboxbutton;
-
+    const { hide } = this.props;
     if(e.target === lightboxWrapper || (e.target === lightboxButton)) {
-      this.props.hide();
+      hide();
     }
   },
   imgLoaded: function() {

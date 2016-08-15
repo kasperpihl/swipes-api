@@ -1,0 +1,221 @@
+.swipes-sidemenu {
+	position: fixed;
+	width:$expandedWidth;
+	height:100%;
+	background-color: #fbfbfb;
+	overflow: hidden;
+	top:0;
+	left:0;
+	z-index: 99999;
+	transform: translateX( - ($expandedWidth -  $minWidth) );
+	transition: 0.1s ease-in;
+	transition-delay: $returnDelay;
+
+	.relative-wrapper{
+		height:100%;
+		width:100%;
+		position:relative;
+	}
+	.scroller{
+		width:100%;
+		height:100%;
+		overflow: hidden;
+
+		h3 {
+			opacity: 0;
+			font-size: 12px;
+			text-transform: uppercase;
+			padding: 10px 30px;
+			letter-spacing: .5px;
+			transition: .1s;
+			transition-delay: $returnDelay;
+			color: $deepBlue-80;
+			font-weight: 500;
+			margin-bottom: 5px;
+
+			&:not(:first-child) {
+				margin-top: 25px;
+			}
+		}
+	}
+	.content-container{
+		height:100%;
+	}
+	/*
+		K_TODO: Remove this and make a delegate method on sidemenu instead.
+	 */
+	/*&.pinned + .chat-list-container {
+		width: calc(100% - 180px);
+		transform: translateX(180px);
+		transition: 0.3s ease-in;
+		transition-delay: .1s;
+	}*/
+	&:hover:not(.force-close), &.pinned {
+		.scroller{
+			overflow-y: auto;
+		}
+		border-right: 1px solid #eee;
+		transform: translateX(0);
+		transition: 0.1s ease-in;
+		transition-delay: 0.05s;
+
+		h3 {
+			opacity: 1;
+		}
+
+		.menu-item{
+			&.active{
+				background: #ecf1f6;
+			}
+			.indicator{
+				opacity: 0;
+			}
+			.name{
+				opacity: 1;
+			}
+		}
+
+		.notification {
+			background-color: $salmon;
+			border-color: $salmon;
+			color: #fbfbfb;
+		}
+	}
+	.menu-item{
+		height:$itemHeight;
+		position: relative;
+		.indicator{
+			position: absolute;
+			left: $expandedWidth - $minWidth;
+			top:50%;
+			margin-top: - $indicatorUnreadHeight / 2;
+			background: $color;
+			width: $indicatorWidth;
+			height: $indicatorHeight;
+			transition-delay: $returnDelay;
+		}
+		.indicator.even {
+			animation: indicator-glow-even 1.5s 1;
+		}
+		.indicator.odd {
+			animation: indicator-glow 1.5s 1;
+		}
+		.notification{
+			position: absolute;
+			height: $notificationHeight;
+			// width: $notificationHeight;
+			padding: 0 8px;
+			border-radius: $notificationHeight/2;
+			text-align: center;
+			top: ($itemHeight - $notificationHeight) / 2;
+			right: 8px;
+			font-weight: 400;
+			border: 1px solid $hoverColor;
+			color: $hoverColor;
+			line-height: 15px;
+			font-size: 9px;
+		}
+		.notification.even {
+			animation: notification-glow-even 1.5s 1;
+		}
+		.notification.odd {
+			animation: notification-glow 1.5s 1;
+		}
+		.name{
+			width: $expandedWidth - $notificationHeight - 20px;
+			opacity: 0;
+			padding-left: 50px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			color: $deepBlue-60;
+			line-height: $itemHeight;
+			font-size: 14px;
+			font-weight: 400;
+			cursor: default;
+			transition-delay: $returnDelay;
+
+			&.channel {
+				padding-left: 30px;
+			}
+			/*
+				K_TODO: Rewrite this to be a generic icon that can be added from local_sidemenu somehow.
+			 */
+			&.presence {
+
+				&:after {
+					content: "";
+					position: absolute;
+					/* right: 2px; */
+					left: 30px;
+					width: 6px;
+					height: 6px;
+					background-color: $studioGray-60;
+					border-radius: 50%;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+
+				&.active {
+					&:after {
+						content: "";
+						position: absolute;
+						/* right: 2px; */
+						left: 30px;
+						width: 6px;
+						height: 6px;
+						background-color: #3ed37d;
+						border-radius: 50%;
+						top: 50%;
+						transform: translateY(-50%);
+					}
+				}
+			}
+		}
+		&:hover{
+			background: #efefef;
+			color: #000923;
+		}
+		&.unread{
+			.name{
+				font-weight: 500;
+				color: $deepBlue-80;
+			}
+			.indicator{
+				background: $hoverColor;
+				border-bottom-right-radius: 1px;
+				border-top-right-radius: 1px;
+				width: $indicatorWidth + 4px;
+				height: $indicatorUnreadHeight;
+			}
+		}
+	}
+}
+@keyframes indicator-glow {
+	15%, 90%  {
+		background: $salmon;
+	}
+}
+
+@keyframes indicator-glow-even {
+	15%, 90%  {
+		background: $salmon;
+	}
+}
+
+
+@keyframes notification-glow {
+	15%, 90%  {
+		background: $salmon;
+		border: 1px solid $salmon;
+		color: white;
+	}
+}
+
+@keyframes notification-glow-even {
+	15%, 90%  {
+		background: $salmon;
+		border: 1px solid $salmon;
+		color: white;
+	}
+}

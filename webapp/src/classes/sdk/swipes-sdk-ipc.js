@@ -13,6 +13,8 @@ export default class SwClientCom {
     if(typeof sendFunction !== 'function'){
       throw new Error('SwClientCom: sendFunction must be a function taking one parameter: data');
     }
+    this.receivedCommand = this.receivedCommand.bind(this);
+
     this._sendFunction = sendFunction;
     if(initObj){
       this.sendCommand('init', initObj);

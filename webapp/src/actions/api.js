@@ -54,7 +54,25 @@ const request = (options, data) => {
   }
 }
 
+const serviceRequest = (serviceName, method, parameters, stream) => {
+  const options = {
+    service: serviceName,
+    data: {
+      method: method,
+      parameters: parameters
+    }
+  };
+  const req = stream ? 'services.stream' : 'services.request'
+  return request(req, options)
+}
+
+const serviceStream = (serviceName, method, parameters) => {
+  return serviceRequest(serviceName, method, parameters, true)
+}
+
 export {
   apiUrl,
-  request
+  request,
+  serviceRequest,
+  serviceStream
 }

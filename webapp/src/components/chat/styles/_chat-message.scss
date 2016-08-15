@@ -1,0 +1,140 @@
+.chat__message {
+  @include size(100%, auto);
+  padding: 15px 20px;
+  padding-bottom: 0;
+  position: relative;
+
+  &.extra-message {
+    padding: 0 20px;
+  }
+
+  &.extra-message:hover & {
+    &--content:before {
+      opacity: 1;
+		}
+  }
+
+  &__info {
+    @include size(100%, 35px);
+    position: relative;
+    padding-left: 50px;
+    @include flex(center, flex-start);
+
+    &--profile-img {
+      @include size(35px, 35px);
+      border-radius: 50%;
+      position: absolute;
+      left: 7.5px;
+      top: 0;
+      @include flex(center, center);
+
+      img {
+        @include size(25px, 25px);
+        border-radius: inherit;
+      }
+    }
+
+    &--author {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: $deepBlue-80;
+      text-transform: uppercase;
+    }
+
+    &--timestamp {
+      padding-left: 15px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: $deepBlue-40;
+    }
+  }
+
+  &--content {
+    padding: 0 50px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: $deepBlue-80;
+    position: relative;
+
+    &:before {
+			content: attr(data-timestamp);
+      @include size(auto, 100%);
+			position: absolute;
+      padding: 0 5px;
+      right: 0;
+      top: 0;
+			font-size: 10px;
+			text-transform: uppercase;
+			color: $deepBlue-40;
+      opacity: 0;
+      @include flex(center, center);
+		}
+
+    &:hover {
+      background-color: $deepBlue-5;
+    }
+
+    &--text {
+
+      span {
+        padding-right: 3px;
+
+        &:empty {
+          display: none;
+        }
+      }
+
+      & > img {
+        @include size(17px !important, 17px !important);
+        transform: translateY(3px);
+      }
+
+      a {
+        color: $matBlue;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.dot {
+  @include size(8px, 8px);
+  position: absolute !important;
+  left: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+a {
+  cursor: default;
+
+  &:hover > .unread-bar {
+    background-color: $blue-120;
+  }
+
+  .unread-bar {
+    @include size(100%, 30px);
+    max-width: 650px;
+    background-color: $blue-100;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    border-radius: 5px;
+    @include flex(center, center);
+
+    i.material-icons {
+      padding: 0 8px;
+      color: white !important;
+      font-size: 16px !important;
+    }
+
+    &.read {
+      display: none;
+    }
+  }
+}

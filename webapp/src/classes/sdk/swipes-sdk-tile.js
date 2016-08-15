@@ -1,4 +1,4 @@
-require('expose?Q!q');
+import Q from 'q'
 import SwipesAPIConnector from './swipes-sdk-rest-api'
 import SwClientCom from './swipes-sdk-ipc'
 
@@ -8,21 +8,7 @@ export default class SwipesAppSDK {
     this.api = new SwipesAPIConnector(apiUrl);
     this.info = {}; // initObj.info from tile_loader will be this after init.
 
-    // workspaceSendFunction is defined in the preload
-    this.com = new SwClientCom(workspaceSendFunction || sendFunction);
-    this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
-    this.com.addListener('init', (data) => {
-      if(data.token) {
-        this.api.setToken(data.token);
-      }
-      if(data.info){
-        this.info = data.info;
-      }
-      // Now let's unlock the communicator since the connection from the workspace is ready
-      if(this.com.isLocked()){
-        this.com.unlock();
-      }
-    });
+    this.com = new SwClientCom(sendFunction);
   }
   // Shorthand for getting the init event
   ready(callback){

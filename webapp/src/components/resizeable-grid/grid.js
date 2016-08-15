@@ -487,7 +487,7 @@ var Grid = React.createClass({
       }
     }
     return (
-      <div ref="grid" className={className} styles={styles}>
+      <div ref="grid" className={className} style={styles}>
         {columns}
       </div>
     )

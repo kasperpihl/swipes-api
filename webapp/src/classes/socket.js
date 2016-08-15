@@ -17,7 +17,10 @@ export default class Socket {
       
       this.socket = io.connect(url, {
         query: 'token=' + state.main.token,
-        reconnectionDelay: 5000
+        reconnectionDelay: 5000,
+        'reconnection': true,
+        'reconnectionDelayMax': 5000,
+        'forceNew': true
       });
       this.socket.on('message', this.message)
       this.socket.on('connect', () => this.changeStatus('online'))
