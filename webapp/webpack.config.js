@@ -75,7 +75,6 @@ module.exports = {
     proxy: {
       '/v1*': Object.assign({}, apiRedirect),
       '/socket.io*': Object.assign({}, apiRedirect, {ws: true}),
-      '/workflows*': Object.assign({}, apiRedirect),
       '/s/*': Object.assign({}, apiRedirect)
     }
   }

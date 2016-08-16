@@ -1,24 +1,10 @@
-html, body, #content {
-    height:100%;
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
-    line-height: 1.4;
-    background-color: #fbfbfb;
-}
+@import "../../../components/global-styles/vars";
 
-::-webkit-scrollbar {
-    width: 10px;
-    background-color: rgba(black,0);
-    overflow: hidden;
-}
+@import "mixins";
+@import "input";
+@import "chat-message";
+@import "chat-attachment";
 
-::-webkit-scrollbar-thumb {
-    background-color: rgba(black,.1);
-}
-
-.card-container {
-    @include size(auto, 100%);
-    position:relative;
-}
 
 .chat-list-container {
     @include size(100%, 100%);

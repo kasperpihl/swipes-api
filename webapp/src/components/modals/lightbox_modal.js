@@ -1,6 +1,5 @@
 var React = require('react');
 
-var CircularProgress = <div>Loading</div>
 
 var LightboxModal = React.createClass({
   getInitialState: function() {
@@ -18,7 +17,7 @@ var LightboxModal = React.createClass({
   closeModal: function(e) {
     var lightboxWrapper = this.refs.lightboxwrapper;
     var lightboxButton = this.refs.lightboxbutton;
-    const { hide } = this.props;
+    const { hide } = this.props.data;
     if(e.target === lightboxWrapper || (e.target === lightboxButton)) {
       hide();
     }
@@ -47,7 +46,7 @@ var LightboxModal = React.createClass({
         <h2 className="image-title">{options.title}</h2>
         <img src={options.src} className={'lightbox-image ' + this.state.lightboxImg} ref='lightboxImage' onLoad={this.imgLoaded}/>
         <div className={'lightbox-loader ' + this.state.loading}>
-  				<CircularProgress color="#fff" size={1}/>
+  				Loading
   			</div>
         {this.renderOpenImage()}
       </div>

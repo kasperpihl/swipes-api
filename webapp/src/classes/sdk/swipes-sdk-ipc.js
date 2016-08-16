@@ -70,7 +70,6 @@ export default class SwClientCom {
     }
     // Check if it's a command, or reply to a command.
     if (message.command) {
-      console.log('received command', message);
       var res = null;
       // When receiving a command, check if any listeners have been attached and call them.
       this.getListeners(message.command).forEach(({ listener }) => {

@@ -1,3 +1,27 @@
+import React, { Component, PropTypes } from 'react'
+import ChatSection from './ChatSection'
+
+class ChatList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+  componentDidMount() {
+  }
+  render() {
+    return (
+      <div>
+      </div>
+    )
+  }
+}
+export default ChatList
+
+ChatList.propTypes = {
+  removeThis: PropTypes.string.isRequired
+}
+
+
 var React = require('react');
 var Reflux = require('reflux');
 var chatStore = require('../stores/ChatStore');
@@ -5,11 +29,8 @@ var chatActions = require('../actions/ChatActions');
 var ChatItem = require('./chat_item');
 var ChatInput = require('./chat_input');
 var channelStore = require('../stores/ChannelStore');
-var CircularProgress = require('material-ui/lib/circular-progress');
-var LocalSidemenu = require('./local_sidemenu');
 
 var ChatList = React.createClass({
-  mixins: [chatStore.connect('chat'), chatStore.connect(), channelStore.connect()],
   shouldScrollToBottom: true,
   hasRendered: false,
   getInitialState() {
@@ -42,15 +63,6 @@ var ChatList = React.createClass({
       }
     }
   },
-  checkForcedSidemenu: function(){
-    var forcedSmallSidemenu = false;
-    if(document.body.clientWidth < 600){
-      forcedSmallSidemenu = true;
-    }
-    if(this.state.forcedSmallSidemenu != forcedSmallSidemenu){
-      this.setState({forcedSmallSidemenu: forcedSmallSidemenu});
-    }
-  },
   scrollToBottom: function(animate){
     const chatList = this.refs['chat-list']
     const scrollContainer = this.refs['scroll-container'];
@@ -66,13 +78,16 @@ var ChatList = React.createClass({
       }
     }
     var topPadding = 0;
-    if(chatList.clientHeight < scrollContainer.clientHeight)
+    if(chatList.clientHeight < scrollContainer.clientHeight){
       topPadding = scrollContainer.clientHeight - chatList.clientHeight;
+      if(topPadding != this.state.topPadding){
+        this.setSate({})
+      }
+    }
     $('.chat-list-container').css("paddingTop", topPadding + "px");
   },
   handleResize: function(){
     this.bouncedScroll(this.hasRendered);
-    this.bouncedSidemenuCheck();
   },
   onSendingMessage:function(){
     this.shouldAnimateScroll = true;
@@ -80,10 +95,8 @@ var ChatList = React.createClass({
   },
   componentDidUpdate: function(prevProps, prevState){
     this.scrollToBottom(this.hasRendered);
-    chatActions.updateBadge();
   },
   componentDidMount: function(){
-    this.bouncedSidemenuCheck = _.debounce(this.checkForcedSidemenu, 30);
     this.bouncedScroll = _.debounce(this.scrollToBottom, 100);
     this.bouncedMarkAsRead = _.debounce(chatActions.markAsRead, 500);
     window.addEventListener('resize', this.handleResize);
@@ -91,23 +104,9 @@ var ChatList = React.createClass({
   componentWillUnmount: function() {
     window.removeEventListener('resize', this.handleResize);
   },
-  onSelectedRow: function(row){
-    chatActions.setChannel(row.id);
-    document.getElementById('chat-input').focus();
-    var newSettings = {channelId: row.id};
-    swipes.api.request('users.updateWorkflowSettings', {workflow_id: swipes.info.workflow.id, settings: newSettings})
-    swipes.info.workflow.settings.channelId = row.id;
-  },
   renderLoading: function(){
     if(!this.state.chat.sections){
-      return (<CircularProgress color="#777" size={1} style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        margin: 0,
-        marginTop: '-25px',
-        marginLeft: '-25px'
-      }}/>)
+      return <div>Loading</div>
     }
   },
   renderSections: function(){
@@ -115,22 +114,12 @@ var ChatList = React.createClass({
       var showingUnread = this.state.chat.showingUnread;
       var isMarked = this.state.chat.showingIsRead;
       return this.state.chat.sections.map(function(section){
-        return <ChatList.Section key={section.title} data={{isMarked: isMarked, showingUnread: showingUnread, section: section}} />
+        return <ChatSection key={section.title} data={{isMarked: isMarked, showingUnread: showingUnread, section: section}} />
       });
-    }
-  },
-  onRenderInputHeight: function(height){
-    if(height !== this.state.inputHeight){
-      this.shouldAnimateScroll = true;
-      this.shouldScrollToBottom = true;
-      this.setState({inputHeight: height});
     }
   },
   renderInput: function(){
     return <ChatInput onRenderingInputHeight={this.onRenderInputHeight} onSendingMessage={this.onSendingMessage} />
-  },
-  onSidemenuWidthChanged:function(newWidth){
-    this.setState({sidemenuWidth: newWidth});
   },
   renderTyping: function() {
     if(this.state.typing) {
@@ -140,36 +129,14 @@ var ChatList = React.createClass({
     }
   },
   render: function() {
-    if(!swipes.info.workflow){
-      return <CircularProgress size={1} color="#777" style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        margin: 0,
-        marginTop: '-25px',
-        marginLeft: '-25px'
-      }}/>;
-    }
-    // K_TODO: Test if this works without channel
-    var paddingLeft = 30;
-    if(this.state.sidemenuWidth){
-      paddingLeft = this.state.sidemenuWidth + "px";
-    }
-    if(this.state.forcedSmallSidemenu){
-      paddingLeft = "30px";
-    }
     var sideHeight = "calc(100% - " + this.state.inputHeight + "px)";
     return (
-      <div className="card-container" style={{paddingLeft: paddingLeft, paddingBottom: this.state.inputHeight + 'px' }}>
-        <LocalSidemenu onWidthChanged={this.onSidemenuWidthChanged} onSelectedRow={this.onSelectedRow} style={{height: sideHeight}}/>
-        <div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
-          {this.renderLoading()}
-          <div className="chat-list" ref="chat-list">
-            {this.renderSections()}
-            {this.renderTyping()}
-          </div>
+      <div onScroll={this.onScroll} ref="scroll-container" className="chat-list-container">
+        {this.renderLoading()}
+        <div className="chat-list" ref="chat-list">
+          {this.renderSections()}
+          {this.renderTyping()}
         </div>
-        {this.renderInput()}
       </div>
     );
   }

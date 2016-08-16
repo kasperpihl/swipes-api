@@ -1,4 +1,7 @@
-.todo-input {
+$inputHeight: 60px;
+$inputButtonWidth: 50px;
+
+.chat-input {
   @include size(100%, $inputHeight);
   max-width: 700px;
   background-color: #fbfbfb;

@@ -17,7 +17,7 @@
     "react-router": "^2.5.2",
     "react-select": "^1.0.0-beta14",
     "react-slider": "^0.6.1",
-    "react-textarea-autosize": "^4.0.3",
+    "react-textarea-autosize": "^4.0.4",
     "redux": "^3.5.2",
     "redux-api-middleware": "^1.0.2",
     "redux-localstorage": "^0.4.1",

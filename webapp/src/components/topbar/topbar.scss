@@ -15,6 +15,7 @@ $searchbarSize: 90px;
 $fullscreenTopbarSize: 70px;
 
 .sw-topbar {
+	padding-left: 70px;
 	@include size(100%, $searchbarSize);
 	user-select: none;
   -webkit-app-region: drag;

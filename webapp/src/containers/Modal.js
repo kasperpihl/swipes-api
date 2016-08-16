@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal } from '../actions';
 import modals from '../components/modals'
+import { bindAll } from '../classes/utils'
 
 class Modal extends Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class Modal extends Component {
     this.state = {};
     this.recalculateContent = this.recalculateContent.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
+    bindAll(this, ['onModalCallback', 'onClickedBackground'])
   }
   componentDidMount() {
     this.recalculateContent();
@@ -120,7 +122,7 @@ class Modal extends Component {
       <div ref="container" className={containerClass}>
         <div ref="background" onClick={this.onClickedBackground.bind(this)} className={backgroundClass}></div>
         <div style={styles} ref="content" className={contentClass}>
-          <Modal data={{options: this.props.modal.data, callback: this.onModalCallback.bind(this)}} hide={this.onClickedBackground.bind(this)}/>
+          <Modal data={{options: this.props.modal.data, callback: this.onModalCallback, hide: this.onClickedBackground}}/>
         </div>
       </div>
     );
