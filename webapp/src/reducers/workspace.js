@@ -40,7 +40,7 @@ export default function workspace (state = initialState, action) {
 
     case types.TILE_SAVE_DATA: {
       tiles = clone(state.tiles);
-      if(action.clear){
+      if(action.options){
         tiles[action.tileId].data = null;
       }
       tiles[action.tileId].data = Object.assign({}, tiles[action.tileId].data, action.data);

@@ -16,10 +16,12 @@ export function generateShareUrl(data){
   return request('link.add', data);
 }
 
-export function saveData(tileId, data, clear){
+export function saveData(tileId, obj, clear){
   try{
-    data = JSON.parse(JSON.stringify(data));
-    return { type: types.TILE_SAVE_DATA, tileId, data, clear};
+
+    const data = JSON.parse(JSON.stringify(obj.data));
+    const options = obj.options
+    return { type: types.TILE_SAVE_DATA, tileId, data, options};
   }
   catch(e){
     console.log('wrong data saved');

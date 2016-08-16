@@ -13,8 +13,7 @@ class Chat extends Component {
   componentDidMount(){
     const { swipes, saveData, tileId } = this.props
     swipes.service('slack').request('rtm.start').then((res, err) => {
-
-      swipes.saveData({test: true}, true);
+      swipes.saveData({channels: ['test']});
     })
     // services.request
   }
