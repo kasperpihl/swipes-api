@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-
+import clone from 'clone'
 const initialState = {
   isFullscreen: false,
   isSearching: false,
@@ -25,10 +25,10 @@ export default function main (state = initialState, action) {
       if(!action.payload.ok){
         return state;
       }
-      return Object.assign({}, state, {
-        socketUrl: action.payload.url, 
-        tileBaseUrl: action.payload.workflow_base_url,
-      })
+      const newState = clone(state);
+      newState.socketUrl=  action.payload.url; 
+      newState.tileBaseUrl = action.payload.workflow_base_url;
+      return newState;
     }
 
     case types.SET_STATUS:{
@@ -37,11 +37,15 @@ export default function main (state = initialState, action) {
     }
 
     case types.TOGGLE_FULLSCREEN:{
-      return Object.assign({}, state, {isFullscreen: !state.isFullscreen})
+      const newState = clone(state);
+      newState.isFullscreen = !state.isFullscreen;
+      return newState;
     }
 
     case types.TOGGLE_SEARCHING:{
-      return Object.assign({}, state, {isSearching: !state.isSearching})
+      const newState = clone(state);
+      newState.isSearching = !state.isSearching;
+      return newState;
     }
 
     case types.SET_DRAGGING_DOT:{
@@ -52,16 +56,19 @@ export default function main (state = initialState, action) {
         data: action.data,
         pos: null
       } : null
-
-      return Object.assign({}, state, closeSearching, {draggingDot: draggingDot, mainClasses })
+      const newState = clone(state);
+      newState.closeSearching = closeSearching;
+      newState.draggingDot = { draggingDot, mainClasses };
+      return newState;
     }
     case types.DRAG_DOT:{
-      const newDragDot = Object.assign({}, state.draggingDot, {
-        pos: {clientX: action.clientX, clientY: action.clientY}, 
-        hoverTarget: action.hoverTarget}
-      )
+      const newState = clone(state);
+      newState.draggingDot = Object.assign(newState.draggingDot, {
+        pos: {clientX: action.clientX, clientY: action.clientY},
+        hoverTarget: action.hoverTarget
+      })
 
-      return Object.assign({}, state, {draggingDot: newDragDot})
+      return newState
     }
 
     // ======================================================
@@ -69,15 +76,15 @@ export default function main (state = initialState, action) {
     // ======================================================
     case ('users.signin'):
     case ('users.signup'):{
-      if(action.payload && action.payload.ok){
-        return Object.assign({}, {token: action.payload.token});
+      if(!action.payload || !action.payload.ok){
+        return state;
       }
-      console.log('result', action, state);
-      // K_TODO: Handle error
-      return state;
+      const newState = clone(state);
+      newState.token = action.payload.token;
+      return newState;
     }
     case types.LOGOUT:{
-      return Object.assign({}, initialState)
+      return clone(initialState);
     }
 
 

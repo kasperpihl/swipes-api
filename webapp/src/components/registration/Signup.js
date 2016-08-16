@@ -4,14 +4,12 @@ import SwipesBackgroundAnimation from './SwipesBackgroundAnimation'
 
 export default class Signup extends Component {
   componentDidMount() {
-    amplitude.logEvent('Session - Opened Signup');
-    mixpanel.track('Opened Signup');
   }
   signup(){
-    var name = this.refs.name.getValue();
-    var email = this.refs.email.getValue();
-    var password = this.refs.password.getValue();
-    var invcode = this.refs.invcode.getValue();
+    var name = this.refs.name.value;
+    var email = this.refs.email.value;
+    var password = this.refs.password.value;
+    var invcode = this.refs.invcode.value;
     if(!invcode){
       return alert("Please use invitation code");
     }

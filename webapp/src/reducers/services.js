@@ -15,6 +15,9 @@ export default function services (state = initialState, action) {
       }
       return state;
     }
+    case types.LOGOUT:{
+      return clone(initialState);
+    }
     default: 
       return state
   }

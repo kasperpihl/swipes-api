@@ -5,12 +5,10 @@ import SwipesBackgroundAnimation from './SwipesBackgroundAnimation'
 
 export default class Signin extends Component {
   componentDidMount() {
-    amplitude.logEvent('Session - Opened Login');
-    mixpanel.track('Opened Login');
   }
   signin(){
-    var email = this.refs.username.getValue();
-    var password = this.refs.password.getValue();
+    var email = this.refs.username.value;
+    var password = this.refs.password.value;
     var data = {
       email: email,
       password: password

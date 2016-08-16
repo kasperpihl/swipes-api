@@ -26,7 +26,7 @@ class SwipesBackgroundAnimation extends Component {
   }
   render(){
     return (
-      <div class="swipes-background-animation">
+      <div className="swipes-background-animation">
         <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440">
           <g>
             <path data-start="100" data-duration="200" d="M2459.51,1440c-159.52-86.32-303.59-207.33-420.17-361.41-145.45-192.23-419.2-230.14-611.43-84.69C1286.41,1101,1228.53,1277.58,1265.86,1440" />

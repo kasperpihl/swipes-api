@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-
+import clone from 'clone'
 const initialState = { tiles : {}, columns : [] };
 
 function tiles (state, action){
@@ -38,12 +38,21 @@ export default function workspace (state = initialState, action) {
       break;
     }
 
+    case types.TILE_SAVE_DATA: {
+      tiles = clone(state.tiles);
+      if(action.clear){
+        tiles[action.tileId].data = null;
+      }
+      tiles[action.tileId].data = Object.assign({}, tiles[action.tileId].data, action.data);
+      break;
+    }
+
     case ('rtm.start'):{ // API Request
       const res = action.payload;
       if(res.ok){
-        tiles = {}
+        tiles = clone(state.tiles);
         res.workflows.forEach((tile) => {
-          tiles[tile.id] = tile;
+          tiles[tile.id] = Object.assign({}, tiles[tile.id], tile);
         })
       }
       break;
@@ -52,16 +61,18 @@ export default function workspace (state = initialState, action) {
     case 'workflow_added': // Socket Event
     case 'workflow_changed': // Socket Event
       msg = action.payload;
-      const combinedData = Object.assign({}, state.tiles[msg.data.id], msg.data);
-      tiles = Object.assign({}, state.tiles, {[msg.data.id]: combinedData});
+      tiles = clone(state.tiles);
+      tiles[msg.data.id] = Object.assign({}, tiles[msg.data.id], msg.data);
       break;
     case 'workflow_removed': // Socket Event
       msg = action.payload;
-      tiles = Object.assign({}, state.tiles);
+      tiles = clone(state.tiles);
       delete tiles[msg.data.id];
       break;
     
-    
+    case types.LOGOUT:{
+      return clone(initialState);
+    }
   }
 
   if(!tiles && !columns){

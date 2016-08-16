@@ -11,7 +11,7 @@ export default class SwipesAppSDK {
     this.com = new SwClientCom(sendFunction);
     
     this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
-    this.com.addListener('init', (data) => {
+    this.addListener('init', (data) => {
       if(data.token) {
         this.api.setToken(data.token);
       }
@@ -40,8 +40,12 @@ export default class SwipesAppSDK {
   sendEvent(command, data, callback){
     this.com.sendCommand(command, data, callback);
   }
-  saveData(data, callback){
-    this.com.sendCommand('tile.saveData', data, callback);
+  saveData(data, options, callback){
+    if(typeof options === 'function'){
+      callback = options;
+      options = null;
+    }
+    this.sendEvent('tile.saveData', {data, options}, callback);
   }
 
   isShareURL(url){

@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as actions from '../constants/ActionTypes'
-import { bindAll } from '../classes/utils'
+import * as actions from '../../constants/ActionTypes'
+import { bindAll } from '../../classes/utils'
 
 class Chat extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Chat extends Component {
     const { swipes, saveData, tileId } = this.props
     swipes.service('slack').request('rtm.start').then((res, err) => {
 
-      swipes.saveData(res.data);
+      swipes.saveData({test: true}, true);
     })
     // services.request
   }

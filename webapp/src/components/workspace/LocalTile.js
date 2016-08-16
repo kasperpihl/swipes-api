@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
-import Chat from '../../containers/Chat'
+import Chat from '../../containers/tiles/Chat'
 
 class LocalTile extends Component {
   constructor(props) {

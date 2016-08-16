@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-
+import clone from 'clone'
 const initialState = {};
 
 export default function me (state = initialState, action) {
@@ -14,24 +14,31 @@ export default function me (state = initialState, action) {
     // handle service_added/removed etc from socket.
     case 'service_added':{
       const msg = action.payload;
-      return Object.assign({}, state, {services: [...state.services, msg.data]})
+      const newState = clone(state);
+      newState.services = [...newState.services, msg.data];
+      return newState;
     }
     case 'service_changed':{
       const msg = action.payload;
-      let newServices = state.services.map((service) => {
+      const newState = clone(state);
+      newState.services = newState.services.map((service) => {
         if(service.id === msg.data.id && service.service_name === msg.data.service_name){
-          return Object.assign({}, service, msg.data);
+          service = Object.assign(service, msg.data);
         }
         return service;
       })
-      return Object.assign({}, state, {services: newServices});
+      return newState;
     }
     case 'service_removed':{
       const msg = action.payload;
-      let newServices = state.services.filter((service) => {
+      const newState = clone(state);
+      newState.services = newState.services.filter((service) => {
         return (service.id === msg.data.id && service.service_name === msg.data.service_name);
       })
-      return Object.assign({}, state, {services: newServices});
+      return newState;
+    }
+    case types.LOGOUT:{
+      return clone(initialState);
     }
     default: 
       return state

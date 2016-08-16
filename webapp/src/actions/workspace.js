@@ -16,6 +16,17 @@ export function generateShareUrl(data){
   return request('link.add', data);
 }
 
+export function saveData(tileId, data, clear){
+  try{
+    data = JSON.parse(JSON.stringify(data));
+    return { type: types.TILE_SAVE_DATA, tileId, data, clear};
+  }
+  catch(e){
+    console.log('wrong data saved');
+  }
+  
+}
+
 export function updateColumns(columns){
   return { type: types.UPDATE_COLUMNS, columns: columns }
 }

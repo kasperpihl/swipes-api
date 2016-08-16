@@ -68,15 +68,15 @@ class Tile extends Component {
 
   }
   addListenersToCommunicator(){
-
+    const { tile, sendNotification, startDraggingDot, saveData } = this.props
     this.com.addListener('navigation.setTitle', (data) => {
       if (data.title) {
         //this.setState({"titleFromCard": data.title});
       }
     });
 
-    this.com.addListener('tile.saveData', (data) => {
-
+    this.com.addListener('tile.saveData', (data, clear) => {
+      saveData(tile.id, data, clear);
     });
 
     this.com.addListener('modal.load', (data) => {
@@ -89,24 +89,24 @@ class Tile extends Component {
       }
     });
     this.com.addListener('analytics.action', (data) => {
-      var analyticsProps = {'Card': this.props.tile.manifest_id, 'Action': data.name};
+      var analyticsProps = {'Card': tile.manifest_id, 'Action': data.name};
     });
     this.com.addListener('notifications.send', (data) => {
       var notif = {
-        title: this.props.tile.name,
+        title: tile.name,
         message: data.message
       };
       if(data.title){
         notif.title += ": " + data.title;
       }
       if(!document.hasFocus()) {
-        this.props.sendNotification(notif);
+        sendNotification(notif);
       }
     });
 
     this.com.addListeners(['dot.startDrag', 'share'], (data) => {
       console.log('start dragging data', data);
-      this.props.startDraggingDot(this.props.tile.id, data);
+      startDraggingDot(this.props.tile.id, data);
     })
   }
   receivedCommand(command){
@@ -197,6 +197,7 @@ function mapStateToProps(state, ownProps) {
 
 const ConnectedTile = connect(mapStateToProps, {
   selectAccount: workspace.selectAccount,
+  saveData: workspace.saveData,
   sendNotification: main.sendNotification,
   startDraggingDot: main.startDraggingDot
 })(Tile)
