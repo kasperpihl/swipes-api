@@ -8,10 +8,11 @@ export default class ChatSection extends Component {
   }
   render() {
     var chatItems = [];
+    const { itemDelegate } = this.props;
     const { section, showingUnread, isMarked } = this.props.data;
     section.messages.forEach((item, i) => {
       if(!item.hidden){
-        chatItems.push(<ChatItem key={item.ts} data={item} />);
+        chatItems.push(<ChatItem key={item.ts} data={item} delegate={itemDelegate} />);
       }
       if(item.ts === showingUnread && !item.isLastMessage){
         var className = "new-message-header";
@@ -41,6 +42,7 @@ export default class ChatSection extends Component {
 }
 
 ChatSection.propTypes = {
+  itemDelegate: PropTypes.object.isRequired,
   data: PropTypes.shape({
     section: PropTypes.shape({
       title: PropTypes.string.isRequired,

@@ -3,12 +3,25 @@ import SwipesDot from 'swipes-dot'
 import ReactEmoji from 'react-emoji'
 
 let delegate;
+const delegateMethods = ['editMessage', 'deleteMessage', 'isShareURL', 'openImage', 'loadPrivateImage', 'clickLink']
 
 class ChatItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    delegate = props.delegate; 
+    delegate = props.delegate;
+    if(!delegate){
+      throw 'ChatItem: must have delegate prop'
+    }
+    if(typeof delegate !== 'object'){
+      throw 'ChatItem: delegate must be object'
+    }
+    delegateMethods.forEach((method) => {
+      if(typeof delegate[method] !== 'function'){
+        throw 'ChatItem: delegate must conform to: ' + method;
+      }
+    })
+
   }
   renderMessageHeader(){
     let name = 'unknown';
@@ -54,7 +67,7 @@ class ChatItem extends Component {
   }
   renderMessage(){
     const { data:message } = this.props;
-    //return <ChatMessage key={message.ts} data={message} />;
+    return <ChatMessage key={message.ts} data={message} />;
   }
   render() {
     const { isExtraMessage } = this.props.data;
@@ -74,119 +87,47 @@ class ChatItem extends Component {
 }
 export default ChatItem
 
-
 class ChatMessage extends Component {
-  renderPreview(){
-    if(this.props.data.thumb_360){
-      return this.renderImagePreview();
-    }
-    else{
-      return this.renderDefaultPreview();
-    }
+  share(text) {
+    console.log('share', text);
+    //delegate.share('share', this.shareData(text));
   }
-  openImage() {
-    const { 
-      'url_private_download':src, 
-      title, 
-      permalink:url
-    } = this.props.data;
-
-    chatActions.openImage(src, title, url);
-  }
-  renderImagePreview(){
-    const { 
-      'thumb_360':src,
-      'thumb_360_w':width,
-      'thumb_360_h':height 
-    } = this.props.data;
-
-    return (
-      <div className="image-container">
-        <img
-          ref={function (image) {
-            if (image !== null) {
-              chatActions.loadPrivateImage(image, src)}
-            }
-          }
-          onClick={this.openImage}
-          style={{
-            width: width + 'px',
-            height: height + 'px'
-          }} />
-      </div>
-    );
-  }
-  render(){
-    return (
-      <div className="file-container">
-        {this.renderPreview()}
-      </div>
-    );
-  }
-}
-
-
-const clickedLink = (match) => {
-  const res = match.split("|");
-  let clickObj = {};
-  if(res[0])
-    clickObj.command = res[0];
-  if(res[1])
-    clickObj.identifier = res[1];
-  if(res[2])
-    clickObj.title = res[2];
-  console.log('clicked', clickObj);
-  chatActions.clickLink(clickObj.command);
-
-}
-
-/*
-
-var ChatMessage = React.createClass({
-  share: function (text) {
-    var shareData = this.shareData(text);
-
-    swipes.sendEvent('share', shareData);
-  },
-  shareData: function (text) {
+  shareData(text) {
     return {
       text: text
     }
-  },
-  renderAttachments:function(){
-    if(!this.props.data.attachments){
+  }
+  renderAttachments(){
+    const { attachments } = this.props.data;
+    if(!attachments){
       return;
     }
-    var attachments = this.props.data.attachments.map(function(att){
-      // console.log(att);
-      return <ChatMessage.Attachment key={att.id} data={att} />
+    return attachments.map(function(att){
+      return <Attachment key={att.id} data={att} />
     });
-    return attachments;
-  },
-  renderFile: function(){
-    var file = this.props.data.file;
+  }
+  renderFile(){
+    const { file } = this.props.data;
     if(!file){
       return;
     }
-    // console.log(file);
-    return <ChatMessage.File key={file.id} data={file} />
-  },
-  renderMessage:function(message){
+    return <File key={file.id} data={file} />
+  }
+  renderMessage(message){
     return renderTextWithLinks(message, ReactEmoji.emojify);
-  },
-  dotItems: function () {
-    var that = this;
-    var items = [];
-    var actionsRow = [];
+  }
+  dotItems() {
+    const items = [];
+    const actionsRow = [];
 
-    var message = this.props.data;
+    const { data:message } = this.props;
 
-    var shareItem = {
+    const shareItem = {
       label: 'Share',
       icon: 'share',
       bgColor: 'rgb(255,197,37)',
-      callback: function () {
-        that.share(message.text);
+      callback: () => {
+        this.share(message.text);
       }
     };
 
@@ -195,9 +136,7 @@ var ChatMessage = React.createClass({
         label: 'Edit',
         icon: 'edit',
         bgColor: 'rgb(56,182,131)',
-        callback: function () {
-          chatActions.editMessage(message.text, message.ts);
-        }
+        callback: () => delegate.editMessage(message.text, message.ts)
       });
 
       actionsRow.push(shareItem);
@@ -206,9 +145,7 @@ var ChatMessage = React.createClass({
         label: 'Delete',
         icon: 'delete',
         bgColor: 'rgb(252,58,28)',
-        callback: function () {
-          chatActions.deleteMessage(message.ts);
-        }
+        callback: () => delegate.deleteMessage(message.ts)
       })
       items.push(actionsRow);
     } else {
@@ -217,17 +154,19 @@ var ChatMessage = React.createClass({
     }
 
     return items;
-  },
+  }
   onDotDragStart(message){
-    swipes.sendEvent('dot.startDrag', this.shareData(message));
-  },
-  render: function () {
-    var message = this.props.data;
-    var className = "message-wrapper";
-    if(this.props.data.isNewMessage){
+    console.log('dot start', message);
+    //swipes.sendEvent('dot.startDrag', this.shareData(message));
+  }
+  render() {
+
+    const { data:message } = this.props;
+    let className = "message-wrapper";
+    if(message.isNewMessage){
       className += " new-message";
     }
-    var dotItems = this.dotItems();
+    const dotItems = this.dotItems();
 
     return (
       <div id={message.ts} className={className}>
@@ -243,7 +182,7 @@ var ChatMessage = React.createClass({
             onDragData={this.shareData.bind(this, message.text)}
           />
           <div className="chat__message--content--text">
-            {this.renderMessage(this.props.data.text)}
+            {this.renderMessage(message.text)}
           </div>
           {this.renderFile()}
           {this.renderAttachments()}
@@ -251,60 +190,127 @@ var ChatMessage = React.createClass({
       </div>
     );
   }
-});
+}
 
-
-
-ChatMessage.Attachment = React.createClass({
-  renderPreview: function(){
-
-  },
-  renderPretext:function(){
-    if(this.props.data.pretext){
-      return <div className="attachment-pretext">{renderTextWithLinks(this.props.data.pretext)}</div>;
+class File extends Component {
+  renderPreview(){
+    if(this.props.data.thumb_360){
+      return this.renderImagePreview();
     }
-  },
-  renderServiceName: function(){
-    if(this.props.data.service_name){
-      return <div className="attachment-service-name">{this.props.data.service_name}</div>
+    else{
+      return this.renderDefaultPreview();
     }
-  },
-  renderTitle: function(){
-    if(this.props.data.title){
-      var innerObj = <div className="attachment-title">{this.props.data.title}</div>;
-      if(this.props.data.title_link){
-        return <a className='link' onClick={clickedLink.bind(null, this.props.data.title_link)}>{innerObj}</a>
+  }
+  openImage() {
+    const { 
+      'url_private_download':src, 
+      title, 
+      permalink:url
+    } = this.props.data;
+
+    delegate.openImage(src, title, url);
+  }
+  renderDefaultPreview(){
+
+  }
+  renderImagePreview(){
+    const { 
+      'thumb_360':src,
+      'thumb_360_w':width,
+      'thumb_360_h':height 
+    } = this.props.data;
+
+    return (
+      <div className="image-container">
+        <img
+          ref={function (image) {
+            if (image !== null) {
+              delegate.loadPrivateImage(image, src)}
+            }
+          }
+          onClick={this.openImage.bind(this)}
+          style={{
+            width: width + 'px',
+            height: height + 'px'
+          }} />
+      </div>
+    );
+  }
+  render(){
+    return (
+      <div className="file-container">
+        {this.renderPreview()}
+      </div>
+    );
+  }
+}
+File.propTypes = {
+  data: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    permalink: PropTypes.string,
+    'url_private_download': PropTypes.string,
+    'thumb_360': PropTypes.string,
+    'thumb_360_w': PropTypes.number,
+    'thumb_360_h': PropTypes.number,
+  })
+}
+
+class Attachment extends Component {
+  renderPreview(){
+
+  }
+  renderPretext(){
+    const { pretext } = this.props.data;
+    if(pretext){
+      return <div className="attachment-pretext">{renderTextWithLinks(pretext)}</div>;
+    }
+  }
+  renderServiceName(){
+    const { service_name } = this.props.data;
+    if(service_name){
+      return <div className="attachment-service-name">{service_name}</div>
+    }
+  }
+  renderTitle(){
+    const { title, title_link } = this.props.data;
+    if(title){
+      var innerObj = <div className="attachment-title">{title}</div>;
+      if(title_link){
+        return <a className='link' onClick={clickedLink.bind(null, title_link)}>{innerObj}</a>
       }
       return innerObj;
     }
-  },
-  renderText: function(){
-    if(this.props.data.text){
-      return <div className="attachment-body">{renderTextWithLinks(this.props.data.text)}</div>;
+  }
+  renderText(){
+    const { text } = this.props.data;
+    if(text){
+      return <div className="attachment-body">{renderTextWithLinks(text)}</div>;
     }
-  },
-  renderImage: function(){
-    if(this.props.data.image_url){
+  }
+  renderImage(){
+    const { image_url, image_height, image_width } = this.props.data;
+    if(image_url){
       // KRIS_TODO: Render lightbox
-      var calcHeight = this.props.data.image_height;
-      if(this.props.data.image_width > 400){
-        var proportion = this.props.data.image_width / 400;
+      var calcHeight = image_height;
+      if(image_width > 400){
+        var proportion = image_width / 400;
         calcHeight = calcHeight / proportion;
       }
-      return <div className="attachment-image"><img height={calcHeight} src={this.props.data.image_url} /></div>;
+      return <div className="attachment-image"><img height={calcHeight} src={image_url} /></div>;
     }
-  },
-  renderAuthor: function(){
+  }
+  renderAuthor(){
 
-  },
-  renderBar: function(){
+  }
+  renderBar(){
+    const { color } = this.props.data;
     var styles = {};
-    if(this.props.data.color){
-      styles.background = '#' + this.props.data.color;
+    if(color){
+      styles.background = '#' + color;
     }
     return <div style={styles} className="attachment-bar" />;
-  },
-  render: function(){
+  }
+  render(){
     return (
       <div className="chat-attachment">
         {this.renderPretext()}
@@ -318,30 +324,61 @@ ChatMessage.Attachment = React.createClass({
       </div>
     );
   }
-});
+}
 
-var renderTextWithLinks = function(text, emojiFunction){
+Attachment.propTypes = {
+  data: PropTypes.shape({
+    pretext: PropTypes.string,
+    text: PropTypes.string,
+    color: PropTypes.string,
+    'service_name': PropTypes.string,
+    title: PropTypes.string,
+    'title_link': PropTypes.string,
+    image_url: PropTypes.string,
+    image_height: PropTypes.number,
+    image_width: PropTypes.number
+  })
+}
+
+
+const clickedLink = (match) => {
+  const res = match.split("|");
+  let clickObj = {};
+  if(res[0])
+    clickObj.command = res[0];
+  if(res[1])
+    clickObj.identifier = res[1];
+  if(res[2])
+    clickObj.title = res[2];
+  console.log('clicked', clickObj);
+  delegate.clickLink(clickObj.command);
+
+}
+
+
+
+const renderTextWithLinks = (text, emojiFunction) =>{
   if(!text || !text.length)
     return text;
   if(typeof emojiFunction !== 'function'){
-    emojiFunction = function(par){ return par; };
+    emojiFunction = (par) => par;
   }
   text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
 
-  var matches = text.match(/<(.*?)>/g);
+  const matches = text.match(/<(.*?)>/g);
 
-  var replaced = [];
+  const replaced = [];
 
   if ((matches != null) && matches.length) {
-    var splits = text.split(/<(.*?)>/g);
-    var counter = 0;
+    const splits = text.split(/<(.*?)>/g);
+    let counter = 0;
 
     // Adding the text before the first match
     replaced.push(emojiFunction(splits.shift()));
     for(var i = 0 ; i < matches.length ; i++ ){
       // The match is now the next object
-      var innerMatch = splits.shift();
-      var placement = '';
+      const innerMatch = splits.shift();
+      let placement = '';
 
       // If break, just add that as the placement
       if(innerMatch === 'br'){
@@ -350,14 +387,14 @@ var renderTextWithLinks = function(text, emojiFunction){
       }
       // Else add the link with the proper title
       else{
-        var res = innerMatch.split("|");
-        var command = res[0];
-        var title = res[res.length -1];
-        if(swipes.isShareURL(title)){
+        const res = innerMatch.split("|");
+        const command = res[0];
+        let title = res[res.length -1];
+        if(delegate.isShareURL(title)){
           console.log('was a share url!!! YIR', title);
         }
         else if(title.startsWith("@U")){
-          var user = UserStore.get(title.substr(1));
+          const user = delegate.getUserFromId(title.substr(1));
           if(user){
             title = "@" + user.name;
           }
@@ -377,8 +414,4 @@ var renderTextWithLinks = function(text, emojiFunction){
       return replaced;
   }
   return emojiFunction(unescape(text));
-};
-
-
-module.exports = ChatItem;
-*/
+}

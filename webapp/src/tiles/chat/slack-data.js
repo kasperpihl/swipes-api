@@ -6,7 +6,7 @@ export default class SlackData {
   constructor(swipes, data){
     this.swipes = swipes;
     this.data = data;
-    bindAll(this, ['start', 'handleMessage'])
+    bindAll(this, ['start', 'handleMessage', 'getUserFromId', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.start();
   }
@@ -202,6 +202,34 @@ export default class SlackData {
     // console.log('slack socket handler', msg.type, msg);
   }
 
+  openImage(src, title, url) {
+    this.swipes.modal('lightbox')('', title, url);
+
+    this.swipes.service('slack').stream('file', {url: src})
+    .then((arraybuffer) => {
+      var blob = new Blob([arraybuffer], {type: "application/octet-stream"});
+      var blobSrc = URL.createObjectURL(blob);
+
+      this.swipes.modal('lightbox')(blobSrc, title, url);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+  getUserFromId(id){
+    return this.data.users[id];
+  }
+  loadPrivateImage(domElement, src) {
+    this.swipes.service('slack').stream('file', {url: src})
+    .then((arraybuffer) => {
+      var blob = new Blob([arraybuffer], {type: "application/octet-stream"});
+      var url = URL.createObjectURL(blob);
+      domElement.src = url;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
   sortMessagesForSwipes(messages){
     messages = messages || this.data.messages;
     let lastUser, lastGroup, lastDate;
@@ -357,32 +385,7 @@ var ChatStore = Reflux.createStore({
     }.bind(this));
   },
   
-  onOpenImage: function(src, title, url) {
-    swipes.modal('lightbox')('', title, url);
-
-    swipes.service('slack').stream('file', {url: src})
-    .then(function (arraybuffer) {
-      var blob = new Blob([arraybuffer], {type: "application/octet-stream"});
-      var blobSrc = URL.createObjectURL(blob);
-
-      swipes.modal('lightbox')(blobSrc, title, url);
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-  },
-  onLoadPrivateImage: function (domElement, src) {
-    swipes.service('slack').stream('file', {url: src})
-    .then(function (arraybuffer) {
-      var blob = new Blob([arraybuffer], {type: "application/octet-stream"});
-      var url = URL.createObjectURL(blob);
-
-      domElement.src = url;
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-  },
+  
   
   /* T_INFO // We should replace these once we can upload directly through our service
   // Though, the request might come in handy for how to send the request since they use formData for files.

@@ -82,10 +82,10 @@ class ChatList extends Component {
     }
   }
   renderSections(){
-    const { unreadIndicator, sections } = this.props;
+    const { unreadIndicator, sections, itemDelegate } = this.props;
     if(sections){
       return sections.map(function(section){
-        return <ChatSection key={section.title} data={{unreadIndicator: unreadIndicator, section: section}} />
+        return <ChatSection key={section.title} itemDelegate={itemDelegate} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
     }
   }
@@ -107,6 +107,7 @@ class ChatList extends Component {
 export default ChatList
 
 ChatList.propTypes = {
+  itemDelegate: PropTypes.object.isRequired,
   sections: PropTypes.arrayOf(PropTypes.shape({
 
   }))

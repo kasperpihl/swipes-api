@@ -30,11 +30,23 @@ class Chat extends Component {
     this.slackData.sendMessage(message);
     console.log('send!');
   }
+  createItemDelegate(){
+    const { swipes } = this.props;
+    return {
+      editMessage: this.slackData.editMessage,
+      deleteMessage: this.slackData.deleteMessage,
+      openImage: this.slackData.openImage,
+      loadPrivateImage: this.slackData.loadPrivateImage,
+      isShareURL: swipes.isShareURL,
+      getUserFromId: this.slackData.getUserFromId,
+      clickLink: (url) => swipes.sendEvent('openURL', {url: url}),
+    }
+  }
   render() {
     const sortedMessages = this.slackData.sortMessagesForSwipes();
     return (
       <div style={{height :'100%'}}>
-        <ChatList sections={sortedMessages} />
+        <ChatList sections={sortedMessages} itemDelegate={this.createItemDelegate()} />
         <ChatInput sendMessage={this.sendMessage} />
       </div>
     )
