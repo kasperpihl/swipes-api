@@ -15,9 +15,9 @@ import ChatInput from './ChatInput'
 class Chat extends Component {
   constructor(props) {
     super(props)
-    this.state = { started: false, isStarting: false }
+    this.state = { started: false, isStarting: false, inputHeight: 60 }
 
-    bindAll(this, ['sendMessage', 'onSelectedRow'])
+    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight'])
     
     this.slackData = new SlackData(props.swipes, props.tile.data);
   }
@@ -26,7 +26,11 @@ class Chat extends Component {
   componentDidUpdate(prevProps, prevState){
     //console.log('updated', this.props.tile.data);
   }
-
+  changedHeight(height){
+    if(this.state.inputHeight !== height){
+      this.setState({inputHeight: height});
+    }
+  }
   sendMessage(message){
     this.slackData.sendMessage(message);  
   }
@@ -47,13 +51,14 @@ class Chat extends Component {
     }
   }
   render() {
-    const sortedMessages = this.slackData.sortMessagesForSwipes();
+    const sortedMessages = this.props.tile.data.sortedMessages;
     const sectionsSidemenu = this.slackData.sectionsForSidemenu();
+    const paddingBottom = this.state.inputHeight + 'px';
     return (
-      <div style={{height :'100%'}}>
+      <div style={{height :'100%', paddingBottom}}>
         <Sidemenu onWidthChanged={this.onSidemenuWidthChanged} onSelectedRow={this.onSelectedRow} data={{sections: sectionsSidemenu }} />
-        <ChatList sections={sortedMessages} itemDelegate={this.createItemDelegate()}/>
-        <ChatInput sendMessage={this.sendMessage} />
+        <ChatList sections={sortedMessages} itemDelegate={this.createItemDelegate()} />
+        <ChatInput sendMessage={this.sendMessage} changedHeight={this.changedHeight} />
       </div>
     )
   }

@@ -11,6 +11,9 @@ export default class SlackData {
     this.start();
   }
   saveData(data, options){
+    if(data.messages){
+      data.sortedMessages = this.sortMessagesForSwipes(data.messages);
+    }
     this.data = Object.assign(this.data, data);
     this.swipes.saveData(data, options);
   }
@@ -288,7 +291,7 @@ export default class SlackData {
     messages = messages || this.data.messages;
     if(!messages || !messages.length)
       return [];
-    
+
     let lastUser, lastGroup, lastDate;
     const length = messages.length;
     const me = this.data.self;
