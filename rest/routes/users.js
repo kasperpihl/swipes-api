@@ -7,15 +7,18 @@ import util from '../util.js';
 import utilDB from '../util_db.js';
 import Promise from 'bluebird';
 import SwipesError from '../swipes-error';
-// import {
-//   asana
-// } from '../../services/asana/asana.js'
 import {
-  unsubscribeFromAll
-} from '../../services/asana/webhooks'
-
-// T_TODO after refactoring this will be compatible
-const asana = require('../../services/asana/asana');
+  getUserService,
+  cleanupWebhooksFromUserService,
+  usersGetXendoServiceId,
+  usersRemoveXendoService,
+  userRemoveService,
+} from '../middlewares/users';
+import {
+  xendoSwipesCredentials,
+  xendoRefreshSwipesToken,
+  xendoRemoveServiceFromUser
+} from '../middlewares/xendo';
 
 const router = express.Router();
 const generateId = util.generateSlackLikeId;
@@ -171,57 +174,17 @@ router.post('/users.updateWorkflowSettings', (req, res, next) => {
     })
 });
 
-router.post('/users.serviceDisconnect', (req, res, next) => {
-  const userId = req.userId;
-  let serviceId = req.body.id;
-  let serviceName = null;
-
-  return Promise.resolve().then(() => {
-    // First we have to check which service is that
-    // so we can do some additional work before dissconnect it
-    // for example in case of asana we have to unsubscribe the user
-    // from the webhooks we made when authorizing
-    const getServiceQ =
-      r.table('users')
-        .get(userId)('services')
-        .filter((service) => {
-          return service('id').eq(serviceId).or(service('id').eq(r.expr(serviceId).coerceTo('number')))
-        })
-        .nth(0)
-
-    return db.rethinkQuery(getServiceQ)
-  })
-  .then((service) => {
-    serviceName = service.service_name;
-
-    if (service.service_name === 'asana') {
-      return unsubscribeFromAll({ asana, authData: service.authData, userId })
-    } else {
-      return Promise.resolve();
-    }
-  })
-  .then(() => {
-    // T_TODO really I have to refactor that bs
-    if (serviceName === 'asana') {
-      serviceId = r.expr(serviceId).coerceTo('number');
-    }
-    const updateQ =
-      r.table('users')
-        .get(userId)
-        .update({services: r.row('services')
-          .filter((service) => {
-            return service('id').ne(serviceId)
-          })
-        })
-
-    db.rethinkQuery(updateQ)
-  })
-  .then(() => {
+router.post('/users.serviceDisconnect',
+  getUserService,
+  cleanupWebhooksFromUserService,
+  usersGetXendoServiceId,
+  xendoSwipesCredentials,
+  xendoRefreshSwipesToken,
+  xendoRemoveServiceFromUser,
+  usersRemoveXendoService,
+  userRemoveService,
+  (req, res, next) => {
     return res.status(200).json({ok: true});
-  })
-  .catch((err) => {
-    return next(err);
-  })
-});
+  });
 
 module.exports = router;

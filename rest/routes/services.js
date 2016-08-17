@@ -103,9 +103,9 @@ router.post('/services.authsuccess',
 	serviceUtil.requireService,
 	serviceUtil.getAuthData,
 	serviceUtil.updateAuthData,
-	// xendoSwipesCredentials,
-	// xendoRefreshSwipesToken,
-	// xendoAddServiceToUser,
+	xendoSwipesCredentials,
+	xendoRefreshSwipesToken,
+	xendoAddServiceToUser,
 	(req, res, next) => {
 		return res.status(200).json({ok: true});
 	}

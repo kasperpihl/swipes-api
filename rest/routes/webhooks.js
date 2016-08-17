@@ -105,4 +105,17 @@ router.post('/asana/*', asanaHookInit, validateAsana, processWebhookMessage, (re
   return res.status(200).send();
 });
 
+/* XENDO WEBHOOKS */
+const xendoHookInit = (req, res, next) => {
+  const message = req.body.toString();
+  console.log('Xendo message', message);
+  res.locals.service = 'xendo';
+
+  return next();
+}
+
+router.post('/xendo/*', xendoHookInit, (req, res, next) => {
+  return res.status(200).send();
+});
+
 module.exports = router;
