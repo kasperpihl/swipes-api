@@ -1,13 +1,29 @@
 import { bindAll } from '../../classes/utils'
 
 export default class SlackSocket {
-  constructor(start){
-    // When window onload, close websocket and make sure not to try to reopen. (reset onclose)
-    if(typeof start !== 'function'){
-      start = () => {}
-      console.warn('SlackSocket constructor takes a start function as parameter');
+  constructor(restartSocket, handleMessage){
+
+    bindAll(this, ['checkSocket', 'sendEvent'])
+
+    if(typeof restartSocket !== 'function'){
+      restartSocket = () => {}
+      console.warn('SlackSocket constructor takes a restart function as first parameter');
     }
-    this.start = start;
+    this.restartSocket = restartSocket;
+
+    
+    if(typeof handleMessage === 'function'){
+      this.delegateHandleMessage = handleMessage;
+    }
+    this.handleMessage = (msg) => {
+      if(msg.type === 'pong'){
+        this.lastPongTime = new Date().getTime();
+      }
+      if(this.delegateHandleMessage){
+        this.delegateHandleMessage(msg);
+      }
+    }
+    // When window onload, close websocket and make sure not to try to reopen. (reset onclose)
     window.onbeforeunload = () => {
       if(this.webSocket){
         this.webSocket.onclose = function(){};
@@ -26,11 +42,11 @@ export default class SlackSocket {
       this.webSocket.onclose = () => {
         console.log("slack socket", "close", "now let's reopen");
         this.webSocket = null;
-        this.start();
+        this.restartSocket();
       };
       this.webSocket.onmessage = (msg) => {
         var data = JSON.parse(msg.data);
-        this.onHandleMessage(data);
+        this.handleMessage(data);
       };
 
       this.webSocket.onerror = () =>{
@@ -39,7 +55,7 @@ export default class SlackSocket {
       if(this.timer){
         clearInterval(this.timer);
       }
-      this.timer = setInterval(this.checkSocket.bind(this), 6000);
+      this.timer = setInterval(this.checkSocket, 6000);
     }
   }
   closeWebSocket(){
@@ -50,6 +66,28 @@ export default class SlackSocket {
       this.webSocket = null;
     }
   }
+  sendEvent(msg){
+    if(!this.webSocket){
+      return this.restartSocket();
+    }
+    if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
+      return;
+    }
+    if(this.webSocket.readyState === 3){
+      this.webSocket = null;
+      return this.restartSocket();
+    }
+    
+    if(typeof msg !== 'string'){
+      try{
+        msg = JSON.stringify(msg)
+      }
+      catch(e){
+        msg = ''
+      }
+    }
+    this.webSocket.send(msg);
+  }
   checkSocket(){
 
     // Don't double ping.
@@ -57,27 +95,13 @@ export default class SlackSocket {
       return;
     }
     
-    // If no websocket - run rtm.start again.
-    if(!this.webSocket){
-      return this.start();
-    }
-
-    // State is CONNECTING or CLOSING - Don't interfere
-    if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
-      return;
-    }
-    // If state is CLOSED, remove webSocket variable and run rtm.start again.
-    if(this.webSocket.readyState === 3){
-      this.webSocket = null;
-      return this.start();
-    }
     // Send a ping to the socket, expect return.
-    this.webSocket.send(JSON.stringify({'id':'1234', 'type': 'ping'}));
+    this.sendEvent(JSON.stringify({'id':'1234', 'type': 'ping'}));
     this.isPinging = true;
-    var ping = new Date().getTime();
+    const pingTime = new Date().getTime();
     setTimeout(() => {
       this.isPinging = false;
-      if(!this.lastPong || this.lastPong < ping){
+      if(!this.lastPongTime || this.lastPongTime < pingTime){
         this.closeWebSocket();
       }
     }, 4000);

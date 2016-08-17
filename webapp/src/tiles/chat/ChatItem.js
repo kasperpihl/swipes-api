@@ -1,14 +1,18 @@
-var React = require('react');
-var chatActions = require('../actions/ChatActions');
-var chatStore = require('../stores/ChatStore');
-var ReactEmoji = require('react-emoji');
-var UserStore = require('../stores/UserStore');
-var SwipesDot = require('swipes-dot').default;
+import React, { Component, PropTypes } from 'react'
+import SwipesDot from 'swipes-dot'
+import ReactEmoji from 'react-emoji'
 
-var ChatItem = React.createClass({
-  renderMessageHeader: function(){
-    var name = 'unknown';
-    var message = this.props.data;
+let delegate;
+
+class ChatItem extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+    delegate = props.delegate; 
+  }
+  renderMessageHeader(){
+    let name = 'unknown';
+    const { data:message } = this.props;
     if(message.isExtraMessage){
       return;
     }
@@ -28,14 +32,14 @@ var ChatItem = React.createClass({
         <div className="chat__message__info--timestamp">{message.timeStr}</div>
       </div>
     );
-  },
-  renderProfileImage:function(){
-    var message = this.props.data;
+  }
+  renderProfileImage(){
+    const { data:message } = this.props;
     if(message.isExtraMessage){
       return;
     }
 
-    var profile_image = 'https://i0.wp.com/slack-assets2.s3-us-west-2.amazonaws.com/8390/img/avatars/ava_0002-48.png?ssl=1';
+    let profile_image = 'https://i0.wp.com/slack-assets2.s3-us-west-2.amazonaws.com/8390/img/avatars/ava_0002-48.png?ssl=1';
     if(message.userObj && message.userObj.profile){
       profile_image = message.userObj.profile.image_48;
     }
@@ -47,12 +51,13 @@ var ChatItem = React.createClass({
     return (
       <img src={profile_image} />
     );
-  },
-  renderMessage:function(){
-    var message = this.props.data;
-    return <ChatMessage key={message.ts} data={message} />;
-  },
+  }
+  renderMessage(){
+    const { data:message } = this.props;
+    //return <ChatMessage key={message.ts} data={message} />;
+  }
   render() {
+    const { isExtraMessage } = this.props.data;
     let className = 'chat__message';
 
     if (this.props.data.isExtraMessage) {
@@ -66,13 +71,78 @@ var ChatItem = React.createClass({
       </div>
     )
   }
-});
+}
+export default ChatItem
 
+
+class ChatMessage extends Component {
+  renderPreview(){
+    if(this.props.data.thumb_360){
+      return this.renderImagePreview();
+    }
+    else{
+      return this.renderDefaultPreview();
+    }
+  }
+  openImage() {
+    const { 
+      'url_private_download':src, 
+      title, 
+      permalink:url
+    } = this.props.data;
+
+    chatActions.openImage(src, title, url);
+  }
+  renderImagePreview(){
+    const { 
+      'thumb_360':src,
+      'thumb_360_w':width,
+      'thumb_360_h':height 
+    } = this.props.data;
+
+    return (
+      <div className="image-container">
+        <img
+          ref={function (image) {
+            if (image !== null) {
+              chatActions.loadPrivateImage(image, src)}
+            }
+          }
+          onClick={this.openImage}
+          style={{
+            width: width + 'px',
+            height: height + 'px'
+          }} />
+      </div>
+    );
+  }
+  render(){
+    return (
+      <div className="file-container">
+        {this.renderPreview()}
+      </div>
+    );
+  }
+}
+
+
+const clickedLink = (match) => {
+  const res = match.split("|");
+  let clickObj = {};
+  if(res[0])
+    clickObj.command = res[0];
+  if(res[1])
+    clickObj.identifier = res[1];
+  if(res[2])
+    clickObj.title = res[2];
+  console.log('clicked', clickObj);
+  chatActions.clickLink(clickObj.command);
+
+}
+
+/*
 
 var ChatMessage = React.createClass({
-  mixins: [
-    ReactEmoji
-  ],
   share: function (text) {
     var shareData = this.shareData(text);
 
@@ -102,12 +172,7 @@ var ChatMessage = React.createClass({
     return <ChatMessage.File key={file.id} data={file} />
   },
   renderMessage:function(message){
-    try{
-      return renderTextWithLinks(message, this.emojify);
-    }
-    catch(e){
-      console.log('emojis', message);
-    }
+    return renderTextWithLinks(message, ReactEmoji.emojify);
   },
   dotItems: function () {
     var that = this;
@@ -188,54 +253,7 @@ var ChatMessage = React.createClass({
   }
 });
 
-ChatMessage.File = React.createClass({
-  renderPreview: function(){
-    if(this.props.data.thumb_360){
-      return this.renderImagePreview();
-    }
-    else{
-      return this.renderDefaultPreview();
-    }
-  },
-  openImage: function() {
-    var src = this.props.data.url_private_download;
-    var title = this.props.data.title;
-    var url = this.props.data.permalink;
 
-    chatActions.openImage(src, title, url);
-  },
-  renderImagePreview: function(){
-    var src = this.props.data.thumb_360;
-    var width = this.props.data.thumb_360_w;
-    var height = this.props.data.thumb_360_h;
-
-    return (
-      <div className="image-container">
-        <img
-          ref={function (image) {
-            if (image !== null) {
-              chatActions.loadPrivateImage(image, src)}
-            }
-          }
-          onClick={this.openImage}
-          style={{
-            width: width + 'px',
-            height: height + 'px'
-          }} />
-      </div>
-    );
-  },
-  renderDefaultPreview: function(){
-
-  },
-  render: function(){
-    return (
-      <div className="file-container">
-        {this.renderPreview()}
-      </div>
-    );
-  }
-});
 
 ChatMessage.Attachment = React.createClass({
   renderPreview: function(){
@@ -302,19 +320,6 @@ ChatMessage.Attachment = React.createClass({
   }
 });
 
-var clickedLink = function(match){
-  var res = match.split("|");
-  var clickObj = {};
-  if(res[0])
-    clickObj.command = res[0];
-  if(res[1])
-    clickObj.identifier = res[1];
-  if(res[2])
-    clickObj.title = res[2];
-  console.log('clicked', clickObj);
-  chatActions.clickLink(clickObj.command);
-
-};
 var renderTextWithLinks = function(text, emojiFunction){
   if(!text || !text.length)
     return text;
@@ -376,3 +381,4 @@ var renderTextWithLinks = function(text, emojiFunction){
 
 
 module.exports = ChatItem;
+*/

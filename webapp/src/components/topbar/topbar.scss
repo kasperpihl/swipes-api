@@ -10,12 +10,12 @@
 }
 
 
-$topbarSize: 50px;
+$topbarSize: 38px;
 $searchbarSize: 90px;
 $fullscreenTopbarSize: 70px;
 
 .sw-topbar {
-	padding-left: 70px;
+	padding-left: 80px;
 	@include size(100%, $searchbarSize);
 	user-select: none;
   -webkit-app-region: drag;
@@ -88,8 +88,6 @@ $fullscreenTopbarSize: 70px;
 		&__title {
 			font-size: 12px;
 			font-weight: 500;
-			text-transform: uppercase;
-			font-variant: small-caps;
 			letter-spacing: 1px;
 		}
 	}

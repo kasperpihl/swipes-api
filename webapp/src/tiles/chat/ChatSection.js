@@ -41,5 +41,12 @@ export default class ChatSection extends Component {
 }
 
 ChatSection.propTypes = {
-  removeThis: PropTypes.string.isRequired
+  data: PropTypes.shape({
+    section: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      messages: PropTypes.arrayOf(PropTypes.shape({
+        ts: PropTypes.string.isRequired
+      }))
+    }).isRequired
+  }).isRequired
 }

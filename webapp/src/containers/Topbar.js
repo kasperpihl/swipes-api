@@ -59,16 +59,14 @@ class Topbar extends Component {
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <div className="sw-topbar__info__icon">
-              <WorkspaceIcon />
-            </div>
-            <div className="sw-topbar__info__title">my workspace</div>
-            </div>
-            <div className="sw-topbar__searchbar">
-              <input ref="searchInput" placeholder="Search your apps" />
-            </div>
-            <div className="sw-topbar__actions">
-              <div className="sw-topbar__button sw-topbar__button--search" onClick={this.clickedSearch.bind(this)}>
+            <div className="sw-topbar__info__title">My Workspace</div>
+            <i className="material-icons">arrow_drop_down</i>
+          </div>
+          <div className="sw-topbar__searchbar">
+            <input ref="searchInput" placeholder="Search your apps" />
+          </div>
+          <div className="sw-topbar__actions">
+            <div className="sw-topbar__button sw-topbar__button--search" onClick={this.clickedSearch.bind(this)}>
               <i className="material-icons">search</i>
             </div>
             <div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd.bind(this)}>

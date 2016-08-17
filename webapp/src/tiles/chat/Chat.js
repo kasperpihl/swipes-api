@@ -5,7 +5,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../constants/ActionTypes'
 import { bindAll } from '../../classes/utils'
-import SlackSocket from './slack-socket'
+
+import SlackData from './slack-data'
+
+import ChatList from './ChatList'
 import ChatInput from './ChatInput'
 
 class Chat extends Component {
@@ -13,37 +16,25 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false }
 
-    bindAll(this, ['initialLoad', 'sendMessage'])
+    bindAll(this, ['sendMessage'])
 
-    this.socket = new SlackSocket(this.initialLoad);
+    this.slackData = new SlackData(props.swipes, props.tile.data);
   }
   componentDidMount(){
-    this.initialLoad()
   }
-  fetchChannel(){
+  componentDidUpdate(prevProps, prevState){
+    console.log('updated', this.props.tile.data);
+  }
 
-  }
-  initialLoad(){
-    const { swipes, saveData, tileId } = this.props
-    swipes.service('slack').request('rtm.start').then((res, err) => {
-      if(res.ok){
-        const saveObj = {};
-        const keysToSave = [ 'team', 'users', 'self', 'bots', 'channels', 'groups', 'ims' ]
-        Object.keys(res.data).forEach((key) => {
-          if(keysToSave.indexOf(key) !== -1){
-            saveObj[key] = res.data[key];
-          }
-        });
-        swipes.saveData(saveObj, true);
-      }
-    })
-  }
   sendMessage(message){
+    this.slackData.sendMessage(message);
     console.log('send!');
   }
   render() {
+    const sortedMessages = this.slackData.sortMessagesForSwipes();
     return (
       <div style={{height :'100%'}}>
+        <ChatList sections={sortedMessages} />
         <ChatInput sendMessage={this.sendMessage} />
       </div>
     )

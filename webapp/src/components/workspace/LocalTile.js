@@ -37,7 +37,7 @@ class LocalTile extends Component {
       return <div>Local Tile not found. Import it in LocalTile.js and add to componentForType()</div>
     }
 
-    return (<Component swipes={this.state.sdkForTile} data={tile.data} />);
+    return (<Component swipes={this.state.sdkForTile} tile={tile} />);
 
   }
 }

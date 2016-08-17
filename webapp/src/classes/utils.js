@@ -1,5 +1,3 @@
-
-
 const bindAll = (context, methodNames) => {
   methodNames.map(function(methodName) {
     context[methodName] = context[methodName].bind(context);
@@ -8,6 +6,22 @@ const bindAll = (context, methodNames) => {
 const size = (obj) => {
   if (obj == null) return 0;
   return Object.keys(obj).length;
+}
+
+const indexBy = (arr, iterator) => {
+  const object = {}
+  arr.forEach((val, i) => {
+    if(typeof iterator === 'string' && typeof val[iterator] === 'string'){
+      object[val[iterator]] = val
+    }
+    else if(typeof iterator === 'function' && typeof iterator(val) === 'string'){
+      object[iterator(val)] = val;
+    }
+    else{
+      object[i] = val;
+    }
+  })
+  return object;
 }
 
 const debounce = (func, wait, immediate) => {
@@ -78,6 +92,7 @@ const throttle = (func, wait) => {
 export {
   bindAll,
   size,
+  indexBy,
   debounce,
   throttle
 }
