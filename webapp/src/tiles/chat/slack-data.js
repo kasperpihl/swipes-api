@@ -6,7 +6,7 @@ export default class SlackData {
   constructor(swipes, data){
     this.swipes = swipes;
     this.data = data;
-    bindAll(this, ['start', 'handleMessage', 'getUserFromId', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
+    bindAll(this, ['start', 'handleMessage', 'getUserFromId', 'titleForChannel', 'sectionsForSidemenu', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.start();
   }
@@ -58,6 +58,9 @@ export default class SlackData {
     })
   }
   setChannel(channel){
+    if(typeof channel === 'string'){
+      channel = this.data.channels[channel];
+    }
     if(channel.id === this.data.selectedChannelId){
       return;
     }
@@ -65,7 +68,7 @@ export default class SlackData {
       selectedChannelId: channel.id,
       messages: null
     };
-    this.swipes.saveData(data);
+    this.saveData(data);
     this.fetchMessages(channel);
   }
   fetchMessages(channel){
@@ -216,6 +219,14 @@ export default class SlackData {
       console.log(error);
     })
   }
+  titleForChannel(channel){
+    if(channel.name){
+      return channel.name;
+    }
+    if(channel.user){
+      return this.data.users[channel.user].name;
+    }
+  }
   getUserFromId(id){
     return this.data.users[id];
   }
@@ -227,11 +238,57 @@ export default class SlackData {
       domElement.src = url;
     })
     .catch((error) => {
-      console.log(error);
+      //console.log(error);
     })
+  }
+  sectionsForSidemenu(){
+    const { channels, selectedChannelId } = this.data;
+
+    const starsCol = [];
+    const channelsCol = [];
+    const peopleCol = [];
+
+    for( var key in channels ){
+      const channel = channels[key];
+      if(channel.is_archived ||
+        (channel.is_im && !channel.is_open) ||
+        (channel.is_channel && !channel.is_member) ||
+        (channel.is_group && !channel.is_open)){
+        continue;
+      }
+
+      const item = { id: channel.id, name: this.titleForChannel(channel) };
+      if (selectedChannelId === channel.id) {
+        item.active = true;
+      } else if (channel.unread_count_display) {
+        item.unread = channel.unread_count_display;
+        if (channel.is_im) {
+          item.notification = channel.unread_count_display;
+        }
+      }
+      if (channel.is_starred) {
+        starsCol.push(item);
+      } else if (channel.is_im) {
+        peopleCol.push(item);
+      } else {
+        channelsCol.push(item);
+      }
+    }
+
+    const sections = []
+
+    if(starsCol.length){
+      sections.push({ title: "Starred", rows: starsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
+    }
+    sections.push({ title: "Channels", rows: channelsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
+    sections.push({ title: "People", rows: peopleCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
+    return sections;
   }
   sortMessagesForSwipes(messages){
     messages = messages || this.data.messages;
+    if(!messages || !messages.length)
+      return [];
+    
     let lastUser, lastGroup, lastDate;
     const length = messages.length;
     const me = this.data.self;

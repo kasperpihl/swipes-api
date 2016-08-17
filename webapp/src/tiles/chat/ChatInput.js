@@ -7,7 +7,7 @@ class ChatInput extends Component {
     super(props)
     this.defaultTextHeight = 60;
     this.state = { inputValue: '' }
-    bindAll(this, ['onHeightChange', 'onKeyDown', 'onKeyUp', 'onBlur', 'onFocus', 'onChange', 'onHeightChange', 'onFileChange', 'onPaste'])
+    bindAll(this, ['onHeightChange', 'onSend', 'onKeyDown', 'onKeyUp', 'onBlur', 'onFocus', 'onChange', 'onHeightChange', 'onFileChange', 'onPaste'])
   }
   componentDidMount() {
     if(this.props.sendTypingEvent){

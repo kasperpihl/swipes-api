@@ -126,6 +126,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     flex-direction: column;
 
     .sw-row-content {
+      position: relative;
       @include size(100%, calc(100% - 50px));
     }
   }

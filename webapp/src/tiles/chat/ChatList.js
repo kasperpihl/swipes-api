@@ -7,7 +7,8 @@ class ChatList extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    
+    this.shouldScrollToBottom = true;
+    this.hasRendered = false;
     bindAll(this, ['onScroll', 'scrollToBottom', 'handleResize', 'checkForMarkingAsRead'])
     this.bouncedScroll = debounce(this.scrollToBottom, 100);
     const markAsRead = (typeof props.markAsRead === 'function') ? props.markAsRead : () => {};
@@ -57,7 +58,7 @@ class ChatList extends Component {
     if(chatList.clientHeight < scrollContainer.clientHeight){
       topPadding = scrollContainer.clientHeight - chatList.clientHeight;
       if(topPadding != this.state.topPadding){
-        this.setSate({topPadding: topPadding});
+        this.setState({topPadding: topPadding});
       }
     }
   }

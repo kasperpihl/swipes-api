@@ -108,7 +108,7 @@ export default class SwipesAppSDK {
             else reject(error);
           };
 
-          this.api.request("services.stream", options, intCallback);
+          //this.api.request("services.stream", options, intCallback);
         })
       }
     };

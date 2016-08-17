@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../constants/ActionTypes'
 import { bindAll } from '../../classes/utils'
+import Sidemenu from '../../components/sidemenu/Sidemenu'
 
 import SlackData from './slack-data'
 
@@ -16,19 +17,22 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false }
 
-    bindAll(this, ['sendMessage'])
-
+    bindAll(this, ['sendMessage', 'onSelectedRow'])
+    
     this.slackData = new SlackData(props.swipes, props.tile.data);
   }
   componentDidMount(){
   }
   componentDidUpdate(prevProps, prevState){
-    console.log('updated', this.props.tile.data);
+    //console.log('updated', this.props.tile.data);
   }
 
   sendMessage(message){
-    this.slackData.sendMessage(message);
-    console.log('send!');
+    this.slackData.sendMessage(message);  
+  }
+  onSelectedRow(row){
+    console.log(row);
+    this.slackData.setChannel(row.id);
   }
   createItemDelegate(){
     const { swipes } = this.props;
@@ -44,9 +48,11 @@ class Chat extends Component {
   }
   render() {
     const sortedMessages = this.slackData.sortMessagesForSwipes();
+    const sectionsSidemenu = this.slackData.sectionsForSidemenu();
     return (
       <div style={{height :'100%'}}>
-        <ChatList sections={sortedMessages} itemDelegate={this.createItemDelegate()} />
+        <Sidemenu onWidthChanged={this.onSidemenuWidthChanged} onSelectedRow={this.onSelectedRow} data={{sections: sectionsSidemenu }} />
+        <ChatList sections={sortedMessages} itemDelegate={this.createItemDelegate()}/>
         <ChatInput sendMessage={this.sendMessage} />
       </div>
     )

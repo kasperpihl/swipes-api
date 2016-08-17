@@ -8,11 +8,14 @@
  */
 import React, { Component, PropTypes } from 'react'
 import SidemenuItem from './SidemenuItem'
+import './sidemenu.scss'
+import { debounce, bindAll } from '../../classes/utils'
 
 class Sidemenu extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = { above: {}, below: {} }
+    bindAll(this, ['onScroll', 'calculateBeforeAndAfter', 'scrollToTop', 'scrollToBottom', 'togglePin', 'onClick'])
   }
   componentDidUpdate(prevProps, prevState) {
     this.calculateBeforeAndAfter()
@@ -51,21 +54,19 @@ class Sidemenu extends Component {
     }
   }
   calculateBeforeAndAfter(){
-    var itemEls = this.refs.scroller.getElementsByClassName("menu-item");
-    var items = this.props.data.rows || [];
+    var itemEls = Array.from(this.refs.scroller.getElementsByClassName("menu-item"));
     var height = this.refs.scroller.clientHeight;
+    const scrollTop = this.refs.scroller.scrollTop;
+    const { sections } = this.props.data;
     var itemHeight = 26;
     let unreadAbove = 0;
     let notificationAbove = 0;
     let unreadBelow = 0;
     let notificationBelow = 0;
-
     itemEls.forEach((el, i) => {
-
-      const item = items[i];
-
-      const top = el.getBoundingClientRect().top;
-      const below = (top + itemHeight > height)
+      const item = sections[parseInt(el.dataset.section, 10)].rows[parseInt(el.dataset.row, 10)];
+      const top = el.offsetTop;
+      const below = (top + itemHeight > scrollTop + height)
       const above = (top < 0)
       if(item.unread){
         unreadAbove += above ? item.unread : 0;
@@ -87,7 +88,7 @@ class Sidemenu extends Component {
           name: "- Unread above -",
           unread: unreadAbove,
           notification: notificationAbove
-        }
+        },
         below: {
           name: "- Unread below -",
           unread: unreadBelow,
@@ -118,14 +119,14 @@ class Sidemenu extends Component {
         <SidemenuItem onClick={onClick} data={data} />
       </div>
     );
-  },
+  }
   renderRows(rows, sectionI){
     return rows.map((item, i ) => {
-      return <SidemenuItem onClick={this.onClick} data={item} key={sectionI + '-' + i}/>
+      return <SidemenuItem sectionI={sectionI} rowI={i} onClick={this.onClick} data={item} key={sectionI + '-' + i}/>
     })
   }
   renderTitle(title, sectionI){
-    return <h3 key={sectionI + '-title'}>title</h3>
+    return <h3 id={"section-" + sectionI} key={sectionI + '-title'}>{title}</h3>
   }
   render() {
     let className = "swipes-sidemenu";
@@ -139,13 +140,9 @@ class Sidemenu extends Component {
     if(forceClose){
       className += " force-close";
     }
-
-    if(!Array.isArray(data)){
-      data = [ data ]
-    }
     
     let renderedItems = [];
-    data.forEach((section, i) => {
+    data.sections.forEach((section, i) => {
       if(section.title){
         renderedItems.push(this.renderTitle(section.title, i));
       }

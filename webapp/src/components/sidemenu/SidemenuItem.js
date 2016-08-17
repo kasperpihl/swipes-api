@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
+import { bindAll } from '../../classes/utils'
 class SidemenuItem extends Component {
   constructor(props) {
     super(props)
+    bindAll(this, ['onClick'])
   }
   renderNotification(notification){
     const count = parseInt(notification, 10);
@@ -42,7 +44,7 @@ class SidemenuItem extends Component {
 
 
     return (
-      <div onClick={this.onClick} className={className}>
+      <div data-row={this.props.rowI} data-section={this.props.sectionI} onClick={this.onClick} className={className}>
         {this.renderIndicator(unread)}
         {this.renderNotification(notification)}
         <div className={"name " + presenceClass}>{name}</div>
