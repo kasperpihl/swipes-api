@@ -28,7 +28,7 @@ class Activities extends Component {
     const { title, subtitle, activities } = this.props;
 
     return (
-      <div className="swipes-activites">
+      <div className="swipes-activities">
         {this.renderHeader(title, subtitle)}
         {this.renderActivities(activities)}
       </div>

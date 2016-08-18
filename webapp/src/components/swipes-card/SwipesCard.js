@@ -11,16 +11,18 @@ export default class SwipesCard extends Component {
     this.onDragStart = props.onDragStart || function(){};
   }
   renderDot(actions){
+
+    // add back to swipesdot elements={[actions]}
     return (
       <div className="dot-wrapper">
         <SwipesDot
             onDragStart={this.onDragStart}
             hoverParentId='card-container'
-            elements={[actions]} />
+            />
       </div>
     )
   }
-  renderIcon(headerImage){
+  renderHeaderImage(headerImage){
     if(headerImage){
       return (
         <div className="service-icon-wrapper">
@@ -28,20 +30,37 @@ export default class SwipesCard extends Component {
         </div>
       )
     }
+  }
+  renderHeader(actions, title, subtitle, headerImage) {
 
+    return (
+      <div className="header">
+        <div className="header__dot">
+          {this.renderDot(actions)}
+        </div>
+        <div className="header__content">
+          <div className="header__content--title">{title}</div>
+          <div className="header__content--subtitle">{subtitle}</div>
+        </div>
+        <div className="header__image">
+          {this.renderHeaderImage(headerImage)}
+        </div>
+      </div>
+    )
   }
   render () {
     const {
       title,
       headerImage,
+      subtitle,
       actions
     } = this.props;
 
-    return <div id="card-container" className="shared-card">
-      {this.renderDot(actions)}
-      <div className="title">{title}</div>
-      {this.renderIcon(headerImage)}
-    </div>
+    return (
+      <div id="card-container" className="swipes-card">
+        {this.renderHeader(actions, title, subtitle, headerImage)}
+      </div>
+    )
   }
 }
 

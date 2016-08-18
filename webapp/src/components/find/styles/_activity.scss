@@ -1,0 +1,47 @@
+.swipes-activities {
+  width: 500px;
+  height: calc(100%);
+  padding-left: 10px;
+  padding-top: 90px;
+  float: right;
+  border-left: 1px solid $deepBlue-10;
+
+  .header {
+    width: 100%;
+
+    &__title {
+      font-weight: 900;
+      color: $deepBlue-100;
+      font-size: 36px;
+    }
+
+    &__subtitle {
+      font-weight: 500;
+      color: $deepBlue-60;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+  }
+
+  .activity {
+    margin-top: 3px;
+
+    .story {
+      width: 100%;
+      font-size: 12px;
+      line-height: 24px;
+      color: $deepBlue-40;
+      @include flex(center, flex-end);
+
+      &__timestamp {
+        padding-right: 5px;
+        color: $blue-100;
+        opacity: 0;
+      }
+    }
+
+    &:hover .story__timestamp {
+      opacity: 1;
+    }
+  }
+}

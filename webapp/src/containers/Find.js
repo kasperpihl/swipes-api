@@ -23,7 +23,7 @@ class Find extends Component {
     
   }
   render() {
-    const { isFinding, draggingDot } = this.props;
+    const { isFinding, draggingDot, recent } = this.props;
     let className = "find-overlay"
     if(isFinding && !draggingDot){
       className += ' open'
@@ -31,10 +31,7 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          <Activities title="Recent" subtitle="Mine" activities={[
-              { message: "Kasper uploaded a file", date: new Date(), shortUrl: "123slds" },
-              { message: "Kristian uploaded a file", date: new Date(new Date().getTime() - 50000), shortUrl: "210313d" }
-            ]}
+          <Activities title="Recent" subtitle="Mine" activities={recent}
           />
         </div>
       </div>
@@ -45,7 +42,8 @@ class Find extends Component {
 function mapStateToProps(state) {
   return {
     isFinding: state.main.isFinding,
-    draggingDot: state.main.draggingDot
+    draggingDot: state.main.draggingDot,
+    recent: state.activity.recent
   }
 }
 
