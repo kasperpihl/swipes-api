@@ -25,24 +25,22 @@ export default class SwipesCard extends Component {
   renderHeaderImage(headerImage){
     if(headerImage){
       return (
-        <div className="service-icon-wrapper">
-          <img src={headerImage} alt="" />
-        </div>
+        <img src={headerImage} alt="" />
       )
     }
   }
   renderHeader(actions, title, subtitle, headerImage) {
 
     return (
-      <div className="header">
-        <div className="header__dot">
+      <div className="swipes-card__header">
+        <div className="swipes-card__header__dot">
           {this.renderDot(actions)}
         </div>
-        <div className="header__content">
-          <div className="header__content--title">{title}</div>
-          <div className="header__content--subtitle">{subtitle}</div>
+        <div className="swipes-card__header__content">
+          <div className="swipes-card__header__content--title">{title}</div>
+          <div className="swipes-card__header__content--subtitle">{subtitle}</div>
         </div>
-        <div className="header__image">
+        <div className="swipes-card__header__image">
           {this.renderHeaderImage(headerImage)}
         </div>
       </div>
