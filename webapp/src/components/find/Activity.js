@@ -11,14 +11,13 @@ class Activity extends Component {
   }
   renderStory(dateString, message) {
     return (
-      <div className="story">
-        <div className="story__timestamp">{timeAgo(dateString)}</div>
-        <div className="story__message">{message}</div>
+      <div className="swipes-activities__activity__story">
+        <div className="swipes-activities__activity__story--timestamp">{timeAgo(dateString)}</div>
+        <div className="swipes-activities__activity__story--message">{message}</div>
       </div>
     )
   }
   renderCard(shortUrl) {
-
     return (
       <SwipesCard title="Testing file" subtitle="Uploaded yesterday" />
     )
@@ -27,7 +26,7 @@ class Activity extends Component {
     const { shortUrl, date, message } = this.props.data;
 
     return (
-      <div className="activity">
+      <div className="swipes-activities__activity">
         {this.renderStory(date, message)}
         {this.renderCard(shortUrl)}
       </div>
