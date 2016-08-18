@@ -204,7 +204,8 @@ const processFileChange = ({account, entry}) => {
 					service: 'dropbox',
 					message: message,
 					profile_photo: userProfilePic,
-					shortUrl: shortUrl
+					shortUrl: shortUrl,
+					me: sameUser
 				}
 
 				insertEvent({
