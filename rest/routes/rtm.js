@@ -31,7 +31,7 @@ router.post('/rtm.start', (req, res, next) => {
 
   let activityQ = r.table('events')
                   .filter((e) => {
-                    return e('user_id').eq(userId).and(e('type').eq('activity'))
+                    return e('user_id').eq(userId).and(e('type').eq('activity_added'))
                   })
                   .orderBy(r.desc('date'))
 
