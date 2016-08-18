@@ -14,8 +14,14 @@ const indexBy = (arr, iterator) => {
     if(typeof iterator === 'string' && typeof val[iterator] === 'string'){
       object[val[iterator]] = val
     }
-    else if(typeof iterator === 'function' && typeof iterator(val) === 'string'){
-      object[iterator(val)] = val;
+    else if(typeof iterator === 'function'){
+      const res = iterator(val)
+      if(typeof res === 'string'){
+        object[res] = val;
+      }
+      else {
+        object[i] = val;
+      }
     }
     else{
       object[i] = val;

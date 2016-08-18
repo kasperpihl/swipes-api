@@ -93,7 +93,7 @@ class ChatList extends Component {
   render() {
     const styles = {};
     if(this.state.topPadding){
-      styles.paddingTop = this.state.topPadding + "px"
+      //styles.paddingTop = this.state.topPadding + "px"
     }
     return (
       <div onScroll={this.onScroll} style={styles} ref="scroll-container" className="chat-list-container">
@@ -109,6 +109,7 @@ export default ChatList
 
 ChatList.propTypes = {
   itemDelegate: PropTypes.object.isRequired,
+  markAsRead: PropTypes.func,
   sections: PropTypes.arrayOf(PropTypes.shape({
 
   }))

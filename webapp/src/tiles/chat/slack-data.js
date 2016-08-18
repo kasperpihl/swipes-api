@@ -5,8 +5,8 @@ import SlackSocket from './slack-socket'
 export default class SlackData {
   constructor(swipes, data){
     this.swipes = swipes;
-    this.data = data;
-    bindAll(this, ['start', 'handleMessage', 'getUserFromId', 'titleForChannel', 'sectionsForSidemenu', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
+    this.data = data || {};
+    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'sectionsForSidemenu', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.start();
   }
@@ -27,13 +27,13 @@ export default class SlackData {
       if(res.ok){
         const saveObj = { channels: {} };
         const keysToSave = [ 'team', 'users', 'self', 'bots', 'channels', 'groups', 'ims' ]
+        let generalChannelId;
         Object.keys(res.data).forEach((key) => {
-          let generalChannelId;
           if(keysToSave.indexOf(key) !== -1){
             let value = res.data[key];
             if(Array.isArray(value)){
               value = indexBy(value, (obj) => {
-                
+                console.log(key, obj);
                 if(key === 'channels' && obj.is_general){
                   generalChannelId = obj.id;
                 }
@@ -73,6 +73,25 @@ export default class SlackData {
     };
     this.saveData(data);
     this.fetchMessages(channel);
+  }
+  currentChannel(){
+    return this.data.channels[this.data.selectedChannelId];
+  }
+  markAsRead(ts){
+    const { messages } = this.data;
+    var channel = this.currentChannel();
+    ts = ts || messages[messages.length - 1].ts;
+    if(!channel || ts === channel.last_read){
+      return;
+    }
+    var prefix = this.apiPrefixForChannel(channel);
+    this.swipes.service('slack').request(prefix + "mark",
+      {
+        channel: channel.id,
+        ts: ts
+    })
+    .then(() => {
+    })
   }
   fetchMessages(channel){
     this.swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id }).then((res) => {
@@ -244,6 +263,44 @@ export default class SlackData {
       //console.log(error);
     })
   }
+  uploadFiles(files, callback){
+    const file = files[0];
+    const token = this.swipes.info.slackToken;
+    const formData = new FormData();
+    formData.append("token", token);
+    formData.append("channels", this.get('channelId'));
+    formData.append("filename", file.name);
+    formData.append("title", file.name);
+    formData.append("file", file);
+    this.__tempSlackUpload(formData, (res, err) => {
+      callback(res, err);
+    });
+  }
+  
+  
+  
+  // T_INFO // We should replace these once we can upload directly through our service
+  // Though, the request might come in handy for how to send the request since they use formData for files.
+  
+
+  __tempSlackUpload(formData, callback){
+    $.ajax({
+      url : 'https://slack.com/api/files.upload',
+      type: "POST",
+      success: function(res){
+        console.log('res slack upload', res);
+        callback(true);
+      },
+      error: function(err){
+        console.log('err slack upload', err);
+        callback(false, err);
+      },
+      crossDomain: true,
+      data: formData,
+      processData: false,
+      contentType: false
+    });
+  }
   sectionsForSidemenu(){
     const { channels, selectedChannelId } = this.data;
 
@@ -349,8 +406,8 @@ export default class SlackData {
     const sortedSections = sortedKeys.map((key) => {
       const schedule = new Date(parseInt(key)*1000);
       const title = dayStringForDate(schedule);
-
-      return {"title": title, "messages": groups[key] };
+      const sortedMessages = groups[key].sort((a, b) => { if(a < b) return -1; return 1})
+      return {"title": title, "messages": sortedMessages };
     });
 
     return sortedSections;
@@ -432,43 +489,7 @@ var ChatStore = Reflux.createStore({
       this.set('typing', false);
     }
   },
-  onUploadFile: function(file, callback){
-    var token = swipes.info.slackToken;
-    var formData = new FormData();
-    formData.append("token", token);
-    formData.append("channels", this.get('channelId'));
-    formData.append("filename", file.name);
-    formData.append("title", file.name);
-    formData.append("file", file);
-    this.__tempSlackUpload(formData, function(result, error){
-      callback(result, error);
-    }.bind(this));
-  },
   
-  
-  
-  /* T_INFO // We should replace these once we can upload directly through our service
-  // Though, the request might come in handy for how to send the request since they use formData for files.
-  
-
-  __tempSlackUpload:function(formData, callback){
-    $.ajax({
-      url : 'https://slack.com/api/files.upload',
-      type: "POST",
-      success: function(res){
-        console.log('res slack upload', res);
-        callback(true);
-      },
-      error: function(err){
-        console.log('err slack upload', err);
-        callback(false, err);
-      },
-      crossDomain: true,
-      data: formData,
-      processData: false,
-      contentType: false
-    });
-  },
   onSendTypingEvent: function() {
     var currentChannel = ChannelStore.get(this.get('channelId'));
 

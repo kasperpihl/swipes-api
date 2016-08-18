@@ -107,7 +107,7 @@ export default class SwipesAppSDK {
             if(res) resolve(res);
             else reject(error);
           };
-
+          // T_TODO: Turned off the stream here, because it keeps running and trying
           //this.api.request("services.stream", options, intCallback);
         })
       }

@@ -20,7 +20,6 @@ const persist = paths => {
         token: state.main.token,
         tileBaseUrl: state.main.tileBaseUrl
       },
-      auth: state.auth,
       services: state.services,
       workspace: state.workspace,
       me: state.me

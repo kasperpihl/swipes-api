@@ -51,13 +51,17 @@ class Chat extends Component {
     }
   }
   render() {
-    const sortedMessages = this.props.tile.data.sortedMessages;
+
+    let sortedMessages;
+    if(this.props.tile.data){
+      sortedMessages = this.props.tile.data.sortedMessages; 
+    }
     const sectionsSidemenu = this.slackData.sectionsForSidemenu();
     const paddingBottom = this.state.inputHeight + 'px';
     return (
       <div style={{height :'100%', paddingBottom}}>
         <Sidemenu onWidthChanged={this.onSidemenuWidthChanged} onSelectedRow={this.onSelectedRow} data={{sections: sectionsSidemenu }} />
-        <ChatList sections={sortedMessages} itemDelegate={this.createItemDelegate()} />
+        <ChatList sections={sortedMessages} markAsRead={this.slackData.markAsRead} itemDelegate={this.createItemDelegate()} />
         <ChatInput sendMessage={this.sendMessage} changedHeight={this.changedHeight} />
       </div>
     )
