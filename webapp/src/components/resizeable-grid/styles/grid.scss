@@ -22,8 +22,8 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
   &.sw-resizing {
 
     .sw-resizeable-row > .sw-row-content { // no pointer events for row-content
-      @include hide();
-      //display: none;
+      //@include hide();
+      display: none;
     }
   }
 
