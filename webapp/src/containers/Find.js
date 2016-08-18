@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { main } from '../actions';
-import '../components/find/find.scss'
+import '../components/find/styles/find.scss'
 
 class Find extends Component {
   constructor(props) {

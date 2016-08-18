@@ -406,7 +406,7 @@ export default class SlackData {
     const sortedSections = sortedKeys.map((key) => {
       const schedule = new Date(parseInt(key)*1000);
       const title = dayStringForDate(schedule);
-      const sortedMessages = groups[key].sort((a, b) => { if(a < b) return -1; return 1})
+      const sortedMessages = groups[key].sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
       return {"title": title, "messages": sortedMessages };
     });
 

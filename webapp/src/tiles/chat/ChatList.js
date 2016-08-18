@@ -110,8 +110,6 @@ export default ChatList
 ChatList.propTypes = {
   itemDelegate: PropTypes.object.isRequired,
   markAsRead: PropTypes.func,
-  sections: PropTypes.arrayOf(PropTypes.shape({
-
-  }))
+  sections: PropTypes.arrayOf(PropTypes.object)
 
 }

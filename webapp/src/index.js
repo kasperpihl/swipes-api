@@ -15,8 +15,15 @@ import { render } from 'react-dom'
 let Page, data;
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
+// import SwipesCard from './components/swipes-card/SwipesCard'
+// Component tester: import the component, add it below, and change false to true.
+// OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
-  if(window.__share_data){
+  if(false){
+    //
+    //Page = SwipesCard;
+  }
+  else if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage')
     data = window.__share_data;

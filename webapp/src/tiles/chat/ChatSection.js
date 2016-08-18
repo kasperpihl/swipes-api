@@ -46,9 +46,7 @@ ChatSection.propTypes = {
   data: PropTypes.shape({
     section: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      messages: PropTypes.arrayOf(PropTypes.shape({
-        ts: PropTypes.string.isRequired
-      }))
+      messages: PropTypes.arrayOf(PropTypes.object)
     }).isRequired
   }).isRequired
 }

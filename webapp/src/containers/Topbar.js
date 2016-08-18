@@ -59,7 +59,7 @@ class Topbar extends Component {
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <div className="sw-topbar__info__title">My Workspace</div>
+            <div className="sw-topbar__info__title">My Workspace2</div>
             <i className="material-icons">arrow_drop_down</i>
           </div>
           <div className="sw-topbar__searchbar">
