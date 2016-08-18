@@ -9,10 +9,10 @@ class Activity extends Component {
   }
   componentDidMount() {
   }
-  renderStory(date, message) {
+  renderStory(dateString, message) {
     return (
       <div className="story">
-        <div className="story__timestamp">{timeAgo(date)}</div>
+        <div className="story__timestamp">{timeAgo(dateString)}</div>
         <div className="story__message">{message}</div>
       </div>
     )
@@ -41,7 +41,7 @@ Activity.propTypes = {
   data: PropTypes.shape({
     message: PropTypes.string.isRequired,
     shortUrl: PropTypes.string,
-    date: PropTypes.object,
+    date: PropTypes.string,
     service: PropTypes.string
   })
 }
