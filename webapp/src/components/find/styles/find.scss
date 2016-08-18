@@ -1,39 +1,44 @@
+@import '../../global-styles/vars';
+@import '../../global-styles/mixins';
 @import 'search-results';
 @import 'activity';
 
 $searchbarSize: 90px;
-.find-overlay{
-  position: absolute;
-  width: 100%;
-  height: 100%;
+
+.find-overlay {
   background: rgba(0,0,0,.6);
-  top:0;
+  height: 100%;
   left:0;
-  z-index: 9998;
   opacity: 0;
-  visibility: hidden;
-  transition: opacity .3s .15s, visibility 0s .45s;
   pointer-events: none;
-  .content-container{
-    padding: 5px 10px;
-    padding-top: $searchbarSize + 20;
-    width:96%;
+  position: absolute;
+  top:0;
+  transition: opacity .3s .15s, visibility 0s .45s;
+  visibility: hidden;
+  width: 100%;
+  z-index: 9998;
+
+  .content-container {
+    background: white;
     height:96%;
     margin-left:2%;
+    padding-top: $searchbarSize + 20;
+    padding: 5px 10px;
     position:relative;
-    background: white;
-    transition: transform .3s;
     transform: translateY(-100%);
+    transition: transform .3s;
+    width:96%;
   }
-  &.open{
-    pointer-events: auto;
-    visibility: visible;
+
+  &.open {
     opacity: 1;
+    pointer-events: auto;
     transition: opacity .3s, visibility 0s;
-    .content-container{
+    visibility: visible;
+
+    .content-container {
       transform: translateY(0);
       transition: transform .3s .15s;
     }
   }
-
 }

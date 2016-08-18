@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-
 import SwipesCard from '../swipes-card/SwipesCard'
 
 class Activity extends Component {
