@@ -57,7 +57,7 @@ router.post('/rtm.start', (req, res, next) => {
         users: data[1],
         workflows: data[2],
         services: data[3],
-        recent_activity: data[4]
+        activity: data[4]
       }
 
       res.status(200).json(rtmResponse);
