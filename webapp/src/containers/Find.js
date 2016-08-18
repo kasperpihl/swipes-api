@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { main } from '../actions';
 import '../components/find/styles/find.scss'
 
+import Activities from '../components/find/Activities'
+
 class Find extends Component {
   constructor(props) {
     super(props)
@@ -29,7 +31,11 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          
+          <Activities title="Recent" subtitle="Mine" activities={[
+              { message: "Kasper uploaded a file", date: new Date(), shortUrl: "123slds" },
+              { message: "Kristian uploaded a file", date: new Date(new Date().getTime() - 50000), shortUrl: "210313d" }
+            ]}
+          />
         </div>
       </div>
     );

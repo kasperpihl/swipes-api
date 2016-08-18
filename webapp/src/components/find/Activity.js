@@ -12,7 +12,7 @@ class Activity extends Component {
   renderStory(date, message) {
     return (
       <div className="story">
-        <div className="story__timestamp">{date}</div>
+        <div className="story__timestamp">{date.toString()}</div>
         <div className="story__message">{message}</div>
       </div>
     )

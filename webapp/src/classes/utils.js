@@ -1,14 +1,14 @@
-const bindAll = (context, methodNames) => {
+export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {
     context[methodName] = context[methodName].bind(context);
   });
 }
-const size = (obj) => {
+export function size(obj) {
   if (obj == null) return 0;
   return Object.keys(obj).length;
 }
 
-const indexBy = (arr, iterator) => {
+export function indexBy(arr, iterator){
   const object = {}
   arr.forEach((val, i) => {
     if(typeof iterator === 'string' && typeof val[iterator] === 'string'){
@@ -30,7 +30,7 @@ const indexBy = (arr, iterator) => {
   return object;
 }
 
-const debounce = (func, wait, immediate) => {
+export function debounce(func, wait, immediate){
   let timeout, args, context, timestamp, result;
   if (null == wait) wait = 100;
 
@@ -72,7 +72,7 @@ const debounce = (func, wait, immediate) => {
   return debounced;
 };
 
-const throttle = (func, wait) => {
+export function throttle(func, wait){
   let ctx, args, rtn, timeoutID; // caching
   let last = 0;
 
@@ -93,12 +93,4 @@ const throttle = (func, wait) => {
     ctx = null;
     args = null;
   }
-}
-
-export {
-  bindAll,
-  size,
-  indexBy,
-  debounce,
-  throttle
 }

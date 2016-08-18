@@ -91,6 +91,7 @@ class ChatList extends Component {
     }
   }
   render() {
+    console.log('render list');
     const styles = {};
     if(this.state.topPadding){
       //styles.paddingTop = this.state.topPadding + "px"

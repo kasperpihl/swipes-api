@@ -20,8 +20,8 @@ class Activities extends Component {
     if (!activities) {
       return;
     }
-    return activities.map( (activity) => {
-      <Activity data={activity} />
+    return activities.map( (activity, i) => {
+      return <Activity key={"activity-" + i} data={activity} />
     })
   }
   render() {

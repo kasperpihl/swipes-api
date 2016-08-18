@@ -11,16 +11,14 @@ export default class SwipesCard extends Component {
     this.onDragStart = props.onDragStart || function(){};
   }
   renderDot(actions){
-    if( actions && actions.length ) {
-      return (
-        <div className="dot-wrapper">
-          <SwipesDot
-              onDragStart={this.onDragStart}
-              hoverParentId='card-container'
-              elements={[actions]} />
-        </div>
-      )
-    }
+    return (
+      <div className="dot-wrapper">
+        <SwipesDot
+            onDragStart={this.onDragStart}
+            hoverParentId='card-container'
+            elements={[actions]} />
+      </div>
+    )
   }
   renderIcon(headerImage){
     if(headerImage){
