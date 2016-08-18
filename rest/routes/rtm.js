@@ -29,11 +29,18 @@ router.post('/rtm.start', (req, res, next) => {
                   .without({right: ['id', 'name']}) // No id, nor name from the original service.
                   .zip();
 
+  let activityQ = r.table('events')
+                  .filter((e) => {
+                    return e('user_id').eq(userId).and(e('type').eq('activity'))
+                  })
+                  .orderBy(r.desc('date'))
+
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(users),
     db.rethinkQuery(workflowsQ),
-    db.rethinkQuery(servicesQ)
+    db.rethinkQuery(servicesQ),
+    db.rethinkQuery(activityQ)
   ]
 
   Promise.all(promiseArrayQ)
@@ -49,7 +56,8 @@ router.post('/rtm.start', (req, res, next) => {
         self: data[0],
         users: data[1],
         workflows: data[2],
-        services: data[3]
+        services: data[3],
+        recent_activity: data[4]
       }
 
       res.status(200).json(rtmResponse);
