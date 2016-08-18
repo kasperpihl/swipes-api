@@ -22,27 +22,27 @@ export default class SwipesCard extends Component {
       )
     }
   }
-  renderIcon(iconUrl){
-    if(iconUrl){
+  renderIcon(headerImage){
+    if(headerImage){
       return (
         <div className="service-icon-wrapper">
-          <img src={iconUrl} alt="" />
+          <img src={headerImage} alt="" />
         </div>
       )
     }
-    
+
   }
   render () {
     const {
       title,
-      iconUrl,
+      headerImage,
       actions
     } = this.props;
 
     return <div id="card-container" className="shared-card">
       {this.renderDot(actions)}
       <div className="title">{title}</div>
-      {this.renderIcon(iconUrl)}
+      {this.renderIcon(headerImage)}
     </div>
   }
 }
@@ -50,13 +50,20 @@ export default class SwipesCard extends Component {
 
 SwipesCard.propTypes = {
   title: PropTypes.string.isRequired,
-  iconUrl: PropTypes.string,
+  subtitle: PropTypes.string,
+  description: PropTypes.string,
+  headerImage: PropTypes.oneOf([
+    PropTypes.string,
+    PropTypes.shape({
+      url: PropTypes.string
+    })
+  ]),
   onDragStart: PropTypes.func,
   actions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     callback: PropTypes.func.isRequired,
     icon: PropTypes.string,
-    iconUrl: PropTypes.string,
+    headerImage: PropTypes.string,
     bgColor: PropTypes.string
   }))
 }

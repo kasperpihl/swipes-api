@@ -1,14 +1,43 @@
 @import "roboto/roboto";
 @import "material-icons/material-icons";
 
-*, *:before, *:after, h1, h2, h3, h4, h5, h6, p, a, input, ul, li, button {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  border: none;
-  background-color: transparent;
-  text-decoration: none;
-  list-style: none;
+*,
+*:after,
+*:before,
+a,
+button,
+canvas,
+g,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+image,
+img,
+input,
+li,
+p,
+path,
+svg,
+ul {
+	background-color: transparent;
+	border: none;
+	box-sizing: border-box;
+	font-family: 'Roboto', Arial, Helvetica, sans-serif;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+
+  &::-webkit-input-placeholder {
+    font-family: inherit;
+  }
+
+  &:focus {
+    outline: none;
+  }
 }
 
 input:-webkit-autofill {
@@ -20,10 +49,11 @@ input::-webkit-autofill {
 }
 
 html, body {
+  background-color: #FAFAFA;
+	margin: 0;
   width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+	height: 100%;
+	padding: 0;
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
 
   animation-delay: 0.1s;
@@ -44,12 +74,8 @@ html, body {
 
 
 html {
-    width: 100%;
-    height:100%;
     overflow: hidden;
     body{
-        width: 100%;
-        height:100%;
         overflow: hidden;
         font-smooth: always;
         transform: rotate(-0.0000000001deg);
@@ -59,12 +85,6 @@ html {
 }
 * {
     cursor:default;
-}
-
-*,*:before,*:after,form,input {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
 }
 
 input{
