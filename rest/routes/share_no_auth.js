@@ -58,11 +58,9 @@ router.post('/share.getData', (req, res, next) => {
     		file = require(serviceDir + serviceData.folder_name + '/' + serviceData.script);
     	}
     	catch (e) {
-        // T_TODO nicer error if there is no file
-    		return Promise.reject(e);
+    		return Promise.reject('The file not found');
     	}
 
-      // T_TODO error if there is no file
       const options = {
     		authData: userServiceData.authData,
     		params: {id: shortUrl.service.item_id},
@@ -71,13 +69,16 @@ router.post('/share.getData', (req, res, next) => {
         type: shortUrl.service.type
     	};
 
+      if (!file.shareRequest) {
+        return Promise.reject('The service does not support swipes card yet');
+      }
+
     	file.shareRequest(options, function (err, result) {
     		if (err) {
     			return res.status(200).json({ok: false, err: err});
     		}
 
         res.send({ok: true, data: result});
-
     	});
     })
     .catch((e) => {
