@@ -33,7 +33,6 @@ export default class SlackData {
             let value = res.data[key];
             if(Array.isArray(value)){
               value = indexBy(value, (obj) => {
-                console.log(key, obj);
                 if(key === 'channels' && obj.is_general){
                   generalChannelId = obj.id;
                 }

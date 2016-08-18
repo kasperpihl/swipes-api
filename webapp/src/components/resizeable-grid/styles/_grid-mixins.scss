@@ -11,10 +11,7 @@
 }
 
 @mixin hide(){
-  flex: 0 1;
-  pointer-events: none;
-  width: 0px;
-  height: 0px;
+  display:none;
 }
 
 @mixin collapse-icon($width, $height, $color) {

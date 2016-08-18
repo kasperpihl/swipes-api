@@ -31,6 +31,9 @@ class Topbar extends Component {
     this.props.toggleFind();
   }
   signout() {
+  }
+  onClickWorkspace(){
+    this.props.logout();
     window.location.replace('/');
   }
   gradientStep(){
@@ -59,7 +62,7 @@ class Topbar extends Component {
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <div className="sw-topbar__info__title">My Workspace2</div>
+            <div className="sw-topbar__info__title" onClick={this.onClickWorkspace.bind(this)}>My Workspace2</div>
             <i className="material-icons">arrow_drop_down</i>
           </div>
           <div className="sw-topbar__searchbar">
@@ -87,6 +90,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedTopbar = connect(mapStateToProps, {
+  logout: main.logout,
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
   loadTilesListModal: modal.loadTilesListModal

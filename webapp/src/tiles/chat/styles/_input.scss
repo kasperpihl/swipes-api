@@ -55,13 +55,11 @@ $inputButtonWidth: 50px;
     padding-left: 7px;
     font-weight: 500;
     color: $deepBlue-60;
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     line-height: 15px;
     transition: .1s ease-in-out;
 
     &::-webkit-input-placeholder {
        color: $deepBlue-40;
-       font-family: 'Roboto', Arial, Helvetica, sans-serif;
        font-weight: 400;
     }
   }
