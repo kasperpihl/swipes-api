@@ -3,6 +3,7 @@ import main from './main'
 import modal from './modal'
 import workspace from './workspace'
 import services from './services'
+import activity from './activity'
 import me from './me'
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   modal,
   workspace,
   services,
+  activity,
   me
 })
 
