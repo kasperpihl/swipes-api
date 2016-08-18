@@ -39,16 +39,16 @@ serviceUtil.getServiceWithAuth = (req, res, next) => {
 
 	//T_TODO fix this query. Possible for multiple accounts - filtering by id
 	// merging information from right to left. User's information is more
-	// important is this case
+	// important in this case
 	let userServiceQ = r.table("users")
-						.get(req.userId)("services")
-						.default([])
-						.filter(filter)
-						.limit(1)
-						.pluck('authData', 'service_id', 'id', 'service_name') // Add user settings here
-						.eqJoin('service_id', r.table('services'), {index: 'id'})
-						.without([{right:'id'}, {right:'title'}])
-						.zip()
+		.get(req.userId)("services")
+		.default([])
+		.filter(filter)
+		.limit(1)
+		.pluck('authData', 'service_id', 'id', 'service_name') // Add user settings here
+		.eqJoin('service_id', r.table('services'), {index: 'id'})
+		.without([{right:'id'}, {right:'title'}])
+		.zip()
 
 	db.rethinkQuery(userServiceQ)
 		.then((foundService) => {

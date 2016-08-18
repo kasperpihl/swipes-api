@@ -3,15 +3,13 @@
 import r from 'rethinkdb';
 import db from '../db.js'; // T_TODO I should make this one a local npm module
 
-const updateCursor = ({userId, accountId, cursor}) => {
+const updateCursors = ({ userId, accountId, cursors }) => {
   const query = r.table('users').get(userId)
   	.update({services: r.row('services')
   		.map((service) => {
   			return r.branch(
   				service('id').eq(accountId),
-  				service.merge({
-  					list_folder_cursor: cursor
-  				}),
+          service.merge({cursors: service('cursors').default({}).merge(cursors)}),
   				service
   			)
   		})
@@ -26,7 +24,7 @@ const updateCursor = ({userId, accountId, cursor}) => {
   	});
 }
 
-const insertEvent = ({userId, eventData}) => {
+const insertEvent = ({ userId, eventData }) => {
   const date = new Date();
   const type = 'activity';
 
@@ -48,6 +46,6 @@ const insertEvent = ({userId, eventData}) => {
 }
 
 export {
-  updateCursor,
+  updateCursors,
   insertEvent
 }

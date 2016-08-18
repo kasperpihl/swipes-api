@@ -4,9 +4,11 @@ import config from 'config';
 import request from 'request';
 import r from 'rethinkdb';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
-import ac from 'async';
 import {
-	updateCursor,
+	createSwipesShortUrl
+} from '../../rest/utils/share_url_util.js';
+import {
+	updateCursors,
   insertEvent
 } from '../../rest/utils/webhook_util.js';
 
@@ -56,13 +58,19 @@ const dropbox = {
 		const accountId = account.id;
 		const userId = account.user_id;
 		const method = 'files.listFolder.continue';
+		const cursors = account.cursors;
+
+		if (!cursors || !cursors.list_folder_cursor) {
+			return callback('The required cursor is missing. Try reauthorize the service to fix the problem.');
+		}
+
 		const params = {
-			cursor: account.list_folder_cursor
+			cursor: cursors.list_folder_cursor
 		};
 
 		const secondCallback = (error, result) => {
 			if (error) {
-				console.log(error);
+				return console.log(error);
 			}
 
 			const cursor = result.cursor;
@@ -75,7 +83,8 @@ const dropbox = {
 
 				this.request({authData, method, params}, secondCallback);
 			} else {
-				updateCursor({userId, accountId, cursor});
+				const cursors = {list_folder_cursor: cursor};
+				updateCursors({ userId, accountId, cursors });
 			}
 		}
 
@@ -109,6 +118,7 @@ const dropbox = {
 			const method = 'users.getAccount';
 			const params = { account_id };
 			const data = { authData, id: account_id };
+			const cursors = {};
 
 			this.request({authData, method, params}, (err, res) => {
 				if (err) {
@@ -128,7 +138,8 @@ const dropbox = {
 						console.log(err);
 					}
 
-					data.list_folder_cursor = res.cursor;
+					cursors['list_folder_cursor'] = res.cursor;
+					data.cursors = cursors;
 
 					return callback(null, data);
 				});
@@ -160,24 +171,7 @@ const processChanges = ({account, result}) => {
 
 const processFileChange = ({account, entry}) => {
 	const authData = account.authData;
-	const callbacks = [];
-
-	// Get revisions
-	const listRevisionsMethod = 'files.listRevisions';
-	const listRevisionsParams = {
-		path: entry.path_lower,
-		limit: 2 // We just want to know if it's created or modified file
-	}
-
-	callbacks.push((callback) => {
-		dropbox.request({authData, method: listRevisionsMethod, params: listRevisionsParams}, (err, res) => {
-			if (err) {
-				return callback(err);
-			};
-
-			callback(null, res);
-		})
-	});
+	const userId = account.user_id;
 
 	// Get which user modified the file
 	const getAccountMethod = 'users.getAccount';
@@ -185,46 +179,42 @@ const processFileChange = ({account, entry}) => {
 		account_id: entry.sharing_info.modified_by
 	}
 
-	callbacks.push((callback) => {
-		dropbox.request({authData, method: getAccountMethod, params: getAccountParams}, (err, res) => {
-			if (err) {
-				return callback(err);
-			};
-
-			callback(null, res);
-		})
-	});
-
-	ac.parallel(callbacks, (error, result) => {
-		if (error) {
-			console.log(error);
+	dropbox.request({authData, method: getAccountMethod, params: getAccountParams}, (err, res) => {
+		if (err) {
+			console.log(err);
 			return;
-		}
-
-		const revisions = result[0];
-		const user = result[1];
-		const changed = revisions.length > 0 ? true : false;
-		let eventMessage = '';
-
-		if (changed) {
-			eventMessage = 'File have been changed';
-		} else {
-			eventMessage = 'File have been created';
-		}
-
-		const event = {
-			modified_by: user.name.display_name || user.email,
-			profile_photo: user.profile_photo_url || '',
-			message: eventMessage,
-			// T_TODO service name iss something that we have to know!
-			// more refactoring is needed
-			service: 'dropbox'
 		};
 
-		insertEvent({
-			userId: account.user_id,
-			eventData: event
-		});
+		const user = res;
+		const sameUser = account.id === user.account_id;
+		const userName = sameUser ? 'You' : user.name.display_name || user.email;
+		const userProfilePic = user.profile_photo_url || '';
+		const message = userName + ' made a change';
+
+		const service = {
+			name: 'dropbox',
+			account_id: account.id,
+			type: 'file',
+			item_id: entry.id
+		};
+
+		createSwipesShortUrl({ userId, service })
+			.then((shortUrl) => {
+				const event = {
+					service: 'dropbox',
+					message: message,
+					profile_photo: userProfilePic,
+					shortUrl: shortUrl
+				}
+
+				insertEvent({
+					userId: userId,
+					eventData: event
+				});
+			})
+			.catch((err) => {
+				console.log('Failed creating short url for an asana event', err);
+			})
 	})
 }
 

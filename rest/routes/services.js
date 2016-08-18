@@ -30,8 +30,7 @@ router.post('/services.request',
 			authData: service.authData,
 			method: data.method,
 			params: data.parameters,
-			user: {userId: req.userId},
-			service: {serviceId: service.id}
+			user: {userId: req.userId}
 		};
 		file.request(options, function (err, result) {
 			if (err) {
@@ -104,9 +103,9 @@ router.post('/services.authsuccess',
 	serviceUtil.requireService,
 	serviceUtil.getAuthData,
 	serviceUtil.updateAuthData,
-	// xendoSwipesCredentials,
-	// xendoRefreshSwipesToken,
-	// xendoAddServiceToUser,
+	xendoSwipesCredentials,
+	xendoRefreshSwipesToken,
+	xendoAddServiceToUser,
 	(req, res, next) => {
 		return res.status(200).json({ok: true});
 	}

@@ -1,18 +1,31 @@
 "use strict";
 
-let express = require( 'express' );
-let r = require('rethinkdb');
-let db = require('../db.js');
-let util = require('../util.js');
-let utilDB = require('../util_db.js');
-let Promise = require('bluebird');
-let SwipesError = require( '../swipes-error' );
+import express from 'express';
+import r from 'rethinkdb';
+import db from '../db.js';
+import util from '../util.js';
+import utilDB from '../util_db.js';
+import Promise from 'bluebird';
+import SwipesError from '../swipes-error';
+import {
+  getUserService,
+  cleanupWebhooksFromUserService,
+  usersGetXendoServiceId,
+  usersRemoveXendoService,
+  userRemoveService,
+} from '../middlewares/users';
+import {
+  xendoSwipesCredentials,
+  xendoRefreshSwipesToken,
+  xendoRemoveServiceFromUser
+} from '../middlewares/xendo';
 
-let router = express.Router();
-let generateId = util.generateSlackLikeId;
+const router = express.Router();
+const generateId = util.generateSlackLikeId;
 
 router.post('/users.me', (req, res, next) =>{
-  let meQ = r.table('users').get(req.userId).without('password');
+  const meQ = r.table('users').get(req.userId).without('password');
+
    db.rethinkQuery(meQ)
     .then((results) => {
         return res.status(200).json({ok: true, user: results});
@@ -22,7 +35,7 @@ router.post('/users.me', (req, res, next) =>{
 });
 
 router.post('/users.list', (req, res, next) => {
-  let query = r.table('users').pluck('name', 'id', 'email', 'created', 'profile');
+  const query = r.table('users').pluck('name', 'id', 'email', 'created', 'profile');
 
   db.rethinkQuery(query)
     .then((results) => {
@@ -33,14 +46,10 @@ router.post('/users.list', (req, res, next) => {
 });
 
 router.post('/users.addWorkflow', (req, res, next) => {
-  let userId = req.userId;
-  // T: I'm not sure if this is right but it will be more easy for us to make requests
-  // especially on different servers. We can change it with id whenever we want
-  let manifestId = req.body.manifest_id;
-  // T: Optional param mainly for initial settings. I'm not even sure if we need it.
-  // K: We do need it... Cool!
-  let settings = req.body.settings || {};
-  let getWorkflowQ =
+  const userId = req.userId;
+  const manifestId = req.body.manifest_id;
+  const settings = req.body.settings || {};
+  const getWorkflowQ =
     r.table('workflows')
       .filter((wf) => {
         return wf('manifest_id').eq(manifestId)
@@ -78,14 +87,14 @@ router.post('/users.addWorkflow', (req, res, next) => {
 });
 
 router.post('/users.removeWorkflow', (req, res, next) => {
-  let userId = req.userId;
-  let workflow_id = req.body.workflow_id;
+  const userId = req.userId;
+  const workflow_id = req.body.workflow_id;
 
   if (!workflow_id) {
     return next(new SwipesError('workflow_id_required'));
   }
 
-  let updateQ =
+  const updateQ =
     r.table('users')
       .get(userId)
       .update((user) => {
@@ -106,15 +115,15 @@ router.post('/users.removeWorkflow', (req, res, next) => {
 });
 
 router.post('/users.renameWorkflow', (req, res, next) => {
-  let userId = req.userId;
-  let workflowId = req.body.workflow_id;
-  let name = req.body.name;
+  const userId = req.userId;
+  const workflowId = req.body.workflow_id;
+  const name = req.body.name;
 
   if (!workflowId || !name) {
     return next(new SwipesError('workflow_id_and_name_required'));
   }
 
-  let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {name: name});
+  const updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {name: name});
 
   db.rethinkQuery(updateQ)
     .then(() => {
@@ -126,14 +135,15 @@ router.post('/users.renameWorkflow', (req, res, next) => {
 });
 
 router.post('/users.selectWorkflowAccountId', (req, res, next) => {
-  let userId = req.userId;
-  let workflowId = req.body.workflow_id;
-  let accountId = req.body.account_id;
+  const userId = req.userId;
+  const workflowId = req.body.workflow_id;
+  const accountId = req.body.account_id;
+
   if(!workflowId || !accountId){
     return next(new SwipesError('workflow_id_and_account_id_required'));
   }
 
-  let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {selectedAccountId: accountId});
+  const updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {selectedAccountId: accountId});
 
   db.rethinkQuery(updateQ)
     .then(() => {
@@ -145,15 +155,15 @@ router.post('/users.selectWorkflowAccountId', (req, res, next) => {
 })
 
 router.post('/users.updateWorkflowSettings', (req, res, next) => {
-  let userId = req.userId;
-  let workflowId = req.body.workflow_id;
-  let settings = req.body.settings;
+  const userId = req.userId;
+  const workflowId = req.body.workflow_id;
+  const settings = req.body.settings;
 
   if (!workflowId || !settings) {
     return next(new SwipesError('workflow_id_and_settings_required'));
   }
 
-  let updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {settings: settings});
+  const updateQ = utilDB.updateUserWorkflowsQ(userId, workflowId, {settings: settings});
 
   db.rethinkQuery(updateQ)
     .then(() => {
@@ -164,26 +174,17 @@ router.post('/users.updateWorkflowSettings', (req, res, next) => {
     })
 });
 
-router.post('/users.serviceDisconnect', (req, res, next) => {
-  let userId = req.userId;
-  let serviceId = req.body.id;
-
-  let updateQ =
-    r.table('users')
-      .get(userId)
-      .update({services: r.row('services')
-        .filter((service) => {
-          return service('id').ne(serviceId)
-        })
-      })
-
-  db.rethinkQuery(updateQ)
-    .then(() => {
-      return res.status(200).json({ok: true});
-    })
-    .catch((err) => {
-      return next(err);
-    })
-});
+router.post('/users.serviceDisconnect',
+  getUserService,
+  cleanupWebhooksFromUserService,
+  usersGetXendoServiceId,
+  xendoSwipesCredentials,
+  xendoRefreshSwipesToken,
+  xendoRemoveServiceFromUser,
+  usersRemoveXendoService,
+  userRemoveService,
+  (req, res, next) => {
+    return res.status(200).json({ok: true});
+  });
 
 module.exports = router;
