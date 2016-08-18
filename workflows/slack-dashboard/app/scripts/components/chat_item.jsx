@@ -349,7 +349,10 @@ var renderTextWithLinks = function(text, emojiFunction){
 				var res = innerMatch.split("|");
 				var command = res[0];
 				var title = res[res.length -1];
-				if(title.startsWith("@U")){
+				if(swipes.isShareURL(title)){
+					console.log('was a share url!!! YIR', title);
+				}
+				else if(title.startsWith("@U")){
 					var user = UserStore.get(title.substr(1));
 					if(user){
 						title = "@" + user.name;

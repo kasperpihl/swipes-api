@@ -1,0 +1,68 @@
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin flex($vertical, $horizontal, $direction:row) {
+  display: flex;
+  align-items: $vertical;
+  justify-content: $horizontal;
+  flex-direction: $direction;
+}
+
+@mixin hide(){
+  flex: 0 1;
+  pointer-events: none;
+  width: 0px;
+  height: 0px;
+}
+
+@mixin collapse-icon($width, $height, $color) {
+  @include size($width, $height);
+  background-color: $color;
+}
+
+
+@mixin fullscreen-icon($size, $seperator-size, $color, $seperator-color) {
+  @include size($size, $size);
+  background-color: $color;
+  position: relative;
+  overflow: hidden;
+
+  &:after {
+    content: "";
+    position: absolute;
+    height: 140%;
+    width: $seperator-size;
+    left: calc(50% - (#{$seperator-size} / 2));
+    top: -20%;
+    background-color: $seperator-color;
+    transform-origin: 50% 50%;
+    transform: rotate(-45deg);
+  }
+}
+
+
+@mixin menu-icon($width, $height, $margin, $color) {
+  @include size($width, $height);
+  background-color: $color;
+  position: relative;
+
+  &:before {
+    content: "";
+    @include size(100%, $height);
+    position: absolute;
+    left: 0;
+    top: calc((#{$height} + #{$margin}) * -1);
+    background-color: $color;
+  }
+
+  &:after {
+    content: "";
+    @include size(75%, $height);
+    position: absolute;
+    left: 0;
+    top: calc(#{$height} + #{$margin});
+    background-color: $color;
+  }
+}
