@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { timeAgo } from '../../classes/time-utils'
 import SwipesCard from '../swipes-card/SwipesCard'
 
 class Activity extends Component {
@@ -11,7 +12,7 @@ class Activity extends Component {
   renderStory(date, message) {
     return (
       <div className="story">
-        <div className="story__timestamp">{date.toString()}</div>
+        <div className="story__timestamp">{timeAgo(date)}</div>
         <div className="story__message">{message}</div>
       </div>
     )

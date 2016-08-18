@@ -15,6 +15,9 @@ export function dayStringForDate(date) {
     return getDayWithoutTime(parsedDate);
   }
 }
+export function timeAgo(date){
+  return moment(date).from(moment());
+}
 export function getDayWithoutTime(day) {
   const fullStr = day.calendar();
   const timeIndex = fullStr.indexOf(" at ");
