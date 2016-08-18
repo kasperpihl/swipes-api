@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-
+import clone from 'clone'
 const initialState = {};
 
 export default function services (state = initialState, action) {
