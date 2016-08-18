@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { api } from '../actions'
 
 import Topbar from './Topbar'
-import SearchResults from './SearchResults'
+import Find from './Find'
 import Modal from './Modal'
 import DotDragOverlay from './DotDragOverlay'
 
@@ -20,7 +20,7 @@ class App extends Component {
         <div className="active-app">
           {this.props.children}
         </div>
-        <SearchResults />
+        <Find />
         <Modal />
         <DotDragOverlay />
       </div>

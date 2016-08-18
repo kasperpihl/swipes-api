@@ -96,7 +96,7 @@ $fullscreenTopbarSize: 70px;
 		@include flex(center, center);
 	}
 
-	&__button--search{
+	&__button--find{
 		opacity: 1;
 		visibility: visible;
 		transition: opacity .2s, visibility 0s;
@@ -106,7 +106,7 @@ $fullscreenTopbarSize: 70px;
 		@include size(40px, 50px);
 		@include flex(center, center);
 
-		&--search {
+		&--find {
 			color: white;
 
 			i.material-icons {
@@ -124,19 +124,19 @@ $fullscreenTopbarSize: 70px;
 		}
 	}
 
-	&.search {
+	&.find {
 		transform: translateY(0);
 		transition: .3s ease-in-out;
 	}
 
-	&.search & {
+	&.find & {
 
 		&__content {
 			@include size(100%, $searchbarSize);
 			transition: .3s ease-in-out;
 		}
 
-		&__button--search {
+		&__button--find {
 			opacity: 0;
 			visibility: hidden;
 			transition: opacity .2s, visibility 0s .2s;

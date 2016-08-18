@@ -42,9 +42,9 @@ export default function main (state = initialState, action) {
       return newState;
     }
 
-    case types.TOGGLE_SEARCHING:{
+    case types.TOGGLE_FIND:{
       const newState = clone(state);
-      newState.isSearching = !state.isSearching;
+      newState.isFinding = !state.isFinding;
       return newState;
     }
 

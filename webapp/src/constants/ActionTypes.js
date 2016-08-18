@@ -1,6 +1,6 @@
 // Main
 export const TOGGLE_FULLSCREEN = 'TOGGLE_FULLSCREEN'
-export const TOGGLE_SEARCHING = 'TOGGLE_SEARCHING'
+export const TOGGLE_FIND = 'TOGGLE_FIND'
 export const SET_STATUS = 'SET_STATUS'
 export const LOGOUT = 'LOGOUT'
 export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'

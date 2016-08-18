@@ -5,8 +5,8 @@ export function toggleFullscreen() {
   return { type: types.TOGGLE_FULLSCREEN }
 }
 
-export function toggleSearching() {
-  return { type: types.TOGGLE_SEARCHING }
+export function toggleFind() {
+  return { type: types.TOGGLE_FIND }
 }
 
 export function setStatus(status) {

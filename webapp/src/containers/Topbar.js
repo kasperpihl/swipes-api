@@ -17,8 +17,8 @@ class Topbar extends Component {
     this.gradientStep();
   }
   clickedAdd(){
-    if(this.props.isSearching){
-      this.props.toggleSearching();
+    if(this.props.isFinding){
+      this.props.toggleFind();
     }
     else if(this.props.isFullscreen) {
       this.props.toggleFullscreen();
@@ -27,8 +27,8 @@ class Topbar extends Component {
       this.props.loadTilesListModal();
     }
   }
-  clickedSearch(){
-    this.props.toggleSearching();
+  clickedFind(){
+    this.props.toggleFind();
   }
   signout() {
     window.location.replace('/');
@@ -51,8 +51,8 @@ class Topbar extends Component {
     if(this.props.isFullscreen) {
       topbarClass += ' fullscreen'
     }
-    if(this.props.isSearching){
-      topbarClass += ' search';
+    if(this.props.isFinding){
+      topbarClass += ' find';
     }
 
     return (
@@ -66,7 +66,7 @@ class Topbar extends Component {
             <input ref="searchInput" placeholder="Search your apps" />
           </div>
           <div className="sw-topbar__actions">
-            <div className="sw-topbar__button sw-topbar__button--search" onClick={this.clickedSearch.bind(this)}>
+            <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind.bind(this)}>
               <i className="material-icons">search</i>
             </div>
             <div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd.bind(this)}>
@@ -82,13 +82,13 @@ class Topbar extends Component {
 function mapStateToProps(state) {
   return {
     isFullscreen: state.main.isFullscreen,
-    isSearching: state.main.isSearching
+    isFinding: state.main.isFinding
   }
 }
 
 const ConnectedTopbar = connect(mapStateToProps, {
   toggleFullscreen: main.toggleFullscreen,
-  toggleSearching: main.toggleSearching,
+  toggleFind: main.toggleFind,
   loadTilesListModal: modal.loadTilesListModal
 })(Topbar)
 export default ConnectedTopbar
