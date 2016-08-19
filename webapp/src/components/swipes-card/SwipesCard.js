@@ -11,7 +11,6 @@ export default class SwipesCard extends Component {
     this.onDragStart = props.onDragStart || function(){};
   }
   renderDot(actions){
-
     // add back to swipesdot elements={[actions]}
     return (
       <div className="dot-wrapper">
@@ -30,7 +29,6 @@ export default class SwipesCard extends Component {
     }
   }
   renderHeader(actions, title, subtitle, headerImage) {
-
     return (
       <div className="swipes-card__header">
         <div className="swipes-card__header__dot">
@@ -46,17 +44,26 @@ export default class SwipesCard extends Component {
       </div>
     )
   }
+  renderDescription(description) {
+    return (
+      <div className="swipes-card__description">
+        {description}
+      </div>
+    )
+  }
   render () {
     const {
       title,
       headerImage,
       subtitle,
-      actions
+      actions,
+      description
     } = this.props;
 
     return (
       <div id="card-container" className="swipes-card">
         {this.renderHeader(actions, title, subtitle, headerImage)}
+        {this.renderDescription(description)}
       </div>
     )
   }

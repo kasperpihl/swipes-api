@@ -19,7 +19,7 @@ class Activity extends Component {
   }
   renderCard(shortUrl) {
     return (
-      <SwipesCard title="Testing file" subtitle="Uploaded yesterday" />
+      <SwipesCard title="Testing file" subtitle="Uploaded yesterday" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi, qui quas consequatur quibusdam maiores molestiae molestias rerum velit cumque explicabo." />
     )
   }
   render() {
