@@ -57,7 +57,6 @@ class SearchResults extends Component {
     })
   }
   render() {
-
     const { title, subtitle } = this.props;
 
     return (
