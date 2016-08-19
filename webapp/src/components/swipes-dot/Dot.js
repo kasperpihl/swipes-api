@@ -7,16 +7,18 @@ const getStyles = (props, state) => {
   let dotTransform = '';
 
   if (state.hoveredRoot) {
-    dotTransform = 'scale(1.6)';
+    dotTransform = 'scale(2)';
   }
 
   let secondDotTransform = '';
 
   if (props.hoveredParent && !props.open) {
     if (state.hoveredRoot) {
-      secondDotTransform = 'scale(4.2)';
+      dotTransform = 'scale(2.33)'
+      secondDotTransform = 'scale(4)';
     } else {
-      secondDotTransform = 'scale(2.5)';
+      dotTransform = 'scale(1.3)'
+      secondDotTransform = 'scale(3)';
     }
   }
 
@@ -34,8 +36,8 @@ const getStyles = (props, state) => {
 
   return {
     dot: {
-      width: '8px',
-      height: '8px',
+      width: '6px',
+      height: '6px',
       borderRadius: '50%',
       position: 'absolute',
       left: '0px',
@@ -46,8 +48,8 @@ const getStyles = (props, state) => {
       transform: dotTransform
     },
     secondDot: {
-      width: '8px',
-      height: '8px',
+      width: '6px',
+      height: '6px',
       position: 'absolute',
       left: '0px',
       top: '0px',

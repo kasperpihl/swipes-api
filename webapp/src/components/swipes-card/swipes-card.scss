@@ -7,7 +7,7 @@ $imgWrapper: 50px;
 .swipes-card {
   @include size(100%, auto);
   background-color: white;
-  border-radius: 3px;
+  border-radius: 6px;
   box-shadow: $swipes-shadow-one;
   min-height: 50px;
   line-height: 1;
@@ -42,6 +42,7 @@ $imgWrapper: 50px;
         font-weight: 500;
         font-style: italic;
         letter-spacing: .3px;
+        margin-top: 3px;
       }
     }
 
@@ -81,10 +82,11 @@ $imgWrapper: 50px;
 			@include size(100%, auto);
 
       img {
-        max-width: calc(100% - 20px);
-        border-radius: 5px;
+        max-width: calc(100% - 70px);
+        border-radius: 3px;
         box-shadow: $swipes-shadow-one;
         margin: 0 10px;
+        margin-left: 50px;
       }
 		}
   }
