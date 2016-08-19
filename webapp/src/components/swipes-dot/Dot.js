@@ -1,7 +1,7 @@
 import React from 'react';
 
 const getStyles = (props, state) => {
-  const yellow = '#FFCA28';
+  const yellow = '#FFB021';
   const deepBlue = '#000C2F';
 
   let dotTransform = '';
