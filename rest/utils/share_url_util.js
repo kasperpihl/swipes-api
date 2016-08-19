@@ -15,13 +15,15 @@ const createSwipesShortUrl = ({ userId, service }) => {
   const checksum = hash({ service, userId });
   const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
   let shortUrl = null;
+  let serviceData = null;
 
   return db.rethinkQuery(checkSumQ)
     .then((res) => {
       if (res.length > 0) {
         shortUrl = res[0].short_url;
+        serviceData = res[0].service_data;
 
-        return Promise.resolve(shortUrl);
+        return Promise.resolve({shortUrl, serviceData});
       }
 
       shortUrl = shortid.generate();
@@ -35,6 +37,7 @@ const createSwipesShortUrl = ({ userId, service }) => {
       return fetchSwipesUrlData(null, link)
         .then((linkData) => {
           const insertLinkQ = r.table('links').insert(linkData);
+          serviceData = linkData.service_data;
 
           return db.rethinkQuery(insertLinkQ);
         })
@@ -43,7 +46,7 @@ const createSwipesShortUrl = ({ userId, service }) => {
         })
     })
     .then(() => {
-      return Promise.resolve(shortUrl);
+      return Promise.resolve({shortUrl, serviceData});
     })
     .catch((e) => {
       return Promise.reject(e);
@@ -127,7 +130,10 @@ const fetchSwipesUrlData = (shortUrlId = null, shortUrlData = null) => {
             return reject(err);
       		}
 
-          shortUrl = Object.assign({}, shortUrl, result);
+          shortUrl = Object.assign({}, shortUrl, {
+            service_data: result.serviceData,
+            service_actions: result.serviceActions
+          });
 
           return resolve(shortUrl);
       	});
