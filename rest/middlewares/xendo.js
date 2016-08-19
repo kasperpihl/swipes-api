@@ -245,13 +245,11 @@ const xendoRemoveServiceFromUser = (req, res, next) => {
 }
 
 const xendoSearch = (req, res, next) => {
-  const query = req.body.query;
+  const q = req.body.q;
   const {
     xendoUserCredentials
   } = res.locals;
-  const qs = querystring.stringify({
-    q: query
-  });
+  const qs = querystring.stringify({ q });
   const url = xendoConfig.searchEndpoint + '?' + qs;
 
   rp.get(url, {
