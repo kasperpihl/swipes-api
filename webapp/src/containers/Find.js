@@ -22,7 +22,6 @@ class Find extends Component {
 
   }
   cardDataDelegate(shortUrl, provider, unsubscribe){
-    console.log(shortUrl, unsubscribe);
     if(!unsubscribe){
       shortUrlProvider.subscribe(shortUrl, provider);
     }
