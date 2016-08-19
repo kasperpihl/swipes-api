@@ -4,6 +4,7 @@ import { main } from '../actions';
 import '../components/find/styles/find.scss'
 
 import Activities from '../components/find/Activities'
+import SearchResults from '../components/find/SearchResults'
 
 class Find extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class Find extends Component {
     this.props.startDraggingDot("search", {text: "Cool beans"});
   }
   clickedActionFromDot(){
-    
+
   }
   render() {
     const { isFinding, draggingDot, recent } = this.props;
@@ -31,6 +32,7 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
+          <SearchResults title="Results" subtitle="Evernote"/>
           <Activities title="Recent" subtitle="Mine" activities={recent}
           />
         </div>

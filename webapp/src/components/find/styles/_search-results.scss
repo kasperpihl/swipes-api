@@ -1,0 +1,55 @@
+.flex-wrapper {
+  display: flex;
+}
+
+.swipes-search-results {
+  width: 100%;
+  height: calc(100% - 20px);
+  max-width: calc(100% - 300px);
+  min-width: 80%;
+  padding: 10px 20px;
+  position: relative;
+
+  &__services {
+    max-width: 250px;
+    height: calc(100% - 56px);
+    padding-top: 60px;
+    @include flex(center, flex-start, column);
+
+    &__service {
+      width: 100%;
+      height: 50px;
+      @include flex(center, flex-end);
+
+      &--number {
+        padding-right: 10px;
+        color: $deepBlue-60
+      }
+
+      &--service-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #eee;
+        border: 1px solid $deepBlue-20;
+        @include flex(center, center);
+
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  &__result-list {
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 10px;
+    max-width: 600px;
+
+    .swipes-card {
+      margin: 12px 0;
+    }
+  }
+}
