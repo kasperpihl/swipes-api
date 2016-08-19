@@ -21,8 +21,15 @@ class Find extends Component {
   clickedActionFromDot(){
 
   }
-  cardDataDelegate(shortUrl, callback){
-    console.log(shortUrl, callback);
+  cardDataDelegate(shortUrl, provider, unsubscribe){
+    console.log(shortUrl, unsubscribe);
+    if(!unsubscribe){
+      shortUrlProvider.subscribe(shortUrl, provider);
+    }
+    else{
+      shortUrlProvider.unsubscribe(shortUrl, provider);
+    }
+
   }
   render() {
     const { isFinding, draggingDot, recent } = this.props;

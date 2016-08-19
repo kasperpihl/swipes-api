@@ -9,8 +9,8 @@ export default class ShortUrlProvider {
     this.store = store;
   }
   fetch(shortUrl){
-    this.store.dispatch(request('share.getData', { short_url: shortUrl })).then((res) => {
-      console.log('res from data');
+    this.store.dispatch(api.request('share.getData', { shareId: shortUrl })).then((res) => {
+      console.log('res from data', res);
     });
   }
   subscribe(shortUrl, listener, ctx){
@@ -27,6 +27,7 @@ export default class ShortUrlProvider {
     const currentListeners = this._listenersObj[shortUrl] || [];
     currentListeners.push({listener: listener, context: ctx});
     this._listenersObj[shortUrl] = currentListeners;
+    this.fetch(shortUrl);
   }
   unsubscribe(shortUrl, listener, ctx){
     if(!shortUrl && !listener && !ctx){
