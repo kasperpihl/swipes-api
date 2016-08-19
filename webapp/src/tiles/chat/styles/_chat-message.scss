@@ -1,6 +1,6 @@
 .chat__message {
   @include size(100%, auto);
-  padding: 15px 20px;
+  padding: 9px 20px;
   padding-bottom: 0;
   position: relative;
 
@@ -15,13 +15,13 @@
   }
 
   &__info {
-    @include size(100%, 35px);
+    @include size(100%, 25px);
     position: relative;
     padding-left: 50px;
     @include flex(center, flex-start);
 
     &--profile-img {
-      @include size(35px, 35px);
+      @include size(25px, 25px);
       border-radius: 50%;
       position: absolute;
       left: 7.5px;
@@ -37,26 +37,35 @@
     &--author {
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 1px;
-      color: $deepBlue-80;
-      text-transform: uppercase;
+      color: $deepBlue-100;
+
+      &:first-letter {
+        text-transform: uppercase;
+      }
     }
 
     &--timestamp {
-      padding-left: 15px;
-      font-size: 12px;
-      text-transform: uppercase;
+      padding-left: 7px;
+      font-size: 11px;
+      font-weight: 500;
+      // text-transform: uppercase;
       color: $deepBlue-40;
     }
   }
 
   &--content {
     padding: 0 50px;
-    font-size: 14px;
-    line-height: 1.8;
-    color: $deepBlue-80;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: .4px;
+    font-weight: 400;
+    color: $deepBlue-100;
     position: relative;
-    padding-bottom: 10px;
+    // padding-bottom: 10px;
+
+    .swipes-card {
+      margin: 15px 0;
+    }
 
     &:before {
 			content: attr(data-timestamp);
@@ -67,13 +76,13 @@
       top: 0;
 			font-size: 10px;
 			text-transform: uppercase;
-			color: $deepBlue-40;
+			color: $blue-80;
       opacity: 0;
       @include flex(center, center);
 		}
 
     &:hover {
-      background-color: $deepBlue-5;
+      background-color: darken($blue-5, 1%);
     }
 
     &--text {
@@ -102,10 +111,10 @@
 
 .dot {
   @include size(8px, 8px);
+  left: calc(22px);
   position: absolute !important;
-  left: 0px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateX(-50%);
 }
 
 a {

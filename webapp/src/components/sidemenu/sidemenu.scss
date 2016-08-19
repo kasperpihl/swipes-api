@@ -1,6 +1,6 @@
 @import '../global-styles/vars';
 
-$itemHeight: 30px;
+$itemHeight: 24px;
 $indicatorWidth: 5px;
 $indicatorHeight: 0px;
 $indicatorUnreadHeight: 1px;
@@ -47,15 +47,15 @@ $pushDelay: .1s;
 			font-size: 12px;
 			text-transform: uppercase;
 			padding: 10px 30px;
-			letter-spacing: .5px;
+			letter-spacing: 1px;
 			transition: .1s;
 			transition-delay: $returnDelay;
-			color: $deepBlue-80;
-			font-weight: 500;
-			margin-bottom: 5px;
+			color: $deepBlue-40;
+			font-weight: 700;
+			margin-bottom: 2px;
 
 			&:not(:first-child) {
-				margin-top: 25px;
+				margin-top: 24px;
 			}
 		}
 	}
@@ -78,7 +78,7 @@ $pushDelay: .1s;
 
 		.menu-item{
 			&.active{
-				background: #ecf1f6;
+				background: $blue-10;
 			}
 			.indicator{
 				opacity: 0;
@@ -143,8 +143,8 @@ $pushDelay: .1s;
 			overflow: hidden;
 			color: $deepBlue-60;
 			line-height: $itemHeight;
-			font-size: 14px;
-			font-weight: 400;
+			font-size: 13px;
+			font-weight: 500;
 			cursor: default;
 			transition-delay: $returnDelay;
 
@@ -186,13 +186,13 @@ $pushDelay: .1s;
 			}
 		}
 		&:hover{
-			background: #efefef;
+			background: darken($blue-5, 1%);
 			color: #000923;
 		}
 		&.unread{
 			.name{
 				font-weight: 500;
-				color: $deepBlue-80;
+				color: $deepBlue-100;
 			}
 			.indicator{
 				background: $hoverColor;
