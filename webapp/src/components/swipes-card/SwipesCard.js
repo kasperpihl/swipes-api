@@ -72,6 +72,17 @@ export default class SwipesCard extends Component {
       </div>
     )
   }
+  renderImage(img) {
+    if(img) {
+      return (
+        <div className="swipes-card__preview">
+          <div className="swipes-card__preview--img">
+            <img src={img} alt=""/>
+          </div>
+        </div>
+      )
+    }
+  }
   renderLoading(){
 
   }
@@ -82,13 +93,15 @@ export default class SwipesCard extends Component {
       headerImage,
       subtitle,
       actions,
-      description
+      description,
+      img
     } = data;
 
     return (
       <div id={"card-container"+this.id} className="swipes-card">
         {this.renderHeader(actions, title, subtitle, headerImage)}
         {this.renderDescription(description)}
+        {this.renderImage(img)}
       </div>
     )
   }
