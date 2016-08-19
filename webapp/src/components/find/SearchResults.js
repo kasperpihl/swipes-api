@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../swipes-card/SwipesCard'
-import SearchResultsServices from './SearchResultsServices'
+import SearchResultsService from './SearchResultsService'
 
 class SearchResults extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class SearchResults extends Component {
     ];
 
     return random.map( (el, i) => {
-      return <SearchResultsServices key={"result-service-" + i} icon={el.icon} number={el.number} />
+      return <SearchResultsService key={"result-service-" + i} icon={el.icon} number={el.number} />
     })
   }
   renderResultList() {
@@ -53,7 +53,7 @@ class SearchResults extends Component {
     ];
 
     return results.map( (result, i) => {
-      return <SwipesCard data={{title:result.title, subtitle: result.subtitle, description:result.description}} key={'search-result-' + i} />
+      return <SwipesCard title={result.title} subtitle={result.subtitle} description={result.description} key={'search-result-' + i} />
     })
   }
   render() {
