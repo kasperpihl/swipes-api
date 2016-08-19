@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import SwipesDot from 'swipes-dot'
 import ReactEmoji from 'react-emoji'
 
+import SwipesCard from '../../components/swipes-card/SwipesCard'
+
 let delegate;
 const delegateMethods = ['editMessage', 'deleteMessage', 'isShareURL', 'openImage', 'loadPrivateImage', 'clickLink']
 
@@ -193,57 +195,24 @@ class ChatMessage extends Component {
 }
 
 class File extends Component {
-  renderPreview(){
-    if(this.props.data.thumb_360){
-      return this.renderImagePreview();
-    }
-    else{
-      return this.renderDefaultPreview();
-    }
-  }
   openImage() {
-    const { 
-      'url_private_download':src, 
-      title, 
+    const {
+      'url_private_download':src,
+      title,
       permalink:url
     } = this.props.data;
 
     delegate.openImage(src, title, url);
   }
-  renderDefaultPreview(){
-
-  }
-  renderImagePreview(){
-    const { 
-      'thumb_360':src,
-      'thumb_360_w':width,
-      'thumb_360_h':height 
-    } = this.props.data;
-
-    return (
-      <div className="image-container">
-        <img
-          ref={function (image) {
-            if (image !== null) {
-              delegate.loadPrivateImage(image, src)}
-            }
-          }
-          onClick={this.openImage.bind(this)}
-          style={{
-            width: width + 'px',
-            height: height + 'px'
-          }} />
-      </div>
-    );
-  }
   render(){
+    const { name, url_private } = this.props.data;
+
     return (
-      <div className="file-container">
-        {this.renderPreview()}
-      </div>
+      <SwipesCard data={{title: name, img: url_private}}/>
     );
   }
 }
+
 File.propTypes = {
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
@@ -256,72 +225,11 @@ File.propTypes = {
 }
 
 class Attachment extends Component {
-  renderPreview(){
-
-  }
-  renderPretext(){
-    const { pretext } = this.props.data;
-    if(pretext){
-      return <div className="attachment-pretext">{renderTextWithLinks(pretext)}</div>;
-    }
-  }
-  renderServiceName(){
-    const { service_name } = this.props.data;
-    if(service_name){
-      return <div className="attachment-service-name">{service_name}</div>
-    }
-  }
-  renderTitle(){
-    const { title, title_link } = this.props.data;
-    if(title){
-      var innerObj = <div className="attachment-title">{title}</div>;
-      if(title_link){
-        return <a className='link' onClick={clickedLink.bind(null, title_link)}>{innerObj}</a>
-      }
-      return innerObj;
-    }
-  }
-  renderText(){
-    const { text } = this.props.data;
-    if(text){
-      return <div className="attachment-body">{renderTextWithLinks(text)}</div>;
-    }
-  }
-  renderImage(){
-    const { image_url, image_height, image_width } = this.props.data;
-    if(image_url){
-      // KRIS_TODO: Render lightbox
-      var calcHeight = image_height;
-      if(image_width > 400){
-        var proportion = image_width / 400;
-        calcHeight = calcHeight / proportion;
-      }
-      return <div className="attachment-image"><img height={calcHeight} src={image_url} /></div>;
-    }
-  }
-  renderAuthor(){
-
-  }
-  renderBar(){
-    const { color } = this.props.data;
-    var styles = {};
-    if(color){
-      styles.background = '#' + color;
-    }
-    return <div style={styles} className="attachment-bar" />;
-  }
   render(){
+    const { title, service_name, text, image_url } = this.props.data;
+
     return (
-      <div className="chat-attachment">
-        {this.renderPretext()}
-        {this.renderBar()}
-        <div className="attachment-content">
-          {this.renderServiceName()}
-          {this.renderTitle()}
-          {this.renderText()}
-          {this.renderImage()}
-        </div>
-      </div>
+      <SwipesCard data={{title: title, subtitle: service_name, description: text, img: image_url}}/>
     );
   }
 }

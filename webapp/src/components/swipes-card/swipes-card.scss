@@ -10,6 +10,7 @@ $imgWrapper: 50px;
   border-radius: 3px;
   box-shadow: $swipes-shadow-one;
   min-height: 50px;
+  line-height: 1;
 
   &__header {
     @include size(100%);
@@ -26,7 +27,7 @@ $imgWrapper: 50px;
     }
 
     &__content {
-      @include size(calc(100% - #{$dotWrapper} - #{$imgWrapper}));
+      @include size(calc(100% - 50px));
       @include flex(flex-start, center, column);
 
       &--title {
@@ -49,6 +50,10 @@ $imgWrapper: 50px;
       img {
         @include size(30px, 30px);
       }
+
+      &:empty {
+        display: none;
+      }
     }
   }
 
@@ -59,5 +64,26 @@ $imgWrapper: 50px;
     padding-bottom: 10px;
     padding-left: 50px;
     padding-right: 10px;
+    line-height: 1.2;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__preview {
+		@include size(100%, auto);
+    padding-bottom: 10px;
+
+		&--img {
+			@include size(100%, auto);
+
+      img {
+        max-width: calc(100% - 20px);
+        border-radius: 5px;
+        box-shadow: $swipes-shadow-one;
+        margin: 0 10px;
+      }
+		}
   }
 }

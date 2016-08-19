@@ -30,7 +30,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
   .transition-ripple {
     position: absolute;
-    z-index: 99;
+    z-index: 99999;
     right: 25px;
     top: 27px;
     transform: translate(50%, -50%) scale3d(0, 0, 0);
