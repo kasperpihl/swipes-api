@@ -6,6 +6,7 @@ import { bindAll } from '../classes/utils'
 import '../components/find/styles/find.scss'
 
 import Activities from '../components/find/Activities'
+import SearchResults from '../components/find/SearchResults'
 
 class Find extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Find extends Component {
     }
   }
   clickedActionFromDot(){
-    
+
   }
   cardDataDelegate(shortUrl, callback){
     console.log(shortUrl, callback);
@@ -32,8 +33,8 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          <Activities title="Recent" subtitle="Mine" activities={recent} cardDataDelegate={this.cardDataDelegate}
-          />
+          <SearchResults title="Results" subtitle="Evernote"/>
+          <Activities title="Recent" subtitle="Mine" activities={recent} cardDataDelegate={this.cardDataDelegate}/>
         </div>
       </div>
     );
