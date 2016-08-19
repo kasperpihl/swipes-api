@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var DashboardPlugin = require('webpack-dashboard/plugin');
 
 const apiRedirect = {
   target: 'http://localhost:5000',

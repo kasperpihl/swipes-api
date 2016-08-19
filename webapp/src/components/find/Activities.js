@@ -7,6 +7,7 @@ class Activities extends Component {
     this.state = {}
   }
   componentDidMount() {
+
   }
   renderHeader(title, subtitle) {
     return (
@@ -21,7 +22,7 @@ class Activities extends Component {
       return;
     }
     return activities.map( (activity, i) => {
-      return <Activity key={"activity-" + i} data={activity} />
+      return <Activity key={"activity-" + i} data={activity} cardDataDelegate={this.props.cardDataDelegate }/>
     })
   }
   render() {
@@ -41,5 +42,6 @@ export default Activities
 Activities.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
-  activities: PropTypes.arrayOf(PropTypes.object)
+  activities: PropTypes.arrayOf(PropTypes.object),
+  cardDataDelegate: PropTypes.func
 }

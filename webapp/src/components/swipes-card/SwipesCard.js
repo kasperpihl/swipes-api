@@ -8,16 +8,25 @@ import SwipesDot from 'swipes-dot';
 export default class SwipesCard extends Component {
   constructor(props){
     super(props);
+    this.state = { data: props.data };
+    // Setup delegate structure to provide data
+    if(typeof props.dataDelegate === 'function'){
+      this.updateData = (data) => {
+        this.setState({ data });
+      }
+      props.dataDelegate(props.dataId, this.updateData);
+    }
     this.onDragStart = props.onDragStart || function(){};
   }
+
   renderDot(actions){
     // add back to swipesdot elements={[actions]}
     return (
       <div className="dot-wrapper">
         <SwipesDot
-            onDragStart={this.onDragStart}
-            hoverParentId='card-container'
-            />
+          onDragStart={this.onDragStart}
+          hoverParentId='card-container'
+        />
       </div>
     )
   }
@@ -51,14 +60,18 @@ export default class SwipesCard extends Component {
       </div>
     )
   }
+  renderLoading(){
+
+  }
   render () {
+    const data = this.state.data || { title: "Loading..." }
     const {
       title,
       headerImage,
       subtitle,
       actions,
       description
-    } = this.props;
+    } = data;
 
     return (
       <div id="card-container" className="swipes-card">
@@ -71,21 +84,25 @@ export default class SwipesCard extends Component {
 
 
 SwipesCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
-  description: PropTypes.string,
-  headerImage: PropTypes.oneOf([
-    PropTypes.string,
-    PropTypes.shape({
-      url: PropTypes.string
-    })
-  ]),
-  onDragStart: PropTypes.func,
-  actions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    callback: PropTypes.func.isRequired,
-    icon: PropTypes.string,
-    headerImage: PropTypes.string,
-    bgColor: PropTypes.string
-  }))
+  dataDelegate: PropTypes.func,
+  dataId: PropTypes.string,
+  data: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    subtitle: PropTypes.string,
+    description: PropTypes.string,
+    headerImage: PropTypes.oneOf([
+      PropTypes.string,
+      PropTypes.shape({
+        url: PropTypes.string
+      })
+    ]),
+    actions: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      callback: PropTypes.func.isRequired,
+      icon: PropTypes.string,
+      headerImage: PropTypes.string,
+      bgColor: PropTypes.string
+    }))
+  }),
+  onDragStart: PropTypes.func
 }

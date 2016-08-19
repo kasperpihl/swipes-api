@@ -154,11 +154,11 @@ export default class SwClientCom {
       return console.warn('SwClientCom: removeListener: no params provided');
     }
     if(command){
-      this._removeListenersForCommand(command, listener, context);
+      this._removeListenersForCommand(command, listener, ctx);
     }
     else{
       for(var key in this._listenersObj){
-        this._clearEventName(key, listener, context);
+        this._clearEventName(key, listener, ctx);
       }
     }
   }
