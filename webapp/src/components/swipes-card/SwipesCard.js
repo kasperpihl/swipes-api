@@ -110,6 +110,7 @@ export default class SwipesCard extends Component {
 
 SwipesCard.propTypes = {
   dataDelegate: PropTypes.func,
+  onClick: PropTypes.func,
   dataId: PropTypes.string,
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,

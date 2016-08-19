@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { main, modal } from '../actions'
+import { bindAll } from '../classes/utils'
 import '../components/topbar/topbar.scss'
 
 import WorkspaceIcon from '../components/global-styles/images/workspace-icon.svg'
@@ -11,7 +12,7 @@ class Topbar extends Component {
     super(props)
     var gradientPos = gradient.getGradientPos();
     this.state = {gradientPos: gradientPos};
-    this.gradientStep = this.gradientStep.bind(this);
+    bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp']);
   }
   componentDidMount() {
     this.gradientStep();
@@ -19,6 +20,21 @@ class Topbar extends Component {
   componentDidUpdate(){
     if(this.props.isFinding){
       this.refs.searchInput.focus()
+    }
+  }
+  onKeyDown(e){
+    if(e.keyCode === 13) {
+      e.preventDefault();
+    }
+  }
+  onKeyUp(e){
+    const input = this.refs.searchInput;
+
+    if (e.keyCode === 13) {
+      const searchQuery = input.value;
+      if(searchQuery !== this.props.searchQuery){
+        this.props.search(searchQuery);
+      }
     }
   }
   clickedAdd(){
@@ -71,7 +87,7 @@ class Topbar extends Component {
             <i className="material-icons">arrow_drop_down</i>
           </div>
           <div className="sw-topbar__searchbar">
-            <input ref="searchInput" placeholder="Search your apps" />
+            <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search your apps" />
           </div>
           <div className="sw-topbar__actions">
             <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind.bind(this)}>
@@ -90,12 +106,14 @@ class Topbar extends Component {
 function mapStateToProps(state) {
   return {
     isFullscreen: state.main.isFullscreen,
+    searchQuery: state.main.searchQuery,
     isFinding: state.main.isFinding
   }
 }
 
 const ConnectedTopbar = connect(mapStateToProps, {
   logout: main.logout,
+  search: main.search,
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
   loadTilesListModal: modal.loadTilesListModal

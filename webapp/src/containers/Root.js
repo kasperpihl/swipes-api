@@ -8,12 +8,12 @@ const store = configureStore()
 
 // Get classes that needs socket
 import Socket from '../classes/socket'
-import IpcListeners from '../classes/ipc-listeners'
+import IpcListener from '../classes/ipc-listener'
 import ShortUrlProvider from '../classes/short-url-provider'
 
 window.shortUrlProvider = new ShortUrlProvider(store);
 new Socket(store);
-new IpcListeners(store);
+window.ipcListener = new IpcListener(store);
 
 export default class Root extends Component {
   render() {

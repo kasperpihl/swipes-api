@@ -26,11 +26,13 @@ export default function main (state = initialState, action) {
         return state;
       }
       const newState = clone(state);
-      newState.socketUrl=  action.payload.url; 
+      newState.socketUrl=  action.payload.url;
       newState.tileBaseUrl = action.payload.workflow_base_url;
       return newState;
     }
-
+    case types.SEARCH:{
+      return Object.assign({}, state, { searchQuery: action.query })
+    }
     case types.SET_STATUS:{
       const hasLoaded = (action.status == 'online') ? {hasLoaded: true} : null
       return Object.assign({}, state, {status: action.status}, hasLoaded)

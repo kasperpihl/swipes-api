@@ -173,7 +173,7 @@ class ChatMessage extends Component {
     return (
       <div id={message.ts} className={className}>
         <div className="chat__message--content" data-timestamp={message.timeStr}>
-          <SwipesDot
+          {/*<SwipesDot
             className="dot"
             radial={false}
             reverse={true}
@@ -182,7 +182,7 @@ class ChatMessage extends Component {
             elements={dotItems}
             onDragStart={this.onDotDragStart.bind(this, message.text)}
             onDragData={this.shareData.bind(this, message.text)}
-          />
+          />*/}
           <div className="chat__message--content--text">
             {this.renderMessage(message.text)}
           </div>

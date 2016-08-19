@@ -33,31 +33,15 @@ class SearchResults extends Component {
       return <SearchResultsService key={"result-service-" + i} icon={el.icon} number={el.number} />
     })
   }
-  renderResultList() {
-    const results = [
-      {
-        title: 'Invoice #7 - Swipes.pdf',
-        subtitle: 'By Lois Hicks 11/08/2016 12:00PM',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi, qui quas consequatur quibusdam maiores molestiae molestias rerum velit cumque explicabo.'
-      },
-      {
-        title: 'Invoice #8 - Swipes.pdf',
-        subtitle: 'By Lois Hicks 11/08/2016 12:00PM',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi, qui quas consequatur quibusdam maiores molestiae molestias rerum velit cumque explicabo.'
-      },
-      {
-        title: 'Invoice #9 - Swipes.pdf',
-        subtitle: 'By Lois Hicks 11/08/2016 12:00PM',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi, qui quas consequatur quibusdam maiores molestiae molestias rerum velit cumque explicabo.'
-      }
-    ];
+  renderResultList(results) {
+    if(!results) return;
 
     return results.map( (result, i) => {
-      return <SwipesCard data={{title: result.title, subtitle:result.subtitle, description:result.description}} key={'search-result-' + i} />
+      return <SwipesCard data={result} key={'search-result-' + i} />
     })
   }
   render() {
-    const { title, subtitle } = this.props;
+    const { title, subtitle, results } = this.props;
 
     return (
       <div className="swipes-search-results">
@@ -67,7 +51,7 @@ class SearchResults extends Component {
             {this.renderServices()}
           </div>
           <div className="swipes-search-results__result-list">
-            {this.renderResultList()}
+            {this.renderResultList(results)}
           </div>
         </div>
       </div>
@@ -78,5 +62,7 @@ class SearchResults extends Component {
 export default SearchResults
 
 SearchResults.propTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
   results: PropTypes.arrayOf(PropTypes.object) // SwipesCard Proptypes
 }

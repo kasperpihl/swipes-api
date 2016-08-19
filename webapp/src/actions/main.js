@@ -9,6 +9,10 @@ export function toggleFind() {
   return { type: types.TOGGLE_FIND }
 }
 
+export function search(query){
+  return { type: types.SEARCH, query };
+}
+
 export function setStatus(status) {
   return { type: types.SET_STATUS, status: status }
 }
