@@ -18,7 +18,6 @@ class Chat extends Component {
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
     bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight'])
-    
     this.slackData = new SlackData(props.swipes, props.tile.data);
   }
   componentDidMount(){

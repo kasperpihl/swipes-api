@@ -11,7 +11,7 @@ import SearchResults from '../components/find/SearchResults'
 class Find extends Component {
   constructor(props) {
     super(props)
-    bindAll(this, ['cardDataDelegate'])
+    bindAll(this, ['cardDataDelegate', 'dotDragStart'])
   }
   onClick(e){
     if(e.target.classList.contains("find-overlay")){
@@ -20,6 +20,11 @@ class Find extends Component {
   }
   clickedActionFromDot(){
 
+  }
+  dotDragStart(shortUrl){
+    this.props.toggleFind();
+    this.props.startDraggingDot("search", {shortUrl: shortUrl});
+    //console.log('dot drag start', params);
   }
   cardDataDelegate(shortUrl, provider, unsubscribe){
     if(!unsubscribe){
@@ -40,7 +45,7 @@ class Find extends Component {
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
           <SearchResults title="Results" subtitle="Evernote"/>
-          <Activities title="Recent" subtitle="Mine" activities={recent} cardDataDelegate={this.cardDataDelegate}/>
+          <Activities title="Recent" subtitle="Mine" activities={recent} cardDataDelegate={this.cardDataDelegate} dotDragStart={this.dotDragStart}/>
         </div>
       </div>
     );

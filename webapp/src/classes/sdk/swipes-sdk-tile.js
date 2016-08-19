@@ -50,7 +50,7 @@ export default class SwipesAppSDK {
 
   isShareURL(url){
     url = url || "";
-    const shareURLPrefix = window.location.protocol + '//' + window.location.origin + '/sh';
+    const shareURLPrefix = window.location.origin + '/s/';
     if(url.startsWith(shareURLPrefix)){
       return true;
     }
