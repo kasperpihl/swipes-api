@@ -90,6 +90,47 @@ const dropbox = {
 
 		this.request({authData, method, params}, secondCallback);
 	},
+	shareRequest({ authData, type, itemId, user }, callback) {
+		let method = '';
+		let params = {};
+
+		if (type === 'file') {
+			method = 'files.getMetadata';
+			params = Object.assign({}, {
+				path: itemId
+			})
+		} else {
+			return callback('This type is not supported :/');
+		}
+
+		dropbox.request({authData, method, params, user }, (err, res) => {
+			if (err) {
+				return callback(err);
+			}
+
+			const serviceActions = dropbox.cardActions(type, res);
+			const serviceData = dropbox.cardData(type, res);
+
+
+			return callback(null,  { serviceData, serviceActions });
+		})
+	},
+	cardData(type, data) {
+		let mappedData;
+
+		if (type === 'file') {
+			mappedData = {
+				title: data.name || '',
+				subtitle: data.path_display || ''
+			}
+		}
+
+		return mappedData;
+	},
+	cardActions(type, data) {
+		// Dummy for now
+		return [];
+	},
 	beforeAuthSave(data, callback) {
 		const options = {
 			method: 'post',
@@ -188,7 +229,7 @@ const processFileChange = ({account, entry}) => {
 		const user = res;
 		const sameUser = account.id === user.account_id;
 		const userName = sameUser ? 'You' : user.name.display_name || user.email;
-		const userProfilePic = user.profile_photo_url || '';
+		//const userProfilePic = user.profile_photo_url || '';
 		const message = userName + ' made a change';
 
 		const service = {
@@ -203,7 +244,6 @@ const processFileChange = ({account, entry}) => {
 				const event = {
 					service: 'dropbox',
 					message: message,
-					profile_photo: userProfilePic,
 					shortUrl: shortUrl,
 					me: sameUser
 				}
@@ -214,7 +254,7 @@ const processFileChange = ({account, entry}) => {
 				});
 			})
 			.catch((err) => {
-				console.log('Failed creating short url for an asana event', err);
+				console.log('Failed creating short url for an dropbox event', err);
 			})
 	})
 }

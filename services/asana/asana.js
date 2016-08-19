@@ -214,11 +214,18 @@ const asana = {
 				callback(error);
 			})
 	},
-	shareRequest({ authData, type, params, user }, callback) {
+	shareRequest({ authData, type, itemId, user }, callback) {
 		let method = '';
+		let params = {};
 
 		if (type === 'task') {
-			method = 'tasks.findById'
+			method = 'tasks.findById';
+			params = Object.assign({}, {
+				id: itemId,
+				opt_expand: 'assignee'
+			})
+		} else {
+			return callback('This type is not supported :/');
 		}
 
 		asana.request({authData, method, params, user }, (err, res) => {
@@ -234,10 +241,27 @@ const asana = {
 	},
 	cardData(type, data) {
 		let mappedData;
+		let subtitle = null;
+		let photo = null;
+
+		if (data.projects.length > 0) {
+			subtitle = [];
+			data.projects.forEach((project) => {
+				subtitle.push(project.name);
+			})
+
+			subtitle = subtitle.join('/');
+		}
+
+		if (data.assignee && data.assignee.photo) {
+			photo = data.assignee.photo;
+		}
 
 		if (type === 'task') {
 			mappedData = {
-				title: data.name || ''
+				title: data.name || '',
+				subtitle,
+				photo
 			}
 		}
 
@@ -246,31 +270,31 @@ const asana = {
 	cardActions(type, data) {
 		const actions = [];
 
-		if (type === 'task') {
-			if (!data.completed) {
-				actions.push({
-					label: 'Complete',
-					icon: 'check',
-					bgColor: 'green',
-					method: 'tasks.update',
-					data: {
-						id: data.id,
-						completed: true
-					}
-				})
-			} else {
-				actions.push({
-					label: 'Undo',
-					icon: 'check',
-					bgColor: 'gray',
-					method: 'tasks.update',
-					data: {
-						id: data.id,
-						completed: false
-					}
-				})
-			}
-		}
+		// if (type === 'task') {
+		// 	if (!data.completed) {
+		// 		actions.push({
+		// 			label: 'Complete',
+		// 			icon: 'check',
+		// 			bgColor: 'green',
+		// 			method: 'tasks.update',
+		// 			data: {
+		// 				id: data.id,
+		// 				completed: true
+		// 			}
+		// 		})
+		// 	} else {
+		// 		actions.push({
+		// 			label: 'Undo',
+		// 			icon: 'check',
+		// 			bgColor: 'gray',
+		// 			method: 'tasks.update',
+		// 			data: {
+		// 				id: data.id,
+		// 				completed: false
+		// 			}
+		// 		})
+		// 	}
+		// }
 
 		return actions;
 	},
