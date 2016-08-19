@@ -61,11 +61,9 @@ class Tile extends Component {
       initObj.info.slackToken = this.slackToken;
     }
     this.com = new SwClientCom(sendFunction, initObj);
-    
+
     // Add the listeners for which commands to handle from the tile
     this.addListenersToCommunicator();
-    
-
   }
   addListenersToCommunicator(){
     const { tile, sendNotification, startDraggingDot, saveData } = this.props
