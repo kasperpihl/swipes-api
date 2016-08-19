@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var DashboardPlugin = require('webpack-dashboard/plugin');
 
 const apiRedirect = {
   target: 'http://localhost:5000',
@@ -28,6 +29,7 @@ module.exports = {
       publicPath: '/'
   },
   plugins: [
+    new DashboardPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
     }),
@@ -36,6 +38,7 @@ module.exports = {
       chunks: ['vendor', 'app']
     }),
     new webpack.HotModuleReplacementPlugin(),
+
     new webpack.optimize.OccurrenceOrderPlugin()
   ],
   module: {
@@ -67,6 +70,7 @@ module.exports = {
     publicPath: '/',
     hot: true,
     port: 3000,
+    quiet: true,
     progress:true,
     open: true,
     contentBase: './dist',
