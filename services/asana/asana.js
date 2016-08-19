@@ -101,18 +101,18 @@ const refreshAccessToken = (authData, user) => {
 	});
 }
 
-const processChanges = (userId, events) => {
+const processChanges = (userId, events, accountId) => {
 	// Care only for .tag 'file' just for simplicity
 	const filteredEvents = events.filter((event) => {
 		return event['type'] === 'story' && event['action'] !== 'removed';
 	});
 
 	filteredEvents.forEach((event) => {
-		createShortUrl(userId, event);
+		createShortUrl(userId, event, accountId);
 	})
 }
 
-const createShortUrl = (userId, event) => {
+const createShortUrl = (userId, event, accountId) => {
 	if (event.parent) {
 		const service = {
 			name: 'asana',
@@ -123,18 +123,19 @@ const createShortUrl = (userId, event) => {
 
 		createSwipesShortUrl({ userId, service })
 			.then((shortUrl) => {
-				createEvent(userId, event, shortUrl);
+				createEvent(userId, event, accountId, shortUrl);
 			})
 			.catch((err) => {
 				console.log('Failed creating short url for an asana event', err);
 			})
 	} else {
-		createEvent(userId, event);
+		createEvent(userId, event, accountId);
 	}
 }
 
-const createEvent = (userId, event, shortUrl = null) => {
+const createEvent = (userId, event, accountId, shortUrl = null) => {
 	const createdBy = event.resource.created_by.name;
+	const me = event.user.id === accountId;
 	let text;
 
 	if (event.resource.type === 'comment') {
@@ -146,7 +147,8 @@ const createEvent = (userId, event, shortUrl = null) => {
 	const eventData = {
 		service: 'asana',
 		message: text,
-		shortUrl: shortUrl
+		shortUrl: shortUrl,
+		me
 	}
 
 	insertEvent({
@@ -304,7 +306,7 @@ const asana = {
 
 			const sync = result.sync;
 
-			processChanges(user_id, data);
+			processChanges(user_id, data, accountId);
 
 			// Repeat until there is no more pages
 			if (data && data.length > 0) {

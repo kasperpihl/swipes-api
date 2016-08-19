@@ -26,7 +26,7 @@ const updateCursors = ({ userId, accountId, cursors }) => {
 
 const insertEvent = ({ userId, eventData }) => {
   const date = new Date();
-  const type = 'activity';
+  const type = 'activity_added';
 
   Object.assign(eventData, {
     user_id: userId,
