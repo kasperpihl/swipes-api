@@ -79,6 +79,7 @@ export default class SwipesAppSDK {
     if(this.info.workflow && this.info.workflow.selectedAccountId){
       options.account_id = this.info.workflow.selectedAccountId;
     }
+    
     return options;
   }
   service(serviceName){

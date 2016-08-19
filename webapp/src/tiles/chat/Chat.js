@@ -17,8 +17,17 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
-    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight'])
+    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes'])
     this.slackData = new SlackData(props.swipes, props.tile.data);
+    this.addListenersToSwipes(props.swipes);
+  }
+  addListenersToSwipes(swipes){
+    swipes.addListener('share.receivedData', (data) => {
+      var input = data.text || data.url || ''; 
+      if (input.length) {
+        this.slackData.sendMessage(input);
+      }
+    });
   }
   componentDidMount(){
   }

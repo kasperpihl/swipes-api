@@ -17,16 +17,26 @@ class Workspace extends Component {
     bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
 
   }
+  generateShareUrl(shortUrl){
+    return window.location.origin + '/s/' + shortUrl;
+  }
   onMouseUp(e){
     if(this.props.draggingDot){
       e.preventDefault()
       const { draggingDot } = this.props;
       const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.draggingId){
+        console.log(draggingDot.data);
+        if(draggingDot.data.shortUrl){
+          var shareUrl = this.generateShareUrl(draggingDot.data.shortUrl);
+          this.sendToTile(id, 'share.receivedData', { url: shareUrl });
+          this.props.stopDraggingDot()
+          return;
+        }
         this.props.generateShareUrl(draggingDot.data).then( (res) => {
           console.log('res from share url', res);
           if(res.ok){
-            const shareUrl = window.location.origin + '/s/' + res.short_url;
+            var shareUrl = this.generateShareUrl(res.short_url);
             this.sendToTile(id, 'share.receivedData', { url: shareUrl });
           }
           this.props.stopDraggingDot()
