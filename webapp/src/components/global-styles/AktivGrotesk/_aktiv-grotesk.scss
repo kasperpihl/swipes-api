@@ -1,0 +1,94 @@
+$FontPath: "AktivGrotesk";
+$FontName: "Aktiv-Grotesk";
+
+@mixin fontdef-woff($FontPath, $FontName, $FontType:"Regular") {
+  src:  url('#{$FontPath}/#{$FontType}/#{$FontName}-#{$FontType}.woff2') format('woff2'),
+      url('#{$FontPath}/#{$FontType}/#{$FontName}-#{$FontType}.woff') format('woff'),
+      url('#{$FontPath}/#{$FontType}/#{$FontName}-#{$FontType}.ttf') format('truetype');
+}
+
+
+/* BEGIN Black */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "ExtraBold");
+  font-weight: 800;
+  font-style: normal;
+}
+/* END Black */
+
+/* BEGIN Bold */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Bold");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Bold");
+  font-weight: bold;
+  font-style: normal;
+}
+/* END Bold */
+
+
+/* BEGIN Italic */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Italic");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Italic");
+  font-weight: normal;
+  font-style: italic;
+}
+/* END Italic */
+
+
+/* BEGIN Light */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Light");
+  font-weight: 300;
+  font-style: normal;
+}
+/* END Light */
+
+/* BEGIN Medium */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Medium");
+  font-weight: 500;
+  font-style: normal;
+}
+/* END Medium */
+
+/* BEGIN Medium Italic */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "MediumItalic");
+  font-weight: 500;
+  font-style: italic;
+}
+/* END Medium Italic */
+
+/* BEGIN Regular */
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Regular");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, "Regular");
+  font-weight: normal;
+  font-style: normal;
+}
+/* END Regular */
