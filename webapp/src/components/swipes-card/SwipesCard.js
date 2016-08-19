@@ -18,7 +18,11 @@ export default class SwipesCard extends Component {
     }
     this.onDragStart = props.onDragStart || function(){};
   }
-
+  componentWillUnmount(){
+    if(this.props.dataDelegate){
+      this.props.dataDelegate(this.props.dataId, this.updateData, true);
+    }
+  }
   renderDot(actions){
     // add back to swipesdot elements={[actions]}
     return (

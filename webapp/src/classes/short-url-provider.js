@@ -1,18 +1,50 @@
-import { bindAll } from './utils'
+import { bindAll, debounce } from './utils'
 import { api } from '../actions'
 
 export default class ShortUrlProvider {
   constructor(store){
-    bindAll(this, ['subscribe', 'unsubscribe', 'fetch'])
+    bindAll(this, ['subscribe', 'unsubscribe', 'fetch', 'setThrottleThreshold'])
     this._listenersObj = {}
     this._shortUrlData = {}
     this.store = store;
+    this.urlsToFetch = []
+    this.fetchingUrls = null;
+    this.setThrottleThreshold(30)
+  }
+  setThrottleThreshold(duration){
+    this.throttleThreshold = duration;
+    this.throttledFetch = debounce(this.fetch, duration);
   }
   fetch(shortUrl){
-    this.store.dispatch(request('share.getData', { short_url: shortUrl })).then((res) => {
-      console.log('res from data');
+    if(typeof shortUrl === 'string'){
+      this.urlsToFetch.push(shortUrl);
+      return this.throttledFetch();
+    }
+    if(this.fetchingUrls){
+      return; // Already fetching!
+    }
+
+    this.fetchingUrls = [ ...new Set(this.urlsToFetch) ];
+    this.urlsToFetch = [];
+    this.store.dispatch(api.request('share.getData', { shareIds: this.fetchingUrls })).then((res) => {
+      this.fetchingUrls.forEach((url, i) => {
+        this.notify(url, res.links[i].serviceData);
+      })
+      this.fetchingUrls = null;
+      if(this.urlsToFetch.length){
+        this.throttledFetch();
+      }
     });
   }
+  notify(shortUrl, data){
+    const currentListeners = this._listenersObj[shortUrl];
+    if(currentListeners){
+      currentListeners.forEach(( { listener }) => {
+        listener(data);
+      })
+    } 
+  }
+
   subscribe(shortUrl, listener, ctx){
     if(!shortUrl || typeof shortUrl !== 'string'){
       return console.warn('ShortUrlProvider: addListener param1 (shortUrl): not set or not string');
@@ -27,6 +59,8 @@ export default class ShortUrlProvider {
     const currentListeners = this._listenersObj[shortUrl] || [];
     currentListeners.push({listener: listener, context: ctx});
     this._listenersObj[shortUrl] = currentListeners;
+    
+    this.fetch(shortUrl);
   }
   unsubscribe(shortUrl, listener, ctx){
     if(!shortUrl && !listener && !ctx){

@@ -34,6 +34,7 @@ router.post('/rtm.start', (req, res, next) => {
                     return e('user_id').eq(userId).and(e('type').eq('activity_added'))
                   })
                   .orderBy(r.desc('date'))
+                  .without(['id', 'user_id', 'type'])
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),

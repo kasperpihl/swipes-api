@@ -1,89 +1,27 @@
 "use strict";
 
-const config = require('config');
-const express = require('express');
-const r = require('rethinkdb');
-const Promise = require('bluebird');
-const db = require('../db.js');
-const SwipesError = require('../swipes-error');
+import config from 'config';
+import express from 'express';
+import r from 'rethinkdb';
+import db from '../db.js';
+import {
+  fetchSwipesUrlData
+} from '../utils/share_url_util';
+
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();
 
 router.post('/share.getData', (req, res, next) => {
-  const shareId = req.body.shareId;
-  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0);
+  const shareIds = req.body.shareIds;
 
-  let shortUrl = null;
-  let userServiceData = null;
-  let serviceData = null;
+  const getSwipesUrlsQ = r.table('links').getAll(r.args(shareIds), {index: 'short_url'});
 
-  db.rethinkQuery(getSwipesUrlQ)
-    .then((data) => {
-      // T_TODO handle if there is no url like that
-      shortUrl = data;
-
-      const userId = shortUrl.userId;
-      const serviceId = shortUrl.service.account_id;
-      const serviceName = shortUrl.service.name;
-      const getServiceQ =
-        r.table('users')
-          .get(userId)('services')
-          .filter((service) => {
-            return service('id')
-                    .coerceTo('string')
-                    .eq(serviceId)
-                    .and(
-                      service('service_name')
-                      .coerceTo('string')
-                      .eq(serviceName)
-                    )
-          })
-
-      return db.rethinkQuery(getServiceQ);
+  db.rethinkQuery(getSwipesUrlsQ)
+    .then((links) => {
+      return res.status(200).json({ok: true, links});
     })
-    .then((data) => {
-      // T_TODO handle if there is no authed service in the user record
-      // or there is no a user anymore
-      userServiceData = data[0]; // user service object
-      const serviceQ = r.table('services').get(userServiceData.service_id);
-
-      return db.rethinkQuery(serviceQ);
-    })
-    .then((data) => {
-      // T_TODO service not found error
-      serviceData = data;
-      let file = null;
-
-      try {
-    		file = require(serviceDir + serviceData.folder_name + '/' + serviceData.script);
-    	}
-    	catch (e) {
-    		return Promise.reject('The file not found');
-    	}
-
-      const options = {
-    		authData: userServiceData.authData,
-    		params: {id: shortUrl.service.item_id},
-    		user: {userId: shortUrl.userId},
-    		service: {serviceId: shortUrl.service.account_id},
-        type: shortUrl.service.type
-    	};
-
-      if (!file.shareRequest) {
-        return Promise.reject('The service does not support swipes card yet');
-      }
-
-    	file.shareRequest(options, function (err, result) {
-    		if (err) {
-    			return res.status(200).json({ok: false, err: err});
-    		}
-
-        res.send({ok: true, data: result});
-    	});
-    })
-    .catch((e) => {
-      console.log('e', e);
-      return next(e);
+    .catch((err) => {
+      return res.status(200).json({ok: false, err});
     })
 })
 
