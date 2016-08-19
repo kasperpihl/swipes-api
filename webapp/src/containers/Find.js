@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { main } from '../actions';
+import { bindAll } from '../classes/utils'
+
 import '../components/find/styles/find.scss'
 
 import Activities from '../components/find/Activities'
@@ -9,19 +11,18 @@ import SearchResults from '../components/find/SearchResults'
 class Find extends Component {
   constructor(props) {
     super(props)
-    this.startDraggingDot = this.startDraggingDot.bind(this);
+    bindAll(this, ['cardDataDelegate'])
   }
   onClick(e){
     if(e.target.classList.contains("find-overlay")){
       this.props.toggleFind()
     }
   }
-  startDraggingDot(){
-    //this.props.toggleFinding();
-    this.props.startDraggingDot("search", {text: "Cool beans"});
-  }
   clickedActionFromDot(){
 
+  }
+  cardDataDelegate(shortUrl, callback){
+    console.log(shortUrl, callback);
   }
   render() {
     const { isFinding, draggingDot, recent } = this.props;
@@ -33,8 +34,7 @@ class Find extends Component {
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
           <SearchResults title="Results" subtitle="Evernote"/>
-          <Activities title="Recent" subtitle="Mine" activities={recent}
-          />
+          <Activities title="Recent" subtitle="Mine" activities={recent} cardDataDelegate={this.cardDataDelegate}/>
         </div>
       </div>
     );

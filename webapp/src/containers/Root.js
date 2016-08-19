@@ -7,11 +7,13 @@ import { Provider } from 'react-redux'
 const store = configureStore()
 
 // Get classes that needs socket
-import socket from '../classes/socket'
-import ipcListeners from '../classes/ipcListeners'
+import Socket from '../classes/socket'
+import IpcListeners from '../classes/ipc-listeners'
+import ShortUrlProvider from '../classes/short-url-provider'
 
-new socket(store);
-new ipcListeners(store);
+window.shortUrlProvider = new ShortUrlProvider(store);
+new Socket(store);
+new IpcListeners(store);
 
 export default class Root extends Component {
   render() {

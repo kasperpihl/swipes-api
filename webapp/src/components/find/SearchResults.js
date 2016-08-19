@@ -53,7 +53,7 @@ class SearchResults extends Component {
     ];
 
     return results.map( (result, i) => {
-      return <SwipesCard title={result.title} subtitle={result.subtitle} description={result.description} key={'search-result-' + i} />
+      return <SwipesCard data={{title:result.title, subtitle: result.subtitle, description:result.description}} key={'search-result-' + i} />
     })
   }
   render() {
