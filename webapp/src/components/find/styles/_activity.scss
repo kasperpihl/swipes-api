@@ -1,8 +1,8 @@
 .swipes-activities {
   border-left: 1px solid $deepBlue-10;
   height: calc(100% - 20px);
-  max-width: 20%;
-  min-width: 300px;
+  max-width: 450px;
+  min-width: 200px;
   overflow-y: scroll;
   padding: 10px 20px;
   width: 100%;
@@ -29,11 +29,12 @@
     margin: 3px 0px;
 
     &__story {
-      @include flex(center, flex-end);
+      // @include flex(center, flex-end);
       color: $deepBlue-40;
       font-size: 12px;
       line-height: 24px;
       width: 100%;
+      text-align: right;
 
       &--timestamp {
         color: $blue-100;
