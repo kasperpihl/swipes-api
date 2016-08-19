@@ -20,6 +20,7 @@ module.exports = {
       'webpack/hot/only-dev-server',
       './src/index'
     ],
+    testfont: './src/testfont',
     vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
@@ -34,6 +35,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
       chunks: ['vendor', 'app']
+    }),
+    new HtmlWebpackPlugin({
+      template: 'statics/testfont.html',
+      filename: 'testfont.html',
+      chunks: ['vendor', 'testfont']
     }),
     new webpack.HotModuleReplacementPlugin(),
 

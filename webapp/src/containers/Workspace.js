@@ -15,7 +15,6 @@ class Workspace extends Component {
     super(props)
     this._cachedTiles = {};
     bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
-
   }
   generateShareUrl(shortUrl){
     return window.location.origin + '/s/' + shortUrl;
