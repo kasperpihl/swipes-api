@@ -3,12 +3,15 @@
 import './swipes-card.scss';
 
 import React, { Component, PropTypes } from 'react';
-import SwipesDot from 'swipes-dot';
+import { randomString, bindAll } from '../../classes/utils'
+import SwipesDot from '../swipes-dot/SwipesDot';
 
 export default class SwipesCard extends Component {
   constructor(props){
     super(props);
     this.state = { data: props.data };
+    bindAll(this, ['onDragStart'])
+    this.id = randomString(5);
     // Setup delegate structure to provide data
     if(typeof props.dataDelegate === 'function'){
       this.updateData = (data) => {
@@ -16,11 +19,16 @@ export default class SwipesCard extends Component {
       }
       props.dataDelegate(props.dataId, this.updateData);
     }
-    this.onDragStart = props.onDragStart || function(){};
   }
   componentWillUnmount(){
     if(this.props.dataDelegate){
       this.props.dataDelegate(this.props.dataId, this.updateData, true);
+    }
+  }
+  onDragStart(){
+    const { onDragStart, dataId } = this.props;
+    if(onDragStart){
+      onDragStart(dataId)
     }
   }
   renderDot(actions){
@@ -29,7 +37,7 @@ export default class SwipesCard extends Component {
       <div className="dot-wrapper">
         <SwipesDot
           onDragStart={this.onDragStart}
-          hoverParentId='card-container'
+          hoverParentId={'card-container' + this.id}
         />
       </div>
     )
@@ -90,7 +98,7 @@ export default class SwipesCard extends Component {
     } = data;
 
     return (
-      <div id="card-container" className="swipes-card">
+      <div id={"card-container"+this.id} className="swipes-card">
         {this.renderHeader(actions, title, subtitle, headerImage)}
         {this.renderDescription(description)}
         {this.renderImage(img)}

@@ -49,16 +49,17 @@ export default function main (state = initialState, action) {
     }
 
     case types.SET_DRAGGING_DOT:{
-      const mainClasses = toggleUnique(state.mainClasses, 'draggingDot', action.value);
-      const closeSearching = action.value ? null : {isSearching: false};
       const draggingDot = action.value ? {
         draggingId: action.draggingId,
         data: action.data,
         pos: null
       } : null
       const newState = clone(state);
-      newState.closeSearching = closeSearching;
-      newState.draggingDot = { draggingDot, mainClasses };
+      if(action.value){
+        newState.isFinding = false;
+      }
+      newState.mainClasses = toggleUnique(state.mainClasses, 'draggingDot', action.value);
+      newState.draggingDot = draggingDot;
       return newState;
     }
     case types.DRAG_DOT:{

@@ -20,7 +20,7 @@ class Activity extends Component {
   }
   renderCard(shortUrl) {
     return (
-      <SwipesCard dataId={shortUrl} dataDelegate={this.props.cardDataDelegate} />
+      <SwipesCard dataId={shortUrl} dataDelegate={this.props.cardDataDelegate} onDragStart={this.props.dotDragStart} />
     )
   }
   render() {
@@ -39,6 +39,7 @@ export default Activity
 
 Activity.propTypes = {
   cardDataDelegate: PropTypes.func,
+  dotDragStart: PropTypes.func,
   data: PropTypes.shape({
     message: PropTypes.string.isRequired,
     shortUrl: PropTypes.string,

@@ -50,7 +50,7 @@ export default class SwipesAppSDK {
 
   isShareURL(url){
     url = url || "";
-    const shareURLPrefix = window.location.protocol + '//' + window.location.origin + '/sh';
+    const shareURLPrefix = window.location.origin + '/s/';
     if(url.startsWith(shareURLPrefix)){
       return true;
     }
@@ -79,6 +79,7 @@ export default class SwipesAppSDK {
     if(this.info.workflow && this.info.workflow.selectedAccountId){
       options.account_id = this.info.workflow.selectedAccountId;
     }
+    
     return options;
   }
   service(serviceName){
