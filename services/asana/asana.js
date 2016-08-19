@@ -122,8 +122,8 @@ const createShortUrl = (userId, event, accountId) => {
 		}
 
 		createSwipesShortUrl({ userId, service })
-			.then((shortUrl) => {
-				createEvent(userId, event, accountId, shortUrl);
+			.then(({shortUrl, serviceData}) => {
+				createEvent(userId, event, accountId, shortUrl, serviceData);
 			})
 			.catch((err) => {
 				console.log('Failed creating short url for an asana event', err);
@@ -133,7 +133,7 @@ const createShortUrl = (userId, event, accountId) => {
 	}
 }
 
-const createEvent = (userId, event, accountId, shortUrl = null) => {
+const createEvent = (userId, event, accountId, shortUrl = null, serviceData) => {
 	const createdBy = event.resource.created_by.name;
 	const me = event.user.id === accountId;
 	let text;
@@ -147,7 +147,8 @@ const createEvent = (userId, event, accountId, shortUrl = null) => {
 	const eventData = {
 		service: 'asana',
 		message: text,
-		shortUrl: shortUrl,
+		short_url: shortUrl,
+		service_data: serviceData,
 		me
 	}
 
