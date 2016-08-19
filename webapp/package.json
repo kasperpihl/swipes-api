@@ -51,7 +51,6 @@
     "svg-react-loader": "^0.3.7",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
-    "webpack-dashboard": "^0.1.1",
     "webpack-dev-server": "^1.14.1"
   },
   "engines": {
@@ -62,7 +61,7 @@
     "clean:dist": "rimraf dist",
     "copy:dist": "ncp statics dist",
     "prestart": "npm run clean-and-copy",
-    "start": "webpack-dashboard -c magenta -- webpack-dev-server",
+    "start": "webpack-dev-server",
     "prebuild": "npm run clean-and-copy",
     "build": "webpack --env.dev"
   }

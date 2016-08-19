@@ -29,7 +29,6 @@ module.exports = {
       publicPath: '/'
   },
   plugins: [
-    new DashboardPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
     }),
@@ -70,7 +69,6 @@ module.exports = {
     publicPath: '/',
     hot: true,
     port: 3000,
-    quiet: true,
     progress:true,
     open: true,
     contentBase: './dist',
