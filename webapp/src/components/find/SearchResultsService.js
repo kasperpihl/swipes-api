@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../swipes-card/SwipesCard'
 
-class SearchResultsServices extends Component {
+class SearchResultsService extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -31,9 +31,9 @@ class SearchResultsServices extends Component {
   }
 }
 
-export default SearchResultsServices
+export default SearchResultsService
 
-SearchResultsServices.propTypes = {
+SearchResultsService.propTypes = {
   icon: PropTypes.string,
   number: PropTypes.string
 }
