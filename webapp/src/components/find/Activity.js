@@ -13,8 +13,8 @@ class Activity extends Component {
   renderStory(dateString, message) {
     return (
       <div className="swipes-activities__activity__story">
-        <div className="swipes-activities__activity__story--timestamp">{timeAgo(dateString)}</div>
-        <div className="swipes-activities__activity__story--message">{message}</div>
+        <span className="swipes-activities__activity__story--timestamp">{timeAgo(dateString)}</span>
+        <span className="swipes-activities__activity__story--message">{message}</span>
       </div>
     )
   }

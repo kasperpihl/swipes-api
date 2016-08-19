@@ -1,5 +1,6 @@
 .flex-wrapper {
   display: flex;
+  height: calc(100% - 56px);
 }
 
 .swipes-search-results {
@@ -8,11 +9,11 @@
   max-width: calc(100% - 300px);
   min-width: 80%;
   padding: 10px 20px;
-  position: relative;
 
   &__services {
     width: 100%;
-    max-width: 250px;
+    min-width: 50px;
+    max-width: 300px;
     height: calc(100% - 56px);
     padding-top: 60px;
     @include flex(center, flex-start, column);
@@ -44,13 +45,18 @@
   }
 
   &__result-list {
+    height: 100%;
     margin: 0 auto;
     padding-left: 30px;
     padding-right: 10px;
-    max-width: 600px;
+    width: 100%;
+    min-width: 360px;
+    overflow-y: auto;
 
     .swipes-card {
-      margin: 12px 0;
+      margin: 12px auto;
+      max-width: 600px;
+
     }
   }
 }

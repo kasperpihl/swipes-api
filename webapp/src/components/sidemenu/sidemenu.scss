@@ -27,7 +27,7 @@ $pushDelay: .1s;
 	overflow: hidden;
 	top:0;
 	left:0;
-	z-index: 99999;
+	z-index: 9;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
 	transition-delay: $returnDelay;
