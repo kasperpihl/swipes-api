@@ -16,6 +16,11 @@ class Topbar extends Component {
   componentDidMount() {
     this.gradientStep();
   }
+  componentDidUpdate(){
+    if(this.props.isFinding){
+      this.refs.searchInput.focus()
+    }
+  }
   clickedAdd(){
     if(this.props.isFinding){
       this.props.toggleFind();

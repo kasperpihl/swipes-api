@@ -171,7 +171,12 @@ const SwipesDot = React.createClass({
     const {
       hoverParentId,
       radial=false,
-      style={}
+      style={},
+      elements,
+      reverse,
+      showOnHover,
+      onDragData,
+      ...other
     } = this.props;
     const {
       open,
@@ -182,6 +187,7 @@ const SwipesDot = React.createClass({
 
     return (
       <div
+          {...other}
           onMouseDown={this.onMouseDownRoot}
           style={Object.assign({}, styles.root, style)}>
         <Dot

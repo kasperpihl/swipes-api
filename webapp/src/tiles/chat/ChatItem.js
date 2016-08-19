@@ -208,7 +208,7 @@ class File extends Component {
     const { name, url_private } = this.props.data;
 
     return (
-      <SwipesCard data={{title: name, img: url_private}}/>
+      <SwipesCard data={{title: name || '', img: url_private}}/>
     );
   }
 }
@@ -229,7 +229,7 @@ class Attachment extends Component {
     const { title, service_name, text, image_url } = this.props.data;
 
     return (
-      <SwipesCard data={{title: title, subtitle: service_name, description: text, img: image_url}}/>
+      <SwipesCard data={{title: title || '', subtitle: service_name, description: text, img: image_url}}/>
     );
   }
 }

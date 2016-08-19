@@ -153,7 +153,6 @@ export default class SlackData {
     if(msg.type === 'message'){
       if(msg.channel){
         channel = channels[msg.channel];
-        console.log(channel, msg.channel);
         // Handle message change
         if(msg.subtype === 'message_changed' && msg.message.channel === currChannel.id){
           return this.saveData({messages: messages.map((obj) => {

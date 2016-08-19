@@ -23,7 +23,7 @@ export default class ChatSection extends Component {
         }
         chatItems.push(<div className={className} key="new-message-header"><span>new messages</span></div>);
         chatItems.push(<div key="new-message-post-header" className="new-message-post-header" />);
-        chatItems.push(<a href={'#' + item.ts}><div className={unreadClass}>you have unread messages <i className="material-icons">arrow_upward</i> </div></a>);
+        chatItems.push(<a key="unread-test" href={'#' + item.ts}><div className={unreadClass}>you have unread messages <i className="material-icons">arrow_upward</i> </div></a>);
       }
     });
 
