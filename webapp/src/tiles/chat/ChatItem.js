@@ -198,6 +198,8 @@ class File extends Component {
   openImage() {
     const {
       'url_private_download':src,
+      thumb_360_w,
+      thumb_360_h,
       title,
       permalink:url
     } = this.props.data;
@@ -205,10 +207,13 @@ class File extends Component {
     delegate.openImage(src, title, url);
   }
   render(){
-    const { name, url_private } = this.props.data;
-
+    let { name, url_private, thumb_360_w, thumb_360_h } = this.props.data;
+    if(thumb_360_w){
+      thumb_360_w += 'px';
+      thumb_360_h += 'px';
+    }
     return (
-      <SwipesCard data={{title: name || '', img: url_private}}/>
+      <SwipesCard data={{title: name || '', image: {url: url_private, width: thumb_360_w , height: thumb_360_h}}}/>
     );
   }
 }
@@ -226,10 +231,17 @@ File.propTypes = {
 
 class Attachment extends Component {
   render(){
-    const { title, service_name, text, image_url } = this.props.data;
-
+    const { title, service_name, text, image_url, image_height, image_width } = this.props.data;
+    let image;
+    if(image_url){
+      image = {
+        url: image_url,
+        width: image_width + 'px',
+        height: image_height + 'px'
+      }
+    }
     return (
-      <SwipesCard data={{title: title || '', subtitle: service_name, description: text, img: image_url}}/>
+      <SwipesCard data={{title: title || '', subtitle: service_name, description: text, image: image}}/>
     );
   }
 }

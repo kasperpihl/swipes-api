@@ -17,6 +17,7 @@ class ChatList extends Component {
   
   componentDidMount(){
     window.addEventListener('resize', this.handleResize);
+    this.scrollToBottom(this.hasRendered);
   }
   componentDidUpdate(prevProps, prevState){
     this.scrollToBottom(this.hasRendered);
@@ -42,6 +43,7 @@ class ChatList extends Component {
   scrollToBottom(animate){
     const chatList = this.refs['chat-list']
     const scrollContainer = this.refs['scroll-container'];
+    console.log(scrollContainer.scrollTop, scrollContainer.clientHeight, chatList.clientHeight);
 
     var scrollPosForBottom = chatList.clientHeight - scrollContainer.clientHeight
     if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != scrollContainer.scrollTop ){

@@ -72,12 +72,21 @@ export default class SwipesCard extends Component {
       </div>
     )
   }
-  renderImage(img) {
-    if(img) {
+  renderImage(image) {
+    console.log(image);
+    let url = image;
+    let width, height;
+    if(typeof image === 'object'){
+      width = image.width;
+      height = image.height;
+      url = image.url;
+    }
+
+    if(url) {
       return (
         <div className="swipes-card__preview">
           <div className="swipes-card__preview--img">
-            <img src={img} alt=""/>
+            <img src={url} height={height} width={width} alt=""/>
           </div>
         </div>
       )
@@ -85,6 +94,9 @@ export default class SwipesCard extends Component {
   }
   renderLoading(){
 
+  }
+  clickedCard(e){
+    console.log(window.getSelection().toString());
   }
   render () {
     const data = this.state.data || { title: "Loading..." }
@@ -94,20 +106,20 @@ export default class SwipesCard extends Component {
       subtitle,
       actions,
       description,
-      img
+      image
     } = data;
 
     return (
-      <div id={"card-container"+this.id} className="swipes-card">
+      <div id={"card-container"+this.id} onClick={this.clickedCard} className="swipes-card">
         {this.renderHeader(actions, title, subtitle, headerImage)}
         {this.renderDescription(description)}
-        {this.renderImage(img)}
+        {this.renderImage(image)}
       </div>
     )
   }
 }
 
-const imageProps = PropTypes.oneOf([
+const imageProps = PropTypes.oneOfType([
   PropTypes.string,
   PropTypes.shape({
     url: PropTypes.string,
