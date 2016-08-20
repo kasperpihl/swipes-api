@@ -61,9 +61,10 @@
     font-weight: 400;
     color: $deepBlue-100;
     position: relative;
-    // padding-bottom: 10px;
+    padding-bottom: 10px;
 
     .swipes-card {
+      max-width: 400px;
       margin: 15px 0;
     }
 

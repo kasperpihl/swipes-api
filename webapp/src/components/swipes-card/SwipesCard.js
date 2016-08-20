@@ -66,9 +66,14 @@ export default class SwipesCard extends Component {
     )
   }
   renderDescription(description) {
+    if(!description){
+      return;
+    }
     return (
-      <div className="swipes-card__description">
-        {description}
+      <div className="header-container">
+        <div className="swipes-card__description">
+          {description}
+        </div>
       </div>
     )
   }
@@ -111,8 +116,10 @@ export default class SwipesCard extends Component {
 
     return (
       <div id={"card-container"+this.id} onClick={this.clickedCard} className="swipes-card">
-        {this.renderHeader(actions, title, subtitle, headerImage)}
-        {this.renderDescription(description)}
+
+          {this.renderHeader(actions, title, subtitle, headerImage)}
+          {this.renderDescription(description)}
+
         {this.renderImage(image)}
       </div>
     )
