@@ -92,11 +92,11 @@ export default class SwipesCard extends Component {
       )
     }
 
-    if (preview.type === 'iframe') {
+    if (preview.type === 'html') {
       return (
         <div className="swipes-card__preview">
           <div className="swipes-card__preview--iframe">
-            <div dangerouslySetInnerHTML={{__html: preview.url}}></div>
+            <div dangerouslySetInnerHTML={{__html: preview.html}}></div>
           </div>
         </div>
       )
@@ -134,21 +134,10 @@ export default class SwipesCard extends Component {
   }
 }
 
-<<<<<<< HEAD
 const stringOrNum = PropTypes.oneOfType([
   PropTypes.string,
   PropTypes.number
 ])
-const imageProps = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.shape({
-    url: PropTypes.string,
-    height: stringOrNum,
-    width: stringOrNum
-  })
-]);
-=======
->>>>>>> d13078d539c90fdf6345a790f2695aba9f84fb32
 
 SwipesCard.propTypes = {
   dataDelegate: PropTypes.func,
@@ -160,10 +149,11 @@ SwipesCard.propTypes = {
     description: PropTypes.string,
     headerImage: PropTypes.string,
     preview: PropTypes.shape({
-      type: PropTypes.oneOf(['iframe', 'image']).isRequired,
-      url: PropTypes.string.isRequired,
-      width: PropTypes.string,
-      height: PropTypes.string
+      type: PropTypes.oneOf(['html', 'image']).isRequired,
+      url: PropTypes.string,
+      html: PropTypes.string,
+      width: stringOrNum,
+      height: stringOrNum
 
     }),
     actions: PropTypes.arrayOf(PropTypes.shape({

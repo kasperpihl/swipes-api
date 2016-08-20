@@ -235,8 +235,7 @@ class Attachment extends Component {
       image_height,
       image_width,
       video_html,
-      video_html_width,
-      video_html_height
+      audio_html
     } = this.props.data;
     let preview;
 
@@ -251,8 +250,14 @@ class Attachment extends Component {
 
     if (video_html) {
       preview = {
-        type: 'iframe',
-        url: video_html
+        type: 'html',
+        html: video_html.replace('autoplay=1', 'autoplay=0').replace('width="400"', 'width="360"')
+      }
+    }
+    if(audio_html){
+      preview = {
+        type: 'html',
+        html: audio_html
       }
     }
 
