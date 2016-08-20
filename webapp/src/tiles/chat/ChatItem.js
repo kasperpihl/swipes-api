@@ -227,17 +227,37 @@ File.propTypes = {
 
 class Attachment extends Component {
   render(){
-    const { title, service_name, text, image_url, image_height, image_width } = this.props.data;
-    let image;
-    if(image_url){
-      image = {
+    const {
+      title,
+      service_name,
+      text,
+      image_url,
+      image_height,
+      image_width,
+      video_html,
+      video_html_width,
+      video_html_height
+    } = this.props.data;
+    let preview;
+
+    if (image_url) {
+      preview = {
+        type: 'image',
         url: image_url,
         width: image_width,
         height: image_height
       }
     }
+
+    if (video_html) {
+      preview = {
+        type: 'iframe',
+        url: video_html
+      }
+    }
+
     return (
-      <SwipesCard data={{title: title || '', subtitle: service_name, description: text, image: image}}/>
+      <SwipesCard data={{title: title || '', subtitle: service_name, description: text, preview }}/>
     );
   }
 }

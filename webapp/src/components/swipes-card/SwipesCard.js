@@ -66,26 +66,37 @@ export default class SwipesCard extends Component {
     )
   }
   renderDescription(description) {
+    if(!description){
+      return;
+    }
     return (
-      <div className="swipes-card__description">
-        {description}
+      <div className="header-container">
+        <div className="swipes-card__description">
+          {description}
+        </div>
       </div>
     )
   }
-  renderImage(image) {
-    let url = image;
-    let width, height;
-    if(typeof image === 'object'){
-      width = image.width;
-      height = image.height;
-      url = image.url;
+  renderPreview(preview) {
+    if(!preview){
+      return;
     }
 
-    if(url) {
+    if (preview.type === 'image') {
       return (
         <div className="swipes-card__preview">
           <div className="swipes-card__preview--img">
-            <img src={url} height={height} width={width} alt=""/>
+            <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
+          </div>
+        </div>
+      )
+    }
+
+    if (preview.type === 'iframe') {
+      return (
+        <div className="swipes-card__preview">
+          <div className="swipes-card__preview--iframe">
+            <div dangerouslySetInnerHTML={{__html: preview.url}}></div>
           </div>
         </div>
       )
@@ -108,19 +119,22 @@ export default class SwipesCard extends Component {
       subtitle,
       actions,
       description,
-      image
+      preview
     } = data;
 
     return (
       <div id={"card-container"+this.id} onClick={this.clickedCard} className="swipes-card">
+
         {this.renderHeader(actions, title, subtitle, headerImage)}
         {this.renderDescription(description)}
-        {this.renderImage(image)}
+
+        {this.renderPreview(preview)}
       </div>
     )
   }
 }
 
+<<<<<<< HEAD
 const stringOrNum = PropTypes.oneOfType([
   PropTypes.string,
   PropTypes.number
@@ -133,6 +147,8 @@ const imageProps = PropTypes.oneOfType([
     width: stringOrNum
   })
 ]);
+=======
+>>>>>>> d13078d539c90fdf6345a790f2695aba9f84fb32
 
 SwipesCard.propTypes = {
   dataDelegate: PropTypes.func,
@@ -142,8 +158,14 @@ SwipesCard.propTypes = {
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
     description: PropTypes.string,
-    headerImage: imageProps,
-    image: imageProps,
+    headerImage: PropTypes.string,
+    preview: PropTypes.shape({
+      type: PropTypes.oneOf(['iframe', 'image']).isRequired,
+      url: PropTypes.string.isRequired,
+      width: PropTypes.string,
+      height: PropTypes.string
+
+    }),
     actions: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
       callback: PropTypes.func.isRequired,

@@ -13,6 +13,10 @@ $imgWrapper: 50px;
   line-height: 1;
   overflow: hidden;
 
+  .header-container {
+    padding-bottom: 15px;
+  }
+
   &__header {
     @include size(100%);
     display: flex;
@@ -30,11 +34,17 @@ $imgWrapper: 50px;
     &__content {
       @include size(calc(100% - 42px));
       @include flex(flex-start, center, column);
+      padding-right: 18px;
 
       &--title {
+        @include size(100%);
         color: $deepBlue-100;
         font-size: 15px;
         font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 18px;
       }
 
       &--subtitle {
@@ -67,8 +77,15 @@ $imgWrapper: 50px;
     font-weight: 400;
     padding-bottom: 10px;
     padding-left: 42px;
-    padding-right: 10px;
+    padding-right: 18px;
     line-height: 18px;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    max-height: 36px;      /* fallback */
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
 
     &:empty {
       display: none;
