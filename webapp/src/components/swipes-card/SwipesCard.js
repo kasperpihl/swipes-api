@@ -81,7 +81,7 @@ export default class SwipesCard extends Component {
     if(!preview){
       return;
     }
-
+  console.log()
     if (preview.type === 'image') {
       return (
         <div className="swipes-card__preview">
