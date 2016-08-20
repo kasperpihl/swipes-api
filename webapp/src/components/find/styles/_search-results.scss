@@ -1,5 +1,5 @@
 .flex-wrapper {
-  display: flex;
+  @include flex(center, center);
   height: calc(100% - 56px);
 }
 
@@ -7,15 +7,15 @@
   width: 100%;
   height: calc(100% - 20px);
   max-width: calc(100% - 300px);
-  min-width: 80%;
+  min-width: 70%;
   padding: 10px 20px;
 
   &__services {
     width: 100%;
-    min-width: 50px;
-    max-width: 300px;
+    max-width: 100px;
     height: calc(100% - 56px);
-    padding-top: 60px;
+    padding-top: 20px;
+    padding-right: 20px;
     @include flex(center, flex-start, column);
 
     &__service {
@@ -46,10 +46,9 @@
 
   &__result-list {
     height: 100%;
-    margin: 0 auto;
     padding-left: 30px;
     padding-right: 10px;
-    width: 100%;
+    max-width: 600px;
     min-width: 360px;
     overflow-y: auto;
 

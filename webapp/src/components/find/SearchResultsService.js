@@ -21,7 +21,7 @@ class SearchResultsService extends Component {
     return (
       <div className="swipes-search-results__services__service">
         <div className="swipes-search-results__services__service--number">
-          {number + ' results'}
+          {number}
         </div>
         <div className="swipes-search-results__services__service--service-icon">
           {this.renderIcon(icon)}
