@@ -10,7 +10,7 @@ export default class SwipesCard extends Component {
   constructor(props){
     super(props);
     this.state = { data: props.data };
-    bindAll(this, ['onDragStart'])
+    bindAll(this, ['onDragStart', 'clickedCard'])
     this.id = randomString(5);
     // Setup delegate structure to provide data
     if(typeof props.dataDelegate === 'function'){
@@ -50,12 +50,13 @@ export default class SwipesCard extends Component {
     }
   }
   renderHeader(actions, title, subtitle, headerImage) {
+    const noSubtitleClass = !subtitle ? "no-subtitle" : '';
     return (
       <div className="swipes-card__header">
         <div className="swipes-card__header__dot">
           {this.renderDot(actions)}
         </div>
-        <div className="swipes-card__header__content">
+        <div className={"swipes-card__header__content " + noSubtitleClass}>
           <div className="swipes-card__header__content--title">{title}</div>
           <div className="swipes-card__header__content--subtitle">{subtitle}</div>
         </div>
@@ -70,7 +71,7 @@ export default class SwipesCard extends Component {
       return;
     }
     return (
-      <div className="header-container">
+      <div className="description-container">
         <div className="swipes-card__description">
           {description}
         </div>
@@ -106,6 +107,7 @@ export default class SwipesCard extends Component {
 
   }
   clickedCard(e){
+    console.log('clicked card here', window.getSelection().toString());
     const { onClick, dataId, data } = this.props;
     if(!window.getSelection().toString().length && onClick){
         onClick(dataId, data);

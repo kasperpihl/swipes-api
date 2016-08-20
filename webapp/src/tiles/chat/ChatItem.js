@@ -226,11 +226,38 @@ File.propTypes = {
 }
 
 class Attachment extends Component {
-  render(){
+  generateTitleAndDescription(){
+    let newTitle, newDescription;
     const {
       title,
-      service_name,
       text,
+      pretext,
+      fallback
+    } = this.props.data;
+
+    const texts = [ title, pretext, text ];
+    texts.forEach((t, i) => {
+      if(!newTitle && t){
+        newTitle = t;
+      }
+      else if(!newDescription && t){
+        newDescription = t;
+      }
+    })
+    if(!newTitle){
+      newTitle = fallback;
+    }
+    newTitle = renderTextWithLinks(newTitle, null, true);
+    newDescription = renderTextWithLinks(newDescription, null, true);
+    console.log(newTitle);
+
+    return {
+      title: newTitle,
+      description: newDescription
+    }
+  }
+  generatePreview(){
+    const {
       image_url,
       image_height,
       image_width,
@@ -238,7 +265,6 @@ class Attachment extends Component {
       audio_html
     } = this.props.data;
     let preview;
-
     if (image_url) {
       preview = {
         type: 'image',
@@ -260,9 +286,19 @@ class Attachment extends Component {
         html: audio_html
       }
     }
+    return preview;
+  }
+  render(){
+    console.log(this.props.data);
+    const {
+      service_name
+    } = this.props.data;
+
+    const preview = this.generatePreview();
+    const { title, description } = this.generateTitleAndDescription();
 
     return (
-      <SwipesCard data={{title: title || '', subtitle: service_name, description: text, preview }}/>
+      <SwipesCard data={{ title, subtitle: service_name, description, preview }}/>
     );
   }
 }
@@ -282,7 +318,7 @@ Attachment.propTypes = {
 }
 
 
-const clickedLink = (match) => {
+const clickedLink = (match, e) => {
   const res = match.split("|");
   let clickObj = {};
   if(res[0])
@@ -291,20 +327,28 @@ const clickedLink = (match) => {
     clickObj.identifier = res[1];
   if(res[2])
     clickObj.title = res[2];
-  console.log('clicked', clickObj);
+  console.log('clicked', clickObj, e);
+  e.stopPropagation()
   delegate.clickLink(clickObj.command);
 
 }
 
 
+const removeLinksFromText = (text) => {
+  if(!text || !text.length)
+    return text;
+  return text.replace(/<(.*?)>/g, '');
+}
 
-const renderTextWithLinks = (text, emojiFunction) =>{
+const renderTextWithLinks = (text, emojiFunction, dontReplaceLineBreaks) =>{
   if(!text || !text.length)
     return text;
   if(typeof emojiFunction !== 'function'){
     emojiFunction = (par) => par;
   }
-  text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+  if(!dontReplaceLineBreaks){
+    text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+  }
 
   const matches = text.match(/<(.*?)>/g);
 
