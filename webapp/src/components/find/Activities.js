@@ -21,9 +21,9 @@ class Activities extends Component {
     if (!activities) {
       return;
     }
-    const { dotDragStart, cardDataDelegate } = this.props;
+    const { dotDragStart, cardDataDelegate, cardOnClick } = this.props;
     return activities.map( (activity, i) => {
-      return <Activity key={"activity-" + i} data={activity} dotDragStart={dotDragStart} cardDataDelegate={cardDataDelegate }/>
+      return <Activity key={"activity-" + i} data={activity} cardOnClick={cardOnClick} dotDragStart={dotDragStart}  cardDataDelegate={cardDataDelegate }/>
     })
   }
   render() {
@@ -45,6 +45,7 @@ Activities.propTypes = {
   dotDragStart: PropTypes.func,
   subtitle: PropTypes.string,
   activities: PropTypes.arrayOf(PropTypes.object),
-  cardDataDelegate: PropTypes.func
+  cardDataDelegate: PropTypes.func,
+  cardOnClick: PropTypes.func
 
 }

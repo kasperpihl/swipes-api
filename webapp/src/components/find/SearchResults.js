@@ -35,9 +35,9 @@ class SearchResults extends Component {
   }
   renderResultList(results) {
     if(!results) return;
-
+    const { cardOnClick } = this.props;
     return results.map( (result, i) => {
-      return <SwipesCard data={result} key={'search-result-' + i} />
+      return <SwipesCard data={result} key={'search-result-' + i} onClick={cardOnClick} />
     })
   }
   render() {
@@ -64,5 +64,6 @@ export default SearchResults
 SearchResults.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
-  results: PropTypes.arrayOf(PropTypes.object) // SwipesCard Proptypes
+  results: PropTypes.arrayOf(PropTypes.object), // SwipesCard Proptypes
+  cardOnClick: PropTypes.func
 }

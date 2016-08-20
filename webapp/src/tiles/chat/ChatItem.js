@@ -208,10 +208,6 @@ class File extends Component {
   }
   render(){
     let { name, url_private, thumb_360_w, thumb_360_h } = this.props.data;
-    if(thumb_360_w){
-      thumb_360_w += 'px';
-      thumb_360_h += 'px';
-    }
     return (
       <SwipesCard data={{title: name || '', image: {url: url_private, width: thumb_360_w , height: thumb_360_h}}}/>
     );
@@ -236,8 +232,8 @@ class Attachment extends Component {
     if(image_url){
       image = {
         url: image_url,
-        width: image_width + 'px',
-        height: image_height + 'px'
+        width: image_width,
+        height: image_height
       }
     }
     return (

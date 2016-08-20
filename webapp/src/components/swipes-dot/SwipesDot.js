@@ -98,6 +98,7 @@ const SwipesDot = React.createClass({
     e.stopPropagation();
   },
   renderOverlayMenu(boundRect) {
+
     const {
       elements,
       radial=false,
@@ -107,6 +108,9 @@ const SwipesDot = React.createClass({
       labelStyles={}
     } = this.props;
 
+    if(!elements || !elements.length){
+      return; // No actions;
+    }
     let div = document.getElementById('swipes-dot-overlay');
 
     if (div === null) {

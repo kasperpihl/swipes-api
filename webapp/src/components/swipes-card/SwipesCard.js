@@ -73,7 +73,6 @@ export default class SwipesCard extends Component {
     )
   }
   renderImage(image) {
-    console.log(image);
     let url = image;
     let width, height;
     if(typeof image === 'object'){
@@ -96,7 +95,10 @@ export default class SwipesCard extends Component {
 
   }
   clickedCard(e){
-    console.log(window.getSelection().toString());
+    const { onClick, dataId, data } = this.props;
+    if(!window.getSelection().toString().length && onClick){
+        onClick(dataId, data);
+    }
   }
   render () {
     const data = this.state.data || { title: "Loading..." }
@@ -119,12 +121,16 @@ export default class SwipesCard extends Component {
   }
 }
 
+const stringOrNum = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.number
+])
 const imageProps = PropTypes.oneOfType([
   PropTypes.string,
   PropTypes.shape({
     url: PropTypes.string,
-    height: PropTypes.string,
-    width: PropTypes.string
+    height: stringOrNum,
+    width: stringOrNum
   })
 ]);
 
@@ -142,7 +148,6 @@ SwipesCard.propTypes = {
       label: PropTypes.string.isRequired,
       callback: PropTypes.func.isRequired,
       icon: PropTypes.string,
-      headerImage: PropTypes.string,
       bgColor: PropTypes.string
     }))
   }),

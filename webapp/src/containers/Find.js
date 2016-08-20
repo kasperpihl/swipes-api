@@ -30,7 +30,6 @@ class Find extends Component {
     }
     else if(doc.source === 'dropbox'){
       console.log(doc);
-      onClick = this.onClickFile.bind(this, doc.url);
       title = doc.filename;
       subtitle = doc.filepath;
     }
