@@ -98,6 +98,13 @@ $imgWrapper: 50px;
     border-top: 1px solid $deepBlue-10;
     // box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1);
     padding: 18px;
+    &.no-style{
+      padding: 0;
+      background-color: none;
+      .custom-html{
+        width: 100%;
+      }
+    }
 
 		&--img {
       @include flex(center, center);

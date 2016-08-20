@@ -209,7 +209,7 @@ class File extends Component {
   render(){
     let { name, url_private, thumb_360_w, thumb_360_h } = this.props.data;
     return (
-      <SwipesCard data={{title: name || '', image: {url: url_private, width: thumb_360_w , height: thumb_360_h}}}/>
+      <SwipesCard data={{title: name || '', preview: {type: 'image', url: url_private, width: thumb_360_w , height: thumb_360_h}}}/>
     );
   }
 }
@@ -251,7 +251,7 @@ class Attachment extends Component {
     if (video_html) {
       preview = {
         type: 'html',
-        html: video_html.replace('autoplay=1', 'autoplay=0').replace('width="400"', 'width="360"')
+        html: video_html.replace('autoplay=1', 'autoplay=0')
       }
     }
     if(audio_html){

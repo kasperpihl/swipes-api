@@ -94,9 +94,9 @@ export default class SwipesCard extends Component {
 
     if (preview.type === 'html') {
       return (
-        <div className="swipes-card__preview">
+        <div className="swipes-card__preview no-style">
           <div className="swipes-card__preview--iframe">
-            <div dangerouslySetInnerHTML={{__html: preview.html}}></div>
+            <div className="custom-html" dangerouslySetInnerHTML={{__html: preview.html}}></div>
           </div>
         </div>
       )
