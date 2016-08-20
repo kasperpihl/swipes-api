@@ -107,6 +107,14 @@ export default class SwipesCard extends Component {
   }
 }
 
+const imageProps = PropTypes.oneOf([
+  PropTypes.string,
+  PropTypes.shape({
+    url: PropTypes.string,
+    height: PropTypes.string,
+    width: PropTypes.string
+  })
+]);
 
 SwipesCard.propTypes = {
   dataDelegate: PropTypes.func,
@@ -115,12 +123,8 @@ SwipesCard.propTypes = {
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
     description: PropTypes.string,
-    headerImage: PropTypes.oneOf([
-      PropTypes.string,
-      PropTypes.shape({
-        url: PropTypes.string
-      })
-    ]),
+    headerImage: imageProps,
+    image: imageProps,
     actions: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
       callback: PropTypes.func.isRequired,
