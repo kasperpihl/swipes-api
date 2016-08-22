@@ -50,7 +50,7 @@ export default class SwipesCard extends Component {
     }
   }
   renderHeader(actions, title, subtitle, headerImage) {
-    const noSubtitleClass = !subtitle ? "no-subtitle" : '';
+    const noSubtitleClass = !subtitle ? "swipes-card__header__content--no-subtitle" : '';
     return (
       <div className="swipes-card__header">
         <div className="swipes-card__header__dot">
@@ -95,7 +95,7 @@ export default class SwipesCard extends Component {
 
     if (preview.type === 'html') {
       return (
-        <div className="swipes-card__preview no-style">
+        <div className="swipes-card__preview swipes-card__preview--no-style">
           <div className="swipes-card__preview--iframe">
             <div className="custom-html" dangerouslySetInnerHTML={{__html: preview.html}}></div>
           </div>
@@ -148,7 +148,10 @@ SwipesCard.propTypes = {
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
-    description: PropTypes.string,
+    description: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array
+    ]),
     headerImage: PropTypes.string,
     preview: PropTypes.shape({
       type: PropTypes.oneOf(['html', 'image']).isRequired,

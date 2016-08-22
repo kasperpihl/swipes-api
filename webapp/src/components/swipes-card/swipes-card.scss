@@ -40,7 +40,7 @@ $imgWrapper: 50px;
       @include size(calc(100% - 42px));
       @include flex(flex-start, center, column);
       padding-right: 18px;
-      &.no-subtitle &{
+      &--no-subtitle & {
         &--title {
           white-space: normal;
           display: -webkit-box;
@@ -108,7 +108,7 @@ $imgWrapper: 50px;
     border-top: 1px solid $deepBlue-10;
     padding: 18px;
 
-    &.no-style {
+    &--no-style {
       padding: 0;
       background-color: transparent;
 

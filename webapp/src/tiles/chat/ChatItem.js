@@ -249,7 +249,6 @@ class Attachment extends Component {
     }
     newTitle = renderTextWithLinks(newTitle, null, true);
     newDescription = renderTextWithLinks(newDescription, null, true);
-    console.log(newTitle);
 
     return {
       title: newTitle,
@@ -289,7 +288,6 @@ class Attachment extends Component {
     return preview;
   }
   render(){
-    console.log(this.props.data);
     const {
       service_name
     } = this.props.data;
