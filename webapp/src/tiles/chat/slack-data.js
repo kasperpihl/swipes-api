@@ -7,7 +7,8 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
-    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
+    this.typingUsers = {};
+    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.delegate = delegate || function(){};
     this.parser = new SlackSwipesParser();
@@ -240,7 +241,7 @@ export default class SlackData {
     }
 
     if (msg.type === 'user_typing' && msg.channel === currChannel.id) {
-      //this.userTyping(msg);
+      this.userTyping(msg);
     }
 
     // console.log('slack socket handler', msg.type, msg);
@@ -271,6 +272,36 @@ export default class SlackData {
   getUserFromId(id){
     return this.data.users[id];
   }
+
+  userTyping(data) {
+    if (this.typingUsers[data.user]) {
+      clearTimeout(this.typingUsers[data.user]);
+    }
+
+    const timeout = setTimeout(() => {
+      delete this.typingUsers[data.user];
+      this.userTypingLabel();
+    }, 5000);
+
+    this.typingUsers[data.user] = timeout;
+    this.userTypingLabel();
+  }
+  userTypingLabel() {
+    const users = Object.keys(this.typingUsers).map((userId) => this.getUserFromId(userId).name );
+
+    let content = users.join(', ');
+
+    if (users.length > 1) {
+      content += ' are typing..';
+    } else if (users.length === 1) {
+      content += ' is typing..'
+    } else{
+      content = false;
+    }
+    console.log('saving typing labell');
+    this.saveData({'typingLabel': content});
+  }
+
   loadPrivateImage(domElement, src) {
     this.swipes.service('slack').stream('file', {url: src})
     .then((arraybuffer) => {
@@ -358,33 +389,6 @@ var typingUsers = {};
 var ChatStore = Reflux.createStore({
   listenables: [ChatActions],
   
-  onSetChannel: function(channelId){
-    var channel = ChannelStore.get(channelId);
-    if(channel){
-      this.unset(['messages', 'sections']);
-      this.set('showingUnread', channel.last_read, {trigger:false});
-      swipes.sendEvent('navigation.setTitle', {title:channel.name});
-      this.set('channelId', channel.id);
-      this.fetchChannel(channel);
-    }
-
-  },
-  onMarkAsRead:function(ts){
-    var channel = ChannelStore.get(this.get('channelId'));
-    ts = ts || _.last(this.get('messages')).ts;
-    if(!channel || ts === channel.last_read){
-      return;
-    }
-    var prefix = this.apiPrefixForChannel(channel);
-    swipes.service('slack').request(prefix + "mark",
-      {
-        channel: channel.id,
-        ts: ts
-    })
-    .then(function(){
-    })
-  },
-
   onClickLink:function(url){
     swipes.sendEvent('openURL', {url: url});
   },

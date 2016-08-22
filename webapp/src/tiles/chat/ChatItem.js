@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import createFragment from 'react-addons-create-fragment'
 
 import ReactEmoji from 'react-emoji'
 import SwipesCard from '../../components/swipes-card/SwipesCard'
