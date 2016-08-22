@@ -1,8 +1,6 @@
-import React from 'react'
-import ReactEmoji from 'react-emoji'
-
 import { bindAll, indexBy } from '../../classes/utils'
 import { getTimeStr, dayStringForDate, startOfDayTs, isAmPm } from '../../classes/time-utils'
+
 import { isShareURL } from '../../classes/utils'
 
 const DEFAULT_PROFILE = 'https://i0.wp.com/slack-assets2.s3-us-west-2.amazonaws.com/8390/img/avatars/ava_0002-48.png?ssl=1';
@@ -58,11 +56,78 @@ export default class SlackSwipesParser {
     sections.push({ title: "People", rows: peopleCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
     return sections;
   }
-  parseAttachmentToCard(attachment){
+  parseAttachmentToCards(attachments){
+    return attachments.map((attachment) => {
+      const {
+        title,
+        text,
+        pretext,
+        fallback,
+        service_name,
+        image_url,
+        image_height,
+        image_width,
+        video_html,
+        audio_html
+      } = attachment;
 
+      let newTitle, newDescription;
+      const texts = [ title, pretext, text ];
+      texts.forEach((t, i) => {
+        if(!newTitle && t){
+          newTitle = t;
+        }
+        else if(!newDescription && t){
+          newDescription = t;
+        }
+      })
+      
+      if(!newTitle){
+        newTitle = fallback;
+      }
+      newTitle = this.renderTextWithLinks(newTitle, {});
+      newDescription = this.renderTextWithLinks(newDescription, {});
+
+      let preview;
+      if (image_url) {
+        preview = {
+          type: 'image',
+          url: image_url,
+          width: image_width,
+          height: image_height
+        }
+      }
+
+      if (video_html) {
+        preview = {
+          type: 'html',
+          html: video_html.replace('autoplay=1', 'autoplay=0')
+        }
+      }
+      if(audio_html){
+        preview = {
+          type: 'html',
+          html: audio_html
+        }
+      }
+
+      return {
+        title: newTitle,
+        description: newDescription,
+        preview,
+        subtitle: service_name
+      };
+    })
   }
   parseFileToCard(file){
-
+    let { name, url_private, thumb_360_w, thumb_360_h } = file;
+    const card = {
+      title: name || ''
+    }
+    if(url_private){
+      card.preview = {type: 'image', url: url_private, width: thumb_360_w , height: thumb_360_h}
+    }
+    return [card];
   }
   parseMessageFromSlack(msg, data){
     const { bots, self, users } = data;
@@ -77,12 +142,12 @@ export default class SlackSwipesParser {
     
     if(msg.text && msg.text.length){
       newMsg.oldText = msg.text;
-      newMsg.text = this.renderTextWithLinks(this.replaceNewLines(msg.text), ReactEmoji.emojify, data.users);
+      newMsg.text = this.renderTextWithLinks(this.replaceNewLines(msg.text), data.users);
     }
     
     const { user:userId, bot_id, username } = msg;
     
-    let user;
+    let user, cards;
 
     if(userId){
       user = users[userId];
@@ -116,6 +181,16 @@ export default class SlackSwipesParser {
       if(username){
         newMsg.name = username;
       }
+    }
+
+    if(msg.file){
+      cards = this.parseFileToCard(msg.file);
+    }
+    else if(msg.attachments){
+      cards = this.parseAttachmentToCards(msg.attachments);
+    }
+    if(cards){
+      newMsg.cards = cards;
     }
     this.lastUser = user ? user.id : null;
     this.lastGroup = group;
@@ -152,30 +227,14 @@ export default class SlackSwipesParser {
 
     return sortedSections;
   }
-  clickedLink(match, e) {
-    const res = match.split("|");
-    let clickObj = {};
-    if(res[0])
-      clickObj.command = res[0];
-    if(res[1])
-      clickObj.identifier = res[1];
-    if(res[2])
-      clickObj.title = res[2];
-    console.log('clicked', clickObj, e);
-    e.stopPropagation()
-    this.delegate.clickLink(clickObj.command);
-  }
   replaceNewLines(text){
     if(!text || !text.length)
       return text;
     return text.replace(/(?:\r\n|\r|\n)/g, '<br>');
   }
-  renderTextWithLinks(text, emojiFunction, users){
+  renderTextWithLinks(text, users){
     if(!text || !text.length)
       return text;
-    if(typeof emojiFunction !== 'function'){
-      emojiFunction = (par) => par;
-    }
 
     const matches = text.match(/<(.*?)>/g);
 
@@ -183,10 +242,9 @@ export default class SlackSwipesParser {
 
     if ((matches != null) && matches.length) {
       const splits = text.split(/<(.*?)>/g);
-      let counter = 0;
 
       // Adding the text before the first match
-      replaced.push(emojiFunction(splits.shift()));
+      replaced.push(splits.shift());
       for(var i = 0 ; i < matches.length ; i++ ){
         // The match is now the next object
         const innerMatch = splits.shift();
@@ -194,8 +252,7 @@ export default class SlackSwipesParser {
 
         // If break, just add that as the placement
         if(innerMatch === 'br'){
-          var key = 'break' + (counter++);
-          placement = <br key={key}/>;
+          placement = { type: 'linebreak' };
         }
         // Else add the link with the proper title
         else{
@@ -212,20 +269,19 @@ export default class SlackSwipesParser {
             }
           }
 
-          var key = 'link' + (counter++);
-          placement = <a key={key} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{unescape(title)}</a>;
+          placement = { type: 'link', title: unescape(title), data: innerMatch };
         }
 
         // Adding the replacements
         replaced.push(placement);
 
         // Adding the after text between the matches
-        replaced.push(emojiFunction(unescape(splits.shift())));
+        replaced.push(unescape(splits.shift()));
       }
       if(replaced.length)
         return replaced;
     }
-    return emojiFunction(unescape(text));
+    return unescape(text);
   }
 }
 

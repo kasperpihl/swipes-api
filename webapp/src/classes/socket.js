@@ -13,7 +13,6 @@ export default class Socket {
     const url = state.main.socketUrl;
 
     if(!this.socket && url && state.main.status !== 'connecting'){
-      console.log('connect connect');
       this.changeStatus('connecting');
       
       this.socket = io.connect(url, {

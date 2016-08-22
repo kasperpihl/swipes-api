@@ -22,6 +22,9 @@ class ChatList extends Component {
   componentDidUpdate(prevProps, prevState){
     this.scrollToBottom(this.hasRendered);
   }
+  componentWillReceiveProps(nextProps, nextState){
+    console.log('props', JSON.parse(JSON.stringify(nextProps)), JSON.parse(JSON.stringify(nextState)))
+  }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
@@ -58,9 +61,9 @@ class ChatList extends Component {
     var topPadding = 0;
     if(chatList.clientHeight < scrollContainer.clientHeight){
       topPadding = scrollContainer.clientHeight - chatList.clientHeight;
-      if(topPadding != this.state.topPadding){
-        this.setState({topPadding: topPadding});
-      }
+    }
+    if(topPadding != this.state.topPadding){
+      this.setState({topPadding: topPadding});
     }
   }
   onScroll(e){
@@ -92,10 +95,9 @@ class ChatList extends Component {
     }
   }
   render() {
-    console.log('render list');
     const styles = {};
     if(this.state.topPadding){
-      //styles.paddingTop = this.state.topPadding + "px"
+      styles.paddingTop = this.state.topPadding + "px"
     }
     return (
       <div onScroll={this.onScroll} style={styles} ref="scroll-container" className="chat-list-container">
