@@ -1,21 +1,29 @@
 import { bindAll, indexBy } from '../../classes/utils'
 import { getTimeStr, dayStringForDate, startOfDayTs, isAmPm } from '../../classes/time-utils'
 import SlackSocket from './slack-socket'
+import SlackSwipesParser from './slack-swipes-parser'
 
 export default class SlackData {
-  constructor(swipes, data){
+  constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
     bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'sectionsForSidemenu', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
+    this.delegate = delegate || function(){};
+    this.parser = new SlackSwipesParser();
     this.start();
   }
   saveData(data, options){
-    if(data.messages){
-      data.sortedMessages = this.sortMessagesForSwipes(data.messages);
-    }
+    
+
     this.data = Object.assign(this.data, data);
-    this.swipes.saveData(data, options);
+    if(data.channels){
+      this.data.sectionsSidemenu = data.sectionsSidemenu = this.sectionsForSidemenu();
+    }
+    if(data.messages){
+      this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
+    }
+    this.delegate(JSON.parse(JSON.stringify(data)), options);
   }
   start(){
     if(this.isStarting){
@@ -68,7 +76,7 @@ export default class SlackData {
     }
     const data = {
       selectedChannelId: channel.id,
-      messages: null
+      messages: []
     };
     this.saveData(data);
     this.fetchMessages(channel);
@@ -93,7 +101,7 @@ export default class SlackData {
     })
   }
   fetchMessages(channel){
-    this.swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id }).then((res) => {
+    this.swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id, count: 50 }).then((res) => {
       if(res.ok){
         this.saveData({messages: res.data.messages})
       }
@@ -341,74 +349,6 @@ export default class SlackData {
     sections.push({ title: "Channels", rows: channelsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
     sections.push({ title: "People", rows: peopleCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
     return sections;
-  }
-  sortMessagesForSwipes(messages){
-    messages = messages || this.data.messages;
-    if(!messages || !messages.length)
-      return [];
-
-    let lastUser, lastGroup, lastDate;
-    const length = messages.length;
-    const me = this.data.self;
-    const groups = {};
-    function pushToGroup(groupName, obj){
-      if(!groups[groupName]){
-        groups[groupName] = []
-      }
-      groups[groupName].push(obj)
-    }
-    messages.forEach((msg, i) => {
-      const date = new Date(parseInt(msg.ts)*1000);
-      const group = startOfDayTs(date);
-      const { user:userId, bot_id, username } = msg;
-      msg.timeStr = getTimeStr(date);
-      msg.isExtraMessage = false;
-
-      let user;
-      if(userId){
-        user = this.data.users[userId];
-        if(user){
-          msg.userObj = user;
-          if(user.id == lastUser && group == lastGroup){
-            msg.isExtraMessage = true;
-          }
-          if(user.id === me.id){
-            msg.isMyMessage = true;
-          }
-        }
-
-      }
-      else if(bot_id){
-        const bot = this.data.bots[bot_id];
-        if(bot){
-          msg.bot = bot;
-        }
-      }
-      else{
-        var bot = {};
-        if(username){
-          bot.name = username;
-        }
-        msg.bot = bot;
-      }
-      msg.isLastMessage = (i === length - 1);
-
-      lastGroup = group;
-      lastUser = user ? user.id : null;
-      lastDate = date;
-      pushToGroup(group, msg)
-    });
-
-    const sortedKeys = Object.keys(groups).sort();
-
-    const sortedSections = sortedKeys.map((key) => {
-      const schedule = new Date(parseInt(key)*1000);
-      const title = dayStringForDate(schedule);
-      const sortedMessages = groups[key].sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
-      return {"title": title, "messages": sortedMessages };
-    });
-
-    return sortedSections;
   }
 }
 

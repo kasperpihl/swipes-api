@@ -17,9 +17,12 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
-    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes'])
-    this.slackData = new SlackData(props.swipes, props.tile.data);
+    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate'])
     this.addListenersToSwipes(props.swipes);
+    this.slackData = new SlackData(this.props.swipes, {}, this.dataDelegate);
+  }
+  dataDelegate(data){
+    this.setState(data);
   }
   addListenersToSwipes(swipes){
     swipes.addListener('share.receivedData', (data) => {
@@ -30,6 +33,7 @@ class Chat extends Component {
     });
   }
   componentDidMount(){
+    
   }
   componentDidUpdate(prevProps, prevState){
     //console.log('updated', this.props.tile.data);
@@ -53,18 +57,12 @@ class Chat extends Component {
       deleteMessage: this.slackData.deleteMessage,
       openImage: this.slackData.openImage,
       loadPrivateImage: this.slackData.loadPrivateImage,
-      isShareURL: swipes.isShareURL,
-      getUserFromId: this.slackData.getUserFromId,
       clickLink: (url) => swipes.sendEvent('openURL', {url: url}),
     }
   }
   render() {
-
-    let sortedMessages;
-    if(this.props.tile.data){
-      sortedMessages = this.props.tile.data.sortedMessages; 
-    }
-    const sectionsSidemenu = this.slackData.sectionsForSidemenu();
+    let sortedMessages = this.state.sortedMessages || null; 
+    let sectionsSidemenu = this.state.sectionsSidemenu || [];
     const paddingBottom = this.state.inputHeight + 'px';
     return (
       <div style={{height :'100%', paddingBottom}}>

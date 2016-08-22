@@ -51,14 +51,14 @@ module.exports = {
         include: path.join(__dirname, 'src')
       },
       {
-        test: /\.svg$/,
+        test: /\.svg(\?.*)?$/,
         loader: 'babel?' + babelOptions + '!svg-react'
       },
-      { test: /\.(ttf|woff|woff2)$/,
+      { test: /\.(ttf|woff|woff2)?$/,
         loader: 'file?name=fonts/[name].[hash:6].[ext]'
       },
       {
-        test: /\.(png|jpg|jpeg|gif)$/,
+        test: /\.(png|jpg|jpeg|gif)?$/,
         loader: 'url-loader?limit=10000&name=img/[name]-[hash:6].[ext]'
       },
       {

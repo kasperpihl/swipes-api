@@ -5,7 +5,7 @@ const apiUrl = window.location.origin + '/v1/'
 const request = (options, data) => {
   return (dispatch, getState) => {
     // K_TODO: Validate types, check if types is second parameter etc.
-
+    const now = new Date().getTime();
     let command;
     if(typeof options !== 'object') {
       command = "" + options;
@@ -36,6 +36,7 @@ const request = (options, data) => {
     }).then((res) => {
       command = options.resultAction || command
       // Dispatch an action with the command as type
+      console.log('api response: ', new Date().getTime() - now);
       if(res.error){
         res.payload = Object.assign({}, res.payload, {ok: false});
       }

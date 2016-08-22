@@ -87,11 +87,12 @@ class ChatList extends Component {
     const { unreadIndicator, sections, itemDelegate } = this.props;
     if(sections){
       return sections.map(function(section){
-        return <ChatSection key={section.title} itemDelegate={itemDelegate} data={{unreadIndicator: unreadIndicator, section: section}} />
+        return <ChatSection key={section.title} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
     }
   }
   render() {
+    console.log('render list');
     const styles = {};
     if(this.state.topPadding){
       //styles.paddingTop = this.state.topPadding + "px"
@@ -109,7 +110,6 @@ class ChatList extends Component {
 export default ChatList
 
 ChatList.propTypes = {
-  itemDelegate: PropTypes.object.isRequired,
   markAsRead: PropTypes.func,
   sections: PropTypes.arrayOf(PropTypes.object)
 

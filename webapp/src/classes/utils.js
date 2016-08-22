@@ -1,3 +1,12 @@
+export function isShareURL(url){
+  url = url || "";
+  const shareURLPrefix = window.location.origin + '/s/';
+  if(url.startsWith(shareURLPrefix)){
+    return true;
+  }
+  return false;
+}
+
 export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {
     context[methodName] = context[methodName].bind(context);

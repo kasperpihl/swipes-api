@@ -48,7 +48,7 @@
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
-    "svg-react-loader": "^0.3.7",
+    "svg-react-loader": "^0.4.0-beta.2",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"

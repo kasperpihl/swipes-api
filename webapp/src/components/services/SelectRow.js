@@ -6,8 +6,8 @@ import './services.scss'
 
 import Select from 'react-select';
 
-import EmptyStateConnect from './images/swipes-workspace-illustrations-emptystate-connect.svg'
-import EmptyStatePickTeam from './images/swipes-workspace-illustrations-emptystate-pickteam.svg'
+import EmptyStateConnect from './images/swipes-workspace-illustrations-emptystate-connect.svg?name=EmptyStateConnect'
+import EmptyStatePickTeam from './images/swipes-workspace-illustrations-emptystate-pickteam.svg?name=EmptyStatePickTeam'
 
 class SelectRow extends Component {
   constructor(props) {

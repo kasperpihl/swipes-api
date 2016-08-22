@@ -10,72 +10,42 @@ const delegateMethods = ['editMessage', 'deleteMessage', 'isShareURL', 'openImag
 class ChatItem extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    delegate = props.delegate;
-    if(!delegate){
-      throw 'ChatItem: must have delegate prop'
-    }
-    if(typeof delegate !== 'object'){
-      throw 'ChatItem: delegate must be object'
-    }
-    delegateMethods.forEach((method) => {
-      if(typeof delegate[method] !== 'function'){
-        throw 'ChatItem: delegate must conform to: ' + method;
-      }
-    })
-
   }
   renderMessageHeader(){
-    let name = 'unknown';
-    const { data:message } = this.props;
-    if(message.isExtraMessage){
+    const { name, timeStr, profileImage, dontRenderProfile } = this.props.data;
+    if(dontRenderProfile){
       return;
     }
 
-    if(message.userObj){
-      name = message.userObj.name;
-    }
-    else if(message.bot){
-      name = message.bot.name;
-    }
     return (
       <div className="chat__message__info">
         <div className="chat__message__info--profile-img">
-          {this.renderProfileImage()}
+          <img src={profileImage} />
         </div>
         <div className="chat__message__info--author">{name}</div>
-        <div className="chat__message__info--timestamp">{message.timeStr}</div>
+        <div className="chat__message__info--timestamp">{timeStr}</div>
       </div>
     );
   }
-  renderProfileImage(){
-    const { data:message } = this.props;
-    if(message.isExtraMessage){
-      return;
-    }
+  renderMessage(){
+    const { ts, timeStr, text, oldText } = this.props.data;
+    console.log('text', typeof text, text, oldText);
 
-    let profile_image = 'https://i0.wp.com/slack-assets2.s3-us-west-2.amazonaws.com/8390/img/avatars/ava_0002-48.png?ssl=1';
-    if(message.userObj && message.userObj.profile){
-      profile_image = message.userObj.profile.image_48;
-    }
-    else if(message.bot && message.bot.icons){
-      if(message.bot.icons.image_48){
-        profile_image = message.bot.icons.image_48;
-      }
-    }
     return (
-      <img src={profile_image} />
+      <div id={ts} className="message-wrapper">
+        <div className="chat__message--content" data-timestamp={timeStr}>
+          <div className="chat__message--content--text">
+            {text}
+          </div>
+        </div>
+      </div>
     );
   }
-  renderMessage(){
-    const { data:message } = this.props;
-    return <ChatMessage key={message.ts} data={message} />;
-  }
   render() {
-    const { isExtraMessage } = this.props.data;
+    const { dontRenderProfile } = this.props.data;
     let className = 'chat__message';
 
-    if (this.props.data.isExtraMessage) {
+    if (dontRenderProfile) {
       className += ' extra-message';
     }
 
@@ -88,6 +58,21 @@ class ChatItem extends Component {
   }
 }
 export default ChatItem
+
+ChatItem.propTypes = {
+  data: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    timeStr: PropTypes.string.isRequired,
+    text: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array
+    ]),
+    profileImage: PropTypes.string.isRequired,
+    cards: PropTypes.arrayOf(PropTypes.object) // SwipesCard PropTypes
+  })
+}
+
+
 
 class ChatMessage extends Component {
   share(text) {
@@ -314,88 +299,4 @@ Attachment.propTypes = {
     image_height: PropTypes.number,
     image_width: PropTypes.number
   })
-}
-
-
-const clickedLink = (match, e) => {
-  const res = match.split("|");
-  let clickObj = {};
-  if(res[0])
-    clickObj.command = res[0];
-  if(res[1])
-    clickObj.identifier = res[1];
-  if(res[2])
-    clickObj.title = res[2];
-  console.log('clicked', clickObj, e);
-  e.stopPropagation()
-  delegate.clickLink(clickObj.command);
-
-}
-
-
-const removeLinksFromText = (text) => {
-  if(!text || !text.length)
-    return text;
-  return text.replace(/<(.*?)>/g, '');
-}
-
-const renderTextWithLinks = (text, emojiFunction, dontReplaceLineBreaks) =>{
-  if(!text || !text.length)
-    return text;
-  if(typeof emojiFunction !== 'function'){
-    emojiFunction = (par) => par;
-  }
-  if(!dontReplaceLineBreaks){
-    text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-  }
-
-  const matches = text.match(/<(.*?)>/g);
-
-  const replaced = [];
-
-  if ((matches != null) && matches.length) {
-    const splits = text.split(/<(.*?)>/g);
-    let counter = 0;
-
-    // Adding the text before the first match
-    replaced.push(emojiFunction(splits.shift()));
-    for(var i = 0 ; i < matches.length ; i++ ){
-      // The match is now the next object
-      const innerMatch = splits.shift();
-      let placement = '';
-
-      // If break, just add that as the placement
-      if(innerMatch === 'br'){
-        var key = 'break' + (counter++);
-        placement = <br key={key}/>;
-      }
-      // Else add the link with the proper title
-      else{
-        const res = innerMatch.split("|");
-        const command = res[0];
-        let title = res[res.length -1];
-        if(delegate.isShareURL(title)){
-          console.log('was a share url!!! YIR', title);
-        }
-        else if(title.startsWith("@U")){
-          const user = delegate.getUserFromId(title.substr(1));
-          if(user){
-            title = "@" + user.name;
-          }
-        }
-
-        var key = 'link' + (counter++);
-        placement = <a key={key} className='link' onClick={clickedLink.bind(null, innerMatch)}>{unescape(title)}</a>;
-      }
-
-      // Adding the replacements
-      replaced.push(placement);
-
-      // Adding the after text between the matches
-      replaced.push(emojiFunction(unescape(splits.shift())));
-    }
-    if(replaced.length)
-      return replaced;
-  }
-  return emojiFunction(unescape(text));
 }
