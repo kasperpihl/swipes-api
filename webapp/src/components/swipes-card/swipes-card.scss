@@ -16,12 +16,22 @@ $imgWrapper: 50px;
   .description-container {
     padding-bottom: 15px;
   }
-  a.link{
+
+  a.link {
     text-decoration: underline;
-    &:hover{
+
+    &:hover {
       text-decoration: none;
     }
   }
+
+  &__item {
+    min-height: 50px;
+    line-height: 1;
+    @include size(100%, auto);
+    background-color: white;
+  }
+
   &__header {
     @include size(100%);
     display: flex;
