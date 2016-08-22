@@ -244,12 +244,19 @@ class Attachment extends Component {
         newDescription = t;
       }
     })
+    
     if(!newTitle){
       newTitle = fallback;
     }
     newTitle = renderTextWithLinks(newTitle, null, true);
+    if(Array.isArray(newTitle)){
+      newTitle = newTitle.join(' ')
+    }
+
     newDescription = renderTextWithLinks(newDescription, null, true);
-    console.log(newTitle);
+    if(Array.isArray(newDescription)){
+      newDescription = newDescription.join(' ')
+    }
 
     return {
       title: newTitle,
@@ -289,7 +296,6 @@ class Attachment extends Component {
     return preview;
   }
   render(){
-    console.log(this.props.data);
     const {
       service_name
     } = this.props.data;

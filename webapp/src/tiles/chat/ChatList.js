@@ -43,7 +43,6 @@ class ChatList extends Component {
   scrollToBottom(animate){
     const chatList = this.refs['chat-list']
     const scrollContainer = this.refs['scroll-container'];
-    console.log(scrollContainer.scrollTop, scrollContainer.clientHeight, chatList.clientHeight);
 
     var scrollPosForBottom = chatList.clientHeight - scrollContainer.clientHeight
     if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != scrollContainer.scrollTop ){
@@ -93,7 +92,6 @@ class ChatList extends Component {
     }
   }
   render() {
-    console.log('render list');
     const styles = {};
     if(this.state.topPadding){
       //styles.paddingTop = this.state.topPadding + "px"
