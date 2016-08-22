@@ -222,8 +222,11 @@ export default class SlackData {
         
         let newUnreadIndicator = {
           showAsRead: true,
-          ts: unreadIndicator.ts
         }
+        if(unreadIndicator){
+          newUnreadIndicator.ts = unreadIndicator.ts;
+        }
+        
         if(unreadIndicator && (msg.ts < unreadIndicator.ts)){
           newUnreadIndicator.showAsRead = false;
           newUnreadIndicator.ts = msg.ts;
@@ -280,11 +283,12 @@ export default class SlackData {
     })
   }
   uploadFiles(files, callback){
+    console.log('uploading', files)
     const file = files[0];
     const token = this.swipes.info.slackToken;
     const formData = new FormData();
     formData.append("token", token);
-    formData.append("channels", this.get('channelId'));
+    formData.append("channels", this.data.selectedChannelId);
     formData.append("filename", file.name);
     formData.append("title", file.name);
     formData.append("file", file);
@@ -300,7 +304,7 @@ export default class SlackData {
   
 
   __tempSlackUpload(formData, callback){
-    $.ajax({
+    /*$.ajax({
       url : 'https://slack.com/api/files.upload',
       type: "POST",
       success: function(res){
@@ -315,7 +319,35 @@ export default class SlackData {
       data: formData,
       processData: false,
       contentType: false
-    });
+    });*/
+
+    var url = 'https://slack.com/api/files.upload';
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+
+    xhr.onload = function(e) {
+      var data = e.currentTarget.response;
+      console.log('slack /files.upload' + ' success', data);
+      if(typeof callback === 'function'){
+        if(options.stream || (data && data.ok)){
+          callback(data)
+        }
+        else{
+          callback(false, data)
+        }
+      }
+    };
+
+    xhr.onerror = function(e) {
+      var error = e; //T_TODO make sure that the `e` is actually the error
+      console.log('/slack /files.upload' + ' error', error);
+      if(error.responseJSON)
+        error = error.responseJSON;
+      if(typeof callback === 'function')
+        callback(false, error);
+    };
+
+    xhr.send(formData);
   }
 }
 

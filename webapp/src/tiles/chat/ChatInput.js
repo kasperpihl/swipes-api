@@ -7,7 +7,7 @@ class ChatInput extends Component {
     super(props)
     this.defaultTextHeight = 60;
     this.state = { inputValue: '' }
-    bindAll(this, ['onHeightChange', 'onSend', 'onKeyDown', 'onKeyUp', 'onBlur', 'onFocus', 'onChange', 'onHeightChange', 'onFileChange', 'onPaste'])
+    bindAll(this, ['onHeightChange', 'onSend', 'onAttach', 'onKeyDown', 'onKeyUp', 'onBlur', 'onFocus', 'onChange', 'onHeightChange', 'onFileChange', 'onPaste'])
   }
   componentDidMount() {
     if(this.props.sendTypingEvent){
@@ -123,7 +123,7 @@ class ChatInput extends Component {
     )
   }
   renderAttachButton(){
-    const attachArray = [
+    return [
       <input key="real-input" ref="file" type="file" onChange={this.onFileChange} className="file-input" />,
 
       <div key="attach-button" onClick={this.onAttach} className="action-button attach-icon">

@@ -87,6 +87,7 @@ class Chat extends Component {
         <ChatInput
           sendMessage={this.sendMessage} 
           changedHeight={this.changedHeight} 
+          uploadFiles={this.slackData.uploadFiles}
         />
       </div>
     )
