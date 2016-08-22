@@ -36,6 +36,7 @@ class SearchResults extends Component {
   renderResultList(results) {
     if(!results) return;
     const { cardOnClick } = this.props;
+    
     return results.map( (result, i) => {
       return <SwipesCard data={result} key={'search-result-' + i} onClick={cardOnClick} />
     })

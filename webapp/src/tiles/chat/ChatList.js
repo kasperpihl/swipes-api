@@ -47,7 +47,7 @@ class ChatList extends Component {
     const chatList = this.refs['chat-list']
     const scrollContainer = this.refs['scroll-container'];
 
-    var scrollPosForBottom = chatList.clientHeight - scrollContainer.clientHeight
+    const scrollPosForBottom = chatList.clientHeight - scrollContainer.clientHeight
     if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != scrollContainer.scrollTop ){
       this.hasRendered = true;
       if(animate){

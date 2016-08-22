@@ -12,21 +12,32 @@ import './components/global-styles/app.scss'
 
 import React from 'react'
 import { render } from 'react-dom'
-let Page, data;
+let Page;
+const props = {};
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
-// import SwipesCard from './components/swipes-card/SwipesCard'
+import SwipesCardList from './components/swipes-card/SwipesCardList'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
   if(false){
-    //
-    //Page = SwipesCard;
+    props.title = "Header",
+    props.data = [
+      {
+        title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, qui!',
+        subtitle: 'Lorem ipsum dolor sit amet.'
+      },
+      {
+        title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, qui!',
+        subtitle: 'Lorem ipsum dolor sit amet.'
+      }
+    ]
+    Page = SwipesCardList;
   }
   else if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage')
-    data = window.__share_data;
+    props.data = window.__share_data;
   }
   else {
     Page = require('./components/download-page/DownloadPage');
@@ -36,7 +47,7 @@ else{
   Page = require('./containers/Root');
 }
 
-render( 
-  <Page data={data} />
+render(
+  <Page {...props} />
   , document.getElementById('content')
 )

@@ -42,7 +42,7 @@ const getStyles = (props, state) => {
       position: 'absolute',
       left: '0px',
       top: '0px',
-      zIndex: '9999',
+      zIndex: '98',
       background: dotColor,
       transition: dotTransition,
       transform: dotTransform
@@ -53,7 +53,7 @@ const getStyles = (props, state) => {
       position: 'absolute',
       left: '0px',
       top: '0px',
-      zIndex: '9998',
+      zIndex: '97',
       borderRadius: '50%',
       background: dotColor,
       transition: '.1s linear',
