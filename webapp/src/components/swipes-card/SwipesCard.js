@@ -5,7 +5,6 @@ import './swipes-card.scss';
 import React, { Component, PropTypes } from 'react';
 import { randomString, bindAll } from '../../classes/utils';
 import SwipesCardItem from './SwipesCardItem';
-import SwipesDot from '../swipes-dot/SwipesDot';
 
 export default class SwipesCard extends Component {
   constructor(props){
@@ -32,30 +31,6 @@ export default class SwipesCard extends Component {
       onDragStart(dataId)
     }
   }
-  renderPreview(preview) {
-    if(!preview){
-      return;
-    }
-    if (preview.type === 'image') {
-      return (
-        <div className="swipes-card__preview">
-          <div className="swipes-card__preview--img">
-            <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
-          </div>
-        </div>
-      )
-    }
-
-    if (preview.type === 'html') {
-      return (
-        <div className="swipes-card__preview swipes-card__preview--no-style">
-          <div className="swipes-card__preview--iframe">
-            <div className="custom-html" dangerouslySetInnerHTML={{__html: preview.html}}></div>
-          </div>
-        </div>
-      )
-    }
-  }
   renderLoading(){
 
   }
@@ -68,57 +43,19 @@ export default class SwipesCard extends Component {
   }
   render () {
     const data = this.state.data || { title: "Loading..." }
-    const {
-      title,
-      headerImage,
-      subtitle,
-      actions,
-      description,
-      preview
-    } = data;
 
     return (
       <div id={"card-container"+this.id} onClick={this.clickedCard} className="swipes-card">
-        <SwipesCardItem data={{title, headerImage, subtitle, actions, description}} onDragStart={this.onDragStart} />
-        {this.renderPreview(preview)}
+        <SwipesCardItem data={data} hoverParentId={'card-container' + this.id} onDragStart={this.onDragStart} />
       </div>
     )
   }
 }
 
-const stringOrNum = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.number
-])
-
 SwipesCard.propTypes = {
   dataDelegate: PropTypes.func,
   onClick: PropTypes.func,
   dataId: PropTypes.string,
-  data: PropTypes.shape({
-    title: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array
-    ]).isRequired,
-    subtitle: PropTypes.string,
-    description: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array
-    ]),
-    headerImage: PropTypes.string,
-    preview: PropTypes.shape({
-      type: PropTypes.oneOf(['html', 'image']).isRequired,
-      url: PropTypes.string,
-      html: PropTypes.string,
-      width: stringOrNum,
-      height: stringOrNum
-    }),
-    actions: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      callback: PropTypes.func.isRequired,
-      icon: PropTypes.string,
-      bgColor: PropTypes.string
-    }))
-  }),
-  onDragStart: PropTypes.func
+  onDragStart: PropTypes.func,
+  data: PropTypes.object
 }

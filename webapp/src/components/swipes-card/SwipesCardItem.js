@@ -6,19 +6,18 @@ class SwipesCardItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.id = randomString(5);
   }
   componentDidMount() {
   }
   renderDot(actions){
-    // add back to swipesdot elements={[actions]}
-    const { onDragStart } = this.props;
+    const { onDragStart, hoverParentId } = this.props;
 
     return (
       <div className="dot-wrapper">
         <SwipesDot
           onDragStart={onDragStart}
-          hoverParentId={'card-container' + this.id}
+          hoverParentId={hoverParentId}
+          elements={[actions]}
         />
       </div>
     )
@@ -60,19 +59,45 @@ class SwipesCardItem extends Component {
       </div>
     )
   }
+  renderPreview(preview) {
+    if(!preview){
+      return;
+    }
+    if (preview.type === 'image') {
+      return (
+        <div className="swipes-card__preview">
+          <div className="swipes-card__preview--img">
+            <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
+          </div>
+        </div>
+      )
+    }
+
+    if (preview.type === 'html') {
+      return (
+        <div className="swipes-card__preview swipes-card__preview--no-style">
+          <div className="swipes-card__preview--iframe">
+            <div className="custom-html" dangerouslySetInnerHTML={{__html: preview.html}}></div>
+          </div>
+        </div>
+      )
+    }
+  }
   render() {
     const {
       title,
       subtitle,
       description,
       headerImage,
-      actions
+      actions,
+      preview
     } = this.props.data;
 
     return (
       <div className="swipes-card__item">
         {this.renderHeader(actions, title, subtitle, headerImage)}
         {this.renderDescription(description)}
+        {this.renderPreview(preview)}
       </div>
     )
   }
@@ -80,7 +105,13 @@ class SwipesCardItem extends Component {
 
 export default SwipesCardItem
 
+const stringOrNum = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.number
+])
+
 SwipesCardItem.propTypes = {
+  hoverParentId: PropTypes.string.isRequired,
   data: PropTypes.shape({
     title: PropTypes.oneOfType([
       PropTypes.string,
@@ -92,6 +123,13 @@ SwipesCardItem.propTypes = {
       PropTypes.array
     ]),
     headerImage: PropTypes.string,
+    preview: PropTypes.shape({
+      type: PropTypes.oneOf(['html', 'image']).isRequired,
+      url: PropTypes.string,
+      html: PropTypes.string,
+      width: stringOrNum,
+      height: stringOrNum
+    }),
     actions: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
       callback: PropTypes.func.isRequired,
@@ -99,4 +137,5 @@ SwipesCardItem.propTypes = {
       bgColor: PropTypes.string
     }))
   }),
+  onDragStart: PropTypes.func
 }

@@ -4,6 +4,55 @@
 $dotWrapper: 50px;
 $imgWrapper: 50px;
 
+.sw-card-list {
+  @include size(500px, auto);
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: $swipes-shadow-one;
+  line-height: 1;
+  overflow: hidden;
+  margin: 200px auto;
+
+  &__header {
+    @include size();
+    @include flex(center, flex-start);
+    min-height: 60px;
+    background-color: white;
+    position: relative;
+
+    &:after {
+      content: '';
+      @include size(95%, 2px);
+      position: absolute;
+      left: 2.5%;
+      bottom: 0;
+      background-color: $deepBlue-10;
+    }
+
+    &--title {
+      margin-left: 5%;
+      font-weight: 700;
+      color: $deepBlue-100;
+      font-size: 14px;
+      text-transform: uppercase
+    }
+  }
+
+  &__list {
+
+    &--item {
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $deepBlue-5;
+      }
+    }
+
+    &--padding {
+      padding-bottom: 15px;
+    }
+  }
+}
+
 .swipes-card {
   @include size(100%, auto);
   background-color: white;
