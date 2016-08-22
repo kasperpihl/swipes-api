@@ -59,11 +59,15 @@ class SwipesCardItem extends Component {
       </div>
     )
   }
+  isImage(url) {
+    return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+  }
   renderPreview(preview) {
     if(!preview){
       return;
     }
-    if (preview.type === 'image') {
+    const isImage = this.isImage(preview.url);
+    if (preview.type === 'image' && isImage) {
       return (
         <div className="swipes-card__preview">
           <div className="swipes-card__preview--img">

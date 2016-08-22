@@ -162,7 +162,6 @@ class ChatMessage extends Component {
     //swipes.sendEvent('dot.startDrag', this.shareData(message));
   }
   render() {
-
     const { data:message } = this.props;
     let className = "message-wrapper";
     if(message.isNewMessage){
@@ -208,6 +207,7 @@ class File extends Component {
   }
   render(){
     let { name, url_private, thumb_360_w, thumb_360_h } = this.props.data;
+
     return (
       <SwipesCard data={{title: name || '', preview: {type: 'image', url: url_private, width: thumb_360_w , height: thumb_360_h}}}/>
     );
@@ -244,7 +244,7 @@ class Attachment extends Component {
         newDescription = t;
       }
     })
-    
+
     if(!newTitle){
       newTitle = fallback;
     }
