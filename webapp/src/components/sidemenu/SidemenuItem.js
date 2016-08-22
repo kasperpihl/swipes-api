@@ -26,20 +26,12 @@ class SidemenuItem extends Component {
   }
   render(){
     let className = "menu-item";
-    let presenceClass = '';
-    const { unread, notification, active, user, name, presence } = this.props.data;
+    const { unread, notification, active, name } = this.props.data;
     if(unread){
       className += " unread";
     }
     if(active){
       className += " active";
-    }
-    if(user && presence === 'active') {
-      presenceClass = 'presence active'
-    } else if (user) {
-      presenceClass = 'presence'
-    } else if (!user) {
-      presenceClass = 'channel'
     }
 
 
@@ -47,7 +39,7 @@ class SidemenuItem extends Component {
       <div data-row={this.props.rowI} data-section={this.props.sectionI} onClick={this.onClick} className={className}>
         {this.renderIndicator(unread)}
         {this.renderNotification(notification)}
-        <div className={"name " + presenceClass}>{name}</div>
+        <div className={"name"}>{name}</div>
     </div>
   );
 
@@ -61,5 +53,10 @@ export default SidemenuItem
 
 SidemenuItem.propTypes = {
   onClick: PropTypes.func.isRequired,
-  data: PropTypes.object
+  data: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    unread: PropTypes.number,
+    notification: PropTypes.number
+  })
 }

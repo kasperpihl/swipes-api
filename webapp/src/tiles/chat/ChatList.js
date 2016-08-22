@@ -11,7 +11,11 @@ class ChatList extends Component {
     this.hasRendered = false;
     bindAll(this, ['onScroll', 'scrollToBottom', 'handleResize', 'checkForMarkingAsRead'])
     this.bouncedScroll = debounce(this.scrollToBottom, 100);
-    const markAsRead = (typeof props.markAsRead === 'function') ? props.markAsRead : () => {};
+    const markAsRead = () => { 
+      if(this.props.markAsRead){
+        this.props.markAsRead();
+      }
+    };
     this.bouncedMarkAsRead = debounce(markAsRead, 500);
   }
 
@@ -22,9 +26,6 @@ class ChatList extends Component {
   componentDidUpdate(prevProps, prevState){
     this.scrollToBottom(this.hasRendered);
   }
-  componentWillReceiveProps(nextProps, nextState){
-    console.log('props', JSON.parse(JSON.stringify(nextProps)), JSON.parse(JSON.stringify(nextState)))
-  }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
@@ -34,7 +35,8 @@ class ChatList extends Component {
     const viewHeight = this.refs['scroll-container'].clientHeight
     const messageHeaderEl = this.refs['scroll-container'].querySelector('.new-message-header');
     if(messageHeaderEl){
-      const posForUnread = messageHeaderEl.getBoundingClientRect().top - scrollPos;
+
+      const posForUnread = messageHeaderEl.offsetTop - scrollPos;
       if(posForUnread > 0 && posForUnread < viewHeight){
         this.bouncedMarkAsRead()
       }

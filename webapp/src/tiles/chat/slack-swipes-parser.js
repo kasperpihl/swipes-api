@@ -32,7 +32,9 @@ export default class SlackSwipesParser {
       const item = { id: channel.id, name: this.titleForChannel(channel, users) };
       if (selectedChannelId === channel.id) {
         item.active = true;
-      } else if (channel.unread_count_display) {
+      }
+
+      if (channel.unread_count_display) {
         item.unread = channel.unread_count_display;
         if (channel.is_im) {
           item.notification = channel.unread_count_display;
@@ -212,7 +214,6 @@ export default class SlackSwipesParser {
     }
     messages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
-      newMsg.isLastMessage = (i === length - 1);
       pushToGroup(group, newMsg);
     });
 
@@ -224,6 +225,9 @@ export default class SlackSwipesParser {
       const sortedMessages = groups[key].sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
       return {"title": title, "messages": sortedMessages };
     });
+    const lastSection = sortedSections[sortedSections.length - 1]
+    const numberOfMessagesInLast = lastSection.messages.length;
+    lastSection.messages[numberOfMessagesInLast - 1].isLastMessage = true;
 
     return sortedSections;
   }

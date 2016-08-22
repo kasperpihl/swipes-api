@@ -60,6 +60,9 @@ class SwipesCardItem extends Component {
     )
   }
   isImage(url) {
+    if(!url){
+      return false;
+    }
     return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
   }
   renderPreview(preview) {

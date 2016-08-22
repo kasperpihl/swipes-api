@@ -47,7 +47,6 @@ class Chat extends Component {
     this.slackData.sendMessage(message);  
   }
   onSelectedRow(row){
-    console.log(row);
     this.slackData.setChannel(row.id);
   }
   createItemDelegate(){
@@ -60,15 +59,35 @@ class Chat extends Component {
       clickLink: (url) => swipes.sendEvent('openURL', {url: url}),
     }
   }
+  renderSidemenu(){
+    const sectionsSidemenu = this.state.sectionsSidemenu || [];
+    if(!sectionsSidemenu.length){
+      return;
+    }
+    return (
+      <Sidemenu 
+        onWidthChanged={this.onSidemenuWidthChanged} 
+        onSelectedRow={this.onSelectedRow} 
+        data={{sections: sectionsSidemenu }} 
+      />
+    )
+  }
   render() {
     let sortedMessages = this.state.sortedMessages || null; 
-    let sectionsSidemenu = this.state.sectionsSidemenu || [];
     const paddingBottom = this.state.inputHeight + 'px';
     return (
       <div style={{height :'100%', paddingBottom}}>
-        <Sidemenu onWidthChanged={this.onSidemenuWidthChanged} onSelectedRow={this.onSelectedRow} data={{sections: sectionsSidemenu }} />
-        <ChatList sections={sortedMessages} markAsRead={this.slackData.markAsRead} itemDelegate={this.createItemDelegate()} />
-        <ChatInput sendMessage={this.sendMessage} changedHeight={this.changedHeight} />
+        {this.renderSidemenu()}
+        <ChatList 
+          sections={sortedMessages} 
+          markAsRead={this.slackData.markAsRead} 
+          unreadIndicator={this.state.unreadIndicator} 
+          itemDelegate={this.createItemDelegate()} 
+        />
+        <ChatInput
+          sendMessage={this.sendMessage} 
+          changedHeight={this.changedHeight} 
+        />
       </div>
     )
   }

@@ -7,7 +7,7 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
-    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'sectionsForSidemenu', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
+    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.delegate = delegate || function(){};
     this.parser = new SlackSwipesParser();
@@ -17,8 +17,8 @@ export default class SlackData {
     
 
     this.data = Object.assign(this.data, data);
-    if(data.channels){
-      this.data.sectionsSidemenu = data.sectionsSidemenu = this.sectionsForSidemenu();
+    if(data.channels || data.selectedChannelId){
+      this.data.sectionsSidemenu = data.sectionsSidemenu = this.parser.sectionsForSidemenu(this.data);
     }
     if(data.messages){
       this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
@@ -76,7 +76,8 @@ export default class SlackData {
     }
     const data = {
       selectedChannelId: channel.id,
-      messages: []
+      messages: [],
+      unreadIndicator: {ts: channel.last_read}
     };
     this.saveData(data);
     this.fetchMessages(channel);
@@ -84,10 +85,17 @@ export default class SlackData {
   currentChannel(){
     return this.data.channels[this.data.selectedChannelId];
   }
+  lastMessageTs(){
+    const { sortedMessages } = this.data;
+    const lastMessages = sortedMessages[sortedMessages.length - 1].messages;
+    return lastMessages[lastMessages.length - 1].ts;
+  }
   markAsRead(ts){
+    console.log('markAsRead', ts);
     const { messages } = this.data;
     var channel = this.currentChannel();
-    ts = ts || messages[messages.length - 1].ts;
+
+    ts = ts || this.lastMessageTs();
     if(!channel || ts === channel.last_read){
       return;
     }
@@ -155,6 +163,7 @@ export default class SlackData {
     return "channels.";
   }
   handleMessage(msg){
+    console.log('slack message', msg);
     const { messages, unreadIndicator, users, channels, self } = this.data;
     const currChannel = this.data.channels[this.data.selectedChannelId];
     let channel;
@@ -192,12 +201,11 @@ export default class SlackData {
 
           // If the latest message is your own, channel should be unread
           if(msg.user === self.id){
-            this.saveData({unreadIndicator: null})
+            channel.last_read = msg.ts;
+            this.saveData({unreadIndicator: null, channels})
           }
           else{
-            if(channel && !unreadIndicator){
-              this.saveData({unreadIndicator: {ts: channel.last_read}});
-            }
+            this.saveData({unreadIndicator: {ts: channel.last_read}});
           }
           this.saveData({messages: messages.concat([msg])});
         }
@@ -209,20 +217,22 @@ export default class SlackData {
     }
     else if(msg.type === 'channel_marked' || msg.type === 'im_marked' || msg.type === 'group_marked'){
       // If a user marks a channel as unread back in time. Make sure to update the unread line.
+      channel = channels[msg.channel];
       if(msg.channel === currChannel.id){
         
         let newUnreadIndicator = {
-          showAsRead: true
+          showAsRead: true,
+          ts: unreadIndicator.ts
         }
-        if(unreadIndicator && ( !unreadIndicator.showAsRead || unreadIndicator.ts > msg.ts)){
+        if(unreadIndicator && (msg.ts < unreadIndicator.ts)){
           newUnreadIndicator.showAsRead = false;
           newUnreadIndicator.ts = msg.ts;
         }
         this.saveData({unreadIndicator: newUnreadIndicator});
 
       }
-      currChannel.unread_count_display = msg.unread_count_display;
-      currChannel.last_read = msg.ts;
+      channel.unread_count_display = msg.unread_count_display;
+      channel.last_read = msg.ts;
       this.saveData({channels})
     }
 
@@ -306,49 +316,6 @@ export default class SlackData {
       processData: false,
       contentType: false
     });
-  }
-  sectionsForSidemenu(){
-    const { channels, selectedChannelId } = this.data;
-
-    const starsCol = [];
-    const channelsCol = [];
-    const peopleCol = [];
-
-    for( var key in channels ){
-      const channel = channels[key];
-      if(channel.is_archived ||
-        (channel.is_im && !channel.is_open) ||
-        (channel.is_channel && !channel.is_member) ||
-        (channel.is_group && !channel.is_open)){
-        continue;
-      }
-
-      const item = { id: channel.id, name: this.titleForChannel(channel) };
-      if (selectedChannelId === channel.id) {
-        item.active = true;
-      } else if (channel.unread_count_display) {
-        item.unread = channel.unread_count_display;
-        if (channel.is_im) {
-          item.notification = channel.unread_count_display;
-        }
-      }
-      if (channel.is_starred) {
-        starsCol.push(item);
-      } else if (channel.is_im) {
-        peopleCol.push(item);
-      } else {
-        channelsCol.push(item);
-      }
-    }
-
-    const sections = []
-
-    if(starsCol.length){
-      sections.push({ title: "Starred", rows: starsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
-    }
-    sections.push({ title: "Channels", rows: channelsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
-    sections.push({ title: "People", rows: peopleCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
-    return sections;
   }
 }
 

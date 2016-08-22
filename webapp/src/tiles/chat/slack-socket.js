@@ -18,6 +18,7 @@ export default class SlackSocket {
     this.handleMessage = (msg) => {
       if(msg.type === 'pong'){
         this.lastPongTime = new Date().getTime();
+        return;
       }
       if(this.delegateHandleMessage){
         this.delegateHandleMessage(msg);

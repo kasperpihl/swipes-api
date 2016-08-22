@@ -113,6 +113,7 @@ class Sidemenu extends Component {
     if(!data || (!data.unread && !data.notification)){
       return;
     }
+    data.id = "unread-indicators"
 
     return (
       <div style={styles}>
@@ -148,7 +149,6 @@ class Sidemenu extends Component {
       }
       renderedItems.push(this.renderRows(section.rows, i));
     })
-
     return (
       <div className={className} style={this.props.style}>
         <div className="relative-wrapper">
@@ -173,12 +173,6 @@ class Sidemenu extends Component {
 }
 export default Sidemenu
 
-const rowProps = PropTypes.arrayOf(PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  unread: PropTypes.number,
-  notification: PropTypes.number
-}))
 
 Sidemenu.propTypes = {
   onWidthChanged: PropTypes.func,
@@ -186,7 +180,7 @@ Sidemenu.propTypes = {
   data: PropTypes.shape({
     sections: PropTypes.arrayOf(PropTypes.shape({
       title: PropTypes.string,
-      rows: rowProps.isRequired
+      rows: PropTypes.arrayOf(PropTypes.object).isRequired
     })).isRequired,
     activeRowId: PropTypes.string
 

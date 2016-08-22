@@ -14,7 +14,9 @@ export default class ChatSection extends Component {
       if(!item.hidden){
         chatItems.push(<ChatItem key={item.ts} data={item} />);
       }
+
       if(unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
+        
         var className = "new-message-header";
         var unreadClass = "unread-bar";
         if(unreadIndicator.showAsRead){
