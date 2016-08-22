@@ -61,7 +61,6 @@
     font-weight: 400;
     color: $deepBlue-100;
     position: relative;
-    padding-bottom: 10px;
 
     .swipes-card {
       max-width: 400px;
@@ -90,7 +89,7 @@
 		}
 
     &:hover {
-      background-color: darken($blue-5, 1%);
+      //background-color: darken($blue-5, 1%);
     }
 
     &--text {

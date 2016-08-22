@@ -202,7 +202,7 @@ const processChanges = ({account, result}) => {
 	const entries = result.entries;
 	// Care only for .tag 'file' just for simplicity
 	const filteredEntries = entries.filter((entry) => {
-		return entry['.tag'] === 'file';
+		return entry['.tag'] === 'file' && entry.sharing_info;
 	});
 
 	filteredEntries.forEach((entry) => {
