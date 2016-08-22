@@ -28,8 +28,14 @@ class SwipesCardList extends Component {
       onDragStart(dataId)
     }
   }
+  clickedCard(e){
+    console.log('clicked card here', window.getSelection().toString());
+    const { onClick, dataId, data } = this.props;
+    if(!window.getSelection().toString().length && onClick){
+        onClick(dataId, data);
+    }
+  }
   renderHeader(title) {
-
     return (
       <div className="sw-card-list__header">
         <div className="sw-card-list__header--title">{title}</div>
@@ -42,7 +48,11 @@ class SwipesCardList extends Component {
       paddingClass = 'sw-card-list__list--padding'
     }
     return (
-      <div id={'card-container' + this.id + i} className={"sw-card-list__list--item " + paddingClass} key={'item-' + i}>
+      <div
+        id={'card-container' + this.id + i}
+        className={"sw-card-list__list--item " + paddingClass}
+        key={'swipes-card-list-item-' + i}
+        onClick={this.clickedCard}>
         <SwipesCardItem data={listItem} hoverParentId={'card-container' + this.id + i} onDragStart={this.onDragStart} />
       </div>
     )
@@ -67,6 +77,8 @@ export default SwipesCardList
 
 SwipesCardList.propTypes = {
   title: PropTypes.string.isRequired,
+  dataDelegate: PropTypes.func,
+  onClick: PropTypes.func,
   dataId: PropTypes.string,
   onDragStart: PropTypes.func,
   data: PropTypes.arrayOf(PropTypes.object)
