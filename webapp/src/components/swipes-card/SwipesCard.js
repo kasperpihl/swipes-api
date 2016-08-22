@@ -3,7 +3,8 @@
 import './swipes-card.scss';
 
 import React, { Component, PropTypes } from 'react';
-import { randomString, bindAll } from '../../classes/utils'
+import { randomString, bindAll } from '../../classes/utils';
+import SwipesCardItem from './SwipesCardItem';
 import SwipesDot from '../swipes-dot/SwipesDot';
 
 export default class SwipesCard extends Component {
@@ -31,58 +32,10 @@ export default class SwipesCard extends Component {
       onDragStart(dataId)
     }
   }
-  renderDot(actions){
-    // add back to swipesdot elements={[actions]}
-    return (
-      <div className="dot-wrapper">
-        <SwipesDot
-          onDragStart={this.onDragStart}
-          hoverParentId={'card-container' + this.id}
-        />
-      </div>
-    )
-  }
-  renderHeaderImage(headerImage){
-    if(headerImage){
-      return (
-        <img src={headerImage} alt="" />
-      )
-    }
-  }
-  renderHeader(actions, title, subtitle, headerImage) {
-    const noSubtitleClass = !subtitle ? "no-subtitle" : '';
-    return (
-      <div className="swipes-card__header">
-        <div className="swipes-card__header__dot">
-          {this.renderDot(actions)}
-        </div>
-        <div className={"swipes-card__header__content " + noSubtitleClass}>
-          <div className="swipes-card__header__content--title">{title}</div>
-          <div className="swipes-card__header__content--subtitle">{subtitle}</div>
-        </div>
-        <div className="swipes-card__header__image">
-          {this.renderHeaderImage(headerImage)}
-        </div>
-      </div>
-    )
-  }
-  renderDescription(description) {
-    if(!description){
-      return;
-    }
-    return (
-      <div className="description-container">
-        <div className="swipes-card__description">
-          {description}
-        </div>
-      </div>
-    )
-  }
   renderPreview(preview) {
     if(!preview){
       return;
     }
-
     if (preview.type === 'image') {
       return (
         <div className="swipes-card__preview">
@@ -95,7 +48,7 @@ export default class SwipesCard extends Component {
 
     if (preview.type === 'html') {
       return (
-        <div className="swipes-card__preview no-style">
+        <div className="swipes-card__preview swipes-card__preview--no-style">
           <div className="swipes-card__preview--iframe">
             <div className="custom-html" dangerouslySetInnerHTML={{__html: preview.html}}></div>
           </div>
@@ -126,10 +79,7 @@ export default class SwipesCard extends Component {
 
     return (
       <div id={"card-container"+this.id} onClick={this.clickedCard} className="swipes-card">
-
-        {this.renderHeader(actions, title, subtitle, headerImage)}
-        {this.renderDescription(description)}
-
+        <SwipesCardItem data={{title, headerImage, subtitle, actions, description}} onDragStart={this.onDragStart} />
         {this.renderPreview(preview)}
       </div>
     )
@@ -146,9 +96,15 @@ SwipesCard.propTypes = {
   onClick: PropTypes.func,
   dataId: PropTypes.string,
   data: PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array
+    ]).isRequired,
     subtitle: PropTypes.string,
-    description: PropTypes.string,
+    description: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array
+    ]),
     headerImage: PropTypes.string,
     preview: PropTypes.shape({
       type: PropTypes.oneOf(['html', 'image']).isRequired,
@@ -156,7 +112,6 @@ SwipesCard.propTypes = {
       html: PropTypes.string,
       width: stringOrNum,
       height: stringOrNum
-
     }),
     actions: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,

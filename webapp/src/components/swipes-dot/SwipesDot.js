@@ -34,9 +34,11 @@ const SwipesDot = React.createClass({
   componentDidMount() {
     const {hoverParentId} = this.props;
     const hoverParent = document.getElementById(hoverParentId);
-
-    hoverParent.addEventListener('mouseenter', this.onMouseEnterParent);
-    hoverParent.addEventListener('mouseleave', this.onMouseLeaveParent);
+    if(hoverParent){
+      hoverParent.addEventListener('mouseenter', this.onMouseEnterParent);
+      hoverParent.addEventListener('mouseleave', this.onMouseLeaveParent);
+    }
+    
   },
   onMouseEnterParent() {
     this.setState({

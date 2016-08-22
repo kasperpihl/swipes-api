@@ -16,12 +16,22 @@ $imgWrapper: 50px;
   .description-container {
     padding-bottom: 15px;
   }
-  a.link{
+
+  a.link {
     text-decoration: underline;
-    &:hover{
+
+    &:hover {
       text-decoration: none;
     }
   }
+
+  &__item {
+    min-height: 50px;
+    line-height: 1;
+    @include size(100%, auto);
+    background-color: white;
+  }
+
   &__header {
     @include size(100%);
     display: flex;
@@ -40,7 +50,7 @@ $imgWrapper: 50px;
       @include size(calc(100% - 42px));
       @include flex(flex-start, center, column);
       padding-right: 18px;
-      &.no-subtitle &{
+      &--no-subtitle & {
         &--title {
           white-space: normal;
           display: -webkit-box;
@@ -106,12 +116,13 @@ $imgWrapper: 50px;
 		@include size(100%, auto);
     background-color: $blue-5;
     border-top: 1px solid $deepBlue-10;
-    // box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,1);
     padding: 18px;
-    &.no-style{
+
+    &--no-style {
       padding: 0;
-      background-color: none;
-      .custom-html{
+      background-color: transparent;
+
+      .custom-html {
         width: 100%;
       }
     }

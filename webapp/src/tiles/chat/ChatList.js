@@ -14,7 +14,7 @@ class ChatList extends Component {
     const markAsRead = (typeof props.markAsRead === 'function') ? props.markAsRead : () => {};
     this.bouncedMarkAsRead = debounce(markAsRead, 500);
   }
-  
+
   componentDidMount(){
     window.addEventListener('resize', this.handleResize);
     this.scrollToBottom(this.hasRendered);

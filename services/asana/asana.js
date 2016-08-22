@@ -116,7 +116,7 @@ const createShortUrl = (userId, event, accountId) => {
 	if (event.parent) {
 		const service = {
 			name: 'asana',
-			account_id: event.user.id,
+			account_id: accountId,
 			type: 'task',
 			item_id: event.parent.id
 		}
@@ -134,8 +134,8 @@ const createShortUrl = (userId, event, accountId) => {
 }
 
 const createEvent = (userId, event, accountId, shortUrl = null, serviceData) => {
-	const createdBy = event.resource.created_by.name;
 	const me = event.user.id === accountId;
+	const createdBy = me ? 'You ' : event.resource.created_by.name;
 	let text;
 
 	if (event.resource.type === 'comment') {

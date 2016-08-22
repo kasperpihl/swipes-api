@@ -249,14 +249,7 @@ class Attachment extends Component {
       newTitle = fallback;
     }
     newTitle = renderTextWithLinks(newTitle, null, true);
-    if(Array.isArray(newTitle)){
-      newTitle = newTitle.join(' ')
-    }
-
     newDescription = renderTextWithLinks(newDescription, null, true);
-    if(Array.isArray(newDescription)){
-      newDescription = newDescription.join(' ')
-    }
 
     return {
       title: newTitle,
