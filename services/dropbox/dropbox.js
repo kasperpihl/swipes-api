@@ -213,6 +213,7 @@ const processChanges = ({account, result}) => {
 const processFileChange = ({account, entry}) => {
 	const authData = account.authData;
 	const userId = account.user_id;
+	const accountId = account.id;
 
 	// Get which user modified the file
 	const getAccountMethod = 'users.getAccount';
@@ -227,19 +228,19 @@ const processFileChange = ({account, entry}) => {
 		};
 
 		const user = res;
-		const sameUser = account.id === user.account_id;
+		const sameUser = accountId === user.account_id;
 		const userName = sameUser ? 'You' : user.name.display_name || user.email;
 		//const userProfilePic = user.profile_photo_url || '';
 		const message = userName + ' made a change';
 
 		const service = {
 			name: 'dropbox',
-			account_id: account.id,
+			account_id: accountId,
 			type: 'file',
 			item_id: entry.id
 		};
 
-		createSwipesShortUrl({ userId, service })
+		createSwipesShortUrl({ userId, accountId, service })
 			.then(({shortUrl, serviceData}) => {
 				const event = {
 					service: 'dropbox',

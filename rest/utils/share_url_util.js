@@ -11,8 +11,8 @@ import SwipesError from '../swipes-error';
 
 const serviceDir = __dirname + '/../../services/';
 
-const createSwipesShortUrl = ({ userId, service }) => {
-  const checksum = hash({ service, userId });
+const createSwipesShortUrl = ({ userId, accountId, service }) => {
+  const checksum = hash({ service });
   const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
   let shortUrl = null;
   let serviceData = null;
@@ -24,74 +24,81 @@ const createSwipesShortUrl = ({ userId, service }) => {
         serviceData = res[0].service_data;
 
         return Promise.resolve({shortUrl, serviceData});
+      } else {
+        shortUrl = shortid.generate();
+        const shortUrlData = {
+          short_url: shortUrl,
+          checksum,
+          service
+        };
+
+        return fetchSwipesUrlData({userId, accountId, shortUrlData})
+          .then((linkData) => {
+            const insertLinkQ = r.table('links').insert(linkData);
+            serviceData = linkData.service_data;
+
+            return db.rethinkQuery(insertLinkQ);
+          })
+          .then((result) => {
+            const link_id = result.generated_keys[0];
+            const checkQ =
+              r.table('link_rels')
+                .getAll(link_id, {index: 'link_id'})
+                .map((link) => {
+                  return link('user_id')
+                })
+                .contains(userId)
+
+
+            db.rethinkQuery(checkQ)
+              .then((rels) => {
+                if (rels) {
+                  return Promise.resolve();
+                } else {
+                  const linkRelQ = r.table('link_rels').insert({
+                    link_id,
+                    user_id: userId,
+                    account_id: accountId
+                  });
+
+                  return db.rethinkQuery(linkRelQ);
+                }
+              })
+              .catch((err) => {
+                return Promise.reject(err);
+              })
+          })
+          .then(() => {
+            return Promise.resolve({shortUrl, serviceData});
+          })
       }
-
-      shortUrl = shortid.generate();
-      const link = {
-        checksum: checksum,
-        service: service,
-        short_url: shortUrl,
-        userId: userId
-      };
-
-      return fetchSwipesUrlData(null, link)
-        .then((linkData) => {
-          const insertLinkQ = r.table('links').insert(linkData);
-          serviceData = linkData.service_data;
-
-          return db.rethinkQuery(insertLinkQ);
-        })
-        .catch((err) => {
-          return Promise.reject(err);
-        })
-    })
-    .then(() => {
-      return Promise.resolve({shortUrl, serviceData});
     })
     .catch((e) => {
       return Promise.reject(e);
     })
 }
 
-// T_TODO This is super mega giga hack
-const fetchSwipesUrlData = (shortUrlId = null, shortUrlData = null) => {
-  let initPromise;
-
-  if (shortUrlId) {
-    const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0);
-    initPromise = db.rethinkQuery(getSwipesUrlQ);
-  } else {
-    initPromise = Promise.resolve(shortUrlData);
-  }
+const fetchSwipesUrlData = ({userId, accountId, shortUrlData}) => {
+  const serviceName = shortUrlData.service.name;
+  const getServiceQ =
+    r.table('users')
+      .get(userId)('services')
+      .filter((service) => {
+        return service('id')
+          .coerceTo('string')
+          .eq(accountId + '')
+          .and(
+            service('service_name')
+            .coerceTo('string')
+            .eq(serviceName)
+          )
+      })
 
   let shortUrl = null;
   let userServiceData = null;
   let serviceData = null;
 
-  return initPromise
-    .then((data) => {
-      // T_TODO handle if there is no url like that
-      shortUrl = data;
-
-      const userId = shortUrl.userId;
-      const serviceId = shortUrl.service.account_id;
-      const serviceName = shortUrl.service.name;
-      const getServiceQ =
-        r.table('users')
-          .get(userId)('services')
-          .filter((service) => {
-            return service('id')
-                    .coerceTo('string')
-                    .eq(serviceId + '')
-                    .and(
-                      service('service_name')
-                      .coerceTo('string')
-                      .eq(serviceName)
-                    )
-          })
-
-      return db.rethinkQuery(getServiceQ);
-    })
+  return db.rethinkQuery(getServiceQ)
     .then((data) => {
       // T_TODO handle if there is no authed service in the user record
       // or there is no a user anymore
@@ -114,10 +121,10 @@ const fetchSwipesUrlData = (shortUrlId = null, shortUrlData = null) => {
 
       const options = {
     		authData: userServiceData.authData,
-    		itemId: shortUrl.service.item_id,
-    		user: {userId: shortUrl.userId},
-    		service: {serviceId: shortUrl.service.account_id},
-        type: shortUrl.service.type
+    		itemId: shortUrlData.service.item_id,
+    		user: {userId},
+    		service: {serviceId: accountId},
+        type: shortUrlData.service.type
     	};
 
       if (!file.shareRequest) {
@@ -130,12 +137,12 @@ const fetchSwipesUrlData = (shortUrlId = null, shortUrlData = null) => {
             return reject(err);
       		}
 
-          shortUrl = Object.assign({}, shortUrl, {
+          shortUrlData = Object.assign({}, shortUrlData, {
             service_data: result.serviceData,
             service_actions: result.serviceActions
           });
 
-          return resolve(shortUrl);
+          return resolve(shortUrlData);
       	});
       })
     })

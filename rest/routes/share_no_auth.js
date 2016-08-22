@@ -4,9 +4,6 @@ import config from 'config';
 import express from 'express';
 import r from 'rethinkdb';
 import db from '../db.js';
-import {
-  fetchSwipesUrlData
-} from '../utils/share_url_util';
 
 const serviceDir = __dirname + '/../../services/';
 const router = express.Router();

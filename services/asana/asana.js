@@ -116,12 +116,11 @@ const createShortUrl = (userId, event, accountId) => {
 	if (event.parent) {
 		const service = {
 			name: 'asana',
-			account_id: accountId,
 			type: 'task',
 			item_id: event.parent.id
 		}
 
-		createSwipesShortUrl({ userId, service })
+		createSwipesShortUrl({ userId, accountId, service })
 			.then(({shortUrl, serviceData}) => {
 				createEvent(userId, event, accountId, shortUrl, serviceData);
 			})
