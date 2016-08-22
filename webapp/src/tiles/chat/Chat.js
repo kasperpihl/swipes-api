@@ -72,11 +72,24 @@ class Chat extends Component {
       />
     )
   }
+  renderTypingIndicator(label){
+    
+    if(label){
+      return (
+        <div className="typing-indicator">{label}</div>
+      )
+    }
+  }
   render() {
-    let sortedMessages = this.state.sortedMessages || null; 
-    const paddingBottom = this.state.inputHeight + 'px';
+    const { typingLabel, sortedMessages, inputHeight } = this.state; 
+    
+    let paddingBottom = inputHeight;
+    if(typingLabel){
+      paddingBottom += 14;
+    }
+
     return (
-      <div style={{height :'100%', paddingBottom}}>
+      <div style={{height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
         <ChatList 
           sections={sortedMessages} 
@@ -89,6 +102,7 @@ class Chat extends Component {
           changedHeight={this.changedHeight} 
           uploadFiles={this.slackData.uploadFiles}
         />
+        {this.renderTypingIndicator(typingLabel)}
       </div>
     )
   }
