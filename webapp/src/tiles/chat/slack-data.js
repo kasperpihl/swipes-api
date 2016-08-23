@@ -205,7 +205,13 @@ export default class SlackData {
             this.saveData({unreadIndicator: null, channels})
           }
           else{
-            this.saveData({unreadIndicator: {ts: channel.last_read}});
+            
+            if(document.hasFocus() && document.activeElement && document.activeElement.id  === 'chat-input'){
+              this.markAsRead(msg.ts);
+              console.log('active', document.activeElement.id);
+            }else{
+              this.saveData({unreadIndicator: {ts: channel.last_read}});
+            }
           }
           this.saveData({messages: messages.concat([msg])});
         }
