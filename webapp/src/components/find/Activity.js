@@ -19,7 +19,6 @@ class Activity extends Component {
     )
   }
   renderCard(shortUrl) {
-    console.log('short url', shortUrl);
     return (
       <SwipesCard dataId={shortUrl} onClick={this.props.cardOnClick} dataDelegate={this.props.cardDataDelegate} onDragStart={this.props.dotDragStart} />
     )

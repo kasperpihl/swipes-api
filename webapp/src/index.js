@@ -5,7 +5,6 @@ if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
 
-
 // Include stylesheet (compile sass)
 import './components/global-styles/reset.scss'
 import './components/global-styles/app.scss'
