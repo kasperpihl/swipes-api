@@ -18,14 +18,11 @@ export default class ChatSection extends Component {
       if(unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
         
         var className = "new-message-header";
-        var unreadClass = "unread-bar";
         if(unreadIndicator.showAsRead){
           className += " read";
-          unreadClass += " read";
         }
-        chatItems.push(<div className={className} key="new-message-header"><span>new messages</span></div>);
+        chatItems.push(<div id="unread-indicator" className={className} key="new-message-header"><span>new messages</span></div>);
         chatItems.push(<div key="new-message-post-header" className="new-message-post-header" />);
-        chatItems.push(<a key="unread-test" href={'#' + item.ts}><div className={unreadClass}>you have unread messages <i className="material-icons">arrow_upward</i> </div></a>);
       }
     });
 

@@ -6,7 +6,7 @@ import ChatSection from './ChatSection'
 class ChatList extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {unreadAbove: false}
     this.shouldScrollToBottom = true;
     this.hasRendered = false;
     bindAll(this, ['onScroll', 'scrollToBottom', 'handleResize', 'checkForMarkingAsRead'])
@@ -22,6 +22,7 @@ class ChatList extends Component {
   componentDidMount(){
     window.addEventListener('resize', this.handleResize);
     this.scrollToBottom(this.hasRendered);
+
   }
   componentDidUpdate(prevProps, prevState){
     this.scrollToBottom(this.hasRendered);
@@ -29,10 +30,12 @@ class ChatList extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
+  showUnreadAbove(){
+    //chatItems.push();
+  }
   checkForMarkingAsRead(){
-    if(!document.hasFocus()){
-      return;
-    }
+    const { unreadIndicator } = this.props;
+    let unreadAbove = false;
     // Check for unread marker
     const scrollPos = this.refs['scroll-container'].scrollTop
     const viewHeight = this.refs['scroll-container'].clientHeight
@@ -40,10 +43,14 @@ class ChatList extends Component {
     if(messageHeaderEl){
 
       const posForUnread = messageHeaderEl.offsetTop - scrollPos;
-      if(posForUnread > 0 && posForUnread < viewHeight){
+      if(document.hasFocus() && posForUnread > 0 && posForUnread < viewHeight){
         this.bouncedMarkAsRead()
       }
+      if(posForUnread < 0 && !unreadIndicator.showAsRead){
+        unreadAbove = true;
+      }
     }
+    this.props.unreadAbove(unreadAbove);
   }
   handleResize(){
     this.bouncedScroll(this.hasRendered);

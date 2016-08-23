@@ -92,7 +92,6 @@ export default class SlackData {
     return lastMessages[lastMessages.length - 1].ts;
   }
   markAsRead(ts){
-    console.log('markAsRead', ts);
     const { messages } = this.data;
     var channel = this.currentChannel();
 
