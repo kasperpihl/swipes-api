@@ -195,7 +195,6 @@ export default class SlackData {
     return "channels.";
   }
   handleMessage(msg){
-    //console.log('slack message', msg);
     const { messages, unreadIndicator, users, channels, self } = this.data;
     const currChannel = this.data.channels[this.data.selectedChannelId];
     let channel;
@@ -203,7 +202,7 @@ export default class SlackData {
       if(msg.channel){
         channel = channels[msg.channel];
         // Handle message change
-        if(msg.subtype === 'message_changed' && msg.message.channel === currChannel.id){
+        if(msg.subtype === 'message_changed' && msg.channel === currChannel.id){
           return this.saveData({messages: messages.map((obj) => {
             if(obj.ts === msg.message.ts){
               return Object.assign(obj, msg.message);
