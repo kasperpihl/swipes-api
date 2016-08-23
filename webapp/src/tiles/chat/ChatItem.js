@@ -76,9 +76,10 @@ class ChatItem extends Component {
         description,
         ...other
       } = card;
+
       const data = {
-        title: this.renderTextWithLinks(title, true),
-        subtitle: this.renderTextWithLinks(subtitle, true),
+        title: this.renderTextWithLinks(title),
+        subtitle: this.renderTextWithLinks(subtitle),
         description: this.renderTextWithLinks(description, true),
         ...other
       }
