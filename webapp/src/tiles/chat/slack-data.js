@@ -8,7 +8,7 @@ export default class SlackData {
     this.swipes = swipes;
     this.data = data || {};
     this.typingUsers = {};
-    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel'])
+    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.delegate = delegate || function(){};
     this.parser = new SlackSwipesParser();
@@ -272,6 +272,12 @@ export default class SlackData {
   getUserFromId(id){
     return this.data.users[id];
   }
+  sendTypingEvent() {
+    const { selectedChannelId } = this.data;
+
+    this.socket.sendEvent({'id': '1', 'type': 'typing', 'channel': selectedChannelId});
+
+  }
 
   userTyping(data) {
     if (this.typingUsers[data.user]) {
@@ -391,44 +397,6 @@ var ChatStore = Reflux.createStore({
   
   onClickLink:function(url){
     swipes.sendEvent('openURL', {url: url});
-  },
-  
-  userTyping: function (data) {
-    var self = this;
-
-    if (typingUsers[data.user]) {
-      clearTimeout(typingUsers[data.user]);
-    }
-
-    var timeout = setTimeout(function() {
-      delete typingUsers[data.user];
-      self.userTypingLabel();
-    }, 5000);
-
-    typingUsers[data.user] = timeout;
-    this.userTypingLabel();
-  },
-  userTypingLabel: function() {
-    var userIds = Object.keys(typingUsers);
-    var users = [];
-    var content = '';
-
-    userIds.forEach(function(userId) {
-      users.push(UserStore.get(userId).name);
-    });
-
-    content = users.join(', ');
-
-    if (users.length > 1) {
-      content += ' are typing..';
-      this.set('typing', content);
-    } else if (users.length === 1) {
-      content += ' is typing..'
-      this.set('typing', content);
-    } else {
-      content = '';
-      this.set('typing', false);
-    }
   },
   
   onSendTypingEvent: function() {

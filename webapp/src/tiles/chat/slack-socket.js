@@ -78,7 +78,7 @@ export default class SlackSocket {
       this.webSocket = null;
       return this.restartSocket();
     }
-    
+
     if(typeof msg !== 'string'){
       try{
         msg = JSON.stringify(msg)

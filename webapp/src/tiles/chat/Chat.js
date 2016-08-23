@@ -101,6 +101,7 @@ class Chat extends Component {
           sendMessage={this.sendMessage} 
           changedHeight={this.changedHeight} 
           uploadFiles={this.slackData.uploadFiles}
+          sendTypingEvent={this.slackData.sendTypingEvent}
         />
         {this.renderTypingIndicator(typingLabel)}
       </div>
