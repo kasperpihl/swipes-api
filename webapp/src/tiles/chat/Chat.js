@@ -17,11 +17,25 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
-    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate'])
+    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink'])
     this.addListenersToSwipes(props.swipes);
-    this.slackData = new SlackData(this.props.swipes, {}, this.dataDelegate);
+    const data = {};
+    const selectedChannel = localStorage.getItem(props.tile.id + '-selectedChannelId');
+    if(selectedChannel){
+      data.selectedChannelId = selectedChannel;
+    }
+    this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
   }
   dataDelegate(data){
+    if(data.selectedChannelId && data.selectedChannelId !== this.state.selectedChannelId){
+      const itemId = this.props.tile.id + '-selectedChannelId';
+      if(!data.selectedChannelId){
+        localStorage.removeItem(itemId);
+      }
+      else {
+        localStorage.setItem(itemId, data.selectedChannelId);
+      }
+    }
     this.setState(data);
   }
   addListenersToSwipes(swipes){
@@ -31,6 +45,11 @@ class Chat extends Component {
         this.slackData.sendMessage(input);
       }
     });
+  }
+  unreadAbove(unread){
+    if(this.state.unreadAbove !== unread){
+      this.setState({unreadAbove: unread});
+    }
   }
   componentDidMount(){
     
@@ -48,6 +67,7 @@ class Chat extends Component {
   }
   onSelectedRow(row){
     this.slackData.setChannel(row.id);
+    document.getElementById('chat-input').focus();
   }
   createItemDelegate(){
     const { swipes } = this.props;
@@ -55,8 +75,7 @@ class Chat extends Component {
       editMessage: this.slackData.editMessage,
       deleteMessage: this.slackData.deleteMessage,
       openImage: this.slackData.openImage,
-      loadPrivateImage: this.slackData.loadPrivateImage,
-      clickLink: (url) => swipes.sendEvent('openURL', {url: url}),
+      loadPrivateImage: this.slackData.loadPrivateImage
     }
   }
   renderSidemenu(){
@@ -72,6 +91,15 @@ class Chat extends Component {
       />
     )
   }
+  renderUnreadAbove(){
+    var unreadClass = "unread-bar";
+    if(!this.state.unreadAbove){
+      unreadClass += " read";
+    } 
+    return (
+      <a key="unread-test" href="#unread-indicator">
+        <div className={unreadClass}>Unread messages above <i className="material-icons">arrow_upward</i> </div></a>)
+  }
   renderTypingIndicator(label){
     
     if(label){
@@ -79,6 +107,10 @@ class Chat extends Component {
         <div className="typing-indicator">{label}</div>
       )
     }
+  }
+  clickedLink(command, identifier, title){
+    const { swipes } = this.props;
+    swipes.sendEvent('openURL', {url: command})
   }
   render() {
     const { typingLabel, sortedMessages, inputHeight } = this.state; 
@@ -91,16 +123,19 @@ class Chat extends Component {
     return (
       <div style={{height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
+        {this.renderUnreadAbove()}
         <ChatList 
           sections={sortedMessages} 
           markAsRead={this.slackData.markAsRead} 
+          unreadAbove={this.unreadAbove}
           unreadIndicator={this.state.unreadIndicator} 
-          itemDelegate={this.createItemDelegate()} 
+          clickedLink={this.clickedLink}
         />
         <ChatInput
           sendMessage={this.sendMessage} 
           changedHeight={this.changedHeight} 
           uploadFiles={this.slackData.uploadFiles}
+          sendTypingEvent={this.slackData.sendTypingEvent}
         />
         {this.renderTypingIndicator(typingLabel)}
       </div>

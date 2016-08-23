@@ -11,7 +11,27 @@ class Notifications {
     if(state.notifications.length){
       state.notifications.forEach( (notification) => {
         if(notification.time > this.lastSentTime){
-          this.playSound();
+          if(document.hasFocus()){
+            this.playSound();
+          }
+          else{
+            Notification.requestPermission().then((result) => {
+              if (result === 'denied') {
+                console.log('Permission wasn\'t granted. Allow a retry.');
+                return;
+              }
+              if (result === 'default') {
+                console.log('The permission request was dismissed.');
+                return;
+              }
+              let myNotification = new Notification(notification.title, {
+                sound: 'https://s3.amazonaws.com/cdn.swipesapp.com/default.mp3',
+                body: notification.message
+              })
+            });
+            
+          }
+          
           this.lastSentTime = notification.time;
         }
       })

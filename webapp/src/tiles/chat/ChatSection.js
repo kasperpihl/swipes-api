@@ -8,24 +8,21 @@ export default class ChatSection extends Component {
   }
   render() {
     var chatItems = [];
-    const { itemDelegate } = this.props;
+    const { clickedLink } = this.props;
     const { section, unreadIndicator } = this.props.data;
     section.messages.forEach((item, i) => {
       if(!item.hidden){
-        chatItems.push(<ChatItem key={item.ts} data={item} />);
+        chatItems.push(<ChatItem key={item.ts} clickedLink={clickedLink} data={item} />);
       }
 
       if(unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
         
         var className = "new-message-header";
-        var unreadClass = "unread-bar";
         if(unreadIndicator.showAsRead){
           className += " read";
-          unreadClass += " read";
         }
-        chatItems.push(<div className={className} key="new-message-header"><span>new messages</span></div>);
+        chatItems.push(<div id="unread-indicator" className={className} key="new-message-header"><span>new messages</span></div>);
         chatItems.push(<div key="new-message-post-header" className="new-message-post-header" />);
-        chatItems.push(<a key="unread-test" href={'#' + item.ts}><div className={unreadClass}>you have unread messages <i className="material-icons">arrow_upward</i> </div></a>);
       }
     });
 
@@ -44,6 +41,7 @@ export default class ChatSection extends Component {
 }
 
 ChatSection.propTypes = {
+  clickedLink: PropTypes.func,
   data: PropTypes.shape({
     section: PropTypes.shape({
       title: PropTypes.string.isRequired,

@@ -24,12 +24,12 @@ class Activity extends Component {
     )
   }
   render() {
-    const { shortUrl, date, message } = this.props.data;
+    const { short_url, date, message } = this.props.data;
 
     return (
       <div className="swipes-activities__activity">
         {this.renderStory(date, message)}
-        {this.renderCard(shortUrl)}
+        {this.renderCard(short_url)}
       </div>
     )
   }
@@ -43,7 +43,7 @@ Activity.propTypes = {
   dotDragStart: PropTypes.func,
   data: PropTypes.shape({
     message: PropTypes.string.isRequired,
-    shortUrl: PropTypes.string,
+    short_url: PropTypes.string,
     date: PropTypes.string,
     service: PropTypes.string
   })

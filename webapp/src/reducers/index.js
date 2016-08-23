@@ -4,6 +4,8 @@ import modal from './modal'
 import workspace from './workspace'
 import services from './services'
 import activity from './activity'
+import notifications from './notifications'
+
 import me from './me'
 
 const rootReducer = combineReducers({
@@ -12,6 +14,7 @@ const rootReducer = combineReducers({
   workspace,
   services,
   activity,
+  notifications,
   me
 })
 

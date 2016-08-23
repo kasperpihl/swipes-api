@@ -7,8 +7,9 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
+
     this.typingUsers = {};
-    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel'])
+    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.delegate = delegate || function(){};
     this.parser = new SlackSwipesParser();
@@ -92,7 +93,6 @@ export default class SlackData {
     return lastMessages[lastMessages.length - 1].ts;
   }
   markAsRead(ts){
-    console.log('markAsRead', ts);
     const { messages } = this.data;
     var channel = this.currentChannel();
 
@@ -164,7 +164,7 @@ export default class SlackData {
     return "channels.";
   }
   handleMessage(msg){
-    console.log('slack message', msg);
+    //console.log('slack message', msg);
     const { messages, unreadIndicator, users, channels, self } = this.data;
     const currChannel = this.data.channels[this.data.selectedChannelId];
     let channel;
@@ -206,7 +206,13 @@ export default class SlackData {
             this.saveData({unreadIndicator: null, channels})
           }
           else{
-            this.saveData({unreadIndicator: {ts: channel.last_read}});
+            
+            if(document.hasFocus() && document.activeElement && document.activeElement.id  === 'chat-input'){
+              this.markAsRead(msg.ts);
+              console.log('active', document.activeElement.id);
+            }else{
+              this.saveData({unreadIndicator: {ts: channel.last_read}});
+            }
           }
           this.saveData({messages: messages.concat([msg])});
         }
@@ -272,6 +278,12 @@ export default class SlackData {
   getUserFromId(id){
     return this.data.users[id];
   }
+  sendTypingEvent() {
+    const { selectedChannelId } = this.data;
+
+    this.socket.sendEvent({'id': '1', 'type': 'typing', 'channel': selectedChannelId});
+
+  }
 
   userTyping(data) {
     if (this.typingUsers[data.user]) {
@@ -332,25 +344,7 @@ export default class SlackData {
   
   // T_INFO // We should replace these once we can upload directly through our service
   // Though, the request might come in handy for how to send the request since they use formData for files.
-  
-
   __tempSlackUpload(formData, callback){
-    /*$.ajax({
-      url : 'https://slack.com/api/files.upload',
-      type: "POST",
-      success: function(res){
-        console.log('res slack upload', res);
-        callback(true);
-      },
-      error: function(err){
-        console.log('err slack upload', err);
-        callback(false, err);
-      },
-      crossDomain: true,
-      data: formData,
-      processData: false,
-      contentType: false
-    });*/
 
     var url = 'https://slack.com/api/files.upload';
     var xhr = new XMLHttpRequest();
@@ -381,64 +375,3 @@ export default class SlackData {
     xhr.send(formData);
   }
 }
-
-/*
-
-var typingUsers = {};
-
-var ChatStore = Reflux.createStore({
-  listenables: [ChatActions],
-  
-  onClickLink:function(url){
-    swipes.sendEvent('openURL', {url: url});
-  },
-  
-  userTyping: function (data) {
-    var self = this;
-
-    if (typingUsers[data.user]) {
-      clearTimeout(typingUsers[data.user]);
-    }
-
-    var timeout = setTimeout(function() {
-      delete typingUsers[data.user];
-      self.userTypingLabel();
-    }, 5000);
-
-    typingUsers[data.user] = timeout;
-    this.userTypingLabel();
-  },
-  userTypingLabel: function() {
-    var userIds = Object.keys(typingUsers);
-    var users = [];
-    var content = '';
-
-    userIds.forEach(function(userId) {
-      users.push(UserStore.get(userId).name);
-    });
-
-    content = users.join(', ');
-
-    if (users.length > 1) {
-      content += ' are typing..';
-      this.set('typing', content);
-    } else if (users.length === 1) {
-      content += ' is typing..'
-      this.set('typing', content);
-    } else {
-      content = '';
-      this.set('typing', false);
-    }
-  },
-  
-  onSendTypingEvent: function() {
-    var currentChannel = ChannelStore.get(this.get('channelId'));
-
-    
-    this.webSocket.send(JSON.stringify({'id': '1', 'type': 'typing', 'channel': currentChannel.id}));
-
-  }
-});
-
-module.exports = ChatStore;
-*/
