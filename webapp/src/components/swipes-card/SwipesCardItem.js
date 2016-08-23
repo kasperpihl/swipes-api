@@ -31,7 +31,7 @@ class SwipesCardItem extends Component {
   }
   renderHeader(actions, title, subtitle, headerImage) {
     const noSubtitleClass = !subtitle ? "swipes-card__header__content--no-subtitle" : '';
-    console.log(subtitle);
+
     return (
       <div className="swipes-card__header">
         <div className="swipes-card__header__dot">
@@ -124,10 +124,7 @@ SwipesCardItem.propTypes = {
       PropTypes.string,
       PropTypes.array
     ]).isRequired,
-    subtitle:  PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array
-    ]),
+    subtitle: PropTypes.string,
     description: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.array
