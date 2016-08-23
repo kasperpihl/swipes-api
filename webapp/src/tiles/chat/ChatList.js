@@ -30,6 +30,9 @@ class ChatList extends Component {
     window.removeEventListener('resize', this.handleResize);
   }
   checkForMarkingAsRead(){
+    if(!document.hasFocus()){
+      return;
+    }
     // Check for unread marker
     const scrollPos = this.refs['scroll-container'].scrollTop
     const viewHeight = this.refs['scroll-container'].clientHeight
