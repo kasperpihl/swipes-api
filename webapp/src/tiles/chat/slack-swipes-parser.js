@@ -160,7 +160,8 @@ export default class SlackSwipesParser {
         if(user.profile){
           newMsg.profileImage = user.profile.image_48;
         }
-        if(user.id == this.lastUser && group == this.lastGroup){
+
+        if(user.id === this.lastUser && group === this.lastGroup){
           newMsg.dontRenderProfile = true;
         }
         if(user.id === self.id){
@@ -202,7 +203,7 @@ export default class SlackSwipesParser {
     const { messages, bots, self, users } = data;
     if(!messages || !messages.length)
       return [];
-
+    const sortedMessages = messages.sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
     const length = messages.length;
 
     const groups = {};
@@ -212,7 +213,7 @@ export default class SlackSwipesParser {
       }
       groups[groupName].push(obj)
     }
-    messages.forEach((msg, i) => {
+    sortedMessages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
       pushToGroup(group, newMsg);
     });
@@ -222,8 +223,7 @@ export default class SlackSwipesParser {
     const sortedSections = sortedKeys.map((key) => {
       const schedule = new Date(parseInt(key)*1000);
       const title = dayStringForDate(schedule);
-      const sortedMessages = groups[key].sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
-      return {"title": title, "messages": sortedMessages };
+      return {"title": title, "messages": groups[key] };
     });
     const lastSection = sortedSections[sortedSections.length - 1]
     const numberOfMessagesInLast = lastSection.messages.length;
