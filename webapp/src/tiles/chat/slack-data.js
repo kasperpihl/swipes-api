@@ -7,6 +7,7 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
+    this.data.unsentMessageQueue = this.data.unsentMessageQueue || [];
 
     this.typingUsers = {};
     bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent'])
@@ -22,7 +23,7 @@ export default class SlackData {
     if(data.channels || data.selectedChannelId){
       this.data.sectionsSidemenu = data.sectionsSidemenu = this.parser.sectionsForSidemenu(this.data);
     }
-    if(data.messages){
+    if( data.messages || data.isSendingMessage || data.unsentMessageQueue ){
       this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
     }
     this.delegate(JSON.parse(JSON.stringify(data)), options);
@@ -119,18 +120,41 @@ export default class SlackData {
     });
 
   }
-  sendMessage(message, callback){
-    const { selectedChannelId } = this.data;
-    this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: selectedChannelId, as_user: true, link_names: 1}, (res, err) => {
-      if(res.ok){
+  _sendNextMessage(item){
+ 
+    if(item){
+      this.saveData({unsentMessageQueue: this.data.unsentMessageQueue.concat([item])});
+    }
+    const { isSendingMessage, unsentMessageQueue } = this.data;
+
+    const nextItem = unsentMessageQueue[0];
+    if(!nextItem || isSendingMessage){
+      return;
+    }
+    const { message, channel } = nextItem;
+
+    this.saveData({isSendingMessage: true});
+    this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel, as_user: true, link_names: 1}, (res, err) => {
+      const data = { isSendingMessage: false };
+      if(res && res.ok){
+        data.unsentMessageQueue = this.data.unsentMessageQueue.slice(1);
         this.swipes.sendEvent('analytics.action', {name: "Send message"});
         //this.onMarkAsRead(res.data.ts);
+        this.saveData(data);
+        this._sendNextMessage();
       }
-      if(callback){
-        callback();
+      else{
+        console.log('failed to send!');
+        data.unsentMessageQueue = this.data.unsentMessageQueue;
+        data.unsentMessageQueue[0].failed = true;
+        this.saveData(data);
       }
       
     });
+  }
+  sendMessage(message){
+    const { selectedChannelId:channel } = this.data;
+    this._sendNextMessage({ message, channel });
   }
   deleteMessage(timestamp){
     const { selectedChannelId } = this.data;
@@ -214,7 +238,9 @@ export default class SlackData {
               this.saveData({unreadIndicator: {ts: channel.last_read}});
             }
           }
-          this.saveData({messages: messages.concat([msg])});
+          if(messages){
+            this.saveData({messages: messages.concat([msg])});
+          }
         }
       }
     }

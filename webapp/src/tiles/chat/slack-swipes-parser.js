@@ -200,7 +200,7 @@ export default class SlackSwipesParser {
     return { group , newMsg: newMsg};
   }
   sortMessagesForSwipes(data){
-    const { messages, bots, self, users } = data;
+    const { messages, bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId } = data;
     if(!messages || !messages.length)
       return [];
     const sortedMessages = messages.sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
@@ -225,7 +225,33 @@ export default class SlackSwipesParser {
       const title = dayStringForDate(schedule);
       return {"title": title, "messages": groups[key] };
     });
+    const sendingMessages = unsentMessageQueue.filter((item) => item.channel === selectedChannelId).map(({ message, failed }, i) => {
+
+      const newMsg = {
+        text: message,
+        timeStr: 'Sending...',
+        name: self.name,
+        ts: 'unsent-' + i,
+        profileImage: DEFAULT_PROFILE
+      }
+      if(i > 0){
+        newMsg.timeStr = 'Waiting';
+        newMsg.dontRenderProfile = true;
+      }
+      if(failed){
+        newMsg.timeStr = 'Failed. Retry?';
+      }
+      if(users[self.id].profile){
+        newMsg.profileImage = users[self.id].profile.image_48;
+      }
+
+      return newMsg;
+    })
     const lastSection = sortedSections[sortedSections.length - 1]
+    if(sendingMessages.length){
+      lastSection.messages = lastSection.messages.concat(sendingMessages);
+    }
+    
     const numberOfMessagesInLast = lastSection.messages.length;
     lastSection.messages[numberOfMessagesInLast - 1].isLastMessage = true;
 
