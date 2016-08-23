@@ -50,7 +50,9 @@ class ChatList extends Component {
         unreadAbove = true;
       }
     }
-    this.props.unreadAbove(unreadAbove);
+    if(this.props.unreadAbove){
+      this.props.unreadAbove(unreadAbove);
+    }
   }
   handleResize(){
     this.bouncedScroll(this.hasRendered);
@@ -99,10 +101,10 @@ class ChatList extends Component {
     }
   }
   renderSections(){
-    const { unreadIndicator, sections, itemDelegate } = this.props;
+    const { unreadIndicator, sections, itemDelegate, clickedLink } = this.props;
     if(sections){
       return sections.map(function(section){
-        return <ChatSection key={section.title} data={{unreadIndicator: unreadIndicator, section: section}} />
+        return <ChatSection key={section.title} clickedLink={clickedLink} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
     }
   }
@@ -125,6 +127,8 @@ export default ChatList
 
 ChatList.propTypes = {
   markAsRead: PropTypes.func,
+  clickedLink: PropTypes.func,
+  unreadAbove: PropTypes.func,
   sections: PropTypes.arrayOf(PropTypes.object)
 
 }

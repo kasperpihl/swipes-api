@@ -17,11 +17,25 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
-    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove'])
+    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink'])
     this.addListenersToSwipes(props.swipes);
-    this.slackData = new SlackData(this.props.swipes, {}, this.dataDelegate);
+    const data = {};
+    const selectedChannel = localStorage.getItem(props.tile.id + '-selectedChannelId');
+    if(selectedChannel){
+      data.selectedChannelId = selectedChannel;
+    }
+    this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
   }
   dataDelegate(data){
+    if(data.selectedChannelId && data.selectedChannelId !== this.state.selectedChannelId){
+      const itemId = this.props.tile.id + '-selectedChannelId';
+      if(!data.selectedChannelId){
+        localStorage.removeItem(itemId);
+      }
+      else {
+        localStorage.setItem(itemId, data.selectedChannelId);
+      }
+    }
     this.setState(data);
   }
   addListenersToSwipes(swipes){
@@ -61,8 +75,7 @@ class Chat extends Component {
       editMessage: this.slackData.editMessage,
       deleteMessage: this.slackData.deleteMessage,
       openImage: this.slackData.openImage,
-      loadPrivateImage: this.slackData.loadPrivateImage,
-      clickLink: (url) => swipes.sendEvent('openURL', {url: url}),
+      loadPrivateImage: this.slackData.loadPrivateImage
     }
   }
   renderSidemenu(){
@@ -95,6 +108,10 @@ class Chat extends Component {
       )
     }
   }
+  clickedLink(command, identifier, title){
+    const { swipes } = this.props;
+    swipes.sendEvent('openURL', {url: command})
+  }
   render() {
     const { typingLabel, sortedMessages, inputHeight } = this.state; 
     
@@ -112,7 +129,7 @@ class Chat extends Component {
           markAsRead={this.slackData.markAsRead} 
           unreadAbove={this.unreadAbove}
           unreadIndicator={this.state.unreadIndicator} 
-          itemDelegate={this.createItemDelegate()} 
+          clickedLink={this.clickedLink}
         />
         <ChatInput
           sendMessage={this.sendMessage} 

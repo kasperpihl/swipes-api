@@ -7,6 +7,7 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
+
     this.typingUsers = {};
     bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent'])
     this.socket = new SlackSocket(this.start, this.handleMessage);

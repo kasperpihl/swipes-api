@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import ReactEmoji from 'react-emoji'
 import SwipesCard from '../../components/swipes-card/SwipesCard'
+import { bindAll } from '../../classes/utils'
 
 let delegate;
 const delegateMethods = [ 'clickLink' ]
@@ -9,6 +10,7 @@ const delegateMethods = [ 'clickLink' ]
 class ChatItem extends Component {
   constructor(props) {
     super(props)
+    bindAll(this, ['clickedLink'])
   }
   renderMessageHeader(){
     const { name, timeStr, profileImage, dontRenderProfile } = this.props.data;
@@ -28,16 +30,13 @@ class ChatItem extends Component {
   }
   clickedLink(match, e) {
     const res = match.split("|");
-    let clickObj = {};
-    if(res[0])
-      clickObj.command = res[0];
-    if(res[1])
-      clickObj.identifier = res[1];
-    if(res[2])
-      clickObj.title = res[2];
-    console.log('clicked', clickObj, e);
+    const { clickedLink } = this.props;
+    if(clickedLink){
+      clickedLink(...res);
+    }
+    console.log('clicked', ...res);
     e.stopPropagation()
-    //this.delegate.clickLink(clickObj.command);
+
   }
   renderTextWithLinks(text, emojis){
     if(Array.isArray(text)){
@@ -50,6 +49,7 @@ class ChatItem extends Component {
             return <br key={'break' + i} />
           }
           console.log('object!', t);
+          console.log();
         }
         else if(emojis){
           return ReactEmoji.emojify(t);
@@ -120,6 +120,7 @@ class ChatItem extends Component {
 export default ChatItem
 
 ChatItem.propTypes = {
+  clickedLink: PropTypes.func,
   data: PropTypes.shape({
     name: PropTypes.string.isRequired,
     timeStr: PropTypes.string.isRequired,

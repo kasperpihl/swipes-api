@@ -8,11 +8,11 @@ export default class ChatSection extends Component {
   }
   render() {
     var chatItems = [];
-    const { itemDelegate } = this.props;
+    const { clickedLink } = this.props;
     const { section, unreadIndicator } = this.props.data;
     section.messages.forEach((item, i) => {
       if(!item.hidden){
-        chatItems.push(<ChatItem key={item.ts} data={item} />);
+        chatItems.push(<ChatItem key={item.ts} clickedLink={clickedLink} data={item} />);
       }
 
       if(unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
@@ -41,6 +41,7 @@ export default class ChatSection extends Component {
 }
 
 ChatSection.propTypes = {
+  clickedLink: PropTypes.func,
   data: PropTypes.shape({
     section: PropTypes.shape({
       title: PropTypes.string.isRequired,
