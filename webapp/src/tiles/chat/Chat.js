@@ -53,6 +53,7 @@ class Chat extends Component {
   }
   onSelectedRow(row){
     this.slackData.setChannel(row.id);
+    document.getElementById('chat-input').focus();
   }
   createItemDelegate(){
     const { swipes } = this.props;
