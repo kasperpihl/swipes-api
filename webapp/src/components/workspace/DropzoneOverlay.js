@@ -2,23 +2,6 @@ import React, { Component,  PropTypes } from 'react'
 
 import DropzoneElement from './DropzoneElement'
 
-// const DropzoneOverlay = ({ hover, title }) => {
-//   let className = "tile-dropzone-overlay"
-//
-//   if(hover){
-//     className += " hover"
-//   }
-//   title = title || "Share"
-//   return (
-//     <div className={className}>
-//       <div className="background" />
-//       <div className="center">
-//         <h6><span>{title}</span></h6>
-//       </div>
-//     </div>
-//   )
-// }
-
 class DropzoneOverlay extends Component {
   constructor(props) {
     super(props)
