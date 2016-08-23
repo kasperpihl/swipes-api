@@ -12,10 +12,10 @@ export default class ChatSection extends Component {
     const { section, unreadIndicator } = this.props.data;
     section.messages.forEach((item, i) => {
       if(!item.hidden){
-        chatItems.push(<ChatItem key={item.ts} clickedLink={clickedLink} data={item} />);
+        chatItems.push(<ChatItem key={item.key} clickedLink={clickedLink} data={item} />);
       }
 
-      if(unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
+      if(item.ts && unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
         
         var className = "new-message-header";
         if(unreadIndicator.showAsRead){

@@ -17,7 +17,9 @@ export default class SlackData {
     this.start();
   }
   saveData(data, options){
-    
+    if(data.messages){
+      data.messages = data.messages.sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
+    }
 
     this.data = Object.assign(this.data, data);
     if(data.channels || data.selectedChannelId){
@@ -88,16 +90,12 @@ export default class SlackData {
   currentChannel(){
     return this.data.channels[this.data.selectedChannelId];
   }
-  lastMessageTs(){
-    const { sortedMessages } = this.data;
-    const lastMessages = sortedMessages[sortedMessages.length - 1].messages;
-    return lastMessages[lastMessages.length - 1].ts;
-  }
+  
   markAsRead(ts){
     const { messages } = this.data;
     var channel = this.currentChannel();
 
-    ts = ts || this.lastMessageTs();
+    ts = ts || messages[messages.length - 1].ts;
     if(!channel || ts === channel.last_read){
       return;
     }
@@ -153,8 +151,13 @@ export default class SlackData {
     });
   }
   sendMessage(message){
-    const { selectedChannelId:channel } = this.data;
-    this._sendNextMessage({ message, channel });
+    if(message){
+      const { selectedChannelId:channel } = this.data;
+      this._sendNextMessage({ message, channel });
+    }
+    else{
+      this._sendNextMessage();
+    } 
   }
   deleteMessage(timestamp){
     const { selectedChannelId } = this.data;
