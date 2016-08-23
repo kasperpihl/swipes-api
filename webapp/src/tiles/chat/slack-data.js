@@ -129,9 +129,13 @@ export default class SlackData {
     if(!nextItem || isSendingMessage){
       return;
     }
+    let dataToSave = { isSendingMessage: true };
     const { message, channel } = nextItem;
-
-    this.saveData({isSendingMessage: true});
+    if(nextItem.failed){
+      nextItem.failed = false;
+      dataToSave.unsentMessageQueue = unsentMessageQueue;
+    }
+    this.saveData(dataToSave);
     this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel, as_user: true, link_names: 1}, (res, err) => {
       const data = { isSendingMessage: false };
       if(res && res.ok){

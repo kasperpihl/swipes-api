@@ -243,7 +243,7 @@ export default class SlackSwipesParser {
         newMsg.dontRenderProfile = true;
       }
       if(failed){
-        newMsg.timeStr = 'Failed. Retry?';
+        newMsg.timeStr = ['Failed. ', { type: 'link', title: 'Retry?', data: 'swipes://retry-send' }];
       }
       if(users[self.id].profile){
         newMsg.profileImage = users[self.id].profile.image_48;

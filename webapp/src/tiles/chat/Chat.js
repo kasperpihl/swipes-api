@@ -19,22 +19,27 @@ class Chat extends Component {
 
     bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink'])
     this.addListenersToSwipes(props.swipes);
-    const data = {};
-    const selectedChannel = localStorage.getItem(props.tile.id + '-selectedChannelId');
-    if(selectedChannel){
-      data.selectedChannelId = selectedChannel;
-    }
+    const data = this.loadDataFromStorage(props.tile.id);
     this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
   }
+  loadDataFromStorage(tileId){
+    const data = {};
+    data.selectedChannelId = localStorage.getItem(tileId + '-selectedChannelId');
+    const unsentMessages = localStorage.getItem(tileId + '-unsentMessageQueue');
+    if(unsentMessages){
+      data.unsentMessageQueue = JSON.parse(unsentMessages);
+    }
+    return data;
+  }
   dataDelegate(data){
-    if(data.selectedChannelId && data.selectedChannelId !== this.state.selectedChannelId){
-      const itemId = this.props.tile.id + '-selectedChannelId';
-      if(!data.selectedChannelId){
-        localStorage.removeItem(itemId);
-      }
-      else {
-        localStorage.setItem(itemId, data.selectedChannelId);
-      }
+    let itemId;
+    if(data.selectedChannelId){
+      itemId = this.props.tile.id + '-selectedChannelId';
+      localStorage.setItem(itemId, data.selectedChannelId);
+    }
+    if(data.unsentMessageQueue){
+      itemId = this.props.tile.id + '-unsentMessageQueue';
+      localStorage.setItem(itemId, JSON.stringify(data.unsentMessageQueue));
     }
     this.setState(data);
   }
@@ -109,6 +114,9 @@ class Chat extends Component {
     }
   }
   clickedLink(command, identifier, title){
+    if(command === 'swipes://retry-send'){
+      return this.slackData.sendMessage();
+    }
     const { swipes } = this.props;
     swipes.sendEvent('openURL', {url: command})
   }
