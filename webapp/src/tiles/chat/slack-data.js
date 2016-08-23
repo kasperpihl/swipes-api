@@ -163,7 +163,7 @@ export default class SlackData {
     return "channels.";
   }
   handleMessage(msg){
-    console.log('slack message', msg);
+    //console.log('slack message', msg);
     const { messages, unreadIndicator, users, channels, self } = this.data;
     const currChannel = this.data.channels[this.data.selectedChannelId];
     let channel;

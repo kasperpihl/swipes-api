@@ -59,6 +59,9 @@ class ChatItem extends Component {
         }
       })
     }
+    else if(emojis){
+      return ReactEmoji.emojify(text);
+    }
     return text;
   }
   renderCards(){
@@ -85,7 +88,8 @@ class ChatItem extends Component {
   renderMessage(){
     const { ts, timeStr, oldText } = this.props.data;
     let { text } = this.props.data;
-    text = this.renderTextWithLinks(text);
+    text = this.renderTextWithLinks(text, true);
+
     return (
       <div id={ts} className="message-wrapper">
         <div className="chat__message--content" data-timestamp={timeStr}>
