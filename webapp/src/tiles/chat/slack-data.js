@@ -338,25 +338,7 @@ export default class SlackData {
   
   // T_INFO // We should replace these once we can upload directly through our service
   // Though, the request might come in handy for how to send the request since they use formData for files.
-  
-
   __tempSlackUpload(formData, callback){
-    /*$.ajax({
-      url : 'https://slack.com/api/files.upload',
-      type: "POST",
-      success: function(res){
-        console.log('res slack upload', res);
-        callback(true);
-      },
-      error: function(err){
-        console.log('err slack upload', err);
-        callback(false, err);
-      },
-      crossDomain: true,
-      data: formData,
-      processData: false,
-      contentType: false
-    });*/
 
     var url = 'https://slack.com/api/files.upload';
     var xhr = new XMLHttpRequest();
@@ -387,26 +369,3 @@ export default class SlackData {
     xhr.send(formData);
   }
 }
-
-/*
-
-var typingUsers = {};
-
-var ChatStore = Reflux.createStore({
-  listenables: [ChatActions],
-  
-  onClickLink:function(url){
-    swipes.sendEvent('openURL', {url: url});
-  },
-  
-  onSendTypingEvent: function() {
-    var currentChannel = ChannelStore.get(this.get('channelId'));
-
-    
-    this.webSocket.send(JSON.stringify({'id': '1', 'type': 'typing', 'channel': currentChannel.id}));
-
-  }
-});
-
-module.exports = ChatStore;
-*/
