@@ -18,7 +18,7 @@ export default class SlackData {
   }
   saveData(data, options){
     if(data.messages){
-      data.messages = data.messages.sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
+      data.messages = data.messages.sort((a, b) => (a.ts < b.ts) ? -1 : 1)
     }
 
     this.data = Object.assign(this.data, data);
