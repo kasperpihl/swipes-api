@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { throttle, bindAll } from '../../classes/utils'
+import moment from 'moment'
 import Textarea from 'react-textarea-autosize'
 
 class ChatInput extends Component {
@@ -25,7 +26,7 @@ class ChatInput extends Component {
       const height = Math.max(this.defaultTextHeight, textHeight);
       changedHeight(height);
     }
-   
+
   }
   onKeyDown(e){
     if(e.keyCode === 13 && !e.shiftKey) {
@@ -75,7 +76,7 @@ class ChatInput extends Component {
     }
     this.refs.file.click();
   }
-  
+
   onFileChange(e){
     if(this.props.uploadFiles){
       this.props.uploadFiles(e.target.files);
@@ -92,24 +93,30 @@ class ChatInput extends Component {
     items = [ ...items ];
     //console.log(typeof items, Array.isArray(items) );
     const files = [];
+    let hadTitle = false;
     items.forEach((item, i) => {
-      console.log('item', JSON.stringify(item));
+      console.log('item', item.kind);
       if (item.kind === 'file') {
         var blob = item.getAsFile();
         files.push(blob);
       }
       else {
+        hadTitle = true;
         item.getAsString((text) => {
           if(files.length && this.props.uploadFiles){
-            files[0].name = text; 
+            files[0].name = text;
             this.props.uploadFiles(files);
           }
         });
       }
     })
+
     if(files.length){
       e.preventDefault();
-      //this.props.uploadFiles(files);
+    }
+    if(files.length && !hadTitle){
+      files[0].name = 'Pasted image at' + moment().format('YYYY-MM-DD, h:mm A');
+      this.props.uploadFiles(files);
     }
   }
   renderTextarea(){
