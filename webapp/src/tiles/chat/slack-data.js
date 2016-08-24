@@ -10,11 +10,15 @@ export default class SlackData {
     this.data.unsentMessageQueue = this.data.unsentMessageQueue || [];
 
     this.typingUsers = {};
-    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent'])
+    bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent', 'destroy'])
     this.socket = new SlackSocket(this.start, this.handleMessage);
     this.delegate = delegate || function(){};
     this.parser = new SlackSwipesParser();
     this.start();
+  }
+  destroy(){
+    this.socket.destroy();
+    this.delegate = () => {}
   }
   saveData(data, options){
     if(data.messages){
@@ -29,6 +33,9 @@ export default class SlackData {
       this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
     }
     this.delegate(JSON.parse(JSON.stringify(data)), options);
+  }
+  clearDelegate(){
+    this.delegate = () => {};
   }
   start(){
     if(this.isStarting){

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { main, modal } from '../actions'
 import { bindAll } from '../classes/utils'
@@ -13,7 +14,7 @@ class Topbar extends Component {
     super(props)
     var gradientPos = gradient.getGradientPos();
     this.state = {gradientPos: gradientPos};
-    bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp']);
+    bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp', 'onChangeMenu']);
   }
   componentDidMount() {
     this.gradientStep();
@@ -55,8 +56,20 @@ class Topbar extends Component {
   signout() {
   }
   onClickWorkspace(){
-    this.props.logout();
-    window.location.replace('/');
+    
+  }
+  onChangeMenu(id){
+    if(id === 'workspace'){
+      browserHistory.push('/');
+    }
+    if(id === 'services'){
+      browserHistory.push('/' + id);
+    }
+    if(id === 'logout'){
+      this.props.logout();
+      window.location.replace('/');
+    }
+
   }
   gradientStep(){
     var gradientPos = gradient.getGradientPos();
@@ -82,30 +95,22 @@ class Topbar extends Component {
 
     // dummy data for DropdownMenu
 
-    const title = 'Workspace'
-    const data = [
-      {
-        title: 'workspace',
-        id: ''
-      },
-      {
-        title: 'services',
-        id: ''
-      },
-      {
-        title: 'log out',
-        id: ''
-      }
-    ]
+    let selectedId = 'workspace'
+    const { pathname } = this.props;
+    const dropdownStructure = [
+      { title: 'Workspace', id: 'workspace' },
+      { title: 'Services', id: 'services' },
+      { title: 'Log out', id: 'logout' }
+    ];
+    if(pathname === '/services'){
+      selectedId = 'services';
+    }
 
     return (
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            {/*<div className="sw-topbar__info__title" onClick={this.onClickWorkspace.bind(this)}>Workspace</div>
-          <i className="material-icons">arrow_drop_down</i>*/}
-
-            <DropdownMenu data={data} title={title}/>
+            <DropdownMenu selectedId={selectedId} data={dropdownStructure} onChange={this.onChangeMenu}/>
           </div>
           <div className="sw-topbar__searchbar">
             <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search your apps" />

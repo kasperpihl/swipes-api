@@ -3,7 +3,7 @@ import { bindAll } from '../../classes/utils'
 export default class SlackSocket {
   constructor(restartSocket, handleMessage){
 
-    bindAll(this, ['checkSocket', 'sendEvent'])
+    bindAll(this, ['checkSocket', 'sendEvent', 'destroy'])
 
     if(typeof restartSocket !== 'function'){
       restartSocket = () => {}
@@ -58,6 +58,16 @@ export default class SlackSocket {
       }
       this.timer = setInterval(this.checkSocket, 6000);
     }
+  }
+  destroy(){
+    if(this.timer){
+      clearInterval(this.timer);
+    }
+    if(this.webSocket){
+      this.webSocket.onclose = function(){};
+    }
+    this.handleMessage = () => {};
+    this.closeWebSocket();
   }
   closeWebSocket(){
     // If the websocket exist and is in state OPEN or CONNECTING

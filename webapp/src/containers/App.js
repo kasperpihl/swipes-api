@@ -13,10 +13,9 @@ class App extends Component {
   }
   render() {
     let classes = 'main ' + this.props.mainClasses.join(' ');
-
     return (
       <div className={classes}>
-        <Topbar />
+        <Topbar pathname={this.props.location.pathname} />
         <div className="active-app">
           {this.props.children}
         </div>
