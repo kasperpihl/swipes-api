@@ -59,6 +59,12 @@ class SwipesCardItem extends Component {
       </div>
     )
   }
+  isVideo(url) {
+    if(!url){
+      return false;
+    }
+    return (url.match(/\.(mov|mp4)$/) != null);
+  }
   isImage(url) {
     if(!url){
       return false;
@@ -69,7 +75,20 @@ class SwipesCardItem extends Component {
     if(!preview){
       return;
     }
+
     const isImage = this.isImage(preview.url);
+    const isVideo = this.isVideo(preview.url);
+
+    if (isVideo) {
+      return (
+        <div className="swipes-card__preview swipes-card__preview--no-style">
+          <div className="swipes-card__preview--iframe">
+            <video className="custom-html" src={preview.url} controls></video>
+          </div>
+        </div>
+      )
+    }
+
     if (preview.type === 'image' && isImage) {
       return (
         <div className="swipes-card__preview">
