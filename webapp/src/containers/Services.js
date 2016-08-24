@@ -42,7 +42,7 @@ class Services extends Component {
   renderServicesToConnect(){
     const { services:se } = this.props;
     const sortedKeys = Object.keys(se).sort((k1, k2) => (se[k1].title < se[k2].title) ? -1 : 1)
-   
+
     return sortedKeys.map((key, i) => {
       const service = se[key];
        const data = {
@@ -55,17 +55,14 @@ class Services extends Component {
   render() {
     return (
       <div className="scroll-container">
-          <div className="services-wrapper">
-              <div className="services-card">
-                <div className="services-card-title">Connect new Services</div>
-                {this.renderServicesToConnect()}
-              </div>
-
-              <div className="services-card">
-                <div className="services-card-title">Connected Services</div>
-                {this.renderConnectedServices()}
-              </div>
-          </div>
+        <div className="swipes-services">
+          <div className="swipes-services__title" data-title="Connect new services"></div>
+          {this.renderServicesToConnect()}
+        </div>
+        <div className="swipes-services">
+          <div className="swipes-services__title" data-title="Connected services"></div>
+          {this.renderConnectedServices()}
+        </div>
       </div>
     );
   }
