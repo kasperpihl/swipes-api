@@ -4,7 +4,9 @@ import './DropdownMenu.scss'
 class SwipesDropdownMenu extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      menuOpen: false
+    }
   }
   renderItems(data) {
     return data.map( (item, i) => {
@@ -15,24 +17,37 @@ class SwipesDropdownMenu extends Component {
       )
     })
   }
+  openMenu() {
+    this.setState({menuOpen: true})
+  }
+  closeMenu() {
+    this.setState({menuOpen: false})
+  }
   render() {
     let { selectedId, data } = this.props;
+    let menuClass = 'swipes-dropdown__menu--closed';
     let selectedTitle = '';
+
     if(typeof selectedId !== 'string'){
       selectedId = data[0].id;
     }
+    
     data.forEach((item) => {
       if(item.id === selectedId){
         selectedTitle = item.title;
       }
     })
 
+    if (this.state.menuOpen) {
+      menuClass = 'swipes-dropdown__menu--open';
+    }
+
     return (
-      <div className="swipes-dropdown">
+      <div className="swipes-dropdown" onMouseEnter={this.openMenu.bind(this)} onMouseLeave={this.closeMenu.bind(this)}>
         <div className="swipes-dropdown__title">
           {selectedTitle}
         </div>
-        <div className="swipes-dropdown__menu">
+        <div className={"swipes-dropdown__menu " + menuClass} onClick={this.closeMenu.bind(this)}>
           {this.renderItems(data)}
         </div>
       </div>
