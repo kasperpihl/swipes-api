@@ -52,7 +52,7 @@ class ChatItem extends Component {
         if(typeof t === 'object'){
           if(t.type === 'card'){
             const dataId = dataIdFromShareURL(t.data);
-            return <SwipesCard key={'card' + i} dataId={t.data} dataDelegate={this.dataDelegate}/>
+            return <SwipesCard key={'card' + i} dataId={dataId} dataDelegate={this.dataDelegate}/>
           }
           if(t.type === 'link'){
             return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{unescape(t.title)}</a>;

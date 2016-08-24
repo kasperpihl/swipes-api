@@ -12,15 +12,22 @@ export default class SwipesCard extends Component {
     this.state = { data: props.data };
     bindAll(this, ['onDragStart', 'clickedCard'])
     this.id = randomString(5);
+  }
+  componentDidMount(){
+    this.didMount = true;
     // Setup delegate structure to provide data
-    if(typeof props.dataDelegate === 'function'){
+    if(typeof this.props.dataDelegate === 'function'){
       this.updateData = (data) => {
         this.setState({ data });
+        if(this.didMount){
+
+        }
       }
-      props.dataDelegate(props.dataId, this.updateData);
+      this.props.dataDelegate(this.props.dataId, this.updateData);
     }
   }
   componentWillUnmount(){
+    this.didMount = false;
     if(this.props.dataDelegate){
       this.props.dataDelegate(this.props.dataId, this.updateData, true);
     }

@@ -26,15 +26,20 @@ export default class ShortUrlProvider {
 
     this.fetchingUrls = [ ...new Set(this.urlsToFetch) ];
     this.urlsToFetch = [];
+
     this.store.dispatch(api.request('share.getData', { shareIds: this.fetchingUrls })).then((res) => {
       this.fetchingUrls.forEach((url, i) => {
-        this.notify(url, res.links[i].serviceData);
+        this.save(url, res.links[i].service_data);
       })
       this.fetchingUrls = null;
       if(this.urlsToFetch.length){
         this.throttledFetch();
       }
     });
+  }
+  save(url, data){
+    this._shortUrlData[url] = data;
+    this.notify(url, data);
   }
   notify(shortUrl, data){
     const currentListeners = this._listenersObj[shortUrl];
@@ -59,7 +64,11 @@ export default class ShortUrlProvider {
     const currentListeners = this._listenersObj[shortUrl] || [];
     currentListeners.push({listener: listener, context: ctx});
     this._listenersObj[shortUrl] = currentListeners;
-    
+    const currentData = this._shortUrlData[shortUrl];
+    if(currentData){
+      console.log('sending initial data', currentData);
+      listener(currentData);
+    } 
     this.fetch(shortUrl);
   }
   unsubscribe(shortUrl, listener, ctx){
@@ -76,6 +85,7 @@ export default class ShortUrlProvider {
     }
   }
   _removeListenersForShortUrl(shortUrl, listener, ctx){
+
     const currentListeners = this._listenersObj[shortUrl];
     if(!currentListeners){
       return;
