@@ -24,7 +24,7 @@ export default function notifications (state = initialState, action) {
       if(!isDuplicate){
         newHistory.push({title, message, time})
       }
-      return newHistory;
+      return Object.assign({}, state, {history: newHistory});
     }
     case types.LOGOUT:{
       return clone(initialState);
