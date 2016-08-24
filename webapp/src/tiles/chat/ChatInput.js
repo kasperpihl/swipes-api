@@ -83,19 +83,33 @@ class ChatInput extends Component {
     }
   }
   onPaste(e) {
-    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-    if(!items || !Array.isArray(items)){
+    const clipboard = (e.clipboardData || e.originalEvent.clipboardData);
+    //console.log('paste', items, e.clipboardData);
+    let items = clipboard.items;
+    if(!items){
       return;
     }
+    items = [ ...items ];
+    //console.log(typeof items, Array.isArray(items) );
     const files = [];
-    items.forEach((item) => {
+    items.forEach((item, i) => {
+      console.log('item', JSON.stringify(item));
       if (item.kind === 'file') {
         var blob = item.getAsFile();
         files.push(blob);
       }
+      else {
+        item.getAsString((text) => {
+          if(files.length && this.props.uploadFiles){
+            files[0].name = text; 
+            this.props.uploadFiles(files);
+          }
+        });
+      }
     })
-    if(files.length && this.props.uploadFiles){
-      this.props.uploadFiles(files);
+    if(files.length){
+      e.preventDefault();
+      //this.props.uploadFiles(files);
     }
   }
   renderTextarea(){

@@ -370,12 +370,11 @@ export default class SlackData {
     const formData = new FormData();
     formData.append("token", token);
     formData.append("channels", this.data.selectedChannelId);
+    console.log(file);
     formData.append("filename", file.name);
     formData.append("title", file.name);
     formData.append("file", file);
-    this.__tempSlackUpload(formData, (res, err) => {
-      callback(res, err);
-    });
+    this.__tempSlackUpload(formData, callback);
   }
   
   
@@ -392,7 +391,7 @@ export default class SlackData {
       var data = e.currentTarget.response;
       console.log('slack /files.upload' + ' success', data);
       if(typeof callback === 'function'){
-        if(options.stream || (data && data.ok)){
+        if(data && data.ok){
           callback(data)
         }
         else{
