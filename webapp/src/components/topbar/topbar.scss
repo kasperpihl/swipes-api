@@ -74,7 +74,9 @@ $fullscreenTopbarSize: 70px;
 	}
 
 	&__info {
-		@include flex(center, center);
+		height: 40px;
+		// @include flex(center, center);
+		position: relative;
 
 		&__icon {
 			@include size(50px, 50px);

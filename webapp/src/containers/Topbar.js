@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { main, modal } from '../actions'
 import { bindAll } from '../classes/utils'
 import '../components/topbar/topbar.scss'
+import DropdownMenu from '../components/swipes-ui/DropdownMenu'
 
 import WorkspaceIcon from '../components/global-styles/images/workspace-icon.svg'
 var gradient = require('../components/topbar/gradient');
@@ -67,7 +68,7 @@ class Topbar extends Component {
   render() {
     var topbarClass = 'sw-topbar';
     var styles = {};
-    
+
     if(this.state.gradientPos) {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
     }
@@ -79,12 +80,32 @@ class Topbar extends Component {
       topbarClass += ' find';
     }
 
+    // dummy data for DropdownMenu
+
+    const title = 'Workspace'
+    const data = [
+      {
+        title: 'workspace',
+        id: ''
+      },
+      {
+        title: 'services',
+        id: ''
+      },
+      {
+        title: 'log out',
+        id: ''
+      }
+    ]
+
     return (
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <div className="sw-topbar__info__title" onClick={this.onClickWorkspace.bind(this)}>Workspace</div>
-            <i className="material-icons">arrow_drop_down</i>
+            {/*<div className="sw-topbar__info__title" onClick={this.onClickWorkspace.bind(this)}>Workspace</div>
+          <i className="material-icons">arrow_drop_down</i>*/}
+
+            <DropdownMenu data={data} title={title}/>
           </div>
           <div className="sw-topbar__searchbar">
             <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search your apps" />
