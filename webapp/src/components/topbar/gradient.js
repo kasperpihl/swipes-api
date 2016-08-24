@@ -1,6 +1,6 @@
 var oldTime = null;
 var fullDaySeconds = 86400;
-var gradientSegmentPercentage = 100 / 11;
+var gradientSegmentPercentage = 100 / 12;
 
 var Gradient = {
 	daySegments: [
@@ -10,7 +10,7 @@ var Gradient = {
 		},
 		{
 			time: 4.166666, // 09:00 - 10:00
-			width: gradientSegmentPercentage * 2 + (gradientSegmentPercentage / 2)
+			width: gradientSegmentPercentage * 3 + (gradientSegmentPercentage / 2)
 		},
 		{
 			time: 33.333333, // 10:00 - 18:00
