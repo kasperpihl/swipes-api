@@ -291,10 +291,7 @@ export default class SlackSwipesParser {
           const res = innerMatch.split("|");
           const command = res[0];
           let title = res[res.length -1];
-          if(isShareURL(title)){
-            console.log('was a share url!!! YIR', title);
-          }
-          else if(title.startsWith("@U")){
+          if(title.startsWith("@U")){
             const user = users[title.substr(1)];
             if(user){
               title = "@" + user.name;
@@ -302,6 +299,9 @@ export default class SlackSwipesParser {
           }
 
           placement = { type: 'link', title: unescape(title), data: innerMatch };
+          if(isShareURL(title)){
+            placement = { type: 'card', data: title };
+          }
         }
 
         // Adding the replacements

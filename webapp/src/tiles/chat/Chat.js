@@ -59,6 +59,9 @@ class Chat extends Component {
   componentDidMount(){
     
   }
+  componentWillUnmount(){
+    this.slackData.destroy();
+  }
   componentDidUpdate(prevProps, prevState){
     //console.log('updated', this.props.tile.data);
   }

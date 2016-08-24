@@ -6,25 +6,31 @@ class SwipesDropdownMenu extends Component {
     super(props)
     this.state = {}
   }
-  componentDidMount() {
-  }
   renderItems(data) {
-
     return data.map( (item, i) => {
       return (
-        <div className="swipes-dropdown__menu--item" key={'DropdownMenuItem-' + i}>
+        <div className="swipes-dropdown__menu--item" key={'DropdownMenuItem-' + item.id} onClick={this.props.onChange.bind(null, item.id)}>
           {item.title}
         </div>
       )
     })
   }
   render() {
-    const { title, data } = this.props;
+    let { selectedId, data } = this.props;
+    let selectedTitle = '';
+    if(typeof selectedId !== 'string'){
+      selectedId = data[0].id;
+    }
+    data.forEach((item) => {
+      if(item.id === selectedId){
+        selectedTitle = item.title;
+      }
+    })
 
     return (
       <div className="swipes-dropdown">
         <div className="swipes-dropdown__title">
-          {title}
+          {selectedTitle}
         </div>
         <div className="swipes-dropdown__menu">
           {this.renderItems(data)}
@@ -37,5 +43,11 @@ class SwipesDropdownMenu extends Component {
 export default SwipesDropdownMenu
 
 SwipesDropdownMenu.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
+  })),
+  selectedId: PropTypes.string,
+  onChange: PropTypes.func.isRequired
   // removeThis: PropTypes.string.isRequired
 }

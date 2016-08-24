@@ -6,7 +6,7 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router'
 import Registration from './containers/Registration';
 import App from './containers/App'
 import Workspace from './containers/Workspace'
-
+import Services from './containers/Services'
 
 
 export default class Root extends Component {
@@ -34,6 +34,7 @@ export default class Root extends Component {
         <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="/" component={App}>
           <IndexRoute component={Workspace} onEnter={this.didEnterApp} />
+          <Route path="services" component={Services} onEnter={this.didEnterApp} />
         </Route>
       </Router>
     )
