@@ -7,6 +7,7 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
+    this.data.unsentMessageQueue = this.data.unsentMessageQueue || [];
 
     this.typingUsers = {};
     bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent'])
@@ -16,13 +17,15 @@ export default class SlackData {
     this.start();
   }
   saveData(data, options){
-    
+    if(data.messages){
+      data.messages = data.messages.sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
+    }
 
     this.data = Object.assign(this.data, data);
     if(data.channels || data.selectedChannelId){
       this.data.sectionsSidemenu = data.sectionsSidemenu = this.parser.sectionsForSidemenu(this.data);
     }
-    if(data.messages){
+    if( data.messages || data.isSendingMessage || data.unsentMessageQueue ){
       this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
     }
     this.delegate(JSON.parse(JSON.stringify(data)), options);
@@ -87,16 +90,12 @@ export default class SlackData {
   currentChannel(){
     return this.data.channels[this.data.selectedChannelId];
   }
-  lastMessageTs(){
-    const { sortedMessages } = this.data;
-    const lastMessages = sortedMessages[sortedMessages.length - 1].messages;
-    return lastMessages[lastMessages.length - 1].ts;
-  }
+  
   markAsRead(ts){
     const { messages } = this.data;
     var channel = this.currentChannel();
 
-    ts = ts || this.lastMessageTs();
+    ts = ts || messages[messages.length - 1].ts;
     if(!channel || ts === channel.last_read){
       return;
     }
@@ -119,18 +118,50 @@ export default class SlackData {
     });
 
   }
-  sendMessage(message, callback){
-    const { selectedChannelId } = this.data;
-    this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: selectedChannelId, as_user: true, link_names: 1}, (res, err) => {
-      if(res.ok){
+  _sendNextMessage(item){
+ 
+    if(item){
+      this.saveData({unsentMessageQueue: this.data.unsentMessageQueue.concat([item])});
+    }
+    const { isSendingMessage, unsentMessageQueue } = this.data;
+
+    const nextItem = unsentMessageQueue[0];
+    if(!nextItem || isSendingMessage){
+      return;
+    }
+    let dataToSave = { isSendingMessage: true };
+    const { message, channel } = nextItem;
+    if(nextItem.failed){
+      nextItem.failed = false;
+      dataToSave.unsentMessageQueue = unsentMessageQueue;
+    }
+    this.saveData(dataToSave);
+    this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel, as_user: true, link_names: 1}, (res, err) => {
+      const data = { isSendingMessage: false };
+      if(res && res.ok){
+        data.unsentMessageQueue = this.data.unsentMessageQueue.slice(1);
         this.swipes.sendEvent('analytics.action', {name: "Send message"});
         //this.onMarkAsRead(res.data.ts);
+        this.saveData(data);
+        this._sendNextMessage();
       }
-      if(callback){
-        callback();
+      else{
+        console.log('failed to send!');
+        data.unsentMessageQueue = this.data.unsentMessageQueue;
+        data.unsentMessageQueue[0].failed = true;
+        this.saveData(data);
       }
       
     });
+  }
+  sendMessage(message){
+    if(message){
+      const { selectedChannelId:channel } = this.data;
+      this._sendNextMessage({ message, channel });
+    }
+    else{
+      this._sendNextMessage();
+    } 
   }
   deleteMessage(timestamp){
     const { selectedChannelId } = this.data;
@@ -164,7 +195,6 @@ export default class SlackData {
     return "channels.";
   }
   handleMessage(msg){
-    //console.log('slack message', msg);
     const { messages, unreadIndicator, users, channels, self } = this.data;
     const currChannel = this.data.channels[this.data.selectedChannelId];
     let channel;
@@ -172,7 +202,7 @@ export default class SlackData {
       if(msg.channel){
         channel = channels[msg.channel];
         // Handle message change
-        if(msg.subtype === 'message_changed' && msg.message.channel === currChannel.id){
+        if(msg.subtype === 'message_changed' && msg.channel === currChannel.id){
           return this.saveData({messages: messages.map((obj) => {
             if(obj.ts === msg.message.ts){
               return Object.assign(obj, msg.message);
@@ -214,7 +244,9 @@ export default class SlackData {
               this.saveData({unreadIndicator: {ts: channel.last_read}});
             }
           }
-          this.saveData({messages: messages.concat([msg])});
+          if(messages){
+            this.saveData({messages: messages.concat([msg])});
+          }
         }
       }
     }

@@ -24,7 +24,7 @@ class ChatItem extends Component {
           <img src={profileImage} />
         </div>
         <div className="chat__message__info--author">{name}</div>
-        <div className="chat__message__info--timestamp">{timeStr}</div>
+        <div className="chat__message__info--timestamp">{this.renderTextWithLinks(timeStr)}</div>
       </div>
     );
   }
@@ -124,7 +124,10 @@ ChatItem.propTypes = {
   clickedLink: PropTypes.func,
   data: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    timeStr: PropTypes.string.isRequired,
+    timeStr: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array
+    ]),
     text: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.array

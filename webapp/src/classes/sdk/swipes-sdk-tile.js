@@ -91,7 +91,7 @@ export default class SwipesAppSDK {
           var intCallback = function(res, error){
             if(callback) callback(res,error);
             if(res) resolve(res);
-            else reject(error);
+            else resolve({ok: false, err: error});
           };
 
           this.api.request("services.request", options, intCallback);
@@ -104,7 +104,7 @@ export default class SwipesAppSDK {
           options.stream = true;
 
           var intCallback = function(res, error){
-            if(callback) callback(res,error);
+            if(callback) callback(res, error);
             if(res) resolve(res);
             else reject(error);
           };

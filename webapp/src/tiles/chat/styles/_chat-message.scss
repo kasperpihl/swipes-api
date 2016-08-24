@@ -3,7 +3,12 @@
   padding: 9px 20px;
   padding-bottom: 0;
   position: relative;
-
+  a.link{
+    text-decoration: underline;
+  }
+  a.link:hover{
+    text-decoration: none;
+  }
   &.extra-message {
     padding: 0 20px;
   }

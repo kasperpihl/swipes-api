@@ -84,6 +84,9 @@ class ChatInput extends Component {
   }
   onPaste(e) {
     const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    if(!items || !Array.isArray(items)){
+      return;
+    }
     const files = [];
     items.forEach((item) => {
       if (item.kind === 'file') {

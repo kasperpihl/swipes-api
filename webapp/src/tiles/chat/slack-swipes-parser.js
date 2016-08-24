@@ -137,6 +137,7 @@ export default class SlackSwipesParser {
     const group = startOfDayTs(date);
     const newMsg = { 
       ts: msg.ts, 
+      key: msg.ts,
       timeStr: getTimeStr(date), 
       name: 'unknown',
       profileImage: DEFAULT_PROFILE
@@ -200,10 +201,10 @@ export default class SlackSwipesParser {
     return { group , newMsg: newMsg};
   }
   sortMessagesForSwipes(data){
-    const { messages, bots, self, users } = data;
+    const { messages, bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId } = data;
     if(!messages || !messages.length)
       return [];
-    const sortedMessages = messages.sort((a, b) => { if(a.ts < b.ts) return -1; return 1})
+
     const length = messages.length;
 
     const groups = {};
@@ -213,21 +214,48 @@ export default class SlackSwipesParser {
       }
       groups[groupName].push(obj)
     }
-    sortedMessages.forEach((msg, i) => {
+    messages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
       pushToGroup(group, newMsg);
     });
 
     const sortedKeys = Object.keys(groups).sort();
 
-    const sortedSections = sortedKeys.map((key) => {
+    const sortedSections = sortedKeys.map((key, i) => {
       const schedule = new Date(parseInt(key)*1000);
       const title = dayStringForDate(schedule);
+      if(i === sortedKeys.length - 1){
+        groups[key][groups[key].length - 1].isLastMessage = true;
+      }
       return {"title": title, "messages": groups[key] };
     });
+    const sendingMessages = unsentMessageQueue.filter((item) => item.channel === selectedChannelId).map(({ message, failed }, i) => {
+
+      const newMsg = {
+        text: message,
+        timeStr: 'Sending...',
+        name: self.name,
+        key: 'unsent-' + i,
+        profileImage: DEFAULT_PROFILE
+      }
+      if(i > 0){
+        newMsg.timeStr = 'Waiting';
+        newMsg.dontRenderProfile = true;
+      }
+      if(failed){
+        newMsg.timeStr = ['Failed. ', { type: 'link', title: 'Retry?', data: 'swipes://retry-send' }];
+      }
+      if(users[self.id].profile){
+        newMsg.profileImage = users[self.id].profile.image_48;
+      }
+
+      return newMsg;
+    })
     const lastSection = sortedSections[sortedSections.length - 1]
-    const numberOfMessagesInLast = lastSection.messages.length;
-    lastSection.messages[numberOfMessagesInLast - 1].isLastMessage = true;
+    if(sendingMessages.length){
+      lastSection.messages = lastSection.messages.concat(sendingMessages);
+    }
+    
 
     return sortedSections;
   }

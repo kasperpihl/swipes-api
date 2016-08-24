@@ -53,39 +53,44 @@ export default class SwipesAPIConnector {
     }
 
     data.token = this._token;
+    try{
+      var serData = JSON.stringify(data);
 
-    var serData = JSON.stringify(data);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.responseType = 'json'
-    if(options.stream){
-      xhr.responseType = 'arraybuffer';
-    }
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-    xhr.onload = function(e) {
-      var data = e.currentTarget.response;
-      console.log('/' + options.command + ' success', data);
-      if(typeof callback === 'function'){
-        if(options.stream || (data && data.ok)){
-          callback(data)
-        }
-        else{
-          callback(false, data)
-        }
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.responseType = 'json'
+      if(options.stream){
+        xhr.responseType = 'arraybuffer';
       }
-    };
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
-    xhr.onerror = function(e) {
-      var error = e; //T_TODO make sure that the `e` is actually the error
-      console.log('/' + options.command + ' error', error);
-      if(error.responseJSON)
-        error = error.responseJSON;
+      xhr.onload = function(e) {
+        var data = e.currentTarget.response;
+        console.log('/' + options.command + ' success', data);
+        if(typeof callback === 'function'){
+          if(options.stream || (data && data.ok)){
+            callback(data)
+          }
+          else{
+            callback(false, data)
+          }
+        }
+      };
+
+      xhr.onerror = function(e) {
+        var error = e; //T_TODO make sure that the `e` is actually the error
+        console.log('/' + options.command + ' error', error);
+        if(error.responseJSON)
+          error = error.responseJSON;
+        if(typeof callback === 'function')
+          callback(false, error);
+      };
+      xhr.send(serData);
+    }
+    catch(e){
       if(typeof callback === 'function')
-        callback(false, error);
-    };
-
-    xhr.send(serData);
+        callback(false, e);
+    }
+    
   }
 }
