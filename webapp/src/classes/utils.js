@@ -6,6 +6,9 @@ export function isShareURL(url){
   }
   return false;
 }
+export function dataIdFromShareURL(url){
+  return url.split('/s/')[1].split('/')[0];
+}
 
 export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {

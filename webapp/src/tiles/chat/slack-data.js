@@ -342,7 +342,6 @@ export default class SlackData {
     } else{
       content = false;
     }
-    console.log('saving typing labell');
     this.saveData({'typingLabel': content});
   }
 

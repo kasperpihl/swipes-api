@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import ReactEmoji from 'react-emoji'
 import SwipesCard from '../../components/swipes-card/SwipesCard'
-import { bindAll } from '../../classes/utils'
+import { bindAll, dataIdFromShareURL } from '../../classes/utils'
 
 let delegate;
 const delegateMethods = [ 'clickLink' ]
@@ -10,7 +10,7 @@ const delegateMethods = [ 'clickLink' ]
 class ChatItem extends Component {
   constructor(props) {
     super(props)
-    bindAll(this, ['clickedLink'])
+    bindAll(this, ['clickedLink', 'dataDelegate'])
   }
   renderMessageHeader(){
     const { name, timeStr, profileImage, dontRenderProfile } = this.props.data;
@@ -38,10 +38,22 @@ class ChatItem extends Component {
     e.stopPropagation()
 
   }
+  dataDelegate(shortUrl, provider, unsubscribe){
+    if(!unsubscribe){
+      shortUrlProvider.subscribe(shortUrl, provider);
+    }
+    else{
+      shortUrlProvider.unsubscribe(shortUrl, provider);
+    }
+  }
   renderTextWithLinks(text, emojis){
     if(Array.isArray(text)){
       text = text.map((t, i) => {
         if(typeof t === 'object'){
+          if(t.type === 'card'){
+            const dataId = dataIdFromShareURL(t.data);
+            return <SwipesCard key={'card' + i} dataId={t.data} dataDelegate={this.dataDelegate}/>
+          }
           if(t.type === 'link'){
             return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{unescape(t.title)}</a>;
           }
@@ -49,7 +61,6 @@ class ChatItem extends Component {
             return <br key={'break' + i} />
           }
           console.log('object!', t);
-          console.log();
         }
         else if(emojis){
           return ReactEmoji.emojify(t);
