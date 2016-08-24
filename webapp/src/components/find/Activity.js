@@ -20,7 +20,7 @@ class Activity extends Component {
   }
   renderCard(shortUrl) {
     return (
-      <SwipesCard dataId={shortUrl} onClick={this.props.cardOnClick} dataDelegate={this.props.cardDataDelegate} onDragStart={this.props.dotDragStart} />
+      <SwipesCard dataId={shortUrl} onClick={this.props.cardOnClick} shortUrlProvider={shortUrlProvider} onDragStart={this.props.dotDragStart} />
     )
   }
   render() {

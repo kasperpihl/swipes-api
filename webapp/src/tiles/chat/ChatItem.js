@@ -10,7 +10,7 @@ const delegateMethods = [ 'clickLink' ]
 class ChatItem extends Component {
   constructor(props) {
     super(props)
-    bindAll(this, ['clickedLink', 'dataDelegate'])
+    bindAll(this, ['clickedLink'])
   }
   renderMessageHeader(){
     const { name, timeStr, profileImage, dontRenderProfile } = this.props.data;
@@ -38,21 +38,13 @@ class ChatItem extends Component {
     e.stopPropagation()
 
   }
-  dataDelegate(shortUrl, provider, unsubscribe){
-    if(!unsubscribe){
-      shortUrlProvider.subscribe(shortUrl, provider);
-    }
-    else{
-      shortUrlProvider.unsubscribe(shortUrl, provider);
-    }
-  }
   renderTextWithLinks(text, emojis){
     if(Array.isArray(text)){
       text = text.map((t, i) => {
         if(typeof t === 'object'){
           if(t.type === 'card'){
             const dataId = dataIdFromShareURL(t.data);
-            return <SwipesCard key={'card' + i} dataId={dataId} dataDelegate={this.dataDelegate}/>
+            return <SwipesCard key={'card' + i} dataId={dataId} shortUrlProvider={shortUrlProvider}/>
           }
           if(t.type === 'link'){
             return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{unescape(t.title)}</a>;

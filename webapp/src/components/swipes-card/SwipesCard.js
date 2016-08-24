@@ -10,26 +10,22 @@ export default class SwipesCard extends Component {
   constructor(props){
     super(props);
     this.state = { data: props.data };
-    bindAll(this, ['onDragStart', 'clickedCard'])
+    bindAll(this, ['onDragStart', 'clickedCard', 'updateData'])
     this.id = randomString(5);
   }
+  updateData(data){
+    this.setState({ data });
+  }
   componentDidMount(){
-    this.didMount = true;
-    // Setup delegate structure to provide data
-    if(typeof this.props.dataDelegate === 'function'){
-      this.updateData = (data) => {
-        this.setState({ data });
-        if(this.didMount){
-
-        }
-      }
-      this.props.dataDelegate(this.props.dataId, this.updateData);
+    const { dataId, shortUrlProvider } = this.props;
+    if(dataId && shortUrlProvider){
+      shortUrlProvider.subscribe(dataId, this.updateData, this.id);
     }
   }
   componentWillUnmount(){
-    this.didMount = false;
-    if(this.props.dataDelegate){
-      this.props.dataDelegate(this.props.dataId, this.updateData, true);
+    const { dataId, shortUrlProvider } = this.props;
+    if(dataId && shortUrlProvider){
+      shortUrlProvider.unsubscribe(dataId, this.updateData, this.id);
     }
   }
   onDragStart(){
@@ -60,7 +56,10 @@ export default class SwipesCard extends Component {
 }
 
 SwipesCard.propTypes = {
-  dataDelegate: PropTypes.func,
+  shortUrlProvider: PropTypes.shape({
+    subscribe: PropTypes.func.isRequired,
+    unsubscribe: PropTypes.func.isRequired
+  }),
   onClick: PropTypes.func,
   dataId: PropTypes.string,
   onDragStart: PropTypes.func,

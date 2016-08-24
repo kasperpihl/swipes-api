@@ -12,7 +12,7 @@ class Find extends Component {
   constructor(props) {
     super(props)
     this.state = {};
-    bindAll(this, ['cardDataDelegate', 'dotDragStart'])
+    bindAll(this, [ 'dotDragStart'])
   }
   mapResultToCard(doc){
     let title, subtitle, description, onClick;
@@ -59,15 +59,6 @@ class Find extends Component {
     this.props.startDraggingDot("search", {shortUrl: shortUrl});
     //console.log('dot drag start', params);
   }
-  cardDataDelegate(shortUrl, provider, unsubscribe){
-    if(!unsubscribe){
-      shortUrlProvider.subscribe(shortUrl, provider);
-    }
-    else{
-      shortUrlProvider.unsubscribe(shortUrl, provider);
-    }
-
-  }
   render() {
     const { isFinding, draggingDot, recent } = this.props;
     let className = "find-overlay"
@@ -78,7 +69,7 @@ class Find extends Component {
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
           <SearchResults title="Results" results={this.state.searchResults}/>
-          <Activities title="Recent" subtitle="Mine" activities={recent} cardDataDelegate={this.cardDataDelegate} dotDragStart={this.dotDragStart}/>
+          <Activities title="Recent" subtitle="Mine" activities={recent} dotDragStart={this.dotDragStart}/>
         </div>
       </div>
     );
