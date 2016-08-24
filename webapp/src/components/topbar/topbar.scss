@@ -10,7 +10,7 @@
 }
 
 
-$topbarSize: 38px;
+$topbarSize: 54px;
 $searchbarSize: 90px;
 $fullscreenTopbarSize: 70px;
 
@@ -25,18 +25,19 @@ $fullscreenTopbarSize: 70px;
 	z-index: 9999;
 	background: linear-gradient(
 		to right,
-		#141562,
+		#1D2069,
 		#486FBC,
-		#EAB5A1,
-		#8DD6FF,
+		#FFA68F,
+		#F67F7F,
+		#74C7F5,
 		#4973C9,
 		#D07CA7,
-		#F4915E,
+		#F4945F,
 		#F5919E,
 		#B46F89,
-		#141562,
+		#1D2069,
 		#486FBC);
-	background-size: 1000% 1000%;
+	background-size: 1100% 1100%;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transform: translateY(calc((#{$searchbarSize} - #{$topbarSize}) * -1));
 	transition: .3s ease-in-out;
@@ -74,8 +75,7 @@ $fullscreenTopbarSize: 70px;
 	}
 
 	&__info {
-		height: 40px;
-		// @include flex(center, center);
+		height: $topbarSize;
 		position: relative;
 
 		&__icon {

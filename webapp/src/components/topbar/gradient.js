@@ -1,29 +1,29 @@
-
 var oldTime = null;
 var fullDaySeconds = 86400;
 var gradientSegmentPercentage = 100 / 11;
+
 var Gradient = {
 	daySegments: [
-	{
-		time: 37.5, // 00:00 - 09:00
-		width: gradientSegmentPercentage / 2
-	},
-	{
-		time: 4.166666, // 09:00 - 10:00
-		width: gradientSegmentPercentage * 2 + (gradientSegmentPercentage / 2)
-	},
-	{
-		time: 33.333333, // 10:00 - 18:00
-		width: gradientSegmentPercentage * 2 - (gradientSegmentPercentage / 2)
-	},
-	{
-		time: 6.25, // 18:00 - 19:30
-		width: gradientSegmentPercentage * 4 + (gradientSegmentPercentage / 2)
-	},
-	{
-		time: 18.75, // 19:30 - 00:00
-		width: gradientSegmentPercentage * 2
-	}
+		{
+			time: 37.5, // 00:00 - 09:00
+			width: gradientSegmentPercentage / 2
+		},
+		{
+			time: 4.166666, // 09:00 - 10:00
+			width: gradientSegmentPercentage * 2 + (gradientSegmentPercentage / 2)
+		},
+		{
+			time: 33.333333, // 10:00 - 18:00
+			width: gradientSegmentPercentage * 2 - (gradientSegmentPercentage / 2)
+		},
+		{
+			time: 6.25, // 18:00 - 19:30
+			width: gradientSegmentPercentage * 4 + (gradientSegmentPercentage / 2)
+		},
+		{
+			time: 18.75, // 19:30 - 00:00
+			width: gradientSegmentPercentage * 2
+		}
 	],
 	getGradientPos: function() {
 		var percentOfDay = this.percentOfCurrentDay();

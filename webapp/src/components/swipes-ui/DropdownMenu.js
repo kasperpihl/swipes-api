@@ -31,7 +31,7 @@ class SwipesDropdownMenu extends Component {
     if(typeof selectedId !== 'string'){
       selectedId = data[0].id;
     }
-    
+
     data.forEach((item) => {
       if(item.id === selectedId){
         selectedTitle = item.title;
@@ -46,6 +46,7 @@ class SwipesDropdownMenu extends Component {
       <div className="swipes-dropdown" onMouseEnter={this.openMenu.bind(this)} onMouseLeave={this.closeMenu.bind(this)}>
         <div className="swipes-dropdown__title">
           {selectedTitle}
+          <i className="material-icons">arrow_drop_down</i>
         </div>
         <div className={"swipes-dropdown__menu " + menuClass} onClick={this.closeMenu.bind(this)}>
           {this.renderItems(data)}

@@ -5,8 +5,14 @@
 
   &__title {
     @include flex(center, center);
-    height: 39px;
+    font-family: 'Aktiv-Grotesk';
+    font-size: 12px;
+    font-weight: bold;
+    height: 54px + 6px;
+    letter-spacing: 2.6px;
     padding: 0 10px;
+    padding-bottom: 6px;
+    text-transform: uppercase;
   }
 
   &__menu {
@@ -16,7 +22,7 @@
     border-radius: 6px;
     position: absolute;
     left: 6px;
-    top: 39px + 6px;
+    top: 54px + 6px;
     padding: 6px;
     transform: scaleY(0);
     transform-origin: 50% 0%;
