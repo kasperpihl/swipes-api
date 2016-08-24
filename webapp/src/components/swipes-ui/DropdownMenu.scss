@@ -2,30 +2,36 @@
 @import '../global-styles/mixins';
 
 .swipes-dropdown {
-  background-color: red;
+  // background-color: red;
   // position: absolute;
   // left: 0; top: 1px;
 
   &__title {
     height: 39px;
     @include flex(center, center);
-    background-color: green;
+    // background-color: green;
     padding: 0 10px;
   }
 
   &__menu {
-    background-color: blue;
+    min-width: 160px;
+    background-color: white;
+    box-shadow: $swipes-shadow-two;
+    border-radius: 6px;
     position: absolute;
-    right: 0;
+    left: 0;
     top: 39px;
+    padding: 5px;
     transform: scaleY(0);
     transform-origin: 50% 0%;
     transition: .4s;
     transition-delay: .05s;
 
     &--item {
-      text-align: right;
-      padding: 8px 15px;
+      color: $deepBlue-60;
+      border-radius: 3px;
+      text-align: left;
+      padding: 10px 40px 10px 10px;
       opacity: 0;
       transition: .1s;
     }
@@ -42,8 +48,8 @@
         transition: opacity .1s .3s, background-color .1s;
 
         &:hover {
-          background-color: black;
-
+          background-color: $blue-100;
+          color: #FAFAFA;
         }
       }
     }
