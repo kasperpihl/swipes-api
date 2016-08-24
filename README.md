@@ -1,3 +1,4 @@
+.
 ### Server part is in the rest folder
 Node 5.x.x is required. Npm is required.
 
