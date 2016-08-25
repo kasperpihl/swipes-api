@@ -22,6 +22,7 @@
     background-color: #FAFAFA;
     position: relative;
     height: 30px;
+    margin-bottom: 15px;
 
     &:before {
       content: "";
@@ -37,11 +38,11 @@
       content: attr(data-title);
       position: absolute;
       padding: 0 15px;
-      left: 36px; top: 50%;
+      left: 30px; top: 50%;
       background-color: #FAFAFA;
       transform: translateY(-50%);
       color: $deepBlue-80;
-      font-weight: 700;
+      font-weight: 500;
       font-size: 18px;
     }
   }
@@ -53,9 +54,9 @@
 
     &__toggle {
       @include size(24px, 24px);
-      margin-left: 6px;
+      margin-left: 3px;
       border-radius: 50%;
-      margin-right: 24px;
+      margin-right: 20px;
 
       &--connected {
         border: 1px solid $deepBlue-10;
@@ -122,7 +123,7 @@
       @include flex(flex-start, center, column);
 
       &--title {
-        font-weight: 500;
+        font-weight: 400;
         font-size: 15px;
         color: $deepBlue-100
       }
@@ -173,6 +174,11 @@
     }
 }
 
+.team-empty-state {
+  height: 100px;
+  margin: 0 auto;
+}
+
 .services-row {
   min-height: 80px;
   display: flex !important;
@@ -186,10 +192,6 @@
     align-items: center !important;
     justify-content: center !important;
     flex-direction: column;
-
-    img {
-      height: 100px;
-    }
 
     h6 {
       width: auto;
