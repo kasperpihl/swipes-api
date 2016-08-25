@@ -119,9 +119,15 @@ const dropbox = {
 		let mappedData;
 
 		if (type === 'file') {
+			let subtitle = data.path_display || '';
+
+			if (subtitle.length > 0) {
+				subtitle = subtitle.split('/').slice(0, -1).join('/');
+			}
+
 			mappedData = {
 				title: data.name || '',
-				subtitle: data.path_display || ''
+				subtitle
 			}
 		}
 
