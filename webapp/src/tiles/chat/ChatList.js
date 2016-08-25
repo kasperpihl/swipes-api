@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { bindAll, debounce } from '../../classes/utils'
-import SwipesLoader from '../../components/swipes-ui/SwipesLoader'
+import SwipesLoader from '../../components/swipes-ui/Loader'
 import ChatSection from './ChatSection'
 
 class ChatList extends Component {

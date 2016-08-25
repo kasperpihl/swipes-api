@@ -135,7 +135,7 @@ class Workspace extends Component {
 
   render() {
     if(!this.props.hasLoaded){
-      return <SwipesLoader center={true} />;
+      return <SwipesLoader size={120} center={true} />;
     }
     let content = <EmptyBackground />;
     if (this.props.columns.length) {

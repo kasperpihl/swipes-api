@@ -18,10 +18,8 @@ import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 // import SwipesCardList from './components/swipes-card/SwipesCardList'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
-import Test from './components/test'
 if(!window.process || !window.process.versions.electron){
-  if(true) {
-    Page = Test;
+  if(false) {
     // Page = SwipesCardList;
   }
   else if(window.__share_data){
