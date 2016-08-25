@@ -35,35 +35,35 @@ class SwipesCardList extends Component {
         onClick(dataId, data);
     }
   }
-  renderHeaderImage(headerImageLeft, headerImageRight) {
+  renderHeaderImage(titleLeftImage, titleRightImage) {
 
-    if (headerImageLeft) {
+    if (titleLeftImage) {
       return (
         <div className="sw-card-list__header__image sw-card-list__header__image--left">
-          <img src={headerImageLeft} alt=""/>
+          <img src={titleLeftImage} alt=""/>
         </div>
       )
     }
 
-    if (headerImageRight) {
+    if (titleRightImage) {
       return (
         <div className="sw-card-list__header__image sw-card-list__header__image--right">
-          <img src={headerImageRight} alt=""/>
+          <img src={titleRightImage} alt=""/>
         </div>
       )
     }
   }
-  renderHeader(title, headerImageLeft, headerImageRight) {
+  renderHeader(title, titleLeftImage, titleRightImage) {
     let hasLeftImage = '';
 
-    if (headerImageLeft) {
+    if (titleLeftImage) {
       hasLeftImage = ' sw-card-list__header--left-image'
     }
     return (
       <div className={"sw-card-list__header" + hasLeftImage}>
-        {this.renderHeaderImage(headerImageLeft)}
+        {this.renderHeaderImage(titleLeftImage)}
         <div className="sw-card-list__header--title">{title}</div>
-        {this.renderHeaderImage(headerImageRight)}
+        {this.renderHeaderImage(titleRightImage)}
       </div>
     )
   }
@@ -83,14 +83,14 @@ class SwipesCardList extends Component {
     )
   }
   render() {
-    const { title, headerImageLeft, headerImageRight } = this.props;
+    const { title, titleLeftImage, titleRightImage } = this.props;
     const data = this.state.data || [{ title: "Loading..." }]
 
     const list = data.map( (listItem, i) => this.renderListItem(listItem, i) )
 
     return (
       <div className="sw-card-list">
-        {this.renderHeader(title, headerImageLeft, headerImageRight)}
+        {this.renderHeader(title, titleLeftImage, titleRightImage)}
         <div className="sw-card-list__list">
           {list}
         </div>
@@ -102,7 +102,7 @@ export default SwipesCardList
 
 SwipesCardList.propTypes = {
   title: PropTypes.string.isRequired,
-  headerImageLeft: PropTypes.string,
+  titleLeftImage: PropTypes.string,
   dataDelegate: PropTypes.func,
   onClick: PropTypes.func,
   dataId: PropTypes.string,
