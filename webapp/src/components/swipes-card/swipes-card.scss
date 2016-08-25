@@ -28,6 +28,25 @@ $imgWrapper: 50px;
       background-color: $deepBlue-10;
     }
 
+    &--left-image & {
+      &--title {
+        margin-left: 0;
+      }
+    }
+
+    &__image {
+      @include size(60px, 60px);
+      @include flex(center, center);
+
+      &--left {
+
+        img {
+          @include size(25px, 25px);
+          // border-radius: 50%;
+        }
+      }
+    }
+
     &--title {
       margin-left: 5%;
       font-weight: 700;

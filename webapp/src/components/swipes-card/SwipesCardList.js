@@ -35,10 +35,35 @@ class SwipesCardList extends Component {
         onClick(dataId, data);
     }
   }
-  renderHeader(title) {
+  renderHeaderImage(headerImageLeft, headerImageRight) {
+
+    if (headerImageLeft) {
+      return (
+        <div className="sw-card-list__header__image sw-card-list__header__image--left">
+          <img src={headerImageLeft} alt=""/>
+        </div>
+      )
+    }
+
+    if (headerImageRight) {
+      return (
+        <div className="sw-card-list__header__image sw-card-list__header__image--right">
+          <img src={headerImageRight} alt=""/>
+        </div>
+      )
+    }
+  }
+  renderHeader(title, headerImageLeft, headerImageRight) {
+    let hasLeftImage = '';
+
+    if (headerImageLeft) {
+      hasLeftImage = ' sw-card-list__header--left-image'
+    }
     return (
-      <div className="sw-card-list__header">
+      <div className={"sw-card-list__header" + hasLeftImage}>
+        {this.renderHeaderImage(headerImageLeft)}
         <div className="sw-card-list__header--title">{title}</div>
+        {this.renderHeaderImage(headerImageRight)}
       </div>
     )
   }
@@ -58,14 +83,14 @@ class SwipesCardList extends Component {
     )
   }
   render() {
-    const { title } = this.props;
+    const { title, headerImageLeft, headerImageRight } = this.props;
     const data = this.state.data || [{ title: "Loading..." }]
 
     const list = data.map( (listItem, i) => this.renderListItem(listItem, i) )
 
     return (
       <div className="sw-card-list">
-        {this.renderHeader(title)}
+        {this.renderHeader(title, headerImageLeft, headerImageRight)}
         <div className="sw-card-list__list">
           {list}
         </div>
