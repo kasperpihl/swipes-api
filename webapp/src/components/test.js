@@ -39,13 +39,13 @@ class Test extends Component {
     position = parseInt(position, 10);
 
     if(position === 1){
-      return 'polygon(35% 0, 65% 0, 65% 30%, 35% 30%)';
+      return 'polygon(0 35%, 30% 35%, 30% 65%, 0 65%)';
     }
     else if(position === 2){
       return 'polygon(0 0, 30% 0, 30% 30%, 0 30%)';
     }
     else if(position === 3){
-      return 'polygon(0 35%, 30% 35%, 30% 65%, 0 65%)';
+      return 'polygon(35% 0, 65% 0, 65% 30%, 35% 30%)';
     }
     else if(position === 4){
       return 'polygon(35% 35%, 65% 35%, 65% 65%, 35% 65%)';
