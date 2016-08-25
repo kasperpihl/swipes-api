@@ -30,7 +30,7 @@ class Test extends Component {
     this.setNextState = this.setNextState.bind(this);
   }
   componentDidMount() {
-    this.timer = setInterval(this.setNextState, 1000);
+    this.timer = setInterval(this.setNextState, 200);
   }
   componentWillUnmount(){
     clearInterval(this.timer);

@@ -2,18 +2,17 @@
   width: $width;
   height: $height;
 }
-$loaderSize: 300px;
+$loaderSize: 20px;
 
 .sw-loader__holder {
-  margin: 50px auto;
 
   @include size($loaderSize, $loaderSize);
   // border: 1px solid red;
   position: relative;
   transform: rotate(-45deg);
-
+  margin: 100px auto;
   .rect {
-    transition: 1s;
+    transition: .2s ease-in-out;
     @include size(100%, 100%);
     position: absolute;
     left: 0; top: 0;
@@ -23,7 +22,8 @@ $loaderSize: 300px;
     background-position: 0% 50%;
     background-size: 1000% 1000%;
     overflow: hidden;
-    animation: moveGradient 15s infinite;
+    animation: moveGradient 10s infinite;
+    border-radius: 10%;
 
 
   }
