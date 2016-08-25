@@ -8,6 +8,7 @@ import { bindAll } from '../classes/utils';
 import SelectRow from '../components/services/SelectRow'
 import Webview from '../components/workspace/Webview'
 import DropzoneOverlay from '../components/workspace/DropzoneOverlay'
+import SwipesLoader from '../components/swipes-ui/SwipesLoader'
 
 import LocalTile from '../components/workspace/LocalTile'
 import SwipesAppSDK from '../classes/sdk/swipes-sdk-tile'
@@ -162,7 +163,7 @@ class Tile extends Component {
   }
   render() {
     // KRIS_TODO: Replace Loading with something dope
-    let cardContent = <div>Loading</div>;
+    let cardContent = <SwipesLoader size={120} center={true}/>;
 
     const tile = this.props.tile;
     if(tile){

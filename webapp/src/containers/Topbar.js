@@ -79,6 +79,7 @@ class Topbar extends Component {
     setTimeout(this.gradientStep, 3000);
   }
   render() {
+
     var topbarClass = 'sw-topbar';
     var styles = gradient.getGradientStyles();
 
@@ -105,7 +106,9 @@ class Topbar extends Component {
     if(pathname === '/services'){
       selectedId = 'services';
     }
-
+    if(!this.props.hasLoaded){
+      styles.display = 'none';
+    }
     return (
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
@@ -133,7 +136,8 @@ function mapStateToProps(state) {
   return {
     isFullscreen: state.main.isFullscreen,
     searchQuery: state.main.searchQuery,
-    isFinding: state.main.isFinding
+    isFinding: state.main.isFinding,
+    hasLoaded: state.main.hasLoaded
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { bindAll, debounce } from '../../classes/utils'
-
+import SwipesLoader from '../../components/swipes-ui/SwipesLoader'
 import ChatSection from './ChatSection'
 
 class ChatList extends Component {
@@ -97,7 +97,7 @@ class ChatList extends Component {
 
   renderLoading(){
     if(!this.props.sections){
-      return <div>Loading</div>
+      return <SwipesLoader size={60} center={true}/>
     }
   }
   renderSections(){
