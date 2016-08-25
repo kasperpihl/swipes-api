@@ -45,6 +45,10 @@ $imgWrapper: 50px;
           // border-radius: 50%;
         }
       }
+
+      &--right {
+        @include size(50px, 50px);
+      }
     }
 
     &--title {

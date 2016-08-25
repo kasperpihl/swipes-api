@@ -59,6 +59,7 @@ class SwipesCardList extends Component {
     if (titleLeftImage) {
       hasLeftImage = ' sw-card-list__header--left-image'
     }
+
     return (
       <div className={"sw-card-list__header" + hasLeftImage}>
         {this.renderHeaderImage(titleLeftImage)}
