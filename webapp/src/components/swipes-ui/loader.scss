@@ -1,18 +1,18 @@
-.sw-loader__wrapper{
+.sw-loader__wrapper {
   position:relative;
 
-  &.center{
+  &--center {
     position:absolute;
     left: 50%;
     top:50%;
     transform: translate(-50%, -50%);
   }
+
   .sw-loader__holder {
     width: 70%;
     height: 70%;
     margin-left: 15%;
     margin-top: 15%;
-    // border: 1px solid red;
     position: relative;
     transform: rotate(-45deg);
 
@@ -28,12 +28,9 @@
       background-size: 1000% 1000%;
       overflow: hidden;
       animation: moveGradient 15s infinite;
-
-
     }
   }
 }
-
 
 @keyframes moveGradient {
   to {

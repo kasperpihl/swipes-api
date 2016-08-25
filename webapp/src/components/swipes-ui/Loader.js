@@ -37,7 +37,7 @@ class Loader extends Component {
   }
   clipPathForPosition(position){
     position = parseInt(position, 10);
-    const SIZE = (100-2*GUTTER)/3; 
+    const SIZE = (100-2*GUTTER)/3;
     const VAR0 = '0% ';
     const VAR1 = (SIZE+GUTTER) + '% ';
     const VAR2 = (2*SIZE+2*GUTTER) + '% ';
@@ -45,7 +45,7 @@ class Loader extends Component {
       case 1: return 'inset(' + VAR1 + VAR2 + VAR1 + VAR0 + ' round 5%)';
       case 2: return 'inset(' + VAR0 + VAR2 + VAR2 + VAR0 + ' round 5%)';
       case 3: return 'inset(' + VAR0 + VAR1 + VAR2 + VAR1 + ' round 5%)';
-      case 4: return 'inset(' + VAR1 + VAR1 + VAR1 + VAR1 + ' round 5%)'; 
+      case 4: return 'inset(' + VAR1 + VAR1 + VAR1 + VAR1 + ' round 5%)';
       case 5: return 'inset(' + VAR2 + VAR1 + VAR0 + VAR1 + ' round 5%)';
       case 6: return 'inset(' + VAR2 + VAR0 + VAR0 + VAR2 + ' round 5%)';
       case 7: return 'inset(' + VAR1 + VAR0 + VAR1 + VAR2 + ' round 5%)';
@@ -108,12 +108,12 @@ class Loader extends Component {
       styles.width = size + 'px';
       styles.height = size + 'px';
     }
-    
+
     let className = "sw-loader__wrapper"
     if(center){
-      className += " center";
+      className += " sw-loader__wrapper--center";
     }
-    
+
     return (
       <div style={styles} className={className}>
         <div className="sw-loader__holder">
