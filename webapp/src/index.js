@@ -15,23 +15,12 @@ let Page;
 const props = {};
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
-import SwipesCardList from './components/swipes-card/SwipesCardList'
+import Test from './components/test'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
-  if(false){
-    props.title = "Header",
-    props.data = [
-      {
-        title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, qui!',
-        subtitle: 'Lorem ipsum dolor sit amet.'
-      },
-      {
-        title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, qui!',
-        subtitle: 'Lorem ipsum dolor sit amet.'
-      }
-    ]
-    Page = SwipesCardList;
+  if(true){
+    Page = Test;
   }
   else if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
