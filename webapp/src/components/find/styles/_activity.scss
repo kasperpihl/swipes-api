@@ -27,6 +27,7 @@
 
   &__activity {
     margin: 3px 0px;
+    position: relative;
 
     &__story {
       // @include flex(center, flex-end);
@@ -40,6 +41,10 @@
         color: $blue-100;
         opacity: 0;
         padding-right: 5px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #fafafa;
       }
     }
 

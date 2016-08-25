@@ -2,6 +2,21 @@ var oldTime = null;
 var fullDaySeconds = 86400;
 var gradientSegmentPercentage = 100 / 12;
 
+const gradientColors = [
+	'#1D2069',
+	'#486FBC',
+	'#FFA68F',
+	'#F67F7F',
+	'#74C7F5',
+	'#4973C9',
+	'#D07CA7',
+	'#F4945F',
+	'#F5919E',
+	'#B46F89',
+	'#1D2069',
+	'#486FBC'
+]
+
 var Gradient = {
 	daySegments: [
 		{
@@ -25,8 +40,9 @@ var Gradient = {
 			width: gradientSegmentPercentage * 2
 		}
 	],
-	getGradientPos: function() {
-		var percentOfDay = this.percentOfCurrentDay();
+	getGradientPos: function(percent) {
+		if(!percent) 
+			percent = this.percentOfCurrentDay();
 		var daySegments = this.daySegments;
 		var segLen = daySegments.length;
 		var segTimeSum = 0;
@@ -37,11 +53,11 @@ var Gradient = {
 
 			segTimeSum = segTimeSum + seg.time;
 
-			if (percentOfDay >= segTimeSum) {
+			if (percent >= segTimeSum) {
 				currentWidth = currentWidth + seg.width;
 			} else {
 				var prevSegSum = segTimeSum - seg.time;
-				var portionOfDay = percentOfDay - prevSegSum;
+				var portionOfDay = percent - prevSegSum;
 				var percentOfSeg = portionOfDay / seg.time * 100;
 				var width = seg.width * percentOfSeg / 100;
 
@@ -55,7 +71,18 @@ var Gradient = {
 		currentGradientPosition = Math.round( currentGradientPosition * 1e2 ) / 1e2;
 		return currentGradientPosition;
 	},
-
+	getGradientStyles(){
+		return {
+			background: 'linear-gradient(to right, ' + gradientColors.join(', ') + ')',
+			backgroundSize: '1100% 1100%'
+		}
+	},
+	percentOfValue(elapsed, total){
+		if(elapsed > total){
+			elapsed = elapsed % total;
+		}
+		return (elapsed / total) * 100;
+	},
 	percentOfCurrentDay: function() {
 		var today = new Date();
 		var hoursSeconds = today.getHours() * 60 * 60;
@@ -67,4 +94,4 @@ var Gradient = {
 		return percentOfCurrentDay;
 	}
 };
-module.exports = Gradient;
+export default Gradient;

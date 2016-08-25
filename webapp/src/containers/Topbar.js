@@ -7,7 +7,7 @@ import '../components/topbar/topbar.scss'
 import DropdownMenu from '../components/swipes-ui/DropdownMenu'
 
 import WorkspaceIcon from '../components/global-styles/images/workspace-icon.svg'
-var gradient = require('../components/topbar/gradient');
+import gradient from '../components/topbar/gradient';
 
 class Topbar extends Component {
   constructor(props) {
@@ -19,9 +19,9 @@ class Topbar extends Component {
   componentDidMount() {
     this.gradientStep();
   }
-  componentDidUpdate(){
-    if(this.props.isFinding){
-      this.refs.searchInput.focus()
+  componentDidUpdate(prevProps){
+    if(this.props.isFinding && !prevProps.isFinding && document.activeElement !== this.refs.searchInput){
+      this.refs.searchInput.select()
     }
   }
   onKeyDown(e){
@@ -80,7 +80,7 @@ class Topbar extends Component {
   }
   render() {
     var topbarClass = 'sw-topbar';
-    var styles = {};
+    var styles = gradient.getGradientStyles();
 
     if(this.state.gradientPos) {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';

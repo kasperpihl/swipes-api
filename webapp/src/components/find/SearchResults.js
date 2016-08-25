@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../swipes-card/SwipesCard'
+import SwipesCardList from '../swipes-card/SwipesCardList'
 import SearchResultsService from './SearchResultsService'
 
 class SearchResults extends Component {
@@ -35,11 +36,22 @@ class SearchResults extends Component {
   }
   renderResultList(results) {
     if(!results) return;
-    const { cardOnClick } = this.props;
     
-    return results.map( (result, i) => {
-      return <SwipesCard data={result} key={'search-result-' + i} onClick={cardOnClick} />
-    })
+    const { cardOnClick } = this.props;
+    if(Array.isArray(results)){
+      return results.map( (result, i) => {
+        return <SwipesCard data={result} key={'search-result-' + i} onClick={cardOnClick} />
+      })
+    }
+    else{
+      const html = [];
+      for(var key in results){
+        var cards = results[key];
+        html.push(<SwipesCardList data={cards} title={key} key={'search-result-' + key} onClick={cardOnClick}/>);
+      }
+      return html;
+    }
+    
   }
   render() {
     const { title, subtitle, results } = this.props;

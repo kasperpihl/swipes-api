@@ -9,7 +9,11 @@
   max-width: calc(100% - 300px);
   min-width: 70%;
   padding: 10px 20px;
-
+  &__result-list{
+    .sw-card-list{
+      margin-bottom: 20px;
+    }
+  }
   &__services {
     width: 100%;
     max-width: 100px;
