@@ -7,6 +7,8 @@ import '../components/workspace/workspace.scss'
 
 import EmptyBackground from '../components/workspace/EmptyBackground'
 import ResizeOverlay from '../components/workspace/ResizeOverlay'
+import SwipesLoader from '../components/swipes-ui/SwipesLoader'
+
 import Tile from './Tile'
 import Grid from '../components/resizeable-grid/grid'
 
@@ -133,7 +135,7 @@ class Workspace extends Component {
 
   render() {
     if(!this.props.hasLoaded){
-      return <div>Loading</div>
+      return <SwipesLoader center={true} />;
     }
     let content = <EmptyBackground />;
     if (this.props.columns.length) {

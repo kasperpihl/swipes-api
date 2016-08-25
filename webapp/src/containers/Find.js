@@ -73,7 +73,7 @@ class Find extends Component {
       });
       console.log(groups);
       this.setState({searchResults: groups});
-      console.log('unhandled', this.unhandledDocs);
+      console.log('unhandled', res);
       //this.setState({searchResults: searchResults});
     });
   }
@@ -102,12 +102,25 @@ class Find extends Component {
     this.props.startDraggingDot("search", {shortUrl: shortUrl});
     //console.log('dot drag start', params);
   }
+  generateActivity(){
+    const { recent } = this.props;
+    const keys = {}
+    return recent.filter((activity) => {
+      const id = activity.short_url;
+      if(!keys[id]){
+        keys[id] = true;
+        return true;
+      }
+      return false;
+    })
+  }
   render() {
-    const { isFinding, draggingDot, recent } = this.props;
+    const { isFinding, draggingDot } = this.props;
     let className = "find-overlay"
     if(isFinding && !draggingDot){
       className += ' open'
     }
+    const recent = this.generateActivity();
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">

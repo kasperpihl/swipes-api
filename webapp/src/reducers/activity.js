@@ -12,7 +12,7 @@ export default function services (state = initialState, action) {
       return state;
     }
     case 'activity_added':{
-      return Object.assign({}, state, {recent: [action.payload.data].concat(state.recent.slice(0,20)) })
+      return Object.assign({}, state, {recent: [action.payload.data].concat(state.recent.slice(0, 100)) })
     }
     case types.LOGOUT:{
       return clone(initialState);
