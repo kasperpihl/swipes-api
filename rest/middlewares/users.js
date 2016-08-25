@@ -20,12 +20,12 @@ const getUserService = (req, res, next) => {
     return next(new SwipesError('id is required'));
   }
 
-  const coerceToNumber = r.expr(serviceAccountId).coerceTo('number');
+  const coerceToNumber = isNaN(serviceAccountId) ? serviceAccountId : r.expr(serviceAccountId).coerceTo('number');
   const getServiceQ =
     r.table('users')
       .get(userId)('services')
       .filter((service) => {
-        return service('id').eq(serviceAccountId).or(service('id').eq(coerceToNumber))
+        return service('id').eq(coerceToNumber)
       })
       .nth(0)
 
