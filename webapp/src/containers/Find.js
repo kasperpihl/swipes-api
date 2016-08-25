@@ -13,37 +13,80 @@ class Find extends Component {
     super(props)
     this.state = {};
     bindAll(this, [ 'dotDragStart'])
+    this.unhandledDocs = [];
   }
   mapResultToCard(doc){
-    let title, subtitle, description, onClick;
+    let title, subtitle = '', description, onClick;
     if(doc.source === 'slack'){
       
       if(doc.source_content_type === 'file'){
         title = doc.filename;
       }
-      else if(doc.source_content_type === 'image/png'){
-
+      if(doc.source_content_type === 'image/png'){
+        title = doc.filename;
+        subtitle = 'From ' + doc.author;
+      }
+      if(doc.source_content_type === 'message'){
+        title = doc.message;
+        subtitle = doc.folder.join(', ');
+        subtitle += ' - ' + doc.author;
       }
     }
     else if(doc.source === 'asana'){
-
+      if(doc.source_content_type === 'task'){
+        title = doc.title;
+        if(doc.folder){
+          subtitle = doc.folder.join(', ');
+        }
+        else{
+          subtitle = doc.status;
+        }
+        if(doc.to){
+          subtitle += ': ' + doc.to.join(', ');
+        }
+        //subtitle = doc.folder.join(', ');
+      }
     }
     else if(doc.source === 'dropbox'){
-      console.log(doc);
       title = doc.filename;
       subtitle = doc.filepath;
     }
+    if(!title){
+      this.unhandledDocs.push(doc);
+    }
+    subtitle += ' ' + doc.score;
     return { title, subtitle, description, onClick }
   }
-
+  search(query){
+    this.setState({searchQuery: query, searchResults: []})
+    this.unhandledDocs = [];
+    this.props.request('search', {q: query}).then((res) => {
+      const groups = {};
+      res.result.response.docs.forEach((doc) => {
+        this.mapResultToCard(doc);
+        if(!groups[doc.source]){
+          groups[doc.source] = [];
+        }
+        if(groups[doc.source].length < 3){
+          groups[doc.source].push(this.mapResultToCard(doc));
+        }
+      });
+      console.log(groups);
+      this.setState({searchResults: groups});
+      console.log('unhandled', this.unhandledDocs);
+      //this.setState({searchResults: searchResults});
+    });
+  }
   componentDidUpdate(){
     const { searchQuery } = this.props;
     if(searchQuery !== this.state.searchQuery){
-      this.setState({searchQuery: searchQuery})
-      this.props.request('search', {q: searchQuery}).then((res) => {
-        const searchResults = res.result.response.docs.map((doc) => this.mapResultToCard(doc));
-        this.setState({searchResults: searchResults});
-      });
+      if(!searchQuery || !searchQuery.length){
+        this.setState({searchQuery, searchResults: []});
+      }
+      else{
+        this.search(searchQuery);
+      }
+      console.log('searching', searchQuery);
     }
   }
   onClick(e){

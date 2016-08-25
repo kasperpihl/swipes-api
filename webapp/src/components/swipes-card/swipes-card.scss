@@ -11,7 +11,6 @@ $imgWrapper: 50px;
   box-shadow: $swipes-shadow-one;
   line-height: 1;
   overflow: hidden;
-  margin: 200px auto;
 
   &__header {
     @include size();

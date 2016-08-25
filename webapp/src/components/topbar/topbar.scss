@@ -23,21 +23,6 @@ $fullscreenTopbarSize: 70px;
 	left: 0;
 	top: 0;
 	z-index: 9999;
-	background: linear-gradient(
-		to right,
-		#1D2069,
-		#486FBC,
-		#FFA68F,
-		#F67F7F,
-		#74C7F5,
-		#4973C9,
-		#D07CA7,
-		#F4945F,
-		#F5919E,
-		#B46F89,
-		#1D2069,
-		#486FBC);
-	background-size: 1100% 1100%;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transform: translateY(calc((#{$searchbarSize} - #{$topbarSize}) * -1));
 	transition: .3s ease-in-out;
