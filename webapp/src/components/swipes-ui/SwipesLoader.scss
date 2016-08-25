@@ -1,0 +1,11 @@
+.sw-loader {
+	width: 60px;
+	height: 60px;
+	clip-path: url(#sw-loader-clip);
+	overflow: hidden;
+  background-size: 8800% 8800% !important;
+}
+
+.sw-loader__svg {
+	position: absolute;
+}

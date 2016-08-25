@@ -13,8 +13,7 @@ const gradientColors = [
 	'#F4945F',
 	'#F5919E',
 	'#B46F89',
-	'#1D2069',
-	'#486FBC'
+	'#1D2069'
 ]
 
 var Gradient = {
@@ -41,7 +40,7 @@ var Gradient = {
 		}
 	],
 	getGradientPos: function(percent) {
-		if(!percent) 
+		if(!percent)
 			percent = this.percentOfCurrentDay();
 		var daySegments = this.daySegments;
 		var segLen = daySegments.length;

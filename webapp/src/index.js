@@ -15,12 +15,12 @@ let Page;
 const props = {};
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
-import Test from './components/test'
+// import SwipesLoader from './components/swipes-ui/SwipesLoader'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
-  if(true){
-    Page = Test;
+  if(false){
+    // Page = SwipesLoader;
   }
   else if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
