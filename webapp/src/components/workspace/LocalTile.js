@@ -46,7 +46,6 @@ class LocalTile extends Component {
 
   }
 }
-export default LocalTile
 
 LocalTile.propTypes = {
   onLoad: PropTypes.func.isRequired,
