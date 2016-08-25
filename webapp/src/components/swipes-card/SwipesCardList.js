@@ -102,6 +102,7 @@ export default SwipesCardList
 
 SwipesCardList.propTypes = {
   title: PropTypes.string.isRequired,
+  headerImageLeft: PropTypes.string,
   dataDelegate: PropTypes.func,
   onClick: PropTypes.func,
   dataId: PropTypes.string,

@@ -200,12 +200,7 @@ $imgWrapper: 50px;
 
 		&--img {
       @include flex(center, center);
-			@include size(100%, auto);
-
-      img {
-        // border-radius: 3px;
-        // box-shadow: $swipes-shadow-one;
-      }
+			width: 100%;
 		}
   }
 }
