@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import './test.scss'
 const initialState = {
-  
+
   positions: {
     1: 'alpha',
     2: 'bravo',
@@ -51,11 +51,11 @@ class Test extends Component {
       return 'polygon(35% 35%, 65% 35%, 65% 65%, 35% 65%)';
     }
     else if(position === 5){
-      return 'polygon(35% 100%, 65% 100%, 65% 70%, 35% 70%)';
+      return 'polygon(35% 70%, 65% 70%, 65% 100%, 35% 100%)';
     }
     else if(position === 6){
       return 'polygon(70% 70%, 100% 70%, 100% 100%, 70% 100%)';
-    }  
+    }
     else if(position === 7){
       return 'polygon(70% 35%, 100% 35%, 100% 65%, 70% 65%)';
     }
@@ -91,7 +91,7 @@ class Test extends Component {
 
     const currentState = this.state.stateNumber;
     const nextState = (currentState === 7) ? 0 : currentState + 1;
-    
+
 
     this.setState({stateNumber: nextState, positions: newPositions});
   }
@@ -113,5 +113,3 @@ class Test extends Component {
   }
 }
 export default Test
-
-
