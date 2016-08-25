@@ -29,7 +29,7 @@ class SwipesLoader extends Component {
     }
 
     return (
-      <div className="wrap">
+      <div className="sw-loader-wrap">
         <svg viewBox="0 0 60 45" className="sw-loader__svg">
           <defs>
             <clipPath id="sw-loader-clip">
