@@ -15,7 +15,6 @@ $searchbarSize: 90px;
 $fullscreenTopbarSize: 70px;
 
 .sw-topbar {
-	padding-left: 80px;
 	@include size(100%, $searchbarSize);
 	user-select: none;
   -webkit-app-region: drag;
@@ -33,7 +32,7 @@ $fullscreenTopbarSize: 70px;
 		@include size(100%, $topbarSize);
 		color: white;
 		transition: .3s ease-in-out;
-
+		padding-left: 15px;
 		@include flex(center, space-between);
 	}
 
