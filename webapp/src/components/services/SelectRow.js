@@ -6,8 +6,8 @@ import './services.scss'
 
 import Select from 'react-select';
 
-import EmptyStateConnect from './images/swipes-workspace-illustrations-emptystate-connect.svg?name=EmptyStateConnect'
-import EmptyStatePickTeam from './images/swipes-workspace-illustrations-emptystate-pickteam.svg?name=EmptyStatePickTeam'
+import SwipesWorkspaceIllustrationsEmptystateConnect from './images/swipes-workspace-illustrations-emptystate-connect.svg'
+import SwipesWorkspaceIllustrationsEmptystatePickteam from './images/swipes-workspace-illustrations-emptystate-pickteam.svg'
 
 class SelectRow extends Component {
   constructor(props) {
@@ -59,10 +59,10 @@ class SelectRow extends Component {
 
     if (!this.props.data.services || !this.props.data.services.length) {
       text = 'Connect to ' + this.props.data.title;
-      SVG = EmptyStateConnect
+      SVG = SwipesWorkspaceIllustrationsEmptystateConnect
     } else {
       text = 'Pick a team'
-      SVG = EmptyStatePickTeam
+      SVG = SwipesWorkspaceIllustrationsEmptystatePickteam
     }
     return(
       <div className="services row connect in-card">
