@@ -1,16 +1,20 @@
 import React, { Component, PropTypes } from 'react'
 import gradient from '../topbar/gradient'
-import './SwipesLoader.scss'
+import './swipes-loader.scss'
+const DEFAULT_SIZE = 60;
 
 class SwipesLoader extends Component {
   constructor(props) {
     super(props)
     this.state = {}
   }
+  componentWillUnmount(){
+    clearInterval(this.interval);
+  }
   componentDidMount() {
     const startTime = new Date().getTime();
     let elapsedTime = 0;
-    setInterval(() => {
+    this.interval = setInterval(() => {
       elapsedTime = new Date().getTime() - startTime;
       let percent = gradient.percentOfValue(elapsedTime, 10000);
       this.setState({gradientPos: percent});
@@ -18,18 +22,23 @@ class SwipesLoader extends Component {
   }
   render() {
     let styles = gradient.getGradientStyles();
-    const { size } = this.props;
+    const { size, style, center } = this.props;
 
     if(this.state.gradientPos) {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
     }
-
+    
     if ( size ) {
-      styles.transform = 'scale( ' + size + ')';
+      const scale = size / DEFAULT_SIZE;
+      styles.transform = 'scale( ' + scale + ')';
     }
-
+    
+    let className = "sw-loader-wrap";
+    if(center){
+      className += " center";
+    }
     return (
-      <div className="sw-loader-wrap">
+      <div className={className} style={style}>
         <svg viewBox="0 0 60 45" className="sw-loader__svg">
           <defs>
             <clipPath id="sw-loader-clip">
@@ -46,5 +55,6 @@ class SwipesLoader extends Component {
 export default SwipesLoader
 
 SwipesLoader.propTypes = {
-  size: PropTypes.string
+  size: PropTypes.number,
+  center: PropTypes.bool
 }
