@@ -4,10 +4,14 @@ var Resizer = React.createClass({
   componentDidMount(){
     this.diffX = 0;
     this.diffY = 0;
-    this.bouncedColResize = throttle((var1) => {  
+    this.bouncedColResize = throttle(() => {
       this.props.delegate.columnResize(this.diffX);
       this.diffX = 0;
-    }, 19);
+    }, 50);
+    this.bouncedRowResize = throttle(() => {
+      this.props.delegate.rowResize(this.diffY);
+      this.diffY = 0;
+    }, 50)
   },
   onDragStart(e){
     this.lastX = e.clientX;
@@ -29,12 +33,12 @@ var Resizer = React.createClass({
       var diffX = (e.clientX - this.lastX);
       var diffY = (e.clientY - this.lastY);
       if(this.props.isRow && diffY){
-        this.props.delegate.rowResize(diffY);
+        this.diffY += diffY;
+        this.bouncedRowResize();
       }
       if(!this.props.isRow && diffX){
         this.diffX += diffX;
-        //console.log('drag', diffX, diffY);
-        this.bouncedColResize(diffX);
+        this.bouncedColResize();
       }
 
       this.lastX = e.clientX;

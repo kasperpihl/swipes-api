@@ -1,5 +1,9 @@
 var React = require('react');
 
+import CollapseIcon from './images/sw-collapse-icon.svg';
+import FullscreenIcon from './images/sw-fullscreen-icon.svg';
+import ContextIcon from './images/sw-context-icon.svg';
+
 var initClientX = null;
 var initClientY = null;
 
@@ -69,20 +73,21 @@ var Topbar = React.createClass({
     } else {
       return (
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
-          <div className="sw-grid-topbar_content">
-            <div className="sw-grid-topbar_content-menu" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>
-              <div className="menu-icon"></div>
-            </div>
-            <div className="sw-grid-topbar_content-title">{title}</div>
-            <div className="sw-grid-topbar_content-seperator"></div>
-            <div className="sw-grid-topbar_content-subtitle">Swipes Team</div>
+          <div className="sw-grid-topbar__content">
+            <div className="sw-grid-topbar__content--title" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>{title}</div>
+            <div className="sw-grid-topbar__content--seperator"></div>
+            <div className="sw-grid-topbar__content--subtitle">Swipes Team</div>
           </div>
-          <div className="sw-grid-topbar_actions">
-            <div className="sw-grid-topbar_actions-collapse" onClick={this.props.delegate.onCollapse.bind(null, this.props.data.id)}>
-              <div className="collapse-icon"></div>
+          <div className="sw-grid-topbar__actions">
+            <div className="sw-grid-topbar__actions--collapse" onClick={this.props.delegate.onCollapse.bind(null, this.props.data.id)}>
+              <div className="collapse-icon">
+                <CollapseIcon />
+              </div>
             </div>
-            <div className="sw-grid-topbar_actions-fullscreen" onClick={this.props.delegate.onFullscreen.bind(null, this.props.data.id)}>
-              <div className="fullscreen-icon"></div>
+            <div className="sw-grid-topbar__actions--fullscreen" onClick={this.props.delegate.onFullscreen.bind(null, this.props.data.id)}>
+              <div className="fullscreen-icon">
+                <FullscreenIcon />
+              </div>
             </div>
           </div>
         </div>

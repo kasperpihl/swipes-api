@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import './loader.scss'
-const TIMER = 150;
-const DEF_SIZE = 60;
+
+const TIMER = 150; // Milliseconds between moving the next block
+const TRANSITION = .5 // Seconds to actually move one block
+const DEF_SIZE = 60; // Pixels height/width
 const GUTTER = 5; // Spacing in percentage between tiles
 const initialState = {
 
@@ -90,7 +92,7 @@ class Loader extends Component {
     return ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot'].map((radioCommand) => {
       const pos = this.positionForTile(radioCommand);
       const styles = {
-        transition: (TIMER/1000) + 's ease-in-out',
+        transition: (TRANSITION) + 's cubic-bezier(0.86, 0, 0.07, 1)',
         WebkitClipPath: this.clipPathForPosition(pos)
       }
       return <div key={"rect-" + radioCommand} style={styles} className={"rect " + radioCommand} />

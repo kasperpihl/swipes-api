@@ -1,5 +1,8 @@
+@import '../../global-styles/mixins';
+
 .sw-grid-topbar {
-  $action-button-size: 22px;
+  $action-button-width: 24px;
+  $action-button-height: 18px;
 
   @include size(100%, 55px);
   background-color: #FBFBFB;
@@ -8,102 +11,88 @@
 
   @include flex(center, space-between);
 
-  &_content {
+  &__content {
     height: 100%;
 
     @include flex(center, center);
 
-    &-menu {
-      @include size($action-button-size, $action-button-size);
-      border-radius: 50%;
-      border: 1px solid $deepBlue-20;
-      transition: 0s;
-
-      @include flex(center, center);
-
-      .menu-icon {
-        @include menu-icon(9px, 2px, 2px, $deepBlue-20);
-      }
-
-      &:hover {
-        border: 1px solid $deepBlue-90;
-        background-color: $deepBlue-90;
-
-        .menu-icon {
-          @include menu-icon(11px, 2px, 1px, white);
-        }
-      }
-    }
-
-    &-title {
+    &--title {
       font-size: 14px;
       font-weight: 500;
       color: $deepBlue-100;
       margin-left: 10px;
     }
 
-    &-seperator {
+    &--seperator {
       @include size(1px, 15px);
       background-color: $deepBlue-40;
       margin: 0 10px;
     }
 
-    &-subtitle {
+    &--subtitle {
       color: $deepBlue-40;
       letter-spacing: 1px;
       font-size: .7em;
     }
   }
 
-  &_actions {
+  &__actions {
     @include size(60px, 100%);
     @include flex(center, space-around);
 
-    &-collapse {
-      @include size($action-button-size, $action-button-size);
-      border-radius: 50%;
-      border: 1px solid $deepBlue-20;
+    &--collapse {
+      @include size($action-button-width, $action-button-height);
+      border-radius: 6px;
+      background-color: $deepBlue-10;
       transition: 0s;
 
       @include flex(center, center);
 
       .collapse-icon {
-        @include collapse-icon(8px, 2px, $deepBlue-20);
+        @include size();
+        @include flex(center, center);
+        fill: $deepBlue-40;
         transition: 0s;
       }
 
       &:hover {
-        border: 1px solid $deepBlue-90;
         background-color: $deepBlue-90;
         transition: 0s;
 
         .collapse-icon {
-          @include collapse-icon(8px, 2px, white);
+          fill: $deepBlue-5;
           transition: 0s;
+
+          svg {
+            fill: red
+          }
+
+          svg path {
+            fill: red
+          }
         }
       }
     }
 
-    &-fullscreen {
-      @include size($action-button-size, $action-button-size);
-      border-radius: 50%;
-      border: 1px solid $studioGray-100;
+    &--fullscreen {
+      @include size($action-button-width, $action-button-height);
+      border-radius: 5px;
+      background-color: $deepBlue-10;
       transition: 0s;
 
       @include flex(center, center);
 
       .fullscreen-icon {
-        @include fullscreen-icon(10px, 4px, $deepBlue-20, white);
+        fill: $deepBlue-40;
         transition: 0s;
       }
 
       &:hover {
-        border: 1px solid $deepBlue-90;
         background-color: $deepBlue-90;
         transition: 0s;
 
         .fullscreen-icon {
-          @include fullscreen-icon(10px, 4px, white, $deepBlue-90);
+          fill: $deepBlue-5;
           transition: 0s;
         }
       }

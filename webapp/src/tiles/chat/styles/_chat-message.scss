@@ -3,12 +3,15 @@
   padding: 9px 20px;
   padding-bottom: 0;
   position: relative;
-  a.link{
+
+  a.link {
     text-decoration: underline;
   }
-  a.link:hover{
+
+  a.link:hover {
     text-decoration: none;
   }
+
   &.extra-message {
     padding: 0 20px;
   }
@@ -60,8 +63,8 @@
 
   &--content {
     padding: 0 50px;
-    font-size: 13px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 21px;
     letter-spacing: .4px;
     font-weight: 400;
     color: $deepBlue-100;
