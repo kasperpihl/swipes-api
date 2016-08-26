@@ -52,10 +52,10 @@ export function indexBy(arr, iterator){
 }
 
 export function debounce(func, wait, immediate){
-  let timeout, args, context, timestamp, result;
+  var timeout, args, context, timestamp, result;
   if (null == wait) wait = 100;
 
-  const later = () => {
+  function later(){
     var last = Date.now() - timestamp;
 
     if (last < wait && last > 0) {
@@ -69,7 +69,7 @@ export function debounce(func, wait, immediate){
     }
   }
 
-  const debounced = () => {
+  var debounced = function(){
     context = this;
     args = arguments;
     timestamp = Date.now();
@@ -83,7 +83,7 @@ export function debounce(func, wait, immediate){
     return result;
   };
 
-  debounced.clear = () => {
+  debounced.clear = function(){
     if (timeout) {
       clearTimeout(timeout);
       timeout = null;
@@ -94,16 +94,17 @@ export function debounce(func, wait, immediate){
 };
 
 export function throttle(func, wait){
-  let ctx, args, rtn, timeoutID; // caching
-  let last = 0;
+  var ctx, args, rtn, timeoutID; // caching
+  var last = 0;
 
-  return () => {
+  return function throttled(){
     ctx = this;
     args = arguments;
     const delta = new Date() - last;
     if (!timeoutID)
       if (delta >= wait) call();
       else timeoutID = setTimeout(call, wait - delta);
+
     return rtn;
   };
 
