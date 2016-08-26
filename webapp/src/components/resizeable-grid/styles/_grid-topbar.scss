@@ -36,9 +36,18 @@
     }
   }
 
+  &:hover & {
+
+    &__actions {
+      opacity: 1;
+    }
+  }
+
   &__actions {
-    @include size(60px, 100%);
+    $actionsWidth: $action-button-width * 3 + (6px * 2);
+    @include size($actionsWidth, 100%);
     @include flex(center, space-around);
+    opacity: 0;
 
     &--collapse {
       @include size($action-button-width, $action-button-height);
@@ -51,24 +60,22 @@
       .collapse-icon {
         @include size();
         @include flex(center, center);
-        fill: $deepBlue-40;
         transition: 0s;
+
+        svg g {
+          fill: $deepBlue-40
+        }
       }
 
       &:hover {
-        background-color: $deepBlue-90;
+        background-color: $deepBlue-60;
         transition: 0s;
 
         .collapse-icon {
-          fill: $deepBlue-5;
           transition: 0s;
 
-          svg {
-            fill: red
-          }
-
-          svg path {
-            fill: red
+          svg g {
+            fill: $deepBlue-5
           }
         }
       }
@@ -83,17 +90,57 @@
       @include flex(center, center);
 
       .fullscreen-icon {
-        fill: $deepBlue-40;
+        @include size();
+        @include flex(center, center);
         transition: 0s;
+
+        svg g {
+          fill: $deepBlue-40
+        }
       }
 
       &:hover {
-        background-color: $deepBlue-90;
+        background-color: $deepBlue-60;
         transition: 0s;
 
         .fullscreen-icon {
-          fill: $deepBlue-5;
           transition: 0s;
+
+          svg g {
+            fill: $deepBlue-5
+          }
+        }
+      }
+    }
+
+    &--context {
+      @include size($action-button-width, $action-button-height);
+      border-radius: 5px;
+      background-color: $deepBlue-10;
+      transition: 0s;
+
+      @include flex(center, center);
+
+      .context-icon {
+        @include size();
+        @include flex(center, center);
+        transition: 0s;
+
+        svg g {
+          fill: $deepBlue-40
+        }
+      }
+
+      &:hover {
+        background-color: $deepBlue-60;
+        transition: 0s;
+
+        .context-icon {
+          transition: 0s;
+
+          svg g {
+            fill: $deepBlue-5
+          }
         }
       }
     }

@@ -204,7 +204,11 @@ $imgWrapper: 50px;
 
 		&--img {
       @include flex(center, center);
-			width: 100%;
+			// width: 100%;
+
+      img {
+        // width: 100%;
+      }
 		}
   }
 }

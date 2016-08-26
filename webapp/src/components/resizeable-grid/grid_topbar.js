@@ -89,6 +89,12 @@ var Topbar = React.createClass({
                 <FullscreenIcon />
               </div>
             </div>
+
+            <div className="sw-grid-topbar__actions--context">
+              <div className="context-icon">
+                <ContextIcon />
+              </div>
+            </div>
           </div>
         </div>
       )
