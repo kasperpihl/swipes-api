@@ -7,6 +7,8 @@ import '../components/topbar/topbar.scss'
 import DropdownMenu from '../components/swipes-ui/DropdownMenu'
 
 import WorkspaceIcon from '../components/global-styles/images/workspace-icon.svg'
+import FindIcon from '../components/global-styles/icons/sw-find-icon.svg';
+import PlusIcon from '../components/global-styles/icons/sw-plus-icon.svg';
 import gradient from '../components/topbar/gradient';
 
 class Topbar extends Component {
@@ -56,7 +58,7 @@ class Topbar extends Component {
   signout() {
   }
   onClickWorkspace(){
-    
+
   }
   onChangeMenu(id){
     if(id === 'workspace'){
@@ -120,10 +122,10 @@ class Topbar extends Component {
           </div>
           <div className="sw-topbar__actions">
             <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind.bind(this)}>
-              <i className="material-icons">search</i>
+              <FindIcon />
             </div>
             <div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd.bind(this)}>
-              <i className="material-icons">add</i>
+              <PlusIcon />
             </div>
           </div>
         </div>

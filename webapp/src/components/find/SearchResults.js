@@ -36,7 +36,7 @@ class SearchResults extends Component {
   }
   renderResultList(results) {
     if(!results) return;
-    
+
     const { cardOnClick } = this.props;
     if(Array.isArray(results)){
       return results.map( (result, i) => {
@@ -47,11 +47,12 @@ class SearchResults extends Component {
       const html = [];
       for(var key in results){
         var cards = results[key];
+        console.log(cards)
         html.push(<SwipesCardList data={cards} title={key} key={'search-result-' + key} onClick={cardOnClick}/>);
       }
       return html;
     }
-    
+
   }
   render() {
     const { title, subtitle, results } = this.props;

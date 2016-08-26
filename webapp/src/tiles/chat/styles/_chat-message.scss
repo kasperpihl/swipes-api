@@ -1,6 +1,6 @@
 .chat__message {
   @include size(100%, auto);
-  padding: 9px 20px;
+  padding: 12px 20px;
   padding-bottom: 0;
   position: relative;
 
@@ -23,16 +23,16 @@
   }
 
   &__info {
-    @include size(100%, 25px);
+    @include size(100%, 12px);
     position: relative;
     padding-left: 50px;
     @include flex(center, flex-start);
 
     &--profile-img {
-      @include size(25px, 25px);
-      border-radius: 50%;
+      @include size(27px, 27px);
+      border-radius: 3px;
       position: absolute;
-      left: 7.5px;
+      left: 11px;
       top: 0;
       @include flex(center, center);
 
@@ -64,7 +64,7 @@
   &--content {
     padding: 0 50px;
     font-size: 14px;
-    line-height: 21px;
+    line-height: 18px;
     letter-spacing: .4px;
     font-weight: 400;
     color: $deepBlue-100;

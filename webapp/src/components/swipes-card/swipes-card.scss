@@ -21,11 +21,11 @@ $imgWrapper: 50px;
 
     &:after {
       content: '';
-      @include size(95%, 2px);
+      @include size(calc(100% - 18px), 1px);
       position: absolute;
-      left: 2.5%;
+      left: 9px;
       bottom: 0;
-      background-color: $deepBlue-10;
+      background-color: $deepBlue-80;
     }
 
     &--left-image & {
@@ -52,10 +52,11 @@ $imgWrapper: 50px;
     }
 
     &--title {
-      margin-left: 5%;
+      margin-left: 18px;
       font-weight: 700;
+      letter-spacing: .9px;
       color: $deepBlue-100;
-      font-size: 14px;
+      font-size: 15px;
       text-transform: uppercase
     }
   }
@@ -109,11 +110,11 @@ $imgWrapper: 50px;
     min-height: 60px;
 
     &__dot {
-      @include size(42px);
+      @include size(40px);
       @include flex(center, center);
 
       > * {
-        @include size(8px, 8px); //hack for centering the dot, some issue with no actions
+        @include size(6px, 6px); //hack for centering the dot, some issue with no actions
       }
     }
 
@@ -128,6 +129,11 @@ $imgWrapper: 50px;
           max-height: 36px;      /* fallback */
           -webkit-line-clamp: 2; /* number of lines to show */
           -webkit-box-orient: vertical;
+          margin-top: 0;
+        }
+
+        &--subtitle {
+          display: none;
         }
       }
       &--title {
@@ -138,20 +144,22 @@ $imgWrapper: 50px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        line-height: 18px;
+        line-height: 17px;
+        margin-top: -4px;
       }
 
       &--subtitle {
         @include size(100%);
         color: $deepBlue-40;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 500;
-        font-style: italic;
         letter-spacing: .3px;
+        line-height: 9px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        margin-top: 3px;
+        text-transform: uppercase;
+        margin-top: 4px;
       }
     }
 
@@ -173,7 +181,7 @@ $imgWrapper: 50px;
     color: $deepBlue-70;
     font-size: 13px;
     font-weight: 400;
-    padding-left: 42px;
+    padding-left: 40px;
     padding-right: 18px;
     line-height: 18px;
     overflow: hidden;
@@ -207,7 +215,7 @@ $imgWrapper: 50px;
 			// width: 100%;
 
       img {
-        // width: 100%;
+        width: 100%;
       }
 		}
   }

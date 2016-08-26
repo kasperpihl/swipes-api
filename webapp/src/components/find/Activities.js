@@ -13,6 +13,7 @@ class Activities extends Component {
     return (
       <div className="swipes-activities__header">
         <div className="swipes-activities__header--title">{title}</div>
+        <div className="swipes-activities__header--seperator"></div>
         <div className="swipes-activities__header--subtitle">{subtitle}</div>
       </div>
     )

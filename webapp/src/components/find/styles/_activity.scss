@@ -26,14 +26,26 @@
   }
 
   &__activity {
-    margin: 3px 0px;
     position: relative;
+
+    // For some reason it doesn't think that the forst item is the fitst, hack for targeting the selector
+    &:not(:nth-child(2)) {
+      margin: 18px 0px;
+    }
+
+    &:nth-child(2) {
+      margin-top: 3px;
+      margin-bottom: 18px;
+    }
+
+    // End of hack
 
     &__story {
       // @include flex(center, flex-end);
-      color: $deepBlue-40;
-      font-size: 12px;
+      color: $deepBlue-60;
+      font-size: 11px;
       line-height: 24px;
+      font-weight: 400;
       width: 100%;
       text-align: right;
 

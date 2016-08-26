@@ -5,7 +5,7 @@
   $action-button-height: 18px;
 
   @include size(100%, 55px);
-  background-color: #FBFBFB;
+  background-color: #FAFAFA;
   padding: 0 10px;
   position: relative;
 
@@ -13,26 +13,32 @@
 
   &__content {
     height: 100%;
-
+    margin-left: 18px;
     @include flex(center, center);
 
     &--title {
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 21px;
+      line-height: 21px;
+      font-weight: 900;
       color: $deepBlue-100;
-      margin-left: 10px;
     }
 
     &--seperator {
-      @include size(1px, 15px);
-      background-color: $deepBlue-40;
-      margin: 0 10px;
+      @include size(1px, 16px);
+      background-color: $deepBlue-20;
+      margin: 0 9px;
+      margin-top: 2px;
+      // on hover of the tile to 60
     }
 
     &--subtitle {
-      color: $deepBlue-40;
-      letter-spacing: 1px;
-      font-size: .7em;
+      color: $deepBlue-20;
+      letter-spacing: .3px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+
+      // on hover of the tile to 60
     }
   }
 

@@ -18,7 +18,7 @@ class Find extends Component {
   mapResultToCard(doc){
     let title, subtitle = '', description, onClick;
     if(doc.source === 'slack'){
-      
+
       if(doc.source_content_type === 'file'){
         title = doc.filename;
       }
