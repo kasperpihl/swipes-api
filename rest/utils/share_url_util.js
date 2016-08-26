@@ -1,7 +1,6 @@
 "use strict";
 
 import config from 'config';
-import express from 'express';
 import r from 'rethinkdb';
 import Promise from 'bluebird';
 import shortid from 'shortid';
@@ -13,73 +12,39 @@ const serviceDir = __dirname + '/../../services/';
 
 const createSwipesShortUrl = ({ userId, accountId, service }) => {
   const checksum = hash({ service });
-  const checkSumQ = r.table('links').getAll(checksum, {index: 'checksum'});
-  let shortUrl = null;
-  let serviceData = null;
+  const shortUrl = shortid.generate();
 
-  return db.rethinkQuery(checkSumQ)
-    .then((res) => {
-      if (res.length > 0) {
-        shortUrl = res[0].short_url;
-        serviceData = res[0].service_data;
-
-        return Promise.resolve({shortUrl, serviceData});
-      } else {
-        shortUrl = shortid.generate();
-        const shortUrlData = {
-          short_url: shortUrl,
-          checksum,
-          service
-        };
-
-        return fetchSwipesUrlData({userId, accountId, shortUrlData})
-          .then((linkData) => {
-            const insertLinkQ = r.table('links').insert(linkData);
-            serviceData = linkData.service_data;
-
-            return db.rethinkQuery(insertLinkQ);
-          })
-          .then((result) => {
-            const link_id = result.generated_keys[0];
-            const checkQ =
-              r.table('link_rels')
-                .getAll(link_id, {index: 'link_id'})
-                .map((link) => {
-                  return link('user_id')
-                })
-                .contains(userId)
-
-
-            db.rethinkQuery(checkQ)
-              .then((rels) => {
-                if (rels) {
-                  return Promise.resolve();
-                } else {
-                  const linkRelQ = r.table('link_rels').insert({
-                    link_id,
-                    user_id: userId,
-                    account_id: accountId
-                  });
-
-                  return db.rethinkQuery(linkRelQ);
-                }
+  return fetchSwipesUrlData({userId, accountId, service})
+    .then((shortUrlData) => {
+      const insertDoc = Object.assign({}, {checksum, short_url: shortUrl}, shortUrlData);
+      const insertLinkQ =
+        r.table('links')
+          .insert(insertDoc, {
+            returnChanges: 'always',
+            conflict: (id, oldDoc, newDoc) => {
+        	    return oldDoc.merge({
+                service_data: newDoc('service_data'),
+                service_actions: newDoc('service_actions')
               })
-              .catch((err) => {
-                return Promise.reject(err);
-              })
-          })
-          .then(() => {
-            return Promise.resolve({shortUrl, serviceData});
-          })
-      }
+          	}
+          });
+
+      return db.rethinkQuery(insertLinkQ);
     })
-    .catch((e) => {
+    .then((result) => {
+      const changes = result.changes[0];
+      const shortUrl = changes.new_val.short_url;
+      const serviceData = changes.new_val.service_data;
+
+      return Promise.resolve({shortUrl, serviceData});
+    })
+    .catch((err) => {
       return Promise.reject(e);
     })
 }
 
-const fetchSwipesUrlData = ({userId, accountId, shortUrlData}) => {
-  const serviceName = shortUrlData.service.name;
+const fetchSwipesUrlData = ({userId, accountId, service}) => {
+  const serviceName = service.name;
   const getServiceQ =
     r.table('users')
       .get(userId)('services')
@@ -94,14 +59,13 @@ const fetchSwipesUrlData = ({userId, accountId, shortUrlData}) => {
           )
       })
 
-  let shortUrl = null;
   let userServiceData = null;
   let serviceData = null;
 
   return db.rethinkQuery(getServiceQ)
     .then((data) => {
       // T_TODO handle if there is no authed service in the user record
-      // or there is no a user anymore
+      // or there is no user anymore
       userServiceData = data[0]; // user service object
       const serviceQ = r.table('services').get(userServiceData.service_id);
 
@@ -121,10 +85,10 @@ const fetchSwipesUrlData = ({userId, accountId, shortUrlData}) => {
 
       const options = {
     		authData: userServiceData.authData,
-    		itemId: shortUrlData.service.item_id,
+    		itemId: service.item_id,
     		user: {userId},
     		service: {serviceId: accountId},
-        type: shortUrlData.service.type
+        type: service.type
     	};
 
       if (!file.shareRequest) {
@@ -137,7 +101,7 @@ const fetchSwipesUrlData = ({userId, accountId, shortUrlData}) => {
             return reject(err);
       		}
 
-          shortUrlData = Object.assign({}, shortUrlData, {
+          const shortUrlData = Object.assign({}, service, {
             service_data: result.serviceData,
             service_actions: result.serviceActions
           });
@@ -150,6 +114,41 @@ const fetchSwipesUrlData = ({userId, accountId, shortUrlData}) => {
       return Promise.reject(e);
     })
 }
+
+// T_TODO how to make the permissions table better
+// The problem that we have with the current approach is that
+// that shortUrl/userId are not enough to retrieve the right permissions
+// because a user can share the same item with two different accountIds
+
+// .then((result) => {
+//   const link_id = result.generated_keys[0];
+//   const checkQ =
+//     r.table('link_rels')
+//       .getAll(link_id, {index: 'link_id'})
+//       .map((link) => {
+//         return link('user_id')
+//       })
+//       .contains(userId)
+//
+//
+//   db.rethinkQuery(checkQ)
+//     .then((rels) => {
+//       if (rels) {
+//         return Promise.resolve();
+//       } else {
+//         const linkRelQ = r.table('link_rels').insert({
+//           link_id,
+//           user_id: userId,
+//           account_id: accountId
+//         });
+//
+//         return db.rethinkQuery(linkRelQ);
+//       }
+//     })
+//     .catch((err) => {
+//       return Promise.reject(err);
+//     })
+// })
 
 export {
   createSwipesShortUrl,

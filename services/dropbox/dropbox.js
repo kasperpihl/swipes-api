@@ -241,7 +241,6 @@ const processFileChange = ({account, entry}) => {
 
 		const service = {
 			name: 'dropbox',
-			account_id: accountId,
 			type: 'file',
 			item_id: entry.id
 		};
