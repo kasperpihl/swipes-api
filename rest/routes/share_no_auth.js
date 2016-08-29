@@ -10,21 +10,22 @@ const router = express.Router();
 
 router.post('/share.getData', (req, res, next) => {
   const shareIds = req.body.shareIds;
-
   const getSwipesUrlsQ = r.table('links').getAll(r.args(shareIds), {index: 'short_url'});
 
   db.rethinkQuery(getSwipesUrlsQ)
     .then((links) => {
-      const mappedLinks = [];
-      let j = 0;
+      const mappedLinks = shareIds.map((id) => {
+        const linksLen = links.length;
+        let link = {};
 
-      shareIds.forEach((id, i) => {
-        if (links[j] && links[j].short_url === shareIds[i]) {
-          mappedLinks.push(links[j]);
-          j++;
-        } else {
-          mappedLinks.push({});
+        for (let i=0; i<linksLen; i++) {
+          if (links[i].short_url === id) {
+            link = links[i];
+            break;
+          }
         }
+
+        return link;
       })
 
       return res.status(200).json({ok: true, links: mappedLinks});
