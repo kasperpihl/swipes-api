@@ -15,7 +15,19 @@ router.post('/share.getData', (req, res, next) => {
 
   db.rethinkQuery(getSwipesUrlsQ)
     .then((links) => {
-      return res.status(200).json({ok: true, links});
+      const mappedLinks = [];
+      let j = 0;
+
+      shareIds.forEach((id, i) => {
+        if (links[j] && links[j].short_url === shareIds[i]) {
+          mappedLinks.push(links[j]);
+          j++;
+        } else {
+          mappedLinks.push({});
+        }
+      })
+
+      return res.status(200).json({ok: true, links: mappedLinks});
     })
     .catch((err) => {
       return res.status(200).json({ok: false, err});
