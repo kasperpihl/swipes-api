@@ -14,7 +14,7 @@ var Topbar = React.createClass({
     }
   },
   onTitleClick(e){
-
+    this.props.callGridDelegate('gridRowPressedMenu', this.props.data.id);
   },
   getInitialState(){
     return {
