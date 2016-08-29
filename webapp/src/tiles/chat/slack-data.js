@@ -24,12 +24,11 @@ export default class SlackData {
     if(data.messages){
       data.messages = data.messages.sort((a, b) => (a.ts < b.ts) ? -1 : 1)
     }
-
     this.data = Object.assign(this.data, data);
     if(data.channels || data.selectedChannelId){
       this.data.sectionsSidemenu = data.sectionsSidemenu = this.parser.sectionsForSidemenu(this.data);
     }
-    if( data.messages || data.isSendingMessage || data.unsentMessageQueue ){
+    if( data.messages || data.unreadIndicator || data.isSendingMessage || data.unsentMessageQueue ){
       this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
     }
     this.delegate(JSON.parse(JSON.stringify(data)), options);
@@ -73,17 +72,17 @@ export default class SlackData {
         if(!this.data.selectedChannelId || saveObj['channels'][this.data.selectedChannelId].is_archived){
           this.setChannel(generalChannelId);
         }else{
-          this.fetchMessages(this.data.channels[this.data.selectedChannelId]);
+          this.setChannel(this.data.channels[this.data.selectedChannelId], true);
         }
         
       }
     })
   }
-  setChannel(channel){
+  setChannel(channel, force){
     if(typeof channel === 'string'){
       channel = this.data.channels[channel];
     }
-    if(channel.id === this.data.selectedChannelId){
+    if(!force && channel.id === this.data.selectedChannelId){
       return;
     }
     const data = {

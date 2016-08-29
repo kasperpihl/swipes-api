@@ -27,11 +27,27 @@ const validateData = (req, res, next) => {
   example
   {JSON} service
   {
-    name: "service_name"
+    name: "service_name",
     account_id: "Service account id",
     type: "tasks",
     item_id: "ID of tasks"
+  },
+  {
+    link: {
+      service: 'slack',
+      type: 'task / message / email / file',
+      id: 'T123A'
+    },
+    meta: {
+      // Swipes Card properties
+    },
+    access: {
+      permission: 'public',
+      user_id: 'swipes user id'
+      account_id: 'service account id - to use from swipes'
+    }
   }
+
 **/
 router.post('/link.add', validateData, (req, res, next) => {
   const userId = req.userId;

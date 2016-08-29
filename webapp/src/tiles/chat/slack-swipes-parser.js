@@ -126,7 +126,6 @@ export default class SlackSwipesParser {
     const card = {
       title: name || ''
     }
-    console.log(file);
     if(thumb_360){
       card.preview = {type: 'image', url: thumb_360, width: thumb_360_w , height: thumb_360_h}
     }
@@ -202,7 +201,7 @@ export default class SlackSwipesParser {
     return { group , newMsg: newMsg};
   }
   sortMessagesForSwipes(data){
-    const { messages, bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId } = data;
+    const { messages, bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId, unreadIndicator } = data;
     if(!messages || !messages.length)
       return [];
 
@@ -215,8 +214,16 @@ export default class SlackSwipesParser {
       }
       groups[groupName].push(obj)
     }
+    let lastMessageWasLastRead = false
     messages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
+
+      if(lastMessageWasLastRead){
+        newMsg.isFirstUnreadMessage = true;
+        lastMessageWasLastRead = false;
+      }
+      if(unreadIndicator && unreadIndicator.ts === newMsg.ts){       lastMessageWasLastRead = true;
+      }
       pushToGroup(group, newMsg);
     });
 
@@ -225,10 +232,11 @@ export default class SlackSwipesParser {
     const sortedSections = sortedKeys.map((key, i) => {
       const schedule = new Date(parseInt(key)*1000);
       const title = dayStringForDate(schedule);
+      const sectMessages = groups[key];
       if(i === sortedKeys.length - 1){
-        groups[key][groups[key].length - 1].isLastMessage = true;
+        sectMessages[sectMessages.length - 1].isLastMessage = true;
       }
-      return {"title": title, "messages": groups[key] };
+      return {"title": title, "messages": sectMessages };
     });
     const sendingMessages = unsentMessageQueue.filter((item) => item.channel === selectedChannelId).map(({ message, failed }, i) => {
 
