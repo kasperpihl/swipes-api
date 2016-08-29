@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
 import Chat from '../../tiles/chat/Chat'
+import Browser from '../../tiles/browser/Browser'
 
 class LocalTile extends Component {
   constructor(props) {
@@ -12,9 +13,12 @@ class LocalTile extends Component {
   }
   componentForType(type){
     let Component;
+    console.log(type);
     switch(type){
       case 'slack-dashboard':
         return Chat;
+      case 'browser-card':
+        return Browser;
       default:
         return null
     }

@@ -58,7 +58,7 @@ class Find extends Component {
     return { title, subtitle, description, onClick }
   }
   search(query){
-    this.setState({searchQuery: query, searchResults: []})
+    this.setState({searchQuery: query, searching: true, searchResults: []})
     this.unhandledDocs = [];
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
@@ -72,7 +72,7 @@ class Find extends Component {
         }
       });
       console.log(groups);
-      this.setState({searchResults: groups});
+      this.setState({searchResults: groups, searching: false});
       console.log('unhandled', res);
       //this.setState({searchResults: searchResults});
     });
@@ -124,7 +124,7 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          <SearchResults title="Results" results={this.state.searchResults}/>
+          <SearchResults searching={this.state.searching} title="Results" results={this.state.searchResults}/>
           <Activities title="Recent" subtitle="Mine" activities={recent} dotDragStart={this.dotDragStart}/>
         </div>
       </div>

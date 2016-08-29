@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../swipes-card/SwipesCard'
 import SwipesCardList from '../swipes-card/SwipesCardList'
+import Loader from '../swipes-ui/Loader'
+
 import SearchResultsService from './SearchResultsService'
 
 class SearchResults extends Component {
@@ -35,6 +37,9 @@ class SearchResults extends Component {
     })
   }
   renderResultList(results) {
+    if(this.props.searching){
+      return <Loader size={60} center={true} />
+    }
     if(!results) return;
 
     const { cardOnClick } = this.props;
@@ -55,8 +60,7 @@ class SearchResults extends Component {
 
   }
   render() {
-    const { title, subtitle, results } = this.props;
-
+    const { title, subtitle, results, searching } = this.props;
     return (
       <div className="swipes-search-results">
         {this.renderHeader(title, subtitle)}
@@ -76,6 +80,7 @@ class SearchResults extends Component {
 export default SearchResults
 
 SearchResults.propTypes = {
+  searching: PropTypes.bool,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   results: PropTypes.arrayOf(PropTypes.object), // SwipesCard Proptypes
