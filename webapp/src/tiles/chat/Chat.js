@@ -50,6 +50,11 @@ class Chat extends Component {
         this.slackData.sendMessage(input);
       }
     });
+    swipes.addListener('menu.pressed', () => {
+      if(this.refs.sidemenu){
+        this.refs.sidemenu.togglePin();
+      }
+    })
   }
   unreadAbove(unread){
     if(this.state.unreadAbove !== unread){
@@ -93,6 +98,7 @@ class Chat extends Component {
     }
     return (
       <Sidemenu 
+        ref="sidemenu"
         onWidthChanged={this.onSidemenuWidthChanged} 
         onSelectedRow={this.onSelectedRow} 
         data={{sections: sectionsSidemenu }} 

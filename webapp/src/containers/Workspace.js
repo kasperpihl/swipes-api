@@ -111,7 +111,7 @@ class Workspace extends Component {
     }
   }
   gridRowPressedMenu(grid, id){
-    this.props.removeTile({id: id});
+    this.sendToTile(id, 'menu.pressed');
   }
   gridDidUpdate(grid, columns){
     this.props.updateColumns(columns);

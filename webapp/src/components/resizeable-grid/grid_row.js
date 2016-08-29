@@ -9,7 +9,7 @@ var Row = React.createClass({
     }
   },
   renderTopbar(){
-    return <Topbar delegate={this.props.delegate} data={this.props.data} columnIndex={this.props.columnIndex} rowIndex={this.props.rowIndex} />
+    return <Topbar delegate={this.props.delegate} data={this.props.data} columnIndex={this.props.columnIndex} callGridDelegate={this.props.callGridDelegate} rowIndex={this.props.rowIndex} />
   },
   renderResizingOverlay(){
     return null; (
