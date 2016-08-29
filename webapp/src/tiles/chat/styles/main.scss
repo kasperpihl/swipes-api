@@ -39,6 +39,10 @@
     text-align: right;
     position:relative;
 
+    &:not(.read) + .date {
+      color: $red !important;
+    }
+
     &.read {
       opacity: 0.2;
     }
@@ -71,22 +75,6 @@
     .line {
       @include size(100%, 1px);
       background-color: $studioGray-60;
-
-      &.new-message-header {
-        background-color: $red-100;
-
-        & + .date {
-          color: $red;
-        }
-
-        &.read {
-          opacity: 0.2;
-
-          & + .date {
-            color: $deepBlue-40;
-          }
-        }
-      }
     }
 
     .date {
