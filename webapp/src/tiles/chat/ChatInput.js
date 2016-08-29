@@ -114,8 +114,7 @@ class ChatInput extends Component {
       e.preventDefault();
     }
     if(files.length && !hadTitle){
-      const input = this.refs.input;
-      files[0].name = 'Pasted image at' + moment().format('YYYY-MM-DD, h:mm A') || this.state.inputValue;
+      files[0].name = 'Pasted image at' + moment().format('YYYY-MM-DD, h:mm A');
 
       if (this.state.inputValue && this.state.inputValue.length > 0) {
         files[0].name = this.state.inputValue;
