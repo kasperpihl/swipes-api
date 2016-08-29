@@ -12,13 +12,16 @@ export function loadTilesListModal(){
   return (dispatch, getState) => {
     console.log('dispatch');
     const now = new Date().getTime()
-    dispatch(loadModal('list', {"title": "Add a workflow", "emptyText": "Loading..."}));
+    var returned = false;
+    dispatch(loadModal('list', {"title": "Add a workflow", "emptyText": "Loading..."}, () => {
+      returned = true;
+    }));
     const now2 = new Date().getTime()
     dispatch(request('workflows.list')).then((res) =>{ 
       const time = new Date().getTime() - now;
       const time2 = new Date().getTime() - now2;
-      console.log('returned', time, time2);
-      if(res.ok){
+      console.log('returned', returned, time, time2);
+      if(res.ok && !returned){
         const rows = res.data.map((row) => {
           return Object.assign({}, row, {imageUrl: 'workflows/' + row.manifest_id + '/' + row.icon})
         })

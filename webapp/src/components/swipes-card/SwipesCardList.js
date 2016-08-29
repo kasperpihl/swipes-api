@@ -9,7 +9,7 @@ class SwipesCardList extends Component {
     super(props)
     this.state = {}
     this.state = { data: props.data };
-    bindAll(this, ['onDragStart']);
+    bindAll(this, ['onDragStart', 'clickedCard']);
     this.id = randomString(5);
     // Setup delegate structure to provide data
     if(typeof props.dataDelegate === 'function'){

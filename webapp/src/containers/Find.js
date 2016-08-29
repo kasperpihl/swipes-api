@@ -71,9 +71,8 @@ class Find extends Component {
           groups[doc.source].push(this.mapResultToCard(doc));
         }
       });
-      console.log(groups);
       this.setState({searchResults: groups, searching: false});
-      console.log('unhandled', res);
+      console.log('unhandled', this.unhandledDocs);
       //this.setState({searchResults: searchResults});
     });
   }

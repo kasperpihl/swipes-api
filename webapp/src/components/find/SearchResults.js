@@ -52,7 +52,6 @@ class SearchResults extends Component {
       const html = [];
       for(var key in results){
         var cards = results[key];
-        console.log(cards)
         html.push(<SwipesCardList data={cards} title={key} key={'search-result-' + key} onClick={cardOnClick}/>);
       }
       return html;
