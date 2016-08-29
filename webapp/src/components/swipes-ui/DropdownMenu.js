@@ -17,38 +17,17 @@ class SwipesDropdownMenu extends Component {
       )
     })
   }
-  openMenu() {
-    this.setState({menuOpen: true})
-  }
-  closeMenu() {
-    this.setState({menuOpen: false})
-  }
   render() {
-    let { selectedId, data } = this.props;
+    let { data, show } = this.props;
     let menuClass = 'swipes-dropdown__menu--closed';
-    let selectedTitle = '';
 
-    if(typeof selectedId !== 'string'){
-      selectedId = data[0].id;
-    }
-
-    data.forEach((item) => {
-      if(item.id === selectedId){
-        selectedTitle = item.title;
-      }
-    })
-
-    if (this.state.menuOpen) {
+    if (show) {
       menuClass = 'swipes-dropdown__menu--open';
     }
 
     return (
-      <div className="swipes-dropdown" onMouseEnter={this.openMenu.bind(this)} onMouseLeave={this.closeMenu.bind(this)}>
-        <div className="swipes-dropdown__title">
-          {selectedTitle}
-          <i className="material-icons">arrow_drop_down</i>
-        </div>
-        <div className={"swipes-dropdown__menu " + menuClass} onClick={this.closeMenu.bind(this)}>
+      <div className="swipes-dropdown">
+        <div className={"swipes-dropdown__menu " + menuClass}>
           {this.renderItems(data)}
         </div>
       </div>
@@ -58,12 +37,19 @@ class SwipesDropdownMenu extends Component {
 
 export default SwipesDropdownMenu
 
+
+// <div className="swipes-dropdown__title">
+//   {selectedTitle}
+//   <i className="material-icons">arrow_drop_down</i>
+// </div>
+
 SwipesDropdownMenu.propTypes = {
+  show: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired
   })),
-  selectedId: PropTypes.string,
   onChange: PropTypes.func.isRequired
+
   // removeThis: PropTypes.string.isRequired
 }

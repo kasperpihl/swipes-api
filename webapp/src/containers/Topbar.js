@@ -15,7 +15,10 @@ class Topbar extends Component {
   constructor(props) {
     super(props)
     var gradientPos = gradient.getGradientPos();
-    this.state = {gradientPos: gradientPos};
+    this.state = {
+      gradientPos: gradientPos,
+      showDropdown: false
+    };
     bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp', 'onChangeMenu']);
   }
   componentDidMount() {
@@ -80,6 +83,9 @@ class Topbar extends Component {
     }
     setTimeout(this.gradientStep, 3000);
   }
+  toggleDropdown() {
+    this.setState({showDropdown: !this.state.showDropdown})
+  }
   render() {
 
     var topbarClass = 'sw-topbar';
@@ -98,7 +104,7 @@ class Topbar extends Component {
 
     // dummy data for DropdownMenu
 
-    let selectedId = 'workspace'
+    let selectedTitle = 'Workspace'
     const { pathname } = this.props;
     const dropdownStructure = [
       { title: 'Workspace', id: 'workspace' },
@@ -106,7 +112,7 @@ class Topbar extends Component {
       { title: 'Log out', id: 'logout' }
     ];
     if(pathname === '/services'){
-      selectedId = 'services';
+      selectedTitle = 'Services';
     }
     if(!this.props.hasLoaded){
       styles.display = 'none';
@@ -115,7 +121,11 @@ class Topbar extends Component {
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <DropdownMenu selectedId={selectedId} data={dropdownStructure} onChange={this.onChangeMenu}/>
+            <div className="swipes-dropdown__title" onClick={this.toggleDropdown.bind(this)}>
+              {selectedTitle}
+              <i className="material-icons">arrow_drop_down</i>
+            </div>
+            <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu} selector={this.renderSelector}/>
           </div>
           <div className="sw-topbar__searchbar">
             <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search your apps" />
