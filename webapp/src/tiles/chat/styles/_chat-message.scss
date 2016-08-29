@@ -111,7 +111,7 @@
       }
 
       .emoji {
-        //@include size(17px !important, 17px !important);
+        @include size(17px !important, 17px !important);
         transform: translateY(3px);
       }
 

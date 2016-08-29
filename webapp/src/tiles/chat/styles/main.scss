@@ -35,7 +35,7 @@
 
 .new-message-header {
     @include size(100%, 4px);
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid $red;
     text-align: right;
     position:relative;
 
@@ -45,7 +45,7 @@
 
     span {
       font-size: 12px;
-      color: red;
+      color: $red;
       background-color: #fff;
       padding: 0 10px;
       position:absolute;
@@ -71,6 +71,22 @@
     .line {
       @include size(100%, 1px);
       background-color: $studioGray-60;
+
+      &.new-message-header {
+        background-color: $red-100;
+
+        & + .date {
+          color: $red;
+        }
+
+        &.read {
+          opacity: 0.2;
+
+          & + .date {
+            color: $deepBlue-40;
+          }
+        }
+      }
     }
 
     .date {

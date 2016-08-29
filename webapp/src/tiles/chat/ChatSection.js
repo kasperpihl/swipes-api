@@ -16,7 +16,7 @@ export default class ChatSection extends Component {
       }
 
       if(item.ts && unreadIndicator && item.ts === unreadIndicator.ts && !item.isLastMessage){
-        
+
         var className = "new-message-header";
         if(unreadIndicator.showAsRead){
           className += " read";
