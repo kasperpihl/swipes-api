@@ -1,6 +1,6 @@
 var React = require('react');
 var Resizer = require('./grid_resizer');
-var Topbar = require('./grid_topbar');
+import Topbar from './grid_topbar'
 var CollapsingOverlay = require('./grid_collapsing_overlay');
 var Row = React.createClass({
   renderResizer(){
@@ -34,7 +34,7 @@ var Row = React.createClass({
       styles.height = this.props.delegate.collapsedHeight(this.props.columnIndex) + '%';
     }
 
-    
+
 
     var transitions = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex);
     var rippleStyles = {};
@@ -56,7 +56,7 @@ var Row = React.createClass({
     return (
       <div className={className} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />
-        
+
         {this.renderResizingOverlay()}
         {this.renderTopbar()}
         {this.renderResizer()}

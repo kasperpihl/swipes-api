@@ -46,6 +46,30 @@ var Topbar = React.createClass({
     document.addEventListener('mousemove', this.onMouseMove, false);
     document.addEventListener('mouseup', this.onMouseUp);
   },
+  renderContextItems() {
+    let menuClass = 'context-menu--closed';
+
+    if (false) {
+      menuClass = 'context-menu--open'
+    }
+    return (
+      <div className={"context-menu " + menuClass}>
+        <div className="context-menu__element">
+          <div className="context-menu__element--text">
+            Settings
+          </div>
+        </div>
+        <div className="context-menu__element">
+          <div className="context-menu__element--text">
+            Close
+          </div>
+        </div>
+      </div>
+    )
+  },
+  openContextMenu() {
+
+  },
   render() {
     const {
       data
@@ -78,12 +102,14 @@ var Topbar = React.createClass({
             <div className="sw-grid-topbar__content--seperator"></div>
             <div className="sw-grid-topbar__content--subtitle">Swipes Team</div>
           </div>
+
           <div className="sw-grid-topbar__actions">
             <div className="sw-grid-topbar__actions--collapse" onClick={this.props.delegate.onCollapse.bind(null, this.props.data.id)}>
               <div className="collapse-icon">
                 <CollapseIcon />
               </div>
             </div>
+
             <div className="sw-grid-topbar__actions--fullscreen" onClick={this.props.delegate.onFullscreen.bind(null, this.props.data.id)}>
               <div className="fullscreen-icon">
                 <FullscreenIcon />
@@ -91,8 +117,9 @@ var Topbar = React.createClass({
             </div>
 
             <div className="sw-grid-topbar__actions--context">
-              <div className="context-icon">
+              <div className="context-icon" onClick={this.openContextMenu}>
                 <ContextIcon />
+                {this.renderContextItems()}
               </div>
             </div>
           </div>
