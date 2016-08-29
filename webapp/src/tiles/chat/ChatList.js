@@ -39,9 +39,8 @@ class ChatList extends Component {
     // Check for unread marker
     const scrollPos = this.refs['scroll-container'].scrollTop
     const viewHeight = this.refs['scroll-container'].clientHeight
-    const messageHeaderEl = this.refs['scroll-container'].querySelector('.new-message-header');
+    const messageHeaderEl = this.refs['scroll-container'].querySelector('.js-unread-class');
     if(messageHeaderEl){
-
       const posForUnread = messageHeaderEl.offsetTop - scrollPos;
       if(document.hasFocus() && posForUnread > 0 && posForUnread < viewHeight){
         this.bouncedMarkAsRead()
