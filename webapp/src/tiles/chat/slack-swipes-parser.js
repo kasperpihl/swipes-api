@@ -122,12 +122,13 @@ export default class SlackSwipesParser {
     })
   }
   parseFileToCard(file){
-    let { name, url_private, thumb_360_w, thumb_360_h } = file;
+    let { name, thumb_360, thumb_360_w, thumb_360_h } = file;
     const card = {
       title: name || ''
     }
-    if(url_private){
-      card.preview = {type: 'image', url: url_private, width: thumb_360_w , height: thumb_360_h}
+    console.log(file);
+    if(thumb_360){
+      card.preview = {type: 'image', url: thumb_360, width: thumb_360_w , height: thumb_360_h}
     }
     return [card];
   }
