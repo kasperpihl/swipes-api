@@ -98,9 +98,14 @@ class Loader extends Component {
       return <div key={"rect-" + radioCommand} style={styles} className={"rect " + radioCommand} />
     })
   }
+  renderText(text, textStyle) {
+    if(text && text.length) {
+      return <div className="sw-loader__wrapper__text" style={textStyle}>{text}</div>
+    }
+  }
   render() {
 
-    const { size, style, center } = this.props;
+    const { size, style, center, text, textStyle } = this.props;
     const styles = Object.assign({
       width: DEF_SIZE + 'px',
       height: DEF_SIZE + 'px'
@@ -121,6 +126,7 @@ class Loader extends Component {
         <div className="sw-loader__holder">
           {this.renderTiles()}
         </div>
+        {this.renderText(text, textStyle)}
       </div>
     )
   }
@@ -129,5 +135,7 @@ export default Loader
 
 Loader.propTypes = {
   size: PropTypes.number,
-  center: PropTypes.bool
+  center: PropTypes.bool,
+  text: PropTypes.string,
+  textStyle: PropTypes.object
 }

@@ -21,9 +21,14 @@ class SwipesLoader extends Component {
       this.setState({gradientPos: percent});
     }, 5);
   }
+  renderText(text, textStyle) {
+    if(text && text.length) {
+      return <div className="sw-loader-wrap__text" style={{textStyle}}>{text}</div>
+    }
+  }
   render() {
     let styles = gradient.getGradientStyles();
-    const { size, style, center } = this.props;
+    const { size, style, center, text, textStyle } = this.props;
 
     if(this.state.gradientPos) {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
@@ -42,6 +47,7 @@ class SwipesLoader extends Component {
       <div className={className} style={style}>
         <LogoSVG />
         <div className="sw-loader" style={styles}></div>
+        {this.renderText(text, textStyle)}
       </div>
     )
   }

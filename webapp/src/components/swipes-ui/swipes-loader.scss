@@ -1,3 +1,7 @@
+@import '../global-styles/vars';
+@import '../global-styles/mixins';
+
+
 .sw-loader-wrap {
   &--center {
     position: absolute;
@@ -5,7 +9,7 @@
     top:50%;
     transform: translate(-50%, -50%);
   }
-  
+
   .sw-loader {
     width: 60px;
     height: 60px;
@@ -16,5 +20,11 @@
 
   .sw-loader__svg {
     position: absolute;
+  }
+
+  &__text {
+    @include flex(center, center);
+    margin-top: 10px;
+    color: $deepBlue-40;
   }
 }
