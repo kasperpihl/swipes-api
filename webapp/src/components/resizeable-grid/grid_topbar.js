@@ -13,6 +13,11 @@ var Topbar = React.createClass({
       this.props.delegate.onExpand(this.props.data.id);
     }
   },
+  getInitialState(){
+    return {
+      contextMenu: false
+    }
+  },
   onMouseMove(e){
     e.stopPropagation();
 
@@ -46,10 +51,17 @@ var Topbar = React.createClass({
     document.addEventListener('mousemove', this.onMouseMove, false);
     document.addEventListener('mouseup', this.onMouseUp);
   },
+  renderClickBg() {
+    if (this.state.contextMenu) {
+      return (
+        <div className="context-menu__click-bg"></div>
+      )
+    }
+  },
   renderContextItems() {
     let menuClass = 'context-menu--closed';
 
-    if (false) {
+    if (this.state.contextMenu) {
       menuClass = 'context-menu--open'
     }
     return (
@@ -59,7 +71,7 @@ var Topbar = React.createClass({
             Settings
           </div>
         </div>
-        <div className="context-menu__element">
+        <div className="context-menu__element" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>
           <div className="context-menu__element--text">
             Close
           </div>
@@ -68,7 +80,7 @@ var Topbar = React.createClass({
     )
   },
   openContextMenu() {
-
+    this.setState({contextMenu: !this.state.contextMenu})
   },
   render() {
     const {
@@ -78,6 +90,9 @@ var Topbar = React.createClass({
     let onclickHandler;
     let title = 'Chat';
 
+    if ( this.state.contextMenu ) {
+      className += ' sw-grid-topbar--shown'
+    }
 
     if (this.props.data.collapsed) {
       onclickHandler = this.onClick;
@@ -98,7 +113,7 @@ var Topbar = React.createClass({
       return (
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar__content">
-            <div className="sw-grid-topbar__content--title" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>{title}</div>
+            <div className="sw-grid-topbar__content--title">{title}</div>
             <div className="sw-grid-topbar__content--seperator"></div>
             <div className="sw-grid-topbar__content--subtitle">Swipes Team</div>
           </div>
@@ -118,6 +133,7 @@ var Topbar = React.createClass({
 
             <div className="sw-grid-topbar__actions--context">
               <div className="context-icon" onClick={this.openContextMenu}>
+                {this.renderClickBg()}
                 <ContextIcon />
                 {this.renderContextItems()}
               </div>

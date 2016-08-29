@@ -108,7 +108,7 @@ class Sidemenu extends Component {
       delete styles.top
       styles.bottom = 0
     }
-    
+
     // If no extra notifications, let's not render anything, shall we.
     if(!data || (!data.unread && !data.notification)){
       return;
@@ -141,7 +141,7 @@ class Sidemenu extends Component {
     if(forceClose){
       className += " force-close";
     }
-    
+
     let renderedItems = [];
     data.sections.forEach((section, i) => {
       if(section.title){

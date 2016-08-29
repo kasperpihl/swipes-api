@@ -1,10 +1,12 @@
 @import '../../global-styles/mixins';
 
+$gridTopbarHeight: 55px;
+
 .sw-grid-topbar {
   $action-button-width: 24px;
   $action-button-height: 18px;
 
-  @include size(100%, 55px);
+  @include size(100%, $gridTopbarHeight);
   background-color: #FAFAFA;
   padding: 0 10px;
   position: relative;
@@ -44,6 +46,13 @@
   }
 
   &:hover & {
+
+    &__actions {
+      opacity: 1;
+    }
+  }
+
+  &--shown & {
 
     &__actions {
       opacity: 1;
@@ -157,12 +166,12 @@
 
           &__element {
             @include size(100%, 54px);
-            @include flex(center, flex-end);
+            @include flex(center, flex-start);
             color: $deepBlue-80;
             font-size: 15px;
             border-radius: 3px;
             text-align: right;
-            padding-right: 12px;
+            padding: 0 12px;
 
             &:hover {
               color: $deepBlue-100;
@@ -186,4 +195,12 @@
       }
     }
   }
+}
+
+.context-menu__click-bg {
+  position: fixed;
+  left: 0;
+  top: 0;
+  @include size(100%, 100%);
+  background-color: rgba($deepBlue-100,.2);
 }

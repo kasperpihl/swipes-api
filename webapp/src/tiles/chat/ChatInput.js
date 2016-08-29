@@ -76,7 +76,6 @@ class ChatInput extends Component {
     }
     this.refs.file.click();
   }
-
   onFileChange(e){
     if(this.props.uploadFiles){
       this.props.uploadFiles(e.target.files);
@@ -115,7 +114,14 @@ class ChatInput extends Component {
       e.preventDefault();
     }
     if(files.length && !hadTitle){
-      files[0].name = 'Pasted image at' + moment().format('YYYY-MM-DD, h:mm A');
+      const input = this.refs.input;
+      files[0].name = 'Pasted image at' + moment().format('YYYY-MM-DD, h:mm A') || this.state.inputValue;
+
+      if (this.state.inputValue && this.state.inputValue.length > 0) {
+        files[0].name = this.state.inputValue;
+        this.setState({inputValue: ''})
+      }
+
       this.props.uploadFiles(files);
     }
   }
