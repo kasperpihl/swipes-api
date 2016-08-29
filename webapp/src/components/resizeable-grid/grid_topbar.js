@@ -13,6 +13,9 @@ var Topbar = React.createClass({
       this.props.delegate.onExpand(this.props.data.id);
     }
   },
+  onTitleClick(e){
+
+  },
   getInitialState(){
     return {
       contextMenu: false
@@ -112,7 +115,7 @@ var Topbar = React.createClass({
     } else {
       return (
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
-          <div className="sw-grid-topbar__content">
+          <div className="sw-grid-topbar__content" onClick={this.onTitleClick}>
             <div className="sw-grid-topbar__content--title">{title}</div>
             <div className="sw-grid-topbar__content--seperator"></div>
             <div className="sw-grid-topbar__content--subtitle">Swipes Team</div>
