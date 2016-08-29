@@ -39,6 +39,13 @@ class ChatItem extends Component {
 
   }
   renderTextWithLinks(text, emojis){
+    const emojiOptions = {
+      attributes: {
+        width: '17px',
+        height: '17px',
+        className: 'emoji'
+      }
+    }
     if(Array.isArray(text)){
       text = text.map((t, i) => {
         if(typeof t === 'object'){
@@ -55,7 +62,7 @@ class ChatItem extends Component {
           console.log('object!', t);
         }
         else if(emojis){
-          return ReactEmoji.emojify(t);
+          return ReactEmoji.emojify(t, emojiOptions);
         }
         else{
           return t;
@@ -63,7 +70,7 @@ class ChatItem extends Component {
       })
     }
     else if(emojis){
-      return ReactEmoji.emojify(text);
+      return ReactEmoji.emojify(text, emojiOptions);
     }
     return text;
   }

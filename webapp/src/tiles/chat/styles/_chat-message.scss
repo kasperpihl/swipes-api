@@ -110,8 +110,8 @@
         }
       }
 
-      & > img {
-        @include size(17px !important, 17px !important);
+      .emoji {
+        //@include size(17px !important, 17px !important);
         transform: translateY(3px);
       }
 
