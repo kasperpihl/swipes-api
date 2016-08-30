@@ -143,7 +143,8 @@ class Chat extends Component {
         {this.renderUnreadAbove()}
         <ChatList 
           sections={sortedMessages} 
-          markAsRead={this.slackData.markAsRead} 
+          markAsRead={this.slackData.markAsRead}
+          loadingMessages={this.state.loadingMessages}
           unreadAbove={this.unreadAbove}
           unreadIndicator={this.state.unreadIndicator} 
           clickedLink={this.clickedLink}

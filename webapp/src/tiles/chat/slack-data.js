@@ -88,6 +88,7 @@ export default class SlackData {
     const data = {
       selectedChannelId: channel.id,
       messages: [],
+      loadingMessages: true,
       unreadIndicator: {ts: channel.last_read}
     };
     this.saveData(data);
@@ -117,7 +118,7 @@ export default class SlackData {
   fetchMessages(channel){
     this.swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.id, count: 50 }).then((res) => {
       if(res.ok){
-        this.saveData({messages: res.data.messages})
+        this.saveData({messages: res.data.messages, loadingMessages: false})
       }
     }).catch(function(error){
       console.log(error);

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { bindAll, debounce } from '../../classes/utils'
-import SwipesLoader from '../../components/swipes-ui/Loader'
+import Loader from '../../components/swipes-ui/Loader'
 import ChatSection from './ChatSection'
 
 class ChatList extends Component {
@@ -95,13 +95,13 @@ class ChatList extends Component {
   }
 
   renderLoading(){
-    if(!this.props.sections){
-      return <SwipesLoader size={60} text="Loading" center={true}/>
+    if(!this.props.sections || this.props.loadingMessages){
+      return <Loader size={60} text="Loading" center={true}/>
     }
   }
   renderSections(){
-    const { unreadIndicator, sections, itemDelegate, clickedLink } = this.props;
-    if(sections){
+    const { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages } = this.props;
+    if(sections && !loadingMessages){
       return sections.map(function(section){
         return <ChatSection key={section.title} clickedLink={clickedLink} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
