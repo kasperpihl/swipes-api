@@ -147,6 +147,7 @@ const createEvent = (userId, event, accountId, checksum, serviceData) => {
 		service: 'asana',
 		message: text,
 		service_data: serviceData,
+		account_id: accountId,
 		checksum,
 		me
 	}

@@ -251,6 +251,7 @@ const processFileChange = ({account, entry}) => {
 					service: 'dropbox',
 					message: message,
 					service_data: serviceData,
+					account_id: accountId,
 					me: sameUser,
 					checksum
 				}
