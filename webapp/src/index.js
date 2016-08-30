@@ -16,12 +16,12 @@ const props = {};
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 import GridTest from './components/resizeable-grid/grid_test'
 
-// import DropdownMenu from './components/swipes-ui/DropdownMenu'
+// import SwipesLoader from './components/swipes-ui/SwipesLoader'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
   if(false) {
-    // Page = DropdownMenu;
+    // Page = SwipesLoader;
   }
   else if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);

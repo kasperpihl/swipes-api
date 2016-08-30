@@ -8,6 +8,7 @@
     left: 50%;
     top:50%;
     transform: translate(-50%, -50%);
+    @include flex(center, center, column);
   }
 
   .sw-loader {
@@ -23,8 +24,17 @@
   }
 
   &__text {
+    @include size(100%, auto);
     @include flex(center, center);
     margin-top: 10px;
     color: $deepBlue-40;
   }
+}
+
+.loader-clippath {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
 }

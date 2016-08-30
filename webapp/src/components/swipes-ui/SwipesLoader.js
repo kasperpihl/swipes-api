@@ -45,7 +45,7 @@ class SwipesLoader extends Component {
     }
     return (
       <div className={className} style={style}>
-        <LogoSVG />
+        <LogoSVG className="loader-clippath"/>
         <div className="sw-loader" style={styles}></div>
         {this.renderText(text, textStyle)}
       </div>
