@@ -10,12 +10,16 @@ import SwipesError from '../swipes-error';
 
 const serviceDir = __dirname + '/../../services/';
 
-const createSwipesShortUrl = ({ userId, accountId, link, meta = null }) => {
-  const checksum = hash({ link });
+const createSwipesShortUrl = ({ userId, accountId, link, checksum = null, meta = null }) => {
+  if (checksum) {
+    return fetchSwipesUrlDataById(checksum);
+  }
+
+  const newChecksum = hash({ link });
 
   return fetchSwipesUrlData({userId, accountId, link, meta})
     .then((shortUrlData) => {
-      const insertDoc = Object.assign({}, { checksum }, shortUrlData);
+      const insertDoc = Object.assign({}, { checksum: newChecksum }, shortUrlData);
       const insertLinkQ =
         r.table('links')
           .insert(insertDoc, {
@@ -39,6 +43,20 @@ const createSwipesShortUrl = ({ userId, accountId, link, meta = null }) => {
       const changes = result.changes[0];
       const checksum = changes.new_val.checksum;
       const serviceData = changes.new_val.service_data;
+
+      return Promise.resolve({ serviceData, checksum });
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    })
+}
+
+const fetchSwipesUrlDataById = (checksum) => {
+  const q = r.table('links').get(checksum);
+
+  return db.rethinkQuery(q)
+    .then((link) => {
+      const serviceData = link.service_data;
 
       return Promise.resolve({ serviceData, checksum });
     })
