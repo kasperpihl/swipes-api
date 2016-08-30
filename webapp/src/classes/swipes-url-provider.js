@@ -1,7 +1,7 @@
 import { bindAll, debounce } from './utils'
 import { api } from '../actions'
 
-export default class ShortUrlProvider {
+export default class SwipesUrlProvider {
   constructor(store){
     bindAll(this, ['subscribe', 'unsubscribe', 'fetch', 'setThrottleThreshold'])
     this._listenersObj = {}

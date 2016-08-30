@@ -158,7 +158,6 @@ SwipesCardItem.propTypes = {
     }),
     actions: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
-      callback: PropTypes.func.isRequired,
       icon: PropTypes.string,
       bgColor: PropTypes.string
     }))

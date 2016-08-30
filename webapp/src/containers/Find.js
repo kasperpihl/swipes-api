@@ -16,46 +16,50 @@ class Find extends Component {
     this.unhandledDocs = [];
   }
   mapResultToCard(doc){
+    const shareData = { link: {}, permissions: {}};
+    const meta = {};
     let title, subtitle = '', description, onClick;
+    const idParts = doc.id.split('-')
+    shareData.link.service = doc.source;
+    shareData.link.type = doc.content_type;
+    shareData.permissions.account_id = shareData.link.service_id;
     if(doc.source === 'slack'){
+      shareData.link.id = idParts[idParts.length - 1];
 
-      if(doc.source_content_type === 'file'){
-        title = doc.filename;
+      if(['image', 'file'].indexOf(doc.content_type) > -1){
+        meta.title = doc.filename;
+        meta.subtitle = 'From ' + doc.author;
       }
-      if(doc.source_content_type === 'image/png'){
-        title = doc.filename;
-        subtitle = 'From ' + doc.author;
-      }
-      if(doc.source_content_type === 'message'){
-        title = doc.message;
-        subtitle = doc.folder.join(', ');
-        subtitle += ' - ' + doc.author;
+      if(doc.content_type === 'message'){
+        meta.title = doc.message;
+        meta.subtitle = doc.folder.join(', ');
+        meta.subtitle += ' - ' + doc.author;
       }
     }
     else if(doc.source === 'asana'){
-      if(doc.source_content_type === 'task'){
-        title = doc.title;
+      if(doc.content_type === 'task'){
+        meta.title = doc.title;
         if(doc.folder){
-          subtitle = doc.folder.join(', ');
+          meta.subtitle = doc.folder.join(', ');
         }
         else{
-          subtitle = doc.status;
+          meta.subtitle = doc.status;
         }
         if(doc.to){
-          subtitle += ': ' + doc.to.join(', ');
+          meta.subtitle += ': ' + doc.to.join(', ');
         }
-        //subtitle = doc.folder.join(', ');
       }
     }
     else if(doc.source === 'dropbox'){
-      title = doc.filename;
-      subtitle = doc.filepath;
+      meta.title = doc.filename;
+      meta.subtitle = doc.filepath;
     }
     if(!title){
       this.unhandledDocs.push(doc);
     }
-    subtitle += ' ' + doc.score;
-    return { title, subtitle, description, onClick }
+
+    shareData.meta = meta;
+    return { meta, shareData };
   }
   search(query){
     this.setState({searchQuery: query, searching: true, searchResults: []})
@@ -63,7 +67,6 @@ class Find extends Component {
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
       res.result.response.docs.forEach((doc) => {
-        this.mapResultToCard(doc);
         if(!groups[doc.source]){
           groups[doc.source] = [];
         }
@@ -93,12 +96,19 @@ class Find extends Component {
       this.props.toggleFind()
     }
   }
-  clickedActionFromDot(){
 
+  onCardClick(card, data, shareUrl){
+    console.log('clicked', shareUrlOrData);
+  }
+  onCardShare(card, data, shareUrl, dragging){
+    this.props.toggleFind();
+    this.props.startDraggingDot("search", {shortUrl: shareUrl});
+    console.log('sharing', shareUrlOrData, dragging);
+  }
+  onCardAction(card, data, shareUrl, action){
+    console.log('action', shareUrlOrData, action);
   }
   dotDragStart(shortUrl){
-    this.props.toggleFind();
-    this.props.startDraggingDot("search", {shortUrl: shortUrl});
     //console.log('dot drag start', params);
   }
   generateActivity(){
@@ -124,7 +134,7 @@ class Find extends Component {
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
           <SearchResults searching={this.state.searching} title="Results" results={this.state.searchResults}/>
-          <Activities title="Recent" subtitle="Mine" activities={recent} dotDragStart={this.dotDragStart}/>
+          <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
         </div>
       </div>
     );
