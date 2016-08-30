@@ -63,36 +63,15 @@ var Topbar = React.createClass({
       )
     }
   },
-  renderContextItems() {
-    let menuClass = 'context-menu--closed';
-
-    if (this.state.dropdownMenu) {
-      menuClass = 'context-menu--open'
-    }
-    return (
-      <div className={"context-menu " + menuClass}>
-        <div className="context-menu__element">
-          <div className="context-menu__element--text">
-            Settings
-          </div>
-        </div>
-        <div className="context-menu__element" onClick={this.props.delegate.onMenuButton.bind(null, this.props.data.id)}>
-          <div className="context-menu__element--text">
-            Close
-          </div>
-        </div>
-      </div>
-    )
-  },
   openDropdownMenu() {
     this.setState({dropdownMenu: !this.state.dropdownMenu})
   },
   onChangeMenu(id){
     if(id === 'settings'){
-      console.log(id)
+
     }
     if(id === 'remove'){
-      console.log(id)
+
     }
   },
   render() {
@@ -111,6 +90,11 @@ var Topbar = React.createClass({
       { title: 'Settings', id: 'settings' },
       { title: 'Remove Tile', id: 'remove' },
     ];
+
+    const dropdownStyles = {
+      top: '30px',
+      right: '0px'
+    }
 
     if (this.props.data.collapsed) {
       onclickHandler = this.onClick;
@@ -152,7 +136,7 @@ var Topbar = React.createClass({
             <div className="sw-grid-topbar__actions--context">
               <div className="context-icon" onClick={this.openDropdownMenu}>
                 <ContextIcon />
-                <DropdownMenu show={this.state.dropdownMenu} data={dropdownStructure} onChange={this.onChangeMenu} reverse={true} />
+                <DropdownMenu show={this.state.dropdownMenu} data={dropdownStructure} onChange={this.onChangeMenu} reverse={true} styles={dropdownStyles}/>
               </div>
             </div>
           </div>

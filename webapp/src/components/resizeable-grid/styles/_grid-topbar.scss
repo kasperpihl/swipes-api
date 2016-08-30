@@ -141,6 +141,7 @@ $gridTopbarHeight: 55px;
         @include size();
         @include flex(center, center);
         transition: 0s;
+        position: relative;
 
         svg g {
           fill: $deepBlue-40

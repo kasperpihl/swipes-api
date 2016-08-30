@@ -48,5 +48,7 @@ SwipesDropdownMenu.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired
   })),
-  onChange: PropTypes.func
+  reverse: PropTypes.bool,
+  styles: PropTypes.object,
+  onChange: PropTypes.func.isRequired
 }

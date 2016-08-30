@@ -117,7 +117,7 @@ class Topbar extends Component {
     if(!this.props.hasLoaded){
       styles.display = 'none';
     }
-    console.log(this.state.showDropdown);
+
     return (
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
