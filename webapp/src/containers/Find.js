@@ -69,7 +69,7 @@ class Find extends Component {
     this.shareDataForId = {};
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
-      res.result.response.docs.forEach((doc) => {
+      res.result.forEach((doc) => {
         if(!groups[doc.source]){
           groups[doc.source] = [];
         }
