@@ -40,7 +40,7 @@ class SelectRow extends Component {
   }
   renderSelector(){
     if(!this.props.data.services || !this.props.data.services.length){
-      return <div className="services-button" onClick={this.clickedAuthorize}>Connect</div>
+      return <div className="services-connect__button" onClick={this.clickedAuthorize}>Connect</div>
     }
     let options = this.props.data.services.map(function(service, i){
       return { value: i, label: service.show_name }

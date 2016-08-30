@@ -41,6 +41,7 @@
   }
 
   &--text-right & {
+    
     &__text {
       @include flex(center, center);
       position: absolute;
