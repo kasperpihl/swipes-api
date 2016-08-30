@@ -96,7 +96,7 @@ class ChatList extends Component {
 
   renderLoading(){
     if(!this.props.sections){
-      return <SwipesLoader size={60} center={true}/>
+      return <SwipesLoader size={60} text="Loading" center={true}/>
     }
   }
   renderSections(){
