@@ -1,4 +1,6 @@
 var React = require('react');
+import Loader from '../swipes-ui/Loader'
+
 var ListModal = React.createClass({
 	didClickRow: function(row){
 		this.props.data.callback(row);
@@ -27,7 +29,7 @@ var ListModal = React.createClass({
 
 		var emptyText = options.emptyText || this.defaults.emptyText;
 		if(!rows.length){
-			rows.push(<li key="empty-text" className="empty-text"><h3>{emptyText}</h3></li>);
+			rows.push(<div className="list-modal-loader"> <Loader /> </div>);
 		}
 		var title = options.title || this.defaults.title;
 
