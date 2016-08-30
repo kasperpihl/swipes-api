@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { main, api } from '../actions';
+import { main, api, workspace } from '../actions';
 import { bindAll } from '../classes/utils'
 
 import '../components/find/styles/find.scss'
@@ -17,16 +17,15 @@ class Find extends Component {
   }
   mapResultToCard(doc){
     const shareData = { link: {}, permissions: {}};
-    const meta = {};
-    let title, subtitle = '', description, onClick;
+    const meta = { };
     const idParts = doc.id.split('-')
     shareData.link.service = doc.source;
     shareData.link.type = doc.content_type;
-    shareData.permissions.account_id = shareData.link.service_id;
+    shareData.permissions.account_id = doc.service_id;
     if(doc.source === 'slack'){
       shareData.link.id = idParts[idParts.length - 1];
 
-      if(['image', 'file'].indexOf(doc.content_type) > -1){
+      if(['image', 'file', 'document'].indexOf(doc.content_type) > -1){
         meta.title = doc.filename;
         meta.subtitle = 'From ' + doc.author;
       }
@@ -54,16 +53,20 @@ class Find extends Component {
       meta.title = doc.filename;
       meta.subtitle = doc.filepath;
     }
-    if(!title){
+    if(!meta.title){
       this.unhandledDocs.push(doc);
     }
 
-    shareData.meta = meta;
-    return { meta, shareData };
+    shareData.meta = JSON.parse(JSON.stringify(meta));
+    meta.xendo_id = doc.id;
+    this.shareDataForId[meta.xendo_id] = shareData;
+
+    return meta ;
   }
   search(query){
     this.setState({searchQuery: query, searching: true, searchResults: []})
     this.unhandledDocs = [];
+    this.shareDataForId = {};
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
       res.result.response.docs.forEach((doc) => {
@@ -101,9 +104,12 @@ class Find extends Component {
     console.log('clicked', shareUrlOrData);
   }
   onCardShare(card, data, dragging){
+    this.props.toggleFind();
     if(data.checksum){ // Is activity
-      this.props.toggleFind();
       this.props.startDraggingDot("search", {checksum: data.checksum});
+    }
+    else if(data.xendo_id){
+      this.props.startDraggingDot("search", this.shareDataForId[data.xendo_id]);
     }
     
     console.log('sharing', data,  dragging);
@@ -136,7 +142,7 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          <SearchResults searching={this.state.searching} title="Results" results={this.state.searchResults}/>
+          <SearchResults searching={this.state.searching} title="Results" results={this.state.searchResults} cardDelegate={this}/>
           <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
         </div>
       </div>

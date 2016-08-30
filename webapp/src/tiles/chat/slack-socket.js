@@ -17,7 +17,6 @@ export default class SlackSocket {
     }
     this.handleMessage = (msg) => {
       if(msg.type === 'pong'){
-        console.log('pong');
         this.lastPongTime = new Date().getTime();
         return;
       }

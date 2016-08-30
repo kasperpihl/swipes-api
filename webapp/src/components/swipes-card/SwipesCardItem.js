@@ -1,22 +1,53 @@
 import React, { Component, PropTypes } from 'react';
-import { randomString } from '../../classes/utils';
+import { randomString, bindAll } from '../../classes/utils';
 import SwipesDot from '../swipes-dot/SwipesDot';
 
 class SwipesCardItem extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = { data: props.data }
+    bindAll(this, ['onClick', 'onAction', 'onDragStart'])
+    this.id = randomString(5);
   }
-  componentDidMount() {
+  updateData(data){
+    const newData = Object.assign(this.props.data, data);
+    this.setState({ data:newData });
+  }
+  componentDidMount(){
+    const { data, callDelegate } = this.props;
+    callDelegate('onCardSubscribe', data, this.updateData, this.id);
+  }
+  componentWillUnmount(){
+    const { data, callDelegate } = this.props;
+    callDelegate('onCardUnsubscribe', data, this.updateData, this.id);
+  }
+  onClick(e){
+    const { data, callDelegate } = this.props;
+    if(!window.getSelection().toString().length){
+      callDelegate('onCardClick', data);
+    }
+  }
+  onAction(action){
+    const { data, callDelegate } = this.props;
+    if(action.label === 'Share'){
+      callDelegate('onCardShare', data);
+    }
+    else {
+      callDelegate('onCardAction', data, action);
+    }
+  }
+  onDragStart(){
+    const { data, callDelegate } = this.props;
+    callDelegate('onCardShare', data, true);
   }
   renderDot(actions){
-    const { onDragStart, hoverParentId } = this.props;
+    const { onDragStart } = this.props;
 
     return (
       <div className="dot-wrapper">
         <SwipesDot
-          onDragStart={onDragStart}
-          hoverParentId={hoverParentId}
+          onDragStart={this.onDragStart}
+          hoverParentId={"swipes-card__item-" + this.id }
           elements={[actions]}
         />
       </div>
@@ -120,7 +151,7 @@ class SwipesCardItem extends Component {
     } = this.props.data;
 
     return (
-      <div className="swipes-card__item">
+      <div id={"swipes-card__item-" + this.id } className="swipes-card__item" onClick={this.onClick}>
         {this.renderHeader(actions, title, subtitle, headerImage)}
         {this.renderDescription(description)}
         {this.renderPreview(preview)}
@@ -137,7 +168,7 @@ const stringOrNum = PropTypes.oneOfType([
 ])
 
 SwipesCardItem.propTypes = {
-  hoverParentId: PropTypes.string.isRequired,
+  callDelegate: PropTypes.func.isRequired,
   data: PropTypes.shape({
     title: PropTypes.oneOfType([
       PropTypes.string,
@@ -161,6 +192,5 @@ SwipesCardItem.propTypes = {
       icon: PropTypes.string,
       bgColor: PropTypes.string
     }))
-  }),
-  onDragStart: PropTypes.func
+  })
 }

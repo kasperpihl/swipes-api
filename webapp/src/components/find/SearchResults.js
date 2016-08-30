@@ -37,23 +37,23 @@ class SearchResults extends Component {
     })
   }
   renderResultList(results) {
-    if(this.props.searching){
+    const { cardDelegate, searching } = this.props;
+    if(searching){
       return <Loader size={60} center={true} />
     }
     if(!results) return;
 
-    const { cardOnClick } = this.props;
+    
     if(Array.isArray(results)){
       return results.map( (result, i) => {
-        console.log(result);
-        return <SwipesCard data={result} key={'search-result-' + i} onClick={cardOnClick} />
+        return <SwipesCard data={result} key={'search-result-' + i} delegate={cardDelegate} />
       })
     }
     else{
       const html = [];
       for(var key in results){
         var cards = results[key];
-        html.push(<SwipesCardList data={cards} title={key} key={'search-result-' + key} onClick={cardOnClick}/>);
+        html.push(<SwipesCardList data={cards} delegate={cardDelegate} title={key} key={'search-result-' + key} />);
       }
       return html;
     }
@@ -83,6 +83,6 @@ SearchResults.propTypes = {
   searching: PropTypes.bool,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
-  results: PropTypes.arrayOf(PropTypes.object), // SwipesCard Proptypes
-  cardOnClick: PropTypes.func
+  results: PropTypes.object, // SwipesCard Proptypes
+  cardDelegate: PropTypes.object.isRequired
 }
