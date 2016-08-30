@@ -67,11 +67,11 @@ var Topbar = React.createClass({
     this.setState({dropdownMenu: !this.state.dropdownMenu})
   },
   onChangeMenu(id){
-    if(id === 'settings'){
-
+    if(id === 'menu'){
+      this.props.callGridDelegate('gridRowPressedMenu', this.props.data.id);
     }
     if(id === 'remove'){
-
+      this.props.callGridDelegate('gridRowPressedRemove', this.props.data.id);
     }
   },
   render() {
@@ -87,8 +87,9 @@ var Topbar = React.createClass({
     }
 
     const dropdownStructure = [
+      { title: 'Tile menu', id: 'menu' },
       { title: 'Settings', id: 'settings' },
-      { title: 'Remove Tile', id: 'remove' },
+      { title: 'Remove Tile', id: 'remove' }
     ];
 
     const dropdownStyles = {

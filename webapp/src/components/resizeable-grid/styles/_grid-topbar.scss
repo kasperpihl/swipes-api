@@ -24,6 +24,10 @@ $gridTopbarHeight: 55px;
       line-height: 21px;
       font-weight: 900;
       color: $deepBlue-100;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &--seperator {

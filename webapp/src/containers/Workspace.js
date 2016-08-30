@@ -16,7 +16,7 @@ class Workspace extends Component {
   constructor(props) {
     super(props)
     this._cachedTiles = {};
-    bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
+    bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridRowPressedRemove', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
   }
   generateShareUrl(shortUrl){
     return window.location.origin + '/s/' + shortUrl;
@@ -49,7 +49,7 @@ class Workspace extends Component {
         this.props.stopDraggingDot()
       }
 
-      
+
 
     }
   }
@@ -61,7 +61,7 @@ class Workspace extends Component {
         // Do additional tests if no row was hovered. Like (topbar etc)
       }
       this.props.dragDot(e.clientX, e.clientY, hoverTarget)
-      
+
       //console.log(hoverTarget);
     }
   }
@@ -109,6 +109,9 @@ class Workspace extends Component {
         this.props.toggleFullscreen();
       }
     }
+  }
+  gridRowPressedRemove(grid, id){
+    this.props.removeTile({id: id});
   }
   gridRowPressedMenu(grid, id){
     this.sendToTile(id, 'menu.pressed');
