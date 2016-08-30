@@ -1,18 +1,20 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import SwipesBackgroundAnimation from './SwipesBackgroundAnimation'
+import FloatingInput from '../swipes-ui/FloatingInput'
 
 
 export default class Signin extends Component {
   componentDidMount() {
   }
   signin(){
-    var email = this.refs.username.value;
-    var password = this.refs.password.value;
+    var email = this.refs.username.state.value;
+    var password = this.refs.password.state.value;
     var data = {
       email: email,
       password: password
     };
+
     return this.props.onLogin(data);
   }
   preventSubmit(e) {
@@ -29,8 +31,8 @@ export default class Signin extends Component {
             <h2>sign in to swipes</h2>
             <form action="" onSubmit={this.preventSubmit}>
               <br/>
-              <input type="text" placeholder="Email" ref="username" id="email" className="username"/>
-              <input type="text" placeholder="Password" ref="password" type="password" />
+              <FloatingInput label="Email" type="text" id="email" ref="username" />
+              <FloatingInput label="Password" type="password" id="password" ref="password" />
               <br/>
               <input type="submit" className="login-submit" value="SIGN IN" onClick={this.signin.bind(this)}/>
             </form>

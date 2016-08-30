@@ -1,0 +1,62 @@
+@import '../global-styles/vars';
+@import '../global-styles/mixins';
+
+
+.floating-label {
+	position: relative;
+  width: 100%;
+  padding: 15px 30px;
+  max-width: 350px;
+
+	&__input {
+		padding: 5px 0;
+		width: inherit;
+		border: none;
+		border-bottom: 1px solid $deepBlue-40;
+		background-color: transparent;
+		font-weight: 400;
+		font-size: 16px;
+		color: $deepBlue-80;
+		position: relative;
+    transition: .2s ease-in-out;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	&__label {
+		position: absolute;
+		bottom: 50%;
+		left: 0;
+		font-weight: 400;
+		color: $deepBlue-40;
+		transform: translateY(50%);
+    transition: .2s ease-in-out;
+    padding-left: 30px;
+	}
+
+  &--active & {
+
+    &__input {
+      border-bottom: 1px solid $blue-100;
+      transition: .2s ease-in-out;
+    }
+
+    &__label {
+      color: $blue-100;
+      transform: translate3d(0px,-15px, 0px);
+			font-size: 11px;
+			transition: .2s ease-in-out;
+    }
+  }
+
+  &--standby & {
+
+    &__label {
+      transform: translate3d(0px,-15px, 0px);
+			font-size: 11px;
+			transition: .2s ease-in-out;
+    }
+  }
+}

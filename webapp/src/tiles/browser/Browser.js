@@ -18,7 +18,7 @@ class Browser extends Component {
     this.setState({url: url});
   }
   componentDidMount() {
-    
+
   }
   render() {
     if(!this.state.url){
