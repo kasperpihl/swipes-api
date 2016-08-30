@@ -73,6 +73,8 @@ export default class SlackSwipesParser {
         audio_html
       } = attachment;
 
+      console.log(attachment);
+
       let newTitle, newDescription;
       const texts = [ title, pretext, text ];
       texts.forEach((t, i) => {
@@ -83,7 +85,7 @@ export default class SlackSwipesParser {
           newDescription = t;
         }
       })
-      
+
       if(!newTitle){
         newTitle = fallback;
       }
@@ -103,7 +105,7 @@ export default class SlackSwipesParser {
       if (video_html) {
         preview = {
           type: 'html',
-          html: video_html.replace('autoplay=1', 'autoplay=0')
+          html: video_html.replace('autoplay=1', 'autoplay=0').replace('autoplay ', '')
         }
       }
       if(audio_html){
@@ -135,21 +137,21 @@ export default class SlackSwipesParser {
     const { bots, self, users } = data;
     const date = new Date(parseInt(msg.ts)*1000);
     const group = startOfDayTs(date);
-    const newMsg = { 
-      ts: msg.ts, 
+    const newMsg = {
+      ts: msg.ts,
       key: msg.ts,
-      timeStr: getTimeStr(date), 
+      timeStr: getTimeStr(date),
       name: 'unknown',
       profileImage: DEFAULT_PROFILE
     };
-    
+
     if(msg.text && msg.text.length){
       newMsg.oldText = msg.text;
       newMsg.text = this.renderTextWithLinks(this.replaceNewLines(msg.text), data.users);
     }
-    
+
     const { user:userId, bot_id, username } = msg;
-    
+
     let user, cards;
 
     if(userId){
@@ -264,7 +266,7 @@ export default class SlackSwipesParser {
     if(sendingMessages.length){
       lastSection.messages = lastSection.messages.concat(sendingMessages);
     }
-    
+
 
     return sortedSections;
   }
@@ -333,4 +335,3 @@ const removeLinksFromText = (text) => {
     return text;
   return text.replace(/<(.*?)>/g, '');
 }
-
