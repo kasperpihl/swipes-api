@@ -111,8 +111,9 @@
       }
 
       .emoji {
-        @include size(17px !important, 17px !important);
-        transform: translateY(3px);
+        @include size(15px !important, 15px !important);
+        transform: translateY(-1px);
+        vertical-align: middle;
       }
 
       a {
