@@ -117,15 +117,16 @@ class Topbar extends Component {
     if(!this.props.hasLoaded){
       styles.display = 'none';
     }
+    console.log(this.state.showDropdown);
     return (
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <div className="swipes-dropdown__title" onClick={this.toggleDropdown.bind(this)}>
+            <div className="sw-topbar__info__title" onClick={this.toggleDropdown.bind(this)}>
               {selectedTitle}
               <i className="material-icons">arrow_drop_down</i>
+              <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
             </div>
-            <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu} selector={this.renderSelector}/>
           </div>
           <div className="sw-topbar__searchbar">
             <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search your apps" />

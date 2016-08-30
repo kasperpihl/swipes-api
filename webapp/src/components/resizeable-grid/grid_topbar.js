@@ -4,6 +4,8 @@ import CollapseIcon from './images/sw-collapse-icon.svg';
 import FullscreenIcon from './images/sw-fullscreen-icon.svg';
 import ContextIcon from './images/sw-context-icon.svg';
 
+import DropdownMenu from '../swipes-ui/DropdownMenu';
+
 var initClientX = null;
 var initClientY = null;
 
@@ -18,7 +20,7 @@ var Topbar = React.createClass({
   },
   getInitialState(){
     return {
-      contextMenu: false
+      dropdownMenu: false
     }
   },
   onMouseMove(e){
@@ -55,7 +57,7 @@ var Topbar = React.createClass({
     document.addEventListener('mouseup', this.onMouseUp);
   },
   renderClickBg() {
-    if (this.state.contextMenu) {
+    if (this.state.dropdownMenu) {
       return (
         <div className="context-menu__click-bg"></div>
       )
@@ -64,7 +66,7 @@ var Topbar = React.createClass({
   renderContextItems() {
     let menuClass = 'context-menu--closed';
 
-    if (this.state.contextMenu) {
+    if (this.state.dropdownMenu) {
       menuClass = 'context-menu--open'
     }
     return (
@@ -82,8 +84,16 @@ var Topbar = React.createClass({
       </div>
     )
   },
-  openContextMenu() {
-    this.setState({contextMenu: !this.state.contextMenu})
+  openDropdownMenu() {
+    this.setState({dropdownMenu: !this.state.dropdownMenu})
+  },
+  onChangeMenu(id){
+    if(id === 'settings'){
+      console.log(id)
+    }
+    if(id === 'remove'){
+      console.log(id)
+    }
   },
   render() {
     const {
@@ -93,9 +103,14 @@ var Topbar = React.createClass({
     let onclickHandler;
     let title = 'Chat';
 
-    if ( this.state.contextMenu ) {
+    if ( this.state.dropdownMenu ) {
       className += ' sw-grid-topbar--shown'
     }
+
+    const dropdownStructure = [
+      { title: 'Settings', id: 'settings' },
+      { title: 'Remove Tile', id: 'remove' },
+    ];
 
     if (this.props.data.collapsed) {
       onclickHandler = this.onClick;
@@ -135,10 +150,9 @@ var Topbar = React.createClass({
             </div>
 
             <div className="sw-grid-topbar__actions--context">
-              <div className="context-icon" onClick={this.openContextMenu}>
-                {this.renderClickBg()}
+              <div className="context-icon" onClick={this.openDropdownMenu}>
                 <ContextIcon />
-                {this.renderContextItems()}
+                <DropdownMenu show={this.state.dropdownMenu} data={dropdownStructure} onChange={this.onChangeMenu} reverse={true} />
               </div>
             </div>
           </div>

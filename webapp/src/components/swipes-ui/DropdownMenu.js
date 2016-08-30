@@ -18,16 +18,21 @@ class SwipesDropdownMenu extends Component {
     })
   }
   render() {
-    let { data, show } = this.props;
-    let menuClass = 'swipes-dropdown__menu--closed';
+    let { data, show, reverse, styles } = this.props;
+    let menuClass = 'swipes-dropdown--closed';
 
     if (show) {
-      menuClass = 'swipes-dropdown__menu--open';
+      menuClass = 'swipes-dropdown--open';
+    }
+
+    if (reverse) {
+      menuClass += ' swipes-dropdown--right'
     }
 
     return (
-      <div className="swipes-dropdown">
-        <div className={"swipes-dropdown__menu " + menuClass}>
+      <div className={"swipes-dropdown " + menuClass}>
+        <div className="swipes-dropdown__clickable-bg"></div>
+        <div className="swipes-dropdown__menu" style={styles}>
           {this.renderItems(data)}
         </div>
       </div>
@@ -37,19 +42,11 @@ class SwipesDropdownMenu extends Component {
 
 export default SwipesDropdownMenu
 
-
-// <div className="swipes-dropdown__title">
-//   {selectedTitle}
-//   <i className="material-icons">arrow_drop_down</i>
-// </div>
-
 SwipesDropdownMenu.propTypes = {
   show: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired
   })),
-  onChange: PropTypes.func.isRequired
-
-  // removeThis: PropTypes.string.isRequired
+  onChange: PropTypes.func
 }

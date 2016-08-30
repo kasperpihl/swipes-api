@@ -1,14 +1,5 @@
-@mixin size($width, $height) {
-	width: $width;
-	height: $height;
-}
-@mixin flex($vertical, $horizontal, $direction:row) {
-	display: flex;
-	align-items: $vertical;
-	justify-content: $horizontal;
-	flex-direction: $direction;
-}
-
+@import '../global-styles/vars';
+@import '../global-styles/mixins';
 
 $topbarSize: 54px;
 $searchbarSize: 90px;
@@ -73,9 +64,14 @@ $fullscreenTopbarSize: 70px;
 		}
 
 		&__title {
-			font-size: 12px;
-			font-weight: 500;
-			letter-spacing: 1px;
+			@include flex(center, center);
+	    font-family: 'Aktiv-Grotesk';
+	    font-size: 12px;
+	    font-weight: bold;
+	    height: $topbarSize;
+	    letter-spacing: 2.6px;
+	    padding: 0 10px;
+	    text-transform: uppercase;
 		}
 	}
 

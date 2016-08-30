@@ -3,16 +3,13 @@
 
 .swipes-dropdown {
 
-  &__title {
-    @include flex(center, center);
-    font-family: 'Aktiv-Grotesk';
-    font-size: 12px;
-    font-weight: bold;
-    height: 54px + 6px;
-    letter-spacing: 2.6px;
-    padding: 0 10px;
-    padding-bottom: 6px;
-    text-transform: uppercase;
+  &__clickable-bg {
+    @include size(100vw, 120vh);
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba($deepBlue-100, .2);
+    display: none;
   }
 
   &__menu {
@@ -28,12 +25,31 @@
     transform-origin: 50% 0%;
     transition: .3s;
 
-    &--open {
-      transform: scaleY(1);
-      transition: .3s;
+    &--item {
+      @include size(100%, 54px);
+      @include flex(center, flex-start);
+      color: $deepBlue-80;
+      font-size: 15px;
+      border-radius: 3px;
+      text-align: left;
+      padding-left: 12px;
+      opacity: 0;
+      transition: .05s;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+  }
+
+  &--open & {
+
+    &__clickable-bg {
+      display: block;
     }
 
-    &--open & {
+    &__menu {
+      transform: scaleY(1);
+      transition: .3s;
 
       &--item {
         opacity: 1;
@@ -45,17 +61,13 @@
         }
       }
     }
+  }
 
-    &--item {
-      @include size(100%, 54px);
-      @include flex(center, flex-start);
-      color: $deepBlue-80;
-      font-size: 15px;
-      border-radius: 3px;
-      text-align: left;
-      padding-left: 12px;
-      opacity: 0;
-      transition: .05s;
+  &--right & {
+
+    &__menu {
+      left: auto;
+      right: 6px;
     }
   }
 }
