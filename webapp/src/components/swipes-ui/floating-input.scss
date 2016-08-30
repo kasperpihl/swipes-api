@@ -34,6 +34,7 @@
 		transform: translateY(50%);
     transition: .2s ease-in-out;
     padding-left: 30px;
+		font-size: 14px;
 	}
 
   &--active & {
@@ -45,7 +46,7 @@
 
     &__label {
       color: $blue-100;
-      transform: translate3d(0px,-15px, 0px);
+      transform: translate3d(0px,-13px, 0px);
 			font-size: 11px;
 			transition: .2s ease-in-out;
     }
@@ -54,7 +55,7 @@
   &--standby & {
 
     &__label {
-      transform: translate3d(0px,-15px, 0px);
+      transform: translate3d(0px,-13px, 0px);
 			font-size: 11px;
 			transition: .2s ease-in-out;
     }

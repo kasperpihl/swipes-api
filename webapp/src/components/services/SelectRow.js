@@ -64,11 +64,14 @@ class SelectRow extends Component {
       text = 'Pick a team'
       SVG = SwipesWorkspaceIllustrationsEmptystatePickteam
     }
-    return(
-      <div className="services row connect in-card">
-        <SVG />
-        <h6>{text}</h6>
-        <p></p>
+
+    return (
+
+      <div className="services-connect">
+        <div className="services-connect__illustration">
+          <SVG className="services-connect__illustration--svg"/>
+        </div>
+        <div className="services-connect__title">{text}</div>
         {this.renderSelector()}
       </div>
     );
