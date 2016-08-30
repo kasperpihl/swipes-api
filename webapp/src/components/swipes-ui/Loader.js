@@ -105,20 +105,25 @@ class Loader extends Component {
   }
   render() {
 
-    const { size, style, center, text, textStyle } = this.props;
+    const { size, style, center, text, textStyle, textPosition } = this.props;
     const styles = Object.assign({
       width: DEF_SIZE + 'px',
       height: DEF_SIZE + 'px'
     }, style);
 
-    if ( size ) {
+    if (size) {
       styles.width = size + 'px';
       styles.height = size + 'px';
     }
 
     let className = "sw-loader__wrapper"
-    if(center){
+
+    if (center) {
       className += " sw-loader__wrapper--center";
+    }
+
+    if (textPosition === 'right') {
+      className += " sw-loader__wrapper--text-right"
     }
 
     return (

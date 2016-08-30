@@ -34,8 +34,22 @@
 
   &__text {
     @include flex(center, center);
-    margin-top: 10px;
+    position: absolute;
     color: $deepBlue-40;
+    width: 100%;
+    bottom: -15px;
+  }
+
+  &--text-right & {
+    &__text {
+      @include flex(center, center);
+      position: absolute;
+      color: $deepBlue-40;
+      width: 100%;
+      bottom: 50%;
+      right: -15px;
+      transform: translate(100%, 50%);
+    }
   }
 }
 
