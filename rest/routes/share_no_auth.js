@@ -10,7 +10,23 @@ const router = express.Router();
 
 router.post('/share.getData', (req, res, next) => {
   const shareIds = req.body.shareIds;
-  const getSwipesUrlsQ = r.table('links').getAll(r.args(shareIds), {index: 'short_url'});
+  const getSwipesUrlsQ =
+    r.db('swipes').table('links_permissions')
+      .getAll(r.args(shareIds))
+      .eqJoin('link_id', r.db('swipes').table('links'))
+      .map((doc) => {
+        return {
+          left: doc('left').without('link_id'),
+          right: doc('right').without('id', 'type', 'short_url')
+        }
+      })
+      .zip()
+      .map((link) => {
+        return link.merge(() => {
+          return {"short_url": link('id')}
+        })
+      })
+      .without('id')
 
   db.rethinkQuery(getSwipesUrlsQ)
     .then((links) => {

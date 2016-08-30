@@ -4,7 +4,8 @@ const express = require('express');
 const validator = require('validator');
 import SwipesError from '../swipes-error.js';
 import {
-  createSwipesShortUrl
+  createSwipesShortUrl,
+  addPermissionsToALink
 } from '../utils/share_url_util'
 
 const router = express.Router();
@@ -69,12 +70,26 @@ router.post('/link.add', validateData, (req, res, next) => {
   const userId = req.userId;
   const link = res.locals.link;
   const permission = res.locals.permission;
+  const permissionType = permission.type || 'public';
   const accountId = permission.account_id;
   const meta = res.locals.meta;
+  let service_data;
 
   createSwipesShortUrl({ userId, accountId, link, meta })
-    .then(({shortUrl, serviceData}) => {
-      return res.status(200).json({ok: true, short_url: shortUrl, service_data: serviceData});
+    .then(({serviceData, checksum}) => {
+      const permission = {
+        type: 'public',
+        account_id: accountId
+      }
+
+      service_data = serviceData;
+
+      return addPermissionsToALink({ userId, checksum, permission })
+    })
+    .then(({ permissionPart }) => {
+      const short_url = permissionPart;
+
+      return res.status(200).json({ok: true, short_url, service_data});
     })
     .catch((err) => {
       return next(err);

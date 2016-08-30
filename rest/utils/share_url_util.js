@@ -12,11 +12,10 @@ const serviceDir = __dirname + '/../../services/';
 
 const createSwipesShortUrl = ({ userId, accountId, link, meta = null }) => {
   const checksum = hash({ link });
-  const shortUrl = shortid.generate();
 
   return fetchSwipesUrlData({userId, accountId, link, meta})
     .then((shortUrlData) => {
-      const insertDoc = Object.assign({}, {checksum, short_url: shortUrl}, shortUrlData);
+      const insertDoc = Object.assign({}, { checksum }, shortUrlData);
       const insertLinkQ =
         r.table('links')
           .insert(insertDoc, {
@@ -38,10 +37,10 @@ const createSwipesShortUrl = ({ userId, accountId, link, meta = null }) => {
     })
     .then((result) => {
       const changes = result.changes[0];
-      const shortUrl = changes.new_val.short_url;
+      const checksum = changes.new_val.checksum;
       const serviceData = changes.new_val.service_data;
 
-      return Promise.resolve({shortUrl, serviceData});
+      return Promise.resolve({ serviceData, checksum });
     })
     .catch((err) => {
       return Promise.reject(err);
@@ -129,42 +128,25 @@ const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
     })
 }
 
-// T_TODO how to make the permissions table better
-// The problem that we have with the current approach is that
-// that shortUrl/userId are not enough to retrieve the right permissions
-// because a user can share the same item with two different accountIds
+const addPermissionsToALink = ({ userId, checksum, permission }) => {
+  const permissionPart = shortid.generate();
+  const linkPermissionQ = r.table('links_permissions').insert({
+    id: permissionPart,
+    link_id: checksum,
+    user_id: userId,
+    permission: permission
+  });
 
-// .then((result) => {
-//   const link_id = result.generated_keys[0];
-//   const checkQ =
-//     r.table('link_rels')
-//       .getAll(link_id, {index: 'link_id'})
-//       .map((link) => {
-//         return link('user_id')
-//       })
-//       .contains(userId)
-//
-//
-//   db.rethinkQuery(checkQ)
-//     .then((rels) => {
-//       if (rels) {
-//         return Promise.resolve();
-//       } else {
-//         const linkRelQ = r.table('link_rels').insert({
-//           link_id,
-//           user_id: userId,
-//           account_id: accountId
-//         });
-//
-//         return db.rethinkQuery(linkRelQ);
-//       }
-//     })
-//     .catch((err) => {
-//       return Promise.reject(err);
-//     })
-// })
+  return db.rethinkQuery(linkPermissionQ)
+    .then(() => {
+      return Promise.resolve({ permissionPart });
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+}
 
 export {
   createSwipesShortUrl,
-  fetchSwipesUrlData
+  addPermissionsToALink
 }
