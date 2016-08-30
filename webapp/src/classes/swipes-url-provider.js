@@ -5,7 +5,7 @@ export default class SwipesUrlProvider {
   constructor(store){
     bindAll(this, ['subscribe', 'unsubscribe', 'fetch', 'setThrottleThreshold'])
     this._listenersObj = {}
-    this._shortUrlData = {}
+    this._shareUrlData = {}
     this.store = store;
     this.urlsToFetch = []
     this.fetchingUrls = null;
@@ -15,9 +15,9 @@ export default class SwipesUrlProvider {
     this.throttleThreshold = duration;
     this.throttledFetch = debounce(this.fetch, duration);
   }
-  fetch(shortUrl){
-    if(typeof shortUrl === 'string'){
-      this.urlsToFetch.push(shortUrl);
+  fetch(shareUrl){
+    if(typeof shareUrl === 'string'){
+      this.urlsToFetch.push(shareUrl);
       return this.throttledFetch();
     }
     if(this.fetchingUrls){
@@ -38,11 +38,11 @@ export default class SwipesUrlProvider {
     });
   }
   save(url, data){
-    this._shortUrlData[url] = data;
+    this._shareUrlData[url] = data;
     this.notify(url, data);
   }
-  notify(shortUrl, data){
-    const currentListeners = this._listenersObj[shortUrl];
+  notify(shareUrl, data){
+    const currentListeners = this._listenersObj[shareUrl];
     if(currentListeners){
       currentListeners.forEach(( { listener }) => {
         listener(data);
@@ -50,33 +50,35 @@ export default class SwipesUrlProvider {
     } 
   }
 
-  subscribe(shortUrl, listener, ctx){
-    if(!shortUrl || typeof shortUrl !== 'string'){
-      return console.warn('ShortUrlProvider: addListener param1 (shortUrl): not set or not string');
+  subscribe(shareUrl, listener, ctx){
+    if(!shareUrl || typeof shareUrl !== 'string'){
+      return console.warn('ShareUrlProvider: addListener param1 (shareUrl): not set or not string', shareUrl);
     }
     if(!listener || typeof listener !== 'function'){
-      return console.warn("ShortUrlProvider: addListener param2 (listener): not set or not function");
+      return console.warn("ShareUrlProvider: addListener param2 (listener): not set or not function");
     }
     if(typeof ctx !== 'string'){
       ctx = '';
     }
 
-    const currentListeners = this._listenersObj[shortUrl] || [];
+    const currentListeners = this._listenersObj[shareUrl] || [];
     currentListeners.push({listener: listener, context: ctx});
-    this._listenersObj[shortUrl] = currentListeners;
-    const currentData = this._shortUrlData[shortUrl];
+    this._listenersObj[shareUrl] = currentListeners;
+    const currentData = this._shareUrlData[shareUrl];
     if(currentData){
       console.log('sending initial data', currentData);
       listener(currentData);
     } 
-    this.fetch(shortUrl);
-  }
-  unsubscribe(shortUrl, listener, ctx){
-    if(!shortUrl && !listener && !ctx){
-      return console.warn('ShortUrlProvider: removeListener: no params provided');
+    else{
+      this.fetch(shareUrl);
     }
-    if(shortUrl){
-      this._removeListenersForShortUrl(shortUrl, listener, ctx);
+  }
+  unsubscribe(shareUrl, listener, ctx){
+    if(!shareUrl && !listener && !ctx){
+      return console.warn('ShareUrlProvider: removeListener: no params provided');
+    }
+    if(shareUrl){
+      this._removeListenersForShareUrl(shareUrl, listener, ctx);
     }
     else{
       for(var key in this._listenersObj){
@@ -84,15 +86,15 @@ export default class SwipesUrlProvider {
       }
     }
   }
-  _removeListenersForShortUrl(shortUrl, listener, ctx){
+  _removeListenersForShareUrl(shareUrl, listener, ctx){
 
-    const currentListeners = this._listenersObj[shortUrl];
+    const currentListeners = this._listenersObj[shareUrl];
     if(!currentListeners){
       return;
     }
     // If only event name is provided, remove all
     if(!listener && !ctx){
-      return delete this._listenersObj[shortUrl];
+      return delete this._listenersObj[shareUrl];
     }
 
     const newListeners = [];
@@ -102,10 +104,10 @@ export default class SwipesUrlProvider {
         newListeners.push(listener);
     }
     if(!newListeners.length){
-      return delete this._listenersObj[shortUrl];
+      return delete this._listenersObj[shareUrl];
     }
     else if(newListeners.length && newListeners.length !== currentListeners.length){
-      this._listenersObj[shortUrl] = newListeners;
+      this._listenersObj[shareUrl] = newListeners;
     }
   }
 

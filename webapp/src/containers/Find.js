@@ -12,7 +12,7 @@ class Find extends Component {
   constructor(props) {
     super(props)
     this.state = {};
-    bindAll(this, [ 'dotDragStart'])
+    bindAll(this, [ 'dotDragStart', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
   mapResultToCard(doc){
@@ -97,16 +97,19 @@ class Find extends Component {
     }
   }
 
-  onCardClick(card, data, shareUrl){
+  onCardClick(card, data){
     console.log('clicked', shareUrlOrData);
   }
-  onCardShare(card, data, shareUrl, dragging){
-    this.props.toggleFind();
-    this.props.startDraggingDot("search", {shortUrl: shareUrl});
-    console.log('sharing', shareUrlOrData, dragging);
+  onCardShare(card, data, dragging){
+    if(data.checksum){ // Is activity
+      this.props.toggleFind();
+      this.props.startDraggingDot("search", {checksum: data.checksum});
+    }
+    
+    console.log('sharing', data,  dragging);
   }
-  onCardAction(card, data, shareUrl, action){
-    console.log('action', shareUrlOrData, action);
+  onCardAction(card, data, action){
+    console.log('action', action);
   }
   dotDragStart(shortUrl){
     //console.log('dot drag start', params);
@@ -115,7 +118,7 @@ class Find extends Component {
     const { recent } = this.props;
     const keys = {}
     return recent.filter((activity) => {
-      const id = activity.short_url;
+      const id = activity.checksum;
       if(!keys[id]){
         keys[id] = true;
         return true;

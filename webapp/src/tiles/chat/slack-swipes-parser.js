@@ -73,8 +73,6 @@ export default class SlackSwipesParser {
         audio_html
       } = attachment;
 
-      console.log(attachment);
-
       let newTitle, newDescription;
       const texts = [ title, pretext, text ];
       texts.forEach((t, i) => {

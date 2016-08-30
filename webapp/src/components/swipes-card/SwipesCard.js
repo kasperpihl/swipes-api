@@ -40,14 +40,16 @@ export default class SwipesCard extends Component {
   }
   componentDidMount(){
     const provider = this.getProvider();
-    if(provider){
-      provider.subscribe(this.getShareUrl(), this.updateData, this.id);
+    const shareUrl = this.getShareUrl();
+    if(provider && shareUrl){
+      provider.subscribe(shareUrl, this.updateData, this.id);
     }
   }
   componentWillUnmount(){
     const provider = this.getProvider();
-    if(provider){
-      provider.unsubscribe(this.getShareUrl(), this.updateData, this.id);
+    const shareUrl = this.getShareUrl();
+    if(provider && shareUrl){
+      provider.unsubscribe(shareUrl, this.updateData, this.id);
     }
   }
   onDragStart(){

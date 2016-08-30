@@ -17,6 +17,7 @@ export default class SlackSocket {
     }
     this.handleMessage = (msg) => {
       if(msg.type === 'pong'){
+        console.log('pong');
         this.lastPongTime = new Date().getTime();
         return;
       }
@@ -79,25 +80,34 @@ export default class SlackSocket {
   }
   sendEvent(msg){
     if(!this.webSocket){
-      return this.restartSocket();
+      this.restartSocket();
+      return;
     }
     if(this.webSocket.readyState === 0 || this.webSocket.readyState === 2){
       return;
     }
     if(this.webSocket.readyState === 3){
       this.webSocket = null;
-      return this.restartSocket();
+       this.restartSocket();
+      return;
     }
 
     if(typeof msg !== 'string'){
       try{
         msg = JSON.stringify(msg)
+        return true;
       }
       catch(e){
         msg = ''
       }
     }
-    this.webSocket.send(msg);
+    try{
+      this.webSocket.send(msg);
+      return true;
+    }
+    catch(e){
+
+    }
   }
   checkSocket(){
 
@@ -107,14 +117,17 @@ export default class SlackSocket {
     }
     
     // Send a ping to the socket, expect return.
-    this.sendEvent(JSON.stringify({'id':'1234', 'type': 'ping'}));
-    this.isPinging = true;
-    const pingTime = new Date().getTime();
-    setTimeout(() => {
-      this.isPinging = false;
-      if(!this.lastPongTime || this.lastPongTime < pingTime){
-        this.closeWebSocket();
-      }
-    }, 4000);
+    if(this.sendEvent(JSON.stringify({'id':'1234', 'type': 'ping'}))){
+      this.isPinging = true;
+      const pingTime = new Date().getTime();
+      setTimeout(() => {
+        this.isPinging = false;
+        if(!this.lastPongTime || this.lastPongTime < pingTime){
+          this.closeWebSocket();
+        }
+      }, 6000);
+    }
+    
+    
   }
 }

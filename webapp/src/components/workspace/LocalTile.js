@@ -13,7 +13,6 @@ class LocalTile extends Component {
   }
   componentForType(type){
     let Component;
-    console.log(type);
     switch(type){
       case 'slack-dashboard':
         return Chat;

@@ -18,18 +18,17 @@ class Activity extends Component {
       </div>
     )
   }
-  renderCard(shortUrl) {
+  renderCard(data, checksum) {
     return (
-      <SwipesCard shareUrl={shortUrl} delegate={this.props.cardDelegate} />
+      <SwipesCard data={Object.assign({}, data, { checksum })} delegate={this.props.cardDelegate} />
     )
   }
   render() {
-    const { short_url, date, message } = this.props.data;
-
+    const { service_data, checksum, date, message } = this.props.data;
     return (
       <div className="swipes-activities__activity">
         {this.renderStory(date, message)}
-        {this.renderCard(short_url)}
+        {this.renderCard(service_data, checksum)}
       </div>
     )
   }
