@@ -10,11 +10,11 @@ import SwipesError from '../swipes-error';
 
 const serviceDir = __dirname + '/../../services/';
 
-const createSwipesShortUrl = ({ userId, accountId, service }) => {
-  const checksum = hash({ service });
+const createSwipesShortUrl = ({ userId, accountId, link, meta = null }) => {
+  const checksum = hash({ link });
   const shortUrl = shortid.generate();
 
-  return fetchSwipesUrlData({userId, accountId, service})
+  return fetchSwipesUrlData({userId, accountId, link, meta})
     .then((shortUrlData) => {
       const insertDoc = Object.assign({}, {checksum, short_url: shortUrl}, shortUrlData);
       const insertLinkQ =
@@ -22,10 +22,15 @@ const createSwipesShortUrl = ({ userId, accountId, service }) => {
           .insert(insertDoc, {
             returnChanges: 'always',
             conflict: (id, oldDoc, newDoc) => {
-        	    return oldDoc.merge({
-                service_data: newDoc('service_data'),
-                service_actions: newDoc('service_actions')
-              })
+              return r.branch(
+                r.expr(meta).ne(null),
+                oldDoc,
+                oldDoc.merge({
+                  last_updated: r.now(),
+                  service_data: newDoc('service_data'),
+                  service_actions: newDoc('service_actions')
+                })
+              )
           	}
           });
 
@@ -39,12 +44,21 @@ const createSwipesShortUrl = ({ userId, accountId, service }) => {
       return Promise.resolve({shortUrl, serviceData});
     })
     .catch((err) => {
-      return Promise.reject(e);
+      return Promise.reject(err);
     })
 }
 
-const fetchSwipesUrlData = ({userId, accountId, service}) => {
-  const serviceName = service.name;
+const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
+  if (meta) {
+    const shortUrlData = Object.assign({}, link, {
+      service_data: meta.data || [],
+      service_actions: meta.actions || []
+    });
+
+    return Promise.resolve(shortUrlData);
+  }
+
+  const serviceName = link.service;
   const getServiceQ =
     r.table('users')
       .get(userId)('services')
@@ -85,10 +99,10 @@ const fetchSwipesUrlData = ({userId, accountId, service}) => {
 
       const options = {
     		authData: userServiceData.authData,
-    		itemId: service.item_id,
+    		itemId: link.id,
     		user: {userId},
     		service: {serviceId: accountId},
-        type: service.type
+        type: link.type
     	};
 
       if (!file.shareRequest) {
@@ -101,7 +115,7 @@ const fetchSwipesUrlData = ({userId, accountId, service}) => {
             return reject(err);
       		}
 
-          const shortUrlData = Object.assign({}, service, {
+          const shortUrlData = Object.assign({}, link, {
             service_data: result.serviceData,
             service_actions: result.serviceActions
           });
@@ -110,8 +124,8 @@ const fetchSwipesUrlData = ({userId, accountId, service}) => {
       	});
       })
     })
-    .catch((e) => {
-      return Promise.reject(e);
+    .catch((err) => {
+      return Promise.reject(err);
     })
 }
 

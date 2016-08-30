@@ -2,6 +2,7 @@
 
 const express = require('express');
 const validator = require('validator');
+import SwipesError from '../swipes-error.js';
 import {
   createSwipesShortUrl
 } from '../utils/share_url_util'
@@ -9,16 +10,38 @@ import {
 const router = express.Router();
 
 const validateData = (req, res, next) => {
-  // That validation tho!
-  const accountId = req.body.account_id.toString();
-  const service = req.body.service;
+  const link = req.body.link;
+  const permission = req.body.permission;
+  const meta = req.body.meta || null;
 
-  service.name = service.name.toString();
-  service.type = service.type.toString();
-  service.item_id = service.item_id.toString();
+  if (validator.isNull(link) || validator.isNull(permission)) {
+    return next(new SwipesError('link and permission are required'));
+  }
 
-  res.locals.accountId = accountId;
-  res.locals.service = service;
+  if (validator.isNull(link.service) ||
+      validator.isNull(link.type) ||
+      validator.isNull(link.id)) {
+    return next(new SwipesError('service, type and id of link are required'));
+  }
+
+  if (validator.isNull(permission.type) ||
+      validator.isNull(permission.account_id)) {
+    return next(new SwipesError('type, account_id of permission are required'));
+  }
+
+  if (meta && meta.data && !meta.data.title) {
+    return next(new SwipesError('meta.title is required'));
+  }
+
+  link.service = link.service.toString();
+  link.type = link.type.toString();
+  link.id = link.id.toString();
+  permission.type = permission.type.toString();
+  permission.account_id = permission.account_id.toString();
+
+  res.locals.link = link;
+  res.locals.permission = permission;
+  res.locals.meta = meta;
 
   return next();
 }
@@ -26,12 +49,6 @@ const validateData = (req, res, next) => {
 /**
   example
   {JSON} service
-  {
-    name: "service_name",
-    account_id: "Service account id",
-    type: "tasks",
-    item_id: "ID of tasks"
-  },
   {
     link: {
       service: 'slack',
@@ -41,9 +58,8 @@ const validateData = (req, res, next) => {
     meta: {
       // Swipes Card properties
     },
-    access: {
-      permission: 'public',
-      user_id: 'swipes user id'
+    permission: {
+      type: 'public',
       account_id: 'service account id - to use from swipes'
     }
   }
@@ -51,15 +67,17 @@ const validateData = (req, res, next) => {
 **/
 router.post('/link.add', validateData, (req, res, next) => {
   const userId = req.userId;
-  const service = res.locals.service;
-  const accountId = res.locals.accountId;
+  const link = res.locals.link;
+  const permission = res.locals.permission;
+  const accountId = permission.account_id;
+  const meta = res.locals.meta;
 
-  createSwipesShortUrl({ userId, accountId, service })
-    .then((shortUrl) => {
-      return res.status(200).json({ok: true, short_url: shortUrl});
+  createSwipesShortUrl({ userId, accountId, link, meta })
+    .then(({shortUrl, serviceData}) => {
+      return res.status(200).json({ok: true, short_url: shortUrl, service_data: serviceData});
     })
     .catch((err) => {
-      return next(e);
+      return next(err);
     })
 });
 

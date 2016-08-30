@@ -239,13 +239,13 @@ const processFileChange = ({account, entry}) => {
 		//const userProfilePic = user.profile_photo_url || '';
 		const message = userName + ' made a change';
 
-		const service = {
-			name: 'dropbox',
+		const link = {
+			service: 'dropbox',
 			type: 'file',
-			item_id: entry.id
+			id: entry.id
 		};
 
-		createSwipesShortUrl({ userId, accountId, service })
+		createSwipesShortUrl({ userId, accountId, link })
 			.then(({shortUrl, serviceData}) => {
 				const event = {
 					service: 'dropbox',
