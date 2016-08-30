@@ -246,13 +246,14 @@ const processFileChange = ({account, entry}) => {
 		};
 
 		createSwipesShortUrl({ userId, accountId, link })
-			.then(({shortUrl, serviceData}) => {
+			.then(({serviceData, checksum}) => {
 				const event = {
 					service: 'dropbox',
 					message: message,
-					short_url: shortUrl,
 					service_data: serviceData,
-					me: sameUser
+					account_id: accountId,
+					me: sameUser,
+					checksum
 				}
 
 				insertEvent({
