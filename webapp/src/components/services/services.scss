@@ -161,7 +161,7 @@
   &__button {
     @include flex(center, center);
     width: 150px !important;
-    padding: 10px 20px;
+    padding: 10px 20px !important;
     background-color: $blue-100;
     border-radius: 6px;
     color: white;
@@ -175,6 +175,7 @@
     width: 100%;
     max-width: 460px;
     min-width: 100px;
+    padding: 15px 30px;
   }
 }
 
