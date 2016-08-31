@@ -29,7 +29,7 @@
     @include flex(center, flex-start);
 
     &--profile-img {
-      @include size(27px, 27px);
+      @include size(30px, 30px);
       border-radius: 3px;
       position: absolute;
       left: 11px;
@@ -37,7 +37,7 @@
       @include flex(center, center);
 
       img {
-        @include size(25px, 25px);
+        @include size(30px, 30px);
         border-radius: inherit;
       }
     }
@@ -69,6 +69,7 @@
     font-weight: 400;
     color: $deepBlue-100;
     position: relative;
+    padding-top: 4px;
 
     .swipes-card {
       max-width: 400px;
