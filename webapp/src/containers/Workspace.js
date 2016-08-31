@@ -34,6 +34,7 @@ class Workspace extends Component {
           this.props.stopDraggingDot()
           return;
         }
+        console.log('generating from', draggingDot.data)
         this.props.generateShareUrl(draggingDot.data).then( (res) => {
           console.log('res from share url', res);
           if(res.ok){

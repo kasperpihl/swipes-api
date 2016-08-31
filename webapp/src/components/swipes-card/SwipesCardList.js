@@ -1,39 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import SwipesCardItem from './SwipesCardItem';
-import { randomString, bindAll } from '../../classes/utils';
+import { bindAll } from '../../classes/utils';
 
 import './swipes-card.scss';
 
 class SwipesCardList extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    this.state = { data: props.data };
-    bindAll(this, ['onDragStart', 'clickedCard']);
-    this.id = randomString(5);
-    // Setup delegate structure to provide data
-    if(typeof props.dataDelegate === 'function'){
-      this.updateData = (data) => {
-        this.setState({ data });
-      }
-      props.dataDelegate(props.dataId, this.updateData);
+    bindAll(this, ['callDelegate']);
+  }
+  callDelegate(name){
+    const { delegate } = this.props;
+    if(delegate && typeof delegate[name] === "function"){
+      return delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
   componentDidMount() {
-  }
-  onDragStart(){
-    const { onDragStart, dataId } = this.props;
-
-    if(onDragStart){
-      onDragStart(dataId)
-    }
-  }
-  clickedCard(e){
-    console.log('clicked card here', window.getSelection().toString());
-    const { onClick, dataId, data } = this.props;
-    if(!window.getSelection().toString().length && onClick){
-        onClick(dataId, data);
-    }
   }
   renderHeaderImage(titleLeftImage, titleRightImage) {
 
@@ -79,13 +61,13 @@ class SwipesCardList extends Component {
         className={"sw-card-list__list--item " + paddingClass}
         key={'swipes-card-list-item-' + i}
         onClick={this.clickedCard}>
-        <SwipesCardItem data={listItem} hoverParentId={'card-container' + this.id + i} onDragStart={this.onDragStart} />
+        <SwipesCardItem callDelegate={this.callDelegate} data={listItem} />
       </div>
     )
   }
   render() {
     const { title, titleLeftImage, titleRightImage } = this.props;
-    const data = this.state.data || [{ title: "Loading..." }]
+    const data = this.props.data || [{ title: "Loading..." }]
 
     const list = data.map( (listItem, i) => this.renderListItem(listItem, i) )
 
@@ -104,9 +86,7 @@ export default SwipesCardList
 SwipesCardList.propTypes = {
   title: PropTypes.string.isRequired,
   titleLeftImage: PropTypes.string,
-  dataDelegate: PropTypes.func,
-  onClick: PropTypes.func,
-  dataId: PropTypes.string,
-  onDragStart: PropTypes.func,
-  data: PropTypes.arrayOf(PropTypes.object)
+  data: PropTypes.arrayOf(PropTypes.object),
+  delegate: PropTypes.object
+  
 }
