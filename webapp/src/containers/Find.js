@@ -16,12 +16,12 @@ class Find extends Component {
     this.unhandledDocs = [];
   }
   mapResultToCard(doc){
-    const shareData = { link: {}, permission: {}};
+    const shareData = { link: {}, permission: { type: 'public' }};
     const meta = { };
     const idParts = doc.id.split('-')
     shareData.link.service = doc.source;
     shareData.link.type = doc.content_type;
-    shareData.permissions.account_id = doc.service_id;
+    shareData.permission.account_id = doc.account_id;
     if(doc.source === 'slack'){
       shareData.link.id = idParts[idParts.length - 1];
 
@@ -100,7 +100,7 @@ class Find extends Component {
     }
   }
   onCardClick(card, data){
-    console.log('clicked', shareUrlOrData);
+    console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
     this.props.toggleFind();
@@ -108,7 +108,7 @@ class Find extends Component {
       this.props.startDraggingDot("search", this.shareDataForChecksum[data.checksum]);
     }
     else if(data.xendo_id){
-      this.props.startDraggingDot("search", this.shareDataForId[data.xendo_id]);
+      this.props.startDraggingDot("search", this.shareDataForSearchId[data.xendo_id]);
     }
 
     console.log('sharing', data,  dragging);
@@ -133,7 +133,7 @@ class Find extends Component {
             type: 'public',
             account_id: activity.account_id
           },
-          meta: activity.service_data
+          meta: activity.meta
         };
         keys[id] = true;
         return true;

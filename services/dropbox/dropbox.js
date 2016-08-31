@@ -110,9 +110,9 @@ const dropbox = {
 
 			const serviceActions = dropbox.cardActions(type, res);
 			const serviceData = dropbox.cardData(type, res);
+			const meta = Object.assign({}, serviceData, serviceActions);
 
-
-			return callback(null,  { serviceData, serviceActions });
+			return callback(null, { meta });
 		})
 	},
 	cardData(type, data) {
@@ -246,11 +246,11 @@ const processFileChange = ({account, entry}) => {
 		};
 
 		createSwipesShortUrl({ userId, accountId, link })
-			.then(({serviceData, checksum}) => {
+			.then(({ meta, checksum }) => {
 				const event = {
 					service: 'dropbox',
 					message: message,
-					service_data: serviceData,
+					meta: meta,
 					account_id: accountId,
 					me: sameUser,
 					checksum

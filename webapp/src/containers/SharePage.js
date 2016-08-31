@@ -16,9 +16,9 @@ class SharePage extends Component {
   }
   renderCards(){
     if(this.state.cards){
-      const data = this.state.cards.serviceData;
-      const actions = this.state.cards.serviceActions;
-      const title = data.title || "No title!"
+      const meta = this.state.cards.meta;
+      const actions = meta.actions || [];
+      const title = meta.title || "No title!"
       return <SwipesCard title={title} actions={actions} />
     }
     else return "Loading...."

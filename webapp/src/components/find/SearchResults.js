@@ -39,7 +39,7 @@ class SearchResults extends Component {
   renderResultList(results) {
     const { cardDelegate, searching } = this.props;
     if(searching){
-      return <Loader size={60} center={true} />
+      return <Loader size={60} text="Searching" center={true} />
     }
     if(!results) return;
 

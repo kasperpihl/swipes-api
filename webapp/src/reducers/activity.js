@@ -9,7 +9,7 @@ export default function services (state = initialState, action) {
       if(res.ok){
         var activities = res.activity.slice(0,100);
         activities.reverse().forEach((activity) => {
-          swipesUrlProvider.save(activity.checksum, activity.service_data);
+          swipesUrlProvider.save(activity.checksum, activity.meta);
         })
         return Object.assign({}, state, {recent: activities});
       }
@@ -17,7 +17,7 @@ export default function services (state = initialState, action) {
     }
     case 'activity_added':{
       var activity = action.payload.data;
-      swipesUrlProvider.save(activity.checksum, activity.service_data);
+      swipesUrlProvider.save(activity.checksum, activity.meta);
       return Object.assign({}, state, {recent: [action.payload.data].concat(state.recent.slice(0, 100)) })
     }
     case types.LOGOUT:{

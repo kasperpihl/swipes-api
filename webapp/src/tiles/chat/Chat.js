@@ -45,10 +45,12 @@ class Chat extends Component {
   }
   addListenersToSwipes(swipes){
     swipes.addListener('share.receivedData', (data) => {
-      var input = data.text || data.url || ''; 
-      if (input.length) {
-        this.slackData.sendMessage(input);
+      var input = '<' + data.shareUrl;
+      if(data.title){
+        input += '|' + data.title;
       }
+      input += '>';
+      this.slackData.sendMessage(input);
     });
     swipes.addListener('menu.pressed', () => {
       if(this.refs.sidemenu){

@@ -24,11 +24,11 @@ class Activity extends Component {
     )
   }
   render() {
-    const { service_data, checksum, date, message } = this.props.data;
+    const { meta, checksum, date, message } = this.props.data;
     return (
       <div className="swipes-activities__activity">
         {this.renderStory(date, message)}
-        {this.renderCard(service_data, checksum)}
+        {this.renderCard(meta, checksum)}
       </div>
     )
   }

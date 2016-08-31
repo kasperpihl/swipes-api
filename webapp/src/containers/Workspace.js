@@ -30,7 +30,7 @@ class Workspace extends Component {
         console.log(draggingDot.data);
         if(draggingDot.data.shortUrl){
           var shareUrl = this.generateShareUrl(draggingDot.data.shortUrl);
-          this.sendToTile(id, 'share.receivedData', { url: shareUrl });
+          this.sendToTile(id, 'share.receivedData', { shareUrl });
           this.props.stopDraggingDot()
           return;
         }
@@ -39,7 +39,13 @@ class Workspace extends Component {
           console.log('res from share url', res);
           if(res.ok){
             var shareUrl = this.generateShareUrl(res.short_url);
-            this.sendToTile(id, 'share.receivedData', { url: shareUrl });
+            var shareData = {
+              shareUrl,
+            }
+            if(res.meta && res.meta.title){
+              shareData.title = res.meta.title;
+            }
+            this.sendToTile(id, 'share.receivedData', shareData);
           }
           this.props.stopDraggingDot()
         }).catch((e) => {
@@ -61,7 +67,8 @@ class Workspace extends Component {
       if(!hoverTarget){
         // Do additional tests if no row was hovered. Like (topbar etc)
       }
-      this.props.dragDot(e.clientX, e.clientY, hoverTarget)
+
+      //this.props.dragDot(e.clientX, e.clientY, hoverTarget)
 
       //console.log(hoverTarget);
     }
