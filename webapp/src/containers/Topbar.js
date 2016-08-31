@@ -96,10 +96,10 @@ class Topbar extends Component {
     }
 
     if(this.props.isFullscreen) {
-      topbarClass += ' fullscreen'
+      topbarClass += ' sw-topbar--fullscreen'
     }
     if(this.props.isFinding){
-      topbarClass += ' find';
+      topbarClass += ' sw-topbar--find';
     }
 
     // dummy data for DropdownMenu
@@ -126,6 +126,11 @@ class Topbar extends Component {
               {selectedTitle}
               <i className="material-icons">arrow_drop_down</i>
               <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
+            </div>
+            <div className="sw-topbar__info__tile-title">
+              <div className="sw-topbar__info__tile-title--title">chat</div>
+              <div className="sw-topbar__info__tile-title--seperator"></div>
+              <div className="sw-topbar__info__tile-title--subtitle">Swipes Team</div>
             </div>
           </div>
           <div className="sw-topbar__searchbar">
