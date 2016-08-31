@@ -100,10 +100,10 @@ class ChatList extends Component {
     }
   }
   renderSections(){
-    const { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages } = this.props;
+    const { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages, cardDelegate } = this.props;
     if(sections && !loadingMessages){
       return sections.map(function(section){
-        return <ChatSection key={section.title} clickedLink={clickedLink} data={{unreadIndicator: unreadIndicator, section: section}} />
+        return <ChatSection cardDelegate={cardDelegate} key={section.title} clickedLink={clickedLink} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
     }
   }
@@ -125,6 +125,7 @@ class ChatList extends Component {
 export default ChatList
 
 ChatList.propTypes = {
+  cardDelegate: PropTypes.object.isRequired,
   markAsRead: PropTypes.func,
   clickedLink: PropTypes.func,
   unreadAbove: PropTypes.func,

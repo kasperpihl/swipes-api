@@ -1,5 +1,13 @@
 'use strict'
+/*
+  Delegate Methods
+  - onCardClick
+  - onCardShare
+  - onCardAction
+  - onCardSubscribe
+  - onCardUnsubscribe
 
+ */
 import './swipes-card.scss';
 
 import React, { Component, PropTypes } from 'react';
@@ -10,7 +18,11 @@ export default class SwipesCard extends Component {
   constructor(props){
     super(props);
     this.state = { data: props.data };
+    
     bindAll(this, ['callDelegate'])
+  }
+  componentDidMount(){
+    this.callDelegate('onCardLoad', 'hello', 'world');
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -24,7 +36,7 @@ export default class SwipesCard extends Component {
 
   }
   render () {
-    const data = this.state.data || { title: "Loading..." }
+    const { data } = this.state;
 
     return (
       <div className="swipes-card">

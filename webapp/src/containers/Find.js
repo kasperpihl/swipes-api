@@ -16,7 +16,7 @@ class Find extends Component {
     this.unhandledDocs = [];
   }
   mapResultToCard(doc){
-    const shareData = { link: {}, permissions: {}};
+    const shareData = { link: {}, permission: {}};
     const meta = { };
     const idParts = doc.id.split('-')
     shareData.link.service = doc.source;
@@ -59,14 +59,14 @@ class Find extends Component {
 
     shareData.meta = JSON.parse(JSON.stringify(meta));
     meta.xendo_id = doc.id;
-    this.shareDataForId[meta.xendo_id] = shareData;
+    this.shareDataForSearchId[meta.xendo_id] = shareData;
 
     return meta ;
   }
   search(query){
     this.setState({searchQuery: query, searching: true, searchResults: []})
     this.unhandledDocs = [];
-    this.shareDataForId = {};
+    this.shareDataForSearchId = {};
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
       res.result.forEach((doc) => {
@@ -106,7 +106,7 @@ class Find extends Component {
   onCardShare(card, data, dragging){
     this.props.toggleFind();
     if(data.checksum){ // Is activity
-      this.props.startDraggingDot("search", {checksum: data.checksum});
+      this.props.startDraggingDot("search", this.shareDataForChecksum[data.checksum]);
     }
     else if(data.xendo_id){
       this.props.startDraggingDot("search", this.shareDataForId[data.xendo_id]);
@@ -123,9 +123,19 @@ class Find extends Component {
   generateActivity(){
     const { recent } = this.props;
     const keys = {}
+    this.shareDataForChecksum = {}
     return recent.filter((activity) => {
+
       const id = activity.checksum;
       if(!keys[id]){
+        this.shareDataForChecksum[id] = {
+          checksum: id,
+          permission: {
+            type: 'public',
+            account_id: activity.account_id
+          },
+          meta: activity.service_data
+        };
         keys[id] = true;
         return true;
       }

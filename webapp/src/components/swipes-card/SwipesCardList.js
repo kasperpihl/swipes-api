@@ -66,8 +66,7 @@ class SwipesCardList extends Component {
     )
   }
   render() {
-    const { title, titleLeftImage, titleRightImage } = this.props;
-    const data = this.props.data || [{ title: "Loading..." }]
+    const { title, titleLeftImage, titleRightImage, data } = this.props;
 
     const list = data.map( (listItem, i) => this.renderListItem(listItem, i) )
 
@@ -83,10 +82,18 @@ class SwipesCardList extends Component {
 }
 export default SwipesCardList
 
+const dataProps = {
+  title: PropTypes.string,
+  items: PropTypes.arrayOf(PropTypes.object)
+}
+
 SwipesCardList.propTypes = {
   title: PropTypes.string.isRequired,
   titleLeftImage: PropTypes.string,
+  titleRightImage: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object),
-  delegate: PropTypes.object
-  
+  delegate: PropTypes.object,
+  data2: PropTypes.oneOfType([
+    PropTypes.shape(dataProps),
+    PropTypes.arrayOf(dataProps)
 }
