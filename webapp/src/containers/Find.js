@@ -99,7 +99,6 @@ class Find extends Component {
       this.props.toggleFind()
     }
   }
-
   onCardClick(card, data){
     console.log('clicked', shareUrlOrData);
   }
@@ -111,7 +110,7 @@ class Find extends Component {
     else if(data.xendo_id){
       this.props.startDraggingDot("search", this.shareDataForId[data.xendo_id]);
     }
-    
+
     console.log('sharing', data,  dragging);
   }
   onCardAction(card, data, action){

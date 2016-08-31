@@ -76,6 +76,30 @@ $imgWrapper: 50px;
   }
 }
 
+.sw-tabs {
+  @include size(500px, auto);
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: $swipes-shadow-one;
+  line-height: 1;
+  overflow: hidden;
+
+  &__selectors {
+    @include size(100%, 50px);
+    @include flex(center, center);
+    position: relative;
+
+    &__tab {
+      @include size(100%, 100%);
+      @include flex(center, center);
+
+      &--active {
+        background-color: blue;
+      }
+    }
+  }
+}
+
 .swipes-card {
   @include size(100%, auto);
   background-color: white;

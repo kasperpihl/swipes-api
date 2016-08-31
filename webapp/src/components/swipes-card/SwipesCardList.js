@@ -7,6 +7,7 @@ import './swipes-card.scss';
 class SwipesCardList extends Component {
   constructor(props) {
     super(props)
+    this.state = { selectedTab: 0 };
     bindAll(this, ['callDelegate']);
   }
   callDelegate(name){
@@ -16,6 +17,26 @@ class SwipesCardList extends Component {
     }
   }
   componentDidMount() {
+  }
+  renderHeader(data, selectedTab) {
+    if(Array.isArray(data)){
+      return this.renderTabsHeader(data, selectedTab);
+    }
+
+    const { titleLeftImage, titleRightImage, title } = data;
+    let hasLeftImage = '';
+
+    if (titleLeftImage) {
+      hasLeftImage = ' sw-card-list__header--left-image'
+    }
+
+    return (
+      <div className={"sw-card-list__header" + hasLeftImage}>
+        {this.renderHeaderImage(titleLeftImage)}
+        <div className="sw-card-list__header--title">{title}</div>
+        {this.renderHeaderImage(titleRightImage)}
+      </div>
+    )
   }
   renderHeaderImage(titleLeftImage, titleRightImage) {
 
@@ -35,22 +56,44 @@ class SwipesCardList extends Component {
       )
     }
   }
-  renderHeader(title, titleLeftImage, titleRightImage) {
-    let hasLeftImage = '';
+  renderTabsHeader(data, selectedTab) {
+    const tabs = data.map( (tab, i) => this.renderTabItem(tab.title, i, (i === selectedTab)))
 
-    if (titleLeftImage) {
-      hasLeftImage = ' sw-card-list__header--left-image'
+    return (
+      <div className="sw-tabs">
+        <div className="sw-tabs__selectors">
+          {tabs}
+        </div>
+      </div>
+    )
+  }
+  renderTabItem(title, i, selected) {
+    let tabClass = 'sw-tabs__selectors__tab';
+
+    if (selected) {
+      tabClass += ' sw-tabs__selectors__tab--active'
     }
 
     return (
-      <div className={"sw-card-list__header" + hasLeftImage}>
-        {this.renderHeaderImage(titleLeftImage)}
-        <div className="sw-card-list__header--title">{title}</div>
-        {this.renderHeaderImage(titleRightImage)}
+      <div className={tabClass} key={'tab-' + i} onClick={this.tabClick.bind(this, i)}>{title}</div>
+    )
+  }
+  renderList(data, selectedTab) {
+    let items = data.items;
+    if(Array.isArray(data)){
+      items = data[selectedTab].items;
+    }
+
+    const list = items.map( (listItem, i) => this.renderListItem(listItem, i) )
+
+    return (
+      <div className="sw-card-list__list">
+        {list}
       </div>
     )
   }
   renderListItem(listItem, i) {
+    console.log(listItem)
     let paddingClass = '';
     if (listItem.description) {
       paddingClass = 'sw-card-list__list--padding'
@@ -65,27 +108,37 @@ class SwipesCardList extends Component {
       </div>
     )
   }
+  tabClick(i) {
+    console.log(i)
+    this.setState({selectedTab: i});
+    this.callDelegate('onCardChangedTab', i);
+  }
   render() {
-    const { title, titleLeftImage, titleRightImage, data } = this.props;
-
-    const list = data.map( (listItem, i) => this.renderListItem(listItem, i) )
+    const { data } = this.props;
+    const selectedTab = this.state.selectedTab;
 
     return (
       <div className="sw-card-list">
-        {this.renderHeader(title, titleLeftImage, titleRightImage)}
-        <div className="sw-card-list__list">
-          {list}
-        </div>
+        {this.renderHeader(data, selectedTab)}
+        {this.renderList(data, selectedTab)}
       </div>
     )
   }
 }
+
 export default SwipesCardList
 
-SwipesCardList.propTypes = {
-  title: PropTypes.string.isRequired,
+const dataType = {
+  title: PropTypes.string,
+  items: PropTypes.array,
   titleLeftImage: PropTypes.string,
   titleRightImage: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.object),
-  delegate: PropTypes.object
+}
+
+SwipesCardList.propTypes = {
+  data: PropTypes.oneOfType([
+    PropTypes.shape(dataType),
+    PropTypes.array
+  ]),
+  delegate: PropTypes.object.isRequired
 }

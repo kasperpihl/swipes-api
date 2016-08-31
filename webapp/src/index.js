@@ -16,12 +16,59 @@ const props = {};
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 import GridTest from './components/resizeable-grid/grid_test'
 
-// import Loader from './components/swipes-ui/Loader'
+// import SwipesCardList from './components/swipes-card/SwipesCardList'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
+  // props.data = {
+  //   title: 'No tabs',
+  //   items: [
+  //     {
+  //       title: 'notabs title',
+  //       subtitle: "Lorem ipsum dolor sit amet."
+  //     },
+  //     {
+  //       title: 'notabs title 2',
+  //       subtitle: "Lorem ipsum dolor sit amet."
+  //     }
+  //   ]
+  // };
+  // props.delegate = {
+  //   onCardChangedTab: (card, i) => {
+  //     console.log('my delegate works ', i)
+  //   }
+  // };
+  // props.data = [
+  //   {
+  //     title: 'tabOne',
+  //     items: [
+  //       {
+  //         title: 'tabone title',
+  //         subtitle: "Lorem ipsum dolor sit amet."
+  //       },
+  //       {
+  //         title: 'tabone title',
+  //         subtitle: "Lorem ipsum dolor sit amet."
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     title: 'tabTwo',
+  //     items: [
+  //       {
+  //         title: 'tabTwo title',
+  //         subtitle: "Lorem ipsum dolor sit amet."
+  //       },
+  //       {
+  //         title: 'tabTwo title',
+  //         subtitle: "Lorem ipsum dolor sit amet."
+  //       }
+  //     ]
+  //   }
+  // ]
+
   if(false) {
-    // Page = Loader;
+    // Page = SwipesCardList;
   }
   else if(window.__share_data){
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
