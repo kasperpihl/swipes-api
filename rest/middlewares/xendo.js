@@ -284,6 +284,39 @@ const xendoSearch = (req, res, next) => {
   })
 }
 
+const xendoSearchMapResults = (req, res, next) => {
+  const results = res.locals.result;
+  const userId = req.userId;
+  const xendoServicesQ =
+    r.table('xendo_user_services')
+      .getAll(userId, {index: 'user_id'})
+      .map((service) => {
+        return [
+          service('service_id').coerceTo('string'),
+          service('service_account_id').coerceTo('string')
+        ]
+      })
+      .coerceTo('object')
+
+  db.rethinkQuery(xendoServicesQ)
+    .then((userServices) => {
+      const mappedResults = results.response.docs.map((doc) => {
+        if (userServices[doc['service_id']]) {
+          doc['account_id'] = userServices[doc['service_id']];
+        }
+
+        return doc;
+      })
+
+      res.locals.mappedResults = mappedResults;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
@@ -292,5 +325,6 @@ export {
   xendoUserSignUp,
   xendoAddServiceToUser,
   xendoRemoveServiceFromUser,
-  xendoSearch
+  xendoSearch,
+  xendoSearchMapResults
 }
