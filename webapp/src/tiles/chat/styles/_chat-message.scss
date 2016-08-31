@@ -95,6 +95,7 @@
 			color: $blue-80;
       opacity: 0;
       @include flex(center, center);
+      padding-top: 4px;
 		}
 
     &:after {
