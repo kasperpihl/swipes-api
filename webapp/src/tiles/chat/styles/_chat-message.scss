@@ -13,7 +13,7 @@
   }
 
   &.extra-message {
-    padding: 5px 20px;
+    padding: 2px 20px;
   }
 
   &.extra-message:hover & {
@@ -88,7 +88,7 @@
       @include size(auto, 100%);
 			position: absolute;
       padding: 0 5px;
-      right: 0;
+      left: -10px;
       top: 0;
 			font-size: 10px;
 			text-transform: uppercase;
@@ -97,8 +97,21 @@
       @include flex(center, center);
 		}
 
+    &:after {
+      content: "";
+      @include size(1px, 80%);
+      position: absolute;
+      left: 45px; top: 15%;
+      background-color: $deepBlue-40;
+      opacity: 0;
+    }
+
     &:hover {
       //background-color: darken($blue-5, 1%);
+
+      &:after {
+        opacity: 1;
+      }
     }
 
     &--text {
