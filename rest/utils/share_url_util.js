@@ -30,8 +30,7 @@ const createSwipesShortUrl = ({ userId, accountId, link, checksum = null, meta =
                 oldDoc,
                 oldDoc.merge({
                   last_updated: r.now(),
-                  service_data: newDoc('service_data'),
-                  service_actions: newDoc('service_actions')
+                  meta: newDoc('meta')
                 })
               )
           	}
@@ -42,9 +41,9 @@ const createSwipesShortUrl = ({ userId, accountId, link, checksum = null, meta =
     .then((result) => {
       const changes = result.changes[0];
       const checksum = changes.new_val.checksum;
-      const serviceData = changes.new_val.service_data;
+      const meta = changes.new_val.meta;
 
-      return Promise.resolve({ serviceData, checksum });
+      return Promise.resolve({ meta, checksum });
     })
     .catch((err) => {
       return Promise.reject(err);
@@ -56,9 +55,9 @@ const fetchSwipesUrlDataById = (checksum) => {
 
   return db.rethinkQuery(q)
     .then((link) => {
-      const serviceData = link.service_data;
+      const meta = link.meta;
 
-      return Promise.resolve({ serviceData, checksum });
+      return Promise.resolve({ meta, checksum });
     })
     .catch((err) => {
       return Promise.reject(err);
@@ -68,8 +67,7 @@ const fetchSwipesUrlDataById = (checksum) => {
 const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
   if (meta) {
     const shortUrlData = Object.assign({}, link, {
-      service_data: meta.data || [],
-      service_actions: meta.actions || []
+      meta: meta || {}
     });
 
     return Promise.resolve(shortUrlData);
@@ -133,8 +131,7 @@ const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
       		}
 
           const shortUrlData = Object.assign({}, link, {
-            service_data: result.serviceData,
-            service_actions: result.serviceActions
+            meta: result.meta
           });
 
           return resolve(shortUrlData);

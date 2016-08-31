@@ -37,7 +37,7 @@ const validateData = (req, res, next) => {
     return next(new SwipesError('type, account_id of permission are required'));
   }
 
-  if (meta && meta.data && !meta.data.title) {
+  if (meta && meta.title) {
     return next(new SwipesError('meta.title is required'));
   }
 
@@ -87,23 +87,23 @@ router.post('/link.add', validateData, (req, res, next) => {
   const permissionType = permission.type || 'public';
   const accountId = permission.account_id;
   const meta = res.locals.meta;
-  let service_data;
+  let newMeta;
 
   createSwipesShortUrl({ userId, accountId, link, checksum, meta })
-    .then(({serviceData, checksum}) => {
+    .then(({meta, checksum}) => {
       const permission = {
         type: 'public',
         account_id: accountId
       }
 
-      service_data = serviceData;
+      newMeta = meta;
 
       return addPermissionsToALink({ userId, checksum, permission })
     })
     .then(({ permissionPart }) => {
       const short_url = permissionPart;
 
-      return res.status(200).json({ok: true, short_url, service_data});
+      return res.status(200).json({ok: true, short_url, meta: newMeta});
     })
     .catch((err) => {
       return next(err);

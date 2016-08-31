@@ -29,7 +29,7 @@ export default class SwipesUrlProvider {
 
     this.store.dispatch(api.request('share.getData', { shareIds: this.fetchingUrls })).then((res) => {
       this.fetchingUrls.forEach((url, i) => {
-        this.save(url, res.links[i].service_data);
+        this.save(url, res.links[i].meta);
       })
       this.fetchingUrls = null;
       if(this.urlsToFetch.length){
@@ -47,7 +47,7 @@ export default class SwipesUrlProvider {
       currentListeners.forEach(( { listener }) => {
         listener(data);
       })
-    } 
+    }
   }
 
   subscribe(shareUrl, listener, ctx){
@@ -68,7 +68,7 @@ export default class SwipesUrlProvider {
     if(currentData){
       console.log('sending initial data', currentData);
       listener(currentData);
-    } 
+    }
     else{
       this.fetch(shareUrl);
     }
