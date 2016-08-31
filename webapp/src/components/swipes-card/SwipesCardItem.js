@@ -6,7 +6,7 @@ class SwipesCardItem extends Component {
   constructor(props) {
     super(props)
     this.state = { data: props.data }
-    bindAll(this, ['onClick', 'onAction', 'onDragStart'])
+    bindAll(this, ['onClick', 'onAction', 'onDragStart', 'clickedLink'])
     this.id = randomString(5);
   }
   updateData(data){
@@ -15,11 +15,16 @@ class SwipesCardItem extends Component {
   }
   componentDidMount(){
     const { data, callDelegate } = this.props;
-    callDelegate('onCardSubscribe', data, this.updateData, this.id);
+    if(data.id){
+      callDelegate('onCardSubscribe', data.id, this.updateData, this.id);
+    }
+    
   }
   componentWillUnmount(){
     const { data, callDelegate } = this.props;
-    callDelegate('onCardUnsubscribe', data, this.updateData, this.id);
+    if(data.id){
+      callDelegate('onCardUnsubscribe', data.id, this.updateData, this.id);
+    }
   }
   onClick(e){
     const { data, callDelegate } = this.props;
@@ -69,8 +74,8 @@ class SwipesCardItem extends Component {
           {this.renderDot(actions)}
         </div>
         <div className={"swipes-card__header__content " + noSubtitleClass}>
-          <div className="swipes-card__header__content--title">{title}</div>
-          <div className="swipes-card__header__content--subtitle">{subtitle}</div>
+          <div className="swipes-card__header__content--title">{this.renderTextWithLinks(title)}</div>
+          <div className="swipes-card__header__content--subtitle">{this.renderTextWithLinks(subtitle)}</div>
         </div>
         <div className="swipes-card__header__image">
           {this.renderHeaderImage(headerImage)}
@@ -85,7 +90,7 @@ class SwipesCardItem extends Component {
     return (
       <div className="description-container">
         <div className="swipes-card__description">
-          {description}
+          {this.renderTextWithLinks(description)}
         </div>
       </div>
     )
@@ -158,7 +163,47 @@ class SwipesCardItem extends Component {
       </div>
     )
   }
+  renderTextWithLinks(text){
+    if(!text || !text.length)
+      return text;
+
+    const matches = text.match(/<(.*?)>/g);
+
+    const replaced = [];
+
+    if ((matches != null) && matches.length) {
+      const splits = text.split(/<(.*?)>/g);
+
+      // Adding the text before the first match
+      replaced.push(splits.shift());
+      for(var i = 0 ; i < matches.length ; i++ ){
+        // The match is now the next object
+        const innerMatch = splits.shift();
+
+        // Else add the link with the proper title
+        const res = innerMatch.split("|");
+        const command = res[0];
+        let title = res[res.length -1];
+
+        replaced.push(<a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{unescape(title)}</a>);
+
+        // Adding the after text between the matches
+        replaced.push(unescape(splits.shift()));
+      }
+      if(replaced.length)
+        return replaced;
+    }
+    return unescape(text);
+  }
+  clickedLink(match, e) {
+    const res = match.split("|");
+    console.log('clicked', res);
+    this.props.callDelegate('onCardClickLink', res);
+    e.stopPropagation()
+
+  }
 }
+
 
 export default SwipesCardItem
 
@@ -170,15 +215,10 @@ const stringOrNum = PropTypes.oneOfType([
 SwipesCardItem.propTypes = {
   callDelegate: PropTypes.func.isRequired,
   data: PropTypes.shape({
-    title: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array
-    ]).isRequired,
+    id: stringOrNum,
+    title: PropTypes.string,
     subtitle: PropTypes.string,
-    description: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array
-    ]),
+    description: PropTypes.string,
     headerImage: PropTypes.string,
     preview: PropTypes.shape({
       type: PropTypes.oneOf(['html', 'image']).isRequired,

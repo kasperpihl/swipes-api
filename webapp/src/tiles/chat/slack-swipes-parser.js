@@ -87,8 +87,6 @@ export default class SlackSwipesParser {
       if(!newTitle){
         newTitle = fallback;
       }
-      newTitle = this.renderTextWithLinks(newTitle, {});
-      newDescription = this.renderTextWithLinks(newDescription, {});
 
       let preview;
       if (image_url) {

@@ -8,7 +8,7 @@ export default class ChatSection extends Component {
   }
   render() {
     var chatItems = [];
-    const { clickedLink } = this.props;
+    const { clickedLink, cardDelegate } = this.props;
     const { section, unreadIndicator } = this.props.data;
     var unreadSectionClass = ""
     var chatLineContainerClass = 'chat-date-line'
@@ -22,18 +22,16 @@ export default class ChatSection extends Component {
         }
         if(i > 0){
           unreadClass += ' js-unread-class'
-          console.log('unread added normally');
           chatItems.push(<div id="unread-indicator" className={unreadClass} key="new-message-header"><span>new messages</span></div>);
           chatItems.push(<div key="new-message-post-header" className="new-message-post-header" />);
         }
         else{
           unreadSectionClass = unreadClass;
           chatLineContainerClass += ' js-unread-class'
-          console.log('item was unread and first section');
         }
       }
       if(!item.hidden){
-        chatItems.push(<ChatItem key={item.key} clickedLink={clickedLink} data={item} />);
+        chatItems.push(<ChatItem key={item.key} cardDelegate={cardDelegate} clickedLink={clickedLink} data={item} />);
       }
     });
 
@@ -52,6 +50,7 @@ export default class ChatSection extends Component {
 }
 
 ChatSection.propTypes = {
+  cardDelegate: PropTypes.object.isRequired,
   clickedLink: PropTypes.func,
   data: PropTypes.shape({
     section: PropTypes.shape({

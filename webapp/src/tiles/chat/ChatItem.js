@@ -51,7 +51,7 @@ class ChatItem extends Component {
         if(typeof t === 'object'){
           if(t.type === 'card'){
             const dataId = dataIdFromShareURL(t.data);
-            return <SwipesCard key={'card' + i} dataId={dataId} />
+            return <SwipesCard key={'card' + i} data={{id: dataId}} delegate={this.props.cardDelegate} />
           }
           if(t.type === 'link'){
             return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{unescape(t.title)}</a>;
@@ -80,20 +80,7 @@ class ChatItem extends Component {
       return;
     }
     return cards.map((card, i) => {
-      const {
-        title,
-        subtitle,
-        description,
-        ...other
-      } = card;
-
-      const data = {
-        title: this.renderTextWithLinks(title),
-        subtitle: this.renderTextWithLinks(subtitle),
-        description: this.renderTextWithLinks(description, true),
-        ...other
-      }
-      return <SwipesCard key={'card-'+i} data={data}/>
+      return <SwipesCard key={'card-'+i} data={card} delegate={this.props.cardDelegate}/>
     })
   }
   renderMessage(){
@@ -132,6 +119,7 @@ export default ChatItem
 
 ChatItem.propTypes = {
   clickedLink: PropTypes.func,
+  cardDelegate: PropTypes.object.isRequired,
   data: PropTypes.shape({
     name: PropTypes.string.isRequired,
     timeStr: PropTypes.oneOfType([

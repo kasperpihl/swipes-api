@@ -78,6 +78,15 @@ class Chat extends Component {
   sendMessage(message){
     this.slackData.sendMessage(message);  
   }
+  onCardShare(card, data){
+    console.log('share', data);
+  }
+  onCardAction(card, data, action){
+    console.log('action', data, action);
+  }
+  onCardClick(card, data){
+    console.log('clicked', data);
+  }
   onSelectedRow(row){
     this.slackData.setChannel(row.id);
     document.getElementById('chat-input').focus();
@@ -142,6 +151,7 @@ class Chat extends Component {
         {this.renderSidemenu()}
         {this.renderUnreadAbove()}
         <ChatList 
+          cardDelegate={this}
           sections={sortedMessages} 
           markAsRead={this.slackData.markAsRead}
           loadingMessages={this.state.loadingMessages}
