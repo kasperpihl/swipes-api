@@ -37,7 +37,7 @@ const validateData = (req, res, next) => {
     return next(new SwipesError('type, account_id of permission are required'));
   }
 
-  if (meta && meta.title) {
+  if (meta && !meta.title) {
     return next(new SwipesError('meta.title is required'));
   }
 
