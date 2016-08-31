@@ -18,18 +18,17 @@ class Activity extends Component {
       </div>
     )
   }
-  renderCard(shortUrl) {
+  renderCard(data, checksum) {
     return (
-      <SwipesCard dataId={shortUrl} onClick={this.props.cardOnClick} shortUrlProvider={shortUrlProvider} onDragStart={this.props.dotDragStart} />
+      <SwipesCard data={Object.assign({}, data, { checksum })} delegate={this.props.cardDelegate} />
     )
   }
   render() {
-    const { short_url, date, message } = this.props.data;
-
+    const { service_data, checksum, date, message } = this.props.data;
     return (
       <div className="swipes-activities__activity">
         {this.renderStory(date, message)}
-        {this.renderCard(short_url)}
+        {this.renderCard(service_data, checksum)}
       </div>
     )
   }
@@ -38,9 +37,7 @@ class Activity extends Component {
 export default Activity
 
 Activity.propTypes = {
-  cardDataDelegate: PropTypes.func,
-  cardOnClick: PropTypes.func,
-  dotDragStart: PropTypes.func,
+  cardDelegate: PropTypes.object.isRequired,
   data: PropTypes.shape({
     message: PropTypes.string.isRequired,
     short_url: PropTypes.string,

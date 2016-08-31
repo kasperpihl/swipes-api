@@ -37,7 +37,6 @@ class Sidemenu extends Component {
   }
   togglePin(){
 
-    console.log("pinning", !(this.state.pinned));
     this.setState({pinned: !(this.state.pinned)});
     if(this.props.onWidthChanged){
       let newWidth = 210;

@@ -7,11 +7,17 @@ export default function services (state = initialState, action) {
     case ('rtm.start'):{
       const res = action.payload;
       if(res.ok){
-        return Object.assign({}, state, {recent: res.activity.slice(0, 20)});
+        var activities = res.activity.slice(0,100);
+        activities.reverse().forEach((activity) => {
+          swipesUrlProvider.save(activity.checksum, activity.service_data);
+        })
+        return Object.assign({}, state, {recent: activities});
       }
       return state;
     }
     case 'activity_added':{
+      var activity = action.payload.data;
+      swipesUrlProvider.save(activity.checksum, activity.service_data);
       return Object.assign({}, state, {recent: [action.payload.data].concat(state.recent.slice(0, 100)) })
     }
     case types.LOGOUT:{

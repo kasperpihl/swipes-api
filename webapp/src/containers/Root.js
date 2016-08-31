@@ -9,10 +9,10 @@ const store = configureStore()
 // Get classes that needs socket
 import Socket from '../classes/socket'
 import IpcListener from '../classes/ipc-listener'
-import ShortUrlProvider from '../classes/short-url-provider'
+import SwipesUrlProvider from '../classes/swipes-url-provider'
 import Notifications from '../classes/notifications'
 
-window.shortUrlProvider = new ShortUrlProvider(store);
+window.swipesUrlProvider = new SwipesUrlProvider(store);
 new Socket(store);
 new Notifications(store);
 window.ipcListener = new IpcListener(store);
