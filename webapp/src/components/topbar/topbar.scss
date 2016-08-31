@@ -41,7 +41,7 @@ $fullscreenTopbarSize: 70px;
 			width: 100%;
 			font-weight: 300;
 			color: #fff;
-			line-height: 105px;
+			line-height: $searchbarSize;
 			font-size: 24px;
 
 			&::-webkit-input-placeholder {
