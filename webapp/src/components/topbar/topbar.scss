@@ -30,7 +30,7 @@ $fullscreenTopbarSize: 70px;
 	&__searchbar {
 		position: absolute;
 		height: $searchbarSize;
-		width: 400px;
+		width: calc(100% - 101px);
 		top: 0;
 		left: 51px;
 		opacity: 0;
@@ -38,6 +38,7 @@ $fullscreenTopbarSize: 70px;
 		transition: opacity .2s, visibility 0s .2s;
 
 		input {
+			width: 100%;
 			font-weight: 300;
 			color: #fff;
 			line-height: $searchbarSize;
