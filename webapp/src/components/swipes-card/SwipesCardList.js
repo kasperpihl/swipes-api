@@ -83,10 +83,6 @@ class SwipesCardList extends Component {
       left: pos * (100 / number) + '%'
     }
 
-    console.log('number', number);
-    console.log('pos', pos);
-    console.log(styles)
-
     return (
       <div className="sw-card-list__header__slider" style={styles}></div>
     )

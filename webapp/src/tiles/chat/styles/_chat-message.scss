@@ -88,23 +88,24 @@
       @include size(auto, 100%);
 			position: absolute;
       padding: 0 5px;
-      left: -10px;
+      left: -2px;
       top: 0;
 			font-size: 10px;
 			text-transform: uppercase;
 			color: $blue-80;
       opacity: 0;
       @include flex(center, center);
-      padding-top: 4px;
+      transform: translateY(4px);
 		}
 
     &:after {
       content: "";
       @include size(1px, 80%);
       position: absolute;
-      left: 45px; top: 15%;
-      background-color: $deepBlue-40;
+      left: 45px; top: 0;
+      background-color: $blue-100;
       opacity: 0;
+      transform: translateY(20%);
     }
 
     &:hover {
