@@ -5,11 +5,15 @@ $inputButtonWidth: 50px;
   @include size(100%, $inputHeight);
   max-width: 700px;
   background-color: #fbfbfb;
-  border-top: 2px solid $deepBlue-5;
+  border-top: 1px solid $deepBlue-5;
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+
+  &.focused {
+    border-top: 1px solid $blue-60;
+  }
 
   &.active {
     z-index: 1000;
