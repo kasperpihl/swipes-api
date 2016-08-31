@@ -67,7 +67,8 @@ class Workspace extends Component {
       if(!hoverTarget){
         // Do additional tests if no row was hovered. Like (topbar etc)
       }
-      this.props.dragDot(e.clientX, e.clientY, hoverTarget)
+
+      //this.props.dragDot(e.clientX, e.clientY, hoverTarget)
 
       //console.log(hoverTarget);
     }

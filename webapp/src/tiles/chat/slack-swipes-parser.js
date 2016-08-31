@@ -239,7 +239,7 @@ export default class SlackSwipesParser {
     const sendingMessages = unsentMessageQueue.filter((item) => item.channel === selectedChannelId).map(({ message, failed }, i) => {
 
       const newMsg = {
-        text: message,
+        text: this.renderTextWithLinks(this.replaceNewLines(message), users),
         timeStr: 'Sending...',
         name: self.name,
         key: 'unsent-' + i,
@@ -306,8 +306,8 @@ export default class SlackSwipesParser {
           }
 
           placement = { type: 'link', title: unescape(title), data: innerMatch };
-          if(isShareURL(title)){
-            placement = { type: 'card', data: title };
+          if(isShareURL(command)){
+            placement = { type: 'card', data: command };
           }
         }
 

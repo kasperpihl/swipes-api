@@ -101,7 +101,7 @@ class Find extends Component {
   }
 
   onCardClick(card, data){
-    console.log('clicked', shareUrlOrData);
+    console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
     this.props.toggleFind();
