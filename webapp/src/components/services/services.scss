@@ -50,7 +50,6 @@
   &__row {
     @include size(100%, 48px);
     @include flex(center, flex-start);
-    // padding-left: 180px;
 
     &__toggle {
       @include size(24px, 24px);
@@ -173,7 +172,9 @@
   }
 
   & > * {
-    width: 460px;
+    width: 100%;
+    max-width: 460px;
+    min-width: 100px;
   }
 }
 
