@@ -5,66 +5,101 @@ $dotWrapper: 50px;
 $imgWrapper: 50px;
 
 .sw-card-list {
-  @include size(500px, auto);
+  @include size(100%, auto);
   background-color: white;
   border-radius: 6px;
   box-shadow: $swipes-shadow-one;
+  min-height: 50px;
   line-height: 1;
   overflow: hidden;
 
   &__header {
-    @include size();
-    @include flex(center, flex-start);
-    min-height: 60px;
+    @include size(100%, 60px);
     background-color: white;
     position: relative;
 
-    &:after {
-      content: '';
-      @include size(calc(100% - 18px), 1px);
-      position: absolute;
-      left: 9px;
-      bottom: 0;
-      background-color: $deepBlue-80;
+    &--title {
+      @include flex(center, flex-start)
     }
 
-    &--left-image & {
-      &--title {
-        margin-left: 0;
+    &--title & {
+      &:after {
+        content: '';
+        @include size(calc(100% - 18px), 1px);
+        position: absolute;
+        left: 9px;
+        bottom: 0;
+        background-color: $deepBlue-80;
       }
-    }
 
-    &__image {
-      @include size(60px, 60px);
-      @include flex(center, center);
-
-      &--left {
-
-        img {
-          @include size(25px, 25px);
-          // border-radius: 50%;
+      &--left-image & {
+        &__title {
+          margin-left: 0;
         }
       }
 
-      &--right {
-        @include size(50px, 50px);
+      &__image {
+        @include size(60px, 60px);
+        @include flex(center, center);
+
+        &--left {
+
+          img {
+            @include size(25px, 25px);
+            // border-radius: 50%;
+          }
+        }
+
+        &--right {
+          @include size(50px, 50px);
+        }
+      }
+
+      &__title {
+        margin-left: 18px;
+        font-weight: 700;
+        letter-spacing: .9px;
+        color: $deepBlue-100;
+        font-size: 15px;
+        text-transform: uppercase
       }
     }
 
-    &--title {
-      margin-left: 18px;
-      font-weight: 700;
-      letter-spacing: .9px;
-      color: $deepBlue-100;
-      font-size: 15px;
-      text-transform: uppercase
+    &--tabs {
+      @include flex(center, center);
+    }
+
+    &--tabs & {
+      &__tab {
+        @include size(100%, 100%);
+        @include flex(center, center);
+        font-weight: 700;
+        letter-spacing: .9px;
+        color: $deepBlue-40;
+        font-size: 15px;
+        text-transform: uppercase;
+        transition: .1s;
+
+        &--active {
+          color: $blue-100;
+          transition: .1s;
+        }
+      }
+
+      &__slider {
+        height: 2px;
+        background-color: $blue-100;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        transition: .3s ease-in-out;
+      }
     }
   }
 
   &__list {
 
     &--item {
-
       &:not(:last-child) {
         border-bottom: 1px solid $deepBlue-5;
       }
@@ -72,30 +107,6 @@ $imgWrapper: 50px;
 
     &--padding {
       padding-bottom: 15px;
-    }
-  }
-}
-
-.sw-tabs {
-  @include size(500px, auto);
-  background-color: white;
-  border-radius: 6px;
-  box-shadow: $swipes-shadow-one;
-  line-height: 1;
-  overflow: hidden;
-
-  &__selectors {
-    @include size(100%, 50px);
-    @include flex(center, center);
-    position: relative;
-
-    &__tab {
-      @include size(100%, 100%);
-      @include flex(center, center);
-
-      &--active {
-        background-color: blue;
-      }
     }
   }
 }

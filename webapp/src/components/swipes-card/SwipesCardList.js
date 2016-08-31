@@ -31,9 +31,9 @@ class SwipesCardList extends Component {
     }
 
     return (
-      <div className={"sw-card-list__header" + hasLeftImage}>
+      <div className={"sw-card-list__header sw-card-list__header--title" + hasLeftImage}>
         {this.renderHeaderImage(titleLeftImage)}
-        <div className="sw-card-list__header--title">{title}</div>
+        <div className="sw-card-list__header__title">{title}</div>
         {this.renderHeaderImage(titleRightImage)}
       </div>
     )
@@ -60,22 +60,35 @@ class SwipesCardList extends Component {
     const tabs = data.map( (tab, i) => this.renderTabItem(tab.title, i, (i === selectedTab)))
 
     return (
-      <div className="sw-tabs">
-        <div className="sw-tabs__selectors">
-          {tabs}
-        </div>
+      <div className="sw-card-list__header sw-card-list__header--tabs">
+        {tabs}
+        {this.renderSlider(data.length, selectedTab)}
       </div>
     )
   }
   renderTabItem(title, i, selected) {
-    let tabClass = 'sw-tabs__selectors__tab';
+    let tabClass = 'sw-card-list__header__tab';
 
     if (selected) {
-      tabClass += ' sw-tabs__selectors__tab--active'
+      tabClass += ' sw-card-list__header__tab--active'
     }
 
     return (
       <div className={tabClass} key={'tab-' + i} onClick={this.tabClick.bind(this, i)}>{title}</div>
+    )
+  }
+  renderSlider(number, pos) {
+    const styles = {
+      width: 100 / number + '%',
+      left: pos * (100 / number) + '%'
+    }
+
+    console.log('number', number);
+    console.log('pos', pos);
+    console.log(styles)
+
+    return (
+      <div className="sw-card-list__header__slider" style={styles}></div>
     )
   }
   renderList(data, selectedTab) {
