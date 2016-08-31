@@ -32,9 +32,8 @@ const validateData = (req, res, next) => {
     return next(new SwipesError('service, type and id of link are required'));
   }
 
-  if (validator.isNull(permission.type) ||
-      validator.isNull(permission.account_id)) {
-    return next(new SwipesError('type, account_id of permission are required'));
+  if (validator.isNull(permission.account_id)) {
+    return next(new SwipesError('account_id of permission is required'));
   }
 
   if (meta && !meta.title) {
@@ -51,7 +50,7 @@ const validateData = (req, res, next) => {
     res.locals.link = link;
   }
 
-  permission.type = permission.type.toString();
+  permission.type = permission.type ? permission.type.toString() : 'public';
   permission.account_id = permission.account_id.toString();
 
   res.locals.permission = permission;
@@ -84,7 +83,7 @@ router.post('/link.add', validateData, (req, res, next) => {
   const checksum = res.locals.checksum;
   const link = res.locals.link;
   const permission = res.locals.permission;
-  const permissionType = permission.type || 'public';
+  const permissionType = permission.type;
   const accountId = permission.account_id;
   const meta = res.locals.meta;
   let newMeta;
