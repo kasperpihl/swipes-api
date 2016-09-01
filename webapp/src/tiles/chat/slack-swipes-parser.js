@@ -226,6 +226,7 @@ export default class SlackSwipesParser {
         newMsg.isFirstUnreadMessage = true;
         lastMessageWasLastRead = false;
       }
+
       if(unreadIndicator && unreadIndicator.ts === newMsg.ts){       lastMessageWasLastRead = true;
       }
       pushToGroup(group, newMsg);
@@ -238,9 +239,6 @@ export default class SlackSwipesParser {
       const schedule = new Date(parseInt(key)*1000);
       const title = dayStringForDate(schedule);
       const sectMessages = groups[key];
-      if(i === sortedKeys.length - 1){
-        sectMessages[sectMessages.length - 1].isLastMessage = true;
-      }
       return {"title": title, "messages": sectMessages };
     });
 

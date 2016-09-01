@@ -146,6 +146,7 @@ export default class SlackData {
     this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel, as_user: true, link_names: 1}, (res, err) => {
       const data = { isSendingMessage: false };
       if(res && res.ok){
+        this.markAsRead(res.data.ts);
         data.unsentMessageQueue = this.data.unsentMessageQueue.slice(1);
         this.swipes.sendEvent('analytics.action', {name: "Send message"});
         //this.onMarkAsRead(res.data.ts);
@@ -246,9 +247,8 @@ export default class SlackData {
             
             if(document.hasFocus() && document.activeElement && document.activeElement.id  === 'chat-input'){
               this.markAsRead(msg.ts);
-              console.log('active', document.activeElement.id);
             }else{
-              this.saveData({unreadIndicator: {ts: channel.last_read}});
+              this.saveData({unreadIndicator: {ts: channel.last_read, showAsRead: false}});
             }
           }
           if(messages){

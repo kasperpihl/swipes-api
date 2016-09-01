@@ -82,8 +82,7 @@ class Chat extends Component {
   }
   onCardShare(card, data){
     const { swipes } = this.props;
-    console.log('share', data);
-    
+
     const shareData = {};
     if(data.shortUrl){
       shareData.shortUrl = data.shortUrl;
@@ -170,7 +169,6 @@ class Chat extends Component {
     if(typingLabel){
       paddingBottom += 14;
     }
-
     return (
       <div style={{height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
