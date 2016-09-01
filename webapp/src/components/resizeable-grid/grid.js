@@ -188,8 +188,9 @@ var Grid = React.createClass({
     if(rowToInsert){
       newColumns[tarIndex.col].rows = targetCol.rows.slice( 0, tarIndex.row ).concat( [ rowToInsert ] ).concat( targetCol.rows.slice( tarIndex.row ) );
     }
-
-    this.setState({columns: this.validateColumns(newColumns)});
+    newColumns = this.validateColumns(newColumns);
+    this.setState({columns: newColumns});
+    this.callDelegate('gridDidUpdate', JSON.parse(JSON.stringify(newColumns)));
   },
   deepCopyColumns(columns){
     return columns.map( column => {
@@ -1561,7 +1562,9 @@ var Grid = React.createClass({
             rows[i].h = percent;
           })
         }
-        return {columns: this.validateColumns(columns)};
+        var newColumns = this.validateColumns(columns);
+        this.callDelegate('gridDidUpdate',JSON.parse(JSON.stringify(newColumns)));
+        return {columns: newColumns};
       }
     }.bind(this));
   }
