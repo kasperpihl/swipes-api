@@ -58,8 +58,8 @@ export default class SlackSwipesParser {
     sections.push({ title: "People", rows: peopleCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
     return sections;
   }
-  parseAttachmentToCards(attachments){
-    return attachments.map((attachment) => {
+  parseAttachmentToCards(msg, data){
+    return msg.attachments.map((attachment) => {
       const {
         title,
         text,
@@ -72,7 +72,6 @@ export default class SlackSwipesParser {
         video_html,
         audio_html
       } = attachment;
-
       let newTitle, newDescription;
       const texts = [ title, pretext, text ];
       texts.forEach((t, i) => {
@@ -110,8 +109,9 @@ export default class SlackSwipesParser {
           html: audio_html
         }
       }
-
       return {
+        id: data.selectedChannelId + '-' + msg.ts + '-' + attachment.id,
+        type: 'attachment',
         title: newTitle,
         description: newDescription,
         preview,
@@ -119,12 +119,15 @@ export default class SlackSwipesParser {
       };
     })
   }
-  parseFileToCard(file){
-    let { name, thumb_360, thumb_360_w, thumb_360_h } = file;
+  parseFileToCard(msg, data){
+    let { name, thumb_360, thumb_360_w, thumb_360_h, id } = msg.file;
     const card = {
+      id,
+      type: 'file',
       title: name || ''
     }
     if(thumb_360){
+      card.type = 'image',
       card.preview = {type: 'image', url: thumb_360, width: thumb_360_w , height: thumb_360_h}
     }
     return [card];
@@ -186,11 +189,12 @@ export default class SlackSwipesParser {
     }
 
     if(msg.file){
-      cards = this.parseFileToCard(msg.file);
+      cards = this.parseFileToCard(msg, data);
     }
     else if(msg.attachments){
-      cards = this.parseAttachmentToCards(msg.attachments);
+      cards = this.parseAttachmentToCards(msg, data);
     }
+
     if(cards){
       newMsg.cards = cards;
     }
@@ -212,6 +216,8 @@ export default class SlackSwipesParser {
       }
       groups[groupName].push(obj)
     }
+
+
     let lastMessageWasLastRead = false
     messages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
@@ -225,6 +231,7 @@ export default class SlackSwipesParser {
       pushToGroup(group, newMsg);
     });
 
+
     const sortedKeys = Object.keys(groups).sort();
 
     const sortedSections = sortedKeys.map((key, i) => {
@@ -236,6 +243,7 @@ export default class SlackSwipesParser {
       }
       return {"title": title, "messages": sectMessages };
     });
+
     const sendingMessages = unsentMessageQueue.filter((item) => item.channel === selectedChannelId).map(({ message, failed }, i) => {
 
       const newMsg = {

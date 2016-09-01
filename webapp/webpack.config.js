@@ -7,7 +7,8 @@ const apiRedirect = {
   secure: false,
   xfwd: false
 }
-const babelOptions = JSON.stringify({ 
+
+const babelOptions = JSON.stringify({
   presets: ['es2015', 'react'],
   plugins: [
     "transform-object-rest-spread"

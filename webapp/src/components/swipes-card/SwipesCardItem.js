@@ -6,7 +6,7 @@ class SwipesCardItem extends Component {
   constructor(props) {
     super(props)
     this.state = { data: props.data }
-    bindAll(this, ['onClick', 'onAction', 'onDragStart', 'clickedLink'])
+    bindAll(this, ['onClick', 'updateData', 'onAction', 'onDragStart', 'clickedLink'])
     this.id = randomString(5);
   }
   updateData(data){
@@ -14,16 +14,16 @@ class SwipesCardItem extends Component {
     this.setState({ data:newData });
   }
   componentDidMount(){
-    const { data, callDelegate } = this.props;
-    if(data.id){
-      callDelegate('onCardSubscribe', data.id, this.updateData, this.id);
+    const { data } = this.props;
+    if(data.shortUrl){
+      window.swipesUrlProvider.subscribe(data.shortUrl, this.updateData, this.id);
     }
     
   }
   componentWillUnmount(){
     const { data, callDelegate } = this.props;
-    if(data.id){
-      callDelegate('onCardUnsubscribe', data.id, this.updateData, this.id);
+    if(data.shortUrl){
+      window.swipesUrlProvider.unsubscribe(data.shortUrl, this.updateData, this.id);
     }
   }
   onClick(e){
@@ -216,6 +216,7 @@ SwipesCardItem.propTypes = {
   callDelegate: PropTypes.func.isRequired,
   data: PropTypes.shape({
     id: stringOrNum,
+    shortUrl: PropTypes.string,
     title: PropTypes.string,
     subtitle: PropTypes.string,
     description: PropTypes.string,

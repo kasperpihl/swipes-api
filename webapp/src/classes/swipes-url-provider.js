@@ -5,7 +5,7 @@ export default class SwipesUrlProvider {
   constructor(store){
     bindAll(this, ['subscribe', 'unsubscribe', 'fetch', 'setThrottleThreshold'])
     this._listenersObj = {}
-    this._shareUrlData = {}
+    this._shortUrlData = {}
     this.store = store;
     this.urlsToFetch = []
     this.fetchingUrls = null;
@@ -15,9 +15,9 @@ export default class SwipesUrlProvider {
     this.throttleThreshold = duration;
     this.throttledFetch = debounce(this.fetch, duration);
   }
-  fetch(shareUrl){
-    if(typeof shareUrl === 'string'){
-      this.urlsToFetch.push(shareUrl);
+  fetch(shortUrl){
+    if(typeof shortUrl === 'string'){
+      this.urlsToFetch.push(shortUrl);
       return this.throttledFetch();
     }
     if(this.fetchingUrls){
@@ -28,8 +28,9 @@ export default class SwipesUrlProvider {
     this.urlsToFetch = [];
 
     this.store.dispatch(api.request('share.getData', { shareIds: this.fetchingUrls })).then((res) => {
+      console.log('ressy', res);
       this.fetchingUrls.forEach((url, i) => {
-        this.save(url, res.links[i].meta);
+        this.save(url, res.links[i]);
       })
       this.fetchingUrls = null;
       if(this.urlsToFetch.length){
@@ -37,12 +38,15 @@ export default class SwipesUrlProvider {
       }
     });
   }
-  save(url, data){
-    this._shareUrlData[url] = data;
-    this.notify(url, data);
+  get(url){
+    return this._shortUrlData[url];
   }
-  notify(shareUrl, data){
-    const currentListeners = this._listenersObj[shareUrl];
+  save(url, data){
+    this._shortUrlData[url] = data;
+    this.notify(url, data.meta);
+  }
+  notify(shortUrl, data){
+    const currentListeners = this._listenersObj[shortUrl];
     if(currentListeners){
       currentListeners.forEach(( { listener }) => {
         listener(data);
@@ -50,35 +54,35 @@ export default class SwipesUrlProvider {
     }
   }
 
-  subscribe(shareUrl, listener, ctx){
-    if(!shareUrl || typeof shareUrl !== 'string'){
-      return console.warn('ShareUrlProvider: addListener param1 (shareUrl): not set or not string', shareUrl);
+  subscribe(shortUrl, listener, ctx){
+    if(!shortUrl || typeof shortUrl !== 'string'){
+      return console.warn('SwipesUrlProvider: addListener param1 (shortUrl): not set or not string', shortUrl);
     }
     if(!listener || typeof listener !== 'function'){
-      return console.warn("ShareUrlProvider: addListener param2 (listener): not set or not function");
+      return console.warn("SwipesUrlProvider: addListener param2 (listener): not set or not function");
     }
     if(typeof ctx !== 'string'){
       ctx = '';
     }
 
-    const currentListeners = this._listenersObj[shareUrl] || [];
+    const currentListeners = this._listenersObj[shortUrl] || [];
     currentListeners.push({listener: listener, context: ctx});
-    this._listenersObj[shareUrl] = currentListeners;
-    const currentData = this._shareUrlData[shareUrl];
+    this._listenersObj[shortUrl] = currentListeners;
+    const currentData = this.get(shortUrl);
     if(currentData){
       console.log('sending initial data', currentData);
-      listener(currentData);
+      listener(currentData.meta);
     }
     else{
-      this.fetch(shareUrl);
+      this.fetch(shortUrl);
     }
   }
-  unsubscribe(shareUrl, listener, ctx){
-    if(!shareUrl && !listener && !ctx){
-      return console.warn('ShareUrlProvider: removeListener: no params provided');
+  unsubscribe(shortUrl, listener, ctx){
+    if(!shortUrl && !listener && !ctx){
+      return console.warn('SwipesUrlProvider: removeListener: no params provided');
     }
-    if(shareUrl){
-      this._removeListenersForShareUrl(shareUrl, listener, ctx);
+    if(shortUrl){
+      this._removeListenersForShortUrl(shortUrl, listener, ctx);
     }
     else{
       for(var key in this._listenersObj){
@@ -86,15 +90,15 @@ export default class SwipesUrlProvider {
       }
     }
   }
-  _removeListenersForShareUrl(shareUrl, listener, ctx){
+  _removeListenersForShortUrl(shortUrl, listener, ctx){
 
-    const currentListeners = this._listenersObj[shareUrl];
+    const currentListeners = this._listenersObj[shortUrl];
     if(!currentListeners){
       return;
     }
     // If only event name is provided, remove all
     if(!listener && !ctx){
-      return delete this._listenersObj[shareUrl];
+      return delete this._listenersObj[shortUrl];
     }
 
     const newListeners = [];
@@ -104,10 +108,10 @@ export default class SwipesUrlProvider {
         newListeners.push(listener);
     }
     if(!newListeners.length){
-      return delete this._listenersObj[shareUrl];
+      return delete this._listenersObj[shortUrl];
     }
     else if(newListeners.length && newListeners.length !== currentListeners.length){
-      this._listenersObj[shareUrl] = newListeners;
+      this._listenersObj[shortUrl] = newListeners;
     }
   }
 
