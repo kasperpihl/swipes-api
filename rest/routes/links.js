@@ -5,7 +5,8 @@ const validator = require('validator');
 import SwipesError from '../swipes-error.js';
 import {
   createSwipesShortUrl,
-  addPermissionsToALink
+  addPermissionsToALink,
+  findPermissionsById
 } from '../utils/share_url_util'
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const validateData = (req, res, next) => {
   const link = req.body.link;
   const permission = req.body.permission;
   const meta = req.body.meta || null;
+  const shareUrl = req.body.shareUrl || null;
   let checksum = req.body.checksum;
 
   if (validator.isNull(link) && validator.isNull(checksum)) {
@@ -55,6 +57,7 @@ const validateData = (req, res, next) => {
 
   res.locals.permission = permission;
   res.locals.meta = meta;
+  res.locals.shareUrl = shareUrl;
 
   return next();
 }
@@ -86,18 +89,36 @@ router.post('/link.add', validateData, (req, res, next) => {
   const permissionType = permission.type;
   const accountId = permission.account_id;
   const meta = res.locals.meta;
+  const shareUrl = res.locals.shareUrl;
   let newMeta;
+  let newChecksum;
 
   createSwipesShortUrl({ userId, accountId, link, checksum, meta })
     .then(({meta, checksum}) => {
       const permission = {
-        type: 'public',
+        type: permissionType,
         account_id: accountId
       }
 
       newMeta = meta;
+      newChecksum = checksum;
 
-      return addPermissionsToALink({ userId, checksum, permission })
+      return findPermissionsById(shareUrl);
+    })
+    .then((result) => {
+      let permission;
+
+      if (!result) {
+        permission = {
+          type: permissionType,
+          account_id: accountId,
+          user_id: userId
+        }
+      } else {
+        permission = result.permission;
+      }
+
+      return addPermissionsToALink({ userId, checksum: newChecksum, permission });
     })
     .then(({ permissionPart }) => {
       const short_url = permissionPart;
