@@ -81,15 +81,15 @@ const validateData = (req, res, next) => {
   }
 
 **/
-router.post('/link.add', validateData, (req, res, next) => {
+router.post('/link.add', (req, res, next) => {
   const userId = req.userId;
   const checksum = res.locals.checksum;
   const link = res.locals.link;
   const permission = res.locals.permission;
-  const permissionType = permission.type;
+  const permissionType = permission.type || 'public';
   const accountId = permission.account_id;
-  const meta = res.locals.meta;
-  const shortUrl = res.locals.shortUrl;
+  const meta = res.locals.meta || null;
+  const shortUrl = res.locals.shortUrl || null;
   let newMeta;
   let newChecksum;
 
