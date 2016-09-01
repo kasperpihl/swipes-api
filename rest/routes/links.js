@@ -15,7 +15,7 @@ const validateData = (req, res, next) => {
   const link = req.body.link;
   const permission = req.body.permission;
   const meta = req.body.meta || null;
-  const shareUrl = req.body.shareUrl || null;
+  const shortUrl = req.body.shortUrl || null;
   let checksum = req.body.checksum;
 
   if (validator.isNull(link) && validator.isNull(checksum)) {
@@ -57,7 +57,7 @@ const validateData = (req, res, next) => {
 
   res.locals.permission = permission;
   res.locals.meta = meta;
-  res.locals.shareUrl = shareUrl;
+  res.locals.shortUrl = shortUrl;
 
   return next();
 }
@@ -89,7 +89,7 @@ router.post('/link.add', validateData, (req, res, next) => {
   const permissionType = permission.type;
   const accountId = permission.account_id;
   const meta = res.locals.meta;
-  const shareUrl = res.locals.shareUrl;
+  const shortUrl = res.locals.shortUrl;
   let newMeta;
   let newChecksum;
 
@@ -103,7 +103,7 @@ router.post('/link.add', validateData, (req, res, next) => {
       newMeta = meta;
       newChecksum = checksum;
 
-      return findPermissionsById(shareUrl);
+      return findPermissionsById(shortUrl);
     })
     .then((result) => {
       let permission;

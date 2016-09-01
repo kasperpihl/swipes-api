@@ -143,10 +143,10 @@ const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
     })
 }
 
-const findPermissionsById = (shareUrl) => {
-  const q = r.table('links_permissions').get(shareUrl);
+const findPermissionsById = (shortUrl) => {
+  const q = r.table('links_permissions').get(shortUrl);
 
-  if (!shareUrl) {
+  if (!shortUrl) {
     return Promise.resolve(null);
   } else {
     return db.rethinkQuery(q);
