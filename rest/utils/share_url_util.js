@@ -144,7 +144,11 @@ const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
 }
 
 const findPermissionsById = (shortUrl) => {
-  const q = r.table('links_permissions').get(shortUrl);
+  const q =
+    r.table('links_permissions')
+      .getAll(shortUrl)
+      .eqJoin('link_id', r.table('links'))
+      .zip()
 
   if (!shortUrl) {
     return Promise.resolve(null);
