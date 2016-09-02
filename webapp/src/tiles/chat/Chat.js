@@ -85,7 +85,7 @@ class Chat extends Component {
 
     const shareData = {};
     if(data.shortUrl){
-      shareData.shortUrl = data.shortUrl;
+      shareData.short_url = data.shortUrl;
       // Is a swipes url to reshare  
     }
     else if(data.id && data.type){
