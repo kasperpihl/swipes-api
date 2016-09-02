@@ -60,14 +60,14 @@ class SearchResults extends Component {
 
   }
   render() {
+    // <div className="swipes-search-results__services">
+      // {this.renderServices()}
+    // </div>
     const { title, subtitle, results, searching } = this.props;
     return (
       <div className="swipes-search-results">
         {this.renderHeader(title, subtitle)}
         <div className="flex-wrapper">
-          <div className="swipes-search-results__services">
-            {this.renderServices()}
-          </div>
           <div className="swipes-search-results__result-list">
             {this.renderResultList(results)}
           </div>
