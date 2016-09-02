@@ -15,7 +15,7 @@ const validateData = (req, res, next) => {
   const link = req.body.link;
   const permission = req.body.permission;
   const meta = req.body.meta || null;
-  const shortUrl = req.body.short_url || null;
+  const shortUrl = req.body.short_url ? req.body.short_url.toString() : null;
   let checksum = req.body.checksum;
 
   if (validator.isNull(link) && validator.isNull(checksum) && validator.isNull(shortUrl)) {
@@ -51,16 +51,35 @@ const validateData = (req, res, next) => {
     link.service = link.service.toString();
     link.type = link.type.toString();
     link.id = link.id.toString();
-    res.locals.link = link;
+    res.locals.link = {
+      id: link.id,
+      type: link.type,
+      service: link.service
+    };
   }
 
   if (!shortUrl) {
     permission.type = permission.type ? permission.type.toString() : 'public';
     permission.account_id = permission.account_id.toString();
-    res.locals.permission = permission;
+    res.locals.permission = {
+      type: permission.type,
+      account_id: permission.account_id
+    };
   }
 
-  res.locals.meta = meta;
+  if (meta) {
+    meta.title = meta.title.toString();
+    res.locals.meta = {
+      title: meta.title.toString()
+    };
+
+    if (meta.subtitle) {
+      res.locals.meta['subtitle'] = meta.subtitle.toString();
+    }
+  } else {
+    res.locals.meta = meta;
+  }
+
   res.locals.shortUrl = shortUrl;
 
   return next();
