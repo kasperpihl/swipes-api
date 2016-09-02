@@ -43,7 +43,7 @@ class SearchResults extends Component {
     }
     if(!results) return;
 
-    
+
     if(Array.isArray(results)){
       return results.map( (result, i) => {
         return <SwipesCard data={result} key={'search-result-' + i} delegate={cardDelegate} />
@@ -83,6 +83,9 @@ SearchResults.propTypes = {
   searching: PropTypes.bool,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
-  results: PropTypes.object, // SwipesCard Proptypes
+  results: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]), // SwipesCard Proptypes
   cardDelegate: PropTypes.object.isRequired
 }

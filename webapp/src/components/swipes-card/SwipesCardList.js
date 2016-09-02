@@ -84,7 +84,7 @@ class SwipesCardList extends Component {
     }
 
     return (
-      <div className="sw-card-list__header__slider" style={styles}></div>
+      <slider style={styles}></slider>
     )
   }
   renderList(data, selectedTab) {
