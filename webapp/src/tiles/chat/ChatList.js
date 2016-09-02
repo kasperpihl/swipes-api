@@ -30,9 +30,6 @@ class ChatList extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
-  showUnreadAbove(){
-    //chatItems.push();
-  }
   checkForMarkingAsRead(){
     const { unreadIndicator } = this.props;
     let unreadAbove = false;

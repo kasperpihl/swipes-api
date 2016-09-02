@@ -87,7 +87,6 @@ export default class SlackData {
     }
     const data = {
       selectedChannelId: channel.id,
-      messages: [],
       loadingMessages: true,
       unreadIndicator: {ts: channel.last_read}
     };
