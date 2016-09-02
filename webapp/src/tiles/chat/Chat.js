@@ -131,7 +131,7 @@ class Chat extends Component {
     }
     return (
       <Sidemenu
-        style={{paddingBottom: '60px'}}
+        style={{paddingBottom: '90px'}}
         ref="sidemenu"
         onWidthChanged={this.onSidemenuWidthChanged}
         onSelectedRow={this.onSelectedRow}

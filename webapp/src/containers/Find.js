@@ -151,7 +151,7 @@ class Find extends Component {
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          <SearchResults searching={this.state.searching} title="Results" results={this.state.searchResults} cardDelegate={this}/>
+          <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this}/>
           <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
         </div>
       </div>

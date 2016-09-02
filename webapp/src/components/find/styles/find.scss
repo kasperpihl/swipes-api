@@ -58,20 +58,6 @@ $searchbarSize: 90px;
         }
       }
     }
-
-    .swipes-search-results {
-
-      &__header {
-
-        &--inactive {
-          opacity: 0;
-        }
-
-        &--active {
-          opacity: 1;
-        }
-      }
-    }
   }
 
   &.open {

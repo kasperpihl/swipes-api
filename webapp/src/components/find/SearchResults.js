@@ -12,15 +12,9 @@ class SearchResults extends Component {
   }
   componentDidMount() {
   }
-  renderHeader(title, subtitle, results) {
-    let headerClass = ' swipes-search-results__header--inactive';
-
-    if (results) {
-      headerClass = ' swipes-search-results__header--active'
-    }
-
+  renderHeader(title, subtitle) {
     return (
-      <div className={"swipes-search-results__header" + headerClass}>
+      <div className="swipes-search-results__header">
         <div className="swipes-search-results__header__title">{title}</div>
         <div className="swipes-search-results__header__subtitle">{subtitle}</div>
       </div>
