@@ -64,7 +64,7 @@ class Chat extends Component {
     }
   }
   componentDidMount(){
-    
+
   }
   componentWillUnmount(){
     this.slackData.destroy();
@@ -78,7 +78,7 @@ class Chat extends Component {
     }
   }
   sendMessage(message){
-    this.slackData.sendMessage(message);  
+    this.slackData.sendMessage(message);
   }
   onCardShare(card, data){
     const { swipes } = this.props;
@@ -86,7 +86,7 @@ class Chat extends Component {
     const shareData = {};
     if(data.shortUrl){
       shareData.short_url = data.shortUrl;
-      // Is a swipes url to reshare  
+      // Is a swipes url to reshare
     }
     else if(data.id && data.type){
       shareData.link = {
@@ -130,11 +130,12 @@ class Chat extends Component {
       return;
     }
     return (
-      <Sidemenu 
+      <Sidemenu
+        style={{paddingBottom: '60px'}}
         ref="sidemenu"
-        onWidthChanged={this.onSidemenuWidthChanged} 
-        onSelectedRow={this.onSelectedRow} 
-        data={{sections: sectionsSidemenu }} 
+        onWidthChanged={this.onSidemenuWidthChanged}
+        onSelectedRow={this.onSelectedRow}
+        data={{sections: sectionsSidemenu }}
       />
     )
   }
@@ -142,13 +143,13 @@ class Chat extends Component {
     var unreadClass = "unread-bar";
     if(!this.state.unreadAbove){
       unreadClass += " read";
-    } 
+    }
     return (
       <a key="unread-test" href="#unread-indicator">
         <div className={unreadClass}>Unread messages above <i className="material-icons">arrow_upward</i> </div></a>)
   }
   renderTypingIndicator(label){
-    
+
     if(label){
       return (
         <div className="typing-indicator">{label}</div>
@@ -163,8 +164,8 @@ class Chat extends Component {
     swipes.sendEvent('openURL', {url: command})
   }
   render() {
-    const { typingLabel, sortedMessages, inputHeight } = this.state; 
-    
+    const { typingLabel, sortedMessages, inputHeight } = this.state;
+
     let paddingBottom = inputHeight;
     if(typingLabel){
       paddingBottom += 14;
@@ -173,18 +174,18 @@ class Chat extends Component {
       <div style={{height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
         {this.renderUnreadAbove()}
-        <ChatList 
+        <ChatList
           cardDelegate={this}
-          sections={sortedMessages} 
+          sections={sortedMessages}
           markAsRead={this.slackData.markAsRead}
           loadingMessages={this.state.loadingMessages}
           unreadAbove={this.unreadAbove}
-          unreadIndicator={this.state.unreadIndicator} 
+          unreadIndicator={this.state.unreadIndicator}
           clickedLink={this.clickedLink}
         />
         <ChatInput
-          sendMessage={this.sendMessage} 
-          changedHeight={this.changedHeight} 
+          sendMessage={this.sendMessage}
+          changedHeight={this.changedHeight}
           uploadFiles={this.slackData.uploadFiles}
           sendTypingEvent={this.slackData.sendTypingEvent}
         />
