@@ -5,6 +5,7 @@ const TIMER = 150; // Milliseconds between moving the next block
 const TRANSITION = .5 // Seconds to actually move one block
 const DEF_SIZE = 60; // Pixels height/width
 const GUTTER = 5; // Spacing in percentage between tiles
+const MINI_GUTTER = 10;
 const initialState = {
 
   positions: {
@@ -38,31 +39,48 @@ class Loader extends Component {
     clearInterval(this.timer);
   }
   clipPathForPosition(position){
+    const { mini } = this.props;
     position = parseInt(position, 10);
-    const SIZE = (100-2*GUTTER)/3;
-    const VAR0 = '0% ';
-    const VAR1 = (SIZE+GUTTER) + '% ';
-    const VAR2 = (2*SIZE+2*GUTTER) + '% ';
-    switch(position){
-      case 1: return 'inset(' + VAR1 + VAR2 + VAR1 + VAR0 + ' round 5%)';
-      case 2: return 'inset(' + VAR0 + VAR2 + VAR2 + VAR0 + ' round 5%)';
-      case 3: return 'inset(' + VAR0 + VAR1 + VAR2 + VAR1 + ' round 5%)';
-      case 4: return 'inset(' + VAR1 + VAR1 + VAR1 + VAR1 + ' round 5%)';
-      case 5: return 'inset(' + VAR2 + VAR1 + VAR0 + VAR1 + ' round 5%)';
-      case 6: return 'inset(' + VAR2 + VAR0 + VAR0 + VAR2 + ' round 5%)';
-      case 7: return 'inset(' + VAR1 + VAR0 + VAR1 + VAR2 + ' round 5%)';
+    let SIZE = (100-2*GUTTER)/3;
+    let GUT = GUTTER;
+    if(mini){
+      SIZE = (100 - GUTTER)/2;
+      GUT = MINI_GUTTER;
     }
+    const VAR0 = '0% ';
+    const VAR1 = (SIZE+GUT) + '% ';
+    const VAR2 = (2*SIZE+2*GUT) + '% ';
+    if(mini){
+      switch(position){
+        case 1: return 'inset(' + VAR0 + VAR1 + VAR1 + VAR0 + ' round 5%)';
+        case 2: return 'inset(' + VAR0 + VAR0 + VAR1 + VAR1 + ' round 5%)';
+        case 3: return 'inset(' + VAR1 + VAR0 + VAR0 + VAR1 + ' round 5%)';
+        case 4: return 'inset(' + VAR1 + VAR1 + VAR0 + VAR0 + ' round 5%)';
+      }
+    }
+    else {
+      switch(position){
+        case 1: return 'inset(' + VAR1 + VAR2 + VAR1 + VAR0 + ' round 5%)';
+        case 2: return 'inset(' + VAR0 + VAR2 + VAR2 + VAR0 + ' round 5%)';
+        case 3: return 'inset(' + VAR0 + VAR1 + VAR2 + VAR1 + ' round 5%)';
+        case 4: return 'inset(' + VAR1 + VAR1 + VAR1 + VAR1 + ' round 5%)';
+        case 5: return 'inset(' + VAR2 + VAR1 + VAR0 + VAR1 + ' round 5%)';
+        case 6: return 'inset(' + VAR2 + VAR0 + VAR0 + VAR2 + ' round 5%)';
+        case 7: return 'inset(' + VAR1 + VAR0 + VAR1 + VAR2 + ' round 5%)';
+      }
+    }
+    
   }
   tileIndexToMove(){
     switch(this.state.stateNumber){
-      case 0: return 7;
-      case 1: return 6;
-      case 2: return 5;
-      case 3: return 4;
-      case 4: return 3;
-      case 5: return 2;
-      case 6: return 1;
-      case 7: return 4;
+      case 0: return 3; 
+      case 1: return 2; 
+      case 2: return 1; 
+      case 3: return 4; 
+      case 4: return 7; 
+      case 5: return 6; 
+      case 6: return 5; 
+      case 7: return 4; 
     }
   }
   positionForTile(radioCommand){
@@ -83,13 +101,19 @@ class Loader extends Component {
     });
 
     const currentState = this.state.stateNumber;
-    const nextState = (currentState === 7) ? 0 : currentState + 1;
+    const maxState = this.props.mini ? 3 : 7;
+    const nextState = (currentState === maxState) ? 0 : currentState + 1;
 
 
     this.setState({stateNumber: nextState, positions: newPositions});
   }
   renderTiles(){
-    return ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot'].map((radioCommand) => {
+    let squares = ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot'];
+    if(this.props.mini){
+      squares = squares.slice(0, 3);
+    }
+
+    return squares.map((radioCommand) => {
       const pos = this.positionForTile(radioCommand);
       const styles = {
         transition: (TRANSITION) + 's cubic-bezier(0.86, 0, 0.07, 1)',
@@ -141,6 +165,7 @@ export default Loader
 Loader.propTypes = {
   size: PropTypes.number,
   center: PropTypes.bool,
+  mini: PropTypes.bool,
   text: PropTypes.string,
   textStyle: PropTypes.object
 }
