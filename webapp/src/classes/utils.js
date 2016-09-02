@@ -6,7 +6,7 @@ export function isShareURL(url){
   }
   return false;
 }
-export function dataIdFromShareURL(url){
+export function shortUrlFromShareUrl(url){
   return url.split('/s/')[1].split('/')[0];
 }
 

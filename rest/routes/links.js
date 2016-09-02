@@ -5,7 +5,8 @@ const validator = require('validator');
 import SwipesError from '../swipes-error.js';
 import {
   createSwipesShortUrl,
-  addPermissionsToALink
+  addPermissionsToALink,
+  findPermissionsById
 } from '../utils/share_url_util'
 
 const router = express.Router();
@@ -14,14 +15,19 @@ const validateData = (req, res, next) => {
   const link = req.body.link;
   const permission = req.body.permission;
   const meta = req.body.meta || null;
+  const shortUrl = req.body.short_url || null;
   let checksum = req.body.checksum;
 
-  if (validator.isNull(link) && validator.isNull(checksum)) {
-    return next(new SwipesError('link or checksum are required'));
+  if (validator.isNull(link) && validator.isNull(checksum) && validator.isNull(shortUrl)) {
+    return next(new SwipesError('link or checksum or shortUrl are required'));
   }
 
-  if (validator.isNull(permission)) {
+  if (!shortUrl && validator.isNull(permission)) {
     return next(new SwipesError('permission is required'));
+  }
+
+  if (!shortUrl && validator.isNull(permission.account_id)) {
+    return next(new SwipesError('account_id of permission is required'));
   }
 
   if (link && (
@@ -32,10 +38,6 @@ const validateData = (req, res, next) => {
     return next(new SwipesError('service, type and id of link are required'));
   }
 
-  if (validator.isNull(permission.account_id)) {
-    return next(new SwipesError('account_id of permission is required'));
-  }
-
   if (meta && !meta.title) {
     return next(new SwipesError('meta.title is required'));
   }
@@ -43,18 +45,23 @@ const validateData = (req, res, next) => {
   if (!validator.isNull(checksum)) {
     checksum = checksum.toString();
     res.locals.checksum = checksum;
-  } else {
+  }
+
+  if (validator.isNull(checksum) && validator.isNull(shortUrl)) {
     link.service = link.service.toString();
     link.type = link.type.toString();
     link.id = link.id.toString();
     res.locals.link = link;
   }
 
-  permission.type = permission.type ? permission.type.toString() : 'public';
-  permission.account_id = permission.account_id.toString();
+  if (!shortUrl) {
+    permission.type = permission.type ? permission.type.toString() : 'public';
+    permission.account_id = permission.account_id.toString();
+    res.locals.permission = permission;
+  }
 
-  res.locals.permission = permission;
   res.locals.meta = meta;
+  res.locals.shortUrl = shortUrl;
 
   return next();
 }
@@ -82,22 +89,42 @@ router.post('/link.add', validateData, (req, res, next) => {
   const userId = req.userId;
   const checksum = res.locals.checksum;
   const link = res.locals.link;
-  const permission = res.locals.permission;
-  const permissionType = permission.type;
+  const shortUrl = res.locals.shortUrl;
+  const permission = res.locals.permission || {};
+  const permissionType = permission.type || 'public';
   const accountId = permission.account_id;
   const meta = res.locals.meta;
   let newMeta;
+  let newPermission;
 
-  createSwipesShortUrl({ userId, accountId, link, checksum, meta })
+  findPermissionsById(shortUrl)
+    .then((result) => {
+      if (result && result.length > 0) {
+        newPermission = result[0].permission;
+
+        return Promise.resolve({
+          meta: result[0].meta,
+          checksum: result[0].checksum
+        })
+      } else {
+        newPermission = {
+          type: permissionType,
+          account_id: accountId,
+          user_id: userId
+        }
+
+        return createSwipesShortUrl({ userId, accountId, link, checksum, meta })
+      }
+    })
     .then(({meta, checksum}) => {
       const permission = {
-        type: 'public',
+        type: permissionType,
         account_id: accountId
       }
 
       newMeta = meta;
 
-      return addPermissionsToALink({ userId, checksum, permission })
+      return addPermissionsToALink({ userId, checksum, permission: newPermission });
     })
     .then(({ permissionPart }) => {
       const short_url = permissionPart;

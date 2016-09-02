@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import ReactEmoji from 'react-emoji'
 import SwipesCard from '../../components/swipes-card/SwipesCard'
-import { bindAll, dataIdFromShareURL } from '../../classes/utils'
+import { bindAll, shortUrlFromShareUrl } from '../../classes/utils'
 
 let delegate;
 const delegateMethods = [ 'clickLink' ]
@@ -50,8 +50,8 @@ class ChatItem extends Component {
       text = text.map((t, i) => {
         if(typeof t === 'object'){
           if(t.type === 'card'){
-            const dataId = dataIdFromShareURL(t.data);
-            return <SwipesCard key={'card' + i} data={{id: dataId}} delegate={this.props.cardDelegate} />
+            const shortUrl = shortUrlFromShareUrl(t.data);
+            return <SwipesCard key={'card' + i} data={{ shortUrl }} delegate={this.props.cardDelegate} />
           }
           if(t.type === 'link'){
             return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{unescape(t.title)}</a>;

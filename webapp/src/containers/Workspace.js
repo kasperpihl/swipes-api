@@ -27,13 +27,12 @@ class Workspace extends Component {
       const { draggingDot } = this.props;
       const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.draggingId){
-        console.log(draggingDot.data);
-        if(draggingDot.data.shortUrl){
+        /*if(draggingDot.data.shortUrl){
           var shareUrl = this.generateShareUrl(draggingDot.data.shortUrl);
           this.sendToTile(id, 'share.receivedData', { shareUrl });
           this.props.stopDraggingDot()
           return;
-        }
+        }*/
         console.log('generating from', draggingDot.data)
         this.props.generateShareUrl(draggingDot.data).then( (res) => {
           console.log('res from share url', res);

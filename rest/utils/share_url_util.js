@@ -143,6 +143,20 @@ const fetchSwipesUrlData = ({userId, accountId, link, meta = null}) => {
     })
 }
 
+const findPermissionsById = (shortUrl) => {
+  const q =
+    r.table('links_permissions')
+      .getAll(shortUrl)
+      .eqJoin('link_id', r.table('links'))
+      .zip()
+
+  if (!shortUrl) {
+    return Promise.resolve(null);
+  } else {
+    return db.rethinkQuery(q);
+  }
+}
+
 const addPermissionsToALink = ({ userId, checksum, permission }) => {
   const permissionPart = shortid.generate();
   const linkPermissionQ = r.table('links_permissions').insert({
@@ -163,5 +177,6 @@ const addPermissionsToALink = ({ userId, checksum, permission }) => {
 
 export {
   createSwipesShortUrl,
-  addPermissionsToALink
+  addPermissionsToALink,
+  findPermissionsById
 }

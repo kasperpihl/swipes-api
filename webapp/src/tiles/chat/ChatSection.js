@@ -13,8 +13,7 @@ export default class ChatSection extends Component {
     var unreadSectionClass = ""
     var chatLineContainerClass = 'chat-date-line'
     section.messages.forEach((item, i) => {
-      
-      if(unreadIndicator && item.isFirstUnreadMessage && !item.isLastMessage){
+      if(unreadIndicator && item.isFirstUnreadMessage){
         var unreadClass = "new-message-header";
 
         if(unreadIndicator.showAsRead){

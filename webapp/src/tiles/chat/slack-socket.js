@@ -75,6 +75,7 @@ export default class SlackSocket {
       console.log('closing the socket manually!');
       this.webSocket.close();
       this.webSocket = null;
+      this.restartSocket();
     }
   }
   sendEvent(msg){

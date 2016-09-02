@@ -17,7 +17,7 @@ class Chat extends Component {
     super(props)
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
-    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink'])
+    bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink', 'onCardShare', 'onCardAction'])
     this.addListenersToSwipes(props.swipes);
     const data = this.loadDataFromStorage(props.tile.id);
     this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
@@ -81,7 +81,29 @@ class Chat extends Component {
     this.slackData.sendMessage(message);  
   }
   onCardShare(card, data){
-    console.log('share', data);
+    const { swipes } = this.props;
+
+    const shareData = {};
+    if(data.shortUrl){
+      shareData.shortUrl = data.shortUrl;
+      // Is a swipes url to reshare  
+    }
+    else if(data.id && data.type){
+      shareData.link = {
+        service: 'slack',
+        id: data.id,
+        type: data.type
+      }
+      shareData.meta = data;
+      shareData.permission = {
+        type: 'public',
+        account_id: swipes.info.workflow.selectedAccountId
+      }
+      // Is a slack object
+    }
+    if(Object.keys(shareData).length){
+      swipes.sendEvent('share', shareData);
+    }
   }
   onCardAction(card, data, action){
     console.log('action', data, action);
@@ -147,7 +169,6 @@ class Chat extends Component {
     if(typingLabel){
       paddingBottom += 14;
     }
-
     return (
       <div style={{height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
