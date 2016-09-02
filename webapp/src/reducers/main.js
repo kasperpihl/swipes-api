@@ -53,8 +53,7 @@ export default function main (state = initialState, action) {
     case types.SET_DRAGGING_DOT:{
       const draggingDot = action.value ? {
         draggingId: action.draggingId,
-        data: action.data,
-        pos: null
+        data: action.data
       } : null
       const newState = clone(state);
       if(action.value){
@@ -67,11 +66,9 @@ export default function main (state = initialState, action) {
     case types.DRAG_DOT:{
       const newState = clone(state);
       newState.draggingDot = Object.assign(newState.draggingDot, {
-        pos: {clientX: action.clientX, clientY: action.clientY},
         hoverTarget: action.hoverTarget
       })
-
-      return newState
+      return newState;
     }
 
     // ======================================================

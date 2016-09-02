@@ -11,10 +11,12 @@ import SwipesLoader from '../components/swipes-ui/SwipesLoader'
 
 import Tile from './Tile'
 import Grid from '../components/resizeable-grid/grid'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class Workspace extends Component {
   constructor(props) {
     super(props)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this._cachedTiles = {};
     bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridRowPressedRemove', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
   }
@@ -60,14 +62,15 @@ class Workspace extends Component {
     }
   }
   onMouseMove(e){
-    if(this.props.draggingDot){
+    const { draggingDot, dragDot } = this.props;
+    if(draggingDot){
       e.preventDefault()
       let { id: hoverTarget } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
-      if(!hoverTarget){
-        // Do additional tests if no row was hovered. Like (topbar etc)
+      if(hoverTarget !== draggingDot.hoverTarget){
+        dragDot(hoverTarget);
       }
 
-      //this.props.dragDot(e.clientX, e.clientY, hoverTarget)
+      //
 
       //console.log(hoverTarget);
     }
