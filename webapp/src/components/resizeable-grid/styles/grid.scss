@@ -209,7 +209,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     position: absolute;
     left: 0;
     top: calc(0px - 8px);
-    z-index: 3;
+    z-index: 99;
     transition: .1s calc(#{$transitionTime} - .2);
 
     &:after {
