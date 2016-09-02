@@ -84,7 +84,7 @@ class SwipesCardList extends Component {
     }
 
     return (
-      <slider style={styles}></slider>
+      <tabSlider style={styles}></tabSlider>
     )
   }
   renderList(data, selectedTab) {

@@ -12,11 +12,17 @@ class SearchResults extends Component {
   }
   componentDidMount() {
   }
-  renderHeader(title, subtitle) {
+  renderHeader(title, subtitle, results) {
+    let headerClass = ' swipes-search-results__header--inactive';
+
+    if (results) {
+      headerClass = ' swipes-search-results__header--active'
+    }
+
     return (
-      <div className="swipes-search-results__header">
-        <div className="swipes-search-results__header--title">{title}</div>
-        <div className="swipes-search-results__header--subtitle">{subtitle}</div>
+      <div className={"swipes-search-results__header" + headerClass}>
+        <div className="swipes-search-results__header__title">{title}</div>
+        <div className="swipes-search-results__header__subtitle">{subtitle}</div>
       </div>
     )
   }
@@ -38,11 +44,37 @@ class SearchResults extends Component {
   }
   renderResultList(results) {
     const { cardDelegate, searching } = this.props;
-    if(searching){
+
+    if (searching) {
       return <Loader size={60} text="Searching" center={true} />
     }
-    if(!results) return;
 
+    if (!results) {
+      return (
+        <div className="search-empty-state">
+          start typing to search
+        </div>
+      )
+    }
+
+    if (results && Object.keys(results).length === 0) {
+      return (
+        <div className="search-no-results">
+          <div className="face">
+          	<div className="face__band">
+          		<div className="face__band--red"></div>
+          		<div className="face__band--white"></div>
+          		<div className="face__band--blue"></div>
+          	</div>
+          	<div className="face__eyes"></div>
+          	<div className="face__dimples"></div>
+          	<div className="face__mouth"></div>
+          </div>
+
+          <div className="search-no-results__text">These are not the files you were looking for!</div>
+        </div>
+      )
+    }
 
     if(Array.isArray(results)){
       return results.map( (result, i) => {
@@ -66,7 +98,7 @@ class SearchResults extends Component {
     const { title, subtitle, results, searching } = this.props;
     return (
       <div className="swipes-search-results">
-        {this.renderHeader(title, subtitle)}
+        {this.renderHeader(title, subtitle, results)}
         <div className="flex-wrapper">
           <div className="swipes-search-results__result-list">
             {this.renderResultList(results)}

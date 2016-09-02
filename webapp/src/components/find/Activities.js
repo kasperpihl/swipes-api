@@ -12,9 +12,9 @@ class Activities extends Component {
   renderHeader(title, subtitle) {
     return (
       <div className="swipes-activities__header">
-        <div className="swipes-activities__header--title">{title}</div>
-        <div className="swipes-activities__header--seperator"></div>
-        <div className="swipes-activities__header--subtitle">{subtitle}</div>
+        <div className="swipes-activities__header__title">{title}</div>
+        <div className="swipes-activities__header__seperator"></div>
+        <div className="swipes-activities__header__subtitle">{subtitle}</div>
       </div>
     )
   }
