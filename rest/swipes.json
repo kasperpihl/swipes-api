@@ -13,8 +13,8 @@
        "SW_DATABASE_USER": "sw1p3ss",
        "SW_DATABASE_PASSWORD": "st@ypr0duct1v3",
 
-       "SW_JIRA_CONSUMER_KEY": "DevSwipesUnicorns",
-
+       "SW_DROPBOX_APP_ID": "wh02j5prwflysc2",
+       "SW_DROPBOX_APP_SECRET": "uzq5he1dv12608f",
        "SW_DROPBOX_REDIRECT_URI": "https://dev.swipesapp.com/oauth-success.html",
 
        "SW_ASANA_CLIENT_ID": "93722876544114",

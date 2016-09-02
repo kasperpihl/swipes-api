@@ -7,7 +7,7 @@ var FontIcon = require('material-ui/lib/font-icon');
 var SwipesDot = require('swipes-dot').default;
 
 var ChatItem = React.createClass({
-	renderNameHeader: function(){
+	renderMessageHeader: function(){
 		var name = 'unknown';
 		var message = this.props.data;
 		if(message.isExtraMessage){
@@ -21,8 +21,12 @@ var ChatItem = React.createClass({
 			name = message.bot.name;
 		}
 		return (
-			<div className="message-details">
-				<span className="message-author">{name}</span> <span className="message-time">{message.timeStr}</span>
+			<div className="chat__message__info">
+				<div className="chat__message__info--profile-img">
+					{this.renderProfileImage()}
+				</div>
+				<div className="chat__message__info--author">{name}</div>
+				<div className="chat__message__info--timestamp">{message.timeStr}</div>
 			</div>
 		);
 	},
@@ -45,45 +49,23 @@ var ChatItem = React.createClass({
 			<img src={profile_image} />
 		);
 	},
-	renderSecondaryTime: function(){
-		var message = this.props.data;
-		if(!message.isExtraMessage){
-			return;
-		}
-		return (
-			<div className="secondary-time">
-				<span className="message-time">
-					{message.timeStr}
-				</span>
-			</div>
-		);
-	},
 	renderMessage:function(){
 		var message = this.props.data;
 		return <ChatMessage key={message.ts} data={message} />;
 	},
-	render: function () {
-		/*
+	render() {
+		let className = 'chat__message';
 
-		var meClassName = swipes.info.userId === firstMessage.user.id ? ' me' : '';
-		var chatWrapperClassName = 'chat-wrapper' + meClassName;*/
-		var className = "chat-wrapper";
-		if(this.props.data.isExtraMessage){
-			className += " extra-message";
+		if (this.props.data.isExtraMessage) {
+			className += ' extra-message';
 		}
 
 		return (
 			<div className={className}>
-				<div className="left-side-container">
-					{this.renderProfileImage()}
-					{this.renderSecondaryTime()}
-				</div>
-				<div className="right-side-container">
-					{this.renderNameHeader()}
-					{this.renderMessage()}
-				</div>
+				{this.renderMessageHeader()}
+				{this.renderMessage()}
 			</div>
-		);
+		)
 	}
 });
 
@@ -107,6 +89,7 @@ var ChatMessage = React.createClass({
 			return;
 		}
 		var attachments = this.props.data.attachments.map(function(att){
+			// console.log(att);
 			return <ChatMessage.Attachment key={att.id} data={att} />
 		});
 		return attachments;
@@ -116,6 +99,7 @@ var ChatMessage = React.createClass({
 		if(!file){
 			return;
 		}
+		// console.log(file);
 		return <ChatMessage.File key={file.id} data={file} />
 	},
 	renderMessage:function(message){
@@ -170,6 +154,9 @@ var ChatMessage = React.createClass({
 
     return items;
   },
+  onDotDragStart(message){
+  	swipes.sendEvent('dot.startDrag', this.shareData(message));
+  },
 	render: function () {
 		var message = this.props.data;
 		var className = "message-wrapper";
@@ -177,9 +164,10 @@ var ChatMessage = React.createClass({
 			className += " new-message";
 		}
 		var dotItems = this.dotItems();
+
 		return (
 			<div id={message.ts} className={className}>
-				<div className="message">
+				<div className="chat__message--content" data-timestamp={message.timeStr}>
 					<SwipesDot
 						className="dot"
 						radial={false}
@@ -187,9 +175,12 @@ var ChatMessage = React.createClass({
 						showOnHover={true}
 						hoverParentId={message.ts}
 						elements={dotItems}
+						onDragStart={this.onDotDragStart.bind(this, message.text)}
 						onDragData={this.shareData.bind(this, message.text)}
 					/>
-					{this.renderMessage(this.props.data.text)}
+					<div className="chat__message--content--text">
+						{this.renderMessage(this.props.data.text)}
+					</div>
 					{this.renderFile()}
 					{this.renderAttachments()}
 				</div>
@@ -358,7 +349,10 @@ var renderTextWithLinks = function(text, emojiFunction){
 				var res = innerMatch.split("|");
 				var command = res[0];
 				var title = res[res.length -1];
-				if(title.startsWith("@U")){
+				if(swipes.isShareURL(title)){
+					console.log('was a share url!!! YIR', title);
+				}
+				else if(title.startsWith("@U")){
 					var user = UserStore.get(title.substr(1));
 					if(user){
 						title = "@" + user.name;

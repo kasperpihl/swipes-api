@@ -9,12 +9,15 @@
   "xendo": {
     "clientId": "99965e447026eb281dfc",
     "clientSecret": "2ffed44df0b40c81845780baa74ba57cc0a6f06c",
+    "accessTokenEndpoint": "https://xen.do/oauth2/access_token",
     "addUserEndpoint": "https://xen.do/api/v1/provisioning/user/",
-    "addServiceToUserEndpoint": "https://xen.do/api/v1/provisioning/service/"
+    "addServiceToUserEndpoint": "https://xen.do/api/v1/provisioning/service/",
+    "searchEndpoint": "https://xen.do/api/v1/search/",
+    "userServiceEndpoint": "https://xen.do/api/v1/user-service/"
   },
   "dropbox": {
-    "appId": "wh02j5prwflysc2",
-    "appSecret": "uzq5he1dv12608f",
+    "appId": "qhkw8akehpocer3",
+    "appSecret": "gjocjcvalr8xena",
     "redirectURI": "http://localhost:3000/oauth-success.html"
   },
   "asana": {
@@ -23,6 +26,7 @@
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "origin": "http://localhost",
+  "webhooksHost": "https://swipesdev.eu.ngrok.io/",
   "apiPort": 5000,
   "clientPort" :3000,
   "protocol": "http://",

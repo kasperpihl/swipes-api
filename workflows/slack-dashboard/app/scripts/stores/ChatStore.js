@@ -362,19 +362,19 @@ var ChatStore = Reflux.createStore({
 		}
 	},
 	onUploadFile: function(file, callback){
-		var token = swipes.info.workflow.slackToken;
+		var token = swipes.info.slackToken;
 		var formData = new FormData();
 		formData.append("token", token);
 		formData.append("channels", this.get('channelId'));
 		formData.append("filename", file.name);
 		formData.append("title", file.name);
 		formData.append("file", file);
-		this.__tempSlackRequest('files.upload', {}, function(result, error){
+		this.__tempSlackUpload(formData, function(result, error){
 			callback(result, error);
-		}.bind(this), formData);
+		}.bind(this));
 	},
 	onUploadClipboard: function(blob, message, callback) {
-		var token = swipes.info.workflow.slackToken;
+		var token = swipes.info.slackToken;
 		var formData = new FormData();
 		var date = moment().format('YYYY-MM-DD, h:mm A');
 		var imageTitle;
@@ -390,9 +390,9 @@ var ChatStore = Reflux.createStore({
 		formData.append("filename", 'Pasted image at ' + date);
 		formData.append("title", imageTitle);
 		formData.append("file", blob);
-		this.__tempSlackRequest('files.upload', {}, function(result, error){
+		this.__tempSlackUpload(formData, function(result, error){
 			callback(result, error);
-		}.bind(this), formData);
+		}.bind(this));
 	},
 	onSendMessage: function(message, callback){
 		var self = this;
@@ -401,7 +401,10 @@ var ChatStore = Reflux.createStore({
 				swipes.sendEvent('analytics.action', {name: "Send message"});
 				self.onMarkAsRead(res.data.ts);
 			}
-			callback();
+			if(callback){
+				callback();
+			}
+			
 		});
 	},
 	onDeleteMessage: function(timestamp){
@@ -409,7 +412,7 @@ var ChatStore = Reflux.createStore({
 
 		this.removeMessage(timestamp);
 
-		swipes.service('slack').request('chat.delete', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: this.get('channelId')}, function(res, err){
+		swipes.service('slack').request('chat.delete', {token: swipes.info.slackToken, ts: timestamp, channel: this.get('channelId')}, function(res, err){
 			if (err) {
 				console.log(err);
 			}
@@ -420,7 +423,7 @@ var ChatStore = Reflux.createStore({
 		swipes.modal('edit')('Edit Message', message, function(res) {
 			if (res) {
 				var newText = res;
-				swipes.service('slack').request('chat.update', {token: swipes.info.workflow.slackToken, ts: timestamp, channel: that.get('channelId'), text: encodeURIComponent(res)}, function(res, err) {
+				swipes.service('slack').request('chat.update', {token: swipes.info.slackToken, ts: timestamp, channel: that.get('channelId'), text: encodeURIComponent(res)}, function(res, err) {
 					if (err) {
 						console.log(err);
 					}
@@ -472,13 +475,9 @@ var ChatStore = Reflux.createStore({
 	// Though, the request might come in handy for how to send the request since they use formData for files.
 	*/
 
-	__tempSlackRequest:function(command, options, callback, formData){
-		var url = 'https://slack.com/api/' + command;
-		var token = swipes.info.workflow.slackToken;
-		options = options || {};
-		options.token = swipes
-		var settings = {
-			url : url,
+	__tempSlackUpload:function(formData, callback){
+		$.ajax({
+			url : 'https://slack.com/api/files.upload',
 			type: "POST",
 			success: function(res){
 				console.log('res slack upload', res);
@@ -489,17 +488,10 @@ var ChatStore = Reflux.createStore({
 				callback(false, err);
 			},
 			crossDomain: true,
-			context: this,
-			data: options,
-			processData: true
-		};
-		if(formData){
-			settings.data = formData;
-			settings.processData = false;
-			settings.contentType = false;
-
-		}
-		$.ajax(settings);
+			data: formData,
+			processData: false,
+			contentType: false
+		});
 	},
 	onSendTypingEvent: function() {
 		var currentChannel = ChannelStore.get(this.get('channelId'));
@@ -517,7 +509,7 @@ var ChatStore = Reflux.createStore({
 			this.webSocket = null;
 			return this.start();
 		}
-		console.log('we are in store, we made it')
+		
 		this.webSocket.send(JSON.stringify({'id': '1', 'type': 'typing', 'channel': currentChannel.id}));
 
 	}

@@ -4,7 +4,7 @@ let express = require( 'express' );
 let config = require('config');
 let serviceUtil = require('../utils/services_util.js');
 let router = express.Router();
-
+let SwipesError = require('../swipes-error.js');
 
 /*
 	Forward authorize request.

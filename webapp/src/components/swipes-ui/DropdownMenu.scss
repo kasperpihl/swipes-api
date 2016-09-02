@@ -1,0 +1,73 @@
+@import '../global-styles/vars';
+@import '../global-styles/mixins';
+
+.swipes-dropdown {
+
+  &__clickable-bg {
+    @include size(100vw, 120vh);
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba($deepBlue-100, 0);
+    display: none;
+  }
+
+  &__menu {
+    min-width: 270px;
+    background-color: white;
+    box-shadow: 0px 1px 10px 1px rgba($deepBlue-80, 0.1);;
+    border-radius: 6px;
+    position: absolute;
+    left: 6px;
+    top: 54px + 6px;
+    padding: 6px;
+    transform: scaleY(0);
+    transform-origin: 50% 0%;
+    transition: .3s;
+
+    &--item {
+      @include size(100%, 54px);
+      @include flex(center, flex-start);
+      color: $deepBlue-80;
+      font-size: 15px;
+      border-radius: 3px;
+      text-align: left;
+      padding-left: 12px;
+      opacity: 0;
+      transition: .05s;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+  }
+
+  &--open & {
+
+    &__clickable-bg {
+      display: block;
+    }
+
+    &__menu {
+      transform: scaleY(1);
+      transition: .3s;
+
+      &--item {
+        opacity: 1;
+        transition: opacity .05s .2s, background-color .05s;
+
+        &:hover {
+          color: $deepBlue-100;
+          background-color: $blue-10;
+        }
+      }
+    }
+  }
+
+  &--right & {
+
+    &__menu {
+      left: auto;
+      right: 6px;
+    }
+  }
+}

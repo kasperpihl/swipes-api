@@ -1,15 +1,20 @@
 "use strict";
 
-let r = require('rethinkdb');
-let db = require('../db.js');
-let _ = require('underscore');
+/*
+  Serving only common events
+  Common events are events that are not modified before sending them to the client.
+*/
 
-// We don't listen here for some 'special' events because we do
-// some stuff with them before we send them back trough the websocket
-let specialEvents = ['im_open'];
+import r from 'rethinkdb';
+import db from '../db.js';
+import _ from 'underscore';
 
-let commonEvents = (socket, userId) => {
-  let listenQ =
+// Add types of events to the specialEvents array
+// that are not common and we want to ignore them here
+const specialEvents = [];
+
+const commonEvents = (socket, userId) => {
+  const listenQ =
     r.table('events')
       .filter((e) => {
         return e('user_id').eq(userId)
@@ -31,7 +36,7 @@ let commonEvents = (socket, userId) => {
         let data;
 
         if (!row.old_val) {
-          let n = row.new_val;
+          const n = row.new_val;
 
           type = n.type;
           data = _.omit(n, ['id', 'type', 'user_id']);

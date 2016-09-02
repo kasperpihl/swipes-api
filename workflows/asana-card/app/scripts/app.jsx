@@ -9,8 +9,8 @@ var MainActions = require('./actions/MainActions');
 var CreateTaskInputActions = require('./actions/CreateTaskInputActions');
 
 ReactDOM.render(<Home />, document.getElementById('content'));
-
-swipes.ready (function () {
+swipes.ready(function () {
+	console.log(swipes.info);
 	MainStore.fetch();
 });
 
@@ -60,14 +60,12 @@ swipes.addListener('share.provideDropzones', function(e) {
 	}
 });
 
-swipes.addListener('share.receivedData', function(e) {
-	var data = e.data.data;
-
-	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
+swipes.addListener('share.receivedData', function(msg) {
+	var input = msg.data.text || msg.data.url || '';
 
 	if (input) {
 		CreateTaskInputActions.changeInputValue(input);
-		// document.getElementById('create-task-input').focus();
+		document.getElementById('create-task-input').focus();
 	}
 });
 

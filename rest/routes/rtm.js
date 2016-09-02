@@ -18,7 +18,7 @@ router.post('/rtm.start', (req, res, next) => {
   //let meQ = r.table('users').get(userId).without(['password', 'workflows', {'services': "authData"}]);
   let meQ = r.table('users').get(userId).without(['password']);
 
-  let users = r.table('users').without(["password", "services", "workflows"]);
+  let users = r.table('users').without(["password", "services", "workflows", "xendoCredentials"]);
 
   // K_TODO: also only add
   let servicesQ = r.table('services');
@@ -29,11 +29,19 @@ router.post('/rtm.start', (req, res, next) => {
                   .without({right: ['id', 'name']}) // No id, nor name from the original service.
                   .zip();
 
+  let activityQ = r.table('events')
+                  .filter((e) => {
+                    return e('user_id').eq(userId).and(e('type').eq('activity_added'))
+                  })
+                  .orderBy(r.desc('date'))
+                  .without(['id', 'user_id', 'type'])
+
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(users),
     db.rethinkQuery(workflowsQ),
-    db.rethinkQuery(servicesQ)
+    db.rethinkQuery(servicesQ),
+    db.rethinkQuery(activityQ)
   ]
 
   Promise.all(promiseArrayQ)
@@ -49,7 +57,8 @@ router.post('/rtm.start', (req, res, next) => {
         self: data[0],
         users: data[1],
         workflows: data[2],
-        services: data[3]
+        services: data[3],
+        activity: data[4]
       }
 
       res.status(200).json(rtmResponse);

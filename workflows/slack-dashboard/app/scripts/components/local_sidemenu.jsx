@@ -24,35 +24,39 @@ var LocalSidemenu = React.createClass({
 			var starsCol = [];
 			var channelsCol = [];
 			var peopleCol = [];
-			_.each(channels, function(channel){
+
+			_.each(channels, function(channel) {
 				var item = { id: channel.id, name: channel.name, user: channel.is_im };
-				if(channel.is_im === true && !channel.user.is_bot) {
+
+				if (channel.is_im === true && !channel.user.is_bot) {
 					item.presence = channel.user.presence;
 				}
-				if(currentChatId === channel.id){
+
+				if (currentChatId === channel.id) {
 					item.active = true;
-				}
-				else{
-					if(channel.unread_count_display){
+				} else {
+					if (channel.unread_count_display) {
 						item.unread = channel.unread_count_display;
-						if(channel.is_im){ // K_TODO: This should also be triggered on channels if mentioned....
+
+						if (channel.is_im) { // K_TODO: This should also be triggered on channels if mentioned....
 							item.notification = channel.unread_count_display;
 						}
 					}
 				}
-				if(channel.is_starred){
+
+				if (channel.is_starred) {
 					item.starred = true;
 					starsCol.push(item);
-				}
-				else if(channel.is_im){
+				} else if (channel.is_im) {
 					peopleCol.push(item);
-				}
-				else{
+				} else {
 					channelsCol.push(item);
 				}
 			});
+
 			var channels = starsCol.concat(channelsCol.concat(peopleCol));
 		}
+		
 		return (
 			<Sidemenu ref="sidemenu" data={{rows: channels}} {...this.props} />
 		);

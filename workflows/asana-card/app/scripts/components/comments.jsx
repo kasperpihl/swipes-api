@@ -264,6 +264,8 @@ var Attachment = React.createClass({
     swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
   },
   renderSwipesDot: function() {
+    return null;
+    // K_TODO/T_TODO: come up with strategy for sub components share (comments etc.)
     var dotItems = this.dotItems();
     var attachment = this.props.attachment;
     var that = this;

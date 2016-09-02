@@ -24,6 +24,10 @@ let tables = [
     name: 'links',
     indexes: ['checksum', 'short_url']
   },
+  {
+    name: 'config',
+    indexes: ['key']
+  },
   'events',
   'mentions',
   'organizations',

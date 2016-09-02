@@ -15,7 +15,7 @@ swipes.ready(function(){
 	chatStore.start();
 });
 
-swipes.addListener('share.init', function(e) {
+swipes.addListener('share.provideDropzones', function(e) {
 	var channels = channelStore.getActive();
 	var currentChatId = chatStore.get('channelId');
 
@@ -31,14 +31,11 @@ swipes.addListener('share.init', function(e) {
 	}
 });
 
-swipes.addListener('share.transmit', function(e) {
-	var data = e.data.data;
-
-	var input = data.data.text || data.data.url || ''; // e.data.data.data.data...
+swipes.addListener('share.receivedData', function(data) {
+	var input = data.text || data.url || ''; 
 
 	if (input) {
-		chatInputActions.changeInputValue(input);
-		// document.getElementById('chat-input').focus();
+		chatActions.sendMessage(input);
 	}
 });
 

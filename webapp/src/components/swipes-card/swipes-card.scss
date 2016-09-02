@@ -1,0 +1,277 @@
+@import "../global-styles/mixins";
+@import "../global-styles/vars";
+
+$dotWrapper: 50px;
+$imgWrapper: 50px;
+
+.sw-card-list {
+  @include size(100%, auto);
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: $swipes-shadow-one;
+  min-height: 50px;
+  line-height: 1;
+  overflow: hidden;
+
+  &__header {
+    @include size(100%, 60px);
+    background-color: white;
+    position: relative;
+    border-bottom: 2px solid $deepBlue-10;
+
+    &--title {
+      @include flex(center, flex-start)
+    }
+
+    &--title & {
+      &:after {
+        content: '';
+        @include size(calc(100% - 18px), 1px);
+        position: absolute;
+        left: 9px;
+        bottom: 0;
+        background-color: $deepBlue-80;
+      }
+
+      &--left-image & {
+        &__title {
+          margin-left: 0;
+        }
+      }
+
+      &__image {
+        @include size(60px, 60px);
+        @include flex(center, center);
+
+        &--left {
+
+          img {
+            @include size(25px, 25px);
+            // border-radius: 50%;
+          }
+        }
+
+        &--right {
+          @include size(50px, 50px);
+        }
+      }
+
+      &__title {
+        margin-left: 18px;
+        font-weight: 700;
+        letter-spacing: .9px;
+        color: $deepBlue-100;
+        font-size: 15px;
+        text-transform: uppercase;
+        transform: translateY(1px);
+      }
+    }
+
+    &--tabs {
+      @include flex(center, center);
+    }
+
+    &--tabs & {
+      &__tab {
+        @include size(100%, 100%);
+        @include flex(center, center);
+        color: $deepBlue-40;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: .9px;
+        position: relative;
+        text-transform: uppercase;
+        transform: translateY(1px);
+        transition: .1s;
+        user-select: none;
+
+        &:not(:last-of-type) {
+
+
+          &:after {
+            $sepHeight: 40%;
+            content: "";
+            position: absolute;
+            right: 0;
+            top: (100% - $sepHeight) / 2;
+            width: 1px;
+            height: $sepHeight;
+            background-color: $deepBlue-10;
+          }
+        }
+
+        &--active {
+          color: $blue-100;
+          transition: .1s;
+        }
+      }
+    }
+  }
+
+  &__list {
+
+    &--item {
+      &:not(:last-child) {
+        border-bottom: 1px solid $deepBlue-5;
+      }
+    }
+
+    &--padding {
+      padding-bottom: 15px;
+    }
+  }
+}
+
+tabSlider {
+  height: 2px;
+  background-color: $blue-100;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  transition: .3s ease-in-out;
+}
+
+.swipes-card {
+  @include size(100%, auto);
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: $swipes-shadow-one;
+  min-height: 50px;
+  line-height: 1;
+  overflow: hidden;
+
+  .description-container {
+    padding-bottom: 15px;
+  }
+
+  a.link {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__item {
+    min-height: 50px;
+    line-height: 1;
+    @include size(100%, auto);
+    background-color: white;
+  }
+
+  &__header {
+    @include size(100%);
+    display: flex;
+    min-height: 60px;
+
+    &__dot {
+      @include size(40px);
+      @include flex(center, center);
+
+      > * {
+        @include size(6px, 6px); //hack for centering the dot, some issue with no actions
+      }
+    }
+
+    &__content {
+      @include size(calc(100% - 42px));
+      @include flex(flex-start, center, column);
+      padding-right: 18px;
+      &--no-subtitle & {
+        &--title {
+          white-space: normal;
+          display: -webkit-box;
+          max-height: 36px;      /* fallback */
+          -webkit-line-clamp: 2; /* number of lines to show */
+          -webkit-box-orient: vertical;
+          margin-top: 0;
+        }
+
+        &--subtitle {
+          display: none;
+        }
+      }
+      &--title {
+        @include size(100%);
+        color: $deepBlue-100;
+        font-size: 15px;
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 17px;
+        margin-top: -4px;
+      }
+
+      &--subtitle {
+        @include size(100%);
+        color: $deepBlue-40;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: .3px;
+        line-height: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+    }
+
+    &__image {
+      @include size(50px, 100%);
+      @include flex(center, center);
+
+      img {
+        @include size(30px, 30px);
+      }
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+
+  &__description {
+    color: $deepBlue-70;
+    font-size: 13px;
+    font-weight: 400;
+    padding-left: 40px;
+    padding-right: 18px;
+    line-height: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    max-height: 36px;      /* fallback */
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__preview {
+		@include size(100%, auto);
+    background-color: $blue-5;
+    border-top: 1px solid $deepBlue-10;
+    padding: 18px;
+
+    &--no-style {
+      padding: 0;
+      background-color: transparent;
+
+      .custom-html {
+        width: 100%;
+      }
+    }
+
+		&--img {
+      @include flex(center, center);
+			// width: 100%;
+
+      img {
+        //width: 100%;
+      }
+		}
+  }
+}

@@ -1,0 +1,71 @@
+$inputHeight: 60px;
+$inputButtonWidth: 50px;
+
+.chat-input {
+  @include size(100%, $inputHeight);
+  max-width: 700px;
+  background-color: #fbfbfb;
+  border-top: 1px solid $deepBlue-5;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99;
+
+  &.focused {
+    border-top: 1px solid $blue-60;
+  }
+
+  &.active {
+    z-index: 1000;
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .send-button, .attach-icon {
+    @include size($inputButtonWidth, 100%);
+    position: absolute;
+    top: 0;
+    cursor: default;
+    @include flex(center, center);
+
+    .material-icons {
+      font-size: 20px !important;
+      color: $deepBlue-20 !important;
+    }
+
+    &:hover .material-icons {
+      color: $deepBlue-60 !important;
+    }
+  }
+
+  .attach-icon {
+    left: 0;
+  }
+
+  .send-button {
+    right: 0;
+  }
+
+  textarea {
+    width: calc(100% - 2 * #{$inputButtonWidth});
+    resize: none;
+    outline: none;
+    min-height: 100%;
+    margin-left: $inputButtonWidth;
+    font-size: 13px;
+    padding: 22px 5px;
+    padding-left: 7px;
+    font-weight: 500;
+    color: $deepBlue-60;
+    line-height: 15px;
+    transition: .1s ease-in-out;
+
+    &::-webkit-input-placeholder {
+       color: $deepBlue-40;
+       font-weight: 400;
+    }
+  }
+}

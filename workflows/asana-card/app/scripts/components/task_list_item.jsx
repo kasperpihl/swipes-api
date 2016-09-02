@@ -24,14 +24,17 @@ var TaskItem = React.createClass({
   removeTask: function (task) {
     ProjectDataActions.removeTask(task);
   },
-  shareTaskUrl: function (taskUrl) {
-    var shareData = this.shareData(taskUrl);
-
-    swipes.sendEvent('share', shareData);
+  shareTask: function () {
+    swipes.sendEvent('share', this.shareData())
   },
-  shareData: function (taskUrl) {
+  shareData: function () {
     return {
-      url: taskUrl
+      service: {
+        name: 'asana',
+        type: 'task',
+        item_id: this.props.data.id,
+        account_id: swipes.info.workflow.selectedAccountId
+      }
     }
   },
   scheduleTask: function(task, taskId) {
@@ -83,7 +86,7 @@ var TaskItem = React.createClass({
           icon: 'share',
           bgColor: 'rgb(255,197,37)',
           callback: function () {
-            that.shareTaskUrl(taskUrl);
+            that.shareTask();
           }
         },
         {
@@ -141,7 +144,7 @@ var TaskItem = React.createClass({
         icon: 'share',
         bgColor: 'rgb(255,197,37)',
         callback: function () {
-          that.shareTaskUrl(taskUrl);
+          that.shareTask(taskUrl);
         }
       });
 
@@ -218,10 +221,7 @@ var TaskItem = React.createClass({
     }
   },
   onDotDragStart: function(){
-    var task = this.props.data;
-    var settings = MainStore.get('settings');
-    var taskUrl = 'https://app.asana.com/0/' + settings.projectId + '/' + task.id;
-    swipes.sendEvent('dot.startDrag', this.shareData(taskUrl));
+    swipes.sendEvent('dot.startDrag', this.shareData());
   },
   renderSwipesDot: function() {
     var task = this.props.data;

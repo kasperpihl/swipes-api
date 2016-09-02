@@ -1,14 +1,17 @@
 STATE DESCRIPTION
-auth
-	token
 main
 	isFullscreen: bool
 	isSearching: bool
+	token
+	socketUrl
+	tileBaseUrl
 topbar
-	
-workspaces
 
-tiles
+me
+
+workspace
+	tiles (id indexes object with tile)
+	columns (array for rendering)
 
 searchResults
 

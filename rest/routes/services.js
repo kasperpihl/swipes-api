@@ -1,96 +1,128 @@
 "use strict";
 
-let stream = require('stream');
-let express = require( 'express' );
-let router = express.Router();
-let r = require('rethinkdb');
-let db = require('../db.js');
-let util = require('../util.js');
-let generateId = util.generateSlackLikeId;
-let serviceDir = __dirname + '/../../services/';
-let serviceUtil = require('../utils/services_util.js');
-let SwipesError = require( '../swipes-error' );
+import stream from 'stream';
+import express from 'express';
+import r from 'rethinkdb';
+import db from '../db.js';
+import util from '../util.js';
+import serviceUtil from '../utils/services_util.js';
+import SwipesError from '../swipes-error';
+import {
+	xendoSwipesCredentials,
+	xendoRefreshSwipesToken,
+	xendoAddServiceToUser
+} from '../middlewares/xendo.js';
 
-let isAdmin = util.isAdmin;
+const router = express.Router();
+const serviceDir = __dirname + '/../../services/';
+const isAdmin = util.isAdmin;
+const generateId = util.generateSlackLikeId;
 
-router.post('/services.request', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
-	let data = res.locals.data;
-	let service = res.locals.service;
-	let file = res.locals.file;
-	let options = {
-		authData: service.authData,
-		method: data.method,
-		params: data.parameters,
-		user: {userId: req.userId},
-		service: {serviceId: service.id}
-	};
-	file.request(options, function (err, result) {
-		if (err) {
-			return res.status(200).json({ok:false, err: err});
-		}
+router.post('/services.request',
+	serviceUtil.validateData,
+	serviceUtil.getServiceWithAuth,
+	serviceUtil.requireService,
+	(req, res, next) => {
+		const data = res.locals.data;
+		const service = res.locals.service;
+		const file = res.locals.file;
+		const options = {
+			authData: service.authData,
+			method: data.method,
+			params: data.parameters,
+			user: {userId: req.userId}
+		};
+		file.request(options, function (err, result) {
+			if (err) {
+				return res.status(200).json({ok:false, err: err});
+			}
 
-		res.send({ok: true, data: result});
-	});
-});
-router.post('/services.search', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
-	let data = res.locals.data;
-	let service = res.locals.service;
-	let file = res.locals.file;
-	let options = {
-		authData: service.authData,
-		params: data,
-		user: {userId: req.userId},
-		service: {serviceId: service.id}
-	};
-	file.search(options, function (err, result) {
-		if (err) {
-			return res.status(200).json({ok:false, err: err});
-		}
+			res.send({ok: true, data: result});
+		});
+	}
+);
 
-		res.send({ok: true, data: result});
-	});
-});
+router.post('/services.search',
+	serviceUtil.validateData,
+	serviceUtil.getServiceWithAuth,
+	serviceUtil.requireService,
+	(req, res, next) => {
+		const data = res.locals.data;
+		const service = res.locals.service;
+		const file = res.locals.file;
+		const options = {
+			authData: service.authData,
+			params: data,
+			user: {userId: req.userId},
+			service: {serviceId: service.id}
+		};
+		file.search(options, function (err, result) {
+			if (err) {
+				return res.status(200).json({ok:false, err: err});
+			}
 
-router.post('/services.stream', serviceUtil.validateData, serviceUtil.getServiceWithAuth, serviceUtil.requireService, (req, res, next) => {
-	let data = res.locals.data;
-	let service = res.locals.service;
-	let file = res.locals.file;
-	let options = {
-		authData: service.authData,
-		method: data.method,
-		params: data.parameters || {},
-		user: {userId: req.userId},
-		service: {serviceId: service.id}
-	};
-	let passStream = new stream.PassThrough();
+			res.send({ok: true, data: result});
+		});
+	}
+);
 
-	file.stream(options, passStream, function (err) {
-		if (err) {
-			res.status(200).json({ok: false, error: err});
-		}
-	});
+router.post('/services.stream',
+	serviceUtil.validateData,
+	serviceUtil.getServiceWithAuth,
+	serviceUtil.requireService,
+	(req, res, next) => {
+		const data = res.locals.data;
+		const service = res.locals.service;
+		const file = res.locals.file;
+		const options = {
+			authData: service.authData,
+			method: data.method,
+			params: data.parameters || {},
+			user: {userId: req.userId},
+			service: {serviceId: service.id}
+		};
+		const passStream = new stream.PassThrough();
 
-	passStream.pipe(res);
-})
+		file.stream(options, passStream, function (err) {
+			if (err) {
+				res.status(200).json({ok: false, error: err});
+			}
+		});
+
+		passStream.pipe(res);
+	}
+)
 
 /*
 	authsuccess should be called after
 */
 
-router.post('/services.authsuccess', serviceUtil.validateData, serviceUtil.getService, serviceUtil.requireService, serviceUtil.getAuthData, serviceUtil.updateAuthData);
+router.post('/services.authsuccess',
+	serviceUtil.validateData,
+	serviceUtil.getService,
+	serviceUtil.requireService,
+	serviceUtil.getAuthData,
+	serviceUtil.updateAuthData,
+	xendoSwipesCredentials,
+	xendoRefreshSwipesToken,
+	xendoAddServiceToUser,
+	(req, res, next) => {
+		return res.status(200).json({ok: true});
+	}
+);
 
 /*
 	This is for sysadmin only!
 */
 router.post('/services.install', isAdmin, (req, res, next) => {
 	console.log('service');
-	let manifestId = req.body && req.body.manifest_id;
+	const manifestId = req.body && req.body.manifest_id;
 
 	if (!manifestId) {
 		return res.status(200).json({ok: false, err: 'manifest_id is required'});
 	}
 
-	let getServiceQ =
+	const getServiceQ =
 		r.table('services')
 			.getAll(manifestId, {index: 'manifest_id'})
 			.nth(0)
@@ -105,13 +137,13 @@ router.post('/services.install', isAdmin, (req, res, next) => {
 			serviceId = generateId('S');
 		}
 
-		let manifest = JSON.parse(util.getFile(serviceDir + manifestId + '/manifest.json'));
+		const manifest = JSON.parse(util.getFile(serviceDir + manifestId + '/manifest.json'));
 
 		if (!manifest) {
 			return Promise.reject({ok: false, err: 'no_manifest_found'});
 		}
 
-		let updateObj = {
+		const updateObj = {
 			id: serviceId,
 			title: manifest.title,
 			manifest_id: manifest.identifier,
