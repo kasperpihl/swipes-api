@@ -46,7 +46,7 @@ class SearchResults extends Component {
     if (!results) {
       return (
         <div className="search-empty-state">
-          start typing to search
+          type and press enter to search
         </div>
       )
     }
@@ -65,7 +65,7 @@ class SearchResults extends Component {
           	<div className="face__mouth"></div>
           </div>
 
-          <div className="search-no-results__text">These are not the files you were looking for!</div>
+          <div className="search-no-results__text">Here are not the things you are looking for!</div>
         </div>
       )
     }
