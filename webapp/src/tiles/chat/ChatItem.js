@@ -90,8 +90,8 @@ class ChatItem extends Component {
 
     return (
       <div id={ts} className="message-wrapper">
-        <div className="chat__message--content" data-timestamp={timeStr}>
-          <div className="chat__message--content--text">
+        <div className="chat__message--content">
+          <div className="chat__message--content--text" data-timestamp={timeStr}>
             {text}
           </div>
           {this.renderCards()}
