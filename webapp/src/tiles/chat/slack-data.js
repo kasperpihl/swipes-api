@@ -1,4 +1,4 @@
-import { bindAll, indexBy } from '../../classes/utils'
+import { bindAll, indexBy, randomString } from '../../classes/utils'
 import { getTimeStr, dayStringForDate, startOfDayTs, isAmPm } from '../../classes/time-utils'
 import SlackSocket from './slack-socket'
 import SlackSwipesParser from './slack-swipes-parser'
@@ -7,7 +7,7 @@ export default class SlackData {
   constructor(swipes, data, delegate){
     this.swipes = swipes;
     this.data = data || {};
-    this.data.unsentMessageQueue = this.data.unsentMessageQueue || [];
+    this.sendingMessagesQueue = [];
 
     this.typingUsers = {};
     bindAll(this, ['start', 'handleMessage', 'uploadFiles', 'markAsRead', 'getUserFromId', 'titleForChannel', 'fetchMessages', 'setChannel', 'deleteMessage', 'editMessage', 'openImage', 'loadPrivateImage', 'userTyping', 'userTypingLabel', 'sendTypingEvent', 'destroy'])
@@ -28,8 +28,8 @@ export default class SlackData {
     if(data.channels || data.selectedChannelId){
       this.data.sectionsSidemenu = data.sectionsSidemenu = this.parser.sectionsForSidemenu(this.data);
     }
-    if( data.messages || data.unreadIndicator || data.isSendingMessage || data.unsentMessageQueue ){
-      this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data);
+    if( data.messages || data.unreadIndicator ){
+      this.data.sortedMessages = data.sortedMessages = this.parser.sortMessagesForSwipes(this.data, this.sendingMessagesQueue);
     }
     this.delegate(JSON.parse(JSON.stringify(data)), options);
   }
@@ -125,52 +125,101 @@ export default class SlackData {
     });
 
   }
-  _sendNextMessage(item){
- 
-    if(item){
-      this.saveData({unsentMessageQueue: this.data.unsentMessageQueue.concat([item])});
+  uploadFiles(files, callback){
+    console.log('uploading', files)
+    const file = files[0];
+    const token = this.swipes.info.slackToken;
+    const formData = new FormData();
+    formData.append("token", token);
+    formData.append("channels", this.data.selectedChannelId);
+    formData.append("filename", file.name);
+    formData.append("title", file.name);
+    formData.append("file", file);
+    
+    const item = {
+      type: 'file',
+      message: file.name,
+      status: 'Uploading'
     }
-    const { isSendingMessage, unsentMessageQueue } = this.data;
-
-    const nextItem = unsentMessageQueue[0];
-    if(!nextItem || isSendingMessage){
-      return;
-    }
-    let dataToSave = { isSendingMessage: true };
-    const { message, channel } = nextItem;
-    if(nextItem.failed){
-      nextItem.failed = false;
-      dataToSave.unsentMessageQueue = unsentMessageQueue;
-    }
-    this.saveData(dataToSave);
-    this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel, as_user: true, link_names: 1}, (res, err) => {
-      const data = { isSendingMessage: false };
-      if(res && res.ok){
-        this.markAsRead(res.data.ts);
-        data.unsentMessageQueue = this.data.unsentMessageQueue.slice(1);
-        this.swipes.sendEvent('analytics.action', {name: "Send message"});
-        //this.onMarkAsRead(res.data.ts);
-        this.saveData(data);
-        this._sendNextMessage();
+    let uploadingId = this.addItemToQueue(item);
+    this.__tempSlackUpload(formData, (res, err) => {
+      if(res.ok){
+        this.removeItemFromQueue(uploadingId);
       }
       else{
-        console.log('failed to send!');
-        data.unsentMessageQueue = this.data.unsentMessageQueue;
-        data.unsentMessageQueue[0].failed = true;
-        this.saveData(data);
+        this.updateItemInQueue(uploadingId, {status: 'Failed'});
       }
-      
+      if(callback){
+        callback(res, err);
+      }
     });
   }
   sendMessage(message){
     if(message){
-      const { selectedChannelId:channel } = this.data;
-      this._sendNextMessage({ message, channel });
+      this.addItemToQueue({type: 'message', 'status': 'Waiting', message: message});
     }
-    else{
-      this._sendNextMessage();
-    } 
+    this._sendNextMessage(); 
   }
+  _sendNextMessage(){
+
+    const nextItem = this.getNextItemFromQueue('message', this.data.selectedChannelId);
+    if(!nextItem || nextItem.status === 'Sending'){
+      return;
+    }
+    const { id, message, channel } = nextItem;
+
+    this.updateItemInQueue(id, {status: 'Sending'});
+    this.swipes.service('slack').request('chat.postMessage', {text: encodeURIComponent(message), channel: channel, as_user: true, link_names: 1}, (res, err) => {
+      if(res && res.ok){
+        this.markAsRead(res.data.ts);
+        this.removeItemFromQueue(id);
+        this.swipes.sendEvent('analytics.action', {name: "Send message"});
+
+        this._sendNextMessage();
+      }
+      else{
+        console.log('updating failed item', id);
+        this.updateItemInQueue(id, {status: 'Failed'});
+      }
+      
+    });
+  }
+  addItemToQueue(item){
+    item.id = randomString(6);
+    item.channel = this.data.selectedChannelId;
+    item.createdAt = new Date().getTime();
+    this.sendingMessagesQueue.push(item);
+    this.updateSortedMessages();
+    return item.id;
+  }
+  getNextItemFromQueue(type, channel){
+    let foundItem;
+    this.sendingMessagesQueue.forEach((item) => {
+      if(!foundItem && item.type === type && item.channel === channel){
+        foundItem = item;
+      }
+    })
+    return foundItem;
+  }
+  removeItemFromQueue(id){
+    this.sendingMessagesQueue = this.sendingMessagesQueue.filter((i) => i.id != id)
+    this.updateSortedMessages();
+  }
+  updateItemInQueue(id, data){
+    this.sendingMessagesQueue = this.sendingMessagesQueue.map((i) => {
+      if(id === i.id){
+        i = Object.assign(i, data);
+      }
+      return i;
+    })
+    this.updateSortedMessages();
+  }
+  updateSortedMessages(){
+    const sortedMessages = this.parser.sortMessagesForSwipes(this.data, this.sendingMessagesQueue);
+    this.saveData({ sortedMessages });
+  }
+  
+  
   deleteMessage(timestamp){
     const { selectedChannelId } = this.data;
     const messages = this.data.messages.filter((obj) => (obj.ts !== timestamp));
@@ -363,18 +412,6 @@ export default class SlackData {
       //console.log(error);
     })
   }
-  uploadFiles(files, callback){
-    console.log('uploading', files)
-    const file = files[0];
-    const token = this.swipes.info.slackToken;
-    const formData = new FormData();
-    formData.append("token", token);
-    formData.append("channels", this.data.selectedChannelId);
-    formData.append("filename", file.name);
-    formData.append("title", file.name);
-    formData.append("file", file);
-    this.__tempSlackUpload(formData, callback);
-  }
   
   
   
@@ -387,7 +424,7 @@ export default class SlackData {
     xhr.open('POST', url, true);
 
     xhr.onload = function(e) {
-      var data = e.currentTarget.response;
+      var data = JSON.parse(e.currentTarget.response);
       console.log('slack /files.upload success', data);
       if(typeof callback === 'function'){
         if(data && data.ok){
