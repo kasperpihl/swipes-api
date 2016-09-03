@@ -4,6 +4,17 @@
   "description": "Swipes Webapp",
   "author": "Swipes Team",
   "license": "MIT",
+  "scripts": {
+    "clean-and-copy": "npm run clean:dist && npm run copy:dist",
+    "clean:dist": "rimraf dist",
+    "copy:dist": "ncp statics dist",
+
+    "prestart": "npm run clean-and-copy",
+    "start": "webpack-dev-server",
+
+    "prebuild": "npm run clean-and-copy",
+    "build": "webpack --progress"
+  },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
     "clone": "^1.0.2",
@@ -55,14 +66,5 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "scripts": {
-    "clean-and-copy": "npm run clean:dist && npm run copy:dist",
-    "clean:dist": "rimraf dist",
-    "copy:dist": "ncp statics dist",
-    "prestart": "npm run clean-and-copy",
-    "start": "webpack-dev-server",
-    "prebuild": "npm run clean-and-copy",
-    "build": "webpack --env.dev"
   }
 }
