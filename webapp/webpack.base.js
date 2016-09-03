@@ -5,7 +5,11 @@ var NODE_ENV = process.env.NODE_ENV;
 
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-
+ const apiRedirect = {
+  target: 'http://localhost:5000',
+  secure: false,
+  xfwd: false
+}
 module.exports = {
   context: __dirname,
   devtool: 'eval',
@@ -53,5 +57,19 @@ module.exports = {
         loader: 'style!css!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded'
       }
     ]
+  },
+  devServer: {
+    publicPath: '/',
+    port: 3000,
+    progress:true,
+    open: true,
+    contentBase: './dist',
+    inline: true,
+    historyApiFallback: true,
+    proxy: {
+      '/v1*': Object.assign({}, apiRedirect),
+      '/socket.io*': Object.assign({}, apiRedirect, {ws: true}),
+      '/s/*': Object.assign({}, apiRedirect)
+    }
   }
 };

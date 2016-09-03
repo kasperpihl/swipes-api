@@ -18,28 +18,7 @@ config.plugins = config.plugins.concat([
 // Add the hot reloader to dev environ
 const currentJS = config.module.loaders[0].loaders;
 config.module.loaders[0].loaders = ['react-hot-loader/webpack'].concat(currentJS)
-
-
-const apiRedirect = {
-  target: 'http://localhost:5000',
-  secure: false,
-  xfwd: false
-}
-config.devServer = {
-  publicPath: '/',
-  hot: true,
-  port: 3000,
-  progress:true,
-  open: true,
-  contentBase: './dist',
-  inline: true,
-  historyApiFallback: true,
-  proxy: {
-    '/v1*': Object.assign({}, apiRedirect),
-    '/socket.io*': Object.assign({}, apiRedirect, {ws: true}),
-    '/s/*': Object.assign({}, apiRedirect)
-  }
-}
+config.devServer.hot = true;
 
 
 module.exports = config;
