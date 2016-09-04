@@ -45,12 +45,23 @@ module.exports = {
         test: /\.svg(\?.*)?$/,
         loader: 'babel!svg-react'
       },
-      { test: /\.(ttf|woff|woff2)?$/,
-        loader: 'file?name=fonts/[name].[hash:6].[ext]'
+      {
+        test: /\.woff2$/,
+        // Inline small woff files and output them below font/.
+        // Set mimetype just in case.
+        loader: 'url',
+        query: {
+          name: 'fonts/[name].[hash:6].[ext]',
+          limit: 50000,
+          mimetype: 'application/font-woff'
+        }
       },
+      /*{ test: /\.(ttf|woff|woff2)?$/,
+        loader: 'file?name=fonts/[name].[hash:6].[ext]'
+      },*/
       {
         test: /\.(png|jpg|jpeg|gif)?$/,
-        loader: 'url-loader?limit=10000&name=img/[name]-[hash:6].[ext]'
+        loader: 'url-loader?limit=50000&name=img/[name]-[hash:6].[ext]'
       },
       {
         test: /\.scss$/,

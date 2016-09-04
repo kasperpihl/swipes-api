@@ -6,7 +6,6 @@ import * as types from '../constants/ActionTypes'
 import { apiMiddleware } from 'redux-api-middleware';
 
 import persistState from 'redux-localstorage'
-import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 
