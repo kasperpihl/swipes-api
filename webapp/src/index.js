@@ -5,10 +5,6 @@ if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
 
-if(process.env.NODE_ENV !== 'production'){
-  require('./dev-setup');
-}
-
 // Include stylesheet (compile sass)
 import './components/global-styles/reset.scss'
 import './components/global-styles/app.scss'

@@ -1,1 +1,1 @@
-module.exports = process.env.NODE_ENV === 'production' ? require('./webpack.production.js') : require('./webpack.development.js');
+module.exports = process.env.NODE_ENV === 'production' ? require('./webpack.prod') : require('./webpack.dev');
