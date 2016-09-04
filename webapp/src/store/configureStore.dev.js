@@ -38,7 +38,7 @@ export default function configureStore(preloadedState) {
       createLogger({collapsed: true, duration: true, diff: true, predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1)
       })
     ),
-    persistState(null, {key: 'reduxState', slicer: persist}),
+    persistState(null, {key: 'redux-dev', slicer: persist}),
     devtool.instrument(),
     persistStateDevtools(getDebugSessionKey())
   )
