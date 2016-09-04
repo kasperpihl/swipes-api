@@ -11,7 +11,7 @@ class ChatList extends Component {
     this.hasRendered = false;
     bindAll(this, ['onScroll', 'scrollToBottom', 'handleResize', 'checkForMarkingAsRead'])
     this.bouncedScroll = debounce(this.scrollToBottom, 100);
-    const markAsRead = () => { 
+    const markAsRead = () => {
       if(this.props.markAsRead){
         this.props.markAsRead();
       }
@@ -29,9 +29,6 @@ class ChatList extends Component {
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
-  }
-  showUnreadAbove(){
-    //chatItems.push();
   }
   checkForMarkingAsRead(){
     const { unreadIndicator } = this.props;

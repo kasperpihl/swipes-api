@@ -1,13 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-
-import { browserHistory, Router, Route, IndexRoute } from 'react-router'
-
+import { Router, Route, IndexRoute } from 'react-router'
 
 import Registration from './containers/Registration';
 import App from './containers/App'
 import Workspace from './containers/Workspace'
 import Services from './containers/Services'
-
 
 export default class Root extends Component {
   constructor(props) {
@@ -29,7 +26,7 @@ export default class Root extends Component {
   }
   render() {
     return (
-      <Router history={browserHistory} >
+      <Router history={this.props.history} >
         <Route path="signin" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="/" component={App}>

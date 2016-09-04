@@ -3,10 +3,12 @@ import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
 import Chat from '../../tiles/chat/Chat'
 import Browser from '../../tiles/browser/Browser'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class LocalTile extends Component {
   constructor(props) {
     super(props)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     // Setup SDK for tile, make sure it sends commands back to us
     const sdkForTile = new SwipesAppSDK(props.receivedCommand);
     this.state = { sdkForTile }
@@ -35,7 +37,7 @@ class LocalTile extends Component {
 
       this.props.onLoad(sendFunction);
     }
-    
+
   }
   render() {
     const { tile } = this.props
@@ -55,6 +57,5 @@ LocalTile.propTypes = {
   receivedCommand: PropTypes.func.isRequired,
   tile: PropTypes.object.isRequired
 }
-
 
 export default LocalTile

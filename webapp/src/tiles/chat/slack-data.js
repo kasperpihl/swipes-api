@@ -74,7 +74,7 @@ export default class SlackData {
         }else{
           this.setChannel(this.data.channels[this.data.selectedChannelId], true);
         }
-        
+
       }
     })
   }
@@ -87,7 +87,6 @@ export default class SlackData {
     }
     const data = {
       selectedChannelId: channel.id,
-      messages: [],
       loadingMessages: true,
       unreadIndicator: {ts: channel.last_read}
     };
@@ -97,7 +96,7 @@ export default class SlackData {
   currentChannel(){
     return this.data.channels[this.data.selectedChannelId];
   }
-  
+
   markAsRead(ts){
     const { messages } = this.data;
     var channel = this.currentChannel();
@@ -135,7 +134,7 @@ export default class SlackData {
     formData.append("filename", file.name);
     formData.append("title", file.name);
     formData.append("file", file);
-    
+
     const item = {
       type: 'file',
       message: file.name,
@@ -158,7 +157,7 @@ export default class SlackData {
     if(message){
       this.addItemToQueue({type: 'message', 'status': 'Waiting', message: message});
     }
-    this._sendNextMessage(); 
+    this._sendNextMessage();
   }
   _sendNextMessage(){
 
@@ -181,7 +180,7 @@ export default class SlackData {
         console.log('updating failed item', id);
         this.updateItemInQueue(id, {status: 'Failed'});
       }
-      
+
     });
   }
   addItemToQueue(item){
@@ -218,8 +217,8 @@ export default class SlackData {
     const sortedMessages = this.parser.sortMessagesForSwipes(this.data, this.sendingMessagesQueue);
     this.saveData({ sortedMessages });
   }
-  
-  
+
+
   deleteMessage(timestamp){
     const { selectedChannelId } = this.data;
     const messages = this.data.messages.filter((obj) => (obj.ts !== timestamp));
@@ -273,10 +272,10 @@ export default class SlackData {
 
         // If message is from someone else, and is not hidden
         if(msg.user !== self.id && !msg.hidden){
-          
+
           Object.assign(channel, {'unread_count_display': channel.unread_count_display + 1 })
           this.saveData({channels: channels});
-          
+
           // K_TODO: Test if msg.text exist, or generate it from attachment etc
           var text = msg.text;
           if(channel.is_im){
@@ -293,7 +292,7 @@ export default class SlackData {
             this.saveData({unreadIndicator: null, channels})
           }
           else{
-            
+
             if(document.hasFocus() && document.activeElement && document.activeElement.id  === 'chat-input'){
               this.markAsRead(msg.ts);
             }else{
@@ -314,14 +313,14 @@ export default class SlackData {
       // If a user marks a channel as unread back in time. Make sure to update the unread line.
       channel = channels[msg.channel];
       if(msg.channel === currChannel.id){
-        
+
         let newUnreadIndicator = {
           showAsRead: true,
         }
         if(unreadIndicator){
           newUnreadIndicator.ts = unreadIndicator.ts;
         }
-        
+
         if(unreadIndicator && (msg.ts < unreadIndicator.ts)){
           newUnreadIndicator.showAsRead = false;
           newUnreadIndicator.ts = msg.ts;
@@ -412,9 +411,9 @@ export default class SlackData {
       //console.log(error);
     })
   }
-  
-  
-  
+
+
+
   // T_INFO // We should replace these once we can upload directly through our service
   // Though, the request might come in handy for how to send the request since they use formData for files.
   __tempSlackUpload(formData, callback){

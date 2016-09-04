@@ -43,7 +43,7 @@ class DropzoneOverlay extends Component {
 
     return (
       <div className="swipes-dropzone">
-        <DropzoneElement title={title} />
+        <DropzoneElement title={title} hover={hover} />
       </div>
     )
   }
