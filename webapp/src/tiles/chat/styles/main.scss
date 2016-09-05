@@ -25,12 +25,12 @@
 .typing-indicator {
   @include size(700px, auto);
   position: absolute;
-  left: 50%;
-  transform: translate(-50%);
+  right: 0;
+  z-index: 3;
   font-size: 12px;
   color: $deepBlue-40;
-  bottom: 60px;
-  padding-left: 58px;
+  bottom: 68px;
+  padding-right: 68px;
 }
 
 .new-message-header {
