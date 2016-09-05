@@ -23,10 +23,24 @@ class Topbar extends Component {
   }
   componentDidMount() {
     this.gradientStep();
+    window.addEventListener('keydown', this.navigateTopbar.bind(this), this.props);
   }
   componentDidUpdate(prevProps){
     if(this.props.isFinding && !prevProps.isFinding && document.activeElement !== this.refs.searchInput){
       this.refs.searchInput.select()
+    }
+  }
+  navigateTopbar(e) {
+    if(((e.ctrlKey || e.metaKey) && e.keyCode === 83) && !this.props.isFinding) {
+      this.props.toggleFind()
+    }
+
+    if (e.keyCode === 27 && this.props.isFinding) {
+      this.props.toggleFind()
+    }
+
+    if (((e.ctrlKey || e.metaKey) && e.keyCode === 78)) {
+      this.props.loadTilesListModal();
     }
   }
   onKeyDown(e){
