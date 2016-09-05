@@ -11,20 +11,11 @@ $inputButtonWidth: 50px;
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%) translateY(20px);
+  transform: translateX(-50%);
   z-index: 99;
   box-shadow: 0px -1px 9px 1px rgba($deepBlue-100,0.10);
-  overflow: hidden;
-  transition: .3s;
 
   &.focused {
-    transform: translateX(-50%) translateY(0px);
-    transition: .3s;
-
-    textarea, .send-button, .attach-icon {
-      transform: translateY(0px);
-    }
-
     .attach-icon {
       background-color: $blue-100;
       @include border-radius(6px,0,0,0);
@@ -66,9 +57,6 @@ $inputButtonWidth: 50px;
     top: 0;
     cursor: default;
     @include flex(center, center);
-    // opacity: 0;
-    transform: translateY(-8px);
-    transition: .1s, transform .3s;
 
     .material-icons {
       font-size: 20px !important;
@@ -102,8 +90,7 @@ $inputButtonWidth: 50px;
     font-weight: 500;
     color: $deepBlue-60;
     line-height: 15px;
-    transition: .3s ease-in-out;
-    transform: translateY(-8px);
+    transition: .1s ease-in-out;
 
     &::-webkit-input-placeholder {
        color: $deepBlue-40;
