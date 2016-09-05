@@ -171,7 +171,7 @@ class Chat extends Component {
       paddingBottom += 14;
     }
     return (
-      <div style={{height :'100%', paddingBottom: paddingBottom + 'px'}}>
+      <div style={{position: 'relative', height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
         {this.renderUnreadAbove()}
         <ChatList

@@ -31,7 +31,7 @@ export default class Signin extends Component {
             <h2>sign in to swipes</h2>
             <form action="" onSubmit={this.preventSubmit}>
               <br/>
-              <FloatingInput label="Email" type="text" id="email" ref="username" />
+              <FloatingInput label="Email" type="email" id="email" ref="username" />
               <FloatingInput label="Password" type="password" id="password" ref="password" />
               <br/>
               <input type="submit" className="login-submit" value="SIGN IN" onClick={this.signin.bind(this)}/>

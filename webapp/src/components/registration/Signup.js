@@ -49,7 +49,7 @@ export default class Signup extends Component {
 
 
               <FloatingInput label="Your Name" type="text" id="name" ref="name" />
-              <FloatingInput label="Email" type="text" id="email" ref="email" />
+              <FloatingInput label="Email" type="email" id="email" ref="email" />
               <FloatingInput label="Password" type="password" id="password" ref="password" />
               <FloatingInput label="Invitation Code" type="text" id="invitation" ref="invcode" />
               <br/>
