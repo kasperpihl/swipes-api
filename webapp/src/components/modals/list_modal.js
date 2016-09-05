@@ -29,7 +29,7 @@ var ListModal = React.createClass({
 
 		var emptyText = options.emptyText || this.defaults.emptyText;
 		if(!rows.length){
-			rows.push(<div className="list-modal-loader"> <Loader size={30} text={emptyText} /> </div>);
+			rows.push(<div key="list-loader" className="list-modal-loader"> <Loader size={30} text={emptyText} /> </div>);
 		}
 		var title = options.title || this.defaults.title;
 

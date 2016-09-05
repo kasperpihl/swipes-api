@@ -64,10 +64,13 @@ export default function workspace (state = initialState, action) {
       tiles = clone(state.tiles);
       tiles[msg.data.id] = Object.assign({}, tiles[msg.data.id], msg.data);
       break;
+    case types.REMOVE_TILE:
     case 'workflow_removed': // Socket Event
       msg = action.payload;
-      tiles = clone(state.tiles);
-      delete tiles[msg.data.id];
+      if(state.tiles[msg.data.id]){
+        tiles = clone(state.tiles);
+        delete tiles[msg.data.id];
+      }
       break;
     
     case types.LOGOUT:{

@@ -113,7 +113,7 @@ class Tile extends Component {
   }
   renderServiceSelector(tile){
     // Determine if the selected account is still a service.
-    if(tile.required_services.length > 0){
+    if(tile.required_services && tile.required_services.length > 0){
       // Find services from the required services
       const services = this.props.services.filter( ({service_name}) => (service_name === tile.required_services[0]))
       // Check if a the selected account exist

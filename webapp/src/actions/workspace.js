@@ -5,7 +5,11 @@ export function renameTile(tile, name) {
   return request('users.renameWorkflow', { 'workflow_id': tile.id, name })
 }
 export function removeTile(tile) {
-  return request('users.removeWorkflow', { 'workflow_id': tile.id})
+  return (dispatch, getState) => {
+    dispatch({type: types.REMOVE_TILE, payload: {data: {id: tile.id}}}).then(() => {
+      dispatch(request('users.removeWorkflow', { 'workflow_id': tile.id}));
+    })
+  }
 }
 
 export function selectAccount(tile, accountId){

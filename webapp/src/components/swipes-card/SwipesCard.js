@@ -17,8 +17,6 @@ import SwipesCardItem from './SwipesCardItem';
 export default class SwipesCard extends Component {
   constructor(props){
     super(props);
-    this.state = { data: props.data };
-    
     bindAll(this, ['callDelegate'])
   }
   componentDidMount(){
@@ -36,7 +34,7 @@ export default class SwipesCard extends Component {
 
   }
   render () {
-    const { data } = this.state;
+    const { data } = this.props;
 
     return (
       <div className="swipes-card">

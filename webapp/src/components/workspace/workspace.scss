@@ -237,14 +237,14 @@
     z-index: 2;
   }
 
-  &:hover > &__background {
+  &.hover > &__background {
     backface-visibility: hidden;
     box-shadow: 0px 1px 30px 10px rgba($deepBlue-100, 0.16);
     transform: scale(1.02) translateZ(0);
     transition: .15s ease-in-out;
   }
 
-  &:hover & {
+  &.hover & {
 
     &__icon {
 

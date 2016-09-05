@@ -47,6 +47,7 @@ router.post('/users.list', (req, res, next) => {
 
 router.post('/users.addWorkflow', (req, res, next) => {
   const userId = req.userId;
+  const tempId = req.temp_id;
   const manifestId = req.body.manifest_id;
   const settings = req.body.settings || {};
   const getWorkflowQ =
@@ -79,7 +80,7 @@ router.post('/users.addWorkflow', (req, res, next) => {
       return db.rethinkQuery(appendWorkflowQ);
     })
     .then(() => {
-      return res.status(200).json({ok: true});
+      return res.status(200).json({ok: true, temp_id: tempId});
     })
     .catch((err) => {
       return next(err);

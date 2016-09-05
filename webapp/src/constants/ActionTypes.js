@@ -24,3 +24,4 @@ export const API_ERROR = 'API_ERROR'
 // Workspace
 export const UPDATE_COLUMNS = 'UPDATE_COLUMNS'
 export const TILE_SAVE_DATA = 'TILE_SAVE_DATA'
+export const REMOVE_TILE = 'REMOVE_TILE'

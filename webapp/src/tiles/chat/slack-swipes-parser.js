@@ -202,7 +202,7 @@ export default class SlackSwipesParser {
     this.lastGroup = group;
     return { group , newMsg: newMsg};
   }
-  sortMessagesForSwipes(data){
+  sortMessagesForSwipes(data, sendingMessagesQueue){
     const { messages, bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId, unreadIndicator } = data;
     if(!messages || !messages.length)
       return [];
@@ -241,34 +241,39 @@ export default class SlackSwipesParser {
       const sectMessages = groups[key];
       return {"title": title, "messages": sectMessages };
     });
-
-    const sendingMessages = unsentMessageQueue.filter((item) => item.channel === selectedChannelId).map(({ message, failed }, i) => {
-
+    const sendingMessages = sendingMessagesQueue.map((item, i) => {
       const newMsg = {
-        text: this.renderTextWithLinks(this.replaceNewLines(message), users),
-        timeStr: 'Sending...',
+        timeStr: item.status,
         name: self.name,
         key: 'unsent-' + i,
         profileImage: DEFAULT_PROFILE
       }
-      if(i > 0){
-        newMsg.timeStr = 'Waiting';
-        newMsg.dontRenderProfile = true;
-      }
-      if(failed){
-        newMsg.timeStr = ['Failed. ', { type: 'link', title: 'Retry?', data: 'swipes://retry-send' }];
-      }
       if(users[self.id].profile){
         newMsg.profileImage = users[self.id].profile.image_48;
       }
+      if(i > 0){
+        newMsg.dontRenderProfile = true;
+      }
 
+      if(item.type === 'file'){
+        newMsg.cards = [{ title: item.message, subtitle: item.status }]
+        if(item.status == 'Failed'){
+          // Do something when file fails....
+        }
+      }
+      else if(item.type === 'message'){
+        newMsg.text = item.message;
+        if(item.status == 'Failed'){
+          newMsg.text = [item.message, ' ', { type: 'link', title: 'Retry', data: 'swipes://retry-send' }];
+        }
+      }
       return newMsg;
     })
+    
     const lastSection = sortedSections[sortedSections.length - 1]
     if(sendingMessages.length){
       lastSection.messages = lastSection.messages.concat(sendingMessages);
     }
-
 
     return sortedSections;
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Dot from './dot';
+import Dot from './Dot';
 import RadialMenu from './RadialMenu';
 import GridMenu from './GridMenu';
 import Overlay from './Overlay';
@@ -38,7 +38,7 @@ const SwipesDot = React.createClass({
       hoverParent.addEventListener('mouseenter', this.onMouseEnterParent);
       hoverParent.addEventListener('mouseleave', this.onMouseLeaveParent);
     }
-    
+
   },
   onMouseEnterParent() {
     this.setState({

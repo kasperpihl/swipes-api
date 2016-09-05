@@ -10,15 +10,20 @@ class SwipesCardItem extends Component {
     this.id = randomString(5);
   }
   updateData(data){
-    const newData = Object.assign(this.props.data, data);
+    const newData = Object.assign(this.state.data, data);
     this.setState({ data:newData });
   }
   componentDidMount(){
     const { data } = this.props;
     if(data.shortUrl){
       window.swipesUrlProvider.subscribe(data.shortUrl, this.updateData, this.id);
+    } 
+  }
+  componentDidUpdate(prevProps){
+    if(JSON.stringify(this.props.data) !== JSON.stringify(prevProps.data)){
+      const newData = Object.assign(this.state.data, this.props.data);
+      this.setState({ data: newData });
     }
-    
   }
   componentWillUnmount(){
     const { data, callDelegate } = this.props;

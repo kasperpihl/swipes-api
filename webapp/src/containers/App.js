@@ -6,6 +6,10 @@ import Topbar from './Topbar'
 import Find from './Find'
 import Modal from './Modal'
 import DotDragOverlay from './DotDragOverlay'
+let DevTools = 'div';
+if(process.env.NODE_ENV !== 'production'){
+  DevTools = require('../DevTools');
+}
 
 class App extends Component {
   componentDidMount() {
@@ -22,6 +26,7 @@ class App extends Component {
         <Find />
         <Modal />
         <DotDragOverlay />
+        <DevTools />
       </div>
     );
   }

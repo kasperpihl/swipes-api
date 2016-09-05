@@ -27,8 +27,8 @@ export function startDraggingDot(draggingId, data){
 export function stopDraggingDot(){
   return { type: types.SET_DRAGGING_DOT, value: false }
 }
-export function dragDot(clientX, clientY, hoverTarget){
-  return { type: types.DRAG_DOT, clientX, clientY, hoverTarget }
+export function dragDot(hoverTarget){
+  return { type: types.DRAG_DOT, hoverTarget }
 }
 
 
