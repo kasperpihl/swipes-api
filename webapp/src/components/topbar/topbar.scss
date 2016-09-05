@@ -67,7 +67,6 @@ $fullscreenTopbarSize: 70px;
 
 		&__title {
 			@include flex(center, center);
-	    font-family: 'Aktiv-Grotesk';
 	    font-size: 12px;
 	    font-weight: bold;
 	    height: $topbarSize;
@@ -80,7 +79,6 @@ $fullscreenTopbarSize: 70px;
 
 		&__tile-title {
 			@include flex(center, center);
-			// background-color: red;
 			position: absolute;
 			left: 0;
 			top: 0;

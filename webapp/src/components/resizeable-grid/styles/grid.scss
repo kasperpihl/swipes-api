@@ -187,20 +187,12 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       content: "";
       position: absolute;
       top: 0;
-      @include size(1px, 100%);
+      @include size(4px, 100%);
       left: 50%;
       transform: translateX(-50%);
       background-color: $deepBlue-10;
       cursor: col-resize;
       transition: .2s ease-in-out;
-    }
-
-    &:hover {
-
-      &:after {
-        width: 4px;
-        transition: .2s ease-in-out;
-      }
     }
   }
 
@@ -209,14 +201,14 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
     position: absolute;
     left: 0;
     top: calc(0px - 8px);
-    z-index: 3;
+    z-index: 99;
     transition: .1s calc(#{$transitionTime} - .2);
 
     &:after {
       content: "";
       position: absolute;
       top: 50%;
-      @include size(100%, 2px);
+      @include size(100%, 8px);
       left: 0;
       transform: translateY(-50%);
       transform-origin: 50% 50%;
@@ -224,15 +216,6 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
       cursor: row-resize;
       will-change: height;
       transition: .2s ease-in-out;
-    }
-
-    &:hover {
-
-      &:after {
-        transform-origin: 50% 50%;
-        transform: translateY(-50%) scaleY(4);
-        transition: .2s ease-in-out;
-      }
     }
   }
 }
