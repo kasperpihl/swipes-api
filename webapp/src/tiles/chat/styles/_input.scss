@@ -1,29 +1,28 @@
-$inputHeight: 60px;
+$inputHeight: 50px;
 $inputButtonWidth: 50px;
 
 .chat-input {
   @include size(100%, $inputHeight);
   max-width: 600px;
   background-color: #fbfbfb;
-  border: 2px solid $deepBlue-10;
-  border-bottom: none;
-  @include border-radius(6px,6px,0,0);
+  border: 1px solid $deepBlue-10;
+  // border-bottom: none;
+  @include border-radius(6px,6px,6px,6px);
   position: fixed;
-  bottom: 0;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 99;
-  box-shadow: 0px -1px 9px 1px rgba($deepBlue-100,0.10);
+  // box-shadow: 0px -1px 9px 1px rgba($deepBlue-100,0.10);
+  // box-shadow: $swipes-shadow-one;
 
   &.focused {
     .attach-icon {
       background-color: $blue-100;
-      @include border-radius(6px,0,0,0);
-      border: 2px solid $blue-100;
-      border-bottom: none;
-      border-right: none;
-      box-sizing: content-box;
-      margin-left: -2px;
+      @include border-radius(6px,0,6px,0);
+      border: 1px solid $blue-100;
+      box-sizing: border-box;
+      margin-left: -1px;
       margin-top: 0px;
 
       .material-icons {
@@ -31,10 +30,8 @@ $inputButtonWidth: 50px;
       }
 
       &:hover {
-        border: 2px solid $blue-80;
+        border: 1px solid $blue-80;
         background-color: $blue-80;
-        border-bottom: none;
-        border-right: none;
 
         .material-icons {
           color: white !important;
@@ -70,8 +67,9 @@ $inputButtonWidth: 50px;
 
   .attach-icon {
     left: 0;
-    border-right: 2px solid $deepBlue-10;
+    border-right: 1px solid $deepBlue-10;
     background-color: $deepBlue-5;
+    @include border-radius(6px,0,6px,0);
   }
 
   .send-button {
@@ -82,7 +80,7 @@ $inputButtonWidth: 50px;
     width: calc(100% - 2 * #{$inputButtonWidth});
     resize: none;
     outline: none;
-    min-height: 100%;
+    min-height: $inputHeight;
     margin-left: $inputButtonWidth;
     font-size: 13px;
     padding: 22px 5px;

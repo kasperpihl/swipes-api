@@ -31,7 +31,7 @@ class Topbar extends Component {
     }
   }
   navigateTopbar(e) {
-    if(((e.ctrlKey || e.metaKey) && e.keyCode === 83) && !this.props.isFinding) {
+    if(((e.ctrlKey || e.metaKey) && e.keyCode === 70) && !this.props.isFinding) {
       this.props.toggleFind()
     }
 
