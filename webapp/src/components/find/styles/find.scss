@@ -31,6 +31,7 @@ $searchbarSize: 90px;
     transition: transform .3s .3s, visibility 0s .3s, opacity .2s;
     width:96%;
     display: flex;
+    will-change: transform;
 
     .swipes-activities, .swipes-search-results {
       &__header {
