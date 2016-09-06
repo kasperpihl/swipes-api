@@ -46,6 +46,7 @@
       font-size: 12px;
       font-weight: 700;
       color: $deepBlue-100;
+      transform: translateY(-2px);
 
       &:first-letter {
         text-transform: uppercase;
@@ -58,6 +59,7 @@
       font-weight: 500;
       // text-transform: uppercase;
       color: $deepBlue-40;
+      transform: translateY(-2px);
     }
   }
 
