@@ -34,10 +34,12 @@
 }
 
 .new-message-header {
-    @include size(100%, 4px);
-    border-bottom: 1px solid $red;
+    @include size(600px, 4px);
+    border-bottom: 1px solid #F44336;
     text-align: right;
-    position:relative;
+    position: relative;
+    margin: 0 auto;
+    transform: translateX(10px) translateY(5px);
 
     &:not(.read) + .date {
       color: $red !important;
@@ -71,6 +73,7 @@
     position: relative;
     margin-left: 30px;
     @include flex(center, center);
+    transform: translateY(3px);
 
     .line {
       @include size(100%, 1px);
