@@ -1,0 +1,25 @@
+@import '../../components/global-styles/vars';
+@import '../../components/global-styles/mixins';
+
+.goals-container{
+  height: 100%;
+  .goals-wrapper{
+    margin: 20px auto;
+    max-width: 500px;
+    .swipes-card{
+      margin-bottom: 10px;
+    }
+    .add-new-goal {
+      @include flex(center, center);
+      width: 150px !important;
+      padding: 10px 20px !important;
+      background-color: $blue-100;
+      border-radius: 6px;
+      color: white;
+
+      &:hover {
+        background-color: $blue-80;
+      }
+    }
+  }
+}

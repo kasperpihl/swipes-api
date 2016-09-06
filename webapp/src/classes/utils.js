@@ -51,6 +51,21 @@ export function indexBy(arr, iterator){
   return object;
 }
 
+export function decodeHtml(text) {
+  var replacements = [
+    ['amp', '&'],
+    ['apos', '\''],
+    ['lt', '<'],
+    ['gt', '>']
+  ];
+
+  replacements.forEach(function(replace){
+    text = text.replace(new RegExp('&'+replace[0]+';', 'g'), replace[1]);
+  });
+
+  return text;
+};
+
 export function debounce(func, wait, immediate){
   var timeout, args, context, timestamp, result;
   if (null == wait) wait = 100;

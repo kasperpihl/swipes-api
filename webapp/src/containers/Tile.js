@@ -67,19 +67,19 @@ class Tile extends Component {
     this.addListenersToCommunicator();
   }
   addListenersToCommunicator(){
-    const { tile, sendNotification, startDraggingDot, saveData } = this.props
+    const { tile, sendNotification, startDraggingDot, saveData, loadModal } = this.props
     this.com.addListener('navigation.setTitle', (data) => {
       if (data.title) {
         //this.setState({"titleFromCard": data.title});
       }
     });
 
-    this.com.addListener('tile.saveData', (data, clear) => {
-      saveData(tile.id, data, clear);
+    this.com.addListener('tile.saveData', (data) => {
+      saveData(tile.id, data);
     });
 
-    this.com.addListener('modal.load', (data) => {
-      modal.loadModal(data.modal, data.options, callback);
+    this.com.addListener('modal.load', (data, callback) => {
+      loadModal(data.modal, data.options, callback);
     });
 
     this.com.addListener('openURL', (data) => {
@@ -197,6 +197,7 @@ function mapStateToProps(state, ownProps) {
 const ConnectedTile = connect(mapStateToProps, {
   selectAccount: workspace.selectAccount,
   saveData: workspace.saveData,
+  loadModal: modal.loadModal,
   sendNotification: main.sendNotification,
   startDraggingDot: main.startDraggingDot
 })(Tile)

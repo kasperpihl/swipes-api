@@ -31,7 +31,7 @@ $pushDelay: .1s;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
 	transition-delay: $returnDelay;
-
+	border-right: 1px solid #eee;
 	.relative-wrapper{
 		height:100%;
 		width:100%;
@@ -67,7 +67,7 @@ $pushDelay: .1s;
 		.scroller{
 			overflow-y: auto;
 		}
-		border-right: 1px solid #eee;
+		//border-right: 1px solid #eee;
 		transform: translateX(0);
 		transition: 0.1s ease-in;
 		transition-delay: 0.05s;

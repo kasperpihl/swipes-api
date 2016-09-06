@@ -3,6 +3,7 @@ import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
 import Chat from '../../tiles/chat/Chat'
 import Browser from '../../tiles/browser/Browser'
+import Goals from '../../tiles/goals/Goals'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class LocalTile extends Component {
@@ -19,7 +20,7 @@ class LocalTile extends Component {
       case 'slack-dashboard':
         return Chat;
       case 'browser-card':
-        return Browser;
+        return Goals;
       default:
         return null
     }
