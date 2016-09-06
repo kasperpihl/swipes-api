@@ -14,7 +14,7 @@ class Registration extends Component {
     super(props)
   }
   componentDidUpdate(){
-    { push, token } = this.props;
+    const { push, token } = this.props;
     if(token){
       push('/')
     }
