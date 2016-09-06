@@ -3,8 +3,12 @@ import React, { Component, PropTypes } from 'react'
 import Router from '../Router'
 import configureStore from '../store/configureStore'
 import { Provider } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 const store = configureStore()
+
+const history = syncHistoryWithStore(browserHistory, store)
 
 // Get classes that needs socket
 import Socket from '../classes/socket'
@@ -22,7 +26,7 @@ export default class Root extends Component {
     // Passing store to router, needs it to check if signed in.
     return (
       <Provider store={store}>
-        <Router store={store} />
+        <Router history={history} store={store} />
       </Provider>
     )
   }
