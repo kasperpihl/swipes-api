@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../../components/swipes-card/SwipesCard'
 import './goals.scss'
+import { bindAll } from '../../classes/utils'
+import GoalsModel from './goals-model'
+
 const goalData = {
   title: "Design Icons",
   description: "Get the final versions of the",
@@ -15,21 +18,33 @@ const goalData = {
     type: 'decision'
   }]
 }
-const initialData = [
-  { title: 'Design icons' },
-  { title: 'Investor presentation' },
-  { title: 'Business model' }
-]
 class Goals extends Component {
   constructor(props) {
     super(props)
-    this.state = {goals: initialData}
+    bindAll(this, ['update', 'clickedAddGoal'])
+    this.model = new GoalsModel(this.update);
+    this.state = {goals: []}
+  }
+  update(goals){
+    this.setState({ goals })
   }
   componentDidMount() {
 
   }
   clickedAddGoal(){
-    console.log('adding new goal');
+    const { swipes } = this.props;
+    swipes.modal('list', {title: 'Select Template', rows: [
+      { id: 'design', name: 'Design' },
+      { id: 'file', name: 'File Vacation' },
+      { id: 'develop', name: 'Feature' }
+    ]}, (res) => {
+      console.log('modal done', res);
+      if(res){
+        const id = this.model.add({title: res.name})
+        console.log('id received', id);
+      }
+    });
+    console.log('adding new goal'); 
   }
   renderGoals(){
     return this.state.goals.map((g, i) => {

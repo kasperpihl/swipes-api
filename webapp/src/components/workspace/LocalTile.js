@@ -19,7 +19,7 @@ class LocalTile extends Component {
     switch(type){
       case 'slack-dashboard':
         return Chat;
-      case 'jira-card':
+      case 'browser-card':
         return Goals;
       default:
         return null

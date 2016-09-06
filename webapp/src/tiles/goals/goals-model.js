@@ -1,16 +1,28 @@
 import Immutable from 'immutable'
-import { randomString } from '../../classes/utils'
+import { bindAll, randomString } from '../../classes/utils'
 
 export default class GoalsModel {
   constructor(delegate){
-    this.state = new Immutable.map({});
+    this.goals = new Immutable.List([]);
+    bindAll(this, ['add']);
     this.delegate = delegate || function(){};
   }
-  addGoal(type){
+  defaultProps(){
+    return {
+      confirmed: false,
+      steps: []
+    }
+  }
+  get(){
+    return this.model.goals;
+  }
+  update(){
     
   }
-  saveData(data, options){
-    
-    this.delegate(JSON.parse(JSON.stringify(data)), options);
+  add(goal){
+    var obj = Object.assign(this.defaultProps(), goal, {id: randomString(6)});
+    this.goals = this.goals.push(obj);
+    this.delegate(this.goals);
+    return obj.id;
   }
 }
