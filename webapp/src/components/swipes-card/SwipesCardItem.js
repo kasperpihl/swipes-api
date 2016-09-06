@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { randomString, bindAll } from '../../classes/utils';
+import { randomString, bindAll, decodeHtml } from '../../classes/utils';
 import SwipesDot from '../swipes-dot/SwipesDot';
 
 class SwipesCardItem extends Component {
@@ -190,15 +190,15 @@ class SwipesCardItem extends Component {
         const command = res[0];
         let title = res[res.length -1];
 
-        replaced.push(<a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{unescape(title)}</a>);
+        replaced.push(<a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{decodeHtml(title)}</a>);
 
         // Adding the after text between the matches
-        replaced.push(unescape(splits.shift()));
+        replaced.push(decodeHtml(splits.shift()));
       }
       if(replaced.length)
         return replaced;
     }
-    return unescape(text);
+    return decodeHtml(text);
   }
   clickedLink(match, e) {
     const res = match.split("|");

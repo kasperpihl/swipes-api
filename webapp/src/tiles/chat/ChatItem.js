@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import ReactEmoji from 'react-emoji'
 import SwipesCard from '../../components/swipes-card/SwipesCard'
-import { bindAll, shortUrlFromShareUrl } from '../../classes/utils'
+import { bindAll, shortUrlFromShareUrl, decodeHtml } from '../../classes/utils'
 
 let delegate;
 const delegateMethods = [ 'clickLink' ]
@@ -54,7 +54,7 @@ class ChatItem extends Component {
             return <SwipesCard key={'card' + i} data={{ shortUrl }} delegate={this.props.cardDelegate} />
           }
           if(t.type === 'link'){
-            return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{unescape(t.title)}</a>;
+            return <a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, t.data)}>{decodeHtml(t.title)}</a>;
           }
           if(t.type === 'linebreak'){
             return <br key={'break' + i} />

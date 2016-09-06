@@ -1,4 +1,4 @@
-import { bindAll, indexBy } from '../../classes/utils'
+import { bindAll, indexBy, decodeHtml } from '../../classes/utils'
 import { getTimeStr, dayStringForDate, startOfDayTs, isAmPm } from '../../classes/time-utils'
 
 import { isShareURL } from '../../classes/utils'
@@ -316,7 +316,7 @@ export default class SlackSwipesParser {
             }
           }
 
-          placement = { type: 'link', title: unescape(title), data: innerMatch };
+          placement = { type: 'link', title: decodeHtml(title), data: innerMatch };
           if(isShareURL(command)){
             placement = { type: 'card', data: command };
           }
@@ -326,12 +326,12 @@ export default class SlackSwipesParser {
         replaced.push(placement);
 
         // Adding the after text between the matches
-        replaced.push(unescape(splits.shift()));
+        replaced.push(decodeHtml(splits.shift()));
       }
       if(replaced.length)
         return replaced;
     }
-    return unescape(text);
+    return decodeHtml(text);
   }
 }
 
