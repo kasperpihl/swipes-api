@@ -119,7 +119,7 @@ export default class SwipesAppSDK {
       edit: (title, message, callback) => {
         let options = {};
         options = this._getModalOptions(options, title, message);
-        this._loadMdal("textarea", options, function(res){
+        this._loadModal("textarea", options, function(res){
           if(typeof callback === 'function')
             callback(res);
         })
@@ -175,9 +175,12 @@ export default class SwipesAppSDK {
           if(typeof callback === 'function')
             callback(confirmed);
         })
+      },
+      custom: (type, options, callback) => {
+        this._loadModal(type, options, callback);
       }
     };
-    return modals[modal] || modals['alert'];
+    return modals[modal] || modals['custom'].apply(this, arguments);
   }
   _loadModal(name, options, callback){
     options = options || {};
@@ -185,7 +188,7 @@ export default class SwipesAppSDK {
       callback = options;
       options = {};
     }
-    this.sendEvent("modal.load", {modal: name, options: options}, callback);
+    this.sendEvent({async: true, command: "modal.load"}, {modal: name, options: options}, callback);
   }
   _getModalOptions(options, title, message){
     if(typeof title === 'object'){

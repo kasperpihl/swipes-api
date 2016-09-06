@@ -41,8 +41,10 @@ export default class SwClientCom {
     if(this._isLocked){
       return this._commandQueue.push({command: command, data: data, callback: callback});
     }
-
-    if(typeof command !== 'string' || !command.length){
+    if(typeof command !== 'object'){
+      command = { command }
+    }
+    if(typeof command.command !== 'string' || !command.command.length){
       return console.warn('SwClientCom: sendCommand first parameter must be a string');
     }
     // If data is a function, it's shorthand for the callback
@@ -55,8 +57,11 @@ export default class SwClientCom {
     var callJson = {
       'identifier': identifier,
       'data': data,
-      'command': command
+      'command': command.command
     };
+    if(command.async){
+      callJson.async = true;
+    }
 
     if (callback && typeof callback === 'function') {
       this._localCallbacks[identifier] = callback;
@@ -68,16 +73,25 @@ export default class SwClientCom {
     if(typeof message !== 'object') {
       return;
     }
+    var hasSentRes = false;
+    const sendResult = (res) => {
+      if(!hasSentRes){
+        this._generateAndSendResponseToCommand(message.identifier, res);
+        hasSentRes = true;
+      }
+    }
     // Check if it's a command, or reply to a command.
     if (message.command) {
-      var res = null;
       // When receiving a command, check if any listeners have been attached and call them.
       this.getListeners(message.command).forEach(({ listener }) => {
-        res = listener(message.data);
+        if(message.async){
+          listener(message.data, (result) => {
+            sendResult(result);
+          })
+        }else{  
+          sendResult(listener(message.data));
+        }
       })
-      
-      // Then generate a response with whatever result was returned from the last listener
-      this._generateAndSendResponseToCommand(message.identifier, res);
     }
     // Else if receiving the reply from a command, check the local callbacks.
     else if (message.reply_to) {
