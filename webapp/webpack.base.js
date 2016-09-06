@@ -78,8 +78,8 @@ module.exports = {
     inline: true,
     historyApiFallback: true,
     proxy: {
-      '/v1*': Object.assign({}, apiRedirect),
-      '/socket.io*': Object.assign({}, apiRedirect, {ws: true}),
+      '/v1/*': Object.assign({}, apiRedirect),
+      '/socket.io/*': Object.assign({}, apiRedirect, {ws: true}),
       '/s/*': Object.assign({}, apiRedirect)
     }
   }
