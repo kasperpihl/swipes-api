@@ -6,7 +6,7 @@ import Textarea from 'react-textarea-autosize'
 class ChatInput extends Component {
   constructor(props) {
     super(props)
-    this.defaultTextHeight = 60;
+    this.defaultTextHeight = 50;
     this.state = { inputValue: '' }
     bindAll(this, ['onHeightChange', 'onSend', 'onAttach', 'onKeyDown', 'onKeyUp', 'onBlur', 'onFocus', 'onChange', 'onHeightChange', 'onFileChange', 'onPaste'])
   }

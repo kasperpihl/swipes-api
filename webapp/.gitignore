@@ -1,10 +1,5 @@
 node_modules
 dist
-test/temp
 .sass-cache
-app/vendor
 .tmp
 dev
-ssr_card_dev
-test/scripts/
-app/styles/_my-awesome-theme.scss

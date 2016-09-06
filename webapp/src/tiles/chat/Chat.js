@@ -166,9 +166,9 @@ class Chat extends Component {
   render() {
     const { typingLabel, sortedMessages, inputHeight } = this.state;
 
-    let paddingBottom = inputHeight;
+    let paddingBottom = inputHeight + 20;
     if(typingLabel){
-      paddingBottom += 14;
+      // paddingBottom += 14;
     }
     return (
       <div style={{position: 'relative', height :'100%', paddingBottom: paddingBottom + 'px'}}>

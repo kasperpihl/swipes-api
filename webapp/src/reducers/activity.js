@@ -7,7 +7,7 @@ export default function services (state = initialState, action) {
     case ('rtm.start'):{
       const res = action.payload;
       if(res.ok){
-        var activities = res.activity.slice(0,100);
+        var activities = res.activity.reverse().slice(0,100);
         activities.reverse().forEach((activity) => {
           swipesUrlProvider.save(activity.checksum, activity.meta);
         })

@@ -2,16 +2,6 @@ var React = require('react');
 import { throttle } from '../../classes/utils'
 var Resizer = React.createClass({
   componentDidMount(){
-    this.diffX = 0;
-    this.diffY = 0;
-    this.bouncedColResize = throttle(() => {
-      this.props.delegate.columnResize(this.diffX);
-      this.diffX = 0;
-    }, 50);
-    this.bouncedRowResize = throttle(() => {
-      this.props.delegate.rowResize(this.diffY);
-      this.diffY = 0;
-    }, 50)
   },
   onDragStart(e){
     this.lastX = e.clientX;
@@ -33,12 +23,10 @@ var Resizer = React.createClass({
       var diffX = (e.clientX - this.lastX);
       var diffY = (e.clientY - this.lastY);
       if(this.props.isRow && diffY){
-        this.diffY += diffY;
-        this.bouncedRowResize();
+        this.props.delegate.rowResize(diffY);
       }
       if(!this.props.isRow && diffX){
-        this.diffX += diffX;
-        this.bouncedColResize();
+        this.props.delegate.columnResize(diffX);
       }
 
       this.lastX = e.clientX;

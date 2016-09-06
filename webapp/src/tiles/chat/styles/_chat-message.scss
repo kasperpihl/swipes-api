@@ -110,7 +110,7 @@
         @include size(auto, 100%);
   			position: absolute;
         padding: 0 5px;
-        left: -3px;
+        right: calc(100% - 45px);
         top: 0;
   			font-size: 10px;
   			text-transform: uppercase;
