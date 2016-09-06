@@ -26,12 +26,11 @@ export default class SwipesUrlProvider {
 
     this.fetchingUrls = [ ...new Set(this.urlsToFetch) ];
     this.urlsToFetch = [];
-
     this.store.dispatch(api.request('share.getData', { shareIds: this.fetchingUrls })).then((res) => {
       console.log('ressy', res);
       if(res && res.ok){
         this.fetchingUrls.forEach((url, i) => {
-          this.save(url, res.links[i]);
+          this.save(url, res.links[i].meta);
         })
       }
       else{
@@ -48,10 +47,11 @@ export default class SwipesUrlProvider {
   }
   save(url, data){
     this._shortUrlData[url] = data;
-    this.notify(url, data.meta);
+    this.notify(url, data);
   }
   notify(shortUrl, data){
     const currentListeners = this._listenersObj[shortUrl];
+    
     if(currentListeners){
       currentListeners.forEach(( { listener }) => {
         listener(data);
@@ -75,10 +75,10 @@ export default class SwipesUrlProvider {
     this._listenersObj[shortUrl] = currentListeners;
     const currentData = this.get(shortUrl);
     if(currentData){
-      console.log('sending initial data', currentData);
-      listener(currentData.meta);
+      listener(currentData);
     }
-    else{
+    // Only fetch if it is not the checksum.
+    if(shortUrl.length < 12){
       this.fetch(shortUrl);
     }
   }

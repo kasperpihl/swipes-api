@@ -10,7 +10,7 @@ class SwipesCardItem extends Component {
     this.id = randomString(5);
   }
   updateData(data){
-    const newData = Object.assign(this.state.data, data);
+    const newData = Object.assign({}, this.state.data, data);
     this.setState({ data:newData });
   }
   componentDidMount(){
@@ -158,7 +158,7 @@ class SwipesCardItem extends Component {
       headerImage,
       actions,
       preview
-    } = this.props.data;
+    } = this.state.data;
 
     return (
       <div id={"swipes-card__item-" + this.id } className="swipes-card__item" onClick={this.onClick}>
