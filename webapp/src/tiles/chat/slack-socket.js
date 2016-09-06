@@ -69,13 +69,15 @@ export default class SlackSocket {
     this.handleMessage = () => {};
     this.closeWebSocket();
   }
-  closeWebSocket(){
+  closeWebSocket(restart){
     // If the websocket exist and is in state OPEN or CONNECTING
     if( this.webSocket && this.webSocket.readyState <= 1 ){
       console.log('closing the socket manually!');
       this.webSocket.close();
       this.webSocket = null;
-      this.restartSocket();
+      if(restart){
+        this.restartSocket();
+      }
     }
   }
   sendEvent(msg){
@@ -123,7 +125,7 @@ export default class SlackSocket {
       setTimeout(() => {
         this.isPinging = false;
         if(!this.lastPongTime || this.lastPongTime < pingTime){
-          this.closeWebSocket();
+          this.closeWebSocket(true);
         }
       }, 6000);
     }
