@@ -56,23 +56,17 @@ class Workspace extends Component {
       else{
         this.props.stopDraggingDot()
       }
-
-
-
     }
   }
   onMouseMove(e){
     const { draggingDot, dragDot } = this.props;
+
     if(draggingDot){
       e.preventDefault()
       let { id: hoverTarget } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
       if(hoverTarget !== draggingDot.hoverTarget){
         dragDot(hoverTarget);
       }
-
-      //
-
-      //console.log(hoverTarget);
     }
   }
   onWindowFocus(e) {

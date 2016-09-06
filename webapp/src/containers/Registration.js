@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { main } from '../actions';
+import { browserHistory } from 'react-router'
 
 import '../components/registration/registration.scss';
 
@@ -13,7 +13,8 @@ class Registration extends Component {
     super(props)
   }
   componentDidUpdate(){
-    if(this.props.token){
+    const { token } = this.props;
+    if(token){
       browserHistory.push('/')
     }
   }

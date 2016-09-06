@@ -69,18 +69,18 @@ class Loader extends Component {
         case 7: return 'inset(' + VAR1 + VAR0 + VAR1 + VAR2 + ' round 5%)';
       }
     }
-    
+
   }
   tileIndexToMove(){
     switch(this.state.stateNumber){
-      case 0: return 3; 
-      case 1: return 2; 
-      case 2: return 1; 
-      case 3: return 4; 
-      case 4: return 7; 
-      case 5: return 6; 
-      case 6: return 5; 
-      case 7: return 4; 
+      case 0: return 3;
+      case 1: return 2;
+      case 2: return 1;
+      case 3: return 4;
+      case 4: return 7;
+      case 5: return 6;
+      case 6: return 5;
+      case 7: return 4;
     }
   }
   positionForTile(radioCommand){

@@ -37,7 +37,7 @@ class LocalTile extends Component {
 
       this.props.onLoad(sendFunction);
     }
-    
+
   }
   render() {
     const { tile } = this.props
@@ -57,6 +57,5 @@ LocalTile.propTypes = {
   receivedCommand: PropTypes.func.isRequired,
   tile: PropTypes.object.isRequired
 }
-
 
 export default LocalTile

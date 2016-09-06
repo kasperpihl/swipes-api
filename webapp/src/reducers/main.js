@@ -88,7 +88,7 @@ export default function main (state = initialState, action) {
     }
 
 
-    default: 
+    default:
       return state
   }
 }

@@ -64,7 +64,6 @@ class SearchResults extends Component {
           	<div className="face__dimples"></div>
           	<div className="face__mouth"></div>
           </div>
-
           <div className="search-no-results__text">Here are not the things you are looking for!</div>
         </div>
       )

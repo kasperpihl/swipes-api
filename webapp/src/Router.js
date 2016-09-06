@@ -1,14 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-
 import { Router, Route, IndexRoute } from 'react-router'
 
 import Registration from './containers/Registration';
 import App from './containers/App'
 import Workspace from './containers/Workspace'
 import Services from './containers/Services'
-
-
-
 
 export default class Root extends Component {
   constructor(props) {
