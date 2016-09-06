@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import { main } from '../actions';
+import { browserHistory } from 'react-router'
 
 import '../components/registration/registration.scss';
 
@@ -14,9 +13,9 @@ class Registration extends Component {
     super(props)
   }
   componentDidUpdate(){
-    const { push, token } = this.props;
+    const { token } = this.props;
     if(token){
-      push('/')
+      browserHistory.push('/')
     }
   }
   render() {
@@ -35,7 +34,6 @@ function mapStateToProps(state) {
 
 const ConnectedRegistration = connect(mapStateToProps, {
   signin: main.signin,
-  signup: main.signup,
-  push: push
+  signup: main.signup
 })(Registration)
 export default ConnectedRegistration
