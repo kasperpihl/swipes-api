@@ -73,7 +73,6 @@ module.exports = {
     publicPath: '/',
     port: 3000,
     progress:true,
-    open: true,
     contentBase: './dist',
     inline: true,
     historyApiFallback: true,
