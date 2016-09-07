@@ -62,7 +62,6 @@ $imgWrapper: 50px;
         letter-spacing: .9px;
         color: $deepBlue-100;
         font-size: 15px;
-        text-transform: uppercase;
         // transform: translateY(1px);
       }
     }
@@ -80,7 +79,6 @@ $imgWrapper: 50px;
         font-weight: 700;
         letter-spacing: .9px;
         position: relative;
-        text-transform: uppercase;
         transform: translateY(1px);
         transition: .1s;
         user-select: none;
@@ -213,7 +211,6 @@ tabSlider {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        text-transform: uppercase;
         margin-top: 4px;
       }
     }

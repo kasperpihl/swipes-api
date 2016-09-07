@@ -17,9 +17,9 @@ $inputButtonWidth: 50px;
   // box-shadow: $swipes-shadow-one;
 
   &.focused {
-    .attach-icon {
+    .send-button {
       background-color: $blue-100;
-      @include border-radius(6px,0,6px,0);
+      @include border-radius(0,6px,0,6px);
       border: 1px solid $blue-100;
       box-sizing: border-box;
       margin-left: -1px;
@@ -68,12 +68,14 @@ $inputButtonWidth: 50px;
   .attach-icon {
     left: 0;
     border-right: 1px solid $deepBlue-10;
-    background-color: $deepBlue-5;
     @include border-radius(6px,0,6px,0);
   }
 
   .send-button {
     right: 0;
+    border-left: 1px solid $deepBlue-10;
+    background-color: $deepBlue-5;
+    @include border-radius(0,6px,0,6px);
   }
 
   textarea {
