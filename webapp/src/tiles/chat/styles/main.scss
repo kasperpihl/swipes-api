@@ -22,6 +22,10 @@
     position: relative;
 }
 
+.section {
+  @include size(100%, auto);
+}
+
 .typing-indicator {
   @include size(700px, auto);
   position: absolute;
@@ -33,68 +37,85 @@
   padding-right: 68px;
 }
 
-.new-message-header {
-    @include size(calc(100% - 40px), 4px);
-    border-bottom: 1px solid #F44336;
-    text-align: right;
-    position: relative;
-    margin: 0 auto;
-    transform: translateX(10px) translateY(5px);
+.seperator-line {
+  @include size(calc(100% - 20px), 20px);
+  @include flex(center, center);
+  margin-left: 20px;
+  position: relative;
 
-    &:not(.read) + .date {
-      color: $red !important;
+  &__line {
+    @include size(100%, 1px);
+  }
+
+  &__message {
+    background-color: #FAFAFA;
+    font-size: 12px;
+    padding: 0 10px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Default date styles
+
+  &--date & {
+    &__line {
+      background-color: $deepBlue-20;
     }
 
-    &.read {
-      opacity: 0.2;
-    }
-
-    span {
-      font-size: 12px;
-      color: $red;
-      background-color: #fff;
-      padding: 0 10px;
-      position:absolute;
-      right: 0;
-      top:50%;
-      margin-top:-7px;
-    }
-}
-
-.new-message-post-header{
-  @include size(100%, 4px);
-}
-
-.section {
-  @include size(100%, auto);
-
-  .chat-date-line {
-    @include size(calc(100% - 60px), 30px);
-    position: relative;
-    margin-left: 30px;
-    @include flex(center, center);
-    transform: translateY(3px);
-
-    .line {
-      @include size(100%, 1px);
-      background-color: $studioGray-60;
-    }
-
-    .date {
-      @include size(100%, auto);
-      position: absolute;
-      line-height: 30px;
-      font-weight: 500;
+    &__message {
       color: $deepBlue-40;
-      text-align: right;
-      font-size: 11px;
-      left: 0;
-      // transform: translateY(5px);
+    }
+  }
 
-      span {
-        padding-left: 15px;
-        background-color: #fbfbfb;
-      }
+  // Unread new message state
+
+  &--new#{&}--unread &{
+    &__line {
+      background-color: $red;
+    }
+
+    &__message {
+      color: $red
+    }
+  }
+
+  // Read new message state
+
+  &--new#{&}--read & {
+		&__line {
+      background-color: $red;
+			opacity: .3;
+    }
+
+    &__message {
+      color: rgba($red, .3);
+    }
+  }
+
+  // Unread date message state
+
+  &--date#{&}--unread & {
+    &__line {
+      background-color: $red;
+    }
+
+    &__message {
+      color: $deepBlue-40;
+    }
+  }
+
+  // Read date message state
+
+  &--date#{&}--read & {
+    &__line {
+      background-color: $red;
+			opacity: .3;
+    }
+
+    &__message {
+      color: $deepBlue-40;
     }
   }
 }
