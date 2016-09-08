@@ -12,7 +12,7 @@ $imgWrapper: 50px;
   min-height: 50px;
   line-height: 1;
   overflow: hidden;
-  
+
   &__header {
     @include size(100%, 60px);
     background-color: white;
@@ -153,7 +153,7 @@ tabSlider {
     min-height: 70px;
     line-height: 1;
     @include size(100%, auto);
-    @include flex(center, center);
+    @include flex(center, center, column);
     background-color: white;
   }
 
