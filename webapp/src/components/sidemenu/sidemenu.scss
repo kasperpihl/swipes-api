@@ -27,16 +27,23 @@ $pushDelay: .1s;
 	overflow: hidden;
 	top:0;
 	left:0;
-	z-index: 99;
+	z-index: 999;
 	transform: translateX( - ($expandedWidth -  $minWidth) );
 	transition: 0.1s ease-in;
 	transition-delay: $returnDelay;
 	border-right: 1px solid #eee;
-	.relative-wrapper{
+
+	@media screen and (max-width: 600px) {
+    z-index: 99;
+		border-right: none;
+  }
+
+	.relative-wrapper {
 		height:100%;
 		width:100%;
 		position:relative;
 	}
+
 	.scroller{
 		width:100%;
 		height:100%;
@@ -64,26 +71,34 @@ $pushDelay: .1s;
 	}
 
 	&:hover:not(.force-close), &.pinned {
-		.scroller{
-			overflow-y: auto;
-		}
-		//border-right: 1px solid #eee;
 		transform: translateX(0);
 		transition: 0.1s ease-in;
 		transition-delay: 0.05s;
+
+		@media screen and (max-width: 600px) {
+	    z-index: 999;
+			border-right: 1px solid #eee !important;
+			border-right: none;
+	  }
+
+		.scroller {
+			overflow-y: auto;
+		}
 
 		h3 {
 			opacity: 1;
 		}
 
-		.menu-item{
-			&.active{
+		.menu-item {
+			&.active {
 				background: $blue-10;
 			}
-			.indicator{
+
+			.indicator {
 				opacity: 0;
 			}
-			.name{
+
+			.name {
 				opacity: 1;
 			}
 		}

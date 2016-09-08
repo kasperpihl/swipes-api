@@ -15,7 +15,10 @@ $inputButtonWidth: 50px;
   z-index: 99;
   // box-shadow: 0px -1px 9px 1px rgba($deepBlue-100,0.10);
   // box-shadow: $swipes-shadow-one;
-
+  @media screen and (max-width: 600px) {
+    bottom: 0;
+    border-radius: 0px;
+  }
   &.focused {
     .send-button {
       background-color: $blue-100;

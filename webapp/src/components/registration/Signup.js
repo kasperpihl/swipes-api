@@ -42,12 +42,6 @@ export default class Signup extends Component {
             <h2>sign up to swipes</h2>
             <form action="" onSubmit={this.preventSubmit}>
               <br/>
-              {/*}<input type="text" placeholder="Your Name" ref="name"/>
-              <input type="text" placeholder="Email" ref="email" id="email" className="username"/>
-              <input type="text" placeholder="Password" ref="password" type="password" />
-              <input type="text" placeholder="Invitation Code" ref="invcode" />*/}
-
-
               <FloatingInput label="Your Name" type="text" id="name" ref="name" />
               <FloatingInput label="Email" type="email" id="email" ref="email" />
               <FloatingInput label="Password" type="password" id="password" ref="password" />
