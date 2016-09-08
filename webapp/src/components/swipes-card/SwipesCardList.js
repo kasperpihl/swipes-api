@@ -3,6 +3,7 @@ import SwipesCardItem from './SwipesCardItem';
 import { bindAll } from '../../classes/utils';
 
 import './swipes-card.scss';
+import EyeIcon from './images/swipes-ui-icon-see.svg';
 
 class SwipesCardList extends Component {
   constructor(props) {
@@ -22,8 +23,8 @@ class SwipesCardList extends Component {
     if(Array.isArray(data)){
       return this.renderTabsHeader(data, selectedTab);
     }
-
     const { titleLeftImage, titleRightImage, title } = data;
+
     let hasLeftImage = '';
 
     if (titleLeftImage) {
@@ -32,9 +33,9 @@ class SwipesCardList extends Component {
 
     return (
       <div className={"sw-card-list__header sw-card-list__header--title" + hasLeftImage}>
-        {this.renderHeaderImage(titleLeftImage)}
+        {this.renderHeaderImage(titleLeftImage, null)}
         <div className="sw-card-list__header__title">{title}</div>
-        {this.renderHeaderImage(titleRightImage)}
+        {this.renderHeaderImage(null,titleRightImage)}
       </div>
     )
   }
@@ -102,7 +103,6 @@ class SwipesCardList extends Component {
     )
   }
   renderListItem(listItem, i) {
-    console.log(listItem)
     let paddingClass = '';
     if (listItem.description) {
       paddingClass = 'sw-card-list__list--padding'
@@ -117,6 +117,19 @@ class SwipesCardList extends Component {
       </div>
     )
   }
+  renderAction(label) {
+    if (label && label.length > 0) {
+
+      return (
+        <div className="sw-card-list__action">
+          <div className="sw-card-list__action__label">{label}</div>
+          <div className="sw-card-list__action__icon">
+            <EyeIcon />
+          </div>
+        </div>
+      )
+    }
+  }
   tabClick(i) {
     console.log(i)
     this.setState({selectedTab: i});
@@ -130,6 +143,7 @@ class SwipesCardList extends Component {
       <div className="sw-card-list">
         {this.renderHeader(data, selectedTab)}
         {this.renderList(data, selectedTab)}
+        {this.renderAction(data.actionLabel)}
       </div>
     )
   }
@@ -142,6 +156,7 @@ const dataType = {
   items: PropTypes.array,
   titleLeftImage: PropTypes.string,
   titleRightImage: PropTypes.string,
+  actionLabel: PropTypes.string
 }
 
 SwipesCardList.propTypes = {

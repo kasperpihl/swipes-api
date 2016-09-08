@@ -20,7 +20,6 @@ import GridTest from './components/resizeable-grid/grid_test'
 // Component tester: import the component, add it below, and change false to true.
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
-
   if(false) {
     // Page = SwipesCardList;
   }
