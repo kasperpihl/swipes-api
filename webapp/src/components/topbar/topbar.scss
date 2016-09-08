@@ -97,6 +97,10 @@ $fullscreenTopbarSize: 70px;
 	      font-weight: 900;
 	      color: white;
 
+				&::first-letter {
+					text-transform: uppercase;
+				}
+
 	      &:hover {
 	        text-decoration: underline;
 	      }
