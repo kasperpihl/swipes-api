@@ -208,7 +208,7 @@ $pushDelay: .1s;
 		}
 		&.unread{
 			.name{
-				font-weight: 500;
+				font-weight: 700;
 				color: $deepBlue-100;
 			}
 			.indicator{
@@ -221,6 +221,7 @@ $pushDelay: .1s;
 		}
 	}
 }
+
 @keyframes indicator-glow {
 	15%, 90%  {
 		background: $salmon;
