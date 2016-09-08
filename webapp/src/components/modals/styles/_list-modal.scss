@@ -7,6 +7,10 @@
     &.modal-list {
       align-items: center;
 
+      &.selected {
+        background-color: red;
+      }
+
       &:hover {
         background-color: $studioGray-20;
 
