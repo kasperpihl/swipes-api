@@ -12,12 +12,14 @@ $imgWrapper: 50px;
   min-height: 50px;
   line-height: 1;
   overflow: hidden;
+  max-width: 600px;
+  margin: 100px auto;
 
   &__header {
     @include size(100%, 60px);
     background-color: white;
     position: relative;
-    border-bottom: 2px solid $deepBlue-10;
+    border-bottom: 2px solid $deepBlue-5;
 
     &--title {
       @include flex(center, flex-start)
@@ -62,7 +64,6 @@ $imgWrapper: 50px;
         letter-spacing: .9px;
         color: $deepBlue-100;
         font-size: 15px;
-        // transform: translateY(1px);
       }
     }
 
@@ -110,7 +111,7 @@ $imgWrapper: 50px;
 
     &--item {
       &:not(:last-child) {
-        border-bottom: 1px solid $deepBlue-5;
+        // border-bottom: 1px solid $deepBlue-5;
       }
     }
 
@@ -134,7 +135,7 @@ tabSlider {
   background-color: white;
   border-radius: 6px;
   box-shadow: $swipes-shadow-one;
-  min-height: 50px;
+  min-height: 70px;
   line-height: 1;
   overflow: hidden;
 
@@ -151,9 +152,10 @@ tabSlider {
   }
 
   &__item {
-    min-height: 50px;
+    min-height: 70px;
     line-height: 1;
     @include size(100%, auto);
+    @include flex(center, center);
     background-color: white;
   }
 
@@ -203,15 +205,15 @@ tabSlider {
 
       &--subtitle {
         @include size(100%);
-        color: $deepBlue-40;
-        font-size: 10px;
+        color: $deepBlue-60;
+        font-size: 12px;
         font-weight: 500;
         letter-spacing: .3px;
         line-height: 12px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        margin-top: 4px;
+        margin-top: 5px;
       }
     }
 

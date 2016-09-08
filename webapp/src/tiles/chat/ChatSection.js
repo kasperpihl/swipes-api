@@ -23,7 +23,7 @@ export default class ChatSection extends Component {
           unreadClass += ' js-unread-class'
 
           chatItems.push(
-            <div className={"seperator-line seperator-line--new" + unreadClass}>
+            <div className={"seperator-line seperator-line--new" + unreadClass} key="new-message-header">
               <div className="seperator-line__line"></div>
               <div className="seperator-line__message">new messages</div>
             </div>
@@ -45,7 +45,7 @@ export default class ChatSection extends Component {
           <div className="seperator-line__line"></div>
           <div className="seperator-line__message">{section.title}</div>
         </div>
-        
+
         {chatItems}
       </div>
     );

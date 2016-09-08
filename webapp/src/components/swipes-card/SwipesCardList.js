@@ -149,5 +149,5 @@ SwipesCardList.propTypes = {
     PropTypes.shape(dataType),
     PropTypes.array
   ]),
-  delegate: PropTypes.object.isRequired
+  // delegate: PropTypes.object.isRequired
 }
