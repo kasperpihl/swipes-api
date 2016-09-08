@@ -21,23 +21,6 @@ import GridTest from './components/resizeable-grid/grid_test'
 // OBS: Works only in browser
 if(!window.process || !window.process.versions.electron){
 
-  // props.data = {
-  //   title: 'This is title',
-  //   items: [
-  //     {
-  //       title: 'Lorem ipsum dolor sit.',
-  //       subtitle: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat rem nostrum blanditiis vitae? Delectus fugiat temporibus libero ullam saepe laboriosam!'
-  //     },
-  //     {
-  //       title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque aperiam consequatur deserunt sapiente eum odit tenetur impedit veritatis voluptates, harum animi quis eligendi dicta at repudiandae corporis error iure ipsa.'
-  //     },
-  //     {
-  //       title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus ex accusamus, debitis totam velit reprehenderit aperiam saepe harum recusandae consectetur ipsa nisi, doloribus at laudantium iste nesciunt? Assumenda, magnam odit.',
-  //       subtitle: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus, natus.'
-  //     }
-  //   ]
-  // }
-
   if(false) {
     // Page = SwipesCardList;
   }

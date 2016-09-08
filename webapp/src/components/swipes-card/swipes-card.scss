@@ -12,9 +12,7 @@ $imgWrapper: 50px;
   min-height: 50px;
   line-height: 1;
   overflow: hidden;
-  max-width: 600px;
-  margin: 100px auto;
-
+  
   &__header {
     @include size(100%, 60px);
     background-color: white;
@@ -207,7 +205,7 @@ tabSlider {
         @include size(100%);
         color: $deepBlue-60;
         font-size: 12px;
-        font-weight: 500;
+        font-weight: 400;
         letter-spacing: .3px;
         line-height: 12px;
         overflow: hidden;
