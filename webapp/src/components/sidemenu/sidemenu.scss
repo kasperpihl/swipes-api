@@ -134,7 +134,7 @@ $pushDelay: .1s;
 			}
 
 			&__indicator {
-				@include size($indicatorUnreadHeight, $indicatorWidth + 4px);
+				@include size($indicatorWidth + 4px, $indicatorUnreadHeight);
 				@include border-radius(0px, 1px, 0px, 1px);
 				background: $hoverColor;
 			}
