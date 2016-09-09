@@ -29,14 +29,14 @@ var ListModal = React.createClass({
 
 		var emptyText = options.emptyText || this.defaults.emptyText;
 		if(!rows.length){
-			rows.push(<div key="list-loader" className="list-modal-loader"> <Loader size={30} text={emptyText} /> </div>);
+			rows.push(<div key="list-loader" className="list-modal__loader"> <Loader size={30} text={emptyText} /> </div>);
 		}
 		var title = options.title || this.defaults.title;
 
 		return (
 			<div className="modal-full">
 				<h2>{title}</h2>
-				<ul className="list-results">
+				<ul className="list-modal">
 					{rows}
 				</ul>
 			</div>
@@ -61,9 +61,9 @@ ListModal.Row = React.createClass({
 
 
 		return (
-			<li className="modal-list" onClick={this.onClick}>
+			<li className="list-modal__item" onClick={this.onClick}>
 				{image}
-				<h3 className="name">{name}</h3>
+				<h3 className="list-modal__item__title">{name}</h3>
 
 			</li>
 		);
