@@ -2,163 +2,144 @@
 @import '../global-styles/mixins';
 
 
-%flex {
-	display: flex;
-	//align-items: center;
-	justify-content: center;
-	//flex-direction: column;
-}
-
-.main-log-wrapper {
-    width: 100%;
-	margin: 0;
-	height: 100%;
-	padding: 0;
+.sign {
+	@include size(100%, 100%);
+	@include flex(center, center);
 	background-color: $deepBlue-100;
+	margin: 0;
 	overflow: hidden;
+	padding: 0;
 
-	@extend %flex;
-		h1 {
-		text-align: center;
+	&__wrapper {
+		@include size(100%, 100%);
+		overflow-y: auto;
+		padding: 50px 0;
+		position: relative;
+    animation: signFadeIn .6s ease-in-out forwards;
+    opacity: 0;
+    transform: translateY(50px);
+
+    @keyframes signFadeIn {
+      100% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+	  }
+	}
+
+	&__logo {
+		@include size(calc(272px / 3), calc(272px / 3));
+		background-image: url("../global-styles/images/swipes-logo.png");
+		background-size: calc(272px / 3) calc(272px / 3);
+		left: 20px; top: 20px;
+		position: absolute;
+	}
+
+	&__headline {
 		color: white;
-		font-weight: 100;
 		font-size: 3em;
+		font-weight: 100;
+		text-align: center;
 	  padding-top: calc(272px / 3);
 	}
 
-	h3 {
-		text-align: center;
-		color: $deepBlue-60;
-		font-weight: 400;
-		font-size: 1em;
-	  padding-top: 50px;
-	}
-	form {
-		width: 100%;
-	  margin-top: -30px;
+	&__card {
+		@include size(350px, auto);
+		background-color: white;
+		border-radius: 5px;
+		box-shadow: $swipes-shadow-five;
+		margin-left: calc(50% - (350px / 2));
+		margin-top: 50px;
+		overflow: hidden;
 		position: relative;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
+	}
 
-		.login-submit {
-			width: 100%;
-			border: 0px solid black;
-			height: 70px;
-			background-color: $blue-100;
+	&__title {
+		color: $deepBlue-80;
+		font-size: 1.2em;
+		font-weight: 400;
+		padding-top: 40px;
+		padding: 50px 0;
+		text-align: center;
+		text-transform: uppercase;
+	}
+
+	&__form {
+		@include size(100%, auto);
+		@include flex(center, center, column);
+		margin-top: -30px;
+		position: relative;
+
+		&__button {
+			@include size(100%, 70px);
+			cursor: default;
 			margin-top: 20px;
-			color: white;
-	    cursor: default;
 
-			&:hover, &:focus {
-				background-color: $blue-80;
+			&--submit {
+				background-color: $blue-100;
+				color: white;
+
+				&:hover, &:focus {
+					background-color: $blue-80;
+				}
 			}
 		}
 	}
-	.wrapper {
-		width: 100%;
-		height: 100%;
-		position: relative;
-		overflow-y: auto;
-		padding: 50px 0;
-	    //background-color: $deepBlue-100;
-	    opacity: 0;
-	    transform: translateY(50px);
 
-	    animation: signFadeIn .6s ease-in-out forwards;
-
-	    @keyframes signFadeIn {
-
-	        100% {
-	            opacity: 1;
-	            transform: translateY(0px);
-	        }
-	    }
+	&__subheadline {
+		color: $deepBlue-60;
+		font-size: 1em;
+		font-weight: 400;
+		text-align: center;
+	  padding-top: 50px;
 	}
 
-
-
-	.signup-button {
-		text-align: center;
+	&__button {
 		color: $deepBlue-40;
-		font-weight: 400;
 		font-size: 1em;
-		//margin-top: -10px;
+		font-weight: 400;
+		text-align: center;
 	  margin-top: 15px;
 
 		a {
 			color: $deepBlue-40;
-			font-weight: 400;
 			font-size: 1em;
-
-			&:visited {
-				color: $deepBlue-40;
-			}
+			font-weight: 400;
 
 			&:hover {
 				color: $studioGray-100;
 				text-decoration: underline;
-				// background-color: red;
+			}
+
+			&:visited {
+				color: $deepBlue-40;
 			}
 		}
 	}
+}
 
-	.logo {
-	    width: calc(272px / 3);
-	    height: calc(272px / 3);
-	    background-image: url("../global-styles/images/swipes-logo.png");
-	    background-size: calc(272px / 3) calc(272px / 3);
-	    position: absolute;
-	    top: 20px;
-	    left: 20px;
+#Layer_1 {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+
+	path {
+		fill: none;
+		stroke: rgba($blue-80,.4);
 	}
+}
 
-	.sign-up-card {
-		width: 350px;
-		//height: 550px;
-		margin-left: calc(50% - (350px / 2));
-	    margin-top: 50px;
-		background-color: white;
-		position: relative;
-		border-radius: 5px;
-		overflow: hidden;
-		box-shadow: $swipes-shadow-five;
+#Layer_2 {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
 
-		h2 {
-			text-align: center;
-			color: $deepBlue-80;
-			font-weight: 400;
-      font-size: 1.2em;
-			text-transform: uppercase;
-			padding: 50px 0;
-      padding-top: 40px;
-		}
-	}
-
-	#Layer_1 {
-		width: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		overflow: hidden;
-		//filter: blur(1px);
-
-		path {
-			fill: none;
-			stroke: rgba($blue-80,.4);
-		}
-	}
-
-	#Layer_2 {
-		width: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		overflow: hidden;
-		path {
-			fill: none;
-			stroke: rgba($deepBlue-80,.6);
-		}
+	path {
+		fill: none;
+		stroke: rgba($deepBlue-80,.6);
 	}
 }

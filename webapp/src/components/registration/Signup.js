@@ -32,26 +32,26 @@ export default class Signup extends Component {
   }
   render() {
     return (
-      <div className="main-log-wrapper">
+      <div className="sign">
         <SwipesBackgroundAnimation />
 
-        <div className="wrapper">
-          <div className="logo"></div>
-          <h1>Welcome to your Swipes</h1>
-          <div className="sign-up-card">
-            <h2>sign up to swipes</h2>
-            <form action="" onSubmit={this.preventSubmit}>
+        <div className="sign__wrapper">
+          <div className="sign__logo"></div>
+          <div className="sign__headline">Welcome to your Swipes</div>
+          <div className="sign__card">
+            <div className="sign__title">sign up to swipes</div>
+            <form className="sign__form" action="" onSubmit={this.preventSubmit}>
               <br/>
               <FloatingInput label="Your Name" type="text" id="name" ref="name" />
               <FloatingInput label="Email" type="email" id="email" ref="email" />
               <FloatingInput label="Password" type="password" id="password" ref="password" />
               <FloatingInput label="Invitation Code" type="text" id="invitation" ref="invcode" />
               <br/>
-              <input type="submit" className="login-submit" value="SIGN UP" onClick={this.signup.bind(this)}/>
+              <input type="submit" className="sign__form__button sign__form__button--submit" value="SIGN UP" onClick={this.signup.bind(this)}/>
             </form>
           </div>
-          <h3>Already have an account?</h3>
-          <div className="signup-button"><Link to="/signin">SIGN IN</Link></div>
+          <div className="sign__subheadline">Already have an account?</div>
+          <div className="sign__button"><Link to="/signin">SIGN IN</Link></div>
         </div>
       </div>
     );
