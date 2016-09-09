@@ -145,7 +145,7 @@ class Find extends Component {
     const { isFinding, draggingDot } = this.props;
     let className = "find-overlay"
     if(isFinding && !draggingDot){
-      className += ' open'
+      className += ' find-overlay--open'
     }
     const recent = this.generateActivity();
     return (
