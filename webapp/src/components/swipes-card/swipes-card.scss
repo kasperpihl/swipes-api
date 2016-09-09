@@ -278,6 +278,11 @@ tabSlider {
     max-height: 36px;      /* fallback */
     -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
+
+    a {
+      word-break: break-all;
+    }
+
     &:empty {
       display: none;
     }
