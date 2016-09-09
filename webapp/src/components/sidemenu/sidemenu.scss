@@ -21,7 +21,7 @@ $pushDelay: .1s;
 
 .swipes-sidemenu {
 	@include size($expandedWidth, 100%);
-	background-color: #FBFBFB;
+	background-color: $bg;
 	border-right: 1px solid #eee;
 	left: 0; top: 0;
 	overflow: hidden;
@@ -49,7 +49,7 @@ $pushDelay: .1s;
 	}
 
 	&__title {
-		color: $deepBlue-40;
+		color: $deepBlue-80;
 		font-size: 12px;
 		font-weight: 700;
 		letter-spacing: 1px;
@@ -108,23 +108,25 @@ $pushDelay: .1s;
 		}
 
 		&__title {
-			color: $deepBlue-60;
+			color: $deepBlue-40;
 			cursor: default;
 			font-size: 13px;
 			font-weight: 500;
 			line-height: $itemHeight;
 			opacity: 0;
 			overflow: hidden;
-			padding-left: 30px;
+			padding-left: 40px;
 			text-overflow: ellipsis;
-			transition-delay: $returnDelay;
 			white-space: nowrap;
 			width: $expandedWidth - $notificationHeight - 20px;
 		}
 
 		&:hover {
 			background: darken($blue-5, 1%);
-			color: #000923;
+
+			.swipes-sidemenu__item__title {
+				color: $deepBlue-80;
+			}
 		}
 
 		&--unread & {
@@ -166,6 +168,11 @@ $pushDelay: .1s;
 		&__item {
 			&--active {
 				background-color: $blue-10;
+
+				.swipes-sidemenu__item__title {
+					color: $deepBlue-80;
+					transition: color 0s 0s;
+				}
 			}
 
 			&__indicator {
@@ -196,7 +203,6 @@ $pushDelay: .1s;
 		background: $salmon;
 	}
 }
-
 
 @keyframes notification-glow {
 	15%, 90%  {

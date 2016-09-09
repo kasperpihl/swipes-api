@@ -144,9 +144,10 @@
   &__illustration {
     @include size(150px, 150px);
     @include flex(center, center);
+    position: relative;
 
     &--svg {
-      width: 150px;
+      width: 100%;
     }
   }
 
