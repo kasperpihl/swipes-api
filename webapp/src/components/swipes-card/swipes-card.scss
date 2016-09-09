@@ -189,7 +189,7 @@ tabSlider {
     min-height: 70px;
     line-height: 1;
     @include size(100%, auto);
-    @include flex(center, center, column);
+    @include flex(center, center, column !important);
     background-color: white;
   }
 
