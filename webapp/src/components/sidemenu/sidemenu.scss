@@ -193,19 +193,19 @@ $pushDelay: .1s;
 }
 
 @keyframes indicator-glow {
-	15%, 90%  {
+	15%, 90% {
 		background: $salmon;
 	}
 }
 
 @keyframes indicator-glow-even {
-	15%, 90%  {
+	15%, 90% {
 		background: $salmon;
 	}
 }
 
 @keyframes notification-glow {
-	15%, 90%  {
+	15%, 90% {
 		background: $salmon;
 		border: 1px solid $salmon;
 		color: white;
@@ -213,7 +213,7 @@ $pushDelay: .1s;
 }
 
 @keyframes notification-glow-even {
-	15%, 90%  {
+	15%, 90% {
 		background: $salmon;
 		border: 1px solid $salmon;
 		color: white;

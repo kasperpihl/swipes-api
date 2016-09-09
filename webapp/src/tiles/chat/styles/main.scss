@@ -87,10 +87,12 @@
 		&__line {
       background-color: $red;
 			opacity: .3;
+      transition: .2s ease-in-out;
     }
 
     &__message {
       color: rgba($red, .3);
+      transition: .2s ease-in-out;
     }
   }
 
@@ -112,6 +114,7 @@
     &__line {
       background-color: $red;
 			opacity: .3;
+      transition: .2s ease-in-out;
     }
 
     &__message {
