@@ -29,11 +29,11 @@
 .typing-indicator {
   @include size(700px, auto);
   position: absolute;
-  right: 45px;
+  right: 50px;
   z-index: 3;
   font-size: 12px;
   color: $deepBlue-40;
-  bottom: 78px;
+  bottom: 68px;
   padding-right: 68px;
 }
 
