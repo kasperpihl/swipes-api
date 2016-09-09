@@ -82,17 +82,20 @@ $inputButtonWidth: 50px;
   }
 
   textarea {
+    $lineHeight: 15px;
     width: calc(100% - 2 * #{$inputButtonWidth});
     resize: none;
     outline: none;
-    min-height: $inputHeight;
+    
     margin-left: $inputButtonWidth;
+    min-height: $inputHeight;
     font-size: 13px;
-    padding: 17px 5px;
+    padding: (($inputHeight - $lineHeight) / 2 ) 5px;
     padding-left: 15px;
     font-weight: 500;
     color: $deepBlue-60;
-    line-height: 15px;
+    line-height: $lineHeight;
+
     transition: .1s ease-in-out;
 
     &::-webkit-input-placeholder {
