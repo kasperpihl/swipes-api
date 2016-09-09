@@ -1,5 +1,5 @@
 var React = require('react');
-var DEFAULT_MINWIDTH = 150;
+var DEFAULT_MINWIDTH = 400;
 var DEFAULT_MINHEIGHT = 150;
 var DEFAULT_COLLAPSED_WIDTH = 40;
 var DEFAULT_COLLAPSED_HEIGHT = 40;
@@ -31,9 +31,9 @@ var TRANSITIONS_STEPS = {
     {n: "removeRipple", t: 330}
   ],
   collapse: [
-    {n: "overlayIn", t: 100}, 
-    {n: "scaling", t: 200}, 
-    {n:"afterScaling", t: 1}, 
+    {n: "overlayIn", t: 100},
+    {n: "scaling", t: 200},
+    {n:"afterScaling", t: 1},
     {n: "overlayOut", t: 350}
   ],
   resizing: ["resizing"],
@@ -96,7 +96,7 @@ var Grid = React.createClass({
             index.row = rI;
             index.id = row.id;
             //console.log('hover', cI, rI, trans.info.direction);
-            
+
           }
           dY += height;
         })
@@ -108,7 +108,7 @@ var Grid = React.createClass({
   _onReorderMouseMove(e){
     var trans = this.state.transition;
     trans.info.target = this.positionForPageXY(e.pageX, e.pageY) || {};
-    this.setState({transition: trans}); 
+    this.setState({transition: trans});
   },
   _onReorderMouseUp(e){
     window.removeEventListener('mousemove', this._onReorderMouseMove);
@@ -119,14 +119,14 @@ var Grid = React.createClass({
 
     this.moveRowToPosition(rowId, target);
     this.transitionNext();
-    
+
   },
   moveRowToPosition(id, position){
     var tarIndex = {col: position.col, row: position.row};
     var srcIndex = this.indexesForRowId(id);
 
     var row = this.rowFromId(id);
-    
+
     var srcCol = this.state.columns[srcIndex.col];
     var targetCol = this.state.columns[tarIndex.col];
 
@@ -134,7 +134,7 @@ var Grid = React.createClass({
 
     var columnToInsert, rowToInsert;
 
-    // Determine what needs to be done 
+    // Determine what needs to be done
     if(position.direction === 'left' || position.direction === 'right') {
       if(position.direction === 'right') {
         tarIndex.col += 1;
@@ -146,10 +146,10 @@ var Grid = React.createClass({
       }
       else {
         deleteSrcRow = true;
-        columnToInsert = { rows: [row] }; // 
+        columnToInsert = { rows: [row] }; //
       }
 
-      
+
 
     }
     else if(position.direction === 'top' || position.direction === 'bottom'){
@@ -1153,7 +1153,7 @@ var Grid = React.createClass({
   transitionNext(transition, stateChanges){
     if(!transition){
       transition = this.state.transition;
-    } 
+    }
     var timer = 0;
     if(transition){
       var lastIndex = TRANSITIONS_STEPS[transition.name].length - 1;
