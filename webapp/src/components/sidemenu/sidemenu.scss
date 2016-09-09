@@ -1,4 +1,5 @@
 @import '../global-styles/vars';
+@import '../global-styles/mixins';
 
 $itemHeight: 24px;
 $indicatorWidth: 5px;
@@ -18,205 +19,167 @@ $minWidth: 40px;
 $returnDelay: .2s;
 $pushDelay: .1s;
 
-
 .swipes-sidemenu {
-	position: absolute;
-	width:$expandedWidth;
-	height:100%;
-	background-color: #fbfbfb;
-	overflow: hidden;
-	top:0;
-	left:0;
-	z-index: 999;
-	transform: translateX( - ($expandedWidth -  $minWidth) );
-	transition: 0.1s ease-in;
-	transition-delay: $returnDelay;
+	@include size($expandedWidth, 100%);
+	background-color: #FBFBFB;
 	border-right: 1px solid #eee;
+	left: 0; top: 0;
+	overflow: hidden;
+	position: absolute;
+	transform: translateX( - ($expandedWidth -  $minWidth) );
+	transition-delay: $returnDelay;
+	transition: 0.1s ease-in;
+	z-index: 999;
 
 	@media screen and (max-width: 600px) {
+		border-right: none;
 		opacity: 0;
     z-index: 99;
-		border-right: none;
   }
 
-	.relative-wrapper {
-		height:100%;
-		width:100%;
-		position:relative;
+	&__relative-wrapper {
+		@include size(100%, 100%);
+		position: relative;
 	}
 
-	.scroller{
+	&__scroll-wrapper {
 		width:100%;
 		height:100%;
 		overflow: hidden;
-
-		h3 {
-			opacity: 0;
-			font-size: 12px;
-			text-transform: uppercase;
-			padding: 10px 30px;
-			letter-spacing: 1px;
-			transition: .1s;
-			transition-delay: $returnDelay;
-			color: $deepBlue-40;
-			font-weight: 700;
-			margin-bottom: 2px;
-
-			&:not(:first-child) {
-				margin-top: 24px;
-			}
-		}
-	}
-	.content-container{
-		height:100%;
 	}
 
-	&:hover:not(.force-close), &.pinned {
-		transform: translateX(0);
-		transition: 0.1s ease-in;
-		transition-delay: 0.05s;
+	&__title {
+		color: $deepBlue-40;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 1px;
+		margin-bottom: 2px;
+		opacity: 0;
+		padding: 10px 30px;
+		text-transform: uppercase;
+		transition-delay: $returnDelay;
+		transition: .1s;
 
-		@media screen and (max-width: 600px) {
-			opacity: 1;
-	    z-index: 999;
-			border-right: 1px solid #eee !important;
-			border-right: none;
-	  }
-
-		.scroller {
-			overflow-y: auto;
-		}
-
-		h3 {
-			opacity: 1;
-		}
-
-		.menu-item {
-			&.active {
-				background: $blue-10;
-			}
-
-			.indicator {
-				opacity: 0;
-			}
-
-			.name {
-				opacity: 1;
-			}
-		}
-
-		.notification {
-			background-color: $salmon;
-			border-color: $salmon;
-			color: #fbfbfb;
+		&:not(:first-child) {
+			margin-top: 24px;
 		}
 	}
-	.menu-item{
-		height:$itemHeight;
+
+	&__item {
+		@include size(100%, $itemHeight);
 		position: relative;
-		.indicator{
-			position: absolute;
-			left: $expandedWidth - $minWidth;
-			top:50%;
-			margin-top: - $indicatorUnreadHeight / 2;
+
+		&__indicator {
+			@include size($indicatorWidth, $indicatorHeight);
 			background: $color;
-			width: $indicatorWidth;
-			height: $indicatorHeight;
-			transition-delay: $returnDelay;
-		}
-		.indicator.even {
-			animation: indicator-glow-even 1.5s 1;
-		}
-		.indicator.odd {
-			animation: indicator-glow 1.5s 1;
-		}
-		.notification{
+			left: $expandedWidth - $minWidth; top:50%;
+			margin-top: - $indicatorUnreadHeight / 2;
 			position: absolute;
-			height: $notificationHeight;
-			// width: $notificationHeight;
-			padding: 0 8px;
+			transition-delay: $returnDelay;
+
+			&--even {
+				animation: indicator-glow-even 1.5s 1;
+			}
+
+			&--odd {
+				animation: indicator-glow 1.5s 1;
+			}
+		}
+
+		&__notification {
 			border-radius: $notificationHeight/2;
-			text-align: center;
-			top: ($itemHeight - $notificationHeight) / 2;
-			right: 8px;
-			font-weight: 400;
 			border: 1px solid $hoverColor;
 			color: $hoverColor;
-			line-height: 15px;
 			font-size: 9px;
+			font-weight: 400;
+			height: $notificationHeight;
+			line-height: 15px;
+			padding: 0 8px;
+			position: absolute;
+			right: 8px; top: ($itemHeight - $notificationHeight) / 2;
+			text-align: center;
+
+			&--even {
+				animation: notification-glow-even 1.5s 1;
+			}
+			&--odd {
+				animation: notification-glow 1.5s 1;
+			}
 		}
-		.notification.even {
-			animation: notification-glow-even 1.5s 1;
-		}
-		.notification.odd {
-			animation: notification-glow 1.5s 1;
-		}
-		.name{
-			width: $expandedWidth - $notificationHeight - 20px;
-			opacity: 0;
-			padding-left: 50px;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
+
+		&__title {
 			color: $deepBlue-60;
-			line-height: $itemHeight;
+			cursor: default;
 			font-size: 13px;
 			font-weight: 500;
-			cursor: default;
+			line-height: $itemHeight;
+			opacity: 0;
+			overflow: hidden;
+			padding-left: 30px;
+			text-overflow: ellipsis;
 			transition-delay: $returnDelay;
-
-			&.channel {
-				padding-left: 30px;
-			}
-			/*
-				K_TODO: Rewrite this to be a generic icon that can be added from local_sidemenu somehow.
-			 */
-			&.presence {
-
-				&:after {
-					content: "";
-					position: absolute;
-					/* right: 2px; */
-					left: 30px;
-					width: 6px;
-					height: 6px;
-					background-color: $studioGray-60;
-					border-radius: 50%;
-					top: 50%;
-					transform: translateY(-50%);
-				}
-
-				&.active {
-					&:after {
-						content: "";
-						position: absolute;
-						/* right: 2px; */
-						left: 30px;
-						width: 6px;
-						height: 6px;
-						background-color: #3ed37d;
-						border-radius: 50%;
-						top: 50%;
-						transform: translateY(-50%);
-					}
-				}
-			}
+			white-space: nowrap;
+			width: $expandedWidth - $notificationHeight - 20px;
 		}
-		&:hover{
+
+		&:hover {
 			background: darken($blue-5, 1%);
 			color: #000923;
 		}
-		&.unread{
-			.name{
+
+		&--unread & {
+			&__title {
 				font-weight: 700;
 				color: $deepBlue-100;
 			}
-			.indicator{
+
+			&__indicator {
+				@include size($indicatorUnreadHeight, $indicatorWidth + 4px);
+				@include border-radius(0px, 1px, 0px, 1px);
 				background: $hoverColor;
-				border-bottom-right-radius: 1px;
-				border-top-right-radius: 1px;
-				width: $indicatorWidth + 4px;
-				height: $indicatorUnreadHeight;
+			}
+		}
+	}
+
+	&:hover:not(&--force-close), &--pinned {
+		transform: translateX(0) !important;
+		transition-delay: 0.05s !important;
+		transition: 0.1s ease-in !important;
+
+		@media screen and (max-width: 600px) {
+			opacity: 1 !important;
+	    z-index: 999 !important;
+			border-right: 1px solid #eee !important;
+			border-right: none !important;
+	  }
+	}
+
+	&:hover:not(&--force-close) &, &--pinned & {
+		&__scroll-wrapper {
+			overflow-y: auto;
+		}
+
+		&__title {
+			opacity: 1;
+		}
+
+		&__item {
+			&--active {
+				background-color: $blue-10;
+			}
+
+			&__indicator {
+				opacity: 0;
+			}
+
+			&__title {
+				opacity: 1;
+			}
+
+			&__notification {
+				background-color: $salmon;
+				border-color: $salmon;
+				color: #fbfbfb;
 			}
 		}
 	}

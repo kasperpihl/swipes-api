@@ -126,7 +126,7 @@ class Sidemenu extends Component {
     })
   }
   renderTitle(title, sectionI){
-    return <h3 id={"section-" + sectionI} key={sectionI + '-title'}>{title}</h3>
+    return <div className="swipes-sidemenu__title" id={"section-" + sectionI} key={sectionI + '-title'}>{title}</div>
   }
   render() {
     let className = "swipes-sidemenu";
@@ -135,10 +135,10 @@ class Sidemenu extends Component {
     let { data } = this.props
 
     if(pinned){
-      className += " pinned";
+      className += " swipes-sidemenu--pinned";
     }
     if(forceClose){
-      className += " force-close";
+      className += " swipes-sidemenu--force-close";
     }
 
     let renderedItems = [];
@@ -150,9 +150,9 @@ class Sidemenu extends Component {
     })
     return (
       <div className={className} style={this.props.style}>
-        <div className="relative-wrapper">
+        <div className="swipes-sidemenu__relative-wrapper">
           {this.renderNotificationOverlay()}
-          <div ref="scroller" onScroll={this.onScroll} className="scroller">
+          <div ref="scroller" onScroll={this.onScroll} className="swipes-sidemenu__scroll-wrapper">
             {renderedItems}
           </div>
         </div>

@@ -7,17 +7,17 @@ class SidemenuItem extends Component {
   }
   renderNotification(notification){
     const count = parseInt(notification, 10);
-    const even = (count % 2 == 0) ? "even" : "odd";
+    const even = (count % 2 == 0) ? "swipes-sidemenu__item__notification--even" : "swipes-sidemenu__item__notification--odd";
 
     if(count){
-      const className = "notification " + even;
+      const className = "swipes-sidemenu__item__notification " + even;
       return <div className={className}>{count}</div>;
     }
   }
   renderIndicator(unread){
     const count = parseInt(unread, 10);
-    let even = (count % 2 == 0) ? "even" : "odd";
-    let className = "indicator ";
+    let even = (count % 2 == 0) ? "swipes-sidemenu__item__indicator--even" : "swipes-sidemenu__item__indicator--odd";
+    let className = "swipes-sidemenu__item__indicator ";
 
     if(count){
       className += even;
@@ -25,21 +25,21 @@ class SidemenuItem extends Component {
     return <div className={className} />
   }
   render(){
-    let className = "menu-item";
+    let className = "swipes-sidemenu__item";
     const { unread, notification, active, name } = this.props.data;
+
     if(unread){
-      className += " unread";
+      className += " swipes-sidemenu__item--unread";
     }
     if(active){
-      className += " active";
+      className += " swipes-sidemenu__item--active";
     }
-
 
     return (
       <div data-row={this.props.rowI} data-section={this.props.sectionI} onClick={this.onClick} className={className}>
         {this.renderIndicator(unread)}
         {this.renderNotification(notification)}
-        <div className={"name"}>{name}</div>
+        <div className="swipes-sidemenu__item__title">{name}</div>
     </div>
   );
 
