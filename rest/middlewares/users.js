@@ -70,16 +70,17 @@ const usersGetXendoServiceId = (req, res, next) => {
   } = res.locals;
 
   const getQ = r.table('xendo_user_services')
-    .getAll(service.id, {index: 'service_account_id'})
-    .nth(0);
+    .getAll(service.id, {index: 'service_account_id'});
 
   db.rethinkQuery(getQ)
     .then((xendoUserService) => {
-      if (validator.isNull(xendoUserService)) {
-        return next(new SwipesError('Xendo service not found'));
+      let xendoUserServiceId = null;
+
+      if (xendoUserService && xendoUserService.length > 0) {
+        xendoUserServiceId = xendoUserService[0].service_id;
       }
 
-      res.locals.xendoUserServiceId = xendoUserService.service_id;
+      res.locals.xendoUserServiceId = xendoUserServiceId;
 
       return next();
     })
@@ -92,6 +93,10 @@ const usersRemoveXendoService = (req, res, next) => {
   const {
     xendoUserServiceId
   } = res.locals;
+
+  if (xendoUserServiceId === null) {
+    return next();
+  }
 
   const deleteQ = r.table('xendo_user_services')
     .getAll(xendoUserServiceId, {index: 'service_id'})

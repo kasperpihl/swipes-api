@@ -190,6 +190,11 @@ const xendoRemoveServiceFromUser = (req, res, next) => {
     xendoSwipesCredentials,
     xendoUserServiceId
   } = res.locals;
+
+  if (xendoUserServiceId === null) {
+    return next();
+  }
+
   const url = xendoConfig.userServiceEndpoint + xendoUserServiceId;
 
   request.delete(url, {
