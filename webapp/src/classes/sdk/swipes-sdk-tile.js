@@ -171,7 +171,7 @@ export default class SwipesAppSDK {
         }
 
         this._loadModal("alert", options, function(res){
-          var confirmed = (res && res.button === 2);
+          var confirmed = (res && res.button === 1);
           if(typeof callback === 'function')
             callback(confirmed);
         })

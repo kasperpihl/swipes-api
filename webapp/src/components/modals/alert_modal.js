@@ -13,16 +13,14 @@ var AlertModal = React.createClass({
 
     var title = options.title || this.defaults.title;
     options.buttons = options.buttons || this.defaults.buttons;
-    var counter = 1;
-    var self = this;
-    var buttons = options.buttons.map(function(button){
+    var buttons = options.buttons.map((button, i) => {
       if(typeof button === 'string'){
         button = {title: button};
       }
       if(typeof button != 'object')
         return false;
-      button.key = counter;
-      return <AlertModal.Button didClickButton={self.didClickButton} key={counter++} data={button} />
+      button.key = i;
+      return <AlertModal.Button didClickButton={this.didClickButton} key={i} data={button} />
     });
     var message = "";
     if(options.message){

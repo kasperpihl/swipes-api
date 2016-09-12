@@ -4,7 +4,7 @@ var Textarea = require('react-textarea-autosize');
 var TextareaModal = React.createClass({
 	didClickButton: function(button){
 		var dataToReturn = null;
-		if(button === 2){
+		if(button === 1){
 			dataToReturn = this.refs.message.value;
 		}
 		this.props.data.callback(dataToReturn);
@@ -35,16 +35,15 @@ var TextareaModal = React.createClass({
 
 		var title = options.title || this.defaults.title;
 		options.buttons = ["Cancel", "Submit"];
-		var counter = 1;
-		var self = this;
-		var buttons = options.buttons.map(function(button){
+
+		var buttons = options.buttons.map((button, i) =>{
 			if(typeof button === 'string'){
 				button = {title: button};
 			}
 			if(typeof button != 'object')
 				return false;
-			button.key = counter;
-			return <TextareaModal.Button didClickButton={self.didClickButton} key={counter++} data={button} />
+			button.key = i;
+			return <TextareaModal.Button didClickButton={this.didClickButton} key={i} data={button} />
 		});
 
 		return (
