@@ -13,6 +13,6 @@ export default class IpcListener {
     if(name === 'showItemInFolder'){
       functionName = 'sendSync'
     }
-    ipcRenderer[functionName](name, data);
+    return ipcRenderer[functionName](name, data);
   }
 }
