@@ -65,12 +65,13 @@ const cleanupWebhooksFromUserService = (req, res, next) => {
 }
 
 const usersGetXendoServiceId = (req, res, next) => {
+  const userId = req.userId;
   const {
     service
   } = res.locals;
 
   const getQ = r.table('xendo_user_services')
-    .getAll(service.id, {index: 'service_account_id'});
+    .getAll([service.id, userId], {index: 'service_and_user_id'});
 
   db.rethinkQuery(getQ)
     .then((xendoUserService) => {
