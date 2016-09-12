@@ -99,28 +99,14 @@
     }
   }
 
-  img.empty-workspace-illustration {
+  svg.empty-workspace-illustration {
     width: 250px;
     cursor: default;
   }
 
-  img.empty-workspace-arrow {
-    position: absolute;
-    top: 15px;
-    right: 8px;
-    width: 34px;
-    animation: hoverArrow 2s ease-in-out infinite;
-
-    @keyframes hoverArrow {
-      50% {
-        transform: translateY(14px);
-      }
-    }
-  }
-
   p.workspace-empty-text {
     text-align: center;
-    margin: 20px 0;
+    margin: 100px 0;
     color: $deepBlue-40;
     font-size: 14px;
     font-weight: 300;
@@ -168,7 +154,7 @@
 
 .tile-resizing-overlay {
   @include size(100%, 100%);
-  background-color: white;
+  background-color: salmon;
 
   @include flex(center, center);
 
