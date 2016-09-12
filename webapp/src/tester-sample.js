@@ -1,7 +1,6 @@
 const props = {};
 let view;
 
-
 // Welcome to Swipes Component Tester, change anything between the ==='s
 // ==========================================
 
@@ -9,7 +8,7 @@ let view;
 import SwipesCard from './components/swipes-card/SwipesCard'
 
 // 2. Set the properties for your test
-props.data = {"title": "Yir"};
+props.data = {"title": "This is the properties of the component"};
 
 // 3. Set the view to test
 view = SwipesCard;
