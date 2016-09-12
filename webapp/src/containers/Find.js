@@ -104,7 +104,7 @@ class Find extends Component {
     const folder = localStorage.getItem('dropbox-folder');
     if(folder){
       var path = folder + data.subtitle + '/' + data.title;
-      console.log('opening', window.ipcListener.sendSyncEvent('showItemInFolder', path));
+      console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
     }
     console.log('clicked', data);
   }

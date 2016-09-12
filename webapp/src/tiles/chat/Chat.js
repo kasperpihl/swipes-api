@@ -115,7 +115,7 @@ class Chat extends Component {
       data = swipesUrlProvider.get(data.shortUrl);
       if(folder){
         var path = folder + data.subtitle + '/' + data.title;
-        console.log('opening', window.ipcListener.sendSyncEvent('showItemInFolder', path));
+        console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
       }
     }
     

@@ -8,10 +8,11 @@ export default class IpcListener {
       store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
     });
   }
-  sendSyncEvent(name, data){
-    return ipcRenderer.sendSync(name, data);
-  }
   sendEvent(name, data){
-    ipcRenderer.send(name, data);
+    var functionName = 'send';
+    if(name === 'showItemInFolder'){
+      functionName = 'sendSync'
+    }
+    ipcRenderer[functionName](name, data);
   }
 }
