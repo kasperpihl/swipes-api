@@ -152,8 +152,8 @@ class SwipesCardList extends Component {
 export default SwipesCardList
 
 const dataType = {
-  title: PropTypes.string,
-  items: PropTypes.array,
+  title: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
   titleLeftImage: PropTypes.string,
   titleRightImage: PropTypes.string,
   actionLabel: PropTypes.string
@@ -163,6 +163,6 @@ SwipesCardList.propTypes = {
   data: PropTypes.oneOfType([
     PropTypes.shape(dataType),
     PropTypes.array
-  ]),
+  ]).isRequired,
   // delegate: PropTypes.object.isRequired
 }
