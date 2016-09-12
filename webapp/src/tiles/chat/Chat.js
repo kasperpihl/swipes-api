@@ -109,6 +109,16 @@ class Chat extends Component {
     console.log('action', data, action);
   }
   onCardClick(card, data){
+    //console.log(this.shareDataForChecksum[data.checksum]);
+    if(data.shortUrl){
+      const folder = localStorage.getItem('dropbox-folder');
+      data = swipesUrlProvider.get(data.shortUrl);
+      if(folder){
+        var path = folder + data.subtitle + '/' + data.title;
+        console.log('opening', window.ipcListener.sendSyncEvent('showItemInFolder', path));
+      }
+    }
+    
     console.log('clicked', data);
   }
   onSelectedRow(row){

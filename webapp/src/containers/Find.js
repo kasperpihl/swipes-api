@@ -51,7 +51,7 @@ class Find extends Component {
     }
     else if(doc.source === 'dropbox'){
       meta.title = doc.filename;
-      meta.subtitle = doc.filepath;
+      meta.subtitle = doc.filepath  || '/';
     }
     if(!meta.title){
       this.unhandledDocs.push(doc);
@@ -100,6 +100,12 @@ class Find extends Component {
     }
   }
   onCardClick(card, data){
+    //console.log(this.shareDataForChecksum[data.checksum]);
+    const folder = localStorage.getItem('dropbox-folder');
+    if(folder){
+      var path = folder + data.subtitle + '/' + data.title;
+      console.log('opening', window.ipcListener.sendSyncEvent('showItemInFolder', path));
+    }
     console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
@@ -124,7 +130,6 @@ class Find extends Component {
     const keys = {}
     this.shareDataForChecksum = {}
     return recent.filter((activity) => {
-
       const id = activity.checksum;
       if(!keys[id]){
         this.shareDataForChecksum[id] = {

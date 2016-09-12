@@ -8,8 +8,10 @@ export default class IpcListener {
       store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
     });
   }
+  sendSyncEvent(name, data){
+    return ipcRenderer.sendSync(name, data);
+  }
   sendEvent(name, data){
-    console.log('sending ipc', name, data);
     ipcRenderer.send(name, data);
   }
 }
