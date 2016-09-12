@@ -40,5 +40,6 @@ export function signup(data){
 }
 
 export function logout() {
+  localStorage.clear();
   return { type: types.LOGOUT }
 }

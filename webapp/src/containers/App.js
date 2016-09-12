@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { api } from '../actions'
+import { api, modal } from '../actions'
 
 import Topbar from './Topbar'
 import Find from './Find'
 import Modal from './Modal'
 import DotDragOverlay from './DotDragOverlay'
+const {dialog} = nodeRequire('electron').remote
+
 let DevTools = 'div';
 if(process.env.NODE_ENV !== 'production'){
   DevTools = require('../DevTools');
@@ -14,6 +16,21 @@ if(process.env.NODE_ENV !== 'production'){
 class App extends Component {
   componentDidMount() {
     this.props.request('rtm.start');
+    this.checkForDropboxFolder();
+  }
+  checkForDropboxFolder(){
+    if(!localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')){
+      this.props.loadModal('alert', {title: "Find Dropbox folder", message: "This will enable you to open files on your local dropbox folder (experimental)", buttons: ["No", "Yes"]}, (confirmed) => {
+        if(confirmed.button){
+          var folder = dialog.showOpenDialog({ properties: ['openDirectory']});
+          if(folder){
+            localStorage.setItem('dropbox-folder', folder);
+          }
+        }
+        localStorage.setItem('dropbox-did-ask', true)
+      })
+      //
+    }
   }
   render() {
     let classes = 'main ' + this.props.mainClasses.join(' ');
@@ -39,6 +56,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedApp = connect(mapStateToProps, {
-  request: api.request
+  request: api.request,
+  loadModal: modal.loadModal
 })(App)
 export default ConnectedApp
