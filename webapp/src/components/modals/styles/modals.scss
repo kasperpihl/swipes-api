@@ -104,13 +104,9 @@ $break-mid: 650px;
     align-items: center;
   }
   .buttons {
-    position:absolute;
-    right: 0;
-    bottom: 0;
-    height: 50px;
-    padding-right: 10px;
+    float: right;
     button {
-      padding: 15px;
+      padding: 10px 15px;
       position: relative;
       width:auto;
       outline: none;
