@@ -25,7 +25,7 @@ class SidemenuItem extends Component {
     return <div className={className} />
   }
   render(){
-    let className = "swipes-sidemenu__item";
+    let className = "swipes-sidemenu__item js-menu-item";
     const { unread, notification, active, name } = this.props.data;
 
     if(unread){

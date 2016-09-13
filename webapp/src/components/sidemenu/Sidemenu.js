@@ -53,7 +53,7 @@ class Sidemenu extends Component {
     }
   }
   calculateBeforeAndAfter(){
-    var itemEls = Array.from(this.refs.scroller.getElementsByClassName("menu-item"));
+    var itemEls = Array.from(this.refs.scroller.getElementsByClassName("js-menu-item"));
     var height = this.refs.scroller.clientHeight;
     const scrollTop = this.refs.scroller.scrollTop;
     const { sections } = this.props.data;
@@ -65,8 +65,9 @@ class Sidemenu extends Component {
     itemEls.forEach((el, i) => {
       const item = sections[parseInt(el.dataset.section, 10)].rows[parseInt(el.dataset.row, 10)];
       const top = el.offsetTop;
+
       const below = (top + itemHeight > scrollTop + height)
-      const above = (top < 0)
+      const above = (top < scrollTop)
       if(item.unread){
         unreadAbove += above ? item.unread : 0;
         unreadBelow += below ? item.unread : 0;
