@@ -1,4 +1,5 @@
 var React = require('react');
+import './styles/modals.scss'
 var AlertModal = React.createClass({
   didClickButton: function(button){
     this.props.data.callback({button: button});

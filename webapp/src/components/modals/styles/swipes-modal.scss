@@ -1,0 +1,195 @@
+@import '../../global-styles/vars';
+@import '../../global-styles/mixins';
+
+.swipes-modal-overlay {
+	@include size(100%, 100%);
+	// background-color: red;
+	left: 0; top: 0;
+	position: fixed;
+}
+
+.swipes-modal {
+	@include size(100%, auto);
+	@include flex(center, center, column);
+	background-color: white;
+	border-radius: 6px;
+	box-shadow: 0px 5px 20px 0px rgba($deepBlue-40, 0.3);
+	margin: 100px auto;
+	max-width: 500px;
+	overflow: hidden;
+
+	// Default blocks
+
+	&__title {
+		@include size(100%, 70px);
+		@include flex(center, center);
+		background-color: $bg;
+		color: $blue-100;
+		font-size: 18px;
+		font-weight: 500;
+		position: relative;
+	}
+
+	&__close {
+		@include size(50px, 70px);
+		@include flex(center, center);
+		color: $deepBlue-60;
+		font-size: 18px;
+		position: absolute;
+		right: 0; top: 0;
+	}
+
+	&__message {
+		color: $deepBlue-60;
+		padding: 40px 25px;
+	}
+
+	&__textarea {
+		background-color: $bg;
+		color: $deepBlue-60;
+		font-size: 1em;
+		margin-top: 0;
+		margin: 15px 25px;
+		padding: 10px;
+	  outline: none;
+    line-height: 19px;
+    resize: none;
+    width: calc(100% - 30px);
+
+		&::-webkit-input-placeholder {
+	    color: $deepBlue-40;
+			font-size: 1em;
+	  }
+	}
+
+	&__list {
+		@include size(100%, auto);
+		@include flex(center, center, column);
+
+		&__item {
+			@include size(100%, 60px);
+			@include flex(center, flex-start);
+
+			&__img {
+				@include size(30px, 30px);
+				@include flex(center, center);
+				border-radius: 6px;
+				margin-left: 15px;
+			}
+
+			&__title {
+				color: $deepBlue-60;
+				padding: 0 25px;
+
+				&:not(:only-child) {
+					padding-left: 15px;
+					padding-right: 25px;
+				}
+			}
+
+			&:hover {
+				background-color: $bg;
+			}
+		}
+	}
+
+	// Buttons
+
+	&__actions {
+		@include size(100%, 60px);
+		@include flex(center, center);
+
+		&__button {
+			@include size(100%);
+			@include flex(center, center);
+			background-color: $blue-100;
+			color: white;
+			position: relative;
+			transition: .1s;
+
+			&:hover {
+				background-color: darken($blue-100, 5%);
+				color: darken(white, 5%);
+				transition: .1s;
+			}
+
+			&:not(:last-of-type) {
+
+				&:after {
+					@include size(1px, 30%);
+					background-color: white;
+					content: "";
+					opacity: .4;
+					position: absolute;
+					right: 0;
+					top: 35%;
+				}
+			}
+		}
+	}
+
+	// Loader
+
+	&__loader {
+
+	}
+
+	// Modifiers
+
+	&--success & {
+
+		&__title {
+			color: $green-color
+		}
+
+		&__actions {
+
+			&__button {
+				background-color: $green-color;
+
+				&:hover {
+					background-color: darken($green-color, 5%);
+					color: white;
+				}
+			}
+		}
+	}
+
+	&--warning & {
+
+		&__title {
+			color: $orange
+		}
+
+		&__actions {
+
+			&__button {
+				background-color: $orange;
+
+				&:hover {
+					background-color: darken($orange, 5%);
+					color: white;
+				}
+			}
+		}
+	}
+
+	&--error & {
+
+		&__title {
+			color: $red-100;
+		}
+
+		&__actions {
+
+			&__button {
+				background-color: $red-100;
+
+				&:hover {
+					background-color: darken($red-100, 5%);
+					color: white;
+				}
+			}
+		}
+	}
+}
