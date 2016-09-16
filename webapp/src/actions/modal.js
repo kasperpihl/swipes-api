@@ -13,7 +13,7 @@ export function loadTilesListModal(){
     console.log('dispatch');
     const now = new Date().getTime()
     var returned = false;
-    dispatch(loadModal('list', {"title": "Add a workflow", "emptyText": "Loading..."}, () => {
+    dispatch(loadModal('list', {"title": "Add a tile", "emptyText": "Loading..."}, () => {
       returned = true;
     }));
     const now2 = new Date().getTime()
@@ -25,7 +25,7 @@ export function loadTilesListModal(){
         const rows = res.data.map((row) => {
           return Object.assign({}, row, {imageUrl: 'workflows/' + row.manifest_id + '/' + row.icon})
         })
-        dispatch(loadModal('list', {"title": "Add a workflow", "emptyText": "We're working on adding more workflows.", "rows": rows }, (row) => {
+        dispatch(loadModal('list', {"title": "Add a tile", "emptyText": "We're working on adding more tiles.", "rows": rows }, (row) => {
 
           if(row){
             dispatch(request('users.addWorkflow', {manifest_id: row.manifest_id}));
