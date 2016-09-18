@@ -367,7 +367,6 @@ export default class SlackData {
   }
   sendTypingEvent() {
     const { selectedChannelId } = this.data;
-
     this.socket.sendEvent({'id': '1', 'type': 'typing', 'channel': selectedChannelId});
 
   }

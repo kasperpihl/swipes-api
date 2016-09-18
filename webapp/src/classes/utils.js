@@ -12,7 +12,11 @@ export function shortUrlFromShareUrl(url){
 
 export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {
-    context[methodName] = context[methodName].bind(context);
+    if(typeof context[methodName] !== 'function'){
+      console.warn('trying to bind non-existing function', methodName);
+    }
+    else
+      context[methodName] = context[methodName].bind(context);
   });
 }
 export function size(obj) {
