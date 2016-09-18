@@ -86,12 +86,14 @@ class SwipesModal extends Component {
 		}
 	}
   render() {
-    const { title, message, textarea, buttons, items, type } = this.props.data;
+    const { title, message, textarea, buttons, items, type, children } = this.props.data;
 		let modalClass = 'swipes-modal';
 
     if (type) {
       modalClass += ' swipes-modal--' + type.toLowerCase();
     }
+
+    console.log(children);
 
     return (
       <div className="swipes-modal-overlay">
@@ -103,6 +105,7 @@ class SwipesModal extends Component {
   				{this.renderMessage(message)}
           {this.renderTextarea(textarea)}
   				{this.renderList(items)}
+          {children}
   				{this.renderActions(buttons)}
         </div>
       </div>
