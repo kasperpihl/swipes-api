@@ -35,7 +35,7 @@
   left: 50%;
   max-width: 600px;
   position: absolute;
-  transform: translateX(-50%);
+  transform: translateX(calc(-50% - 1px));
   z-index: 3;
 }
 
