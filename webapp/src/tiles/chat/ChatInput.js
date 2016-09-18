@@ -12,7 +12,7 @@ class ChatInput extends Component {
   }
   componentDidMount() {
     if(this.props.sendTypingEvent){
-      this.sendTypingEvent = throttle(this.props.sendTypingEvent, 3000, [{leading: true}]);
+      this.sendTypingEvent = throttle(this.props.sendTypingEvent, 3000);
     }
     else{
       this.sendTypingEvent = () => {};

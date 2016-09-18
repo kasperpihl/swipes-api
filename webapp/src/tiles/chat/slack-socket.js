@@ -97,7 +97,6 @@ export default class SlackSocket {
     if(typeof msg !== 'string'){
       try{
         msg = JSON.stringify(msg)
-        return true;
       }
       catch(e){
         msg = ''
