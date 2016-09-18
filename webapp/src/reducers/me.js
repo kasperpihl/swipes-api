@@ -33,7 +33,7 @@ export default function me (state = initialState, action) {
       const msg = action.payload;
       const newState = clone(state);
       newState.services = newState.services.filter((service) => {
-        return (service.id === msg.data.id && service.service_name === msg.data.service_name);
+        return (service.id !== msg.data.id && service.service_name !== msg.data.service_name);
       })
       return newState;
     }
