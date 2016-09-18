@@ -120,7 +120,7 @@ export default class SlackSwipesParser {
     })
   }
   parseFileToCard(msg, data){
-    let { name, thumb_360, thumb_360_w, thumb_360_h, id } = msg.file;
+    let { name, thumb_360, thumb_360_w, thumb_360_h, id, filetype, url_private_download } = msg.file;
     const card = {
       id,
       type: 'file',
@@ -129,6 +129,12 @@ export default class SlackSwipesParser {
     if(thumb_360){
       card.type = 'image',
       card.preview = {type: 'image', url: thumb_360, width: thumb_360_w , height: thumb_360_h}
+    }
+
+    if ((filetype === 'mov' | 'mp4') && url_private_download) {
+      card.type = 'html',
+      card.preview = {type: 'html', url: url_private_download, width: '360', height:'180'}
+      console.log(msg.file);
     }
     return [card];
   }
@@ -269,7 +275,7 @@ export default class SlackSwipesParser {
       }
       return newMsg;
     })
-    
+
     const lastSection = sortedSections[sortedSections.length - 1]
     if(sendingMessages.length){
       lastSection.messages = lastSection.messages.concat(sendingMessages);

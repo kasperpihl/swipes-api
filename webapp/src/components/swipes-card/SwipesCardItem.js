@@ -17,7 +17,7 @@ class SwipesCardItem extends Component {
     const { data } = this.props;
     if(data.shortUrl){
       window.swipesUrlProvider.subscribe(data.shortUrl, this.updateData, this.id);
-    } 
+    }
   }
   componentDidUpdate(prevProps){
     if(JSON.stringify(this.props.data) !== JSON.stringify(prevProps.data)){
