@@ -18,7 +18,7 @@ class Workspace extends Component {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this._cachedTiles = {};
-    bindAll(this, ['gridRenderRowForId', 'gridDidTransitionStep', 'gridRowPressedMenu', 'gridRowPressedRemove', 'gridDidUpdate', 'gridRenderResizeOverlayForId', 'tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
+    bindAll(this, ['tileDidLoad', 'tileWillUnload', 'sendToTile', 'sendToAllTiles', 'onWindowFocus', 'onWindowBlur', 'onMouseMove', 'onMouseUp'])
   }
   generateShareUrl(shortUrl){
     return window.location.origin + '/s/' + shortUrl;
@@ -107,6 +107,20 @@ class Workspace extends Component {
         data={{id: id}} />
     );
   }
+  gridOptionsForTopbar(grid, id){
+    var tile = this.props.tiles[id];
+    var me = this.props.me;
+    if(tile.selectedAccountId){
+      var show_name;
+      me.services.forEach((service) => {
+        if(service.service_name === tile.required_services[0] && tile.selectedAccountId === service.id){
+          show_name = service.show_name;
+        }
+      })
+    }
+    return { title: tile.name, subtitle: show_name };
+    
+  }
   gridDidTransitionStep(grid, name, step){
     if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
       if(!this.props.fullscreen){
@@ -182,6 +196,7 @@ function mapStateToProps(state) {
     baseUrl: state.main.tileBaseUrl,
     draggingDot: state.main.draggingDot,
     fullscreen: state.main.isFullscreen,
+    me: state.me,
     tiles: state.workspace.tiles,
     hasLoaded: state.main.hasLoaded,
     columns: state.workspace.columns
