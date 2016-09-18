@@ -118,7 +118,7 @@ class Chat extends Component {
         console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
       }
     }
-    
+
     console.log('clicked', data);
   }
   onSelectedRow(row){

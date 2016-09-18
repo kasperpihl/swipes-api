@@ -27,14 +27,16 @@
 }
 
 .typing-indicator {
-  @include size(700px, auto);
-  position: absolute;
-  right: 50px;
-  z-index: 3;
-  font-size: 12px;
-  color: $deepBlue-40;
+  @include flex(center, flex-end);
+  @include size(100%, auto);
   bottom: 68px;
-  padding-right: 68px;
+  color: $deepBlue-40;
+  font-size: 12px;
+  left: 50%;
+  max-width: 600px;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 3;
 }
 
 .seperator-line {

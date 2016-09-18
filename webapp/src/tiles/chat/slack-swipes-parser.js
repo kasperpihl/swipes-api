@@ -134,7 +134,6 @@ export default class SlackSwipesParser {
     if ((filetype === 'mov' | 'mp4') && url_private_download) {
       card.type = 'html',
       card.preview = {type: 'html', url: url_private_download, width: '360', height:'180'}
-      console.log(msg.file);
     }
     return [card];
   }
