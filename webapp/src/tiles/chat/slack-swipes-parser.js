@@ -19,7 +19,7 @@ export default class SlackSwipesParser {
     if(channel.user){
       var user = users[channel.user];
       if (user.presence === "active") {
-        return { svg: SlackOnline }
+        return { svg: SlackOnline };
       } else {
         return (
           {
