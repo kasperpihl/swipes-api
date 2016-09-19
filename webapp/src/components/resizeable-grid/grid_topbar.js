@@ -76,13 +76,13 @@ var Topbar = React.createClass({
   },
   render() {
 
-    
+
 
     const {
       data
     } = this.props;
     var options = this.props.callGridDelegate('gridOptionsForTopbar', data.id);
-    
+
     let className = "sw-grid-topbar";
     let onclickHandler;
     let title = options.title;
@@ -94,7 +94,6 @@ var Topbar = React.createClass({
 
     const dropdownStructure = [
       { title: 'Tile menu', id: 'menu' },
-      { title: 'Settings', id: 'settings' },
       { title: 'Remove Tile', id: 'remove' }
     ];
 
