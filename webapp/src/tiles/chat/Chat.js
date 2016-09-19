@@ -8,7 +8,7 @@ import { bindAll } from '../../classes/utils'
 import Sidemenu from '../../components/sidemenu/Sidemenu'
 
 import SlackData from './slack-data'
-import SlackTileHandler from './slack-tile-handler'
+// import SlackTileHandler from './slack-tile-handler'
 
 import ChatList from './ChatList'
 import ChatInput from './ChatInput'
@@ -16,13 +16,13 @@ import ChatInput from './ChatInput'
 class Chat extends Component {
   constructor(props) {
     super(props)
-    
+
     this.state = { started: false, isStarting: false, inputHeight: 60 }
 
     bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink', 'onCardShare', 'onCardAction'])
     this.addListenersToSwipes(props.swipes);
     //this.slackHandler = new SlackTileHandler(props.tile);
-    
+
     const data = this.loadDataFromStorage(props.tile.id);
     this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
   }

@@ -1,6 +1,6 @@
 import { bindAll, indexBy, decodeHtml } from '../../classes/utils'
 import { getTimeStr, dayStringForDate, startOfDayTs, isAmPm } from '../../classes/time-utils'
-import { SlackOnline } from '../../components/icons';
+import { SlackOnline, SlackOffline } from '../../components/icons';
 
 import { isShareURL } from '../../classes/utils'
 
@@ -23,9 +23,7 @@ export default class SlackSwipesParser {
       } else {
         return (
           {
-            url: 'https://cdn3.iconfinder.com/data/icons/player/128/sound-35-128.png',
-            width: 10,
-            height: 10
+            svg: SlackOffline
           }
         )
       }

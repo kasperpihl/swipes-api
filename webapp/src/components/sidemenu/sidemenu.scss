@@ -85,6 +85,10 @@ $pushDelay: .1s;
 			img {
 				@include size();
 			}
+
+			svg {
+				@include size(10px, 10px);
+			}
 		}
 
 		&__indicator {
