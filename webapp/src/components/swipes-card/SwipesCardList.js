@@ -117,19 +117,20 @@ class SwipesCardList extends Component {
       </div>
     )
   }
-  renderAction(label) {
-    if (label && label.length > 0) {
-
-      return (
-        <div className="sw-card-list__action">
-          <div className="sw-card-list__action__label">{label}</div>
-          <div className="sw-card-list__action__icon">
-            <EyeIcon />
-          </div>
-        </div>
-      )
-    }
-  }
+  // Removed templorary until we figure out how we want to build "view more"
+  // renderAction(label) {
+  //   if (label && label.length > 0) {
+  //
+  //     return (
+  //       <div className="sw-card-list__action">
+  //         <div className="sw-card-list__action__label">{label}</div>
+  //         <div className="sw-card-list__action__icon">
+  //           <EyeIcon />
+  //         </div>
+  //       </div>
+  //     )
+  //   }
+  // }
   tabClick(i) {
     console.log(i)
     this.setState({selectedTab: i});
@@ -143,7 +144,6 @@ class SwipesCardList extends Component {
       <div className="sw-card-list">
         {this.renderHeader(data, selectedTab)}
         {this.renderList(data, selectedTab)}
-        {this.renderAction(data.actionLabel)}
       </div>
     )
   }
