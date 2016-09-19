@@ -211,6 +211,7 @@ tabSlider {
       @include size(calc(100% - 42px));
       @include flex(flex-start, center, column);
       padding-right: 18px;
+      
       &--no-subtitle & {
         &--title {
           white-space: normal;
@@ -291,8 +292,8 @@ tabSlider {
   &__preview {
 		@include size(100%, auto);
     background-color: $blue-5;
-    border-top: 1px solid $deepBlue-10;
-    padding: 18px;
+    // border-top: 1px solid $deepBlue-10;
+    // padding: 18px;
 
     &--no-style {
       padding: 0;
@@ -305,10 +306,10 @@ tabSlider {
 
 		&--img {
       @include flex(center, center);
-			// width: 100%;
+			width: 100%;
 
       img {
-        //width: 100%;
+        // width: 100%;
       }
 		}
   }

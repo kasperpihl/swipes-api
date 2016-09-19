@@ -131,8 +131,18 @@ class SwipesCardItem extends Component {
     }
 
     if (preview.type === 'image' && isImage) {
+      const { cardPreview } = this.refs;
+
+
+      if (cardPreview) {
+        if (preview.width > cardPreview.clientWidth) {
+          preview.height = preview.height * cardPreview.clientWidth / preview.width;
+          preview.width = cardPreview.clientWidth;
+        }
+      }
+
       return (
-        <div className="swipes-card__preview">
+        <div className="swipes-card__preview" ref="cardPreview">
           <div className="swipes-card__preview--img">
             <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
           </div>
