@@ -1,5 +1,6 @@
 import { bindAll, indexBy, decodeHtml } from '../../classes/utils'
 import { getTimeStr, dayStringForDate, startOfDayTs, isAmPm } from '../../classes/time-utils'
+import { SlackOnline } from '../../components/icons';
 
 import { isShareURL } from '../../classes/utils'
 
@@ -18,7 +19,7 @@ export default class SlackSwipesParser {
     if(channel.user){
       var user = users[channel.user];
       if (user.presence === "active") {
-        return 'https://cdn3.iconfinder.com/data/icons/player/128/sound-18-128.png'
+        return { svg: SlackOnline }
       } else {
         return (
           {

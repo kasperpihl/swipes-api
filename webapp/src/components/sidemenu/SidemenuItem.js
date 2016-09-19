@@ -6,7 +6,17 @@ class SidemenuItem extends Component {
     bindAll(this, ['onClick'])
   }
   renderIcon(icon) {
+    console.log(icon);
     if (icon && typeof icon === 'object') {
+      if (icon.svg) {
+        var SVG = icon.svg;
+        return (
+          <div className="swipes-sidemenu__item__icon">
+            <SVG />
+          </div>
+        )
+      }
+
       return (
         <div className="swipes-sidemenu__item__icon">
           <img src={icon.url} style={{width: icon.width + 'px', height: icon.height + 'px'}} />
