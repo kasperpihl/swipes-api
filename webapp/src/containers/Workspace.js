@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import * as actions from '../constants/ActionTypes'
 import { workspace, main } from '../actions'
 import { size, bindAll } from '../classes/utils'
+
 import '../components/workspace/workspace.scss'
 
 import EmptyBackground from '../components/workspace/EmptyBackground'
 import ResizeOverlay from '../components/workspace/ResizeOverlay'
 import SwipesLoader from '../components/swipes-ui/SwipesLoader'
+import { SlackIcon } from '../components/icons'
 
 import Tile from './Tile'
 import Grid from '../components/resizeable-grid/grid'
@@ -141,7 +143,12 @@ class Workspace extends Component {
     var tile = this.props.tiles[id];
     var title = tile.name;
     var url = this.props.baseUrl + tile.manifest_id + '/' + tile.icon;
-    return <ResizeOverlay imageUrl={url} title={title} />
+    console.log('tile', tile);
+    var SVG;
+    if(tile.manifest_id === 'slack-dashboard'){
+      SVG = SlackIcon;
+    }
+    return <ResizeOverlay imageUrl={url} svg={SVG} title={title} />
   }
 
   // ======================================================

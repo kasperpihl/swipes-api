@@ -12,7 +12,7 @@ var Row = React.createClass({
     return <Topbar delegate={this.props.delegate} data={this.props.data} columnIndex={this.props.columnIndex} callGridDelegate={this.props.callGridDelegate} rowIndex={this.props.rowIndex} />
   },
   renderResizingOverlay(){
-    return null; (
+    return (
       <div className="sw-resizing-overlay">
         <CollapsingOverlay />
         {this.props.callGridDelegate('gridRenderResizeOverlayForId', this.props.data.id)}

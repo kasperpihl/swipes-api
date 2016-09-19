@@ -3,6 +3,7 @@ import SwipesCard from '../swipes-card/SwipesCard'
 import SwipesCardList from '../swipes-card/SwipesCardList'
 import Loader from '../swipes-ui/Loader'
 
+import { FindIcon } from '../icons'
 import SearchResultsService from './SearchResultsService'
 
 class SearchResults extends Component {

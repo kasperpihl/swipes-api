@@ -6,9 +6,8 @@ import { bindAll } from '../classes/utils'
 import '../components/topbar/topbar.scss'
 import DropdownMenu from '../components/swipes-ui/DropdownMenu'
 
-import WorkspaceIcon from '../components/global-styles/images/workspace-icon.svg'
-import FindIcon from '../components/global-styles/icons/sw-find-icon.svg';
-import PlusIcon from '../components/global-styles/icons/sw-plus-icon.svg';
+import { FindIcon, WorkspaceIcon, PlusIcon } from '../components/icons';
+
 import gradient from '../components/topbar/gradient';
 
 class Topbar extends Component {
