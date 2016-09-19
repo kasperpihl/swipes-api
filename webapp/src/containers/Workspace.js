@@ -143,7 +143,6 @@ class Workspace extends Component {
     var tile = this.props.tiles[id];
     var title = tile.name;
     var url = this.props.baseUrl + tile.manifest_id + '/' + tile.icon;
-    console.log('tile', tile);
     var SVG;
     if(tile.manifest_id === 'slack-dashboard'){
       SVG = SlackIcon;

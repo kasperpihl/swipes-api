@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react'
 const ResizeOverlay = ({ imageUrl, title, svg }) => {
   var imageHtml = <img src={imageUrl} />;
   if(svg){
-    console.log(svg);
     var LogoSlack = svg;
     imageHtml = <LogoSlack />
   }
