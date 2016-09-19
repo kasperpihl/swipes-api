@@ -71,7 +71,15 @@ export default class SlackSwipesParser {
     const sections = []
 
     if(starsCol.length){
-      sections.push({ title: "Starred", rows: starsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
+      sections.push({ 
+        title: "Starred", 
+        rows: starsCol.sort((a, b) => {
+          if(a.id.startsWith('D') !== b.id.startsWith('D')){
+            return (a.id.startsWith('D')) ? 1 : -1;
+          }
+          return (a.name < b.name) ? -1 : 1;
+        }) 
+      })
     }
     sections.push({ title: "Channels", rows: channelsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
     sections.push({ title: "People", rows: peopleCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })
