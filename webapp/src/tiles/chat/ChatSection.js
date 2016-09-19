@@ -11,6 +11,7 @@ export default class ChatSection extends Component {
     const { clickedLink, cardDelegate } = this.props;
     const { section, unreadIndicator } = this.props.data;
     var unreadSectionClass = ""
+    var idForSection = ""
     var chatLineContainerClass = ''
     section.messages.forEach((item, i) => {
       if(unreadIndicator && item.isFirstUnreadMessage){
@@ -23,7 +24,7 @@ export default class ChatSection extends Component {
           unreadClass += ' js-unread-class'
 
           chatItems.push(
-            <div className={"seperator-line seperator-line--new" + unreadClass} key="new-message-header">
+            <div id="unread-indicator" className={"seperator-line seperator-line--new" + unreadClass} key="new-message-header">
               <div className="seperator-line__line"></div>
               <div className="seperator-line__message">New Messages</div>
             </div>
@@ -31,6 +32,7 @@ export default class ChatSection extends Component {
         }
         else{
           unreadSectionClass = unreadClass;
+          idForSection = 'unread-indicator'
           chatLineContainerClass += ' js-unread-class'
         }
       }
@@ -41,7 +43,7 @@ export default class ChatSection extends Component {
 
     return (
       <div className="section">
-        <div className={"seperator-line seperator-line--date" + chatLineContainerClass + unreadSectionClass}>
+        <div id={idForSection} className={"seperator-line seperator-line--date" + chatLineContainerClass + unreadSectionClass}>
           <div className="seperator-line__line"></div>
           <div className="seperator-line__message">{section.title}</div>
         </div>
