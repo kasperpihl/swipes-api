@@ -5,10 +5,10 @@ import { main, modal } from '../actions'
 import { bindAll } from '../classes/utils'
 import '../components/topbar/topbar.scss'
 import DropdownMenu from '../components/swipes-ui/DropdownMenu'
-
 import { FindIcon, WorkspaceIcon, PlusIcon } from '../components/icons';
-
 import gradient from '../components/topbar/gradient';
+
+const { ipcRenderer } = nodeRequire('electron');
 
 class Topbar extends Component {
   constructor(props) {
@@ -22,24 +22,25 @@ class Topbar extends Component {
   }
   componentDidMount() {
     this.gradientStep();
-    window.addEventListener('keydown', this.navigateTopbar.bind(this), this.props);
+    ipcRenderer.on('toggle-find', () => {
+      if (!this.props.isFinding) {
+        this.props.toggleFind();
+      }
+    })
+    ipcRenderer.on('new-tile', () => {
+      if (!this.props.isFinding) {
+        this.props.loadTilesListModal();
+      }
+    })
+    window.addEventListener('keydown', (e) => {
+      if (e.keyCode === 27 && this.props.isFinding) {
+        this.props.toggleFind();
+      }
+    });
   }
   componentDidUpdate(prevProps){
     if(this.props.isFinding && !prevProps.isFinding && document.activeElement !== this.refs.searchInput){
       this.refs.searchInput.select()
-    }
-  }
-  navigateTopbar(e) {
-    if(((e.ctrlKey || e.metaKey) && e.keyCode === 70) && !this.props.isFinding) {
-      this.props.toggleFind()
-    }
-
-    if (e.keyCode === 27 && this.props.isFinding) {
-      this.props.toggleFind()
-    }
-
-    if (((e.ctrlKey || e.metaKey) && e.keyCode === 78)) {
-      this.props.loadTilesListModal();
     }
   }
   onKeyDown(e){
