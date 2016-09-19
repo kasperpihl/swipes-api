@@ -130,6 +130,10 @@ class Workspace extends Component {
       }
     }
   }
+  gridRowPressedFullscreen(grid, id){
+    var options = this.gridOptionsForTopbar(grid,id);
+    this.props.setFullscreenTitle(options.title, options.subtitle);
+  }
   gridRowPressedRemove(grid, id){
     this.props.removeTile({id: id});
   }
@@ -214,6 +218,7 @@ const ConnectedWorkspace = connect(mapStateToProps, {
   updateColumns: workspace.updateColumns,
   generateShareUrl: workspace.generateShareUrl,
   toggleFullscreen: main.toggleFullscreen,
+  setFullscreenTitle: main.setFullscreenTitle,
   dragDot: main.dragDot,
   stopDraggingDot: main.stopDraggingDot
 })(Workspace)

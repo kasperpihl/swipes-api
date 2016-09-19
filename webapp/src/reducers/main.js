@@ -43,6 +43,12 @@ export default function main (state = initialState, action) {
       newState.isFullscreen = !state.isFullscreen;
       return newState;
     }
+    case types.SET_FULLSCREEN_TITLE:{
+      const newState = clone(state);
+      newState.fullscreenTitle = action.title;
+      newState.fullscreenSubtitle = action.subtitle;
+      return newState;
+    }
 
     case types.TOGGLE_FIND:{
       const newState = clone(state);
