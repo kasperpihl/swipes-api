@@ -17,20 +17,14 @@ export default class EmptyBackground extends Component {
         </div>
       )
     }
-    
+
   }
   render() {
     return (
       <div className="empty-workspace-state">
         <p className="workspace-empty-text">
-          <span className="strong">Welcome to your workspace</span> <br />
+          <span className="strong">You have no tiles currently opened. Open one from the topbar.</span>
         </p>
-        <EmptyWorkspace className="empty-workspace-illustration" onClick={this.toggleVideo} />
-        <div className="play-button" onClick={this.toggleVideo}></div>
-          <p className="workspace-empty-text">
-            Play the video to get started
-          </p>
-          {this.renderVideo()}
       </div>
     )
   }
