@@ -69,6 +69,24 @@ $pushDelay: .1s;
 		@include size(100%, $itemHeight);
 		position: relative;
 
+		&--icon & {
+
+			&__title {
+				padding-left: 60px;
+			}
+		}
+
+		&__icon {
+			@include size($itemHeight, $itemHeight);
+			@include flex(center, center);
+			left: 30px; top: 0;
+			position: absolute;
+
+			img {
+				@include size();
+			}
+		}
+
 		&__indicator {
 			@include size($indicatorWidth, $indicatorHeight);
 			background: $color;

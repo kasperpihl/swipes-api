@@ -14,6 +14,23 @@ export default class SlackSwipesParser {
       return users[channel.user].name;
     }
   }
+  iconForChannel(channel, users){
+    if(channel.user){
+      var user = users[channel.user];
+      if (user.presence === "active") {
+        return 'https://cdn3.iconfinder.com/data/icons/player/128/sound-18-128.png'
+      } else {
+        return (
+          {
+            url: 'https://cdn3.iconfinder.com/data/icons/player/128/sound-35-128.png',
+            width: 10,
+            height: 10
+          }
+        )
+      }
+    }
+    return null;
+  }
   sectionsForSidemenu(data){
     const { channels, users, selectedChannelId } = data;
     const starsCol = [];
@@ -29,10 +46,12 @@ export default class SlackSwipesParser {
         continue;
       }
 
-      const item = { id: channel.id, name: this.titleForChannel(channel, users) };
+      const item = { id: channel.id, name: this.titleForChannel(channel, users), icon: this.iconForChannel(channel, users) };
       if (selectedChannelId === channel.id) {
         item.active = true;
       }
+
+
 
       if (channel.unread_count_display) {
         item.unread = channel.unread_count_display;
@@ -48,6 +67,7 @@ export default class SlackSwipesParser {
         channelsCol.push(item);
       }
     }
+
 
     const sections = []
 
