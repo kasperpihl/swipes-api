@@ -6,6 +6,7 @@ export const FindIcon = svg('sw-find-icon')
 export const EmptyWorkspace = svg('emptystate-workspace')
 export const WorkspaceIcon = svg('workspace-icon')
 export const SlackOnline = svg('slack-online')
+export const SwipesLogo = svg('swipes-logo')
 export const SlackOffline = svg('slack-offline')
 
 export const SlackIcon = svg('logo-slack')

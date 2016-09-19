@@ -29,10 +29,14 @@
 
 	&__logo {
 		@include size(calc(272px / 3), calc(272px / 3));
-		background-image: url("../icons/pngs/swipes-logo.png");
-		background-size: calc(272px / 3) calc(272px / 3);
+		// background-image: url("../icons/pngs/swipes-logo.png");
+		// background-size: calc(272px / 3) calc(272px / 3);
 		left: 20px; top: 20px;
 		position: absolute;
+
+		svg {
+			@include size();
+		}
 	}
 
 	&__headline {
