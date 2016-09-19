@@ -118,7 +118,7 @@ class Topbar extends Component {
     // dummy data for DropdownMenu
 
     let selectedTitle = 'Workspace'
-    const { pathname } = this.props;
+    const { pathname, fullscreenTitle, fullscreenSubtitle } = this.props;
     const dropdownStructure = [
       { title: 'Workspace', id: 'workspace' },
       { title: 'Services', id: 'services' },
@@ -141,9 +141,9 @@ class Topbar extends Component {
               <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
             </div>
             <div className="sw-topbar__info__tile-title">
-              <div className="sw-topbar__info__tile-title--title">chat</div>
+              <div className="sw-topbar__info__tile-title--title">{fullscreenTitle}</div>
               <div className="sw-topbar__info__tile-title--seperator"></div>
-              <div className="sw-topbar__info__tile-title--subtitle">Swipes Team</div>
+              <div className="sw-topbar__info__tile-title--subtitle">{fullscreenSubtitle}</div>
             </div>
           </div>
           <div className="sw-topbar__searchbar">
@@ -166,6 +166,8 @@ class Topbar extends Component {
 function mapStateToProps(state) {
   return {
     isFullscreen: state.main.isFullscreen,
+    fullscreenTitle: state.main.fullscreenTitle,
+    fullscreenSubtitle: state.main.fullscreenSubtitle,
     searchQuery: state.main.searchQuery,
     isFinding: state.main.isFinding,
     hasLoaded: state.main.hasLoaded

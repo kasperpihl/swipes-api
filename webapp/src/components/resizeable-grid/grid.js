@@ -1430,7 +1430,7 @@ var Grid = React.createClass({
       this.transitionNext();
       return;
     }
-
+    this.callDelegate('gridRowPressedFullscreen', id);
 
 
     var indexes = this.indexesForRowId(id);

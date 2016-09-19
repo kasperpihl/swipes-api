@@ -4,6 +4,9 @@ import { request } from './api'
 export function toggleFullscreen() {
   return { type: types.TOGGLE_FULLSCREEN }
 }
+export function setFullscreenTitle(title, subtitle){
+  return { type: types.SET_FULLSCREEN_TITLE, title, subtitle }
+}
 
 export function toggleFind() {
   return { type: types.TOGGLE_FIND }
