@@ -3,7 +3,7 @@
 
 .tile {
   @include size(100%, 100%);
-
+  background-color: $bg;
   .workflow-frame-class {
     @include size(100%, 100%);
     display:flex;
@@ -154,7 +154,7 @@
 
 .tile-resizing-overlay {
   @include size(100%, 100%);
-  background-color: salmon;
+  background-color: $bg;
 
   @include flex(center, center);
 
@@ -164,9 +164,11 @@
 
     .app-icon {
       @include size(40px, 40px);
+      @include flex(center, center);
+      position: relative;
 
-      img {
-        @include size(40px, 40px);
+      svg, img {
+        @include size();
       }
     }
   }

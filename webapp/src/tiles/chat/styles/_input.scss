@@ -4,7 +4,7 @@ $inputButtonWidth: 50px;
 .chat-input {
   @include size(100%, $inputHeight);
   max-width: 600px;
-  background-color: #fbfbfb;
+  background-color: $bg;
   border: 1px solid $deepBlue-10;
   // border-bottom: none;
   @include border-radius(6px,6px,6px,6px);
@@ -86,7 +86,7 @@ $inputButtonWidth: 50px;
     width: calc(100% - 2 * #{$inputButtonWidth});
     resize: none;
     outline: none;
-    
+
     margin-left: $inputButtonWidth;
     min-height: $inputHeight;
     font-size: 13px;
