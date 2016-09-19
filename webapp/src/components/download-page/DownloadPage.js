@@ -1,7 +1,7 @@
 var React = require('react');
 var browser = require('detect-browser');
 import './download-page.scss'
-import LogoImg from '../global-styles/images/swipes-logo.png'
+import { SwipesIcon } from '../icons'
 var DownloadPage = React.createClass({
   componentDidMount: function() {
     if (browser.name === 'safari') {
@@ -104,7 +104,7 @@ var DownloadPage = React.createClass({
 
     return (
       <div className="dl-card">
-        <img src={LogoImg}/>
+        <img src={SwipesIcon}/>
         <h6>NEW VERSION OF SWIPES</h6>
         <p>Great news! Swipes is now available for your operating system. <br /> {microCopy}</p>
         {downloadOptions}

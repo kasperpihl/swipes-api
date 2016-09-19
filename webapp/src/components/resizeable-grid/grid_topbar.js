@@ -75,12 +75,18 @@ var Topbar = React.createClass({
     }
   },
   render() {
+
+    
+
     const {
       data
     } = this.props;
+    var options = this.props.callGridDelegate('gridOptionsForTopbar', data.id);
+    
     let className = "sw-grid-topbar";
     let onclickHandler;
-    let title = 'Chat';
+    let title = options.title;
+    let subtitle = options.subtitle;
 
     if ( this.state.dropdownMenu ) {
       className += ' sw-grid-topbar--shown'
@@ -99,26 +105,26 @@ var Topbar = React.createClass({
 
     if (this.props.data.collapsed) {
       onclickHandler = this.onClick;
-
+      const splittedTitle = title.split("").map((char, i) => {
+        return <div style={{minHeight: "22px"}} key={"char-" + i} className="collapsed__title--letter">{char}</div>
+      });
       return (
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar_content">
             <div className="sw-grid-topbar_content-title">
-              <div className="collapsed__title--letter">C</div>
-              <div className="collapsed__title--letter">H</div>
-              <div className="collapsed__title--letter">A</div>
-              <div className="collapsed__title--letter">T</div>
+              {splittedTitle}
             </div>
           </div>
         </div>
       )
     } else {
+
       return (
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar__content" onClick={this.onTitleClick}>
             <div className="sw-grid-topbar__content--title">{title}</div>
             <div className="sw-grid-topbar__content--seperator"></div>
-            <div className="sw-grid-topbar__content--subtitle">Swipes Team</div>
+            <div className="sw-grid-topbar__content--subtitle">{subtitle}</div>
           </div>
 
           <div className="sw-grid-topbar__actions">

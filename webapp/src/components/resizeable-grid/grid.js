@@ -1126,8 +1126,9 @@ var Grid = React.createClass({
   // Delegation Setup
   // ======================================================
   callDelegate(name){
-    if(this.props.delegate && typeof this.props.delegate[name] === "function"){
-      return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    const { delegate } = this.props; 
+    if(delegate && typeof delegate[name] === "function"){
+      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   },
 
