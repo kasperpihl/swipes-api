@@ -32,7 +32,6 @@ var ListModal = React.createClass({
 			rows.push(<div key="list-loader" className="list-modal__loader"> <Loader size={30} text={emptyText} /> </div>);
 		}
 		var title = options.title || this.defaults.title;
-
 		return (
 			<div className="modal-full">
 				<h2>{title}</h2>
@@ -56,9 +55,8 @@ ListModal.Row = React.createClass({
 		// Determining image
 		var image = "";
 		if(data.imageUrl){
-			image = <img src={data.imageUrl} />
+			image = <data.imageUrl className="list-modal__item__image" fill="#CCCED5"/>
 		}
-
 
 		return (
 			<li className="list-modal__item" onClick={this.onClick}>
