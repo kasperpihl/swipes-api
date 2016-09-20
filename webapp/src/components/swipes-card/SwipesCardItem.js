@@ -65,13 +65,23 @@ class SwipesCardItem extends Component {
     )
   }
   renderHeaderImage(headerImage){
-    if(headerImage){
+    const {
+      preview
+    } = this.state.data;
+
+    if (headerImage) {
       return (
         <img src={headerImage} alt="" />
       )
+    } else if (preview && preview.url) {
+      return (
+        <a href={preview.url} download={preview.url} className="swipes-card__header__download">
+          <DownloadIcon />
+        </a>
+      )
     }
   }
-  renderHeader(actions, title, subtitle, headerImage) {
+  renderHeader(actions, title, subtitle, headerImage, url) {
     const noSubtitleClass = !subtitle ? "swipes-card__header__content--no-subtitle" : '';
 
     return (
@@ -124,7 +134,7 @@ class SwipesCardItem extends Component {
     if (isVideo) {
       return (
         <div className="swipes-card__preview swipes-card__preview--no-style">
-          <div className="swipes-card__preview--iframe">
+          <div className="swipes-card__preview--video">
             <video className="custom-html" src={preview.url} controls></video>
           </div>
         </div>
@@ -145,9 +155,6 @@ class SwipesCardItem extends Component {
         <div className="swipes-card__preview" ref="cardPreview">
           <div className="swipes-card__preview--img">
             <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
-            <a href={preview.url} download={preview.url} className="swipes-card__preview__download">
-              <DownloadIcon />
-            </a>
           </div>
         </div>
       )

@@ -264,6 +264,30 @@ tabSlider {
         display: none;
       }
     }
+
+    &__download {
+      @include size(50px, 50px);
+      @include flex(center, center);
+      margin-top: 6px;
+      border-radius: 50%;
+      opacity: 0;
+
+      svg {
+        @include size(20px, 20px);
+      }
+
+      svg * {
+        fill: $deepBlue-40;
+      }
+
+      &:hover svg * {
+        fill: $deepBlue-60;
+      }
+    }
+
+    &:hover &__download {
+      opacity: 1;
+    }
   }
 
   &__description {
@@ -304,32 +328,16 @@ tabSlider {
       }
     }
 
+    &--video {
+      @include flex(center, center);
+			width: 100%;
+      position: relative;
+    }
+
 		&--img {
       @include flex(center, center);
 			width: 100%;
       position: relative;
-
-      img {
-        // width: 100%;
-      }
 		}
-
-    &__download {
-      @include size(40px, 40px);
-      @include flex(center, center);
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(225,255,255,.6);
-      border-radius: 50%;
-
-      svg * {
-        fill: $deepBlue-100;
-      }
-
-      &:hover svg * {
-        fill: $deepBlue-100;
-      }
-    }
   }
 }
