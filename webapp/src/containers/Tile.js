@@ -23,7 +23,7 @@ const os = nodeRequire('os');
 class Tile extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {};
     bindAll(this, ['sendCommandToTile', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount', 'receivedCommand']);
   }
   componentDidMount(){
@@ -33,8 +33,9 @@ class Tile extends Component {
     this.callDelegate('tileWillUnload', this.props.data.id);
   }
   callDelegate(name){
-    if(this.props.delegate && typeof this.props.delegate[name] === "function"){
-      return this.props.delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    const { delegate } = this.props;
+    if(delegate && typeof delegate[name] === "function"){
+      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
   sendCommandToTile(command, data, callback){
@@ -69,8 +70,12 @@ class Tile extends Component {
   addListenersToCommunicator(){
     const { tile, sendNotification, startDraggingDot, saveData, loadModal } = this.props
     this.com.addListener('navigation.setTitle', (data) => {
-      if (data.title) {
-        //this.setState({"titleFromCard": data.title});
+      if (data) {
+        this.setState({"titleFromCard": data});
+        setTimeout(() => { 
+          this.callDelegate('tileForceGridUpdate');
+        }, 10)
+        
       }
     });
 

@@ -54,6 +54,7 @@ export default class SlackTileHandler {
       nD = nD.set('unreadIndicator', {ts: channel.get('last_read')})
       return nD;
     })
+    this.swipes.sendEvent('navigation.setTitle',this.tileSlackData.parser.titleForChannel(channel.toJS(), this.getData().get('users').toJS()));
     localStorage.setItem(this.tile.id + '-selectedChannelId', channelId);
     this.fetchMessages(channel);
   }

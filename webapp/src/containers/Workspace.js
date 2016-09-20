@@ -37,7 +37,6 @@ class Workspace extends Component {
           this.props.stopDraggingDot()
           return;
         }*/
-        console.log('generating from', draggingDot.data)
         this.props.generateShareUrl(draggingDot.data).then( (res) => {
           console.log('res from share url', res);
           if(res.ok){
@@ -89,6 +88,9 @@ class Workspace extends Component {
       });
     }
   }
+  tileForceGridUpdate(){
+    this.refs.grid.forceUpdate();
+  }
   sendToTile(id, command, data, callback){
     const tile = this._cachedTiles[id];
     if(tile){
@@ -111,6 +113,11 @@ class Workspace extends Component {
   }
   gridOptionsForTopbar(grid, id){
     var tile = this.props.tiles[id];
+    var title = tile.name;
+    const tileView = this._cachedTiles[id];
+    if(tileView && tileView.state.titleFromCard){
+      title = tileView.state.titleFromCard;
+    }
     var me = this.props.me;
     if(tile.selectedAccountId){
       var show_name;
@@ -120,7 +127,7 @@ class Workspace extends Component {
         }
       })
     }
-    return { title: tile.name, subtitle: show_name };
+    return { title: title, subtitle: show_name };
     
   }
   gridDidTransitionStep(grid, name, step){

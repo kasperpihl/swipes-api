@@ -25,11 +25,6 @@ class LocalTile extends Component {
         return null
     }
   }
-  shouldComponentUpdate(nextProps, nextState){
-    if(JSON.stringify(nextProps) !== JSON.stringify(this.props))
-      return true;
-    return false;
-  }
   componentDidMount() {
     const { tile } = this.props
     if(this.componentForType(tile.manifest_id)){
