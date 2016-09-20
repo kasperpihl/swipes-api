@@ -19,11 +19,19 @@ export default class SlackSwipesParser {
     if(channel.user){
       var user = users[channel.user];
       if (user.presence === "active") {
-        return { svg: SlackOnline };
+        return (
+          {
+            svg: SlackOnline,
+            width: 8,
+            height: 8
+           }
+        )
       } else {
         return (
           {
-            svg: SlackOffline
+            svg: SlackOffline,
+            width: 8,
+            height: 8
           }
         )
       }
@@ -74,13 +82,13 @@ export default class SlackSwipesParser {
     if(starsCol.length){
       var counter = 0;
       sections.push({
-        title: "Starred", 
+        title: "Starred",
         rows: starsCol.sort((a, b) => {
           if(a.id.startsWith('D') !== b.id.startsWith('D')){
             return (a.id.startsWith('D')) ? 1 : -1;
           }
           return (a.name < b.name) ? -1 : 1;
-        }) 
+        })
       })
     }
     sections.push({ title: "Channels", rows: channelsCol.sort((a, b) => (a.name < b.name) ? -1 : 1) })

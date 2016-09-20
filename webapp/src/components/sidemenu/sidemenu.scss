@@ -67,27 +67,28 @@ $pushDelay: .1s;
 
 	&__item {
 		@include size(100%, $itemHeight);
+		@include flex(flex-start, center);
+		padding: 0 40px;
 		position: relative;
 
 		&--icon & {
 
 			&__title {
-				padding-left: 60px;
+				transform: translateX(-5px);
 			}
 		}
 
 		&__icon {
 			@include size($itemHeight, $itemHeight);
 			@include flex(center, center);
-			left: 30px; top: 0;
-			position: absolute;
+			transform: translateX(-10px);
 
 			img {
 				@include size();
 			}
 
 			svg {
-				@include size(10px, 10px);
+				// @include size(10px, 10px);
 			}
 		}
 
@@ -137,7 +138,6 @@ $pushDelay: .1s;
 			line-height: $itemHeight;
 			opacity: 0;
 			overflow: hidden;
-			padding-left: 40px;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			width: $expandedWidth - $notificationHeight - 20px;

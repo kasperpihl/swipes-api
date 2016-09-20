@@ -11,7 +11,7 @@ class SidemenuItem extends Component {
         var SVG = icon.svg;
         return (
           <div className="swipes-sidemenu__item__icon">
-            <SVG />
+            <SVG style={{width: icon.width + 'px', height: icon.height + 'px'}}/>
           </div>
         )
       }
@@ -91,8 +91,8 @@ SidemenuItem.propTypes = {
       PropTypes.shape({
         svg: PropTypes.function,
         url: PropTypes.string,
-        width: PropTypes.string,
-        height: PropTypes.string
+        width: PropTypes.number,
+        height: PropTypes.number
       })
     ])
   })
