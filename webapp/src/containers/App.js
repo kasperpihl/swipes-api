@@ -17,6 +17,18 @@ class App extends Component {
   componentDidMount() {
     this.props.request('rtm.start');
     this.checkForDropboxFolder();
+
+    // Massive hack to not be able to drop files into swipes so it wouldn't redirect
+
+    document.addEventListener('dragover', (e) => {
+      e.preventDefault()
+      return false;
+    })
+
+    document.addEventListener('drop', (e) => {
+      e.preventDefault()
+      return false;
+    })
   }
   checkForDropboxFolder(){
     if(!localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')){
