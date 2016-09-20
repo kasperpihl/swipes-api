@@ -211,7 +211,7 @@ tabSlider {
       @include size(calc(100% - 42px));
       @include flex(flex-start, center, column);
       padding-right: 18px;
-      
+
       &--no-subtitle & {
         &--title {
           white-space: normal;
@@ -307,10 +307,29 @@ tabSlider {
 		&--img {
       @include flex(center, center);
 			width: 100%;
+      position: relative;
 
       img {
         // width: 100%;
       }
 		}
+
+    &__download {
+      @include size(40px, 40px);
+      @include flex(center, center);
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(225,255,255,.6);
+      border-radius: 50%;
+
+      svg * {
+        fill: $deepBlue-100;
+      }
+
+      &:hover svg * {
+        fill: $deepBlue-100;
+      }
+    }
   }
 }

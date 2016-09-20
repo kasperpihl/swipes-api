@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { randomString, bindAll, decodeHtml } from '../../classes/utils';
 import SwipesDot from '../swipes-dot/SwipesDot';
+import { DownloadIcon } from '../icons'
 
 class SwipesCardItem extends Component {
   constructor(props) {
@@ -140,11 +141,13 @@ class SwipesCardItem extends Component {
           preview.width = cardPreview.clientWidth;
         }
       }
-
       return (
         <div className="swipes-card__preview" ref="cardPreview">
           <div className="swipes-card__preview--img">
             <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
+            <a href={preview.url} download={preview.url} className="swipes-card__preview__download">
+              <DownloadIcon />
+            </a>
           </div>
         </div>
       )
