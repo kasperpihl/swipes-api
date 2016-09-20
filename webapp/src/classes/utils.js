@@ -9,6 +9,13 @@ export function isShareURL(url){
 export function shortUrlFromShareUrl(url){
   return url.split('/s/')[1].split('/')[0];
 }
+export function immuCompare(o1, o2, attr){
+  let getMethod = 'get';
+  if(Array.isArray(attr)){
+    getMethod = 'getIn';
+  }
+  return (o1[getMethod](attr) === o2[getMethod](attr));
+}
 
 export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {

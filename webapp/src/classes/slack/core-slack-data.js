@@ -1,12 +1,16 @@
 import { bindAll } from '../../classes/utils'
-
-export default class SlackData {
+import Immutable from 'immutable'
+export default class CoreSlackData {
   constructor(data){
+
     this.data = data || {};
+    this.data = new Immutable.fromJS(data || {});
     bindAll(this, ['handleMessage', 'notify'])
   }
   getData(){
-    return JSON.parse(JSON.stringify(this.data));
+    return this.data.toJS();
+  }
+  before(){
   }
   notify(){
     if(typeof this.onChange === 'function'){
@@ -14,42 +18,48 @@ export default class SlackData {
     }
   }
   updateBot(botId, data){
-    this.data.bots[botId] = Object.assign({}, this.data.bots[botId], data);
+    this.before();
+    this.data = this.data.mergeIn( ['bots', botId], data );
     this.notify();
   }
   updateUser(userId, data){
-    this.data.users[userId] = Object.assign({}, this.data.users[userId], data);
-    if(userId === this.data.self.id){
+    this.before();
+    this.data = this.data.mergeIn(['users', userId], data);
+    if(userId === this.data.get('self').get('id')){
       this.updateSelf(data);
     }
     this.notify();
   }
   updateSelf(data, dontNotify){
-    Object.assign(this.data.self, data);
+    this.data = this.data.mergeIn(['self'], data );
   }
   updateTeam(data){
-    Object.assign(this.data.team, data);
+    this.before();
+    this.data = this.data.mergeIn(['team'], data );
     this.notify();
   }
   updateChannel(channelId, data){
+    this.before();
     if(data){
-      this.data.channels[channelId] = Object.assign({}, this.data.channels[channelId], data);
+      this.data = this.data.mergeIn(['channels', channelId], data);
     }
     else{
-      this.data.channels[channelId];
+      this.data = this.data.deleteIn(['channels', channelId]);
     }
     this.notify();
   }
   handleMessage(msg){
 
-    console.log('socket message', msg);
+    //console.log('socket message', msg);
     if('message' === msg.type){
       if(msg.channel){
         // If message is from someone else, and is not hidden
         
-        if(msg.user !== self.id && !msg.hidden){
-          var currentUnread = this.data.channels[msg.channel].unread_count_display;
-          this.updateChannel(msg.channel, {'unread_count_display': currentUnread + 1 })
+        if(msg.user !== this.data.get('self').get('id') && !msg.hidden){
+          var channel = this.data.getIn(['channels', msg.channel]);
+          if(channel.last_read < msg.ts){
+            this.updateChannel(msg.channel, {'unread_count_display': channel.unread_count_display + 1 })
+          }
         }
       }
     }

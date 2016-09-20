@@ -38,7 +38,7 @@ export default class Subscriber {
     }
     else{
       for(var key in this._listenersObj){
-        this._removeListener(key, listener, context);
+        this._removeListener(key, listener, ctx);
       }
     }
   }

@@ -8,44 +8,29 @@ import { bindAll } from '../../classes/utils'
 import Sidemenu from '../../components/sidemenu/Sidemenu'
 
 import SlackData from './slack-data'
-// import SlackTileHandler from './slack-tile-handler'
+import SlackTileHandler from './slack-tile-handler'
 
 import ChatList from './ChatList'
 import ChatInput from './ChatInput'
 
 class Chat extends Component {
   constructor(props) {
-    super(props)
-
-    this.state = { started: false, isStarting: false, inputHeight: 60 }
+    super(props)    
 
     bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink', 'onCardShare', 'onCardAction'])
     this.addListenersToSwipes(props.swipes);
-    //this.slackHandler = new SlackTileHandler(props.tile);
+    this.slackHandler = new SlackTileHandler(props.swipes, props.tile, this.dataDelegate);
+    this.state = { started: false, isStarting: false, inputHeight: 60, data: this.slackHandler.getData() }
+    
+    //const data = this.loadDataFromStorage(props.tile.id);
+    //this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
 
-    const data = this.loadDataFromStorage(props.tile.id);
-    this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
-  }
-  loadDataFromStorage(tileId){
-    const data = {};
-    data.selectedChannelId = localStorage.getItem(tileId + '-selectedChannelId');
-    const unsentMessages = localStorage.getItem(tileId + '-unsentMessageQueue');
-    if(unsentMessages){
-      data.unsentMessageQueue = JSON.parse(unsentMessages);
-    }
-    return data;
   }
   dataDelegate(data){
-    let itemId;
-    if(data.selectedChannelId){
-      itemId = this.props.tile.id + '-selectedChannelId';
-      localStorage.setItem(itemId, data.selectedChannelId);
+    if(!this.mounted){
+      return;
     }
-    if(data.unsentMessageQueue){
-      itemId = this.props.tile.id + '-unsentMessageQueue';
-      localStorage.setItem(itemId, JSON.stringify(data.unsentMessageQueue));
-    }
-    this.setState(data);
+    this.setState({data});
   }
   addListenersToSwipes(swipes){
     swipes.addListener('share.receivedData', (data) => {
@@ -54,7 +39,7 @@ class Chat extends Component {
         input += '|' + data.title;
       }
       input += '>';
-      this.slackData.sendMessage(input);
+      this.slackHandler.sendMessage(input);
     });
     swipes.addListener('menu.pressed', () => {
       if(this.refs.sidemenu){
@@ -68,10 +53,11 @@ class Chat extends Component {
     }
   }
   componentDidMount(){
-
+    this.mounted = true;
   }
   componentWillUnmount(){
-    this.slackData.destroy();
+    this.mounted = false;
+    this.slackHandler.destroy();
   }
   componentDidUpdate(prevProps, prevState){
     //console.log('updated', this.props.tile.data);
@@ -82,7 +68,7 @@ class Chat extends Component {
     }
   }
   sendMessage(message){
-    this.slackData.sendMessage(message);
+    this.slackHandler.sendMessage(message);
   }
   onCardShare(card, data){
     const { swipes } = this.props;
@@ -126,23 +112,13 @@ class Chat extends Component {
     console.log('clicked', data);
   }
   onSelectedRow(row){
-    this.slackData.setChannel(row.id);
+    this.slackHandler.setChannel(row.id);
     document.getElementById('chat-input').focus();
   }
-  createItemDelegate(){
-    const { swipes } = this.props;
-    return {
-      editMessage: this.slackData.editMessage,
-      deleteMessage: this.slackData.deleteMessage,
-      openImage: this.slackData.openImage,
-      loadPrivateImage: this.slackData.loadPrivateImage
-    }
-  }
   renderSidemenu(){
-    let sectionsSidemenu = [];
-    if(this.slackData){
-      sectionsSidemenu = this.slackData.parser.sectionsForSidemenu(this.slackData.data) || [];
-    }
+    // K_TODO: Update to use internal state;
+    const { data } = this.state;
+    const sectionsSidemenu = data.get('sectionsForSidemenu') || [];;
     //this.state.sectionsSidemenu || [];
     if(!sectionsSidemenu.length){
       return;
@@ -175,15 +151,14 @@ class Chat extends Component {
   }
   clickedLink(command, identifier, title){
     if(command === 'swipes://retry-send'){
-      return this.slackData.sendMessage();
+      return this.slackHandler.sendMessage();
     }
     const { swipes } = this.props;
     swipes.sendEvent('openURL', {url: command})
   }
   render() {
-
-    const { typingLabel, sortedMessages, inputHeight } = this.state;
-
+    let { data } = this.state;
+    const { typingLabel, inputHeight } = this.state;
     let paddingBottom = inputHeight + 20;
     if(typingLabel){
       // paddingBottom += 14;
@@ -194,20 +169,20 @@ class Chat extends Component {
         {this.renderUnreadAbove()}
         <ChatList
           cardDelegate={this}
-          sections={sortedMessages}
-          markAsRead={this.slackData.markAsRead}
-          loadingMessages={this.state.loadingMessages}
+          sections={data.get('sortedMessages')}
+          markAsRead={this.slackHandler.markAsRead}
+          loadingMessages={data.get('loadingMessages')}
           unreadAbove={this.unreadAbove}
-          unreadIndicator={this.state.unreadIndicator}
+          unreadIndicator={data.get('unreadIndicator')}
           clickedLink={this.clickedLink}
         />
         <ChatInput
           sendMessage={this.sendMessage}
           changedHeight={this.changedHeight}
-          uploadFiles={this.slackData.uploadFiles}
-          sendTypingEvent={this.slackData.sendTypingEvent}
+          uploadFiles={this.slackHandler.uploadFiles}
+          sendTypingEvent={this.slackHandler.sendTypingEvent}
         />
-        {this.renderTypingIndicator(typingLabel)}
+        {this.renderTypingIndicator(data.get('typingLabel'))}
       </div>
     )
   }

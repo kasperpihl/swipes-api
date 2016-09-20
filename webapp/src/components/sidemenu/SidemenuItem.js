@@ -89,6 +89,7 @@ SidemenuItem.propTypes = {
     icon: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({
+        svg: PropTypes.function,
         url: PropTypes.string,
         width: PropTypes.string,
         height: PropTypes.string

@@ -14,11 +14,13 @@ const history = syncHistoryWithStore(browserHistory, store)
 import Socket from '../classes/socket'
 import IpcListener from '../classes/ipc-listener'
 import SwipesUrlProvider from '../classes/swipes-url-provider'
+import Slack from '../classes/slack/slack'
 import Notifications from '../classes/notifications'
 
 window.swipesUrlProvider = new SwipesUrlProvider(store);
 new Socket(store);
 new Notifications(store);
+window.slack = new Slack(store);
 window.ipcListener = new IpcListener(store);
 
 export default class Root extends Component {

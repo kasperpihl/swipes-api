@@ -1,6 +1,6 @@
 import { bindAll, indexBy } from '../../classes/utils'
 import SlackSocket from './slack-socket'
-import SlackData from './slack-data'
+import CoreSlackData from './core-slack-data'
 
 export default class SlackCoreHandler {
   constructor(delegate, request){
@@ -48,7 +48,7 @@ export default class SlackCoreHandler {
             saveObj[key] = value;
           }
         });
-        this.slackData = new SlackData(saveObj);
+        this.slackData = new CoreSlackData(saveObj);
         this.delegate('init', saveObj);
         this.socket.connect(res.data.url);
       }

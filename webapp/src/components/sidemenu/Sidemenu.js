@@ -164,10 +164,10 @@ class Sidemenu extends Component {
   onClick(data){
     if(this.props.onSelectedRow){
       this.props.onSelectedRow(data);
-      this.setState({forceClose: true});
+      /*this.setState({forceClose: true});
       setTimeout(() => {
         this.setState({forceClose: false});
-      }, 1500);
+      }, 300);*/
     }
   }
 }

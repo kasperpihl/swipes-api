@@ -53,6 +53,7 @@ export default class SlackSwipesParser {
 
 
       if (channel.unread_count_display) {
+        console.log(channel);
         item.unread = channel.unread_count_display;
         if (channel.is_im) {
           item.notification = channel.unread_count_display;
@@ -71,7 +72,8 @@ export default class SlackSwipesParser {
     const sections = []
 
     if(starsCol.length){
-      sections.push({ 
+      var counter = 0;
+      sections.push({
         title: "Starred", 
         rows: starsCol.sort((a, b) => {
           if(a.id.startsWith('D') !== b.id.startsWith('D')){
@@ -234,13 +236,15 @@ export default class SlackSwipesParser {
     this.lastGroup = group;
     return { group , newMsg: newMsg};
   }
-  sortMessagesForSwipes(data, sendingMessagesQueue){
-    const { messages, bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId, unreadIndicator } = data;
+  sortMessagesForSwipes(data){
+    const { bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId, unreadIndicator } = data;
+    if(!data.cachedChannels || !data.cachedChannels[selectedChannelId]){
+      return;
+    }
+    const messages = data.cachedChannels[selectedChannelId].messages;
     if(!messages || !messages.length)
       return [];
-
-    const length = messages.length;
-
+    const sortedMessages = messages.sort((a, b) => (a.ts < b.ts) ? -1 : 1)
     const groups = {};
     function pushToGroup(groupName, obj){
       if(!groups[groupName]){
@@ -251,7 +255,7 @@ export default class SlackSwipesParser {
 
 
     let lastMessageWasLastRead = false
-    messages.forEach((msg, i) => {
+    sortedMessages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
 
       if(lastMessageWasLastRead){
@@ -273,6 +277,7 @@ export default class SlackSwipesParser {
       const sectMessages = groups[key];
       return {"title": title, "messages": sectMessages };
     });
+    const sendingMessagesQueue = data.sendingMessagesQueue || [];
     const sendingMessages = sendingMessagesQueue.map((item, i) => {
       const newMsg = {
         timeStr: item.status,
