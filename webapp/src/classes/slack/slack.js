@@ -44,7 +44,7 @@ export default class Slack {
   }
   storeChange(){
     const state = this.store.getState();
-    if(state.me){
+    if(state.me && state.me.services){
       const services = state.me.services;
       services.filter( s => s.service_name === 'slack').map((service) => {
         if(!this.currentHandlers[service.id]){
@@ -52,6 +52,6 @@ export default class Slack {
         }
       })
     }
-    
+
   }
 }
