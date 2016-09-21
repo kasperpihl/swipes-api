@@ -1,7 +1,8 @@
 # Preview structure
 
 ## Asana task
-```[
+```
+[
   { type: 'Card',
     data: {
       title: 'Task title',
@@ -29,10 +30,13 @@
       }
     ]
   }
-]```
+]
+```
 
 
 ## Dropbox file
-```[
+```
+[
   
-]```
+]
+```
