@@ -2,8 +2,8 @@ import * as types from '../constants/ActionTypes'
 import { request } from './api'
 import { SlackIcon, EarthIcon } from '../components/icons'
 
-export function loadModal(modal, options, callback) {
-  return { type: types.LOAD_MODAL, modal, options, callback }
+export function loadModal(data, callback) {
+  return { type: types.LOAD_MODAL, data, callback }
 }
 export function hideModal() {
   return { type: types.HIDE_MODAL }
@@ -14,18 +14,16 @@ export function loadTilesListModal(){
     console.log('dispatch');
     const now = new Date().getTime()
     var returned = false;
-    dispatch(loadModal('list', {"title": "Add a tile", "emptyText": "Loading..."}, () => {
+    dispatch(loadModal({"title": "Add a tile", loader: true}, () => {
       returned = true;
     }));
+    return;
     const now2 = new Date().getTime()
     dispatch(request('workflows.list')).then((res) =>{
       const time = new Date().getTime() - now;
       const time2 = new Date().getTime() - now2;
-      console.log('res', res);
-      console.log('returned', returned, time, time2);
       if(res.ok && !returned){
         const rows = res.data.map((row) => {
-          console.log(row.name);
           if (row.name === 'Slack') {
             const SVG = SlackIcon
             return Object.assign({}, row, {imageUrl: SVG})
@@ -36,7 +34,7 @@ export function loadTilesListModal(){
             return Object.assign({}, row)
           }
         })
-        dispatch(loadModal('list', {"title": "Add a tile", "emptyText": "We're working on adding more tiles.", "rows": rows }, (row) => {
+        dispatch(loadModal({"title": "Add a tile", "emptyText": "We're working on adding more tiles.", "items": rows }, (row) => {
 
           if(row){
             dispatch(request('users.addWorkflow', {manifest_id: row.manifest_id}));

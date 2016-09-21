@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Textarea from 'react-textarea-autosize'
+import Loader from '../swipes-ui/Loader'
+
 import './styles/swipes-modal.scss'
 
 class SwipesModalActions extends React.Component {
@@ -31,7 +33,16 @@ class SwipesModal extends Component {
     super(props)
     this.state = {}
   }
-  componentDidMount() {
+  sendCallback(){
+    /*
+    {
+      button: 0 || 1
+      text: this.refs.textarea.value,
+      item: 0 || 1
+    }
+    if you click the background, callback(null)
+    this.props.callback()
+    */
   }
   renderMessage(message) {
 		if (message && message.length > 0) {
@@ -71,6 +82,11 @@ class SwipesModal extends Component {
   		)
     }
 	}
+  renderLoader(loader){
+    if(loader){
+      return <Loader center={true} text="Loading" />
+    }
+  }
 	renderListItemImg(img) {
 		if (img) {
 			return (
@@ -85,29 +101,43 @@ class SwipesModal extends Component {
 			)
 		}
 	}
-  render() {
-    const { title, message, textarea, buttons, items, type, children } = this.props.data;
-		let modalClass = 'swipes-modal';
+  renderContent(data){
+    if(!data){
+      return;
+    }
+    const { title, message, textarea, buttons, items, type, loader } = data;
+    
+    let modalClass = 'swipes-modal';
 
     if (type) {
       modalClass += ' swipes-modal--' + type.toLowerCase();
     }
 
-    console.log(children);
+    return (
+      <div className={modalClass}>
+        <div className="swipes-modal__title">
+          {title}
+          <i className="material-icons swipes-modal__close">close</i>
+        </div>
+        {this.renderMessage(message)}
+        {this.renderTextarea(textarea)}
+        {this.renderLoader(loader)}
+        {this.renderList(items)}
+        {this.renderActions(buttons)}
+      </div>
+    )
+  }
+  render() {
+    const { data, shown, callback } = this.props;
+		
+    let modalClass = "swipes-modal-overlay"
+    if(shown){
+      modalClass += ' shown'
+    }
 
     return (
-      <div className="swipes-modal-overlay">
-        <div className={modalClass}>
-  				<div className="swipes-modal__title">
-  					{title}
-  					<i className="material-icons swipes-modal__close">close</i>
-  				</div>
-  				{this.renderMessage(message)}
-          {this.renderTextarea(textarea)}
-  				{this.renderList(items)}
-          {children}
-  				{this.renderActions(buttons)}
-        </div>
+      <div className={modalClass}>
+        {this.renderContent(data)}
       </div>
     )
   }
@@ -120,6 +150,7 @@ SwipesModal.propTypes = {
     title: PropTypes.string.isRequired,
     message: PropTypes.string,
     textarea: PropTypes.string,
+    loader: PropTypes.bool,
     items: PropTypes.shape({
       title: PropTypes.string,
       imgUrl: PropTypes.string

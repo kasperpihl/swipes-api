@@ -85,7 +85,8 @@ class Find extends Component {
   componentDidMount(){
     if(this.props.me && this.props.me.services){
       var connectedService = this.props.me.services[0]; // Warning this will break, 
-      this.props.services[connectedService.id].title;
+      console.log(connectedService, this.props.services);
+      this.props.services[connectedService.service_id].title;
     }
     
   }

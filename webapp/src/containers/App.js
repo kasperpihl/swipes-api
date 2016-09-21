@@ -32,8 +32,8 @@ class App extends Component {
   }
   checkForDropboxFolder(){
     if(!localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')){
-      this.props.loadModal('alert', {title: "Find Dropbox folder", message: "This will enable you to open files on your local dropbox folder (experimental)", buttons: ["No", "Yes"]}, (confirmed) => {
-        if(confirmed.button){
+      this.props.loadModal({title: "Find Dropbox folder", message: "This will enable you to open files on your local dropbox folder (experimental)", buttons: ["No", "Yes"]}, (res) => {
+        if(res && res.button){
           var folder = dialog.showOpenDialog({ properties: ['openDirectory']});
           if(folder){
             localStorage.setItem('dropbox-folder', folder);
