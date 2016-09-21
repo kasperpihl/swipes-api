@@ -7,10 +7,7 @@ class ChatList extends Component {
   constructor(props) {
     super(props)
     this.state = {unreadAbove: false}
-    this.shouldScrollToBottom = true;
-    this.hasRendered = false;
-    bindAll(this, ['onScroll', 'scrollToBottom', 'handleResize', 'checkForMarkingAsRead'])
-    this.bouncedScroll = debounce(this.scrollToBottom, 100);
+    bindAll(this, ['onScroll', 'handleResize', 'checkForMarkingAsRead'])
     const markAsRead = () => {
       if(this.props.markAsRead){
         this.props.markAsRead();
@@ -21,11 +18,17 @@ class ChatList extends Component {
 
   componentDidMount(){
     window.addEventListener('resize', this.handleResize);
-    this.scrollToBottom(this.hasRendered);
-
+  }
+  componentWillUpdate(nextProps, nextState){
+    const node = this.refs['scroll-container'];
+    this.shouldScrollBottom = this.forceScrollToBottom || node.scrollTop + node.offsetHeight === node.scrollHeight;
+    this.forceScrollToBottom = false;
   }
   componentDidUpdate(prevProps, prevState){
-    this.scrollToBottom(this.hasRendered);
+    if (this.shouldScrollBottom) {
+      const node = this.refs['scroll-container'];
+      node.scrollTop = node.scrollHeight
+    }
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -51,43 +54,9 @@ class ChatList extends Component {
     }
   }
   handleResize(){
-    this.bouncedScroll(this.hasRendered);
-  }
-  scrollToBottom(animate){
-    const chatList = this.refs['chat-list']
-    const scrollContainer = this.refs['scroll-container'];
-
-    const scrollPosForBottom = chatList.clientHeight - scrollContainer.clientHeight
-    if(scrollPosForBottom > 0 && this.shouldScrollToBottom && scrollPosForBottom != scrollContainer.scrollTop ){
-      this.hasRendered = true;
-      if(animate){
-        scrollContainer.scrollTop = scrollPosForBottom;
-        //$('.chat-list-container').animate({ scrollTop: scrollPosForBottom }, 50);
-      }
-      else{
-        scrollContainer.scrollTop = scrollPosForBottom;
-      }
-    }
-    var topPadding = 0;
-    if(chatList.clientHeight < scrollContainer.clientHeight){
-      topPadding = scrollContainer.clientHeight - chatList.clientHeight;
-    }
-    if(topPadding != this.state.topPadding){
-      this.setState({topPadding: topPadding});
-    }
+    this.bouncedScroll();
   }
   onScroll(e){
-    const contentHeight = this.refs['chat-list'].clientHeight
-    const scrollPos = this.refs['scroll-container'].scrollTop
-    const viewHeight = this.refs['scroll-container'].clientHeight
-
-    if( (viewHeight+scrollPos) >= contentHeight ){
-      this.shouldScrollToBottom = true;
-    }
-    else{
-      this.shouldScrollToBottom = false;
-    }
-
     this.checkForMarkingAsRead();
   }
 

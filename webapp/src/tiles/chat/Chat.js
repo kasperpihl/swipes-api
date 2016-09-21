@@ -40,6 +40,8 @@ class Chat extends Component {
       }
       input += '>';
       this.slackHandler.sendMessage(input);
+      this.refs['chat-list'].forceScrollToBottom = true;
+      this.slackData.sendMessage(input);
     });
     swipes.addListener('menu.pressed', () => {
       if(this.refs.sidemenu){
@@ -68,6 +70,7 @@ class Chat extends Component {
     }
   }
   sendMessage(message){
+    this.refs['chat-list'].forceScrollToBottom = true;
     this.slackHandler.sendMessage(message);
   }
   onCardShare(card, data){
@@ -168,6 +171,7 @@ class Chat extends Component {
         {this.renderSidemenu()}
         {this.renderUnreadAbove()}
         <ChatList
+          ref="chat-list"
           cardDelegate={this}
           sections={data.get('sortedMessages')}
           markAsRead={this.slackHandler.markAsRead}
