@@ -51,7 +51,17 @@ class SwipesModal extends Component {
 			)
 		}
 	}
-  renderTextarea(placeholder) {
+  renderTextarea(options) {
+    var defaultValue = "";
+    var placeholder = options;
+    var minRows = 4;
+    var maxRows = 4;
+    if(typeof options === 'object'){
+      defaultValue = options.text || defaultValue;
+      placeholder = options.placeholder || 'Edit text';
+      minRows = options.minRows || minRows;
+      maxRows = options.maxRows || maxRows;
+    }
     if (placeholder && placeholder.length > 0) {
       return (
         <Textarea
@@ -59,8 +69,9 @@ class SwipesModal extends Component {
           className="swipes-modal__textarea"
           onChange={this.onMessageChange}
           placeholder={placeholder}
-          minRows={4}
-          maxRows={4}/>
+          defaultValue={defaultValue}
+          minRows={minRows}
+          maxRows={maxRows}/>
       )
     }
   }
@@ -143,19 +154,47 @@ class SwipesModal extends Component {
   }
 }
 
+
 export default SwipesModal
 
+const itemProps = PropTypes.shape({
+  title: PropTypes.string,
+  image: PropTypes.string
+})
 SwipesModal.propTypes = {
+  callback: PropTypes.func,
+  show: PropTypes.bool,
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     message: PropTypes.string,
-    textarea: PropTypes.string,
-    loader: PropTypes.bool,
-    items: PropTypes.shape({
-      title: PropTypes.string,
-      imgUrl: PropTypes.string
-    }),
-    buttons: PropTypes.array,
+    textarea: PropTypes.oneOfType([
+      PropTypes.string, // Placeholder
+      PropTypes.shape({
+        placeholder: PropTypes.string,
+        text: PropTypes.string,
+        minRows: PropTypes.number,
+        maxRows: PropTypes.number
+      })
+    ]),
+    loader: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.string
+    ]),
+    list: PropTypes.oneOfType([
+      PropTypes.arrayOf(itemProps),
+      PropTypes.shape({
+        items: PropTypes.arrayOf(itemProps).isRequired,
+        selectable: PropTypes.bool,
+      })
+    ]),
+    buttons: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        title: PropTypes.string,
+        bgColor: PropTypes.string,
+        textColor: PropTypes.string
+      })
+    ])),
     type: PropTypes.string
   }.isRequired)
 }
