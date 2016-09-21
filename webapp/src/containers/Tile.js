@@ -164,10 +164,9 @@ class Tile extends Component {
     return <Webview onLoad={this.onLoad} receivedCommand={this.receivedCommand} preloadUrl={preloadUrl} url={url} />;
   }
   renderLocalTile(tile){
-    return <LocalTile tile={tile} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
+    return <LocalTile tile={tile} size={this.props.size} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
   }
   render() {
-    // KRIS_TODO: Replace Loading with something dope
     let cardContent = <SwipesLoader size={120} center={true}/>;
 
     const tile = this.props.tile;

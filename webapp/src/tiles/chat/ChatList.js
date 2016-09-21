@@ -7,7 +7,7 @@ class ChatList extends Component {
   constructor(props) {
     super(props)
     this.state = {unreadAbove: false}
-    bindAll(this, ['onScroll', 'handleResize', 'checkForMarkingAsRead'])
+    bindAll(this, ['onScroll', 'checkForMarkingAsRead'])
     const markAsRead = () => {
       if(this.props.markAsRead){
         this.props.markAsRead();

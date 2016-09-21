@@ -23,6 +23,7 @@ class Sidemenu extends Component {
   componentDidMount() {
     this.bouncedCalculate = debounce(this.calculateBeforeAndAfter, 50);
     this.calculateBeforeAndAfter()
+
   }
   onScroll(){
     this.bouncedCalculate();
@@ -150,7 +151,7 @@ class Sidemenu extends Component {
       renderedItems.push(this.renderRows(section.rows, i));
     })
     return (
-      <div className={className} style={this.props.style}>
+      <div ref="root" className={className} style={this.props.style}>
         <div className="swipes-sidemenu__relative-wrapper">
           {this.renderNotificationOverlay()}
           <div ref="scroller" onScroll={this.onScroll} className="swipes-sidemenu__scroll-wrapper">

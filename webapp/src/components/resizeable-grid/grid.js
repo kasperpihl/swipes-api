@@ -888,6 +888,16 @@ var Grid = React.createClass({
     const gw = this.refs.grid.clientWidth;
     return Math.round(gw / 100 * percentage);
   },
+  pixelsWidthFromRow(id){
+    var indexes = this.indexesForRowId(id);
+    var columnsWidths = this.columnsArrayPixels();
+    return columnsWidths[indexes.col];
+  },
+  pixelsHeightFromRow(id){
+    var indexes = this.indexesForRowId(id);
+    var columnsHeights = this.rowsArrayPixels(indexes.col);
+    return columnsHeights[indexes.row];
+  },
   percentageHeightFromPixels(pixels){
     const gh = this.refs.grid.clientHeight;
     var percentage = (pixels / gh * 100);

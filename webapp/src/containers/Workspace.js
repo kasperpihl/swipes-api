@@ -104,9 +104,12 @@ class Workspace extends Component {
   // ======================================================
 
   gridRenderRowForId(grid, id){
+    const width = grid.pixelsWidthFromRow(id);
+    const height = grid.pixelsHeightFromRow(id);
     return (
       <Tile
         key={id}
+        size={{ width, height }}
         delegate={this}
         data={{id: id}} />
     );

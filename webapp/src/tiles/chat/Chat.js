@@ -128,6 +128,7 @@ class Chat extends Component {
     }
     return (
       <Sidemenu
+        parentWidth={this.props.size.width}
         style={{paddingBottom: '10px'}}
         ref="sidemenu"
         onWidthChanged={this.onSidemenuWidthChanged}
