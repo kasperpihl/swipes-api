@@ -5,6 +5,7 @@ import {
   signUpValidate,
   userAvailability,
   userSignUp,
+  userAddToOrganization,
   signInValidate,
   userSignIn
 } from '../middlewares/users_signup_signin.js';
@@ -28,6 +29,7 @@ router.post('/users.signup',
   signUpValidate,
   userAvailability,
   userSignUp,
+  userAddToOrganization,
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoUserSignUp,

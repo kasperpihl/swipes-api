@@ -15,13 +15,15 @@ const signUpValidate = (req, res, next) => {
     email,
     name,
     password,
-    repassword
+    repassword,
+    organization
   } = req.body;
 
   email = email ? validator.trim(email.toLowerCase()) : '';
   name = validator.trim(name);
   password = password || '';
   repassword = repassword || '';
+  organization = organization || '';
 
   if (!validator.isEmail(email)) {
     errors.push({
@@ -51,12 +53,20 @@ const signUpValidate = (req, res, next) => {
     });
   }
 
+  if (validator.isNull(organization)) {
+    errors.push({
+      field: 'organization',
+      message: 'Organization is required!'
+    });
+  }
+
   if (errors.length > 0) {
     return next(new SwipesError(errors));
   } else {
     res.locals.email = email;
     res.locals.name = name;
     res.locals.password = password;
+    res.locals.organization = organization;
 
     return next();
   }
@@ -100,6 +110,39 @@ const userAvailability = (req, res, next) => {
     })
 }
 
+const userAddToOrganization = (req, res, next) => {
+  const {
+    organization,
+    userId
+  } = res.locals;
+  const insertDoc = {
+    organization,
+    users: [userId]
+  }
+  const q =
+    r.table('organizations')
+      .insert(insertDoc, {
+        returnChanges: 'always',
+        conflict: (id, oldDoc, newDoc) => {
+          return r.branch(
+            oldDoc('users').contains(userId),
+            oldDoc,
+            oldDoc.merge({
+              users: oldDoc('users').append(userId)
+            })
+          )
+        }
+      });
+
+  db.rethinkQuery(q)
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 const userSignUp = (req, res, next) => {
   const {
     email,
@@ -111,12 +154,10 @@ const userSignUp = (req, res, next) => {
     id: userId,
     apps: [],
     services:[],
-    organizations: [],
     email: email,
     name: name,
     password: sha1(password),
-    created: moment().unix(),
-    team: 'swipes'
+    created: moment().unix()
   }
   const createUserQ = r.table('users').insert(userDoc);
   const token = jwt.encode({
@@ -211,6 +252,7 @@ export {
   signUpValidate,
   userAvailability,
   userSignUp,
+  userAddToOrganization,
   signInValidate,
   userSignIn
 }

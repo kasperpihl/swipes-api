@@ -11,6 +11,7 @@ export default class Signup extends Component {
     var name = this.refs.name.state.value;
     var email = this.refs.email.state.value;
     var password = this.refs.password.state.value;
+    var organization = this.refs.organization.state.value;
     var invcode = this.refs.invcode.state.value;
 
     if(!invcode){
@@ -24,7 +25,8 @@ export default class Signup extends Component {
       email: email,
       name: name,
       password: password,
-      repassword: password
+      repassword: password,
+      organization: organization
     };
     this.props.onSignup(data);
   }
@@ -48,6 +50,7 @@ export default class Signup extends Component {
               <FloatingInput label="Your Name" type="text" id="name" ref="name" />
               <FloatingInput label="Email" type="email" id="email" ref="email" />
               <FloatingInput label="Password" type="password" id="password" ref="password" />
+              <FloatingInput label="Organization" type="text" id="organization" ref="organization" />
               <FloatingInput label="Invitation Code" type="text" id="invitation" ref="invcode" />
               <br/>
               <input type="submit" className="sign__form__button sign__form__button--submit" value="SIGN UP" onClick={this.signup.bind(this)}/>
