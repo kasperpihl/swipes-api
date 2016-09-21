@@ -9,8 +9,10 @@ class SwipesModalActions extends React.Component {
     super(props)
     this.state = {}
   }
-  buttonClick(e) {
-    const { modalButton } = this.refs;
+  buttonClick(i) {
+    this.props.onClick({
+      button: i
+    })
   }
   render() {
 		const { actions } = this.props;
@@ -33,7 +35,7 @@ class SwipesModal extends Component {
     super(props)
     this.state = {}
   }
-  sendCallback(){
+  sendCallback(res){
     /*
     {
       button: 0 || 1
@@ -43,6 +45,15 @@ class SwipesModal extends Component {
     if you click the background, callback(null)
     this.props.callback()
     */
+    this.props.callback(res)
+  }
+  closeModal(e) {
+    this.sendCallback(null)
+  }
+  selectListItem(i) {
+    this.sendCallback({
+      item: i
+    })
   }
   renderMessage(message) {
 		if (message && message.length > 0) {
@@ -75,14 +86,23 @@ class SwipesModal extends Component {
       )
     }
   }
+  renderLoader(loader) {
+    if (loader) {
+      return (
+        <div className="swipes-modal__loader">
+          <Loader center={true} text="Loading" />
+        </div>
+      )
+    }
+  }
 	renderList(items) {
     if (items) {
   		const list = items.map( (item, i) => {
   			return (
-  				<div className="swipes-modal__list__item" key={i}>
-  					{this.renderListItemImg(item.imgUrl)}
+  				<div className="swipes-modal__list__item" key={i} onClick={this.selectListItem.bind(this, i)}>
+  					{this.renderListItemImg(item.image)}
   					<div className="swipes-modal__list__item__title">
-  						{item.title}
+  						{item.name}
   					</div>
   				</div>
   			)
@@ -93,26 +113,22 @@ class SwipesModal extends Component {
   		)
     }
 	}
-  renderLoader(loader){
-    if(loader){
-      return (
-        <div className="swipes-modal__loader">
-          <Loader center={true} text="Loading" />
-        </div>
-      )
-    }
-  }
 	renderListItemImg(img) {
-		if (img) {
+		if (img && typeof img === 'string') {
 			return (
 				<img className="swipes-modal__list__item__img" src={img} />
 			)
-		}
+		} else if (img) {
+      const SVG = img;
+      return (
+        <SVG className="swipes-modal__list__item__img" />
+      )
+    }
 	}
 	renderActions(actions) {
 		if (actions && actions.length > 0) {
 			return (
-				<SwipesModalActions actions={actions} />
+				<SwipesModalActions actions={actions} onClick={this.sendCallback.bind(this)}/>
 			)
 		}
 	}
@@ -132,7 +148,7 @@ class SwipesModal extends Component {
       <div className={modalClass}>
         <div className="swipes-modal__title">
           {title}
-          <i className="material-icons swipes-modal__close">close</i>
+          <i className="material-icons swipes-modal__close" onClick={this.closeModal.bind(this)}>close</i>
         </div>
         {this.renderMessage(message)}
         {this.renderTextarea(textarea)}
@@ -144,27 +160,31 @@ class SwipesModal extends Component {
   }
   render() {
     const { data, shown, callback } = this.props;
+    let modalWrapClass = "swipes-modal__holder"
 
-    let modalClass = "swipes-modal-overlay"
     if(shown){
-      modalClass += ' swipes-modal-overlay--shown'
+      modalWrapClass += ' swipes-modal__holder--shown'
     }
 
     return (
-      <div className={modalClass}>
+      <div className={modalWrapClass}>
+        <div className="swipes-modal__overlay" onClick={this.closeModal.bind(this)}></div>
         {this.renderContent(data)}
       </div>
     )
   }
 }
 
-
 export default SwipesModal
 
 const itemProps = PropTypes.shape({
   title: PropTypes.string,
-  image: PropTypes.string
+  image: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ])
 })
+
 SwipesModal.propTypes = {
   callback: PropTypes.func,
   show: PropTypes.bool,

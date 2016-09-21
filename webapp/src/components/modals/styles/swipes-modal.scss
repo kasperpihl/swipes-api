@@ -1,10 +1,9 @@
 @import '../../global-styles/vars';
 @import '../../global-styles/mixins';
 
-.swipes-modal-overlay {
+.swipes-modal__holder {
 	@include size(100%, 100%);
 	@include flex(center, center);
-	background-color: rgba($deepBlue-100, .2);
 	display: none;
 	left: 0; top: 0;
 	position: fixed;
@@ -13,6 +12,13 @@
 	&--shown {
 		display: flex;
 	}
+}
+
+.swipes-modal__overlay {
+	@include size(100%, 100%);
+	background-color: rgba($deepBlue-100, .2);
+	left: 0; top: 0;
+	position: fixed;
 }
 
 .swipes-modal {
@@ -25,7 +31,7 @@
 	overflow: hidden;
 	position: relative;
 
-	// Default blocks
+	// Default elements
 
 	&__title {
 		@include size(100%, 70px);
@@ -40,10 +46,14 @@
 	&__close {
 		@include size(50px, 70px);
 		@include flex(center, center);
-		color: $deepBlue-60;
+		color: $deepBlue-40;
 		font-size: 18px;
 		position: absolute;
 		right: 0; top: 0;
+
+		&:hover {
+			color: $deepBlue-100;
+		}
 	}
 
 	&__message {

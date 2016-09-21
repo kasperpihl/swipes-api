@@ -11,13 +11,11 @@ export function hideModal() {
 
 export function loadTilesListModal(){
   return (dispatch, getState) => {
-    console.log('dispatch');
     const now = new Date().getTime()
     var returned = false;
     dispatch(loadModal({"title": "Add a tile", loader: true}, () => {
       returned = true;
     }));
-    return;
     const now2 = new Date().getTime()
     dispatch(request('workflows.list')).then((res) =>{
       const time = new Date().getTime() - now;
@@ -26,18 +24,18 @@ export function loadTilesListModal(){
         const rows = res.data.map((row) => {
           if (row.name === 'Slack') {
             const SVG = SlackIcon
-            return Object.assign({}, row, {imageUrl: SVG})
+            return Object.assign({}, row, {image: SVG})
           } else if (row.name === 'Browser Card') {
             const SVG = EarthIcon
-            return Object.assign({}, row, {imageUrl: SVG})
+            return Object.assign({}, row, {image: SVG})
           } else {
             return Object.assign({}, row)
           }
         })
-        dispatch(loadModal({"title": "Add a tile", "emptyText": "We're working on adding more tiles.", "items": rows }, (row) => {
+        dispatch(loadModal({"title": "Add a tile", "emptyText": "We're working on adding more tiles.", "items": rows, loader: false }, (result) => {
 
-          if(row){
-            dispatch(request('users.addWorkflow', {manifest_id: row.manifest_id}));
+          if(result){
+            dispatch(request('users.addWorkflow', {manifest_id: res.data[result.item].manifest_id}));
           }
 
         }))
