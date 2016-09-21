@@ -82,7 +82,10 @@ item = {
         title: 'Subtasks',
         items: [{
           title: 'Task title',
-          subtitle: 'Assignee'
+          subtitle: 'Assignee',
+          actions: [{ 
+            label: "Complete/Undo"
+          }]
         }]
       },
       {
@@ -104,7 +107,20 @@ item = {
   {
     type: 'Card',
     data: {
-      title: ''
+      title: 'File title',
+      subtitle: '/Path',
+      headerImage: 'Type icon (document) etc', // Do this if preview is not image
+      preview: { // If preview is image, do this
+        type: 'image',
+        url: 'imageUrl',
+        width: imageWidthPx
+        height: imageHeightPx
+      },
+      actions: [{
+        label: 'Download',
+      },{
+        label: 'Open'
+      }]
     }
   }
 ]
