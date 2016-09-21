@@ -82,6 +82,13 @@ class Find extends Component {
       //this.setState({searchResults: searchResults});
     });
   }
+  componentDidMount(){
+    if(this.props.me && this.props.me.services){
+      var connectedService = this.props.me.services[0]; // Warning this will break, 
+      this.props.services[connectedService.id].title;
+    }
+    
+  }
   componentDidUpdate(){
     const { searchQuery } = this.props;
     if(searchQuery !== this.state.searchQuery){
@@ -167,6 +174,8 @@ class Find extends Component {
 function mapStateToProps(state) {
   return {
     isFinding: state.main.isFinding,
+    services: state.services,
+    me: state.me,
     searchQuery: state.main.searchQuery,
     draggingDot: state.main.draggingDot,
     recent: state.activity.recent
