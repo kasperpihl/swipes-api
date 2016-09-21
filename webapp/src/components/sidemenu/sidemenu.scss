@@ -212,6 +212,19 @@ $pushDelay: .1s;
 			}
 		}
 	}
+
+	&--responsive {
+		border-right: none;
+		opacity: 0;
+    z-index: 99;
+	}
+
+	&:hover:not(&--force-close), &--pinned, &--responsive {
+		opacity: 1 !important;
+		z-index: 999 !important;
+		border-right: 1px solid #eee !important;
+		border-right: none !important;
+	}
 }
 
 @keyframes indicator-glow {

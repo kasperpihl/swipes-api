@@ -95,7 +95,11 @@ class SwipesModal extends Component {
 	}
   renderLoader(loader){
     if(loader){
-      return <Loader center={true} text="Loading" />
+      return (
+        <div className="swipes-modal__loader">
+          <Loader center={true} text="Loading" />
+        </div>
+      )
     }
   }
 	renderListItemImg(img) {
@@ -117,7 +121,7 @@ class SwipesModal extends Component {
       return;
     }
     const { title, message, textarea, buttons, items, type, loader } = data;
-    
+
     let modalClass = 'swipes-modal';
 
     if (type) {
@@ -140,10 +144,10 @@ class SwipesModal extends Component {
   }
   render() {
     const { data, shown, callback } = this.props;
-		
+
     let modalClass = "swipes-modal-overlay"
     if(shown){
-      modalClass += ' shown'
+      modalClass += ' swipes-modal-overlay--shown'
     }
 
     return (
