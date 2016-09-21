@@ -16,9 +16,6 @@ class ChatList extends Component {
     this.bouncedMarkAsRead = debounce(markAsRead, 500);
   }
 
-  componentDidMount(){
-    window.addEventListener('resize', this.handleResize);
-  }
   componentWillUpdate(nextProps, nextState){
     const node = this.refs['scroll-container'];
     this.shouldScrollBottom = this.forceScrollToBottom || node.scrollTop + node.offsetHeight === node.scrollHeight;
@@ -52,9 +49,6 @@ class ChatList extends Component {
     if(this.props.unreadAbove){
       this.props.unreadAbove(unreadAbove);
     }
-  }
-  handleResize(){
-    this.bouncedScroll();
   }
   onScroll(e){
     this.checkForMarkingAsRead();
