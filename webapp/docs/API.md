@@ -1,6 +1,34 @@
 # Preview structure
 
+## Card supported props
+The supported properties to be sent with the Swipes Card
+```
+propTypes = {
+  data: shape({
+    id: stringOrNum,
+    shortUrl: string,
+    title: string,
+    subtitle: string,
+    description: string,
+    headerImage: string,
+    preview: shape({
+      type: oneOf(['html', 'image']).isRequired,
+      url: string,
+      html: string,
+      width: stringOrNum,
+      height: stringOrNum
+    }),
+    actions: arrayOf(PropTypes.shape({
+      label: string.isRequired,
+      icon: string,
+      bgColor: string
+    }))
+  })
+}
+```
+
 ## CardList supported props
+The supported properties to be sent with a Swipes Card List
 ```
 propTypes = {
   data: oneOfType([
@@ -25,13 +53,6 @@ item = {
     subtitle: string,
     description: string,
     headerImage: string,
-    preview: shape({
-      type: oneOf(['html', 'image']).isRequired,
-      url: string,
-      html: string,
-      width: stringOrNum,
-      height: stringOrNum
-    }),
     actions: arrayOf(PropTypes.shape({
       label: string.isRequired,
       icon: string,
