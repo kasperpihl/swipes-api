@@ -294,10 +294,6 @@ tabSlider {
         fill: $deepBlue-60;
       }
     }
-
-    &:hover &__download {
-      opacity: 1;
-    }
   }
 
   &__description {
@@ -349,5 +345,9 @@ tabSlider {
 			width: 100%;
       position: relative;
 		}
+  }
+
+  &:hover &__header &__header__download {
+    opacity: 1;
   }
 }
