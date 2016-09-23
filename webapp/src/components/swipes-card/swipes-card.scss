@@ -64,6 +64,10 @@ $imgWrapper: 50px;
         letter-spacing: .9px;
         color: $deepBlue-100;
         font-size: 15px;
+
+        &:first-letter {
+          text-transform: uppercase;
+        }
       }
     }
 
@@ -202,6 +206,11 @@ tabSlider {
       @include size(40px);
       @include flex(center, center);
 
+      &:empty {
+        @include size(20px);
+        // background-color: red;
+      }
+
       > * {
         @include size(6px, 6px); //hack for centering the dot, some issue with no actions
       }
@@ -226,6 +235,7 @@ tabSlider {
           display: none;
         }
       }
+
       &--title {
         @include size(100%);
         color: $deepBlue-100;

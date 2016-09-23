@@ -54,6 +54,10 @@ class SwipesCardItem extends Component {
   renderDot(actions){
     const { onDragStart } = this.props;
 
+    if (this.state.data.dot === false) {
+      return;
+    }
+
     return (
       <div className="dot-wrapper">
         <SwipesDot
@@ -177,7 +181,8 @@ class SwipesCardItem extends Component {
       description,
       headerImage,
       actions,
-      preview
+      preview,
+      dot
     } = this.state.data;
 
     return (
@@ -246,6 +251,7 @@ SwipesCardItem.propTypes = {
     subtitle: PropTypes.string,
     description: PropTypes.string,
     headerImage: PropTypes.string,
+    noDot: PropTypes.bool,
     preview: PropTypes.shape({
       type: PropTypes.oneOf(['html', 'image']).isRequired,
       url: PropTypes.string,

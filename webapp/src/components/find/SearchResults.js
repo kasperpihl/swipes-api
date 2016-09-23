@@ -90,6 +90,7 @@ class SearchResults extends Component {
       // {this.renderServices()}
     // </div>
     const { title, subtitle, results, searching } = this.props;
+
     return (
       <div className="swipes-search-results">
         {this.renderHeader(title, subtitle, results)}

@@ -11,9 +11,7 @@ import SearchResults from '../components/find/SearchResults'
 class Find extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      connectedServices: []
-    };
+    this.state = {};
     bindAll(this, [ 'dotDragStart', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
@@ -71,20 +69,9 @@ class Find extends Component {
     this.shareDataForSearchId = {};
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
-      let conServices = [];
+      let connectedServices = [];
+      let uniqueResServices = [];
       let resServices = [];
-
-      if (this.props.me && this.props.me.services) {
-        this.props.me.services.forEach( (connectedService) => {
-          services.push(connectedService.service_name);
-        })
-
-        this.setState({connectedServices: services})
-      }
-
-
-      console.log('res', res);
-
 
       res.result.forEach((doc) => {
         if(!groups[doc.source]){
@@ -98,7 +85,34 @@ class Find extends Component {
           resServices.push(doc.source)
         }
       });
-      console.log(resServices);
+
+      // To get an array of connected services
+      if (this.props.me && this.props.me.services) {
+        this.props.me.services.forEach( (connectedService) => {
+          connectedServices.push(connectedService.service_name);
+        })
+      }
+
+      // to get an array of unique result services
+      res.result.forEach( (result) => {
+      	const filter = uniqueResServices.findIndex(x => x === result.source);
+      	if (filter === -1) {
+      		uniqueResServices.push(result.source)
+      	}
+      })
+
+      // Getting services with no results
+      const noResServices = connectedServices.filter(x => uniqueResServices.indexOf(x) === -1);
+
+      // if we want these as card lists
+      noResServices.forEach( (serv) => {
+        groups[serv] = []
+        groups[serv].push({
+          title: 'No results',
+          dot: false
+        })
+      })
+
       this.setState({searchResults: groups, searching: false});
       console.log('unhandled', this.unhandledDocs);
       //this.setState({searchResults: searchResults});
@@ -177,10 +191,11 @@ class Find extends Component {
       className += ' find-overlay--open'
     }
     const recent = this.generateActivity();
+
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
         <div className="content-container">
-          <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this}/>
+          <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
           <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
         </div>
       </div>
