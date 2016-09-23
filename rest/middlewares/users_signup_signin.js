@@ -25,6 +25,11 @@ const signUpValidate = (req, res, next) => {
   repassword = repassword || '';
   organization = organization || '';
 
+  // Because we are cool!
+  if (!email.includes('@')) {
+    email = email + '@swipesapp.com';
+  }
+
   if (!validator.isEmail(email)) {
     errors.push({
       field: 'email',
@@ -183,6 +188,11 @@ const  signInValidate = (req, res, next) => {
 
   email = email ? validator.trim(email.toLowerCase()) : '';
   password = password ? sha1(req.body.password) : '';
+
+  // Because we are cool!
+  if (!email.includes('@')) {
+    email = email + '@swipesapp.com';
+  }
 
   if (!validator.isEmail(email)) {
     const error = {

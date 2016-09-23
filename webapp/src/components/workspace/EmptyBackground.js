@@ -23,7 +23,7 @@ export default class EmptyBackground extends Component {
     return (
       <div className="empty-workspace-state">
         <p className="workspace-empty-text">
-          <span className="strong">You have no tiles currently opened. Open one from the topbar.</span>
+          <span className="strong">You have no open tiles at the moment. Add a tile from the '+' button at the top.</span>
         </p>
       </div>
     )
