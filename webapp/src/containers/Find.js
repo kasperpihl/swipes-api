@@ -11,7 +11,9 @@ import SearchResults from '../components/find/SearchResults'
 class Find extends Component {
   constructor(props) {
     super(props)
-    this.state = {};
+    this.state = {
+      connectedServices: []
+    };
     bindAll(this, [ 'dotDragStart', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
@@ -69,6 +71,21 @@ class Find extends Component {
     this.shareDataForSearchId = {};
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
+      let conServices = [];
+      let resServices = [];
+
+      if (this.props.me && this.props.me.services) {
+        this.props.me.services.forEach( (connectedService) => {
+          services.push(connectedService.service_name);
+        })
+
+        this.setState({connectedServices: services})
+      }
+
+
+      console.log('res', res);
+
+
       res.result.forEach((doc) => {
         if(!groups[doc.source]){
           groups[doc.source] = [];
@@ -76,19 +93,18 @@ class Find extends Component {
         if(groups[doc.source].length < 3){
           groups[doc.source].push(this.mapResultToCard(doc));
         }
+
+        if (doc.source) {
+          resServices.push(doc.source)
+        }
       });
+      console.log(resServices);
       this.setState({searchResults: groups, searching: false});
       console.log('unhandled', this.unhandledDocs);
       //this.setState({searchResults: searchResults});
     });
   }
   componentDidMount(){
-    if(this.props.me && this.props.me.services){
-      var connectedService = this.props.me.services[0]; // Warning this will break, 
-      console.log(connectedService, this.props.services);
-      this.props.services[connectedService.service_id].title;
-    }
-    
   }
   componentDidUpdate(){
     const { searchQuery } = this.props;
