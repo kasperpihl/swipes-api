@@ -242,7 +242,7 @@ const { string, number, shape, oneOf, oneOfType, arrayOf, func } = PropTypes;
 SwipesCardItem.propTypes = {
   callDelegate: func.isRequired,
   data: shape({
-    id: oneOfType([string, number]),,
+    id: oneOfType([string, number]),
     shortUrl: string,
     title: string,
     subtitle: string,
