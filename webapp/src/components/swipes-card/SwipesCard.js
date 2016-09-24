@@ -44,7 +44,8 @@ export default class SwipesCard extends Component {
   }
 }
 
+const { shape, object } = PropTypes;
 SwipesCard.propTypes = {
-  data: PropTypes.object,
-  delegate: PropTypes.object
+  data: shape(SwipesCardItem.propTypes),
+  delegate: object
 }
