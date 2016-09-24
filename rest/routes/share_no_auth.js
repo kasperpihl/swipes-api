@@ -51,4 +51,38 @@ router.post('/share.getData', (req, res, next) => {
     })
 })
 
+router.post('/share.getPreview', (req, res, next) => {
+  const shareId = req.body.shareId;
+  const getSwipesUrlsQ =
+    r.db('swipes').table('links_permissions')
+      .getAll(shareId)
+      .eqJoin('link_id', r.db('swipes').table('links'))
+      .map((doc) => {
+        return {
+          left: doc('left').without('link_id'),
+          right: doc('right').merge({
+            item_id: doc('right')('id')
+          })
+          .without('id', 'short_url')
+        }
+      })
+      .zip()
+      .map((link) => {
+        return link.merge(() => {
+          return {"short_url": link('id')}
+        })
+      })
+      .without('id')
+
+  db.rethinkQuery(getSwipesUrlsQ)
+    .then((links) => {
+      const link = links[0];
+
+      return res.status(200).json({ok: true, link});
+    })
+    .catch((err) => {
+      return res.status(200).json({ok: false, err});
+    })
+})
+
 module.exports = router;
