@@ -46,10 +46,10 @@ class TemplateListItem extends Component {
 
 export default TemplateListItem
 
-const { shape, oneOf, string, func } = PropTypes;
+const { shape, oneOfType, string, func } = PropTypes;
 TemplateListItem.propTypes = {
   data: shape({
-    img: oneOf([
+    img: oneOfType([
       string,
       func
     ]),
