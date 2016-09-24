@@ -72,12 +72,10 @@
       .search-empty-state {
         @include size();
         @include flex(center, center);
-        font-weight: 500;
+        font-size: 20px;
+        font-weight: 400;
         color: $deepBlue-80;
-        text-align: center;
-        font-size: 12px;
-        letter-spacing: .9px;
-        text-transform: uppercase;
+        letter-spacing: .5px;
       }
 
       .search-no-results {
