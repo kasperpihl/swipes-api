@@ -151,18 +151,19 @@ class SwipesCardList extends Component {
 
 export default SwipesCardList
 
+const { string, arrayOf, oneOfType, shape } = PropTypes;
 const dataType = {
-  title: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  titleLeftImage: PropTypes.string,
-  titleRightImage: PropTypes.string,
-  actionLabel: PropTypes.string
+  title: string.isRequired,
+  items: arrayOf(SwipesCardItem.propTypes).isRequired,
+  titleLeftImage: string,
+  titleRightImage: string,
+  actionLabel: string
 }
 
 SwipesCardList.propTypes = {
-  data: PropTypes.oneOfType([
-    PropTypes.shape(dataType),
-    PropTypes.array
+  data: oneOfType([
+    shape(dataType),
+    arrayOf(dataType)
   ]).isRequired,
   // delegate: PropTypes.object.isRequired
 }
