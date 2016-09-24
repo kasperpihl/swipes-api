@@ -117,7 +117,7 @@ const dropbox = {
 	},
 	previewRequest({ authData, type, itemId, user }, callback) {
 		return callback(null, {});
-	}
+	},
 	cardData(type, data) {
 		let mappedData;
 
