@@ -69,9 +69,6 @@ class Find extends Component {
     this.shareDataForSearchId = {};
     this.props.request('search', {q: query}).then((res) => {
       const groups = {};
-      let connectedServices = [];
-      let uniqueResServices = [];
-      let resServices = [];
 
       res.result.forEach((doc) => {
         if(!groups[doc.source]){
@@ -80,38 +77,21 @@ class Find extends Component {
         if(groups[doc.source].length < 3){
           groups[doc.source].push(this.mapResultToCard(doc));
         }
-
-        if (doc.source) {
-          resServices.push(doc.source)
-        }
       });
 
       // To get an array of connected services
       if (this.props.me && this.props.me.services) {
         this.props.me.services.forEach( (connectedService) => {
-          connectedServices.push(connectedService.service_name);
+          if(!groups[connectedService.service_name]){
+            groups[connectedService.service_name] = [{
+              title: 'No results',
+              dot: false
+            }]
+          }
         })
       }
 
-      // to get an array of unique result services
-      res.result.forEach( (result) => {
-      	const filter = uniqueResServices.findIndex(x => x === result.source);
-      	if (filter === -1) {
-      		uniqueResServices.push(result.source)
-      	}
-      })
 
-      // Getting services with no results
-      const noResServices = connectedServices.filter(x => uniqueResServices.indexOf(x) === -1);
-
-      // if we want these as card lists
-      noResServices.forEach( (serv) => {
-        groups[serv] = []
-        groups[serv].push({
-          title: 'No results',
-          dot: false
-        })
-      })
 
       this.setState({searchResults: groups, searching: false});
       console.log('unhandled', this.unhandledDocs);
