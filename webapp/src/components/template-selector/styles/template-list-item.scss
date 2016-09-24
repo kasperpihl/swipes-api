@@ -1,0 +1,44 @@
+@import "../../global-styles/vars";
+@import "../../global-styles/mixins";
+
+.template-list__item {
+  @include size(100%, auto);
+  @include flex(center, center);
+  position: relative;
+
+  &:not(:first-of-type) {
+    margin-top: 20px;
+  }
+
+  &__image {
+    @include size(50px, 50px);
+    @include flex();
+
+    & > * {
+      @include size(40px, 40px);
+    }
+
+    &--img > img {
+      border-radius: 6px;
+    }
+  }
+
+  &__info {
+    @include size(auto, 100%);
+    @include flex(flex-start, center, column);
+
+    &__title {
+
+    }
+
+    &__subtitle {
+
+    }
+
+    &__title, &__subtitle {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

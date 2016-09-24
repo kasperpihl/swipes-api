@@ -5,7 +5,7 @@
 }
 
 //Pass (center, center) paramenters for simple centering
-@mixin flex($vertical, $horizontal, $direction:row) {
+@mixin flex($vertical:center, $horizontal:center, $direction:row) {
 	align-items: $vertical;
 	display: flex;
 	flex-direction: $direction;
