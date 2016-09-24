@@ -3,7 +3,10 @@
 
 .template-list__item {
   @include size(100%, auto);
-  @include flex(center, center);
+  @include flex(center, flex-start);
+  background-color: #fff;
+  box-shadow: 0px 5px 20px 0px rgba($deepBlue-40, 0.1);
+  padding: 10px 0;
   position: relative;
 
   &:not(:first-of-type) {
@@ -26,19 +29,20 @@
   &__info {
     @include size(auto, 100%);
     @include flex(flex-start, center, column);
+  }
 
-    &__title {
+  &__title {
+    color: $deepBlue-80;
+  }
 
-    }
+  &__subtitle {
+    font-size: 12px;
+    color: $deepBlue-40
+  }
 
-    &__subtitle {
-
-    }
-
-    &__title, &__subtitle {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  &__title, &__subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
