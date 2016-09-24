@@ -234,35 +234,31 @@ class SwipesCardItem extends Component {
   }
 }
 
-
 export default SwipesCardItem
 
-const stringOrNum = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.number
-])
+const { string, number, shape, oneOf, oneOfType, arrayOf, func } = PropTypes;
+
 
 SwipesCardItem.propTypes = {
-  callDelegate: PropTypes.func.isRequired,
-  data: PropTypes.shape({
-    id: stringOrNum,
-    shortUrl: PropTypes.string,
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    description: PropTypes.string,
-    headerImage: PropTypes.string,
-    noDot: PropTypes.bool,
-    preview: PropTypes.shape({
-      type: PropTypes.oneOf(['html', 'image']).isRequired,
-      url: PropTypes.string,
-      html: PropTypes.string,
-      width: stringOrNum,
-      height: stringOrNum
+  callDelegate: func.isRequired,
+  data: shape({
+    id: oneOfType([string, number]),,
+    shortUrl: string,
+    title: string,
+    subtitle: string,
+    description: string,
+    headerImage: string,
+    preview: shape({
+      type: oneOf(['html', 'image']).isRequired,
+      url: string,
+      html: string,
+      width: oneOfType([string, number]),
+      height: oneOfType([string, number])
     }),
-    actions: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      icon: PropTypes.string,
-      bgColor: PropTypes.string
+    actions: arrayOf(shape({
+      label: string.isRequired,
+      icon: string,
+      bgColor: string
     }))
   })
 }
