@@ -51,12 +51,26 @@ class Services extends Component {
       };
       let placeholderText;
       if(service.manifest_id === 'dropbox'){
-        placeholderText = "Droppy!";
+        placeholderText = "By connecting Dropbox, you will get a stream of notifications for recently updated or uploaded files by you or your colleagues. Also you will be able to search and find files from there ~30min after connecting the service.";
+      }
+      if(service.manifest_id === 'asana'){
+        placeholderText = "By connecting Asana, you will get a stream of notifications for recently updated or added tasks by you or your colleagues.";
+      }
+      if(service.manifest_id === 'slack'){
+        placeholderText = "By connecting Slack, you can add a chat tile in your Workspace from where you can easily communicate with your team, share information and progress on your work.";
       }
 
       return [
         <ConnectRow key={service.id + '-' + i} data={data} clickedButton={this.clickedConnect}/>,
-        <div className="placeholderForServices" key={"placeholder" + i}>{placeholderText}</div>
+        <div
+          key={"placeholder" + i}
+          style={{
+            paddingLeft: '48px',
+            paddingBottom: '10px',
+            fontSize: '12px'
+          }}>
+          {placeholderText}
+        </div>
       ];
     })
   }
