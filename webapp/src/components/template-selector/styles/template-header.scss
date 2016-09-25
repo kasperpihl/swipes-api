@@ -1,0 +1,13 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+
+.template-header {
+  @include size(100%, 400px);
+  background-color: #DAF3F7;
+  position: relative;
+
+  &__col {
+    @include size(auto, 100%);
+  }
+}

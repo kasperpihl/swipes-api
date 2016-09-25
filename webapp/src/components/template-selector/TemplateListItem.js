@@ -30,7 +30,7 @@ class TemplateListItem extends Component {
   }
   render() {
     const { img, title, subtitle } = this.props.data;
-    let rootClass = 'template-list__item';
+    let rootClass = 'template-list__item'; // Trying something new here
 
     return (
       <div className={rootClass}>
