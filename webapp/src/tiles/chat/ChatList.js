@@ -26,6 +26,7 @@ class ChatList extends Component {
       const node = this.refs['scroll-container'];
       node.scrollTop = node.scrollHeight
     }
+
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -60,8 +61,13 @@ class ChatList extends Component {
     }
   }
   renderSections(){
-    const { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages, cardDelegate } = this.props;
+    let { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages, cardDelegate } = this.props;
+    if(sections && !sections.length){
+      return <div>This is the very beginning of this conversation. Start writing below</div>;
+    }
     if(sections && !loadingMessages){
+      //sections = sections.slice(0,1);
+      //sections[0].messages = sections[0].messages.slice(0,1);
       return sections.map(function(section){
         return <ChatSection cardDelegate={cardDelegate} key={section.title} clickedLink={clickedLink} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
