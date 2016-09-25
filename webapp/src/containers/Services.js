@@ -49,7 +49,15 @@ class Services extends Component {
         id: service.manifest_id,
         title: service.title
       };
-      return <ConnectRow key={service.id + '-' + i} data={data} clickedButton={this.clickedConnect}/>;
+      let placeholderText;
+      if(service.manifest_id === 'dropbox'){
+        placeholderText = "Droppy!";
+      }
+
+      return [
+        <ConnectRow key={service.id + '-' + i} data={data} clickedButton={this.clickedConnect}/>,
+        <div className="placeholderForServices" key={"placeholder" + i}>{placeholderText}</div>
+      ];
     })
   }
   render() {
