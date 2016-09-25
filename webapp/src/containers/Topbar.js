@@ -66,6 +66,10 @@ class Topbar extends Component {
       this.props.toggleFullscreen();
     }
     else {
+      const { pathname } = this.props;
+      if(pathname !== '/'){
+        browserHistory.push('/');
+      }
       this.props.loadTilesListModal();
     }
   }
