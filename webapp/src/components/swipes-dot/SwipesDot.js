@@ -90,6 +90,14 @@ const SwipesDot = React.createClass({
     document.addEventListener('mouseup', this.onMouseUp);
   },
   onClickDot(e, boundRect) {
+    const {
+      elements,
+    } = this.props;
+
+    if(!elements || !elements.length){
+      return; // No actions;
+    }
+
     this.setState({
       open: !this.state.open,
       dotBoundRect: boundRect
