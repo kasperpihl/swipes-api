@@ -8,7 +8,6 @@
 
 .chat-list-container {
   @include size(100%, 100%);
-  //@include flex(center, flex-end, column);
   background-color: $bg;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -16,12 +15,30 @@
   transition: .1s;
 }
 
+.flex-container {
+  min-height: 100%;
+  @include flex(center, flex-end, column);
+}
+
 .chat-list {
   width: 100%;
   max-width: 650px;
   padding: 10px;
-  margin: 0 auto;
   position: relative;
+
+  &__no-messages {
+    @include size(60%, auto);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0 20px;
+    font-size: 20px;
+    font-weight: 400;
+    color: $deepBlue-80;
+    letter-spacing: .5px;
+  }
 }
 
 .section {

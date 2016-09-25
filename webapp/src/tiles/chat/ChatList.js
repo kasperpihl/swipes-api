@@ -63,11 +63,9 @@ class ChatList extends Component {
   renderSections(){
     let { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages, cardDelegate } = this.props;
     if(sections && !sections.length){
-      return <div>This is the very beginning of this conversation. Start writing below</div>;
+      return <div className="chat-list__no-messages">This is the very beginning of this conversation. Start writing below</div>;
     }
     if(sections && !loadingMessages){
-      //sections = sections.slice(0,1);
-      //sections[0].messages = sections[0].messages.slice(0,1);
       return sections.map(function(section){
         return <ChatSection cardDelegate={cardDelegate} key={section.title} clickedLink={clickedLink} data={{unreadIndicator: unreadIndicator, section: section}} />
       });
@@ -81,8 +79,10 @@ class ChatList extends Component {
     return (
       <div onScroll={this.onScroll} style={styles} ref="scroll-container" className="chat-list-container">
         {this.renderLoading()}
-        <div className="chat-list" ref="chat-list">
-          {this.renderSections()}
+        <div className="flex-container">
+          <div className="chat-list" ref="chat-list">
+            {this.renderSections()}
+          </div>
         </div>
       </div>
     );
