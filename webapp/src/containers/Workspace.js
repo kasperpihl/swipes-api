@@ -37,19 +37,21 @@ class Workspace extends Component {
           this.props.stopDraggingDot()
           return;
         }*/
+        this.props.stopDraggingDot()
         this.props.generateShareUrl(draggingDot.data).then( (res) => {
           console.log('res from share url', res);
+          
           if(res.ok){
             var shareUrl = this.generateShareUrl(res.short_url);
             var shareData = {
-              shareUrl,
+              shareUrl
             }
             if(res.meta && res.meta.title){
               shareData.title = res.meta.title;
             }
             this.sendToTile(id, 'share.receivedData', shareData);
           }
-          this.props.stopDraggingDot()
+         
         }).catch((e) => {
           console.log('catch catch');
         })

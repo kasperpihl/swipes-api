@@ -25,6 +25,7 @@ class DotDragOverlay extends Component {
     
     const styles = {};
     const {draggingDot} = this.props;
+    //console.log('dotting', draggingDot);
     if(draggingDot){
       className += ' shown'
       const { clientX, clientY } = this.state;

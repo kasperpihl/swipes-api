@@ -30,7 +30,6 @@ export default class SlackCoreHandler {
     }
     this.isStarting = true;
     this.request('rtm.start').then((res, err) => {
-      console.log('yay return!', res, err);
       this.isStarting = false;
       if(res.ok){
         const saveObj = { channels: {} };
