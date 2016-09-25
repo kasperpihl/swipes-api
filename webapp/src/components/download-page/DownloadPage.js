@@ -92,21 +92,19 @@ var DownloadPage = React.createClass({
     )
   },
   renderWebsite: function() {
-    var downloadOptions;
-    var microCopy = 'Download it below.';
+    var downloadOptions; // = this.renderButtons();
+    var microCopy = 'But only for a few selected people.';
 
     if (browser.name === 'safari') {
-      downloadOptions = this.renderLink();
-      microCopy = 'Copy the link below'
-    } else {
-      downloadOptions = this.renderButtons()
+      //downloadOptions = this.renderLink();
+      //microCopy = 'Copy the link below'
     }
 
     return (
       <div className="dl-card">
         <img src={SwipesIcon}/>
-        <h6>NEW VERSION OF SWIPES</h6>
-        <p>Great news! Swipes is now available for your operating system. <br /> {microCopy}</p>
+        <h6>SECRET VERSION OF SWIPES</h6>
+        <p>Swipes is available. <br /> {microCopy}</p>
         {downloadOptions}
       </div>
     )
