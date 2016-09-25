@@ -118,7 +118,7 @@ export default class TileSlackData {
     if (this.typingUsers[data.user]) {
       clearTimeout(this.typingUsers[data.user]);
     }
-
+    
     const timeout = setTimeout(() => {
       delete this.typingUsers[data.user];
       this.userTypingLabel();
@@ -130,7 +130,7 @@ export default class TileSlackData {
   userTypingLabel() {
 
     const users = Object.keys(this.typingUsers).map((userId) => this.data.getIn(['users', userId, 'name']));
-
+  
     let content = users.join(', ');
 
     if (users.length > 1) {

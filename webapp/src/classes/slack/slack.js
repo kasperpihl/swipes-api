@@ -31,6 +31,7 @@ export default class Slack {
     }
   }
   sendEvent(serviceId, msg){
+
     var handler = this.currentHandlers[serviceId];
     if(handler){
       handler.socket.sendEvent(msg);
