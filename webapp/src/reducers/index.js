@@ -5,6 +5,7 @@ import workspace from './workspace'
 import services from './services'
 import activity from './activity'
 import notifications from './notifications'
+import templates from './templates'
 import { routerReducer } from 'react-router-redux'
 
 import me from './me'
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   activity,
   notifications,
   me,
+  templates,
   routing: routerReducer
 })
 
