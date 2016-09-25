@@ -7,7 +7,7 @@ import db from '../db.js';
 const router = express.Router();
 
 router.post('/goals.templatesList', (req, res, next) => {
-  const q = r.table('goals_templates').orderBy('title');
+  const q = r.table('templates').orderBy('title');
 
   return db.rethinkQuery(q)
     .then((templates) => {
