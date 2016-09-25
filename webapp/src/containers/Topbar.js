@@ -152,7 +152,7 @@ class Topbar extends Component {
             </div>
           </div>
           <div className="sw-topbar__searchbar">
-            <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search your apps" />
+            <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search across your apps" />
           </div>
           <div className="sw-topbar__actions">
             <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind.bind(this)}>
