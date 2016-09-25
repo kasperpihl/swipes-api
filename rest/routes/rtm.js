@@ -36,12 +36,15 @@ router.post('/rtm.start', (req, res, next) => {
                   .orderBy(r.desc('date'))
                   .without(['id', 'user_id', 'type'])
 
+  let goalsTemplatesQ = r.table('goals_templates').orderBy('title');
+
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
     db.rethinkQuery(users),
     db.rethinkQuery(workflowsQ),
     db.rethinkQuery(servicesQ),
-    db.rethinkQuery(activityQ)
+    db.rethinkQuery(activityQ),
+    db.rethinkQuery(goalsTemplatesQ)
   ]
 
   Promise.all(promiseArrayQ)
@@ -58,7 +61,8 @@ router.post('/rtm.start', (req, res, next) => {
         users: data[1],
         workflows: data[2],
         services: data[3],
-        activity: data[4]
+        activity: data[4],
+        goals_templates: data[5]
       }
 
       res.status(200).json(rtmResponse);
