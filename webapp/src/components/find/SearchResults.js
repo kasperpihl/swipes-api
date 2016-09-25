@@ -47,7 +47,7 @@ class SearchResults extends Component {
     if (!results) {
       return (
         <div className="search-empty-state">
-          type and press enter to search
+          Type and press 'Enter' to search
         </div>
       )
     }
