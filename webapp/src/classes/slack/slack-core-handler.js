@@ -49,6 +49,7 @@ export default class SlackCoreHandler {
           }
         });
         this.slackData = new CoreSlackData(saveObj);
+        this.slackData.onNotification = this.onNotification;
         this.delegate('init', saveObj);
         this.socket.connect(res.data.url);
       }
