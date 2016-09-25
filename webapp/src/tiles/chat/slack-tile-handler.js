@@ -60,7 +60,6 @@ export default class SlackTileHandler {
   }
   sendTypingEvent() {
     const { data } = this.tileSlackData;
-
     window.slack.sendEvent(this.tile.selectedAccountId, {'id': '1', 'type': 'typing', 'channel': data.get('selectedChannelId')});
 
   }
