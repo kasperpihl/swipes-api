@@ -7,6 +7,9 @@ export default class IpcListener {
     ipcRenderer.on('oauth-success', (event, arg) => {
       store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
     });
+    ipcRenderer.on('alert-message', (event, arg) => {
+      alert(arg.message);
+    });
   }
   sendEvent(name, data){
     var functionName = 'send';
