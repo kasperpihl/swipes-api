@@ -157,6 +157,16 @@ class Chat extends Component {
     if(command === 'swipes://retry-send'){
       return this.slackHandler.sendMessage();
     }
+    if(command.startsWith("@U")){
+      var channel = this.slackHandler.channelForUser(command.substring(1));
+      if(channel){
+        this.slackHandler.setChannel(channel.get('id'));
+      }
+      return;
+    }
+    if(command.startsWith("#C")){
+      return this.slackHandler.setChannel(command.substring(1));
+    }
     const { swipes } = this.props;
     swipes.sendEvent('openURL', {url: command})
   }
