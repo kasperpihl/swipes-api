@@ -2,15 +2,21 @@ import { bindAll } from '../utils'
 import Subscriber from '../subscriber'
 
 import { request } from '../../actions/api'
+import { sendNotification } from '../../actions/main'
 import SlackCoreHandler from './slack-core-handler'
 
 export default class Slack {
   constructor(store){
     this.store = store;
-    bindAll(this, ['storeChange', 'request', 'delegate', 'connect', 'disconnect'])
+    bindAll(this, ['storeChange', 'request', 'delegate', 'connect', 'disconnect', 'onNotification'])
     store.subscribe(this.storeChange)
     this.subscriber = new Subscriber();
     this.currentHandlers = {};
+  }
+  onNotification(msg){
+    console.log('on notification');
+    this.store.dispatch(sendNotification(msg));
+    //this.swipes.sendEvent('notifications.send', {title: channel.name, message: text});
   }
   request(serviceId, method, data){
     var options = {
@@ -50,6 +56,7 @@ export default class Slack {
       services.filter( s => s.service_name === 'slack').map((service) => {
         if(!this.currentHandlers[service.id]){
           this.currentHandlers[service.id] = new SlackCoreHandler(this.delegate.bind(null, service.id), this.request.bind(null, service.id));
+          this.currentHandlers[service.id].onNotification = this.onNotification;
         }
       })
     }

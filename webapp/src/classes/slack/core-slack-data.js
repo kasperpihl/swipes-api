@@ -2,7 +2,6 @@ import { bindAll } from '../../classes/utils'
 import Immutable from 'immutable'
 export default class CoreSlackData {
   constructor(data){
-
     this.data = data || {};
     this.data = new Immutable.fromJS(data || {});
     bindAll(this, ['handleMessage', 'notify'])
@@ -54,13 +53,18 @@ export default class CoreSlackData {
     if('message' === msg.type){
       if(msg.channel){
         // If message is from someone else, and is not hidden
-        
+       
         if(msg.user !== this.data.get('self').get('id') && !msg.hidden){
           var channel = this.data.getIn(['channels', msg.channel]);
           if(channel.get('last_read') < msg.ts){
             this.updateChannel(msg.channel, {'unread_count_display': channel.get('unread_count_display') + 1 })
           }
+          if(channel.get('is_im') && this.onNotification){
+            const name = this.data.getIn(['users', channel.get('user'), 'name'])
+            this.onNotification({title: name, message: msg.text})
+          }
         }
+        
       }
     }
     else if([ 
