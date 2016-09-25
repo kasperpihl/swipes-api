@@ -63,7 +63,7 @@ class SwipesCardItem extends Component {
         <SwipesDot
           onDragStart={this.onDragStart}
           hoverParentId={"swipes-card__item-" + this.id }
-          elements={[actions]}
+          elements={actions ? [actions] : []}
         />
       </div>
     )
