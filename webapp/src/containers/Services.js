@@ -62,13 +62,7 @@ class Services extends Component {
 
       return [
         <ConnectRow key={service.id + '-' + i} data={data} clickedButton={this.clickedConnect}/>,
-        <div
-          key={"placeholder" + i}
-          style={{
-            paddingLeft: '48px',
-            paddingBottom: '10px',
-            fontSize: '12px'
-          }}>
+        <div className="swipes-services__placeholder swipes-services__placeholder--connect" key={"placeholder" + i} >
           {placeholderText}
         </div>
       ];
@@ -77,7 +71,7 @@ class Services extends Component {
   render() {
     return (
       <div className="scroll-container">
-        <div>Below are a set of services, integrated with the Swipes Workspace. We support multiple accounts from each service and you can add different Slack, Dropbox or Asana accounts for the different teams or companies you work with.</div>
+        <div className="swipes-services__placeholder">Below are a set of services, integrated with the Swipes Workspace. We support multiple accounts from each service and you can add different Slack, Dropbox or Asana accounts for the different teams or companies you work with.</div>
         <div className="swipes-services">
           <div className="swipes-services__title" data-title="Connect new services"></div>
           {this.renderServicesToConnect()}
