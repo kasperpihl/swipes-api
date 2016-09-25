@@ -61,7 +61,6 @@ export default class SlackSwipesParser {
 
 
       if (channel.unread_count_display) {
-        console.log(channel);
         item.unread = channel.unread_count_display;
         if (channel.is_im) {
           item.notification = channel.unread_count_display;
