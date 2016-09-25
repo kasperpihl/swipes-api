@@ -57,8 +57,8 @@ export default class CoreSlackData {
         
         if(msg.user !== this.data.get('self').get('id') && !msg.hidden){
           var channel = this.data.getIn(['channels', msg.channel]);
-          if(channel.last_read < msg.ts){
-            this.updateChannel(msg.channel, {'unread_count_display': channel.unread_count_display + 1 })
+          if(channel.get('last_read') < msg.ts){
+            this.updateChannel(msg.channel, {'unread_count_display': channel.get('unread_count_display') + 1 })
           }
         }
       }
