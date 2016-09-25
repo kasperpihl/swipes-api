@@ -29,7 +29,6 @@ class Modal extends Component {
   render() {
     const { shown, data } = this.props.modal;
 
-
     return (
       <SwipesModal shown={shown} callback={this.onModalCallback} data={data}/>
     );

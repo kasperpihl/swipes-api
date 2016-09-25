@@ -12,7 +12,7 @@ class Find extends Component {
   constructor(props) {
     super(props)
     this.state = {};
-    bindAll(this, [ 'dotDragStart', 'onCardClick', 'onCardShare', 'onCardAction'])
+    bindAll(this, [ 'dotDragStart', 'onCardClick', 'onClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
   mapResultToCard(doc){
@@ -173,7 +173,7 @@ class Find extends Component {
     const recent = this.generateActivity();
 
     return (
-      <div className={className} onClick={this.onClick.bind(this)}>
+      <div className={className} onClick={this.onClick}>
         <div className="content-container">
           <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
           <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
