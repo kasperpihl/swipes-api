@@ -13,9 +13,48 @@
   min-width: 300px;
   margin: 0 auto;
 
-  &:first-child {
-    margin-top: 100px;
-    margin-bottom: 40px;
+  &__placeholder {
+    width: 100%;
+    max-width: 600px;
+    min-width: 300px;
+    margin: 0 auto;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    color: $deepBlue-60;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0px;
+      top: 30px;
+      width: 4px;
+      height: calc(100% - 60px);
+      background-color: $blue-60;
+    }
+
+
+    &--connect {
+      width: auto;
+      padding: 0;
+      color: $deepBlue-40;
+      font-size: 12px;
+      line-height: 1.4;
+      padding-left: 48px;
+      padding-bottom: 10px;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  &:last-child {
+    margin-top: 30px;
+    margin-bottom: 150px;
   }
 
   &__title {
