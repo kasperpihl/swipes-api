@@ -54,8 +54,11 @@ const deleteWebhooksFromAsana = ({ asana, authData, userId }, webhooks) => {
 		const params = {
 			id: webhook.id
 		}
+		const user = {
+			userId
+		}
 
-		promiseArray.push(request({ authData, method, params }));
+		promiseArray.push(request({ authData, method, params, user }));
 	})
 
 	return Promise.all(promiseArray.map(function(promise) {
@@ -69,8 +72,11 @@ const subscribeToAll = ({ asana, authData, userId, accountId }) => {
 
   const method = 'workspaces.findAll';
   const params = {};
+	const user = {
+		userId
+	}
 
-  asana.request({ authData, method, params }, (err, workspaces) => {
+  asana.request({ authData, method, params, user }, (err, workspaces) => {
     if (err) {
       console.log('Registering asana webhooks - Workspace Step', err);
       return;
@@ -89,8 +95,11 @@ const findAllProjects = ({ asana, authData, userId, accountId, workspace }) => {
   const params = {
     workspace: workspace.id
   };
+	const user = {
+		userId
+	}
 
-  asana.request({ authData, method, params }, (err, projects) => {
+  asana.request({ authData, method, params, user }, (err, projects) => {
     if (err) {
       console.log('Registering asana webhooks - Projects Step', err);
       return;
@@ -114,10 +123,13 @@ const createWebhookForProject = ({ asana, authData, userId, accountId, project }
 		    resource: projectId,
 		    target: webhookTarget
 		  };
+			const user = {
+				userId
+			}
 
 		  console.log(params);
 
-		  asana.request({ authData, method, params }, (err, result) => {
+		  asana.request({ authData, method, params, user }, (err, result) => {
 		    if (err) {
 		      console.log('Registering asana webhooks - Create webhook Step');
 		      console.log(util.inspect(err, { showHidden: true, depth: null }));
@@ -139,8 +151,11 @@ const saveSyncCursor = ({ asana, authData, userId, accountId, projectId }) => {
   const params = {
     resource: projectId
   }
+	const user = {
+		userId
+	}
 
-  asana.request({ authData, method, params }, (err, result) => {
+  asana.request({ authData, method, params, user }, (err, result) => {
     if (err) {
       console.log('Didn\'t get a sync token from the events API');
       console.log(util.inspect(err, { showHidden: true, depth: null }));
@@ -168,8 +183,11 @@ const deleteAllWorkspaceWebhooks = ({ asana, authData, userId, accountId, worksp
 	const params = {
 		id: workspace.id
 	}
+	const user = {
+		userId
+	}
 
-	asana.request({ authData, method, params }, (err, webhooks) => {
+	asana.request({ authData, method, params, user }, (err, webhooks) => {
 		if (err) {
 			console.log('Ooops... can\'t get the webhooks', err);
 			return;
@@ -180,8 +198,11 @@ const deleteAllWorkspaceWebhooks = ({ asana, authData, userId, accountId, worksp
 			const params =  {
 				id: webhook.id
 			}
+			const user = {
+				userId
+			}
 
-			asana.request({ authData, method, params }, (err, res) => {
+			asana.request({ authData, method, params, user }, (err, res) => {
 				if (err) {
 					console.log('Could not delete the webhook', err);
 					return;
