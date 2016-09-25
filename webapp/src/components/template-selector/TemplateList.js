@@ -21,7 +21,7 @@ class TemplateList extends Component {
     }
 
     return (
-      <div className="template-list">
+      <div className="template__list">
         {templates}
       </div>
     )

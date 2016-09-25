@@ -30,14 +30,14 @@ class TemplateListItem extends Component {
   }
   render() {
     const { img, title, subtitle } = this.props.data;
-    let rootClass = 'template-list__item'; // Trying something new here
+    let rootClass = 'template__item'; // Trying something new here because of BEM
 
     return (
       <div className={rootClass}>
         {this.renderImage(rootClass, img)}
-        <div className={rootClass + '__info'}>
-          <div className={rootClass + '__title'}>{title}</div>
-          <div className={rootClass + '__subtitle'}>{subtitle}</div>
+        <div className={rootClass + '__content'}>
+          <div className={rootClass + '__content__title'}>{title}</div>
+          <div className={rootClass + '__content__subtitle'}>{subtitle}</div>
         </div>
       </div>
     )
