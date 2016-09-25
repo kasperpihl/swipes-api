@@ -6,7 +6,7 @@ import db from '../db.js';
 
 const router = express.Router();
 
-router.post('/goals.templatesList', (req, res, next) => {
+router.post('/goals.templates', (req, res, next) => {
   const q = r.table('templates').orderBy('title');
 
   return db.rethinkQuery(q)
