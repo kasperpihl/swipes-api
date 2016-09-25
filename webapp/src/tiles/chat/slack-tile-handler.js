@@ -81,6 +81,12 @@ export default class SlackTileHandler {
     const { data } = this.tileSlackData;
     return data.getIn(['cachedChannels', data.get('selectedChannelId'), 'messages']);
   }
+  channelForUser(userId){
+    const { data } = this.tileSlackData;
+    return data.get('channels').find((val) => {
+      return (val.get('user') === userId);
+    });
+  }
   markAsRead(ts){
 
     const messages = this.currentMessages();
