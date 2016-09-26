@@ -1,5 +1,6 @@
 "use strict";
 
+const http = require('http');
 const r = require('rethinkdb');
 const Promise = require('bluebird');
 const db = require('../db.js');
@@ -10,6 +11,7 @@ const router = express.Router();
 import fs from 'fs';
 import path from 'path';
 const indexPath = path.join(__dirname, '../../webapp/dist/index.html');
+
 
 router.get('/*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
@@ -38,7 +40,14 @@ router.get('/*', (req, res, next) => {
     .then((data) => {
       console.log('data found in share render', data);
       if (data && data[0]) {
-        res.send(renderIndex(data[0]));
+        if(req.headers.host.startsWith('localhost')){
+          // webpack dev server
+          fetchIndexForDevServer(data[0], res);
+        }
+        else{
+          // production
+          res.send(renderIndex(data[0]));
+        }
       }
     })
     .catch((e) => {
@@ -46,10 +55,11 @@ router.get('/*', (req, res, next) => {
     })
 })
 
-const renderIndex = (data) => {
-  let indexHtml;
+const renderIndex = (data, indexHtml) => {
   try {
-    indexHtml = fs.readFileSync(indexPath, 'utf8');
+    if(!indexHtml){
+      indexHtml = fs.readFileSync(indexPath, 'utf8');
+    }
     data = JSON.stringify(data);
   }
   catch (e) {
@@ -61,6 +71,26 @@ const renderIndex = (data) => {
   const embededScript = '<script type="text/javascript">window.__share_data = ' + data + ';</script>'
 
   return [indexHtml.slice(0, firstJsTagIndex), embededScript, indexHtml.slice(firstJsTagIndex)].join('');
+}
+
+
+const fetchIndexForDevServer = (data, res) => {
+  return http.get({
+        host: 'localhost',
+        port: 3000,
+        path: '/'
+    }, function(response) {
+        // Continuously update stream with data
+        var body = '';
+        response.on('data', function(d) {
+            body += d;
+        });
+        response.on('end', function() {
+          res.send(renderIndex(data, body));
+            // Data reception is done, do whatever with it!
+        });
+    });
+
 }
 
 module.exports = router;
