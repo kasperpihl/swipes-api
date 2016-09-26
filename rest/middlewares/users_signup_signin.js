@@ -152,13 +152,15 @@ const userSignUp = (req, res, next) => {
   const {
     email,
     name,
-    password
+    password,
+    organization
   } = res.locals;
   const userId = generateSlackLikeId('U');
   const userDoc = {
     id: userId,
     apps: [],
     services:[],
+    organizations: [organization],
     email: email,
     name: name,
     password: sha1(password),
