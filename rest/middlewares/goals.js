@@ -25,14 +25,14 @@ const goalsValidate = (req, res, next) => {
 const goalsCreate = (req, res, next) => {
   const userId = req.userId;
   const timestamp = new Date().UTC();
-  const originalTemplateId = req.body.orignal_template_id;
+  const processId = req.body.process_id;
   const {
     goal
   } = res.locals;
   const insertQ = r.table('goals').insert({
     timestamp,
     goal,
-    template_ref: originalTemplateId, // T_TODO check if this one exists!
+    process_id: processId, // T_TODO check if this one exists!
     created_by: userId
   })
 
