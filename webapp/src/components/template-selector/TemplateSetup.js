@@ -12,7 +12,6 @@ class TemplateSetup extends Component {
   }
   render() {
     let rootClass = 'template__setup';
-    console.log('setup', this.props)
 
     return (
       <div className={rootClass}>
