@@ -10,12 +10,12 @@ import {
 
 const router = express.Router();
 
-router.post('/goals.templates', (req, res, next) => {
-  const q = r.table('templates').orderBy('title');
+router.post('/goals.processes', (req, res, next) => {
+  const q = r.table('processes').orderBy('title');
 
   return db.rethinkQuery(q)
-    .then((templates) => {
-      return res.status(200).json({ok: true, data: templates});
+    .then((processes) => {
+      return res.status(200).json({ok: true, data: processes});
     })
     .catch((err) => {
       return next(err);

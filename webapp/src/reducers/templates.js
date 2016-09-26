@@ -8,7 +8,7 @@ export default function templates (state = initialState, action) {
       const res = action.payload;
       if(res.ok){
         const templates = {}
-        res.templates.forEach((template) => {
+        res.processes.forEach((template) => {
           templates[template.id] = template;
         })
         return templates;
@@ -18,7 +18,7 @@ export default function templates (state = initialState, action) {
     case types.LOGOUT:{
       return clone(initialState);
     }
-    default: 
+    default:
       return state
   }
 }

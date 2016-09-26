@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../constants/ActionTypes'
+
+import { templates } from '../actions'
 
 class TemplateSelector extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class TemplateSelector extends Component {
   }
   render() {
     return (
-      <div>
+
+      <div>Load Template
       </div>
     )
   }
@@ -17,15 +19,11 @@ class TemplateSelector extends Component {
 
 function mapStateToProps(state) {
   return {
-    fullscreen: state.main.isFullscreen
+    templates: state.templates
   }
 }
 
-TemplateSelector.propTypes = {
-  removeThis: PropTypes.string.isRequired
-}
-
 const ConnectedTemplateSelector = connect(mapStateToProps, {
-  onDoing: actions.doStuff
+  
 })(TemplateSelector)
 export default ConnectedTemplateSelector

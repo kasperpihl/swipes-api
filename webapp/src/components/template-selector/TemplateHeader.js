@@ -45,6 +45,7 @@ class TemplateHeader extends Component {
           <div className={rootClass + '__title'}>{title}</div>
           <div className={rootClass + '__subtitle'}>{subtitle}</div>
           <div className={rootClass + '__description'}>{description}</div>
+
         </div>
         <div className={rootClass + '__col'}>
           <div className={rootClass + '__cta'}>use process</div>
