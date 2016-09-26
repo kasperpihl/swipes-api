@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import './styles/template-steplist-item.scss'
+
 class TemplateStepListItem extends Component {
   constructor(props) {
     super(props)
@@ -7,14 +9,26 @@ class TemplateStepListItem extends Component {
   componentDidMount() {
   }
   render() {
+    let rootClass = 'template__step-item';
+    const { title, type, index } = this.props;
+
     return (
-      <div>
+      <div className={rootClass}>
+        <div className={rootClass + '__number'}>{index + 1}</div>
+        <div className={rootClass + '__content'}>
+          <div className={rootClass + '__title'}>{title}</div>
+          <div className={rootClass + '__type'}>{type}</div>
+          <div className={rootClass + '__icons'}></div>
+        </div>
       </div>
     )
   }
 }
+
 export default TemplateStepListItem
 
+const { string } = PropTypes;
+
 TemplateStepListItem.propTypes = {
-  removeThis: PropTypes.string.isRequired
+  // removeThis: string.isRequired
 }

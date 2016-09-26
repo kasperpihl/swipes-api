@@ -12,11 +12,11 @@ class TemplateSetup extends Component {
   }
   render() {
     let rootClass = 'template__setup';
-    console.log('setup', this.props)
 
     return (
       <div className={rootClass}>
-        <TemplateHeader data={this.props.data}/>
+        <TemplateHeader data={this.props.data} />
+        <TemplateStepList data={this.props.data.steps} />
       </div>
     )
   }

@@ -15,7 +15,7 @@ class TemplateList extends Component {
     if (data) {
       templates = data.map( (template, i) => {
         return (
-          <TemplateListItem data={template} key={i} />
+          <TemplateListItem data={template} callback={this.props.callback} key={i} />
         )
       })
     }
@@ -30,7 +30,8 @@ class TemplateList extends Component {
 
 export default TemplateList
 
-const { shape, arrayOf } = PropTypes
+const { shape, arrayOf, func } = PropTypes
 TemplateList.propTypes = {
-  data: arrayOf(shape(TemplateListItem.propTypes))
+  data: arrayOf(shape(TemplateListItem.propTypes)),
+  callback: func.isRequired
 }

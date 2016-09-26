@@ -33,7 +33,7 @@ class TemplateListItem extends Component {
     let rootClass = 'template__item'; // Trying something new here because of BEM
 
     return (
-      <div className={rootClass}>
+      <div className={rootClass} onClick={this.props.callback}>
         {this.renderImage(rootClass, img)}
         <div className={rootClass + '__content'}>
           <div className={rootClass + '__content__title'}>{title}</div>
@@ -55,5 +55,6 @@ TemplateListItem.propTypes = {
     ]),
     title: string,
     subtitle: string
-  })
+  }),
+  callback: func
 }

@@ -12,21 +12,16 @@
     @include size(auto, 100%);
     @include flex(flex-start, flex-start, column);
     padding: 60px 0;
-
-    @media (max-width: 1400px) {
-      padding-bottom: 90px;
-    }
+    padding-bottom: 90px;
 
     &--text {
-      max-width: 600px;
-      padding-right: 30px;
+      max-width: 550px;
     }
   }
 
   &__image {
     @include size(150px);
     margin-right: 90px;
-    margin-left: 30px;
 
     & > * {
       @include size();
@@ -40,7 +35,6 @@
     padding-top: 30px;
     color: $deepBlue-40;
     line-height: 1.67;
-    margin-left: 30px;
   }
 
   &__title {
@@ -65,22 +59,25 @@
   }
 
   &__cta {
+    @include flex();
     background-color: $blue-100;
     border-radius: 3px;
-    bottom: 15px;
+    bottom: 30px;
     box-shadow: 0 1px 20px 3px rgba($blue-100, 0.6);
     color: #fdfdfd;
     font-size: 12px;
     font-weight: 400;
+    height: 45px;
     letter-spacing: 1px;
     margin-left: 90px;
-    padding: 15px 33px;
     position: absolute;
     text-transform: uppercase;
     transition: .2s ease-in-out;
+    width: 150px;
 
     &:hover {
-      $darkBlue: darken($blue-100, 2%);
+      $darkBlue: darken($blue-100, 3%);
+
       background-color: $darkBlue;
       box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.6);
       transition: .2s ease-in-out;
@@ -89,7 +86,6 @@
     @media (max-width: 1400px) {
       margin-left: 0;
       right: 60px;
-      bottom: 20px;
     }
   }
 }
