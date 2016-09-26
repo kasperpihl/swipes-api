@@ -8,7 +8,7 @@ export default function templates (state = initialState, action) {
       const res = action.payload;
       if(res.ok){
         const templates = {}
-        res.goals_templates.forEach((template) => {
+        res.templates.forEach((template) => {
           templates[template.id] = template;
         })
         return templates;
