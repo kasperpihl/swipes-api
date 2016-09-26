@@ -17,9 +17,12 @@ class TemplateStepList extends Component {
     const listItems = data.map( (item, i) => {
       return <TemplateStepListItem title={item.title} type={item.type} index={i} key={i} />
     })
-
+    const height = this.props.height || '100%';
+    const style = {
+      height
+    };
     return (
-      <div className={rootClass} ref="stepList">
+      <div style={style} className={rootClass} ref="stepList">
         {listItems}
       </div>
     )
