@@ -1,0 +1,13 @@
+@import '../global-styles/vars';
+.overlay {
+  width:100%;
+  height:calc(100% - 54px);
+  position:fixed;
+  background: $bg;
+  left: 0;
+  top: 54px;
+  visibility: hidden;
+  &--shown{
+    visibility: visible;
+  }
+}

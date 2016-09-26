@@ -5,8 +5,12 @@ class TemplateListItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.callback = this.callback.bind(this);
   }
   componentDidMount() {
+  }
+  callback(){
+    this.props.callback(this.props.i);
   }
   renderImage(rootClass, img) {
     if (img) {
@@ -33,7 +37,7 @@ class TemplateListItem extends Component {
     let rootClass = 'template__item'; // Trying something new here because of BEM
 
     return (
-      <div className={rootClass} onClick={this.props.callback}>
+      <div className={rootClass} onClick={this.callback}>
         {this.renderImage(rootClass, img)}
         <div className={rootClass + '__content'}>
           <div className={rootClass + '__content__title'}>{title}</div>

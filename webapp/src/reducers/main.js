@@ -5,6 +5,7 @@ const initialState = {
   isSearching: false,
   socketUrl: null,
   tileBaseUrl: null,
+  overlay: null,
   token: null,
   draggingDot: null,
   mainClasses: [],
@@ -29,6 +30,9 @@ export default function main (state = initialState, action) {
       newState.socketUrl=  action.payload.url;
       newState.tileBaseUrl = action.payload.workflow_base_url;
       return newState;
+    }
+    case types.SET_OVERLAY: {
+      return Object.assign({}, state, {overlay: action.overlay});
     }
     case types.SEARCH:{
       return Object.assign({}, state, { searchQuery: action.query })

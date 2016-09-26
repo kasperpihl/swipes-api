@@ -5,6 +5,7 @@ import { api, modal } from '../actions'
 import Topbar from './Topbar'
 import Find from './Find'
 import Modal from './Modal'
+import Overlay from './Overlay'
 import DotDragOverlay from './DotDragOverlay'
 const {dialog} = nodeRequire('electron').remote
 
@@ -53,7 +54,9 @@ class App extends Component {
           {this.props.children}
         </div>
         <Find />
+        <Overlay />
         <Modal />
+
         <DotDragOverlay />
         <DevTools />
       </div>

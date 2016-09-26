@@ -70,7 +70,8 @@ class Topbar extends Component {
       if(pathname !== '/'){
         browserHistory.push('/');
       }
-      this.props.loadTilesListModal();
+      this.props.setOverlay('TemplateSelector');
+      //this.props.loadTilesListModal();
     }
   }
   clickedFind(){
@@ -184,6 +185,7 @@ const ConnectedTopbar = connect(mapStateToProps, {
   search: main.search,
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
+  setOverlay: main.setOverlay,
   loadTilesListModal: modal.loadTilesListModal
 })(Topbar)
 export default ConnectedTopbar

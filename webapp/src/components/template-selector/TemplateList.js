@@ -7,7 +7,9 @@ class TemplateList extends Component {
     super(props)
     this.state = {}
   }
-  componentDidMount() {}
+  componentDidMount() {
+
+  }
   render() {
     const { data } = this.props;
     let templates;
@@ -15,7 +17,7 @@ class TemplateList extends Component {
     if (data) {
       templates = data.map( (template, i) => {
         return (
-          <TemplateListItem data={template} callback={this.props.callback} key={i} />
+          <TemplateListItem data={template} i={i} callback={this.props.callback} key={i} />
         )
       })
     }
