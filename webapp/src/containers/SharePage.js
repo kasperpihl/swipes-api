@@ -12,7 +12,8 @@ class SharePage extends Component {
     })
   }
   componentDidMount(){
-    this.updateAndReloadData();
+    console.log(this.props.data)
+    //this.updateAndReloadData();
   }
   renderCards(){
     if(this.state.cards){
