@@ -1,5 +1,5 @@
 import React from 'react';
-
+window.Perf = require('react-addons-perf');
 // Exported from redux-devtools
 import { createDevTools } from 'redux-devtools';
 
