@@ -9,18 +9,37 @@ const router = express.Router();
 
 import fs from 'fs';
 import path from 'path';
-const indexPath = path.join(__dirname, '../../webapp/dev/index.html');
+const indexPath = path.join(__dirname, '../../webapp/dist/index.html');
 
 router.get('/*', (req, res, next) => {
   const pathParts = req.originalUrl.split('/');
   const shareId = pathParts[2];
-  const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0).without('checksum', 'id', 'userId', 'service');
+  const getSwipesUrlsQ =
+    r.db('swipes').table('links_permissions')
+      .getAll(shareId)
+      .eqJoin('link_id', r.db('swipes').table('links'))
+      .map((doc) => {
+        return {
+          left: doc('left').without('link_id'),
+          right: doc('right').without('id', 'type', 'short_url')
+        }
+      })
+      .zip()
+      .map((link) => {
+        return link.merge(() => {
+          return {"short_url": link('id')}
+        })
+      })
+      .without('id')
+  //const getSwipesUrlQ = r.table('links').getAll(shareId, {index: 'short_url'}).nth(0).without('checksum', 'id', 'userId', 'service');
 
 
-  db.rethinkQuery(getSwipesUrlQ)
+  db.rethinkQuery(getSwipesUrlsQ)
     .then((data) => {
       console.log('data found in share render', data);
-      res.send(renderIndex(data));
+      if (data && data[0]) {
+        res.send(renderIndex(data[0]));
+      }
     })
     .catch((e) => {
       return next(e);
