@@ -78,16 +78,18 @@ export default class TileSlackData {
         // Handle message change
         if(msg.subtype === 'message_changed'){
           this.performChangesIn(['cachedChannels', msg.channel, 'messages'], (data) =>{
+            console.log('change', msg);
             return data.mergeIn([data.findIndex((item) => item.get('ts') === msg.message.ts)], msg.message);
           })
         }
         else if(msg.subtype === 'message_deleted'){
           this.performChangesIn([ 'cachedChannels', msg.channel, 'messages' ], (data) =>{
-            console.log(msg);
+            console.log('delete', msg);
             return data.deleteIn([data.findIndex((item) => item.get('ts') === msg.deleted_ts)]);
           })
         }
         else if(this.data.getIn(['cachedChannels', msg.channel])){
+          console.log('add', msg);
           this.performChangesIn(['cachedChannels', msg.channel, 'messages'], (data) => {
             return data.push(Map(msg))
           })
