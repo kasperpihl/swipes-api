@@ -12,10 +12,11 @@ class TemplateSetup extends Component {
   }
   render() {
     let rootClass = 'template__setup';
+    console.log('setup', this.props)
 
     return (
       <div className={rootClass}>
-        <TemplateHeader />
+        <TemplateHeader data={this.props.data}/>
       </div>
     )
   }
@@ -26,5 +27,5 @@ export default TemplateSetup
 const { string } = PropTypes;
 
 TemplateSetup.propTypes = {
-  // removeThis: string.isRequired
+
 }
