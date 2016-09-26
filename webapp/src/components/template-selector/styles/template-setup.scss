@@ -1,7 +1,7 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-.template {
-  @include size(100%, 100%);
+.template__setup {
+  @include size(100%);
   position: relative;
 }

@@ -2,12 +2,48 @@
 @import '../../global-styles/mixins/';
 
 
-.template-header {
+.template__header {
   @include size(100%, 400px);
+  @include flex(center, center);
   background-color: #DAF3F7;
   position: relative;
 
   &__col {
     @include size(auto, 100%);
+    @include flex(flex-start, center, column);
+
+    &--text {
+      @include size(100%, auto);
+      max-width: 500px
+    }
+  }
+
+  &__image {
+    @include size(200px);
+
+    & > * {
+      @include size();
+    }
+  }
+
+  &__author {
+    @include size(200px, auto);
+  }
+
+  &__title {
+    font-size: 24px;
+    color: $deepBlue-100;
+    font-weight: 400;
+  }
+
+  &__subtitle {
+    font-size: 21px;
+    color: $deepBlue-40;
+    font-weight: 400;
+  }
+
+  &__description {
+    color: $deepBlue-100;
+    line-height: 21px;
   }
 }
