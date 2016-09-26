@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Activity from './Activity'
-import { VelocityTransitionGroup } from 'velocity-react'
 
 class Activities extends Component {
   constructor(props) {
@@ -34,9 +33,7 @@ class Activities extends Component {
     return (
       <div className="swipes-activities">
         {this.renderHeader(title, subtitle)}
-        <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-          {this.renderActivities(activities)}
-        </VelocityTransitionGroup>
+        {this.renderActivities(activities)}
       </div>
     )
   }
