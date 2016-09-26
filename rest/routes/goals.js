@@ -3,6 +3,10 @@
 import express from 'express';
 import r from 'rethinkdb';
 import db from '../db.js';
+import {
+  goalsValidate,
+  goalsCreate
+} from '../middlewares/goals';
 
 const router = express.Router();
 
@@ -16,6 +20,10 @@ router.post('/goals.templates', (req, res, next) => {
     .catch((err) => {
       return next(err);
     })
+})
+
+router.post('/goals.create', goalsValidate, goalsCreate, (req, res, next) => {
+  return res.status(200).json({ok: true});
 })
 
 module.exports = router;
