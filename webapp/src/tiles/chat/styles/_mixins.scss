@@ -1,15 +1,30 @@
-@mixin size($width:inherit, $height:inherit) {
-	width: $width;
-	height: $height;
+// if no parameters are passed, the size is inherited
+@mixin size($width:null, $height:null) {
+	@if $width {
+		width: $width;
+	} @else {
+		width: inherit;
+		height: inherit
+	}
+
+	@if $height {
+		height: $height;
+	} @else if $width {
+		height: $width;
+	}
 }
 
+//Pass nothing paramenters for simple centering
 @mixin flex($vertical:center, $horizontal:center, $direction:row) {
-	display: flex;
-	align-items: $vertical;
-	justify-content: $horizontal;
-	flex-direction: $direction;
+	@if $vertical == flex {
+		display: flex;
+	} @else {
+		align-items: $vertical;
+		display: flex;
+		flex-direction: $direction;
+		justify-content: $horizontal;
+	}
 }
-
 
 @mixin border-radius($topLeft:50%, $topRight:50%, $botLeft:50%, $botRight:50%) {
   border-top-left-radius: $topLeft;
