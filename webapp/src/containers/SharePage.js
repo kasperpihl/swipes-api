@@ -4,12 +4,10 @@ import SwipesCard from '../components/swipes-card/SwipesCard'
 class SharePage extends Component {
   constructor(props) {
     super(props)
-    this.state = {data: null}
+    this.state = {cards: props.data}
   }
   updateAndReloadData(){
-    swipesApi.request({command: 'share.getData', force: true}, {shareId: this.props.data.short_url}, (res, err) => {
-      this.setState({cards: res.data});
-    })
+
   }
   componentDidMount(){
     console.log(this.props.data)
@@ -18,9 +16,7 @@ class SharePage extends Component {
   renderCards(){
     if(this.state.cards){
       const meta = this.state.cards.meta;
-      const actions = meta.actions || [];
-      const title = meta.title || "No title!"
-      return <SwipesCard title={title} actions={actions} />
+      return <SwipesCard data={meta} />
     }
     else return "Loading...."
   }
