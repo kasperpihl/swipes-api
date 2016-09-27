@@ -87,14 +87,14 @@ class SwipesModal extends Component {
       })
     }
   }
-  renderMessage(message) {
+  renderMessage(message, key) {
 		if (message && message.length > 0) {
 			return (
-				<div className="swipes-modal__message">{message}</div>
+				<div key={key} className="swipes-modal__message">{message}</div>
 			)
 		}
 	}
-  renderTextarea(options) {
+  renderTextarea(options, key) {
     var defaultValue = "";
     var placeholder = options;
     var minRows = 4;
@@ -108,6 +108,7 @@ class SwipesModal extends Component {
     if (placeholder && placeholder.length > 0) {
       return (
         <Textarea
+          key={key}
           ref="textarea"
           className="swipes-modal__textarea"
           onChange={this.onMessageChange}
@@ -118,16 +119,16 @@ class SwipesModal extends Component {
       )
     }
   }
-  renderLoader(loader) {
+  renderLoader(loader, key) {
     if (loader) {
       return (
-        <div className="swipes-modal__loader">
+        <div className="swipes-modal__loader" key={key}>
           <Loader center={true} text="Loading" />
         </div>
       )
     }
   }
-	renderList(list) {
+	renderList(list, key) {
     if(!list || typeof list !== 'object'){
       return;
     }
@@ -156,7 +157,7 @@ class SwipesModal extends Component {
   		})
 
   		return (
-  			<div className="swipes-modal__list">{listRender}</div>
+  			<div className="swipes-modal__list" key={key}>{listRender}</div>
   		)
     }
 	}
@@ -172,10 +173,10 @@ class SwipesModal extends Component {
       )
     }
 	}
-	renderActions(actions) {
-		if (actions && actions.length > 0) {
+	renderButtons(buttons, key) {
+		if (buttons && buttons.length > 0) {
 			return (
-				<SwipesModalActions actions={actions} onClick={this.sendCallback.bind(this)}/>
+				<SwipesModalActions key={key} actions={buttons} onClick={this.sendCallback.bind(this)}/>
 			)
 		}
 	}
@@ -183,8 +184,40 @@ class SwipesModal extends Component {
     if(!data){
       return;
     }
-    const { title, message, textarea, buttons, list, type, loader } = data;
+    const { message, textarea, buttons, list, loader } = data;
+    if(Array.isArray(data)){
+      return data.map((item, i) => {
+        switch(item.type){
+          case 'message':
+            return this.renderMessage(item.value, i);
+          case 'textarea':
+            return this.renderTextarea(item.value, i);
+          case 'loader':
+            return this.renderLoader(item.value, i);
+          case 'list':
+            return this.renderList(item.value, i);
+          case 'buttons':
+            return this.renderButtons(item.value, i);
+        }
+      })
+    }
+    else if(typeof data === 'object'){
+      return [ 
+        this.renderMessage(message, 1),
+        this.renderTextarea(textarea, 2),
+        this.renderLoader(loader, 3),
+        this.renderList(list, 4),
+        this.renderButtons(buttons, 5)
+      ]
+    }
+  }
+  render() {
+    const { title, type,  data, shown, callback } = this.props;
+    let modalWrapClass = "swipes-modal__holder"
 
+    if(shown){
+      modalWrapClass += ' swipes-modal__holder--shown'
+    }
     let modalClass = 'swipes-modal';
 
     if (type) {
@@ -192,81 +225,72 @@ class SwipesModal extends Component {
     }
 
     return (
-      <div className={modalClass}>
-        <div className="swipes-modal__title">
-          {title}
-          <i className="material-icons swipes-modal__close" onClick={this.closeModal.bind(this)}>close</i>
-        </div>
-        {this.renderMessage(message)}
-        {this.renderTextarea(textarea)}
-        {this.renderLoader(loader)}
-        {this.renderList(list)}
-        {this.renderActions(buttons)}
-      </div>
-    )
-  }
-  render() {
-    const { data, shown, callback } = this.props;
-    let modalWrapClass = "swipes-modal__holder"
-
-    if(shown){
-      modalWrapClass += ' swipes-modal__holder--shown'
-    }
-
-    return (
       <div className={modalWrapClass}>
         <div className="swipes-modal__overlay" onClick={this.closeModal.bind(this)}></div>
-        {this.renderContent(data)}
+        <div className={modalClass}>
+          <div className="swipes-modal__title">
+            {title}
+            <i className="material-icons swipes-modal__close" onClick={this.closeModal.bind(this)}>close</i>
+          </div>
+          {this.renderContent(data)}
+        </div>
       </div>
     )
   }
 }
 
 export default SwipesModal
-const { bool } = PropTypes;
-const itemProps = PropTypes.shape({
-  title: PropTypes.string,
+const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func } = PropTypes;
+const itemProps = shape({
+  title: string,
   selected: bool,
-  image: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element
+  image: oneOfType([
+    string,
+    element
   ])
 })
 
 SwipesModal.propTypes = {
-  callback: PropTypes.func.isRequired,
-  show: bool,
-  data: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    message: PropTypes.string,
-    textarea: PropTypes.oneOfType([
-      PropTypes.string, // Placeholder
-      PropTypes.shape({
-        placeholder: PropTypes.string,
-        text: PropTypes.string,
-        minRows: PropTypes.number,
-        maxRows: PropTypes.number
-      })
-    ]),
-    loader: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.string
-    ]),
-    list: PropTypes.oneOfType([
-      PropTypes.arrayOf(itemProps),
-      PropTypes.shape({
-        items: PropTypes.arrayOf(itemProps).isRequired,
-        selectable: PropTypes.bool,
-      })
-    ]),
-    buttons: PropTypes.arrayOf(PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.shape({
-        title: PropTypes.string,
-        bgColor: PropTypes.string,
-        textColor: PropTypes.string
-      })
-    ])),
-    type: PropTypes.string
-  }.isRequired)
+  callback: func.isRequired,
+  shown: bool,
+  title: string,
+  type: string,
+  data: oneOfType([
+    shape({
+      message: string,
+      textarea: oneOfType([
+        string, // Placeholder
+        shape({
+          placeholder: string,
+          text: string,
+          minRows: number,
+          maxRows: number
+        })
+      ]),
+      loader: oneOfType([
+        bool,
+        string
+      ]),
+      list: oneOfType([
+        arrayOf(itemProps),
+        shape({
+          items: arrayOf(itemProps).isRequired,
+          selectable: bool,
+        })
+      ]),
+      buttons: arrayOf(oneOfType([
+        string,
+        shape({
+          title: string,
+          bgColor: string,
+          textColor: string
+        })
+      ]))
+      
+    }),
+    arrayOf(shape({
+      type: oneOf(['message', 'textarea', 'loader', 'list', 'buttons']),
+      value: any
+    }))
+  ])
 }
