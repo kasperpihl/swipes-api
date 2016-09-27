@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-
+import { modal } from '../actions'
 import { bindAll } from '../classes/utils'
 import { templates } from '../actions'
 import TemplateList from '../components/template-selector/TemplateList'
@@ -21,8 +21,23 @@ class TemplateSelector extends Component {
       this.setState({ selectedItem: i });
     }
   }
-  setupStepDidPressAssign(setup){
-
+  setupStepPressedAssign(setup, e, i){
+    var userArray = [];
+    for( var key in this.props.users ){
+      var user = this.props.users[key];
+      userArray.push(user);
+    }
+    this.props.loadModal({
+      list: {
+        selectable: true,
+        items: userArray.map((item) => {
+          return {
+            title: item.name,
+            img: item.profile_pic || 'gotohell'
+          }
+        })
+      }
+    })
   }
   setupSetTitle(setup, title){
     console.log(title);
@@ -57,11 +72,12 @@ class TemplateSelector extends Component {
 
 function mapStateToProps(state) {
   return {
-    templates: state.templates
+    templates: state.templates,
+    users: state.users
   }
 }
 
 const ConnectedTemplateSelector = connect(mapStateToProps, {
-  
+  loadModal: modal.loadModal
 })(TemplateSelector)
 export default ConnectedTemplateSelector

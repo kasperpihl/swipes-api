@@ -11,15 +11,11 @@ export function hideModal() {
 
 export function loadTilesListModal(){
   return (dispatch, getState) => {
-    const now = new Date().getTime()
     var returned = false;
     dispatch(loadModal({"title": "Add a tile", loader: true}, () => {
       returned = true;
     }));
-    const now2 = new Date().getTime()
     dispatch(request('workflows.list')).then((res) =>{
-      const time = new Date().getTime() - now;
-      const time2 = new Date().getTime() - now2;
       if(res.ok && !returned){
         const rows = res.data.map((row) => {
           if (row.name === 'Slack') {

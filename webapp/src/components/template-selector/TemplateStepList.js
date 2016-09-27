@@ -7,7 +7,7 @@ class TemplateStepList extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    bindAll(this, ['onKeyUp', 'onBlur']);
+    bindAll(this, ['onKeyUp', 'onBlur', 'clickedAssign']);
   }
   componentDidMount() {
   }
@@ -19,15 +19,15 @@ class TemplateStepList extends Component {
       this.refs.input.blur();
     }
   }
-  clickedAssign(){
-    this.props.callDelegate('setupStepPressedAssign')
+  clickedAssign(e, i){
+    this.props.callDelegate('setupStepPressedAssign', e, i)
   }
   render() {
     const { data } = this.props;
     let rootClass = 'template__step-list';
 
     const listItems = data.map( (item, i) => {
-      return <TemplateStepListItem title={item.title} type={item.type} index={i} key={i} />
+      return <TemplateStepListItem title={item.title} clickedAssign={this.clickedAssign} type={item.type} index={i} key={i} />
     })
     const height = this.props.height || '100%';
     const style = {
