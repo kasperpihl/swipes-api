@@ -40,6 +40,10 @@
     font-size: 13px;
     color: $deepBlue-60;
     line-height: 1.62;
+
+    &:empty {
+      display: none;
+    }
   }
 
   &__button {
