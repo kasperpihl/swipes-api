@@ -188,4 +188,20 @@ router.post('/users.serviceDisconnect',
     return res.status(200).json({ok: true});
   });
 
+// T_TODO that's a hack that we will remove Sunday
+router.post('/users.profilePic', (req, res, next) => {
+  const userId = req.userId;
+  const profilePic = req.body.profile_pic;
+
+  const updateQ = r.table('users').get(userId).update({profile_pic: profilePic});
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+      return res.status(200).json({ok: true});
+    })
+    .catch((err) => {
+      return next(err);
+    })
+})
+
 module.exports = router;
