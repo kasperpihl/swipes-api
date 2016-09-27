@@ -125,7 +125,7 @@ const userAddToOrganization = (req, res, next) => {
     users: [userId]
   }
   const q =
-    r.table('organizations')
+    r.table('organizations_old')
       .insert(insertDoc, {
         returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
