@@ -20,7 +20,7 @@ export default class Slack {
   }
   onProfilePic(pic){
     var state = this.store.getState();
-    if(state.me && !state.me.profile_pic){
+    if(state.me && (!state.me.profile_pic || pic !== state.me.profile_pic)){
       this.store.dispatch(request('users.profilePic', {profile_pic: pic}));
     }
   }

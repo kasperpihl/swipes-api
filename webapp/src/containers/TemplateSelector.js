@@ -21,13 +21,22 @@ class TemplateSelector extends Component {
       this.setState({ selectedItem: i });
     }
   }
+  setupStepDidPressAssign(setup){
+
+  }
+  setupSetTitle(setup, title){
+    console.log(title);
+  }
+  setupDidMount(setup, options, name){
+    console.log(options, name);
+  }
   didPressUseProcess(ref){
     console.log('didPressUseProcess', ref);
   }
   renderSetup(){
     if(typeof this.state.selectedItem !== 'undefined' && this.state.selectedItem > -1){
       const data = this.state.templates[this.state.selectedItem];
-      return <TemplateSetup data={data} callback={this.didPressUseProcess} />
+      return <TemplateSetup data={data} delegate={this} />
     }
   }
   renderList(){

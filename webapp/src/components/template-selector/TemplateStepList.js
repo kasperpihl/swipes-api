@@ -1,14 +1,26 @@
 import React, { Component, PropTypes } from 'react'
 import TemplateStepListItem from './TemplateStepListItem'
-
+import { bindAll } from '../../classes/utils'
 import './styles/template-steplist.scss'
 
 class TemplateStepList extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    bindAll(this, ['onKeyUp', 'onBlur']);
   }
   componentDidMount() {
+  }
+  onBlur(e){
+    this.props.callDelegate('setupSetTitle', this.refs.input.value)
+  }
+  onKeyUp(e){
+    if(e.keyCode === 13){
+      this.refs.input.blur();
+    }
+  }
+  clickedAssign(){
+    this.props.callDelegate('setupStepPressedAssign')
   }
   render() {
     const { data } = this.props;
@@ -23,7 +35,7 @@ class TemplateStepList extends Component {
     };
     return (
       <div style={style} className={rootClass} ref="stepList">
-        <input className={rootClass + '__title'} placeholder="Name your goal" />
+        <input ref="input" className={rootClass + '__title'} onKeyUp={this.onKeyUp} onBlur={this.onBlur} placeholder="Name your goal" />
         {listItems}
       </div>
     )
@@ -32,7 +44,8 @@ class TemplateStepList extends Component {
 
 export default TemplateStepList
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 TemplateStepList.propTypes = {
+  callDelegate: func
 }

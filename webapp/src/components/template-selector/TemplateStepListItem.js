@@ -30,8 +30,9 @@ class TemplateStepListItem extends Component {
 
 export default TemplateStepListItem
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 TemplateStepListItem.propTypes = {
+  clickedAssign: func.isRequired
   // removeThis: string.isRequired
 }

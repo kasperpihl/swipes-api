@@ -16,7 +16,8 @@ class Modal extends Component {
     window.removeEventListener('keyup', this.onKeyUp)
   }
   onKeyUp(e){
-    if(e.keyCode === 27) {
+    const { modal } = this.props;
+    if(e.keyCode === 27 && modal && modal.shown) {
       this.props.hideModal();
     }
   }
