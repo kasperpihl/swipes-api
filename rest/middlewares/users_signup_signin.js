@@ -117,30 +117,38 @@ const userAvailability = (req, res, next) => {
 
 const userAddToOrganization = (req, res, next) => {
   const {
-    organization,
-    userId
+    organization
   } = res.locals;
+  const organizationId = generateSlackLikeId('O');
+  const userId = generateSlackLikeId('U');
   const insertDoc = {
+    id: organizationId,
     organization,
     users: [userId]
   }
-  const q =
-    r.table('organizations_old')
-      .insert(insertDoc, {
-        returnChanges: 'always',
-        conflict: (id, oldDoc, newDoc) => {
-          return r.branch(
-            oldDoc('users').contains(userId),
-            oldDoc,
-            oldDoc.merge({
-              users: oldDoc('users').append(userId)
-            })
-          )
-        }
-      });
+  const checkQ = r.table('organizations').getAll(organization, {index: 'name'});
+  const insertQ = r.table('organizations').insert(insertDoc);
 
-  db.rethinkQuery(q)
+  db.rethinkQuery(checkQ)
+    .then((organizations) => {
+      if (organizations.length > 0) {
+        const organization = organizations[0];
+        const updateQ = r.table('organizations').update({
+          users: r.row('users').append(userId)
+        });
+
+        res.locals.organizationId = organization.id;
+
+        return db.rethinkQuery(updateQ);
+      }
+
+      res.locals.organizationId = organizationId;
+
+      return db.rethinkQuery(insertQ);
+    })
     .then(() => {
+      res.locals.userId = userId;
+
       return next();
     })
     .catch((err) => {
@@ -152,13 +160,15 @@ const userSignUp = (req, res, next) => {
   const {
     email,
     name,
-    password
+    password,
+    organizationId,
+    userId
   } = res.locals;
-  const userId = generateSlackLikeId('U');
   const userDoc = {
     id: userId,
     apps: [],
     services:[],
+    organizations: [organizationId],
     email: email,
     name: name,
     password: sha1(password),
