@@ -1,13 +1,15 @@
 @import '../global-styles/vars';
+@import '../global-styles/mixins';
+
 .overlay {
-  width:100%;
-  height:calc(100% - 54px);
-  position:fixed;
+  @include size(100%, calc(100% - 54px));
   background: $bg;
-  left: 0;
-  top: 54px;
+  left: 0; top: 54px;
+  position:fixed;
   visibility: hidden;
-  &--shown{
+  z-index: 99999;
+
+  &--shown {
     visibility: visible;
   }
 }
