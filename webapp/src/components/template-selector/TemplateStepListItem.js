@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/template-steplist-item.scss'
+import { AssignIcon } from '../icons'
 
 class TemplateStepListItem extends Component {
   constructor(props) {
@@ -18,7 +19,9 @@ class TemplateStepListItem extends Component {
         <div className={rootClass + '__content'}>
           <div className={rootClass + '__title'}>{title}</div>
           <div className={rootClass + '__type'}>{type}</div>
-          <div className={rootClass + '__icons'}></div>
+        </div>
+        <div className={rootClass + '__icons'}>
+          <AssignIcon className={rootClass + '__icon ' + rootClass + '--assign'} />
         </div>
       </div>
     )

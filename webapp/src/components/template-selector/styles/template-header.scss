@@ -2,90 +2,83 @@
 @import '../../global-styles/mixins/';
 
 
-.template__header {
-  @include size(100%, auto);
-  @include flex(flex-start, center);
-  background-color: #DAF3F7;
+.template__side {
+  $margin: 63px;
+  $width: 270px + ($margin * 2);
+  @include size($width, 100%);
+  @include flex(center, flex-start, column);
+  padding-top: 60px;
   position: relative;
 
-  &__col {
-    @include size(auto, 100%);
-    @include flex(flex-start, flex-start, column);
-    padding: 60px 0;
-    padding-bottom: 90px;
-
-    &--text {
-      max-width: 550px;
-    }
-  }
-
   &__image {
-    @include size(150px);
-    margin-right: 90px;
+    @include size(270px, 150px);
+    border-radius: 3px;
+    overflow: hidden;
 
     & > * {
       @include size();
-      border-radius: 3px;
     }
-  }
-
-  &__author {
-    @include size(150px, auto);
-    font-size: 12px;
-    padding-top: 30px;
-    color: $deepBlue-40;
-    line-height: 1.67;
   }
 
   &__title {
-    font-size: 21px;
+    @include size(270px, auto);
     color: $deepBlue-100;
-    font-weight: 400;
-    padding-bottom: 9px;
-    line-height: 1;
-  }
+    font-size: 21px;
+    line-height: 1.29;
+    margin-top: 21px;
 
-  &__subtitle {
-    font-size: 18px;
-    color: $deepBlue-40;
-    font-weight: 400;
-    padding-bottom: 30px;
+    &:not(:first-line) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__description {
-    color: $deepBlue-90;
-    line-height: 1.6;
-    font-size: 15px;
+    @include size(270px, auto);
+    margin-top: 30px;
+    font-size: 13px;
+    color: $deepBlue-60;
+    line-height: 1.62;
   }
 
-  &__cta {
+  &__button {
+    @include size(180px, 45px);
     @include flex();
+    align-self: flex-start;
     background-color: $blue-100;
     border-radius: 3px;
-    bottom: 30px;
-    box-shadow: 0 1px 20px 3px rgba($blue-100, 0.6);
+    box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
     color: #fdfdfd;
     font-size: 12px;
-    font-weight: 400;
-    height: 45px;
-    letter-spacing: 1px;
-    margin-left: 90px;
-    position: absolute;
+    font-weight: 500;
+    letter-spacing: .5px;
+    margin: 60px 0 0 $margin;
     text-transform: uppercase;
-    transition: .2s ease-in-out;
-    width: 150px;
+    transition: .15s ease-in-out;
 
     &:hover {
-      $darkBlue: darken($blue-100, 3%);
-
+      $darkBlue: darken($blue-100, 7%);
       background-color: $darkBlue;
-      box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.6);
-      transition: .2s ease-in-out;
+      box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
     }
 
-    @media (max-width: 1400px) {
-      margin-left: 0;
-      right: 60px;
+    &--disabled {
+      background-color: $deepBlue-20;
+      box-shadow: 0 1px 10px 1px rgba($deepBlue-20, 0.4);
+      color: $deepBlue-60;
+      cursor: not-allowed;
+      position: relative;
+
+      &:after {
+
+      }
+
+      &:hover {
+        background-color: $deepBlue-10;
+        box-shadow: 0 1px 10px 1px rgba($deepBlue-20, 0.4);
+        color: $deepBlue-80;
+      }
     }
   }
 }

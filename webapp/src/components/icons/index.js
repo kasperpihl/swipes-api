@@ -10,6 +10,7 @@ export const SwipesLogo = svg('swipes-logo')
 export const SlackOffline = svg('slack-offline')
 export const EarthIcon = svg('earth-icon')
 export const DownloadIcon = svg('download-icon')
+export const AssignIcon = svg('assign-icon')
 
 export const SlackIcon = svg('logo-slack')
 export const SwipesIcon = png('swipes-logo')

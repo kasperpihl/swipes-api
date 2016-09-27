@@ -3,9 +3,46 @@
 
 
 .template__step-list {
-  width: 100%;
-  height: 100%;
-  background-color: firebrick;
-  overflow-y: scroll;
+  $width: calc(100% - 396px);
+  @include size($width, 100%);
+  background-color: $bg;
+  overflow-y: auto;
   position: relative;
+  padding: 60px 0;
+
+  &__title {
+    width: 500px;
+    font-size: 27px;
+    color: $deepBlue-100;
+    padding: 20px 0;
+    padding-left: 33px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 25px;
+    position: relative;
+    border-bottom: 2px solid $blue-100;
+    -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 0% 95%, 0% 100%, 0 100%, 0 0);
+    transition: .2s ease-in-out;
+
+    &::-webkit-input-placeholder {
+      color: $deepBlue-40;
+      font-weight: 300;
+    }
+
+    &:focus {
+      border-bottom: 2px solid $blue-100;
+      -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 100% 95%, 100% 100%, 0 100%, 0 0);
+      transition: .2s ease-in-out;
+    }
+
+    &:not(:placeholder-shown) {
+      border-bottom: 2px solid $blue-20;
+      -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 100% 95%, 100% 100%, 0 100%, 0 0);
+      transition: .2s ease-in-out;
+
+      &:focus {
+        border-bottom: 2px solid $blue-100;
+      }
+    }
+  }
 }

@@ -5,7 +5,7 @@ class TemplateHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.rootClass = 'template__header';
+    this.rootClass = 'template__side';
   }
   componentDidMount() {
   }
@@ -29,34 +29,21 @@ class TemplateHeader extends Component {
       )
     }
   }
-  renderCreator(){
-    const { creator } = this.props;
-    if(creator){
-      <div className={this.rootClass + '__author'}>
-        Created by {creator.author} <br/>
-        {creator.time}
-      </div>
-    }
-  }
   render() {
-    const { title, subtitle, img, description } = this.props.data;
+    const { title, img, description, disabled } = this.props.data;
     let { rootClass } = this;
+    let btnClass = rootClass + '__button '
+
+    if (disabled) {
+      btnClass += rootClass + '__button--disabled'
+    }
 
     return (
       <div className={rootClass}>
-        <div className={rootClass + '__col'}>
-          {this.renderImage(rootClass, img)}
-          {this.renderCreator()}
-        </div>
-        <div className={rootClass + '__col ' + rootClass + '__col--text'}>
-          <div className={rootClass + '__title'}>{title}</div>
-          <div className={rootClass + '__subtitle'}>{subtitle}</div>
-          <div className={rootClass + '__description'}>{description}</div>
-
-        </div>
-        <div className={rootClass + '__col'}>
-          <div className={rootClass + '__cta'}>use process</div>
-        </div>
+        {this.renderImage(rootClass, img)}
+        <div className={rootClass + '__title'}>{title}</div>
+        <div className={rootClass + '__description'}>{description}</div>
+        <div className={btnClass}>use process</div>
       </div>
     )
   }

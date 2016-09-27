@@ -3,5 +3,6 @@
 
 .template__setup {
   @include size(100%);
+  @include flex(flex);
   position: relative;
 }

@@ -23,6 +23,7 @@ class TemplateStepList extends Component {
     };
     return (
       <div style={style} className={rootClass} ref="stepList">
+        <input className={rootClass + '__title'} placeholder="Name your goal" />
         {listItems}
       </div>
     )
