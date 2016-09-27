@@ -48,8 +48,6 @@ export default class CoreSlackData {
     this.notify();
   }
   handleMessage(msg){
-
-    //console.log('socket message', msg);
     if('message' === msg.type){
       if(msg.channel){
         // If message is from someone else, and is not hidden

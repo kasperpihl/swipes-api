@@ -70,6 +70,7 @@ export default class TileSlackData {
     }
   }
   handleMessage(msg){
+
     this.coreSlackData.handleMessage(msg);
     //const { messages, unreadIndicator, users, channels, self } = this.data;
     //const currChannel = this.data.channels[this.data.selectedChannelId];

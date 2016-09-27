@@ -47,6 +47,9 @@ export default class SlackCoreHandler {
             saveObj[key] = value;
           }
         });
+        if(this.onProfilePic){
+          this.onProfilePic(saveObj.users[saveObj.self.id].profile.image_72);
+        }
         this.slackData = new CoreSlackData(saveObj);
         this.slackData.onNotification = this.onNotification;
         this.delegate('init', saveObj);

@@ -8,7 +8,7 @@ import SlackCoreHandler from './slack-core-handler'
 export default class Slack {
   constructor(store){
     this.store = store;
-    bindAll(this, ['storeChange', 'request', 'delegate', 'connect', 'disconnect', 'onNotification'])
+    bindAll(this, ['storeChange', 'request', 'delegate', 'connect', 'disconnect', 'onNotification', 'onProfilePic'])
     store.subscribe(this.storeChange)
     this.subscriber = new Subscriber();
     this.currentHandlers = {};
@@ -17,6 +17,12 @@ export default class Slack {
     console.log('on notification');
     this.store.dispatch(sendNotification(msg));
     //this.swipes.sendEvent('notifications.send', {title: channel.name, message: text});
+  }
+  onProfilePic(pic){
+    var state = this.store.getState();
+    if(state.me && !state.me.profile_pic){
+      this.store.dispatch(request('users.profilePic', {profile_pic: pic}));
+    }
   }
   request(serviceId, method, data){
     var options = {
@@ -57,6 +63,7 @@ export default class Slack {
         if(!this.currentHandlers[service.id]){
           this.currentHandlers[service.id] = new SlackCoreHandler(this.delegate.bind(null, service.id), this.request.bind(null, service.id));
           this.currentHandlers[service.id].onNotification = this.onNotification;
+          this.currentHandlers[service.id].onProfilePic = this.onProfilePic;
         }
       })
     }
