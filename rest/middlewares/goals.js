@@ -11,6 +11,10 @@ const goalsValidate = (req, res, next) => {
   const goal = req.body.goal;
   const goalId = generateSlackLikeId('G');
 
+  if (validator.isNull(goal)) {
+    return next(new SwipesError('goal is required'));
+  }
+
   goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
 
@@ -35,6 +39,15 @@ const goalsCreate = (req, res, next) => {
   const userId = req.userId;
   const organizationId = req.body.organization_id;
   const processId = req.body.process_id;
+
+  if (validator.isNull(organizationId)) {
+    return next(new SwipesError('organization_id is required'));
+  }
+
+  if (validator.isNull(processId)) {
+    return next(new SwipesError('process_id is required'));
+  }
+
   const {
     goalId,
     goal
