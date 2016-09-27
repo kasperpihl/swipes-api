@@ -123,7 +123,7 @@ const userAddToOrganization = (req, res, next) => {
   const userId = generateSlackLikeId('U');
   const insertDoc = {
     id: organizationId,
-    organization,
+    name: organization,
     users: [userId]
   }
   const checkQ = r.table('organizations').getAll(organization, {index: 'name'});
