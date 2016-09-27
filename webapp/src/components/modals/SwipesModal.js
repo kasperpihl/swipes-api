@@ -33,27 +33,47 @@ class SwipesModalActions extends React.Component {
 class SwipesModal extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-  }
-  sendCallback(res){
-    /*
-    {
-      button: 0 || 1
-      text: this.refs.textarea.value,
-      item: 0 || 1
+    this.state = {
+      selectedListItems: []
     }
-    if you click the background, callback(null)
-    this.props.callback()
-    */
-    this.props.callback(res)
+  }
+  sendCallback(obj){
+    let res = obj;
+    if(obj){
+      const { list, textarea } = this.props.data;
+
+      const generated = {}
+      if(list && list.selectable){
+        generated.items = this.state.selectedListItems;
+      }
+      if(textarea){
+        generated.text = this.refs.textarea.value;
+      }
+
+      res = Object.assign({}, generated, obj);
+    }
+
+    console.log(res);
+    //this.props.callback(res)
   }
   closeModal(e) {
     this.sendCallback(null)
   }
   selectListItem(i) {
-    this.sendCallback({
-      item: i
-    })
+    const { list } = this.props.data;
+
+    if (list.selectable) {
+      if(this.state.selectedListItems.includes(i)){
+        this.setState({selectedListItems: this.state.selectedListItems.filter((j) => j !== i )})
+      }
+      else{
+        this.setState({selectedListItems: this.state.selectedListItems.concat(i)})
+      }
+    } else {
+      this.sendCallback({
+        item: i
+      })
+    }
   }
   renderMessage(message) {
 		if (message && message.length > 0) {
@@ -67,7 +87,7 @@ class SwipesModal extends Component {
     var placeholder = options;
     var minRows = 4;
     var maxRows = 4;
-    if(typeof options === 'object'){
+    if (typeof options === 'object') {
       defaultValue = options.text || defaultValue;
       placeholder = options.placeholder || 'Edit text';
       minRows = options.minRows || minRows;
@@ -76,7 +96,7 @@ class SwipesModal extends Component {
     if (placeholder && placeholder.length > 0) {
       return (
         <Textarea
-          ref="message"
+          ref="textarea"
           className="swipes-modal__textarea"
           onChange={this.onMessageChange}
           placeholder={placeholder}
@@ -95,21 +115,36 @@ class SwipesModal extends Component {
       )
     }
   }
-	renderList(items) {
+	renderList(list) {
+    if(!list || typeof list !== 'object'){
+      return;
+    }
+
+    let items = list;
+
+    if (!Array.isArray(list)) {
+      items = list.items;
+    }
+
     if (items) {
-  		const list = items.map( (item, i) => {
+  		const listRender = items.map( (item, i) => {
+        let className = "swipes-modal__list__item";
+
+        if (this.state.selectedListItems.includes(i)){
+          className += ' swipes-modal__list__item--selected'
+        }
   			return (
-  				<div className="swipes-modal__list__item" key={i} onClick={this.selectListItem.bind(this, i)}>
+  				<div className={className} key={i} onClick={this.selectListItem.bind(this, i)}>
   					{this.renderListItemImg(item.image)}
   					<div className="swipes-modal__list__item__title">
-  						{item.name}
+  						{item.title}
   					</div>
   				</div>
   			)
   		})
 
   		return (
-  			<div className="swipes-modal__list">{list}</div>
+  			<div className="swipes-modal__list">{listRender}</div>
   		)
     }
 	}
@@ -136,7 +171,7 @@ class SwipesModal extends Component {
     if(!data){
       return;
     }
-    const { title, message, textarea, buttons, items, type, loader } = data;
+    const { title, message, textarea, buttons, list, type, loader } = data;
 
     let modalClass = 'swipes-modal';
 
@@ -153,7 +188,7 @@ class SwipesModal extends Component {
         {this.renderMessage(message)}
         {this.renderTextarea(textarea)}
         {this.renderLoader(loader)}
-        {this.renderList(items)}
+        {this.renderList(list)}
         {this.renderActions(buttons)}
       </div>
     )

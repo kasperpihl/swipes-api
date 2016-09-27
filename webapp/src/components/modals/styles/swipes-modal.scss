@@ -87,6 +87,20 @@
 			@include size(100%, 60px);
 			@include flex(center, flex-start);
 
+			&--selected {
+				background-color: $deepBlue-40;
+
+				&:hover {
+					background-color: $deepBlue-60;
+				}
+			}
+
+			&--selected & {
+				&__title {
+					color: $deepBlue-5;
+				}
+			}
+
 			&__img {
 				@include size(30px, 30px);
 				@include flex(center, center);
@@ -104,7 +118,7 @@
 				}
 			}
 
-			&:hover {
+			&:hover:not(&--selected) {
 				background-color: $bg;
 			}
 		}
