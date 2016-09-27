@@ -148,7 +148,7 @@ class SwipesModal extends Component {
         }
   			return (
   				<div className={className} key={i} onClick={this.selectListItem.bind(this, i)}>
-  					{this.renderListItemImg(item.image)}
+  					{this.renderListItemImg(item.img)}
   					<div className="swipes-modal__list__item__title">
   						{item.title}
   					</div>
@@ -166,10 +166,11 @@ class SwipesModal extends Component {
 			return (
 				<img className="swipes-modal__list__item__img" src={img} />
 			)
-		} else if (img) {
-      const SVG = img;
+		} else if (img && typeof img === 'object') {
+      const SVG = img.element;
+      const props = img.props || {};
       return (
-        <SVG className="swipes-modal__list__item__img" />
+        <SVG className="swipes-modal__list__item__img" {...props} />
       )
     }
 	}
@@ -202,7 +203,7 @@ class SwipesModal extends Component {
       })
     }
     else if(typeof data === 'object'){
-      return [ 
+      return [
         this.renderMessage(message, 1),
         this.renderTextarea(textarea, 2),
         this.renderLoader(loader, 3),
@@ -240,13 +241,14 @@ class SwipesModal extends Component {
 }
 
 export default SwipesModal
-const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func } = PropTypes;
+const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func, node } = PropTypes;
 const itemProps = shape({
   title: string,
   selected: bool,
-  image: oneOfType([
+  img: oneOfType([
     string,
-    element
+    node,
+    object
   ])
 })
 
@@ -286,7 +288,7 @@ SwipesModal.propTypes = {
           textColor: string
         })
       ]))
-      
+
     }),
     arrayOf(shape({
       type: oneOf(['message', 'textarea', 'loader', 'list', 'buttons']),
