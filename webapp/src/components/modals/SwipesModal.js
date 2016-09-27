@@ -36,6 +36,20 @@ class SwipesModal extends Component {
     this.state = {
       selectedListItems: []
     }
+
+    const { data } = props;
+    if(data && data.list){
+      const { list } = data;
+      let items = list;
+      if(!Array.isArray(list)){
+        items = list.items;
+      }
+      items.forEach((item, i) => {
+        if(item.selected){
+          this.state.selectedListItems.push(i)
+        }
+      })
+    }
   }
   sendCallback(obj){
     let res = obj;
@@ -52,9 +66,7 @@ class SwipesModal extends Component {
 
       res = Object.assign({}, generated, obj);
     }
-
-    console.log(res);
-    //this.props.callback(res)
+    this.props.callback(res)
   }
   closeModal(e) {
     this.sendCallback(null)
@@ -211,9 +223,10 @@ class SwipesModal extends Component {
 }
 
 export default SwipesModal
-
+const { bool } = PropTypes;
 const itemProps = PropTypes.shape({
   title: PropTypes.string,
+  selected: bool,
   image: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element
@@ -221,8 +234,8 @@ const itemProps = PropTypes.shape({
 })
 
 SwipesModal.propTypes = {
-  callback: PropTypes.func,
-  show: PropTypes.bool,
+  callback: PropTypes.func.isRequired,
+  show: bool,
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     message: PropTypes.string,
