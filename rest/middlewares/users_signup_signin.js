@@ -121,12 +121,15 @@ const userAddToOrganization = (req, res, next) => {
   } = res.locals;
   const organizationId = generateSlackLikeId('O');
   const userId = generateSlackLikeId('U');
+  const name = organization;
+  const nameToCompare = name.toLowerCase().replace(/\s+/g,"_");
   const insertDoc = {
     id: organizationId,
-    name: organization,
+    name,
+    name_to_compare: nameToCompare,
     users: [userId]
   }
-  const checkQ = r.table('organizations').getAll(organization, {index: 'name'});
+  const checkQ = r.table('organizations').getAll(nameToCompare, {index: 'name_to_compare'});
   const insertQ = r.table('organizations').insert(insertDoc);
 
   db.rethinkQuery(checkQ)
