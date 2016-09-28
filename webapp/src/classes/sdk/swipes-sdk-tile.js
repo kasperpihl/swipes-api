@@ -93,7 +93,6 @@ export default class SwipesAppSDK {
             if(res) resolve(res);
             else resolve({ok: false, err: error});
           };
-
           this.api.request("services.request", options, intCallback);
         })
 

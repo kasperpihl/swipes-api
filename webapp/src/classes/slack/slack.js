@@ -20,7 +20,8 @@ export default class Slack {
   }
   onProfilePic(pic){
     var state = this.store.getState();
-    if(state.me && (!state.me.profile_pic || pic !== state.me.profile_pic)){
+    const curr = state.getIn(['me', 'profile_pic']);
+    if(pic !== curr){
       this.store.dispatch(request('users.profilePic', {profile_pic: pic}));
     }
   }
@@ -57,13 +58,14 @@ export default class Slack {
   }
   storeChange(){
     const state = this.store.getState();
-    if(state.me && state.me.services){
-      const services = state.me.services;
-      services.filter( s => s.service_name === 'slack').map((service) => {
-        if(!this.currentHandlers[service.id]){
-          this.currentHandlers[service.id] = new SlackCoreHandler(this.delegate.bind(null, service.id), this.request.bind(null, service.id));
-          this.currentHandlers[service.id].onNotification = this.onNotification;
-          this.currentHandlers[service.id].onProfilePic = this.onProfilePic;
+    const services = state.getIn(['me', 'services']);
+    if(services){
+      services.filter( s => s.get('service_name') === 'slack').map((service) => {
+        const id = service.get('id');
+        if(!this.currentHandlers[id]){
+          this.currentHandlers[id] = new SlackCoreHandler(this.delegate.bind(null, id), this.request.bind(null, id));
+          this.currentHandlers[id].onNotification = this.onNotification;
+          this.currentHandlers[id].onProfilePic = this.onProfilePic;
         }
       })
     }

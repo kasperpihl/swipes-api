@@ -30,7 +30,7 @@ class Workspace extends Component {
       e.preventDefault()
       const { draggingDot } = this.props;
       const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
-      if(id && id !== draggingDot.draggingId){
+      if(id && id !== draggingDot.get('draggingId')){
         /*if(draggingDot.data.shortUrl){
           var shareUrl = this.generateShareUrl(draggingDot.data.shortUrl);
           this.sendToTile(id, 'share.receivedData', { shareUrl });
@@ -38,7 +38,7 @@ class Workspace extends Component {
           return;
         }*/
         this.props.stopDraggingDot()
-        this.props.generateShareUrl(draggingDot.data).then( (res) => {
+        this.props.generateShareUrl(draggingDot.get('data')).then( (res) => {
           console.log('res from share url', res);
           
           if(res.ok){
@@ -67,7 +67,7 @@ class Workspace extends Component {
     if(draggingDot){
       e.preventDefault()
       let { id: hoverTarget } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {}; // Checking if a row is currently hovered
-      if(hoverTarget !== draggingDot.hoverTarget){
+      if(hoverTarget !== draggingDot.get('hoverTarget')){
         dragDot(hoverTarget);
       }
     }
@@ -117,18 +117,20 @@ class Workspace extends Component {
     );
   }
   gridOptionsForTopbar(grid, id){
-    var tile = this.props.tiles[id];
-    var title = tile.name;
+    const { tiles, me } = this.props;
+    var tile = tiles.get(id);
+
+    var title = tile.get('name');
     const tileView = this._cachedTiles[id];
     if(tileView && tileView.state.titleFromCard){
       title = tileView.state.titleFromCard;
     }
-    var me = this.props.me;
-    if(tile.selectedAccountId){
+
+    if(tile.get('selectedAccountId')){
       var show_name;
-      me.services.forEach((service) => {
-        if(service.service_name === tile.required_services[0] && tile.selectedAccountId === service.id){
-          show_name = service.show_name;
+      me.get('services').forEach((service) => {
+        if(service.get('service_name') === tile.getIn(['required_services', 0]) && tile.get('selectedAccountId') === service.get('id')){
+          show_name = service.get('show_name');
         }
       })
     }
@@ -136,9 +138,10 @@ class Workspace extends Component {
     
   }
   gridDidTransitionStep(grid, name, step){
+    const { fullscreen, toggleFullscreen } = this.props;
     if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
-      if(!this.props.fullscreen){
-        this.props.toggleFullscreen();
+      if(!fullscreen){
+        toggleFullscreen();
       }
     }
   }
@@ -156,11 +159,11 @@ class Workspace extends Component {
     this.props.updateColumns(columns);
   }
   gridRenderResizeOverlayForId(grid, id){
-    var tile = this.props.tiles[id];
-    var title = tile.name;
-    var url = this.props.baseUrl + tile.manifest_id + '/' + tile.icon;
+    var tile = this.props.tiles.get(id);
+    var title = tile.get('name');
+    var url = this.props.baseUrl + tile.get('manifest_id') + '/' + tile.get('icon');
     var SVG;
-    if(tile.manifest_id === 'slack-dashboard'){
+    if(tile.get('manifest_id') === 'slack-dashboard'){
       SVG = SlackIcon;
     }
     return <ResizeOverlay imageUrl={url} svg={SVG} title={title} />
@@ -181,8 +184,8 @@ class Workspace extends Component {
       return <SwipesLoader size={120} text="Opening Swipes" center={true} />;
     }
     let content = <EmptyBackground />;
-    if (this.props.columns.length) {
-      content = <Grid ref="grid" columns={this.props.columns} delegate={this} />
+    if (this.props.columns.size) {
+      content = <Grid ref="grid" columns={this.props.columns.toJS()} delegate={this} />
     }
     return (
       <div id="actual-app" className="actual-app">

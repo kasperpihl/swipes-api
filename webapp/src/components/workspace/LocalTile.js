@@ -27,7 +27,7 @@ class LocalTile extends Component {
   }
   componentDidMount() {
     const { tile } = this.props
-    if(this.componentForType(tile.manifest_id)){
+    if(this.componentForType(tile.get('manifest_id'))){
       // Provide the sendFunction so that the workspace communicate with the right tile sdk when sending commands
       const sendFunction = this.state.sdkForTile.com.receivedCommand;
 
@@ -38,20 +38,23 @@ class LocalTile extends Component {
   render() {
     const { tile, size } = this.props
 
-    const Component = this.componentForType(tile.manifest_id);
+    const Component = this.componentForType(tile.get('manifest_id'));
     if(!Component){
       return <div>Local Tile not found. Import it in LocalTile.js and add to componentForType()</div>
     }
 
-    return (<Component size={size} swipes={this.state.sdkForTile} tile={tile} />);
+    return (<Component size={size} swipes={this.state.sdkForTile} tile={tile.toJS()} />);
 
   }
 }
 
+const { func } = PropTypes;
+import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
+
 LocalTile.propTypes = {
-  onLoad: PropTypes.func.isRequired,
-  receivedCommand: PropTypes.func.isRequired,
-  tile: PropTypes.object.isRequired
+  onLoad: func.isRequired,
+  receivedCommand: func.isRequired,
+  tile: map.isRequired
 }
 
 export default LocalTile

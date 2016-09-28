@@ -48,12 +48,12 @@ class Tile extends Component {
   }
 
   onLoad(sendFunction){
-    const tile = this.props.tile;
+    const { tile, me, token } = this.props;
     const initObj = {
       // Info object will be available in SDK from swipes.info
       info: {
-        workflow: tile,
-        userId: this.props.me.id
+        workflow: tile.toJS(),
+        userId: me.get('id')
       },
       token: this.props.token
     };
@@ -80,7 +80,7 @@ class Tile extends Component {
     });
 
     this.com.addListener('tile.saveData', (data) => {
-      saveData(tile.id, data);
+      saveData(tile.get('id'), data);
     });
 
     this.com.addListener('modal.load', (data, callback) => {
@@ -97,7 +97,7 @@ class Tile extends Component {
     });
     this.com.addListener('notifications.send', (data) => {
       var notif = {
-        title: tile.name,
+        title: tile.get('name'),
         message: data.message
       };
       if(data.title){
@@ -110,7 +110,7 @@ class Tile extends Component {
 
     this.com.addListeners(['dot.startDrag', 'share'], (data) => {
       console.log('start dragging data', data);
-      startDraggingDot(this.props.tile.id, data);
+      startDraggingDot(this.props.tile.get('id'), data);
     })
   }
   receivedCommand(command){
@@ -118,24 +118,24 @@ class Tile extends Component {
   }
   renderServiceSelector(tile){
     // Determine if the selected account is still a service.
-    if(tile.required_services && tile.required_services.length > 0){
+    if(tile.get('required_services') && tile.get('required_services').size){
       // Find services from the required services
-      const services = this.props.services.filter( ({service_name}) => (service_name === tile.required_services[0]))
+      const services = this.props.services.filter( (s) => (s.get('service_name') === tile.getIn(['required_services', 0])))
       // Check if a the selected account exist
-      const selectedAccount = services.find( ({id}) => (id === tile.selectedAccountId) )
-
+      const selectedAccount = services.find( (s) => (s.get('id') === tile.get('selectedAccountId')) )
+      console.log(this.props.services, services);
       // Hack to pass on the right slack token to the tile for file upload
-      if(selectedAccount && selectedAccount.service_name === 'slack'){
-        this.slackToken = selectedAccount.authData.access_token;
+      if(selectedAccount && selectedAccount.get('service_name') === 'slack'){
+        this.slackToken = selectedAccount.get(['authData', 'access_token']);
       }
 
       if(!selectedAccount){
         return ( <SelectRow
           onSelectedAccount={this.onSelectedAccount}
           data={{
-            services: services,
-            title: tile.required_services[0],
-            service_name: tile.required_services[0]
+            services: services.toJS(),
+            title: tile.getIn(['required_services', 0]),
+            service_name: tile.getIn(['required_services', 0])
           }}
         />);
       }
@@ -148,12 +148,12 @@ class Tile extends Component {
   renderDropzoneOverlay(){
     const { draggingDot, tile } = this.props;
 
-    if (draggingDot && draggingDot.draggingId !== tile.id) {
-      return <DropzoneOverlay hover={(tile.id === draggingDot.hoverTarget)} title={"Share to: " + tile.name}/>
+    if (draggingDot && draggingDot.get('draggingId') !== tile.get('id')) {
+      return <DropzoneOverlay hover={(tile.id === draggingDot.get('hoverTarget'))} title={"Share to: " + tile.get('name')}/>
     }
   }
   renderWebview(tile){
-    const url = this.props.baseUrl + tile.manifest_id + '/' + tile.index + '?id=' + tile.id;
+    const url = this.props.baseUrl + tile.get('manifest_id') + '/' + tile.get('index') + '?id=' + tile.get('id');
 
     let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
     if (os.platform() === 'win32') {
@@ -189,12 +189,12 @@ class Tile extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    draggingDot: state.main.draggingDot,
-    baseUrl: state.main.tileBaseUrl,
-    tile: state.workspace.tiles[ownProps.data.id],
-    token: state.main.token,
-    services: state.me.services,
-    me: state.me
+    draggingDot: state.getIn(['main', 'draggingDot']),
+    baseUrl: state.getIn(['main', 'tileBaseUrl']),
+    tile: state.getIn(['workspace', 'tiles', ownProps.data.id]),
+    token: state.getIn(['main', 'token']),
+    services: state.getIn(['me', 'services']),
+    me: state.get('me')
   }
 }
 

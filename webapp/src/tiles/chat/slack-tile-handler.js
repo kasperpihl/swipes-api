@@ -104,7 +104,9 @@ export default class SlackTileHandler {
     })
   }
   fetchMessages(channel){
+    console.log('fetching');
     this.swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.get('id'), count: 50 }).then((res) => {
+      console.log('fetched', res);
       if(res.ok){
         this.tileSlackData.performChanges((oldData) => {
           let nD = oldData.set('loadingMessages', false);
@@ -115,7 +117,7 @@ export default class SlackTileHandler {
         //this.saveData({messages: res.data.messages, loadingMessages: false})
       }
     }).catch(function(error){
-      console.log(error);
+      console.log('err', error);
     });
 
   }
