@@ -9,7 +9,7 @@ export default function modal (state = initialState, action) {
   switch (action.type) {
     case types.LOAD_MODAL:{
       const data = fromJS(action.data || {});
-      state.update((ns) => ns.set('shown', true).set('data', data).set('callback', action.callback || null))
+      return state.update((ns) => ns.set('shown', true).set('data', data).set('callback', action.callback || null))
     }
     case types.HIDE_MODAL:{
       return initialState;

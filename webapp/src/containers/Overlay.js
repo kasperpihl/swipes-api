@@ -10,14 +10,24 @@ class Overlay extends Component {
     this.state = {}
   }
   renderOverlay(){
-    const { overlay } = this.props;
-    if(overlay === 'TemplateSelector'){
-      return <TemplateSelector />
+    const overlay = this.props.overlays.last();
+    console.log('overlay', overlay);
+    if(!overlay){
+      return;
     }
-    if(overlay === 'Services'){
-      return <Services />
+    let Comp;
+
+    const { component, props } = overlay.toJS();
+
+    if(component === 'TemplateSelector'){
+      Comp = TemplateSelector;
     }
-    return null;
+    if(component === 'Services'){
+      Comp = Services;
+    }
+    if(Comp){
+      return <Comp {...props} />
+    }
   }
   render() {
     const renderedOverlay = this.renderOverlay();
@@ -35,7 +45,7 @@ class Overlay extends Component {
 
 function mapStateToProps(state) {
   return {
-    overlay: state.getIn(['main', 'overlay'])
+    overlays: state.get('overlays')
   }
 }
 

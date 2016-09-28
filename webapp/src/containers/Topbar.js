@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { main, modal } from '../actions'
+import { main, modal, overlays } from '../actions'
 import { bindAll } from '../classes/utils'
 import '../components/topbar/topbar.scss'
 import DropdownMenu from '../components/swipes-ui/DropdownMenu'
@@ -139,7 +139,7 @@ const ConnectedTopbar = connect(mapStateToProps, {
   search: main.search,
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
-  setOverlay: main.setOverlay,
+  setOverlay: overlays.set,
   loadTilesListModal: modal.loadTilesListModal
 })(Topbar)
 export default ConnectedTopbar

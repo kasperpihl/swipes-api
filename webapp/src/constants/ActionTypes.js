@@ -1,7 +1,7 @@
 // Main
 export const TOGGLE_FULLSCREEN = 'TOGGLE_FULLSCREEN'
 export const SET_FULLSCREEN_TITLE = 'SET_FULLSCREEN_TITLE'
-export const SET_OVERLAY = 'SET_OVERLAY'
+
 export const TOGGLE_FIND = 'TOGGLE_FIND'
 export const SET_STATUS = 'SET_STATUS'
 export const LOGOUT = 'LOGOUT'
@@ -11,6 +11,9 @@ export const SET_DRAGGING_DOT = 'SET_DRAGGING_DOT'
 export const DRAG_DOT = 'DRAG_DOT'
 
 
+// Overlay
+export const SET_OVERLAY = 'SET_OVERLAY'
+export const PUSH_OVERLAY = 'PUSH_OVERLAY'
 // Modal
 export const LOAD_MODAL = 'LOAD_MODAL'
 export const HIDE_MODAL = 'HIDE_MODAL'

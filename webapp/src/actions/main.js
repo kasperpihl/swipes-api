@@ -8,10 +8,6 @@ export function setFullscreenTitle(title, subtitle){
   return { type: types.SET_FULLSCREEN_TITLE, title, subtitle }
 }
 
-export function setOverlay(overlay){
-  return { type: types.SET_OVERLAY, overlay };
-}
-
 export function toggleFind() {
   return { type: types.TOGGLE_FIND }
 }
