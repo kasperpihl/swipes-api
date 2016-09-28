@@ -75,8 +75,8 @@ class Topbar extends Component {
     if(profilePic){
       return <img src={profilePic} />;
     }
-    else{
-      return 'No icon';
+    else {
+      return <img src="http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230" />;
     }
   }
   render() {
@@ -97,25 +97,26 @@ class Topbar extends Component {
     ];
 
     return (
-      <div className={topbarClass} id="topbar" style={styles}>
-        <div className="sw-topbar__content">
-          <div className="sw-topbar__info">
-            <div className="sw-topbar__info__profile">
-              {this.renderProfile()}
-            </div>
-            
-            <div className="sw-topbar__info__title" onClick={this.toggleDropdown}>
-              {selectedTitle}
-              <i className="material-icons">arrow_drop_down</i>
-              <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
-            </div>
+      <div className="topbar" id="topbar" style={styles}>
+
+        <div className="topbar__nav">
+          <div className="topbar__profile">
+            {this.renderProfile()}
           </div>
-          <div className="sw-topbar__actions">
-            <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind}>
-              <FindIcon />
-            </div>
+
+          <div className="topbar__title" onClick={this.toggleDropdown}>
+            {selectedTitle}
+            <i className="material-icons">arrow_drop_down</i>
+            <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
           </div>
         </div>
+
+        <div className="topbar__actions">
+          <div className="topbar__button" onClick={this.clickedFind}>
+            <FindIcon className="topbar__button--find"/>
+          </div>
+        </div>
+
       </div>
     )
   }

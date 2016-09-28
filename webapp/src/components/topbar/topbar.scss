@@ -3,9 +3,9 @@
 
 $topbarSize: 54px;
 
-.sw-topbar {
+.topbar {
 	@include size(100%, $topbarSize);
-	@include flex(flex-end, center);
+	@include flex(center, space-between);
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	left: 0; top: 0;
 	position: absolute;
@@ -13,49 +13,37 @@ $topbarSize: 54px;
 	z-index: 9999;
   -webkit-app-region: drag;
 
-	&__content {
-		@include size(100%, $topbarSize);
-		@include flex(center, space-between);
-		color: white;
-		padding-left: 0;
+	&__nav {
+		@include flex()
+		position: relative;
+		padding-left: 21px;
 	}
 
-	&__info {
-		@include size(200px, $topbarSize);
-		position: relative;
+	&__profile {
+		@include size(54px);
+		@include flex()
 
-		&__icon {
-			@include size(50px);
-			@include flex();
-
-			img {
-				@include size(18px);
-			}
+		img {
+			@include size(30px);
+			border-radius: 50%;
 		}
+	}
 
-		&__title {
-			@include flex(center, flex-start);
-			@include size(100%, $topbarSize);
-	    font-size: 12px;
-	    font-weight: bold;
-	    letter-spacing: 2.6px;
-	    padding: 0 30px;
-	    text-transform: uppercase;
-		}
+	&__title {
+		@include flex(center, flex-start);
+		@include size(100%, $topbarSize);
+		font-size: 12px;
+		font-weight: bold;
+		letter-spacing: 2.6px;
+		padding: 0 30px;
+		padding-left: 15px;
+		text-transform: uppercase;
+		color: white;
 	}
 
 	&__actions {
+		@include size(auto, $topbarSize);
 		@include flex();
-	}
-
-	&__button--find {
-		opacity: 1;
-		visibility: visible;
-		transition: opacity .1s .4s, visibility 0s;
-	}
-
-	&__button--add {
-		transition: .3s ease-in-out;
 	}
 
 	&__button {
@@ -69,7 +57,8 @@ $topbarSize: 54px;
 			background-color: rgba(white,.4);
 		}
 
-		svg g {
+		&--find {
+			@include size(12px);
 			fill: white;
 		}
 	}
