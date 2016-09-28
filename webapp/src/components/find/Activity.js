@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { timeAgo } from '../../classes/time-utils'
 import SwipesCard from '../swipes-card/SwipesCard'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class Activity extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {};
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
 
