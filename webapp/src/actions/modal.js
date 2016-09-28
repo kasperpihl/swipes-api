@@ -11,6 +11,8 @@ export function hideModal() {
 
 export function loadTilesListModal(){
   return (dispatch, getState) => {
+    dispatch(request('users.addWorkflow', {manifest_id: 'slack-dashboard'}));
+    return;
     var returned = false;
     dispatch(loadModal({"title": "Add a tile", loader: true}, () => {
       returned = true;

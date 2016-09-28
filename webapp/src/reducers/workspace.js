@@ -5,11 +5,15 @@ const initialState = fromJS({ tiles : {}, columns : [] });
 
 function fillTilesToColumns(cols, tiles){
   let et = {};
-  cols = cols.filter((c) => c.get('rows').filter( (r) => { 
-    et[r.get('id')] = true; 
-    return (tiles.get(r.get('id')));
-  }));
-
+  cols = cols.filter((c) => {
+    const newRows = c.get('rows').filter( (r) => { 
+      et[r.get('id')] = true; 
+      return (tiles.get(r.get('id')));
+    })
+    c.set('rows', newRows);
+    return newRows.size;
+  });
+  console.log('inside', cols.toJS(), tiles.toJS());
   tiles.forEach((t) => {
     if(!et[t.get('id')]){
       cols = cols.push(fromJS({ rows: [ {id: t.get('id')} ] }))
@@ -49,7 +53,7 @@ export default function workspace (state = initialState, action) {
     
     case 'workflow_added': // Socket Event
     case 'workflow_changed': // Socket Event
-      state = state.mergeIn(['tiles', action.payload.data]);
+      state = state.mergeIn(['tiles', action.payload.data.id], action.payload.data);
       break;
     case types.REMOVE_TILE:
     case 'workflow_removed': // Socket Event
@@ -60,7 +64,9 @@ export default function workspace (state = initialState, action) {
     }
   }
   if(state.get('tiles') !== oldState.get('tiles')){
+    console.log('filling cols', state.toJS());
     state = state.set('columns', fillTilesToColumns(state.get('columns'), state.get('tiles')))
+    console.log('after', state.toJS());
   }
   return state;
 }

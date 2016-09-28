@@ -27,10 +27,10 @@ class Tile extends Component {
     bindAll(this, ['sendCommandToTile', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount', 'receivedCommand']);
   }
   componentDidMount(){
-    this.callDelegate('tileDidLoad', this.props.data.id);
+    this.callDelegate('tileDidLoad', this.props.id);
   }
   componentWillUnmount(){
-    this.callDelegate('tileWillUnload', this.props.data.id);
+    this.callDelegate('tileWillUnload', this.props.id);
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -44,7 +44,7 @@ class Tile extends Component {
     }
   }
   onSelectedAccount(selectedAccount){
-    this.props.selectAccount(this.props.tile, selectedAccount.id);
+    this.props.selectAccount(this.props.tile.get('id'), selectedAccount.get('id'));
   }
 
   onLoad(sendFunction){
@@ -123,7 +123,6 @@ class Tile extends Component {
       const services = this.props.services.filter( (s) => (s.get('service_name') === tile.getIn(['required_services', 0])))
       // Check if a the selected account exist
       const selectedAccount = services.find( (s) => (s.get('id') === tile.get('selectedAccountId')) )
-      console.log(this.props.services, services);
       // Hack to pass on the right slack token to the tile for file upload
       if(selectedAccount && selectedAccount.get('service_name') === 'slack'){
         this.slackToken = selectedAccount.get(['authData', 'access_token']);
@@ -133,7 +132,7 @@ class Tile extends Component {
         return ( <SelectRow
           onSelectedAccount={this.onSelectedAccount}
           data={{
-            services: services.toJS(),
+            services: services,
             title: tile.getIn(['required_services', 0]),
             service_name: tile.getIn(['required_services', 0])
           }}
@@ -167,6 +166,7 @@ class Tile extends Component {
     return <LocalTile tile={tile} size={this.props.size} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
   }
   render() {
+    console.log('render tile');
     let cardContent = <SwipesLoader size={120} center={true}/>;
 
     const tile = this.props.tile;
@@ -191,7 +191,7 @@ function mapStateToProps(state, ownProps) {
   return {
     draggingDot: state.getIn(['main', 'draggingDot']),
     baseUrl: state.getIn(['main', 'tileBaseUrl']),
-    tile: state.getIn(['workspace', 'tiles', ownProps.data.id]),
+    tile: state.getIn(['workspace', 'tiles', ownProps.id]),
     token: state.getIn(['main', 'token']),
     services: state.getIn(['me', 'services']),
     me: state.get('me')

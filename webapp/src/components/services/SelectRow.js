@@ -27,37 +27,38 @@ class SelectRow extends Component {
   }
   handleChange(val){
     let value = val.value;
-    console.log(value, this.props.data.services);
-    if(value === this.props.data.services.length){
+    const { services } = this.props.data;
+    if(value === services.size){
       this.clickedAuthorize();
     }
     else{
-      var selectedAccount = this.props.data.services[value];
+      var selectedAccount = services.get(value);
       if(typeof this.props.onSelectedAccount === 'function'){
         this.props.onSelectedAccount(selectedAccount);
       }
     }
   }
   renderSelector(){
-    if(!this.props.data.services || !this.props.data.services.length){
+    const services = this.props.data.services;
+    if(!services || !services.size){
       return <div className="services-connect__button" onClick={this.clickedAuthorize}>Connect</div>
     }
-    let options = this.props.data.services.map(function(service, i){
-      return { value: i, label: service.show_name }
+    let options = services.map(function(service, i){
+      return { value: i, label: service.get('show_name') }
     });
-    options.push({ value: this.props.data.services.length, label: 'Add New Account'});
+    options = options.push({ value: services.size, label: 'Add New Account'});
     return (
       <Select
         value={this.state.value}
-        options={options}
+        options={options.toJS()}
         onChange={this.handleChange}
       />
     );
   }
   render(){
     let text, SVG
-
-    if (!this.props.data.services || !this.props.data.services.length) {
+    const services = this.props.data.services;
+    if (!services || !services.size) {
       text = 'Connect to ' + this.props.data.title;
       SVG = SwipesWorkspaceIllustrationsEmptystateConnect
     } else {

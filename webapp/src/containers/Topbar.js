@@ -9,16 +9,18 @@ import { FindIcon, WorkspaceIcon, PlusIcon } from '../components/icons';
 import gradient from '../components/topbar/gradient';
 
 const { ipcRenderer } = nodeRequire('electron');
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class Topbar extends Component {
   constructor(props) {
     super(props)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     var gradientPos = gradient.getGradientPos();
     this.state = {
       gradientPos: gradientPos,
       showDropdown: false
     };
-    bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp', 'onChangeMenu']);
+    bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedAdd']);
   }
   componentDidMount() {
     this.gradientStep();
@@ -70,8 +72,8 @@ class Topbar extends Component {
       if(pathname !== '/'){
         browserHistory.push('/');
       }
-      this.props.setOverlay('TemplateSelector');
-      //this.props.loadTilesListModal();
+      //this.props.setOverlay('TemplateSelector');
+      this.props.loadTilesListModal();
     }
   }
   clickedFind(){
@@ -141,7 +143,7 @@ class Topbar extends Component {
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
-            <div className="sw-topbar__info__title" onClick={this.toggleDropdown.bind(this)}>
+            <div className="sw-topbar__info__title" onClick={this.toggleDropdown}>
               {selectedTitle}
               <i className="material-icons">arrow_drop_down</i>
               <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
@@ -156,10 +158,10 @@ class Topbar extends Component {
             <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search across your apps" />
           </div>
           <div className="sw-topbar__actions">
-            <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind.bind(this)}>
+            <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind}>
               <FindIcon />
             </div>
-            <div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd.bind(this)}>
+            <div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd}>
               <PlusIcon />
             </div>
           </div>

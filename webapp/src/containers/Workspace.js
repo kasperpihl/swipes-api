@@ -113,7 +113,8 @@ class Workspace extends Component {
         key={id}
         size={{ width, height }}
         delegate={this}
-        data={{id: id}} />
+        id={id}
+      />
     );
   }
   gridOptionsForTopbar(grid, id){
@@ -150,7 +151,7 @@ class Workspace extends Component {
     this.props.setFullscreenTitle(options.title, options.subtitle);
   }
   gridRowPressedRemove(grid, id){
-    this.props.removeTile({id: id});
+    this.props.removeTile(id);
   }
   gridRowPressedMenu(grid, id){
     this.sendToTile(id, 'menu.pressed');
@@ -180,6 +181,7 @@ class Workspace extends Component {
   }
 
   render() {
+    console.log('render workspace');
     if(!this.props.hasLoaded){
       return <SwipesLoader size={120} text="Opening Swipes" center={true} />;
     }

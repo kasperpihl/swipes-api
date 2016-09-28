@@ -21,48 +21,48 @@ class Services extends Component {
   }
   renderConnectedServices(){
     const { myServices:my, services } = this.props;
-    const sortedServices = my.sort((a, b) => (a.service_name < b.service_name) ? -1 : 1);
+    const sortedServices = my.sort((a, b) => (a.get('service_name') < b.get('service_name')) ? -1 : 1);
 
-    if(!sortedServices.length){
+    if(!sortedServices.size){
       return "No services connected";
     }
     return sortedServices.map((service, i) =>{
-      var realService = services[service.service_id];
+      var realService = services.get(service.get('service_id'));
       if(!realService){
         return null;
       }
       const data = {
-        id: service.id,
-        title: realService.title,
-        subtitle: service.show_name
+        id: service.get('id'),
+        title: realService.get('title'),
+        subtitle: service.get('show_name')
       };
-      return <ConnectRow key={service.id + '-' + i} clickedButton={this.clickedDisconnect} data={data} disconnect={true} />;
+      return <ConnectRow key={service.get('id') + '-' + i} clickedButton={this.clickedDisconnect} data={data} disconnect={true} />;
     })
   }
   renderServicesToConnect(){
     const { services:se } = this.props;
-    const sortedKeys = Object.keys(se).sort((k1, k2) => (se[k1].title < se[k2].title) ? -1 : 1)
-
-    return sortedKeys.map((key, i) => {
-      const service = se[key];
-       const data = {
-        id: service.manifest_id,
-        title: service.title
+    
+    const sortedKeys = se.sort((k1, k2) => (se.getIn([k1, 'title']) < se.getIn([k2, 'title'])) ? -1 : 1).toArray();
+    console.log(sortedKeys);
+    return sortedKeys.map((service, key) => {
+      const data = {
+        id: service.get('manifest_id'),
+        title: service.get('title')
       };
       let placeholderText;
-      if(service.manifest_id === 'dropbox'){
+      if(service.get('manifest_id') === 'dropbox'){
         placeholderText = "By connecting Dropbox, you will get a stream of notifications for recently updated or uploaded files by you or your colleagues. Also you will be able to search and find files from there ~30min after connecting the service.";
       }
-      if(service.manifest_id === 'asana'){
+      if(service.get('manifest_id') === 'asana'){
         placeholderText = "By connecting Asana, you will get a stream of notifications for recently updated or added tasks by you or your colleagues.";
       }
-      if(service.manifest_id === 'slack'){
+      if(service.get('manifest_id') === 'slack'){
         placeholderText = "By connecting Slack, you can add a chat tile in your Workspace from where you can easily communicate with your team, share information and progress on your work.";
       }
 
       return [
-        <ConnectRow key={service.id + '-' + i} data={data} clickedButton={this.clickedConnect}/>,
-        <div className="swipes-services__placeholder swipes-services__placeholder--connect" key={"placeholder" + i} >
+        <ConnectRow key={service.get('id') + '-' + key} data={data} clickedButton={this.clickedConnect}/>,
+        <div className="swipes-services__placeholder swipes-services__placeholder--connect" key={"placeholder" + key} >
           {placeholderText}
         </div>
       ];
@@ -87,8 +87,8 @@ class Services extends Component {
 
 function mapStateToProps(state) {
   return {
-    services: state.services,
-    myServices: state.me.services
+    services: state.get('services'),
+    myServices: state.getIn(['me', 'services'])
   }
 }
 
