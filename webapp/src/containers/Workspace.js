@@ -215,13 +215,13 @@ class Workspace extends Component {
 
 function mapStateToProps(state) {
   return {
-    baseUrl: state.main.tileBaseUrl,
-    draggingDot: state.main.draggingDot,
-    fullscreen: state.main.isFullscreen,
-    me: state.me,
-    tiles: state.workspace.tiles,
-    hasLoaded: state.main.hasLoaded,
-    columns: state.workspace.columns
+    baseUrl: state.getIn(['main', 'tileBaseUrl']),
+    draggingDot: state.getIn(['main', 'draggingDot']),
+    fullscreen: state.getIn(['main', 'isFullscreen']),
+    me: state.get('me'),
+    tiles: state.getIn(['workspace', 'tiles']),
+    hasLoaded: state.getIn(['main', 'hasLoaded']),
+    columns: state.getIn(['workspace', 'columns'])
   }
 }
 

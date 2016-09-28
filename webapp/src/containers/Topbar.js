@@ -171,12 +171,12 @@ class Topbar extends Component {
 
 function mapStateToProps(state) {
   return {
-    isFullscreen: state.main.isFullscreen,
-    fullscreenTitle: state.main.fullscreenTitle,
-    fullscreenSubtitle: state.main.fullscreenSubtitle,
-    searchQuery: state.main.searchQuery,
-    isFinding: state.main.isFinding,
-    hasLoaded: state.main.hasLoaded
+    isFullscreen: state.getIn(['main', 'isFullscreen']),
+    fullscreenTitle: state.getIn(['main', 'fullscreenTitle']),
+    fullscreenSubtitle: state.getIn(['main', 'fullscreenSubtitle']),
+    searchQuery: state.getIn(['main', 'searchQuery']),
+    isFinding: state.getIn(['main', 'isFinding']),
+    hasLoaded: state.getIn(['main', 'hasLoaded'])
   }
 }
 

@@ -40,11 +40,11 @@ class Activities extends Component {
 }
 
 export default Activities
-
+const { string, object } = PropTypes;
+import { map, mapOf, list, listOf } from 'react-immutable-proptypes'
 Activities.propTypes = {
-  title: PropTypes.string.isRequired,
-  cardDelegate: PropTypes.object.isRequired,
-  subtitle: PropTypes.string,
-  activities: PropTypes.arrayOf(PropTypes.object)
-
+  title: string.isRequired,
+  cardDelegate: object.isRequired,
+  subtitle: string,
+  activities: listOf(map)
 }

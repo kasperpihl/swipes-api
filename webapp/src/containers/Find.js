@@ -185,12 +185,12 @@ class Find extends Component {
 
 function mapStateToProps(state) {
   return {
-    isFinding: state.main.isFinding,
-    services: state.services,
-    me: state.me,
-    searchQuery: state.main.searchQuery,
-    draggingDot: state.main.draggingDot,
-    recent: state.activity.recent
+    isFinding: state.getIn(['main', 'isFinding']),
+    services: state.get('services'),
+    me: state.get('me'),
+    searchQuery: state.getIn(['main', 'searchQuery']),
+    draggingDot: state.getIn(['main', 'draggingDot']),
+    recent: state.getIn(['activity', 'recent'])
   }
 }
 

@@ -38,7 +38,7 @@ class Modal extends Component {
 
 function mapStateToProps(state) {
   return {
-    modal: state.modal
+    modal: state.get('modal')
   }
 }
 

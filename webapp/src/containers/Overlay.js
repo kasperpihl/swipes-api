@@ -31,7 +31,7 @@ class Overlay extends Component {
 
 function mapStateToProps(state) {
   return {
-    overlay: state.main.overlay
+    overlay: state.getIn(['main', 'overlay'])
   }
 }
 

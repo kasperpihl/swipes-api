@@ -41,7 +41,7 @@ class DotDragOverlay extends Component {
 
 function mapStateToProps(state) {
   return {
-    draggingDot: state.main.draggingDot
+    draggingDot: state.getIn(['main', 'draggingDot'])
   }
 }
 
