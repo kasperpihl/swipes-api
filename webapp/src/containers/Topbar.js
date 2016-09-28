@@ -20,10 +20,10 @@ class Topbar extends Component {
       gradientPos: gradientPos,
       showDropdown: false
     };
-    bindAll(this, ['gradientStep', 'onKeyDown', 'onKeyUp', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedAdd']);
+    bindAll(this, ['gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedAdd']);
   }
   componentDidMount() {
-    this.gradientStep();
+    // this.gradientStep();
     ipcRenderer.on('toggle-find', () => {
       if (!this.props.isFinding) {
         this.props.toggleFind();
@@ -41,24 +41,6 @@ class Topbar extends Component {
     });
   }
   componentDidUpdate(prevProps){
-    if(this.props.isFinding && !prevProps.isFinding && document.activeElement !== this.refs.searchInput){
-      this.refs.searchInput.select()
-    }
-  }
-  onKeyDown(e){
-    if(e.keyCode === 13) {
-      e.preventDefault();
-    }
-  }
-  onKeyUp(e){
-    const input = this.refs.searchInput;
-
-    if (e.keyCode === 13) {
-      const searchQuery = input.value;
-      if(searchQuery !== this.props.searchQuery){
-        this.props.search(searchQuery);
-      }
-    }
   }
   clickedAdd(){
     if(this.props.isFinding){
@@ -117,15 +99,6 @@ class Topbar extends Component {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
     }
 
-    if(this.props.isFullscreen) {
-      topbarClass += ' sw-topbar--fullscreen'
-    }
-    if(this.props.isFinding){
-      topbarClass += ' sw-topbar--find';
-    }
-
-    // dummy data for DropdownMenu
-
     let selectedTitle = 'Workspace'
     const { pathname, fullscreenTitle, fullscreenSubtitle } = this.props;
     const dropdownStructure = [
@@ -149,14 +122,6 @@ class Topbar extends Component {
               <i className="material-icons">arrow_drop_down</i>
               <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
             </div>
-            <div className="sw-topbar__info__tile-title">
-              <div className="sw-topbar__info__tile-title--title">{fullscreenTitle}</div>
-              <div className="sw-topbar__info__tile-title--seperator"></div>
-              <div className="sw-topbar__info__tile-title--subtitle">{fullscreenSubtitle}</div>
-            </div>
-          </div>
-          <div className="sw-topbar__searchbar">
-            <input onKeyUp={this.onKeyUp} onKeyDown={this.onKeyDown} ref="searchInput" placeholder="Search across your apps" />
           </div>
           <div className="sw-topbar__actions">
             <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind}>
