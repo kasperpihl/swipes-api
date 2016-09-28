@@ -29,10 +29,11 @@ const localStorageConfig = {
   serialize: (subset) => JSON.stringify(subset.toJS()),
   deserialize: (serializedData) => fromJS(JSON.parse(serializedData)),
   merge: (initialState, persistedState) => initialState.mergeDeep(persistedState),
-  key: 'redux', 
+  key: 'redux-prod', 
   slicer: persist
 }
 export default function configureStore(preloadedState) {
+  preloadedState = Immutable.Map();
   // All the keys to persist to localStorage between opens
   const enhancer = compose(
     applyMiddleware(
