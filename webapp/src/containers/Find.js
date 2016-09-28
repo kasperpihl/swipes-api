@@ -148,15 +148,15 @@ class Find extends Component {
     const keys = {}
     this.shareDataForChecksum = {}
     return recent.filter((activity) => {
-      const id = activity.checksum;
+      const id = activity.get('checksum');
       if(!keys[id]){
         this.shareDataForChecksum[id] = {
           checksum: id,
           permission: {
             type: 'public',
-            account_id: activity.account_id
+            account_id: activity.get('account_id')
           },
-          meta: activity.meta
+          meta: activity.get('meta')
         };
         keys[id] = true;
         return true;
@@ -165,13 +165,11 @@ class Find extends Component {
     })
   }
   render() {
-    const { isFinding, draggingDot } = this.props;
+    const { isFinding, draggingDot, recent } = this.props;
     let className = "find-overlay"
     if(isFinding && !draggingDot){
       className += ' find-overlay--open'
     }
-    const recent = this.generateActivity();
-
     return (
       <div className={className} onClick={this.onClick}>
         <div className="content-container">

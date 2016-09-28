@@ -2,24 +2,34 @@ import * as types from '../constants/ActionTypes'
 import { fromJS } from 'immutable'
 const initialState = fromJS({ recent: [] });
 
+const filterActivity = (activity) => {
+  const keys = {}
+  return activity.filter((act) => {
+    const id = act.get('checksum');
+    if(keys[id]){
+      return true;
+    }
+    keys[id] = true;
+  })
+} 
+
 export default function services (state = initialState, action) {
   switch (action.type) {
     case ('rtm.start'):{
       const res = action.payload;
       if(res.ok){
-        var activities = res.activity.slice(0,100);
-        activities.reverse().forEach((activity) => {
-          swipesUrlProvider.save(activity.checksum, activity.meta);
+        var activities = filterActivity(fromJS(res.activity.slice(0,100)));
+        activities.forEach((activity) => {
+          swipesUrlProvider.save(activity.get('checksum'), activity.get('meta'));
         })
-        activities.reverse();
-        return state.set('recent', fromJS(activities));
+        return state.set('recent', activities);
       }
       return state;
     }
     case 'activity_added':{
       var activity = action.payload.data;
       swipesUrlProvider.save(activity.checksum, activity.meta);
-      return state.updateIn(['recent'], (recent) => recent.insert(0), fromJS(activity));
+      return filterActivity(state.updateIn(['recent'], (recent) => recent.insert(0, fromJS(activity))));
     }
     case types.LOGOUT:{
       return initialState;

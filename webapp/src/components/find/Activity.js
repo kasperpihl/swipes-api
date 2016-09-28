@@ -10,25 +10,29 @@ class Activity extends Component {
   componentDidMount() {
 
   }
-  renderStory(dateString, message) {
+  renderStory(data) {
+    const date = data.get('date');
+    const message = data.get('message');
     return (
       <div className="swipes-activities__activity__story">
-        <span className="swipes-activities__activity__story--timestamp">{timeAgo(dateString)}</span>
+        <span className="swipes-activities__activity__story--timestamp">{timeAgo(date)}</span>
         <span className="swipes-activities__activity__story--message">{message}</span>
       </div>
     )
   }
   renderCard(data, checksum) {
+    let meta = data.get('meta');
+    meta = meta.set('checksum', data.get('checksum'));
     return (
-      <SwipesCard data={Object.assign({}, data, { checksum })} delegate={this.props.cardDelegate} />
+      <SwipesCard data={meta.toJS()} delegate={this.props.cardDelegate} />
     )
   }
   render() {
-    const { meta, checksum, date, message } = this.props.data;
+    const { data } = this.props;
     return (
       <div className="swipes-activities__activity">
-        {this.renderStory(date, message)}
-        {this.renderCard(meta, checksum)}
+        {this.renderStory(data)}
+        {this.renderCard(data)}
       </div>
     )
   }
@@ -36,12 +40,15 @@ class Activity extends Component {
 
 export default Activity
 
+const { string, object } = PropTypes;
+import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
+
 Activity.propTypes = {
-  cardDelegate: PropTypes.object.isRequired,
-  data: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-    short_url: PropTypes.string,
-    date: PropTypes.string,
-    service: PropTypes.string
+  cardDelegate: object.isRequired,
+  data: mapContains({
+    message: string.isRequired,
+    short_url: string,
+    date: string,
+    service: string
   })
 }

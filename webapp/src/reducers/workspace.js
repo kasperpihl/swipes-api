@@ -5,7 +5,6 @@ const initialState = fromJS({ tiles : {}, columns : [] });
 
 function fillTilesToColumns(cols, tiles){
   let et = {};
-  console.log('cols', cols, cols.filter);
   cols = cols.filter((c) => c.get('rows').filter( (r) => { 
     et[r.get('id')] = true; 
     return (tiles.get(r.get('id')));
