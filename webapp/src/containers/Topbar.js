@@ -25,13 +25,15 @@ class Topbar extends Component {
   componentDidMount() {
     // this.gradientStep();
     ipcRenderer.on('toggle-find', () => {
-      if (!this.props.isFinding) {
-        this.props.toggleFind();
+      const { isFinding, toggleFind } = this.props;
+      if (!isFinding) {
+        toggleFind();
       }
     })
     ipcRenderer.on('new-tile', () => {
-      if (!this.props.isFinding) {
-        this.props.loadTilesListModal();
+      const { isFinding, loadTilesListModal } = this.props;
+      if (!isFinding) {
+        loadTilesListModal();
       }
     })
     window.addEventListener('keydown', (e) => {
@@ -40,27 +42,24 @@ class Topbar extends Component {
       }
     });
   }
-  componentDidUpdate(prevProps){
-  }
   clickedAdd(){
-    if(this.props.isFinding){
-      this.props.toggleFind();
+    const { pathname, isFinding, toggleFind, isFullscreen, toggleFullscreen, loadTilesListModal, setOverlay } = this.props
+    if(isFinding){
+      toggleFind();
     }
-    else if(this.props.isFullscreen) {
-      this.props.toggleFullscreen();
+    else if(isFullscreen) {
+      toggleFullscreen();
     }
     else {
-      const { pathname } = this.props;
       if(pathname !== '/'){
         browserHistory.push('/');
       }
-      //this.props.setOverlay('TemplateSelector');
-      this.props.loadTilesListModal();
+      //setOverlay('TemplateSelector');
+      loadTilesListModal();
     }
   }
   clickedFind(){
     this.props.toggleFind();
-    return false;
   }
   signout() {
   }
@@ -106,12 +105,6 @@ class Topbar extends Component {
       { title: 'Services', id: 'services' },
       { title: 'Log out', id: 'logout' }
     ];
-    if(pathname === '/services'){
-      selectedTitle = 'Services';
-    }
-    if(!this.props.hasLoaded){
-      styles.display = 'none';
-    }
 
     return (
       <div className={topbarClass} id="topbar" style={styles}>
