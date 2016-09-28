@@ -39,7 +39,8 @@ router.get('/*', (req, res, next) => {
   db.rethinkQuery(getSwipesUrlsQ)
     .then((data) => {
       console.log('data found in share render', data);
-      if (data && data[0]) {
+      if (data) {
+        data[0] = data[0] || {};
         if(req.headers.host.startsWith('localhost')){
           // webpack dev server
           fetchIndexForDevServer(data[0], res);
