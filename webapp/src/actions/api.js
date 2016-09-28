@@ -38,11 +38,19 @@ const request = (options, data) => {
       if(res.error){
         res.payload = Object.assign({}, res.payload, {ok: false});
       }
+      if(res.payload.err && res.payload.err === 'not_authed'){
+        dispatch({
+          type: types.LOGOUT
+        });
+        window.location.replace('/');
+        return Promise.reject({ok: false});
+      }
       dispatch({
         type: command,
         payload: res.payload,
         meta: res.meta
       })
+      
       // Let's return a promise for convenience.
       return Promise.resolve(res.payload);
 

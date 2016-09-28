@@ -131,9 +131,9 @@ $pushDelay: .1s;
 		}
 
 		&__title {
-			color: $deepBlue-40;
+			color: $deepBlue-60;
 			cursor: default;
-			font-size: 13px;
+			font-size: 12px;
 			font-weight: 500;
 			line-height: $itemHeight;
 			opacity: 0;
@@ -153,7 +153,7 @@ $pushDelay: .1s;
 
 		&--unread & {
 			&__title {
-				font-weight: 700;
+				font-weight: 600;
 				color: $deepBlue-100;
 			}
 
@@ -189,7 +189,16 @@ $pushDelay: .1s;
 
 		&__item {
 			&--active {
-				background-color: $blue-10;
+				background-color: $blue-5;
+				position: relative;
+
+				&:after {
+					content: "";
+					@include size(3px, 100%);
+					position: absolute;
+					left: 0; top: 0;
+					background-color: $blue-100;
+				}
 
 				.swipes-sidemenu__item__title {
 					// color: $deepBlue-80;

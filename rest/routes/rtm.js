@@ -15,10 +15,31 @@ router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
 
-  //let meQ = r.table('users').get(userId).without(['password', 'workflows', {'services': "authData"}]);
-  let meQ = r.table('users').get(userId).without(['password']);
+  let meQ =
+    r.table('users')
+      .get(userId)
+      .without(['password', 'xendoCredentials'/*, {'services': 'authData'}*/])
+      .merge({
+        organizations:
+          r.table('organizations')
+            .getAll(r.args(r.row("organizations")))
+            .coerceTo('ARRAY')
+      })
+      .do((user) => {
+        return user.merge({
+          organizations: user('organizations').map((organization) => {
+            return organization.merge({
+            users:
+    					r.db('swipes').table('users')
+                .getAll(r.args(organization("users")))
+          			.without('password', 'organizations', 'services', 'xendoCredentials')
+                .coerceTo('ARRAY')
+            })
+          })
+        })
+      })
 
-  let users = r.table('users').without(["password", "services", "workflows", "xendoCredentials"]);
+  //let users = r.table('users').without(["password", "services", "workflows", "xendoCredentials"]);
 
   // K_TODO: also only add
   let servicesQ = r.table('services');
@@ -40,7 +61,6 @@ router.post('/rtm.start', (req, res, next) => {
 
   let promiseArrayQ = [
     db.rethinkQuery(meQ),
-    db.rethinkQuery(users),
     db.rethinkQuery(workflowsQ),
     db.rethinkQuery(servicesQ),
     db.rethinkQuery(activityQ),
@@ -49,6 +69,16 @@ router.post('/rtm.start', (req, res, next) => {
 
   Promise.all(promiseArrayQ)
     .then(data => {
+      const self = data[0];
+      let users = [];
+
+      if (self.organizations.length > 0) {
+        let users = self.organizations[0].users;
+
+        // We don't want duplication of that data served on the client;
+        delete self.organizations[0].users;
+      }
+
       let rtmResponse = {
         ok: true,
         url: config.get('clientPort') === '443' ?
@@ -57,12 +87,11 @@ router.post('/rtm.start', (req, res, next) => {
         workflow_base_url: config.get('clientPort') === '443' ?
                           config.get('origin')  + '/workflows/' :
                           config.get('origin') + ':' + config.get('clientPort')  + '/workflows/',
-        self: data[0],
-        users: data[1],
-        workflows: data[2],
-        services: data[3],
-        activity: data[4],
-        processes: data[5]
+        self,
+        users,
+        workflows: data[1],
+        services: data[2],
+        activity: data[3]
       }
 
       res.status(200).json(rtmResponse);
