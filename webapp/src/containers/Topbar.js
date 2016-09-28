@@ -20,10 +20,10 @@ class Topbar extends Component {
       gradientPos: gradientPos,
       showDropdown: false
     };
-    bindAll(this, ['gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedAdd']);
+    bindAll(this, ['gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind']);
   }
   componentDidMount() {
-    // this.gradientStep();
+    this.gradientStep();
     ipcRenderer.on('toggle-find', () => {
       const { isFinding, toggleFind } = this.props;
       if (!isFinding) {
@@ -31,9 +31,9 @@ class Topbar extends Component {
       }
     })
     ipcRenderer.on('new-tile', () => {
-      const { isFinding, loadTilesListModal } = this.props;
+      const { isFinding, loadTilesListModal, setOverlay } = this.props;
       if (!isFinding) {
-        loadTilesListModal();
+        setOverlay('TemplateSelector');
       }
     })
     window.addEventListener('keydown', (e) => {
@@ -41,22 +41,6 @@ class Topbar extends Component {
         this.props.toggleFind();
       }
     });
-  }
-  clickedAdd(){
-    const { pathname, isFinding, toggleFind, isFullscreen, toggleFullscreen, loadTilesListModal, setOverlay } = this.props
-    if(isFinding){
-      toggleFind();
-    }
-    else if(isFullscreen) {
-      toggleFullscreen();
-    }
-    else {
-      if(pathname !== '/'){
-        browserHistory.push('/');
-      }
-      //setOverlay('TemplateSelector');
-      loadTilesListModal();
-    }
   }
   clickedFind(){
     this.props.toggleFind();
@@ -67,11 +51,8 @@ class Topbar extends Component {
 
   }
   onChangeMenu(id){
-    if(id === 'workspace'){
-      browserHistory.push('/');
-    }
     if(id === 'services'){
-      browserHistory.push('/' + id);
+      this.props.setOverlay('Services');
     }
     if(id === 'logout'){
       this.props.logout();
@@ -89,6 +70,15 @@ class Topbar extends Component {
   toggleDropdown() {
     this.setState({showDropdown: !this.state.showDropdown})
   }
+  renderProfile(){
+    const { profilePic } = this.props;
+    if(profilePic){
+      return <img src={profilePic} />;
+    }
+    else{
+      return 'No icon';
+    }
+  }
   render() {
 
     var topbarClass = 'sw-topbar';
@@ -99,7 +89,7 @@ class Topbar extends Component {
     }
 
     let selectedTitle = 'Workspace'
-    const { pathname, fullscreenTitle, fullscreenSubtitle } = this.props;
+    const { pathname, fullscreenTitle, fullscreenSubtitle, } = this.props;
     const dropdownStructure = [
       { title: 'Workspace', id: 'workspace' },
       { title: 'Services', id: 'services' },
@@ -110,6 +100,10 @@ class Topbar extends Component {
       <div className={topbarClass} id="topbar" style={styles}>
         <div className="sw-topbar__content">
           <div className="sw-topbar__info">
+            <div className="sw-topbar__info__profile">
+              {this.renderProfile()}
+            </div>
+            
             <div className="sw-topbar__info__title" onClick={this.toggleDropdown}>
               {selectedTitle}
               <i className="material-icons">arrow_drop_down</i>
@@ -120,9 +114,6 @@ class Topbar extends Component {
             <div className="sw-topbar__button sw-topbar__button--find" onClick={this.clickedFind}>
               <FindIcon />
             </div>
-            <div className="sw-topbar__button sw-topbar__button--add" onClick={this.clickedAdd}>
-              <PlusIcon />
-            </div>
           </div>
         </div>
       </div>
@@ -132,6 +123,7 @@ class Topbar extends Component {
 
 function mapStateToProps(state) {
   return {
+    profilePic: state.getIn(['me', 'profile_pic']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
     fullscreenTitle: state.getIn(['main', 'fullscreenTitle']),
     fullscreenSubtitle: state.getIn(['main', 'fullscreenSubtitle']),

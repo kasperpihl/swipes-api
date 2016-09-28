@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import TemplateSelector from './TemplateSelector'
+import Services from './Services'
 import '../components/overlay/overlay.scss'
 class Overlay extends Component {
   constructor(props) {
@@ -12,6 +13,9 @@ class Overlay extends Component {
     const { overlay } = this.props;
     if(overlay === 'TemplateSelector'){
       return <TemplateSelector />
+    }
+    if(overlay === 'Services'){
+      return <Services />
     }
     return null;
   }
