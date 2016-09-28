@@ -15,11 +15,10 @@ router.post('/rtm.start', (req, res, next) => {
   let userId = req.userId;
   let isAdmin = req.isAdmin;
 
-  //let meQ = r.table('users').get(userId).without(['password', 'workflows', {'services': "authData"}]);
   let meQ =
     r.table('users')
       .get(userId)
-      .without(['password', 'xendoCredentials', {'services': 'authData'}])
+      .without(['password', 'xendoCredentials'/*, {'services': 'authData'}*/])
       .merge({
         organizations:
           r.table('organizations')
@@ -68,10 +67,14 @@ router.post('/rtm.start', (req, res, next) => {
   Promise.all(promiseArrayQ)
     .then(data => {
       const self = data[0];
-      const users = self.organizations[0].users;
+      let users = [];
 
-      // We don't want duplication of that data served on the client;
-      delete self.organizations[0].users;
+      if (self.organizations.length > 0) {
+        let users = self.organizations[0].users;
+
+        // We don't want duplication of that data served on the client;
+        delete self.organizations[0].users;
+      }
 
       let rtmResponse = {
         ok: true,
