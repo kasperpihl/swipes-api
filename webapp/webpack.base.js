@@ -48,7 +48,6 @@ module.exports = {
       {
         test: /\.woff2$/,
         // Inline small woff files and output them below font/.
-        // Set mimetype just in case.
         loader: 'url',
         query: {
           name: 'fonts/[name].[hash:6].[ext]',
@@ -75,11 +74,11 @@ module.exports = {
     progress:true,
     contentBase: './dist',
     inline: true,
-    historyApiFallback: true,
     proxy: {
-      '/v1/*': Object.assign({}, apiRedirect),
-      '/socket.io/*': Object.assign({}, apiRedirect, {ws: true}),
-      '/s/*': Object.assign({}, apiRedirect)
-    }
+      '/v1/**': Object.assign({}, apiRedirect),
+      '/socket.io/**': Object.assign({}, apiRedirect, {ws: true}),
+      '/s/**': Object.assign({}, apiRedirect)
+    },
+    historyApiFallback: true
   }
 };
