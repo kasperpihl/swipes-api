@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes'
-import clone from 'clone'
-const initialState = { recent: [] };
+import { fromJS } from 'immutable'
+const initialState = fromJS({ recent: [] });
 
 export default function services (state = initialState, action) {
   switch (action.type) {
@@ -12,17 +12,17 @@ export default function services (state = initialState, action) {
           swipesUrlProvider.save(activity.checksum, activity.meta);
         })
         activities.reverse();
-        return Object.assign({}, state, {recent: activities});
+        return state.set('recent', fromJS(activities));
       }
       return state;
     }
     case 'activity_added':{
       var activity = action.payload.data;
       swipesUrlProvider.save(activity.checksum, activity.meta);
-      return Object.assign({}, state, {recent: [action.payload.data].concat(state.recent.slice(0, 100)) })
+      return state.updateIn(['recent'], (recent) => recent.insert(0), fromJS(activity));
     }
     case types.LOGOUT:{
-      return clone(initialState);
+      return initialState;
     }
     default: 
       return state

@@ -9,36 +9,43 @@ const devtool = require('../DevTools');
 import persistState from 'redux-localstorage'
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
-
+import Immutable, { fromJS } from 'immutable'
 
 import rootReducer from '../reducers'
 
 // Define what's saved from state to LocalStorage
 const persist = paths => {
   return state => {
-    return {
+    return Immutable.Map({
       main: {
-        token: state.main ? state.main.token : null,
-        tileBaseUrl: state.main ? state.main.tileBaseUrl : null
+        token: state.getIn(['main', 'token']) || null,
+        tileBaseUrl: state.getIn(['main','tileBaseUrl']) || null
       },
-      services: state.services,
-      workspace: state.workspace,
-      me: state.me
-    }
+      services: state.get('services'),
+      workspace: state.get('workspace'),
+      me: state.get('me')
+    })
   }
 }
+const localStorageConfig = {
+  serialize: (subset) => JSON.stringify(subset.toJS()),
+  deserialize: (serializedData) => fromJS(JSON.parse(serializedData)),
+  merge: (initialState, persistedState) => initialState.mergeDeep(persistedState),
+  key: 'redux-dev', 
+  slicer: persist
+}
 export default function configureStore(preloadedState) {
-
+  preloadedState = Immutable.Map();
   const ignoredActions = [types.DRAG_DOT]; // Ignore actions from Logger
   // All the keys to persist to localStorage between opens
   const enhancer = compose(
     applyMiddleware(
       thunk,
       apiMiddleware,
-      createLogger({collapsed: true, duration: true, diff: true, predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1)
+      createLogger({stateTransformer: (state) => state.toJS(), collapsed: true, duration: true, diff: true, predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1)
       })
     ),
-    persistState(null, {key: 'redux-dev', slicer: persist}),
+    persistState(null, localStorageConfig),
     devtool.instrument(),
     persistStateDevtools(getDebugSessionKey())
   )

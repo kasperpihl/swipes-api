@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes'
-import clone from 'clone'
-const initialState = {
+import { fromJS } from 'immutable'
+const initialState = fromJS({
   isFullscreen: false,
   isSearching: false,
   socketUrl: null,
@@ -10,7 +10,7 @@ const initialState = {
   draggingDot: null,
   mainClasses: [],
   hasLoaded: false
-}
+})
 function toggleUnique(array, string, toggle){
   array = array || [];
   if(toggle){
@@ -26,38 +26,28 @@ export default function main (state = initialState, action) {
       if(!action.payload.ok){
         return state;
       }
-      const newState = clone(state);
-      newState.socketUrl=  action.payload.url;
-      newState.tileBaseUrl = action.payload.workflow_base_url;
-      return newState;
+      return state.withMutations((ns) => ns.set('socketUrl', action.payload.url).set('tileBaseUrl', action.payload.workflow_base_url));
     }
     case types.SET_OVERLAY: {
-      return Object.assign({}, state, {overlay: action.overlay});
+      return state.set('overlay', action.overlay);
     }
     case types.SEARCH:{
-      return Object.assign({}, state, { searchQuery: action.query })
+      return state.set('searchQuery', action.query);
     }
     case types.SET_STATUS:{
-      const hasLoaded = (action.status == 'online') ? {hasLoaded: true} : null
-      return Object.assign({}, state, {status: action.status}, hasLoaded)
+      const hasLoaded = (action.status == 'online') ? true : null;
+      return state.withMutations((ns) => ns.set('hasLoaded', hasLoaded).set('status', action.status));
     }
 
     case types.TOGGLE_FULLSCREEN:{
-      const newState = clone(state);
-      newState.isFullscreen = !state.isFullscreen;
-      return newState;
+      return state.set('isFullscreen', !state.get('isFullscreen'));
     }
     case types.SET_FULLSCREEN_TITLE:{
-      const newState = clone(state);
-      newState.fullscreenTitle = action.title;
-      newState.fullscreenSubtitle = action.subtitle;
-      return newState;
+      return state.withMutations((ns) => ns.set('fullscreenTitle', action.title).set('fullscreenSubtitle', action.subtitle));
     }
 
     case types.TOGGLE_FIND:{
-      const newState = clone(state);
-      newState.isFinding = !state.isFinding;
-      return newState;
+      return state.set('isFinding', !state.get('isFinding'));
     }
 
     case types.SET_DRAGGING_DOT:{
@@ -65,20 +55,17 @@ export default function main (state = initialState, action) {
         draggingId: action.draggingId,
         data: action.data
       } : null
-      const newState = clone(state);
-      if(action.value){
-        newState.isFinding = false;
+      let mainClasses = state.get('mainClasses');
+      if(!mainClasses){
+        mainClasses = new Set();
       }
-      newState.mainClasses = toggleUnique(state.mainClasses, 'draggingDot', action.value);
-      newState.draggingDot = draggingDot;
-      return newState;
+      const addOrDelete = action.value ? 'add' : 'delete';
+      mainClasses = mainClasses[addOrDelete]('draggingDot');
+
+      return state.withMutations((ns) => ns.set('isFinding', !action.value).set('draggingDot', draggingDot).set('mainClasses', mainClasses))
     }
     case types.DRAG_DOT:{
-      const newState = clone(state);
-      newState.draggingDot = Object.assign(newState.draggingDot, {
-        hoverTarget: action.hoverTarget
-      })
-      return newState;
+      return state.setIn(['draggingDot', 'hoverTarget'], action.hoverTarget);
     }
 
     // ======================================================
@@ -89,12 +76,10 @@ export default function main (state = initialState, action) {
       if(!action.payload || !action.payload.ok){
         return state;
       }
-      const newState = clone(state);
-      newState.token = action.payload.token;
-      return newState;
+      return state.set('token', action.payload.token);
     }
     case types.LOGOUT:{
-      return clone(initialState);
+      return initialState;
     }
 
 

@@ -1,10 +1,10 @@
 import * as types from '../constants/ActionTypes'
-import clone from 'clone'
+import { fromJS } from 'immutable'
 
-const initialState = {
+const initialState = fromJS({
   history: [],
   sentTime: new Date()
-}
+})
 
 export default function notifications (state = initialState, action) {
   switch(action.type){
@@ -13,10 +13,10 @@ export default function notifications (state = initialState, action) {
       const {title, message} =  action.payload;
 
       let newHistory = [], isDuplicate = false
-      state.history.forEach((obj) => {
-        if(obj.time > (time - 3000)){
+      state.get('history').forEach((obj) => {
+        if(obj.get('time') > (time - 3000)){
           newHistory.push(obj)
-          if(obj.title === title && obj.message === message){
+          if(obj.get('title') === title && obj.get('message') === message){
             isDuplicate = true;
           }
         }
@@ -24,10 +24,10 @@ export default function notifications (state = initialState, action) {
       if(!isDuplicate){
         newHistory.push({title, message, time})
       }
-      return Object.assign({}, state, {history: newHistory});
+      return state.set('history', fromJS(newHistory));
     }
     case types.LOGOUT:{
-      return clone(initialState);
+      return initialState;
     }
     default:
       return state;

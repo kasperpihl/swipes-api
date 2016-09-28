@@ -1,6 +1,7 @@
 import * as types from '../constants/ActionTypes'
-import clone from 'clone'
-const initialState = {};
+import { fromJS } from 'immutable'
+
+const initialState = fromJS({});
 
 export default function services (state = initialState, action) {
   switch (action.type) {
@@ -11,12 +12,12 @@ export default function services (state = initialState, action) {
         res.services.forEach((service) => {
           services[service.id] = service;
         })
-        return services;
+        return fromJS(services);
       }
       return state;
     }
     case types.LOGOUT:{
-      return clone(initialState);
+      return initialState;
     }
     default: 
       return state

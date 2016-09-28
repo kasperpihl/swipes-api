@@ -1,21 +1,18 @@
 import * as types from '../constants/ActionTypes'
-import clone from 'clone'
+import { fromJS } from 'immutable'
 
-const initialState = {
+const initialState = fromJS({
   shown: false
-}
+})
 
 export default function modal (state = initialState, action) {
   switch (action.type) {
     case types.LOAD_MODAL:{
-      let newState = clone(initialState)
-      newState.shown = true;
-      newState.data = action.data || {}
-      newState.callback = action.callback || null 
-      return newState;
+      const data = fromJS(action.data || {});
+      state.update((ns) => ns.set('shown', true).set('data', data).set('callback', action.callback || null))
     }
     case types.HIDE_MODAL:{
-      return clone(initialState)
+      return initialState;
     }
     default: 
       return state

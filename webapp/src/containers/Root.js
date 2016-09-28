@@ -8,7 +8,11 @@ import { syncHistoryWithStore } from 'react-router-redux'
 
 const store = configureStore()
 
-const history = syncHistoryWithStore(browserHistory, store)
+const history = syncHistoryWithStore(browserHistory, store, {
+  selectLocationState (state){
+    return state.get('routing').toJS();
+  }
+})
 
 // Get classes that needs socket
 import Socket from '../classes/socket'

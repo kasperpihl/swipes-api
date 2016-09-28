@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux-immutable'
 import main from './main'
 import modal from './modal'
 import workspace from './workspace'
@@ -7,21 +7,25 @@ import activity from './activity'
 import notifications from './notifications'
 import templates from './templates'
 import users from './users'
+import routing from './routing'
 import { routerReducer } from 'react-router-redux'
 
 import me from './me'
 
 const rootReducer = combineReducers({
-  main,
-  modal,
-  workspace,
-  services,
   activity,
-  notifications,
+  main,
+  routing,
+  services,
   me,
+  workspace,
+  modal,
+  notifications,
   templates,
-  users,
-  routing: routerReducer
+  users
+  /*
+  
+  */
 })
 
 export default rootReducer
