@@ -7,23 +7,30 @@ import { apiMiddleware } from 'redux-api-middleware';
 
 import persistState from 'redux-localstorage'
 import thunk from 'redux-thunk';
-
+import Immutable, { fromJS } from 'immutable'
 
 import rootReducer from '../reducers'
 
 // Define what's saved from state to LocalStorage
 const persist = paths => {
   return state => {
-    return {
+    return Immutable.Map({
       main: {
-        token: state.main.token,
-        tileBaseUrl: state.main.tileBaseUrl
+        token: state.getIn(['main', 'token']) || null,
+        tileBaseUrl: state.getIn(['main','tileBaseUrl']) || null
       },
-      services: state.services,
-      workspace: state.workspace,
-      me: state.me
-    }
+      services: state.get('services'),
+      workspace: state.get('workspace'),
+      me: state.get('me')
+    })
   }
+}
+const localStorageConfig = {
+  serialize: (subset) => JSON.stringify(subset.toJS()),
+  deserialize: (serializedData) => fromJS(JSON.parse(serializedData)),
+  merge: (initialState, persistedState) => initialState.mergeDeep(persistedState),
+  key: 'redux', 
+  slicer: persist
 }
 export default function configureStore(preloadedState) {
   // All the keys to persist to localStorage between opens
@@ -32,7 +39,7 @@ export default function configureStore(preloadedState) {
       thunk,
       apiMiddleware
     ),
-    persistState(null, {slicer: persist})
+    persistState(null, localStorageConfig)
   )
   return createStore(
     rootReducer,
