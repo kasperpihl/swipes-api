@@ -12,7 +12,7 @@
     "start": "webpack-dev-server --progress",
     "prebuild": "npm run clean-and-copy",
     "build": "webpack --progress",
-    "preinstall": "if [ ! -f ./src/Tester.js ]; then ncp ./src/tester-sample.js ./src/Tester.js ; fi"
+    "postinstall": "path-exists ./src/Tester.js && echo 'Tester.js found' || ncp ./src/tester-sample.js ./src/Tester.js"
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
@@ -57,6 +57,7 @@
     "html-webpack-plugin": "^2.22.0",
     "ncp": "^2.0.0",
     "node-sass": "^3.8.0",
+    "path-exists-cli": "^1.0.0",
     "react": "^15.3.0",
     "react-addons-perf": "^15.3.1",
     "react-addons-test-utils": "^15.3.0",
