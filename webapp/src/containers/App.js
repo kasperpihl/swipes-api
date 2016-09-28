@@ -46,7 +46,8 @@ class App extends Component {
     }
   }
   render() {
-    let classes = 'main ' + this.props.mainClasses.join(' ');
+    return <div /> // testing redux
+    let classes = 'main ' + this.props.mainClasses.toArray().join(' ');
     return (
       <div className={classes}>
         <Topbar pathname={this.props.location.pathname} />
@@ -66,7 +67,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    mainClasses: state.main.mainClasses || []
+    mainClasses: state.getIn(['main', 'mainClasses']) || []
   }
 }
 

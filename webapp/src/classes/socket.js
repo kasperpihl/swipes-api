@@ -10,13 +10,13 @@ export default class Socket {
   }
   storeChange(){
     const state = this.store.getState();
-    const url = state.main.socketUrl;
+    const url = state.getIn(['main', 'socketUrl']);
 
-    if(!this.socket && url && state.main.status !== 'connecting'){
+    if(!this.socket && url && state.getIn(['main', 'status']) !== 'connecting'){
       this.changeStatus('connecting');
       
       this.socket = io.connect(url, {
-        query: 'token=' + state.main.token,
+        query: 'token=' + state.getIn(['main', 'token']),
         reconnectionDelay: 5000,
         'reconnection': true,
         'reconnectionDelayMax': 5000,

@@ -22,7 +22,7 @@ const request = (options, data) => {
       types.API_ERROR
     ];
 
-    const body = Object.assign({}, {token: getState().main.token}, data);
+    const body = Object.assign({}, {token: getState().getIn(['main', 'token'])}, data);
 
     return dispatch({
       [CALL_API]: {

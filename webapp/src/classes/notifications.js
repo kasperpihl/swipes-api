@@ -8,8 +8,9 @@ class Notifications {
   }
   storeChange(){
     const state = this.store.getState();
-    if(state.notifications.history.length){
-      state.notifications.history.forEach( (notification) => {
+    const history = state.getIn(['notifications', 'history'])
+    if(history && history.length){
+      history.forEach( (notification) => {
         if(notification.time > this.lastSentTime){
           if(document.hasFocus()){
             this.playSound();

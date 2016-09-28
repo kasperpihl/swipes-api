@@ -28,7 +28,7 @@ class Registration extends Component {
 
 function mapStateToProps(state) {
   return {
-    token: state.main.token
+    token: state.getIn(['main', 'token'])
   }
 }
 
