@@ -4,7 +4,6 @@ import { Router, Route, IndexRoute } from 'react-router'
 import Registration from './containers/Registration';
 import App from './containers/App'
 import Workspace from './containers/Workspace'
-import Services from './containers/Services'
 
 export default class Root extends Component {
   constructor(props) {
@@ -31,10 +30,7 @@ export default class Root extends Component {
       <Router history={this.props.history} >
         <Route path="signin" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
-        <Route path="/" component={App}>
-          <IndexRoute component={Workspace} onEnter={this.didEnterApp} />
-          <Route path="services" component={Services} onEnter={this.didEnterApp} />
-        </Route>
+        <Route path="/" component={App} />
       </Router>
     )
   }

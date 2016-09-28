@@ -18,12 +18,15 @@ const remote = nodeRequire('electron').remote;
 const app = remote.app;
 const path = nodeRequire('path');
 const os = nodeRequire('os');
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 
 class Tile extends Component {
   constructor(props) {
     super(props)
     this.state = {};
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
     bindAll(this, ['sendCommandToTile', 'onLoad', 'callDelegate','addListenersToCommunicator', 'onSelectedAccount', 'receivedCommand']);
   }
   componentDidMount(){
@@ -166,7 +169,6 @@ class Tile extends Component {
     return <LocalTile tile={tile} size={this.props.size} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
   }
   render() {
-    console.log('render tile');
     let cardContent = <SwipesLoader size={120} center={true}/>;
 
     const tile = this.props.tile;

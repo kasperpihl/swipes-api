@@ -181,7 +181,6 @@ class Workspace extends Component {
   }
 
   render() {
-    console.log('render workspace');
     if(!this.props.hasLoaded){
       return <SwipesLoader size={120} text="Opening Swipes" center={true} />;
     }
@@ -205,7 +204,7 @@ class Workspace extends Component {
     window.addEventListener("mouseup", this.onMouseUp);
     window.addEventListener("blur", this.onWindowBlur);
   }
-  componentDidUpdate(){
+  componentDidUpdate(prevProps){
     if(!this.props.fullscreen && this.refs.grid){
       this.refs.grid.closeFullscreen()
     }

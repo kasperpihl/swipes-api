@@ -43,7 +43,6 @@ class Services extends Component {
     const { services:se } = this.props;
     
     const sortedKeys = se.sort((k1, k2) => (se.getIn([k1, 'title']) < se.getIn([k2, 'title'])) ? -1 : 1).toArray();
-    console.log(sortedKeys);
     return sortedKeys.map((service, key) => {
       const data = {
         id: service.get('manifest_id'),

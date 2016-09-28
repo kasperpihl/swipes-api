@@ -5,6 +5,7 @@ import { api, modal } from '../actions'
 import Topbar from './Topbar'
 import Find from './Find'
 import Modal from './Modal'
+import Workspace from './Workspace'
 import Overlay from './Overlay'
 import DotDragOverlay from './DotDragOverlay'
 const {dialog} = nodeRequire('electron').remote
@@ -13,8 +14,13 @@ let DevTools = 'div';
 if(process.env.NODE_ENV !== 'production'){
   DevTools = require('../DevTools');
 }
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
   componentDidMount() {
     this.props.request('rtm.start');
     this.checkForDropboxFolder();
@@ -54,7 +60,7 @@ class App extends Component {
       <div className={classes}>
         <Topbar pathname={this.props.location.pathname} />
         <div className="active-app">
-          {this.props.children}
+          <Workspace />
         </div>
         <Find />
         <Overlay />

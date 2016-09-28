@@ -65,7 +65,6 @@ export default class TileSlackData {
     this.performChangesIn(null, changeHandler);
   }
   notify(){
-    console.log('update', this.data.toJS());
     if(typeof this.onChange === 'function'){
       this.onChange(this.data);
     }

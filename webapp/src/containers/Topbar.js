@@ -78,6 +78,7 @@ class Topbar extends Component {
   }
   clickedFind(){
     this.props.toggleFind();
+    return false;
   }
   signout() {
   }

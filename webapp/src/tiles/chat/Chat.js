@@ -21,7 +21,7 @@ class Chat extends Component {
     this.addListenersToSwipes(props.swipes);
     this.slackHandler = new SlackTileHandler(props.swipes, props.tile, this.dataDelegate);
     this.state = { started: false, isStarting: false, inputHeight: 60, data: this.slackHandler.getData() }
-    
+
     //const data = this.loadDataFromStorage(props.tile.id);
     //this.slackData = new SlackData(this.props.swipes, data, this.dataDelegate);
 

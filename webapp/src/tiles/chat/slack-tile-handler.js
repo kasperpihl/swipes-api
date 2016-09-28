@@ -104,9 +104,7 @@ export default class SlackTileHandler {
     })
   }
   fetchMessages(channel){
-    console.log('fetching');
     this.swipes.service('slack').request(this.apiPrefixForChannel(channel) + "history", {channel: channel.get('id'), count: 50 }).then((res) => {
-      console.log('fetched', res);
       if(res.ok){
         this.tileSlackData.performChanges((oldData) => {
           let nD = oldData.set('loadingMessages', false);
