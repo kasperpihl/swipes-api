@@ -3,13 +3,11 @@ import { connect } from 'react-redux'
 
 import * as overlays from './overlays'
 
-import '../components/overlay/overlay.scss'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 class Overlay extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.state = {}
   }
   renderOverlay(){
     const overlay = this.props.overlays.last();

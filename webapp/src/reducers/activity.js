@@ -6,10 +6,11 @@ const filterActivity = (activity) => {
   const keys = {}
   return activity.filter((act) => {
     const id = act.get('checksum');
-    if(keys[id]){
+    if(!keys[id]){
+      keys[id] = true;
       return true;
     }
-    keys[id] = true;
+    return false;
   })
 } 
 

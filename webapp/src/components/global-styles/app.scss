@@ -44,3 +44,19 @@ button::-moz-focus-inner {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@import './vars';
+@import './mixins';
+
+.overlay {
+  @include size(100%, calc(100% - 54px));
+  background: $bg;
+  left: 0; top: 54px;
+  position:fixed;
+  visibility: hidden;
+  z-index: 9;
+
+  &--shown {
+    visibility: visible;
+  }
+}
