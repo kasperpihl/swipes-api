@@ -45,9 +45,7 @@ export default function configureStore(preloadedState) {
       createLogger({stateTransformer: (state) => state.toJS(), collapsed: true, duration: true, diff: true, predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1)
       })
     ),
-    persistState(null, localStorageConfig),
-    devtool.instrument(),
-    persistStateDevtools(getDebugSessionKey())
+    persistState(null, localStorageConfig)
   )
   return createStore(
     rootReducer,
