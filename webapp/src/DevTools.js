@@ -30,15 +30,16 @@ class DevTools extends Component {
     const styles = {
       position: 'fixed',
       background: 'red',
-      top: 0,
-
-      right: 0,
-      width: '9px',
-      height: '9px',
-      zIndex: '99999'
+      display: 'none',
+      top: '3px',
+      borderRadius: '50%',
+      right: '3px',
+      width: '12px',
+      height: '12px',
+      zIndex: '10000'
     }
     if(this.state.recording){
-      styles.background = 'green'
+      styles.display = 'block';
     }
     return (
       <div style={styles} onClick={this.toggleRecording}>

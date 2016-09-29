@@ -19,7 +19,7 @@ class SwipesLoader extends Component {
       elapsedTime = new Date().getTime() - startTime;
       let percent = gradient.percentOfValue(elapsedTime, 10000);
       this.setState({gradientPos: percent});
-    }, 5);
+    }, 15);
   }
   renderText(text, textStyle) {
     if(text && text.length) {
