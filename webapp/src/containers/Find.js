@@ -112,11 +112,6 @@ class Find extends Component {
       console.log('searching', searchQuery);
     }
   }
-  onClick(e){
-    if(e.target.classList.contains("find-overlay")){
-      this.props.toggleFind()
-    }
-  }
   onCardClick(card, data){
     //console.log(this.shareDataForChecksum[data.checksum]);
     const folder = localStorage.getItem('dropbox-folder');
@@ -127,7 +122,6 @@ class Find extends Component {
     console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
-    this.props.toggleFind();
     if(data.checksum){ // Is activity
       this.props.startDraggingDot("search", this.shareDataForChecksum[data.checksum]);
     }
@@ -165,17 +159,12 @@ class Find extends Component {
     })
   }
   render() {
-    const { isFinding, draggingDot, recent } = this.props;
+    const { draggingDot, recent } = this.props;
     let className = "find-overlay"
-    if(isFinding && !draggingDot){
-      className += ' find-overlay--open'
-    }
     return (
-      <div className={className} onClick={this.onClick}>
-        <div className="content-container">
-          <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
-          <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
-        </div>
+      <div className="find-overlay">
+        <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
+        <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
       </div>
     );
   }
@@ -183,7 +172,6 @@ class Find extends Component {
 
 function mapStateToProps(state) {
   return {
-    isFinding: state.getIn(['main', 'isFinding']),
     services: state.get('services'),
     me: state.get('me'),
     searchQuery: state.getIn(['main', 'searchQuery']),
@@ -193,7 +181,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedFind = connect(mapStateToProps, {
-  toggleFind: main.toggleFind,
   request: api.request,
   startDraggingDot: main.startDraggingDot
 })(Find)

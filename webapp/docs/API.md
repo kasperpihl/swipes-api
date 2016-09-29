@@ -1,3 +1,13 @@
+# IDs
+
+A - Activity ?
+G - Goals
+O - Organisation
+S - Service
+T - Team
+U - User
+W - Workflow
+
 # Preview structure
 
 ## Card supported props

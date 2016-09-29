@@ -14,6 +14,8 @@ export const DRAG_DOT = 'DRAG_DOT'
 // Overlay
 export const SET_OVERLAY = 'SET_OVERLAY'
 export const PUSH_OVERLAY = 'PUSH_OVERLAY'
+export const CLEAR_OVERLAY = 'CLEAR_OVERLAY'
+
 // Modal
 export const LOAD_MODAL = 'LOAD_MODAL'
 export const HIDE_MODAL = 'HIDE_MODAL'

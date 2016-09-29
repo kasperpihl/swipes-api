@@ -20,30 +20,32 @@ class Topbar extends Component {
       gradientPos: gradientPos,
       showDropdown: false
     };
-    bindAll(this, ['gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind']);
+    bindAll(this, ['gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedBack', 'clickedProfile']);
   }
   componentDidMount() {
     this.gradientStep();
+    const { setOverlay, clearOverlay, pushOverlay } = this.props;
     ipcRenderer.on('toggle-find', () => {
-      const { isFinding, toggleFind } = this.props;
-      if (!isFinding) {
-        toggleFind();
-      }
+      this.clickedFind();
     })
     ipcRenderer.on('new-tile', () => {
-      const { isFinding, loadTilesListModal, setOverlay } = this.props;
-      if (!isFinding) {
-        setOverlay('TemplateSelector');
-      }
+      setOverlay({ component: 'TemplateSelector', title: 'Create Goal' });
+      pushOverlay({ component: 'Find', title: 'Find'});
     })
     window.addEventListener('keydown', (e) => {
-      if (e.keyCode === 27 && this.props.isFinding) {
-        this.props.toggleFind();
+      if (e.keyCode === 27) {
+        clearOverlay();
       }
     });
   }
   clickedFind(){
-    this.props.toggleFind();
+    this.props.setOverlay({ component: 'Find', title: 'Find' });
+  }
+  clickedBack(){
+    this.props.clearOverlay();
+  }
+  clickedProfile(){
+    this.props.setOverlay({ component: 'Services', title: 'Services' });
   }
   signout() {
   }
@@ -70,6 +72,51 @@ class Topbar extends Component {
   toggleDropdown() {
     this.setState({showDropdown: !this.state.showDropdown})
   }
+  clickedClear(i){
+    const { clearOverlay } = this.props;
+    console.log('clicked', i);
+    clearOverlay(i);
+  }
+  renderBreadcrumb(){
+    const { overlays } = this.props;
+    if(overlays.size){
+      const crumbs = overlays.map((overlay, i) => {
+        return <div key={"crumb-"+i} onClick={this.clickedClear.bind(this, i)} className="topbar__nav__crumb">{overlay.get('title')}</div>
+      })
+      return (
+        <div className="topbar__nav">
+          <i onClick={this.clickedBack} className="material-icons">arrow_back</i>
+          <div className="topbar__nav__crumbs">
+            {crumbs}
+          </div>
+        </div>
+      )
+    }
+  }
+  renderNav(){
+    let selectedTitle = 'Workspace'
+    const { overlays } = this.props;
+    if(!overlays.size){
+      const dropdownStructure = [
+        { title: 'Workspace', id: 'workspace' },
+        { title: 'Services', id: 'services' },
+        { title: 'Log out', id: 'logout' }
+      ];
+      return (
+        <div className="topbar__nav">
+          <div className="topbar__profile" onClick={this.clickedProfile}>
+            {this.renderProfile()}
+          </div>
+
+          <div className="topbar__title" onClick={this.toggleDropdown}>
+            {selectedTitle}
+            <i className="material-icons">arrow_drop_down</i>
+            <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
+          </div>
+        </div>
+      )
+    }
+  }
   renderProfile(){
     const { profilePic } = this.props;
     if(profilePic){
@@ -88,28 +135,13 @@ class Topbar extends Component {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
     }
 
-    let selectedTitle = 'Workspace'
-    const { pathname, fullscreenTitle, fullscreenSubtitle, } = this.props;
-    const dropdownStructure = [
-      { title: 'Workspace', id: 'workspace' },
-      { title: 'Services', id: 'services' },
-      { title: 'Log out', id: 'logout' }
-    ];
+    
+    const { pathname, fullscreenTitle, fullscreenSubtitle } = this.props;
 
     return (
       <div className="topbar" id="topbar" style={styles}>
-
-        <div className="topbar__nav">
-          <div className="topbar__profile">
-            {this.renderProfile()}
-          </div>
-
-          <div className="topbar__title" onClick={this.toggleDropdown}>
-            {selectedTitle}
-            <i className="material-icons">arrow_drop_down</i>
-            <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
-          </div>
-        </div>
+        {this.renderNav()}
+        {this.renderBreadcrumb()}
 
         <div className="topbar__actions">
           <div className="topbar__button" onClick={this.clickedFind}>
@@ -124,12 +156,11 @@ class Topbar extends Component {
 
 function mapStateToProps(state) {
   return {
+    overlays: state.get('overlays'),
     profilePic: state.getIn(['me', 'profile_pic']),
-    isFullscreen: state.getIn(['main', 'isFullscreen']),
     fullscreenTitle: state.getIn(['main', 'fullscreenTitle']),
     fullscreenSubtitle: state.getIn(['main', 'fullscreenSubtitle']),
     searchQuery: state.getIn(['main', 'searchQuery']),
-    isFinding: state.getIn(['main', 'isFinding']),
     hasLoaded: state.getIn(['main', 'hasLoaded'])
   }
 }
@@ -140,6 +171,8 @@ const ConnectedTopbar = connect(mapStateToProps, {
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
   setOverlay: overlays.set,
+  clearOverlay: overlays.clear,
+  pushOverlay: overlays.push,
   loadTilesListModal: modal.loadTilesListModal
 })(Topbar)
 export default ConnectedTopbar

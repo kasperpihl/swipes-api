@@ -1,16 +1,11 @@
 #content{
-height: 100%;
-  .main {
   height: 100%;
-
-    .active-app {
+  .main {
+    height: 100%;
+    padding-top: 54px;
+    .workspace {
       height:100%;
-      padding-top: 54px;
-
-      .actual-app {
-        height:100%;
-        position: relative;
-      }
+      position: relative;
     }
   }
 }

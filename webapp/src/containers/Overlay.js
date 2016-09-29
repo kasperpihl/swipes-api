@@ -3,19 +3,24 @@ import { connect } from 'react-redux'
 
 import TemplateSelector from './TemplateSelector'
 import Services from './Services'
+import Find from './Find'
+
 import '../components/overlay/overlay.scss'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 class Overlay extends Component {
   constructor(props) {
     super(props)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {}
   }
   renderOverlay(){
+    let Comp;
     const overlay = this.props.overlays.last();
     console.log('overlay', overlay);
     if(!overlay){
       return;
     }
-    let Comp;
+    
 
     const { component, props } = overlay.toJS();
 
@@ -24,6 +29,9 @@ class Overlay extends Component {
     }
     if(component === 'Services'){
       Comp = Services;
+    }
+    if(component === 'Find'){
+      Comp = Find;
     }
     if(Comp){
       return <Comp {...props} />

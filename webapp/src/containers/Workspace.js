@@ -189,7 +189,7 @@ class Workspace extends Component {
       content = <Grid ref="grid" columns={this.props.columns.toJS()} delegate={this} />
     }
     return (
-      <div id="actual-app" className="actual-app">
+      <div id="workspace" className="workspace">
         {content}
       </div>
     )

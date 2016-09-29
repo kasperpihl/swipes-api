@@ -59,10 +59,7 @@ class App extends Component {
     return (
       <div className={classes}>
         <Topbar pathname={this.props.location.pathname} />
-        <div className="active-app">
-          <Workspace />
-        </div>
-        <Find />
+        <Workspace />
         <Overlay />
         <Modal />
 
