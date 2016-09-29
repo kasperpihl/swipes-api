@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { api, modal } from '../actions'
 
 import Topbar from './Topbar'
-import Find from './Find'
 import Modal from './Modal'
 import Workspace from './Workspace'
 import Overlay from './Overlay'

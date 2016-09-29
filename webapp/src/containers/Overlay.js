@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import TemplateSelector from './TemplateSelector'
-import Services from './Services'
-import Find from './Find'
+import * as overlays from './overlays'
 
 import '../components/overlay/overlay.scss'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -14,25 +12,14 @@ class Overlay extends Component {
     this.state = {}
   }
   renderOverlay(){
-    let Comp;
     const overlay = this.props.overlays.last();
-    console.log('overlay', overlay);
     if(!overlay){
       return;
     }
-    
 
     const { component, props } = overlay.toJS();
 
-    if(component === 'TemplateSelector'){
-      Comp = TemplateSelector;
-    }
-    if(component === 'Services'){
-      Comp = Services;
-    }
-    if(component === 'Find'){
-      Comp = Find;
-    }
+    let Comp = overlays[component];
     if(Comp){
       return <Comp {...props} />
     }

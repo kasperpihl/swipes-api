@@ -6,25 +6,23 @@ import overlays from './overlays'
 import notifications from './notifications'
 import routing from './routing'
 
-
 import me from './me'
 import workspace from './workspace'
 import services from './services'
 import activity from './activity'
-import templates from './templates'
 import users from './users'
 
 const rootReducer = combineReducers({
-  activity,
   main,
+  modal,
   overlays,
+  notifications,
   routing,
-  services,
+
   me,
   workspace,
-  modal,
-  notifications,
-  templates,
+  services,
+  activity,
   users
 })
 
