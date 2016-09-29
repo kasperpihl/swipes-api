@@ -22,7 +22,7 @@ router.post('/goals.processes', (req, res, next) => {
     })
 })
 
-router.post('/goals.create', goalsValidate, goalsCreate, (req, res, next) => {
+router.post('/goals.add', goalsValidate, goalsCreate, (req, res, next) => {
   return res.status(200).json({ok: true});
 })
 
