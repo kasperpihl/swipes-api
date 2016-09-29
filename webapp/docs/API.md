@@ -1,9 +1,38 @@
+# Endpoints
+
+## Yesterday
+goals.add
+goals.list
+
+step.assign
+step.do
+- goal_id
+- type
+- payload
+/* 
+Fetch the goal
+Check current step
+Compare current step type to sent type
+Forward payload to handler type
+*/
+step.complete
+
+
+
+## Later
+goals.update
+goals.remove
+step.removeAssignee
+step.add
+step.update
+step.remove
+
 # IDs
 
 A - Apps
 G - Goals
 O - Organisation
-S - Service
+S - Service / Integration / Provider /
 T - Team
 U - User
 W - Workflow
