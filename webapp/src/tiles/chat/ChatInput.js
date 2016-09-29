@@ -163,10 +163,14 @@ class ChatInput extends Component {
   render() {
     const textHeight = this.state.inputTextHeight || 0;
     const height = Math.max(this.defaultTextHeight, textHeight);
-
     let className = "chat-input";
-    if(this.state.isFocused){
+
+    if (this.state.isFocused) {
       className += " focused";
+    }
+
+    if (this.props.parentWidth < 680) {
+      className += ' responsive'
     }
 
     return (

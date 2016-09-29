@@ -161,10 +161,11 @@ class Find extends Component {
   render() {
     const { draggingDot, recent } = this.props;
     let className = "find-overlay"
+
     return (
       <div className="find-overlay">
         <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
-        <Activities title="Recent" subtitle="Mine" activities={recent} cardDelegate={this}/>
+        <Activities title="Recent" subtitle="Mine" activities={recent.slice(0,10)} cardDelegate={this}/>
       </div>
     );
   }

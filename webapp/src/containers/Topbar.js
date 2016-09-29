@@ -85,7 +85,7 @@ class Topbar extends Component {
       })
       return (
         <div className="topbar__nav">
-          <i onClick={this.clickedBack} className="material-icons">arrow_back</i>
+          <i onClick={this.clickedBack} className="material-icons topbar__nav__back">arrow_back</i>
           <div className="topbar__nav__crumbs">
             {crumbs}
           </div>
@@ -135,7 +135,7 @@ class Topbar extends Component {
       styles.backgroundPosition = this.state.gradientPos + '% 50%';
     }
 
-    
+
     const { pathname, fullscreenTitle, fullscreenSubtitle } = this.props;
 
     return (

@@ -19,6 +19,12 @@ $inputButtonWidth: 50px;
     bottom: 0;
     border-radius: 0px;
   }
+
+  &.responsive {
+    bottom: 0;
+    border-radius: 0px;
+  }
+
   &.focused {
     .send-button {
       background-color: $blue-100;

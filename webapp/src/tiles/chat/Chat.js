@@ -15,7 +15,7 @@ import ChatInput from './ChatInput'
 
 class Chat extends Component {
   constructor(props) {
-    super(props)    
+    super(props)
 
     bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink', 'onCardShare', 'onCardAction'])
     this.addListenersToSwipes(props.swipes);
@@ -193,6 +193,7 @@ class Chat extends Component {
         />
         <ChatInput
           sendMessage={this.sendMessage}
+          parentWidth={this.props.size.width}
           changedHeight={this.changedHeight}
           uploadFiles={this.slackHandler.uploadFiles}
           sendTypingEvent={this.slackHandler.sendTypingEvent}

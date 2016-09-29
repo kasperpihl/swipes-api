@@ -136,7 +136,7 @@ class Sidemenu extends Component {
     const { pinned, forceClose } = this.state
     let { data } = this.props
 
-    if (this.props.parentWidth < 600) {
+    if (this.props.parentWidth < 680) {
       className += " swipes-sidemenu--responsive"
     }
 
