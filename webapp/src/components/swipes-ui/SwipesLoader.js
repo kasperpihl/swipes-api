@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import gradient from '../topbar/gradient'
-import './swipes-loader.scss'
-import LogoSVG from './images/sw-logo-loader.svg'
+import './styles/swipes-loader.scss'
+import { LogoLoader } from '../icons'
 const DEFAULT_SIZE = 60;
 
 class SwipesLoader extends Component {
@@ -45,7 +45,7 @@ class SwipesLoader extends Component {
     }
     return (
       <div className={className} style={style}>
-        <LogoSVG className="loader-clippath"/>
+        <LogoLoader className="loader-clippath"/>
         <div className="sw-loader" style={styles}></div>
         {this.renderText(text, textStyle)}
       </div>

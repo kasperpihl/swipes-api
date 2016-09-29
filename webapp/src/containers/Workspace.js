@@ -31,12 +31,6 @@ class Workspace extends Component {
       const { draggingDot } = this.props;
       const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.get('draggingId')){
-        /*if(draggingDot.data.shortUrl){
-          var shareUrl = this.generateShareUrl(draggingDot.data.shortUrl);
-          this.sendToTile(id, 'share.receivedData', { shareUrl });
-          this.props.stopDraggingDot()
-          return;
-        }*/
         this.props.stopDraggingDot()
         this.props.generateShareUrl(draggingDot.get('data')).then( (res) => {
           console.log('res from share url', res);
@@ -162,12 +156,11 @@ class Workspace extends Component {
   gridRenderResizeOverlayForId(grid, id){
     var tile = this.props.tiles.get(id);
     var title = tile.get('name');
-    var url = this.props.baseUrl + tile.get('manifest_id') + '/' + tile.get('icon');
     var SVG;
     if(tile.get('manifest_id') === 'slack-dashboard'){
       SVG = SlackIcon;
     }
-    return <ResizeOverlay imageUrl={url} svg={SVG} title={title} />
+    return <ResizeOverlay svg={SVG} title={title} />
   }
 
   // ======================================================
@@ -219,7 +212,6 @@ class Workspace extends Component {
 
 function mapStateToProps(state) {
   return {
-    baseUrl: state.getIn(['main', 'tileBaseUrl']),
     draggingDot: state.getIn(['main', 'draggingDot']),
     fullscreen: state.getIn(['main', 'isFullscreen']),
     me: state.get('me'),

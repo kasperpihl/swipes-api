@@ -11,6 +11,10 @@ export default function me (state = initialState, action) {
       }
       return state;
     }
+    case ('profile_pic_update'):{
+      console.log(action.payload);
+      return state;
+    }
     // handle service_added/removed etc from socket.
     case 'service_added':{
       const service = fromJS(action.payload.data);

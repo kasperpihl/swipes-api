@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import './DropdownMenu.scss'
+import './styles/dropdown-menu.scss'
 
 class SwipesDropdownMenu extends Component {
   constructor(props) {

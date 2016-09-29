@@ -43,8 +43,8 @@ function mapStateToProps(state) {
 }
 
 const ConnectedModal = connect(mapStateToProps, {
-  loadModal: modal.loadModal,
-  hideModal: modal.hideModal
+  loadModal: modal.load,
+  hideModal: modal.hide
 
 })(Modal)
 export default ConnectedModal

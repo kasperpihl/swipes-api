@@ -154,17 +154,6 @@ class Tile extends Component {
       return <DropzoneOverlay hover={(tile.id === draggingDot.get('hoverTarget'))} title={"Share to: " + tile.get('name')}/>
     }
   }
-  renderWebview(tile){
-    const url = this.props.baseUrl + tile.get('manifest_id') + '/' + tile.get('index') + '?id=' + tile.get('id');
-
-    let preloadUrl = 'file://' + path.join(app.getAppPath(), 'preload/tile-preload.js');
-    if (os.platform() === 'win32') {
-      console.log('windows');
-      preloadUrl = path.resolve('preload/tile-preload.js')
-    }
-
-    return <Webview onLoad={this.onLoad} receivedCommand={this.receivedCommand} preloadUrl={preloadUrl} url={url} />;
-  }
   renderLocalTile(tile){
     return <LocalTile tile={tile} size={this.props.size} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
   }
@@ -192,7 +181,6 @@ class Tile extends Component {
 function mapStateToProps(state, ownProps) {
   return {
     draggingDot: state.getIn(['main', 'draggingDot']),
-    baseUrl: state.getIn(['main', 'tileBaseUrl']),
     tile: state.getIn(['workspace', 'tiles', ownProps.id]),
     token: state.getIn(['main', 'token']),
     services: state.getIn(['me', 'services']),
@@ -203,7 +191,7 @@ function mapStateToProps(state, ownProps) {
 const ConnectedTile = connect(mapStateToProps, {
   selectAccount: workspace.selectAccount,
   saveData: workspace.saveData,
-  loadModal: modal.loadModal,
+  loadModal: modal.load,
   sendNotification: main.sendNotification,
   startDraggingDot: main.startDraggingDot
 })(Tile)

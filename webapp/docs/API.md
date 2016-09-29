@@ -1,6 +1,6 @@
 # IDs
 
-A - Activity ?
+A - Apps
 G - Goals
 O - Organisation
 S - Service

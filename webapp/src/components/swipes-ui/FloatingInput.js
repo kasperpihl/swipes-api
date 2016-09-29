@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import './floating-input.scss'
+import './styles/floating-input.scss'
 
 class FloatingInput extends Component {
   constructor(props) {

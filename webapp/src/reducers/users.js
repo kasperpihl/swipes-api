@@ -2,7 +2,7 @@ import * as types from '../constants/ActionTypes'
 import { fromJS } from 'immutable'
 const initialState = fromJS({});
 
-export default function services (state = initialState, action) {
+export default function users (state = initialState, action) {
   switch (action.type) {
     case ('rtm.start'):{
       const res = action.payload;

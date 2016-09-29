@@ -84,6 +84,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedTemplateSelector = connect(mapStateToProps, {
-  loadModal: modal.loadModal
+  loadModal: modal.load
 })(TemplateSelector)
 export default ConnectedTemplateSelector

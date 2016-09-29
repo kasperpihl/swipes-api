@@ -172,7 +172,6 @@ const ConnectedTopbar = connect(mapStateToProps, {
   toggleFind: main.toggleFind,
   setOverlay: overlays.set,
   clearOverlay: overlays.clear,
-  pushOverlay: overlays.push,
-  loadTilesListModal: modal.loadTilesListModal
+  pushOverlay: overlays.push
 })(Topbar)
 export default ConnectedTopbar

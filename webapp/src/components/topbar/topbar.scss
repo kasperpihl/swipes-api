@@ -2,7 +2,6 @@
 @import '../global-styles/mixins';
 
 $topbarSize: 54px;
-
 .topbar {
 	@include size(100%, $topbarSize);
 	@include flex(center, space-between);

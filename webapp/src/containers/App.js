@@ -77,6 +77,6 @@ function mapStateToProps(state) {
 
 const ConnectedApp = connect(mapStateToProps, {
   request: api.request,
-  loadModal: modal.loadModal
+  loadModal: modal.load
 })(App)
 export default ConnectedApp

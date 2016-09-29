@@ -11,6 +11,7 @@ import workspace from './workspace'
 import services from './services'
 import activity from './activity'
 import users from './users'
+import goals from './goals'
 
 const rootReducer = combineReducers({
   main,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   routing,
 
   me,
+  goals,
   workspace,
   services,
   activity,
