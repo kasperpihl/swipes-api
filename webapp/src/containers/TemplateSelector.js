@@ -5,6 +5,7 @@ import { bindAll } from '../classes/utils'
 import { templates } from '../actions'
 import TemplateList from '../components/template-selector/TemplateList'
 import TemplateSetup from '../components/template-selector/TemplateSetup'
+import { AssignIcon } from '../components/icons'
 class TemplateSelector extends Component {
   constructor(props) {
     super(props)
@@ -23,6 +24,10 @@ class TemplateSelector extends Component {
   }
   setupStepPressedAssign(setup, e, i){
     var userArray = [];
+    const icon = {
+      element: AssignIcon,
+      props: {fill: '#3394FF'}
+    }
     for( var key in this.props.users ){
       var user = this.props.users[key];
       userArray.push(user);
@@ -33,10 +38,11 @@ class TemplateSelector extends Component {
         items: userArray.map((item) => {
           return {
             title: item.name,
-            img: item.profile_pic || 'gotohell'
+            img: item.profile_pic || icon
           }
         })
-      }
+      },
+      buttons: ["Cancel", "Select"]
     })
   }
   setupSetTitle(setup, title){

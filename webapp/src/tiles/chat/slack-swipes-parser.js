@@ -284,7 +284,8 @@ export default class SlackSwipesParser {
       const sectMessages = groups[key];
       return {"title": title, "messages": sectMessages };
     });
-    const sendingMessagesQueue = data.sendingMessagesQueue || [];
+    let sendingMessagesQueue = data.sendingMessagesQueue || [];
+    sendingMessagesQueue = sendingMessagesQueue.filter((item) => (item.channel === selectedChannelId))
     const sendingMessages = sendingMessagesQueue.map((item, i) => {
       const newMsg = {
         timeStr: item.status,

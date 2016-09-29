@@ -2,10 +2,11 @@
 @import '../../global-styles/mixins/';
 
 .template__step-item {
-  @include size(550px, 66px);
+  @include size(100%, 66px);
   @include flex(center, flex-start);
   border-radius: 6px;
   margin: 0 3px;
+  max-width: 750px;
   position: relative;
 
   &:hover {
@@ -15,11 +16,11 @@
   &__number {
     @include size(33px !important);
     @include flex(center, center);
-    border: solid 2px $blue-40;
     border-radius: 50%;
+    border: solid 2px $blue-40;
+    color: $blue-160;
     font-size: 15px;
     font-weight: 500;
-    color: $blue-160;
     margin: 0 calc(33px / 2);
   }
 
@@ -27,19 +28,24 @@
     $contentWidth: calc((100% - 66px) - (22px + 21px + 21px));
     @include size($contentWidth, 33px);
     @include flex(flex-start, space-between, column);
+    position: relative;
   }
 
   &__title {
-    line-height: 1;
+    @include size(100%, auto);
+    color: $deepBlue-100;
     font-size: 15px;
-    color: $deepBlue-100
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__type {
+    color: $deepBlue-40;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: .3px;
-    color: $deepBlue-40;
     text-transform: uppercase;
   }
 
@@ -50,6 +56,7 @@
   }
 
   &__icon {
+    @include size(22px);
     fill: $deepBlue-40;
     transition: .1s;
   }

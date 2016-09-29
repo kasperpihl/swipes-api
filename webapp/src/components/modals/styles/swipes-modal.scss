@@ -36,7 +36,7 @@
 	&__title {
 		@include size(100%, 70px);
 		@include flex(center, center);
-		background-color: $bg;
+		background-color: $blue-5;
 		color: $blue-100;
 		font-size: 18px;
 		font-weight: 500;
@@ -81,23 +81,23 @@
 
 	&__list {
 		@include size(100%, auto);
-		@include flex(center, center, column);
+		max-height: 400px;
+		overflow-y: auto;
 
 		&__item {
 			@include size(100%, 60px);
 			@include flex(center, flex-start);
 
 			&--selected {
-				background-color: $deepBlue-40;
+			position: relative;
 
-				&:hover {
-					background-color: $deepBlue-60;
-				}
-			}
-
-			&--selected & {
-				&__title {
-					color: $deepBlue-5;
+				&:after {
+					@include size(3px, 100%);
+					background-color: $blue-100;
+					content: "";
+					left: 0; top: 0;
+					position: absolute;
+					transition: .15s ease-in-out;
 				}
 			}
 
@@ -106,6 +106,10 @@
 				@include flex(center, center);
 				border-radius: 6px;
 				margin-left: 15px;
+
+				& > * {
+					@include size();
+				}
 			}
 
 			&__title {
@@ -118,8 +122,8 @@
 				}
 			}
 
-			&:hover:not(&--selected) {
-				background-color: $bg;
+			&:hover {
+				background-color: $blue-5;
 			}
 		}
 	}
