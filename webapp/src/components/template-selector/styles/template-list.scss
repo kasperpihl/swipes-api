@@ -5,4 +5,5 @@
   @include size(100%, auto)
   @include flex(center, flex-start, column);
   background-color: $bg;
+  padding: 0 30px;
 }

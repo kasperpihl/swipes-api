@@ -33,15 +33,19 @@ class TemplateListItem extends Component {
     }
   }
   render() {
-    const { img, title, subtitle } = this.props.data;
+    const { img, title, description } = this.props.data;
     let rootClass = 'template__item'; // Trying something new here because of BEM
 
     return (
-      <div className={rootClass} onClick={this.callback}>
+      <div className={rootClass}>
         {this.renderImage(rootClass, img)}
         <div className={rootClass + '__content'}>
-          <div className={rootClass + '__content__title'}>{title}</div>
-          <div className={rootClass + '__content__subtitle'}>{subtitle}</div>
+          <div className={rootClass + '__title'}>{title}</div>
+          <div className={rootClass + '__description'}>{description}</div>
+          <div className={rootClass + '__button'} onClick={this.callback}>
+            select
+            <i className="material-icons">keyboard_arrow_right</i>
+          </div>
         </div>
       </div>
     )
