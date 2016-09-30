@@ -1,6 +1,7 @@
 .elasticbeanstalk/
 .vscode/
 .DS_Store
+drafts.txt
 rethinkdb_data
 # Logs
 logs

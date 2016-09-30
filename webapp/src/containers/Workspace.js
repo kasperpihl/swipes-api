@@ -121,13 +121,17 @@ class Workspace extends Component {
       title = tileView.state.titleFromCard;
     }
 
+    var show_name;
     if(tile.get('selectedAccountId')){
-      var show_name;
+      
       me.get('services').forEach((service) => {
         if(service.get('service_name') === tile.getIn(['required_services', 0]) && tile.get('selectedAccountId') === service.get('id')){
           show_name = service.get('show_name');
         }
       })
+    }
+    if(tileView && tileView.state.subtitleFromCard){
+      show_name = tileView.state.subtitleFromCard;
     }
     return { title: title, subtitle: show_name };
     

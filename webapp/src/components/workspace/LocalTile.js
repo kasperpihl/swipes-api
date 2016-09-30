@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
 import Chat from '../../tiles/chat/Chat'
-import Goals from '../../tiles/goals/Goals'
+import Goals from '../../containers/tiles/Goals'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class LocalTile extends Component {

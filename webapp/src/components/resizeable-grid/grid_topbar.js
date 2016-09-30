@@ -103,9 +103,10 @@ var Topbar = React.createClass({
 
     if (this.props.data.collapsed) {
       onclickHandler = this.onClick;
-      const splittedTitle = title.split("").map((char, i) => {
+      let splittedTitle = title.split("").map((char, i) => {
         return <div style={{minHeight: "22px"}} key={"char-" + i} className="collapsed__title--letter">{char}</div>
       });
+      splittedTitle = <div style={{minHeight: "22px"}} className="collapsed__title--letter">{title}</div>
       return (
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar_content">

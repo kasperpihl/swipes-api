@@ -57,7 +57,6 @@ class GoalStep extends Component {
   }
   render() {
     const { description, statusLabel, completeButton, completed } = this.props.data
-    console.log(completed);
 
     return (
       <div className="goal-step">
@@ -71,9 +70,12 @@ class GoalStep extends Component {
 }
 export default GoalStep
 
-const { string, bool } = PropTypes;
+const { string, bool, shape } = PropTypes;
 GoalStep.propTypes = {
-  description: string,
-  statusLabel: string,
-  completeButton: bool
+  data: shape({
+    description: string,
+    statusLabel: string,
+    completeButton: bool
+  })
+  
 }

@@ -85,6 +85,14 @@ class Tile extends Component {
         
       }
     });
+    this.com.addListener('navigation.setSubtitle', (data) => {
+      if (data) {
+        this.setState({"subtitleFromCard": data});
+        setTimeout(() => { 
+          this.callDelegate('tileForceGridUpdate');
+        }, 10)
+      }
+    });
 
     this.com.addListener('modal.load', (data, callback) => {
       loadModal(data.modal, data.options, callback);
