@@ -4,8 +4,6 @@ const initialState = fromJS({
   isFullscreen: false,
   isSearching: false,
   socketUrl: null,
-  tileBaseUrl: null,
-  overlay: null,
   token: null,
   draggingDot: null,
   mainClasses: [],
@@ -26,10 +24,7 @@ export default function main (state = initialState, action) {
       if(!action.payload.ok){
         return state;
       }
-      return state.withMutations((ns) => ns.set('socketUrl', action.payload.url).set('tileBaseUrl', action.payload.workflow_base_url));
-    }
-    case types.SET_OVERLAY: {
-      return state.set('overlay', action.overlay);
+      return state.withMutations((ns) => ns.set('socketUrl', action.payload.url));
     }
     case types.SEARCH:{
       return state.set('searchQuery', action.query);

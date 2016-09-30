@@ -93,8 +93,7 @@ var Topbar = React.createClass({
     }
 
     const dropdownStructure = [
-      { title: 'Tile menu', id: 'menu' },
-      { title: 'Remove Tile', id: 'remove' }
+      { title: 'Tile menu', id: 'menu' }
     ];
 
     const dropdownStyles = {

@@ -58,6 +58,7 @@ let shareRender = require('./routes/share_render.js');
 let shareNoAuthRouter = require('./routes/share_no_auth.js');
 let webhooksRouter = require('./routes/webhooks.js');
 let goalsRouter = require('./routes/goals.js');
+let stepsRouter = require('./routes/steps.js');
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
@@ -97,6 +98,7 @@ app.use('/v1', workflowsRouter);
 app.use('/v1', linksRouter);
 app.use('/v1', feedbackRouter);
 app.use('/v1', goalsRouter);
+app.use('/v1', stepsRouter);
 
 // We want req.userId to the socket.io stuff too
 io.use((socket, next) => {

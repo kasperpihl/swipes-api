@@ -56,6 +56,7 @@ router.post('/rtm.start', (req, res, next) => {
                   })
                   .orderBy(r.desc('date'))
                   .without(['id', 'user_id', 'type'])
+                  .limit(100);
 
   let processesQ = r.table('processes').orderBy('title');
 

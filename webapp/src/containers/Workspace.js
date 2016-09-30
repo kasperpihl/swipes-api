@@ -144,9 +144,6 @@ class Workspace extends Component {
     var options = this.gridOptionsForTopbar(grid,id);
     this.props.setFullscreenTitle(options.title, options.subtitle);
   }
-  gridRowPressedRemove(grid, id){
-    this.props.removeTile(id);
-  }
   gridRowPressedMenu(grid, id){
     this.sendToTile(id, 'menu.pressed');
   }
@@ -157,7 +154,7 @@ class Workspace extends Component {
     var tile = this.props.tiles.get(id);
     var title = tile.get('name');
     var SVG;
-    if(tile.get('manifest_id') === 'slack-dashboard'){
+    if(tile.get('id') === 'slack'){
       SVG = SlackIcon;
     }
     return <ResizeOverlay svg={SVG} title={title} />
