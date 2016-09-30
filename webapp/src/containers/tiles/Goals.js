@@ -39,9 +39,7 @@ export default ConnectedGoals
 
 const first = [
   {
-    currentStep: false,
     completed: true,
-    active: false,
     title: 'Icon Design',
     type: 'DELIVERY',
     assignees: {
@@ -52,9 +50,7 @@ const first = [
     completeButton: true
   },
   {
-    currentStep: true,
     completed: false,
-    active: true,
     title: 'Approve designs1',
     type: 'DECISION',
     assignees: {
@@ -65,9 +61,7 @@ const first = [
     statusLabel: 'Stefan needs to complete previous step'
   },
   {
-    currentStep: false,
     completed: false,
-    active: false,
     title: 'Upload files to Dropbox',
     type: 'ACTION',
     assignees: {
@@ -78,9 +72,7 @@ const first = [
     statusLabel: 'Stefan needs to complete previous step'
   },
   {
-    currentStep: true,
     completed: false,
-    active: false,
     title: 'Wait for implementation',
     type: 'WAITING',
     assignees: {

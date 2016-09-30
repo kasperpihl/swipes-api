@@ -5,6 +5,7 @@ class GoalStepHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.clickedHeader = this.clickedHeader.bind(this);
   }
   componentDidMount() {
   }
@@ -47,11 +48,18 @@ class GoalStepHeader extends Component {
       </div>
     )
   }
+  clickedHeader(){
+    const { index, onClick } = this.props;
+    if(onClick){
+      onClick(index);
+    }
+  }
   render() {
+    const { active } = this.props;
     const { index, step } = this.props.data;
     let className = 'step-header';
 
-    if (step.active) {
+    if (active) {
       className += ' step-header--active'
     }
 
@@ -60,7 +68,7 @@ class GoalStepHeader extends Component {
     }
 
     return (
-      <div className={className}>
+      <div className={className} onClick={this.clickedHeader}>
         {this.renderIndicator(index, step.completed)}
         <div className="step-header__content">
           <div className="step-header__title">{step.title}</div>
@@ -73,16 +81,20 @@ class GoalStepHeader extends Component {
 }
 export default GoalStepHeader
 
-const { string, number, shape, bool } = PropTypes;
+const { string, number, shape, bool, func } = PropTypes;
 
 GoalStepHeader.propTypes = {
-  index: number,
-  completed: bool,
   active: bool,
-  title: string,
-  type: string,
-  assignees: shape({
-    img: string,
-    count: number
+  onClick: func,
+  index: number,
+  step: shape({
+    completed: bool,
+    title: string,
+    type: string,
+    assignees: shape({
+      img: string,
+      count: number
+    })
   })
+  
 }

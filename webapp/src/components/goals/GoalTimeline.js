@@ -7,8 +7,8 @@ import './styles/goal-timeline.scss'
 class GoalTimeline extends Component {
   constructor(props) {
     super(props)
-    this.state = { }
-    bindAll( this, ['onScroll']);
+    this.state = { activeIndex: -1 }
+    bindAll( this, ['onScroll', 'clickedHeader']);
   }
   callDelegate(name){
     const { delegate } = this.props; 
@@ -18,7 +18,14 @@ class GoalTimeline extends Component {
   }
   componentDidMount() {
   }
-
+  clickedHeader(index){
+    index = index - 1;
+    if(index === this.state.activeIndex){
+      this.setState({activeIndex: false});
+    } else {
+      this.setState({activeIndex: index});
+    }
+  }
   onScroll(){
     console.log(this.refs.scroller.scrollTop);
   }
@@ -28,18 +35,29 @@ class GoalTimeline extends Component {
     if(!data){
       return null;
     }
+    let currentStep;
+    let activeIndex = this.state.activeIndex;
+    const allClosed = (activeIndex === false);
+    console.log('active', activeIndex);
     data.forEach((step, i) => {
-      renderedItems.push(this.renderHeader(step, i+1));
+      // Set the current step to the first step that is not completed
+      if(!step.completed && typeof currentStep === 'undefined'){
+        currentStep = i;
+        if(activeIndex === -1){
+          activeIndex = i;
+        }
+      }
+      renderedItems.push(this.renderHeader(step, i+1, (allClosed || activeIndex === i)));
 
-      if(step.active){
+      if(!allClosed && i === activeIndex){
         renderedItems.push(this.renderStep(step, i));
       }
     });
 
     return renderedItems;
   }
-  renderHeader(step, index){
-    return <GoalStepHeader data={{step, index}} key={'header' + index} />
+  renderHeader(step, index, active){
+    return <GoalStepHeader onClick={this.clickedHeader} index={index} active={active} data={{step, index}} key={'header' + index} />
   }
   renderStep(step, i){
     return <GoalStep data={step} key={'step' + i} />
