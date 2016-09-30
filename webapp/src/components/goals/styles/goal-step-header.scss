@@ -6,6 +6,7 @@ $fade: .4;
 .step-header {
   @include size(100%, auto);
   @include flex(center, flex-start);
+  display: flex !important;
   padding: 0 22px;
   position: relative;
   z-index: 2;

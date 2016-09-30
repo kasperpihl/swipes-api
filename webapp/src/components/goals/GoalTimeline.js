@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import GoalStepHeader from './GoalStepHeader'
 import GoalStep from './GoalStep'
 import { debounce, bindAll } from '../../classes/utils'
+import { VelocityTransitionGroup } from 'velocity-react'
+
 import './styles/goal-timeline.scss'
 
 class GoalTimeline extends Component {
@@ -17,6 +19,17 @@ class GoalTimeline extends Component {
     }
   }
   componentDidMount() {
+  }
+  componentWillUpdate(nextProps, nextState){
+    this.shouldAutoScroll = (nextState.activeIndex > this.state.activeIndex);
+  }
+  componentDidUpdate(){
+    if(this.shouldAutoScroll && this.state.activeIndex > -1){
+      const scrollVal = (69 * this.state.activeIndex);
+      document.querySelector('.steps-timeline').scrollTop = scrollVal;
+      console.log('scroll W', scrollVal)
+      //this.refs.scroller.scrollTop = 69 * this.state.activeIndex;
+    }
   }
   clickedHeader(index){
     index = index - 1;
@@ -35,7 +48,6 @@ class GoalTimeline extends Component {
     let currentStep;
     let activeIndex = this.state.activeIndex;
     const allClosed = (activeIndex === false);
-    console.log('active', activeIndex);
     data.forEach((step, i) => {
       // Set the current step to the first step that is not completed
       if(!step.completed && typeof currentStep === 'undefined'){
@@ -62,9 +74,9 @@ class GoalTimeline extends Component {
 
   render() {
     return (
-      <div className="steps-timeline" ref="scroller">
+      <VelocityTransitionGroup ref="scroller" component="div" className="steps-timeline" enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
         {this.renderSteps()}
-      </div>
+      </VelocityTransitionGroup>
     )
   }
 }
