@@ -71,7 +71,30 @@ const goalsCreate = (req, res, next) => {
     })
 }
 
+const goalsGet = (req, res, next) => {
+  const {
+    goalId
+  } = res.locals;
+
+  const q = r.table('goals').get(goalId);
+
+  db.rethinkQuery(q)
+    .then((goal) => {
+      if (!goal) {
+        return next(new SwipesError('goal not found'));
+      }
+
+      res.locals.goal = goal;
+
+      return next()
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   goalsValidate,
-  goalsCreate
+  goalsCreate,
+  goalsGet
 }
