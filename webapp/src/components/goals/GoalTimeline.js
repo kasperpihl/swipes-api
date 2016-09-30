@@ -1,4 +1,8 @@
 import React, { Component, PropTypes } from 'react'
+import GoalStepHeader from './GoalStepHeader'
+import GoalStep from './GoalStep'
+import './styles/goal-timeline.scss'
+
 class GoalTimeline extends Component {
   constructor(props) {
     super(props)
@@ -7,26 +11,31 @@ class GoalTimeline extends Component {
   componentDidMount() {
   }
   renderSteps(){
+    const { data } = this.props;
     const renderedItems = [];
-    steps.forEach((step) => {
-      renderedItems.push(this.renderHeader(step));
-      if(step === 'currentStep'){
-        renderedItems.push(this.renderStep(step));
+
+    data.forEach((step, i) => {
+      renderedItems.push(this.renderHeader(step, i+1));
+
+      if(step.active){
+        renderedItems.push(this.renderStep(step, i));
       }
     });
+
     return renderedItems;
   }
-  renderHeader(step){
-    return <GoalStepHeader />
+  renderHeader(step, index){
+    return <GoalStepHeader data={{step, index}} key={index} />
   }
-  renderStep(step){
-    return <GoalStep />
+  renderStep(step, i){
+    var ran = Math.random();
+    return <GoalStep data={step} key={ran} />
   }
-  
+
   render() {
     return (
-      <div>
-
+      <div className="steps-timeline">
+        {this.renderSteps()}
       </div>
     )
   }

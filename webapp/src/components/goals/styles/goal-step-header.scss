@@ -1,0 +1,118 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+$fade: .4;
+
+.step-header {
+  @include size(100%, auto);
+  @include flex(center, flex-start);
+  padding: 30px 22px;
+  position: relative;
+  z-index: 2;
+
+  & > *:not(&__indicator) {
+		opacity: $fade;
+	}
+
+  &__indicator {
+    @include size(30px);
+    @include flex();
+    background-color: $bg;
+    border-radius: 50%;
+    position: relative;
+
+    &#{&}--index {
+      color: rgba($blue-120, $fade);
+      font-size: 15px;
+
+      &:after {
+        @include size(30px);
+        border-radius: 50%;
+        border: 2px solid $blue-40;
+        content: "";
+        left: 0; top: 0;
+        position: absolute;
+        opacity: $fade;
+      }
+    }
+
+    &#{&}--completed {
+      i {
+        color: lighten($green-color, 30%);
+        font-size: 210%;
+      }
+    }
+  }
+
+  &__content {
+    $contentWidth: calc(100% - 30px - 30px);
+
+    @include size($contentWidth, 39px);
+    @include flex(flex-start, space-between, column);
+    padding-left: 21px;
+  }
+
+  &__title {
+    color: $deepBlue-100;
+    font-size: 15px;
+  }
+
+  &__type {
+    color: $blue-140;
+    font-size: 11px;
+    letter-spacing: 1px;
+    opacity: .3;
+    text-transform: uppercase;
+  }
+
+  &__assignees {
+    @include size(30px);
+    position: relative;
+
+    img {
+      @include size();
+      border-radius: 50%;
+    }
+
+    &__count {
+      @include size(30px);
+      @include flex();
+      background-color: rgba($deepBlue-100, .4);
+      border-radius: 50%;
+      color: white;
+      font-size: 15px;
+      left: 0; top: 0;
+      position: absolute;
+
+      &:hover {
+        background-color: rgba($deepBlue-100, .7);
+      }
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+
+  &#{&}--active > * {
+    opacity: 1;
+  }
+
+  &#{&}--active & {
+    &__indicator {
+			&--index {
+				color: $blue-120;
+
+        &:after {
+          opacity: 1;
+        }
+			}
+
+			&--completed {
+				i {
+          color: $green-color;
+        }
+			}
+		}
+  }
+}

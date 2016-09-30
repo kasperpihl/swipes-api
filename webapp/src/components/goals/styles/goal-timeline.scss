@@ -1,0 +1,15 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.steps-timeline {
+  @include size(100%, auto);
+  position: relative;
+
+  &:before {
+    content: "";
+    @include size(2px, 100%);
+    position: fixed;
+    left: 36px; top: 0;
+    background-color: $blue-10;
+  }
+}
