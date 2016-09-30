@@ -6,13 +6,57 @@ $fade: .4;
 .step-header {
   @include size(100%, auto);
   @include flex(center, flex-start);
-  padding: 30px 22px;
+  padding: 0 22px;
   position: relative;
   z-index: 2;
+  transition: opacity .1s;
+
+  &:before {
+    content: "";
+    @include size(2px, 100%);
+    position: absolute;
+    left: 36px; top: 0;
+    background-color: $blue-20;
+  }
+
+  &:first-of-type {
+    padding-bottom: 15px;
+    
+    &:before {
+      content: "";
+      @include size(2px, 100%);
+      position: absolute;
+      left: 36px; top: 5px;
+      background-color: $blue-20;
+    }
+  }
+
+  &:last-of-type {
+    padding-top: 15px;
+
+    &:before {
+      content: "";
+      @include size(2px, 90%);
+      position: absolute;
+      left: 36px; top: 0px;
+      background-color: $blue-20;
+    }
+  }
+
+  &:not(:first-of-type):not(:last-of-type) {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
 
   & > *:not(&__indicator) {
 		opacity: $fade;
+    transition: opacity .1s;
 	}
+
+  &:hover > * {
+    opacity: 1;
+    transition: opacity .1s;
+  }
 
   &__indicator {
     @include size(30px);
@@ -24,6 +68,7 @@ $fade: .4;
     &#{&}--index {
       color: rgba($blue-120, $fade);
       font-size: 15px;
+      transition: color .1s;
 
       &:after {
         @include size(30px);
@@ -33,13 +78,15 @@ $fade: .4;
         left: 0; top: 0;
         position: absolute;
         opacity: $fade;
+        transition: opacity .1s;
       }
     }
 
     &#{&}--completed {
       i {
         color: lighten($green-color, 30%);
-        font-size: 210%;
+        font-size: 216%;
+        transition: color .1s;
       }
     }
   }
@@ -94,23 +141,49 @@ $fade: .4;
     }
   }
 
-  &#{&}--active > * {
-    opacity: 1;
-  }
+  &:hover & {
 
-  &#{&}--active & {
     &__indicator {
 			&--index {
 				color: $blue-120;
+        transition: color .1s;
 
         &:after {
           opacity: 1;
+          transition: opacity .1s;
         }
 			}
 
 			&--completed {
 				i {
           color: $green-color;
+          transition: color .1s;
+        }
+			}
+		}
+  }
+
+  &#{&}--active > * {
+    opacity: 1;
+    transition: opacity .1s;
+  }
+
+  &#{&}--active & {
+    &__indicator {
+			&--index {
+				color: $blue-120;
+        transition: color .1s;
+
+        &:after {
+          opacity: 1;
+          transition: opacity .1s;
+        }
+			}
+
+			&--completed {
+				i {
+          color: $green-color;
+          transition: color .1s;
         }
 			}
 		}

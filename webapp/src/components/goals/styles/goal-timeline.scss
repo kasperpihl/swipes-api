@@ -4,13 +4,6 @@
 .steps-timeline {
   @include size(100%);
   position: relative;
+  padding: 30px 0;
   overflow-y: auto;
-
-  &:before {
-    content: "";
-    @include size(2px, 100%);
-    position: fixed;
-    left: 36px; top: 0;
-    background-color: $blue-10;
-  }
 }

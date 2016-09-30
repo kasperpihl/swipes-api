@@ -3,8 +3,16 @@
 
 .goal-step {
   @include size(100%, auto);
-  padding-left: 73px;
-  padding-right: 21px;
+  padding: 30px 21px 30px 73px;
+  position: relative;
+
+  &:before {
+    content: "";
+    @include size(2px, 100%);
+    position: absolute;
+    left: 36px; top: 0;
+    background-color: $blue-20;
+  }
 
   &__description {
     @include size(100%, auto);
@@ -24,7 +32,7 @@
 
     &#{&}--label {
       padding-left: 21px;
-      
+
       i {
         display: none;
       }
