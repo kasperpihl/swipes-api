@@ -4,6 +4,7 @@
 .steps-timeline {
   @include size(100%, auto);
   position: relative;
+  overflow-y: auto;
 
   &:before {
     content: "";
