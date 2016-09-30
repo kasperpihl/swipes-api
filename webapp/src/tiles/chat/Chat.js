@@ -15,7 +15,7 @@ import ChatInput from './ChatInput'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 class Chat extends Component {
   constructor(props) {
-    super(props)    
+    super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
     bindAll(this, ['sendMessage', 'onSelectedRow', 'changedHeight', 'addListenersToSwipes', 'dataDelegate', 'unreadAbove', 'clickedLink', 'onCardShare', 'onCardAction'])

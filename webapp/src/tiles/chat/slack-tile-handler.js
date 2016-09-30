@@ -16,7 +16,6 @@ export default class SlackTileHandler {
     
     window.slack.connect(tile.selectedAccountId, (method, data) => {
       if(method === 'init'){
-        console.log(method, data);
         this.tileSlackData.loadCoreData(data);
         this.start();
       }

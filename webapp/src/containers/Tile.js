@@ -52,17 +52,21 @@ class Tile extends Component {
 
   onLoad(sendFunction){
     const { tile, me, token } = this.props;
+    const tileJS = tile.toJS();
     const initObj = {
       // Info object will be available in SDK from swipes.info
       info: {
-        workflow: tile.toJS(),
+        workflow: tileJS,
         userId: me.get('id')
       },
       token: this.props.token
     };
 
     // K_TODO || T_TODO : WARNING, This is a super hack hahaha
+    console.log(this.slackToken, this.selectedAccountId);
     if(this.slackToken){
+      
+      tileJS.selectedAccountId = this.selectedAccountId;
       initObj.info.slackToken = this.slackToken;
     }
     this.com = new SwClientCom(sendFunction, initObj);
@@ -82,10 +86,6 @@ class Tile extends Component {
       }
     });
 
-    this.com.addListener('tile.saveData', (data) => {
-      saveData(tile.get('id'), data);
-    });
-
     this.com.addListener('modal.load', (data, callback) => {
       loadModal(data.modal, data.options, callback);
     });
@@ -95,9 +95,7 @@ class Tile extends Component {
         window.open(data.url, "_blank");
       }
     });
-    this.com.addListener('analytics.action', (data) => {
-      var analyticsProps = {'Card': tile.manifest_id, 'Action': data.name};
-    });
+
     this.com.addListener('notifications.send', (data) => {
       var notif = {
         title: tile.get('name'),
@@ -124,14 +122,13 @@ class Tile extends Component {
     if(tile.get('required_services') && tile.get('required_services').size){
       // Find services from the required services
       const services = this.props.services.filter( (s) => (s.get('service_name') === tile.getIn(['required_services', 0])))
-      // Check if a the selected account exist
-      const selectedAccount = services.find( (s) => (s.get('id') === tile.get('selectedAccountId')) )
       // Hack to pass on the right slack token to the tile for file upload
-      if(selectedAccount && selectedAccount.get('service_name') === 'slack'){
-        this.slackToken = selectedAccount.get(['authData', 'access_token']);
+      if(services.size && services.get(0).get('service_name') === 'slack'){
+        this.selectedAccountId = services.get(0).get('id');
+        this.slackToken = services.get(0).getIn(['authData', 'access_token']);
       }
 
-      if(!selectedAccount){
+      if(!services.size){
         return ( <SelectRow
           onSelectedAccount={this.onSelectedAccount}
           data={{
@@ -155,7 +152,7 @@ class Tile extends Component {
     }
   }
   renderLocalTile(tile){
-    return <LocalTile tile={tile} size={this.props.size} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
+    return <LocalTile tile={tile} selectedAccountId={this.selectedAccountId} size={this.props.size} onLoad={this.onLoad} receivedCommand={this.receivedCommand} />
   }
   render() {
     let cardContent = <SwipesLoader size={120} center={true}/>;

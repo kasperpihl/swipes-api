@@ -1,11 +1,18 @@
 import * as types from '../constants/ActionTypes'
-import { fromJS } from 'immutable'
+import { fromJS, Map } from 'immutable'
 const initialState = fromJS({});
 
 export default function goals (state = initialState, action) {
   switch (action.type) {
     case 'rtm.start':{
-      return state;
+      const { goals } = action.payload;
+      if(!goals) return state;
+
+      const tempG = {}
+      goals.forEach((goal) => {
+        tempG[goal.id] = goal;
+      })
+      return fromJS(tempG);
     }
     case types.LOGOUT:{
       return initialState;

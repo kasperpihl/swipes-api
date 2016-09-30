@@ -36,7 +36,6 @@ export default class Socket {
     })
   }
   message(msg){
-    console.log('msg', msg);
     if(!msg.type)
       return;
     this.store.dispatch({type: msg.type, payload: msg});
