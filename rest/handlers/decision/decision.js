@@ -1,8 +1,8 @@
-const do = (data, action) => {
-  switch(action.type){
+const do = (data, action, payload) => {
+  switch(action){
     case 'add': {
       // Add validation for payload
-      return data.push(action.payload);
+      return data.push(payload);
     }
   }
 }
