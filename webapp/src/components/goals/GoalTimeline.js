@@ -26,9 +26,6 @@ class GoalTimeline extends Component {
       this.setState({activeIndex: index});
     }
   }
-  onScroll(){
-    console.log(this.refs.scroller.scrollTop);
-  }
   renderSteps(){
     const { data } = this.props;
     const renderedItems = [];
@@ -65,7 +62,7 @@ class GoalTimeline extends Component {
 
   render() {
     return (
-      <div className="steps-timeline" ref="scroller" onScroll={this.onScroll}>
+      <div className="steps-timeline" ref="scroller">
         {this.renderSteps()}
       </div>
     )
