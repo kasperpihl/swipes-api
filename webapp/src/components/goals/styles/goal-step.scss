@@ -6,7 +6,7 @@
   padding: 30px 21px 30px 73px;
   position: relative;
 
-  &:before {
+  &:not(:last-of-type):before {
     content: "";
     @include size(2px, 100%);
     position: absolute;
