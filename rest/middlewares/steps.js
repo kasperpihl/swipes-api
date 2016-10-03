@@ -9,8 +9,6 @@ import { fromJS, Map } from 'immutable'
 import requireDir from 'require-dir'
 var reducers = requireDir('../reducers', {recurse: true});
 
-console.log('dirs', reducers);
-
 const stepsAssignValidate = (req, res, next) => {
 
   const goalId = req.body.goal_id;
@@ -64,9 +62,9 @@ const stepsAssign = (req, res, next) => {
 }
 
 const stepsValidateDoAction = (req, res, next) => {
-  const action = req.body.action;
-  if (typeof action !== 'string') {
-    return next(new SwipesError('action required (string)'));
+  const goalId = req.body.goal_id;
+  if (validator.isNull(goalId)) {
+    return next(new SwipesError('goal_id is required'));
   }
 
   const payload = req.body.payload;
@@ -74,9 +72,16 @@ const stepsValidateDoAction = (req, res, next) => {
     return next(new SwipesError('payload must be object'));
   }
 
-  res.locals.action = action;
+  const action = req.body.action;
+  if (typeof action !== 'string') {
+    return next(new SwipesError('action required (string)'));
+  }
+
+  res.locals.goalId = goalId;
   res.locals.payload = payload;
-  next();
+  res.locals.action = action;
+
+  return next();
 }
 
 
@@ -116,7 +121,7 @@ const stepsDo = (req, res, next) => {
     return next('invalid reducer implementation, should return immutable object');
   }
   res.status(200).send(newData.toJS());
-    
+
   if(newData !== oldData){
     // Run rethinkdb to save new data
   }
@@ -126,5 +131,6 @@ const stepsDo = (req, res, next) => {
 export {
   stepsAssignValidate,
   stepsAssign,
+  stepsValidateDoAction,
   stepsDo
 }

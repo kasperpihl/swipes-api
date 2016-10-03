@@ -1,8 +1,12 @@
-import { fromJS } from 'immutable'
-function init(){
+"use strict";
+
+import { fromJS } from 'immutable';
+
+const init = () => {
   return fromJS({deliveries: [{collection: []}]});
 }
-function attach(data, payload){
+
+const attach = (data, payload) => {
   data = fromJS({deliveries: [{collection: []}]});
   const lastIndex = data.get('deliveries').size - 1;
   return data.updateIn(['deliveries', lastIndex, 'collection'], (array) => {

@@ -74,7 +74,7 @@ router.post('/rtm.start', (req, res, next) => {
       let users = [];
 
       if (self.organizations.length > 0) {
-        let users = self.organizations[0].users;
+        users = self.organizations[0].users;
 
         // We don't want duplication of that data served on the client;
         delete self.organizations[0].users;

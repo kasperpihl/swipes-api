@@ -1,3 +1,5 @@
+"use strict";
+
 import config from 'config';
 import validator from 'validator';
 import r from 'rethinkdb';
