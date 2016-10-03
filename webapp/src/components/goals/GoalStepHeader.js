@@ -51,7 +51,7 @@ class GoalStepHeader extends Component {
   clickedHeader(){
     const { onClick } = this.props;
     const { index } = this.props.data;
-    if(onClick){
+    if(onClick && !window.getSelection().toString().length){
       onClick(index);
     }
   }
@@ -66,7 +66,7 @@ class GoalStepHeader extends Component {
     if(isLast){
       className += ' step-header--last'
     }
-    
+
     if (step.completed) {
       className += ' step-header--completed'
     }
@@ -100,5 +100,5 @@ GoalStepHeader.propTypes = {
       count: number
     })
   })
-  
+
 }

@@ -217,7 +217,7 @@ tabSlider {
     }
 
     &__content {
-      @include size(calc(100% - 42px));
+      @include size(calc(100% - 42px - 50px));
       @include flex(flex-start, center, column);
       padding-right: 18px;
 
@@ -278,7 +278,6 @@ tabSlider {
     &__download {
       @include size(50px, 50px);
       @include flex(center, center);
-      margin-top: 6px;
       border-radius: 50%;
       opacity: 0;
 
