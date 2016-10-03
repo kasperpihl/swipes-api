@@ -31,9 +31,10 @@ class Modal extends Component {
   }
   render() {
     const { modal } = this.props;
+    const props = modal.get('props') || {};
 
     return (
-      <SwipesModal shown={modal.get('shown')} callback={this.onModalCallback} data={modal.get('data')}/>
+      <SwipesModal shown={modal.get('shown')} callback={this.onModalCallback} {...props} />
     );
   }
 }

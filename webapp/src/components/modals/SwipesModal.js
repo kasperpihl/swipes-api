@@ -185,8 +185,6 @@ class SwipesModal extends Component {
     if(!data){
       return;
     }
-    data = data.toJS();
-    console.log('render content', data);
     const { message, textarea, buttons, list, loader } = data;
     if(Array.isArray(data)){
       return data.map((item, i) => {

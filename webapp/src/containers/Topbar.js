@@ -84,7 +84,7 @@ class Topbar extends Component {
       })
       return (
         <div className="topbar__nav">
-          <i onClick={this.clickedBack} className="material-icons topbar__nav__back">arrow_back</i>
+          <i onClick={this.clickedBack} className="material-icons topbar__nav__back">close</i>
           <div className="topbar__nav__crumbs">
             {crumbs}
           </div>

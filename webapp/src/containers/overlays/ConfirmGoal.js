@@ -24,11 +24,15 @@ class ConfirmGoal extends Component {
       }
     })
     loadModal({
-      list: {
-        selectable: true,
-        items: userArray
-      },
-      buttons: ["Cancel", "Select"]
+      title: 'Assign Person',
+      data: {
+        list: {
+          selectable: true,
+          items: userArray,
+          emptyText: 'No people found'
+        },
+        buttons: ["Cancel", "Select"]
+      }
     })
   }
   didPressUseProcess(ref){

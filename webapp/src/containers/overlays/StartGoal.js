@@ -13,7 +13,6 @@ class StartGoal extends Component {
     bindAll( this, ['didSelectItem']);
   }
   didSelectItem(id){
-    console.log('selected item', id);
     const { pushOverlay, workflows } = this.props;
     pushOverlay({component: "ConfirmGoal", title: "Confirm", props: {data: workflows.get(id).toJS()}});
   }
