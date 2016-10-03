@@ -63,7 +63,6 @@ class Tile extends Component {
     };
 
     // K_TODO || T_TODO : WARNING, This is a super hack hahaha
-    console.log(this.slackToken, this.selectedAccountId);
     if(this.slackToken){
       
       tileJS.selectedAccountId = this.selectedAccountId;

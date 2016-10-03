@@ -40,6 +40,18 @@ export function randomString(length){
   return text;
 }
 
+export function autoscroll(element, to, duration){
+  if (duration <= 0) return;
+  var difference = to - element.scrollTop;
+  var perTick = difference / duration * 10;
+
+  setTimeout(() => {
+    element.scrollTop = element.scrollTop + perTick;
+    if (element.scrollTop == to) return;
+    autoscroll(element, to, duration - 10);
+  }, 10);
+}
+
 export function indexBy(arr, iterator){
   const object = {}
   arr.forEach((val, i) => {

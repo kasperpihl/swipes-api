@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import GoalStepHeader from './GoalStepHeader'
 import GoalStep from './GoalStep'
-import { debounce, bindAll } from '../../classes/utils'
+import { debounce, bindAll, autoscroll } from '../../classes/utils'
 import { VelocityTransitionGroup } from 'velocity-react'
 
 import './styles/goal-timeline.scss'
@@ -11,7 +11,7 @@ class GoalTimeline extends Component {
     super(props)
     this.state = { activeIndex: -1, currentIndex: -1 }
     this.updateCurrentAndActive();
-    bindAll( this, ['onScroll', 'clickedHeader']);
+    bindAll( this, [ 'clickedHeader']);
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -60,23 +60,12 @@ class GoalTimeline extends Component {
     if(this.shouldAutoScroll){
       this.autoscrollTimer = setTimeout(() => {
         const scrollVal = (69 * this.state.activeIndex);
-        document.querySelector('.steps-timeline').scrollTop = scrollVal;
-        console.log('scroll W', scrollVal)
-      }, 500);
+        const el = document.querySelector('.steps-timeline');
+        autoscroll(el, scrollVal, 200);
+      }, 450);
       //
       
     }
-  }
-  scrollTo(element, to, duration) {
-    if (duration <= 0) return;
-    var difference = to - element.scrollTop;
-    var perTick = difference / duration * 10;
-
-    setTimeout(function() {
-      element.scrollTop = element.scrollTop + perTick;
-      if (element.scrollTop == to) return;
-      scrollTo(element, to, duration - 10);
-    }, 10);
   }
   clickedHeader(index){
     index = index - 1;
