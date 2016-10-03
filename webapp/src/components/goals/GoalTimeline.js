@@ -66,7 +66,7 @@ class GoalTimeline extends Component {
           activeIndex = i;
         }
       }
-      renderedItems.push(this.renderHeader(step, i+1, (allClosed || activeIndex === i)));
+      renderedItems.push(this.renderHeader(step, i+1, ((!step.completed && allClosed) || activeIndex === i)));
 
       if(!allClosed && i === activeIndex){
         renderedItems.push(this.renderStep(step, i));
