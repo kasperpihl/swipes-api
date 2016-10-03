@@ -55,14 +55,17 @@ class GoalStepHeader extends Component {
     }
   }
   render() {
-    const { active } = this.props;
+    const { active, isLast } = this.props;
     const { index, step } = this.props.data;
     let className = 'step-header';
 
     if (active) {
       className += ' step-header--active'
     }
-
+    if(isLast){
+      className += ' step-header--last'
+    }
+    
     if (step.completed) {
       className += ' step-header--completed'
     }

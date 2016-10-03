@@ -66,7 +66,9 @@ class GoalTimeline extends Component {
     return renderedItems;
   }
   renderHeader(step, index, active){
-    return <GoalStepHeader onClick={this.clickedHeader} index={index} active={active} data={{step, index}} key={'header' + index} />
+    const { data } = this.props;
+    const isLast = index === data.length;
+    return <GoalStepHeader onClick={this.clickedHeader} isLast={isLast} index={index} active={active} data={{step, index}} key={'header' + index} />
   }
   renderStep(step, i){
     return <GoalStep data={step} key={'step' + i} />
