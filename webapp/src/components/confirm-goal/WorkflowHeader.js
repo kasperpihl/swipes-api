@@ -43,7 +43,7 @@ class WorkflowHeader extends Component {
         {this.renderImage(rootClass, img)}
         <div className={rootClass + '__title'}>{title}</div>
         <div className={rootClass + '__description'}>{description}</div>
-        <div className={btnClass}>use process</div>
+        <div className={btnClass}>StArT GoAl</div>
       </div>
     )
   }

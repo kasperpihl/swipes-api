@@ -27,14 +27,16 @@ $topbarSize: 54px;
 		}
 
 		&__crumb {
-			font-size: 12px;
-			font-weight: bold;
-			letter-spacing: 2.6px;
-			text-transform: uppercase;
+			font-size: 14px;
+			font-weight: 600;
+			letter-spacing: 1px;
 			color: white;
+			line-height: 1;
 			padding: 0 15px;
 			position: relative;
-
+			&:not(:last-child):hover{
+				text-decoration: underline;
+			}
 			&:not(:last-child):after {
 				content: ">";
 				position: absolute;
@@ -42,16 +44,7 @@ $topbarSize: 54px;
 				color: rgba(white, .5)
 			}
 
-			&:last-of-type:after {
-				$borderWidth: calc(100% - 30px);
-				content: "";
-				position: absolute;
-				@include size($borderWidth, 1px);
-				background-color: white;
-				left: 50%;
-				bottom: -3px;
-				transform: translateX(-50%);
-			}
+			
 		}
 	}
 

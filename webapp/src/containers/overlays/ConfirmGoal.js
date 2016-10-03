@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { modal } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import { workflows } from '../../actions'
-import WorkflowSetup from '../../components/edit-goal/WorkflowSetup'
+import WorkflowSetup from '../../components/confirm-goal/WorkflowSetup'
 import { AssignIcon } from '../../components/icons'
-class EditGoal extends Component {
+class ConfirmGoal extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -47,7 +47,7 @@ function mapStateToProps(state) {
   }
 }
 
-const ConnectedEditGoal = connect(mapStateToProps, {
+const ConnectedConfirmGoal = connect(mapStateToProps, {
   loadModal: modal.load
-})(EditGoal)
-export default ConnectedEditGoal
+})(ConfirmGoal)
+export default ConnectedConfirmGoal

@@ -15,7 +15,7 @@ class StartGoal extends Component {
   didSelectItem(id){
     console.log('selected item', id);
     const { pushOverlay, workflows } = this.props;
-    pushOverlay({component: "EditGoal", title: "Confirm", props: {data: workflows.get(id).toJS()}});
+    pushOverlay({component: "ConfirmGoal", title: "Confirm", props: {data: workflows.get(id).toJS()}});
   }
   renderList(){
     if(typeof this.state.selectedItem === 'undefined' || this.state.selectedItem === -1){

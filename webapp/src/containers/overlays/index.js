@@ -1,11 +1,11 @@
 import Find from './Find'
 import Services from './Services'
 import StartGoal from './StartGoal'
-import EditGoal from './EditGoal'
+import ConfirmGoal from './ConfirmGoal'
 
 export {
   StartGoal,
-  EditGoal,
+  ConfirmGoal,
   Services,
   Find
 }

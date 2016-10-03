@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import { modal } from '../actions';
 import SwipesModal from '../components/modals/SwipesModal'
 import { bindAll } from '../classes/utils'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class Modal extends Component {
   constructor(props) {
     super(props)
     bindAll(this, ['onModalCallback', 'onKeyUp'])
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
     window.addEventListener('keyup', this.onKeyUp);
@@ -28,10 +30,10 @@ class Modal extends Component {
     this.props.hideModal();
   }
   render() {
-    const { shown, data } = this.props.modal;
+    const { modal } = this.props;
 
     return (
-      <SwipesModal shown={shown} callback={this.onModalCallback} data={data}/>
+      <SwipesModal shown={modal.get('shown')} callback={this.onModalCallback} data={modal.get('data')}/>
     );
   }
 }
