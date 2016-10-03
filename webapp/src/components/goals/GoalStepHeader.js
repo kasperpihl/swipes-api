@@ -49,7 +49,8 @@ class GoalStepHeader extends Component {
     )
   }
   clickedHeader(){
-    const { index, onClick } = this.props;
+    const { onClick } = this.props;
+    const { index } = this.props.data;
     if(onClick){
       onClick(index);
     }

@@ -9,7 +9,8 @@ import './styles/goal-timeline.scss'
 class GoalTimeline extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeIndex: -1 }
+    this.state = { activeIndex: -1, currentIndex: -1 }
+    this.updateCurrentAndActive();
     bindAll( this, ['onScroll', 'clickedHeader']);
   }
   callDelegate(name){
@@ -18,16 +19,52 @@ class GoalTimeline extends Component {
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
+  updateCurrentAndActive(){
+    const { data } = this.props;
+    if(data){
+      const {
+        activeIndex,
+        currentIndex
+      } = this.state;
+
+      const newState = { activeIndex, currentIndex };
+      data.forEach((step, i) => {
+        if(newState.currentIndex === -1 && (!step.completed || i === data.length - 1)){
+          newState.currentIndex = i;
+          newState.activeIndex = i;
+        }
+      })
+
+      if(activeIndex === -1){
+        this.state = newState;
+      }
+      else if(newState.currentIndex !== currentIndex || newState.activeIndex !== activeIndex){
+        this.setState(newState);
+      }
+    }
+  }
   componentDidMount() {
   }
   componentWillUpdate(nextProps, nextState){
-    this.shouldAutoScroll = (nextState.activeIndex > this.state.activeIndex);
+    this.shouldAutoScroll = this.state.activeIndex && (nextState.activeIndex > this.state.activeIndex);
+  }
+  componentWillUnmount(){
+    if(this.autoscrollTimer){
+      clearTimeout(this.autoscrollTimer);
+    }
   }
   componentDidUpdate(){
-    if(this.shouldAutoScroll && this.state.activeIndex > -1){
-      const scrollVal = (69 * this.state.activeIndex);
-      // document.querySelector('.steps-timeline').scrollTop = scrollVal;
-      this.scrollTo(document.querySelector('.steps-timeline'), scrollVal, 400)
+    if(this.autoscrollTimer){
+      clearTimeout(this.autoscrollTimer);
+    }
+    if(this.shouldAutoScroll){
+      this.autoscrollTimer = setTimeout(() => {
+        const scrollVal = (69 * this.state.activeIndex);
+        document.querySelector('.steps-timeline').scrollTop = scrollVal;
+        console.log('scroll W', scrollVal)
+      }, 500);
+      //
+      
     }
   }
   scrollTo(element, to, duration) {
@@ -55,18 +92,15 @@ class GoalTimeline extends Component {
     if(!data){
       return null;
     }
-    let currentStep;
-    let activeIndex = this.state.activeIndex;
+
+    const { 
+      currentIndex,
+      activeIndex
+    } = this.state;
+
     const allClosed = (activeIndex === false);
     data.forEach((step, i) => {
-      // Set the current step to the first step that is not completed
-      if(!step.completed && typeof currentStep === 'undefined'){
-        currentStep = i;
-        if(activeIndex === -1){
-          activeIndex = i;
-        }
-      }
-      renderedItems.push(this.renderHeader(step, i+1, ((!step.completed && allClosed) || activeIndex === i)));
+      renderedItems.push(this.renderHeader(step, i, ((!step.completed && allClosed) || activeIndex === i)));
 
       if(!allClosed && i === activeIndex){
         renderedItems.push(this.renderStep(step, i));
@@ -75,10 +109,10 @@ class GoalTimeline extends Component {
 
     return renderedItems;
   }
-  renderHeader(step, index, active){
+  renderHeader(step, i, active){
     const { data } = this.props;
-    const isLast = index === data.length;
-    return <GoalStepHeader onClick={this.clickedHeader} isLast={isLast} index={index} active={active} data={{step, index}} key={'header' + index} />
+    const isLast = i === data.length - 1;
+    return <GoalStepHeader onClick={this.clickedHeader} isLast={isLast} active={active} data={{step, index: i+1}} key={'header' + i} />
   }
   renderStep(step, i){
     return <GoalStep data={step} key={'step' + i} />
