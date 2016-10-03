@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import TemplateHeader from './TemplateHeader'
-import TemplateStepList from './TemplateStepList'
+import WorkflowHeader from './WorkflowHeader'
+import WorkflowStepList from './WorkflowStepList'
 
-import './styles/template-setup.scss'
+import './styles/workflow-setup.scss'
 
-class TemplateSetup extends Component {
+class WorkflowSetup extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -20,21 +20,21 @@ class TemplateSetup extends Component {
   componentDidMount() {
   }
   render() {
-    let rootClass = 'template__setup';
-    const { delegate } = this.props;
+    let rootClass = 'workflow__setup';
+    const { delegate, data } = this.props;
     return (
       <div ref="container" className={rootClass}>
-        <TemplateHeader data={this.props.data} callDelegate={this.callDelegate} />
-        <TemplateStepList data={this.props.data.steps} callDelegate={this.callDelegate} />
+        <WorkflowHeader data={data} callDelegate={this.callDelegate} />
+        <WorkflowStepList data={data.steps} callDelegate={this.callDelegate} />
       </div>
     )
   }
 }
 
-export default TemplateSetup
+export default WorkflowSetup
 
 const { string, object } = PropTypes;
 
-TemplateSetup.propTypes = {
+WorkflowSetup.propTypes = {
   delegate: object
 }

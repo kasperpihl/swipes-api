@@ -2,18 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal } from '../../actions'
 import { bindAll } from '../../classes/utils'
-import { templates } from '../../actions'
-import TemplateList from '../../components/template-selector/TemplateList'
-import TemplateSetup from '../../components/template-selector/TemplateSetup'
+import { workflows } from '../../actions'
+import WorkflowList from '../../components/workflow-selector/WorkflowList'
+import WorkflowSetup from '../../components/workflow-selector/WorkflowSetup'
 import { AssignIcon } from '../../components/icons'
-class TemplateSelector extends Component {
+class WorkflowSelector extends Component {
   constructor(props) {
     super(props)
-    const data = [];
-    for( var key in props.templates){
-      data.push(props.templates[key]);
-    }
-    this.state = {templates: data}
+    this.state = {}
     bindAll( this, ['didSelectItem', 'didPressUseProcess']);
   }
   didSelectItem(i){
@@ -55,20 +51,20 @@ class TemplateSelector extends Component {
     console.log('didPressUseProcess', ref);
   }
   renderSetup(){
-    if(typeof this.state.selectedItem !== 'undefined' && this.state.selectedItem > -1){
-      const data = this.state.templates[this.state.selectedItem];
-      return <TemplateSetup data={data} delegate={this} />
+    if(this.state.selectedItem){
+      const data = this.props.workflows.get(this.state.selectedItem);
+      return <WorkflowSetup data={data.toJS()} delegate={this} />
     }
   }
   renderList(){
     if(typeof this.state.selectedItem === 'undefined' || this.state.selectedItem === -1){
-      const { templates } = this.state;
-      return <TemplateList data={templates} callback={this.didSelectItem}/>
+      const { workflows } = this.props;
+      return <WorkflowList data={workflows.toArray().map((i) => i.toJS())} callback={this.didSelectItem}/>
     }
   }
   render() {
     return (
-      <div className="template-selector">
+      <div className="workflow-selector">
         {this.renderList()}
         {this.renderSetup()}
       </div>
@@ -78,12 +74,12 @@ class TemplateSelector extends Component {
 
 function mapStateToProps(state) {
   return {
-    templates: state.templates,
-    users: state.users
+    workflows: state.get('workflows'),
+    users: state.get('users')
   }
 }
 
-const ConnectedTemplateSelector = connect(mapStateToProps, {
+const ConnectedWorkflowSelector = connect(mapStateToProps, {
   loadModal: modal.load
-})(TemplateSelector)
-export default ConnectedTemplateSelector
+})(WorkflowSelector)
+export default ConnectedWorkflowSelector

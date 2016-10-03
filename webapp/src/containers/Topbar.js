@@ -29,8 +29,7 @@ class Topbar extends Component {
       this.clickedFind();
     })
     ipcRenderer.on('new-tile', () => {
-      setOverlay({ component: 'TemplateSelector', title: 'Create Goal' });
-      pushOverlay({ component: 'Find', title: 'Find'});
+      setOverlay({ component: 'StartGoal', title: 'Start a Goal' });
     })
     window.addEventListener('keydown', (e) => {
       if (e.keyCode === 27) {

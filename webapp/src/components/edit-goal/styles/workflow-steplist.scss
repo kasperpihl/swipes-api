@@ -2,7 +2,7 @@
 @import '../../global-styles/mixins/';
 
 
-.template__step-list {
+.workflow__step-list {
   $width: calc(100% - 396px);
   @include size($width, 100%);
   background-color: $bg;

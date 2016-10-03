@@ -2,7 +2,7 @@
 @import '../../global-styles/mixins/';
 
 
-.template__side {
+.workflow__side {
   $margin: 63px;
   $width: 270px;
   @include size($width, 100%);

@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import TemplateStepListItem from './TemplateStepListItem'
+import WorkflowStepListItem from './WorkflowStepListItem'
 import { bindAll } from '../../classes/utils'
-import './styles/template-steplist.scss'
+import './styles/workflow-steplist.scss'
 
-class TemplateStepList extends Component {
+class WorkflowStepList extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -24,10 +24,10 @@ class TemplateStepList extends Component {
   }
   render() {
     const { data } = this.props;
-    let rootClass = 'template__step-list';
+    let rootClass = 'workflow__step-list';
 
     const listItems = data.map( (item, i) => {
-      return <TemplateStepListItem title={item.title} clickedAssign={this.clickedAssign} type={item.type} index={i} key={i} />
+      return <WorkflowStepListItem title={item.title} clickedAssign={this.clickedAssign} type={item.type} index={i} key={i} />
     })
     const height = this.props.height || '100%';
     const style = {
@@ -42,10 +42,10 @@ class TemplateStepList extends Component {
   }
 }
 
-export default TemplateStepList
+export default WorkflowStepList
 
 const { string, func } = PropTypes;
 
-TemplateStepList.propTypes = {
+WorkflowStepList.propTypes = {
   callDelegate: func
 }

@@ -1,9 +1,11 @@
 import Find from './Find'
 import Services from './Services'
-import TemplateSelector from './TemplateSelector'
+import StartGoal from './StartGoal'
+import EditGoal from './EditGoal'
 
 export {
-  TemplateSelector,
+  StartGoal,
+  EditGoal,
   Services,
   Find
 }

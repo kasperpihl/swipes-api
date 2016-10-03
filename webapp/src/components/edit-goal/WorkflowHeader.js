@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import './styles/template-header.scss'
+import './styles/workflow-header.scss'
 
-class TemplateHeader extends Component {
+class WorkflowHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.rootClass = 'template__side';
+    this.rootClass = 'workflow__side';
   }
   componentDidMount() {
   }
@@ -49,11 +49,11 @@ class TemplateHeader extends Component {
   }
 }
 
-export default TemplateHeader
+export default WorkflowHeader
 
 const { string, shape, oneOfType, func } = PropTypes;
 
-TemplateHeader.propTypes = {
+WorkflowHeader.propTypes = {
   data: shape({
     title: string,
     subtitle: string,

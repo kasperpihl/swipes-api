@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import './styles/template-list-item.scss'
+import './styles/workflow-list-item.scss'
 
-class TemplateListItem extends Component {
+class WorkflowListItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -10,7 +10,7 @@ class TemplateListItem extends Component {
   componentDidMount() {
   }
   callback(){
-    this.props.callback(this.props.i);
+    this.props.callback(this.props.data.id);
   }
   renderImage(rootClass, img) {
     if (img) {
@@ -34,7 +34,7 @@ class TemplateListItem extends Component {
   }
   render() {
     const { img, title, description } = this.props.data;
-    let rootClass = 'template__item'; // Trying something new here because of BEM
+    let rootClass = 'workflow__item'; // Trying something new here because of BEM
 
     return (
       <div className={rootClass}>
@@ -52,10 +52,10 @@ class TemplateListItem extends Component {
   }
 }
 
-export default TemplateListItem
+export default WorkflowListItem
 
 const { shape, oneOfType, string, func } = PropTypes;
-TemplateListItem.propTypes = {
+WorkflowListItem.propTypes = {
   data: shape({
     img: oneOfType([
       string,

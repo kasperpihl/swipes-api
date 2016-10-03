@@ -1,7 +1,7 @@
 @import "../../global-styles/vars";
 @import "../../global-styles/mixins";
 
-.template__list {
+.workflow__list {
   @include size(100%, auto)
   @include flex(center, flex-start, column);
   background-color: $bg;

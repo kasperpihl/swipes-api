@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import './styles/template-steplist-item.scss'
+import './styles/workflow-steplist-item.scss'
 import { AssignIcon } from '../icons'
 
-class TemplateStepListItem extends Component {
+class WorkflowStepListItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -14,7 +14,7 @@ class TemplateStepListItem extends Component {
     this.props.clickedAssign(e, this.props.index);
   }
   render() {
-    let rootClass = 'template__step-item';
+    let rootClass = 'workflow__step-item';
     const { title, type, index } = this.props;
 
     return (
@@ -32,11 +32,11 @@ class TemplateStepListItem extends Component {
   }
 }
 
-export default TemplateStepListItem
+export default WorkflowStepListItem
 
 const { string, func } = PropTypes;
 
-TemplateStepListItem.propTypes = {
+WorkflowStepListItem.propTypes = {
   clickedAssign: func.isRequired
   // removeThis: string.isRequired
 }

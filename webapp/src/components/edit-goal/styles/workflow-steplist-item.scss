@@ -1,7 +1,7 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-.template__step-item {
+.workflow__step-item {
   @include size(100%, 66px);
   @include flex(center, flex-start);
   border-radius: 6px;

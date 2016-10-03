@@ -3,7 +3,7 @@
 
 $itemWidth: 550px;
 
-.template__item {
+.workflow__item {
   @include size(100%, auto);
   @include flex(flex-start, flex-start);
   max-width: $itemWidth;

@@ -1,7 +1,7 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-.template__setup {
+.workflow__setup {
   @include size(100%);
   @include flex(flex);
   position: relative;
