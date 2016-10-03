@@ -13,7 +13,7 @@ class GoalTimeline extends Component {
     bindAll( this, ['onScroll', 'clickedHeader']);
   }
   callDelegate(name){
-    const { delegate } = this.props; 
+    const { delegate } = this.props;
     if(delegate && typeof delegate[name] === "function"){
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
@@ -26,10 +26,20 @@ class GoalTimeline extends Component {
   componentDidUpdate(){
     if(this.shouldAutoScroll && this.state.activeIndex > -1){
       const scrollVal = (69 * this.state.activeIndex);
-      document.querySelector('.steps-timeline').scrollTop = scrollVal;
-      console.log('scroll W', scrollVal)
-      //this.refs.scroller.scrollTop = 69 * this.state.activeIndex;
+      // document.querySelector('.steps-timeline').scrollTop = scrollVal;
+      this.scrollTo(document.querySelector('.steps-timeline'), scrollVal, 400)
     }
+  }
+  scrollTo(element, to, duration) {
+    if (duration <= 0) return;
+    var difference = to - element.scrollTop;
+    var perTick = difference / duration * 10;
+
+    setTimeout(function() {
+      element.scrollTop = element.scrollTop + perTick;
+      if (element.scrollTop == to) return;
+      scrollTo(element, to, duration - 10);
+    }, 10);
   }
   clickedHeader(index){
     index = index - 1;

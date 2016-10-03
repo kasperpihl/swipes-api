@@ -50,6 +50,14 @@ $fade: .4;
     padding-bottom: 15px;
   }
 
+  &--last {
+    padding-bottom: 0;
+
+    &:before {
+      @include size(2px, 70%);
+    }
+  }
+
   & > *:not(&__indicator) {
 		opacity: $fade;
     transition: opacity .1s;
