@@ -4,9 +4,15 @@ import validator from 'validator';
 import r from 'rethinkdb';
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
-import { fromJS } from 'immutable'
+import { fromJS, Map } from 'immutable'
+
+import requireDir from 'require-dir'
+var reducers = requireDir('../reducers', {recurse: true});
+
+console.log('dirs', reducers);
 
 const stepsAssignValidate = (req, res, next) => {
+
   const goalId = req.body.goal_id;
   const stepId = req.body.step_id;
   const assignee = req.body.assignee;
@@ -34,6 +40,7 @@ const stepsAssign = (req, res, next) => {
       .table('goals')
       .get(goalId)
       .update((goal) => {
+
         return goal.merge({
           steps: goal('steps').map((step) => {
             return r.branch(
@@ -72,22 +79,49 @@ const stepsValidateDoAction = (req, res, next) => {
   next();
 }
 
+
 const stepsDo = (req, res, next) => {
-  const {
+
+  let {
+    data,
     action,
-    payload
+    payload,
+    step,
   } = res.locals;
+  action = 'attach';
+  payload = { url: 'a4231' };
+  step = {type: 'deliver', subtype: 'collection'};
 
-  const existingDataFromRethink = {} // rethink query to fetch data object in step
+  const directory = reducers[step.type];
+  if(!directory){
+    return next('invalid type');
+  }
 
-  var handler = require('../handlers/deliver/collection');
-  
-  let oldData = fromJS(existingDataFromRethink);
-  let newData = handler.do(oldData, action, payload);
-  if(oldData !== newData){
+  const file = directory[step.subtype];
+  if(!file){
+    return next('invalid subtype')
+  }
+
+  const reducer = file[action];
+  if(typeof reducer !== 'function'){
+    return next('invalid action');
+  }
+
+  const oldData = fromJS(data);
+  let newData = reducer(oldData, payload);
+  if(typeof newData === 'string'){
+    return next(newData);
+  }
+  if(!Map.isMap(newData)){
+    return next('invalid reducer implementation, should return immutable object');
+  }
+  res.status(200).send(newData.toJS());
+    
+  if(newData !== oldData){
     // Run rethinkdb to save new data
   }
 }
+
 
 export {
   stepsAssignValidate,

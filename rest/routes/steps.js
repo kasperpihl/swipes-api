@@ -3,7 +3,8 @@
 import express from 'express';
 import {
   stepsAssignValidate,
-  stepsAssign
+  stepsAssign,
+  stepsDo
 } from '../middlewares/steps';
 
 const router = express.Router();
@@ -14,6 +15,10 @@ router.post('/steps.assign',
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }
+)
+
+router.post('/steps.do', 
+  stepsDo
 )
 
 module.exports = router;
