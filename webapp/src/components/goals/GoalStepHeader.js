@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/goal-step-header.scss'
+import { CheckmarkIcon } from '../icons'
 
 class GoalStepHeader extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class GoalStepHeader extends Component {
     let className = "step-header__indicator";
 
     if (completed) {
-      content = <i className="material-icons">check_circle</i>;
+      content = <CheckmarkIcon />;
       className += ' step-header__indicator--completed';
     } else if (!completed && index) {
       content = index;

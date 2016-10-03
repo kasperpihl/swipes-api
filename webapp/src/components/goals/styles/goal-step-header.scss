@@ -93,10 +93,11 @@ $fade: .4;
     }
 
     &#{&}--completed {
-      i {
-        color: lighten($green-color, 30%);
-        font-size: 216%;
-        transition: color .1s;
+      background-color: lighten($green-color, 30%);
+
+      svg {
+        @include size(12px);
+        fill: $bg;
       }
     }
   }
@@ -165,10 +166,8 @@ $fade: .4;
 			}
 
 			&--completed {
-				i {
-          color: $green-color;
-          transition: color .1s;
-        }
+        background-color: $green-color;
+        transition: background-color .1s;
 			}
 		}
   }
@@ -191,10 +190,8 @@ $fade: .4;
 			}
 
 			&--completed {
-				i {
-          color: $green-color;
-          transition: color .1s;
-        }
+        background-color: $green-color;
+        transition: background-color .1s;
 			}
 		}
   }

@@ -29,13 +29,9 @@
     font-size: 15px;
     color: $deepBlue-40;
     margin-top: 60px;
+    padding-left: 21px;
 
     &#{&}--label {
-      padding-left: 21px;
-
-      i {
-        display: none;
-      }
 
       &:before {
         @include size(2px, 100%);
@@ -47,10 +43,12 @@
     }
 
     &#{&}--completed {
-      i {
-        color: $green-color;
-        font-size: 18px;
-        padding-right: 9px;
+      &:before {
+        @include size(2px, 100%);
+        content: "";
+        position: absolute;
+        left: 0; top: 0;
+        background-color: $green-color;
       }
     }
   }

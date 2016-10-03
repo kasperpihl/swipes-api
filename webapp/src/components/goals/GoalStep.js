@@ -38,7 +38,6 @@ class GoalStep extends Component {
 
     return (
       <div className={className}>
-      <i className="material-icons">check_circle</i>
       {content}
       </div>
     )
@@ -77,5 +76,5 @@ GoalStep.propTypes = {
     statusLabel: string,
     completeButton: bool
   })
-  
+
 }

@@ -12,6 +12,7 @@ export const EarthIcon = svg('earth-icon')
 export const DownloadIcon = svg('download-icon')
 export const AssignIcon = svg('assign-icon')
 export const LogoLoader = svg('sw-logo-loader')
+export const CheckmarkIcon = svg('checkmark-icon')
 
 export const SlackIcon = svg('logo-slack')
 export const SwipesIcon = png('swipes-logo')
