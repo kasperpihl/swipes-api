@@ -60,9 +60,9 @@ class GoalTimeline extends Component {
     if(this.shouldAutoScroll){
       this.autoscrollTimer = setTimeout(() => {
         const scrollVal = (69 * this.state.activeIndex);
-        document.querySelector('.steps-timeline').scrollTop = scrollVal;
-        console.log('scroll W', scrollVal)
-      }, 500);
+        const el = document.querySelector('.steps-timeline');
+        this.scrollTo(el, scrollVal, 200);
+      }, 450);
       //
       
     }
@@ -72,10 +72,10 @@ class GoalTimeline extends Component {
     var difference = to - element.scrollTop;
     var perTick = difference / duration * 10;
 
-    setTimeout(function() {
+    setTimeout(() => {
       element.scrollTop = element.scrollTop + perTick;
       if (element.scrollTop == to) return;
-      scrollTo(element, to, duration - 10);
+      this.scrollTo(element, to, duration - 10);
     }, 10);
   }
   clickedHeader(index){
