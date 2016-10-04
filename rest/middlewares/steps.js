@@ -2,15 +2,18 @@
 
 import validator from 'validator';
 import r from 'rethinkdb';
+import requireDir from 'require-dir';
+import {
+  fromJS,
+  Map
+} from 'immutable';
+
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
-import { fromJS, Map } from 'immutable'
 
-import requireDir from 'require-dir'
-var reducers = requireDir('../reducers', {recurse: true});
+const reducers = requireDir('../reducers', {recurse: true});
 
 const stepsAssignValidate = (req, res, next) => {
-
   const goalId = req.body.goal_id;
   const stepId = req.body.step_id;
   const assignee = req.body.assignee;
@@ -38,7 +41,6 @@ const stepsAssign = (req, res, next) => {
       .table('goals')
       .get(goalId)
       .update((goal) => {
-
         return goal.merge({
           steps: goal('steps').map((step) => {
             return r.branch(
@@ -59,6 +61,27 @@ const stepsAssign = (req, res, next) => {
     .catch((err) => {
       return next(err);
     })
+}
+
+const stepsGetCurrent = (req, res, next) => {
+  const {
+    goal
+  } = res.locals;
+
+  const steps = goal.steps;
+  const n = steps.length;
+
+  for (let i = 0; i < n; i++) {
+    const step = steps[i];
+
+    if (!step.completed) {
+      res.locals.step = step;
+
+      break;
+    }
+  }
+
+  return next();
 }
 
 const stepsValidateDoAction = (req, res, next) => {
@@ -84,53 +107,80 @@ const stepsValidateDoAction = (req, res, next) => {
   return next();
 }
 
-
 const stepsDo = (req, res, next) => {
-
   let {
-    data,
     action,
     payload,
-    step,
+    step
   } = res.locals;
-  action = 'attach';
-  payload = { url: 'a4231' };
-  step = {type: 'deliver', subtype: 'collection'};
 
   const directory = reducers[step.type];
-  if(!directory){
+  if (!directory) {
     return next('invalid type');
   }
 
   const file = directory[step.subtype];
-  if(!file){
+  if (!file) {
     return next('invalid subtype')
   }
 
   const reducer = file[action];
-  if(typeof reducer !== 'function'){
+  if (typeof reducer !== 'function') {
     return next('invalid action');
   }
 
-  const oldData = fromJS(data);
-  let newData = reducer(oldData, payload);
-  if(typeof newData === 'string'){
-    return next(newData);
+  const stepUpdated = reducer(step, payload);
+
+  if (typeof stepUpdated === 'string') {
+    return next(stepUpdated);
   }
-  if(!Map.isMap(newData)){
+
+  if (!Map.isMap(stepUpdated)) {
     return next('invalid reducer implementation, should return immutable object');
   }
-  res.status(200).send(newData.toJS());
 
-  if(newData !== oldData){
-    // Run rethinkdb to save new data
-  }
+  res.locals.stepUpdated = stepUpdated.toJS();
+
+  return next();
+}
+
+const stepsUpdate = (req, res, next) => {
+  const {
+    goalId,
+    stepUpdated
+  } = res.locals;
+
+  const updateQ =
+    r.db('swipes')
+      .table('goals')
+      .get(goalId)
+      .update((goal) => {
+        return goal.merge({
+          steps: goal('steps').map((step) => {
+            return r.branch(
+              step('id').eq(stepUpdated.id),
+              step.merge(stepUpdated),
+              step
+            )
+          })
+        })
+      })
+
+  db.rethinkQuery(updateQ)
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
 }
 
 
 export {
   stepsAssignValidate,
   stepsAssign,
+  stepsGetCurrent,
   stepsValidateDoAction,
-  stepsDo
+  stepsDo,
+  stepsUpdate
 }

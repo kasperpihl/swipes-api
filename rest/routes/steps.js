@@ -4,8 +4,10 @@ import express from 'express';
 import {
   stepsAssignValidate,
   stepsAssign,
+  stepsGetCurrent,
   stepsValidateDoAction,
-  stepsDo
+  stepsDo,
+  stepsUpdate
 } from '../middlewares/steps';
 import {
   goalsGet
@@ -24,6 +26,9 @@ router.post('/steps.assign',
 router.post('/steps.do',
   stepsValidateDoAction,
   goalsGet,
+  stepsGetCurrent,
+  stepsDo,
+  stepsUpdate,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }
