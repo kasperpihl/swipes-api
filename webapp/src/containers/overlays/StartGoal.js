@@ -33,7 +33,7 @@ class StartGoal extends Component {
 }
 
 function mapStateToProps(state) {
-
+  // T_TODO
   let workflows = state.get('workflows').updateIn(['PGR5OHKL6'], (wf) => {
     wf = wf.set('title', 'Design workflow').set('img', 'http://publicdomainvectors.org/photos/Raseone-Record.png').set('description', 'The Swipes simple design workflow, just enough structure to deliver great quality.. Always');
     console.log(wf.get('steps').toJS())
