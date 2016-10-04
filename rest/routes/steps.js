@@ -7,7 +7,10 @@ import {
   stepsGetCurrent,
   stepsValidateDoAction,
   stepsDo,
-  stepsUpdate
+  stepsGet,
+  stepsValidateUpdateData,
+  stepsUpdateData,
+  stepsUpdateRethinkdb
 } from '../middlewares/steps';
 import {
   goalsGet
@@ -28,7 +31,18 @@ router.post('/steps.do',
   goalsGet,
   stepsGetCurrent,
   stepsDo,
-  stepsUpdate,
+  stepsUpdateRethinkdb,
+  (req, res, next) => {
+    return res.status(200).json({ok: true});
+  }
+)
+
+router.post('/steps.update',
+  stepsValidateUpdateData,
+  goalsGet,
+  stepsGet,
+  stepsUpdateData,
+  stepsUpdateRethinkdb,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }
