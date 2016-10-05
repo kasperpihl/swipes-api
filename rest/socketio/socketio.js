@@ -6,6 +6,7 @@ let workflows = require('./workflows-io.js');
 let services = require('./services-io.js');
 let users = require('./users-io.js');
 let common = require('./common-events-io.js');
+let commonMultiple = require('./common-events-multiple-io.js');
 let db = require('../db.js');
 let scopes = [];
 let userScope = [];
@@ -74,5 +75,6 @@ module.exports = (io) => {
     services.userServices(socket, userId);
     users.usersProfilePic(socket, userId);
     common.commonEvents(socket, userId);
+    commonMultiple.commonEventsMultiple(socket, userId);
   });
 };

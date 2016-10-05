@@ -7,7 +7,6 @@ import {
   fromJS,
   Map
 } from 'immutable';
-
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 
@@ -222,6 +221,10 @@ const stepsUpdateRethinkdb = (req, res, next) => {
 
   db.rethinkQuery(updateQ)
     .then(() => {
+      res.locals.eventType = 'step_changed';
+      res.locals.eventMessage = stepUpdated.title + ' has been updated';
+      res.locals.eventData = stepUpdated;
+
       return next();
     })
     .catch((err) => {
