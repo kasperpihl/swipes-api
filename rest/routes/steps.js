@@ -16,9 +16,12 @@ import {
   goalsGet
 } from '../middlewares/goals';
 import {
-  notifyAllInGoal,
+  notifyAllInCompany,
   notifyCommonRethinkdb
 } from '../middlewares/notify';
+import {
+  usersGet
+} from '../middlewares/users';
 
 const router = express.Router();
 
@@ -43,11 +46,12 @@ router.post('/steps.do',
 
 router.post('/steps.update',
   stepsValidateUpdateData,
+  usersGet,
   goalsGet,
   stepsGet,
   stepsUpdateData,
   stepsUpdateRethinkdb,
-  notifyAllInGoal,
+  notifyAllInCompany,
   notifyCommonRethinkdb,
   (req, res, next) => {
     return res.status(200).json({ok: true});

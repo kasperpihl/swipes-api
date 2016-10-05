@@ -24,6 +24,27 @@ const notifyAllInGoal = (req, res, next) => {
   return next();
 }
 
+const notifyAllInCompany = (req, res, next) => {
+  const {
+    user
+  } = res.locals;
+
+  const usersIds = [];
+  const organizations = user.organizations;
+
+  organizations.forEach((organization) => {
+    organization.users.forEach((userId) => {
+      usersIds.push(userId);
+    })
+  })
+
+  const uniqueUsersToNotify = Array.from(new Set(usersIds));
+
+  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
+
+  return next();
+}
+
 const notifyCommonRethinkdb = (req, res, next) => {
   const {
     uniqueUsersToNotify,
@@ -58,5 +79,6 @@ const notifyCommonRethinkdb = (req, res, next) => {
 
 export {
   notifyAllInGoal,
+  notifyAllInCompany,
   notifyCommonRethinkdb
 }
