@@ -62,7 +62,7 @@ export default TabBar
 const { string, oneOfType, func, array, shape } = PropTypes;
 
 TabBar.propTypes = {
-  callback: func,
+  onChange: func,
   data: oneOfType([
     array,
     shape({

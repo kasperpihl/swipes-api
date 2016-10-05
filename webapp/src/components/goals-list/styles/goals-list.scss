@@ -1,0 +1,8 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+@include b(goals-list) {
+  @include size(100%, 100%);
+  @include flex(center, flex-start, column);
+  overflow-y: auto;
+}

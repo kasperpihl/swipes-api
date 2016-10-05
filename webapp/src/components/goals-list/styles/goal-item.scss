@@ -1,0 +1,43 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+$imgContHeight: 60px;
+
+@include b(goal) {
+  @include size(100%, auto);
+  @include flex();
+  margin: 10px 0;
+  max-width: 550px;
+  min-height: $imgContHeight;
+  position: relative;
+
+  @include e(image) {
+    @include size($imgContHeight);
+
+    img {
+      @include size();
+      border-radius: 3px;
+    }
+  }
+
+  @include e(content) {
+    $contentWidth: calc(100% - #{$imgContHeight});
+
+    @include size($contentWidth, 100%);
+
+    min-height: $imgContHeight;
+    padding-left: 15px;
+  }
+
+  @include e(title) {
+    color: $deepBlue-80;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  @include e(label) {
+    color: $deepBlue-40;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
