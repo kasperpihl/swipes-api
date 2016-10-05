@@ -12,6 +12,30 @@ import {
 // T_TODO after refactoring this will be compatible
 const asana = require('../../services/asana/asana');
 
+const usersGet = (req, res, next) => {
+  const userId = req.userId;
+  const userQ =
+    r.table('users')
+      .get(userId)
+      .without(['password', 'xendoCredentials', {'services': 'authData'}])
+      .merge({
+        organizations:
+          r.table('organizations')
+            .getAll(r.args(r.row("organizations")))
+            .coerceTo('ARRAY')
+      })
+
+  db.rethinkQuery(userQ)
+    .then((user) => {
+      res.locals.user = user;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 const getUserService = (req, res, next) => {
   const userId = req.userId;
   const serviceAccountId = req.body.id;
@@ -142,6 +166,7 @@ const userRemoveService = (req, res, next) => {
 }
 
 export {
+  usersGet,
   getUserService,
   cleanupWebhooksFromUserService,
   usersGetXendoServiceId,
