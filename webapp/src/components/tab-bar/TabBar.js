@@ -12,18 +12,15 @@ class TabBar extends Component {
   }
   componentDidMount() {
   }
-  componentWillUpdate(nextProps, nextState) {
-    if(nextState.activeTab != this.state.activeTab) {
-      this.callback(nextState.activeTab)
-    }
-  }
   callback(index) {
-    this.props.callback(index)
+    this.props.onChange(index)
   }
   setActiveTab(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
-    console.log(e.target);
-    this.setState({activeTab: newIndex})
+    if(newIndex !== this.state.activeTab){
+      this.setState({activeTab: newIndex})
+      this.callback(newIndex)
+    }
   }
   render() {
     const { data } = this.props;
