@@ -59,8 +59,15 @@ class TabBar extends Component {
 
 export default TabBar
 
-const { string } = PropTypes;
+const { string, oneOfType, func, array, shape } = PropTypes;
 
 TabBar.propTypes = {
-  // removeThis: string.isRequired
+  callback: func,
+  data: oneOfType([
+    array,
+    shape({
+      title: string,
+      icon: string
+    })
+  ])
 }
