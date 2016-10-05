@@ -1,0 +1,40 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+
+.tab-bar {
+  @include size(100%, auto);
+  @include flex();
+  padding-left: 21px;
+
+  &__tab {
+    @include size(100%, 50px);
+    @include flex();
+    color: $deepBlue-30;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: .1s;
+
+    &:not(:first-child) {
+      padding-left: 15px;
+    }
+
+    &:hover {
+      color: darken($deepBlue-40, 5%);
+    }
+
+    &--active {
+      color: $blue-100;
+      transition: .1s;
+
+      &:hover {
+        color: $blue-120;
+      }
+    }
+
+    i {
+      margin-right: 9px;
+    }
+  }
+}
