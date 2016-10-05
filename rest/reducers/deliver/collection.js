@@ -1,6 +1,6 @@
 "use strict";
 
-import { toJS, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 
 const init = () => {
   return fromJS({deliveries: [{collection: []}]});

@@ -7,7 +7,6 @@ import {
   fromJS,
   Map
 } from 'immutable';
-
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 
@@ -144,7 +143,61 @@ const stepsDo = (req, res, next) => {
   return next();
 }
 
-const stepsUpdate = (req, res, next) => {
+const stepsValidateUpdateData = (req, res, next) => {
+  const goalId = req.body.goal_id;
+  const stepId = req.body.step_id;
+  const payload = req.body.payload;
+
+  res.locals.goalId = goalId;
+  res.locals.stepId = stepId;
+  res.locals.payload = payload;
+
+  if (validator.isNull(goalId) || validator.isNull(stepId) || validator.isNull(payload)) {
+    return next(new SwipesError('goal_id, step_id and payload are required'));
+  }
+
+  return next();
+}
+
+const stepsGet = (req, res, next) => {
+  const {
+    goal,
+    stepId
+  } = res.locals;
+
+  const steps = goal.steps;
+  const n = steps.length;
+
+  for (let i = 0; i < n; i++) {
+    const step = steps[i];
+
+    if (step.id === stepId) {
+      res.locals.step = step;
+
+      break;
+    }
+  }
+
+  return next();
+}
+
+const stepsUpdateData = (req, res, next) => {
+  const {
+    step,
+    payload
+  } = res.locals;
+
+  const stepMap = Map(step);
+  const payloadMap = Map(payload);
+
+  const stepUpdated = stepMap.merge(payloadMap);
+
+  res.locals.stepUpdated = stepUpdated.toJS();
+
+  return next();
+}
+
+const stepsUpdateRethinkdb = (req, res, next) => {
   const {
     goalId,
     stepUpdated
@@ -168,6 +221,10 @@ const stepsUpdate = (req, res, next) => {
 
   db.rethinkQuery(updateQ)
     .then(() => {
+      res.locals.eventType = 'step_changed';
+      res.locals.eventMessage = stepUpdated.title + ' has been updated';
+      res.locals.eventData = stepUpdated;
+
       return next();
     })
     .catch((err) => {
@@ -182,5 +239,8 @@ export {
   stepsGetCurrent,
   stepsValidateDoAction,
   stepsDo,
-  stepsUpdate
+  stepsGet,
+  stepsValidateUpdateData,
+  stepsUpdateData,
+  stepsUpdateRethinkdb
 }
