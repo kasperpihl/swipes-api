@@ -53,7 +53,7 @@ const goalsCreate = (req, res, next) => {
     return next(new SwipesError('organization_id is required'));
   }
 
-  if (validator.isNull(processId)) {
+  if (validator.isNull(workflowId)) {
     return next(new SwipesError('workflow_id is required'));
   }
 
