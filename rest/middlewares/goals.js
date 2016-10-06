@@ -66,7 +66,8 @@ const goalsCreate = (req, res, next) => {
     workflow_id: workflowId, // T_TODO check if this one exists!
     organization_id: organizationId,
     timestamp: r.now(),
-    created_by: userId
+    created_by: userId,
+    deleted: false
   }
 
   const goalWithMeta = Object.assign({}, goal, metaObj);
@@ -106,8 +107,32 @@ const goalsGet = (req, res, next) => {
     })
 }
 
+const goalsDelete = (req, res, next) => {
+  const goalId = req.body.goal_id;
+
+  if (validator.isNull(goalId)) {
+    return next(new SwipesError('goal_id is required'));
+  }
+
+  const updateQ =
+    r.table('goals')
+      .get(goalId)
+      .update({
+        deleted: true
+      });
+
+  return db.rethinkQuery(updateQ)
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   goalsValidate,
   goalsCreate,
-  goalsGet
+  goalsGet,
+  goalsDelete
 }

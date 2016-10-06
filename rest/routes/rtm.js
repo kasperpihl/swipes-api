@@ -30,6 +30,9 @@ router.post('/rtm.start', (req, res, next) => {
           goals:
             r.table('goals')
               .getAll(user('organizations')(0)('id'), {index: 'organization_id'})
+              .filter({
+                deleted: false
+              })
               .coerceTo('ARRAY')
         })
       })

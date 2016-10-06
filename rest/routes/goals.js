@@ -5,7 +5,8 @@ import r from 'rethinkdb';
 import db from '../db.js';
 import {
   goalsValidate,
-  goalsCreate
+  goalsCreate,
+  goalsDelete
 } from '../middlewares/goals';
 
 const router = express.Router();
@@ -31,6 +32,12 @@ router.post('/goals.create',
     } = res.locals;
 
     return res.status(200).json({ok: true, goal: goalWithMeta});
+  })
+
+router.post('/goals.delete',
+  goalsDelete,
+  (req, res, next) => {
+    return res.status(200).json({ok: true});
   })
 
 module.exports = router;
