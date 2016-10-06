@@ -14,10 +14,11 @@ class Overlay extends Component {
     if(!overlay){
       return;
     }
-
-    const { component, props } = overlay.toJS();
-
-    let Comp = overlays[component];
+    let props = {};
+    if(overlay.get('props')){
+      props = overlay.get('props').toObject();
+    }
+    let Comp = overlays[overlay.get('component')];
     if(Comp){
       return <Comp {...props} />
     }

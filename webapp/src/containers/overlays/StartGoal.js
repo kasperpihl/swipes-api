@@ -10,7 +10,6 @@ import WorkflowList from '../../components/start-goal/WorkflowList'
 class StartGoal extends Component {
   constructor(props) {
     super(props)
-    console.log(props.workflows);
     this.state = {}
     bindAll( this, ['didSelectItem']);
   }
@@ -33,25 +32,8 @@ class StartGoal extends Component {
 }
 
 function mapStateToProps(state) {
-  // T_TODO
-  let workflows = state.get('workflows').updateIn(['PGR5OHKL6'], (wf) => {
-    wf = wf.set('title', 'Design workflow').set('img', 'http://publicdomainvectors.org/photos/Raseone-Record.png').set('description', 'The Swipes simple design workflow, just enough structure to deliver great quality.. Always');
-    console.log(wf.get('steps').toJS())
-    wf = wf.updateIn(['steps'], (steps) => {
-      steps = steps.updateIn([0], (step) => step.set('title', 'Upload designs').set('description', 'Hello desc ffs'));
-      return steps.push(fromJS({
-        type: 'decide',
-        subtype: 'decision',
-        title: 'Select Design',
-        assignees: []
-      }))
-    })
-    return wf;
-  })
-  //const wf = workflows.get('PGR5OHKL6')
-  //workflows = workflows.set('PGR5OHKL5', wf).set('PGR5OHKL4', wf).set('PGR5OHKL3', wf);
   return {
-    workflows: workflows
+    workflows: state.get('workflows')
   }
 }
 

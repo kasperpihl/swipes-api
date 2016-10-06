@@ -14,9 +14,9 @@ class WorkflowStepListItem extends Component {
     this.props.clickedAssign(e, this.props.index);
   }
   render() {
+
     let rootClass = 'workflow__step-item';
     const { title, type, index } = this.props;
-
     return (
       <div className={rootClass}>
         <div className={rootClass + '__number'}>{index + 1}</div>

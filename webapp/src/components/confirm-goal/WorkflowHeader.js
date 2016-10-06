@@ -6,6 +6,10 @@ class WorkflowHeader extends Component {
     super(props)
     this.state = {}
     this.rootClass = 'workflow__side';
+    this.clickedStart = this.clickedStart.bind(this);
+  }
+  clickedStart(){
+    this.props.callDelegate('didPressStart');
   }
   componentDidMount() {
   }
@@ -43,7 +47,7 @@ class WorkflowHeader extends Component {
         {this.renderImage(rootClass, img)}
         <div className={rootClass + '__title'}>{title}</div>
         <div className={rootClass + '__description'}>{description}</div>
-        <div className={btnClass}>StArT GoAl</div>
+        <div className={btnClass} onClick={this.clickedStart}>StArT GoAl</div>
       </div>
     )
   }
@@ -62,7 +66,6 @@ WorkflowHeader.propTypes = {
       author: string,
       time: string
     }),
-    description: string,
-    callback: func
+    description: string
   })
 }

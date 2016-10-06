@@ -7,9 +7,11 @@ import './styles/swipes-modal.scss'
 class SwipesModalActions extends React.Component {
   constructor(props) {
     super(props)
+    this.buttonClick = this.buttonClick.bind(this);
     this.state = {}
   }
-  buttonClick(i) {
+  buttonClick(e) {
+    const i = e.target.getAttribute('data-index');
     this.props.onClick({
       button: i
     })
@@ -18,7 +20,7 @@ class SwipesModalActions extends React.Component {
 		const { actions } = this.props;
 		const buttons = actions.map( (button, i) => {
 			return (
-				<div className="swipes-modal__actions__button" ref="modalButton" key={i} onClick={this.buttonClick.bind(this, i)}>{button}</div>
+				<div className="swipes-modal__actions__button" data-index={i} ref="modalButton" key={i} onClick={this.buttonClick}>{button}</div>
 			)
 		})
 
@@ -33,22 +35,10 @@ class SwipesModalActions extends React.Component {
 class SwipesModal extends Component {
   constructor(props) {
     super(props)
+    this.closeModal = this.closeModal.bind(this);
+    
     this.state = {
       selectedListItems: []
-    }
-
-    const { data } = props;
-    if(data && data.list){
-      const { list } = data;
-      let items = list;
-      if(!Array.isArray(list)){
-        items = list.items;
-      }
-      items.forEach((item, i) => {
-        if(item.selected){
-          this.state.selectedListItems.push(i)
-        }
-      })
     }
   }
   sendCallback(obj){
@@ -66,6 +56,7 @@ class SwipesModal extends Component {
 
       res = Object.assign({}, generated, obj);
     }
+    this.setState({selectedListItems: []});
     this.props.callback(res)
   }
   closeModal(e) {
@@ -143,7 +134,7 @@ class SwipesModal extends Component {
   		const listRender = items.map( (item, i) => {
         let className = "swipes-modal__list__item";
 
-        if (this.state.selectedListItems.includes(i)){
+        if (item.selected || this.state.selectedListItems.includes(i)){
           className += ' swipes-modal__list__item--selected'
         }
   			return (
@@ -227,11 +218,11 @@ class SwipesModal extends Component {
 
     return (
       <div className={modalWrapClass}>
-        <div className="swipes-modal__overlay" onClick={this.closeModal.bind(this)}></div>
+        <div className="swipes-modal__overlay" onClick={this.closeModal}></div>
         <div className={modalClass}>
           <div className="swipes-modal__title">
             {title}
-            <i className="material-icons swipes-modal__close" onClick={this.closeModal.bind(this)}>close</i>
+            <i className="material-icons swipes-modal__close" onClick={this.closeModal}>close</i>
           </div>
           {this.renderContent(data)}
         </div>

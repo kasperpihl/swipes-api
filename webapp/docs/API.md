@@ -1,8 +1,8 @@
 # Endpoints
-
 ## Yesterday
 goals.add
 goals.list
+
 
 step.assign
 step.do
@@ -26,6 +26,14 @@ step.removeAssignee
 step.add
 step.update
 step.remove
+
+
+# Socket events
+## Yesterday
+goal_created (goal.add)
+goal_changed (step.complete)
+goal_deleted (goal.delete)
+step_changed (step.do)
 
 # IDs
 

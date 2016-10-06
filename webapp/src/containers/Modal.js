@@ -25,8 +25,8 @@ class Modal extends Component {
   }
   
   onModalCallback(res){
-    if(this.props.modal.callback)
-      this.props.modal.callback(res);
+    if(this.props.modal.get('callback'))
+      this.props.modal.get('callback')(res);
     this.props.hideModal();
   }
   render() {
