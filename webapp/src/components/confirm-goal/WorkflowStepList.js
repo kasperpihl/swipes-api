@@ -30,9 +30,9 @@ class WorkflowStepList extends Component {
     const listItems = data.map( (item, i) => {
       console.log('assignees', item.assignees);
       const totalAssignees = item.assignees.length;
-      
+
       // KRIS_TODO: Here is the assignees. Check for profile_pic and length
-      return <WorkflowStepListItem title={item.title} clickedAssign={this.clickedAssign} type={item.type} index={i} key={i} />
+      return <WorkflowStepListItem title={item.title} clickedAssign={this.clickedAssign} assignees={item.assignees} type={item.type} index={i} key={i} />
     })
     const height = this.props.height || '100%';
     const style = {

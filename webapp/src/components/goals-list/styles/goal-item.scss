@@ -3,7 +3,9 @@
 
 $imgContHeight: 40px;
 
-@include b(goal) {
+.goal {
+  $b: &;
+
   @include size(100%, auto);
   @include flex();
   margin: 10px 0;
@@ -11,7 +13,7 @@ $imgContHeight: 40px;
   min-height: $imgContHeight;
   position: relative;
 
-  @include e(image) {
+  &__image {
     @include size($imgContHeight);
 
     img {
@@ -20,7 +22,7 @@ $imgContHeight: 40px;
     }
   }
 
-  @include e(content) {
+  &__content {
     $contentWidth: calc(100% - #{$imgContHeight});
 
     @include size($contentWidth, 100%);
@@ -29,13 +31,13 @@ $imgContHeight: 40px;
     padding-left: 15px;
   }
 
-  @include e(title) {
+  &__title {
     color: $deepBlue-80;
     font-size: 15px;
     font-weight: 500;
   }
 
-  @include e(label) {
+  &__label {
     color: $deepBlue-40;
     font-size: 12px;
     font-weight: 500;
