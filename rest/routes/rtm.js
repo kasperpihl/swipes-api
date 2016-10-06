@@ -27,10 +27,18 @@ router.post('/rtm.start', (req, res, next) => {
       })
       .do((user) => {
         return user.merge({
+          goals:
+            r.table('goals')
+              .getAll(user('organizations')(0)('id'), {index: 'organization_id'})
+              .coerceTo('ARRAY')
+        })
+      })
+      .do((user) => {
+        return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
             users:
-    					r.db('swipes').table('users')
+    					r.table('users')
                 .getAll(r.args(organization("users")))
           			.without('password', 'organizations', 'services', 'xendoCredentials')
                 .coerceTo('ARRAY')
@@ -72,12 +80,20 @@ router.post('/rtm.start', (req, res, next) => {
     .then(data => {
       const self = data[0];
       let users = [];
+      let goals = [];
 
       if (self.organizations.length > 0) {
         users = self.organizations[0].users;
 
         // We don't want duplication of that data served on the client;
         delete self.organizations[0].users;
+      }
+
+      if (self.goals.length > 0) {
+        goals = self.goals;
+
+        // We don't want duplication of that data served on the client;
+        delete self.goals;
       }
 
       let rtmResponse = {
@@ -90,6 +106,7 @@ router.post('/rtm.start', (req, res, next) => {
                           config.get('origin') + ':' + config.get('clientPort')  + '/workflows/',
         self,
         users,
+        goals,
         workflows: data[1],
         services: data[2],
         activity: data[3],
