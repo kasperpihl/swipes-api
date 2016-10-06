@@ -8,3 +8,33 @@
   @include flex(center, flex-start, column);
   overflow-y: auto;
 }
+
+.fab {
+  $b: &;
+
+  @include size(44px);
+  @include flex();
+  border-radius: 50%;
+
+  &__icon {
+    @include size(12px);
+  }
+
+  &--goals {
+    background-color: $blue-100;
+    box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
+    position: fixed;
+    right: 21px; bottom: 21px;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+      background-color: $blue-120;
+      box-shadow: 0 1px 10px 3px rgba($blue-120, 0.4);
+      transition: all .2s ease-in-out;
+    }
+
+    #{$b}__icon {
+      fill: white;
+    }
+  }
+}

@@ -3,13 +3,16 @@ import { connect } from 'react-redux'
 import * as actions from '../../constants/ActionTypes'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalTimeline from '../../components/goals/GoalTimeline';
+import { overlay } from '../../actions';
 import GoalItem from '../../components/goals/GoalItem';
+import { PlusIcon } from '../../components/icons'
 import '../../components/goals/styles/goals.scss';
 
 class Goals extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.addGoal = this.addGoal.bind(this);
     props.swipes.sendEvent('navigation.setTitle', 'Design icons');
     props.swipes.sendEvent('navigation.setSubtitle', 'Approve Designs');
   }
@@ -30,8 +33,16 @@ class Goals extends Component {
     props.data = first;
     return <GoalTimeline {...props} delegate={this}/>;
   }
+  addGoal() {
+    this.props.setOverlay({component: 'StartGoal', title: 'Start a Goal'});
+  }
   renderPlusButton(){
 
+    return (
+      <div className="fab fab--goals" onClick={this.addGoal}>
+        <PlusIcon className="fab__icon"/>
+      </div>
+    )
   }
   render() {
 
@@ -52,6 +63,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedGoals = connect(mapStateToProps, {
+  setOverlay: overlay.set
 })(Goals)
 export default ConnectedGoals
 

@@ -4,6 +4,8 @@
 $fade: .4;
 
 .step-header {
+  $b: &;
+  
   @include size(100%, auto);
   @include flex(center, flex-start);
   display: flex !important;
