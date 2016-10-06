@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import Toast from './Toast'
 import './styles/toasty.scss'
 
@@ -18,9 +19,9 @@ class Toasty extends Component {
   }
   render() {
     return (
-      <div className="toasty">
+      <ReactCSSTransitionGroup transitionName="fadeToaster" component="div" className="toasty" transitionEnterTimeout={300} transitionLeaveTimeout={600}>
         {this.renderToasts()}
-      </div>
+      </ReactCSSTransitionGroup>
     )
   }
 }

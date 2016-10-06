@@ -53,8 +53,6 @@ class Goals extends Component {
     this.props.swipes.sendEvent('navigation.setSubtitle', subtitle)
   }
   clickedListItem(id){
-
-    console.log(id, this.props.goals.get(id).toJS());
     this.props.setActiveGoal(id);
   }
   renderList(){
