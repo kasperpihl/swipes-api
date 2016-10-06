@@ -59,10 +59,9 @@ class ConfirmGoal extends Component {
   }
   didPressStart(ref){
     const { addToasty, updateToasty, removeToasty } = this.props;
-    const random = Math.random();
-    addToasty({title: "Adding goal " + random, loading: true}).then((toastId) => {
+    addToasty({title: "Adding a goal", loading: true}).then((toastId) => {
       setTimeout(() => {
-        updateToasty(toastId, { loading: false, title: "Added goal " + random });
+        updateToasty(toastId, { loading: false, title: "Added the goal" });
       }, 3000);
       setTimeout(() => {
         removeToasty(toastId);

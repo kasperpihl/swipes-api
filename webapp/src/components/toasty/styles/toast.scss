@@ -51,6 +51,7 @@
 .fadeToaster-enter {
   opacity: 0;
   transform: translateY(20px);
+  will-change: opacity, transform;
 }
 
 .fadeToaster-enter.fadeToaster-enter-active {
@@ -61,11 +62,12 @@
 
 .fadeToaster-leave {
   opacity: 1;
+  will-change: opacity, transform, height;
 }
 
 .fadeToaster-leave.fadeToaster-leave-active {
   opacity: 0;
   transform: translateX(calc(100% + 20px));
   height: 0px;
-  transition: opacity .5s ease-in-out, transform .5s ease-in-out, height .2s .5s ease-in-out;
+  transition: opacity .3s ease-in-out, transform .5s ease-in-out, height .3s .3s ease-in-out;
 }
