@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/goal-item.scss'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class GoalItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    
   }
   componentDidMount() {
   }
