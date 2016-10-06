@@ -199,7 +199,7 @@ tabSlider {
 
   &__header {
     @include size(100%);
-    @include flex(center, center)
+    @include flex(center, flex-start)
     min-height: 60px;
 
     &__dot {
