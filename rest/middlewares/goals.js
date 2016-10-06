@@ -3,11 +3,18 @@
 import config from 'config';
 import validator from 'validator';
 import r from 'rethinkdb';
+import {
+  fromJS,
+  Map
+} from 'immutable';
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 import {
   generateSlackLikeId
 } from '../util.js';
+import {
+  reducersGet
+} from '../reducers/helpers';
 
 const goalsValidate = (req, res, next) => {
   const goal = req.body.goal;
@@ -17,18 +24,18 @@ const goalsValidate = (req, res, next) => {
     return next(new SwipesError('goal is required'));
   }
 
-  goal.steps.map((step) => {
+  goal.steps = goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
-
+    const reducer = reducersGet(step);
     step.id = goalId + '-' + stepId;
 
-    if (step.type === 'deliver') {
-      step.data = {
-        deliveries: [{collection: []}]
-      }
+    if (!reducer) {
+      return next('invalid init reducer');
     }
 
-    return step;
+    const stepInited = reducer(fromJS(step));
+
+    return stepInited.toJS();
   })
 
   res.locals.goalId = goalId;
@@ -54,7 +61,7 @@ const goalsCreate = (req, res, next) => {
     goalId,
     goal
   } = res.locals;
-  const insertObj = {
+  const metaObj = {
     id: goalId,
     process_id: processId, // T_TODO check if this one exists!
     organization_id: organizationId,
@@ -62,10 +69,14 @@ const goalsCreate = (req, res, next) => {
     created_by: userId
   }
 
-  const insertQ = r.table('goals').insert(Object.assign({}, goal, insertObj))
+  const goalWithMeta = Object.assign({}, goal, metaObj);
+
+  const insertQ = r.table('goals').insert(goalWithMeta);
 
   return db.rethinkQuery(insertQ)
     .then(() => {
+      res.locals.goalWithMeta = goalWithMeta;
+
       return next();
     })
     .catch((err) => {

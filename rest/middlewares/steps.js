@@ -128,7 +128,7 @@ const stepsDo = (req, res, next) => {
     return next('invalid action');
   }
 
-  const stepUpdated = reducer(step, payload);
+  const stepUpdated = reducer(fromJS(step), payload);
 
   if (typeof stepUpdated === 'string') {
     return next(stepUpdated);
