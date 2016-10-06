@@ -2,6 +2,7 @@
 @import '../../global-styles/mixins/';
 
 .workflow__step-item {
+  $b: &;
   @include size(100%, 66px);
   @include flex(center, flex-start);
   border-radius: 6px;
@@ -63,5 +64,86 @@
 
   &__icons:hover &__icon {
     fill: $blue-100;
+  }
+
+  &__assignees {
+    @include size(30px, 100%);
+    @include flex();
+    margin: 0 17px;
+    position: relative;
+
+    &:hover {
+
+      #{$b}__tooltip {
+        display: block;
+      }
+    }
+  }
+
+  &__assignee {
+    @include size(30px);
+
+    img {
+      @include size();
+      border-radius: 50%;
+    }
+  }
+
+  &__assignee-count {
+    @include size(30px);
+    @include flex();
+    border-radius: 50%;
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba($deepBlue-100, .4);
+    color: white;
+    font-size: 13px;
+
+    &:hover {
+      background-color: rgba($deepBlue-100, .8);
+      transition: .15s ease-in-out;
+    }
+  }
+
+  &__tooltip {
+    @include size(150px, auto);
+    position: absolute;
+    left: calc(0px - 75px); bottom: 0;
+    transform: translateY(100%);
+    background-color: $deepBlue-100;
+    z-index: 2;
+    border-radius: 6px;
+    display: none;
+
+    &:after {
+      content: "";
+      @include size(12px);
+      position: absolute;
+      transform: rotate(45deg);
+      background-color: $deepBlue-100;
+      right: 55px;
+      top: -6px;
+    }
+  }
+
+  &__tooltip-item {
+    padding: 10px;
+    color: white;
+    font-size: 13px;
+    position: relative;
+    z-index: 4;
+
+    &:first-of-type {
+      @include border-radius(6px, 6px, 0px, 0px);
+    }
+
+    &:last-of-type {
+      @include border-radius(0px, 0px, 6px, 6px);
+    }
+
+    &:hover {
+      background-color: $deepBlue-80;
+    }
   }
 }

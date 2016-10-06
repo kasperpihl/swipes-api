@@ -28,7 +28,6 @@ class WorkflowStepList extends Component {
     let rootClass = 'workflow__step-list';
 
     const listItems = data.map( (item, i) => {
-      console.log('assignees', item.assignees);
       const totalAssignees = item.assignees.length;
 
       // KRIS_TODO: Here is the assignees. Check for profile_pic and length
