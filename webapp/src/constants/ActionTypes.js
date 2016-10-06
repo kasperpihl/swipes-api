@@ -10,6 +10,8 @@ export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'
 export const SET_DRAGGING_DOT = 'SET_DRAGGING_DOT'
 export const DRAG_DOT = 'DRAG_DOT'
 
+export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
+
 // Toasty
 export const TOAST_ADD = 'TOAST_ADD'
 export const TOAST_REMOVE = 'TOAST_REMOVE'

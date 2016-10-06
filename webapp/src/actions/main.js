@@ -35,6 +35,11 @@ export function dragDot(hoverTarget){
 }
 
 
+export function setActiveGoal(goalId){
+  return { type: types.SET_ACTIVE_GOAL, goalId };
+}
+
+
 export function signin(data) {
   return request('users.signin', data);
 }

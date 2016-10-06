@@ -7,23 +7,29 @@ class GoalItem extends Component {
     super(props)
     this.state = {}
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    
+    this.clickedListItem = this.clickedListItem.bind(this);
+  }
+  clickedListItem(){
+    const { onClick, data } = this.props;
+    if(onClick){
+      onClick(data.get('id'));
+    }
   }
   componentDidMount() {
   }
   render() {
     const { data } = this.props;
-    let rootClass = 'goal';
+    let rootClass = 'goal-item';
 
     return (
-      <div className={rootClass}>
-        <div className="goal__image">
+      <div className={rootClass} onClick={this.clickedListItem}>
+        <div className={rootClass + "__image"}>
           <img src={data.get('img')} />
         </div>
-        <div className="goal__content">
-          <div className="goal__title">{data.get('title')}</div>
-          <div className="goal__progress"></div>
-          <div className="goal__label">{data.get('status')}</div>
+        <div className={rootClass + "__content"}>
+          <div className={rootClass + "__title"}>{data.get('title')}</div>
+          <div className={rootClass + "__progress"}></div>
+          <div className={rootClass + "__label"}>{data.get('status')}</div>
         </div>
       </div>
     )
