@@ -125,6 +125,18 @@ class Topbar extends Component {
       return <img src="http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230" />;
     }
   }
+  renderButtons(){
+    const { overlays } = this.props;
+    const buttons = [];
+    if(!overlays.size || overlays.last().get('component') !== 'Find'){
+      buttons.push(
+        <div key="find-button" className="topbar__button" onClick={this.clickedFind}>
+          <FindIcon className="topbar__button--find"/>
+        </div>
+      )
+    }
+    return buttons;
+  }
   render() {
 
     var topbarClass = 'sw-topbar';
@@ -143,9 +155,7 @@ class Topbar extends Component {
         {this.renderBreadcrumb()}
 
         <div className="topbar__actions">
-          <div className="topbar__button" onClick={this.clickedFind}>
-            <FindIcon className="topbar__button--find"/>
-          </div>
+          {this.renderButtons()}          
         </div>
 
       </div>

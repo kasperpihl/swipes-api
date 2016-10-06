@@ -57,30 +57,29 @@ class ConfirmGoal extends Component {
   didUpdateTitle(ref, title){
     this.goalTitle = title;
   }
-  didPressStart(ref){
-    const { addToasty, updateToasty, removeToasty } = this.props;
-    addToasty({title: "Adding a goal", loading: true}).then((toastId) => {
-      setTimeout(() => {
-        updateToasty(toastId, { loading: false, title: "Added the goal" });
-      }, 3000);
-      setTimeout(() => {
-        removeToasty(toastId);
-      }, 4500);
-    });
-
-    return;
-    const { request, organization_id, clearOverlay } = this.props;
+  didPressStart(ref){  
+    const { request, organization_id, clearOverlay, addToasty, updateToasty } = this.props;
     const { workflow } = this.state;
     const goal = workflow.toJS();
     const workflow_id = goal.id;
+    if(this.goalTitle){
+      goal.title = this.goalTitle;
+    }
     delete goal.id;
-    console.log(workflow.toJS());
-    request('goals.add', {process_id: workflow_id, organization_id, goal }).then((res) => {
-      if(res.ok){
-        clearOverlay();
-      }
-      console.log(res);
-    })
+    clearOverlay();
+    addToasty({title: "Adding: " + this.goalTitle, loading: true}).then((toastId) => {
+
+      request('goals.create', {workflow_id: workflow_id, organization_id, goal }).then((res) => {
+        if(res.ok){
+          updateToasty(toastId, { title: "Added: " + this.goalTitle, loading: false, duration: 3000 });
+          clearOverlay();
+        }
+        else{
+          updateToasty(toastId, { title: 'Error adding goal', loading: false, duration: 3000 });
+        }
+        console.log(res);
+      })
+    });
   }
   parseWorkflow(){
     const { workflow } = this.state;
@@ -110,7 +109,6 @@ const ConnectedConfirmGoal = connect(mapStateToProps, {
   clearOverlay: overlay.clear,
   request: api.request,
   addToasty: toasty.add,
-  updateToasty: toasty.update,
-  removeToasty: toasty.remove
+  updateToasty: toasty.update
 })(ConfirmGoal)
 export default ConnectedConfirmGoal
