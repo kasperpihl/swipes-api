@@ -47,14 +47,14 @@ const goalsValidate = (req, res, next) => {
 const goalsCreate = (req, res, next) => {
   const userId = req.userId;
   const organizationId = req.body.organization_id;
-  const processId = req.body.process_id;
+  const workflowId = req.body.workflow_id;
 
   if (validator.isNull(organizationId)) {
     return next(new SwipesError('organization_id is required'));
   }
 
   if (validator.isNull(processId)) {
-    return next(new SwipesError('process_id is required'));
+    return next(new SwipesError('workflow_id is required'));
   }
 
   const {
@@ -63,7 +63,7 @@ const goalsCreate = (req, res, next) => {
   } = res.locals;
   const metaObj = {
     id: goalId,
-    process_id: processId, // T_TODO check if this one exists!
+    workflow_id: workflowId, // T_TODO check if this one exists!
     organization_id: organizationId,
     timestamp: r.now(),
     created_by: userId
