@@ -4,6 +4,7 @@ import { randomString } from '../classes/utils'
 export function add(toast){
   return (dispatch, getState) => {
     const toastId = randomString(6);
+    toast.id = toastId;
     dispatch({ type: types.TOAST_ADD, toast, toastId });
     return Promise.resolve(toastId);
   }
