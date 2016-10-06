@@ -1,7 +1,7 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-$imgContHeight: 60px;
+$imgContHeight: 40px;
 
 @include b(goal) {
   @include size(100%, auto);
@@ -24,7 +24,7 @@ $imgContHeight: 60px;
     $contentWidth: calc(100% - #{$imgContHeight});
 
     @include size($contentWidth, 100%);
-
+    @include flex(flexstart, center, column);
     min-height: $imgContHeight;
     padding-left: 15px;
   }
