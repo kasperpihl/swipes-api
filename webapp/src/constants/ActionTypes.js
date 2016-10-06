@@ -10,6 +10,10 @@ export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'
 export const SET_DRAGGING_DOT = 'SET_DRAGGING_DOT'
 export const DRAG_DOT = 'DRAG_DOT'
 
+// Toasty
+export const TOAST_ADD = 'TOAST_ADD'
+export const TOAST_REMOVE = 'TOAST_REMOVE'
+export const TOAST_UPDATE = 'TOAST_UPDATE'
 
 // Overlay
 export const SET_OVERLAY = 'SET_OVERLAY'

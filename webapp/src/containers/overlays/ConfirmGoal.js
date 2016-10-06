@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { modal, api, overlay } from '../../actions'
+import { modal, api, overlay, toasty } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import { workflows } from '../../actions'
 import WorkflowSetup from '../../components/confirm-goal/WorkflowSetup'
@@ -58,6 +58,10 @@ class ConfirmGoal extends Component {
     this.goalTitle = title;
   }
   didPressStart(ref){
+    const { addToasty } = this.props;
+    addToasty({title: "Adding goal", loading: true});
+
+    return;
     const { request, organization_id, clearOverlay } = this.props;
     const { workflow } = this.state;
     const goal = workflow.toJS();
@@ -97,6 +101,9 @@ function mapStateToProps(state) {
 const ConnectedConfirmGoal = connect(mapStateToProps, {
   loadModal: modal.load,
   clearOverlay: overlay.clear,
-  request: api.request
+  request: api.request,
+  addToasty: toasty.add,
+  updateToasty: toasty.update,
+  removeToasty: toasty.remove
 })(ConfirmGoal)
 export default ConnectedConfirmGoal

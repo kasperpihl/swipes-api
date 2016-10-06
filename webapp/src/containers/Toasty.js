@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../constants/ActionTypes'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class Toasty extends Component {
@@ -8,9 +7,14 @@ class Toasty extends Component {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
+  renderToasts(){
+    const { toasts } = this.props;
+    console.log('toasts', toasts);
+  }
   render() {
     return (
-      <div>
+      <div className="toasty">
+        {this.renderToasts()}
       </div>
     )
   }
@@ -18,18 +22,10 @@ class Toasty extends Component {
 
 function mapStateToProps(state) {
   return {
-    main: state.get('main')
+    toasts: state.get('toasty').toArray()
   }
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-const { string } = PropTypes;
-Toasty.propTypes = {
-  //removeThis: PropTypes.string.isRequired
-}
-
-
 const ConnectedToasty = connect(mapStateToProps, {
-  onDoing: actions.doStuff
 })(Toasty)
 export default ConnectedToasty

@@ -5,6 +5,7 @@ import modal from './modal'
 import overlays from './overlays'
 import notifications from './notifications'
 import routing from './routing'
+import toasty from './toasty'
 
 import me from './me'
 import workspace from './workspace'
@@ -14,11 +15,13 @@ import users from './users'
 import goals from './goals'
 import workflows from './workflows'
 
+
 const rootReducer = combineReducers({
   main,
   modal,
   overlays,
   notifications,
+  toasty,
   routing,
 
   me,
