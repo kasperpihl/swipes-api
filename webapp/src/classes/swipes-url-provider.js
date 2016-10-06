@@ -28,7 +28,6 @@ export default class SwipesUrlProvider {
     this.fetchingUrls = [ ...new Set(this.urlsToFetch) ];
     this.urlsToFetch = [];
     this.store.dispatch(api.request('share.getData', { shareIds: this.fetchingUrls })).then((res) => {
-      console.log('ressy', res);
       if(res && res.ok){
         this.fetchingUrls.forEach((url, i) => {
           this.save(url, res.links[i].meta);

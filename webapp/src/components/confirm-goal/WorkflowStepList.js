@@ -13,7 +13,7 @@ class WorkflowStepList extends Component {
     this.refs.input.focus();
   }
   onBlur(e){
-    this.props.callDelegate('setupSetTitle', this.refs.input.value)
+    this.props.callDelegate('didUpdateTitle', this.refs.input.value)
   }
   onKeyUp(e){
     if(e.keyCode === 13){

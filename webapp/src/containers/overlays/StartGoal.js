@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import { fromJS } from 'immutable'
-import { modal, workflows, overlays } from '../../actions'
+import { modal, workflows, overlay } from '../../actions'
 import { bindAll } from '../../classes/utils'
 
 import WorkflowList from '../../components/start-goal/WorkflowList'
@@ -39,6 +39,6 @@ function mapStateToProps(state) {
 
 const ConnectedStartGoal = connect(mapStateToProps, {
   loadModal: modal.load,
-  pushOverlay: overlays.push
+  pushOverlay: overlay.push
 })(StartGoal)
 export default ConnectedStartGoal

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { modal } from '../../actions'
+import { modal, api, overlay } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import { workflows } from '../../actions'
 import WorkflowSetup from '../../components/confirm-goal/WorkflowSetup'
@@ -54,8 +54,22 @@ class ConfirmGoal extends Component {
       this.setState({workflow: newWorkflow});
     }
   }
+  didUpdateTitle(ref, title){
+    this.goalTitle = title;
+  }
   didPressStart(ref){
-    console.log('didPressUseProcess', ref);
+    const { request, organization_id, clearOverlay } = this.props;
+    const { workflow } = this.state;
+    const goal = workflow.toJS();
+    const workflow_id = goal.id;
+    delete goal.id;
+    console.log(workflow.toJS());
+    request('goals.add', {process_id: workflow_id, organization_id, goal }).then((res) => {
+      if(res.ok){
+        clearOverlay();
+      }
+      console.log(res);
+    })
   }
   parseWorkflow(){
     const { workflow } = this.state;
@@ -75,11 +89,14 @@ class ConfirmGoal extends Component {
 
 function mapStateToProps(state) {
   return {
+    organization_id: state.getIn(['me', 'organizations', 0, 'id']),
     users: state.get('users')
   }
 }
 
 const ConnectedConfirmGoal = connect(mapStateToProps, {
-  loadModal: modal.load
+  loadModal: modal.load,
+  clearOverlay: overlay.clear,
+  request: api.request
 })(ConfirmGoal)
 export default ConnectedConfirmGoal
