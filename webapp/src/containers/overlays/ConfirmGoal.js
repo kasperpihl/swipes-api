@@ -19,9 +19,9 @@ class ConfirmGoal extends Component {
     }
     const { users, loadModal } = this.props;
     const { workflow } = this.state;
-    const userArray = users.toArray().map((u) => { 
+    const userArray = users.toArray().map((u) => {
       return {
-        title: u.get('name'), 
+        title: u.get('name'),
         img: u.get('profile_pic') || icon,
         selected: (workflow.getIn(['steps', i, 'assignees', u.get('id')]))
       }
@@ -58,11 +58,14 @@ class ConfirmGoal extends Component {
     this.goalTitle = title;
   }
   didPressStart(ref){
-    const { addToasty, updateToasty } = this.props;
+    const { addToasty, updateToasty, removeToasty } = this.props;
     addToasty({title: "Adding goal", loading: true}).then((toastId) => {
       setTimeout(() => {
         updateToasty(toastId, { loading: false, title: 'Added goal' });
-      }, 3000)
+      }, 3000);
+      setTimeout(() => {
+        removeToasty(toastId);
+      }, 4500);
     });
 
     return;

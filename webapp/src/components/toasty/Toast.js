@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Loader from './../swipes-ui/Loader'
+import { CheckmarkIcon } from './../icons'
 import './styles/toast.scss'
 
 class Toast extends Component {
@@ -11,7 +12,9 @@ class Toast extends Component {
   }
   renderLoader(loading) {
     if (!loading) {
-      return;
+      return (
+        <CheckmarkIcon className="toast__icon"/>
+      )
     }
 
     return (
