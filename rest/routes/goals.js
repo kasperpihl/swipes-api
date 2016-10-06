@@ -8,6 +8,13 @@ import {
   goalsCreate,
   goalsDelete
 } from '../middlewares/goals';
+import {
+  usersGet
+} from '../middlewares/users';
+import {
+  notifyAllInCompany,
+  notifyCommonRethinkdb
+} from '../middlewares/notify';
 
 const router = express.Router();
 
@@ -24,8 +31,11 @@ router.post('/goals.processes', (req, res, next) => {
 })
 
 router.post('/goals.create',
+  usersGet,
   goalsValidate,
   goalsCreate,
+  notifyAllInCompany,
+  notifyCommonRethinkdb,
   (req, res, next) => {
     const {
       goalWithMeta
@@ -35,7 +45,10 @@ router.post('/goals.create',
   })
 
 router.post('/goals.delete',
+  usersGet,
   goalsDelete,
+  notifyAllInCompany,
+  notifyCommonRethinkdb,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   })
