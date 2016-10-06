@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Toast from '../components/toasty/Toast'
+import '../components/toasty/styles/toasty.scss'
 
 class Toasty extends Component {
   constructor(props) {
@@ -9,7 +11,10 @@ class Toasty extends Component {
   }
   renderToasts(){
     const { toasts } = this.props;
-    console.log('toasts', toasts);
+    return toasts.map( (toast, i) => {
+      return <Toast data={toast} key={'toast-' + i}/>
+    })
+    
   }
   render() {
     return (

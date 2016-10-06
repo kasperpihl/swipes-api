@@ -58,8 +58,12 @@ class ConfirmGoal extends Component {
     this.goalTitle = title;
   }
   didPressStart(ref){
-    const { addToasty } = this.props;
-    addToasty({title: "Adding goal", loading: true});
+    const { addToasty, updateToasty } = this.props;
+    addToasty({title: "Adding goal", loading: true}).then((toastId) => {
+      setTimeout(() => {
+        updateToasty(toastId, { loading: false, title: 'Added goal' });
+      }, 3000)
+    });
 
     return;
     const { request, organization_id, clearOverlay } = this.props;

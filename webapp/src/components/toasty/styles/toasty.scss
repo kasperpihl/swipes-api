@@ -1,9 +1,10 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-.toast-list {
+.toasty {
   $b: &;
   @include size(200px, auto);
   position: fixed;
-  right: 30px; top: 30px;
+  z-index: 10000;
+  right: 20px; top: 70px;
 }

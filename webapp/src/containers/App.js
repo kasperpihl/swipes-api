@@ -6,6 +6,7 @@ import Topbar from './Topbar'
 import Modal from './Modal'
 import Workspace from './Workspace'
 import Overlay from './Overlay'
+import Toasty from './Toasty'
 import DotDragOverlay from './DotDragOverlay'
 const {dialog} = nodeRequire('electron').remote
 
@@ -61,7 +62,7 @@ class App extends Component {
         <Workspace />
         <Overlay />
         <Modal />
-
+        <Toasty />
         <DotDragOverlay />
         <DevTools />
       </div>

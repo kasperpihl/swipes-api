@@ -3,7 +3,7 @@
 
 .toast {
   $b: &;
-  @include size(auto, 60px);
+  @include size(auto, 40px);
   @include flex(flex);
   background-color: $bg;
   box-shadow: 0 1px 20px 3px rgba($deepBlue-40, 0.4);
