@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Toast from '../components/toasty/Toast'
-import '../components/toasty/styles/toasty.scss'
+import Toast from './Toast'
+import './styles/toasty.scss'
 
 class Toasty extends Component {
   constructor(props) {

@@ -6,7 +6,7 @@ import Topbar from './Topbar'
 import Modal from './Modal'
 import Workspace from './Workspace'
 import Overlay from './Overlay'
-import Toasty from './Toasty'
+import Toasty from '../components/toasty/HOToasty'
 import DotDragOverlay from './DotDragOverlay'
 const {dialog} = nodeRequire('electron').remote
 

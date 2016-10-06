@@ -20,16 +20,17 @@ class GoalTimeline extends Component {
     }
   }
   updateCurrentAndActive(){
-    const { data } = this.props;
-    if(data){
+    const { goal } = this.props;
+    if(goal){
       const {
         activeIndex,
         currentIndex
       } = this.state;
 
       const newState = { activeIndex, currentIndex };
-      data.forEach((step, i) => {
-        if(newState.currentIndex === -1 && (!step.completed || i === data.length - 1)){
+      const steps = goal.get('steps');
+      steps.forEach((step, i) => {
+        if(newState.currentIndex === -1 && (!step.get('completed') || i === steps.size - 1)){
           newState.currentIndex = i;
           newState.activeIndex = i;
         }
@@ -76,9 +77,10 @@ class GoalTimeline extends Component {
     }
   }
   renderSteps(){
-    const { data } = this.props;
+    const { goal } = this.props;
+    const steps = goal.get('steps');
     const renderedItems = [];
-    if(!data){
+    if(!steps){
       return null;
     }
 
@@ -88,8 +90,8 @@ class GoalTimeline extends Component {
     } = this.state;
 
     const allClosed = (activeIndex === false);
-    data.forEach((step, i) => {
-      renderedItems.push(this.renderHeader(step, i, ((!step.completed && allClosed) || activeIndex === i)));
+    steps.forEach((step, i) => {
+      renderedItems.push(this.renderHeader(step, i, ((!step.get('completed') && allClosed) || activeIndex === i)));
 
       if(!allClosed && i === activeIndex){
         renderedItems.push(this.renderStep(step, i));
@@ -99,9 +101,10 @@ class GoalTimeline extends Component {
     return renderedItems;
   }
   renderHeader(step, i, active){
-    const { data } = this.props;
-    const isLast = i === data.length - 1;
-    return <GoalStepHeader onClick={this.clickedHeader} isLast={isLast} active={active} data={{step, index: i+1}} key={'header' + i} />
+    const { goal } = this.props;
+    const steps = goal.get('steps');
+    const isLast = i === steps.size - 1;
+    return <GoalStepHeader onClick={this.clickedHeader} isLast={isLast} active={active} step={step} index={i+1} key={'header' + i} />
   }
   renderStep(step, i){
     return <GoalStep data={step} key={'step' + i} />
@@ -119,6 +122,5 @@ export default GoalTimeline
 
 const { string, arrayOf, object } = PropTypes;
 GoalTimeline.propTypes = {
-  data: arrayOf(object),
   delegate: object
 }

@@ -50,15 +50,15 @@ class GoalStepHeader extends Component {
     )
   }
   clickedHeader(){
-    const { onClick } = this.props;
-    const { index } = this.props.data;
+    const { onClick, index } = this.props;
     if(onClick && !window.getSelection().toString().length){
       onClick(index);
     }
   }
   render() {
-    const { active, isLast } = this.props;
-    const { index, step } = this.props.data;
+    let { active, isLast, index, step } = this.props;
+    step = step.toJS();
+
     let className = 'step-header';
 
     if (active) {

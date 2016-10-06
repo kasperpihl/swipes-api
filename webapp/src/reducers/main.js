@@ -7,7 +7,8 @@ const initialState = fromJS({
   token: null,
   draggingDot: null,
   mainClasses: [],
-  hasLoaded: false
+  hasLoaded: false,
+  activeGoal: null
 })
 function toggleUnique(array, string, toggle){
   array = array || [];
@@ -61,6 +62,10 @@ export default function main (state = initialState, action) {
     }
     case types.DRAG_DOT:{
       return state.setIn(['draggingDot', 'hoverTarget'], action.hoverTarget);
+    }
+
+    case types.SET_ACTIVE_GOAL: {
+      return state.set('activeGoal', action.goalId || null);
     }
 
     // ======================================================

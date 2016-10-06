@@ -55,7 +55,7 @@ class GoalStep extends Component {
     )
   }
   render() {
-    const { description, statusLabel, completeButton, completed } = this.props.data
+    const { description, statusLabel, completeButton, completed } = this.props.data.toJS();
 
     return (
       <div className="goal-step">
