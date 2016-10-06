@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-
+import { overlay, main, api } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalTimeline from '../../components/goals/GoalTimeline';
-import { overlay, main } from '../../actions';
+
 import GoalItem from '../../components/goals/GoalItem';
 import { PlusIcon } from '../../components/icons'
 import '../../components/goals/styles/goals.scss';
@@ -15,8 +15,39 @@ class Goals extends Component {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['addGoal', 'clickedListItem']);
-    props.swipes.sendEvent('navigation.setTitle', 'Design icons');
-    props.swipes.sendEvent('navigation.setSubtitle', 'Approve Designs');
+    this.updateTitle('Goals');
+    this.addListenersToSwipes(props.swipes);
+
+    //props.swipes.sendEvent('navigation.setSubtitle', 'Approve Designs');
+  }
+  addListenersToSwipes(swipes){
+    
+    swipes.addListener('share.receivedData', (data) => {
+      
+    });
+    swipes.addListener('menu.pressed', () => {
+      this.goBack();
+    })
+  }
+  goBack(){
+    const { setActiveGoal } = this.props;
+    setActiveGoal(null);
+  }
+  componentDidUpdate(){
+    let { goals, currentGoalId } = this.props;
+    if(currentGoalId){
+      const goal = goals.get(currentGoalId);
+      this.updateTitle(goal.get('title'));
+    }
+    else{
+      this.updateTitle('Goals');
+    }
+  }
+  updateTitle(title){
+    if(title !== this.currentTitle){
+      this.props.swipes.sendEvent('navigation.setTitle', title);
+      this.currentTitle = title;
+    }
   }
   timelineUpdateSubtitle(subtitle){
     this.props.swipes.sendEvent('navigation.setSubtitle', subtitle)
@@ -40,7 +71,7 @@ class Goals extends Component {
     let { goals, currentGoalId } = this.props;
     if(currentGoalId){
       const goal = goals.get(currentGoalId);
-      return <GoalTimeline data={goal.toJS()} delegate={this}/>;
+      return <GoalTimeline goal={goal} data={goal.toJS()} delegate={this}/>;
     }
     return null;
   }
