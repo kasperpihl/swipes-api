@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../constants/ActionTypes'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import GoalTimeline from '../../components/goals/GoalTimeline'
+import GoalTimeline from '../../components/goals/GoalTimeline';
+import GoalItem from '../../components/goals/GoalItem';
+import '../../components/goals/styles/goals.scss';
 
 class Goals extends Component {
   constructor(props) {
@@ -14,11 +16,31 @@ class Goals extends Component {
   timelineUpdateSubtitle(subtitle){
     this.props.swipes.sendEvent('navigation.setSubtitle', subtitle)
   }
-  render() {
+  renderList(){
+    let { goals } = this.props;
+
+    goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
+    return goals.map((goal) => {
+      return <GoalItem data={goal} key={'goal-list-item-' + goal.get('id')}/>
+    })
+  }
+  renderTimeline(){
+    return null;
     const props = {};
     props.data = first;
+    return <GoalTimeline {...props} delegate={this}/>;
+  }
+  renderPlusButton(){
+
+  }
+  render() {
+
     return (
-      <GoalTimeline {...props} delegate={this}/>
+      <div className="goals">
+        {this.renderList()}
+        {this.renderTimeline()}
+        {this.renderPlusButton()}
+      </div>
     )
   }
 }

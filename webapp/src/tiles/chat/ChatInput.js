@@ -94,7 +94,6 @@ class ChatInput extends Component {
     const files = [];
     let hadTitle = false;
     items.forEach((item, i) => {
-      console.log('item', item.kind);
       if (item.kind === 'file') {
         var blob = item.getAsFile();
         files.push(blob);
