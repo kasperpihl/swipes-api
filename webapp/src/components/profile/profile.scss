@@ -4,65 +4,87 @@
 .profile {
   $b: &;
 
-  @include size(100%, auto);
-  min-height: 100vh;
-  @include flex(center, flex-start, column);
-  padding-top: 150px;
+  @include size(100%);
+  overflow-y: scroll;
+  padding: 12vh 0;
 
   &__image {
-    @include size(192px);
     @include flex();
-    padding: 0;
+    @include size(192px);
+    margin: 0 auto;
     border-radius: 50%;
 
     img {
-      max-width: 192px;
-      max-height: 192px;
       border-radius: 50%;
+      max-height: 192px;
+      max-width: 192px;
     }
   }
 
   &__name {
-    margin-top: 30px;
-    font-size: 30px;
     color: $deepBlue-80;
+    font-size: 30px;
     font-weight: 700;
+    margin-top: 5vh;
+    text-align: center;
   }
 
   &__organization {
-    margin-top: 15px;
-    padding-top: 15px;
     color: $deepBlue-30;
+    padding-top: 15px;
     position: relative;
+    max-width: 300px;
+    margin: 0 auto;
+    margin-top: 15px;
+    text-align: center;
 
     &:before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      @include size(100%, 1px);
+      @include size(100px, 1px);
       background-color: $deepBlue-20;
+      content: "";
+      left: calc(50% - 50px); top: 0;
+      position: absolute;
     }
   }
 
   &__button {
+    @include flex();
+    color: #fdfdfd;
+    transition: .15s ease-in-out;
 
-    &--logout {
+    i {
+      font-size: 18px;
+    }
+
+    &--nav {
       @include size(180px, 45px);
-      @include flex();
       background-color: $blue-100;
       border-radius: 3px;
       box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
-      color: #fdfdfd;
       font-size: 12px;
       font-weight: 500;
       letter-spacing: .5px;
+      margin: 0 auto;
+      margin-top: 10vh;
       text-transform: uppercase;
-      transition: .15s ease-in-out;
-      margin-top: 90px;
 
       &:hover {
         $darkBlue: darken($blue-100, 7%);
+        background-color: $darkBlue;
+        box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
+      }
+    }
+
+    &--logout {
+      @include size(44px);
+      background-color: $salmon;
+      border-radius: 50%;
+      box-shadow: 0 1px 20px 3px rgba($salmon, 0.4);
+      position: fixed;
+      right: 60px; bottom: 60px;
+
+      &:hover {
+        $darkBlue: darken($salmon, 7%);
         background-color: $darkBlue;
         box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
       }

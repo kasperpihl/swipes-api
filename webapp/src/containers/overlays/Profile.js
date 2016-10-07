@@ -27,7 +27,10 @@ class Profile extends Component {
         <div className="profile__image"><img src={me.get('profile_pic')} /></div>
         <div className="profile__name">{me.get('name')}</div>
         <div className="profile__organization">{me.getIn(['organizations', 0, 'name'])}</div>
-        <div className="profile__button profile__button--logout" onClick={this.onLogout}>log out</div>
+        <div className="profile__button profile__button--nav" onClick={this.clickedServices}>Services</div>
+        <div className="profile__button profile__button--logout" onClick={this.onLogout}>
+          <i className="material-icons">power_settings_new</i>
+        </div>
       </div>
     )
   }
