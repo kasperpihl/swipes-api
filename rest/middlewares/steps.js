@@ -7,6 +7,9 @@ import {
   fromJS,
   Map
 } from 'immutable';
+import {
+  reducersGet
+} from '../reducers/helpers';
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 
@@ -15,15 +18,15 @@ const reducers = requireDir('../reducers', {recurse: true});
 const stepsAssignValidate = (req, res, next) => {
   const goalId = req.body.goal_id;
   const stepId = req.body.step_id;
-  const assignee = req.body.assignee;
+  const assigneeId = req.body.assignee_id;
 
-  if (validator.isNull(goalId) || validator.isNull(stepId) || validator.isNull(assignee)) {
-    return next(new SwipesError('goal_id, step_id and assignee are required'));
+  if (validator.isNull(goalId) || validator.isNull(stepId) || validator.isNull(assigneeId)) {
+    return next(new SwipesError('goal_id, step_id and assignee_id are required'));
   }
 
   res.locals.goalId = goalId;
   res.locals.stepId = stepId;
-  res.locals.assignee = assignee;
+  res.locals.assigneeId = assigneeId;
 
   return next();
 }
@@ -32,7 +35,7 @@ const stepsAssign = (req, res, next) => {
   const {
     goalId,
     stepId,
-    assignee
+    assigneeId
   } = res.locals;
 
   const updateQ =
@@ -45,7 +48,7 @@ const stepsAssign = (req, res, next) => {
             return r.branch(
               step('id').eq(stepId),
               step.merge({
-                assignees: step('assignees').append(assignee)
+                assignees: step('assignees').append(assigneeId)
               }),
               step
             )
@@ -55,6 +58,14 @@ const stepsAssign = (req, res, next) => {
 
   db.rethinkQuery(updateQ)
     .then(() => {
+      res.locals.eventType = 'step_assignee_added';
+      res.locals.eventMessage = '';
+      res.locals.eventData = {
+        goal_id: goalId,
+        step_id: stepId,
+        assignee_id: assigneeId
+      };
+
       return next();
     })
     .catch((err) => {
@@ -113,19 +124,10 @@ const stepsDo = (req, res, next) => {
     step
   } = res.locals;
 
-  const directory = reducers[step.type];
-  if (!directory) {
-    return next('invalid type');
-  }
+  const reducer = reducersGet(step, action);
 
-  const file = directory[step.subtype];
-  if (!file) {
-    return next('invalid subtype')
-  }
-
-  const reducer = file[action];
-  if (typeof reducer !== 'function') {
-    return next('invalid action');
+  if (!reducer) {
+    return next('invalid reducer');
   }
 
   const stepUpdated = reducer(fromJS(step), payload);

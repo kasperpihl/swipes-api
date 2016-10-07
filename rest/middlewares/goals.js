@@ -26,7 +26,7 @@ const goalsValidate = (req, res, next) => {
 
   goal.steps = goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
-    const reducer = reducersGet(step);
+    const reducer = reducersGet(step, 'init');
     step.id = goalId + '-' + stepId;
 
     if (!reducer) {
@@ -77,6 +77,9 @@ const goalsCreate = (req, res, next) => {
   return db.rethinkQuery(insertQ)
     .then(() => {
       res.locals.goalWithMeta = goalWithMeta;
+      res.locals.eventType = 'goal_created';
+      res.locals.eventMessage = 'Goal "' + goalWithMeta.title + '" has been created';
+      res.locals.eventData = goalWithMeta;
 
       return next();
     })
@@ -123,6 +126,10 @@ const goalsDelete = (req, res, next) => {
 
   return db.rethinkQuery(updateQ)
     .then(() => {
+      res.locals.eventType = 'goal_deleted';
+      res.locals.eventMessage = 'Goal has been deleted';
+      res.locals.eventData = {id: goalId};
+
       return next();
     })
     .catch((err) => {

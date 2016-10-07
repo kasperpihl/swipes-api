@@ -7,22 +7,22 @@ import {
 
 const reducers = requireDir('./', {recurse: true});
 
-const reducersGet = (step, action = 'init') => {
+const reducersGet = (step, action) => {
   const directory = reducers[step.type];
   if (!directory) {
-    console.log('invalid step type', step);
+    console.log('invalid step type', step.type);
     return null;
   }
 
   const file = directory[step.subtype];
   if (!file) {
-    console.log('invalid step subtype', step);
+    console.log('invalid step subtype', step.subtype);
     return null;
   }
 
   const reducer = file[action];
   if (typeof reducer !== 'function') {
-    console.log('invalid step action', step);
+    console.log('invalid step action', action);
     return null;
   }
 

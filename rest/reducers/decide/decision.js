@@ -10,6 +10,15 @@ const init = (step) => {
   return step.mergeIn(['data'], data);
 }
 
+const decide = (step, payload) => {
+  const decision = payload.decision === true ? true : false;
+
+  return step.updateIn(['data', 'decision'], () => {
+    return decision;
+  });
+}
+
 export {
-  init
+  init,
+  decide
 }
