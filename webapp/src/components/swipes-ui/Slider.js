@@ -61,11 +61,16 @@ class Slider extends Component {
     return (
       <div className="slider">
         {this.renderLeftArrow()}
-        <div className="slider__content">
-          <ReactCSSTransitionGroup transitionName="slideSlider" component="div" className="toasty" transitionEnterTimeout={300} transitionLeaveTimeout={600}>
+        <ReactCSSTransitionGroup
+          transitionName={this.transitionName}
+          component="div"
+          className="slider__content"
+          transitionEnterTimeout={500} 
+          transitionLeaveTimeout={500}>
+
             {this.renderChildren()}
-          </ReactCSSTransitionGroup>
-        </div>
+
+        </ReactCSSTransitionGroup>
         {this.renderRightArrow()}
       </div>
     )

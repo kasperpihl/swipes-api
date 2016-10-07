@@ -2,6 +2,7 @@
 @import '../../global-styles/mixins/';
 
 .slider {
+  $b: &;
   @include size(100%);
   @include flex(flex);
 
@@ -12,52 +13,81 @@
     user-select: none;
 
     i {
-      color: $deepBlue-40;
+      color: $blue-60;
       user-select: none;
     }
 
 
     &:hover i {
-      color: $deepBlue-60;
+      color: $blue-100;
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+
+      i {
+        color: $deepBlue-20;
+      }
     }
   }
 
   &__content {
     @include size(calc(100% - 100px), 100%);
     @include flex();
+    position: relative;
+
+    & > #{$b}__child {
+      @include size(inherit, auto);
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }
 
 .slideLeft {
-
+  //empty
   &-enter {
+    opacity: 0;
+    transition: .5s;
 
     &-active {
-
+      opacity: 1;
+      transition: .5s;
     }
   }
 
   &-leave {
+    opacity: 1;
+    transition: .5s;
 
     &-active {
-
+      opacity: 0;
+      transition: .5s;
     }
   }
 }
 
 .slideRight {
-
+  //empty
   &-enter {
+    opacity: 0;
+    transition: .5s;
 
     &-active {
-
+      opacity: 1;
+      transition: .5s;
     }
   }
 
   &-leave {
+    opacity: 1;
+    transition: .5s;
 
     &-active {
-
+      opacity: 0;
+      transition: .5s;
     }
   }
 }
