@@ -38,10 +38,13 @@ router.post('/steps.assign',
 
 router.post('/steps.do',
   stepsValidateDoAction,
+  usersGet,
   goalsGet,
   stepsGetCurrent,
   stepsDo,
   stepsUpdateRethinkdb,
+  notifyAllInCompany,
+  notifyCommonRethinkdb,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }

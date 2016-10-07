@@ -26,7 +26,7 @@ const goalsValidate = (req, res, next) => {
 
   goal.steps = goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
-    const reducer = reducersGet(step);
+    const reducer = reducersGet(step, 'init');
     step.id = goalId + '-' + stepId;
 
     if (!reducer) {

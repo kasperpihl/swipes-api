@@ -7,6 +7,9 @@ import {
   fromJS,
   Map
 } from 'immutable';
+import {
+  reducersGet
+} from '../reducers/helpers';
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 
@@ -121,19 +124,10 @@ const stepsDo = (req, res, next) => {
     step
   } = res.locals;
 
-  const directory = reducers[step.type];
-  if (!directory) {
-    return next('invalid type');
-  }
+  const reducer = reducersGet(step, action);
 
-  const file = directory[step.subtype];
-  if (!file) {
-    return next('invalid subtype')
-  }
-
-  const reducer = file[action];
-  if (typeof reducer !== 'function') {
-    return next('invalid action');
+  if (!reducer) {
+    return next('invalid reducer');
   }
 
   const stepUpdated = reducer(fromJS(step), payload);

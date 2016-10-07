@@ -65,8 +65,6 @@ const notifyCommonRethinkdb = (req, res, next) => {
     data: eventData
   };
 
-  console.log(objToInsert);
-
   const query = r.table('events_multiple').insert(objToInsert);
 
   db.rethinkQuery(query)
