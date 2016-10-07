@@ -14,6 +14,7 @@ $fade: .4;
   z-index: 2;
   transition: opacity .1s;
 
+
   &:before {
     content: "";
     @include size(2px, 100%);
@@ -110,11 +111,13 @@ $fade: .4;
     @include size($contentWidth, 39px);
     @include flex(flex-start, space-between, column);
     padding-left: 21px;
+    user-select: none;
   }
 
   &__title {
     color: $deepBlue-100;
     font-size: 15px;
+    user-select: auto;
   }
 
   &__type {
@@ -123,6 +126,7 @@ $fade: .4;
     letter-spacing: 1px;
     opacity: .3;
     text-transform: uppercase;
+    user-select: auto;
   }
 
   &__assignees {

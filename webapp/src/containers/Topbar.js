@@ -57,7 +57,6 @@ class Topbar extends Component {
     }
     if(id === 'logout'){
       this.props.logout();
-      window.location.replace('/');
     }
 
   }

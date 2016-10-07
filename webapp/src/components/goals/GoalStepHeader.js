@@ -49,10 +49,13 @@ class GoalStepHeader extends Component {
       </div>
     )
   }
-  clickedHeader(){
+  clickedHeader(e){
+    console.log('e clicked', window.getSelection().toString().length);
     const { onClick, index } = this.props;
     if(onClick && !window.getSelection().toString().length){
       onClick(index);
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
   render() {
