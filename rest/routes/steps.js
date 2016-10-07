@@ -27,7 +27,10 @@ const router = express.Router();
 
 router.post('/steps.assign',
   stepsAssignValidate,
+  usersGet,
   stepsAssign,
+  notifyAllInCompany,
+  notifyCommonRethinkdb,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }
