@@ -171,27 +171,37 @@ class Chat extends Component {
     const { swipes } = this.props;
     swipes.sendEvent('openURL', {url: command})
   }
-  render() {
-    let { data } = this.state;
-    const { typingLabel, inputHeight } = this.state;
-    let paddingBottom = inputHeight + 20;
-    if(typingLabel){
-      // paddingBottom += 14;
+  renderList(){
+    const { data } = this.state;
+    const { activeGoal } = this.props;
+
+    if(activeGoal){
+      return <div>Threads will be here soon :)</div>
     }
+
+    return (
+      <ChatList
+        ref="chat-list"
+        cardDelegate={this}
+        sections={data.get('sortedMessages')}
+        markAsRead={this.slackHandler.markAsRead}
+        loadingMessages={data.get('loadingMessages')}
+        unreadAbove={this.unreadAbove}
+        unreadIndicator={data.get('unreadIndicator')}
+        clickedLink={this.clickedLink}
+      />
+    )
+  }
+  render() {
+    const { data } = this.state;
+    const { inputHeight } = this.state;
+    let paddingBottom = inputHeight + 20;
+
     return (
       <div style={{position: 'relative', height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
         {this.renderUnreadAbove()}
-        <ChatList
-          ref="chat-list"
-          cardDelegate={this}
-          sections={data.get('sortedMessages')}
-          markAsRead={this.slackHandler.markAsRead}
-          loadingMessages={data.get('loadingMessages')}
-          unreadAbove={this.unreadAbove}
-          unreadIndicator={data.get('unreadIndicator')}
-          clickedLink={this.clickedLink}
-        />
+        {this.renderList()}
         <ChatInput
           sendMessage={this.sendMessage}
           parentWidth={this.props.size.width}
@@ -205,4 +215,14 @@ class Chat extends Component {
   }
 }
 
-export default Chat;
+function mapStateToProps(state) {
+  return {
+    activeGoal: state.get('main').get('activeGoal')
+  }
+}
+
+const ConnectedChat = connect(mapStateToProps, {
+
+})(Chat)
+export default ConnectedChat
+

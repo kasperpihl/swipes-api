@@ -76,10 +76,16 @@ class Goals extends Component {
 
   }
   renderTimeline(){
-    let { goals, currentGoalId } = this.props;
+    let { goals, currentGoalId, users } = this.props;
     if(currentGoalId){
-      const goal = goals.get(currentGoalId);
-      return <GoalTimeline goal={goal} data={goal.toJS()} delegate={this}/>;
+      let goal = goals.get(currentGoalId);
+      goal = goal.updateIn(['steps'], (s) => s.map((step) => {
+        const assignees = step.get('assignees');
+        return step.set('assignees', assignees.map((userId) => {
+          return users.get(userId);
+        }));
+      }))
+      return <GoalTimeline goal={goal} delegate={this}/>;
     }
     return null;
   }
@@ -147,7 +153,8 @@ class Goals extends Component {
 function mapStateToProps(state) {
   return {
     goals: state.get('goals'),
-    currentGoalId: state.getIn(['main', 'activeGoal'])
+    currentGoalId: state.getIn(['main', 'activeGoal']),
+    users: state.get('users')
   }
 }
 
