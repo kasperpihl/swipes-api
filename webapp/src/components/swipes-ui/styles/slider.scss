@@ -1,0 +1,27 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.slider {
+  @include size(600px, 100%);
+  @include flex(flex);
+  margin: 0 auto;
+
+  &__nav {
+    @include size(50px, 100%);
+    @include flex();
+
+    i {
+      color: $deepBlue-40;
+    }
+
+
+    &:hover i {
+      color: $deepBlue-60;
+    }
+  }
+
+  &__content {
+    @include size(500px, 100%);
+    @include flex();
+  }
+}

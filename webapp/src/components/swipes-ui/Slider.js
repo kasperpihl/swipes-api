@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import './styles/slider.scss'
+
 class Slider extends Component {
   constructor(props) {
     super(props)
@@ -38,7 +40,7 @@ class Slider extends Component {
           {this.renderChildren()}
         </div>
         {this.renderRightArrow()}
-      </div>    
+      </div>
     )
   }
 }
