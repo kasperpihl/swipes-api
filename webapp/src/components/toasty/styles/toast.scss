@@ -3,7 +3,7 @@
 
 .toast {
   $b: &;
-  @include size(auto, 40px);
+  @include size(200px, 40px);
   display: flex !important;
   background-color: $bg;
   border-radius: 3px;
@@ -40,11 +40,16 @@
   }
 
   &__title {
-    @include size(100%);
-    @include flex();
+    @include size(calc(100% - 60px), 100%);
     color: $deepBlue-60;
     font-size: 12px;
     font-weight: 500;
+    line-height: 40px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
   }
 }
 

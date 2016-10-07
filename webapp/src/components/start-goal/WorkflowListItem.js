@@ -37,15 +37,11 @@ class WorkflowListItem extends Component {
     let rootClass = 'workflow__item'; // Trying something new here because of BEM
 
     return (
-      <div className={rootClass}>
+      <div className={rootClass} onClick={this.callback}>
         {this.renderImage(rootClass, img)}
         <div className={rootClass + '__content'}>
           <div className={rootClass + '__title'}>{title}</div>
           <div className={rootClass + '__description'}>{description}</div>
-          <div className={rootClass + '__button'} onClick={this.callback}>
-            select
-            <i className="material-icons">keyboard_arrow_right</i>
-          </div>
         </div>
       </div>
     )
