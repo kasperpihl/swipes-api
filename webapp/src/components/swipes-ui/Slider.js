@@ -18,18 +18,13 @@ class Slider extends Component {
   }
   componentDidMount() {
   }
-  componentWillUpdate(nextProps, nextState){
-    this.transitionName = 'slideLeft';
-    if(nextState.activeIndex < this.state.activeIndex){
-      this.transitionName = 'slideRight';
-    }
-  }
   goLeft(){
     const { activeIndex } = this.state;
     let nextIndex = activeIndex - 1;
     if(nextIndex < 0){
       nextIndex = this.props.children.length - 1;
     }
+    this.transitionName = 'slideLeft';
     this.setState({activeIndex: nextIndex })
   }
   goRight(){
@@ -38,6 +33,7 @@ class Slider extends Component {
     if(nextIndex >= this.props.children.length){
       nextIndex = 0;
     }
+    this.transitionName = 'slideRight';
     this.setState({activeIndex: nextIndex });
   }
   renderIndicators(){
