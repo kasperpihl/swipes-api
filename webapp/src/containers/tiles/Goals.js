@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { overlay, main, api, toasty, modal } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
+import { actionForType } from '../../components/goals/actions'
+
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalTimeline from '../../components/goals/GoalTimeline';
 
@@ -17,8 +19,6 @@ class Goals extends Component {
     bindAll(this, ['clickedRoundButton', 'clickedListItem']);
     this.updateTitle('Goals');
     this.addListenersToSwipes(props.swipes);
-
-    //props.swipes.sendEvent('navigation.setSubtitle', 'Approve Designs');
   }
   addListenersToSwipes(swipes){
 
@@ -34,10 +34,9 @@ class Goals extends Component {
     setActiveGoal(null);
   }
   componentDidUpdate(){
-    let { goals, currentGoalId } = this.props;
-    if(currentGoalId){
-      const goal = goals.get(currentGoalId);
-      this.updateTitle(goal.get('title'));
+    let { goals, currentGoal } = this.props;
+    if(currentGoal){
+      this.updateTitle(currentGoal.get('title'));
     }
     else{
       this.updateTitle('Goals');
@@ -56,8 +55,8 @@ class Goals extends Component {
     this.props.setActiveGoal(id);
   }
   renderList(){
-    let { goals, currentGoalId } = this.props;
-    if(currentGoalId){
+    let { goals, currentGoal } = this.props;
+    if(currentGoal){
       return;
     }
     goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
@@ -66,8 +65,12 @@ class Goals extends Component {
     })
   }
   renderActionForStep(timeline, stepId){
-    console.log(stepId);
-    return <div>Hello</div>
+    const { currentGoal } = this.props;
+    if(currentGoal){
+      const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
+      return actionForType(actionStep.get('type'), actionStep.get('subtype'));
+    }
+    return null;
   }
   getStatusForStep(timeline, stepId){
 
@@ -76,10 +79,9 @@ class Goals extends Component {
 
   }
   renderTimeline(){
-    let { goals, currentGoalId, users } = this.props;
-    if(currentGoalId){
-      let goal = goals.get(currentGoalId);
-      goal = goal.updateIn(['steps'], (s) => s.map((step) => {
+    let { currentGoal, users } = this.props;
+    if(currentGoal){
+      let goal = currentGoal.updateIn(['steps'], (s) => s.map((step) => {
         const assignees = step.get('assignees');
         return step.set('assignees', assignees.map((userId) => {
           return users.get(userId);
@@ -92,23 +94,22 @@ class Goals extends Component {
   clickedRoundButton() {
     const { 
       addToast, 
-      updateToast, 
-      loadModal, 
-      currentGoalId,
-      setActiveGoal,
-      setOverlay, 
-      request 
+      updateToast,
+      loadModal,
+      currentGoal,
+      setOverlay,
+      request
     } = this.props;
 
-    if(!currentGoalId){
+    if(!currentGoal){
       setOverlay({component: 'StartGoal', title: 'Start a Goal'});
     }
     else{
       loadModal({title: 'Delete Goal?', data: {message: 'Are you sure you want to delete this goal?', buttons: ['No', 'Yes']}, type: 'warning'}, (res) => {
         if(res && res.button){
-          setActiveGoal(null);
+          this.goBack();
           addToast({title: 'Deleting Goal', loading: true}).then((toastId) => {
-            request('goals.delete', {goal_id: currentGoalId}).then((res) =>{
+            request('goals.delete', {goal_id: currentGoal.get('id')}).then((res) =>{
               updateToast(toastId, {title: 'Goal deleted', loading: false, duration: 3000});
             });
           })
@@ -118,19 +119,17 @@ class Goals extends Component {
     
   }
   renderPlusButton(){
-    const { currentGoalId } = this.props;
+    const { currentGoal } = this.props;
     let className = 'fab';
     let icon = <PlusIcon className="fab__icon"/>
 
-    if (!currentGoalId) {
+    if (!currentGoal) {
       className += ' fab--add'
     }
     else {
       className += ' fab--delete'
       icon = <div className="material-icons fab__icon">delete</div>
     }
-
-    
 
     return (
       <div className={className} onClick={this.clickedRoundButton}>
@@ -153,7 +152,7 @@ class Goals extends Component {
 function mapStateToProps(state) {
   return {
     goals: state.get('goals'),
-    currentGoalId: state.getIn(['main', 'activeGoal']),
+    currentGoal: state.getIn(['goals', state.getIn(['main', 'activeGoal'])]),
     users: state.get('users')
   }
 }
