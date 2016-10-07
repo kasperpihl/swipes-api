@@ -9,7 +9,7 @@ class Slider extends Component {
     this.state = { activeIndex: -1 }
     this.calculateActiveIndex();
     this.transitionName = 'slideLeft';
-    bindAll(this, ['goLeft', 'goRight']);
+    bindAll(this, ['goLeft', 'goRight', 'clickedDot']);
   }
   calculateActiveIndex(){
     if(this.state.activeIndex === -1){
@@ -80,8 +80,30 @@ class Slider extends Component {
       return <div key={"child-" + i} className="slider__child">{c}</div>;
     }).filter((c, i) => i === aI);
   }
+  clickedDot(e){
+    const index = parseInt(e.target.getAttribute('data-index'), 10);
+    console.log('index', index);
+    this.setState({activeIndex: index});
+  }
+  renderDots(){
+    const { dots } = this.props;
+    const { activeIndex:aI } = this.state;
+
+    if(dots){
+      return (
+        <div className="slider__dots">
+          {this.props.children.map((c, i) => {
+            let className = "slider__dot";
+            if(i === aI){
+              className += " slider__dot--active";
+            }
+            return <div data-index={i} className={className} onClick={this.clickedDot} key={"dot-" + i} />
+          })}
+        </div>
+      )
+    }
+  }
   render() {
-    console.log(this.state.activeIndex);
     return (
       <div className="slider">
         {this.renderLeftArrow()}
@@ -96,6 +118,7 @@ class Slider extends Component {
 
         </ReactCSSTransitionGroup>
         {this.renderRightArrow()}
+        {this.renderDots()}
       </div>
     )
   }
@@ -105,5 +128,6 @@ export default Slider
 const { number, bool } = PropTypes;
 Slider.propTypes = {
   activeIndex: number,
-  infinite: bool
+  infinite: bool,
+  dots: bool
 }
