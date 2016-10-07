@@ -77,34 +77,48 @@ class Slider extends Component {
     }).filter((c, i) => i === aI);
   }
   clickedDot(e){
+    const curr = this.state.activeIndex;
     const index = parseInt(e.target.getAttribute('data-index'), 10);
     console.log('index', index);
+    this.transitionName = 'slideLeft';
+    if(index < curr){
+      this.transitionName = 'slideRight';
+    }
     this.setState({activeIndex: index});
   }
-  renderDots(){
+  renderDotsTop(){
     const { dots } = this.props;
-    const { activeIndex:aI } = this.state;
-
-    if(dots){
-      return (
-        <div className="slider__dots">
-          {this.props.children.map((c, i) => {
-            let className = "slider__dot";
-            if(i === aI){
-              className += " slider__dot--active";
-            }
-            return <div data-index={i} className={className} onClick={this.clickedDot} key={"dot-" + i} />
-          })}
-        </div>
-      )
+    if(dots && dots === 'top'){
+      return this.renderDots();
     }
+  }
+  renderDotsBottom(){
+    const { dots } = this.props;
+    if(dots && dots !== 'top'){
+      return this.renderDots();
+    }
+  }
+  renderDots(){
+
+    const { activeIndex:aI } = this.state;
+    return (
+      <div className="slider__dots">
+        {this.props.children.map((c, i) => {
+          let className = "slider__dot";
+          if(i === aI){
+            className += " slider__dot--active";
+          }
+          return <div data-index={i} className={className} onClick={this.clickedDot} key={"dot-" + i} />
+        })}
+      </div>
+    )
   }
   render() {
     return (
       <div className="slider">
         {this.renderLeftArrow()}
         <div className="slider__content">
-
+          {this.renderDotsTop()}
           <ReactCSSTransitionGroup
             transitionName={this.transitionName}
             component="div"
@@ -116,7 +130,7 @@ class Slider extends Component {
 
           </ReactCSSTransitionGroup>
 
-          {this.renderDots()}
+          {this.renderDotsBottom()}
 
         </div>
 
@@ -127,9 +141,9 @@ class Slider extends Component {
 }
 export default Slider
 
-const { number, bool } = PropTypes;
+const { number, bool, string, oneOfType } = PropTypes;
 Slider.propTypes = {
   activeIndex: number,
   infinite: bool,
-  dots: bool
+  dots: oneOfType([bool, string])
 }
