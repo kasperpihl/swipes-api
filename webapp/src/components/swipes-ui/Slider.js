@@ -8,6 +8,7 @@ class Slider extends Component {
     super(props)
     this.state = { activeIndex: -1 }
     this.calculateActiveIndex();
+    this.transitionName = 'slideLeft';
     bindAll(this, ['goLeft', 'goRight']);
   }
   calculateActiveIndex(){
@@ -39,22 +40,45 @@ class Slider extends Component {
     }
     this.setState({activeIndex: nextIndex });
   }
+  renderIndicators(){
+
+  }
   renderLeftArrow(){
+    const { infinite } = this.props;
+    const { activeIndex } = this.state;
+
+    let className = "slider__nav";
+    if(!infinite && activeIndex === 0 ){
+      className += ' slider__nav--disabled';
+    }
+    
     return (
-      <div className="slider__nav slider__nav--left" onClick={this.goLeft}>
+      <div className={className} onClick={this.goLeft}>
         <i className="material-icons">keyboard_arrow_left</i>
       </div>
     )
+    
   }
   renderRightArrow(){
+    const { infinite, children } = this.props;
+    const { activeIndex } = this.state;
+
+    let className = "slider__nav";
+    if(!infinite && activeIndex === children.length - 1 ){
+      className += ' slider__nav--disabled';
+    }
     return (
-      <div className="slider__nav slider__nav--right" onClick={this.goRight}>
+      <div className={className} onClick={this.goRight}>
         <i className="material-icons">keyboard_arrow_right</i>
       </div>
     )
   }
   renderChildren(){
-    return this.props.children.filter((c, i) => i === this.state.activeIndex);
+    const { activeIndex:aI } = this.state;
+
+    return this.props.children.map((c, i) => {
+      return <div key={"child-" + i} className="slider__child">{c}</div>;
+    }).filter((c, i) => i === aI);
   }
   render() {
     console.log(this.state.activeIndex);
@@ -78,7 +102,8 @@ class Slider extends Component {
 }
 export default Slider
 
-const { number } = PropTypes;
+const { number, bool } = PropTypes;
 Slider.propTypes = {
-  activeIndex: number
+  activeIndex: number,
+  infinite: bool
 }
