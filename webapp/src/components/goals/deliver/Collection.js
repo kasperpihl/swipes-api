@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCardList from '../../swipes-card/SwipesCardList'
+import Slider from '../../swipes-ui/Slider'
 
 class Collection extends Component {
   constructor(props) {
@@ -9,13 +10,15 @@ class Collection extends Component {
   }
   componentDidMount() {
   }
-  renderCardList(){
+  renderCardLists(){
     const { step } = this.props;
-    console.log(steps.get('data'))
+    console.log(step.getIn(['data', 'deliveries']).toJS());
   }
   render() {
     return (
-      <div>Collection</div>
+      <div>
+        {this.renderCardLists()}
+      </div>
     )
   }
 }

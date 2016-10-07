@@ -32,7 +32,7 @@ class Workspace extends Component {
       const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.get('draggingId')){
         this.props.stopDraggingDot()
-        this.props.generateShareUrl(draggingDot.get('data')).then( (res) => {
+        this.props.generateShareUrl(draggingDot.get('data').toJS()).then( (res) => {
           console.log('res from share url', res);
           
           if(res.ok){

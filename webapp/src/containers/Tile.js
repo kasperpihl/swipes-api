@@ -155,7 +155,8 @@ class Tile extends Component {
     const { draggingDot, tile } = this.props;
 
     if (draggingDot && draggingDot.get('draggingId') !== tile.get('id')) {
-      return <DropzoneOverlay hover={(tile.id === draggingDot.get('hoverTarget'))} title={"Share to: " + tile.get('name')}/>
+      console.log(tile.toJS());
+      return <DropzoneOverlay hover={(tile.get('id') === draggingDot.get('hoverTarget'))} title={"Share to: " + tile.get('name')}/>
     }
   }
   renderLocalTile(tile){

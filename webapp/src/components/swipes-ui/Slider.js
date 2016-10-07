@@ -79,7 +79,6 @@ class Slider extends Component {
   clickedDot(e){
     const curr = this.state.activeIndex;
     const index = parseInt(e.target.getAttribute('data-index'), 10);
-    console.log('index', index);
     this.transitionName = 'slideLeft';
     if(index < curr){
       this.transitionName = 'slideRight';
@@ -118,7 +117,9 @@ class Slider extends Component {
       <div className="slider">
         {this.renderLeftArrow()}
         <div className="slider__content">
+
           {this.renderDotsTop()}
+
           <ReactCSSTransitionGroup
             transitionName={this.transitionName}
             component="div"
@@ -133,7 +134,6 @@ class Slider extends Component {
           {this.renderDotsBottom()}
 
         </div>
-
         {this.renderRightArrow()}
       </div>
     )

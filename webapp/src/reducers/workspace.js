@@ -8,7 +8,8 @@ const initialState = fromJS({ tiles : {
     required_services: ['slack']
   },
   'goals': {
-    id: 'goals'
+    id: 'goals',
+    name: 'Goals'
   }}, columns : [] });
 
 function fillTilesToColumns(cols, tiles){
