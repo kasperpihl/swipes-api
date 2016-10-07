@@ -1,15 +1,20 @@
 "use strict";
 
-import { fromJS } from 'immutable';
+import {
+  fromJS,
+  Map
+} from 'immutable';
 
 const init = (step) => {
-  const data = fromJS({
-    deliveries: [
-      {collection: []}
-    ]
-  });
+  const data = fromJS([
+    {
+      deliveries: [
+        {collection: []}
+      ]
+    }
+  ]);
 
-  return step.mergeIn(['data'], data);
+  return step.merge(new Map({data: data}));
 }
 
 const add = (step, payload) => {
