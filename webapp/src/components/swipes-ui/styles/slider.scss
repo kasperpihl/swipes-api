@@ -33,15 +33,16 @@
   }
 
   &__content {
-    @include size(calc(100% - 100px), 100%);
+    $contentWidth: calc(100% - 100px);
+    @include size($contentWidth, 100%);
     @include flex();
     position: relative;
 
     & > #{$b}__child {
-      @include size(inherit, auto);
+      @include size(100%);
+      @include flex();
       position: absolute;
-      left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
+      left: 0; top: 0;
     }
   }
 }
@@ -50,21 +51,29 @@
   //empty
   &-enter {
     opacity: 0;
-    transition: .5s;
+    transform: translateX(50%);
+    transition: all .5s;
+    will-change: transform, opacity;
 
     &-active {
       opacity: 1;
-      transition: .5s;
+      transform: translateX(0px);
+      transition: all .5s;
+      will-change: transform, opacity;
     }
   }
 
   &-leave {
     opacity: 1;
-    transition: .5s;
+    transform: translateX(0px);
+    transition: all .5s;
+    will-change: transform, opacity;
 
     &-active {
       opacity: 0;
-      transition: .5s;
+      transform: translateX(-50%);
+      transition: all .5s;
+      will-change: transform, opacity;
     }
   }
 }
@@ -73,21 +82,29 @@
   //empty
   &-enter {
     opacity: 0;
-    transition: .5s;
+    transform: translateX(-50%);
+    transition: all .5s;
+    will-change: transform, opacity;
 
     &-active {
       opacity: 1;
-      transition: .5s;
+      transform: translateX(0px);
+      transition: all .5s;
+      will-change: transform, opacity;
     }
   }
 
   &-leave {
     opacity: 1;
-    transition: .5s;
+    transform: translateX(0px);
+    transition: all .5s;
+    will-change: transform, opacity;
 
     &-active {
       opacity: 0;
-      transition: .5s;
+      transform: translateX(50%);
+      transition: all .5s;
+      will-change: transform, opacity;
     }
   }
 }
