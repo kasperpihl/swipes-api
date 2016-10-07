@@ -199,16 +199,16 @@
 	&--warning & {
 
 		&__title {
-			color: $orange
+			color: $yellow-color
 		}
 
 		&__actions {
 
 			&__button {
-				background-color: $orange;
+				background-color: $yellow-color;
 
 				&:hover {
-					background-color: darken($orange, 5%);
+					background-color: darken($yellow-color, 5%);
 					color: white;
 				}
 			}

@@ -18,8 +18,8 @@ class WorkflowStepListItem extends Component {
       return;
     }
 
-    const nameList = names.map( (name) => {
-      return <div className="workflow__step-item__tooltip-item">{name.name}</div>
+    const nameList = names.map( (name, i) => {
+      return <div className="workflow__step-item__tooltip-item" key={'tooltip-item-' + i}>{name.name}</div>
     })
 
     return (

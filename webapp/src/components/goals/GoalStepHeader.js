@@ -28,26 +28,52 @@ class GoalStepHeader extends Component {
       </div>
     )
   }
-  renderAssignees(assignees) {
-    let img;
-    let count: '';
-
-    if (assignees.img) {
-      img = assignees.img
-    } else {
-      img = 'http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230'
+  renderAssigneeTooltip(names) {
+    if (names.length <= 1) {
+      return;
     }
 
-    if (assignees.count > 1) {
-      count = assignees.count + '+'
-    }
+    const nameList = names.map( (name, i) => {
+      return <div className="step-header__tooltip-item" key={'tooltip-item-' + i}>{name.name}</div>
+    })
 
     return (
-      <div className="step-header__assignees">
-        <img src={img} />
-        <div className="step-header__assignees__count">{count}</div>
+      <div className="step-header__tooltip">
+        {nameList}
       </div>
     )
+  }
+  renderAssignees(assignees) {
+    if (assignees.length < 1) {
+
+      return (
+        <div className="step-header__icons" onClick={this.clickedAssign}>
+          <AssignIcon className="step-header__icon step-header__icon--assign" />
+        </div>
+      )
+    } else {
+      let profileImg = "http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230";
+      let assigneesCount = assignees.length - 1;
+      let assigneesCountEl = '';
+      let assigneeNames = assignees.filter( (assignee) => (assignee.name));
+      const profilesOnly = assignees.filter( (assignee) => (assignee.profile_pic));
+
+      if (profilesOnly.length) {
+        profileImg = profilesOnly[0].profile_pic;
+      }
+
+      if (assigneesCount > 0) {
+        assigneesCountEl = <div className="step-header__assignee-count">{'+' + assigneesCount}</div>
+      }
+
+      return (
+        <div className="step-header__assignees">
+          <div className="step-header__assignee"><img src={profileImg}/></div>
+          {assigneesCountEl}
+          {this.renderAssigneeTooltip(assigneeNames)}
+        </div>
+      )
+    }
   }
   clickedHeader(e){
     console.log('e clicked', window.getSelection().toString().length);
@@ -61,6 +87,8 @@ class GoalStepHeader extends Component {
   render() {
     let { active, isLast, index, step } = this.props;
     step = step.toJS();
+
+    console.log('step', step);
 
     let className = 'step-header';
 
