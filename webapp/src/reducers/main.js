@@ -67,6 +67,12 @@ export default function main (state = initialState, action) {
     case types.SET_ACTIVE_GOAL: {
       return state.set('activeGoal', action.goalId || null);
     }
+    case 'goal_deleted':{
+      if(state.get('activeGoal') === action.payload.data.id){
+        return state.set('activeGoal', null);
+      }
+      return state;
+    }
 
     // ======================================================
     // Authorization methods

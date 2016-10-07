@@ -14,6 +14,12 @@ export default function goals (state = initialState, action) {
       })
       return fromJS(tempG);
     }
+    case 'goal_deleted':{
+      return state.delete(action.payload.data.id);
+    }
+    case 'goal_created':{
+      return state.set(action.payload.data.id, fromJS(action.payload.data));
+    }
     case types.LOGOUT:{
       return initialState;
     }

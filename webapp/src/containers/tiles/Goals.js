@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { overlay, main, api } from '../../actions';
+import { overlay, main, api, toasty, modal } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -14,7 +14,7 @@ class Goals extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['addGoal', 'clickedListItem']);
+    bindAll(this, ['clickedRoundButton', 'clickedListItem']);
     this.updateTitle('Goals');
     this.addListenersToSwipes(props.swipes);
 
@@ -83,25 +83,51 @@ class Goals extends Component {
     }
     return null;
   }
-  addGoal() {
-    this.props.setOverlay({component: 'StartGoal', title: 'Start a Goal'});
+  clickedRoundButton() {
+    const { 
+      addToast, 
+      updateToast, 
+      loadModal, 
+      currentGoalId,
+      setActiveGoal,
+      setOverlay, 
+      request 
+    } = this.props;
+
+    if(!currentGoalId){
+      setOverlay({component: 'StartGoal', title: 'Start a Goal'});
+    }
+    else{
+      loadModal({title: 'Delete Goal?', data: {message: 'Are you sure you want to delete this goal?', buttons: ['No', 'Yes']}, type: 'warning'}, (res) => {
+        if(res.button){
+          setActiveGoal(null);
+          addToast({title: 'Deleting Goal', loading: true}).then((toastId) => {
+            request('goals.delete', {goal_id: currentGoalId}).then((res) =>{
+              updateToast(toastId, {title: 'Goal deleted', loading: false, duration: 3000});
+            });
+          })
+        }
+      })      
+    }
+    
   }
   renderPlusButton(){
-
+    const { currentGoalId } = this.props;
     let className = 'fab';
     let icon = <PlusIcon className="fab__icon"/>
 
-    if (true) {
+    if (!currentGoalId) {
       className += ' fab--add'
     }
-
-    if (false) {
+    else {
       className += ' fab--delete'
       icon = <div className="material-icons fab__icon">delete</div>
     }
 
+    
+
     return (
-      <div className={className} onClick={this.addGoal}>
+      <div className={className} onClick={this.clickedRoundButton}>
         {icon}
       </div>
     )
@@ -127,6 +153,10 @@ function mapStateToProps(state) {
 
 const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
+  loadModal: modal.load,
+  request: api.request,
+  addToast: toasty.add,
+  updateToast: toasty.update,
   setActiveGoal: main.setActiveGoal
 })(Goals)
 export default ConnectedGoals
