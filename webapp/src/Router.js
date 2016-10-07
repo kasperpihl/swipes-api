@@ -30,7 +30,7 @@ export default class Root extends Component {
       <Router history={this.props.history} >
         <Route path="signin" component={Registration} onEnter={this.didEnterRegistration} />
         <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
-        <Route path="/" component={App} />
+        <Route path="/" component={App} onEnter={this.didEnterApp} />
       </Router>
     )
   }
