@@ -15,12 +15,17 @@ const init = (step) => {
   return step.merge(new Map({data: data}));
 }
 
-const decide = (step, payload) => {
+const decide = (step, payload, userId) => {
   const lastDataIndex = step.getIn(['data']).size - 1;
   const decision = payload.decision === true ? true : false;
+  const ts = new Date();
 
-  return step.updateIn(['data', lastDataIndex, 'decision'], () => {
-    return decision;
+  return step.updateIn(['data', lastDataIndex], () => {
+    return {
+      decision,
+      ts,
+      user_id: userId
+    };
   });
 }
 

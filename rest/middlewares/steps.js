@@ -121,7 +121,8 @@ const stepsDo = (req, res, next) => {
   let {
     action,
     payload,
-    step
+    step,
+    user
   } = res.locals;
 
   const reducer = reducersGet(step, action);
@@ -130,7 +131,7 @@ const stepsDo = (req, res, next) => {
     return next('invalid reducer');
   }
 
-  const stepUpdated = reducer(fromJS(step), payload);
+  const stepUpdated = reducer(fromJS(step), payload, user.id);
 
   if (typeof stepUpdated === 'string') {
     return next(stepUpdated);
@@ -234,6 +235,16 @@ const stepsUpdateRethinkdb = (req, res, next) => {
     })
 }
 
+const stepsIterate = (req, res, next) => {
+  const {
+    goal,
+    step
+  } = res.locals;
+
+
+
+  return next();
+}
 
 export {
   stepsAssignValidate,
@@ -244,5 +255,6 @@ export {
   stepsGet,
   stepsValidateUpdateData,
   stepsUpdateData,
-  stepsUpdateRethinkdb
+  stepsUpdateRethinkdb,
+  stepsIterate
 }
