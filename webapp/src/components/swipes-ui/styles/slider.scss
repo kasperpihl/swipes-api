@@ -35,7 +35,12 @@
   &__content {
     $contentWidth: calc(100% - 100px);
     @include size($contentWidth, 100%);
-    @include flex();
+    @include flex(center, center, column);
+    position: relative;
+  }
+
+  &__children {
+    @include size(100%, 80%);
     position: relative;
 
     & > #{$b}__child {
@@ -43,6 +48,25 @@
       @include flex();
       position: absolute;
       left: 0; top: 0;
+    }
+  }
+
+  &__dots {
+    @include size(100%, 20%);
+    @include flex();
+  }
+
+  &__dot {
+    @include size(10px);
+    background-color: $deepBlue-30;
+    border-radius: 50%;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    &--active {
+      background-color: $deepBlue-80;
     }
   }
 }

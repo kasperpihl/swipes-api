@@ -51,13 +51,13 @@ class Slider extends Component {
     if(!infinite && activeIndex === 0 ){
       className += ' slider__nav--disabled';
     }
-    
+
     return (
       <div className={className} onClick={this.goLeft}>
         <i className="material-icons">keyboard_arrow_left</i>
       </div>
     )
-    
+
   }
   renderRightArrow(){
     const { infinite, children } = this.props;
@@ -107,18 +107,24 @@ class Slider extends Component {
     return (
       <div className="slider">
         {this.renderLeftArrow()}
-        <ReactCSSTransitionGroup
-          transitionName={this.transitionName}
-          component="div"
-          className="slider__content"
-          transitionEnterTimeout={500} 
-          transitionLeaveTimeout={500}>
+        <div className="slider__content">
 
-            {this.renderChildren()}
+          <ReactCSSTransitionGroup
+            transitionName={this.transitionName}
+            component="div"
+            className="slider__children"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}>
 
-        </ReactCSSTransitionGroup>
+              {this.renderChildren()}
+
+          </ReactCSSTransitionGroup>
+
+          {this.renderDots()}
+
+        </div>
+
         {this.renderRightArrow()}
-        {this.renderDots()}
       </div>
     )
   }
