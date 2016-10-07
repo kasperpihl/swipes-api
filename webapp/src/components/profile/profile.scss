@@ -1,0 +1,71 @@
+@import '../global-styles/vars/';
+@import '../global-styles/mixins/';
+
+.profile {
+  $b: &;
+
+  @include size(100%, auto);
+  min-height: 100vh;
+  @include flex(center, flex-start, column);
+  padding-top: 150px;
+
+  &__image {
+    @include size(192px);
+    @include flex();
+    padding: 0;
+    border-radius: 50%;
+
+    img {
+      max-width: 192px;
+      max-height: 192px;
+      border-radius: 50%;
+    }
+  }
+
+  &__name {
+    margin-top: 30px;
+    font-size: 30px;
+    color: $deepBlue-80;
+    font-weight: 700;
+  }
+
+  &__organization {
+    margin-top: 15px;
+    padding-top: 15px;
+    color: $deepBlue-30;
+    position: relative;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      @include size(100%, 1px);
+      background-color: $deepBlue-20;
+    }
+  }
+
+  &__button {
+
+    &--logout {
+      @include size(180px, 45px);
+      @include flex();
+      background-color: $blue-100;
+      border-radius: 3px;
+      box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
+      color: #fdfdfd;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      transition: .15s ease-in-out;
+      margin-top: 90px;
+
+      &:hover {
+        $darkBlue: darken($blue-100, 7%);
+        background-color: $darkBlue;
+        box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
+      }
+    }
+  }
+}

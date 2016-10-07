@@ -1,28 +1,33 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { overlay } from '../../actions'
+import { overlay, main } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import '../../components/profile/profile.scss'
 
 class Profile extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['clickedServices'])
+    bindAll(this, ['clickedServices', 'onLogout'])
   }
   clickedServices(){
     const { pushOverlay } = this.props;
     pushOverlay({component: "Services", title: "Services"});
   }
+  onLogout() {
+    this.props.logout();
+  }
   render() {
     const { me } = this.props;
-    console.log('me', me);
     console.log('me.toJS()', me.toJS());
-    console.log("me.get('name')", me.get('name'));
-    console.log("me.getIn(['services', 0])", me.getIn(['services', 0, 'authData']));
-    console.log("me.getIn(['services', 0]).toJS()", me.getIn(['services', 0]).toJS());
+
     return (
-      <div onClick={this.clickedServices}>Hello
+      <div className="profile">
+        <div className="profile__image"><img src={me.get('profile_pic')} /></div>
+        <div className="profile__name">{me.get('name')}</div>
+        <div className="profile__organization">{me.getIn(['organizations', 0, 'name'])}</div>
+        <div className="profile__button profile__button--logout" onClick={this.onLogout}>log out</div>
       </div>
     )
   }
@@ -41,6 +46,7 @@ Profile.propTypes = {
 
 
 const ConnectedProfile = connect(mapStateToProps, {
-  pushOverlay: overlay.push
+  pushOverlay: overlay.push,
+  logout: main.logout
 })(Profile)
 export default ConnectedProfile
