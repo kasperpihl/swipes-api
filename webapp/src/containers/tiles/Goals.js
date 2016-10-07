@@ -68,7 +68,8 @@ class Goals extends Component {
     const { currentGoal } = this.props;
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
-      return actionForType(actionStep.get('type'), actionStep.get('subtype'));
+      const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
+      return <View goal={currentGoal} step={actionStep}/>
     }
     return null;
   }

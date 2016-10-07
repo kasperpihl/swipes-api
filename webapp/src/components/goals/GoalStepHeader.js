@@ -44,7 +44,6 @@ class GoalStepHeader extends Component {
     )
   }
   renderAssignees(assignees) {
-    console.log(assignees);
     if (assignees.length < 1) {
 
       return;
@@ -73,7 +72,6 @@ class GoalStepHeader extends Component {
     }
   }
   clickedHeader(e){
-    console.log('e clicked', window.getSelection().toString().length);
     const { onClick, index } = this.props;
     if(onClick && !window.getSelection().toString().length){
       onClick(index);

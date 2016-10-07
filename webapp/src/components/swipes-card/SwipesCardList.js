@@ -156,8 +156,7 @@ const dataType = {
   title: string.isRequired,
   items: arrayOf(SwipesCardItem.propTypes.data).isRequired,
   titleLeftImage: string,
-  titleRightImage: string,
-  actionLabel: string
+  titleRightImage: string
 }
 
 SwipesCardList.propTypes = {
