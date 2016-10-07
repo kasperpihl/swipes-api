@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/slider.scss'
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { bindAll } from '../../classes/utils'
 
 class Slider extends Component {
@@ -55,7 +56,9 @@ class Slider extends Component {
       <div className="slider">
         {this.renderLeftArrow()}
         <div className="slider__content">
-          {this.renderChildren()}
+          <ReactCSSTransitionGroup transitionName="slideSlider" component="div" className="toasty" transitionEnterTimeout={300} transitionLeaveTimeout={600}>
+            {this.renderChildren()}
+          </ReactCSSTransitionGroup>
         </div>
         {this.renderRightArrow()}
       </div>

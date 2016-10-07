@@ -2,16 +2,18 @@
 @import '../../global-styles/mixins/';
 
 .slider {
-  @include size(600px, 100%);
+  @include size(100%);
   @include flex(flex);
-  margin: 0 auto;
 
   &__nav {
     @include size(50px, 100%);
     @include flex();
 
+    user-select: none;
+
     i {
       color: $deepBlue-40;
+      user-select: none;
     }
 
 
@@ -21,7 +23,41 @@
   }
 
   &__content {
-    @include size(500px, 100%);
+    @include size(calc(100% - 100px), 100%);
     @include flex();
+  }
+}
+
+.slideLeft {
+
+  &-enter {
+
+    &-active {
+
+    }
+  }
+
+  &-leave {
+
+    &-active {
+
+    }
+  }
+}
+
+.slideRight {
+
+  &-enter {
+
+    &-active {
+
+    }
+  }
+
+  &-leave {
+
+    &-active {
+
+    }
   }
 }
