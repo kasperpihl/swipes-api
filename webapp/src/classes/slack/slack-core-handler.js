@@ -32,6 +32,12 @@ export default class SlackCoreHandler {
     this.request('rtm.start').then((res, err) => {
       this.isStarting = false;
       if(res.ok){
+        console.log('slacky', res);
+        res.data.users.forEach((user) => {
+          if(user.id == res.data.self.id){
+            console.log(user);
+          }
+        })
         const saveObj = { channels: {} };
         const keysToSave = [ 'team', 'users', 'self', 'bots', 'channels', 'groups', 'ims' ]
         Object.keys(res.data).forEach((key) => {
@@ -48,7 +54,7 @@ export default class SlackCoreHandler {
           }
         });
         if(this.onProfilePic){
-          this.onProfilePic(saveObj.users[saveObj.self.id].profile.image_72);
+          this.onProfilePic(saveObj.users[saveObj.self.id].profile.image_192);
         }
         this.slackData = new CoreSlackData(saveObj);
         this.slackData.onNotification = this.onNotification;

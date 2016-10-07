@@ -1,25 +1,23 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/goal-step.scss'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class GoalStep extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
   }
   renderDescription(description){
-
-
     return (
       <div className="goal-step__description">{description}</div>
     )
   }
   renderAction(){
-
-    return (
-      <div className="kremlin"></div>
-    )
+    const { callDelegate, data } = this.props;
+    return callDelegate('renderActionForStep', data.get('id'));
   }
   renderStatus(label, completed){
     if (!label && !completed) {
@@ -55,7 +53,8 @@ class GoalStep extends Component {
     )
   }
   render() {
-    const { description, statusLabel, completeButton, completed } = this.props.data.toJS();
+    const { data } = this.props;
+    const { description, statusLabel, completeButton, completed } = data.toJS();
 
     return (
       <div className="goal-step">
@@ -71,10 +70,4 @@ export default GoalStep
 
 const { string, bool, shape } = PropTypes;
 GoalStep.propTypes = {
-  data: shape({
-    description: string,
-    statusLabel: string,
-    completeButton: bool
-  })
-
 }

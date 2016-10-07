@@ -11,7 +11,8 @@ class GoalTimeline extends Component {
     super(props)
     this.state = { activeIndex: -1, currentIndex: -1 }
     this.updateCurrentAndActive();
-    bindAll( this, [ 'clickedHeader']);
+    bindAll( this, [ 'clickedHeader', 'callDelegate']);
+
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -107,7 +108,7 @@ class GoalTimeline extends Component {
     return <GoalStepHeader onClick={this.clickedHeader} isLast={isLast} active={active} step={step} index={i+1} key={'header' + i} />
   }
   renderStep(step, i){
-    return <GoalStep data={step} key={'step' + i} />
+    return <GoalStep data={step} key={'step' + i} callDelegate={this.callDelegate} />
   }
 
   render() {

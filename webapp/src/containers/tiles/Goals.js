@@ -65,6 +65,16 @@ class Goals extends Component {
       return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
+  renderActionForStep(timeline, stepId){
+    console.log(stepId);
+    return <div>Hello</div>
+  }
+  getStatusForStep(timeline, stepId){
+
+  }
+  statusForGoal(){
+
+  }
   renderTimeline(){
     let { goals, currentGoalId } = this.props;
     if(currentGoalId){
