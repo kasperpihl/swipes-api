@@ -5,7 +5,6 @@
   $b: &;
 
   @include size(100%);
-  @include flex(center, flex-start, column);
   overflow-y: auto;
 }
 

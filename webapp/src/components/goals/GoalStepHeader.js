@@ -44,13 +44,10 @@ class GoalStepHeader extends Component {
     )
   }
   renderAssignees(assignees) {
+    console.log(assignees);
     if (assignees.length < 1) {
 
-      return (
-        <div className="step-header__icons" onClick={this.clickedAssign}>
-          <AssignIcon className="step-header__icon step-header__icon--assign" />
-        </div>
-      )
+      return;
     } else {
       let profileImg = "http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230";
       let assigneesCount = assignees.length - 1;
@@ -87,8 +84,6 @@ class GoalStepHeader extends Component {
   render() {
     let { active, isLast, index, step } = this.props;
     step = step.toJS();
-
-    console.log('step', step);
 
     let className = 'step-header';
 
