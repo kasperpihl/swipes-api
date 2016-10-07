@@ -30,8 +30,8 @@ $itemWidth: 550px;
   &__content {
     $contentWidth: calc(100% - 84px - 18px);
 
-    @include size($contentWidth, auto);
-    // @include flex(flex-start, flex-start, column);
+    @include size($contentWidth, 84px);
+    @include flex(flex-start, center, column);
     padding-left: 18px;
     position: relative;
   }

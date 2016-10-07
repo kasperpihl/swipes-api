@@ -5,6 +5,7 @@
   $b: &;
 
   @include size(100%);
+  padding: 0 30px;
   overflow-y: auto;
 }
 
