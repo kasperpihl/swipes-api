@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes, Children } from 'react'
 import './styles/slider.scss'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { bindAll } from '../../classes/utils'
@@ -13,24 +13,26 @@ class Slider extends Component {
   }
   calculateActiveIndex(){
     if(this.state.activeIndex === -1){
-      this.state.activeIndex = this.props.children.length - 1;
+      this.state.activeIndex = Children.count(this.props.children) - 1;
     }
   }
   componentDidMount() {
   }
   goLeft(){
     const { activeIndex } = this.state;
+    const { children } = this.props;
     let nextIndex = activeIndex - 1;
     if(nextIndex < 0){
-      nextIndex = this.props.children.length - 1;
+      nextIndex = Children.count(children) - 1;
     }
     this.transitionName = 'slideLeft';
     this.setState({activeIndex: nextIndex })
   }
   goRight(){
     const { activeIndex } = this.state;
+    const { children } = this.props;
     let nextIndex = activeIndex + 1;
-    if(nextIndex >= this.props.children.length){
+    if(nextIndex >= Children.count(children)){
       nextIndex = 0;
     }
     this.transitionName = 'slideRight';
@@ -60,7 +62,7 @@ class Slider extends Component {
     const { activeIndex } = this.state;
 
     let className = "slider__nav";
-    if(!infinite && activeIndex === children.length - 1 ){
+    if(!infinite && activeIndex === Children.count(children) - 1 ){
       className += ' slider__nav--disabled';
     }
     return (

@@ -6,13 +6,22 @@ class Collection extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    console.log('in the collection', props.step.toJS());
   }
   componentDidMount() {
   }
   renderCardLists(){
     const { step } = this.props;
-    console.log(step.getIn(['data', 'deliveries']).toJS());
+    const cards = step.getIn(['data', 'deliveries']).map((iteration, i) => {
+      const data = {
+        title: 'Iteration #' + i,
+        items: iteration.get('collection').map((del) => {
+
+        }).toArray()
+      }
+      return <SwipesCardList data={data} key={"cardlist-" + i}/>
+    });
+    return ( <Slider infinite={true} dots={true}>{cards}</Slider> )
+
   }
   render() {
     return (
