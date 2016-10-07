@@ -16,6 +16,12 @@ class Slider extends Component {
   }
   componentDidMount() {
   }
+  componentWillUpdate(nextProps, nextState){
+    this.transitionName = 'slideLeft';
+    if(nextState.activeIndex < this.state.activeIndex){
+      this.transitionName = 'slideRight';
+    }
+  }
   goLeft(){
     const { activeIndex } = this.state;
     let nextIndex = activeIndex - 1;
