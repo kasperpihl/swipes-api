@@ -32,12 +32,6 @@ export default class SlackCoreHandler {
     this.request('rtm.start').then((res, err) => {
       this.isStarting = false;
       if(res.ok){
-        console.log('slacky', res);
-        res.data.users.forEach((user) => {
-          if(user.id == res.data.self.id){
-            console.log(user);
-          }
-        })
         const saveObj = { channels: {} };
         const keysToSave = [ 'team', 'users', 'self', 'bots', 'channels', 'groups', 'ims' ]
         Object.keys(res.data).forEach((key) => {
