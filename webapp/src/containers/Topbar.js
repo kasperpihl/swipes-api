@@ -44,7 +44,7 @@ class Topbar extends Component {
     this.props.clearOverlay();
   }
   clickedProfile(){
-    this.props.setOverlay({ component: 'Services', title: 'Services' });
+    this.props.setOverlay({ component: 'Profile', title: 'Profile' });
   }
   signout() {
   }

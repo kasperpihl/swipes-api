@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-class Delivery extends Component {
+class Collection extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -13,10 +13,10 @@ class Delivery extends Component {
     )
   }
 }
-export default Delivery
+export default Collection
 
 const { string } = PropTypes;
 import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-Delivery.propTypes = {
+Collection.propTypes = {
   removeThis: string.isRequired
 }
