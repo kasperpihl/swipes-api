@@ -13,7 +13,7 @@ class SwipesModalActions extends React.Component {
   buttonClick(e) {
     const i = e.target.getAttribute('data-index');
     this.props.onClick({
-      button: i
+      button: parseInt(i, 10)
     })
   }
   render() {

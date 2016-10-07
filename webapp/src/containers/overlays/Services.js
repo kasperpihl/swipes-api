@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { bindAll } from '../../classes/utils'
-import * as actions from '../../actions'
+import { modal, me } from '../../actions'
 import ConnectRow from '../../components/services/ConnectRow'
 import '../../components/services/services.scss'
+
+const {dialog} = nodeRequire('electron').remote
 
 class Services extends Component {
   constructor(props) {
@@ -18,6 +20,30 @@ class Services extends Component {
       serviceName: data.id,
       url: window.location.origin + '/v1/services.authorize?service=' + data.id
     });
+  }
+  componentDidMount(){
+    this.checkForDropboxFolder();
+  }
+  checkForDropboxFolder(){
+    const { myServices } = this.props;
+    const db = myServices.find((s) => s.get('service_name') === 'dropbox');
+    if(db && !localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')){
+      this.props.loadModal({title: "Find Dropbox folder", data: {message: "This will enable you to open files on your local dropbox folder", buttons: ["No", "Yes"]}}, (res) => {
+        if(res && res.button){
+          var folder = dialog.showOpenDialog({ properties: ['openDirectory']});
+          if(folder){
+            localStorage.setItem('dropbox-folder', folder);
+          }
+        }
+        localStorage.setItem('dropbox-did-ask', true)
+      })
+      //
+    }
+  }
+
+  componentDidUpdate(){
+    
+    this.checkForDropboxFolder();
   }
   renderConnectedServices(){
     const { myServices:my, services } = this.props;
@@ -92,6 +118,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedServices = connect(mapStateToProps, {
-  disconnectService: actions.me.disconnectService
+  disconnectService: me.disconnectService,
+  loadModal: modal.load
 })(Services)
 export default ConnectedServices

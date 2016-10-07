@@ -8,7 +8,7 @@ import Workspace from './Workspace'
 import Overlay from './Overlay'
 import Toasty from '../components/toasty/HOToasty'
 import DotDragOverlay from './DotDragOverlay'
-const {dialog} = nodeRequire('electron').remote
+
 
 let DevTools = 'div';
 if(process.env.NODE_ENV !== 'production'){
@@ -23,7 +23,6 @@ class App extends Component {
   }
   componentDidMount() {
     this.props.request('rtm.start');
-    this.checkForDropboxFolder();
 
     // Massive hack to not be able to drop files into swipes so it wouldn't redirect
 
@@ -36,20 +35,6 @@ class App extends Component {
       e.preventDefault()
       return false;
     })
-  }
-  checkForDropboxFolder(){
-    if(!localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')){
-      this.props.loadModal({title: "Find Dropbox folder", data: {message: "This will enable you to open files on your local dropbox folder (experimental)", buttons: ["No", "Yes"]}}, (res) => {
-        if(res && res.button){
-          var folder = dialog.showOpenDialog({ properties: ['openDirectory']});
-          if(folder){
-            localStorage.setItem('dropbox-folder', folder);
-          }
-        }
-        localStorage.setItem('dropbox-did-ask', true)
-      })
-      //
-    }
   }
   render() {
     let classes = 'main ';
