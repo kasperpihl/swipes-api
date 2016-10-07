@@ -18,9 +18,10 @@ const init = (step) => {
 }
 
 const add = (step, payload) => {
-  const lastIndex = step.getIn(['data', 'deliveries']).size - 1;
+  const lastDataIndex = step.getIn(['data']).size - 1;
+  const lastDeliveriesIndex = step.getIn(['data', lastDataIndex, 'deliveries']).size - 1;
 
-  return step.updateIn(['data', 'deliveries', lastIndex, 'collection'], (array) => {
+  return step.updateIn(['data', lastDataIndex, 'deliveries', lastDeliveriesIndex, 'collection'], (array) => {
     return array.push(payload.url);
   })
 }

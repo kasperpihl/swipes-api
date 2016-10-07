@@ -16,9 +16,10 @@ const init = (step) => {
 }
 
 const decide = (step, payload) => {
+  const lastDataIndex = step.getIn(['data']).size - 1;
   const decision = payload.decision === true ? true : false;
 
-  return step.updateIn(['data', 'decision'], () => {
+  return step.updateIn(['data', lastDataIndex, 'decision'], () => {
     return decision;
   });
 }
