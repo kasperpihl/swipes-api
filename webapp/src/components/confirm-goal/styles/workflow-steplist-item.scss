@@ -67,8 +67,8 @@
   }
 
   &__assignees {
-    @include size(30px, 100%);
     @include flex();
+    @include size(30px, 100%);
     margin: 0 17px;
     position: relative;
 
@@ -90,15 +90,15 @@
   }
 
   &__assignee-count {
-    @include size(30px);
     @include flex();
-    border-radius: 50%;
-    position: absolute;
-    left: 0; top: 50%;
-    transform: translateY(-50%);
+    @include size(30px);
     background-color: rgba($deepBlue-100, .4);
+    border-radius: 50%;
     color: white;
     font-size: 13px;
+    left: 0; top: 50%;
+    position: absolute;
+    transform: translateY(-50%);
 
     &:hover {
       background-color: rgba($deepBlue-100, .8);
@@ -108,29 +108,29 @@
 
   &__tooltip {
     @include size(150px, auto);
-    position: absolute;
-    left: calc(0px - 75px); bottom: 0;
-    transform: translateY(100%);
     background-color: $deepBlue-100;
-    z-index: 2;
     border-radius: 6px;
     display: none;
+    left: calc(0px - 75px); bottom: 0;
+    position: absolute;
+    transform: translateY(100%);
+    z-index: 2;
 
     &:after {
-      content: "";
       @include size(12px);
-      position: absolute;
-      transform: rotate(45deg);
       background-color: $deepBlue-100;
+      content: "";
+      position: absolute;
       right: 55px;
       top: -6px;
+      transform: rotate(45deg);
     }
   }
 
   &__tooltip-item {
-    padding: 10px;
     color: white;
     font-size: 13px;
+    padding: 10px;
     position: relative;
     z-index: 4;
 

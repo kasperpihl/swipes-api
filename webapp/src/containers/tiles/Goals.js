@@ -21,9 +21,9 @@ class Goals extends Component {
     //props.swipes.sendEvent('navigation.setSubtitle', 'Approve Designs');
   }
   addListenersToSwipes(swipes){
-    
+
     swipes.addListener('share.receivedData', (data) => {
-      
+
     });
     swipes.addListener('menu.pressed', () => {
       this.goBack();
@@ -78,9 +78,21 @@ class Goals extends Component {
   }
   renderPlusButton(){
 
+    let className = 'fab';
+    let icon = <PlusIcon className="fab__icon"/>
+
+    if (true) {
+      className += ' fab--add'
+    }
+
+    if (false) {
+      className += ' fab--delete'
+      icon = <div className="material-icons fab__icon">delete</div>
+    }
+
     return (
-      <div className="fab fab--goals" onClick={this.addGoal}>
-        <PlusIcon className="fab__icon"/>
+      <div className={className} onClick={this.addGoal}>
+        {icon}
       </div>
     )
   }
