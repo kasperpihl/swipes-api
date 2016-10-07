@@ -66,7 +66,7 @@ class GoalTimeline extends Component {
         autoscroll(el, scrollVal, 200);
       }, 450);
       //
-      
+
     }
   }
   clickedHeader(index){
@@ -85,7 +85,7 @@ class GoalTimeline extends Component {
       return null;
     }
 
-    const { 
+    const {
       currentIndex,
       activeIndex
     } = this.state;

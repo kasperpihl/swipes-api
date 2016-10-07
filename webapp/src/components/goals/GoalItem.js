@@ -28,7 +28,6 @@ class GoalItem extends Component {
         </div>
         <div className={rootClass + "__content"}>
           <div className={rootClass + "__title"}>{data.get('title')}</div>
-          <div className={rootClass + "__progress"}></div>
           <div className={rootClass + "__label"}>{data.get('status')}</div>
         </div>
       </div>
