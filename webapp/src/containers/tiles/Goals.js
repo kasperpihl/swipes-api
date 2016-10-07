@@ -99,7 +99,7 @@ class Goals extends Component {
     }
     else{
       loadModal({title: 'Delete Goal?', data: {message: 'Are you sure you want to delete this goal?', buttons: ['No', 'Yes']}, type: 'warning'}, (res) => {
-        if(res.button){
+        if(res && res.button){
           setActiveGoal(null);
           addToast({title: 'Deleting Goal', loading: true}).then((toastId) => {
             request('goals.delete', {goal_id: currentGoalId}).then((res) =>{
