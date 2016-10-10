@@ -35,7 +35,7 @@ const localStorageConfig = {
 }
 export default function configureStore(preloadedState) {
   preloadedState = Immutable.Map();
-  const ignoredActions = [types.DRAG_DOT]; // Ignore actions from Logger
+  const ignoredActions = []; // Ignore actions from Logger
   // All the keys to persist to localStorage between opens
   const enhancer = compose(
     applyMiddleware(

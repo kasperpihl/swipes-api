@@ -122,14 +122,24 @@ class Find extends Component {
     console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
+    const { recent } = this.props;
     if(data.checksum){ // Is activity
-      this.props.startDraggingDot("search", this.shareDataForChecksum[data.checksum]);
+      const activity = recent.find((act) => act.get('checksum') === data.checksum);
+      const share = {
+        checksum: data.checksum,
+        permission: {
+          type: 'public',
+          account_id: activity.get('account_id')
+        },
+        meta: activity.get('meta')
+      };
+      this.props.startDraggingDot("search", share);
     }
     else if(data.xendo_id){
       this.props.startDraggingDot("search", this.shareDataForSearchId[data.xendo_id]);
     }
 
-    console.log('sharing', data,  dragging);
+    
   }
   onCardAction(card, data, action){
     console.log('action', action);

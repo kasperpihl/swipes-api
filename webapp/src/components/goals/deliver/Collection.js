@@ -1,21 +1,33 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCardList from '../../swipes-card/SwipesCardList'
+import Slider from '../../swipes-ui/Slider'
 
 class Collection extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    console.log('in the collection', props.step.toJS());
   }
   componentDidMount() {
   }
-  renderCardList(){
+  renderCardLists(){
     const { step } = this.props;
-    console.log(steps.get('data'))
+    const cards = step.getIn(['data', 'deliveries']).map((iteration, i) => {
+      const data = {
+        title: 'Iteration #' + i,
+        items: iteration.get('collection').map((del) => {
+
+        }).toArray()
+      }
+      return <SwipesCardList data={data} key={"cardlist-" + i}/>
+    });
+    return ( <Slider infinite={true} dots={true}>{cards}</Slider> )
+
   }
   render() {
     return (
-      <div>Collection</div>
+      <div>
+        {this.renderCardLists()}
+      </div>
     )
   }
 }

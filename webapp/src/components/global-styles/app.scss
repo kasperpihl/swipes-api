@@ -47,7 +47,13 @@ button::-moz-focus-inner {
 
 @import './vars';
 @import './mixins';
-
+.draggingDot{
+  .overlay{
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+}
 .overlay {
   @include size(100%, calc(100% - 54px));
   background: $bg;

@@ -1,12 +1,12 @@
 import * as types from '../constants/ActionTypes'
-import { fromJS } from 'immutable'
+import { fromJS, Set } from 'immutable'
 const initialState = fromJS({
   isFullscreen: false,
   isSearching: false,
   socketUrl: null,
   token: null,
   draggingDot: null,
-  mainClasses: [],
+  mainClasses: Set(),
   hasLoaded: false,
   activeGoal: null
 })
@@ -47,10 +47,10 @@ export default function main (state = initialState, action) {
     }
 
     case types.SET_DRAGGING_DOT:{
-      const draggingDot = action.value ? {
+      const draggingDot = action.value ? fromJS({
         draggingId: action.draggingId,
         data: action.data
-      } : null
+      }) : null
       let mainClasses = state.get('mainClasses');
       if(!mainClasses){
         mainClasses = new Set();
