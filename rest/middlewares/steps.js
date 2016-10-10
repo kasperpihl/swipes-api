@@ -235,16 +235,20 @@ const stepsUpdateRethinkdb = (req, res, next) => {
     })
 }
 
-const stepsIterate = (req, res, next) => {
-  const {
-    goal,
-    step
-  } = res.locals;
-
-
-
-  return next();
-}
+// const stepsIterate = (req, res, next) => {
+//   const {
+//     goal,
+//     step
+//   } = res.locals;
+//
+//   if (step.type !== 'decide') {
+//     step.completed = true;
+//
+//     res.locals.stepUpdated = step;
+//   }
+//
+//   return next();
+// }
 
 export {
   stepsAssignValidate,
@@ -255,6 +259,6 @@ export {
   stepsGet,
   stepsValidateUpdateData,
   stepsUpdateData,
-  stepsUpdateRethinkdb,
-  stepsIterate
+  stepsUpdateRethinkdb
+  //stepsIterate
 }

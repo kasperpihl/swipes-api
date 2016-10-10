@@ -6,21 +6,23 @@ import {
 } from 'immutable';
 
 const init = (step) => {
-  const data = fromJS([
-    {
-      decision: null
-    }
-  ]);
+  const data = fromJS({
+    iterations: [
+      {
+        decision: null
+      }
+    ]
+  });
 
   return step.merge(new Map({data: data}));
 }
 
 const decide = (step, payload, userId) => {
-  const lastDataIndex = step.getIn(['data']).size - 1;
+  const lastIterationIndex = step.getIn(['data', 'iterations']).size - 1;
   const decision = payload.decision === true ? true : false;
   const ts = new Date();
 
-  return step.updateIn(['data', lastDataIndex], () => {
+  return step.updateIn(['data', 'iterations', lastIterationIndex], () => {
     return {
       decision,
       ts,

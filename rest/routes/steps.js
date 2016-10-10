@@ -11,6 +11,7 @@ import {
   stepsValidateUpdateData,
   stepsUpdateData,
   stepsUpdateRethinkdb
+  //stepsIterate
 } from '../middlewares/steps';
 import {
   goalsGet
@@ -59,6 +60,16 @@ router.post('/steps.update',
   stepsUpdateRethinkdb,
   notifyAllInCompany,
   notifyCommonRethinkdb,
+  (req, res, next) => {
+    return res.status(200).json({ok: true});
+  }
+)
+
+router.post('/steps.complete',
+  usersGet,
+  goalsGet,
+  stepsGetCurrent,
+  //stepsIterate,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }
