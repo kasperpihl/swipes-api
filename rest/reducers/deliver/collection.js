@@ -1,22 +1,32 @@
 "use strict";
 
-import { fromJS } from 'immutable';
+import {
+  fromJS,
+  Map
+} from 'immutable';
 
 const init = (step) => {
   const data = fromJS({
-    deliveries: [
-      {collection: []}
+    iterations: [
+      {
+        collection: []
+      }
     ]
   });
 
-  return step.mergeIn(['data'], data);
+  return step.merge(new Map({data: data}));
 }
 
-const add = (step, payload) => {
-  const lastIndex = step.getIn(['data', 'deliveries']).size - 1;
+const add = (step, payload, userId) => {
+  const lastIterationIndex = step.getIn(['data', 'iterations']).size - 1;
+  const ts = new Date();
 
-  return step.updateIn(['data', 'deliveries', lastIndex, 'collection'], (array) => {
-    return array.push(payload.url);
+  return step.updateIn(['data', lastIterationIndex, 'collection'], (array) => {
+    return array.push({
+      ts,
+      user_id: userId,
+      url: payload.url
+    });
   })
 }
 
