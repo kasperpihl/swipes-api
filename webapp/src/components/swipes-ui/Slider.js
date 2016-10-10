@@ -8,7 +8,7 @@ class Slider extends Component {
     super(props)
     this.state = { activeIndex: -1 }
     this.calculateActiveIndex();
-    this.transitionName = 'slideLeft';
+    this.transitionName = 'slideRight';
     bindAll(this, ['goLeft', 'goRight', 'clickedDot']);
   }
   calculateActiveIndex(){
@@ -25,7 +25,7 @@ class Slider extends Component {
     if(nextIndex < 0){
       nextIndex = Children.count(children) - 1;
     }
-    this.transitionName = 'slideLeft';
+    this.transitionName = 'slideRight';
     this.setState({activeIndex: nextIndex })
   }
   goRight(){
@@ -35,7 +35,7 @@ class Slider extends Component {
     if(nextIndex >= Children.count(children)){
       nextIndex = 0;
     }
-    this.transitionName = 'slideRight';
+    this.transitionName = 'slideLeft';
     this.setState({activeIndex: nextIndex });
   }
   renderIndicators(){
@@ -81,25 +81,25 @@ class Slider extends Component {
   clickedDot(e){
     const curr = this.state.activeIndex;
     const index = parseInt(e.target.getAttribute('data-index'), 10);
-    this.transitionName = 'slideLeft';
+    this.transitionName = 'slideRight';
     if(index < curr){
-      this.transitionName = 'slideRight';
+      this.transitionName = 'slideLeft';
     }
     this.setState({activeIndex: index});
   }
   renderDotsTop(){
     const { dots } = this.props;
     if(dots && dots === 'top'){
-      return this.renderDots();
+      return this.renderDots('top');
     }
   }
   renderDotsBottom(){
     const { dots } = this.props;
     if(dots && dots !== 'top'){
-      return this.renderDots();
+      return this.renderDots('bottom');
     }
   }
-  renderDots(){
+  renderDots(pos){
 
     const { activeIndex:aI } = this.state;
     return (
@@ -109,6 +109,8 @@ class Slider extends Component {
           if(i === aI){
             className += " slider__dot--active";
           }
+          className += ' slider__dot--' + pos;
+
           return <div data-index={i} className={className} onClick={this.clickedDot} key={"dot-" + i} />
         })}
       </div>

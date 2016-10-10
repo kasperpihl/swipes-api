@@ -13,7 +13,6 @@ $imgWrapper: 50px;
   line-height: 1;
   overflow: hidden;
   max-width: 600px;
-  margin: 100px auto;
 
   &__header {
     @include size(100%, 60px);

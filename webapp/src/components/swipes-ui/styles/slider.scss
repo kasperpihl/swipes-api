@@ -1,15 +1,20 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
+$navWidth: 50px;
+$contentWidth: calc(100% - #{$navWidth});
+
 .slider {
   $b: &;
+
   @include size(100%);
-  @include flex(flex);
+  @include flex();
+  position: relative;
 
   &__nav {
     @include size(50px, 100%);
     @include flex();
-
+    position: relative;
     user-select: none;
 
     i {
@@ -33,27 +38,36 @@
   }
 
   &__content {
-    $contentWidth: calc(100% - 100px);
     @include size($contentWidth, 100%);
-    @include flex(center, center, column);
+		padding: 10% 0;
     position: relative;
   }
 
   &__children {
-    @include size(100%, 80%);
+    @include size(100%);
+    @include flex();
     position: relative;
 
     & > #{$b}__child {
       @include size(100%);
       @include flex();
-      position: absolute;
-      left: 0; top: 0;
     }
   }
 
   &__dots {
-    @include size(100%, 20%);
+    @include size(100%, 10%);
     @include flex();
+    min-height: 50px;
+    position: absolute;
+    left: 0;
+
+    &--top {
+      top: 3%;
+    }
+
+    &--bottom {
+      bottom: 3%;
+    }
   }
 
   &__dot {
@@ -75,12 +89,15 @@
   //empty
   &-enter {
     opacity: 0;
+    left: 0; top: 0;
+    position: absolute;
     transform: translateX(50%);
     transition: all .5s;
     will-change: transform, opacity;
 
     &-active {
       opacity: 1;
+      position: relative;
       transform: translateX(0px);
       transition: all .5s;
       will-change: transform, opacity;
@@ -90,12 +107,15 @@
   &-leave {
     opacity: 1;
     transform: translateX(0px);
+    position: relative;
     transition: all .5s;
     will-change: transform, opacity;
 
     &-active {
+      left: 0; top: 0;
       opacity: 0;
       transform: translateX(-50%);
+      position: absolute;
       transition: all .5s;
       will-change: transform, opacity;
     }
@@ -106,12 +126,15 @@
   //empty
   &-enter {
     opacity: 0;
+    left: 0; top: 0;
+    position: absolute;
     transform: translateX(-50%);
     transition: all .5s;
     will-change: transform, opacity;
 
     &-active {
       opacity: 1;
+      position: relative;
       transform: translateX(0px);
       transition: all .5s;
       will-change: transform, opacity;
@@ -120,12 +143,15 @@
 
   &-leave {
     opacity: 1;
+    position: relative;
     transform: translateX(0px);
     transition: all .5s;
     will-change: transform, opacity;
 
     &-active {
       opacity: 0;
+      left: 0; top: 0;
+      position: absolute;
       transform: translateX(50%);
       transition: all .5s;
       will-change: transform, opacity;
