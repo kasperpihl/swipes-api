@@ -1,0 +1,50 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.activity-wrapper {
+  $b: &;
+  $wrapperHeight: calc(100% - 76px - 33px - 60px);
+
+  @include size(100%, $wrapperHeight);
+  margin: 30px 0;
+  overflow-y: scroll;
+  padding: 0 60px;
+  padding-bottom: 100px;
+}
+
+.activity {
+  $b: &;
+
+  @include size(100%, auto);
+  max-width: 550px;
+  min-width: 300px;
+  position: relative;
+
+  &:not(:first-child) {
+    margin: 18px 0px;
+  }
+
+  &__story {
+    @include size(100%, auto);
+    color: $deepBlue-60;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: right;
+  }
+
+  &__timestamp {
+    background: $bg;
+    color: $blue-100;
+    left: 0; top: 0;
+    opacity: 0;
+    padding-right: 5px;
+    position: absolute;
+  }
+
+  &:hover {
+    #{$b}__timestamp {
+      opacity: 1;
+    }
+  }
+}

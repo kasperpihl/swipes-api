@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../swipes-card/SwipesCard'
 import SwipesCardList from '../swipes-card/SwipesCardList'
 import Loader from '../swipes-ui/Loader'
-
+import '../../components/find/styles/search-results.scss'
 import { FindIcon } from '../icons'
 import SearchResultsService from './SearchResultsService'
 
@@ -12,14 +12,6 @@ class SearchResults extends Component {
     this.state = {}
   }
   componentDidMount() {
-  }
-  renderHeader(title, subtitle) {
-    return (
-      <div className="swipes-search-results__header">
-        <div className="swipes-search-results__header__title">{title}</div>
-        <div className="swipes-search-results__header__subtitle">{subtitle}</div>
-      </div>
-    )
   }
   renderServices() {
     const random = [
@@ -46,7 +38,7 @@ class SearchResults extends Component {
 
     if (!results) {
       return (
-        <div className="search-empty-state">
+        <div className="search-results__empty-state">
           Type and press 'Enter' to search
         </div>
       )
@@ -54,7 +46,7 @@ class SearchResults extends Component {
 
     if (results && Object.keys(results).length === 0) {
       return (
-        <div className="search-no-results">
+        <div className="search-results__no-results">
           <div className="face">
           	<div className="face__band">
           		<div className="face__band--red"></div>
@@ -65,7 +57,7 @@ class SearchResults extends Component {
           	<div className="face__dimples"></div>
           	<div className="face__mouth"></div>
           </div>
-          <div className="search-no-results__text">Here are not the things you are looking for!</div>
+          <div className="search-results__no-results__text">Here are not the things you are looking for!</div>
         </div>
       )
     }
@@ -86,19 +78,11 @@ class SearchResults extends Component {
 
   }
   render() {
-    // <div className="swipes-search-results__services">
-      // {this.renderServices()}
-    // </div>
-    const { title, subtitle, results, searching } = this.props;
+    const { results } = this.props;
 
     return (
-      <div className="swipes-search-results">
-        {this.renderHeader(title, subtitle, results)}
-        <div className="flex-wrapper">
-          <div className="swipes-search-results__result-list">
-            {this.renderResultList(results)}
-          </div>
-        </div>
+      <div className="search-results">
+        {this.renderResultList(results)}
       </div>
     )
   }

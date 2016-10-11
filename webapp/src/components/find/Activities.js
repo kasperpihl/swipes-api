@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Activity from './Activity'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import './styles/activity.scss'
 
 class Activities extends Component {
   constructor(props) {
@@ -10,15 +11,6 @@ class Activities extends Component {
   }
   componentDidMount() {
 
-  }
-  renderHeader(title, subtitle) {
-    return (
-      <div className="swipes-activities__header">
-        <div className="swipes-activities__header__title">{title}</div>
-        <div className="swipes-activities__header__seperator"></div>
-        <div className="swipes-activities__header__subtitle">{subtitle}</div>
-      </div>
-    )
   }
   renderActivities(activities){
     if (!activities) {
@@ -30,11 +22,10 @@ class Activities extends Component {
     })
   }
   render() {
-    const { title, subtitle, activities } = this.props;
+    const { activities } = this.props;
 
     return (
-      <div className="swipes-activities">
-        {this.renderHeader(title, subtitle)}
+      <div className="activity-wrapper">
         {this.renderActivities(activities)}
       </div>
     )

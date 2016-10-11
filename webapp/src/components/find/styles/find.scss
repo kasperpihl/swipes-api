@@ -1,45 +1,30 @@
-@import '../../global-styles/vars';
-@import '../../global-styles/mixins';
-@import 'search-results';
-@import 'activity';
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
 
-$searchbarSize: 90px;
 
 .find-overlay {
+  @include size(100%);
 
-  background: #fafafa;
-  height: 100%;
-  position:relative;
-  // transition: transform .3s .15s;
-  display: flex;
+  &__input {
+    @include size(70%, auto);
+    color: $deepBlue-100;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 45px 60px 0 60px;
+    padding: 20px;
+    transform: translateX(-20px);
+    transition: .2s;
 
-  .swipes-activities, .swipes-search-results {
-    &__header {
-      @include flex(center, flex-start);
-      width: 100%;
-      padding-bottom: 10px;
-
-      &__title {
-        font-size: 21px;
-        line-height: 21px;
-        font-weight: 900;
-        color: $deepBlue-100;
-      }
-
-      &__seperator {
-        @include size(1px, 16px);
-        background-color: $deepBlue-20;
-        margin: 0 9px;
-        margin-top: 2px;
-      }
-
-      &__subtitle {
-        color: $deepBlue-20;
-        letter-spacing: .3px;
-        font-size: 9px;
-        font-weight: 700;
-        text-transform: uppercase;
-      }
+    &:focus {
+      background-color: $blue-10;
     }
+
+    &::-webkit-input-placeholder {
+      color: $deepBlue-30;
+    }
+  }
+
+  &__tabs {
+    margin: 15px 0 0 60px;
   }
 }

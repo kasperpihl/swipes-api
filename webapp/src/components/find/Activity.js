@@ -16,9 +16,9 @@ class Activity extends Component {
     const date = data.get('date');
     const message = data.get('message');
     return (
-      <div className="swipes-activities__activity__story">
-        <span className="swipes-activities__activity__story--timestamp">{timeAgo(date)}</span>
-        <span className="swipes-activities__activity__story--message">{message}</span>
+      <div className="activity__story">
+        <span className="activity__timestamp">{timeAgo(date)}</span>
+        <span className="activity__message">{message}</span>
       </div>
     )
   }
@@ -32,7 +32,7 @@ class Activity extends Component {
   render() {
     const { data } = this.props;
     return (
-      <div className="swipes-activities__activity">
+      <div className="activity">
         {this.renderStory(data)}
         {this.renderCard(data)}
       </div>

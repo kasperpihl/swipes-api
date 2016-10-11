@@ -4,7 +4,7 @@ import { main, api, workspace } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import TabBar from '../../components/tab-bar/TabBar'
-import '../../components/find/new-find/new-find.scss'
+import '../../components/find/styles/find.scss'
 
 import Activities from '../../components/find/Activities'
 import SearchResults from '../../components/find/SearchResults'
@@ -143,7 +143,7 @@ class Find extends Component {
       this.props.startDraggingDot("search", this.shareDataForSearchId[data.xendo_id]);
     }
 
-    
+
   }
   onCardAction(card, data, action){
     console.log('action', action);
@@ -185,8 +185,8 @@ class Find extends Component {
     else{
       return <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
     }
-    
-    
+
+
   }
   render() {
     let rootClass = 'find-overlay';
