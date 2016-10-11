@@ -1,0 +1,104 @@
+@import './vars/';
+@import './mixins/';
+
+.fade {
+  //empty
+  &-enter {
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+    will-change: opacity;
+
+    &-active {
+    opacity: 1;
+    transition: opacity .2s ease-in-out;
+    will-change: opacity;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    transition: opacity .2s ease-in-out;
+    will-change: opacity;
+
+    &-active {
+      opacity: 0;
+      transition: opacity .2s ease-in-out;
+      will-change: opacity;
+    }
+  }
+}
+
+.slideLeft {
+  //empty
+  &-enter {
+    opacity: 0;
+    left: 0; top: 0;
+    position: absolute;
+    transform: translateX(50%);
+    transition: all .5s;
+    will-change: transform, opacity;
+
+    &-active {
+      opacity: 1;
+      position: relative;
+      transform: translateX(0px);
+      transition: all .5s;
+      will-change: transform, opacity;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    transform: translateX(0px);
+    position: relative;
+    transition: all .5s;
+    will-change: transform, opacity;
+
+    &-active {
+      left: 0; top: 0;
+      opacity: 0;
+      transform: translateX(-50%);
+      position: absolute;
+      transition: all .5s;
+      will-change: transform, opacity;
+    }
+  }
+}
+
+
+.slideRight {
+  //empty
+  &-enter {
+    opacity: 0;
+    left: 0; top: 0;
+    position: absolute;
+    transform: translateX(-50%);
+    transition: all .5s;
+    will-change: transform, opacity;
+
+    &-active {
+      opacity: 1;
+      position: relative;
+      transform: translateX(0px);
+      transition: all .5s;
+      will-change: transform, opacity;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    position: relative;
+    transform: translateX(0px);
+    transition: all .5s;
+    will-change: transform, opacity;
+
+    &-active {
+      opacity: 0;
+      left: 0; top: 0;
+      position: absolute;
+      transform: translateX(50%);
+      transition: all .5s;
+      will-change: transform, opacity;
+    }
+  }
+}

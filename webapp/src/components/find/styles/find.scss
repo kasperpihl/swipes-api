@@ -4,6 +4,7 @@
 
 .find-overlay {
   @include size(100%);
+  position: relative;
 
   &__input {
     @include size(70%, auto);
@@ -26,5 +27,11 @@
 
   &__tabs {
     margin: 15px 0 0 60px;
+  }
+
+  &__content {
+    $wrapperHeight: calc(100% - 76px - 33px - 60px);
+    @include size(100%, $wrapperHeight);
+    position: relative;
   }
 }

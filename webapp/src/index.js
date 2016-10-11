@@ -8,6 +8,7 @@ if (!regeneratorRuntime.default) {
 // Include stylesheet (compile sass)
 import './components/global-styles/reset.scss'
 import './components/global-styles/app.scss'
+import './components/global-styles/transitions.scss'
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -21,7 +22,7 @@ let Tester;
 if(process.env.NODE_ENV !== 'production'){
   Tester = require('./Tester');
 }
-if(typeof Tester !== 'undefined'){  
+if(typeof Tester !== 'undefined'){
   Page = Tester.view;
   props = Tester.props;
 }

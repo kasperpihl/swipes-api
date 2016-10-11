@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { main, api, workspace } from '../../actions';
 import { bindAll } from '../../classes/utils'
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 
 import TabBar from '../../components/tab-bar/TabBar'
 import '../../components/find/styles/find.scss'
@@ -173,17 +174,17 @@ class Find extends Component {
     const tabs = ['Activity', 'Search Results'];
     return (
       <div className="find-overlay__tabs">
-        <TabBar data={tabs} onChange={this.onChange} align="left"/>
+        <TabBar data={tabs} onChange={this.onChange} align="left" activeTab={this.state.currentTabIndex}/>
       </div>
     )
   }
   renderContent() {
     const { recent } = this.props;
     if(this.state.currentTabIndex === 0){
-      return <Activities title="Recent" subtitle="Mine" activities={recent.slice(0,10)} cardDelegate={this}/>;
+      return <Activities title="Recent" subtitle="Mine" key={"activities-" + this.state.currentTabIndex} activities={recent.slice(0,10)} cardDelegate={this}/>;
     }
     else{
-      return <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
+      return <SearchResults searching={this.state.searching} title="Search" key={"search-results-" + this.state.currentTabIndex} results={this.state.searchResults} cardDelegate={this} />
     }
 
 
@@ -195,7 +196,14 @@ class Find extends Component {
       <div className={rootClass}>
         {this.renderSearchField()}
         {this.renderTabs()}
-        {this.renderContent()}
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          component="div"
+          className="find-overlay__content"
+          transitionEnterTimeout={200}
+          transitionLeaveTimeout={200}>
+          {this.renderContent()}
+        </ReactCSSTransitionGroup>
       </div>
     )
   }

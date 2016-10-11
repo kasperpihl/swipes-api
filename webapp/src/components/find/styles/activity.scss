@@ -3,9 +3,8 @@
 
 .activity-wrapper {
   $b: &;
-  $wrapperHeight: calc(100% - 76px - 33px - 60px);
 
-  @include size(100%, $wrapperHeight);
+  @include size(100%, 100%);
   margin: 30px 0;
   overflow-y: scroll;
   padding: 0 60px;
