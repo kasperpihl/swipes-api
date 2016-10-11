@@ -38,4 +38,19 @@
       }
     }
   }
+
+  &--left {
+    @include size(auto);
+    @include flex(flex-start, flex-start);
+    padding: 0;
+
+    #{$b}__tab {
+      @include size(auto);
+      padding: 10px 20px;
+
+      &:first-of-type {
+        padding-left: 0;
+      }
+    }
+  }
 }

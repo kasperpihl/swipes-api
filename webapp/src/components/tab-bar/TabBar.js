@@ -23,9 +23,13 @@ class TabBar extends Component {
     }
   }
   render() {
-    const { data } = this.props;
+    const { data, align } = this.props;
     const { activeTab } = this.state;
     let rootClass = 'tab-bar';
+
+    if (align) {
+      rootClass += ' tab-bar--' + align;
+    }
 
     const tabs = data.map((tab, i) => {
       let tabClass = 'tab-bar__tab';
