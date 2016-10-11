@@ -71,6 +71,12 @@ class SearchResults extends Component {
       const html = [];
       for(var key in results){
         var cards = results[key];
+        cards = cards.map((obj) => {
+          if(obj.shareData){
+            return obj.shareData.meta;
+          }
+          return obj;
+        })
         html.push(<SwipesCardList data={{title: key, items: cards, actionLabel: 'View more results'}} delegate={cardDelegate} title={key} key={'search-result-' + key} />);
       }
       return html;

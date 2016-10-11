@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { main } from '../actions';
+import { api } from '../actions';
 import { browserHistory } from 'react-router'
 
 import '../components/registration/registration.scss';
@@ -11,6 +11,8 @@ import Signin from '../components/registration/Signin'
 class Registration extends Component {
   constructor(props) {
     super(props)
+    this.signin = this.signin.bind(this);
+    this.signup = this.signup.bind(this);
   }
   componentDidUpdate(){
     const { token } = this.props;
@@ -18,11 +20,17 @@ class Registration extends Component {
       browserHistory.push('/')
     }
   }
+  signin(data){
+    this.props.request('users.signin', data);
+  }
+  signup(data){
+    this.props.request('users.signup', data);
+  }
   render() {
   	if(this.props.route.path === "signin"){
-  		return <Signin onLogin={this.props.signin} />
+  		return <Signin onLogin={this.signin} />
   	}
-  	return <Signup onSignup={this.props.signup} />
+  	return <Signup onSignup={this.signup} />
   }
 }
 
@@ -33,7 +41,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedRegistration = connect(mapStateToProps, {
-  signin: main.signin,
-  signup: main.signup
+  request: api.request
 })(Registration)
 export default ConnectedRegistration

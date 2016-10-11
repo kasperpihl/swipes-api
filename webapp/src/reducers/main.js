@@ -27,24 +27,12 @@ export default function main (state = initialState, action) {
       }
       return state.withMutations((ns) => ns.set('socketUrl', action.payload.url));
     }
-    case types.SEARCH:{
-      return state.set('searchQuery', action.query);
-    }
+
     case types.SET_STATUS:{
-      const hasLoaded = (action.status == 'online') ? true : null;
+      const hasLoaded = (state.get('hasLoaded') || action.status == 'online') ? true : null;
       return state.withMutations((ns) => ns.set('hasLoaded', hasLoaded).set('status', action.status));
     }
 
-    case types.TOGGLE_FULLSCREEN:{
-      return state.set('isFullscreen', !state.get('isFullscreen'));
-    }
-    case types.SET_FULLSCREEN_TITLE:{
-      return state.withMutations((ns) => ns.set('fullscreenTitle', action.title).set('fullscreenSubtitle', action.subtitle));
-    }
-
-    case types.TOGGLE_FIND:{
-      return state.set('isFinding', !state.get('isFinding'));
-    }
 
     case types.SET_DRAGGING_DOT:{
       const draggingDot = action.value ? fromJS({
@@ -77,8 +65,8 @@ export default function main (state = initialState, action) {
     // ======================================================
     // Authorization methods
     // ======================================================
-    case ('users.signin'):
-    case ('users.signup'):{
+    case 'users.signin':
+    case 'users.signup':{
       if(!action.payload || !action.payload.ok){
         return state;
       }

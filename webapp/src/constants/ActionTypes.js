@@ -12,6 +12,11 @@ export const DRAG_DOT = 'DRAG_DOT'
 
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
 
+// Search
+export const SEARCH = 'SEARCH'
+export const SEARCH_RESULTS = 'SEARCH_RESULTS'
+export const SEARCH_ERROR = 'SEARCH_ERROR'
+
 // Toasty
 export const TOAST_ADD = 'TOAST_ADD'
 export const TOAST_REMOVE = 'TOAST_REMOVE'
