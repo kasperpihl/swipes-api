@@ -8,6 +8,7 @@ class Overlay extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.transitionName = "slideRight";
   }
   renderOverlay(){
     const overlay = this.props.overlays.last();
@@ -21,6 +22,34 @@ class Overlay extends Component {
     let Comp = overlays[overlay.get('component')];
     if(Comp){
       return <Comp {...props} />
+    }
+  }
+  componentWillUpdate(nextProps){
+    const { oldVal } = this.props;
+    const { newVal } = nextProps;
+    if(newVal.size !== oldVal.size){
+      // Is the first overlay to be shown
+      if(!oldVal.size && newVal.size){
+        this.transitionName = 'fadeIn';
+      }
+      // Removing the last overlay
+      else if(oldVal.size && !newVal.size){
+        this.transitionName = 'fadeOut'
+      }
+      // Pushing a new overlay
+      else if(newVal.size > oldVal.size){
+        this.transitionName = 'slideLeft';
+      }
+      // Popping an overlay (going back with breadcrumps)
+      else if(newVal.size < oldVal.size){
+        this.transitionName = 'slideRight';
+      }
+    }
+    else if(newVal.size && newVal.size === oldVal.size){
+      // Replacing overlay with a new overlay
+      if(oldVal.last().get('component') !== newVal.last().get('component')){
+        this.transitionName = 'fade';
+      }
     }
   }
   render() {

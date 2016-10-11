@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { main, api, workspace } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
-import '../../components/find/styles/find.scss'
+import TabBar from '../../components/tab-bar/TabBar'
+import '../../components/find/new-find/new-find.scss'
 
 import Activities from '../../components/find/Activities'
 import SearchResults from '../../components/find/SearchResults'
@@ -11,8 +12,10 @@ import SearchResults from '../../components/find/SearchResults'
 class Find extends Component {
   constructor(props) {
     super(props)
-    this.state = {};
-    bindAll(this, [ 'dotDragStart', 'onCardClick', 'onCardShare', 'onCardAction'])
+    this.state = {
+      currentTabIndex: 0
+    }
+    bindAll(this, [ 'dotDragStart', 'onChange', 'onKeyUp', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
   mapResultToCard(doc){
@@ -99,6 +102,7 @@ class Find extends Component {
     });
   }
   componentDidMount(){
+    this.refs.searchInput.focus()
   }
   componentDidUpdate(){
     const { searchQuery } = this.props;
@@ -147,37 +151,53 @@ class Find extends Component {
   dotDragStart(shortUrl){
     //console.log('dot drag start', params);
   }
-  generateActivity(){
-    const { recent } = this.props;
-    const keys = {}
-    this.shareDataForChecksum = {}
-    return recent.filter((activity) => {
-      const id = activity.get('checksum');
-      if(!keys[id]){
-        this.shareDataForChecksum[id] = {
-          checksum: id,
-          permission: {
-            type: 'public',
-            account_id: activity.get('account_id')
-          },
-          meta: activity.get('meta')
-        };
-        keys[id] = true;
-        return true;
+
+  renderSearchField() {
+
+    return <input type="text" onKeyUp={this.onKeyUp} ref="searchInput" className="find-overlay__input" placeholder="Search"/>
+  }
+  onKeyUp(e){
+    if(e.keyCode === 13){
+      if(this.state.currentTabIndex !== 1){
+        this.setState({currentTabIndex: 1});
       }
-      return false;
-    })
+      this.props.search(this.refs.searchInput.value)
+    }
+  }
+  onChange(i) {
+    if(this.state.currentTabIndex !== i){
+      this.setState({currentTabIndex: i});
+    }
+  }
+  renderTabs() {
+    const tabs = ['Activity', 'Search Results'];
+    return (
+      <div className="find-overlay__tabs">
+        <TabBar data={tabs} onChange={this.onChange} align="left"/>
+      </div>
+    )
+  }
+  renderContent() {
+    const { recent } = this.props;
+    if(this.state.currentTabIndex === 0){
+      return <Activities title="Recent" subtitle="Mine" activities={recent.slice(0,10)} cardDelegate={this}/>;
+    }
+    else{
+      return <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
+    }
+    
+    
   }
   render() {
-    const { draggingDot, recent } = this.props;
-    let className = "find-overlay"
+    let rootClass = 'find-overlay';
 
     return (
-      <div className="find-overlay">
-        <SearchResults searching={this.state.searching} title="Search" results={this.state.searchResults} cardDelegate={this} />
-        <Activities title="Recent" subtitle="Mine" activities={recent.slice(0,10)} cardDelegate={this}/>
+      <div className={rootClass}>
+        {this.renderSearchField()}
+        {this.renderTabs()}
+        {this.renderContent()}
       </div>
-    );
+    )
   }
 }
 
@@ -193,6 +213,7 @@ function mapStateToProps(state) {
 
 const ConnectedFind = connect(mapStateToProps, {
   request: api.request,
+  search: main.search,
   startDraggingDot: main.startDraggingDot
 })(Find)
 export default ConnectedFind
