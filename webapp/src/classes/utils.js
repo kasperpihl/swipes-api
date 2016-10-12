@@ -17,6 +17,15 @@ export function immuCompare(o1, o2, attr){
   return (o1[getMethod](attr) === o2[getMethod](attr));
 }
 
+export function hexToRgb(hex){
+  var bigint = parseInt(hex, 16);
+  var r = (bigint >> 16) & 255;
+  var g = (bigint >> 8) & 255;
+  var b = bigint & 255;
+
+  return r + "," + g + "," + b;
+}
+
 export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {
     if(typeof context[methodName] !== 'function'){
