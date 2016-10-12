@@ -29,7 +29,6 @@
 }
 
 .slideInOutLeft {
-  z-index: 99;
 
   &-enter {
     transform: translate3d(100%, 0, 0);
@@ -44,8 +43,13 @@
   }
 
   &-leave {
-
+    opacity: 1;
+    transition: opacity .15s ease-in-out;
+    will-change: opacity;
     &-active {
+      opacity: 0;
+      transition: opacity .15s ease-in-out;
+      will-change: opacity;
     }
   }
 }

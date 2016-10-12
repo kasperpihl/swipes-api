@@ -68,7 +68,7 @@ class Overlay extends Component {
         component="div"
         className="overlay__anim-wrap"
         transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}>
+        transitionLeaveTimeout={150}>
         {renderedOverlay}
       </ReactCSSTransitionGroup>
       </div>

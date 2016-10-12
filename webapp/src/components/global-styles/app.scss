@@ -48,7 +48,7 @@ svg {
   transition: visibility 0s .3s, opacity 0s .3s;
 
   &__anim-wrap {
-    @include size();
+    @include size(100%);
   }
 
   &--shown {
