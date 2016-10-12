@@ -1,5 +1,4 @@
 import * as types from '../constants/ActionTypes'
-import { request } from './api'
 
 export function toggleFullscreen() {
   return { type: types.TOGGLE_FULLSCREEN }

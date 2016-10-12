@@ -82,34 +82,23 @@ export default class SwipesAppSDK {
     
     return options;
   }
+  do(data, callback){
+    return this._apiRequest('steps.do', data, callback);
+  }
+  complete(){
+
+  }
   service(serviceName){
     return {
       request: (method, parameters, callback) => {
-        return new Promise((resolve, reject) => {
-          const options = this.getRequestOptions(serviceName, method, parameters)
-
-          var intCallback = function(res, error){
-            if(callback) callback(res,error);
-            if(res) resolve(res);
-            else resolve({ok: false, err: error});
-          };
-          this.api.request("services.request", options, intCallback);
-        })
-
+        const options = this.getRequestOptions(serviceName, method, parameters)
+        return this._apiRequest('services.request', options, callback);
       },
       stream: (method, parameters, callback) => {
-        return new Promise((resolve, reject) => {
-          const options = this.getRequestOptions(serviceName, method, parameters);
-          options.stream = true;
-
-          var intCallback = function(res, error){
-            if(callback) callback(res, error);
-            if(res) resolve(res);
-            else reject(error);
-          };
-          // T_TODO: Turned off the stream here, because it keeps running and trying
-          //this.api.request("services.stream", options, intCallback);
-        })
+        const options = this.getRequestOptions(serviceName, method, parameters);
+        options.stream = true;
+        // T_TODO: Turned off the stream here, because it keeps running and trying
+        //return this._apiRequest("services.stream", options, callback);
       }
     };
   }
@@ -181,6 +170,7 @@ export default class SwipesAppSDK {
     };
     return modals[modal] || modals['custom'].apply(this, arguments);
   }
+
   _loadModal(name, options, callback){
     options = options || {};
     if(typeof options === 'function'){
@@ -200,5 +190,16 @@ export default class SwipesAppSDK {
       options.message = message;
     }
     return options;
+  }
+
+  _apiRequest(method, options, callback){
+    return new Promise((resolve, reject) => {
+      var intCallback = function(res, error){
+        if(callback) callback(res,error);
+        if(res) resolve(res);
+        else resolve({ok: false, err: error});
+      };
+      this.api.request(method, options, intCallback);
+    })
   }
 }

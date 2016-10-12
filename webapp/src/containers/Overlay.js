@@ -60,15 +60,14 @@ class Overlay extends Component {
     if (renderedOverlay) {
       className += ' overlay--shown'
     }
-    console.log('slide', this.transitionName);
     return (
       <div className={className}>
       <ReactCSSTransitionGroup
         transitionName={this.transitionName}
         component="div"
         className="transition overlay__anim-wrap"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}>
+        transitionEnterTimeout={400}
+        transitionLeaveTimeout={400}>
         {renderedOverlay}
       </ReactCSSTransitionGroup>
       </div>
