@@ -21,10 +21,6 @@ class Goals extends Component {
     this.addListenersToSwipes(props.swipes);
   }
   addListenersToSwipes(swipes){
-
-    swipes.addListener('share.receivedData', (data) => {
-
-    });
     swipes.addListener('menu.pressed', () => {
       this.goBack();
     })
@@ -69,9 +65,12 @@ class Goals extends Component {
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
       const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
-      return <View goal={currentGoal} step={actionStep}/>
+      return <View swipes={this.props.swipes} do={this.stepDo} goal={currentGoal} step={actionStep}/>
     }
     return null;
+  }
+  stepDo(data){
+    
   }
   getStatusForStep(timeline, stepId){
 

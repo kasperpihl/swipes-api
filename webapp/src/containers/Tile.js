@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { modal, workspace, main } from '../actions'
+import { modal, workspace, main, overlay } from '../actions'
 import * as actions from '../constants/ActionTypes'
 import { bindAll } from '../classes/utils';
 
@@ -74,7 +74,7 @@ class Tile extends Component {
     this.addListenersToCommunicator();
   }
   addListenersToCommunicator(){
-    const { tile, sendNotification, startDraggingDot, saveData, loadModal } = this.props
+    const { tile, sendNotification, startDraggingDot, saveData, loadModal, setOverlay } = this.props
     this.com.addListener('navigation.setTitle', (data) => {
       if (data) {
         this.setState({"titleFromCard": data});
@@ -84,6 +84,7 @@ class Tile extends Component {
         
       }
     });
+
     this.com.addListener('navigation.setSubtitle', (data) => {
       if (data) {
         this.setState({"subtitleFromCard": data});
@@ -96,6 +97,9 @@ class Tile extends Component {
     this.com.addListener('modal.load', (data, callback) => {
       loadModal(data.modal, data.options, callback);
     });
+    this.com.addListener('overlay.set', (data) => {
+      setOverlay(data);
+    })
 
     this.com.addListener('openURL', (data) => {
       if(data.url){
@@ -155,7 +159,6 @@ class Tile extends Component {
     const { draggingDot, tile } = this.props;
 
     if (draggingDot && draggingDot.get('draggingId') !== tile.get('id')) {
-      console.log(tile.toJS());
       return <DropzoneOverlay hover={(tile.get('id') === draggingDot.get('hoverTarget'))} title={"Share to: " + tile.get('name')}/>
     }
   }
@@ -196,6 +199,8 @@ function mapStateToProps(state, ownProps) {
 const ConnectedTile = connect(mapStateToProps, {
   selectAccount: workspace.selectAccount,
   saveData: workspace.saveData,
+  setOverlay: overlay.set,
+  pushOverlay: overlay.push,
   loadModal: modal.load,
   sendNotification: main.sendNotification,
   startDraggingDot: main.startDraggingDot

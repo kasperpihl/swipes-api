@@ -5,13 +5,32 @@ import Slider from '../../swipes-ui/Slider'
 class Collection extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.clickedAdd = this.clickedAdd.bind(this);
+    
   }
   componentDidMount() {
+    const { swipes, step, goal } = this.props;
+    swipes.addListener('share.receivedData', (data) => {
+      console.log('shared data', data);
+      swipes.do({action: 'add', 'goal_id': goal.get('id'), payload: {url: data.shareUrl}}).then((res, err) => {
+        console.log('ret', res, err);
+      })
+    }, step.get('id'));
+  }
+  componentWillUnmount(){
+    const { swipes, step } = this.props;
+    swipes.removeListener('share.receivedData', null, step.get('id'));
+  }
+  clickedAdd(){
+    const { swipes } = this.props;
+    swipes.sendEvent('overlay.set', {component: 'Find', title: 'Find'});
+  }
+  renderAddButton(){
+    return <div onClick={this.clickedAdd}>Add new</div>
   }
   renderCardLists(){
     const { step } = this.props;
-    const cards = step.getIn(['data', 'deliveries']).map((iteration, i) => {
+    const cards = step.getIn(['data', 'iterations']).map((iteration, i) => {
       const data = {
         title: 'Iteration #' + i,
         items: iteration.get('collection').map((del) => {
@@ -27,6 +46,7 @@ class Collection extends Component {
     return (
       <div>
         {this.renderCardLists()}
+        {this.renderAddButton()}
       </div>
     )
   }

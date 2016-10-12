@@ -72,7 +72,6 @@ class Topbar extends Component {
   }
   clickedClear(i){
     const { clearOverlay } = this.props;
-    console.log('clicked', i);
     clearOverlay(i);
   }
   renderBreadcrumb(){
