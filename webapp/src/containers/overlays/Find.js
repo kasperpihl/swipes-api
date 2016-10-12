@@ -117,11 +117,8 @@ class Find extends Component {
 }
 
 function mapStateToProps(state) {
-  const services = state.getIn(['me', 'services'])
-  let searchResults = state.getIn(['search', 'searchResults']).groupBy((res) => res.getIn(['doc', 'source']));
   return {
-    services: services,
-    searchResults: searchResults,
+    searchResults: state.getIn(['search', 'searchResults']).groupBy((res) => res.getIn(['doc', 'source'])),
     searching: state.getIn(['search', 'searching']),
 
     draggingDot: state.getIn(['main', 'draggingDot']),
