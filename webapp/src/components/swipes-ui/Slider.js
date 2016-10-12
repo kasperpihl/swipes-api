@@ -8,7 +8,7 @@ class Slider extends Component {
     super(props)
     this.state = { activeIndex: -1 }
     this.calculateActiveIndex();
-    this.transitionName = 'slideRight';
+    this.transitionName = 'sliderRight';
     bindAll(this, ['goLeft', 'goRight', 'clickedDot']);
   }
   calculateActiveIndex(){
@@ -25,7 +25,7 @@ class Slider extends Component {
     if(nextIndex < 0){
       nextIndex = Children.count(children) - 1;
     }
-    this.transitionName = 'slideRight';
+    this.transitionName = 'sliderRight';
     this.setState({activeIndex: nextIndex })
   }
   goRight(){
@@ -35,7 +35,7 @@ class Slider extends Component {
     if(nextIndex >= Children.count(children)){
       nextIndex = 0;
     }
-    this.transitionName = 'slideLeft';
+    this.transitionName = 'sliderLeft';
     this.setState({activeIndex: nextIndex });
   }
   renderIndicators(){
@@ -81,9 +81,9 @@ class Slider extends Component {
   clickedDot(e){
     const curr = this.state.activeIndex;
     const index = parseInt(e.target.getAttribute('data-index'), 10);
-    this.transitionName = 'slideRight';
+    this.transitionName = 'sliderRight';
     if(index < curr){
-      this.transitionName = 'slideLeft';
+      this.transitionName = 'sliderLeft';
     }
     this.setState({activeIndex: index});
   }

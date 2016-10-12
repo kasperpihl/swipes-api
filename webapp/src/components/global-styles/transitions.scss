@@ -45,7 +45,7 @@ $defaultTime: .5s;
     transform: none;
     transition: all $defaultTime ease-in-out;
     will-change: transform, opacity;
-    
+
 
     &-active {
       transform: translate3d(-100%, 0, 0);
@@ -72,87 +72,11 @@ $defaultTime: .5s;
     transform: none;
     transition: all $defaultTime ease-in-out;
     will-change: transform, opacity;
-    
+
 
     &-active {
       transform: translate3d(100%, 0, 0);
       transition: all $defaultTime ease-in-out;
-      will-change: transform, opacity;
-    }
-  }
-}
-
-
-.sliderrrLeft {
-  //empty
-  &-enter {
-    opacity: 0;
-    left: 0; top: 0;
-    position: absolute;
-    transform: translateX(50%);
-    transition: all .5s;
-    will-change: transform, opacity;
-
-    &-active {
-      opacity: 1;
-      position: relative;
-      transform: translateX(0px);
-      transition: all .5s;
-      will-change: transform, opacity;
-    }
-  }
-
-  &-leave {
-    opacity: 1;
-    transform: translateX(0px);
-    position: relative;
-    transition: all .5s;
-    will-change: transform, opacity;
-
-    &-active {
-      left: 0; top: 0;
-      opacity: 0;
-      transform: translateX(-50%);
-      position: absolute;
-      transition: all .5s;
-      will-change: transform, opacity;
-    }
-  }
-}
-
-
-.sliderrrRight {
-  //empty
-  &-enter {
-    opacity: 0;
-    left: 0; top: 0;
-    position: absolute;
-    transform: translateX(-50%);
-    transition: all .5s;
-    will-change: transform, opacity;
-
-    &-active {
-      opacity: 1;
-      position: relative;
-      transform: translateX(0px);
-      transition: all .5s;
-      will-change: transform, opacity;
-    }
-  }
-
-  &-leave {
-    opacity: 1;
-    position: relative;
-    transform: translateX(0px);
-    transition: all .5s;
-    will-change: transform, opacity;
-
-    &-active {
-      opacity: 0;
-      left: 0; top: 0;
-      position: absolute;
-      transform: translateX(50%);
-      transition: all .5s;
       will-change: transform, opacity;
     }
   }
