@@ -5,12 +5,16 @@ export const SET_FULLSCREEN_TITLE = 'SET_FULLSCREEN_TITLE'
 export const TOGGLE_FIND = 'TOGGLE_FIND'
 export const SET_STATUS = 'SET_STATUS'
 export const LOGOUT = 'LOGOUT'
-export const SEARCH = 'SEARCH'
 export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'
 export const SET_DRAGGING_DOT = 'SET_DRAGGING_DOT'
 export const DRAG_DOT = 'DRAG_DOT'
 
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
+
+// Search
+export const SEARCH = 'SEARCH'
+export const SEARCH_RESULTS = 'SEARCH_RESULTS'
+export const SEARCH_ERROR = 'SEARCH_ERROR'
 
 // Toasty
 export const TOAST_ADD = 'TOAST_ADD'

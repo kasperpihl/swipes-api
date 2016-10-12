@@ -6,6 +6,7 @@ import overlays from './overlays'
 import notifications from './notifications'
 import routing from './routing'
 import toasty from './toasty'
+import search from './search'
 
 import me from './me'
 import workspace from './workspace'
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   notifications,
   toasty,
   routing,
+  search,
 
   me,
   goals,

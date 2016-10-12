@@ -5,6 +5,7 @@ import * as api from './api'
 import * as me from './me'
 import * as workspace from './workspace'
 import * as toasty from './toasty'
+import * as search from './search'
 
 export {
   main,
@@ -13,5 +14,6 @@ export {
   api,
   me,
   toasty,
+  search,
   workspace
 }
