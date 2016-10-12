@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { connect } from 'react-redux'
-
+import { transitions } from '../classes/utils'
 import * as overlays from './overlays'
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -31,25 +31,25 @@ class Overlay extends Component {
     if(newVal.size !== oldVal.size){
       // Is the first overlay to be shown
       if(!oldVal.size && newVal.size){
-        this.transitionName = 'fadeInOut';
+        this.transitionName = 'fade';
       }
       // Removing the last overlay
       else if(oldVal.size && !newVal.size){
-        this.transitionName = 'fadeInOut'
+        this.transitionName = 'fade'
       }
       // Pushing a new overlay
       else if(newVal.size > oldVal.size){
-        this.transitionName = 'slideInOutLeft';
+        this.transitionName = 'slideLeft';
       }
       // Popping an overlay (going back with breadcrumps)
       else if(newVal.size < oldVal.size){
-        this.transitionName = 'slideInOutLeft';
+        this.transitionName = 'slideRight';
       }
     }
     else if(newVal.size && newVal.size === oldVal.size){
       // Replacing overlay with a new overlay
       if(oldVal.last().get('component') !== newVal.last().get('component')){
-        this.transitionName = 'fadeInOut';
+        this.transitionName = 'fade';
       }
     }
   }
@@ -60,15 +60,15 @@ class Overlay extends Component {
     if (renderedOverlay) {
       className += ' overlay--shown'
     }
-
+    console.log('slide', this.transitionName);
     return (
       <div className={className}>
       <ReactCSSTransitionGroup
         transitionName={this.transitionName}
         component="div"
-        className="overlay__anim-wrap"
+        className="transition overlay__anim-wrap"
         transitionEnterTimeout={500}
-        transitionLeaveTimeout={150}>
+        transitionLeaveTimeout={500}>
         {renderedOverlay}
       </ReactCSSTransitionGroup>
       </div>

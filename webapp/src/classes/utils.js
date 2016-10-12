@@ -131,6 +131,27 @@ export function debounce(func, wait, immediate){
   return debounced;
 };
 
+export function transitions(enter, leave, appear){
+  const returnObj = {};
+  if(typeof enter === 'string'){
+    returnObj.enter = enter + '-enter';
+    returnObj.enterActive = enter + '-enter-active';
+    returnObj.leave = enter + '-leave';
+    returnObj.leaveActive = enter + '-leave-active';
+    returnObj.appear = enter + '-appear';
+    returnObj.appearActive = enter + '-appear-active';
+  }
+  if(typeof leave === 'string'){
+    returnObj.leave = leave + '-leave';
+    returnObj.leaveActive = leave + '-leave-active';
+  }
+  if(typeof appear === 'string'){
+    returnObj.appear = appear + '-appear';
+    returnObj.appearActive = appear + '-appear-active';
+  }
+  return returnObj;
+}
+
 export function throttle(func, wait){
   var ctx, args, rtn, timeoutID; // caching
   var last = 0;

@@ -1,87 +1,89 @@
 @import './vars/';
 @import './mixins/';
-
-.fadeInOut {
-
-  &-enter {
-    opacity: 0;
-    transition: opacity .5s ease-in-out;
-    will-change: opacity;
-
-    &-active {
-    opacity: 1;
-    transition: opacity .5s ease-in-out;
-    will-change: opacity;
-    }
-  }
-
-  &-leave {
-    opacity: 1;
-    transition: opacity .5s ease-in-out;
-    will-change: opacity;
-
-    &-active {
-      opacity: 0;
-      transition: opacity .5s ease-in-out;
-      will-change: opacity;
-    }
-  }
-}
-
-.slideInOutLeft {
-
-  &-enter {
-    transform: translate3d(100%, 0, 0);
-    transition: all .5s ease-in-out;
-    will-change: transform, opacity;
-
-    &-active {
-      transform: none;
-      transition: all .5s ease-in-out;
-      will-change: transform, opacity;
-    }
-  }
-
-  &-leave {
-    opacity: 1;
-    transition: opacity .15s ease-in-out;
-    will-change: opacity;
-    &-active {
-      opacity: 0;
-      transition: opacity .15s ease-in-out;
-      will-change: opacity;
-    }
-  }
-}
-
+$defaultTime: .5s;
 .fade {
-  //empty
+
   &-enter {
     opacity: 0;
-    transition: opacity .2s ease-in-out;
+    transition: opacity .3s ease-in-out;
     will-change: opacity;
 
     &-active {
     opacity: 1;
-    transition: opacity .2s ease-in-out;
+    transition: opacity .3s ease-in-out;
     will-change: opacity;
     }
   }
 
   &-leave {
     opacity: 1;
-    transition: opacity .2s ease-in-out;
+    transition: opacity .3s ease-in-out;
     will-change: opacity;
 
     &-active {
       opacity: 0;
-      transition: opacity .2s ease-in-out;
+      transition: opacity .3s ease-in-out;
       will-change: opacity;
     }
   }
 }
 
 .slideLeft {
+
+  &-enter {
+    transform: translate3d(100%, 0, 0);
+    transition: all $defaultTime ease-in-out;
+    will-change: transform, opacity;
+
+    &-active {
+      transform: none;
+      transition: all $defaultTime ease-in-out;
+      will-change: transform, opacity;
+    }
+  }
+  &-leave {
+    transform: none;
+    transition: all $defaultTime ease-in-out;
+    will-change: transform, opacity;
+    
+
+    &-active {
+      transform: translate3d(-100%, 0, 0);
+      transition: all $defaultTime ease-in-out;
+      will-change: transform, opacity;
+    }
+  }
+}
+
+.slideRight {
+
+  &-enter {
+    transform: translate3d(-100%, 0, 0);
+    transition: all $defaultTime ease-in-out;
+    will-change: transform, opacity;
+
+    &-active {
+      transform: none;
+      transition: all $defaultTime ease-in-out;
+      will-change: transform, opacity;
+    }
+  }
+  &-leave {
+    transform: none;
+    transition: all $defaultTime ease-in-out;
+    will-change: transform, opacity;
+    
+
+    &-active {
+      transform: translate3d(100%, 0, 0);
+      transition: all $defaultTime ease-in-out;
+      will-change: transform, opacity;
+    }
+  }
+}
+
+
+.sliderrrLeft {
   //empty
   &-enter {
     opacity: 0;
@@ -119,7 +121,7 @@
 }
 
 
-.slideRight {
+.sliderrrRight {
   //empty
   &-enter {
     opacity: 0;
