@@ -4,5 +4,7 @@
 .workflow__setup {
   @include size(100%);
   @include flex(flex);
-  position: relative;
+  position: absolute;
+  left: 0; top: 0;
+  background-color: $bg;
 }

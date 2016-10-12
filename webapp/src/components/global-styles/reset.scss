@@ -1,5 +1,7 @@
 @import "AktivGrotesk/aktiv-grotesk";
 @import "material-icons/material-icons";
+@import './vars/';
+@import './mixins/';
 
 *,
 *:after,
@@ -26,6 +28,7 @@ textarea {
 	background-color: transparent;
 	border: none;
 	box-sizing: border-box;
+	cursor: default;
 	font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
 	list-style: none;
 	margin: 0;
@@ -37,8 +40,18 @@ textarea {
   }
 
   &:focus {
-    outline: none;
+		border: 0 !important;
+	  outline: 0 !important;
+	  outline-offset: 0 !important;
   }
+}
+
+input {
+  cursor: text;
+
+	&:focus, &:active {
+		outline: 0 !important;
+	}
 }
 
 input:-webkit-autofill {
@@ -50,64 +63,26 @@ input::-webkit-autofill {
 }
 
 html, body {
-  background-color: #FAFAFA;
+	@include size(100%);
+	background-color: $bg;
+	font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
+	font-smooth: always;
 	margin: 0;
-  width: 100%;
-	height: 100%;
+	overflow: hidden;
 	padding: 0;
-  font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
-}
-
-.hidden {
-  display: none;
-}
-
-html {
-  overflow: hidden;
-
-  body {
-    overflow: hidden;
-    font-smooth: always;
-    transform: rotate(-0.0000000001deg);
-    text-rendering: optimizeLegibility !important;
-    -webkit-font-smoothing: antialiased !important;
-  }
-}
-
-* {
-  cursor:default;
-}
-
-input {
-  cursor: text;
-  border:0;
-}
-
-input:focus {
-  border:0;
-  outline: 0;
-  outline-offset: 0;
-}
-
-ul {
-  list-style:none;
-  padding-left:0;
-
-	li {
-    list-style:none;
-  }
+	text-rendering: optimizeLegibility !important;
+	transform: rotate(-0.0000000001deg);
+  -webkit-font-smoothing: antialiased !important;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
   background-color: rgba(black,0);
-  //border-radius: 50px;
   overflow: hidden;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: rgba(black,.1);
-  //border-radius: 50px;
 }
 
 h1 {

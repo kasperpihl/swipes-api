@@ -10,7 +10,9 @@ class WorkflowStepList extends Component {
     bindAll(this, ['onKeyUp', 'onBlur', 'clickedAssign']);
   }
   componentDidMount() {
-    this.refs.input.focus();
+    setTimeout( () => {
+      this.refs.input.focus();  
+    }, 0)
   }
   onBlur(e){
     this.props.callDelegate('didUpdateTitle', this.refs.input.value)

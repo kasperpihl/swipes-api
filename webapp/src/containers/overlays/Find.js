@@ -103,7 +103,9 @@ class Find extends Component {
     });
   }
   componentDidMount(){
-    this.refs.searchInput.focus()
+    setTimeout( () => {
+        this.refs.searchInput.focus()
+    }, 0)
   }
   componentDidUpdate(){
     const { searchQuery } = this.props;
@@ -193,7 +195,7 @@ class Find extends Component {
     let rootClass = 'find-overlay';
 
     return (
-      <div className={rootClass}>
+      <div className="find-overlay">
         {this.renderSearchField()}
         {this.renderTabs()}
         <ReactCSSTransitionGroup

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { connect } from 'react-redux'
 
 import * as overlays from './overlays'
@@ -21,7 +22,7 @@ class Overlay extends Component {
     }
     let Comp = overlays[overlay.get('component')];
     if(Comp){
-      return <Comp {...props} />
+      return <Comp key={overlay.get('component')} {...props} />
     }
   }
   componentWillUpdate(nextProps){
@@ -30,37 +31,46 @@ class Overlay extends Component {
     if(newVal.size !== oldVal.size){
       // Is the first overlay to be shown
       if(!oldVal.size && newVal.size){
-        this.transitionName = 'fadeIn';
+        this.transitionName = 'fadeInOut';
       }
       // Removing the last overlay
       else if(oldVal.size && !newVal.size){
-        this.transitionName = 'fadeOut'
+        this.transitionName = 'fadeInOut'
       }
       // Pushing a new overlay
       else if(newVal.size > oldVal.size){
-        this.transitionName = 'slideLeft';
+        this.transitionName = 'slideInOutLeft';
       }
       // Popping an overlay (going back with breadcrumps)
       else if(newVal.size < oldVal.size){
-        this.transitionName = 'slideRight';
+        this.transitionName = 'slideInOutLeft';
       }
     }
     else if(newVal.size && newVal.size === oldVal.size){
       // Replacing overlay with a new overlay
       if(oldVal.last().get('component') !== newVal.last().get('component')){
-        this.transitionName = 'fade';
+        this.transitionName = 'fadeInOut';
       }
     }
   }
   render() {
     const renderedOverlay = this.renderOverlay();
     let className = "overlay";
-    if(renderedOverlay){
+
+    if (renderedOverlay) {
       className += ' overlay--shown'
     }
+
     return (
       <div className={className}>
+      <ReactCSSTransitionGroup
+        transitionName={this.transitionName}
+        component="div"
+        className="overlay__anim-wrap"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}>
         {renderedOverlay}
+      </ReactCSSTransitionGroup>
       </div>
     )
   }

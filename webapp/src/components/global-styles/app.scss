@@ -1,17 +1,23 @@
-#content{
-  height: 100%;
+@import './vars';
+@import './mixins';
+
+#content {
+  @include size(100%);
+
   .main {
-    height: 100%;
+    @include size();
     padding-top: 54px;
+    position: relative;
+
     .workspace {
-      height:100%;
+      @include size();
       position: relative;
     }
   }
 }
 
-.scroll-container{
-  height: 100%;
+.scroll-container {
+  @include size(100%);
   overflow-y: scroll;
 }
 
@@ -19,41 +25,18 @@ svg {
   pointer-events: none;
 }
 
-a:focus {
-  outline: none;
-}
-
-button::-moz-focus-inner {
-  border: 0;
-}
-
-.hidden {
-  display: none;
-}
-
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
-
 .main-loader {
+  left: 50%; top: 50%;
   position: fixed !important;
-  top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
 }
 
-@import './vars';
-@import './mixins';
-.draggingDot{
-  .overlay{
-    pointer-events: none;
+.draggingDot .overlay{
     opacity: 0;
+    pointer-events: none;
     transition: opacity .3s;
-  }
 }
+
 .overlay {
   @include size(100%, calc(100% - 54px));
   background: $bg;
@@ -61,8 +44,16 @@ button::-moz-focus-inner {
   position:fixed;
   visibility: hidden;
   z-index: 9;
+  opacity: 0;
+  transition: visibility 0s .3s, opacity 0s .3s;
+
+  &__anim-wrap {
+    @include size();
+  }
 
   &--shown {
     visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .15s;
   }
 }

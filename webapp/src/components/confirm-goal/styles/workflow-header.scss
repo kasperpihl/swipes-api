@@ -6,7 +6,6 @@
   $margin: 63px;
   $width: 270px;
   @include size($width, 100%);
-  @include flex(flex-start, flex-start, column);
   padding-top: 60px;
   position: relative;
   margin: 0 $margin;
