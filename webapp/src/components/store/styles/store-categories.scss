@@ -1,0 +1,130 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.store-content {
+  $b: &;
+
+  @include size(100%, auto);
+  padding-left: 30px;
+
+  &__seperator {
+    @include size(calc(100% + 30px), 2px);
+    background-color: $deepBlue-10;
+    margin-top: 30px;
+    margin-left: -30px;
+  }
+
+  &__title {
+
+    &--main {
+      color: $deepBlue-100;
+      font-size: 30px;
+      font-weight: bold;
+      padding-top: 30px;
+    }
+  }
+
+  &__category {
+    @include size(100%, auto);
+    display: flex;
+    margin-top: 30px;
+  }
+
+  &__item {
+
+    &--small {
+      @include size(210px, auto);
+
+      &:not(:first-child) {
+        margin-left: 30px;
+      }
+
+      #{$b}__image {
+        @include size(150px);
+        @include flex();
+        border-radius: 3px;
+        box-shadow: 0 1px 1px 1px rgba(0, 12, 46, 0.09);
+        background-color: #fff;
+      }
+
+      #{$b}__title--item {
+        font-size: 15px;
+        font-weight: 500;
+        color: $deepBlue-80;
+        margin-top: 30px;
+      }
+
+      #{$b}__description--small {
+        @include size(210px, auto);
+        margin-top: 15px;
+      }
+    }
+
+    &--big {
+      @include size(300px, auto);
+
+      &:not(:first-child) {
+        margin-left: 60px;
+      }
+
+      #{$b}__image {
+        @include size(300px, 150px);
+        @include flex();
+        border-radius: 3px;
+        background-color: $deepBlue-100;
+        position: relative;
+
+        &:after {
+          content: "";
+          position: absolute;
+          left: 0; top: 0;
+          @include size(300px, 150px);
+          background-color: rgba($deepBlue-100, 0.5);
+          z-index: 2;
+          opacity: 0;
+          transition: .15s ease-in-out;
+        }
+
+        &:hover {
+
+          &:after {
+            opacity: 1;
+            transition: .15s ease-in-out;
+          }
+        }
+
+        img {
+          @include size();
+          position: absolute;
+          left: 0; top: 0;
+        }
+      }
+
+      #{$b}__title {
+        font-size: 21px;
+        font-weight: 500;
+        color: $bg;
+        position: relative;
+        z-index: 3;
+      }
+
+      #{$b}__description--big {
+        @include size(300px, auto);
+        margin-top: 21px;
+      }
+    }
+  }
+
+  &__author {
+    font-size: 12px;
+    font-weight: 500;
+    color: $deepBlue-60;
+    margin-top: 12px;
+  }
+
+  &__description {
+    font-size: 12px;
+    line-height: 1.5;
+    color: $deepBlue-60;
+  }
+}

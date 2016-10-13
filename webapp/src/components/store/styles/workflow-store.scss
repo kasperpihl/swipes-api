@@ -1,0 +1,16 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+
+.store {
+  $b: &;
+  @include size(100%);
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  &__section {
+    @include size(100%, auto);
+    padding-bottom: 30px;
+    border-bottom: 2px solid $deepBlue-10;
+  }
+}

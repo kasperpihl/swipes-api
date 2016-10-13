@@ -1,0 +1,84 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.store-header {
+  $b: &;
+
+  @include size(100%, auto);
+
+  &__section {
+
+    &--first {
+      @include size(100%, 102px);
+      @include flex();
+      position: relative;
+    }
+
+    &--second {
+      @include size(100%, auto);
+      padding-left: 9px;
+      display: flex;
+      // transform: translateX(-400px);
+    }
+  }
+
+  &__title {
+    color: $deepBlue-100;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  &__search {
+    @include size(60px);
+    @include flex();
+    position: absolute;
+    right: 21px; top: 21px;
+    background-color: $deepBlue-20;
+    transition: .1s;
+
+    &:hover {
+      background-color: $deepBlue-30;
+      transition: .1s;
+
+      #{$b}__icon--find {
+        fill: $deepBlue-80;
+        transition: .1s;
+      }
+    }
+  }
+
+  &__icon {
+
+    &--find {
+      @include size(12px);
+      fill: $deepBlue-100;
+      transition: .1s;
+    }
+  }
+
+  &__featured {
+    @include size(420px, 210px);
+    cursor: pointer;
+    position: relative;
+    flex:none;
+
+    img {
+      @include size();
+      cursor: inherit;
+      position: absolute;
+      left: 0; top: 0;
+    }
+
+    &__title {
+      text-align: center;
+      position: relative;
+      z-index: 3;
+      margin-top: 150px;
+      color: white;
+    }
+
+    &:not(:first-child) {
+      margin-left: 9px;
+    }
+  }
+}

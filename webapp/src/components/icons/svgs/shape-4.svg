@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="90px" height="90px" viewBox="0 0 90 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 22</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Store" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-22">
+            <path d="M45,0 C20.147,0 0,20.147 0,45 C0,69.853 20.147,90 45,90 C69.853,90 90,69.853 90,45 C90,20.147 69.853,0 45,0 M45,3 C68.159,3 87,21.841 87,45 C87,68.159 68.159,87 45,87 C21.841,87 3,68.159 3,45 C3,21.841 21.841,3 45,3" id="Fill-7" fill="#000C2F"></path>
+            <path d="M7.5,25 L82.5,25" id="Stroke-9" stroke="#000C2F" stroke-width="3"></path>
+            <path d="M1.5,45 L88.5,45" id="Stroke-45" stroke="#000C2F" stroke-width="3"></path>
+            <path d="M7.5,65 L82.5,65" id="Stroke-47" stroke="#000C2F" stroke-width="3"></path>
+        </g>
+    </g>
+</svg>

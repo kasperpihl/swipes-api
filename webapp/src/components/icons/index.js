@@ -13,6 +13,29 @@ export const DownloadIcon = svg('download-icon')
 export const AssignIcon = svg('assign-icon')
 export const LogoLoader = svg('sw-logo-loader')
 export const CheckmarkIcon = svg('checkmark-icon')
-
 export const SlackIcon = svg('logo-slack')
+
+export const ShapeOne = svg('shape-1')
+export const ShapeTwo = svg('shape-2')
+export const ShapeThree = svg('shape-3')
+export const ShapeFour = svg('shape-4')
+export const ShapeFive = svg('shape-5')
+export const ShapeSix = svg('shape-6')
+export const ShapeSeven = svg('shape-7')
+export const ShapeEight = svg('shape-8')
+export const ShapeNine = svg('shape-9')
+export const ShapeTen = svg('shape-10')
+
+
+
+
 export const SwipesIcon = png('swipes-logo')
+
+// Remove these soon
+export const facebookCover = png('facebook')
+export const airbnbCover = png('airbnb')
+export const uberCover = png('uber')
+export const oneCover = png('1')
+export const twoCover = png('2')
+export const threeCover = png('3')
+export const fourCover = png('4')
