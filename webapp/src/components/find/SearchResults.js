@@ -73,7 +73,7 @@ class SearchResults extends Component {
         var cards = results[key];
         cards = cards.map((obj) => {
           if(obj.shareData){
-            return obj.shareData.meta;
+            return Object.assign({}, obj.shareData.meta, { xendo_id: obj.doc.id });
           }
           return obj;
         })

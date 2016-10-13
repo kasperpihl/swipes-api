@@ -30,7 +30,7 @@ class Collection extends Component {
     return <Button title="Upload" callback={this.clickedAdd} style={{marginTop: '30px'}} />
   }
   renderCardLists(){
-    const { step } = this.props;
+    const { step, cardDelegate } = this.props;
     const cards = step.getIn(['data', 'iterations']).toArray().map((iteration, i) => {
       return {
         title: 'v' + (i+1),
@@ -40,7 +40,7 @@ class Collection extends Component {
       }
 
     });
-    return <SwipesCardList data={cards} key={"cardlist"}/>;
+    return <SwipesCardList delegate={cardDelegate} data={cards} key={"cardlist"}/>;
 
   }
   render() {

@@ -14,7 +14,7 @@ class SwipesCardList extends Component {
   callDelegate(name){
     const { delegate } = this.props;
     if(delegate && typeof delegate[name] === "function"){
-      return delegate[name].apply(null, [this].concat(Array.prototype.slice.call(arguments, 1)));
+      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
   componentDidMount() {

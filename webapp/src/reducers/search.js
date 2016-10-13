@@ -54,6 +54,7 @@ const searchResults = (results) => {
     }
     else if(doc.source === 'asana'){
       if(doc.content_type === 'task'){
+        shareData.link.id = idParts[idParts.length - 1];
         meta.title = doc.title;
         if(doc.folder){
           meta.subtitle = doc.folder.join(', ');
@@ -67,6 +68,7 @@ const searchResults = (results) => {
       }
     }
     else if(doc.source === 'dropbox'){
+      shareData.link.id = idParts[idParts.length - 1];
       meta.title = doc.filename;
       meta.subtitle = doc.filepath  || '/';
     }

@@ -50,6 +50,33 @@ class Goals extends Component {
   clickedListItem(id){
     this.props.setActiveGoal(id);
   }
+  onCardShare(card, data){
+    console.log('data', data);
+    const { swipes } = this.props;
+
+    const shareData = {};
+    if(data.shortUrl){
+      shareData.short_url = data.shortUrl;
+      // Is a swipes url to reshare
+    }
+    swipes.sendEvent('share', shareData);
+  }
+  onCardAction(card, data, action){
+    console.log('action', data, action);
+  }
+  onCardClick(card, data){
+    //console.log(this.shareDataForChecksum[data.checksum]);
+    if(data.shortUrl){
+      const folder = localStorage.getItem('dropbox-folder');
+      data = swipesUrlProvider.get(data.shortUrl);
+      if(folder){
+        var path = folder + data.subtitle + '/' + data.title;
+        console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
+      }
+    }
+
+    console.log('clicked', data);
+  }
   renderList(){
     let { goals, currentGoal } = this.props;
     if(currentGoal){
@@ -65,7 +92,7 @@ class Goals extends Component {
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
       const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
-      return <View swipes={this.props.swipes} do={this.stepDo} goal={currentGoal} step={actionStep}/>
+      return <View swipes={this.props.swipes} cardDelegate={this} do={this.stepDo} goal={currentGoal} step={actionStep}/>
     }
     return null;
   }

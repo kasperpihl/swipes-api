@@ -36,7 +36,8 @@ class Find extends Component {
     console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
-    const { recent } = this.props;
+    const { recent, searchResults } = this.props;
+    console.log(data);
     if(data.checksum){ // Is activity
       const activity = recent.find((act) => act.get('checksum') === data.checksum);
       const share = {
@@ -50,7 +51,15 @@ class Find extends Component {
       this.props.startDraggingDot("search", share);
     }
     else if(data.xendo_id){
-      this.props.startDraggingDot("search", this.shareDataForSearchId[data.xendo_id]);
+      const obj = searchResults.find((res) => {
+        const id = res.getIn(['doc', 'id']);
+        return id === data.xendo_id;
+      })
+      if(obj){
+        console.log(obj.get('shareData').toJS());
+        this.props.startDraggingDot("search", obj.get('shareData').toJS());
+      }
+      
     }
 
 
@@ -88,12 +97,12 @@ class Find extends Component {
     )
   }
   renderContent() {
-    const { recent } = this.props;
+    const { recent, groupedResults } = this.props;
     if(this.state.currentTabIndex === 0){
       return <Activities title="Recent" subtitle="Mine" key={"activities-" + this.state.currentTabIndex} activities={recent.slice(0,10)} cardDelegate={this}/>;
     }
     else{
-      return <SearchResults searching={this.state.searching} title="Search" key={"search-results-" + this.state.currentTabIndex} results={this.props.searchResults.toJS()} cardDelegate={this} />
+      return <SearchResults searching={this.state.searching} title="Search" key={"search-results-" + this.state.currentTabIndex} results={groupedResults.toJS()} cardDelegate={this} />
     }
 
 
@@ -119,8 +128,10 @@ class Find extends Component {
 }
 
 function mapStateToProps(state) {
+  const results = state.getIn(['search', 'searchResults']);
   return {
-    searchResults: state.getIn(['search', 'searchResults']).groupBy((res) => res.getIn(['doc', 'source'])),
+    searchResults: results,
+    groupedResults: results.groupBy((res) => res.getIn(['doc', 'source'])),
     searching: state.getIn(['search', 'searching']),
 
     draggingDot: state.getIn(['main', 'draggingDot']),

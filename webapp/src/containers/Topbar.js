@@ -95,6 +95,10 @@ class Topbar extends Component {
   renderNav(){
     let selectedTitle = 'Workspace'
     const { overlays, organizations } = this.props;
+    let title = "Workspace";
+    if(organizations && organizations.size){
+      title = organizations.first().get('name')
+    }
     if(!overlays.size){
       return (
         <div className="topbar__nav">
@@ -103,7 +107,7 @@ class Topbar extends Component {
           </div>
 
           <div className="topbar__title" onClick={this.clickedProfile}>
-            {organizations.first().get('name')}
+            {title}
           </div>
         </div>
       )

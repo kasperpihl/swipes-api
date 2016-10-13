@@ -42,7 +42,6 @@ class Chat extends Component {
       input += '>';
       this.slackHandler.sendMessage(input);
       this.refs['chat-list'].forceScrollToBottom = true;
-      this.slackData.sendMessage(input);
     });
     swipes.addListener('menu.pressed', () => {
       if(this.refs.sidemenu){
