@@ -32,6 +32,8 @@ class Button extends Component {
     if (disabled) {
       return;
     }
+
+    callback();
   }
   handleMouseEnter() {
     if (!this.state.hover) {

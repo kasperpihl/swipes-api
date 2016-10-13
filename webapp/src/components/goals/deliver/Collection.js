@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCardList from '../../swipes-card/SwipesCardList'
 import Slider from '../../swipes-ui/Slider'
+import Button from '../../swipes-ui/Button'
 
 class Collection extends Component {
   constructor(props) {
     super(props)
     this.clickedAdd = this.clickedAdd.bind(this);
-    
+
   }
   componentDidMount() {
     const { swipes, step, goal } = this.props;
@@ -21,11 +22,12 @@ class Collection extends Component {
     swipes.removeListener('share.receivedData', null, step.get('id'));
   }
   clickedAdd(){
+    console.log('works?');
     const { swipes } = this.props;
     swipes.sendEvent('overlay.set', {component: 'Find', title: 'Find'});
   }
   renderAddButton(){
-    return <div onClick={this.clickedAdd}>Add new</div>
+    return <Button title="Upload" callback={this.clickedAdd} style={{marginTop: '30px'}} />
   }
   renderCardLists(){
     const { step } = this.props;
@@ -36,10 +38,10 @@ class Collection extends Component {
           return { shortUrl: item.get('url') };
         })
       }
-      
+
     });
     return <SwipesCardList data={cards} key={"cardlist"}/>;
-    
+
   }
   render() {
     return (
