@@ -20,6 +20,19 @@ export default function goals (state = initialState, action) {
     case 'goal_created':{
       return state.set(action.payload.data.id, fromJS(action.payload.data));
     }
+    case 'step_changed': {
+      console.log('step change', action);
+      const stepId = action.payload.data.id;
+      const goalId = action.payload.data.id.split('-')[0];
+      return state.updateIn([goalId, 'steps'], (steps) => {
+        return steps.map((step) => {
+          if(step.get('id') === stepId){
+            return fromJS(action.payload.data);
+          }
+          return step;
+        }) 
+      })
+    }
     case types.LOGOUT:{
       return initialState;
     }

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../constants/ActionTypes'
-import { workspace, main } from '../actions'
+import { workspace, main, overlay, toasty } from '../actions'
 import { size, bindAll } from '../classes/utils'
 
 import '../components/workspace/workspace.scss'
@@ -26,32 +26,47 @@ class Workspace extends Component {
     return window.location.origin + '/s/' + shortUrl;
   }
   onMouseUp(e){
-    if(this.props.draggingDot){
+    const { draggingDot } = this.props
+    if(draggingDot){
       e.preventDefault()
-      const { draggingDot } = this.props;
+
+      const { 
+        draggingDot,
+        stopDraggingDot,
+        generateShareUrl,
+        clearOverlay,
+        addToasty,
+        updateToasty
+      } = this.props;
+
       const { id } = this.refs.grid.positionForPageXY(e.pageX, e.pageY) || {};
       if(id && id !== draggingDot.get('draggingId')){
-        this.props.stopDraggingDot()
-        this.props.generateShareUrl(draggingDot.get('data').toJS()).then( (res) => {
-          console.log('res from share url', res);
-          
-          if(res.ok){
-            var shareUrl = this.generateShareUrl(res.short_url);
-            var shareData = {
-              shareUrl
+        stopDraggingDot()
+        clearOverlay();
+        addToasty({title: "Sharing item", loading: true}).then((toastId) => {
+          generateShareUrl(draggingDot.get('data').toJS()).then( (res) => {
+    
+            if(res.ok){
+              var shareUrl = this.generateShareUrl(res.short_url);
+              var shareData = {
+                shortUrl: res.short_url,
+                shareUrl
+              }
+              if(res.meta && res.meta.title){
+                shareData.title = res.meta.title;
+              }
+              this.sendToTile(id, 'share.receivedData', shareData);
+              updateToasty(toastId, { title: "Shared item" , loading: false, duration: 3000 });
             }
-            if(res.meta && res.meta.title){
-              shareData.title = res.meta.title;
+            else{
+              updateToasty(toastId, { title: 'Error sharing item', loading: false, duration: 3000 });
             }
-            this.sendToTile(id, 'share.receivedData', shareData);
-          }
-         
-        }).catch((e) => {
-          console.log('catch catch');
-        })
+           
+          })
+        });
       }
       else{
-        this.props.stopDraggingDot()
+        stopDraggingDot()
       }
     }
   }
@@ -228,6 +243,9 @@ const ConnectedWorkspace = connect(mapStateToProps, {
   generateShareUrl: workspace.generateShareUrl,
   toggleFullscreen: main.toggleFullscreen,
   setFullscreenTitle: main.setFullscreenTitle,
+  addToasty: toasty.add,
+  updateToasty: toasty.update,
+  clearOverlay: overlay.clear, 
   dragDot: main.dragDot,
   stopDraggingDot: main.stopDraggingDot
 })(Workspace)

@@ -11,8 +11,7 @@ class Collection extends Component {
   componentDidMount() {
     const { swipes, step, goal } = this.props;
     swipes.addListener('share.receivedData', (data) => {
-      console.log('shared data', data);
-      swipes.do({action: 'add', 'goal_id': goal.get('id'), payload: {url: data.shareUrl}}).then((res, err) => {
+      swipes.do({action: 'add', 'goal_id': goal.get('id'), payload: {url: data.shortUrl}}).then((res, err) => {
         console.log('ret', res, err);
       })
     }, step.get('id'));
@@ -30,17 +29,17 @@ class Collection extends Component {
   }
   renderCardLists(){
     const { step } = this.props;
-    const cards = step.getIn(['data', 'iterations']).map((iteration, i) => {
-      const data = {
-        title: 'Iteration #' + i,
-        items: iteration.get('collection').map((del) => {
-
-        }).toArray()
+    const cards = step.getIn(['data', 'iterations']).toArray().map((iteration, i) => {
+      return {
+        title: 'v' + (i+1),
+        items: iteration.get('collection').toArray().map((item) => {
+          return { shortUrl: item.get('url') };
+        })
       }
-      return <SwipesCardList data={data} key={"cardlist-" + i}/>
+      
     });
-    return ( <Slider infinite={true} dots={true}>{cards}</Slider> )
-
+    return <SwipesCardList data={cards} key={"cardlist"}/>;
+    
   }
   render() {
     return (

@@ -173,12 +173,7 @@ class Chat extends Component {
   }
   renderList(){
     const { data } = this.state;
-    const { activeGoal } = this.props;
-
-    if(activeGoal){
-      return <div>Threads will be here soon :)</div>
-    }
-
+    
     return (
       <ChatList
         ref="chat-list"

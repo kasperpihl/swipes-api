@@ -162,7 +162,7 @@ const dataType = {
 SwipesCardList.propTypes = {
   data: oneOfType([
     shape(dataType),
-    arrayOf(dataType)
+    arrayOf(shape(dataType))
   ]).isRequired,
   // delegate: PropTypes.object.isRequired
 }
