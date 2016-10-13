@@ -1,0 +1,68 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-button {
+  $b: &;
+
+  @include size(180px, 45px);
+  @include flex();
+  background-color: $blue-100;
+  border-radius: 3px;
+  box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
+  color: #fdfdfd;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .5px;
+  transition: .1s ease-in-out;
+
+  &:hover {
+    $darkBlue: darken($blue-100, 7%);
+    background-color: $darkBlue;
+    box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
+  }
+
+  &__title {
+    order: 2;
+  }
+
+  &__icon {
+    order: 1;
+  }
+
+  i {
+    font-size: 18px;
+    margin-right: 9px;
+    transform: translateY(2px);
+  }
+
+  &--round {
+    @include size(45px);
+    border-radius: 50%;
+  }
+
+  &--disabled {
+    background-color: $deepBlue-20;
+    box-shadow: 0 1px 10px 1px rgba($deepBlue-20, 0.4);
+    color: $deepBlue-60;
+    cursor: not-allowed;
+    position: relative;
+
+    &:after {
+
+    }
+
+    &:hover {
+      background-color: $deepBlue-10;
+      box-shadow: 0 1px 10px 1px rgba($deepBlue-20, 0.4);
+      color: $deepBlue-80;
+    }
+  }
+
+  &__title:empty + &__icon i {
+    margin: 0;
+  }
+
+  & *:empty { // Do not render every element that's empty
+    display:none;
+  }
+}

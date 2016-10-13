@@ -18,8 +18,19 @@ $topbarSize: 54px;
 		padding-left: 21px;
 
 		&__back {
-			color: white;
-			font-size: 18px;
+			@include size(30px);
+			@include flex();
+			margin-left: 5px;
+			border-radius: 50%;
+
+			i {
+				color: white;
+				font-size: 15px;
+			}
+
+			&:hover {
+				background-color: rgba(white, .3);
+			}
 		}
 
 		&__crumbs {
@@ -44,7 +55,7 @@ $topbarSize: 54px;
 				color: rgba(white, .5)
 			}
 
-			
+
 		}
 	}
 

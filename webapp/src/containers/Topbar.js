@@ -82,7 +82,9 @@ class Topbar extends Component {
       })
       return (
         <div className="topbar__nav">
-          <i onClick={this.clickedBack} className="material-icons topbar__nav__back">close</i>
+          <div className="topbar__nav__back">
+            <i onClick={this.clickedBack} className="material-icons">close</i>
+          </div>
           <div className="topbar__nav__crumbs">
             {crumbs}
           </div>
@@ -94,11 +96,6 @@ class Topbar extends Component {
     let selectedTitle = 'Workspace'
     const { overlays } = this.props;
     if(!overlays.size){
-      const dropdownStructure = [
-        { title: 'Workspace', id: 'workspace' },
-        { title: 'Services', id: 'services' },
-        { title: 'Log out', id: 'logout' }
-      ];
       return (
         <div className="topbar__nav">
           <div className="topbar__profile" onClick={this.clickedProfile}>
@@ -107,8 +104,6 @@ class Topbar extends Component {
 
           <div className="topbar__title" onClick={this.toggleDropdown}>
             {selectedTitle}
-            <i className="material-icons">arrow_drop_down</i>
-            <DropdownMenu show={this.state.showDropdown} data={dropdownStructure} onChange={this.onChangeMenu}/>
           </div>
         </div>
       )
@@ -153,7 +148,7 @@ class Topbar extends Component {
         {this.renderBreadcrumb()}
 
         <div className="topbar__actions">
-          {this.renderButtons()}          
+          {this.renderButtons()}
         </div>
 
       </div>
