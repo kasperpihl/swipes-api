@@ -7,6 +7,8 @@
   @include size(100%);
   overflow-x: hidden;
   overflow-y: scroll;
+  position: absolute;
+  left: 0; top: 0;
 
   &__section {
     @include size(100%, auto);

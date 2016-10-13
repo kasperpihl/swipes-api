@@ -73,8 +73,10 @@
       text-align: center;
       position: relative;
       z-index: 3;
-      margin-top: 150px;
+      margin-top: 152px;
       color: white;
+      font-size: 15px;
+      font-weight: 500;
     }
 
     &:not(:first-child) {

@@ -28,12 +28,12 @@ class StartGoal extends Component {
   }
   render() {
     return (
-      <div className="start-goal">
+      <div className="start-goal" style={{height: '100%'}}>
         {this.renderList()}
-        <Button callback={this.clickedStore} title="Go to store" />
+        <Button callback={this.clickedStore} title="Go to store" style={{position: 'fixed', bottom: '60px', right: '30px'}}/>
       </div>
     )
-    
+
   }
 }
 

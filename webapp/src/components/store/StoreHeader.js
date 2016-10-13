@@ -28,11 +28,11 @@ class StoreHeader extends Component {
           </div>
           <div className="store-header__featured">
             <img src={airbnbCover} />
-            <div className="store-header__featured__title"></div>
+            <div className="store-header__featured__title">Get more done in your meetings</div>
           </div>
           <div className="store-header__featured">
             <img src={uberCover} />
-            <div className="store-header__featured__title"></div>
+            <div className="store-header__featured__title">Get a project from A to Z</div>
           </div>
         </div>
       </div>

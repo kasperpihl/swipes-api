@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { overlay } from '../../actions'
 
+import WorkflowStore from '../../components/store/WorkflowStore'
+
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class Store extends Component {
@@ -10,11 +12,7 @@ class Store extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
-    return (
-      <div>
-        I will become a store soon
-      </div>
-    )
+    return <WorkflowStore />
   }
 }
 
