@@ -45,17 +45,17 @@ $topbarSize: 54px;
 			line-height: 1;
 			padding: 0 15px;
 			position: relative;
-			&:not(:last-child):hover{
+
+			&:not(:last-child):hover {
 				text-decoration: underline;
 			}
+
 			&:not(:last-child):after {
 				content: ">";
 				position: absolute;
 				right: -5px; top: 0;
 				color: rgba(white, .5)
 			}
-
-
 		}
 	}
 

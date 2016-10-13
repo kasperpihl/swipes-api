@@ -1,0 +1,19 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+
+.goal-decisions {
+  $b: &;
+
+  &__text {
+    padding-bottom: 30px;
+    margin-top: -15px;
+
+    font-size: 18px;
+    color: $deepBlue-100;
+  }
+
+  &__buttons {
+    @include flex(flex);
+  }
+}
