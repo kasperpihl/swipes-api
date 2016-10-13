@@ -29,8 +29,8 @@ class SearchResults extends Component {
       return <SearchResultsService key={"result-service-" + i} icon={el.icon} number={el.number} />
     })
   }
-  renderResultList(results) {
-    const { cardDelegate, searching } = this.props;
+  renderResultList() {
+    const { cardDelegate, searching, results } = this.props;
 
     if (searching) {
       return <Loader size={60} text="Searching" center={true} />
@@ -83,12 +83,17 @@ class SearchResults extends Component {
     }
 
   }
+  renderQuery(){
+    const { searching, query } = this.props;
+    if(!searching && query && query.length){
+      return <div>{"Showing results for: " + query}</div>
+    }
+  }
   render() {
-    const { results } = this.props;
-
     return (
       <div className="search-results">
-        {this.renderResultList(results)}
+        {this.renderQuery()}
+        {this.renderResultList()}
       </div>
     )
   }
@@ -96,13 +101,14 @@ class SearchResults extends Component {
 
 export default SearchResults
 
+const { bool, string, oneOfType, object, array } = PropTypes;
+
 SearchResults.propTypes = {
-  searching: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
-  results: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object
+  searching: bool,
+  query: string,
+  results: oneOfType([
+    array,
+    object
   ]), // SwipesCard Proptypes
-  cardDelegate: PropTypes.object.isRequired
+  cardDelegate: object.isRequired
 }

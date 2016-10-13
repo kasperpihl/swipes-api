@@ -97,12 +97,12 @@ class Find extends Component {
     )
   }
   renderContent() {
-    const { recent, groupedResults } = this.props;
+    const { recent, groupedResults, searching, searchQuery } = this.props;
     if(this.state.currentTabIndex === 0){
       return <Activities title="Recent" subtitle="Mine" key={"activities-" + this.state.currentTabIndex} activities={recent.slice(0,10)} cardDelegate={this}/>;
     }
     else{
-      return <SearchResults searching={this.state.searching} title="Search" key={"search-results-" + this.state.currentTabIndex} results={groupedResults.toJS()} cardDelegate={this} />
+      return <SearchResults searching={searching} query={searchQuery} title="Search" key={"search-results-" + this.state.currentTabIndex} results={groupedResults.toJS()} cardDelegate={this} />
     }
 
 
@@ -133,7 +133,7 @@ function mapStateToProps(state) {
     searchResults: results,
     groupedResults: results.groupBy((res) => res.getIn(['doc', 'source'])),
     searching: state.getIn(['search', 'searching']),
-
+    searchQuery: state.getIn(['search', 'query']),
     draggingDot: state.getIn(['main', 'draggingDot']),
     recent: state.getIn(['activity', 'recent'])
   }

@@ -10,7 +10,11 @@ const initialState = fromJS({
 export default function search (state = initialState, action) {
   switch (action.type) {
     case types.SEARCH: {
-      return state.set('query', action.query).set('searching', true);
+      return state.withMutations((ns) => {
+        ns.set('searching', true);
+        ns.set('searchResults', initialState.get('searchResults'));
+        ns.set('query', action.query);
+      })
     }
     case types.SEARCH_RESULTS: {
       return state.withMutations((ns) => {
