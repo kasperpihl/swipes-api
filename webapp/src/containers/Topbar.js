@@ -94,7 +94,7 @@ class Topbar extends Component {
   }
   renderNav(){
     let selectedTitle = 'Workspace'
-    const { overlays } = this.props;
+    const { overlays, organizations } = this.props;
     if(!overlays.size){
       return (
         <div className="topbar__nav">
@@ -102,8 +102,8 @@ class Topbar extends Component {
             {this.renderProfile()}
           </div>
 
-          <div className="topbar__title" onClick={this.toggleDropdown}>
-            {selectedTitle}
+          <div className="topbar__title" onClick={this.clickedProfile}>
+            {organizations.first().get('name')}
           </div>
         </div>
       )
@@ -159,6 +159,7 @@ class Topbar extends Component {
 function mapStateToProps(state) {
   return {
     overlays: state.get('overlays'),
+    organizations: state.getIn(['me', 'organizations']),
     profilePic: state.getIn(['me', 'profile_pic']),
     fullscreenTitle: state.getIn(['main', 'fullscreenTitle']),
     fullscreenSubtitle: state.getIn(['main', 'fullscreenSubtitle']),

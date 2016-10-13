@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { overlay, main } from '../../actions'
+import { overlay, main, modal } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import '../../components/profile/profile.scss'
@@ -16,7 +16,13 @@ class Profile extends Component {
     pushOverlay({component: "Services", title: "Services"});
   }
   onLogout() {
-    this.props.logout();
+    const { loadModal } = this.props;
+    loadModal({title: 'Log out', data: { message: 'Do you want to log out?', buttons: ['No', 'Yes'] }}, (res) => {
+      if(res && res.button){
+        this.props.logout();
+      }
+    });
+    
   }
   render() {
     const { me } = this.props;
@@ -50,6 +56,7 @@ Profile.propTypes = {
 
 const ConnectedProfile = connect(mapStateToProps, {
   pushOverlay: overlay.push,
+  loadModal: modal.load,
   logout: main.logout
 })(Profile)
 export default ConnectedProfile
