@@ -1,0 +1,20 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-textarea {
+  @include size(100%, auto);
+  background-color: $deepBlue-5;
+  color: $deepBlue-80;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 15px;
+  resize: none;
+
+  &::-webkit-input-placeholder {
+    color: $deepBlue-40;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import './styles/form.scss'
 
 class Form extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class Form extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="sw-form">
         {this.props.children}
       </div>
     )

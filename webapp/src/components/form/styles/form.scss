@@ -1,0 +1,7 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-form {
+  @include size(100%, auto);
+  @include flex(flex-start, flex-start, column);
+}
