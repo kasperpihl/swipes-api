@@ -44,8 +44,8 @@ class Form extends Component {
   renderSubmit(){
     const { submit } = this.props;
     if(submit){
-      return <Button callback={this.onSubmit} title="Submit" />
-    } 
+    return <Button callback={this.onSubmit} title="READY" style={{boxShadow: "none", marginTop: "108px", marginLeft: "73px"}}/>
+    }
   }
   render() {
     const { children, fields } = this.props;

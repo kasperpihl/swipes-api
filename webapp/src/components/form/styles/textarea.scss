@@ -2,19 +2,64 @@
 @import '../../global-styles/mixins/';
 
 .sw-textarea {
+  $b: &;
   @include size(100%, auto);
-  background-color: $deepBlue-5;
-  color: $deepBlue-80;
-  font-size: 15px;
-  line-height: 1.6;
-  padding: 15px;
-  resize: none;
 
-  &::-webkit-input-placeholder {
-    color: $deepBlue-40;
+  &__header {
+    @include size(100%, auto);
+    @include flex(flex);
   }
 
-  &:focus {
-    outline: none;
+  &__icon {
+    @include size(12px);
+    margin: 0 calc(73px / 2 - 6px);
+    margin-top: 3px;
+
+    &--svg {
+      stroke: $deepBlue-80;
+      fill: $deepBlue-80;
+    }
+
+    &--font {
+      color: $deepBlue-80;
+      font-size: 18px;
+    }
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 500;
+    color: $deepBlue-80;
+
+    &:not(:empty) {
+      margin-bottom: 30px;
+    }
+  }
+
+  &__input {
+    @include size(calc(100% - 73px), auto);
+    border-bottom: 1px solid $deepBlue-20;
+    color: $deepBlue-80;
+    font-size: 12px;
+    line-height: 1;
+    padding: 12px 0;
+    transform: translateX(73px);
+    resize: none;
+    transition: .15s;
+
+    &::-webkit-input-placeholder {
+      color: $deepBlue-40;
+      font-style: italic;
+    }
+
+    &:focus {
+      border-bottom: 1px solid $blue-100;
+      outline: none;
+      transition: .15s;
+    }
+  }
+
+  &__*:empty {
+    display:none;
   }
 }

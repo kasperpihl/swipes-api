@@ -21,10 +21,12 @@ class Textarea extends Component {
   }
   render() {
     const options = this.props.options || {};
-    const styles = this.props.styles || {};
+    const style = this.props.style || {};
 
     return (
-      <ReactTextarea className="sw-textarea" {...options} style={styles} value={this.state.value} onChange={this.setValue}/>
+      <div className="sw-textarea">
+        <ReactTextarea className="sw-textarea__input" {...options} style={style} value={this.state.value} onChange={this.setValue}/>
+      </div>
     )
   }
 }

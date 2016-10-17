@@ -3,8 +3,31 @@
 
 .sw-scheduler {
   @include size(100%, auto);
-  &__row{
-    &--selected{
+  @include flex(space-between, space-between);
+  flex-wrap: wrap;
+  padding-left: 73px;
+  position: relative;
+
+  &__col {
+    min-width: 200px;
+    position: relative;
+  }
+
+  &__day {
+    @include size(100%, 54px);
+    @include flex();
+    border-bottom: 1px solid $deepBlue-10;
+    color: $deepBlue-80;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  &__row {
+    @include size(100%, 45px);
+    border-radius: 1px;
+    border: solid 1px #e5e6ea;
+
+    &--selected {
       background: red;
     }
   }

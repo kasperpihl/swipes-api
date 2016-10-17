@@ -4,4 +4,7 @@
 .sw-form {
   @include size(100%, auto);
   @include flex(flex-start, flex-start, column);
+  max-width: 550px;
+  margin: 50px auto;
+  position: relative;
 }
