@@ -12,9 +12,9 @@ class Textarea extends Component {
   }
   render() {
     const options = this.props.options || {};
-    console.log(options);
+    const styles = this.props.styles || {};
     return (
-      <ReactTextarea className="sw-textarea" {...options} />
+      <ReactTextarea className="sw-textarea" {...options} style={styles} />
     )
   }
 }
