@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/form.scss'
 import * as Comps from './'
+import Button from '../swipes-ui/Button'
 
 class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
   }
@@ -17,26 +19,52 @@ class Form extends Component {
         if(!Comp){
           return <div key={'unsupported' + i}>Unsupported Component</div>;
         }
-        return <Comp key={type + i} options={options} style={style} />
+        return <Comp ref={'comp'+i} key={'comp' + i} options={options} style={style} />
       })
     }
   }
+  onSubmit(){
+    const { fields, children, onSubmit } = this.props;
+    const values = [];
+    if(fields){
+      fields.forEach((field, i) => {
+        const comp = this.refs['comp' + i];
+        let val = null;
+        if(comp && typeof comp.getValue === 'function'){
+          val = comp.getValue();
+        }
+        values.push(val);
+      })
+    }
+    if(onSubmit){
+      onSubmit(values);
+    }
+  }
+
+  renderSubmit(){
+    const { submit } = this.props;
+    if(submit){
+      return <Button callback={this.onSubmit} title="Submit" />
+    } 
+  }
   render() {
     const { children, fields } = this.props;
-    console.log('this', this.props.children)
     const renderedChildren = children || this.renderFields(fields);
     return (
       <div className="sw-form">
         {renderedChildren}
+        {this.renderSubmit()}
       </div>
     )
   }
 }
 export default Form
 
-const { arrayOf, shape, string, object } = PropTypes;
+const { func, bool, arrayOf, shape, string, object } = PropTypes;
 import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
 Form.propTypes = {
+  onSubmit: func,
+  submit: bool,
   fields: arrayOf(shape({
     type: string,
     options: object,

@@ -9,11 +9,14 @@ class Textarea extends Component {
     this.state = {
       value: props.defaultValue || ''
     }
-    this.getValue = this.getValue.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
   componentDidMount() {
   }
-  getValue(e) {
+  getValue(){
+    return this.state.value;
+  }
+  setValue(e) {
     this.setState({value: e.target.value})
   }
   render() {
@@ -21,7 +24,7 @@ class Textarea extends Component {
     const styles = this.props.styles || {};
 
     return (
-      <ReactTextarea className="sw-textarea" {...options} style={styles} value={this.state.value} onChange={this.getValue}/>
+      <ReactTextarea className="sw-textarea" {...options} style={styles} value={this.state.value} onChange={this.setValue}/>
     )
   }
 }

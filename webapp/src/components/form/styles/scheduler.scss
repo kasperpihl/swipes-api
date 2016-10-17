@@ -1,0 +1,11 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-scheduler {
+  @include size(100%, auto);
+  &__row{
+    &--selected{
+      background: red;
+    }
+  }
+}
