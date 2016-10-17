@@ -6,7 +6,7 @@ import Topbar from './Topbar'
 import Modal from './Modal'
 import Workspace from './Workspace'
 import Overlay from './Overlay'
-import Toasty from '../components/toasty/HOToasty'
+import Toasty from '../components/toasty/HOCToasty'
 import DotDragOverlay from './DotDragOverlay'
 
 

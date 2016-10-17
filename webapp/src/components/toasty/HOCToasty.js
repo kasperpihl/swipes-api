@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import Toast from './Toast'
+
 import './styles/toasty.scss'
 
-class Toasty extends Component {
+class HOCToasty extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -32,6 +33,6 @@ function mapStateToProps(state) {
   }
 }
 
-const ConnectedToasty = connect(mapStateToProps, {
-})(Toasty)
-export default ConnectedToasty
+const ConnectedHOCToasty = connect(mapStateToProps, {
+})(HOCToasty)
+export default ConnectedHOCToasty

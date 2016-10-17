@@ -33,11 +33,9 @@ class Find extends Component {
       var path = folder + data.subtitle + '/' + data.title;
       console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
     }
-    console.log('clicked', data);
   }
   onCardShare(card, data, dragging){
     const { recent, searchResults } = this.props;
-    console.log(data);
     if(data.checksum){ // Is activity
       const activity = recent.find((act) => act.get('checksum') === data.checksum);
       const share = {
@@ -56,7 +54,6 @@ class Find extends Component {
         return id === data.xendo_id;
       })
       if(obj){
-        console.log(obj.get('shareData').toJS());
         this.props.startDraggingDot("search", obj.get('shareData').toJS());
       }
       

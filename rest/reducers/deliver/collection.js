@@ -16,6 +16,17 @@ const init = (step) => {
 
   return step.merge(new Map({data: data}));
 }
+const variables = (step) => {
+  return {
+    'Collection': {},
+    'lastIteration': 'Array (string)'
+  }
+}
+const getVariable = (variable) => {
+  if(variable === 'collection'){
+  }
+}
+
 
 const add = (step, payload, userId) => {
   const lastIterationIndex = step.getIn(['data', 'iterations']).size - 1;
