@@ -65,7 +65,7 @@ router.post('/steps.update',
   }
 )
 
-router.post('/steps.complete',
+router.post('/steps.next',
   usersGet,
   goalsGet,
   stepsGetCurrent,
