@@ -15,6 +15,7 @@ import { render } from 'react-dom'
 import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
 
 let Page;
+let RenderedComp;
 let props = {};
 
 
@@ -23,8 +24,7 @@ if(process.env.NODE_ENV !== 'production'){
   Tester = require('./Tester');
 }
 if(typeof Tester !== 'undefined'){
-  Page = Tester.view;
-  props = Tester.props;
+  RenderedComp = Tester;
 }
 else if(!window.process || !window.process.versions.electron){
   if(window.__share_data){
@@ -41,6 +41,6 @@ else{
 }
 
 render(
-  <Page {...props} />
+  RenderedComp || <Page {...props} />
   , document.getElementById('content')
 )
