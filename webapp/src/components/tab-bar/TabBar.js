@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { bindAll } from '../../classes/utils';
 import './styles/tab-bar.scss'
+import * as Icons from '../icons'
 
 class TabBar extends Component {
   constructor(props) {
@@ -27,6 +28,13 @@ class TabBar extends Component {
       this.callback(newIndex)
     }
   }
+  renderIcon(icon, i){
+    const Comp = Icons[icon];
+    if(Comp){
+      return <Comp data-index={i} />;
+    }
+    return <i className='material-icons' data-index={i}>{icon}</i>
+  }
   render() {
     const { data, align } = this.props;
     const { activeTab } = this.state;
@@ -51,7 +59,7 @@ class TabBar extends Component {
 
         return (
           <div className={tabClass + ' tab-bar__tab--icon'} data-index={i} key={'tab-'+i} onClick={this.setActiveTab}>
-            <i className='material-icons' data-index={i}>{tab.icon}</i>
+            {this.renderIcon(tab.icon, i)}
             <div className='tab-bar__tab__title' data-index={i}>{tab.title}</div>
           </div>
         )
@@ -68,15 +76,17 @@ class TabBar extends Component {
 
 export default TabBar
 
-const { string, oneOfType, func, array, shape } = PropTypes;
+const { string, oneOfType, func, arrayOf, shape } = PropTypes;
 
 TabBar.propTypes = {
   onChange: func,
-  data: oneOfType([
-    array,
-    shape({
-      title: string,
-      icon: string
-    })
-  ])
+  data: arrayOf(
+    oneOfType([
+      string,
+      shape({
+        title: string,
+        icon: string
+      })
+    ])
+  )
 }
