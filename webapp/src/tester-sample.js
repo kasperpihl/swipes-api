@@ -7,9 +7,15 @@ import React from 'react'
 // 1. Import the component you want to test
 import SwipesCard from './components/swipes-card/SwipesCard'
 
-// 2. Set the components to test
+// 2. Set the components and props to test
+const props = {
+  data: {
+    "title": "This is the properties of the component"
+  }
+};
+
 view = (
-  <SwipesCard data={{"title": "This is the properties of the component"}} />
+  <SwipesCard {...props} />
 )
 
 // 3. Change this to true, to enable the tester
