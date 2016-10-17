@@ -11,16 +11,31 @@ class Form extends Component {
   }
   componentDidMount() {
   }
+  renderHeader(header, i){
+    const { title, description, icon } = header;
+    return (
+      <div key={'header'+i}>
+        {title}
+      </div>
+    )
+  }
   renderFields(fields){
     if(fields){
-      return fields.map((field, i) => {
-        const { type, options, style } = field;
+      const renderedArr = [];
+      fields.forEach((field, i) => {
+        const { type, options, style, header } = field;
         const Comp = Comps[type];
-        if(!Comp){
-          return <div key={'unsupported' + i}>Unsupported Component</div>;
+        if(header && header.title){
+          renderedArr.push(this.renderHeader(header, i));
         }
-        return <Comp ref={'comp'+i} key={'comp' + i} options={options} style={style} />
+        if(!Comp){
+          renderedArr.push(<div key={'unsupported' + i}>Unsupported Component</div>);
+        }
+        else {
+          renderedArr.push(<Comp ref={'comp'+i} key={'comp' + i} options={options} style={style} />)
+        }
       })
+      return renderedArr
     }
   }
   onSubmit(){
