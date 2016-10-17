@@ -20,7 +20,7 @@ class GoalItem extends Component {
   render() {
     const { data } = this.props;
     let rootClass = 'goal-item';
-
+    
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={rootClass + "__image"}>
@@ -28,7 +28,7 @@ class GoalItem extends Component {
         </div>
         <div className={rootClass + "__content"}>
           <div className={rootClass + "__title"}>{data.get('title')}</div>
-          <div className={rootClass + "__label"}>{data.get('status')}</div>
+          <div className={rootClass + "__label"}>2/3 steps</div>
         </div>
       </div>
     )

@@ -97,7 +97,7 @@ class Goals extends Component {
     return null;
   }
   stepDo(data){
-    
+
   }
   getStatusForStep(timeline, stepId){
 
@@ -119,8 +119,8 @@ class Goals extends Component {
     return null;
   }
   clickedRoundButton() {
-    const { 
-      addToast, 
+    const {
+      addToast,
       updateToast,
       loadModal,
       currentGoal,
@@ -141,9 +141,9 @@ class Goals extends Component {
             });
           })
         }
-      })      
+      })
     }
-    
+
   }
   renderPlusButton(){
     const { currentGoal } = this.props;

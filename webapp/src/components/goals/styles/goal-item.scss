@@ -1,32 +1,40 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-$imgContHeight: 40px;
+$imgContHeight: 30px;
 
 .goal-item {
   $b: &;
 
   @include size(100%, auto);
   @include flex();
-  margin: 10px 0;
   max-width: 550px;
   min-height: $imgContHeight;
   position: relative;
+  padding: 12px 21px;
+  margin: 0 auto;
+
+  &:not(:first-child) {
+    margin-top: 18px;
+  }
+
+  &:hover {
+    background-color: $blue-10;;
+  }
 
   &__image {
     @include size($imgContHeight);
+    @include flex();
 
     img {
-      @include size();
-      border-radius: 3px;
+      @include size(24px);
     }
   }
 
   &__content {
     $contentWidth: calc(100% - #{$imgContHeight});
-
+    @include flex(flex-start, center, column);
     @include size($contentWidth, 100%);
-    @include flex(flexstart, center, column);
     min-height: $imgContHeight;
     padding-left: 15px;
   }
@@ -34,12 +42,16 @@ $imgContHeight: 40px;
   &__title {
     color: $deepBlue-80;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 700;
+    letter-spacing: -0.1px;
   }
 
   &__label {
     color: $deepBlue-40;
     font-size: 12px;
     font-weight: 500;
+    line-height: 1.75;
+    margin-top: 6px;
+    letter-spacing: .5px;
   }
 }

@@ -39,3 +39,6 @@ export const oneCover = png('1')
 export const twoCover = png('2')
 export const threeCover = png('3')
 export const fourCover = png('4')
+
+
+export const designWorkflowCover = png('design-template')
