@@ -12,7 +12,8 @@ $imgContHeight: 30px;
   min-height: $imgContHeight;
   position: relative;
   padding: 12px 21px;
-  margin: 0 auto;
+  padding-left: 15px;
+  // margin: 0 auto;
 
   &:not(:first-child) {
     margin-top: 18px;
