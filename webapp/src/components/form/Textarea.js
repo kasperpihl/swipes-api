@@ -6,15 +6,22 @@ import './styles/textarea.scss'
 class Textarea extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      value: props.defaultValue || ''
+    }
+    this.getValue = this.getValue.bind(this);
   }
   componentDidMount() {
+  }
+  getValue(e) {
+    this.setState({value: e.target.value})
   }
   render() {
     const options = this.props.options || {};
     const styles = this.props.styles || {};
+
     return (
-      <ReactTextarea className="sw-textarea" {...options} style={styles} />
+      <ReactTextarea className="sw-textarea" {...options} style={styles} value={this.state.value} onChange={this.getValue}/>
     )
   }
 }
