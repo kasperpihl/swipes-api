@@ -61,8 +61,11 @@ class ChatList extends Component {
     }
   }
   renderSections(){
-    let { unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages, cardDelegate } = this.props;
+    let { thread, unreadIndicator, sections, itemDelegate, clickedLink, loadingMessages, cardDelegate } = this.props;
     if(sections && !sections.length){
+      if(thread){
+        return <div className="chat-list__no-messages">{"This is beginning of the thread"}<br/>{thread.name}</div>;
+      }
       return <div className="chat-list__no-messages">This is the very beginning of this conversation. Start writing below</div>;
     }
     if(sections && !loadingMessages){

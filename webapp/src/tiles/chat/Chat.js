@@ -206,6 +206,7 @@ class Chat extends Component {
       <ChatList
         ref="chat-list"
         cardDelegate={this}
+        thread={data.get('thread')}
         sections={data.get('sortedMessages')}
         markAsRead={this.slackHandler.markAsRead}
         loadingMessages={data.get('loadingMessages')}
