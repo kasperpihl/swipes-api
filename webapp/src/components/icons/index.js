@@ -14,6 +14,8 @@ export const AssignIcon = svg('assign-icon')
 export const LogoLoader = svg('sw-logo-loader')
 export const CheckmarkIcon = svg('checkmark-icon')
 export const SlackIcon = svg('logo-slack')
+export const ListIcon = svg('list-logo')
+export const ClockIcon = svg('clock-logo')
 
 export const ShapeOne = svg('shape-1')
 export const ShapeTwo = svg('shape-2')
