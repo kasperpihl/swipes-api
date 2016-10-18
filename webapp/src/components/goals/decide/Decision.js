@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Button from '../../swipes-ui/Button'
 import { bindAll } from '../../../classes/utils'
+import Form from './Form'
 
 import '../styles/decisions.scss'
 
@@ -28,13 +29,7 @@ class Decision extends Component {
   }
   render() {
     return (
-      <div className="goal-decisions">
-        <div className="goal-decisions__text">Are these designs good enough to move on?</div>
-        <div className="goal-decisions__buttons">
-          <Button icon="thumb_down" callback={this.decideNo} />
-          <Button icon="thumb_up" style={{marginLeft: '15px'}} callback={this.decideYes} />
-        </div>
-      </div>
+      <Form />
     )
   }
 }

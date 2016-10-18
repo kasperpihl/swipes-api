@@ -48,25 +48,14 @@ $fade: .4;
   &__indicator {
     @include size(30px);
     @include flex();
-    background-color: $bg;
     border-radius: 50%;
     position: relative;
 
     &#{&}--index {
-      color: rgba($blue-120, $fade);
+      background-color: rgba($blue-100, .3);
+      color: $bg;
       font-size: 15px;
       transition: color .1s;
-
-      &:after {
-        @include size(30px);
-        border-radius: 50%;
-        border: 2px solid $blue-40;
-        content: "";
-        left: 0; top: 0;
-        position: absolute;
-        opacity: $fade;
-        transition: opacity .1s;
-      }
     }
 
     &#{&}--completed {
@@ -89,16 +78,17 @@ $fade: .4;
   }
 
   &__title {
-    color: $deepBlue-100;
-    font-size: 15px;
+    color: $deepBlue-80;
+    font-size: 21px;
+    font-weight: 500;
     user-select: auto;
   }
 
   &__type {
-    color: $blue-140;
-    font-size: 11px;
+    color: $deepBlue-40;
+    font-size: 10px;
+    font-weight: bold;
     letter-spacing: 1px;
-    opacity: .3;
     text-transform: uppercase;
     user-select: auto;
   }
@@ -136,7 +126,8 @@ $fade: .4;
 
     &__indicator {
 			&--index {
-				color: $blue-120;
+        background-color: $blue-100;
+				color: $bg;
         transition: color .1s;
 
         &:after {
@@ -168,7 +159,8 @@ $fade: .4;
   &#{&}--active & {
     &__indicator {
 			&--index {
-				color: $blue-120;
+        background-color: $blue-100;
+				color: $bg;
         transition: color .1s;
 
         &:after {

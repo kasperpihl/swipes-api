@@ -1,7 +1,8 @@
-<svg version="1.1" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g stroke-width="1" fill-rule="evenodd" >
-        <polygon points="0 6 12 6 12 3.999 0 3.999"></polygon>
-        <polygon points="0 2 12 2 12 0 0 0"></polygon>
-        <polygon points="0 10 6 10 6 8 0 8"></polygon>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <g>
+    <rect width="24" height="24" fill="none" stroke="none"/>
+    <rect x="6" y="11" width="12" height="2" />
+    <rect x="6" y="8" width="12" height="2" />
+    <rect x="6" y="14" width="6" height="2" />
+  </g>
 </svg>

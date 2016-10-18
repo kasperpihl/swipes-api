@@ -104,7 +104,7 @@ class StoreCategories extends Component {
               <img src={oneCover} />
               <div className="store-content__title store-content__title--big">The Startup Pack</div>
             </div>
-            <div className="store-content__description store-content__description--big">When Creating as template, you edit the goal, from the perspective of which things should filled out when someone selects this template. Say… for example you have a decision step for approval and you wont be the decision maker all the time, you can …</div>
+            <div className="store-content__description store-content__description--big">Full package of workflows for fast growing teams. Setting up the right way of doing things from the start will help accelerate growth and improve quality. Easy workflows to onboard new team mates every week.</div>
           </div>
 
           <div className="store-content__item store-content__item--big">
@@ -112,7 +112,7 @@ class StoreCategories extends Component {
               <img src={twoCover} />
               <div className="store-content__title store-content__title--big">Grow fast. Work fast.</div>
             </div>
-            <div className="store-content__description store-content__description--big">When Creating as template, you edit the goal, from the perspective of which things should filled out when someone selects this template. Say… for example you have a decision step for approval and you wont be the decision maker all the time, you can …</div>
+            <div className="store-content__description store-content__description--big">If your team is growing in size but you are still doing most of things, you are doing it wrong. Set up easy workflows to onboard new team mates every week. Keep up with the speed of your growth and scale up faster.</div>
           </div>
 
           <div className="store-content__item store-content__item--big">
@@ -120,15 +120,16 @@ class StoreCategories extends Component {
               <img src={threeCover} />
               <div className="store-content__title store-content__title--big">Product Sprints</div>
             </div>
-            <div className="store-content__description store-content__description--big">When Creating as template, you edit the goal, from the perspective of which things should filled out when someone selects this template. Say… for example you have a decision step for approval and you wont be the decision maker all the time, you can …</div>
+            <div className="store-content__description store-content__description--big">
+Iterations, QA and product launch workflows to help you get the product right. All you need package for product teams who are focused on quality and speed.</div>
           </div>
 
           <div className="store-content__item store-content__item--big">
             <div className="store-content__image">
               <img src={fourCover} />
-              <div className="store-content__title store-content__title--big">Conferences</div>
+              <div className="store-content__title store-content__title--big">Conference Stand</div>
             </div>
-            <div className="store-content__description store-content__description--big">When Creating as template, you edit the goal, from the perspective of which things should filled out when someone selects this template. Say… for example you have a decision step for approval and you wont be the decision maker all the time, you can …</div>
+            <div className="store-content__description store-content__description--big">Plan a conference trip and make most out of the networking opportunities. Who should attend the conference from your team? What results would you achieve with a PR campaign? Who would you meet with?</div>
           </div>
         </div>
       </div>

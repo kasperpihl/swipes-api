@@ -1,0 +1,102 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.form-decide {
+  @include size(100%, auto);
+
+  &__header {
+    @include size(100%, auto);
+    position: relative;
+
+
+    &:not(:first-child) {
+      margin-top: 60px;
+    }
+  }
+
+  &__icon {
+    left: calc(-86px / 2); top: 1px;
+    position: absolute;
+
+    &--svg {
+      @include size(14px);
+      fill: $green-color;
+      stroke: $green-color;
+      top: 3px;
+    }
+
+    &--font {
+      color: $green-color;
+      font-size: 15px;
+    }
+
+    &--active {
+      fill: $deepBlue-30 !important;
+      stroke: $deepBlue-30 !important;
+      color: $deepBlue-30 !important;
+    }
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 500;
+    color: $deepBlue-80;
+  }
+
+  &__description {
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: italic;
+    color: #4c546d;
+    margin-bottom: 30px;
+  }
+
+  &__response-wrap {
+    @include size();
+    @include flex(flex);
+    padding-bottom: 30px;
+  }
+
+  &__avatar {
+    @include size(24px);
+
+    img {
+      @include size();
+      border-radius: 50%;
+    }
+  }
+
+  &__response {
+    margin-left: 21px;
+    font-size: 13px;
+    color: $deepBlue-60;
+    line-height: 1.4;
+    max-width: 400px;
+    padding-right: 20px;
+    margin-top: -2px;
+  }
+
+  &__available-time {
+    @include size(155px, 45px);
+    @include flex(flex);
+    border-radius: 3px;
+    border: solid 1px $deepBlue-10;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+
+  &__stats {
+    @include size(35px, 100%);
+    @include flex();
+    border-right: 1px solid $deepBlue-10;
+    color: $deepBlue-40;
+  }
+
+  &__time {
+    @include size(120px, 100%);
+    @include flex();
+    color: $deepBlue-90;
+  }
+}
