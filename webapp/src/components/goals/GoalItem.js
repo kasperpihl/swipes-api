@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
 import './styles/goal-item.scss'
+import { randomStatusLabel } from '../../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class GoalItem extends Component {
@@ -78,7 +79,7 @@ class GoalItem extends Component {
         </div>
         <div className={rootClass + "__content"}>
           <div className={rootClass + "__title"}>{data.get('title')}</div>
-          <div className={rootClass + "__label"}>waiting for Kasper to build a random status generator</div>
+          <div className={rootClass + "__label"}>{randomStatusLabel()}</div>
         </div>
       </div>
     )
