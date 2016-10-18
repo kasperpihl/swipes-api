@@ -200,7 +200,7 @@ export default class SlackSwipesParser {
     }
 
     const { user:userId, bot_id, username } = msg;
-
+    console.log(this.lastUser, this.lastGroup);
     let user, cards;
 
     if(userId){
@@ -274,7 +274,8 @@ export default class SlackSwipesParser {
       groups[groupName].push(obj)
     }
 
-
+    this.lastUser = null;
+    this.lastGroup = null;
     let lastMessageWasLastRead = false
     sortedMessages.forEach((msg, i) => {
       const { newMsg, group } = this.parseMessageFromSlack(msg, data);
