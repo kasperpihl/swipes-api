@@ -108,13 +108,7 @@ class Goals extends Component {
   renderTimeline(){
     let { currentGoal, users } = this.props;
     if(currentGoal){
-      let goal = currentGoal.updateIn(['steps'], (s) => s.map((step) => {
-        const assignees = step.get('assignees');
-        return step.set('assignees', assignees.map((userId) => {
-          return users.get(userId);
-        }));
-      }))
-      return <GoalTimeline goal={goal} delegate={this}/>;
+      return <GoalTimeline goal={currentGoal} delegate={this}/>;
     }
     return null;
   }
