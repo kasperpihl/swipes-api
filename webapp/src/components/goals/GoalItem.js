@@ -18,6 +18,48 @@ class GoalItem extends Component {
   }
   componentDidMount() {
   }
+  renderAssigneeTooltip(names) {
+    if (names.length <= 1) {
+      return;
+    }
+
+    const nameList = names.map( (name, i) => {
+      return <div className="step-header__tooltip-item" key={'tooltip-item-' + i}>{name.name}</div>
+    })
+
+    return (
+      <div className="step-header__tooltip">
+        {nameList}
+      </div>
+    )
+  }
+  renderAssignees(assignees) {
+    if (assignees.length < 1) {
+      return;
+    } else {
+      let profileImg = "http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230";
+      let assigneesCount = assignees.length - 1;
+      let assigneesCountEl = '';
+      let assigneeNames = assignees.filter( (assignee) => (assignee.name));
+      const profilesOnly = assignees.filter( (assignee) => (assignee.profile_pic));
+
+      if (profilesOnly.length) {
+        profileImg = profilesOnly[0].profile_pic;
+      }
+
+      if (assigneesCount > 0) {
+        assigneesCountEl = <div className="step-header__assignee-count">{'+' + assigneesCount}</div>
+      }
+
+      return (
+        <div className="step-header__assignees">
+          <div className="step-header__assignee"><img src={profileImg}/></div>
+          {assigneesCountEl}
+          {this.renderAssigneeTooltip(assigneeNames)}
+        </div>
+      )
+    }
+  }
   renderIcon(icon){
     const Comp = Icons[icon];
     if(Comp){
@@ -28,7 +70,7 @@ class GoalItem extends Component {
   render() {
     const { data } = this.props;
     let rootClass = 'goal-item';
-
+    const data = data.toJS();
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={rootClass + "__image"}>
@@ -36,7 +78,7 @@ class GoalItem extends Component {
         </div>
         <div className={rootClass + "__content"}>
           <div className={rootClass + "__title"}>{data.get('title')}</div>
-          <div className={rootClass + "__label"}>2/3 steps</div>
+          <div className={rootClass + "__label"}>waiting for Kasper to build a random status generator</div>
         </div>
       </div>
     )

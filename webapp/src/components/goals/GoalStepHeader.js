@@ -45,7 +45,6 @@ class GoalStepHeader extends Component {
   }
   renderAssignees(assignees) {
     if (assignees.length < 1) {
-
       return;
     } else {
       let profileImg = "http://www.avatarys.com/var/albums/Cool-Avatars/Facebook-Avatars/500x500-facebook-avatars/cute-fluffy-monster-facebook-avatar-500x500.png?m=1455128230";
