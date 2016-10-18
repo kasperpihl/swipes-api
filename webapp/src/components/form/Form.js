@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/form.scss'
 import * as Comps from './'
+import * as Icons from '../icons'
 import Button from '../swipes-ui/Button'
 
 class Form extends Component {
@@ -11,11 +12,20 @@ class Form extends Component {
   }
   componentDidMount() {
   }
+  renderIcon(icon, i){
+    const Comp = Icons[icon];
+    if(Comp){
+      return <Comp className="sw-form__icon sw-form__icon--svg"/>;
+    }
+    return <i className="material-icons sw-form__icon sw-form__icon--font">{icon}</i>
+  }
   renderHeader(header, i){
     const { title, description, icon } = header;
     return (
-      <div key={'header'+i}>
-        {title}
+      <div key={'header'+i} className="sw-form__header">
+        {this.renderIcon(icon)}
+        <div className="sw-form__title">{title}</div>
+        <div className="sw-form__description">{description}</div>
       </div>
     )
   }
@@ -59,7 +69,7 @@ class Form extends Component {
   renderSubmit(){
     const { submit } = this.props;
     if(submit){
-    return <Button callback={this.onSubmit} title="READY" style={{boxShadow: "none", marginTop: "108px", marginLeft: "73px"}}/>
+    return <Button callback={this.onSubmit} title="READY" style={{boxShadow: "none", marginTop: "108px"}}/>
     }
   }
   render() {

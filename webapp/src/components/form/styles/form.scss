@@ -7,4 +7,46 @@
   max-width: 550px;
   margin: 50px auto;
   position: relative;
+  // overflow-y: hidden;
+
+  &__header {
+    @include size(100%, auto);
+    position: relative;
+    margin-top: 60px
+  }
+
+  &__icon {
+    left: calc(-73px / 2); top: 2px;
+    position: absolute;
+
+    &--svg {
+      @include size(12px);
+      fill: $deepBlue-60;
+      stroke: $deepBlue-60;
+    }
+
+    &--font {
+      color: $deepBlue-60;
+      font-size: 15px;
+    }
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333d59;
+  }
+
+  &__description {
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: italic;
+    color: #4c546d;
+    margin-bottom: 30px;
+  }
+
+  &__*:empty {
+    display:none;
+  }
 }

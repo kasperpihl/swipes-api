@@ -3,18 +3,18 @@
 
 .sw-scheduler {
   @include size(100%, auto);
-  @include flex(space-between, space-between);
-  flex-wrap: wrap;
-  padding-left: 73px;
+  @include flex(flex);
   position: relative;
 
   &__col {
-    min-width: 200px;
+    min-width: 150px;
     position: relative;
+    flex: none;
+    margin-right: 15px;
   }
 
   &__day {
-    @include size(100%, 54px);
+    @include size(100%, 36px);
     @include flex();
     border-bottom: 1px solid $deepBlue-10;
     color: $deepBlue-80;
@@ -24,11 +24,20 @@
 
   &__row {
     @include size(100%, 45px);
-    border-radius: 1px;
+    @include flex();
+    border-radius: 3px;
     border: solid 1px #e5e6ea;
+    color: $deepBlue-100;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 15px;
+    transition: .15s ease-in-out;
+    user-select: none;
 
     &--selected {
-      background: red;
+      background-color: $green-color;
+      border-color: $green-color;
+      color: $bg;
     }
   }
 }
