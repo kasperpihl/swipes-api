@@ -36,7 +36,8 @@
     @include size(100%, auto);
     color: $deepBlue-100;
     font-size: 15px;
-    line-height: 1;
+    line-height: 18px;
+    margin-top: -1px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

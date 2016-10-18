@@ -18,39 +18,39 @@ class StoreCategories extends Component {
         <div className="store-content__category">
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#edf8f5'}}><ShapeOne /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Concept development</div>
+            <div className="store-content__author">By Uber <br/> Used by 107 companies</div>
+            <div className="store-content__description store-content__description--small">WGood ideas come from creative explorations and research. Make it easy for your team to…</div>
           </div>
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#ffebe0'}}><ShapeTwo /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Rebranding strategy</div>
+            <div className="store-content__author">By Airbnb <br/> Used by 15 companies</div>
+            <div className="store-content__description store-content__description--small">It’s time for a new fresh company look but it is so hard to get it right. Run this process to make…</div>
           </div>
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#f4f9fc'}}><ShapeThree /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Campaign designs</div>
+            <div className="store-content__author">By Nike <br/> Used by 78 companies</div>
+            <div className="store-content__description store-content__description--small">What’s the right segment? How would the new message come across? Test your camp…</div>
           </div>
 
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#f0f6f4'}}><ShapeFour /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Brainstorming session</div>
+            <div className="store-content__author">By Buffer <br/> Used by 703 companies</div>
+            <div className="store-content__description store-content__description--small">Make most out of having the right people in the right set-up. How to run 1h brainstorming sess…</div>
           </div>
 
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#f7fafe'}}><ShapeFive /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Set up design guidelines</div>
+            <div className="store-content__author">By Facebook <br/> Used by 23 companies</div>
+            <div className="store-content__description store-content__description--small">Have consistent design across all teams even when you scale. Set up a guide that’s easy to…</div>
           </div>
         </div>
 
