@@ -174,7 +174,7 @@ export default class SlackSwipesParser {
     return [card];
   }
   parseMessageFromSlack(msg, data){
-    const { bots, self, users } = data;
+    const { bots, self, users, thread } = data;
     const date = new Date(parseInt(msg.ts)*1000);
     const group = startOfDayTs(date);
     const newMsg = {
@@ -186,8 +186,17 @@ export default class SlackSwipesParser {
     };
 
     if(msg.text && msg.text.length){
-      newMsg.oldText = msg.text;
-      newMsg.text = this.renderTextWithLinks(this.replaceNewLines(msg.text), data.users);
+      let text = msg.text;
+      if(text.startsWith('<' + window.location.origin + '/g/')){
+        if(!thread){
+          text = 'Commented on ' + text.match(/<(.*?)>/g)[0];
+        }
+        else{
+          text = text.substr(text.match(/<(.*?)>/g)[0].length + 2);
+        }
+      }
+      newMsg.oldText = text;
+      newMsg.text = this.renderTextWithLinks(this.replaceNewLines(text), data.users);
     }
 
     const { user:userId, bot_id, username } = msg;
@@ -244,13 +253,18 @@ export default class SlackSwipesParser {
     return { group , newMsg: newMsg};
   }
   sortMessagesForSwipes(data){
-    const { bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId, unreadIndicator } = data;
+    const { bots, self, users, unsentMessageQueue, isSendingMessage, selectedChannelId, unreadIndicator, thread } = data;
     if(!data.cachedChannels || !data.cachedChannels[selectedChannelId]){
       return;
     }
-    const messages = data.cachedChannels[selectedChannelId].messages;
+    let messages = data.cachedChannels[selectedChannelId].messages;
     if(!messages || !messages.length)
       return [];
+    if(thread){
+      messages = messages.filter((data) => {
+        return (data.text && data.text.startsWith('<' + thread.url))
+      })
+    }
     const sortedMessages = messages.sort((a, b) => (a.ts < b.ts) ? -1 : 1)
     const groups = {};
     function pushToGroup(groupName, obj){
@@ -270,7 +284,8 @@ export default class SlackSwipesParser {
         lastMessageWasLastRead = false;
       }
 
-      if(unreadIndicator && unreadIndicator.ts === newMsg.ts){       lastMessageWasLastRead = true;
+      if(unreadIndicator && unreadIndicator.ts === newMsg.ts){
+        lastMessageWasLastRead = true;
       }
       pushToGroup(group, newMsg);
     });
@@ -314,9 +329,12 @@ export default class SlackSwipesParser {
       }
       return newMsg;
     })
-
-    const lastSection = sortedSections[sortedSections.length - 1]
+    
     if(sendingMessages.length){
+      if(!sortedSections.length){
+        sortedSections.push({title: 'Today', messages: []});
+      }
+      let lastSection = sortedSections[sortedSections.length - 1]
       lastSection.messages = lastSection.messages.concat(sendingMessages);
     }
 
