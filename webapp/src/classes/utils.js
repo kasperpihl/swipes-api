@@ -14,7 +14,7 @@ export function randomStatusLabel(){
     'Waiting for Kristjan',
     'You need to deliver'
   ]
-  return statuses[Math.random() * statuses.length];
+  return statuses[parseInt(Math.random() * statuses.length, 10)];
 }
 
 export function shortUrlFromShareUrl(url){
