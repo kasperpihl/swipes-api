@@ -166,6 +166,7 @@ $pushDelay: .1s;
 	}
 
 	&:hover:not(&--force-close), &--pinned {
+		background-color: $bg !important;
 		transform: translateX(0) !important;
 		transition-delay: 0.05s !important;
 		transition: 0.1s ease-in !important;

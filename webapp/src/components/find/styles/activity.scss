@@ -15,12 +15,13 @@
   $b: &;
 
   @include size(100%, auto);
-  max-width: 550px;
+  max-width: 600px;
   min-width: 300px;
   position: relative;
+  margin: 0 auto;
 
   &:not(:first-child) {
-    margin: 18px 0px;
+    margin: 18px auto;
   }
 
   &__story {

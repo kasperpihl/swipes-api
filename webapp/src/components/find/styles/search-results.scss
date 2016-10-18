@@ -12,7 +12,14 @@
   position: relative;
 
   & > .sw-card-list:not(:first-child) {
-    margin: 30px 0;
+    margin: 30px auto;
+  }
+
+  &__query {
+    color: $deepBlue-60;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   &__empty-state {

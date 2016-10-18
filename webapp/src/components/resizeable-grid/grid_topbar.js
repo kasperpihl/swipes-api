@@ -122,8 +122,6 @@ var Topbar = React.createClass({
         <div className={className} onMouseDown={this.onMouseDown} onClick={onclickHandler}>
           <div className="sw-grid-topbar__content" onClick={this.onTitleClick}>
             <div className="sw-grid-topbar__content--title">{title}</div>
-            <div className="sw-grid-topbar__content--seperator"></div>
-            <div className="sw-grid-topbar__content--subtitle">{subtitle}</div>
           </div>
 
           <div className="sw-grid-topbar__actions">

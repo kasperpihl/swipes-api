@@ -86,7 +86,7 @@ class SearchResults extends Component {
   renderQuery(){
     const { searching, query } = this.props;
     if(!searching && query && query.length){
-      return <div>{"Showing results for: " + query}</div>
+      return <div className="search-results__query">{"Showing results for: " + query}</div>
     }
   }
   render() {

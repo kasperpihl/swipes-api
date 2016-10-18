@@ -7,13 +7,15 @@
   position: relative;
 
   &__input {
-    @include size(70%, auto);
+    @include size(100%, auto);
     color: $deepBlue-100;
     font-size: 30px;
     font-weight: bold;
-    margin: 45px 60px 0 60px;
+    max-width: 640px;
+    margin-top: 45px;
+    margin-left: 50%;
     padding: 20px;
-    transform: translateX(-20px);
+    transform: translateX(calc(-50% - 0px));
     transition: .2s;
 
     &:focus {
@@ -24,9 +26,12 @@
       color: $deepBlue-30;
     }
   }
-  
+
   &__tabs {
-    margin: 15px 0 0 60px;
+    @include flex(center, flex-start);
+    margin: 15px auto;
+    max-width: 600px;
+    width: 100%;
   }
 
   &__content {
