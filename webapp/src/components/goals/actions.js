@@ -1,12 +1,13 @@
 import Collection from './deliver/Collection'
 import Decision from './decide/Decision'
-
+import FormStep from './deliver/FormStep'
 const actions = {
   decide: {
     decision: Decision
   },
   deliver: {
-    collection: Collection
+    form: FormStep,
+    collection: FormStep
   }
 }
 

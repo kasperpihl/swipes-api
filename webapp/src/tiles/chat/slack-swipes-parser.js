@@ -200,7 +200,6 @@ export default class SlackSwipesParser {
     }
 
     const { user:userId, bot_id, username } = msg;
-    console.log(this.lastUser, this.lastGroup);
     let user, cards;
 
     if(userId){
