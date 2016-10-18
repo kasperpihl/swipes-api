@@ -58,39 +58,39 @@ class StoreCategories extends Component {
         <div className="store-content__category">
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#effafe'}}><ShapeSix /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">2-weeks sprint</div>
+            <div className="store-content__author">By Facebook <br/> Used by 1243 companies</div>
+            <div className="store-content__description store-content__description--small">Set up an objective and choose a coach to direct the sprint. Distribute the work realisti...</div>
           </div>
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#f0f6f4'}}><ShapeSeven /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Kanban workflow</div>
+            <div className="store-content__author">By Amazon <br/> Used by 190 companies</div>
+            <div className="store-content__description store-content__description--small">Manage work between current and new projects. Have the full overview of the progr…</div>
           </div>
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#d1e9ea'}}><ShapeEight /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">Bug tracking</div>
+            <div className="store-content__author">By Gigster <br/> Used by 31 companies</div>
+            <div className="store-content__description store-content__description--small">Which bugs have been fixed? What is the progress on a critical item? What…</div>
           </div>
 
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#f2f3f4'}}><ShapeNine /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">App Store update</div>
+            <div className="store-content__author">By Zynga <br/> Used by 359 companies</div>
+            <div className="store-content__description store-content__description--small">Checklist and process to review the final product version before launching the app. Des…</div>
           </div>
 
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{backgroundColor: '#fffaee'}}><ShapeTen /></div>
-            <div className="store-content__title store-content__title--item">Develop a concept</div>
-            <div className="store-content__author">Uber</div>
-            <div className="store-content__description store-content__description--small">When Creating as template, you edit the goal, from the perspective of which things…</div>
+            <div className="store-content__title store-content__title--item">A/B test</div>
+            <div className="store-content__author">By Optimizely <br/> Used by 43 companies</div>
+            <div className="store-content__description store-content__description--small">Run a split test to improve the product engagement or website conversions. This proc…</div>
           </div>
         </div>
 
