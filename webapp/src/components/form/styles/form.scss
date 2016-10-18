@@ -5,14 +5,17 @@
   @include size(100%, auto);
   @include flex(flex-start, flex-start, column);
   max-width: 550px;
-  margin: 50px auto;
   position: relative;
   // overflow-y: hidden;
 
   &__header {
     @include size(100%, auto);
     position: relative;
-    margin-top: 60px
+
+
+    &:not(:first-child) {
+      margin-top: 60px;
+    }
   }
 
   &__icon {
