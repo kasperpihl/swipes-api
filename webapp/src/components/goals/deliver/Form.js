@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Form, { Textarea, Scheduler } from '../../form'
+import ReactForm, { Textarea, Scheduler } from '../../form'
 import moment from 'moment'
 
 const times = [
@@ -10,7 +10,7 @@ const times = [
 ]
 const props = {
   fields: [
-    { type: 'Textarea', header: { icon: 'ListIcon', title: 'Purpose of meeting', description: 'Why should we have this meeting? What is the expected outcomes' }, options: { placeholder: 'Write some shit', maxRows: 5, minRows: 1 } },
+    { type: 'Textarea', header: { icon: 'ListIcon', title: 'Purpose of meeting', description: 'Why should we have this meeting? What is the expected outcomes' }, options: { placeholder: 'What should be the outcomes?', maxRows: 5, minRows: 1 } },
     { type: 'Scheduler', header: { icon: 'ClockIcon', title: 'Schedule Time', description: 'Select the times you are available for this meeting' }, options: { duration: 60, times } }
   ],
   submit: true,
@@ -19,21 +19,20 @@ const props = {
   }
 }
 
-class FormStep extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
   }
 
   render() {
     return (
-      <Form {...props}>
-      </Form>
+      <ReactForm {...props} />
     )
   }
 }
-export default FormStep
+export default Form
 
 const { string } = PropTypes;
 import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-FormStep.propTypes = {
+Form.propTypes = {
 }

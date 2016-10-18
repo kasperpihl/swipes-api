@@ -6,6 +6,17 @@ export function isShareURL(url){
   }
   return false;
 }
+
+export function randomStatusLabel(){
+  const statuses = [
+    'Waiting for Stefan to deliver',
+    'You need to take a decision',
+    'Waiting for Kristjan',
+    'You need to deliver'
+  ]
+  return statuses[parseInt(Math.random() * statuses.length, 10)];
+}
+
 export function shortUrlFromShareUrl(url){
   return url.split('/s/')[1].split('/')[0];
 }

@@ -177,10 +177,22 @@ class Goals extends Component {
 }
 
 function mapStateToProps(state) {
+  const users = state.get('users');
+  let goals = state.get('goals');
+  if(goals){
+    goals = goals.map((g) => {
+      return g.updateIn(['steps'], (steps) => steps.map((s) => {
+        const assignees = s.get('assignees');
+        return s.set('assignees', assignees.map((userId) => {
+          return users.get(userId);
+        }));
+      }))
+    })
+  }
   return {
-    goals: state.get('goals'),
-    currentGoal: state.getIn(['goals', state.getIn(['main', 'activeGoal'])]),
-    users: state.get('users')
+    goals: goals,
+    currentGoal: goals.getIn([state.getIn(['main', 'activeGoal'])]),
+    users: users
   }
 }
 

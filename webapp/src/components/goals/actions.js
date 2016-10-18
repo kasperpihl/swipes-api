@@ -1,13 +1,16 @@
 import Collection from './deliver/Collection'
 import Decision from './decide/Decision'
-import FormStep from './deliver/FormStep'
+import Form from './deliver/Form'
+import Note from './deliver/Note'
+
 const actions = {
   decide: {
     decision: Decision
   },
   deliver: {
-    form: FormStep,
-    collection: Collection
+    form: Form,
+    collection: Collection,
+    note: Note
   }
 }
 
