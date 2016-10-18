@@ -10,8 +10,8 @@ const times = [
 ]
 const props = {
   fields: [
-    { type: 'Textarea', header: { icon: 'edit', title: 'Purpose of meeting', description: 'Why should we have this meeting? What is the expected outcomes' }, options: { placeholder: 'Write some shit', maxRows: 5, minRows: 1 } },
-    { type: 'Scheduler', header: { icon: 'search', title: 'Schedule Time', description: 'Select the times you are available for this meeting' }, options: { duration: 60, times } }
+    { type: 'Textarea', header: { icon: 'ListIcon', title: 'Purpose of meeting', description: 'Why should we have this meeting? What is the expected outcomes' }, options: { placeholder: 'Write some shit', maxRows: 5, minRows: 1 } },
+    { type: 'Scheduler', header: { icon: 'ClockIcon', title: 'Schedule Time', description: 'Select the times you are available for this meeting' }, options: { duration: 60, times } }
   ],
   submit: true,
   onSubmit: (vals) => {
@@ -23,7 +23,7 @@ class FormStep extends Component {
   constructor(props) {
     super(props)
   }
-  
+
   render() {
     return (
       <Form {...props}>

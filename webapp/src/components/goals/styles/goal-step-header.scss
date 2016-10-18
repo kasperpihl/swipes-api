@@ -11,41 +11,15 @@ $fade: .4;
   display: flex !important;
   padding: 0 22px;
   position: relative;
-  // z-index: 2;
   transition: opacity .1s;
-
-
-  &:before {
-    content: "";
-    @include size(2px, 100%);
-    position: absolute;
-    left: 36px; top: 0;
-    background-color: $blue-20;
-  }
 
   &:first-of-type {
     padding-bottom: 15px;
-
-    &:before {
-      content: "";
-      @include size(2px, 100%);
-      position: absolute;
-      left: 36px; top: 5px;
-      background-color: $blue-20;
-    }
   }
 
   &:last-of-type {
     padding-top: 15px;
     padding-bottom: 0;
-
-    &:before {
-      content: "";
-      @include size(2px, 90%);
-      position: absolute;
-      left: 36px; top: 0px;
-      background-color: $blue-20;
-    }
   }
 
   &:not(:first-of-type):not(:last-of-type) {

@@ -6,14 +6,6 @@
   padding: 30px 21px 30px 73px;
   position: relative;
 
-  &:not(:last-of-type):before {
-    content: "";
-    @include size(2px, 100%);
-    position: absolute;
-    left: 36px; top: 0;
-    background-color: $blue-20;
-  }
-
   &__description {
     @include size(100%, auto);
     color: $deepBlue-80;
@@ -70,11 +62,4 @@
       background-color: $blue-80;
     }
   }
-}
-
-.kremlin {
-  @include size(60%, 300px);
-  background-color: $salmon;
-  border-radius: 3px;
-  margin-top: 45px;
 }

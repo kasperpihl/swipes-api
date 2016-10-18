@@ -19,13 +19,14 @@
   }
 
   &__icon {
-    left: calc(-73px / 2); top: 2px;
+    left: calc(-83px / 2); top: 1px;
     position: absolute;
 
     &--svg {
-      @include size(12px);
+      @include size(14px);
       fill: $deepBlue-30;
       stroke: $deepBlue-30;
+      top: 3px;
     }
 
     &--font {
