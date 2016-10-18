@@ -24,11 +24,11 @@ class GoalItem extends Component {
     }
 
     const nameList = names.map( (name, i) => {
-      return <div className="step-header__tooltip-item" key={'tooltip-item-' + i}>{name.name}</div>
+      return <div className="goal-item__tooltip-item" key={'tooltip-item-' + i}>{name.name}</div>
     })
 
     return (
-      <div className="step-header__tooltip">
+      <div className="goal-item__tooltip">
         {nameList}
       </div>
     )
@@ -48,12 +48,12 @@ class GoalItem extends Component {
       }
 
       if (assigneesCount > 0) {
-        assigneesCountEl = <div className="step-header__assignee-count">{'+' + assigneesCount}</div>
+        assigneesCountEl = <div className="goal-item__assignee-count">{'+' + assigneesCount}</div>
       }
 
       return (
-        <div className="step-header__assignees">
-          <div className="step-header__assignee"><img src={profileImg}/></div>
+        <div className="goal-item__assignees">
+          <div className="goal-item__assignee"><img src={profileImg}/></div>
           {assigneesCountEl}
           {this.renderAssigneeTooltip(assigneeNames)}
         </div>
@@ -70,7 +70,8 @@ class GoalItem extends Component {
   render() {
     const { data } = this.props;
     let rootClass = 'goal-item';
-    console.log(data.toJS());
+    const steps = data.get('steps').toJS();
+
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={rootClass + "__image"}>
@@ -80,6 +81,7 @@ class GoalItem extends Component {
           <div className={rootClass + "__title"}>{data.get('title')}</div>
           <div className={rootClass + "__label"}>waiting for Kasper to build a random status generator</div>
         </div>
+        {this.renderAssignees(steps[0].assignees)}
       </div>
     )
   }
