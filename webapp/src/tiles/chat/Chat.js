@@ -4,6 +4,7 @@ import './styles/main.scss'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../constants/ActionTypes'
+import { main } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import Sidemenu from '../../components/sidemenu/Sidemenu'
 
@@ -63,6 +64,30 @@ class Chat extends Component {
   }
   componentDidUpdate(prevProps, prevState){
     //console.log('updated', this.props.tile.data);
+
+    const { activeGoal } = this.props;
+    if(prevProps.activeGoal !== activeGoal){
+      let thread = null;
+      if(activeGoal){
+        thread = {
+          id: activeGoal.get('id'),
+          name: activeGoal.get('title'),
+          url: window.location.origin + '/g/' + activeGoal.get('id')
+        }
+      }
+      this.slackHandler.setThread(thread);
+    }
+
+    const { swipes } = this.props;
+    let title = this.slackHandler.titleForChannel();
+    if(activeGoal){
+      title = activeGoal.get('title');
+    }
+    if(title !== this.title){
+      console.log('act', title);
+      swipes.sendEvent('navigation.setTitle', title)
+      this.title = title;
+    }
   }
   changedHeight(height){
     if(this.state.inputHeight !== height){
@@ -167,6 +192,10 @@ class Chat extends Component {
     if(command.startsWith("#C")){
       return this.slackHandler.setChannel(command.substring(1));
     }
+    console.log('command', command);
+    if(command.startsWith(window.location.origin + '/g/')){
+      return this.props.setActiveGoal(command.split('/g/')[1]);
+    }
     const { swipes } = this.props;
     swipes.sendEvent('openURL', {url: command})
   }
@@ -186,11 +215,15 @@ class Chat extends Component {
       />
     )
   }
+  renderThreadHeader(){
+    
+  }
   render() {
+
     const { data } = this.state;
     const { inputHeight } = this.state;
     let paddingBottom = inputHeight + 20;
-
+    this.renderThreadHeader();
     return (
       <div style={{position: 'relative', height :'100%', paddingBottom: paddingBottom + 'px'}}>
         {this.renderSidemenu()}
@@ -211,12 +244,13 @@ class Chat extends Component {
 
 function mapStateToProps(state) {
   return {
-    activeGoal: state.get('main').get('activeGoal')
+    goals: state.get('goals'),
+    activeGoal: state.getIn(['goals', state.getIn(['main', 'activeGoal'])])
   }
 }
 
 const ConnectedChat = connect(mapStateToProps, {
-
+  setActiveGoal: main.setActiveGoal
 })(Chat)
 export default ConnectedChat
 

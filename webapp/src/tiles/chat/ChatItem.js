@@ -34,7 +34,6 @@ class ChatItem extends Component {
     if(clickedLink){
       clickedLink(...res);
     }
-    console.log('clicked', ...res);
     e.stopPropagation()
 
   }

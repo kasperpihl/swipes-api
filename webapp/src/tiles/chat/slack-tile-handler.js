@@ -39,6 +39,12 @@ export default class SlackTileHandler {
       this.setChannel(data.get('selectedChannelId'), true);
     }
   }
+  setThread(thread){
+    console.log('setting thread');
+    this.tileSlackData.performChanges((oldData) => {
+      return oldData.set('thread', thread);
+    })
+  }
   setChannel(channelId, force){
     const { data } = this.tileSlackData; 
     const channel = data.getIn(['channels', channelId]);
@@ -53,9 +59,13 @@ export default class SlackTileHandler {
       nD = nD.set('unreadIndicator', {ts: channel.get('last_read')})
       return nD;
     })
-    this.swipes.sendEvent('navigation.setTitle',this.tileSlackData.parser.titleForChannel(channel.toJS(), this.getData().get('users').toJS()));
+    this.title = this.tileSlackData.parser.titleForChannel(channel.toJS(), this.getData().get('users').toJS())
+    this.swipes.sendEvent('navigation.setTitle', this.title);
     localStorage.setItem(this.tile.id + '-selectedChannelId', channelId);
     this.fetchMessages(channel);
+  }
+  titleForChannel(){
+    return this.title;
   }
   sendTypingEvent() {
     const { data } = this.tileSlackData;
@@ -156,6 +166,12 @@ export default class SlackTileHandler {
   }
   sendMessage(message){
     if(message){
+      const { data } = this.tileSlackData;
+      const thread = data.get('thread');
+      if(thread){
+        message = '<' + thread.url + '|' + thread.name + '>: ' + message;
+      }
+
       this.addItemToQueue({type: 'message', 'status': 'Waiting', message: message});
     }
     this._sendNextMessage();

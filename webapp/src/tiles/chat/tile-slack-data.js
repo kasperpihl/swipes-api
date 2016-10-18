@@ -28,7 +28,7 @@ export default class TileSlackData {
     if(changedOr('channels', 'selectedChannelId')){
       newData = newData.set('sectionsForSidemenu', this.parser.sectionsForSidemenu(newData.toJS()));  
     }
-    if(changedOr('selectedChannelId', 'sendingMessagesQueue', ['cachedChannels', newData.get('selectedChannelId'), 'messages'])){
+    if(changedOr('selectedChannelId', 'thread', 'sendingMessagesQueue', ['cachedChannels', newData.get('selectedChannelId'), 'messages'])){
       
       newData = newData.set('sortedMessages', this.parser.sortMessagesForSwipes(newData.toJS(), []))
     }
