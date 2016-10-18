@@ -70,7 +70,7 @@ class GoalItem extends Component {
   render() {
     const { data } = this.props;
     let rootClass = 'goal-item';
-    const data = data.toJS();
+    console.log(data.toJS());
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={rootClass + "__image"}>
