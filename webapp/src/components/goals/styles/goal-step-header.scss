@@ -10,6 +10,7 @@ $fade: .4;
   @include flex(center, flex-start);
   display: flex !important;
   padding: 0 22px;
+  padding-left: 0px;
   position: relative;
   transition: opacity .1s;
 
@@ -46,7 +47,7 @@ $fade: .4;
   }
 
   &__indicator {
-    @include size(30px);
+    @include size(45px);
     @include flex();
     border-radius: 50%;
     position: relative;
@@ -54,7 +55,8 @@ $fade: .4;
     &#{&}--index {
       background-color: rgba($blue-100, .3);
       color: $bg;
-      font-size: 15px;
+      font-size: 20px;
+      font-weight: 500;
       transition: color .1s;
     }
 
@@ -71,9 +73,10 @@ $fade: .4;
   &__content {
     $contentWidth: calc(100% - 30px - 30px);
 
-    @include size($contentWidth, 39px);
+    @include size($contentWidth, 45px);
     @include flex(flex-start, space-between, column);
-    padding-left: 21px;
+    align-content: space-between;
+    padding-left: 20px;
     user-select: none;
   }
 
