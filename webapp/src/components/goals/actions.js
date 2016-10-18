@@ -7,7 +7,7 @@ const actions = {
   },
   deliver: {
     form: FormStep,
-    collection: FormStep
+    collection: Collection
   }
 }
 
