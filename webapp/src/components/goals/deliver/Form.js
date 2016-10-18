@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Form, { Textarea, Scheduler } from '../../form'
+import ReactForm, { Textarea, Scheduler } from '../../form'
 import moment from 'moment'
 
 const times = [
@@ -19,21 +19,20 @@ const props = {
   }
 }
 
-class FormStep extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
   }
 
   render() {
     return (
-      <Form {...props}>
-      </Form>
+      <ReactForm {...props} />
     )
   }
 }
-export default FormStep
+export default Form
 
 const { string } = PropTypes;
 import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-FormStep.propTypes = {
+Form.propTypes = {
 }
