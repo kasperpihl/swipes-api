@@ -27,7 +27,7 @@ $imgContHeight: 30px;
     @include size($imgContHeight);
     @include flex();
 
-    img {
+    #{$b}__icon {
       @include size(24px);
     }
   }

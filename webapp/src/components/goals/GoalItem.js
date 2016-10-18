@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import * as Icons from '../icons'
 import './styles/goal-item.scss'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
@@ -17,14 +18,21 @@ class GoalItem extends Component {
   }
   componentDidMount() {
   }
+  renderIcon(icon){
+    const Comp = Icons[icon];
+    if(Comp){
+      return <Comp className="goal-item__icon goal-item__icon--svg"/>;
+    }
+    return <i className="material-icons goal-item__icon goal-item__icon--font">{icon}</i>
+  }
   render() {
     const { data } = this.props;
     let rootClass = 'goal-item';
-    
+
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={rootClass + "__image"}>
-          <img src={data.get('img')} />
+          {this.renderIcon(data.get('img'))}
         </div>
         <div className={rootClass + "__content"}>
           <div className={rootClass + "__title"}>{data.get('title')}</div>

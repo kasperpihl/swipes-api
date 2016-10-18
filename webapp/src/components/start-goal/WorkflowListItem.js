@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import * as Icons from '../icons'
 import './styles/workflow-list-item.scss'
 
 class WorkflowListItem extends Component {
@@ -12,25 +13,12 @@ class WorkflowListItem extends Component {
   callback(){
     this.props.callback(this.props.data.id);
   }
-  renderImage(rootClass, img) {
-    if (img) {
-      let image;
-      let modifier = ''; // Because BEM
-
-      if (typeof img === 'string') {
-        image = <img src={img} alt=""/>;
-        modifier = '--img'
-      } else {
-        image = SVG = img;
-        modifier = '--svg'
-      }
-
-      return (
-        <div className={rootClass + '__image ' + rootClass + '__image' + modifier}>
-          {image}
-        </div>
-      )
+  renderIcon(icon){
+    const Comp = Icons[icon];
+    if(Comp){
+      return <Comp className="workflow__item__icon workflow__item__icon--svg"/>;
     }
+    return <i className="material-icons workflow__item__icon workflow__item__icon--font">{icon}</i>
   }
   render() {
     const { img, title, description } = this.props.data;
@@ -38,7 +26,7 @@ class WorkflowListItem extends Component {
 
     return (
       <div className={rootClass} onClick={this.callback}>
-        {this.renderImage(rootClass, img)}
+        {this.renderIcon(img)}
         <div className={rootClass + '__content'}>
           <div className={rootClass + '__title'}>{title}</div>
           <div className={rootClass + '__description'}>{description}</div>
