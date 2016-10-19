@@ -13,17 +13,19 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.onSubmit = this.onSubmit.bind(this);
+
   }
   onSubmit(){
     this.props.completeStep();
   }
   render() {
+    const { step } = this.props;
     const props = {
       fields: [
         { type: 'Textarea', header: { icon: 'ListIcon', title: 'Purpose of meeting', description: 'Why should we have this meeting? What is the expected outcomes' }, options: { placeholder: 'What should be the outcomes?', maxRows: 5, minRows: 1 } },
         { type: 'Scheduler', header: { icon: 'ClockIcon', title: 'Schedule Time', description: 'Select the times you are available for this meeting' }, options: { duration: 60, times } }
       ],
-      submit: true,
+      submit: (!step.get('completed')),
       onSubmit: this.onSubmit
     }
     return (

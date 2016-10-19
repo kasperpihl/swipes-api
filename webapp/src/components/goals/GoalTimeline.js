@@ -29,12 +29,15 @@ class GoalTimeline extends Component {
         currentIndex
       } = this.state;
 
-      const newState = { activeIndex, currentIndex };
+      const newState = { activeIndex, currentIndex: -1 };
       const steps = goal.get('steps');
       steps.forEach((step, i) => {
+        console.log('step completed', step.get('completed'), i, currentIndex);
         if(newState.currentIndex === -1 && (!step.get('completed') || i === steps.size - 1)){
           newState.currentIndex = i;
-          newState.activeIndex = i;
+          if(currentIndex !== i){
+            newState.activeIndex = i;
+          }
         }
       })
 
@@ -42,8 +45,10 @@ class GoalTimeline extends Component {
         this.state = newState;
       }
       else if(newState.currentIndex !== currentIndex || newState.activeIndex !== activeIndex){
+        console.log('setting currentIndex from: ', currentIndex, ' to: ', newState.currentIndex);
         this.setState(newState);
       }
+      
     }
   }
   componentDidMount() {
@@ -56,7 +61,7 @@ class GoalTimeline extends Component {
       clearTimeout(this.autoscrollTimer);
     }
   }
-  componentDidUpdate(){
+  componentDidUpdate(prevProps){
     if(this.autoscrollTimer){
       clearTimeout(this.autoscrollTimer);
     }
@@ -68,6 +73,11 @@ class GoalTimeline extends Component {
       }, 450);
       //
 
+    }
+    this.updateCurrentAndActive();
+
+    if(!prevProps.goal.get('steps').last().get('completed') && this.props.goal.get('steps').last().get('completed')){
+      this.setState({activeIndex: false});
     }
   }
   clickedHeader(index){
@@ -112,9 +122,10 @@ class GoalTimeline extends Component {
     return <GoalStep data={step} key={'step' + i} callDelegate={this.callDelegate} />
   }
   renderCompleted() {
+    const {activeIndex} = this.state;
     const { goal } = this.props;
     const lastCompleted = goal.get('steps').last().get('completed');
-    if (lastCompleted) {
+    if (lastCompleted && activeIndex === false) {
       return <img className="steps-timeline__success" src={successState} key="completedState" />;
     }
 
