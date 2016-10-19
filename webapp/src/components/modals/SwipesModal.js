@@ -223,15 +223,12 @@ class SwipesModal extends Component {
     }
 
     return (
-      <div className={modalWrapClass}>
-        <div className="swipes-modal__overlay" onClick={this.closeModal}></div>
-        <div className={modalClass}>
-          <div className="swipes-modal__title">
-            {title}
-            <i className="material-icons swipes-modal__close" onClick={this.closeModal}>close</i>
-          </div>
-          {this.renderContent(data)}
+      <div className={modalClass}>
+        <div className="swipes-modal__title">
+          {title}
+          <i className="material-icons swipes-modal__close" onClick={this.closeModal}>close</i>
         </div>
+        {this.renderContent(data)}
       </div>
     )
   }
