@@ -31,11 +31,9 @@ class Form extends Component {
     return <i className={"material-icons " + iconClass}>{icon}</i>
   }
   decide(yes){
-    const decision = (yes);
-    const { swipes, goal } = this.props;
-    swipes.do({action: 'decide', 'goal_id': goal.get('id'), payload: {decision}}).then((res, err) => {
-      console.log('ret', res, err);
-    })
+    const { completeStep } = this.props;
+
+    completeStep();
   }
   decideYes(){
     this.decide(true);

@@ -61,14 +61,18 @@ $fade: .4;
       font-weight: 700;
       padding-bottom: 1px;
       transition: color .1s;
+
+      svg {
+        display: none;
+      }
     }
 
     &#{&}--completed {
       background-color: lighten($green-color, 30%);
 
       svg {
-        @include size(12px);
-        fill: $bg;
+        @include size(18px);
+        stroke: $bg;
       }
     }
   }

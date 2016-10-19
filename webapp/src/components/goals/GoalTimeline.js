@@ -115,7 +115,7 @@ class GoalTimeline extends Component {
     const { goal } = this.props;
     const lastCompleted = goal.get('steps').last().get('completed');
     if (lastCompleted) {
-      return <img src={successState} key="completedState" />;
+      return <img className="steps-timeline__success" src={successState} key="completedState" />;
     }
 
   }
