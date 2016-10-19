@@ -3,6 +3,7 @@ import GoalStepHeader from './GoalStepHeader'
 import GoalStep from './GoalStep'
 import { debounce, bindAll, autoscroll } from '../../classes/utils'
 import { VelocityTransitionGroup } from 'velocity-react'
+import {successState} from '../../icons'
 
 import './styles/goal-timeline.scss'
 
@@ -110,11 +111,21 @@ class GoalTimeline extends Component {
   renderStep(step, i){
     return <GoalStep data={step} key={'step' + i} callDelegate={this.callDelegate} />
   }
+  renderCompleted() {
+    const { goal } = this.props;
+    const lastCompleted = goal.get('steps').last().get('completed');
+    if (lastCompleted) {
+      return <img src={successState} key="completedState" />;
+    }
 
+  }
   render() {
+    const { goal } = this.props;
+
     return (
       <VelocityTransitionGroup ref="scroller" component="div" className="steps-timeline" enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
         {this.renderSteps()}
+        {this.renderCompleted()}
       </VelocityTransitionGroup>
     )
   }
