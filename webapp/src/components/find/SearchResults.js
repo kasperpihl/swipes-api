@@ -4,7 +4,6 @@ import SwipesCardList from '../swipes-card/SwipesCardList'
 import Loader from '../swipes-ui/Loader'
 import '../../components/find/styles/search-results.scss'
 import { FindIcon } from '../icons'
-import SearchResultsService from './SearchResultsService'
 
 class SearchResults extends Component {
   constructor(props) {
@@ -12,22 +11,6 @@ class SearchResults extends Component {
     this.state = {}
   }
   componentDidMount() {
-  }
-  renderServices() {
-    const random = [
-      {
-        icon: 'https://www.icreatemagazine.com/wp-content/uploads/2013/12/609x609xDropbox.png.pagespeed.ic.ORJ8ZyfURY.png',
-        number: '46'
-      },
-      {
-        icon: 'https://cdn4.iconfinder.com/data/icons/free-colorful-icons/360/gmail.png',
-        number: '9'
-      }
-    ];
-
-    return random.map( (el, i) => {
-      return <SearchResultsService key={"result-service-" + i} icon={el.icon} number={el.number} />
-    })
   }
   renderResultList() {
     const { cardDelegate, searching, results } = this.props;

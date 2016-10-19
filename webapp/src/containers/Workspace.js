@@ -99,6 +99,9 @@ class Workspace extends Component {
       });
     }
   }
+  sendSlackMessage(tile, text){
+    this.sendToAllTiles('send.slackMessage', { text });
+  }
   tileForceGridUpdate(){
     this.refs.grid.forceUpdate();
   }

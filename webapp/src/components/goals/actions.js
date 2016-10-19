@@ -1,10 +1,13 @@
 import Collection from './deliver/Collection'
 import Decision from './decide/Decision'
+import DecideForm from './decide/Form'
+
 import Form from './deliver/Form'
 import Note from './deliver/Note'
 
 const actions = {
   decide: {
+    form: DecideForm,
     decision: Decision
   },
   deliver: {

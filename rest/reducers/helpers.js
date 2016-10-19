@@ -19,8 +19,8 @@ const reducersGet = (step, action) => {
     console.log('invalid step subtype', step.subtype);
     return null;
   }
-
   const reducer = file[action];
+  console.log(file, action, reducer);
   if (typeof reducer !== 'function') {
     console.log('invalid step action', action);
     return null;

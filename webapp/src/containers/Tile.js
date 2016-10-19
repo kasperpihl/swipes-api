@@ -96,12 +96,14 @@ class Tile extends Component {
     });
 
     this.com.addListener('modal.load', (data, callback) => {
-      loadModal(data.modal, data.options, callback);
+      loadModal(data.props, callback);
     });
     this.com.addListener('overlay.set', (data) => {
       setOverlay(data);
-    })
-
+    });
+    this.com.addListener('send.slackMessage', (data) => {
+      this.callDelegate('sendSlackMessage', data.text);
+    });
     this.com.addListener('openURL', (data) => {
       if(data.url){
         window.open(data.url, "_blank");
