@@ -164,20 +164,20 @@ export default class SwipesAppSDK {
             callback(confirmed);
         })
       },
-      custom: (type, options, callback) => {
-        this._loadModal(type, options, callback);
+      custom: (type, props, callback) => {
+        this._loadModal(type, props, callback);
       }
     };
     return modals[modal] || modals['custom'].apply(this, arguments);
   }
 
-  _loadModal(name, options, callback){
-    options = options || {};
-    if(typeof options === 'function'){
-      callback = options;
-      options = {};
+  _loadModal(name, props, callback){
+    props = props || {};
+    if(typeof props === 'function'){
+      callback = props;
+      props = {};
     }
-    this.sendEvent({async: true, command: "modal.load"}, {modal: name, options: options}, callback);
+    this.sendEvent({async: true, command: "modal.load"}, {modal: name, props: props}, callback);
   }
   _getModalOptions(options, title, message){
     if(typeof title === 'object'){

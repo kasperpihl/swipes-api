@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Button from '../../swipes-ui/Button'
 import { bindAll } from '../../../classes/utils'
-import Form from './Form'
 
 import '../styles/decisions.scss'
 
@@ -25,11 +24,29 @@ class Decision extends Component {
     this.decide(true);
   }
   decideNo(){
-    this.decide();
+    const { swipes } = this.props;
+    swipes.modal('SwipesModal', {
+      title: 'Why not?',
+      data: {
+        textarea: 'Please give as good feedback as possible.',
+        buttons: ['Send']
+      }
+    }, (res) => {
+      if(res && res.text && res.text.length){
+        swipes.sendEvent('send.slackMessage', {text: res.text});
+      }
+      console.log(res);
+    })
   }
   render() {
     return (
-      <Form />
+      <div className="goal-decisions">
+        <div className="goal-decisions__text">Are these designs good enough to move on?</div>
+        <div className="goal-decisions__buttons">
+          <Button icon="thumb_up" callback={this.decideYes} />
+          <Button icon="thumb_down" style={{marginLeft: '15px'}} callback={this.decideNo} />
+        </div>
+      </div>
     )
   }
 }

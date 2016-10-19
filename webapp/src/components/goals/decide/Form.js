@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../../icons'
+import Button from '../../swipes-ui/Button'
+import { bindAll } from '../../../classes/utils'
 
 import '../styles/form-decision.scss'
 
@@ -7,6 +9,7 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    bindAll( this, [ 'decideYes', 'decideNo' ]);
   }
   componentDidMount() {
   }
@@ -27,12 +30,47 @@ class Form extends Component {
 
     return <i className={"material-icons " + iconClass}>{icon}</i>
   }
+  decide(yes){
+    const decision = (yes);
+    const { swipes, goal } = this.props;
+    swipes.do({action: 'decide', 'goal_id': goal.get('id'), payload: {decision}}).then((res, err) => {
+      console.log('ret', res, err);
+    })
+  }
+  decideYes(){
+    this.decide(true);
+  }
+  decideNo(){
+    const { swipes } = this.props;
+    swipes.modal('SwipesModal', {
+      title: 'Why not?',
+      data: {
+        textarea: 'Please give as good feedback as possible.',
+        buttons: ['Send']
+      }
+    }, (res) => {
+      if(res && res.text && res.text.length){
+        swipes.sendEvent('send.slackMessage', {text: res.text});
+      }
+      console.log(res);
+    })
+  }
   renderHeader(icon, title, description, completed) {
     return (
       <div className="form-decide__header">
         {this.renderIcon(icon, completed)}
         <div className="form-decide__title">{title}</div>
         <div className="form-decide__description">{description}</div>
+      </div>
+    )
+  }
+  renderDecisionButton(){
+    return (
+      <div className="goal-decisions" style={{marginTop: '30px'}}>
+        <div className="goal-decisions__buttons">
+          <Button icon="thumb_up" callback={this.decideYes} />
+          <Button icon="thumb_down" style={{marginLeft: '15px'}} callback={this.decideNo} />
+        </div>
       </div>
     )
   }
@@ -79,6 +117,7 @@ class Form extends Component {
           <div className="form-decide__time">FRI 8:00 AM</div>
         </div>
 
+        {this.renderDecisionButton()}
         {this.renderHeader('ActionIcon', 'Automation', 'Create a cal event to all participants', false)}
       </div>
     )

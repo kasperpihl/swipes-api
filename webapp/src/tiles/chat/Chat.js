@@ -44,6 +44,9 @@ class Chat extends Component {
       this.slackHandler.sendMessage(input);
       this.refs['chat-list'].forceScrollToBottom = true;
     });
+    swipes.addListener('send.slackMessage', (data) => {
+      this.slackHandler.sendMessage(data.text);
+    })
     swipes.addListener('menu.pressed', () => {
       if(this.refs.sidemenu){
         this.refs.sidemenu.togglePin();
