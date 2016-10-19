@@ -8,7 +8,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 class Modal extends Component {
   constructor(props) {
     super(props)
-    bindAll(this, ['onModalCallback', 'onKeyUp'])
+    bindAll(this, ['onModalCallback', 'closeModal', 'onKeyUp'])
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
@@ -30,7 +30,7 @@ class Modal extends Component {
     this.props.hideModal();
   }
   closeModal(e) {
-    this.onModalCallback();
+    this.onModalCallback(null);
   }
   render() {
     const { modal } = this.props;

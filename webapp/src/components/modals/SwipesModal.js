@@ -41,11 +41,6 @@ class SwipesModal extends Component {
       selectedListItems: []
     }
   }
-  componentDidUpdate(prevProps){
-    if(prevProps.shown !== this.props.shown && this.props.shown){
-      this.shownTime = new Date().getTime();
-    }
-  }
   sendCallback(obj){
     let res = obj;
     if(obj){
@@ -65,11 +60,7 @@ class SwipesModal extends Component {
     this.props.callback(res)
   }
   closeModal(e) {
-    const now = new Date().getTime();
-    const clickDiff = (now - this.shownTime);
-    if(clickDiff > 250){
-      this.sendCallback(null);
-    }
+    this.sendCallback(null);
   }
   selectListItem(i) {
     const { list } = this.props.data;
