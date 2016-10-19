@@ -88,33 +88,34 @@ class Form extends Component {
 
         <div className="form-decide__response-wrap">
           <div className="form-decide__avatar">
-            <img src="https://avatars.slack-edge.com/2016-10-07/88804920934_f6d899ac8257f186bfe5_192.jpg" alt=""/>
+            <img src="https://secure.gravatar.com/avatar/0abdbd665abf1b1ad3b64893fdc38f25.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0011-192.png" alt=""/>
           </div>
           <div className="form-decide__response">Brainstorm workflow ideas</div>
         </div>
 
         <div className="form-decide__response-wrap">
           <div className="form-decide__avatar">
-            <img src="https://avatars.slack-edge.com/2016-10-07/88804920934_f6d899ac8257f186bfe5_192.jpg" alt=""/>
+            <img src="https://avatars.slack-edge.com/2015-02-08/3653274961_e603e2299019ffdacb4d_192.jpg" alt=""/>
           </div>
           <div className="form-decide__response">Brainstorm workflow ideas Lock down on 3 workflows</div>
         </div>
 
         {this.renderHeader('CheckmarkIcon', 'Schedule Time', 'Available times for this meeting')}
+        <div className="form-decide__times">
+          <div className="form-decide__available-time">
+            <div className="form-decide__stats">5/5</div>
+            <div className="form-decide__time">MON 10:00 AM</div>
+          </div>
 
-        <div className="form-decide__available-time">
-          <div className="form-decide__stats">5/5</div>
-          <div className="form-decide__time">MON 10:00 AM</div>
-        </div>
+          <div className="form-decide__available-time">
+            <div className="form-decide__stats">3/5</div>
+            <div className="form-decide__time">WED 1:00 PM</div>
+          </div>
 
-        <div className="form-decide__available-time">
-          <div className="form-decide__stats">3/5</div>
-          <div className="form-decide__time">WED 1:00 PM</div>
-        </div>
-
-        <div className="form-decide__available-time">
-          <div className="form-decide__stats">2/5</div>
-          <div className="form-decide__time">FRI 8:00 AM</div>
+          <div className="form-decide__available-time">
+            <div className="form-decide__stats">2/5</div>
+            <div className="form-decide__time">FRI 8:00 AM</div>
+          </div>
         </div>
 
         {this.renderDecisionButton()}

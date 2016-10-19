@@ -79,6 +79,11 @@
     margin-top: -2px;
   }
 
+  &__times {
+    @include flex(flex);
+    margin-bottom: 15px;
+  }
+
   &__available-time {
     @include size(155px, 45px);
     @include flex(flex);
@@ -86,7 +91,10 @@
     border: solid 1px $deepBlue-10;
     font-size: 12px;
     font-weight: 500;
-    margin-bottom: 15px;
+
+    &:not(:first-child) {
+      margin-left: 15px;
+    }
   }
 
   &__stats {
