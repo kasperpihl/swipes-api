@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal } from '../actions';
 import SwipesModal from '../components/modals/SwipesModal'
+import PreviewModal from '../components/modals/PreviewModal'
+
 import { bindAll } from '../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
@@ -32,9 +34,17 @@ class Modal extends Component {
   closeModal(e) {
     this.onModalCallback(null);
   }
+  renderModal(type, props){
+    let Comp = SwipesModal;
+    if(type === 'preview'){
+      Comp = PreviewModal;
+    }
+    return <Comp callback={this.onModalCallback} {...props} />
+  }
   render() {
     const { modal } = this.props;
     const props = modal.get('props') || {};
+    const type = modal.get('type');
     let className = "g-modal";
     if(modal.get('shown')){
       className += " g-modal--shown";
@@ -42,7 +52,7 @@ class Modal extends Component {
     return (
       <div className={className}>
         <div className="g-modal__overlay" onClick={this.closeModal}></div>
-        <SwipesModal callback={this.onModalCallback} {...props} />
+        {this.renderModal(type, props)}
       </div>
     );
   }
@@ -55,7 +65,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedModal = connect(mapStateToProps, {
-  loadModal: modal.load,
   hideModal: modal.hide
 
 })(Modal)

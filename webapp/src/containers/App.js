@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { api, modal } from '../actions'
+import { api } from '../actions'
 
 import Topbar from './Topbar'
 import Modal from './Modal'
@@ -62,7 +62,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedApp = connect(mapStateToProps, {
-  request: api.request,
-  loadModal: modal.load
+  request: api.request
 })(App)
 export default ConnectedApp

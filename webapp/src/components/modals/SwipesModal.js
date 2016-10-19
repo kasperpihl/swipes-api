@@ -204,8 +204,7 @@ class SwipesModal extends Component {
     }
   }
   render() {
-    const { title, type,  data, shown, callback } = this.props;
-    let modalWrapClass = "swipes-modal__holder"
+    const { title, type, data, callback } = this.props;
 
     let modalClass = 'swipes-modal';
 
@@ -239,7 +238,6 @@ const itemProps = shape({
 
 SwipesModal.propTypes = {
   callback: func.isRequired,
-  shown: bool,
   title: string,
   type: string,
   data: oneOfType([
