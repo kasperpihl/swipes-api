@@ -16,6 +16,7 @@ export const CheckmarkIcon = svg('checkmark-icon')
 export const SlackIcon = svg('logo-slack')
 export const ListIcon = svg('list-icon')
 export const ClockIcon = svg('clock-icon')
+export const ActionIcon = svg('action-icon')
 
 export const ShapeOne = svg('shape-1')
 export const ShapeTwo = svg('shape-2')

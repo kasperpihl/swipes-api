@@ -30,10 +30,12 @@ class TabBar extends Component {
   }
   renderIcon(icon, i){
     const Comp = Icons[icon];
-    if(Comp){
-      return <Comp data-index={i} />;
+
+    if (Comp) {
+      return <Comp className="tab-bar__icon tab-bar__icon--svg" data-index={i}/>;
     }
-    return <i className='material-icons' data-index={i}>{icon}</i>
+
+    return <i className="material-icons tab-bar__icon tab-bar__icon--font" data-index={i}>{icon}</i>
   }
   render() {
     const { data, align } = this.props;
@@ -42,6 +44,8 @@ class TabBar extends Component {
 
     if (align) {
       rootClass += ' tab-bar--' + align;
+    } else {
+      rootClass += ' tab-bar--center';
     }
 
     const tabs = data.map((tab, i) => {

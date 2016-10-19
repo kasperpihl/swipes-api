@@ -23,20 +23,62 @@
 
     &:hover {
       color: darken($deepBlue-40, 5%);
-    }
 
-    i {
-      margin-right: 9px;
+      #{$b}__icon--svg {
+        fill: darken($deepBlue-40, 5%);
+      }
+
+      #{$b}__icon--font {
+        color: darken($deepBlue-40, 5%);
+      }
     }
 
     &--active {
       color: $blue-100;
       transition: .1s;
 
-      &:hover {
+      #{$b}__icon--svg {
+        fill: $blue-100;
+      }
+
+      #{$b}__icon--font {
         color: $blue-120;
       }
+
+      &:hover {
+        color: $blue-120;
+
+        #{$b}__icon--font {
+          color: $blue-120;
+        }
+
+        #{$b}__icon--svg {
+          fill: $blue-120;
+        }
+      }
     }
+  }
+
+  &__icon {
+
+    &--svg {
+      @include size(24px);
+      fill: $deepBlue-30;
+      margin-right: 9px;
+      transition: .1s;
+    }
+
+    &--font {
+      font-size: 18px;
+      color: $deepBlue-30;
+      margin-right: 9px;
+      transition: .1s;
+    }
+  }
+
+  &--center {
+    @include size(calc(100% - 21px), auto);
+    border: 1px solid $blue-100;
   }
 
   &--left {

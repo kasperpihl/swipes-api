@@ -19,10 +19,10 @@
     position: absolute;
 
     &--svg {
-      @include size(14px);
+      @include size(24px);
       fill: $green-color;
       stroke: $green-color;
-      top: 3px;
+      top: -4px;
     }
 
     &--font {

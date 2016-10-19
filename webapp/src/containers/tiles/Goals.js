@@ -4,6 +4,7 @@ import { overlay, main, api, toasty, modal } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import { actionForType } from '../../components/goals/actions'
+import TabBar from '../../components/tab-bar/TabBar'
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalTimeline from '../../components/goals/GoalTimeline';
@@ -158,10 +159,20 @@ class Goals extends Component {
       </div>
     )
   }
+  onChange(index) {
+    console.log(index);
+  }
+  renderTabbar() {
+
+    return (
+      <TabBar data={[{title: 'Mine', icon: 'person'}, {title: 'Later', icon: 'timelapse'}, {title: 'Favorites', icon: 'favorite'}, {title: 'All', icon: 'filter_list'}]} onChange={this.onChange}/>
+    )
+  }
   render() {
 
     return (
       <div className="goals">
+        {this.renderTabbar()}
         {this.renderList()}
         {this.renderTimeline()}
         {this.renderPlusButton()}

@@ -79,7 +79,7 @@ class Form extends Component {
           <div className="form-decide__time">FRI 8:00 AM</div>
         </div>
 
-        {this.renderHeader('CheckmarkIcon', 'Automation', 'Create a cal event to all participants', false)}
+        {this.renderHeader('ActionIcon', 'Automation', 'Create a cal event to all participants', false)}
       </div>
     )
   }
