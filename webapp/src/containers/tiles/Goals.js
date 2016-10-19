@@ -165,7 +165,7 @@ class Goals extends Component {
   renderTabbar() {
 
     return (
-      <TabBar data={[{title: 'Mine', icon: 'person'}, {title: 'Later', icon: 'timelapse'}, {title: 'Favorites', icon: 'favorite'}, {title: 'All', icon: 'filter_list'}]} onChange={this.onChange}/>
+      <TabBar data={['mine', 'later', 'favorites', 'all']} onChange={this.onChange}/>
     )
   }
   render() {
