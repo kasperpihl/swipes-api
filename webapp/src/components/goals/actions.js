@@ -9,7 +9,7 @@ const actions = {
   },
   deliver: {
     form: Form,
-    collection: Note,
+    collection: Collection,
     note: Note
   }
 }

@@ -31,6 +31,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
       chunks: ['vendor', 'app']
+    }),
+    new webpack.ProvidePlugin({
+      "PDFJS": "pdfjs-dist",
+      "window.PDFJS": "pdfjs-dist"
     })
   ],
   module: {
