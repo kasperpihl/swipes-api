@@ -163,10 +163,13 @@ class Goals extends Component {
     console.log(index);
   }
   renderTabbar() {
-
-    return (
-      <TabBar data={['mine', 'later', 'favorites', 'all']} onChange={this.onChange}/>
-    )
+    let { currentGoal } = this.props;
+    if(!currentGoal){
+      return (
+        <TabBar data={['mine', 'later', 'favorites', 'all']} onChange={this.onChange}/>
+      )
+    }
+    
   }
   render() {
 
