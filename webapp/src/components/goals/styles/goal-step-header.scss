@@ -47,16 +47,19 @@ $fade: .4;
   }
 
   &__indicator {
-    @include size(30px);
+    @include size(30px !important);
     @include flex();
     border-radius: 50%;
     position: relative;
+    flex: none;
+    transform: translateY(2px);
 
     &#{&}--index {
       background-color: rgba($blue-100, .3);
       color: $bg;
       font-size: 12px;
-      font-weight: 400;
+      font-weight: 700;
+      padding-bottom: 1px;
       transition: color .1s;
     }
 
@@ -71,13 +74,14 @@ $fade: .4;
   }
 
   &__content {
-    $contentWidth: calc(100% - 30px - 30px);
+    $contentWidth: calc(100% - 30px - 60px);
 
     @include size($contentWidth, 36px);
     @include flex(flex-start, space-between, column);
     align-content: space-between;
     padding-left: 20px;
     user-select: none;
+    flex: none;
   }
 
   &__title {

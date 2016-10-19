@@ -66,7 +66,7 @@ class Form extends Component {
   }
   renderDecisionButton(){
     return (
-      <div className="goal-decisions" style={{marginTop: '30px'}}>
+      <div className="goal-decisions" style={{marginTop: '60px'}}>
         <div className="goal-decisions__buttons">
           <Button icon="thumb_up" callback={this.decideYes} />
           <Button icon="thumb_down" style={{marginLeft: '15px'}} callback={this.decideNo} />
