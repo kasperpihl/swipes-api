@@ -1,26 +1,6 @@
 @import '../../global-styles/vars';
 @import '../../global-styles/mixins';
 
-.swipes-modal__holder {
-	@include size(100%, 100%);
-	@include flex(center, center);
-	display: none;
-	left: 0; top: 0;
-	position: fixed;
-	z-index: 9999;
-
-	&--shown {
-		display: flex;
-	}
-}
-
-.swipes-modal__overlay {
-	@include size(100%, 100%);
-	background-color: rgba($deepBlue-100, .2);
-	left: 0; top: 0;
-	position: fixed;
-}
-
 .swipes-modal {
 	@include size(100%, auto);
 	@include flex(center, center, column);

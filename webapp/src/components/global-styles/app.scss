@@ -57,3 +57,18 @@ svg {
     transition: visibility 0s 0s, opacity .15s;
   }
 }
+
+.g-modal {
+  @include size(100%);
+  @include flex();
+  left: 0; top: 0;
+  position: fixed;
+  z-index: 9999;
+
+  &__overlay {
+  	@include size(100%);
+  	background-color: rgba($deepBlue-100, .2);
+  	left: 0; top: 0;
+  	position: fixed;
+  }
+}

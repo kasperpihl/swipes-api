@@ -23,18 +23,28 @@ class Modal extends Component {
       this.props.hideModal();
     }
   }
-  
+
   onModalCallback(res){
     if(this.props.modal.get('callback'))
       this.props.modal.get('callback')(res);
     this.props.hideModal();
+  }
+  closeModal(e) {
+    const now = new Date().getTime();
+    const clickDiff = (now - this.shownTime);
+    if(clickDiff > 250){
+      // this.sendCallback(null);
+    }
   }
   render() {
     const { modal } = this.props;
     const props = modal.get('props') || {};
 
     return (
-      <SwipesModal shown={modal.get('shown')} callback={this.onModalCallback} {...props} />
+      <div className="g-modal">
+        <div className="g-modal__overlay" onClick={this.closeModal}></div>
+        <SwipesModal shown={modal.get('shown')} callback={this.onModalCallback} {...props} />
+      </div>
     );
   }
 }

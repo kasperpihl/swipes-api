@@ -36,7 +36,7 @@ class SwipesModal extends Component {
   constructor(props) {
     super(props)
     this.closeModal = this.closeModal.bind(this);
-    
+
     this.state = {
       selectedListItems: []
     }
@@ -216,9 +216,6 @@ class SwipesModal extends Component {
     const { title, type,  data, shown, callback } = this.props;
     let modalWrapClass = "swipes-modal__holder"
 
-    if(shown){
-      modalWrapClass += ' swipes-modal__holder--shown'
-    }
     let modalClass = 'swipes-modal';
 
     if (type) {
