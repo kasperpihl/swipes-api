@@ -64,6 +64,11 @@ svg {
   left: 0; top: 0;
   position: fixed;
   z-index: 9999;
+  display: none;
+
+  &--shown {
+    display: flex;
+  }
 
   &__overlay {
   	@include size(100%);
