@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { overlay, main, api, toasty, modal } from '../../actions';
+import { overlay, main, api, toasty, modal, goals } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import { actionForType } from '../../components/goals/actions'
@@ -17,7 +17,7 @@ class Goals extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['clickedRoundButton', 'clickedListItem']);
+    bindAll(this, ['clickedRoundButton', 'clickedListItem', 'completeStep']);
     this.updateTitle('Goals');
     this.addListenersToSwipes(props.swipes);
   }
@@ -88,17 +88,18 @@ class Goals extends Component {
       return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
+  completeStep(){
+    const { currentGoal, completeStep } = this.props;
+    completeStep(currentGoal.get('id'));
+  }
   renderActionForStep(timeline, stepId){
     const { currentGoal } = this.props;
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
       const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
-      return <View swipes={this.props.swipes} cardDelegate={this} do={this.stepDo} goal={currentGoal} step={actionStep}/>
+      return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>
     }
     return null;
-  }
-  stepDo(data){
-
   }
   getStatusForStep(timeline, stepId){
 
@@ -207,6 +208,7 @@ function mapStateToProps(state) {
 const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
   loadModal: modal.load,
+  completeStep: goals.completeStep,
   request: api.request,
   addToast: toasty.add,
   updateToast: toasty.update,

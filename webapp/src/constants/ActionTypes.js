@@ -11,6 +11,9 @@ export const DRAG_DOT = 'DRAG_DOT'
 
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
 
+// Goals
+export const GOAL_COMPLETE_STEP = 'GOAL_COMPLETE_STEP'
+
 // Search
 export const SEARCH = 'SEARCH'
 export const SEARCH_RESULTS = 'SEARCH_RESULTS'
