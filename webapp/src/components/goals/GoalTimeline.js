@@ -3,7 +3,7 @@ import GoalStepHeader from './GoalStepHeader'
 import GoalStep from './GoalStep'
 import { debounce, bindAll, autoscroll } from '../../classes/utils'
 import { VelocityTransitionGroup } from 'velocity-react'
-import {successState} from '../../icons'
+import {successState} from '../icons'
 
 import './styles/goal-timeline.scss'
 
