@@ -8,6 +8,7 @@ $itemWidth: 550px;
   @include flex(flex-start, flex-start);
   max-width: $itemWidth;
   position: relative;
+  flex: none;
 
 
   &:not(:first-of-type) {
