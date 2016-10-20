@@ -1,17 +1,44 @@
 import React, { Component, PropTypes } from 'react'
+import Loader from '../swipes-ui/Loader'
+import { isImage, bindAll } from '../../classes/utils'
 import './styles/preview-modal.scss'
 
 class PreviewModal extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      loaded: false
+    }
+    bindAll(this, ['fileLoaded']);
   }
   componentDidMount() {
   }
-  render() {
-    return (
-      <div className="preview-modal">Preview my ass
+  fileLoaded() {
+    console.log('loaded');
+    this.setState({loaded: true})
+  }
+  renderContent(file) {
 
+    if (isImage(file)) {
+      return (
+        <div className="preview-modal__image">
+          <img src={file} onLoad={this.fileLoaded}/>
+        </div>
+      )
+    }
+  }
+  renderLoader() {
+
+    if (!this.state.loaded) {
+      // return <Loader center={true} />
+    }
+  }
+  render() {
+
+    return (
+      <div className="preview-modal">
+        {this.renderLoader()}
+        {this.renderContent(this.props.data)}
       </div>
     )
   }

@@ -61,6 +61,14 @@ export function hexToRgb(hex){
   return r + "," + g + "," + b;
 }
 
+export function isImage(file) {
+  if (!file) {
+    return false;
+  }
+
+  return (file.match(/\.(jpeg|jpg|gif|png)$/) != null);
+}
+
 export function bindAll(context, methodNames) {
   methodNames.map(function(methodName) {
     if(typeof context[methodName] !== 'function'){

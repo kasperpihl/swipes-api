@@ -7,7 +7,7 @@ class SwipesCardItem extends Component {
   constructor(props) {
     super(props)
     this.state = { data: props.data }
-    bindAll(this, ['onClick', 'updateData', 'onAction', 'onDragStart', 'clickedLink'])
+    bindAll(this, ['onClick', 'updateData', 'onAction', 'onDragStart', 'clickedLink', 'openImage'])
     this.id = randomString(5);
   }
   updateData(data){
@@ -50,6 +50,9 @@ class SwipesCardItem extends Component {
   onDragStart(){
     const { data, callDelegate } = this.props;
     callDelegate('onCardShare', data, true);
+  }
+  openImage() {
+
   }
   renderDot(actions){
     const { onDragStart } = this.props;
@@ -157,7 +160,7 @@ class SwipesCardItem extends Component {
       }
       return (
         <div className="swipes-card__preview" ref="cardPreview">
-          <div className="swipes-card__preview--img">
+          <div className="swipes-card__preview--img" onClick={this.openImage}>
             <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
           </div>
         </div>

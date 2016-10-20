@@ -48,7 +48,7 @@ class GoalTimeline extends Component {
         console.log('setting currentIndex from: ', currentIndex, ' to: ', newState.currentIndex);
         this.setState(newState);
       }
-      
+
     }
   }
   componentDidMount() {

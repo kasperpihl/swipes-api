@@ -22,7 +22,7 @@ class Profile extends Component {
         this.props.logout();
       }
     });
-    
+
   }
   render() {
     const { me } = this.props;
