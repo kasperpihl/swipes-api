@@ -64,15 +64,19 @@ svg {
   left: 0; top: 0;
   position: fixed;
   z-index: 9999;
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s .3s, opacity 0s .3s;
 
   &--shown {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .3s;
   }
 
   &__overlay {
   	@include size(100%);
-  	background-color: rgba(black, .85);
+  	background-color: rgba(black, .95);
   	left: 0; top: 0;
   	position: fixed;
   }
