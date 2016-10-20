@@ -38,11 +38,6 @@ class Topbar extends Component {
     });
   }
   clickedFind(){
-    this.props.loadModal('preview', {data: "https://d13yacurqjgara.cloudfront.net/users/366584/screenshots/3036498/attachments/636884/astro-death-2.jpg"}, (res) => {
-
-    });
-
-    return;
     this.props.setOverlay({ component: 'Find', title: 'Find' });
   }
   clickedBack(){

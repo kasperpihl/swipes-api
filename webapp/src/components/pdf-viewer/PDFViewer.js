@@ -27,6 +27,14 @@ class PDFViewer extends Component {
       this.setState({ page: newPage });
     }
   }
+  hasNextPage(){
+    const { page, pages } = this.state;
+    return (page < pages);
+  }
+  hasPrevPage(){
+    const { page } = this.state;
+    return (page > 1);
+  }
   render() {
     const { file } = this.props;
     const { page } = this.state;
