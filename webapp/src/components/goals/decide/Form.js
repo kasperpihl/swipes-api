@@ -63,6 +63,8 @@ class Form extends Component {
     )
   }
   renderDecisionButton(){
+    const { step } = this.props;
+    if(step.get('completed')) return;
     return (
       <div className="goal-decisions" style={{marginTop: '60px'}}>
         <div className="goal-decisions__buttons">
