@@ -35,7 +35,6 @@ class Note extends Component {
     this.onChange = (editorState) => {
       const index = this.props.step.get('id') + '-note';
       localStorage.setItem(index, JSON.stringify(convertToRaw(editorState.getCurrentContent())))
-      console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())));
       this.setState({ editorState });
     };
     this.clickedSubmit = this.clickedSubmit.bind(this);
@@ -45,6 +44,12 @@ class Note extends Component {
   }
   componentDidMount() {
   }
+  renderSubmit(){
+    const { step } = this.props;
+    if(!step.get('completed')){
+      return <Button title="Submit" callback={this.clickedSubmit} style={{marginTop: '30px'}} />
+    }
+  }
   render() {
     const {editorState} = this.state;
     return (
@@ -53,7 +58,7 @@ class Note extends Component {
           editorState={editorState}
           onChange={this.onChange}
         />
-        <Button title="Submit" callback={this.clickedSubmit} style={{marginTop: '30px'}} />
+        {this.renderSubmit()}
       </div>
     )
   }
