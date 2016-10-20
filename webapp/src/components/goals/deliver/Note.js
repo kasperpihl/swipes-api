@@ -1,28 +1,60 @@
 import React, { Component, PropTypes } from 'react'
+import Button from '../../swipes-ui/Button'
 
 import '../styles/note.scss'
 import {
   Editor,
-  createEditorState,
+  createEditorState
 } from 'medium-draft';
+import {
+  convertFromRaw, 
+  EditorState,
+  convertToRaw
+} from 'draft-js'
 
 class Note extends Component {
   constructor(props) {
     super(props)
-    this.state = {editorState: createEditorState()};
+    const index = props.step.get('id') + '-note';
+    
+   
+    let editorState = createEditorState();
+    
+    let localState = localStorage.getItem(index);
+    if(!localState){
+      const data = props.step.get('data');
+      localState = JSON.stringify(data.get('initialData').toJS());
+    }
+    if(localState){
+      const blockData = JSON.parse(localState);
+      editorState = EditorState.push(editorState, convertFromRaw(blockData));
+    }
+
+
+    this.state = { editorState };
     this.onChange = (editorState) => {
+      const index = this.props.step.get('id') + '-note';
+      localStorage.setItem(index, JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+      console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())));
       this.setState({ editorState });
     };
+    this.clickedSubmit = this.clickedSubmit.bind(this);
+  }
+  clickedSubmit(){
+    this.props.completeStep();
   }
   componentDidMount() {
   }
   render() {
     const {editorState} = this.state;
     return (
-      <Editor
-        editorState={editorState}
-        onChange={this.onChange}
-      />
+      <div className="deliver-note">
+        <Editor
+          editorState={editorState}
+          onChange={this.onChange}
+        />
+        <Button title="Submit" callback={this.clickedSubmit} style={{marginTop: '30px'}} />
+      </div>
     )
   }
 }

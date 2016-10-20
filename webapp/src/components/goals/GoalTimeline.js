@@ -32,7 +32,6 @@ class GoalTimeline extends Component {
       const newState = { activeIndex, currentIndex: -1 };
       const steps = goal.get('steps');
       steps.forEach((step, i) => {
-        console.log('step completed', step.get('completed'), i, currentIndex);
         if(newState.currentIndex === -1 && (!step.get('completed') || i === steps.size - 1)){
           newState.currentIndex = i;
           if(currentIndex !== i){
@@ -45,7 +44,6 @@ class GoalTimeline extends Component {
         this.state = newState;
       }
       else if(newState.currentIndex !== currentIndex || newState.activeIndex !== activeIndex){
-        console.log('setting currentIndex from: ', currentIndex, ' to: ', newState.currentIndex);
         this.setState(newState);
       }
 

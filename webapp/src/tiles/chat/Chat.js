@@ -87,7 +87,6 @@ class Chat extends Component {
       title = activeGoal.get('title');
     }
     if(title !== this.title){
-      console.log('act', title);
       swipes.sendEvent('navigation.setTitle', title)
       this.title = title;
     }
