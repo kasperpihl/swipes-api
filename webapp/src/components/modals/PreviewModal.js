@@ -15,7 +15,7 @@ class PreviewModal extends Component {
     return (
       <div className="preview-modal__topbar">
         <div className="preview-modal__close">
-          <CloseIcon className="preview-modal__icon preview-modal__icon--close" />
+          <CloseIcon className="preview-modal__icon" />
         </div>
         <div className="preview-modal__title">Lorem_ipsum_dolor_sit_amet.png</div>
         {this.renderActions()}
@@ -26,14 +26,14 @@ class PreviewModal extends Component {
 
     return (
       <div className="preview-modal__actions">
-        <div className="preview-modal__action preview-modal__action--open-browser" data-content="Open in Dropbox.com">
-          <EarthIcon className="preview-modal__icon preview-modal__icon--open-browser" />
+        <div className="preview-modal__action" data-content="Open in Dropbox.com">
+          <EarthIcon className="preview-modal__icon" />
         </div>
-        <div className="preview-modal__action preview-modal__action--open-desktop" data-content="Open on Desktop">
-          <DesktopIcon className="preview-modal__icon preview-modal__icon--open-desktop" />
+        <div className="preview-modal__action" data-content="Open on Desktop">
+          <DesktopIcon className="preview-modal__icon" />
         </div>
-        <div className="preview-modal__action preview-modal__action--download" data-content="Download">
-          <DownloadIcon className="preview-modal__icon preview-modal__icon--download" />
+        <div className="preview-modal__action" data-content="Download">
+          <DownloadIcon className="preview-modal__icon" />
         </div>
       </div>
     )
@@ -51,10 +51,6 @@ class PreviewModal extends Component {
   render() {
 
     let className = 'preview-modal'
-
-    if (isImage(this.props.data)) {
-      className += ' preview-modal--image'
-    }
 
     return (
       <div className={className}>
