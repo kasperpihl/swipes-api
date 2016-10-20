@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { isImage, bindAll } from '../../classes/utils'
 import { EarthIcon, CloseIcon, DesktopIcon, DownloadIcon } from '../icons'
+import PDFViewer from '../pdf-viewer/PDFViewer'
+
 import './styles/preview-modal.scss'
 
 class PreviewModal extends Component {
@@ -38,15 +40,23 @@ class PreviewModal extends Component {
       </div>
     )
   }
-  renderContent(file) {
+  renderPDF(){
+    const { pdf } = this.props;
+    if(!pdf) return;
 
-    if (isImage(file)) {
-      return (
-        <div className="preview-modal__image">
-          <img src={file} />
-        </div>
-      )
-    }
+    return (
+      <PDFViewer file={pdf} />
+    )
+  }
+  renderImage() {
+    const { img } = this.props;
+    if(!img) return;
+
+    return (
+      <div className="preview-modal__image">
+        <img src={img} />
+      </div>
+    )
   }
   render() {
 
@@ -55,7 +65,8 @@ class PreviewModal extends Component {
     return (
       <div className={className}>
         {this.renderTopbar()}
-        {this.renderContent(this.props.data)}
+        {this.renderImage()}
+        {this.renderPDF()}
       </div>
     )
   }
@@ -66,5 +77,7 @@ const { string } = PropTypes;
 import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
 
 PreviewModal.propTypes = {
+  img: string,
+  pdf: string
   // removeThis: string.isRequired
 }

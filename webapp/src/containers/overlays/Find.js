@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fromJS } from 'immutable'
-import { main, search } from '../../actions';
+import { main, search, api, modal } from '../../actions';
 import { bindAll } from '../../classes/utils'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 
@@ -20,13 +20,68 @@ class Find extends Component {
     bindAll(this, [ 'dotDragStart', 'onChange', 'onKeyUp', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
-  
+  previewNumberOfItems(preview){
+    return 5;
+  }
+  previewRenderForItem(preview, item){
+  }
+  previewMetaForItem(preview, item){
+    return {
+      title: 'Lalala',
+      buttons: [],
+    }
+  }
   componentDidMount(){
     setTimeout( () => {
         this.refs.searchInput.focus()
     }, 0)
   }
   onCardClick(card, data){
+    console.log(data);
+    const { searchResults, request, loadModal } = this.props;
+    if(data.xendo_id){
+      const obj = searchResults.find((res) => {
+        const id = res.getIn(['doc', 'id']);
+        return id === data.xendo_id;
+      })
+      if(obj){
+        const doc = obj.get('doc').toJS();
+
+        if(doc.source === 'dropbox'){
+          console.log('hello', doc);
+          const id = doc.id.split('-')[1];
+          loadModal('preview', {
+            loading: true
+          });
+          request('services.request', { 
+            service: 'dropbox', 
+            data: {
+              method: 'files.getTemporaryLink',
+              parameters: {
+                path: 'rev:' + id
+              }
+            }
+          }).then((res) => {
+            if(res && res.data && res.data.link){
+              const type = doc.source_content_type;
+              const link = res.data.link;
+              const data = {};
+              if(['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1){
+                data.img = res.data.link;
+              }
+              if(['application/pdf'].indexOf(type) > -1){
+                data.pdf = res.data.link;
+              }
+              loadModal('preview', data);
+            }
+          })
+          
+        }
+        
+      }
+      
+    }
+    return;
     //console.log(this.shareDataForChecksum[data.checksum]);
     const folder = localStorage.getItem('dropbox-folder');
     if(folder){
@@ -138,6 +193,8 @@ function mapStateToProps(state) {
 
 const ConnectedFind = connect(mapStateToProps, {
   search: search.search,
+  request: api.request,
+  loadModal: modal.load,
   startDraggingDot: main.startDraggingDot
 })(Find)
 export default ConnectedFind
