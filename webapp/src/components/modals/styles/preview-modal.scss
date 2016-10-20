@@ -82,20 +82,18 @@
 
   // EVERYTHING CONTENT
 
+  &__pdf {
+    animation: fadeInContent .35s .2s ease-in-out forwards;
+    position: relative;
+  }
+
   &__image {
     @include flex();
-    animation: fadeInImage .35s .2s ease-in-out forwards;
+    animation: fadeInContent .35s .2s ease-in-out forwards;
     max-height: 70vh;
     max-width: 70vw;
     opacity: 0;
     transform: translateY(20px);
-
-    @keyframes fadeInImage {
-      to {
-        opacity: 1;
-        transform: translateY(0px);
-      }
-    }
 
     img {
       max-height: 70vh;
@@ -131,5 +129,12 @@
 
   &--image {
 
+  }
+}
+
+@keyframes fadeInContent {
+  to {
+    opacity: 1;
+    transform: translateY(0px);
   }
 }

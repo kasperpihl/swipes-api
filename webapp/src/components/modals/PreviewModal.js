@@ -13,16 +13,27 @@ class PreviewModal extends Component {
   componentDidMount() {
   }
   renderTopbar() {
+    const { title} = this.props;
+    console.log(detail);
 
     return (
       <div className="preview-modal__topbar">
         <div className="preview-modal__close">
           <CloseIcon className="preview-modal__icon" />
         </div>
-        <div className="preview-modal__title">Lorem_ipsum_dolor_sit_amet.png</div>
+        <div className="preview-modal__title">{title}</div>
         {this.renderActions()}
       </div>
     )
+  }
+  renderIcon(icon) {
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="preview-modal__icon preview-modal__icon--svg"/>;
+    }
+
+    return <i className="material-icons preview-modal__icon preview-modal__icon--font">{icon}</i>
   }
   renderActions() {
 
@@ -40,16 +51,20 @@ class PreviewModal extends Component {
       </div>
     )
   }
-  renderPDF(){
+  renderPDF() {
     const { pdf } = this.props;
+
     if(!pdf) return;
 
     return (
-      <PDFViewer file={pdf} />
+      <div className="preview-modal__pdf">
+        <PDFViewer file={pdf} />
+      </div>
     )
   }
   renderImage() {
     const { img } = this.props;
+
     if(!img) return;
 
     return (
@@ -59,7 +74,6 @@ class PreviewModal extends Component {
     )
   }
   render() {
-
     let className = 'preview-modal'
 
     return (
@@ -79,5 +93,4 @@ import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
 PreviewModal.propTypes = {
   img: string,
   pdf: string
-  // removeThis: string.isRequired
 }
