@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal } from '../actions';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import SwipesModal from '../components/modals/SwipesModal'
 import PreviewModal from '../components/modals/PreviewModal'
 
@@ -46,13 +47,24 @@ class Modal extends Component {
     const props = modal.get('props') || {};
     const type = modal.get('type');
     let className = "g-modal";
+
     if(modal.get('shown')){
       className += " g-modal--shown";
     }
     return (
       <div className={className}>
         <div className="g-modal__overlay" onClick={this.closeModal}></div>
-        {this.renderModal(type, props)}
+
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          component="div"
+          className="g-modal__transition"
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}>
+
+          {this.renderModal(type, props)}
+
+        </ReactCSSTransitionGroup>
       </div>
     );
   }

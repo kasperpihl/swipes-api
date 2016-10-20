@@ -40,7 +40,7 @@ class PDFViewer extends Component {
     const { page } = this.state;
     return (
       <div onClick={this.nextPage} className="sw-pdf-viewer">
-        <PDF ref="pdf" file={file} loading={<Loader center={true} text="Loading" />}
+        <PDF ref="pdf" file={file} scale="1.2" loading={<Loader center={true} text="Loading" />}
             onDocumentComplete={this._onDocumentComplete} page={page} />
       </div>
     )

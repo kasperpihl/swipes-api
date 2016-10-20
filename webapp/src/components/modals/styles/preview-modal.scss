@@ -85,6 +85,9 @@
   &__pdf {
     animation: fadeInContent .35s .2s ease-in-out forwards;
     position: relative;
+    max-height: 80vh;
+    max-width: 70vw;
+    overflow-y: scroll;
   }
 
   &__image {
