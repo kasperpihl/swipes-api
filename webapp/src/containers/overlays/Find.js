@@ -66,13 +66,23 @@ class Find extends Component {
               const type = doc.source_content_type;
               const link = res.data.link;
               const data = {};
+              data.title = doc.filename;
+              let path = res.data.metadata.path_display;
               if(['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1){
                 data.img = res.data.link;
               }
               if(['application/pdf'].indexOf(type) > -1){
                 data.pdf = res.data.link;
               }
-              loadModal('preview', data);
+              loadModal('preview', data, (res) => {
+                if(res){
+                  const folder = localStorage.getItem('dropbox-folder');
+                  if(folder){
+                    path = folder + path;
+                    console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
+                  }
+                }
+              });
             }
           })
           
@@ -83,11 +93,7 @@ class Find extends Component {
     }
     return;
     //console.log(this.shareDataForChecksum[data.checksum]);
-    const folder = localStorage.getItem('dropbox-folder');
-    if(folder){
-      var path = folder + data.subtitle + '/' + data.title;
-      console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
-    }
+    
   }
   onCardShare(card, data, dragging){
     const { recent, searchResults } = this.props;

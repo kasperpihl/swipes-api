@@ -9,12 +9,12 @@ class PreviewModal extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    bindAll(this, ['clickedDownload', 'clickedOpenDesktop']);
   }
   componentDidMount() {
   }
   renderTopbar() {
     const { title} = this.props;
-    console.log(detail);
 
     return (
       <div className="preview-modal__topbar">
@@ -35,6 +35,12 @@ class PreviewModal extends Component {
 
     return <i className="material-icons preview-modal__icon preview-modal__icon--font">{icon}</i>
   }
+  clickedDownload(){
+  }
+  clickedOpenDesktop(){
+    this.props.callback('download');
+
+  }
   renderActions() {
 
     return (
@@ -42,10 +48,10 @@ class PreviewModal extends Component {
         <div className="preview-modal__action" data-content="Open in Dropbox.com">
           <EarthIcon className="preview-modal__icon" />
         </div>
-        <div className="preview-modal__action" data-content="Open on Desktop">
+        <div onClick={this.clickedOpenDesktop} className="preview-modal__action" data-content="Open on Desktop">
           <DesktopIcon className="preview-modal__icon" />
         </div>
-        <div className="preview-modal__action" data-content="Download">
+        <div onClick={this.clickedDownload} className="preview-modal__action" data-content="Download">
           <DownloadIcon className="preview-modal__icon" />
         </div>
       </div>
