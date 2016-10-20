@@ -71,8 +71,10 @@ $imgContHeight: 30px;
     position: absolute;
     right: 10px; top: 50%;
     transform: translateY(-50%);
+    z-index: 1;
 
     &:hover {
+      z-index: 10;
 
       #{$b}__tooltip {
         display: block;
@@ -114,7 +116,7 @@ $imgContHeight: 30px;
     left: calc(0px - 90px); bottom: 0;
     position: absolute;
     transform: translateY(calc(100% + 10px));
-    z-index: 5;
+    z-index: 20;
 
     &:after {
       @include size(12px);

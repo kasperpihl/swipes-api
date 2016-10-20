@@ -76,7 +76,7 @@ svg {
 
   &__overlay {
   	@include size(100%);
-  	background-color: rgba(black, .95);
+  	background-color: rgba($deepBlue-100, .96);
   	left: 0; top: 0;
   	position: fixed;
   }

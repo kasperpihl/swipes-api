@@ -1,43 +1,64 @@
 import React, { Component, PropTypes } from 'react'
-import Loader from '../swipes-ui/Loader'
 import { isImage, bindAll } from '../../classes/utils'
+import { EarthIcon, CloseIcon, DesktopIcon, DownloadIcon } from '../icons'
 import './styles/preview-modal.scss'
 
 class PreviewModal extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      loaded: false
-    }
-    bindAll(this, ['fileLoaded']);
+    this.state = {}
   }
   componentDidMount() {
   }
-  fileLoaded() {
-    console.log('loaded');
-    this.setState({loaded: true})
+  renderTopbar() {
+
+    return (
+      <div className="preview-modal__topbar">
+        <div className="preview-modal__close">
+          <CloseIcon className="preview-modal__icon preview-modal__icon--close" />
+        </div>
+        <div className="preview-modal__title">Lorem_ipsum_dolor_sit_amet.png</div>
+        {this.renderActions()}
+      </div>
+    )
+  }
+  renderActions() {
+
+    return (
+      <div className="preview-modal__actions">
+        <div className="preview-modal__action preview-modal__action--open-browser" data-content="Open in Dropbox.com">
+          <EarthIcon className="preview-modal__icon preview-modal__icon--open-browser" />
+        </div>
+        <div className="preview-modal__action preview-modal__action--open-desktop" data-content="Open on Desktop">
+          <DesktopIcon className="preview-modal__icon preview-modal__icon--open-desktop" />
+        </div>
+        <div className="preview-modal__action preview-modal__action--download" data-content="Download">
+          <DownloadIcon className="preview-modal__icon preview-modal__icon--download" />
+        </div>
+      </div>
+    )
   }
   renderContent(file) {
 
     if (isImage(file)) {
       return (
         <div className="preview-modal__image">
-          <img src={file} onLoad={this.fileLoaded}/>
+          <img src={file} />
         </div>
       )
     }
   }
-  renderLoader() {
-
-    if (!this.state.loaded) {
-      // return <Loader center={true} />
-    }
-  }
   render() {
 
+    let className = 'preview-modal'
+
+    if (isImage(this.props.data)) {
+      className += ' preview-modal--image'
+    }
+
     return (
-      <div className="preview-modal">
-        {this.renderLoader()}
+      <div className={className}>
+        {this.renderTopbar()}
         {this.renderContent(this.props.data)}
       </div>
     )

@@ -2,15 +2,93 @@
 @import '../../global-styles/mixins/';
 
 .preview-modal {
+  $b: &;
 
+  // EVERYTHING TOPBAR
+
+  &__topbar {
+    @include flex(center, flex-start);
+    @include size(100%, 54px);
+    border-bottom: 1px solid $deepBlue-90;
+    left: 0; top: 0;
+    position: absolute;
+  }
+
+  &__close {
+    @include flex();
+    @include size(46px);
+    border-radius: 50%;
+    margin-left: 15px;
+
+    &:hover {
+      background-color: #333d59;
+    }
+  }
+
+  &__title {
+    color: $bg;
+    font-size: 15px;
+    font-weight: 500;
+    margin-left: 9px;
+  }
+
+  &__actions {
+    @include flex(flex);
+    position: absolute;
+    right: 60px;
+  }
+
+  &__action {
+    @include flex();
+    @include size(46px);
+    border-radius: 50%;
+    position: relative;
+
+    &:before {
+      background-color: $deepBlue-120;
+      border: 1px solid #333d58;
+      bottom: 0;
+      color: $bg;
+      content: attr(data-content);
+      display: none;
+      min-width: 150px;
+      padding: 15px 12px;
+      position: absolute;
+      text-align: center;
+      transform: translateY(calc(100% + 18px));
+    }
+
+    &:after {
+      @include size(15px);
+      background-color: $deepBlue-120;
+      border: 1px solid #333d58;
+      border-bottom: none;
+      border-right: none;
+      bottom: 0;
+      content: "";
+      display: none;
+      position: absolute;
+      transform: translateY(calc(100% + 10px)) rotate(45deg);
+    }
+
+    &:hover {
+      background-color: #333d59;
+
+      &:before, &:after {
+        display: block;
+      }
+    }
+  }
+
+  // EVERYTHING CONTENT
 
   &__image {
     @include flex();
-    max-width: 70vw;
-    max-height: 70vh;
     animation: fadeInImage .35s .2s ease-in-out forwards;
-    transform: translateY(20px);
+    max-height: 70vh;
+    max-width: 70vw;
     opacity: 0;
+    transform: translateY(20px);
 
     @keyframes fadeInImage {
       to {
@@ -20,9 +98,37 @@
     }
 
     img {
-      max-width: 70vw;
       max-height: 70vh;
-      box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+      max-width: 70vw;
     }
+  }
+
+  // ICONS
+
+  &__icon {
+    @include size(24px);
+    fill: $bg;
+
+    &--close {
+
+    }
+
+    &--open-browser {
+
+    }
+
+    &--open-desktop {
+
+    }
+
+    &--download {
+
+    }
+  }
+
+  // MODIFIERS
+
+  &--image {
+
   }
 }
