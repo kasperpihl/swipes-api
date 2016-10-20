@@ -74,6 +74,11 @@ svg {
     transition: visibility 0s 0s, opacity .3s;
   }
 
+  &__transition {
+    @include size();
+    @include flex();
+  }
+
   &__overlay {
   	@include size(100%);
   	background-color: rgba($deepBlue-100, .96);
