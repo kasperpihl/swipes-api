@@ -38,6 +38,8 @@ class Topbar extends Component {
     });
   }
   clickedFind(){
+    this.props.loadModal('preview', {});
+    return;
     this.props.setOverlay({ component: 'Find', title: 'Find' });
   }
   clickedBack(){
@@ -177,6 +179,7 @@ const ConnectedTopbar = connect(mapStateToProps, {
   search: main.search,
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
+  loadModal: modal.load,
   setOverlay: overlay.set,
   clearOverlay: overlay.clear,
   pushOverlay: overlay.push
