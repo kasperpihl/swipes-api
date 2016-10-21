@@ -17,17 +17,18 @@ class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keyup', this.onKeyUp);
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     window.removeEventListener('keyup', this.onKeyUp)
   }
-  onKeyUp(e){
+  onKeyUp(e) {
     const { modal } = this.props;
-    if(e.keyCode === 27 && modal && modal.get('shown')) {
+
+    if (e.keyCode === 27 && modal && modal.get('shown')) {
       this.props.hideModal();
     }
   }
 
-  onModalCallback(res){
+  onModalCallback(res) {
     if(this.props.modal.get('callback'))
       this.props.modal.get('callback')(res);
     this.props.hideModal();
