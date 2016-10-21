@@ -3,7 +3,6 @@
 
 .sw-pdf-viewer {
   @include size(100%, auto);
-  // position: relative;
 
   &__actions {
     @include size(400px, 50px);
