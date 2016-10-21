@@ -32,7 +32,11 @@ class Topbar extends Component {
       setOverlay({ component: 'StartGoal', title: 'Start a Goal' });
     })
     window.addEventListener('keydown', (e) => {
-      if (e.keyCode === 27) {
+      const {
+        modal
+      } = this.props;
+
+      if (e.keyCode === 27 && (!modal || modal.get('shown') === false)) {
         clearOverlay();
       }
     });
@@ -162,6 +166,7 @@ class Topbar extends Component {
 
 function mapStateToProps(state) {
   return {
+    modal: state.get('modal'),
     overlays: state.get('overlays'),
     organizations: state.getIn(['me', 'organizations']),
     profilePic: state.getIn(['me', 'profile_pic']),
@@ -177,7 +182,6 @@ const ConnectedTopbar = connect(mapStateToProps, {
   search: main.search,
   toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
-  loadModal: modal.load,
   setOverlay: overlay.set,
   clearOverlay: overlay.clear,
   pushOverlay: overlay.push

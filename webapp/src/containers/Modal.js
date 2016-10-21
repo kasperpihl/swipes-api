@@ -22,6 +22,7 @@ class Modal extends Component {
   }
   onKeyUp(e) {
     const { modal } = this.props;
+    console.log(modal.get('shown'));
 
     if (e.keyCode === 27 && modal && modal.get('shown')) {
       this.props.hideModal();
