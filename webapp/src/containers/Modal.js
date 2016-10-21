@@ -33,6 +33,7 @@ class Modal extends Component {
     this.props.hideModal();
   }
   closeModal(e) {
+    console.log('this', e.target);
     this.onModalCallback(null);
   }
   renderModal(type, props){
@@ -54,17 +55,7 @@ class Modal extends Component {
     return (
       <div className={className}>
         <div className="g-modal__overlay" onClick={this.closeModal}></div>
-
-        <ReactCSSTransitionGroup
-          transitionName="fade"
-          component="div"
-          className="g-modal__transition"
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}>
-
           {this.renderModal(type, props)}
-
-        </ReactCSSTransitionGroup>
       </div>
     );
   }

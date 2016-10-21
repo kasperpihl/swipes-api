@@ -1,0 +1,16 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-pdf-viewer {
+  @include size(100%, auto);
+  // position: relative;
+
+  &__actions {
+    @include size(400px, 50px);
+    position: fixed;
+    background-color: rgba(red, 1);
+    border-radius: 3px;
+    left: 50%; bottom: 10px;
+    // transform: translateX(-50%);
+  }
+}

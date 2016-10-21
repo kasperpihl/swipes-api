@@ -2,14 +2,17 @@ import React, { Component, PropTypes } from 'react'
 import { isImage, bindAll } from '../../classes/utils'
 import { EarthIcon, CloseIcon, DesktopIcon, DownloadIcon } from '../icons'
 import PDFViewer from '../pdf-viewer/PDFViewer'
+import Loader from '../swipes-ui/Loader'
 
 import './styles/preview-modal.scss'
 
 class PreviewModal extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    bindAll(this, ['clickedDownload', 'clickedOpenDesktop']);
+    this.state = {
+      fileLoaded: false
+    }
+    bindAll(this, ['clickedDownload', 'clickedOpenDesktop', 'fileLoaded']);
   }
   componentDidMount() {
   }
@@ -39,7 +42,6 @@ class PreviewModal extends Component {
   }
   clickedOpenDesktop(){
     this.props.callback('download');
-
   }
   renderActions() {
 
@@ -57,27 +59,41 @@ class PreviewModal extends Component {
       </div>
     )
   }
+  fileLoaded() {
+    const { loaded } = this.state;
+
+    this.setState({loaded: true});
+  }
   renderPDF() {
     const { pdf } = this.props;
+    const { loaded } = this.state;
 
-    if(!pdf) return;
+    if(!pdf && !loaded) return;
 
     return (
       <div className="preview-modal__pdf">
-        <PDFViewer file={pdf} />
+        <PDFViewer file={pdf} fileLoaded={this.fileLoaded}/>
       </div>
     )
   }
   renderImage() {
     const { img } = this.props;
+    const { loaded } = this.state;
 
-    if(!img) return;
+    if(!img && !loaded) return;
 
     return (
       <div className="preview-modal__image">
         <img src={img} />
       </div>
     )
+  }
+  renderLoader() {
+    const { loaded } = this.state;
+
+    if (!loaded) {
+      return <Loader center={true} />
+    }
   }
   render() {
     let className = 'preview-modal'
@@ -87,6 +103,8 @@ class PreviewModal extends Component {
         {this.renderTopbar()}
         {this.renderImage()}
         {this.renderPDF()}
+
+        {this.renderLoader()}
       </div>
     )
   }

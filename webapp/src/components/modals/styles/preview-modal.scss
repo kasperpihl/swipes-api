@@ -3,6 +3,10 @@
 
 .preview-modal {
   $b: &;
+  @include size(100%);
+  @include flex();
+  position: relative;
+  z-index: 999;
 
   // EVERYTHING TOPBAR
 
@@ -43,6 +47,8 @@
     @include size(46px);
     border-radius: 50%;
     position: relative;
+
+    // DROPDOWN
 
     &:before {
       background-color: $deepBlue-120;
@@ -85,9 +91,20 @@
   &__pdf {
     animation: fadeInContent .35s .2s ease-in-out forwards;
     position: relative;
-    max-height: 80vh;
+    max-height: calc(100vh - 54px);
     max-width: 70vw;
+    margin-top: 54px;
     overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      background-color: rgba(white,0);
+      overflow: hidden;
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($bg,.5);
+    }
   }
 
   &__image {
@@ -111,26 +128,22 @@
     @include size(24px);
     fill: $bg;
 
-    &--close {
-
-    }
-
-    &--open-browser {
-
-    }
-
-    &--open-desktop {
-
-    }
-
-    &--download {
-
+    &:hover {
+      background-color: #333d59;
     }
   }
 
   // MODIFIERS
 
   &--image {
+
+  }
+
+  &--pdf {
+
+  }
+
+  &--empty {
 
   }
 }
