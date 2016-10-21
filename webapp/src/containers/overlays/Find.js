@@ -53,8 +53,8 @@ class Find extends Component {
           loadModal('preview', {
             loading: true
           });
-          request('services.request', { 
-            service: 'dropbox', 
+          request('services.request', {
+            service: 'dropbox',
             data: {
               method: 'files.getTemporaryLink',
               parameters: {
@@ -63,21 +63,47 @@ class Find extends Component {
             }
           }).then((res) => {
             if(res && res.data && res.data.link){
+              const dropboxFolder = localStorage.getItem('dropbox-folder');
               const type = doc.source_content_type;
               const link = res.data.link;
-              const data = {};
-              data.title = doc.filename;
+              const data = {
+                type: null,
+                title: doc.filename,
+                icons: {},
+                img: null
+              };
+              const icons = {
+                openWeb: {
+                  icon: 'EarthIcon',
+                  title: 'Open in Dropbox.com'
+                },
+                download: {
+                  icon: 'DownloadIcon',
+                  title: 'Download'
+                }
+              }
+
+              if (dropboxFolder) {
+                icons['openDesktop'] = {
+                  icon: 'DesktopIcon',
+                  title: 'Open on Desktop'
+                }
+              }
+
+              data.icons = icons;
               let path = res.data.metadata.path_display;
+
               if(['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1){
                 data.img = res.data.link;
+                data.type = 'image';
               }
               if(['application/pdf'].indexOf(type) > -1){
                 data.pdf = res.data.link;
+                data.type = 'pdf';
               }
               loadModal('preview', data, (res) => {
                 if(res){
-                  const folder = localStorage.getItem('dropbox-folder');
-                  if(folder){
+                  if(dropboxFolder){
                     path = folder + path;
                     console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
                   }
@@ -85,15 +111,12 @@ class Find extends Component {
               });
             }
           })
-          
         }
-        
       }
-      
     }
     return;
     //console.log(this.shareDataForChecksum[data.checksum]);
-    
+
   }
   onCardShare(card, data, dragging){
     const { recent, searchResults } = this.props;
@@ -117,7 +140,7 @@ class Find extends Component {
       if(obj){
         this.props.startDraggingDot("search", obj.get('shareData').toJS());
       }
-      
+
     }
 
 
