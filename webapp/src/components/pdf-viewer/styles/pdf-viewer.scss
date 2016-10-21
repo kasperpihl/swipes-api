@@ -7,9 +7,9 @@
   &__actions {
     @include size(400px, 50px);
     position: fixed;
-    background-color: rgba(red, 1);
+    background-color: rgba($deepBlue-20, 1);
     border-radius: 3px;
     left: 50%; bottom: 10px;
-    // transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 }

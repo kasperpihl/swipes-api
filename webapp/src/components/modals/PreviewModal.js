@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { isImage, bindAll } from '../../classes/utils'
-import { EarthIcon, CloseIcon, DesktopIcon, DownloadIcon } from '../icons'
+import { CloseIcon } from '../icons'
+import * as Icons from '../icons'
 import PDFViewer from '../pdf-viewer/PDFViewer'
 import Loader from '../swipes-ui/Loader'
 
@@ -12,7 +13,7 @@ class PreviewModal extends Component {
     this.state = {
       fileLoaded: false
     }
-    bindAll(this, ['clickedDownload', 'clickedOpenDesktop', 'fileLoaded']);
+    bindAll(this, [ 'fileLoaded']);
   }
   componentDidMount() {
   }
@@ -33,31 +34,29 @@ class PreviewModal extends Component {
     const Comp = Icons[icon];
 
     if (Comp) {
-      return <Comp className="preview-modal__icon preview-modal__icon--svg"/>;
+      return <Comp className="preview-modal__icon preview-modal__icon--svg" />;
     }
 
     return <i className="material-icons preview-modal__icon preview-modal__icon--font">{icon}</i>
   }
-  clickedDownload(){
-  }
-  clickedOpenDesktop(){
-    this.props.callback('download');
-  }
   renderActions() {
+    const { actions } = this.props;
 
-    return (
-      <div className="preview-modal__actions">
-        <div className="preview-modal__action" data-content="Open in Dropbox.com">
-          <EarthIcon className="preview-modal__icon" />
+    if (actions) {
+      const icons = actions.map( (action, i) => {
+        return (
+          <div key={"action-" + i} className="preview-modal__action" data-content={action.title} onClick={action.onClick}>
+            {this.renderIcon(action.icon)}
+          </div>
+        )
+      })
+
+      return (
+        <div className="preview-modal__actions">
+          {icons}
         </div>
-        <div onClick={this.clickedOpenDesktop} className="preview-modal__action" data-content="Open on Desktop">
-          <DesktopIcon className="preview-modal__icon" />
-        </div>
-        <div onClick={this.clickedDownload} className="preview-modal__action" data-content="Download">
-          <DownloadIcon className="preview-modal__icon" />
-        </div>
-      </div>
-    )
+      )
+    }
   }
   fileLoaded() {
     const { loaded } = this.state;
