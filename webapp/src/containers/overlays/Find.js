@@ -97,7 +97,7 @@ class Find extends Component {
                 }
               });
 
-              data.actions = icons;
+              data.actions = actions;
               let path = res.data.metadata.path_display;
 
               if(['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1){
