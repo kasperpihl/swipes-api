@@ -69,35 +69,33 @@ class Find extends Component {
               const data = {
                 type: null,
                 title: doc.filename,
-                icons: {},
+                actions: [],
                 img: null
               };
-              const icons = {
-                openWeb: {
-                  icon: 'EarthIcon',
-                  title: 'Open in Dropbox.com',
-                  onClick: (e) => {
-                    console.log('bla');
-                  }
-                },
-                download: {
-                  icon: 'DownloadIcon',
-                  title: 'Download',
-                  onClick: (e) => {
-                    console.log('bla');
-                  }
-                }
-              }
 
               if (dropboxFolder) {
-                icons['openDesktop'] = {
+                actions.push({
                   icon: 'DesktopIcon',
                   title: 'Open on Desktop',
                   onClick: (e) => {
                     console.log('bla');
                   }
-                }
+                });
               }
+
+              actions.push({
+                icon: 'EarthIcon',
+                title: 'Open in Dropbox.com',
+                onClick: (e) => {
+                  console.log('bla');
+                }
+              }, {
+                icon: 'DownloadIcon',
+                title: 'Download',
+                onClick: (e) => {
+                  console.log('bla');
+                }
+              });
 
               data.actions = icons;
               let path = res.data.metadata.path_display;
