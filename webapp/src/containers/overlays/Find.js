@@ -99,7 +99,7 @@ class Find extends Component {
                 }
               }
 
-              data.icons = icons;
+              data.actions = icons;
               let path = res.data.metadata.path_display;
 
               if(['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1){
