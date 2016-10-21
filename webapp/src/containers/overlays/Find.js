@@ -75,18 +75,27 @@ class Find extends Component {
               const icons = {
                 openWeb: {
                   icon: 'EarthIcon',
-                  title: 'Open in Dropbox.com'
+                  title: 'Open in Dropbox.com',
+                  onClick: (e) => {
+                    console.log('bla');
+                  }
                 },
                 download: {
                   icon: 'DownloadIcon',
-                  title: 'Download'
+                  title: 'Download',
+                  onClick: (e) => {
+                    console.log('bla');
+                  }
                 }
               }
 
               if (dropboxFolder) {
                 icons['openDesktop'] = {
                   icon: 'DesktopIcon',
-                  title: 'Open on Desktop'
+                  title: 'Open on Desktop',
+                  onClick: (e) => {
+                    console.log('bla');
+                  }
                 }
               }
 
