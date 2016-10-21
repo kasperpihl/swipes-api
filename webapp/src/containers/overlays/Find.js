@@ -66,11 +66,10 @@ class Find extends Component {
               const dropboxFolder = localStorage.getItem('dropbox-folder');
               const type = doc.source_content_type;
               const link = res.data.link;
+              const actions = [];
               const data = {
                 type: null,
-                title: doc.filename,
-                actions: [],
-                img: null
+                title: doc.filename
               };
 
               if (dropboxFolder) {
