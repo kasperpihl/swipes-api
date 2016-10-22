@@ -14,11 +14,12 @@ export default class IpcListener {
     });
     ipcRenderer.on('toasty', (event, arg) => {
       const options = {
-        title: arg.percentage + '%',
-        loading: true
+        title: arg.filename,
+        progress: arg.percentage
       }
 
       if (arg.state === 'completed') {
+        options.completed = true;
         options.duration = 3000;
       }
 
