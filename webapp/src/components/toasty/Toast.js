@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ProgressBar from 'progressbar.js'
 import Loader from './../swipes-ui/Loader'
 import { CheckmarkIcon } from './../icons'
 import './styles/toast.scss'
@@ -9,7 +10,8 @@ class Toast extends Component {
     this.state = {}
   }
   componentDidMount() {
-    let bar = new ProgressBar.Circle( container, {
+    console.log(this.refs, 'DADADADA')
+    const bar = new ProgressBar.Circle( this.refs.toastProgress, {
       color: '#000C2F',
       strokeWidth: 3,
       trailWidth: 2,
@@ -29,14 +31,13 @@ class Toast extends Component {
         } else {
           circle.setText(value);
         }
-
       }
     });
 
-    bar.text.style.fontFamily = '"Roboto"';
+    bar.text.style.fontFamily = 'Roboto';
     bar.text.style.fontSize = '15px';
 
-    bar.animate(1.0)
+    bar.animate(1.0);
   }
   renderLoader() {
     const { loading, progress, completed } = this.props.data;
@@ -53,14 +54,14 @@ class Toast extends Component {
     if (progress && !loading && !completed) {
 
       return (
-        <div id="toast-progress">
+        <div ref="toastProgress">
           <svg className="svg svg--defs">
             <defs>
               <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#00ff66"/>
-                <stop offset="33%" stop-color="#0ec4f2"/>
-                <stop offset="66%" stop-color="#e609e6"/>
-                <stop offset="100%" stop-color="#5c005a"/>
+                <stop offset="0%" stopColor="#00ff66"/>
+                <stop offset="33%" stopColor="#0ec4f2"/>
+                <stop offset="66%" stopColor="#e609e6"/>
+                <stop offset="100%" stopColor="#5c005a"/>
               </linearGradient>
             </defs>
           </svg>
@@ -81,7 +82,7 @@ class Toast extends Component {
     const { title, loading, progress } = this.props.data;
 
     return (
-      <div className="toast">
+      <div ref="dada" className="toast">
         <div className="toast__loader">
           {this.renderLoader()}
           {this.renderProgressbar()}
@@ -95,13 +96,13 @@ class Toast extends Component {
 
 export default Toast
 
-const { string, bool, shape } = PropTypes;
+const { string, number, bool, shape } = PropTypes;
 
 Toast.propTypes = {
   data: shape({
     title: string.isRequired,
     loading: bool,
-    progress: string,
+    progress: number,
     completed: bool
   })
 }
