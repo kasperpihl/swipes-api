@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import ProgressBar from 'progressbar.js'
 import Loader from './../swipes-ui/Loader'
 import { CheckmarkIcon } from './../icons'
 import './styles/toast.scss'
@@ -10,7 +9,6 @@ class Toast extends Component {
     this.state = {}
   }
   componentDidMount() {
-    console.log(this.refs, 'DADADADA')
     const bar = new ProgressBar.Circle( this.refs.toastProgress, {
       color: '#000C2F',
       strokeWidth: 3,
