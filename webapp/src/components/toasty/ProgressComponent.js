@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import ProgressBar from 'progressbar.js'
-import './styles/sassFile.scss'
 
 class ProgressCircle extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+  }
+  componentWillReceiveProps(nextProps) {
+    this.bar.animate(nextProps.value);
   }
   componentDidMount() {
     const { value } = this.props
@@ -15,7 +17,7 @@ class ProgressCircle extends Component {
       strokeWidth: 3,
       trailWidth: 2,
       easing: 'easeInOut',
-      duration: 5000,
+      duration: 1000,
       text: {
         autoStyleContainer: false
       },
@@ -37,6 +39,7 @@ class ProgressCircle extends Component {
     bar.text.style.fontSize = '15px';
 
     bar.animate(value);
+    this.bar = bar;
   }
   render() {
     return (

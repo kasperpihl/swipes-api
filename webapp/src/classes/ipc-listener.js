@@ -24,9 +24,13 @@ export default class IpcListener {
       }
 
       if (toasts[arg.id]) {
-        store.dispatch(toasty.update(toasts[arg.id], options));
-        if (arg.state === 'completed') {
-          delete toasts[arg.id];
+        if (arg.state !== 'completed') {
+          store.dispatch(toasty.update(toasts[arg.id], options));
+        } else {
+          setTimeout(() => {
+            store.dispatch(toasty.update(toasts[arg.id], options));
+            delete toasts[arg.id];
+          }, 1000)
         }
       } else {
         store.dispatch(toasty.add(options)).then((toastId) => {
