@@ -133,7 +133,7 @@ class Goals extends Component {
           this.goBack();
           addToast({title: 'Deleting Goal', loading: true}).then((toastId) => {
             request('goals.delete', {goal_id: currentGoal.get('id')}).then((res) =>{
-              updateToast(toastId, {title: 'Goal deleted', loading: false, duration: 3000});
+              updateToast(toastId, {title: 'Goal deleted', completed: true, duration: 3000});
             });
           })
         }

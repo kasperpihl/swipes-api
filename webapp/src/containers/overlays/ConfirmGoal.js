@@ -57,7 +57,7 @@ class ConfirmGoal extends Component {
   didUpdateTitle(ref, title){
     this.goalTitle = title;
   }
-  didPressStart(ref){  
+  didPressStart(ref){
     const { request, organization_id, clearOverlay, addToasty, updateToasty } = this.props;
     const { workflow } = this.state;
     const goal = workflow.toJS();
@@ -71,7 +71,7 @@ class ConfirmGoal extends Component {
 
       request('goals.create', {workflow_id: workflow_id, organization_id, goal }).then((res) => {
         if(res.ok){
-          updateToasty(toastId, { title: "Added: " + this.goalTitle, loading: false, duration: 3000 });
+          updateToasty(toastId, { title: "Added: " + this.goalTitle, completed: true, duration: 3000 });
           clearOverlay();
         }
         else{
