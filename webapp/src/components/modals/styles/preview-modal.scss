@@ -91,6 +91,7 @@
   &__pdf {
     animation: fadeInContent .35s .2s ease-in-out forwards;
     position: relative;
+    height: calc(100vh - 54px);
     max-height: calc(100vh - 54px);
     max-width: 70vw;
     margin-top: 54px;

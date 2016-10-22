@@ -2,14 +2,92 @@
 @import '../../global-styles/mixins/';
 
 .sw-pdf-viewer {
+  $b: &;
   @include size(100%, auto);
+
+  // Containers
 
   &__actions {
     @include size(400px, 50px);
-    position: fixed;
-    background-color: rgba($deepBlue-20, 1);
+    @include flex(flex);
+    background-color: rgba($deepBlue-40, 1);
     border-radius: 3px;
-    left: 50%; bottom: 10px;
+    left: 50%; bottom: 30px;
+    position: fixed;
     transform: translateX(-50%);
+  }
+
+  &__action {
+    @include size(200px, 50px);
+    @include flex(center, space-between);
+
+    &--pagination {
+
+    }
+
+    &--zoom {
+
+    }
+  }
+
+  // Content
+
+  &__input {
+    background-color: $bg;
+    border: 1px solid $deepBlue-20;
+    @include size(50px);
+    text-align: center;
+    transition: .4s;
+
+    &--error {
+      color: red;
+    }
+  }
+
+  &__pages-value {
+    margin-left: 9px;
+  }
+
+  &__zoom-value {
+
+  }
+
+  // Buttons
+
+  &__button {
+    @include size(50px);
+    @include flex();
+
+    &--arrow-left {
+
+    }
+
+    &--arrow-right {
+      transform: rotate(180deg);
+    }
+
+    &--zoom-out {
+
+    }
+
+    &--zoom-in {
+
+    }
+
+    &--disabled {
+      #{$b}__icon {
+        fill: $deepBlue-60;
+      }
+    }
+  }
+
+  &__icon {
+    @include size(24px);
+  }
+
+  // Modifiers
+
+  &--shown {
+
   }
 }
