@@ -19,7 +19,7 @@
   }
 
   &__loader {
-    @include size(60px, 60px);
+    @include size(60px);
     @include flex();
     position: relative;
 
@@ -33,7 +33,7 @@
   }
 
   &__icon {
-    @include size(12px);
+    @include size(24px);
     fill: $green-color;
   }
 
@@ -52,7 +52,7 @@
 }
 
 #toast-progress {
-  @include size(60px);
+  @include size(50px);
 }
 
 .svg {

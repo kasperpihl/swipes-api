@@ -38,21 +38,19 @@ class Toast extends Component {
 
     bar.animate(1.0)
   }
-  renderLoader(loading) {
-    if (!loading) {
+  renderLoader() {
+    const { loading, progress, completed } = this.props.data;
+
+    if (loading && !progress && !completed) {
       return (
-        <CheckmarkIcon className="toast__icon"/>
+        <Loader size={20} mini={true} center={true}/>
       )
     }
-
-    return (
-      <Loader size={20} mini={true} center={true}/>
-    )
   }
   renderProgressbar() {
-    const { loading, progress } = this.props.data;
+    const { loading, progress, completed } = this.props.data;
 
-    if (progress && !loading) {
+    if (progress && !loading && !completed) {
 
       return (
         <div id="toast-progress">
@@ -70,13 +68,24 @@ class Toast extends Component {
       )
     }
   }
+  renderSuccess() {
+  const { loading, progress, completed } = this.props.data;
+
+    if (!loading && !progress && completed) {
+      return (
+        <CheckmarkIcon className="toast__icon"/>
+      )
+    }
+  }
   render() {
-    const { title, loading } = this.props.data;
+    const { title, loading, progress } = this.props.data;
 
     return (
       <div className="toast">
         <div className="toast__loader">
-          {this.renderLoader(loading)}
+          {this.renderLoader()}
+          {this.renderProgressbar()}
+          {this.renderSuccess()}
         </div>
         <div className="toast__title">{title}</div>
       </div>
@@ -86,8 +95,13 @@ class Toast extends Component {
 
 export default Toast
 
-const { string } = PropTypes;
+const { string, bool, shape } = PropTypes;
 
 Toast.propTypes = {
-  // removeThis: string.isRequired
+  data: shape({
+    title: string.isRequired,
+    loading: bool,
+    progress: string,
+    completed: bool
+  })
 }
