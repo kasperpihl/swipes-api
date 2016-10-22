@@ -30,7 +30,7 @@ export default function goals (state = initialState, action) {
             return fromJS(action.payload.data);
           }
           return step;
-        }) 
+        })
       })
     }
     case types.GOAL_COMPLETE_STEP:{
@@ -46,7 +46,7 @@ export default function goals (state = initialState, action) {
     case types.LOGOUT:{
       return initialState;
     }
-    default: 
+    default:
       return state
   }
 }

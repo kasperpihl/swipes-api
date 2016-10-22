@@ -66,7 +66,6 @@ class PDFViewer extends Component {
     }, 2000)
   }
   handleMouseEnter() {
-    console.log('do you get here');
     window.clearTimeout(this.timeout);
     this.setState({actionHover: true});
 

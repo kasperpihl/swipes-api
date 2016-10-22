@@ -7,7 +7,7 @@ import {
   createEditorState
 } from 'medium-draft';
 import {
-  convertFromRaw, 
+  convertFromRaw,
   EditorState,
   convertToRaw
 } from 'draft-js'
@@ -16,11 +16,9 @@ class Note extends Component {
   constructor(props) {
     super(props)
     const index = props.step.get('id') + '-note';
-    
-   
     let editorState = createEditorState();
-    
     let localState = localStorage.getItem(index);
+
     if(!localState){
       const data = props.step.get('data');
       localState = JSON.stringify(data.get('initialData').toJS());
@@ -40,7 +38,9 @@ class Note extends Component {
     this.clickedSubmit = this.clickedSubmit.bind(this);
   }
   clickedSubmit(){
-    this.props.completeStep();
+    const { step, completeStep } = this.props;
+
+    completeStep(step.get('id'));
   }
   componentDidMount() {
   }

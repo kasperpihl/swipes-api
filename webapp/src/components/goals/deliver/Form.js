@@ -16,7 +16,9 @@ class Form extends Component {
 
   }
   onSubmit(){
-    this.props.completeStep();
+    const { step, completeStep } = this.props;
+
+    completeStep(step.get('id'));
   }
   render() {
     const { step } = this.props;

@@ -31,9 +31,9 @@ class Form extends Component {
     return <i className={"material-icons " + iconClass}>{icon}</i>
   }
   decide(yes){
-    const { completeStep } = this.props;
+    const { step, completeStep } = this.props;
 
-    completeStep();
+    completeStep(step.get('id'));
   }
   decideYes(){
     this.decide(true);

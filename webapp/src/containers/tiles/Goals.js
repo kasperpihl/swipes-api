@@ -88,9 +88,11 @@ class Goals extends Component {
       return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
-  completeStep(){
+  completeStep(stepId){
     const { currentGoal, completeStep } = this.props;
-    completeStep(currentGoal.get('id'));
+    const goalId = currentGoal.get('id');
+
+    completeStep(goalId, stepId);
   }
   renderActionForStep(timeline, stepId){
     const { currentGoal } = this.props;
