@@ -170,7 +170,7 @@ class Goals extends Component {
         <TabBar data={['mine', 'later', 'favorites', 'all']} onChange={this.onChange}/>
       )
     }
-    
+
   }
   render() {
 

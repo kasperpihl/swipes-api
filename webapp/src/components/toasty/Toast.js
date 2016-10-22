@@ -32,7 +32,7 @@ class Toast extends Component {
   const { loading, progress, completed } = this.props.data;
 
     if (this.props.data.completed) {
-      console.log('inside');
+
       return (
         <CheckmarkIcon className="toast__icon"/>
       )
