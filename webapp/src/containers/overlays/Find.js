@@ -64,6 +64,7 @@ class Find extends Component {
           }).then((res) => {
             if(res && res.data && res.data.link){
               const dropboxFolder = localStorage.getItem('dropbox-folder');
+              const fullFilePath = dropboxFolder + res.data.metadata.path_display;
               const type = doc.source_content_type;
               const link = res.data.link;
               const actions = [];
@@ -77,7 +78,7 @@ class Find extends Component {
                   icon: 'DesktopIcon',
                   title: 'Open on Desktop',
                   onClick: (e) => {
-                    console.log('bla');
+                    window.ipcListener.sendEvent('showItemInFolder', fullFilePath);
                   }
                 });
               }
@@ -86,18 +87,22 @@ class Find extends Component {
                 icon: 'EarthIcon',
                 title: 'Open in Dropbox.com',
                 onClick: (e) => {
-                  console.log('bla');
+                  const url = 'https://www.dropbox.com/home' + doc.filepath + '/' + doc.filename;
+                  window.ipcListener.sendEvent('openExternal', url);
                 }
               }, {
                 icon: 'DownloadIcon',
                 title: 'Download',
                 onClick: (e) => {
-                  console.log('bla');
+                  window.location.replace(link);
                 }
               });
 
               data.actions = actions;
+              console.log(res);
               let path = res.data.metadata.path_display;
+              console.log(path);
+              console.log(dropboxFolder + path);
 
               if(['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1){
                 data.img = res.data.link;
@@ -108,12 +113,7 @@ class Find extends Component {
                 data.type = 'pdf';
               }
               loadModal('preview', data, (res) => {
-                if(res){
-                  if(dropboxFolder){
-                    path = folder + path;
-                    console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
-                  }
-                }
+                //console.log('opening', window.ipcListener.sendEvent('showItemInFolder', path));
               });
             }
           })
