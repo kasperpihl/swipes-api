@@ -34,7 +34,7 @@
 
   &__icon {
     @include size(24px);
-    fill: $green-color;
+    stroke: $green-color;
   }
 
   &__title {
@@ -42,17 +42,13 @@
     color: $deepBlue-60;
     font-size: 12px;
     font-weight: 500;
-    line-height: 40px;
+    line-height: 60px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 0 10px;
   }
-}
-
-#toast-progress {
-  @include size(50px);
 }
 
 .svg {

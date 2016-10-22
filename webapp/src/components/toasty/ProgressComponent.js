@@ -14,8 +14,8 @@ class ProgressCircle extends Component {
 
     const bar = new ProgressBar.Circle( this.refs.toastProgress, {
       color: '#000C2F',
-      strokeWidth: 3,
-      trailWidth: 2,
+      strokeWidth: 7,
+      trailWidth: 5,
       easing: 'easeInOut',
       duration: 1000,
       text: {
@@ -23,7 +23,7 @@ class ProgressCircle extends Component {
       },
       step: function(state, circle) {
         circle.path.setAttribute('stroke', "url(#linear)");
-        circle.path.setAttribute('stroke-width', '3');
+        circle.path.setAttribute('stroke-width', '7');
 
         const value = Math.round(circle.value() * 100) + '%';
 
@@ -43,14 +43,12 @@ class ProgressCircle extends Component {
   }
   render() {
     return (
-      <div ref="toastProgress">
+      <div ref="toastProgress" style={{width: '80%', height: '80%'}}>
         <svg className="svg svg--defs">
           <defs>
             <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#00ff66"/>
-              <stop offset="33%" stopColor="#0ec4f2"/>
-              <stop offset="66%" stopColor="#e609e6"/>
-              <stop offset="100%" stopColor="#5c005a"/>
+              <stop offset="0%" stopColor="#fc00ff"/>
+              <stop offset="100%" stopColor="#00dbde"/>
             </linearGradient>
           </defs>
         </svg>

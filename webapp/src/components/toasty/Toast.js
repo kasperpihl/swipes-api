@@ -31,7 +31,8 @@ class Toast extends Component {
   renderSuccess() {
   const { loading, progress, completed } = this.props.data;
 
-    if (!loading && !progress && completed) {
+    if (this.props.data.completed) {
+      console.log('inside');
       return (
         <CheckmarkIcon className="toast__icon"/>
       )
