@@ -37,7 +37,7 @@
     border: 1px solid $deepBlue-20;
     @include size(50px);
     text-align: center;
-    transition: .4s;
+    transition: .5s;
 
     &--error {
       color: red;

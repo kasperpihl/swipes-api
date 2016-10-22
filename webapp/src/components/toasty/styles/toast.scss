@@ -3,7 +3,7 @@
 
 .toast {
   $b: &;
-  @include size(200px, 40px);
+  @include size(200px, 60px);
   display: flex !important;
   background-color: $bg;
   border-radius: 3px;
@@ -19,7 +19,7 @@
   }
 
   &__loader {
-    @include size(60px, 40px);
+    @include size(60px, 60px);
     @include flex();
     position: relative;
 
@@ -49,6 +49,18 @@
     text-overflow: ellipsis;
     padding: 0 10px;
   }
+}
+
+#toast-progress {
+  @include size(60px);
+}
+
+.svg {
+
+	&--defs {
+		position: absolute;
+		left: 0; top: 0;
+	}
 }
 
 .fadeToaster {

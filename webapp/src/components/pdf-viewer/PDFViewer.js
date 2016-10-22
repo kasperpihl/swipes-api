@@ -46,7 +46,7 @@ class PDFViewer extends Component {
         this.setState({inputValue: page});
         setTimeout( () => {
           this.setState({error: false});
-        }, 800)
+        }, 1000)
       }
     }
   }
