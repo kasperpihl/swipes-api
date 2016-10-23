@@ -3,6 +3,7 @@
 import config from 'config';
 import request from 'request';
 import r from 'rethinkdb';
+import mime from 'mime';
 import db from '../../rest/db.js'; // T_TODO I should make this one a local npm module
 import {
 	createSwipesShortUrl
@@ -33,16 +34,28 @@ const getDropboxApiMethod = (method) => {
 
 const dropbox = {
 	request({authData, method, params}, callback) {
+		const mappedMethod = getDropboxApiMethod(method);
+		const headers = {
+			Authorization: 'Bearer ' + authData.access_token
+		}
 		const options = {
 			method: 'post',
-			body: params,
-			json: true,
-			url: 'https://api.dropboxapi.com/2' + getDropboxApiMethod(method),
-			headers : {
-				Authorization: 'Bearer ' + authData.access_token,
-				'Content-Type': 'application/json'
-			}
+			json: true
 		}
+
+		if (method === 'files.getThumbnail') {
+			const apiUrl = 'https://content.dropboxapi.com/2';
+			headers['Dropbox-API-Arg'] = JSON.stringify(params);
+			options.url = apiUrl + mappedMethod;
+			options.encoding = null;
+		} else {
+			const apiUrl = 'https://api.dropboxapi.com/2';
+			options.url = apiUrl + mappedMethod;
+			headers['Content-Type'] = 'application/json';
+			options.body = params;
+		}
+
+		options.headers = headers;
 
 		request(options, (err, res, body) => {
 		  if (err) {
@@ -111,8 +124,27 @@ const dropbox = {
 			const serviceActions = dropbox.cardActions(type, res);
 			const serviceData = dropbox.cardData(type, res);
 			const meta = Object.assign({}, serviceData, serviceActions);
+			const method = 'files.getThumbnail';
+			const params = {
+				path: 'rev:' + meta.rev,
+				size: 'w64h64'
+			};
 
-			return callback(null, { meta });
+			dropbox.request({authData, method, params, user }, (err, res) => {
+				if (err) {
+					return callback(err);
+				}
+
+				// That means that we db don't support thumbnail on this file
+				if (res.error) {
+					return callback(null, { meta });
+				}
+
+				const thumbnail = new Buffer(res).toString('base64');
+				meta.thumbnail = thumbnail;
+
+				return callback(null, { meta });
+			})
 		})
 	},
 	previewRequest({ authData, type, itemId, user }, callback) {
@@ -128,8 +160,12 @@ const dropbox = {
 				subtitle = subtitle.split('/').slice(0, -1).join('/');
 			}
 
+			const mimeType = mime.lookup(data.name);
+
 			mappedData = {
 				title: data.name || '',
+				mime_type: mimeType || '',
+				rev: data.rev,
 				subtitle
 			}
 		}
