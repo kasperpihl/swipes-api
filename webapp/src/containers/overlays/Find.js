@@ -17,6 +17,7 @@ class Find extends Component {
     this.state = {
       currentTabIndex: 0
     }
+    
     bindAll(this, [ 'dotDragStart', 'onChange', 'onKeyUp', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }

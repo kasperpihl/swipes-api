@@ -1,27 +1,58 @@
-var React = require('react');
-var Resizer = require('./grid_resizer');
+import React, { Component, PropTypes } from 'react'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+
 import Topbar from './grid_topbar'
-var CollapsingOverlay = require('./grid_collapsing_overlay');
-var Row = React.createClass({
+import Resizer from './grid_resizer'
+import CollapsingOverlay from './grid_collapsing_overlay'
+
+class GridRow extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+    this.getChildObject = this.getChildObject.bind(this);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+  getChildObject(id){
+    const { callGridDelegate } = this.props;
+    return callGridDelegate('gridRenderRowForId', id);
+  }
   renderResizer(){
-    if(this.props.rowIndex > 0){
-      return <Resizer isRow={true} columnIndex={this.props.columnIndex} rowIndex={this.props.rowIndex} delegate={this.props.delegate} />;
+    const { rowIndex, columnIndex, delegate } = this.props;
+    if(rowIndex > 0){
+      return <Resizer isRow={true} columnIndex={columnIndex} rowIndex={rowIndex} delegate={delegate} />;
     }
-  },
+  }
   renderTopbar(){
-    return <Topbar delegate={this.props.delegate} data={this.props.data} columnIndex={this.props.columnIndex} callGridDelegate={this.props.callGridDelegate} rowIndex={this.props.rowIndex} />
-  },
+    const { 
+      delegate, 
+      data, 
+      columnIndex, 
+      callGridDelegate, 
+      rowIndex
+    } = this.props;
+
+    return <Topbar delegate={delegate} data={data} columnIndex={columnIndex} callGridDelegate={callGridDelegate} rowIndex={rowIndex} />
+  }
   renderResizingOverlay(){
+    const { 
+      data,
+      callGridDelegate
+    } = this.props;
     return (
       <div className="sw-resizing-overlay">
         <CollapsingOverlay />
-        {this.props.callGridDelegate('gridRenderResizeOverlayForId', this.props.data.id)}
+        {callGridDelegate('gridRenderResizeOverlayForId', data.id)}
       </div>
     );
-  },
+  }
+  componentDidMount() {
+  }
   render(){
     const {
-      data
+      data,
+      delegate,
+      columnIndex,
+      rowIndex
     } = this.props;
 
     var styles = {
@@ -31,12 +62,12 @@ var Row = React.createClass({
     var className = "sw-resizeable-row";
     if(data.collapsed){
       className += " sw-collapsed-row";
-      styles.height = this.props.delegate.collapsedHeight(this.props.columnIndex) + '%';
+      styles.height = delegate.collapsedHeight(this.props.columnIndex) + '%';
     }
 
 
 
-    var transitions = this.props.delegate.transitionForRow(this.props.columnIndex, this.props.rowIndex);
+    var transitions = delegate.transitionForRow(columnIndex, rowIndex);
     var rippleStyles = {};
 
     if(transitions){
@@ -51,8 +82,7 @@ var Row = React.createClass({
       }
     }
 
-    var child = this.props.callGridDelegate('gridRenderRowForId', data.id);
-
+    console.log('child', RowChild);
     return (
       <div className={className} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />
@@ -60,10 +90,25 @@ var Row = React.createClass({
         {this.renderResizingOverlay()}
         {this.renderTopbar()}
         {this.renderResizer()}
-        <div className="sw-row-content">{child}</div>
+        <RowChild getChild={this.getChildObject} id={data.id} />
       </div>
     )
   }
-});
+}
+export default GridRow
 
-module.exports = Row;
+
+class RowChild extends React.Component {
+  constructor(props) {
+    super(props)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+  render() {
+    const { getChild, id } = this.props;
+    const child = getChild(id);
+    return (
+      <div className="sw-row-content">{child}</div>
+    )
+  }
+}
+module.exports = GridRow;
