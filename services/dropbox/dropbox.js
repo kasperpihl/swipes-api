@@ -127,7 +127,7 @@ const dropbox = {
 			const method = 'files.getThumbnail';
 			const params = {
 				path: 'rev:' + meta.rev,
-				size: 'w64h64'
+				size: 'w128h128'
 			};
 
 			dropbox.request({authData, method, params, user }, (err, res) => {
