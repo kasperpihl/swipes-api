@@ -141,7 +141,7 @@ const dropbox = {
 				}
 
 				const thumbnail = new Buffer(res).toString('base64');
-				meta.thumbnail = thumbnail;
+				meta.thumbnail = 'data:' + meta.mime_type + ';base64,' + thumbnail;
 
 				return callback(null, { meta });
 			})
