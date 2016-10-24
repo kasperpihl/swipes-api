@@ -156,12 +156,12 @@ class PDFViewer extends Component {
 
     return (
       <div className="sw-pdf-viewer__action">
-        <div className="sw-pdf-viewer__button" onClick={this.scaleUp}>
-          <AddIcon className="sw-pdf-viewer__icon" />
-        </div>
-        <div className="sw-pdf-viewer__zoom-value">{Math.round(scale * 100) + '%'}</div>
         <div className="sw-pdf-viewer__button" onClick={this.scaleDown}>
           <MinusIcon className="sw-pdf-viewer__icon" />
+        </div>
+        <div className="sw-pdf-viewer__zoom-value">{Math.round(scale * 100) + '%'}</div>
+        <div className="sw-pdf-viewer__button" onClick={this.scaleUp}>
+          <AddIcon className="sw-pdf-viewer__icon" />
         </div>
       </div>
     )
