@@ -72,19 +72,10 @@ class SwipesCardItem extends Component {
     )
   }
   renderHeaderImage(headerImage){
-    const {
-      preview
-    } = this.state.data;
 
     if (headerImage) {
       return (
         <img src={headerImage} alt="" />
-      )
-    } else if (preview && preview.url) {
-      return (
-        <a href={preview.url} download={preview.url} className="swipes-card__header__download">
-          <DownloadIcon />
-        </a>
       )
     }
   }
@@ -182,7 +173,7 @@ class SwipesCardItem extends Component {
       title,
       subtitle,
       description,
-      headerImage,
+      thumbnail,
       actions,
       preview,
       dot
@@ -190,7 +181,7 @@ class SwipesCardItem extends Component {
 
     return (
       <div id={"swipes-card__item-" + this.id } className="swipes-card__item" onClick={this.onClick}>
-        {this.renderHeader(actions, title, subtitle, headerImage)}
+        {this.renderHeader(actions, title, subtitle, thumbnail)}
         {this.renderDescription(description)}
         {this.renderPreview(preview)}
       </div>
