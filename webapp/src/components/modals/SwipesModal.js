@@ -153,19 +153,6 @@ class SwipesModal extends Component {
   		)
     }
 	}
-	renderListItemImg(img) {
-		if (img && typeof img === 'string') {
-			return (
-				<img className="swipes-modal__list__item__img" src={img} />
-			)
-		} else if (img && typeof img === 'object') {
-      const SVG = img.element;
-      const props = img.props || {};
-      return (
-        <SVG className="swipes-modal__list__item__img" {...props} />
-      )
-    }
-	}
   renderIcon(icon){
     const svg = icon.element;
     const props = icon.props || {};
@@ -173,6 +160,8 @@ class SwipesModal extends Component {
 
     if (Comp) {
       return <Comp className="swipes-modal__list__item__img" {...props} />;
+    } else {
+      <img className="swipes-modal__list__item__img" src={icon} />
     }
   }
 	renderButtons(buttons, key) {
