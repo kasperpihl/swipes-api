@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Textarea from 'react-textarea-autosize'
 import Loader from '../swipes-ui/Loader'
+import * as Icons from '../icons'
 
 import './styles/swipes-modal.scss'
 
@@ -139,7 +140,7 @@ class SwipesModal extends Component {
         }
   			return (
   				<div className={className} key={i} onClick={this.selectListItem.bind(this, i)}>
-  					{this.renderListItemImg(item.img)}
+  					{this.renderIcon(item.img)}
   					<div className="swipes-modal__list__item__title">
   						{item.title}
   					</div>
@@ -165,6 +166,15 @@ class SwipesModal extends Component {
       )
     }
 	}
+  renderIcon(icon){
+    const svg = icon.element;
+    const props = icon.props || {};
+    const Comp = Icons[svg];
+
+    if (Comp) {
+      return <Comp className="swipes-modal__list__item__img" {...props} />;
+    }
+  }
 	renderButtons(buttons, key) {
 		if (buttons && buttons.length > 0) {
 			return (
