@@ -281,7 +281,7 @@ const processFileChange = ({account, entry}) => {
 		const link = {
 			service: 'dropbox',
 			type: 'file',
-			id: entry.id
+			id: 'rev:' + entry.rev
 		};
 
 		createSwipesShortUrl({ userId, accountId, link })

@@ -29,7 +29,7 @@ export default function search (state = initialState, action) {
     case types.LOGOUT:{
       return initialState;
     }
-    default: 
+    default:
       return state
   }
 }
@@ -72,7 +72,7 @@ const searchResults = (results) => {
       }
     }
     else if(doc.source === 'dropbox'){
-      shareData.link.id = idParts[idParts.length - 1];
+      shareData.link.id = 'rev:' + idParts[idParts.length - 1];
       meta.title = doc.filename;
       meta.subtitle = doc.filepath  || '/';
     }
@@ -82,5 +82,4 @@ const searchResults = (results) => {
 
     return { shareData, doc };
   })
-  
 };
