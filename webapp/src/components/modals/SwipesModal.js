@@ -154,13 +154,15 @@ class SwipesModal extends Component {
     }
 	}
   renderIcon(icon){
+    if (!icon) return;
+    
     const svg = icon.element;
     const props = icon.props || {};
     const Comp = Icons[svg];
 
     if (Comp) {
       return <Comp className="swipes-modal__list__item__img" {...props} />;
-    } else {
+    } else if (icon && !Comp) {
       return <img className="swipes-modal__list__item__img" src={icon} />
     }
   }

@@ -102,12 +102,13 @@
   // EVERYTHING CONTENT
 
   &__pdf {
-    position: relative;
+    display: none;
     height: calc(100vh - 54px);
+    margin-top: 54px;
     max-height: calc(100vh - 54px);
     max-width: 70vw;
-    margin-top: 54px;
     overflow-y: scroll;
+    position: relative;
 
     &::-webkit-scrollbar {
       background-color: rgba(white,0);
@@ -118,6 +119,10 @@
     &::-webkit-scrollbar-thumb {
       background-color: rgba($bg,.5);
     }
+
+    &--shown {
+      display: block;
+    }
   }
 
   &__image {
@@ -126,9 +131,9 @@
     display: none;
 
     img {
+      background-color: #fff;
       max-height: 70vh;
       max-width: 70vw;
-      background-color: #fff;
     }
 
     &--shown {

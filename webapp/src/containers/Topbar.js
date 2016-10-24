@@ -42,7 +42,7 @@ class Topbar extends Component {
     });
   }
   clickedFind(){
-    this.props.setOverlay({ component: 'Find', title: 'Find' });
+    this.props.setOverlay({ component: 'CreatePattern', title: 'Create Pattern' });
   }
   clickedBack(){
     this.props.clearOverlay();

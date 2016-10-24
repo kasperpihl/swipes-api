@@ -88,11 +88,16 @@ class PreviewModal extends Component {
   renderPDF() {
     const { pdf } = this.props;
     const { loaded } = this.state;
+    let className = 'preview-modal__pdf';
 
-    if(!pdf || !loaded) return;
+    if(!pdf) return;
+
+    if (loaded) {
+      className += ' preview-modal__pdf--shown'
+    }
 
     return (
-      <div className="preview-modal__pdf">
+      <div className={className}>
         <PDFViewer file={pdf} fileLoaded={this.fileLoaded}/>
       </div>
     )
