@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import PDF from 'react-pdf'
-import { ArrowLeftIcon, ArrowRightIcon, AddIcon, MinusIcon } from '../icons'
-import { bindAll } from '../../classes/utils'
-import Loader from '../swipes-ui/Loader'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PDFRender from './PDFRender'
+import Loader from '../swipes-ui/Loader'
+import { bindAll } from '../../classes/utils'
+import { ArrowLeftIcon, ArrowRightIcon, AddIcon, MinusIcon } from '../icons'
+
 import './styles/pdf-viewer.scss'
 
 class PDFViewer extends Component {
@@ -189,13 +190,12 @@ class PDFViewer extends Component {
 
     return (
       <div className="sw-pdf-viewer" onMouseMove={this.handleMouseMove}>
-        <PDF ref="pdf" file={file} scale={this.state.scale} onDocumentComplete={this._onDocumentComplete}
+        <PDFRender file={file} scale={this.state.scale} onDocumentComplete={this._onDocumentComplete}
         page={page} loading={(<span></span>)} />
         {this.renderActions()}
       </div>
     )
   }
-
   _onDocumentComplete(pages) {
     const { fileLoaded } = this.props;
     const { loaded } = this.state;
