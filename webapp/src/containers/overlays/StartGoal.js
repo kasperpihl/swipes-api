@@ -35,7 +35,7 @@ class StartGoal extends Component {
           title = x.get('title');
           img = users.getIn([x.get('created_by'), 'profile_pic']);
         } else {
-          title = 'Generic';
+          title = 'Company Standard';
           img = {
             element: x.get('img')
           }
