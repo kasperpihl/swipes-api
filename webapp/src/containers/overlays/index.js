@@ -4,6 +4,7 @@ import StartGoal from './StartGoal'
 import ConfirmGoal from './ConfirmGoal'
 import Profile from './Profile'
 import Store from './Store'
+import CreatePattern from './CreatePattern'
 
 export {
   Store,
@@ -11,5 +12,6 @@ export {
   ConfirmGoal,
   Profile,
   Services,
-  Find
+  Find,
+  CreatePattern
 }
