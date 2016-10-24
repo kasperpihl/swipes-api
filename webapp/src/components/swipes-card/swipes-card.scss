@@ -262,11 +262,12 @@ tabSlider {
     }
 
     &__image {
-      @include size(50px, 100%);
-      @include flex(center, center);
+      @include size(60px, 100%);
+      @include flex();
 
       img {
-        @include size(30px, 30px);
+        max-width: 60px;
+        max-height: 60px;
       }
 
       &:empty {

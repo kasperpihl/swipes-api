@@ -3,6 +3,7 @@
 
 .preview-modal {
   $b: &;
+
   @include size(100%);
   @include flex();
   position: relative;
@@ -33,7 +34,19 @@
     color: $bg;
     font-size: 15px;
     font-weight: 500;
-    margin-left: 9px;
+
+    &--topbar {
+      margin-left: 9px;
+    }
+
+    &--action {
+
+    }
+
+    &--empty {
+      font-size: 21px;
+      margin-bottom: 60px;
+    }
   }
 
   &__actions {
@@ -89,7 +102,6 @@
   // EVERYTHING CONTENT
 
   &__pdf {
-    animation: fadeInContent .35s .2s ease-in-out forwards;
     position: relative;
     height: calc(100vh - 54px);
     max-height: calc(100vh - 54px);
@@ -109,18 +121,24 @@
   }
 
   &__image {
+    @include size(100%);
     @include flex();
-    animation: fadeInContent .35s .2s ease-in-out forwards;
-    max-height: 70vh;
-    max-width: 70vw;
-    opacity: 0;
-    transform: translateY(20px);
+    display: none;
 
     img {
       max-height: 70vh;
       max-width: 70vw;
       background-color: #fff;
     }
+
+    &--shown {
+      display: flex;
+    }
+  }
+
+  &__empty {
+    @include size(100%);
+    @include flex(center, center, column);
   }
 
   // ICONS
@@ -136,22 +154,42 @@
 
   // MODIFIERS
 
-  &--image {
-
-  }
-
-  &--pdf {
-
-  }
-
   &--empty {
+    #{$b}__topbar {
 
-  }
-}
+      & > *:not(#{$b}__close) {
+        display: none;
+      }
+    }
 
-@keyframes fadeInContent {
-  to {
-    opacity: 1;
-    //transform: translateY(0px);
+    #{$b}__actions {
+      @include flex(flex);
+      border: 1px solid $bg;
+      position: relative;
+      right: auto;
+    }
+
+    #{$b}__action {
+      @include size(300px);
+      @include flex(center, center, column);
+      border-radius: 0;
+
+      &:not(:last-child) {
+        border-right: 1px solid $bg;
+      }
+
+      &:before, &:after {
+        display: none;
+      }
+
+      &:hover {
+
+      }
+
+      #{$b}__icon {
+        @include size(48px);
+        margin-bottom: 30px;
+      }
+    }
   }
 }
