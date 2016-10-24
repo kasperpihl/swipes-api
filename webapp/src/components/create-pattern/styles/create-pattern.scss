@@ -1,0 +1,100 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.create-pattern {
+  $b: &;
+  @include size(100%);
+  overflow-y: auto;
+
+  &__header {
+    @include flex();
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__image {
+    @include size(72px);
+    margin-right: 15px;
+    flex: none;
+
+    #{$b}__icon {
+      @include size();
+      background-color: #fff;
+      border-radius: 6px;
+      box-shadow: 0 1px 1px 1px rgba(0, 12, 46, 0.09);
+      overflow: hidden;
+      padding: 15px;
+    }
+  }
+
+  &__title {
+    @include size(calc(100% - 72px - 15px), auto);
+  }
+
+  &__input {
+    width: 100%;
+    max-width: 750px;
+    font-size: 27px;
+    flex: none;
+    color: $deepBlue-100;
+    padding: 20px 0;
+    padding-left: 33px;
+    font-weight: 300;
+    line-height: 1;
+    position: relative;
+    border-bottom: 2px solid $blue-100;
+    -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 0% 95%, 0% 100%, 0 100%, 0 0);
+    transition: .2s ease-in-out;
+
+    &::-webkit-input-placeholder {
+      color: $deepBlue-40;
+      font-weight: 300;
+    }
+
+    &:focus {
+      border-bottom: 2px solid $blue-100;
+      -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 100% 95%, 100% 100%, 0 100%, 0 0);
+      transition: .2s ease-in-out;
+    }
+
+    &:not(:placeholder-shown) {
+      border-bottom: 2px solid $blue-20;
+      -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 100% 95%, 100% 100%, 0 100%, 0 0);
+      transition: .2s ease-in-out;
+
+      &:focus {
+        border-bottom: 2px solid $blue-100;
+      }
+    }
+  }
+
+  &__description {
+    @include flex();
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 42px;
+  }
+
+  &__step-list {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 42px;
+  }
+
+  &__step-item {
+
+    &--empty {
+      @include size(100%, 50px);
+    	@include flex(center, flex-start);
+    	border-radius: 6px;
+      box-shadow: 0 1px 1px 1px rgba(0, 12, 46, 0.09);
+    	padding-left: 21px;
+      color: $deepBlue-60;
+      font-size: 15px;
+    }
+  }
+
+  &__icon {
+    @include size(24px);
+  }
+}
