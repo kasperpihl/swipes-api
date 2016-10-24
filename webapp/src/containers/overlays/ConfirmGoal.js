@@ -4,7 +4,7 @@ import { modal, api, overlay, toasty } from '../../actions'
 import { bindAll } from '../../classes/utils'
 import { workflows } from '../../actions'
 import WorkflowSetup from '../../components/confirm-goal/WorkflowSetup'
-import { AssignIcon } from '../../components/icons'
+
 class ConfirmGoal extends Component {
   constructor(props) {
     super(props)
@@ -14,7 +14,7 @@ class ConfirmGoal extends Component {
 
   setupStepPressedAssign(setup, e, i){
     const icon = {
-      element: AssignIcon,
+      element: 'AssignIcon',
       props: {fill: '#3394FF'}
     }
     const { users, loadModal } = this.props;

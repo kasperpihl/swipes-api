@@ -161,7 +161,7 @@ class SwipesModal extends Component {
     if (Comp) {
       return <Comp className="swipes-modal__list__item__img" {...props} />;
     } else {
-      <img className="swipes-modal__list__item__img" src={icon} />
+      return <img className="swipes-modal__list__item__img" src={icon} />
     }
   }
 	renderButtons(buttons, key) {
