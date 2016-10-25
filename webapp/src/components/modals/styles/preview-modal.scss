@@ -17,6 +17,7 @@
     border-bottom: 1px solid $deepBlue-90;
     left: 0; top: 0;
     position: absolute;
+    z-index: 1;
   }
 
   &__close {
