@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { modal } from '../actions';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import SwipesModal from '../components/modals/SwipesModal'
 import PreviewModal from '../components/modals/PreviewModal'
 
@@ -29,18 +28,28 @@ class Modal extends Component {
   }
 
   onModalCallback(res) {
-    if(this.props.modal.get('callback'))
+    if(this.props.modal.get('callback')) {
       this.props.modal.get('callback')(res);
+    }
+
     this.props.hideModal();
   }
   closeModal(e) {
     this.onModalCallback(null);
   }
-  renderModal(type, props){
+  renderModal(type, props) {
+    const { modal } = this.props;
+
+    if (!modal.get('shown')) {
+      return;
+    }
+
     let Comp = SwipesModal;
-    if(type === 'preview'){
+
+    if (type === 'preview') {
       Comp = PreviewModal;
     }
+
     return <Comp callback={this.onModalCallback} {...props} />
   }
   render() {
@@ -49,7 +58,7 @@ class Modal extends Component {
     const type = modal.get('type');
     let className = "g-modal";
 
-    if(modal.get('shown')){
+    if (modal.get('shown')) {
       className += " g-modal--shown";
     }
     return (

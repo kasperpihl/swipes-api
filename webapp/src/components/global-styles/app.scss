@@ -66,7 +66,7 @@ svg {
   z-index: 9999;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s .3s, opacity 0s .3s;
+  transition: visibility 0s .3s, opacity .3s;
 
   &--shown {
     visibility: visible;
