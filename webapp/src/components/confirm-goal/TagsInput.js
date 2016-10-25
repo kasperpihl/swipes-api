@@ -12,14 +12,16 @@ import './styles/tags-input.scss'
 class TagsInput extends Component {
   constructor(props) {
     super(props)
+    this.storeSuggestions = [
+      'Product Team',
+      'Marketing Team',
+      'Bug',
+      'Improvement'
+    ]
+
     this.state = {
       tags: [],
-      suggestions: [
-        'Product Team',
-        'Marketing Team',
-        'Bug',
-        'Improvement'
-      ]
+      suggestions: []
     }
     bindAll(this, [
       'handleChange',
@@ -34,13 +36,12 @@ class TagsInput extends Component {
     this.setState({tags})
   }
   getSuggestions(value) {
-    const suggestions = this.state.suggestions;
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
+    const inputValue = value.trim().toLowerCase()
+    const inputLength = inputValue.length
 
-    return inputLength === 0 ? [] : suggestions.filter(s =>
+    return inputLength === 0 ? [] : this.storeSuggestions.filter(s =>
       s.toLowerCase().slice(0, inputLength) === inputValue
-    );
+    )
   }
   onSuggestionsFetchRequested({ value }) {
      this.setState({
@@ -48,15 +49,14 @@ class TagsInput extends Component {
      })
   }
   onSuggestionsClearRequested() {
-    console.log('Clear suggestions');
-    // this.setState({
-    //   suggestions: []
-    // })
+    this.setState({
+      suggestions: []
+    })
   }
   autosuggestRenderInput(props) {
     // Removing addTag attr
     // We need it only if we are using the default RenderInput
-    delete props.addTag;
+    delete props.addTag
 
     return (
       <Autosuggest
