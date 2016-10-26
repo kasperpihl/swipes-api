@@ -30,14 +30,12 @@ class TagsInput extends Component {
   componentDidMount() {
   }
   handleDelete(i) {
-    console.log(i)
-    var tags = this.state.tags
+    const tags = this.state.tags
     tags.splice(i, 1)
     this.setState({ tags: tags })
   }
   handleAddition(tag) {
-    console.log(tag)
-    var tags = this.state.tags
+    const tags = this.state.tags
     tags.push(tag)
     this.setState({ tags: tags })
   }
