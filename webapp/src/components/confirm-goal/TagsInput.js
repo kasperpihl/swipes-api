@@ -23,7 +23,7 @@ class TagsInput extends Component {
       tags: []
     }
 
-    bindAll(this, ['handleDelete', 'handleAddition', 'handleClick'])
+    bindAll(this, ['handleDelete', 'handleAddition'])
   }
   componentDidMount() {}
   handleDelete(i) {
@@ -37,9 +37,6 @@ class TagsInput extends Component {
 
     tags.push(tag);
     this.setState({ tags: tags });
-  }
-  handleClick(e) {
-    console.log(e.target);
   }
   render() {
     const { tags } = this.state;
@@ -65,7 +62,6 @@ class TagsInput extends Component {
         suggestions={this.storeSuggestions}
         handleDelete={this.handleDelete}
         handleAddition={this.handleAddition}
-        onClick={this.handleClick}
       />
     )
   }
