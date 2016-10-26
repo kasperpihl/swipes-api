@@ -50,7 +50,7 @@ class TagsInput extends Component {
       search: 'sw-tags__search',
       searchInput: 'sw-tags__search-input',
       suggestions: 'sw-tags__suggestions',
-      suggestionActive: 'sw-tags__suggestions--active',
+      suggestionActive: 'is-active',
       suggestionDisabled: 'sw-tags__suggestions--disabled'
     }
 
