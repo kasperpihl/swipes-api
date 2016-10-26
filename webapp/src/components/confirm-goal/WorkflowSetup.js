@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import WorkflowHeader from './WorkflowHeader'
 import WorkflowStepList from './WorkflowStepList'
-import TagsInput from './TagsInput'
 
 import './styles/workflow-setup.scss'
 
@@ -17,7 +16,6 @@ class WorkflowSetup extends Component {
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
-
   componentDidMount() {
   }
   render() {
@@ -27,7 +25,6 @@ class WorkflowSetup extends Component {
       <div ref="container" className={rootClass}>
         <WorkflowHeader data={data} callDelegate={this.callDelegate} />
         <WorkflowStepList data={data.steps} callDelegate={this.callDelegate} />
-        <TagsInput callDelegate={this.callDelegate} />
       </div>
     )
   }
