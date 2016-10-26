@@ -27,7 +27,8 @@ class TagsInput extends Component {
       'handleChange',
       'autosuggestRenderInput',
       'onSuggestionsFetchRequested',
-      'onSuggestionsClearRequested'
+      'onSuggestionsClearRequested',
+      'handleAutoSuggestSelectWithKey'
     ])
   }
   componentDidMount() {
@@ -53,10 +54,19 @@ class TagsInput extends Component {
       suggestions: []
     })
   }
+  // handleAutoSuggestSelectWithKey(event, {newValue, method}) {
+  //   if(method === 'enter') {
+  //     event.preventDefault()
+  //   } else {
+  //     this.props.onChange(event)
+  //   }
+  // }
   autosuggestRenderInput(props) {
     // Removing addTag attr
     // We need it only if we are using the default RenderInput
     delete props.addTag
+
+    //props.onChange = this.handleAutoSuggestSelectWithKey
 
     return (
       <Autosuggest
@@ -65,11 +75,11 @@ class TagsInput extends Component {
         shouldRenderSuggestions={(value) => value && value.trim().length > 0}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={(suggestion) => suggestion.name}
-        renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
+        getSuggestionValue={(suggestion) => {suggestion}}
+        renderSuggestion={(suggestion) => <span>{suggestion}</span>}
         inputProps={props}
         onSuggestionSelected={(e, {suggestion}) => {
-          this.refs.tagsinput.addTag(suggestion.name)
+          this.refs.tagsinput.addTag(suggestion)
         }}
       />
     )
