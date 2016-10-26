@@ -56,6 +56,7 @@ class TabBar extends Component {
       }
 
       if (typeof tab === 'string') {
+
         return (
           <div className={tabClass} data-index={i} key={'tab-'+i} onClick={this.setActiveTab}>{tab}</div>
         )
