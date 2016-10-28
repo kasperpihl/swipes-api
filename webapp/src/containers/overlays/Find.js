@@ -17,7 +17,7 @@ class Find extends Component {
     this.state = {
       currentTabIndex: 0
     }
-    
+
     bindAll(this, [ 'dotDragStart', 'onChange', 'onKeyUp', 'onCardClick', 'onCardShare', 'onCardAction'])
     this.unhandledDocs = [];
   }
@@ -29,7 +29,7 @@ class Find extends Component {
   previewMetaForItem(preview, item){
     return {
       title: 'Lalala',
-      buttons: [],
+      buttons: []
     }
   }
   componentDidMount(){

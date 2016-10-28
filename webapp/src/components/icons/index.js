@@ -23,6 +23,8 @@ export const ArrowLeftIcon = svg('arrow-left-icon')
 export const ArrowRightIcon = svg('arrow-right-icon')
 export const AddIcon = svg('plus-icon')
 export const MinusIcon = svg('minus-icon')
+export const DeliverIcon = svg('deliver-icon')
+export const VoteIcon = svg('vote-icon')
 
 export const ShapeOne = svg('shape-1')
 export const ShapeTwo = svg('shape-2')
