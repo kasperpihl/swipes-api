@@ -13,9 +13,13 @@ import GoalItem from '../../components/goals/GoalItem';
 import { PlusIcon } from '../../components/icons'
 import '../../components/goals/styles/goals.scss';
 
+
+
 class Goals extends Component {
   constructor(props) {
     super(props)
+    this.tabs = ['mine', 'later', 'tags', 'all'];
+    this.state = { tabIndex: 0 };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['clickedRoundButton', 'clickedListItem', 'completeStep']);
     this.updateTitle('Goals');
@@ -83,7 +87,10 @@ class Goals extends Component {
     if(currentGoal){
       return;
     }
+
     goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
+    goals = this.filterGoals(goals);
+    
     return goals.map((goal) => {
       return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
@@ -162,14 +169,30 @@ class Goals extends Component {
       </div>
     )
   }
+  filterGoals(goals){
+    const { tabIndex } = this.state;
+    const tab = this.tabs[tabIndex];
+
+    switch(tab){
+      case 'mine':
+      case 'later':
+      case 'tags':
+      case 'all':
+      default:
+        return goals;
+    }
+  }
   onChange(index) {
     console.log(index);
+    if(this.state.tabIndex !== index) {
+      this.setState({tabIndex: index});
+    }
   }
   renderTabbar() {
     let { currentGoal } = this.props;
     if(!currentGoal){
       return (
-        <TabBar data={['mine', 'later', 'favorites', 'all']} onChange={this.onChange}/>
+        <TabBar data={this.tabs} onChange={this.onChange}/>
       )
     }
 
