@@ -102,7 +102,7 @@ class CreatePattern extends Component {
     return (
       <div className="create-pattern__header">
         <div className="create-pattern__pattern-icon">{this.renderIcon('ShapeEight')}</div>
-        <div className="create-pattern__header create-pattern__header--vertical-flex">
+        <div className="create-pattern__vertical-flex">
           <input ref="input" type="text" className="create-pattern__title create-pattern__title--input" placeholder="Name your pattern"/>
           <Textarea className="create-pattern__description create-pattern__description--textarea" minRows={1} maxRows={2} placeholder={'Give it a short description'}/>
         </div>
@@ -139,7 +139,7 @@ class CreatePattern extends Component {
       <div className="create-pattern__step-item" key={'step-item-' + i}>
         <div className="create-pattern__step-index">{i + 1}</div>
         <div className="create-pattern__vertical-flex">
-          <input ref="stepItemInput" type="text" className="create-pattern__step-name" placeholder="Enter Step Banana"/>
+          <input ref="stepItemInput" type="text" className="create-pattern__step-name" placeholder="Enter Step Name"/>
           <div className="create-pattern__step-title">{title}</div>
         </div>
       </div>

@@ -12,9 +12,19 @@ class StartGoal extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    bindAll( this, ['didSelectItem', 'clickedStore']);
+    bindAll( this, ['didSelectItem', 'openStore', 'openCreatePattern']);
   }
-  didSelectItem(id){
+  openStore() {
+    const { pushOverlay } = this.props;
+
+    pushOverlay({component: "Store", title: "Store"});
+  }
+  openCreatePattern() {
+    const { pushOverlay } = this.props;
+
+    pushOverlay({component: "CreatePattern", title: "Create Pattern"});
+  }
+  didSelectItem(id) {
     const { pushOverlay, workflows, loadModal, users } = this.props;
     const idToCheck = 'PGR5OHKL6';
 
@@ -64,7 +74,7 @@ class StartGoal extends Component {
       pushOverlay({component: "ConfirmGoal", title: "Confirm", props: {data: workflows.get(id).toJS()}});
     }
   }
-  renderList(){
+  renderList() {
     const { workflows } = this.props;
     const filteredWorkflows = [];
 
@@ -76,15 +86,13 @@ class StartGoal extends Component {
 
     return <WorkflowList data={filteredWorkflows} callback={this.didSelectItem} />
   }
-  clickedStore(){
-    const { pushOverlay } = this.props;
-    pushOverlay({component: "Store", title: "Store"});
-  }
   render() {
+
     return (
       <div className="start-goal" style={{height: '100%'}}>
         {this.renderList()}
-        <Button callback={this.clickedStore} title="Go to store" style={{position: 'fixed', bottom: '60px', right: '30px'}}/>
+        <Button callback={this.openStore} title="Go to store" style={{position: 'fixed', bottom: '60px', right: '30px', transform: 'translateX(-120%)'}}/>
+        <Button callback={this.openCreatePattern} title="Create a pattern" style={{position: 'fixed', bottom: '60px', right: '30px'}}/>
       </div>
     )
 
@@ -102,4 +110,5 @@ const ConnectedStartGoal = connect(mapStateToProps, {
   loadModal: modal.load,
   pushOverlay: overlay.push
 })(StartGoal)
+
 export default ConnectedStartGoal
