@@ -13,15 +13,21 @@ import GoalItem from '../../components/goals/GoalItem';
 import { PlusIcon } from '../../components/icons'
 import '../../components/goals/styles/goals.scss';
 
-
-
 class Goals extends Component {
   constructor(props) {
     super(props)
-    this.tabs = ['mine', 'later', 'tags', 'all'];
+    this.tabs = ['now', 'later', 'tags', 'all'];
     this.state = { tabIndex: 0 };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['clickedRoundButton', 'clickedListItem', 'completeStep']);
+    bindAll(this, [
+      'clickedRoundButton',
+      'clickedListItem',
+      'completeStep',
+      'filterGoals',
+      'onChange',
+      'filterMine',
+      'filterLater'
+    ]);
     this.updateTitle('Goals');
     this.addListenersToSwipes(props.swipes);
   }
@@ -90,7 +96,7 @@ class Goals extends Component {
 
     goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
     goals = this.filterGoals(goals);
-    
+
     return goals.map((goal) => {
       return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
@@ -175,15 +181,94 @@ class Goals extends Component {
 
     switch(tab){
       case 'mine':
+        return this.filterMine(goals);
       case 'later':
+        return this.filterLater(goals);
       case 'tags':
       case 'all':
-      default:
         return goals;
+      default:
+        return this.filterMine(goals);
     }
   }
+  filterMine(goals) {
+    const {
+      me
+    } = this.props;
+
+    return goals.filter((goal) => {
+      const steps = goal.get('steps');
+      const currentStep = steps.find((step) => {
+        return step.get('completed') !== true;
+      })
+
+      if (!currentStep) {
+        return false;
+      }
+
+      const assignees = currentStep.get('assignees');
+      const containsMe = assignees.find((user) => {
+        if (user.get('id') === me.get('id')) {
+          return true;
+        }
+
+        return false;
+      })
+
+      if (!containsMe) {
+        return false;
+      }
+
+      return true;
+    })
+  }
+  filterLater(goals) {
+    const {
+      me
+    } = this.props;
+
+    return goals.filter((goal) => {
+      const steps = goal.get('steps');
+      let indexCompleted = null;
+      let match = null;
+
+      const currentStep = steps.findEntry((step) => {
+        return step.get('completed') !== true;
+      })
+
+      if (!currentStep) {
+        return false;
+      }
+
+      indexCompleted = currentStep[0];
+
+      steps.forEach((step, i) => {
+        if (i > indexCompleted) {
+          const assignees = step.get('assignees');
+          const containsMe = assignees.find((user) => {
+            if (user.get('id') === me.get('id')) {
+              return true;
+            }
+
+            return false;
+          })
+
+          if (containsMe) {
+            match = true;
+            // Stop the forEach
+            return false;
+          }
+        }
+      })
+
+      if (match) {
+        return true;
+      }
+
+      return false;
+    })
+  }
   onChange(index) {
-    console.log(index);
     if(this.state.tabIndex !== index) {
       this.setState({tabIndex: index});
     }
@@ -213,6 +298,7 @@ class Goals extends Component {
 function mapStateToProps(state) {
   const users = state.get('users');
   let goals = state.get('goals');
+
   if(goals){
     goals = goals.map((g) => {
       return g.updateIn(['steps'], (steps) => steps.map((s) => {
@@ -223,10 +309,12 @@ function mapStateToProps(state) {
       }))
     })
   }
+
   return {
     goals: goals,
     currentGoal: goals.getIn([state.getIn(['main', 'activeGoal'])]),
-    users: users
+    users: users,
+    me: state.get('me')
   }
 }
 
