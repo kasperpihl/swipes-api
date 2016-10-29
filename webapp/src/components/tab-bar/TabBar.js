@@ -45,7 +45,7 @@ class TabBar extends Component {
     if (align) {
       rootClass += ' tab-bar--' + align;
     } else {
-      rootClass += ' tab-bar--center';
+      rootClass += ' tab-bar--left';
     }
 
     const tabs = data.map((tab, i) => {

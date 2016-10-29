@@ -88,9 +88,11 @@ class Goals extends Component {
 
     console.log('clicked', data);
   }
-  renderList(){
+  renderList() {
+    const { tabIndex } = this.state;
     let { goals, currentGoal } = this.props;
-    if(currentGoal){
+
+    if (currentGoal || tabIndex === 2) {
       return;
     }
 
@@ -123,11 +125,12 @@ class Goals extends Component {
 
   }
   renderTimeline(){
-    let { currentGoal, users } = this.props;
-    if(currentGoal){
+    const { tabIndex } = this.state;
+    const { currentGoal } = this.props;
+
+    if (currentGoal) {
       return <GoalTimeline goal={currentGoal} delegate={this}/>;
     }
-    return null;
   }
   clickedRoundButton() {
     const {
@@ -274,13 +277,27 @@ class Goals extends Component {
     }
   }
   renderTabbar() {
-    let { currentGoal } = this.props;
-    if(!currentGoal){
+    const { currentGoal } = this.props;
+
+    if (!currentGoal) {
       return (
         <TabBar data={this.tabs} onChange={this.onChange}/>
       )
     }
+  }
+  renderTagsList() {
+    const { tabIndex } = this.state;
+    const { currentGoal } = this.props;
 
+    if (currentGoal) {
+      return;
+    }
+
+    if (tabIndex === 2) {
+      return (
+        <div>Tags will display here</div>
+      )
+    }
   }
   render() {
 
@@ -289,6 +306,7 @@ class Goals extends Component {
         {this.renderTabbar()}
         {this.renderList()}
         {this.renderTimeline()}
+        {this.renderTagsList()}
         {this.renderPlusButton()}
       </div>
     )
