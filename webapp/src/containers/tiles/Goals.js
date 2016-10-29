@@ -10,6 +10,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalTimeline from '../../components/goals/GoalTimeline';
 
 import GoalItem from '../../components/goals/GoalItem';
+import TagItem from '../../components/tags/TagItem';
 import { PlusIcon } from '../../components/icons'
 import '../../components/goals/styles/goals.scss';
 
@@ -18,7 +19,17 @@ class Goals extends Component {
     super(props)
     this.tabs = ['now', 'later', 'tags', 'all'];
     this.state = { tabIndex: 0 };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.tags = [
+      'development',
+      'design',
+      'v1',
+      'beta',
+      'bugs',
+      'marketing',
+      'sales',
+      'vacation',
+      'team building'
+    ]
     bindAll(this, [
       'clickedRoundButton',
       'clickedListItem',
@@ -30,6 +41,7 @@ class Goals extends Component {
     ]);
     this.updateTitle('Goals');
     this.addListenersToSwipes(props.swipes);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   addListenersToSwipes(swipes){
     swipes.addListener('menu.pressed', () => {
@@ -281,28 +293,27 @@ class Goals extends Component {
 
     if (!currentGoal) {
       return (
-        <TabBar data={this.tabs} onChange={this.onChange}/>
+        <TabBar data={this.tabs} align="left" onChange={this.onChange}/>
       )
     }
   }
   renderTagsList() {
     const { tabIndex } = this.state;
-    const { currentGoal } = this.props;
+    let items = [];
 
-    if (currentGoal) {
-      return;
-    }
+    items = this.tags.map((tag, i) => {
+      return <TagItem text={tag} key={'tag-item-' + i} />
+    })
 
     if (tabIndex === 2) {
       return (
-        <div>Tags will display here</div>
+        <div className="goals__tags">{items}</div>
       )
     }
   }
   render() {
-
     return (
-      <div className="goals">
+      <div className='goals'>
         {this.renderTabbar()}
         {this.renderList()}
         {this.renderTimeline()}

@@ -1,0 +1,32 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.tag-item {
+  margin: 3px;
+  padding: 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border: 1px solid $blue-20;
+  border-radius: 3px;
+  color: deepBlue-60;
+  font-size: 12px;
+  font-weight: 500;
+  transition: .1s;
+
+  &:hover {
+    background-color: $blue-5;
+    transition: .1s;
+  }
+
+  &--active {
+    border: 1px solid $blue-80;
+    background-color: $blue-80;
+    color: $bg;
+
+    &:hover {
+      border: 1px solid $blue-60;
+      background-color: $blue-60;
+      transition: .1s;
+    }
+  }
+}
