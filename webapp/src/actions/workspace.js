@@ -4,12 +4,12 @@ import { request } from './api'
 export function renameTile(tile, name) {
   return request('users.renameWorkflow', { 'workflow_id': tile.id, name })
 }
-export function removeTile(id) {
-  return (dispatch, getState) => {
-    dispatch({type: types.REMOVE_TILE, payload: {data: {id: id}}}).then(() => {
-      dispatch(request('users.removeWorkflow', { 'workflow_id': id}));
-    })
-  }
+
+export function addTile(tile){
+  return { type: types.ADD_TILE, tile: tile };
+}
+export function removeTile(tileId){
+  return { type: types.REMOVE_TILE, tileId };
 }
 
 export function selectAccount(id, accountId){
@@ -30,7 +30,7 @@ export function saveData(tileId, obj, clear){
   catch(e){
     console.log('wrong data saved');
   }
-  
+
 }
 
 export function updateColumns(columns){

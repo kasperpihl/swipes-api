@@ -16,6 +16,7 @@
     font-weight: 700;
     text-transform: uppercase;
     transition: .1s;
+    user-select: none;
 
     &:not(:first-child) {
       padding-left: 15px;
@@ -91,6 +92,7 @@
   &--left {
     @include size(auto);
     @include flex(flex-start, flex-start);
+    border-bottom: 1px solid $deepBlue-5;
     padding: 0;
 
     #{$b}__tab {

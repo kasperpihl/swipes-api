@@ -6,15 +6,27 @@ import {
 } from 'immutable';
 
 const init = (step) => {
-  const data = fromJS({
-    iterations: [
+  const setup = fromJS({
+    secondary: [
       {
-        collection: []
+        type: 'note',
+        data: ''
+      },
+      {
+        type: 'checklist',
+        data: []
       }
-    ]
+    ],
+    data: {
+      iterations: [
+        {
+          collection: []
+        }
+      ]
+    }
   });
 
-  return step.merge(new Map({data: data}));
+  return step.merge(new Map(setup));
 }
 const variables = (step) => {
   return {

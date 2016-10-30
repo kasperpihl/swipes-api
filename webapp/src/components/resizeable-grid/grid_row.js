@@ -23,18 +23,18 @@ class GridRow extends Component {
     }
   }
   renderTopbar(){
-    const { 
-      delegate, 
-      data, 
-      columnIndex, 
-      callGridDelegate, 
+    const {
+      delegate,
+      data,
+      columnIndex,
+      callGridDelegate,
       rowIndex
     } = this.props;
 
     return <Topbar delegate={delegate} data={data} columnIndex={columnIndex} callGridDelegate={callGridDelegate} rowIndex={rowIndex} />
   }
   renderResizingOverlay(){
-    const { 
+    const {
       data,
       callGridDelegate
     } = this.props;
@@ -81,8 +81,7 @@ class GridRow extends Component {
         className += " " + transitions.classes.join(' ');
       }
     }
-
-    console.log('child', RowChild);
+    
     return (
       <div className={className} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />

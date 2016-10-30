@@ -13,6 +13,12 @@ import {
 } from 'draft-js'
 
 class Note extends Component {
+  static actionTile(){
+    return "Create Note";
+  }
+  static previewForData(data){
+
+  }
   constructor(props) {
     super(props)
     const index = props.step.get('id') + '-note';

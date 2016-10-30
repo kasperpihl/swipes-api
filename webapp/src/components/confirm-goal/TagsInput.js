@@ -9,14 +9,15 @@ class TagsInput extends Component {
     super(props)
 
     this.storeSuggestions = [
-      {id: 0, name: 'Product Team 1'},
-      {id: 1, name: 'Product Team 2'},
-      {id: 2, name: 'Product Team 3'},
-      {id: 3, name: 'Product Team 4'},
-      {id: 4, name: 'Product Team 5'},
-      {id: 5, name: 'Marketing Team'},
-      {id: 6, name: 'Bug'},
-      {id: 7, name: 'Improvement'}
+      {id: 0, name: 'development'},
+      {id: 1, name: 'design'},
+      {id: 2, name: 'v1'},
+      {id: 3, name: 'beta'},
+      {id: 4, name: 'bugs'},
+      {id: 5, name: 'marketing'},
+      {id: 6, name: 'sales'},
+      {id: 7, name: 'vacation'},
+      {id: 8, name: 'team building'}
     ]
 
     this.state = {
