@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <g>
     <rect width="24" height="24" fill="none" stroke="none" />
-    <polyline points="6 12.65 11.2 16.55 19 7.45" fill="none" stroke-miterlimit="10" stroke-width="2"/>
+    <polyline points="6 12.65 11.2 16.55 19 7.45" fill="none" stroke-miterlimit="10" />
   </g>
 </svg>
