@@ -121,13 +121,13 @@ class Goals extends Component {
       return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
-  completeStep(stepId){
+  completeStep(stepId) {
     const { currentGoal, completeStep } = this.props;
     const goalId = currentGoal.get('id');
 
     completeStep(goalId, stepId);
   }
-  renderActionForStep(timeline, stepId){
+  renderActionForStep(timeline, stepId) {
     const { currentGoal } = this.props;
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
@@ -138,6 +138,26 @@ class Goals extends Component {
       }
       return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>
     }
+    return null;
+  }
+  renderSecondaryActionForStep(timeline, stepId) {
+    const { currentGoal } = this.props;
+    if (currentGoal) {
+      const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
+      const secondaryActions = actionStep.get('secondary');
+
+      if (!secondaryActions) {
+        return null;
+      }
+
+      return secondaryActions.map((action, i) => {
+        const actionData = action.get('data');
+        const View = actionForType('secondary', action.get('type'));
+
+        return <View key={'secondary-' + i} swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep} actionData={actionData} />
+      })
+    }
+
     return null;
   }
   getStatusForStep(timeline, stepId){

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import './styles/goal-step.scss'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+
+import './styles/goal-step.scss'
 
 class GoalStep extends Component {
   constructor(props) {
@@ -18,6 +19,10 @@ class GoalStep extends Component {
   renderAction(){
     const { callDelegate, data } = this.props;
     return callDelegate('renderActionForStep', data.get('id'));
+  }
+  renderSecondaryAction(){
+    const { callDelegate, data } = this.props;
+    return callDelegate('renderSecondaryActionForStep', data.get('id'));
   }
   renderStatus(label, completed){
     if (!label && !completed) {
@@ -59,6 +64,7 @@ class GoalStep extends Component {
     return (
       <div className="goal-step">
         {this.renderDescription(description)}
+        {this.renderSecondaryAction()}
         {this.renderAction()}
         {this.renderStatus(statusLabel, completed)}
         {this.renderComplete(completeButton, completed)}

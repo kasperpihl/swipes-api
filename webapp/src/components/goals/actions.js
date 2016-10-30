@@ -4,6 +4,7 @@ import DecideForm from './decide/Form'
 
 import Form from './deliver/Form'
 import Note from './deliver/Note'
+import Checklist from './secondary/Checklist'
 
 const actions = {
   decide: {
@@ -13,6 +14,10 @@ const actions = {
   deliver: {
     form: Form,
     collection: Collection,
+    note: Note
+  },
+  secondary: {
+    checklist: Checklist,
     note: Note
   }
 }

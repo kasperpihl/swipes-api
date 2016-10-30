@@ -15,15 +15,16 @@ class Step extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
-  renderActionForStep(){
-    const { goal, step } = this.props;
-
-    if(goal && step){
-      const View = actionForType(step.get('type'), step.get('subtype'));
-      return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={goal} step={step}/>
-    }
-    return null;
-  }
+  // Is that needed??
+  // renderActionForStep(){
+  //   const { goal, step } = this.props;
+  //
+  //   if(goal && step){
+  //     const View = actionForType(step.get('type'), step.get('subtype'));
+  //     return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={goal} step={step}/>
+  //   }
+  //   return null;
+  // }
   completeStep(stepId){
     const { goal, completeStep, removeTile } = this.props;
     const goalId = goal.get('id');
