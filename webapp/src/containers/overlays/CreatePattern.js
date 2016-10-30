@@ -29,7 +29,7 @@ class CreatePattern extends Component {
         },
         {
           icon: 'ListIcon',
-          title: 'Note',
+          title: 'Read Me',
           description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.'
         }
       ],
