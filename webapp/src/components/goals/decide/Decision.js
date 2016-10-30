@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import { List, fromJS } from 'immutable'
+import SwipesCardList from '../../swipes-card/SwipesCardList'
 import Button from '../../swipes-ui/Button'
 import { bindAll } from '../../../classes/utils'
 
@@ -12,6 +14,34 @@ class Decision extends Component {
   }
   handleClick() {
     console.log('clicked decision');
+  }
+  findCollectionsFromPreviousSteps() {
+    const { goal, step } = this.props;
+    const currentInterationIndex = step.getIn(['data', 'iterations']).size - 1;
+    let collection = new List();
+    let foundStep = false;
+
+    goal.get('steps').forEach((s) => {
+      if (foundStep) {
+        return;
+      }
+
+      if (s.get('type') === 'decide' && s.get('id') !== step.get('id')) {
+        collection.clear();
+      }
+
+      if (s.get('type') === 'deliver' && s.get('subtype') === 'collection') {
+        const deliverables = s.getIn(['data', 'iterations', currentInterationIndex]).get('collection');
+
+        collection = collection.toSet().union(deliverables.toSet()).toList();
+      }
+
+      if (s.get('id') === step.get('id')) {
+        foundStep = true;
+      }
+    })
+
+    return collection;
   }
   decide(yes){
     const decision = (yes);
@@ -38,22 +68,35 @@ class Decision extends Component {
       console.log(res);
     })
   }
+  renderCardLists() {
+    const { step, cardDelegate } = this.props;
+    const collection = this.findCollectionsFromPreviousSteps();
+    const cards = [{
+        title: 'v1',
+        items: collection.toArray().map((item) => {
+          return { shortUrl: item.get('url') };
+        })
+      }]
+
+    return <SwipesCardList delegate={cardDelegate} data={cards} key={"decision-cardlist"}/>;
+
+  }
   render() {
     return (
-      <div className="goal-decisions">
-        <div className="goal-decisions__text">Are these designs good enough to move on?</div>
-        <div className="goal-decisions__buttons">
-          <Button icon="thumb_up" callback={this.decideYes} />
-          <Button icon="thumb_down" style={{marginLeft: '15px'}} callback={this.decideNo} />
+        <div className="goal-decisions">
+          {this.renderCardLists()}
+          <div className="goal-decisions__text">Are these designs good enough to move on?</div>
+          <div className="goal-decisions__buttons">
+            <Button icon="thumb_up" callback={this.decideYes} />
+            <Button icon="thumb_down" style={{marginLeft: '15px'}} callback={this.decideNo} />
+          </div>
         </div>
-      </div>
     )
   }
 }
+
 export default Decision
 
 const { string } = PropTypes;
 import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-Decision.propTypes = {
-
-}
+Decision.propTypes = {}
