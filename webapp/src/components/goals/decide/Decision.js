@@ -13,18 +13,6 @@ class Decision extends Component {
   handleClick() {
     console.log('clicked decision');
   }
-  previousSteps(){
-    const { goal, step } = this.props;
-    let foundStep
-    goal.get('steps').forEach((s) => {
-      if(s.get('id') === step.get('id')){
-        foundStep = true;
-      }
-      if(!foundStep){
-        console.log('this is a previous step');
-      }
-    })
-  }
   decide(yes){
     const decision = (yes);
     const { swipes, goal } = this.props;

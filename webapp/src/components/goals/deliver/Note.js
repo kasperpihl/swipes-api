@@ -22,12 +22,12 @@ class Note extends Component {
   constructor(props) {
     super(props)
     const index = props.step.get('id') + '-note';
-    const data = props.actionData ? props.actionData : props.step.getIn(['data', 'initialData']);
     let editorState = createEditorState();
     let localState = localStorage.getItem(index);
 
     if (!localState) {
-      localState = JSON.stringify(data.toJS());
+      const data = props.step.get('data');
+      localState = JSON.stringify(data.get('initialData').toJS());
     }
     if (localState) {
       const blockData = JSON.parse(localState);
@@ -51,8 +51,8 @@ class Note extends Component {
   componentDidMount() {
   }
   renderSubmit(){
-    const { step, actionData } = this.props;
-    if (!step.get('completed') && !actionData) {
+    const { step } = this.props;
+    if (!step.get('completed')) {
       return <Button title="Submit" callback={this.clickedSubmit} style={{marginTop: '30px'}} />
     }
   }

@@ -5,6 +5,7 @@ import DecideForm from './decide/Form'
 import Form from './deliver/Form'
 import Note from './deliver/Note'
 import Checklist from './secondary/Checklist'
+import Readme from './secondary/Readme'
 
 const actions = {
   decide: {
@@ -18,7 +19,7 @@ const actions = {
   },
   secondary: {
     checklist: Checklist,
-    note: Note
+    readme: Readme
   }
 }
 
@@ -26,6 +27,7 @@ function actionForType(type, subtype){
   if(actions[type]){
     return actions[type][subtype];
   }
+
   return undefined;
 }
 export {
