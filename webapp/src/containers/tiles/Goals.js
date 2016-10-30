@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { overlay, main, api, toasty, modal, goals } from '../../actions';
+import { overlay, main, api, toasty, modal, goals, workspace } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import { actionForType } from '../../components/goals/actions'
@@ -70,6 +70,12 @@ class Goals extends Component {
   timelineUpdateSubtitle(subtitle){
     this.props.swipes.sendEvent('navigation.setSubtitle', subtitle)
   }
+  openActionTile(stepId, title){
+    const { tiles, addTile } = this.props;
+    if(!tiles.get(stepId)){
+      addTile({id: stepId, name: title});
+    }
+  }
   clickedListItem(id){
     this.props.setActiveGoal(id);
   }
@@ -126,6 +132,10 @@ class Goals extends Component {
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
       const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
+      if(typeof View.actionTile === 'function'){
+        const buttonTitle = View.actionTile();
+        return <div onClick={this.openActionTile.bind(this, stepId, buttonTitle)}>{buttonTitle}</div>
+      }
       return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>
     }
     return null;
@@ -343,6 +353,7 @@ function mapStateToProps(state) {
     goals: goals,
     currentGoal: goals.getIn([state.getIn(['main', 'activeGoal'])]),
     users: users,
+    tiles: state.getIn(['workspace', 'tiles']),
     me: state.get('me')
   }
 }
@@ -351,6 +362,7 @@ const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
   loadModal: modal.load,
   completeStep: goals.completeStep,
+  addTile: workspace.addTile,
   request: api.request,
   addToast: toasty.add,
   updateToast: toasty.update,

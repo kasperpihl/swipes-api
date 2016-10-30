@@ -125,7 +125,7 @@ var Topbar = React.createClass({
           </div>
 
           <div className="sw-grid-topbar__actions">
-            {/*<div className="sw-grid-topbar__actions--collapse" onClick={this.props.delegate.onCollapse.bind(null, this.props.data.id)}>
+            <div className="sw-grid-topbar__actions--collapse" onClick={this.props.delegate.onCollapse.bind(null, this.props.data.id)}>
               <div className="collapse-icon">
                 <CollapseIcon />
               </div>
@@ -135,7 +135,7 @@ var Topbar = React.createClass({
               <div className="fullscreen-icon">
                 <FullscreenIcon />
               </div>
-            </div>*/}
+            </div>
 
             <div className="sw-grid-topbar__actions--context">
               <div className="context-icon" onClick={this.openDropdownMenu}>

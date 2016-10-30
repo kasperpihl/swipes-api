@@ -15,8 +15,8 @@ const initialState = fromJS({ tiles : {
 function fillTilesToColumns(cols, tiles){
   let et = {};
   cols = cols.filter((c) => {
-    const newRows = c.get('rows').filter( (r) => { 
-      et[r.get('id')] = true; 
+    const newRows = c.get('rows').filter( (r) => {
+      et[r.get('id')] = true;
       return (tiles.get(r.get('id')));
     })
     c.set('rows', newRows);
@@ -38,11 +38,19 @@ export default function workspace (state = initialState, action) {
       state = initialState;
       break;
     }
+    case types.ADD_TILE:{
+      state = state.setIn(['tiles', action.tile.id], fromJS(action.tile));
+      break;
+    }
+    case types.REMOVE_TILE:{
+      state = state.deleteIn(['tiles', action.tileId]);
+      break;
+    }
     case types.UPDATE_COLUMNS:{
       state = state.set('columns', fromJS(action.columns));
       break;
     }
-    
+
     case types.LOGOUT:{
       return initialState;
     }

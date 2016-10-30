@@ -3,6 +3,8 @@ import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
 import Chat from '../../tiles/chat/Chat'
 import Goals from '../../containers/tiles/Goals'
+import Step from '../../containers/tiles/Step'
+
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class LocalTile extends Component {
@@ -21,7 +23,7 @@ class LocalTile extends Component {
       case 'goals':
         return Goals;
       default:
-        return null
+        return Step;
     }
   }
   componentDidMount() {

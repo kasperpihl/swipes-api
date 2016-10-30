@@ -30,7 +30,7 @@ class Workspace extends Component {
     if(draggingDot){
       e.preventDefault()
 
-      const { 
+      const {
         draggingDot,
         stopDraggingDot,
         generateShareUrl,
@@ -45,7 +45,7 @@ class Workspace extends Component {
         clearOverlay();
         addToasty({title: "Sharing item", loading: true}).then((toastId) => {
           generateShareUrl(draggingDot.get('data').toJS()).then( (res) => {
-    
+
             if(res.ok){
               var shareUrl = this.generateShareUrl(res.short_url);
               var shareData = {
@@ -61,7 +61,7 @@ class Workspace extends Component {
             else{
               updateToasty(toastId, { title: 'Error sharing item', loading: false, duration: 3000 });
             }
-           
+
           })
         });
       }
@@ -141,7 +141,7 @@ class Workspace extends Component {
 
     var show_name;
     if(tile.get('selectedAccountId')){
-      
+
       me.get('services').forEach((service) => {
         if(service.get('service_name') === tile.getIn(['required_services', 0]) && tile.get('selectedAccountId') === service.get('id')){
           show_name = service.get('show_name');
@@ -152,7 +152,7 @@ class Workspace extends Component {
       show_name = tileView.state.subtitleFromCard;
     }
     return { title: title, subtitle: show_name };
-    
+
   }
   gridDidTransitionStep(grid, name, step){
     const { fullscreen, toggleFullscreen } = this.props;
@@ -163,8 +163,8 @@ class Workspace extends Component {
     }
   }
   gridRowPressedFullscreen(grid, id){
-    var options = this.gridOptionsForTopbar(grid,id);
-    this.props.setFullscreenTitle(options.title, options.subtitle);
+    //var options = this.gridOptionsForTopbar(grid,id);
+    //this.props.setFullscreenTitle(options.title, options.subtitle);
   }
   gridRowPressedMenu(grid, id){
     this.sendToTile(id, 'menu.pressed');
@@ -248,7 +248,7 @@ const ConnectedWorkspace = connect(mapStateToProps, {
   setFullscreenTitle: main.setFullscreenTitle,
   addToasty: toasty.add,
   updateToasty: toasty.update,
-  clearOverlay: overlay.clear, 
+  clearOverlay: overlay.clear,
   dragDot: main.dragDot,
   stopDraggingDot: main.stopDraggingDot
 })(Workspace)
