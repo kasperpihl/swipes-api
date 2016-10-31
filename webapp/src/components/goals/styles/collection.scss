@@ -1,0 +1,11 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+
+.goal-collection {
+  $b: &;
+
+  &__buttons {
+    @include flex(flex);
+  }
+}

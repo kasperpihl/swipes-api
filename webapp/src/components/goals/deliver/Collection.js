@@ -3,11 +3,13 @@ import SwipesCardList from '../../swipes-card/SwipesCardList'
 import Slider from '../../swipes-ui/Slider'
 import Button from '../../swipes-ui/Button'
 
+import '../styles/collection.scss'
+
 class Collection extends Component {
   constructor(props) {
     super(props)
     this.clickedAdd = this.clickedAdd.bind(this);
-
+    this.clickedSubmit = this.clickedSubmit.bind(this);
   }
   componentDidMount() {
     const { swipes, step, goal } = this.props;
@@ -22,9 +24,13 @@ class Collection extends Component {
     swipes.removeListener('share.receivedData', null, step.get('id'));
   }
   clickedAdd() {
-    console.log('works?');
     const { swipes } = this.props;
     swipes.sendEvent('overlay.set', {component: 'Find', title: 'Find'});
+  }
+  clickedSubmit(){
+    const { step, completeStep } = this.props;
+
+    completeStep(step.get('id'));
   }
   renderAddButton() {
     return <Button title="Upload" callback={this.clickedAdd} style={{marginTop: '30px'}} />
@@ -39,14 +45,24 @@ class Collection extends Component {
         })
       }
     });
-    
+
     return <SwipesCardList delegate={cardDelegate} data={cards} key={"cardlist"} />;
+  }
+  renderSubmit() {
+    const { step } = this.props;
+
+    if (!step.get('completed')) {
+      return <Button title="Next" callback={this.clickedSubmit} style={{marginLeft: '15px', marginTop: '30px'}} />
+    }
   }
   render() {
     return (
-      <div>
+      <div className="goal-decisions">
         {this.renderCardLists()}
-        {this.renderAddButton()}
+        <div className="goal-decisions__buttons">
+          {this.renderAddButton()}
+          {this.renderSubmit()}
+        </div>
       </div>
     )
   }
