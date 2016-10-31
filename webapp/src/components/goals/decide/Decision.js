@@ -18,7 +18,7 @@ class Decision extends Component {
   findCollectionsFromPreviousSteps() {
     const { goal, step } = this.props;
     const currentInterationIndex = step.getIn(['data', 'iterations']).size - 1;
-    let collection = new List();
+    let iterations = new List();
     let foundStep = false;
 
     goal.get('steps').forEach((s) => {
@@ -27,13 +27,21 @@ class Decision extends Component {
       }
 
       if (s.get('type') === 'decide' && s.get('id') !== step.get('id')) {
-        collection.clear();
+        iterations.clear();
       }
 
       if (s.get('type') === 'deliver' && s.get('subtype') === 'collection') {
-        const deliverables = s.getIn(['data', 'iterations', currentInterationIndex]).get('collection');
+        s.getIn(['data', 'iterations']).forEach((iteration, i) => {
+          const deliverables = iteration.get('collection');
 
-        collection = collection.toSet().union(deliverables.toSet()).toList();
+          iterations = iterations.update(i, (item) => {
+            if (!item) {
+              return deliverables;
+            }
+
+            return item.toSet().union(deliverables.toSet()).toList();
+          })
+        })
       }
 
       if (s.get('id') === step.get('id')) {
@@ -41,7 +49,7 @@ class Decision extends Component {
       }
     })
 
-    return collection;
+    return iterations;
   }
   decide(yes){
     const decision = (yes);
@@ -70,16 +78,18 @@ class Decision extends Component {
   }
   renderCardLists() {
     const { step, cardDelegate } = this.props;
-    const collection = this.findCollectionsFromPreviousSteps();
-    const cards = [{
-        title: 'v1',
-        items: collection.toArray().map((item) => {
+    const iterations = this.findCollectionsFromPreviousSteps();
+
+    const cards = iterations.toArray().map((iteration, i) => {
+      return {
+        title: 'v' + (i+1),
+        items: iteration.toArray().map((item) => {
           return { shortUrl: item.get('url') };
         })
-      }]
+      }
+    })
 
     return <SwipesCardList delegate={cardDelegate} data={cards} key={"decision-cardlist"}/>;
-
   }
   render() {
     return (

@@ -17,19 +17,19 @@ class Collection extends Component {
       })
     }, step.get('id'));
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     const { swipes, step } = this.props;
     swipes.removeListener('share.receivedData', null, step.get('id'));
   }
-  clickedAdd(){
+  clickedAdd() {
     console.log('works?');
     const { swipes } = this.props;
     swipes.sendEvent('overlay.set', {component: 'Find', title: 'Find'});
   }
-  renderAddButton(){
+  renderAddButton() {
     return <Button title="Upload" callback={this.clickedAdd} style={{marginTop: '30px'}} />
   }
-  renderCardLists(){
+  renderCardLists() {
     const { step, cardDelegate } = this.props;
     const cards = step.getIn(['data', 'iterations']).toArray().map((iteration, i) => {
       return {
@@ -38,10 +38,9 @@ class Collection extends Component {
           return { shortUrl: item.get('url') };
         })
       }
-
     });
-    return <SwipesCardList delegate={cardDelegate} data={cards} key={"cardlist"}/>;
-
+    
+    return <SwipesCardList delegate={cardDelegate} data={cards} key={"cardlist"} />;
   }
   render() {
     return (
