@@ -1,17 +1,16 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { overlay, main, api, toasty, modal, goals, workspace } from '../../actions';
 import { bindAll } from '../../classes/utils'
-
 import { actionForType } from '../../components/goals/actions'
 import TabBar from '../../components/tab-bar/TabBar'
-
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalTimeline from '../../components/goals/GoalTimeline';
-
 import GoalItem from '../../components/goals/GoalItem';
 import TagItem from '../../components/tags/TagItem';
 import { PlusIcon } from '../../components/icons'
+import Button from '../../components/swipes-ui/Button'
+
 import '../../components/goals/styles/goals.scss';
 
 class Goals extends Component {
@@ -94,7 +93,6 @@ class Goals extends Component {
     console.log('action', data, action);
   }
   onCardClick(card, data){
-    //console.log(this.shareDataForChecksum[data.checksum]);
     if(data.shortUrl){
       const folder = localStorage.getItem('dropbox-folder');
       data = swipesUrlProvider.get(data.shortUrl);
@@ -134,7 +132,7 @@ class Goals extends Component {
       const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
       if(typeof View.actionTile === 'function'){
         const buttonTitle = View.actionTile();
-        return <div onClick={this.openActionTile.bind(this, stepId, buttonTitle)}>{buttonTitle}</div>
+        return <Button title={buttonTitle} callback={this.openActionTile.bind(this, stepId, buttonTitle)} />
       }
       return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>
     }
