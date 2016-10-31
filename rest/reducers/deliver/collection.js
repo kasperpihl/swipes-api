@@ -8,10 +8,10 @@ import {
 const init = (step) => {
   const setup = fromJS({
     secondary: [
-      {
-        type: 'readme',
-        data: ''
-      },
+      // {
+      //   type: 'readme',
+      //   data: ''
+      // },
       {
         type: 'checklist',
         data: []
