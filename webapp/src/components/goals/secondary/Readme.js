@@ -23,8 +23,8 @@ class Readme extends Component {
     return (
       <div className="sw-read-me__header">
         {this.renderIcon('ListIcon')}
-        <div className="sw-read-me__title">Checklist</div>
-        <div className="sw-read-me__description">Things to improve</div>
+        <div className="sw-read-me__title">Readme</div>
+        <div className="sw-read-me__description">Guidance</div>
       </div>
     )
   }
@@ -33,10 +33,16 @@ class Readme extends Component {
       <div className="sw-read-me">
         {this.renderHeader()}
         <div className="sw-read-me__content">
-          Swipes helps companies work fast even as they grow. You can create simple workflows for meetings, projects or onboardings.
+          How to define clear specs:
           <br/>
           <br/>
-          Share them with your team. So they can execute them across Slack, Dropbox, Evernote, Gmail etc. All from a single place.
+          1. Listen to each other
+          <br/>
+          2. Respect your teammates' opinion
+          <br/>
+          3. Smile and be happy
+          <br/>
+          4. Stop reading and just do it!
         </div>
       </div>
     )
