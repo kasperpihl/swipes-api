@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { randomString, bindAll, decodeHtml } from '../../classes/utils';
 import SwipesDot from '../swipes-dot/SwipesDot';
+import * as Icons from '../icons'
 import { DownloadIcon } from '../icons'
 
 class SwipesCardItem extends Component {
@@ -79,20 +80,30 @@ class SwipesCardItem extends Component {
       )
     }
   }
+  renderIcon(icon){
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="swipes-card__header__icon swipes-card__header__icon--svg"/>;
+    }
+
+    return <img src={icon} className="material-icons swipes-card__header__icon swipes-card__header__icon--imaget" alt=""/>
+  }
   renderHeader(actions, title, subtitle, headerImage, url) {
     const noSubtitleClass = !subtitle ? "swipes-card__header__content--no-subtitle" : '';
 
     return (
       <div className="swipes-card__header">
-        <div className="swipes-card__header__dot">
-          {this.renderDot(actions)}
-        </div>
+        <div className="swipes-card__header__image">{this.renderHeaderImage(headerImage)}</div>
         <div className={"swipes-card__header__content " + noSubtitleClass}>
           <div className="swipes-card__header__content--title">{this.renderTextWithLinks(title)}</div>
           <div className="swipes-card__header__content--subtitle">{this.renderTextWithLinks(subtitle)}</div>
+          <div className="swipes-card__header__service">
+            {this.renderIcon('DropboxLogo')} Dropbox
+          </div>
         </div>
-        <div className="swipes-card__header__image">
-          {this.renderHeaderImage(headerImage)}
+        <div className="swipes-card__header__dot">
+          {this.renderDot(actions)}
         </div>
       </div>
     )

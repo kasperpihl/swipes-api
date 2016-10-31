@@ -35,6 +35,7 @@
   &__icon {
     @include size(24px);
     stroke: $green-color;
+    stroke-width: 2px;
   }
 
   &__title {

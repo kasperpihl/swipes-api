@@ -198,16 +198,19 @@ tabSlider {
 
   &__header {
     @include size(100%);
-    @include flex(center, flex-start)
+    @include flex(flex)
     min-height: 60px;
+    position: relative;
 
     &__dot {
-      @include size(40px);
+      @include size(6px);
       @include flex(center, center);
+      position: absolute;
+      right: 15px;
+      top: 15px;
 
       &:empty {
-        @include size(20px);
-        // background-color: red;
+        display: none;
       }
 
       > * {
@@ -215,10 +218,56 @@ tabSlider {
       }
     }
 
+    &__icon {
+
+      &--svg {
+        @include size(24px);
+        margin-right: 6px;
+        opacity: .5;
+      }
+    }
+
+    &__service {
+      @include size(auto, 24px);
+      @include flex(center, flex-start);
+      font-size: 12px;
+      color: $deepBlue-40;
+      margin-top: 12px;
+    }
+
+    &__image {
+      @include size(108px);
+      @include flex();
+      position: relative;
+      flex: none;
+
+      &:empty {
+        display: none;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        right: 0; top: 0;
+        @include size(1px, 100%);
+        background-color: $deepBlue-10;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      &:empty {
+        display: none;
+      }
+    }
+
     &__content {
-      @include size(calc(100% - 42px - 50px));
+      @include size(auto, 108px);
       @include flex(flex-start, center, column);
-      padding-right: 18px;
+      align-content: center;
+      padding: 0 18px;
 
       &--no-subtitle & {
         &--title {
@@ -236,7 +285,7 @@ tabSlider {
       }
 
       &--title {
-        @include size(100%);
+        @include size(100%, auto);
         color: $deepBlue-100;
         font-size: 15px;
         font-weight: 400;
@@ -244,11 +293,12 @@ tabSlider {
         text-overflow: ellipsis;
         white-space: nowrap;
         line-height: 17px;
-        margin-top: -4px;
+        // margin-top: -4px;
+        padding: 4.5px 0;
       }
 
       &--subtitle {
-        @include size(100%);
+        @include size(100%, auto);
         color: $deepBlue-40;
         font-size: 12px;
         font-weight: 400;
@@ -257,21 +307,8 @@ tabSlider {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        margin-top: 5px;
-      }
-    }
-
-    &__image {
-      @include size(60px, 100%);
-      @include flex();
-
-      img {
-        max-width: 60px;
-        max-height: 60px;
-      }
-
-      &:empty {
-        display: none;
+        // margin-top: 5px;
+        padding: 4.5px 0;
       }
     }
 
@@ -280,6 +317,7 @@ tabSlider {
       @include flex(center, center);
       border-radius: 50%;
       opacity: 0;
+      display: none;
 
       svg {
         @include size(20px, 20px);
