@@ -9,6 +9,7 @@ import GoalTimeline from '../../components/goals/GoalTimeline';
 import GoalItem from '../../components/goals/GoalItem';
 import TagItem from '../../components/tags/TagItem';
 import { PlusIcon } from '../../components/icons'
+import Button from '../../components/swipes-ui/Button'
 
 import '../../components/goals/styles/goals.scss';
 
@@ -131,7 +132,7 @@ class Goals extends Component {
       const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
       if(typeof View.actionTile === 'function'){
         const buttonTitle = View.actionTile();
-        return <div onClick={this.openActionTile.bind(this, stepId, buttonTitle)}>{buttonTitle}</div>
+        return <Button title={buttonTitle} callback={this.openActionTile.bind(this, stepId, buttonTitle)} />
       }
       return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>
     }
