@@ -9,7 +9,7 @@
   overflow-y: auto;
 
   &__tags {
-    @include size();
+    @include size(100%, auto);
     @include flex(flex);
     flex-wrap: wrap;
     align-content: flex-start;
