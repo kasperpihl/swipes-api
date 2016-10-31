@@ -6,208 +6,101 @@ $fade: .4;
 .step-header {
   $b: &;
 
-  @include size(100%, auto);
+  @include size(100%, 30px);
   @include flex(center, flex-start);
   display: flex !important;
   padding: 0 22px;
   padding-left: 0px;
   position: relative;
+  opacity: .3;
   transition: opacity .1s;
 
-  &:first-of-type {
-    padding-bottom: 15px;
-  }
-
-  &:last-of-type {
-    padding-top: 15px;
-    padding-bottom: 0;
-  }
-
-  &:not(:first-of-type):not(:last-of-type) {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-
-  &--last {
-    padding-bottom: 0;
-
-    &:before {
-      @include size(2px, 70%);
-    }
-  }
-
-  & > *:not(&__indicator) {
-		opacity: $fade;
-    transition: opacity .1s;
-	}
-
-  &:hover > * {
-    opacity: 1;
-    transition: opacity .1s;
+  &:not(:first-child) {
+    margin-top: 15px;
   }
 
   &__indicator {
-    @include size(30px !important);
+    @include size(50px, 30px);
     @include flex();
-    border-radius: 50%;
     position: relative;
     flex: none;
-    transform: translateY(2px);
 
-    &#{&}--index {
-      background-color: rgba($blue-100, .3);
-      color: $bg;
-      font-size: 12px;
-      font-weight: 700;
-      padding-bottom: 1px;
-      transition: color .1s;
+    &--index {
+      font-size: 21px;
+      color: $deepBlue-100;
+      position: relative;
 
-      svg {
-        display: none;
+      &:after {
+        content: "";
+        position: absolute;
+        right: 0; top: 0;
+        @include size(1px, 100%);
+        background-color: $deepBlue-10;
       }
     }
 
-    &#{&}--completed {
-      background-color: lighten($green-color, 30%);
+    &--completed {
 
-      svg {
-        @include size(18px);
+      &:before {
+        content: "";
+        @include size(30px);
+        background-color: $green-color;
+        border-radius: 50%;
+        position: absolute;
+      }
+
+      #{$b}__icon {
+        @include size(24px);
         stroke: $bg;
+        position: relative;
+        z-index: 2;
       }
     }
-  }
-
-  &__content {
-    $contentWidth: calc(100% - 30px - 60px);
-
-    @include size($contentWidth, 36px);
-    @include flex(flex-start, space-between, column);
-    align-content: space-between;
-    padding-left: 20px;
-    user-select: none;
-    flex: none;
   }
 
   &__title {
-    color: $deepBlue-80;
-    font-size: 16px;
-    font-weight: 400;
-    user-select: auto;
+    $titleWidth: calc(100% - (22px + 30px + 22px + 12px + 50px));
+    @include size($titleWidth, 30px);
+    font-size: 21px;
+    line-height: 30px;
+    color: $deepBlue-100;
+    margin-left: 12px;
+    flex: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  &__type {
-    color: $deepBlue-40;
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    user-select: auto;
-  }
-
-  &__assignees {
-    @include size(30px);
-    position: relative;
-
-    img {
-      @include size();
-      border-radius: 50%;
-    }
-
-    &__count {
-      @include size(30px);
-      @include flex();
-      background-color: rgba($deepBlue-100, .4);
-      border-radius: 50%;
-      color: white;
-      font-size: 15px;
-      left: 0; top: 0;
-      position: absolute;
-
-      &:hover {
-        background-color: rgba($deepBlue-100, .7);
-      }
-
-      &:empty {
-        display: none;
-      }
-    }
-  }
-
-  &:hover & {
-
-    &__indicator {
-			&--index {
-        background-color: $blue-100;
-				color: $bg;
-        transition: color .1s;
-
-        &:after {
-          opacity: 1;
-          transition: opacity .1s;
-        }
-			}
-
-			&--completed {
-        background-color: $green-color;
-        transition: background-color .1s;
-			}
-		}
-  }
-
-  &#{&}--active {
-    z-index: 9;
-
-    &:hover {
-      z-index: 10;
-    }
-  }
-
-  &#{&}--active > * {
+  &:hover {
     opacity: 1;
     transition: opacity .1s;
   }
 
-  &#{&}--active & {
-    &__indicator {
-			&--index {
-        background-color: $blue-100;
-				color: $bg;
-        transition: color .1s;
-
-        &:after {
-          opacity: 1;
-          transition: opacity .1s;
-        }
-			}
-
-			&--completed {
-        background-color: $green-color;
-        transition: background-color .1s;
-			}
-		}
-  }
-
-  &__icons {
-    @include size(22px, 100%);
-    @include flex();
-    margin: 0 21px;
-  }
+  // COMMON ELEMENTS
 
   &__icon {
-    @include size(22px);
-    fill: $deepBlue-40;
-    transition: .1s;
+    @include size(24px);
   }
 
-  &__icons:hover &__icon {
-    fill: $blue-100;
+  // MODIFIERS
+
+  &--completed {
+
   }
+
+  &--active {
+    opacity: 1;
+  }
+}
+
+.step-header {
+  $b: &;
 
   &__assignees {
     @include flex();
     @include size(30px, 100%);
-    margin: 0 17px;
-    position: relative;
+    position: absolute;
+    right: 42px; top: 0;
 
     &:hover {
 

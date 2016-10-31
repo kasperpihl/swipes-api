@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { List, fromJS } from 'immutable'
 import SwipesCardList from '../../swipes-card/SwipesCardList'
+import GoalStepAction from '../GoalStepAction'
 import Button from '../../swipes-ui/Button'
 import { bindAll } from '../../../classes/utils'
 
@@ -92,14 +93,25 @@ class Decision extends Component {
     return <SwipesCardList delegate={cardDelegate} data={cards} key={"decision-cardlist"}/>;
   }
   render() {
+    const goalAction = {
+      title: 'Proceed with these designs?',
+      icon: 'VoteIcon',
+      buttons: [
+        {
+          label: 'Yes',
+          callback: this.decideYes
+        },
+        {
+          label: 'No',
+          callback: this.decideNo
+        }
+      ]
+    };
+
     return (
         <div className="goal-decisions">
           {this.renderCardLists()}
-          <div className="goal-decisions__text">Are these designs good enough to move on?</div>
-          <div className="goal-decisions__buttons">
-            <Button icon="thumb_up" callback={this.decideYes} />
-            <Button icon="thumb_down" style={{marginLeft: '15px'}} callback={this.decideNo} />
-          </div>
+          <GoalStepAction data={goalAction}/>
         </div>
     )
   }

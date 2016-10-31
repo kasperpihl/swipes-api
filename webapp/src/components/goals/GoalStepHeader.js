@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './styles/goal-step-header.scss'
-import { CheckmarkIcon } from '../icons'
+import * as Icons from '../icons'
 
 class GoalStepHeader extends Component {
   constructor(props) {
@@ -10,16 +10,23 @@ class GoalStepHeader extends Component {
   }
   componentDidMount() {
   }
+  renderIcon(icon){
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="step-header__icon"/>;
+    }
+  }
   renderIndicator(index, completed) {
     let content;
-    let className = "step-header__indicator";
+    let className = 'step-header__indicator';
 
     if (completed) {
-      content = <CheckmarkIcon />;
       className += ' step-header__indicator--completed';
+      content = this.renderIcon('CheckmarkIcon');
     } else if (!completed && index) {
-      content = index;
       className += ' step-header__indicator--index';
+      content = index;
     }
 
     return (
@@ -87,9 +94,6 @@ class GoalStepHeader extends Component {
     if (active) {
       className += ' step-header--active'
     }
-    if(isLast){
-      className += ' step-header--last'
-    }
 
     if (step.completed) {
       className += ' step-header--completed'
@@ -98,10 +102,7 @@ class GoalStepHeader extends Component {
     return (
       <div className={className} onClick={this.clickedHeader}>
         {this.renderIndicator(index, step.completed)}
-        <div className="step-header__content">
-          <div className="step-header__title">{step.title}</div>
-          <div className="step-header__type">{step.type}</div>
-        </div>
+        <div className="step-header__title">{step.title}</div>
         {this.renderAssignees(step.assignees)}
       </div>
     )

@@ -68,3 +68,27 @@
     }
   }
 }
+
+.slideStepAction {
+  transition: all .2s ease-in-out;
+
+  &-enter {
+    bottom: 0px;
+    will-change: bottom;
+
+    &-active {
+      bottom: 167px;
+      will-change: bottom;
+    }
+  }
+
+  &-leave {
+    bottom: 167px;
+    will-change: bottom;
+
+    &-active {
+      bottom: 0px;
+      will-change: bottom;
+    }
+  }
+}

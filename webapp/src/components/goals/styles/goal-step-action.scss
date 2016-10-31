@@ -1,0 +1,63 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.goal-step-action {
+  $b: &;
+
+  @include size(100%, 162px);
+  background-color: $blue-5;
+  position: fixed;
+  left: 0; bottom: 0;
+  border-top: 1px solid $deepBlue-10;
+
+  &__header {
+    @include size(100%, 72px);
+    @include flex(center, flex-start);
+  }
+
+  &__title {
+    padding-left: 18px;
+  }
+
+  &__icon {
+    @include size(24px);
+    fill: $blue-100;
+    stroke: $blue-100;
+    margin-left: 32px;
+  }
+
+  &__actions {
+    display: inline-block;
+    margin-left: calc(32px + 18px + 24px);
+    border: 1px solid $blue-100;
+    border-radius: 3px;
+  }
+
+  &__button {
+    padding: 18px 40px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: $blue-100;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    position: relative;
+    transition: .1s;
+
+    &:not(:last-child) {
+      &:after {
+        content: '';
+        position: absolute;
+        right: 0; top: 0;
+        @include size(1px, 100%);
+        background-color: $blue-100;
+      }
+    }
+
+    &:hover {
+      background-color: $blue-100;
+      color: $bg;
+      transition: .1s;
+    }
+  }
+}

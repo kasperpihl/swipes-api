@@ -32,7 +32,7 @@ class Step extends Component {
   }
   render() {
     return (
-      <div className='step-tile'>
+      <div className="step-tile">
         {this.renderActionForStep()}
       </div>
     )

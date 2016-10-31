@@ -30,9 +30,9 @@ class Checkbox extends Component {
 
     return (
       <label className="sw-checkbox">
-      	{label}
       	<input ref="checkboxInput" type="checkbox" className="sw-checkbox__input" />
       	<div className="sw-checkbox__indicator">{this.renderIcon('CheckmarkIcon')}</div>
+        <div className="sw-checkbox__label">{label}</div>
       </label>
     )
   }
