@@ -321,7 +321,7 @@ class Goals extends Component {
 
     if (!currentGoal) {
       return (
-        <TabBar data={this.tabs} align="left" onChange={this.onChange}/>
+        <TabBar data={this.tabs} align="left" onChange={this.onChange} activeTab={this.state.tabIndex}/>
       )
     }
   }
