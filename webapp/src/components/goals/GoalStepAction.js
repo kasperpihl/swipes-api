@@ -29,10 +29,10 @@ class GoalStepAction extends Component {
   renderActions() {
     const { buttons } = this.props.data;
 
-    const actions = buttons.map( (button) => {
+    const actions = buttons.map( (button, i) => {
 
       return (
-        <div className="goal-step-action__button" onClick={button.callback}>{button.label}</div>
+        <div className="goal-step-action__button" onClick={button.callback} key={'step-action-button' + i}>{button.label}</div>
       )
     })
 
