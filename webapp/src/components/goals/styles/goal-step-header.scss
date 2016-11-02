@@ -144,7 +144,7 @@ $fade: .4;
     left: calc(0px - 90px); bottom: 0;
     position: absolute;
     transform: translateY(calc(100% + 10px));
-    z-index: 5;
+    z-index: 9;
 
     &:after {
       @include size(12px);

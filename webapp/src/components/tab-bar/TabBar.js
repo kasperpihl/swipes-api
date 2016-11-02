@@ -70,7 +70,9 @@ class TabBar extends Component {
     const { data, align } = this.props;
     const { activeTab } = this.state;
     let rootClass = 'tab-bar';
-    let styles = {};
+    let styles = {
+      WebkitClipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)'
+    };
 
     if (align) {
       rootClass += ' tab-bar--' + align;
