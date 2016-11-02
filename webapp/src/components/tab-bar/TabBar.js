@@ -7,15 +7,19 @@ class TabBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeTab: props.activeTab || 0
+      activeTab: props.activeTab || 0,
+      clips: []
     }
     bindAll(this, ['setActiveTab'])
   }
   componentDidMount() {
+    setTimeout( () => {
+      this.doMath()
+    }, 0)
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.activeTab != nextProps.activeTab) {
-      this.setState({activeTab: nextProps.activeTab})
+      this.setState({activeTab: nextProps.activeTab});
     }
   }
   callback(index) {
@@ -25,7 +29,7 @@ class TabBar extends Component {
     const newIndex = Number(e.target.getAttribute('data-index'));
     if(newIndex !== this.state.activeTab){
       this.setState({activeTab: newIndex})
-      this.callback(newIndex)
+      this.callback(newIndex);
     }
   }
   renderIcon(icon, i){
@@ -37,10 +41,36 @@ class TabBar extends Component {
 
     return <i className="material-icons tab-bar__icon tab-bar__icon--font" data-index={i}>{icon}</i>
   }
+  doMath() {
+    const { activeTab, clips } = this.state;
+    const { data } = this.props;
+    const { tabBar } = this.refs;
+		const tabBarWidth = tabBar.getBoundingClientRect().width;
+    const tabWidths = [];
+    const sliderClips = [];
+
+    for (var ref in this.refs) {
+      if (ref.startsWith('tab-')) {
+        tabWidths.push(this.refs[ref].getBoundingClientRect().width)
+      }
+    }
+
+    tabWidths.reduce( (previousValue, currentValue) => {
+
+      sliderClips.push({start: previousValue * 100 / tabBarWidth, end: (previousValue + currentValue) * 100 / tabBarWidth})
+
+      return previousValue + currentValue
+    }, 0);
+
+    clips.push(...sliderClips)
+
+    this.setState({clips: clips})
+  }
   render() {
     const { data, align } = this.props;
     const { activeTab } = this.state;
     let rootClass = 'tab-bar';
+    let styles = {};
 
     if (align) {
       rootClass += ' tab-bar--' + align;
@@ -58,7 +88,7 @@ class TabBar extends Component {
       if (typeof tab === 'string') {
 
         return (
-          <div className={tabClass} data-index={i} key={'tab-'+i} onClick={this.setActiveTab}>{tab}</div>
+          <div ref={"tab-" + i} className={tabClass} data-index={i} key={'tab-'+i} onClick={this.setActiveTab}>{tab}</div>
         )
       } else if (typeof tab === 'object') {
 
@@ -71,9 +101,16 @@ class TabBar extends Component {
       }
     })
 
+    if (this.state.clips.length) {
+      styles = {
+        WebkitClipPath: 'polygon(' + this.state.clips[activeTab].start + '% 0%, ' + this.state.clips[activeTab].end + '% 0%, ' + this.state.clips[activeTab].end + '% 100%, ' + this.state.clips[activeTab].start + '% 100%)'
+      }
+    }
+
     return (
-      <div className={rootClass}>
+      <div ref="tabBar" className={rootClass}>
         {tabs}
+        <div className="tab-bar__slider" style={styles}></div>
       </div>
     )
   }

@@ -5,8 +5,9 @@
   $b: &;
 
   @include size(100%, auto);
-  @include flex();
+  // @include flex();
   padding-left: 21px;
+  position: relative;
 
   &__tab {
     @include size(100%, 50px);
@@ -91,17 +92,20 @@
 
   &--left {
     @include size(auto);
-    @include flex(flex-start, flex-start);
-    border-bottom: 1px solid $deepBlue-5;
     padding: 0;
+
+    #{$b}__slider {
+      @include size(100%, 2px);
+      left: 0; bottom: 0;
+      position: absolute;
+      background-color: $blue-100;
+      transition: .2s;
+    }
 
     #{$b}__tab {
       @include size(auto);
+      display: inline-block;
       padding: 10px 20px;
-
-      &:first-of-type {
-        padding-left: 0;
-      }
     }
   }
 }
