@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
 import './styles/goal-step-action.scss'
 
-class GoalStepAction extends Component {
+class StepAction extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -52,11 +52,11 @@ class GoalStepAction extends Component {
   }
 }
 
-export default GoalStepAction
+export default StepAction
 
 const { string, shape, func, arrayOf } = PropTypes;
 
-GoalStepAction.propTypes = {
+StepAction.propTypes = {
  data: shape({
    title: string,
    icon: string,

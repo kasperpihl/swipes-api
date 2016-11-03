@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCardList from '../../swipes-card/SwipesCardList'
-import GoalStepAction from '../GoalStepAction'
 import Slider from '../../swipes-ui/Slider'
 import Button from '../../swipes-ui/Button'
 
@@ -58,30 +57,10 @@ class Collection extends Component {
   }
   render() {
 
-    const goalAction = {
-      icon: 'DeliverIcon',
-      title: 'Deliver Icons',
-      buttons: [
-        {
-          label: 'upload',
-          callback: this.clickedAdd
-        },
-        {
-          label: 'find',
-          callback: this.clickedAdd
-        }
-      ]
-    }
-
-    // <div className="goal-decisions__buttons">
-    //   {this.renderAddButton()}
-    //   {this.renderSubmit()}
-    // </div>
 
     return (
       <div className="goal-decisions">
         {this.renderCardLists()}
-        <GoalStepAction data={goalAction}/>
       </div>
     )
   }

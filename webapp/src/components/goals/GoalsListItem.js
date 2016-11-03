@@ -4,7 +4,7 @@ import './styles/goal-item.scss'
 import { randomStatusLabel } from '../../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-class GoalItem extends Component {
+class GoalsListItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -72,7 +72,7 @@ class GoalItem extends Component {
     const { data } = this.props;
     let rootClass = 'goal-item';
     const steps = data.get('steps').toJS();
-    
+
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={rootClass + "__image"}>
@@ -87,11 +87,4 @@ class GoalItem extends Component {
     )
   }
 }
-
-export default GoalItem
-
-const { string } = PropTypes;
-
-GoalItem.propTypes = {
-  // removeThis: string.isRequired
-}
+export default GoalsListItem
