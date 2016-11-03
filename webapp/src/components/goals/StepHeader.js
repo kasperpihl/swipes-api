@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import './styles/goal-step-header.scss'
 import * as Icons from '../icons'
 
-class GoalStepHeader extends Component {
+class StepHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -108,11 +108,11 @@ class GoalStepHeader extends Component {
     )
   }
 }
-export default GoalStepHeader
+export default StepHeader
 
 const { string, number, shape, bool, func } = PropTypes;
 
-GoalStepHeader.propTypes = {
+StepHeader.propTypes = {
   active: bool,
   onClick: func,
   index: number,

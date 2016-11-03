@@ -5,8 +5,9 @@ import { overlay, main, api, toasty, modal, goals, workspace } from '../../actio
 import { bindAll } from '../../classes/utils'
 import { actionForType } from '../../components/goals/actions'
 import TabBar from '../../components/tab-bar/TabBar'
-import GoalTimeline from '../../components/goals/GoalTimeline';
-import GoalItem from '../../components/goals/GoalItem';
+import Step from '../../components/goals/Step'
+
+import GoalsListItem from '../../components/goals/GoalsListItem';
 import TagItem from '../../components/tags/TagItem';
 import { PlusIcon } from '../../components/icons'
 import Button from '../../components/swipes-ui/Button'
@@ -116,7 +117,7 @@ class Goals extends Component {
     goals = this.filterGoals(goals);
 
     return goals.map((goal) => {
-      return <GoalItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
+      return <GoalsListItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
   completeStep(stepId) {
@@ -169,7 +170,8 @@ class Goals extends Component {
     const { currentGoal } = this.props;
 
     if (currentGoal) {
-      return <GoalTimeline goal={currentGoal} delegate={this}/>;
+
+      return <Step goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {
