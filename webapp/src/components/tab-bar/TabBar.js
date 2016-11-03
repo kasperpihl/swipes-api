@@ -15,7 +15,7 @@ class TabBar extends Component {
   componentDidMount() {
     setTimeout( () => {
       this.doMath()
-    }, 0)
+    }, 100)
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.activeTab != nextProps.activeTab) {
