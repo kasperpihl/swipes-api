@@ -7,7 +7,7 @@ class TabBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeTab: props.activeTab || 0,
+      activeTab: 1,
       clips: []
     }
     bindAll(this, ['setActiveTab'])
@@ -15,7 +15,7 @@ class TabBar extends Component {
   componentDidMount() {
     setTimeout( () => {
       this.doMath()
-    }, 100)
+    }, 10)
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.activeTab != nextProps.activeTab) {
@@ -56,8 +56,7 @@ class TabBar extends Component {
     }
 
     tabWidths.reduce( (previousValue, currentValue) => {
-
-      sliderClips.push({start: previousValue * 100 / tabBarWidth, end: (previousValue + currentValue) * 100 / tabBarWidth})
+      sliderClips.push({start: previousValue * 100 / tabBarWidth, end: (previousValue + currentValue) * 100 / tabBarWidth});
 
       return previousValue + currentValue
     }, 0);
