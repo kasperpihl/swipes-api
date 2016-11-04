@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import './styles/workflow-steplist-item.scss'
+import Assigning from '../assigning/Assigning'
 import { AssignIcon } from '../icons'
+
+import './styles/workflow-steplist-item.scss'
 
 class WorkflowStepListItem extends Component {
   constructor(props) {
@@ -65,15 +67,18 @@ class WorkflowStepListItem extends Component {
     let rootClass = 'workflow__step-item';
     const { title, type, index, assignees } = this.props;
 
+    console.log(assignees);
 
     return (
       <div className={rootClass}>
-        <div className={rootClass + '__number'}>{index + 1}</div>
-        <div className={rootClass + '__content'}>
-          <div className={rootClass + '__title'}>{title}</div>
-          <div className={rootClass + '__type'}>{type}</div>
+        <div className={`${rootClass}__number`}>{index + 1}</div>
+        <div className={`${rootClass}__content`}>
+          <div className={`${rootClass}__title`}>{title}</div>
+          <div className={`${rootClass}__type`}>{type}</div>
         </div>
-        {this.renderAssigning(assignees)}
+        <div className={`${rootClass}__assigning`}>
+          <Assigning assignees={assignees} editable={true} clickAssign={this.clickedAssign}/>
+        </div>
       </div>
     )
   }
