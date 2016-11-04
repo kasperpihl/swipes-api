@@ -15,6 +15,14 @@ import {
 
 const serviceDir = __dirname;
 const dropboxConfig = config.get('dropbox');
+const thumbnailMimeTypes = [
+	'image/jpeg',
+	'image/png',
+	'image/tiff',
+	'image/x-tiff',
+	'image/gif',
+	'image/bmp'
+]
 
 const camelCaseToUnderscore = (word) => {
 	// http://stackoverflow.com/questions/30521224/javascript-convert-camel-case-to-underscore-case
@@ -124,27 +132,32 @@ const dropbox = {
 			const serviceActions = dropbox.cardActions(type, res);
 			const serviceData = dropbox.cardData(type, res);
 			const meta = Object.assign({}, serviceData, serviceActions);
-			const method = 'files.getThumbnail';
-			const params = {
-				path: 'rev:' + meta.rev,
-				size: 'w128h128'
-			};
 
-			dropbox.request({authData, method, params, user }, (err, res) => {
-				if (err) {
-					return callback(err);
-				}
-
-				// That means that we db don't support thumbnail on this file
-				if (res.error) {
-					return callback(null, { meta });
-				}
-
-				const thumbnail = new Buffer(res).toString('base64');
-				meta.thumbnail = 'data:' + meta.mime_type + ';base64,' + thumbnail;
-
+			if (thumbnailMimeTypes.indexOf(meta.mime_type) < 0) {
 				return callback(null, { meta });
-			})
+			} else {
+				const method = 'files.getThumbnail';
+				const params = {
+					path: 'rev:' + meta.rev,
+					size: 'w128h128'
+				};
+
+				dropbox.request({authData, method, params, user }, (err, res) => {
+					if (err) {
+						return callback(err);
+					}
+
+					// Should log this error!
+					if (res.error) {
+						return callback(null, { meta });
+					}
+
+					const thumbnail = new Buffer(res).toString('base64');
+					meta.thumbnail = 'data:' + meta.mime_type + ';base64,' + thumbnail;
+
+					return callback(null, { meta });
+				})
+			}
 		})
 	},
 	previewRequest({ authData, type, itemId, user }, callback) {
