@@ -117,7 +117,7 @@ class Goals extends Component {
     goals = this.filterGoals(goals);
 
     return goals.map((goal) => {
-      return <GoalsListItem onClick={this.clickedListItem} data={goal} key={'goal-list-item-' + goal.get('id')}/>
+      return <GoalsListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
   completeStep(stepId) {

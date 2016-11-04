@@ -33,7 +33,7 @@ $imgContHeight: 30px;
   }
 
   &__content {
-    $contentWidth: calc(100% - #{$imgContHeight});
+    $contentWidth: calc(100% - #{$imgContHeight} - 60px);
     @include flex(flex-start, center, column);
     @include size($contentWidth, 100%);
     min-height: $imgContHeight;
@@ -65,87 +65,10 @@ $imgContHeight: 30px;
     text-overflow: ellipsis;
   }
 
-  &__assignees {
-    @include flex();
+  &__assigning {
     @include size(30px);
     position: absolute;
-    right: 10px; top: 50%;
+    right: 15px; top: 50%;
     transform: translateY(-50%);
-    z-index: 1;
-
-    &:hover {
-      z-index: 10;
-
-      #{$b}__tooltip {
-        display: block;
-      }
-    }
-  }
-
-  &__assignee {
-    @include size(30px);
-
-    img {
-      @include size();
-      border-radius: 50%;
-    }
-  }
-
-  &__assignee-count {
-    @include flex();
-    @include size(30px);
-    background-color: rgba($deepBlue-100, .4);
-    border-radius: 50%;
-    color: white;
-    font-size: 13px;
-    left: 0; top: 50%;
-    position: absolute;
-    transform: translateY(-50%);
-
-    &:hover {
-      background-color: rgba($deepBlue-100, .8);
-      transition: .15s ease-in-out;
-    }
-  }
-
-  &__tooltip {
-    @include size(150px, auto);
-    background-color: $deepBlue-100;
-    border-radius: 6px;
-    display: none;
-    left: calc(0px - 90px); bottom: 0;
-    position: absolute;
-    transform: translateY(calc(100% + 10px));
-    z-index: 20;
-
-    &:after {
-      @include size(12px);
-      background-color: $deepBlue-100;
-      content: "";
-      position: absolute;
-      right: 40px;
-      top: -6px;
-      transform: rotate(45deg);
-    }
-  }
-
-  &__tooltip-item {
-    color: white;
-    font-size: 13px;
-    padding: 10px;
-    position: relative;
-    z-index: 4;
-
-    &:first-of-type {
-      @include border-radius(6px, 6px, 0px, 0px);
-    }
-
-    &:last-of-type {
-      @include border-radius(0px, 0px, 6px, 6px);
-    }
-
-    &:hover {
-      background-color: $deepBlue-80;
-    }
   }
 }
