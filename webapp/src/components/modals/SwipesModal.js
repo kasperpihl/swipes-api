@@ -155,7 +155,7 @@ class SwipesModal extends Component {
 	}
   renderIcon(icon){
     if (!icon) return;
-    
+
     const svg = icon.element;
     const props = icon.props || {};
     const Comp = Icons[svg];
@@ -226,7 +226,7 @@ class SwipesModal extends Component {
 }
 
 export default SwipesModal
-const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func, node } = PropTypes;
+const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func, node, array } = PropTypes;
 const itemProps = shape({
   title: string,
   selected: bool,

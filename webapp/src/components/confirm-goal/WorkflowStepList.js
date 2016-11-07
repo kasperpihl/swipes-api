@@ -46,7 +46,7 @@ class WorkflowStepList extends Component {
     const style = {
       height
     };
-    
+
     return (
       <div style={style} className={rootClass} ref="stepList">
         <input ref="input" key="input" className={rootClass + '__title'} onKeyUp={this.onKeyUp} onBlur={this.onBlur} placeholder="Name your goal" />

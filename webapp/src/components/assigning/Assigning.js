@@ -12,9 +12,11 @@ class Assigning extends Component {
   }
   componentDidMount() {
   }
-  handleClick() {
+  handleClick(e) {
     const { editable, clickAssign } = this.props;
-
+    if (editable && clickAssign) {
+      clickAssign(e)
+    }
   }
   renderIcon(icon){
     const Comp = Icons[icon];
@@ -27,7 +29,7 @@ class Assigning extends Component {
 
     return (
       <div className="sw-assign__assign">
-        
+        {this.renderIcon('AssignIcon')}
       </div>
     )
   }
@@ -53,7 +55,7 @@ class Assigning extends Component {
     }
 
     if (!profileImage.length) {
-      return this.renderIcon('AssignIcon')
+      return this.renderIcon('PersonIcon')
     } else {
       return <img className="sw-assign__profile-image" src={profileImage} />
     }

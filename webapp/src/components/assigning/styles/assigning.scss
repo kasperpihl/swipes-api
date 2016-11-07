@@ -70,5 +70,6 @@
 
   &__icon {
     @include size(24px);
+    fill: $deepBlue-60;
   }
 }

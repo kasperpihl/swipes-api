@@ -67,8 +67,6 @@ class WorkflowStepListItem extends Component {
     let rootClass = 'workflow__step-item';
     const { title, type, index, assignees } = this.props;
 
-    console.log(assignees);
-
     return (
       <div className={rootClass}>
         <div className={`${rootClass}__number`}>{index + 1}</div>
@@ -90,5 +88,4 @@ const { string, func } = PropTypes;
 
 WorkflowStepListItem.propTypes = {
   clickedAssign: func.isRequired
-  // removeThis: string.isRequired
 }

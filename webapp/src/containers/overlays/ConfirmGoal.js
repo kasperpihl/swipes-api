@@ -14,16 +14,17 @@ class ConfirmGoal extends Component {
 
   setupStepPressedAssign(setup, e, i){
     const icon = {
-      element: 'AssignIcon',
+      element: 'PersonIcon',
       props: {fill: '#3394FF'}
     }
     const { users, loadModal } = this.props;
     const { workflow } = this.state;
     const userArray = users.toArray().map((u) => {
+      console.log(workflow.getIn(['steps']));
       return {
         title: u.get('name'),
         img: u.get('profile_pic') || icon,
-        selected: (workflow.getIn(['steps', i, 'assignees', u.get('id')]))
+        selected: (workflow.getIn(['steps', i, 'assignees']).contains(u.get('id')))
       }
     })
     loadModal({
