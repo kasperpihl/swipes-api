@@ -20,7 +20,7 @@ class Step extends Component {
 
   }
   renderHeader(){
-
+    const { step } = this.props;
   }
   renderSecondaries(){
 
@@ -34,12 +34,12 @@ class Step extends Component {
   render() {
     return (
       <div className="goal-step">
-        <div className="goal-step-scroller">
+        <div className="goal-step__scroller">
           {this.renderHeader()}
           {this.renderSecondaries()}
           {this.renderPrimary()}
         </div>
-        <div className="goal-step-action">
+        <div className="goal-step__actions">
           {this.renderAction()}
         </div>
       </div>
