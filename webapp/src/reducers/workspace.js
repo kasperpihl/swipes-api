@@ -2,11 +2,11 @@ import * as types from '../constants/ActionTypes'
 import { fromJS, Map } from 'immutable'
 
 const initialState = fromJS({ tiles : {
-  'slack': {
+  /*'slack': {
     id: 'slack',
     name: 'Slack',
     required_services: ['slack']
-  },
+  },*/
   'goals': {
     id: 'goals',
     name: 'Goals'

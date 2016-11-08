@@ -1,3 +1,36 @@
+```
+{
+  id: 'G1234',
+  steps: [{
+    title: 'Feedback',
+    assignees: ['kasper@swipesapp.com', '@kristjan', '#product'],
+    fields: [{
+      type: 'text',
+      title: 'Write email'
+    }],
+    submission: {
+      type: 'decide'
+    },
+    submitted: new Date(), // Submitted means that data has been submitted
+    completed: false || new Date(), // Completed means submitted and automations done and moved to the next stage
+    automations: [],
+    iterations: [{
+      message: {
+
+      },
+      automationLog: {
+
+      },
+      data: {
+
+      }
+    }]
+  }]
+}
+```
+
+
+
 # Endpoints
 ## Yesterday
 goals.add
@@ -9,7 +42,7 @@ step.do
 - goal_id
 - type
 - payload
-/* 
+/*
 Fetch the goal
 Check current step
 Compare current step type to sent type
@@ -119,7 +152,7 @@ item = {
       title: 'Task title',
       subtitle: 'Project name',
       description: 'Task description',
-      headerImage: 'profile picture of assigned', 
+      headerImage: 'profile picture of assigned',
     }
   },
   {
@@ -130,7 +163,7 @@ item = {
         items: [{
           title: 'Task title',
           subtitle: 'Assignee',
-          actions: [{ 
+          actions: [{
             label: "Complete/Undo"
           }]
         }]

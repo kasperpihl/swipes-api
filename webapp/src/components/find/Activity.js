@@ -24,7 +24,7 @@ class Activity extends Component {
   }
   renderCard(data, checksum) {
     let meta = data.get('meta');
-    meta = meta.set('checksum', data.get('checksum'));
+    meta = meta.set('checksum', data.get('checksum')).set('service', data.get('service'));
     return (
       <SwipesCard data={meta.toJS()} delegate={this.props.cardDelegate} />
     )

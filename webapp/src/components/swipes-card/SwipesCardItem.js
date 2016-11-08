@@ -89,18 +89,46 @@ class SwipesCardItem extends Component {
 
     return <img src={icon} className="material-icons swipes-card__header__icon swipes-card__header__icon--imaget" alt=""/>
   }
-  renderHeader(actions, title, subtitle, headerImage, url) {
+  titleForService(service){
+    switch(service){
+    }
+  }
+  iconForService(service){
+    switch(service){
+      case 'slack':
+        return 'SlackIcon'
+      case 'dropbox':
+        return 'DropboxLogo'
+      default:
+        return 'SwipesLogo'
+    }
+  }
+  renderService(service){
+    service = service || 'swipes'
+    const icon = this.iconForService(service);
+    return (
+      <div className="swipes-card__header__service">
+        {this.renderIcon(icon)} {service}
+      </div>
+    )
+  }
+  renderHeader() {
+    const {
+      thumbnail,
+      actions,
+      title,
+      subtitle,
+      service
+    } = this.state.data;
     const noSubtitleClass = !subtitle ? "swipes-card__header__content--no-subtitle" : '';
 
     return (
       <div className="swipes-card__header">
-        <div className="swipes-card__header__image">{this.renderHeaderImage(headerImage)}</div>
+        <div className="swipes-card__header__image">{this.renderHeaderImage(thumbnail)}</div>
         <div className={"swipes-card__header__content " + noSubtitleClass}>
           <div className="swipes-card__header__content--title">{this.renderTextWithLinks(title)}</div>
           <div className="swipes-card__header__content--subtitle">{this.renderTextWithLinks(subtitle)}</div>
-          <div className="swipes-card__header__service">
-            {this.renderIcon('DropboxLogo')} Dropbox
-          </div>
+          {this.renderService(service)}
         </div>
         <div className="swipes-card__header__dot">
           {this.renderDot(actions)}
@@ -181,18 +209,14 @@ class SwipesCardItem extends Component {
   }
   render() {
     const {
-      title,
-      subtitle,
       description,
-      thumbnail,
-      actions,
       preview,
       dot
     } = this.state.data;
 
     return (
       <div id={"swipes-card__item-" + this.id } className="swipes-card__item" onClick={this.onClick}>
-        {this.renderHeader(actions, title, subtitle, thumbnail)}
+        {this.renderHeader()}
         {this.renderDescription(description)}
         {this.renderPreview(preview)}
       </div>
@@ -251,6 +275,7 @@ SwipesCardItem.propTypes = {
     shortUrl: string,
     title: string,
     subtitle: string,
+    service: string,
     description: string,
     headerImage: string,
     preview: shape({
