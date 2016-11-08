@@ -20,7 +20,6 @@ class ConfirmGoal extends Component {
     const { users, loadModal } = this.props;
     const { workflow } = this.state;
     const userArray = users.toArray().map((u) => {
-      console.log(workflow.getIn(['steps']));
       return {
         title: u.get('name'),
         img: u.get('profile_pic') || icon,
