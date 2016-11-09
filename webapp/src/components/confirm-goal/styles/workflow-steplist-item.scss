@@ -19,10 +19,8 @@
   &__number {
     @include size(33px !important);
     @include flex(center, center);
-    border-radius: 50%;
-    border: solid 2px $blue-40;
-    color: $blue-160;
-    font-size: 15px;
+    color: $deepBlue-80;
+    font-size: 22px;
     font-weight: 500;
     margin: 0 calc(33px / 2);
   }
@@ -30,16 +28,14 @@
   &__content {
     $contentWidth: calc((100% - 66px) - (22px + 21px + 21px));
     @include size($contentWidth, 33px);
-    @include flex(flex-start, space-between, column);
+    @include flex(flex-start, center, column);
     position: relative;
   }
 
   &__title {
     @include size(100%, auto);
-    color: $deepBlue-100;
-    font-size: 15px;
-    line-height: 18px;
-    margin-top: -1px;
+    color: $deepBlue-80;
+    font-size: 21px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

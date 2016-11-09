@@ -72,7 +72,6 @@ class WorkflowStepListItem extends Component {
         <div className={`${rootClass}__number`}>{index + 1}</div>
         <div className={`${rootClass}__content`}>
           <div className={`${rootClass}__title`}>{title}</div>
-          <div className={`${rootClass}__type`}>{type}</div>
         </div>
         <div className={`${rootClass}__assigning`}>
           <Assigning assignees={assignees} editable={true} clickAssign={this.clickedAssign}/>
