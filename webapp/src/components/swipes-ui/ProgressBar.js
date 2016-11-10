@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { bindAll } from '../../classes/utils'
 
+import './styles/progress-bar.scss'
+
 class ProgressBar extends Component {
   constructor(props) {
     super(props)
@@ -24,23 +26,41 @@ class ProgressBar extends Component {
       this.callDelegate('barDidChange', i);
     }
   }
-  renderSteps(){
-    // onClick = this.onChange
+  renderStep(step, i){
+    let className = 'sw-progress-bar__step';
+
+    if (step.completed) {
+      className += ' sw-progress-bar__step--completed'
+    }
+
+    return (
+      <div className={className} data-attr={`${i + 1} ${step.title}`} key={`progress-step-${i}`}></div>
+    )
   }
   render() {
+    const { steps } = this.props;
+    const { activeIndex } = this.state;
+
+    const progresses = steps.map( (step, i) => {
+      return this.renderStep(step, i)
+    })
+
     return (
-      <div className="sw-progress-bar"></div>
+      <div className="sw-progress-bar">
+        {progresses}
+      </div>
     )
   }
 }
 
 export default ProgressBar
 
-const { arrayOf, bool, shape, string } = PropTypes;
+const { arrayOf, bool, shape, string, number } = PropTypes;
 
 ProgressBar.propTypes = {
   steps: arrayOf(shape({
     title: string,
     completed: bool
-  }))
+  })),
+  index: number
 }

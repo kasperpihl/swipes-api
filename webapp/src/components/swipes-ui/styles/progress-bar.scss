@@ -1,0 +1,89 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-progress-bar {
+  @include size(100%, auto);
+  @include flex(flex);
+  max-width: 500px;
+  margin: 300px auto;
+
+  &__step {
+    @include size(100%, 18px);
+    padding: 6px 0;
+    transition: .2s;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0; top: 6px;
+      @include size(100%, 6px);
+      background-color: $deepBlue-10;
+      transition: .2s;
+    }
+
+    &:before {
+      content: attr(data-attr);
+      position: absolute;
+      left: 0; top: -20px;
+      white-space: nowrap;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: visibility 0s .1s, opacity .1s, transform .1s;
+      font-size: 12px;
+      font-weight: 500;
+      color: $deepBlue-100;
+    }
+
+    &:first-child {
+
+      &:after {
+        @include border-radius(3px, 0px, 3px, 0px);
+      }
+    }
+
+    &:last-child {
+
+      &:after {
+        @include border-radius(0px, 3px, 0px, 3px);
+      }
+    }
+
+    &:not(:first-child) {
+      margin-left: 1px;
+    }
+
+    &:hover {
+      &:first-child {
+
+        &:after {
+          @include border-radius(100px, 0px, 100px, 0px);
+        }
+      }
+
+      &:before {
+        content: attr(data-attr);
+        position: absolute;
+        left: 0; top: -20px;
+        white-space: nowrap;
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0px);
+        transition: visibility 0s, opacity .2s, transform .2s;
+      }
+
+      &:after {
+        transform: scaleY(2);
+        transition: .2s;
+      }
+    }
+
+    &--completed {
+
+      &:after {
+        background-color: $green-color;
+      }
+    }
+  }
+}
