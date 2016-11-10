@@ -60,8 +60,8 @@ class TabBar extends Component {
 
       sliderClips.push(
         {
-          start: (previousValue + calcMargin) * 100 / tabBarWidth,
-          end: (previousValue + currentValue + calcMargin) * 100 / tabBarWidth
+          start: (previousValue) * 100 / tabBarWidth,
+          end: (previousValue + currentValue - 60) * 100 / tabBarWidth
         }
       );
 
