@@ -2,64 +2,20 @@
 @import '../../global-styles/mixins/';
 
 .goal-step {
-  @include size(100%, auto);
-  padding: 30px 21px 30px 50px;
+  @include size(100%);
+  @include flex(center, flex-start, column);
   position: relative;
 
-  &__description {
-    @include size(100%, auto);
-    color: $deepBlue-80;
-    font-size: 12px;
-    line-height: 1.75;
-    max-width: 500px;
+  &__scroller {
+    @include size(100%, 100%);
+    padding-right: 20px;
+    padding-left: 20px;
+    overflow-y:auto;
   }
 
-  &__label {
-    @include size(80%, auto);
-    @include flex(center, flex-start);
-    position: relative;
-    font-size: 15px;
-    color: $deepBlue-40;
-    margin-top: 60px;
-    padding-left: 21px;
-
-    &#{&}--label {
-
-      &:before {
-        @include size(2px, 100%);
-        content: "";
-        position: absolute;
-        left: 0; top: 0;
-        background-color: $blue-60;
-      }
-    }
-
-    &#{&}--completed {
-      &:before {
-        @include size(2px, 100%);
-        content: "";
-        position: absolute;
-        left: 0; top: 0;
-        background-color: $green-color;
-      }
-    }
-  }
-
-  &__button {
-    @include size(276px, 50px);
-    @include flex();
-    background-color: $blue-100;
-    border-radius: 3px;
-    color: #fdfdfd;
-    font-size: 13px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    line-height: 1.15;
-    margin-top: 60px;
-    text-transform: uppercase;
-
-    &:hover {
-      background-color: $blue-80;
-    }
+  &__submission {
+    @include size(100%, 200px);
+    background-color: $blue-20;
+    flex: none;
   }
 }

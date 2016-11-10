@@ -6,6 +6,8 @@ import StepHeader from './StepHeader'
 import StepSubmission from './StepSubmission'
 // fields
 import * as fields from '../fields'
+// styles
+import './styles/goal-step.scss'
 
 class GoalStep extends Component {
   constructor(props) {
@@ -19,11 +21,11 @@ class GoalStep extends Component {
     const { step } = this.props;
   }
   renderFields(){
-    const { step } = this.props;
-    console.log('step', step);
-    return step.get('fields').map((field) => {
-
-    });
+    // const { step } = this.props;
+    // console.log('step', step);
+    // return step.get('fields').map((field) => {
+    //
+    // });
   }
   renderSubmission(){
 
