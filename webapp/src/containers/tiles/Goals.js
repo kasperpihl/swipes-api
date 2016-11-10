@@ -170,7 +170,7 @@ class Goals extends Component {
 
     if (currentGoal) {
 
-      return <GoalStep goal={currentGoal} delegate={this}/>;
+      return <GoalStep step={currentGoal.getIn(['steps', 0])} goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {

@@ -20,6 +20,7 @@ class GoalStep extends Component {
   }
   renderFields(){
     const { step } = this.props;
+    console.log('step', step);
     return step.get('fields').map((field) => {
 
     });

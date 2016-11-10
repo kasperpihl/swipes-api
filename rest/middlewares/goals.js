@@ -26,11 +26,12 @@ const goalsValidate = (req, res, next) => {
 
   goal.steps = goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
-    const reducer = reducersGet(step, 'init');
+    let reducer = reducersGet(step, 'init');
     step.id = goalId + '-' + stepId;
 
     if (!reducer) {
-      return next('invalid init reducer');
+      reducer = (step) => step.merge(fromJS({data: {}}))
+      //return next('invalid init reducer');
     }
 
     const stepInited = reducer(fromJS(step));
