@@ -102,8 +102,13 @@ class Assigning extends Component {
 
 export default Assigning
 
-const { string } = PropTypes;
+const { string, bool, arrayOf, shape } = PropTypes;
 
 Assigning.propTypes = {
-  // removeThis: string.isRequired
+  assignees: arrayOf(shape({
+    name: string,
+    profile_pic: string
+  })),
+  me: bool,
+  editable: bool
 }

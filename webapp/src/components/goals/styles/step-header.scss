@@ -1,179 +1,39 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-$fade: .4;
-
 .step-header {
-  $b: &;
+  @include size(100%, auto);
+  max-width: 550px;
+  margin: 200px auto;
 
-  @include size(100%, 30px);
-  @include flex(center, flex-start);
-  display: flex !important;
-  padding: 0 22px;
-  padding-left: 0px;
-  position: relative;
-  opacity: .3;
-  transition: opacity .1s;
-
-  &:not(:first-child) {
-    margin-top: 15px;
+  &__flex-container {
+    @include size(100%, 30px);
+    @include flex(center, flex-start);
+    position: relative;
   }
 
-  &__indicator {
-    @include size(50px, 30px);
-    @include flex();
-    position: relative;
-    flex: none;
-
-    &--index {
-      font-size: 21px;
-      color: $deepBlue-100;
-      position: relative;
-
-      &:after {
-        content: "";
-        position: absolute;
-        right: 0; top: 0;
-        @include size(1px, 100%);
-        background-color: $deepBlue-10;
-      }
-    }
-
-    &--completed {
-
-      &:before {
-        content: "";
-        @include size(30px);
-        background-color: $green-color;
-        border-radius: 50%;
-        position: absolute;
-      }
-
-      #{$b}__icon {
-        @include size(24px);
-        stroke: $bg;
-        position: relative;
-        z-index: 2;
-      }
-    }
+  &__index {
+    font-size: 22px;
+    color: $deepBlue-100;
   }
 
   &__title {
-    $titleWidth: calc(100% - (22px + 30px + 22px + 12px + 50px));
-    @include size($titleWidth, 30px);
+    margin-left: 18px;
     font-size: 21px;
-    line-height: 30px;
     color: $deepBlue-100;
-    margin-left: 12px;
-    flex: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  &:hover {
-    opacity: 1;
-    transition: opacity .1s;
-  }
-
-  // COMMON ELEMENTS
-
-  &__icon {
-    @include size(24px);
-  }
-
-  // MODIFIERS
-
-  &--completed {
-
-  }
-
-  &--active {
-    opacity: 1;
-  }
-}
-
-.step-header {
-  $b: &;
-
-  &__assignees {
-    @include flex();
-    @include size(30px, 100%);
-    position: absolute;
-    right: 42px; top: 0;
-
-    &:hover {
-
-      #{$b}__tooltip {
-        display: block;
-      }
-    }
-  }
-
-  &__assignee {
+  &__assigning {
     @include size(30px);
-
-    img {
-      @include size();
-      border-radius: 50%;
-    }
-  }
-
-  &__assignee-count {
-    @include flex();
-    @include size(30px);
-    background-color: rgba($deepBlue-100, .4);
-    border-radius: 50%;
-    color: white;
-    font-size: 13px;
-    left: 0; top: 50%;
     position: absolute;
+    right: 0; top: 50%;
     transform: translateY(-50%);
-
-    &:hover {
-      background-color: rgba($deepBlue-100, .8);
-      transition: .15s ease-in-out;
-    }
+    background-color: red;
+    border-radius: 50%;
   }
 
-  &__tooltip {
-    @include size(150px, auto);
-    background-color: $deepBlue-100;
-    border-radius: 6px;
-    display: none;
-    left: calc(0px - 90px); bottom: 0;
-    position: absolute;
-    transform: translateY(calc(100% + 10px));
-    z-index: 9;
-
-    &:after {
-      @include size(12px);
-      background-color: $deepBlue-100;
-      content: "";
-      position: absolute;
-      right: 40px;
-      top: -6px;
-      transform: rotate(45deg);
-    }
-  }
-
-  &__tooltip-item {
-    color: white;
-    font-size: 13px;
-    padding: 10px;
-    position: relative;
-    z-index: 4;
-
-    &:first-of-type {
-      @include border-radius(6px, 6px, 0px, 0px);
-    }
-
-    &:last-of-type {
-      @include border-radius(0px, 0px, 6px, 6px);
-    }
-
-    &:hover {
-      background-color: $deepBlue-80;
-    }
+  &__progress-bar {
+    @include size(100%, auto);
+    margin-top: 30px;
   }
 }

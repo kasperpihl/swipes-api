@@ -2,14 +2,74 @@
 @import '../../global-styles/mixins/';
 
 .sw-progress-bar {
+  $b: &;
+
   @include flex(flex);
   @include size(100%, auto);
+
+  &:hover {
+
+    #{$b}__step--active {
+
+      &:after {
+        transform: scale(1);
+        transition: .2s;
+      }
+
+      &:hover {
+        &:before {
+          opacity: 1;
+          transform: translateY(0px);
+          transition: visibility 0s, opacity .2s, transform .2s;
+          visibility: visible;
+        }
+
+        &:after {
+          transform: scaleY(2);
+          transition: .2s;
+        }
+      }
+    }
+  }
 
   &__step {
     @include size(100%, 18px);
     padding: 6px 0;
     position: relative;
     transition: .2s;
+
+    &:hover {
+
+      &:before {
+        opacity: 1;
+        transform: translateY(0px);
+        transition: visibility 0s, opacity .2s, transform .2s;
+        visibility: visible;
+      }
+
+      &:after {
+        transform: scaleY(2);
+        transition: .2s;
+      }
+    }
+
+    &:first-child {
+
+      &:after {
+        @include border-radius(3px, 0px, 3px, 0px);
+      }
+    }
+
+    &:last-child {
+
+      &:after {
+        @include border-radius(0px, 3px, 0px, 3px);
+      }
+    }
+
+    &:not(:first-child) {
+      margin-left: 1px;
+    }
 
     &:after {
       @include size(100%, 6px);
@@ -34,39 +94,6 @@
       white-space: nowrap;
     }
 
-    &:first-child {
-
-      &:after {
-        @include border-radius(3px, 0px, 3px, 0px);
-      }
-    }
-
-    &:last-child {
-
-      &:after {
-        @include border-radius(0px, 3px, 0px, 3px);
-      }
-    }
-
-    &:not(:first-child) {
-      margin-left: 1px;
-    }
-
-    &:hover {
-
-      &:before {
-        opacity: 1;
-        transform: translateY(0px);
-        transition: visibility 0s, opacity .2s, transform .2s;
-        visibility: visible;
-      }
-
-      &:after {
-        transform: scaleY(2);
-        transition: .2s;
-      }
-    }
-
     &--completed {
 
       &:after {
@@ -79,10 +106,6 @@
       &:after {
         transform: scaleY(2);
         transition: .2s;
-      }
-
-      &:after {
-        background-color: $green-color;
       }
     }
   }
