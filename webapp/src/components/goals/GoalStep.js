@@ -20,8 +20,11 @@ class GoalStep extends Component {
   }
   renderFields(){
     const { step } = this.props;
+    return step.get('fields').map((field) => {
+
+    });
   }
-  renderAction(){
+  renderSubmission(){
 
   }
   render() {
@@ -31,8 +34,8 @@ class GoalStep extends Component {
           {this.renderHeader()}
           {this.renderFields()}
         </div>
-        <div className="goal-step__actions">
-          {this.renderAction()}
+        <div className="goal-step__submission">
+          {this.renderSubmission()}
         </div>
       </div>
     )
