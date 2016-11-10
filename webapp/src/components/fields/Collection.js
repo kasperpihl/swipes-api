@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCardList from '../swipes-card/SwipesCardList'
-import Slider from '../swipes-ui/Slider'
-import Button from '../swipes-ui/Button'
 
 import './styles/collection.scss'
 
@@ -27,14 +25,6 @@ class Collection extends Component {
     const { swipes } = this.props;
     swipes.sendEvent('overlay.set', {component: 'Find', title: 'Find'});
   }
-  clickedSubmit(){
-    const { step, completeStep } = this.props;
-
-    completeStep(step.get('id'));
-  }
-  renderAddButton() {
-    return <Button title="Upload" callback={this.clickedAdd} style={{marginTop: '30px'}} />
-  }
   renderCardLists() {
     const { step, cardDelegate } = this.props;
     const cards = step.getIn(['data', 'iterations']).toArray().map((iteration, i) => {
@@ -48,16 +38,7 @@ class Collection extends Component {
 
     return <SwipesCardList delegate={cardDelegate} data={cards} key={"cardlist"} />;
   }
-  renderSubmit() {
-    const { step } = this.props;
-
-    if (!step.get('completed')) {
-      return <Button title="Next" callback={this.clickedSubmit} style={{marginLeft: '15px', marginTop: '30px'}} />
-    }
-  }
   render() {
-
-
     return (
       <div className="goal-decisions">
         {this.renderCardLists()}
