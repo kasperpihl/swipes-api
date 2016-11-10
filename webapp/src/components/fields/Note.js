@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import Button from '../../swipes-ui/Button'
+import Button from '../swipes-ui/Button'
 
-import '../styles/note.scss'
+import './styles/note.scss'
 import {
   Editor,
   createEditorState

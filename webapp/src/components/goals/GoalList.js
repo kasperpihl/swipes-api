@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import GoalsListItem from './GoalsListItem.js'
+import GoalListItem from './GoalListItem.js'
 
-class GoalsList extends Component {
+class GoalList extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -20,4 +20,4 @@ class GoalsList extends Component {
   }
 }
 
-export default GoalsList
+export default GoalList

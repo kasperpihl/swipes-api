@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
-import './styles/goal-step-action.scss'
+import './styles/step-submission.scss'
 
-class StepAction extends Component {
+class StepSubmission extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -13,16 +13,16 @@ class StepAction extends Component {
     const Comp = Icons[icon];
 
     if (Comp) {
-      return <Comp className="goal-step-action__icon"/>;
+      return <Comp className="step-submission__icon"/>;
     }
   }
   renderHeader() {
     const { icon, title } = this.props.data;
 
     return (
-      <div className="goal-step-action__header">
+      <div className="step-submission__header">
         {this.renderIcon(icon)}
-        <div className="goal-step-action__title">{title}</div>
+        <div className="step-submission__title">{title}</div>
       </div>
     )
   }
@@ -32,19 +32,19 @@ class StepAction extends Component {
     const actions = buttons.map( (button, i) => {
 
       return (
-        <div className="goal-step-action__button" onClick={button.callback} key={'step-action-button' + i}>{button.label}</div>
+        <div className="step-submission__button" onClick={button.callback} key={'step-action-button' + i}>{button.label}</div>
       )
     })
 
     return (
-      <div className="goal-step-action__actions">
+      <div className="step-submission__actions">
         {actions}
       </div>
     )
   }
   render() {
     return (
-      <div className="goal-step-action">
+      <div className="step-submission">
         {this.renderHeader()}
         {this.renderActions()}
       </div>
@@ -52,11 +52,11 @@ class StepAction extends Component {
   }
 }
 
-export default StepAction
+export default StepSubmission
 
 const { string, shape, func, arrayOf } = PropTypes;
 
-StepAction.propTypes = {
+StepSubmission.propTypes = {
  data: shape({
    title: string,
    icon: string,

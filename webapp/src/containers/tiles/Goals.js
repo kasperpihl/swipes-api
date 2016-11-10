@@ -3,11 +3,10 @@ import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { overlay, main, api, toasty, modal, goals, workspace } from '../../actions';
 import { bindAll } from '../../classes/utils'
-import { actionForType } from '../../components/goals/actions'
 import TabBar from '../../components/tab-bar/TabBar'
-import Step from '../../components/goals/Step'
+import GoalStep from '../../components/goals/GoalStep'
 
-import GoalsListItem from '../../components/goals/GoalsListItem';
+import GoalListItem from '../../components/goals/GoalListItem';
 import TagItem from '../../components/tags/TagItem';
 import { PlusIcon } from '../../components/icons'
 import Button from '../../components/swipes-ui/Button'
@@ -117,7 +116,7 @@ class Goals extends Component {
     goals = this.filterGoals(goals);
 
     return goals.map((goal) => {
-      return <GoalsListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={'goal-list-item-' + goal.get('id')}/>
+      return <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
   completeStep(stepId) {
@@ -130,12 +129,12 @@ class Goals extends Component {
     const { currentGoal } = this.props;
     if(currentGoal){
       const actionStep = currentGoal.get('steps').find((s) => s.get('id') === stepId)
-      const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
+      /*const View = actionForType(actionStep.get('type'), actionStep.get('subtype'));
       if(typeof View.actionTile === 'function'){
         const buttonTitle = View.actionTile();
         return <Button title={buttonTitle} callback={this.openActionTile.bind(this, stepId, buttonTitle)} />
       }
-      return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>
+      return <View swipes={this.props.swipes} completeStep={this.completeStep} cardDelegate={this} goal={currentGoal} step={actionStep}/>*/
     }
     return null;
   }
@@ -171,7 +170,7 @@ class Goals extends Component {
 
     if (currentGoal) {
 
-      return <Step goal={currentGoal} delegate={this}/>;
+      return <GoalStep goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {

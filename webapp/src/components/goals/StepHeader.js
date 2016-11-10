@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import './styles/goal-step-header.scss'
+import './styles/step-header.scss'
 import * as Icons from '../icons'
 
 class StepHeader extends Component {

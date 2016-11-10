@@ -4,9 +4,9 @@ import * as Icons from '../icons'
 import { randomStatusLabel } from '../../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import './styles/goal-item.scss'
+import './styles/goal-list-item.scss'
 
-class GoalsListItem extends Component {
+class GoalListItem extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -24,13 +24,13 @@ class GoalsListItem extends Component {
   renderIcon(icon){
     const Comp = Icons[icon];
     if(Comp){
-      return <Comp className="goal-item__icon goal-item__icon--svg"/>;
+      return <Comp className="goal-list-item__icon goal-list-item__icon--svg"/>;
     }
-    return <i className="material-icons goal-item__icon goal-item__icon--font">{icon}</i>
+    return <i className="material-icons goal-list-item__icon goal-list-item__icon--font">{icon}</i>
   }
   render() {
     const { data } = this.props;
-    let rootClass = 'goal-item';
+    let rootClass = 'goal-list-item';
     const steps = data.get('steps').toJS();
     let assignees = [];
 
@@ -58,4 +58,4 @@ class GoalsListItem extends Component {
     )
   }
 }
-export default GoalsListItem
+export default GoalListItem

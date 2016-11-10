@@ -1,7 +1,7 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-.goal-step-action {
+.step-submission {
   $b: &;
 
   @include size(100%, 162px);

@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import SwipesCardList from '../../swipes-card/SwipesCardList'
-import Slider from '../../swipes-ui/Slider'
-import Button from '../../swipes-ui/Button'
+import SwipesCardList from '../swipes-card/SwipesCardList'
+import Slider from '../swipes-ui/Slider'
+import Button from '../swipes-ui/Button'
 
-import '../styles/collection.scss'
+import './styles/collection.scss'
 
 class Collection extends Component {
   constructor(props) {

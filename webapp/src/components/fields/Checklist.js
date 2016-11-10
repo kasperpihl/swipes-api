@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import * as Icons from '../../icons'
-import Checkbox from '../../swipes-ui/Checkbox'
-import '../styles/checklist.scss'
+import * as Icons from '../icons'
+import Checkbox from '../swipes-ui/Checkbox'
+import './styles/checklist.scss'
 
 class Checklist extends Component {
   constructor(props) {
