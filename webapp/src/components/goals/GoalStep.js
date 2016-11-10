@@ -21,11 +21,17 @@ class GoalStep extends Component {
     const { step } = this.props;
   }
   renderFields(){
-    // const { step } = this.props;
-    // console.log('step', step);
-    // return step.get('fields').map((field) => {
-    //
-    // });
+    const { step } = this.props;
+    return step.get('fields').map((field, i) => {
+      const Field = fields[field.get('type')];
+      if(Field){
+        let data = {};
+        if(field.get('initialData')){
+          data = field.get('initialData').toJS();
+        }
+        return <Field key={'field-'+i} id={step.get('id')} data={data} settings={field.get('settings')} />
+      }
+    });
   }
   renderSubmission(){
 
