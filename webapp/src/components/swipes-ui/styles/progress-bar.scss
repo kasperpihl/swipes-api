@@ -4,8 +4,6 @@
 .sw-progress-bar {
   @include flex(flex);
   @include size(100%, auto);
-  margin: 300px auto;
-  max-width: 500px;
 
   &__step {
     @include size(100%, 18px);
