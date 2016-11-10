@@ -55,8 +55,15 @@ class TabBar extends Component {
       }
     }
 
-    tabWidths.reduce( (previousValue, currentValue) => {
-      sliderClips.push({start: previousValue * 100 / tabBarWidth, end: (previousValue + currentValue) * 100 / tabBarWidth});
+    tabWidths.reduce( (previousValue, currentValue, index) => {
+      const calcMargin = 60 * index;
+
+      sliderClips.push(
+        {
+          start: (previousValue + calcMargin) * 100 / tabBarWidth,
+          end: (previousValue + currentValue + calcMargin) * 100 / tabBarWidth
+        }
+      );
 
       return previousValue + currentValue
     }, 0);

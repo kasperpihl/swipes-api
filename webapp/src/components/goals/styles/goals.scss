@@ -5,16 +5,25 @@
   $b: &;
 
   @include size(100%);
-  padding-bottom: 162px;
-  padding-left: 30px;
-  overflow-y: auto;
+  // padding-top: 50px;
+  // overflow-y: auto;
+  overflow-x: hidden;
 
   &__tags {
     @include size(100%, auto);
+    max-width: 500px;
+    margin: 0 auto;
     @include flex(flex);
     flex-wrap: wrap;
     align-content: flex-start;
     transform: translateX(-3px);
+  }
+
+  &__tab-bar {
+    @include size(100%, auto);
+    max-width: 500px;
+    z-index: 2;
+    margin: 0 auto;
   }
 }
 

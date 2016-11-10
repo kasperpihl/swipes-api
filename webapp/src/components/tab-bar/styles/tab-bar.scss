@@ -94,20 +94,31 @@
     @include size(100%, auto);
     max-width: 650px;
     padding: 0;
+    background-color: $bg;
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      @include size(100%, 1px);
+      background-color: $deepBlue-10;
+    }
 
     #{$b}__slider {
-      @include size(100%, 2px);
+      @include size(100%, 1px);
       left: 0; bottom: 0;
       position: absolute;
       background-color: $blue-100;
-      transition: .2s;
+      transition: .2s ease-in-out;
+      z-index: 2
     }
 
     #{$b}__tab {
       @include size(auto);
       display: inline-block;
-      padding: 10px 20px;
+      padding: 10px 0;
       margin: 0;
+      margin-right: 60px;
       position: relative;
     }
   }

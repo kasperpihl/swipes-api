@@ -323,7 +323,9 @@ class Goals extends Component {
 
     if (!currentGoal) {
       return (
-        <TabBar data={this.tabs} align="left" onChange={this.onChange} activeTab={this.state.tabIndex}/>
+        <div className="goals__tab-bar">
+          <TabBar data={this.tabs} align="left" onChange={this.onChange} activeTab={this.state.tabIndex}/>
+        </div>
       )
     }
   }
@@ -344,7 +346,9 @@ class Goals extends Component {
   render() {
     return (
       <div className='goals'>
-        {this.renderTabbar()}
+        <div className="goals__tab-abs">
+          {this.renderTabbar()}
+        </div>
         {this.renderList()}
         {this.renderTimeline()}
         {this.renderTagsList()}

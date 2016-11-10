@@ -8,7 +8,7 @@ $imgContHeight: 30px;
 
   @include size(100%, auto);
   @include flex();
-  max-width: 550px;
+  max-width: 500px;
   min-height: $imgContHeight;
   position: relative;
   padding: 12px 21px;
