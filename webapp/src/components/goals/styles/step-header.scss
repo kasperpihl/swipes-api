@@ -18,9 +18,14 @@
   }
 
   &__title {
+    $titleWidth: calc(100% - 70px);
+    @include size($titleWidth, auto);
     margin-left: 18px;
     font-size: 21px;
     color: $deepBlue-100;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__assigning {

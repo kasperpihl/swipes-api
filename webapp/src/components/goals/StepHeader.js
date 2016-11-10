@@ -46,7 +46,7 @@ class StepHeader extends Component {
       <div className="step-header">
         <div className="step-header__flex-container">
           <div className="step-header__index">1</div>
-          <div className="step-header__title">Decision</div>
+          <div className="step-header__title">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores sed, at veniam nostrum perferendis nesciunt voluptate quam nulla eaque reiciendis!</div>
           <div className="step-header__assigning"></div>
         </div>
         {this.renderProgressBar()}
