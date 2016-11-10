@@ -9,32 +9,40 @@ class ProgressBar extends Component {
     this.state = {
       activeIndex: props.index || 0
     }
+
     bindAll(this, ['onChange']);
   }
-  callDelegate(name){
+  callDelegate(name) {
     const { delegate } = this.props;
-    if(delegate && typeof delegate[name] === "function"){
+
+    if (delegate && typeof delegate[name] === "function") {
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
   componentDidMount() {
   }
-  onChange(i){
+  onChange(i) {
     const { activeIndex } = this.state;
-    if(activeIndex !== i){
+
+    if (activeIndex !== i) {
       this.setState({activeIndex: i});
       this.callDelegate('barDidChange', i);
     }
   }
-  renderStep(step, i){
+  renderStep(step, i) {
+    const { activeIndex } = this.state;
     let className = 'sw-progress-bar__step';
 
     if (step.completed) {
       className += ' sw-progress-bar__step--completed'
     }
 
+    if (i === activeIndex) {
+      className += ' sw-progress-bar__step--active'
+    }
+
     return (
-      <div className={className} data-attr={`${i + 1} ${step.title}`} key={`progress-step-${i}`}></div>
+      <div className={className} data-attr={`${i + 1} ${step.title}`} key={`progress-step-${i}`} onClick={this.onChange}></div>
     )
   }
   render() {

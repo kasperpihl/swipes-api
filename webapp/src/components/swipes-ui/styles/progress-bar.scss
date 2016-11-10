@@ -2,38 +2,38 @@
 @import '../../global-styles/mixins/';
 
 .sw-progress-bar {
-  @include size(100%, auto);
   @include flex(flex);
-  max-width: 500px;
+  @include size(100%, auto);
   margin: 300px auto;
+  max-width: 500px;
 
   &__step {
     @include size(100%, 18px);
     padding: 6px 0;
-    transition: .2s;
     position: relative;
+    transition: .2s;
 
     &:after {
-      content: '';
-      position: absolute;
-      left: 0; top: 6px;
       @include size(100%, 6px);
       background-color: $deepBlue-10;
+      content: '';
+      left: 0; top: 6px;
+      position: absolute;
       transition: .2s;
     }
 
     &:before {
+      color: $deepBlue-100;
       content: attr(data-attr);
-      position: absolute;
-      left: 0; top: -20px;
-      white-space: nowrap;
-      visibility: hidden;
-      opacity: 0;
-      transform: translateY(5px);
-      transition: visibility 0s .1s, opacity .1s, transform .1s;
       font-size: 12px;
       font-weight: 500;
-      color: $deepBlue-100;
+      left: 0; top: -20px;
+      opacity: 0;
+      position: absolute;
+      transform: translateY(5px);
+      transition: visibility 0s .1s, opacity .1s, transform .1s;
+      visibility: hidden;
+      white-space: nowrap;
     }
 
     &:first-child {
@@ -55,22 +55,12 @@
     }
 
     &:hover {
-      &:first-child {
-
-        &:after {
-          @include border-radius(100px, 0px, 100px, 0px);
-        }
-      }
 
       &:before {
-        content: attr(data-attr);
-        position: absolute;
-        left: 0; top: -20px;
-        white-space: nowrap;
-        visibility: visible;
         opacity: 1;
         transform: translateY(0px);
         transition: visibility 0s, opacity .2s, transform .2s;
+        visibility: visible;
       }
 
       &:after {
@@ -80,6 +70,18 @@
     }
 
     &--completed {
+
+      &:after {
+        background-color: $green-color;
+      }
+    }
+
+    &--active {
+
+      &:after {
+        transform: scaleY(2);
+        transition: .2s;
+      }
 
       &:after {
         background-color: $green-color;
