@@ -1,19 +1,20 @@
 @import '../../global-styles/mixins';
 @import '../../global-styles/vars';
 
-$gridTopbarHeight: 55px;
+$gridTopbarHeight: 42px;
 
 .sw-grid-topbar {
   $action-button-width: 24px;
   $action-button-height: 18px;
 
-  @include size(100%, $gridTopbarHeight);
+  @include size(calc(100% - 60px), $gridTopbarHeight);
   background-color: $bg;
-  padding: 0 10px;
+  margin: 0 30px;
   position: relative;
   overflow: visible;
   z-index: 99;
   @include flex(center, space-between);
+  border-bottom: 1px solid $deepBlue-10;
 
   &__content {
     height: 100%;
@@ -21,10 +22,10 @@ $gridTopbarHeight: 55px;
     @include flex(center, center);
 
     &--title {
-      font-size: 21px;
-      line-height: 21px;
-      font-weight: 900;
-      color: $deepBlue-100;
+      font-size: 18px;
+      line-height: 18px;
+      color: #192445;
+      font-weight: 400;
 
       &:hover {
         text-decoration: underline;

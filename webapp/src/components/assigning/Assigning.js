@@ -109,6 +109,5 @@ Assigning.propTypes = {
     name: string,
     profile_pic: string
   })),
-  me: bool,
   editable: bool
 }

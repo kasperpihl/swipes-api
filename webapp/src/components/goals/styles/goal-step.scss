@@ -8,8 +8,8 @@
 
   &__scroller {
     @include size(100%);
-    padding-right: 20px;
-    padding-left: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
     overflow-y:auto;
   }
 
