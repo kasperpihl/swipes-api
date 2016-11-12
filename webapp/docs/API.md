@@ -4,23 +4,51 @@
   steps: [{
     title: 'Feedback',
     assignees: ['kasper@swipesapp.com', '@kristjan', '#product'],
+    responses: 'single' || 'multiple',
+    collaborative: true || false,
     fields: [{
       type: 'text',
-      title: 'Write email'
+      title: 'Write email',
+      settings:{
+        editable: false
+      },
+      initialData:{
+
+      }
+    }, {
+      type: 'checklist',
+      title: 'Flight check',
+      settings: {
+        required: true
+      }
     }],
     submission: {
-      type: 'decide'
+      type: 'decide',
     },
     submitted: new Date(), // Submitted means that data has been submitted
     completed: false || new Date(), // Completed means submitted and automations done and moved to the next stage
-    automations: [],
+    errors: [],
+    automations: [{
+      type: 'action',
+      id: 'send-email',
+      params: {
+        subject,
+        body,
+        receiver
+      }
+    }, {
+      type: 'wait',
+      id: 'wait-response',
+      params: {
+        'threadId': ''
+      }
+    }],
     iterations: [{
       message: {
 
       },
-      automationLog: {
-
-      },
+      errorLog: [],
+      automationLog: [],
       data: {
 
       }

@@ -6,17 +6,13 @@ class Checkbox extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.onChange = this.onChange.bind(this);
   }
   componentDidMount() {
-    const { checkboxInput } = this.refs;
     const { checked } = this.props;
-
     if (checked) {
-      checkboxInput.checked = true;
+      this.refs.checkboxInput.checked = true;
     }
-  }
-  handleClick() {
-
   }
   renderIcon(icon){
     const Comp = Icons[icon];
@@ -25,12 +21,18 @@ class Checkbox extends Component {
       return <Comp className="sw-checkbox__icon" />;
     }
   }
+  onChange(e){
+    const { onChange } = this.props;
+    if(onChange){
+      onChange(this.refs.checkboxInput.checked);
+    }
+  }
   render() {
-    const { label } = this.props;
 
+    const { label } = this.props;
     return (
       <label className="sw-checkbox">
-      	<input ref="checkboxInput" type="checkbox" className="sw-checkbox__input" />
+      	<input ref="checkboxInput" onChange={this.onChange} type="checkbox" className="sw-checkbox__input" />
       	<div className="sw-checkbox__indicator">{this.renderIcon('CheckmarkIcon')}</div>
         <div className="sw-checkbox__label">{label}</div>
       </label>
@@ -40,9 +42,10 @@ class Checkbox extends Component {
 
 export default Checkbox
 
-const { string, bool } = PropTypes;
+const { string, bool, func } = PropTypes;
 
 Checkbox.propTypes = {
+  onChange: func,
   label: string,
   checked: bool
 }

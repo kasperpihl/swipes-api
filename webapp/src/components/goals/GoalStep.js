@@ -24,21 +24,21 @@ class GoalStep extends Component {
   onFieldChange(id, data){
     console.log(id, data);
   }
-  renderField(field, id){
+  renderField(field, i){
     const Field = fields[field.get('type')];
     if(Field){
       let data = {};
       if(field.get('initialData')){
         data = field.get('initialData').toJS();
       }
-      const key = 'field-' + id;
-      if(!this.bindCallbacks[id]){
-        this.bindCallbacks[id] = this.onFieldChange.bind(this, id);
+      const key = 'field-' + i;
+      if(!this.bindCallbacks[i]){
+        this.bindCallbacks[i] = this.onFieldChange.bind(this, i);
       }
       return (
         <Field
           key={key}
-          onChange={this.bindCallbacks[id]}
+          onChange={this.bindCallbacks[i]}
           data={data}
           settings={field.get('settings')}
         />
@@ -50,15 +50,14 @@ class GoalStep extends Component {
       if(field.get('type') === 'link'){
 
       }
-      return this.renderField(field, step.get('id') +i);
-
+      return this.renderField(field, i);
     });
   }
   onSubmit(submission){
 
   }
   renderSubmission(){
-
+    const { step } = this.props;
   }
   render() {
     const { step } = this.props;
