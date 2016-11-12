@@ -21,15 +21,6 @@ const size = (obj) => {
 }
 // define the steps of transitions here. Pass a string or an object with n/t (name/time) for more control. t: 0, means you should call this.transitionNext manually.
 var TRANSITIONS_STEPS = {
-  fullscreen: [
-    {n: "rippleStart", t: 330},
-    {n: "scalingUp", t:250},
-    "isFullscreen",
-    {n: "rippleEnd", t: 100},
-    {n: "beforeScaleDown", t: 1},
-    {n: "scalingDown", t: 250},
-    {n: "removeRipple", t: 330}
-  ],
   collapse: [
     {n: "overlayIn", t: 100},
     {n: "scaling", t: 200},
@@ -1136,7 +1127,7 @@ var Grid = React.createClass({
   // Delegation Setup
   // ======================================================
   callDelegate(name){
-    const { delegate } = this.props; 
+    const { delegate } = this.props;
     if(delegate && typeof delegate[name] === "function"){
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
@@ -1265,25 +1256,6 @@ var Grid = React.createClass({
       }
 
     }
-    if(trans.name === "fullscreen"){
-      if(trans.info.col === colIndex){ // The column with the row to fullscreen
-        classes.push("sw-fullscreen-column");
-      }
-      else { // The columns without the row to fullscreen
-        var gw = this.refs.grid.clientWidth;
-        styles.transformOrigin = "50% 50%";
-        if(colIndex < trans.info.col){
-          if(trans.step.isOneOf("scalingUp","isFullscreen", "rippleEnd", "prepareScaleDown")){
-            styles.transform = "translateX(" + (-trans.info.rowPos.left) + "px)";
-          }
-        }
-        if(colIndex > trans.info.col){
-          if(trans.step.isOneOf("scalingUp","isFullscreen", "rippleEnd", "prepareScaleDown")){
-            styles.transform = "translateX(" + (gw - trans.info.rowPos.right) + 'px)';
-          }
-        }
-      }
-    }
     return {styles: styles, classes: classes};
   },
   transitionForRow(colIndex, rowIndex){
@@ -1335,83 +1307,7 @@ var Grid = React.createClass({
         }
       }
     }
-    if(trans.name === "fullscreen"){
-      if(trans.info.col === colIndex){
 
-        var gh = this.refs.grid.clientHeight;
-        var gw = this.refs.grid.clientWidth;
-        if(rowIndex > trans.info.row){
-          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){
-            styles.transformOrigin = "50% 50%";
-            styles.transform = "translateY(" + (gh - trans.info.rowPos.bottom) + 'px)';
-          }
-          if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
-            styles.display = 'none';
-          }
-        }
-        if(rowIndex < trans.info.row){
-          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){
-            styles.transformOrigin = "50% 50%";
-            styles.transform = "translateY(" + (-trans.info.rowPos.top) + "px)";
-          }
-          if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
-            styles.display = 'none';
-          }
-        }
-
-
-        if(rowIndex === trans.info.row){
-          classes.push("sw-fullscreen-row");
-
-          if(trans.step.isOneOf("rippleStart", "scalingUp", "isFullscreen", "rippleEnd", "beforeScaleDown", "scalingDown", "removeRipple")){
-            var rippleSize = 2 * Math.max(trans.info.rowSize.height, trans.info.rowSize.width);
-            if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
-              rippleSize = 2 * Math.max(gw, gh);
-            }
-            rippleStyles.width = rippleSize + 'px';
-            rippleStyles.height = rippleSize + 'px';
-          }
-
-          var numberOfRowsInColumn = columns[colIndex].rows.length;
-          const centerXPercentage = (trans.info.rowPos.left * 100) / ((gw - trans.info.rowPos.right) + trans.info.rowPos.left);
-          const centerYPercentage = (trans.info.rowPos.top * 100) / ((gh - trans.info.rowPos.bottom) + trans.info.rowPos.top);
-          const scaleTo = this.calcScale(gw, gh, trans.info.rowSize.width, trans.info.rowSize.height);
-
-          var originX = centerXPercentage;
-
-          if(colIndex === 0)
-            originX = 0;
-          if(colIndex === columns.length - 1)
-            originX = 100;
-
-          var originY = centerYPercentage;
-          if(rowIndex === 0 && numberOfRowsInColumn === 1)
-            originY = 50;
-          else if(rowIndex === 0)
-            originY = 0;
-          else if(rowIndex === numberOfRowsInColumn - 1)
-            originY = 100;
-
-
-          styles.transformOrigin = originX + '% ' + originY + '%';
-          if(trans.step.isOneOf("scalingUp", "beforeScaleDown")){
-            styles.transform = 'scaleX(' + scaleTo.w + ') scaleY(' + scaleTo.h + ')';
-          }
-
-
-
-          if(trans.step.isOneOf("isFullscreen", "rippleEnd")){
-            styles.marginLeft = -trans.info.rowPos.left + 'px';
-            styles.top = 0;
-            styles.left = 0;
-            styles.position = "absolute";
-            styles.width = gw + 'px';
-            styles.height = '100%';
-          }
-
-        }
-      }
-    } // End transition fullscreen
     return {styles: styles, classes: classes, rippleStyles: rippleStyles};
   },
 
@@ -1421,55 +1317,6 @@ var Grid = React.createClass({
   // ======================================================
   onMenuButton(id){
     this.callDelegate('gridRowPressedMenu', id);
-  },
-  closeFullscreen(){
-    var trans = this.state.transition
-    if(!trans || trans.name !== 'fullscreen' || trans.step !== 'isFullscreen'){
-      return;
-    }
-    this.transitionNext();
-  },
-  onFullscreen(id){
-    this._onFullscreenClick(id);
-  },
-  _onFullscreenClick(id){
-    var trans = this.state.transition;
-
-    // If fullscreen is already on, jump to prepareScaleDown and then scalingDown
-    if(trans && trans.name === "fullscreen"){ // trans.step is "isFullscreen"
-      this.transitionNext();
-      return;
-    }
-    this.callDelegate('gridRowPressedFullscreen', id);
-
-
-    var indexes = this.indexesForRowId(id);
-    var rowEl = document.getElementById('row-'+ id);
-    var colEl = rowEl.parentNode;
-    var transitionInfo = {
-      row: indexes.row,
-      col: indexes.col,
-      id: id,
-      rowPos: {
-        left: colEl.offsetLeft,
-        top: rowEl.offsetTop,
-        right: colEl.offsetLeft + rowEl.clientWidth,
-        bottom: rowEl.offsetTop + rowEl.clientHeight
-      },
-      rowSize: {
-        width: rowEl.clientWidth,
-        height: rowEl.clientHeight
-      }
-    };
-    this.transitionStart("fullscreen", transitionInfo, function(step){
-      var columns = this.state.columns;
-      if(!step || step === 'isFullscreen'){
-        columns[indexes.col].rows[indexes.row].fullscreen = (step === 'isFullscreen');
-        this.setState({columns: columns});
-      }
-
-
-    }.bind(this));
   },
 
   onCollapse(id){
