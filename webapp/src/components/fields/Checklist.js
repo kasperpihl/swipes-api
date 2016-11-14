@@ -2,39 +2,39 @@ import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
 import Checkbox from '../swipes-ui/Checkbox'
 import './styles/checklist.scss'
+import { fromJS } from 'immutable'
 
 class Checklist extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = { checks: fromJS(props.data.checks) };
+    this.bindCallbacks = {};
   }
-  componentDidMount() {
-  }
-  renderIcon(icon){
-    const Comp = Icons[icon];
+  onChange(i, checked){
+    const { checks } = this.state;
+    const newChecks = checks.setIn([i, 'checked'], checked);
+    this.setState({checks: newChecks});
 
-    if (Comp) {
-      return <Comp className="checklist__icon checklist__icon--svg"/>;
+    const { onChange } = this.props;
+    if(onChange){
+      onChange({checks: newChecks.toJS()});
     }
-
-    return <i className="material-icons checklist__icon checklist__icon--font">{icon}</i>
   }
-  renderHeader() {
-    return (
-      <div className="checklist__header">
-        {this.renderIcon('CheckmarkIcon')}
-        <div className="checklist__title">Checklist</div>
-        <div className="checklist__description">Things to improve</div>
-      </div>
-    )
+  renderChecks(){
+    const { checks } = this.state;
+    return checks.map((c,i) => {
+      if(!this.bindCallbacks[i]){
+        this.bindCallbacks[i] = this.onChange.bind(this, i);
+      }
+      return (
+        <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} />
+      )
+    })
   }
   render() {
     return (
       <div className="checklist">
-        {this.renderHeader()}
-        <Checkbox label="Improve target audience" checked={true}/>
-        <Checkbox label="Minimize on features"/>
-        <Checkbox label="Prepare 2 more use cases"/>
+        {this.renderChecks()}
       </div>
     )
   }
@@ -42,6 +42,13 @@ class Checklist extends Component {
 
 export default Checklist
 
-const { string } = PropTypes;
+const { string, bool, arrayOf, shape } = PropTypes;
 
-Checklist.propTypes = {}
+Checklist.propTypes = {
+  data: shape({
+    checks: arrayOf(shape({
+      label: string,
+      checked: bool
+    }))
+  })
+}

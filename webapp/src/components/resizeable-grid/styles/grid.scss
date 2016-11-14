@@ -128,7 +128,7 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
 
     .sw-row-content {
       position: relative;
-      @include size(100%, calc(100% - 50px));
+      @include size(100%, 100%);
     }
   }
 
@@ -220,6 +220,4 @@ $defaultTransformTransition: transform $transitionTime cubic-bezier(.76,.33,.76,
   }
 }
 
-
-@import "grid-topbar";
 @import "grid-transitions";

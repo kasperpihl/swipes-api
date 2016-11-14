@@ -148,7 +148,6 @@ class Topbar extends Component {
     }
 
 
-    const { pathname, fullscreenTitle, fullscreenSubtitle } = this.props;
 
     return (
       <div className="topbar" id="topbar" style={styles}>
@@ -170,8 +169,6 @@ function mapStateToProps(state) {
     overlays: state.get('overlays'),
     organizations: state.getIn(['me', 'organizations']),
     profilePic: state.getIn(['me', 'profile_pic']),
-    fullscreenTitle: state.getIn(['main', 'fullscreenTitle']),
-    fullscreenSubtitle: state.getIn(['main', 'fullscreenSubtitle']),
     searchQuery: state.getIn(['main', 'searchQuery']),
     hasLoaded: state.getIn(['main', 'hasLoaded'])
   }
@@ -180,7 +177,6 @@ function mapStateToProps(state) {
 const ConnectedTopbar = connect(mapStateToProps, {
   logout: main.logout,
   search: main.search,
-  toggleFullscreen: main.toggleFullscreen,
   toggleFind: main.toggleFind,
   setOverlay: overlay.set,
   clearOverlay: overlay.clear,

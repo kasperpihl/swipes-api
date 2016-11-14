@@ -154,21 +154,6 @@ class Workspace extends Component {
     return { title: title, subtitle: show_name };
 
   }
-  gridDidTransitionStep(grid, name, step){
-    const { fullscreen, toggleFullscreen } = this.props;
-    if(name === "fullscreen" && (step === "scalingUp" || step === "isFullscreen")){
-      if(!fullscreen){
-        toggleFullscreen();
-      }
-    }
-  }
-  gridRowPressedFullscreen(grid, id){
-    //var options = this.gridOptionsForTopbar(grid,id);
-    //this.props.setFullscreenTitle(options.title, options.subtitle);
-  }
-  gridRowPressedMenu(grid, id){
-    this.sendToTile(id, 'menu.pressed');
-  }
   gridDidUpdate(grid, columns){
     this.props.updateColumns(columns);
   }
@@ -217,9 +202,6 @@ class Workspace extends Component {
     window.addEventListener("blur", this.onWindowBlur);
   }
   componentDidUpdate(prevProps){
-    if(!this.props.fullscreen && this.refs.grid){
-      this.refs.grid.closeFullscreen()
-    }
   }
   componentWillUnmount(){
     window.removeEventListener("focus", this.onWindowFocus);
@@ -232,7 +214,6 @@ class Workspace extends Component {
 function mapStateToProps(state) {
   return {
     draggingDot: state.getIn(['main', 'draggingDot']),
-    fullscreen: state.getIn(['main', 'isFullscreen']),
     me: state.get('me'),
     tiles: state.getIn(['workspace', 'tiles']),
     hasLoaded: state.getIn(['main', 'hasLoaded']),
@@ -244,8 +225,6 @@ const ConnectedWorkspace = connect(mapStateToProps, {
   removeTile: workspace.removeTile,
   updateColumns: workspace.updateColumns,
   generateShareUrl: workspace.generateShareUrl,
-  toggleFullscreen: main.toggleFullscreen,
-  setFullscreenTitle: main.setFullscreenTitle,
   addToasty: toasty.add,
   updateToasty: toasty.update,
   clearOverlay: overlay.clear,

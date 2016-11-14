@@ -1,9 +1,5 @@
 import * as types from '../constants/ActionTypes'
 
-export function toggleFullscreen() {
-  return { type: types.TOGGLE_FULLSCREEN }
-}
-
 export function setStatus(status) {
   return { type: types.SET_STATUS, status: status }
 }

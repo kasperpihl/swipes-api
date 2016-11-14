@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import Button from '../swipes-ui/Button'
 
 import './styles/note.scss'
 import {
@@ -15,28 +14,21 @@ import {
 class Note extends Component {
   constructor(props) {
     super(props)
-    const index = props.id + '-note';
     let editorState = createEditorState();
-    let localState = localStorage.getItem(index);
 
-    if (!localState) {
-      const data = props.data;
-      localState = JSON.stringify(props.data);
-    }
-    if (localState) {
-      const blockData = JSON.parse(localState);
+    if (props.data) {
+      const blockData = JSON.parse(JSON.stringify(props.data))
       editorState = EditorState.push(editorState, convertFromRaw(blockData));
     }
 
-
     this.state = { editorState };
-    this.onChange = (editorState) => {
-      const index = this.props.id + '-note';
-      localStorage.setItem(index, JSON.stringify(convertToRaw(editorState.getCurrentContent())))
-      this.setState({ editorState });
-    };
+    this.onChange = this.onChange.bind(this);
+
   }
-  componentDidMount() {
+  onChange(editorState){
+    const { onChange } = this.props;
+    this.setState({ editorState });
+    onChange(convertToRaw(editorState.getCurrentContent()))
   }
   render() {
     const {editorState} = this.state;

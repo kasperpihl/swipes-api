@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import Topbar from './grid_topbar'
 import Resizer from './grid_resizer'
 import CollapsingOverlay from './grid_collapsing_overlay'
 
@@ -21,17 +20,6 @@ class GridRow extends Component {
     if(rowIndex > 0){
       return <Resizer isRow={true} columnIndex={columnIndex} rowIndex={rowIndex} delegate={delegate} />;
     }
-  }
-  renderTopbar(){
-    const {
-      delegate,
-      data,
-      columnIndex,
-      callGridDelegate,
-      rowIndex
-    } = this.props;
-
-    return <Topbar delegate={delegate} data={data} columnIndex={columnIndex} callGridDelegate={callGridDelegate} rowIndex={rowIndex} />
   }
   renderResizingOverlay(){
     const {
@@ -81,13 +69,12 @@ class GridRow extends Component {
         className += " " + transitions.classes.join(' ');
       }
     }
-    
+
     return (
       <div className={className} id={"row-" + data.id } ref="row" style={styles}>
         <div className="transition-ripple" style={rippleStyles} />
 
         {this.renderResizingOverlay()}
-        {this.renderTopbar()}
         {this.renderResizer()}
         <RowChild getChild={this.getChildObject} id={data.id} />
       </div>
