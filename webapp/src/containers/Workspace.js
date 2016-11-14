@@ -154,9 +154,6 @@ class Workspace extends Component {
     return { title: title, subtitle: show_name };
 
   }
-  gridRowPressedMenu(grid, id){
-    this.sendToTile(id, 'menu.pressed');
-  }
   gridDidUpdate(grid, columns){
     this.props.updateColumns(columns);
   }

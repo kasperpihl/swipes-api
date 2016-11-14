@@ -13,7 +13,9 @@ class GoalStep extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.onSubmit = this.onSubmit.bind(this);
     this.bindCallbacks = {};
+    this.formData = [];
   }
   componentDidMount() {
 
@@ -21,8 +23,9 @@ class GoalStep extends Component {
   renderHeader(){
     const { step } = this.props;
   }
-  onFieldChange(id, data){
-    console.log(id, data);
+  onFieldChange(i, data){
+    console.log(i, data);
+    this.formData[i] = data;
   }
   renderField(field, i){
     const Field = fields[field.get('type')];
@@ -34,6 +37,9 @@ class GoalStep extends Component {
       const key = 'field-' + i;
       if(!this.bindCallbacks[i]){
         this.bindCallbacks[i] = this.onFieldChange.bind(this, i);
+      }
+      if(typeof this.formData[i] === 'undefined'){
+        this.formData[i] = data;
       }
       return (
         <Field
@@ -54,10 +60,11 @@ class GoalStep extends Component {
     });
   }
   onSubmit(submission){
-
+    console.log(this.formData);
   }
   renderSubmission(){
     const { step } = this.props;
+    return <StepSubmission onSubmit={this.onSubmit} />
   }
   render() {
     const { step } = this.props;

@@ -1,7 +1,5 @@
 STATE DESCRIPTION
 main
-	isFullscreen: bool
-	isSearching: bool
 	token
 	socketUrl
 	tileBaseUrl
