@@ -5,8 +5,8 @@ import {
   stepsAssignValidate,
   stepsAssign,
   stepsGetCurrent,
-  stepsValidateDoAction,
-  stepsDo,
+  stepsValidateSubmit,
+  stepsSubmit,
   stepsGet,
   stepsValidateUpdateData,
   stepsUpdateData,
@@ -37,18 +37,15 @@ router.post('/steps.assign',
   }
 )
 
-router.post('/steps.do',
-  stepsValidateDoAction,
-  usersGet,
+router.post('/steps.submit',
+  stepsValidateSubmit,
   goalsGet,
   stepsGetCurrent,
-  stepsDo,
+  stepsSubmit,
   stepsUpdateRethinkdb,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
-  }
+  (req, res, next) => res.status(200).json({ok:true})
 )
 
 router.post('/steps.update',
@@ -60,16 +57,6 @@ router.post('/steps.update',
   stepsUpdateRethinkdb,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
-  }
-)
-
-router.post('/steps.next',
-  usersGet,
-  goalsGet,
-  stepsGetCurrent,
-  //stepsIterate,
   (req, res, next) => {
     return res.status(200).json({ok: true});
   }

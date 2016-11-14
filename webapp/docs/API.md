@@ -44,13 +44,13 @@
       }
     }],
     iterations: [{
-      message: {
-
-      },
       errorLog: [],
       automationLog: [],
-      data: {
-
+      responses: {
+        "user12": {
+          message: 'Hello there',
+          data: []
+        }
       }
     }]
   }]

@@ -12,9 +12,6 @@ import SwipesError from '../swipes-error.js';
 import {
   generateSlackLikeId
 } from '../util.js';
-import {
-  reducersGet
-} from '../reducers/helpers';
 
 const goalsValidate = (req, res, next) => {
   const goal = req.body.goal;
@@ -26,17 +23,8 @@ const goalsValidate = (req, res, next) => {
 
   goal.steps = goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
-    let reducer = reducersGet(step, 'init');
-    step.id = goalId + '-' + stepId;
-
-    if (!reducer) {
-      reducer = (step) => step.merge(fromJS({data: {}}))
-      //return next('invalid init reducer');
-    }
-
-    const stepInited = reducer(fromJS(step));
-
-    return stepInited.toJS();
+    step = step.set('id', goalId + '-' + stepId);
+    return step.toJS();
   })
 
   res.locals.goalId = goalId;

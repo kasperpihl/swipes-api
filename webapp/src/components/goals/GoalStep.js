@@ -17,6 +17,12 @@ class GoalStep extends Component {
     this.bindCallbacks = {};
     this.formData = [];
   }
+  callDelegate(name){
+    const { delegate } = this.props;
+    if(delegate && typeof delegate[name] === "function"){
+      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
+  }
   componentDidMount() {
 
   }
@@ -60,6 +66,8 @@ class GoalStep extends Component {
     });
   }
   onSubmit(submission){
+    const { goal, step } = this.props;
+    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData);
     console.log(this.formData);
   }
   renderSubmission(){

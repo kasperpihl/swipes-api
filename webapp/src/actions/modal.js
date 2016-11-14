@@ -10,6 +10,7 @@ export function load(type, props, callback) {
   }
   if(typeof type === 'object'){
     props = type;
+    type = null;
   }
 
   return { type: types.LOAD_MODAL, modalType: type, props, callback }

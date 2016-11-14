@@ -2,18 +2,14 @@
 
 import validator from 'validator';
 import r from 'rethinkdb';
-import requireDir from 'require-dir';
 import {
   fromJS,
   Map
 } from 'immutable';
-import {
-  reducersGet
-} from '../reducers/helpers';
+
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 
-const reducers = requireDir('../reducers', {recurse: true});
 
 const stepsAssignValidate = (req, res, next) => {
   const goalId = req.body.goal_id;
@@ -94,57 +90,33 @@ const stepsGetCurrent = (req, res, next) => {
   return next();
 }
 
-const stepsValidateDoAction = (req, res, next) => {
+const stepsValidateSubmit = (req, res, next) => {
   const goalId = req.body.goal_id;
   if (validator.isNull(goalId)) {
     return next(new SwipesError('goal_id is required'));
   }
 
-  const payload = req.body.payload;
-  if(payload && typeof payload !== 'object'){
-    return next(new SwipesError('payload must be object'));
+  const data = req.body.data;
+  if(typeof data !== 'object'){
+    return next(new SwipesError('data must be object'));
   }
 
-  const action = req.body.action;
-  if (typeof action !== 'string') {
-    return next(new SwipesError('action required (string)'));
+  const message = req.body.message;
+  if (message && typeof message !== 'string') {
+    return next(new SwipesError('message must be string'));
   }
 
   res.locals.goalId = goalId;
-  res.locals.payload = payload;
-  res.locals.action = action;
+  res.locals.data = data;
+  res.locals.message = message;
 
   return next();
 }
 
-const stepsDo = (req, res, next) => {
-  let {
-    action,
-    payload,
-    step,
-    user
-  } = res.locals;
-
-  const reducer = reducersGet(step, action);
-
-  if (!reducer) {
-    return next('invalid reducer');
-  }
-
-  const stepUpdated = reducer(fromJS(step), payload, user.id);
-
-  if (typeof stepUpdated === 'string') {
-    return next(stepUpdated);
-  }
-
-  if (!Map.isMap(stepUpdated)) {
-    return next('invalid reducer implementation, should return immutable object');
-  }
-
-  res.locals.stepUpdated = stepUpdated.toJS();
-
+const stepsSubmit = (req, res, next) => {
   return next();
 }
+
 
 const stepsValidateUpdateData = (req, res, next) => {
   const goalId = req.body.goal_id;
@@ -254,8 +226,8 @@ export {
   stepsAssignValidate,
   stepsAssign,
   stepsGetCurrent,
-  stepsValidateDoAction,
-  stepsDo,
+  stepsValidateSubmit,
+  stepsSubmit,
   stepsGet,
   stepsValidateUpdateData,
   stepsUpdateData,

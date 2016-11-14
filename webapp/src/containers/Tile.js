@@ -64,7 +64,7 @@ class Tile extends Component {
 
     // K_TODO || T_TODO : WARNING, This is a super hack hahaha
     if(this.slackToken){
-      
+
       tileJS.selectedAccountId = this.selectedAccountId;
       initObj.info.slackToken = this.slackToken;
     }
@@ -75,25 +75,6 @@ class Tile extends Component {
   }
   addListenersToCommunicator(){
     const { tile, sendNotification, startDraggingDot, saveData, loadModal, setOverlay } = this.props
-    this.com.addListener('navigation.setTitle', (data) => {
-      if (data) {
-        this.setState({"titleFromCard": data});
-        setTimeout(() => { 
-          this.callDelegate('tileForceGridUpdate');
-        }, 10)
-        
-      }
-    });
-
-    this.com.addListener('navigation.setSubtitle', (data) => {
-      if(!data){
-        data = '';
-      }
-      this.setState({"subtitleFromCard": data});
-      setTimeout(() => { 
-        this.callDelegate('tileForceGridUpdate');
-      }, 10)
-    });
 
     this.com.addListener('modal.load', (data, callback) => {
       loadModal(data.props, callback);

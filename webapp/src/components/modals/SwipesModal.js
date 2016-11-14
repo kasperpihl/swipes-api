@@ -42,6 +42,9 @@ class SwipesModal extends Component {
       selectedListItems: []
     }
   }
+  componentDidMount(){
+    this.refs.textarea.focus();
+  }
   sendCallback(obj){
     let res = obj;
     if(obj){
