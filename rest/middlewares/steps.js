@@ -10,82 +10,12 @@ import {
 import db from '../db.js';
 import SwipesError from '../swipes-error.js';
 
-
-const stepsAssignValidate = (req, res, next) => {
-  const goalId = req.body.goal_id;
-  const stepId = req.body.step_id;
-  const assigneeId = req.body.assignee_id;
-
-  if (validator.isNull(goalId) || validator.isNull(stepId) || validator.isNull(assigneeId)) {
-    return next(new SwipesError('goal_id, step_id and assignee_id are required'));
-  }
-
-  res.locals.goalId = goalId;
-  res.locals.stepId = stepId;
-  res.locals.assigneeId = assigneeId;
-
-  return next();
-}
-
-const stepsAssign = (req, res, next) => {
-  const {
-    goalId,
-    stepId,
-    assigneeId
-  } = res.locals;
-
-  const updateQ =
-    r.db('swipes')
-      .table('goals')
-      .get(goalId)
-      .update((goal) => {
-        return goal.merge({
-          steps: goal('steps').map((step) => {
-            return r.branch(
-              step('id').eq(stepId),
-              step.merge({
-                assignees: step('assignees').append(assigneeId)
-              }),
-              step
-            )
-          })
-        })
-      })
-
-  db.rethinkQuery(updateQ)
-    .then(() => {
-      res.locals.eventType = 'step_assignee_added';
-      res.locals.eventMessage = '';
-      res.locals.eventData = {
-        goal_id: goalId,
-        step_id: stepId,
-        assignee_id: assigneeId
-      };
-
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    })
-}
-
 const stepsGetCurrent = (req, res, next) => {
   const {
     goal
   } = res.locals;
 
-  const steps = goal.steps;
-  const n = steps.length;
-
-  for (let i = 0; i < n; i++) {
-    const step = steps[i];
-
-    if (!step.completed) {
-      res.locals.step = step;
-
-      break;
-    }
-  }
+  res.locals.step = goal.steps[goal.currentStepIndex];
 
   return next();
 }
@@ -110,10 +40,29 @@ const stepsValidateSubmit = (req, res, next) => {
   res.locals.data = data;
   res.locals.message = message;
 
+  if (req.body.step_back_id) {
+    res.locals.stepBackId = req.body.step_back_id;
+  }
+
   return next();
 }
 
 const stepsSubmit = (req, res, next) => {
+  const userId = req.userId;
+  const {
+    step,
+    data,
+    message,
+    step_back_id
+  } = res.locals;
+  const lastIterationIndex = step.iterations.length - 1;
+
+  step.iterations[lastIterationIndex].responses[userId] = { data, message }
+
+  if (step.response_type === 'single') {
+    res.locals.doNext = true;
+  }
+
   return next();
 }
 
@@ -207,24 +156,7 @@ const stepsUpdateRethinkdb = (req, res, next) => {
     })
 }
 
-// const stepsIterate = (req, res, next) => {
-//   const {
-//     goal,
-//     step
-//   } = res.locals;
-//
-//   if (step.type !== 'decide') {
-//     step.completed = true;
-//
-//     res.locals.stepUpdated = step;
-//   }
-//
-//   return next();
-// }
-
 export {
-  stepsAssignValidate,
-  stepsAssign,
   stepsGetCurrent,
   stepsValidateSubmit,
   stepsSubmit,
@@ -232,5 +164,4 @@ export {
   stepsValidateUpdateData,
   stepsUpdateData,
   stepsUpdateRethinkdb
-  //stepsIterate
 }

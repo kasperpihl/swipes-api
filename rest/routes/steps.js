@@ -2,8 +2,6 @@
 
 import express from 'express';
 import {
-  stepsAssignValidate,
-  stepsAssign,
   stepsGetCurrent,
   stepsValidateSubmit,
   stepsSubmit,
@@ -11,10 +9,11 @@ import {
   stepsValidateUpdateData,
   stepsUpdateData,
   stepsUpdateRethinkdb
-  //stepsIterate
 } from '../middlewares/steps';
 import {
-  goalsGet
+  goalsGet,
+  goalsNext,
+  goalsUpdate
 } from '../middlewares/goals';
 import {
   notifyAllInCompany,
@@ -26,23 +25,14 @@ import {
 
 const router = express.Router();
 
-router.post('/steps.assign',
-  stepsAssignValidate,
-  usersGet,
-  stepsAssign,
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
-  }
-)
-
 router.post('/steps.submit',
   stepsValidateSubmit,
   goalsGet,
   stepsGetCurrent,
   stepsSubmit,
-  stepsUpdateRethinkdb,
+  goalsNext,
+  goalsUpdate,
+  usersGet,
   notifyAllInCompany,
   notifyCommonRethinkdb,
   (req, res, next) => res.status(200).json({ok:true})
