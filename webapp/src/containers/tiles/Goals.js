@@ -49,11 +49,9 @@ class Goals extends Component {
       navStepIndex = currentGoal.get('currentStepIndex') || 0;
     }
     return (
-      <div className="goals__tab-abs">
-        <div className="goals__tab-bar">
+        <div className="goals__nav-bar">
           <NavBar tabs={this.tabs} stepIndex={navStepIndex} steps={navSteps} title={navTitle} delegate={this} activeTab={this.state.tabIndex}/>
         </div>
-      </div>
     )
   }
   stepSubmit(step, goalId, stepId, data, previousSteps){
@@ -64,7 +62,7 @@ class Goals extends Component {
   renderTimeline(){
     const { currentGoal } = this.props;
     if (currentGoal) {
-      return <div>Inner goal</div>
+      return <div style={{marginTop: '100px'}}>Inner goal</div>
       return <GoalStep step={currentGoal.getIn(['steps', 0])} goal={currentGoal} delegate={this}/>;
     }
   }

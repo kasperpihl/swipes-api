@@ -5,10 +5,7 @@
   $b: &;
 
   @include size(100%, 100%);
-  // padding-top: 50px;
-  // overflow-y: auto;
   max-width: 500px;
-  // overflow-x: hidden;
   margin: 0 auto;
   margin-top: 30px;
 
@@ -22,7 +19,7 @@
     transform: translateX(-3px);
   }
 
-  &__tab-bar {
+  &__nav-bar {
     @include size(100%, auto);
     max-width: 500px;
     z-index: 2;

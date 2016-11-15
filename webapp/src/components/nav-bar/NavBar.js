@@ -142,14 +142,10 @@ class NavBar extends Component {
       return;
     }
 
-    return (
-      <div className="sw-nav-bar__progressbar">
-        <ProgressBar steps={steps} index={stepIndex}/>
-      </div>
-    )
+    return <ProgressBar steps={steps} index={stepIndex}/>
   }
   render() {
-    const { tabs, title } = this.props;
+    const { tabs, title, steps } = this.props;
     const { activeTab} = this.state;
     let rootClass = 'sw-nav-bar';
 
@@ -174,7 +170,14 @@ class NavBar extends Component {
         {tabsHTML}
         {this.renderTitle()}
         {this.renderSlider()}
-        {this.renderProgressbar()}
+        <ReactCSSTransitionGroup
+          transitionName="progressBarTransition"
+          component="div"
+          className="sw-nav-bar__progressbar"
+          transitionEnterTimeout={0}
+          transitionLeaveTimeout={400}>
+          {this.renderProgressbar()}
+        </ReactCSSTransitionGroup>
       </div>
     )
   }
