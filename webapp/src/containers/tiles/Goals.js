@@ -15,18 +15,11 @@ class Goals extends Component {
   constructor(props) {
     super(props)
     bindAll(this, [
-      'clickedRoundButton',
-      'onChange'
+      'clickedRoundButton'
     ]);
     this.state = { tabIndex: 0 };
     this.tabs = ['now', 'later', 'tags', 'all'];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  onChange(index) {
-    if(this.state.tabIndex !== index) {
-      this.setState({tabIndex: index});
-    }
   }
 
   renderList(){
@@ -36,11 +29,29 @@ class Goals extends Component {
       return <GoalList goals={goals} me={me} tabIndex={tabIndex} setActiveGoal={setActiveGoal}/>
     }
   }
+  navTabDidChange(nav, index){
+    if(this.state.tabIndex !== index) {
+      this.setState({tabIndex: index});
+    }
+  }
+  navPressedBack(nav){
+    const { setActiveGoal } = this.props;
+    setActiveGoal();
+  }
   renderTabbar() {
+    let navTitle, navSteps, navStepIndex;
+    const { currentGoal } = this.props;
+    if (currentGoal) {
+      navTitle = currentGoal.get('title');
+      navSteps = currentGoal.get('steps').map((s) => {
+        return { title: s.get('title'), completed: s.get('completed')}
+      }).toJS()
+      navStepIndex = currentGoal.get('currentStepIndex') || 0;
+    }
     return (
       <div className="goals__tab-abs">
         <div className="goals__tab-bar">
-          <NavBar tabs={this.tabs} onChange={this.onChange} activeTab={this.state.tabIndex}/>
+          <NavBar tabs={this.tabs} stepIndex={navStepIndex} steps={navSteps} title={navTitle} delegate={this} activeTab={this.state.tabIndex}/>
         </div>
       </div>
     )

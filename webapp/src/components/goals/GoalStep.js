@@ -30,7 +30,7 @@ class GoalStep extends Component {
     const { step } = this.props;
   }
   renderHandoff(){
-    
+
   }
   onFieldChange(i, data){
     console.log(i, data);

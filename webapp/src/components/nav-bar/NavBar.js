@@ -16,7 +16,13 @@ class NavBar extends Component {
       activeTab: 0,
       sliderClips: []
     }
-    bindAll(this, ['setActiveTab'])
+    bindAll(this, ['setActiveTab', 'pressedBack'])
+  }
+  callDelegate(name){
+    const { delegate } = this.props;
+    if(delegate && typeof delegate[name] === "function"){
+      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
   }
   componentDidMount() {
     setTimeout( () => {
@@ -59,8 +65,11 @@ class NavBar extends Component {
 
     this.setState({sliderClips: sliderClips})
   }
+  pressedBack(){
+    this.callDelegate('navPressedBack');
+  }
   callback(index) {
-    this.props.onChange(index)
+    this.callDelegate('navTabDidChange', index);
   }
   setActiveTab(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
@@ -77,6 +86,7 @@ class NavBar extends Component {
       return <Comp className="sw-nav-bar__icon sw-nav-bar__icon--svg" data-index={i}/>;
     }
   }
+
   renderTitle() {
     const { title, steps, stepIndex } = this.props;
     let newTitle = '';
@@ -86,7 +96,7 @@ class NavBar extends Component {
     }
 
     return (
-      <div className="sw-nav-bar__main-title">
+      <div className="sw-nav-bar__main-title" onClick={this.pressedBack}>
         {this.renderIcon('ArrowLeftIcon')}
         {newTitle}
       </div>
