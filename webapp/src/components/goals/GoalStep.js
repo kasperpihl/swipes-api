@@ -29,6 +29,9 @@ class GoalStep extends Component {
   renderHeader(){
     const { step } = this.props;
   }
+  renderHandoff(){
+    
+  }
   onFieldChange(i, data){
     console.log(i, data);
     this.formData[i] = data;
