@@ -2,15 +2,40 @@
 @import '../../global-styles/mixins/';
 
 .goal-step {
+  $b: &;
+
   @include size(100%);
-  @include flex(center, flex-start, column);
+  @include flex(flex-start, flex-start, column);
   position: relative;
 
   &__scroller {
     @include size(100%);
-    padding-left: 30px;
-    padding-right: 30px;
     overflow-y:auto;
+  }
+
+  &__field {
+    @include size(100%, auto);
+    position: relative;
+    padding-left: 42px;
+    padding-bottom: 15px;
+  }
+
+  &__field-header {
+    @include size(100%, 50px);
+    @include flex(center, flex-start);
+    transform: translateX(-42px);
+    color: $deepBlue-80;
+    font-size: 15px;
+
+    #{$b}__icon {
+      margin: 0 9px;
+    }
+  }
+
+  &__icon {
+    @include size(24px);
+    fill: $blue-100;
+    stroke: $blue-100;
   }
 
   &__submission {

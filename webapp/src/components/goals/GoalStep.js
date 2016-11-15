@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-
+import * as Icons from '../icons'
 
 // Views
 import StepHeader from './StepHeader'
@@ -33,6 +33,13 @@ class GoalStep extends Component {
     console.log(i, data);
     this.formData[i] = data;
   }
+  renderIcon(icon){
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="goal-step__icon goal-step__icon--svg"/>;
+    }
+  }
   renderField(field, i){
     const Field = fields[field.get('type')];
     if(Field){
@@ -48,12 +55,17 @@ class GoalStep extends Component {
         this.formData[i] = data;
       }
       return (
-        <Field
-          key={key}
-          onChange={this.bindCallbacks[i]}
-          data={data}
-          settings={field.get('settings')}
-        />
+        <div className="goal-step__field" key={key}>
+          <div className="goal-step__field-header">
+            {this.renderIcon('CheckmarkIcon')}
+            Check list
+          </div>
+          <Field
+            onChange={this.bindCallbacks[i]}
+            data={data}
+            settings={field.get('settings')}
+          />
+        </div>
       )
     }
   }
