@@ -1,0 +1,144 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-nav-bar {
+  $b: &;
+
+  @include size(100%, auto);
+  background-color: $bg;
+  max-width: 500px;
+  padding: 0;
+  position: relative;
+
+  &:after {
+    @include size(100%, 1px);
+    background-color: $deepBlue-10;
+    content: "";
+    left: 0; bottom: 0;
+    position: absolute;
+  }
+
+  &__tab {
+    @include size(auto, 50px);
+    color: $deepBlue-30;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 50px;
+    padding: 0 30px;
+    position: relative;
+    text-transform: uppercase;
+    transition: .1s, transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s;
+    user-select: none;
+
+    &:hover {
+      color: darken($deepBlue-40, 5%);
+    }
+
+    &--active {
+      color: $blue-100;
+      transition: .1s, transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s;
+
+      &:hover {
+        color: $blue-120;
+      }
+    }
+  }
+
+  &__main-title {
+    @include flex(center, flex-start);
+    @include size(100%, 50px);
+    color: $blue-100;
+    font-size: 11px;
+    font-weight: 700;
+    left: 0; top: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(50%);
+    transition: opacity .2s ease-in-out, transform .2s ease-in-out .2s;
+
+    &:hover {
+      color: $blue-120;
+
+      #{$b}__icon {
+        &--svg {
+          fill: $blue-120;
+        }
+      }
+    }
+
+    #{$b}__icon {
+      &--svg {
+        fill: $blue-100;
+        transform: translateY(1px);
+      }
+    }
+  }
+
+  &__slider {
+    @include size(100%, 1px);
+    @include flex();
+    background-color: $blue-100;
+    left: 0; bottom: 0;
+    position: absolute;
+    transition: -webkit-clip-path .2s ease-in-out, background .2s ease-in-out;
+    z-index: 2;
+  }
+
+  &__progressbar {
+    @include size(100%, auto);
+    left: 0; bottom: -9px;
+    position: absolute;
+    transform: scaleY(0);
+    transition: transform .2s ease-in-out;
+    z-index: 3;
+  }
+
+  &__icon {
+
+    &--svg {
+      @include size(24px);
+      fill: $deepBlue-30;
+      margin-right: 9px;
+      transition: .1s;
+    }
+  }
+
+  &--title-view {
+
+    &:after {
+      opacity: 0;
+      transition: .15s;
+    }
+
+    #{$b}__tab {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(50%);
+      transition: all .2s ease-in-out .1s;
+    }
+
+    #{$b}__main-title {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0px);
+      transition: transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s;
+    }
+
+    #{$b}__slider {
+      opacity: 0;
+      transition:
+        -webkit-clip-path .2s ease-in-out,
+        background .2s ease-in-out .2s,
+        opacity .1s ease-in-out .2s;
+    }
+
+    #{$b}__progressbar {
+      transform: scaleY(1);
+      transition: transform .2s ease-in-out .2s;
+      transform-origin: 50% 50%;
+    }
+  }
+}

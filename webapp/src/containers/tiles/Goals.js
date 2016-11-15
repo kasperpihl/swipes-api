@@ -4,7 +4,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { overlay, main, api, goals } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
-import TabBar from '../../components/tab-bar/TabBar'
+import NavBar from '../../components/nav-bar/NavBar'
 import GoalStep from '../../components/goals/GoalStep'
 import GoalList from '../../components/goals/GoalList'
 import { PlusIcon } from '../../components/icons'
@@ -40,7 +40,7 @@ class Goals extends Component {
     return (
       <div className="goals__tab-abs">
         <div className="goals__tab-bar">
-          <TabBar data={this.tabs} align="left" onChange={this.onChange} activeTab={this.state.tabIndex}/>
+          <NavBar tabs={this.tabs} onChange={this.onChange} activeTab={this.state.tabIndex}/>
         </div>
       </div>
     )
@@ -53,6 +53,7 @@ class Goals extends Component {
   renderTimeline(){
     const { currentGoal } = this.props;
     if (currentGoal) {
+      return <div>Inner goal</div>
       return <GoalStep step={currentGoal.getIn(['steps', 0])} goal={currentGoal} delegate={this}/>;
     }
   }

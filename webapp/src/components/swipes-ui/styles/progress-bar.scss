@@ -73,7 +73,7 @@
 
     &:after {
       @include size(100%, 6px);
-      background-color: $deepBlue-10;
+      background-color: $salmon;
       content: '';
       left: 0; top: 6px;
       position: absolute;
@@ -85,7 +85,7 @@
       content: attr(data-attr);
       font-size: 12px;
       font-weight: 500;
-      left: 0; top: -20px;
+      left: 0; bottom: -20px;
       opacity: 0;
       position: absolute;
       transform: translateY(5px);
@@ -97,7 +97,7 @@
     &--completed {
 
       &:after {
-        background-color: $green-color;
+        background-color: $blue-100;
       }
     }
 

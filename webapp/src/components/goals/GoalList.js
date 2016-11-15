@@ -4,6 +4,8 @@ import { bindAll } from '../../classes/utils'
 import GoalListItem from './GoalListItem'
 import TagItem from '../tags/TagItem';
 
+import './styles/goals-list.scss'
+
 class GoalList extends Component {
   constructor(props) {
     super(props)
