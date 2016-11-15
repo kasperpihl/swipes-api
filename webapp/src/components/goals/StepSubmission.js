@@ -10,16 +10,25 @@ class StepSubmission extends Component {
   }
   componentDidMount() {
   }
-  onSubmit(){
+  onSubmit(e){
+    const goBack = (parseInt(e.target.getAttribute('data-index'), 10));
+    console.log('go back', goBack);
     const { onSubmit } = this.props;
     if(onSubmit){
-      onSubmit();
+      onSubmit(goBack);
     }
   }
   renderActions() {
+    let btns = ['Submit'];
+    const { submission } = this.props;
+
+    if(submission && submission.type === 'decide'){
+      btns = ['Yes', 'No'];
+    }
+
     return (
       <div className="step-submission__actions">
-        <div className="step-submission__button" onClick={this.onSubmit} key={'step-action-button'}>Submit</div>
+        {btns.map((t,i) => <div className="step-submission__button" onClick={this.onSubmit} data-index={i} key={i}>{t}</div>)}
       </div>
     )
   }

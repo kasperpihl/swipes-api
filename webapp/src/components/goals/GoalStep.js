@@ -65,14 +65,19 @@ class GoalStep extends Component {
       return this.renderField(field, i);
     });
   }
-  onSubmit(submission){
+  onSubmit(goBack){
     const { goal, step } = this.props;
-    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData);
+    let previousSteps;
+    if(!goBack){
+      console.log('sending orev');
+      previousSteps = goal.get('steps');
+    }
+    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
     console.log(this.formData);
   }
   renderSubmission(){
     const { step } = this.props;
-    return <StepSubmission onSubmit={this.onSubmit} />
+    return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
   }
   render() {
     const { step } = this.props;

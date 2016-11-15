@@ -45,10 +45,10 @@ class Goals extends Component {
       </div>
     )
   }
-  stepSubmit(step, goalId, stepId, data){
+  stepSubmit(step, goalId, stepId, data, previousSteps){
     const { submit } = this.props;
     console.log('submit!', data);
-    submit(goalId, stepId, data);
+    submit(goalId, stepId, data, previousSteps);
   }
   renderTimeline(){
     const { currentGoal } = this.props;

@@ -23,7 +23,7 @@
       }
     }],
     submission: {
-      type: 'decide',
+      type: 'default' || 'decide' || 'custom'
     },
     submitted: new Date(), // Submitted means that data has been submitted
     completed: false || new Date(), // Completed means submitted and automations done and moved to the next stage
@@ -48,6 +48,8 @@
       automationLog: [],
       responses: {
         "user12": {
+          created_at: '12345',
+          updated_at: '23456',
           message: 'Hello there',
           data: []
         }
@@ -56,6 +58,68 @@
   }]
 }
 ```
+
+
+```
+{
+  id: 'G1234',
+  steps: [{
+    title: 'Feedback',
+    assignees: ['kasper@swipesapp.com', '@kristjan', '#product'],
+    responses: 'single' || 'multiple',
+    collaborative: true || false,
+    fields: [{
+      type: 'note',
+      title: 'Write email',
+      settings:{
+        editable: false
+      },
+      initialData:{
+
+      }
+    }, {
+      type: 'link',
+      settings: {
+        linkType: 'field'
+      }
+    }, {
+      type: 'checklist',
+      title: 'Flight check',
+      settings: {
+        required: true
+      }
+    }],
+    submission: {
+      type: 'default' || 'decide' || 'custom'
+    },
+    submitted: new Date(), // Submitted means that data has been submitted
+    completed: false || new Date(), // Completed means submitted and automations done and moved to the next stage
+    errors: [],
+    iterations: [{
+      errorLog: [],
+      automationLog: [],
+      responses: {
+        "user12": {
+          created_at: '12345',
+          updated_at: '23456',
+          message: 'Hello there',
+          data: []
+        }
+      }
+    }]
+  }]
+}
+```
+
+
+Goals create
+take all from patterns with iterations: []
+init first step
+  add iteration with empty logs and responses = {}
+
+Goals submit
+if responses is single
+  init next step
 
 
 

@@ -13,7 +13,7 @@ class NoteEditor extends Component {
       // { show: true, mousePos: {x, y} }
       editorState: EditorState.createEmpty() // Initiate Editor
     }
-    bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseDown', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'handleKeyCommand']);
+    bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'handleKeyCommand']);
     this.onChange = (editorState) => {
       const sel = editorState.getSelection();
       const hasSelected = ( sel.anchorKey !== sel.focusKey || sel.anchorOffset !== sel.focusOffset)
@@ -24,8 +24,6 @@ class NoteEditor extends Component {
       }
       this.setState({ editorState, hasSelected, styleControl });
     }
-  }
-  componentDidMount() {
   }
   handleKeyCommand(keyCommand) {
     const { editorState } = this.state;
@@ -94,9 +92,6 @@ class NoteEditor extends Component {
       this.shiftKeyTest = false;
     }
   }
-  onMouseDown(e){
-
-  }
   setStyleControl(styleControlVal){
     const { editorState, styleControl, hasSelected } = this.state;
     const selectionState = editorState.getSelection();
@@ -120,12 +115,11 @@ class NoteEditor extends Component {
   render() {
     const { editorState } = this.state;
     return (
-      <div className="sw-text-editor"
+      <div ref="rooty" className="sw-text-editor"
         onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
         onMouseMove={this.onMouseMove}
-        onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}>
         {this.renderStyleControls()}
         <Editor

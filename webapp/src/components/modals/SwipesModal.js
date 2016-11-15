@@ -70,7 +70,10 @@ class SwipesModal extends Component {
     const { list } = this.props.data;
 
     if (list.selectable) {
-      if(this.state.selectedListItems.includes(i)){
+      if(!list.multiple){
+        this.setState({selectedListItems: [i]});
+      }
+      else if(this.state.selectedListItems.includes(i)){
         this.setState({selectedListItems: this.state.selectedListItems.filter((j) => j !== i )})
       }
       else{
@@ -124,6 +127,7 @@ class SwipesModal extends Component {
     }
   }
 	renderList(list, key) {
+    console.log(list);
     if(!list || typeof list !== 'object'){
       return;
     }
@@ -200,9 +204,9 @@ class SwipesModal extends Component {
     else if(typeof data === 'object'){
       return [
         this.renderMessage(message, 1),
-        this.renderTextarea(textarea, 2),
-        this.renderLoader(loader, 3),
-        this.renderList(list, 4),
+        this.renderLoader(loader, 2),
+        this.renderList(list, 3),
+        this.renderTextarea(textarea, 4),
         this.renderButtons(buttons, 5)
       ]
     }
