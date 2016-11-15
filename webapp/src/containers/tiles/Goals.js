@@ -84,6 +84,7 @@ class Goals extends Component {
         {this.renderTabbar()}
         {this.renderList()}
         {this.renderTimeline()}
+        {this.renderPlusButton()}
       </div>
     )
   }

@@ -12,7 +12,6 @@ class StepSubmission extends Component {
   }
   onSubmit(e){
     const goBack = (parseInt(e.target.getAttribute('data-index'), 10));
-    console.log('go back', goBack);
     const { onSubmit } = this.props;
     if(onSubmit){
       onSubmit(goBack);
