@@ -80,7 +80,10 @@
     }, {
       type: 'link',
       settings: {
-        linkType: 'field'
+        target: {
+          type: 'field',
+          id: 'field-id-2123'
+        }
       }
     }, {
       type: 'checklist',
