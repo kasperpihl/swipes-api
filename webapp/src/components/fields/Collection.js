@@ -6,27 +6,10 @@ import './styles/collection.scss'
 class Collection extends Component {
   constructor(props) {
     super(props)
-    this.clickedAdd = this.clickedAdd.bind(this);
-    this.clickedSubmit = this.clickedSubmit.bind(this);
-  }
-  componentDidMount() {
-    const { swipes, step, goal } = this.props;
-    swipes.addListener('share.receivedData', (data) => {
-      swipes.do({action: 'add', 'goal_id': goal.get('id'), payload: {url: data.shortUrl}}).then((res, err) => {
-        console.log('ret', res, err);
-      })
-    }, step.get('id'));
-  }
-  componentWillUnmount() {
-    const { swipes, step } = this.props;
-    swipes.removeListener('share.receivedData', null, step.get('id'));
-  }
-  clickedAdd() {
-    const { swipes } = this.props;
-    swipes.sendEvent('overlay.set', {component: 'Find', title: 'Find'});
   }
   renderCardLists() {
     const { step, cardDelegate } = this.props;
+    return;
     const cards = step.getIn(['data', 'iterations']).toArray().map((iteration, i) => {
       return {
         title: 'v' + (i+1),

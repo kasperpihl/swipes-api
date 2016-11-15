@@ -21,12 +21,6 @@ const goalsValidate = (req, res, next) => {
     return next(new SwipesError('goal is required'));
   }
 
-  goal.steps = goal.steps.map((step) => {
-    const stepId = generateSlackLikeId('');
-    step = step.set('id', goalId + '-' + stepId);
-    return step.toJS();
-  })
-
   res.locals.goalId = goalId;
   res.locals.goal = goal;
 
@@ -50,25 +44,86 @@ const goalsCreate = (req, res, next) => {
     goalId,
     goal
   } = res.locals;
-  const metaObj = {
-    id: goalId,
-    workflow_id: workflowId, // T_TODO check if this one exists!
-    organization_id: organizationId,
-    timestamp: r.now(),
-    created_by: userId,
-    deleted: false
+
+  goal.currentStepIndex = -1;
+  goal.steps = goal.steps.map((step) => {
+    const stepId = generateSlackLikeId('');
+    step.id = goalId + '-' + stepId;
+    step.iterations = [];
+
+    return step;
+  })
+
+  goal.id = goalId;
+  goal.workflow_id = workflowId;
+  goal.organization_id = organizationId;
+  goal.timestamp = r.now();
+  goal.created_by = userId;
+  goal.deleted = false;
+
+  res.locals.doNext = true;
+
+  return next();
+}
+
+const goalsNext = (req, res, next) => {
+  const {
+    goal,
+    doNext,
+    stepBackId
+  } = res.locals;
+  const currentStepIndex = goal.currentStepIndex;
+  const currentStep = goal.steps[currentStepIndex];
+  let nextStepIndex = ++goal.currentStepIndex;
+
+  if (!doNext) {
+    return next();
   }
 
-  const goalWithMeta = Object.assign({}, goal, metaObj);
+  if (currentStep) {
+    currentStep.completed = true;
+  }
 
-  const insertQ = r.table('goals').insert(goalWithMeta);
+  if (stepBackId) {
+    let stepBackFound = false;
+
+    goal.steps.map((step, i) => {
+      /* Find steps before the step we are going back to
+         and find steps after the current step and add null iteration
+      */
+      if (!stepBackFound && step.id !== stepBackId || i > currentStepIndex) {
+        step.iterations.push(null);
+      } else if (step.id === stepBackId) {
+        nextStepIndex = i;
+        stepBackFound = true;
+      }
+    })
+  }
+
+  const nextStep = goal.steps[nextStepIndex];
+
+  nextStep.iterations.push({
+    errorLog: [],
+    automationLog: [],
+    responses: {}
+  })
+
+  return next();
+}
+
+const goalsInsert = (req, res, next) => {
+  const {
+    goal
+  } = res.locals;
+
+  const insertQ = r.table('goals').insert(goal);
 
   return db.rethinkQuery(insertQ)
     .then(() => {
-      res.locals.goalWithMeta = goalWithMeta;
+      res.locals.goalWithMeta = goal;
       res.locals.eventType = 'goal_created';
-      res.locals.eventMessage = 'Goal "' + goalWithMeta.title + '" has been created';
-      res.locals.eventData = goalWithMeta;
+      res.locals.eventMessage = 'Goal "' + goal.title + '" has been created';
+      res.locals.eventData = goal;
 
       return next();
     })
@@ -93,6 +148,29 @@ const goalsGet = (req, res, next) => {
       res.locals.goal = goal;
 
       return next()
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
+const goalsUpdate = (req, res, next) => {
+  const {
+    goal
+  } = res.locals;
+
+  const updateQ =
+    r.table('goals')
+      .get(goal.id)
+      .update(goal);
+
+  return db.rethinkQuery(updateQ)
+    .then(() => {
+      res.locals.eventType = 'goal_updated';
+      res.locals.eventMessage = 'Goal has been updated';
+      res.locals.eventData = goal;
+
+      return next();
     })
     .catch((err) => {
       return next(err);
@@ -130,5 +208,8 @@ export {
   goalsValidate,
   goalsCreate,
   goalsGet,
-  goalsDelete
+  goalsDelete,
+  goalsInsert,
+  goalsNext,
+  goalsUpdate
 }

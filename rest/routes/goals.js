@@ -6,7 +6,9 @@ import db from '../db.js';
 import {
   goalsValidate,
   goalsCreate,
-  goalsDelete
+  goalsDelete,
+  goalsNext,
+  goalsInsert
 } from '../middlewares/goals';
 import {
   usersGet
@@ -34,6 +36,8 @@ router.post('/goals.create',
   usersGet,
   goalsValidate,
   goalsCreate,
+  goalsNext,
+  goalsInsert,
   notifyAllInCompany,
   notifyCommonRethinkdb,
   (req, res, next) => {

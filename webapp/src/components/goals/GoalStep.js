@@ -47,8 +47,8 @@ class GoalStep extends Component {
     const Field = fields[field.get('type')];
     if(Field){
       let data = {};
-      if(field.get('initialData')){
-        data = field.get('initialData').toJS();
+      if(field.get('initial_data')){
+        data = field.get('initial_data').toJS();
       }
       const key = 'field-' + i;
       if(!this.bindCallbacks[i]){
