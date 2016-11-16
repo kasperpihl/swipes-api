@@ -127,8 +127,8 @@ class NavBar extends Component {
       }
     }
 
-    if (steps && stepIndex) {
-      const activeLength = 100 / steps.length * stepIndex;
+    if (steps && stepIndex > -1) {
+      const activeLength = 100 - (100 / steps.length * stepIndex);
 
       styles = {
         WebkitClipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',

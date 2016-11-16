@@ -73,7 +73,7 @@
 
     &:after {
       @include size(100%, 6px);
-      background-color: $blue-100;
+      background-color: $blue-40;
       content: '';
       left: 0; top: 6px;
       position: absolute;
@@ -97,7 +97,7 @@
     &--completed {
 
       &:after {
-        background-color: $green-color;
+        background-color: $blue-80;
       }
     }
 
