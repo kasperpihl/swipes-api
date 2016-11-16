@@ -8,6 +8,7 @@
   max-width: 500px;
   margin: 0 auto;
   margin-top: 30px;
+  position: relative;
 
   &__tags {
     @include size(100%, auto);
@@ -79,26 +80,73 @@
   }
 }
 
-.slideStepAction {
-  transition: all .2s ease-in-out;
+.goals-timeline {
+  @include size(100%);
+  position: absolute;
+  left: 0; top: 30px;
+  pointer-events: none;
+}
 
+.goals-step-transition {
+  //empty
+  @include size(100%);
+  position: absolute;
+  left: 0; top: 0;
   &-enter {
-    bottom: 0px;
-    will-change: bottom;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all .2s ease-in-out;
+    will-change: opacity,  transform;
 
     &-active {
-      bottom: 167px;
-      will-change: bottom;
+      opacity: 1;
+      transform: translateY(0px);
+      transition: all .2s ease-in-out .2s;
+      will-change: opacity,  transform;
     }
   }
 
   &-leave {
-    bottom: 167px;
-    will-change: bottom;
+    opacity: 1;
+    transform: translateY(0px);
+    transition: all .2s ease-in-out;
+    will-change: opacity,  transform;
 
     &-active {
-      bottom: 0px;
-      will-change: bottom;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .2s ease-in-out;
+      will-change: opacity,  transform;
+    }
+  }
+}
+
+.goals-list-transition {
+  &-enter {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all .2s ease-in-out;
+    will-change: opacity,  transform;
+
+    &-active {
+      opacity: 1;
+      transform: translateY(0px);
+      transition: all .2s ease-in-out .2s;
+      will-change: opacity,  transform;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    transform: translateY(0px);
+    transition: all .2s ease-in-out;
+    will-change: opacity,  transform;
+
+    &-active {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .2s ease-in-out;
+      will-change: opacity,  transform;
     }
   }
 }

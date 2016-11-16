@@ -13,12 +13,45 @@
     overflow-y:auto;
   }
 
+  &__header {
+    @include size(100%, 60px);
+    @include flex(center, flex-start);
+    margin: 30px 0;
+    position: relative;
+  }
+
+  &__index {
+    @include size(60px, 60px);
+    @include flex();
+    color: $deepBlue-80;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  &__title {
+    $titleWidth: calc(100% - 60px - 60px);
+    @include size($titleWidth, auto);
+    color: $deepBlue-80;
+    font-size: 24px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__assignees {
+    @include size(30px);
+    position: absolute;
+    right: 15px; top: 50%;
+    transform: translateY(-50%);
+  }
+
   &__field {
     @include size(100%, auto);
     position: relative;
     padding-left: 42px;
     padding-bottom: 15px;
-    
+
     &:first-child {
       padding-top: 30px;
     }
@@ -45,5 +78,36 @@
   &__submission {
     @include size(100%, auto);
     flex: none;
+  }
+}
+
+.goal-step-intro-transition {
+  //empty
+  &-enter {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all .2s ease-in-out;
+    will-change: opacity,  transform;
+
+    &-active {
+      opacity: 1;
+      transform: translateY(0px);
+      transition: all .2s ease-in-out;
+      will-change: opacity,  transform;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    transform: translateY(0px);
+    transition: all .2s ease-in-out;
+    will-change: opacity,  transform;
+
+    &-active {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all .2s ease-in-out;
+      will-change: opacity,  transform;
+    }
   }
 }

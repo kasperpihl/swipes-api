@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { overlay, main, api, goals } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
@@ -90,8 +91,22 @@ class Goals extends Component {
     return (
       <div className='goals'>
         {this.renderTabbar()}
+        <ReactCSSTransitionGroup
+          transitionName="goals-list-transition"
+          component="div"
+          className="goals-list-wrap"
+          transitionEnterTimeout={400}
+          transitionLeaveTimeout={200}>
         {this.renderList()}
-        {this.renderTimeline()}
+        </ReactCSSTransitionGroup>
+        <ReactCSSTransitionGroup
+          transitionName="goals-step-transition"
+          component="div"
+          className="goals-timeline"
+          transitionEnterTimeout={400}
+          transitionLeaveTimeout={200}>
+          {this.renderTimeline()}
+        </ReactCSSTransitionGroup>
         {this.renderPlusButton()}
       </div>
     )
