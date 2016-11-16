@@ -128,7 +128,7 @@ class NavBar extends Component {
 
       styles = {
         WebkitClipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-        background: `linear-gradient(to right, #26D176 0%, #26D176 ${activeLength}%, #007AFF ${activeLength}%, #007AFF 100%)`
+        backgroundPosition: `${activeLength}% 0`
       }
     }
 

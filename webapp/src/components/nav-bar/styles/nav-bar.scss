@@ -70,10 +70,12 @@
   &__slider {
     @include size(100%, 1px);
     @include flex();
-    background-color: $blue-100;
+    background: linear-gradient(to right, $green-color 0%, $green-color 50%, $blue-100 50%, $blue-100 100%);
+    background-size: 200%;
+  	background-position: 100% 0;
     left: 0; bottom: 0;
     position: absolute;
-    transition: -webkit-clip-path .2s ease-in-out, background .2s ease-in-out;
+    transition: -webkit-clip-path .2s ease-in-out, background .2s ease-in-out, background-position .2s ease-in-out;
     z-index: 2;
   }
 
@@ -143,6 +145,7 @@
       opacity: 0;
       transition:
         -webkit-clip-path .4s ease-in-out,
+        background-position .4s ease-in-out,
         background .4s ease-in-out,
         opacity .1s ease-in-out .4s;
     }
