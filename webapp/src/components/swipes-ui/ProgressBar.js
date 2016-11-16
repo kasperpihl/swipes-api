@@ -12,21 +12,19 @@ class ProgressBar extends Component {
 
     bindAll(this, ['onChange']);
   }
-  callDelegate(name) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === "function") {
-      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
+  componentWillReceiveProps(nextProps){
+    if(this.props.index !== nextProps.index){
+      this.setState({activeIndex: nextProps.index});
     }
   }
-  componentDidMount() {
-  }
-  onChange(i) {
+  onChange(e) {
     const { activeIndex } = this.state;
-
+    const i = parseInt(e.target.getAttribute('data-index'));
     if (activeIndex !== i) {
-      this.setState({activeIndex: i});
-      this.callDelegate('barDidChange', i);
+      const { onChange } = this.props;
+      if(onChange){
+        onChange(i);
+      }
     }
   }
   renderStep(step, i) {
@@ -42,7 +40,7 @@ class ProgressBar extends Component {
     }
 
     return (
-      <div className={className} data-attr={`${i + 1} ${step.title}`} key={`progress-step-${i}`} onClick={this.onChange}></div>
+      <div className={className} data-index={i} key={`progress-step-${i}`} onClick={this.onChange}></div>
     )
   }
   render() {

@@ -18,17 +18,34 @@ class Goals extends Component {
     bindAll(this, [
       'clickedRoundButton'
     ]);
-    this.state = { tabIndex: 0 };
+    this.state = { tabIndex: 0, progressIndex: -1 };
     this.tabs = ['now', 'later', 'tags', 'all'];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
+  componentWillReceiveProps(nextProps){
+    const { currentGoal } = this.props;
+    const nextGoal = nextProps.currentGoal;
+    if(nextGoal){
+      if(!currentGoal || currentGoal && currentGoal.get('id') !== nextGoal.get('id')){
+        this.setState({progressIndex: -1});
+      }
+    }
+  }
   renderList(){
     const { tabIndex } = this.state;
     const { currentGoal, goals, me, setActiveGoal } = this.props;
     if(!currentGoal){
       return <GoalList goals={goals} me={me} tabIndex={tabIndex} setActiveGoal={setActiveGoal}/>
     }
+  }
+  navProgressChange(nav, index){
+    console.log('changed', index);
+    const { progressIndex } = this.state;
+    if(progressIndex !== index){
+      this.setState({progressIndex: index});
+    }
+
   }
   navTabDidChange(nav, index){
     if(this.state.tabIndex !== index) {
@@ -42,12 +59,13 @@ class Goals extends Component {
   renderTabbar() {
     let navTitle, navSteps, navStepIndex;
     const { currentGoal } = this.props;
+
     if (currentGoal) {
       navTitle = currentGoal.get('title');
       navSteps = currentGoal.get('steps').map((s) => {
         return { title: s.get('title'), completed: s.get('completed')}
       }).toJS()
-      navStepIndex = currentGoal.get('currentStepIndex') || 0;
+      navStepIndex = this.stepIndexForGoal(currentGoal);
     }
     return (
         <div className="goals__nav-bar">
@@ -59,10 +77,22 @@ class Goals extends Component {
     const { submit } = this.props;
     submit(goalId, stepId, data, previousSteps);
   }
+  stepIndexForGoal(goal){
+    let navStepIndex = -1;
+    const { progressIndex } = this.state;
+    if (goal) {
+      navStepIndex = goal.get('currentStepIndex') || 0;
+      if(progressIndex > -1){
+        navStepIndex = progressIndex;
+      }
+    }
+    return navStepIndex;
+  }
   renderTimeline(){
     const { currentGoal, me } = this.props;
     if (currentGoal) {
-      return <GoalStep myId={me.get('id')} step={currentGoal.getIn(['steps', currentGoal.get('currentStepIndex')])} goal={currentGoal} delegate={this}/>;
+      const index = this.stepIndexForGoal(currentGoal);
+      return <GoalStep myId={me.get('id')} step={currentGoal.getIn(['steps', index])} goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {

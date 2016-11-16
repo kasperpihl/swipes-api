@@ -16,7 +16,7 @@ class NavBar extends Component {
       activeTab: 0,
       sliderClips: []
     }
-    bindAll(this, ['setActiveTab', 'pressedBack'])
+    bindAll(this, ['setActiveTab', 'pressedBack', 'progressBarChange'])
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -29,6 +29,10 @@ class NavBar extends Component {
       this.calculateSliderClips()
     }, 10)
   }
+  progressBarChange(i){
+    this.callDelegate('navProgressChange', i);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.activeTab != nextProps.activeTab) {
       this.setState({activeTab: nextProps.activeTab});
@@ -136,6 +140,7 @@ class NavBar extends Component {
       <div className="sw-nav-bar__slider" style={styles}></div>
     )
   }
+
   renderProgressbar() {
     const { steps, stepIndex } = this.props;
 
@@ -143,7 +148,7 @@ class NavBar extends Component {
       return;
     }
 
-    return <ProgressBar steps={steps} index={stepIndex}/>
+    return <ProgressBar steps={steps} index={stepIndex} onChange={this.progressBarChange} />
   }
   render() {
     const { tabs, title, steps } = this.props;

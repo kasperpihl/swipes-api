@@ -5,6 +5,9 @@ import './styles/checklist.scss'
 import { fromJS } from 'immutable'
 
 class Checklist extends Component {
+  static getIcon(){
+    return 'CheckmarkIcon'
+  }
   constructor(props) {
     super(props)
     this.state = { checks: fromJS(props.data.checks) };

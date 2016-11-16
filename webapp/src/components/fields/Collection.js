@@ -4,7 +4,7 @@ import SwipesCardList from '../swipes-card/SwipesCardList'
 import './styles/collection.scss'
 
 class Collection extends Component {
-  getIcon(){
+  static getIcon(){
     return 'SlackIcon'
   }
   constructor(props) {

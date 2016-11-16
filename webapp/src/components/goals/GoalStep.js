@@ -85,12 +85,27 @@ class GoalStep extends Component {
       </div>
     )
   }
-  renderFields(step) {
+  fieldById(fieldId){
+    const { goal } = this.props;
+    let field;
+    goal.get('steps').forEach((s) => {
+      s.get('fields').forEach((f) => {
+        if(f.get('id') === fieldId){
+          field = f;
+        }
+      })
+    })
+    return field;
+  }
+  renderFields(step){
     const { myId } = this.props;
 
     return step.get('fields').map((field, i) => {
-      if (field.get('type') === 'link') {
-
+      if(field.get('type') === 'link'){
+        const target = field.getIn(['settings', 'target']);
+        if(target && target.get('type') === 'field'){
+          field = this.fieldById(target.get('id')) || field;
+        }
       }
 
       let data = {};
@@ -121,10 +136,16 @@ class GoalStep extends Component {
 
     this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
   }
-  renderSubmission() {
+  renderPreAutomations(){
+
+  }
+  renderSubmission(){
     const { step } = this.props;
 
     return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
+  }
+  renderPostAutomations(){
+
   }
   render() {
     const { step } = this.props;
@@ -141,7 +162,9 @@ class GoalStep extends Component {
           {this.renderFields(step)}
         </div>
         <div className="goal-step__submission">
+          {this.renderPreAutomations()}
           {this.renderSubmission()}
+          {this.renderPostAutomations()}
         </div>
       </ReactCSSTransitionGroup>
     )
