@@ -89,16 +89,17 @@ class NavBar extends Component {
 
   renderTitle() {
     const { title, steps, stepIndex } = this.props;
-    let newTitle = '';
 
-    if (title) {
-      newTitle = title
+    if (!title) {
+      return
     }
 
     return (
-      <div className="sw-nav-bar__main-title" onClick={this.pressedBack}>
-        {this.renderIcon('ArrowLeftIcon')}
-        {newTitle}
+      <div className="sw-nav-bar__main-title">
+        <div className="sw-nav-bar__btn" onClick={this.pressedBack}>
+          {this.renderIcon('ArrowLeftIcon')}
+        </div>
+        {title}
       </div>
     )
   }
@@ -127,7 +128,7 @@ class NavBar extends Component {
 
       styles = {
         WebkitClipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-        background: `linear-gradient(to right, #007AFF 0%, #007AFF ${activeLength}%, #f56b72 ${activeLength}%, #f56b72 100%)`
+        background: `linear-gradient(to right, #26D176 0%, #26D176 ${activeLength}%, #007AFF ${activeLength}%, #007AFF 100%)`
       }
     }
 
@@ -168,7 +169,14 @@ class NavBar extends Component {
     return (
       <div ref="tabBar" className={rootClass}>
         {tabsHTML}
-        {this.renderTitle()}
+        <ReactCSSTransitionGroup
+          transitionName="titleTransition"
+          component="div"
+          className="sw-nav-bar__titleTransition"
+          transitionEnterTimeout={0}
+          transitionLeaveTimeout={400}>
+          {this.renderTitle()}
+        </ReactCSSTransitionGroup>
         {this.renderSlider()}
         <ReactCSSTransitionGroup
           transitionName="progressBarTransition"
