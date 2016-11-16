@@ -83,12 +83,10 @@ class GoalStep extends Component {
   onSubmit(goBack){
     const { goal, step } = this.props;
     let previousSteps;
-    if(!goBack){
-      console.log('sending orev');
-      previousSteps = goal.get('steps');
+    if(goBack){
+      previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
     }
     this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
-    console.log(this.formData);
   }
   renderSubmission(){
     const { step } = this.props;

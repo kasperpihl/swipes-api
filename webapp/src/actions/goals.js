@@ -22,23 +22,30 @@ const submitStep = (goalId, stepId, data, previousSteps) => {
           },
           list: {
             selectable: true,
-            items: previousSteps.map((step) => {
-              return { title: step.get('title'), id: step.get('id')}
+            items: previousSteps.map((step, i) => {
+              const selected = (i === 0);
+              const title = (i + 1) + '. ' + step.get('title');
+              return { title, id: step.get('id')}
             }).toJS()
           },
           buttons: ['Submit']
         }
       }
-      modalOpt.data.list.items = [{title: '1. Gather Feedback', id: '123'}, {title: '2. Design Iteration', id: '234'}, {title: '3. Moodboard', id: '345'}];
     }
     dispatch(load( modalOpt, (res) => {
       let message = null;
+      let step_back_id = null;
       if(res){
         message = res.text;
-        console.log(data);
+        if(previousSteps){
+          const index = res.items.length ? res.items[0] : 0;
+          step_back_id = previousSteps.get(index).get('id');
+        }
+
         dispatch(request('steps.submit', {
           goal_id: goalId,
           step_id: stepId,
+          step_back_id,
           data,
           message
         })).then((res, err) => {

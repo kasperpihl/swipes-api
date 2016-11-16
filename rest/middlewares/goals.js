@@ -95,7 +95,12 @@ const goalsNext = (req, res, next) => {
         step.iterations.push(null);
       } else if (step.id === stepBackId) {
         nextStepIndex = i;
+        goal.currentStepIndex = i;
         stepBackFound = true;
+      }
+
+      if (stepBackFound && i <= currentStepIndex) {
+        step.completed = false;
       }
     })
   }

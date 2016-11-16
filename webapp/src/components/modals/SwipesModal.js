@@ -127,7 +127,6 @@ class SwipesModal extends Component {
     }
   }
 	renderList(list, key) {
-    console.log(list);
     if(!list || typeof list !== 'object'){
       return;
     }

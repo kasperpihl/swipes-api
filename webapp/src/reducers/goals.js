@@ -17,6 +17,7 @@ export default function goals (state = initialState, action) {
     case 'goal_deleted':{
       return state.delete(action.payload.data.id);
     }
+    case 'goal_updated':
     case 'goal_created':{
       return state.set(action.payload.data.id, fromJS(action.payload.data));
     }

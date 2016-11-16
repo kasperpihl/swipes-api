@@ -21,7 +21,7 @@ class StepSubmission extends Component {
     let btns = ['Submit'];
     const { submission } = this.props;
 
-    if(submission && submission.type === 'decide'){
+    if(submission && submission.get('type') === 'decide'){
       btns = ['Yes', 'No'];
     }
 
