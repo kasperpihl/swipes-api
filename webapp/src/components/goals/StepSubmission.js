@@ -18,8 +18,8 @@ class StepSubmission extends Component {
     }
   }
   renderActions() {
-    let btns = ['Submit'];
     const { submission } = this.props;
+    let btns = ['Submit'];
 
     if(submission && submission.get('type') === 'decide'){
       btns = ['Yes', 'No'];

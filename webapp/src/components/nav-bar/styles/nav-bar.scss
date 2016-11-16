@@ -10,6 +10,7 @@
   padding: 0;
   position: relative;
   z-index: 3;
+  flex: none;
 
   &:after {
     @include size(100%, 1px);
@@ -50,9 +51,8 @@
   &__main-title {
     @include flex(center, flex-start);
     @include size(100%, 50px);
-    color: $deepBlue-120;
-    font-size: 11px;
-    font-weight: 700;
+    color: $deepBlue-90;
+    font-size: 15px;
     left: 0; top: 0;
     opacity: 0;
     pointer-events: none;
@@ -62,7 +62,7 @@
 
     #{$b}__icon {
       &--svg {
-        fill: $blue-100;
+        fill: $deepBlue-80;
         transform: translateY(1px);
       }
     }
@@ -97,7 +97,7 @@
 
       #{$b}__icon {
         &--svg {
-          fill: $blue-120;
+          fill: $deepBlue-60;
         }
       }
     }

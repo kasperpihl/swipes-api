@@ -5,9 +5,11 @@
   $b: &;
 
   @include size(100%, 100%);
+  display: flex;
+  flex-direction: column;
   max-width: 500px;
   margin: 0 auto;
-  margin-top: 30px;
+  padding-top: 30px;
   position: relative;
 
   &__tags {
@@ -83,7 +85,8 @@
 .goals-timeline {
   @include size(100%);
   position: absolute;
-  left: 0; top: 30px;
+  left: 0; top: 0px;
+  padding-top: 60px;
 }
 
 .goals-step-transition {

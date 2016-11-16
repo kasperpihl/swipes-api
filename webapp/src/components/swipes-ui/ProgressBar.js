@@ -27,8 +27,9 @@ class ProgressBar extends Component {
       }
     }
   }
-  renderStep(step, i) {
+  renderStep(step, i, currentStep) {
     const { activeIndex } = this.state;
+    const { currentStepIndex } = this.props;
     let className = 'sw-progress-bar__step';
 
     if (step.completed) {
@@ -39,15 +40,20 @@ class ProgressBar extends Component {
       className += ' sw-progress-bar__step--active'
     }
 
+    if (i === currentStepIndex) {
+      className += ' sw-progress-bar__step--current-step'
+    }
+
     return (
       <div className={className} data-index={i} data-attr={`${i + 1} ${step.title}`} key={`progress-step-${i}`} onClick={this.onChange}></div>
     )
   }
   render() {
-    const { steps } = this.props;
+    const { steps, currentStepIndex } = this.props;
     const { activeIndex } = this.state;
 
     const progresses = steps.map( (step, i) => {
+
       return this.renderStep(step, i)
     })
 

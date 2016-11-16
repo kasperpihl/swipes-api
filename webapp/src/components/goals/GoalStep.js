@@ -65,8 +65,12 @@ class GoalStep extends Component {
     return (
       <div className="goal-step__field" key={key}>
         <div className="goal-step__field-header">
-          {this.renderIcon(Field.getIcon && Field.getIcon() || 'CheckmarkIcon')}
-          {title}
+          <div className="goal-step__field-icon">
+            {this.renderIcon(Field.getIcon && Field.getIcon() || 'CheckmarkIcon')}
+          </div>
+          <div className="goal-step__field-title">
+            {title}
+          </div>
         </div>
         <Field
           onChange={this.bindCallbacks[id]}
@@ -145,12 +149,7 @@ class GoalStep extends Component {
     const { step } = this.props;
 
     return (
-      <ReactCSSTransitionGroup
-        transitionName="goal-step-intro-transition"
-        component="div"
-        className="goal-step"
-        transitionEnterTimeout={200}
-        transitionLeaveTimeout={200}>
+      <div className="goal-step">
         <div className="goal-step__scroller">
           {this.renderHeader()}
           {this.renderFields(step)}
@@ -160,7 +159,7 @@ class GoalStep extends Component {
           {this.renderSubmission()}
           {this.renderPostAutomations()}
         </div>
-      </ReactCSSTransitionGroup>
+      </div>
     )
   }
 }

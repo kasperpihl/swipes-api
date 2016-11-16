@@ -61,7 +61,7 @@ class Goals extends Component {
     setActiveGoal();
   }
   renderTabbar() {
-    let navTitle, navSteps, navStepIndex;
+    let navTitle, navSteps, navStepIndex, currentStepIndex;
     const { currentGoal } = this.props;
 
     if (currentGoal) {
@@ -69,11 +69,12 @@ class Goals extends Component {
       navSteps = currentGoal.get('steps').map((s) => {
         return { title: s.get('title'), completed: s.get('completed')}
       }).toJS()
+      currentStepIndex = currentGoal.get('currentStepIndex')
       navStepIndex = this.stepIndexForGoal(currentGoal);
     }
     return (
         <div className="goals__nav-bar">
-          <NavBar tabs={this.tabs} stepIndex={navStepIndex} steps={navSteps} title={navTitle} delegate={this} activeTab={this.state.tabIndex}/>
+          <NavBar tabs={this.tabs} stepIndex={navStepIndex} currentStepIndex={currentStepIndex} steps={navSteps} title={navTitle} delegate={this} activeTab={this.state.tabIndex}/>
         </div>
     )
   }

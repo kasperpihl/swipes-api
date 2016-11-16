@@ -13,7 +13,7 @@ import {
 
 class Note extends Component {
   static getIcon(){
-    return 'SlackIcon';
+    return 'ListIcon';
   }
   constructor(props) {
     super(props)

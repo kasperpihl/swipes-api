@@ -23,9 +23,9 @@
     @include size(270px, auto);
     color: $deepBlue-80;
     font-size: 18px;
-    line-height: 1;
+    line-height: 1.33;
     margin-top: 30px;
-    margin-bottom: 15px;
+    margin-bottom: 21px;
 
     &:not(:first-line) {
       white-space: nowrap;
@@ -36,10 +36,10 @@
 
   &__description {
     @include size(270px, auto);
-    font-size: 13px;
-    color: $deepBlue-60;
-    line-height: 1.62;
-    margin-bottom: 90px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: $deepBlue-70;
+    margin-bottom: 72px;
 
     &:empty {
       display: none;
@@ -47,28 +47,26 @@
   }
 
   &__button {
-    @include size(180px, 45px);
+    @include size(180px, 60px);
     @include flex();
     align-self: flex-start;
-    background-color: $blue-100;
+    border: 1px solid $blue-100;
     border-radius: 3px;
-    box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
-    color: #fdfdfd;
+    color: $blue-100;
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: .5px;
+    letter-spacing: .3px;
     text-transform: uppercase;
     transition: .15s ease-in-out;
 
     &:hover {
-      $darkBlue: darken($blue-100, 7%);
-      background-color: $darkBlue;
-      box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
+      background-color: $blue-100;
+      color: $bg;
+      transition: .15s ease-in-out;
     }
 
     &--disabled {
       background-color: $deepBlue-20;
-      box-shadow: 0 1px 10px 1px rgba($deepBlue-20, 0.4);
       color: $deepBlue-60;
       cursor: not-allowed;
       position: relative;
@@ -79,7 +77,6 @@
 
       &:hover {
         background-color: $deepBlue-10;
-        box-shadow: 0 1px 10px 1px rgba($deepBlue-20, 0.4);
         color: $deepBlue-80;
       }
     }

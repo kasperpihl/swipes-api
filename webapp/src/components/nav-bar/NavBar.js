@@ -142,13 +142,13 @@ class NavBar extends Component {
   }
 
   renderProgressbar() {
-    const { steps, stepIndex } = this.props;
+    const { steps, stepIndex, currentStepIndex } = this.props;
 
     if (!steps) {
       return;
     }
 
-    return <ProgressBar steps={steps} index={stepIndex} onChange={this.progressBarChange} />
+    return <ProgressBar steps={steps} currentStepIndex={currentStepIndex} index={stepIndex} onChange={this.progressBarChange} />
   }
   render() {
     const { tabs, title, steps } = this.props;
