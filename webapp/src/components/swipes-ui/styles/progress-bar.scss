@@ -7,30 +7,7 @@
   @include flex(flex);
   @include size(100%, auto);
 
-  &:hover {
-
-    #{$b}__step--active {
-
-      &:after {
-        transform: scale(1);
-        transition: .2s .1s;
-      }
-
-      &:hover {
-        &:before {
-          opacity: 1;
-          transform: translateY(0px);
-          transition: visibility 0s, opacity .2s .1s, transform .2s .1s;
-          visibility: visible;
-        }
-
-        &:after {
-          transform: scaleY(2);
-          transition: .2s;
-        }
-      }
-    }
-  }
+  
 
   &__step {
     @include size(100%, 18px);

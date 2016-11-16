@@ -42,7 +42,11 @@ class Goals extends Component {
   navProgressChange(nav, index){
     console.log('changed', index);
     const { progressIndex } = this.state;
+    const { currentGoal } = this.props;
     if(progressIndex !== index){
+      if(index === currentGoal.get('currentStepIndex')){
+        index = -1;
+      }
       this.setState({progressIndex: index});
     }
 
@@ -92,7 +96,7 @@ class Goals extends Component {
     const { currentGoal, me } = this.props;
     if (currentGoal) {
       const index = this.stepIndexForGoal(currentGoal);
-      return <GoalStep myId={me.get('id')} step={currentGoal.getIn(['steps', index])} goal={currentGoal} delegate={this}/>;
+      return <GoalStep myId={me.get('id')} stepIndex={index} step={currentGoal.getIn(['steps', index])} goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {

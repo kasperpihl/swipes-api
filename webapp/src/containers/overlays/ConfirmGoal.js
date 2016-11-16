@@ -31,6 +31,7 @@ class ConfirmGoal extends Component {
       data: {
         list: {
           selectable: true,
+          multiple: true,
           items: userArray,
           emptyText: 'No people found'
         },

@@ -144,7 +144,7 @@ class GoalStep extends Component {
   }
   renderSubmission(){
     const { step } = this.props;
-    
+
     return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
   }
   renderPostAutomations(){
