@@ -1,0 +1,21 @@
+{
+  "apps" : [{
+    "name"        : "swipes-server",
+    "script"      : "dist/index.js",
+    "watch"       : "./dist/",
+    "node_args"   : ["--harmony"],
+    "env_staging" : {
+       "SW_ORIGIN": "https://staging.swipesapp.com",
+       "SW_WEBHOOKS_HOST": "https://staging.swipesapp.com/",
+       "SW_API_PORT": "5000",
+       "SW_CLIENT_PORT": "443",
+       "SW_DATABASE_HOST": "rethinkdb-staging6110.cloudapp.net",
+
+       "SW_DROPBOX_REDIRECT_URI": "https://staging.swipesapp.com/oauth-success.html",
+
+       "SW_ASANA_CLIENT_ID": "176482403617703",
+       "SW_ASANA_CLIENT_SECRET": "ec4b5e86b007f5061168be5acb8cc231",
+       "SW_ASANA_REDIRECT_URI": "http://staging.swipesapp.com/oauth-success.html"
+    }
+  }]
+}

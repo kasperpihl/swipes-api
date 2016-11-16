@@ -1,0 +1,28 @@
+{
+  "database": {
+    "host": "SW_DATABASE_HOST",
+    "port": "SW_DATABASE_PORT",
+    "db": "SW_DATABASE_NAME",
+    "user": "SW_DATABASE_USER",
+    "password": "SW_DATABASE_PASSWORD"
+  },
+  "dropbox": {
+    "appId": "SW_DROPBOX_APP_ID",
+    "appSecret": "SW_DROPBOX_APP_SECRET",
+    "redirectURI": "SW_DROPBOX_REDIRECT_URI"
+  },
+  "asana": {
+    "clientId": "SW_ASANA_CLIENT_ID",
+    "clientSecret": "SW_ASANA_CLIENT_SECRET",
+    "redirectUri": "SW_ASANA_REDIRECT_URI"
+  },
+  "slack": {
+    "clientId": "SW_SLACK_CLIENT_ID",
+    "clientSecret": "SW_SLACK_CLIENT_SECRET",
+    "redirectUri": "SW_SLACK_REDIRECT_URI"
+  },
+  "origin": "SW_ORIGIN",
+  "apiPort": "SW_API_PORT",
+  "clientPort": "SW_CLIENT_PORT",
+  "webhooksHost": "SW_WEBHOOKS_HOST"
+}
