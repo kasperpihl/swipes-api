@@ -9,6 +9,7 @@
   max-width: 500px;
   padding: 0;
   position: relative;
+  z-index: 3;
 
   &:after {
     @include size(100%, 1px);
