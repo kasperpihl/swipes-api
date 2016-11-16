@@ -139,9 +139,12 @@ class GoalStep extends Component {
   renderPreAutomations(){
 
   }
+  renderStatus(){
+    const { step } = this.props;
+  }
   renderSubmission(){
     const { step } = this.props;
-
+    
     return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
   }
   renderPostAutomations(){

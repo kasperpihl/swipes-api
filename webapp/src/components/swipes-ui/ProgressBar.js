@@ -40,7 +40,7 @@ class ProgressBar extends Component {
     }
 
     return (
-      <div className={className} data-index={i} key={`progress-step-${i}`} onClick={this.onChange}></div>
+      <div className={className} data-index={i} data-attr={`${i + 1} ${step.title}`} key={`progress-step-${i}`} onClick={this.onChange}></div>
     )
   }
   render() {
