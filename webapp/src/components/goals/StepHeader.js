@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Assigning from '../assigning/Assigning'
-import ProgressBar from '../swipes-ui/ProgressBar'
 
 import './styles/step-header.scss'
 
@@ -11,45 +10,18 @@ class StepHeader extends Component {
   }
   componentDidMount() {
   }
-  renderProgressBar() {
-    const progIndex = 2;
-    const progData = [
-      {
-        title: 'One',
-        completed: true
-      },
-      {
-        title: 'Two',
-        completed: true
-      },
-      {
-        title: 'Three',
-        completed: false
-      },
-      {
-        title: 'Four',
-        completed: false
-      }
-    ];
 
-    return (
-      <div className="step-header__progress-bar">
-        <ProgressBar index={progIndex} steps={progData} />
-      </div>
-    )
-  }
   render() {
-    const { index, step, goal } = this.props;
+    const { index, title, assignees } = this.props;
 
 
     return (
       <div className="step-header">
-        <div className="step-header__flex-container">
-          <div className="step-header__index">1</div>
-          <div className="step-header__title">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores sed, at veniam nostrum perferendis nesciunt voluptate quam nulla eaque reiciendis!</div>
-          <div className="step-header__assigning"></div>
+        <div className="step-header__index">{index}</div>
+        <div className="step-header__title">{title}</div>
+        <div className="step-header__assignees">
+          <Assigning assignees={assignees}/>
         </div>
-        {this.renderProgressBar()}
       </div>
     )
   }
@@ -57,8 +29,10 @@ class StepHeader extends Component {
 
 export default StepHeader
 
-const { number } = PropTypes;
+const { number, string, array } = PropTypes;
 
 StepHeader.propTypes = {
-  index: number
+  index: number,
+  title: string,
+  assignees: array
 }

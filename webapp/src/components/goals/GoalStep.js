@@ -32,20 +32,11 @@ class GoalStep extends Component {
 
   }
   renderHeader() {
-    const { goal, step } = this.props;
-    const currentStepIndex = goal.get('currentStepIndex') + 1;
+    const { step, stepIndex } = this.props;
     const stepTitle = step.get('title');
     const assignees = step.get('assignees').toJS();
 
-    return (
-      <div className="goal-step__header">
-        <div className="goal-step__index">{currentStepIndex}</div>
-        <div className="goal-step__title">{stepTitle}</div>
-        <div className="goal-step__assignees">
-          <Assigning assignees={assignees}/>
-        </div>
-      </div>
-    )
+    return <StepHeader index={stepIndex + 1} title={stepTitle} assignees={assignees}/>
   }
   renderHandoff() {
 

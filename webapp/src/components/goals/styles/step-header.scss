@@ -2,43 +2,34 @@
 @import '../../global-styles/mixins/';
 
 .step-header {
-  @include size(100%, auto);
-  max-width: 550px;
-  margin: 200px auto;
-
-  &__flex-container {
-    @include size(100%, 30px);
-    @include flex(center, flex-start);
-    position: relative;
-  }
+  @include size(100%, 60px);
+  @include flex(center, flex-start);
+  margin: 30px 0;
+  position: relative;
 
   &__index {
-    font-size: 22px;
-    color: $deepBlue-100;
+    @include size(60px, 60px);
+    @include flex();
+    color: $deepBlue-80;
+    font-size: 30px;
+    font-weight: 500;
   }
 
   &__title {
-    $titleWidth: calc(100% - 70px);
+    $titleWidth: calc(100% - 60px - 60px);
     @include size($titleWidth, auto);
-    margin-left: 18px;
-    font-size: 21px;
-    color: $deepBlue-100;
-    white-space: nowrap;
+    color: $deepBlue-80;
+    font-size: 24px;
+    font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  &__assigning {
+  &__assignees {
     @include size(30px);
     position: absolute;
-    right: 0; top: 50%;
+    right: 15px; top: 50%;
     transform: translateY(-50%);
-    background-color: red;
-    border-radius: 50%;
-  }
-
-  &__progress-bar {
-    @include size(100%, auto);
-    margin-top: 30px;
   }
 }
