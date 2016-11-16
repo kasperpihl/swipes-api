@@ -59,9 +59,9 @@ class Goals extends Component {
     submit(goalId, stepId, data, previousSteps);
   }
   renderTimeline(){
-    const { currentGoal } = this.props;
+    const { currentGoal, me } = this.props;
     if (currentGoal) {
-      return <GoalStep step={currentGoal.getIn(['steps', currentGoal.get('currentStepIndex')])} goal={currentGoal} delegate={this}/>;
+      return <GoalStep myId={me.get('id')} step={currentGoal.getIn(['steps', currentGoal.get('currentStepIndex')])} goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {

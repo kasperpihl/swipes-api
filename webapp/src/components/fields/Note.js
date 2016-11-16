@@ -12,6 +12,9 @@ import {
 } from 'draft-js'
 
 class Note extends Component {
+  static getIcon(){
+    return 'SlackIcon';
+  }
   constructor(props) {
     super(props)
     let editorState = createEditorState();

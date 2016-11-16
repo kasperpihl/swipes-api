@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 // Views
 import StepHeader from './StepHeader'
@@ -16,6 +17,8 @@ class GoalStep extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.bindCallbacks = {};
     this.formData = [];
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -33,7 +36,6 @@ class GoalStep extends Component {
 
   }
   onFieldChange(i, data){
-    console.log(i, data);
     this.formData[i] = data;
   }
   renderIcon(icon){
@@ -43,41 +45,49 @@ class GoalStep extends Component {
       return <Comp className="goal-step__icon goal-step__icon--svg"/>;
     }
   }
-  renderField(field, i){
-    const Field = fields[field.get('type')];
-    if(Field){
-      let data = {};
-      if(field.get('initial_data')){
-        data = field.get('initial_data').toJS();
-      }
-      const key = 'field-' + i;
-      if(!this.bindCallbacks[i]){
-        this.bindCallbacks[i] = this.onFieldChange.bind(this, i);
-      }
-      if(typeof this.formData[i] === 'undefined'){
-        this.formData[i] = data;
-      }
-      return (
-        <div className="goal-step__field" key={key}>
-          <div className="goal-step__field-header">
-            {this.renderIcon('CheckmarkIcon')}
-            Check list
-          </div>
-          <Field
-            onChange={this.bindCallbacks[i]}
-            data={data}
-            settings={field.get('settings')}
-          />
-        </div>
-      )
+  renderField(Field, id, title, data, settings){
+    const key = 'field-' + id;
+    if(!this.bindCallbacks[id]){
+      this.bindCallbacks[id] = this.onFieldChange.bind(this, id);
     }
+    if(typeof this.formData[id] === 'undefined'){
+      this.formData[id] = data;
+    }
+    return (
+      <div className="goal-step__field" key={key}>
+        <div className="goal-step__field-header">
+          {this.renderIcon(Field.getIcon && Field.getIcon() || 'CheckmarkIcon')}
+          {title}
+        </div>
+        <Field
+          onChange={this.bindCallbacks[id]}
+          data={data}
+          settings={settings}
+        />
+      </div>
+    )
   }
   renderFields(step){
+    const { myId } = this.props;
+
     return step.get('fields').map((field, i) => {
       if(field.get('type') === 'link'){
-
       }
-      return this.renderField(field, i);
+      let data = {};
+      const lastValue = step.get('iterations').findLast((val, k) => {
+        return (k !== step.get('iterations').size-1 && val)
+      })
+
+      if(lastValue && lastValue.getIn(['responses', myId, 'data', i ])){
+        data = lastValue.getIn(['responses', myId, 'data', i ]).toJS();
+      }
+      else if(field.get('initial_data')){
+        data = field.get('initial_data').toJS();
+      }
+      const Field = fields[field.get('type')];
+      if(Field){
+        return this.renderField(Field, i, field.get('title'), data, field.get('settings'));
+      }
     });
   }
   onSubmit(goBack){
@@ -115,5 +125,6 @@ import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
 
 GoalStep.propTypes = {
   goal: map,
-  step: map
+  step: map,
+  myId: string
 }
