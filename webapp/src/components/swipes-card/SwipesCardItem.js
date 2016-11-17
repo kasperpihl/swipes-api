@@ -130,9 +130,6 @@ class SwipesCardItem extends Component {
           <div className="swipes-card__header__content--subtitle">{this.renderTextWithLinks(subtitle)}</div>
           {this.renderService(service)}
         </div>
-        <div className="swipes-card__header__dot">
-          {this.renderDot(actions)}
-        </div>
       </div>
     )
   }
