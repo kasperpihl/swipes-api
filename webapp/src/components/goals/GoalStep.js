@@ -192,8 +192,6 @@ class GoalStep extends Component {
     const { step, stepIndex } = this.props;
     const { slideDirection } = this.state;
 
-    console.log(slideDirection);
-
     return (
       <div className="goal-step">
         <ReactCSSTransitionGroup

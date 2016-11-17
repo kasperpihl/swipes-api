@@ -14,9 +14,10 @@ class NavBar extends Component {
     super(props)
     this.state = {
       activeTab: 0,
-      sliderClips: []
+      sliderClips: [],
+      showMenu: false
     }
-    bindAll(this, ['setActiveTab', 'pressedBack', 'progressBarChange'])
+    bindAll(this, ['setActiveTab', 'pressedBack', 'progressBarChange', 'toggleMenu', 'clickedAction'])
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -75,6 +76,11 @@ class NavBar extends Component {
   callback(index) {
     this.callDelegate('navTabDidChange', index);
   }
+  toggleMenu() {
+    const { showMenu } = this.state;
+
+    this.setState({showMenu: !showMenu})
+  }
   setActiveTab(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
 
@@ -104,6 +110,37 @@ class NavBar extends Component {
           {this.renderIcon('ArrowLeftIcon')}
         </div>
         {title}
+      </div>
+    )
+  }
+  clickedAction(e){
+    var i = parseInt(e.target.getAttribute('data-index'))
+    this.callDelegate('navPressedAction', i)
+  }
+  renderActions() {
+    const { showMenu } = this.state;
+    const { actions } = this.props;
+
+    if (!actions) {
+      return;
+    }
+
+    const actionsHtml = actions.map( (action, i) => {
+      return <div className="sw-nav-bar__action" onClick={this.clickedAction} key={i} data-index={i}>{action}</div>
+    })
+
+    let className = 'sw-nav-bar__action-list';
+
+    if (showMenu) {
+      className += ' sw-nav-bar__action-list--shown'
+    }
+
+    return (
+      <div className="sw-nav-bar__actions" onClick={this.toggleMenu}>
+        <div className="sw-nav-bar__actions-icon"></div>
+        <div className={className}>
+          {actionsHtml}
+        </div>
       </div>
     )
   }
@@ -182,6 +219,7 @@ class NavBar extends Component {
           transitionLeaveTimeout={400}>
           {this.renderTitle()}
         </ReactCSSTransitionGroup>
+        {this.renderActions()}
         {this.renderSlider()}
         <ReactCSSTransitionGroup
           transitionName="progressBarTransition"

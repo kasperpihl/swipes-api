@@ -55,12 +55,15 @@ class Goals extends Component {
       this.setState({tabIndex: index});
     }
   }
+  navPressedAction(nav, i){
+    console.log('pressed action', i)
+  }
   navPressedBack(nav){
     const { setActiveGoal } = this.props;
     setActiveGoal();
   }
   renderTabbar() {
-    let navTitle, navSteps, navStepIndex, currentStepIndex;
+    let navTitle, navSteps, navStepIndex, currentStepIndex, actions;
     const { currentGoal } = this.props;
 
     if (currentGoal) {
@@ -70,10 +73,11 @@ class Goals extends Component {
       }).toJS()
       currentStepIndex = currentGoal.get('currentStepIndex')
       navStepIndex = this.stepIndexForGoal(currentGoal);
+      actions = ['Delete'];
     }
     return (
         <div className="goals__nav-bar">
-          <NavBar tabs={this.tabs} stepIndex={navStepIndex} currentStepIndex={currentStepIndex} steps={navSteps} title={navTitle} delegate={this} activeTab={this.state.tabIndex}/>
+          <NavBar tabs={this.tabs} actions={actions} stepIndex={navStepIndex} currentStepIndex={currentStepIndex} steps={navSteps} title={navTitle} delegate={this} activeTab={this.state.tabIndex}/>
         </div>
     )
   }

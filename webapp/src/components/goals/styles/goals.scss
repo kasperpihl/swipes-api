@@ -25,7 +25,7 @@
   &__nav-bar {
     @include size(100%, auto);
     max-width: 500px;
-    z-index: 2;
+    z-index: 5;
     margin: 0 auto;
   }
 }
