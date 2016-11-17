@@ -74,7 +74,7 @@ const goalsNext = (req, res, next) => {
   } = res.locals;
   const currentStepIndex = goal.currentStepIndex;
   const currentStep = goal.steps[currentStepIndex];
-  let nextStepIndex = ++goal.currentStepIndex;
+  let nextStepIndex = goal.currentStepIndex + 1;
 
   if (!doNext) {
     return next();
@@ -95,7 +95,6 @@ const goalsNext = (req, res, next) => {
         step.iterations.push(null);
       } else if (step.id === stepBackId) {
         nextStepIndex = i;
-        goal.currentStepIndex = i;
         stepBackFound = true;
       }
 
@@ -105,14 +104,18 @@ const goalsNext = (req, res, next) => {
     })
   }
 
-  const nextStep = goal.steps[nextStepIndex];
 
-  nextStep.iterations.push({
-    errorLog: [],
-    automationLog: [],
-    previousStep: currentStep ? currentStep.id : null,
-    responses: {}
-  })
+  const nextStep = goal.steps[nextStepIndex];
+  // Check that next step is not the last step
+  if(nextStep){
+    goal.currentStepIndex = nextStepIndex;
+    nextStep.iterations.push({
+      errorLog: [],
+      automationLog: [],
+      previousStep: currentStep ? currentStep.id : null,
+      responses: {}
+    })
+  }
 
   return next();
 }
