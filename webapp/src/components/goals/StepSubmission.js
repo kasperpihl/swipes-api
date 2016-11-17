@@ -17,7 +17,9 @@ class StepSubmission extends Component {
       onSubmit(goBack);
     }
   }
-  renderActions() {
+  render() {
+    let btns = ['Submit'];
+
     const { submission } = this.props;
     let btns = ['Submit'];
 
@@ -26,15 +28,10 @@ class StepSubmission extends Component {
     }
 
     return (
-      <div className="step-submission__actions">
-        {btns.map((t,i) => <div className="step-submission__button" onClick={this.onSubmit} data-index={i} key={i}>{t}</div>)}
-      </div>
-    )
-  }
-  render() {
-    return (
       <div className="step-submission">
-        {this.renderActions()}
+        <div className="step-submission__actions">
+          {btns.map((t,i) => <div className="step-submission__button" onClick={this.onSubmit} data-index={i} key={i}>{t}</div>)}
+        </div>
       </div>
     )
   }

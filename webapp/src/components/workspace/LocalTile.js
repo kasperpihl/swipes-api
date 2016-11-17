@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesAppSDK from '../../classes/sdk/swipes-sdk-tile'
 // Import the local tiles here and map them in componentForTypeAndData
-import Chat from '../../tiles/chat/Chat'
+//import Chat from '../../tiles/chat/Chat'
 import Goals from '../../containers/tiles/Goals'
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -17,8 +17,6 @@ class LocalTile extends Component {
   componentForType(type){
     let Component;
     switch(type){
-      case 'slack':
-        return Chat;
       case 'goals':
         return Goals;
       default:

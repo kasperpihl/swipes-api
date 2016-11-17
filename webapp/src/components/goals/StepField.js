@@ -1,0 +1,42 @@
+import React, { Component, PropTypes } from 'react'
+import * as Icons from '../icons'
+
+class StepField extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+  componentDidMount() {
+  }
+  renderIcon(icon) {
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="goal-step__icon goal-step__icon--svg"/>;
+    }
+    else{
+      return <img className="goal-step__icon" src={icon} />
+    }
+  }
+  render() {
+    const { icon, title, children } = this.props;
+    return (
+      <div className="goal-step__field">
+        <div className="goal-step__field-header">
+          {this.renderIcon(icon)}
+          {title}
+        </div>
+        {children}
+      </div>
+    )
+  }
+}
+
+export default StepField
+
+const { string } = PropTypes;
+
+StepField.propTypes = {
+  icon: string,
+  title: string
+}

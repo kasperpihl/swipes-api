@@ -46,6 +46,7 @@
     iterations: [{
       errorLog: [],
       automationLog: [],
+      previousStep: 'stepID'
       responses: {
         "user12": {
           created_at: '12345',

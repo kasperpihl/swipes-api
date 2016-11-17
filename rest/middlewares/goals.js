@@ -110,6 +110,7 @@ const goalsNext = (req, res, next) => {
   nextStep.iterations.push({
     errorLog: [],
     automationLog: [],
+    previousStep: currentStep ? currentStep.id : null,
     responses: {}
   })
 

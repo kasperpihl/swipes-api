@@ -40,7 +40,6 @@ class Goals extends Component {
     }
   }
   navProgressChange(nav, index){
-    console.log('changed', index);
     const { progressIndex } = this.state;
     const { currentGoal } = this.props;
     if(progressIndex !== index){
@@ -94,10 +93,10 @@ class Goals extends Component {
     return navStepIndex;
   }
   renderTimeline(){
-    const { currentGoal, me } = this.props;
+    const { currentGoal, me, users } = this.props;
     if (currentGoal) {
       const index = this.stepIndexForGoal(currentGoal);
-      return <GoalStep myId={me.get('id')} stepIndex={index} step={currentGoal.getIn(['steps', index])} goal={currentGoal} delegate={this}/>;
+      return <GoalStep users={users} myId={me.get('id')} stepIndex={index} step={currentGoal.getIn(['steps', index])} goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {
