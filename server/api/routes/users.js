@@ -6,15 +6,24 @@ import {
   validateSignIn
 } from '../validators/users';
 import {
+  validateGetServiceFromUser
+} from '../validators/services';
+import {
   userAvailability,
   userAddToOrganization,
   userSignUp,
-  userSignIn
+  userSignIn,
+  usersGetService,
+  usersCleanupRegisteredWebhooksToService,
+  usersGetXendoServiceId,
+  usersRemoveXendoService,
+  usersRemoveService
 } from './middlewares/users';
 import {
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
-  xendoUserSignUp
+  xendoUserSignUp,
+  xendoRemoveServiceFromUser
 } from './middlewares/xendo.js';
 
 const authed = express.Router();
@@ -48,6 +57,20 @@ notAuthed.all('/users.signup',
     res.status(200).json({ok: true, userId, token});
   }
 );
+
+authed.post('/users.serviceDisconnect',
+  validateGetServiceFromUser,
+  usersGetService,
+  usersCleanupRegisteredWebhooksToService,
+  usersGetXendoServiceId,
+  xendoSwipesCredentials,
+  xendoRefreshSwipesToken,
+  xendoRemoveServiceFromUser,
+  usersRemoveXendoService,
+  usersRemoveService,
+  (req, res, next) => {
+    return res.status(200).json({ok: true});
+  });
 
 export {
   notAuthed,

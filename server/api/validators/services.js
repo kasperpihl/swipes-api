@@ -28,9 +28,11 @@ const authSuccessConstraints = Object.assign({}, { service_name, query });
 const validateServicesAuthorize = validatorMiddleware({ service_name });
 const validateServicesAuthorizeSuccess = validatorMiddleware(authSuccessConstraints);
 const validateServicesRequest = validatorMiddleware(requestConstraints);
+const validateGetServiceFromUser = validatorMiddleware({ account_id });
 
 export {
   validateServicesAuthorize,
   validateServicesRequest,
-  validateServicesAuthorizeSuccess
+  validateServicesAuthorizeSuccess,
+  validateGetServiceFromUser
 }

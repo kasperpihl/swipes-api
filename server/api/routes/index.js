@@ -16,7 +16,8 @@ const v1Authed = [
   init.authed,
   links.authed,
   services.authed,
-  search.authed
+  search.authed,
+  users.authed,
 ]
 
 const webhooksNotAuthed = [
