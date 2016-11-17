@@ -1,5 +1,6 @@
 "use strict";
 
+import * as init from './init';
 import * as users from './users';
 import * as links from './links';
 import * as services from './services';
@@ -11,6 +12,7 @@ const v1NotAuthed = [
 ]
 
 const v1Authed = [
+  init.authed,
   links.authed,
   services.authed
 ]

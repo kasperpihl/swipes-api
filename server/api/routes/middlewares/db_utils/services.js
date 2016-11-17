@@ -3,6 +3,12 @@
 import r from 'rethinkdb';
 import db from '../../../../db';
 
+const servicesGetAll = () => {
+  const q = r.table('services');
+
+  return db.rethinkQuery(q);
+}
+
 const getServiceByManifestId = (manifestId) => {
   const q = r.table('services')
   	.getAll(manifestId, {index: 'manifest_id'})
@@ -42,6 +48,7 @@ const appendSeviceToUser = ({ user_id, serviceToAppend }) => {
 }
 
 export {
+  servicesGetAll,
   getServiceByManifestId,
   getServiceWithAuth,
   appendSeviceToUser
