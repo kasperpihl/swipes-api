@@ -18,8 +18,6 @@ class StepSubmission extends Component {
     }
   }
   render() {
-    let btns = ['Submit'];
-
     const { submission } = this.props;
     let btns = ['Submit'];
 
