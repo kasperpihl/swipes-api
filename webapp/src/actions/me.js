@@ -1,7 +1,7 @@
 import { request } from './api'
 
-const disconnectService = (id) => {
-  return request('users.serviceDisconnect', {id});
+const disconnectService = (account_id) => {
+  return request('users.serviceDisconnect', { account_id });
 }
 
 const handleOAuthSuccess = (serviceName, query) => {

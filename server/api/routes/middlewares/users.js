@@ -5,6 +5,7 @@ import r from 'rethinkdb';
 import jwt from 'jwt-simple';
 import sha1 from 'sha1';
 import moment from 'moment';
+import * as services from '../../services';
 import db from '../../../db';
 import {
   SwipesError
@@ -12,6 +13,14 @@ import {
 import {
   generateSlackLikeId
 } from '../../utils.js';
+import {
+  dbUsersGetService,
+  dbUsersRemoveService
+} from './db_utils/users';
+import {
+  dbXendoGetService,
+  dbXendoRemoveService
+} from './db_utils/xendo';
 
 const userAvailability = (req, res, next) => {
   const {
@@ -161,9 +170,111 @@ const userSignIn = (req, res, next) => {
     });
 }
 
+const usersGetService = (req, res, next) => {
+  const userId = req.userId;
+  const {
+    account_id
+  } = res.locals;
+
+  dbUsersGetService(userId, account_id)
+    .then((service) => {
+      if (service === null) {
+        return next(new SwipesError('There is no such service'));
+      }
+
+      res.locals.service = service;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
+const usersCleanupRegisteredWebhooksToService = (req, res, next) => {
+  const userId = req.userId;
+  const {
+    service
+  } = res.locals;
+  const serviceName = service.service_name;
+
+  if (serviceName === 'asana') {
+    services[serviceName].webhooks.unsubscribeFromAll({ authData: service.authData, userId })
+      .then(() => {
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      })
+  } else {
+    return next();
+  }
+}
+
+const usersGetXendoServiceId = (req, res, next) => {
+  const userId = req.userId;
+  const {
+    service
+  } = res.locals;
+
+  dbXendoGetService(userId, service.id)
+    .then((xendoUserService) => {
+      let xendoUserServiceId = null;
+
+      if (xendoUserService && xendoUserService.length > 0) {
+        xendoUserServiceId = xendoUserService[0].service_id;
+      }
+
+      res.locals.xendoUserServiceId = xendoUserServiceId;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
+const usersRemoveXendoService = (req, res, next) => {
+  const {
+    xendoUserServiceId
+  } = res.locals;
+
+  if (xendoUserServiceId === null) {
+    return next();
+  }
+
+  dbXendoRemoveService(xendoUserServiceId)
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
+const usersRemoveService = (req, res, next) => {
+  const userId = req.userId;
+  const {
+    service
+  } = res.locals;
+
+  dbUsersRemoveService(userId, service.id)
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   userAvailability,
   userAddToOrganization,
   userSignUp,
-  userSignIn
+  userSignIn,
+  usersGetService,
+  usersCleanupRegisteredWebhooksToService,
+  usersGetXendoServiceId,
+  usersRemoveXendoService,
+  usersRemoveService
 }

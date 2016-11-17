@@ -38,10 +38,10 @@ const usersGet = (req, res, next) => {
 
 const getUserService = (req, res, next) => {
   const userId = req.userId;
-  const serviceAccountId = req.body.id;
+  const serviceAccountId = req.body.account_id;
 
   if (validator.isNull(serviceAccountId)) {
-    return next(new SwipesError('id is required'));
+    return next(new SwipesError('account_id is required'));
   }
 
   const coerceToNumber = isNaN(serviceAccountId) ? serviceAccountId : r.expr(serviceAccountId).coerceTo('number');
