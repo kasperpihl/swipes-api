@@ -15,16 +15,21 @@ class StepField extends Component {
       return <Comp className="goal-step__icon goal-step__icon--svg"/>;
     }
     else{
-      return <img className="goal-step__icon" src={icon} />
+      return <img className="goal-step__icon goal-step__icon--img" src={icon} />
     }
   }
   render() {
     const { icon, title, children } = this.props;
+
     return (
       <div className="goal-step__field">
         <div className="goal-step__field-header">
-          {this.renderIcon(icon)}
-          {title}
+          <div className="goal-step__field-icon">
+            {this.renderIcon(icon)}
+          </div>
+          <div className="goal-step__field-title">
+            {title}
+          </div>
         </div>
         {children}
       </div>

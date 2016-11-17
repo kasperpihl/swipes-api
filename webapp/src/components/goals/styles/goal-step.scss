@@ -45,9 +45,22 @@
   }
 
   &__icon {
-    @include size(24px);
-    fill: $deepBlue-20;
-    stroke: $deepBlue-20;
+      @include size(24px);
+
+    &--svg {
+      fill: $deepBlue-20;
+      stroke: $deepBlue-20;
+    }
+
+    &--img {
+      border-radius: 50%;
+    }
+  }
+
+  &__hand-off-message {
+    font-size: 15px;
+    line-height: 1.4;
+    color: $deepBlue-80;
   }
 
   &__status {

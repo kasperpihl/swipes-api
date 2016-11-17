@@ -124,7 +124,7 @@ class GoalStep extends Component {
           if(user && message && message.length){
               return (
               <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
-                <div>{message}</div>
+                <div className="goal-step__hand-off-message">{message}</div>
               </StepField>
             )
           }

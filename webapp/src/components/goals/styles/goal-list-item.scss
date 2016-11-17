@@ -17,6 +17,7 @@ $imgContHeight: 30px;
 
   &:hover {
     background-color: $blue-10;;
+    z-index: 2;
   }
 
   &__image {

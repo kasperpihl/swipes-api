@@ -73,14 +73,15 @@ class Assigning extends Component {
   }
   renderTooltip() {
     const { assignees } = this.props;
+    let tooltip;
 
-    if (assignees.length < 2) {
-      return;
+    if (assignees.length < 1) {
+      tooltip = <div className="sw-assign__name">No one is assigned</div>
+    } else {
+      tooltip = assignees.map( (assignee, i) => {
+        return <div className="sw-assign__name" key={`assignee-${i}`}>{assignee.name}</div>
+      })
     }
-
-    const tooltip = assignees.map( (assignee, i) => {
-      return <div className="sw-assign__name" key={`assignee-${i}`}>{assignee.name}</div>
-    })
 
     return (
       <div className="sw-assign__tooltip" >
