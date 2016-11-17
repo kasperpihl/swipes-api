@@ -116,15 +116,15 @@ router.post('/services.authsuccess',
 */
 router.post('/services.install', isAdmin, (req, res, next) => {
 	console.log('service');
-	const manifestId = req.body && req.body.manifest_id;
+	const serviceName = req.body && req.body.service_name;
 
 	if (!manifestId) {
-		return res.status(200).json({ok: false, err: 'manifest_id is required'});
+		return res.status(200).json({ok: false, err: 'service_name is required'});
 	}
 
 	const getServiceQ =
 		r.table('services')
-			.getAll(manifestId, {index: 'manifest_id'})
+			.getAll(serviceName, {index: 'name'})
 			.nth(0)
 			.default(null);
 
@@ -137,7 +137,7 @@ router.post('/services.install', isAdmin, (req, res, next) => {
 			serviceId = generateId('S');
 		}
 
-		const manifest = JSON.parse(util.getFile(serviceDir + manifestId + '/manifest.json'));
+		const manifest = JSON.parse(util.getFile(serviceDir + serviceName + '/manifest.json'));
 
 		if (!manifest) {
 			return Promise.reject({ok: false, err: 'no_manifest_found'});

@@ -17,12 +17,12 @@ class SelectRow extends Component {
   }
   clickedAuthorize() {
     const serviceName = this.props.data.service_name;
-    const url = apiUrl + 'services.authorize?service=' + serviceName;
+    const url = apiUrl + 'services.authorize?service_name=' + serviceName;
     const {ipcRenderer} = nodeRequire('electron');
 
     ipcRenderer.send('oauth-init', {
-      serviceName: serviceName,
-      url: url
+      serviceName,
+      url
     });
   }
   handleChange(val){
