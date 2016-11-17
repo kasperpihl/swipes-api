@@ -10,8 +10,8 @@ const handleOAuthSuccess = (serviceName, query) => {
   }
 
   const options = {
-    service: serviceName,
-    data: query
+    query,
+    service_name: serviceName
   };
 
   return request('services.authsuccess', options);

@@ -4,7 +4,7 @@ import {
   validatorMiddleware
 } from './validation-wrapper';
 
-const manifest_id = {
+const service_name = {
   presence: true
 }
 
@@ -19,16 +19,13 @@ const query = {
 const dataConstraints = {
   "data.method": {
     presence: true
-  },
-  "data.parameters": {
-    presence: true
   }
 }
 
-const requestConstraints = Object.assign({}, dataConstraints, { manifest_id, account_id });
-const authSuccessConstraints = Object.assign({}, { manifest_id, query });
+const requestConstraints = Object.assign({}, dataConstraints, { service_name, account_id });
+const authSuccessConstraints = Object.assign({}, { service_name, query });
 
-const validateServicesAuthorize = validatorMiddleware({ manifest_id });
+const validateServicesAuthorize = validatorMiddleware({ service_name });
 const validateServicesAuthorizeSuccess = validatorMiddleware(authSuccessConstraints);
 const validateServicesRequest = validatorMiddleware(requestConstraints);
 

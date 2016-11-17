@@ -16,9 +16,10 @@ class Services extends Component {
     this.props.disconnectService(data.id);
   }
   clickedConnect(data){
+    console.log('CONNECT', data)
     ipcListener.sendEvent('oauth-init', {
       serviceName: data.id,
-      url: window.location.origin + '/v1/services.authorize?service=' + data.id
+      url: window.location.origin + '/v1/services.authorize?service_name=' + data.id
     });
   }
   componentDidMount(){
@@ -42,7 +43,7 @@ class Services extends Component {
   }
 
   componentDidUpdate(){
-    
+
     this.checkForDropboxFolder();
   }
   renderConnectedServices(){
@@ -67,21 +68,21 @@ class Services extends Component {
   }
   renderServicesToConnect(){
     const { services:se } = this.props;
-    
+
     const sortedKeys = se.sort((k1, k2) => (se.getIn([k1, 'title']) < se.getIn([k2, 'title'])) ? -1 : 1).toArray();
     return sortedKeys.map((service, key) => {
       const data = {
-        id: service.get('manifest_id'),
+        id: service.get('name'),
         title: service.get('title')
       };
       let placeholderText;
-      if(service.get('manifest_id') === 'dropbox'){
+      if(service.get('name') === 'dropbox'){
         placeholderText = "By connecting Dropbox, you will get a stream of notifications for recently updated or uploaded files by you or your colleagues. Also you will be able to search and find files from there ~30min after connecting the service.";
       }
-      if(service.get('manifest_id') === 'asana'){
+      if(service.get('name') === 'asana'){
         placeholderText = "By connecting Asana, you will get a stream of notifications for recently updated or added tasks by you or your colleagues.";
       }
-      if(service.get('manifest_id') === 'slack'){
+      if(service.get('name') === 'slack'){
         placeholderText = "By connecting Slack, you can add a chat tile in your Workspace from where you can easily communicate with your team, share information and progress on your work.";
       }
 

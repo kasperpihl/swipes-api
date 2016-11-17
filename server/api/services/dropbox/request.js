@@ -5,7 +5,7 @@ import {
   mapApiMethod
 } from './api_map';
 
-const request = ({ authData, method, params }, callback) => {
+const request = ({ authData, method, params = {} }, callback) => {
   const url =
     authData.access_token ?
     'https://api.dropboxapi.com/2' :

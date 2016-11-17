@@ -10,10 +10,10 @@ let generateId = util.generateSlackLikeId;
 let serviceUtil = {};
 
 serviceUtil.validateData = (req, res, next) => {
-	let data = req.body.data;
+	let data = req.body.data || req.body.query;
 
 	if (!data) {
-		return next(new SwipesError('data_required'));
+		return next(new SwipesError('data_or_query_required'));
 	}
 
 	// Some additional information
@@ -25,13 +25,13 @@ serviceUtil.validateData = (req, res, next) => {
 }
 
 serviceUtil.getServiceWithAuth = (req, res, next) => {
-	let service = req.body.service;
+	let serviceName = req.body.service_name;
 
-	if (!service) {
-		return next(new SwipesError('service_required'));
+	if (!serviceName) {
+		return next(new SwipesError('service_name_required'));
 	}
 
-	let filter = {"service_name": service};
+	let filter = {"service_name": serviceName};
 	let selectedAccountId = req.body.account_id;
 	if(selectedAccountId){
 		filter.id = selectedAccountId;
@@ -66,19 +66,18 @@ serviceUtil.getServiceWithAuth = (req, res, next) => {
 }
 
 serviceUtil.getService = (req, res, next) => {
-	// Kasper how should I know that service is manifest_id ??? Keep it consistent.
-	let manifestId = req.body.service;
+	let serviceName = req.body.service_name;
 
-	if (!manifestId) {
-		manifestId = req.query.service;
+	if (!serviceName) {
+		serviceName = req.query.service_name;
 	}
-	if (!manifestId) {
+	if (!serviceName) {
 		return next('service_required!');
 	}
 
 	let getServiceQ =
 		r.table('services')
-			.getAll(manifestId, {index: 'manifest_id'})
+			.getAll(serviceName, {index: 'name'})
 			.nth(0)
 			.default(null);
 
@@ -102,7 +101,7 @@ serviceUtil.requireService = (req, res, next) => {
 	let file;
 
 	try {
-		file = require(serviceDir + service.folder_name + '/' + service.script);
+		file = require(serviceDir + service.name + '/' + service.name + '.js');
 	}
 	catch (e) {
 		console.log(e);
@@ -135,7 +134,7 @@ serviceUtil.getAuthData = (req, res, next) => {
 
 			let serviceToAppend = Object.assign({}, serviceData, {
 				service_id: service.id,
-				service_name: service.manifest_id
+				service_name: service.name
 			});
 
 			res.locals.serviceToAppend = serviceToAppend;

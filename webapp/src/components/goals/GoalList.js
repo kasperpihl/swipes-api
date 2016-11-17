@@ -32,10 +32,6 @@ class GoalList extends Component {
   renderList() {
     let { goals, tabIndex } = this.props;
 
-    if (tabIndex === 2) {
-      return;
-    }
-
     goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
     goals = this.filterGoals(goals);
 
@@ -44,6 +40,7 @@ class GoalList extends Component {
     })
   }
   renderTagsList() {
+    return;
     const { tabIndex } = this.props;
     let items = [];
 
@@ -77,11 +74,17 @@ class GoalList extends Component {
       case 1:
         return this.filterLater(goals);
       case 2:
+        return this.filterCompleted(goals);
       case 3:
         return goals;
       default:
         return this.filterMine(goals);
     }
+  }
+  filterCompleted(goals){
+    return goals.filter((goal) => {
+      return (goal.get('steps').last().get('completed'))
+    })
   }
   filterMine(goals) {
     const {

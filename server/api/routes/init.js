@@ -1,7 +1,6 @@
 "use strict";
 
 import express from 'express';
-import config from 'config';
 import {
   initGetData
 } from './middlewares/init';

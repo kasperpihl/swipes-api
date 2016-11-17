@@ -27,7 +27,7 @@ export default class Slack {
   }
   request(serviceId, method, data){
     var options = {
-      service: 'slack',
+      service_name: 'slack',
       account_id: serviceId,
       data: {
         method,

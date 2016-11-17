@@ -2,7 +2,7 @@
 
 import req from 'request'
 
-const request = ({ authData, method, params }, callback) => {
+const request = ({ authData, method, params = {} }, callback) => {
   if (authData.access_token) {
     params.token = authData.access_token;
   }
@@ -18,7 +18,6 @@ const request = ({ authData, method, params }, callback) => {
   }
 
   req(options, (err, res, body) => {
-    console.log(body);
     if (err) {
       console.log(err);
       return callback(err);

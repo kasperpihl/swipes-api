@@ -56,7 +56,7 @@ const refreshAccessToken = (authData, user) => {
 	});
 }
 
-const request = ({ authData, method, params, user }, callback) => {
+const request = ({ authData, method, params = {}, user }, callback) => {
   const client = createClient();
 
   refreshAccessToken(authData, user)

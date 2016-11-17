@@ -9,7 +9,7 @@ export default class SwipesAppSDK {
     this.info = {}; // initObj.info from tile_loader will be this after init.
 
     this.com = new SwClientCom(sendFunction);
-    
+
     this.com.lock(); // Lock until init from the workspace, this will queue all calls and fire them once ready (init calls unlock);
     this.addListener('init', (data) => {
       if(data.token) {
@@ -67,9 +67,9 @@ export default class SwipesAppSDK {
       callback = parameters;
     }
     parameters = (typeof parameters === 'object') ? parameters : {};
-    
+
     const options = {
-      service: serviceName,
+      service_name: serviceName,
       data: {
         method: method,
         parameters: parameters
@@ -79,7 +79,7 @@ export default class SwipesAppSDK {
     if(this.info.workflow && this.info.workflow.selectedAccountId){
       options.account_id = this.info.workflow.selectedAccountId;
     }
-    
+
     return options;
   }
   do(data, callback){
