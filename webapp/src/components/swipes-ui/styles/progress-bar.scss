@@ -5,10 +5,10 @@
   $b: &;
 
   @include flex(flex);
-  @include size(100%, 18px);
+  @include size(100%, auto);
 
   &__step {
-    @include size(100%, 6px);
+    @include size(100%, 18px);
     padding: 6px 0;
     position: relative;
     transition: .2s;
