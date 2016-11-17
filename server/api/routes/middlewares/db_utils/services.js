@@ -9,19 +9,19 @@ const servicesGetAll = () => {
   return db.rethinkQuery(q);
 }
 
-const getServiceByManifestId = (manifestId) => {
+const getServiceByManifestId = (serviceName) => {
   const q = r.table('services')
-  	.getAll(manifestId, {index: 'manifest_id'})
+  	.getAll(serviceName, {index: 'name'})
   	.nth(0)
   	.default(null);
 
   return db.rethinkQuery(q);
 }
 
-const getServiceWithAuth = ({ user_id, manifest_id, account_id }) => {
+const getServiceWithAuth = ({ user_id, service_name, account_id }) => {
   const filter = {
     id: account_id,
-    service_name: manifest_id
+    service_name
   }
 
 	const q = r.table("users")

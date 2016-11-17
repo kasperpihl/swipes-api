@@ -11,9 +11,9 @@ import {
 } from '../../../middlewares/swipes-error';
 
 const serviceIdGet = (req, res, next) => {
-	const manifestId = res.locals.manifest_id;
+	const serviceName = res.locals.service_name;
 
-	getServiceByManifestId(manifestId)
+	getServiceByManifestId(serviceName)
 		.then((service) => {
 			if (!service) {
 				return next(new SwipesError('Service not found'));
@@ -31,11 +31,11 @@ const serviceIdGet = (req, res, next) => {
 const serviceWithAuthGet = (req, res, next) => {
   const user_id = req.userId;
   const {
-    manifest_id,
+    service_name,
     account_id
   } = res.locals;
 
-  getServiceWithAuth({ user_id, manifest_id, account_id })
+  getServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
         return next(new SwipesError('Service not found'));
@@ -53,11 +53,11 @@ const serviceWithAuthGet = (req, res, next) => {
 
 const serviceImport = (req, res, next) => {
   const {
-    manifest_id
+    service_name
   } = res.locals;
 
-  if (services[manifest_id]) {
-    res.locals.service = services[manifest_id];
+  if (services[service_name]) {
+    res.locals.service = services[service_name];
 
     return next();
   } else {
@@ -141,7 +141,7 @@ const serviceDoShareRequest = (req, res, next) => {
 const serviceGetAuthData = (req, res, next) => {
   const userId = req.userId;
   const {
-    manifest_id,
+    service_name,
     service_id,
     query,
     service
@@ -165,7 +165,7 @@ const serviceGetAuthData = (req, res, next) => {
 
     const serviceToAppend = Object.assign({}, serviceData, {
       service_id,
-      service_name: manifest_id
+      service_name
     });
 
     res.locals.serviceToAppend = serviceToAppend;

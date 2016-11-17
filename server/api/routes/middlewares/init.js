@@ -22,8 +22,8 @@ const initGetData = (req, res, next) => {
   const userId = req.userId;
   const promiseArrayQ = [
     initMe(userId),
-    servicesGetAll(),
     initWorkflows(userId),
+    servicesGetAll(),
     initActivities(userId),
     processesGetAllOrderedByTitle()
   ]
