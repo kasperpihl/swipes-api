@@ -7,11 +7,18 @@
   @include size(100%);
   @include flex(flex-start, flex-start, column);
   position: relative;
-  // background-color: red;
+
+  &__transition-wrapper {
+    @include size(100%, auto);
+    position: absolute;
+    left: 0; top: 0;
+  }
 
   &__scroller {
     @include size(100%, calc(100% - 114px));
+    position: relative;
     overflow-y:auto;
+    overflow-x: hidden;
   }
 
   &__field {
@@ -69,33 +76,92 @@
   }
 }
 
-.goal-step-intro-transition {
+.slide-step-left {
   //empty
   &-enter {
     opacity: 0;
-    transform: translateY(50px);
-    transition: all .2s ease-in-out;
-    will-change: opacity,  transform;
+    transform: translateX(40%);
+    transition: all .4s ease-in-out;
+    will-change: opacity, transform;
 
     &-active {
       opacity: 1;
-      transform: translateY(0px);
-      transition: all .2s ease-in-out;
-      will-change: opacity,  transform;
+      transform: translateX(0%);
+      transition: all .4s ease-in-out;
+      will-change: opacity, transform;
     }
   }
 
   &-leave {
     opacity: 1;
-    transform: translateY(0px);
-    transition: all .2s ease-in-out;
-    will-change: opacity,  transform;
+    transform: translateX(0%);
+    transition: all .4s ease-in-out;
+    will-change: opacity, transform;
 
     &-active {
       opacity: 0;
-      transform: translateY(50px);
+      transform: translateX(-40%);
+      transition: all .4s ease-in-out;
+      will-change: opacity, transform;
+    }
+  }
+}
+
+.slide-step-right {
+  &-enter {
+    opacity: 0;
+    transform: translateX(-40%);
+    transition: all .4s ease-in-out;
+    will-change: opacity, transform;
+
+    &-active {
+      opacity: 1;
+      transform: translateX(0%);
+      transition: all .4s ease-in-out;
+      will-change: opacity, transform;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    transform: translateX(0%);
+    transition: all .4s ease-in-out;
+    will-change: opacity, transform;
+
+    &-active {
+      opacity: 0;
+      transform: translateX(40%);
+      transition: all .4s ease-in-out;
+      will-change: opacity, transform;
+    }
+  }
+}
+
+.step-status-slide {
+  //empty
+  &-enter {
+    opacity: 0;
+    transform: translateY(20px);
+    will-change: opacity, transform;
+
+    &-active {
+      opacity: 1;
+      transform: translateY(0%);
       transition: all .2s ease-in-out;
-      will-change: opacity,  transform;
+      will-change: opacity, transform;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+    transform: translateY(0%);
+    will-change: opacity, transform;
+
+    &-active {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .2s ease-in-out;
+      will-change: opacity, transform;
     }
   }
 }

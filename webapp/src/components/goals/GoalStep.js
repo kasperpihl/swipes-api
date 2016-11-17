@@ -15,7 +15,9 @@ import './styles/goal-step.scss'
 class GoalStep extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      slideDirection: 'slide-step-left'
+    }
     this.onSubmit = this.onSubmit.bind(this);
     this.bindCallbacks = {};
     this.formData = [];
@@ -29,11 +31,16 @@ class GoalStep extends Component {
     }
   }
   componentWillReceiveProps(nextProps){
-    if(nextProps.stepIndex !== this.props.stepIndex){
+    if (nextProps.stepIndex !== this.props.stepIndex) {
       this.formData = [];
     }
-  }
 
+    if (nextProps.stepIndex < this.props.stepIndex) {
+      this.setState({slideDirection: 'slide-step-right'})
+    } else {
+      this.setState({slideDirection: 'slide-step-left'})
+    }
+  }
   onSubmit(goBack) {
     const { goal, step } = this.props;
     let previousSteps;
@@ -120,11 +127,10 @@ class GoalStep extends Component {
             return false;
 
           })
-          console.log('message', message, user);
           if(user && message && message.length){
               return (
               <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
-                <div className="goal-step__hand-off-message">{message}</div>
+                <div className="goal-step__hand-">{message}</div>
               </StepField>
             )
           }
@@ -183,21 +189,36 @@ class GoalStep extends Component {
 
   }
   render() {
-    const { step } = this.props;
+    const { step, stepIndex } = this.props;
+    const { slideDirection } = this.state;
+
+    console.log(slideDirection);
 
     return (
       <div className="goal-step">
-        <div className="goal-step__scroller">
-          {this.renderHeader()}
-          {this.renderHandoff()}
-          {this.renderFields(step)}
-        </div>
-        <div className="goal-step__status">
+        <ReactCSSTransitionGroup
+        transitionName={slideDirection}
+        component="div"
+        className="goal-step__scroller"
+        transitionEnterTimeout={600}
+        transitionLeaveTimeout={400}>
+          <div className="goal-step__transition-wrapper" key={'step-' + stepIndex}>
+            {this.renderHeader()}
+            {this.renderHandoff()}
+            {this.renderFields(step)}
+          </div>
+        </ReactCSSTransitionGroup>
+        <ReactCSSTransitionGroup
+        transitionName="step-status-slide"
+        component="div"
+        className="goal-step__status"
+        transitionEnterTimeout={600}
+        transitionLeaveTimeout={300}>
           {this.renderPreAutomations()}
           {this.renderStatus()}
           {this.renderSubmission()}
           {this.renderPostAutomations()}
-        </div>
+        </ReactCSSTransitionGroup>
       </div>
     )
   }
