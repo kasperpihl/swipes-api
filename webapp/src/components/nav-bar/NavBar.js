@@ -182,7 +182,6 @@ class NavBar extends Component {
           transitionLeaveTimeout={400}>
           {this.renderTitle()}
         </ReactCSSTransitionGroup>
-          {this.renderActions()}
         {this.renderSlider()}
         <ReactCSSTransitionGroup
           transitionName="progressBarTransition"
