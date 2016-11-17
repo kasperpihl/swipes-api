@@ -54,8 +54,10 @@ class Find extends Component {
           loadModal('preview', {
             loading: true
           });
+
           request('services.request', {
-            service: 'dropbox',
+            service_name: 'dropbox',
+            account_id: doc.account_id,
             data: {
               method: 'files.getTemporaryLink',
               parameters: {
