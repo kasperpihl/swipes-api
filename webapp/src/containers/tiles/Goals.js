@@ -19,7 +19,7 @@ class Goals extends Component {
       'clickedRoundButton'
     ]);
     this.state = { tabIndex: 0, progressIndex: -1 };
-    this.tabs = ['now', 'later', 'tags', 'all'];
+    this.tabs = ['now', 'later', 'completed', 'all'];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
