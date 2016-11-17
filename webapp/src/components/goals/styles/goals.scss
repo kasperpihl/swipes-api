@@ -123,6 +123,11 @@
   }
 }
 
+.goals-list-wrap {
+  @include size(100%);
+  position: relative;
+}
+
 .goals-list-transition {
   &-enter {
     opacity: 0;
