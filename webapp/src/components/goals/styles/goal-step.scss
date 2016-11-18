@@ -73,7 +73,7 @@
     transform: rotate(-45deg);
     // background-color: salmon;
     position: absolute;
-    right: 0; top: 0;
+    right: 6px; top: 0;
 
     #{$b}__icon {
       @include size(18px);
