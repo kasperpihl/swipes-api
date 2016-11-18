@@ -2,10 +2,12 @@
 
 import * as services from '../../services';
 import {
-  getServiceByManifestId,
-  getServiceWithAuth,
-  appendSeviceToUser
+  getServiceByManifestId
 } from './db_utils/services';
+import {
+  dbUsersAddSevice,
+  dbUsersGetServiceWithAuth
+} from './db_utils/users';
 import {
   SwipesError
 } from '../../../middlewares/swipes-error';
@@ -35,7 +37,7 @@ const serviceWithAuthGet = (req, res, next) => {
     account_id
   } = res.locals;
 
-  getServiceWithAuth({ user_id, service_name, account_id })
+  dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
         return next(new SwipesError('Service not found'));
@@ -180,10 +182,7 @@ const serviceUpdateAuthData = (req, res, next) => {
     serviceToAppend
   } = res.locals;
 
-  // T_TODO: if(service_id  === authData.service_id && id === authData.id)
-	// Remove it before inserting the new one (or replace etc.)
-	// This will both allow multi accounts and prevents duplicate accounts
-  appendSeviceToUser({ user_id: userId, serviceToAppend })
+  dbUsersAddSevice({ user_id: userId, service: serviceToAppend })
     .then(() => {
       return next();
     })
