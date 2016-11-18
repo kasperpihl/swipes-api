@@ -182,7 +182,7 @@ const serviceUpdateAuthData = (req, res, next) => {
     serviceToAppend
   } = res.locals;
 
-  dbUsersAddSevice({ user_id: userId, serviceToAppend })
+  dbUsersAddSevice({ user_id: userId, service: serviceToAppend })
     .then(() => {
       return next();
     })
