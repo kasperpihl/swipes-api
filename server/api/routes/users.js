@@ -17,7 +17,8 @@ import {
   usersCleanupRegisteredWebhooksToService,
   usersGetXendoServiceId,
   usersRemoveXendoService,
-  usersRemoveService
+  usersRemoveService,
+  usersUpdateProfilePic
 } from './middlewares/users';
 import {
   xendoSwipesCredentials,
@@ -71,6 +72,15 @@ authed.post('/users.serviceDisconnect',
   (req, res, next) => {
     return res.status(200).json({ok: true});
   });
+
+// T_TODO
+// that's a hack that we will remove Sunday
+// DELETE THIS AS SOON AS POSSIBLE
+authed.post('/users.profilePic',
+  usersUpdateProfilePic,
+  (req, res, next) => {
+    return res.status(200).json({ok: true});
+  })
 
 export {
   notAuthed,

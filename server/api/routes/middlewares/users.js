@@ -15,7 +15,8 @@ import {
 } from '../../utils.js';
 import {
   dbUsersGetService,
-  dbUsersRemoveService
+  dbUsersRemoveService,
+  dbUsersUpdateProfilePic
 } from './db_utils/users';
 import {
   dbXendoGetService,
@@ -268,6 +269,19 @@ const usersRemoveService = (req, res, next) => {
     })
 }
 
+const usersUpdateProfilePic = (req, res, next) => {
+  const userId = req.userId;
+  const profilePic = req.body.profile_pic;
+
+  dbUsersUpdateProfilePic({ userId, profilePic })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   userAvailability,
   userAddToOrganization,
@@ -277,5 +291,6 @@ export {
   usersCleanupRegisteredWebhooksToService,
   usersGetXendoServiceId,
   usersRemoveXendoService,
-  usersRemoveService
+  usersRemoveService,
+  usersUpdateProfilePic
 }

@@ -69,9 +69,16 @@ const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
   return db.rethinkQuery(q);
 }
 
+const dbUsersUpdateProfilePic = ({ userId, profilePic }) => {
+	const q = r.table('users').get(userId).update({profile_pic: profilePic});
+
+  return db.rethinkQuery(q);
+}
+
 export {
   dbUsersGetService,
   dbUsersRemoveService,
   dbUsersAddSevice,
-  dbUsersGetServiceWithAuth
+  dbUsersGetServiceWithAuth,
+  dbUsersUpdateProfilePic
 }
