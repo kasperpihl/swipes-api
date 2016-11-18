@@ -6,16 +6,19 @@
 
   @include size(100%);
   @include flex(flex-start, flex-start, column);
+  background-color: $bg;
   position: relative;
 
   &__transition-wrapper {
     @include size(100%, auto);
+    background-color: $bg;
     position: absolute;
     left: 0; top: 0;
   }
 
   &__scroller {
     @include size(100%, calc(100% - 114px));
+    background-color: $bg;
     position: relative;
     overflow-y:auto;
     overflow-x: hidden;
@@ -111,62 +114,62 @@
 }
 
 .slide-step-left {
-  //empty
+
   &-enter {
-    opacity: 0;
-    transform: translateX(40%);
+    transform: translateX(100%);
     transition: all .4s ease-in-out;
-    will-change: opacity, transform;
+    will-change: transform;
+    position: relative;
+    z-index: 10;
 
     &-active {
-      opacity: 1;
       transform: translateX(0%);
       transition: all .4s ease-in-out;
-      will-change: opacity, transform;
+      will-change: transform;
+      position: relative;
+      z-index: 10;
     }
   }
 
   &-leave {
-    opacity: 1;
     transform: translateX(0%);
     transition: all .4s ease-in-out;
-    will-change: opacity, transform;
+    will-change: transform;
+    z-index: 1;
 
     &-active {
-      opacity: 0;
-      transform: translateX(-40%);
+
+      transform: translateX(-80px);
       transition: all .4s ease-in-out;
-      will-change: opacity, transform;
+      will-change: transform;
+      z-index: 1;
     }
   }
 }
 
 .slide-step-right {
+
   &-enter {
-    opacity: 0;
-    transform: translateX(-40%);
+    transform: translateX(-40px);
     transition: all .4s ease-in-out;
-    will-change: opacity, transform;
+    will-change: transform;
 
     &-active {
-      opacity: 1;
       transform: translateX(0%);
       transition: all .4s ease-in-out;
-      will-change: opacity, transform;
+      will-change: transform;
     }
   }
 
   &-leave {
-    opacity: 1;
     transform: translateX(0%);
     transition: all .4s ease-in-out;
-    will-change: opacity, transform;
+    will-change: transform;
 
     &-active {
-      opacity: 0;
-      transform: translateX(40%);
+      transform: translateX(100%);
       transition: all .4s ease-in-out;
-      will-change: opacity, transform;
+      will-change: transform;
     }
   }
 }
