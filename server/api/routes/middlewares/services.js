@@ -2,11 +2,11 @@
 
 import * as services from '../../services';
 import {
-  getServiceByManifestId,
-  getServiceWithAuth
+  getServiceByManifestId
 } from './db_utils/services';
 import {
-  dbUsersAddSevice
+  dbUsersAddSevice,
+  dbUsersGetServiceWithAuth
 } from './db_utils/users';
 import {
   SwipesError
@@ -37,7 +37,7 @@ const serviceWithAuthGet = (req, res, next) => {
     account_id
   } = res.locals;
 
-  getServiceWithAuth({ user_id, service_name, account_id })
+  dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
         return next(new SwipesError('Service not found'));

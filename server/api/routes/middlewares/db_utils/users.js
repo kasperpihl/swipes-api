@@ -50,8 +50,28 @@ const dbUsersAddSevice = ({ user_id, serviceToAppend }) => {
 	return db.rethinkQuery(q);
 }
 
+const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
+  const filter = {
+    id: account_id,
+    service_name
+  }
+
+	const q = r.table("users")
+		.get(user_id)("services")
+		.default([])
+		.filter(filter)
+		.limit(1)
+		.pluck('authData', 'service_id', 'id', 'service_name')
+		.eqJoin('service_id', r.table('services'), {index: 'id'})
+		.without([{right:'id'}, {right:'title'}])
+		.zip();
+
+  return db.rethinkQuery(q);
+}
+
 export {
   dbUsersGetService,
   dbUsersRemoveService,
-  dbUsersAddSevice
+  dbUsersAddSevice,
+  dbUsersGetServiceWithAuth
 }
