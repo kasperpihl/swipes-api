@@ -9,7 +9,8 @@ import {
   shareRequest
 } from './request'
 import {
-  webhooks
+  webhooks,
+  unsubscribeFromAllWebhooks
 } from './webhooks'
 
 export {
@@ -17,5 +18,6 @@ export {
   authData,
   request,
   shareRequest,
-  webhooks
+  webhooks,
+  unsubscribeFromAllWebhooks
 }
