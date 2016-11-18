@@ -216,7 +216,7 @@ class NavBar extends Component {
           component="div"
           className="sw-nav-bar__titleTransition"
           transitionEnterTimeout={0}
-          transitionLeaveTimeout={400}>
+          transitionLeaveTimeout={600}>
           {this.renderTitle()}
         </ReactCSSTransitionGroup>
         {this.renderActions()}
