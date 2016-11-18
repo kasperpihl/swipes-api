@@ -37,19 +37,8 @@ const getServiceWithAuth = ({ user_id, service_name, account_id }) => {
   return db.rethinkQuery(q);
 }
 
-const appendSeviceToUser = ({ user_id, serviceToAppend }) => {
-  const q = r.table('users').get(user_id).update((user) => {
-		return {
-			services: user('services').default([]).append(serviceToAppend)
-		}
-	});
-
-	return db.rethinkQuery(q);
-}
-
 export {
   servicesGetAll,
   getServiceByManifestId,
-  getServiceWithAuth,
-  appendSeviceToUser
+  getServiceWithAuth
 }

@@ -30,7 +30,28 @@ const dbUsersRemoveService = (userId, account_id) => {
   return db.rethinkQuery(q);
 }
 
+const dbUsersAddSevice = ({ user_id, serviceToAppend }) => {
+  const account_id = serviceToAppend.id;
+  const coerceToNumber = isNaN(account_id) ? account_id : r.expr(account_id).coerceTo('number');
+  const q = r.table('users').get(user_id).update((user) => {
+		return {
+			services:
+        user('services')
+          .default([])
+          .filter((service) => {
+            return service('id')
+                    .ne(coerceToNumber)
+                    .and(service('service_id').ne(serviceToAppend.service_id))
+          })
+          .append(serviceToAppend)
+		}
+	});
+
+	return db.rethinkQuery(q);
+}
+
 export {
   dbUsersGetService,
-  dbUsersRemoveService
+  dbUsersRemoveService,
+  dbUsersAddSevice
 }
