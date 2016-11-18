@@ -4,8 +4,8 @@ import req from 'request';
 import { request } from './request';
 import { createClient } from './utils';
 import {
-  unsubscribeFromAll,
-  subscribeToAll
+  unsubscribeFromAllWebhooks,
+  subscribeToAllWebhooks
 } from './webhooks';
 
 const authUrl = (data, callback) => {
@@ -34,10 +34,10 @@ const authData = (data, callback) => {
 
       data = { authData, id, show_name };
 
-      return unsubscribeFromAll({ authData, userId });
+      return unsubscribeFromAllWebhooks({ authData, userId });
     })
     .then(() => {
-      subscribeToAll({ authData, userId, accountId: id });
+      subscribeToAllWebhooks({ authData, userId, accountId: id });
 
       callback(null, data);
     })

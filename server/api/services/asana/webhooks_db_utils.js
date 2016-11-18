@@ -9,15 +9,15 @@ const createWebhookReference = (userId, accountId) => {
     account_id: accountId
   }
 
-  const insertQ = r.table('asana_webhooks').insert(data);
+  const q = r.table('asana_webhooks').insert(data);
 
-  return db.rethinkQuery(insertQ);
+  return db.rethinkQuery(q);
 }
 
 const updateWebhookReference = (webhookId, webhook) => {
-  const updateQ = r.table('asana_webhooks').get(webhookId).update({ webhook });
+  const q = r.table('asana_webhooks').get(webhookId).update({ webhook });
 
-  db.rethinkQuery(updateQ)
+  db.rethinkQuery(q)
     .then(() => {
       console.log('Webhook reference updated!');
     })
@@ -27,27 +27,27 @@ const updateWebhookReference = (webhookId, webhook) => {
 }
 
 const updateWebhookReferenceSecret = (webhookId, secret) => {
-  const updateQ = r.table('asana_webhooks').get(webhookId).update({ secret });
+  const q = r.table('asana_webhooks').get(webhookId).update({ secret });
 
-  return db.rethinkQuery(updateQ);
+  return db.rethinkQuery(q);
 }
 
 const getWebhookReference = (webhookId) => {
-  const getQ = r.table('asana_webhooks').get(webhookId);
+  const q = r.table('asana_webhooks').get(webhookId);
 
-  return db.rethinkQuery(getQ);
+  return db.rethinkQuery(q);
 }
 
 const getWebhooksReferences = (userId) => {
-  const query = r.table('asana_webhooks').getAll(userId, {index: 'user_id'});
+  const q = r.table('asana_webhooks').getAll(userId, {index: 'user_id'});
 
-  return db.rethinkQuery(query);
+  return db.rethinkQuery(q);
 }
 
 const deleteWebhooksRefereces = (userId) => {
-  const deleteQ = r.table('asana_webhooks').getAll(userId, {index: 'user_id'}).delete();
+  const q = r.table('asana_webhooks').getAll(userId, {index: 'user_id'}).delete();
 
-  return db.rethinkQuery(deleteQ);
+  return db.rethinkQuery(q);
 }
 
 export {

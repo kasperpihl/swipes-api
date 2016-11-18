@@ -169,7 +169,7 @@ const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
 // }
 
 // Unsubscribe from webhooks that are referenced in our database
-const unsubscribeFromAll = ({ authData, userId }) => {
+const unsubscribeFromAllWebhooks = ({ authData, userId }) => {
 	return getWebhooksReferences(userId)
 		.then((webhooks) => {
 			console.log('Unsubscribe HOOKS', webhooks);
@@ -200,7 +200,7 @@ const unsubscribeFromAll = ({ authData, userId }) => {
 		})
 }
 
-const subscribeToAll = ({ authData, userId, accountId }) => {
+const subscribeToAllWebhooks = ({ authData, userId, accountId }) => {
   console.log('subscribing asana webhooks to all projects');
 
   const method = 'workspaces.findAll';
@@ -342,7 +342,7 @@ const webhooks = (account, resourceId, accountId, callback) => {
 }
 
 export {
-  unsubscribeFromAll,
-  subscribeToAll,
+  unsubscribeFromAllWebhooks,
+  subscribeToAllWebhooks,
   webhooks
 }
