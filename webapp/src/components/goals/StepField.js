@@ -30,6 +30,10 @@ class StepField extends Component {
           <div className="goal-step__field-title">
             {title}
           </div>
+          <div className="goal-step__field-action" title="Fullscreen">
+            {this.renderIcon('ArrowLeftIcon')}
+            {this.renderIcon('ArrowRightIcon')}
+          </div>
         </div>
         {children}
       </div>

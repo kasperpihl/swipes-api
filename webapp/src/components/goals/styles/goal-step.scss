@@ -64,6 +64,40 @@
     }
   }
 
+  &__field-action {
+    @include size(50px);
+    @include flex();
+    transform: rotate(-45deg);
+    // background-color: salmon;
+    position: absolute;
+    right: 0; top: 0;
+
+    #{$b}__icon {
+      @include size(18px);
+      transition: .15s;
+
+      &:last-child {
+        margin-left: -8px;
+        transition: .15s;
+        will-change: margin-left;
+      }
+    }
+
+    &:hover {
+
+      #{$b}__icon {
+        fill: $deepBlue-40;
+        stroke: $deepBlue-40;
+        transition: .15s;
+
+        &:last-child {
+          margin-left: -4px;
+          transition: .15s;
+        }
+      }
+    }
+  }
+
   &__hand-off-message {
     font-size: 15px;
     line-height: 1.4;
