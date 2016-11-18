@@ -198,7 +198,7 @@ class GoalStep extends Component {
         transitionName={slideDirection}
         component="div"
         className="goal-step__scroller"
-        transitionEnterTimeout={600}
+        transitionEnterTimeout={400}
         transitionLeaveTimeout={400}>
           <div className="goal-step__transition-wrapper" key={'step-' + stepIndex}>
             {this.renderHeader()}
