@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import SwipesCard from '../swipes-card/SwipesCard'
 
 import './styles/note.scss'
 import {
@@ -31,16 +32,42 @@ class Note extends Component {
   onChange(editorState){
     const { onChange } = this.props;
     this.setState({ editorState });
+
     onChange(convertToRaw(editorState.getCurrentContent()))
   }
-  render() {
+  onCardClick(card){
+    const { swipes } = this.props;
+  }
+  renderNoteCard(){
+    const { options } = this.props;
+    if(options.fullscreen){
+      return;
+    }
+    const { editorState } = this.state;
+
+    return <SwipesCard delegate={this} data={{
+      title: 'Untitled note',
+      subtitle: editorState.getCurrentContent().getPlainText().substr(0,100)
+    }}/>
+  }
+  renderNoteEditor(){
+    const { options } = this.props;
+    if(!options.fullscreen){
+      return;
+    }
     const {editorState} = this.state;
     return (
+      <Editor
+        editorState={editorState}
+        onChange={this.onChange}
+      />
+    )
+  }
+  render() {
+    return (
       <div className="deliver-note">
-        <Editor
-          editorState={editorState}
-          onChange={this.onChange}
-        />
+        {this.renderNoteEditor()}
+        {this.renderNoteCard()}
       </div>
     )
   }

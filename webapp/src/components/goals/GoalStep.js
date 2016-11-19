@@ -55,17 +55,21 @@ class GoalStep extends Component {
     this.formData[i] = data;
   }
 
-  fieldById(fieldId){
+  stepFieldById(fieldId){
     const { goal } = this.props;
-    let field;
+    let field, step;
     goal.get('steps').forEach((s) => {
       s.get('fields').forEach((f) => {
         if(f.get('id') === fieldId){
           field = f;
+          step = s;
         }
       })
     })
-    return field;
+    if(field){
+      return [step, field];
+    }
+    return;
   }
 
   renderHeader() {
@@ -91,11 +95,16 @@ class GoalStep extends Component {
       this.formData[id] = data;
     }
 
+    const options = {
+      fullscreen: false
+    }
+
     const icon = Field.getIcon && Field.getIcon() || 'CheckmarkIcon';
     return (
 
       <StepField key={key} title={title} icon={icon}>
         <Field
+          options={options}
           onChange={this.bindCallbacks[id]}
           data={data}
           settings={settings}
@@ -103,9 +112,12 @@ class GoalStep extends Component {
       </StepField>
     )
   }
-  lastIteration(iterations, belowIndex){
-    return iterations.findLast((iter, i) => {
-      if(typeof belowIndex !== 'undefined' && i >= belowIndex){
+  lastIteration(iterations, maxIndex){
+    if(!iterations || maxIndex < 0 ){
+      return undefined;
+    }
+    return iterations.findLastEntry((iter, i) => {
+      if(typeof maxIndex !== 'undefined' && i > maxIndex){
         return false;
       }
       return (iter !== null);
@@ -114,26 +126,28 @@ class GoalStep extends Component {
   renderHandoff(){
     const { step, stepIndex, goal, users } = this.props;
     const lastIteration = this.lastIteration(step.get('iterations'));
-    if(lastIteration && lastIteration.get('previousStep')){
-      const previousStep = goal.get('steps').find((s) => s.get('id') === lastIteration.get('previousStep'));
-      if(previousStep){
-        const prevIteration = this.lastIteration(previousStep.get('iterations'))
-        if(prevIteration && prevIteration.get('responses').size){
 
-          let user, message;
-          prevIteration.get('responses').forEach((response, userId) => {
-            user = users.get(userId);
-            message = response.get('message');
-            return false;
+    if(lastIteration){
+      const previousStepIndex = lastIteration[1].get('previousStepIndex');
+      const iterationIndex = lastIteration[0];
 
-          })
-          if(user && message && message.length){
-              return (
-              <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
-                <div className="goal-step__hand-">{message}</div>
-              </StepField>
-            )
-          }
+      const pIterations = goal.getIn(['steps', previousStepIndex, 'iterations'])
+      const pIteration = this.lastIteration(pIterations, iterationIndex);
+
+      if(pIteration){
+        let user, message;
+        pIteration[1].get('responses').forEach((response, userId) => {
+          user = users.get(userId);
+          message = response.get('message');
+          return false;
+
+        })
+        if(user && message && message.length){
+          return (
+            <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
+              <div className="goal-step__hand-off-message">{message}</div>
+            </StepField>
+          )
         }
       }
     }
@@ -142,22 +156,30 @@ class GoalStep extends Component {
     const { myId } = this.props;
 
     return step.get('fields').map((field, i) => {
+      let lastIteration = this.lastIteration(step.get('iterations'));
+      console.log(lastIteration);
       if(field.get('type') === 'link'){
         const target = field.getIn(['settings', 'target']);
         if(target && target.get('type') === 'field'){
-          field = this.fieldById(target.get('id')) || field;
+          const stepField = this.stepFieldById(target.get('id'));
+          if(stepField){
+            field = stepField[1];
+            lastIteration = this.lastIteration(stepField[0].get('iterations'), lastIteration ? lastIteration[0] : undefined);
+            console.log('lastIteration2', lastIteration)
+          }
         }
       }
 
       let data = {};
-      const lastValue = step.get('iterations').findLast((val, k) => {
-        return (k !== step.get('iterations').size-1 && val)
-      })
-
-      if (lastValue && lastValue.getIn(['responses', myId, 'data', i ])) {
-        data = lastValue.getIn(['responses', myId, 'data', i ]).toJS();
-      } else if(field.get('initial_data')) {
+      if(field.get('initial_data')) {
         data = field.get('initial_data').toJS();
+      }
+
+      if(lastIteration){
+        const myLastResponseToField = lastIteration[1].getIn(['responses', myId, 'data', i]);
+        if(myLastResponseToField){
+          data = myLastResponseToField.toJS();
+        }
       }
 
       const Field = fields[field.get('type')];
@@ -172,7 +194,10 @@ class GoalStep extends Component {
 
   }
   renderStatus(){
-    const { step } = this.props;
+    const { step, stepIndex, goal } = this.props;
+    const isCompleted = step.get('completed');
+    const isCurrent = stepIndex === goal.get('currentStepIndex')
+
     // You need to fill this form. Submit here
     // Waiting for (${person} || 'people') to fill this form
     // You submitted this form.

@@ -10,7 +10,7 @@ export const DRAG_DOT = 'DRAG_DOT'
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
 
 // Goals
-export const GOAL_COMPLETE_STEP = 'GOAL_COMPLETE_STEP'
+export const GOAL_DELETE = 'GOAL_DELETE';
 
 // Search
 export const SEARCH = 'SEARCH'

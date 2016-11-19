@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import { overlay, main, api, goals } from '../../actions';
+import { overlay, main, goals } from '../../actions';
 import { bindAll } from '../../classes/utils'
 
 import NavBar from '../../components/nav-bar/NavBar'
@@ -42,7 +42,7 @@ class Goals extends Component {
   navProgressChange(nav, index){
     const { progressIndex } = this.state;
     const { currentGoal } = this.props;
-    if(progressIndex !== index){
+    if(currentGoal && progressIndex !== index){
       if(index === currentGoal.get('currentStepIndex')){
         index = -1;
       }
@@ -57,6 +57,10 @@ class Goals extends Component {
   }
   navPressedAction(nav, i){
     console.log('pressed action', i)
+    const { currentGoal } = this.props;
+    if(i === 0){
+
+    }
   }
   navPressedBack(nav){
     const { setActiveGoal } = this.props;
@@ -100,7 +104,7 @@ class Goals extends Component {
     const { currentGoal, me, users } = this.props;
     if (currentGoal) {
       const index = this.stepIndexForGoal(currentGoal);
-      return <GoalStep users={users} myId={me.get('id')} stepIndex={index} step={currentGoal.getIn(['steps', index])} goal={currentGoal} delegate={this}/>;
+      return <GoalStep users={users} myId={me.get('id')} step={currentGoal.getIn(['steps', index])} stepIndex={index} goal={currentGoal} delegate={this}/>;
     }
   }
   clickedRoundButton() {
@@ -176,7 +180,7 @@ function mapStateToProps(state) {
 
 const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
-  request: api.request,
+  goalDelete: goals.delete,
   submit: goals.submitStep,
   setActiveGoal: main.setActiveGoal
 })(Goals)

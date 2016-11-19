@@ -4,7 +4,7 @@ import { api } from '../actions'
 
 import Topbar from './Topbar'
 import Modal from './Modal'
-import Workspace from './Workspace'
+import Goals from './tiles/Goals'
 import Overlay from './Overlay'
 import Toasty from '../components/toasty/HOCToasty'
 import DotDragOverlay from './DotDragOverlay'
@@ -40,11 +40,11 @@ class App extends Component {
     let classes = 'main ';
     if(this.props.mainClasses){
       classes += this.props.mainClasses.toArray().join(' ');
-    } 
+    }
     return (
       <div className={classes}>
         <Topbar pathname={this.props.location.pathname} />
-        <Workspace />
+        <Goals />
         <Overlay />
         <Modal />
         <Toasty />

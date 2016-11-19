@@ -43,7 +43,9 @@ class SwipesModal extends Component {
     }
   }
   componentDidMount(){
-    this.refs.textarea.focus();
+    if(this.refs.textarea){
+      this.refs.textarea.focus();
+    }
   }
   sendCallback(obj){
     let res = obj;

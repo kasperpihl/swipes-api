@@ -2,6 +2,21 @@ import * as types from '../constants/ActionTypes'
 import { request } from './api'
 import { load } from './modal'
 
+const deleteGoal = (goalId) => {
+  return (dispatch, getState) => {
+    dispatch(load({title: 'Delete Goal?', data: {message: 'Are you sure you want to delete this goal?', buttons: ['Yes', 'No']}, type: 'warning'}, (res) => {
+      if(res && !res.button){
+
+        request('goals.delete', {goal_id: currentGoal.get('id')}).then((res) =>{
+          if(!res || !res.ok){
+
+          }
+        });
+      }
+    }))
+  }
+}
+
 const submitStep = (goalId, stepId, data, previousSteps) => {
   return (dispatch, getState) => {
     let modalOpt = {
@@ -61,5 +76,6 @@ const submitStep = (goalId, stepId, data, previousSteps) => {
 }
 
 export {
-  submitStep
+  submitStep,
+  deleteGoal
 }
