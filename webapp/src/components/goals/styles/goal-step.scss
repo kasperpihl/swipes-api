@@ -17,7 +17,7 @@
   }
 
   &__scroller {
-    @include size(100%, calc(100% - 114px));
+    @include size(100%, 100%);
     background-color: $bg;
     position: relative;
     overflow-y:auto;

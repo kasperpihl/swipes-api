@@ -157,7 +157,6 @@ class GoalStep extends Component {
 
     return step.get('fields').map((field, i) => {
       let lastIteration = this.lastIteration(step.get('iterations'));
-      console.log(lastIteration);
       if(field.get('type') === 'link'){
         const target = field.getIn(['settings', 'target']);
         if(target && target.get('type') === 'field'){
@@ -165,7 +164,6 @@ class GoalStep extends Component {
           if(stepField){
             field = stepField[1];
             lastIteration = this.lastIteration(stepField[0].get('iterations'), lastIteration ? lastIteration[0] : undefined);
-            console.log('lastIteration2', lastIteration)
           }
         }
       }
@@ -176,6 +174,7 @@ class GoalStep extends Component {
       }
 
       if(lastIteration){
+        console.log('lastIteration.toJS()', lastIteration[1].toJS());
         const myLastResponseToField = lastIteration[1].getIn(['responses', myId, 'data', i]);
         if(myLastResponseToField){
           data = myLastResponseToField.toJS();
@@ -194,10 +193,12 @@ class GoalStep extends Component {
 
   }
   renderStatus(){
-    const { step, stepIndex, goal } = this.props;
+    const { step, stepIndex, goal, myId } = this.props;
     const isCompleted = step.get('completed');
-    const isCurrent = stepIndex === goal.get('currentStepIndex')
-
+    const isCurrent = (stepIndex === goal.get('currentStepIndex'))
+    const isFuture = (stepIndex > goal.get('currentStepIndex'))
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId)) ? true : false;
+    console.log('isMine', isMine)
     // You need to fill this form. Submit here
     // Waiting for (${person} || 'people') to fill this form
     // You submitted this form.
@@ -227,20 +228,13 @@ class GoalStep extends Component {
         transitionLeaveTimeout={400}>
           <div className="goal-step__transition-wrapper" key={'step-' + stepIndex}>
             {this.renderHeader()}
+            {this.renderStatus()}
             {this.renderHandoff()}
             {this.renderFields(step)}
+            {this.renderPreAutomations()}
+            {this.renderSubmission()}
+            {this.renderPostAutomations()}
           </div>
-        </ReactCSSTransitionGroup>
-        <ReactCSSTransitionGroup
-        transitionName="step-status-slide"
-        component="div"
-        className="goal-step__status"
-        transitionEnterTimeout={600}
-        transitionLeaveTimeout={300}>
-          {this.renderPreAutomations()}
-          {this.renderStatus()}
-          {this.renderSubmission()}
-          {this.renderPostAutomations()}
         </ReactCSSTransitionGroup>
       </div>
     )
