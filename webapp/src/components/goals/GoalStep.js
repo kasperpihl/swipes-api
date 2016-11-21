@@ -79,10 +79,6 @@ class GoalStep extends Component {
 
     return <StepHeader index={stepIndex + 1} title={stepTitle} assignees={assignees}/>
   }
-  renderHandoff() {
-
-  }
-
 
   renderField(Field, id, title, data, settings) {
     const key = 'field-' + id;
@@ -194,11 +190,22 @@ class GoalStep extends Component {
   }
   renderStatus(){
     const { step, stepIndex, goal, myId } = this.props;
-    const isCompleted = step.get('completed');
-    const isCurrent = (stepIndex === goal.get('currentStepIndex'))
-    const isFuture = (stepIndex > goal.get('currentStepIndex'))
-    const isMine = step.get('assignees').find((a) => (a.get('id') === myId)) ? true : false;
-    console.log('isMine', isMine)
+    let status;
+
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
+    if(step.get('completed')){
+      status = 'This step was completed';
+    }
+    else if(stepIndex === goal.get('currentStepIndex')){
+      status = 'Waiting for people to complete this step';
+      if(isMine){
+        status = 'You need to complete this step';
+      }
+    }
+    else if(stepIndex > goal.get('currentStepIndex')){
+      status = 'This step is yet to be completed';
+    }
+    return <div className="goal-step__status">{status}</div>
     // You need to fill this form. Submit here
     // Waiting for (${person} || 'people') to fill this form
     // You submitted this form.
