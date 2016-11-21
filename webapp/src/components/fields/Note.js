@@ -30,13 +30,14 @@ class Note extends Component {
 
   }
   onChange(editorState){
-    const { onChange } = this.props;
+    const { delegate } = this.props;
     this.setState({ editorState });
 
-    onChange(convertToRaw(editorState.getCurrentContent()))
+    delegate('change', convertToRaw(editorState.getCurrentContent()))
   }
   onCardClick(card){
-    const { swipes } = this.props;
+    const { delegate } = this.props;
+    delegate('stepTest', delegate);
   }
   renderNoteCard(){
     const { options } = this.props;

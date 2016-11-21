@@ -18,10 +18,8 @@ class Checklist extends Component {
     const newChecks = checks.setIn([i, 'checked'], checked);
     this.setState({checks: newChecks});
 
-    const { onChange } = this.props;
-    if(onChange){
-      onChange({checks: newChecks.toJS()});
-    }
+    const { delegate } = this.props;
+    delegate('change', {checks: newChecks.toJS()});
   }
   renderChecks(){
     const { checks } = this.state;
