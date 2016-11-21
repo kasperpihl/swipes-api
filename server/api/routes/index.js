@@ -4,6 +4,7 @@ import * as init from './init';
 import * as users from './users';
 import * as links from './links';
 import * as services from './services';
+import * as goals from './goals';
 import * as search from './search';
 import * as webhooks from './webhooks';
 
@@ -18,6 +19,7 @@ const v1Authed = [
   services.authed,
   search.authed,
   users.authed,
+  goals.authed,
 ]
 
 const webhooksNotAuthed = [

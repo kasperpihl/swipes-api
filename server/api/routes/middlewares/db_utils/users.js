@@ -75,10 +75,26 @@ const dbUsersUpdateProfilePic = ({ userId, profilePic }) => {
   return db.rethinkQuery(q);
 }
 
+const dbUsersGetSingleWithOrganizations = ({ userId }) => {
+  const q =
+    r.table('users')
+      .get(userId)
+      .without(['password', 'xendoCredentials', {'services': 'authData'}])
+      .merge({
+        organizations:
+          r.table('organizations')
+            .getAll(r.args(r.row("organizations")))
+            .coerceTo('ARRAY')
+      })
+
+  return db.rethinkQuery(q);
+}
+
 export {
   dbUsersGetService,
   dbUsersRemoveService,
   dbUsersAddSevice,
   dbUsersGetServiceWithAuth,
-  dbUsersUpdateProfilePic
+  dbUsersUpdateProfilePic,
+  dbUsersGetSingleWithOrganizations
 }

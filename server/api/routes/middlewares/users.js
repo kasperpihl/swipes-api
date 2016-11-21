@@ -16,7 +16,8 @@ import {
 import {
   dbUsersGetService,
   dbUsersRemoveService,
-  dbUsersUpdateProfilePic
+  dbUsersUpdateProfilePic,
+  dbUsersGetSingleWithOrganizations
 } from './db_utils/users';
 import {
   dbXendoGetService,
@@ -282,6 +283,20 @@ const usersUpdateProfilePic = (req, res, next) => {
     })
 }
 
+const usersGetSingleWithOrganizations = (req, res, next) => {
+  const userId = req.userId;
+
+  dbUsersGetSingleWithOrganizations({ userId })
+    .then((user) => {
+      res.locals.user = user;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   userAvailability,
   userAddToOrganization,
@@ -292,5 +307,6 @@ export {
   usersGetXendoServiceId,
   usersRemoveXendoService,
   usersRemoveService,
-  usersUpdateProfilePic
+  usersUpdateProfilePic,
+  usersGetSingleWithOrganizations
 }

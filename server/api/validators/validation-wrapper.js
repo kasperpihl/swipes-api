@@ -31,9 +31,6 @@ const validatorMiddleware = (model = null) => {
     const validation = validate(res.locals, modelToValidate);
 
     if (validation) {
-      console.log(res.locals);
-      console.log(modelToValidate);
-      console.log(validation);
       return next(new SwipesError('Some property in the request is not valid!'));
     }
 

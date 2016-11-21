@@ -16,6 +16,13 @@ const initActivities = (userId) => {
   return db.rethinkQuery(q);
 }
 
+const commonMultipleEvents = ({ objToInsert }) => {
+  const q = r.table('events_multiple').insert(objToInsert);
+
+  return db.rethinkQuery(q);
+}
+
 export {
-  initActivities
+  initActivities,
+  commonMultipleEvents
 }
