@@ -15,7 +15,14 @@ const dbGoalsUpdateSingle = ({ goal_id, properties }) => {
   return db.rethinkQuery(q);
 }
 
+const dbGoalsGetSingle = ({ goal_id }) => {
+  const q = r.table('goals').get(goal_id);
+
+  return db.rethinkQuery(q);
+}
+
 export {
   dbGoalsInsertSingle,
-  dbGoalsUpdateSingle
+  dbGoalsUpdateSingle,
+  dbGoalsGetSingle
 }

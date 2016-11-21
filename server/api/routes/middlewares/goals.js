@@ -3,7 +3,8 @@
 import r from 'rethinkdb';
 import {
   dbGoalsInsertSingle,
-  dbGoalsUpdateSingle
+  dbGoalsUpdateSingle,
+  dbGoalsGetSingle
 } from './db_utils/goals';
 import {
   generateSlackLikeId
@@ -132,9 +133,49 @@ const goalsDelete = (req, res, next) => {
     })
 }
 
+const goalsGet = (req, res, next) => {
+  const {
+    goal_id
+  } = res.locals;
+
+  dbGoalsGetSingle({ goal_id })
+    .then((goal) => {
+      if (!goal) {
+        return next(new SwipesError('goal not found'));
+      }
+
+      res.locals.goal = goal;
+
+      return next()
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
+const goalsUpdate = (req, res, next) => {
+  const {
+    goal
+  } = res.locals;
+
+  dbGoalsUpdateSingle({ goal_id: goal.id, properties: goal })
+    .then(() => {
+      res.locals.eventType = 'goal_updated';
+      res.locals.eventMessage = 'Goal has been updated';
+      res.locals.eventData = goal;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 export {
   goalsCreate,
   goalsNext,
   goalsInsert,
-  goalsDelete
+  goalsDelete,
+  goalsGet,
+  goalsUpdate
 }
