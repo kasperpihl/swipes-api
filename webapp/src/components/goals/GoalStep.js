@@ -213,8 +213,10 @@ class GoalStep extends Component {
 
   }
   renderSubmission(){
-    const { stepIndex, step, goal } = this.props;
-    if(stepIndex === goal.get('currentStepIndex')){
+    const { stepIndex, step, goal, myId } = this.props;
+
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
+    if(isMine && stepIndex === goal.get('currentStepIndex')){
       return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
     }
   }
