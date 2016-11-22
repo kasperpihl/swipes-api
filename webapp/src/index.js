@@ -12,7 +12,7 @@ import './components/global-styles/transitions.scss'
 
 import React from 'react'
 import { render } from 'react-dom'
-import SwipesAPIConnector from './classes/sdk/swipes-sdk-rest-api'
+import SwipesAPIConnector from './classes/api-connector'
 
 let Page;
 let RenderedComp;

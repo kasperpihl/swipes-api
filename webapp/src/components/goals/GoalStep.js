@@ -34,7 +34,7 @@ class GoalStep extends Component {
     if(name === 'fullscreen'){
 
       this.callDelegate('stepAction', name, {
-        component: 'Field'
+        component: 'Field',
       });
     }
   }
@@ -223,7 +223,9 @@ class GoalStep extends Component {
 
 
   renderPreAutomations(){
-
+    // Here will come the pre automations
+    // > Send email
+    // > Save to Evernote
   }
   renderSubmission(){
     const { stepIndex, step, goal, myId } = this.props;
@@ -234,7 +236,9 @@ class GoalStep extends Component {
     }
   }
   renderPostAutomations(){
-
+    // Here will come the post automations
+    // > Send email
+    // > Save to Evernote
   }
   render() {
     const { step, stepIndex } = this.props;
