@@ -116,6 +116,7 @@
 .slide-step-left {
 
   &-enter {
+    opacity: 0;
     transform: translate3d(100%, 0px, 0px);
     transition: all .4s ease-in-out;
     will-change: transform;
@@ -123,6 +124,7 @@
     z-index: 10;
 
     &-active {
+      opacity: 1;
       transform: translate3d(0px, 0px, 0px);
       transition: all .4s ease-in-out;
       will-change: transform;
@@ -139,7 +141,7 @@
     &-active {
 
       transform:  scale3d(.8, .8, 1);
-      opacity: .0;
+      opacity: 0;
       transition: all .4s ease-in-out;
       will-change: transform;
       z-index: 1;
@@ -162,43 +164,16 @@
   }
 
   &-leave {
+    opacity: 1;
     transform: translate3d(0px, 0px, 0px);
     transition: all .4s ease-in-out;
     will-change: transform;
 
     &-active {
+      opacity: 0;
       transform: translate3d(100%, 0px, 0px);
       transition: all .4s ease-in-out;
       will-change: transform;
-    }
-  }
-}
-
-.step-status-slide {
-  //empty
-  &-enter {
-    opacity: 0;
-    transform: translate3d(0px, 20px, 0px);
-    will-change: opacity, transform;
-
-    &-active {
-      opacity: 1;
-      transform: translate3d(0px, 0px, 0px);
-      transition: all .2s ease-in-out;
-      will-change: opacity, transform;
-    }
-  }
-
-  &-leave {
-    opacity: 1;
-    transform: translate3d(0px, 0px, 0px);
-    will-change: opacity, transform;
-
-    &-active {
-      opacity: 0;
-      transform: translate3d(0px, 20px, 0px);
-      transition: all .2s ease-in-out;
-      will-change: opacity, transform;
     }
   }
 }

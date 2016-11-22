@@ -264,7 +264,7 @@ tabSlider {
     }
 
     &__content {
-      @include size(auto, 108px);
+      @include size(calc(100%), 108px);
       @include flex(flex-start, center, column);
       align-content: center;
       padding: 0 18px;
