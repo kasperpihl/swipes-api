@@ -14,10 +14,9 @@ class NavBar extends Component {
     super(props)
     this.state = {
       activeTab: 0,
-      sliderClips: [],
-      showMenu: false
+      sliderClips: []
     }
-    bindAll(this, ['setActiveTab', 'pressedBack', 'progressBarChange', 'toggleMenu', 'clickedAction'])
+    bindAll(this, ['setActiveTab'])
   }
   callDelegate(name){
     const { delegate } = this.props;
@@ -30,10 +29,6 @@ class NavBar extends Component {
       this.calculateSliderClips()
     }, 10)
   }
-  progressBarChange(i){
-    this.callDelegate('navProgressChange', i);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (this.props.activeTab != nextProps.activeTab) {
       this.setState({activeTab: nextProps.activeTab});
@@ -70,16 +65,8 @@ class NavBar extends Component {
 
     this.setState({sliderClips: sliderClips})
   }
-  pressedBack(){
-    this.callDelegate('navPressedBack');
-  }
   callback(index) {
     this.callDelegate('navTabDidChange', index);
-  }
-  toggleMenu() {
-    const { showMenu } = this.state;
-
-    this.setState({showMenu: !showMenu})
   }
   setActiveTab(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
@@ -96,54 +83,6 @@ class NavBar extends Component {
       return <Comp className="sw-nav-bar__icon sw-nav-bar__icon--svg" data-index={i}/>;
     }
   }
-
-  renderTitle() {
-    const { title, steps, stepIndex } = this.props;
-
-    if (!title) {
-      return
-    }
-
-    return (
-      <div className="sw-nav-bar__main-title">
-        <div className="sw-nav-bar__btn" onClick={this.pressedBack}>
-          {this.renderIcon('ArrowLeftIcon')}
-        </div>
-        {title}
-      </div>
-    )
-  }
-  clickedAction(e){
-    var i = parseInt(e.target.getAttribute('data-index'))
-    this.callDelegate('navPressedAction', i)
-  }
-  renderActions() {
-    const { showMenu } = this.state;
-    const { actions } = this.props;
-
-    if (!actions) {
-      return;
-    }
-
-    const actionsHtml = actions.map( (action, i) => {
-      return <div className="sw-nav-bar__action" onClick={this.clickedAction} key={i} data-index={i}>{action}</div>
-    })
-
-    let className = 'sw-nav-bar__action-list';
-
-    if (showMenu) {
-      className += ' sw-nav-bar__action-list--shown'
-    }
-
-    return (
-      <div className="sw-nav-bar__actions" onClick={this.toggleMenu}>
-        <div className="sw-nav-bar__actions-icon"></div>
-        <div className={className}>
-          {actionsHtml}
-        </div>
-      </div>
-    )
-  }
   renderSlider() {
     const { activeTab, sliderClips } = this.state;
     const { title, steps, stepIndex } = this.props;
@@ -158,43 +97,14 @@ class NavBar extends Component {
       }
     }
 
-    if (title) {
-      styles = {
-        WebkitClipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)'
-      }
-    }
-
-    if (steps && stepIndex > -1) {
-      const activeLength = 100 - (100 / steps.length * stepIndex);
-
-      styles = {
-        WebkitClipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-        backgroundPosition: `${activeLength}% 0`
-      }
-    }
-
     return (
       <div className="sw-nav-bar__slider" style={styles}></div>
     )
-  }
-
-  renderProgressbar() {
-    const { steps, stepIndex, currentStepIndex } = this.props;
-
-    if (!steps) {
-      return;
-    }
-
-    return <ProgressBar steps={steps} currentStepIndex={currentStepIndex} index={stepIndex} onChange={this.progressBarChange} />
   }
   render() {
     const { tabs, title, steps } = this.props;
     const { activeTab} = this.state;
     let rootClass = 'sw-nav-bar';
-
-    if (title) {
-      rootClass += ' sw-nav-bar--title-view'
-    }
 
     const tabsHTML = tabs.map((tab, i) => {
       let tabClass = 'sw-nav-bar__tab';
@@ -211,24 +121,7 @@ class NavBar extends Component {
     return (
       <div ref="tabBar" className={rootClass}>
         {tabsHTML}
-        <ReactCSSTransitionGroup
-          transitionName="titleTransition"
-          component="div"
-          className="sw-nav-bar__titleTransition"
-          transitionEnterTimeout={0}
-          transitionLeaveTimeout={600}>
-          {this.renderTitle()}
-        </ReactCSSTransitionGroup>
-        {this.renderActions()}
         {this.renderSlider()}
-        <ReactCSSTransitionGroup
-          transitionName="progressBarTransition"
-          component="div"
-          className="sw-nav-bar__progressbar"
-          transitionEnterTimeout={0}
-          transitionLeaveTimeout={400}>
-          {this.renderProgressbar()}
-        </ReactCSSTransitionGroup>
       </div>
     )
   }
