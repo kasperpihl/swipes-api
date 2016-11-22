@@ -1,12 +1,6 @@
 // Main
-
-export const TOGGLE_FIND = 'TOGGLE_FIND'
 export const SET_STATUS = 'SET_STATUS'
 export const LOGOUT = 'LOGOUT'
-export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'
-export const SET_DRAGGING_DOT = 'SET_DRAGGING_DOT'
-export const DRAG_DOT = 'DRAG_DOT'
-
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
 
 // Goals
@@ -37,9 +31,3 @@ export const HIDE_MODAL = 'HIDE_MODAL'
 export const API_REQUEST = 'API_REQUEST'
 export const API_SUCCESS = 'API_SUCCESS'
 export const API_ERROR = 'API_ERROR'
-
-
-// Workspace
-export const ADD_TILE = 'ADD_TILE'
-export const REMOVE_TILE = 'REMOVE_TILE'
-export const UPDATE_COLUMNS = 'UPDATE_COLUMNS'

@@ -30,13 +30,14 @@ class Note extends Component {
 
   }
   onChange(editorState){
-    const { onChange } = this.props;
+    const { delegate } = this.props;
     this.setState({ editorState });
 
-    onChange(convertToRaw(editorState.getCurrentContent()))
+    delegate('change', convertToRaw(editorState.getCurrentContent()))
   }
   onCardClick(card){
-    const { swipes } = this.props;
+    const { delegate } = this.props;
+    delegate('fullscreen', delegate);
   }
   renderNoteCard(){
     const { options } = this.props;
@@ -47,7 +48,7 @@ class Note extends Component {
 
     return <SwipesCard delegate={this} data={{
       title: 'Untitled note',
-      subtitle: editorState.getCurrentContent().getPlainText().substr(0,100)
+      description: editorState.getCurrentContent().getPlainText().substr(0,100)
     }}/>
   }
   renderNoteEditor(){

@@ -4,10 +4,9 @@ import { api } from '../actions'
 
 import Topbar from './Topbar'
 import Modal from './Modal'
-import Goals from './tiles/Goals'
+import Goals from './Goals'
 import Overlay from './Overlay'
 import Toasty from '../components/toasty/HOCToasty'
-import DotDragOverlay from './DotDragOverlay'
 
 
 let DevTools = 'div';
@@ -48,7 +47,6 @@ class App extends Component {
         <Overlay />
         <Modal />
         <Toasty />
-        <DotDragOverlay />
         <DevTools />
       </div>
     );

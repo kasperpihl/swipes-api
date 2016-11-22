@@ -1,5 +1,4 @@
-
-export default class SwipesAPIConnector {
+export default class APIConnector {
   constructor(baseUrl, token) {
 
     this._baseURL = baseUrl;
@@ -91,6 +90,6 @@ export default class SwipesAPIConnector {
       if(typeof callback === 'function')
         callback(false, e);
     }
-    
+
   }
 }

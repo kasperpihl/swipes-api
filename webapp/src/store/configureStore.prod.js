@@ -20,7 +20,6 @@ const persist = paths => {
         tileBaseUrl: state.getIn(['main','tileBaseUrl']) || null
       },
       services: state.get('services'),
-      workspace: state.get('workspace'),
       me: state.get('me')
     })
   }
@@ -29,7 +28,7 @@ const localStorageConfig = {
   serialize: (subset) => JSON.stringify(subset.toJS()),
   deserialize: (serializedData) => fromJS(JSON.parse(serializedData)),
   merge: (initialState, persistedState) => initialState.mergeDeep(persistedState),
-  key: 'redux-prod', 
+  key: 'redux-prod',
   slicer: persist
 }
 export default function configureStore(preloadedState) {
@@ -45,6 +44,6 @@ export default function configureStore(preloadedState) {
   return createStore(
     rootReducer,
     preloadedState,
-    enhancer 
+    enhancer
   );
 }

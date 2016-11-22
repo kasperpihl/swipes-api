@@ -22,6 +22,29 @@ class GoalStep extends Component {
     this.bindCallbacks = {};
     this.formData = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
+  }
+  delegateFromField(id, name){
+    const { step } = this.props;
+    const field = step.getIn(['fields', id]);
+    if(name === 'change'){
+      this.formData[id] = arguments[2];
+    }
+    if(name === 'fullscreen'){
+
+      const options = { fullscreen: true };
+      this.callDelegate('stepAction', name, {
+        component: 'Field',
+        title: field.get('title') + ' (Note)',
+        props: {
+          field,
+          options,
+          delegate: this.bindCallbacks[id],
+          settings: field.get('settings'),
+          data: this.formData[id]
+        }
+      });
+    }
   }
   callDelegate(name) {
     const { delegate } = this.props;
@@ -37,7 +60,7 @@ class GoalStep extends Component {
 
     if (nextProps.stepIndex < this.props.stepIndex) {
       this.setState({slideDirection: 'slide-step-right'})
-    } else {
+    } else if(nextProps > this.props.stepIndex) {
       this.setState({slideDirection: 'slide-step-left'})
     }
   }
@@ -50,9 +73,6 @@ class GoalStep extends Component {
     }
 
     this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
-  }
-  onFieldChange(i, data) {
-    this.formData[i] = data;
   }
 
   stepFieldById(fieldId){
@@ -79,12 +99,36 @@ class GoalStep extends Component {
 
     return <StepHeader index={stepIndex + 1} title={stepTitle} assignees={assignees}/>
   }
+  renderStatus(){
+    const { step, stepIndex, goal, myId } = this.props;
+    let status;
 
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
+    if(step.get('completed')){
+      status = 'This step was completed';
+    }
+    else if(stepIndex === goal.get('currentStepIndex')){
+      status = 'Waiting for people to complete this step';
+      if(isMine){
+        status = 'You need to complete this step';
+      }
+    }
+    else if(stepIndex > goal.get('currentStepIndex')){
+      status = 'This step is yet to be completed';
+    }
+    return <div className="goal-step__status">{status}</div>
+    // You need to fill this form. Submit here
+    // Waiting for (${person} || 'people') to fill this form
+    // You submitted this form.
+    // You submitted this form. Waiting
+
+  }
   renderField(Field, id, title, data, settings) {
     const key = 'field-' + id;
 
+    // Make sure the delegate is bound with the field id
     if (!this.bindCallbacks[id]) {
-      this.bindCallbacks[id] = this.onFieldChange.bind(this, id);
+      this.bindCallbacks[id] = this.delegateFromField.bind(this, id);
     }
 
     if (typeof this.formData[id] === 'undefined') {
@@ -100,8 +144,8 @@ class GoalStep extends Component {
 
       <StepField key={key} title={title} icon={icon}>
         <Field
+          delegate={this.bindCallbacks[id]}
           options={options}
-          onChange={this.bindCallbacks[id]}
           data={data}
           settings={settings}
         />
@@ -170,7 +214,6 @@ class GoalStep extends Component {
       }
 
       if(lastIteration){
-        console.log('lastIteration.toJS()', lastIteration[1].toJS());
         const myLastResponseToField = lastIteration[1].getIn(['responses', myId, 'data', i]);
         if(myLastResponseToField){
           data = myLastResponseToField.toJS();
@@ -185,41 +228,25 @@ class GoalStep extends Component {
     });
   }
 
+
+
   renderPreAutomations(){
-
-  }
-  renderStatus(){
-    const { step, stepIndex, goal, myId } = this.props;
-    let status;
-
-    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
-    if(step.get('completed')){
-      status = 'This step was completed';
-    }
-    else if(stepIndex === goal.get('currentStepIndex')){
-      status = 'Waiting for people to complete this step';
-      if(isMine){
-        status = 'You need to complete this step';
-      }
-    }
-    else if(stepIndex > goal.get('currentStepIndex')){
-      status = 'This step is yet to be completed';
-    }
-    return <div className="goal-step__status">{status}</div>
-    // You need to fill this form. Submit here
-    // Waiting for (${person} || 'people') to fill this form
-    // You submitted this form.
-    // You submitted this form. Waiting
-
+    // Here will come the pre automations
+    // > Send email
+    // > Save to Evernote
   }
   renderSubmission(){
-    const { stepIndex, step, goal } = this.props;
-    if(stepIndex === goal.get('currentStepIndex')){
+    const { stepIndex, step, goal, myId } = this.props;
+
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
+    if(isMine && stepIndex === goal.get('currentStepIndex')){
       return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
     }
   }
   renderPostAutomations(){
-
+    // Here will come the post automations
+    // > Send email
+    // > Save to Evernote
   }
   render() {
     const { step, stepIndex } = this.props;
