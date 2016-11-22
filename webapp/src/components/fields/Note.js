@@ -37,7 +37,7 @@ class Note extends Component {
   }
   onCardClick(card){
     const { delegate } = this.props;
-    delegate('stepTest', delegate);
+    delegate('fullscreen', delegate);
   }
   renderNoteCard(){
     const { options } = this.props;

@@ -62,6 +62,13 @@ class Goals extends Component {
 
     }
   }
+  stepAction(step, action, data){
+    const { pushOverlay } = this.props;
+    if(action === 'fullscreen'){
+      console.log('stepAction', data);
+      pushOverlay(data);
+    }
+  }
   navPressedBack(nav){
     const { setActiveGoal } = this.props;
     setActiveGoal();
@@ -180,6 +187,7 @@ function mapStateToProps(state) {
 
 const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
+  pushOverlay: overlay.push,
   goalDelete: goals.delete,
   submit: goals.submitStep,
   setActiveGoal: main.setActiveGoal

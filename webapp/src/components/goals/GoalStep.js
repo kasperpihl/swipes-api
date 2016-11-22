@@ -27,14 +27,22 @@ class GoalStep extends Component {
   delegateFromField(id, name){
     const { step } = this.props;
     const field = step.getIn(['fields', id]);
-    console.log('field!', field.toJS());
     if(name === 'change'){
       this.formData[id] = arguments[2];
     }
     if(name === 'fullscreen'){
 
+      const options = { fullscreen: true };
       this.callDelegate('stepAction', name, {
         component: 'Field',
+        title: field.get('title') + ' (Note)',
+        props: {
+          field,
+          options,
+          delegate: this.bindCallbacks[id],
+          settings: field.get('settings'),
+          data: this.formData[id]
+        }
       });
     }
   }

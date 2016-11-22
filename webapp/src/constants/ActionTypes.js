@@ -1,9 +1,6 @@
 // Main
-
-export const TOGGLE_FIND = 'TOGGLE_FIND'
 export const SET_STATUS = 'SET_STATUS'
 export const LOGOUT = 'LOGOUT'
-
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
 
 // Goals

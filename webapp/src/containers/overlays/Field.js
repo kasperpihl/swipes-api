@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../actions'
+import * as actions from '../../actions'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
+import * as fields from '../../components/fields'
 
 class Field extends Component {
   constructor(props) {
@@ -12,8 +13,21 @@ class Field extends Component {
   componentDidMount() {
   }
   render() {
+    const { options, delegate, data, settings, field } = this.props;
+    console.log('options1', options);
+    const Field = fields[field.get('type')];
+    if(!Field){
+      return <div>Field not found...</div>
+    }
     return (
-      <div className="className"></div>
+      <div className="field-overlay">
+        <Field
+          delegate={delegate}
+          options={options.toJS()}
+          data={data}
+          settings={settings}
+        />
+      </div>
     )
   }
 }
