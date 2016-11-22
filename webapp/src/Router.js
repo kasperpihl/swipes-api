@@ -3,7 +3,6 @@ import { Router, Route, IndexRoute } from 'react-router'
 
 import Registration from './containers/Registration';
 import App from './containers/App'
-import Workspace from './containers/Workspace'
 
 export default class Root extends Component {
   constructor(props) {

@@ -3,7 +3,6 @@ import * as modal from './modal'
 import * as overlay from './overlay'
 import * as api from './api'
 import * as me from './me'
-import * as workspace from './workspace'
 import * as toasty from './toasty'
 import * as search from './search'
 import * as goals from './goals'
@@ -16,6 +15,5 @@ export {
   api,
   me,
   toasty,
-  search,
-  workspace
+  search
 }

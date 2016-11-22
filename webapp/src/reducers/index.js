@@ -9,7 +9,6 @@ import toasty from './toasty'
 import search from './search'
 
 import me from './me'
-import workspace from './workspace'
 import services from './services'
 import activity from './activity'
 import users from './users'
@@ -28,7 +27,6 @@ const rootReducer = combineReducers({
 
   me,
   goals,
-  workspace,
   services,
   activity,
   users,

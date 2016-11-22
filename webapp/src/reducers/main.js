@@ -1,23 +1,12 @@
 import * as types from '../constants/ActionTypes'
 import { fromJS, Set } from 'immutable'
 const initialState = fromJS({
-  isFullscreen: false,
-  isSearching: false,
   socketUrl: null,
   token: null,
-  draggingDot: null,
   mainClasses: Set(),
   hasLoaded: false,
   activeGoal: null
 })
-function toggleUnique(array, string, toggle){
-  array = array || [];
-  if(toggle){
-    return [ ...new Set(array.concat([string])) ]
-  }
-  return array.filter( value => (string !== value))
-}
-
 
 export default function main (state = initialState, action) {
   switch (action.type) {
@@ -31,25 +20,6 @@ export default function main (state = initialState, action) {
     case types.SET_STATUS:{
       const hasLoaded = (state.get('hasLoaded') || action.status == 'online') ? true : null;
       return state.withMutations((ns) => ns.set('hasLoaded', hasLoaded).set('status', action.status));
-    }
-
-
-    case types.SET_DRAGGING_DOT:{
-      const draggingDot = action.value ? fromJS({
-        draggingId: action.draggingId,
-        data: action.data
-      }) : null
-      let mainClasses = state.get('mainClasses');
-      if(!mainClasses){
-        mainClasses = new Set();
-      }
-      const addOrDelete = action.value ? 'add' : 'delete';
-      mainClasses = mainClasses[addOrDelete]('draggingDot');
-
-      return state.withMutations((ns) => ns.set('isFinding', !action.value).set('draggingDot', draggingDot).set('mainClasses', mainClasses))
-    }
-    case types.DRAG_DOT:{
-      return state.setIn(['draggingDot', 'hoverTarget'], action.hoverTarget);
     }
 
     case types.SET_ACTIVE_GOAL: {

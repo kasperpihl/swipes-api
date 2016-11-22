@@ -2,15 +2,15 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import { overlay, main, goals } from '../../actions';
-import { bindAll } from '../../classes/utils'
+import { overlay, main, goals } from '../actions';
+import { bindAll } from '../classes/utils'
 
-import NavBar from '../../components/nav-bar/NavBar'
-import GoalStep from '../../components/goals/GoalStep'
-import GoalList from '../../components/goals/GoalList'
-import { PlusIcon } from '../../components/icons'
+import NavBar from '../components/nav-bar/NavBar'
+import GoalStep from '../components/goals/GoalStep'
+import GoalList from '../components/goals/GoalList'
+import { PlusIcon } from '../components/icons'
 
-import '../../components/goals/styles/goals.scss';
+import '../components/goals/styles/goals.scss';
 
 class Goals extends Component {
   constructor(props) {

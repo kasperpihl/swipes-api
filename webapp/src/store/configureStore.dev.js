@@ -21,7 +21,6 @@ const persist = paths => {
         token: state.getIn(['main', 'token']) || null
       },
       services: state.get('services'),
-      workspace: state.get('workspace'),
       me: state.get('me')
     })
   }
@@ -30,7 +29,7 @@ const localStorageConfig = {
   serialize: (subset) => JSON.stringify(subset.toJS()),
   deserialize: (serializedData) => fromJS(JSON.parse(serializedData)),
   merge: (initialState, persistedState) => initialState.mergeDeep(persistedState),
-  key: 'redux-dev', 
+  key: 'redux-dev',
   slicer: persist
 }
 export default function configureStore(preloadedState) {
@@ -49,7 +48,7 @@ export default function configureStore(preloadedState) {
   return createStore(
     rootReducer,
     preloadedState,
-    enhancer 
+    enhancer
   );
 }
 
