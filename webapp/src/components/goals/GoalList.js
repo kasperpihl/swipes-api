@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { bindAll } from '../../classes/utils'
 
+import NavBar from '../nav-bar/NavBar'
 import GoalListItem from './GoalListItem'
 import TagItem from '../tags/TagItem';
 
@@ -9,6 +10,8 @@ import './styles/goals-list.scss'
 class GoalList extends Component {
   constructor(props) {
     super(props)
+    this.tabs = ['now', 'later', 'completed', 'all'];
+    this.state = { tabIndex: 0 };
     this.tags = [
       'development',
       'design',
@@ -27,10 +30,23 @@ class GoalList extends Component {
   clickedListItem(id){
     this.props.setActiveGoal(id);
   }
-
+  navTabDidChange(nav, index){
+    if(this.state.tabIndex !== index) {
+      this.setState({tabIndex: index});
+    }
+  }
+  renderTabbar() {
+    let navTitle, actions;
+    return (
+        <div className="goals__nav-bar">
+          <NavBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex}/>
+        </div>
+    )
+  }
 
   renderList() {
-    let { goals, tabIndex } = this.props;
+    let { goals } = this.props;
+    const { tabIndex } = this.state;
 
     goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
     goals = this.filterGoals(goals);
@@ -39,34 +55,22 @@ class GoalList extends Component {
       return <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={'goal-list-item-' + goal.get('id')}/>
     })
   }
-  renderTagsList() {
-    return;
-    const { tabIndex } = this.props;
-    let items = [];
-
-    items = this.tags.map((tag, i) => {
-      return <TagItem text={tag} key={'tag-item-' + i} />
-    })
-
-    if (tabIndex === 2) {
-      return (
-        <div className="goals__tags">{items}</div>
-      )
-    }
-  }
   render() {
     return (
       <div className="goals-list">
+        {this.renderTabbar()}
         {this.renderList()}
-        {this.renderTagsList()}
       </div>
     )
   }
 
 
 
+
+
+
   filterGoals(goals){
-    const { tabIndex } = this.props;
+    const { tabIndex } = this.state;
 
     switch(tabIndex){
       case 0:

@@ -7,6 +7,8 @@ import Assigning from '../assigning/Assigning'
 import StepHeader from './StepHeader'
 import StepField from './StepField'
 import StepSubmission from './StepSubmission'
+
+import * as gUtils from './goals_utils'
 // fields
 import * as fields from '../fields'
 // styles
