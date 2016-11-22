@@ -48,7 +48,7 @@ class Note extends Component {
 
     return <SwipesCard delegate={this} data={{
       title: 'Untitled note',
-      subtitle: editorState.getCurrentContent().getPlainText().substr(0,100)
+      description: editorState.getCurrentContent().getPlainText().substr(0,100)
     }}/>
   }
   renderNoteEditor(){
