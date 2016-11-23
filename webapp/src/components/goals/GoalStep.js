@@ -129,9 +129,8 @@ class GoalStep extends Component {
         if (!this.bindCallbacks[i]) {
           this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
         }
-        const icon = Field.getIcon && Field.getIcon() || 'CheckmarkIcon';
         return (
-          <StepField key={field.get('id')} title={field.get('title')} icon={icon}>
+          <StepField key={field.get('id')} title={field.get('title')} icon={Field.icon()}>
             <Field
               delegate={this.bindCallbacks[i]}
               options={options}

@@ -4,7 +4,7 @@ import SwipesCardList from '../swipes-card/SwipesCardList'
 import './styles/collection.scss'
 
 class Collection extends Component {
-  static getIcon(){
+  static icon(){
     return 'ArrowRightIcon'
   }
   constructor(props) {

@@ -5,7 +5,7 @@ import './styles/checklist.scss'
 import { fromJS } from 'immutable'
 
 class Checklist extends Component {
-  static getIcon(){
+  static icon(){
     return 'CheckmarkIcon'
   }
   constructor(props) {

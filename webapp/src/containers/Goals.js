@@ -14,7 +14,6 @@ import '../components/goals/styles/goals.scss';
 class Goals extends Component {
   constructor(props) {
     super(props)
-
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   stepAction(step, action, data) {

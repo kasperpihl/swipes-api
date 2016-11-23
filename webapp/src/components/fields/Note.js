@@ -13,7 +13,7 @@ import {
 } from 'draft-js'
 
 class Note extends Component {
-  static getIcon(){
+  static icon(){
     return 'ListIcon';
   }
   static saveData(data){
