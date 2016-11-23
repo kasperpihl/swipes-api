@@ -46,27 +46,6 @@ const restAuth = (req, res, next) => {
   }
 }
 
-const ioAuth = (req, res, next) => {
-  const token = req._query && req._query.token;
-
-  if (token) {
-    try {
-      const decoded = jwt.decode(token, config.get('jwtTokenSecret'));
-
-      req.userId = decoded.iss;
-      next();
-    } catch (err) {
-      console.log(err);
-      console.log('Can\'t parse the token!');
-      next();
-    }
-  } else {
-    console.log('No token passed!');
-    next();
-  }
-}
-
 export {
-  restAuth,
-  ioAuth
+  restAuth
 }

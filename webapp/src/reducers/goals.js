@@ -3,9 +3,14 @@ import { fromJS, Map } from 'immutable'
 const initialState = fromJS({});
 
 export default function goals (state = initialState, action) {
-  switch (action.type) {
+  const {
+    type,
+    payload
+  } = action;
+
+  switch (type) {
     case 'rtm.start':{
-      const { goals } = action.payload;
+      const { goals } = payload;
       if(!goals) return state;
 
       const tempG = {}
@@ -15,20 +20,20 @@ export default function goals (state = initialState, action) {
       return fromJS(tempG);
     }
     case 'goal_deleted':{
-      return state.delete(action.payload.data.id);
+      return state.delete(payload.id);
     }
     case 'goal_updated':
     case 'goal_created':{
-      return state.set(action.payload.data.id, fromJS(action.payload.data));
+      return state.set(payload.id, fromJS(payload));
     }
     case 'step_changed': {
       console.log('step change', action);
-      const stepId = action.payload.data.id;
-      const goalId = action.payload.data.id.split('-')[0];
+      const stepId = payload.id;
+      const goalId = payload.id.split('-')[0];
       return state.updateIn([goalId, 'steps'], (steps) => {
         return steps.map((step) => {
           if(step.get('id') === stepId){
-            return fromJS(action.payload.data);
+            return fromJS(payload);
           }
           return step;
         })

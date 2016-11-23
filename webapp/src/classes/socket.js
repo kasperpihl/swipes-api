@@ -1,43 +1,64 @@
 import * as types from '../constants/ActionTypes'
-import io from 'socket.io-client'
 import { bindAll } from './utils'
 
 export default class Socket {
   constructor(store){
     this.store = store;
+    this.reconnect_attempts = 1;
     bindAll(this, ['message', 'changeStatus', 'storeChange'])
     store.subscribe(this.storeChange)
   }
   storeChange(){
     const state = this.store.getState();
+
     const url = state.getIn(['main', 'socketUrl']);
+    const token = state.getIn(['main', 'token']);
 
-    if(!this.socket && url && state.getIn(['main', 'status']) !== 'connecting'){
-      this.changeStatus('connecting');
-
-      this.socket = io.connect(url, {
-        query: 'token=' + state.getIn(['main', 'token']),
-        reconnectionDelay: 5000,
-        'reconnection': true,
-        'reconnectionDelayMax': 5000,
-        'forceNew': true
-      });
-      this.socket.on('message', this.message)
-      this.socket.on('connect', () => this.changeStatus('online'))
-      this.socket.on('connect_error', () => this.changeStatus('offline'))
-      this.socket.on('reconnect_attempt', () => this.changeStatus('connecting'));
-      this.socket.on('disconnect', () => this.changeStatus('offline'));
+    if (!this.socket && url && state.getIn(['main', 'status']) !== 'connecting') {
+      this.connect(url, token);
     }
   }
-  changeStatus(status){
+  connect(url, token) {
+    const ws = new WebSocket(url + '?token=' + token);
+
+    this.changeStatus('connecting');
+
+    ws.onopen = () => {
+      this.socket = true;
+      this.changeStatus('online');
+      //we can send stuff here like that
+      //ws.send('stuff')
+    }
+
+    ws.onmessage = this.message;
+
+    ws.onerror = (event) => {
+      console.log('websocket error', event);
+    }
+
+    ws.onclose = () => {
+      this.changeStatus('offline');
+      setTimeout(this.connect.bind(this, url, token), this.reconnect_attempts * 200);
+      this.reconnect_attempts++;
+    }
+  };
+  changeStatus(status) {
     this.store.dispatch({
       type: types.SET_STATUS,
       status
     })
   }
-  message(msg){
-    if(!msg.type)
+  message(message) {
+    const data = JSON.parse(message.data);
+    const {
+      type,
+      payload
+    } = data;
+
+    if(!type) {
       return;
-    this.store.dispatch({type: msg.type, payload: msg});
+    }
+
+    this.store.dispatch({ type, payload });
   }
 }

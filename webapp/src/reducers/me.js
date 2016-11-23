@@ -3,40 +3,41 @@ import { fromJS } from 'immutable'
 const initialState = fromJS({});
 
 export default function me (state = initialState, action) {
-  switch (action.type) {
+  const {
+    type,
+    payload
+  } = action;
+
+  switch (type) {
     case ('rtm.start'):{
-      const res = action.payload;
-      if(res.ok){
-        return fromJS(res.self);
+      if(payload.ok){
+        return fromJS(payload.self);
       }
       return state;
     }
     case ('profile_pic_update'):{
-      console.log(action.payload);
+      console.log(payload);
       return state;
     }
-    // handle service_added/removed etc from socket.
     case 'service_added':{
-      const service = fromJS(action.payload.data);
+      const service = fromJS(payload);
       return state.updateIn(['services'], (services) => services.push(service))
     }
     case 'service_changed':{
-      const msg = action.payload;
       return state.updateIn(['services'], (services) => services.map((service) => {
-        if(service.get('id') === msg.data.id){
-          return service.merge(msg.data);
+        if(service.get('id') === payload.id){
+          return service.merge(payload);
         }
         return service;
       }))
     }
     case 'service_removed':{
-      const msg = action.payload;
-      return state.updateIn(['services'], (services) => services.filter((service) => (service.get('id') !== msg.data.id)))
+      return state.updateIn(['services'], (services) => services.filter((service) => (service.get('id') !== payload.id)))
     }
     case types.LOGOUT:{
       return initialState;
     }
-    default: 
+    default:
       return state
   }
 }

@@ -12,14 +12,18 @@ const filterActivity = (activity) => {
     }
     return false;
   })
-} 
+}
 
 export default function services (state = initialState, action) {
-  switch (action.type) {
+  const {
+    type,
+    payload
+  } = action
+
+  switch (type) {
     case ('rtm.start'):{
-      const res = action.payload;
-      if(res.ok){
-        var activities = filterActivity(fromJS(res.activity.slice(0,100)));
+      if(payload.ok){
+        const activities = filterActivity(fromJS(payload.activity.slice(0,100)));
         activities.forEach((activity) => {
           swipesUrlProvider.save(activity.get('checksum'), activity.get('meta'));
         })
@@ -28,14 +32,13 @@ export default function services (state = initialState, action) {
       return state;
     }
     case 'activity_added':{
-      var activity = action.payload.data;
-      swipesUrlProvider.save(activity.checksum, activity.meta);
-      return filterActivity(state.updateIn(['recent'], (recent) => recent.insert(0, fromJS(activity))));
+      swipesUrlProvider.save(payload.checksum, payload.meta);
+      return filterActivity(state.updateIn(['recent'], (recent) => recent.insert(0, fromJS(payload))));
     }
     case types.LOGOUT:{
       return initialState;
     }
-    default: 
+    default:
       return state
   }
 }

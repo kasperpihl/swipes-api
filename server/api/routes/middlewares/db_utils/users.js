@@ -32,16 +32,16 @@ const dbUsersRemoveService = (userId, account_id) => {
 
 const dbUsersAddSevice = ({ user_id, service }) => {
   const account_id = service.id;
-  const coerceToNumber = isNaN(account_id) ? account_id : r.expr(account_id).coerceTo('number');
+  const coerceToNumber = service.service_name !== 'asana' ? account_id : r.expr(account_id).coerceTo('number');
   const q = r.table('users').get(user_id).update((user) => {
 		return {
 			services:
         user('services')
           .default([])
-          .filter((service) => {
-            return service('id')
+          .filter((s) => {
+            return s('id')
                     .ne(coerceToNumber)
-                    .and(service('service_id').ne(service.service_id))
+                    .and(s('service_id').ne(service.service_id))
           })
           .append(service)
 		}

@@ -5,7 +5,7 @@ var NODE_ENV = process.env.NODE_ENV;
 
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
- const apiRedirect = {
+const apiRedirect = {
   target: 'http://localhost:5000',
   secure: false,
   xfwd: false
@@ -80,7 +80,6 @@ module.exports = {
     inline: true,
     proxy: {
       '/v1/**': Object.assign({}, apiRedirect),
-      '/socket.io/**': Object.assign({}, apiRedirect, {ws: true}),
       '/s/**': Object.assign({}, apiRedirect)
     },
     historyApiFallback: true

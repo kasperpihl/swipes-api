@@ -9,9 +9,6 @@ import {
   servicesGetAll
 } from './db_utils/services';
 import {
-  initWorkflows
-} from './db_utils/workflows';
-import {
   initActivities
 } from './db_utils/events';
 import {
@@ -22,7 +19,6 @@ const initGetData = (req, res, next) => {
   const userId = req.userId;
   const promiseArrayQ = [
     initMe(userId),
-    initWorkflows(userId),
     servicesGetAll(),
     initActivities(userId),
     processesGetAllOrderedByTitle()
@@ -48,21 +44,25 @@ const initGetData = (req, res, next) => {
         delete self.goals;
       }
 
+      const origin = config.get('origin');
+      const ws_origin = origin.replace(/http(s)?/, 'ws' + '$1');
+      const port = config.get('clientPort');
+      const api_port = config.get('apiPort');
+      const https = port === '443';
+      const url = https ? origin : origin + ':' + port;
+      const ws_path = '/ws';
+      const ws_url = https ? ws_origin + ws_path : ws_origin + ':' + api_port + ws_path;
+
       const response = {
         ok: true,
-        url: config.get('clientPort') === '443' ?
-            config.get('origin') :
-            config.get('origin') + ':' + config.get('clientPort'),
-        workflow_base_url: config.get('clientPort') === '443' ?
-                          config.get('origin')  + '/workflows/' :
-                          config.get('origin') + ':' + config.get('clientPort')  + '/workflows/',
+        url,
+        ws_url,
         self,
         users,
         goals,
-        workflows: data[1],
-        services: data[2],
-        activity: data[3],
-        processes: data[4]
+        services: data[1],
+        activity: data[2],
+        processes: data[3]
       }
 
       res.locals.initData = response;

@@ -14,7 +14,7 @@ export default function main (state = initialState, action) {
       if(!action.payload.ok){
         return state;
       }
-      return state.withMutations((ns) => ns.set('socketUrl', action.payload.url));
+      return state.withMutations((ns) => ns.set('socketUrl', action.payload.ws_url));
     }
 
     case types.SET_STATUS:{
