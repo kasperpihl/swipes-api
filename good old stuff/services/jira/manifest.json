@@ -1,9 +1,0 @@
-{
-	"manifest_version": 1,
-	"type": "service",
-	"title": "JIRA",
-	"identifier": "jira",
-	"version": "0.1",
-	"description": "The JIRA Service For Swipes",
-	"script": "jira.js"
-}

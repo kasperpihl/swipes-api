@@ -1,7 +1,0 @@
-@function text-color($color) {
-  @if (lightness($color) > 50) {
-    @return $deepBlue-120;
-  } @else {
-    @return $studioGray-20;
-  }
-}

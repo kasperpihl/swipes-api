@@ -1,8 +1,0 @@
-node_modules
-dev
-dist
-test/temp
-.sass-cache
-app/vendor
-.tmp
-test/scripts/
