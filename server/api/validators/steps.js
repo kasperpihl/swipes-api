@@ -12,10 +12,6 @@ const data = {
   presence: true
 }
 
-const message = {
-  presence: true
-}
-
 const step_id = {
   presence: true
 }
@@ -26,8 +22,7 @@ const payload = {
 
 const validateStepsSubmit = validatorMiddleware({
   goal_id,
-  data,
-  message
+  data
 });
 
 const validateStepsUpdate = validatorMiddleware({
