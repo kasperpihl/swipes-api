@@ -5,99 +5,44 @@
   $b: &;
 
   @include size(100%);
-  @include flex(flex-start, flex-start, column);
+  @include flex(flex-start, center);
   background-color: $bg;
   position: relative;
+  overflow-y: auto;
 
-  &__transition-wrapper {
+  @media screen and (max-width: 1140px) {
+
+    #{$b}__content {
+      margin-left: 30px;
+      margin-right: 15px;
+    }
+
+    #{$b}__side-column {
+      margin-left: 15px;
+    }
+  }
+
+  &__content {
     @include size(100%, auto);
-    background-color: $bg;
-    position: absolute;
-    left: 0; top: 0;
-  }
-
-  &__scroller {
-    @include size(100%, 100%);
-    background-color: $bg;
+    max-width: 600px;
+    margin-left: 240px;
     position: relative;
-    overflow-y:auto;
-    overflow-x: hidden;
   }
 
-  &__field {
-    @include size(100%, auto);
+  &__side-column {
+    @include size(240px, auto);
+    padding-top: 32px;
+    margin: 0 30px;
+    margin-top: 53px;
     position: relative;
-    padding-left: 50px;
-    padding-bottom: 15px;
+    flex: none;
 
-    &:first-child {
-      padding-top: 30px;
-    }
-  }
-
-  &__field-header {
-    @include size(100%, 50px);
-    @include flex(center, flex-start);
-    position: relative;
-    margin-bottom: 30px;
-  }
-
-  &__field-icon {
-    @include size(50px);
-    @include flex();
-    position: absolute;
-    left: -50px; top: 0;
-  }
-
-  &__field-title {
-    font-size: 21px;
-    color: $deepBlue-80;
-  }
-
-  &__icon {
-      @include size(24px);
-
-    &--svg {
-      fill: $deepBlue-20;
-      stroke: $deepBlue-20;
-    }
-
-    &--img {
-      border-radius: 50%;
-    }
-  }
-
-  &__field-action {
-    @include size(50px);
-    @include flex();
-    transform: rotate(-45deg);
-    // background-color: salmon;
-    position: absolute;
-    right: 6px; top: 0;
-
-    #{$b}__icon {
-      @include size(18px);
-      transition: .15s;
-
-      &:last-child {
-        margin-left: -8px;
-        transition: .15s;
-        will-change: margin-left;
-      }
-    }
-
-    &:hover {
-
-      #{$b}__icon {
-        fill: $deepBlue-40;
-        stroke: $deepBlue-40;
-        transition: .15s;
-
-        &:last-child {
-          margin-left: -4px;
-          transition: .15s;
-        }
-      }
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      background-color: $deepBlue-20;
+      @include size(100%, 1px);
     }
   }
 
@@ -110,5 +55,9 @@
   &__status {
     @include size(100%, auto);
     flex: none;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.75;
+    color: $deepBlue-30;
   }
 }

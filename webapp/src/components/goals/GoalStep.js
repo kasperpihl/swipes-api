@@ -17,24 +17,24 @@ import './styles/goal-step.scss'
 class GoalStep extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      slideDirection: 'slide-step-left'
-    }
-    this.onSubmit = this.onSubmit.bind(this);
+    this.state = {}
     this.bindCallbacks = {};
     this.formData = [];
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
+    this.onSubmit = this.onSubmit.bind(this);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   delegateFromField(id, name){
     const { step } = this.props;
     const field = step.getIn(['fields', id]);
-    if(name === 'change'){
+
+    if (name === 'change') {
       this.formData[id] = arguments[2];
     }
-    if(name === 'fullscreen'){
 
+    if (name === 'fullscreen') {
       const options = { fullscreen: true };
+
       this.callDelegate('stepAction', name, {
         component: 'Field',
         title: field.get('title') + ' (Note)',
@@ -55,15 +55,9 @@ class GoalStep extends Component {
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     if (nextProps.stepIndex !== this.props.stepIndex) {
       this.formData = [];
-    }
-
-    if (nextProps.stepIndex < this.props.stepIndex) {
-      this.setState({slideDirection: 'slide-step-right'})
-    } else if(nextProps > this.props.stepIndex) {
-      this.setState({slideDirection: 'slide-step-left'})
     }
   }
   onSubmit(goBack) {
@@ -76,10 +70,10 @@ class GoalStep extends Component {
 
     this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
   }
-
-  stepFieldById(fieldId){
+  stepFieldById(fieldId) {
     const { goal } = this.props;
     let field, step;
+
     goal.get('steps').forEach((s) => {
       s.get('fields').forEach((f) => {
         if(f.get('id') === fieldId){
@@ -88,12 +82,13 @@ class GoalStep extends Component {
         }
       })
     })
-    if(field){
+
+    if (field) {
       return [step, field];
     }
+
     return;
   }
-
   renderHeader() {
     const { step, stepIndex } = this.props;
     const stepTitle = step.get('title');
@@ -103,21 +98,21 @@ class GoalStep extends Component {
   }
   renderStatus(){
     const { step, stepIndex, goal, myId } = this.props;
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId));
     let status;
 
-    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
-    if(step.get('completed')){
+    if (step.get('completed')) {
       status = 'This step was completed';
-    }
-    else if(stepIndex === goal.get('currentStepIndex')){
+    } else if (stepIndex === goal.get('currentStepIndex')) {
       status = 'Waiting for people to complete this step';
-      if(isMine){
+
+      if (isMine) {
         status = 'You need to complete this step';
       }
-    }
-    else if(stepIndex > goal.get('currentStepIndex')){
+    } else if (stepIndex > goal.get('currentStepIndex')) {
       status = 'This step is yet to be completed';
     }
+
     return <div className="goal-step__status">{status}</div>
     // You need to fill this form. Submit here
     // Waiting for (${person} || 'people') to fill this form
@@ -142,8 +137,8 @@ class GoalStep extends Component {
     }
 
     const icon = Field.getIcon && Field.getIcon() || 'CheckmarkIcon';
-    return (
 
+    return (
       <StepField key={key} title={title} icon={icon}>
         <Field
           delegate={this.bindCallbacks[id]}
@@ -154,37 +149,40 @@ class GoalStep extends Component {
       </StepField>
     )
   }
-  lastIteration(iterations, maxIndex){
-    if(!iterations || maxIndex < 0 ){
+  lastIteration(iterations, maxIndex) {
+    if (!iterations || maxIndex < 0 ) {
       return undefined;
     }
+
     return iterations.findLastEntry((iter, i) => {
-      if(typeof maxIndex !== 'undefined' && i > maxIndex){
+      if (typeof maxIndex !== 'undefined' && i > maxIndex) {
         return false;
       }
+
       return (iter !== null);
     })
   }
-  renderHandoff(){
+  renderHandoff() {
     const { step, stepIndex, goal, users } = this.props;
     const lastIteration = this.lastIteration(step.get('iterations'));
 
-    if(lastIteration){
+    if (lastIteration) {
       const previousStepIndex = lastIteration[1].get('previousStepIndex');
       const iterationIndex = lastIteration[0];
-
       const pIterations = goal.getIn(['steps', previousStepIndex, 'iterations'])
       const pIteration = this.lastIteration(pIterations, iterationIndex);
 
-      if(pIteration){
+      if (pIteration) {
         let user, message;
+
         pIteration[1].get('responses').forEach((response, userId) => {
           user = users.get(userId);
           message = response.get('message');
-          return false;
 
+          return false;
         })
-        if(user && message && message.length){
+
+        if (user && message && message.length) {
           return (
             <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
               <div className="goal-step__hand-off-message">{message}</div>
@@ -199,11 +197,14 @@ class GoalStep extends Component {
 
     return step.get('fields').map((field, i) => {
       let lastIteration = this.lastIteration(step.get('iterations'));
-      if(field.get('type') === 'link'){
+
+      if (field.get('type') === 'link') {
         const target = field.getIn(['settings', 'target']);
-        if(target && target.get('type') === 'field'){
+
+        if (target && target.get('type') === 'field') {
           const stepField = this.stepFieldById(target.get('id'));
-          if(stepField){
+
+          if (stepField) {
             field = stepField[1];
             lastIteration = this.lastIteration(stepField[0].get('iterations'), lastIteration ? lastIteration[0] : undefined);
           }
@@ -211,13 +212,15 @@ class GoalStep extends Component {
       }
 
       let data = {};
-      if(field.get('initial_data')) {
+
+      if (field.get('initial_data')) {
         data = field.get('initial_data').toJS();
       }
 
-      if(lastIteration){
+      if (lastIteration) {
         const myLastResponseToField = lastIteration[1].getIn(['responses', myId, 'data', i]);
-        if(myLastResponseToField){
+
+        if (myLastResponseToField) {
           data = myLastResponseToField.toJS();
         }
       }
@@ -229,9 +232,6 @@ class GoalStep extends Component {
       }
     });
   }
-
-
-
   renderPreAutomations(){
     // Here will come the pre automations
     // > Send email
@@ -239,9 +239,9 @@ class GoalStep extends Component {
   }
   renderSubmission(){
     const { stepIndex, step, goal, myId } = this.props;
+    const isMine = step.get('assignees').find((a) => (a.get('id') === myId));
 
-    const isMine = step.get('assignees').find((a) => (a.get('id') === myId))
-    if(isMine && stepIndex === goal.get('currentStepIndex')){
+    if (isMine && stepIndex === goal.get('currentStepIndex')) {
       return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
     }
   }
@@ -256,22 +256,19 @@ class GoalStep extends Component {
 
     return (
       <div className="goal-step">
-        <ReactCSSTransitionGroup
-        transitionName={slideDirection}
-        component="div"
-        className="goal-step__scroller"
-        transitionEnterTimeout={400}
-        transitionLeaveTimeout={400}>
-          <div className="goal-step__transition-wrapper" key={'step-' + stepIndex}>
-            {this.renderHeader()}
-            {this.renderStatus()}
-            {this.renderHandoff()}
-            {this.renderFields(step)}
-            {this.renderPreAutomations()}
-            {this.renderSubmission()}
-            {this.renderPostAutomations()}
-          </div>
-        </ReactCSSTransitionGroup>
+
+        <div className="goal-step__content">
+          {this.renderHeader()}
+          {this.renderHandoff()}
+          {this.renderFields(step)}
+        </div>
+
+        <div className="goal-step__side-column">
+          {this.renderStatus()}
+          {this.renderPreAutomations()}
+          {this.renderSubmission()}
+          {this.renderPostAutomations()}
+        </div>
       </div>
     )
   }

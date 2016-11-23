@@ -1,0 +1,82 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+
+.step-field {
+  $b: &;
+
+  @include size(100%, auto);
+  position: relative;
+  padding-left: 45px;
+  padding-bottom: 15px;
+
+  &:not(:last-child) {
+    padding-bottom: 36px;
+  }
+
+  &__header {
+    @include size(100%, 45px);
+    @include flex(center, flex-start);
+    position: relative;
+    margin-bottom: 15px;
+  }
+
+  &__header-image {
+    @include size(45px);
+    @include flex();
+    position: absolute;
+    left: -50px; top: 0;
+  }
+
+  &__title {
+    font-size: 21px;
+    color: $deepBlue-90;
+  }
+
+  &__icon {
+      @include size(24px);
+
+    &--svg {
+      fill: $deepBlue-20;
+      stroke: $deepBlue-20;
+    }
+
+    &--img {
+      border-radius: 50%;
+    }
+  }
+
+  &__action {
+    @include size(50px);
+    @include flex();
+    transform: rotate(-45deg);
+    // background-color: salmon;
+    position: absolute;
+    right: 6px; top: 0;
+
+    #{$b}__icon {
+      @include size(18px);
+      transition: .15s;
+
+      &:last-child {
+        margin-left: -8px;
+        transition: .15s;
+        will-change: margin-left;
+      }
+    }
+
+    &:hover {
+
+      #{$b}__icon {
+        fill: $deepBlue-40;
+        stroke: $deepBlue-40;
+        transition: .15s;
+
+        &:last-child {
+          margin-left: -4px;
+          transition: .15s;
+        }
+      }
+    }
+  }
+}

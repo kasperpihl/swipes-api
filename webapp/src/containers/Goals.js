@@ -14,37 +14,38 @@ import '../components/goals/styles/goals.scss';
 class Goals extends Component {
   constructor(props) {
     super(props)
+
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-
-  stepAction(step, action, data){
+  stepAction(step, action, data) {
     const { pushOverlay } = this.props;
-    if(action === 'fullscreen'){
+
+    if (action === 'fullscreen') {
       console.log('stepAction', data);
       pushOverlay(data);
     }
   }
-  
-  stepSubmit(step, goalId, stepId, data, previousSteps){
+  stepSubmit(step, goalId, stepId, data, previousSteps) {
     const { submit } = this.props;
+
     submit(goalId, stepId, data, previousSteps);
   }
-
-  renderList(){
+  renderList() {
     const { currentGoal, goals, me, setActiveGoal } = this.props;
-    if(!currentGoal){
+
+    if(!currentGoal) {
       return <GoalList goals={goals} me={me} setActiveGoal={setActiveGoal}/>
     }
   }
-
-  renderTimeline(){
+  renderTimeline() {
     const { currentGoal, me, users } = this.props;
+
     if (currentGoal) {
-      return <GoalStep users={users} myId={me.get('id')} step={currentGoal.getIn(['steps', currentGoal.get('currentStepIndex')])} goal={currentGoal} delegate={this}/>;
+      return <GoalStep users={users} myId={me.get('id')} stepIndex={currentGoal.get('currentStepIndex')} step={currentGoal.getIn(['steps', currentGoal.get('currentStepIndex')])} goal={currentGoal} delegate={this}/>;
     }
   }
-
   render() {
+
     return (
       <div className='goals'>
         {this.renderList()}
@@ -58,7 +59,7 @@ function mapStateToProps(state) {
   const users = state.get('users');
   let goals = state.get('goals');
 
-  if(goals){
+  if(goals) {
     goals = goals.map((g) => {
       return g.updateIn(['steps'], (steps) => steps.map((s) => {
         const assignees = s.get('assignees');
@@ -84,4 +85,5 @@ const ConnectedGoals = connect(mapStateToProps, {
   submit: goals.submitStep,
   setActiveGoal: main.setActiveGoal
 })(Goals)
+
 export default ConnectedGoals

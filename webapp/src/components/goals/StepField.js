@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
 
+import './styles/step-field.scss'
+
 class StepField extends Component {
   constructor(props) {
     super(props)
@@ -12,25 +14,24 @@ class StepField extends Component {
     const Comp = Icons[icon];
 
     if (Comp) {
-      return <Comp className="goal-step__icon goal-step__icon--svg"/>;
-    }
-    else{
-      return <img className="goal-step__icon goal-step__icon--img" src={icon} />
+      return <Comp className="step-field__icon step-field__icon--svg"/>;
+    } else {
+      return <img className="step-field__icon step-field__icon--img" src={icon} />
     }
   }
   render() {
     const { icon, title, children } = this.props;
 
     return (
-      <div className="goal-step__field">
-        <div className="goal-step__field-header">
-          <div className="goal-step__field-icon">
+      <div className="step-field">
+        <div className="step-field__header">
+          <div className="step-field__header-image">
             {this.renderIcon(icon)}
           </div>
-          <div className="goal-step__field-title">
+          <div className="step-field__title">
             {title}
           </div>
-          <div className="goal-step__field-action" title="Fullscreen">
+          <div className="step-field__action" title="Fullscreen">
             {this.renderIcon('ArrowLeftIcon')}
             {this.renderIcon('ArrowRightIcon')}
           </div>

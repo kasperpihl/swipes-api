@@ -2,18 +2,18 @@
 @import '../../global-styles/mixins/';
 
 .step-header {
-  @include size(100%, 60px);
+  @include size(100%, 36px);
   @include flex(center, flex-start);
-  margin: 30px 0;
-  margin-top: 50px;
+  margin-bottom: 71px;
   position: relative;
 
   &__index {
     @include size(50px, 60px);
     @include flex();
-    color: $deepBlue-80;
-    font-size: 30px;
-    font-weight: 500;
+    color: $deepBlue-90;
+    font-size: 27px;
+    line-height: 1.33;
+    font-weight: bold;
   }
 
   &__title {
@@ -27,10 +27,11 @@
     white-space: nowrap;
   }
 
-  &__assignees {
-    @include size(30px);
+  &:after {
+    content: '';
+    @include size(100%, 1px);
     position: absolute;
-    right: 15px; top: 50%;
-    transform: translateY(-50%);
+    background-color: $deepBlue-20;
+    left: 0; bottom: -18px;
   }
 }

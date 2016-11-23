@@ -5,7 +5,7 @@ import './styles/collection.scss'
 
 class Collection extends Component {
   static getIcon(){
-    return 'DeliverIcon'
+    return 'ArrowRightIcon'
   }
   constructor(props) {
     super(props)
