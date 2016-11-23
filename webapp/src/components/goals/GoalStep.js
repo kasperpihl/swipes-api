@@ -9,36 +9,34 @@ import StepField from './StepField'
 import StepSubmission from './StepSubmission'
 import ProgressBar from '../swipes-ui/ProgressBar'
 
-import * as gUtils from './goals_utils'
-// fields
-import * as fields from '../fields'
+import GoalsUtil from './goals_util'
 // styles
 import './styles/goal-step.scss'
 
 class GoalStep extends Component {
   constructor(props) {
     super(props)
+    this.helper = new GoalsUtil(props.goal, props.myId);
     this.state = {
       stepIndex: props.initialStepIndex,
-      step: props.goal.getIn(['steps', props.initialStepIndex])
+      step: props.goal.getIn(['steps', props.initialStepIndex]),
+      formData: this.getInitialDataForStepIndex(props.initialStepIndex)
     }
-    this.setDataForStep();
+
     this.onSubmit = this.onSubmit.bind(this);
     this.bindCallbacks = {};
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  setDataForStep(){
-    const { goal, myId } = this.props;
-    const { step, stepIndex } = this.state;
-    this.formData = gUtils.getDataForStepIndex(goal, stepIndex, myId);
+  getInitialDataForStepIndex(stepIndex){
+    return this.helper.getInitialDataForStepIndex(stepIndex);
   }
-  delegateFromField(id, name){
-    const { step } = this.state;
-    const field = step.getIn(['fields', id]);
+  delegateFromField(index, name){
+    const { step, formData } = this.state;
+    const field = step.getIn(['fields', index]);
 
     if(name === 'change'){
-      this.formData = this.formData.set(id, arguments[2]);
+      this.setState({formData: formData.set(index, arguments[2])});
     }
 
     if (name === 'fullscreen') {
@@ -50,9 +48,9 @@ class GoalStep extends Component {
         props: {
           field,
           options,
-          delegate: this.bindCallbacks[id],
+          delegate: this.bindCallbacks[index],
           settings: field.get('settings'),
-          data: this.formData.get(id)
+          data: formData.get(index)
         }
       });
     }
@@ -67,14 +65,14 @@ class GoalStep extends Component {
 
   onSubmit(goBack) {
     const { goal } = this.props;
-    const { step } = this.state;
+    const { step, formData } = this.state;
     let previousSteps;
 
     if (goBack) {
       previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
     }
 
-    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
+    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), formData, previousSteps);
   }
 
   renderHeader() {
@@ -94,9 +92,8 @@ class GoalStep extends Component {
     return <ProgressBar steps={steps} currentStepIndex={goal.get('currentStepIndex')}/>
   }
   renderStatus(){
-    const {  goal, myId } = this.props;
-    const {  stepIndex } = this.state;
-    const status = gUtils.getStatusForStepWithIndex(goal, stepIndex, myId);
+    const { stepIndex } = this.state;
+    const status = this.helper.getStatusForStepIndex(stepIndex);
 
     return <div className="goal-step__status">{status}</div>
     // You need to fill this form. Submit here
@@ -105,11 +102,10 @@ class GoalStep extends Component {
     // You submitted this form. Waiting
   }
   renderHandoff(){
-    const {  goal, users } = this.props;
+    const { users } = this.props;
     const { stepIndex } = this.state;
-    const handOff = gUtils.getHandoffMessageForStepIndex(goal, stepIndex);
-
-    if (handOff) {
+    const handOff = this.helper.getHandoffMessageForStepIndex(stepIndex);
+    if(handOff){
       let user, message;
       console.log('handOff', handOff.toJS())
       return;
@@ -122,10 +118,10 @@ class GoalStep extends Component {
     }
   }
   renderFields(step){
+    const { formData } = this.state;
     return step.get('fields').map((field, i) => {
-      const Field = fields[field.get('type')];
+      const Field = this.helper.fieldForType(field.get('type'));
       if (Field) {
-
         const options = {
           fullscreen: false
         }
@@ -139,7 +135,7 @@ class GoalStep extends Component {
             <Field
               delegate={this.bindCallbacks[i]}
               options={options}
-              data={this.formData.get(i)}
+              data={formData.get(i)}
               settings={field.get('settings')}
             />
           </StepField>
@@ -153,12 +149,11 @@ class GoalStep extends Component {
     // > Save to Evernote
   }
   renderSubmission(){
-
-    const { goal, myId } = this.props;
     const { stepIndex, step } = this.state;
-    const isMine = step.get('assignees').find((a) => (a.get('id') === myId));
+    const amIAssigned = this.helper.amIAssigned(stepIndex);
+    const isCurrent = this.helper.isCurrentStep(stepIndex);
 
-    if (isMine && stepIndex === goal.get('currentStepIndex')) {
+    if (amIAssigned && isCurrent) {
       return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
     }
   }

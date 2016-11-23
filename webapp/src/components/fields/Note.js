@@ -16,24 +16,32 @@ class Note extends Component {
   static getIcon(){
     return 'ListIcon';
   }
-  constructor(props) {
-    super(props)
+  static saveData(data){
+    return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
+  }
+  static initialData(data){
     let editorState = createEditorState();
-
-    if (props.data) {
-      const blockData = JSON.parse(JSON.stringify(props.data))
-      editorState = EditorState.push(editorState, convertFromRaw(blockData));
+    if(data && data.get('editorState')){
+      const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
+      editorState = EditorState.push(editorState, convertFromRaw(raw));
     }
 
-    this.state = { editorState };
+    data = data.set('editorState', editorState);
+    console.log('data', data.toJS());
+    return data;
+  }
+  constructor(props) {
+    super(props)
+    this.state = { data: props.data };
     this.onChange = this.onChange.bind(this);
-
   }
   onChange(editorState){
     const { delegate } = this.props;
-    this.setState({ editorState });
-
-    delegate('change', convertToRaw(editorState.getCurrentContent()))
+    const { data } = this.state;
+    delegate('change', data.set('editorState', editorState));
+  }
+  componentWillReceiveProps(nextProps){
+    this.setState({ data: nextProps.data });
   }
   onCardClick(card){
     const { delegate } = this.props;
@@ -41,25 +49,25 @@ class Note extends Component {
   }
   renderNoteCard(){
     const { options } = this.props;
-    if(options.fullscreen){
+    if(!options.fullscreen){
       return;
     }
-    const { editorState } = this.state;
+    const { data } = this.state;
 
     return <SwipesCard delegate={this} data={{
       title: 'Untitled note',
-      description: editorState.getCurrentContent().getPlainText().substr(0,100)
+      description: data.get('editorState').getCurrentContent().getPlainText().substr(0,100)
     }}/>
   }
   renderNoteEditor(){
     const { options } = this.props;
-    if(!options.fullscreen){
+    if(options.fullscreen){
       return;
     }
-    const {editorState} = this.state;
+    const { data } = this.state;
     return (
       <Editor
-        editorState={editorState}
+        editorState={data.get('editorState')}
         onChange={this.onChange}
       />
     )

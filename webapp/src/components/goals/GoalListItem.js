@@ -3,13 +3,14 @@ import Assigning from '../assigning/Assigning'
 import * as Icons from '../icons'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import * as gUtils from './goals_utils'
+import GoalsUtil from './goals_util'
 
 import './styles/goal-list-item.scss'
 
 class GoalListItem extends Component {
   constructor(props) {
     super(props)
+    this.helper = new GoalsUtil(props.data, props.me.get('id'));
     this.state = {}
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedListItem = this.clickedListItem.bind(this);
@@ -35,7 +36,7 @@ class GoalListItem extends Component {
     const steps = data.get('steps').toJS();
     const step = data.getIn(['steps', data.get('currentStepIndex')]);
     const assignees = step.get('assignees').toJS();
-    const status = gUtils.getStatusForCurrentStep(data, this.props.me.get('id'));
+    const status = this.helper.getStatusForCurrentStep();
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={`${rootClass}__image`}>

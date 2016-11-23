@@ -10,20 +10,15 @@ class Checklist extends Component {
   }
   constructor(props) {
     super(props)
-    this.state = { checks: fromJS(props.data.checks) };
     this.bindCallbacks = {};
   }
   onChange(i, checked){
-    const { checks } = this.state;
-    const newChecks = checks.setIn([i, 'checked'], checked);
-    this.setState({checks: newChecks});
-
-    const { delegate } = this.props;
-    delegate('change', {checks: newChecks.toJS()});
+    const { data, delegate } = this.props;
+    delegate('change', data.setIn(['checks', i, 'checked'], checked));
   }
   renderChecks(){
-    const { checks } = this.state;
-    return checks.map((c,i) => {
+    const { data } = this.props;
+    return data.get('checks').map((c,i) => {
       if(!this.bindCallbacks[i]){
         this.bindCallbacks[i] = this.onChange.bind(this, i);
       }

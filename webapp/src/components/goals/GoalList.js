@@ -35,6 +35,7 @@ class GoalList extends Component {
       this.setState({tabIndex: index});
     }
   }
+
   renderTabbar() {
     let navTitle, actions;
     return (

@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
-
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import './styles/step-field.scss'
 
 class StepField extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-  }
-  componentDidMount() {
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
   }
   renderIcon(icon) {
     const Comp = Icons[icon];
