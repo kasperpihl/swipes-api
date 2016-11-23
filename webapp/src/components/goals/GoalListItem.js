@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import Assigning from '../assigning/Assigning'
 import * as Icons from '../icons'
-import { randomStatusLabel } from '../../classes/utils'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+
+import * as gUtils from './goals_utils'
 
 import './styles/goal-list-item.scss'
 
@@ -32,16 +33,9 @@ class GoalListItem extends Component {
     const { data } = this.props;
     let rootClass = 'goal-list-item';
     const steps = data.get('steps').toJS();
-    let assignees = [];
-
-    for (let i = 0; i < steps.length; i++) {
-      if (!steps[i].completed) {
-        assignees = steps[i].assignees;
-
-        break;
-      }
-    }
-
+    const step = data.getIn(['steps', data.get('currentStepIndex')]);
+    const assignees = step.get('assignees').toJS();
+    const status = gUtils.getStatusForCurrentStep(data, this.props.me.get('id'));
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={`${rootClass}__image`}>
@@ -49,7 +43,7 @@ class GoalListItem extends Component {
         </div>
         <div className={`${rootClass}__content`}>
           <div className={`${rootClass}__title`}>{data.get('title')}</div>
-          <div className={`${rootClass}__label`}>{randomStatusLabel()}</div>
+          <div className={`${rootClass}__label`}>{status}</div>
         </div>
         <div className={`${rootClass}__assigning`}>
           <Assigning assignees={assignees} me={this.props.me.toJS()} />

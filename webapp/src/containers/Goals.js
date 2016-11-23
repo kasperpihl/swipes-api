@@ -26,6 +26,7 @@ class Goals extends Component {
     }
   }
   stepSubmit(step, goalId, stepId, data, previousSteps) {
+
     const { submit } = this.props;
 
     submit(goalId, stepId, data, previousSteps);
@@ -41,7 +42,7 @@ class Goals extends Component {
     const { currentGoal, me, users } = this.props;
 
     if (currentGoal) {
-      return <GoalStep users={users} myId={me.get('id')} stepIndex={currentGoal.get('currentStepIndex')} step={currentGoal.getIn(['steps', currentGoal.get('currentStepIndex')])} goal={currentGoal} delegate={this}/>;
+      return <GoalStep users={users} myId={me.get('id')} initialStepIndex={currentGoal.get('currentStepIndex')} goal={currentGoal} delegate={this}/>;
     }
   }
   render() {

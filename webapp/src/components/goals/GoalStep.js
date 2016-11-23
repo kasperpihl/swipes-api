@@ -17,19 +17,27 @@ import './styles/goal-step.scss'
 class GoalStep extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    this.bindCallbacks = {};
-    this.formData = [];
-
+    this.state = {
+      stepIndex: props.initialStepIndex,
+      step: props.goal.getIn(['steps', props.initialStepIndex])
+    }
+    this.setDataForStep();
     this.onSubmit = this.onSubmit.bind(this);
+    this.bindCallbacks = {};
+
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
+  setDataForStep(){
+    const { goal, myId } = this.props;
+    const { step, stepIndex } = this.state;
+    this.formData = gUtils.getDataForStepIndex(goal, stepIndex, myId);
+  }
   delegateFromField(id, name){
-    const { step } = this.props;
+    const { step } = this.state;
     const field = step.getIn(['fields', id]);
 
-    if (name === 'change') {
-      this.formData[id] = arguments[2];
+    if(name === 'change'){
+      this.formData = this.formData.set(id, arguments[2]);
     }
 
     if (name === 'fullscreen') {
@@ -43,7 +51,7 @@ class GoalStep extends Component {
           options,
           delegate: this.bindCallbacks[id],
           settings: field.get('settings'),
-          data: this.formData[id]
+          data: this.formData.get(id)
         }
       });
     }
@@ -55,13 +63,10 @@ class GoalStep extends Component {
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.stepIndex !== this.props.stepIndex) {
-      this.formData = [];
-    }
-  }
+
   onSubmit(goBack) {
-    const { goal, step } = this.props;
+    const { goal } = this.props;
+    const { step } = this.state;
     let previousSteps;
 
     if (goBack) {
@@ -70,49 +75,18 @@ class GoalStep extends Component {
 
     this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), this.formData, previousSteps);
   }
-  stepFieldById(fieldId) {
-    const { goal } = this.props;
-    let field, step;
 
-    goal.get('steps').forEach((s) => {
-      s.get('fields').forEach((f) => {
-        if(f.get('id') === fieldId){
-          field = f;
-          step = s;
-        }
-      })
-    })
-
-    if (field) {
-      return [step, field];
-    }
-
-    return;
-  }
   renderHeader() {
-    const { step, stepIndex } = this.props;
+    const { step, stepIndex } = this.state;
     const stepTitle = step.get('title');
     const assignees = step.get('assignees').toJS();
 
     return <StepHeader index={stepIndex + 1} title={stepTitle} assignees={assignees}/>
   }
   renderStatus(){
-    const { step, stepIndex, goal, myId } = this.props;
-    const isMine = step.get('assignees').find((a) => (a.get('id') === myId));
-    let status;
-
-    if (step.get('completed')) {
-      status = 'This step was completed';
-    } else if (stepIndex === goal.get('currentStepIndex')) {
-      status = 'Waiting for people to complete this step';
-
-      if (isMine) {
-        status = 'You need to complete this step';
-      }
-    } else if (stepIndex > goal.get('currentStepIndex')) {
-      status = 'This step is yet to be completed';
-    }
-
+    const {  goal, myId } = this.props;
+    const {  stepIndex } = this.state;
+    const status = gUtils.getStatusForStepWithIndex(goal, stepIndex, myId);
     return <div className="goal-step__status">{status}</div>
     // You need to fill this form. Submit here
     // Waiting for (${person} || 'people') to fill this form
@@ -120,115 +94,46 @@ class GoalStep extends Component {
     // You submitted this form. Waiting
 
   }
-  renderField(Field, id, title, data, settings) {
-    const key = 'field-' + id;
 
-    // Make sure the delegate is bound with the field id
-    if (!this.bindCallbacks[id]) {
-      this.bindCallbacks[id] = this.delegateFromField.bind(this, id);
-    }
+  renderHandoff(){
+    const {  goal, users } = this.props;
+    const { stepIndex } = this.state;
+    const handOff = gUtils.getHandoffMessageForStepIndex(goal, stepIndex);
+    if(handOff){
+      let user, message;
+      console.log('handOff', handOff.toJS())
+      return;
+      return (
+        <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
+          <div className="goal-step__hand-off-message">{message}</div>
+        </StepField>
+      )
 
-    if (typeof this.formData[id] === 'undefined') {
-      this.formData[id] = data;
-    }
-
-    const options = {
-      fullscreen: false
-    }
-
-    const icon = Field.getIcon && Field.getIcon() || 'CheckmarkIcon';
-
-    return (
-      <StepField key={key} title={title} icon={icon}>
-        <Field
-          delegate={this.bindCallbacks[id]}
-          options={options}
-          data={data}
-          settings={settings}
-        />
-      </StepField>
-    )
-  }
-  lastIteration(iterations, maxIndex) {
-    if (!iterations || maxIndex < 0 ) {
-      return undefined;
-    }
-
-    return iterations.findLastEntry((iter, i) => {
-      if (typeof maxIndex !== 'undefined' && i > maxIndex) {
-        return false;
-      }
-
-      return (iter !== null);
-    })
-  }
-  renderHandoff() {
-    const { step, stepIndex, goal, users } = this.props;
-    const lastIteration = this.lastIteration(step.get('iterations'));
-
-    if (lastIteration) {
-      const previousStepIndex = lastIteration[1].get('previousStepIndex');
-      const iterationIndex = lastIteration[0];
-      const pIterations = goal.getIn(['steps', previousStepIndex, 'iterations'])
-      const pIteration = this.lastIteration(pIterations, iterationIndex);
-
-      if (pIteration) {
-        let user, message;
-
-        pIteration[1].get('responses').forEach((response, userId) => {
-          user = users.get(userId);
-          message = response.get('message');
-
-          return false;
-        })
-
-        if (user && message && message.length) {
-          return (
-            <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
-              <div className="goal-step__hand-off-message">{message}</div>
-            </StepField>
-          )
-        }
-      }
     }
   }
   renderFields(step){
-    const { myId } = this.props;
-
     return step.get('fields').map((field, i) => {
-      let lastIteration = this.lastIteration(step.get('iterations'));
-
-      if (field.get('type') === 'link') {
-        const target = field.getIn(['settings', 'target']);
-
-        if (target && target.get('type') === 'field') {
-          const stepField = this.stepFieldById(target.get('id'));
-
-          if (stepField) {
-            field = stepField[1];
-            lastIteration = this.lastIteration(stepField[0].get('iterations'), lastIteration ? lastIteration[0] : undefined);
-          }
-        }
-      }
-
-      let data = {};
-
-      if (field.get('initial_data')) {
-        data = field.get('initial_data').toJS();
-      }
-
-      if (lastIteration) {
-        const myLastResponseToField = lastIteration[1].getIn(['responses', myId, 'data', i]);
-
-        if (myLastResponseToField) {
-          data = myLastResponseToField.toJS();
-        }
-      }
-
       const Field = fields[field.get('type')];
-
       if (Field) {
-        return this.renderField(Field, i, field.get('title'), data, field.get('settings'));
+
+        const options = {
+          fullscreen: false
+        }
+
+        if (!this.bindCallbacks[i]) {
+          this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
+        }
+        const icon = Field.getIcon && Field.getIcon() || 'CheckmarkIcon';
+        return (
+          <StepField key={field.get('id')} title={field.get('title')} icon={icon}>
+            <Field
+              delegate={this.bindCallbacks[i]}
+              options={options}
+              data={this.formData.get(i)}
+              settings={field.get('settings')}
+            />
+          </StepField>
+        )
       }
     });
   }
@@ -238,7 +143,9 @@ class GoalStep extends Component {
     // > Save to Evernote
   }
   renderSubmission(){
-    const { stepIndex, step, goal, myId } = this.props;
+
+    const { goal, myId } = this.props;
+    const { stepIndex, step } = this.state;
     const isMine = step.get('assignees').find((a) => (a.get('id') === myId));
 
     if (isMine && stepIndex === goal.get('currentStepIndex')) {
@@ -251,7 +158,7 @@ class GoalStep extends Component {
     // > Save to Evernote
   }
   render() {
-    const { step, stepIndex } = this.props;
+    const { step, stepIndex } = this.state;
     const { slideDirection } = this.state;
 
     return (

@@ -38,9 +38,9 @@ class GoalList extends Component {
   renderTabbar() {
     let navTitle, actions;
     return (
-        <div className="goals__nav-bar">
-          <NavBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex}/>
-        </div>
+      <div className="goals__nav-bar">
+        <NavBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex}/>
+      </div>
     )
   }
 
