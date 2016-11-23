@@ -7,6 +7,7 @@ import Assigning from '../assigning/Assigning'
 import StepHeader from './StepHeader'
 import StepField from './StepField'
 import StepSubmission from './StepSubmission'
+import ProgressBar from '../swipes-ui/ProgressBar'
 
 import * as gUtils from './goals_utils'
 // fields
@@ -83,23 +84,32 @@ class GoalStep extends Component {
 
     return <StepHeader index={stepIndex + 1} title={stepTitle} assignees={assignees}/>
   }
+  renderProgressBar() {
+    const { goal } = this.props;
+
+    const steps = goal.get('steps').map( (step) => {
+      return { title: step.get('title'), completed: step.get('completed') }
+    }).toJS();
+
+    return <ProgressBar steps={steps} currentStepIndex={goal.get('currentStepIndex')}/>
+  }
   renderStatus(){
     const {  goal, myId } = this.props;
     const {  stepIndex } = this.state;
     const status = gUtils.getStatusForStepWithIndex(goal, stepIndex, myId);
+
     return <div className="goal-step__status">{status}</div>
     // You need to fill this form. Submit here
     // Waiting for (${person} || 'people') to fill this form
     // You submitted this form.
     // You submitted this form. Waiting
-
   }
-
   renderHandoff(){
     const {  goal, users } = this.props;
     const { stepIndex } = this.state;
     const handOff = gUtils.getHandoffMessageForStepIndex(goal, stepIndex);
-    if(handOff){
+
+    if (handOff) {
       let user, message;
       console.log('handOff', handOff.toJS())
       return;
@@ -166,6 +176,7 @@ class GoalStep extends Component {
 
         <div className="goal-step__content">
           {this.renderHeader()}
+          {this.renderProgressBar()}
           {this.renderHandoff()}
           {this.renderFields(step)}
         </div>

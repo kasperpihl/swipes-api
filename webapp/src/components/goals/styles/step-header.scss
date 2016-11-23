@@ -2,36 +2,28 @@
 @import '../../global-styles/mixins/';
 
 .step-header {
-  @include size(100%, 36px);
   @include flex(center, flex-start);
-  margin-bottom: 71px;
+  @include size(100%, 36px);
   position: relative;
+  padding-bottom: 18px;
 
   &__index {
-    @include size(50px, 60px);
     @include flex();
+    @include size(50px, 60px);
     color: $deepBlue-90;
     font-size: 27px;
-    line-height: 1.33;
     font-weight: bold;
+    line-height: 1.33;
   }
 
   &__title {
     $titleWidth: calc(100% - 50px - 60px);
     @include size($titleWidth, auto);
-    color: $deepBlue-80;
+    color: $deepBlue-90;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 700;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  &:after {
-    content: '';
-    @include size(100%, 1px);
-    position: absolute;
-    background-color: $deepBlue-20;
-    left: 0; bottom: -18px;
   }
 }

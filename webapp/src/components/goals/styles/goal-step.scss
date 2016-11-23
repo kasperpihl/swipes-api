@@ -33,7 +33,7 @@
     @include size(240px, auto);
     padding-top: 32px;
     margin: 0 30px;
-    margin-top: 53px;
+    margin-top: 64px;
     position: relative;
     flex: none;
 
@@ -42,7 +42,7 @@
       position: absolute;
       left: 0; top: 0;
       background-color: $deepBlue-20;
-      @include size(100%, 1px);
+      @include size(100%, 2px);
     }
   }
 
