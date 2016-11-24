@@ -145,7 +145,7 @@ class GoalStep extends Component {
   renderProgressBar() {
     const { goal } = this.props;
     const { stepIndex } = this.state;
-
+    const runCounter = this.helper.runCounter();
     const steps = goal.get('steps').map( (step, i) => {
       return {
         title: step.get('title'),
@@ -157,6 +157,7 @@ class GoalStep extends Component {
     return (
       <ProgressBar
         steps={steps}
+        title={'run ' + runCounter}
         onChange={this.onProgressChange}
         activeIndex={stepIndex}
       />
