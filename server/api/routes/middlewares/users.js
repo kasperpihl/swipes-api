@@ -59,14 +59,14 @@ const userAddToOrganization = (req, res, next) => {
   } = res.locals;
 
   const organizationId = generateSlackLikeId('O');
-  const userId = generateSlackLikeId('U');
+  const user_id = generateSlackLikeId('U');
   const name = organization;
   const nameToCompare = name.toLowerCase().replace(/\s+/g,"_");
   const insertDoc = {
     id: organizationId,
     name,
     name_to_compare: nameToCompare,
-    users: [userId]
+    users: [user_id]
   }
   const checkQ = r.table('organizations').getAll(nameToCompare, {index: 'name_to_compare'});
   const insertQ = r.table('organizations').insert(insertDoc);
@@ -76,7 +76,7 @@ const userAddToOrganization = (req, res, next) => {
       if (organizations.length > 0) {
         const organization = organizations[0];
         const updateQ = r.table('organizations').update({
-          users: r.row('users').append(userId)
+          users: r.row('users').append(user_id)
         });
 
         res.locals.organizationId = organization.id;
@@ -89,7 +89,7 @@ const userAddToOrganization = (req, res, next) => {
       return db.rethinkQuery(insertQ);
     })
     .then(() => {
-      res.locals.userId = userId;
+      res.locals.user_id = user_id;
 
       return next();
     })
@@ -100,14 +100,14 @@ const userAddToOrganization = (req, res, next) => {
 
 const userSignUp = (req, res, next) => {
   const {
+    user_id,
     email,
     name,
     password,
-    organizationId,
-    userId
+    organizationId
   } = res.locals;
   const userDoc = {
-    id: userId,
+    id: user_id,
     apps: [],
     services:[],
     organizations: [organizationId],
@@ -118,12 +118,11 @@ const userSignUp = (req, res, next) => {
   }
   const createUserQ = r.table('users').insert(userDoc);
   const token = jwt.encode({
-    iss: userId
+    iss: user_id
   }, config.get('jwtTokenSecret'))
 
   db.rethinkQuery(createUserQ)
     .then(() => {
-      res.locals.userId = userId;
       res.locals.token = token;
 
       return next();
@@ -173,12 +172,12 @@ const userSignIn = (req, res, next) => {
 }
 
 const usersGetService = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     account_id
   } = res.locals;
 
-  dbUsersGetService(userId, account_id)
+  dbUsersGetService(user_id, account_id)
     .then((service) => {
       if (service === null) {
         return next(new SwipesError('There is no such service'));
@@ -194,15 +193,15 @@ const usersGetService = (req, res, next) => {
 }
 
 const usersCleanupRegisteredWebhooksToService = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     service
   } = res.locals;
   const serviceName = service.service_name;
 
   if (serviceName === 'asana') {
     console.log(services[serviceName]);
-    services[serviceName].unsubscribeFromAllWebhooks({ auth_data: service.auth_data, userId })
+    services[serviceName].unsubscribeFromAllWebhooks({ auth_data: service.auth_data, user_id })
       .then(() => {
         return next();
       })
@@ -215,12 +214,12 @@ const usersCleanupRegisteredWebhooksToService = (req, res, next) => {
 }
 
 const usersGetXendoServiceId = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     service
   } = res.locals;
 
-  dbXendoGetService(userId, service.id)
+  dbXendoGetService(user_id, service.id)
     .then((xendoUserService) => {
       let xendoUserServiceId = null;
 
@@ -256,12 +255,12 @@ const usersRemoveXendoService = (req, res, next) => {
 }
 
 const usersRemoveService = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     service
   } = res.locals;
 
-  dbUsersRemoveService(userId, service.id)
+  dbUsersRemoveService(user_id, service.id)
     .then(() => {
       return next();
     })
@@ -271,10 +270,12 @@ const usersRemoveService = (req, res, next) => {
 }
 
 const usersUpdateProfilePic = (req, res, next) => {
-  const userId = req.userId;
+  const {
+    user_id
+  } = res.locals;
   const profilePic = req.body.profile_pic;
 
-  dbUsersUpdateProfilePic({ userId, profilePic })
+  dbUsersUpdateProfilePic({ user_id, profilePic })
     .then(() => {
       return next();
     })
@@ -284,9 +285,11 @@ const usersUpdateProfilePic = (req, res, next) => {
 }
 
 const usersGetSingleWithOrganizations = (req, res, next) => {
-  const userId = req.userId;
+  const {
+    user_id
+  } = res.locals;
 
-  dbUsersGetSingleWithOrganizations({ userId })
+  dbUsersGetSingleWithOrganizations({ user_id })
     .then((user) => {
       res.locals.user = user;
 

@@ -21,8 +21,8 @@ const stepsGetCurrent = (req, res, next) => {
 }
 
 const stepsSubmit = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     step,
     data,
     message,
@@ -30,7 +30,7 @@ const stepsSubmit = (req, res, next) => {
   } = res.locals;
   const lastIterationIndex = step.iterations.length - 1;
 
-  step.iterations[lastIterationIndex].responses[userId] = { data, message }
+  step.iterations[lastIterationIndex].responses[user_id] = { data, message }
 
   if (step.response_type === 'single') {
     res.locals.doNext = true;

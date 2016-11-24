@@ -16,11 +16,13 @@ import {
 } from './db_utils/processes';
 
 const initGetData = (req, res, next) => {
-  const userId = req.userId;
+  const {
+    user_id
+  } = res.locals;
   const promiseArrayQ = [
-    initMe(userId),
+    initMe(user_id),
     servicesGetAll(),
-    initActivities(userId),
+    initActivities(user_id),
     processesGetAllOrderedByTitle()
   ]
 

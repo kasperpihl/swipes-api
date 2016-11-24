@@ -64,13 +64,15 @@ const xendoSwipesCredentials = (req, res, next) => {
 }
 
 const xendoUserCredentials = (req, res, next) => {
-  const userId = req.userId;
-  const query = r.table('users').get(userId);
+  const {
+    user_id
+  } = res.locals;
+  const query = r.table('users').get(user_id);
 
   db.rethinkQuery(query)
     .then((result) => {
       if (!result) {
-        return next('Invalid userId :/');
+        return next('Invalid user_id :/');
       }
 
       res.locals.xendoUserCredentials = result.xendoCredentials;
@@ -84,10 +86,10 @@ const xendoUserCredentials = (req, res, next) => {
 
 const xendoUserSignUp = (req, res, next) => {
   const {
-    userId,
+    user_id,
     xendoSwipesCredentials
   } = res.locals;
-  const xendoEmail = userId + '@swipesapp.com';
+  const xendoEmail = user_id + '@swipesapp.com';
   const qs = querystring.stringify({
     email: xendoEmail,
     username: xendoEmail,
@@ -108,7 +110,7 @@ const xendoUserSignUp = (req, res, next) => {
 
     res.locals.xendoUserCredentials = xendoResult;
 
-    const updateSwipesUserQ = r.table('users').get(userId).update({
+    const updateSwipesUserQ = r.table('users').get(user_id).update({
       xendoCredentials: JSON.parse(xendoResult)
     });
 
@@ -123,12 +125,12 @@ const xendoUserSignUp = (req, res, next) => {
 }
 
 const xendoAddServiceToUser = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     xendoSwipesCredentials,
     serviceToAppend
   } = res.locals;
-  const xendoEmail = userId + '@swipesapp.com';
+  const xendoEmail = user_id + '@swipesapp.com';
   const qs = querystring.stringify({
     client_id: xendoConfig.clientId,
     email: xendoEmail,
@@ -167,8 +169,8 @@ const xendoAddServiceToUser = (req, res, next) => {
     }
 
     const newXendoService = Object.assign({}, xendoResult, {
-      service_account_id: serviceToAppend.id,
-      user_id: userId
+      user_id,
+      service_account_id: serviceToAppend.id
     });
 
     const insertXendoUserServiceQ =
@@ -251,11 +253,13 @@ const xendoSearch = (req, res, next) => {
 }
 
 const xendoSearchMapResults = (req, res, next) => {
-  const results = res.locals.result;
-  const userId = req.userId;
+  const {
+    user_id,
+    results
+  } = res.locals;
   const xendoServicesQ =
     r.table('xendo_user_services')
-      .getAll(userId, {index: 'user_id'})
+      .getAll(user_id, {index: 'user_id'})
       .map((service) => {
         return [
           service('service_id').coerceTo('string'),

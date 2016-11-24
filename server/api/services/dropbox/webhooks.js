@@ -23,10 +23,12 @@ const processChanges = ({account, result}) => {
 	})
 }
 
-const processFileChange = ({account, entry}) => {
-	const auth_data = account.auth_data;
-	const userId = account.user_id;
-	const accountId = account.id;
+const processFileChange = ({ account, entry }) => {
+  const {
+    auth_data,
+    id,
+    user_id
+  } = account;
 
 	// Get which user modified the file
 	const getAccountMethod = 'users.getAccount';
@@ -41,7 +43,7 @@ const processFileChange = ({account, entry}) => {
 		};
 
 		const user = res;
-		const sameUser = accountId === user.account_id;
+		const sameUser = id === user.account_id;
 		const userName = sameUser ? 'You' : user.name.display_name || user.email;
 		const message = userName + ' made a change';
 
@@ -49,7 +51,9 @@ const processFileChange = ({account, entry}) => {
       auth_data,
       type: 'file',
       itemId: entry.id,
-      user: { userId }
+      user: {
+        id: user_id
+      }
     };
 
     shareRequest(options, (err, res) => {
@@ -67,23 +71,23 @@ const processFileChange = ({account, entry}) => {
       const event = {
       	service: 'dropbox',
       	message: message,
-      	account_id: accountId,
+      	account_id: id,
       	me: sameUser
       }
 
-  		createSwipesShortUrl({ link, shortUrlData, userId, event});
+  		createSwipesShortUrl({ link, shortUrlData, user_id, event});
     })
 	})
 }
 
 const webhooks = (account, callback) => {
-  // T_TODO
-  // Fix that crazy variable mapping here
-  const auth_data = account.auth_data;
-  const accountId = account.id;
-  const userId = account.user_id;
+  const {
+    auth_data,
+    id,
+    user_id,
+    cursors
+  } = account;
   const method = 'files.listFolder.continue';
-  const cursors = account.cursors;
 
   if (!cursors || !cursors.list_folder_cursor) {
     return callback('The required cursor is missing. Try reauthorize the service to fix the problem.');
@@ -109,7 +113,7 @@ const webhooks = (account, callback) => {
       request({auth_data, method, params}, secondCallback);
     } else {
       const cursors = {list_folder_cursor: cursor};
-      updateCursors({ userId, accountId, cursors });
+      updateCursors({ user_id, id, cursors });
     }
   }
 

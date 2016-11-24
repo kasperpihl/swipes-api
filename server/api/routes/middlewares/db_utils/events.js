@@ -3,11 +3,11 @@
 import r from 'rethinkdb';
 import db from '../../../../db';
 
-const initActivities = (userId) => {
+const initActivities = (user_id) => {
   const q =
     r.table('events')
       .filter((e) => {
-        return e('user_id').eq(userId).and(e('type').eq('activity_added'))
+        return e('user_id').eq(user_id).and(e('type').eq('activity_added'))
       })
       .orderBy(r.desc('date'))
       .without(['id', 'user_id', 'type'])

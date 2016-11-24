@@ -11,8 +11,8 @@ import {
 } from '../../utils.js';
 
 const goalsCreate = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     goal,
     organization_id,
     workflow_id
@@ -33,7 +33,7 @@ const goalsCreate = (req, res, next) => {
   goal.workflow_id = workflow_id;
   goal.organization_id = organization_id;
   goal.timestamp = r.now();
-  goal.created_by = userId;
+  goal.created_by = user_id;
   goal.deleted = false;
 
   res.locals.doNext = true;

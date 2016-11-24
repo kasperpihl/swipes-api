@@ -3,8 +3,8 @@
 import r from 'rethinkdb';
 import db from '../db';
 
-const updateCursors = ({ userId, accountId, cursors }) => {
-  const query = r.table('users').get(userId)
+const updateCursors = ({ user_id, accountId, cursors }) => {
+  const query = r.table('users').get(user_id)
   	.update({services: r.row('services')
   		.map((service) => {
   			return r.branch(
@@ -24,12 +24,12 @@ const updateCursors = ({ userId, accountId, cursors }) => {
   	});
 }
 
-const insertEvent = ({ userId, eventData }) => {
+const insertEvent = ({ user_id, eventData }) => {
   const date = new Date();
   const type = 'activity_added';
 
   Object.assign(eventData, {
-    user_id: userId,
+    user_id,
     date,
     type
   });

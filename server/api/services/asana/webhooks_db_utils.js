@@ -3,9 +3,9 @@
 import r from 'rethinkdb';
 import db from '../../../db';
 
-const createWebhookReference = (userId, accountId) => {
+const createWebhookReference = (user_id, accountId) => {
   const data = {
-    user_id: userId,
+    user_id,
     account_id: accountId
   }
 
@@ -38,14 +38,14 @@ const getWebhookReference = (webhookId) => {
   return db.rethinkQuery(q);
 }
 
-const getWebhooksReferences = (userId) => {
-  const q = r.table('asana_webhooks').getAll(userId, {index: 'user_id'});
+const getWebhooksReferences = (user_id) => {
+  const q = r.table('asana_webhooks').getAll(user_id, {index: 'user_id'});
 
   return db.rethinkQuery(q);
 }
 
-const deleteWebhooksRefereces = (userId) => {
-  const q = r.table('asana_webhooks').getAll(userId, {index: 'user_id'}).delete();
+const deleteWebhooksRefereces = (user_id) => {
+  const q = r.table('asana_webhooks').getAll(user_id, {index: 'user_id'}).delete();
 
   return db.rethinkQuery(q);
 }

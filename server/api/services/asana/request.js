@@ -15,10 +15,11 @@ const refreshAccessToken = (auth_data, user) => {
 		const expires_in = auth_data.expires_in - 30; // 30 seconds margin of error
 		const ts_last_token = auth_data.ts_last_token;
 		const client = createClient();
-		const userId = user ? user.userId : null;
 		let accessToken;
 
 		if ((now - ts_last_token > expires_in) && user) {
+      const user_id = user.id;
+
 			client.app.accessTokenFromRefreshToken(auth_data.refresh_token)
 				.then((response) => {
 					accessToken = response.access_token;
@@ -26,7 +27,7 @@ const refreshAccessToken = (auth_data, user) => {
 					// Update service in our database
 					// This shouldn't be done here ;)
 					// No operations to our database should be allowed from the services
-					var query = r.table('users').get(userId)
+					var query = r.table('users').get(user_id)
 						.update({services: r.row('services')
 							.map((service) => {
 								return r.branch(

@@ -3,7 +3,7 @@
 import r from 'rethinkdb';
 import db from '../../../../db';
 
-const processesGetAllOrderedByTitle = (userId) => {
+const processesGetAllOrderedByTitle = () => {
   const q = r.table('processes').orderBy('title');
 
   return db.rethinkQuery(q);

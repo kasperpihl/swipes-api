@@ -21,12 +21,12 @@ const findLinkByChecksum = (checksum) => {
   return db.rethinkQuery(q);
 }
 
-const addPermissionsToALink = ({ userId, checksum, permission }) => {
+const addPermissionsToALink = ({ user_id, checksum, permission }) => {
   const permissionPart = shortid.generate();
   const q = r.table('links_permissions').insert({
+    user_id,
     id: permissionPart,
     link_id: checksum,
-    user_id: userId,
     permission: permission
   }, {
     returnChanges: true

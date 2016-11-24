@@ -51,11 +51,11 @@ notAuthed.all('/users.signup',
   xendoUserSignUp,
   (req, res, next) => {
     const {
-      userId,
+      user_id,
       token
     } = res.locals;
 
-    res.status(200).json({ok: true, userId, token});
+    res.status(200).json({ok: true, userId: user_id, token});
   }
 );
 

@@ -3,11 +3,11 @@
 import r from 'rethinkdb';
 import db from '../../../../db';
 
-const dbUsersGetService = (userId, account_id) => {
+const dbUsersGetService = (user_id, account_id) => {
   const coerceToNumber = isNaN(account_id) ? account_id : r.expr(account_id).coerceTo('number');
   const q =
     r.table('users')
-      .get(userId)('services')
+      .get(user_id)('services')
       .filter((service) => {
         return service('id').eq(coerceToNumber)
       })
@@ -16,11 +16,11 @@ const dbUsersGetService = (userId, account_id) => {
   return db.rethinkQuery(q);
 }
 
-const dbUsersRemoveService = (userId, account_id) => {
+const dbUsersRemoveService = (user_id, account_id) => {
   const coerceToNumber = isNaN(account_id) ? account_id : r.expr(account_id).coerceTo('number');
   const q =
     r.table('users')
-      .get(userId)
+      .get(user_id)
       .update({services: r.row('services')
         .filter((service) => {
           return service('id').ne(coerceToNumber)
@@ -69,16 +69,16 @@ const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
   return db.rethinkQuery(q);
 }
 
-const dbUsersUpdateProfilePic = ({ userId, profilePic }) => {
-	const q = r.table('users').get(userId).update({profile_pic: profilePic});
+const dbUsersUpdateProfilePic = ({ user_id, profilePic }) => {
+	const q = r.table('users').get(user_id).update({profile_pic: profilePic});
 
   return db.rethinkQuery(q);
 }
 
-const dbUsersGetSingleWithOrganizations = ({ userId }) => {
+const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
   const q =
     r.table('users')
-      .get(userId)
+      .get(user_id)
       .without(['password', 'xendoCredentials', {'services': 'auth_data'}])
       .merge({
         organizations:
