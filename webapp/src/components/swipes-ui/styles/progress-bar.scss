@@ -68,6 +68,7 @@
     position: relative;
     padding-bottom: 10px;
 
+    // tooltip
     &:before {
       color: $deepBlue-80;
       content: attr(data-title);
@@ -80,6 +81,7 @@
       pointer-events: none;
     }
 
+    // progress step
     &:after {
       @include size(100%, 14px);
       background-color: $deepBlue-20;
@@ -112,6 +114,7 @@
 
     &--disabled {
       pointer-events: none;
+      -webkit-clip-path: polygon(0 0, 100% 0, 100% 0%, 0% 0%);
     }
 
     &--last-step {

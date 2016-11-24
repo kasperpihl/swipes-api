@@ -32,7 +32,7 @@ class ProgressBar extends Component {
   renderSteps() {
     const { steps } = this.props;
     const stepWidth = 100 / steps.length;
-    let lastCompletedStep = 0;
+    let lastCompletedStep = -1;
 
     for (var i = 0; i < steps.length; i++) {
       if (steps[i].completed) {
