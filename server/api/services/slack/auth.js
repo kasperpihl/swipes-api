@@ -30,7 +30,7 @@ const authData = (data, callback) => {
     return callback('no_code');
   }
 
-  const authData = {};
+  const auth_data = {};
   const method = 'oauth.access';
   const params = {
     code,
@@ -39,7 +39,7 @@ const authData = (data, callback) => {
     redirect_uri: slackConfig.redirectUri
   };
 
-  request({ authData, method, params }, (err, res) => {
+  request({ auth_data, method, params }, (err, res) => {
     if (err) {
       console.log(err);
     }
@@ -47,7 +47,7 @@ const authData = (data, callback) => {
     delete res.ok;
 
     const data = {
-      authData: res,
+      auth_data: res,
       id: res.team_id,
       show_name: res.team_name
     }

@@ -202,7 +202,7 @@ const usersCleanupRegisteredWebhooksToService = (req, res, next) => {
 
   if (serviceName === 'asana') {
     console.log(services[serviceName]);
-    services[serviceName].unsubscribeFromAllWebhooks({ authData: service.authData, userId })
+    services[serviceName].unsubscribeFromAllWebhooks({ auth_data: service.auth_data, userId })
       .then(() => {
         return next();
       })

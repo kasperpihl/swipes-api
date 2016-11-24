@@ -9,17 +9,17 @@ import {
 } from './api_map';
 import db from '../../../db';
 
-const refreshAccessToken = (authData, user) => {
+const refreshAccessToken = (auth_data, user) => {
 	return new Promise((resolve, reject) => {
 		const now = new Date().getTime() / 1000;
-		const expires_in = authData.expires_in - 30; // 30 seconds margin of error
-		const ts_last_token = authData.ts_last_token;
+		const expires_in = auth_data.expires_in - 30; // 30 seconds margin of error
+		const ts_last_token = auth_data.ts_last_token;
 		const client = createClient();
 		const userId = user ? user.userId : null;
 		let accessToken;
 
 		if ((now - ts_last_token > expires_in) && user) {
-			client.app.accessTokenFromRefreshToken(authData.refresh_token)
+			client.app.accessTokenFromRefreshToken(auth_data.refresh_token)
 				.then((response) => {
 					accessToken = response.access_token;
 					// T_TODO
@@ -30,9 +30,9 @@ const refreshAccessToken = (authData, user) => {
 						.update({services: r.row('services')
 							.map((service) => {
 								return r.branch(
-									service('authData')('access_token').eq(authData.access_token),
+									service('auth_data')('access_token').eq(auth_data.access_token),
 									service.merge({
-										authData: {
+										auth_data: {
 											access_token: accessToken,
 											ts_last_token: now
 										}
@@ -51,15 +51,15 @@ const refreshAccessToken = (authData, user) => {
 					reject(error);
 				})
 		} else {
-			resolve(authData.access_token);
+			resolve(auth_data.access_token);
 		}
 	});
 }
 
-const request = ({ authData, method, params = {}, user }, callback) => {
+const request = ({ auth_data, method, params = {}, user }, callback) => {
   const client = createClient();
 
-  refreshAccessToken(authData, user)
+  refreshAccessToken(auth_data, user)
     .then((credentials) => {
       let asanaPromise;
       client.useOauth({ credentials });
@@ -113,7 +113,7 @@ const request = ({ authData, method, params = {}, user }, callback) => {
     })
 }
 
-const shareRequest = ({ authData, type, itemId, user }, callback) => {
+const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
   let params = {};
 
@@ -127,7 +127,7 @@ const shareRequest = ({ authData, type, itemId, user }, callback) => {
     return callback('This type is not supported :/');
   }
 
-  request({authData, method, params, user }, (err, res) => {
+  request({auth_data, method, params, user }, (err, res) => {
     if (err) {
       return callback(err);
     }

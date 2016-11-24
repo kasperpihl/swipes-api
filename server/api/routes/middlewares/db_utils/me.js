@@ -7,7 +7,7 @@ const initMe = (userId) => {
   const q =
     r.table('users')
       .get(userId)
-      .without(['password', 'xendoCredentials', {'services': 'authData'}])
+      .without(['password', 'xendoCredentials', {'services': 'auth_data'}])
       .merge({
         organizations:
           r.table('organizations')

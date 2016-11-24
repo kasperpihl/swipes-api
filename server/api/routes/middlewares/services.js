@@ -44,7 +44,7 @@ const serviceWithAuthGet = (req, res, next) => {
       }
 
       const service = results[0];
-      res.locals.service_auth_data = service.authData;
+      res.locals.service_auth_data = service.auth_data;
 
       return next();
     })
@@ -92,7 +92,7 @@ const serviceDoRequest = (req, res, next) => {
   } = res.locals;
 
   const options = {
-    authData: service_auth_data,
+    auth_data: service_auth_data,
     method: data.method,
     params: data.parameters,
     user: {userId: user_id}
@@ -120,7 +120,7 @@ const serviceDoShareRequest = (req, res, next) => {
   } = res.locals;
 
   const options = {
-    authData: service_auth_data,
+    auth_data: service_auth_data,
     type: link.type,
     itemId: link.id,
     user: { userId: user_id }

@@ -5,9 +5,9 @@ import {
   mapApiMethod
 } from './api_map';
 
-const request = ({ authData, method, params = {} }, callback) => {
+const request = ({ auth_data, method, params = {} }, callback) => {
   const url =
-    authData.access_token ?
+    auth_data.access_token ?
     'https://api.dropboxapi.com/2' :
     'https://api.dropboxapi.com/oauth2';
   const mappedMethod = mapApiMethod(method);
@@ -21,9 +21,9 @@ const request = ({ authData, method, params = {} }, callback) => {
     }
   }
 
-  if (authData.access_token) {
+  if (auth_data.access_token) {
     options.body = params;
-    options.headers['Authorization'] = 'Bearer ' + authData.access_token;
+    options.headers['Authorization'] = 'Bearer ' + auth_data.access_token;
   } else {
     options.form = params;
   }
@@ -38,7 +38,7 @@ const request = ({ authData, method, params = {} }, callback) => {
   });
 }
 
-const shareRequest = ({ authData, type, itemId, user }, callback) => {
+const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
   let params = {};
 
@@ -51,7 +51,7 @@ const shareRequest = ({ authData, type, itemId, user }, callback) => {
     return callback('This type is not supported :/');
   }
 
-  request({ authData, method, params, user }, (err, res) => {
+  request({ auth_data, method, params, user }, (err, res) => {
     if (err) {
       return callback(err);
     }
