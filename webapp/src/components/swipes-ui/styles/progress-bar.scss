@@ -64,6 +64,7 @@
   }
 
   &__step {
+    // Container
     @include size(calc((100% / 3) - 1px), calc(100% + 10px));
     position: relative;
     padding-bottom: 10px;
@@ -113,8 +114,10 @@
     }
 
     &--disabled {
-      pointer-events: none;
-      -webkit-clip-path: polygon(0 0, 100% 0, 100% 0%, 0% 0%);
+
+      &:after {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 0%, 0% 0%);
+      }
     }
 
     &--last-step {
@@ -152,6 +155,19 @@
           }
         }
 
+        &--disabled {
+
+          &:after {
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% 20%, 0% 20%);
+          }
+
+          &#{$b}__step--last-step {
+            &:after {
+              -webkit-clip-path: polygon(0 0, 92% 0, 94% 20%, 1% 20%);
+            }
+          }
+        }
+
         &:hover {
 
           &:before {
@@ -169,6 +185,24 @@
           &:hover {
             &:after {
               -webkit-clip-path: polygon(0 0, 92% 0, 100% 100%, 0% 100%);
+            }
+          }
+        }
+
+        &--disabled {
+
+          &:hover {
+            &:after {
+              -webkit-clip-path: polygon(0 0, 100% 0, 100% 20%, 0% 20%);
+            }
+          }
+
+          &#{$b}__step--last-step {
+
+            &:hover {
+              &:after {
+                -webkit-clip-path: polygon(0 0, 92% 0, 94% 20%, 1% 20%);
+              }
             }
           }
         }
