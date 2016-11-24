@@ -9,14 +9,33 @@ const validateOverlay = (overlay) => {
   }
   return overlay;
 }
-
+const fireOnCloseForOverlays = (overlays, index) => {
+  overlays.findLastEntry((o, i) => {
+    if(typeof o.get('onClose') === 'function'){
+      o.get('onClose')();
+    }
+    if(typeof index !== 'undefined'){
+      return (i === (index + 1));
+    }
+    return false;
+  })
+}
 export function clear(index){
-  return { type: types.CLEAR_OVERLAY, index };
+  return (dispatch, getState) => {
+    const overlays = getState().get('overlays');
+    fireOnCloseForOverlays(overlays, index);
+    dispatch({ type: types.CLEAR_OVERLAY, index })
+  }
 }
 
 export function set(overlay){
-  overlay = validateOverlay(overlay);
-  return { type: types.SET_OVERLAY, overlay };
+  return (dispatch, getState) => {
+    overlay = validateOverlay(overlay);
+    const overlays = getState().get('overlays');
+    fireOnCloseForOverlays(overlays);
+    dispatch({ type: types.SET_OVERLAY, overlay })
+  }
+
 }
 export function push(overlay){
   return { type: types.PUSH_OVERLAY, overlay };

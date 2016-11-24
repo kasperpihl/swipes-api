@@ -9,7 +9,7 @@ class Overlay extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.transitionName = "slideRight";
+    this.transitionName = "fade";
   }
   renderOverlay(){
     const overlay = this.props.overlays.last();
@@ -39,11 +39,11 @@ class Overlay extends Component {
       }
       // Pushing a new overlay
       else if(newVal.size > oldVal.size){
-        this.transitionName = 'slideLeft';
+        this.transitionName = 'fade';
       }
       // Popping an overlay (going back with breadcrumps)
       else if(newVal.size < oldVal.size){
-        this.transitionName = 'slideRight';
+        this.transitionName = 'fade';
       }
     }
     else if(newVal.size && newVal.size === oldVal.size){
