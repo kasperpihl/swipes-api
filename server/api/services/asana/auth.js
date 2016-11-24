@@ -22,22 +22,22 @@ const authData = (data, callback) => {
   const client = createClient();
   const code = data.query.code;
   const userId = data.userId;
-  let authData, id, show_name;
+  let auth_data, id, show_name;
 
   client.app.accessTokenFromCode(code)
     .then((response) => {
-      authData = response;
+      auth_data = response;
       id = response.data.id;
       show_name = response.data.email;
       // Need that for the refresh token
       response.ts_last_token = new Date().getTime() / 1000;
 
-      data = { authData, id, show_name };
+      data = { auth_data, id, show_name };
 
-      return unsubscribeFromAllWebhooks({ authData, userId });
+      return unsubscribeFromAllWebhooks({ auth_data, userId });
     })
     .then(() => {
-      subscribeToAllWebhooks({ authData, userId, accountId: id });
+      subscribeToAllWebhooks({ auth_data, userId, accountId: id });
 
       callback(null, data);
     })

@@ -22,7 +22,7 @@ import {
 
 const webhooksHost = config.get('webhooksHost');
 
-const findAllProjects = ({ authData, userId, accountId, workspace }) => {
+const findAllProjects = ({ auth_data, userId, accountId, workspace }) => {
   const method = 'projects.findAll';
   const params = {
     workspace: workspace.id
@@ -31,7 +31,7 @@ const findAllProjects = ({ authData, userId, accountId, workspace }) => {
 		userId
 	}
 
-  request({ authData, method, params, user }, (err, projects) => {
+  request({ auth_data, method, params, user }, (err, projects) => {
     if (err) {
       console.log('Registering asana webhooks - Projects Step', err);
       return;
@@ -39,12 +39,12 @@ const findAllProjects = ({ authData, userId, accountId, workspace }) => {
 
 
     projects.forEach((project) => {
-      createWebhookForProject({ authData, userId, accountId, project });
+      createWebhookForProject({ auth_data, userId, accountId, project });
     })
   })
 }
 
-const deleteWebhooksFromAsana = ({ authData, userId }, webhooks) => {
+const deleteWebhooksFromAsana = ({ auth_data, userId }, webhooks) => {
 	const promiseArray = [];
 	const promiseRequest = Promise.promisify(request);
 	const method = 'webhooks.deleteById';
@@ -57,7 +57,7 @@ const deleteWebhooksFromAsana = ({ authData, userId }, webhooks) => {
 			userId
 		}
 
-		promiseArray.push(promiseRequest({ authData, method, params, user }));
+		promiseArray.push(promiseRequest({ auth_data, method, params, user }));
 	})
 
 	return Promise.all(promiseArray.map(function(promise) {
@@ -66,7 +66,7 @@ const deleteWebhooksFromAsana = ({ authData, userId }, webhooks) => {
 	}));
 }
 
-const createWebhookForProject = ({ authData, userId, accountId, project }) => {
+const createWebhookForProject = ({ auth_data, userId, accountId, project }) => {
 	createWebhookReference(userId, accountId)
 		.then((result) => {
 			const webhookId = result.generated_keys[0];
@@ -83,7 +83,7 @@ const createWebhookForProject = ({ authData, userId, accountId, project }) => {
 
 		  console.log(params);
 
-		  request({ authData, method, params, user }, (err, result) => {
+		  request({ auth_data, method, params, user }, (err, result) => {
 		    if (err) {
 		      console.log('Registering asana webhooks - Create webhook Step');
 		      console.log(util.inspect(err, { showHidden: true, depth: null }));
@@ -91,7 +91,7 @@ const createWebhookForProject = ({ authData, userId, accountId, project }) => {
 		    }
 
 				updateWebhookReference(webhookId, result);
-		    saveSyncCursor({ authData, userId, accountId, projectId });
+		    saveSyncCursor({ auth_data, userId, accountId, projectId });
 		    console.log('Registering asana webhook success', result);
 		  })
 		})
@@ -100,7 +100,7 @@ const createWebhookForProject = ({ authData, userId, accountId, project }) => {
 		})
 }
 
-const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
+const saveSyncCursor = ({ auth_data, userId, accountId, projectId }) => {
   const method = 'events.get';
   const params = {
     resource: projectId
@@ -109,7 +109,7 @@ const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
 		userId
 	}
 
-  request({ authData, method, params, user }, (err, result) => {
+  request({ auth_data, method, params, user }, (err, result) => {
     if (err) {
       console.log('Didn\'t get a sync token from the events API');
       console.log(util.inspect(err, { showHidden: true, depth: null }));
@@ -132,7 +132,7 @@ const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
 	Don't use in production. If we have multiple swipes accounts with the same
 	asana user it will delete the webhooks for every single one of them.
  */
-// const deleteAllWorkspaceWebhooks = ({ asana, authData, userId, accountId, workspace }) => {
+// const deleteAllWorkspaceWebhooks = ({ asana, auth_data, userId, accountId, workspace }) => {
 // 	const method = 'webhooks.getAll';
 // 	const params = {
 // 		id: workspace.id
@@ -141,7 +141,7 @@ const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
 // 		userId
 // 	}
 //
-// 	request({ authData, method, params, user }, (err, webhooks) => {
+// 	request({ auth_data, method, params, user }, (err, webhooks) => {
 // 		if (err) {
 // 			console.log('Ooops... can\'t get the webhooks', err);
 // 			return;
@@ -156,7 +156,7 @@ const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
 // 				userId
 // 			}
 //
-// 			request({ authData, method, params, user }, (err, res) => {
+// 			request({ auth_data, method, params, user }, (err, res) => {
 // 				if (err) {
 // 					console.log('Could not delete the webhook', err);
 // 					return;
@@ -169,11 +169,11 @@ const saveSyncCursor = ({ authData, userId, accountId, projectId }) => {
 // }
 
 // Unsubscribe from webhooks that are referenced in our database
-const unsubscribeFromAllWebhooks = ({ authData, userId }) => {
+const unsubscribeFromAllWebhooks = ({ auth_data, userId }) => {
 	return getWebhooksReferences(userId)
 		.then((webhooks) => {
 			console.log('Unsubscribe HOOKS', webhooks);
-			return deleteWebhooksFromAsana({ authData, userId }, webhooks);
+			return deleteWebhooksFromAsana({ auth_data, userId }, webhooks);
 		})
 		.then((inspections) => {
 			// If the error message is NOT FOUND that simply meens that our webhooks are out of sync
@@ -200,7 +200,7 @@ const unsubscribeFromAllWebhooks = ({ authData, userId }) => {
 		})
 }
 
-const subscribeToAllWebhooks = ({ authData, userId, accountId }) => {
+const subscribeToAllWebhooks = ({ auth_data, userId, accountId }) => {
   console.log('subscribing asana webhooks to all projects');
 
   const method = 'workspaces.findAll';
@@ -209,7 +209,7 @@ const subscribeToAllWebhooks = ({ authData, userId, accountId }) => {
 		userId
 	}
 
-  request({ authData, method, params, user }, (err, workspaces) => {
+  request({ auth_data, method, params, user }, (err, workspaces) => {
     if (err) {
       console.log('Registering asana webhooks - Workspace Step', err);
       return;
@@ -218,7 +218,7 @@ const subscribeToAllWebhooks = ({ authData, userId, accountId }) => {
     const method = 'projects.findAll';
 
     workspaces.forEach((workspace) => {
-      findAllProjects({ authData, userId, accountId, workspace });
+      findAllProjects({ auth_data, userId, accountId, workspace });
     })
   })
 }
@@ -236,14 +236,14 @@ const processChanges = ({ account, result, accountId }) => {
 
 const createShortUrl = (account, event, accountId) => {
 	const {
-		authData,
+		auth_data,
 		user_id
 	} = account
 	const userId = user_id; // T_TODO omg... this is just stupid
 
 	if (event.parent) {
 		const options = {
-			authData,
+			auth_data,
 			type: event.type,
 			itemId: event.parent.id,
 			user: { userId }
@@ -292,7 +292,7 @@ const createEvent = (userId, event, accountId) => {
 const webhooks = (account, resourceId, accountId, callback) => {
 	const cursorId = resourceId + '-' + accountId;
 	const {
-		authData,
+		auth_data,
 		user_id,
 		cursors
 	} = account;
@@ -328,7 +328,7 @@ const webhooks = (account, resourceId, accountId, callback) => {
 		if (data && data.length > 0) {
 			Object.assign(params, { sync });
 
-			request({ authData, method, params, user }, secondCallback);
+			request({ auth_data, method, params, user }, secondCallback);
 		} else {
 			const cursors = {
 				[cursorId]: sync
@@ -338,7 +338,7 @@ const webhooks = (account, resourceId, accountId, callback) => {
 		}
 	}
 
-	request({ authData, method, params, user }, secondCallback);
+	request({ auth_data, method, params, user }, secondCallback);
 }
 
 export {

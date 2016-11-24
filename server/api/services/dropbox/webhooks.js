@@ -24,7 +24,7 @@ const processChanges = ({account, result}) => {
 }
 
 const processFileChange = ({account, entry}) => {
-	const authData = account.authData;
+	const auth_data = account.auth_data;
 	const userId = account.user_id;
 	const accountId = account.id;
 
@@ -34,7 +34,7 @@ const processFileChange = ({account, entry}) => {
 		account_id: entry.sharing_info.modified_by
 	}
 
-	request({authData, method: getAccountMethod, params: getAccountParams}, (err, res) => {
+	request({auth_data, method: getAccountMethod, params: getAccountParams}, (err, res) => {
 		if (err) {
 			console.log(err);
 			return;
@@ -46,7 +46,7 @@ const processFileChange = ({account, entry}) => {
 		const message = userName + ' made a change';
 
     const options = {
-      authData,
+      auth_data,
       type: 'file',
       itemId: entry.id,
       user: { userId }
@@ -79,7 +79,7 @@ const processFileChange = ({account, entry}) => {
 const webhooks = (account, callback) => {
   // T_TODO
   // Fix that crazy variable mapping here
-  const authData = account.authData;
+  const auth_data = account.auth_data;
   const accountId = account.id;
   const userId = account.user_id;
   const method = 'files.listFolder.continue';
@@ -106,14 +106,14 @@ const webhooks = (account, callback) => {
     if (result.has_more) {
       Object.assign(params, {cursor});
 
-      request({authData, method, params}, secondCallback);
+      request({auth_data, method, params}, secondCallback);
     } else {
       const cursors = {list_folder_cursor: cursor};
       updateCursors({ userId, accountId, cursors });
     }
   }
 
-  request({authData, method, params}, secondCallback);
+  request({auth_data, method, params}, secondCallback);
 }
 
 export {

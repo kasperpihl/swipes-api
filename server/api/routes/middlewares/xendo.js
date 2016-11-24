@@ -133,8 +133,8 @@ const xendoAddServiceToUser = (req, res, next) => {
     client_id: xendoConfig.clientId,
     email: xendoEmail,
     service_name: serviceToAppend.service_name,
-    access_token: serviceToAppend.authData.access_token,
-    refresh_token: serviceToAppend.authData.refresh_token,
+    access_token: serviceToAppend.auth_data.access_token,
+    refresh_token: serviceToAppend.auth_data.refresh_token,
     display_name: serviceToAppend.show_name,
     account_name: serviceToAppend.id
   });

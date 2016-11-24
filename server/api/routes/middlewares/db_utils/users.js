@@ -61,7 +61,7 @@ const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
 		.default([])
 		.filter(filter)
 		.limit(1)
-		.pluck('authData', 'service_id', 'id', 'service_name')
+		.pluck('auth_data', 'service_id', 'id', 'service_name')
 		.eqJoin('service_id', r.table('services'), {index: 'id'})
 		.without([{right:'id'}, {right:'title'}])
 		.zip();
@@ -79,7 +79,7 @@ const dbUsersGetSingleWithOrganizations = ({ userId }) => {
   const q =
     r.table('users')
       .get(userId)
-      .without(['password', 'xendoCredentials', {'services': 'authData'}])
+      .without(['password', 'xendoCredentials', {'services': 'auth_data'}])
       .merge({
         organizations:
           r.table('organizations')

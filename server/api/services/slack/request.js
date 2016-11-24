@@ -2,9 +2,9 @@
 
 import req from 'request'
 
-const request = ({ authData, method, params = {} }, callback) => {
-  if (authData.access_token) {
-    params.token = authData.access_token;
+const request = ({ auth_data, method, params = {} }, callback) => {
+  if (auth_data.access_token) {
+    params.token = auth_data.access_token;
   }
 
   const options = {
