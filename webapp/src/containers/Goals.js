@@ -15,6 +15,7 @@ class Goals extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    bindAll(this, ['setActiveGoal']);
   }
   stepAction(step, action, data) {
     const { pushOverlay } = this.props;
@@ -38,15 +39,27 @@ class Goals extends Component {
 
     submit(goalId, stepId, data, previousSteps);
   }
+  setActiveGoal(id){
+    const { setActiveGoal, setOverlay, goals } = this.props;
+
+    const goal = goals.get(id);
+    if(goal){
+      setActiveGoal(id);
+      setOverlay({title: goal.get('title'), onClose: () => {
+        setActiveGoal(null);
+      }});
+    }
+
+  }
   renderList() {
-    const { currentGoal, goals, me, setActiveGoal } = this.props;
+    const { currentGoal, goals, me } = this.props;
 
     if(!currentGoal) {
       return (
         <GoalList
           goals={goals}
           me={me}
-          setActiveGoal={setActiveGoal}
+          setActiveGoal={this.setActiveGoal}
         />
       )
     }
