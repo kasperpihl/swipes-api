@@ -21,15 +21,29 @@ class GoalStep extends Component {
     this.helper = new GoalsUtil(props.goal, props.myId, props.cache);
     this.state = {
       stepIndex: props.initialStepIndex,
-      step: props.goal.getIn(['steps', props.initialStepIndex]),
+      step: this.helper.getStepByIndex(props.initialStepIndex),
       formData: this.helper.getInitialDataForStepIndex(props.initialStepIndex)
     }
 
-    bindAll(this, ['onSubmit', 'cacheFormInput']);
+    bindAll(this, ['onSubmit', 'cacheFormInput', 'onProgressChange']);
     this.bindCallbacks = {};
     this.throttledCache = throttle(this.cacheFormInput, 5000)
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+  updateToStepIndex(i){
+    console.log('progress change', i);
+    const { stepIndex } = this.state;
+    if(i !== stepIndex){
+      const step = this.helper.getStepByIndex(i);
+      const formData = this.helper.getInitialDataForStepIndex(i)
+      this.setState({
+        stepIndex: i,
+        step,
+        formData
+      })
+    }
+
   }
   cacheFormInput(){
     const { stepIndex } = this.state;
@@ -117,16 +131,36 @@ class GoalStep extends Component {
     const stepTitle = step.get('title');
     const assignees = step.get('assignees').toJS();
 
-    return <StepHeader index={stepIndex + 1} title={stepTitle} assignees={assignees}/>
+    return (
+      <StepHeader
+        index={stepIndex + 1}
+        title={stepTitle}
+        assignees={assignees}
+      />
+    )
+  }
+  onProgressChange(i){
+    this.updateToStepIndex(i);
   }
   renderProgressBar() {
     const { goal } = this.props;
+    const { stepIndex } = this.state;
 
-    const steps = goal.get('steps').map( (step) => {
-      return { title: step.get('title'), completed: step.get('completed') }
+    const steps = goal.get('steps').map( (step, i) => {
+      return {
+        title: step.get('title'),
+        completed: step.get('completed'),
+        disabled: (i > goal.get('currentStepIndex'))
+      }
     }).toJS();
 
-    return <ProgressBar steps={steps} currentStepIndex={goal.get('currentStepIndex')}/>
+    return (
+      <ProgressBar
+        steps={steps}
+        onChange={this.onProgressChange}
+        activeIndex={stepIndex}
+      />
+    )
   }
   renderStatus(){
     const { stepIndex } = this.state;
@@ -145,7 +179,9 @@ class GoalStep extends Component {
       message = firstMessage[1];
       if(user && message && message.length){
         return (
-          <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
+          <StepField
+            icon={user.get('profile_pic') || 'PersonIcon'}
+            title={'Handoff from ' + user.get('name')}>
             <div className="goal-step__hand-off-message">{message}</div>
           </StepField>
         )
@@ -167,7 +203,10 @@ class GoalStep extends Component {
           this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
         }
         return (
-          <StepField key={field.get('id')} title={field.get('title')} icon={Field.icon()}>
+          <StepField
+            key={field.get('id')}
+            title={field.get('title')}
+            icon={Field.icon()}>
             <Field
               delegate={this.bindCallbacks[i]}
               options={options}

@@ -7,19 +7,11 @@ import './styles/progress-bar.scss'
 class ProgressBar extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      activeIndex: props.currentStepIndex || 0
-    }
 
     bindAll(this, ['onChange']);
   }
-  componentWillReceiveProps(nextProps){
-    if (this.props.currentStepIndex !== nextProps.currentStepIndex) {
-      this.setState({activeIndex: nextProps.currentStepIndex});
-    }
-  }
   onChange(e) {
-    const { activeIndex } = this.state;
+    const { activeIndex } = this.props;
     const i = parseInt(e.target.getAttribute('data-index'));
 
     if (activeIndex !== i) {
@@ -39,7 +31,6 @@ class ProgressBar extends Component {
   }
   renderSteps() {
     const { steps } = this.props;
-    const { activeIndex } = this.state;
     const stepWidth = 100 / steps.length;
     let lastCompletedStep = 0;
 
@@ -69,8 +60,7 @@ class ProgressBar extends Component {
     )
   }
   renderStep(step, i) {
-    const { activeIndex } = this.state;
-    const { currentStepIndex, steps } = this.props;
+    const { activeIndex, steps } = this.props;
     let className = 'sw-progress-bar__step';
 
     if (step.completed) {
@@ -81,42 +71,30 @@ class ProgressBar extends Component {
       className += ' sw-progress-bar__step--active'
     }
 
-    if (i > currentStepIndex) {
+    // K_TODO: Fix knowing future steps
+    if (step.disabled) {
       className += ' sw-progress-bar__step--disabled'
     }
 
     return (
-      <div className={className} key={'step-' + i} data-title={`${i + 1}. ${step.title}`} key={`progress-step-${i}`} onClick={this.onChange}></div>
+      <div className={className} data-index={i} key={'step-' + i} data-title={`${i + 1}. ${step.title}`} onClick={this.onChange}></div>
     )
   }
-  renderInteration() {
-    const { currentIterationIndex } = this.props;
-    let iterationIndex = '';
-
-    if (currentIterationIndex > -1) {
-      iterationIndex = currentIterationIndex + 1
-    }
+  renderIteration() {
+    const { title } = this.props;
 
     return (
       <div className="sw-progress-bar__slope">
         {this.renderSlope('ProgressBarSlope')}
-        <div className="sw-progress-bar__iteration">{'run ' + iterationIndex}</div>
+        <div className="sw-progress-bar__iteration">{title}</div>
       </div>
     )
   }
   render() {
-    const { steps, currentStepIndex } = this.props;
-    const { activeIndex } = this.state;
-
-    const progresses = steps.map( (step, i) => {
-
-      return this.renderStep(step, i)
-    })
-
     return (
       <div className="sw-progress-bar">
         {this.renderSteps()}
-        {this.renderInteration()}
+        {this.renderIteration()}
       </div>
     )
   }
@@ -131,6 +109,6 @@ ProgressBar.propTypes = {
     title: string,
     completed: bool
   })),
-  currentStepIndex: number,
-  currentIterationIndex: number
+  stepIndex: number,
+  title: string
 }
