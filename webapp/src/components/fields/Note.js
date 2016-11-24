@@ -13,9 +13,6 @@ import {
 } from 'draft-js'
 
 class Note extends Component {
-  static icon(){
-    return 'ListIcon';
-  }
   static saveData(data){
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
   }

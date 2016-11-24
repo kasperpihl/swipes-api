@@ -206,7 +206,7 @@ class GoalStep extends Component {
           <StepField
             key={field.get('id')}
             title={field.get('title')}
-            icon={Field.icon()}>
+            icon={'ArrowRightIcon'}>
             <Field
               delegate={this.bindCallbacks[i]}
               options={options}
