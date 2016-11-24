@@ -46,9 +46,9 @@ class ProgressBar extends Component {
     for (var i = 0; i < steps.length; i++) {
       if (steps[i].completed) {
         lastCompletedStep = i;
+      } else {
+        break;
       }
-
-      break;
     }
 
     let styles = {

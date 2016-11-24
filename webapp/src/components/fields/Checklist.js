@@ -6,7 +6,7 @@ import { fromJS } from 'immutable'
 
 class Checklist extends Component {
   static icon(){
-    return 'CheckmarkIcon'
+    return 'DotIcon'
   }
   constructor(props) {
     super(props)

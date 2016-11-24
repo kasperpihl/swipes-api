@@ -6,20 +6,19 @@
 
   @include size(100%, auto);
   @include flex(center, flex-start);
-  border-top: 1px solid $blue-100;
   flex: none;
 
   &__actions {
-    display: inline-block;
+    @include size(100%, 45px);
+    @include flex();
     border: 1px solid $blue-100;
     border-radius: 3px;
     margin: 30px 0;
-    margin-left: calc(32px + 18px + 24px);
   }
 
   &__button {
-    padding: 18px 40px;
-    display: inline-block;
+    @include size(100%);
+    @include flex();
     font-size: 12px;
     font-weight: 700;
     color: $blue-100;
