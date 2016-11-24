@@ -29,7 +29,6 @@ const dbUsersRemoveService = (user_id, account_id) => {
 }
 
 const dbUsersAddSevice = ({ user_id, service }) => {
-  const account_id = service.id;
   const q = r.table('users').get(user_id).update((user) => {
 		return {
 			services:
@@ -37,7 +36,7 @@ const dbUsersAddSevice = ({ user_id, service }) => {
           .default([])
           .filter((s) => {
             return s('id')
-                    .ne(account_id)
+                    .ne(service.id)
                     .and(s('service_id').ne(service.service_id))
           })
           .append(service)

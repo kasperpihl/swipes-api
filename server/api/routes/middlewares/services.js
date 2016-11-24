@@ -165,6 +165,11 @@ const serviceGetAuthData = (req, res, next) => {
       serviceData.id = service.id;
     }
 
+    // The id field should be string. Some services like asana are returning
+    // numbers and this is okay for the auth_data but not for the id field in the root
+    // because it is hell to write db queries that maches different type for a field
+    serviceData.id = serviceData.id.toString();
+
     const serviceToAppend = Object.assign({}, serviceData, {
       service_id,
       service_name
