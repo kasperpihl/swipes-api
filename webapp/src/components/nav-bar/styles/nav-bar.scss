@@ -68,81 +68,10 @@
     }
   }
 
-  &__actions {
-    @include size(24px);
-    @include flex();
-    position: absolute;
-    right: 0; top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-
-    &:hover {
-      #{$b}__actions-icon {
-        background-color: $deepBlue-80;
-
-        &:before {
-          background-color: $deepBlue-80;
-        }
-
-        &:after {
-          background-color: $deepBlue-80;
-        }
-      }
-    }
-  }
-
-  &__actions-icon {
-    @include size(4px);
-    background-color: $deepBlue-40;
-    position: relative;
-
-    &:before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: -6px;
-      @include size(4px);
-      background-color: $deepBlue-40;
-    }
-
-    &:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -6px;
-      @include size(4px);
-      background-color: $deepBlue-40;
-    }
-  }
-
-  &__action-list {
-    @include size(150px, auto);
-    position: absolute;
-    right: 15px; bottom: -10px;
-    transform: translateY(100%);
-    background-color: white;
-    box-shadow: 0 1px 20px 3px rgba($deepBlue-20, 0.4);
-    border-radius: 3px;
-    overflow: hidden;
-    z-index: 10;
-    display: none;
-
-    &--shown {
-      display: block;
-    }
-  }
-
-  &__action {
-    padding: 10px;
-    font-size: 15px;
-    color: $deepBlue-80;
-    user-select: none;
-  }
-
   &__slider {
     @include size(100%, 1px);
     @include flex();
-    background: linear-gradient(to right, $green-color 0%, $green-color 50%, $blue-40 50%, $blue-40 100%);
+    background: linear-gradient(to right, $green-color 0%, $green-color 50%, $blue-100 50%, $blue-100 100%);
     background-size: 200%;
   	background-position: 100% 0;
     left: 0; bottom: 0;
