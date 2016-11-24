@@ -32,7 +32,6 @@ class GoalStep extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   updateToStepIndex(i){
-    console.log('progress change', i);
     const { stepIndex } = this.state;
     if(i !== stepIndex){
       const step = this.helper.getStepByIndex(i);

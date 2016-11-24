@@ -4,12 +4,11 @@ import r from 'rethinkdb';
 import db from '../../../../db';
 
 const dbUsersGetService = (user_id, account_id) => {
-  const coerceToNumber = isNaN(account_id) ? account_id : r.expr(account_id).coerceTo('number');
   const q =
     r.table('users')
       .get(user_id)('services')
       .filter((service) => {
-        return service('id').eq(coerceToNumber)
+        return service('id').eq(account_id)
       })
       .nth(0)
 
@@ -17,13 +16,12 @@ const dbUsersGetService = (user_id, account_id) => {
 }
 
 const dbUsersRemoveService = (user_id, account_id) => {
-  const coerceToNumber = isNaN(account_id) ? account_id : r.expr(account_id).coerceTo('number');
   const q =
     r.table('users')
       .get(user_id)
       .update({services: r.row('services')
         .filter((service) => {
-          return service('id').ne(coerceToNumber)
+          return service('id').ne(account_id)
         })
       })
 
@@ -31,8 +29,6 @@ const dbUsersRemoveService = (user_id, account_id) => {
 }
 
 const dbUsersAddSevice = ({ user_id, service }) => {
-  const account_id = service.id;
-  const coerceToNumber = service.service_name !== 'asana' ? account_id : r.expr(account_id).coerceTo('number');
   const q = r.table('users').get(user_id).update((user) => {
 		return {
 			services:
@@ -40,7 +36,7 @@ const dbUsersAddSevice = ({ user_id, service }) => {
           .default([])
           .filter((s) => {
             return s('id')
-                    .ne(coerceToNumber)
+                    .ne(service.id)
                     .and(s('service_id').ne(service.service_id))
           })
           .append(service)

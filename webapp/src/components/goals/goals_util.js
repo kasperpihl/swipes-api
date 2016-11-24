@@ -91,16 +91,20 @@ export default class GoalsUtil {
         data = lastResponse;
       }
     }
-    // Check that the cache is the currentStep
-    if(this.cache && this.isCurrentStep(this.cache.get('stepIndex'))){
-      // And still the same iteration
-      if(this.runCounter() === this.cache.get('runCounter')){
-        // Make sure the cache has data.
-        const cachedData = this.cache.getIn(['data', fI]);
-        if(cachedData){
-          data = cachedData;
+    // Check for cache and that it is this step
+    if(this.cache && sI === this.cache.get('stepIndex')){
+      // Check that the cache is the currentStep
+      if(this.isCurrentStep(this.cache.get('stepIndex'))){
+        // And still the same iteration
+        if(this.runCounter() === this.cache.get('runCounter')){
+          // Make sure the cache has data.
+          const cachedData = this.cache.getIn(['data', fI]);
+          if(cachedData){
+            data = cachedData;
+          }
         }
       }
+
     }
 
     const Field = this.fieldForType(field.get('type'));
