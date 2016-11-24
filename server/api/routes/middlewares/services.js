@@ -31,8 +31,8 @@ const serviceIdGet = (req, res, next) => {
 }
 
 const serviceWithAuthGet = (req, res, next) => {
-  const user_id = req.userId;
   const {
+    user_id,
     service_name,
     account_id
   } = res.locals;
@@ -84,8 +84,8 @@ const serviceGetAuthUrl = (req, res, next) => {
 }
 
 const serviceDoRequest = (req, res, next) => {
-  const user_id = req.userId;
   const {
+    user_id,
     service_auth_data,
     service,
     data
@@ -95,7 +95,7 @@ const serviceDoRequest = (req, res, next) => {
     auth_data: service_auth_data,
     method: data.method,
     params: data.parameters,
-    user: {userId: user_id}
+    user: { user_id }
   };
 
   service.request(options, function (err, result) {
@@ -110,8 +110,8 @@ const serviceDoRequest = (req, res, next) => {
 }
 
 const serviceDoShareRequest = (req, res, next) => {
-  const user_id = req.userId;
   const {
+    user_id,
     service_auth_data,
     service,
     link,
@@ -123,7 +123,7 @@ const serviceDoShareRequest = (req, res, next) => {
     auth_data: service_auth_data,
     type: link.type,
     itemId: link.id,
-    user: { userId: user_id }
+    user: { user_id }
   };
 
   service.shareRequest(options, function (err, result) {
@@ -141,16 +141,16 @@ const serviceDoShareRequest = (req, res, next) => {
 }
 
 const serviceGetAuthData = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     service_name,
     service_id,
     query,
     service
   } = res.locals;
 
-  // The userId is needed for some services
-  const data = Object.assign({}, { query, userId });
+  // The user_id is needed for some services
+  const data = Object.assign({}, { query, user_id });
 
   service.authData(data, (error, result) => {
     if (error) {
@@ -177,12 +177,12 @@ const serviceGetAuthData = (req, res, next) => {
 }
 
 const serviceUpdateAuthData = (req, res, next) => {
-  const userId = req.userId;
   const {
+    user_id,
     serviceToAppend
   } = res.locals;
 
-  dbUsersAddSevice({ user_id: userId, service: serviceToAppend })
+  dbUsersAddSevice({ user_id, service: serviceToAppend })
     .then(() => {
       return next();
     })

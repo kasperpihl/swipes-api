@@ -13,9 +13,7 @@ import {
 
 const linksFindPermissions = (req, res, next) => {
   const {
-    userId
-  } = req;
-  const {
+    user_id,
     shortUrl,
     checksum,
     permission
@@ -45,7 +43,7 @@ const linksFindPermissions = (req, res, next) => {
     findLinkByChecksum(checksum)
       .then((result) => {
         if (result) {
-          res.locals.permission = Object.assign({}, { user_id: userId }, permission);
+          res.locals.permission = Object.assign({}, { user_id }, permission);
           res.locals.checksum = result.checksum;
           res.locals.meta = result.meta;
 
@@ -62,14 +60,12 @@ const linksFindPermissions = (req, res, next) => {
 
 const linksAddPermission = (req, res, next) => {
   const {
-    userId
-  } = req;
-  const {
+    user_id,
     permission,
     checksum
   } = res.locals;
 
-  addPermissionsToALink({ userId, checksum, permission })
+  addPermissionsToALink({ user_id, checksum, permission })
     .then((result) => {
       res.locals.short_url = result.changes[0].new_val.id;
 

@@ -22,13 +22,13 @@ import {
 
 const webhooksHost = config.get('webhooksHost');
 
-const findAllProjects = ({ auth_data, userId, accountId, workspace }) => {
+const findAllProjects = ({ auth_data, user_id, accountId, workspace }) => {
   const method = 'projects.findAll';
   const params = {
     workspace: workspace.id
   };
 	const user = {
-		userId
+		id: user_id
 	}
 
   request({ auth_data, method, params, user }, (err, projects) => {
@@ -39,12 +39,12 @@ const findAllProjects = ({ auth_data, userId, accountId, workspace }) => {
 
 
     projects.forEach((project) => {
-      createWebhookForProject({ auth_data, userId, accountId, project });
+      createWebhookForProject({ auth_data, user_id, accountId, project });
     })
   })
 }
 
-const deleteWebhooksFromAsana = ({ auth_data, userId }, webhooks) => {
+const deleteWebhooksFromAsana = ({ auth_data, user_id }, webhooks) => {
 	const promiseArray = [];
 	const promiseRequest = Promise.promisify(request);
 	const method = 'webhooks.deleteById';
@@ -54,7 +54,7 @@ const deleteWebhooksFromAsana = ({ auth_data, userId }, webhooks) => {
 			id: webhook.id
 		}
 		const user = {
-			userId
+			id: user_id
 		}
 
 		promiseArray.push(promiseRequest({ auth_data, method, params, user }));
@@ -66,8 +66,8 @@ const deleteWebhooksFromAsana = ({ auth_data, userId }, webhooks) => {
 	}));
 }
 
-const createWebhookForProject = ({ auth_data, userId, accountId, project }) => {
-	createWebhookReference(userId, accountId)
+const createWebhookForProject = ({ auth_data, user_id, accountId, project }) => {
+	createWebhookReference(user_id, accountId)
 		.then((result) => {
 			const webhookId = result.generated_keys[0];
 			const projectId = project.id;
@@ -78,7 +78,7 @@ const createWebhookForProject = ({ auth_data, userId, accountId, project }) => {
 		    target: webhookTarget
 		  };
 			const user = {
-				userId
+				id: user_id
 			}
 
 		  console.log(params);
@@ -91,7 +91,7 @@ const createWebhookForProject = ({ auth_data, userId, accountId, project }) => {
 		    }
 
 				updateWebhookReference(webhookId, result);
-		    saveSyncCursor({ auth_data, userId, accountId, projectId });
+		    saveSyncCursor({ auth_data, user_id, accountId, projectId });
 		    console.log('Registering asana webhook success', result);
 		  })
 		})
@@ -100,13 +100,13 @@ const createWebhookForProject = ({ auth_data, userId, accountId, project }) => {
 		})
 }
 
-const saveSyncCursor = ({ auth_data, userId, accountId, projectId }) => {
+const saveSyncCursor = ({ auth_data, user_id, accountId, projectId }) => {
   const method = 'events.get';
   const params = {
     resource: projectId
   }
 	const user = {
-		userId
+		id: user_id
 	}
 
   request({ auth_data, method, params, user }, (err, result) => {
@@ -122,7 +122,7 @@ const saveSyncCursor = ({ auth_data, userId, accountId, projectId }) => {
       [cursorId]: cursor
     }
 
-    updateCursors({ userId, accountId, cursors });
+    updateCursors({ user_id, accountId, cursors });
   })
 }
 
@@ -132,13 +132,13 @@ const saveSyncCursor = ({ auth_data, userId, accountId, projectId }) => {
 	Don't use in production. If we have multiple swipes accounts with the same
 	asana user it will delete the webhooks for every single one of them.
  */
-// const deleteAllWorkspaceWebhooks = ({ asana, auth_data, userId, accountId, workspace }) => {
+// const deleteAllWorkspaceWebhooks = ({ asana, auth_data, user_id, accountId, workspace }) => {
 // 	const method = 'webhooks.getAll';
 // 	const params = {
 // 		id: workspace.id
 // 	}
 // 	const user = {
-// 		userId
+// 		id: user_id
 // 	}
 //
 // 	request({ auth_data, method, params, user }, (err, webhooks) => {
@@ -151,9 +151,6 @@ const saveSyncCursor = ({ auth_data, userId, accountId, projectId }) => {
 // 			const method = 'webhooks.deleteById';
 // 			const params =  {
 // 				id: webhook.id
-// 			}
-// 			const user = {
-// 				userId
 // 			}
 //
 // 			request({ auth_data, method, params, user }, (err, res) => {
@@ -169,11 +166,12 @@ const saveSyncCursor = ({ auth_data, userId, accountId, projectId }) => {
 // }
 
 // Unsubscribe from webhooks that are referenced in our database
-const unsubscribeFromAllWebhooks = ({ auth_data, userId }) => {
-	return getWebhooksReferences(userId)
+const unsubscribeFromAllWebhooks = ({ auth_data, user_id }) => {
+	return Promise.resolve();
+	return getWebhooksReferences(user_id)
 		.then((webhooks) => {
 			console.log('Unsubscribe HOOKS', webhooks);
-			return deleteWebhooksFromAsana({ auth_data, userId }, webhooks);
+			return deleteWebhooksFromAsana({ auth_data, user_id }, webhooks);
 		})
 		.then((inspections) => {
 			// If the error message is NOT FOUND that simply meens that our webhooks are out of sync
@@ -190,7 +188,7 @@ const unsubscribeFromAllWebhooks = ({ auth_data, userId }) => {
 			})
 		})
 		.then(() => {
-			return deleteWebhooksRefereces(userId);
+			return deleteWebhooksRefereces(user_id);
 		})
 		.then(() => {
 			return Promise.resolve();
@@ -200,13 +198,13 @@ const unsubscribeFromAllWebhooks = ({ auth_data, userId }) => {
 		})
 }
 
-const subscribeToAllWebhooks = ({ auth_data, userId, accountId }) => {
+const subscribeToAllWebhooks = ({ auth_data, user_id, accountId }) => {
   console.log('subscribing asana webhooks to all projects');
 
   const method = 'workspaces.findAll';
   const params = {};
 	const user = {
-		userId
+		id: user_id
 	}
 
   request({ auth_data, method, params, user }, (err, workspaces) => {
@@ -218,7 +216,7 @@ const subscribeToAllWebhooks = ({ auth_data, userId, accountId }) => {
     const method = 'projects.findAll';
 
     workspaces.forEach((workspace) => {
-      findAllProjects({ auth_data, userId, accountId, workspace });
+      findAllProjects({ auth_data, user_id, accountId, workspace });
     })
   })
 }
@@ -238,15 +236,16 @@ const createShortUrl = (account, event, accountId) => {
 	const {
 		auth_data,
 		user_id
-	} = account
-	const userId = user_id; // T_TODO omg... this is just stupid
+	} = account;
 
 	if (event.parent) {
 		const options = {
 			auth_data,
 			type: event.type,
 			itemId: event.parent.id,
-			user: { userId }
+			user: {
+				id: user_id
+			}
 		};
 
 		shareRequest(options, (err, res) => {
@@ -261,14 +260,14 @@ const createShortUrl = (account, event, accountId) => {
 				type: 'task',
 				id: event.parent.id
 			}
-			const eventData = createEvent(userId, event, accountId);
+			const eventData = createEvent(user_id, event, accountId);
 
-			createSwipesShortUrl({ link, shortUrlData, userId, event: eventData });
+			createSwipesShortUrl({ link, shortUrlData, user_id, event: eventData });
 		})
 	}
 }
 
-const createEvent = (userId, event, accountId) => {
+const createEvent = (user_id, event, accountId) => {
 	const me = event.user.id === accountId;
 	const createdBy = me ? 'You' : event.resource.created_by.name;
 	let text;
@@ -297,8 +296,9 @@ const webhooks = (account, resourceId, accountId, callback) => {
 		cursors
 	} = account;
 	const method = 'events.get';
-	const userId = user_id;
-	const user = { userId };
+	const user = {
+		id: user_id
+	};
 
 	if (!cursors || !cursors[cursorId]) {
 		return callback('The required cursor is missing. Try reauthorize the service to fix the problem.');
@@ -334,7 +334,7 @@ const webhooks = (account, resourceId, accountId, callback) => {
 				[cursorId]: sync
 			}
 
-			updateCursors({ userId, accountId, cursors });
+			updateCursors({ user_id, accountId, cursors });
 		}
 	}
 

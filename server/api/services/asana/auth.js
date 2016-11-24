@@ -19,9 +19,12 @@ const authUrl = (data, callback) => {
 }
 
 const authData = (data, callback) => {
+  const {
+    query,
+    user_id
+  } = data;
   const client = createClient();
-  const code = data.query.code;
-  const userId = data.userId;
+  const code = query.code;
   let auth_data, id, show_name;
 
   client.app.accessTokenFromCode(code)
@@ -34,12 +37,13 @@ const authData = (data, callback) => {
 
       data = { auth_data, id, show_name };
 
-      return unsubscribeFromAllWebhooks({ auth_data, userId });
+      return unsubscribeFromAllWebhooks({ auth_data, user_id });
     })
     .then(() => {
-      subscribeToAllWebhooks({ auth_data, userId, accountId: id });
-
-      callback(null, data);
+      return subscribeToAllWebhooks({ auth_data, user_id, accountId: id });
+    })
+    .then(() => {
+      return callback(null, data);
     })
     .catch((error) => {
       console.log(error);

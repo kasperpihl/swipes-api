@@ -8,7 +8,7 @@ import {
   insertEvent
 } from './webhook_utils.js';
 
-const createSwipesShortUrl = ({ link, shortUrlData, userId, event }) => {
+const createSwipesShortUrl = ({ link, shortUrlData, user_id, event }) => {
   const checksum = hash({ link });
   const meta = null;
   const insert_doc = Object.assign({}, { checksum }, shortUrlData);
@@ -19,7 +19,7 @@ const createSwipesShortUrl = ({ link, shortUrlData, userId, event }) => {
       const meta = changes.new_val.meta;
 
       insertEvent({
-        userId,
+        user_id,
         eventData: Object.assign({}, event, { meta, checksum })
       });
     })

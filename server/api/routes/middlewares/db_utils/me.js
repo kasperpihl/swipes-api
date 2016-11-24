@@ -3,10 +3,10 @@
 import r from 'rethinkdb';
 import db from '../../../../db';
 
-const initMe = (userId) => {
+const initMe = (user_id) => {
   const q =
     r.table('users')
-      .get(userId)
+      .get(user_id)
       .without(['password', 'xendoCredentials', {'services': 'auth_data'}])
       .merge({
         organizations:
