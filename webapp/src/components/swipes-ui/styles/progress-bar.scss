@@ -55,7 +55,7 @@
   }
 
   &__step {
-    @include size(calc((100% / 3) - 1px), 12px);
+    @include size(calc((100% / 3) - 1px), 14px);
     margin-top: 4px;
     position: relative;
 
@@ -92,6 +92,10 @@
       &:after {
         background-color: $blue-100;
       }
+    }
+
+    &--disabled {
+      pointer-events: none;
     }
   }
 
