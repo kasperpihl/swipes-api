@@ -1,19 +1,18 @@
 @import '../../global-styles/vars/';
 @import '../../global-styles/mixins/';
 
-$imgContHeight: 30px;
+$imgContHeight: 72px;
 
 .goal-list-item {
   $b: &;
 
   @include size(100%, auto);
-  @include flex();
-  max-width: 500px;
+  max-width: 600px;
   min-height: $imgContHeight;
   position: relative;
   padding: 12px 21px;
-  padding-left: 15px;
   margin: 0 auto;
+  border-bottom: 1px solid $deepBlue-10;
 
   &:hover {
     background-color: $blue-10;;
@@ -30,20 +29,18 @@ $imgContHeight: 30px;
   }
 
   &__content {
-    $contentWidth: calc(100% - #{$imgContHeight} - 60px);
+    $contentWidth: calc(100% - 60px);
     @include flex(flex-start, center, column);
     @include size($contentWidth, 100%);
     min-height: $imgContHeight;
-    padding-left: 15px;
     position: relative;
   }
 
   &__title {
     width: calc(100% - 50px);
     color: $deepBlue-80;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: -0.1px;
+    font-size: 18px;
+    line-height: 1.33;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -54,8 +51,7 @@ $imgContHeight: 30px;
     color: $deepBlue-40;
     font-size: 12px;
     font-weight: 500;
-    line-height: 1.75;
-    margin-top: 6px;
+    margin-top: 3px;
     letter-spacing: .5px;
     white-space: nowrap;
     overflow: hidden;
@@ -65,7 +61,7 @@ $imgContHeight: 30px;
   &__assigning {
     @include size(30px);
     position: absolute;
-    right: 15px; top: 50%;
+    right: 21px; top: 50%;
     transform: translateY(-50%);
   }
 }

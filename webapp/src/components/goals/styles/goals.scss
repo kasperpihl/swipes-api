@@ -9,10 +9,10 @@
   flex-direction: column;
   padding-top: 30px;
   position: relative;
-  
+
   &__nav-bar {
     @include size(100%, auto);
-    max-width: 500px;
+    max-width: 600px;
     z-index: 5;
     margin: 0 auto;
   }

@@ -39,9 +39,6 @@ class GoalListItem extends Component {
     const status = this.helper.getStatusForCurrentStep();
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
-        <div className={`${rootClass}__image`}>
-          {this.renderIcon(data.get('img'))}
-        </div>
         <div className={`${rootClass}__content`}>
           <div className={`${rootClass}__title`}>{data.get('title')}</div>
           <div className={`${rootClass}__label`}>{status}</div>
