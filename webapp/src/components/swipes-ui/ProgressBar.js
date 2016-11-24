@@ -47,7 +47,7 @@ class ProgressBar extends Component {
     };
 
     const stepsHTML = steps.map( (step, i) => {
-      return this.renderStep(step, i)
+      return this.renderStep(step, i, steps.length - 1)
     })
 
     return (
@@ -59,7 +59,7 @@ class ProgressBar extends Component {
       </div>
     )
   }
-  renderStep(step, i) {
+  renderStep(step, i, lastStep) {
     const { activeIndex, steps } = this.props;
     let className = 'sw-progress-bar__step';
 
@@ -74,6 +74,10 @@ class ProgressBar extends Component {
     // K_TODO: Fix knowing future steps
     if (step.disabled) {
       className += ' sw-progress-bar__step--disabled'
+    }
+
+    if (i === lastStep) {
+      className += ' sw-progress-bar__step--last-step'
     }
 
     return (
