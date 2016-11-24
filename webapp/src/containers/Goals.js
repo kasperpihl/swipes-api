@@ -55,7 +55,10 @@ class Goals extends Component {
     const { currentGoal, me, users, cachedData } = this.props;
 
     if (currentGoal) {
-      const cache = cachedData.get(currentGoal.get('id'));
+      let cache;
+      if(cachedData){
+        cache = cachedData.get(currentGoal.get('id'));
+      }
       return (
         <GoalStep
           cache={cache}
