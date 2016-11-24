@@ -30,11 +30,12 @@
       transition: -webkit-clip-path .2s ease-in-out;
     }
 
+    // For hiding overflow
     &:after {
-      content: '';
-      position: absolute;
       @include size(15px, 2px);
       background-color: $bg;
+      content: '';
+      position: absolute;
       right: -2px; top: 0;
       -webkit-clip-path: polygon(2% 0, 100% 0, 100% 100%, 19% 100%);
     }
@@ -93,19 +94,22 @@
       transition: -webkit-clip-path .2s ease-in-out;
     }
 
+    // Active Step
     &--active {
 
       &:after {
         -webkit-clip-path: polygon(0 0, 100% 0, 99% 25%, 1% 25%);
       }
 
+      // Different clipping for the last element
       &#{$b}__step--last-step {
         &:after {
-          -webkit-clip-path: polygon(0 0, 92% 0, 95% 25%, 1% 25%);
+          -webkit-clip-path: polygon(0 0, 92% 0, 94% 25%, 1% 25%);
         }
       }
     }
 
+    // Completed Step
     &--completed {
 
       &:after {
@@ -113,6 +117,7 @@
       }
     }
 
+    // Hide Disabled
     &--disabled {
 
       &:after {
@@ -120,34 +125,41 @@
       }
     }
 
+    // Clipping for the last element because of the slope
     &--last-step {
       &:after {
-        -webkit-clip-path: polygon(0 0, 92% 0, 95% 0%, 0% 0%);
+        -webkit-clip-path: polygon(0 0, 92% 0, 92% 0%, 0% 0%);
       }
     }
   }
 
-
+  // Hover logic
   &__step-holder {
 
     &:hover {
+
+      // Hover container logic
       #{$b}__step  {
 
+        // Make progress clips 50% height
         &:after {
           -webkit-clip-path: polygon(0 0, 100% 0, 100% 50%, 0% 50%);
         }
 
+        // Different clipping for the last element because of the slope
         &--last-step {
           &:after {
             -webkit-clip-path: polygon(0 0, 92% 0, 96% 50%, 0% 50%);
           }
         }
 
+        // Make progress clips 100% height for the active element
         &--active {
           &:after {
             -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
           }
 
+          // Different clipping for the last element because of the slope
           &#{$b}__step--last-step {
             &:after {
               -webkit-clip-path: polygon(0 0, 92% 0, 100% 100%, 0% 100%);
@@ -155,32 +167,39 @@
           }
         }
 
+        // Show a little of the disabled clips
         &--disabled {
 
           &:after {
             -webkit-clip-path: polygon(0 0, 100% 0, 100% 20%, 0% 20%);
           }
 
+          // Different clipping for the last element because of the slope
           &#{$b}__step--last-step {
             &:after {
-              -webkit-clip-path: polygon(0 0, 92% 0, 94% 20%, 1% 20%);
+              -webkit-clip-path: polygon(0 0, 92% 0, 94% 20%, 0% 20%);
             }
           }
         }
 
+        // Hover on a progress clip logic, nests inside of container hover
+        // essentially creating a hover within a hover
         &:hover {
 
+          // Show tooltip
           &:before {
             opacity: 1;
             transform: translateY(100%);
             transition: .2s ease-in-out;
           }
 
+          // Make progress clip full height
           &:after {
             -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
           }
         }
 
+        // hovering on last step creates a different clipping because of the slope
         &--last-step {
           &:hover {
             &:after {
@@ -189,10 +208,10 @@
           }
         }
 
+        // Disabling height change on hover of a disabled clip and changing the tooltip color
         &--disabled {
 
           &:hover {
-
             &:before {
               color: $deepBlue-40;
             }
@@ -202,11 +221,11 @@
             }
           }
 
+          // Clipping for the last step because of the slope
           &#{$b}__step--last-step {
-
             &:hover {
               &:after {
-                -webkit-clip-path: polygon(0 0, 92% 0, 94% 20%, 1% 20%);
+                -webkit-clip-path: polygon(0 0, 92% 0, 94% 20%, 0% 20%);
               }
             }
           }
