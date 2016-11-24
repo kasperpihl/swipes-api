@@ -48,7 +48,7 @@ class Note extends Component {
   }
   renderNoteCard(){
     const { options } = this.props;
-    if(!options.fullscreen){
+    if(options.fullscreen){
       return;
     }
     const { data } = this.state;
@@ -60,7 +60,7 @@ class Note extends Component {
   }
   renderNoteEditor(){
     const { options } = this.props;
-    if(options.fullscreen){
+    if(!options.fullscreen){
       return;
     }
     const { data } = this.state;
