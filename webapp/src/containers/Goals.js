@@ -24,6 +24,14 @@ class Goals extends Component {
       pushOverlay(data);
     }
   }
+  stepCache(step, data){
+    const { cacheSave, currentGoal } = this.props;
+    if(currentGoal){
+      cacheSave(currentGoal.get('id'), data);
+      console.log('and we got it', data);
+    }
+
+  }
   stepSubmit(step, goalId, stepId, data, previousSteps) {
 
     const { submit } = this.props;
@@ -34,14 +42,30 @@ class Goals extends Component {
     const { currentGoal, goals, me, setActiveGoal } = this.props;
 
     if(!currentGoal) {
-      return <GoalList goals={goals} me={me} setActiveGoal={setActiveGoal}/>
+      return (
+        <GoalList
+          goals={goals}
+          me={me}
+          setActiveGoal={setActiveGoal}
+        />
+      )
     }
   }
   renderTimeline() {
-    const { currentGoal, me, users } = this.props;
+    const { currentGoal, me, users, cachedData } = this.props;
 
     if (currentGoal) {
-      return <GoalStep users={users} myId={me.get('id')} initialStepIndex={currentGoal.get('currentStepIndex')} goal={currentGoal} delegate={this}/>;
+      const cache = cachedData.get(currentGoal.get('id'));
+      return (
+        <GoalStep
+          cache={cache}
+          users={users}
+          myId={me.get('id')}
+          initialStepIndex={currentGoal.get('currentStepIndex')}
+          goal={currentGoal}
+          delegate={this}
+        />
+      );
     }
   }
   render() {
@@ -73,6 +97,7 @@ function mapStateToProps(state) {
   return {
     goals: goals,
     currentGoal: goals.getIn([state.getIn(['main', 'activeGoal'])]),
+    cachedData: state.getIn(['main', 'cache']),
     users: users,
     me: state.get('me')
   }
@@ -80,6 +105,7 @@ function mapStateToProps(state) {
 
 const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
+  cacheSave: main.cacheSave,
   pushOverlay: overlay.push,
   goalDelete: goals.delete,
   submit: goals.submitStep,

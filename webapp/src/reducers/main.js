@@ -3,6 +3,7 @@ import { fromJS, Set } from 'immutable'
 const initialState = fromJS({
   socketUrl: null,
   token: null,
+  cache: {},
   mainClasses: Set(),
   hasLoaded: false,
   activeGoal: null
@@ -31,6 +32,20 @@ export default function main (state = initialState, action) {
       }
       return state;
     }
+
+    // ======================================================
+    // Caching
+    // ======================================================
+    case types.CACHE_SAVE:{
+      return state.setIn(['cache', action.index], action.data);
+    }
+    case types.CACHE_REMOVE:{
+      return state.deleteIn(['cache', action.index]);
+    }
+    case types.CACHE_CLEAR:{
+      return state.set('cache', initialState.get('cache'));
+    }
+
 
     // ======================================================
     // Authorization methods

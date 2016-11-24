@@ -19,7 +19,7 @@ class Note extends Component {
   static saveData(data){
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
   }
-  static initialData(data){
+  static parseInitialData(data){
     let editorState = createEditorState();
     if(data && data.get('editorState')){
       const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
@@ -27,7 +27,6 @@ class Note extends Component {
     }
 
     data = data.set('editorState', editorState);
-    console.log('data', data.toJS());
     return data;
   }
   constructor(props) {

@@ -3,9 +3,11 @@ import { Map } from 'immutable'
 import * as fields from '../fields'
 
 export default class GoalsUtil {
-  constructor(goal, myId) {
+  constructor(goal, myId, cache) {
     this.goal = goal;
     this.id = myId;
+    this.cache = cache;
+
   }
   fieldForType(type){
     return fields[type];
@@ -16,6 +18,15 @@ export default class GoalsUtil {
   amIAssigned(stepIndex){
     const step = this.getStepByIndex(stepIndex);
     return step.get('assignees').find((a) => (a.get('id') === this.id)) ? true : false;
+  }
+  currentStepIndex(){
+    return this.goal.get('currentStepIndex');
+  }
+  currentStep(){
+    return this.goal.getIn(['steps', this.currentStepIndex()]);
+  }
+  runCounter(){
+    return this.currentStep().get('iterations').size;
   }
   // Getting the handoff message from the step before this
   getHandoffMessageForStepIndex(stepIndex, users){
@@ -80,10 +91,21 @@ export default class GoalsUtil {
         data = lastResponse;
       }
     }
+    // Check that the cache is the currentStep
+    if(this.cache && this.isCurrentStep(this.cache.get('stepIndex'))){
+      // And still the same iteration
+      if(this.runCounter() === this.cache.get('runCounter')){
+        // Make sure the cache has data.
+        const cachedData = this.cache.getIn(['data', fI]);
+        if(cachedData){
+          data = cachedData;
+        }
+      }
+    }
 
     const Field = this.fieldForType(field.get('type'));
-    if(typeof Field.initialData === 'function'){
-      data = Field.initialData(data);
+    if(typeof Field.parseInitialData === 'function'){
+      data = Field.parseInitialData(data);
     }
     return data;
   }

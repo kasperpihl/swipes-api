@@ -2,6 +2,9 @@
 export const SET_STATUS = 'SET_STATUS'
 export const LOGOUT = 'LOGOUT'
 export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL'
+export const CACHE_SAVE = 'CACHE_SAVE'
+export const CACHE_REMOVE = 'CACHE_REMOVE'
+export const CACHE_CLEAR = 'CACHE_CLEAR'
 
 // Goals
 export const GOAL_DELETE = 'GOAL_DELETE';

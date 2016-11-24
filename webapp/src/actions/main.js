@@ -18,6 +18,15 @@ export function dragDot(hoverTarget){
   return { type: types.DRAG_DOT, hoverTarget }
 }
 
+export function cacheSave(index, data){
+  return { type: types.CACHE_SAVE, index, data};
+}
+export function cacheRemove(index){
+  return { type: types.CACHE_REMOVE, index }
+}
+export function cacheClear(){
+  return { type: types.CACHE_CLEAR };
+}
 
 export function setActiveGoal(goalId){
   return { type: types.SET_ACTIVE_GOAL, goalId };

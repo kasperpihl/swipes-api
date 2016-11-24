@@ -10,26 +10,61 @@ import StepSubmission from './StepSubmission'
 import ProgressBar from '../swipes-ui/ProgressBar'
 
 import GoalsUtil from './goals_util'
+import { throttle, bindAll } from '../../classes/utils'
+
 // styles
 import './styles/goal-step.scss'
 
 class GoalStep extends Component {
   constructor(props) {
     super(props)
-    this.helper = new GoalsUtil(props.goal, props.myId);
+    this.helper = new GoalsUtil(props.goal, props.myId, props.cache);
     this.state = {
       stepIndex: props.initialStepIndex,
       step: props.goal.getIn(['steps', props.initialStepIndex]),
-      formData: this.getInitialDataForStepIndex(props.initialStepIndex)
+      formData: this.helper.getInitialDataForStepIndex(props.initialStepIndex)
     }
 
-    this.onSubmit = this.onSubmit.bind(this);
+    bindAll(this, ['onSubmit', 'cacheFormInput']);
     this.bindCallbacks = {};
+    this.throttledCache = throttle(this.cacheFormInput, 5000)
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  getInitialDataForStepIndex(stepIndex){
-    return this.helper.getInitialDataForStepIndex(stepIndex);
+  cacheFormInput(){
+    const { stepIndex } = this.state;
+    const data = {
+      stepIndex: this.helper.currentStepIndex(),
+      runCounter: this.helper.runCounter()
+    };
+    const amIAssigned = this.helper.amIAssigned(stepIndex);
+    const isCurrent = this.helper.isCurrentStep(stepIndex);
+    if(amIAssigned && isCurrent){
+      data.data = this.generateRawObj()
+    }
+    console.log('caching', data);
+    this.callDelegate('stepCache', data);
+  }
+  generateRawObj(){
+    const { formData, step } = this.state;
+    return step.get('fields').map((field, i) => {
+      if(field.get('type') === 'link'){
+        return null;
+      }
+      const Field = this.helper.fieldForType(field.get('type'));
+      let data = formData.get(i);
+      if (Field && typeof Field.saveData === 'function') {
+        data = Field.saveData(data);
+      }
+      return data;
+    }).toJS();
+  }
+  componentDidMount(){
+    window.addEventListener("beforeunload", this.cacheFormInput);
+  }
+  componentWillUnmount(){
+    this.cacheFormInput();
+    window.removeEventListener("beforeunload", this.cacheFormInput);
   }
   delegateFromField(index, name){
     const { step, formData } = this.state;
@@ -37,6 +72,7 @@ class GoalStep extends Component {
 
     if(name === 'change'){
       this.setState({formData: formData.set(index, arguments[2])});
+      this.throttledCache();
     }
 
     if (name === 'fullscreen') {
@@ -64,15 +100,16 @@ class GoalStep extends Component {
   }
 
   onSubmit(goBack) {
+
     const { goal } = this.props;
-    const { step, formData } = this.state;
+    const { step } = this.state;
     let previousSteps;
 
     if (goBack) {
       previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
     }
-
-    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), formData, previousSteps);
+    const data = this.generateRawObj();
+    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), data, previousSteps);
   }
 
   renderHeader() {
@@ -96,10 +133,6 @@ class GoalStep extends Component {
     const status = this.helper.getStatusForStepIndex(stepIndex);
 
     return <div className="goal-step__status">{status}</div>
-    // You need to fill this form. Submit here
-    // Waiting for (${person} || 'people') to fill this form
-    // You submitted this form.
-    // You submitted this form. Waiting
   }
   renderHandoff(){
     const { users } = this.props;
@@ -107,13 +140,17 @@ class GoalStep extends Component {
     const handOff = this.helper.getHandoffMessageForStepIndex(stepIndex);
     if(handOff){
       let user, message;
-      console.log('handOff', handOff.toJS())
-      return;
-      return (
-        <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
-          <div className="goal-step__hand-off-message">{message}</div>
-        </StepField>
-      )
+      const firstMessage = handOff.findEntry(() => true);
+      user = users.get(firstMessage[0])
+      message = firstMessage[1];
+      if(user && message && message.length){
+        return (
+          <StepField icon={user.get('profile_pic') || 'PersonIcon'} title={'Handoff from ' + user.get('name')}>
+            <div className="goal-step__hand-off-message">{message}</div>
+          </StepField>
+        )
+      }
+
 
     }
   }
