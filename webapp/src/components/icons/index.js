@@ -27,6 +27,7 @@ export const AddIcon = svg('plus-icon')
 export const MinusIcon = svg('minus-icon')
 export const DeliverIcon = svg('deliver-icon')
 export const VoteIcon = svg('vote-icon')
+export const DotIcon = svg('dot-icon')
 export const ProgressBarSlope = svg('progress-bar-slope')
 
 export const ShapeOne = svg('shape-1')
