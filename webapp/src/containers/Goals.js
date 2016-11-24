@@ -8,6 +8,7 @@ import { bindAll } from '../classes/utils'
 
 import GoalStep from '../components/goals/GoalStep'
 import GoalList from '../components/goals/GoalList'
+import { PlusIcon } from '../components/icons'
 
 import '../components/goals/styles/goals.scss';
 
@@ -15,7 +16,7 @@ class Goals extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['setActiveGoal']);
+    bindAll(this, ['setActiveGoal', 'clickedRoundButton']);
   }
   stepAction(step, action, data) {
     const { pushOverlay } = this.props;
@@ -48,6 +49,27 @@ class Goals extends Component {
       setOverlay({title: goal.get('title'), onClose: () => {
         setActiveGoal(null);
       }});
+    }
+
+  }
+  clickedRoundButton() {
+    const {
+      setOverlay
+    } = this.props;
+    console.log('click!');
+    setOverlay({component: 'StartGoal', title: 'Start a Goal'});
+  }
+  renderPlusButton(){
+    const { currentGoal } = this.props;
+    if(!currentGoal){
+      let className = 'fab fab--add';
+      let icon = <PlusIcon className="fab__icon"/>
+
+      return (
+        <div className={className} onClick={this.clickedRoundButton}>
+          {icon}
+        </div>
+      )
     }
 
   }
@@ -88,8 +110,10 @@ class Goals extends Component {
 
     return (
       <div className='goals'>
+
         {this.renderList()}
         {this.renderTimeline()}
+        {this.renderPlusButton()}
       </div>
     )
   }
