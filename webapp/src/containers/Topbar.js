@@ -75,8 +75,10 @@ class Topbar extends Component {
     this.setState({showDropdown: !this.state.showDropdown})
   }
   clickedClear(i){
-    const { clearOverlay } = this.props;
-    clearOverlay(i);
+    const { clearOverlay, overlays } = this.props;
+    if((i + 1) < overlays.size){
+      clearOverlay(i);
+    }
   }
   renderBreadcrumb(){
     const { overlays } = this.props;
