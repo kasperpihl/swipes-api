@@ -17,8 +17,9 @@ const persist = paths => {
     return Immutable.Map({
       main: {
         token: state.getIn(['main', 'token']) || null,
-        tileBaseUrl: state.getIn(['main','tileBaseUrl']) || null
+        cache: state.getIn(['main', 'cache']) || {}
       },
+      goals: state.get('goals'),
       services: state.get('services'),
       me: state.get('me')
     })

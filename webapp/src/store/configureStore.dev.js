@@ -21,6 +21,8 @@ const persist = paths => {
         token: state.getIn(['main', 'token']) || null,
         cache: state.getIn(['main', 'cache']) || {}
       },
+      goals: state.get('goals'),
+      users: state.get('users'),
       services: state.get('services'),
       me: state.get('me')
     })
