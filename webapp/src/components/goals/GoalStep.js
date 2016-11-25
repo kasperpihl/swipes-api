@@ -210,12 +210,13 @@ class GoalStep extends Component {
 
     }
   }
-  iconWithColorForField(field, settings){
+  iconWithColorForField(field, isCurrentStep){
+    const settings = field.get('settings');
     let icon = 'ArrowRightIcon';
     let color = '#007AFF';
     let editable = true;
-
-    if (!settings.get('editable')) {
+    
+    if (field.get('type') === 'link' || !settings.get('editable')) {
       editable = false;
       icon = 'DotIcon';
       color = undefined;
@@ -225,14 +226,22 @@ class GoalStep extends Component {
       color = '#FD4A48';
     }
 
+    if(!isCurrentStep){
+      color = undefined;
+    }
+
     return [icon, color];
   }
+
   renderFields(step){
     const { goal } = this.props;
     const { formData, stepIndex } = this.state;
     return step.get('fields').map((field, i) => {
-      // Check if field is a link and find the link
       let options = Map({ fullscreen: false })
+      const isCurrentStep = this.helper.isCurrentStep(stepIndex);
+      const iconColor = this.iconWithColorForField(field, isCurrentStep);
+      // Check if field is a link and find the link
+
       if(field.get('type') === 'link'){
         const targetField = this.helper.getTargetField(field);
         if(targetField){
@@ -246,13 +255,10 @@ class GoalStep extends Component {
 
       const Field = this.helper.fieldForType(field.get('type'));
       if (Field) {
-
+        const canShowFullscreen = (Field.fullscreen && Field.fullscreen());
         if (!this.bindCallbacks[i]) {
           this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
         }
-        const canShowFullscreen = (Field.fullscreen && Field.fullscreen());
-        const settings = field.get('settings').merge(options)
-        const iconColor = this.iconWithColorForField(field, settings);
         return (
           <StepField
             fullscreen={canShowFullscreen}
@@ -263,7 +269,7 @@ class GoalStep extends Component {
             <Field
               delegate={this.bindCallbacks[i]}
               data={formData.get(i)}
-              settings={settings}
+              settings={field.get('settings').merge(options)}
             />
           </StepField>
         )
