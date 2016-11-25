@@ -266,11 +266,11 @@ class GoalStep extends Component {
     // > Save to Evernote
   }
   render() {
+    const { helper } = this;
     const { step, stepIndex } = this.state;
     const { slideDirection } = this.state;
     let sideColumnClass = 'goal-step__side-column'
-
-    if (true) {
+    if(helper.isCurrentStep(stepIndex) && helper.amIAssigned(stepIndex)){
       sideColumnClass += ' goal-step__side-column--active'
     }
 
