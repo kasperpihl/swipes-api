@@ -210,6 +210,21 @@ class GoalStep extends Component {
 
     }
   }
+  iconWithColorForField(field){
+    const settings = field.get('settings');
+    let icon = 'ArrowRightIcon';
+    let color = 'blue';
+    let editable = true;
+    if(!settings.get('editable')){
+      editable = false;
+      icon = 'DotIcon';
+      color = undefined;
+    }
+    if(settings.get('required')){
+      color = 'red';
+    }
+    return [icon, color];
+  }
   renderFields(step){
     const { formData } = this.state;
     return step.get('fields').map((field, i) => {
@@ -222,11 +237,13 @@ class GoalStep extends Component {
         if (!this.bindCallbacks[i]) {
           this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
         }
+        const iconColor = this.iconWithColorForField(field);
         return (
           <StepField
             key={field.get('id')}
             title={field.get('title')}
-            icon={'ArrowRightIcon'}>
+            icon={iconColor[0]}
+            iconColor={iconColor[1]}>
             <Field
               delegate={this.bindCallbacks[i]}
               options={options}

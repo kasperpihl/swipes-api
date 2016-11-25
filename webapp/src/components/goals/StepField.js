@@ -9,23 +9,26 @@ class StepField extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
   }
-  renderIcon(icon) {
+  renderIcon(icon, color) {
     const Comp = Icons[icon];
-
+    const styles = {};
+    if(color){
+      styles.fill = color;
+    }
     if (Comp) {
-      return <Comp className="step-field__icon step-field__icon--svg"/>;
+      return <Comp style={styles} className="step-field__icon step-field__icon--svg"/>;
     } else {
       return <img className="step-field__icon step-field__icon--img" src={icon} />
     }
   }
   render() {
-    const { icon, title, children } = this.props;
+    const { icon, iconColor, title, children } = this.props;
 
     return (
       <div className="step-field">
         <div className="step-field__header">
           <div className="step-field__header-image">
-            {this.renderIcon(icon)}
+            {this.renderIcon(icon, iconColor)}
           </div>
           <div className="step-field__title">
             {title}
