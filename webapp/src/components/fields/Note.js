@@ -56,10 +56,14 @@ class Note extends Component {
     }
     const { data } = this.state;
 
-    return <SwipesCard delegate={this} data={{
-      title: data.get('title') || 'Untitled note',
-      description: data.get('editorState').getCurrentContent().getPlainText().substr(0,100)
-    }}/>
+    return (
+      <div className="sw-note-field__card">
+        <SwipesCard delegate={this} data={{
+          title: data.get('title') || 'Untitled note',
+          description: data.get('editorState').getCurrentContent().getPlainText().substr(0,100)
+        }}/>
+      </div>
+    )
   }
   renderNoteEditor(){
     const { settings } = this.props;
@@ -68,8 +72,8 @@ class Note extends Component {
     }
     const { data } = this.state;
     return (
-      <div className="note-editor-container">
-        <input type="text" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
+      <div className="sw-note-field__editor-container">
+        <input type="text" className="sw-note-field__title" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
         <NoteEditor
           editorState={data.get('editorState')}
           onChange={this.onChange}
@@ -79,7 +83,7 @@ class Note extends Component {
   }
   render() {
     return (
-      <div className="deliver-note">
+      <div className="sw-note-field">
         {this.renderNoteEditor()}
         {this.renderNoteCard()}
       </div>

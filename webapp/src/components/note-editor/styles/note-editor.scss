@@ -2,18 +2,14 @@
 @import '../../global-styles/mixins/';
 
 .sw-text-editor {
-  @include size(80%, 400px);
-  margin: 200px auto;
-  border: 1px solid red;
+  @include size(100%, calc(100% - 102px));
   position: relative;
 }
 
 .DraftEditor-root {
-  height: inherit;
+  height: 100%;
   position: relative;
   text-align: initial;
-  background-color: $blue-10;
-  overflow-y: auto;
 }
 
 .DraftEditor-editorContainer {
@@ -26,6 +22,9 @@
 }
 
 .public-DraftEditor-content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   height: inherit;
   text-align: initial;
   font-size: 15px;

@@ -28,7 +28,7 @@ class Field extends Component {
       return <div>Field not found...</div>
     }
     return (
-      <div className="field-overlay">
+      <div className="field-overlay" style={{height: '100%'}}>
         <Field
           delegate={this.delegate}
           data={data}
