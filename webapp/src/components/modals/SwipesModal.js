@@ -37,9 +37,17 @@ class SwipesModal extends Component {
   constructor(props) {
     super(props)
     this.closeModal = this.closeModal.bind(this);
-
+    let selectedItems = [];
+    const { list } = this.props.data;
+    if(list && list.items){
+      list.items.forEach((o, i) => {
+        if(o.selected){
+          selectedItems.push(i);
+        }
+      })
+    }
     this.state = {
-      selectedListItems: []
+      selectedListItems: selectedItems
     }
   }
   componentDidMount(){
@@ -143,7 +151,7 @@ class SwipesModal extends Component {
   		const listRender = items.map( (item, i) => {
         let className = "swipes-modal__list__item";
 
-        if (item.selected || this.state.selectedListItems.includes(i)){
+        if (this.state.selectedListItems.includes(i)){
           className += ' swipes-modal__list__item--selected'
         }
   			return (

@@ -28,8 +28,8 @@ export default class SwipesCard extends Component {
       return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
-  
-  
+
+
   renderLoading(){
 
   }
