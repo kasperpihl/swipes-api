@@ -30,20 +30,11 @@ class ProgressBar extends Component {
     }
   }
   renderSteps() {
-    const { steps } = this.props;
+    const { steps, activeIndex, currentIndex } = this.props;
     const stepWidth = 100 / steps.length;
-    let lastCompletedStep = -1;
-
-    for (var i = 0; i < steps.length; i++) {
-      if (steps[i].completed) {
-        lastCompletedStep = i;
-      } else {
-        break;
-      }
-    }
 
     let styles = {
-      WebkitClipPath: `polygon(0% 0, ${stepWidth * (lastCompletedStep + 1)}% 0, ${stepWidth * (lastCompletedStep + 1)}% 100%, 0% 100%)`
+      WebkitClipPath: `polygon(${stepWidth * currentIndex}% 0, ${stepWidth * (currentIndex + 1)}% 0, ${stepWidth * (currentIndex + 1)}% 100%, ${stepWidth * currentIndex}% 100%)`
     };
 
     const stepsHTML = steps.map( (step, i) => {
@@ -60,11 +51,11 @@ class ProgressBar extends Component {
     )
   }
   renderStep(step, i, lastStep) {
-    const { activeIndex, steps } = this.props;
+    const { activeIndex, currentIndex, steps } = this.props;
     let className = 'sw-progress-bar__step';
 
-    if (step.completed) {
-      className += ' sw-progress-bar__step--completed'
+    if (i === currentIndex) {
+      className += ' sw-progress-bar__step--current'
     }
 
     if (i === activeIndex) {

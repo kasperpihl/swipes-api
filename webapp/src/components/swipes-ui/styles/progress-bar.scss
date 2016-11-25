@@ -94,6 +94,12 @@
       transition: -webkit-clip-path .2s ease-in-out;
     }
 
+    &--current {
+      &:after {
+        background-color: $blue-100;
+      }
+    }
+
     // Active Step
     &--active {
 
@@ -113,7 +119,7 @@
     &--completed {
 
       &:after {
-        background-color: $blue-100;
+        // background-color: $blue-100;
       }
     }
 

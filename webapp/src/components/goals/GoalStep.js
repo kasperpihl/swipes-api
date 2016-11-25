@@ -150,7 +150,6 @@ class GoalStep extends Component {
     const steps = goal.get('steps').map( (step, i) => {
       return {
         title: step.get('title'),
-        completed: step.get('completed'),
         disabled: (i > goal.get('currentStepIndex'))
       }
     }).toJS();
@@ -161,6 +160,7 @@ class GoalStep extends Component {
         title={'run ' + runCounter}
         onChange={this.onProgressChange}
         activeIndex={stepIndex}
+        currentIndex={goal.get('currentStepIndex')}
       />
     )
   }
