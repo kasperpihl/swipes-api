@@ -13,6 +13,9 @@ import {
 } from 'draft-js'
 
 class Note extends Component {
+  static fullscreen(){
+    return true;
+  }
   static saveData(data){
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
   }
@@ -40,7 +43,6 @@ class Note extends Component {
   onTitleChange(e){
     const { delegate } = this.props;
     const { data } = this.state;
-    console.log('e.target', e.target.value)
     delegate('change', data.set('title', e.target.value));
   }
   componentWillReceiveProps(nextProps){
@@ -51,8 +53,8 @@ class Note extends Component {
     delegate('fullscreen', delegate);
   }
   renderNoteCard(){
-    const { options } = this.props;
-    if(options.fullscreen){
+    const { settings } = this.props;
+    if(settings.fullscreen){
       return;
     }
     const { data } = this.state;
@@ -63,8 +65,8 @@ class Note extends Component {
     }}/>
   }
   renderNoteEditor(){
-    const { options } = this.props;
-    if(!options.fullscreen){
+    const { settings } = this.props;
+    if(!settings.fullscreen){
       return;
     }
     const { data } = this.state;

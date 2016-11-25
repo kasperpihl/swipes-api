@@ -119,7 +119,14 @@ export default class GoalsUtil {
     }
     return data;
   }
-
+  getTargetField(field){
+    const target = field.getIn(['settings', 'target']);
+    const tSFIndex = this.getStepFieldIndexFromTarget(target);
+    if(tSFIndex){
+      console.log(tSFIndex);
+      return this.goal.getIn(['steps', tSFIndex[0], 'fields', tSFIndex[1]]);
+    }
+  }
   getInitialDataForStepIndex(stepIndex){
     const step = this.getStepByIndex(stepIndex);
     return step.get('fields').map((field, i) => {

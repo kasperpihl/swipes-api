@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import { fromJS } from 'immutable'
+import { Map, fromJS } from 'immutable'
 
 // Views
 import Assigning from '../assigning/Assigning'
@@ -210,8 +210,7 @@ class GoalStep extends Component {
 
     }
   }
-  iconWithColorForField(field){
-    const settings = field.get('settings');
+  iconWithColorForField(field, settings){
     let icon = 'ArrowRightIcon';
     let color = '#007AFF';
     let editable = true;
@@ -225,33 +224,46 @@ class GoalStep extends Component {
     if (settings.get('required')) {
       color = '#FD4A48';
     }
-    
+
     return [icon, color];
   }
   renderFields(step){
-    const { formData } = this.state;
+    const { goal } = this.props;
+    const { formData, stepIndex } = this.state;
     return step.get('fields').map((field, i) => {
+      // Check if field is a link and find the link
+      let options = Map({ fullscreen: false })
+      if(field.get('type') === 'link'){
+        const targetField = this.helper.getTargetField(field);
+        if(targetField){
+          field = targetField;
+        }
+        options = options.set('editable', false);
+      }
+      if(goal.get('currentStepIndex') !== stepIndex){
+        options = options.set('editable', false)
+      }
+
       const Field = this.helper.fieldForType(field.get('type'));
       if (Field) {
-        const options = {
-          fullscreen: false
-        }
 
         if (!this.bindCallbacks[i]) {
           this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
         }
-        const iconColor = this.iconWithColorForField(field);
+        const canShowFullscreen = (Field.fullscreen && Field.fullscreen());
+        const settings = field.get('settings').merge(options)
+        const iconColor = this.iconWithColorForField(field, settings);
         return (
           <StepField
+            fullscreen={canShowFullscreen}
             key={field.get('id')}
             title={field.get('title')}
             icon={iconColor[0]}
             iconColor={iconColor[1]}>
             <Field
               delegate={this.bindCallbacks[i]}
-              options={options}
               data={formData.get(i)}
-              settings={field.get('settings')}
+              settings={settings}
             />
           </StepField>
         )

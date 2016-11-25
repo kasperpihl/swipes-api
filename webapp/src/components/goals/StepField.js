@@ -24,8 +24,7 @@ class StepField extends Component {
   }
   renderFullscreen() {
     const { fullscreen } = this.props;
-
-    if (!fullscreen) return;
+    if(!fullscreen) return;
 
     return (
       <div className="step-field__action" title="Fullscreen">

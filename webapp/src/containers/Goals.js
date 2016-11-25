@@ -22,7 +22,6 @@ class Goals extends Component {
     const { pushOverlay } = this.props;
 
     if (action === 'fullscreen') {
-      console.log('stepAction', data);
       pushOverlay(data);
     }
   }
@@ -30,7 +29,6 @@ class Goals extends Component {
     const { cacheSave, currentGoal } = this.props;
     if(currentGoal){
       cacheSave(currentGoal.get('id'), data);
-      console.log('and we got it', data);
     }
 
   }
