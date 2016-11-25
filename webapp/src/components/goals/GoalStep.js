@@ -88,7 +88,6 @@ class GoalStep extends Component {
     }
   }
   componentDidMount(){
-    console.log(this.helper.getSettingsForField('test'));
     window.addEventListener("beforeunload", this.cacheFormInput);
   }
   componentWillUnmount(){
