@@ -1,11 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import SwipesCard from '../swipes-card/SwipesCard'
+import NoteEditor from '../note-editor/NoteEditor'
 
 import './styles/note.scss'
-import {
-  Editor,
-  createEditorState
-} from 'medium-draft';
 import {
   convertFromRaw,
   EditorState,
@@ -20,7 +17,7 @@ class Note extends Component {
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
   }
   static parseInitialData(data){
-    let editorState = createEditorState();
+    let editorState = EditorState.createEmpty();
     if(data && data.get('editorState')){
       const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
       editorState = EditorState.push(editorState, convertFromRaw(raw));
@@ -73,7 +70,7 @@ class Note extends Component {
     return (
       <div className="note-editor-container">
         <input type="text" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
-        <Editor
+        <NoteEditor
           editorState={data.get('editorState')}
           onChange={this.onChange}
         />

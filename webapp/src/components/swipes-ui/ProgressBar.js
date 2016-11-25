@@ -11,10 +11,11 @@ class ProgressBar extends Component {
     bindAll(this, ['onChange']);
   }
   onChange(e) {
-    const { activeIndex } = this.props;
+    const { activeIndex, steps } = this.props;
     const i = parseInt(e.target.getAttribute('data-index'));
 
     if (activeIndex !== i) {
+      if(steps[i].disabled) return;
       const { onChange } = this.props;
 
       if (onChange) {

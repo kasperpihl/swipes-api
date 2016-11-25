@@ -9,9 +9,7 @@ class NoteEditor extends Component {
     super(props)
     this.state = {
       hasSelected: false,
-      styleControl: {show: false},
-      // { show: true, mousePos: {x, y} }
-      editorState: EditorState.createEmpty() // Initiate Editor
+      styleControl: {show: false}
     }
     bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'handleKeyCommand']);
     this.onChange = (editorState) => {
@@ -22,11 +20,14 @@ class NoteEditor extends Component {
       if(!hasSelected && styleControl.show){
         styleControl = {show: false};
       }
-      this.setState({ editorState, hasSelected, styleControl });
+      if(this.props.onChange){
+        this.props.onChange(editorState);
+      }
+      this.setState({ hasSelected, styleControl });
     }
   }
   handleKeyCommand(keyCommand) {
-    const { editorState } = this.state;
+    const { editorState } = this.props;
     const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
 
     if (newState) {
@@ -49,8 +50,8 @@ class NoteEditor extends Component {
     return selectionRect;
   }
   renderStyleControls() {
-    const { editorState, hasSelected, styleControl } = this.state;
-
+    const { hasSelected, styleControl } = this.state;
+    const { editorState } = this.props;
     if(!styleControl.show || !hasSelected){
       return;
     }
@@ -93,7 +94,8 @@ class NoteEditor extends Component {
     }
   }
   setStyleControl(styleControlVal){
-    const { editorState, styleControl, hasSelected } = this.state;
+    const { styleControl, hasSelected } = this.state;
+    const { editorState } = this.props;
     const selectionState = editorState.getSelection();
     if (!styleControl.show && hasSelected && selectionState.getHasFocus()){
       this.setState({styleControl: styleControlVal});
@@ -113,7 +115,7 @@ class NoteEditor extends Component {
     }, 1)
   }
   render() {
-    const { editorState } = this.state;
+    const { editorState } = this.props;
     return (
       <div ref="rooty" className="sw-text-editor"
         onBlur={this.onBlur}
