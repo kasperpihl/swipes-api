@@ -23,7 +23,7 @@ class ConfirmGoal extends Component {
       return {
         title: u.get('name'),
         img: u.get('profile_pic') || icon,
-        selected: true //(workflow.getIn(['steps', i, 'assignees']).contains(u.get('id')))
+        selected: (workflow.getIn(['steps', i, 'assignees']).contains(u.get('id')))
       }
     })
     loadModal({
