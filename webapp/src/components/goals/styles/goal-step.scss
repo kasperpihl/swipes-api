@@ -46,7 +46,9 @@
     }
 
     &--active {
-      background-color: $blue-100;
+      &:after {
+        background-color: $blue-100;
+      }
     }
   }
 
