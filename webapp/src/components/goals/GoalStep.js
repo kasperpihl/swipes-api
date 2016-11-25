@@ -213,16 +213,19 @@ class GoalStep extends Component {
   iconWithColorForField(field){
     const settings = field.get('settings');
     let icon = 'ArrowRightIcon';
-    let color = 'blue';
+    let color = '#007AFF';
     let editable = true;
-    if(!settings.get('editable')){
+
+    if (!settings.get('editable')) {
       editable = false;
       icon = 'DotIcon';
       color = undefined;
     }
-    if(settings.get('required')){
-      color = 'red';
+
+    if (settings.get('required')) {
+      color = '#FD4A48';
     }
+    
     return [icon, color];
   }
   renderFields(step){
