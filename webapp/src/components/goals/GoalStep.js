@@ -72,6 +72,21 @@ class GoalStep extends Component {
       return data;
     }).toJS();
   }
+  componentWillReceiveProps(nextProps){
+    const { goal } = this.props;
+    const { stepIndex } = this.state;
+    const nextGoal = nextProps.goal;
+
+    if(goal !== nextGoal){
+      this.helper.updateGoal(nextGoal);
+      if(stepIndex === goal.get('currentStepIndex')){
+        if(goal.get('currentStepIndex') !== nextGoal.get('currentStepIndex')){
+          this.updateToStepIndex(nextGoal.get('currentStepIndex'))
+        }
+      }
+
+    }
+  }
   componentDidMount(){
     window.addEventListener("beforeunload", this.cacheFormInput);
   }
@@ -177,6 +192,9 @@ class GoalStep extends Component {
     if(handOff){
       let user, message;
       const firstMessage = handOff.findEntry(() => true);
+      if(!firstMessage){
+        return;
+      }
       user = users.get(firstMessage[0])
       message = firstMessage[1];
       if(user && message && message.length){
