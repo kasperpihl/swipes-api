@@ -6,6 +6,18 @@ export function isShareURL(url){
   }
   return false;
 }
+export function requireParams(obj, caller){
+  if(typeof obj !== 'object'){
+    return console.warn('requireParams should be {varName}');
+  }
+  var counter = 0;
+  for(var key in obj){
+    if(typeof obj[key] === 'undefined'){
+      console.warn('Required params [' + counter + ']: ' + key + ' not set in ' + caller);
+    }
+    counter++;
+  }
+}
 
 export function shortUrlFromShareUrl(url){
   return url.split('/s/')[1].split('/')[0];

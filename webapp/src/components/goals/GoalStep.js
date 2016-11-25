@@ -88,6 +88,7 @@ class GoalStep extends Component {
     }
   }
   componentDidMount(){
+    console.log(this.helper.getSettingsForField('test'));
     window.addEventListener("beforeunload", this.cacheFormInput);
   }
   componentWillUnmount(){
@@ -98,7 +99,6 @@ class GoalStep extends Component {
     const { step, formData, stepIndex } = this.state;
     const { helper } = this;
     let field = step.getIn(['fields', index]);
-    console.log('hello');
     if(name === 'change'){
       this.setState({formData: formData.set(index, arguments[2])});
       this.throttledCache();

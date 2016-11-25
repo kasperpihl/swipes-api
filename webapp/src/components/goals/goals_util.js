@@ -1,23 +1,29 @@
 import { Map } from 'immutable'
+import { requireParams } from '../../classes/utils'
 // fields
 import * as fields from '../fields'
 
 export default class GoalsUtil {
+
   constructor(goal, myId, cache) {
     this.goal = goal;
     this.id = myId;
     this.cache = cache;
   }
   updateGoal(goal){
+    requireParams({ goal }, 'updateGoal');
     this.goal = goal;
   }
   fieldForType(type){
+    requireParams({ type }, 'fieldForType');
     return fields[type];
   }
   isCurrentStep(stepIndex){
+    requireParams({ stepIndex }, 'isCurrentStep');
     return (this.goal.get('currentStepIndex') === stepIndex)
   }
   amIAssigned(stepIndex){
+    requireParams({ stepIndex }, 'amIAssigned');
     const step = this.getStepByIndex(stepIndex);
     return step.get('assignees').find((a) => (a.get('id') === this.id)) ? true : false;
   }
@@ -31,6 +37,7 @@ export default class GoalsUtil {
     return this.currentStep().get('iterations').size;
   }
   getFieldFromField(field){
+    requireParams({ field }, 'getFieldFromField');
     if(field.get('type') === 'link'){
       const targetField = this.getTargetField(field);
       if(targetField){
@@ -40,6 +47,7 @@ export default class GoalsUtil {
     return field;
   }
   getIconWithColorForField(field, stepIndex){
+    requireParams({ field, stepIndex }, 'getIconWithColorForField');
     const settings = field.get('settings');
     let icon = 'ArrowRightIcon';
     let color = '#007AFF';
@@ -62,6 +70,7 @@ export default class GoalsUtil {
     return [icon, color];
   }
   getSettingsForField(field, stepIndex, merging){
+    requireParams({ field, stepIndex }, 'getSettingsForField');
     let options = Map({ fullscreen: false })
     if(field.get('type') === 'link'){
       options = options.set('editable', false);
@@ -72,17 +81,19 @@ export default class GoalsUtil {
     return field.get('settings').merge(options).merge(merging);
   }
   // Getting the handoff message from the step before this
-  getHandoffMessageForStepIndex(stepIndex, users){
+  getHandoffMessageForStepIndex(stepIndex){
+    requireParams({ stepIndex }, 'getHandoffMessageForStepIndex');
     const step = this.getStepByIndex(stepIndex);
-    return this.getHandoffMessageForStep(step, users);
+    return this.getHandoffMessageForStep(step);
   }
-  getHandoffMessageForStep(step, users){
+  getHandoffMessageForStep(step){
+    requireParams({ step }, 'getHandoffMessageForStep');
     const stepData = this.getLastIterationFromStep(step);
     if(stepData){
       const prevStepIndex = stepData[1].get('previousStepIndex');
       let maxRunCounter = stepData[0];
       const prevStep = this.getStepByIndex(prevStepIndex);
-      if(!prevStep.get('completed')){
+      if(prevStep && !prevStep.get('completed')){
         maxRunCounter--;
       }
       const pStepData = this.getLastIterationFromStepIndex(prevStepIndex, maxRunCounter);
@@ -163,7 +174,6 @@ export default class GoalsUtil {
     const target = field.getIn(['settings', 'target']);
     const tSFIndex = this.getStepFieldIndexFromTarget(target);
     if(tSFIndex){
-      console.log(tSFIndex);
       return this.goal.getIn(['steps', tSFIndex[0], 'fields', tSFIndex[1]]);
     }
   }
