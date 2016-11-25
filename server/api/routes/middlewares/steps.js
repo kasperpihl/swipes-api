@@ -25,8 +25,7 @@ const stepsSubmit = (req, res, next) => {
     user_id,
     step,
     data,
-    message,
-    step_back_id
+    message
   } = res.locals;
   const lastIterationIndex = step.iterations.length - 1;
 

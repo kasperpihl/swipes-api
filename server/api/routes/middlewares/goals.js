@@ -45,7 +45,7 @@ const goalsNext = (req, res, next) => {
   const {
     goal,
     doNext,
-    stepBackId
+    step_back_id
   } = res.locals;
   const currentStepIndex = goal.currentStepIndex;
   const currentStep = goal.steps[currentStepIndex];
@@ -59,16 +59,16 @@ const goalsNext = (req, res, next) => {
     currentStep.completed = true;
   }
 
-  if (stepBackId) {
+  if (step_back_id) {
     let stepBackFound = false;
 
     goal.steps.map((step, i) => {
       /* Find steps before the step we are going back to
          and find steps after the current step and add null iteration
       */
-      if (!stepBackFound && step.id !== stepBackId || i > currentStepIndex) {
+      if (!stepBackFound && step.id !== step_back_id || i > currentStepIndex) {
         step.iterations.push(null);
-      } else if (step.id === stepBackId) {
+      } else if (step.id === step_back_id) {
         nextStepIndex = i;
         stepBackFound = true;
       }
