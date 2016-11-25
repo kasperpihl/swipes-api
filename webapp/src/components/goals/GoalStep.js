@@ -268,6 +268,11 @@ class GoalStep extends Component {
   render() {
     const { step, stepIndex } = this.state;
     const { slideDirection } = this.state;
+    let sideColumnClass = 'goal-step__side-column'
+
+    if (true) {
+      sideColumnClass += ' goal-step__side-column--active'
+    }
 
     return (
       <div className="goal-step">
@@ -279,7 +284,7 @@ class GoalStep extends Component {
           {this.renderFields(step)}
         </div>
 
-        <div className="goal-step__side-column">
+        <div className={sideColumnClass}>
           {this.renderStatus()}
           {this.renderPreAutomations()}
           {this.renderSubmission()}

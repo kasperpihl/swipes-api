@@ -44,6 +44,10 @@
       background-color: $deepBlue-20;
       @include size(100%, 2px);
     }
+
+    &--active {
+      background-color: $blue-100;
+    }
   }
 
   &__hand-off-message {
