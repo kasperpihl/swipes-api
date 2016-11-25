@@ -2,28 +2,33 @@
 @import '../../global-styles/mixins/';
 
 .step-header {
-  @include flex(center, flex-start);
+  @include flex(flex-start, center);
   @include size(100%, 36px);
   position: relative;
-  padding-bottom: 18px;
+  z-index: 9;
 
   &__index {
     @include flex();
-    @include size(50px, 60px);
+    @include size(50px, 36px);
     color: $deepBlue-90;
     font-size: 27px;
     font-weight: bold;
-    line-height: 1.33;
   }
 
   &__title {
     $titleWidth: calc(100% - 50px - 60px);
-    @include size($titleWidth, auto);
+    @include size($titleWidth, 36px);
     color: $deepBlue-90;
     font-size: 24px;
     font-weight: 700;
+    line-height: 36px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__assignees {
+    @include size(36px);
+    @include flex();
   }
 }
