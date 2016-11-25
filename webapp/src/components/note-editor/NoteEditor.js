@@ -40,7 +40,7 @@ class NoteEditor extends Component {
   toggleBlockType(blockType) {
     this.onChange(
       RichUtils.toggleBlockType(
-        this.state.editorState,
+        this.props.editorState,
         blockType
       )
     );
