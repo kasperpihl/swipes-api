@@ -81,8 +81,11 @@ export default class GoalsUtil {
     const stepData = this.getLastIterationFromStep(step);
     if(stepData){
       const prevStepIndex = stepData[1].get('previousStepIndex');
-      const maxRunCounter = stepData[0];
-
+      let maxRunCounter = stepData[0];
+      const prevStep = this.getStepByIndex(prevStepIndex);
+      if(!prevStep.get('completed')){
+        maxRunCounter--;
+      }
       const pStepData = this.getLastIterationFromStepIndex(prevStepIndex, maxRunCounter);
       if(pStepData){
         return pStepData[1].get('responses').map((r, i) => {
@@ -101,9 +104,6 @@ export default class GoalsUtil {
       return undefined;
     }
     let iterations = step.get('iterations');
-    if(!step.get('completed')){
-      iterations = iterations.butLast();
-    }
     return iterations.findLastEntry((iter, i) => {
       if(typeof maxIndex !== 'undefined' && i > maxIndex){
         return false;

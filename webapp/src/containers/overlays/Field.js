@@ -13,9 +13,11 @@ class Field extends Component {
   }
   delegate(name, data){
     const { delegate, index } = this.props;
+    // Do a controlled field
     if(name === 'change'){
       this.setState({data});
     }
+    // And forward to the delegate from GoalStep.
     delegate.apply(null, arguments);
   }
   render() {
