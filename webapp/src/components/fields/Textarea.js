@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { fromJS } from 'immutable'
+import { bindAll } from '../../classes/utils'
 
 import ReactTextarea from 'react-textarea-autosize'
 import * as Icons from '../icons'
@@ -12,31 +13,55 @@ class Textarea extends Component {
   }
   constructor(props) {
     super(props)
-    this.bindCallbacks = {};
+    this.state = {
+      focused: false
+    }
+    bindAll(this, ['handleFocus', 'handleBlur', 'onChange']);
   }
-  onChange(i, text){
+  onChange(e){
     const { data, delegate } = this.props;
 
-    delegate('change', data.set('text', text));
+    delegate('change', data.set('text', e.target.value));
+  }
+  handleFocus() {
+    this.setState({focused: true})
+  }
+  handleBlur() {
+    this.setState({focused: false})
   }
   renderTextarea() {
     const { data } = this.props;
     const defaultValue = data.get('text') || null;
 
     return <ReactTextarea
-      className="field-textarea"
+      className="sw-textarea__input"
       defaultValue={defaultValue}
       minRows={1}
       maxRows={10}
+      ref='textarea'
+      onFocus={this.handleFocus}
+      onBlur={this.handleBlur}
+      onChange={this.onChange}
     />
   }
   renderPlaceholder() {
-    const { settings } = this.props;
+    const { settings, data } = this.props;
+    const { focused } = this.state;
+    const { textarea } = this.refs;
+    let className = 'sw-textarea__placeholder';
+    let placeholder = settings.get('placeholder') || 'Default placeholder';
 
+    if (focused || data.get('text').length) {
+      className += ' sw-textarea__placeholder--shown'
+    }
+
+    return (
+      <span className={className}>{placeholder}</span>
+    )
   }
   render() {
     return (
-      <div className="checklist">
+      <div className="sw-textarea">
         {this.renderTextarea()}
         {this.renderPlaceholder()}
       </div>
@@ -46,13 +71,10 @@ class Textarea extends Component {
 
 export default Textarea
 
-const { string, bool, arrayOf, shape } = PropTypes;
+const { string, shape } = PropTypes;
 
 Textarea.propTypes = {
   data: shape({
-    checks: arrayOf(shape({
-      label: string,
-      checked: bool
-    }))
+    text: string
   })
 }

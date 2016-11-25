@@ -1,0 +1,46 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.sw-textarea {
+  @include size(calc(100% - 50px), auto);
+  @include flex();
+  border-top: 1px solid $deepBlue-10;
+  border-bottom: 1px solid $deepBlue-10;
+  position: relative;
+
+  &__input {
+    color: $deepBlue-80;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 21px 0;
+    resize: none;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__placeholder {
+    @include flex(center, flex-start);
+    background-color: $bg;
+    color: $deepBlue-70;
+    font-size: 15px;
+    left: 0; top: 50%;
+    line-height: 1.6;
+    padding-right: 10px;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(-50%);
+    transition: .2s ease-in-out;
+    user-select: none;
+    will-change: top;
+
+    &--shown {
+      color: $deepBlue-120;
+      top: 0;
+      transition: .2s ease-in-out;
+      will-change: top;
+    }
+  }
+}
