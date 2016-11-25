@@ -71,15 +71,51 @@ class Note extends Component {
       return;
     }
     const { data } = this.state;
+
     return (
-      <div className="sw-note-field__editor-container">
-        <input type="text" className="sw-note-field__title" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
-        <NoteEditor
-          editorState={data.get('editorState')}
-          onChange={this.onChange}
-        />
+      <div className="sw-note-field__note-editor">
+        <div className="sw-note-field__note">
+          <input type="text" className="sw-note-field__title" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
+          <NoteEditor
+            editorState={data.get('editorState')}
+            onChange={this.onChange} />
+        </div>
+        {this.renderSideColumn()}
       </div>
     )
+  }
+  renderSideColumn() {
+    const { settings } = this.props;
+    let className = 'sw-note-field__side';
+
+    if (settings.get('editable')) {
+      className += ' sw-note-field__side--status'
+    }
+
+    return (
+      <div className="sw-note-field__side">
+        {this.renderNoteButton()}
+        {this.renderNoteStatus()}
+      </div>
+    )
+  }
+  renderNoteStatus() {
+    const { settings } = this.props;
+
+    if (settings.get('editable')) {
+      return;
+    }
+
+    return <div className="sw-note-field__status">This note is not editable</div>
+  }
+  renderNoteButton() {
+    const { settings } = this.props;
+
+    if (!settings.get('editable')) {
+      return;
+    }
+
+    return <div className="sw-note-field__button">Done</div>
   }
   render() {
     return (

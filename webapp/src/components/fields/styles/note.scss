@@ -2,27 +2,144 @@
 @import '../../global-styles/mixins/';
 
 .sw-note-field {
+  $b: &;
   @include size(100%);
-  position: relative;
 
-  &__editor-container {
+  &__note-editor {
     @include size(100%);
-    margin: 0 auto;
+    @include flex(flex-start, center);
+    background-color: $bg;
     position: relative;
+    overflow-y: auto;
+  }
+
+  &__note {
+    @include size(100%, auto);
+    max-width: 630px;
+    margin-left: 240px;
+    position: relative;
+  }
+
+  &__side {
+    @include size(240px, auto);
+    padding-top: 32px;
+    margin: 0 30px;
+    margin-top: 102px;
+    position: relative;
+    flex: none;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      background-color: $blue-100;
+      @include size(100%, 2px);
+    }
+
+    &--status {
+      &:after {
+        background-color: $deepBlue-20;
+      }
+    }
   }
 
   &__title {
     @include size(100%, auto);
-    max-width: 600px;
     font-size: 33px;
     line-height: 1.27;
     color: $deepBlue-100;
-    margin: 30px auto;
-    margin-left: 50%;
-    transform: translateX(-50%);
+    margin: 30px 15px;
+  }
+
+  &__status {
+    font-size: 12px;
+    letter-spacing: .3px;
+    color: $deepBlue-40
+  }
+
+  &__button {
+    @include size(100%, 45px);
+    @include flex();
+    border: 1px solid $blue-100;
+    font-size: 12px;
+    letter-spacing: .3px;
+    font-weight: bold;
+    transition: .1s;
+    border-radius: 3px;
+    color: $blue-100;
+
+    &:hover {
+      background-color: $blue-100;
+      color: $bg;
+      transition: .1s;
+    }
+
+
   }
 
   &__card {
     @include size(calc(100% - 50px), auto);
   }
+
+  @media screen and (max-width: 1140px) {
+
+    #{$b}__note {
+      margin-left: 30px;
+      margin-right: 15px;
+    }
+
+    #{$b}__side-side {
+      margin-left: 15px;
+    }
+  }
 }
+
+// .sw-note-field {
+//
+//   &__editor-container {
+//     @include size(100%);
+//     margin: 0 auto;
+//     overflow-y: auto;
+//     overflow-x: hidden;
+//     position: relative;
+//   }
+//
+//   &__title {
+//     @include size(100%, auto);
+//     max-width: 600px;
+//     font-size: 33px;
+//     line-height: 1.27;
+//     color: $deepBlue-100;
+//     margin: 30px auto;
+//     margin-left: 50%;
+//     transform: translateX(-50%);
+//   }
+//
+//   &__actions {
+//     @include size(100px, auto);
+//     position: fixed;
+//     right: 60px; top: 85px;
+//   }
+//
+//   &__button {
+//     @include size(100%, 40px);
+//     @include flex();
+//     border: 1px solid $blue-100;
+//     font-size: 12px;
+//     letter-spacing: .3px;
+//     font-weight: bold;
+//     transition: .1s;
+//     border-radius: 3px;
+//     color: $blue-100;
+//
+//     &:hover {
+//       background-color: $blue-100;
+//       color: $bg;
+//       transition: .1s;
+//     }
+//   }
+//
+//   &__card {
+//     @include size(calc(100% - 50px), auto);
+//   }
+// }
