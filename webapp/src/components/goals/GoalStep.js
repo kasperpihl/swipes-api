@@ -95,17 +95,17 @@ class GoalStep extends Component {
     window.removeEventListener("beforeunload", this.cacheFormInput);
   }
   delegateFromField(index, name){
-    const { step, formData } = this.state;
-    const field = step.getIn(['fields', index]);
-
+    const { step, formData, stepIndex } = this.state;
+    const { helper } = this;
+    let field = step.getIn(['fields', index]);
+    console.log('hello');
     if(name === 'change'){
       this.setState({formData: formData.set(index, arguments[2])});
       this.throttledCache();
     }
 
     if (name === 'fullscreen') {
-      const options = { fullscreen: true };
-
+      field = helper.getFieldFromField(field);
       this.callDelegate('stepAction', name, {
         component: 'Field',
         title: field.get('title') + ' (Note)',
@@ -113,9 +113,8 @@ class GoalStep extends Component {
         props: {
           index,
           field,
-          options,
           delegate: this.bindCallbacks[index],
-          settings: field.get('settings'),
+          settings: helper.getSettingsForField(field, stepIndex, {fullscreen : true}),
           data: formData.get(index)
         }
       });
@@ -210,48 +209,19 @@ class GoalStep extends Component {
 
     }
   }
-  iconWithColorForField(field, isCurrentStep){
-    const settings = field.get('settings');
-    let icon = 'ArrowRightIcon';
-    let color = '#007AFF';
-    let editable = true;
-    
-    if (field.get('type') === 'link' || !settings.get('editable')) {
-      editable = false;
-      icon = 'DotIcon';
-      color = undefined;
-    }
 
-    if (settings.get('required')) {
-      color = '#FD4A48';
-    }
-
-    if(!isCurrentStep){
-      color = undefined;
-    }
-
-    return [icon, color];
-  }
 
   renderFields(step){
     const { goal } = this.props;
     const { formData, stepIndex } = this.state;
     return step.get('fields').map((field, i) => {
-      let options = Map({ fullscreen: false })
-      const isCurrentStep = this.helper.isCurrentStep(stepIndex);
-      const iconColor = this.iconWithColorForField(field, isCurrentStep);
-      // Check if field is a link and find the link
 
-      if(field.get('type') === 'link'){
-        const targetField = this.helper.getTargetField(field);
-        if(targetField){
-          field = targetField;
-        }
-        options = options.set('editable', false);
-      }
-      if(goal.get('currentStepIndex') !== stepIndex){
-        options = options.set('editable', false)
-      }
+      const iconAndColor = this.helper.getIconWithColorForField(field, stepIndex);
+      const settings = this.helper.getSettingsForField(field, stepIndex);
+      // Field-swap for links. Check if field is a link and find the link
+      field = this.helper.getFieldFromField(field);
+
+
 
       const Field = this.helper.fieldForType(field.get('type'));
       if (Field) {
@@ -264,12 +234,12 @@ class GoalStep extends Component {
             fullscreen={canShowFullscreen}
             key={field.get('id')}
             title={field.get('title')}
-            icon={iconColor[0]}
-            iconColor={iconColor[1]}>
+            icon={iconAndColor[0]}
+            iconColor={iconAndColor[1]}>
             <Field
               delegate={this.bindCallbacks[i]}
               data={formData.get(i)}
-              settings={field.get('settings').merge(options)}
+              settings={settings}
             />
           </StepField>
         )

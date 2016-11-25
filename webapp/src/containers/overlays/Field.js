@@ -19,7 +19,7 @@ class Field extends Component {
     delegate.apply(null, arguments);
   }
   render() {
-    const { options, settings, field } = this.props;
+    const { settings, field } = this.props;
     const { data } = this.state;
     const Field = fields[field.get('type')];
     if(!Field){
@@ -29,7 +29,6 @@ class Field extends Component {
       <div className="field-overlay">
         <Field
           delegate={this.delegate}
-          options={options.toJS()}
           data={data}
           settings={settings}
         />

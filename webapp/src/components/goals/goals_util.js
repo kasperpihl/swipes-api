@@ -30,6 +30,47 @@ export default class GoalsUtil {
   runCounter(){
     return this.currentStep().get('iterations').size;
   }
+  getFieldFromField(field){
+    if(field.get('type') === 'link'){
+      const targetField = this.getTargetField(field);
+      if(targetField){
+        field = targetField;
+      }
+    }
+    return field;
+  }
+  getIconWithColorForField(field, stepIndex){
+    const settings = field.get('settings');
+    let icon = 'ArrowRightIcon';
+    let color = '#007AFF';
+    let editable = true;
+
+    if (field.get('type') === 'link' || !settings.get('editable')) {
+      editable = false;
+      icon = 'DotIcon';
+      color = undefined;
+    }
+
+    if (settings.get('required')) {
+      color = '#FD4A48';
+    }
+
+    if(!this.isCurrentStep(stepIndex)){
+      color = undefined;
+    }
+
+    return [icon, color];
+  }
+  getSettingsForField(field, stepIndex, merging){
+    let options = Map({ fullscreen: false })
+    if(field.get('type') === 'link'){
+      options = options.set('editable', false);
+    }
+    if(this.goal.get('currentStepIndex') !== stepIndex){
+      options = options.set('editable', false)
+    }
+    return field.get('settings').merge(options).merge(merging);
+  }
   // Getting the handoff message from the step before this
   getHandoffMessageForStepIndex(stepIndex, users){
     const step = this.getStepByIndex(stepIndex);
