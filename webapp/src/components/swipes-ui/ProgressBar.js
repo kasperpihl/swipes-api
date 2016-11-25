@@ -34,7 +34,9 @@ class ProgressBar extends Component {
     const stepWidth = 100 / steps.length;
 
     let styles = {
-      WebkitClipPath: `polygon(${stepWidth * currentIndex}% 0, ${stepWidth * (currentIndex + 1)}% 0, ${stepWidth * (currentIndex + 1)}% 100%, ${stepWidth * currentIndex}% 100%)`
+      // WebkitClipPath: `polygon(${stepWidth * currentIndex}% 0, ${stepWidth * (currentIndex + 1)}% 0, ${stepWidth * (currentIndex + 1)}% 100%, ${stepWidth * currentIndex}% 100%)`
+
+      WebkitClipPath: `polygon(0% 0, ${stepWidth * currentIndex}% 0, ${stepWidth * currentIndex}% 100%, 0% 100%)`
     };
 
     const stepsHTML = steps.map( (step, i) => {
@@ -54,6 +56,10 @@ class ProgressBar extends Component {
     const { activeIndex, currentIndex, steps } = this.props;
     let className = 'sw-progress-bar__step';
 
+    if (i < currentIndex) {
+      className += ' sw-progress-bar__step--completed'
+    }
+
     if (i === currentIndex) {
       className += ' sw-progress-bar__step--current'
     }
@@ -62,7 +68,6 @@ class ProgressBar extends Component {
       className += ' sw-progress-bar__step--active'
     }
 
-    // K_TODO: Fix knowing future steps
     if (step.disabled) {
       className += ' sw-progress-bar__step--disabled'
     }

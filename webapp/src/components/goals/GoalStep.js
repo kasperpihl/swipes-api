@@ -162,8 +162,8 @@ class GoalStep extends Component {
     const runCounter = this.helper.runCounter();
     const steps = goal.get('steps').map( (step, i) => {
       return {
-        title: step.get('title'),
-        disabled: (i > goal.get('currentStepIndex'))
+        title: step.get('title')
+        // disabled: (i > goal.get('currentStepIndex'))
       }
     }).toJS();
 
