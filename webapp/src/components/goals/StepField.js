@@ -7,6 +7,7 @@ class StepField extends Component {
   constructor(props) {
     super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.clickedFullscreen = this.clickedFullscreen.bind(this);
   }
   renderIcon(icon, color) {
     const Comp = Icons[icon];
@@ -22,12 +23,16 @@ class StepField extends Component {
       return <img className="step-field__icon step-field__icon--img" src={icon} />
     }
   }
+  clickedFullscreen(index, e){
+    const { delegate } = this.props;
+    delegate('fullscreen');
+  }
   renderFullscreen() {
     const { fullscreen } = this.props;
     if(!fullscreen) return;
 
     return (
-      <div className="step-field__action" title="Fullscreen">
+      <div onClick={this.clickedFullscreen} className="step-field__action" title="Fullscreen">
         {this.renderIcon('ArrowLeftIcon')}
         {this.renderIcon('ArrowRightIcon')}
       </div>

@@ -50,7 +50,7 @@ class Note extends Component {
   }
   onCardClick(card){
     const { delegate } = this.props;
-    delegate('fullscreen', delegate);
+    delegate('fullscreen');
   }
   renderNoteCard(){
     const { settings } = this.props;

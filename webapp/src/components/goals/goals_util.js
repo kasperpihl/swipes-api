@@ -77,7 +77,6 @@ export default class GoalsUtil {
     return this.getHandoffMessageForStep(step, users);
   }
   getHandoffMessageForStep(step, users){
-
     const stepData = this.getLastIterationFromStep(step);
     if(stepData){
       const prevStepIndex = stepData[1].get('previousStepIndex');

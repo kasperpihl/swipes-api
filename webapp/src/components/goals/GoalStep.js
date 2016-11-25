@@ -232,6 +232,7 @@ class GoalStep extends Component {
         return (
           <StepField
             fullscreen={canShowFullscreen}
+            delegate={this.bindCallbacks[i]}
             key={field.get('id')}
             title={field.get('title')}
             icon={iconAndColor[0]}
