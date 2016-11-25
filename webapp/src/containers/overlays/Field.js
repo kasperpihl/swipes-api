@@ -7,14 +7,20 @@ import * as fields from '../../components/fields'
 class Field extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = { data: props.data };
+    this.delegate = this.delegate.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  componentDidMount() {
+  delegate(name, data){
+    const { delegate, index } = this.props;
+    if(name === 'change'){
+      this.setState({data});
+    }
+    delegate.apply(null, arguments);
   }
   render() {
-    const { options, delegate, data, settings, field } = this.props;
-    console.log('options1', options);
+    const { options, settings, field } = this.props;
+    const { data } = this.state;
     const Field = fields[field.get('type')];
     if(!Field){
       return <div>Field not found...</div>
@@ -22,7 +28,7 @@ class Field extends Component {
     return (
       <div className="field-overlay">
         <Field
-          delegate={delegate}
+          delegate={this.delegate}
           options={options.toJS()}
           data={data}
           settings={settings}

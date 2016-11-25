@@ -5,9 +5,6 @@ import './styles/checklist.scss'
 import { fromJS } from 'immutable'
 
 class Checklist extends Component {
-  static icon(){
-    return 'DotIcon'
-  }
   constructor(props) {
     super(props)
     this.bindCallbacks = {};

@@ -13,9 +13,6 @@ import {
 } from 'draft-js'
 
 class Note extends Component {
-  static icon(){
-    return 'ListIcon';
-  }
   static saveData(data){
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
   }
@@ -33,11 +30,18 @@ class Note extends Component {
     super(props)
     this.state = { data: props.data };
     this.onChange = this.onChange.bind(this);
+    this.onTitleChange = this.onTitleChange.bind(this);
   }
   onChange(editorState){
     const { delegate } = this.props;
     const { data } = this.state;
     delegate('change', data.set('editorState', editorState));
+  }
+  onTitleChange(e){
+    const { delegate } = this.props;
+    const { data } = this.state;
+    console.log('e.target', e.target.value)
+    delegate('change', data.set('title', e.target.value));
   }
   componentWillReceiveProps(nextProps){
     this.setState({ data: nextProps.data });
@@ -54,7 +58,7 @@ class Note extends Component {
     const { data } = this.state;
 
     return <SwipesCard delegate={this} data={{
-      title: 'Untitled note',
+      title: data.get('title') || 'Untitled note',
       description: data.get('editorState').getCurrentContent().getPlainText().substr(0,100)
     }}/>
   }
@@ -65,10 +69,13 @@ class Note extends Component {
     }
     const { data } = this.state;
     return (
-      <Editor
-        editorState={data.get('editorState')}
-        onChange={this.onChange}
-      />
+      <div className="note-editor-container">
+        <input type="text" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
+        <Editor
+          editorState={data.get('editorState')}
+          onChange={this.onChange}
+        />
+      </div>
     )
   }
   render() {

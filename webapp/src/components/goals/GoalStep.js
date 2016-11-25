@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
+import { fromJS } from 'immutable'
 
 // Views
 import Assigning from '../assigning/Assigning'
@@ -55,8 +56,7 @@ class GoalStep extends Component {
     if(amIAssigned && isCurrent){
       data.data = this.generateRawObj()
     }
-    console.log('caching', data);
-    this.callDelegate('stepCache', data);
+    this.callDelegate('stepCache', fromJS(data));
   }
   generateRawObj(){
     const { formData, step } = this.state;
@@ -94,7 +94,9 @@ class GoalStep extends Component {
       this.callDelegate('stepAction', name, {
         component: 'Field',
         title: field.get('title') + ' (Note)',
+        onClose: this.cacheFormInput,
         props: {
+          index,
           field,
           options,
           delegate: this.bindCallbacks[index],
@@ -206,7 +208,7 @@ class GoalStep extends Component {
           <StepField
             key={field.get('id')}
             title={field.get('title')}
-            icon={Field.icon()}>
+            icon={'ArrowRightIcon'}>
             <Field
               delegate={this.bindCallbacks[i]}
               options={options}
