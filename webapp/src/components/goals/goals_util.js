@@ -7,7 +7,9 @@ export default class GoalsUtil {
     this.goal = goal;
     this.id = myId;
     this.cache = cache;
-
+  }
+  updateGoal(goal){
+    this.goal = goal;
   }
   fieldForType(type){
     return fields[type];
@@ -31,16 +33,19 @@ export default class GoalsUtil {
   // Getting the handoff message from the step before this
   getHandoffMessageForStepIndex(stepIndex, users){
     const step = this.getStepByIndex(stepIndex);
+    console.log('getting handoff message for step', stepIndex);
     return this.getHandoffMessageForStep(step, users);
   }
   getHandoffMessageForStep(step, users){
 
     const stepData = this.getLastIterationFromStep(step);
+    console.log('current iteration counter', stepData[0]);
     if(stepData){
       const prevStepIndex = stepData[1].get('previousStepIndex');
       const maxRunCounter = stepData[0];
 
       const pStepData = this.getLastIterationFromStepIndex(prevStepIndex, maxRunCounter);
+      console.log('prev step iteration counter', pStepData[0]);
       if(pStepData){
         return pStepData[1].get('responses').map((r, i) => {
           return r.get('message');
@@ -57,7 +62,11 @@ export default class GoalsUtil {
     if(!step || maxIndex < 0 ){
       return undefined;
     }
-    return step.get('iterations').findLastEntry((iter, i) => {
+    let iterations = step.get('iterations');
+    if(!step.get('completed')){
+      iterations = iterations.butLast();
+    }
+    return iterations.findLastEntry((iter, i) => {
       if(typeof maxIndex !== 'undefined' && i > maxIndex){
         return false;
       }
