@@ -146,8 +146,7 @@ const BlockStyleControls = (props) => {
   const BLOCK_TYPES = [
     {label: 'H1', style: 'header-one'},
     {label: 'H2', style: 'header-two'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'}
+    {label: 'UL', style: 'unordered-list-item'}
   ];
 
 
