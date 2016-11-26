@@ -30,7 +30,7 @@ class Textarea extends Component {
     this.setState({focused: false})
   }
   renderTextarea() {
-    const { data } = this.props;
+    const { data, settings } = this.props;
     const defaultValue = data.get('text') || null;
 
     return <ReactTextarea
@@ -42,6 +42,7 @@ class Textarea extends Component {
       onFocus={this.handleFocus}
       onBlur={this.handleBlur}
       onChange={this.onChange}
+      disabled={!settings.get('editable')}
     />
   }
   renderPlaceholder() {

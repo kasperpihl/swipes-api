@@ -38,7 +38,7 @@
 		@include size(18px);
 		position: absolute;
 		border-radius: 3px;
-		border: solid 1px $deepBlue-20;
+		border: solid 1px $blue-100;
 		left: 0; top: 0;
 	}
 
@@ -83,5 +83,13 @@
 
 	&:hover &__input:checked ~ &__indicator {
 		// background-color: purple;
+	}
+
+  & &__input:disabled ~ &__indicator {
+    border: solid 1px $deepBlue-20;
+  }
+
+  & &__input:disabled ~ &__indicator, & &__input:disabled ~ &__label {
+		cursor: not-allowed;
 	}
 }

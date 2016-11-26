@@ -14,13 +14,14 @@ class Checklist extends Component {
     delegate('change', data.setIn(['checks', i, 'checked'], checked));
   }
   renderChecks(){
-    const { data } = this.props;
+    const { data, settings } = this.props;
+
     return data.get('checks').map((c,i) => {
       if(!this.bindCallbacks[i]){
         this.bindCallbacks[i] = this.onChange.bind(this, i);
       }
       return (
-        <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} />
+        <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} disable={settings.get('editable')}/>
       )
     })
   }

@@ -22,11 +22,11 @@ class Checkbox extends Component {
     }
   }
   render() {
+    const { label, checked, disable } = this.props;
 
-    const { label, checked } = this.props;
     return (
       <label className="sw-checkbox">
-      	<input ref="checkboxInput" checked={checked} onChange={this.onChange} type="checkbox" className="sw-checkbox__input" />
+      	<input ref="checkboxInput" checked={checked} onChange={this.onChange} type="checkbox" className="sw-checkbox__input" disabled={!disable}/>
       	<div className="sw-checkbox__indicator">{this.renderIcon('CheckmarkIcon')}</div>
         <div className="sw-checkbox__label">{label}</div>
       </label>
