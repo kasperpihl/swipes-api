@@ -9,3 +9,4 @@ https://gist.github.com/thinklinux/ad66d90700966f981318ea38055901b7 - this confi
 
 # jenkins config
 http://code.tutsplus.com/tutorials/setting-up-continuous-integration-continuous-deployment-with-jenkins--cms-21511
+  - switch to jenkins user - `sudo su` -> `su jenkins`

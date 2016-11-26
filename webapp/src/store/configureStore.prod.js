@@ -21,6 +21,7 @@ const persist = paths => {
       },
       goals: state.get('goals'),
       services: state.get('services'),
+      users: state.get('users'),
       me: state.get('me')
     })
   }
