@@ -94,21 +94,24 @@ class GoalStep extends Component {
     this.cacheFormInput();
     window.removeEventListener("beforeunload", this.cacheFormInput);
   }
-  delegateFromField(index, name){
+  fullscreenForFieldIndex(index){
     const { step, formData, stepIndex } = this.state;
     const { helper } = this;
     let field = step.getIn(['fields', index]);
-    if(name === 'change'){
-      this.setState({formData: formData.set(index, arguments[2])});
-      this.throttledCache();
-    }
 
-    if (name === 'fullscreen') {
+    if(this.isFullscreen){
+      this.callDelegate('stepAction', 'popOverlay');
+    }
+    else{
       const fieldAndSettings = helper.getFieldAndSettingsFromField(field, stepIndex, {fullscreen: true});
-      this.callDelegate('stepAction', name, {
+      this.isFullscreen = true;
+      this.callDelegate('stepAction', 'fullscreen', {
         component: 'Field',
         title: field.get('title') + ' (Note)',
-        onClose: this.cacheFormInput,
+        onClose: () => {
+          this.isFullscreen = false;
+          this.cacheFormInput()
+        },
         props: {
           index,
           field: fieldAndSettings[0],
@@ -117,6 +120,21 @@ class GoalStep extends Component {
           data: formData.get(index)
         }
       });
+    }
+
+
+  }
+  delegateFromField(index, name){
+    const { step, formData, stepIndex } = this.state;
+
+
+    if(name === 'change'){
+      this.setState({formData: formData.set(index, arguments[2])});
+      this.throttledCache();
+    }
+
+    if (name === 'fullscreen') {
+      this.fullscreenForFieldIndex(index);
     }
   }
   callDelegate(name) {

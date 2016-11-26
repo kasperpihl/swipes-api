@@ -19,6 +19,7 @@ class Note extends Component {
   static parseInitialData(data){
     let editorState = EditorState.createEmpty();
     if(data && data.get('editorState')){
+      console.log(data.toJS());
       const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
       editorState = EditorState.push(editorState, convertFromRaw(raw));
     }
@@ -30,6 +31,7 @@ class Note extends Component {
     super(props)
     this.state = { data: props.data };
     this.onChange = this.onChange.bind(this);
+    this.onDone = this.onDone.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
   }
   onChange(editorState){
@@ -108,6 +110,10 @@ class Note extends Component {
       </div>
     )
   }
+  onDone(e){
+    const { delegate } = this.props;
+    delegate('fullscreen');
+  }
   renderNoteStatus() {
     const { settings } = this.props;
 
@@ -118,7 +124,7 @@ class Note extends Component {
     return <div className="sw-note-field__status">This note is not editable</div>
   }
   renderNoteButton() {
-    return <div className="sw-note-field__button">Done</div>
+    return <div className="sw-note-field__button" onClick={this.onDone}>Done</div>
   }
   render() {
     return (

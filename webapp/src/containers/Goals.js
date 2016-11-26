@@ -19,10 +19,13 @@ class Goals extends Component {
     bindAll(this, ['setActiveGoal', 'clickedRoundButton']);
   }
   stepAction(step, action, data) {
-    const { pushOverlay } = this.props;
+    const { pushOverlay, popOverlay } = this.props;
 
     if (action === 'fullscreen') {
       pushOverlay(data);
+    }
+    if(action === 'popOverlay') {
+      popOverlay();
     }
   }
   stepCache(step, data){
@@ -145,6 +148,7 @@ const ConnectedGoals = connect(mapStateToProps, {
   setOverlay: overlay.set,
   cacheSave: main.cacheSave,
   pushOverlay: overlay.push,
+  popOverlay: overlay.pop,
   goalDelete: goals.delete,
   submit: goals.submitStep,
   setActiveGoal: main.setActiveGoal

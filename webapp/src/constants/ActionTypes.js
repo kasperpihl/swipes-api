@@ -21,6 +21,7 @@ export const TOAST_UPDATE = 'TOAST_UPDATE'
 
 // Overlay
 export const SET_OVERLAY = 'SET_OVERLAY'
+export const POP_OVERLAY = 'POP_OVERLAY'
 export const PUSH_OVERLAY = 'PUSH_OVERLAY'
 export const CLEAR_OVERLAY = 'CLEAR_OVERLAY'
 

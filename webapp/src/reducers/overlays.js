@@ -11,6 +11,9 @@ export default function modal (state = initialState, action) {
     case types.PUSH_OVERLAY:{
       return state.push(fromJS(action.overlay));
     }
+    case types.POP_OVERLAY:{
+      return state.butLast();
+    }
     case types.CLEAR_OVERLAY:{
       if(typeof action.index === 'number'){
         return state.slice(0, action.index + 1);
@@ -19,7 +22,7 @@ export default function modal (state = initialState, action) {
     }
     case types.LOGOUT:
       return initialState;
-    default: 
+    default:
       return state
   }
 }

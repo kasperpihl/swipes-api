@@ -37,6 +37,13 @@ export function set(overlay){
   }
 
 }
+export function pop(){
+  return (dispatch, getState) => {
+    const overlays = getState().get('overlays');
+    fireOnCloseForOverlays(overlays, overlays.size - 2);
+    dispatch({ type: types.POP_OVERLAY })
+  }
+}
 export function push(overlay){
   return { type: types.PUSH_OVERLAY, overlay };
 }
