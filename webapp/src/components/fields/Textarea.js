@@ -8,9 +8,6 @@ import * as Icons from '../icons'
 import './styles/textarea.scss'
 
 class Textarea extends Component {
-  static icon(){
-    return 'DotIcon'
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -50,9 +47,9 @@ class Textarea extends Component {
     const { focused } = this.state;
     const { textarea } = this.refs;
     let className = 'sw-textarea__placeholder';
-    let placeholder = settings.get('placeholder') || 'Default placeholder';
+    let placeholder = settings.get('placeholder') || 'Text';
 
-    if (focused || data.get('text').length) {
+    if (focused || data.get('text') && data.get('text').length) {
       className += ' sw-textarea__placeholder--shown'
     }
 
