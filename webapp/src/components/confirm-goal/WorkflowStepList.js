@@ -50,7 +50,7 @@ class WorkflowStepList extends Component {
     return (
       <div style={style} className={rootClass} ref="stepList">
         <input ref="input" key="input" className={rootClass + '__title'} onKeyUp={this.onKeyUp} onBlur={this.onBlur} placeholder="Name your goal" />
-        <TagsInput callDelegate={this.callDelegate}/>
+        {/* <TagsInput callDelegate={this.callDelegate}/> */}
         {listItems}
       </div>
     )
