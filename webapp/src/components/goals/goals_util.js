@@ -69,16 +69,21 @@ export default class GoalsUtil {
 
     return [icon, color];
   }
-  getSettingsForField(field, stepIndex, merging){
+  getFieldAndSettingsFromField(field, stepIndex, merging){
     requireParams({ field, stepIndex }, 'getSettingsForField');
     let options = Map({ fullscreen: false })
-    if(field.get('type') === 'link'){
-      options = options.set('editable', false);
-    }
     if(this.goal.get('currentStepIndex') !== stepIndex){
       options = options.set('editable', false)
     }
-    return field.get('settings').merge(options).merge(merging);
+    if(field.get('type') === 'link'){
+      options = options.set('editable', false);
+      field = this.getTargetField(field);
+    }
+    const settings = field.get('settings').merge(options).merge(merging);
+    return [field, settings];
+  }
+  getSettingsForField(field, stepIndex, merging){
+    return this.getFieldAndSettingsFromField(field, stepIndex, merging)[1];
   }
   // Getting the handoff message from the step before this
   getHandoffMessageForStepIndex(stepIndex){

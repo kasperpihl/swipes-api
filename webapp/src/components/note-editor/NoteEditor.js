@@ -115,7 +115,7 @@ class NoteEditor extends Component {
     }, 1)
   }
   render() {
-    const { editorState } = this.props;
+    const { editorState, readOnly } = this.props;
     return (
       <div ref="rooty" className="sw-text-editor"
         onBlur={this.onBlur}
@@ -125,6 +125,7 @@ class NoteEditor extends Component {
         onMouseUp={this.onMouseUp}>
         {this.renderStyleControls()}
         <Editor
+          readOnly={readOnly}
           editorState={editorState}
           handleKeyCommand={this.handleKeyCommand}
           onChange={this.onChange}

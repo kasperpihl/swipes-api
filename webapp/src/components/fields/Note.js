@@ -79,10 +79,12 @@ class Note extends Component {
             type="text"
             className="sw-note-field__title"
             placeholder="Untitled note"
-            value={data.get('title')}
+            disabled={!settings.get('editable')}
+            value={data.get('title') || ""}
             onChange={this.onTitleChange}
-            disabled={!settings.get('editable')}/>
+          />
           <NoteEditor
+            readOnly={settings.get('editable') ? false : true}
             editorState={data.get('editorState')}
             onChange={this.onChange} />
         </div>
@@ -100,8 +102,8 @@ class Note extends Component {
 
     return (
       <div className="sw-note-field__side">
-        {this.renderNoteButton()}
         {this.renderNoteStatus()}
+        {this.renderNoteButton()}
       </div>
     )
   }
@@ -115,12 +117,6 @@ class Note extends Component {
     return <div className="sw-note-field__status">This note is not editable</div>
   }
   renderNoteButton() {
-    const { settings } = this.props;
-
-    if (!settings.get('editable')) {
-      return;
-    }
-
     return <div className="sw-note-field__button">Done</div>
   }
   render() {

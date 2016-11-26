@@ -104,16 +104,16 @@ class GoalStep extends Component {
     }
 
     if (name === 'fullscreen') {
-      field = helper.getFieldFromField(field);
+      const fieldAndSettings = helper.getFieldAndSettingsFromField(field, stepIndex, {fullscreen: true});
       this.callDelegate('stepAction', name, {
         component: 'Field',
         title: field.get('title') + ' (Note)',
         onClose: this.cacheFormInput,
         props: {
           index,
-          field,
+          field: fieldAndSettings[0],
           delegate: this.bindCallbacks[index],
-          settings: helper.getSettingsForField(field, stepIndex, {fullscreen : true}),
+          settings: fieldAndSettings[1],
           data: formData.get(index)
         }
       });
@@ -212,17 +212,18 @@ class GoalStep extends Component {
 
   renderFields(step){
     const { goal } = this.props;
+    const { helper } = this;
     const { formData, stepIndex } = this.state;
     return step.get('fields').map((field, i) => {
 
-      const iconAndColor = this.helper.getIconWithColorForField(field, stepIndex);
-      const settings = this.helper.getSettingsForField(field, stepIndex);
+      const iconAndColor = helper.getIconWithColorForField(field, stepIndex);
       // Field-swap for links. Check if field is a link and find the link
-      field = this.helper.getFieldFromField(field);
+      const fAndS = helper.getFieldAndSettingsFromField(field, stepIndex);
+      field = fAndS[0];
+      const settings = fAndS[1];
 
 
-
-      const Field = this.helper.fieldForType(field.get('type'));
+      const Field = helper.fieldForType(field.get('type'));
       if (Field) {
         const canShowFullscreen = (Field.fullscreen && Field.fullscreen());
         if (!this.bindCallbacks[i]) {
