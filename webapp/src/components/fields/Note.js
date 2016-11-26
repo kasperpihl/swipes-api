@@ -75,7 +75,13 @@ class Note extends Component {
     return (
       <div className="sw-note-field__note-editor">
         <div className="sw-note-field__note">
-          <input type="text" className="sw-note-field__title" placeholder="Untitled note" value={data.get('title')} onChange={this.onTitleChange}/>
+          <input
+            type="text"
+            className="sw-note-field__title"
+            placeholder="Untitled note"
+            value={data.get('title')}
+            onChange={this.onTitleChange}
+            disabled={!settings.get('editable')}/>
           <NoteEditor
             editorState={data.get('editorState')}
             onChange={this.onChange} />
