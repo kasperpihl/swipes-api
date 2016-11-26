@@ -277,11 +277,9 @@ class GoalStep extends Component {
     const { stepIndex, step, isSubmitting } = this.state;
     const amIAssigned = this.helper.amIAssigned(stepIndex);
     const isCurrent = this.helper.isCurrentStep(stepIndex);
-    if(isSubmitting){
-      return <div>LALALA</div>
-    }
+
     if (amIAssigned && isCurrent) {
-      return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
+      return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} disabled={!!isSubmitting}/>
     }
   }
   renderPostAutomations(){

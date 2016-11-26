@@ -43,4 +43,16 @@
       transition: .1s;
     }
   }
+
+  &--disabled {
+    #{$b}__actions {
+      border: 1px solid $deepBlue-20;
+    }
+
+    #{$b}__button {
+      pointer-events: none;
+      cursor: wait;
+      color: $deepBlue-20;
+    }
+  }
 }

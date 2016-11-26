@@ -18,15 +18,22 @@ class StepSubmission extends Component {
     }
   }
   render() {
-    const { submission } = this.props;
+    const { submission, disabled } = this.props;
+    let className = 'step-submission';
     let btns = ['Submit'];
 
     if(submission && submission.get('type') === 'decide'){
       btns = ['Yes', 'No'];
     }
 
+    console.log('disabled', disabled)
+
+    if (disabled) {
+      className += ' step-submission--disabled'
+    }
+
     return (
-      <div className="step-submission">
+      <div className={className}>
         <div className="step-submission__actions">
           {btns.map((t,i) => <div className="step-submission__button" onClick={this.onSubmit} data-index={i} key={i}>{t}</div>)}
         </div>
