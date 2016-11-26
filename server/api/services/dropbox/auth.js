@@ -21,7 +21,7 @@ const authUrl = (data, callback) => {
 }
 
 const authData = (data, callback) => {
-  const authData = {};
+  const auth_data = {};
   const method = 'token';
   const params = {
     code: data.query.code,
@@ -31,7 +31,7 @@ const authData = (data, callback) => {
     redirect_uri: dropboxConfig.redirectURI
   }
 
-  request({ authData, method, params }, (err, res) => {
+  request({ auth_data, method, params }, (err, res) => {
     // console.log('RESULTS', res);
     // return callback('emi_malko_si_eba_maikata');
     if (err) {
@@ -43,7 +43,7 @@ const authData = (data, callback) => {
       access_token,
       token_type
     } = res;
-    const authData = {
+    const auth_data = {
       access_token,
       token_type
     };
@@ -52,12 +52,12 @@ const authData = (data, callback) => {
       account_id
     };
     const data = {
-      authData,
+      auth_data,
       id: account_id
     };
     const cursors = {};
 
-    request({ authData, method, params }, (err, res) => {
+    request({ auth_data, method, params }, (err, res) => {
       if (err) {
         console.log(err);
       }
@@ -70,7 +70,7 @@ const authData = (data, callback) => {
         recursive: true
       }
 
-      request({authData, method, params}, (err, res) => {
+      request({auth_data, method, params}, (err, res) => {
         if (err) {
           console.log(err);
         }
