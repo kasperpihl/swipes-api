@@ -19,59 +19,66 @@ const deleteGoal = (goalId) => {
 
 const submitStep = (goalId, stepId, data, previousSteps) => {
   return (dispatch, getState) => {
-    let modalOpt = {
-      title: 'Personal hand-off',
-      data: {
-        textarea: {
-          placeholder: 'Personal message (optional)'
-        },
-        buttons: ['Submit']
-      }
-    }
-    if(previousSteps){
-      modalOpt = {
-        title: 'Choose reason',
+    return new Promise((resolve, reject) => {
+      let modalOpt = {
+        title: 'Personal hand-off',
         data: {
           textarea: {
-            placeholder: 'Personal hand-off, what should be changed? (required)'
-          },
-          list: {
-            selectable: true,
-            items: previousSteps.map((step, i) => {
-              const selected = (i === 0);
-              const title = (i + 1) + '. ' + step.get('title');
-              return { title, id: step.get('id')}
-            }).toJS()
+            placeholder: 'Personal message (optional)'
           },
           buttons: ['Submit']
         }
       }
-    }
-    dispatch(load( modalOpt, (res) => {
-      let message = null;
-      let step_back_id = null;
-      if(res){
-        message = res.text;
-        if(previousSteps){
-          const index = res.items.length ? res.items[0] : 0;
-          step_back_id = previousSteps.get(index).get('id');
+      if(previousSteps){
+        modalOpt = {
+          title: 'Choose reason',
+          data: {
+            textarea: {
+              placeholder: 'Personal hand-off, what should be changed? (required)'
+            },
+            list: {
+              selectable: true,
+              items: previousSteps.map((step, i) => {
+                const selected = (i === 0);
+                const title = (i + 1) + '. ' + step.get('title');
+                return { title, id: step.get('id')}
+              }).toJS()
+            },
+            buttons: ['Submit']
+          }
+        }
+      }
+      dispatch(load( modalOpt, (res) => {
+        let message = null;
+        let step_back_id = null;
+        if(res){
+          message = res.text;
+          if(previousSteps){
+            const index = res.items.length ? res.items[0] : 0;
+            step_back_id = previousSteps.get(index).get('id');
+          }
+
+          dispatch(request('steps.submit', {
+            goal_id: goalId,
+            step_id: stepId,
+            step_back_id,
+            data,
+            message
+          })).then((res, err) => {
+            resolve();
+            if (err) {
+              return console.log('Error completing step', err);
+            }
+          })
+
+        }
+        else{
+          resolve();
         }
 
-        dispatch(request('steps.submit', {
-          goal_id: goalId,
-          step_id: stepId,
-          step_back_id,
-          data,
-          message
-        })).then((res, err) => {
-          if (err) {
-            return console.log('Error completing step', err);
-          }
-        })
+      }))
+    })
 
-      }
-
-    }))
   }
 }
 

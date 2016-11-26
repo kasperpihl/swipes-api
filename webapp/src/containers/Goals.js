@@ -5,7 +5,6 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { overlay, main, goals } from '../actions';
 import { bindAll } from '../classes/utils'
 
-
 import GoalStep from '../components/goals/GoalStep'
 import GoalList from '../components/goals/GoalList'
 import { PlusIcon } from '../components/icons'
@@ -35,11 +34,17 @@ class Goals extends Component {
     }
 
   }
-  stepSubmit(step, goalId, stepId, data, previousSteps) {
+  stepSubmit(step, stepId, data, previousSteps, callback) {
 
-    const { submit } = this.props;
+    const { submit, currentGoal } = this.props;
+    if(currentGoal){
+      submit(currentGoal.get('id'), stepId, data, previousSteps).then((res) => {
+        if(callback){
+          callback();
+        }
+      });
+    }
 
-    submit(goalId, stepId, data, previousSteps);
   }
   setActiveGoal(id){
     const { setActiveGoal, setOverlay, goals } = this.props;

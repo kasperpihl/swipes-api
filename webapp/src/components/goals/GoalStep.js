@@ -155,7 +155,10 @@ class GoalStep extends Component {
       previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
     }
     const data = this.generateRawObj();
-    this.callDelegate('stepSubmit', goal.get('id'), step.get('id'), data, previousSteps);
+    this.setState({isSubmitting: true});
+    this.callDelegate('stepSubmit', step.get('id'), data, previousSteps, () => {
+      this.setState({isSubmitting: false});
+    });
   }
 
   renderHeader() {
@@ -271,10 +274,12 @@ class GoalStep extends Component {
     // > Save to Evernote
   }
   renderSubmission(){
-    const { stepIndex, step } = this.state;
+    const { stepIndex, step, isSubmitting } = this.state;
     const amIAssigned = this.helper.amIAssigned(stepIndex);
     const isCurrent = this.helper.isCurrentStep(stepIndex);
-
+    if(isSubmitting){
+      return <div>LALALA</div>
+    }
     if (amIAssigned && isCurrent) {
       return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />
     }

@@ -19,7 +19,6 @@ class Note extends Component {
   static parseInitialData(data){
     let editorState = EditorState.createEmpty();
     if(data && data.get('editorState')){
-      console.log(data.toJS());
       const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
       editorState = EditorState.push(editorState, convertFromRaw(raw));
     }
