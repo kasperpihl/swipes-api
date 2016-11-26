@@ -130,6 +130,7 @@ class NoteEditor extends Component {
           handleKeyCommand={this.handleKeyCommand}
           onChange={this.onChange}
           blockStyleFn={this.handleBlock}
+          placeholder="Write something cool in me"
         />
       </div>
     )

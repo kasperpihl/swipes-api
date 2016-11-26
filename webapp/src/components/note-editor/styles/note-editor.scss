@@ -69,6 +69,21 @@
   }
 }
 
+.public-DraftEditorPlaceholder-root {
+  color: $deepBlue-30;
+  position: absolute;
+  z-index: 0;
+  left: 15px;
+}
+
+.public-DraftEditorPlaceholder-hasFocus {
+  color: $deepBlue-40;
+}
+
+.DraftEditorPlaceholder-hidden {
+  display: none
+}
+
 .public-DraftEditor-block {
   position: relative;
 }
@@ -100,7 +115,6 @@
   right: 0;
   text-align: right;
 }
-
 
 .RichEditor-controls {
   @include size(auto, 42px);

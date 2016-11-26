@@ -82,6 +82,7 @@ class Note extends Component {
             disabled={!settings.get('editable')}
             value={data.get('title') || ""}
             onChange={this.onTitleChange}
+            autoFocus
           />
           <NoteEditor
             readOnly={settings.get('editable') ? false : true}
