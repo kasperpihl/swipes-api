@@ -14,6 +14,20 @@ export default class GoalsUtil {
     requireParams({ goal }, 'updateGoal');
     this.goal = goal;
   }
+  isLastStep(stepIndex){
+    requireParams({ stepIndex }, 'isLastStep');
+    return (this.goal.get('currentStepIndex' === this.goal.get('steps').size - 1));
+  }
+  isGoalCompleted(){
+    if(this.goal.get('steps').last().get('completed')){
+      return true;
+    }
+    return false;
+  }
+  isStepCompleted(stepIndex){
+    requireParams({ stepIndex }, 'isStepCompleted');
+    return this.goal.getIn(['steps', stepIndex, 'completed'])
+  }
   fieldForType(type){
     requireParams({ type }, 'fieldForType');
     return fields[type];
