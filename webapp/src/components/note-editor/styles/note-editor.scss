@@ -8,14 +8,12 @@
 
 .DraftEditor-root {
   height: 100%;
-  min-height: calc(100vh - 200px);
   position: relative;
   text-align: initial;
 }
 
 .DraftEditor-editorContainer {
   height: inherit;
-  min-height: calc(100vh - 200px);
   position: relative;
   text-align: initial;
   z-index: 1;
@@ -24,13 +22,27 @@
 .public-DraftEditor-content {
   width: 100%;
   height: inherit;
-  min-height: calc(100vh - 200px);
   text-align: initial;
   font-size: 15px;
   line-height: 1.5;
   letter-spacing: .6px;
   color: $deepBlue-100;
   padding: 0 15px;
+  cursor: text;
+  position: relative;
+
+  &:after {
+    content: "";
+    @include size(100%, calc(50vh - 100px));
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transform: translateY(100%);
+  }
+
+  & * {
+    cursor: text;
+  }
 
   & h1 {
     letter-spacing: 0px;
@@ -60,7 +72,6 @@
 
   & li {
     list-style: initial !important;
-    color: $deepBlue-80;
     margin: 3px 0;
   }
 
