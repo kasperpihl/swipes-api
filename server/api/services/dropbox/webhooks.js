@@ -112,8 +112,9 @@ const webhooks = (account, callback) => {
 
       request({auth_data, method, params}, secondCallback);
     } else {
+      const accountId = id;
       const cursors = {list_folder_cursor: cursor};
-      updateCursors({ user_id, id, cursors });
+      updateCursors({ user_id, accountId, cursors });
     }
   }
 
