@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import { Map, fromJS } from 'immutable'
+import * as Icons from '../icons'
 
 // Views
 import Assigning from '../assigning/Assigning'
@@ -160,7 +161,13 @@ class GoalStep extends Component {
       this.setState({isSubmitting: false});
     });
   }
+  renderIcon(icon){
+    const Comp = Icons[icon];
 
+    if (Comp) {
+      return <Comp className="goal-step__icon goal-step__icon--svg"/>;
+    }
+  }
   renderHeader() {
     const { step, stepIndex } = this.state;
     const stepTitle = step.get('title');
@@ -197,6 +204,18 @@ class GoalStep extends Component {
         currentIndex={goal.get('currentStepIndex')}
       />
     )
+  }
+  renderComplete() {
+    const { stepIndex } = this.state;
+
+    if (this.helper.isLastStep(stepIndex) && this.helper.isGoalCompleted()) {
+      return (
+        <div className="goal-step__completed">
+          {this.renderIcon('CheckmarkIcon')}
+          goal completed
+        </div>
+      )
+    }
   }
   renderStatus(){
     const { stepIndex } = this.state;
@@ -302,6 +321,7 @@ class GoalStep extends Component {
         <div className="goal-step__content">
           {this.renderHeader()}
           {this.renderProgressBar()}
+          {this.renderComplete()}
           {this.renderHandoff()}
           {this.renderFields(step)}
         </div>

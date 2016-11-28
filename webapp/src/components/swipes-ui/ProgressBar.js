@@ -33,11 +33,14 @@ class ProgressBar extends Component {
   renderSteps() {
     const { steps, activeIndex, currentIndex } = this.props;
     const stepWidth = 100 / steps.length;
+    let multiplier = currentIndex;
+
+    if (steps.length == currentIndex + 1) {
+      multiplier = currentIndex + 1
+    }
 
     let styles = {
-      // WebkitClipPath: `polygon(${stepWidth * currentIndex}% 0, ${stepWidth * (currentIndex + 1)}% 0, ${stepWidth * (currentIndex + 1)}% 100%, ${stepWidth * currentIndex}% 100%)`
-
-      WebkitClipPath: `polygon(0% 0, ${stepWidth * currentIndex}% 0, ${stepWidth * currentIndex}% 100%, 0% 100%)`
+      WebkitClipPath: `polygon(0% 0, ${stepWidth * multiplier}% 0, ${stepWidth * multiplier}% 100%, 0% 100%)`
     };
 
     const stepsHTML = steps.map( (step, i) => {

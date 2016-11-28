@@ -16,7 +16,7 @@ export default class GoalsUtil {
   }
   isLastStep(stepIndex){
     requireParams({ stepIndex }, 'isLastStep');
-    return (this.goal.get('currentStepIndex' === this.goal.get('steps').size - 1));
+    return stepIndex === this.goal.get('steps').size - 1;
   }
   isGoalCompleted(){
     if(this.goal.get('steps').last().get('completed')){
