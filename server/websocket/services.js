@@ -80,6 +80,11 @@ let userServices = (socket, userId) => {
         let type = getType(o, n);
         let payload = difference(o, n, type);
 
+        // omit some fields
+        payload = payload.map((service) => {
+          return _.omit(service, ['auth_data', 'cursors']);
+        })
+
         // In an event when we delete multiple workflows we will return array here
         // In any other case we will return object
         if (payload.length === 1) {

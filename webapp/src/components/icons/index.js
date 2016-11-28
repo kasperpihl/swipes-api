@@ -41,6 +41,12 @@ export const ShapeEight = svg('shape-8')
 export const ShapeNine = svg('shape-9')
 export const ShapeTen = svg('shape-10')
 
+export const BoldIcon = svg('bold-icon')
+export const ItallicIcon = svg('itallic-icon')
+export const H1Icon = svg('h1-icon')
+export const H2Icon = svg('h2-icon')
+export const UnderlineIcon = svg('underline-icon')
+export const UnorderedListIcon = svg('unordered-list-icon')
 
 
 

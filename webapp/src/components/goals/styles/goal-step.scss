@@ -52,6 +52,35 @@
     }
   }
 
+  &__completed {
+    @include size(100%, auto);
+    @include flex(center, center, column);
+    color: $deepBlue-100;
+    font-size: 36px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding-top: 25px;
+    padding-bottom: 85px;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 20px;
+      @include size(100%, 1px);
+      background-color: $deepBlue-10;
+    }
+
+    #{$b}__icon {
+      @include size(60px);
+      background-color: $green-color;
+      stroke: $bg;
+      border-radius: 50%;
+      padding: 15px;
+      margin-bottom: 21px;
+    }
+  }
+
   &__hand-off-message {
     font-size: 15px;
     line-height: 1.4;

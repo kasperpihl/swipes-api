@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import {Editor, EditorState, SelectionState, RichUtils, ContentBlock, getVisibleSelectionRect } from 'draft-js'
 import { bindAll } from '../../classes/utils'
+import * as Icons from '../icons'
 
 import './styles/note-editor.scss'
 
@@ -11,7 +12,7 @@ class NoteEditor extends Component {
       hasSelected: false,
       styleControl: {show: false}
     }
-    bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'handleKeyCommand']);
+    bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'toggleInlineStyle', 'handleKeyCommand']);
     this.onChange = (editorState) => {
       const sel = editorState.getSelection();
       const hasSelected = ( sel.anchorKey !== sel.focusKey || sel.anchorOffset !== sel.focusOffset)
@@ -45,6 +46,14 @@ class NoteEditor extends Component {
       )
     );
   }
+  toggleInlineStyle(inlineStyle) {
+    this.onChange(
+      RichUtils.toggleInlineStyle(
+        this.props.editorState,
+        inlineStyle
+      )
+    );
+  }
   positionForStyleControls(){
     const selectionRect = getVisibleSelectionRect(window);
     return selectionRect;
@@ -67,14 +76,14 @@ class NoteEditor extends Component {
     return (
       <BlockStyleControls
         editorState={editorState}
-        onToggle={this.toggleBlockType}
+        onToggleBlock={this.toggleBlockType}
+        onToggleInline={this.toggleInlineStyle}
         position={position}
       />
     )
   }
   onKeyDown(e){
     if(e.keyCode === 16){
-      console.log('shift down');
       const { styleControl } = this.state;
       if(styleControl.show){
         this.shiftKeyTest = true;
@@ -146,16 +155,16 @@ const BlockStyleControls = (props) => {
     .getType();
 
   const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'UL', style: 'unordered-list-item'}
+    {label: 'H1Icon', style: 'header-one'},
+    {label: 'H2Icon', style: 'header-two'},
+    {label: 'UnorderedListIcon', style: 'unordered-list-item'}
   ];
 
-
-  // let style = {
-  //   top: position.top,
-  //   transform: 'translateY(-120%) translateX(-50%)'
-  // }
+  const INLINE_STYLES = [
+    {label: 'BoldIcon', style: 'BOLD'},
+    {label: 'ItallicIcon', style: 'ITALIC'},
+    {label: 'UnderlineIcon', style: 'UNDERLINE'}
+  ];
 
   let style = {
     left: position.left,
@@ -163,6 +172,7 @@ const BlockStyleControls = (props) => {
     transform: 'translateY(-120%) translateX(-50%)'
   };
 
+  const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
     <div className="RichEditor-controls" style={style}>
       {BLOCK_TYPES.map((type) =>
@@ -170,13 +180,31 @@ const BlockStyleControls = (props) => {
           key={type.label}
           active={type.style === blockType}
           label={type.label}
-          onToggle={props.onToggle}
+          onToggle={props.onToggleBlock}
+          style={type.style}
+        />
+      )}
+
+      {INLINE_STYLES.map(type =>
+        <StyleButton
+          key={type.label}
+          active={currentStyle.has(type.style)}
+          label={type.label}
+          onToggle={props.onToggleInline}
           style={type.style}
         />
       )}
     </div>
   );
 };
+
+const renderIcon = (icon) => {
+  const Comp = Icons[icon];
+
+  if (Comp) {
+    return <Comp className="RichEditor-styleButton__icon rootClass__icon--svg"/>;
+  }
+}
 
 const StyleButton = (props) => {
   let className = 'RichEditor-styleButton';
@@ -192,7 +220,7 @@ const StyleButton = (props) => {
 
   return (
     <span className={className} onMouseDown={toggle}>
-      {props.label}
+      {renderIcon(props.label)}
     </span>
   );
 }
