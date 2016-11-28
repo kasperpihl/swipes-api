@@ -138,4 +138,10 @@
   &.RichEditor-activeButton {
     background-color: $blue-100;
   }
+
+
+  &__icon {
+    @include size(30px);
+    fill: $bg;
+  }
 }
