@@ -49,7 +49,6 @@ class NoteEditor extends Component {
     );
   }
   toggleInlineStyle(inlineStyle) {
-    console.log('do you get here')
     this.onChange(
       RichUtils.toggleInlineStyle(
         this.props.editorState,
@@ -149,102 +148,6 @@ class NoteEditor extends Component {
     )
   }
 }
-
-const BlockStyleControls = (props) => {
-  const { editorState, position, mousePosition } = props;
-  const selection = editorState.getSelection();
-  const currentStyle = props.editorState.getCurrentInlineStyle();
-  const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
-
-  // const BLOCK_TYPES = [
-  //   {label: 'H1Icon', style: 'header-one'},
-  //   {label: 'H2Icon', style: 'header-two'},
-  //   {label: 'UnorderedListIcon', style: 'unordered-list-item'}
-  // ];
-  //
-  // const INLINE_STYLES = [
-  //   {label: 'BoldIcon', style: 'BOLD'},
-  //   {label: 'ItallicIcon', style: 'ITALIC'},
-  //   {label: 'UnderlineIcon', style: 'UNDERLINE'}
-  // ];
-
-  // let style = {};
-  //
-  // if (!mousePosition.mousePos) {
-  //   style.left = position.left + (position.width / 2);
-  //   style.top = position.bottom;
-  //   style.transform = 'translateY(20%) translateX(-50%)'
-  //
-  //   if (selection.get('isBackward')) {
-  //     style.top = position.top;
-  //     style.transform = 'translateY(-120%) translateX(-50%)'
-  //   }
-  // } else {
-  //   style.left = mousePosition.mousePos.x + 20;
-  //   style.top = mousePosition.mousePos.y + 20;
-  //
-  //   if (selection.get('isBackward')) {
-  //     style.left = mousePosition.mousePos.x;
-  //     style.top = mousePosition.mousePos.y;
-  //     style.transform = 'translateY(-120%) translateX(-120%)'
-  //   }
-  // }
-
-  return (
-    <div className="RichEditor-controls" style={style}>
-      {BLOCK_TYPES.map((type) =>
-        <StyleButton
-          key={type.label}
-          active={type.style === blockType}
-          label={type.label}
-          onToggle={props.onToggleBlock}
-          style={type.style}
-        />
-      )}
-
-      {INLINE_STYLES.map(type =>
-        <StyleButton
-          key={type.label}
-          active={currentStyle.has(type.style)}
-          label={type.label}
-          onToggle={props.onToggleInline}
-          style={type.style}
-        />
-      )}
-    </div>
-  );
-};
-
-const renderIcon = (icon) => {
-  const Comp = Icons[icon];
-
-  if (Comp) {
-    return <Comp className="RichEditor-styleButton__icon rootClass__icon--svg"/>;
-  }
-}
-
-const StyleButton = (props) => {
-  let className = 'RichEditor-styleButton';
-
-  const toggle = (e) => {
-    e.preventDefault();
-    props.onToggle(props.style);
-  }
-
-  if (props.active) {
-    className += ' RichEditor-activeButton';
-  }
-
-  return (
-    <span className={className} onMouseDown={toggle}>
-      {renderIcon(props.label)}
-    </span>
-  );
-}
-
 
 export default NoteEditor
 

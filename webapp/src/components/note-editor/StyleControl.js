@@ -10,15 +10,14 @@ class StyleControl extends Component {
   }
   componentDidMount() {
   }
-  onToggle(e, style) {
+  onToggle(style, type) {
     const { onToggleBlock, onToggleInline } = this.props;
-    e.preventDefault;
 
-    if (onToggleBlock) {
-      onToggleBlock(style);
+    if (type === 'block') {
+      onToggleBlock(style)
     }
 
-    if (onToggleInline) {
+    if (type === 'inline') {
       onToggleInline(style)
     }
   }
@@ -44,11 +43,11 @@ class StyleControl extends Component {
     }
 
     const blockHtml = styleOptions.block.map( (option) => {
-      return this.renderButton(option.label, option.style)
+      return this.renderButton(option.label, option.style, 'block')
     })
 
     const inlineHtml = styleOptions.inline.map( (option) => {
-      return this.renderButton(option.label, option.style)
+      return this.renderButton(option.label, option.style, 'inline')
     })
 
 
@@ -59,7 +58,7 @@ class StyleControl extends Component {
       </div>
     )
   }
-  renderButton(label, style) {
+  renderButton(label, style, type) {
     const { editorState } = this.props;
     const selection = editorState.getSelection();
     const currentStyle = editorState.getCurrentInlineStyle();
@@ -75,7 +74,7 @@ class StyleControl extends Component {
     }
 
     return (
-      <span className={className} key={label} onMouseDown={this.onToggle.bind(this, style)}>
+      <span className={className} key={label} onMouseDown={this.onToggle.bind(this, style, type)}>
         {this.renderIcon(label)}
       </span>
     )
