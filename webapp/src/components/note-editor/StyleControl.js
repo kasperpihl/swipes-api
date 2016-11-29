@@ -160,13 +160,17 @@ class StyleControl extends Component {
     if (Comp) {
       return <Comp className="RichEditor-styleButton__icon"/>;
     }
+
+    return <span>{icon}</span>
   }
   renderButtons() {
     const styleOptions = {
       block: [
         {label: 'H1Icon', style: 'header-one'},
         {label: 'H2Icon', style: 'header-two'},
-        {label: 'UnorderedListIcon', style: 'unordered-list-item'}
+        {label: 'OL', style: 'ordered-list-item'},
+        {label: 'UnorderedListIcon', style: 'unordered-list-item'},
+        {label: 'C', style: 'code-block'},
       ],
       inline: [
         {label: 'BoldIcon', style: 'BOLD'},

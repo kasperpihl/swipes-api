@@ -14,7 +14,19 @@ class NoteEditor extends Component {
       hasSelected: false,
       styleControl: {show: false}
     }
-    bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'toggleInlineStyle', 'handleKeyCommand']);
+    bindAll(this,
+      [
+        'onBlur',
+        'onKeyDown',
+        'onKeyUp',
+        'onMouseMove',
+        'onMouseUp',
+        'toggleBlockType',
+        'toggleInlineStyle',
+        'handleKeyCommand',
+        'onTab'
+      ]
+    );
     this.onChange = (editorState) => {
       const sel = editorState.getSelection();
       const hasSelected = ( sel.anchorKey !== sel.focusKey || sel.anchorOffset !== sel.focusOffset)
@@ -55,6 +67,12 @@ class NoteEditor extends Component {
         inlineStyle
       )
     );
+  }
+  onTab(e) {
+    const { editorState } = this.props;
+    const maxDepth = 4;
+    e.preventDefault()
+    this.onChange(RichUtils.onTab(e, editorState, maxDepth));
   }
   positionForStyleControls(){
     const selectionRect = getVisibleSelectionRect(window);
@@ -142,6 +160,7 @@ class NoteEditor extends Component {
           handleKeyCommand={this.handleKeyCommand}
           onChange={this.onChange}
           blockStyleFn={this.handleBlock}
+          onTab={this.onTab}
           placeholder="Write something cool in me"
         />
       </div>
