@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import {Editor, EditorState, SelectionState, RichUtils, ContentBlock, getVisibleSelectionRect } from 'draft-js'
+import StyleControl from './StyleControl'
+
 import { bindAll } from '../../classes/utils'
 import * as Icons from '../icons'
 
@@ -47,6 +49,7 @@ class NoteEditor extends Component {
     );
   }
   toggleInlineStyle(inlineStyle) {
+    console.log('do you get here')
     this.onChange(
       RichUtils.toggleInlineStyle(
         this.props.editorState,
@@ -66,19 +69,20 @@ class NoteEditor extends Component {
     }
 
     const position = this.positionForStyleControls();
+
     if(!position){
       return;
     }
 
-
     const selectionState = editorState.getSelection();
 
     return (
-      <BlockStyleControls
+      <StyleControl
         editorState={editorState}
         onToggleBlock={this.toggleBlockType}
         onToggleInline={this.toggleInlineStyle}
         position={position}
+        mousePosition={styleControl}
       />
     )
   }
@@ -147,32 +151,48 @@ class NoteEditor extends Component {
 }
 
 const BlockStyleControls = (props) => {
-  const { editorState, position } = props;
+  const { editorState, position, mousePosition } = props;
   const selection = editorState.getSelection();
+  const currentStyle = props.editorState.getCurrentInlineStyle();
   const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
 
-  const BLOCK_TYPES = [
-    {label: 'H1Icon', style: 'header-one'},
-    {label: 'H2Icon', style: 'header-two'},
-    {label: 'UnorderedListIcon', style: 'unordered-list-item'}
-  ];
+  // const BLOCK_TYPES = [
+  //   {label: 'H1Icon', style: 'header-one'},
+  //   {label: 'H2Icon', style: 'header-two'},
+  //   {label: 'UnorderedListIcon', style: 'unordered-list-item'}
+  // ];
+  //
+  // const INLINE_STYLES = [
+  //   {label: 'BoldIcon', style: 'BOLD'},
+  //   {label: 'ItallicIcon', style: 'ITALIC'},
+  //   {label: 'UnderlineIcon', style: 'UNDERLINE'}
+  // ];
 
-  const INLINE_STYLES = [
-    {label: 'BoldIcon', style: 'BOLD'},
-    {label: 'ItallicIcon', style: 'ITALIC'},
-    {label: 'UnderlineIcon', style: 'UNDERLINE'}
-  ];
+  // let style = {};
+  //
+  // if (!mousePosition.mousePos) {
+  //   style.left = position.left + (position.width / 2);
+  //   style.top = position.bottom;
+  //   style.transform = 'translateY(20%) translateX(-50%)'
+  //
+  //   if (selection.get('isBackward')) {
+  //     style.top = position.top;
+  //     style.transform = 'translateY(-120%) translateX(-50%)'
+  //   }
+  // } else {
+  //   style.left = mousePosition.mousePos.x + 20;
+  //   style.top = mousePosition.mousePos.y + 20;
+  //
+  //   if (selection.get('isBackward')) {
+  //     style.left = mousePosition.mousePos.x;
+  //     style.top = mousePosition.mousePos.y;
+  //     style.transform = 'translateY(-120%) translateX(-120%)'
+  //   }
+  // }
 
-  let style = {
-    left: position.left,
-    top: position.top,
-    transform: 'translateY(-120%) translateX(-50%)'
-  };
-
-  const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
     <div className="RichEditor-controls" style={style}>
       {BLOCK_TYPES.map((type) =>
@@ -209,13 +229,13 @@ const renderIcon = (icon) => {
 const StyleButton = (props) => {
   let className = 'RichEditor-styleButton';
 
-  if (props.active) {
-    className += ' RichEditor-activeButton';
-  }
-
   const toggle = (e) => {
     e.preventDefault();
     props.onToggle(props.style);
+  }
+
+  if (props.active) {
+    className += ' RichEditor-activeButton';
   }
 
   return (
