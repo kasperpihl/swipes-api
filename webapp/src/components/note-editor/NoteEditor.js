@@ -81,7 +81,7 @@ class NoteEditor extends Component {
         onToggleBlock={this.toggleBlockType}
         onToggleInline={this.toggleInlineStyle}
         position={position}
-        mousePosition={styleControl}
+        mouseUp={styleControl}
       />
     )
   }
