@@ -7,6 +7,7 @@ import '../components/topbar/topbar.scss'
 import DropdownMenu from '../components/swipes-ui/DropdownMenu'
 import { FindIcon, WorkspaceIcon, PlusIcon } from '../components/icons';
 import gradient from '../components/topbar/gradient';
+import * as Icons from '../components/icons'
 
 const { ipcRenderer } = nodeRequire('electron');
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -85,6 +86,15 @@ class Topbar extends Component {
       clearOverlay(i);
     }
   }
+  renderIcon(icon){
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="topbar__icon topbar__icon--svg"/>;
+    }
+
+    return <i className="material-icons topbar__icon topbar__icon--font">{icon}</i>
+  }
   renderBreadcrumb(){
     const { overlays } = this.props;
     if(overlays.size){
@@ -94,7 +104,7 @@ class Topbar extends Component {
       return (
         <div className="topbar__nav">
           <div className="topbar__nav__back" onClick={this.clickedBack}>
-            <i className="material-icons">close</i>
+            {this.renderIcon('ArrowLeftIcon')}
           </div>
           <div className="topbar__nav__crumbs">
             {crumbs}
@@ -146,7 +156,7 @@ class Topbar extends Component {
     else{
       return (
         <div className="topbar__button" onClick={this.clickedClear}>
-          <i className="material-icons">close</i>
+          {this.renderIcon('CloseIcon')}
         </div>
       )
     }
