@@ -6,9 +6,48 @@ import './styles/style-control.scss'
 class StyleControl extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      styles: {}
+    }
+  }
+  calculatePosition() {
+    const { editorState, position, mousePosition } = this.props;
+    const selection = editorState.getSelection();
+    let style = {};
+
+    if (!mousePosition.mousePos) {
+      style.left = position.left + (position.width / 2);
+      style.top = position.bottom;
+      style.transform = 'translateY(20%) translateX(-50%)'
+
+      if (selection.get('isBackward')) {
+        style.top = position.top;
+        style.transform = 'translateY(-120%) translateX(-50%)'
+      }
+    } else {
+      style.left = mousePosition.mousePos.x + 20;
+      style.top = mousePosition.mousePos.y + 20;
+
+      if (selection.get('isBackward')) {
+        style.left = mousePosition.mousePos.x;
+        style.top = mousePosition.mousePos.y;
+        style.transform = 'translateY(-120%) translateX(-120%)'
+      }
+    }
+
+    this.setState({styles: style})
   }
   componentDidMount() {
+    const { styleControls } = this.refs;
+    const { styles } = this.state;
+
+    setTimeout( () => {
+      const { left, bottom, top, right } = styleControls.getBoundingClientRect();
+      this.calculatePosition()
+      if (left < 0) {
+        console.log('styles', styles)
+      }
+    }, 0)
   }
   onToggle(style, type) {
     const { onToggleBlock, onToggleInline } = this.props;
@@ -80,32 +119,9 @@ class StyleControl extends Component {
     )
   }
   render() {
-    const { editorState, position, mousePosition } = this.props;
-    const selection = editorState.getSelection();
-    let style = {};
-
-    if (!mousePosition.mousePos) {
-      style.left = position.left + (position.width / 2);
-      style.top = position.bottom;
-      style.transform = 'translateY(20%) translateX(-50%)'
-
-      if (selection.get('isBackward')) {
-        style.top = position.top;
-        style.transform = 'translateY(-120%) translateX(-50%)'
-      }
-    } else {
-      style.left = mousePosition.mousePos.x + 20;
-      style.top = mousePosition.mousePos.y + 20;
-
-      if (selection.get('isBackward')) {
-        style.left = mousePosition.mousePos.x;
-        style.top = mousePosition.mousePos.y;
-        style.transform = 'translateY(-120%) translateX(-120%)'
-      }
-    }
 
     return (
-      <div className="RichEditor-controls" style={style}>
+      <div className="RichEditor-controls" ref="styleControls">
         {this.renderButtons()}
       </div>
     )
