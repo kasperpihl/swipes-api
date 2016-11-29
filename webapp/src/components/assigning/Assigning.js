@@ -47,7 +47,7 @@ class Assigning extends Component {
           profileImage = assignees[i].profile_pic;
         }
         if (me && assignees[i].id === me.id) {
-          profileImage = me.profile_pic;
+          profileImage = assignees[i].profile_pic;
 
           break;
         }
@@ -68,7 +68,7 @@ class Assigning extends Component {
     }
 
     return (
-      <div className="sw-assign__overlay">{`+${assignees.length}`}</div>
+      <div className="sw-assign__overlay">{`+${assignees.length - 1}`}</div>
     )
   }
   renderTooltip() {

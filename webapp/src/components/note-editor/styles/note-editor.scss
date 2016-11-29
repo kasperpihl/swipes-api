@@ -7,9 +7,12 @@
 }
 
 .DraftEditor-root {
-  height: 100%;
   position: relative;
   text-align: initial;
+
+  & * {
+    cursor: text;
+  }
 }
 
 .DraftEditor-editorContainer {
@@ -22,27 +25,14 @@
 .public-DraftEditor-content {
   width: 100%;
   height: inherit;
+  min-height: 49vh;
   text-align: initial;
   font-size: 15px;
   line-height: 1.5;
   letter-spacing: .6px;
   color: $deepBlue-100;
   padding: 0 15px;
-  cursor: text;
-  position: relative;
-
-  &:after {
-    content: "";
-    @include size(100%, calc(50vh - 100px));
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    transform: translateY(100%);
-  }
-
-  & * {
-    cursor: text;
-  }
+  // background-color: salmon;
 
   & h1 {
     letter-spacing: 0px;
@@ -71,7 +61,7 @@
   }
 
   & li {
-    list-style: initial !important;
+    // list-style: initial;
     margin: 3px 0;
   }
 
@@ -127,45 +117,150 @@
   text-align: right;
 }
 
-.RichEditor-controls {
-  @include size(auto, 42px);
-  @include flex(flex);
-  position: fixed;
-  z-index: 2;
-  background-color: $deepBlue-100;
-  border-radius: 6px;
-  overflow: hidden;
-  animation: fadeUpControls .15s ease-out forwards;
 
-  @keyframes fadeUpControls {
-    from {
-      opacity: 0;
-      margin-top: 8px;
-    }
-
-    to {
-      opacity: 1;
-      margin-top: 0;
-    }
-  }
+// FB styles
+.public-DraftStyleDefault-block {
+  position: relative;
+  white-space: pre-wrap;
 }
 
-.RichEditor-styleButton {
-  @include size(42px);
-  @include flex();
-  color: $bg;
+.public-DraftStyleDefault-ltr {
+  direction: ltr;
+  text-align: left;
+}
 
-  &:hover {
-    background-color: $deepBlue-80;
-  }
+.public-DraftStyleDefault-rtl {
+  direction: rtl;
+  text-align: right;
+}
 
-  &.RichEditor-activeButton {
-    background-color: $blue-100;
-  }
+.public-DraftStyleDefault-listLTR {
+  direction: ltr;
+}
 
+.public-DraftStyleDefault-listRTL {
+  direction: rtl;
+}
 
-  &__icon {
-    @include size(30px);
-    fill: $bg;
-  }
+.public-DraftStyleDefault-ul,
+.public-DraftStyleDefault-ol {
+  margin: 16px 0;
+  padding: 0;
+}
+
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+  margin-left: 1.5em;
+}
+
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listRTL {
+  margin-right: 1.5em;
+}
+
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+  margin-left: 3em;
+}
+
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listRTL {
+  margin-right: 3em;
+}
+
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+  margin-left: 4.5em;
+}
+
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listRTL {
+  margin-right: 4.5em;
+}
+
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+  margin-left: 6em;
+}
+
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listRTL {
+  margin-right: 6em;
+}
+
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+  margin-left: 7.5em;
+}
+
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listRTL {
+  margin-right: 7.5em;
+}
+
+.public-DraftStyleDefault-unorderedListItem {
+  list-style-type: square;
+  position: relative;
+}
+
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth0 {
+  list-style-type: disc;
+}
+
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth1 {
+  list-style-type: circle;
+}
+
+.public-DraftStyleDefault-orderedListItem {
+  list-style-type: none;
+  position: relative;
+}
+
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-listLTR:before {
+  left: -36px;
+  position: absolute;
+  text-align: right;
+  width: 30px;
+}
+
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-listRTL:before {
+  position: absolute;
+  right: -36px;
+  text-align: left;
+  width: 30px;
+}
+
+.public-DraftStyleDefault-orderedListItem:before {
+  content: counter(ol0) ". ";
+  counter-increment: ol0;
+}
+
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth1:before {
+  content: counter(ol1) ". ";
+  counter-increment: ol1;
+}
+
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth2:before {
+  content: counter(ol2) ". ";
+  counter-increment: ol2;
+}
+
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth3:before {
+  content: counter(ol3) ". ";
+  counter-increment: ol3;
+}
+
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth4:before {
+  content: counter(ol4) ". ";
+  counter-increment: ol4;
+}
+
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-reset {
+  counter-reset: ol0;
+}
+
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-reset {
+  counter-reset: ol1;
+}
+
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-reset {
+  counter-reset: ol2;
+}
+
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-reset {
+  counter-reset: ol3;
+}
+
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-reset {
+  counter-reset: ol4;
 }

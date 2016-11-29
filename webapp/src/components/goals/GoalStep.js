@@ -169,15 +169,18 @@ class GoalStep extends Component {
     }
   }
   renderHeader() {
+    const { myId } = this.props;
     const { step, stepIndex } = this.state;
     const stepTitle = step.get('title');
     const assignees = step.get('assignees').toJS();
+    const me = { id: myId };
 
     return (
       <StepHeader
         index={stepIndex + 1}
         title={stepTitle}
         assignees={assignees}
+        me={me}
       />
     )
   }

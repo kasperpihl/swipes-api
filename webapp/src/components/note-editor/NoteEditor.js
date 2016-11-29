@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import {Editor, EditorState, SelectionState, RichUtils, ContentBlock, getVisibleSelectionRect } from 'draft-js'
+import StyleControl from './StyleControl'
+
 import { bindAll } from '../../classes/utils'
 import * as Icons from '../icons'
 
@@ -12,7 +14,19 @@ class NoteEditor extends Component {
       hasSelected: false,
       styleControl: {show: false}
     }
-    bindAll(this, ['onBlur', 'onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'toggleBlockType', 'toggleInlineStyle', 'handleKeyCommand']);
+    bindAll(this,
+      [
+        'onBlur',
+        'onKeyDown',
+        'onKeyUp',
+        'onMouseMove',
+        'onMouseUp',
+        'toggleBlockType',
+        'toggleInlineStyle',
+        'handleKeyCommand',
+        'onTab'
+      ]
+    );
     this.onChange = (editorState) => {
       const sel = editorState.getSelection();
       const hasSelected = ( sel.anchorKey !== sel.focusKey || sel.anchorOffset !== sel.focusOffset)
@@ -54,6 +68,12 @@ class NoteEditor extends Component {
       )
     );
   }
+  onTab(e) {
+    const { editorState } = this.props;
+    const maxDepth = 4;
+    e.preventDefault()
+    this.onChange(RichUtils.onTab(e, editorState, maxDepth));
+  }
   positionForStyleControls(){
     const selectionRect = getVisibleSelectionRect(window);
     return selectionRect;
@@ -66,19 +86,20 @@ class NoteEditor extends Component {
     }
 
     const position = this.positionForStyleControls();
+
     if(!position){
       return;
     }
 
-
     const selectionState = editorState.getSelection();
 
     return (
-      <BlockStyleControls
+      <StyleControl
         editorState={editorState}
         onToggleBlock={this.toggleBlockType}
         onToggleInline={this.toggleInlineStyle}
         position={position}
+        mouseUp={styleControl}
       />
     )
   }
@@ -139,92 +160,13 @@ class NoteEditor extends Component {
           handleKeyCommand={this.handleKeyCommand}
           onChange={this.onChange}
           blockStyleFn={this.handleBlock}
+          onTab={this.onTab}
           placeholder="Write something cool in me"
         />
       </div>
     )
   }
 }
-
-const BlockStyleControls = (props) => {
-  const { editorState, position } = props;
-  const selection = editorState.getSelection();
-  const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
-
-  const BLOCK_TYPES = [
-    {label: 'H1Icon', style: 'header-one'},
-    {label: 'H2Icon', style: 'header-two'},
-    {label: 'UnorderedListIcon', style: 'unordered-list-item'}
-  ];
-
-  const INLINE_STYLES = [
-    {label: 'BoldIcon', style: 'BOLD'},
-    {label: 'ItallicIcon', style: 'ITALIC'},
-    {label: 'UnderlineIcon', style: 'UNDERLINE'}
-  ];
-
-  let style = {
-    left: position.left,
-    top: position.top,
-    transform: 'translateY(-120%) translateX(-50%)'
-  };
-
-  const currentStyle = props.editorState.getCurrentInlineStyle();
-  return (
-    <div className="RichEditor-controls" style={style}>
-      {BLOCK_TYPES.map((type) =>
-        <StyleButton
-          key={type.label}
-          active={type.style === blockType}
-          label={type.label}
-          onToggle={props.onToggleBlock}
-          style={type.style}
-        />
-      )}
-
-      {INLINE_STYLES.map(type =>
-        <StyleButton
-          key={type.label}
-          active={currentStyle.has(type.style)}
-          label={type.label}
-          onToggle={props.onToggleInline}
-          style={type.style}
-        />
-      )}
-    </div>
-  );
-};
-
-const renderIcon = (icon) => {
-  const Comp = Icons[icon];
-
-  if (Comp) {
-    return <Comp className="RichEditor-styleButton__icon rootClass__icon--svg"/>;
-  }
-}
-
-const StyleButton = (props) => {
-  let className = 'RichEditor-styleButton';
-
-  if (props.active) {
-    className += ' RichEditor-activeButton';
-  }
-
-  const toggle = (e) => {
-    e.preventDefault();
-    props.onToggle(props.style);
-  }
-
-  return (
-    <span className={className} onMouseDown={toggle}>
-      {renderIcon(props.label)}
-    </span>
-  );
-}
-
 
 export default NoteEditor
 

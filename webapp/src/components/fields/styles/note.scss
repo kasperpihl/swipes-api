@@ -15,15 +15,9 @@
 
   &__note {
     @include size(100%, auto);
-    min-height: 100%;
     max-width: 630px;
     margin-left: 240px;
-    display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-content: center;
     position: relative;
-    padding-bottom: 100px;
   }
 
   &__side {

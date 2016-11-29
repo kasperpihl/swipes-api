@@ -82,7 +82,7 @@ const linksCreateMapLocals = (req, res, next) => {
     permission
   } = res.locals;
 
-  res.locals.service_name = link.service;
+  res.locals.service_name = link.service_name;
   res.locals.account_id = permission.account_id;
 
   return next();

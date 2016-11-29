@@ -124,21 +124,24 @@ export default class GoalsUtil {
     }
   }
 
-  getLastIterationFromStepIndex(stepIndex, maxIndex){
+  getLastIterationFromStepIndex(stepIndex, maxCounter){
     const step = this.getStepByIndex(stepIndex);
-    return this.getLastIterationFromStep(step, maxIndex);
+    return this.getLastIterationFromStep(step, maxCounter);
   }
-  getLastIterationFromStep(step, maxIndex){
-    if(!step || maxIndex < 0 ){
+  getLastIterationFromStep(step, maxCounter){
+    if(!step || maxCounter < 1 ){
       return undefined;
     }
-    let iterations = step.get('iterations');
-    return iterations.findLastEntry((iter, i) => {
-      if(typeof maxIndex !== 'undefined' && i > maxIndex){
+    let iteration = step.get('iterations').findLastEntry((iter, i) => {
+      if(typeof maxCounter !== 'undefined' && (i+1) > maxCounter){
         return false;
       }
       return (iter !== null);
     })
+    if(iteration){
+      iteration[0] = iteration[0] + 1;
+    }
+    return iteration;
   }
 
 
@@ -157,16 +160,30 @@ export default class GoalsUtil {
     const field = this.getFieldByIndex(step, fI);
     let data = Map();
 
-    const lastIteration = this.getLastIterationFromStep(step);
+
     if(field.get('initial_data')) {
       data = field.get('initial_data');
     }
+
+    const thisIteration = this.getLastIterationFromStep(step);
+    const lastIteration = this.getLastIterationFromStep(step, this.runCounter() - 1);
     if(lastIteration){
+      console.log('lastIteration', 'sI', sI, 'fI', fI, 'run#', lastIteration[0], 'oldD', lastIteration[1].toJS());
       const lastResponse = lastIteration[1].getIn(['responses', this.id, 'data', fI]);
       if(lastResponse){
+        console.log('response!', lastResponse.toJS())
         data = lastResponse;
       }
     }
+    if(thisIteration){
+      console.log('thisIteration', 'sI', sI, 'fI', fI, 'run#', thisIteration[0], 'oldD', thisIteration[1].toJS());
+      const thisResponse = thisIteration[1].getIn(['responses', this.id, 'data', fI]);
+      if(thisResponse){
+        console.log('response!', thisResponse.toJS())
+        data = thisResponse;
+      }
+    }
+
     // Check for cache and that it is this step
     if(this.cache && sI === this.cache.get('stepIndex')){
       // Check that the cache is the currentStep
@@ -176,6 +193,7 @@ export default class GoalsUtil {
           // Make sure the cache has data.
           const cachedData = this.cache.getIn(['data', fI]);
           if(cachedData){
+            console.log('cached data');
             data = cachedData;
           }
         }

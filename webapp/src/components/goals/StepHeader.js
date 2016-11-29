@@ -11,14 +11,14 @@ class StepHeader extends Component {
   componentDidMount() {
   }
   render() {
-    const { index, title, assignees } = this.props;
+    const { index, title, assignees, me } = this.props;
 
     return (
       <div className="step-header">
         <div className="step-header__index">{index}.</div>
         <div className="step-header__title">{title}</div>
         <div className="step-header__assignees">
-          <Assigning assignees={assignees} />
+          <Assigning assignees={assignees} me={me}/>
         </div>
       </div>
     )
