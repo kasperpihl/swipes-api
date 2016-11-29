@@ -91,8 +91,7 @@ class StartGoal extends Component {
     return (
       <div className="start-goal" style={{height: '100%'}}>
         {this.renderList()}
-        <Button callback={this.openStore} title="Go to store" style={{position: 'fixed', bottom: '60px', right: '30px', transform: 'translateX(-120%)'}}/>
-        <Button callback={this.openCreatePattern} title="Create a pattern" style={{position: 'fixed', bottom: '60px', right: '30px'}}/>
+        <Button callback={this.openStore} title="Go to store" style={{position: 'fixed', bottom: '60px', right: '30px'}}/>
       </div>
     )
 

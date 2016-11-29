@@ -28,15 +28,41 @@ class Note extends Component {
   }
   constructor(props) {
     super(props)
-    this.state = { data: props.data };
+    this.state = { data: props.data, topPadding: 0 };
     this.onChange = this.onChange.bind(this);
     this.onDone = this.onDone.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
   }
+  componentDidMount(){
+    setTimeout(() => {
+      this.paddingForContainer()
+    }, 1);
+  }
+  componentDidUpdate(){
+    this.paddingForContainer();
+  }
+  paddingForContainer(){
+    const { paddingTop } = this.state;
+    const { settings } = this.props;
+    let padding = 0;
+    if(settings.get('fullscreen')){
+      const nH = this.refs.editor.refs.rooty.querySelector('.public-DraftEditor-content').firstChild.clientHeight;
+      const tH = 100;
+      const cH = this.refs.container.clientHeight;
+      padding = (Math.max(cH - (nH + tH), 0))/2;
+    }
+
+    if(padding !== paddingTop){
+      this.setState({paddingTop : padding});
+    }
+  }
   onChange(editorState){
     const { delegate } = this.props;
     const { data } = this.state;
+
     delegate('change', data.set('editorState', editorState));
+
+
   }
   onTitleChange(e){
     const { delegate } = this.props;
@@ -71,11 +97,11 @@ class Note extends Component {
     if(!settings.get('fullscreen')){
       return;
     }
-    const { data } = this.state;
-
+    const { data, paddingTop } = this.state;
+    const styles = {paddingTop};
     return (
       <div className="sw-note-field__note-editor">
-        <div className="sw-note-field__note">
+        <div className="sw-note-field__note" style={styles}>
           <input
             type="text"
             className="sw-note-field__title"
@@ -86,6 +112,7 @@ class Note extends Component {
             autoFocus
           />
           <NoteEditor
+            ref="editor"
             readOnly={settings.get('editable') ? false : true}
             editorState={data.get('editorState')}
             onChange={this.onChange} />
@@ -127,7 +154,7 @@ class Note extends Component {
   }
   render() {
     return (
-      <div className="sw-note-field">
+      <div ref="container" className="sw-note-field">
         {this.renderNoteEditor()}
         {this.renderNoteCard()}
       </div>
