@@ -47,7 +47,7 @@ class Note extends Component {
     let padding = 0;
     if(settings.get('fullscreen')){
       const nH = this.refs.editor.refs.rooty.querySelector('.public-DraftEditor-content').firstChild.clientHeight;
-      const tH = 100;
+      const tH = 250;
       const cH = this.refs.container.clientHeight;
       padding = (Math.max(cH - (nH + tH), 0))/2;
     }
