@@ -20,7 +20,7 @@ class Topbar extends Component {
       gradientPos: gradientPos,
       showDropdown: false
     };
-    bindAll(this, ['gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedBack', 'clickedProfile']);
+    bindAll(this, ['clickedClear', 'gradientStep', 'onChangeMenu', 'toggleDropdown', 'clickedFind', 'clickedBack', 'clickedProfile']);
   }
   componentDidMount() {
     this.gradientStep();
@@ -43,9 +43,6 @@ class Topbar extends Component {
   }
   clickedFind(){
     this.props.pushOverlay({ component: 'Find', title: 'Find' });
-  }
-  clickedBack(){
-    this.props.clearOverlay();
   }
   clickedProfile(){
     this.props.setOverlay({ component: 'Profile', title: 'Profile' });
@@ -74,9 +71,17 @@ class Topbar extends Component {
   toggleDropdown() {
     this.setState({showDropdown: !this.state.showDropdown})
   }
-  clickedClear(i){
+  clickedBack(i){
+    const { popOverlay } = this.props;
+    popOverlay();
+  }
+  clickedClear(e){
     const { clearOverlay, overlays } = this.props;
-    if((i + 1) < overlays.size){
+    let i;
+    if(e.target.getAttribute('data-index')){
+      i = parseInt(e.target.getAttribute('data-index'), 10);
+    }
+    if(typeof i === 'undefined' || (i + 1) < overlays.size){
       clearOverlay(i);
     }
   }
@@ -84,7 +89,7 @@ class Topbar extends Component {
     const { overlays } = this.props;
     if(overlays.size){
       const crumbs = overlays.map((overlay, i) => {
-        return <div key={"crumb-"+i} onClick={this.clickedClear.bind(this, i)} className="topbar__nav__crumb">{overlay.get('title')}</div>
+        return <div key={"crumb-"+i} data-index={i} onClick={this.clickedClear} className="topbar__nav__crumb">{overlay.get('title')}</div>
       })
       return (
         <div className="topbar__nav">
@@ -131,10 +136,17 @@ class Topbar extends Component {
   renderButtons(){
     const { overlays } = this.props;
     const buttons = [];
-    if(!overlays.size || overlays.last().get('component') !== 'Find'){
+    if(!overlays.size){
       buttons.push(
         <div key="find-button" className="topbar__button" onClick={this.clickedFind}>
           <FindIcon className="topbar__button--find"/>
+        </div>
+      )
+    }
+    else{
+      return (
+        <div className="topbar__button" onClick={this.clickedClear}>
+          <i className="material-icons">close</i>
         </div>
       )
     }
@@ -182,6 +194,7 @@ const ConnectedTopbar = connect(mapStateToProps, {
   toggleFind: main.toggleFind,
   setOverlay: overlay.set,
   clearOverlay: overlay.clear,
-  pushOverlay: overlay.push
+  pushOverlay: overlay.push,
+  popOverlay: overlay.pop
 })(Topbar)
 export default ConnectedTopbar
