@@ -23,7 +23,7 @@ const checksumConstraints = {
 const linkConstraints = {
   "link.id": { presence: true },
   "link.type": { presence: true },
-  "link.service": { presence: true }
+  "link.service_name": { presence: true }
 }
 
 const permissionConstraints = {
