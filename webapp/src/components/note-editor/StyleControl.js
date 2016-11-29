@@ -10,6 +10,22 @@ class StyleControl extends Component {
       styles: {}
     }
   }
+  handleMousePosition(styles){
+
+  }
+  handleScreenBounderies(styles){
+
+  }
+  calculatePosition2(){
+    const { styles } = this.state;
+    let newStyles = styles;
+    newStyles = this.handleMousePosition(newStyles);
+    newStyles = this.handleScreenBounderies(newStyles);
+    newStyles = this.handleContentOverlap(newStyles);
+    if(styles !== newStyles){
+      this.setState({styles: newStyles});
+    }
+  }
   calculatePosition() {
     const { editorState, position, mousePosition } = this.props;
     const selection = editorState.getSelection();
