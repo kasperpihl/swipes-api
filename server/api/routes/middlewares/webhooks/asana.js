@@ -58,7 +58,7 @@ const validate = (req, res, next) => {
 
       res.locals.service = 'asana';
       res.locals.resourceId = result.webhook.resource.id;
-      res.locals.accountId = result.account_id;
+      res.locals.accountId = result.account_id.toString();
       res.locals.message = JSON.parse(message);
 
       return next();

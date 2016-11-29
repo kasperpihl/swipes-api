@@ -20,7 +20,7 @@ const asanaGetAuthDataByAccountId = ({ accountId }) => {
     .concatMap((user) => {
       return user('services').merge({user_id: user('id')})
     }).filter((service) => {
-      return service('id').eq(r.expr(accountId).coerceTo('number'));
+      return service('id').eq(accountId)
     })
 
   return db.rethinkQuery(q);

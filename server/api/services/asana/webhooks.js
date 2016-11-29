@@ -81,8 +81,6 @@ const createWebhookForProject = ({ auth_data, user_id, accountId, project }) => 
 				id: user_id
 			}
 
-		  console.log(params);
-
 		  request({ auth_data, method, params, user }, (err, result) => {
 		    if (err) {
 		      console.log('Registering asana webhooks - Create webhook Step');

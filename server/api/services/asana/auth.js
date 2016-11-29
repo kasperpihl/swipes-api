@@ -30,7 +30,7 @@ const authData = (data, callback) => {
   client.app.accessTokenFromCode(code)
     .then((response) => {
       auth_data = response;
-      id = response.data.id;
+      id = response.data.id.toString();
       show_name = response.data.email;
       // Need that for the refresh token
       response.ts_last_token = new Date().getTime() / 1000;

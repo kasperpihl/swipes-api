@@ -255,7 +255,7 @@ const xendoSearch = (req, res, next) => {
 const xendoSearchMapResults = (req, res, next) => {
   const {
     user_id,
-    results
+    result
   } = res.locals;
   const xendoServicesQ =
     r.table('xendo_user_services')
@@ -270,7 +270,7 @@ const xendoSearchMapResults = (req, res, next) => {
 
   db.rethinkQuery(xendoServicesQ)
     .then((userServices) => {
-      const mappedResults = results.response.docs.map((doc) => {
+      const mappedResults = result.response.docs.map((doc) => {
         if (userServices[doc['service_id']]) {
           doc['account_id'] = userServices[doc['service_id']];
         }
