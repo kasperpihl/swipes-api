@@ -9,6 +9,7 @@ import {
   getVisibleSelectionRect,
   convertToRaw,
   CompositeDecorator,
+  Modifier,
   Entity
 } from 'draft-js'
 import StyleControl from './StyleControl'
@@ -90,8 +91,6 @@ class NoteEditor extends Component {
       this.setState({
         showURLInput: true,
         urlValue: url,
-      }, () => {
-        setTimeout(() => this.refs.url.focus(), 0);
       });
     }
   }
@@ -99,20 +98,28 @@ class NoteEditor extends Component {
     e.preventDefault();
     const { editorState } = this.props;
     const { urlValue } = this.state;
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = editorState.createEntity(
+    const entityKey = Entity.create(
       'LINK',
       'MUTABLE',
       {url: urlValue}
     );
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+    console.log('entityKey', entityKey);
+    const contentState = editorState.getCurrentContent();
+    const newContentState = Modifier.applyEntity(
+      contentState,
+      editorState.getSelection(),
+      entityKey
+    )
+    let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
+
+
+    newEditorState = RichUtils.toggleLink(
+      newEditorState,
+      newEditorState.getSelection(),
+      entityKey
+    )
+    this.props.onChange(newEditorState);
     this.setState({
-      editorState: RichUtils.toggleLink(
-        newEditorState,
-        newEditorState.getSelection(),
-        entityKey
-      ),
       showURLInput: false,
       urlValue: '',
     });

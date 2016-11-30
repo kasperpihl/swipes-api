@@ -5,9 +5,10 @@ class NoteLink extends Component {
     contentBlock.findEntityRanges(
       (character) => {
         const entityKey = character.getEntity();
+        console.log('entityKey', entityKey, contentBlock.getType())
         return (
           entityKey !== null &&
-          contentState.getEntity(entityKey).getType() === 'LINK'
+          contentBlock.getType() === 'LINK'
         );
       },
       callback
