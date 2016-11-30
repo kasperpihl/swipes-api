@@ -175,11 +175,11 @@ class Topbar extends Component {
 
     return (
       <div className="topbar" id="topbar" style={styles}>
-        {this.renderNav()}
-        {this.renderBreadcrumb()}
+        {/* {this.renderNav()} */}
+        {/* {this.renderBreadcrumb()} */}
 
         <div className="topbar__actions">
-          {this.renderButtons()}
+          {/* {this.renderButtons()} */}
         </div>
 
       </div>

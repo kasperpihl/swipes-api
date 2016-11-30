@@ -14,19 +14,24 @@ import {
 } from 'draft-js'
 import StyleControl from './StyleControl'
 import NoteLink from './NoteLink'
+
 import { bindAll } from '../../classes/utils'
 import * as Icons from '../icons'
 
 import './styles/note-editor.scss'
 
 class NoteEditor extends Component {
+  static decorator(Component){
+    return {
+      strategy: Component.strategy,
+      component: Component
+    }
+  }
   static getEmptyEditorState(){
-    const decorator = new CompositeDecorator([
-      {
-        strategy: NoteLink.strategy,
-        component: NoteLink,
-      },
-    ]);
+    const decorators = [
+      NoteLink
+    ].map((d) => this.decorator(d));
+    const decorator = new CompositeDecorator(decorators);
     return EditorState.createEmpty(decorator);
   }
   constructor(props) {
@@ -134,9 +139,7 @@ class NoteEditor extends Component {
     const {editorState} = this.props;
     const selection = editorState.getSelection();
     if (!selection.isCollapsed()) {
-      this.setState({
-        editorState: RichUtils.toggleLink(editorState, selection, null),
-      });
+      this.props.onChange(RichUtils.toggleLink(editorState, selection, null))
     }
   }
   handleKeyCommand(keyCommand) {
