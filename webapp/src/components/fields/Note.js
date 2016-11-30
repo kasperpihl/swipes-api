@@ -17,7 +17,7 @@ class Note extends Component {
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
   }
   static parseInitialData(data){
-    let editorState = EditorState.createEmpty();
+    let editorState = NoteEditor.getEmptyEditorState();
     if(data && data.get('editorState')){
       const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
       editorState = EditorState.push(editorState, convertFromRaw(raw));
@@ -61,8 +61,6 @@ class Note extends Component {
     const { data } = this.state;
 
     delegate('change', data.set('editorState', editorState));
-
-
   }
   onTitleChange(e){
     const { delegate } = this.props;
