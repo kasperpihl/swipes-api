@@ -1,112 +1,108 @@
-import React, { Component, PropTypes } from 'react'
-import Textarea from 'react-textarea-autosize'
-import Loader from '../swipes-ui/Loader'
-import * as Icons from '../icons'
+import React, { Component, PropTypes } from 'react';
+import Textarea from 'react-textarea-autosize';
+import Loader from '../swipes-ui/Loader';
+import * as Icons from '../icons';
 
-import './styles/swipes-modal.scss'
+import './styles/swipes-modal.scss';
 
 class SwipesModalActions extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.buttonClick = this.buttonClick.bind(this);
-    this.state = {}
+    this.state = {};
   }
   buttonClick(e) {
     const i = e.target.getAttribute('data-index');
     this.props.onClick({
-      button: parseInt(i, 10)
-    })
+      button: parseInt(i, 10),
+    });
   }
   render() {
-		const { actions } = this.props;
-		const buttons = actions.map( (button, i) => {
-			return (
-				<div className="swipes-modal__actions__button" data-index={i} ref="modalButton" key={i} onClick={this.buttonClick}>{button}</div>
-			)
-		})
+    const { actions } = this.props;
+    const buttons = actions.map((button, i) => (
+      <div className="swipes-modal__actions__button" data-index={i} ref="modalButton" key={i} onClick={this.buttonClick}>{button}</div>
+      ));
 
     return (
       <div className="swipes-modal__actions">
-				{buttons}
+        {buttons}
       </div>
-    )
+    );
   }
 }
 
 class SwipesModal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.closeModal = this.closeModal.bind(this);
-    let selectedItems = [];
+    const selectedItems = [];
     const { list } = this.props.data;
-    if(list && list.items){
+    if (list && list.items) {
       list.items.forEach((o, i) => {
-        if(o.selected){
+        if (o.selected) {
           selectedItems.push(i);
         }
-      })
+      });
     }
     this.state = {
-      selectedListItems: selectedItems
-    }
+      selectedListItems: selectedItems,
+    };
   }
-  componentDidMount(){
-    if(this.refs.textarea){
+  componentDidMount() {
+    if (this.refs.textarea) {
       this.refs.textarea.focus();
     }
   }
-  sendCallback(obj){
+  sendCallback(obj) {
     let res = obj;
-    if(obj){
+    if (obj) {
       const { list, textarea } = this.props.data;
 
-      const generated = {}
-      if(list && list.selectable){
+      const generated = {};
+      if (list && list.selectable) {
         generated.items = this.state.selectedListItems;
       }
-      if(textarea){
+      if (textarea) {
         generated.text = this.refs.textarea.value;
       }
 
       res = Object.assign({}, generated, obj);
     }
-    this.setState({selectedListItems: []});
-    this.props.callback(res)
+    this.setState({ selectedListItems: [] });
+    this.props.callback(res);
   }
-  closeModal(e) {
+  closeModal() {
     this.sendCallback(null);
   }
   selectListItem(i) {
     const { list } = this.props.data;
 
     if (list.selectable) {
-      if(!list.multiple){
-        this.setState({selectedListItems: [i]});
-      }
-      else if(this.state.selectedListItems.includes(i)){
-        this.setState({selectedListItems: this.state.selectedListItems.filter((j) => j !== i )})
-      }
-      else{
-        this.setState({selectedListItems: this.state.selectedListItems.concat(i)})
+      if (!list.multiple) {
+        this.setState({ selectedListItems: [i] });
+      } else if (this.state.selectedListItems.includes(i)) {
+        this.setState({ selectedListItems: this.state.selectedListItems.filter(j => j !== i) });
+      } else {
+        this.setState({ selectedListItems: this.state.selectedListItems.concat(i) });
       }
     } else {
       this.sendCallback({
-        item: i
-      })
+        item: i,
+      });
     }
   }
   renderMessage(message, key) {
-		if (message && message.length > 0) {
-			return (
-				<div key={key} className="swipes-modal__message">{message}</div>
-			)
-		}
-	}
+    if (message && message.length > 0) {
+      return (
+        <div key={key} className="swipes-modal__message">{message}</div>
+      );
+    }
+  }
   renderTextarea(options, key) {
-    var defaultValue = "";
-    var placeholder = options;
-    var minRows = 4;
-    var maxRows = 4;
+    let defaultValue = '';
+    let placeholder = options;
+    let minRows = 4;
+    let maxRows = 4;
     if (typeof options === 'object') {
       defaultValue = options.text || defaultValue;
       placeholder = options.placeholder || 'Edit text';
@@ -123,21 +119,22 @@ class SwipesModal extends Component {
           placeholder={placeholder}
           defaultValue={defaultValue}
           minRows={minRows}
-          maxRows={maxRows}/>
-      )
+          maxRows={maxRows}
+        />
+      );
     }
   }
   renderLoader(loader, key) {
     if (loader) {
       return (
         <div className="swipes-modal__loader" key={key}>
-          <Loader center={true} text="Loading" />
+          <Loader center text="Loading" />
         </div>
-      )
+      );
     }
   }
-	renderList(list, key) {
-    if(!list || typeof list !== 'object'){
+  renderList(list, key) {
+    if (!list || typeof list !== 'object') {
       return;
     }
 
@@ -148,28 +145,28 @@ class SwipesModal extends Component {
     }
 
     if (items) {
-  		const listRender = items.map( (item, i) => {
-        let className = "swipes-modal__list__item";
+      const listRender = items.map((item, i) => {
+        let className = 'swipes-modal__list__item';
 
-        if (this.state.selectedListItems.includes(i)){
-          className += ' swipes-modal__list__item--selected'
+        if (this.state.selectedListItems.includes(i)) {
+          className += ' swipes-modal__list__item--selected';
         }
-  			return (
-  				<div className={className} key={i} onClick={this.selectListItem.bind(this, i)}>
-  					{this.renderIcon(item.img)}
-  					<div className="swipes-modal__list__item__title">
-  						{item.title}
-  					</div>
-  				</div>
-  			)
-  		})
+        return (
+          <div className={className} key={i} onClick={this.selectListItem.bind(this, i)}>
+            {this.renderIcon(item.img)}
+            <div className="swipes-modal__list__item__title">
+              {item.title}
+            </div>
+          </div>
+        );
+      });
 
-  		return (
-  			<div className="swipes-modal__list" key={key}>{listRender}</div>
-  		)
+      return (
+        <div className="swipes-modal__list" key={key}>{listRender}</div>
+      );
     }
-	}
-  renderIcon(icon){
+  }
+  renderIcon(icon) {
     if (!icon) return;
 
     const svg = icon.element;
@@ -179,24 +176,24 @@ class SwipesModal extends Component {
     if (Comp) {
       return <Comp className="swipes-modal__list__item__img" {...props} />;
     } else if (icon && !Comp) {
-      return <img className="swipes-modal__list__item__img" src={icon} />
+      return <img className="swipes-modal__list__item__img" src={icon} />;
     }
   }
-	renderButtons(buttons, key) {
-		if (buttons && buttons.length > 0) {
-			return (
-				<SwipesModalActions key={key} actions={buttons} onClick={this.sendCallback.bind(this)}/>
-			)
-		}
-	}
-  renderContent(data){
-    if(!data){
+  renderButtons(buttons, key) {
+    if (buttons && buttons.length > 0) {
+      return (
+        <SwipesModalActions key={key} actions={buttons} onClick={this.sendCallback.bind(this)} />
+      );
+    }
+  }
+  renderContent(data) {
+    if (!data) {
       return;
     }
     const { message, textarea, buttons, list, loader } = data;
-    if(Array.isArray(data)){
+    if (Array.isArray(data)) {
       return data.map((item, i) => {
-        switch(item.type){
+        switch (item.type) {
           case 'message':
             return this.renderMessage(item.value, i);
           case 'textarea':
@@ -208,16 +205,15 @@ class SwipesModal extends Component {
           case 'buttons':
             return this.renderButtons(item.value, i);
         }
-      })
-    }
-    else if(typeof data === 'object'){
+      });
+    } else if (typeof data === 'object') {
       return [
         this.renderMessage(message, 1),
         this.renderLoader(loader, 2),
         this.renderList(list, 3),
         this.renderTextarea(textarea, 4),
-        this.renderButtons(buttons, 5)
-      ]
+        this.renderButtons(buttons, 5),
+      ];
     }
   }
   render() {
@@ -226,7 +222,7 @@ class SwipesModal extends Component {
     let modalClass = 'swipes-modal';
 
     if (type) {
-      modalClass += ' swipes-modal--' + type.toLowerCase();
+      modalClass += ` swipes-modal--${type.toLowerCase()}`;
     }
 
     return (
@@ -237,11 +233,11 @@ class SwipesModal extends Component {
         </div>
         {this.renderContent(data)}
       </div>
-    )
+    );
   }
 }
 
-export default SwipesModal
+export default SwipesModal;
 const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func, node, array } = PropTypes;
 const itemProps = shape({
   title: string,
@@ -249,9 +245,9 @@ const itemProps = shape({
   img: oneOfType([
     string,
     node,
-    object
-  ])
-})
+    object,
+  ]),
+});
 
 SwipesModal.propTypes = {
   callback: func.isRequired,
@@ -266,33 +262,33 @@ SwipesModal.propTypes = {
           placeholder: string,
           text: string,
           minRows: number,
-          maxRows: number
-        })
+          maxRows: number,
+        }),
       ]),
       loader: oneOfType([
         bool,
-        string
+        string,
       ]),
       list: oneOfType([
         arrayOf(itemProps),
         shape({
           items: arrayOf(itemProps).isRequired,
           selectable: bool,
-        })
+        }),
       ]),
       buttons: arrayOf(oneOfType([
         string,
         shape({
           title: string,
           bgColor: string,
-          textColor: string
-        })
-      ]))
+          textColor: string,
+        }),
+      ])),
 
     }),
     arrayOf(shape({
       type: oneOf(['message', 'textarea', 'loader', 'list', 'buttons']),
-      value: any
-    }))
-  ])
-}
+      value: any,
+    })),
+  ]),
+};
