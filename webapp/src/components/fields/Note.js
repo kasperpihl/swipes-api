@@ -18,10 +18,10 @@ class Note extends Component {
   }
   static parseInitialData(data){
     let editorState = NoteEditor.getEmptyEditorState()
-    // if(data && data.get('editorState')){
-    //   const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
-    //   editorState = EditorState.push(editorState, convertFromRaw(raw));
-    // }
+    if(data && data.get('editorState')){
+      const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
+      editorState = EditorState.push(editorState, convertFromRaw(raw));
+    }
 
     data = data.set('editorState', editorState);
     return data;
