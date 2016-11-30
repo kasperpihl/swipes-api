@@ -1,7 +1,7 @@
 @import '../global-styles/vars';
 @import '../global-styles/mixins';
 
-$topbarSize: 54px;
+$topbarSize: 38px;
 .topbar {
 	$b: &;
 	@include size(100%, $topbarSize);
