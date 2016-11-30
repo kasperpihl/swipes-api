@@ -10,7 +10,7 @@ fs.readdirSync('node_modules')
   .forEach(function(mod) {
     nodeModules[mod] = 'commonjs ' + mod;
   });
-  
+
 module.exports = {
   context: __dirname,
   devtool: 'eval',
@@ -25,7 +25,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: [ 'babel-loader' ],
+        loaders: [ 'babel-loader', 'eslint-loader' ],
         exclude: /node_modules/
       }
     ]
