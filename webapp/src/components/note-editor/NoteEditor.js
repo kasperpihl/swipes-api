@@ -12,7 +12,7 @@ import {
   Entity
 } from 'draft-js'
 import StyleControl from './StyleControl'
-
+import NoteLink from './NoteLink'
 import { bindAll } from '../../classes/utils'
 import * as Icons from '../icons'
 
@@ -23,8 +23,8 @@ class NoteEditor extends Component {
     super(props)
     const decorator = new CompositeDecorator([
       {
-        strategy: this.findLinkEntities,
-        component: this.renderLink,
+        strategy: NoteLink.strategy,
+        component: NoteLink,
       },
     ]);
     this.state = {
@@ -128,18 +128,6 @@ class NoteEditor extends Component {
       });
     }
   }
-  findLinkEntities(contentBlock, callback, contentState) {
-    contentBlock.findEntityRanges(
-      (character) => {
-        const entityKey = character.getEntity();
-        return (
-          entityKey !== null &&
-          contentState.getEntity(entityKey).getType() === 'LINK'
-        );
-      },
-      callback
-    );
-  }
   handleKeyCommand(keyCommand) {
     const { editorState } = this.props;
     const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
@@ -150,17 +138,6 @@ class NoteEditor extends Component {
     }
 
     return 'not handled'
-  }
-  renderLink() {
-    const { editorState } = this.props;
-    const contentState = editorState.getCurrentContent();
-    const {url} = contentState.getEntity(props.entityKey).getData();
-
-    return (
-      <a href={url}>
-        {props.children}
-      </a>
-    )
   }
   toggleBlockType(blockType) {
     this.onChange(

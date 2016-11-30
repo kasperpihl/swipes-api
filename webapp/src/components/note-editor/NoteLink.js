@@ -13,12 +13,6 @@ class NoteLink extends Component {
       callback
     );
   }
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  componentDidMount() {
-  }
   render() {
     const { editorState, entityKey, children } = this.props;
     const contentState = editorState.getCurrentContent();
