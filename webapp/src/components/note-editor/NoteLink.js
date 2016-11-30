@@ -1,23 +1,22 @@
 import React, { Component, PropTypes } from 'react'
-
+import { Entity } from 'draft-js'
 class NoteLink extends Component {
-  static strategy(contentBlock, callback, contentState){
+  static strategy(contentBlock, callback){
     contentBlock.findEntityRanges(
       (character) => {
-        const entityKey = character.getEntity();
-        console.log('entityKey', entityKey, contentBlock.getType())
+        const entity = character.getEntity();
         return (
-          entityKey !== null &&
-          contentBlock.getType() === 'LINK'
+          entity !== null &&
+          Entity.get(entity).get('type') === 'LINK'
         );
       },
       callback
     );
   }
   render() {
-    const { editorState, entityKey, children } = this.props;
-    const contentState = editorState.getCurrentContent();
-    const { url } = contentState.getEntity(entityKey).getData();
+    console.log(this.props);
+    const { entityKey, children } = this.props;
+    const { url } = Entity.get(entityKey).get('data');
 
     return (
       <a href={url}>
