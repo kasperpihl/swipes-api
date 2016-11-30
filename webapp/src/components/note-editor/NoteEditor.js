@@ -1,5 +1,16 @@
 import React, { Component, PropTypes } from 'react'
-import {Editor, EditorState, SelectionState, RichUtils, ContentBlock, getVisibleSelectionRect } from 'draft-js'
+import {
+  Editor,
+  EditorState,
+  SelectionState,
+  RichUtils,
+  ContentState,
+  ContentBlock,
+  getVisibleSelectionRect,
+  convertToRaw,
+  CompositeDecorator,
+  Entity
+} from 'draft-js'
 import StyleControl from './StyleControl'
 
 import { bindAll } from '../../classes/utils'
@@ -10,9 +21,17 @@ import './styles/note-editor.scss'
 class NoteEditor extends Component {
   constructor(props) {
     super(props)
+    const decorator = new CompositeDecorator([
+      {
+        strategy: this.findLinkEntities,
+        component: this.renderLink,
+      },
+    ]);
     this.state = {
       hasSelected: false,
-      styleControl: {show: false}
+      styleControl: {show: false},
+      showURLInput: false,
+      urlValue: ''
     }
     bindAll(this,
       [
@@ -40,6 +59,86 @@ class NoteEditor extends Component {
       }
       this.setState({ hasSelected, styleControl });
     }
+    this.promptForLink = this._promptForLink.bind(this);
+    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+    this.confirmLink = this._confirmLink.bind(this);
+    this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
+    this.removeLink = this._removeLink.bind(this);
+  }
+  _promptForLink(e) {
+    e.preventDefault();
+    const { editorState } = this.props;
+    const selection = editorState.getSelection();
+
+    if (!selection.isCollapsed()) {
+      const contentState = editorState.getCurrentContent();
+      const startKey = editorState.getSelection().getStartKey();
+      const startOffset = editorState.getSelection().getStartOffset();
+      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+
+      let url = '';
+      if (linkKey) {
+        const linkInstance = contentState.getEntity(linkKey);
+        url = linkInstance.getData().url;
+      }
+
+      this.setState({
+        showURLInput: true,
+        urlValue: url,
+      }, () => {
+        setTimeout(() => this.refs.url.focus(), 0);
+      });
+    }
+  }
+  _confirmLink(e) {
+    e.preventDefault();
+    const { editorState } = this.props;
+    const { urlValue } = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = editorState.createEntity(
+      'LINK',
+      'MUTABLE',
+      {url: urlValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+    this.setState({
+      editorState: RichUtils.toggleLink(
+        newEditorState,
+        newEditorState.getSelection(),
+        entityKey
+      ),
+      showURLInput: false,
+      urlValue: '',
+    });
+  }
+  _onLinkInputKeyDown(e) {
+    if (e.which === 13) {
+      this._confirmLink(e);
+    }
+  }
+  _removeLink(e) {
+    e.preventDefault();
+    const {editorState} = this.props;
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      this.setState({
+        editorState: RichUtils.toggleLink(editorState, selection, null),
+      });
+    }
+  }
+  findLinkEntities(contentBlock, callback, contentState) {
+    contentBlock.findEntityRanges(
+      (character) => {
+        const entityKey = character.getEntity();
+        return (
+          entityKey !== null &&
+          contentState.getEntity(entityKey).getType() === 'LINK'
+        );
+      },
+      callback
+    );
   }
   handleKeyCommand(keyCommand) {
     const { editorState } = this.props;
@@ -51,6 +150,17 @@ class NoteEditor extends Component {
     }
 
     return 'not handled'
+  }
+  renderLink() {
+    const { editorState } = this.props;
+    const contentState = editorState.getCurrentContent();
+    const {url} = contentState.getEntity(props.entityKey).getData();
+
+    return (
+      <a href={url}>
+        {props.children}
+      </a>
+    )
   }
   toggleBlockType(blockType) {
     this.onChange(
@@ -81,6 +191,9 @@ class NoteEditor extends Component {
   renderStyleControls() {
     const { hasSelected, styleControl } = this.state;
     const { editorState } = this.props;
+    if (true) {
+      return;
+    }
     if(!styleControl.show || !hasSelected){
       return;
     }
@@ -146,6 +259,22 @@ class NoteEditor extends Component {
   }
   render() {
     const { editorState, readOnly } = this.props;
+    let urlInput;
+    if (this.state.showURLInput) {
+      urlInput =
+        <div>
+          <input
+            onChange={this.onURLChange}
+            ref="url"
+            type="text"
+            value={this.state.urlValue}
+            onKeyDown={this.onLinkInputKeyDown}
+          />
+          <button onMouseDown={this.confirmLink}>
+            Confirm
+          </button>
+        </div>;
+    }
     return (
       <div ref="rooty" className="sw-text-editor"
         onBlur={this.onBlur}
@@ -154,6 +283,21 @@ class NoteEditor extends Component {
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}>
         {this.renderStyleControls()}
+        <div style={{marginBottom: 10}}>
+                Select some text, then use the buttons to add or remove links
+                on the selected text.
+              </div>
+              <div >
+                <button
+                  onMouseDown={this.promptForLink}
+                  style={{marginRight: 10}}>
+                  Add Link
+                </button>
+                <button onMouseDown={this.removeLink}>
+                  Remove Link
+                </button>
+              </div>
+              {urlInput}
         <Editor
           readOnly={readOnly}
           editorState={editorState}
