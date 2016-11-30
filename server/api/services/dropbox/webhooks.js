@@ -62,14 +62,14 @@ const processFileChange = ({ account, entry }) => {
         return;
       }
 
-      const shortUrlData = res;
       const link = {
-  			service: 'dropbox',
+  			service_name: 'dropbox',
   			type: 'file',
   			id: entry.id
   		};
+      const shortUrlData = Object.assign({}, res, link);
       const event = {
-      	service: 'dropbox',
+      	service_name: 'dropbox',
       	message: message,
       	account_id: id,
       	me: sameUser
