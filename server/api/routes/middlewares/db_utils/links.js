@@ -36,14 +36,21 @@ const addPermissionsToALink = ({ user_id, checksum, permission }) => {
 }
 
 const createLink = ({ meta, insert_doc }) => {
+  insert_doc.last_updated = r.now();
+
   const q =
     r.table('links')
       .insert(insert_doc, {
         returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
           return r.branch(
+            // The meta variable comes from the client so to speak
+            // In order to not overwrite data from the webhooks
+            // we are doing that check when there is a conflict.
             r.expr(meta).ne(null),
-            oldDoc,
+            oldDoc.merge({
+              last_updated: r.now()
+            }),
             oldDoc.merge({
               last_updated: r.now(),
               meta: newDoc('meta')

@@ -252,12 +252,12 @@ const createShortUrl = (account, event, accountId) => {
         return;
       }
 
-			const shortUrlData = res;
 			const link = {
-				service: 'asana',
+				service_name: 'asana',
 				type: 'task',
 				id: event.parent.id
 			}
+			const shortUrlData = Object.assign({}, res, link);
 			const eventData = createEvent(user_id, event, accountId);
 
 			createSwipesShortUrl({ link, shortUrlData, user_id, event: eventData });
@@ -277,7 +277,7 @@ const createEvent = (user_id, event, accountId) => {
 	}
 
 	const eventData = {
-		service: 'asana',
+		service_name: 'asana',
 		message: text,
 		account_id: accountId,
 		me
