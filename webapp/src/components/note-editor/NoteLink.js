@@ -20,13 +20,13 @@ class NoteLink extends Component {
   componentDidMount() {
   }
   render() {
-    const { editorState } = this.props;
+    const { editorState, entityKey, children } = this.props;
     const contentState = editorState.getCurrentContent();
-    const {url} = contentState.getEntity(props.entityKey).getData();
+    const { url } = contentState.getEntity(entityKey).getData();
 
     return (
       <a href={url}>
-        {props.children}
+        {children}
       </a>
     )
   }

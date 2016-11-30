@@ -12,7 +12,6 @@ import {
   Entity
 } from 'draft-js'
 import StyleControl from './StyleControl'
-import NoteLink from './NoteLink'
 
 import { bindAll } from '../../classes/utils'
 import * as Icons from '../icons'
@@ -20,21 +19,14 @@ import * as Icons from '../icons'
 import './styles/note-editor.scss'
 
 class NoteEditor extends Component {
-  static getEmptyEditorState(){
-    // this is NOT available in this function
-    // It's a static function
-    const decorator = new CompositeDecorator([
-      {
-        strategy: NoteLink.findLinkEntities,
-        component: NoteLink,
-      },
-    ]);
-
-    return EditorState.createEmpty(decorator);
-  }
   constructor(props) {
     super(props)
-
+    const decorator = new CompositeDecorator([
+      {
+        strategy: this.findLinkEntities,
+        component: this.renderLink,
+      },
+    ]);
     this.state = {
       hasSelected: false,
       styleControl: {show: false},
@@ -136,7 +128,18 @@ class NoteEditor extends Component {
       });
     }
   }
-
+  findLinkEntities(contentBlock, callback, contentState) {
+    contentBlock.findEntityRanges(
+      (character) => {
+        const entityKey = character.getEntity();
+        return (
+          entityKey !== null &&
+          contentState.getEntity(entityKey).getType() === 'LINK'
+        );
+      },
+      callback
+    );
+  }
   handleKeyCommand(keyCommand) {
     const { editorState } = this.props;
     const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
@@ -147,6 +150,17 @@ class NoteEditor extends Component {
     }
 
     return 'not handled'
+  }
+  renderLink() {
+    const { editorState } = this.props;
+    const contentState = editorState.getCurrentContent();
+    const {url} = contentState.getEntity(props.entityKey).getData();
+
+    return (
+      <a href={url}>
+        {props.children}
+      </a>
+    )
   }
   toggleBlockType(blockType) {
     this.onChange(
