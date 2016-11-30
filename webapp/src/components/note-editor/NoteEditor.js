@@ -19,14 +19,18 @@ import * as Icons from '../icons'
 import './styles/note-editor.scss'
 
 class NoteEditor extends Component {
-  constructor(props) {
-    super(props)
+  static getEmptyEditorState(){
     const decorator = new CompositeDecorator([
       {
         strategy: NoteLink.strategy,
         component: NoteLink,
       },
     ]);
+    return EditorState.createEmpty(decorator);
+  }
+  constructor(props) {
+    super(props)
+
     this.state = {
       hasSelected: false,
       styleControl: {show: false},
