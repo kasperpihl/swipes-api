@@ -1,17 +1,26 @@
 import React, { Component, PropTypes } from 'react'
 import * as Icons from '../icons'
 import { Map } from 'immutable'
+import { bindAll } from '../../classes/utils'
+
 import './styles/style-control.scss'
 
 class StyleControl extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      styles: Map()
+      styles: Map(),
+      showInput: false
+    }
+    bindAll(this, ['addLink', 'handleKeyUp']);
+  }
+  callDelegate(name){
+    const { delegate } = this.props;
+    if(delegate && typeof delegate[name] === "function"){
+      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
     }
   }
   getCenterFromX(x, w) {
-
     return x - (w / 2);
   }
   handleDefaultPosition(styles) {
@@ -137,28 +146,48 @@ class StyleControl extends Component {
 
     setTimeout( () => {
       const { left, bottom, top, right } = styleControls.getBoundingClientRect();
+
       this.calculatePosition()
+
       if (left < 0) {
         console.log('styles', styles)
       }
     }, 0)
   }
   onToggle(style, type) {
-    const { onToggleBlock, onToggleInline } = this.props;
-
     if (type === 'block') {
-      onToggleBlock(style)
+      this.callDelegate('toggleBlockType', style)
     }
 
     if (type === 'inline') {
-      onToggleInline(style)
+      this.callDelegate('toggleInlineStyle', style)
+    }
+
+    if (type === 'entity') {
+      if (style === 'link') {
+        this.setState({showInput: true})
+      }
+    }
+  }
+  handleKeyUp(e) {
+    if (e.keyCode === 13) {
+      this.addLink();
+    }
+  }
+  addLink() {
+    const { addLink } = this.props;
+    const { input } = this.refs;
+
+    if (input.value.length) {
+      this.callDelegate('addLink', input.value);
+      this.callDelegate('hideStyleControls');
     }
   }
   renderIcon(icon){
     const Comp = Icons[icon];
 
     if (Comp) {
-      return <Comp className="RichEditor-styleButton__icon"/>;
+      return <Comp className="RichEditor-controls__icon"/>;
     }
 
     return <span>{icon}</span>
@@ -176,6 +205,9 @@ class StyleControl extends Component {
         {label: 'BoldIcon', style: 'BOLD'},
         {label: 'ItallicIcon', style: 'ITALIC'},
         {label: 'UnderlineIcon', style: 'UNDERLINE'}
+      ],
+      entities: [
+        {label: 'url', style: 'link'}
       ]
     }
 
@@ -187,11 +219,16 @@ class StyleControl extends Component {
       return this.renderButton(option.label, option.style, 'inline')
     })
 
+    const entityHtml = styleOptions.entities.map( (option) => {
+      return this.renderButton(option.label, option.style, 'entity')
+    })
+
 
     return (
       <div className="buttons">
         {blockHtml}
         {inlineHtml}
+        {entityHtml}
       </div>
     )
   }
@@ -216,12 +253,32 @@ class StyleControl extends Component {
       </span>
     )
   }
-  render() {
-    const { styles } = this.state;
+  renderInput() {
+    const { showInput } = this.state;
+
+    if (!showInput) {
+      return
+    }
 
     return (
-      <div className="RichEditor-controls" ref="styleControls" style={styles.toJS()}>
+      <div className="RichEditor-controls__input-wrapper">
+        <input ref="input" type="text" className="RichEditor-controls__input" placeholder="Enter url" onKeyUp={this.handleKeyUp}/>
+        <div className="RichEditor-controls__input-submit" onClick={this.addLink}>{this.renderIcon('ArrowRightIcon')}</div>
+      </div>
+    )
+  }
+  render() {
+    const { styles, showInput } = this.state;
+    let className = 'RichEditor-controls';
+
+    if (showInput) {
+      className += ' RichEditor-controls--input'
+    }
+
+    return (
+      <div className={className} ref="styleControls" style={styles.toJS()}>
         {this.renderButtons()}
+        {this.renderInput()}
       </div>
     )
   }
