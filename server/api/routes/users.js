@@ -1,12 +1,10 @@
-"use strict";
-
 import express from 'express';
 import {
   validateSignUp,
-  validateSignIn
+  validateSignIn,
 } from '../validators/users';
 import {
-  validateGetServiceFromUser
+  validateGetServiceFromUser,
 } from '../validators/services';
 import {
   userAvailability,
@@ -18,14 +16,14 @@ import {
   usersGetXendoServiceId,
   usersRemoveXendoService,
   usersRemoveService,
-  usersUpdateProfilePic
+  usersUpdateProfilePic,
 } from './middlewares/users';
 import {
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoUserSignUp,
-  xendoRemoveServiceFromUser
-} from './middlewares/xendo.js';
+  xendoRemoveServiceFromUser,
+} from './middlewares/xendo';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -33,13 +31,13 @@ const notAuthed = express.Router();
 notAuthed.all('/users.signin',
   validateSignIn,
   userSignIn,
-  (req, res, next) => {
-  const {
-    token
+  (req, res) => {
+    const {
+    token,
   } = res.locals;
 
-  res.status(200).json({ok: true, token});
-});
+    res.status(200).json({ ok: true, token });
+  });
 
 notAuthed.all('/users.signup',
   validateSignUp,
@@ -49,14 +47,14 @@ notAuthed.all('/users.signup',
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoUserSignUp,
-  (req, res, next) => {
+  (req, res) => {
     const {
       user_id,
-      token
+      token,
     } = res.locals;
 
-    res.status(200).json({ok: true, userId: user_id, token});
-  }
+    res.status(200).json({ ok: true, userId: user_id, token });
+  },
 );
 
 authed.post('/users.serviceDisconnect',
@@ -69,8 +67,8 @@ authed.post('/users.serviceDisconnect',
   xendoRemoveServiceFromUser,
   usersRemoveXendoService,
   usersRemoveService,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
+  (req, res) => {
+    return res.status(200).json({ ok: true });
   });
 
 // T_TODO
@@ -78,11 +76,11 @@ authed.post('/users.serviceDisconnect',
 // DELETE THIS AS SOON AS POSSIBLE
 authed.post('/users.profilePic',
   usersUpdateProfilePic,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
-  })
+  (req, res) => {
+    return res.status(200).json({ ok: true });
+  });
 
 export {
   notAuthed,
-  authed
-}
+  authed,
+};

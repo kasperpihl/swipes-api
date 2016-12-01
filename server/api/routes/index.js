@@ -1,5 +1,3 @@
-"use strict";
-
 import * as init from './init';
 import * as users from './users';
 import * as links from './links';
@@ -11,9 +9,8 @@ import * as webhooks from './webhooks';
 
 const v1NotAuthed = [
   users.notAuthed,
-  services.notAuthed
-]
-
+  services.notAuthed,
+];
 const v1Authed = [
   init.authed,
   links.authed,
@@ -21,15 +18,14 @@ const v1Authed = [
   search.authed,
   users.authed,
   goals.authed,
-  steps.authed
-]
-
+  steps.authed,
+];
 const webhooksNotAuthed = [
-  webhooks.notAuthed
-]
+  webhooks.notAuthed,
+];
 
 export {
   v1NotAuthed,
   v1Authed,
-  webhooksNotAuthed
-}
+  webhooksNotAuthed,
+};

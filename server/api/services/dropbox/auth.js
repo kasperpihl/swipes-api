@@ -1,25 +1,21 @@
-"use strict";
-
-import config from 'config'
+import config from 'config';
 import {
-  request
-} from './request'
+  request,
+} from './request';
 
 const dropboxConfig = config.get('dropbox');
-
 const authUrl = (data, callback) => {
   let url = 'https://www.dropbox.com/oauth2/authorize';
-  url += '?response_type=code'
-  url += '&client_id=' + dropboxConfig.appId;
-  url += '&redirect_uri=' + dropboxConfig.redirectURI;
+  url += '?response_type=code';
+  url += `&client_id=${dropboxConfig.appId}`;
+  url += `&redirect_uri=${dropboxConfig.redirectURI}`;
   // T_TODO state for better security
 
   callback(null, {
     url,
-    type: 'oauth'
+    type: 'oauth',
   });
-}
-
+};
 const authData = (data, callback) => {
   const auth_data = {};
   const method = 'token';
@@ -28,8 +24,8 @@ const authData = (data, callback) => {
     grant_type: 'authorization_code',
     client_id: dropboxConfig.appId,
     client_secret: dropboxConfig.appSecret,
-    redirect_uri: dropboxConfig.redirectURI
-  }
+    redirect_uri: dropboxConfig.redirectURI,
+  };
 
   request({ auth_data, method, params }, (err, res) => {
     // console.log('RESULTS', res);
@@ -41,19 +37,19 @@ const authData = (data, callback) => {
     const {
       account_id,
       access_token,
-      token_type
+      token_type,
     } = res;
     const auth_data = {
       access_token,
-      token_type
+      token_type,
     };
     const method = 'users.getAccount';
     const params = {
-      account_id
+      account_id,
     };
     const data = {
       auth_data,
-      id: account_id
+      id: account_id,
     };
     const cursors = {};
 
@@ -67,24 +63,24 @@ const authData = (data, callback) => {
       const method = 'files.listFolder.getLatestCursor';
       const params = {
         path: '',
-        recursive: true
-      }
+        recursive: true,
+      };
 
-      request({auth_data, method, params}, (err, res) => {
+      request({ auth_data, method, params }, (err, res) => {
         if (err) {
           console.log(err);
         }
 
-        cursors['list_folder_cursor'] = res.cursor;
+        cursors.list_folder_cursor = res.cursor;
         data.cursors = cursors;
 
         return callback(null, data);
       });
-    })
-  })
-}
+    });
+  });
+};
 
 export {
   authUrl,
-  authData
-}
+  authData,
+};

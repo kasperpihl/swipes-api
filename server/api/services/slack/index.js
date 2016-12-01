@@ -1,15 +1,13 @@
-"use strict";
-
 import {
   authUrl,
-  authData
-} from './auth'
+  authData,
+} from './auth';
 import {
-  request
-} from './request'
+  request,
+} from './request';
 
 export {
   authUrl,
   authData,
-  request
-}
+  request,
+};

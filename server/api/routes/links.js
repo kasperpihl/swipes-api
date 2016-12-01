@@ -1,20 +1,18 @@
-"use strict";
-
 import express from 'express';
 import {
   preValidateLinkAdd,
-  validateLinkAdd
+  validateLinkAdd,
 } from '../validators/links';
 import {
   linksFindPermissions,
   linksAddPermission,
   linksCreateMapLocals,
-  linksCreate
+  linksCreate,
 } from './middlewares/links';
 import {
   serviceWithAuthGet,
   serviceImport,
-  serviceDoShareRequest
+  serviceDoShareRequest,
 } from './middlewares/services';
 
 const authed = express.Router();
@@ -25,10 +23,10 @@ authed.all('/link.addPermission',
   validateLinkAdd,
   linksFindPermissions,
   linksAddPermission,
-  (req, res, next) => {
+  (req, res) => {
     const {
       meta,
-      short_url
+      short_url,
     } = res.locals;
 
     res.status(200).json({ ok: true, short_url, meta });
@@ -43,10 +41,10 @@ authed.all('/link.create',
   serviceDoShareRequest,
   linksCreate,
   linksAddPermission,
-  (req, res, next) => {
+  (req, res) => {
     const {
       meta,
-      short_url
+      short_url,
     } = res.locals;
 
     res.status(200).json({ ok: true, short_url, meta });
@@ -54,5 +52,5 @@ authed.all('/link.create',
 
 export {
   authed,
-  notAuthed
-}
+  notAuthed,
+};

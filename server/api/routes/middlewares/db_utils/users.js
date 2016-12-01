@@ -1,5 +1,3 @@
-"use strict";
-
 import r from 'rethinkdb';
 import db from '../../../../db';
 
@@ -8,83 +6,78 @@ const dbUsersGetService = (user_id, account_id) => {
     r.table('users')
       .get(user_id)('services')
       .filter((service) => {
-        return service('id').eq(account_id)
+        return service('id').eq(account_id);
       })
-      .nth(0)
+      .nth(0);
 
   return db.rethinkQuery(q);
-}
-
+};
 const dbUsersRemoveService = (user_id, account_id) => {
   const q =
     r.table('users')
       .get(user_id)
-      .update({services: r.row('services')
+      .update({ services: r.row('services')
         .filter((service) => {
-          return service('id').ne(account_id)
-        })
-      })
+          return service('id').ne(account_id);
+        }),
+      });
 
   return db.rethinkQuery(q);
-}
-
+};
 const dbUsersAddSevice = ({ user_id, service }) => {
   const q = r.table('users').get(user_id).update((user) => {
-		return {
-			services:
+    return {
+      services:
         user('services')
           .default([])
           .filter((s) => {
             return s('id')
                     .ne(service.id)
-                    .and(s('service_id').ne(service.service_id))
+                    .and(s('service_id').ne(service.service_id));
           })
-          .append(service)
-		}
-	});
+          .append(service),
+    };
+  });
 
-	return db.rethinkQuery(q);
-}
-
+  return db.rethinkQuery(q);
+};
 const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
   const filter = {
     id: account_id,
-    service_name
-  }
+    service_name,
+  };
 
-	const q = r.table("users")
-		.get(user_id)("services")
-		.default([])
-		.filter(filter)
-		.limit(1)
-		.pluck('auth_data', 'service_id', 'id', 'service_name')
-		.eqJoin('service_id', r.table('services'), {index: 'id'})
-		.without([{right:'id'}, {right:'title'}])
-		.zip();
+  const q = r.table('users')
+    .get(user_id)('services')
+    .default([])
+    .filter(filter)
+    .limit(1)
+    .pluck('auth_data', 'service_id', 'id', 'service_name')
+    .eqJoin('service_id', r.table('services'), { index: 'id' })
+    .without([{ right: 'id' }, { right: 'title' }])
+    .zip();
 
   return db.rethinkQuery(q);
-}
-
+};
 const dbUsersUpdateProfilePic = ({ user_id, profilePic }) => {
-	const q = r.table('users').get(user_id).update({profile_pic: profilePic});
+  const q = r.table('users').get(user_id).update({ profile_pic: profilePic });
 
   return db.rethinkQuery(q);
-}
-
+};
 const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
   const q =
     r.table('users')
       .get(user_id)
-      .without(['password', 'xendoCredentials', {'services': 'auth_data'}])
+      .without(['password', 'xendoCredentials', { services: 'auth_data' }])
       .merge({
         organizations:
           r.table('organizations')
-            .getAll(r.args(r.row("organizations")))
-            .coerceTo('ARRAY')
-      })
+            .getAll(r.args(r.row('organizations')))
+            .coerceTo('ARRAY'),
+      });
 
   return db.rethinkQuery(q);
-}
+};
 
 export {
   dbUsersGetService,
@@ -92,5 +85,5 @@ export {
   dbUsersAddSevice,
   dbUsersGetServiceWithAuth,
   dbUsersUpdateProfilePic,
-  dbUsersGetSingleWithOrganizations
-}
+  dbUsersGetSingleWithOrganizations,
+};

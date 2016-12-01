@@ -1,33 +1,27 @@
-"use strict";
-
 import {
-  validatorMiddleware
+  validatorMiddleware,
 } from './validation-wrapper';
 
 const goal_id = {
-  presence: true
-}
-
+  presence: true,
+};
 const goal = {
-  presence: true
-}
-
+  presence: true,
+};
 const organization_id = {
-  presence: true
-}
-
+  presence: true,
+};
 const workflow_id = {
-  presence: true
-}
-
+  presence: true,
+};
 const validateGoalsCreate = validatorMiddleware({
   goal,
   organization_id,
-  workflow_id
+  workflow_id,
 });
 const validateGoalsDelete = validatorMiddleware({ goal_id });
 
 export {
   validateGoalsCreate,
-  validateGoalsDelete
-}
+  validateGoalsDelete,
+};

@@ -1,16 +1,13 @@
-"use strict";
-
 import config from 'config';
 import crypto from 'crypto';
 import {
-  dropboxGetAuthDataByAccounts
+  dropboxGetAuthDataByAccounts,
 } from '../db_utils/webhooks';
 import {
-  dropbox
+  dropbox,
 } from '../../../services';
 
 const dropboxConfig = config.get('dropbox');
-
 const validate = (req, res, next) => {
   const signature = req.headers['x-dropbox-signature'];
   const message = req.body.toString();
@@ -26,8 +23,7 @@ const validate = (req, res, next) => {
   res.locals.message = JSON.parse(message);
 
   return next();
-}
-
+};
 const process = (req, res, next) => {
   const message = res.locals.message;
   const accounts = message.list_folder.accounts;
@@ -35,21 +31,21 @@ const process = (req, res, next) => {
   dropboxGetAuthDataByAccounts({ accounts })
     .then((accountsAuthData) => {
       accountsAuthData.forEach((accountAuthData) => {
-        dropbox.webhooks(accountAuthData, (err, res) => {
+        dropbox.webhooks(accountAuthData, (err) => {
           if (err) {
             console.log('ERROR Processing drobox webhook', err);
           }
-        })
-      })
+        });
+      });
     })
     .catch((error) => {
       console.log(error);
-    })
+    });
 
   return next();
-}
+};
 
 export {
   validate,
-  process
-}
+  process,
+};

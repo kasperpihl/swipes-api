@@ -1,64 +1,62 @@
-"use strict";
-
 import r from 'rethinkdb';
-import req from 'request';
 import Promise from 'bluebird';
-import { createClient } from './utils';
-import {
-  mapApiMethod
-} from './api_map';
+import createClient from './utils';
+import mapApiMethod from './api_map';
 import db from '../../../db';
+import {
+  SwipesError,
+} from '../../../middlewares/swipes-error';
 
 const refreshAccessToken = (auth_data, user) => {
-	return new Promise((resolve, reject) => {
-		const now = new Date().getTime() / 1000;
-		const expires_in = auth_data.expires_in - 30; // 30 seconds margin of error
-		const ts_last_token = auth_data.ts_last_token;
-		const client = createClient();
-		let accessToken;
+  return new Promise((resolve, reject) => {
+    const now = new Date().getTime() / 1000;
+    const expires_in = auth_data.expires_in - 30; // 30 seconds margin of error
+    const ts_last_token = auth_data.ts_last_token;
+    const client = createClient();
+    let accessToken;
 
-		if ((now - ts_last_token > expires_in) && user) {
+    if ((now - ts_last_token > expires_in) && user) {
       const user_id = user.id;
 
-			client.app.accessTokenFromRefreshToken(auth_data.refresh_token)
-				.then((response) => {
-					accessToken = response.access_token;
-					// T_TODO
-					// Update service in our database
-					// This shouldn't be done here ;)
-					// No operations to our database should be allowed from the services
-					var query = r.table('users').get(user_id)
-						.update({services: r.row('services')
-							.map((service) => {
-								return r.branch(
-									service('auth_data')('access_token').eq(auth_data.access_token),
-									service.merge({
-										auth_data: {
-											access_token: accessToken,
-											ts_last_token: now
-										}
-									}),
-									service
-								)
-							})
-						});
+      client.app.accessTokenFromRefreshToken(auth_data.refresh_token)
+        .then((response) => {
+          accessToken = response.access_token;
+          // T_TODO
+          // Update service in our database
+          // This shouldn't be done here ;)
+          // No operations to our database should be allowed from the services
+          const query = r.table('users').get(user_id)
+            .update({ services: r.row('services')
+              .map((service) => {
+                return r.branch(
+                  service('auth_data')('access_token').eq(auth_data.access_token),
+                  service.merge({
+                    auth_data: {
+                      access_token: accessToken,
+                      ts_last_token: now,
+                    },
+                  }),
+                  service,
+                );
+              }),
+            });
 
-					return db.rethinkQuery(query);
-				})
-				.then(() => {
-					resolve(accessToken);
-				})
-				.catch((error) => {
-					reject(error);
-				})
-		} else {
-			resolve(auth_data.access_token);
-		}
-	});
-}
-
+          return db.rethinkQuery(query);
+        })
+        .then(() => {
+          resolve(accessToken);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    } else {
+      resolve(auth_data.access_token);
+    }
+  });
+};
 const request = ({ auth_data, method, params = {}, user }, callback) => {
   const client = createClient();
+  const newParams = Object.assign({}, params);
 
   refreshAccessToken(auth_data, user)
     .then((credentials) => {
@@ -74,19 +72,19 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
 
       let id = null;
 
-      if (params.id) {
-        id = params.id;
-        delete(params.id);
+      if (newParams.id) {
+        id = newParams.id;
+        delete newParams.id;
       }
 
       if (id) {
-        asanaPromise = asanaMethod(id, params);
+        asanaPromise = asanaMethod(id, newParams);
       } else if (method === 'webhooks.create') {
-        asanaPromise = asanaMethod(params.resource, params.target);
+        asanaPromise = asanaMethod(newParams.resource, newParams.target);
       } else if (method === 'events.get') {
-        asanaPromise = asanaMethod(params.resource, params.sync);
+        asanaPromise = asanaMethod(newParams.resource, newParams.sync);
       } else {
-        asanaPromise = asanaMethod(params);
+        asanaPromise = asanaMethod(newParams);
       }
 
       return asanaPromise;
@@ -96,7 +94,7 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
       // In the web explorer where one can test the api
       // there is no such problem.
       // When we delete things there is no response at all...
-      var data = {};
+      let data = {};
 
       if (response) {
         // Absolutely ugly patch. I should return always the whole result back
@@ -111,36 +109,8 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
     })
     .catch((error) => {
       callback(error);
-    })
-}
-
-const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
-  let method = '';
-  let params = {};
-
-  if (type === 'story') {
-    method = 'tasks.findById';
-    params = Object.assign({}, {
-      id: itemId,
-      opt_expand: 'assignee'
-    })
-  } else {
-    return callback('This type is not supported :/');
-  }
-
-  request({auth_data, method, params, user }, (err, res) => {
-    if (err) {
-      return callback(err);
-    }
-
-    const serviceActions = cardActions(type, res);
-    const serviceData = cardData(type, res);
-    const meta = Object.assign({}, serviceData, serviceActions);
-
-    return callback(null, { meta });
-  })
-}
-
+    });
+};
 const cardData = (type, data) => {
   let mappedData;
   let subtitle = null;
@@ -150,7 +120,7 @@ const cardData = (type, data) => {
     subtitle = [];
     data.projects.forEach((project) => {
       subtitle.push(project.name);
-    })
+    });
 
     subtitle = subtitle.join('/');
   }
@@ -163,19 +133,43 @@ const cardData = (type, data) => {
     mappedData = {
       title: data.name || '',
       subtitle,
-      photo
-    }
+      photo,
+    };
   }
 
   return mappedData;
-}
-
-const cardActions = (type, data) => {
+};
+const cardActions = () => {
   // Dummy for now
   return [];
-}
+};
+const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
+  let method = '';
+  let params = {};
 
+  if (type === 'story') {
+    method = 'tasks.findById';
+    params = Object.assign({}, {
+      id: itemId,
+      opt_expand: 'assignee',
+    });
+  } else {
+    return callback('This type is not supported :/');
+  }
+
+  return request({ auth_data, method, params, user }, (err, res) => {
+    if (err) {
+      return callback(err);
+    }
+
+    const serviceActions = cardActions(type, res);
+    const serviceData = cardData(type, res);
+    const meta = Object.assign({}, serviceData, serviceActions);
+
+    return callback(null, { meta });
+  });
+};
 export {
   request,
-  shareRequest
-}
+  shareRequest,
+};

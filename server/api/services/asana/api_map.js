@@ -1,28 +1,24 @@
-"use strict";
-
 const mapApiMethod = (method, client) => {
   const arr = method.split('.');
-	const len = arr.length;
-	let asanaMethod = client;
-	let prevAsanaMethod = asanaMethod;
+  const len = arr.length;
+  let asanaMethod = client;
+  let prevAsanaMethod = asanaMethod;
 
-	for (let i=0; i<len; i++) {
-		if (!asanaMethod[arr[i]]) {
-			return null;
-		}
+  for (let i = 0; i < len; i += 1) {
+    if (!asanaMethod[arr[i]]) {
+      return null;
+    }
 
-		if (!asanaMethod[arr[i]].bind) {
-			asanaMethod = asanaMethod[arr[i]];
-		} else {
-			asanaMethod = asanaMethod[arr[i]].bind(prevAsanaMethod);
-		}
+    if (!asanaMethod[arr[i]].bind) {
+      asanaMethod = asanaMethod[arr[i]];
+    } else {
+      asanaMethod = asanaMethod[arr[i]].bind(prevAsanaMethod);
+    }
 
-		prevAsanaMethod = asanaMethod;
-	}
+    prevAsanaMethod = asanaMethod;
+  }
 
-	return asanaMethod;
-}
+  return asanaMethod;
+};
 
-export {
-  mapApiMethod
-}
+export default mapApiMethod;

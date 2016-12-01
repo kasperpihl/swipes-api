@@ -1,12 +1,10 @@
-"use strict";
-
 import {
-  commonMultipleEvents
+  commonMultipleEvents,
 } from './db_utils/events';
 
 const notifyAllInGoal = (req, res, next) => {
   const {
-    goal
+    goal,
   } = res.locals;
 
   const assignees = [];
@@ -15,19 +13,19 @@ const notifyAllInGoal = (req, res, next) => {
   steps.forEach((step) => {
     step.assignees.forEach((assignee) => {
       assignees.push(assignee);
-    })
-  })
+    });
+  });
 
   const uniqueUsersToNotify = Array.from(new Set(assignees));
 
   res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
 
   return next();
-}
+};
 
 const notifyAllInCompany = (req, res, next) => {
   const {
-    user
+    user,
   } = res.locals;
 
   const usersIds = [];
@@ -35,21 +33,21 @@ const notifyAllInCompany = (req, res, next) => {
 
   organization.users.forEach((userId) => {
     usersIds.push(userId);
-  })
+  });
 
   const uniqueUsersToNotify = Array.from(new Set(usersIds));
 
   res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
 
   return next();
-}
+};
 
 const notifyCommonRethinkdb = (req, res, next) => {
   const {
     uniqueUsersToNotify,
     eventType,
     eventMessage,
-    eventData
+    eventData,
   } = res.locals;
 
   const date = new Date();
@@ -61,7 +59,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
     date,
     type,
     message,
-    data: eventData
+    data: eventData,
   };
 
   commonMultipleEvents({ objToInsert })
@@ -72,10 +70,10 @@ const notifyCommonRethinkdb = (req, res, next) => {
       console.log(err);
       return next(err);
     });
-}
+};
 
 export {
   notifyAllInGoal,
   notifyAllInCompany,
-  notifyCommonRethinkdb
-}
+  notifyCommonRethinkdb,
+};

@@ -1,21 +1,19 @@
-"use strict";
-
 import {
   authUrl,
-  authData
-} from './auth'
+  authData,
+} from './auth';
 import {
   request,
-  shareRequest
-} from './request'
+  shareRequest,
+} from './request';
 import {
-  webhooks
-} from './webhooks'
+  webhooks,
+} from './webhooks';
 
 export {
   authUrl,
   authData,
   request,
   shareRequest,
-  webhooks
-}
+  webhooks,
+};

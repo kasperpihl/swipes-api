@@ -1,46 +1,42 @@
-"use strict";
-
 import {
-  SwipesError
+  SwipesError,
 } from '../../middlewares/swipes-error';
 import {
   validatorMiddleware,
-  validatorModelMiddleware
+  validatorModelMiddleware,
 } from './validation-wrapper';
 
 const shortUrlConstraints = {
-  "shortUrl": {
-    presence: true
-  }
-}
+  shortUrl: {
+    presence: true,
+  },
+};
 
 const checksumConstraints = {
-  "checksum": {
-    presence: true
-  }
-}
+  checksum: {
+    presence: true,
+  },
+};
 
 const linkConstraints = {
-  "link.id": { presence: true },
-  "link.type": { presence: true },
-  "link.service_name": { presence: true }
-}
+  'link.id': { presence: true },
+  'link.type': { presence: true },
+  'link.service_name': { presence: true },
+};
 
 const permissionConstraints = {
-  "permission.account_id": { presence: true }
-}
+  'permission.account_id': { presence: true },
+};
 
 const metaConstraints = {
-  "meta.title": { presence: true }
-}
+  'meta.title': { presence: true },
+};
 
 const constructModelLinkAdd = (body) => {
   const {
     link,
     shortUrl,
-    permission,
     checksum,
-    meta
   } = body;
 
   if (!link && !shortUrl && !checksum) {
@@ -56,12 +52,12 @@ const constructModelLinkAdd = (body) => {
   }
 
   return Object.assign({}, linkConstraints, permissionConstraints, metaConstraints);
-}
+};
 
 const preValidateLinkAdd = validatorModelMiddleware(constructModelLinkAdd);
 const validateLinkAdd = validatorMiddleware();
 
 export {
   preValidateLinkAdd,
-  validateLinkAdd
-}
+  validateLinkAdd,
+};

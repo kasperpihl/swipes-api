@@ -1,21 +1,22 @@
-"use strict";
-
 import r from 'rethinkdb';
 import {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
-  dbGoalsGetSingle
+  dbGoalsGetSingle,
 } from './db_utils/goals';
 import {
-  generateSlackLikeId
-} from '../../utils.js';
+  generateSlackLikeId,
+} from '../../utils';
+import {
+  SwipesError,
+} from '../../../middlewares/swipes-error';
 
 const goalsCreate = (req, res, next) => {
   const {
     user_id,
     goal,
     organization_id,
-    workflow_id
+    workflow_id,
   } = res.locals;
   const goalId = generateSlackLikeId('G');
 
@@ -23,11 +24,11 @@ const goalsCreate = (req, res, next) => {
   goal.steps = goal.steps.map((step) => {
     const stepId = generateSlackLikeId('');
 
-    step.id = goalId + '-' + stepId;
+    step.id = `${goalId}-${stepId}`;
     step.iterations = [];
 
     return step;
-  })
+  });
 
   goal.id = goalId;
   goal.workflow_id = workflow_id;
@@ -39,13 +40,13 @@ const goalsCreate = (req, res, next) => {
   res.locals.doNext = true;
 
   return next();
-}
+};
 
 const goalsNext = (req, res, next) => {
   const {
     goal,
     doNext,
-    step_back_id
+    step_back_id,
   } = res.locals;
   const currentStepIndex = goal.currentStepIndex;
   const currentStep = goal.steps[currentStepIndex];
@@ -66,7 +67,7 @@ const goalsNext = (req, res, next) => {
       /* Find steps before the step we are going back to
          and find steps after the current step and add null iteration
       */
-      if (!stepBackFound && step.id !== step_back_id || i > currentStepIndex) {
+      if ((!stepBackFound && step.id !== step_back_id) || i > currentStepIndex) {
         step.iterations.push(null);
       } else if (step.id === step_back_id) {
         nextStepIndex = i;
@@ -76,7 +77,9 @@ const goalsNext = (req, res, next) => {
       if (stepBackFound && i <= currentStepIndex) {
         step.completed = false;
       }
-    })
+
+      return step;
+    });
   }
 
 
@@ -88,35 +91,35 @@ const goalsNext = (req, res, next) => {
       errorLog: [],
       automationLog: [],
       previousStepIndex: currentStepIndex,
-      responses: {}
-    })
+      responses: {},
+    });
   }
 
   return next();
-}
+};
 
 const goalsInsert = (req, res, next) => {
   const {
-    goal
+    goal,
   } = res.locals;
 
   dbGoalsInsertSingle({ goal })
     .then(() => {
       res.locals.goalWithMeta = goal;
       res.locals.eventType = 'goal_created';
-      res.locals.eventMessage = 'Goal "' + goal.title + '" has been created';
+      res.locals.eventMessage = `Goal "${goal.title}" has been created`;
       res.locals.eventData = goal;
 
       return next();
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
 const goalsDelete = (req, res, next) => {
   const {
-    goal_id
+    goal_id,
   } = res.locals;
   const properties = { deleted: true };
 
@@ -124,18 +127,18 @@ const goalsDelete = (req, res, next) => {
     .then(() => {
       res.locals.eventType = 'goal_deleted';
       res.locals.eventMessage = 'Goal has been deleted';
-      res.locals.eventData = {id: goal_id};
+      res.locals.eventData = { id: goal_id };
 
       return next();
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
 const goalsGet = (req, res, next) => {
   const {
-    goal_id
+    goal_id,
   } = res.locals;
 
   dbGoalsGetSingle({ goal_id })
@@ -146,16 +149,16 @@ const goalsGet = (req, res, next) => {
 
       res.locals.goal = goal;
 
-      return next()
+      return next();
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
 const goalsUpdate = (req, res, next) => {
   const {
-    goal
+    goal,
   } = res.locals;
 
   dbGoalsUpdateSingle({ goal_id: goal.id, properties: goal })
@@ -168,8 +171,8 @@ const goalsUpdate = (req, res, next) => {
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
 export {
   goalsCreate,
@@ -177,5 +180,5 @@ export {
   goalsInsert,
   goalsDelete,
   goalsGet,
-  goalsUpdate
-}
+  goalsUpdate,
+};

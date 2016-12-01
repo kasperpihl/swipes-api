@@ -1,9 +1,3 @@
-"use strict";
+import handleJsonError from './json-parse';
 
-import {
-  handleJsonError
-} from './json-parse';
-
-export {
-  handleJsonError
-}
+export default handleJsonError;

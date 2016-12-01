@@ -1,17 +1,15 @@
-"use strict";
-
 import {
   authUrl,
-  authData
-} from './auth'
+  authData,
+} from './auth';
 import {
   request,
-  shareRequest
-} from './request'
+  shareRequest,
+} from './request';
 import {
   webhooks,
-  unsubscribeFromAllWebhooks
-} from './webhooks'
+  unsubscribeFromAllWebhooks,
+} from './webhooks';
 
 export {
   authUrl,
@@ -19,5 +17,5 @@ export {
   request,
   shareRequest,
   webhooks,
-  unsubscribeFromAllWebhooks
-}
+  unsubscribeFromAllWebhooks,
+};

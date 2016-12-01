@@ -1,26 +1,24 @@
-"use strict";
-
 import express from 'express';
 import {
   validateGoalsCreate,
-  validateGoalsDelete
+  validateGoalsDelete,
 } from '../validators/goals';
 import {
   goalsCreate,
   goalsDelete,
   goalsNext,
-  goalsInsert
+  goalsInsert,
 } from './middlewares/goals';
 import {
-  usersGetSingleWithOrganizations
+  usersGetSingleWithOrganizations,
 } from './middlewares/users';
 import {
   notifyAllInCompany,
-  notifyCommonRethinkdb
+  notifyCommonRethinkdb,
 } from './middlewares/notify';
 import {
-  processesGetAllOrderedByTitle
-} from './middlewares/db_utils/processes'
+  processesGetAllOrderedByTitle,
+} from './middlewares/db_utils/processes';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -28,12 +26,12 @@ const notAuthed = express.Router();
 authed.all('/goals.processes', (req, res, next) => {
   processesGetAllOrderedByTitle()
     .then((processes) => {
-      return res.status(200).json({ok: true, data: processes});
+      return res.status(200).json({ ok: true, data: processes });
     })
     .catch((err) => {
       return next(err);
-    })
-})
+    });
+});
 
 authed.all('/goals.create',
   validateGoalsCreate,
@@ -43,13 +41,13 @@ authed.all('/goals.create',
   goalsInsert,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res, next) => {
+  (req, res) => {
     const {
-      goalWithMeta
+      goalWithMeta,
     } = res.locals;
 
-    return res.status(200).json({ok: true, goal: goalWithMeta});
-  })
+    return res.status(200).json({ ok: true, goal: goalWithMeta });
+  });
 
 authed.all('/goals.delete',
   validateGoalsDelete,
@@ -57,11 +55,11 @@ authed.all('/goals.delete',
   goalsDelete,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
-  })
+  (req, res) => {
+    return res.status(200).json({ ok: true });
+  });
 
 export {
   authed,
-  notAuthed
-}
+  notAuthed,
+};
