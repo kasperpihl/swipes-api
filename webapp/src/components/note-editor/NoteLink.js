@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { Entity } from 'draft-js';
+import React, { Component, PropTypes } from 'react'
+import { Entity } from 'draft-js'
+import * as Icons from '../icons'
 
 class NoteLink extends Component {
-  static strategy(contentBlock, callback) {
+  static strategy(contentBlock, callback){
     contentBlock.findEntityRanges(
       (character) => {
         const entity = character.getEntity();
@@ -11,27 +12,28 @@ class NoteLink extends Component {
           Entity.get(entity).get('type') === 'LINK'
         );
       },
-      callback,
+      callback
     );
   }
-  render() {
-    if (true) {
-      console.log('true', true);
+  renderIcon(icon){
+    const Comp = Icons[icon];
+
+    if (Comp) {
+      return <Comp className="DraftEditor-link__icon"/>;
     }
-    console.log(this.props);
+  }
+  render() {
     const { entityKey, children } = this.props;
     const { url } = Entity.get(entityKey).get('data');
 
     return (
-      <a href={url}>
+      <a className="DraftEditor-link" href={url}>
         {children}
       </a>
-    );
+    )
   }
 }
 
-export default NoteLink;
+export default NoteLink
 
-const {
-  string,
-} = PropTypes;
+const { string } = PropTypes;

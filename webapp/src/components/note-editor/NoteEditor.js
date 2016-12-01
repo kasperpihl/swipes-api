@@ -24,7 +24,10 @@ class NoteEditor extends Component {
   static decorator(Component){
     return {
       strategy: Component.strategy,
-      component: Component
+      component: Component,
+      props: {
+        'test': true
+      }
     }
   }
   static getEmptyEditorState(){
@@ -34,14 +37,13 @@ class NoteEditor extends Component {
     const decorator = new CompositeDecorator(decorators);
     return EditorState.createEmpty(decorator);
   }
+
   constructor(props) {
     super(props)
 
     this.state = {
       hasSelected: false,
-      styleControl: {show: false},
-      showURLInput: false,
-      urlValue: ''
+      styleControl: {show: false}
     }
     bindAll(this,
       [
@@ -50,8 +52,6 @@ class NoteEditor extends Component {
         'onKeyUp',
         'onMouseMove',
         'onMouseUp',
-        'toggleBlockType',
-        'toggleInlineStyle',
         'handleKeyCommand',
         'onTab'
       ]
@@ -69,46 +69,14 @@ class NoteEditor extends Component {
       }
       this.setState({ hasSelected, styleControl });
     }
-    this.promptForLink = this._promptForLink.bind(this);
-    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
-    this.confirmLink = this._confirmLink.bind(this);
-    this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
-    this.removeLink = this._removeLink.bind(this);
   }
-  _promptForLink(e) {
-    e.preventDefault();
+  addLink(styleControl, urlValue) {
     const { editorState } = this.props;
-    const selection = editorState.getSelection();
-
-    if (!selection.isCollapsed()) {
-      const contentState = editorState.getCurrentContent();
-      const startKey = editorState.getSelection().getStartKey();
-      const startOffset = editorState.getSelection().getStartOffset();
-      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
-      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
-
-      let url = '';
-      if (linkKey) {
-        const linkInstance = contentState.getEntity(linkKey);
-        url = linkInstance.getData().url;
-      }
-
-      this.setState({
-        showURLInput: true,
-        urlValue: url,
-      });
-    }
-  }
-  _confirmLink(e) {
-    e.preventDefault();
-    const { editorState } = this.props;
-    const { urlValue } = this.state;
     const entityKey = Entity.create(
       'LINK',
       'MUTABLE',
       {url: urlValue}
     );
-    console.log('entityKey', entityKey);
     const contentState = editorState.getCurrentContent();
     const newContentState = Modifier.applyEntity(
       contentState,
@@ -117,27 +85,17 @@ class NoteEditor extends Component {
     )
     let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
 
-
     newEditorState = RichUtils.toggleLink(
       newEditorState,
       newEditorState.getSelection(),
       entityKey
     )
     this.props.onChange(newEditorState);
-    this.setState({
-      showURLInput: false,
-      urlValue: '',
-    });
   }
-  _onLinkInputKeyDown(e) {
-    if (e.which === 13) {
-      this._confirmLink(e);
-    }
-  }
-  _removeLink(e) {
-    e.preventDefault();
+  removeLink(styleControl) {
     const {editorState} = this.props;
     const selection = editorState.getSelection();
+
     if (!selection.isCollapsed()) {
       this.props.onChange(RichUtils.toggleLink(editorState, selection, null))
     }
@@ -153,7 +111,7 @@ class NoteEditor extends Component {
 
     return 'not handled'
   }
-  toggleBlockType(blockType) {
+  toggleBlockType(styleControl, blockType) {
     this.onChange(
       RichUtils.toggleBlockType(
         this.props.editorState,
@@ -161,7 +119,7 @@ class NoteEditor extends Component {
       )
     );
   }
-  toggleInlineStyle(inlineStyle) {
+  toggleInlineStyle(styleControl, inlineStyle) {
     this.onChange(
       RichUtils.toggleInlineStyle(
         this.props.editorState,
@@ -179,29 +137,53 @@ class NoteEditor extends Component {
     const selectionRect = getVisibleSelectionRect(window);
     return selectionRect;
   }
+  hideStyleControls(a) {
+    let styleControl = this.state.styleControl;
+
+    styleControl = {show: false};
+    this.setState({ styleControl });
+
+    setTimeout( () => {
+      const { editor } = this.refs;
+      const { editorState } = this.props;
+      const selectionState = editorState.getSelection();
+      let newKey = selectionState.get('focusKey');
+      let newOffset = selectionState.get('focusOffset');
+
+      if (selectionState.get('isBackward')) {
+        newKey = selectionState.get('anchorKey');
+        newOffset = selectionState.get('anchorOffset');
+      }
+
+      const newSelState = SelectionState.createEmpty().merge({
+        anchorKey: newKey,
+        anchorOffset: newOffset,
+        focusKey: newKey,
+        focusOffset: newOffset,
+      })
+      const newEditorState = EditorState.forceSelection(editorState, newSelState);
+
+      editor.focus();
+      this.onChange(newEditorState);
+    }, 0);
+  }
   renderStyleControls() {
     const { hasSelected, styleControl } = this.state;
     const { editorState } = this.props;
-    if (true) {
-      return;
-    }
+
     if(!styleControl.show || !hasSelected){
       return;
     }
 
     const position = this.positionForStyleControls();
 
-    if(!position){
-      return;
-    }
-
     const selectionState = editorState.getSelection();
+    console.log('selectionState', )
 
     return (
       <StyleControl
+        delegate={this}
         editorState={editorState}
-        onToggleBlock={this.toggleBlockType}
-        onToggleInline={this.toggleInlineStyle}
         position={position}
         mouseUp={styleControl}
       />
@@ -274,22 +256,8 @@ class NoteEditor extends Component {
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}>
         {this.renderStyleControls()}
-        <div style={{marginBottom: 10}}>
-                Select some text, then use the buttons to add or remove links
-                on the selected text.
-              </div>
-              <div >
-                <button
-                  onMouseDown={this.promptForLink}
-                  style={{marginRight: 10}}>
-                  Add Link
-                </button>
-                <button onMouseDown={this.removeLink}>
-                  Remove Link
-                </button>
-              </div>
-              {urlInput}
         <Editor
+          ref="editor"
           readOnly={readOnly}
           editorState={editorState}
           handleKeyCommand={this.handleKeyCommand}
