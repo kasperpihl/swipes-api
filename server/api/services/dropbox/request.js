@@ -1,9 +1,5 @@
-"use strict";
-
 import req from 'request';
-import {
-  mapApiMethod
-} from './api_map';
+import mapApiMethod from './api_map';
 
 const request = ({ auth_data, method, params = {} }, callback) => {
   const url =
@@ -11,19 +7,18 @@ const request = ({ auth_data, method, params = {} }, callback) => {
     'https://api.dropboxapi.com/2' :
     'https://api.dropboxapi.com/oauth2';
   const mappedMethod = mapApiMethod(method);
-
   const options = {
     method: 'post',
     json: true,
     url: url + mappedMethod,
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    }
-  }
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  };
 
   if (auth_data.access_token) {
     options.body = params;
-    options.headers['Authorization'] = 'Bearer ' + auth_data.access_token;
+    options.headers.Authorization = `Bearer ${auth_data.access_token}`;
   } else {
     options.form = params;
   }
@@ -36,34 +31,7 @@ const request = ({ auth_data, method, params = {} }, callback) => {
 
     return callback(null, body);
   });
-}
-
-const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
-  let method = '';
-  let params = {};
-
-  if (type === 'file') {
-    method = 'files.getMetadata';
-    params = Object.assign({}, {
-      path: itemId
-    })
-  } else {
-    return callback('This type is not supported :/');
-  }
-
-  request({ auth_data, method, params, user }, (err, res) => {
-    if (err) {
-      return callback(err);
-    }
-
-    const serviceActions = cardActions(type, res);
-    const serviceData = cardData(type, res);
-    const meta = Object.assign({}, serviceData, serviceActions);
-
-    return callback(null, { meta });
-  })
-}
-
+};
 const cardData = (type, data) => {
   let mappedData;
 
@@ -76,19 +44,42 @@ const cardData = (type, data) => {
 
     mappedData = {
       title: data.name || '',
-      subtitle
-    }
+      subtitle,
+    };
   }
 
   return mappedData;
-}
-
-const cardActions = (type, data) => {
+};
+const cardActions = () => {
   // Dummy for now
   return [];
-}
+};
+const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
+  let method = '';
+  let params = {};
 
+  if (type === 'file') {
+    method = 'files.getMetadata';
+    params = Object.assign({}, {
+      path: itemId,
+    });
+  } else {
+    return callback('This type is not supported :/');
+  }
+
+  return request({ auth_data, method, params, user }, (err, res) => {
+    if (err) {
+      return callback(err);
+    }
+
+    const serviceActions = cardActions(type, res);
+    const serviceData = cardData(type, res);
+    const meta = Object.assign({}, serviceData, serviceActions);
+
+    return callback(null, { meta });
+  });
+};
 export {
   request,
-  shareRequest
-}
+  shareRequest,
+};

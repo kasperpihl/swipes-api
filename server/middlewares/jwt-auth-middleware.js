@@ -1,9 +1,5 @@
-"use strict";
-
 import jwt from 'jwt-simple';
 import config from 'config';
-import r from 'rethinkdb';
-import db from '../db';
 
 const restAuth = (req, res, next) => {
   const token = res.locals.token;
@@ -17,13 +13,11 @@ const restAuth = (req, res, next) => {
 
       return next();
     } catch (err) {
-      res.status(200).json({ok: false, err: 'not_authed'});
+      return res.status(200).json({ ok: false, err: 'not_authed' });
     }
-  } else {
-    res.status(200).json({ok: false, err: 'not_authed'});
   }
-}
 
-export {
-  restAuth
-}
+  return res.status(200).json({ ok: false, err: 'not_authed' });
+};
+
+export default restAuth;

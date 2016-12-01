@@ -1,30 +1,24 @@
-"use strict";
-
 import Promise from 'bluebird';
 import config from 'config';
+import initMe from './db_utils/me';
+import processesGetAllOrderedByTitle from './db_utils/processes';
 import {
-  initMe
-} from './db_utils/me';
-import {
-  servicesGetAll
+  servicesGetAll,
 } from './db_utils/services';
 import {
-  initActivities
+  initActivities,
 } from './db_utils/events';
-import {
-  processesGetAllOrderedByTitle
-} from './db_utils/processes';
 
 const initGetData = (req, res, next) => {
   const {
-    user_id
+    user_id,
   } = res.locals;
   const promiseArrayQ = [
     initMe(user_id),
     servicesGetAll(),
     initActivities(user_id),
-    processesGetAllOrderedByTitle()
-  ]
+    processesGetAllOrderedByTitle(),
+  ];
 
   Promise.all(promiseArrayQ)
     .then((data) => {
@@ -47,13 +41,13 @@ const initGetData = (req, res, next) => {
       }
 
       const origin = config.get('origin');
-      const ws_origin = origin.replace(/http(s)?/, 'ws' + '$1');
+      const ws_origin = origin.replace(/http(s)?/, 'ws$1');
       const port = config.get('clientPort');
       const api_port = config.get('apiPort');
       const https = port === '443';
-      const url = https ? origin : origin + ':' + port;
+      const url = https ? origin : `${origin}:${port}`;
       const ws_path = '/ws';
-      const ws_url = https ? ws_origin + ws_path : ws_origin + ':' + api_port + ws_path;
+      const ws_url = https ? ws_origin + ws_path : `${ws_origin}:${api_port}${ws_path}`;
 
       const response = {
         ok: true,
@@ -64,8 +58,8 @@ const initGetData = (req, res, next) => {
         goals,
         services: data[1],
         activity: data[2],
-        processes: data[3]
-      }
+        processes: data[3],
+      };
 
       res.locals.initData = response;
 
@@ -73,9 +67,7 @@ const initGetData = (req, res, next) => {
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
-export {
-  initGetData
-}
+export default initGetData;

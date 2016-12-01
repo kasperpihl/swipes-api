@@ -1,13 +1,11 @@
-"use strict";
-
 import url from 'url';
 import config from 'config';
 import ws from 'ws';
 import jwt from 'jwt-simple';
-import * as services from './services';
-import * as users from './users';
-import * as common from './common-events';
-import * as commonMultiple from './common-events-multiple';
+import usersProfilePic from './services';
+import userServices from './users';
+import commonEvents from './common-events';
+import commonEventsMultiple from './common-events-multiple';
 
 const auth = (token) => {
   if (token) {
@@ -28,9 +26,9 @@ const auth = (token) => {
 
     return false;
   }
-}
+};
 
-const start = (server) => {
+const websocketStart = (server) => {
   const WebSocketServer = ws.Server;
   const wss = new WebSocketServer({ server, path: '/ws' });
 
@@ -52,15 +50,13 @@ const start = (server) => {
 
     socket.send(JSON.stringify({ type: 'hello', payload: 'world' }));
 
-    users.usersProfilePic(socket, user_id);
-    services.userServices(socket, user_id);
-    common.commonEvents(socket, user_id);
-    commonMultiple.commonEventsMultiple(socket, user_id);
+    usersProfilePic(socket, user_id);
+    userServices(socket, user_id);
+    commonEvents(socket, user_id);
+    commonEventsMultiple(socket, user_id);
   });
 
   console.log('ws server is online');
-}
+};
 
-export {
-  start
-}
+export { websocketStart as default };

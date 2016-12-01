@@ -1,11 +1,7 @@
-"use strict";
-
-import req from 'request';
-import { request } from './request';
-import { createClient } from './utils';
+import createClient from './utils';
 import {
   unsubscribeFromAllWebhooks,
-  subscribeToAllWebhooks
+  subscribeToAllWebhooks,
 } from './webhooks';
 
 const authUrl = (data, callback) => {
@@ -13,29 +9,31 @@ const authUrl = (data, callback) => {
   const url = client.app.asanaAuthorizeUrl();
 
   callback(null, {
+    url,
     type: 'oauth',
-    url: url
   });
-}
-
+};
 const authData = (data, callback) => {
   const {
     query,
-    user_id
+    user_id,
   } = data;
   const client = createClient();
   const code = query.code;
-  let auth_data, id, show_name;
+  let auth_data;
+  let id;
+  let show_name;
+  let authDataResponse;
 
   client.app.accessTokenFromCode(code)
     .then((response) => {
       auth_data = response;
-      id = response.data.id.toString();
-      show_name = response.data.email;
+      id = auth_data.data.id.toString();
+      show_name = auth_data.data.email;
       // Need that for the refresh token
-      response.ts_last_token = new Date().getTime() / 1000;
+      auth_data.ts_last_token = new Date().getTime() / 1000;
 
-      data = { auth_data, id, show_name };
+      authDataResponse = { auth_data, id, show_name };
 
       return unsubscribeFromAllWebhooks({ auth_data, user_id });
     })
@@ -43,15 +41,15 @@ const authData = (data, callback) => {
       return subscribeToAllWebhooks({ auth_data, user_id, accountId: id });
     })
     .then(() => {
-      return callback(null, data);
+      return callback(null, authDataResponse);
     })
     .catch((error) => {
       console.log(error);
       callback(error);
-    })
-}
+    });
+};
 
 export {
   authUrl,
-  authData
-}
+  authData,
+};

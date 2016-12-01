@@ -1,27 +1,25 @@
-"use strict";
-
 import express from 'express';
 import {
   validateStepsSubmit,
-  validateStepsUpdate
+  validateStepsUpdate,
 } from '../validators/steps';
 import {
   stepsGetCurrent,
   stepsSubmit,
   stepsGet,
-  stepsUpdateData
+  stepsUpdateData,
 } from './middlewares/steps';
 import {
   goalsGet,
   goalsNext,
-  goalsUpdate
+  goalsUpdate,
 } from './middlewares/goals';
 import {
   notifyAllInCompany,
-  notifyCommonRethinkdb
+  notifyCommonRethinkdb,
 } from './middlewares/notify';
 import {
-  usersGetSingleWithOrganizations
+  usersGetSingleWithOrganizations,
 } from './middlewares/users';
 
 const authed = express.Router();
@@ -37,8 +35,8 @@ authed.post('/steps.submit',
   usersGetSingleWithOrganizations,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res, next) => res.status(200).json({ok:true})
-)
+  (req, res) => res.status(200).json({ ok: true }),
+);
 
 authed.post('/steps.update',
   validateStepsUpdate,
@@ -48,12 +46,10 @@ authed.post('/steps.update',
   stepsUpdateData,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res, next) => {
-    return res.status(200).json({ok: true});
-  }
-)
+  (req, res) => res.status(200).json({ ok: true }),
+);
 
 export {
   authed,
-  notAuthed
-}
+  notAuthed,
+};

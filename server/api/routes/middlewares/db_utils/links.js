@@ -1,6 +1,3 @@
-"use strict";
-
-import Promise from 'bluebird';
 import shortid from 'shortid';
 import r from 'rethinkdb';
 import db from '../../../../db';
@@ -10,31 +7,28 @@ const findLinkPermissionsById = (shortUrl) => {
     r.table('links_permissions')
       .getAll(shortUrl)
       .eqJoin('link_id', r.table('links'))
-      .zip()
+      .zip();
 
   return db.rethinkQuery(q);
-}
-
+};
 const findLinkByChecksum = (checksum) => {
   const q = r.table('links').get(checksum);
 
   return db.rethinkQuery(q);
-}
-
+};
 const addPermissionsToALink = ({ user_id, checksum, permission }) => {
   const permissionPart = shortid.generate();
   const q = r.table('links_permissions').insert({
     user_id,
+    permission,
     id: permissionPart,
     link_id: checksum,
-    permission: permission
   }, {
-    returnChanges: true
+    returnChanges: true,
   });
 
   return db.rethinkQuery(q);
-}
-
+};
 const createLink = ({ meta, insert_doc }) => {
   insert_doc.last_updated = r.now();
 
@@ -49,22 +43,22 @@ const createLink = ({ meta, insert_doc }) => {
             // we are doing that check when there is a conflict.
             r.expr(meta).ne(null),
             oldDoc.merge({
-              last_updated: r.now()
+              last_updated: r.now(),
             }),
             oldDoc.merge({
               last_updated: r.now(),
-              meta: newDoc('meta')
-            })
-          )
-        }
+              meta: newDoc('meta'),
+            }),
+          );
+        },
       });
 
   return db.rethinkQuery(q);
-}
+};
 
 export {
   findLinkPermissionsById,
   findLinkByChecksum,
   addPermissionsToALink,
-  createLink
-}
+  createLink,
+};

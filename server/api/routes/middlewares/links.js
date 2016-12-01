@@ -1,14 +1,12 @@
-"use strict";
-
 import hash from 'object-hash';
 import {
   findLinkPermissionsById,
   findLinkByChecksum,
   addPermissionsToALink,
-  createLink
+  createLink,
 } from './db_utils/links';
 import {
-  SwipesError
+  SwipesError,
 } from '../../../middlewares/swipes-error';
 
 const linksFindPermissions = (req, res, next) => {
@@ -16,7 +14,7 @@ const linksFindPermissions = (req, res, next) => {
     user_id,
     shortUrl,
     checksum,
-    permission
+    permission,
   } = res.locals;
 
   if (shortUrl) {
@@ -30,13 +28,13 @@ const linksFindPermissions = (req, res, next) => {
           res.locals.meta = result.meta;
 
           return next();
-        } else {
-          return next(new SwipesError('There is no link with that id'));
         }
+
+        return next(new SwipesError('There is no link with that id'));
       })
       .catch((err) => {
         return next(err);
-      })
+      });
   }
 
   if (checksum) {
@@ -48,21 +46,21 @@ const linksFindPermissions = (req, res, next) => {
           res.locals.meta = result.meta;
 
           return next();
-        } else {
-          return next(new SwipesError('There is no link with that checksum'));
         }
+
+        return next(new SwipesError('There is no link with that checksum'));
       })
       .catch((err) => {
         return next(err);
-      })
+      });
   }
-}
+};
 
 const linksAddPermission = (req, res, next) => {
   const {
     user_id,
     permission,
-    checksum
+    checksum,
   } = res.locals;
 
   addPermissionsToALink({ user_id, checksum, permission })
@@ -73,26 +71,26 @@ const linksAddPermission = (req, res, next) => {
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
 const linksCreateMapLocals = (req, res, next) => {
   const {
     link,
-    permission
+    permission,
   } = res.locals;
 
   res.locals.service_name = link.service_name;
   res.locals.account_id = permission.account_id;
 
   return next();
-}
+};
 
 const linksCreate = (req, res, next) => {
   const {
     short_url_data,
     link,
-    meta
+    meta,
   } = res.locals;
 
   const checksum = hash({ link });
@@ -111,12 +109,12 @@ const linksCreate = (req, res, next) => {
     })
     .catch((error) => {
       return next(error);
-    })
-}
+    });
+};
 
 export {
   linksFindPermissions,
   linksAddPermission,
   linksCreateMapLocals,
-  linksCreate
-}
+  linksCreate,
+};

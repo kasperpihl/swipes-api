@@ -1,9 +1,7 @@
-"use strict";
-
 import r from 'rethinkdb';
 import db from '../../../../db';
 
-const dbStepsUpdateSingle = ({ goal_id, step }) => {
+const dbStepsUpdateSingle = ({ goal_id, stepUpdated }) => {
   const q =
     r.db('swipes')
       .table('goals')
@@ -12,17 +10,15 @@ const dbStepsUpdateSingle = ({ goal_id, step }) => {
         return goal.merge({
           steps: goal('steps').map((step) => {
             return r.branch(
-              step('id').eq(step.id),
-              step.merge(step),
-              step
-            )
-          })
-        })
-      })
+              step('id').eq(stepUpdated.id),
+              step.merge(stepUpdated),
+              step,
+            );
+          }),
+        });
+      });
 
   return db.rethinkQuery(q);
-}
+};
 
-export {
-  dbStepsUpdateSingle
-}
+export default dbStepsUpdateSingle;

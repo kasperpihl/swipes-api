@@ -1,37 +1,30 @@
-"use strict";
-
 import {
-  validatorMiddleware
+  validatorMiddleware,
 } from './validation-wrapper';
 
 const goal_id = {
-  presence: true
-}
-
+  presence: true,
+};
 const data = {
-  presence: true
-}
-
+  presence: true,
+};
 const step_id = {
-  presence: true
-}
-
+  presence: true,
+};
 const payload = {
-  presence: true
-}
-
+  presence: true,
+};
 const validateStepsSubmit = validatorMiddleware({
   goal_id,
-  data
+  data,
 });
-
 const validateStepsUpdate = validatorMiddleware({
   goal_id,
   step_id,
-  payload
+  payload,
 });
 
 export {
   validateStepsSubmit,
-  validateStepsUpdate
-}
+  validateStepsUpdate,
+};

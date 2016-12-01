@@ -1,28 +1,25 @@
-"use strict";
-
 /*
   Serving only common events
   Common events are events that are not modified before sending them to the client.
 */
 
 import r from 'rethinkdb';
-import db from '../db';
 import _ from 'underscore';
+import db from '../db';
 
 // Add types of events to the specialEvents array
 // that are not common and we want to ignore them here
 const specialEvents = [];
-
 const commonEvents = (socket, userId) => {
   const listenQ =
     r.table('events')
       .filter((e) => {
         return e('user_id').eq(userId)
-              .and(r.expr(specialEvents).contains(e('type')).not())
+              .and(r.expr(specialEvents).contains(e('type')).not());
       })
-      .changes()
+      .changes();
 
-  db.rethinkQuery(listenQ, {feed: true, socket: socket})
+  db.rethinkQuery(listenQ, { feed: true, socket })
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {
@@ -43,10 +40,8 @@ const commonEvents = (socket, userId) => {
         }
 
         socket.send(JSON.stringify({ type, payload }));
-      })
-    })
-}
+      });
+    });
+};
 
-export {
-  commonEvents
-}
+export default commonEvents;

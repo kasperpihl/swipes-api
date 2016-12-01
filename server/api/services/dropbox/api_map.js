@@ -1,20 +1,16 @@
-"use strict";
-
 import {
-  camelCaseToUnderscore
+  camelCaseToUnderscore,
 } from '../../utils';
 
 const mapApiMethod = (method) => {
   const pathItems = method.split('.');
-	let path = '';
+  let path = '';
 
-	pathItems.forEach((item) => {
-		path = path + '/' + camelCaseToUnderscore(item);
-	})
+  pathItems.forEach((item) => {
+    path = `${path}/${camelCaseToUnderscore(item)}`;
+  });
 
-	return path;
-}
+  return path;
+};
 
-export {
-  mapApiMethod
-}
+export default mapApiMethod;

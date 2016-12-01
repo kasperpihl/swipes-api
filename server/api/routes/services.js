@@ -1,10 +1,8 @@
-"use strict";
-
 import express from 'express';
 import {
   validateServicesAuthorize,
   validateServicesRequest,
-  validateServicesAuthorizeSuccess
+  validateServicesAuthorizeSuccess,
 } from '../validators/services';
 import {
   serviceIdGet,
@@ -13,13 +11,13 @@ import {
   serviceWithAuthGet,
   serviceDoRequest,
   serviceGetAuthData,
-  serviceUpdateAuthData
+  serviceUpdateAuthData,
 } from './middlewares/services';
 import {
   xendoSwipesCredentials,
-	xendoRefreshSwipesToken,
-	xendoAddServiceToUser
-} from './middlewares/xendo.js';
+  xendoRefreshSwipesToken,
+  xendoAddServiceToUser,
+} from './middlewares/xendo';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -28,27 +26,27 @@ notAuthed.all('/services.authorize',
   validateServicesAuthorize,
   serviceImport,
   serviceGetAuthUrl,
-  (req, res, next) => {
+  (req, res) => {
     const {
-      authUrl
+      authUrl,
     } = res.locals;
 
-    res.writeHead(302, {'Location': authUrl});
+    res.writeHead(302, { Location: authUrl });
     res.end();
-  })
+  });
 
 authed.all('/services.request',
   validateServicesRequest,
   serviceWithAuthGet,
   serviceImport,
   serviceDoRequest,
-  (req, res, next) => {
+  (req, res) => {
     const {
-      service_request_result
+      service_request_result,
     } = res.locals;
 
     res.send({ ok: true, data: service_request_result });
-  })
+  });
 
 authed.all('/services.authsuccess',
   validateServicesAuthorizeSuccess,
@@ -57,13 +55,13 @@ authed.all('/services.authsuccess',
   serviceGetAuthData,
   serviceUpdateAuthData,
   xendoSwipesCredentials,
-	xendoRefreshSwipesToken,
-	xendoAddServiceToUser,
-  (req, res, next) => {
+  xendoRefreshSwipesToken,
+  xendoAddServiceToUser,
+  (req, res) => {
     res.send({ ok: true });
-  })
+  });
 
 export {
   notAuthed,
-  authed
-}
+  authed,
+};

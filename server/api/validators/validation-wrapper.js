@@ -1,7 +1,7 @@
-"use strict";
-
 import validate from 'validate.js';
-import SwipesError from '../../middlewares/swipes-error/swipes-error';
+import {
+  SwipesError,
+} from '../../middlewares/swipes-error';
 
 const validatorModelMiddleware = (fn) => {
   return (req, res, next) => {
@@ -14,15 +14,14 @@ const validatorModelMiddleware = (fn) => {
     res.locals.validatorModel = model;
 
     return next();
-  }
-}
-
+  };
+};
 const validatorMiddleware = (model = null) => {
   return (req, res, next) => {
     const {
-      validatorModel
+      validatorModel,
     } = res.locals;
-    const modelToValidate = model ? model : validatorModel;
+    const modelToValidate = model || validatorModel;
 
     if (!modelToValidate) {
       return next(new SwipesError('There is no model to validate!'));
@@ -35,10 +34,10 @@ const validatorMiddleware = (model = null) => {
     }
 
     return next();
-  }
-}
+  };
+};
 
 export {
   validatorMiddleware,
-  validatorModelMiddleware
-}
+  validatorModelMiddleware,
+};

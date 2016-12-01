@@ -1,5 +1,3 @@
-"use strict";
-
 import r from 'rethinkdb';
 import db from '../db';
 
@@ -9,11 +7,11 @@ const usersProfilePic = (socket, userId) => {
       .table('users')
       .getAll(userId)
       .map((user) => {
-        return user('profile_pic')
+        return user('profile_pic');
       })
-      .changes()
+      .changes();
 
-  db.rethinkQuery(q, {feed: true, socket: socket})
+  db.rethinkQuery(q, { feed: true, socket })
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {
@@ -27,13 +25,11 @@ const usersProfilePic = (socket, userId) => {
         const payload = row.new_val;
 
         socket.send(JSON.stringify({ type, payload }));
-      })
+      });
     })
     .catch((err) => {
       console.log(err);
-    })
-}
+    });
+};
 
-export {
-  usersProfilePic
-}
+export default usersProfilePic;

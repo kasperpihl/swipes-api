@@ -1,21 +1,21 @@
-"use strict";
-
-import req from 'request'
+import req from 'request';
 
 const request = ({ auth_data, method, params = {} }, callback) => {
+  const copyParams = Object.assign({}, params);
+
   if (auth_data.access_token) {
-    params.token = auth_data.access_token;
+    copyParams.token = auth_data.access_token;
   }
 
   const options = {
     method: 'post',
-    form: params,
+    form: copyParams,
     json: true,
-    url: 'https://slack.com/api/' + method.toLowerCase(),
+    url: `https://slack.com/api/${method.toLowerCase()}`,
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    }
-  }
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  };
 
   req(options, (err, res, body) => {
     if (err) {
@@ -25,8 +25,6 @@ const request = ({ auth_data, method, params = {} }, callback) => {
 
     return callback(null, body);
   });
-}
+};
 
-export {
-  request
-}
+export default request;

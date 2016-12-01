@@ -4,14 +4,13 @@ import request from 'request';
 import querystring from 'querystring';
 import r from 'rethinkdb';
 import db from '../../../db';
-import SwipesError from '../../../middlewares/swipes-error/swipes-error';
 
 const xendoConfig = config.get('xendo');
 
 const xendoRefreshSwipesToken = (req, res, next) => {
   // TODO check the expire time and don't refresh the token everytime
   const {
-    xendoSwipesCredentials
+    xendoSwipesCredentials,
   } = res.locals;
   const options = {
     method: 'POST',
@@ -20,16 +19,16 @@ const xendoRefreshSwipesToken = (req, res, next) => {
       grant_type: 'refresh_token',
       client_id: xendoConfig.clientId,
       client_secret: xendoConfig.clientSecret,
-      refresh_token: xendoSwipesCredentials.refresh_token
-    }
-  }
+      refresh_token: xendoSwipesCredentials.refresh_token,
+    },
+  };
 
   rp.post(options)
     .then((result) => {
       const newConfig = JSON.parse(result);
       const query =
         r.table('config')
-          .getAll('xendo', {index: 'key'})
+          .getAll('xendo', { index: 'key' })
           .nth(0)
           .update(newConfig);
 
@@ -42,11 +41,11 @@ const xendoRefreshSwipesToken = (req, res, next) => {
     })
     .catch((error) => {
       return next(error);
-    })
-}
+    });
+};
 
 const xendoSwipesCredentials = (req, res, next) => {
-  const query = r.table('config').getAll('xendo', {index: 'key'}).nth(0);
+  const query = r.table('config').getAll('xendo', { index: 'key' }).nth(0);
 
   db.rethinkQuery(query)
     .then((result) => {
@@ -60,12 +59,12 @@ const xendoSwipesCredentials = (req, res, next) => {
     })
     .catch((error) => {
       return next(error);
-    })
-}
+    });
+};
 
 const xendoUserCredentials = (req, res, next) => {
   const {
-    user_id
+    user_id,
   } = res.locals;
   const query = r.table('users').get(user_id);
 
@@ -81,27 +80,27 @@ const xendoUserCredentials = (req, res, next) => {
     })
     .catch((error) => {
       return next(error);
-    })
-}
+    });
+};
 
 const xendoUserSignUp = (req, res, next) => {
   const {
     user_id,
-    xendoSwipesCredentials
+    xendoSwipesCredentials,
   } = res.locals;
-  const xendoEmail = user_id + '@swipesapp.com';
+  const xendoEmail = `${user_id}@swipesapp.com`;
   const qs = querystring.stringify({
     email: xendoEmail,
     username: xendoEmail,
     client_id: xendoConfig.clientId,
-    client_secret: xendoConfig.clientSecret
+    client_secret: xendoConfig.clientSecret,
   });
-  const url = xendoConfig.addUserEndpoint + '?' + qs;
+  const url = `${xendoConfig.addUserEndpoint}?${qs}`;
 
   rp.get(url, {
     auth: {
-      bearer: xendoSwipesCredentials.access_token
-    }
+      bearer: xendoSwipesCredentials.access_token,
+    },
   })
   .then((xendoResult) => {
     if (xendoResult.error) {
@@ -111,7 +110,7 @@ const xendoUserSignUp = (req, res, next) => {
     res.locals.xendoUserCredentials = xendoResult;
 
     const updateSwipesUserQ = r.table('users').get(user_id).update({
-      xendoCredentials: JSON.parse(xendoResult)
+      xendoCredentials: JSON.parse(xendoResult),
     });
 
     return db.rethinkQuery(updateSwipesUserQ);
@@ -121,16 +120,16 @@ const xendoUserSignUp = (req, res, next) => {
   })
   .catch((error) => {
     return next(error);
-  })
-}
+  });
+};
 
 const xendoAddServiceToUser = (req, res, next) => {
   const {
     user_id,
     xendoSwipesCredentials,
-    serviceToAppend
+    serviceToAppend,
   } = res.locals;
-  const xendoEmail = user_id + '@swipesapp.com';
+  const xendoEmail = `${user_id}@swipesapp.com`;
   const qs = querystring.stringify({
     client_id: xendoConfig.clientId,
     email: xendoEmail,
@@ -138,28 +137,26 @@ const xendoAddServiceToUser = (req, res, next) => {
     access_token: serviceToAppend.auth_data.access_token,
     refresh_token: serviceToAppend.auth_data.refresh_token,
     display_name: serviceToAppend.show_name,
-    account_name: serviceToAppend.id
+    account_name: serviceToAppend.id,
   });
-  const url = xendoConfig.addServiceToUserEndpoint + '?' + qs;
+  const url = `${xendoConfig.addServiceToUserEndpoint}?${qs}`;
   let xendoResult;
 
   rp.get(url, {
     auth: {
-      bearer: xendoSwipesCredentials.access_token
-    }
+      bearer: xendoSwipesCredentials.access_token,
+    },
   })
   .then((result) => {
-    result = JSON.parse(result);
+    xendoResult = JSON.parse(result);
 
-    if (result.error) {
-      return next(result.error);
+    if (xendoResult.error) {
+      return next(xendoResult.error);
     }
-
-    xendoResult = result;
 
     const checkXendoUserServiceQ =
       r.table('xendo_user_services')
-        .getAll(xendoResult.service_id, {index: 'service_id'});
+        .getAll(xendoResult.service_id, { index: 'service_id' });
 
     return db.rethinkQuery(checkXendoUserServiceQ);
   })
@@ -170,7 +167,7 @@ const xendoAddServiceToUser = (req, res, next) => {
 
     const newXendoService = Object.assign({}, xendoResult, {
       user_id,
-      service_account_id: serviceToAppend.id
+      service_account_id: serviceToAppend.id,
     });
 
     const insertXendoUserServiceQ =
@@ -184,13 +181,13 @@ const xendoAddServiceToUser = (req, res, next) => {
   })
   .catch((error) => {
     return next(error);
-  })
-}
+  });
+};
 
 const xendoRemoveServiceFromUser = (req, res, next) => {
   const {
     xendoSwipesCredentials,
-    xendoUserServiceId
+    xendoUserServiceId,
   } = res.locals;
 
   if (xendoUserServiceId === null) {
@@ -199,18 +196,18 @@ const xendoRemoveServiceFromUser = (req, res, next) => {
 
   const url = xendoConfig.userServiceEndpoint + xendoUserServiceId;
 
-  request.delete(url, {
+  return request.delete(url, {
     auth: {
-      bearer: xendoSwipesCredentials.access_token
-    }
-  }, (error, response) => {
+      bearer: xendoSwipesCredentials.access_token,
+    },
+  }, (error) => {
     if (error) {
       return next(error);
     }
 
     return next();
-  })
-}
+  });
+};
 
 const xendoSearch = (req, res, next) => {
   const q = res.locals.q;
@@ -218,12 +215,12 @@ const xendoSearch = (req, res, next) => {
   const p = parseInt(res.locals.p, 10) || 0;
   const sources = (res.locals.sources || []).join(',');
   const {
-    xendoUserCredentials
+    xendoUserCredentials,
   } = res.locals;
   const qo = {
     q,
-    p
-  }
+    p,
+  };
 
   if (sources.length > 0) {
     qo.sources = sources;
@@ -235,12 +232,12 @@ const xendoSearch = (req, res, next) => {
 
   const qs = querystring.stringify(qo);
 
-  const url = xendoConfig.searchEndpoint + '?' + qs;
+  const url = `${xendoConfig.searchEndpoint}?${qs}`;
 
   rp.get(url, {
     auth: {
-      bearer: xendoUserCredentials.access_token
-    }
+      bearer: xendoUserCredentials.access_token,
+    },
   })
   .then((result) => {
     res.locals.result = JSON.parse(result);
@@ -249,34 +246,34 @@ const xendoSearch = (req, res, next) => {
   })
   .catch((error) => {
     return next(error);
-  })
-}
+  });
+};
 
 const xendoSearchMapResults = (req, res, next) => {
   const {
     user_id,
-    result
+    result,
   } = res.locals;
   const xendoServicesQ =
     r.table('xendo_user_services')
-      .getAll(user_id, {index: 'user_id'})
+      .getAll(user_id, { index: 'user_id' })
       .map((service) => {
         return [
           service('service_id').coerceTo('string'),
-          service('service_account_id').coerceTo('string')
-        ]
+          service('service_account_id').coerceTo('string'),
+        ];
       })
-      .coerceTo('object')
+      .coerceTo('object');
 
   db.rethinkQuery(xendoServicesQ)
     .then((userServices) => {
       const mappedResults = result.response.docs.map((doc) => {
-        if (userServices[doc['service_id']]) {
-          doc['account_id'] = userServices[doc['service_id']];
+        if (userServices[doc.service_id]) {
+          doc.account_id = userServices[doc.service_id];
         }
 
         return doc;
-      })
+      });
 
       res.locals.mappedResults = mappedResults;
 
@@ -284,8 +281,8 @@ const xendoSearchMapResults = (req, res, next) => {
     })
     .catch((err) => {
       return next(err);
-    })
-}
+    });
+};
 
 export {
   xendoSwipesCredentials,
@@ -295,5 +292,5 @@ export {
   xendoAddServiceToUser,
   xendoRemoveServiceFromUser,
   xendoSearch,
-  xendoSearchMapResults
-}
+  xendoSearchMapResults,
+};
