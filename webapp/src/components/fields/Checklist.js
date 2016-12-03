@@ -36,7 +36,7 @@ class Checklist extends Component {
 
 export default Checklist;
 
-const { string, bool, arrayOf, shape, object } = PropTypes;
+const { string, bool, arrayOf, shape, func } = PropTypes;
 
 Checklist.propTypes = {
   data: shape({
@@ -45,6 +45,6 @@ Checklist.propTypes = {
       checked: bool,
     })),
   }),
-  delegate: object,
+  delegate: func,
   settings: map,
 };

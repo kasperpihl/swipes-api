@@ -67,12 +67,12 @@ class Textarea extends Component {
 
 export default Textarea;
 
-const { string, shape, object } = PropTypes;
+const { string, shape, func } = PropTypes;
 
 Textarea.propTypes = {
   data: shape({
     text: string,
   }),
-  delegate: object,
+  delegate: func,
   settings: map,
 };

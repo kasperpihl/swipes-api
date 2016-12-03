@@ -52,9 +52,8 @@ class NavBar extends Component {
 
     keys.forEach((key) => {
       const ref = this.refs[key];
-
-      if (ref.startsWith('tab-')) {
-        tabWidths.push(this.refs[ref].getBoundingClientRect().width);
+      if (key.startsWith('tab-')) {
+        tabWidths.push(ref.getBoundingClientRect().width);
       }
     });
 

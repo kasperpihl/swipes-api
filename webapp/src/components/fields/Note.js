@@ -170,10 +170,10 @@ class Note extends Component {
 }
 export default Note;
 
-const { object } = PropTypes;
+const { func } = PropTypes;
 
 Note.propTypes = {
   data: map,
-  delegate: object,
+  delegate: func,
   settings: map,
 };
