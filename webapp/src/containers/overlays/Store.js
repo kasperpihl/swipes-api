@@ -1,33 +1,18 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { overlay } from '../../actions'
-
-import WorkflowStore from '../../components/store/WorkflowStore'
-
+import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { connect } from 'react-redux';
+import WorkflowStore from '../../components/store/WorkflowStore';
 
 class Store extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
-    return <WorkflowStore />
+    return <WorkflowStore />;
   }
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-const { string } = PropTypes;
-Store.propTypes = {
-}
+const ConnectedStore = connect(null, {})(Store);
 
-
-function mapStateToProps(state) {
-  return {
-  }
-}
-
-const ConnectedStore = connect(mapStateToProps, {
-  popOverlay: overlay.pop
-})(Store)
-export default ConnectedStore
+export default ConnectedStore;

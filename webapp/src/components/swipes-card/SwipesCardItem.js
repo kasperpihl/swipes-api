@@ -1,165 +1,170 @@
 import React, { Component, PropTypes } from 'react';
 import { randomString, bindAll, decodeHtml } from '../../classes/utils';
-import SwipesDot from '../swipes-dot/SwipesDot';
-import * as Icons from '../icons'
-import { DownloadIcon } from '../icons'
+import Icon from '../icons/Icon';
 
 class SwipesCardItem extends Component {
   constructor(props) {
-    super(props)
-    this.state = { data: props.data }
-    bindAll(this, ['onClick', 'updateData', 'onAction', 'onDragStart', 'clickedLink', 'openImage'])
+    super(props);
+    this.state = { data: props.data };
+    bindAll(this, ['onClick', 'updateData', 'onAction', 'onDragStart', 'clickedLink', 'openImage']);
     this.id = randomString(5);
   }
-  updateData(data){
-    const newData = Object.assign({}, this.state.data, data);
-    this.setState({ data:newData });
-  }
-  componentDidMount(){
+  componentDidMount() {
     const { data } = this.props;
-    if(data.shortUrl){
+    if (data.shortUrl) {
       window.swipesUrlProvider.subscribe(data.shortUrl, this.updateData, this.id);
     }
   }
-  componentDidUpdate(prevProps){
-    if(JSON.stringify(this.props.data) !== JSON.stringify(prevProps.data)){
-      const newData = Object.assign(this.state.data, this.props.data);
+  componentWillUpdate(nextProps) {
+    if (JSON.stringify(nextProps) !== JSON.stringify(this.props.data)) {
+      const newData = Object.assign(this.state.data, nextProps);
+
       this.setState({ data: newData });
     }
   }
-  componentWillUnmount(){
-    const { data, callDelegate } = this.props;
-    if(data.shortUrl){
+  componentWillUnmount() {
+    const { data } = this.props;
+
+    if (data.shortUrl) {
       window.swipesUrlProvider.unsubscribe(data.shortUrl, this.updateData, this.id);
     }
   }
-  onClick(e){
+  onClick() {
     const { data, callDelegate } = this.props;
-    if(!window.getSelection().toString().length){
+
+    if (!window.getSelection().toString().length) {
       callDelegate('onCardClick', data);
     }
   }
-  onAction(action){
+  onAction(action) {
     const { data, callDelegate } = this.props;
-    if(action.label === 'Share'){
+    if (action.label === 'Share') {
       callDelegate('onCardShare', data);
-    }
-    else {
+    } else {
       callDelegate('onCardAction', data, action);
     }
   }
-  onDragStart(){
+  onDragStart() {
     const { data, callDelegate } = this.props;
     callDelegate('onCardShare', data, true);
+  }
+  clickedLink(match, e) {
+    const res = match.split('|');
+    // console.log('clicked', res);
+
+    this.props.callDelegate('onCardClickLink', res);
+    e.stopPropagation();
+  }
+  updateData(data) {
+    const newData = Object.assign({}, this.state.data, data);
+
+    this.setState({ data: newData });
   }
   openImage() {
 
   }
-  renderDot(actions){
-    const { onDragStart } = this.props;
-
-    if (this.state.data.dot === false) {
-      return;
+  isVideo(url) {
+    if (!url) {
+      return false;
+    }
+    return (url.match(/\.(mov|mp4)$/) != null);
+  }
+  isImage(url) {
+    if (!url) {
+      return false;
+    }
+    return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+  }
+  iconForService(service) {
+    switch (service) {
+      case 'slack':
+        return 'SlackIcon';
+      case 'dropbox':
+        return 'DropboxLogo';
+      default:
+        return 'SwipesLogo';
+    }
+  }
+  renderHeaderImage(headerImage) {
+    if (!headerImage) {
+      return undefined;
     }
 
     return (
-      <div className="dot-wrapper">
-        <SwipesDot
-          onDragStart={this.onDragStart}
-          hoverParentId={"swipes-card__item-" + this.id }
-          elements={actions ? [actions] : []}
-        />
-      </div>
-    )
+      <img src={headerImage} alt="" />
+    );
   }
-  renderHeaderImage(headerImage){
-
-    if (headerImage) {
+  renderIcon(icon) {
+    if (<Icon svg={icon} />) {
       return (
-        <img src={headerImage} alt="" />
-      )
-    }
-  }
-  renderIcon(icon){
-    const Comp = Icons[icon];
-
-    if (Comp) {
-      return <Comp className="swipes-card__header__icon swipes-card__header__icon--svg"/>;
+        <Icon
+          svg={icon}
+          className="swipes-card__header__icon swipes-card__header__icon--svg"
+        />
+      );
     }
 
-    return <img src={icon} className="material-icons swipes-card__header__icon swipes-card__header__icon--imaget" alt=""/>
+    return (
+      <img
+        src={icon}
+        className="material-icons swipes-card__header__icon swipes-card__header__icon--imaget"
+        alt=""
+      />
+    );
   }
-  titleForService(service){
-    switch(service){
-    }
-  }
-  iconForService(service){
-    switch(service){
-      case 'slack':
-        return 'SlackIcon'
-      case 'dropbox':
-        return 'DropboxLogo'
-      default:
-        return 'SwipesLogo'
-    }
-  }
-  renderService(service){
-    service = service || 'swipes'
+  renderService(service) {
+    service = service || 'swipes';
     const icon = this.iconForService(service);
     return (
       <div className="swipes-card__header__service">
         {this.renderIcon(icon)} {service}
       </div>
-    )
+    );
   }
   renderHeader() {
     const {
       thumbnail,
-      actions,
       title,
       subtitle,
-      service
+      service,
     } = this.state.data;
-    const noSubtitleClass = !subtitle ? "swipes-card__header__content--no-subtitle" : '';
+    const noSubtitleClass = !subtitle ? 'swipes-card__header__content--no-subtitle' : '';
 
     return (
       <div className="swipes-card__header">
         <div className="swipes-card__header__image">{this.renderHeaderImage(thumbnail)}</div>
-        <div className={"swipes-card__header__content " + noSubtitleClass}>
-          <div className="swipes-card__header__content--title">{this.renderTextWithLinks(title)}</div>
-          <div className="swipes-card__header__content--subtitle">{this.renderTextWithLinks(subtitle)}</div>
+        <div className={`swipes-card__header__content ${noSubtitleClass}`}>
+          <div
+            className="swipes-card__header__content--title"
+          >
+            {this.renderTextWithLinks(title)}
+          </div>
+          <div
+            className="swipes-card__header__content--subtitle"
+          >
+            {this.renderTextWithLinks(subtitle)}
+          </div>
           {this.renderService(service)}
         </div>
       </div>
-    )
+    );
   }
   renderDescription(description) {
-    if(!description){
-      return;
+    if (!description) {
+      return undefined;
     }
+
     return (
       <div className="description-container">
         <div className="swipes-card__description">
           {this.renderTextWithLinks(description)}
         </div>
       </div>
-    )
-  }
-  isVideo(url) {
-    if(!url){
-      return false;
-    }
-    return (url.match(/\.(mov|mp4)$/) != null);
-  }
-  isImage(url) {
-    if(!url){
-      return false;
-    }
-    return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    );
   }
   renderPreview(preview) {
-    if(!preview){
-      return;
+    if (!preview) {
+      return undefined;
     }
 
     const isImage = this.isImage(preview.url);
@@ -169,10 +174,10 @@ class SwipesCardItem extends Component {
       return (
         <div className="swipes-card__preview swipes-card__preview--no-style">
           <div className="swipes-card__preview--video">
-            <video className="custom-html" src={preview.url} controls></video>
+            <video className="custom-html" src={preview.url} controls />
           </div>
         </div>
-      )
+      );
     }
 
     if (preview.type === 'image' && isImage) {
@@ -181,47 +186,38 @@ class SwipesCardItem extends Component {
 
       if (cardPreview) {
         if (preview.width > cardPreview.clientWidth) {
-          preview.height = preview.height * cardPreview.clientWidth / preview.width;
+          preview.height = (preview.height * cardPreview.clientWidth) / preview.width;
           preview.width = cardPreview.clientWidth;
         }
       }
       return (
         <div className="swipes-card__preview" ref="cardPreview">
           <div className="swipes-card__preview--img" onClick={this.openImage}>
-            <img src={preview.url} height={preview.height} width={preview.width} alt=""/>
+            <img src={preview.url} height={preview.height} width={preview.width} alt="" />
           </div>
         </div>
-      )
+      );
     }
 
     if (preview.type === 'html') {
       return (
         <div className="swipes-card__preview swipes-card__preview--no-style">
           <div className="swipes-card__preview--iframe">
-            <div className="custom-html" dangerouslySetInnerHTML={{__html: preview.html}}></div>
+            <div
+              className="custom-html"
+              dangerouslySetInnerHTML={{ __html: preview.html }} // eslint-disable-line
+            />
           </div>
         </div>
-      )
+      );
     }
-  }
-  render() {
-    const {
-      description,
-      preview,
-      dot
-    } = this.state.data;
 
-    return (
-      <div id={"swipes-card__item-" + this.id } className="swipes-card__item" onClick={this.onClick}>
-        {this.renderHeader()}
-        {this.renderDescription(description)}
-        {this.renderPreview(preview)}
-      </div>
-    )
+    return undefined;
   }
-  renderTextWithLinks(text){
-    if(!text || !text.length)
+  renderTextWithLinks(text) {
+    if (!text || !text.length) {
       return text;
+    }
 
     const matches = text.match(/<(.*?)>/g);
 
@@ -232,35 +228,42 @@ class SwipesCardItem extends Component {
 
       // Adding the text before the first match
       replaced.push(splits.shift());
-      for(var i = 0 ; i < matches.length ; i++ ){
+      for (let i = 0; i < matches.length; i += 1) {
         // The match is now the next object
         const innerMatch = splits.shift();
 
         // Else add the link with the proper title
-        const res = innerMatch.split("|");
-        const command = res[0];
-        let title = res[res.length -1];
+        const res = innerMatch.split('|');
+        const title = res[res.length - 1];
 
-        replaced.push(<a key={'link' + i} className='link' onClick={this.clickedLink.bind(null, innerMatch)}>{decodeHtml(title)}</a>);
+        replaced.push(<a key={`link${i}`} className="link" onClick={this.clickedLink.bind(null, innerMatch)}>{decodeHtml(title)}</a>); // eslint-disable-line
 
         // Adding the after text between the matches
         replaced.push(decodeHtml(splits.shift()));
       }
-      if(replaced.length)
+      if (replaced.length) {
         return replaced;
+      }
     }
     return decodeHtml(text);
   }
-  clickedLink(match, e) {
-    const res = match.split("|");
-    console.log('clicked', res);
-    this.props.callDelegate('onCardClickLink', res);
-    e.stopPropagation()
+  render() {
+    const {
+      description,
+      preview,
+    } = this.state.data;
 
+    return (
+      <div id={`swipes-card__item-${this.id}`} className="swipes-card__item" onClick={this.onClick}>
+        {this.renderHeader()}
+        {this.renderDescription(description)}
+        {this.renderPreview(preview)}
+      </div>
+    );
   }
 }
 
-export default SwipesCardItem
+export default SwipesCardItem;
 
 const { string, number, shape, oneOf, oneOfType, arrayOf, func } = PropTypes;
 
@@ -280,12 +283,12 @@ SwipesCardItem.propTypes = {
       url: string,
       html: string,
       width: oneOfType([string, number]),
-      height: oneOfType([string, number])
+      height: oneOfType([string, number]),
     }),
     actions: arrayOf(shape({
       label: string.isRequired,
       icon: string,
-      bgColor: string
-    }))
-  })
-}
+      bgColor: string,
+    })),
+  }),
+};

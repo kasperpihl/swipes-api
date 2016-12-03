@@ -1,17 +1,17 @@
-import React, { Component, PropTypes } from 'react'
-import StoreHeader from './StoreHeader'
-import StoreCategories from './StoreCategories'
-import './styles/workflow-store.scss'
+import React, { Component } from 'react';
+import StoreHeader from './StoreHeader';
+import StoreCategories from './StoreCategories';
+import './styles/workflow-store.scss';
 
 class WorkflowStore extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
   componentDidMount() {
   }
   render() {
-    let rootClass = 'store';
+    const rootClass = 'store';
 
     return (
       <div className={rootClass}>
@@ -22,14 +22,8 @@ class WorkflowStore extends Component {
           <StoreCategories />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default WorkflowStore
-
-const { string } = PropTypes;
-
-WorkflowStore.propTypes = {
-
-}
+export default WorkflowStore;

@@ -1,45 +1,47 @@
-import React, { Component, PropTypes } from 'react'
-import Loader from './../swipes-ui/Loader'
-import ProgressCircle from './ProgressComponent'
-import { CheckmarkIcon } from './../icons'
-import './styles/toast.scss'
+import React, { Component, PropTypes } from 'react';
+import Loader from './../swipes-ui/Loader';
+import ProgressCircle from './ProgressComponent';
+import Icon from '../icons/Icon';
+
+
+import './styles/toast.scss';
 
 class Toast extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
   renderLoader() {
     const { loading, progress, completed } = this.props.data;
 
     if (loading && !progress && !completed) {
       return (
-        <Loader size={20} mini={true} center={true}/>
-      )
+        <Loader size={20} mini center />
+      );
     }
+
+    return undefined;
   }
   renderProgressbar() {
     const { loading, progress, completed } = this.props.data;
 
     if (progress && !loading && !completed) {
-
       return (
-        <ProgressCircle value={progress/100} />
-      )
+        <ProgressCircle value={progress / 100} />
+      );
     }
+
+    return undefined;
   }
   renderSuccess() {
-  const { loading, progress, completed } = this.props.data;
-
     if (this.props.data.completed) {
-
-      return (
-        <CheckmarkIcon className="toast__icon"/>
-      )
+      return <Icon svg="CheckmarkIcon" lassName="toast__icon" />;
     }
+
+    return undefined;
   }
   render() {
-    const { title, loading, progress } = this.props.data;
+    const { title } = this.props.data;
 
     return (
       <div className="toast">
@@ -50,11 +52,11 @@ class Toast extends Component {
         </div>
         <div className="toast__title">{title}</div>
       </div>
-    )
+    );
   }
 }
 
-export default Toast
+export default Toast;
 
 const { string, number, bool, shape } = PropTypes;
 
@@ -63,6 +65,6 @@ Toast.propTypes = {
     title: string.isRequired,
     loading: bool,
     progress: number,
-    completed: bool
-  })
-}
+    completed: bool,
+  }),
+};

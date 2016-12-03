@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react'
-import * as Icons from '../../components/icons'
-import Textarea from 'react-textarea-autosize'
-import { connect } from 'react-redux'
-import { bindAll } from '../../classes/utils'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import Textarea from 'react-textarea-autosize';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Icon from '../../components/icons/Icon';
+import { bindAll } from '../../classes/utils';
 
-import '../../components/create-pattern/styles/create-pattern.scss'
+import '../../components/create-pattern/styles/create-pattern.scss';
 
 class CreatePattern extends Component {
   constructor(props) {
@@ -15,53 +15,47 @@ class CreatePattern extends Component {
         {
           icon: 'CheckmarkIcon',
           title: 'Checklist',
-          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.'
+          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.',
         },
         {
           icon: 'VoteIcon',
           title: 'Vote',
-          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.'
+          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.',
         },
         {
           icon: 'DeliverIcon',
           title: 'Deliverable',
-          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.'
+          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.',
         },
         {
           icon: 'ListIcon',
           title: 'Read Me',
-          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.'
-        }
+          description: 'Create a checklist for actions. Create a checklist for actions. Create a checklist for actions.',
+        },
       ],
       selectedSteps: [],
-      showSidebar: false
-    }
+      showSidebar: false,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['addStep', 'showSidebar']);
   }
   componentDidMount() {
-    setTimeout( () => {
+    setTimeout(() => {
       this.refs.input.focus();
-    }, 0)
+    }, 0);
   }
   addStep(i) {
     const { selectedSteps } = this.state;
     selectedSteps.push(i);
 
-    this.setState({selectedSteps});
-    this.setState({showSidebar: false})
+    this.setState({ selectedSteps });
+    this.setState({ showSidebar: false });
   }
   showSidebar() {
-    const { showSidebar } = this.state;
-
-    this.setState({showSidebar: true})
+    this.setState({ showSidebar: true });
   }
-  renderIcon(icon){
-    const Comp = Icons[icon];
-
-    if (Comp) {
-      return <Comp className="create-pattern__icon"/>;
-    }
+  renderIcon(icon) {
+    return <Icon svg={icon} className="create-pattern__icon" />;
   }
   renderSidebar() {
     const { showSidebar, steps } = this.state;
@@ -71,9 +65,16 @@ class CreatePattern extends Component {
       className += ' create-pattern__sidebar--shown';
     }
 
-    const renderSteps = steps.map( (step, i) => {
-      return this.renderSidebarItem(step.icon, step.title, step.description, i);
-    })
+    const renderSteps = steps.map((step, i) =>
+      <SidebarItem
+        icon={step.icon}
+        title={step.title}
+        description={step.description}
+        index={i}
+        callback={this.addStep}
+        renderIcon={this.renderIcon}
+      />,
+    );
 
     return (
       <div className={className}>
@@ -83,76 +84,70 @@ class CreatePattern extends Component {
         </div>
         {renderSteps}
       </div>
-    )
-  }
-  renderSidebarItem(icon, title, description, index) {
-
-    return (
-      <div className="create-pattern__sidebar-item" onClick={this.addStep.bind(this, index)} key={'sidebar-item-' + index}>
-        <div className="create-pattern__sidebar-icon">{this.renderIcon(icon)}</div>
-        <div className="create-pattern__vertical-flex">
-          <div className="create-pattern__sidebar-title">{title}</div>
-          <div className="create-pattern__sidebar-description">{description}</div>
-        </div>
-      </div>
-    )
+    );
   }
   renderHeader() {
-
     return (
       <div className="create-pattern__header">
         <div className="create-pattern__pattern-icon">{this.renderIcon('ShapeEight')}</div>
         <div className="create-pattern__vertical-flex">
-          <input ref="input" type="text" className="create-pattern__title create-pattern__title--input" placeholder="Name your pattern"/>
-          <Textarea className="create-pattern__description create-pattern__description--textarea" minRows={1} maxRows={2} placeholder={'Give it a short description'}/>
+          <input
+            ref="input"
+            type="text"
+            className="create-pattern__title create-pattern__title--input"
+            placeholder="Name your pattern"
+          />
+          <Textarea className="create-pattern__description create-pattern__description--textarea" minRows={1} maxRows={2} placeholder={'Give it a short description'} />
         </div>
       </div>
-    )
+    );
   }
   renderStepList() {
     const { selectedSteps, steps } = this.state;
 
     if (selectedSteps.length < 1) {
-      return;
+      return undefined;
     }
 
     const renderSelectedSteps = [];
 
-    selectedSteps.forEach( (selectedStep, i) => {
-      steps[selectedStep];
-      renderSelectedSteps.push(this.renderStepItem(steps[selectedStep].title, i))
-    })
+    selectedSteps.forEach((selectedStep, i) => {
+      renderSelectedSteps.push(this.renderStepItem(steps[selectedStep].title, i));
+    });
 
     return (
       <div className="create-pattern__step-list">
         {renderSelectedSteps}
       </div>
-    )
+    );
   }
   renderStepItem(title, i) {
-
     if (this.refs.stepItemInput) {
       this.refs.stepItemInput.focus();
     }
 
     return (
-      <div className="create-pattern__step-item" key={'step-item-' + i}>
+      <div className="create-pattern__step-item" key={`step-item-${i}`}>
         <div className="create-pattern__step-index">{i + 1}</div>
         <div className="create-pattern__vertical-flex">
-          <input ref="stepItemInput" type="text" className="create-pattern__step-name" placeholder="Enter Step Name"/>
+          <input
+            ref="stepItemInput"
+            type="text"
+            className="create-pattern__step-name"
+            placeholder="Enter Step Name"
+          />
           <div className="create-pattern__step-title">{title}</div>
         </div>
       </div>
-    )
+    );
   }
   renderAddStep() {
-
     return (
       <div className="create-pattern__add-step" onClick={this.showSidebar}>
         <div className="create-pattern__button create-pattern__button--add-step">{this.renderIcon('AddIcon')}</div>
         add step
       </div>
-    )
+    );
   }
   render() {
     return (
@@ -162,19 +157,36 @@ class CreatePattern extends Component {
           {this.renderHeader()}
           {this.renderStepList()}
           {this.renderAddStep()}
-          <div className="create-pattern__button create-pattern__button--create-pattern">Create Pattern</div>
+          <div className="create-pattern__button create-pattern__button--create-pattern">
+            Create Pattern
+          </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-  }
-}
+const SidebarItem = props => (
+  <div className="create-pattern__sidebar-item" onClick={props.callback(props.index)} key={`sidebar-item-${props.index}`}>
+    <div className="create-pattern__sidebar-icon">{props.renderIcon(props.icon)}</div>
+    <div className="create-pattern__vertical-flex">
+      <div className="create-pattern__sidebar-title">{props.title}</div>
+      <div className="create-pattern__sidebar-description">{props.description}</div>
+    </div>
+  </div>
+  );
 
-const ConnectedCreatePattern = connect(mapStateToProps, {
+const ConnectedCreatePattern = connect(null, {})(CreatePattern);
 
-})(CreatePattern)
-export default ConnectedCreatePattern
+export default ConnectedCreatePattern;
+
+const { func, number, string } = PropTypes;
+
+SidebarItem.propTypes = {
+  callback: func,
+  index: number,
+  renderIcon: func,
+  icon: string,
+  title: string,
+  description: string,
+};

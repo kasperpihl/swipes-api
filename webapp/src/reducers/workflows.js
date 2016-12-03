@@ -1,23 +1,26 @@
-import * as types from '../constants/ActionTypes'
-import { fromJS } from 'immutable'
+import { fromJS } from 'immutable';
+import * as types from '../constants/ActionTypes';
+
 const initialState = fromJS({});
 
-export default function workflows (state = initialState, action) {
+export default function workflows(state = initialState, action) {
   switch (action.type) {
-    case 'rtm.start':{
-      const { processes: workflows } = action.payload;
-      if(!workflows) return state;
+    case 'rtm.start': {
+      const { processes } = action.payload;
 
-      const tempW = {}
-      workflows.forEach((workflow) => {
-        tempW[workflow.id] = workflow;
-      })
+      if (!processes) return state;
+      const tempW = {};
+
+      processes.forEach((process) => {
+        tempW[process.id] = process;
+      });
+
       return fromJS(tempW);
     }
-    case types.LOGOUT:{
+    case types.LOGOUT: {
       return initialState;
     }
-    default: 
-      return state
+    default:
+      return state;
   }
 }

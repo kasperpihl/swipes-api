@@ -1,32 +1,33 @@
-import * as types from '../constants/ActionTypes'
-import { fromJS } from 'immutable'
+import { fromJS } from 'immutable';
+import * as types from '../constants/ActionTypes';
 
 const initialState = fromJS({
   history: [],
-  sentTime: new Date()
-})
+  sentTime: new Date(),
+});
 
-export default function notifications (state = initialState, action) {
-  switch(action.type){
-    case types.SEND_NOTIFICATION:{
+export default function notifications(state = initialState, action) {
+  switch (action.type) {
+    case types.SEND_NOTIFICATION: {
       const time = new Date().getTime();
-      const {title, message} =  action.payload;
+      const { title, message } = action.payload;
+      const newHistory = [];
+      let isDuplicate = false;
 
-      let newHistory = [], isDuplicate = false
       state.get('history').forEach((obj) => {
-        if(obj.get('time') > (time - 3000)){
-          newHistory.push(obj)
-          if(obj.get('title') === title && obj.get('message') === message){
+        if (obj.get('time') > (time - 3000)) {
+          newHistory.push(obj);
+          if (obj.get('title') === title && obj.get('message') === message) {
             isDuplicate = true;
           }
         }
-      })
-      if(!isDuplicate){
-        newHistory.push({title, message, time})
+      });
+      if (!isDuplicate) {
+        newHistory.push({ title, message, time });
       }
       return state.set('history', fromJS(newHistory));
     }
-    case types.LOGOUT:{
+    case types.LOGOUT: {
       return initialState;
     }
     default:

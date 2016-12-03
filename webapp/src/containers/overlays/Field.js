@@ -1,57 +1,62 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import * as actions from '../../actions'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
-import * as fields from '../../components/fields'
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { map } from 'react-immutable-proptypes';
+import * as actions from '../../actions';
+import * as fields from '../../components/fields';
 
 class Field extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = { data: props.data };
     this.delegate = this.delegate.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  delegate(name, data){
-    const { delegate, index } = this.props;
+  delegate(name, data) {
+    const { delegate } = this.props;
     // Do a controlled field
-    if(name === 'change'){
-      this.setState({data});
+    if (name === 'change') {
+      this.setState({ data });
     }
     // And forward to the delegate from GoalStep.
-    delegate.apply(null, arguments);
+    delegate(arguments);
   }
   render() {
     const { settings, field } = this.props;
     const { data } = this.state;
-    const Field = fields[field.get('type')];
-    if(!Field){
-      return <div>Field not found...</div>
+    const FieldHtml = fields[field.get('type')];
+
+    if (!FieldHtml) {
+      return <div>Field not found...</div>;
     }
+
     return (
-      <div className="field-overlay" style={{height: '100%'}}>
-        <Field
+      <div className="field-overlay" style={{ height: '100%' }}>
+        <FieldHtml
           delegate={this.delegate}
           data={data}
           settings={settings}
         />
       </div>
-    )
+    );
   }
 }
-
 function mapStateToProps(state) {
   return {
-    main: state.get('main')
-  }
+    main: state.get('main'),
+  };
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
-const { string } = PropTypes;
+const { object } = PropTypes;
+
 Field.propTypes = {
-  //removeThis: PropTypes.string.isRequired
-}
+  data: map,
+  settings: map,
+  field: map,
+  delegate: object,
+};
 
 const ConnectedField = connect(mapStateToProps, {
-  onDoing: actions.doStuff
-})(Field)
-export default ConnectedField
+  onDoing: actions.doStuff,
+})(Field);
+export default ConnectedField;

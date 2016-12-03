@@ -1,51 +1,42 @@
 
-import {compose, applyMiddleware, createStore} from 'redux';
-import * as types from '../constants/ActionTypes'
-
-// API middleware + hack to work with Babel 6
+import { compose, applyMiddleware, createStore } from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
-
-import persistState from 'redux-localstorage'
+import persistState from 'redux-localstorage';
 import thunk from 'redux-thunk';
-import Immutable, { fromJS } from 'immutable'
-
-import rootReducer from '../reducers'
+import Immutable, { fromJS } from 'immutable';
+import rootReducer from '../reducers';
 
 // Define what's saved from state to LocalStorage
-const persist = paths => {
-  return state => {
-    return Immutable.Map({
-      main: {
-        token: state.getIn(['main', 'token']) || null,
-        cache: state.getIn(['main', 'cache']) || {}
-      },
-      goals: state.get('goals'),
-      services: state.get('services'),
-      users: state.get('users'),
-      me: state.get('me')
-    })
-  }
-}
+const persist = () => state => Immutable.Map({
+  main: {
+    token: state.getIn(['main', 'token']) || null,
+    cache: state.getIn(['main', 'cache']) || {},
+  },
+  goals: state.get('goals'),
+  services: state.get('services'),
+  users: state.get('users'),
+  me: state.get('me'),
+});
 const localStorageConfig = {
-  serialize: (subset) => JSON.stringify(subset.toJS()),
-  deserialize: (serializedData) => fromJS(JSON.parse(serializedData)),
+  serialize: subset => JSON.stringify(subset.toJS()),
+  deserialize: serializedData => fromJS(JSON.parse(serializedData)),
   merge: (initialState, persistedState) => initialState.mergeDeep(persistedState),
   key: 'redux-prod',
-  slicer: persist
-}
+  slicer: persist,
+};
 export default function configureStore(preloadedState) {
   preloadedState = Immutable.Map();
   // All the keys to persist to localStorage between opens
   const enhancer = compose(
     applyMiddleware(
       thunk,
-      apiMiddleware
+      apiMiddleware,
     ),
-    persistState(null, localStorageConfig)
-  )
+    persistState(null, localStorageConfig),
+  );
   return createStore(
     rootReducer,
     preloadedState,
-    enhancer
+    enhancer,
   );
 }

@@ -1,24 +1,25 @@
-import * as types from '../constants/ActionTypes'
-import { fromJS } from 'immutable'
+import { fromJS } from 'immutable';
+import * as types from '../constants/ActionTypes';
+
 const initialState = fromJS({});
 
-export default function users (state = initialState, action) {
+export default function usersReducer(state = initialState, action) {
   switch (action.type) {
-    case ('rtm.start'):{
+    case ('rtm.start'): {
       const res = action.payload;
-      if(res.ok){
-        const users = {}
+      if (res.ok) {
+        const users = {};
         res.users.forEach((user) => {
           users[user.id] = user;
-        })
+        });
         return fromJS(users);
       }
       return state;
     }
-    case types.LOGOUT:{
+    case types.LOGOUT: {
       return initialState;
     }
-    default: 
-      return state
+    default:
+      return state;
   }
 }

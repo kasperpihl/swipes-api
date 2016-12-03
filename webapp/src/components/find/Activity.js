@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from 'react'
-import { timeAgo } from '../../classes/time-utils'
-import SwipesCard from '../swipes-card/SwipesCard'
+import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { mapContains } from 'react-immutable-proptypes';
+import { timeAgo } from '../../classes/time-utils';
+import SwipesCard from '../swipes-card/SwipesCard';
 
 class Activity extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
@@ -20,14 +21,16 @@ class Activity extends Component {
         <span className="activity__timestamp">{timeAgo(date)}</span>
         <span className="activity__message">{message}</span>
       </div>
-    )
+    );
   }
-  renderCard(data, checksum) {
+  renderCard(data) {
     let meta = data.get('meta');
+
     meta = meta.set('checksum', data.get('checksum')).set('service', data.get('service_name'));
+
     return (
       <SwipesCard data={meta.toJS()} delegate={this.props.cardDelegate} />
-    )
+    );
   }
   render() {
     const { data } = this.props;
@@ -36,14 +39,13 @@ class Activity extends Component {
         {this.renderStory(data)}
         {this.renderCard(data)}
       </div>
-    )
+    );
   }
 }
 
-export default Activity
+export default Activity;
 
 const { string, object } = PropTypes;
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
 
 Activity.propTypes = {
   cardDelegate: object.isRequired,
@@ -51,6 +53,6 @@ Activity.propTypes = {
     message: string.isRequired,
     short_url: string,
     date: string,
-    service: string
-  })
-}
+    service: string,
+  }),
+};

@@ -1,25 +1,24 @@
-import React, { Component, PropTypes } from 'react'
-import Activity from './Activity'
+import React, { Component, PropTypes } from 'react';
+import { listOf, map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import './styles/activity.scss'
+import Activity from './Activity';
+import './styles/activity.scss';
 
 class Activities extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.state = {}
+    this.state = {};
   }
   componentDidMount() {
 
   }
-  renderActivities(activities){
+  renderActivities(activities) {
     if (!activities) {
-      return;
+      return undefined;
     }
-    const { dotDragStart, cardOnClick } = this.props;
-    return activities.map( (activity, i) => {
-      return <Activity key={"activity-" + i} data={activity} cardDelegate={this.props.cardDelegate} />
-    })
+
+    return activities.map((activity, i) => <Activity key={`activity-${i}`} data={activity} cardDelegate={this.props.cardDelegate} />);
   }
   render() {
     const { activities } = this.props;
@@ -28,16 +27,13 @@ class Activities extends Component {
       <div className="activity-wrapper">
         {this.renderActivities(activities)}
       </div>
-    )
+    );
   }
 }
 
-export default Activities
-const { string, object } = PropTypes;
-import { map, mapOf, list, listOf } from 'react-immutable-proptypes'
+export default Activities;
+const { object } = PropTypes;
 Activities.propTypes = {
-  title: string.isRequired,
   cardDelegate: object.isRequired,
-  subtitle: string,
-  activities: listOf(map)
-}
+  activities: listOf(map),
+};

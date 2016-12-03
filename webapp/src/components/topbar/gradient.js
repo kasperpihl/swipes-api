@@ -1,4 +1,3 @@
-const oldTime = null;
 const fullDaySeconds = 86400;
 const gradientSegmentPercentage = 100 / 12;
 
@@ -40,35 +39,40 @@ const Gradient = {
     },
   ],
   getGradientPos(percent) {
-    if (!percent) {
-      percent = this.percentOfCurrentDay();
+    let newPercent = percent;
+
+    if (!newPercent) {
+      newPercent = this.percentOfCurrentDay();
     }
+
     const daySegments = this.daySegments;
     const segLen = daySegments.length;
     let segTimeSum = 0;
     let currentWidth = 0;
 
-    for (let i = 0; i < segLen; i++) {
+    for (let i = 0; i < segLen; i += 1) {
       const seg = daySegments[i];
 
       segTimeSum += seg.time;
 
-      if (percent >= segTimeSum) {
+      if (newPercent >= segTimeSum) {
         currentWidth += seg.width;
       } else {
         const prevSegSum = segTimeSum - seg.time;
-        const portionOfDay = percent - prevSegSum;
-        const percentOfSeg = portionOfDay / seg.time * 100;
-        const width = seg.width * percentOfSeg / 100;
+        const portionOfDay = newPercent - prevSegSum;
+        const percentOfSeg = (portionOfDay / seg.time) * 100;
+        const width = (seg.width * percentOfSeg) / 100;
 
         currentWidth += width;
+
         break;
       }
     }
 
-		// var currentTimePercentage = percentOfDay / prevSegSum * 100;
     let currentGradientPosition = (100 * currentWidth) / 100;
+
     currentGradientPosition = Math.round(currentGradientPosition * 1e2) / 1e2;
+
     return currentGradientPosition;
   },
   getGradientStyles() {
@@ -78,10 +82,12 @@ const Gradient = {
     };
   },
   percentOfValue(elapsed, total) {
-    if (elapsed > total) {
-      elapsed %= total;
+    let newElapsed = elapsed;
+
+    if (newElapsed > total) {
+      newElapsed %= total;
     }
-    return (elapsed / total) * 100;
+    return (newElapsed / total) * 100;
   },
   percentOfCurrentDay() {
     const today = new Date();
@@ -89,7 +95,7 @@ const Gradient = {
     const minutesSeconds = today.getMinutes() * 60;
     const seconds = today.getSeconds();
     const currentTimeSeconds = hoursSeconds + minutesSeconds + seconds;
-    const percentOfCurrentDay = currentTimeSeconds / fullDaySeconds * 100;
+    const percentOfCurrentDay = (currentTimeSeconds / fullDaySeconds) * 100;
 
     return percentOfCurrentDay;
   },

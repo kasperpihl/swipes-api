@@ -1,39 +1,49 @@
-import moment from 'moment'
+import moment from 'moment';
+
+export function getDayWithoutTime(day) {
+  let fullStr = day.calendar();
+  const timeIndex = fullStr.indexOf(' at ');
+
+  if (timeIndex !== -1) {
+    fullStr = fullStr.slice(0, timeIndex);
+  }
+
+  return fullStr;
+}
+
 export function dayStringForDate(date) {
   let result;
   const now = moment();
   const parsedDate = moment(date);
-  const dayDiff = Math.abs(parsedDate.diff(now, "days"));
+  const dayDiff = Math.abs(parsedDate.diff(now, 'days'));
+
   if (dayDiff >= 6 || dayDiff <= -6) {
     if (parsedDate.year() !== now.year()) {
       result = parsedDate.format("MMM Do 'YY");
     } else {
-      result = parsedDate.format("MMM Do");
+      result = parsedDate.format('MMM Do');
     }
-    return result;
   } else {
-    return getDayWithoutTime(parsedDate);
+    result = getDayWithoutTime(parsedDate);
   }
+
+  return result;
 }
-export function timeAgo(date){
+
+export function timeAgo(date) {
   return moment(date).from(moment());
 }
-export function getDayWithoutTime(day) {
-  const fullStr = day.calendar();
-  const timeIndex = fullStr.indexOf(" at ");
-  if (timeIndex !== -1) {
-    return fullStr.slice(0, timeIndex);
-  } else {
-    return fullStr;
-  }
-}
-export function startOfDayTs(date){
+
+export function startOfDayTs(date) {
   return moment(date).startOf('day').unix();
 }
-export function isAmPm(){
+
+export function isAmPm() {
   return true;
 }
-export function getTimeStr(date){
-  const format = isAmPm() ? "h:mma" : "H:mm";
+
+export function getTimeStr(date) {
+  const format = isAmPm() ? 'h:mma' : 'H:mm';
+
   return moment(date).format(format);
 }

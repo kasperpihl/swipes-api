@@ -1,7 +1,7 @@
-const {ipcRenderer} = nodeRequire('electron');
-
 import { me, toasty } from '../actions';
 
+/* global nodeRequire*/
+const { ipcRenderer } = nodeRequire('electron');
 const toasts = {};
 
 export default class IpcListener {
@@ -15,8 +15,8 @@ export default class IpcListener {
     ipcRenderer.on('toasty', (event, arg) => {
       const options = {
         title: arg.filename,
-        progress: arg.percentage
-      }
+        progress: arg.percentage,
+      };
 
       if (arg.state === 'completed') {
         options.completed = true;
@@ -30,19 +30,19 @@ export default class IpcListener {
           setTimeout(() => {
             store.dispatch(toasty.update(toasts[arg.id], options));
             delete toasts[arg.id];
-          }, 1000)
+          }, 1000);
         }
       } else {
         store.dispatch(toasty.add(options)).then((toastId) => {
           toasts[arg.id] = toastId;
-        })
+        });
       }
-    })
+    });
   }
-  sendEvent(name, data){
-    var functionName = 'send';
-    if(name === 'showItemInFolder'){
-      functionName = 'sendSync'
+  sendEvent(name, data) {
+    let functionName = 'send';
+    if (name === 'showItemInFolder') {
+      functionName = 'sendSync';
     }
     return ipcRenderer[functionName](name, data);
   }

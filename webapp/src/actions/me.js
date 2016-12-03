@@ -1,8 +1,6 @@
-import { request } from './api'
+import { request } from './api';
 
-const disconnectService = (account_id) => {
-  return request('users.serviceDisconnect', { account_id });
-}
+const disconnectService = accountId => request('users.serviceDisconnect', { account_id: accountId });
 
 const handleOAuthSuccess = (serviceName, query) => {
   if (typeof query === 'string') {
@@ -11,13 +9,13 @@ const handleOAuthSuccess = (serviceName, query) => {
 
   const options = {
     query,
-    service_name: serviceName
+    service_name: serviceName,
   };
 
   return request('services.authsuccess', options);
-}
+};
 
 export {
   disconnectService,
-  handleOAuthSuccess
-}
+  handleOAuthSuccess,
+};

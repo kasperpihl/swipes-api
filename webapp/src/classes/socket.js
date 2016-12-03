@@ -1,14 +1,14 @@
-import * as types from '../constants/ActionTypes'
-import { bindAll } from './utils'
+import * as types from '../constants/ActionTypes';
+import { bindAll } from './utils';
 
 export default class Socket {
-  constructor(store){
+  constructor(store) {
     this.store = store;
     this.reconnect_attempts = 1;
-    bindAll(this, ['message', 'changeStatus', 'storeChange'])
-    store.subscribe(this.storeChange)
+    bindAll(this, ['message', 'changeStatus', 'storeChange']);
+    store.subscribe(this.storeChange);
   }
-  storeChange(){
+  storeChange() {
     const state = this.store.getState();
 
     const url = state.getIn(['main', 'socketUrl']);
@@ -19,43 +19,43 @@ export default class Socket {
     }
   }
   connect(url, token) {
-    const ws = new WebSocket(url + '?token=' + token);
+    const ws = new WebSocket(`${url}?token=${token}`);
 
     this.changeStatus('connecting');
 
     ws.onopen = () => {
       this.socket = true;
       this.changeStatus('online');
-      //we can send stuff here like that
-      //ws.send('stuff')
-    }
+      // we can send stuff here like that
+      // ws.send('stuff')
+    };
 
     ws.onmessage = this.message;
 
     ws.onerror = (event) => {
-      console.log('websocket error', event);
-    }
+      console.log('websocket error', event); // eslint-disable-line
+    };
 
     ws.onclose = () => {
       this.changeStatus('offline');
       setTimeout(this.connect.bind(this, url, token), this.reconnect_attempts * 200);
-      this.reconnect_attempts++;
-    }
-  };
+      this.reconnect_attempts += 1;
+    };
+  }
   changeStatus(status) {
     this.store.dispatch({
       type: types.SET_STATUS,
-      status
-    })
+      status,
+    });
   }
   message(message) {
     const data = JSON.parse(message.data);
     const {
       type,
-      payload
+      payload,
     } = data;
 
-    if(!type) {
+    if (!type) {
       return;
     }
 

@@ -1,102 +1,121 @@
-import React, { Component, PropTypes } from 'react'
-import SwipesCard from '../swipes-card/SwipesCard'
-import NoteEditor from '../note-editor/NoteEditor'
-
-import './styles/note.scss'
+import React, { Component, PropTypes } from 'react';
+import { map } from 'react-immutable-proptypes';
 import {
   convertFromRaw,
   EditorState,
-  convertToRaw
-} from 'draft-js'
+  convertToRaw,
+} from 'draft-js';
+
+import SwipesCard from '../swipes-card/SwipesCard';
+import NoteEditor from '../note-editor/NoteEditor';
+
+import './styles/note.scss';
 
 class Note extends Component {
-  static fullscreen(){
+  static fullscreen() {
     return true;
   }
-  static saveData(data){
-    return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()))
+  static saveData(data) {
+    return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()));
   }
-  static parseInitialData(data){
-    let editorState = NoteEditor.getEmptyEditorState()
-    if(data && data.get('editorState')){
-      const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()))
+  static parseInitialData(data) {
+    let newData = data;
+    let editorState = NoteEditor.getEmptyEditorState();
+    if (newData && newData.get('editorState')) {
+      const raw = JSON.parse(JSON.stringify(newData.get('editorState').toJS()));
       editorState = EditorState.push(editorState, convertFromRaw(raw));
     }
 
-    data = data.set('editorState', editorState);
-    return data;
+    newData = newData.set('editorState', editorState);
+    return newData;
   }
   constructor(props) {
-    super(props)
+    super(props);
     this.state = { data: props.data, topPadding: 0 };
     this.onChange = this.onChange.bind(this);
     this.onDone = this.onDone.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
   }
-  componentDidMount(){
+  componentDidMount() {
     setTimeout(() => {
-      this.paddingForContainer()
+      this.paddingForContainer();
     }, 1);
   }
-  componentDidUpdate(){
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.data });
+  }
+  componentDidUpdate() {
     this.paddingForContainer();
   }
-  paddingForContainer(){
-    const { paddingTop } = this.state;
-    const { settings } = this.props;
-    let padding = 0;
-    if(settings.get('fullscreen')){
-      const nH = this.refs.editor.refs.rooty.querySelector('.public-DraftEditor-content').firstChild.clientHeight;
-      const tH = 250;
-      const cH = this.refs.container.clientHeight;
-      padding = (Math.max(cH - (nH + tH), 0))/2;
-    }
-
-    if(padding !== paddingTop){
-      this.setState({paddingTop : padding});
-    }
-  }
-  onChange(editorState){
+  onChange(editorState) {
     const { delegate } = this.props;
     const { data } = this.state;
 
     delegate('change', data.set('editorState', editorState));
   }
-  onTitleChange(e){
+  onTitleChange(e) {
     const { delegate } = this.props;
     const { data } = this.state;
+
     delegate('change', data.set('title', e.target.value));
   }
-  componentWillReceiveProps(nextProps){
-    this.setState({ data: nextProps.data });
-  }
-  onCardClick(card){
+  onCardClick() {
     const { delegate } = this.props;
+
     delegate('fullscreen');
   }
-  renderNoteCard(){
+  onDone() {
+    const { delegate } = this.props;
+
+    delegate('fullscreen');
+  }
+  paddingForContainer() {
+    const { paddingTop } = this.state;
     const { settings } = this.props;
-    if(settings.get('fullscreen')){
-      return;
+    let padding = 0;
+
+    if (settings.get('fullscreen')) {
+      const nH = this.refs.editor.refs.rooty.querySelector('.public-DraftEditor-content').firstChild.clientHeight;
+      const tH = 250;
+      const cH = this.refs.container.clientHeight;
+
+      padding = (Math.max(cH - (nH + tH), 0)) / 2;
     }
+
+    if (padding !== paddingTop) {
+      this.setState({ paddingTop: padding });
+    }
+  }
+  renderNoteCard() {
+    const { settings } = this.props;
+
+    if (settings.get('fullscreen')) {
+      return undefined;
+    }
+
     const { data } = this.state;
 
     return (
       <div className="sw-note-field__card">
-        <SwipesCard delegate={this} data={{
-          title: data.get('title') || 'Untitled note',
-          description: data.get('editorState').getCurrentContent().getPlainText().substr(0,100)
-        }}/>
+        <SwipesCard
+          delegate={this} data={{
+            title: data.get('title') || 'Untitled note',
+            description: data.get('editorState').getCurrentContent().getPlainText().substr(0, 100),
+          }}
+        />
       </div>
-    )
+    );
   }
-  renderNoteEditor(){
+  renderNoteEditor() {
     const { settings } = this.props;
-    if(!settings.get('fullscreen')){
-      return;
+
+    if (!settings.get('fullscreen')) {
+      return undefined;
     }
+
     const { data, paddingTop } = this.state;
-    const styles = {paddingTop};
+    const styles = { paddingTop };
+
     return (
       <div className="sw-note-field__note-editor">
         <div className="sw-note-field__note" style={styles}>
@@ -105,50 +124,40 @@ class Note extends Component {
             className="sw-note-field__title"
             placeholder="Untitled note"
             disabled={!settings.get('editable')}
-            value={data.get('title') || ""}
+            value={data.get('title') || ''}
             onChange={this.onTitleChange}
             autoFocus
           />
           <NoteEditor
             ref="editor"
-            readOnly={settings.get('editable') ? false : true}
+            readOnly={settings.get('editable') !== true}
             editorState={data.get('editorState')}
-            onChange={this.onChange} />
+            onChange={this.onChange}
+          />
         </div>
         {this.renderSideColumn()}
       </div>
-    )
+    );
   }
   renderSideColumn() {
-    const { settings } = this.props;
-    let className = 'sw-note-field__side';
-
-    if (settings.get('editable')) {
-      className += ' sw-note-field__side--status'
-    }
-
     return (
       <div className="sw-note-field__side">
         {this.renderNoteStatus()}
         {this.renderNoteButton()}
       </div>
-    )
-  }
-  onDone(e){
-    const { delegate } = this.props;
-    delegate('fullscreen');
+    );
   }
   renderNoteStatus() {
     const { settings } = this.props;
 
     if (settings.get('editable')) {
-      return;
+      return undefined;
     }
 
-    return <div className="sw-note-field__status">This note is not editable</div>
+    return <div className="sw-note-field__status">This note is not editable</div>;
   }
   renderNoteButton() {
-    return <div className="sw-note-field__button" onClick={this.onDone}>Done</div>
+    return <div className="sw-note-field__button" onClick={this.onDone}>Done</div>;
   }
   render() {
     return (
@@ -156,12 +165,15 @@ class Note extends Component {
         {this.renderNoteEditor()}
         {this.renderNoteCard()}
       </div>
-    )
+    );
   }
 }
-export default Note
+export default Note;
 
-const { string } = PropTypes;
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
+const { object } = PropTypes;
+
 Note.propTypes = {
-}
+  data: map,
+  delegate: object,
+  settings: map,
+};

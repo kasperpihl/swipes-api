@@ -1,23 +1,17 @@
-import React, { Component, PropTypes } from 'react'
-import * as Icons from '../icons'
-import './styles/checkbox.scss'
+import React, { Component, PropTypes } from 'react';
+import Icon from '../icons/Icon';
+import './styles/checkbox.scss';
 
 class Checkbox extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
     this.onChange = this.onChange.bind(this);
   }
-  renderIcon(icon){
-    const Comp = Icons[icon];
-
-    if (Comp) {
-      return <Comp className="sw-checkbox__icon" />;
-    }
-  }
-  onChange(e){
+  onChange() {
     const { onChange } = this.props;
-    if(onChange){
+
+    if (onChange) {
       onChange(this.refs.checkboxInput.checked);
     }
   }
@@ -26,20 +20,30 @@ class Checkbox extends Component {
 
     return (
       <label className="sw-checkbox">
-      	<input ref="checkboxInput" checked={checked} onChange={this.onChange} type="checkbox" className="sw-checkbox__input" disabled={!disable}/>
-      	<div className="sw-checkbox__indicator">{this.renderIcon('CheckmarkIcon')}</div>
+        <input
+          ref="checkboxInput"
+          checked={checked}
+          onChange={this.onChange}
+          type="checkbox"
+          className="sw-checkbox__input"
+          disabled={!disable}
+        />
+        <div className="sw-checkbox__indicator">
+          <Icon svg="CheckmarkIcon" className="sw-checkbox__icon" />
+        </div>
         <div className="sw-checkbox__label">{label}</div>
       </label>
-    )
+    );
   }
 }
 
-export default Checkbox
+export default Checkbox;
 
 const { string, bool, func } = PropTypes;
 
 Checkbox.propTypes = {
   onChange: func,
   label: string,
-  checked: bool
-}
+  checked: bool,
+  disable: bool,
+};

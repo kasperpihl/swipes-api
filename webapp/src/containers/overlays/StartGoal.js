@@ -1,28 +1,27 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { map } from 'react-immutable-proptypes';
+import { overlay, modal } from '../../actions';
+import { bindAll } from '../../classes/utils';
 
-import { fromJS } from 'immutable'
-import { workflows, overlay, modal } from '../../actions'
-import { bindAll } from '../../classes/utils'
-
-import WorkflowList from '../../components/start-goal/WorkflowList'
-import Button from '../../components/swipes-ui/Button'
+import WorkflowList from '../../components/start-goal/WorkflowList';
+import Button from '../../components/swipes-ui/Button';
 
 class StartGoal extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
-    bindAll( this, ['didSelectItem', 'openStore', 'openCreatePattern']);
+    super(props);
+    this.state = {};
+    bindAll(this, ['didSelectItem', 'openStore', 'openCreatePattern']);
   }
   openStore() {
     const { pushOverlay } = this.props;
 
-    pushOverlay({component: "Store", title: "Store"});
+    pushOverlay({ component: 'Store', title: 'Store' });
   }
   openCreatePattern() {
     const { pushOverlay } = this.props;
 
-    pushOverlay({component: "CreatePattern", title: "Create Pattern"});
+    pushOverlay({ component: 'CreatePattern', title: 'Create Pattern' });
   }
   didSelectItem(id) {
     const { pushOverlay, workflows, loadModal, users } = this.props;
@@ -47,31 +46,31 @@ class StartGoal extends Component {
         } else {
           title = 'Company Standard';
           img = {
-            element: x.get('img')
-          }
+            element: x.get('img'),
+          };
         }
 
         return {
           title,
-          img
-        }
-      })
+          img,
+        };
+      });
 
       loadModal({
         title: 'Choose Pattern',
         data: {
           list: {
             items: mappedItems,
-            emptyText: 'No patterns found!'
-          }
-        }
+            emptyText: 'No patterns found!',
+          },
+        },
       }, (e) => {
         if (e) {
-          pushOverlay({component: "ConfirmGoal", title: "Confirm", props: {data: filteredWorkspaces[e.item]}});
+          pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: filteredWorkspaces[e.item] } });
         }
-      })
+      });
     } else {
-      pushOverlay({component: "ConfirmGoal", title: "Confirm", props: {data: workflows.get(id).toJS()}});
+      pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: workflows.get(id).toJS() } });
     }
   }
   renderList() {
@@ -84,30 +83,37 @@ class StartGoal extends Component {
       }
     });
 
-    return <WorkflowList data={filteredWorkflows} callback={this.didSelectItem} />
+    return <WorkflowList data={filteredWorkflows} callback={this.didSelectItem} />;
   }
   render() {
-
     return (
-      <div className="start-goal" style={{height: '100%'}}>
+      <div className="start-goal" style={{ height: '100%' }}>
         {this.renderList()}
-        <Button callback={this.openStore} title="Go to store" style={{position: 'fixed', bottom: '60px', right: '30px'}}/>
+        <Button callback={this.openStore} title="Go to store" style={{ position: 'fixed', bottom: '60px', right: '30px' }} />
       </div>
-    )
-
+    );
   }
 }
+
+const { func } = PropTypes;
+
+StartGoal.propTypes = {
+  pushOverlay: func,
+  workflows: map,
+  loadModal: func,
+  users: map,
+};
 
 function mapStateToProps(state) {
   return {
     workflows: state.get('workflows'),
-    users: state.get('users')
-  }
+    users: state.get('users'),
+  };
 }
 
 const ConnectedStartGoal = connect(mapStateToProps, {
   loadModal: modal.load,
-  pushOverlay: overlay.push
-})(StartGoal)
+  pushOverlay: overlay.push,
+})(StartGoal);
 
-export default ConnectedStartGoal
+export default ConnectedStartGoal;

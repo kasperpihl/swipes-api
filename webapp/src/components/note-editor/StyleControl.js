@@ -1,23 +1,38 @@
-import React, { Component, PropTypes } from 'react'
-import * as Icons from '../icons'
-import { Map } from 'immutable'
-import { bindAll } from '../../classes/utils'
+import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
+import { map } from 'react-immutable-proptypes';
+import { bindAll } from '../../classes/utils';
+import Icon from '../icons/Icon';
 
-import './styles/style-control.scss'
+import './styles/style-control.scss';
 
 class StyleControl extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       styles: Map(),
-      showInput: false
-    }
+      showInput: false,
+    };
     bindAll(this, ['addLink', 'handleKeyUp']);
   }
-  callDelegate(name){
-    const { delegate } = this.props;
-    if(delegate && typeof delegate[name] === "function"){
-      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
+  componentDidMount() {
+    setTimeout(() => {
+      this.calculatePosition();
+    }, 0);
+  }
+  onToggle(style, type) {
+    if (type === 'block') {
+      this.callDelegate('toggleBlockType', style);
+    }
+
+    if (type === 'inline') {
+      this.callDelegate('toggleInlineStyle', style);
+    }
+
+    if (type === 'entity') {
+      if (style === 'link') {
+        this.setState({ showInput: true });
+      }
     }
   }
   getCenterFromX(x, w) {
@@ -30,35 +45,35 @@ class StyleControl extends Component {
     const w = styleControls.clientWidth;
     const h = styleControls.clientHeight;
 
-    styles = styles.set('left', (position.left + (position.width / 2)) - (w / 2));
+    let newStyles = styles.set('left', (position.left + (position.width / 2)) - (w / 2));
 
     if (selection.get('isBackward')) {
-      styles = styles.set('top', position.top - (h + 20) );
+      newStyles = styles.set('top', position.top - (h + 20));
     } else {
-      styles = styles.set('top', position.bottom + 20);
+      newStyles = styles.set('top', position.bottom + 20);
     }
 
-    return styles;
+    return newStyles;
   }
   handleMousePosition(styles) {
-    const { editorState, position, mouseUp } = this.props;
+    const { editorState, mouseUp } = this.props;
     const { styleControls } = this.refs;
     const selection = editorState.getSelection();
     const w = styleControls.clientWidth;
     const h = styleControls.clientHeight;
+    let newStyles;
 
     if (mouseUp.mousePos) {
-
       if (selection.get('isBackward')) {
-        styles = styles.set('left', this.getCenterFromX(mouseUp.mousePos.x, w));
-        styles = styles.set('top', mouseUp.mousePos.y - h - 20);
+        newStyles = styles.set('left', this.getCenterFromX(mouseUp.mousePos.x, w));
+        newStyles = styles.set('top', mouseUp.mousePos.y - h - 20);
       } else {
-        styles = styles.set('left', this.getCenterFromX(mouseUp.mousePos.x, w));
-        styles = styles.set('top', mouseUp.mousePos.y + 20);
+        newStyles = styles.set('left', this.getCenterFromX(mouseUp.mousePos.x, w));
+        newStyles = styles.set('top', mouseUp.mousePos.y + 20);
       }
     }
 
-    return styles;
+    return newStyles;
   }
   handleScreenBounderies(styles) {
     const { styleControls } = this.refs;
@@ -66,41 +81,36 @@ class StyleControl extends Component {
     const h = styleControls.clientHeight;
     const ww = window.innerWidth;
     const wh = window.innerHeight;
+    let newStyles;
 
     if (styles.get('left') < 10) {
-      styles = styles.set('left', 10);
-    }
-    else if (styles.get('top') < 64) {
-      styles = styles.set('top', 64);
-    }
-    else if ((styles.get('left') + w) > ww - 10) {
-      styles = styles.set('left', ww - 10);
-    }
-    else if ((styles.get('top') + h) > wh - 10) {
-      styles = styles.set('top', wh - 10);
+      newStyles = styles.set('left', 10);
+    } else if (styles.get('top') < 64) {
+      newStyles = styles.set('top', 64);
+    } else if ((styles.get('left') + w) > ww - 10) {
+      newStyles = styles.set('left', ww - 10);
+    } else if ((styles.get('top') + h) > wh - 10) {
+      newStyles = styles.set('top', wh - 10);
     }
 
-    return styles;
+    return newStyles;
   }
   handleContentOverlap(styles) {
-    const { editorState, position } = this.props;
-    const selection = editorState.getSelection();
+    const { position } = this.props;
     const { styleControls } = this.refs;
-    const w = styleControls.clientWidth;
     const h = styleControls.clientHeight;
-    const ww = window.innerWidth;
     const wh = window.innerHeight;
+    let newStyles;
 
     if ((styles.get('top') + h) > position.top && (styles.get('top') + h) < position.bottom) {
-      styles = styles.set('top', position.bottom + 20);
-    }
-    else if ((styles.get('top') + h) > wh) {
-      styles = styles.set('top', position.top - (h + 20) );
+      newStyles = styles.set('top', position.bottom + 20);
+    } else if ((styles.get('top') + h) > wh) {
+      newStyles = styles.set('top', position.top - (h + 20));
     }
 
-    return styles;
+    return newStyles;
   }
-  calculatePosition(){
+  calculatePosition() {
     const { styles } = this.state;
     let newStyles = styles;
 
@@ -110,64 +120,17 @@ class StyleControl extends Component {
     newStyles = this.handleContentOverlap(newStyles);
 
     if (styles !== newStyles) {
-      this.setState({styles: newStyles});
+      this.setState({ styles: newStyles });
     }
   }
-  calculatePosition1() {
-    const { editorState, position, mouseUp } = this.props;
-    const selection = editorState.getSelection();
-    let style = {};
+  callDelegate(name, ...arg) {
+    const { delegate } = this.props;
 
-    if (!mouseUp.mousePos) {
-      style.left = position.left + (position.width / 2);
-      style.top = position.bottom;
-      style.transform = 'translateY(20%) translateX(-50%)'
-
-      if (selection.get('isBackward')) {
-        style.top = position.top;
-        style.transform = 'translateY(-120%) translateX(-50%)'
-      }
-    } else {
-      style.left = mouseUp.mousePos.x + 20;
-      style.top = mouseUp.mousePos.y + 20;
-
-      if (selection.get('isBackward')) {
-        style.left = mouseUp.mousePos.x;
-        style.top = mouseUp.mousePos.y;
-        style.transform = 'translateY(-120%) translateX(-120%)'
-      }
+    if (delegate && typeof delegate[name] === 'function') {
+      return delegate[name](...[this].concat(Array.prototype.slice.call(arg, 1)));
     }
 
-    this.setState({styles: style})
-  }
-  componentDidMount() {
-    const { styleControls } = this.refs;
-    const { styles } = this.state;
-
-    setTimeout( () => {
-      const { left, bottom, top, right } = styleControls.getBoundingClientRect();
-
-      this.calculatePosition()
-
-      if (left < 0) {
-        console.log('styles', styles)
-      }
-    }, 0)
-  }
-  onToggle(style, type) {
-    if (type === 'block') {
-      this.callDelegate('toggleBlockType', style)
-    }
-
-    if (type === 'inline') {
-      this.callDelegate('toggleInlineStyle', style)
-    }
-
-    if (type === 'entity') {
-      if (style === 'link') {
-        this.setState({showInput: true})
-      }
-    }
+    return undefined;
   }
   handleKeyUp(e) {
     if (e.keyCode === 13) {
@@ -175,7 +138,6 @@ class StyleControl extends Component {
     }
   }
   addLink() {
-    const { addLink } = this.props;
     const { input } = this.refs;
 
     if (input.value.length) {
@@ -183,45 +145,30 @@ class StyleControl extends Component {
       this.callDelegate('hideStyleControls');
     }
   }
-  renderIcon(icon){
-    const Comp = Icons[icon];
-
-    if (Comp) {
-      return <Comp className="RichEditor-controls__icon"/>;
-    }
-
-    return <span>{icon}</span>
-  }
   renderButtons() {
     const styleOptions = {
       block: [
-        {label: 'H1Icon', style: 'header-one'},
-        {label: 'H2Icon', style: 'header-two'},
-        {label: 'OL', style: 'ordered-list-item'},
-        {label: 'UnorderedListIcon', style: 'unordered-list-item'},
-        {label: 'C', style: 'code-block'},
+        { label: 'H1Icon', style: 'header-one' },
+        { label: 'H2Icon', style: 'header-two' },
+        { label: 'OL', style: 'ordered-list-item' },
+        { label: 'UnorderedListIcon', style: 'unordered-list-item' },
+        { label: 'C', style: 'code-block' },
       ],
       inline: [
-        {label: 'BoldIcon', style: 'BOLD'},
-        {label: 'ItallicIcon', style: 'ITALIC'},
-        {label: 'UnderlineIcon', style: 'UNDERLINE'}
+        { label: 'BoldIcon', style: 'BOLD' },
+        { label: 'ItallicIcon', style: 'ITALIC' },
+        { label: 'UnderlineIcon', style: 'UNDERLINE' },
       ],
       entities: [
-        {label: 'url', style: 'link'}
-      ]
-    }
+        { label: 'url', style: 'link' },
+      ],
+    };
 
-    const blockHtml = styleOptions.block.map( (option) => {
-      return this.renderButton(option.label, option.style, 'block')
-    })
+    const blockHtml = styleOptions.block.map(option => this.renderButton(option.label, option.style, 'block'));
 
-    const inlineHtml = styleOptions.inline.map( (option) => {
-      return this.renderButton(option.label, option.style, 'inline')
-    })
+    const inlineHtml = styleOptions.inline.map(option => this.renderButton(option.label, option.style, 'inline'));
 
-    const entityHtml = styleOptions.entities.map( (option) => {
-      return this.renderButton(option.label, option.style, 'entity')
-    })
+    const entityHtml = styleOptions.entities.map(option => this.renderButton(option.label, option.style, 'entity'));
 
 
     return (
@@ -230,7 +177,7 @@ class StyleControl extends Component {
         {inlineHtml}
         {entityHtml}
       </div>
-    )
+    );
   }
   renderButton(label, style, type) {
     const { editorState } = this.props;
@@ -241,38 +188,42 @@ class StyleControl extends Component {
       .getBlockForKey(selection.getStartKey())
       .getType();
 
-    let className = 'RichEditor-styleButton';
-
-    if (style === blockType || currentStyle.has(style)) {
-      className += ' RichEditor-activeButton';
-    }
-
     return (
-      <span className={className} key={label} onMouseDown={this.onToggle.bind(this, style, type)}>
-        {this.renderIcon(label)}
-      </span>
-    )
+      <Button
+        callback={this.onToggle}
+        data={{ label, style, type, blockType, currentStyle }}
+        key={label}
+      />
+    );
   }
   renderInput() {
     const { showInput } = this.state;
 
-    if (!showInput) {
-      return
+    if (showInput) {
+      return (
+        <div className="RichEditor-controls__input-wrapper">
+          <input
+            ref="input"
+            type="text"
+            className="RichEditor-controls__input"
+            placeholder="Enter url"
+            onKeyUp={this.handleKeyUp}
+          />
+          <button className="RichEditor-controls__input-submit" onClick={this.addLink}>
+            {this.renderIcon('ArrowRightIcon')}
+          </button>
+        </div>
+      );
     }
 
-    return (
-      <div className="RichEditor-controls__input-wrapper">
-        <input ref="input" type="text" className="RichEditor-controls__input" placeholder="Enter url" onKeyUp={this.handleKeyUp}/>
-        <div className="RichEditor-controls__input-submit" onClick={this.addLink}>{this.renderIcon('ArrowRightIcon')}</div>
-      </div>
-    )
+    return undefined;
   }
   render() {
     const { styles, showInput } = this.state;
     let className = 'RichEditor-controls';
 
     if (showInput) {
-      className += ' RichEditor-controls--input'
+      className += ' RichEditor-controls--input';
     }
 
     return (
@@ -280,13 +231,44 @@ class StyleControl extends Component {
         {this.renderButtons()}
         {this.renderInput()}
       </div>
-    )
+    );
   }
 }
 
-export default StyleControl
+const Button = (props) => {
+  const { label, style, type, blockType, currentStyle } = props.data;
+  let className = 'RichEditor-styleButton';
+  let RenderIcon;
 
-const { string } = PropTypes;
+  if (style === blockType || currentStyle.has(style)) {
+    className += ' RichEditor-activeButton';
+  }
+
+  if (<Icon svg={label} />) {
+    RenderIcon = <Icon svg={label} className="RichEditor__icon" />;
+  } else {
+    RenderIcon = <span>{label}</span>;
+  }
+
+  return (
+    <span className={className} onMouseDown={props.callback(style, type)}>
+      {RenderIcon}
+    </span>
+  );
+};
+
+export default StyleControl;
+
+const { object, func } = PropTypes;
 
 StyleControl.propTypes = {
-}
+  editorState: map,
+  position: object,
+  mouseUp: object,
+  delegate: object,
+};
+
+Button.propTypes = {
+  data: object,
+  callback: func,
+};

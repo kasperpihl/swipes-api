@@ -1,42 +1,39 @@
-import React, { Component, PropTypes } from 'react'
-import * as Icons from '../icons'
+import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import './styles/step-field.scss'
+import Icon from '../icons/Icon';
+import './styles/step-field.scss';
 
 class StepField extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedFullscreen = this.clickedFullscreen.bind(this);
   }
+  clickedFullscreen() {
+    const { delegate } = this.props;
+
+    delegate('fullscreen');
+  }
   renderIcon(icon, color) {
-    const Comp = Icons[icon];
     const styles = {};
 
     if (color) {
       styles.fill = color;
     }
 
-    if (Comp) {
-      return <Comp style={styles} className="step-field__icon step-field__icon--svg"/>;
-    } else {
-      return <img className="step-field__icon step-field__icon--img" src={icon} />
-    }
-  }
-  clickedFullscreen(index, e){
-    const { delegate } = this.props;
-    delegate('fullscreen');
+    return <Icon svg={icon} style={styles} className="step-field__icon step-field__icon--svg" />;
   }
   renderFullscreen() {
     const { fullscreen } = this.props;
-    if(!fullscreen) return;
+
+    if (!fullscreen) return undefined;
 
     return (
       <div onClick={this.clickedFullscreen} className="step-field__action" title="Fullscreen">
         {this.renderIcon('ArrowLeftIcon')}
         {this.renderIcon('ArrowRightIcon')}
       </div>
-    )
+    );
   }
   render() {
     const { icon, iconColor, title, children } = this.props;
@@ -54,15 +51,19 @@ class StepField extends Component {
         </div>
         {children}
       </div>
-    )
+    );
   }
 }
 
-export default StepField
+export default StepField;
 
-const { string } = PropTypes;
+const { string, object, bool } = PropTypes;
 
 StepField.propTypes = {
   icon: string,
-  title: string
-}
+  title: string,
+  delegate: object,
+  fullscreen: bool,
+  iconColor: string,
+  children: object,
+};

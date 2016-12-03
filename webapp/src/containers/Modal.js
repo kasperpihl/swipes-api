@@ -1,23 +1,24 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { modal } from '../actions';
-import SwipesModal from '../components/modals/SwipesModal'
-import PreviewModal from '../components/modals/PreviewModal'
-
-import { bindAll } from '../classes/utils'
+import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { map } from 'react-immutable-proptypes';
+import { connect } from 'react-redux';
+import SwipesModal from '../components/modals/SwipesModal';
+import PreviewModal from '../components/modals/PreviewModal';
+import { modal as modalActions } from '../actions';
+
+import { bindAll } from '../classes/utils';
 
 class Modal extends Component {
   constructor(props) {
-    super(props)
-    bindAll(this, ['onModalCallback', 'closeModal', 'onKeyUp'])
+    super(props);
+    bindAll(this, ['onModalCallback', 'closeModal', 'onKeyUp']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
     window.addEventListener('keyup', this.onKeyUp);
   }
   componentWillUnmount() {
-    window.removeEventListener('keyup', this.onKeyUp)
+    window.removeEventListener('keyup', this.onKeyUp);
   }
   onKeyUp(e) {
     const { modal } = this.props;
@@ -28,20 +29,22 @@ class Modal extends Component {
   }
 
   onModalCallback(res) {
-    if(this.props.modal.get('callback')) {
-      this.props.modal.get('callback')(res);
+    const { modal, hideModal } = this.props;
+
+    if (modal.get('callback')) {
+      modal.get('callback')(res);
     }
 
-    this.props.hideModal();
+    hideModal();
   }
-  closeModal(e) {
+  closeModal() {
     this.onModalCallback(null);
   }
   renderModal(type, props) {
     const { modal } = this.props;
 
     if (!modal.get('shown')) {
-      return;
+      return undefined;
     }
 
     let Comp = SwipesModal;
@@ -50,21 +53,21 @@ class Modal extends Component {
       Comp = PreviewModal;
     }
 
-    return <Comp callback={this.onModalCallback} {...props} />
+    return <Comp callback={this.onModalCallback} {...props} />;
   }
   render() {
     const { modal } = this.props;
     const props = modal.get('props') || {};
     const type = modal.get('type');
-    let className = "g-modal";
+    let className = 'g-modal';
 
     if (modal.get('shown')) {
-      className += " g-modal--shown";
+      className += ' g-modal--shown';
     }
     return (
       <div className={className}>
-        <div className="g-modal__overlay" onClick={this.closeModal}></div>
-          {this.renderModal(type, props)}
+        <div className="g-modal__overlay" onClick={this.closeModal} />
+        {this.renderModal(type, props)}
       </div>
     );
   }
@@ -72,12 +75,20 @@ class Modal extends Component {
 
 function mapStateToProps(state) {
   return {
-    modal: state.get('modal')
-  }
+    modal: state.get('modal'),
+  };
 }
 
 const ConnectedModal = connect(mapStateToProps, {
-  hideModal: modal.hide
+  hideModal: modalActions.hide,
 
-})(Modal)
-export default ConnectedModal
+})(Modal);
+
+const { func } = PropTypes;
+
+Modal.propTypes = {
+  modal: map,
+  hideModal: func,
+};
+
+export default ConnectedModal;
