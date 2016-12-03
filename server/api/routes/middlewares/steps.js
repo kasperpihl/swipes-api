@@ -70,7 +70,6 @@ const stepsUpdateData = (req, res, next) => {
   dbStepsUpdateSingle({ goal_id, stepUpdated })
     .then(() => {
       res.locals.eventType = 'step_changed';
-      res.locals.eventMessage = `${stepUpdated.title} has been updated`;
       res.locals.eventData = stepUpdated;
 
       return next();

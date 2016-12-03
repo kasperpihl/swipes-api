@@ -52,7 +52,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
 
   const date = new Date();
   const type = eventType;
-  const message = eventMessage;
+  const message = eventMessage || '';
 
   const objToInsert = {
     user_ids: uniqueUsersToNotify,

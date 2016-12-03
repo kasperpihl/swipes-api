@@ -1,9 +1,0 @@
-{
-	"manifest_version": 1,
-	"type": "service",
-	"title": "Asana",
-	"identifier": "asana",
-	"version": "0.1",
-	"description": "The Asana Service For Swipes",
-	"script": "asana.js"
-}
