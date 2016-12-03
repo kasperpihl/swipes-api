@@ -1,68 +1,104 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
+import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import { Map, fromJS } from 'immutable'
-import * as Icons from '../icons'
+import { fromJS } from 'immutable';
+import Icon from '../icons/Icon';
 
 // Views
-import Assigning from '../assigning/Assigning'
-import StepHeader from './StepHeader'
-import StepField from './StepField'
-import StepSubmission from './StepSubmission'
-import ProgressBar from '../swipes-ui/ProgressBar'
+import StepHeader from './StepHeader';
+import StepField from './StepField';
+import StepSubmission from './StepSubmission';
+import ProgressBar from '../swipes-ui/ProgressBar';
 
-import GoalsUtil from './goals_util'
-import { throttle, bindAll } from '../../classes/utils'
+import GoalsUtil from './goals_util';
+import { throttle, bindAll } from '../../classes/utils';
 
 // styles
-import './styles/goal-step.scss'
+import './styles/goal-step.scss';
 
 class GoalStep extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.helper = new GoalsUtil(props.goal, props.myId, props.cache);
     this.state = {
       stepIndex: props.initialStepIndex,
       step: this.helper.getStepByIndex(props.initialStepIndex),
-      formData: this.helper.getInitialDataForStepIndex(props.initialStepIndex)
-    }
+      formData: this.helper.getInitialDataForStepIndex(props.initialStepIndex),
+    };
 
     bindAll(this, ['onSubmit', 'cacheFormInput', 'onProgressChange']);
     this.bindCallbacks = {};
-    this.throttledCache = throttle(this.cacheFormInput, 5000)
+    this.throttledCache = throttle(this.cacheFormInput, 5000);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  updateToStepIndex(i){
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.cacheFormInput);
+  }
+  componentWillReceiveProps(nextProps) {
+    const { goal } = this.props;
     const { stepIndex } = this.state;
-    if(i !== stepIndex){
+    const nextGoal = nextProps.goal;
+
+    if (goal !== nextGoal) {
+      this.helper.updateGoal(nextGoal);
+      if (stepIndex === goal.get('currentStepIndex')) {
+        if (goal.get('currentStepIndex') !== nextGoal.get('currentStepIndex')) {
+          this.updateToStepIndex(nextGoal.get('currentStepIndex'));
+        }
+      }
+    }
+  }
+  componentWillUnmount() {
+    this.cacheFormInput();
+    window.removeEventListener('beforeunload', this.cacheFormInput);
+  }
+  onSubmit(goBack) {
+    const { goal } = this.props;
+    const { step } = this.state;
+    let previousSteps;
+
+    if (goBack) {
+      previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
+    }
+    const data = this.generateRawObj();
+    this.setState({ isSubmitting: true });
+    this.callDelegate('stepSubmit', step.get('id'), data, previousSteps, () => {
+      this.setState({ isSubmitting: false });
+    });
+  }
+  onProgressChange(i) {
+    this.updateToStepIndex(i);
+  }
+  updateToStepIndex(i) {
+    const { stepIndex } = this.state;
+    if (i !== stepIndex) {
       const step = this.helper.getStepByIndex(i);
-      const formData = this.helper.getInitialDataForStepIndex(i)
+      const formData = this.helper.getInitialDataForStepIndex(i);
       this.setState({
         stepIndex: i,
         step,
-        formData
-      })
+        formData,
+      });
     }
-
   }
-  cacheFormInput(){
+  cacheFormInput() {
     const { stepIndex } = this.state;
     const data = {
       stepIndex: this.helper.currentStepIndex(),
-      runCounter: this.helper.runCounter()
+      runCounter: this.helper.runCounter(),
     };
     const amIAssigned = this.helper.amIAssigned(stepIndex);
     const isCurrent = this.helper.isCurrentStep(stepIndex);
-    if(amIAssigned && isCurrent){
-      data.data = this.generateRawObj()
+    if (amIAssigned && isCurrent) {
+      data.data = this.generateRawObj();
     }
     this.callDelegate('stepCache', fromJS(data));
   }
-  generateRawObj(){
+  generateRawObj() {
     const { formData, step } = this.state;
     return step.get('fields').map((field, i) => {
-      if(field.get('type') === 'link'){
+      if (field.get('type') === 'link') {
         return null;
       }
       const Field = this.helper.fieldForType(field.get('type'));
@@ -73,64 +109,41 @@ class GoalStep extends Component {
       return data;
     }).toJS();
   }
-  componentWillReceiveProps(nextProps){
-    const { goal } = this.props;
-    const { stepIndex } = this.state;
-    const nextGoal = nextProps.goal;
-
-    if(goal !== nextGoal){
-      this.helper.updateGoal(nextGoal);
-      if(stepIndex === goal.get('currentStepIndex')){
-        if(goal.get('currentStepIndex') !== nextGoal.get('currentStepIndex')){
-          this.updateToStepIndex(nextGoal.get('currentStepIndex'))
-        }
-      }
-
-    }
-  }
-  componentDidMount(){
-    window.addEventListener("beforeunload", this.cacheFormInput);
-  }
-  componentWillUnmount(){
-    this.cacheFormInput();
-    window.removeEventListener("beforeunload", this.cacheFormInput);
-  }
-  fullscreenForFieldIndex(index){
+  fullscreenForFieldIndex(index) {
     const { step, formData, stepIndex } = this.state;
     const { helper } = this;
-    let field = step.getIn(['fields', index]);
+    const field = step.getIn(['fields', index]);
 
-    if(this.isFullscreen){
+    if (this.isFullscreen) {
       this.callDelegate('stepAction', 'popOverlay');
-    }
-    else{
-      const fieldAndSettings = helper.getFieldAndSettingsFromField(field, stepIndex, {fullscreen: true});
+    } else {
+      const fieldAndSettings =
+      helper.getFieldAndSettingsFromField(field, stepIndex, { fullscreen: true });
+
       this.isFullscreen = true;
       this.callDelegate('stepAction', 'fullscreen', {
         component: 'Field',
-        title: field.get('title') + ' (Note)',
+        title: `${field.get('title')} (Note)`,
         onClose: () => {
           this.isFullscreen = false;
-          this.cacheFormInput()
+          this.cacheFormInput();
         },
         props: {
           index,
           field: fieldAndSettings[0],
           delegate: this.bindCallbacks[index],
           settings: fieldAndSettings[1],
-          data: formData.get(index)
-        }
+          data: formData.get(index),
+        },
       });
     }
-
-
   }
-  delegateFromField(index, name){
-    const { step, formData, stepIndex } = this.state;
+  delegateFromField(index, name) {
+    const { formData } = this.state;
 
 
-    if(name === 'change'){
-      this.setState({formData: formData.set(index, arguments[2])});
+    if (name === 'change') {
+      this.setState({ formData: formData.set(index, arguments[2]) });
       this.throttledCache();
     }
 
@@ -141,32 +154,14 @@ class GoalStep extends Component {
   callDelegate(name) {
     const { delegate } = this.props;
 
-    if (delegate && typeof delegate[name] === "function") {
-      return delegate[name].apply(delegate, [this].concat(Array.prototype.slice.call(arguments, 1)));
+    if (delegate && typeof delegate[name] === 'function') {
+      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
     }
+
+    return undefined;
   }
-
-  onSubmit(goBack) {
-
-    const { goal } = this.props;
-    const { step } = this.state;
-    let previousSteps;
-
-    if (goBack) {
-      previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
-    }
-    const data = this.generateRawObj();
-    this.setState({isSubmitting: true});
-    this.callDelegate('stepSubmit', step.get('id'), data, previousSteps, () => {
-      this.setState({isSubmitting: false});
-    });
-  }
-  renderIcon(icon){
-    const Comp = Icons[icon];
-
-    if (Comp) {
-      return <Comp className="goal-step__icon goal-step__icon--svg"/>;
-    }
+  renderIcon(icon) {
+    return <Icon svg={icon} className="goal-step__icon goal-step__icon--svg" />;
   }
   renderHeader() {
     const { myId } = this.props;
@@ -182,31 +177,26 @@ class GoalStep extends Component {
         assignees={assignees}
         me={me}
       />
-    )
-  }
-  onProgressChange(i){
-    this.updateToStepIndex(i);
+    );
   }
   renderProgressBar() {
     const { goal } = this.props;
     const { stepIndex } = this.state;
     const runCounter = this.helper.runCounter();
-    const steps = goal.get('steps').map( (step, i) => {
-      return {
-        title: step.get('title')
+    const steps = goal.get('steps').map(step => ({
+      title: step.get('title'),
         // disabled: (i > goal.get('currentStepIndex'))
-      }
-    }).toJS();
+    })).toJS();
 
     return (
       <ProgressBar
         steps={steps}
-        title={'run ' + runCounter}
+        title={`run ${runCounter}`}
         onChange={this.onProgressChange}
         activeIndex={stepIndex}
         currentIndex={goal.get('currentStepIndex')}
       />
-    )
+    );
   }
   renderComplete() {
     const { stepIndex } = this.state;
@@ -217,58 +207,62 @@ class GoalStep extends Component {
           {this.renderIcon('CheckmarkIcon')}
           goal completed
         </div>
-      )
+      );
     }
+
+    return undefined;
   }
-  renderStatus(){
+  renderStatus() {
     const { stepIndex } = this.state;
     const status = this.helper.getStatusForStepIndex(stepIndex);
 
-    return <div className="goal-step__status">{status}</div>
+    return <div className="goal-step__status">{status}</div>;
   }
-  renderHandoff(){
+  renderHandoff() {
     const { users } = this.props;
     const { stepIndex } = this.state;
     const handOff = this.helper.getHandoffMessageForStepIndex(stepIndex);
-    if(handOff){
-      let user, message;
+
+    if (handOff) {
       const firstMessage = handOff.findEntry(() => true);
-      if(!firstMessage){
-        return;
+
+      if (!firstMessage) {
+        return undefined;
       }
-      user = users.get(firstMessage[0])
-      message = firstMessage[1];
-      if(user && message && message.length){
+
+      const user = users.get(firstMessage[0]);
+      const message = firstMessage[1];
+
+      if (user && message && message.length) {
         return (
           <StepField
             icon={user.get('profile_pic') || 'PersonIcon'}
-            title={'Handoff from ' + user.get('name')}>
+            title={`Handoff from ${user.get('name')}`}
+          >
             <div className="goal-step__hand-off-message">{message}</div>
           </StepField>
-        )
+        );
       }
-
-
     }
+
+    return undefined;
   }
-
-
-  renderFields(step){
-    const { goal } = this.props;
+  renderFields(step) {
     const { helper } = this;
     const { formData, stepIndex } = this.state;
     return step.get('fields').map((field, i) => {
-
       const iconAndColor = helper.getIconWithColorForField(field, stepIndex);
       // Field-swap for links. Check if field is a link and find the link
       const fAndS = helper.getFieldAndSettingsFromField(field, stepIndex);
-      field = fAndS[0];
+      let newField = field;
+      newField = fAndS[0];
       const settings = fAndS[1];
 
-
       const Field = helper.fieldForType(field.get('type'));
+
       if (Field) {
         const canShowFullscreen = (Field.fullscreen && Field.fullscreen());
+
         if (!this.bindCallbacks[i]) {
           this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
         }
@@ -276,35 +270,40 @@ class GoalStep extends Component {
           <StepField
             fullscreen={canShowFullscreen}
             delegate={this.bindCallbacks[i]}
-            key={field.get('id')}
-            title={field.get('title')}
+            key={newField.get('id')}
+            title={newField.get('title')}
             icon={iconAndColor[0]}
-            iconColor={iconAndColor[1]}>
+            iconColor={iconAndColor[1]}
+          >
             <Field
               delegate={this.bindCallbacks[i]}
               data={formData.get(i)}
               settings={settings}
             />
           </StepField>
-        )
+        );
       }
+
+      return undefined;
     });
   }
-  renderPreAutomations(){
+  renderPreAutomations() {
     // Here will come the pre automations
     // > Send email
     // > Save to Evernote
   }
-  renderSubmission(){
+  renderSubmission() {
     const { stepIndex, step, isSubmitting } = this.state;
     const amIAssigned = this.helper.amIAssigned(stepIndex);
     const isCurrent = this.helper.isCurrentStep(stepIndex);
 
     if (amIAssigned && isCurrent) {
-      return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} disabled={!!isSubmitting}/>
+      return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} disabled={!!isSubmitting} />;
     }
+
+    return undefined;
   }
-  renderPostAutomations(){
+  renderPostAutomations() {
     // Here will come the post automations
     // > Send email
     // > Save to Evernote
@@ -312,10 +311,10 @@ class GoalStep extends Component {
   render() {
     const { helper } = this;
     const { step, stepIndex } = this.state;
-    const { slideDirection } = this.state;
-    let sideColumnClass = 'goal-step__side-column'
-    if(helper.isCurrentStep(stepIndex) && helper.amIAssigned(stepIndex)){
-      sideColumnClass += ' goal-step__side-column--active'
+    let sideColumnClass = 'goal-step__side-column';
+
+    if (helper.isCurrentStep(stepIndex) && helper.amIAssigned(stepIndex)) {
+      sideColumnClass += ' goal-step__side-column--active';
     }
 
     return (
@@ -336,18 +335,19 @@ class GoalStep extends Component {
           {this.renderPostAutomations()}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default GoalStep
+export default GoalStep;
 
-const { string } = PropTypes;
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes'
+const { string, number, object } = PropTypes;
 
 GoalStep.propTypes = {
   goal: map,
-  step: map,
   users: map,
-  myId: string
-}
+  myId: string,
+  cache: map,
+  initialStepIndex: number,
+  delegate: object,
+};

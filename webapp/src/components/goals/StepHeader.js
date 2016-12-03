@@ -1,12 +1,12 @@
-import React, { Component, PropTypes } from 'react'
-import Assigning from '../assigning/Assigning'
+import React, { Component, PropTypes } from 'react';
+import Assigning from '../assigning/Assigning';
 
-import './styles/step-header.scss'
+import './styles/step-header.scss';
 
 class StepHeader extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
   componentDidMount() {
   }
@@ -18,19 +18,20 @@ class StepHeader extends Component {
         <div className="step-header__index">{index}.</div>
         <div className="step-header__title">{title}</div>
         <div className="step-header__assignees">
-          <Assigning assignees={assignees} me={me}/>
+          <Assigning assignees={assignees} me={me} />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default StepHeader
+export default StepHeader;
 
-const { number, string, array } = PropTypes;
+const { number, string, array, object } = PropTypes;
 
 StepHeader.propTypes = {
   index: number,
   title: string,
-  assignees: array
-}
+  assignees: array,
+  me: object,
+};

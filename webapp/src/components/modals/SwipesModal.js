@@ -1,35 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Textarea from 'react-textarea-autosize';
 import Loader from '../swipes-ui/Loader';
-import * as Icons from '../icons';
+import Icon from '../icons/Icon';
 
 import './styles/swipes-modal.scss';
-
-class SwipesModalActions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.buttonClick = this.buttonClick.bind(this);
-    this.state = {};
-  }
-  buttonClick(e) {
-    const i = e.target.getAttribute('data-index');
-    this.props.onClick({
-      button: parseInt(i, 10),
-    });
-  }
-  render() {
-    const { actions } = this.props;
-    const buttons = actions.map((button, i) => (
-      <div className="swipes-modal__actions__button" data-index={i} ref="modalButton" key={i} onClick={this.buttonClick}>{button}</div>
-      ));
-
-    return (
-      <div className="swipes-modal__actions">
-        {buttons}
-      </div>
-    );
-  }
-}
 
 class SwipesModal extends Component {
   constructor(props) {
@@ -47,6 +21,8 @@ class SwipesModal extends Component {
     this.state = {
       selectedListItems: selectedItems,
     };
+    this.buttonClick = this.buttonClick.bind(this);
+    this.selectListItem = this.selectListItem.bind(this);
   }
   componentDidMount() {
     if (this.refs.textarea) {
@@ -74,7 +50,15 @@ class SwipesModal extends Component {
   closeModal() {
     this.sendCallback(null);
   }
-  selectListItem(i) {
+  buttonClick(e) {
+    const i = e.target.getAttribute('data-index');
+
+    this.sendCallback({
+      button: parseInt(i, 10),
+    });
+  }
+  selectListItem(e) {
+    const i = e.target.getAttribute('data-index');
     const { list } = this.props.data;
 
     if (list.selectable) {
@@ -97,18 +81,22 @@ class SwipesModal extends Component {
         <div key={key} className="swipes-modal__message">{message}</div>
       );
     }
+
+    return undefined;
   }
   renderTextarea(options, key) {
     let defaultValue = '';
     let placeholder = options;
     let minRows = 4;
     let maxRows = 4;
+
     if (typeof options === 'object') {
       defaultValue = options.text || defaultValue;
       placeholder = options.placeholder || 'Edit text';
       minRows = options.minRows || minRows;
       maxRows = options.maxRows || maxRows;
     }
+
     if (placeholder && placeholder.length > 0) {
       return (
         <Textarea
@@ -123,6 +111,8 @@ class SwipesModal extends Component {
         />
       );
     }
+
+    return undefined;
   }
   renderLoader(loader, key) {
     if (loader) {
@@ -132,10 +122,12 @@ class SwipesModal extends Component {
         </div>
       );
     }
+
+    return undefined;
   }
   renderList(list, key) {
     if (!list || typeof list !== 'object') {
-      return;
+      return undefined;
     }
 
     let items = list;
@@ -144,53 +136,69 @@ class SwipesModal extends Component {
       items = list.items;
     }
 
-    if (items) {
-      const listRender = items.map((item, i) => {
-        let className = 'swipes-modal__list__item';
+    if (!items) {
+      return undefined;
+    }
 
-        if (this.state.selectedListItems.includes(i)) {
-          className += ' swipes-modal__list__item--selected';
-        }
-        return (
-          <div className={className} key={i} onClick={this.selectListItem.bind(this, i)}>
-            {this.renderIcon(item.img)}
-            <div className="swipes-modal__list__item__title">
-              {item.title}
-            </div>
-          </div>
-        );
-      });
+    const listRender = items.map((item, i) => {
+      let className = 'swipes-modal__list__item';
+
+      if (this.state.selectedListItems.includes(i)) {
+        className += ' swipes-modal__list__item--selected';
+      }
 
       return (
-        <div className="swipes-modal__list" key={key}>{listRender}</div>
+        <div className={className} key={i} data-index={i} onClick={this.selectListItem}>
+          {this.renderIcon(item.img)}
+          <div className="swipes-modal__list__item__title" data-index={i}>
+            {item.title}
+          </div>
+        </div>
       );
-    }
+    });
+
+    return (
+      <div className="swipes-modal__list" key={key}>{listRender}</div>
+    );
   }
   renderIcon(icon) {
-    if (!icon) return;
+    if (!icon) return undefined;
 
     const svg = icon.element;
     const props = icon.props || {};
-    const Comp = Icons[svg];
 
-    if (Comp) {
-      return <Comp className="swipes-modal__list__item__img" {...props} />;
-    } else if (icon && !Comp) {
-      return <img className="swipes-modal__list__item__img" src={icon} />;
+    if (<Icon svg={svg} /> && svg) {
+      return <Icon svg={svg} className="swipes-modal__list__item__img" {...props} />;
     }
+
+    return (
+      <img
+        className="swipes-modal__list__item__img"
+        src={icon}
+        role="presentation"
+      />
+    );
   }
   renderButtons(buttons, key) {
     if (buttons && buttons.length > 0) {
       return (
-        <SwipesModalActions key={key} actions={buttons} onClick={this.sendCallback.bind(this)} />
+        <SwipesModalActions
+          key={key}
+          actions={buttons}
+          onClick={this.buttonClick}
+        />
       );
     }
+
+    return undefined;
   }
   renderContent(data) {
     if (!data) {
-      return;
+      return undefined;
     }
+
     const { message, textarea, buttons, list, loader } = data;
+
     if (Array.isArray(data)) {
       return data.map((item, i) => {
         switch (item.type) {
@@ -204,6 +212,8 @@ class SwipesModal extends Component {
             return this.renderList(item.value, i);
           case 'buttons':
             return this.renderButtons(item.value, i);
+          default:
+            return undefined;
         }
       });
     } else if (typeof data === 'object') {
@@ -215,9 +225,11 @@ class SwipesModal extends Component {
         this.renderButtons(buttons, 5),
       ];
     }
+
+    return undefined;
   }
   render() {
-    const { title, type, data, callback } = this.props;
+    const { title, type, data } = this.props;
 
     let modalClass = 'swipes-modal';
 
@@ -237,8 +249,42 @@ class SwipesModal extends Component {
   }
 }
 
+const SwipesModalActions = (props) => {
+  const { actions } = props;
+  const buttons = actions.map((button, i) => (
+    <div
+      className="swipes-modal__actions__button"
+      data-index={i}
+      ref="modalButton"
+      key={i}
+      onClick={props.onClick}
+    >
+      {button}
+    </div>
+  ));
+
+  return (
+    <div className="swipes-modal__actions">
+      {buttons}
+    </div>
+  );
+};
+
 export default SwipesModal;
-const { any, bool, oneOf, string, shape, element, oneOfType, object, number, arrayOf, func, node, array } = PropTypes;
+const {
+  any,
+  bool,
+  oneOf,
+  string,
+  shape,
+  oneOfType,
+  object,
+  number,
+  arrayOf,
+  func,
+  node,
+  array,
+} = PropTypes;
 const itemProps = shape({
   title: string,
   selected: bool,
@@ -291,4 +337,9 @@ SwipesModal.propTypes = {
       value: any,
     })),
   ]),
+};
+
+SwipesModalActions.propTypes = {
+  actions: array,
+  onClick: func,
 };

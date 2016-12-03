@@ -1,50 +1,43 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 import {
   Editor,
   EditorState,
   SelectionState,
   RichUtils,
-  ContentState,
-  ContentBlock,
   getVisibleSelectionRect,
-  convertToRaw,
   CompositeDecorator,
   Modifier,
-  Entity
-} from 'draft-js'
-import StyleControl from './StyleControl'
-import NoteLink from './NoteLink'
+  Entity,
+} from 'draft-js';
+import { map } from 'react-immutable-proptypes';
+import StyleControl from './StyleControl';
+import NoteLink from './NoteLink';
+import { bindAll } from '../../classes/utils';
 
-import { bindAll } from '../../classes/utils'
-import * as Icons from '../icons'
-
-import './styles/note-editor.scss'
+import './styles/note-editor.scss';
 
 class NoteEditor extends Component {
-  static decorator(Component){
+  static decorator(DecoratorComponent) {
     return {
-      strategy: Component.strategy,
-      component: Component,
-      props: {
-        'test': true
-      }
-    }
+      strategy: DecoratorComponent.strategy,
+      component: DecoratorComponent,
+    };
   }
-  static getEmptyEditorState(){
+  static getEmptyEditorState() {
     const decorators = [
-      NoteLink
-    ].map((d) => this.decorator(d));
+      NoteLink,
+    ].map(d => this.decorator(d));
     const decorator = new CompositeDecorator(decorators);
+
     return EditorState.createEmpty(decorator);
   }
-
   constructor(props) {
-    super(props)
-
+    super(props);
     this.state = {
       hasSelected: false,
-      styleControl: {show: false}
-    }
+      styleControl: { show: false },
+    };
+
     bindAll(this,
       [
         'onBlur',
@@ -53,97 +46,84 @@ class NoteEditor extends Component {
         'onMouseMove',
         'onMouseUp',
         'handleKeyCommand',
-        'onTab'
-      ]
+        'onTab',
+      ],
     );
+
     this.onChange = (editorState) => {
+      const { onChange } = this.props;
       const sel = editorState.getSelection();
-      const hasSelected = ( sel.anchorKey !== sel.focusKey || sel.anchorOffset !== sel.focusOffset)
-
+      const hasSelected = (sel.anchorKey !== sel.focusKey || sel.anchorOffset !== sel.focusOffset);
       let styleControl = this.state.styleControl;
-      if(!hasSelected && styleControl.show){
-        styleControl = {show: false};
+
+      if (!hasSelected && styleControl.show) {
+        styleControl = { show: false };
       }
-      if(this.props.onChange){
-        this.props.onChange(editorState);
+
+      if (onChange) {
+        onChange(editorState);
       }
+
       this.setState({ hasSelected, styleControl });
-    }
-  }
-  addLink(styleControl, urlValue) {
-    const { editorState } = this.props;
-    const entityKey = Entity.create(
-      'LINK',
-      'MUTABLE',
-      {url: urlValue}
-    );
-    const contentState = editorState.getCurrentContent();
-    const newContentState = Modifier.applyEntity(
-      contentState,
-      editorState.getSelection(),
-      entityKey
-    )
-    let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
-
-    newEditorState = RichUtils.toggleLink(
-      newEditorState,
-      newEditorState.getSelection(),
-      entityKey
-    )
-    this.props.onChange(newEditorState);
-  }
-  removeLink(styleControl) {
-    const {editorState} = this.props;
-    const selection = editorState.getSelection();
-
-    if (!selection.isCollapsed()) {
-      this.props.onChange(RichUtils.toggleLink(editorState, selection, null))
-    }
-  }
-  handleKeyCommand(keyCommand) {
-    const { editorState } = this.props;
-    const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
-
-    if (newState) {
-      this.onChange(newState)
-      return 'handled'
-    }
-
-    return 'not handled'
-  }
-  toggleBlockType(styleControl, blockType) {
-    this.onChange(
-      RichUtils.toggleBlockType(
-        this.props.editorState,
-        blockType
-      )
-    );
-  }
-  toggleInlineStyle(styleControl, inlineStyle) {
-    this.onChange(
-      RichUtils.toggleInlineStyle(
-        this.props.editorState,
-        inlineStyle
-      )
-    );
+    };
   }
   onTab(e) {
     const { editorState } = this.props;
     const maxDepth = 4;
-    e.preventDefault()
+
+    e.preventDefault();
+
     this.onChange(RichUtils.onTab(e, editorState, maxDepth));
   }
-  positionForStyleControls(){
-    const selectionRect = getVisibleSelectionRect(window);
-    return selectionRect;
+  onKeyDown(e) {
+    if (e.keyCode === 16) {
+      const { styleControl } = this.state;
+
+      if (styleControl.show) {
+        this.shiftKeyTest = true;
+
+        setTimeout(() => {
+          if (this.shiftKeyTest) {
+            this.setState({ styleControl: { show: false } });
+          }
+        }, 500);
+      }
+    }
   }
-  hideStyleControls(a) {
+  onKeyUp(e) {
+    if (e.keyCode === 16) {
+      this.shiftKeyTest = false;
+    }
+  }
+  onMouseUp(e) {
+    const x = e.pageX;
+    const y = e.pageY;
+
+    setTimeout(() => {
+      this.setStyleControl({ show: true, mousePos: { x, y } });
+    }, 1);
+  }
+  onMouseMove() {
+    setTimeout(() => {
+      this.setStyleControl({ show: true });
+    }, 1);
+  }
+  setStyleControl(styleControlVal) {
+    const { styleControl, hasSelected } = this.state;
+    const { editorState } = this.props;
+    const selectionState = editorState.getSelection();
+
+    if (!styleControl.show && hasSelected && selectionState.getHasFocus()) {
+      this.setState({ styleControl: styleControlVal });
+    }
+  }
+  hideStyleControls() {
     let styleControl = this.state.styleControl;
 
-    styleControl = {show: false};
+    styleControl = { show: false };
     this.setState({ styleControl });
 
-    setTimeout( () => {
+    setTimeout(() => {
       const { editor } = this.refs;
       const { editorState } = this.props;
       const selectionState = editorState.getSelection();
@@ -160,25 +140,84 @@ class NoteEditor extends Component {
         anchorOffset: newOffset,
         focusKey: newKey,
         focusOffset: newOffset,
-      })
+      });
       const newEditorState = EditorState.forceSelection(editorState, newSelState);
 
       editor.focus();
       this.onChange(newEditorState);
     }, 0);
   }
+  positionForStyleControls() {
+    const selectionRect = getVisibleSelectionRect(window);
+    return selectionRect;
+  }
+  toggleBlockType(styleControl, blockType) {
+    this.onChange(
+      RichUtils.toggleBlockType(
+        this.props.editorState,
+        blockType,
+      ),
+    );
+  }
+  toggleInlineStyle(styleControl, inlineStyle) {
+    this.onChange(
+      RichUtils.toggleInlineStyle(
+        this.props.editorState,
+        inlineStyle,
+      ),
+    );
+  }
+  handleKeyCommand(keyCommand) {
+    const { editorState } = this.props;
+    const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
+
+    if (newState) {
+      this.onChange(newState);
+      return 'handled';
+    }
+
+    return 'not handled';
+  }
+  addLink(styleControl, urlValue) {
+    const { editorState } = this.props;
+    const entityKey = Entity.create(
+      'LINK',
+      'MUTABLE',
+      { url: urlValue },
+    );
+    const contentState = editorState.getCurrentContent();
+    const newContentState = Modifier.applyEntity(
+      contentState,
+      editorState.getSelection(),
+      entityKey,
+    );
+    let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
+
+    newEditorState = RichUtils.toggleLink(
+      newEditorState,
+      newEditorState.getSelection(),
+      entityKey,
+    );
+
+    this.props.onChange(newEditorState);
+  }
+  removeLink() {
+    const { editorState } = this.props;
+    const selection = editorState.getSelection();
+
+    if (!selection.isCollapsed()) {
+      this.props.onChange(RichUtils.toggleLink(editorState, selection, null));
+    }
+  }
   renderStyleControls() {
     const { hasSelected, styleControl } = this.state;
     const { editorState } = this.props;
 
-    if(!styleControl.show || !hasSelected){
-      return;
+    if (!styleControl.show || !hasSelected) {
+      return undefined;
     }
 
     const position = this.positionForStyleControls();
-
-    const selectionState = editorState.getSelection();
-    console.log('selectionState', )
 
     return (
       <StyleControl
@@ -187,74 +226,20 @@ class NoteEditor extends Component {
         position={position}
         mouseUp={styleControl}
       />
-    )
-  }
-  onKeyDown(e){
-    if(e.keyCode === 16){
-      const { styleControl } = this.state;
-      if(styleControl.show){
-        this.shiftKeyTest = true;
-        setTimeout(() => {
-          if(this.shiftKeyTest){
-            this.setState({styleControl: {show: false}})
-          }
-        }, 500)
-      }
-    }
-  }
-  onBlur(e){
-  }
-  onKeyUp(e){
-    if(e.keyCode === 16){
-      this.shiftKeyTest = false;
-    }
-  }
-  setStyleControl(styleControlVal){
-    const { styleControl, hasSelected } = this.state;
-    const { editorState } = this.props;
-    const selectionState = editorState.getSelection();
-    if (!styleControl.show && hasSelected && selectionState.getHasFocus()){
-      this.setState({styleControl: styleControlVal});
-    }
-  }
-  onMouseUp(e){
-    const x = e.pageX;
-    const y = e.pageY;
-    setTimeout(() => {
-      this.setStyleControl({ show: true, mousePos: {x, y}});
-    }, 1)
-
-  }
-  onMouseMove(e){
-    setTimeout(() => {
-      this.setStyleControl({ show: true });
-    }, 1)
+    );
   }
   render() {
     const { editorState, readOnly } = this.props;
-    let urlInput;
-    if (this.state.showURLInput) {
-      urlInput =
-        <div>
-          <input
-            onChange={this.onURLChange}
-            ref="url"
-            type="text"
-            value={this.state.urlValue}
-            onKeyDown={this.onLinkInputKeyDown}
-          />
-          <button onMouseDown={this.confirmLink}>
-            Confirm
-          </button>
-        </div>;
-    }
+
     return (
-      <div ref="rooty" className="sw-text-editor"
+      <div
+        ref="rooty" className="sw-text-editor"
         onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
         onMouseMove={this.onMouseMove}
-        onMouseUp={this.onMouseUp}>
+        onMouseUp={this.onMouseUp}
+      >
         {this.renderStyleControls()}
         <Editor
           ref="editor"
@@ -267,14 +252,16 @@ class NoteEditor extends Component {
           placeholder="Write something cool in me"
         />
       </div>
-    )
+    );
   }
 }
 
-export default NoteEditor
+export default NoteEditor;
 
-const { string } = PropTypes;
+const { bool, func } = PropTypes;
 
 NoteEditor.propTypes = {
-
-}
+  onChange: func,
+  editorState: map,
+  readOnly: bool,
+};

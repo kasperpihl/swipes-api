@@ -1,21 +1,21 @@
-import * as types from '../constants/ActionTypes'
-import { fromJS } from 'immutable'
+import { fromJS } from 'immutable';
+import * as types from '../constants/ActionTypes';
 
 const initialState = fromJS([]);
 
-export default function modal (state = initialState, action) {
+export default function modal(state = initialState, action) {
   switch (action.type) {
-    case types.SET_OVERLAY:{
+    case types.SET_OVERLAY: {
       return state.clear().push(fromJS(action.overlay));
     }
-    case types.PUSH_OVERLAY:{
+    case types.PUSH_OVERLAY: {
       return state.push(fromJS(action.overlay));
     }
-    case types.POP_OVERLAY:{
+    case types.POP_OVERLAY: {
       return state.butLast();
     }
-    case types.CLEAR_OVERLAY:{
-      if(typeof action.index === 'number'){
+    case types.CLEAR_OVERLAY: {
+      if (typeof action.index === 'number') {
         return state.slice(0, action.index + 1);
       }
       return state.clear();
@@ -23,6 +23,6 @@ export default function modal (state = initialState, action) {
     case types.LOGOUT:
       return initialState;
     default:
-      return state
+      return state;
   }
 }

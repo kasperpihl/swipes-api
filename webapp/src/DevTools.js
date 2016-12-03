@@ -1,30 +1,31 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+/* global Perf*/
+
 window.Perf = require('react-addons-perf');
 // Exported from redux-devtools
 
 class DevTools extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = { recording: false };
     this.toggleRecording = this.toggleRecording.bind(this);
   }
-  toggleRecording(){
-    if(this.state.recording){
-      Perf.stop();
-      Perf.printWasted();
-      this.setState({ recording: false });
-    }
-    else{
-      Perf.start();
-      this.setState({ recording: true });
-    }
-  }
   componentDidMount() {
     window.addEventListener('keydown', (e) => {
-      if(e.keyCode === 83 && (e.metaKey || e.ctrlKey)){
+      if (e.keyCode === 83 && (e.metaKey || e.ctrlKey)) {
         this.toggleRecording();
       }
     });
+  }
+  toggleRecording() {
+    if (this.state.recording) {
+      Perf.stop();
+      Perf.printWasted();
+      this.setState({ recording: false });
+    } else {
+      Perf.start();
+      this.setState({ recording: true });
+    }
   }
   render() {
     const styles = {
@@ -36,19 +37,19 @@ class DevTools extends Component {
       right: '3px',
       width: '12px',
       height: '12px',
-      zIndex: '10000'
-    }
-    if(this.state.recording){
+      zIndex: '10000',
+    };
+    if (this.state.recording) {
       styles.display = 'block';
     }
     return (
-      <div style={styles} onClick={this.toggleRecording}>
-      </div>
-    )
+      <div style={styles} onClick={this.toggleRecording} />
+    );
   }
 }
-export default DevTools
-module.exports = DevTools
+
+export default DevTools;
+module.exports = DevTools;
 
 /*
 import { createDevTools } from 'redux-devtools';

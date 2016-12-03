@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react'
-import PDF from 'react-pdf'
+import React, { Component, PropTypes } from 'react';
+import PDF from 'react-pdf';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class PDFRender extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
@@ -16,13 +16,13 @@ class PDFRender extends Component {
         scale={scale}
         onDocumentComplete={onDocumentComplete}
         page={page}
-        loading={(<span></span>)}
+        loading={(<span />)}
       />
-    )
+    );
   }
 }
 
-export default PDFRender
+export default PDFRender;
 
 const { string, number, func } = PropTypes;
 
@@ -30,5 +30,5 @@ PDFRender.propTypes = {
   file: string,
   scale: number,
   page: number,
-  onDocumentComplete: func
-}
+  onDocumentComplete: func,
+};

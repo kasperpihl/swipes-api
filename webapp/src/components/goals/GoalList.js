@@ -1,15 +1,15 @@
-import React, { Component, PropTypes } from 'react'
-import { bindAll } from '../../classes/utils'
+import React, { Component, PropTypes } from 'react';
+import { map } from 'react-immutable-proptypes';
+import { bindAll } from '../../classes/utils';
 
-import NavBar from '../nav-bar/NavBar'
-import GoalListItem from './GoalListItem'
-import TagItem from '../tags/TagItem';
+import NavBar from '../nav-bar/NavBar';
+import GoalListItem from './GoalListItem';
 
-import './styles/goals-list.scss'
+import './styles/goals-list.scss';
 
 class GoalList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.tabs = ['now', 'later', 'completed', 'all'];
     this.state = { tabIndex: 0 };
     this.tags = [
@@ -21,59 +21,24 @@ class GoalList extends Component {
       'marketing',
       'sales',
       'vacation',
-      'team building'
+      'team building',
     ];
     bindAll(this, ['clickedListItem']);
   }
   componentDidMount() {
   }
-  clickedListItem(id){
+  clickedListItem(id) {
     this.props.setActiveGoal(id);
   }
-  navTabDidChange(nav, index){
-    if(this.state.tabIndex !== index) {
-      this.setState({tabIndex: index});
+  navTabDidChange(nav, index) {
+    if (this.state.tabIndex !== index) {
+      this.setState({ tabIndex: index });
     }
   }
-
-  renderTabbar() {
-    let navTitle, actions;
-    return (
-      <div className="goals__nav-bar">
-        <NavBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex}/>
-      </div>
-    )
-  }
-
-  renderList() {
-    let { goals } = this.props;
+  filterGoals(goals) {
     const { tabIndex } = this.state;
 
-    goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
-    goals = this.filterGoals(goals);
-
-    return goals.map((goal) => {
-      return <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={'goal-list-item-' + goal.get('id')}/>
-    })
-  }
-  render() {
-    return (
-      <div className="goals-list">
-        {this.renderTabbar()}
-        {this.renderList()}
-      </div>
-    )
-  }
-
-
-
-
-
-
-  filterGoals(goals){
-    const { tabIndex } = this.state;
-
-    switch(tabIndex){
+    switch (tabIndex) {
       case 0:
         return this.filterMine(goals);
       case 1:
@@ -86,21 +51,17 @@ class GoalList extends Component {
         return this.filterMine(goals);
     }
   }
-  filterCompleted(goals){
-    return goals.filter((goal) => {
-      return (goal.get('steps').last().get('completed'))
-    })
+  filterCompleted(goals) {
+    return goals.filter(goal => (goal.get('steps').last().get('completed')));
   }
   filterMine(goals) {
     const {
-      me
+      me,
     } = this.props;
 
     return goals.filter((goal) => {
       const steps = goal.get('steps');
-      const currentStep = steps.find((step) => {
-        return step.get('completed') !== true;
-      })
+      const currentStep = steps.find(step => step.get('completed') !== true);
 
       if (!currentStep) {
         return false;
@@ -113,18 +74,18 @@ class GoalList extends Component {
         }
 
         return false;
-      })
+      });
 
       if (!containsMe) {
         return false;
       }
 
       return true;
-    })
+    });
   }
   filterLater(goals) {
     const {
-      me
+      me,
     } = this.props;
 
     return goals.filter((goal) => {
@@ -132,9 +93,7 @@ class GoalList extends Component {
       let indexCompleted = null;
       let match = null;
 
-      const currentStep = steps.findEntry((step) => {
-        return step.get('completed') !== true;
-      })
+      const currentStep = steps.findEntry(step => step.get('completed') !== true);
 
       if (!currentStep) {
         return false;
@@ -145,13 +104,14 @@ class GoalList extends Component {
       steps.forEach((step, i) => {
         if (i > indexCompleted) {
           const assignees = step.get('assignees');
+
           const containsMe = assignees.find((user) => {
             if (user.get('id') === me.get('id')) {
               return true;
             }
 
             return false;
-          })
+          });
 
           if (containsMe) {
             match = true;
@@ -159,15 +119,48 @@ class GoalList extends Component {
             return false;
           }
         }
-      })
+
+        return undefined;
+      });
 
       if (match) {
         return true;
       }
 
       return false;
-    })
+    });
+  }
+  renderTabbar() {
+    return (
+      <div className="goals__nav-bar">
+        <NavBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex} />
+      </div>
+    );
+  }
+  renderList() {
+    let { goals } = this.props;
+
+    goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
+    goals = this.filterGoals(goals);
+
+    return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
+  }
+  render() {
+    return (
+      <div className="goals-list">
+        {this.renderTabbar()}
+        {this.renderList()}
+      </div>
+    );
   }
 }
 
-export default GoalList
+const { func } = PropTypes;
+
+GoalList.propTypes = {
+  setActiveGoal: func,
+  goals: map,
+  me: map,
+};
+
+export default GoalList;

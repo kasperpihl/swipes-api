@@ -86,9 +86,11 @@
 				@include flex(center, center);
 				border-radius: 6px;
 				margin-left: 15px;
+				pointer-events: none;
 
 				& > * {
 					@include size();
+					pointer-events: none;
 				}
 			}
 

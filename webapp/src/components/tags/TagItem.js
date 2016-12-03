@@ -1,14 +1,14 @@
-import React, { Component, PropTypes } from 'react'
-import { bindAll } from '../../classes/utils'
+import React, { Component, PropTypes } from 'react';
+import { bindAll } from '../../classes/utils';
 
-import './styles/tag-item.scss'
+import './styles/tag-item.scss';
 
 class TagItem extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      active: false
-    }
+      active: false,
+    };
     bindAll(this, ['activeToggle']);
   }
   componentDidMount() {
@@ -17,8 +17,8 @@ class TagItem extends Component {
     const { active } = this.state;
 
     this.setState({
-      active: !active
-    })
+      active: !active,
+    });
   }
   render() {
     const { text } = this.props;
@@ -27,14 +27,14 @@ class TagItem extends Component {
 
     return (
       <div className={className} onClick={this.activeToggle}>{text}</div>
-    )
+    );
   }
 }
 
-export default TagItem
+export default TagItem;
 
 const { string } = PropTypes;
 
 TagItem.propTypes = {
-  text: string.isRequired
-}
+  text: string.isRequired,
+};

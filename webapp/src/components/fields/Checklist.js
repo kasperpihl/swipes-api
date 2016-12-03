@@ -1,48 +1,50 @@
-import React, { Component, PropTypes } from 'react'
-import * as Icons from '../icons'
-import Checkbox from '../swipes-ui/Checkbox'
-import './styles/checklist.scss'
-import { fromJS } from 'immutable'
+import React, { Component, PropTypes } from 'react';
+import { map } from 'react-immutable-proptypes';
+import Checkbox from '../swipes-ui/Checkbox';
+
+import './styles/checklist.scss';
 
 class Checklist extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.bindCallbacks = {};
   }
-  onChange(i, checked){
+  onChange(i, checked) {
     const { data, delegate } = this.props;
     delegate('change', data.setIn(['checks', i, 'checked'], checked));
   }
-  renderChecks(){
+  renderChecks() {
     const { data, settings } = this.props;
 
-    return data.get('checks').map((c,i) => {
-      if(!this.bindCallbacks[i]){
+    return data.get('checks').map((c, i) => {
+      if (!this.bindCallbacks[i]) {
         this.bindCallbacks[i] = this.onChange.bind(this, i);
       }
       return (
-        <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} disable={settings.get('editable')}/>
-      )
-    })
+        <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} disable={settings.get('editable')} />
+      );
+    });
   }
   render() {
     return (
       <div className="checklist">
         {this.renderChecks()}
       </div>
-    )
+    );
   }
 }
 
-export default Checklist
+export default Checklist;
 
-const { string, bool, arrayOf, shape } = PropTypes;
+const { string, bool, arrayOf, shape, object } = PropTypes;
 
 Checklist.propTypes = {
   data: shape({
     checks: arrayOf(shape({
       label: string,
-      checked: bool
-    }))
-  })
-}
+      checked: bool,
+    })),
+  }),
+  delegate: object,
+  settings: map,
+};

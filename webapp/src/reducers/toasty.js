@@ -1,25 +1,26 @@
-import * as types from '../constants/ActionTypes'
-import { OrderedMap, Map } from 'immutable'
+import { OrderedMap, Map } from 'immutable';
+import * as types from '../constants/ActionTypes';
+
 const initialState = OrderedMap();
 
-export default function toasty (state = initialState, action) {
+export default function toasty(state = initialState, action) {
   switch (action.type) {
-    case types.TOAST_ADD:{
+    case types.TOAST_ADD: {
       const { toast, toastId } = action;
-      return state.set(toastId, Map(toast))
+      return state.set(toastId, Map(toast));
     }
-    case types.TOAST_UPDATE:{
+    case types.TOAST_UPDATE: {
       const { toast, toastId } = action;
       return state.mergeIn([toastId], Map(toast));
     }
-    case types.TOAST_REMOVE:{
+    case types.TOAST_REMOVE: {
       const { toastId } = action;
       return state.delete(toastId);
     }
-    case types.LOGOUT:{
+    case types.LOGOUT: {
       return initialState;
     }
-    default: 
-      return state
+    default:
+      return state;
   }
 }

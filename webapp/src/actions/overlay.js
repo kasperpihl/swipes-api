@@ -1,49 +1,49 @@
-import * as types from '../constants/ActionTypes'
+import * as types from '../constants/ActionTypes';
 
 const validateOverlay = (overlay) => {
-  if(typeof overlay === 'string'){
+  if (typeof overlay === 'string') {
     overlay = {
       component: overlay,
-      title: overlay
-    }
+      title: overlay,
+    };
   }
   return overlay;
-}
+};
 const fireOnCloseForOverlays = (overlays, index) => {
   overlays.findLastEntry((o, i) => {
-    if(typeof o.get('onClose') === 'function'){
+    if (typeof o.get('onClose') === 'function') {
       o.get('onClose')();
     }
-    if(typeof index !== 'undefined'){
+    if (typeof index !== 'undefined') {
       return (i === (index + 1));
     }
     return false;
-  })
-}
-export function clear(index){
+  });
+};
+export function clear(index) {
   return (dispatch, getState) => {
     const overlays = getState().get('overlays');
     fireOnCloseForOverlays(overlays, index);
-    dispatch({ type: types.CLEAR_OVERLAY, index })
-  }
+    dispatch({ type: types.CLEAR_OVERLAY, index });
+  };
 }
 
-export function set(overlay){
+export function set(overlay) {
   return (dispatch, getState) => {
     overlay = validateOverlay(overlay);
     const overlays = getState().get('overlays');
     fireOnCloseForOverlays(overlays);
-    dispatch({ type: types.SET_OVERLAY, overlay })
-  }
-
+    dispatch({ type: types.SET_OVERLAY, overlay });
+  };
 }
-export function pop(){
+
+export function pop() {
   return (dispatch, getState) => {
     const overlays = getState().get('overlays');
     fireOnCloseForOverlays(overlays, overlays.size - 2);
-    dispatch({ type: types.POP_OVERLAY })
-  }
+    dispatch({ type: types.POP_OVERLAY });
+  };
 }
-export function push(overlay){
+export function push(overlay) {
   return { type: types.PUSH_OVERLAY, overlay };
 }

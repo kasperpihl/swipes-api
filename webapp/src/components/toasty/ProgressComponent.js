@@ -1,38 +1,35 @@
-import React, { Component, PropTypes } from 'react'
-import ProgressBar from 'progressbar.js'
+import React, { Component, PropTypes } from 'react';
+import ProgressBar from 'progressbar.js';
 
 class ProgressCircle extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  componentWillReceiveProps(nextProps) {
-    this.bar.animate(nextProps.value);
+    super(props);
+    this.state = {};
   }
   componentDidMount() {
-    const { value } = this.props
+    const { value } = this.props;
 
-    const bar = new ProgressBar.Circle( this.refs.toastProgress, {
+    const bar = new ProgressBar.Circle(this.refs.toastProgress, {
       color: '#000C2F',
       strokeWidth: 7,
       trailWidth: 5,
       easing: 'easeInOut',
       duration: 1000,
       text: {
-        autoStyleContainer: false
+        autoStyleContainer: false,
       },
-      step: function(state, circle) {
-        circle.path.setAttribute('stroke', "url(#linear)");
+      step(state, circle) {
+        circle.path.setAttribute('stroke', 'url(#linear)');
         circle.path.setAttribute('stroke-width', '7');
 
-        const value = Math.round(circle.value() * 100) + '%';
+        const newValue = `${Math.round(circle.value() * 100)}%`;
 
-        if (value === 0) {
+        if (newValue === 0) {
           circle.setText('');
         } else {
-          circle.setText(value);
+          circle.setText(newValue);
         }
-      }
+      },
     });
 
     bar.text.style.fontFamily = 'Roboto';
@@ -41,26 +38,29 @@ class ProgressCircle extends Component {
     bar.animate(value);
     this.bar = bar;
   }
+  componentWillReceiveProps(nextProps) {
+    this.bar.animate(nextProps.value);
+  }
   render() {
     return (
-      <div ref="toastProgress" style={{width: '80%', height: '80%'}}>
+      <div ref="toastProgress" style={{ width: '80%', height: '80%' }}>
         <svg className="svg svg--defs">
           <defs>
             <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#fc00ff"/>
-              <stop offset="100%" stopColor="#00dbde"/>
+              <stop offset="0%" stopColor="#fc00ff" />
+              <stop offset="100%" stopColor="#00dbde" />
             </linearGradient>
           </defs>
         </svg>
       </div>
-    )
+    );
   }
 }
 
-export default ProgressCircle
+export default ProgressCircle;
 
 const { number } = PropTypes;
 
 ProgressCircle.propTypes = {
-  value: number
-}
+  value: number,
+};

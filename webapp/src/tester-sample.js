@@ -1,3 +1,4 @@
+/* eslint-disable */
 let view;
 import React from 'react'
 
