@@ -75,12 +75,12 @@ export function isImage(file) {
 }
 
 export function bindAll(context, methodNames) {
-  methodNames.map((methodName) => {
+  methodNames.forEach((methodName) => {
     if (typeof context[methodName] !== 'function') {
       console.warn('trying to bind non-existing function', methodName);
+    } else {
+      context[methodName] = context[methodName].bind(context);
     }
-    context[methodName] = context[methodName].bind(context);
-    return undefined;
   });
 }
 export function size(obj) {
