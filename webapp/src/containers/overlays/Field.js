@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
-import * as actions from '../../actions';
 import * as fields from '../../components/fields';
 
 class Field extends Component {
@@ -47,16 +46,14 @@ function mapStateToProps(state) {
   };
 }
 
-const { object } = PropTypes;
+const { func } = PropTypes;
 
 Field.propTypes = {
   data: map,
   settings: map,
   field: map,
-  delegate: object,
+  delegate: func,
 };
 
-const ConnectedField = connect(mapStateToProps, {
-  onDoing: actions.doStuff,
-})(Field);
+const ConnectedField = connect(mapStateToProps, null)(Field);
 export default ConnectedField;

@@ -57,12 +57,12 @@ class StepField extends Component {
 
 export default StepField;
 
-const { string, object, bool } = PropTypes;
+const { string, object, bool, func } = PropTypes;
 
 StepField.propTypes = {
   icon: string,
   title: string,
-  delegate: object,
+  delegate: func,
   fullscreen: bool,
   iconColor: string,
   children: object,

@@ -127,7 +127,7 @@ function mapStateToProps(state) {
   }
 
   return {
-    goalsState,
+    goals: goalsState,
     currentGoal: goalsState.getIn([state.getIn(['main', 'activeGoal'])]),
     cachedData: state.getIn(['main', 'cache']),
     users,
