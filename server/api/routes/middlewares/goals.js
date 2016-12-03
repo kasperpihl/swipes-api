@@ -107,7 +107,6 @@ const goalsInsert = (req, res, next) => {
     .then(() => {
       res.locals.goalWithMeta = goal;
       res.locals.eventType = 'goal_created';
-      res.locals.eventMessage = `Goal "${goal.title}" has been created`;
       res.locals.eventData = goal;
 
       return next();
@@ -126,7 +125,6 @@ const goalsDelete = (req, res, next) => {
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
       res.locals.eventType = 'goal_deleted';
-      res.locals.eventMessage = 'Goal has been deleted';
       res.locals.eventData = { id: goal_id };
 
       return next();
@@ -164,7 +162,6 @@ const goalsUpdate = (req, res, next) => {
   dbGoalsUpdateSingle({ goal_id: goal.id, properties: goal })
     .then(() => {
       res.locals.eventType = 'goal_updated';
-      res.locals.eventMessage = 'Goal has been updated';
       res.locals.eventData = goal;
 
       return next();
