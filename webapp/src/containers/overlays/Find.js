@@ -5,7 +5,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import { main, search, api, modal } from '../../actions';
 import { bindAll } from '../../classes/utils';
 
-import TabBar from '../../components/nav-bar/TabBar';
+import TabBar from '../../components/tab-bar/TabBar';
 import '../../components/find/styles/find.scss';
 
 import Activities from '../../components/find/Activities';
