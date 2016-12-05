@@ -3,9 +3,9 @@ import React, { Component, PropTypes } from 'react';
 import Icon from '../icons/Icon';
 import { bindAll } from '../../classes/utils';
 
-import './styles/nav-bar.scss';
+import './styles/tab-bar.scss';
 
-class NavBar extends Component {
+class TabBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,7 +76,7 @@ class NavBar extends Component {
     this.callDelegate('navTabDidChange', index);
   }
   renderIcon(icon, i) {
-    return <Icon svg={icon} className="sw-nav-bar__icon sw-nav-bar__icon--svg" data-index={i} />;
+    return <Icon svg={icon} className="tab-bar__icon tab-bar__icon--svg" data-index={i} />;
   }
   renderSlider() {
     const { activeTab, sliderClips } = this.state;
@@ -92,19 +92,19 @@ class NavBar extends Component {
     }
 
     return (
-      <div className="sw-nav-bar__slider" style={styles} />
+      <div className="tab-bar__slider" style={styles} />
     );
   }
   render() {
     const { tabs } = this.props;
     const { activeTab } = this.state;
-    const rootClass = 'sw-nav-bar';
+    const rootClass = 'tab-bar';
 
     const tabsHTML = tabs.map((tab, i) => {
-      let tabClass = 'sw-nav-bar__tab';
+      let tabClass = 'tab-bar__tab';
 
       if (i === activeTab) {
-        tabClass += ' sw-nav-bar__tab--active';
+        tabClass += ' tab-bar__tab--active';
       }
 
       return (
@@ -121,11 +121,11 @@ class NavBar extends Component {
   }
 }
 
-export default NavBar;
+export default TabBar;
 
 const { string, arrayOf, number, object } = PropTypes;
 
-NavBar.propTypes = {
+TabBar.propTypes = {
   tabs: arrayOf(
     string,
   ),

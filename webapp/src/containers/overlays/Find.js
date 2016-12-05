@@ -5,7 +5,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import { main, search, api, modal } from '../../actions';
 import { bindAll } from '../../classes/utils';
 
-import NavBar from '../../components/nav-bar/NavBar';
+import TabBar from '../../components/nav-bar/TabBar';
 import '../../components/find/styles/find.scss';
 
 import Activities from '../../components/find/Activities';
@@ -177,7 +177,7 @@ class Find extends Component {
 
     return (
       <div className="find-overlay__tabs">
-        <NavBar
+        <TabBar
           tabs={tabs}
           onChange={this.onChange}
           align="left"
