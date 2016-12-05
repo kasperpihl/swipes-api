@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { bindAll } from '../../classes/utils';
 
-import NavBar from '../nav-bar/NavBar';
+import TabBar from '../tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
 
 import './styles/goals-list.scss';
@@ -133,7 +133,7 @@ class GoalList extends Component {
   renderTabbar() {
     return (
       <div className="goals__nav-bar">
-        <NavBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex} />
+        <TabBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex} />
       </div>
     );
   }
