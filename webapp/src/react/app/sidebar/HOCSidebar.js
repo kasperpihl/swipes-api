@@ -2,7 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import Icon from '../../icons/Icon';
 import { navigation } from '../../../actions';
+
+import './styles/sidebar.scss';
 
 
 class HOCSidebar extends Component {
@@ -14,14 +17,17 @@ class HOCSidebar extends Component {
   clickedItem(e) {
     const { navigateToId } = this.props;
     const id = e.target.getAttribute('data-id');
+
     navigateToId(id);
   }
-  renderItem(id, title) {
+  renderTeam(id) {
     const { navId } = this.props;
-    let className = 'sidebar-item';
+    let className = 'sidebar__team';
+
     if (id === navId) {
-      className += ' active';
+      className += ' sidebar__team--active';
     }
+
     return (
       <div
         onClick={this.clickedItem}
@@ -29,32 +35,56 @@ class HOCSidebar extends Component {
         key={id}
         data-id={id}
       >
-        {title}
+        <Icon svg="SwipesLogo" className="sidebar__icon" />
+      </div>
+    );
+  }
+  renderItem(id, image) {
+    const { navId } = this.props;
+    let className = 'sidebar__item';
+
+    if (id === navId) {
+      className += ' sidebar__item--active';
+    }
+
+    return (
+      <div
+        onClick={this.clickedItem}
+        className={className}
+        key={id}
+        data-id={id}
+      >
+        <img src={image} className="sidebar__image" alt="" />
       </div>
     );
   }
   renderTeams() {
     const { me } = this.props;
+
     if (!me) {
       return undefined;
     }
 
-    return me.get('organizations').map(o => this.renderItem(o.get('id'), o.get('name')));
+    return me.get('organizations').map(o => this.renderTeam(o.get('id')));
   }
   renderProfile() {
     const { me } = this.props;
+
     if (!me) {
       return undefined;
     }
-    return this.renderItem(me.get('id'), me.get('name'));
+
+    return this.renderItem(me.get('id'), me.get('profile_pic'));
   }
   renderStore() {
     // For later
   }
   render() {
     return (
-      <div className="sw-sidebar">
-        {this.renderTeams()}
+      <div className="sidebar">
+        <div className="sidebar__teams">
+          {this.renderTeams()}
+        </div>
         {this.renderProfile()}
       </div>
     );
