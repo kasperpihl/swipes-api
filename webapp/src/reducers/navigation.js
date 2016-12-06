@@ -19,22 +19,15 @@ export default function history(state = initialState, action) {
       });
     }
     case types.NAVIGATION_PUSH: {
-      return state.push(fromJS(action.overlay));
+      return state.updateIn(['history', state.get('id')], s => s.push(fromJS(payload)));
     }
     case types.NAVIGATION_POP: {
-      return state.butLast();
-    }
-    case types.NAVIGATION_POP_TO: {
-      if (typeof action.index === 'number') {
-        return state.slice(0, action.index + 1);
-      }
-      return state.clear();
-    }
-    case types.NAVIGATION_POP_TO_ROOT: {
-      if (typeof action.index === 'number') {
-        return state.slice(0, action.index + 1);
-      }
-      return state.clear();
+      return state.updateIn(['history', state.get('id')], (s) => {
+        if (payload && typeof payload.index === 'number') {
+          return s.slice(0, payload.index + 1);
+        }
+        return s.butLast();
+      });
     }
     case types.LOGOUT:
       return initialState;
