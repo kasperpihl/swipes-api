@@ -7,7 +7,12 @@
   display: flex;
   flex-direction: column;
   z-index: 3;
-
+  &__nav-bar {
+    @include size(100%, auto);
+    max-width: 600px;
+    z-index: 5;
+    margin: 0 auto;
+  }
   &__scroller {
     @include size(100%);
     position: relative;

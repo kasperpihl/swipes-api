@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { map } from 'react-immutable-proptypes';
-import Assign from '../assigning/Assigning';
+import Assign from 'components/assigning/Assigning';
 import './styles/goal-overview.scss';
 
 class GoalOverview extends Component {
@@ -8,7 +8,7 @@ class GoalOverview extends Component {
     const { goal } = this.props;
     const numberOfSteps = goal.get('steps').size;
     const numberOfCompletedSteps = goal.get('currentStepIndex');
-    const completedPercentage = (100 / numberOfSteps) * numberOfCompletedSteps;
+    const completedPercentage = Math.min(99, 100 - ((100 / numberOfSteps) * numberOfCompletedSteps));
     const completedClipping = {
       WebkitClipPath: `inset(0 ${completedPercentage}% 0 0 round 3px)`,
     };
