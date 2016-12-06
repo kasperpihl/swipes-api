@@ -7,17 +7,33 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.clickedBack = this.clickedBack.bind(this);
+    this.clickedCrumb = this.clickedCrumb.bind(this);
   }
-  renderCrumb(title, index, numberOfCrumbs) {
+  callDelegate(name) {
+    const { delegate } = this.props;
+    if (delegate && typeof delegate[name] === 'function') {
+      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
+    return undefined;
+  }
+  clickedBack() {
+    this.callDelegate('navbarClickedBack');
+  }
+  clickedCrumb(e) {
+    const i = parseInt(e.target.getAttribute('data-index'), 10);
+    this.callDelegate('navbarClickedCrumb', i);
+  }
+  renderCrumb(title, i, numberOfCrumbs) {
     let className = 'bread-crumbs__crumb';
 
-    if ((index + 1) === numberOfCrumbs) {
+    if ((i + 1) === numberOfCrumbs) {
       className += ' bread-crumbs__crumb--last';
     }
 
     return (
-      <div className={className} key={index}>
-        <div className="bread-crumbs__title">
+      <div className={className} key={i} onClick={this.clickedCrumb} data-index={i}>
+        <div className="bread-crumbs__title" data-index={i}>
           {title}
         </div>
         <div className="bread-crumbs__seperator">
@@ -27,13 +43,13 @@ class NavBar extends Component {
     );
   }
   renderBreadCrumbs() {
-    const { data } = this.props;
-    if (!data) {
+    const { history } = this.props;
+    if (!history) {
       return undefined;
     }
 
-    const breadCrumbsHTML = data.map((crumb, i) =>
-      this.renderCrumb(crumb.title, i, data.length));
+    const breadCrumbsHTML = history.map((crumb, i) =>
+      this.renderCrumb(crumb.title, i, history.length));
 
     return (
       <div className="bread-crumbs">
@@ -42,12 +58,12 @@ class NavBar extends Component {
     );
   }
   renderBackButton() {
-    const { data } = this.props;
-    if (!data || data.length === 1) {
+    const { history } = this.props;
+    if (!history || history.length === 1) {
       return undefined;
     }
     return (
-      <div className="nav-bar__button nav-bar__button--back">
+      <div className="nav-bar__button nav-bar__button--back" onClick={this.clickedBack}>
         <Icon svg="ArrowLeftIcon" className="nav-bar__icon" />
       </div>
     );
@@ -68,8 +84,9 @@ class NavBar extends Component {
 
 export default NavBar;
 
-const { string } = PropTypes;
+const { array, object } = PropTypes;
 
 NavBar.propTypes = {
-  // removeThis: string.isRequired,
+  history: array,
+  delegate: object,
 };

@@ -18,7 +18,7 @@ class HOCViewController extends Component {
     const { pop } = this.props;
     pop();
   }
-  navbarClickedItem(navbar, i) {
+  navbarClickedCrumb(navbar, i) {
     const { popTo } = this.props;
     popTo(i);
   }
@@ -28,11 +28,11 @@ class HOCViewController extends Component {
       return undefined;
     }
 
-    const navbarData = history.map((el) => {
-      // Map the data for navbar here.
-    });
+    const navbarData = history.map(el => ({
+      title: el.get('title'),
+    })).toArray();
 
-    // return <Navbar history={navbarData} delegate={this} />;
+    return <Navbar history={navbarData} delegate={this} />;
   }
   renderContent() {
     const { history } = this.props;
