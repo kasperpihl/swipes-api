@@ -4,6 +4,7 @@ import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
+
 class HOCGoalStep extends Component {
   constructor(props) {
     super(props);
@@ -13,16 +14,25 @@ class HOCGoalStep extends Component {
   componentDidMount() {
   }
   render() {
-    const { goal } = this.props;
+    const { step, stepIndex } = this.props;
+    return <div>Goaly</div>;
     return (
-      <GoalStep goal={goal} delegate={this} />
+      <GoalStep
+        stepIndex={stepIndex}
+        step={step}
+        goal={goal}
+        delegate={this}
+      />
     );
   }
 }
 
 function mapStateToProps(state, ownProps) {
+  const { goalId, stepIndex } = ownProps;
   return {
-    goal: state.getIn(['goals', ownProps.goalId]),
+    goal: state.getIn(['goals', goalId]),
+    step: state.getIn(['goals', goalId, 'steps', stepIndex]),
+    cachedData: state.getIn(['main', 'cache', goalId]),
   };
 }
 

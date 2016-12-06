@@ -1,25 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import Assign from 'components/assigning/Assigning';
+import { nearestAttribute } from 'classes/utils';
 import './styles/goal-overview.scss';
 
 class GoalOverview extends Component {
-  renderProgressBar() {
-    const { goal } = this.props;
-    const numberOfSteps = goal.get('steps').size;
-    const numberOfCompletedSteps = goal.get('currentStepIndex');
-    const completedPercentage = Math.min(99, 100 - ((100 / numberOfSteps) * numberOfCompletedSteps));
-    const completedClipping = {
-      WebkitClipPath: `inset(0 ${completedPercentage}% 0 0 round 3px)`,
-    };
-
-    return (
-      <div className="progress-bar">
-        <div className="progress-bar__progress" style={completedClipping} />
-      </div>
-    );
+  constructor(props) {
+    super(props);
+    this.clickedStep = this.clickedStep.bind(this);
   }
-  renderStepListItem(completed, title, assignees, index, currentStepIndex) {
+  callDelegate(name) {
+    const { delegate } = this.props;
+    if (delegate && typeof delegate[name] === 'function') {
+      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
+
+    return undefined;
+  }
+  clickedStep(e) {
+    const stepIndex = parseInt(nearestAttribute(e.target, 'data-index'), 10);
+    this.callDelegate('goalOverviewClickedStep', stepIndex);
+  }
+  renderStepListItem(step, index, currentStepIndex) {
+    const completed = step.get('completed');
+    const title = step.get('title');
+    const assignees = step.get('assignees');
     let className = 'goal-overview__step';
 
     if (completed) {
@@ -31,7 +36,7 @@ class GoalOverview extends Component {
     }
 
     return (
-      <div className={className} key={index}>
+      <div className={className} data-index={index} key={index} onClick={this.clickedStep}>
         <div className="goal-overview__step-status" />
         <div className="goal-overview__step-title">{index + 1}. {title}</div>
         <div className="goal-overview__assignees">
@@ -43,15 +48,12 @@ class GoalOverview extends Component {
   renderStepList() {
     const { goal } = this.props;
     const steps = goal.get('steps');
-    const currentStepIndex = goal.get('currentStepIndex');
-    const renderStepsHTML = steps.map((step, i) => this.renderStepListItem(step.get('completed'), step.get('title'), step.get('assignees'), i, currentStepIndex));
-
-    return renderStepsHTML;
+    const stepIndex = goal.get('currentStepIndex');
+    return steps.map((step, i) => this.renderStepListItem(step, i, stepIndex));
   }
   render() {
     return (
       <div className="goal-overview">
-        {this.renderProgressBar()}
         {this.renderStepList()}
       </div>
     );
@@ -60,6 +62,8 @@ class GoalOverview extends Component {
 
 export default GoalOverview;
 
+const { object } = PropTypes;
 GoalOverview.propTypes = {
   goal: map,
+  delegate: object,
 };

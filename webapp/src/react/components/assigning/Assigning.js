@@ -14,7 +14,7 @@ class Assigning extends Component {
   }
   handleClick(e) {
     const { editable, clickAssign } = this.props;
-
+    e.stopPropagation();
     if (editable && clickAssign) {
       clickAssign(e);
     }

@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { map } from 'react-immutable-proptypes';
+import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll } from 'classes/utils';
 import { modal, me } from 'actions';
-import ConnectRow from '../../components/services/ConnectRow';
-import '../../components/services/services.scss';
+import ConnectRow from './ConnectRow';
+import './services.scss';
 
 /* global nodeRequire, ipcListener */
 
@@ -48,9 +48,9 @@ class Services extends Component {
   }
   renderConnectedServices() {
     const { myServices: my, services } = this.props;
+    console.log('my', my);
     const sortedServices = my.sort((a, b) => {
       const res = (a.get('service_name') < b.get('service_name')) ? -1 : 1;
-
       return res;
     });
 
@@ -72,12 +72,11 @@ class Services extends Component {
   }
   renderServicesToConnect() {
     const { services: se } = this.props;
-
+    console.log('services', se);
     const sortedKeys = se.sort((k1, k2) => {
       const res = (se.getIn([k1, 'title']) < se.getIn([k2, 'title'])) ? -1 : 1;
-
-      return res.toArray();
-    });
+      return res;
+    }).toArray();
 
     return sortedKeys.map((service, key) => {
       const data = {
@@ -124,11 +123,11 @@ class Services extends Component {
   }
 }
 
-const { func, array } = PropTypes;
+const { func, array, object } = PropTypes;
 
 Services.propTypes = {
   disconnectService: func,
-  myServices: array,
+  myServices: list,
   loadModal: func,
   services: map,
 };

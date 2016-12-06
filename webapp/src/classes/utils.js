@@ -7,6 +7,15 @@ export function isShareURL(url) {
   return false;
 }
 
+export function nearestAttribute(target, attribute) {
+  let value;
+  do {
+    value = target.getAttribute(attribute);
+    target = target.parentNode;
+  } while (!value && typeof target.getAttribute === 'function');
+  return value;
+}
+
 export function requireParams() {
   // if (typeof obj !== 'object') {
   //   return console.warn('requireParams should be {varName}');
