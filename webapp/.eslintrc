@@ -16,5 +16,6 @@
     "no-param-reassign": 0,
     "no-console": ["error", { allow: ["warn", "error"] }],
     "no-alert": 0,
+    "import/no-unresolved": 0,
   }
 }
