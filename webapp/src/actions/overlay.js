@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 
 const validateOverlay = (overlay) => {
   if (typeof overlay === 'string') {

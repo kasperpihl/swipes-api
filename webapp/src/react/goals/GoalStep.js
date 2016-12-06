@@ -11,7 +11,7 @@ import StepSubmission from './StepSubmission';
 import ProgressBar from '../swipes-ui/ProgressBar';
 
 import GoalsUtil from './goals_util';
-import { throttle, bindAll } from '../../classes/utils';
+import { throttle, bindAll } from 'classes/utils';
 
 // styles
 import './styles/goal-step.scss';

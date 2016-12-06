@@ -12,7 +12,7 @@ import {
 import { map } from 'react-immutable-proptypes';
 import StyleControl from './StyleControl';
 import NoteLink from './NoteLink';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import './styles/note-editor.scss';
 

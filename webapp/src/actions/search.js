@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 import { request } from './api';
 
 const search = query => (dispatch) => {

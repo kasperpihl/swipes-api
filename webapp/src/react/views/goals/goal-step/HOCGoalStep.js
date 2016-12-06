@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class HOCGoalStep extends Component {

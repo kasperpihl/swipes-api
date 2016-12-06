@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 
 export function setStatus(status) {
   return { type: types.SET_STATUS, status };

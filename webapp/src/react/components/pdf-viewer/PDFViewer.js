@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import PDFRender from './PDFRender';
-import { bindAll } from '../../../classes/utils';
+import { bindAll } from 'classes/utils';
 import Icon from 'Icon';
 // import { ArrowLeftIcon, ArrowRightIcon, AddIcon, MinusIcon } from '../icons'
 

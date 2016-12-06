@@ -1,5 +1,5 @@
-import * as types from '../constants/ActionTypes';
-import { randomString } from '../classes/utils';
+import * as types from 'constants';
+import { randomString } from 'classes/utils';
 
 export function remove(toastId) {
   return { type: types.TOAST_REMOVE, toastId };

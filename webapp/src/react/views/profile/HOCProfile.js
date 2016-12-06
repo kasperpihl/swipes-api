@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { navigation, main, modal } from '../../../actions';
-import { bindAll } from '../../../classes/utils';
+import { navigation, main, modal } from 'actions';
+import { bindAll } from 'classes/utils';
 import './profile.scss';
 
 class HOCProfile extends Component {

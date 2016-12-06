@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import { apiUrl } from '../../actions/api';
-import { bindAll } from '../../classes/utils';
+import { apiUrl } from 'actions/api';
+import { bindAll } from 'classes/utils';
 
 import './services.scss'
 

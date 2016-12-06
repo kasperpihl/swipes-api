@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import WorkflowStepListItem from './WorkflowStepListItem';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 import './styles/workflow-steplist.scss';
 
 class WorkflowStepList extends Component {

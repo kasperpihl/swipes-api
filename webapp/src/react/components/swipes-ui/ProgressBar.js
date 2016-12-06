@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import './styles/progress-bar.scss';
 

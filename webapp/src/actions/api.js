@@ -1,5 +1,5 @@
 import { CALL_API } from 'redux-api-middleware';
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 
 const apiUrl = `${window.location.origin}/v1/`;
 

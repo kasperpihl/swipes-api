@@ -12,7 +12,7 @@ import React, { Component, PropTypes } from 'react';
  */
 import './swipes-card.scss';
 
-import { bindAll } from '../../../classes/utils';
+import { bindAll } from 'classes/utils';
 import SwipesCardItem from './SwipesCardItem';
 
 export default class SwipesCard extends Component {

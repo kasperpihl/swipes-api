@@ -1,7 +1,7 @@
 import React, { Component, PropTypes, Children } from 'react'
 import './styles/slider.scss'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import { bindAll } from '../../classes/utils'
+import { bindAll } from 'classes/utils'
 
 class Slider extends Component {
   constructor(props) {

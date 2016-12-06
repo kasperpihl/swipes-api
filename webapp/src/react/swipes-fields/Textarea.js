@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import ReactTextarea from 'react-textarea-autosize';
 
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import './styles/textarea.scss';
 

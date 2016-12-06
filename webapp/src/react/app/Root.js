@@ -4,14 +4,14 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import Router from '../../Router';
-import configureStore from '../../store/configureStore';
+import Router from 'src/Router';
+import configureStore from 'src/store/configureStore';
 // Get classes that needs socket
-import Socket from '../../classes/socket';
-import IpcListener from '../../classes/ipc-listener';
-import SwipesUrlProvider from '../../classes/swipes-url-provider';
+import Socket from 'classes/socket';
+import IpcListener from 'classes/ipc-listener';
+import SwipesUrlProvider from 'classes/swipes-url-provider';
 // import Slack from '../classes/slack/slack'
-import Notifications from '../../classes/notifications';
+import Notifications from 'classes/notifications';
 
 const store = configureStore();
 

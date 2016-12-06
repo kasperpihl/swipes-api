@@ -1,6 +1,6 @@
 import { bindAll, debounce } from './utils';
 import Subscriber from './subscriber';
-import { api } from '../actions';
+import { api } from 'actions';
 
 export default class SwipesUrlProvider {
   constructor(store) {

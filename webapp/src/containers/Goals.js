@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
-import { overlay, main, goals } from '../actions';
-import { bindAll } from '../classes/utils';
+import { overlay, main, goals } from 'actions';
+import { bindAll } from 'classes/utils';
 
 import GoalStep from '../components/goals/GoalStep';
 import GoalList from '../components/goals/GoalList';

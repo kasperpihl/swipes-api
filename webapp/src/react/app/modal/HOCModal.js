@@ -4,9 +4,9 @@ import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SwipesModal from '../../modals/SwipesModal';
 import PreviewModal from '../../modals/PreviewModal';
-import { modal as modalActions } from '../../../actions';
+import { modal as modalActions } from 'actions';
 
-import { bindAll } from '../../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 class HOCModal extends Component {
   constructor(props) {

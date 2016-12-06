@@ -3,7 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Navbar from '../../components/nav-bar/NavBar';
-import { navigation } from '../../../actions';
+import { navigation } from 'actions';
 import * as views from '../../views';
 
 class HOCViewController extends Component {

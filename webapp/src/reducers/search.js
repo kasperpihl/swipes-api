@@ -1,5 +1,5 @@
 import { fromJS, List } from 'immutable';
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 
 const initialState = fromJS({
   query: null,
