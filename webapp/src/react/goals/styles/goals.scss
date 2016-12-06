@@ -10,9 +10,9 @@
   padding-top: 30px;
   position: relative;
 
-  &__nav-bar {
+  &__tab-bar {
     @include size(100%, auto);
-    max-width: 600px;
+    max-width: 780px;
     z-index: 5;
     margin: 0 auto;
   }
