@@ -1,0 +1,11 @@
+{
+  "apps" : [{
+    "name"        : "swipes-queue",
+    "script"      : "dist/index.js",
+    "watch"       : "./dist/",
+    "node_args"   : ["--harmony"],
+    "env_staging" : {
+
+    }
+  }]
+}
