@@ -17,15 +17,15 @@ module.exports = {
   resolve: {
     root: path.resolve(__dirname),
     alias: {
-      src: 'src/',
-      app: 'src/react/app/',
+      src: 'src',
+      app: 'src/react/app',
       constants: 'src/constants/ActionTypes',
       components: 'src/react/components',
-      styles: 'src/react/global-styles/',
-      actions: 'src/actions/',
-      views: 'src/react/views/',
+      styles: 'src/react/global-styles',
+      actions: 'src/actions',
+      views: 'src/react/views',
       Icon: 'src/react/icons/Icon',
-      classes: 'src/classes/'
+      classes: 'src/classes'
     },
     extensions: ['', '.js', '.scss']
   },
