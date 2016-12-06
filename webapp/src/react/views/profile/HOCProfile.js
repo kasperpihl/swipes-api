@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { overlay, main, modal } from '../../actions';
-import { bindAll } from '../../classes/utils';
-import '../../components/profile/profile.scss';
+import { overlay, main, modal } from '../../../actions';
+import { bindAll } from '../../../classes/utils';
+import './profile.scss';
 
-class Profile extends Component {
+class HOCProfile extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -53,17 +53,17 @@ function mapStateToProps(state) {
 
 const { func } = PropTypes;
 
-Profile.propTypes = {
+HOCProfile.propTypes = {
   loadModal: func,
   logout: func,
   pushOverlay: func,
   me: map,
 };
 
-const ConnectedProfile = connect(mapStateToProps, {
+const ConnectedHOCProfile = connect(mapStateToProps, {
   pushOverlay: overlay.push,
   loadModal: modal.load,
   logout: main.logout,
-})(Profile);
+})(HOCProfile);
 
-export default ConnectedProfile;
+export default ConnectedHOCProfile;

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { api } from '../../actions';
+import { api, navigation } from '../../actions';
 
 import Topbar from './topbar/Topbar';
 import Modal from './modal/HOCModal';
@@ -21,7 +21,13 @@ class HOCApp extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    this.props.request('rtm.start');
+    const { request, navInit } = this.props;
+    navInit();
+    request('rtm.start').then((res) => {
+      if (res && res.ok) {
+        navInit();
+      }
+    });
 
     // Massive hack to not be able to drop files into swipes so it wouldn't redirect
 
@@ -53,21 +59,16 @@ class HOCApp extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    navId: state.getIn(['navigation', 'currentId']),
-  };
-}
-
-const { func, string, object } = PropTypes;
+const { func, object } = PropTypes;
 
 HOCApp.propTypes = {
   request: func,
-  navId: string,
+  navInit: func,
   location: object,
 };
 
-const ConnectedHOCApp = connect(mapStateToProps, {
+const ConnectedHOCApp = connect(null, {
   request: api.request,
+  navInit: navigation.init,
 })(HOCApp);
 export default ConnectedHOCApp;

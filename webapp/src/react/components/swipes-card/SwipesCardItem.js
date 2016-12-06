@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { randomString, bindAll, decodeHtml } from '../../classes/utils';
-import Icon from '../icons/Icon';
+import { randomString, bindAll, decodeHtml } from '../../../classes/utils';
+import Icon from '../../icons/Icon';
 
 class SwipesCardItem extends Component {
   constructor(props) {

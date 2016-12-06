@@ -1,5 +1,5 @@
-@import "../../global-styles/vars";
-@import "../../global-styles/mixins";
+@import "../../../global-styles/vars";
+@import "../../../global-styles/mixins";
 
 .workflow__list {
   @include size(100%, 100%)

@@ -1,20 +1,22 @@
-import * as types from '../constants/ActionTypes';
 import { fromJS } from 'immutable';
-const initialState = fromJS({
-  currentId: null,
-  histories: {
+import * as types from '../constants/ActionTypes';
 
-  },
+const initialState = fromJS({
+  id: null,
+  history: {},
 });
 
 export default function history(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case 'rtm.start': {
-      return state;
-    }
     case types.NAVIGATION_SET: {
-      return state.clear().push(fromJS(action.overlay));
+      return state.update((s) => {
+        s = s.set('id', payload.id);
+        if (payload.history) {
+          s = s.setIn(['history', payload.id], fromJS(payload.history));
+        }
+        return s;
+      });
     }
     case types.NAVIGATION_PUSH: {
       return state.push(fromJS(action.overlay));
