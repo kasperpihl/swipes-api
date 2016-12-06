@@ -12,9 +12,18 @@ class HOCSidebar extends Component {
   }
   componentDidMount() {
   }
+  renderTeams() {
+
+  }
+  renderProfile() {
+
+  }
+  renderStore() {
+    // For later
+  }
   render() {
     return (
-      <div className="className" />
+      <div className="sw-sidebar" />
     );
   }
 }

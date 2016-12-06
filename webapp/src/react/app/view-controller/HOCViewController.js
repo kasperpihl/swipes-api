@@ -20,7 +20,7 @@ class HOCViewController extends Component {
   }
   render() {
     return (
-      <div className="className" />
+      <div className="view-controller" />
     );
   }
 }

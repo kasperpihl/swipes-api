@@ -36,14 +36,10 @@ class HOCApp extends Component {
     });
   }
   render() {
-    let classes = 'main ';
-    const { mainClasses, location } = this.props;
+    const { location } = this.props;
 
-    if (mainClasses) {
-      classes += mainClasses.toArray().join(' ');
-    }
     return (
-      <div className={classes}>
+      <div className="app">
         <Topbar pathname={location.pathname} />
         <div className="content-wrapper">
           <Sidebar />
@@ -59,15 +55,15 @@ class HOCApp extends Component {
 
 function mapStateToProps(state) {
   return {
-    mainClasses: state.getIn(['main', 'mainClasses']),
+    navId: state.getIn(['navigation', 'currentId']),
   };
 }
 
-const { func, array, object } = PropTypes;
+const { func, string, object } = PropTypes;
 
 HOCApp.propTypes = {
   request: func,
-  mainClasses: array,
+  navId: string,
   location: object,
 };
 
