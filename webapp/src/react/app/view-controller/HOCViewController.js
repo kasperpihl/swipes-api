@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import { list } from 'react-immutable-proptypes';
+import Navbar from '../../components/nav-bar/NavBar';
+import { navigation } from '../../../actions';
 import * as views from '../../views';
 
 class HOCViewController extends Component {
@@ -12,8 +14,25 @@ class HOCViewController extends Component {
   }
   componentDidMount() {
   }
+  navbarClickedBack() {
+    const { pop } = this.props;
+    pop();
+  }
+  navbarClickedItem(navbar, i) {
+    const { popTo } = this.props;
+    popTo(i);
+  }
   renderNavbar() {
+    const { history } = this.props;
+    if (!history) {
+      return undefined;
+    }
 
+    const navbarData = history.map((el) => {
+      // Map the data for navbar here.
+    });
+
+    // return <Navbar history={navbarData} delegate={this} />;
   }
   renderContent() {
     const { history } = this.props;
@@ -23,14 +42,13 @@ class HOCViewController extends Component {
 
     const lastEl = history.last();
     const View = views[lastEl.get('component')];
-    console.log(views);
-    console.log('lastEl', lastEl.toJS(), View);
-
-    if (View) {
-      return (
-        <View />
-      );
+    if (!View) {
+      return <div>View ({lastEl.get('component')}) not found!</div>;
     }
+
+    return (
+      <View />
+    );
   }
   render() {
     return (
@@ -49,13 +67,15 @@ function mapStateToProps(state) {
   };
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
-const { string } = PropTypes;
+const { func } = PropTypes;
 HOCViewController.propTypes = {
-  // removeThis: PropTypes.string.isRequired
+  history: list,
+  popTo: func,
+  pop: func,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
-  onDoing: actions.doStuff,
+  popTo: navigation.popTo,
+  pop: navigation.pop,
 })(HOCViewController);
 export default ConnectedHOCViewController;

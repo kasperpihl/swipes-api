@@ -28,6 +28,9 @@ class NavBar extends Component {
   }
   renderBreadCrumbs() {
     const { data } = this.props;
+    if (!data) {
+      return undefined;
+    }
 
     const breadCrumbsHTML = data.map((crumb, i) =>
       this.renderCrumb(crumb.title, i, data.length));
@@ -39,6 +42,10 @@ class NavBar extends Component {
     );
   }
   renderBackButton() {
+    const { data } = this.props;
+    if (!data || data.length === 1) {
+      return undefined;
+    }
     return (
       <div className="nav-bar__button nav-bar__button--back">
         <Icon svg="ArrowLeftIcon" className="nav-bar__icon" />
