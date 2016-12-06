@@ -45,9 +45,13 @@ class HOCViewController extends Component {
     if (!View) {
       return <div>View ({lastEl.get('component')}) not found!</div>;
     }
+    let props = {};
 
+    if (lastEl.get('props')) {
+      props = lastEl.get('props').toObject();
+    }
     return (
-      <View />
+      <View {...props} />
     );
   }
   render() {

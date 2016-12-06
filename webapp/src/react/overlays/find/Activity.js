@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { mapContains } from 'react-immutable-proptypes';
-import { timeAgo } from '../../classes/time-utils';
+import { timeAgo } from 'classes/time-utils';
 import SwipesCard from '../swipes-card/SwipesCard';
 
 class Activity extends Component {

@@ -6,8 +6,8 @@ import {
   convertToRaw,
 } from 'draft-js';
 
-import SwipesCard from '../swipes-card/SwipesCard';
-import NoteEditor from '../note-editor/NoteEditor';
+import SwipesCard from 'components/swipes-card/SwipesCard';
+import NoteEditor from 'components/note-editor/NoteEditor';
 
 import './styles/note.scss';
 

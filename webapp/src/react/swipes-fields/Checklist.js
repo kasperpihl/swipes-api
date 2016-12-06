@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import Checkbox from '../swipes-ui/Checkbox';
+import Checkbox from 'components/swipes-ui/Checkbox';
 
 import './styles/checklist.scss';
 

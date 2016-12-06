@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { bindAll } from 'classes/utils';
 
-import TabBar from '../tab-bar/TabBar';
+import TabBar from 'components/tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
 
 import './styles/goals-list.scss';
@@ -27,10 +27,18 @@ class GoalList extends Component {
   }
   componentDidMount() {
   }
-  clickedListItem(id) {
-    this.props.setActiveGoal(id);
+  callDelegate(name) {
+    const { delegate } = this.props;
+    if (delegate && typeof delegate[name] === 'function') {
+      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
+    }
+
+    return undefined;
   }
-  navTabDidChange(nav, index) {
+  clickedListItem(id) {
+    this.callDelegate('goalListClickedGoal', id);
+  }
+  tabDidChange(nav, index) {
     if (this.state.tabIndex !== index) {
       this.setState({ tabIndex: index });
     }
@@ -159,8 +167,8 @@ const { func } = PropTypes;
 
 GoalList.propTypes = {
   setActiveGoal: func,
-  goals: map,
-  me: map,
+  goals: map.isRequired,
+  me: map.isRequired,
 };
 
 export default GoalList;

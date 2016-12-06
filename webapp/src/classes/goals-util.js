@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { requireParams } from 'classes/utils';
 // fields
-import * as fields from '../swipes-fields';
+import * as fields from 'src/react/swipes-fields';
 
 export default class GoalsUtil {
 

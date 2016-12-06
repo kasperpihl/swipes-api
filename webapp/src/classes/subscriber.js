@@ -1,4 +1,4 @@
-import { bindAll } from './utils';
+import { bindAll } from 'classes/utils';
 
 export default class Subscriber {
   constructor() {

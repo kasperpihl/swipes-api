@@ -1,5 +1,5 @@
 import * as types from 'constants';
-import { bindAll } from './utils';
+import { bindAll } from 'classes/utils';
 
 export default class Socket {
   constructor(store) {

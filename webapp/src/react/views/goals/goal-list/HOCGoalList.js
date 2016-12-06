@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import * as actions from 'actions';
+import GoalList from './GoalList';
+
 
 class HOCGoalList extends Component {
   constructor(props) {
@@ -11,16 +13,42 @@ class HOCGoalList extends Component {
   }
   componentDidMount() {
   }
+  goalListClickedGoal(goalList, goalId) {
+    const {
+      navPush,
+      goals,
+    } = this.props;
+    navPush({
+      component: 'GoalOverview',
+      title: goals.get(goalId).get('title'),
+      props: {
+        goal: goals.get(goalId),
+      },
+    });
+  }
   render() {
+    const { goals, me } = this.props;
     return (
-      <div className="className" />
+      <GoalList me={me} goals={goals} delegate={this} />
     );
   }
 }
 
 function mapStateToProps(state) {
+  const users = state.get('users');
+  let goalsState = state.get('goals');
+
+  if (goalsState) {
+    goalsState = goalsState.map(g => g.updateIn(['steps'], steps => steps.map((s) => {
+      const assignees = s.get('assignees');
+      return s.set('assignees', assignees.map(userId => users.get(userId)));
+    })));
+  }
+
   return {
-    main: state.get('main'),
+    goals: goalsState,
+    users,
+    me: state.get('me'),
   };
 }
 
@@ -31,6 +59,6 @@ HOCGoalList.propTypes = {
 };
 
 const ConnectedHOCGoalList = connect(mapStateToProps, {
-  onDoing: actions.doStuff,
+  navPush: actions.navigation.push,
 })(HOCGoalList);
 export default ConnectedHOCGoalList;
