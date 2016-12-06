@@ -1,0 +1,42 @@
+@import '../../../global-styles/vars/';
+@import '../../../global-styles/mixins/';
+
+.sidebar {
+  @include flex(center, space-between, column);
+  @include size(66px, 100%);
+  background-color: #FCFCFC;
+  flex: none;
+  padding-bottom: 22px;
+  position: relative;
+
+  &:after {
+    @include size(1px, 100%);
+    background-color: $deepBlue-10;
+    content: '';
+    position: absolute;
+    right: 0; top: 0;
+  }
+
+  &__teams {
+    @include size(100%, auto);
+    @include flex(flex-start, center);
+    padding-top: 39px;
+  }
+
+  &__item {
+
+    &--active {
+
+    }
+  }
+
+  &__image {
+    @include size(32px);
+    border-radius: 50%;
+  }
+
+  &__icon {
+    @include size(32px);
+    border-radius: 50%;
+  }
+}

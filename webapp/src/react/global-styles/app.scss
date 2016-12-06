@@ -3,11 +3,26 @@
 
 #content {
   @include size(100%);
+  position: relative;
 
   .app {
-    @include size();
+    @include size(100%);
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
+}
+
+.content-wrapper {
+  @include size(100%);
+  @include flex(flex);
+  position: relative;
+}
+
+.view-controller {
+  @include size(100%);
+  padding-left: 84px;
+  padding-top: 9px;
 }
 
 .scroll-container {
