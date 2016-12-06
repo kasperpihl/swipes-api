@@ -1,6 +1,6 @@
  import React, { Component } from 'react';
  import Vivus from 'vivus';
- import Icon from '../icons/Icon';
+ import Icon from 'Icon';
 
  class SwipesBackgroundAnimation extends Component {
    componentDidMount() {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 var webpack = require('webpack');
 var path = require('path');
 
@@ -13,6 +14,21 @@ const apiRedirect = {
 module.exports = {
   context: __dirname,
   devtool: 'eval',
+  resolve: {
+    root: path.resolve(__dirname),
+    alias: {
+      src: 'src/',
+      app: 'src/react/app/',
+      constants: 'src/constants/ActionTypes',
+      components: 'src/react/components',
+      styles: 'src/react/global-styles/',
+      actions: 'src/actions/',
+      views: 'src/react/views/',
+      Icon: 'src/react/icons/Icon',
+      classes: 'src/classes/'
+    },
+    extensions: ['', '.js', '.scss']
+  },
   entry: {
     app: [
       './src/index'

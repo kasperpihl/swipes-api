@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import browser from 'detect-browser';
 import './download-page.scss';
-import Icon from '../icons/Icon';
+import Icon from 'Icon';
 
 class DownloadPage extends Component {
   componentDidMount() {

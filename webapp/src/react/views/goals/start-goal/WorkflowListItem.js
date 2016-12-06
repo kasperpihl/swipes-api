@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Icon from '../../icons/Icon';
+import Icon from 'Icon';
 import './styles/workflow-list-item.scss';
 
 class WorkflowListItem extends Component {

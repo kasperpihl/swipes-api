@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import { bindAll } from '../../classes/utils';
-import Icon from '../icons/Icon';
+import Icon from 'Icon';
 
 import './styles/style-control.scss';
 

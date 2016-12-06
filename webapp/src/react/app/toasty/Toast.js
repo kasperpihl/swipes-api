@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Loader from '../../components/swipes-ui/Loader';
 import ProgressCircle from './ProgressComponent';
-import Icon from '../../icons/Icon';
+import Icon from 'Icon';
 
 
 import './styles/toast.scss';

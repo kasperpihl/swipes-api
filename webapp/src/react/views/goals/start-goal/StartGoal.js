@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { overlay, modal } from '../../../actions';
-import { bindAll } from '../../../classes/utils';
+import { overlay, modal } from 'actions';
+import { bindAll } from 'classes/utils';
 
 import WorkflowList from './WorkflowList';
-import Button from '../../components/swipes-ui/Button';
+import Button from 'components/swipes-ui/Button';
 
 class StartGoal extends Component {
   constructor(props) {

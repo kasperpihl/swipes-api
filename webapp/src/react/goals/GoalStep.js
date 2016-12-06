@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { fromJS } from 'immutable';
-import Icon from '../icons/Icon';
+import Icon from 'Icon';
 
 // Views
 import StepHeader from './StepHeader';

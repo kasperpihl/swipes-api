@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { overlay, main, modal } from '../../../actions';
+import { navigation, main, modal } from '../../../actions';
 import { bindAll } from '../../../classes/utils';
 import './profile.scss';
 
@@ -22,9 +22,9 @@ class HOCProfile extends Component {
     });
   }
   clickedServices() {
-    const { pushOverlay } = this.props;
+    const { navPush } = this.props;
 
-    pushOverlay({ component: 'Services', title: 'Services' });
+    navPush({ component: 'Services', title: 'Services' });
   }
   render() {
     const { me } = this.props;
@@ -56,12 +56,12 @@ const { func } = PropTypes;
 HOCProfile.propTypes = {
   loadModal: func,
   logout: func,
-  pushOverlay: func,
+  navPush: func,
   me: map,
 };
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
-  pushOverlay: overlay.push,
+  navPush: navigation.push,
   loadModal: modal.load,
   logout: main.logout,
 })(HOCProfile);

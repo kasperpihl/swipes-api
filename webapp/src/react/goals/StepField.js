@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Icon from '../icons/Icon';
+import Icon from 'Icon';
 import './styles/step-field.scss';
 
 class StepField extends Component {

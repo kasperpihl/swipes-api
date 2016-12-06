@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Textarea from 'react-textarea-autosize';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Icon from '../../components/icons/Icon';
-import { bindAll } from '../../classes/utils';
+import Icon from 'Icon';
+import { bindAll } from 'classes/utils';
 
-import '../../components/create-pattern/styles/create-pattern.scss';
+import './styles/create-pattern.scss';
 
 class CreatePattern extends Component {
   constructor(props) {

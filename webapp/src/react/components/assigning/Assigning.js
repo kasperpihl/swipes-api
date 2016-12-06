@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from '../../classes/utils';
-import Icon from '../icons/Icon';
+import { bindAll } from 'classes/utils';
+import Icon from 'Icon';
 
 import './styles/assigning.scss';
 
