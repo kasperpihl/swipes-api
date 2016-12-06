@@ -3,8 +3,14 @@
 
 .goals-list {
   @include size(100%);
-  margin-top: 18px;
   position: relative;
+  display: flex;
+  flex-direction: column;
   z-index: 3;
-  overflow-y: auto;
+
+  &__scroller {
+    @include size(100%);
+    position: relative;
+    overflow-y: auto;
+  }
 }

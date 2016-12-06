@@ -23,6 +23,9 @@
   @include size(100%);
   padding-left: 84px;
   padding-top: 9px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .scroll-container {

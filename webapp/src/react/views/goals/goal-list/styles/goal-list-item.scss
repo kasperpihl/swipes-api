@@ -7,11 +7,10 @@ $imgContHeight: 54px;
   $b: &;
 
   @include size(100%, auto);
-  max-width: 600px;
+  max-width: 780px;
   min-height: $imgContHeight;
   position: relative;
   padding: 12px 21px;
-  margin: 0 auto;
   border-bottom: 1px solid $deepBlue-10;
 
   &:hover {
