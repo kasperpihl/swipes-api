@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import SwipesCardItem from './SwipesCardItem';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import './swipes-card.scss';
 

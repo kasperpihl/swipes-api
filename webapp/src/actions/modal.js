@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 
 export function load(type, props, callback) {
   // support shorthand for load({title: 'lala'}, () => {})

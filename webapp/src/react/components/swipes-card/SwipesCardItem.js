@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { randomString, bindAll, decodeHtml } from '../../../classes/utils';
+import { randomString, bindAll, decodeHtml } from 'classes/utils';
 import Icon from 'Icon';
 
 class SwipesCardItem extends Component {

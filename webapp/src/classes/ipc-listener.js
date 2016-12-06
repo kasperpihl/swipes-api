@@ -1,4 +1,4 @@
-import { me, toasty } from '../actions';
+import { me, toasty } from 'actions';
 
 /* global nodeRequire*/
 const { ipcRenderer } = nodeRequire('electron');

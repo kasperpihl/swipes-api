@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 import Icon from 'Icon';
 import PDFViewer from '../components/pdf-viewer/PDFViewer';
 import Loader from '../components/swipes-ui/Loader';

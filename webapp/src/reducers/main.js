@@ -1,5 +1,5 @@
 import { fromJS, Set } from 'immutable';
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants';
 
 const initialState = fromJS({
   socketUrl: null,

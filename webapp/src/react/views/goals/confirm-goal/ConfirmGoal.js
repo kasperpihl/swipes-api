@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { modal, api, overlay, toasty } from '../../actions';
-import { bindAll } from '../../classes/utils';
+import { modal, api, overlay, toasty } from 'actions';
+import { bindAll } from 'classes/utils';
 import WorkflowSetup from '../../components/confirm-goal/WorkflowSetup';
 
 class ConfirmGoal extends Component {

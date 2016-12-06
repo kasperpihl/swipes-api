@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import Icon from '../../icons/Icon';
-import { navigation } from '../../../actions';
+import Icon from 'Icon';
+import { navigation } from 'actions';
 
 import './styles/sidebar.scss';
 

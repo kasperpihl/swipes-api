@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ReactTags from 'react-tag-autocomplete';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import './styles/tags.scss';
 

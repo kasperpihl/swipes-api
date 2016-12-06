@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { bindAll } from '../../classes/utils';
-import { modal, me } from '../../actions';
+import { bindAll } from 'classes/utils';
+import { modal, me } from 'actions';
 import ConnectRow from '../../components/services/ConnectRow';
 import '../../components/services/services.scss';
 

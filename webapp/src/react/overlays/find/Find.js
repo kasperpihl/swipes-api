@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import { main, search, api, modal } from '../../actions';
-import { bindAll } from '../../classes/utils';
+import { main, search, api, modal } from 'actions';
+import { bindAll } from 'classes/utils';
 
 import TabBar from '../../components/tab-bar/TabBar';
 import '../../components/find/styles/find.scss';

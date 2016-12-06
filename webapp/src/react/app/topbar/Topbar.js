@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { bindAll } from '../../../classes/utils';
+import { bindAll } from 'classes/utils';
 import './topbar.scss';
 import gradient from './gradient';
 

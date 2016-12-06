@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import TabBar from '../tab-bar/TabBar';
 import GoalListItem from './GoalListItem';

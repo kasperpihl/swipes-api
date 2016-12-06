@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { api, navigation } from '../../actions';
+import { api, navigation } from 'actions';
 
 import Topbar from './topbar/Topbar';
 import Modal from './modal/HOCModal';
@@ -12,7 +12,7 @@ import Toasty from './toasty/HOCToasty';
 let DevTools = 'div';
 
 if (process.env.NODE_ENV !== 'production') {
-  DevTools = require('../../DevTools'); // eslint-disable-line global-require
+  DevTools = require('src/DevTools'); // eslint-disable-line global-require
 }
 
 class HOCApp extends Component {

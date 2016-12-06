@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from '../../classes/utils';
+import { bindAll } from 'classes/utils';
 
 import './styles/tag-item.scss';
 
