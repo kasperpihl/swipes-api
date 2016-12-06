@@ -316,7 +316,7 @@ class GoalStep extends Component {
     if (helper.isCurrentStep(stepIndex) && helper.amIAssigned(stepIndex)) {
       sideColumnClass += ' goal-step__side-column--active';
     }
-
+    // console.log('this.props.goal.toJS()', JSON.stringify(this.props.goal.toJS()));
     return (
       <div className="goal-step">
 
