@@ -11,7 +11,7 @@ class GoalList extends Component {
   constructor(props) {
     super(props);
     this.tabs = ['now', 'later', 'completed', 'all'];
-    this.state = { tabIndex: 3 };
+    this.state = { tabIndex: 0 };
     this.tags = [
       'development',
       'design',
@@ -165,12 +165,13 @@ class GoalList extends Component {
   }
 }
 
-const { func } = PropTypes;
+const { func, object } = PropTypes;
 
 GoalList.propTypes = {
   setActiveGoal: func,
   goals: map.isRequired,
   me: map.isRequired,
+  delegate: object,
 };
 
 export default GoalList;

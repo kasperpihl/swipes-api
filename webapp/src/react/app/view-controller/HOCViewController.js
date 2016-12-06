@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { navigation } from 'actions';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Navbar from '../../components/nav-bar/NavBar';
-import { navigation } from 'actions';
 import * as views from '../../views';
 
 class HOCViewController extends Component {
@@ -51,7 +51,7 @@ class HOCViewController extends Component {
       props = lastEl.get('props').toObject();
     }
     return (
-      <View {...props} />
+      <View {...props} key={lastEl.get('component')} />
     );
   }
   render() {

@@ -21,11 +21,14 @@
     @include size(100%, auto);
     @include flex(flex-start, center);
     padding-top: 39px;
-    @include size(32px);
   }
 
   &__team {
-    @include size(32px);
+    @include size(45px);
+    @include flex();
+    flex: none;
+    border-radius: 50%;
+    border: 1px solid $deepBlue-20;
 
     &--active {
       position: relative;
@@ -33,7 +36,7 @@
       &:before {
         content: '';
         position: absolute;
-        left: -15px; top: 0;
+        left: -10px; top: 0;
         @include size(2px, 100%);
         background-color: $blue-100;
       }
