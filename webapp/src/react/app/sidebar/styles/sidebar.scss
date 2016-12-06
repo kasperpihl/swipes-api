@@ -21,22 +21,50 @@
     @include size(100%, auto);
     @include flex(flex-start, center);
     padding-top: 39px;
+    @include size(32px);
+  }
+
+  &__team {
+    @include size(32px);
+
+    &--active {
+      position: relative;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: -15px; top: 0;
+        @include size(2px, 100%);
+        background-color: $blue-100;
+      }
+    }
   }
 
   &__item {
+    @include size(32px);
 
     &--active {
+      position: relative;
 
+      &:before {
+        content: '';
+        position: absolute;
+        left: -15px; top: 0;
+        @include size(2px, 100%);
+        background-color: $blue-100;
+      }
     }
   }
 
   &__image {
     @include size(32px);
     border-radius: 50%;
+    pointer-events: none;
   }
 
   &__icon {
     @include size(32px);
     border-radius: 50%;
+    pointer-events: none;
   }
 }
