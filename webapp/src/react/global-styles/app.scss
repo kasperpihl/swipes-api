@@ -4,14 +4,9 @@
 #content {
   @include size(100%);
 
-  .main {
+  .app {
     @include size();
     position: relative;
-
-    .workspace {
-      @include size();
-      position: relative;
-    }
   }
 }
 
@@ -28,12 +23,6 @@ svg {
   left: 50%; top: 50%;
   position: fixed !important;
   transform: translate(-50%, -50%);
-}
-
-.draggingDot .overlay{
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .3s;
 }
 
 .overlay {
@@ -79,9 +68,9 @@ svg {
   }
 
   &__overlay {
-  	@include size(100%);
-  	background-color: rgba($deepBlue-100, .96);
-  	left: 0; top: 0;
-  	position: fixed;
+    @include size(100%);
+    background-color: rgba($deepBlue-100, .96);
+    left: 0; top: 0;
+    position: fixed;
   }
 }

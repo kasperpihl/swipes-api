@@ -10,6 +10,9 @@ const initialState = fromJS({
 export default function history(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
+    case 'rtm.start': {
+      return state;
+    }
     case types.NAVIGATION_SET: {
       return state.clear().push(fromJS(action.overlay));
     }

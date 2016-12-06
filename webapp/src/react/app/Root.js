@@ -24,7 +24,6 @@ const history = syncHistoryWithStore(browserHistory, store, {
 window.swipesUrlProvider = new SwipesUrlProvider(store);
 window.socket = new Socket(store);
 window.notifications = new Notifications(store);
-// window.slack = new Slack(store);
 window.ipcListener = new IpcListener(store);
 
 export default function Root() {
