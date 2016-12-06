@@ -5,13 +5,13 @@ const defaultHistoryForProfile = () => [{
   title: 'Profile',
 }];
 
-const defaultHistoryForOrgName = orgName => [/* {
+const defaultHistoryForOrgName = orgName => [{
   component: 'OrgDashboard',
   title: orgName,
-  }, */{
-    component: 'GoalList',
-    title: 'Goals',
-  }];
+}, {
+  component: 'GoalList',
+  title: 'Goals',
+}];
 
 export function navigateToId(navId) {
   return (dispatch, getState) => {
