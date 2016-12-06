@@ -3,7 +3,8 @@
 
 .nav-bar {
   $b: &;
-  @include size(100%, 74px);
+  @include size(100%, 73px);
+  flex: none;
   max-width: 780px;
   position: relative;
 
@@ -14,7 +15,7 @@
 
     &--back {
       position: absolute;
-      left: -12px; bottom: 0px;
+      left: -13px; bottom: 0px;
       transform: translateX(-100%);
 
       #{$b}__icon {
