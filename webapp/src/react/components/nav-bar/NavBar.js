@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Icon from 'Icon';
 
 import './styles/nav-bar.scss';
@@ -26,13 +27,15 @@ class NavBar extends Component {
   }
   renderCrumb(title, i, numberOfCrumbs) {
     let className = 'bread-crumbs__crumb';
+    let j = i;
 
     if ((i + 1) === numberOfCrumbs) {
       className += ' bread-crumbs__crumb--last';
+      j = `${j}last`;
     }
 
     return (
-      <div className={className} key={i} onClick={this.clickedCrumb} data-index={i}>
+      <div className={className} key={j} onClick={this.clickedCrumb} data-index={i}>
         <div className="bread-crumbs__title" data-index={i}>
           {title}
         </div>
@@ -52,9 +55,15 @@ class NavBar extends Component {
       this.renderCrumb(crumb.title, i, history.length));
 
     return (
-      <div className="bread-crumbs">
+      <ReactCSSTransitionGroup
+        transitionName="breadCrumbsTransition"
+        component="div"
+        className="bread-crumbs"
+        transitionEnterTimeout={400}
+        transitionLeaveTimeout={400}
+      >
         {breadCrumbsHTML}
-      </div>
+      </ReactCSSTransitionGroup>
     );
   }
   renderBackButton() {
