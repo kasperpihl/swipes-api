@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
 import GoalOverview from './GoalOverview';
 
 
@@ -14,8 +14,20 @@ class HOCGoalOverview extends Component {
   }
   componentDidMount() {
   }
-  goalOverviewClickedStep(goalOverview, stepId) {
-    console.log(stepId);
+  goalOverviewClickedStep(goalOverview, stepIndex) {
+    const {
+      navPush,
+      goalId,
+      goal,
+    } = this.props;
+    navPush({
+      component: 'GoalStep',
+      title: goal.getIn(['steps', stepIndex, 'title']),
+      props: {
+        goalId,
+        stepIndex,
+      },
+    });
   }
   render() {
     const { goal } = this.props;
@@ -30,12 +42,14 @@ function mapStateToProps(state, ownProps) {
     goal: state.getIn(['goals', ownProps.goalId]),
   };
 }
-
+const { string, func } = PropTypes;
 HOCGoalOverview.propTypes = {
   goal: map,
+  goalId: string,
+  navPush: func,
 };
 
 const ConnectedHOCGoalOverview = connect(mapStateToProps, {
-  onDoing: actions.doStuff,
+  navPush: actions.navigation.push,
 })(HOCGoalOverview);
 export default ConnectedHOCGoalOverview;

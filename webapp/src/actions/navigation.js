@@ -37,7 +37,7 @@ export function navigateToId(navId) {
 export function init() {
   return (dispatch, getState) => {
     const state = getState();
-    let navId = state.getIn(['navigation', 'currentId']);
+    let navId = state.getIn(['navigation', 'id']);
     const me = state.get('me');
     if (!navId && me) {
       navId = me.getIn(['organizations', 0, 'id']);

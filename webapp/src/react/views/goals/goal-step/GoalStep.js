@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { fromJS } from 'immutable';
+import { throttle, bindAll } from 'classes/utils';
 import Icon from 'Icon';
 
 // Views
@@ -9,7 +10,7 @@ import StepField from './StepField';
 import StepSubmission from './StepSubmission';
 
 import GoalsUtil from './goals_util';
-import { throttle, bindAll } from 'classes/utils';
+
 
 // styles
 import './styles/goal-step.scss';
@@ -19,8 +20,6 @@ class GoalStep extends Component {
     super(props);
     this.helper = new GoalsUtil(props.goal, props.myId, props.cache);
     this.state = {
-      stepIndex: props.initialStepIndex,
-      step: this.helper.getStepByIndex(props.initialStepIndex),
       formData: this.helper.getInitialDataForStepIndex(props.initialStepIndex),
     };
 
@@ -32,20 +31,6 @@ class GoalStep extends Component {
   }
   componentDidMount() {
     window.addEventListener('beforeunload', this.cacheFormInput);
-  }
-  componentWillReceiveProps(nextProps) {
-    const { goal } = this.props;
-    const { stepIndex } = this.state;
-    const nextGoal = nextProps.goal;
-
-    if (goal !== nextGoal) {
-      this.helper.updateGoal(nextGoal);
-      if (stepIndex === goal.get('currentStepIndex')) {
-        if (goal.get('currentStepIndex') !== nextGoal.get('currentStepIndex')) {
-          this.updateToStepIndex(nextGoal.get('currentStepIndex'));
-        }
-      }
-    }
   }
   componentWillUnmount() {
     this.cacheFormInput();
@@ -64,21 +49,6 @@ class GoalStep extends Component {
     this.callDelegate('stepSubmit', step.get('id'), data, previousSteps, () => {
       this.setState({ isSubmitting: false });
     });
-  }
-  onProgressChange(i) {
-    this.updateToStepIndex(i);
-  }
-  updateToStepIndex(i) {
-    const { stepIndex } = this.state;
-    if (i !== stepIndex) {
-      const step = this.helper.getStepByIndex(i);
-      const formData = this.helper.getInitialDataForStepIndex(i);
-      this.setState({
-        stepIndex: i,
-        step,
-        formData,
-      });
-    }
   }
   cacheFormInput() {
     const { stepIndex } = this.state;
