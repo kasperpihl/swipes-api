@@ -11,7 +11,7 @@ class GoalList extends Component {
   constructor(props) {
     super(props);
     this.tabs = ['now', 'later', 'completed', 'all'];
-    this.state = { tabIndex: 0 };
+    this.state = { tabIndex: 3 };
     this.tags = [
       'development',
       'design',

@@ -9,27 +9,26 @@ class TabBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 0,
+      activeTab: props.activeTab || 0,
       sliderClips: [],
     };
-    bindAll(this, ['setActiveTab']);
+    bindAll(this, ['onChange']);
   }
   componentDidMount() {
     setTimeout(() => {
       this.calculateSliderClips();
-    }, 10);
+    }, 50);
   }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.activeTab !== nextProps.activeTab) {
-      this.setState({ activeTab: nextProps.activeTab });
+  componentDidUpdate(prevProps) {
+    if (this.props.activeTab !== prevProps.activeTab) {
+      this.calculateSliderClips();
     }
   }
-  setActiveTab(e) {
+  onChange(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
 
-    if (newIndex !== this.state.activeTab) {
-      this.setState({ activeTab: newIndex });
-      this.callback(newIndex);
+    if (newIndex !== this.props.activeTab) {
+      this.callDelegate('tabDidChange', newIndex);
     }
   }
   callDelegate(name) {
@@ -42,44 +41,34 @@ class TabBar extends Component {
     return undefined;
   }
   calculateSliderClips() {
-    const { sliderClips } = this.state;
     const { tabBar } = this.refs;
+    const { tabs } = this.props;
     const tabBarWidth = tabBar.getBoundingClientRect().width;
     const tabWidths = [];
     const sliderClipsArr = [];
 
-    const keys = Object.keys(this.refs);
-
-    keys.forEach((key) => {
-      const ref = this.refs[key];
-      if (key.startsWith('tab-')) {
-        tabWidths.push(ref.getBoundingClientRect().width);
-      }
+    tabs.forEach((t, i) => {
+      const ref = this.refs[`tab-${i}`];
+      tabWidths.push(ref.getBoundingClientRect().width);
     });
 
     tabWidths.reduce((previousValue, currentValue) => {
+      console.log(previousValue, currentValue);
       sliderClipsArr.push(
         {
           start: ((previousValue * 100) / tabBarWidth),
-          end: (((previousValue + currentValue) * 100) / tabBarWidth),
+          end: ((((previousValue + currentValue) - 30) * 100) / tabBarWidth),
         },
       );
 
       return previousValue + currentValue;
     }, 0);
 
-    sliderClips.push(...sliderClipsArr);
-
-    this.setState({ sliderClips });
-  }
-  callback(index) {
-    this.callDelegate('tabDidChange', index);
-  }
-  renderIcon(icon, i) {
-    return <Icon svg={icon} className="tab-bar__icon tab-bar__icon--svg" data-index={i} />;
+    this.setState({ sliderClips: sliderClipsArr });
   }
   renderSlider() {
-    const { activeTab, sliderClips } = this.state;
+    const { sliderClips } = this.state;
+    const { activeTab } = this.props;
 
     let styles = {
       WebkitClipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
@@ -96,8 +85,8 @@ class TabBar extends Component {
     );
   }
   render() {
-    const { tabs } = this.props;
-    const { activeTab } = this.state;
+    console.log('run render');
+    const { tabs, activeTab } = this.props;
     const rootClass = 'tab-bar';
 
     const tabsHTML = tabs.map((tab, i) => {
@@ -108,7 +97,7 @@ class TabBar extends Component {
       }
 
       return (
-        <div ref={`tab-${i}`} className={tabClass} data-index={i} key={`tab-${i}`} onClick={this.setActiveTab}>{tab}</div>
+        <div ref={`tab-${i}`} className={tabClass} data-index={i} key={`tab-${i}`} onClick={this.onChange}>{tab}</div>
       );
     });
 
