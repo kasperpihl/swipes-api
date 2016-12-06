@@ -3,7 +3,7 @@ import Measure from 'react-measure';
 
 import { bindAll, debounce } from 'classes/utils';
 
-import './styles/tab-bar.scss';
+import './styles/tab-bar';
 
 class TabBar extends Component {
   constructor(props) {
