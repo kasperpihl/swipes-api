@@ -28,10 +28,10 @@
     font-weight: 700;
     margin: 0;
     line-height: 50px;
-    padding: 0 30px;
+    padding-right: 30px;
     position: relative;
     text-transform: uppercase;
-    transition: .1s, transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s;
+    transition: .1s;
     user-select: none;
 
     &:hover {
@@ -40,7 +40,7 @@
 
     &--active {
       color: $blue-100;
-      transition: .1s, transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s;
+      transition: .1s;
 
       &:hover {
         color: $blue-120;
@@ -48,45 +48,14 @@
     }
   }
 
-  &__main-title {
-    @include flex(center, flex-start);
-    @include size(100%, 50px);
-    color: $deepBlue-90;
-    font-size: 15px;
-    left: 0; top: 0;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    transform: translateY(50%);
-    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
-
-    #{$b}__icon {
-      &--svg {
-        fill: $deepBlue-80;
-        transform: translateY(1px);
-      }
-    }
-  }
-
   &__slider {
     @include size(100%, 1px);
     @include flex();
-    background: linear-gradient(to right, $green-color 0%, $green-color 50%, $blue-100 50%, $blue-100 100%);
-    background-size: 200%;
-  	background-position: 100% 0;
+    background: $blue-100;
     left: 0; bottom: 0;
     position: absolute;
-    transition: -webkit-clip-path .2s ease-in-out, background .2s ease-in-out, background-position .2s ease-in-out;
+    transition: -webkit-clip-path .2s ease-in-out;
     z-index: 2;
-  }
-
-  &__progressbar {
-    @include size(100%, auto);
-    left: 0; bottom: -9px;
-    position: absolute;
-    transform: scaleY(0);
-    transition: transform .2s ease-in-out;
-    z-index: 3;
   }
 
   &__btn {
@@ -109,56 +78,6 @@
       @include size(24px);
       fill: $deepBlue-30;
       transition: .1s;
-    }
-  }
-
-  &--title-view {
-
-    &:after {
-      opacity: 0;
-      transition: .1s .4s;
-    }
-
-    #{$b}__tab {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(50%);
-      transition: all .2s ease-in-out .1s;
-    }
-
-    #{$b}__main-title {
-      pointer-events: all;
-      animation: titleIn .2s ease-in-out .2s forwards;
-
-      @keyframes titleIn {
-        from {
-          opacity: 0;
-          transform: translateY(50%);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0px);
-        }
-      }
-    }
-
-    #{$b}__slider {
-      opacity: 0;
-      height: 3px;
-      bottom: 0px;
-      transition:
-        bottom .2s ease-in-out,
-        height .2s ease-in-out,
-        -webkit-clip-path .4s ease-in-out,
-        background-position .4s ease-in-out,
-        background .4s ease-in-out,
-        opacity .1s ease-in-out .6s;
-    }
-
-    #{$b}__progressbar {
-      transform: scaleY(1);
-      transition: transform .2s ease-in-out .4s;
-      transform-origin: 50% 50%;
     }
   }
 }
