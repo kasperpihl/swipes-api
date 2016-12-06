@@ -5,8 +5,6 @@
   $b: &;
   @include size(100%);
   max-width: 780px;
-  margin-left: 84px;
-  margin-top: 102px;
 
   &__step {
     @include size(100%, 72px);

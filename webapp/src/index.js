@@ -31,7 +31,7 @@ if (typeof Tester !== 'undefined') {
     Page = require('./containers/SharePage'); // eslint-disable-line
     props.data = window.__share_data;
   } else {
-    Page = require('./components/download-page/DownloadPage'); // eslint-disable-line
+    Page = require('./react/download-page/DownloadPage'); // eslint-disable-line
   }
 } else {
   Page = require('./react/app/Root'); // eslint-disable-line
