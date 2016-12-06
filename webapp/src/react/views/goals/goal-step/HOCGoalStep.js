@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
@@ -12,25 +13,25 @@ class HOCGoalStep extends Component {
   componentDidMount() {
   }
   render() {
+    const { goal } = this.props;
     return (
-      <div className="className" />
+      <GoalStep goal={goal} delegate={this} />
     );
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    main: state.get('main'),
+    goal: state.getIn(['goals', ownProps.goalId]),
   };
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
 const { string } = PropTypes;
 HOCGoalStep.propTypes = {
   // removeThis: PropTypes.string.isRequired
 };
 
 const ConnectedHOCGoalStep = connect(mapStateToProps, {
-  onDoing: actions.doStuff,
+  navPop: actions.navigation.pop,
 })(HOCGoalStep);
 export default ConnectedHOCGoalStep;

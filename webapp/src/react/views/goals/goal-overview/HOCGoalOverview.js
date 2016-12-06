@@ -1,8 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import GoalOverview from './GoalOverview';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
+import GoalOverview from './GoalOverview';
+
 
 class HOCGoalOverview extends Component {
   constructor(props) {
@@ -12,23 +14,25 @@ class HOCGoalOverview extends Component {
   }
   componentDidMount() {
   }
+  goalOverviewClickedStep(goalOverview, stepId) {
+    console.log(stepId);
+  }
   render() {
+    const { goal } = this.props;
     return (
-      <GoalOverview />
+      <GoalOverview goal={goal} delegate={this} />
     );
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    main: state.get('main'),
+    goal: state.getIn(['goals', ownProps.goalId]),
   };
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
-const { string } = PropTypes;
 HOCGoalOverview.propTypes = {
-  // removeThis: PropTypes.string.isRequired
+  goal: map,
 };
 
 const ConnectedHOCGoalOverview = connect(mapStateToProps, {

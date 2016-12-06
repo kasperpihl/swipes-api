@@ -5,10 +5,8 @@ import { fromJS } from 'immutable';
 import Icon from 'Icon';
 
 // Views
-import StepHeader from './StepHeader';
 import StepField from './StepField';
 import StepSubmission from './StepSubmission';
-import ProgressBar from '../swipes-ui/ProgressBar';
 
 import GoalsUtil from './goals_util';
 import { throttle, bindAll } from 'classes/utils';
@@ -163,41 +161,6 @@ class GoalStep extends Component {
   renderIcon(icon) {
     return <Icon svg={icon} className="goal-step__icon goal-step__icon--svg" />;
   }
-  renderHeader() {
-    const { myId } = this.props;
-    const { step, stepIndex } = this.state;
-    const stepTitle = step.get('title');
-    const assignees = step.get('assignees').toJS();
-    const me = { id: myId };
-
-    return (
-      <StepHeader
-        index={stepIndex + 1}
-        title={stepTitle}
-        assignees={assignees}
-        me={me}
-      />
-    );
-  }
-  renderProgressBar() {
-    const { goal } = this.props;
-    const { stepIndex } = this.state;
-    const runCounter = this.helper.runCounter();
-    const steps = goal.get('steps').map(step => ({
-      title: step.get('title'),
-        // disabled: (i > goal.get('currentStepIndex'))
-    })).toJS();
-
-    return (
-      <ProgressBar
-        steps={steps}
-        title={`run ${runCounter}`}
-        onChange={this.onProgressChange}
-        activeIndex={stepIndex}
-        currentIndex={goal.get('currentStepIndex')}
-      />
-    );
-  }
   renderComplete() {
     const { stepIndex } = this.state;
 
@@ -321,8 +284,6 @@ class GoalStep extends Component {
       <div className="goal-step">
 
         <div className="goal-step__content">
-          {this.renderHeader()}
-          {this.renderProgressBar()}
           {this.renderComplete()}
           {this.renderHandoff()}
           {this.renderFields(step)}

@@ -140,7 +140,7 @@ class GoalList extends Component {
   }
   renderTabbar() {
     return (
-      <div className="goals__tab-bar">
+      <div className="goals-list__tab-bar">
         <TabBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex} />
       </div>
     );

@@ -22,7 +22,7 @@ class HOCGoalList extends Component {
       component: 'GoalOverview',
       title: goals.get(goalId).get('title'),
       props: {
-        goal: goals.get(goalId),
+        goalId,
       },
     });
   }
