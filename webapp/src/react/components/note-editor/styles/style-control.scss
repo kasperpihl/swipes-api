@@ -1,5 +1,5 @@
-@import '../../global-styles/vars/';
-@import '../../global-styles/mixins/';
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
 
 .RichEditor-controls {
   $b: &;

@@ -19,7 +19,7 @@ export default function history(state = initialState, action) {
       });
     }
     case types.NAVIGATION_PUSH: {
-      return state.updateIn(['history', state.get('id')], s => s.push(fromJS(payload)));
+      return state.updateIn(['history', state.get('id')], s => s.push(fromJS(payload.obj)));
     }
     case types.NAVIGATION_POP: {
       return state.updateIn(['history', state.get('id')], (s) => {

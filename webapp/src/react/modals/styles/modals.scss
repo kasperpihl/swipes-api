@@ -5,7 +5,7 @@ $break-mid: 650px;
   justify-content: center;
   //flex-direction: column;
 }
-@import '../../global-styles/vars';
+@import "~styles/_vars.scss";
 
 @import "lightbox";
 @import "list-modal";

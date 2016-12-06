@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import Icon from '../icons/Icon';
+import Icon from 'Icon';
 import { bindAll } from '../../classes/utils';
 
 import './styles/tab-bar.scss';
