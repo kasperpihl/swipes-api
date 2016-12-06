@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import Measure from 'react-measure';
 
-import Icon from 'Icon';
-import { bindAll } from 'classes/utils';
+import { bindAll, debounce } from 'classes/utils';
 
 import './styles/tab-bar.scss';
 
@@ -12,17 +12,9 @@ class TabBar extends Component {
       activeTab: props.activeTab || 0,
       sliderClips: [],
     };
+    this.calculateSliderClips = this.calculateSliderClips.bind(this);
+    this.bouncedCalc = debounce(this.calculateSliderClips, 1);
     bindAll(this, ['onChange']);
-  }
-  componentDidMount() {
-    setTimeout(() => {
-      this.calculateSliderClips();
-    }, 50);
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.activeTab !== prevProps.activeTab) {
-      this.calculateSliderClips();
-    }
   }
   onChange(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
@@ -53,7 +45,6 @@ class TabBar extends Component {
     });
 
     tabWidths.reduce((previousValue, currentValue) => {
-      console.log(previousValue, currentValue);
       sliderClipsArr.push(
         {
           start: ((previousValue * 100) / tabBarWidth),
@@ -85,7 +76,6 @@ class TabBar extends Component {
     );
   }
   render() {
-    console.log('run render');
     const { tabs, activeTab } = this.props;
     const rootClass = 'tab-bar';
 
@@ -97,14 +87,18 @@ class TabBar extends Component {
       }
 
       return (
-        <div ref={`tab-${i}`} className={tabClass} data-index={i} key={`tab-${i}`} onClick={this.onChange}>{tab}</div>
+        <Measure key={`tab-${i}`} onMeasure={this.bouncedCalc}>
+          <div ref={`tab-${i}`} className={tabClass} data-index={i} onClick={this.onChange}>{tab}</div>
+        </Measure>
       );
     });
 
     return (
       <div ref="tabBar" className={rootClass}>
         {tabsHTML}
-        {this.renderSlider()}
+        <Measure onMeasure={this.bouncedCalc}>
+          {this.renderSlider()}
+        </Measure>
       </div>
     );
   }
