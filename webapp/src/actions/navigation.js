@@ -1,46 +1,65 @@
 import * as types from '../constants/ActionTypes';
 
-const validateObj = obj => null;
+const defaultHistoryForProfile = () => [{
+  component: 'Profile',
+  title: 'Profile',
+}];
 
-const fireOnCloseToIndex = (history, data) => {
-  history.findLastEntry((o, i) => {
-    if (typeof o.get('onClose') === 'function') {
-      o.get('onClose')(data);
-    }
-    if (typeof index !== 'undefined') {
-      return (i === (index + 1));
-    }
-    return false;
-  });
-};
-const popHandler = (getState, index) => {
+const defaultHistoryForOrgName = orgName => [{
+  component: 'OrgDashboard',
+  title: orgName,
+}, {
+  component: 'GoalList',
+  title: 'Goals',
+}];
 
-};
+export function navigateToId(navId) {
+  return (dispatch, getState) => {
+    if (navId) {
+      const payload = {
+        id: navId,
+      };
+      const state = getState();
+      let history = state.getIn(['navigation', 'history', navId]);
+      if (!history) {
+        history = defaultHistoryForProfile();
+        const org = state.getIn(['me', 'organizations']).find(o => o.get('id') === navId);
+        if (org) {
+          history = defaultHistoryForOrgName(org.get('name'));
+        }
+        payload.history = history;
+      }
+      dispatch({ type: types.NAVIGATION_SET, payload });
+    }
+  };
+}
 
 export function init() {
   return (dispatch, getState) => {
     const state = getState();
-    const navId = state.getIn(['navigation', 'currentId']);
+    let navId = state.getIn(['navigation', 'currentId']);
+    const me = state.get('me');
+    if (!navId && me) {
+      navId = me.getIn(['organizations', 0, 'id']);
+    }
+    if (navId) {
+      dispatch(navigateToId(navId));
+    }
   };
 }
 
-export function set(id, obj) {
-
-}
 export function push(obj) {
-
+  const payload = { obj };
+  return { type: types.NAVIGATION_PUSH, payload };
 }
-export function pop(data) {
-  return (dispatch, getState) => {
-    fireOnCloseForOverlays(getState);
-    dispatch({ type: types.POP_OVERLAY });
-  };
+export function pop() {
+  return { type: types.NAVIGATION_POP };
 }
 export function popTo(i) {
-  return (dispatch, getState) => {
-    fireOnCloseForOverlays(getState);
-    dispatch({ type: types.POP_OVERLAY });
+  const payload = {
+    index: i,
   };
+  return { type: types.NAVIGATION_POP, payload };
 }
 export function popToRoot() {
 

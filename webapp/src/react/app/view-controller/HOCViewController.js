@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
-
+import * as views from '../../views';
 
 class HOCViewController extends Component {
   constructor(props) {
@@ -16,18 +16,36 @@ class HOCViewController extends Component {
 
   }
   renderContent() {
+    const { history } = this.props;
+    if (!history) {
+      return undefined;
+    }
 
+    const lastEl = history.last();
+    const View = views[lastEl.get('component')];
+    console.log(views);
+    console.log('lastEl', lastEl.toJS(), View);
+
+    if (View) {
+      return (
+        <View />
+      );
+    }
   }
   render() {
     return (
-      <div className="view-controller" />
+      <div className="view-controller">
+        {this.renderNavbar()}
+        {this.renderContent()}
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const navId = state.getIn(['navigation', 'id']);
   return {
-    main: state.get('main'),
+    history: state.getIn(['navigation', 'history', navId]),
   };
 }
 

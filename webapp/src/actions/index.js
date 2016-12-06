@@ -1,4 +1,5 @@
 import * as main from './main';
+import * as navigation from './navigation';
 import * as modal from './modal';
 import * as overlay from './overlay';
 import * as api from './api';
@@ -9,6 +10,7 @@ import * as goals from './goals';
 
 export {
   main,
+  navigation,
   modal,
   goals,
   overlay,

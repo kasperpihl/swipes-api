@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import { bindAll, hexToRgb, shadeColor } from '../../classes/utils';
+import { bindAll, hexToRgb, shadeColor } from '../../../classes/utils';
 import './styles/sw-button.scss';
 
 class Button extends Component {

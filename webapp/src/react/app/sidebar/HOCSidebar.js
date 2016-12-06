@@ -1,46 +1,82 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import { map } from 'react-immutable-proptypes';
+import { navigation } from '../../../actions';
 
 
 class HOCSidebar extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.clickedItem = this.clickedItem.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  componentDidMount() {
+  clickedItem(e) {
+    const { navigateToId } = this.props;
+    const id = e.target.getAttribute('data-id');
+    navigateToId(id);
+  }
+  renderItem(id, title) {
+    const { navId } = this.props;
+    let className = 'sidebar-item';
+    if (id === navId) {
+      className += ' active';
+    }
+    return (
+      <div
+        onClick={this.clickedItem}
+        className={className}
+        key={id}
+        data-id={id}
+      >
+        {title}
+      </div>
+    );
   }
   renderTeams() {
+    const { me } = this.props;
+    if (!me) {
+      return undefined;
+    }
 
+    return me.get('organizations').map(o => this.renderItem(o.get('id'), o.get('name')));
   }
   renderProfile() {
-
+    const { me } = this.props;
+    if (!me) {
+      return undefined;
+    }
+    return this.renderItem(me.get('id'), me.get('name'));
   }
   renderStore() {
     // For later
   }
   render() {
     return (
-      <div className="sw-sidebar" />
+      <div className="sw-sidebar">
+        {this.renderTeams()}
+        {this.renderProfile()}
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    main: state.get('main'),
+    me: state.get('me'),
+    navId: state.getIn(['navigation', 'id']),
   };
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
-const { string } = PropTypes;
+
+const { string, func } = PropTypes;
 HOCSidebar.propTypes = {
-  // removeThis: PropTypes.string.isRequired
+  me: map,
+  navId: string,
+  navigateToId: func,
 };
 
 const ConnectedHOCSidebar = connect(mapStateToProps, {
-  onDoing: actions.doStuff,
+  navigateToId: navigation.navigateToId,
 })(HOCSidebar);
 export default ConnectedHOCSidebar;

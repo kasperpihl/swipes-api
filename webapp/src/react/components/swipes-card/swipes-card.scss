@@ -1,5 +1,5 @@
-@import "../global-styles/mixins";
-@import "../global-styles/vars";
+@import "../../global-styles/mixins";
+@import "../../global-styles/vars";
 
 $dotWrapper: 50px;
 $imgWrapper: 50px;
@@ -357,7 +357,7 @@ tabSlider {
   }
 
   &__preview {
-		@include size(100%, auto);
+    @include size(100%, auto);
     background-color: $blue-5;
     // border-top: 1px solid $deepBlue-10;
     // padding: 18px;
@@ -373,15 +373,15 @@ tabSlider {
 
     &--video {
       @include flex(center, center);
-			width: 100%;
+      width: 100%;
       position: relative;
     }
 
-		&--img {
+    &--img {
       @include flex(center, center);
-			width: 100%;
+      width: 100%;
       position: relative;
-		}
+    }
   }
 
   &:hover &__header &__header__download {
