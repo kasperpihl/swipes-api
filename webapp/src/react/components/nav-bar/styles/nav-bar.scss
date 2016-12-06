@@ -1,0 +1,90 @@
+@import '../../../global-styles/vars/';
+@import '../../../global-styles/mixins/';
+
+.nav-bar {
+  $b: &;
+  @include size(100%, 74px);
+  max-width: 780px;
+  margin: 200px;
+  position: relative;
+
+  &__button {
+    @include size(42px);
+    @include flex();
+    border-radius: 50%;
+
+    &--back {
+      position: absolute;
+      left: -12px; bottom: 0px;
+      transform: translateX(-100%);
+
+      #{$b}__icon {
+        transform: translateX(-1px);
+      }
+
+      &:hover {
+        background-color: $deepBlue-10;
+      }
+    }
+  }
+
+  &__icon {
+    @include size(24px);
+  }
+}
+
+.bread-crumbs {
+  $b: &;
+  @include size(100%, 30px);
+  @include flex(flex);
+  position: relative;
+
+  &__crumb {
+    @include size(auto, 100%);
+    @include flex();
+
+    &--last {
+      position: absolute;
+			left: 0; bottom: -6px;
+			transform: translateY(100%);
+
+      #{$b}__title {
+        font-size: 27px;
+  			font-weight: 700;
+  			color: #192445;
+  			white-space: nowrap;
+      }
+
+      #{$b}__seperator {
+        display: none;
+      }
+    }
+
+    &:not(&--last):hover {
+
+      #{$b}__title {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__title {
+    color: $blue-100;
+    margin-right: 6px;
+  }
+
+  &__seperator {
+    @include size(18px, 30px);
+    @include flex();
+    padding-top: 2px;
+    margin-right: 6px;
+
+    #{$b}__icon {
+      fill: $deepBlue-40;
+    }
+  }
+
+  &__icon {
+    @include size(18px);
+  }
+}
