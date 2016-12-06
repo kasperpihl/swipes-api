@@ -73,7 +73,7 @@ class TabBar extends Component {
     this.setState({ sliderClips });
   }
   callback(index) {
-    this.callDelegate('navTabDidChange', index);
+    this.callDelegate('tabDidChange', index);
   }
   renderIcon(icon, i) {
     return <Icon svg={icon} className="tab-bar__icon tab-bar__icon--svg" data-index={i} />;

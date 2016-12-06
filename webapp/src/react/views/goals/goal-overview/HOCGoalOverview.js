@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import GoalOverview from './GoalOverview';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 class HOCGoalOverview extends Component {
@@ -13,7 +14,7 @@ class HOCGoalOverview extends Component {
   }
   render() {
     return (
-      <div className="className" />
+      <GoalOverview />
     );
   }
 }

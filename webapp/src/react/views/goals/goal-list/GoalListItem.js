@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Assigning from '../assigning/Assigning';
+import Assigning from 'components/assigning/Assigning';
 
-import GoalsUtil from './goals_util';
+import GoalsUtil from 'classes/goals-util';
 
 import './styles/goal-list-item.scss';
 

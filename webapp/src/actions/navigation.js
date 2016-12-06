@@ -5,13 +5,13 @@ const defaultHistoryForProfile = () => [{
   title: 'Profile',
 }];
 
-const defaultHistoryForOrgName = orgName => [{
+const defaultHistoryForOrgName = orgName => [/* {
   component: 'OrgDashboard',
   title: orgName,
-}, {
-  component: 'GoalList',
-  title: 'Goals',
-}];
+  }, */{
+    component: 'GoalList',
+    title: 'Goals',
+  }];
 
 export function navigateToId(navId) {
   return (dispatch, getState) => {
@@ -56,6 +56,12 @@ export function pop() {
   return { type: types.NAVIGATION_POP };
 }
 export function popTo(i) {
+  i = Math.max(parseInt(i, 10), 0); // Don't allow removing root
+
+  if (!i || typeof i !== 'number') {
+    i = undefined;
+  }
+
   const payload = {
     index: i,
   };

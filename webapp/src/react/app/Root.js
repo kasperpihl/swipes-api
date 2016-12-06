@@ -10,7 +10,6 @@ import configureStore from 'src/store/configureStore';
 import Socket from 'classes/socket';
 import IpcListener from 'classes/ipc-listener';
 import SwipesUrlProvider from 'classes/swipes-url-provider';
-// import Slack from '../classes/slack/slack'
 import Notifications from 'classes/notifications';
 
 const store = configureStore();

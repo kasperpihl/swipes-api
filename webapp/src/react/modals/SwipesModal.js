@@ -255,7 +255,6 @@ const SwipesModalActions = (props) => {
     <div
       className="swipes-modal__actions__button"
       data-index={i}
-      ref="modalButton"
       key={i}
       onClick={props.onClick}
     >
