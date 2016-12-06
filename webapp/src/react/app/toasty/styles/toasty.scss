@@ -1,0 +1,10 @@
+@import '../../../global-styles/vars/';
+@import '../../../global-styles/mixins/';
+
+.toasty {
+  $b: &;
+  @include size(200px, auto);
+  position: fixed;
+  z-index: 10000;
+  right: 20px; top: 70px;
+}

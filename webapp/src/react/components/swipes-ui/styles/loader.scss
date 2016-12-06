@@ -1,0 +1,61 @@
+@import '../../../global-styles/vars';
+@import '../../../global-styles/mixins';
+
+.sw-loader__wrapper {
+  position:relative;
+
+  &--center {
+    position:absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .sw-loader__holder {
+    @include size(70%, 70%);
+    margin-left: 15%;
+    margin-top: 15%;
+    position: relative;
+    transform: rotate(-45deg);
+
+    .rect {
+      @include size(100%, 100%);
+      position: absolute;
+      left: 0; top: 0;
+      background: linear-gradient(
+      to right,
+      #141562, #486FBC, #EAB5A1, #8DD6FF, #4973C9, #D07CA7, #F4915E, #F5919E, #B46F89, #141562, #486FBC);
+      background-position: 0% 50%;
+      background-size: 1000% 1000%;
+      overflow: hidden;
+      animation: moveGradient 15s infinite;
+    }
+  }
+
+  &__text {
+    @include flex(center, center);
+    position: absolute;
+    color: $deepBlue-40;
+    width: 100%;
+    bottom: -15px;
+  }
+
+  &--text-right & {
+
+    &__text {
+      @include flex(center, center);
+      position: absolute;
+      color: $deepBlue-40;
+      width: 100%;
+      bottom: 50%;
+      right: -15px;
+      transform: translate(100%, 50%);
+    }
+  }
+}
+
+@keyframes moveGradient {
+  to {
+    background-position: 100% 50%;
+  }
+}

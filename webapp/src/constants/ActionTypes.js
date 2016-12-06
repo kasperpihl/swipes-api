@@ -6,6 +6,13 @@ export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
 
+// Navigation
+export const NAVIGATION_SET = 'NAVIGATION_SET';
+export const NAVIGATION_PUSH = 'NAVIGATION_PUSH';
+export const NAVIGATION_POP = 'NAVIGATION_POP';
+export const NAVIGATION_POP_TO = 'NAVIGATION_POP_TO';
+export const NAVIGATION_POP_TO_ROOT = 'NAVIGATION_POP_TO_ROOT';
+
 // Goals
 export const GOAL_DELETE = 'GOAL_DELETE';
 

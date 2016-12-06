@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Router, Route } from 'react-router';
 
-import Registration from './containers/Registration';
-import App from './containers/App';
+import HOCRegistration from './react/registration/HOCRegistration';
+import HOCApp from './react/app/HOCApp';
 
 export default class Root extends Component {
   constructor(props) {
@@ -33,9 +33,9 @@ export default class Root extends Component {
   render() {
     return (
       <Router history={this.props.history} >
-        <Route path="signin" component={Registration} onEnter={this.didEnterRegistration} />
-        <Route path="signup" component={Registration} onEnter={this.didEnterRegistration} />
-        <Route path="/" component={App} onEnter={this.didEnterApp} />
+        <Route path="signin" component={HOCRegistration} onEnter={this.didEnterRegistration} />
+        <Route path="signup" component={HOCRegistration} onEnter={this.didEnterRegistration} />
+        <Route path="/" component={HOCApp} onEnter={this.didEnterApp} />
       </Router>
     );
   }
