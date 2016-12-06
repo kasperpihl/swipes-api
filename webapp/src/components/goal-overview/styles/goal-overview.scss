@@ -1,0 +1,82 @@
+@import '../../global-styles/vars/';
+@import '../../global-styles/mixins/';
+
+.goal-overview {
+  $b: &;
+  @include size(100%);
+  max-width: 780px;
+  margin-left: 84px;
+  margin-top: 102px;
+
+  &__step {
+    @include size(100%, 72px);
+    @include flex(center, space-between);
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      @include size(100%, 1px);
+      left: 0; bottom: 0;
+      background-color: $deepBlue-10;
+    }
+
+    &:hover {
+      background-color: $blue-5;
+    }
+
+    &--completed {
+
+      #{$b}__step-status {
+        background-color: $green-color;
+      }
+
+      #{$b}__step-title {
+        color: $deepBlue-90;
+      }
+    }
+
+    &--current {
+      #{$b}__step-status {
+        background-color: $deepBlue-70;
+      }
+
+      #{$b}__step-title {
+        font-weight: 500;
+        color: $deepBlue-90;
+      }
+    }
+  }
+
+  &__step-status {
+    @include size(6px);
+    border-radius: 50%;
+    background-color: $deepBlue-10;
+    margin-left: 9px;
+  }
+
+  &__step-title {
+    @include size(calc(100% - 12px - 72px), auto);
+    color: $deepBlue-40;
+    font-size: 18px;
+    padding-left: 15px;
+  }
+
+  &__assignees {
+    @include size(72px);
+    @include flex();
+  }
+}
+
+.progress-bar {
+  @include size(100%, 16px);
+  padding: 1px 0px;
+  border: 1px solid $deepBlue-10;
+  border-left: none; border-right: none;
+  position: relative;
+
+  &__progress {
+    @include size(100%);
+    background-color: $green-color;
+  }
+}
