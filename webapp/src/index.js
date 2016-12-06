@@ -2,9 +2,9 @@ import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import SwipesAPIConnector from './classes/api-connector';
-import './components/global-styles/reset.scss';
-import './components/global-styles/app.scss';
-import './components/global-styles/transitions.scss';
+import './react/global-styles/reset.scss';
+import './react/global-styles/app.scss';
+import './react/global-styles/transitions.scss';
 
 const getURLParameter = name => decodeURIComponent((new  RegExp(`[?|&]${name}=` + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null; // eslint-disable-line
 const regeneratorRuntime = require('babel-runtime/regenerator'); // eslint-disable-line
@@ -34,7 +34,7 @@ if (typeof Tester !== 'undefined') {
     Page = require('./components/download-page/DownloadPage'); // eslint-disable-line
   }
 } else {
-  Page = require('./containers/Root'); // eslint-disable-line
+  Page = require('./react/app/Root'); // eslint-disable-line
 }
 
 render(

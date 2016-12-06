@@ -1,0 +1,109 @@
+@import '../../../global-styles/vars/';
+@import '../../../global-styles/mixins/';
+
+$actionsHeight: 48px;
+
+.sw-pdf-viewer {
+  $b: &;
+  @include size(100%, auto);
+
+  // Containers
+
+  &__actions {
+    @include flex(flex);
+    @include size(324px, $actionsHeight);
+    background-color: rgba($deepBlue-120, .9);
+    border-radius: 6px;
+    border: 1px solid #333d58;
+    left: 50%; bottom: 30px;
+    position: fixed;
+    transform: translateX(-50%);
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+
+    &--shown {
+      opacity: 1;
+      transition: opacity .3s ease-in-out;
+    }
+  }
+
+  &__action {
+    @include size(50%, $actionsHeight);
+    @include flex();
+
+    &:first-child {
+      border-right: 1px solid #333d58;
+    }
+  }
+
+  // Content
+
+  &__input {
+    @include size(30px, 30px);
+    background-color: transparent;
+    border-bottom: 1px solid $deepBlue-10;
+    color: white;
+    text-align: center;
+    transition: .5s;
+    font-size: 15px;
+    // padding-top: 1px;
+
+    &--error {
+      color: $salmon;
+      border-color: $salmon;
+    }
+  }
+
+  &__pages-value {
+    color: white;
+    @include flex(flex);
+    font-size: 15px;
+    transform: translateY(-1px);
+    user-select: none;
+
+    span {
+      color: $deepBlue-60;
+      margin: 0 5px;
+      margin-right: 9px;
+      user-select: none;
+    }
+  }
+
+  &__zoom-value {
+    color: $bg;
+    font-size: 15px;
+    margin: 0 3px;
+    user-select: none;
+  }
+
+  // Buttons
+
+  &__button {
+    $e: &;
+
+    @include size(24px);
+    @include flex();
+    margin: 0 6px;
+
+    #{$b}__icon {
+      fill: $deepBlue-40;
+    }
+
+    &:not(#{$e}--disabled):hover {
+      #{$b}__icon {
+        fill: $bg;
+      }
+    }
+
+    &--disabled {
+      #{$b}__icon {
+        fill: $deepBlue-80;
+      }
+    }
+  }
+
+  &__icon {
+    @include size(24px);
+  }
+}

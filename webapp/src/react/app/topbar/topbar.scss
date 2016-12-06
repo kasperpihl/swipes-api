@@ -1,0 +1,110 @@
+@import '../../global-styles/vars';
+@import '../../global-styles/mixins';
+
+$topbarSize: 38px;
+.topbar {
+  $b: &;
+  @include size(100%, $topbarSize);
+  @include flex(center, space-between);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  position: relative;
+  user-select: none;
+  z-index: 9999;
+  -webkit-app-region: drag;
+
+  &__icon {
+    @include size(24px);
+    fill: white;
+    stroke: white;
+  }
+
+  &__nav {
+    @include flex()
+    position: relative;
+    padding-left: 21px;
+
+    &__back {
+      @include size(30px);
+      @include flex();
+      // margin-left: 5px;
+      border-radius: 50%;
+
+      #{$b}__icon {
+        transform: translateX(-1px);
+      }
+
+      &:hover {
+        background-color: rgba(white, .3);
+      }
+    }
+
+    &__crumbs {
+      @include flex(flex);
+    }
+
+    &__crumb {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: white;
+      line-height: 1;
+      padding: 0 15px;
+      position: relative;
+
+      &:not(:last-child):hover {
+        text-decoration: underline;
+      }
+
+      &:not(:last-child):after {
+        content: ">";
+        position: absolute;
+        right: -5px; top: 0;
+        color: rgba(white, .5)
+      }
+    }
+  }
+
+  &__profile {
+    @include size(54px);
+    @include flex()
+
+    img {
+      @include size(30px);
+      border-radius: 50%;
+    }
+  }
+
+  &__title {
+    @include flex(center, flex-start);
+    @include size(100%, $topbarSize);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2.6px;
+    padding: 0 30px;
+    padding-left: 15px;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  &__actions {
+    @include size(auto, $topbarSize);
+    @include flex();
+  }
+
+  &__button {
+    @include size(30px);
+    @include flex();
+    background-color: rgba(white,.2);
+    border-radius: 50%;
+    margin-right: 12px;
+
+    &:hover {
+      background-color: rgba(white,.4);
+    }
+
+    &--find {
+      @include size(12px);
+      fill: white;
+    }
+  }
+}
