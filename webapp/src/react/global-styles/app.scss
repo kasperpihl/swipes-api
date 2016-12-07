@@ -81,6 +81,22 @@ svg {
     @include size(100%);
   }
 
+  &__actions {
+    position: fixed;
+    right: 30px; top: 79px;
+    @include flex(flex);
+  }
+
+  &__action {
+    @include size(42px);
+    @include flex();
+  }
+
+  &__icon {
+    @include size(24px);
+    fill: $deepBlue-100;
+  }
+
   &--shown {
     visibility: visible;
     opacity: 1;

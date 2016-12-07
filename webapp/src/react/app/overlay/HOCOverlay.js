@@ -4,6 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as overlays from 'src/react/overlays';
+import Icon from 'Icon';
 
 
 class HOCOverlay extends Component {
@@ -34,6 +35,15 @@ class HOCOverlay extends Component {
 
     return <Comp key={overlay.get('component')} {...props} />;
   }
+  renderOverleyActions() {
+    return (
+      <div className="overlay__actions">
+        <div className="overlay__action">
+          <Icon svg="CloseIcon" className="overlay__icon" />
+        </div>
+      </div>
+    );
+  }
   render() {
     const renderedOverlay = this.renderOverlay();
     let className = 'overlay';
@@ -52,6 +62,8 @@ class HOCOverlay extends Component {
         >
           {renderedOverlay}
         </ReactCSSTransitionGroup>
+
+        {this.renderOverleyActions()}
       </div>
     );
   }
