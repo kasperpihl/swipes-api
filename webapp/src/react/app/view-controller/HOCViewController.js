@@ -4,6 +4,7 @@ import { navigation } from 'actions';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Navbar from 'components/nav-bar/NavBar';
+import Icon from 'Icon';
 import * as views from 'views';
 
 class HOCViewController extends Component {
@@ -54,11 +55,21 @@ class HOCViewController extends Component {
       <View {...props} key={lastEl.get('component')} />
     );
   }
+  renderGlobalActions() {
+    return (
+      <div className="global-actions">
+        <div className="global-actions__action">
+          <Icon svg="FindIcon" className="global-actions__icon" />
+        </div>
+      </div>
+    );
+  }
   render() {
     return (
       <div className="view-controller">
         {this.renderNavbar()}
         {this.renderContent()}
+        {this.renderGlobalActions()}
       </div>
     );
   }
