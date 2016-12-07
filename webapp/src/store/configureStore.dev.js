@@ -4,7 +4,7 @@ import persistState from 'redux-localstorage';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import Immutable, { fromJS } from 'immutable';
-import rootReducer from '../reducers';
+import rootReducer from 'reducers';
 
 
 // Define what's saved from state to LocalStorage

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
+import { bindAll } from 'classes/utils';
 
 /*
   Delegate Methods
@@ -11,17 +11,12 @@ import React, { Component, PropTypes } from 'react';
 
  */
 import './swipes-card.scss';
-
-import { bindAll } from 'classes/utils';
 import SwipesCardItem from './SwipesCardItem';
 
 export default class SwipesCard extends Component {
   constructor(props) {
     super(props);
     bindAll(this, ['callDelegate']);
-  }
-  componentDidMount() {
-    this.callDelegate('onCardLoad', 'hello', 'world');
   }
   callDelegate(name) {
     const { delegate } = this.props;

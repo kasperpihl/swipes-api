@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import SwipesCard from '../swipes-card/SwipesCard';
-import SwipesCardList from '../swipes-card/SwipesCardList';
-import Loader from '../swipes-ui/Loader';
-import '../../components/find/styles/search-results.scss';
+import SwipesCard from 'components/swipes-card/SwipesCard';
+import SwipesCardList from 'components/swipes-card/SwipesCardList';
+import Loader from 'components/swipes-ui/Loader';
+import './styles/search-results.scss';
 // import { FindIcon } from '../icons'
 
 class SearchResults extends Component {

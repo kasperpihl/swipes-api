@@ -5,11 +5,11 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import { main, search, api, modal } from 'actions';
 import { bindAll } from 'classes/utils';
 
-import TabBar from '../../components/tab-bar/TabBar';
-import '../../components/find/styles/find.scss';
+import TabBar from 'components/tab-bar/TabBar';
+import 'components/find/styles/find.scss';
 
-import Activities from '../../components/find/Activities';
-import SearchResults from '../../components/find/SearchResults';
+import Activities from './Activities';
+import SearchResults from './SearchResults';
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
 class Find extends Component {
   constructor(props) {
