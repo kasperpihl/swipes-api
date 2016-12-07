@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Assigning from 'components/assigning/Assigning';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import GoalsUtil from 'classes/goals-util';
 
@@ -26,8 +26,6 @@ class GoalListItem extends Component {
   render() {
     const { data } = this.props;
     const rootClass = 'goal-list-item';
-    const step = data.getIn(['steps', data.get('currentStepIndex')]);
-    const assignees = step.get('assignees').toJS();
     const status = this.helper.getStatusForCurrentStep();
 
     return (
@@ -37,7 +35,10 @@ class GoalListItem extends Component {
           <div className={`${rootClass}__label`}>{status}</div>
         </div>
         <div className={`${rootClass}__assigning`}>
-          <Assigning assignees={assignees} me={this.props.me.toJS()} />
+          <HOCAssigning
+            stepIndex={data.get('currentStepIndex')}
+            goalId={data.get('id')}
+          />
         </div>
       </div>
     );

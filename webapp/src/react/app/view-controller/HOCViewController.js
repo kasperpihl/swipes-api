@@ -5,10 +5,8 @@ import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Navbar from 'components/nav-bar/NavBar';
 import { bindAll } from 'classes/utils';
-import Icon from 'Icon';
 import Button from 'Button';
 import * as views from 'views';
-
 import './styles/view-controller';
 
 class HOCViewController extends Component {

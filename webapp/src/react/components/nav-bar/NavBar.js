@@ -100,5 +100,5 @@ const { array, object } = PropTypes;
 NavBar.propTypes = {
   history: array,
   delegate: object,
-  children: array,
+  children: object,
 };
