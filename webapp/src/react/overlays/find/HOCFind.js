@@ -1,21 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { map } from 'react-immutable-proptypes';
+import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
 
-import TabBar from 'components/tab-bar/TabBar';
 import './styles/find.scss';
 
-import Activities from './Activities';
 import SearchResults from './SearchResults';
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
 class HOCFind extends Component {
   constructor(props) {
     super(props);
 
-    bindAll(this, ['onChange', 'onKeyUp', 'onCardClick']);
+    bindAll(this, ['onKeyUp', 'onCardClick']);
     this.unhandledDocs = [];
   }
   componentDidMount() {
@@ -156,16 +154,16 @@ class HOCFind extends Component {
   }
 }
 
-const { func, bool } = PropTypes;
+const { func, bool, string } = PropTypes;
 
 HOCFind.propTypes = {
-  searchResults: map,
+  searchResults: list,
   request: func,
   loadModal: func,
   search: func,
   groupedResults: map,
   searching: bool,
-  searchQuery: map,
+  searchQuery: string,
 };
 
 function mapStateToProps(state) {
