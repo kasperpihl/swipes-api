@@ -32,6 +32,12 @@ class Loader extends Component {
   componentWillUnmount() {
     clearInterval(this.timer);
   }
+  setTimer(time) {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+    this.timer = setInterval(this.setNextState, time);
+  }
   setNextState() {
     const currentPositions = this.state.positions;
     const emptyIndex = this.positionForTile(null);
@@ -48,40 +54,28 @@ class Loader extends Component {
 
     this.setState({ stateNumber: nextState, positions: newPositions });
   }
-  setTimer(time) {
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-    this.timer = setInterval(this.setNextState, time);
-  }
   clipPathForPosition(position) {
     const { mini } = this.props;
-    let newPosition = position;
-
-    newPosition = parseInt(newPosition, 10);
-
-    let SIZE = 100 - ((2 * GUTTER) / 3);
+    position = parseInt(position, 10);
+    let SIZE = (100 - (2 * GUTTER)) / 3;
     let GUT = GUTTER;
-
     if (mini) {
-      SIZE = 100 - (GUTTER / 2);
+      SIZE = (100 - GUTTER) / 2;
       GUT = MINI_GUTTER;
     }
-
     const VAR0 = '0% ';
     const VAR1 = `${SIZE + GUT}% `;
     const VAR2 = `${(2 * SIZE) + (2 * GUT)}% `;
-
     if (mini) {
-      switch (newPosition) {
+      switch (position) {
         case 1: return `inset(${VAR0}${VAR1}${VAR1}${VAR0} round 5%)`;
         case 2: return `inset(${VAR0}${VAR0}${VAR1}${VAR1} round 5%)`;
         case 3: return `inset(${VAR1}${VAR0}${VAR0}${VAR1} round 5%)`;
         case 4: return `inset(${VAR1}${VAR1}${VAR0}${VAR0} round 5%)`;
-        default: return `inset(${VAR0}${VAR1}${VAR1}${VAR0} round 5%)`;
+        default: return `inset(${VAR1}${VAR1}${VAR0}${VAR0} round 5%)`;
       }
     } else {
-      switch (newPosition) {
+      switch (position) {
         case 1: return `inset(${VAR1}${VAR2}${VAR1}${VAR0} round 5%)`;
         case 2: return `inset(${VAR0}${VAR2}${VAR2}${VAR0} round 5%)`;
         case 3: return `inset(${VAR0}${VAR1}${VAR2}${VAR1} round 5%)`;
@@ -89,7 +83,7 @@ class Loader extends Component {
         case 5: return `inset(${VAR2}${VAR1}${VAR0}${VAR1} round 5%)`;
         case 6: return `inset(${VAR2}${VAR0}${VAR0}${VAR2} round 5%)`;
         case 7: return `inset(${VAR1}${VAR0}${VAR1}${VAR2} round 5%)`;
-        default: return `inset(${VAR1}${VAR2}${VAR1}${VAR0} round 5%)`;
+        default: return `inset(${VAR1}${VAR0}${VAR1}${VAR2} round 5%)`;
       }
     }
   }
@@ -108,19 +102,17 @@ class Loader extends Component {
   }
   positionForTile(radioCommand) {
     const keys = Object.keys(this.state.positions);
-
+    let foundKey;
     keys.forEach((key) => {
       const tile = this.state.positions[key];
-
       if (tile === radioCommand) {
-        return key;
+        foundKey = key;
       }
-
-      return undefined;
     });
 
-    return undefined;
+    return foundKey;
   }
+
   renderTiles() {
     let squares = ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot'];
     if (this.props.mini) {
@@ -140,7 +132,6 @@ class Loader extends Component {
     if (text && text.length) {
       return <div className="sw-loader__wrapper__text" style={textStyle}>{text}</div>;
     }
-
     return undefined;
   }
   render() {
@@ -177,12 +168,13 @@ class Loader extends Component {
 }
 export default Loader;
 
+const { number, bool, string, object } = PropTypes;
 Loader.propTypes = {
-  size: PropTypes.number,
-  center: PropTypes.bool,
-  mini: PropTypes.bool,
-  text: PropTypes.string,
-  textStyle: PropTypes.object,
-  textPosition: PropTypes.string,
-  style: PropTypes.object,
+  size: number,
+  center: bool,
+  mini: bool,
+  text: string,
+  textStyle: object,
+  textPosition: string,
+  style: object,
 };
