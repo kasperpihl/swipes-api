@@ -92,6 +92,7 @@ class Note extends Component {
     if (settings.get('fullscreen')) {
       return undefined;
     }
+    return undefined;
 
     const { data } = this.state;
 

@@ -58,7 +58,7 @@ export function pop() {
 export function popTo(i) {
   i = Math.max(parseInt(i, 10), 0); // Don't allow removing root
 
-  if (!i || typeof i !== 'number') {
+  if (!i && i !== 0 || typeof i !== 'number') {
     i = undefined;
   }
 

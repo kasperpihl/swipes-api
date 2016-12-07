@@ -19,6 +19,7 @@ module.exports = {
     alias: {
       src: 'src',
       app: 'src/react/app',
+      reducers: 'src/reducers',
       constants: 'src/constants/ActionTypes',
       components: 'src/react/components',
       styles: 'src/react/global-styles',

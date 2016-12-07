@@ -40,7 +40,7 @@ export default class GoalsUtil {
     requireParams({ stepIndex }, 'amIAssigned');
     const step = this.getStepByIndex(stepIndex);
 
-    return step.get('assignees').find(a => (a.get('id') === this.id));
+    return step.get('assignees').find(a => (a === this.id));
   }
   currentStepIndex() {
     return this.goal.get('currentStepIndex');

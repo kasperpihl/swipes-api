@@ -18,7 +18,6 @@ class SwipesCardItem extends Component {
   componentWillUpdate(nextProps) {
     if (JSON.stringify(nextProps) !== JSON.stringify(this.props.data)) {
       const newData = Object.assign(this.state.data, nextProps);
-
       this.setState({ data: newData });
     }
   }

@@ -7,12 +7,6 @@ class StepField extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.clickedFullscreen = this.clickedFullscreen.bind(this);
-  }
-  clickedFullscreen() {
-    const { delegate } = this.props;
-
-    delegate('fullscreen');
   }
   renderIcon(icon, color) {
     const styles = {};
@@ -22,18 +16,6 @@ class StepField extends Component {
     }
 
     return <Icon svg={icon} style={styles} className="step-field__icon step-field__icon--svg" />;
-  }
-  renderFullscreen() {
-    const { fullscreen } = this.props;
-
-    if (!fullscreen) return undefined;
-
-    return (
-      <div onClick={this.clickedFullscreen} className="step-field__action" title="Fullscreen">
-        {this.renderIcon('ArrowLeftIcon')}
-        {this.renderIcon('ArrowRightIcon')}
-      </div>
-    );
   }
   render() {
     const { icon, iconColor, title, children } = this.props;
@@ -47,7 +29,6 @@ class StepField extends Component {
           <div className="step-field__title">
             {title}
           </div>
-          {this.renderFullscreen()}
         </div>
         {children}
       </div>
@@ -62,8 +43,6 @@ const { string, object, bool, func } = PropTypes;
 StepField.propTypes = {
   icon: string,
   title: string,
-  delegate: func,
-  fullscreen: bool,
   iconColor: string,
   children: object,
 };
