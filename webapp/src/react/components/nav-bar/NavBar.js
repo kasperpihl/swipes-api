@@ -87,7 +87,7 @@ class NavBar extends Component {
       <div className="nav-bar">
         {this.renderBreadCrumbs()}
         {this.renderBackButton()}
-        {this.renderActions()}
+        {this.props.children}
       </div>
     );
   }
@@ -100,4 +100,5 @@ const { array, object } = PropTypes;
 NavBar.propTypes = {
   history: array,
   delegate: object,
+  children: array,
 };

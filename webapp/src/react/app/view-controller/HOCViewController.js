@@ -6,7 +6,10 @@ import { list } from 'react-immutable-proptypes';
 import Navbar from 'components/nav-bar/NavBar';
 import { bindAll } from 'classes/utils';
 import Icon from 'Icon';
+import Button from 'Button';
 import * as views from 'views';
+
+import './styles/view-controller';
 
 class HOCViewController extends Component {
   constructor(props) {
@@ -33,6 +36,18 @@ class HOCViewController extends Component {
     const { popTo } = this.props;
     popTo(i);
   }
+  renderActionButtons() {
+    return (
+      <div className="nav-bar__actions">
+        <div className="nav-bar__action">
+          <Button text="Create goal" />
+        </div>
+        <div className="nav-bar__action">
+          <Button secondary icon="ArrowRightIcon" />
+        </div>
+      </div>
+    );
+  }
   renderNavbar() {
     const { history } = this.props;
     if (!history) {
@@ -43,7 +58,11 @@ class HOCViewController extends Component {
       title: el.get('title'),
     })).toArray();
 
-    return <Navbar history={navbarData} delegate={this} />;
+    return (
+      <Navbar history={navbarData} delegate={this}>
+        {this.renderActionButtons()}
+      </Navbar>
+    );
   }
   renderContent() {
     const { history } = this.props;
@@ -70,7 +89,7 @@ class HOCViewController extends Component {
     return (
       <div className="global-actions">
         <div className="global-actions__action" onClick={this.clickedFind}>
-          <Icon svg="FindIcon" className="global-actions__icon" />
+          <Button secondary="true" icon="FindIcon" />
         </div>
       </div>
     );
