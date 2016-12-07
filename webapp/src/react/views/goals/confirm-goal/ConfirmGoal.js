@@ -3,7 +3,7 @@ import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { modal, api, overlay, toasty } from 'actions';
 import { bindAll } from 'classes/utils';
-import WorkflowSetup from '../../components/confirm-goal/WorkflowSetup';
+import WorkflowSetup from './WorkflowSetup';
 
 class ConfirmGoal extends Component {
   constructor(props) {
