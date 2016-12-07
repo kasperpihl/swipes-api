@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { overlay, modal } from 'actions';
+import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
-
-import WorkflowList from './WorkflowList';
 import Button from 'components/swipes-ui/Button';
+import WorkflowList from './WorkflowList';
+
 
 class StartGoal extends Component {
   constructor(props) {
@@ -14,17 +14,13 @@ class StartGoal extends Component {
     bindAll(this, ['didSelectItem', 'openStore', 'openCreatePattern']);
   }
   openStore() {
-    const { pushOverlay } = this.props;
 
-    pushOverlay({ component: 'Store', title: 'Store' });
   }
   openCreatePattern() {
-    const { pushOverlay } = this.props;
 
-    pushOverlay({ component: 'CreatePattern', title: 'Create Pattern' });
   }
   didSelectItem(id) {
-    const { pushOverlay, workflows, loadModal, users } = this.props;
+    const { workflows, loadModal, users } = this.props;
     const idToCheck = 'PGR5OHKL6';
 
     if (workflows.get(id).toJS().id === idToCheck) {
@@ -66,11 +62,11 @@ class StartGoal extends Component {
         },
       }, (e) => {
         if (e) {
-          pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: filteredWorkspaces[e.item] } });
+          // pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: filteredWorkspaces[e.item] } });
         }
       });
     } else {
-      pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: workflows.get(id).toJS() } });
+      // pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: workflows.get(id).toJS() } });
     }
   }
   renderList() {
@@ -98,7 +94,6 @@ class StartGoal extends Component {
 const { func } = PropTypes;
 
 StartGoal.propTypes = {
-  pushOverlay: func,
   workflows: map,
   loadModal: func,
   users: map,
@@ -112,8 +107,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedStartGoal = connect(mapStateToProps, {
-  loadModal: modal.load,
-  pushOverlay: overlay.push,
+  loadModal: actions.modal.load,
 })(StartGoal);
 
 export default ConnectedStartGoal;

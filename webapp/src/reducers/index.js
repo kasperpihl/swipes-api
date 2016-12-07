@@ -3,8 +3,6 @@ import { combineReducers } from 'redux-immutable';
 import main from './main';
 import navigation from './navigation';
 import modal from './modal';
-import overlays from './overlays';
-import notifications from './notifications';
 import routing from './routing';
 import toasty from './toasty';
 import search from './search';
@@ -21,8 +19,6 @@ const rootReducer = combineReducers({
   main,
   navigation,
   modal,
-  overlays,
-  notifications,
   toasty,
   routing,
   search,

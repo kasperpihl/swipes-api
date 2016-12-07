@@ -6,12 +6,12 @@ import { main, search, api, modal } from 'actions';
 import { bindAll } from 'classes/utils';
 
 import TabBar from 'components/tab-bar/TabBar';
-import 'components/find/styles/find.scss';
+import './styles/find.scss';
 
 import Activities from './Activities';
 import SearchResults from './SearchResults';
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
-class Find extends Component {
+class HOCFind extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -216,7 +216,7 @@ class Find extends Component {
 
 const { func, bool } = PropTypes;
 
-Find.propTypes = {
+HOCFind.propTypes = {
   searchResults: map,
   request: func,
   loadModal: func,
@@ -240,10 +240,10 @@ function mapStateToProps(state) {
   };
 }
 
-const ConnectedFind = connect(mapStateToProps, {
+const ConnectedHOCFind = connect(mapStateToProps, {
   search: search.search,
   request: api.request,
   loadModal: modal.load,
   startDraggingDot: main.startDraggingDot,
-})(Find);
-export default ConnectedFind;
+})(HOCFind);
+export default ConnectedHOCFind;

@@ -7,6 +7,7 @@ import Topbar from './topbar/Topbar';
 import Modal from './modal/HOCModal';
 import ViewController from './view-controller/HOCViewController';
 import Sidebar from './sidebar/HOCSidebar';
+import Overlay from './overlay/HOCOverlay';
 import Toasty from './toasty/HOCToasty';
 
 let DevTools = 'div';
@@ -51,6 +52,7 @@ class HOCApp extends Component {
           <Sidebar />
           <ViewController />
         </div>
+        <Overlay />
         <Modal />
         <Toasty />
         <DevTools />
