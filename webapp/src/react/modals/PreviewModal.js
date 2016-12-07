@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
 import Icon from 'Icon';
-import PDFViewer from '../components/pdf-viewer/PDFViewer';
-import Loader from '../components/swipes-ui/Loader';
+import PDFViewer from 'components/pdf-viewer/PDFViewer';
+import Loader from 'components/swipes-ui/Loader';
 
 import './styles/preview-modal.scss';
 

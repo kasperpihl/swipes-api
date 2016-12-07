@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Icon from 'Icon';
+import { nearestAttribute } from 'classes/utils';
 
 import './styles/nav-bar.scss';
 
@@ -22,7 +23,7 @@ class NavBar extends Component {
     this.callDelegate('navbarClickedBack');
   }
   clickedCrumb(e) {
-    const i = parseInt(e.target.getAttribute('data-index'), 10);
+    const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
     this.callDelegate('navbarClickedCrumb', i);
   }
   renderCrumb(title, i, numberOfCrumbs) {
@@ -36,7 +37,7 @@ class NavBar extends Component {
 
     return (
       <div className={className} key={j} onClick={this.clickedCrumb} data-index={i}>
-        <div className="bread-crumbs__title" data-index={i}>
+        <div className="bread-crumbs__title">
           {title}
         </div>
         <div className="bread-crumbs__seperator">
@@ -67,7 +68,8 @@ class NavBar extends Component {
     );
   }
   renderBackButton() {
-    const { history } = this.props;
+    return undefined;
+    /* const { history } = this.props;
     if (!history || history.length === 1) {
       return undefined;
     }
@@ -75,7 +77,7 @@ class NavBar extends Component {
       <div className="nav-bar__button nav-bar__button--back" onClick={this.clickedBack}>
         <Icon svg="ArrowLeftIcon" className="nav-bar__icon" />
       </div>
-    );
+    );*/
   }
   renderActions() {
 

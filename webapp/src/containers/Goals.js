@@ -57,14 +57,6 @@ class Goals extends Component {
       });
     }
   }
-  clickedRoundButton() {
-    const {
-      setOverlay,
-    } = this.props;
-
-    setOverlay({ component: 'StartGoal', title: 'Start a Goal' });
-  }
-
   renderList() {
     const { currentGoal, goals: goalsProps, me } = this.props;
 

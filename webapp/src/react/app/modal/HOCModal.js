@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import SwipesModal from '../../modals/SwipesModal';
-import PreviewModal from '../../modals/PreviewModal';
+import SwipesModal from 'src/react/modals/SwipesModal';
+import PreviewModal from 'src/react/modals/PreviewModal';
 import { modal as modalActions } from 'actions';
 
 import { bindAll } from 'classes/utils';
