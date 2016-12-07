@@ -1,0 +1,36 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.view-controller {
+  @include size(100%);
+  padding-left: 45px;
+  padding-top: 9px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.global-actions {
+  position: fixed;
+  right: 30px; top: 79px;
+  @include flex(flex);
+  z-index: 9;
+
+  &__action {
+    margin: 0 3px;
+  }
+}
+
+
+.nav-bar {
+
+  &__actions {
+    @include flex(flex);
+    position: absolute;
+    right: 0; bottom: 0;
+  }
+
+  &__action {
+    margin: 0 3px;
+  }
+}

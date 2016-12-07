@@ -26,6 +26,7 @@ module.exports = {
       actions: 'src/actions',
       views: 'src/react/views',
       Icon: 'src/react/icons/Icon',
+      Button: 'src/react/components/button/Button',
       classes: 'src/classes'
     },
     extensions: ['', '.js', '.scss']
