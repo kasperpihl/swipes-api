@@ -4,6 +4,7 @@ import * as types from 'constants';
 const initialState = fromJS({
   socketUrl: null,
   token: null,
+  overlay: null,
   cache: {},
   mainClasses: Set(),
   hasLoaded: false,
@@ -11,12 +12,13 @@ const initialState = fromJS({
 });
 
 export default function main(state = initialState, action) {
-  switch (action.type) {
+  const { payload, type } = action;
+  switch (type) {
     case 'rtm.start': {
-      if (!action.payload.ok) {
+      if (!payload.ok) {
         return state;
       }
-      return state.withMutations(ns => ns.set('socketUrl', action.payload.ws_url));
+      return state.withMutations(ns => ns.set('socketUrl', payload.ws_url));
     }
 
     case types.SET_STATUS: {
@@ -28,7 +30,7 @@ export default function main(state = initialState, action) {
       return state.set('activeGoal', action.goalId || null);
     }
     case 'goal_deleted': {
-      if (state.get('activeGoal') === action.payload.data.id) {
+      if (state.get('activeGoal') === payload.data.id) {
         return state.set('activeGoal', null);
       }
       return state;
@@ -49,14 +51,24 @@ export default function main(state = initialState, action) {
 
 
     // ======================================================
+    // Overlays
+    // ======================================================
+    case types.OVERLAY_SHOW: {
+      return state.set('overlay', fromJS(payload.overlay));
+    }
+    case types.OVERLAY_HIDE: {
+      return state.set('overlay', null);
+    }
+
+    // ======================================================
     // Authorization methods
     // ======================================================
     case 'users.signin':
     case 'users.signup': {
-      if (!action.payload || !action.payload.ok) {
+      if (!action.payload || !payload.ok) {
         return state;
       }
-      return state.set('token', action.payload.token);
+      return state.set('token', payload.token);
     }
     case types.LOGOUT: {
       return initialState;

@@ -1,10 +1,12 @@
 // Main
 export const SET_STATUS = 'SET_STATUS';
 export const LOGOUT = 'LOGOUT';
-export const SET_ACTIVE_GOAL = 'SET_ACTIVE_GOAL';
 export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
+
+export const OVERLAY_SHOW = 'OVERLAY_SHOW';
+export const OVERLAY_HIDE = 'OVERLAY_HIDE';
 
 // Navigation
 export const NAVIGATION_SET = 'NAVIGATION_SET';
@@ -27,10 +29,7 @@ export const TOAST_REMOVE = 'TOAST_REMOVE';
 export const TOAST_UPDATE = 'TOAST_UPDATE';
 
 // Overlay
-export const SET_OVERLAY = 'SET_OVERLAY';
-export const POP_OVERLAY = 'POP_OVERLAY';
-export const PUSH_OVERLAY = 'PUSH_OVERLAY';
-export const CLEAR_OVERLAY = 'CLEAR_OVERLAY';
+
 
 // Modal
 export const LOAD_MODAL = 'LOAD_MODAL';

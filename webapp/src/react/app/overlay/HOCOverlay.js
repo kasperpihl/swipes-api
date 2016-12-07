@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import { list } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import * as overlays from './overlays';
+import * as overlays from 'src/react/overlays';
 
 
 class HOCOverlay extends Component {
@@ -12,33 +12,8 @@ class HOCOverlay extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.transitionName = 'fade';
   }
-  componentWillUpdate(nextProps) {
-    const { overlays: oldVal } = this.props;
-    const { overlays: newVal } = nextProps;
-    if (newVal.size !== oldVal.size) {
-      // Is the first overlay to be shown
-      if (!oldVal.size && newVal.size) {
-        this.transitionName = 'fade';
-      } else if (oldVal.size && !newVal.size) {
-        // Removing the last overlay
-        this.transitionName = 'fade';
-      } else if (newVal.size > oldVal.size) {
-        // Pushing a new overlay
-        this.transitionName = 'fade';
-      } else if (newVal.size < oldVal.size) {
-        // Popping an overlay (going back with breadcrumps)
-        this.transitionName = 'fade';
-      }
-    } else if (newVal.size && newVal.size === oldVal.size) {
-      // Replacing overlay with a new overlay
-      if (oldVal.last().get('component') !== newVal.last().get('component')) {
-        this.transitionName = 'fade';
-      }
-    }
-  }
   renderOverlay() {
-    const { overlays: propOverlays } = this.props;
-    const overlay = propOverlays.last();
+    const { overlay } = this.props;
 
     if (!overlay) {
       return undefined;
@@ -53,6 +28,7 @@ class HOCOverlay extends Component {
     const Comp = overlays[overlay.get('component')];
 
     if (!Comp) {
+      console.warn(`unsupported overlay: ${overlay.get('component')}, Check react/overlays/index.js`);
       return undefined;
     }
 
@@ -83,13 +59,13 @@ class HOCOverlay extends Component {
 
 function mapStateToProps(state) {
   return {
-    overlays: state.get('overlays'),
+    overlay: state.getIn(['main', 'overlay']),
   };
 }
 
 
 HOCOverlay.propTypes = {
-  overlays: list,
+  overlay: map,
 };
 
 const ConnectedHOCOverlay = connect(mapStateToProps, {
