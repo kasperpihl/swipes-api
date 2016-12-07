@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as overlays from 'src/react/overlays';
+import * as actions from 'actions';
 import Icon from 'Icon';
 
 
@@ -12,6 +13,13 @@ class HOCOverlay extends Component {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.transitionName = 'fade';
+    this.clickedClose = this.clickedClose.bind(this);
+  }
+  clickedClose() {
+    const {
+      overlayHide,
+    } = this.props;
+    overlayHide();
   }
   renderOverlay() {
     const { overlay } = this.props;
@@ -38,7 +46,7 @@ class HOCOverlay extends Component {
   renderOverleyActions() {
     return (
       <div className="overlay__actions">
-        <div className="overlay__action">
+        <div className="overlay__action" onClick={this.clickedClose}>
           <Icon svg="CloseIcon" className="overlay__icon" />
         </div>
       </div>
@@ -75,11 +83,13 @@ function mapStateToProps(state) {
   };
 }
 
-
+const { func } = PropTypes;
 HOCOverlay.propTypes = {
   overlay: map,
+  overlayHide: func,
 };
 
 const ConnectedHOCOverlay = connect(mapStateToProps, {
+  overlayHide: actions.main.overlayHide,
 })(HOCOverlay);
 export default ConnectedHOCOverlay;
