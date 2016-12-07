@@ -15,6 +15,7 @@ class HOCGoalStep extends Component {
     this.state = {
       data: helper.getInitialDataForStepIndex(props.stepIndex),
     };
+    this.cacheFormInput = this.cacheFormInput.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
@@ -30,7 +31,7 @@ class HOCGoalStep extends Component {
     return new GoalsUtil(goal, me.get('id'), cachedData);
   }
   cacheFormInput() {
-    const { stepIndex } = this.props;
+    const { stepIndex, cacheSave, goal } = this.props;
     const helper = this.getHelper();
     const data = {
       stepIndex: helper.currentStepIndex(),
@@ -41,7 +42,7 @@ class HOCGoalStep extends Component {
     if (amIAssigned && isCurrent) {
       data.data = this.generateRawObj(helper);
     }
-    // this.callDelegate('goalStepCacheData', fromJS(data));
+    cacheSave(goal.get('id'), fromJS(data));
   }
 
   generateRawObj() {
@@ -139,10 +140,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const { number } = PropTypes;
+const { number, func } = PropTypes;
 HOCGoalStep.propTypes = {
   stepIndex: number,
   step: map,
+  cacheSave: func,
   goal: map,
   me: map,
   cachedData: map,
@@ -151,5 +153,6 @@ HOCGoalStep.propTypes = {
 
 const ConnectedHOCGoalStep = connect(mapStateToProps, {
   navPop: actions.navigation.pop,
+  cacheSave: actions.main.cacheSave,
 })(HOCGoalStep);
 export default ConnectedHOCGoalStep;
