@@ -40,10 +40,10 @@ class HOCViewController extends Component {
     return (
       <div className="nav-bar__actions">
         <div className="nav-bar__action">
-          <Button text="Create goal" />
+          <Button primary text="Create goal" />
         </div>
         <div className="nav-bar__action">
-          <Button secondary icon="ArrowRightIcon" />
+          <Button icon="ArrowRightIcon" />
         </div>
       </div>
     );
@@ -89,7 +89,7 @@ class HOCViewController extends Component {
     return (
       <div className="global-actions">
         <div className="global-actions__action" onClick={this.clickedFind}>
-          <Button secondary="true" icon="FindIcon" />
+          <Button icon="FindIcon" />
         </div>
       </div>
     );

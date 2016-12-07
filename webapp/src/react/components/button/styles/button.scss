@@ -1,61 +1,127 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+$bigBtn: 42px;
+$smallBtn: 33px;
+$btnSize: $bigBtn;
+$mainColor: $deepBlue-100;
+
 .g-button {
   $b: &;
 
-  @include size(auto, 42px);
-  min-width: 42px;
   @include flex();
+  @include size(auto, $btnSize);
   border: 1px solid;
-  border-color: $blue-100;
+  border-color: rgba($mainColor, .1);
   border-radius: 50px;
+  min-width: $btnSize;
   transition: .15s;
+}
+
+// ELEMENTS
+
+.g-button {
+  $b: &;
 
   &__svg {
     @include size(24px);
-    fill: $blue-100;
-    stroke: $blue-100;
+    fill: rgba($mainColor, .8);
+    stroke: rgba($mainColor, .8);
     transition: .15s;
   }
 
   &__text {
-    padding: 0 42px;
-    font-weight: bold;
+    color: rgba($mainColor, .6);
     font-size: 12px;
-    color: $blue-100;
+    font-weight: bold;
+    padding: 0 $btnSize;
     transition: .15s;
 
     &:first-letter {
       text-transform: uppercase;
     }
   }
+}
+
+
+// MODIFIERS
+
+.g-button {
+  $b: &;
 
   &--icon-and-text {
-    padding: 0 42px;
+    padding: 0 $btnSize;
 
     #{$b}__text {
-      padding: 0;
+      padding: 0 !important;
       padding-left: 6px;
     }
   }
 
-  &--secondary {
-    border-color: $deepBlue-10;
+  &--primary {
+    $mainColor: $blue-100;
+
+    border-color: $mainColor;
     transition: .15s;
 
     #{$b}__svg {
-      fill: $deepBlue-80;
-      stroke: $deepBlue-80;
+      fill: $mainColor;
+      stroke: $mainColor;
     }
 
     #{$b}__text {
-      color: $deepBlue-80;
+      color: $mainColor;
     }
   }
 
-  &:hover:not(&--secondary) {
-    background-color: $blue-100;
+  &--reverse {
+    #{$b}__svg {
+      order: 2;
+    }
+
+    #{$b}__text {
+      order: 1;
+    }
+  }
+
+  &--small {
+    $btnSize: $smallBtn;
+
+    @include size(auto, $btnSize);
+    min-width: $btnSize;
+
+    #{$b}__text {
+      padding: 0 $btnSize;
+    }
+
+    &#{$b}--icon-and-text {
+      padding: 0 $btnSize;
+    }
+  }
+}
+
+// HOVER
+
+.g-button {
+  $b: &;
+
+  &:hover:not(&--primary) {
+    border-color: transparent;
+    background-color: rgba($mainColor, .1);
+
+    #{$b}__svg {
+      fill: $mainColor;
+      stroke: $mainColor;
+    }
+
+    #{$b}__text {
+      color: $mainColor;
+    }
+  }
+
+  &--primary:hover {
+    $mainColor: $blue-100;
+    background-color: $mainColor;
 
     #{$b}__svg {
       fill: white;
@@ -67,19 +133,6 @@
     }
   }
 
-  &--secondary:hover {
-    border-color: $deepBlue-100;
-
-    #{$b}__svg {
-      fill: $deepBlue-100;
-      stroke: $deepBlue-100;
-    }
-
-    #{$b}__text {
-      color: $deepBlue-100;
-    }
-  }
-
   &--icon-and-text:hover {
 
     #{$b}__svg {
@@ -88,6 +141,16 @@
 
     #{$b}__text {
       transform: translateX(6px);
+    }
+  }
+
+  &--reverse#{&}--icon-and-text:hover {
+    #{$b}__svg {
+      transform: translateX(6px);
+    }
+
+    #{$b}__text {
+      transform: translateX(-6px);
     }
   }
 }

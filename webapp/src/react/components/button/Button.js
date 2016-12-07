@@ -30,11 +30,19 @@ class Button extends Component {
     );
   }
   render() {
-    const { secondary, icon, text } = this.props;
+    const { primary, icon, text, small, alignIcon } = this.props;
     let className = 'g-button';
 
-    if (secondary) {
-      className += ' g-button--secondary';
+    if ((alignIcon === 'right') && icon && text) {
+      className += ' g-button--reverse';
+    }
+
+    if (small) {
+      className += ' g-button--small';
+    }
+
+    if (primary) {
+      className += ' g-button--primary';
     }
 
     if (text && icon) {
@@ -51,3 +59,13 @@ class Button extends Component {
 }
 
 export default Button;
+
+const { string, bool } = PropTypes;
+
+Button.propTypes = {
+  primary: bool,
+  icon: string,
+  text: string,
+  small: bool,
+  alignIcon: string,
+};
