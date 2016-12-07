@@ -19,8 +19,8 @@ class GoalStep extends Component {
     this.bindCallbacks = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  onSubmit() {
-
+  onSubmit(goBack) {
+    this.callDelegate('goalStepSubmit', goBack);
   }
   callDelegate(name) {
     const { delegate } = this.props;
@@ -99,9 +99,15 @@ return undefined;*/
     // > Save to Evernote
   }
   renderSubmission() {
-    const { options, step } = this.props;
+    const { options, step, isSubmitting } = this.props;
     if (options.showSubmission) {
-      return <StepSubmission onSubmit={this.onSubmit} submission={step.get('submission')} />;
+      return (
+        <StepSubmission
+          onSubmit={this.onSubmit}
+          submission={step.get('submission')}
+          disabled={!!isSubmitting}
+        />
+      );
     }
 
     return undefined;
@@ -132,12 +138,13 @@ return undefined;*/
 
 export default GoalStep;
 
-const { object } = PropTypes;
+const { object, bool } = PropTypes;
 
 GoalStep.propTypes = {
-  step: map,
-  fields: list,
-  data: map,
-  options: object,
-  delegate: object,
+  step: map.isRequired,
+  isSubmitting: bool,
+  fields: list.isRequired,
+  data: list.isRequired,
+  options: object.isRequired,
+  delegate: object.isRequired,
 };

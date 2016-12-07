@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import Assign from 'components/assigning/Assigning';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import { nearestAttribute } from 'classes/utils';
 import './styles/goal-overview.scss';
 
@@ -22,9 +22,9 @@ class GoalOverview extends Component {
     this.callDelegate('goalOverviewClickedStep', stepIndex);
   }
   renderStepListItem(step, index, currentStepIndex) {
+    const { goal } = this.props;
     const completed = step.get('completed');
     const title = step.get('title');
-    const assignees = step.get('assignees');
     let className = 'goal-overview__step';
 
     if (completed) {
@@ -40,7 +40,7 @@ class GoalOverview extends Component {
         <div className="goal-overview__step-status" />
         <div className="goal-overview__step-title">{index + 1}. {title}</div>
         <div className="goal-overview__assignees">
-          <Assign assignees={assignees.toJS()} />
+          <HOCAssigning goalId={goal.get('id')} stepIndex={index} />
         </div>
       </div>
     );

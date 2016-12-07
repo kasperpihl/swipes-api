@@ -5,6 +5,7 @@ import { bindAll } from 'classes/utils';
 import TabBar from 'components/tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
 
+
 import './styles/goals-list.scss';
 
 class GoalList extends Component {
@@ -168,7 +169,6 @@ class GoalList extends Component {
 const { func, object } = PropTypes;
 
 GoalList.propTypes = {
-  setActiveGoal: func,
   goals: map.isRequired,
   me: map.isRequired,
   delegate: object,

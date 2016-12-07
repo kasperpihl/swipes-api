@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from 'actions';
 import GoalList from './GoalList';
@@ -52,9 +53,12 @@ function mapStateToProps(state) {
   };
 }
 
-import { map, mapContains, list, listOf } from 'react-immutable-proptypes';
-const { string } = PropTypes;
+
+const { func } = PropTypes;
 HOCGoalList.propTypes = {
+  goals: map,
+  navPush: func,
+  me: map,
   // removeThis: PropTypes.string.isRequired
 };
 

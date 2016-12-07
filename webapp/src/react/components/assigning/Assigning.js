@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
+import { map, mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 
 import './styles/assigning.scss';
@@ -13,10 +14,10 @@ class Assigning extends Component {
   componentDidMount() {
   }
   handleClick(e) {
-    const { editable, clickAssign } = this.props;
+    const { editable, onClick } = this.props;
     e.stopPropagation();
-    if (editable && clickAssign) {
-      clickAssign(e);
+    if (editable && onClick) {
+      onClick(e);
     }
   }
   renderIcon(icon) {
@@ -31,22 +32,22 @@ class Assigning extends Component {
   }
   renderAssignees() {
     const { assignees, me, editable } = this.props;
-    let profileImage = '';
 
-    if (assignees.length < 1 && editable) {
+    if (!assignees || assignees.size < 1 && editable) {
       return this.renderAddAssignees();
     }
 
-    for (let i = 0; i < assignees.length; i += 1) {
-      if (assignees[i].profile_pic) {
-        profileImage = assignees[i].profile_pic;
+    let profileImage = '';
+    assignees.forEach((assignee) => {
+      const pic = assignee.get('profile_pic');
+      if (pic) {
+        profileImage = pic;
+        if (me.get('id') === assignee.get('id')) {
+          return false;
+        }
       }
-      if (me && assignees[i].id === me.id) {
-        profileImage = assignees[i].profile_pic;
-
-        break;
-      }
-    }
+      return true;
+    });
 
     if (!profileImage.length) {
       return this.renderIcon('PersonIcon');
@@ -57,22 +58,22 @@ class Assigning extends Component {
   renderOverlay() {
     const { assignees } = this.props;
 
-    if (assignees.length < 2) {
+    if (!assignees || assignees.size < 2) {
       return undefined;
     }
 
     return (
-      <div className="sw-assign__overlay">{`+${assignees.length - 1}`}</div>
+      <div className="sw-assign__overlay">{`+${assignees.size - 1}`}</div>
     );
   }
   renderTooltip() {
     const { assignees } = this.props;
     let tooltip;
 
-    if (assignees.length < 1) {
+    if (assignees.size < 1) {
       tooltip = <div className="sw-assign__name">No one is assigned</div>;
     } else {
-      tooltip = assignees.map((assignee, i) => <div className="sw-assign__name" key={`assignee-${i}`}>{assignee.name}</div>);
+      tooltip = assignees.map((assignee, i) => <div className="sw-assign__name" key={`assignee-${i}`}>{assignee.get('name')}</div>);
     }
 
     return (
@@ -97,11 +98,11 @@ export default Assigning;
 const { string, bool, arrayOf, shape, object, func } = PropTypes;
 
 Assigning.propTypes = {
-  assignees: arrayOf(shape({
+  assignees: listOf(mapContains({
     name: string,
     profile_pic: string,
   })),
   editable: bool,
-  clickAssign: func,
-  me: object,
+  onClick: func,
+  me: map,
 };
