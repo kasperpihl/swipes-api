@@ -6,12 +6,6 @@ import './styles/search-results.scss';
 // import { FindIcon } from '../icons'
 
 class SearchResults extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   renderResultList() {
     const { cardDelegate, searching, results } = this.props;
 
