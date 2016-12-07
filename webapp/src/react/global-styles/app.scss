@@ -21,17 +21,19 @@
 
 .view-controller {
   @include size(100%);
-  padding-left: 84px;
+  padding-left: 45px;
   padding-top: 9px;
   position: relative;
   display: flex;
   flex-direction: column;
+  padding-right: 45px;
 }
 
 .global-actions {
   position: fixed;
   right: 30px; top: 79px;
   @include flex(flex);
+  z-index: 9;
 
   &__action {
     @include size(42px);
@@ -90,6 +92,14 @@ svg {
   &__action {
     @include size(42px);
     @include flex();
+    border-radius: 50%;
+    border: 1px solid $deepBlue-10;
+    transition: .15s;
+
+    &:hover {
+      border-color: $deepBlue-100;
+      transition: .15s;
+    }
   }
 
   &__icon {
