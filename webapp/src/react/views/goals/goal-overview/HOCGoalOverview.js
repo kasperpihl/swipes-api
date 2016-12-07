@@ -22,7 +22,7 @@ class HOCGoalOverview extends Component {
     } = this.props;
     navPush({
       component: 'GoalStep',
-      title: goal.getIn(['steps', stepIndex, 'title']),
+      title: `${stepIndex + 1}. ${goal.getIn(['steps', stepIndex, 'title'])}`,
       props: {
         goalId,
         stepIndex,

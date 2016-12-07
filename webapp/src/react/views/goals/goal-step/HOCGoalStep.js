@@ -64,7 +64,7 @@ class HOCGoalStep extends Component {
 
   }
   goalStepSubmit(goalStep, i) {
-    const { goal, step } = this.props;
+    const { goal, step, submit } = this.props;
     let previousSteps;
 
     if (i) {
@@ -72,7 +72,7 @@ class HOCGoalStep extends Component {
     }
     const data = this.generateRawObj();
     this.setState({ isSubmitting: true });
-    this.callDelegate('stepSubmit', step.get('id'), data, previousSteps, () => {
+    submit(goal.get('id'), step.get('id'), data, previousSteps).then((res) => {
       this.setState({ isSubmitting: false });
     });
   }
@@ -82,8 +82,14 @@ class HOCGoalStep extends Component {
     this.setState({ data });
   }
   generateOptions() {
+    const {
+      stepIndex: i,
+    } = this.props;
+    const h = this.getHelper();
+    const showSubmission = (h.amIAssigned(i) && h.isCurrentStep(i));
+
     return {
-      showSubmission: false,
+      showSubmission,
     };
   }
   generateFields() {
@@ -115,6 +121,7 @@ class HOCGoalStep extends Component {
     } = this.props;
     const {
       data,
+      isSubmitting,
     } = this.state;
 
     return (
@@ -123,6 +130,7 @@ class HOCGoalStep extends Component {
         stepIndex={stepIndex}
         step={step}
         fields={this.generateFields()}
+        isSubmitting={isSubmitting}
         data={data}
         delegate={this}
       />
@@ -154,5 +162,6 @@ HOCGoalStep.propTypes = {
 const ConnectedHOCGoalStep = connect(mapStateToProps, {
   navPop: actions.navigation.pop,
   cacheSave: actions.main.cacheSave,
+  submit: actions.goals.submitStep,
 })(HOCGoalStep);
 export default ConnectedHOCGoalStep;

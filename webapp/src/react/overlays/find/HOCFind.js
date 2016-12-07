@@ -140,15 +140,7 @@ class HOCFind extends Component {
     return (
       <div className="find-overlay">
         {this.renderSearchField()}
-        <ReactCSSTransitionGroup
-          transitionName="fade"
-          component="div"
-          className="find-overlay__content"
-          transitionEnterTimeout={200}
-          transitionLeaveTimeout={200}
-        >
-          {this.renderContent()}
-        </ReactCSSTransitionGroup>
+        {this.renderContent()}
       </div>
     );
   }
