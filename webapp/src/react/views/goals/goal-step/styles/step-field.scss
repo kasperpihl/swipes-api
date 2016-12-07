@@ -7,7 +7,7 @@
 
   @include size(100%, auto);
   position: relative;
-  padding-left: 45px;
+  padding-left: 36px;
   padding-bottom: 15px;
 
   &:not(:last-child) {
@@ -78,5 +78,12 @@
         }
       }
     }
+  }
+
+  &__description {
+    font-size: 12px;
+    line-height: 21px;
+    color: $deepBlue-70;
+    margin-bottom: 27px;
   }
 }
