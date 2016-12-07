@@ -25,7 +25,8 @@ export function overlayHide() {
 }
 
 export function overlayShow(overlay) {
-  return { type: types.OVERLAY_SHOW, overlay };
+  const payload = { overlay };
+  return { type: types.OVERLAY_SHOW, payload };
 }
 
 // ======================================================

@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { navigation } from 'actions';
+import * as actions from 'actions';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Navbar from 'components/nav-bar/NavBar';
+import { bindAll } from 'classes/utils';
 import Icon from 'Icon';
 import * as views from 'views';
 
@@ -12,8 +13,17 @@ class HOCViewController extends Component {
     super(props);
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    bindAll(this, ['clickedFind']);
   }
   componentDidMount() {
+  }
+  clickedFind() {
+    const {
+      overlayShow,
+    } = this.props;
+    overlayShow({
+      component: 'Find',
+    });
   }
   navbarClickedBack() {
     const { pop } = this.props;
@@ -55,10 +65,11 @@ class HOCViewController extends Component {
       <View {...props} key={lastEl.get('component')} />
     );
   }
+
   renderGlobalActions() {
     return (
       <div className="global-actions">
-        <div className="global-actions__action">
+        <div className="global-actions__action" onClick={this.clickedFind}>
           <Icon svg="FindIcon" className="global-actions__icon" />
         </div>
       </div>
@@ -85,12 +96,14 @@ function mapStateToProps(state) {
 const { func } = PropTypes;
 HOCViewController.propTypes = {
   history: list,
+  overlayShow: func,
   popTo: func,
   pop: func,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
-  popTo: navigation.popTo,
-  pop: navigation.pop,
+  popTo: actions.navigation.popTo,
+  pop: actions.navigation.pop,
+  overlayShow: actions.main.overlayShow,
 })(HOCViewController);
 export default ConnectedHOCViewController;

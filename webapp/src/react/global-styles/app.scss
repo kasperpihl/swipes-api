@@ -68,9 +68,9 @@ svg {
 }
 
 .overlay {
-  @include size(100%, calc(100% - 54px));
+  @include size(100%, calc(100% - 38px));
   background: $bg;
-  left: 0; top: 54px;
+  left: 0; top: 38px;
   position:fixed;
   visibility: hidden;
   z-index: 9;
