@@ -21,7 +21,10 @@ class Checklist extends Component {
         this.bindCallbacks[i] = this.onChange.bind(this, i);
       }
       return (
-        <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} disable={settings.get('editable')} />
+        <div className="checklist__checkbox">
+          <Checkbox key={i} onChange={this.bindCallbacks[i]} label={c.get('label')} checked={c.get('checked')} disable={settings.get('editable')} />
+          <div className="checklist__description" />
+        </div>
       );
     });
   }

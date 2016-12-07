@@ -18,7 +18,7 @@ class StepField extends Component {
     return <Icon svg={icon} style={styles} className="step-field__icon step-field__icon--svg" />;
   }
   render() {
-    const { icon, iconColor, title, children } = this.props;
+    const { icon, iconColor, title, children, description } = this.props;
 
     return (
       <div className="step-field">
@@ -30,6 +30,7 @@ class StepField extends Component {
             {title}
           </div>
         </div>
+        <div className="step-field__description">{description}</div>
         {children}
       </div>
     );

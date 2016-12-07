@@ -5,51 +5,25 @@
   $b: &;
 
   @include size(100%);
-  @include flex(flex-start, center);
   background-color: $bg;
   position: relative;
   overflow-y: auto;
+  margin-top: 50px;
+  padding-top: 36px;
 
-  @media screen and (max-width: 1140px) {
-
-    #{$b}__content {
-      margin-left: 30px;
-      margin-right: 15px;
-    }
-
-    #{$b}__side-column {
-      margin-left: 15px;
-    }
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    @include size(100%, 1px);
+    max-width: 780px;
+    background-color: $deepBlue-10;
   }
 
   &__content {
     @include size(100%, auto);
     max-width: 600px;
-    margin-left: 240px;
     position: relative;
-  }
-
-  &__side-column {
-    @include size(240px, auto);
-    padding-top: 32px;
-    margin: 0 30px;
-    margin-top: 78px;
-    position: relative;
-    flex: none;
-
-    &:after {
-      content: '';
-      position: absolute;
-      left: 0; top: 0;
-      background-color: $deepBlue-20;
-      @include size(100%, 2px);
-    }
-
-    &--active {
-      &:after {
-        background-color: $blue-100;
-      }
-    }
   }
 
   &__completed {

@@ -120,7 +120,7 @@ return undefined;*/
           {this.renderFields()}
         </div>
 
-        <div className="submission">
+        <div className="goal-step__submission">
           {this.renderPreAutomations()}
           {this.renderSubmission()}
           {this.renderPostAutomations()}
