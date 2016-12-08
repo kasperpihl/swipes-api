@@ -79,9 +79,17 @@ $itemHeight: $largeHeight;
   &:hover {
     background-color: #F0F6FD;
 
+    #{$b}__service {
+      display: none;
+    }
+
     #{$b}__actions {
       background-color: #F0F6FD;
       display: flex;
+    }
+
+    #{$b}__action {
+      background-color: #F0F6FD;
     }
   }
 
