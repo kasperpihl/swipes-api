@@ -325,7 +325,7 @@ export default class GoalsUtil {
 
     let status;
 
-    const isMine = step.get('assignees').find(a => (a.get('id') === this.id));
+    const isMine = step.get('assignees').find(a => (a === this.id));
     if (step.get('completed')) {
       status = 'This step was completed';
     } else if (stepIndex === this.goal.get('currentStepIndex')) {

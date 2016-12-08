@@ -71,7 +71,7 @@ class GoalList extends Component {
 
       const assignees = currentStep.get('assignees');
       const containsMe = assignees.find((user) => {
-        if (user.get('id') === me.get('id')) {
+        if (user === me.get('id')) {
           return true;
         }
 
@@ -108,7 +108,7 @@ class GoalList extends Component {
           const assignees = step.get('assignees');
 
           const containsMe = assignees.find((user) => {
-            if (user.get('id') === me.get('id')) {
+            if (user === me.get('id')) {
               return true;
             }
 

@@ -56,19 +56,8 @@ class HOCGoalList extends Component {
 }
 
 function mapStateToProps(state) {
-  const users = state.get('users');
-  let goalsState = state.get('goals');
-
-  if (goalsState) {
-    goalsState = goalsState.map(g => g.updateIn(['steps'], steps => steps.map((s) => {
-      const assignees = s.get('assignees');
-      return s.set('assignees', assignees.map(userId => users.get(userId)));
-    })));
-  }
-
   return {
-    goals: goalsState,
-    users,
+    goals: state.get('goals'),
     me: state.get('me'),
   };
 }
