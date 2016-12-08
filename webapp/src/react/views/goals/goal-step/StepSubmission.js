@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
+import Button from 'Button';
 import './styles/step-submission.scss';
 
 class StepSubmission extends Component {
@@ -18,31 +19,27 @@ class StepSubmission extends Component {
     }
   }
   render() {
-    const { submission, disabled } = this.props;
-    let className = 'step-submission';
+    const { submission } = this.props;
+    const className = 'step-submission';
     let btns = ['Submit'];
 
     if (submission && submission.get('type') === 'decide') {
       btns = ['Yes', 'No'];
     }
 
-    if (disabled) {
-      className += ' step-submission--disabled';
-    }
-
     return (
       <div className={className}>
         <div className="step-submission__actions">
-          {btns.map((t, i) =>
-            <div
-              className="step-submission__button"
+          {btns.map((t, i) => (
+            <Button
+              className="step-submission__action"
+              primary={(i === 0)}
+              text={t}
               onClick={this.onSubmit}
               data-index={i}
               key={i}
-            >
-              {t}
-            </div>,
-          )}
+            />
+          ))}
         </div>
       </div>
     );
