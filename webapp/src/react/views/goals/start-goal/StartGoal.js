@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
-import Button from 'components/swipes-ui/Button';
+import Button from 'Button';
 import WorkflowList from './WorkflowList';
 
 
@@ -36,12 +36,7 @@ class StartGoal extends Component {
     return <WorkflowList data={filteredWorkflows} callback={this.didSelectItem} />;
   }
   render() {
-    return (
-      <div className="start-goal" style={{ height: '100%' }}>
-        {this.renderList()}
-        <Button callback={this.openStore} title="Go to store" style={{ position: 'fixed', bottom: '60px', right: '30px' }} />
-      </div>
-    );
+    return this.renderList();
   }
 }
 

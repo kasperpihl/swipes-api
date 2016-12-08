@@ -2,8 +2,7 @@
 @import "~styles/_mixins.scss";
 
 .workflow__list {
-  @include size(100%, 100%)
-  @include flex(center, flex-start, column);
+  @include size(100%)
   background-color: $bg;
   padding: 60px 30px;
   overflow-y: auto;
