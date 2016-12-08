@@ -27,7 +27,7 @@ class HOCGoalList extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onContextClick(i, e) {
+  onContextClick(i) {
     const { navPush } = this.props;
     navPush({
       component: 'StartGoal',
@@ -72,7 +72,6 @@ HOCGoalList.propTypes = {
   // removeThis: PropTypes.string.isRequired
 };
 
-const ConnectedHOCGoalList = connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
 })(HOCGoalList);
-export default ConnectedHOCGoalList;
