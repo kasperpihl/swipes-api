@@ -58,7 +58,7 @@ class SwipesModal extends Component {
     });
   }
   selectListItem(e) {
-    const i = e.target.getAttribute('data-index');
+    const i = parseInt(e.target.getAttribute('data-index'), 10);
     const { list } = this.props.data;
 
     if (list.selectable) {
@@ -230,7 +230,7 @@ class SwipesModal extends Component {
   }
   render() {
     const { title, type, data } = this.props;
-
+    console.log(this.state.selectedListItems);
     let modalClass = 'swipes-modal';
 
     if (type) {

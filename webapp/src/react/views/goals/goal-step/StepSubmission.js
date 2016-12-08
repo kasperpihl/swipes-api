@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
+import { nearestAttribute } from 'classes/utils';
 import './styles/step-submission.scss';
 
 class StepSubmission extends Component {
@@ -12,7 +13,7 @@ class StepSubmission extends Component {
   componentDidMount() {
   }
   onSubmit(e) {
-    const goBack = (parseInt(e.target.getAttribute('data-index'), 10));
+    const goBack = parseInt(nearestAttribute(e.target, 'data-index'), 10);
     const { onSubmit } = this.props;
     if (onSubmit) {
       onSubmit(goBack);
