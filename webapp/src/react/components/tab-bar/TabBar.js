@@ -26,28 +26,30 @@ class TabBar extends Component {
   }
   calculateSliderClips() {
     const { tabBar } = this.refs;
-    const { tabs } = this.props;
-    const tabBarWidth = tabBar.getBoundingClientRect().width;
-    const tabWidths = [];
-    const sliderClipsArr = [];
+    if (tabBar) {
+      const { tabs } = this.props;
+      const tabBarWidth = tabBar.getBoundingClientRect().width;
+      const tabWidths = [];
+      const sliderClipsArr = [];
 
-    tabs.forEach((t, i) => {
-      const ref = this.refs[`tab-${i}`];
-      tabWidths.push(ref.getBoundingClientRect().width);
-    });
+      tabs.forEach((t, i) => {
+        const ref = this.refs[`tab-${i}`];
+        tabWidths.push(ref.getBoundingClientRect().width);
+      });
 
-    tabWidths.reduce((previousValue, currentValue) => {
-      sliderClipsArr.push(
-        {
-          start: ((previousValue * 100) / tabBarWidth),
-          end: ((((previousValue + currentValue) - 30) * 100) / tabBarWidth),
-        },
-      );
+      tabWidths.reduce((previousValue, currentValue) => {
+        sliderClipsArr.push(
+          {
+            start: ((previousValue * 100) / tabBarWidth),
+            end: ((((previousValue + currentValue) - 30) * 100) / tabBarWidth),
+          },
+        );
 
-      return previousValue + currentValue;
-    }, 0);
+        return previousValue + currentValue;
+      }, 0);
 
-    this.setState({ sliderClips: sliderClipsArr });
+      this.setState({ sliderClips: sliderClipsArr });
+    }
   }
   renderSlider() {
     const { sliderClips } = this.state;
