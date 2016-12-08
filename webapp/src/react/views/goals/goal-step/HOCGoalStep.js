@@ -10,13 +10,6 @@ import * as Fields from 'src/react/swipes-fields';
 import GoalStep from './GoalStep';
 
 class HOCGoalStep extends Component {
-  static contextButtons() {
-    return [{
-      props: {
-        icon: 'ThreeDotsIcon',
-      },
-    }];
-  }
   constructor(props) {
     super(props);
     const helper = this.getHelper();
@@ -26,10 +19,6 @@ class HOCGoalStep extends Component {
     this.cacheFormInput = this.cacheFormInput.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
-  }
-
-  onContextClick(i) {
-    console.log('clicked ', i);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
@@ -152,6 +141,19 @@ class HOCGoalStep extends Component {
   }
 }
 
+const { number, func, object } = PropTypes;
+HOCGoalStep.propTypes = {
+  stepIndex: number,
+  step: map,
+  delegate: object,
+  cacheSave: func,
+  goal: map,
+  me: map,
+  cachedData: map,
+  // removeThis: PropTypes.string.isRequired
+};
+
+
 function mapStateToProps(state, ownProps) {
   const { goalId, stepIndex } = ownProps;
   return {
@@ -162,20 +164,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const { number, func } = PropTypes;
-HOCGoalStep.propTypes = {
-  stepIndex: number,
-  step: map,
-  cacheSave: func,
-  goal: map,
-  me: map,
-  cachedData: map,
-  // removeThis: PropTypes.string.isRequired
-};
-
-const ConnectedHOCGoalStep = connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   navPop: actions.navigation.pop,
   cacheSave: actions.main.cacheSave,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);
-export default ConnectedHOCGoalStep;
