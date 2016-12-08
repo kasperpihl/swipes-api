@@ -7,6 +7,17 @@ import GoalOverview from './GoalOverview';
 
 
 class HOCGoalOverview extends Component {
+  static contextButtons() {
+    return [{
+      component: 'Button',
+      props: {
+        icon: 'FindIcon',
+      },
+    }];
+  }
+  onContextButton(i, e) {
+
+  }
   constructor(props) {
     super(props);
     this.state = {};

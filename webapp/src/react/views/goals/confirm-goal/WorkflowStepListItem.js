@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Assigning from '../assigning/Assigning';
+import Assigning from 'components/assigning/Assigning';
 
 import './styles/workflow-steplist-item.scss';
 
