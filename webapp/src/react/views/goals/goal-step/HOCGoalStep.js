@@ -9,6 +9,12 @@ import * as Fields from 'src/react/swipes-fields';
 import GoalStep from './GoalStep';
 
 class HOCGoalStep extends Component {
+  static actions(props) {
+    return [{
+      type: 'Button',
+    }];
+  }
+
   constructor(props) {
     super(props);
     const helper = this.getHelper();
@@ -26,6 +32,10 @@ class HOCGoalStep extends Component {
     this.cacheFormInput();
     window.removeEventListener('beforeunload', this.cacheFormInput);
   }
+  onAction(actionIndex, data) {
+
+  }
+
   getHelper() {
     const { goal, me, cachedData } = this.props;
     return new GoalsUtil(goal, me.get('id'), cachedData);

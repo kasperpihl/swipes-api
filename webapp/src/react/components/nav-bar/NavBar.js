@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Icon from 'Icon';
-import { nearestAttribute } from 'classes/utils';
+import { nearestAttribute, setupDelegate } from 'classes/utils';
 
 import './styles/nav-bar.scss';
 
@@ -11,13 +11,7 @@ class NavBar extends Component {
     this.state = {};
     this.clickedBack = this.clickedBack.bind(this);
     this.clickedCrumb = this.clickedCrumb.bind(this);
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-    return undefined;
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   clickedBack() {
     this.callDelegate('navbarClickedBack');

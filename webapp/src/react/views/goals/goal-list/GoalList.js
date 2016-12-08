@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupDelegate } from 'classes/utils';
 
 import TabBar from 'components/tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
@@ -24,17 +24,10 @@ class GoalList extends Component {
       'vacation',
       'team building',
     ];
+    this.callDelegate = setupDelegate(props.delegate, this);
     bindAll(this, ['clickedListItem']);
   }
   componentDidMount() {
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
   }
   clickedListItem(id) {
     this.callDelegate('goalListClickedGoal', id);

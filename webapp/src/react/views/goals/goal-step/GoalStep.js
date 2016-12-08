@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupDelegate } from 'classes/utils';
 
 // Views
 import * as Fields from 'src/react/swipes-fields';
@@ -18,18 +18,10 @@ class GoalStep extends Component {
     bindAll(this, ['onSubmit']);
     this.bindCallbacks = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   onSubmit(goBack) {
     this.callDelegate('goalStepSubmit', goBack);
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
   }
   delegateFromField(index, name) {
     if (name === 'change') {

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
 
 import './styles/style-control.scss';
@@ -13,6 +13,7 @@ class StyleControl extends Component {
       styles: Map(),
       showInput: false,
     };
+    this.callDelegate = setupDelegate(props, this);
     bindAll(this, ['addLink', 'handleKeyUp']);
   }
   componentDidMount() {
@@ -122,15 +123,6 @@ class StyleControl extends Component {
     if (styles !== newStyles) {
       this.setState({ styles: newStyles });
     }
-  }
-  callDelegate(name, ...arg) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arg, 1)));
-    }
-
-    return undefined;
   }
   handleKeyUp(e) {
     if (e.keyCode === 13) {
