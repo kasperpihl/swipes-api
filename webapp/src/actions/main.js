@@ -50,6 +50,7 @@ export function search(query) {
     dispatch({ type: types.SEARCH, query });
     dispatch(request('search', { q: query })).then((res) => {
       if (res && res.ok) {
+        console.log(res);
         dispatch({ type: types.SEARCH_RESULTS, result: res.result });
       } else {
         dispatch({ type: types.SEARCH_ERROR });
