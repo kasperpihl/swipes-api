@@ -1,5 +1,3 @@
-import PlusIcon from './svgs/sw-plus-icon.svg';
-
 import FindIcon from './svgs/sw-find-icon.svg';
 import EmptyWorkspace from './svgs/emptystate-workspace.svg';
 import WorkspaceIcon from './svgs/workspace-icon.svg';
@@ -32,6 +30,8 @@ import LoginIconTwo from './svgs/login-background-2.svg';
 import WindowsIcon from './svgs/windows-icon.svg';
 import MacIcon from './svgs/mac-icon.svg';
 import LinuxIcon from './svgs/linux-icon.svg';
+import LinkIcon from './svgs/link.svg';
+import ThreeDotsIcon from './svgs/three-dots.svg';
 
 import ShapeOne from './svgs/shape-1.svg';
 import ShapeTwo from './svgs/shape-2.svg';
@@ -50,6 +50,7 @@ import H1Icon from './svgs/h1-icon.svg';
 import H2Icon from './svgs/h2-icon.svg';
 import UnderlineIcon from './svgs/underline-icon.svg';
 import UnorderedListIcon from './svgs/unordered-list-icon.svg';
+import OrderedListIcon from './svgs/ordered-list-icon.svg';
 
 import SwipesIcon from './pngs/swipes-logo.png';
 
@@ -65,7 +66,6 @@ import successState from './pngs/success-state.png';
 import designWorkflowCover from './pngs/design-template.png';
 
 export {
-  PlusIcon,
   FindIcon,
   EmptyWorkspace,
   WorkspaceIcon,
@@ -115,6 +115,9 @@ export {
   MacIcon,
   LinuxIcon,
   SwipesIcon,
+  LinkIcon,
+  OrderedListIcon,
+  ThreeDotsIcon,
   facebookCover,
   airbnbCover,
   uberCover,
