@@ -5,38 +5,52 @@
 .find-overlay {
   @include size(100%);
   position: relative;
+}
+
+.find {
+  @include size(100%);
+  @include flex(column);
+  position: relative;
+  padding-left: 83px;
+
+  &__header {
+    @include size(100%, 117px);
+    @include flex(center, flex-start);
+    max-width: 780px;
+    flex: none;
+    position: relative;
+
+    &:after {
+      @include size(100%, 1px);
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      background-color: $deepBlue-10;
+    }
+  }
 
   &__input {
-    @include size(100%, auto);
+    @include size(100%, calc(100% - (27px * 2)));
+    font-size: 27px;
+    font-weight: 500;
     color: $deepBlue-100;
-    font-size: 30px;
-    font-weight: bold;
-    max-width: 640px;
-    margin-top: 45px;
-    margin-left: 50%;
-    padding: 20px;
-    transform: translateX(calc(-50% - 0px));
-    transition: .2s;
-
-    &:focus {
-      background-color: $blue-10;
-    }
 
     &::-webkit-input-placeholder {
-      color: $deepBlue-30;
+      color: $deepBlue-40;
     }
   }
 
-  &__tabs {
-    @include flex(center, flex-start);
-    margin: 15px auto;
-    max-width: 600px;
-    width: 100%;
+  &__subtitle {
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 15px;
+    color: $deepBlue-30;
+    position: absolute;
+    left: 0; bottom: 6px;
   }
 
-  &__content {
-    $wrapperHeight: calc(100% - 76px - 33px - 60px);
-    @include size(100%, $wrapperHeight);
-    position: relative;
+  &__results {
+    @include size(100%);
+    overflow-y: auto;
   }
 }

@@ -5,7 +5,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as overlays from 'src/react/overlays';
 import * as actions from 'actions';
-import Icon from 'Icon';
+import Button from 'Button';
 
 
 class HOCOverlay extends Component {
@@ -47,7 +47,7 @@ class HOCOverlay extends Component {
     return (
       <div className="overlay__actions">
         <div className="overlay__action" onClick={this.clickedClose}>
-          <Icon svg="CloseIcon" className="overlay__icon" />
+          <Button icon="CloseIcon" />
         </div>
       </div>
     );

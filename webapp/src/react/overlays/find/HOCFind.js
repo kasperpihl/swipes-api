@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import Find from './Find';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
 
@@ -17,9 +18,6 @@ class HOCFind extends Component {
     this.unhandledDocs = [];
   }
   componentDidMount() {
-    setTimeout(() => {
-      this.refs.searchInput.focus();
-    }, 0);
   }
   onCardClick(card, data) {
     const { searchResults, request, loadModal } = this.props;
@@ -139,8 +137,7 @@ class HOCFind extends Component {
   render() {
     return (
       <div className="find-overlay">
-        {this.renderSearchField()}
-        {this.renderContent()}
+        <Find />
       </div>
     );
   }

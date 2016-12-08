@@ -1,0 +1,97 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+$largeHeight: 102px;
+$smallHeight: 66px;
+
+$itemHeight: $largeHeight;
+
+.find-item {
+  $b: &;
+  @include size(100%, $itemHeight);
+  max-width: 780px;
+  position: relative;
+  border-bottom: 1px solid $deepBlue-10;
+
+  &__content {
+    @include size(100%);
+    @include flex(flex-start, center, column);
+    padding-left: 9px;
+    padding-right: 60px;
+  }
+
+  &__title {
+    @include size(100%, auto);
+    max-width: 500px;
+    font-size: 15px;
+    line-height: 21px;
+    color: $deepBlue-90;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__description {
+    @include size(100%, auto);
+    max-width: 500px;
+    font-size: 12px;
+    line-height: 18px;
+    color: #999EAC;
+    margin-top: 3px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  &__service {
+    @include size(27px);
+    @include flex();
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    right: 9px; top: 12px;
+    border: 1px solid #E6E7EB;
+  }
+
+  &__icon {
+    @include size(21px);
+  }
+
+  &__actions {
+    @include flex(flex);
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    display: none;
+  }
+
+  &__action {
+    background-color: white;
+    border-radius: 50px;
+
+    &:not(:first-child) {
+      margin-left: 6px;
+    }
+  }
+
+  &:hover {
+    background-color: #F0F6FD;
+
+    #{$b}__actions {
+      background-color: #F0F6FD;
+      display: flex;
+    }
+  }
+
+  &--small {
+    $itemHeight: $smallHeight;
+
+    @include size(100%, $itemHeight);
+
+    #{$b}__description {
+      -webkit-line-clamp: 1;
+    }
+  }
+}

@@ -18,6 +18,9 @@
 @mixin flex($vertical:center, $horizontal:center, $direction:row) {
 	@if $vertical == flex {
 		display: flex;
+	} @else if $vertical == column {
+		display: flex;
+		flex-direction: column;
 	} @else {
 		align-items: $vertical;
 		display: flex;
