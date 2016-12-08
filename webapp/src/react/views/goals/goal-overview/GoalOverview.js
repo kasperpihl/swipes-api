@@ -1,21 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { nearestAttribute } from 'classes/utils';
+import { nearestAttribute, setupDelegate } from 'classes/utils';
 import './styles/goal-overview.scss';
 
 class GoalOverview extends Component {
   constructor(props) {
     super(props);
     this.clickedStep = this.clickedStep.bind(this);
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   clickedStep(e) {
     const stepIndex = parseInt(nearestAttribute(e.target, 'data-index'), 10);

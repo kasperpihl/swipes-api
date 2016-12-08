@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import WorkflowStepListItem from './WorkflowStepListItem';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupDelegate } from 'classes/utils';
 import './styles/workflow-steplist.scss';
 
 class WorkflowStepList extends Component {
@@ -8,6 +8,7 @@ class WorkflowStepList extends Component {
     super(props);
     this.state = {};
     bindAll(this, ['onKeyUp', 'onBlur', 'clickedAssign']);
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   componentDidMount() {
     setTimeout(() => {
@@ -21,15 +22,6 @@ class WorkflowStepList extends Component {
     if (e.keyCode === 13) {
       this.refs.input.blur();
     }
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
   }
   clickedAssign(e, i) {
     this.props.callDelegate('setupStepPressedAssign', e, i);

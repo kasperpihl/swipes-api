@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import WorkflowHeader from './WorkflowHeader';
 import WorkflowStepList from './WorkflowStepList';
+import { setupDelegate } from 'classes/utils';
 
 import './styles/workflow-setup.scss';
 
@@ -9,16 +10,7 @@ class WorkflowSetup extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = this.callDelegate.bind(this);
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   render() {
     const rootClass = 'workflow__setup';

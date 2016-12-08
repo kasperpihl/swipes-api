@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import SwipesCardItem from './SwipesCardItem';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupDelegate } from 'classes/utils';
 
 import './swipes-card.scss';
 
@@ -9,17 +9,9 @@ class SwipesCardList extends Component {
     super(props);
     this.state = { selectedTab: 0 };
     bindAll(this, ['callDelegate']);
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   componentDidMount() {
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
   }
   tabClick(i) {
     this.setState({ selectedTab: i });

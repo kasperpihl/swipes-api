@@ -20,54 +20,8 @@ class StartGoal extends Component {
 
   }
   didSelectItem(id) {
-    const { workflows, loadModal, users } = this.props;
-    const idToCheck = 'PGR5OHKL6';
-
-    if (workflows.get(id).toJS().id === idToCheck) {
-      const filteredWorkspaces = workflows.toArray().filter((x) => {
-        if (x.get('id') === idToCheck || x.get('parent_id') === idToCheck) {
-          return true;
-        }
-
-        return false;
-      });
-
-      const mappedItems = filteredWorkspaces.map((x) => {
-        let title;
-        let img;
-
-        if (x.get('created_by')) {
-          title = x.get('title');
-          img = users.getIn([x.get('created_by'), 'profile_pic']);
-        } else {
-          title = 'Company Standard';
-          img = {
-            element: x.get('img'),
-          };
-        }
-
-        return {
-          title,
-          img,
-        };
-      });
-
-      loadModal({
-        title: 'Choose Pattern',
-        data: {
-          list: {
-            items: mappedItems,
-            emptyText: 'No patterns found!',
-          },
-        },
-      }, (e) => {
-        if (e) {
-          // pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: filteredWorkspaces[e.item] } });
-        }
-      });
-    } else {
-      // pushOverlay({ component: 'ConfirmGoal', title: 'Confirm', props: { data: workflows.get(id).toJS() } });
-    }
+    const { workflows, navPush } = this.props;
+    navPush({ component: 'ConfirmGoal', title: 'Confirm Goal', props: { data: workflows.get(id).toJS() } });
   }
   renderList() {
     const { workflows } = this.props;
@@ -96,6 +50,7 @@ const { func } = PropTypes;
 StartGoal.propTypes = {
   workflows: map,
   loadModal: func,
+  navPush: func,
   users: map,
 };
 
@@ -108,6 +63,7 @@ function mapStateToProps(state) {
 
 const ConnectedStartGoal = connect(mapStateToProps, {
   loadModal: actions.modal.load,
+  navPush: actions.navigation.push,
 })(StartGoal);
 
 export default ConnectedStartGoal;

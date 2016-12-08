@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Measure from 'react-measure';
 
-import { bindAll, debounce } from 'classes/utils';
+import { bindAll, debounce, setupDelegate } from 'classes/utils';
 
 import './styles/tab-bar';
 
@@ -14,6 +14,7 @@ class TabBar extends Component {
     };
     this.calculateSliderClips = this.calculateSliderClips.bind(this);
     this.bouncedCalc = debounce(this.calculateSliderClips, 1);
+    this.callDelegate = setupDelegate(props.delegate, this);
     bindAll(this, ['onChange']);
   }
   onChange(e) {
@@ -22,15 +23,6 @@ class TabBar extends Component {
     if (newIndex !== this.props.activeTab) {
       this.callDelegate('tabDidChange', newIndex);
     }
-  }
-  callDelegate(name) {
-    const { delegate } = this.props;
-
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...[this].concat(Array.prototype.slice.call(arguments, 1)));
-    }
-
-    return undefined;
   }
   calculateSliderClips() {
     const { tabBar } = this.refs;

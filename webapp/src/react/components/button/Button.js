@@ -6,7 +6,13 @@ import './styles/button.scss';
 class Button extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.onClick = this.onClick.bind(this);
+  }
+  onClick(e) {
+    const { onClick } = this.props;
+    if (onClick) {
+      onClick(e);
+    }
   }
   renderIcon() {
     const { icon } = this.props;
@@ -50,7 +56,7 @@ class Button extends Component {
     }
 
     return (
-      <div className={className}>
+      <div className={className} onClick={this.onClick}>
         {this.renderIcon()}
         {this.renderText()}
       </div>
@@ -60,9 +66,10 @@ class Button extends Component {
 
 export default Button;
 
-const { string, bool } = PropTypes;
+const { string, bool, func } = PropTypes;
 
 Button.propTypes = {
+  onClick: func,
   primary: bool,
   icon: string,
   text: string,

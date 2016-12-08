@@ -16,6 +16,18 @@ export function nearestAttribute(target, attribute) {
   return value;
 }
 
+export function setupDelegate(delegate) {
+  const orgArgs = Array.prototype.slice.call(arguments, 1);
+
+  return function callDelegate(name) {
+    if (delegate && typeof delegate[name] === 'function') {
+      return delegate[name](...orgArgs.concat(Array.prototype.slice.call(arguments, 1)));
+    }
+
+    return undefined;
+  };
+}
+
 export function requireParams() {
   // if (typeof obj !== 'object') {
   //   return console.warn('requireParams should be {varName}');
