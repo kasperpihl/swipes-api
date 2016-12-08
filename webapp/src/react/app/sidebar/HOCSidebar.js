@@ -61,10 +61,9 @@ class HOCSidebar extends Component {
   renderTeams() {
     const { me } = this.props;
 
-    if (!me) {
+    if (!me || !me.size) {
       return undefined;
     }
-
     return me.get('organizations').map(o => this.renderTeam(o.get('id')));
   }
   renderProfile() {

@@ -39,7 +39,8 @@ export function submitStep(goalId, stepId, data, previousSteps) {
             selectable: true,
             items: previousSteps.map((step, i) => {
               const title = `${i + 1}. ${step.get('title')}`;
-              return { title, id: step.get('id') };
+              const selected = (i === 0);
+              return { title, selected, id: step.get('id') };
             }).toJS(),
           },
           buttons: ['Submit'],
