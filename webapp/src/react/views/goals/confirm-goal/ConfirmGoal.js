@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { modal, api, overlay, toasty } from 'actions';
+import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
 import WorkflowSetup from './WorkflowSetup';
 
@@ -64,7 +64,7 @@ class ConfirmGoal extends Component {
     this.goalTitle = title;
   }
   didPressStart() {
-    const { request, organization_id, clearOverlay, addToasty, updateToasty } = this.props;
+    const { organization_id } = this.props;
     const { workflow } = this.state;
     const goal = workflow.toJS();
     const workflowId = goal.id;
@@ -74,18 +74,16 @@ class ConfirmGoal extends Component {
     }
 
     delete goal.id;
-    clearOverlay();
 
-    addToasty({ title: `Adding: ${this.goalTitle}`, loading: true }).then((toastId) => {
+    /* addToasty({ title: `Adding: ${this.goalTitle}`, loading: true }).then((toastId) => {
       request('goals.create', { workflowId, organization_id, goal }).then((res) => {
         if (res.ok) {
           updateToasty(toastId, { title: `Added: ${this.goalTitle}`, completed: true, duration: 3000 });
-          clearOverlay();
         } else {
           updateToasty(toastId, { title: 'Error adding goal', loading: false, duration: 3000 });
         }
       });
-    });
+    });*/
   }
   parseWorkflow() {
     const { workflow } = this.state;
@@ -110,11 +108,7 @@ ConfirmGoal.propTypes = {
   data: map,
   users: map,
   loadModal: func,
-  request: func,
   organization_id: string,
-  clearOverlay: func,
-  addToasty: func,
-  updateToasty: func,
 };
 
 function mapStateToProps(state) {
@@ -125,11 +119,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedConfirmGoal = connect(mapStateToProps, {
-  loadModal: modal.load,
-  clearOverlay: overlay.clear,
-  request: api.request,
-  addToasty: toasty.add,
-  updateToasty: toasty.update,
+  loadModal: actions.modal.load,
 })(ConfirmGoal);
 
 export default ConnectedConfirmGoal;

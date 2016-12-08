@@ -3,16 +3,36 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from 'actions';
+import { setupDelegate } from 'classes/utils';
 import GoalList from './GoalList';
 
 
 class HOCGoalList extends Component {
+  static contextButtons() {
+    return [{
+      component: 'Button',
+      props: {
+        text: 'Create Goal',
+        primary: true,
+      },
+    }];
+  }
+
   constructor(props) {
     super(props);
+    this.callDelegate = setupDelegate(props.delegate);
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+  }
+  onContextClick(i, e) {
+    const { navPush } = this.props;
+    navPush({
+      component: 'StartGoal',
+      title: 'Create (template)',
+    });
   }
   goalListClickedGoal(goalList, goalId) {
     const {
@@ -54,10 +74,11 @@ function mapStateToProps(state) {
 }
 
 
-const { func } = PropTypes;
+const { func, object } = PropTypes;
 HOCGoalList.propTypes = {
   goals: map,
   navPush: func,
+  delegate: object,
   me: map,
   // removeThis: PropTypes.string.isRequired
 };
