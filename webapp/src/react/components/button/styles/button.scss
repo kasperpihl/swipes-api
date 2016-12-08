@@ -3,6 +3,7 @@
 
 $bigBtn: 42px;
 $smallBtn: 34px;
+
 $btnSize: $bigBtn;
 $mainColor: $deepBlue-100;
 
@@ -36,6 +37,7 @@ $mainColor: $deepBlue-100;
     font-weight: bold;
     padding: 0 $btnSize;
     transition: .15s;
+    pointer-events: none;
 
     &:first-letter {
       text-transform: uppercase;
