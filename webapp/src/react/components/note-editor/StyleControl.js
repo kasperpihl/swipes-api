@@ -142,9 +142,8 @@ class StyleControl extends Component {
       block: [
         { label: 'H1Icon', style: 'header-one' },
         { label: 'H2Icon', style: 'header-two' },
-        { label: 'OL', style: 'ordered-list-item' },
+        { label: 'OrderedListIcon', style: 'ordered-list-item' },
         { label: 'UnorderedListIcon', style: 'unordered-list-item' },
-        { label: 'C', style: 'code-block' },
       ],
       inline: [
         { label: 'BoldIcon', style: 'BOLD' },
@@ -152,7 +151,7 @@ class StyleControl extends Component {
         { label: 'UnderlineIcon', style: 'UNDERLINE' },
       ],
       entities: [
-        { label: 'url', style: 'link' },
+        { label: 'LinkIcon', style: 'link' },
       ],
     };
 
