@@ -5,16 +5,18 @@ import * as actions from 'actions';
 import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
+import { setupDelegate } from 'classes/utils';
 import * as Fields from 'src/react/swipes-fields';
 import GoalStep from './GoalStep';
 
 class HOCGoalStep extends Component {
-  static actions(props) {
+  static contextButtons() {
     return [{
-      type: 'Button',
+      props: {
+        icon: 'ThreeDotsIcon',
+      },
     }];
   }
-
   constructor(props) {
     super(props);
     const helper = this.getHelper();
@@ -23,17 +25,19 @@ class HOCGoalStep extends Component {
     };
     this.cacheFormInput = this.cacheFormInput.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.callDelegate = setupDelegate(props.delegate);
   }
 
+  onContextClick(i) {
+    console.log('clicked ', i);
+  }
   componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
     window.addEventListener('beforeunload', this.cacheFormInput);
   }
   componentWillUnmount() {
     this.cacheFormInput();
     window.removeEventListener('beforeunload', this.cacheFormInput);
-  }
-  onAction(actionIndex, data) {
-
   }
 
   getHelper() {
@@ -65,7 +69,7 @@ class HOCGoalStep extends Component {
       const Field = Fields[field.get('type')];
       let newData = data.get(i);
       if (Field && typeof Field.saveData === 'function') {
-        newData = Field.saveData(data);
+        newData = Field.saveData(newData);
       }
       return newData;
     }).toJS();
