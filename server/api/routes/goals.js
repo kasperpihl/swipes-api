@@ -8,6 +8,7 @@ import {
   goalsDelete,
   goalsNext,
   goalsInsert,
+  goalsPushToQueue,
 } from './middlewares/goals';
 import {
   usersGetSingleWithOrganizations,
@@ -39,8 +40,9 @@ authed.all('/goals.create',
   goalsCreate,
   goalsNext,
   goalsInsert,
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
+  goalsPushToQueue,
+  // notifyAllInCompany,
+  // notifyCommonRethinkdb,
   (req, res) => {
     const {
       goalWithMeta,

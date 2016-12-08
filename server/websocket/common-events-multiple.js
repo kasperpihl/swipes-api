@@ -1,8 +1,3 @@
-/*
-  Serving only common events
-  Common events are events that are not modified before sending them to the client.
-*/
-
 import r from 'rethinkdb';
 import _ from 'underscore';
 import db from '../db';
@@ -31,16 +26,27 @@ const commonEventsMultiple = (socket, userId) => {
         }
 
         let type;
-        let omitted;
+        let payload;
 
         if (!row.old_val) {
           const n = row.new_val;
 
+          if (n.user_notification_map) {
+            const notification_map = n.user_notification_map[userId];
+
+            n.notification_data.id = notification_map.id;
+            n.notification_data.ts = notification_map.ts;
+          }
+
           type = n.type;
-          omitted = _.omit(n, ['id', 'type', 'user_ids']);
+          payload = _.omit(n, ['id', 'type', 'user_ids', 'user_notification_map']);
         }
 
-        socket.send(JSON.stringify({ type, payload: omitted.data }));
+        console.log(payload);
+        socket.send(JSON.stringify({
+          type,
+          payload,
+        }));
       });
     });
 };

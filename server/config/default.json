@@ -36,5 +36,6 @@
   "clientPort" :3000,
   "protocol": "http://",
   "cors": "*",
-  "jwtTokenSecret": "swipy the dinocat"
+  "jwtTokenSecret": "swipy the dinocat",
+  "queueHost": "http://localhost:5005"
 }

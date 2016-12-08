@@ -1,4 +1,11 @@
 {
+  "database": {
+    "host": "rethinkdb-staging6110.cloudapp.net",
+    "port": 28015,
+    "db": "swipes",
+    "user": "admin",
+    "password": ""
+  },
   "port": 5005,
   "cors": "*"
 }
