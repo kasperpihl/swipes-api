@@ -36,7 +36,15 @@ class Button extends Component {
     );
   }
   render() {
-    const { primary, icon, text, small, alignIcon } = this.props;
+    const {
+      primary,
+      icon,
+      text,
+      small,
+      alignIcon,
+      className: classNameFromButton,
+      ...rest
+    } = this.props;
     let className = 'g-button';
 
     if ((alignIcon === 'right') && icon && text) {
@@ -54,9 +62,12 @@ class Button extends Component {
     if (text && icon) {
       className += ' g-button--icon-and-text';
     }
+    if (classNameFromButton && typeof classNameFromButton === 'string') {
+      className += ` ${classNameFromButton}`;
+    }
 
     return (
-      <div className={className} onClick={this.onClick}>
+      <div className={className} {...rest} onClick={this.onClick}>
         {this.renderIcon()}
         {this.renderText()}
       </div>
