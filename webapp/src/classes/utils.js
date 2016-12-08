@@ -7,6 +7,17 @@ export function isShareURL(url) {
   return false;
 }
 
+export function iconForService(service) {
+  switch (service) {
+    case 'slack':
+      return 'SlackIcon';
+    case 'dropbox':
+      return 'DropboxLogo';
+    default:
+      return 'SwipesLogo';
+  }
+}
+
 export function nearestAttribute(target, attribute) {
   let value;
   do {

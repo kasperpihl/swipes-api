@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import Find from './Find';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
 
+import Find from './Find';
 import './styles/find.scss';
 
 import SearchResults from './SearchResults';
@@ -18,6 +17,14 @@ class HOCFind extends Component {
     this.unhandledDocs = [];
   }
   componentDidMount() {
+  }
+  findSearch(find, query) {
+    const { search } = this.props;
+    console.log('search', query);
+    search(query);
+  }
+  findResultClick(find, data) {
+
   }
   onCardClick(card, data) {
     const { searchResults, request, loadModal } = this.props;
@@ -110,17 +117,6 @@ class HOCFind extends Component {
       this.props.search(this.refs.searchInput.value);
     }
   }
-  renderSearchField() {
-    return (
-      <input
-        type="text"
-        onKeyUp={this.onKeyUp}
-        ref="searchInput"
-        className="find-overlay__input"
-        placeholder="Search"
-      />
-    );
-  }
   renderContent() {
     const { groupedResults, searching, searchQuery } = this.props;
 
@@ -135,10 +131,15 @@ class HOCFind extends Component {
     );
   }
   render() {
+    const { searchResults, searching, searchQuery } = this.props;
+
     return (
-      <div className="find-overlay">
-        <Find />
-      </div>
+      <Find
+        results={searchResults}
+        searching={searching}
+        searchQuery={searchQuery}
+        delegate={this}
+      />
     );
   }
 }
@@ -146,20 +147,18 @@ class HOCFind extends Component {
 const { func, bool, string } = PropTypes;
 
 HOCFind.propTypes = {
-  searchResults: list,
+
   request: func,
   loadModal: func,
   search: func,
-  groupedResults: map,
+  searchResults: list,
   searching: bool,
   searchQuery: string,
 };
 
 function mapStateToProps(state) {
-  const results = state.getIn(['search', 'searchResults']);
   return {
-    searchResults: results,
-    groupedResults: results.groupBy(res => res.getIn(['doc', 'source'])),
+    searchResults: state.getIn(['search', 'searchResults']),
     searching: state.getIn(['search', 'searching']),
     searchQuery: state.getIn(['search', 'query']),
   };
