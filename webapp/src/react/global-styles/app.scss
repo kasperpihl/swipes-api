@@ -56,21 +56,7 @@ svg {
   }
 
   &__action {
-    @include size(42px);
-    @include flex();
-    border-radius: 50%;
-    border: 1px solid $deepBlue-10;
     transition: .15s;
-
-    &:hover {
-      border-color: $deepBlue-100;
-      transition: .15s;
-    }
-  }
-
-  &__icon {
-    @include size(24px);
-    fill: $deepBlue-100;
   }
 
   &--shown {
