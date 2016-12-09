@@ -8,6 +8,9 @@ import {
 import {
   initActivities,
 } from './db_utils/events';
+import {
+  dbNotificationsGetAllByIdOrderByTs,
+} from './db_utils/notifications';
 
 const initGetData = (req, res, next) => {
   const {
@@ -18,6 +21,7 @@ const initGetData = (req, res, next) => {
     servicesGetAll(),
     initActivities(user_id),
     processesGetAllOrderedByTitle(),
+    dbNotificationsGetAllByIdOrderByTs({ user_id }),
   ];
 
   Promise.all(promiseArrayQ)
@@ -59,6 +63,7 @@ const initGetData = (req, res, next) => {
         services: data[1],
         activity: data[2],
         processes: data[3],
+        notifications: data[4],
       };
 
       res.locals.initData = response;
