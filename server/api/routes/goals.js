@@ -11,13 +11,6 @@ import {
   goalsPushToQueue,
 } from './middlewares/goals';
 import {
-  usersGetSingleWithOrganizations,
-} from './middlewares/users';
-import {
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
-} from './middlewares/notify';
-import {
   processesGetAllOrderedByTitle,
 } from './middlewares/db_utils/processes';
 
@@ -36,7 +29,6 @@ authed.all('/goals.processes', (req, res, next) => {
 
 authed.all('/goals.create',
   validateGoalsCreate,
-  usersGetSingleWithOrganizations,
   goalsCreate,
   goalsNext,
   goalsInsert,
@@ -51,12 +43,14 @@ authed.all('/goals.create',
 
 authed.all('/goals.delete',
   validateGoalsDelete,
-  usersGetSingleWithOrganizations,
   goalsDelete,
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
+  goalsPushToQueue,
   (req, res) => {
-    return res.status(200).json({ ok: true });
+    const {
+      goal_id,
+    } = res.locals;
+
+    return res.status(200).json({ ok: true, id: goal_id });
   });
 
 export {
