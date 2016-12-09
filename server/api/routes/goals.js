@@ -41,14 +41,12 @@ authed.all('/goals.create',
   goalsNext,
   goalsInsert,
   goalsPushToQueue,
-  // notifyAllInCompany,
-  // notifyCommonRethinkdb,
   (req, res) => {
     const {
-      goalWithMeta,
+      goal,
     } = res.locals;
 
-    return res.status(200).json({ ok: true, goal: goalWithMeta });
+    return res.status(200).json({ ok: true, goal });
   });
 
 authed.all('/goals.delete',
