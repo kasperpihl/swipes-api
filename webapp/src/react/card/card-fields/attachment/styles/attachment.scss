@@ -8,7 +8,7 @@
 
   &__icon {
     @include size(24px);
-    @include flex(false);
+    @include flex(none);
     margin-right: 15px;
     fill: $blue-100;
     stroke: $blue-100;
