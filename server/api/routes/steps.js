@@ -35,7 +35,7 @@ authed.post('/steps.submit',
   usersGetSingleWithOrganizations,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res) => res.status(200).json({ ok: true }),
+  (req, res, next) => res.status(200).json({ ok: true }),
 );
 
 authed.post('/steps.update',
@@ -46,7 +46,7 @@ authed.post('/steps.update',
   stepsUpdateData,
   notifyAllInCompany,
   notifyCommonRethinkdb,
-  (req, res) => res.status(200).json({ ok: true }),
+  (req, res, next) => res.status(200).json({ ok: true }),
 );
 
 export {

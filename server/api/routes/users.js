@@ -31,7 +31,7 @@ const notAuthed = express.Router();
 notAuthed.all('/users.signin',
   validateSignIn,
   userSignIn,
-  (req, res) => {
+  (req, res, next) => {
     const {
     token,
   } = res.locals;
@@ -47,7 +47,7 @@ notAuthed.all('/users.signup',
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoUserSignUp,
-  (req, res) => {
+  (req, res, next) => {
     const {
       user_id,
       token,
@@ -67,7 +67,7 @@ authed.post('/users.serviceDisconnect',
   xendoRemoveServiceFromUser,
   usersRemoveXendoService,
   usersRemoveService,
-  (req, res) => {
+  (req, res, next) => {
     return res.status(200).json({ ok: true });
   });
 
@@ -76,7 +76,7 @@ authed.post('/users.serviceDisconnect',
 // DELETE THIS AS SOON AS POSSIBLE
 authed.post('/users.profilePic',
   usersUpdateProfilePic,
-  (req, res) => {
+  (req, res, next) => {
     return res.status(200).json({ ok: true });
   });
 
