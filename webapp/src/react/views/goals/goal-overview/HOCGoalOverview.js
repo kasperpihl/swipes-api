@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
+import { setupDelegate } from 'classes/utils';
 import GoalOverview from './GoalOverview';
 
 
@@ -11,19 +12,22 @@ class HOCGoalOverview extends Component {
     return [{
       component: 'Button',
       props: {
-        icon: 'FindIcon',
+        icon: 'ThreeDotsIcon',
       },
     }];
   }
-  onContextButton(i, e) {
 
-  }
   constructor(props) {
     super(props);
     this.state = {};
+    this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+  }
+  onContextButton() {
+
   }
   goalOverviewClickedStep(goalOverview, stepIndex) {
     const {
@@ -48,19 +52,20 @@ class HOCGoalOverview extends Component {
   }
 }
 
+const { string, func, object } = PropTypes;
+HOCGoalOverview.propTypes = {
+  goal: map,
+  goalId: string,
+  delegate: object,
+  navPush: func,
+};
+
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
   };
 }
-const { string, func } = PropTypes;
-HOCGoalOverview.propTypes = {
-  goal: map,
-  goalId: string,
-  navPush: func,
-};
 
-const ConnectedHOCGoalOverview = connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
 })(HOCGoalOverview);
-export default ConnectedHOCGoalOverview;

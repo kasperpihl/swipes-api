@@ -109,9 +109,7 @@ const goalsInsert = (req, res, next) => {
 
   dbGoalsInsertSingle({ goal })
     .then(() => {
-      res.locals.goalWithMeta = goal;
       res.locals.eventType = 'goal_created';
-      res.locals.eventData = goal;
 
       return next();
     })
@@ -129,7 +127,6 @@ const goalsDelete = (req, res, next) => {
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
       res.locals.eventType = 'goal_deleted';
-      res.locals.eventData = { id: goal_id };
 
       return next();
     })
@@ -179,6 +176,7 @@ const goalsPushToQueue = (req, res, next) => {
   const {
     user_id,
     goal,
+    eventType,
   } = res.locals;
 
   const goal_id = goal.id;
@@ -189,6 +187,7 @@ const goalsPushToQueue = (req, res, next) => {
     json: {
       user_id,
       goal_id,
+      event_type: eventType,
     },
   }, (error) => {
     if (error) {
