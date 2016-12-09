@@ -8,7 +8,7 @@
 
   &__profile-image {
     @include size(36px);
-    @include flex(false);
+    @include flex(none);
     margin-right: 15px;
   }
 
