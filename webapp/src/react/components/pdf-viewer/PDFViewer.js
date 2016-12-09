@@ -21,7 +21,20 @@ class PDFViewer extends Component {
       actionHover: false,
     };
 
-    bindAll(this, ['nextPage', 'prevPage', '_onDocumentComplete', 'scaleUp', 'scaleDown', 'handleInputChange', 'handleInputClick', 'handleInputKeyUp', 'handleMouseMove', 'handleMouseEnter', 'handleMouseLeave']);
+    bindAll(this,
+      [
+        'nextPage',
+        'prevPage',
+        'onDocumentComplete',
+        'scaleUp', 'scaleDown',
+        'handleInputChange',
+        'handleInputClick',
+        'handleInputKeyUp',
+        'handleMouseMove',
+        'handleMouseEnter',
+        'handleMouseLeave',
+      ],
+    );
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentWillMount() {
@@ -152,7 +165,7 @@ class PDFViewer extends Component {
     return (
       <div className="sw-pdf-viewer__action">
         <div className={arrowButtonLeft} onClick={this.prevPage}>
-          {/* <ArrowLeftIcon className="sw-pdf-viewer__icon" /> */}
+          <Icon svg="ArrowLeftIcon" className="sw-pdf-viewer__icon" />
         </div>
 
         <input

@@ -54,8 +54,8 @@ class NavBar extends Component {
         transitionName="breadCrumbsTransition"
         component="div"
         className="bread-crumbs"
-        transitionEnterTimeout={400}
-        transitionLeaveTimeout={400}
+        transitionEnterTimeout={200}
+        transitionLeaveTimeout={200}
       >
         {breadCrumbsHTML}
       </ReactCSSTransitionGroup>
