@@ -8,7 +8,7 @@ const initialState = fromJS({
 });
 
 const searchResults = results => results.map((doc) => {
-  const shareData = { link: {}, meta: {}, permission: { type: 'public' } };
+  const shareData = { link: {}, meta: { service: doc.source }, permission: { type: 'public' } };
   const { meta } = shareData;
   const idParts = doc.id.split('-');
   shareData.link.service = doc.source;
