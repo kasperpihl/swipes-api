@@ -127,7 +127,6 @@ const goalsDelete = (req, res, next) => {
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
       res.locals.eventType = 'goal_deleted';
-      res.locals.eventData = { id: goal_id };
 
       return next();
     })
