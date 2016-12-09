@@ -5,4 +5,6 @@ const email = {
   },
 };
 
-export default email;
+export {
+  email,
+};
