@@ -1,0 +1,44 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.card-header {
+  @include size(100%, auto);
+  padding: 32px 23px 21px 136px;
+  position: relative;
+
+  &__subtitle {
+    @include size(100%, auto);
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 15px;
+    color: $deepBlue-30;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  &__title {
+    @include size(100%, auto);
+    font-size: 21px;
+    line-height: 27px;
+    color: $deepBlue-90;
+    margin-top: 9px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  &__description {
+    margin-top: 15px;
+    font-size: 12px;
+    line-height: 21px;
+    color: $deepBlue-60;
+    position: relative;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}

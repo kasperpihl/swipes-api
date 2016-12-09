@@ -1,0 +1,51 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.card-message {
+  @include size(100%, auto);
+  @include flex(flex);
+  position: relative;
+
+  &__profile-image {
+    @include size(36px);
+    @include flex(false);
+    margin-right: 15px;
+  }
+
+  &__content {
+    @include size(100%, auto);
+    position: relative;
+  }
+
+  &__info {
+    @include size(100%, auto);
+    @include flex(center, flex-start);
+    padding-bottom: 6px;
+  }
+
+  &__name {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 20px;
+    color: $deepBlue-100;
+    padding-right: 6px;
+  }
+
+  &__time {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    color: $deepBlue-30;
+  }
+
+  &__message {
+    font-size: 15px;
+    line-height: 21px;
+    color: #333D59;
+  }
+
+  img#{&}__image {
+    @include size();
+    border-radius: 6px;
+  }
+}

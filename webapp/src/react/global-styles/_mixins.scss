@@ -21,6 +21,8 @@
 	} @else if $vertical == column {
 		display: flex;
 		flex-direction: column;
+	}	@else if $vertical = false {
+		flex: none;
 	} @else {
 		align-items: $vertical;
 		display: flex;

@@ -1,0 +1,28 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.card-attachment {
+  @include size(100%, auto);
+  @include flex(flex);
+  position: relative;
+
+  &__icon {
+    @include size(24px);
+    @include flex(false);
+    margin-right: 15px;
+    fill: $blue-100;
+    stroke: $blue-100;
+  }
+
+  &__title {
+    @include size(calc(100% - 24px - 15px));
+    color: $blue-100;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+}
