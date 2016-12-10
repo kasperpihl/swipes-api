@@ -3,7 +3,7 @@
 
 .card-header {
   @include size(100%, auto);
-  padding: 32px 23px 21px 136px;
+  // padding: 32px 136px 21px 23px;
   position: relative;
 
   &__subtitle {

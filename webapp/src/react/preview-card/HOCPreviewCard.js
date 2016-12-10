@@ -4,6 +4,8 @@ import { setupDelegate } from 'classes/utils';
 import * as Fields from './preview-fields';
 import PreviewField from './PreviewField';
 
+import './styles/preview-card';
+
 class HOCSwipesCard extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +43,7 @@ class HOCSwipesCard extends Component {
   }
   render() {
     return (
-      <div className="swipes-card">
+      <div className="preview-card">
         {this.renderFields()}
       </div>
     );

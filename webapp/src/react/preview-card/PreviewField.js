@@ -1,18 +1,20 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
-class PreviewField extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const { children, title } = this.props;
-    return (
-      <div className="preview-field">
-        {children}
+import './styles/preview-field';
+
+const PreviewField = (props) => {
+  const { children, title } = props;
+
+  return (
+    <div className="preview-field">
+      <div className="preview-field__header">
+        <div className="preview-field__title">{title}</div>
       </div>
-    );
-  }
-}
+
+      {children}
+    </div>
+  );
+};
 
 export default PreviewField;
 
