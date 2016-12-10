@@ -2,16 +2,12 @@
 @import '~styles/_mixins.scss/';
 
 .preview-card {
-  @include size(auto);
-  min-width: 400px;
-  max-width: 650px;
-  border: 1px solid red;
+  max-width: 90vh;
+  max-height: 90vh;
   position: relative;
   background-color: $bg;
   border-radius: 3px;
   border: 1px solid #E6E7EB;
   box-shadow: 0 1px 2px 0 rgba(0,12,46,0.15);
-  overflow: hidden;
-  // max-height: 70vh;
-  // max-width: 70vw;
+  overflow: auto;
 }

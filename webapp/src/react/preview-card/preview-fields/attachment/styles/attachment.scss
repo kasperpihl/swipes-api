@@ -2,8 +2,10 @@
 @import '~styles/_mixins.scss/';
 
 .card-attachment {
-  @include size(100%, auto);
+  @include size(auto);
   @include flex(flex);
+  max-width: 650px;
+  padding: 21px 42px;
   position: relative;
 
   &__icon {
