@@ -10,7 +10,8 @@ import {
   SwipesError,
 } from './swipes-error';
 
-const port = config.get('port');
+// process.env.PORT - this is set by default from elastic beanstalk
+const port = process.env.PORT || config.get('port');
 const app = express();
 
 app.use(cors({
@@ -20,7 +21,7 @@ app.use(cors({
 }));
 
 app.use('/health', (req, res) => {
-  return res.status(200).json({});
+  return res.sendStatus(200);
 });
 
 app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) => {

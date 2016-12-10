@@ -36,6 +36,9 @@
     "build": "webpack --progress",
     "watch": "webpack --progress --watch",
     "server": "pm2-dev start pm2_config.json",
-    "start": "npm run build && npm-run-all --parallel watch server"
+    "start": "npm run build && npm-run-all --parallel watch server",
+
+    "server-staging": "node ./dist/index.js",
+    "staging": "npm run server-staging"
   }
 }
