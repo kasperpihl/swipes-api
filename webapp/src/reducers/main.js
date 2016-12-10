@@ -1,4 +1,4 @@
-import { fromJS, Set } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
 
 const initialState = fromJS({
@@ -6,7 +6,6 @@ const initialState = fromJS({
   token: null,
   overlay: null,
   cache: {},
-  mainClasses: Set(),
   hasLoaded: false,
   activeGoal: null,
 });
@@ -24,16 +23,6 @@ export default function main(state = initialState, action) {
     case types.SET_STATUS: {
       const hasLoaded = (state.get('hasLoaded') || action.status === 'online') ? true : null;
       return state.withMutations(ns => ns.set('hasLoaded', hasLoaded).set('status', action.status));
-    }
-
-    case types.SET_ACTIVE_GOAL: {
-      return state.set('activeGoal', action.goalId || null);
-    }
-    case 'goal_deleted': {
-      if (state.get('activeGoal') === payload.data.id) {
-        return state.set('activeGoal', null);
-      }
-      return state;
     }
 
     // ======================================================
@@ -54,7 +43,7 @@ export default function main(state = initialState, action) {
     // Overlays
     // ======================================================
     case types.OVERLAY_SHOW: {
-      return state.set('overlay', fromJS(payload.overlay));
+      return state.set('overlay', payload.overlay);
     }
     case types.OVERLAY_HIDE: {
       return state.set('overlay', null);

@@ -7,7 +7,6 @@ import { navigation } from 'actions';
 
 import './styles/sidebar.scss';
 
-
 class HOCSidebar extends Component {
   constructor(props) {
     super(props);

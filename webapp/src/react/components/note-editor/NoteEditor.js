@@ -40,7 +40,6 @@ class NoteEditor extends Component {
 
     bindAll(this,
       [
-        'onBlur',
         'onKeyDown',
         'onKeyUp',
         'onMouseMove',
@@ -234,7 +233,6 @@ class NoteEditor extends Component {
     return (
       <div
         ref="rooty" className="sw-text-editor"
-        onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
         onMouseMove={this.onMouseMove}

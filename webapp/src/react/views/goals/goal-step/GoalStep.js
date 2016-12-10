@@ -18,15 +18,10 @@ class GoalStep extends Component {
     bindAll(this, ['onSubmit']);
     this.bindCallbacks = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.callDelegate = setupDelegate(props.delegate, this);
+    this.callDelegate = setupDelegate(props.delegate);
   }
   onSubmit(goBack) {
     this.callDelegate('goalStepSubmit', goBack);
-  }
-  delegateFromField(index, name) {
-    if (name === 'change') {
-      this.callDelegate('goalStepUpdatedFieldData', index, arguments[2]);
-    }
   }
 
   renderHandoff() {
@@ -64,7 +59,7 @@ return undefined;*/
       const Field = Fields[field.get('type')];
       if (Field) {
         if (!this.bindCallbacks[i]) {
-          this.bindCallbacks[i] = this.delegateFromField.bind(this, i);
+          this.bindCallbacks[i] = this.callDelegate.bind(null, 'delegateFromField', i);
         }
         return (
           <StepField

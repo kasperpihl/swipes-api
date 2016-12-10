@@ -28,7 +28,6 @@ class HOCGoalStep extends Component {
     this.cacheFormInput();
     window.removeEventListener('beforeunload', this.cacheFormInput);
   }
-
   getHelper() {
     const { goal, me, cachedData } = this.props;
     return new GoalsUtil(goal, me.get('id'), cachedData);
@@ -63,10 +62,7 @@ class HOCGoalStep extends Component {
       return newData;
     }).toJS();
   }
-  goalStepCacheData() {
-
-  }
-  goalStepSubmit(goalStep, i) {
+  goalStepSubmit(i) {
     const { goal, step, submit } = this.props;
     let previousSteps;
 
@@ -79,10 +75,42 @@ class HOCGoalStep extends Component {
       this.setState({ isSubmitting: false });
     });
   }
-  goalStepUpdatedFieldData(goalStep, fieldIndex, fieldData) {
-    let { data } = this.state;
-    data = data.set(fieldIndex, fieldData);
-    this.setState({ data });
+  fullscreenField(fieldIndex) {
+    const {
+      overlayShow,
+      step,
+      stepIndex,
+    } = this.props;
+
+    const {
+      data,
+    } = this.state;
+
+    const helper = this.getHelper();
+
+    const field = helper.getFieldByIndex(step, fieldIndex);
+    const fieldAndSettings = helper.getFieldAndSettingsFromField(field, stepIndex, { fullscreen: true });
+    this.isFullscreen = true;
+
+    overlayShow({
+      component: 'Field',
+      props: {
+        field: fieldAndSettings[0],
+        settings: fieldAndSettings[1],
+        data: fromJS(this.generateRawObj()[fieldIndex]),
+        delegate: this.delegateFromField.bind(this, fieldIndex),
+      },
+    });
+  }
+  delegateFromField(index, name) {
+    if (name === 'change') {
+      let { data } = this.state;
+      data = data.set(index, arguments[2]);
+      this.setState({ data });
+    }
+    if (name === 'fullscreen') {
+      this.fullscreenField(index);
+    }
   }
   generateOptions() {
     const {
@@ -147,6 +175,7 @@ HOCGoalStep.propTypes = {
   step: map,
   delegate: object,
   cacheSave: func,
+  overlayShow: func,
   goal: map,
   me: map,
   cachedData: map,
@@ -167,5 +196,6 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   navPop: actions.navigation.pop,
   cacheSave: actions.main.cacheSave,
+  overlayShow: actions.main.overlayShow,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);
