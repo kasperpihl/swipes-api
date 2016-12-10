@@ -39,6 +39,7 @@
     "start": "npm run build && npm-run-all --parallel watch server",
 
     "server-staging": "node ./dist/index.js",
-    "staging": "npm run server-staging"
+    "staging": "npm run server-staging",
+    "deploy": "npm run build && eb deploy"
   }
 }
