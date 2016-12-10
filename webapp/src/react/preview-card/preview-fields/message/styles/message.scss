@@ -2,7 +2,9 @@
 @import '~styles/_mixins.scss/';
 
 .card-message {
-  @include size(100%, auto);
+  @include size(auto);
+  max-width: 650px;
+  padding: 21px 42px;
   @include flex(flex);
   position: relative;
 

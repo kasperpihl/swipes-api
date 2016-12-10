@@ -1,0 +1,27 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.preview-image {
+  @include size(100%);
+  @include flex();
+  min-width: 400px;
+  min-height: 400px;
+  max-height: 90vh;
+  max-width: 90vw;
+  position: relative;
+  background-color: $blue-5;
+
+  img {
+    max-height: 85vh;
+    max-width: 85vw;
+  }
+
+  &--full-size {
+    display: block;
+
+    img {
+      max-height: none;
+      max-width: none;
+    }
+  }
+}

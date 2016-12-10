@@ -4,18 +4,16 @@
 .preview-field {
   $b: &;
 
-  @include size(calc(100% - 44px), auto);
-  margin-left: 22px;
-  padding: 21px;
+  @include size(100%, auto);
   position: relative;
 
   &:not(:first-child) {
     #{$b}__header {
-      @include size(100%, 1px);
+      @include size(calc(100% - 44px), 1px);
       background-color: $deepBlue-10;
       position: relative;
       position: absolute;
-      right: 0; top: 0;
+      left: 22px; top: 0;
     }
 
     #{$b}__title {

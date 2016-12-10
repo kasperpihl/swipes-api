@@ -2,6 +2,8 @@
 @import '~styles/_mixins.scss/';
 
 .card-note {
+  max-width: 650px;
+  padding: 21px 42px;
   font-size: 15px;
   line-height: 24px;
   color: $deepBlue-80;
