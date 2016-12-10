@@ -19,15 +19,15 @@ class Note extends Component {
     return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()));
   }
   static parseInitialData(data) {
-    let newData = data;
+    const newData = data;
     let editorState = NoteEditor.getEmptyEditorState();
-    if (newData && newData.get('editorState')) {
-      const raw = JSON.parse(JSON.stringify(newData.get('editorState').toJS()));
+    if (data && data.get('editorState')) {
+      console.log(data.get('editorState').toJS());
+      const raw = JSON.parse(JSON.stringify(data.get('editorState').toJS()));
       editorState = EditorState.push(editorState, convertFromRaw(raw));
     }
 
-    newData = newData.set('editorState', editorState);
-    return newData;
+    return data.set('editorState', editorState);
   }
   constructor(props) {
     super(props);
@@ -45,6 +45,10 @@ class Note extends Component {
   }
   componentDidUpdate() {
     this.paddingForContainer();
+  }
+  onCardClick() {
+    const { delegate } = this.props;
+    delegate('fullscreen');
   }
   onChange(editorState) {
     const { delegate } = this.props;

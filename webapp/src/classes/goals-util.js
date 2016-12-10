@@ -180,17 +180,6 @@ export default class GoalsUtil {
     const lastIteration = this.getLastIterationFromStep(step, this.runCounter() - 1);
 
     if (lastIteration) {
-      // console.log(
-    //   'lastIteration',
-    //   'sI',
-    //   sI,
-    //   'fI',
-    //   fI,
-    //   'run#',
-    //   lastIteration[0],
-    //   'oldD',
-    //   lastIteration[1].toJS()
-    // );
       const lastResponse = lastIteration[1].getIn(['responses', this.id, 'data', fI]);
 
       if (lastResponse) {
@@ -199,17 +188,6 @@ export default class GoalsUtil {
       }
     }
     if (thisIteration) {
-      // console.log(
-      //   'lastIteration',
-      //   'sI',
-      //   sI,
-      //   'fI',
-      //   fI,
-      //   'run#',
-      //   lastIteration[0],
-      //   'oldD',
-      //   lastIteration[1].toJS()
-      // );
       const thisResponse = thisIteration[1].getIn(['responses', this.id, 'data', fI]);
 
       if (thisResponse) {

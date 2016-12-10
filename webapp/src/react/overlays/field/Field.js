@@ -2,12 +2,20 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
+import { fromJS, Map } from 'immutable';
 import * as fields from 'src/react/swipes-fields';
 
 class Field extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: props.data };
+    let data = Map(props.data);
+
+    const FieldHtml = fields[props.field.get('type')];
+    if (typeof FieldHtml.parseInitialData === 'function') {
+      data = FieldHtml.parseInitialData(data);
+    }
+
+    this.state = { data };
     this.delegate = this.delegate.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }

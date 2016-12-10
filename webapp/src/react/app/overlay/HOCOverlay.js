@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as overlays from 'src/react/overlays';
@@ -30,18 +29,18 @@ class HOCOverlay extends Component {
 
     let props = {};
 
-    if (overlay.get('props')) {
-      props = overlay.get('props').toObject();
+    if (overlay.props) {
+      props = overlay.props;
     }
 
-    const Comp = overlays[overlay.get('component')];
+    const Comp = overlays[overlay.component];
 
     if (!Comp) {
-      console.warn(`unsupported overlay: ${overlay.get('component')}, Check react/overlays/index.js`);
+      console.warn(`unsupported overlay: ${overlay.component}, Check react/overlays/index.js`);
       return undefined;
     }
 
-    return <Comp key={overlay.get('component')} {...props} />;
+    return <Comp key={overlay.component} {...props} />;
   }
   renderOverleyActions() {
     return (
@@ -83,9 +82,9 @@ function mapStateToProps(state) {
   };
 }
 
-const { func } = PropTypes;
+const { func, object } = PropTypes;
 HOCOverlay.propTypes = {
-  overlay: map,
+  overlay: object,
   overlayHide: func,
 };
 
