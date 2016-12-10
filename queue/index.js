@@ -37,7 +37,6 @@ app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) 
     originalReq.body,
     ...middlewares[event_type],
     (req, res, next) => {
-      console.log('res', res);
       return originalRes.status(200).json({ ok: true, res: res.locals });
     },
     (err, req, res, next) => {
