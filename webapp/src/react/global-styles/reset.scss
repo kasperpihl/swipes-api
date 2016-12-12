@@ -47,6 +47,13 @@ textarea {
   }
 }
 
+
+button {
+	&:focus {
+		outline: none;
+	}
+}
+
 input {
   cursor: text;
 

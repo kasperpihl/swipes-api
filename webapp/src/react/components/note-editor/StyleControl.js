@@ -14,7 +14,7 @@ class StyleControl extends Component {
       styles: Map(),
       showInput: false,
     };
-    this.callDelegate = setupDelegate(props, this);
+    this.callDelegate = setupDelegate(props.delegate, this);
     bindAll(this, ['addLink', 'handleKeyUp', 'onToggle']);
   }
   componentDidMount() {
@@ -23,13 +23,14 @@ class StyleControl extends Component {
     }, 0);
   }
   onToggle(style, type) {
-    console.log('toggle buggle', style, type);
     if (type === 'block') {
       this.callDelegate('toggleBlockType', style);
+      this.callDelegate('hideStyleControls');
     }
 
     if (type === 'inline') {
       this.callDelegate('toggleInlineStyle', style);
+      this.callDelegate('hideStyleControls');
     }
 
     if (type === 'entity') {
@@ -133,7 +134,6 @@ class StyleControl extends Component {
   }
   addLink() {
     const { input } = this.refs;
-
     if (input.value.length) {
       this.callDelegate('addLink', input.value);
       this.callDelegate('hideStyleControls');
@@ -203,7 +203,7 @@ class StyleControl extends Component {
             onKeyUp={this.handleKeyUp}
           />
           <button className="RichEditor-controls__input-submit" onClick={this.addLink}>
-            <Icon svg="ArrowRightIcon" />
+            <Icon svg="ArrowRightIcon" className="RichEditor-controls__icon" />
           </button>
         </div>
       );

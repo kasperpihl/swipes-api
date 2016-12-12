@@ -5,4 +5,5 @@
   @include size(100%, auto);
   @include flex(none);
   max-width: 600px;
+  border-left: 1px solid red;
 }
