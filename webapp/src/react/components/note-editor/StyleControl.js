@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
+import StyleControlButton from './StyleControlButton';
 
 import './styles/style-control.scss';
 
@@ -14,7 +15,7 @@ class StyleControl extends Component {
       showInput: false,
     };
     this.callDelegate = setupDelegate(props, this);
-    bindAll(this, ['addLink', 'handleKeyUp']);
+    bindAll(this, ['addLink', 'handleKeyUp', 'onToggle']);
   }
   componentDidMount() {
     setTimeout(() => {
@@ -22,6 +23,7 @@ class StyleControl extends Component {
     }, 0);
   }
   onToggle(style, type) {
+    console.log('toggle buggle', style, type);
     if (type === 'block') {
       this.callDelegate('toggleBlockType', style);
     }
@@ -62,7 +64,7 @@ class StyleControl extends Component {
     const selection = editorState.getSelection();
     const w = styleControls.clientWidth;
     const h = styleControls.clientHeight;
-    let newStyles;
+    let newStyles = styles;
 
     if (mouseUp.mousePos) {
       if (selection.get('isBackward')) {
@@ -82,7 +84,7 @@ class StyleControl extends Component {
     const h = styleControls.clientHeight;
     const ww = window.innerWidth;
     const wh = window.innerHeight;
-    let newStyles;
+    let newStyles = styles;
 
     if (styles.get('left') < 10) {
       newStyles = styles.set('left', 10);
@@ -101,7 +103,7 @@ class StyleControl extends Component {
     const { styleControls } = this.refs;
     const h = styleControls.clientHeight;
     const wh = window.innerHeight;
-    let newStyles;
+    let newStyles = styles;
 
     if ((styles.get('top') + h) > position.top && (styles.get('top') + h) < position.bottom) {
       newStyles = styles.set('top', position.bottom + 20);
@@ -180,7 +182,7 @@ class StyleControl extends Component {
       .getType();
 
     return (
-      <Button
+      <StyleControlButton
         callback={this.onToggle}
         data={{ label, style, type, blockType, currentStyle }}
         key={label}
@@ -201,7 +203,7 @@ class StyleControl extends Component {
             onKeyUp={this.handleKeyUp}
           />
           <button className="RichEditor-controls__input-submit" onClick={this.addLink}>
-            {this.renderIcon('ArrowRightIcon')}
+            <Icon svg="ArrowRightIcon" />
           </button>
         </div>
       );
@@ -226,40 +228,14 @@ class StyleControl extends Component {
   }
 }
 
-const Button = (props) => {
-  const { label, style, type, blockType, currentStyle } = props.data;
-  let className = 'RichEditor-styleButton';
-  let RenderIcon;
-
-  if (style === blockType || currentStyle.has(style)) {
-    className += ' RichEditor-activeButton';
-  }
-
-  if (<Icon svg={label} />) {
-    RenderIcon = <Icon svg={label} className="RichEditor__icon" />;
-  } else {
-    RenderIcon = <span>{label}</span>;
-  }
-
-  return (
-    <span className={className} onMouseDown={props.callback(style, type)}>
-      {RenderIcon}
-    </span>
-  );
-};
 
 export default StyleControl;
 
-const { object, func } = PropTypes;
+const { object } = PropTypes;
 
 StyleControl.propTypes = {
   editorState: map,
   position: object,
   mouseUp: object,
   delegate: object,
-};
-
-Button.propTypes = {
-  data: object,
-  callback: func,
 };
