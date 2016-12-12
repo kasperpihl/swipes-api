@@ -41,6 +41,17 @@ export function logout() {
   };
 }
 
+// ======================================================
+// Notes
+// ======================================================
+export function saveNote(goalId, text) {
+  return (dispatch) => {
+    dispatch(request('save.note', { goalId, text })).then((res) => {
+
+    });
+  };
+}
+
 
 // ======================================================
 // Search
