@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { NoteEditor } from 'components/note-editor/NoteEditor';
+import NoteEditor from 'components/note-editor/NoteEditor';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Map } from 'immutable';
-import * as actions from '../actions';
+import * as actions from 'actions';
 
 
 class HOCSideNote extends Component {
@@ -34,7 +34,7 @@ class HOCSideNote extends Component {
     return (
       <div className="side-note">
         <NoteEditor
-          editorState={initialData}
+          editorState={initialData.get('editorState')}
           onChange={this.onChange}
         />
       </div>
@@ -49,5 +49,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  saveNote: actions.note.save,
+  // saveNote: actions.note.save,
 })(HOCSideNote);

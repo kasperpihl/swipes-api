@@ -105,7 +105,6 @@ return undefined;*/
     // > Save to Evernote
   }
   render() {
-    // console.log('this.props.goal.toJS()', JSON.stringify(this.props.goal.toJS()));
     return (
       <div className="goal-step">
 
@@ -118,6 +117,8 @@ return undefined;*/
           {this.renderSubmission()}
           {this.renderPostAutomations()}
         </div>
+
+
       </div>
     );
   }
