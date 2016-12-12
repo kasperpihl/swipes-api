@@ -1,0 +1,8 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.side-note {
+  @include size(100%, auto);
+  @include flex(none);
+  max-width: 600px;
+}

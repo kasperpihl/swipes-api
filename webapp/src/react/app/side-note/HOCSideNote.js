@@ -5,6 +5,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Map } from 'immutable';
 import * as actions from 'actions';
 
+import './styles/side-note';
 
 class HOCSideNote extends Component {
   constructor(props) {

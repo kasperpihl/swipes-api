@@ -8,6 +8,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
+
+  &__flex-wrap {
+    @include size(100%);
+    @include flex(flex);
+  }
 }
 
 .global-actions {
