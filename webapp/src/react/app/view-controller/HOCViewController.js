@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import * as actions from 'actions';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import Navbar from 'components/nav-bar/NavBar';
-import { bindAll, nearestAttribute } from 'classes/utils';
+import HOCSideNote from '../side-note/HOCSideNote';
 import Button from 'Button';
+import * as actions from 'actions';
 import * as views from 'views';
+import { bindAll, nearestAttribute } from 'classes/utils';
 import './styles/view-controller';
 
 class HOCViewController extends Component {
@@ -127,6 +128,9 @@ class HOCViewController extends Component {
       </div>
     );
   }
+  renderNote() {
+    return <HOCSideNote />;
+  }
   renderLoading() {
     return <div>Loading</div>;
   }
@@ -136,6 +140,7 @@ class HOCViewController extends Component {
         {this.renderNavbar()}
         {this.renderContent()}
         {this.renderGlobalActions()}
+        {this.renderNote()}
       </div>
     );
   }
