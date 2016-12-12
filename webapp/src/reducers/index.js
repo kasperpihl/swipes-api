@@ -12,6 +12,7 @@ import services from './services';
 import activity from './activity';
 import users from './users';
 import goals from './goals';
+import notes from './notes';
 import workflows from './workflows';
 
 
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   me,
   goals,
   services,
+  notes,
   activity,
   users,
   workflows,

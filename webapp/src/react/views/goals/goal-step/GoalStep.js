@@ -23,7 +23,6 @@ class GoalStep extends Component {
   onSubmit(goBack) {
     this.callDelegate('goalStepSubmit', goBack);
   }
-
   renderHandoff() {
 /* const { users } = this.props;
 const { stepIndex } = this.state;
