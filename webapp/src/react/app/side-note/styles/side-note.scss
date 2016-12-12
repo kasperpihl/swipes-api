@@ -2,8 +2,47 @@
 @import '~styles/_mixins.scss/';
 
 .side-note {
-  @include size(100%, auto);
+  $b: &;
+  @include size(100%);
   @include flex(none);
+  @include flex(column);
   max-width: 600px;
-  border-left: 1px solid red;
+  overflow-y: auto;
+  padding-left: 0 15px;
+  position: relative;
+
+  &:after {
+    @include size(1px, calc(100% - 54px));
+    content: '';
+    left: 0; top: 54px;
+    background-color: $blue-100;
+    // z-index: 9;
+    position: absolute;
+  }
+
+  &__header {
+    @include size(100%, 24px);
+    @include flex(none);
+    @include flex(center, flex-end);
+    border-bottom: 1px solid $deepBlue-10;
+    margin-top: 30px;
+    padding-right: 15px;
+    color: $deepBlue-80;
+    margin-bottom: 12px;
+  }
+
+  &--locked {
+
+    &:after {
+      background-color: $deepBlue-10;
+    }
+
+    #{$b}__header {
+      color: $red-100;
+    }
+
+    & > *:not(#{$b}__header) {
+      opacity: .4;
+    }
+  }
 }
