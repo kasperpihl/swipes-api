@@ -80,7 +80,19 @@ class HOCSideNote extends Component {
 
     return editorState;
   }
-  componentDidMount() {
+  renderHeader() {
+    const { note, users } = this.props;
+    const { locked } = this.state;
+    const person = users.get(note.get('locked_by'));
+    let message = 'You are editing this note';
+
+    if (locked) {
+      message = `${person.get('name')} is editing this note`;
+    }
+
+    return (
+      <div className="side-note__header">{message}</div>
+    );
   }
   render() {
     const { note, goalId } = this.props;
@@ -89,8 +101,15 @@ class HOCSideNote extends Component {
       return null;
     }
 
+    let className = 'side-note';
+
+    if (locked) {
+      className += ' side-note--locked';
+    }
+
     return (
-      <div className="side-note">
+      <div className={className}>
+        {this.renderHeader()}
         <NoteEditor
           editorState={editorState}
           onChange={this.onChange}
@@ -114,6 +133,7 @@ function mapStateToProps(state) {
     me: state.get('me'),
     navId,
     note: state.getIn(['notes', goalId]),
+    users: state.get('users'),
   };
 }
 
