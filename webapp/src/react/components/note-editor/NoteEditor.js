@@ -9,7 +9,6 @@ import {
   Modifier,
   Entity,
 } from 'draft-js';
-import { map } from 'react-immutable-proptypes';
 import StyleControl from './StyleControl';
 import NoteLink from './NoteLink';
 import { bindAll } from 'classes/utils';
@@ -257,10 +256,10 @@ class NoteEditor extends Component {
 
 export default NoteEditor;
 
-const { bool, func } = PropTypes;
+const { bool, func, object } = PropTypes;
 
 NoteEditor.propTypes = {
   onChange: func,
-  editorState: map,
+  editorState: object,
   readOnly: bool,
 };

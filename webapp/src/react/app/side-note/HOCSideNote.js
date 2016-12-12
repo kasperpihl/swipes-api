@@ -2,7 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { Map } from 'immutable';
+import {
+  convertFromRaw,
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
+
+import { bindAll, throttle } from 'classes/utils';
 import * as actions from 'actions';
 
 import './styles/side-note';
@@ -13,15 +19,33 @@ class HOCSideNote extends Component {
     this.state = { editorState: this.parseInitialData() };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
+    bindAll(this, ['onChange', 'saveNote']);
+    this.throttledSave = throttle(this.saveNote, 5000);
   }
   componentWillReceiveProps(nextProps) {
+    const { me, note } = this.props;
 
+    if (nextProps.note !== note) {
+      if (!note || (me && me.get('id') !== nextProps.note.get('locked_by'))) {
+        this.setState({ editorState: this.parseInitialData(nextProps.note.get('text')) });
+      }
+    }
   }
   onChange(editorState) {
     this.setState({ editorState });
+    this.throttledSave(editorState);
+  }
+  saveNote(editorState) {
+    const {
+      saveNote,
+      goalId,
+      navId,
+    } = this.props;
+
+    saveNote(navId, goalId, this.saveData(editorState));
   }
   saveData(data) {
-    return data.set('editorState', convertToRaw(data.get('editorState').getCurrentContent()));
+    return convertToRaw(data.getCurrentContent());
   }
   parseInitialData(initialState) {
     let editorState = NoteEditor.getEmptyEditorState();
@@ -36,7 +60,11 @@ class HOCSideNote extends Component {
   componentDidMount() {
   }
   render() {
-    const { note } = this.props;
+    const { note, goalId } = this.props;
+    if (!goalId) {
+      return null;
+    }
+
     const { editorState } = this.state;
 
     return (
@@ -51,11 +79,21 @@ class HOCSideNote extends Component {
 }
 
 function mapStateToProps(state) {
+  const navId = state.getIn(['navigation', 'id']);
+  const history = state.getIn(['navigation', 'history', navId]);
+  const currentView = history ? history.last() : undefined;
+  let goalId;
+  if (currentView) {
+    goalId = currentView.getIn(['props', 'goalId']);
+  }
   return {
-    note: state.getIn(['notes', state.getIn(['main', 'activeGoalId'])]),
+    goalId,
+    me: state.get('me'),
+    navId,
+    note: state.getIn(['notes', goalId]),
   };
 }
 
 export default connect(mapStateToProps, {
-  // saveNote: actions.note.save,
+  saveNote: actions.main.saveNote,
 })(HOCSideNote);
