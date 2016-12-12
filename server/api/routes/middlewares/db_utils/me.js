@@ -25,6 +25,14 @@ const initMe = (user_id) => {
       })
       .do((user) => {
         return user.merge({
+          notes:
+            r.table('notes')
+              .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+              .coerceTo('ARRAY'),
+        });
+      })
+      .do((user) => {
+        return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
               users:
