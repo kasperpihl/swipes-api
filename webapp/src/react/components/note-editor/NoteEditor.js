@@ -178,6 +178,7 @@ class NoteEditor extends Component {
     return 'not handled';
   }
   addLink(styleControl, urlValue) {
+    console.log('get here?');
     const { editorState } = this.props;
     const entityKey = Entity.create(
       'LINK',
@@ -197,7 +198,7 @@ class NoteEditor extends Component {
       newEditorState.getSelection(),
       entityKey,
     );
-
+    console.log('newEditorState.toJS()', newEditorState.toJS());
     this.props.onChange(newEditorState);
   }
   removeLink() {

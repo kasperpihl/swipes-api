@@ -28,7 +28,7 @@ class StyleControlButton extends Component {
     }
 
     if (<Icon svg={label} />) {
-      RenderIcon = <Icon svg={label} className="RichEditor__icon" />;
+      RenderIcon = <Icon svg={label} className="RichEditor-controls__icon" />;
     } else {
       RenderIcon = <span>{label}</span>;
     }
