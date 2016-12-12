@@ -3,7 +3,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import Navbar from 'components/nav-bar/NavBar';
-import HOCSideNote from '../side-note/HOCSideNote';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
@@ -120,6 +119,9 @@ class HOCViewController extends Component {
   }
 
   renderGlobalActions() {
+    if (true) {
+      return null;
+    }
     return (
       <div className="global-actions" key="global-actions">
         <div className="global-actions__action" onClick={this.clickedFind}>
@@ -127,9 +129,6 @@ class HOCViewController extends Component {
         </div>
       </div>
     );
-  }
-  renderNote() {
-    return <HOCSideNote />;
   }
   renderLoading() {
     return <div>Loading</div>;
@@ -139,10 +138,7 @@ class HOCViewController extends Component {
       <div className="view-controller">
         {this.renderNavbar()}
         {this.renderGlobalActions()}
-        <div className="view-controller__flex-wrap">
-          {this.renderContent()}
-          {this.renderNote()}
-        </div>
+        {this.renderContent()}
       </div>
     );
   }
