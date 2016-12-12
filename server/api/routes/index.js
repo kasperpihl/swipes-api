@@ -7,6 +7,7 @@ import * as steps from './steps';
 import * as search from './search';
 import * as webhooks from './webhooks';
 import * as notifications from './notifications';
+import * as notes from './notes';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -21,6 +22,7 @@ const v1Authed = [
   goals.authed,
   steps.authed,
   notifications.authed,
+  notes.authed,
 ];
 const webhooksNotAuthed = [
   webhooks.notAuthed,

@@ -29,6 +29,7 @@ const initGetData = (req, res, next) => {
       const self = data[0];
       let users = [];
       let goals = [];
+      let notes = [];
 
       if (self.organizations.length > 0) {
         users = self.organizations[0].users;
@@ -42,6 +43,13 @@ const initGetData = (req, res, next) => {
 
         // We don't want duplication of that data served on the client;
         delete self.goals;
+      }
+
+      if (self.notes.length > 0) {
+        notes = self.notes;
+
+        // We don't want duplication of that data served on the client;
+        delete self.notes;
       }
 
       const origin = config.get('origin');
@@ -60,6 +68,7 @@ const initGetData = (req, res, next) => {
         self,
         users,
         goals,
+        notes,
         services: data[1],
         activity: data[2],
         processes: data[3],
