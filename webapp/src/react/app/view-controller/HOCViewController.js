@@ -138,9 +138,11 @@ class HOCViewController extends Component {
     return (
       <div className="view-controller">
         {this.renderNavbar()}
-        {this.renderContent()}
         {this.renderGlobalActions()}
-        {this.renderNote()}
+        <div className="view-controller__flex-wrap">
+          {this.renderContent()}
+          {this.renderNote()}
+        </div>
       </div>
     );
   }

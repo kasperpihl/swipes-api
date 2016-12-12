@@ -5,6 +5,7 @@
   $b: &;
 
   @include size(100%);
+  min-width: 450px;
   background-color: $bg;
   position: relative;
   overflow-y: auto;
