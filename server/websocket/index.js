@@ -2,8 +2,9 @@ import url from 'url';
 import config from 'config';
 import ws from 'ws';
 import jwt from 'jwt-simple';
-import usersProfilePic from './services';
-import userServices from './users';
+import usersProfilePic from './users';
+import userServices from './services';
+import notes from './notes';
 import commonEvents from './common-events';
 import commonEventsMultiple from './common-events-multiple';
 
@@ -52,6 +53,7 @@ const websocketStart = (server) => {
 
     usersProfilePic(socket, user_id);
     userServices(socket, user_id);
+    notes(socket, user_id);
     commonEvents(socket, user_id);
     commonEventsMultiple(socket, user_id);
   });
