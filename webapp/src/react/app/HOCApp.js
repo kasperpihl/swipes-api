@@ -9,6 +9,7 @@ import ViewController from './view-controller/HOCViewController';
 import Sidebar from './sidebar/HOCSidebar';
 import Overlay from './overlay/HOCOverlay';
 import Toasty from './toasty/HOCToasty';
+import HOCSideNote from './side-note/HOCSideNote';
 
 let DevTools = 'div';
 
@@ -42,6 +43,9 @@ class HOCApp extends Component {
       return false;
     });
   }
+  renderNote() {
+    return <HOCSideNote />;
+  }
   render() {
     const { location } = this.props;
 
@@ -51,6 +55,7 @@ class HOCApp extends Component {
         <div className="content-wrapper">
           <Sidebar />
           <ViewController />
+          <HOCSideNote />
         </div>
         <Overlay />
         <Modal />
