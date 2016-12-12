@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import { map } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
 import StyleControlButton from './StyleControlButton';
@@ -234,7 +233,7 @@ export default StyleControl;
 const { object } = PropTypes;
 
 StyleControl.propTypes = {
-  editorState: map,
+  editorState: object,
   position: object,
   mouseUp: object,
   delegate: object,

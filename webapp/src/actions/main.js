@@ -44,10 +44,9 @@ export function logout() {
 // ======================================================
 // Notes
 // ======================================================
-export function saveNote(goalId, text) {
+export function saveNote(organizationId, goalId, text) {
   return (dispatch) => {
-    dispatch(request('save.note', { goalId, text })).then((res) => {
-
+    dispatch(request('notes.save', { organization_id: organizationId, goal_id: goalId, text })).then((res) => {
     });
   };
 }
