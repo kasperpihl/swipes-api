@@ -16,16 +16,40 @@ import './styles/side-note';
 class HOCSideNote extends Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: this.parseInitialData() };
+    this.state = { editorState: this.parseInitialData(), locked: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     bindAll(this, ['onChange', 'saveNote']);
     this.throttledSave = throttle(this.saveNote, 5000);
   }
+  lockUI(timeleft) {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    this.timer = setTimeout(() => {
+      this.setState({ locked: false });
+    }, timeleft * 1000);
+    if (!this.state.locked) {
+      this.setState({ locked: true });
+    }
+  }
   componentWillReceiveProps(nextProps) {
     const { me, note } = this.props;
-
+    if (this.props.note && !nextProps.note) {
+      this.setState({ editorState: null, locked: false });
+    }
     if (nextProps.note && nextProps.note !== note) {
+      let locked = false;
+      if (nextProps.note.get('locked_by') !== me.get('id')) {
+        const ts = parseInt(new Date(nextProps.note.get('ts')).getTime() / 1000, 10);
+        const now = parseInt(new Date().getTime() / 1000, 10);
+        if (now < (ts + 10)) {
+          console.log('let lock this shit up');
+          locked = true;
+          this.lockUI(Math.max((ts + 10) - now, 10));
+        }
+      }
+
       if (!note || (me && me.get('id') !== nextProps.note.get('locked_by'))) {
         this.setState({ editorState: this.parseInitialData(nextProps.note.get('text')) });
       }
@@ -50,7 +74,6 @@ class HOCSideNote extends Component {
   parseInitialData(initialState) {
     let editorState = NoteEditor.getEmptyEditorState();
     if (initialState) {
-      console.log(initialState.toJS());
       const raw = JSON.parse(JSON.stringify(initialState.toJS()));
       editorState = EditorState.push(editorState, convertFromRaw(raw));
     }
@@ -61,17 +84,17 @@ class HOCSideNote extends Component {
   }
   render() {
     const { note, goalId } = this.props;
-    if (!goalId) {
+    const { editorState, locked } = this.state;
+    if (!goalId || !editorState) {
       return null;
     }
-
-    const { editorState } = this.state;
 
     return (
       <div className="side-note">
         <NoteEditor
           editorState={editorState}
           onChange={this.onChange}
+          readOnly={locked}
         />
       </div>
     );
