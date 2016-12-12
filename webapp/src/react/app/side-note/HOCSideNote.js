@@ -25,7 +25,7 @@ class HOCSideNote extends Component {
   componentWillReceiveProps(nextProps) {
     const { me, note } = this.props;
 
-    if (nextProps.note !== note) {
+    if (nextProps.note && nextProps.note !== note) {
       if (!note || (me && me.get('id') !== nextProps.note.get('locked_by'))) {
         this.setState({ editorState: this.parseInitialData(nextProps.note.get('text')) });
       }
