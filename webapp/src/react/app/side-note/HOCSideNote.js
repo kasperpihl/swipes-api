@@ -57,7 +57,11 @@ class HOCSideNote extends Component {
   }
   onChange(editorState) {
     this.setState({ editorState });
-    this.throttledSave(editorState);
+    const lastUndo = editorState.getUndoStack().first();
+    if (this.lastUndo && this.lastUndo !== lastUndo) {
+      this.throttledSave(editorState);
+    }
+    this.lastUndo = lastUndo;
   }
   saveNote(editorState) {
     const {

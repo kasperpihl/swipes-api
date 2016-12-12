@@ -30,6 +30,10 @@ class NoteEditor extends Component {
 
     return EditorState.createEmpty(decorator);
   }
+  blockRendererFn(contentBlock) {
+    const type = contentBlock.getType();
+    console.log(type);
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -241,6 +245,7 @@ class NoteEditor extends Component {
         {this.renderStyleControls()}
         <Editor
           ref="editor"
+          blockRendererFn={this.blockRender}
           readOnly={readOnly}
           editorState={editorState}
           handleKeyCommand={this.handleKeyCommand}
