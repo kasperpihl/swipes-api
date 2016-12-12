@@ -9,14 +9,17 @@ const notesSave = (req, res, next) => {
     organization_id,
     goal_id,
     text,
+    unlock,
   } = res.locals;
+
+  const locked_by = unlock ? null : user_id;
 
   const note = {
     organization_id,
     goal_id,
     text,
+    locked_by,
     ts: r.now(),
-    locked_by: user_id,
   };
 
   dbNotesInsert({ note })
