@@ -34,7 +34,7 @@ class HOCSideNote extends Component {
     // This enables us to not lock the note for others on selection, focus etc.
     if (editing || this.lastUndo !== lastUndo) {
       if (editorState.getSelection().hasFocus) {
-        this.debouncedSave();
+        this.bouncedSaveNote();
       }
       if (!editing) {
         this.saveNote(false, editorState);
@@ -117,7 +117,7 @@ class HOCSideNote extends Component {
   onBlur() {
     const { editing, editorState } = this.state;
     if (editing) {
-      this.debouncedSave.clear();
+      this.bouncedSaveNote.clear();
       this.saveNote(true, editorState);
     }
   }
