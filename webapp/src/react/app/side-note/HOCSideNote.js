@@ -68,7 +68,6 @@ class HOCSideNote extends Component {
       navId,
     } = this.props;
     const { editorState } = this.state;
-    this.throttle = null;
     saveNote(navId, goalId, this.saveData(editorState), unlock);
   }
 
@@ -89,8 +88,13 @@ class HOCSideNote extends Component {
       } else if (!lockedBy && note && note.get('locked_by')) {
         this.unlockUI();
       }
-
-      if (!note || (lockedBy && me && me.get('id') !== lockedBy)) {
+      const oldLock = note && note.get('locked_by');
+      if (
+        !note ||
+        (lockedBy && me.get('id') !== lockedBy) ||
+        (!lockedBy && oldLock && oldLock !== me.get('id'))
+      ) {
+        console.log('setting new note');
         const editorState = this.parseInitialData(nextProps.note.get('text'));
         this.setState({ editorState });
         // Using the last undo item to check if something has actually changed
