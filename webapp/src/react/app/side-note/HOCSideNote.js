@@ -22,7 +22,7 @@ class HOCSideNote extends Component {
     this.state = { editorState: this.parseInitialData(), locked: false, editing: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onChange', 'saveNote', 'onBlur']);
-    this.debouncedSave = debounce(this.saveNote, 5000);
+    this.bouncedSaveNote = debounce(this.bouncedSaveNote, 5000);
   }
 
   onChange(editorState) {
@@ -69,10 +69,7 @@ class HOCSideNote extends Component {
     }
   }
 
-
-  saveNote(unlock) {
-    const { editorState } = this.state;
-    console.log('un', unlock);
+  saveNote(unlock, editorState) {
     const {
       saveNote,
       goalId,
@@ -80,6 +77,10 @@ class HOCSideNote extends Component {
     } = this.props;
 
     saveNote(navId, goalId, this.convertDataToSave(editorState), unlock);
+  }
+  bouncedSaveNote() {
+    const { editorState } = this.state;
+    this.saveNote(false, editorState);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -114,10 +115,10 @@ class HOCSideNote extends Component {
     }
   }
   onBlur() {
-    const { editing } = this.state;
+    const { editing, editorState } = this.state;
     if (editing) {
       this.debouncedSave.clear();
-      this.saveNote(true);
+      this.saveNote(true, editorState);
     }
   }
 
