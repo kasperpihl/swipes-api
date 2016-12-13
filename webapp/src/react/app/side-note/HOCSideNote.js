@@ -82,24 +82,24 @@ class HOCSideNote extends Component {
     const { me, note: oldNote } = this.props;
     const { note: newNote } = nextProps;
     if (oldNote && !newNote) {
-      this.setState({ editorState: null, locked: false, editing: false });
+      this.unlockUI();
     }
     if (newNote && newNote !== oldNote) {
-      const lockedBy = newNote.get('locked_by');
-      if (lockedBy) {
+      const newLock = newNote.get('locked_by');
+      if (newLock) {
         const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
         const now = parseInt(new Date().getTime(), 10);
         if (now < (ts + UNLOCK_TIMER)) {
           this.lockUI(Math.max((ts + UNLOCK_TIMER) - now, UNLOCK_TIMER));
         }
-      } else if (!lockedBy && oldNote && oldNote.get('locked_by')) {
+      } else {
         this.unlockUI();
       }
       const oldLock = oldNote && oldNote.get('locked_by');
       if (
         !oldNote ||
-        (lockedBy && me.get('id') !== lockedBy) ||
-        (!lockedBy && oldLock && oldLock !== me.get('id'))
+        (newLock && me.get('id') !== newLock) ||
+        (!newLock && oldLock && oldLock !== me.get('id'))
       ) {
         console.log('setting new data');
         const editorState = this.parseInitialData(newNote.get('text'));
