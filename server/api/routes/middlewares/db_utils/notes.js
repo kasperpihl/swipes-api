@@ -5,7 +5,6 @@ const dbNotesInsert = ({ note }) => {
   const q =
     r.table('notes')
       .insert(note, {
-        returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
           return r.branch(
             oldDoc('locked_by').ne(null).and(oldDoc('locked_by').ne(newDoc('user_id'))),
