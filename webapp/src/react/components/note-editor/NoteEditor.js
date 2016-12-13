@@ -181,7 +181,6 @@ class NoteEditor extends Component {
     return 'not handled';
   }
   addLink(styleControl, urlValue) {
-    console.log('get here?');
     const { editorState } = this.props;
     const entityKey = Entity.create(
       'LINK',
@@ -201,7 +200,6 @@ class NoteEditor extends Component {
       newEditorState.getSelection(),
       entityKey,
     );
-    console.log('newEditorState.toJS()', newEditorState.toJS());
     this.props.onChange(newEditorState);
   }
   removeLink() {
@@ -232,7 +230,11 @@ class NoteEditor extends Component {
     );
   }
   render() {
-    const { editorState, readOnly } = this.props;
+    const {
+      editorState,
+      readOnly,
+      onChange,
+    } = this.props;
 
     return (
       <div
@@ -252,7 +254,9 @@ class NoteEditor extends Component {
           onChange={this.onChange}
           blockStyleFn={this.handleBlock}
           onTab={this.onTab}
+          onBlur={this.props.onBlur}
           placeholder="Write something cool in me"
+
         />
       </div>
     );
