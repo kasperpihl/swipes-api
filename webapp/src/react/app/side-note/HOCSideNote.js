@@ -21,7 +21,7 @@ class HOCSideNote extends Component {
     super(props);
     this.state = { editorState: this.parseInitialData(), locked: false, editing: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onChange', 'saveNote', 'onBlur']);
+    bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 5000);
   }
 
