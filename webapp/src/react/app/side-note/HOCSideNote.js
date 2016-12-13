@@ -19,10 +19,14 @@ const UNLOCK_TIMER = 30000;
 class HOCSideNote extends Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: this.parseInitialData(), locked: false, editing: false };
+    this.state = {
+      editorState: this.parseInitialData(),
+      locked: false,
+      editing: false,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur']);
-    this.bouncedSaveNote = debounce(this.bouncedSaveNote, 5000);
+    this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
 
   onChange(editorState) {
@@ -33,7 +37,9 @@ class HOCSideNote extends Component {
     // If you are editing or if not the last undo item has changed.
     // This enables us to not lock the note for others on selection, focus etc.
     if (!editing && this.lastUndo !== lastUndo) {
-      this.saveNote(false, editorState);
+      this.saveNote(false, this.state.editorState);
+      // Call twice, to call immediately to lock, and on the timer with content
+      this.bouncedSaveNote();
       changeObj.editing = true;
     }
     if (editing && editorState.getSelection().hasFocus) {
@@ -50,14 +56,17 @@ class HOCSideNote extends Component {
       this.lockTimer = null;
     }
   }
-  lockUI(timeleft) {
+  lockUI(ts, lockedByMe) {
     this.clearTimer();
-    this.lockTimer = setTimeout(() => {
-      this.unlockUI();
-    }, timeleft);
-
-    if (!this.state.locked) {
-      this.setState({ locked: true });
+    const now = parseInt(new Date().getTime(), 10);
+    const timeleft = (ts + UNLOCK_TIMER) - now;
+    if (timeleft > 0) {
+      this.lockTimer = setTimeout(() => {
+        this.unlockUI();
+      }, timeleft);
+      if (!this.state.locked) {
+        this.setState({ locked: true });
+      }
     }
   }
   unlockUI() {
@@ -83,37 +92,35 @@ class HOCSideNote extends Component {
       goalId,
       navId,
     } = this.props;
-
+    console.log('saving', unlock);
     saveNote(navId, goalId, this.convertDataToSave(editorState), unlock);
   }
   bouncedSaveNote() {
     const { editorState } = this.state;
-    this.saveNote(false, editorState);
+    this.saveNote(true, editorState);
   }
 
   componentWillReceiveProps(nextProps) {
     const { me, note: oldNote } = this.props;
     const { note: newNote } = nextProps;
     if (oldNote && !newNote) {
+      // If we leave the note, unlock stuff.
       this.unlockUI();
     }
     if (newNote && newNote !== oldNote) {
       const newLock = newNote.get('locked_by');
       if (newLock) {
         const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
-        const now = parseInt(new Date().getTime(), 10);
-        if (now < (ts + UNLOCK_TIMER)) {
-          this.lockUI(Math.max((ts + UNLOCK_TIMER) - now, UNLOCK_TIMER));
-        }
+        this.lockUI(ts, (newNote.get('locked_by') === me.get('id')));
       } else {
         this.unlockUI();
       }
       if (newNote.get('user_id') !== me.get('id')) {
         console.log('setting new data');
         const editorState = this.parseInitialData(newNote.get('text'));
+        this.lastUndo = editorState.getUndoStack().first();
         this.setState({ editorState, editing: false });
         // Using the last undo item to check if something has actually changed
-        this.lastUndo = editorState.getUndoStack().first();
       }
     }
   }
