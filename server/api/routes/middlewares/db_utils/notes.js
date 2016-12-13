@@ -7,6 +7,15 @@ const dbNotesInsert = ({ note }) => {
       .insert(note, {
         returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
+          /*
+          if(oldDoc.locked_by && oldDoc.locked_by !== newDoc.locked_by){
+            const oldTs = new Date(oldDoc.ts).getTime();
+            const newTs = new Date(newDoc.ts).getTime();
+            if(oldTs + 30sec > newTs){
+              reject changes!
+            }
+          }
+          */
           return oldDoc.merge(newDoc);
         },
       });
