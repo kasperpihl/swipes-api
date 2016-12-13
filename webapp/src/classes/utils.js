@@ -275,6 +275,7 @@ export function throttle(func, wait) {
     if (timeoutID) {
       clearTimeout(timeoutID);
       timeoutID = 0;
+      last = 0;
     }
   };
   return throttled;

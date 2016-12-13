@@ -33,24 +33,26 @@ class HOCSideNote extends Component {
     // If you are editing or if not the last undo item has changed.
     // This enables us to not lock the note for others on selection, focus etc.
     if (editing || this.lastUndo !== lastUndo) {
+      if (editorState.getSelection().hasFocus) {
+        this.throttledSave();
+      }
       if (!editing) {
         changeObj.editing = true;
       }
-      this.throttledSave();
     }
     this.setState(changeObj);
     this.lastUndo = lastUndo;
   }
 
   clearTimer() {
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
+    if (this.lockTimer) {
+      clearTimeout(this.lockTimer);
+      this.lockTimer = null;
     }
   }
   lockUI(timeleft) {
     this.clearTimer();
-    this.timer = setTimeout(() => {
+    this.lockTimer = setTimeout(() => {
       this.unlockUI();
     }, timeleft);
 
@@ -91,7 +93,6 @@ class HOCSideNote extends Component {
           this.lockUI(Math.max((ts + UNLOCK_TIMER) - now, UNLOCK_TIMER));
         }
       } else if (!lockedBy && oldNote && oldNote.get('locked_by')) {
-        console.log('unlock!');
         this.unlockUI();
       }
       const oldLock = oldNote && oldNote.get('locked_by');
@@ -133,7 +134,7 @@ class HOCSideNote extends Component {
     const { locked, editing } = this.state;
 
     let message = 'No one is editing this note';
-    const lockedBy = note.get('locked_by');
+    const lockedBy = note && note.get('locked_by');
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
       message = `${person.get('name')} is editing this note`;
