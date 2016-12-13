@@ -111,7 +111,7 @@ class HOCSideNote extends Component {
       if (newNote.get('user_id') !== me.get('id')) {
         console.log('setting new data');
         const editorState = this.parseInitialData(newNote.get('text'));
-        this.setState({ editorState });
+        this.setState({ editorState, editing: false });
         // Using the last undo item to check if something has actually changed
         this.lastUndo = editorState.getUndoStack().first();
       }
@@ -139,12 +139,12 @@ class HOCSideNote extends Component {
 
     let message = 'No one is editing this note';
     const lockedBy = note && note.get('locked_by');
+    if (editing) {
+      message = 'You are editing this note';
+    }
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
       message = `${person.get('name')} is editing this note`;
-    }
-    if (editing) {
-      message = 'You are editing this note';
     }
 
 
