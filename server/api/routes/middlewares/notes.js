@@ -15,6 +15,7 @@ const notesSave = (req, res, next) => {
   const locked_by = unlock ? null : user_id;
 
   const note = {
+    user_id,
     organization_id,
     goal_id,
     text,

@@ -8,24 +8,14 @@ const dbNotesInsert = ({ note }) => {
         returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
           return r.branch(
-            oldDoc('locked_by').ne(newDoc('locked_by')),
+            oldDoc('locked_by').ne(null).and(oldDoc('locked_by').ne(newDoc('user_id'))),
             r.branch(
-              oldDoc('ts').date().add(30).gt(newDoc('ts')),
+              oldDoc('ts').add(30).gt(newDoc('ts')),
               oldDoc,
               oldDoc.merge(newDoc),
             ),
             oldDoc.merge(newDoc),
           );
-          /*
-          if(oldDoc.locked_by && oldDoc.locked_by !== newDoc.locked_by){
-            const oldTs = new Date(oldDoc.ts).getTime();
-            const newTs = new Date(newDoc.ts).getTime();
-            if(oldTs + 30sec > newTs){
-              reject changes!
-            }
-          }
-          */
-          // return oldDoc.merge(newDoc);
         },
       });
 
