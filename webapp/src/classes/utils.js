@@ -181,6 +181,7 @@ export function debounce(func, wait, immediate) {
   let context;
   let timestamp;
   let result;
+  let hasCalledSecondTime;
   if (wait == null) wait = 100;
 
   function later() {
@@ -190,9 +191,10 @@ export function debounce(func, wait, immediate) {
       timeout = setTimeout(later, wait - last);
     } else {
       timeout = null;
-      if (!immediate) {
+      if (!immediate || hasCalledSecondTime) {
         result = func.apply(context, args);
         context = args = null;
+        hasCalledSecondTime = undefined;
       }
     }
   }
@@ -202,10 +204,14 @@ export function debounce(func, wait, immediate) {
     args = arguments;
     timestamp = Date.now();
     const callNow = immediate && !timeout;
+    const isSecondTime = immediate && timeout && !hasCalledSecondTime;
     if (!timeout) timeout = setTimeout(later, wait);
     if (callNow) {
       result = func.apply(context, args);
       context = args = null;
+    }
+    if (isSecondTime) {
+      hasCalledSecondTime = true;
     }
 
     return result;
