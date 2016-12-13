@@ -70,11 +70,9 @@ class HOCSideNote extends Component {
   }
 
 
-  saveNote(unlock, editorS) {
-    let { editorState } = this.state;
-    if (editorS) {
-      editorState = editorS;
-    }
+  saveNote(unlock) {
+    const { editorState } = this.state;
+    console.log('un', unlock);
     const {
       saveNote,
       goalId,
