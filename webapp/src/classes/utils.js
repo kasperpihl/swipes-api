@@ -257,7 +257,7 @@ export function throttle(func, wait) {
     args = null;
   }
 
-  return function throttled() {
+  const throttled = function throttled() {
     ctx = this;
     args = arguments;
     const delta = new Date() - last;
@@ -268,4 +268,14 @@ export function throttle(func, wait) {
 
     return rtn;
   };
+  throttled.isRunning = function () {
+    return !!timeoutID;
+  };
+  throttled.cancel = function () {
+    if (timeoutID) {
+      clearTimeout(timeoutID);
+      timeoutID = 0;
+    }
+  };
+  return throttled;
 }
