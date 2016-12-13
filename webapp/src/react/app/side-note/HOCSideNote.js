@@ -14,25 +14,31 @@ import * as actions from 'actions';
 
 import './styles/side-note';
 
+const UNLOCK_TIMER = 10000;
+
 class HOCSideNote extends Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: this.parseInitialData(), locked: false };
+    this.state = { editorState: this.parseInitialData(), locked: false, editing: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onChange', 'saveNote', 'onBlur']);
     this.throttledSave = throttle(this.saveNote, 5000);
-    this.isEditing = false;
   }
 
   onChange(editorState) {
-    this.setState({ editorState });
+    const { editing } = this.state;
+
+    const changeObj = { editorState };
     const lastUndo = editorState.getUndoStack().first();
     // If you are editing or if not the last undo item has changed.
     // This enables us to not lock the note for others on selection, focus etc.
-    if (this.isEditing || this.lastUndo !== lastUndo) {
-      this.isEditing = true;
+    if (editing || this.lastUndo !== lastUndo) {
+      if (!editing) {
+        changeObj.editing = true;
+      }
       this.throttledSave();
     }
+    this.setState(changeObj);
     this.lastUndo = lastUndo;
   }
 
@@ -46,17 +52,16 @@ class HOCSideNote extends Component {
     this.clearTimer();
     this.timer = setTimeout(() => {
       this.unlockUI();
-    }, timeleft * 1000);
+    }, timeleft);
 
     if (!this.state.locked) {
-      this.isEditing = false;
       this.setState({ locked: true });
     }
   }
   unlockUI() {
     this.clearTimer();
     if (this.state.locked) {
-      this.setState({ locked: false });
+      this.setState({ locked: false, editing: false });
     }
   }
 
@@ -68,34 +73,35 @@ class HOCSideNote extends Component {
       navId,
     } = this.props;
     const { editorState } = this.state;
-    saveNote(navId, goalId, this.saveData(editorState), unlock);
+    saveNote(navId, goalId, this.convertDataToSave(editorState), unlock);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { me, note } = this.props;
-    if (this.props.note && !nextProps.note) {
-      this.setState({ editorState: null, locked: false });
-      this.isEditing = false;
+    const { me, note: oldNote } = this.props;
+    const { note: newNote } = nextProps;
+    if (oldNote && !newNote) {
+      this.setState({ editorState: null, locked: false, editing: false });
     }
-    if (nextProps.note && nextProps.note !== note) {
-      const lockedBy = nextProps.note.get('locked_by');
-      if (lockedBy && lockedBy !== me.get('id')) {
-        const ts = parseInt(new Date(nextProps.note.get('ts')).getTime() / 1000, 10);
-        const now = parseInt(new Date().getTime() / 1000, 10);
-        if (now < (ts + 10)) {
-          this.lockUI(Math.max((ts + 10) - now, 10));
+    if (newNote && newNote !== oldNote) {
+      const lockedBy = newNote.get('locked_by');
+      if (lockedBy) {
+        const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
+        const now = parseInt(new Date().getTime(), 10);
+        if (now < (ts + UNLOCK_TIMER)) {
+          this.lockUI(Math.max((ts + UNLOCK_TIMER) - now, UNLOCK_TIMER));
         }
-      } else if (!lockedBy && note && note.get('locked_by')) {
+      } else if (!lockedBy && oldNote && oldNote.get('locked_by')) {
+        console.log('unlock!');
         this.unlockUI();
       }
-      const oldLock = note && note.get('locked_by');
+      const oldLock = oldNote && oldNote.get('locked_by');
       if (
-        !note ||
+        !oldNote ||
         (lockedBy && me.get('id') !== lockedBy) ||
         (!lockedBy && oldLock && oldLock !== me.get('id'))
       ) {
-        console.log('setting new note');
-        const editorState = this.parseInitialData(nextProps.note.get('text'));
+        console.log('setting new data');
+        const editorState = this.parseInitialData(newNote.get('text'));
         this.setState({ editorState });
         // Using the last undo item to check if something has actually changed
         this.lastUndo = editorState.getUndoStack().first();
@@ -103,15 +109,14 @@ class HOCSideNote extends Component {
     }
   }
   onBlur() {
-    if (this.throttledSave.isRunning()) {
+    const { editing } = this.state;
+    if (editing) {
       this.throttledSave.cancel();
       this.saveNote(true);
-      this.isEditing = false;
     }
   }
 
-
-  saveData(data) {
+  convertDataToSave(data) {
     return convertToRaw(data.getCurrentContent());
   }
   parseInitialData(initialState) {
@@ -124,31 +129,35 @@ class HOCSideNote extends Component {
     return editorState;
   }
   renderHeader() {
-    const { note, users } = this.props;
-    const { locked } = this.state;
-    const person = users.get(note.get('locked_by'));
+    const { note, users, me } = this.props;
+    const { locked, editing } = this.state;
+
     let message = 'No one is editing this note';
-    if (this.isEditing) {
-      message = 'You are editing this note';
-    }
-    if (locked) {
+    const lockedBy = note.get('locked_by');
+    if (locked && lockedBy && lockedBy !== me.get('id')) {
+      const person = users.get(note.get('locked_by'));
       message = `${person.get('name')} is editing this note`;
     }
+    if (editing) {
+      message = 'You are editing this note';
+    }
+
 
     return (
       <div className="side-note__header">{message}</div>
     );
   }
   render() {
-    const { note, goalId } = this.props;
-    const { editorState, locked } = this.state;
+    const { goalId } = this.props;
+    const { editorState, locked, editing } = this.state;
     if (!goalId || !editorState) {
       return null;
     }
+    const someoneElseEditing = (locked && !editing);
 
     let className = 'side-note';
 
-    if (locked) {
+    if (someoneElseEditing) {
       className += ' side-note--locked';
     }
 
@@ -158,7 +167,7 @@ class HOCSideNote extends Component {
         <NoteEditor
           editorState={editorState}
           onChange={this.onChange}
-          readOnly={locked}
+          readOnly={someoneElseEditing}
           onBlur={this.onBlur}
         />
       </div>
