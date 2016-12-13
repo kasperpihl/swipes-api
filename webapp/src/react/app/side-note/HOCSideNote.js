@@ -56,7 +56,7 @@ class HOCSideNote extends Component {
       this.lockTimer = null;
     }
   }
-  lockUI(ts, lockedByMe) {
+  lockUI(ts) {
     this.clearTimer();
     const now = parseInt(new Date().getTime(), 10);
     const timeleft = (ts + UNLOCK_TIMER) - now;
@@ -92,7 +92,7 @@ class HOCSideNote extends Component {
       goalId,
       navId,
     } = this.props;
-    console.log('saving', unlock);
+
     saveNote(navId, goalId, this.convertDataToSave(editorState), unlock);
   }
   bouncedSaveNote() {
@@ -106,6 +106,7 @@ class HOCSideNote extends Component {
     if (oldNote && !newNote) {
       // If we leave the note, unlock stuff.
       this.unlockUI();
+      this.setState({ editorState: null });
     }
     if (newNote && newNote !== oldNote) {
       const newLock = newNote.get('locked_by');
@@ -115,7 +116,7 @@ class HOCSideNote extends Component {
       } else {
         this.unlockUI();
       }
-      if (newNote.get('user_id') !== me.get('id')) {
+      if (!oldNote || newNote.get('user_id') !== me.get('id')) {
         console.log('setting new data');
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
