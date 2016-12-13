@@ -14,7 +14,7 @@ import * as actions from 'actions';
 
 import './styles/side-note';
 
-const UNLOCK_TIMER = 10000;
+const UNLOCK_TIMER = 30000;
 
 class HOCSideNote extends Component {
   constructor(props) {
@@ -32,14 +32,12 @@ class HOCSideNote extends Component {
     const lastUndo = editorState.getUndoStack().first();
     // If you are editing or if not the last undo item has changed.
     // This enables us to not lock the note for others on selection, focus etc.
-    if (editing || this.lastUndo !== lastUndo) {
-      if (editorState.getSelection().hasFocus) {
-        this.bouncedSaveNote();
-      }
-      if (!editing) {
-        this.saveNote(false, editorState);
-        changeObj.editing = true;
-      }
+    if (!editing && this.lastUndo !== lastUndo) {
+      this.saveNote(false, editorState);
+      changeObj.editing = true;
+    }
+    if (editing && editorState.getSelection().hasFocus) {
+      this.bouncedSaveNote();
     }
     this.setState(changeObj);
 
@@ -64,9 +62,19 @@ class HOCSideNote extends Component {
   }
   unlockUI() {
     this.clearTimer();
-    if (this.state.locked) {
-      this.setState({ locked: false, editing: false });
+    const { locked, editing, editorState } = this.state;
+    const newState = {};
+    if (editing) {
+      newState.editing = false;
+      if (this.bouncedSaveNote.isRunning()) {
+        this.bouncedSaveNote.clear();
+        this.saveNote(true, editorState);
+      }
     }
+    if (locked) {
+      newState.locked = false;
+    }
+    this.setState(newState);
   }
 
   saveNote(unlock, editorState) {
@@ -100,12 +108,7 @@ class HOCSideNote extends Component {
       } else {
         this.unlockUI();
       }
-      const oldLock = oldNote && oldNote.get('locked_by');
-      if (
-        !oldNote ||
-        (newLock && me.get('id') !== newLock) ||
-        (!newLock && oldLock && oldLock !== me.get('id'))
-      ) {
+      if (newNote.get('user_id') !== me.get('id')) {
         console.log('setting new data');
         const editorState = this.parseInitialData(newNote.get('text'));
         this.setState({ editorState });
@@ -115,11 +118,7 @@ class HOCSideNote extends Component {
     }
   }
   onBlur() {
-    const { editing, editorState } = this.state;
-    if (editing) {
-      this.bouncedSaveNote.clear();
-      this.saveNote(true, editorState);
-    }
+    this.unlockUI();
   }
 
   convertDataToSave(data) {
