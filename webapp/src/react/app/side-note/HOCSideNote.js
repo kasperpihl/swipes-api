@@ -9,7 +9,7 @@ import {
   convertToRaw,
 } from 'draft-js';
 
-import { bindAll, throttle } from 'classes/utils';
+import { bindAll, debounce } from 'classes/utils';
 import * as actions from 'actions';
 
 import './styles/side-note';
@@ -22,7 +22,7 @@ class HOCSideNote extends Component {
     this.state = { editorState: this.parseInitialData(), locked: false, editing: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onChange', 'saveNote', 'onBlur']);
-    this.throttledSave = throttle(this.saveNote, 5000);
+    this.debouncedSave = debounce(this.saveNote, 5000);
   }
 
   onChange(editorState) {
@@ -34,13 +34,15 @@ class HOCSideNote extends Component {
     // This enables us to not lock the note for others on selection, focus etc.
     if (editing || this.lastUndo !== lastUndo) {
       if (editorState.getSelection().hasFocus) {
-        this.throttledSave();
+        this.debouncedSave();
       }
       if (!editing) {
+        this.saveNote(false, editorState);
         changeObj.editing = true;
       }
     }
     this.setState(changeObj);
+
     this.lastUndo = lastUndo;
   }
 
@@ -68,13 +70,17 @@ class HOCSideNote extends Component {
   }
 
 
-  saveNote(unlock) {
+  saveNote(unlock, editorS) {
+    let { editorState } = this.state;
+    if (editorS) {
+      editorState = editorS;
+    }
     const {
       saveNote,
       goalId,
       navId,
     } = this.props;
-    const { editorState } = this.state;
+
     saveNote(navId, goalId, this.convertDataToSave(editorState), unlock);
   }
 
@@ -112,7 +118,7 @@ class HOCSideNote extends Component {
   onBlur() {
     const { editing } = this.state;
     if (editing) {
-      this.throttledSave.cancel();
+      this.debouncedSave.clear();
       this.saveNote(true);
     }
   }
