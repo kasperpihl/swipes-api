@@ -230,7 +230,6 @@ class SwipesModal extends Component {
   }
   render() {
     const { title, type, data } = this.props;
-    console.log(this.state.selectedListItems);
     let modalClass = 'swipes-modal';
 
     if (type) {

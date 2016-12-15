@@ -1,9 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
-import WorkflowSetup from './WorkflowSetup';
+import WorkflowHeader from './WorkflowHeader';
+import WorkflowStepList from './WorkflowStepList';
+
+import './styles/workflow-setup.scss';
 
 class ConfirmGoal extends Component {
   constructor(props) {
@@ -13,50 +17,17 @@ class ConfirmGoal extends Component {
   }
 
   setupStepPressedAssign(setup, e, i) {
-    const icon = {
-      element: 'PersonIcon',
-      props: { fill: '#3394FF' },
-    };
-    const { users, loadModal } = this.props;
+    const { assignModal } = this.props;
     const { workflow } = this.state;
-    const userArray = users.toArray().map(u => ({
-      title: u.get('name'),
-      img: u.get('profile_pic') || icon,
-      selected: (workflow.getIn(['steps', i, 'assignees']).contains(u.get('id'))),
-    }));
-
-    loadModal({
-      title: 'Assign Person',
-      data: {
-        list: {
-          selectable: true,
-          multiple: true,
-          items: userArray,
-          emptyText: 'No people found',
-        },
-        buttons: ['Cancel', 'Select'],
-      },
-    }, this.selectedAssignees.bind(this, i));
+    return assignModal(
+      workflow.getIn(['steps', i, 'assignees']),
+      this.selectedAssignees.bind(this, i),
+    );
   }
   selectedAssignees(i, res) {
     const { workflow } = this.state;
-    const { users } = this.props;
-
-    if (res && res.items.length) {
-      const newWorkflow = workflow.updateIn(['steps', i, 'assignees'], (assignees) => {
-        let newAssignees = assignees;
-
-        res.items.forEach((u) => {
-          const user = users.toArray()[u];
-
-          if (!newAssignees.contains(user.get('id'))) {
-            newAssignees = newAssignees.push(user.get('id'));
-          }
-        });
-
-        return newAssignees;
-      });
-
+    if (res) {
+      const newWorkflow = workflow.setIn(['steps', i, 'assignees'], fromJS(res));
       this.setState({ workflow: newWorkflow });
     }
   }
@@ -85,20 +56,14 @@ class ConfirmGoal extends Component {
       });
     });*/
   }
-  parseWorkflow() {
-    const { workflow } = this.state;
-    const { users } = this.props;
-
-    return workflow.updateIn(['steps'], s => s.map((step) => {
-      const assignees = step.get('assignees');
-
-      return step.set('assignees', assignees.map(userId => users.get(userId)));
-    })).toJS();
-  }
   render() {
-    const workflow = this.parseWorkflow();
-
-    return <WorkflowSetup data={workflow} delegate={this} />;
+    const { workflow } = this.state;
+    return (
+      <div ref="container" className="workflow__setup">
+        <WorkflowHeader data={workflow} delegate={this} />
+        <WorkflowStepList data={workflow.get('steps')} delegate={this} />
+      </div>
+    );
   }
 }
 
@@ -106,20 +71,19 @@ const { string, func } = PropTypes;
 
 ConfirmGoal.propTypes = {
   data: map,
-  users: map,
-  loadModal: func,
+  assignModal: func,
   organization_id: string,
 };
 
 function mapStateToProps(state) {
+  const navId = state.getIn(['navigation', 'id']);
   return {
-    organization_id: state.getIn(['me', 'organizations', 0, 'id']),
-    users: state.get('users'),
+    organization_id: state.getIn(['me', 'organizations', navId, 'id']),
   };
 }
 
 const ConnectedConfirmGoal = connect(mapStateToProps, {
-  loadModal: actions.modal.load,
+  assignModal: actions.modal.assign,
 })(ConfirmGoal);
 
 export default ConnectedConfirmGoal;

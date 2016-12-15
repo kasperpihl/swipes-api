@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import WorkflowStepListItem from './WorkflowStepListItem';
 import { bindAll, setupDelegate } from 'classes/utils';
+import WorkflowStepListItem from './WorkflowStepListItem';
+import { list } from 'react-immutable-proptypes';
 import './styles/workflow-steplist.scss';
 
 class WorkflowStepList extends Component {
@@ -16,7 +17,7 @@ class WorkflowStepList extends Component {
     }, 0);
   }
   onBlur() {
-    this.props.callDelegate('didUpdateTitle', this.refs.input.value);
+    this.callDelegate('didUpdateTitle', this.refs.input.value);
   }
   onKeyUp(e) {
     if (e.keyCode === 13) {
@@ -24,15 +25,22 @@ class WorkflowStepList extends Component {
     }
   }
   clickedAssign(e, i) {
-    this.props.callDelegate('setupStepPressedAssign', e, i);
+    this.callDelegate('setupStepPressedAssign', e, i);
   }
   render() {
     const { data } = this.props;
     const rootClass = 'workflow__step-list';
 
-    const listItems = data.map((item, i) =>
-      <WorkflowStepListItem title={item.title} clickedAssign={this.clickedAssign} assignees={item.assignees} type={item.type} index={i} key={`step-list-item-${i}`} />,
-    );
+    const listItems = data.map((item, i) => (
+      <WorkflowStepListItem
+        title={item.get('title')}
+        clickedAssign={this.clickedAssign}
+        assignees={item.get('assignees')}
+        type={item.get('type')}
+        index={i}
+        key={`step-list-item-${i}`}
+      />
+    ));
 
     const height = this.props.height || '100%';
     const style = {
@@ -41,7 +49,14 @@ class WorkflowStepList extends Component {
 
     return (
       <div style={style} className={rootClass} ref="stepList">
-        <input ref="input" key="input" className={`${rootClass}__title`} onKeyUp={this.onKeyUp} onBlur={this.onBlur} placeholder="Name your goal" />
+        <input
+          ref="input"
+          key="input"
+          className={`${rootClass}__title`}
+          onKeyUp={this.onKeyUp}
+          onBlur={this.onBlur}
+          placeholder="Name your goal"
+        />
         {listItems}
       </div>
     );
@@ -50,11 +65,10 @@ class WorkflowStepList extends Component {
 
 export default WorkflowStepList;
 
-const { func, object, number } = PropTypes;
+const { func, object, number, array } = PropTypes;
 
 WorkflowStepList.propTypes = {
-  callDelegate: func,
   delegate: object,
-  data: object,
+  data: list,
   height: number,
 };

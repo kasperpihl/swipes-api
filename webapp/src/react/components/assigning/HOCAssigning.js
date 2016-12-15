@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { setupDelegate } from 'classes/utils';
 import Assigning from './Assigning';
 
 class HOCAssigning extends Component {
@@ -10,45 +12,42 @@ class HOCAssigning extends Component {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedAssignee = this.clickedAssignee.bind(this);
+
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
-  clickedAssignee() {
-    const {
-      goalId,
-      stepIndex,
-      stepAssign,
-    } = this.props;
-    stepAssign(goalId, stepIndex);
+  clickedAssignee(e) {
+    this.callDelegate('clickedAssign', e);
   }
   render() {
     const {
-      assignees,
+      stateAssignees,
       me,
     } = this.props;
     return (
-      <Assigning me={me} assignees={assignees} onClick={this.clickedAssignee} />
+      <Assigning me={me} assignees={stateAssignees} onClick={this.clickedAssignee} />
     );
   }
 }
 
 function mapStateToProps(state, ownProps) {
   const users = state.get('users');
-
-  const { goalId, stepIndex } = ownProps;
-  const step = state.getIn(['goals', goalId, 'steps', stepIndex]);
-  const assignees = step.get('assignees').map(userId => users.get(userId));
+  const { goalId, stepIndex, assignees } = ownProps;
+  let stateAssignees = List(assignees);
+  if (goalId) {
+    stateAssignees = state.getIn(['goals', goalId, 'steps', stepIndex, 'assignees']);
+  }
+  stateAssignees = stateAssignees.map(userId => users.get(userId));
 
   return {
-    assignees,
+    stateAssignees,
     me: state.get('me'),
   };
 }
 
-const { string, number, func } = PropTypes;
+const { object } = PropTypes;
 HOCAssigning.propTypes = {
-  assignees: list.isRequired,
-  stepAssign: func,
-  goalId: string.isRequired,
-  stepIndex: number.isRequired,
+  stateAssignees: list,
+  delegate: object,
   me: map,
 };
 

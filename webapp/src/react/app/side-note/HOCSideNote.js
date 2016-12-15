@@ -37,6 +37,7 @@ class HOCSideNote extends Component {
     // If you are editing or if not the last undo item has changed.
     // This enables us to not lock the note for others on selection, focus etc.
     if (!editing && this.lastUndo !== lastUndo) {
+      // Save immediately (with no changes to lock the doc)
       this.saveNote(false, this.state.editorState);
       // Call twice, to call immediately to lock, and on the timer with content
       this.bouncedSaveNote();

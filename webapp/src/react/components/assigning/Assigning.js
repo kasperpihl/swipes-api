@@ -14,9 +14,9 @@ class Assigning extends Component {
   componentDidMount() {
   }
   handleClick(e) {
-    const { editable, onClick } = this.props;
+    const { onClick } = this.props;
     e.stopPropagation();
-    if (editable && onClick) {
+    if (onClick) {
       onClick(e);
     }
   }
@@ -95,14 +95,13 @@ class Assigning extends Component {
 
 export default Assigning;
 
-const { string, bool, arrayOf, shape, object, func } = PropTypes;
+const { string, arrayOf, shape, object, func } = PropTypes;
 
 Assigning.propTypes = {
   assignees: listOf(mapContains({
     name: string,
     profile_pic: string,
   })),
-  editable: bool,
   onClick: func,
   me: map,
 };
