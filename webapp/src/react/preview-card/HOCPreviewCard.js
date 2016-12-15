@@ -52,7 +52,7 @@ class HOCSwipesCard extends Component {
 
 export default HOCSwipesCard;
 
-const { string, object } = PropTypes;
+const { object } = PropTypes;
 
 HOCSwipesCard.propTypes = {
   fields: list,

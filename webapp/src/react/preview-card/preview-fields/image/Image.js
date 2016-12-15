@@ -14,7 +14,6 @@ class Image extends Component {
   toggleRawSize() {
     const { rawSize } = this.state;
     this.setState({ rawSize: !rawSize });
-    console.log('name');
   }
   render() {
     const { data } = this.props;

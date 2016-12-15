@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { map, list } from 'react-immutable-proptypes';
+import { list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
@@ -7,7 +7,6 @@ import { bindAll } from 'classes/utils';
 import Find from './Find';
 import './styles/find.scss';
 
-import SearchResults from './SearchResults';
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
 class HOCFind extends Component {
   constructor(props) {
@@ -18,8 +17,8 @@ class HOCFind extends Component {
   }
   componentDidMount() {
   }
-  findItemShare(i) {
-    const { searchResults } = this.props;
+  findItemShare() {
+    // const { searchResults } = this.props;
   }
 
   findSearch(query) {
@@ -121,7 +120,6 @@ class HOCFind extends Component {
 const { func, bool, string } = PropTypes;
 
 HOCFind.propTypes = {
-
   request: func,
   loadModal: func,
   search: func,

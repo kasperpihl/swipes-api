@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
-import Button from 'Button';
 import WorkflowList from './WorkflowList';
 
 
@@ -21,13 +20,13 @@ class StartGoal extends Component {
   }
   didSelectItem(id) {
     const { workflows, navPush } = this.props;
-    navPush({ component: 'ConfirmGoal', title: 'Confirm Goal', props: { data: workflows.get(id).toJS() } });
+    navPush({ component: 'ConfirmGoal', title: 'Confirm', props: { data: workflows.get(id).toJS() } });
   }
   renderList() {
     const { workflows } = this.props;
     const filteredWorkflows = [];
 
-    workflows.toArray().forEach((i) => {
+    workflows.forEach((i) => {
       if (!i.get('parent_id')) {
         filteredWorkflows.push(i.toJS());
       }
@@ -44,20 +43,16 @@ const { func } = PropTypes;
 
 StartGoal.propTypes = {
   workflows: map,
-  loadModal: func,
   navPush: func,
-  users: map,
 };
 
 function mapStateToProps(state) {
   return {
     workflows: state.get('workflows'),
-    users: state.get('users'),
   };
 }
 
 const ConnectedStartGoal = connect(mapStateToProps, {
-  loadModal: actions.modal.load,
   navPush: actions.navigation.push,
 })(StartGoal);
 

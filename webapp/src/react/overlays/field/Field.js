@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
-import { fromJS, Map } from 'immutable';
+import { Map } from 'immutable';
 import * as fields from 'src/react/swipes-fields';
 
 class Field extends Component {

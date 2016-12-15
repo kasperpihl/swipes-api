@@ -49,10 +49,9 @@ class StepSubmission extends Component {
 
 export default StepSubmission;
 
-const { func, bool } = PropTypes;
+const { func } = PropTypes;
 
 StepSubmission.propTypes = {
   onSubmit: func,
   submission: map,
-  disabled: bool,
 };

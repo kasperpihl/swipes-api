@@ -48,7 +48,6 @@ class Services extends Component {
   }
   renderConnectedServices() {
     const { myServices: my, services } = this.props;
-    console.log('my', my);
     const sortedServices = my.sort((a, b) => {
       const res = (a.get('service_name') < b.get('service_name')) ? -1 : 1;
       return res;
@@ -72,7 +71,6 @@ class Services extends Component {
   }
   renderServicesToConnect() {
     const { services: se } = this.props;
-    console.log('services', se);
     const sortedKeys = se.sort((k1, k2) => {
       const res = (se.getIn([k1, 'title']) < se.getIn([k2, 'title'])) ? -1 : 1;
       return res;
@@ -123,7 +121,7 @@ class Services extends Component {
   }
 }
 
-const { func, array, object } = PropTypes;
+const { func } = PropTypes;
 
 Services.propTypes = {
   disconnectService: func,

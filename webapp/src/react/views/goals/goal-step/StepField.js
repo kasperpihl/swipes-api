@@ -44,6 +44,7 @@ const { string, object } = PropTypes;
 StepField.propTypes = {
   icon: string,
   title: string,
+  description: string,
   iconColor: string,
   children: object,
 };

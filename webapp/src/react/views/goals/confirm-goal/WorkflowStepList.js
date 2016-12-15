@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindAll, setupDelegate } from 'classes/utils';
-import WorkflowStepListItem from './WorkflowStepListItem';
 import { list } from 'react-immutable-proptypes';
+import WorkflowStepListItem from './WorkflowStepListItem';
 import './styles/workflow-steplist.scss';
 
 class WorkflowStepList extends Component {
@@ -65,7 +65,7 @@ class WorkflowStepList extends Component {
 
 export default WorkflowStepList;
 
-const { func, object, number, array } = PropTypes;
+const { object, number } = PropTypes;
 
 WorkflowStepList.propTypes = {
   delegate: object,

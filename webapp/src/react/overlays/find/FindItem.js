@@ -80,11 +80,12 @@ class FindItem extends Component {
   }
 }
 
-const { bool, object } = PropTypes;
+const { bool, object, number } = PropTypes;
 
 FindItem.propTypes = {
   small: bool,
   data: map,
+  index: number,
   delegate: object,
 };
 

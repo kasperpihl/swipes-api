@@ -16,7 +16,6 @@ class Button extends Component {
   }
   renderIcon() {
     const { icon } = this.props;
-    const className = 'g-button__icon';
 
     if (!icon) {
       return undefined;
@@ -81,6 +80,7 @@ const { string, bool, func } = PropTypes;
 
 Button.propTypes = {
   onClick: func,
+  className: string,
   primary: bool,
   icon: string,
   text: string,

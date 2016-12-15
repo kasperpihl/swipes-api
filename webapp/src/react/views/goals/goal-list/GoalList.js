@@ -159,7 +159,7 @@ class GoalList extends Component {
   }
 }
 
-const { func, object } = PropTypes;
+const { object } = PropTypes;
 
 GoalList.propTypes = {
   goals: map.isRequired,

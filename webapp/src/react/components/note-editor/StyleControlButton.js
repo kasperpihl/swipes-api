@@ -6,7 +6,7 @@ class StyleControlButton extends Component {
     super(props);
     this.onMouseDown = this.onMouseDown.bind(this);
   }
-  onMouseDown(e) {
+  onMouseDown() {
     const {
       data,
       callback,
