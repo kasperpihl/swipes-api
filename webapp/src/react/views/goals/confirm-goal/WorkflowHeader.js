@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
 import Button from 'Button';
+import { setupDelegate } from 'classes/utils';
 import './styles/workflow-header.scss';
 
 class WorkflowHeader extends Component {
@@ -9,19 +10,21 @@ class WorkflowHeader extends Component {
     this.state = {};
     this.rootClass = 'workflow__side';
     this.clickedStart = this.clickedStart.bind(this);
+    this.callDelegate = setupDelegate(props.delegate, this);
   }
   clickedStart() {
-    this.props.callDelegate('didPressStart');
+    this.callDelegate('didPressStart');
   }
   render() {
-    const { title, img, description } = this.props.data;
+    const { data } = this.props;
+
     const { rootClass } = this;
 
     return (
       <div className={rootClass}>
-        <Icon svg={img} className="workflow__side__icon workflow__side__icon--svg" />
-        <div className={`${rootClass}__title`}>{title}</div>
-        <div className={`${rootClass}__description`}>{description}</div>
+        <Icon svg={data.get('img')} className="workflow__side__icon workflow__side__icon--svg" />
+        <div className={`${rootClass}__title`}>{data.get('title')}</div>
+        <div className={`${rootClass}__description`}>{data.get('description')}</div>
         <Button primary text="Start goal" onClick={this.clickedStart} />
       </div>
     );
@@ -30,7 +33,7 @@ class WorkflowHeader extends Component {
 
 export default WorkflowHeader;
 
-const { string, shape, oneOfType, func } = PropTypes;
+const { string, shape, oneOfType, object, func } = PropTypes;
 
 WorkflowHeader.propTypes = {
   data: shape({
@@ -43,5 +46,5 @@ WorkflowHeader.propTypes = {
     }),
     description: string,
   }),
-  callDelegate: func,
+  delegate: object,
 };

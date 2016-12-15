@@ -27,11 +27,11 @@ class HOCGoalList extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onContextClick(i) {
+  onContextClick() {
     const { navPush } = this.props;
     navPush({
       component: 'StartGoal',
-      title: 'Create (template)',
+      title: 'Create',
     });
   }
   goalListClickedGoal(goalList, goalId) {
