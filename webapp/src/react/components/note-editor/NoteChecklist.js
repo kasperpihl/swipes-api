@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EditorBlock } from 'draft-js';
+import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';
 
 export default class ChecklistEditorBlock extends Component {
