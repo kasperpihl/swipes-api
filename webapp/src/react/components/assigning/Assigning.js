@@ -31,9 +31,9 @@ class Assigning extends Component {
     );
   }
   renderAssignees() {
-    const { assignees, me, editable } = this.props;
+    const { assignees, me } = this.props;
 
-    if (!assignees || assignees.size < 1 && editable) {
+    if (!assignees || assignees.size < 1) {
       return this.renderAddAssignees();
     }
 
@@ -95,7 +95,7 @@ class Assigning extends Component {
 
 export default Assigning;
 
-const { string, arrayOf, shape, object, func } = PropTypes;
+const { string, func } = PropTypes;
 
 Assigning.propTypes = {
   assignees: listOf(mapContains({

@@ -119,9 +119,6 @@ class HOCViewController extends Component {
   }
 
   renderGlobalActions() {
-    if (true) {
-      return null;
-    }
     return (
       <div className="global-actions" key="global-actions">
         <div className="global-actions__action" onClick={this.clickedFind}>

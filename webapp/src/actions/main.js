@@ -46,7 +46,7 @@ export function logout() {
 // ======================================================
 export function saveNote(organizationId, goalId, text, unlock) {
   return (dispatch) => {
-    dispatch(request('notes.save', { organization_id: organizationId, goal_id: goalId, text, unlock })).then((res) => {
+    dispatch(request('notes.save', { organization_id: organizationId, goal_id: goalId, text, unlock })).then(() => {
     });
   };
 }
@@ -60,7 +60,6 @@ export function search(query) {
     dispatch({ type: types.SEARCH, query });
     dispatch(request('search', { q: query })).then((res) => {
       if (res && res.ok) {
-        console.log(res);
         dispatch({ type: types.SEARCH_RESULTS, result: res.result });
       } else {
         dispatch({ type: types.SEARCH_ERROR });

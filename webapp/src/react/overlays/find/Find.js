@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate } from 'classes/utils';
+import { list } from 'react-immutable-proptypes';
 import Loader from 'components/swipes-ui/Loader';
 import FindItem from './FindItem';
 
@@ -92,3 +93,11 @@ class Find extends Component {
 }
 
 export default Find;
+
+const { object, string, bool } = PropTypes;
+Find.propTypes = {
+  delegate: object,
+  results: list,
+  searchQuery: string,
+  searching: bool,
+};

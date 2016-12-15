@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import SwipesCardItem from './SwipesCardItem';
 import { bindAll, setupDelegate } from 'classes/utils';
+import SwipesCardItem from './SwipesCardItem';
 
 import './swipes-card.scss';
 

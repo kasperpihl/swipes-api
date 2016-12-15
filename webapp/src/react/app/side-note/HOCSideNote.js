@@ -28,7 +28,30 @@ class HOCSideNote extends Component {
     bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
-
+  componentWillReceiveProps(nextProps) {
+    const { me, note: oldNote } = this.props;
+    const { note: newNote } = nextProps;
+    if (oldNote && !newNote) {
+      // If we leave the note, unlock stuff.
+      this.unlockUI();
+      this.setState({ editorState: null });
+    }
+    if (newNote && newNote !== oldNote) {
+      const newLock = newNote.get('locked_by');
+      if (newLock) {
+        const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
+        this.lockUI(ts, (newNote.get('locked_by') === me.get('id')));
+      } else {
+        this.unlockUI();
+      }
+      if (!oldNote || newNote.get('user_id') !== me.get('id')) {
+        const editorState = this.parseInitialData(newNote.get('text'));
+        this.lastUndo = editorState.getUndoStack().first();
+        this.setState({ editorState, editing: false });
+        // Using the last undo item to check if something has actually changed
+      }
+    }
+  }
   onChange(editorState) {
     const { editing } = this.state;
 
@@ -50,7 +73,9 @@ class HOCSideNote extends Component {
 
     this.lastUndo = lastUndo;
   }
-
+  onBlur() {
+    this.unlockUI();
+  }
   clearTimer() {
     if (this.lockTimer) {
       clearTimeout(this.lockTimer);
@@ -99,35 +124,6 @@ class HOCSideNote extends Component {
   bouncedSaveNote() {
     const { editorState } = this.state;
     this.saveNote(true, editorState);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { me, note: oldNote } = this.props;
-    const { note: newNote } = nextProps;
-    if (oldNote && !newNote) {
-      // If we leave the note, unlock stuff.
-      this.unlockUI();
-      this.setState({ editorState: null });
-    }
-    if (newNote && newNote !== oldNote) {
-      const newLock = newNote.get('locked_by');
-      if (newLock) {
-        const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
-        this.lockUI(ts, (newNote.get('locked_by') === me.get('id')));
-      } else {
-        this.unlockUI();
-      }
-      if (!oldNote || newNote.get('user_id') !== me.get('id')) {
-        console.log('setting new data');
-        const editorState = this.parseInitialData(newNote.get('text'));
-        this.lastUndo = editorState.getUndoStack().first();
-        this.setState({ editorState, editing: false });
-        // Using the last undo item to check if something has actually changed
-      }
-    }
-  }
-  onBlur() {
-    this.unlockUI();
   }
 
   convertDataToSave(data) {

@@ -217,9 +217,7 @@ export function debounce(func, wait, immediate) {
     return result;
   };
 
-  debounced.isRunning = function () {
-    return !!timeout;
-  };
+  debounced.isRunning = () => !!timeout;
 
   debounced.clear = () => {
     if (timeout) {
@@ -278,10 +276,8 @@ export function throttle(func, wait) {
 
     return rtn;
   };
-  throttled.isRunning = function () {
-    return !!timeoutID;
-  };
-  throttled.clear = function () {
+  throttled.isRunning = () => !!timeoutID;
+  throttled.clear = () => {
     if (timeoutID) {
       clearTimeout(timeoutID);
       timeoutID = 0;

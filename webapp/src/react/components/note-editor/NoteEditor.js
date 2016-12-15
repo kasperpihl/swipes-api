@@ -9,9 +9,9 @@ import {
   Modifier,
   Entity,
 } from 'draft-js';
+import { bindAll } from 'classes/utils';
 import StyleControl from './StyleControl';
 import NoteLink from './NoteLink';
-import { bindAll } from 'classes/utils';
 
 import './styles/note-editor.scss';
 
@@ -29,10 +29,6 @@ class NoteEditor extends Component {
     const decorator = new CompositeDecorator(decorators);
 
     return EditorState.createEmpty(decorator);
-  }
-  blockRendererFn(contentBlock) {
-    const type = contentBlock.getType();
-    console.log(type);
   }
   constructor(props) {
     super(props);
@@ -149,6 +145,10 @@ class NoteEditor extends Component {
       this.onChange(newEditorState);
     }, 0);
   }
+  blockRender(contentBlock) {
+    const type = contentBlock.getType();
+    console.warn(type);
+  }
   positionForStyleControls() {
     const selectionRect = getVisibleSelectionRect(window);
     return selectionRect;
@@ -233,7 +233,6 @@ class NoteEditor extends Component {
     const {
       editorState,
       readOnly,
-      onChange,
     } = this.props;
 
     return (
@@ -269,6 +268,7 @@ const { bool, func, object } = PropTypes;
 
 NoteEditor.propTypes = {
   onChange: func,
+  onBlur: func,
   editorState: object,
   readOnly: bool,
 };

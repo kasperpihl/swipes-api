@@ -35,7 +35,7 @@ class ConfirmGoal extends Component {
     this.goalTitle = title;
   }
   didPressStart() {
-    const { organization_id } = this.props;
+    const { organization_id, addToasty, updateToasty, request } = this.props;
     const { workflow } = this.state;
     const goal = workflow.toJS();
     const workflowId = goal.id;
@@ -46,15 +46,23 @@ class ConfirmGoal extends Component {
 
     delete goal.id;
 
-    /* addToasty({ title: `Adding: ${this.goalTitle}`, loading: true }).then((toastId) => {
+    addToasty({ title: `Adding: ${this.goalTitle}`, loading: true }).then((toastId) => {
       request('goals.create', { workflowId, organization_id, goal }).then((res) => {
         if (res.ok) {
-          updateToasty(toastId, { title: `Added: ${this.goalTitle}`, completed: true, duration: 3000 });
+          updateToasty(toastId, {
+            title: `Added: ${this.goalTitle}`,
+            completed: true,
+            duration: 3000,
+          });
         } else {
-          updateToasty(toastId, { title: 'Error adding goal', loading: false, duration: 3000 });
+          updateToasty(toastId, {
+            title: 'Error adding goal',
+            loading: false,
+            duration: 3000,
+          });
         }
       });
-    });*/
+    });
   }
   render() {
     const { workflow } = this.state;
@@ -72,6 +80,9 @@ const { string, func } = PropTypes;
 ConfirmGoal.propTypes = {
   data: map,
   assignModal: func,
+  addToasty: func,
+  updateToasty: func,
+  request: func,
   organization_id: string,
 };
 
@@ -84,6 +95,9 @@ function mapStateToProps(state) {
 
 const ConnectedConfirmGoal = connect(mapStateToProps, {
   assignModal: actions.modal.assign,
+  addToasty: actions.toasty.add,
+  updateToasty: actions.toasty.update,
+  request: actions.api.request,
 })(ConfirmGoal);
 
 export default ConnectedConfirmGoal;

@@ -71,7 +71,7 @@ class HOCGoalStep extends Component {
     }
     const data = this.generateRawObj();
     this.setState({ isSubmitting: true });
-    submit(goal.get('id'), step.get('id'), data, previousSteps).then((res) => {
+    submit(goal.get('id'), step.get('id'), data, previousSteps).then(() => {
       this.setState({ isSubmitting: false });
     });
   }
@@ -82,14 +82,14 @@ class HOCGoalStep extends Component {
       stepIndex,
     } = this.props;
 
-    const {
-      data,
-    } = this.state;
-
     const helper = this.getHelper();
 
     const field = helper.getFieldByIndex(step, fieldIndex);
-    const fieldAndSettings = helper.getFieldAndSettingsFromField(field, stepIndex, { fullscreen: true });
+    const fieldAndSettings = helper.getFieldAndSettingsFromField(
+      field,
+      stepIndex,
+      { fullscreen: true },
+    );
     this.isFullscreen = true;
 
     overlayShow({
@@ -176,6 +176,7 @@ HOCGoalStep.propTypes = {
   delegate: object,
   cacheSave: func,
   overlayShow: func,
+  submit: func,
   goal: map,
   me: map,
   cachedData: map,
