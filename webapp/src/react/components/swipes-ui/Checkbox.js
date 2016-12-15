@@ -26,7 +26,7 @@ class Checkbox extends Component {
           onChange={this.onChange}
           type="checkbox"
           className="sw-checkbox__input"
-          disabled={!disable}
+          disabled={!!disable}
         />
         <div className="sw-checkbox__indicator">
           <Icon svg="CheckmarkIcon" className="sw-checkbox__icon" />

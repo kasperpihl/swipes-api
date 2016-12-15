@@ -40,11 +40,12 @@ class HOCSideNote extends Component {
       const newLock = newNote.get('locked_by');
       if (newLock) {
         const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
-        this.lockUI(ts, (newNote.get('locked_by') === me.get('id')));
+        this.lockUI(ts);
       } else {
         this.unlockUI();
       }
       if (!oldNote || newNote.get('user_id') !== me.get('id')) {
+        console.log('new state');
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
         this.setState({ editorState, editing: false });

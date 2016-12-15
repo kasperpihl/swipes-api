@@ -47,7 +47,7 @@ class ConfirmGoal extends Component {
     delete goal.id;
 
     addToasty({ title: `Adding: ${this.goalTitle}`, loading: true }).then((toastId) => {
-      request('goals.create', { workflowId, organization_id, goal }).then((res) => {
+      request('goals.create', { workflow_id: workflowId, organization_id, goal }).then((res) => {
         if (res.ok) {
           updateToasty(toastId, {
             title: `Added: ${this.goalTitle}`,
@@ -89,7 +89,7 @@ ConfirmGoal.propTypes = {
 function mapStateToProps(state) {
   const navId = state.getIn(['navigation', 'id']);
   return {
-    organization_id: state.getIn(['me', 'organizations', navId, 'id']),
+    organization_id: navId,
   };
 }
 
