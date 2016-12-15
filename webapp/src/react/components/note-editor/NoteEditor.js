@@ -5,13 +5,16 @@ import {
   SelectionState,
   RichUtils,
   getVisibleSelectionRect,
+  getDefaultKeyBinding,
   CompositeDecorator,
+  DefaultDraftBlockRenderMap,
   Modifier,
   Entity,
 } from 'draft-js';
 import { bindAll } from 'classes/utils';
 import StyleControl from './StyleControl';
 import NoteLink from './NoteLink';
+import NoteChecklist from './NoteChecklist';
 
 import './styles/note-editor.scss';
 
@@ -45,8 +48,21 @@ class NoteEditor extends Component {
         'onMouseUp',
         'handleKeyCommand',
         'onTab',
+        'blockRender',
+        'keyBindingFn',
+        'updateBlockMetadata',
       ],
     );
+    const checklistRenderProp = {
+      element: 'li',
+      wrapper: {
+        type: 'ul',
+        props: {
+          className: 'checklist-ul',
+        },
+      },
+    };
+    this.blockRenderMap = DefaultDraftBlockRenderMap.set('checklist', checklistRenderProp);
 
     this.onChange = (editorState) => {
       const { onChange } = this.props;
@@ -141,13 +157,38 @@ class NoteEditor extends Component {
       });
       const newEditorState = EditorState.forceSelection(editorState, newSelState);
 
-      editor.focus();
+      // editor.focus();
       this.onChange(newEditorState);
     }, 0);
   }
+  updateBlockMetadata(blockKey, metadata) {
+    const { editorState } = this.props;
+    let contentState = editorState.getCurrentContent();
+    const updatedBlock = contentState
+      .getBlockForKey(blockKey)
+      .mergeIn(['data'], metadata);
+
+    let blockMap = contentState.getBlockMap();
+    blockMap = blockMap.merge({ [blockKey]: updatedBlock });
+    contentState = contentState.merge({ blockMap });
+
+    const newEditorState = EditorState.push(editorState, contentState, 'metadata-update');
+    this.onChange(newEditorState);
+  }
   blockRender(contentBlock) {
     const type = contentBlock.getType();
-    console.warn(type);
+    switch (type) {
+      case 'checklist':
+        return {
+          component: NoteChecklist,
+          props: {
+            updateMetadataFn: this.updateBlockMetadata,
+            checked: !!contentBlock.getData().get('checked'),
+          },
+        };
+      default:
+        return null;
+    }
   }
   positionForStyleControls() {
     const selectionRect = getVisibleSelectionRect(window);
@@ -169,16 +210,26 @@ class NoteEditor extends Component {
       ),
     );
   }
+
+  keyBindingFn(e) {
+    const { editorState } = this.props;
+
+    return NoteChecklist.keyBindingFn(editorState, e)
+      || getDefaultKeyBinding(e);
+  }
   handleKeyCommand(keyCommand) {
     const { editorState } = this.props;
-    const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
+    let newState = NoteChecklist.handleKeyCommand(editorState, keyCommand);
+    if (!newState) {
+      newState = RichUtils.handleKeyCommand(editorState, keyCommand);
+    }
 
     if (newState) {
       this.onChange(newState);
-      return 'handled';
+      return true;
     }
 
-    return 'not handled';
+    return false;
   }
   addLink(styleControl, urlValue) {
     const { editorState } = this.props;
@@ -247,9 +298,11 @@ class NoteEditor extends Component {
         <Editor
           ref="editor"
           blockRendererFn={this.blockRender}
+          blockRenderMap={this.blockRenderMap}
           readOnly={readOnly}
           editorState={editorState}
           handleKeyCommand={this.handleKeyCommand}
+          keyBindingFn={this.keyBindingFn}
           onChange={this.onChange}
           blockStyleFn={this.handleBlock}
           onTab={this.onTab}

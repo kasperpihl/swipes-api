@@ -141,7 +141,7 @@ class StyleControl extends Component {
   renderButtons() {
     const styleOptions = {
       block: [
-        { label: 'H1Icon', style: 'header-one' },
+        { label: 'H1Icon', style: 'checklist' },
         { label: 'H2Icon', style: 'header-two' },
         { label: 'OrderedListIcon', style: 'ordered-list-item' },
         { label: 'UnorderedListIcon', style: 'unordered-list-item' },

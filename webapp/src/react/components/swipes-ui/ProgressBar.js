@@ -24,7 +24,7 @@ class ProgressBar extends Component {
     }
   }
   renderSlope(svg) {
-    return <Icon svg={svg} lassName="sw-progress-bar__slope-svg" />;
+    return <Icon svg={svg} className="sw-progress-bar__slope-svg" />;
   }
   renderSteps() {
     const { steps, currentIndex } = this.props;
