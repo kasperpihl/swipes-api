@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import browser from 'detect-browser';
 import Icon from 'Icon';
 import './download-page.scss';
 
 class DownloadPage extends Component {
   componentDidMount() {
-    if (browser.name === 'safari') {
+    /* if (browser.name === 'safari') {
       const dLink = document.getElementById('safari-download-link');
       dLink.focus();
       dLink.setSelectionRange(0, dLink.value.length);
-    }
+    }*/
   }
   selectText() {
     const dLink = document.getElementById('safari-download-link');
@@ -78,11 +77,6 @@ class DownloadPage extends Component {
   renderWebsite() {
     let downloadOptions; // = this.renderButtons();
     const microCopy = 'But only for a few selected people.';
-
-    if (browser.name === 'safari') {
-      // downloadOptions = this.renderLink();
-      // microCopy = 'Copy the link below'
-    }
 
     return (
       <div className="dl-card">
