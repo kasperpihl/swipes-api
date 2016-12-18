@@ -1,0 +1,41 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.ChecklistEditorBlock {
+  $b: &;
+
+  @include size(auto);
+  @include flex(center, flex-start);
+  min-width: 18px;
+  margin-left: -1.5em;
+
+  &__text {
+    line-height: 18px;
+  	font-size: 15px;
+  	color: $deepBlue-80;
+    position: relative;
+
+    &:after {
+      content: '';
+      @include size(105%, 1px);
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateX(-2.5%) translateY(-50%);
+      background-color: $deepBlue-60;
+      -webkit-clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
+      transition: .15s ease-in-out;
+    }
+  }
+
+  &--checked {
+
+    #{$b}__text {
+      color: $deepBlue-30;
+
+      &:after {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        transition: .25s ease-in-out;
+      }
+    }
+  }
+}
