@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';
 
+import './styles/check-list';
+
 export default class ChecklistEditorBlock extends Component {
   static keyBindingFn(editorState, e) {
     // left key
@@ -74,14 +76,15 @@ export default class ChecklistEditorBlock extends Component {
     const { checked } = blockProps;
 
     let className = 'ChecklistEditorBlock';
+
     if (checked) {
-      className += ' checked';
+      className += ' ChecklistEditorBlock--checked';
     }
 
     return (
       <div className={className} data-offset-key={offsetKey}>
         <Checkbox checked={checked} onChange={this.toggleChecked} />
-        <div className="text"><EditorBlock {...this.props} /></div>
+        <div className="ChecklistEditorBlock__text"><EditorBlock {...this.props} /></div>
       </div>
     );
   }
