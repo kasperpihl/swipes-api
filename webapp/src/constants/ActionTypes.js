@@ -8,6 +8,9 @@ export const CACHE_CLEAR = 'CACHE_CLEAR';
 export const OVERLAY_SHOW = 'OVERLAY_SHOW';
 export const OVERLAY_HIDE = 'OVERLAY_HIDE';
 
+export const TOGGLE_SIDE_NOTE = 'TOGGLE_SIDE_NOTE';
+export const CLOSE_SIDE_NOTE = 'CLOSE_SIDE_NOTE';
+
 // Navigation
 export const NAVIGATION_SET = 'NAVIGATION_SET';
 export const NAVIGATION_PUSH = 'NAVIGATION_PUSH';

@@ -12,6 +12,11 @@ class HOCGoalOverview extends Component {
     return [{
       component: 'Button',
       props: {
+        icon: 'ListIcon',
+      },
+    }, {
+      component: 'Button',
+      props: {
         icon: 'ThreeDotsIcon',
       },
     }];
@@ -26,13 +31,17 @@ class HOCGoalOverview extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onContextClick(i, e) {
+  onContextClick(i) {
     const {
+      toggleSideNote,
       goalId,
       goalDelete,
     } = this.props;
-    goalDelete(goalId);
-    console.log(i, e.target.getBoundingClientRect());
+    if (i === 0) {
+      toggleSideNote(goalId);
+    } else {
+      goalDelete(goalId);
+    }
   }
   goalOverviewClickedStep(goalOverview, stepIndex) {
     const {
@@ -64,6 +73,7 @@ HOCGoalOverview.propTypes = {
   delegate: object,
   navPush: func,
   goalDelete: func,
+  toggleSideNote: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -75,4 +85,5 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
   goalDelete: actions.goals.deleteGoal,
+  toggleSideNote: actions.main.toggleSideNote,
 })(HOCGoalOverview);

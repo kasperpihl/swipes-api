@@ -25,8 +25,14 @@ class HOCSideNote extends Component {
       editing: false,
     };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur']);
+    bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur', 'closeSideNote']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
+  }
+  closeSideNote() {
+    const {
+      closeSideNote,
+    } = this.props;
+    closeSideNote();
   }
   componentWillReceiveProps(nextProps) {
     const { me, note: oldNote } = this.props;
@@ -116,11 +122,11 @@ class HOCSideNote extends Component {
   saveNote(unlock, editorState) {
     const {
       saveNote,
-      goalId,
+      sideNoteId,
       navId,
     } = this.props;
 
-    saveNote(navId, goalId, this.convertDataToSave(editorState), unlock);
+    saveNote(navId, sideNoteId, this.convertDataToSave(editorState), unlock);
   }
   bouncedSaveNote() {
     const { editorState } = this.state;
@@ -143,25 +149,29 @@ class HOCSideNote extends Component {
     const { note, users, me } = this.props;
     const { locked, editing } = this.state;
 
-    let message = 'No one is editing this note';
+    let message = '';
+    let color = 'gray';
     const lockedBy = note && note.get('locked_by');
     if (editing) {
+      color = 'blue';
       message = 'You are writing';
     }
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
       message = `${person.get('name').split(' ')[0]} is writing`;
+      color = 'red';
     }
 
-
     return (
-      <div className="side-note__header">{message}</div>
+      <div onClick={this.closeSideNote} className="side-note__header" style={{ backgroundColor: color }}>
+        {message}
+      </div>
     );
   }
   render() {
-    const { goalId } = this.props;
+    const { sideNoteId } = this.props;
     const { editorState, locked, editing } = this.state;
-    if (!goalId || !editorState) {
+    if (!sideNoteId || !editorState) {
       return null;
     }
     const someoneElseEditing = (locked && !editing);
@@ -171,7 +181,6 @@ class HOCSideNote extends Component {
     if (someoneElseEditing) {
       className += ' side-note--locked';
     }
-    return null;
     return (
       <div className={className}>
         {this.renderHeader()}
@@ -188,31 +197,28 @@ class HOCSideNote extends Component {
 
 const { string, func } = PropTypes;
 HOCSideNote.propTypes = {
-  goalId: string,
+  sideNoteId: string,
   note: map,
   me: map,
   navId: string,
   users: map,
   saveNote: func,
+  closeSideNote: func,
 };
 
 function mapStateToProps(state) {
   const navId = state.getIn(['navigation', 'id']);
-  const history = state.getIn(['navigation', 'history', navId]);
-  const currentView = history ? history.last() : undefined;
-  let goalId;
-  if (currentView) {
-    goalId = currentView.getIn(['props', 'goalId']);
-  }
+  const sideNoteId = state.getIn(['main', 'sideNoteId']);
   return {
-    goalId,
-    me: state.get('me'),
     navId,
-    note: state.getIn(['notes', goalId]),
+    sideNoteId,
+    me: state.get('me'),
+    note: state.getIn(['notes', sideNoteId]),
     users: state.get('users'),
   };
 }
 
 export default connect(mapStateToProps, {
   saveNote: actions.main.saveNote,
+  closeSideNote: actions.main.closeSideNote,
 })(HOCSideNote);

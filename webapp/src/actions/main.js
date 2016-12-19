@@ -50,6 +50,14 @@ export function saveNote(organizationId, goalId, text, unlock) {
     });
   };
 }
+export function toggleSideNote(sideNoteId) {
+  return { type: types.TOGGLE_SIDE_NOTE, payload: {
+    sideNoteId,
+  } };
+}
+export function closeSideNote() {
+  return { type: types.CLOSE_SIDE_NOTE };
+}
 
 
 // ======================================================

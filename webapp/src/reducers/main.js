@@ -50,6 +50,17 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
+    // Note
+    // ======================================================
+    case types.TOGGLE_SIDE_NOTE: {
+      const newVal = state.get('sideNoteId') ? null : payload.sideNoteId;
+      return state.set('sideNoteId', newVal);
+    }
+    case types.CLOSE_SIDE_NOTE: {
+      return state.set('sideNoteId', null);
+    }
+
+    // ======================================================
     // Authorization methods
     // ======================================================
     case 'users.signin':

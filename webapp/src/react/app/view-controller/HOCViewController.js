@@ -71,7 +71,7 @@ class HOCViewController extends Component {
       if (buttons && buttons.length) {
         return (
           <div className="nav-bar__actions">
-            {buttons.map((b, i) => this.renderContextButton(i, b))}
+            {buttons.map((b, i) => this.renderContextButton(i, b)).reverse()}
           </div>
         );
       }
