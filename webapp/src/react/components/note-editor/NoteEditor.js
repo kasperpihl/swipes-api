@@ -51,6 +51,7 @@ class NoteEditor extends Component {
         'blockRender',
         'keyBindingFn',
         'updateBlockMetadata',
+        'handleBeforeInput',
       ],
     );
     const checklistRenderProp = {
@@ -138,7 +139,6 @@ class NoteEditor extends Component {
     this.setState({ styleControl });
 
     setTimeout(() => {
-      const { editor } = this.refs;
       const { editorState } = this.props;
       const selectionState = editorState.getSelection();
       let newKey = selectionState.get('focusKey');
@@ -189,6 +189,59 @@ class NoteEditor extends Component {
       default:
         return null;
     }
+  }
+  getDefaultBlockData(blockType, initialData = {}) {
+    switch (blockType) {
+      case 'checklist':
+        return { checked: false };
+      default:
+        return initialData;
+    }
+  }
+  resetBlockType(editorState, newType = Block.UNSTYLED) {
+    const contentState = editorState.getCurrentContent();
+    const selectionState = editorState.getSelection();
+    const key = selectionState.getStartKey();
+    const blockMap = contentState.getBlockMap();
+    const block = blockMap.get(key);
+    let newText = '';
+    const text = block.getText();
+    if (block.getLength() >= 2) {
+      newText = text.substr(1);
+    }
+    const newBlock = block.merge({
+      text: newText,
+      type: newType,
+      data: this.getDefaultBlockData(newType),
+    });
+    const newContentState = contentState.merge({
+      blockMap: blockMap.set(key, newBlock),
+      selectionAfter: selectionState.merge({
+        anchorOffset: 0,
+        focusOffset: 0,
+      }),
+    });
+    return EditorState.push(editorState, newContentState, 'change-block-type');
+  }
+  handleBeforeInput(str) {
+    if (str !== ']') {
+      return false;
+    }
+
+    const { editorState } = this.props;
+    const selection = editorState.getSelection();
+    const currentBlock = editorState.getCurrentContent()
+      .getBlockForKey(selection.getStartKey());
+    const blockType = currentBlock.getType();
+    const blockLength = currentBlock.getLength();
+
+    if (blockLength === 1 && currentBlock.getText() === '[') {
+      this.onChange(this.resetBlockType(editorState, blockType !== 'checklist' ? 'checklist' : 'unstyled'));
+
+      return true;
+    }
+
+    return false;
   }
   positionForStyleControls() {
     const selectionRect = getVisibleSelectionRect(window);
@@ -305,6 +358,7 @@ class NoteEditor extends Component {
           keyBindingFn={this.keyBindingFn}
           onChange={this.onChange}
           blockStyleFn={this.handleBlock}
+          handleBeforeInput={this.handleBeforeInput}
           onTab={this.onTab}
           onBlur={this.props.onBlur}
           placeholder="Write something cool in me"

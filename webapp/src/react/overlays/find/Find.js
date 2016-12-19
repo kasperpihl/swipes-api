@@ -13,12 +13,16 @@ class Find extends Component {
     this.callDelegate = setupDelegate(props.delegate);
     this.onKeyUp = this.onKeyUp.bind(this);
   }
+  componentDidMount() {
+    setTimeout(() => {
+      this._searchInput.focus();
+    }, 0);
+  }
   onKeyUp(e) {
     if (e.keyCode === 13) {
       this.callDelegate('findSearch', this._searchInput.value);
     }
   }
-
   renderInput() {
     return (
       <input

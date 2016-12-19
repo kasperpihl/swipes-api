@@ -29,7 +29,10 @@ class Note extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = { data: props.data, topPadding: 0 };
+    this.state = {
+      data: props.data,
+      topPadding: 0,
+    };
     this.onChange = this.onChange.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
   }
@@ -104,7 +107,7 @@ class Note extends Component {
       return undefined;
     }
 
-    const { data, paddingTop } = this.state;
+    const { data, paddingTop, noteFocus } = this.state;
     const styles = { paddingTop };
 
     return (
@@ -112,6 +115,7 @@ class Note extends Component {
         <div className="sw-note-field__note" style={styles}>
           <input
             type="text"
+            ref={(c) => { this._noteInput = c; }}
             className="sw-note-field__title"
             placeholder="Untitled note"
             disabled={!settings.get('editable')}

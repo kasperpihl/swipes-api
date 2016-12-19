@@ -11,8 +11,6 @@ import './styles/find.scss';
 class HOCFind extends Component {
   constructor(props) {
     super(props);
-
-    bindAll(this, ['onCardClick']);
     this.unhandledDocs = [];
   }
   componentDidMount() {

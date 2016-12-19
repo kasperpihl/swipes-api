@@ -9,18 +9,27 @@
   min-width: 18px;
   margin-left: -1.5em;
 
+  & > *:not(&__text) {
+    cursor: pointer;
+
+    & * {
+      cursor: pointer;
+    }
+  }
+
   &__text {
     line-height: 18px;
   	font-size: 15px;
   	color: $deepBlue-80;
     position: relative;
+    cursor: text;
 
     &:after {
       content: '';
-      @include size(105%, 1px);
+      @include size(calc(100% + 10px), 1px);
       position: absolute;
       left: 0; top: 50%;
-      transform: translateX(-2.5%) translateY(-50%);
+      transform: translateX(-5px) translateY(calc(-50% + 1px));
       background-color: $deepBlue-60;
       -webkit-clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
       transition: .15s ease-in-out;
