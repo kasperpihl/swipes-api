@@ -26,7 +26,7 @@ class Field extends Component {
       this.setState({ data });
     }
     // And forward to the delegate from GoalStep.
-    delegate(arguments);
+    delegate(...arguments);
   }
   render() {
     const { settings, field } = this.props;

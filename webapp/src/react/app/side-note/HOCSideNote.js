@@ -171,7 +171,7 @@ class HOCSideNote extends Component {
     if (someoneElseEditing) {
       className += ' side-note--locked';
     }
-
+    return null;
     return (
       <div className={className}>
         {this.renderHeader()}
