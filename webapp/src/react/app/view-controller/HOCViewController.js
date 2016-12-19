@@ -119,13 +119,13 @@ class HOCViewController extends Component {
   }
 
   renderGlobalActions() {
-    return (
+    /* return (
       <div className="global-actions" key="global-actions">
         <div className="global-actions__action" onClick={this.clickedFind}>
           <Button icon="FindIcon" />
         </div>
       </div>
-    );
+    );*/
   }
   renderLoading() {
     return <div>Loading</div>;

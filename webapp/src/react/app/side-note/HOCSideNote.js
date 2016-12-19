@@ -146,11 +146,11 @@ class HOCSideNote extends Component {
     let message = 'No one is editing this note';
     const lockedBy = note && note.get('locked_by');
     if (editing) {
-      message = 'You are editing this note';
+      message = 'You are writing';
     }
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
-      message = `${person.get('name')} is editing this note`;
+      message = `${person.get('name').split(' ')[0]} is writing`;
     }
 
 

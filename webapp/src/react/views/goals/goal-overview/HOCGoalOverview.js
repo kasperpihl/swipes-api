@@ -26,8 +26,13 @@ class HOCGoalOverview extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onContextButton() {
-
+  onContextClick(i, e) {
+    const {
+      goalId,
+      goalDelete,
+    } = this.props;
+    goalDelete(goalId);
+    console.log(i, e.target.getBoundingClientRect());
   }
   goalOverviewClickedStep(goalOverview, stepIndex) {
     const {
@@ -58,6 +63,7 @@ HOCGoalOverview.propTypes = {
   goalId: string,
   delegate: object,
   navPush: func,
+  goalDelete: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -68,4 +74,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
+  goalDelete: actions.goals.deleteGoal,
 })(HOCGoalOverview);
