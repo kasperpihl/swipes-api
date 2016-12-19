@@ -24,12 +24,10 @@ class StyleControl extends Component {
   onToggle(style, type) {
     if (type === 'block') {
       this.callDelegate('toggleBlockType', style);
-      this.callDelegate('hideStyleControls');
     }
 
     if (type === 'inline') {
       this.callDelegate('toggleInlineStyle', style);
-      this.callDelegate('hideStyleControls');
     }
 
     if (type === 'entity') {
