@@ -21,6 +21,10 @@
     "clientSecret": "SW_SLACK_CLIENT_SECRET",
     "redirectUri": "SW_SLACK_REDIRECT_URI"
   },
+  "amazonQueue": {
+    "accessKeyId": "SW_AMAZON_QUEUE_ACCESS_KEY_ID",
+    "secretAccessKey": "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY"
+  },
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
   "clientPort": "SW_CLIENT_PORT",

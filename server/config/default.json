@@ -30,6 +30,10 @@
     "clientSecret": "306fd7099a762968aa876d53579fa694",
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
+  "amazonQueue": {
+    "accessKeyId": "",
+    "secretAccessKey": ""
+  },
   "origin": "http://localhost",
   "webhooksHost": "https://swipesdev.ngrok.io/",
   "apiPort": 5000,

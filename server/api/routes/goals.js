@@ -8,8 +8,10 @@ import {
   goalsDelete,
   goalsNext,
   goalsInsert,
-  goalsPushToQueue,
 } from './middlewares/goals';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 import {
   processesGetAllOrderedByTitle,
 } from './middlewares/db_utils/processes';
@@ -32,7 +34,7 @@ authed.all('/goals.create',
   goalsCreate,
   goalsNext,
   goalsInsert,
-  goalsPushToQueue,
+  notificationsPushToQueue,
   (req, res) => {
     const {
       goal,
@@ -44,7 +46,7 @@ authed.all('/goals.create',
 authed.all('/goals.delete',
   validateGoalsDelete,
   goalsDelete,
-  goalsPushToQueue,
+  notificationsPushToQueue,
   (req, res) => {
     const {
       goal_id,

@@ -1,5 +1,3 @@
-import config from 'config';
-import request from 'request';
 import r from 'rethinkdb';
 import {
   dbGoalsInsertSingle,
@@ -12,8 +10,6 @@ import {
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
-
-const queueHost = config.get('queueHost');
 
 const goalsCreate = (req, res, next) => {
   const {
@@ -172,32 +168,6 @@ const goalsUpdate = (req, res, next) => {
     });
 };
 
-const goalsPushToQueue = (req, res, next) => {
-  const {
-    user_id,
-    goal,
-    eventType,
-  } = res.locals;
-
-  const goal_id = goal.id;
-
-  request.post({
-    url: `${queueHost}/process`,
-    method: 'POST',
-    json: {
-      user_id,
-      goal_id,
-      event_type: eventType,
-    },
-  }, (error) => {
-    if (error) {
-      console.log(error, 'Error pushing to queue!');
-    }
-  });
-
-  return next();
-};
-
 export {
   goalsCreate,
   goalsNext,
@@ -205,5 +175,4 @@ export {
   goalsDelete,
   goalsGet,
   goalsUpdate,
-  goalsPushToQueue,
 };

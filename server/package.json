@@ -6,7 +6,7 @@
   "dependencies": {
     "asana": "^0.14.1",
     "async": "2.0.0",
-    "aws-sdk": "^2.2.20",
+    "aws-sdk": "^2.7.15",
     "babel-plugin-transform-builtin-extend": "^1.1.0",
     "bluebird": "2.10.2",
     "body-parser": "1.x",
