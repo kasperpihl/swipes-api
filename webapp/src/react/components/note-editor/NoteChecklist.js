@@ -11,17 +11,20 @@ export default class ChecklistEditorBlock extends Component {
       const selection = editorState.getSelection();
       const startKey = selection.getStartKey();
       const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
+
       if (blockType === 'checklist' && selection.getStartOffset() === 0
         && (selection.isCollapsed() || selection.getIsBackward())) {
         return 'move-selection-to-end-of-prev-block';
       }
     }
+
     return null;
   }
   static handleKeyCommand(editorState, keyCommand) {
     if (keyCommand === 'move-selection-to-end-of-prev-block') {
       return this.handleMoveSelectionToEndOfPreviousBlockCommand(editorState);
     }
+
     return null;
   }
   static handleMoveSelectionToEndOfPreviousBlockCommand(editorState) {
@@ -54,6 +57,7 @@ export default class ChecklistEditorBlock extends Component {
 
     // Update the selection state.
     const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
+
     return EditorState.push(updatedEditorState, contentState, 'move-selection-to-end-of-prev-block');
   }
   constructor(props) {
@@ -64,8 +68,8 @@ export default class ChecklistEditorBlock extends Component {
   toggleChecked() {
     const { blockProps, block } = this.props;
     const { updateMetadataFn, returnFocusToEditor, checked } = blockProps;
-
     const newChecked = !checked;
+
     updateMetadataFn(block.getKey(), { checked: newChecked });
 
     // I also stop propagation, return focus to the editor and set some state here, but that's probably specific to my app
