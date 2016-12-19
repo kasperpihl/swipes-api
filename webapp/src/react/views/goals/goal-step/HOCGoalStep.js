@@ -47,14 +47,19 @@ class HOCGoalStep extends Component {
     cacheSave(goal.get('id'), fromJS(data));
   }
 
-  generateRawObj() {
+  generateRawObj(includeLinks) {
     const { data } = this.state;
     const { step } = this.props;
+    const helper = this.getHelper();
     return step.get('fields').map((field, i) => {
+      let tField = field;
       if (field.get('type') === 'link') {
-        return null;
+        if (!includeLinks) {
+          return null;
+        }
+        tField = helper.getTargetField(field);
       }
-      const Field = Fields[field.get('type')];
+      const Field = Fields[tField.get('type')];
       let newData = data.get(i);
       if (Field && typeof Field.saveData === 'function') {
         newData = Field.saveData(newData);
@@ -91,13 +96,13 @@ class HOCGoalStep extends Component {
       { fullscreen: true },
     );
     this.isFullscreen = true;
-
+    const data = fromJS(this.generateRawObj(true)[fieldIndex]);
     overlayShow({
       component: 'Field',
       props: {
         field: fieldAndSettings[0],
         settings: fieldAndSettings[1],
-        data: fromJS(this.generateRawObj()[fieldIndex]),
+        data,
         delegate: this.delegateFromField.bind(this, fieldIndex),
       },
     });
