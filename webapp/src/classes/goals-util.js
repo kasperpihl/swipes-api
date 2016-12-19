@@ -167,6 +167,28 @@ export default class GoalsUtil {
     }
     return res;
   }
+  getDataForLink(target) {
+    let data = Map();
+    if (target.get('type') === 'field') {
+      const [stepIndex, fieldIndex] = this.getStepAndFieldIndexById(target.get('id'));
+      const latestIteration = this.getLastIterationFromStepIndex(stepIndex);
+      const step = this.getStepByIndex(stepIndex);
+      const field = this.getFieldByIndex(step, fieldIndex);
+      if (latestIteration) {
+        const firstResponse = latestIteration[1].get('responses').first();
+        if (firstResponse) {
+          data = firstResponse.getIn(['data', fieldIndex]);
+        }
+      }
+      const Field = this.fieldForType(field.get('type'));
+
+      if (typeof Field.parseInitialData === 'function') {
+        data = Field.parseInitialData(data);
+      }
+    }
+
+    return data;
+  }
   getDataForFieldAndStepIndex(sI, fI) {
     const step = this.getStepByIndex(sI);
     const field = this.getFieldByIndex(step, fI);
@@ -234,11 +256,7 @@ export default class GoalsUtil {
     const step = this.getStepByIndex(stepIndex);
     return step.get('fields').map((field, i) => {
       if (field.get('type') === 'link') {
-        const target = field.getIn(['settings', 'target']);
-        const tSFIndex = this.getStepFieldIndexFromTarget(target);
-        if (tSFIndex) {
-          return this.getDataForFieldAndStepIndex(tSFIndex[0], tSFIndex[1]);
-        }
+        return this.getDataForLink(field.getIn(['settings', 'target']));
       }
       return this.getDataForFieldAndStepIndex(stepIndex, i);
     });
