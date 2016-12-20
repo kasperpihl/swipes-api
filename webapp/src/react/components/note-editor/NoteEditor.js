@@ -205,10 +205,11 @@ class NoteEditor extends Component {
     const blockMap = contentState.getBlockMap();
     const block = blockMap.get(key);
     let newText = '';
-    const text = block.getText();
+
     if (block.getLength() >= 2) {
-      newText = text.substr(1);
+      newText = '';
     }
+
     const newBlock = block.merge({
       text: newText,
       type: newType,
@@ -224,7 +225,7 @@ class NoteEditor extends Component {
     return EditorState.push(editorState, newContentState, 'change-block-type');
   }
   handleBeforeInput(str) {
-    if (str !== ']') {
+    if (str !== ' ') {
       return false;
     }
 
@@ -235,7 +236,9 @@ class NoteEditor extends Component {
     const blockType = currentBlock.getType();
     const blockLength = currentBlock.getLength();
 
-    if (blockLength === 1 && currentBlock.getText() === '[') {
+    console.log('name', currentBlock.getText() === '[]');
+
+    if (blockLength === 2 && currentBlock.getText() === '[]') {
       this.onChange(this.resetBlockType(editorState, blockType !== 'checklist' ? 'checklist' : 'unstyled'));
 
       return true;
