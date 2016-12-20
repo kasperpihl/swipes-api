@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate } from 'classes/utils';
 
@@ -49,7 +49,7 @@ class GoalStep extends Component {
       collection: col,
     } = this.props;
     const html = col && col.map((c, i) => (
-      <Attachment key={i} title={'Specs note'} />
+      <Attachment key={i} data={Map({ title: 'Specs note' })} />
     ));
     return (
       <StepField

@@ -20,7 +20,12 @@ class HOCGoalStep extends Component {
   }
 
   goalStepAdd() {
-    const { loadModal } = this.props;
+    const {
+      loadModal,
+      addToCollection,
+      goal,
+    } = this.props;
+
     const modalOpt = {
       title: 'Add',
       data: {
@@ -36,7 +41,7 @@ class HOCGoalStep extends Component {
     };
     loadModal(modalOpt, (res) => {
       if (res) {
-
+        addToCollection(goal.get('id'), 'test string');
       }
     });
   }
@@ -101,6 +106,7 @@ class HOCGoalStep extends Component {
     const {
       step,
       stepIndex,
+      goal,
     } = this.props;
     const {
       isSubmitting,
@@ -109,6 +115,7 @@ class HOCGoalStep extends Component {
     return (
       <GoalStep
         options={this.generateOptions()}
+        collection={goal.get('collection')}
         stepIndex={stepIndex}
         step={step}
         handoff={this.generateHandoff()}
@@ -125,6 +132,7 @@ HOCGoalStep.propTypes = {
   step: map,
   delegate: object,
   submit: func,
+  addToCollection: func,
   loadModal: func,
   goal: map,
   me: map,
@@ -147,6 +155,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   loadModal: actions.modal.load,
+  addToCollection: actions.goals.addToCollection,
   navPop: actions.navigation.pop,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);

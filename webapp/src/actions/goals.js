@@ -1,8 +1,20 @@
+import { List } from 'immutable';
 import { request } from './api';
 import { load } from './modal';
 
-/* global currentGoal*/
-
+const addToCollection = (goalId, content) => (dispatch, getState) => {
+  let collection = getState().getIn(['goals', goalId, 'collection']);
+  if (!collection) {
+    collection = List();
+  }
+  collection = collection.push(content).toJS();
+  dispatch(request('goals.update', {
+    goal_id: goalId,
+    goal: { collection, id: goalId },
+  })).then((res) => {
+    console.log('ressy', res);
+  });
+};
 const deleteGoal = goalId => (dispatch) => {
   dispatch(load(
     {
@@ -71,6 +83,7 @@ const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new P
 });
 
 export {
+  addToCollection,
   submitStep,
   deleteGoal,
 };
