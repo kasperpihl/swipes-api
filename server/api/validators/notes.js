@@ -1,9 +1,8 @@
+import validate from 'validate.js';
 import {
   validatorMiddleware,
 } from './validation-wrapper';
-// import {
-//   isBooleanOptinal,
-// } from './common';
+import { optionalBool } from './common';
 
 const organization_id = {
   presence: true,
@@ -11,15 +10,14 @@ const organization_id = {
 const id = {
   presence: true,
 };
-const text = {
 
+const text = {
+  presence: true,
 };
 const title = {
 
 };
-const unlock = {
-
-};
+const unlock = optionalBool;
 
 // const unlock = Object.assign({}, isBooleanOptinal, {
 //   presence: {
