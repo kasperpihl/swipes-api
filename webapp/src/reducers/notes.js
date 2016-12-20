@@ -14,14 +14,14 @@ export default function notesReducer(state = initialState, action) {
       if (payload.ok) {
         const notes = {};
         payload.notes.forEach((note) => {
-          notes[note.goal_id] = note;
+          notes[note.id] = note;
         });
         return fromJS(notes);
       }
       return state;
     }
     case 'note_updated': {
-      return state.set(payload.goal_id, fromJS(payload));
+      return state.set(payload.id, fromJS(payload));
     }
     case types.LOGOUT: {
       return initialState;

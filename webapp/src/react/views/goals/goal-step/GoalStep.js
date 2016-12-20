@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { map } from 'react-immutable-proptypes';
+import { map, list } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate } from 'classes/utils';
@@ -18,7 +18,7 @@ import './styles/goal-step.scss';
 class GoalStep extends Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['onSubmit', 'onAdd']);
+    bindAll(this, ['onSubmit', 'onAdd', 'onOpen']);
     this.bindCallbacks = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
@@ -26,6 +26,13 @@ class GoalStep extends Component {
   onSubmit(goBack) {
     this.callDelegate('goalStepSubmit', goBack, this.handoffMessage);
   }
+  onAdd() {
+    this.callDelegate('goalStepAdd');
+  }
+  onOpen(att, e) {
+    this.callDelegate('goalStepClicked', att, e);
+  }
+
   renderHandoff() {
     const { handoff } = this.props;
     if (!handoff) {
@@ -41,15 +48,12 @@ class GoalStep extends Component {
       </StepField>
     );
   }
-  onAdd() {
-    this.callDelegate('goalStepAdd');
-  }
   renderCollection() {
     const {
       collection: col,
     } = this.props;
     const html = col && col.map((c, i) => (
-      <Attachment key={i} data={Map({ title: 'Specs note' })} />
+      <Attachment onClick={this.onOpen} key={i} data={c} />
     ));
     return (
       <StepField
@@ -133,6 +137,7 @@ const { object, bool } = PropTypes;
 GoalStep.propTypes = {
   step: map.isRequired,
   handoff: object,
+  collection: list,
   isSubmitting: bool,
   options: object.isRequired,
   delegate: object.isRequired,

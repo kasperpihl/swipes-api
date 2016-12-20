@@ -199,8 +199,8 @@ const { string, func } = PropTypes;
 HOCSideNote.propTypes = {
   sideNoteId: string,
   note: map,
-  me: map,
   navId: string,
+  me: map,
   users: map,
   saveNote: func,
   closeSideNote: func,
