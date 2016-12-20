@@ -11,9 +11,11 @@ import {
   Modifier,
   Entity,
 } from 'draft-js';
+import Immutable from 'immutable';
 import { bindAll } from 'classes/utils';
 import StyleControl from './StyleControl';
 import NoteLink from './NoteLink';
+// import NoteUrl from './NoteUrl';
 import NoteChecklist from './NoteChecklist';
 
 import './styles/note-editor.scss';
@@ -54,16 +56,27 @@ class NoteEditor extends Component {
         'handleBeforeInput',
       ],
     );
-    const checklistRenderProp = {
-      element: 'li',
-      wrapper: {
-        type: 'ul',
-        props: {
-          className: 'checklist-ul',
+    const blockRenderMap = Immutable.Map({
+      checklist: {
+        element: 'li',
+        wrapper: {
+          type: 'ul',
+          props: {
+            className: 'checklist-ul',
+          },
         },
       },
-    };
-    this.blockRenderMap = DefaultDraftBlockRenderMap.set('checklist', checklistRenderProp);
+      // url: {
+      //   element: 'a',
+      //   wrapper: {
+      //     type: 'div',
+      //     props: {
+      //       className: 'note-url',
+      //     },
+      //   },
+      // },
+    });
+    this.blockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
     this.onChange = (editorState) => {
       const { onChange } = this.props;
@@ -186,6 +199,10 @@ class NoteEditor extends Component {
             checked: !!contentBlock.getData().get('checked'),
           },
         };
+      // case 'url':
+      //   return {
+      //     component: NoteUrl,
+      //   };
       default:
         return null;
     }
