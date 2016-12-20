@@ -153,10 +153,29 @@ const goalsGet = (req, res, next) => {
 
 const goalsUpdate = (req, res, next) => {
   const {
+    goal_id,
     goal,
   } = res.locals;
 
-  dbGoalsUpdateSingle({ goal_id: goal.id, properties: goal })
+  dbGoalsUpdateSingle({ goal_id, properties: goal })
+    .then(() => {
+      res.locals.eventType = 'goal_updated';
+      res.locals.eventData = goal;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
+
+const goalsUpdateData = (req, res, next) => {
+  const {
+    goal_id,
+    goal,
+  } = res.locals;
+
+  dbGoalsUpdateSingle({ goal_id, properties: goal })
     .then(() => {
       res.locals.eventType = 'goal_updated';
       res.locals.eventData = goal;
@@ -175,4 +194,5 @@ export {
   goalsDelete,
   goalsGet,
   goalsUpdate,
+  goalsUpdateData,
 };

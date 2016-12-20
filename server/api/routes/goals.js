@@ -4,6 +4,7 @@ import {
   validateGoalsDelete,
 } from '../validators/goals';
 import {
+  goalsUpdateData,
   goalsCreate,
   goalsDelete,
   goalsNext,
@@ -15,6 +16,13 @@ import {
 import {
   processesGetAllOrderedByTitle,
 } from './middlewares/db_utils/processes';
+import {
+  usersGetSingleWithOrganizations,
+} from './middlewares/users';
+import {
+  notifyAllInCompany,
+  notifyCommonRethinkdb,
+} from './middlewares/notify';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -54,6 +62,20 @@ authed.all('/goals.delete',
 
     return res.status(200).json({ ok: true, id: goal_id });
   });
+
+// T_TODO warning: this endpoint is to be removed
+authed.all('/goals.update',
+    usersGetSingleWithOrganizations,
+    goalsUpdateData,
+    notifyAllInCompany,
+    notifyCommonRethinkdb,
+    (req, res) => {
+      const {
+        goal_id,
+      } = res.locals;
+
+      return res.status(200).json({ ok: true, id: goal_id });
+    });
 
 export {
   authed,
