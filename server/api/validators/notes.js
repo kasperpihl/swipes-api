@@ -1,4 +1,3 @@
-import validate from 'validate.js';
 import {
   validatorMiddleware,
 } from './validation-wrapper';
