@@ -12,11 +12,6 @@ class HOCGoalOverview extends Component {
     return [{
       component: 'Button',
       props: {
-        icon: 'ListIcon',
-      },
-    }, {
-      component: 'Button',
-      props: {
         icon: 'ThreeDotsIcon',
       },
     }];
@@ -33,13 +28,10 @@ class HOCGoalOverview extends Component {
   }
   onContextClick(i) {
     const {
-      toggleSideNote,
       goalId,
       goalDelete,
     } = this.props;
     if (i === 0) {
-      toggleSideNote(goalId);
-    } else {
       goalDelete(goalId);
     }
   }

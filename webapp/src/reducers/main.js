@@ -53,7 +53,8 @@ export default function main(state = initialState, action) {
     // Note
     // ======================================================
     case types.TOGGLE_SIDE_NOTE: {
-      const newVal = state.get('sideNoteId') ? null : payload.sideNoteId;
+      const { sideNoteId: id } = payload;
+      const newVal = (state.get('sideNoteId') === id) ? null : id;
       return state.set('sideNoteId', newVal);
     }
     case types.CLOSE_SIDE_NOTE: {

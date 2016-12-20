@@ -21,7 +21,6 @@ const unlock = {
 
 };
 
-
 // const unlock = Object.assign({}, isBooleanOptinal, {
 //   presence: {
 //     allowEmpty: true,
@@ -39,6 +38,7 @@ const notesSaveConstraints = Object.assign({}, {
 
 const notesCreateConstraints = Object.assign({}, {
   organization_id,
+  title,
   // T__TODO figure out how we can validate optional attributes
   // unlock,
 });
