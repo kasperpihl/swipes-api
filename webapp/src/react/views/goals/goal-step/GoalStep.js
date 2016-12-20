@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { map, list } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate } from 'classes/utils';
 
 // Views
+import { Attachment } from 'src/react/preview-card/preview-fields';
+import Button from 'Button';
 import * as Fields from 'src/react/swipes-fields';
 import StepField from './StepField';
 import StepSubmission from './StepSubmission';
@@ -15,74 +18,78 @@ import './styles/goal-step.scss';
 class GoalStep extends Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['onSubmit']);
+    bindAll(this, ['onSubmit', 'onAdd']);
     this.bindCallbacks = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
   }
   onSubmit(goBack) {
-    this.callDelegate('goalStepSubmit', goBack);
+    this.callDelegate('goalStepSubmit', goBack, this.handoffMessage);
   }
   renderHandoff() {
-/* const { users } = this.props;
-const { stepIndex } = this.state;
-const handOff = this.helper.getHandoffMessageForStepIndex(stepIndex);
-
-if (handOff) {
-  const firstMessage = handOff.findEntry(() => true);
-
-  if (!firstMessage) {
-    return undefined;
-  }
-
-  const user = users.get(firstMessage[0]);
-  const message = firstMessage[1];
-
-  if (user && message && message.length) {
+    const { handoff } = this.props;
+    if (!handoff) {
+      return undefined;
+    }
     return (
       <StepField
-        icon={user.get('profile_pic') || 'PersonIcon'}
-        title={`Handoff from ${user.get('name')}`}
+        svg={handoff.svg}
+        src={handoff.src}
+        title={handoff.title}
       >
-        <div className="goal-step__hand-off-message">{message}</div>
+        <div className="goal-step__hand-off-message">{handoff.message}</div>
       </StepField>
     );
   }
-}
-
-return undefined;*/
+  onAdd() {
+    this.callDelegate('goalStepAdd');
   }
-  renderFields() {
-    const { data, fields } = this.props;
-    return fields.map((field, i) => {
-      const Field = Fields[field.get('type')];
-      if (Field) {
-        if (!this.bindCallbacks[i]) {
-          this.bindCallbacks[i] = this.callDelegate.bind(null, 'delegateFromField', i);
-        }
-        return (
-          <StepField
-            key={field.get('id')}
-            title={field.get('title')}
-            icon={field.get('icon')}
-            iconColor={field.get('iconColor')}
-          >
-            <Field
-              delegate={this.bindCallbacks[i]}
-              data={data.get(i)}
-              settings={field.get('settings')}
-            />
-          </StepField>
-        );
-      }
+  renderCollection() {
+    const {
+      collection: col,
+    } = this.props;
+    const html = col && col.map((c, i) => (
+      <Attachment key={i} title={'Specs note'} />
+    ));
+    return (
+      <StepField
+        title="Content"
+        svg="ArrowRightIcon"
+        iconColor="#007AFF"
+      >
+        {html}
+        <Button icon="AddIcon" primary onClick={this.onAdd} />
+        <input type="text" placeholder="Add text/url" />
+      </StepField>
+    );
+  }
 
+  renderHandoffField() {
+    const { options } = this.props;
+    if (!options.showSubmission) {
       return undefined;
-    });
-  }
-  renderPreAutomations() {
-    // Here will come the pre automations
-    // > Send email
-    // > Save to Evernote
+    }
+    const Textarea = Fields.textarea;
+    const data = fromJS({ text: '' });
+    const settings = fromJS({ editable: true, placeholder: 'handoff' });
+    return (
+      <StepField
+        title="Handoff"
+        svg="ArrowRightIcon"
+        iconColor="#007AFF"
+      >
+        <Textarea
+          data={data}
+          settings={settings}
+          delegate={(name, val) => {
+            if (name === 'change') {
+              this.handoffMessage = val.get('text');
+            }
+          }}
+        />
+      </StepField>
+
+    );
   }
   renderSubmission() {
     const { options, step, isSubmitting } = this.props;
@@ -98,23 +105,19 @@ return undefined;*/
 
     return undefined;
   }
-  renderPostAutomations() {
-    // Here will come the post automations
-    // > Send email
-    // > Save to Evernote
-  }
+
   render() {
     return (
       <div className="goal-step">
 
         <div className="goal-step__content">
-          {this.renderFields()}
+          {this.renderHandoff()}
+          {this.renderCollection()}
         </div>
 
         <div className="goal-step__submission">
-          {this.renderPreAutomations()}
+          {this.renderHandoffField()}
           {this.renderSubmission()}
-          {this.renderPostAutomations()}
         </div>
 
 
@@ -129,9 +132,8 @@ const { object, bool } = PropTypes;
 
 GoalStep.propTypes = {
   step: map.isRequired,
+  handoff: object,
   isSubmitting: bool,
-  fields: list.isRequired,
-  data: list.isRequired,
   options: object.isRequired,
   delegate: object.isRequired,
 };

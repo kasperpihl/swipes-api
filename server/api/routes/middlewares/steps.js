@@ -19,12 +19,11 @@ const stepsSubmit = (req, res, next) => {
   const {
     user_id,
     step,
-    data,
     message,
   } = res.locals;
   const lastIterationIndex = step.iterations.length - 1;
 
-  step.iterations[lastIterationIndex].responses[user_id] = { data, message };
+  step.iterations[lastIterationIndex].responses[user_id] = { message };
 
   if (step.response_type === 'single') {
     res.locals.doNext = true;

@@ -5,6 +5,7 @@ export default function Icon(props) {
   const {
     svg,
     png,
+    src,
     ...other
   } = props;
   let returnHtml = null;
@@ -15,9 +16,12 @@ export default function Icon(props) {
     returnHtml = <Comp {...other} />;
   }
 
-  if (png) {
-    const src = Icons[png];
-    returnHtml = <img src={src} {...other} role="presentation" />;
+  if (png || src) {
+    let iSrc = Icons[png];
+    if (!iSrc) {
+      iSrc = src || png;
+    }
+    returnHtml = <img src={iSrc} {...other} role="presentation" />;
   }
 
   return returnHtml;

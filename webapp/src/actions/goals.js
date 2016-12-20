@@ -21,23 +21,12 @@ const deleteGoal = goalId => (dispatch) => {
   ));
 };
 
-const submitStep = (goalId, stepId, data, previousSteps) => dispatch => new Promise((resolve) => {
-  let modalOpt = {
-    title: 'Personal hand-off',
-    data: {
-      textarea: {
-        placeholder: 'Personal message (optional)',
-      },
-      buttons: ['Submit'],
-    },
-  };
+const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new Promise((resolve) => {
+  let modalOpt;
   if (previousSteps) {
     modalOpt = {
-      title: 'Choose reason',
+      title: 'Go back to step',
       data: {
-        textarea: {
-          placeholder: 'Personal hand-off, what should be changed? (required)',
-        },
         list: {
           selectable: true,
           items: previousSteps.map((step, i) => {
@@ -50,32 +39,35 @@ const submitStep = (goalId, stepId, data, previousSteps) => dispatch => new Prom
       },
     };
   }
-  dispatch(load(modalOpt, (res) => {
-    let message = null;
-    let stepBackId = null;
-    if (res) {
-      message = res.text;
-      if (previousSteps) {
-        const index = res.items.length ? res.items[0] : 0;
-        stepBackId = previousSteps.get(index).get('id');
-      }
-
-      dispatch(request('steps.submit', {
-        goal_id: goalId,
-        step_id: stepId,
-        step_back_id: stepBackId,
-        data,
-        message,
-      })).then((resMom, err) => {
-        resolve();
-        if (err) {
-            // return console.log('Error completing step', err);
-        }
-      });
-    } else {
+  const submit = (stepBackId) => {
+    dispatch(request('steps.submit', {
+      goal_id: goalId,
+      step_id: stepId,
+      step_back_id: stepBackId,
+      message,
+    })).then((resMom, err) => {
       resolve();
-    }
-  }));
+      if (err) {
+          // return console.log('Error completing step', err);
+      }
+    });
+  };
+  if (modalOpt) {
+    dispatch(load(modalOpt, (res) => {
+      if (res) {
+        let stepBackId;
+        if (previousSteps) {
+          const index = res.items.length ? res.items[0] : 0;
+          stepBackId = previousSteps.get(index).get('id');
+        }
+        submit(stepBackId);
+      } else {
+        resolve();
+      }
+    }));
+  } else {
+    submit();
+  }
 });
 
 export {

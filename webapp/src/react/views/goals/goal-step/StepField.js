@@ -8,23 +8,31 @@ class StepField extends Component {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  renderIcon(icon, color) {
+  renderIcon(color) {
+    const { svg, src } = this.props;
     const styles = {};
 
     if (color) {
       styles.fill = color;
     }
 
-    return <Icon svg={icon} style={styles} className="step-field__icon step-field__icon--svg" />;
+    return (
+      <Icon
+        svg={svg}
+        src={src}
+        style={styles}
+        className="step-field__icon step-field__icon--svg"
+      />
+    );
   }
   render() {
-    const { icon, iconColor, title, children, description } = this.props;
+    const { iconColor, title, children, description } = this.props;
 
     return (
       <div className="step-field">
         <div className="step-field__header">
           <div className="step-field__header-image">
-            {this.renderIcon(icon, iconColor)}
+            {this.renderIcon(iconColor)}
           </div>
           <div className="step-field__title">
             {title}
@@ -39,12 +47,16 @@ class StepField extends Component {
 
 export default StepField;
 
-const { string, object } = PropTypes;
+const { string, object, array, oneOfType } = PropTypes;
 
 StepField.propTypes = {
-  icon: string,
+  svg: string,
+  src: string,
   title: string,
   description: string,
   iconColor: string,
-  children: object,
+  children: oneOfType([
+    object,
+    array,
+  ]),
 };
