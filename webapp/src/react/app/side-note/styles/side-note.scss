@@ -5,6 +5,7 @@
   $b: &;
   @include size(100%);
   // @include flex(none);
+  @include flex(center, flex-start);
   @include flex(column);
   // max-width: 600px;
   overflow-y: auto;
@@ -45,6 +46,11 @@
     &--locked-editing {
       background-color: $red-100;
     }
+  }
+
+  &__note {
+    @include size(100%, auto);
+    max-width: 650px;
   }
 
   &--locked {

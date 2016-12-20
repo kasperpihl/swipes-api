@@ -190,12 +190,15 @@ class HOCSideNote extends Component {
     return (
       <div className={className}>
         {this.renderHeader()}
-        <NoteEditor
-          editorState={editorState}
-          onChange={this.onChange}
-          readOnly={someoneElseEditing}
-          onBlur={this.onBlur}
-        />
+
+        <div className="side-note__note">
+          <NoteEditor
+            editorState={editorState}
+            onChange={this.onChange}
+            readOnly={someoneElseEditing}
+            onBlur={this.onBlur}
+          />
+        </div>
       </div>
     );
   }
