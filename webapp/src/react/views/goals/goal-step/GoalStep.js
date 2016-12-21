@@ -1,30 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
 import Button from 'Button';
-import * as Fields from 'src/react/swipes-fields';
 import StepSection from './StepSection';
+import StepHandoff from './StepHandoff';
 import StepContentRow from './StepContentRow';
 import StepSubmission from './StepSubmission';
 
 
 // styles
-import './styles/goal-step.scss';
+import './styles/goal-step';
 
 class GoalStep extends Component {
   constructor(props) {
     super(props);
     bindAll(this, ['onSubmit', 'onAdd', 'onOpen']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.getCachedOnOpen = setupCachedCallback(this.onOpen, this);
+    this.onOpenCached = setupCachedCallback(this.onOpen, this);
     this.callDelegate = setupDelegate(props.delegate);
   }
-  onSubmit(goBack) {
-    this.callDelegate('goalStepSubmit', goBack, this.handoffMessage);
+  onSubmit(goBack, message) {
+    this.callDelegate('goalStepSubmit', goBack, message);
   }
   onAdd() {
     this.callDelegate('goalStepAdd');
@@ -40,7 +40,7 @@ class GoalStep extends Component {
     }
     return (
       <StepSection title="Handoff">
-        <div className="goal-step__hand-off-message">{handoff.message}</div>
+        <StepHandoff data={handoff} />
       </StepSection>
     );
   }
@@ -51,8 +51,8 @@ class GoalStep extends Component {
     const html = col && col.map((c, i) => (
       <StepContentRow
         key={i}
-        onClick={this.getCachedOnOpen(i)}
-        icon={c.get('icon')}
+        onClick={this.onOpenCached(i)}
+        icon={'LinkIcon'}
         title={'Note'}
       />
     ));
@@ -64,39 +64,18 @@ class GoalStep extends Component {
     );
   }
 
-  renderHandoffField() {
-    const { options } = this.props;
-    if (!options.showSubmission) {
-      return undefined;
-    }
-    const Textarea = Fields.textarea;
-    const data = fromJS({ text: '' });
-    const settings = fromJS({ editable: true, placeholder: 'handoff' });
-    return (
-      <StepSection title="Deliver">
-        <Textarea
-          data={data}
-          settings={settings}
-          delegate={(name, val) => {
-            if (name === 'change') {
-              this.handoffMessage = val.get('text');
-            }
-          }}
-        />
-        {this.renderSubmission}
-      </StepSection>
 
-    );
-  }
   renderSubmission() {
     const { options, step, isSubmitting } = this.props;
     if (options.showSubmission) {
       return (
-        <StepSubmission
-          onSubmit={this.onSubmit}
-          submission={step.get('submission')}
-          disabled={!!isSubmitting}
-        />
+        <StepSection title="Deliver">
+          <StepSubmission
+            onSubmit={this.onSubmit}
+            submission={step.get('submission')}
+            disabled={!!isSubmitting}
+          />
+        </StepSection>
       );
     }
 
@@ -110,14 +89,8 @@ class GoalStep extends Component {
         <div className="goal-step__content">
           {this.renderHandoff()}
           {this.renderCollection()}
-        </div>
-
-        <div className="goal-step__submission">
-          {this.renderHandoffField()}
           {this.renderSubmission()}
         </div>
-
-
       </div>
     );
   }

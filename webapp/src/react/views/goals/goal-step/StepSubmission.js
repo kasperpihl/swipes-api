@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
+import { fromJS } from 'immutable';
 import { nearestAttribute } from 'classes/utils';
+import * as Fields from 'src/react/swipes-fields';
 import './styles/step-submission.scss';
 
 class StepSubmission extends Component {
@@ -16,20 +18,37 @@ class StepSubmission extends Component {
     const goBack = parseInt(nearestAttribute(e.target, 'data-index'), 10);
     const { onSubmit } = this.props;
     if (onSubmit) {
-      onSubmit(goBack);
+      onSubmit(goBack, this.handoffMessage);
     }
+  }
+  renderHandoffField() {
+    const Textarea = Fields.textarea;
+    const data = fromJS({ text: '' });
+    const settings = fromJS({ editable: true, placeholder: 'handoff' });
+    return (
+      <Textarea
+        data={data}
+        settings={settings}
+        delegate={(name, val) => {
+          if (name === 'change') {
+            this.handoffMessage = val.get('text');
+          }
+        }}
+      />
+    );
   }
   render() {
     const { submission } = this.props;
     const className = 'step-submission';
-    let btns = ['Submit'];
+    let btns = ['Complete Step'];
 
     if (submission && submission.get('type') === 'decide') {
-      btns = ['Yes', 'No'];
+      btns = ['Complete Step', 'Go Back'];
     }
 
     return (
       <div className={className}>
+        {this.renderHandoffField()}
         <div className="step-submission__actions">
           {btns.map((t, i) => (
             <Button
