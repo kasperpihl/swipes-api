@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+
 import './styles/step-section';
 
 const StepSection = (props) => {
@@ -6,6 +7,7 @@ const StepSection = (props) => {
     title,
     children,
   } = props;
+
   return (
     <div className="step-section">
       <div className="step-section__title">{title}</div>

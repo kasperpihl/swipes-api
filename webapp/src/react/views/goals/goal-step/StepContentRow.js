@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Icon from 'Icon';
+
 import './styles/step-content-row';
 
 const StepContentRow = (props) => {
@@ -8,6 +9,7 @@ const StepContentRow = (props) => {
     title,
     onClick,
   } = props;
+
   return (
     <div className="step-content-row">
       <Icon svg={icon} />

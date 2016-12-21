@@ -15,7 +15,6 @@ import Immutable from 'immutable';
 import { bindAll } from 'classes/utils';
 import StyleControl from './StyleControl';
 import NoteLink from './NoteLink';
-// import NoteUrl from './NoteUrl';
 import NoteChecklist from './NoteChecklist';
 
 import './styles/note-editor.scss';
@@ -66,15 +65,6 @@ class NoteEditor extends Component {
           },
         },
       },
-      // url: {
-      //   element: 'a',
-      //   wrapper: {
-      //     type: 'div',
-      //     props: {
-      //       className: 'note-url',
-      //     },
-      //   },
-      // },
     });
     this.blockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
@@ -199,10 +189,6 @@ class NoteEditor extends Component {
             checked: !!contentBlock.getData().get('checked'),
           },
         };
-      // case 'url':
-      //   return {
-      //     component: NoteUrl,
-      //   };
       default:
         return null;
     }
