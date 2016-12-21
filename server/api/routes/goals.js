@@ -9,6 +9,8 @@ import {
   goalsDelete,
   goalsNext,
   goalsInsert,
+  goalsCreateQueueMessage,
+  goalsDeleteQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -42,6 +44,7 @@ authed.all('/goals.create',
   goalsCreate,
   goalsNext,
   goalsInsert,
+  goalsCreateQueueMessage,
   notificationsPushToQueue,
   (req, res) => {
     const {
@@ -54,6 +57,7 @@ authed.all('/goals.create',
 authed.all('/goals.delete',
   validateGoalsDelete,
   goalsDelete,
+  goalsDeleteQueueMessage,
   notificationsPushToQueue,
   (req, res) => {
     const {

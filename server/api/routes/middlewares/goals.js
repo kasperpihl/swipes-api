@@ -187,6 +187,40 @@ const goalsUpdateData = (req, res, next) => {
     });
 };
 
+const goalsCreateQueueMessage = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+    eventType,
+  } = res.locals;
+
+  const goal_id = goal.id;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id,
+    event_type: eventType,
+  };
+
+  return next();
+};
+
+const goalsDeleteQueueMessage = (req, res, next) => {
+  const {
+    user_id,
+    goal_id,
+    eventType,
+  } = res.locals;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id,
+    event_type: eventType,
+  };
+
+  return next();
+};
+
 export {
   goalsCreate,
   goalsNext,
@@ -195,4 +229,6 @@ export {
   goalsGet,
   goalsUpdate,
   goalsUpdateData,
+  goalsCreateQueueMessage,
+  goalsDeleteQueueMessage,
 };
