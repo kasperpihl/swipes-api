@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import NoteEditor from 'components/note-editor/NoteEditor';
+import Button from 'Button';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
   convertFromRaw,
@@ -171,6 +172,7 @@ class HOCSideNote extends Component {
 
     return (
       <div onClick={this.closeSideNote} className="side-note__header">
+        <Button icon="ArrowLeftIcon" className="side-note__back" />
         {message}
         <div className={dotClass} />
       </div>

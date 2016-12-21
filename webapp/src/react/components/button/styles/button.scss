@@ -12,10 +12,10 @@ $mainColor: $deepBlue-100;
 
   @include flex();
   @include size(auto, $btnSize);
+  display: inline-flex;
   border: 1px solid;
   border-color: rgba($mainColor, .1);
   border-radius: 50px;
-  float: left;
   min-width: $btnSize;
   transition: .15s;
 }
