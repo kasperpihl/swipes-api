@@ -2,5 +2,25 @@
 @import '~styles/_mixins.scss';
 
 .step-section {
+  @include size(100%, auto);
+  max-width: 780px;
+  position: relative;
+  padding: 30px 0;
+  padding-top: 42px;
+  padding-left: 12px;
 
+  &:not(:first-child) {
+    border-top: 1px solid $deepBlue-10;
+  }
+
+  &__title {
+    @include size(100%, 30px);
+    @include flex(center, flex-start);
+    position: absolute;
+    left: 0; top: 0;
+    text-transform: uppercase;
+    font-size: 9px;
+    font-weight: bold;
+    color: #7F8596;
+  }
 }

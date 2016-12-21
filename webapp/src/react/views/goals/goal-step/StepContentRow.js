@@ -12,7 +12,7 @@ const StepContentRow = (props) => {
 
   return (
     <div className="step-content-row">
-      <Icon svg={icon} />
+      <Icon svg={icon} className="step-content-row__icon" />
       <div className="step-content-row__title" onClick={onClick}>
         {title}
       </div>

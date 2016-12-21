@@ -11,12 +11,14 @@ const StepHandoff = (props) => {
   } = props.data;
   return (
     <div className="step-handoff">
-      <Icon svg={svg} src={src} />
-      <div className="step-handoff__name">
-        {name}
-      </div>
-      <div className="step-handoff__message">
-        {message}
+      <Icon svg={svg} src={src} className="step-handoff__icon" />
+      <div className="step-handoff__column">
+        <div className="step-handoff__name">
+          {name}
+        </div>
+        <div className="step-handoff__message">
+          {message}
+        </div>
       </div>
     </div>
   );
