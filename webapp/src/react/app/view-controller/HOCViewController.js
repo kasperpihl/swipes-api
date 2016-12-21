@@ -166,6 +166,6 @@ HOCViewController.propTypes = {
 const ConnectedHOCViewController = connect(mapStateToProps, {
   popTo: actions.navigation.popTo,
   pop: actions.navigation.pop,
-  overlayShow: actions.main.overlayShow,
+  overlayShow: actions.main.overlay.show,
 })(HOCViewController);
 export default ConnectedHOCViewController;

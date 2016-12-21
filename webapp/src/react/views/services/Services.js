@@ -8,8 +8,6 @@ import './services.scss';
 
 /* global nodeRequire, ipcListener */
 
-const { dialog } = nodeRequire('electron').remote;
-
 class Services extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +35,7 @@ class Services extends Component {
     if (db && !localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')) {
       this.props.loadModal({ title: 'Find Dropbox folder', data: { message: 'This will enable you to open files on your local dropbox folder', buttons: ['No', 'Yes'] } }, (res) => {
         if (res && res.button) {
-          const folder = dialog.showOpenDialog({ properties: ['openDirectory'] });
+          const folder = window.ipcListener.openDialog({ properties: ['openDirectory'] });
           if (folder) {
             localStorage.setItem('dropbox-folder', folder);
           }

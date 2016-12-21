@@ -6,6 +6,7 @@ import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'classes/utils';
 import GoalOverview from './GoalOverview';
 
+import ListMenu from 'components/list-menu/ListMenu';
 
 class HOCGoalOverview extends Component {
   static contextButtons() {
@@ -26,7 +27,27 @@ class HOCGoalOverview extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onContextClick(i) {
+  onContextClick(i, e) {
+    const {
+      contextMenuShow,
+    } = this.props;
+    contextMenuShow({
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'right',
+        positionX: 10,
+        excludeX: false,
+      },
+      component: ListMenu,
+      props: {
+        title: 'hello',
+        onClick: (res) => {
+          console.log('res', res);
+        },
+      },
+    });
+
+    return;
     const {
       goalId,
       goalDelete,
@@ -65,7 +86,6 @@ HOCGoalOverview.propTypes = {
   delegate: object,
   navPush: func,
   goalDelete: func,
-  toggleSideNote: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -77,5 +97,5 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
   goalDelete: actions.goals.deleteGoal,
-  toggleSideNote: actions.main.toggleSideNote,
+  contextMenuShow: actions.main.contextMenu.show,
 })(HOCGoalOverview);

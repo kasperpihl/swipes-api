@@ -21,6 +21,7 @@ class GoalStep extends Component {
     bindAll(this, ['onSubmit', 'onAdd', 'onOpen']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onOpenCached = setupCachedCallback(this.onOpen, this);
+    // now use events as onClick: this.onOpenCached(i)
     this.callDelegate = setupDelegate(props.delegate);
   }
   onSubmit(goBack, message) {

@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { api, navigation } from 'actions';
 
 import Topbar from './topbar/Topbar';
-import Modal from './modal/HOCModal';
-import ViewController from './view-controller/HOCViewController';
-import Sidebar from './sidebar/HOCSidebar';
-import Overlay from './overlay/HOCOverlay';
-import Toasty from './toasty/HOCToasty';
+import HOCModal from './modal/HOCModal';
+import HOCViewController from './view-controller/HOCViewController';
+import HOCSidebar from './sidebar/HOCSidebar';
+import HOCOverlay from './overlay/HOCOverlay';
+import HOCToasty from './toasty/HOCToasty';
 import HOCSideNote from './side-note/HOCSideNote';
+import HOCContextMenu from './context-menu/HOCContextMenu';
 
 let DevTools = 'div';
 
@@ -53,13 +54,14 @@ class HOCApp extends Component {
       <div className="app">
         <Topbar pathname={location.pathname} />
         <div className="content-wrapper">
-          <Sidebar />
-          <ViewController />
+          <HOCSidebar />
+          <HOCViewController />
           <HOCSideNote />
         </div>
-        <Overlay />
-        <Modal />
-        <Toasty />
+        <HOCOverlay />
+        <HOCModal />
+        <HOCToasty />
+        <HOCContextMenu />
         <DevTools />
       </div>
     );

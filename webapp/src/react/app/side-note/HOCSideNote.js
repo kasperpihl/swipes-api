@@ -29,11 +29,11 @@ class HOCSideNote extends Component {
     bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur', 'closeSideNote']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
-  closeSideNote() {
+  closeSideNote(e) {
     const {
-      closeSideNote,
+      hideNote,
     } = this.props;
-    closeSideNote();
+    hideNote();
   }
   componentWillReceiveProps(nextProps) {
     const { me, note: oldNote } = this.props;
@@ -172,7 +172,7 @@ class HOCSideNote extends Component {
 
     return (
       <div className="side-note__header">
-        <Button icon="ArrowLeftIcon" className="side-note__back" onClick={this.closeSideNote} />
+        <Button icon="CloseIcon" className="side-note__back" onClick={this.closeSideNote} />
         {message}
         <div className={dotClass} />
       </div>
@@ -218,7 +218,7 @@ HOCSideNote.propTypes = {
   me: map,
   users: map,
   saveNote: func,
-  closeSideNote: func,
+  hideNote: func,
 };
 
 function mapStateToProps(state) {
@@ -234,6 +234,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  saveNote: actions.main.saveNote,
-  closeSideNote: actions.main.closeSideNote,
+  saveNote: actions.main.note.save,
+  hideNote: actions.main.note.hide,
 })(HOCSideNote);

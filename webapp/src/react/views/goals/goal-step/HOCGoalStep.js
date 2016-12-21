@@ -20,10 +20,10 @@ class HOCGoalStep extends Component {
   }
 
   goalStepClicked(att) {
-    const { toggleSideNote } = this.props;
+    const { showNote } = this.props;
 
     if (att.get('service') === 'swipes' && att.get('type') === 'note') {
-      toggleSideNote(att.get('id'));
+      showNote(att.get('id'));
     }
   }
   goalStepAdd() {
@@ -115,14 +115,14 @@ class HOCGoalStep extends Component {
       const message = firstMessage[1];
 
       if (user && message && message.length) {
-        handoffObj = {};
-        if (user.get('profile_pic')) {
-          handoffObj.src = user.get('profile_pic');
-        } else {
+        handoffObj = {
+          message,
+          name: user.get('name'),
+          src: user.get('profile_pic'),
+        };
+        if (!handoffObj.src) {
           handoffObj.svg = 'PersonIcon';
         }
-        handoffObj.title = `${user.get('name')} said:`;
-        handoffObj.message = message;
       }
     }
 
@@ -159,7 +159,7 @@ HOCGoalStep.propTypes = {
   delegate: object,
   submit: func,
   addToCollection: func,
-  toggleSideNote: func,
+  showNote: func,
   createNote: func,
   navId: string,
   loadModal: func,
@@ -186,8 +186,8 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   loadModal: actions.modal.load,
   addToCollection: actions.goals.addToCollection,
-  toggleSideNote: actions.main.toggleSideNote,
+  showNote: actions.main.note.show,
   navPop: actions.navigation.pop,
-  createNote: actions.main.createNote,
+  createNote: actions.main.note.create,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);

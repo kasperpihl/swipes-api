@@ -34,7 +34,24 @@ svg {
   position: fixed !important;
   transform: translate(-50%, -50%);
 }
-
+.context-menu {
+  @include size(100%, 100%);
+  left: 0; top: 0;
+  position:fixed;
+  visibility: hidden;
+  z-index: 10;
+  opacity: 0;
+  &--shown {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .15s;
+  }
+  &__content {
+    position: absolute;
+    height: auto;
+    width: auto;
+  }
+}
 .overlay {
   @include size(100%, calc(100% - 38px));
   background: $bg;
