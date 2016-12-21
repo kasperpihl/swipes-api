@@ -19,11 +19,10 @@ class HOCGoalStep extends Component {
     return new GoalsUtil(goal, me.get('id'), cachedData);
   }
 
-  goalStepClicked(att, e) {
+  goalStepClicked(att) {
     const { toggleSideNote } = this.props;
 
     if (att.get('service') === 'swipes' && att.get('type') === 'note') {
-      console.log(e, att.toJS());
       toggleSideNote(att.get('id'));
     }
   }

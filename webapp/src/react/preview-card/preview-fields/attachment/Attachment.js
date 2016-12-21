@@ -21,14 +21,11 @@ class Attachment extends Component {
   }
   render() {
     const { data } = this.props;
-    let title = 'Note';
-    if (data.get('type') === 'text') {
-      title = data.get('id');
-    }
+
     return (
       <div className="card-attachment" onClick={this.onClick}>
         {this.renderIcon()}
-        <div className="card-attachment__title">{title}</div>
+        <div className="card-attachment__title">{data.get('title')}</div>
       </div>
     );
   }

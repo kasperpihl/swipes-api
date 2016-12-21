@@ -2,13 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { bindAll, setupDelegate } from 'classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
-import { Attachment } from 'src/react/preview-card/preview-fields';
 import Button from 'Button';
 import * as Fields from 'src/react/swipes-fields';
-import StepField from './StepField';
+import StepSection from './StepSection';
+import StepContentRow from './StepContentRow';
 import StepSubmission from './StepSubmission';
 
 
@@ -19,8 +19,8 @@ class GoalStep extends Component {
   constructor(props) {
     super(props);
     bindAll(this, ['onSubmit', 'onAdd', 'onOpen']);
-    this.bindCallbacks = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.getCachedOnOpen = setupCachedCallback(this.onOpen, this);
     this.callDelegate = setupDelegate(props.delegate);
   }
   onSubmit(goBack) {
@@ -29,8 +29,8 @@ class GoalStep extends Component {
   onAdd() {
     this.callDelegate('goalStepAdd');
   }
-  onOpen(att, e) {
-    this.callDelegate('goalStepClicked', att, e);
+  onOpen(i) {
+    console.log('hello', i, this);
   }
 
   renderHandoff() {
@@ -39,13 +39,9 @@ class GoalStep extends Component {
       return undefined;
     }
     return (
-      <StepField
-        svg={handoff.svg}
-        src={handoff.src}
-        title={handoff.title}
-      >
+      <StepSection title="Handoff">
         <div className="goal-step__hand-off-message">{handoff.message}</div>
-      </StepField>
+      </StepSection>
     );
   }
   renderCollection() {
@@ -53,18 +49,18 @@ class GoalStep extends Component {
       collection: col,
     } = this.props;
     const html = col && col.map((c, i) => (
-      <Attachment onClick={this.onOpen} key={i} data={c} />
+      <StepContentRow
+        key={i}
+        onClick={this.getCachedOnOpen(i)}
+        icon={c.get('icon')}
+        title={'Note'}
+      />
     ));
     return (
-      <StepField
-        title="Content"
-        svg="ArrowRightIcon"
-        iconColor="#007AFF"
-      >
+      <StepSection title="Content">
         {html}
         <Button icon="AddIcon" primary onClick={this.onAdd} />
-        <input type="text" placeholder="Add text/url" />
-      </StepField>
+      </StepSection>
     );
   }
 
@@ -77,11 +73,7 @@ class GoalStep extends Component {
     const data = fromJS({ text: '' });
     const settings = fromJS({ editable: true, placeholder: 'handoff' });
     return (
-      <StepField
-        title="Handoff"
-        svg="ArrowRightIcon"
-        iconColor="#007AFF"
-      >
+      <StepSection title="Deliver">
         <Textarea
           data={data}
           settings={settings}
@@ -91,7 +83,8 @@ class GoalStep extends Component {
             }
           }}
         />
-      </StepField>
+        {this.renderSubmission}
+      </StepSection>
 
     );
   }
