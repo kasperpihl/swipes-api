@@ -50,7 +50,11 @@ class HOCSideNote extends Component {
       } else {
         this.unlockUI();
       }
-      if (!oldNote || newNote.get('user_id') !== me.get('id')) {
+      if (
+        !oldNote ||
+        newNote.get('id') !== oldNote.get('id') ||
+        newNote.get('user_id') !== me.get('id')
+      ) {
         console.log('new state');
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
@@ -208,8 +212,8 @@ const { string, func } = PropTypes;
 HOCSideNote.propTypes = {
   sideNoteId: string,
   note: map,
-  me: map,
   navId: string,
+  me: map,
   users: map,
   saveNote: func,
   closeSideNote: func,

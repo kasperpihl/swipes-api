@@ -8,15 +8,22 @@ class Attachment extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onClick = this.onClick.bind(this);
+  }
+  onClick(e) {
+    const { data, onClick } = this.props;
+    if (onClick) {
+      onClick(data, e);
+    }
   }
   renderIcon() {
-    return <Icon svg="ThreeDotsIcon" className="card-attachment__icon" />;
+    return <Icon svg="LinkIcon" className="card-attachment__icon" />;
   }
   render() {
     const { data } = this.props;
 
     return (
-      <div className="card-attachment">
+      <div className="card-attachment" onClick={this.onClick}>
         {this.renderIcon()}
         <div className="card-attachment__title">{data.get('title')}</div>
       </div>
@@ -26,10 +33,11 @@ class Attachment extends Component {
 
 export default Attachment;
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 Attachment.propTypes = {
   data: mapContains({
     title: string,
   }),
+  onClick: func,
 };

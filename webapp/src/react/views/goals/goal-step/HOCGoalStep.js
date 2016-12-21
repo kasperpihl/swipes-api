@@ -19,10 +19,19 @@ class HOCGoalStep extends Component {
     return new GoalsUtil(goal, me.get('id'), cachedData);
   }
 
+  goalStepClicked(att) {
+    const { toggleSideNote } = this.props;
+
+    if (att.get('service') === 'swipes' && att.get('type') === 'note') {
+      toggleSideNote(att.get('id'));
+    }
+  }
   goalStepAdd() {
     const {
       loadModal,
       addToCollection,
+      createNote,
+      navId,
       goal,
     } = this.props;
 
@@ -39,9 +48,26 @@ class HOCGoalStep extends Component {
         },
       },
     };
-    loadModal(modalOpt, (res) => {
-      if (res) {
-        addToCollection(goal.get('id'), 'test string');
+    loadModal(modalOpt, (result) => {
+      if (result) {
+        switch (result.item) {
+          case 1: {
+            createNote(navId).then((noteRes) => {
+              if (noteRes && noteRes.ok) {
+                addToCollection(goal.get('id'), {
+                  type: 'note',
+                  service: 'swipes',
+                  id: noteRes.id,
+                });
+              }
+            });
+            break;
+          }
+          default:
+            break;
+        }
+
+        // addToCollection(goal.get('id'), 'test string');
       }
     });
   }
@@ -126,13 +152,16 @@ class HOCGoalStep extends Component {
   }
 }
 
-const { number, func, object } = PropTypes;
+const { number, func, object, string } = PropTypes;
 HOCGoalStep.propTypes = {
   stepIndex: number,
   step: map,
   delegate: object,
   submit: func,
   addToCollection: func,
+  toggleSideNote: func,
+  createNote: func,
+  navId: string,
   loadModal: func,
   goal: map,
   me: map,
@@ -145,6 +174,7 @@ HOCGoalStep.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { goalId, stepIndex } = ownProps;
   return {
+    navId: state.getIn(['navigation', 'id']),
     goal: state.getIn(['goals', goalId]),
     users: state.get('users'),
     step: state.getIn(['goals', goalId, 'steps', stepIndex]),
@@ -156,6 +186,8 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   loadModal: actions.modal.load,
   addToCollection: actions.goals.addToCollection,
+  toggleSideNote: actions.main.toggleSideNote,
   navPop: actions.navigation.pop,
+  createNote: actions.main.createNote,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);

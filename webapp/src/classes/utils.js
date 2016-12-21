@@ -39,6 +39,17 @@ export function setupDelegate(delegate) {
   };
 }
 
+export function setupCachedCallback(method, ctx) {
+  const cachedMethod = {};
+  return function cachedCallback(id) {
+    if (!cachedMethod[id]) {
+      const args = Array.from(arguments);
+      cachedMethod[id] = method.bind(ctx, ...args);
+    }
+    return cachedMethod[id];
+  };
+}
+
 export function requireParams() {
   // if (typeof obj !== 'object') {
   //   return console.warn('requireParams should be {varName}');
@@ -175,6 +186,28 @@ export function decodeHtml(text) {
   return text;
 }
 
+export function transitions(enter, leave, appear) {
+  const returnObj = {};
+  if (typeof enter === 'string') {
+    returnObj.enter = `${enter}-enter`;
+    returnObj.enterActive = `${enter}-enter-active`;
+    returnObj.leave = `${enter}-leave`;
+    returnObj.leaveActive = `${enter}-leave-active`;
+    returnObj.appear = `${enter}-appear`;
+    returnObj.appearActive = `${enter}-appear-active`;
+  }
+  if (typeof leave === 'string') {
+    returnObj.leave = `${leave}-leave`;
+    returnObj.leaveActive = `${leave}-leave-active`;
+  }
+  if (typeof appear === 'string') {
+    returnObj.appear = `${appear}-appear`;
+    returnObj.appearActive = `${appear}-appear-active`;
+  }
+  return returnObj;
+}
+
+
 export function debounce(func, wait, immediate) {
   let timeout;
   let args;
@@ -199,7 +232,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  const debounced = () => {
+  function debounced() {
     context = this;
     args = arguments;
     timestamp = Date.now();
@@ -215,7 +248,7 @@ export function debounce(func, wait, immediate) {
     }
 
     return result;
-  };
+  }
 
   debounced.isRunning = () => !!timeout;
 
@@ -227,27 +260,6 @@ export function debounce(func, wait, immediate) {
   };
 
   return debounced;
-}
-
-export function transitions(enter, leave, appear) {
-  const returnObj = {};
-  if (typeof enter === 'string') {
-    returnObj.enter = `${enter}-enter`;
-    returnObj.enterActive = `${enter}-enter-active`;
-    returnObj.leave = `${enter}-leave`;
-    returnObj.leaveActive = `${enter}-leave-active`;
-    returnObj.appear = `${enter}-appear`;
-    returnObj.appearActive = `${enter}-appear-active`;
-  }
-  if (typeof leave === 'string') {
-    returnObj.leave = `${leave}-leave`;
-    returnObj.leaveActive = `${leave}-leave-active`;
-  }
-  if (typeof appear === 'string') {
-    returnObj.appear = `${appear}-appear`;
-    returnObj.appearActive = `${appear}-appear-active`;
-  }
-  return returnObj;
 }
 
 export function throttle(func, wait) {
@@ -265,7 +277,7 @@ export function throttle(func, wait) {
     args = null;
   }
 
-  const throttled = function throttled() {
+  function throttled() {
     ctx = this;
     args = arguments;
     const delta = new Date() - last;
@@ -275,7 +287,7 @@ export function throttle(func, wait) {
     }
 
     return rtn;
-  };
+  }
   throttled.isRunning = () => !!timeoutID;
   throttled.clear = () => {
     if (timeoutID) {

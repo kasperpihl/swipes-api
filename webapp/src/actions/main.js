@@ -44,16 +44,29 @@ export function logout() {
 // ======================================================
 // Notes
 // ======================================================
-export function saveNote(organizationId, goalId, text, unlock) {
-  return (dispatch) => {
-    dispatch(request('notes.save', { organization_id: organizationId, goal_id: goalId, text, unlock })).then(() => {
-    });
-  };
+export function saveNote(organizationId, noteId, text, unlock) {
+  return dispatch => dispatch(request('notes.save', {
+    organization_id: organizationId,
+    id: noteId,
+    text,
+    unlock,
+  }));
 }
+
+export function createNote(organizationId, title) {
+  return dispatch => dispatch(request('notes.create', {
+    organization_id: organizationId,
+    title,
+  }));
+}
+
 export function toggleSideNote(sideNoteId) {
-  return { type: types.TOGGLE_SIDE_NOTE, payload: {
-    sideNoteId,
-  } };
+  return {
+    type: types.TOGGLE_SIDE_NOTE,
+    payload: {
+      sideNoteId,
+    },
+  };
 }
 export function closeSideNote() {
   return { type: types.CLOSE_SIDE_NOTE };
