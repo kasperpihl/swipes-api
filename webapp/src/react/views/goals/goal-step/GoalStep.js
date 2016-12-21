@@ -29,8 +29,11 @@ class GoalStep extends Component {
   onAdd() {
     this.callDelegate('goalStepAdd');
   }
-  onOpen(i) {
-    console.log('hello', i, this);
+  onOpen(i, e) {
+    const {
+      collection,
+    } = this.props;
+    this.callDelegate('goalStepClicked', collection.get(i), e);
   }
 
   renderHandoff() {
