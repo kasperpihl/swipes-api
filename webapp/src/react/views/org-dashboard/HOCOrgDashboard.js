@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate } from 'classes/utils';
+import OrgDashboard from './OrgDashboard';
 
 class HOCOrgDashboard extends Component {
   static contextButtons() {
@@ -37,15 +38,24 @@ class HOCOrgDashboard extends Component {
   }
 
   render() {
+    const {
+      notifications,
+    } = this.props;
     return (
-      <div className="className" />
+      <OrgDashboard notifications={notifications} />
     );
   }
 }
 
+const { func, object } = PropTypes;
+HOCOrgDashboard.propTypes = {
+  navPush: func,
+  delegate: object,
+};
+
 function mapStateToProps(state) {
   return {
-    main: state.get('main'),
+    notifications: state.get('notifications'),
   };
 }
 

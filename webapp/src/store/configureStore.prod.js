@@ -4,7 +4,7 @@ import { apiMiddleware } from 'redux-api-middleware';
 import persistState from 'redux-localstorage';
 import thunk from 'redux-thunk';
 import Immutable, { fromJS } from 'immutable';
-import rootReducer from '../reducers';
+import rootReducer from 'src/reducers';
 
 // Define what's saved from state to LocalStorage
 const persist = () => state => Immutable.Map({

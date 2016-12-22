@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { list } from 'react-immutable-proptypes';
+import NotificationWrapper from './NotificationWrapper';
+import './styles/org-dashboard';
 
 class OrgDashboard extends Component {
   constructor(props) {
@@ -7,9 +10,29 @@ class OrgDashboard extends Component {
   }
   componentDidMount() {
   }
+  renderNotifications() {
+    const { notifications } = this.props;
+    if (!notifications) {
+      return 'No notifications....';
+    }
+    return notifications.map((n, i) => (
+      <NotificationWrapper
+        key={`notif${i}`}
+        svg="AddIcon"
+        iconBgColor="red"
+        message="Kasper added a goal: Test goal"
+        timeago="2m ago"
+      />
+    ));
+  }
   render() {
     return (
-      <div className="className" />
+      <div className="org-dashboard">
+        <div className="notifications-header">Notifications</div>
+        <div className="notifications">
+          {this.renderNotifications()}
+        </div>
+      </div>
     );
   }
 }
@@ -19,5 +42,5 @@ export default OrgDashboard;
 const { string } = PropTypes;
 
 OrgDashboard.propTypes = {
-  removeThis: string.isRequired,
+  notifications: list,
 };

@@ -5,8 +5,6 @@ import Icon from 'Icon';
 
 import PDFRender from './PDFRender';
 
-// import { ArrowLeftIcon, ArrowRightIcon, AddIcon, MinusIcon } from '../icons'
-
 import './styles/pdf-viewer.scss';
 
 class PDFViewer extends Component {

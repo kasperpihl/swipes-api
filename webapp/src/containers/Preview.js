@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 const components = {};
-import SwipesCardList from '../components/swipes-card/SwipesCardList';
-import SwipesCard from '../components/swipes-card/SwipesCard';
+import SwipesCardList from 'components/swipes-card/SwipesCardList';
+import SwipesCard from 'components/swipes-card/SwipesCard';
 
 class Preview extends Component {
   constructor(props) {
