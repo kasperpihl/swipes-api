@@ -27,8 +27,8 @@ class GoalStep extends Component {
   onSubmit(goBack, message) {
     this.callDelegate('goalStepSubmit', goBack, message);
   }
-  onAdd() {
-    this.callDelegate('goalStepAdd');
+  onAdd(e) {
+    this.callDelegate('goalStepAdd', e);
   }
   onOpen(i, e) {
     const {
@@ -56,8 +56,8 @@ class GoalStep extends Component {
       <StepContentRow
         key={i}
         onClick={this.onOpenCached(i)}
-        icon={'LinkIcon'}
-        title={'Note'}
+        icon={c.get('type') === 'note' ? 'ListIcon' : 'LinkIcon'}
+        title={c.get('title')}
       />
     ));
     return (

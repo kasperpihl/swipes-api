@@ -6,6 +6,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate } from 'classes/utils';
 import GoalStep from './GoalStep';
+import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
 
 class HOCGoalStep extends Component {
   constructor(props) {
@@ -26,29 +27,48 @@ class HOCGoalStep extends Component {
       showNote(att.get('id'));
     }
   }
-  goalStepAdd() {
+  goalStepAdd(e) {
     const {
-      loadModal,
+      contextMenuShow,
+      contextMenuHide,
       addToCollection,
       createNote,
       navId,
       goal,
     } = this.props;
-
-    const modalOpt = {
-      title: 'Add',
-      data: {
-        list: {
-          items: [
-            { title: 'Text/URL' },
-            { title: 'Note' },
-            { title: 'Upload' },
-            { title: 'Find' },
-          ],
+    console.log(e.target.getBoundingClientRect());
+    contextMenuShow({
+      component: AttachmentMenu,
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        positionX: -10,
+      },
+      props: {
+        callback: (type, data) => {
+          if (type === 'note') {
+            createNote(navId, data).then((noteRes) => {
+              if (noteRes && noteRes.ok) {
+                addToCollection(goal.get('id'), {
+                  type: 'note',
+                  service: 'swipes',
+                  id: noteRes.id,
+                  title: data,
+                });
+              }
+            });
+          } else if (type === 'link') {
+            addToCollection(goal.get('id'), {
+              type: 'url',
+              service: 'swipes',
+              id: data,
+              title: data,
+            });
+          }
+          contextMenuHide();
         },
       },
-    };
-    loadModal(modalOpt, (result) => {
+    });
+    /* loadModal(modalOpt, (result) => {
       if (result) {
         switch (result.item) {
           case 1: {
@@ -69,7 +89,7 @@ class HOCGoalStep extends Component {
 
         // addToCollection(goal.get('id'), 'test string');
       }
-    });
+    });*/
   }
   goalStepSubmit(i, message) {
     const { goal, step, submit } = this.props;
@@ -162,7 +182,8 @@ HOCGoalStep.propTypes = {
   showNote: func,
   createNote: func,
   navId: string,
-  loadModal: func,
+  contextMenuShow: func,
+  contextMenuHide: func,
   goal: map,
   me: map,
   users: map,
@@ -184,7 +205,8 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  loadModal: actions.modal.load,
+  contextMenuShow: actions.main.contextMenu.show,
+  contextMenuHide: actions.main.contextMenu.hide,
   addToCollection: actions.goals.addToCollection,
   showNote: actions.main.note.show,
   navPop: actions.navigation.pop,
