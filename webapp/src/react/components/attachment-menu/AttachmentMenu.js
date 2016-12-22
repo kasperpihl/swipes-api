@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'classes/utils';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/attachment-menu';
@@ -12,20 +12,28 @@ class AttachmentMenu extends Component {
       buttons: [
         { title: 'Link', svg: 'LinkIcon' },
         { title: 'Note', svg: 'ListIcon' },
+        { title: 'Find', svg: 'FindIcon' },
       ],
     };
     this.onMenuCached = setupCachedCallback(this.onMenu, this);
     this.onAdd = this.onAdd.bind(this);
-    this.callDelegate = setupDelegate(props.delegate);
   }
   onMenu(i) {
-    console.log(i);
+    const { callback } = this.props;
 
     if (i === 0) {
       this.setState({ addMenu: 'link' });
     }
     if (i === 1) {
       this.setState({ addMenu: 'note' });
+    }
+    if (i === 2) {
+      callback('find');
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.addMenu && this.state.addMenu) {
+      this._input.focus();
     }
   }
   onAdd() {
@@ -42,10 +50,23 @@ class AttachmentMenu extends Component {
     if (!addMenu) {
       return undefined;
     }
+    const placeholder = addMenu === 'link' ? 'Enter a URL' : 'Enter note title';
     return (
       <div className="attachment-menu__attach">
-        <input className="attachment-menu__input" placeholder="Enter a URL" key="input" type="text" ref={(c) => { this._input = c; }} />,
-        <Button primary key="butt" text="Add" onClick={this.onAdd} className="attachment-menu__button" />,
+        <input
+          key="input"
+          className="attachment-menu__input"
+          placeholder={placeholder}
+          type="text"
+          ref={(c) => { this._input = c; }}
+        />
+        <Button
+          primary
+          key="butt"
+          text="Add"
+          onClick={this.onAdd}
+          className="attachment-menu__button"
+        />
       </div>
     );
   }
@@ -73,8 +94,8 @@ class AttachmentMenu extends Component {
 
 export default AttachmentMenu;
 
-const { string } = PropTypes;
+const { func } = PropTypes;
 
 AttachmentMenu.propTypes = {
-
+  callback: func.isRequired,
 };
