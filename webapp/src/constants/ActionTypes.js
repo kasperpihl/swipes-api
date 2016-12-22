@@ -12,6 +12,9 @@ export const NOTE_HIDE = 'NOTE_HIDE';
 
 export const CONTEXT_MENU = 'CONTEXT_MENU';
 
+// Notification
+export const NOTIFICATION_ADD = 'NOTIFICATION_ADD';
+
 // Navigation
 export const NAVIGATION_SET = 'NAVIGATION_SET';
 export const NAVIGATION_PUSH = 'NAVIGATION_PUSH';
