@@ -28,6 +28,11 @@ class AttachmentMenu extends Component {
       this.setState({ addMenu: 'note' });
     }
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.addMenu && this.state.addMenu) {
+      this._input.focus();
+    }
+  }
   onAdd() {
     const { callback } = this.props;
     const { addMenu } = this.state;
@@ -44,8 +49,8 @@ class AttachmentMenu extends Component {
     }
     return (
       <div className="attachment-menu__attach">
-        <input className="attachment-menu__input" placeholder="Enter a URL" key="input" type="text" ref={(c) => { this._input = c; }} />,
-        <Button primary key="butt" text="Add" onClick={this.onAdd} className="attachment-menu__button" />,
+        <input className="attachment-menu__input" placeholder="Enter a URL" key="input" type="text" ref={(c) => { this._input = c; }} />
+        <Button primary key="butt" text="Add" onClick={this.onAdd} className="attachment-menu__button" />
       </div>
     );
   }
