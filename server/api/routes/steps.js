@@ -13,6 +13,8 @@ import {
   goalsGet,
   goalsNext,
   goalsUpdate,
+  goalsNextStepQueueMessage,
+  goalsStepGotActiveQueueMessage,
 } from './middlewares/goals';
 import {
   notifyAllInCompany,
@@ -21,6 +23,9 @@ import {
 import {
   usersGetSingleWithOrganizations,
 } from './middlewares/users';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -32,10 +37,17 @@ authed.post('/steps.submit',
   stepsSubmit,
   goalsNext,
   goalsUpdate,
-  usersGetSingleWithOrganizations,
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
-  (req, res, next) => res.status(200).json({ ok: true }),
+  goalsNextStepQueueMessage,
+  notificationsPushToQueue,
+  goalsStepGotActiveQueueMessage,
+  notificationsPushToQueue,
+  (req, res, next) => {
+    const {
+      goal,
+    } = res.locals;
+
+    res.status(200).json({ ok: true, goal });
+  },
 );
 
 authed.post('/steps.update',

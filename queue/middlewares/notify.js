@@ -20,6 +20,25 @@ const notifyAllInCompany = (req, res, next) => {
 
   return next();
 };
+const notifyAllInCurrentStep = (req, res, next) => {
+  const {
+    goal,
+  } = res.locals;
+
+  const currentStepIndex = goal.currentStepIndex;
+  const currentStep = goal.steps[currentStepIndex];
+  const usersIds = [];
+
+  currentStep.assignees.forEach((userId) => {
+    usersIds.push(userId);
+  });
+
+  const uniqueUsersToNotify = Array.from(new Set(usersIds));
+
+  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
+
+  return next();
+};
 const notifyCommonRethinkdb = (req, res, next) => {
   const {
     uniqueUsersToNotify,
@@ -96,4 +115,5 @@ export {
   notifyAllInCompany,
   notifyCommonRethinkdb,
   notifyInsertMultipleNotifications,
+  notifyAllInCurrentStep,
 };

@@ -45,8 +45,42 @@ const goalsDeletedNotificationData = (req, res, next) => {
   return next();
 };
 
+const goalsStepCompletedNotificationData = (req, res, next) => {
+  const {
+    goal,
+  } = res.locals;
+
+  const notificationData = {
+    title: goal.title,
+    currentStepIndex: goal.currentStepIndex,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = goal;
+
+  return next();
+};
+
+const goalsStepGotActiveNotificationData = (req, res, next) => {
+  const {
+    goal,
+  } = res.locals;
+
+  const notificationData = {
+    title: goal.title,
+    currentStepIndex: goal.currentStepIndex,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = goal;
+
+  return next();
+};
+
 export {
   goalsGetSingle,
   goalsNotificationData,
   goalsDeletedNotificationData,
+  goalsStepCompletedNotificationData,
+  goalsStepGotActiveNotificationData,
 };
