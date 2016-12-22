@@ -3,6 +3,8 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 
+import './styles/context-menu';
+
 
 class HOCContextMenu extends Component {
   constructor(props) {

@@ -28,8 +28,8 @@ class OrgDashboard extends Component {
   render() {
     return (
       <div className="org-dashboard">
-        <div className="notifications-header">Notifications</div>
-        <div className="notifications">
+        <div className="notifications__header">Notifications</div>
+        <div className="notifications__list">
           {this.renderNotifications()}
         </div>
       </div>

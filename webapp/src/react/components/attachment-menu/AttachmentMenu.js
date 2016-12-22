@@ -42,10 +42,12 @@ class AttachmentMenu extends Component {
     if (!addMenu) {
       return undefined;
     }
-    return [
-      <input key="input" type="text" ref={(c) => { this._input = c; }} />,
-      <Button key="butt" text="Add" onClick={this.onAdd} />,
-    ];
+    return (
+      <div className="attachment-menu__attach">
+        <input className="attachment-menu__input" placeholder="Enter a URL" key="input" type="text" ref={(c) => { this._input = c; }} />,
+        <Button primary key="butt" text="Add" onClick={this.onAdd} className="attachment-menu__button" />,
+      </div>
+    );
   }
   renderButtons() {
     const { addMenu, buttons } = this.state;
@@ -53,8 +55,8 @@ class AttachmentMenu extends Component {
       return undefined;
     }
     return buttons.map((b, i) => (
-      <div key={`button-${i}`} className="button" onClick={this.onMenuCached(i)}>
-        <Icon svg={b.svg} />
+      <div key={`button-${i}`} className="attachment-menu__item" onClick={this.onMenuCached(i)}>
+        <Icon svg={b.svg} className="attachment-menu__icon" />
         {b.title}
       </div>
     ));

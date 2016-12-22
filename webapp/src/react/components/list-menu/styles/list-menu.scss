@@ -2,7 +2,37 @@
 @import '~styles/_mixins.scss';
 
 .list-menu {
-  width: 200px;
-  height: 200px;
-  background: red;
+  @include size(200px, auto);
+  position: relative;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+
+  &__item {
+    @include size(100%, 60px);
+    line-height: 60px;
+    color: $deepBlue-60;
+    font-size: 12px;
+    padding: 0 18px;
+    position: relative;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+
+    &:not(:last-child) {
+      &:after {
+        content: '';
+        @include size(calc(100% - 24px), 1px);
+        position: absolute;
+        left: 12px; bottom: 0;
+        background-color: $deepBlue-10;
+      }
+    }
+
+    &:hover {
+      background-color: rgba($deepBlue-5, .5);
+      color: $blue-100;
+    }
+  }
 }

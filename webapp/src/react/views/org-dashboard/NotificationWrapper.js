@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Icon from 'Icon';
+import './styles/notification-wrapper';
 
 const NotificationWrapper = (props) => {
   const {
@@ -11,10 +12,16 @@ const NotificationWrapper = (props) => {
   } = props;
 
   return (
-    <div className="notification-wrapper" onClick={onClick}>
-      <Icon svg={svg} />
-      {message}
-      {timeago}
+    <div className="notification" onClick={onClick}>
+      <div className="notification__icon">
+        <Icon svg={svg} className="notification__svg" />
+      </div>
+      <div className="notification__message">
+        {message}
+      </div>
+      <div className="notification__timestamp">
+        {timeago}
+      </div>
     </div>
   );
 };

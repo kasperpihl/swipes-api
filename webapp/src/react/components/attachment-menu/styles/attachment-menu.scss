@@ -1,6 +1,67 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.attachment-menu{
-  background: red;
+.attachment-menu {
+  $b: &;
+  @include size(auto);
+  @include flex(flex);
+  position: relative;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+
+  &__item {
+    @include size(120px);
+    @include flex(center, center, column);
+    padding: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: $blue-100;
+    position: relative;
+
+    &:not(:last-child):after {
+      content: '';
+      @include size(1px, calc(100% - 24px));
+      position: absolute;
+      right: 0; top: 12px;
+      background-color: $deepBlue-10;
+    }
+
+    #{$b}__icon {
+      margin-bottom: 9px;
+    }
+
+    &:hover {
+      #{$b}__icon {
+        @include svg-color($blue-100);
+        margin-bottom: 18px;
+      }
+    }
+  }
+
+  &__attach {
+    @include size(auto, 90px);
+    @include flex();
+    position: relative;
+    padding-right: 15px;
+  }
+
+  &__input {
+    @include size(300px, calc(100% - 30px));
+    margin: 15px;
+    border: 1px solid $deepBlue-10;
+    padding: 0 21px;
+    font-size: 12px;
+    color: $deepBlue-90;
+
+    &::-webkit-input-placeholder {
+      color: $deepBlue-40;
+    }
+  }
+
+  &__icon {
+    @include size(24px);
+    @include svg-color($deepBlue-80);
+    transition: .2s;
+  }
 }

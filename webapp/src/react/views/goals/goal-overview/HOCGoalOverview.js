@@ -35,15 +35,27 @@ class HOCGoalOverview extends Component {
       options: {
         boundingRect: e.target.getBoundingClientRect(),
         alignX: 'right',
-        positionX: 10,
-        excludeX: false,
+        excludeX: true,
+        excludeY: true,
+        positionX: 3,
+        positionY: 3,
       },
       component: ListMenu,
       props: {
-        title: 'hello',
-        onClick: (res) => {
-          console.log('res', res);
-        },
+        items: [
+          {
+            title: 'hello',
+            onClick: (res) => {
+              console.log('hello');
+            },
+          },
+          {
+            title: 'more',
+            onClick: (res) => {
+              console.log('more');
+            },
+          },
+        ],
       },
     });
 

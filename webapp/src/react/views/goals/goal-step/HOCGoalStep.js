@@ -41,7 +41,9 @@ class HOCGoalStep extends Component {
       component: AttachmentMenu,
       options: {
         boundingRect: e.target.getBoundingClientRect(),
-        positionX: -10,
+        alignY: 'center',
+        positionX: 15,
+        excludeX: true,
       },
       props: {
         callback: (type, data) => {
