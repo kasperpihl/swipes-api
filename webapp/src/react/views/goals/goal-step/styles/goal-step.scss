@@ -10,7 +10,7 @@
   position: relative;
   overflow-y: auto;
   margin-top: 50px;
-  padding-top: 36px;
+  padding-top: 1px;
 
   &:before {
     content: '';
@@ -23,7 +23,7 @@
 
   &__content {
     @include size(100%, auto);
-    max-width: 600px;
+    max-width: 780px;
     position: relative;
   }
 
@@ -69,5 +69,10 @@
     font-weight: 500;
     line-height: 1.75;
     color: $deepBlue-30;
+  }
+
+  &__btn {
+    margin-top: 15px;
+    // display: inline-flex !important;
   }
 }

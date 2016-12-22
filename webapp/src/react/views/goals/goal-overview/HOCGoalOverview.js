@@ -4,17 +4,12 @@ import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'classes/utils';
+import ListMenu from 'components/list-menu/ListMenu';
 import GoalOverview from './GoalOverview';
-
 
 class HOCGoalOverview extends Component {
   static contextButtons() {
     return [{
-      component: 'Button',
-      props: {
-        icon: 'ListIcon',
-      },
-    }, {
       component: 'Button',
       props: {
         icon: 'ThreeDotsIcon',
@@ -31,17 +26,31 @@ class HOCGoalOverview extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onContextClick(i) {
+  onContextClick(i, e) {
     const {
-      toggleSideNote,
       goalId,
-      goalDelete,
+      archive,
+      contextMenu,
     } = this.props;
-    if (i === 0) {
-      toggleSideNote(goalId);
-    } else {
-      goalDelete(goalId);
-    }
+
+    contextMenu({
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'right',
+      },
+      component: ListMenu,
+      props: {
+        items: [
+          {
+            title: 'Archive Goal',
+            onClick: () => {
+              archive(goalId);
+              contextMenu(null);
+            },
+          },
+        ],
+      },
+    });
   }
   goalOverviewClickedStep(goalOverview, stepIndex) {
     const {
@@ -72,8 +81,8 @@ HOCGoalOverview.propTypes = {
   goalId: string,
   delegate: object,
   navPush: func,
-  goalDelete: func,
-  toggleSideNote: func,
+  archive: func,
+  contextMenu: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -84,6 +93,6 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
-  goalDelete: actions.goals.deleteGoal,
-  toggleSideNote: actions.main.toggleSideNote,
+  archive: actions.goals.archive,
+  contextMenu: actions.main.contextMenu,
 })(HOCGoalOverview);

@@ -3,7 +3,6 @@ import SwipesCard from 'components/swipes-card/SwipesCard';
 import SwipesCardList from 'components/swipes-card/SwipesCardList';
 import Loader from 'components/swipes-ui/Loader';
 import './styles/search-results.scss';
-// import { FindIcon } from '../icons'
 
 class SearchResults extends Component {
   renderResultList() {

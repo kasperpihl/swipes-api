@@ -16,9 +16,9 @@ class HOCOverlay extends Component {
   }
   clickedClose() {
     const {
-      overlayHide,
+      hide,
     } = this.props;
-    overlayHide();
+    hide(null);
   }
   renderOverlay() {
     const { overlay } = this.props;
@@ -85,10 +85,10 @@ function mapStateToProps(state) {
 const { func, object } = PropTypes;
 HOCOverlay.propTypes = {
   overlay: object,
-  overlayHide: func,
+  hide: func,
 };
 
 const ConnectedHOCOverlay = connect(mapStateToProps, {
-  overlayHide: actions.main.overlayHide,
+  hide: actions.main.overlay,
 })(HOCOverlay);
 export default ConnectedHOCOverlay;

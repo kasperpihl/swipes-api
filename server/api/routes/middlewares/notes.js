@@ -2,12 +2,40 @@ import r from 'rethinkdb';
 import {
   dbNotesInsert,
 } from './db_utils/notes';
+import {
+  generateSlackLikeId,
+} from '../../utils';
 
+const notesCreate = (req, res, next) => {
+  const {
+    user_id,
+    organization_id,
+  } = res.locals;
+  const note_id = generateSlackLikeId('N');
+  const note = {
+    user_id,
+    organization_id,
+    locked_by: null,
+    id: note_id,
+    ts: r.now(),
+    created_at: r.now(),
+    created_by: user_id,
+  };
+
+  dbNotesInsert({ note })
+  .then(() => {
+    res.locals.id = note_id;
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
+};
 const notesSave = (req, res, next) => {
   const {
     user_id,
     organization_id,
-    goal_id,
+    id,
     text,
     unlock,
   } = res.locals;
@@ -17,7 +45,7 @@ const notesSave = (req, res, next) => {
   const note = {
     user_id,
     organization_id,
-    goal_id,
+    id,
     text,
     locked_by,
     ts: r.now(),
@@ -33,5 +61,6 @@ const notesSave = (req, res, next) => {
 };
 
 export {
+  notesCreate,
   notesSave,
 };

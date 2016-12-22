@@ -1,19 +1,23 @@
 import {
   validatorMiddleware,
 } from './validation-wrapper';
-// import {
-//   isBooleanOptinal,
-// } from './common';
+import { optionalBool } from './common';
 
 const organization_id = {
   presence: true,
 };
-const goal_id = {
+const id = {
   presence: true,
 };
+
 const text = {
   presence: true,
 };
+const title = {
+
+};
+const unlock = optionalBool;
+
 // const unlock = Object.assign({}, isBooleanOptinal, {
 //   presence: {
 //     allowEmpty: true,
@@ -21,13 +25,24 @@ const text = {
 // });
 const notesSaveConstraints = Object.assign({}, {
   organization_id,
-  goal_id,
+  id,
   text,
+  title,
+  unlock,
   // T__TODO figure out how we can validate optional attributes
   // unlock,
 });
-const validateNotesSave = validatorMiddleware(notesSaveConstraints);
 
+const notesCreateConstraints = Object.assign({}, {
+  organization_id,
+  title,
+  // T__TODO figure out how we can validate optional attributes
+  // unlock,
+});
+
+const validateNotesSave = validatorMiddleware(notesSaveConstraints);
+const validateNotesCreate = validatorMiddleware(notesCreateConstraints);
 export {
   validateNotesSave,
+  validateNotesCreate,
 };

@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import Icon from 'Icon';
 // import SwipesBackgroundAnimation from './SwipesBackgroundAnimation';
-import FloatingInput from '../components/swipes-ui/FloatingInput';
-// import { SwipesLogo } from '../icons'
+import FloatingInput from 'components/swipes-ui/FloatingInput';
 
 
 export default class Signin extends Component {
@@ -31,7 +31,7 @@ export default class Signin extends Component {
         {/* <SwipesBackgroundAnimation /> */}
         <div className="sign__wrapper">
           <div className="sign__logo">
-            {/* <SwipesLogo /> */}
+            <Icon png="SwipesIcon" />
           </div>
           <div className="sign__headline">Welcome to your Swipes</div>
           <div className="sign__card">

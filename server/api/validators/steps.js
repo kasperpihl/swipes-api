@@ -16,7 +16,6 @@ const payload = {
 };
 const validateStepsSubmit = validatorMiddleware({
   goal_id,
-  data,
 });
 const validateStepsUpdate = validatorMiddleware({
   goal_id,

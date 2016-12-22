@@ -1,3 +1,5 @@
+@import '~styles/_vars.scss/';
+
 // if no parameters are passed, the size is inherited
 @mixin size($width:null, $height:null) {
 	@if $width {
@@ -31,7 +33,10 @@
 	}
 }
 
-
+@mixin svg-color($fill:$deepBlue-100, $stroke:$fill) {
+	fill: $fill;
+	stroke: $stroke;
+}
 
 @mixin border-radius($topLeft:50%, $topRight:50%, $botLeft:50%, $botRight:50%) {
   border-top-left-radius: $topLeft;

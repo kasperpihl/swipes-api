@@ -4,38 +4,63 @@
 .side-note {
   $b: &;
   @include size(100%);
-  @include flex(none);
+  // @include flex(none);
+  @include flex(center, flex-start);
   @include flex(column);
-  max-width: 600px;
+  // max-width: 600px;
   overflow-y: auto;
   padding-left: 0 15px;
   position: relative;
+  margin-left: 45px;
 
   &:after {
-    @include size(1px, calc(100% - 54px));
+    @include size(1px, 100%);
     content: '';
-    left: 0; top: 54px;
-    background-color: $blue-100;
-    // z-index: 9;
+    left: 0; top: 0;
+    background-color: $deepBlue-10;
     position: absolute;
   }
 
   &__header {
-    @include size(100%, 24px);
+    @include size(100%, 84px);
     @include flex(none);
     @include flex(center, flex-end);
-    border-bottom: 1px solid $deepBlue-10;
-    margin-top: 30px;
     padding-right: 15px;
+    padding-bottom: 60px;
     color: $deepBlue-80;
-    margin-bottom: 12px;
+    font-size: 12px;
+    color: $deepBlue-40;
+    // background-color: red;
+  }
+
+  &__back {
+    position: absolute;
+    left: 30px; top: 40px;
+  }
+
+  &__editing-dot {
+    @include size(6px);
+    border-radius: 100%;
+    background-color: $green-color;
+    margin-left: 12px;
+    transition: .1s;
+
+    &--active-editing {
+      background-color: $blue-100;
+    }
+
+    &--locked-editing {
+      background-color: $red-100;
+    }
+  }
+
+  &__note {
+    @include size(100%, auto);
+    max-width: 650px;
+    padding-top: 45px;
   }
 
   &--locked {
-
-    &:after {
-      background-color: $deepBlue-10;
-    }
 
     #{$b}__header {
       color: $red-100;

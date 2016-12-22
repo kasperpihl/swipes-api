@@ -58,7 +58,12 @@ export default class Socket {
     if (!type) {
       return;
     }
-
     this.store.dispatch({ type, payload });
+    if (payload && payload.notification_data) {
+      this.store.dispatch({
+        type: types.NOTIFICATION_ADD,
+        payload: payload.notification_data,
+      });
+    }
   }
 }

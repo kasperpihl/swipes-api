@@ -1,60 +1,28 @@
 ```
 {
   id: 'G1234',
+  collection: [
+    {
+      created_by: 'userId',
+      created_at: 'timestamp',
+    }
+  ],
   steps: [{
     title: 'Feedback',
     assignees: ['kasper@swipesapp.com', '@kristjan', '#product'],
     responses: 'single' || 'multiple',
     collaborative: true || false,
-    fields: [{
-      type: 'text',
-      title: 'Write email',
-      settings:{
-        editable: false
-      },
-      initialData:{
-
-      }
-    }, {
-      type: 'checklist',
-      title: 'Flight check',
-      settings: {
-        required: true
-      }
-    }],
     submission: {
       type: 'default' || 'decide' || 'custom'
     },
     submitted: new Date(), // Submitted means that data has been submitted
     completed: false || new Date(), // Completed means submitted and automations done and moved to the next stage
     errors: [],
-    automations: [{
-      type: 'action',
-      id: 'send-email',
-      params: {
-        subject,
-        body,
-        receiver
-      }
-    }, {
-      type: 'wait',
-      id: 'wait-response',
-      params: {
-        'threadId': ''
-      }
-    }],
     iterations: [{
       errorLog: [],
       automationLog: [],
-      previousStep: 'stepID'
-      responses: {
-        "user12": {
-          created_at: '12345',
-          updated_at: '23456',
-          message: 'Hello there',
-          data: []
-        }
-      }
+      previousStep: 'stepID',
+      handoffs: []
     }]
   }]
 }
@@ -67,49 +35,16 @@
   steps: [{
     title: 'Feedback',
     assignees: ['kasper@swipesapp.com', '@kristjan', '#product'],
-    responses: 'single' || 'multiple',
-    collaborative: true || false,
-    fields: [{
-      type: 'note',
-      title: 'Write email',
-      settings:{
-        editable: false
-      },
-      initialData:{
-
-      }
-    }, {
-      type: 'link',
-      settings: {
-        target: {
-          type: 'field',
-          id: 'field-id-2123'
-        }
-      }
-    }, {
-      type: 'checklist',
-      title: 'Flight check',
-      settings: {
-        required: true
-      }
-    }],
     submission: {
       type: 'default' || 'decide' || 'custom'
     },
     submitted: new Date(), // Submitted means that data has been submitted
-    completed: false || new Date(), // Completed means submitted and automations done and moved to the next stage
+    completed: false || new Date(),
     errors: [],
     iterations: [{
       errorLog: [],
       automationLog: [],
-      responses: {
-        "user12": {
-          created_at: '12345',
-          updated_at: '23456',
-          message: 'Hello there',
-          data: []
-        }
-      }
+      handoffs: [],
     }]
   }]
 }

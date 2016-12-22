@@ -1,14 +1,28 @@
+import { List } from 'immutable';
 import { request } from './api';
+import { note } from './main';
 import { load } from './modal';
 
-/* global currentGoal*/
+export const addToCollection = (goalId, content) => (dispatch, getState) => {
+  let collection = getState().getIn(['goals', goalId, 'collection']);
+  if (!collection) {
+    collection = List();
+  }
+  collection = collection.push(content).toJS();
+  dispatch(request('goals.update', {
+    goal_id: goalId,
+    goal: { collection, id: goalId },
+  })).then((res) => {
+    console.log('ressy', res);
+  });
+};
 
-const deleteGoal = goalId => (dispatch) => {
+export const archive = goalId => (dispatch) => {
   dispatch(load(
     {
-      title: 'Delete Goal?',
+      title: 'Archive Goal?',
       data: {
-        message: 'Are you sure you want to delete this goal?',
+        message: 'Are you sure you want to archive this goal?',
         buttons: ['Yes', 'No'],
       },
       type: 'warning',
@@ -21,23 +35,21 @@ const deleteGoal = goalId => (dispatch) => {
   ));
 };
 
-const submitStep = (goalId, stepId, data, previousSteps) => dispatch => new Promise((resolve) => {
-  let modalOpt = {
-    title: 'Personal hand-off',
-    data: {
-      textarea: {
-        placeholder: 'Personal message (optional)',
-      },
-      buttons: ['Submit'],
-    },
-  };
+export const clickedAttachment = att => (dispatch) => {
+  if (att.get('service') === 'swipes' && att.get('type') === 'note') {
+    dispatch(note.show(att.get('id')));
+  }
+  if (att.get('service') === 'swipes' && att.get('type') === 'url') {
+    window.open(att.get('id'));
+  }
+};
+
+export const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new Promise((resolve) => {
+  let modalOpt;
   if (previousSteps) {
     modalOpt = {
-      title: 'Choose reason',
+      title: 'Go back to step',
       data: {
-        textarea: {
-          placeholder: 'Personal hand-off, what should be changed? (required)',
-        },
         list: {
           selectable: true,
           items: previousSteps.map((step, i) => {
@@ -50,35 +62,33 @@ const submitStep = (goalId, stepId, data, previousSteps) => dispatch => new Prom
       },
     };
   }
-  dispatch(load(modalOpt, (res) => {
-    let message = null;
-    let stepBackId = null;
-    if (res) {
-      message = res.text;
-      if (previousSteps) {
-        const index = res.items.length ? res.items[0] : 0;
-        stepBackId = previousSteps.get(index).get('id');
-      }
-
-      dispatch(request('steps.submit', {
-        goal_id: goalId,
-        step_id: stepId,
-        step_back_id: stepBackId,
-        data,
-        message,
-      })).then((resMom, err) => {
-        resolve();
-        if (err) {
-            // return console.log('Error completing step', err);
-        }
-      });
-    } else {
+  const submit = (stepBackId) => {
+    dispatch(request('steps.submit', {
+      goal_id: goalId,
+      step_id: stepId,
+      step_back_id: stepBackId,
+      message,
+    })).then((resMom, err) => {
       resolve();
-    }
-  }));
+      if (err) {
+          // return console.log('Error completing step', err);
+      }
+    });
+  };
+  if (modalOpt) {
+    dispatch(load(modalOpt, (res) => {
+      if (res) {
+        let stepBackId;
+        if (previousSteps) {
+          const index = res.items.length ? res.items[0] : 0;
+          stepBackId = previousSteps.get(index).get('id');
+        }
+        submit(stepBackId);
+      } else {
+        resolve();
+      }
+    }));
+  } else {
+    submit();
+  }
 });
-
-export {
-  submitStep,
-  deleteGoal,
-};

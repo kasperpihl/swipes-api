@@ -1,123 +1,100 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { bindAll, setupDelegate } from 'classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
-import * as Fields from 'src/react/swipes-fields';
-import StepField from './StepField';
+import Button from 'Button';
+import StepSection from './StepSection';
+import StepHandoff from './StepHandoff';
+import StepContentRow from './StepContentRow';
 import StepSubmission from './StepSubmission';
 
 
 // styles
-import './styles/goal-step.scss';
+import './styles/goal-step';
 
 class GoalStep extends Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['onSubmit']);
-    this.bindCallbacks = {};
+    bindAll(this, ['onSubmit', 'onAdd', 'onOpen']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.onOpenCached = setupCachedCallback(this.onOpen, this);
+    // now use events as onClick: this.onOpenCached(i)
     this.callDelegate = setupDelegate(props.delegate);
   }
-  onSubmit(goBack) {
-    this.callDelegate('goalStepSubmit', goBack);
+  onSubmit(goBack, message) {
+    this.callDelegate('goalStepSubmit', goBack, message);
   }
+  onAdd(e) {
+    this.callDelegate('goalStepAdd', e);
+  }
+  onOpen(i, e) {
+    const {
+      collection,
+    } = this.props;
+    this.callDelegate('goalStepClicked', collection.get(i), e);
+  }
+
   renderHandoff() {
-/* const { users } = this.props;
-const { stepIndex } = this.state;
-const handOff = this.helper.getHandoffMessageForStepIndex(stepIndex);
-
-if (handOff) {
-  const firstMessage = handOff.findEntry(() => true);
-
-  if (!firstMessage) {
-    return undefined;
-  }
-
-  const user = users.get(firstMessage[0]);
-  const message = firstMessage[1];
-
-  if (user && message && message.length) {
+    const { handoff } = this.props;
+    if (!handoff) {
+      return undefined;
+    }
     return (
-      <StepField
-        icon={user.get('profile_pic') || 'PersonIcon'}
-        title={`Handoff from ${user.get('name')}`}
-      >
-        <div className="goal-step__hand-off-message">{message}</div>
-      </StepField>
+      <StepSection title="Handoff">
+        <StepHandoff data={handoff} />
+      </StepSection>
     );
   }
-}
+  renderCollection() {
+    const {
+      collection: col,
+    } = this.props;
+    const html = col && col.map((c, i) => (
+      <StepContentRow
+        key={i}
+        onClick={this.onOpenCached(i)}
+        icon={c.get('type') === 'note' ? 'ListIcon' : 'LinkIcon'}
+        title={c.get('title')}
+      />
+    ));
+    return (
+      <StepSection title="Content">
+        {html}
+        <Button icon="AddIcon" primary onClick={this.onAdd} className="goal-step__btn" />
+      </StepSection>
+    );
+  }
 
-return undefined;*/
-  }
-  renderFields() {
-    const { data, fields } = this.props;
-    return fields.map((field, i) => {
-      const Field = Fields[field.get('type')];
-      if (Field) {
-        if (!this.bindCallbacks[i]) {
-          this.bindCallbacks[i] = this.callDelegate.bind(null, 'delegateFromField', i);
-        }
-        return (
-          <StepField
-            key={field.get('id')}
-            title={field.get('title')}
-            icon={field.get('icon')}
-            iconColor={field.get('iconColor')}
-          >
-            <Field
-              delegate={this.bindCallbacks[i]}
-              data={data.get(i)}
-              settings={field.get('settings')}
-            />
-          </StepField>
-        );
-      }
 
-      return undefined;
-    });
-  }
-  renderPreAutomations() {
-    // Here will come the pre automations
-    // > Send email
-    // > Save to Evernote
-  }
   renderSubmission() {
     const { options, step, isSubmitting } = this.props;
     if (options.showSubmission) {
       return (
-        <StepSubmission
-          onSubmit={this.onSubmit}
-          submission={step.get('submission')}
-          disabled={!!isSubmitting}
-        />
+        <StepSection title="Deliver">
+          <StepSubmission
+            onSubmit={this.onSubmit}
+            submission={step.get('submission')}
+            disabled={!!isSubmitting}
+          />
+        </StepSection>
       );
     }
 
     return undefined;
   }
-  renderPostAutomations() {
-    // Here will come the post automations
-    // > Send email
-    // > Save to Evernote
-  }
+
   render() {
     return (
       <div className="goal-step">
 
         <div className="goal-step__content">
-          {this.renderFields()}
-        </div>
-
-        <div className="goal-step__submission">
-          {this.renderPreAutomations()}
+          {this.renderHandoff()}
+          {this.renderCollection()}
           {this.renderSubmission()}
-          {this.renderPostAutomations()}
         </div>
-
-
       </div>
     );
   }
@@ -129,9 +106,9 @@ const { object, bool } = PropTypes;
 
 GoalStep.propTypes = {
   step: map.isRequired,
+  handoff: object,
+  collection: list,
   isSubmitting: bool,
-  fields: list.isRequired,
-  data: list.isRequired,
   options: object.isRequired,
   delegate: object.isRequired,
 };

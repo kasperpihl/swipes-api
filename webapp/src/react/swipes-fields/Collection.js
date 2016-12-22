@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-// import SwipesCardList from '../swipes-card/SwipesCardList';
+// import SwipesCardList from 'components/swipes-card/SwipesCardList';
 
 import './styles/collection.scss';
 

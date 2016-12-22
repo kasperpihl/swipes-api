@@ -42,21 +42,26 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Overlays
     // ======================================================
-    case types.OVERLAY_SHOW: {
-      return state.set('overlay', payload.overlay);
+    case types.OVERLAY: {
+      return state.set('overlay', payload);
     }
-    case types.OVERLAY_HIDE: {
-      return state.set('overlay', null);
+
+    // ======================================================
+    // Context Menu
+    // ======================================================
+    case types.CONTEXT_MENU: {
+      return state.set('contextMenu', payload);
     }
 
     // ======================================================
     // Note
     // ======================================================
-    case types.TOGGLE_SIDE_NOTE: {
-      const newVal = state.get('sideNoteId') ? null : payload.sideNoteId;
+    case types.NOTE_SHOW: {
+      const { id } = payload;
+      const newVal = (state.get('sideNoteId') === id) ? null : id;
       return state.set('sideNoteId', newVal);
     }
-    case types.CLOSE_SIDE_NOTE: {
+    case types.NOTE_HIDE: {
       return state.set('sideNoteId', null);
     }
 

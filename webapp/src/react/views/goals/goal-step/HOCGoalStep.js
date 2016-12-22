@@ -2,121 +2,92 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
-import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate } from 'classes/utils';
-import * as Fields from 'src/react/swipes-fields';
 import GoalStep from './GoalStep';
+
 
 class HOCGoalStep extends Component {
   constructor(props) {
     super(props);
-    const helper = this.getHelper();
-    this.state = {
-      data: helper.getInitialDataForStepIndex(props.stepIndex),
-    };
-    this.cacheFormInput = this.cacheFormInput.bind(this);
+    this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
-  }
-  componentDidMount() {
-    this.callDelegate('viewDidLoad', this);
-    window.addEventListener('beforeunload', this.cacheFormInput);
-  }
-  componentWillUnmount() {
-    this.cacheFormInput();
-    window.removeEventListener('beforeunload', this.cacheFormInput);
   }
   getHelper() {
     const { goal, me, cachedData } = this.props;
     return new GoalsUtil(goal, me.get('id'), cachedData);
   }
-  cacheFormInput() {
-    const { stepIndex, cacheSave, goal } = this.props;
-    const helper = this.getHelper();
-    const data = {
-      stepIndex: helper.currentStepIndex(),
-      runCounter: helper.runCounter(),
-    };
-    const amIAssigned = helper.amIAssigned(stepIndex);
-    const isCurrent = helper.isCurrentStep(stepIndex);
-    if (amIAssigned && isCurrent) {
-      data.data = this.generateRawObj(helper);
-    }
-    cacheSave(goal.get('id'), fromJS(data));
-  }
 
-  generateRawObj(includeLinks) {
-    const { data } = this.state;
-    const { step } = this.props;
-    const helper = this.getHelper();
-    return step.get('fields').map((field, i) => {
-      let tField = field;
-      if (field.get('type') === 'link') {
-        if (!includeLinks) {
-          return null;
-        }
-        tField = helper.getTargetField(field);
-      }
-      const Field = Fields[tField.get('type')];
-      let newData = data.get(i);
-      if (Field && typeof Field.saveData === 'function') {
-        newData = Field.saveData(newData);
-      }
-      return newData;
-    }).toJS();
+  goalStepClicked(att) {
+    const { clickedAttachment } = this.props;
+    clickedAttachment(att);
   }
-  goalStepSubmit(i) {
+  goalStepAdd(e) {
+    const {
+      contextMenu,
+      addToCollection,
+      createNote,
+      navId,
+      overlay,
+      goal,
+    } = this.props;
+
+    contextMenu({
+      component: AttachmentMenu,
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignY: 'center',
+        positionX: -15,
+      },
+      props: {
+        callback: (type, data) => {
+          if (type === 'note' && data && data.length) {
+            createNote(navId, data).then((noteRes) => {
+              if (noteRes && noteRes.ok) {
+                addToCollection(goal.get('id'), {
+                  type: 'note',
+                  service: 'swipes',
+                  id: noteRes.id,
+                  title: data,
+                });
+              }
+            });
+          }
+          if (type === 'link' && data && data.length) {
+            addToCollection(goal.get('id'), {
+              type: 'url',
+              service: 'swipes',
+              id: data,
+              title: data,
+            });
+          }
+          if (type === 'find') {
+            overlay({
+              component: 'Find',
+            });
+          }
+          contextMenu(null);
+        },
+      },
+    });
+  }
+  goalStepSubmit(i, message) {
     const { goal, step, submit } = this.props;
     let previousSteps;
 
     if (i) {
       previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
     }
-    const data = this.generateRawObj();
+
     this.setState({ isSubmitting: true });
-    submit(goal.get('id'), step.get('id'), data, previousSteps).then(() => {
+    submit(goal.get('id'), step.get('id'), message, previousSteps).then(() => {
       this.setState({ isSubmitting: false });
     });
   }
-  fullscreenField(fieldIndex) {
-    const {
-      overlayShow,
-      step,
-      stepIndex,
-    } = this.props;
 
-    const helper = this.getHelper();
-
-    const field = helper.getFieldByIndex(step, fieldIndex);
-    const fieldAndSettings = helper.getFieldAndSettingsFromField(
-      field,
-      stepIndex,
-      { fullscreen: true },
-    );
-    this.isFullscreen = true;
-    const data = fromJS(this.generateRawObj(true)[fieldIndex]);
-    overlayShow({
-      component: 'Field',
-      props: {
-        field: fieldAndSettings[0],
-        settings: fieldAndSettings[1],
-        data,
-        delegate: this.delegateFromField.bind(this, fieldIndex),
-      },
-    });
-  }
-  delegateFromField(index, name) {
-    if (name === 'change') {
-      let { data } = this.state;
-      data = data.set(index, arguments[2]);
-      this.setState({ data });
-    }
-    if (name === 'fullscreen') {
-      this.fullscreenField(index);
-    }
-  }
   generateOptions() {
     const {
       stepIndex: i,
@@ -128,62 +99,76 @@ class HOCGoalStep extends Component {
       showSubmission,
     };
   }
-  generateFields() {
+  generateHandoff() {
     const {
-      step,
+      users,
       stepIndex,
     } = this.props;
     const helper = this.getHelper();
-    return step.get('fields').map((field) => {
-      // Get icon/iconColor.
-      const iconAndColor = helper.getIconWithColorForField(field, stepIndex);
+    const handOff = helper.getHandoffMessageForStepIndex(stepIndex);
+    let handoffObj;
+    if (handOff) {
+      const firstMessage = handOff.findEntry(() => true);
 
-      // Field-swap for links. Check if field is a link and find the link
-      const fAndS = helper.getFieldAndSettingsFromField(field, stepIndex);
-      field = fAndS[0];
+      if (!firstMessage) {
+        return undefined;
+      }
 
-      return field.merge({
-        icon: iconAndColor[0],
-        iconColor: iconAndColor[1],
-        settings: fAndS[1],
-      });
-    });
+      const user = users.get(firstMessage[0]);
+      const message = firstMessage[1];
+
+      if (user && message && message.length) {
+        handoffObj = {
+          message,
+          name: user.get('name'),
+          src: user.get('profile_pic'),
+        };
+        if (!handoffObj.src) {
+          handoffObj.svg = 'PersonIcon';
+        }
+      }
+    }
+
+    return handoffObj;
   }
-
   render() {
     const {
       step,
       stepIndex,
+      goal,
     } = this.props;
     const {
-      data,
       isSubmitting,
     } = this.state;
 
     return (
       <GoalStep
         options={this.generateOptions()}
+        collection={goal.get('collection')}
         stepIndex={stepIndex}
         step={step}
-        fields={this.generateFields()}
+        handoff={this.generateHandoff()}
         isSubmitting={isSubmitting}
-        data={data}
         delegate={this}
       />
     );
   }
 }
 
-const { number, func, object } = PropTypes;
+const { number, func, object, string } = PropTypes;
 HOCGoalStep.propTypes = {
   stepIndex: number,
   step: map,
   delegate: object,
-  cacheSave: func,
-  overlayShow: func,
   submit: func,
+  addToCollection: func,
+  clickedAttachment: func,
+  createNote: func,
+  navId: string,
+  contextMenu: func,
   goal: map,
   me: map,
+  users: map,
   cachedData: map,
   // removeThis: PropTypes.string.isRequired
 };
@@ -192,7 +177,9 @@ HOCGoalStep.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { goalId, stepIndex } = ownProps;
   return {
+    navId: state.getIn(['navigation', 'id']),
     goal: state.getIn(['goals', goalId]),
+    users: state.get('users'),
     step: state.getIn(['goals', goalId, 'steps', stepIndex]),
     cachedData: state.getIn(['main', 'cache', goalId]),
     me: state.get('me'),
@@ -200,8 +187,12 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  contextMenu: actions.main.contextMenu,
+  clickedAttachment: actions.goals.clickedAttachment,
+  overlay: actions.main.overlay,
+  addToCollection: actions.goals.addToCollection,
+  showNote: actions.main.note.show,
   navPop: actions.navigation.pop,
-  cacheSave: actions.main.cacheSave,
-  overlayShow: actions.main.overlayShow,
+  createNote: actions.main.note.create,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);

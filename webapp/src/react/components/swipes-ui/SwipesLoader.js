@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import gradient from '../topbar/gradient';
+import gradient from 'src/react/app/topbar/gradient';
+import Icon from 'Icon';
 import './styles/swipes-loader.scss';
-// import { LogoLoader } from '../icons'
+
 const DEFAULT_SIZE = 60;
 
 class SwipesLoader extends Component {
@@ -9,9 +10,7 @@ class SwipesLoader extends Component {
     super(props);
     this.state = {};
   }
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+
   componentDidMount() {
     const startTime = new Date().getTime();
     let elapsedTime = 0;
@@ -21,10 +20,14 @@ class SwipesLoader extends Component {
       this.setState({ gradientPos: percent });
     }, 15);
   }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   renderText(text, textStyle) {
-    if (text && text.length) {
-      return <div className="sw-loader-wrap__text" style={{ textStyle }}>{text}</div>;
+    if (!text || !text.length) {
+      return undefined;
     }
+    return <div className="sw-loader-wrap__text" style={{ textStyle }}>{text}</div>;
   }
   render() {
     const styles = gradient.getGradientStyles();
@@ -45,7 +48,7 @@ class SwipesLoader extends Component {
     }
     return (
       <div className={className} style={style}>
-        {/* <LogoLoader className="loader-clippath"/> */}
+        <Icon svg="LogoLoader" className="loader-clippath" />
         <div className="sw-loader" style={styles} />
         {this.renderText(text, textStyle)}
       </div>

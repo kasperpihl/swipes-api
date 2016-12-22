@@ -15,8 +15,9 @@ class Textarea extends Component {
   }
   onChange(e) {
     const { data, delegate } = this.props;
-
-    delegate('change', data.set('text', e.target.value));
+    if (delegate) {
+      delegate('change', data.set('text', e.target.value));
+    }
   }
   renderTextarea() {
     const { data, settings } = this.props;

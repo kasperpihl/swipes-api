@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import NoteEditor from 'components/note-editor/NoteEditor';
+import Button from 'Button';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
   convertFromRaw,
@@ -28,11 +29,11 @@ class HOCSideNote extends Component {
     bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur', 'closeSideNote']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
-  closeSideNote() {
+  closeSideNote(e) {
     const {
-      closeSideNote,
+      hideNote,
     } = this.props;
-    closeSideNote();
+    hideNote();
   }
   componentWillReceiveProps(nextProps) {
     const { me, note: oldNote } = this.props;
@@ -50,7 +51,11 @@ class HOCSideNote extends Component {
       } else {
         this.unlockUI();
       }
-      if (!oldNote || newNote.get('user_id') !== me.get('id')) {
+      if (
+        !oldNote ||
+        newNote.get('id') !== oldNote.get('id') ||
+        newNote.get('user_id') !== me.get('id')
+      ) {
         console.log('new state');
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
@@ -149,47 +154,57 @@ class HOCSideNote extends Component {
     const { note, users, me } = this.props;
     const { locked, editing } = this.state;
 
+    let dotClass = 'side-note__editing-dot';
     let message = '';
-    let color = 'gray';
     const lockedBy = note && note.get('locked_by');
+
     if (editing) {
-      color = 'blue';
       message = 'You are writing';
+      dotClass += ' side-note__editing-dot--active-editing';
     }
+
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
+
+      dotClass += ' side-note__editing-dot--locked-editing';
       message = `${person.get('name').split(' ')[0]} is writing`;
-      color = 'red';
     }
 
     return (
-      <div onClick={this.closeSideNote} className="side-note__header" style={{ backgroundColor: color }}>
+      <div className="side-note__header">
+        <Button icon="CloseIcon" className="side-note__back" onClick={this.closeSideNote} />
         {message}
+        <div className={dotClass} />
       </div>
     );
   }
   render() {
     const { sideNoteId } = this.props;
     const { editorState, locked, editing } = this.state;
+
     if (!sideNoteId || !editorState) {
       return null;
     }
-    const someoneElseEditing = (locked && !editing);
 
+    const someoneElseEditing = (locked && !editing);
     let className = 'side-note';
 
     if (someoneElseEditing) {
       className += ' side-note--locked';
     }
+
     return (
       <div className={className}>
         {this.renderHeader()}
-        <NoteEditor
-          editorState={editorState}
-          onChange={this.onChange}
-          readOnly={someoneElseEditing}
-          onBlur={this.onBlur}
-        />
+
+        <div className="side-note__note">
+          <NoteEditor
+            editorState={editorState}
+            onChange={this.onChange}
+            readOnly={someoneElseEditing}
+            onBlur={this.onBlur}
+          />
+        </div>
       </div>
     );
   }
@@ -199,11 +214,11 @@ const { string, func } = PropTypes;
 HOCSideNote.propTypes = {
   sideNoteId: string,
   note: map,
-  me: map,
   navId: string,
+  me: map,
   users: map,
   saveNote: func,
-  closeSideNote: func,
+  hideNote: func,
 };
 
 function mapStateToProps(state) {
@@ -219,6 +234,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  saveNote: actions.main.saveNote,
-  closeSideNote: actions.main.closeSideNote,
+  saveNote: actions.main.note.save,
+  hideNote: actions.main.note.hide,
 })(HOCSideNote);
