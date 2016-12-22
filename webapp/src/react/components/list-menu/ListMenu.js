@@ -4,13 +4,16 @@ import './styles/list-menu';
 const ListMenu = (props) => {
   const {
     items,
-    onClick,
   } = props;
 
-  const menuItems = items.map((item, i) => <div className="list-menu__item" onClick={item.onClick} key={`list-item-${i}`}>{item.title}</div>);
+  const menuItems = items.map((item, i) => (
+    <div className="list-menu__item" onClick={item.onClick} key={`list-item-${i}`}>
+      {item.title}
+    </div>
+  ));
 
   return (
-    <div className="list-menu" onClick={onClick}>
+    <div className="list-menu">
       {menuItems}
     </div>
   );
@@ -18,9 +21,8 @@ const ListMenu = (props) => {
 
 export default ListMenu;
 
-const { array, func } = PropTypes;
+const { array } = PropTypes;
 
 ListMenu.propTypes = {
   items: array,
-  onClick: func,
 };

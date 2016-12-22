@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate } from 'classes/utils';
 import GoalStep from './GoalStep';
-import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
+
 
 class HOCGoalStep extends Component {
   constructor(props) {
@@ -21,23 +22,20 @@ class HOCGoalStep extends Component {
   }
 
   goalStepClicked(att) {
-    const { showNote } = this.props;
-
-    if (att.get('service') === 'swipes' && att.get('type') === 'note') {
-      showNote(att.get('id'));
-    }
+    const { clickedAttachment } = this.props;
+    clickedAttachment(att);
   }
   goalStepAdd(e) {
     const {
-      contextMenuShow,
-      contextMenuHide,
+      contextMenu,
       addToCollection,
       createNote,
       navId,
+      overlay,
       goal,
     } = this.props;
-    console.log(e.target.getBoundingClientRect());
-    contextMenuShow({
+
+    contextMenu({
       component: AttachmentMenu,
       options: {
         boundingRect: e.target.getBoundingClientRect(),
@@ -46,7 +44,7 @@ class HOCGoalStep extends Component {
       },
       props: {
         callback: (type, data) => {
-          if (type === 'note') {
+          if (type === 'note' && data && data.length) {
             createNote(navId, data).then((noteRes) => {
               if (noteRes && noteRes.ok) {
                 addToCollection(goal.get('id'), {
@@ -57,7 +55,8 @@ class HOCGoalStep extends Component {
                 });
               }
             });
-          } else if (type === 'link') {
+          }
+          if (type === 'link' && data && data.length) {
             addToCollection(goal.get('id'), {
               type: 'url',
               service: 'swipes',
@@ -65,32 +64,15 @@ class HOCGoalStep extends Component {
               title: data,
             });
           }
-          contextMenuHide();
+          if (type === 'find') {
+            overlay({
+              component: 'Find',
+            });
+          }
+          contextMenu(null);
         },
       },
     });
-    /* loadModal(modalOpt, (result) => {
-      if (result) {
-        switch (result.item) {
-          case 1: {
-            createNote(navId).then((noteRes) => {
-              if (noteRes && noteRes.ok) {
-                addToCollection(goal.get('id'), {
-                  type: 'note',
-                  service: 'swipes',
-                  id: noteRes.id,
-                });
-              }
-            });
-            break;
-          }
-          default:
-            break;
-        }
-
-        // addToCollection(goal.get('id'), 'test string');
-      }
-    });*/
   }
   goalStepSubmit(i, message) {
     const { goal, step, submit } = this.props;
@@ -180,11 +162,10 @@ HOCGoalStep.propTypes = {
   delegate: object,
   submit: func,
   addToCollection: func,
-  showNote: func,
+  clickedAttachment: func,
   createNote: func,
   navId: string,
-  contextMenuShow: func,
-  contextMenuHide: func,
+  contextMenu: func,
   goal: map,
   me: map,
   users: map,
@@ -206,8 +187,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  contextMenuShow: actions.main.contextMenu.show,
-  contextMenuHide: actions.main.contextMenu.hide,
+  contextMenu: actions.main.contextMenu,
+  clickedAttachment: actions.goals.clickedAttachment,
+  overlay: actions.main.overlay,
   addToCollection: actions.goals.addToCollection,
   showNote: actions.main.note.show,
   navPop: actions.navigation.pop,

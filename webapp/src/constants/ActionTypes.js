@@ -5,14 +5,12 @@ export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
 
-export const OVERLAY_SHOW = 'OVERLAY_SHOW';
-export const OVERLAY_HIDE = 'OVERLAY_HIDE';
+export const OVERLAY = 'OVERLAY';
 
 export const NOTE_SHOW = 'NOTE_SHOW';
 export const NOTE_HIDE = 'NOTE_HIDE';
 
-export const CONTEXT_MENU_SHOW = 'CONTEXT_MENU_SHOW';
-export const CONTEXT_MENU_HIDE = 'CONTEXT_MENU_HIDE';
+export const CONTEXT_MENU = 'CONTEXT_MENU';
 
 // Navigation
 export const NAVIGATION_SET = 'NAVIGATION_SET';

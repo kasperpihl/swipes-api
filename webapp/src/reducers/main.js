@@ -42,21 +42,15 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Overlays
     // ======================================================
-    case types.OVERLAY_SHOW: {
+    case types.OVERLAY: {
       return state.set('overlay', payload);
-    }
-    case types.OVERLAY_HIDE: {
-      return state.set('overlay', null);
     }
 
     // ======================================================
     // Context Menu
     // ======================================================
-    case types.CONTEXT_MENU_SHOW: {
+    case types.CONTEXT_MENU: {
       return state.set('contextMenu', payload);
-    }
-    case types.CONTEXT_MENU_HIDE: {
-      return state.set('contextMenu', null);
     }
 
     // ======================================================

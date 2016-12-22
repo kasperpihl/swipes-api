@@ -15,18 +15,12 @@ export const cache = {
 // ======================================================
 // Overlays
 // ======================================================
-export const overlay = {
-  show: payload => ({ type: types.OVERLAY_SHOW, payload }),
-  hide: () => ({ type: types.OVERLAY_HIDE }),
-};
+export const overlay = payload => ({ type: types.OVERLAY, payload });
 
 // ======================================================
 // Context Menu
 // ======================================================
-export const contextMenu = {
-  show: payload => ({ type: types.CONTEXT_MENU_SHOW, payload }),
-  hide: () => ({ type: types.CONTEXT_MENU_HIDE }),
-};
+export const contextMenu = payload => ({ type: types.CONTEXT_MENU, payload });
 
 // ======================================================
 // Account related
