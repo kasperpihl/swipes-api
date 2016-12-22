@@ -35,13 +35,13 @@ export const logout = () => (dp) => {
 // Notes
 // ======================================================
 export const note = {
-  create: (organizationId, title) => dp => dp(request('notes.create', {
-    organization_id: organizationId,
+  create: (oId, title) => dp => dp(request('notes.create', {
+    organization_id: oId,
     title,
   })),
-  save: (organizationId, noteId, text, unlock) => dp => dp(request('notes.save', {
-    organization_id: organizationId,
-    id: noteId,
+  save: (oId, id, text, unlock) => dp => dp(request('notes.save', {
+    organization_id: oId,
+    id,
     text,
     unlock,
   })),

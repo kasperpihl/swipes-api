@@ -10,10 +10,13 @@ const NotificationWrapper = (props) => {
     onClick,
     timeago,
   } = props;
-
+  const style = {};
+  if (iconBgColor) {
+    style.backgroundColor = iconBgColor;
+  }
   return (
     <div className="notification" onClick={onClick}>
-      <div className="notification__icon">
+      <div className="notification__icon" style={style}>
         <Icon svg={svg} className="notification__svg" />
       </div>
       <div className="notification__message">
