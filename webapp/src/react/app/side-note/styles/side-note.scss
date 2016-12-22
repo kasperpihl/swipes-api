@@ -57,6 +57,7 @@
   &__note {
     @include size(100%, auto);
     max-width: 650px;
+    padding-top: 45px;
   }
 
   &--locked {
