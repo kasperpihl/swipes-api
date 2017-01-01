@@ -35,9 +35,9 @@ class HOCViewController extends Component {
   }
   clickedFind() {
     const {
-      overlayShow,
+      overlay,
     } = this.props;
-    overlayShow({
+    overlay({
       component: 'Find',
     });
   }
@@ -156,7 +156,7 @@ function mapStateToProps(state) {
 const { func } = PropTypes;
 HOCViewController.propTypes = {
   history: list,
-  overlayShow: func,
+  overlay: func,
   currentView: map,
   View: func,
   popTo: func,
@@ -166,6 +166,6 @@ HOCViewController.propTypes = {
 const ConnectedHOCViewController = connect(mapStateToProps, {
   popTo: actions.navigation.popTo,
   pop: actions.navigation.pop,
-  overlayShow: actions.main.overlay.show,
+  overlay: actions.main.overlay,
 })(HOCViewController);
 export default ConnectedHOCViewController;

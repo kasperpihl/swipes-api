@@ -15,18 +15,12 @@ export const cache = {
 // ======================================================
 // Overlays
 // ======================================================
-export const overlay = {
-  show: payload => ({ type: types.OVERLAY_SHOW, payload }),
-  hide: () => ({ type: types.OVERLAY_HIDE }),
-};
+export const overlay = payload => ({ type: types.OVERLAY, payload });
 
 // ======================================================
 // Context Menu
 // ======================================================
-export const contextMenu = {
-  show: payload => ({ type: types.CONTEXT_MENU_SHOW, payload }),
-  hide: () => ({ type: types.CONTEXT_MENU_HIDE }),
-};
+export const contextMenu = payload => ({ type: types.CONTEXT_MENU, payload });
 
 // ======================================================
 // Account related
@@ -41,13 +35,13 @@ export const logout = () => (dp) => {
 // Notes
 // ======================================================
 export const note = {
-  create: (organizationId, title) => dp => dp(request('notes.create', {
-    organization_id: organizationId,
+  create: (oId, title) => dp => dp(request('notes.create', {
+    organization_id: oId,
     title,
   })),
-  save: (organizationId, noteId, text, unlock) => dp => dp(request('notes.save', {
-    organization_id: organizationId,
-    id: noteId,
+  save: (oId, id, text, unlock) => dp => dp(request('notes.save', {
+    organization_id: oId,
+    id,
     text,
     unlock,
   })),

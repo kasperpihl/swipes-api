@@ -1,5 +1,6 @@
 import * as types from 'constants';
 import { fromJS } from 'immutable';
+
 const initialState = fromJS([]);
 
 export default function notificationsReducer(state = initialState, action) {
@@ -11,7 +12,7 @@ export default function notificationsReducer(state = initialState, action) {
       return fromJS(notifications);
     }
     case types.NOTIFICATION_ADD: {
-      return state.push(payload);
+      return state.insert(0, fromJS({ id: payload.id, data: payload }));
     }
     case types.LOGOUT: {
       return initialState;

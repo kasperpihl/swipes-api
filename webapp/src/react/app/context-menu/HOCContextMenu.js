@@ -26,7 +26,7 @@ class HOCContextMenu extends Component {
       contextMenu,
     } = this.props;
     if (contextMenu) {
-      hide();
+      hide(null);
     }
   }
   clickedBackground(e) {
@@ -123,7 +123,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  hide: actions.main.contextMenu.hide,
+  hide: actions.main.contextMenu,
 })(HOCContextMenu);
 
 const { func, object } = PropTypes;

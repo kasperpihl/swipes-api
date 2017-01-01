@@ -2,8 +2,6 @@ import req from 'request';
 import mapApiMethod from './api_map';
 
 const request = ({ auth_data, method, params = {} }, callback) => {
-  console.log(auth_data);
-  console.log('JIDFIDIJQDJIQWDJIQWIJ')
   const url =
     auth_data.access_token ?
     'https://api.dropboxapi.com/2' :

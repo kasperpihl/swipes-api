@@ -28,17 +28,10 @@ const notificationsMarkAsSeen = (req, res, next) => {
 
 const notificationsPushToQueue = (req, res, next) => {
   const {
-    user_id,
-    goal,
-    eventType,
+    queueMessage,
   } = res.locals;
 
-  const goal_id = goal.id;
-  const message = {
-    user_id,
-    goal_id,
-    event_type: eventType,
-  };
+  const message = queueMessage;
 
   if (env === 'staging') {
     AWS.config.update({ accessKeyId, secretAccessKey });

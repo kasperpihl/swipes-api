@@ -187,6 +187,76 @@ const goalsUpdateData = (req, res, next) => {
     });
 };
 
+const goalsCreateQueueMessage = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+    eventType,
+  } = res.locals;
+
+  const goal_id = goal.id;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id,
+    event_type: eventType,
+  };
+
+  return next();
+};
+
+const goalsDeleteQueueMessage = (req, res, next) => {
+  const {
+    user_id,
+    goal_id,
+    eventType,
+  } = res.locals;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id,
+    event_type: eventType,
+  };
+
+  return next();
+};
+
+const goalsNextStepQueueMessage = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+  } = res.locals;
+
+  const goal_id = goal.id;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id,
+    event_type: 'step_completed',
+  };
+
+  return next();
+};
+
+const goalsStepGotActiveQueueMessage = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+  } = res.locals;
+
+  const goal_id = goal.id;
+  const current_step_id = goal.currentStepIndex;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id,
+    current_step_id,
+    event_type: 'step_got_active',
+  };
+
+  return next();
+};
+
 export {
   goalsCreate,
   goalsNext,
@@ -195,4 +265,8 @@ export {
   goalsGet,
   goalsUpdate,
   goalsUpdateData,
+  goalsCreateQueueMessage,
+  goalsDeleteQueueMessage,
+  goalsNextStepQueueMessage,
+  goalsStepGotActiveQueueMessage,
 };

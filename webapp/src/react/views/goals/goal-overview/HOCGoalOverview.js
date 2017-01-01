@@ -4,9 +4,8 @@ import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'classes/utils';
-import GoalOverview from './GoalOverview';
-
 import ListMenu from 'components/list-menu/ListMenu';
+import GoalOverview from './GoalOverview';
 
 class HOCGoalOverview extends Component {
   static contextButtons() {
@@ -29,44 +28,29 @@ class HOCGoalOverview extends Component {
   }
   onContextClick(i, e) {
     const {
-      contextMenuShow,
+      goalId,
+      archive,
+      contextMenu,
     } = this.props;
-    contextMenuShow({
+
+    contextMenu({
       options: {
         boundingRect: e.target.getBoundingClientRect(),
         alignX: 'right',
-        excludeX: true,
-        excludeY: true,
-        positionX: 3,
-        positionY: 3,
       },
       component: ListMenu,
       props: {
         items: [
           {
-            title: 'hello',
-            onClick: (res) => {
-              console.log('hello');
-            },
-          },
-          {
-            title: 'more',
-            onClick: (res) => {
-              console.log('more');
+            title: 'Archive Goal',
+            onClick: () => {
+              archive(goalId);
+              contextMenu(null);
             },
           },
         ],
       },
     });
-
-    return;
-    const {
-      goalId,
-      goalDelete,
-    } = this.props;
-    if (i === 0) {
-      goalDelete(goalId);
-    }
   }
   goalOverviewClickedStep(goalOverview, stepIndex) {
     const {
@@ -97,7 +81,8 @@ HOCGoalOverview.propTypes = {
   goalId: string,
   delegate: object,
   navPush: func,
-  goalDelete: func,
+  archive: func,
+  contextMenu: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -108,6 +93,6 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   navPush: actions.navigation.push,
-  goalDelete: actions.goals.deleteGoal,
-  contextMenuShow: actions.main.contextMenu.show,
+  archive: actions.goals.archive,
+  contextMenu: actions.main.contextMenu,
 })(HOCGoalOverview);

@@ -1,8 +1,9 @@
 import { List } from 'immutable';
 import { request } from './api';
+import { note } from './main';
 import { load } from './modal';
 
-const addToCollection = (goalId, content) => (dispatch, getState) => {
+export const addToCollection = (goalId, content) => (dispatch, getState) => {
   let collection = getState().getIn(['goals', goalId, 'collection']);
   if (!collection) {
     collection = List();
@@ -15,12 +16,13 @@ const addToCollection = (goalId, content) => (dispatch, getState) => {
     console.log('ressy', res);
   });
 };
-const deleteGoal = goalId => (dispatch) => {
+
+export const archive = goalId => (dispatch) => {
   dispatch(load(
     {
-      title: 'Delete Goal?',
+      title: 'Archive Goal?',
       data: {
-        message: 'Are you sure you want to delete this goal?',
+        message: 'Are you sure you want to archive this goal?',
         buttons: ['Yes', 'No'],
       },
       type: 'warning',
@@ -33,7 +35,16 @@ const deleteGoal = goalId => (dispatch) => {
   ));
 };
 
-const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new Promise((resolve) => {
+export const clickedAttachment = att => (dispatch) => {
+  if (att.get('service') === 'swipes' && att.get('type') === 'note') {
+    dispatch(note.show(att.get('id')));
+  }
+  if (att.get('service') === 'swipes' && att.get('type') === 'url') {
+    window.open(att.get('id'));
+  }
+};
+
+export const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new Promise((resolve) => {
   let modalOpt;
   if (previousSteps) {
     modalOpt = {
@@ -81,9 +92,3 @@ const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new P
     submit();
   }
 });
-
-export {
-  addToCollection,
-  submitStep,
-  deleteGoal,
-};
