@@ -29,12 +29,7 @@ class HOCSideNote extends Component {
     bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur', 'closeSideNote']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
-  closeSideNote(e) {
-    const {
-      hideNote,
-    } = this.props;
-    hideNote();
-  }
+
   componentWillReceiveProps(nextProps) {
     const { me, note: oldNote } = this.props;
     const { note: newNote } = nextProps;
@@ -64,6 +59,9 @@ class HOCSideNote extends Component {
       }
     }
   }
+  onBlur() {
+    this.unlockUI();
+  }
   onChange(editorState) {
     const { editing } = this.state;
 
@@ -85,9 +83,14 @@ class HOCSideNote extends Component {
 
     this.lastUndo = lastUndo;
   }
-  onBlur() {
-    this.unlockUI();
+  closeSideNote() {
+    const {
+      hideNote,
+    } = this.props;
+    hideNote();
   }
+
+
   clearTimer() {
     if (this.lockTimer) {
       clearTimeout(this.lockTimer);
@@ -156,6 +159,7 @@ class HOCSideNote extends Component {
 
     let dotClass = 'side-note__editing-dot';
     let message = '';
+    const title = note && note.get('title');
     const lockedBy = note && note.get('locked_by');
 
     if (editing) {
@@ -175,6 +179,9 @@ class HOCSideNote extends Component {
         <Button icon="CloseIcon" className="side-note__back" onClick={this.closeSideNote} />
         {message}
         <div className={dotClass} />
+        <div className="side-note__title">
+          {title}
+        </div>
       </div>
     );
   }

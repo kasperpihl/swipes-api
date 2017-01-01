@@ -9,8 +9,8 @@ class Button extends Component {
     this.onClick = this.onClick.bind(this);
   }
   onClick(e) {
-    const { onClick } = this.props;
-    if (onClick) {
+    const { onClick, disabled } = this.props;
+    if (onClick && !disabled) {
       onClick(e);
     }
   }
@@ -39,6 +39,7 @@ class Button extends Component {
       primary,
       icon,
       text,
+      disabled,
       small,
       alignIcon,
       className: classNameFromButton,
@@ -52,6 +53,10 @@ class Button extends Component {
 
     if (small) {
       className += ' g-button--small';
+    }
+
+    if (disabled) {
+      className += ' g-button--disabled';
     }
 
     if (primary) {

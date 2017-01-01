@@ -38,7 +38,7 @@ class StepSubmission extends Component {
     );
   }
   render() {
-    const { submission } = this.props;
+    const { submission, disabled } = this.props;
     const className = 'step-submission';
     let btns = ['Complete Step'];
 
@@ -55,6 +55,7 @@ class StepSubmission extends Component {
               className="step-submission__action"
               primary={(i === 0)}
               text={t}
+              disabled={disabled}
               onClick={this.onSubmit}
               data-index={i}
               key={i}
@@ -68,9 +69,10 @@ class StepSubmission extends Component {
 
 export default StepSubmission;
 
-const { func } = PropTypes;
+const { func, bool } = PropTypes;
 
 StepSubmission.propTypes = {
   onSubmit: func,
   submission: map,
+  disabled: bool,
 };

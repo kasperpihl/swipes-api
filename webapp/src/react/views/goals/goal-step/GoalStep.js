@@ -5,6 +5,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
+import ProgressDots from 'components/progress-dots/ProgressDots';
 import Button from 'Button';
 import StepSection from './StepSection';
 import StepHandoff from './StepHandoff';
@@ -36,7 +37,24 @@ class GoalStep extends Component {
     } = this.props;
     this.callDelegate('goalStepClicked', collection.get(i), e);
   }
-
+  renderStatus() {
+    const {
+      stepIndex,
+      step,
+      goal,
+      status,
+    } = this.props;
+    return (
+      <StepSection title="Status">
+        <ProgressDots
+          length={goal.get('steps').size}
+          completed={goal.get('currentStepIndex')}
+        />
+        <div>{status}</div>
+        <div>{`${stepIndex + 1}. ${step.get('title')}`}</div>
+      </StepSection>
+    );
+  }
   renderHandoff() {
     const { handoff } = this.props;
     if (!handoff) {
@@ -91,6 +109,7 @@ class GoalStep extends Component {
       <div className="goal-step">
 
         <div className="goal-step__content">
+          {this.renderStatus()}
           {this.renderHandoff()}
           {this.renderCollection()}
           {this.renderSubmission()}
@@ -102,10 +121,11 @@ class GoalStep extends Component {
 
 export default GoalStep;
 
-const { object, bool } = PropTypes;
+const { object, bool, number } = PropTypes;
 
 GoalStep.propTypes = {
   step: map.isRequired,
+  stepIndex: number,
   handoff: object,
   collection: list,
   isSubmitting: bool,

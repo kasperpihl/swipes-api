@@ -51,7 +51,9 @@ $mainColor: $deepBlue-100;
 
 .g-button {
   $b: &;
-
+  &--disabled {
+    opacity: 0.5;
+  }
   &--icon-and-text {
     padding: 0 $btnSize;
 
