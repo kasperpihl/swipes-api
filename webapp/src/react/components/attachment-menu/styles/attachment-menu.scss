@@ -5,26 +5,26 @@
   $b: &;
   @include size(auto);
   @include flex(flex);
-  position: relative;
   background: white;
   border-radius: 6px;
   box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+  position: relative;
 
   &__item {
     @include size(120px);
     @include flex(center, center, column);
-    padding: 12px;
+    color: $blue-100;
     font-size: 12px;
     font-weight: 500;
-    color: $blue-100;
+    padding: 12px;
     position: relative;
 
     &:not(:last-child):after {
-      content: '';
       @include size(1px, calc(100% - 24px));
+      background-color: $deepBlue-10;
+      content: '';
       position: absolute;
       right: 0; top: 12px;
-      background-color: $deepBlue-10;
     }
 
     #{$b}__icon {
@@ -42,17 +42,17 @@
   &__attach {
     @include size(auto, 90px);
     @include flex();
-    position: relative;
     padding-right: 15px;
+    position: relative;
   }
 
   &__input {
     @include size(300px, calc(100% - 30px));
-    margin: 15px;
     border: 1px solid $deepBlue-10;
-    padding: 0 21px;
-    font-size: 12px;
     color: $deepBlue-90;
+    font-size: 12px;
+    margin: 15px;
+    padding: 0 21px;
 
     &::-webkit-input-placeholder {
       color: $deepBlue-40;

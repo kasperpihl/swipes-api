@@ -3,30 +3,30 @@
 
 .list-menu {
   @include size(200px, auto);
-  position: relative;
   background: white;
   border-radius: 6px;
   box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+  position: relative;
 
   &__item {
     @include size(100%, 60px);
-    line-height: 60px;
     color: $deepBlue-60;
+    display: -webkit-box;
     font-size: 12px;
+    line-height: 60px;
+    overflow: hidden;
     padding: 0 18px;
     position: relative;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 
     &:not(:last-child) {
       &:after {
-        content: '';
         @include size(calc(100% - 24px), 1px);
-        position: absolute;
-        left: 12px; bottom: 0;
         background-color: $deepBlue-10;
+        content: '';
+        left: 12px; bottom: 0;
+        position: absolute;
       }
     }
 

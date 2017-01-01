@@ -4,44 +4,40 @@
 .side-note {
   $b: &;
   @include size(100%);
-  // @include flex(none);
   @include flex(center, flex-start);
   @include flex(column);
-  // max-width: 600px;
+  margin-left: 45px;
   overflow-y: auto;
   padding-left: 0 15px;
   position: relative;
-  margin-left: 45px;
 
   &:after {
     @include size(1px, 100%);
+    background-color: $deepBlue-10;
     content: '';
     left: 0; top: 0;
-    background-color: $deepBlue-10;
     position: absolute;
   }
 
   &__header {
     @include size(100%, 84px);
-    @include flex(none);
     @include flex(center, flex-end);
-    padding-right: 15px;
-    padding-bottom: 60px;
-    color: $deepBlue-80;
-    font-size: 12px;
+    @include flex(none);
     color: $deepBlue-40;
-    // background-color: red;
+    font-size: 12px;
+    padding-bottom: 60px;
+    padding-right: 15px;
   }
 
   &__back {
-    position: absolute;
     left: 30px; top: 40px;
+    position: absolute;
   }
 
   &__editing-dot {
     @include size(6px);
-    border-radius: 100%;
     background-color: $green-color;
+    border-radius: 100%;
     margin-left: 12px;
     transition: .1s;
 
