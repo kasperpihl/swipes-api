@@ -36,8 +36,7 @@ function mapStateToProps(state, ownProps) {
   if (goalId) {
     stateAssignees = state.getIn(['goals', goalId, 'steps', stepIndex, 'assignees']);
   }
-  stateAssignees = stateAssignees.map(userId => users.get(userId));
-
+  stateAssignees = stateAssignees.map(userId => users.get(userId)).filter(u => !!u);
   return {
     stateAssignees,
     me: state.get('me'),
