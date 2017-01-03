@@ -13,10 +13,11 @@ class HOCAssigning extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedAssignee = this.clickedAssignee.bind(this);
 
-    this.callDelegate = setupDelegate(props.delegate, this);
+    this.callDelegate = setupDelegate(props.delegate);
   }
   clickedAssignee(e) {
-    this.callDelegate('clickedAssign', e);
+    const { index } = this.props;
+    this.callDelegate('clickedAssign', e, index);
   }
   render() {
     const {
@@ -36,16 +37,17 @@ function mapStateToProps(state, ownProps) {
   if (goalId) {
     stateAssignees = state.getIn(['goals', goalId, 'steps', stepIndex, 'assignees']);
   }
-  stateAssignees = stateAssignees.map(userId => users.get(userId)).filter(u => !!u);
+  stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
   return {
     stateAssignees,
     me: state.get('me'),
   };
 }
 
-const { object } = PropTypes;
+const { object, oneOfType, number, string } = PropTypes;
 HOCAssigning.propTypes = {
   stateAssignees: list,
+  index: oneOfType([number, string]),
   delegate: object,
   me: map,
 };

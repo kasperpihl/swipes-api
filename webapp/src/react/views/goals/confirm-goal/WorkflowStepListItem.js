@@ -10,7 +10,7 @@ class WorkflowStepListItem extends Component {
   }
   componentDidMount() {
   }
-  clickedAssign(assigning, e) {
+  clickedAssign(e) {
     this.props.clickedAssign(e, this.props.index);
   }
   render() {
