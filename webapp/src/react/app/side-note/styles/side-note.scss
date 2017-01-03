@@ -28,19 +28,33 @@
     padding-bottom: 60px;
     padding-right: 15px;
   }
-  &__title {
+
+  &__btn-title {
+    @include size(100%, 42px);
+    @include flex(flex);
     position: absolute;
-    top: 40px;
-    left: 100px;
+    left: 0; top: 40px;
+  }
+
+  &__title-wrap {
+    @include size(100%);
+    @include flex();
+    position: relative;
+  }
+
+  &__title {
+    @include size(100%);
+    color: $deepBlue-90;
     font-size: 27px;
     font-weight: 700;
-    color: #192445;
-    white-space: nowrap;
+    line-height: 42px;
+    max-width: 750px;
+    padding: 0 25px;
   }
 
   &__back {
-    left: 30px; top: 40px;
-    position: absolute;
+    @include flex(none);
+    margin-left: 30px;
   }
 
   &__editing-dot {
