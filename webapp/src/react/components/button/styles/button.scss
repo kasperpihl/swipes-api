@@ -51,9 +51,8 @@ $mainColor: $deepBlue-100;
 
 .g-button {
   $b: &;
-  &--disabled {
-    opacity: 0.5;
-  }
+
+
   &--icon-and-text {
     padding: 0 $btnSize;
 
@@ -101,6 +100,15 @@ $mainColor: $deepBlue-100;
 
     &#{$b}--icon-and-text {
       padding: 0 $btnSize;
+    }
+  }
+
+  &--disabled {
+    background-color: $deepBlue-10;
+    cursor: not-allowed;
+
+    #{$b}__text {
+      color: $deepBlue-100;
     }
   }
 }
