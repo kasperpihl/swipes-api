@@ -23,7 +23,8 @@ export default function goalsReducer(state = initialState, action) {
     case 'goal_deleted': {
       return state.delete(payload.id);
     }
-    case 'goal_updated': {
+    case 'goal_updated':
+    case 'step_completed': {
       return state.mergeIn([payload.data.id], fromJS(payload.data));
     }
     case 'goal_created': {
