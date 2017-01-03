@@ -39,11 +39,13 @@ class HOCGoalList extends Component {
       navPush,
       goals,
     } = this.props;
+    const goal = goals.get(goalId);
     navPush({
-      component: 'GoalOverview',
-      title: goals.get(goalId).get('title'),
+      component: 'GoalStep',
+      title: goal.get('title'),
       props: {
         goalId,
+        stepIndex: goal.get('currentStepIndex'),
       },
     });
   }
