@@ -6,15 +6,53 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate } from 'classes/utils';
+import ListMenu from 'components/list-menu/ListMenu';
 import GoalStep from './GoalStep';
 
 
 class HOCGoalStep extends Component {
+  static contextButtons() {
+    return [{
+      component: 'Button',
+      props: {
+        icon: 'ThreeDotsIcon',
+      },
+    }];
+  }
   constructor(props) {
     super(props);
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
+  }
+  componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+  }
+  onContextClick(i, e) {
+    const {
+      goal,
+      archive,
+      contextMenu,
+    } = this.props;
+
+    contextMenu({
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'right',
+      },
+      component: ListMenu,
+      props: {
+        items: [
+          {
+            title: 'Archive Goal',
+            onClick: () => {
+              archive(goal.get('id'));
+              contextMenu(null);
+            },
+          },
+        ],
+      },
+    });
   }
   getHelper() {
     const { goal, me, cachedData } = this.props;
@@ -87,11 +125,15 @@ class HOCGoalStep extends Component {
       this.setState({ isSubmitting: false });
     });
   }
-
+  generateStatus() {
+    const helper = this.getHelper();
+    return helper.getStatusForCurrentStep();
+  }
   generateOptions() {
     const {
-      stepIndex: i,
+      goal,
     } = this.props;
+    const i = goal.get('currentStepIndex');
     const h = this.getHelper();
     const showSubmission = (h.amIAssigned(i) && h.isCurrentStep(i));
 
@@ -102,10 +144,10 @@ class HOCGoalStep extends Component {
   generateHandoff() {
     const {
       users,
-      stepIndex,
+      goal,
     } = this.props;
     const helper = this.getHelper();
-    const handOff = helper.getHandoffMessageForStepIndex(stepIndex);
+    const handOff = helper.getHandoffMessageForStepIndex(goal.get('currentStepIndex'));
     let handoffObj;
     if (handOff) {
       const firstMessage = handOff.findEntry(() => true);
@@ -134,7 +176,6 @@ class HOCGoalStep extends Component {
   render() {
     const {
       step,
-      stepIndex,
       goal,
     } = this.props;
     const {
@@ -143,10 +184,12 @@ class HOCGoalStep extends Component {
 
     return (
       <GoalStep
+        goal={goal}
         options={this.generateOptions()}
         collection={goal.get('collection')}
-        stepIndex={stepIndex}
+        stepIndex={goal.get('currentStepIndex')}
         step={step}
+        status={this.generateStatus()}
         handoff={this.generateHandoff()}
         isSubmitting={isSubmitting}
         delegate={this}
@@ -157,8 +200,8 @@ class HOCGoalStep extends Component {
 
 const { number, func, object, string } = PropTypes;
 HOCGoalStep.propTypes = {
-  stepIndex: number,
   step: map,
+  archive: func,
   delegate: object,
   submit: func,
   addToCollection: func,
@@ -166,6 +209,7 @@ HOCGoalStep.propTypes = {
   createNote: func,
   navId: string,
   contextMenu: func,
+  overlay: func,
   goal: map,
   me: map,
   users: map,
@@ -175,12 +219,13 @@ HOCGoalStep.propTypes = {
 
 
 function mapStateToProps(state, ownProps) {
-  const { goalId, stepIndex } = ownProps;
+  const { goalId } = ownProps;
+  const goal = state.getIn(['goals', goalId]);
   return {
     navId: state.getIn(['navigation', 'id']),
-    goal: state.getIn(['goals', goalId]),
+    goal,
     users: state.get('users'),
-    step: state.getIn(['goals', goalId, 'steps', stepIndex]),
+    step: goal.getIn(['steps', goal.get('currentStepIndex')]),
     cachedData: state.getIn(['main', 'cache', goalId]),
     me: state.get('me'),
   };
@@ -188,6 +233,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   contextMenu: actions.main.contextMenu,
+  archive: actions.goals.archive,
   clickedAttachment: actions.goals.clickedAttachment,
   overlay: actions.main.overlay,
   addToCollection: actions.goals.addToCollection,
