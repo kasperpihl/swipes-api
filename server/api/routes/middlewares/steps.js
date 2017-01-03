@@ -22,8 +22,9 @@ const stepsSubmit = (req, res, next) => {
     message,
   } = res.locals;
   const lastIterationIndex = step.iterations.length - 1;
-
-  step.iterations[lastIterationIndex].responses[user_id] = { message };
+  if (message) {
+    step.iterations[lastIterationIndex].responses[user_id] = { message };
+  }
 
   res.locals.doNext = true;
   // if (step.response_type === 'single') {

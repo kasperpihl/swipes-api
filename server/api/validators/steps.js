@@ -5,9 +5,6 @@ import {
 const goal_id = {
   presence: true,
 };
-const data = {
-  presence: true,
-};
 const step_id = {
   presence: true,
 };

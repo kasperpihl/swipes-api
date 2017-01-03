@@ -10,6 +10,7 @@ const notesCreate = (req, res, next) => {
   const {
     user_id,
     organization_id,
+    title,
   } = res.locals;
   const note_id = generateSlackLikeId('N');
   const note = {
@@ -18,6 +19,7 @@ const notesCreate = (req, res, next) => {
     locked_by: null,
     id: note_id,
     ts: r.now(),
+    title,
     created_at: r.now(),
     created_by: user_id,
   };
