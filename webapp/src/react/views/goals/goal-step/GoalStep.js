@@ -37,21 +37,24 @@ class GoalStep extends Component {
     } = this.props;
     this.callDelegate('goalStepClicked', collection.get(i), e);
   }
-  renderStatus() {
+  renderProgressBar() {
+    const {
+      goal,
+    } = this.props;
+    const stepSize = goal.get('steps').size;
+    const completedSize = goal.get('currentStepIndex');
+  }
+  renderCurrentStep() {
     const {
       stepIndex,
       step,
-      goal,
       status,
     } = this.props;
     return (
-      <StepSection title="Status">
-        <ProgressDots
-          length={goal.get('steps').size}
-          completed={goal.get('currentStepIndex')}
-        />
-        <div>{status}</div>
+      <StepSection title="Current Step">
         <div>{`${stepIndex + 1}. ${step.get('title')}`}</div>
+        <div>{status}</div>
+        {this.renderHandoff()}
       </StepSection>
     );
   }
@@ -61,11 +64,29 @@ class GoalStep extends Component {
       return undefined;
     }
     return (
-      <StepSection title="Handoff">
-        <StepHandoff data={handoff} />
+      <StepHandoff data={handoff} />
+    );
+  }
+  renderStatus() {
+    const {
+      stepIndex,
+      step,
+      goal,
+      status,
+    } = this.props;
+    return (
+      <StepSection title="Status">
+        <div>{status}</div>
+        <ProgressDots
+          length={goal.get('steps').size}
+          completed={goal.get('currentStepIndex')}
+        />
+        <div>{`${stepIndex + 1}. ${step.get('title')}`}</div>
+
       </StepSection>
     );
   }
+
   renderCollection() {
     const {
       collection: col,
@@ -125,6 +146,7 @@ const { object, bool, number } = PropTypes;
 
 GoalStep.propTypes = {
   step: map.isRequired,
+  goal: map.isRequired,
   stepIndex: number,
   handoff: object,
   collection: list,

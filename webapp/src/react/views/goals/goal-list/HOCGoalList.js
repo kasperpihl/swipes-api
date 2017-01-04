@@ -30,8 +30,8 @@ class HOCGoalList extends Component {
   onContextClick() {
     const { navPush } = this.props;
     navPush({
-      component: 'StartGoal',
-      title: 'Create',
+      component: 'AddGoal',
+      title: 'Add Goal',
     });
   }
   goalListClickedGoal(goalList, goalId) {

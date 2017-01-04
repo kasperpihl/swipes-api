@@ -20,7 +20,7 @@ export function add(toast) {
     const toastId = randomString(6);
 
     newToast.id = toastId;
-    dispatch({ type: types.TOAST_ADD, newToast, toastId });
+    dispatch({ type: types.TOAST_ADD, toast: newToast, toastId });
     handleDuration(dispatch, newToast.duration, toastId);
 
     return Promise.resolve(toastId);

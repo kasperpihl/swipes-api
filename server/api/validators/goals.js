@@ -12,7 +12,6 @@ const organization_id = {
   presence: true,
 };
 const workflow_id = {
-  presence: true,
 };
 const validateGoalsCreate = validatorMiddleware({
   goal,

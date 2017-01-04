@@ -44,15 +44,15 @@ export const clickedAttachment = att => (dispatch) => {
   }
 };
 
-export const submitStep = (goalId, stepId, message, previousSteps) => dispatch => new Promise((resolve) => {
+export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise((resolve) => {
   let modalOpt;
-  if (previousSteps) {
+  if (pSteps) {
     modalOpt = {
       title: 'Go back to step',
       data: {
         list: {
           selectable: true,
-          items: previousSteps.map((step, i) => {
+          items: pSteps.map((step, i) => {
             const title = `${i + 1}. ${step.get('title')}`;
             const selected = (i === 0);
             return { title, selected, id: step.get('id') };
@@ -64,8 +64,8 @@ export const submitStep = (goalId, stepId, message, previousSteps) => dispatch =
   }
   const submit = (stepBackId) => {
     dispatch(request('steps.submit', {
-      goal_id: goalId,
-      step_id: stepId,
+      goal_id: gId,
+      step_id: sId,
       step_back_id: stepBackId,
       message,
     })).then((resMom, err) => {

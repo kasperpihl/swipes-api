@@ -13,7 +13,6 @@ class HOCToasty extends Component {
   }
   renderToasts() {
     const { toasts } = this.props;
-
     return toasts.map(toast => <Toast data={toast.toJS()} key={`toast-${toast.get('id')}`} />);
   }
   render() {

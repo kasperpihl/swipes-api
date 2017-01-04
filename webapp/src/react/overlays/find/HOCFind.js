@@ -26,9 +26,10 @@ class HOCFind extends Component {
   findItemClick(i) {
     const { searchResults, request, loadModal } = this.props;
     const obj = searchResults.get(i);
+
     if (obj) {
       const doc = obj.get('doc').toJS();
-
+      console.log('clicked', i, obj.toJS());
       if (doc.source === 'dropbox') {
         const id = doc.id.split('-')[1];
 

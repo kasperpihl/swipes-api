@@ -8,6 +8,9 @@ const defaultHistoryForProfile = () => [{
 const defaultHistoryForOrgName = orgName => [{
   component: 'OrgDashboard',
   title: orgName,
+}, {
+  component: 'GoalList',
+  title: 'Goals',
 }];
 
 export function navigateToId(navId) {

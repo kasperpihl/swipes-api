@@ -40,7 +40,6 @@ class PDFViewer extends Component {
   componentWillMount() {
     const { page } = this.state;
 
-    this.setState({ inputValue: page });
     this.timeout = setTimeout(() => {
       this.setState({ shown: false });
     }, 4000);
@@ -238,9 +237,9 @@ class PDFViewer extends Component {
 }
 export default PDFViewer;
 
-const { bool, string } = PropTypes;
+const { func, string } = PropTypes;
 
 PDFViewer.propTypes = {
-  fileLoaded: bool,
+  fileLoaded: func,
   file: string,
 };

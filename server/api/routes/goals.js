@@ -48,10 +48,9 @@ authed.all('/goals.create',
   notificationsPushToQueue,
   (req, res) => {
     const {
-      goal,
+      returnObj,
     } = res.locals;
-
-    return res.status(200).json({ ok: true, goal });
+    return res.status(200).json({ ok: true, ...returnObj });
   });
 
 authed.all('/goals.delete',

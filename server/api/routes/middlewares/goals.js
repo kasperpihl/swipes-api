@@ -31,9 +31,14 @@ const goalsCreate = (req, res, next) => {
   });
 
   goal.id = goalId;
-  goal.workflow_id = workflow_id;
+  if (workflow_id) {
+    goal.workflow_id = workflow_id;
+  }
+
   goal.organization_id = organization_id;
   goal.timestamp = r.now();
+  goal.created_at = r.now();
+  goal.updated_at = r.now();
   goal.created_by = user_id;
   goal.deleted = false;
 
@@ -104,9 +109,9 @@ const goalsInsert = (req, res, next) => {
   } = res.locals;
 
   dbGoalsInsertSingle({ goal })
-    .then(() => {
+    .then((obj) => {
       res.locals.eventType = 'goal_created';
-
+      res.locals.returnObj = { data: obj.changes[0].new_val };
       return next();
     })
     .catch((err) => {

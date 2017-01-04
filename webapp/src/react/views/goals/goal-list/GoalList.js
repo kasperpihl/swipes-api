@@ -142,7 +142,7 @@ class GoalList extends Component {
   renderList() {
     let { goals } = this.props;
 
-    goals = goals.sort((a, b) => b.get('timestamp').localeCompare(a.get('timestamp'))).toArray();
+    goals = goals.sort((a, b) => b.get('created_at').localeCompare(a.get('created_at'))).toArray();
     goals = this.filterGoals(goals);
 
     return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);

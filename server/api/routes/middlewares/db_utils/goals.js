@@ -2,7 +2,7 @@ import r from 'rethinkdb';
 import db from '../../../../db';
 
 const dbGoalsInsertSingle = ({ goal }) => {
-  const q = r.table('goals').insert(goal);
+  const q = r.table('goals').insert(goal, { returnChanges: true });
 
   return db.rethinkQuery(q);
 };

@@ -28,9 +28,7 @@ $big-dot-size: 10px;
       height: $big-dot-size;
     }
     &.current:after{
-      border-radius: 0;
-      width: $big-dot-size;
-      height: $big-dot-size;
+      
     }
   }
 }
