@@ -206,6 +206,7 @@ const goalsCreateQueueMessage = (req, res, next) => {
     goal_id,
     event_type: eventType,
   };
+  res.locals.messageGroupId = goal_id;
 
   return next();
 };
@@ -222,6 +223,7 @@ const goalsDeleteQueueMessage = (req, res, next) => {
     goal_id,
     event_type: eventType,
   };
+  res.locals.messageGroupId = goal_id;
 
   return next();
 };
@@ -239,6 +241,7 @@ const goalsNextStepQueueMessage = (req, res, next) => {
     goal_id,
     event_type: 'step_completed',
   };
+  res.locals.messageGroupId = goal_id;
 
   return next();
 };
@@ -258,6 +261,7 @@ const goalsStepGotActiveQueueMessage = (req, res, next) => {
     current_step_id,
     event_type: 'step_got_active',
   };
+  res.locals.messageGroupId = goal_id;
 
   return next();
 };

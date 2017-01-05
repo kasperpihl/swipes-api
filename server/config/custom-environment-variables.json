@@ -28,7 +28,8 @@
   },
   "amazonQueue": {
     "accessKeyId": "SW_AMAZON_QUEUE_ACCESS_KEY_ID",
-    "secretAccessKey": "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY"
+    "secretAccessKey": "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY",
+    "queueHost": "SW_AMAZON_QUEUE_HOST"
   },
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",

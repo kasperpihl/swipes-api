@@ -36,8 +36,9 @@
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "amazonQueue": {
-    "accessKeyId": "",
-    "secretAccessKey": ""
+    "accessKeyId": "AKIAJYHNP3XSVYNJK7OA",
+    "secretAccessKey": "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",
+    "queueHost": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo"
   },
   "origin": "http://localhost",
   "webhooksHost": "https://swipesdev.ngrok.io/",
@@ -45,6 +46,5 @@
   "clientPort" :3000,
   "protocol": "http://",
   "cors": "*",
-  "jwtTokenSecret": "swipy the dinocat",
-  "queueHost": "http://localhost:5005"
+  "jwtTokenSecret": "swipy the dinocat"
 }
