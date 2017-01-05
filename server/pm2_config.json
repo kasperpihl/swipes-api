@@ -15,11 +15,11 @@
 
        "SW_ASANA_CLIENT_ID": "176482403617703",
        "SW_ASANA_CLIENT_SECRET": "ec4b5e86b007f5061168be5acb8cc231",
-       "SW_ASANA_REDIRECT_URI": "http://staging.swipesapp.com/oauth-success.html",
+       "SW_ASANA_REDIRECT_URI": "https://staging.swipesapp.com/oauth-success.html",
 
-       "SW_SLACK_REDIRECT_URI": "http://staging.swipesapp.com/oauth-success.html",
+       "SW_SLACK_REDIRECT_URI": "https://staging.swipesapp.com/oauth-success.html",
 
-       "SW_GMAIL_REDIRECT_URI": "http://staging.swipesapp.com/oauth-success.html",
+       "SW_GMAIL_REDIRECT_URI": "https://staging.swipesapp.com/oauth-success.html",
 
        "SW_AMAZON_QUEUE_ACCESS_KEY_ID": "AKIAJYHNP3XSVYNJK7OA",
        "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY": "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"
