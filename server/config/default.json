@@ -31,8 +31,8 @@
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "gmail": {
-    "clientId": "336134475796-pab4vabvhf37tkkh82vi846e6jheq76i.apps.googleusercontent.com",
-    "clientSecret": "KittPpq9liOYxktfVptv_kYr",
+    "clientId": "861202120294-qideh39i9tdb1628f9grlj6gb5crv391.apps.googleusercontent.com",
+    "clientSecret": "Dx7AAvFAkXVFsOJuyOG1IlV_",
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "amazonQueue": {
