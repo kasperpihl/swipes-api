@@ -33,8 +33,10 @@ const serviceWithAuthGet = (req, res, next) => {
     service_name,
     account_id,
   } = res.locals;
-
-  dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
+  if (service_name === 'swipes') {
+    return next();
+  }
+  return dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
         return next(new SwipesError('Service not found'));
@@ -53,7 +55,9 @@ const serviceImport = (req, res, next) => {
   const {
     service_name,
   } = res.locals;
-
+  if (service_name === 'swipes') {
+    return next();
+  }
   if (services[service_name]) {
     res.locals.service = services[service_name];
 
@@ -106,10 +110,15 @@ const serviceDoShareRequest = (req, res, next) => {
   const {
     user_id,
     service_auth_data,
+    service_name,
     service,
     link,
+    meta,
   } = res.locals;
-
+  if (service_name === 'swipes') {
+    res.locals.short_url_data = Object.assign({}, link, meta);
+    return next();
+  }
   const options = {
     auth_data: service_auth_data,
     type: link.type,
@@ -117,7 +126,7 @@ const serviceDoShareRequest = (req, res, next) => {
     user: { user_id },
   };
 
-  service.shareRequest(options, (err, result) => {
+  return service.shareRequest(options, (err, result) => {
     if (err) {
       return next(new SwipesError('Something went wrong with the share request'));
     }

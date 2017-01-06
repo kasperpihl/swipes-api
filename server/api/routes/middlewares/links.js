@@ -88,13 +88,12 @@ const linksCreateMapLocals = (req, res, next) => {
 
 const linksCreate = (req, res, next) => {
   const {
-    short_url_data,
     link,
     meta,
   } = res.locals;
 
   const checksum = hash({ link });
-  const insert_doc = Object.assign({}, { checksum }, short_url_data);
+  const insert_doc = Object.assign({ checksum }, link, { meta });
 
   createLink({ meta, insert_doc })
     .then((result) => {
