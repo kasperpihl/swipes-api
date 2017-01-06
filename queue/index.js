@@ -27,14 +27,14 @@ app.use('/health', (req, res) => {
 app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) => {
   const {
     event_type,
-  } = originalReq.body;
+  } = originalReq.body.payload;
 
   if (!middlewares[event_type]) {
     return originalNext(new SwipesError(`There is no event_type with the name - ${event_type}`));
   }
 
   const composer = new MiddlewareComposer(
-    originalReq.body,
+    originalReq.body.payload,
     ...middlewares[event_type],
     (req, res, next) => {
       return originalRes.status(200).json({ ok: true, res: res.locals });
@@ -43,6 +43,7 @@ app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) 
       return originalNext(err);
     },
   );
+
   return composer.run();
 });
 
