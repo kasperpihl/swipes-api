@@ -28,10 +28,7 @@ export default class GoalsUtil {
     requireParams({ stepIndex }, 'isStepCompleted');
     return this.goal.getIn(['steps', stepIndex, 'completed']);
   }
-  fieldForType(type) {
-    requireParams({ type }, 'fieldForType');
-    return fields[type];
-  }
+
   isCurrentStep(stepIndex) {
     requireParams({ stepIndex }, 'isCurrentStep');
     return (this.goal.get('currentStepIndex') === stepIndex);
@@ -51,62 +48,8 @@ export default class GoalsUtil {
   runCounter() {
     return this.currentStep().get('iterations').size;
   }
-  getFieldFromField(field) {
-    requireParams({ field }, 'getFieldFromField');
-    let newField = field;
 
-    if (newField.get('type') === 'link') {
-      const targetField = this.getTargetField(newField);
 
-      if (targetField) {
-        newField = targetField;
-      }
-    }
-
-    return newField;
-  }
-  getIconWithColorForField(field, stepIndex) {
-    requireParams({ field, stepIndex }, 'getIconWithColorForField');
-    const settings = field.get('settings');
-    let icon = 'ArrowRightIcon';
-    let color = '#007AFF';
-
-    if (field.get('type') === 'link' || !settings.get('editable')) {
-      icon = 'DotIcon';
-      color = undefined;
-    }
-
-    if (settings.get('required')) {
-      color = '#FD4A48';
-    }
-
-    if (!this.isCurrentStep(stepIndex)) {
-      color = undefined;
-    }
-
-    return [icon, color];
-  }
-  getFieldAndSettingsFromField(field, stepIndex, merging) {
-    requireParams({ field, stepIndex }, 'getSettingsForField');
-    let newField = field;
-    let options = Map({ fullscreen: false });
-
-    if (this.goal.get('currentStepIndex') !== stepIndex) {
-      options = options.set('editable', false);
-    }
-
-    if (newField.get('type') === 'link') {
-      options = options.set('editable', false);
-      newField = this.getTargetField(newField);
-    }
-
-    const settings = newField.get('settings').merge(options).merge(merging);
-
-    return [newField, settings];
-  }
-  getSettingsForField(field, stepIndex, merging) {
-    return this.getFieldAndSettingsFromField(field, stepIndex, merging)[1];
-  }
   // Getting the handoff message from the step before this
   getHandoffMessageForStepIndex(stepIndex) {
     requireParams({ stepIndex }, 'getHandoffMessageForStepIndex');
@@ -160,150 +103,8 @@ export default class GoalsUtil {
 
     return iteration;
   }
-  getStepFieldIndexFromTarget(target) {
-    let res;
-    if (target && target.get('type') === 'field') {
-      res = this.getStepAndFieldIndexById(target.get('id'));
-    }
-    return res;
-  }
-  getDataForLink(target) {
-    let data = Map();
-    if (target.get('type') === 'field') {
-      const [stepIndex, fieldIndex] = this.getStepAndFieldIndexById(target.get('id'));
-      const latestIteration = this.getLastIterationFromStepIndex(stepIndex);
-      const step = this.getStepByIndex(stepIndex);
-      const field = this.getFieldByIndex(step, fieldIndex);
-      if (latestIteration) {
-        const firstResponse = latestIteration[1].get('responses').first();
-        if (firstResponse) {
-          data = firstResponse.getIn(['data', fieldIndex]);
-        }
-      }
-      const Field = this.fieldForType(field.get('type'));
 
-      if (typeof Field.parseInitialData === 'function') {
-        data = Field.parseInitialData(data);
-      }
-    }
 
-    return data;
-  }
-  getDataForFieldAndStepIndex(sI, fI) {
-    const step = this.getStepByIndex(sI);
-    const field = this.getFieldByIndex(step, fI);
-    let data = Map();
-
-    if (field.get('initial_data')) {
-      data = field.get('initial_data');
-    }
-
-    const thisIteration = this.getLastIterationFromStep(step);
-    const lastIteration = this.getLastIterationFromStep(step, this.runCounter() - 1);
-
-    if (lastIteration) {
-      const lastResponse = lastIteration[1].getIn(['responses', this.id, 'data', fI]);
-
-      if (lastResponse) {
-        // console.log('response!', lastResponse.toJS());
-        data = lastResponse;
-      }
-    }
-    if (thisIteration) {
-      const thisResponse = thisIteration[1].getIn(['responses', this.id, 'data', fI]);
-
-      if (thisResponse) {
-        // console.log('response!', thisResponse.toJS());
-        data = thisResponse;
-      }
-    }
-
-    // Check for cache and that it is this step
-    if (this.cache && sI === this.cache.get('stepIndex')) {
-      // Check that the cache is the currentStep
-      if (this.isCurrentStep(this.cache.get('stepIndex'))) {
-        // And still the same iteration
-        if (this.runCounter() === this.cache.get('runCounter')) {
-          // Make sure the cache has data.
-          const cachedData = this.cache.getIn(['data', fI]);
-          if (cachedData) {
-            // console.log('cached data');
-            data = cachedData;
-          }
-        }
-      }
-    }
-
-    const Field = this.fieldForType(field.get('type'));
-
-    if (typeof Field.parseInitialData === 'function') {
-      data = Field.parseInitialData(data);
-    }
-
-    return data;
-  }
-  getTargetField(field) {
-    const target = field.getIn(['settings', 'target']);
-    const tSFIndex = this.getStepFieldIndexFromTarget(target);
-
-    if (tSFIndex) {
-      return this.goal.getIn(['steps', tSFIndex[0], 'fields', tSFIndex[1]]);
-    }
-
-    return undefined;
-  }
-  getInitialDataForStepIndex(stepIndex) {
-    const step = this.getStepByIndex(stepIndex);
-    return step.get('fields').map((field, i) => {
-      if (field.get('type') === 'link') {
-        return this.getDataForLink(field.getIn(['settings', 'target']));
-      }
-      return this.getDataForFieldAndStepIndex(stepIndex, i);
-    });
-  }
-
-  getFieldByIndex(step, index) {
-    return step.getIn(['fields', index]);
-  }
-  // getStepByIndex(index) {
-  //   return this.goal.getIn(['steps', index]);
-  // }
-  // Get a field by its unique id # checklist-1
-  getFieldById(id) {
-    const stepAndField = this.getStepAndFieldById(id);
-    return stepAndField && stepAndField[1];
-  }
-  // Get the step that has field with id
-  getStepByFieldId(id) {
-    const stepAndField = this.getStepAndFieldById(id);
-    return stepAndField && stepAndField[0];
-  }
-  getStepAndFieldIndexById(id) {
-    let step;
-    let field;
-
-    this.goal.get('steps').forEach((s, sI) => {
-      s.get('fields').forEach((f, fI) => {
-        if (f.get('id') === id) {
-          field = fI;
-          step = sI;
-        }
-      });
-    });
-
-    return [step, field];
-  }
-  // Get [step, field] from a field id;
-  getStepAndFieldById(id) {
-    const indexes = this.getStepAndFieldIndexById(id);
-    if (indexes) {
-      const step = this.getStepByIndex(indexes[0]);
-      const field = this.getFieldByIndex(step, indexes[1]);
-      return [step, field];
-    }
-
-    return undefined;
-  }
   // Get a step by its index
   getStepByIndex(index) {
     return this.goal.get('steps').find((s, i) => (i === index));

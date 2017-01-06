@@ -48,41 +48,17 @@ class GoalStep extends Component {
     const {
       stepIndex,
       step,
+      handoff,
       status,
     } = this.props;
+
+    const handoffHtml = handoff && <StepHandoff data={handoff} />;
+
     return (
       <StepSection title="Current Step">
         <div>{`${stepIndex + 1}. ${step.get('title')}`}</div>
         <div>{status}</div>
-        {this.renderHandoff()}
-      </StepSection>
-    );
-  }
-  renderHandoff() {
-    const { handoff } = this.props;
-    if (!handoff) {
-      return undefined;
-    }
-    return (
-      <StepHandoff data={handoff} />
-    );
-  }
-  renderStatus() {
-    const {
-      stepIndex,
-      step,
-      goal,
-      status,
-    } = this.props;
-    return (
-      <StepSection title="Status">
-        <div>{status}</div>
-        <ProgressDots
-          length={goal.get('steps').size}
-          completed={goal.get('currentStepIndex')}
-        />
-        <div>{`${stepIndex + 1}. ${step.get('title')}`}</div>
-
+        {handoffHtml}
       </StepSection>
     );
   }
@@ -130,8 +106,7 @@ class GoalStep extends Component {
       <div className="goal-step">
 
         <div className="goal-step__content">
-          {this.renderStatus()}
-          {this.renderHandoff()}
+          {this.renderCurrentStep()}
           {this.renderCollection()}
           {this.renderSubmission()}
         </div>
