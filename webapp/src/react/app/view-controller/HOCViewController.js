@@ -33,21 +33,6 @@ class HOCViewController extends Component {
   viewDidLoad(view) {
     this._contentView = view;
   }
-  clickedFind() {
-    const {
-      overlay,
-    } = this.props;
-    overlay({
-      component: 'Browser',
-      props: {
-        url: 'https://projects.invisionapp.com/share/2P9XTG93E#/screens',
-      },
-    });
-  }
-  navbarClickedBack() {
-    const { pop } = this.props;
-    pop();
-  }
   navbarClickedCrumb(navbar, i) {
     const { popTo } = this.props;
     popTo(i);
@@ -121,15 +106,6 @@ class HOCViewController extends Component {
     );
   }
 
-  renderGlobalActions() {
-    return (
-      <div className="global-actions" key="global-actions">
-        <div className="global-actions__action" onClick={this.clickedFind}>
-          <Button icon="FindIcon" />
-        </div>
-      </div>
-    );
-  }
   renderLoading() {
     return <div>Loading</div>;
   }
@@ -137,7 +113,6 @@ class HOCViewController extends Component {
     return (
       <div className="view-controller">
         {this.renderNavbar()}
-        {this.renderGlobalActions()}
         {this.renderContent()}
       </div>
     );
@@ -159,16 +134,13 @@ function mapStateToProps(state) {
 const { func } = PropTypes;
 HOCViewController.propTypes = {
   history: list,
-  overlay: func,
   currentView: map,
   View: func,
   popTo: func,
-  pop: func,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
   popTo: actions.navigation.popTo,
   pop: actions.navigation.pop,
-  overlay: actions.main.overlay,
 })(HOCViewController);
 export default ConnectedHOCViewController;

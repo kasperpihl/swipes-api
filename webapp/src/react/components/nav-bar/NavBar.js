@@ -9,12 +9,8 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.clickedBack = this.clickedBack.bind(this);
     this.clickedCrumb = this.clickedCrumb.bind(this);
     this.callDelegate = setupDelegate(props.delegate, this);
-  }
-  clickedBack() {
-    this.callDelegate('navbarClickedBack');
   }
   clickedCrumb(e) {
     const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
@@ -61,26 +57,10 @@ class NavBar extends Component {
       </ReactCSSTransitionGroup>
     );
   }
-  renderBackButton() {
-    return undefined;
-    /* const { history } = this.props;
-    if (!history || history.length === 1) {
-      return undefined;
-    }
-    return (
-      <div className="nav-bar__button nav-bar__button--back" onClick={this.clickedBack}>
-        <Icon svg="ArrowLeftIcon" className="nav-bar__icon" />
-      </div>
-    );*/
-  }
-  renderActions() {
-
-  }
   render() {
     return (
       <div className="nav-bar">
         {this.renderBreadCrumbs()}
-        {this.renderBackButton()}
         {this.props.children}
       </div>
     );
