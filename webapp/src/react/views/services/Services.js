@@ -1,10 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { bindAll } from 'classes/utils';
-import { modal, me } from 'actions';
+import { bindAll, queryStringToObject } from 'classes/utils';
+import * as actions from 'actions';
 import ConnectRow from './ConnectRow';
 import './services.scss';
+
+const authSuccess = [
+  `${document.location.origin}`,
+  'https://staging.swipesapp.com',
+].map(o => `${o}/oauth-success.html`);
 
 /* global nodeRequire, ipcListener */
 
@@ -23,9 +28,19 @@ class Services extends Component {
     this.props.disconnectService(data.id);
   }
   clickedConnect(data) {
-    ipcListener.sendEvent('oauth-init', {
-      serviceName: data.id,
-      url: `${window.location.origin}/v1/services.authorize?service_name=${data.id}`,
+    const { browser } = this.props;
+    const serviceName = data.id;
+    const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
+
+    browser(url, (webview) => {
+      webview.addEventListener('did-get-redirect-request', (e) => {
+        if (authSuccess.find(u => e.newURL.startsWith(u))) {
+          const { handleOAuthSuccess, overlay } = this.props;
+          const params = queryStringToObject(e.newURL.split('?')[1]);
+          handleOAuthSuccess(serviceName, params);
+          overlay(null);
+        }
+      });
     });
   }
   checkForDropboxFolder() {
@@ -79,33 +94,15 @@ class Services extends Component {
         id: service.get('name'),
         title: service.get('title'),
       };
-      let placeholderText;
-      if (service.get('name') === 'dropbox') {
-        placeholderText = 'By connecting Dropbox, you will get a stream of notifications for recently updated or uploaded files by you or your colleagues. Also you will be able to search and find files from there ~30min after connecting the service.';
-      }
-      if (service.get('name') === 'asana') {
-        placeholderText = 'By connecting Asana, you will get a stream of notifications for recently updated or added tasks by you or your colleagues.';
-      }
-      if (service.get('name') === 'slack') {
-        placeholderText = 'By connecting Slack, you can add a chat tile in your Workspace from where you can easily communicate with your team, share information and progress on your work.';
-      }
 
       return [
         <ConnectRow key={`${service.get('id')}-${key}`} data={data} clickedButton={this.clickedConnect} />,
-        <div className="swipes-services__placeholder swipes-services__placeholder--connect" key={`placeholder${key}`} >
-          {placeholderText}
-        </div>,
       ];
     });
   }
   render() {
     return (
       <div className="scroll-container">
-        <div className="swipes-services__placeholder">
-          Below are a set of services, integrated with the Swipes Workspace.
-          We support multiple accounts from each service and you can add different
-          Slack, Dropbox or Asana accounts for the different teams or companies you work with.
-        </div>
         <div className="swipes-services">
           <div className="swipes-services__title" data-title="Connect new services" />
           {this.renderServicesToConnect()}
@@ -125,6 +122,9 @@ Services.propTypes = {
   disconnectService: func,
   myServices: list,
   loadModal: func,
+  overlay: func,
+  browser: func,
+  handleOAuthSuccess: func,
   services: map,
 };
 
@@ -136,7 +136,10 @@ function mapStateToProps(state) {
 }
 
 const ConnectedServices = connect(mapStateToProps, {
-  disconnectService: me.disconnectService,
-  loadModal: modal.load,
+  browser: actions.main.browser,
+  overlay: actions.main.overlay,
+  handleOAuthSuccess: actions.me.handleOAuthSuccess,
+  disconnectService: actions.me.disconnectService,
+  loadModal: actions.modal.load,
 })(Services);
 export default ConnectedServices;

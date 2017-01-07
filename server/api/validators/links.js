@@ -21,13 +21,11 @@ const metaConstraints = {
   'meta.title': { presence: true },
 };
 
-const preVal = Object.assign({}, linkConstraints, permissionConstraints, metaConstraints);
-const preValidateLinkAdd = validatorModelMiddleware(preVal);
-const validateLinkAdd = validatorMiddleware();
+const linkAdd = Object.assign({}, linkConstraints, permissionConstraints, metaConstraints);
+const validateLinkAdd = validatorMiddleware(linkAdd);
 const validateLinkGet = validatorMiddleware({ ids });
 
 export {
-  preValidateLinkAdd,
   validateLinkAdd,
   validateLinkGet,
 };

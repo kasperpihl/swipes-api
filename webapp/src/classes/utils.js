@@ -39,6 +39,40 @@ export function setupDelegate(delegate) {
   };
 }
 
+export function queryStringToObject(query) {
+  const object = {};
+  const segments = query.split('&');
+
+  segments.forEach((seg) => {
+    const pair = seg.split('=');
+
+    pair[0] = decodeURIComponent(pair[0]);
+    pair[1] = decodeURIComponent(pair[1]);
+
+    if (typeof object[pair[0]] === 'undefined') {
+      object[pair[0]] = pair[1];
+    } else if (typeof object[pair[0]] === 'string') {
+      const arr = [object[pair[0]], pair[1]];
+      object[pair[0]] = arr;
+    } else {
+      object[pair[0]].push(pair[1]);
+    }
+  });
+  return object;
+}
+export function getParameterByName(name, url) {
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
 export function setupCachedCallback(method, ctx) {
   const cachedMethod = {};
   return function cachedCallback(id) {

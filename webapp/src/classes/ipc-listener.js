@@ -2,8 +2,8 @@ import { me, toasty } from 'actions';
 
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
-let ipcRenderer,
-  dialog;
+let ipcRenderer;
+let dialog;
 if (isElectron) {
   ipcRenderer = nodeRequire('electron').ipcRenderer;
   dialog = nodeRequire('electron').remote.dialog;

@@ -22,6 +22,18 @@ export const overlay = payload => ({ type: types.OVERLAY, payload });
 // ======================================================
 export const contextMenu = payload => ({ type: types.CONTEXT_MENU, payload });
 
+
+// ======================================================
+// Browser
+// ======================================================
+export const browser = (url, onLoad) => overlay({
+  component: 'Browser',
+  props: {
+    url,
+    onLoad,
+  },
+});
+
 // ======================================================
 // Account related
 // ======================================================

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 
@@ -11,13 +12,22 @@ class HOCBrowser extends Component {
   }
   componentDidMount() {
     const webview = this.refs.container.childNodes[0];
-    webview.addEventListener('dom-ready', (e) => {
-      console.log('dom-ready', e);
-    });
+    const { onLoad } = this.props;
+    if (onLoad) {
+      onLoad(webview);
+    }
+  }
+  getWebviewHtml() {
+    const { url } = this.props;
+    let html = `<webview src="${url}" `;
+    html += 'style="height: 100%;" ';
+    html += 'partition="persist:browser"';
+    html += '></webview>';
+
+    return html;
   }
   render() {
-    const { url } = this.props;
-    const wHtml = `<webview src="${url}" style="height: 100%;" partition="persist:browser"></webview>`;
+    const wHtml = this.getWebviewHtml();
     return (
       <div
         ref="container"
@@ -29,16 +39,19 @@ class HOCBrowser extends Component {
   }
 }
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 HOCBrowser.propTypes = {
   url: string,
+  onLoad: func,
+  me: map,
 };
 
 function mapStateToProps(state) {
   return {
+    me: state.get('me'),
   };
 }
 
 export default connect(mapStateToProps, {
-
+  handleOAuthSuccess: actions.me.handleOAuthSuccess,
 })(HOCBrowser);

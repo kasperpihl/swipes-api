@@ -151,6 +151,7 @@ class HOCGoalStep extends Component {
     } = this.state;
 
     const array = goal.get('collection').filter(o => !!o.get('short_url')).map(o => o.get('short_url')).toJS();
+    console.log(goal.get('collection').toJS());
     return (
       <GoalStep
         goal={goal}

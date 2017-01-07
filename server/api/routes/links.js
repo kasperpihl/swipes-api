@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-  preValidateLinkAdd,
   validateLinkAdd,
   validateLinkGet,
 } from '../validators/links';
@@ -27,7 +26,6 @@ authed.all('/link.get',
 );
 
 authed.all('/link.copy',
-  preValidateLinkAdd,
   validateLinkAdd,
   linksFindPermissions,
   linksAddPermission,
@@ -41,7 +39,6 @@ authed.all('/link.copy',
   });
 
 authed.all('/link.create',
-  preValidateLinkAdd,
   validateLinkAdd,
   linksCreate,
   linksAddPermission,
