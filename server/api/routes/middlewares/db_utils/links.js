@@ -16,6 +16,27 @@ const findLinkByChecksum = (checksum) => {
 
   return db.rethinkQuery(q);
 };
+const findLinksFromIds = (shareIds) => {
+  const q =
+    r.db('swipes').table('links_permissions')
+      .getAll(r.args(shareIds))
+      .eqJoin('link_id', r.db('swipes').table('links'))
+      .map((doc) => {
+        return {
+          left: doc('left').without('link_id'),
+          right: doc('right').without('id', 'type', 'short_url'),
+        };
+      })
+      .zip()
+      .map((link) => {
+        return link.merge(() => {
+          return { short_url: link('id') };
+        });
+      })
+      .without('id');
+  return db.rethinkQuery(q);
+};
+
 const addPermissionsToALink = ({ user_id, checksum, permission }) => {
   const permissionPart = shortid.generate();
   const q = r.table('links_permissions').insert({
@@ -59,6 +80,7 @@ const createLink = ({ meta, insert_doc }) => {
 export {
   findLinkPermissionsById,
   findLinkByChecksum,
+  findLinksFromIds,
   addPermissionsToALink,
   createLink,
 };

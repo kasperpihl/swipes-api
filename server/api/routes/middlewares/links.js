@@ -2,12 +2,28 @@ import hash from 'object-hash';
 import {
   findLinkPermissionsById,
   findLinkByChecksum,
+  findLinksFromIds,
   addPermissionsToALink,
   createLink,
 } from './db_utils/links';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
+
+const linksGetByIds = (req, res, next) => {
+  const {
+    ids,
+  } = res.locals;
+
+  return findLinksFromIds(ids).then((links) => {
+    const mappedLinks = ids.map((id) => {
+      return links.find(l => l.short_url === id) || {};
+    });
+    res.locals.mappedLinks = mappedLinks;
+    return next();
+  });
+};
+
 
 const linksFindPermissions = (req, res, next) => {
   const {
@@ -113,6 +129,7 @@ const linksCreate = (req, res, next) => {
 
 export {
   linksFindPermissions,
+  linksGetByIds,
   linksAddPermission,
   linksCreateMapLocals,
   linksCreate,

@@ -145,11 +145,17 @@ class HOCGoalStep extends Component {
     const {
       step,
       goal,
+      request,
     } = this.props;
     const {
       isSubmitting,
     } = this.state;
 
+    const array = goal.get('collection').filter(o => !!o.get('short_url')).map(o => o.get('short_url')).toJS();
+    console.log(array);
+    request('link.get', { ids: array }).then((res) => {
+      console.log('getting goodies', res);
+    });
     return (
       <GoalStep
         goal={goal}
@@ -202,6 +208,7 @@ export default connect(mapStateToProps, {
   addLinkMenu: actions.links.addMenu,
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,
+  request: actions.api.request,
   clickedAttachment: actions.goals.clickedAttachment,
   overlay: actions.main.overlay,
   addToCollection: actions.goals.addToCollection,

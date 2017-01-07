@@ -1,21 +1,10 @@
 import {
-  SwipesError,
-} from '../../middlewares/swipes-error';
-import {
   validatorMiddleware,
   validatorModelMiddleware,
 } from './validation-wrapper';
 
-const shortUrlConstraints = {
-  shortUrl: {
-    presence: true,
-  },
-};
-
-const checksumConstraints = {
-  checksum: {
-    presence: true,
-  },
+const ids = {
+  presence: true,
 };
 
 const linkConstraints = {
@@ -32,32 +21,13 @@ const metaConstraints = {
   'meta.title': { presence: true },
 };
 
-const constructModelLinkAdd = (body) => {
-  const {
-    link,
-    shortUrl,
-    checksum,
-  } = body;
-
-  if (!link && !shortUrl && !checksum) {
-    return new SwipesError('One of the following is required - link, checksum or shortUrl');
-  }
-
-  if (shortUrl) {
-    return shortUrlConstraints;
-  }
-
-  if (checksum) {
-    return Object.assign({}, permissionConstraints, checksumConstraints);
-  }
-
-  return Object.assign({}, linkConstraints, permissionConstraints, metaConstraints);
-};
-
-const preValidateLinkAdd = validatorModelMiddleware(constructModelLinkAdd);
+const preVal = Object.assign({}, linkConstraints, permissionConstraints, metaConstraints);
+const preValidateLinkAdd = validatorModelMiddleware(preVal);
 const validateLinkAdd = validatorMiddleware();
+const validateLinkGet = validatorMiddleware({ ids });
 
 export {
   preValidateLinkAdd,
   validateLinkAdd,
+  validateLinkGet,
 };
