@@ -65,51 +65,19 @@ class HOCGoalStep extends Component {
   }
   goalStepAdd(e) {
     const {
-      contextMenu,
       addToCollection,
-      createNote,
-      navId,
-      overlay,
       goal,
+      addLinkMenu,
     } = this.props;
-
-    contextMenu({
-      component: AttachmentMenu,
-      options: {
-        boundingRect: e.target.getBoundingClientRect(),
-        alignY: 'center',
-        positionX: -15,
-      },
-      props: {
-        callback: (type, data) => {
-          if (type === 'note' && data && data.length) {
-            createNote(navId, data).then((noteRes) => {
-              if (noteRes && noteRes.ok) {
-                addToCollection(goal.get('id'), {
-                  type: 'note',
-                  service: 'swipes',
-                  id: noteRes.id,
-                  title: data,
-                });
-              }
-            });
-          }
-          if (type === 'link' && data && data.length) {
-            addToCollection(goal.get('id'), {
-              type: 'url',
-              service: 'swipes',
-              id: data,
-              title: data,
-            });
-          }
-          if (type === 'find') {
-            overlay({
-              component: 'Find',
-            });
-          }
-          contextMenu(null);
-        },
-      },
+    addLinkMenu({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignY: 'center',
+      positionX: -15,
+    }, (shortUrl, meta) => {
+      addToCollection(goal.get('id'), {
+        short_url: shortUrl,
+        title: meta.title,
+      });
     });
   }
   goalStepSubmit(i, message) {
@@ -230,8 +198,8 @@ function mapStateToProps(state, ownProps) {
     me: state.get('me'),
   };
 }
-
 export default connect(mapStateToProps, {
+  addLinkMenu: actions.links.addMenu,
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,
   clickedAttachment: actions.goals.clickedAttachment,

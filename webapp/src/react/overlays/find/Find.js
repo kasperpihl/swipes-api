@@ -66,7 +66,10 @@ class Find extends Component {
     );
   }
   renderResults() {
-    const { results } = this.props;
+    const {
+      results,
+      actionLabel,
+    } = this.props;
     if (!results || !results.size) {
       return undefined;
     }
@@ -74,6 +77,7 @@ class Find extends Component {
       <FindItem
         key={i}
         index={i}
+        actionLabel={actionLabel}
         data={r.getIn(['shareData', 'meta'])}
         delegate={this.props.delegate}
       />
@@ -101,6 +105,7 @@ export default Find;
 const { object, string, bool } = PropTypes;
 Find.propTypes = {
   delegate: object,
+  actionLabel: string,
   results: list,
   searchQuery: string,
   searching: bool,

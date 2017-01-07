@@ -18,7 +18,15 @@ class HOCFind extends Component {
   findItemShare() {
     // const { searchResults } = this.props;
   }
-
+  findItemAction(i) {
+    const { searchResults, actionCallback } = this.props;
+    const obj = searchResults.get(i);
+    if (obj && actionCallback) {
+      const { link, permission, meta } = obj.toJS().shareData;
+      actionCallback(link, permission, meta);
+    }
+    console.log(obj.toJS());
+  }
   findSearch(query) {
     const { search } = this.props;
     search(query);
@@ -103,12 +111,12 @@ class HOCFind extends Component {
     }
   }
   render() {
-    const { searchResults, searching, searchQuery } = this.props;
-
+    const { searchResults, searching, searchQuery, actionLabel } = this.props;
     return (
       <Find
         results={searchResults}
         searching={searching}
+        actionLabel={actionLabel}
         searchQuery={searchQuery}
         delegate={this}
       />
@@ -120,6 +128,8 @@ const { func, bool, string } = PropTypes;
 
 HOCFind.propTypes = {
   request: func,
+  actionLabel: string,
+  actionCallback: func,
   loadModal: func,
   search: func,
   searchResults: list,

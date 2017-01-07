@@ -9,7 +9,6 @@ import search from './search';
 
 import me from './me';
 import services from './services';
-import activity from './activity';
 import users from './users';
 import goals from './goals';
 import notifications from './notifications';
@@ -29,7 +28,6 @@ const rootReducer = combineReducers({
   goals,
   services,
   notes,
-  activity,
   notifications,
   users,
   workflows,

@@ -76,7 +76,7 @@ class GoalStep extends Component {
       />
     ));
     return (
-      <StepSection title="Content">
+      <StepSection title="Attachments">
         {html}
         <Button icon="AddIcon" primary onClick={this.onAdd} className="goal-step__btn" />
       </StepSection>

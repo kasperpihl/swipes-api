@@ -38,7 +38,10 @@ class HOCViewController extends Component {
       overlay,
     } = this.props;
     overlay({
-      component: 'Find',
+      component: 'Browser',
+      props: {
+        url: 'https://projects.invisionapp.com/share/2P9XTG93E#/screens',
+      },
     });
   }
   navbarClickedBack() {
@@ -119,13 +122,13 @@ class HOCViewController extends Component {
   }
 
   renderGlobalActions() {
-    /* return (
+    return (
       <div className="global-actions" key="global-actions">
         <div className="global-actions__action" onClick={this.clickedFind}>
           <Button icon="FindIcon" />
         </div>
       </div>
-    );*/
+    );
   }
   renderLoading() {
     return <div>Loading</div>;

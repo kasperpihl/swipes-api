@@ -10,7 +10,7 @@ class FindItem extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate, props.index);
-    bindAll(this, ['onShare', 'onClick', 'onCollect']);
+    bindAll(this, ['onShare', 'onClick', 'onAction']);
   }
   onShare(e) {
     e.stopPropagation();
@@ -19,9 +19,9 @@ class FindItem extends Component {
   onClick() {
     this.callDelegate('findItemClick');
   }
-  onCollect(e) {
+  onAction(e) {
     e.stopPropagation();
-    this.callDelegate('findItemCollect');
+    this.callDelegate('findItemAction');
   }
   renderContent() {
     const {
@@ -51,11 +51,18 @@ class FindItem extends Component {
     );
   }
   renderActions() {
+    const { actionLabel } = this.props;
+    let customActionHtml;
+    if (actionLabel && actionLabel.length) {
+      customActionHtml = (
+        <div className="find-item__action" onClick={this.onAction}>
+          <Button small primary text={actionLabel} />
+        </div>
+      );
+    }
     return (
       <div className="find-item__actions">
-        <div className="find-item__action" onClick={this.onCollect}>
-          <Button small primary text="Add to collection" />
-        </div>
+        {customActionHtml}
         <div className="find-item__action" onClick={this.onShare}>
           <Button small text="Share" />
         </div>
@@ -80,10 +87,11 @@ class FindItem extends Component {
   }
 }
 
-const { bool, object, number } = PropTypes;
+const { bool, object, number, string } = PropTypes;
 
 FindItem.propTypes = {
   small: bool,
+  actionLabel: string,
   data: map,
   index: number,
   delegate: object,

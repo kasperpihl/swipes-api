@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 import { request } from './api';
-import { note } from './main';
+import { note, overlay } from './main';
 import { load } from './modal';
 
 export const addToCollection = (goalId, content) => (dispatch, getState) => {
@@ -40,7 +40,13 @@ export const clickedAttachment = att => (dispatch) => {
     dispatch(note.show(att.get('id')));
   }
   if (att.get('service') === 'swipes' && att.get('type') === 'url') {
-    window.open(att.get('id'));
+    dispatch(overlay({
+      component: 'Browser',
+      props: {
+        url: att.get('id'),
+      },
+    }));
+    // window.open(att.get('id'));
   }
 };
 

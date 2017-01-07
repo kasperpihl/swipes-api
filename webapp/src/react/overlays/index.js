@@ -1,7 +1,7 @@
 import Find from './find/HOCFind';
-import Field from './field/Field';
+import Browser from './browser/HOCBrowser';
 
 export {
   Find,
-  Field,
+  Browser,
 };
