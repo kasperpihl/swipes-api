@@ -85,9 +85,9 @@ export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise
     dispatch(load(modalOpt, (res) => {
       if (res) {
         let stepBackId;
-        if (previousSteps) {
+        if (pSteps) {
           const index = res.items.length ? res.items[0] : 0;
-          stepBackId = previousSteps.get(index).get('id');
+          stepBackId = pSteps.get(index).get('id');
         }
         submit(stepBackId);
       } else {
