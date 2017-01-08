@@ -12,33 +12,23 @@ class GoalList extends Component {
   constructor(props) {
     super(props);
     this.tabs = ['now', 'later', 'completed', 'all'];
-    this.state = { tabIndex: 0 };
-    this.tags = [
-      'development',
-      'design',
-      'v1',
-      'beta',
-      'bugs',
-      'marketing',
-      'sales',
-      'vacation',
-      'team building',
-    ];
     this.callDelegate = setupDelegate(props.delegate, this);
     bindAll(this, ['clickedListItem']);
   }
   componentDidMount() {
-  }
-  clickedListItem(id) {
-    this.callDelegate('goalListClickedGoal', id);
-  }
-  tabDidChange(nav, index) {
-    if (this.state.tabIndex !== index) {
-      this.setState({ tabIndex: index });
+    const { savedState } = this.props;
+    if (savedState) {
+      const scrollTop = savedState.get('scrollTop');
+      if (scrollTop > 0) {
+        this.refs.scroller.scrollTop = scrollTop;
+      }
     }
   }
+  clickedListItem(id) {
+    this.callDelegate('goalListClickedGoal', id, this.refs.scroller.scrollTop);
+  }
   filterGoals(goals) {
-    const { tabIndex } = this.state;
+    const { tabIndex } = this.props;
 
     switch (tabIndex) {
       case 0:
@@ -133,9 +123,13 @@ class GoalList extends Component {
     });
   }
   renderTabbar() {
+    const {
+      tabIndex,
+      delegate,
+    } = this.props;
     return (
       <div className="goals-list__tab-bar">
-        <TabBar tabs={this.tabs} delegate={this} activeTab={this.state.tabIndex} />
+        <TabBar tabs={this.tabs} delegate={delegate} activeTab={tabIndex} />
       </div>
     );
   }
@@ -151,7 +145,7 @@ class GoalList extends Component {
     return (
       <div className="goals-list">
         {this.renderTabbar()}
-        <div className="goals-list__scroller">
+        <div className="goals-list__scroller" ref="scroller">
           {this.renderList()}
         </div>
       </div>
@@ -159,10 +153,12 @@ class GoalList extends Component {
   }
 }
 
-const { object } = PropTypes;
+const { object, number } = PropTypes;
 
 GoalList.propTypes = {
   goals: map.isRequired,
+  savedState: map,
+  tabIndex: number,
   me: map.isRequired,
   delegate: object,
 };

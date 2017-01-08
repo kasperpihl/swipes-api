@@ -48,8 +48,8 @@ export function init() {
   };
 }
 
-export function push(obj) {
-  const payload = { obj };
+export function push(obj, savedState) {
+  const payload = { obj, savedState };
   return { type: types.NAVIGATION_PUSH, payload };
 }
 export function pop() {

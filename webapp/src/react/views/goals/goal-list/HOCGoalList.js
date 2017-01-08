@@ -21,7 +21,10 @@ class HOCGoalList extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
-    this.state = {};
+    this.state = { tabIndex: 0 };
+    if (props.savedState) {
+      this.state.tabIndex = props.savedState.get('tabIndex');
+    }
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
@@ -34,11 +37,23 @@ class HOCGoalList extends Component {
       title: 'Add Goal',
     });
   }
-  goalListClickedGoal(goalList, goalId) {
+  tabDidChange(nav, index) {
+    if (this.state.tabIndex !== index) {
+      this.setState({ tabIndex: index });
+    }
+  }
+  goalListClickedGoal(goalList, goalId, scrollTop) {
     const {
       navPush,
       goals,
     } = this.props;
+    const {
+      tabIndex,
+    } = this.state;
+    const savedState = {
+      tabIndex,
+      scrollTop,
+    }; // state if this gets reopened
     const goal = goals.get(goalId);
     navPush({
       component: 'GoalStep',
@@ -47,12 +62,20 @@ class HOCGoalList extends Component {
         goalId,
         stepIndex: goal.get('currentStepIndex'),
       },
-    });
+    },
+    savedState);
   }
   render() {
-    const { goals, me } = this.props;
+    const { goals, me, savedState } = this.props;
+    const { tabIndex } = this.state;
     return (
-      <GoalList me={me} goals={goals} delegate={this} />
+      <GoalList
+        me={me}
+        tabIndex={tabIndex}
+        savedState={savedState}
+        goals={goals}
+        delegate={this}
+      />
     );
   }
 }
@@ -68,6 +91,7 @@ function mapStateToProps(state) {
 const { func, object } = PropTypes;
 HOCGoalList.propTypes = {
   goals: map,
+  savedState: object,
   navPush: func,
   delegate: object,
   me: map,
