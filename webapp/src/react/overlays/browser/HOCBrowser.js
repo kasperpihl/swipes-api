@@ -14,14 +14,18 @@ class HOCBrowser extends Component {
     const webview = this.refs.container.childNodes[0];
     const { onLoad } = this.props;
     if (onLoad) {
-      onLoad(webview);
+      onLoad(webview, this.close);
     }
   }
+  close() {
+    const { overlay } = this.props;
+    overlay(null);
+  }
   getWebviewHtml() {
-    const { url } = this.props;
+    const { url, me } = this.props;
     let html = `<webview src="${url}" `;
     html += 'style="height: 100%;" ';
-    html += 'partition="persist:browser"';
+    html += `partition="persist:browser${me.get('id')}"`;
     html += '></webview>';
 
     return html;
@@ -43,6 +47,7 @@ const { string, func } = PropTypes;
 HOCBrowser.propTypes = {
   url: string,
   onLoad: func,
+  overlay: func,
   me: map,
 };
 
@@ -53,5 +58,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  handleOAuthSuccess: actions.me.handleOAuthSuccess,
+  overlay: actions.main.overlay,
 })(HOCBrowser);

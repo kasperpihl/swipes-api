@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
@@ -60,8 +59,8 @@ class HOCGoalStep extends Component {
   }
 
   goalStepClicked(att) {
-    const { clickedAttachment } = this.props;
-    clickedAttachment(att);
+    const { clickLink } = this.props;
+    clickLink(att);
   }
   goalStepAdd(e) {
     const {
@@ -150,7 +149,6 @@ class HOCGoalStep extends Component {
       isSubmitting,
     } = this.state;
 
-    const array = goal.get('collection').filter(o => !!o.get('short_url')).map(o => o.get('short_url')).toJS();
     console.log(goal.get('collection').toJS());
     return (
       <GoalStep
@@ -168,18 +166,16 @@ class HOCGoalStep extends Component {
   }
 }
 
-const { number, func, object, string } = PropTypes;
+const { func, object } = PropTypes;
 HOCGoalStep.propTypes = {
   step: map,
   archive: func,
   delegate: object,
   submit: func,
   addToCollection: func,
-  clickedAttachment: func,
-  createNote: func,
-  navId: string,
+  clickLink: func,
   contextMenu: func,
-  overlay: func,
+  addLinkMenu: func,
   goal: map,
   me: map,
   users: map,
@@ -192,8 +188,8 @@ function mapStateToProps(state, ownProps) {
   const { goalId } = ownProps;
   const goal = state.getIn(['goals', goalId]);
   return {
-    navId: state.getIn(['navigation', 'id']),
     goal,
+
     users: state.get('users'),
     step: goal.getIn(['steps', goal.get('currentStepIndex')]),
     cachedData: state.getIn(['main', 'cache', goalId]),
@@ -204,12 +200,8 @@ export default connect(mapStateToProps, {
   addLinkMenu: actions.links.addMenu,
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,
-  request: actions.api.request,
-  clickedAttachment: actions.goals.clickedAttachment,
-  overlay: actions.main.overlay,
+  clickLink: actions.links.click,
+  getLinks: actions.links.get,
   addToCollection: actions.goals.addToCollection,
-  showNote: actions.main.note.show,
-  navPop: actions.navigation.pop,
-  createNote: actions.main.note.create,
   submit: actions.goals.submitStep,
 })(HOCGoalStep);

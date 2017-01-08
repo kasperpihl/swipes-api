@@ -35,21 +35,6 @@ export const archive = goalId => (dispatch) => {
   ));
 };
 
-export const clickedAttachment = att => (dispatch) => {
-  if (att.get('service') === 'swipes' && att.get('type') === 'note') {
-    dispatch(note.show(att.get('id')));
-  }
-  if (att.get('service') === 'swipes' && att.get('type') === 'url') {
-    dispatch(overlay({
-      component: 'Browser',
-      props: {
-        url: att.get('id'),
-      },
-    }));
-    // window.open(att.get('id'));
-  }
-};
-
 export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise((resolve) => {
   let modalOpt;
   if (pSteps) {

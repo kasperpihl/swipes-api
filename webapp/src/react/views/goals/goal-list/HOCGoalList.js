@@ -32,10 +32,15 @@ class HOCGoalList extends Component {
   }
   onContextClick() {
     const { navPush } = this.props;
+    const { tabIndex } = this.state;
+    const savedState = {
+      tabIndex,
+    };
     navPush({
       component: 'AddGoal',
       title: 'Add Goal',
-    });
+    },
+    savedState);
   }
   tabDidChange(nav, index) {
     if (this.state.tabIndex !== index) {

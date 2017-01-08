@@ -32,13 +32,13 @@ class Services extends Component {
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
 
-    browser(url, (webview) => {
+    browser(url, (webview, close) => {
       webview.addEventListener('did-get-redirect-request', (e) => {
         if (authSuccess.find(u => e.newURL.startsWith(u))) {
           const { handleOAuthSuccess, overlay } = this.props;
           const params = queryStringToObject(e.newURL.split('?')[1]);
           handleOAuthSuccess(serviceName, params);
-          overlay(null);
+          close();
         }
       });
     });

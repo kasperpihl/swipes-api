@@ -1,12 +1,20 @@
-import * as types from 'constants';
+import * as c from 'constants';
 import * as a from 'actions';
 import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
 
-export const add = (link, permission, meta) => d => d(a.api.request('link.create', {
+export const add = (link, permission, meta) => a.api.request('link.create', {
   link,
   permission,
   meta,
-}));
+});
+
+export const get = ids => (d) => {
+  d(a.api.request('link.get', { ids })).then((res) => {
+    if (res.ok) {
+      d({ type: c.LOAD_LINKS, payload: res.links });
+    }
+  });
+};
 
 export const addMenu = (options, callback) => (d, getState) => {
   const state = getState();
@@ -20,7 +28,11 @@ export const addMenu = (options, callback) => (d, getState) => {
         const addLinkAndCallback = (link, permission, meta) => {
           d(add(link, permission, meta)).then((res) => {
             if (res && res.ok && callback) {
-              callback(res.short_url, meta);
+              callback({
+                shortUrl: res.short_url,
+                title: meta.title,
+                ...link,
+              });
             }
           });
         };
@@ -29,7 +41,7 @@ export const addMenu = (options, callback) => (d, getState) => {
             if (res && res.ok) {
               addLinkAndCallback({
                 type: 'note',
-                service_name: 'swipes',
+                service: 'swipes',
                 id: res.id,
               }, {
                 account_id: myId,
@@ -41,7 +53,7 @@ export const addMenu = (options, callback) => (d, getState) => {
         } else if (type === 'link' && data && data.length) {
           addLinkAndCallback({
             type: 'url',
-            service_name: 'swipes',
+            service: 'swipes',
             id: data,
           }, {
             account_id: myId,
@@ -63,4 +75,24 @@ export const addMenu = (options, callback) => (d, getState) => {
       },
     },
   }));
+};
+
+export const click = data => (dispatch, getState) => {
+  let att = data;
+  const state = getState();
+  if (data.get('short_url')) {
+    att = state.getIn(['main', 'links', data.get('short_url')]);
+  }
+  if (att.get('service') === 'swipes' && att.get('type') === 'note') {
+    dispatch(a.main.note.show(att.get('id')));
+  }
+  if (att.get('service') === 'swipes' && att.get('type') === 'url') {
+    dispatch(a.main.overlay({
+      component: 'Browser',
+      props: {
+        url: att.get('id'),
+      },
+    }));
+    // window.open(att.get('id'));
+  }
 };
