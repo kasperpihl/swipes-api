@@ -22,12 +22,11 @@ const findLinksFromIds = (shareIds) => {
       .getAll(r.args(shareIds))
       .eqJoin('link_id', r.db('swipes').table('links'))
       .map(doc => ({
-        left: doc('left').without('link_id'),
-        right: doc('right').without('id', 'type', 'short_url'),
+        left: doc('left').merge(l => ({ short_url: l('id') })).without('link_id'),
+        right: doc('right').without('short_url'),
       }))
       .zip()
-      .map(l => l.merge(() => ({ short_url: l('id') })))
-      .without('id');
+      .without('permission', 'checksum', 'user_id');
   return db.rethinkQuery(q);
 };
 

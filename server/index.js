@@ -29,6 +29,7 @@ app.use('/v1', bodyParser.json(), handleJsonError);
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
+  res.locals.returnObj = {}; // set a global returnObj.
   return next();
 });
 // No authed routes goes here

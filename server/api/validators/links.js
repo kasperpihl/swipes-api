@@ -1,6 +1,5 @@
 import {
   validatorMiddleware,
-  validatorModelMiddleware,
 } from './validation-wrapper';
 
 const ids = {

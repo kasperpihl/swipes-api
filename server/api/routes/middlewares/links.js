@@ -19,7 +19,7 @@ const linksGetByIds = (req, res, next) => {
     const mappedLinks = ids.map((id) => {
       return links.find(l => l.short_url === id) || {};
     });
-    res.locals.mappedLinks = mappedLinks;
+    res.locals.returnObj.links = mappedLinks;
     return next();
   });
 };
@@ -81,25 +81,13 @@ const linksAddPermission = (req, res, next) => {
 
   addPermissionsToALink({ user_id, checksum, permission })
     .then((result) => {
-      res.locals.short_url = result.changes[0].new_val.id;
+      res.locals.returnObj.short_url = result.changes[0].new_val.id;
 
       return next();
     })
     .catch((err) => {
       return next(err);
     });
-};
-
-const linksCreateMapLocals = (req, res, next) => {
-  const {
-    link,
-    permission,
-  } = res.locals;
-
-  res.locals.service_name = link.service_name;
-  res.locals.account_id = permission.account_id;
-
-  return next();
 };
 
 const linksCreate = (req, res, next) => {
@@ -113,12 +101,10 @@ const linksCreate = (req, res, next) => {
 
   createLink({ meta, insert_doc })
     .then((result) => {
-      const changes = result.changes[0];
-      const checksum = changes.new_val.checksum;
-      const meta = changes.new_val.meta;
-
-      res.locals.meta = meta;
-      res.locals.checksum = checksum;
+      const insertedObj = result.changes[0].new_val;
+      res.locals.checksum = insertedObj.checksum;
+      delete insertedObj.checksum;
+      res.locals.returnObj.link = insertedObj;
 
       return next();
     })
@@ -131,6 +117,5 @@ export {
   linksFindPermissions,
   linksGetByIds,
   linksAddPermission,
-  linksCreateMapLocals,
   linksCreate,
 };
