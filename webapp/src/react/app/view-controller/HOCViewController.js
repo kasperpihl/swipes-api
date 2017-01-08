@@ -96,6 +96,9 @@ class HOCViewController extends Component {
     if (currentView.get('props')) {
       props = currentView.get('props').toObject();
     }
+    if (currentView.get('savedState')) {
+      props.savedState = currentView.get('savedState');
+    }
 
     return (
       <View
