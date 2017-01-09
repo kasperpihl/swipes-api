@@ -42,7 +42,11 @@ class HOCOverlay extends Component {
 
     return <Comp key={overlay.component} {...props} />;
   }
-  renderOverleyActions() {
+  renderOverlayActions() {
+    const { overlay } = this.props;
+    if (!overlay || overlay.hideClose) {
+      return undefined;
+    }
     return (
       <div className="overlay__actions">
         <div className="overlay__action" onClick={this.clickedClose}>
@@ -70,7 +74,7 @@ class HOCOverlay extends Component {
           {renderedOverlay}
         </ReactCSSTransitionGroup>
 
-        {this.renderOverleyActions()}
+        {this.renderOverlayActions()}
       </div>
     );
   }

@@ -1,0 +1,14 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+$navbarHeight: 44px;
+.browser-overlay{
+  height: 100%;
+  &__webview-container{
+    height: calc(100% - #{$navbarHeight});
+  }
+}
+.browser-nav-bar {
+  background: red;
+  height: $navbarHeight;
+}

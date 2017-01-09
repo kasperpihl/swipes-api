@@ -71,7 +71,7 @@ class HOCGoalStep extends Component {
     addLinkMenu({
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
-      positionX: -15,
+      alignX: 'right',
     }, (shortUrl, meta) => {
       addToCollection(goal.get('id'), {
         short_url: shortUrl,

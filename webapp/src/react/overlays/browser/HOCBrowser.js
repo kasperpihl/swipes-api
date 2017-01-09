@@ -3,18 +3,63 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import BrowserNavBar from './BrowserNavBar';
+import './styles/browser';
 
 class HOCBrowser extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      backEnabled: false,
+      forwardEnabled: false,
+      title: '',
+      currentUrl: props.url,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    const webview = this.refs.container.childNodes[0];
+    const webview = this.getWebview();
     const { onLoad } = this.props;
     if (onLoad) {
       onLoad(webview, this.close);
+    }
+    webview.addEventListener('did-navigate', (e) => {
+      this.updateUrl(e.url);
+    });
+    webview.addEventListener('did-navigate-in-page', (e) => {
+      if (e.isMainFrame) {
+        this.updateUrl(e.url);
+      }
+    });
+    webview.addEventListener('page-title-updated', (e) => {
+      this.setState({ title: e.title });
+    });
+  }
+  updateUrl(url) {
+    const updateObj = {
+      url,
+    };
+    const webview = this.getWebview();
+    updateObj.backEnabled = webview.canGoBack();
+    updateObj.forwardEnabled = webview.canGoForward();
+    this.setState(updateObj);
+  }
+  getWebview() {
+    return this.refs.container.childNodes[0];
+  }
+  navbarAction(action) {
+    const webview = this.getWebview();
+    switch (action) {
+      case 'close':
+        return this.close();
+      case 'browser':
+        return window.open(this.state.currentUrl);
+      case 'back':
+        return webview.goBack();
+      case 'forward':
+        return webview.goForward();
+      default:
+        return null;
     }
   }
   close() {
@@ -32,12 +77,28 @@ class HOCBrowser extends Component {
   }
   render() {
     const wHtml = this.getWebviewHtml();
+    const {
+      forwardEnabled,
+      backEnabled,
+      title,
+      currentUrl,
+    } = this.state;
     return (
-      <div
-        ref="container"
-        style={{ height: '100%' }}
-        dangerouslySetInnerHTML={{ __html: wHtml }}
-      />
+      <div className="browser-overlay">
+        <BrowserNavBar
+          backEnabled={backEnabled}
+          forwardEnabled={forwardEnabled}
+          delegate={this}
+          title={title}
+          url={currentUrl}
+        />
+        <div
+          ref="container"
+          className="browser-overlay__webview-container"
+          dangerouslySetInnerHTML={{ __html: wHtml }}
+        />
+      </div>
+
 
     );
   }

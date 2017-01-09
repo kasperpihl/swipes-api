@@ -87,12 +87,7 @@ export const click = data => (dispatch, getState) => {
     dispatch(a.main.note.show(att.get('id')));
   }
   if (att.get('service') === 'swipes' && att.get('type') === 'url') {
-    dispatch(a.main.overlay({
-      component: 'Browser',
-      props: {
-        url: att.get('id'),
-      },
-    }));
+    dispatch(a.main.browser(att.get('id')));
     // window.open(att.get('id'));
   }
 };

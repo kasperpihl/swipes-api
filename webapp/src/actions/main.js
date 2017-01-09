@@ -28,6 +28,7 @@ export const contextMenu = payload => ({ type: types.CONTEXT_MENU, payload });
 // ======================================================
 export const browser = (url, onLoad) => overlay({
   component: 'Browser',
+  hideClose: true,
   props: {
     url,
     onLoad,

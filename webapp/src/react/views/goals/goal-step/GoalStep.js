@@ -39,12 +39,8 @@ class GoalStep extends Component {
   }
   renderProgressBar() {
     const {
-      stepIndex,
-      step,
       goal,
     } = this.props;
-
-    const handoffHtml = handoff && <StepHandoff data={handoff} />;
 
     return (
       <StepSection>
@@ -118,7 +114,6 @@ class GoalStep extends Component {
         <div className="goal-step__content">
           {this.renderProgressBar()}
           {this.renderStatus()}
-          {this.renderHandoff()}
           {this.renderCollection()}
           {this.renderSubmission()}
         </div>
