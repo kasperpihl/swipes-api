@@ -3,7 +3,8 @@
 
 #content {
   @include size(100%);
-  @include flex();
+  @include flex(flex-start, center);
+  overflow-y: auto;
   position: relative;
 
   .app {

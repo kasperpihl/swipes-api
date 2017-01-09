@@ -8,9 +8,9 @@
   position: relative;
 
   &__icon {
-    @include size(32px);
+    @include size(36px);
     @include flex(none);
-    border-radius: 50%;
+    border-radius: 6px;
   }
 
   &__column {
@@ -20,10 +20,10 @@
   }
 
   &__name {
-    @include size(100%, 32px);
-    font-size: 12px;
-    font-weight: 500;
-    color: $deepBlue-90;
+    @include size(100%, calc(36px - 13px));
+    font-size: 15px;
+    color: $deepBlue-100;
+    text-transform: capitalize;
   }
 
   &__message {

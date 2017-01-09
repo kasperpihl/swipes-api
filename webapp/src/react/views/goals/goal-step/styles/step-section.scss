@@ -2,6 +2,7 @@
 @import '~styles/_mixins.scss';
 
 .step-section {
+  $b: &;
   @include size(100%, auto);
   max-width: 780px;
   position: relative;
@@ -9,18 +10,26 @@
   padding-top: 42px;
   padding-left: 12px;
 
+  &:first-child {
+    padding: 0;
+  }
+
   &:not(:first-child) {
     border-top: 1px solid $deepBlue-10;
   }
 
   &__title {
     @include size(100%, 30px);
-    @include flex(center, flex-start);
+    @include flex(center, flex-end);
     position: absolute;
     left: 0; top: 0;
     text-transform: uppercase;
     font-size: 9px;
     font-weight: bold;
-    color: #7F8596;
+    color: $deepBlue-40;
+
+    &:empty {
+      display: none;
+    }
   }
 }

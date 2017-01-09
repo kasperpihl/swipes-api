@@ -64,15 +64,37 @@
 
   &__status {
     @include size(100%, auto);
-    flex: none;
     font-size: 12px;
-    font-weight: 500;
-    line-height: 1.75;
-    color: $deepBlue-30;
+    line-height: 24px;
+    color: $deepBlue-70;
+
+    span {
+      font-size: 21px;
+      line-height: 24px;
+      color: $deepBlue-90;
+      padding-right: 24px;
+      position: relative;
+
+      &:after {
+        @include size(1px, 24px);
+        content: '';
+        position: absolute;
+        right: 12px; top: 50%;
+        transform: translate(0, -50%);
+        background-color: $deepBlue-20;
+      }
+    }
+  }
+
+  &__attachments {
+    @include size(100%, auto);
+    @include flex(flex-start, space-between);
+    flex-wrap: wrap;
+    position: relative;
   }
 
   &__btn {
-    margin-top: 15px;
-    // display: inline-flex !important;
+    position: absolute;
+    right: 0; bottom: 15px;
   }
 }

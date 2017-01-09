@@ -5,7 +5,7 @@
   $b: &;
   @include size(100%, auto);
   @include flex(center, flex-start);
-  max-width: 500px;
+  max-width: 50%;
   position: relative;
 
   &__icon {
