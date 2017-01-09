@@ -11,6 +11,7 @@ const authUrl = (data, callback) => {
   const url = oauth2Client.generateAuthUrl({
     // 'online' (default) or 'offline' (gets refresh_token)
     access_type: 'offline',
+    approval_prompt: 'force', // to get refresh_token everytime
     scope: scopes,
   });
 
