@@ -64,7 +64,7 @@ class HOCSidebar extends Component {
   render() {
     return (
       <div className="sidebar">
-        <div className="sidebar__top-section">
+        <div className="sidebar__top-section2">
           {this.renderTopSection()}
         </div>
         {this.renderProfile()}

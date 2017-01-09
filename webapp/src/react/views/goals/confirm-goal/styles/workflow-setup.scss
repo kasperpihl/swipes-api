@@ -1,8 +1,0 @@
-@import '~styles/_vars.scss';
-@import '~styles/_mixins.scss';
-
-.workflow__setup {
-  @include size(100%);
-  @include flex(flex);
-  background-color: $bg;
-}

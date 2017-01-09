@@ -1,9 +1,0 @@
-@import "~styles/_vars.scss";
-@import "~styles/_mixins.scss";
-
-.workflow__list {
-  @include size(100%)
-  background-color: $bg;
-  padding: 60px 30px;
-  overflow-y: auto;
-}

@@ -1,7 +1,6 @@
 import * as types from 'constants';
 
 const startingViewForNavId = (navId) => {
-  console.log(navId);
   switch (navId) {
     case 'goals':
     default:

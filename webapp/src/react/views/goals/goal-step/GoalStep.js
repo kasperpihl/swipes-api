@@ -67,7 +67,7 @@ class GoalStep extends Component {
     );
   }
 
-  renderCollection() {
+  renderAttachments() {
     const {
       collection: col,
     } = this.props;
@@ -80,7 +80,7 @@ class GoalStep extends Component {
       />
     ));
     return (
-      <StepSection title="Content">
+      <StepSection title="Attachments">
         <div className="goal-step__attachments">
           {html}
         </div>
@@ -88,7 +88,6 @@ class GoalStep extends Component {
       </StepSection>
     );
   }
-
 
   renderSubmission() {
     const { options, step, isSubmitting } = this.props;
@@ -114,7 +113,7 @@ class GoalStep extends Component {
         <div className="goal-step__content">
           {this.renderProgressBar()}
           {this.renderStatus()}
-          {this.renderCollection()}
+          {this.renderAttachments()}
           {this.renderSubmission()}
         </div>
       </div>
