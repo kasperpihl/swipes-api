@@ -72,11 +72,8 @@ class HOCGoalStep extends Component {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
       alignX: 'right',
-    }, (shortUrl, meta) => {
-      addToCollection(goal.get('id'), {
-        short_url: shortUrl,
-        title: meta.title,
-      });
+    }, (obj) => {
+      addToCollection(goal.get('id'), obj);
     });
   }
   goalStepSubmit(i, message) {
