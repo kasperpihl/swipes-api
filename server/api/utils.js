@@ -10,13 +10,11 @@ const camelCaseToUnderscore = (word) => {
   return word.replace(/([A-Z]+)/g, (x, y) => { return `_${y.toLowerCase()}`; }).replace(/^_/, '');
 };
 const sendResponse = (req, res) => {
-  let {
-    returnObj,
+  const {
+    returnObj = {},
   } = res.locals;
-  if (typeof returnObj !== 'object') {
-    returnObj = {};
-  }
-  res.status(200).json({ ok: true, ...returnObj });
+
+  return res.status(200).json({ ok: true, ...returnObj });
 };
 
 export {
