@@ -1,7 +1,5 @@
 import config from 'config';
-import {
-  request,
-} from './request';
+import request from './request';
 
 const slackConfig = config.get('slack');
 const authUrl = (data, callback) => {
