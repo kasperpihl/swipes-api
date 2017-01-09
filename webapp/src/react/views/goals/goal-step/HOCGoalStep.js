@@ -78,7 +78,7 @@ class HOCGoalStep extends Component {
       options: {
         boundingRect: e.target.getBoundingClientRect(),
         alignY: 'center',
-        positionX: -15,
+        alignX: 'right',
       },
       props: {
         callback: (type, data) => {

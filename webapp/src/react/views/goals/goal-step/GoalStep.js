@@ -5,7 +5,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
-import ProgressDots from 'components/progress-dots/ProgressDots';
+import ProgressBar from 'components/progress-bar/ProgressBar';
 import Button from 'Button';
 import StepSection from './StepSection';
 import StepHandoff from './StepHandoff';
@@ -37,21 +37,33 @@ class GoalStep extends Component {
     } = this.props;
     this.callDelegate('goalStepClicked', collection.get(i), e);
   }
-  renderStatus() {
+  renderProgressBar() {
     const {
       stepIndex,
       step,
       goal,
-      status,
     } = this.props;
     return (
-      <StepSection title="Status">
-        <ProgressDots
+      <StepSection>
+        <ProgressBar
           length={goal.get('steps').size}
           completed={goal.get('currentStepIndex')}
         />
-        <div>{status}</div>
-        <div>{`${stepIndex + 1}. ${step.get('title')}`}</div>
+      </StepSection>
+    );
+  }
+  renderStatus() {
+    const {
+      stepIndex,
+      step,
+      status,
+    } = this.props;
+
+    return (
+      <StepSection title="current step">
+        <div className="goal-step__status">
+          <span>{`${stepIndex + 1}. ${step.get('title')} `}</span>{status}
+        </div>
       </StepSection>
     );
   }
@@ -80,8 +92,10 @@ class GoalStep extends Component {
     ));
     return (
       <StepSection title="Content">
-        {html}
-        <Button icon="AddIcon" primary onClick={this.onAdd} className="goal-step__btn" />
+        <div className="goal-step__attachments">
+          {html}
+        </div>
+        <Button icon="AddIcon" onClick={this.onAdd} className="goal-step__btn" />
       </StepSection>
     );
   }
@@ -109,6 +123,7 @@ class GoalStep extends Component {
       <div className="goal-step">
 
         <div className="goal-step__content">
+          {this.renderProgressBar()}
           {this.renderStatus()}
           {this.renderHandoff()}
           {this.renderCollection()}

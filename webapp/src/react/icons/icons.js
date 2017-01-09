@@ -1,10 +1,6 @@
 import FindIcon from './svgs/sw-find-icon.svg';
-import EmptyWorkspace from './svgs/emptystate-workspace.svg';
-import WorkspaceIcon from './svgs/workspace-icon.svg';
-import SlackOnline from './svgs/slack-online.svg';
 import SwipesLogo from './svgs/swipes-logo.svg';
 import DropboxLogo from './svgs/dropbox-logo.svg';
-import SlackOffline from './svgs/slack-offline.svg';
 import EarthIcon from './svgs/earth-icon.svg';
 import DownloadIcon from './svgs/download-icon.svg';
 import AssignIcon from './svgs/assign-icon.svg';
@@ -13,8 +9,6 @@ import LogoLoader from './svgs/sw-logo-loader.svg';
 import CheckmarkIcon from './svgs/checkmark-icon.svg';
 import SlackIcon from './svgs/logo-slack.svg';
 import ListIcon from './svgs/list-icon.svg';
-import ClockIcon from './svgs/clock-icon.svg';
-import ActionIcon from './svgs/action-icon.svg';
 import CloseIcon from './svgs/close-icon.svg';
 import DesktopIcon from './svgs/desktop-icon.svg';
 import ArrowLeftIcon from './svgs/arrow-left-icon.svg';
@@ -24,9 +18,6 @@ import MinusIcon from './svgs/minus-icon.svg';
 import DeliverIcon from './svgs/deliver-icon.svg';
 import VoteIcon from './svgs/vote-icon.svg';
 import DotIcon from './svgs/dot-icon.svg';
-import ProgressBarSlope from './svgs/progress-bar-slope.svg';
-import LoginIconOne from './svgs/login-background-1.svg';
-import LoginIconTwo from './svgs/login-background-2.svg';
 import WindowsIcon from './svgs/windows-icon.svg';
 import MacIcon from './svgs/mac-icon.svg';
 import LinuxIcon from './svgs/linux-icon.svg';
@@ -65,34 +56,43 @@ import fourCover from './pngs/4.png';
 import successState from './pngs/success-state.png';
 import designWorkflowCover from './pngs/design-template.png';
 
+import LoginIconOne from './svgs/login-background-1.svg';
+import LoginIconTwo from './svgs/login-background-2.svg';
+
 export {
-  FindIcon,
-  EmptyWorkspace,
-  WorkspaceIcon,
-  SlackOnline,
+  // SwipesIcon, /* SwipesLogo old, replace */
   SwipesLogo,
   DropboxLogo,
-  SlackOffline,
-  EarthIcon,
-  DownloadIcon,
-  AssignIcon,
-  PersonIcon,
+  SlackIcon, /* SlackLogo */
+  FindIcon,  /* Find */
+  EarthIcon, /* Earth` */
+  DownloadIcon, /* Download */
+  AssignIcon, /* AddPerson */
+  PersonIcon, /* Person */
   LogoLoader,
-  CheckmarkIcon,
-  SlackIcon,
-  ListIcon,
-  ClockIcon,
-  ActionIcon,
-  CloseIcon,
-  DesktopIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  AddIcon,
-  MinusIcon,
-  DeliverIcon,
-  VoteIcon,
-  DotIcon,
-  ProgressBarSlope,
+  CheckmarkIcon, /* Checkmark */
+  ListIcon, /* List */
+  CloseIcon, /* Close */
+  DesktopIcon, /* Desktop */
+  ArrowLeftIcon, /* ArrowLeft*/
+  ArrowRightIcon, /* ArrowRight*/
+  AddIcon, /* Plus */
+  MinusIcon, /* Minus */
+  DeliverIcon, /* Deliver */
+  VoteIcon, /* Vote */
+  DotIcon, /* Dote */
+  BoldIcon, /* Bold */
+  ItallicIcon, /* Itallic */
+  H1Icon, /* HeaderOne */
+  H2Icon, /* HeaderTwo */
+  UnderlineIcon, /* Underline */
+  UnorderedListIcon, /* UnorderedList */
+  OrderedListIcon, /* OrderedList */
+  ThreeDotsIcon, /* ThreeDots */
+  LinkIcon, /* Hyperlink */
+  WindowsIcon, /* Windows */
+  MacIcon, /* Mac */
+  LinuxIcon, /* Linux */
   ShapeOne,
   ShapeTwo,
   ShapeThree,
@@ -103,28 +103,15 @@ export {
   ShapeEight,
   ShapeNine,
   ShapeTen,
-  BoldIcon,
-  ItallicIcon,
-  H1Icon,
-  H2Icon,
-  UnderlineIcon,
-  UnorderedListIcon,
-  LoginIconOne,
-  LoginIconTwo,
-  WindowsIcon,
-  MacIcon,
-  LinuxIcon,
-  SwipesIcon,
-  LinkIcon,
-  OrderedListIcon,
-  ThreeDotsIcon,
-  facebookCover,
-  airbnbCover,
-  uberCover,
-  oneCover,
-  twoCover,
-  threeCover,
-  fourCover,
-  successState,
-  designWorkflowCover,
+  // LoginIconOne,
+  // LoginIconTwo,
+  // facebookCover,
+  // airbnbCover,
+  // uberCover,
+  // oneCover,
+  // twoCover,
+  // threeCover,
+  // fourCover,
+  // successState,
+  // designWorkflowCover,
 };

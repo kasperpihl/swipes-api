@@ -1,0 +1,17 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+$step-size: 20px;
+$small-dot-size: 4px;
+$big-dot-size: 10px;
+
+.progress-bar {
+  @include size(100%, auto);
+  border: none;
+
+  &__filling {
+    @include size(100%, 15px);
+    background-color: $green-color;
+    margin: 1px 0;
+  }
+}
