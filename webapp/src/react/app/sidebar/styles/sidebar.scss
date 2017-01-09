@@ -17,38 +17,10 @@
     right: 0; top: 0;
   }
 
-  &__teams {
+  &__top-section {
     @include size(100%, auto);
     @include flex(flex-start, center);
     padding-top: 39px;
-  }
-
-  &__team {
-    @include size(45px);
-    @include flex();
-    flex: none;
-    border-radius: 50%;
-    border: 1px solid $deepBlue-20;
-    filter: grayscale(100%);
-    transition: .1s;
-
-    &:hover {
-      filter: grayscale(0%);
-      transition: .1s;
-    }
-
-    &--active {
-      position: relative;
-      filter: grayscale(0%);
-
-      &:before {
-        content: '';
-        position: absolute;
-        left: -10px; top: 0;
-        @include size(2px, 100%);
-        background-color: $blue-100;
-      }
-    }
   }
 
   &__item {

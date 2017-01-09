@@ -131,10 +131,10 @@ class HOCSideNote extends Component {
     const {
       saveNote,
       sideNoteId,
-      navId,
+      organizationId,
     } = this.props;
 
-    saveNote(navId, sideNoteId, this.convertDataToSave(editorState), unlock);
+    saveNote(organizationId, sideNoteId, this.convertDataToSave(editorState), unlock);
   }
   bouncedSaveNote() {
     const { editorState } = this.state;
@@ -225,7 +225,7 @@ const { string, func } = PropTypes;
 HOCSideNote.propTypes = {
   sideNoteId: string,
   note: map,
-  navId: string,
+  organizationId: string,
   me: map,
   users: map,
   saveNote: func,
@@ -233,10 +233,9 @@ HOCSideNote.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const navId = state.getIn(['navigation', 'id']);
   const sideNoteId = state.getIn(['main', 'sideNoteId']);
   return {
-    navId,
+    organizationId: state.getIn(['me', 'organizations', 0, 'id']),
     sideNoteId,
     me: state.get('me'),
     note: state.getIn(['notes', sideNoteId]),

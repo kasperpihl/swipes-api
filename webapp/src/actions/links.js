@@ -19,7 +19,7 @@ export const get = ids => (d) => {
 export const addMenu = (options, callback) => (d, getState) => {
   const state = getState();
   const myId = state.getIn(['me', 'id']);
-  const navId = state.getIn(['navigation', 'id']);
+  const orgId = state.getIn(['me', 'organizations', 0, 'id']);
   d(a.main.contextMenu({
     options,
     component: AttachmentMenu,
@@ -37,7 +37,7 @@ export const addMenu = (options, callback) => (d, getState) => {
           });
         };
         if (type === 'note' && data && data.length) {
-          d(a.main.note.create(navId, data)).then((res) => {
+          d(a.main.note.create(orgId, data)).then((res) => {
             if (res && res.ok) {
               addLinkAndCallback({
                 type: 'note',

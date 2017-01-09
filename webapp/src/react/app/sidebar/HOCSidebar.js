@@ -19,51 +19,35 @@ class HOCSidebar extends Component {
 
     navigateToId(id);
   }
-  renderTeam(id) {
-    const { navId } = this.props;
-    let className = 'sidebar__team';
-
-    if (id === navId) {
-      className += ' sidebar__team--active';
-    }
-
-    return (
-      <div
-        onClick={this.clickedItem}
-        className={className}
-        key={id}
-        data-id={id}
-      >
-        <Icon svg="SwipesLogo" className="sidebar__icon" />
-      </div>
-    );
-  }
-  renderItem(id, image) {
+  renderItem(item) {
     const { navId } = this.props;
     let className = 'sidebar__item';
 
-    if (id === navId) {
+    if (item.id === navId) {
       className += ' sidebar__item--active';
+    }
+    let image = <Icon svg={item.svg} className="sidebar__icon" />;
+    if (item.src) {
+      image = <img src={item.src} className="sidebar__image" alt="" />;
     }
 
     return (
       <div
         onClick={this.clickedItem}
         className={className}
-        key={id}
-        data-id={id}
+        key={item.id}
+        data-id={item.id}
       >
-        <img src={image} className="sidebar__image" alt="" />
+        {image}
       </div>
     );
   }
-  renderTeams() {
-    const { me } = this.props;
-
-    if (!me || !me.size) {
-      return undefined;
-    }
-    return me.get('organizations').map(o => this.renderTeam(o.get('id')));
+  renderTopSection() {
+    return [
+      { id: 'goals', svg: 'EarthIcon' },
+      { id: 'dashboard', svg: 'AssignIcon' },
+      { id: 'find', svg: 'FindIcon' },
+    ].map(o => this.renderItem(o));
   }
   renderProfile() {
     const { me } = this.props;
@@ -72,7 +56,7 @@ class HOCSidebar extends Component {
       return undefined;
     }
 
-    return this.renderItem(me.get('id'), me.get('profile_pic'));
+    return this.renderItem({ id: 'profile', src: me.get('profile_pic') });
   }
   renderStore() {
     // For later
@@ -80,8 +64,8 @@ class HOCSidebar extends Component {
   render() {
     return (
       <div className="sidebar">
-        <div className="sidebar__teams">
-          {this.renderTeams()}
+        <div className="sidebar__top-section">
+          {this.renderTopSection()}
         </div>
         {this.renderProfile()}
       </div>

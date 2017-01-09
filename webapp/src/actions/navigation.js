@@ -1,17 +1,26 @@
 import * as types from 'constants';
 
-const defaultHistoryForProfile = () => [{
-  component: 'Profile',
-  title: 'Profile',
-}];
-
-const defaultHistoryForOrgName = orgName => [{
-  component: 'OrgDashboard',
-  title: orgName,
-}, {
-  component: 'GoalList',
-  title: 'Goals',
-}];
+const startingViewForNavId = (navId) => {
+  console.log(navId);
+  switch (navId) {
+    case 'goals':
+    default:
+      return {
+        component: 'GoalList',
+        title: 'Goals',
+      };
+    case 'dashboard':
+      return {
+        component: 'OrgDashboard',
+        title: 'Dashboard',
+      };
+    case 'profile':
+      return {
+        component: 'Profile',
+        title: 'Profile',
+      };
+  }
+};
 
 export function navigateToId(navId) {
   return (dispatch, getState) => {
@@ -22,11 +31,7 @@ export function navigateToId(navId) {
       const state = getState();
       let history = state.getIn(['navigation', 'history', navId]);
       if (!history) {
-        history = defaultHistoryForProfile();
-        const org = state.getIn(['me', 'organizations']).find(o => o.get('id') === navId);
-        if (org) {
-          history = defaultHistoryForOrgName(org.get('name'));
-        }
+        history = [startingViewForNavId(navId)];
         payload.history = history;
       }
       dispatch({ type: types.NAVIGATION_SET, payload });
@@ -40,7 +45,7 @@ export function init() {
     let navId = state.getIn(['navigation', 'id']);
     const me = state.get('me');
     if (!navId && me) {
-      navId = me.getIn(['organizations', 0, 'id']);
+      navId = 'goals';
     }
     if (navId) {
       dispatch(navigateToId(navId));

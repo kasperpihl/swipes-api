@@ -87,9 +87,8 @@ ConfirmGoal.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const navId = state.getIn(['navigation', 'id']);
   return {
-    organization_id: navId,
+    organization_id: state.getIn(['me', 'organizations', 0, 'id']),
   };
 }
 
