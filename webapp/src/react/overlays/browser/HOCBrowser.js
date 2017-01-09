@@ -58,6 +58,9 @@ class HOCBrowser extends Component {
         return webview.goBack();
       case 'forward':
         return webview.goForward();
+      case 'reload':
+        console.log('hello');
+        return webview.reload();
       default:
         return null;
     }

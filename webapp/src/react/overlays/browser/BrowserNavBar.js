@@ -9,7 +9,7 @@ class BrowserNavBar extends Component {
     this.callDelegate = setupDelegate(props.delegate);
 
     this.actions = {};
-    ['back', 'forward', 'refresh', 'browser', 'close'].forEach((act) => {
+    ['back', 'forward', 'reload', 'browser', 'close'].forEach((act) => {
       this.actions[act] = this.onAction.bind(this, act);
     });
   }
@@ -37,8 +37,8 @@ class BrowserNavBar extends Component {
         onClick={this.actions.forward}
       />,
       <Button
-        key="refresh"
-        onClick={this.actions.refresh}
+        key="reload"
+        onClick={this.actions.reload}
       />,
     ];
   }
