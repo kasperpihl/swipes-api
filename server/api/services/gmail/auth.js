@@ -41,6 +41,10 @@ const authData = (data, callback) => {
       auth: oauth2Client,
     }, (err, res) => {
       const auth_data = Object.assign({}, res, tokens);
+
+      // Need that for the refresh token
+      auth_data.ts_last_token = new Date().getTime();
+
       const data = {
         auth_data,
         id: res.emailAddress,
