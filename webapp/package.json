@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Swipes Webapp",
   "author": "Swipes Team",
   "license": "MIT",
@@ -43,6 +43,7 @@
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
+    "valjs": "0.0.4",
     "vivus": "^0.2.3"
   },
   "devDependencies": {
