@@ -11,6 +11,7 @@ import StepSection from './StepSection';
 import StepHandoff from './StepHandoff';
 import StepContentRow from './StepContentRow';
 import StepSubmission from './StepSubmission';
+import GoalStatus from './GoalStatus';
 
 
 // styles
@@ -51,6 +52,12 @@ class GoalStep extends Component {
       </StepSection>
     );
   }
+  renderStatusMessage() {
+    const from = ['UB9BXJ1JB', 'URU3EUPOE'];
+    const to = ['UZTYMBVGO'];
+    const message = 'Stefan & Yana did their part. Now it is up to you. Good luck';
+    return <GoalStatus fromAssignees={from} toAssignees={to} message={message} />;
+  }
   renderStatus() {
     const {
       stepIndex,
@@ -88,12 +95,23 @@ class GoalStep extends Component {
       </StepSection>
     );
   }
+  renderHandoff() {
+    const { handoff } = this.props;
+    if (!handoff) {
+      return undefined;
+    }
+    return (
+      <StepSection title="Deliver">
+        <StepHandoff data={handoff} />
+      </StepSection>
+    );
+  }
 
   renderSubmission() {
     const { options, step, isSubmitting } = this.props;
     if (options.showSubmission) {
       return (
-        <StepSection title="Deliver">
+        <StepSection title="Handoff">
           <StepSubmission
             onSubmit={this.onSubmit}
             submission={step.get('submission')}
@@ -112,8 +130,10 @@ class GoalStep extends Component {
 
         <div className="goal-step__content">
           {this.renderProgressBar()}
+          {this.renderStatusMessage()}
           {this.renderStatus()}
           {this.renderAttachments()}
+          {this.renderHandoff()}
           {this.renderSubmission()}
         </div>
       </div>
