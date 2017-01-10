@@ -1,4 +1,5 @@
 import randomstring from 'randomstring';
+import valjs, { shape } from 'valjs';
 
 const generateSlackLikeId = (type) => {
   const id = randomstring.generate(8).toUpperCase();
@@ -17,8 +18,19 @@ const sendResponse = (req, res) => {
   return res.status(200).json({ ok: true, ...returnObj });
 };
 
+const valWrap = (name, schema, middleware) => (req, res, next) => {
+  const error = valjs(res.locals, shape(schema));
+
+  if (error) {
+    return next(`${name} ${error}`);
+  }
+
+  return middleware(req, res, next);
+};
+
 export {
   generateSlackLikeId,
   camelCaseToUnderscore,
   sendResponse,
+  valWrap,
 };
