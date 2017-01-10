@@ -15,7 +15,8 @@
     "request": "~2.72.0",
     "request-promise": "3.0.0",
     "rethinkdb": "^2.3.1",
-    "underscore": "1.8.x"
+    "underscore": "1.8.x",
+    "valjs": "0.0.5"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
@@ -37,7 +38,6 @@
     "watch": "webpack --progress --watch",
     "server": "pm2-dev start pm2_config.json",
     "start": "npm run build && npm-run-all --parallel watch server",
-
     "server-staging": "node ./dist/index.js",
     "staging": "npm run server-staging",
     "deploy": "npm run build && eb deploy"
