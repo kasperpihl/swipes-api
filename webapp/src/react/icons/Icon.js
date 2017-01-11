@@ -10,7 +10,7 @@ export default function Icon(props) {
   } = props;
   let returnHtml = null;
 
-  if (svg) {
+  if (svg && Icons[svg]) {
     const Comp = Icons[svg];
 
     returnHtml = <Comp {...other} />;

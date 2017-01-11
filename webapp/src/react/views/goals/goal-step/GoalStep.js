@@ -82,7 +82,7 @@ class GoalStep extends Component {
       <StepContentRow
         key={i}
         onClick={this.onOpenCached(i)}
-        icon={c.get('type') === 'note' ? 'List' : 'Hyperlink'}
+        icon={c.get('type') === 'note' ? 'SmallList' : 'Hyperlink'}
         title={c.get('title')}
       />
     ));
