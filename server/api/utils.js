@@ -1,5 +1,5 @@
 import randomstring from 'randomstring';
-import valjs, { shape } from 'valjs';
+import valjs, { shape, string, func, object } from 'valjs';
 
 const generateSlackLikeId = (type) => {
   const id = randomstring.generate(8).toUpperCase();
@@ -18,19 +18,51 @@ const sendResponse = (req, res) => {
   return res.status(200).json({ ok: true, ...returnObj });
 };
 
-const valWrap = (name, schema, middleware) => (req, res, next) => {
-  const error = valjs(res.locals, shape(schema));
+const valLocals = (name, schema, middleware) => (req, res, next) => {
+  // let's validate the params #inception! :D
+  let error = valjs({ name, schema, middleware }, shape({
+    name: string.require(),
+    schema: object.require(),
+    middleware: func,
+  }));
+
+  if (!error) {
+    error = valjs(res.locals, shape(schema));
+  }
 
   if (error) {
     return next(`${name} ${error}`);
   }
+  if (middleware) {
+    return middleware(req, res, next);
+  }
+  return next();
+};
 
-  return middleware(req, res, next);
+const valBody = (schema, middleware) => (req, res, next) => {
+  // let's validate the params #inception! :D
+  let error = valjs({ schema, middleware }, shape({
+    schema: object.require(),
+    middleware: func,
+  }));
+
+  if (!error) {
+    error = valjs(req.body, shape(schema));
+  }
+
+  if (error) {
+    return next(`body: ${error}`);
+  }
+  if (middleware) {
+    return middleware(req, res, next);
+  }
+  return next();
 };
 
 export {
   generateSlackLikeId,
   camelCaseToUnderscore,
   sendResponse,
-  valWrap,
+  valLocals,
+  valBody,
 };

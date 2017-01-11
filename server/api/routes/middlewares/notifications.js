@@ -4,7 +4,7 @@ import { arrayOf, string } from 'valjs';
 import AWS from 'aws-sdk';
 import hash from 'object-hash';
 import {
-  valWrap,
+  valLocals,
 } from '../../utils';
 import {
   dbNotificationsMarkAsSeen,
@@ -17,7 +17,7 @@ const {
   queueHost,
 } = config.get('amazonQueue');
 
-const notificationsMarkAsSeen = valWrap('notificationsMarkAsSeen', {
+const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
   notification_ids: arrayOf(string).require(),
 }, (req, res, next) => {
   const {
