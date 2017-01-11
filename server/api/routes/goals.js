@@ -1,8 +1,11 @@
 import express from 'express';
 import {
-  validateGoalsCreate,
-  validateGoalsDelete,
-} from '../validators/goals';
+  string,
+  object,
+} from 'valjs';
+import {
+  valBody,
+} from '../utils';
 import {
   goalsUpdateData,
   goalsCreate,
@@ -40,7 +43,11 @@ authed.all('/goals.processes', (req, res, next) => {
 });
 
 authed.all('/goals.create',
-  validateGoalsCreate,
+  valBody({
+    goal: object.require(), // T_TODO make it shape when it's more final
+    organization_id: string.require(),
+    workflow_id: string,
+  }),
   goalsCreate,
   goalsNext,
   goalsInsert,
@@ -54,7 +61,9 @@ authed.all('/goals.create',
   });
 
 authed.all('/goals.delete',
-  validateGoalsDelete,
+  valBody({
+    goal_id: string.require(),
+  }),
   goalsDelete,
   goalsDeleteQueueMessage,
   notificationsPushToQueue,

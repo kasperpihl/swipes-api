@@ -77,7 +77,7 @@ class HOCGoalStep extends Component {
     });
   }
   goalStepSubmit(i, message) {
-    const { goal, step, submit } = this.props;
+    const { goal, step, submit, overlay } = this.props;
     let previousSteps;
 
     if (i) {
@@ -85,8 +85,19 @@ class HOCGoalStep extends Component {
     }
 
     this.setState({ isSubmitting: true });
-    submit(goal.get('id'), step.get('id'), message, previousSteps).then(() => {
+    submit(goal.get('id'), step.get('id'), message, previousSteps).then((didSubmit) => {
       this.setState({ isSubmitting: false });
+      if (didSubmit) {
+        overlay({
+          component: 'Completed',
+          opaque: true,
+          props: {
+            onClose: () => {
+              console.log('closing the overlay, we should figure out how to animate progress here');
+            },
+          },
+        });
+      }
     });
   }
   generateStatus() {
@@ -146,7 +157,6 @@ class HOCGoalStep extends Component {
       isSubmitting,
     } = this.state;
 
-    console.log(goal.get('collection').toJS());
     return (
       <GoalStep
         goal={goal}
@@ -172,6 +182,7 @@ HOCGoalStep.propTypes = {
   addToCollection: func,
   clickLink: func,
   contextMenu: func,
+  overlay: func,
   addLinkMenu: func,
   goal: map,
   me: map,
@@ -195,6 +206,7 @@ function mapStateToProps(state, ownProps) {
 }
 export default connect(mapStateToProps, {
   addLinkMenu: actions.links.addMenu,
+  overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,
   clickLink: actions.links.click,

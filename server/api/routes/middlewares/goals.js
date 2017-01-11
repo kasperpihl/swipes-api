@@ -1,17 +1,28 @@
 import r from 'rethinkdb';
 import {
+  string,
+  object,
+  bool,
+} from 'valjs';
+import {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
 } from './db_utils/goals';
 import {
   generateSlackLikeId,
+  valLocals,
 } from '../../utils';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 
-const goalsCreate = (req, res, next) => {
+const goalsCreate = valLocals('goalsCreate', {
+  user_id: string.require(),
+  goal: object.require(),
+  organization_id: string.require(),
+  workflow_id: string,
+}, (req, res, next) => {
   const {
     user_id,
     goal,
@@ -45,9 +56,13 @@ const goalsCreate = (req, res, next) => {
   res.locals.doNext = true;
 
   return next();
-};
+});
 
-const goalsNext = (req, res, next) => {
+const goalsNext = valLocals('goalsNext', {
+  goal: object.require(),
+  doNext: bool.require(),
+  step_back_id: string.require(),
+}, (req, res, next) => {
   const {
     goal,
     doNext,
@@ -87,7 +102,6 @@ const goalsNext = (req, res, next) => {
     });
   }
 
-
   const nextStep = goal.steps[nextStepIndex];
   // Check that next step is not the last step
   if (nextStep) {
@@ -101,9 +115,11 @@ const goalsNext = (req, res, next) => {
   }
 
   return next();
-};
+});
 
-const goalsInsert = (req, res, next) => {
+const goalsInsert = valLocals('goalsInsert', {
+  goal: object.require(),
+}, (req, res, next) => {
   const {
     goal,
   } = res.locals;
@@ -117,9 +133,11 @@ const goalsInsert = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
-const goalsDelete = (req, res, next) => {
+const goalsDelete = valLocals('goalsDelete', {
+  goal_id: string.require(),
+}, (req, res, next) => {
   const {
     goal_id,
   } = res.locals;
@@ -134,7 +152,7 @@ const goalsDelete = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
 const goalsGet = (req, res, next) => {
   const {
@@ -192,7 +210,11 @@ const goalsUpdateData = (req, res, next) => {
     });
 };
 
-const goalsCreateQueueMessage = (req, res, next) => {
+const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
+  user_id: string.require(),
+  goal: object.require(),
+  eventType: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     goal,
@@ -209,9 +231,13 @@ const goalsCreateQueueMessage = (req, res, next) => {
   res.locals.messageGroupId = goal_id;
 
   return next();
-};
+});
 
-const goalsDeleteQueueMessage = (req, res, next) => {
+const goalsDeleteQueueMessage = valLocals('goalsDeleteQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  eventType: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     goal_id,
@@ -226,7 +252,7 @@ const goalsDeleteQueueMessage = (req, res, next) => {
   res.locals.messageGroupId = goal_id;
 
   return next();
-};
+});
 
 const goalsNextStepQueueMessage = (req, res, next) => {
   const {

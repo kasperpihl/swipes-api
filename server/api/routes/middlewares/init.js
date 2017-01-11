@@ -1,5 +1,11 @@
 import Promise from 'bluebird';
 import config from 'config';
+import {
+  string,
+} from 'valjs';
+import {
+  valLocals,
+} from '../../utils';
 import initMe from './db_utils/me';
 import processesGetAllOrderedByTitle from './db_utils/processes';
 import {
@@ -12,7 +18,9 @@ import {
   dbNotificationsGetAllByIdOrderByTs,
 } from './db_utils/notifications';
 
-const initGetData = (req, res, next) => {
+const initGetData = valLocals('initGetData', {
+  user_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
   } = res.locals;
@@ -82,6 +90,6 @@ const initGetData = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
 export default initGetData;

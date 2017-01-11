@@ -1,7 +1,14 @@
 import config from 'config';
-// import request from 'request';
 import AWS from 'aws-sdk';
 import hash from 'object-hash';
+import {
+  string,
+  object,
+  arrayOf,
+} from 'valjs';
+import {
+  valLocals,
+} from '../../utils';
 import {
   dbNotificationsMarkAsSeen,
 } from './db_utils/notifications';
@@ -13,7 +20,9 @@ const {
   queueHost,
 } = config.get('amazonQueue');
 
-const notificationsMarkAsSeen = (req, res, next) => {
+const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
+  notification_ids: arrayOf(string).require(),
+}, (req, res, next) => {
   const {
     notification_ids,
   } = res.locals;
@@ -25,9 +34,12 @@ const notificationsMarkAsSeen = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
-const notificationsPushToQueue = (req, res, next) => {
+const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
+  queueMessage: object.require(),
+  messageGroupId: string.require(),
+}, (req, res, next) => {
   const {
     queueMessage,
     messageGroupId,
@@ -67,7 +79,7 @@ const notificationsPushToQueue = (req, res, next) => {
   // });
 
   return next();
-};
+});
 
 export {
   notificationsMarkAsSeen,

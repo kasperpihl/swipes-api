@@ -62,6 +62,11 @@ class HOCOverlay extends Component {
     if (renderedOverlay) {
       className += ' overlay--shown';
     }
+    const { overlay } = this.props;
+    if (overlay && overlay.opaque) {
+      className += ' overlay--opaque';
+    }
+
     return (
       <div className={className}>
         <ReactCSSTransitionGroup
