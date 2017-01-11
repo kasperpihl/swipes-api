@@ -2,13 +2,67 @@
 @import '~styles/_mixins.scss';
 
 $navbarHeight: 44px;
-.browser-overlay{
-  height: 100%;
-  &__webview-container{
-    height: calc(100% - #{$navbarHeight});
+
+.browser-overlay {
+  @include size(100%);
+
+  &__webview-container {
+    $height: calc(100% - #{$navbarHeight});
+    @include size(100%, $height);
   }
 }
-.browser-nav-bar {
-  background: red;
-  height: $navbarHeight;
+
+.browser-nav {
+  $b: &;
+  @include size(100%, 42px);
+  @include flex(center, space-between);
+  background: $bg;
+  padding: 0 30px;
+
+  &__btn {
+    z-index: 9;
+    margin: 0 6px;
+  }
+
+  &__left {
+
+  }
+
+  &__title {
+    @include size(auto, 100%);
+    @include flex();
+    color: $deepBlue-40;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    min-width: 300px;
+    padding: 0 30px;
+    position: relative;
+
+    &:before {
+      content: '';
+      @include size(1px, 30px);
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      background-color: $deepBlue-20;
+    }
+
+    &:after {
+      content: '';
+      @include size(1px, 30px);
+      position: absolute;
+      right: 0; top: 50%;
+      transform: translateY(-50%);
+      background-color: $deepBlue-20;
+    }
+
+    &:hover {
+      color: $deepBlue-90;
+    }
+  }
+
+  &__right {
+
+  }
 }

@@ -42,6 +42,7 @@ class Button extends Component {
       disabled,
       small,
       alignIcon,
+      frameless,
       className: classNameFromButton,
       ...rest
     } = this.props;
@@ -66,6 +67,11 @@ class Button extends Component {
     if (text && icon) {
       className += ' g-button--icon-and-text';
     }
+
+    if (frameless) {
+      className += ' g-button--frameless';
+    }
+
     if (classNameFromButton && typeof classNameFromButton === 'string') {
       className += ` ${classNameFromButton}`;
     }

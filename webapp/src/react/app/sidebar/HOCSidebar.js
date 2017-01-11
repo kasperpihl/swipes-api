@@ -44,8 +44,8 @@ class HOCSidebar extends Component {
   }
   renderTopSection() {
     return [
-      { id: 'goals', svg: 'Earth' },
-      { id: 'dashboard', svg: 'AddPerson' },
+      { id: 'goals', svg: 'Goals' },
+      { id: 'dashboard', svg: 'Collection' },
       { id: 'find', svg: 'Find' },
     ].map(o => this.renderItem(o));
   }

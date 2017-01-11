@@ -1,11 +1,15 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+$sidebarWidth: 60px;
+
 .sidebar {
+  $b: &;
   @include flex(center, space-between, column);
-  @include size(66px, 100%);
+  @include size($sidebarWidth, 100%);
   background-color: #FCFCFC;
   flex: none;
+  padding-top: 30px;
   padding-bottom: 22px;
   position: relative;
 
@@ -20,21 +24,22 @@
   &__top-section {
     @include size(100%, auto);
     @include flex(flex-start, center);
-    padding-top: 39px;
   }
 
   &__item {
-    @include size(32px);
+    @include size($sidebarWidth);
+    @include flex();
+    position: relative;
 
     &--active {
-      position: relative;
+      #{$b}__icon {
+        @include svg-color($deepBlue-90);
+      }
+    }
 
-      &:before {
-        content: '';
-        position: absolute;
-        left: -15px; top: 0;
-        @include size(2px, 100%);
-        background-color: $blue-100;
+    &:hover {
+      #{$b}__icon {
+        @include svg-color($deepBlue-60);
       }
     }
   }
@@ -46,8 +51,8 @@
   }
 
   &__icon {
-    @include size(32px);
-    border-radius: 50%;
+    @include size(24px);
+    @include svg-color($deepBlue-40);
     pointer-events: none;
   }
 }

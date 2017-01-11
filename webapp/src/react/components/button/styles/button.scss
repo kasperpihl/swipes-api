@@ -111,6 +111,10 @@ $mainColor: $deepBlue-100;
       color: $deepBlue-100;
     }
   }
+
+  &--frameless {
+    border: none;
+  }
 }
 
 // HOVER

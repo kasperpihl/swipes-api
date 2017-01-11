@@ -27,17 +27,24 @@ class BrowserNavBar extends Component {
       <Button
         key="back"
         icon="ArrowLeftLine"
+        className="browser-nav__btn"
+        frameless
         disabled={!backEnabled}
         onClick={this.actions.back}
       />,
       <Button
         key="forward"
         icon="ArrowRightLine"
+        className="browser-nav__btn"
+        frameless
         disabled={!forwardEnabled}
         onClick={this.actions.forward}
       />,
       <Button
         key="reload"
+        icon="Reload"
+        className="browser-nav__btn"
+        frameless
         onClick={this.actions.reload}
       />,
     ];
@@ -48,13 +55,9 @@ class BrowserNavBar extends Component {
       url,
     } = this.props;
 
-
-    return undefined;
-
-
     return (
-      <div className="browser-nav-bar__title">
-        {title} - {url}
+      <div className="browser-nav__title">
+        {title}
       </div>
     );
   }
@@ -63,21 +66,29 @@ class BrowserNavBar extends Component {
       <Button
         key="browser"
         icon="Earth"
+        className="browser-nav__btn"
+        frameless
         onClick={this.actions.browser}
       />,
       <Button
         key="close"
         icon="Close"
+        className="browser-nav__btn"
+        frameless
         onClick={this.actions.close}
       />,
     ];
   }
   render() {
     return (
-      <div className="browser-nav-bar">
-        {this.renderNavigation()}
+      <div className="browser-nav">
+        <div className="browser-nav__left">
+          {this.renderNavigation()}
+        </div>
         {this.renderTitleURL()}
-        {this.renderRightActions()}
+        <div className="browser-nav__right">
+          {this.renderRightActions()}
+        </div>
       </div>
     );
   }
