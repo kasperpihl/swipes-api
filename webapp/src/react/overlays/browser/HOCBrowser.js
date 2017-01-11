@@ -37,7 +37,7 @@ class HOCBrowser extends Component {
   }
   updateUrl(url) {
     const updateObj = {
-      url,
+      currentUrl: url,
     };
     const webview = this.getWebview();
     updateObj.backEnabled = webview.canGoBack();
@@ -59,7 +59,6 @@ class HOCBrowser extends Component {
       case 'forward':
         return webview.goForward();
       case 'reload':
-        console.log('hello');
         return webview.reload();
       default:
         return null;
