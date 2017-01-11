@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import Icon from 'Icon';
 
 import './styles/goal-status';
 
@@ -12,11 +13,13 @@ const GoalStatus = (props) => {
 
   return (
     <div className="goal-status">
-      <div className="goal-status__from">
+      <div className="goal-status__assignee">
         <HOCAssigning assignees={fromAssignees} />
       </div>
-      {/* insert the arrow here */}
-      <div className="goal-status__to">
+      <div className="goal-status__arrow">
+        <Icon svg="ArrowRightFull" className="goal-status__icon" />
+      </div>
+      <div className="goal-status__assignee">
         <HOCAssigning assignees={toAssignees} />
       </div>
       <div className="goal-status__message">

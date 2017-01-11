@@ -6,12 +6,88 @@ $small-dot-size: 4px;
 $big-dot-size: 10px;
 
 .progress-bar {
+  $b: &;
   @include size(100%, auto);
   border: none;
+  position: relative;
 
   &__filling {
     @include size(100%, 15px);
     background-color: $green-color;
     margin: 1px 0;
+
+    &:hover + #{$b}__tooltip {
+      display: block;
+    }
+  }
+
+  &__tooltip {
+    @include size(300px, auto);
+    background: $deepBlue-100;
+    border-radius: 3px;
+    position: absolute;
+    left: 50%; bottom: -15px;
+    transform: translateY(100%) translateX(-50%);
+    z-index: 9;
+    padding: 15px;
+    display: none;
+
+    &:before {
+      content: '';
+      @include size(15px);
+      position: absolute;
+      left: calc(50% - 9px); top: -8px;
+      transform: rotate(45deg);
+      background-color: $deepBlue-100;
+    }
+  }
+}
+
+
+.progress-bar-tooltip {
+  $b: &;
+  @include size(270px, 60px);
+  @include flex(flex-start, center);
+  @include flex(column);
+
+  &__title {
+    color: $deepBlue-70;
+    font-size: 15px;
+    font-weight: 500;
+    padding-left: 39px;
+    position: relative;
+
+    &:before {
+      @include size(9px);
+      content: '';
+      position: absolute;
+      left: 15px; top: 4px;
+      border-radius: 50%;
+      background-color: $deepBlue-70
+    }
+  }
+
+  &__assignee {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    color: $deepBlue-70;
+    padding-left: 39px;
+    margin-top: 6px;
+  }
+
+  &--completed {
+
+    #{$b}__title {
+      color: white;
+
+      &:before {
+        background-color: $green-color;
+      }
+    }
+  }
+
+  &:hover {
+
   }
 }

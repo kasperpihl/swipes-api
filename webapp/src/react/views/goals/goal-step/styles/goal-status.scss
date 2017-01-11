@@ -2,5 +2,30 @@
 @import '~styles/_mixins.scss';
 
 .goal-status {
-  
+  $b: &;
+  @include size(100%, 60px);
+  @include flex(center, flex-start);
+  border-top: 1px solid $deepBlue-10;
+
+  &__assignee {
+
+  }
+
+  &__arrow {
+    @include size(40px, 60px);
+    @include flex();
+  }
+
+  &__icon {
+    @include size(24px);
+    @include svg-color($deepBlue-40);
+  }
+
+  &__message {
+    margin-left: 24px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: $deepBlue-60;
+  }
 }

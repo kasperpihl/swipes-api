@@ -48,7 +48,7 @@ class GoalStep extends Component {
         <ProgressBar
           length={goal.get('steps').size}
           completed={goal.get('currentStepIndex')}
-          goal={goal}
+          steps={goal.get('steps')}
         />
       </StepSection>
     );
