@@ -44,6 +44,9 @@ class PDFViewer extends Component {
       this.setState({ shown: false });
     }, 4000);
   }
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
   componentDidMount() {
   }
   onDocumentComplete(pages) {
