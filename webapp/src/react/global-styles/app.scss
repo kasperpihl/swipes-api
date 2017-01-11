@@ -59,7 +59,9 @@ svg {
   &__action {
     transition: .15s;
   }
-
+  &--opaque{
+    background: rgba(255,255,255,0.8);
+  }
   &--shown {
     visibility: visible;
     opacity: 1;

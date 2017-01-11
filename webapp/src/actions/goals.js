@@ -60,7 +60,7 @@ export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise
       step_back_id: stepBackId,
       message,
     })).then((resMom, err) => {
-      resolve();
+      resolve(!err);
       if (err) {
           // return console.log('Error completing step', err);
       }
