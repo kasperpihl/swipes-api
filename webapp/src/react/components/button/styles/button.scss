@@ -104,11 +104,14 @@ $mainColor: $deepBlue-100;
   }
 
   &--disabled {
-    background-color: $deepBlue-10;
-    cursor: not-allowed;
+    // background-color: $deepBlue-10;
 
     #{$b}__text {
       color: $deepBlue-100;
+    }
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-20);
     }
   }
 
@@ -122,7 +125,7 @@ $mainColor: $deepBlue-100;
 .g-button {
   $b: &;
 
-  &:hover:not(&--primary) {
+  &:hover:not(&--primary), &:hover:not(&--disabled) {
     border-color: transparent;
     background-color: rgba($mainColor, .1);
 
@@ -168,6 +171,14 @@ $mainColor: $deepBlue-100;
 
     #{$b}__text {
       transform: translateX(-6px);
+    }
+  }
+
+  &--disabled:hover {
+    background-color: transparent !important;
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-20 !important);
     }
   }
 }

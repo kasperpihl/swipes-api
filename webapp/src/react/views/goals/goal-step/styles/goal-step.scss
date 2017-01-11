@@ -87,7 +87,7 @@
   }
 
   &__attachments {
-    @include size(100%, auto);
+    @include size(calc(100% - 42px), auto);
     @include flex(flex-start, space-between);
     flex-wrap: wrap;
     position: relative;

@@ -48,6 +48,7 @@ class GoalStep extends Component {
         <ProgressBar
           length={goal.get('steps').size}
           completed={goal.get('currentStepIndex')}
+          goal={goal}
         />
       </StepSection>
     );
@@ -82,7 +83,7 @@ class GoalStep extends Component {
       <StepContentRow
         key={i}
         onClick={this.onOpenCached(i)}
-        icon={c.get('type') === 'note' ? 'SmallList' : 'Hyperlink'}
+        icon={c.get('type') === 'note' ? 'Note' : 'Hyperlink'}
         title={c.get('title')}
       />
     ));

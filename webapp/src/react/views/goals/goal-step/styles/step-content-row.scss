@@ -18,12 +18,15 @@
   }
 
   &__title {
-    @include size(100%, 24px);
-    @include flex(center, flex-start);
+    @include size(calc(100% - 24px - 12px), 24px);
+    line-height: 24px;
     padding-left: 12px;
     color: $blue-100;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:not(:last-child) {

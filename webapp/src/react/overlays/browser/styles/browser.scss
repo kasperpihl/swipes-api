@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$navbarHeight: 44px;
+$navbarHeight: 60px;
 
 .browser-overlay {
   @include size(100%);
@@ -14,10 +14,19 @@ $navbarHeight: 44px;
 
 .browser-nav {
   $b: &;
-  @include size(100%, 42px);
+  @include size(100%, $navbarHeight);
   @include flex(center, space-between);
   background: $bg;
   padding: 0 30px;
+  position: relative;
+
+  &:after {
+    @include size(100%, 1px);
+    background-color: $deepBlue-10;
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+  }
 
   &__btn {
     z-index: 9;

@@ -3,8 +3,8 @@
     <g opacity="0">
       <rect width="24" height="24" fill="none" stroke="none"/>
     </g>
-    <rect x="6" y="11" width="12" height="2" fill="#000c2f" stroke="none"/>
-    <rect x="6" y="7" width="12" height="2" fill="#000c2f" stroke="none"/>
-    <rect x="6" y="15" width="6" height="2" fill="#000c2f" stroke="none"/>
+    <rect x="6" y="11" width="12" height="2" stroke="none"/>
+    <rect x="6" y="7" width="12" height="2" stroke="none"/>
+    <rect x="6" y="15" width="6" height="2" stroke="none"/>
   </g>
 </svg>

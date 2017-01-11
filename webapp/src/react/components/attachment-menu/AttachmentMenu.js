@@ -11,7 +11,7 @@ class AttachmentMenu extends Component {
       addMenu: false,
       buttons: [
         { title: 'Link', svg: 'Hyperlink' },
-        { title: 'Note', svg: 'List' },
+        { title: 'Note', svg: 'CreateNote' },
         { title: 'Find', svg: 'Find' },
       ],
     };

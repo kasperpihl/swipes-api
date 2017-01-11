@@ -7,11 +7,14 @@ const ProgressBar = (props) => {
     length,
     completed,
     onClick,
+    goal,
   } = props;
   const progressLength = 100 - ((completed * 100) / length);
   const styles = {
     WebkitClipPath: `inset(0 ${progressLength}% 0 0 round 5px)`,
   };
+
+  console.log('goal', goal.toJS());
 
   return (
     <div className="progress-bar" onClick={onClick}>

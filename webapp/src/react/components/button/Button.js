@@ -56,10 +56,6 @@ class Button extends Component {
       className += ' g-button--small';
     }
 
-    if (disabled) {
-      className += ' g-button--disabled';
-    }
-
     if (primary) {
       className += ' g-button--primary';
     }
@@ -70,6 +66,10 @@ class Button extends Component {
 
     if (frameless) {
       className += ' g-button--frameless';
+    }
+
+    if (disabled) {
+      className += ' g-button--disabled';
     }
 
     if (classNameFromButton && typeof classNameFromButton === 'string') {
