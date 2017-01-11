@@ -10,9 +10,9 @@ class AttachmentMenu extends Component {
     this.state = {
       addMenu: false,
       buttons: [
-        { title: 'Link', svg: 'LinkIcon' },
-        { title: 'Note', svg: 'ListIcon' },
-        { title: 'Find', svg: 'FindIcon' },
+        { title: 'Link', svg: 'Hyperlink' },
+        { title: 'Note', svg: 'List' },
+        { title: 'Find', svg: 'Find' },
       ],
     };
     this.onMenuCached = setupCachedCallback(this.onMenu, this);

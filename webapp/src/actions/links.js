@@ -121,7 +121,7 @@ export const click = data => (dispatch, getState) => {
 
         if (dropboxFolder) {
           buttons.push({
-            icon: 'DesktopIcon',
+            icon: 'Desktop',
             title: 'Open on Desktop',
             onClick: () => {
               window.ipcListener.sendEvent('showItemInFolder', fullFilePath);
@@ -130,14 +130,14 @@ export const click = data => (dispatch, getState) => {
         }
 
         buttons.push({
-          icon: 'EarthIcon',
+          icon: 'Earth',
           title: 'Open in Dropbox.com',
           onClick: () => {
             const url = `https://www.dropbox.com/home${res.data.metadata.path_lower}`;
             window.ipcListener.sendEvent('openExternal', url);
           },
         }, {
-          icon: 'DownloadIcon',
+          icon: 'Download',
           title: 'Download',
           onClick: () => {
             window.location.replace(link);

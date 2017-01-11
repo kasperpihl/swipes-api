@@ -26,7 +26,7 @@ class Assigning extends Component {
   renderAddAssignees() {
     return (
       <div className="sw-assign__assign">
-        {this.renderIcon('AssignIcon')}
+        {this.renderIcon('AddPerson')}
       </div>
     );
   }
@@ -50,7 +50,7 @@ class Assigning extends Component {
     });
 
     if (!profileImage.length) {
-      return this.renderIcon('PersonIcon');
+      return this.renderIcon('Person');
     }
 
     return <img className="sw-assign__profile-image" src={profileImage} role="presentation" />;

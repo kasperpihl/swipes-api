@@ -14,7 +14,7 @@ class HOCGoalStep extends Component {
     return [{
       component: 'Button',
       props: {
-        icon: 'ThreeDotsIcon',
+        icon: 'ThreeDots',
       },
     }];
   }
@@ -130,7 +130,7 @@ class HOCGoalStep extends Component {
           src: user.get('profile_pic'),
         };
         if (!handoffObj.src) {
-          handoffObj.svg = 'PersonIcon';
+          handoffObj.svg = 'Person';
         }
       }
     }

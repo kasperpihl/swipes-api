@@ -50,7 +50,7 @@ class HOCOverlay extends Component {
     return (
       <div className="overlay__actions">
         <div className="overlay__action" onClick={this.clickedClose}>
-          <Button icon="CloseIcon" />
+          <Button icon="Close" />
         </div>
       </div>
     );

@@ -70,7 +70,7 @@ class HOCStepItem extends Component {
     const { index, add } = this.props;
     let renderIndex = index + 1;
     if (add) {
-      renderIndex = <Icon svg="AddIcon" className="add-goal__icon" />;
+      renderIndex = <Icon svg="Plus" className="add-goal__icon" />;
     }
     return <div className="add-goal__step-index">{renderIndex}</div>;
   }

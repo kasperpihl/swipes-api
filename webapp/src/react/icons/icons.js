@@ -1,28 +1,51 @@
-import FindIcon from './svgs/sw-find-icon.svg';
+import SwipesIcon from './pngs/swipes-icon.png';
 import SwipesLogo from './svgs/swipes-logo.svg';
 import DropboxLogo from './svgs/dropbox-logo.svg';
-import EarthIcon from './svgs/earth-icon.svg';
-import DownloadIcon from './svgs/download-icon.svg';
-import AssignIcon from './svgs/assign-icon.svg';
-import PersonIcon from './svgs/person-icon.svg';
-import LogoLoader from './svgs/sw-logo-loader.svg';
-import CheckmarkIcon from './svgs/checkmark-icon.svg';
-import SlackIcon from './svgs/logo-slack.svg';
-import ListIcon from './svgs/list-icon.svg';
-import CloseIcon from './svgs/close-icon.svg';
-import DesktopIcon from './svgs/desktop-icon.svg';
-import ArrowLeftIcon from './svgs/arrow-left-icon.svg';
-import ArrowRightIcon from './svgs/arrow-right-icon.svg';
-import AddIcon from './svgs/plus-icon.svg';
-import MinusIcon from './svgs/minus-icon.svg';
-import DeliverIcon from './svgs/deliver-icon.svg';
-import VoteIcon from './svgs/vote-icon.svg';
-import DotIcon from './svgs/dot-icon.svg';
-import WindowsIcon from './svgs/windows-icon.svg';
-import MacIcon from './svgs/mac-icon.svg';
-import LinuxIcon from './svgs/linux-icon.svg';
-import LinkIcon from './svgs/link.svg';
-import ThreeDotsIcon from './svgs/three-dots.svg';
+import SlackLogo from './svgs/slack-logo.svg';
+
+import AddPerson from './svgs/add-person.svg';
+import AddToCollection from './svgs/add-to-collection.svg';
+import Apple from './svgs/apple.svg';
+import ArrowLeftLine from './svgs/arrow-left-line.svg';
+import ArrowRightFull from './svgs/arrow-right-full.svg';
+import ArrowRightLine from './svgs/arrow-right-line.svg';
+import Assign from './svgs/assign.svg';
+import Bold from './svgs/bold.svg';
+import Calendar from './svgs/calendar.svg';
+import Checkmark from './svgs/checkmark.svg';
+import Close from './svgs/close.svg';
+import Collection from './svgs/collection.svg';
+import CreateNote from './svgs/create-note.svg';
+import Deliver from './svgs/deliver.svg';
+import Desktop from './svgs/desktop.svg';
+import Dot from './svgs/dot.svg';
+import Download from './svgs/download.svg';
+import Earth from './svgs/earth.svg';
+import Email from './svgs/email.svg';
+import Find from './svgs/find.svg';
+import Goals from './svgs/goals.svg';
+import HeaderOne from './svgs/header-one.svg';
+import HeaderTwo from './svgs/header-two.svg';
+import Hyperlink from './svgs/hyperlink.svg';
+import Itallic from './svgs/itallic.svg';
+import LargeList from './svgs/large-list.svg';
+import Linux from './svgs/linux.svg';
+import LogoLoader from './svgs/logo-loader.svg';
+import Minus from './svgs/minus.svg';
+import Note from './svgs/note.svg';
+import OrderedList from './svgs/ordered-list.svg';
+import Person from './svgs/person.svg';
+import Plus from './svgs/plus.svg';
+import Reload from './svgs/reload.svg';
+import SmallList from './svgs/small-list.svg';
+import Star from './svgs/star.svg';
+import ThreeDots from './svgs/three-dots.svg';
+import Unassign from './svgs/unassign.svg';
+import Underline from './svgs/underline.svg';
+import UnorderedList from './svgs/unordered-list.svg';
+import Upload from './svgs/upload.svg';
+import Vote from './svgs/vote.svg';
+import Windows from './svgs/windows.svg';
 
 import ShapeOne from './svgs/shape-1.svg';
 import ShapeTwo from './svgs/shape-2.svg';
@@ -35,15 +58,6 @@ import ShapeEight from './svgs/shape-8.svg';
 import ShapeNine from './svgs/shape-9.svg';
 import ShapeTen from './svgs/shape-10.svg';
 
-import BoldIcon from './svgs/bold-icon.svg';
-import ItallicIcon from './svgs/itallic-icon.svg';
-import H1Icon from './svgs/h1-icon.svg';
-import H2Icon from './svgs/h2-icon.svg';
-import UnderlineIcon from './svgs/underline-icon.svg';
-import UnorderedListIcon from './svgs/unordered-list-icon.svg';
-import OrderedListIcon from './svgs/ordered-list-icon.svg';
-
-import SwipesIcon from './pngs/swipes-logo.png';
 
 // Remove these soon
 import facebookCover from './pngs/facebook.png';
@@ -60,39 +74,41 @@ import LoginIconOne from './svgs/login-background-1.svg';
 import LoginIconTwo from './svgs/login-background-2.svg';
 
 export {
-  // SwipesIcon, /* SwipesLogo old, replace */
+  SwipesIcon, /* SwipesLogo old, replace */
   SwipesLogo,
   DropboxLogo,
-  SlackIcon, /* SlackLogo */
-  FindIcon,  /* Find */
-  EarthIcon, /* Earth` */
-  DownloadIcon, /* Download */
-  AssignIcon, /* AddPerson */
-  PersonIcon, /* Person */
+  SlackLogo,
+
+  AddPerson,
+  Apple,
+  ArrowLeftLine,
+  ArrowRightLine,
+  Bold,
+  Checkmark,
+  Close,
+  Deliver,
+  Desktop,
+  Dot,
+  Download,
+  Earth,
+  Find,
+  HeaderOne,
+  HeaderTwo,
+  Hyperlink,
+  Itallic,
+  Linux,
+  Note,
   LogoLoader,
-  CheckmarkIcon, /* Checkmark */
-  ListIcon, /* List */
-  CloseIcon, /* Close */
-  DesktopIcon, /* Desktop */
-  ArrowLeftIcon, /* ArrowLeft*/
-  ArrowRightIcon, /* ArrowRight*/
-  AddIcon, /* Plus */
-  MinusIcon, /* Minus */
-  DeliverIcon, /* Deliver */
-  VoteIcon, /* Vote */
-  DotIcon, /* Dote */
-  BoldIcon, /* Bold */
-  ItallicIcon, /* Itallic */
-  H1Icon, /* HeaderOne */
-  H2Icon, /* HeaderTwo */
-  UnderlineIcon, /* Underline */
-  UnorderedListIcon, /* UnorderedList */
-  OrderedListIcon, /* OrderedList */
-  ThreeDotsIcon, /* ThreeDots */
-  LinkIcon, /* Hyperlink */
-  WindowsIcon, /* Windows */
-  MacIcon, /* Mac */
-  LinuxIcon, /* Linux */
+  Minus,
+  OrderedList,
+  Person,
+  Plus,
+  ThreeDots,
+  Underline,
+  UnorderedList,
+  Vote,
+  Windows,
+
   ShapeOne,
   ShapeTwo,
   ShapeThree,
@@ -103,15 +119,15 @@ export {
   ShapeEight,
   ShapeNine,
   ShapeTen,
-  // LoginIconOne,
-  // LoginIconTwo,
-  // facebookCover,
-  // airbnbCover,
-  // uberCover,
-  // oneCover,
-  // twoCover,
-  // threeCover,
-  // fourCover,
-  // successState,
-  // designWorkflowCover,
+  LoginIconOne,
+  LoginIconTwo,
+  facebookCover,
+  airbnbCover,
+  uberCover,
+  oneCover,
+  twoCover,
+  threeCover,
+  fourCover,
+  successState,
+  designWorkflowCover,
 };

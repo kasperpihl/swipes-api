@@ -12,7 +12,7 @@ class HOCOrgDashboard extends Component {
     return [{
       component: 'Button',
       props: {
-        icon: 'ArrowRightIcon',
+        icon: 'ArrowRightLine',
         text: 'View Goals',
         alignIcon: 'right',
       },
@@ -56,27 +56,27 @@ class HOCOrgDashboard extends Component {
       case 'goal_created': {
         const name = this.nameForUser(users, data.get('created_by'));
         m = m.set('message', <span><b>{name}</b>{' started a goal: '}<b>{data.get('title')}</b></span>);
-        m = m.set('svg', 'AddIcon');
+        m = m.set('svg', 'Plus');
         m = m.set('iconBgColor', '#3893fc');
         break;
       }
       case 'goal_deleted': {
         const name = this.nameForUser(users, data.get('created_by'));
         m = m.set('message', <span><b>{name}</b>{' deleted a goal: '}<b>{data.get('title')}</b></span>);
-        m = m.set('svg', 'MinusIcon');
+        m = m.set('svg', 'Minus');
         m = m.set('iconBgColor', '#fc7170');
         break;
       }
       case 'step_got_active': {
         m = m.set('message', <span>{'It is your turn to act on: '}<b>{data.get('title')}</b></span>);
-        m = m.set('svg', 'DeliverIcon');
+        m = m.set('svg', 'Deliver');
         m = m.set('iconBgColor', '#3893fc');
         break;
       }
       case 'step_completed': {
         const name = this.nameForUser(users, data.get('created_by'));
         m = m.set('message', <span><b>{name}</b>{' completed a step in: '}<b>{data.get('title')}</b></span>);
-        m = m.set('svg', 'CheckmarkIcon');
+        m = m.set('svg', 'Checkmark');
         m = m.set('iconBgColor', '#51e389');
         break;
       }

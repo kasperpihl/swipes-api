@@ -26,13 +26,13 @@ class BrowserNavBar extends Component {
     return [
       <Button
         key="back"
-        icon="ArrowLeftIcon"
+        icon="ArrowLeftLine"
         disabled={!backEnabled}
         onClick={this.actions.back}
       />,
       <Button
         key="forward"
-        icon="ArrowRightIcon"
+        icon="ArrowRightLine"
         disabled={!forwardEnabled}
         onClick={this.actions.forward}
       />,
@@ -62,12 +62,12 @@ class BrowserNavBar extends Component {
     return [
       <Button
         key="browser"
-        icon="EarthIcon"
+        icon="Earth"
         onClick={this.actions.browser}
       />,
       <Button
         key="close"
-        icon="CloseIcon"
+        icon="Close"
         onClick={this.actions.close}
       />,
     ];

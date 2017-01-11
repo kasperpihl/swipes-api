@@ -68,7 +68,7 @@ class HOCFind extends Component {
 
             if (dropboxFolder) {
               buttons.push({
-                icon: 'DesktopIcon',
+                icon: 'Desktop',
                 title: 'Open on Desktop',
                 onClick: () => {
                   window.ipcListener.sendEvent('showItemInFolder', fullFilePath);
@@ -77,14 +77,14 @@ class HOCFind extends Component {
             }
 
             buttons.push({
-              icon: 'EarthIcon',
+              icon: 'Earth',
               title: 'Open in Dropbox.com',
               onClick: () => {
                 const url = `https://www.dropbox.com/home${doc.filepath}/${doc.filename}`;
                 window.ipcListener.sendEvent('openExternal', url);
               },
             }, {
-              icon: 'DownloadIcon',
+              icon: 'Download',
               title: 'Download',
               onClick: () => {
                 window.location.replace(link);

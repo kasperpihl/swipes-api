@@ -23,7 +23,7 @@ export function assign(assignees, callback) {
   return (dispatch, getState) => {
     const users = getState().get('users');
     const icon = {
-      element: 'PersonIcon',
+      element: 'Person',
       props: { fill: '#3394FF' },
     };
     const userArray = users.toArray();

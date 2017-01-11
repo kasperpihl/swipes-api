@@ -10,7 +10,7 @@ export function isShareURL(url) {
 export function iconForService(service) {
   switch (service) {
     case 'slack':
-      return 'SlackIcon';
+      return 'SlackLogo';
     case 'dropbox':
       return 'DropboxLogo';
     default:

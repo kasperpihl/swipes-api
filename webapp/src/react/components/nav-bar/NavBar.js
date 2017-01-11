@@ -31,7 +31,7 @@ class NavBar extends Component {
           {title}
         </div>
         <div className="bread-crumbs__seperator">
-          <Icon svg="ArrowRightIcon" className="bread-crumbs__icon" />
+          <Icon svg="ArrowRightLine" className="bread-crumbs__icon" />
         </div>
       </div>
     );

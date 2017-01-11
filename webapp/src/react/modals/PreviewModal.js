@@ -30,7 +30,7 @@ class PreviewModal extends Component {
     return (
       <div className="preview-modal__topbar">
         <div className="preview-modal__close" onClick={this.closeModal}>
-          {this.renderIcon('CloseIcon')}
+          {this.renderIcon('Close')}
         </div>
         <div className="preview-modal__title preview-modal__title--topbar">{title}</div>
         {this.renderActions()}

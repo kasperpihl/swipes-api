@@ -164,7 +164,7 @@ class PDFViewer extends Component {
     return (
       <div className="sw-pdf-viewer__action">
         <div className={arrowButtonLeft} onClick={this.prevPage}>
-          <Icon svg="ArrowLeftIcon" className="sw-pdf-viewer__icon" />
+          <Icon svg="ArrowLeftLine" className="sw-pdf-viewer__icon" />
         </div>
 
         <input
@@ -178,7 +178,7 @@ class PDFViewer extends Component {
         <div className="sw-pdf-viewer__pages-value"><span>of </span>{` ${pages}`}</div>
 
         <div className={arrowButtonRight} onClick={this.nextPage}>
-          <Icon svg="ArrowRightIcon" className="sw-pdf-viewer__icon" />
+          <Icon svg="ArrowRightLine" className="sw-pdf-viewer__icon" />
         </div>
       </div>
     );
@@ -189,11 +189,11 @@ class PDFViewer extends Component {
     return (
       <div className="sw-pdf-viewer__action">
         <div className="sw-pdf-viewer__button" onClick={this.scaleDown}>
-          <Icon svg="MinusIcon" className="sw-pdf-viewer__icon" />
+          <Icon svg="Minus" className="sw-pdf-viewer__icon" />
         </div>
         <div className="sw-pdf-viewer__zoom-value">{`${Math.round(scale * 100)}%`}</div>
         <div className="sw-pdf-viewer__button" onClick={this.scaleUp}>
-          <Icon svg="AddIcon" className="sw-pdf-viewer__icon" />
+          <Icon svg="Plus" className="sw-pdf-viewer__icon" />
         </div>
       </div>
     );

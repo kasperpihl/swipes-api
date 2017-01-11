@@ -177,7 +177,7 @@ class HOCSideNote extends Component {
     return (
       <div className="side-note__header">
         <div className="side-note__btn-title">
-          <Button icon="CloseIcon" className="side-note__back" onClick={this.closeSideNote} />
+          <Button icon="Close" className="side-note__back" onClick={this.closeSideNote} />
           <div className="side-note__title-wrap">
             <div className="side-note__title">
               {title}

@@ -82,7 +82,7 @@ class GoalStep extends Component {
       <StepContentRow
         key={i}
         onClick={this.onOpenCached(i)}
-        icon={c.get('type') === 'note' ? 'ListIcon' : 'LinkIcon'}
+        icon={c.get('type') === 'note' ? 'List' : 'Hyperlink'}
         title={c.get('title')}
       />
     ));
@@ -91,7 +91,7 @@ class GoalStep extends Component {
         <div className="goal-step__attachments">
           {html}
         </div>
-        <Button icon="AddIcon" onClick={this.onAdd} className="goal-step__btn" />
+        <Button icon="Plus" onClick={this.onAdd} className="goal-step__btn" />
       </StepSection>
     );
   }

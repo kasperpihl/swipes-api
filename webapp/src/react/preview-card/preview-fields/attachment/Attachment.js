@@ -17,7 +17,7 @@ class Attachment extends Component {
     }
   }
   renderIcon() {
-    return <Icon svg="LinkIcon" className="card-attachment__icon" />;
+    return <Icon svg="Hyperlink" className="card-attachment__icon" />;
   }
   render() {
     const { data } = this.props;

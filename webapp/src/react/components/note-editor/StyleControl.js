@@ -139,18 +139,18 @@ class StyleControl extends Component {
   renderButtons() {
     const styleOptions = {
       block: [
-        { label: 'H1Icon', style: 'checklist' },
-        { label: 'H2Icon', style: 'header-two' },
-        { label: 'OrderedListIcon', style: 'ordered-list-item' },
-        { label: 'UnorderedListIcon', style: 'unordered-list-item' },
+        { label: 'HeaderOne', style: 'checklist' },
+        { label: 'HeaderTwo', style: 'header-two' },
+        { label: 'OrderedList', style: 'ordered-list-item' },
+        { label: 'UnorderedList', style: 'unordered-list-item' },
       ],
       inline: [
-        { label: 'BoldIcon', style: 'BOLD' },
-        { label: 'ItallicIcon', style: 'ITALIC' },
-        { label: 'UnderlineIcon', style: 'UNDERLINE' },
+        { label: 'Bold', style: 'BOLD' },
+        { label: 'Itallic', style: 'ITALIC' },
+        { label: 'Underline', style: 'UNDERLINE' },
       ],
       entities: [
-        { label: 'LinkIcon', style: 'link' },
+        { label: 'Hyperlink', style: 'link' },
       ],
     };
 
@@ -200,7 +200,7 @@ class StyleControl extends Component {
             onKeyUp={this.handleKeyUp}
           />
           <button className="RichEditor-controls__input-submit" onClick={this.addLink}>
-            <Icon svg="ArrowRightIcon" className="RichEditor-controls__icon" />
+            <Icon svg="ArrowRightLine" className="RichEditor-controls__icon" />
           </button>
         </div>
       );

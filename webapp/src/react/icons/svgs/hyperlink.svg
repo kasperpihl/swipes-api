@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+  <g>
+    <g opacity="0">
+      <rect width="24" height="24" transform="translate(24) rotate(90)" fill="none" stroke="none"/>
+    </g>
+    <g>
+      <path d="M11,17H10A5,5,0,0,1,10,7h1V9H10a3,3,0,0,0,0,6h1Z" Stroke="none"/>
+      <path d="M14,17H13V15h1a3,3,0,0,0,0-6H13V7h1a5,5,0,0,1,0,10Z" Stroke="none"/>
+      <rect x="9" y="11" width="6" height="2" Stroke="none"/>
+    </g>
+  </g>
+</svg>

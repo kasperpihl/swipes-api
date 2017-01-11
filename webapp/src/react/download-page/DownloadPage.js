@@ -23,14 +23,14 @@ class DownloadPage extends Component {
 
           <a href="http://cdn.swipesapp.com/appdownloads/Swipes-win32-ia32.zip" traget="_blank">
             <button>
-              <Icon svg="WindowsIcon" />
+              <Icon svg="Windows" />
               Windows 32bit
             </button>
           </a>
 
           <a href="http://cdn.swipesapp.com/appdownloads/Swipes-win32-x64.zip" traget="_blank">
             <button>
-              <Icon svg="WindowsIcon" />
+              <Icon svg="Windows" />
               Windows 64bit
             </button>
           </a>
@@ -41,7 +41,7 @@ class DownloadPage extends Component {
 
           <a href="http://cdn.swipesapp.com/appdownloads/SwipesWorkspace.dmg" traget="_blank">
             <button>
-              <Icon svg="MacIcon" />
+              <Icon svg="Apple" />
               OS X
             </button>
           </a>
@@ -52,14 +52,14 @@ class DownloadPage extends Component {
 
           <a href="http://cdn.swipesapp.com/appdownloads/Swipes-linux-ia32.zip" traget="_blank">
             <button>
-              <Icon svg="LinuxIcon" />
+              <Icon svg="Linux" />
               Linux 32bit
             </button>
           </a>
 
           <a href="http://cdn.swipesapp.com/appdownloads/Swipes-linux-x64.zip" traget="_blank">
             <button>
-              <Icon svg="LinuxIcon" />
+              <Icon svg="Linux" />
               Linux 64bit
             </button>
           </a>
