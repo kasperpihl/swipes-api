@@ -1,8 +1,11 @@
 import config from 'config';
-import { arrayOf, string } from 'valjs';
-// import request from 'request';
 import AWS from 'aws-sdk';
 import hash from 'object-hash';
+import {
+  string,
+  object,
+  arrayOf,
+} from 'valjs';
 import {
   valLocals,
 } from '../../utils';
@@ -33,7 +36,10 @@ const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
     });
 });
 
-const notificationsPushToQueue = (req, res, next) => {
+const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
+  queueMessage: object.require(),
+  messageGroupId: string.require(),
+}, (req, res, next) => {
   const {
     queueMessage,
     messageGroupId,
@@ -73,7 +79,7 @@ const notificationsPushToQueue = (req, res, next) => {
   // });
 
   return next();
-};
+});
 
 export {
   notificationsMarkAsSeen,

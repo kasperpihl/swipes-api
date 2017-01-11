@@ -33,9 +33,11 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
   if (error) {
     return next(`${name} ${error}`);
   }
+
   if (middleware) {
     return middleware(req, res, next);
   }
+
   return next();
 };
 
@@ -51,11 +53,13 @@ const valBody = (schema, middleware) => (req, res, next) => {
   }
 
   if (error) {
-    return next(`body: ${error}`);
+    return next(`body: ${req.route.path} ${error}`);
   }
+
   if (middleware) {
     return middleware(req, res, next);
   }
+
   return next();
 };
 
