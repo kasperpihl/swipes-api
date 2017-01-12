@@ -17,11 +17,13 @@ const goalsGetSingle = (req, res, next) => {
 };
 const goalsNotificationData = (req, res, next) => {
   const {
+    user_id,
     goal,
   } = res.locals;
 
   const notificationData = {
-    title: goal.title,
+    done_by: user_id,
+    goal_id: goal.id,
   };
 
   res.locals.notificationData = notificationData;
@@ -32,11 +34,13 @@ const goalsNotificationData = (req, res, next) => {
 
 const goalsDeletedNotificationData = (req, res, next) => {
   const {
+    user_id,
     goal,
   } = res.locals;
 
   const notificationData = {
-    title: goal.title,
+    done_by: user_id,
+    goal_id: goal.id,
   };
 
   res.locals.notificationData = notificationData;
@@ -47,12 +51,15 @@ const goalsDeletedNotificationData = (req, res, next) => {
 
 const goalsStepCompletedNotificationData = (req, res, next) => {
   const {
+    user_id,
     goal,
+    completedStepIndex,
   } = res.locals;
 
   const notificationData = {
-    title: goal.title,
-    currentStepIndex: goal.currentStepIndex,
+    done_by: user_id,
+    goal_id: goal.id,
+    stepIndex: completedStepIndex,
   };
 
   res.locals.notificationData = notificationData;
@@ -67,8 +74,8 @@ const goalsStepGotActiveNotificationData = (req, res, next) => {
   } = res.locals;
 
   const notificationData = {
-    title: goal.title,
-    currentStepIndex: goal.currentStepIndex,
+    goal_id: goal.id,
+    stepIndex: goal.currentStepIndex,
   };
 
   res.locals.notificationData = notificationData;

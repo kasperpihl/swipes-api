@@ -105,6 +105,7 @@ const goalsNext = valLocals('goalsNext', {
   const nextStep = goal.steps[nextStepIndex];
   // Check that next step is not the last step
   if (nextStep) {
+    res.locals.completedStepIndex = currentStepIndex;
     goal.currentStepIndex = nextStepIndex;
     nextStep.iterations.push({
       errorLog: [],
@@ -145,7 +146,7 @@ const goalsDelete = valLocals('goalsDelete', {
 
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
-      res.locals.eventType = 'goal_deleted';
+      res.locals.eventType = 'goal_archived';
 
       return next();
     })
@@ -258,6 +259,7 @@ const goalsNextStepQueueMessage = (req, res, next) => {
   const {
     user_id,
     goal,
+    completedStepIndex,
   } = res.locals;
 
   const goal_id = goal.id;
@@ -265,6 +267,7 @@ const goalsNextStepQueueMessage = (req, res, next) => {
   res.locals.queueMessage = {
     user_id,
     goal_id,
+    completedStepIndex,
     event_type: 'step_completed',
   };
   res.locals.messageGroupId = goal_id;
