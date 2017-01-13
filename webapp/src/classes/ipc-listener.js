@@ -63,6 +63,16 @@ export default class IpcListener {
     }
     return preloadUrl;
   }
+  setBadgeCount(count) {
+    if (isElectron) {
+      if (typeof count === 'number') {
+        app.setBadgeCount(count);
+      }
+      if (typeof count === 'string') {
+        app.dock.setBadge(count);
+      }
+    }
+  }
   openDialog(options) {
     if (isElectron) {
       dialog.showOpenDialog(options);

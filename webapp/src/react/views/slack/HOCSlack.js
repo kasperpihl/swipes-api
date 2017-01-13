@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import SlackWebview from './SlackWebview';
@@ -18,7 +19,7 @@ class HOCSlack extends Component {
   componentDidMount() {
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.hidden !== this.props.hidden) {
+    if (prevProps.hidden !== this.props.hidden && !this.props.hidden) {
       // Super hack haha. Don't change ref in SlackWebview
       this.refs.slack.refs.container.getElementsByClassName('webview')[0].focus();
     }
@@ -37,9 +38,10 @@ class HOCSlack extends Component {
         counter = arg.counter;
       }
       if (!counter && arg.unread) {
-        counter = '*';
+        counter = '\u2022';
       }
       setCounter('slack', counter);
+      window.ipcListener.setBadgeCount(counter);
     });
   }
 
@@ -60,6 +62,13 @@ class HOCSlack extends Component {
     );
   }
 }
+
+const { func, bool } = PropTypes;
+HOCSlack.propTypes = {
+  setCounter: func,
+  hidden: bool,
+  me: map,
+};
 
 function mapStateToProps(state) {
   return {
