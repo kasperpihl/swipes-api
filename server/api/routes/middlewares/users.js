@@ -3,14 +3,21 @@ import r from 'rethinkdb';
 import jwt from 'jwt-simple';
 import sha1 from 'sha1';
 import moment from 'moment';
+import {
+  string,
+  custom,
+  object,
+} from 'valjs';
+import {
+  valLocals,
+  valEmail,
+  generateSlackLikeId,
+} from '../../utils';
 import * as services from '../../services';
 import db from '../../../db';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
-import {
-  generateSlackLikeId,
-} from '../../utils';
 import {
   dbUsersGetService,
   dbUsersRemoveService,
@@ -126,7 +133,10 @@ const userSignUp = (req, res, next) => {
       return next(err);
     });
 };
-const userSignIn = (req, res, next) => {
+const userSignIn = valLocals('userSignIn', {
+  email: custom(valEmail).require(),
+  password: string.min(1).require(),
+}, (req, res, next) => {
   const {
     email,
     password,
@@ -164,8 +174,11 @@ const userSignIn = (req, res, next) => {
     }).catch((err) => {
       return next(err);
     });
-};
-const usersGetService = (req, res, next) => {
+});
+const usersGetService = valLocals('usersGetService', {
+  user_id: string.require(),
+  account_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     account_id,
@@ -184,8 +197,11 @@ const usersGetService = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const usersCleanupRegisteredWebhooksToService = (req, res, next) => {
+});
+const usersCleanupRegisteredWebhooksToService = valLocals('usersCleanupRegisteredWebhooksToService', {
+  user_id: string.require(),
+  service: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service,
@@ -205,8 +221,11 @@ const usersCleanupRegisteredWebhooksToService = (req, res, next) => {
   }
 
   return next();
-};
-const usersGetXendoServiceId = (req, res, next) => {
+});
+const usersGetXendoServiceId = valLocals('usersGetXendoServiceId', {
+  user_id: string.require(),
+  service: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service,
@@ -227,8 +246,10 @@ const usersGetXendoServiceId = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const usersRemoveXendoService = (req, res, next) => {
+});
+const usersRemoveXendoService = valLocals('usersRemoveXendoService', {
+  xendoUserServiceId: string.require(),
+}, (req, res, next) => {
   const {
     xendoUserServiceId,
   } = res.locals;
@@ -244,8 +265,11 @@ const usersRemoveXendoService = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const usersRemoveService = (req, res, next) => {
+});
+const usersRemoveService = valLocals('usersRemoveService', {
+  user_id: string.require(),
+  service: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service,
@@ -258,8 +282,10 @@ const usersRemoveService = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const usersUpdateProfilePic = (req, res, next) => {
+});
+const usersUpdateProfilePic = valLocals('usersUpdateProfilePic', {
+  user_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
   } = res.locals;
@@ -272,8 +298,10 @@ const usersUpdateProfilePic = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const usersGetSingleWithOrganizations = (req, res, next) => {
+});
+const usersGetSingleWithOrganizations = valLocals('usersGetSingleWithOrganizations', {
+  user_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
   } = res.locals;
@@ -287,7 +315,7 @@ const usersGetSingleWithOrganizations = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
 export {
   userAvailability,

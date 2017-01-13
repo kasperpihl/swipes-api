@@ -1,7 +1,14 @@
 import express from 'express';
 import {
+  string,
+  custom,
+} from 'valjs';
+import {
+  valBody,
+  valEmail,
+} from '../utils';
+import {
   validateSignUp,
-  validateSignIn,
 } from '../validators/users';
 import {
   validateGetServiceFromUser,
@@ -29,7 +36,10 @@ const authed = express.Router();
 const notAuthed = express.Router();
 
 notAuthed.all('/users.signin',
-  validateSignIn,
+  valBody({
+    email: custom(valEmail).require(),
+    password: string.min(1).require(),
+  }),
   userSignIn,
   (req, res, next) => {
     const {

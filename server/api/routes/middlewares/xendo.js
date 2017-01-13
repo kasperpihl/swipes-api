@@ -3,11 +3,20 @@ import rp from 'request-promise';
 import request from 'request';
 import querystring from 'querystring';
 import r from 'rethinkdb';
+import {
+  string,
+  object,
+} from 'valjs';
+import {
+  valLocals,
+} from '../../utils';
 import db from '../../../db';
 
 const xendoConfig = config.get('xendo');
 
-const xendoRefreshSwipesToken = (req, res, next) => {
+const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
+  xendoSwipesCredentials: object.require(),
+}, (req, res, next) => {
   // TODO check the expire time and don't refresh the token everytime
   const {
     xendoSwipesCredentials,
@@ -42,7 +51,7 @@ const xendoRefreshSwipesToken = (req, res, next) => {
     .catch((error) => {
       return next(error);
     });
-};
+});
 
 const xendoSwipesCredentials = (req, res, next) => {
   const query = r.table('config').getAll('xendo', { index: 'key' }).nth(0);
@@ -62,7 +71,9 @@ const xendoSwipesCredentials = (req, res, next) => {
     });
 };
 
-const xendoUserCredentials = (req, res, next) => {
+const xendoUserCredentials = valLocals('xendoUserCredentials', {
+  user_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
   } = res.locals;
@@ -81,9 +92,12 @@ const xendoUserCredentials = (req, res, next) => {
     .catch((error) => {
       return next(error);
     });
-};
+});
 
-const xendoUserSignUp = (req, res, next) => {
+const xendoUserSignUp = valLocals('xendoUserSignUp', {
+  user_id: string.require(),
+  xendoSwipesCredentials: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     xendoSwipesCredentials,
@@ -121,9 +135,13 @@ const xendoUserSignUp = (req, res, next) => {
   .catch((error) => {
     return next(error);
   });
-};
+});
 
-const xendoAddServiceToUser = (req, res, next) => {
+const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
+  user_id: string.require(),
+  xendoSwipesCredentials: object.require(),
+  serviceToAppend: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     xendoSwipesCredentials,
@@ -182,9 +200,12 @@ const xendoAddServiceToUser = (req, res, next) => {
   .catch((error) => {
     return next(error);
   });
-};
+});
 
-const xendoRemoveServiceFromUser = (req, res, next) => {
+const xendoRemoveServiceFromUser = valLocals('xendoRemoveServiceFromUser', {
+  xendoSwipesCredentials: object.require(),
+  xendoUserServiceId: string.require(),
+}, (req, res, next) => {
   const {
     xendoSwipesCredentials,
     xendoUserServiceId,
@@ -207,9 +228,11 @@ const xendoRemoveServiceFromUser = (req, res, next) => {
 
     return next();
   });
-};
+});
 
-const xendoSearch = (req, res, next) => {
+const xendoSearch = valLocals('xendoSearch', {
+  xendoUserCredentials: object.require(),
+}, (req, res, next) => {
   const q = res.locals.q;
   const page_size = parseInt(res.locals.page_size, 10);
   const p = parseInt(res.locals.p, 10) || 0;
@@ -247,9 +270,12 @@ const xendoSearch = (req, res, next) => {
   .catch((error) => {
     return next(error);
   });
-};
+});
 
-const xendoSearchMapResults = (req, res, next) => {
+const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
+  user_id: string.require(),
+  result: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     result,
@@ -282,7 +308,7 @@ const xendoSearchMapResults = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
 export {
   xendoSwipesCredentials,
