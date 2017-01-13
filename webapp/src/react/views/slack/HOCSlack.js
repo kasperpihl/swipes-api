@@ -26,12 +26,12 @@ class HOCSlack extends Component {
   }
   onLoad(webview) {
     webview.addEventListener('dom-ready', () => {
-      webview.openDevTools();
+      // webview.openDevTools();
     });
     webview.addEventListener('ipc-message', (event) => {
       const arg = event.args[0];
       // Pass the received message on to the communicator
-      console.log(arg);
+      // console.log(arg);
       const { setCounter } = this.props;
       let counter = '';
       if (arg.counter) {
