@@ -25,7 +25,11 @@ $sidebarWidth: 60px;
     @include size(100%, auto);
     @include flex(flex-start, center);
   }
+  &__notification{
+    background: red;
+    color: white;
 
+  }
   &__item {
     @include size($sidebarWidth);
     @include flex();

@@ -66,11 +66,8 @@ class HOCViewController extends Component {
     }
     return undefined;
   }
-  renderNavbar(hidden) {
+  renderNavbar() {
     const { history } = this.props;
-    if (!history || hidden) {
-      return undefined;
-    }
 
     const navbarData = history.map(el => ({
       title: el.get('title'),
@@ -83,11 +80,7 @@ class HOCViewController extends Component {
     );
   }
   renderContent() {
-    const { history, currentView, View } = this.props;
-    if (!history || !currentView) {
-      return this.renderLoading();
-    }
-
+    const { currentView, View } = this.props;
 
     if (!View) {
       return <div>View ({currentView.get('component')}) not found!</div>;
@@ -108,22 +101,31 @@ class HOCViewController extends Component {
       />
     );
   }
-
-  renderLoading() {
-    return <div>Loading</div>;
-  }
-  render() {
-    const { history } = this.props;
-    const styles = {};
-    let fullscreen = false;
-    if (history && history.size && history.last().get('hideNav')) {
-      styles.padding = 0;
-      fullscreen = true;
+  renderContainer() {
+    const { history, currentView, navId } = this.props;
+    if (navId === 'slack' || !history || !currentView) {
+      return undefined;
     }
     return (
-      <div className="view-controller" style={styles}>
-        {this.renderNavbar(fullscreen)}
+      <div className="view-controller__content-container">
+        {this.renderNavbar()}
         {this.renderContent()}
+      </div>
+    );
+  }
+  renderSlack() {
+    const HOCSlack = views.Slack;
+    const { navId } = this.props;
+    const hidden = navId !== 'slack';
+    return (
+      <HOCSlack hidden={hidden} />
+    );
+  }
+  render() {
+    return (
+      <div className="view-controller">
+        {this.renderContainer()}
+        {this.renderSlack()}
       </div>
     );
   }
@@ -135,15 +137,17 @@ function mapStateToProps(state) {
   const currentView = history ? history.last() : undefined;
   const View = currentView ? views[currentView.get('component')] : undefined;
   return {
+    navId,
     history,
     currentView,
     View,
   };
 }
 
-const { func } = PropTypes;
+const { func, string } = PropTypes;
 HOCViewController.propTypes = {
   history: list,
+  navId: string,
   currentView: map,
   View: func,
   popTo: func,

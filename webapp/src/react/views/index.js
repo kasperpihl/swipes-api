@@ -10,6 +10,8 @@ import Services from './services/Services';
 import Find from '../overlays/find/HOCFind';
 import Browser from '../overlays/browser/HOCBrowser';
 
+import Slack from './slack/HOCSlack';
+
 export {
   OrgDashboard,
   GoalList,
@@ -19,4 +21,5 @@ export {
   Profile,
   Browser,
   Services,
+  Slack,
 };

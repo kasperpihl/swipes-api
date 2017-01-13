@@ -6,7 +6,6 @@ export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
 export const LOAD_LINKS = 'LOAD_LINKS';
 export const OVERLAY = 'OVERLAY';
-
 export const NOTE_SHOW = 'NOTE_SHOW';
 export const NOTE_HIDE = 'NOTE_HIDE';
 
@@ -21,6 +20,7 @@ export const NAVIGATION_PUSH = 'NAVIGATION_PUSH';
 export const NAVIGATION_POP = 'NAVIGATION_POP';
 export const NAVIGATION_POP_TO = 'NAVIGATION_POP_TO';
 export const NAVIGATION_POP_TO_ROOT = 'NAVIGATION_POP_TO_ROOT';
+export const NAVIGATION_SET_COUNTER = 'NAVIGATION_SET_COUNTER';
 
 // Goals
 export const GOAL_DELETE = 'GOAL_DELETE';
