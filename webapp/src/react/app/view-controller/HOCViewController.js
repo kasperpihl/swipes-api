@@ -66,9 +66,9 @@ class HOCViewController extends Component {
     }
     return undefined;
   }
-  renderNavbar() {
+  renderNavbar(hidden) {
     const { history } = this.props;
-    if (!history) {
+    if (!history || hidden) {
       return undefined;
     }
 
@@ -113,9 +113,16 @@ class HOCViewController extends Component {
     return <div>Loading</div>;
   }
   render() {
+    const { history } = this.props;
+    const styles = {};
+    let fullscreen = false;
+    if (history && history.size && history.last().get('hideNav')) {
+      styles.padding = 0;
+      fullscreen = true;
+    }
     return (
-      <div className="view-controller">
-        {this.renderNavbar()}
+      <div className="view-controller" style={styles}>
+        {this.renderNavbar(fullscreen)}
         {this.renderContent()}
       </div>
     );

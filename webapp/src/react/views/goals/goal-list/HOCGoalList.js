@@ -12,7 +12,7 @@ class HOCGoalList extends Component {
     return [{
       component: 'Button',
       props: {
-        text: 'Create Goal',
+        text: 'New Goal',
         primary: true,
       },
     }];

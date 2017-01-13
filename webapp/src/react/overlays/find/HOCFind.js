@@ -3,7 +3,6 @@ import { list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
-
 import Find from './Find';
 import './styles/find.scss';
 
@@ -111,10 +110,11 @@ class HOCFind extends Component {
     }
   }
   render() {
-    const { searchResults, searching, searchQuery, actionLabel } = this.props;
+    const { searchResults, searching, searchQuery, actionLabel, browseQuery } = this.props;
     return (
       <Find
         results={searchResults}
+        browseQuery={browseQuery}
         searching={searching}
         actionLabel={actionLabel}
         searchQuery={searchQuery}

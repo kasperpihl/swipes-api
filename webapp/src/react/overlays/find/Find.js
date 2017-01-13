@@ -3,7 +3,7 @@ import { setupDelegate } from 'classes/utils';
 import { list } from 'react-immutable-proptypes';
 import Loader from 'components/swipes-ui/Loader';
 import FindItem from './FindItem';
-
+import HOCBrowse from './browse/HOCBrowse';
 
 import './styles/find.scss';
 

@@ -13,10 +13,24 @@ const startingViewForNavId = (navId) => {
         component: 'OrgDashboard',
         title: 'Dashboard',
       };
+    case 'find':
+      return {
+        component: 'Find',
+        title: 'Find',
+      };
     case 'profile':
       return {
         component: 'Profile',
         title: 'Profile',
+      };
+    case 'browser':
+      return {
+        component: 'Browser',
+        title: 'Browser',
+        hideNav: true,
+        props: {
+          url: 'https://google.com',
+        },
       };
   }
 };
