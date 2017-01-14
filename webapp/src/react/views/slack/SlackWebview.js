@@ -20,7 +20,6 @@ class SlackWebview extends Component {
   }
   getWebviewHtml() {
     const preloadUrl = window.ipcListener.preloadUrl('slack-preload');
-    console.log(preloadUrl);
     const { persistId, url } = this.props;
     let html = `<webview src="${url}" class="webview" `;
     html += `preload="${preloadUrl}" `;
