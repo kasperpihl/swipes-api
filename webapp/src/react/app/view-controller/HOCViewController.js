@@ -9,6 +9,11 @@ import * as views from 'views';
 import { bindAll, nearestAttribute } from 'classes/utils';
 import './styles/view-controller';
 
+const reservedNavIds = [
+  'slack',
+  'gmail',
+];
+
 class HOCViewController extends Component {
   constructor(props) {
     super(props);
@@ -103,7 +108,7 @@ class HOCViewController extends Component {
   }
   renderContainer() {
     const { history, currentView, navId } = this.props;
-    if (navId === 'slack' || !history || !currentView) {
+    if (reservedNavIds.indexOf(navId) !== -1 || !history || !currentView) {
       return undefined;
     }
     return (
@@ -111,6 +116,14 @@ class HOCViewController extends Component {
         {this.renderNavbar()}
         {this.renderContent()}
       </div>
+    );
+  }
+  renderGmail() {
+    const HOCGmail = views.Gmail;
+    const { navId } = this.props;
+    const hidden = navId !== 'gmail';
+    return (
+      <HOCGmail hidden={hidden} />
     );
   }
   renderSlack() {
@@ -126,6 +139,7 @@ class HOCViewController extends Component {
       <div className="view-controller">
         {this.renderContainer()}
         {this.renderSlack()}
+        {this.renderGmail()}
       </div>
     );
   }

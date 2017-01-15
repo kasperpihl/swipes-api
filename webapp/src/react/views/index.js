@@ -11,6 +11,8 @@ import Find from '../overlays/find/HOCFind';
 import Browser from '../overlays/browser/HOCBrowser';
 
 import Slack from './slack/HOCSlack';
+import Store from './store/Store';
+import Gmail from './gmail/HOCGmail';
 
 export {
   OrgDashboard,
@@ -22,4 +24,6 @@ export {
   Browser,
   Services,
   Slack,
+  Store,
+  Gmail,
 };

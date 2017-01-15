@@ -55,6 +55,8 @@ class HOCSidebar extends Component {
       { id: 'dashboard', svg: 'Collection' },
       { id: 'find', svg: 'Find' },
       { id: 'slack', svg: 'SlackLogo' },
+      { id: 'store', svg: 'Earth' },
+      { id: 'gmail', svg: 'DropboxLogo' },
     ].map(o => this.renderItem(o));
   }
   renderProfile() {

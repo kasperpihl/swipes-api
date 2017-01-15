@@ -29,8 +29,13 @@ const startingViewForNavId = (navId) => {
         title: 'Browser',
         hideNav: true,
         props: {
-          url: 'https://google.com',
+          url: 'https://gmail.com',
         },
+      };
+    case 'store':
+      return {
+        component: 'Store',
+        hideNav: true,
       };
   }
 };
