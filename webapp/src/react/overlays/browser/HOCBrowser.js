@@ -19,6 +19,7 @@ class HOCBrowser extends Component {
   }
   componentDidMount() {
     const webview = this.getWebview();
+    webview.focus();
     const { onLoad } = this.props;
     if (onLoad) {
       onLoad(webview, this.close);

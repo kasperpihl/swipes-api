@@ -7,12 +7,19 @@ import AddGoal from './add-goal/HOCAddGoal';
 import Profile from './profile/HOCProfile';
 import Services from './services/Services';
 
+import Find from '../overlays/find/HOCFind';
+import Browser from '../overlays/browser/HOCBrowser';
+
+import Slack from './slack/HOCSlack';
+
 export {
   OrgDashboard,
   GoalList,
   AddGoal,
   GoalStep,
-
+  Find,
   Profile,
+  Browser,
   Services,
+  Slack,
 };

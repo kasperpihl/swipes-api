@@ -13,10 +13,24 @@ const startingViewForNavId = (navId) => {
         component: 'OrgDashboard',
         title: 'Dashboard',
       };
+    case 'find':
+      return {
+        component: 'Find',
+        title: 'Find',
+      };
     case 'profile':
       return {
         component: 'Profile',
         title: 'Profile',
+      };
+    case 'browser':
+      return {
+        component: 'Browser',
+        title: 'Browser',
+        hideNav: true,
+        props: {
+          url: 'https://google.com',
+        },
       };
   }
 };
@@ -29,8 +43,9 @@ export function navigateToId(navId) {
       };
       const state = getState();
       let history = state.getIn(['navigation', 'history', navId]);
+      const currentNavId = state.getIn(['navigation', 'id']);
       if (!history) {
-        history = [startingViewForNavId(navId)];
+        history = [startingViewForNavId(navId, currentNavId)];
         payload.history = history;
       }
       dispatch({ type: types.NAVIGATION_SET, payload });
@@ -50,6 +65,9 @@ export function init() {
       dispatch(navigateToId(navId));
     }
   };
+}
+export function setCounter(id, counter) {
+  return { type: types.NAVIGATION_SET_COUNTER, payload: { id, counter } };
 }
 
 export function push(obj, savedState) {

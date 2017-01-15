@@ -3,12 +3,17 @@
 
 .view-controller {
   @include size(100%);
-  padding-left: 45px;
-  padding-top: 9px;
   position: relative;
   display: flex;
   flex-direction: column;
 
+  &__content-container{
+    @include size(100%);
+    padding-left: 45px;
+    padding-top: 9px;
+    display: flex;
+    flex-direction: column;
+  }
   &__flex-wrap {
     @include size(100%);
     @include flex(flex);

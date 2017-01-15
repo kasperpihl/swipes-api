@@ -4,9 +4,15 @@ import { me, toasty } from 'actions';
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
 let dialog;
+let app;
+let os;
+let path;
 if (isElectron) {
   ipcRenderer = nodeRequire('electron').ipcRenderer;
   dialog = nodeRequire('electron').remote.dialog;
+  app = nodeRequire('electron').remote.app;
+  path = nodeRequire('path');
+  os = nodeRequire('os');
 }
 const toasts = {};
 
@@ -45,6 +51,26 @@ export default class IpcListener {
           });
         }
       });
+    }
+  }
+  preloadUrl(script) {
+    if (!isElectron) {
+      return script;
+    }
+    let preloadUrl = `file://${path.join(app.getAppPath(), `preload/${script}.js`)}`;
+    if (os.platform() === 'win32') {
+      preloadUrl = path.resolve(`preload/${script}.js`);
+    }
+    return preloadUrl;
+  }
+  setBadgeCount(count) {
+    if (isElectron) {
+      if (typeof count === 'number') {
+        app.setBadgeCount(count);
+      }
+      if (typeof count === 'string') {
+        app.dock.setBadge(count);
+      }
     }
   }
   openDialog(options) {

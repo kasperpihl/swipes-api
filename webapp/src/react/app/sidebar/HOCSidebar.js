@@ -20,12 +20,18 @@ class HOCSidebar extends Component {
     navigateToId(id);
   }
   renderItem(item) {
-    const { navId } = this.props;
-    let className = 'sidebar__item';
+    const { navId, counters } = this.props;
+    const counter = counters.get(item.id);
 
+    let className = 'sidebar__item';
     if (item.id === navId) {
       className += ' sidebar__item--active';
     }
+    let notif = null;
+    if (counter && counter.length) {
+      notif = <div className="sidebar__notification">{counter}</div>;
+    }
+
     let image = <Icon svg={item.svg} className="sidebar__icon" />;
     if (item.src) {
       image = <img src={item.src} className="sidebar__image" alt="" />;
@@ -39,6 +45,7 @@ class HOCSidebar extends Component {
         data-id={item.id}
       >
         {image}
+        {notif}
       </div>
     );
   }
@@ -47,6 +54,7 @@ class HOCSidebar extends Component {
       { id: 'goals', svg: 'Goals' },
       { id: 'dashboard', svg: 'Collection' },
       { id: 'find', svg: 'Find' },
+      { id: 'slack', svg: 'SlackLogo' },
     ].map(o => this.renderItem(o));
   }
   renderProfile() {
@@ -77,6 +85,7 @@ function mapStateToProps(state) {
   return {
     me: state.get('me'),
     navId: state.getIn(['navigation', 'id']),
+    counters: state.getIn(['navigation', 'counters']),
   };
 }
 
@@ -85,6 +94,7 @@ const { string, func } = PropTypes;
 HOCSidebar.propTypes = {
   me: map,
   navId: string,
+  counters: map,
   navigateToId: func,
 };
 
