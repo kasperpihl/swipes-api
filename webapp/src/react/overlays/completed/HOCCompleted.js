@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import Icon from 'Icon';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 
+import './styles/completed';
 
 class HOCCompleted extends Component {
   constructor(props) {
@@ -29,7 +31,9 @@ class HOCCompleted extends Component {
   render() {
     return (
       <div className="completed-overlay">
-        Hello
+        <Icon svg="Star" className="completed__icon" />
+        <div className="completed__header completed__header--sub">Nice work!</div>
+        <div className="completed__header completed__header--main">step completed</div>
       </div>
     );
   }
