@@ -3,7 +3,7 @@ var express =       require( 'express' ),
     http    =       require( 'http' ),
     bodyParser =    require( 'body-parser' ),
     _ =             require( 'underscore' );
-var Parse = require('parse').Parse;
+var Parse = require('parse/node').Parse;
 var keys = require('./utilities/keys.js');
 var util = require('./utilities/util.js');
 var Logger =          require( './utilities/logger.js' );
@@ -88,6 +88,7 @@ app.route( '/move' ).get( function( req, res ){
 
 function handleAdd( req, res, next){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+  Parse.serverURL = keys.get( "parseUrl" );
   var logger = new Logger();
   var client = new PGClient( logger, 12000 );
 
@@ -114,7 +115,6 @@ function handleAdd( req, res, next){
         res.send( result );
       }
       else{
-        logger.sendErrorLogToParse( error, req.body );
         util.sendBackError( error , res, logger.logs );
       }
 
@@ -124,6 +124,8 @@ function handleAdd( req, res, next){
 
 function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
+  Parse.serverURL = keys.get( "parseUrl" );
+
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
   if(versionNumber == 0){
@@ -133,7 +135,7 @@ function handleSync( req, res, next ){
 
 
   var logger = new Logger();
-  var client = new PGClient( logger, 1000 );
+  var client = new PGClient( logger, 10000 );
   process.on('uncaughtException', function (err) {
     console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
     console.error(err.stack)
@@ -160,7 +162,7 @@ function handleSync( req, res, next ){
         util.sendBackError( {code:510, message:"Request Timed Out"} , res, logger.logs );
         return;
       }
-      
+
       if ( result ){
         if ( req.body.sendLogs ){
           result['logs'] = logger.logs;
@@ -170,7 +172,6 @@ function handleSync( req, res, next ){
         res.send( result );
       }
       else{
-        logger.sendErrorLogToParse( error, req.body );
         util.sendBackError( error , res, logger.logs );
       }
 
