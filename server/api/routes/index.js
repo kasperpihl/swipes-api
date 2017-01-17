@@ -8,6 +8,7 @@ import * as search from './search';
 import * as webhooks from './webhooks';
 import * as notifications from './notifications';
 import * as notes from './notes';
+import * as find from './find';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -23,6 +24,7 @@ const v1Authed = [
   steps.authed,
   notifications.authed,
   notes.authed,
+  find.authed,
 ];
 const webhooksNotAuthed = [
   webhooks.notAuthed,

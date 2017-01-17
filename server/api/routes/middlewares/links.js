@@ -1,7 +1,7 @@
 import hash from 'object-hash';
 import {
   findLinkPermissionsById,
-  findLinkByChecksum,
+  // findLinkByChecksum,
   findLinksFromIds,
   addPermissionsToALink,
   createLink,
@@ -23,25 +23,39 @@ const linksGetByIds = (req, res, next) => {
     return next();
   });
 };
-
-
-const linksFindPermissions = (req, res, next) => {
+// T_TODO optimize that
+const linksGetById = (req, res, next) => {
   const {
-    user_id,
-    shortUrl,
-    checksum,
-    permission,
+    short_url,
   } = res.locals;
 
-  if (shortUrl) {
-    findLinkPermissionsById(shortUrl)
+  const ids = [short_url];
+
+  return findLinksFromIds(ids).then((links) => {
+    const mappedLinks = ids.map((id) => {
+      return links.find(l => l.short_url === id) || {};
+    });
+
+    res.locals.returnObj.link = mappedLinks[0];
+
+    return next();
+  });
+};
+const linksFindPermissions = (req, res, next) => {
+  const {
+    // user_id,
+    short_url,
+    // checksum,
+    // permission,
+  } = res.locals;
+
+  if (short_url) {
+    findLinkPermissionsById(short_url)
       .then((results) => {
         if (results && results.length > 0) {
           const result = results[0];
 
-          res.locals.permission = result.permission;
-          res.locals.checksum = result.checksum;
-          res.locals.meta = result.meta;
+          res.locals.link_with_permission = result;
 
           return next();
         }
@@ -53,23 +67,23 @@ const linksFindPermissions = (req, res, next) => {
       });
   }
 
-  if (checksum) {
-    findLinkByChecksum(checksum)
-      .then((result) => {
-        if (result) {
-          res.locals.permission = Object.assign({}, { user_id }, permission);
-          res.locals.checksum = result.checksum;
-          res.locals.meta = result.meta;
-
-          return next();
-        }
-
-        return next(new SwipesError('There is no link with that checksum'));
-      })
-      .catch((err) => {
-        return next(err);
-      });
-  }
+  // if (checksum) {
+  //   findLinkByChecksum(checksum)
+  //     .then((result) => {
+  //       if (result) {
+  //         res.locals.permission = Object.assign({}, { user_id }, permission);
+  //         res.locals.checksum = result.checksum;
+  //         res.locals.meta = result.meta;
+  //
+  //         return next();
+  //       }
+  //
+  //       return next(new SwipesError('There is no link with that checksum'));
+  //     })
+  //     .catch((err) => {
+  //       return next(err);
+  //     });
+  // }
 };
 
 const linksAddPermission = (req, res, next) => {
@@ -118,4 +132,5 @@ export {
   linksGetByIds,
   linksAddPermission,
   linksCreate,
+  linksGetById,
 };

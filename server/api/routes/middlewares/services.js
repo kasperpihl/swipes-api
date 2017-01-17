@@ -33,9 +33,11 @@ const serviceWithAuthGet = (req, res, next) => {
     service_name,
     account_id,
   } = res.locals;
+
   if (service_name === 'swipes') {
     return next();
   }
+
   return dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
@@ -43,7 +45,37 @@ const serviceWithAuthGet = (req, res, next) => {
       }
 
       const service = results[0];
+
       res.locals.service_auth_data = service.auth_data;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
+const serviceWithAuthFromLinkGet = (req, res, next) => {
+  const {
+    link_with_permission,
+  } = res.locals;
+  const user_id = link_with_permission.user_id;
+  const service_name = link_with_permission.meta.service;
+  const account_id = link_with_permission.permission.account_id;
+
+  if (service_name === 'swipes') {
+    return next();
+  }
+
+  return dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
+    .then((results) => {
+      if (results && !(results.length > 0)) {
+        return next(new SwipesError('Service not found'));
+      }
+
+      const service = results[0];
+      console.log(service.auth_data);
+      res.locals.service_auth_data = service.auth_data;
+      res.locals.service_name = service_name;
 
       return next();
     })
@@ -55,9 +87,11 @@ const serviceImport = (req, res, next) => {
   const {
     service_name,
   } = res.locals;
+
   if (service_name === 'swipes') {
     return next();
   }
+
   if (services[service_name]) {
     res.locals.service = services[service_name];
 
@@ -106,35 +140,67 @@ const serviceDoRequest = (req, res, next) => {
     return next();
   });
 };
-const serviceDoShareRequest = (req, res, next) => {
+const servicePreview = (req, res, next) => {
+  const {
+    service_auth_data,
+    service_name,
+    service,
+    link_with_permission,
+    // meta,
+  } = res.locals;
+
+  if (service_name === 'swipes') {
+    // Kasper not sure what's up here
+    // res.locals.short_url_data = Object.assign({}, link, meta);
+    return next();
+  }
+
+  const options = {
+    auth_data: service_auth_data,
+    type: link_with_permission.type,
+    itemId: link_with_permission.id,
+    user: { user_id: link_with_permission.user_id },
+  };
+
+  return service.preview(options, (err, result) => {
+    if (err) {
+      return next(new SwipesError('Something went wrong with the preview request'));
+    }
+
+    res.locals.returnObj.preview = result;
+
+    return next();
+  });
+};
+const servicePreviewFind = (req, res, next) => {
   const {
     user_id,
     service_auth_data,
     service_name,
     service,
-    link,
-    meta,
+    id,
+    type,
   } = res.locals;
+
   if (service_name === 'swipes') {
-    res.locals.short_url_data = Object.assign({}, link, meta);
+    // Kasper not sure what's up here
+    // res.locals.short_url_data = Object.assign({}, link, meta);
     return next();
   }
+
   const options = {
+    type,
     auth_data: service_auth_data,
-    type: link.type,
-    itemId: link.id,
+    itemId: id,
     user: { user_id },
   };
 
-  return service.shareRequest(options, (err, result) => {
+  return service.preview(options, (err, result) => {
     if (err) {
-      return next(new SwipesError('Something went wrong with the share request'));
+      return next(new SwipesError('Something went wrong with the preview request'));
     }
 
-    res.locals.service_share_request_result = result;
-    res.locals.short_url_data = Object.assign({}, link, {
-      meta: result.meta,
-    });
+    res.locals.returnObj.preview = result;
 
     return next();
   });
@@ -201,8 +267,10 @@ export {
   serviceImport,
   serviceGetAuthUrl,
   serviceWithAuthGet,
+  serviceWithAuthFromLinkGet,
   serviceDoRequest,
-  serviceDoShareRequest,
+  servicePreview,
+  servicePreviewFind,
   serviceGetAuthData,
   serviceUpdateAuthData,
 };

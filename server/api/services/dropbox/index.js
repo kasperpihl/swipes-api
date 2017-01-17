@@ -4,8 +4,10 @@ import {
 } from './auth';
 import {
   request,
-  shareRequest,
 } from './request';
+import {
+  preview,
+} from './preview';
 import {
   webhooks,
 } from './webhooks';
@@ -14,6 +16,6 @@ export {
   authUrl,
   authData,
   request,
-  shareRequest,
+  preview,
   webhooks,
 };

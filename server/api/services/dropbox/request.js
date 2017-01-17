@@ -32,54 +32,7 @@ const request = ({ auth_data, method, params = {} }, callback) => {
     return callback(null, body);
   });
 };
-const cardData = (type, data) => {
-  let mappedData;
 
-  if (type === 'file') {
-    let subtitle = data.path_display || '';
-
-    if (subtitle.length > 0) {
-      subtitle = subtitle.split('/').slice(0, -1).join('/');
-    }
-
-    mappedData = {
-      title: data.name || '',
-      subtitle,
-    };
-  }
-
-  return mappedData;
-};
-const cardActions = () => {
-  // Dummy for now
-  return [];
-};
-const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
-  let method = '';
-  let params = {};
-
-  if (type === 'file') {
-    method = 'files.getMetadata';
-    params = Object.assign({}, {
-      path: itemId,
-    });
-  } else {
-    return callback('This type is not supported :/');
-  }
-
-  return request({ auth_data, method, params, user }, (err, res) => {
-    if (err) {
-      return callback(err);
-    }
-
-    const serviceActions = cardActions(type, res);
-    const serviceData = cardData(type, res);
-    const meta = Object.assign({}, serviceData, serviceActions);
-
-    return callback(null, { meta });
-  });
-};
 export {
   request,
-  shareRequest,
 };
