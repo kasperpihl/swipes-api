@@ -79,7 +79,7 @@ class GoalStep extends Component {
     const {
       collection: col,
     } = this.props;
-    const html = col && col.map((c, i) => (
+    let html = col && col.map((c, i) => (
       <StepContentRow
         key={i}
         onClick={this.onOpenCached(i)}
@@ -87,6 +87,11 @@ class GoalStep extends Component {
         title={c.get('title')}
       />
     ));
+    console.log('html1', html);
+    if (!html) {
+      html = <div className="goal-step__empty-state">Nothing here yet</div>;
+    }
+    console.log('html2', html);
     return (
       <StepSection title="Attachments">
         <div className="goal-step__attachments">
