@@ -17,6 +17,13 @@ const sendResponse = (req, res) => {
 
   return res.status(200).json({ ok: true, ...returnObj });
 };
+const valResponseAndSend = schema => (req, res, next) => {
+  const error = valjs(res.locals.returnObj, shape(schema));
+  if (error) {
+    return next(`Error returnObj: ${error}`);
+  }
+  return sendResponse(req, res);
+};
 
 const valLocals = (name, schema, middleware) => (req, res, next) => {
   // let's validate the params #inception! :D
@@ -67,6 +74,7 @@ export {
   generateSlackLikeId,
   camelCaseToUnderscore,
   sendResponse,
+  valResponseAndSend,
   valLocals,
   valBody,
 };
