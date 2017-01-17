@@ -18,6 +18,9 @@ $mainColor: $deepBlue-100;
   border-radius: 50px;
   min-width: $btnSize;
   transition: .15s;
+  background-color: $bg;
+  position: relative;
+  z-index: 2;
 }
 
 // ELEMENTS
@@ -125,7 +128,7 @@ $mainColor: $deepBlue-100;
 .g-button {
   $b: &;
 
-  &:hover:not(&--primary), &:hover:not(&--disabled) {
+  &:hover:not(&--primary):not(&--disabled) {
     border-color: transparent;
     background-color: rgba($mainColor, .1);
 

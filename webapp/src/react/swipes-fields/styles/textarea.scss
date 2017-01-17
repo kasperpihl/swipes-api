@@ -4,6 +4,7 @@
 .sw-textarea {
   @include size(calc(100% - 50px), auto);
   @include flex();
+  margin-right: 50px;
   position: relative;
 
   &__input {

@@ -30,6 +30,7 @@ $sidebarWidth: 60px;
     @include flex();
     height: 12px;
     min-width: 12px;
+    max-width: 30px;
     background: $red-color;
     color: $bg;
     position: absolute;

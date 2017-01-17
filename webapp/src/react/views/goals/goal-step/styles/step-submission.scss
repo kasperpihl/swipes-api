@@ -5,16 +5,22 @@
   $b: &;
 
   @include size(100%, auto);
-  @include flex(column);
+  @include flex(flex-start, flex-end);
+  flex-wrap: wrap;
   flex: none;
 
   &__actions {
     @include flex(flex);
     margin: 30px 0;
-    // margin-left: 35px;
-  }
+    margin-right: 3px;
+    background-color: $bg;
 
-  &__action:not(:first-child) {
-    margin-left: 9px
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 60px + 21px;
+      @include size(100%, 1px);
+      background-color: $deepBlue-10;
+    }
   }
 }
