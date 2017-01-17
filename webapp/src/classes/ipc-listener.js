@@ -68,7 +68,7 @@ export default class IpcListener {
       if (typeof count === 'number') {
         app.setBadgeCount(count);
       }
-      if (typeof count === 'string') {
+      if (typeof count === 'string' && app.dock) {
         app.dock.setBadge(count);
       }
     }
