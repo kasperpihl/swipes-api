@@ -107,7 +107,7 @@ $mainColor: $deepBlue-100;
   }
 
   &--disabled {
-    // background-color: $deepBlue-10;
+    border-color: $deepBlue-20;
 
     #{$b}__text {
       color: $deepBlue-100;

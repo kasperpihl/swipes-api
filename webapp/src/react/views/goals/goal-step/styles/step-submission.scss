@@ -14,13 +14,5 @@
     margin: 30px 0;
     margin-right: 3px;
     background-color: $bg;
-
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0; bottom: 60px + 21px;
-      @include size(100%, 1px);
-      background-color: $deepBlue-10;
-    }
   }
 }
