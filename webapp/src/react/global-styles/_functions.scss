@@ -1,3 +1,11 @@
+//
+
+@function getElementSelectorInBlock($elementPath, $block) {
+  $selector: str-replace($elementPath, $block);
+
+  @return $selector;
+}
+
 // Strings
 
 @function str-replace($string, $search, $replace: '') {

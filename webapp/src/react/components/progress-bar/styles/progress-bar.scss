@@ -60,8 +60,7 @@ $big-dot-size: 10px;
   }
 
   .tooltip {
-    $e: &;
-    $elementSelector: str-replace(#{$e}, #{$b});
+    $e: getElementSelectorInBlock(#{&}, #{$b});
 
     @include size(270px, 60px);
     @include flex(flex-start, center);
@@ -96,7 +95,7 @@ $big-dot-size: 10px;
 
     &--completed {
 
-      #{$elementSelector}__title {
+      #{$e}__title {
         color: white;
 
         &:before {
@@ -108,17 +107,17 @@ $big-dot-size: 10px;
     &:hover {
       background-color: $blue-100;
 
-      #{$elementSelector}__title {
+      #{$e}__title {
         color: $bg;
       }
 
-      #{$elementSelector}__assignee {
+      #{$e}__assignee {
         color: $bg;
       }
 
-      &:not(#{$elementSelector}--completed) {
+      &:not(#{$e}--completed) {
 
-        #{$elementSelector}__title:before {
+        #{$e}__title:before {
           background-color: $bg;
         }
       }
