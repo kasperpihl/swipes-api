@@ -25,11 +25,21 @@ $sidebarWidth: 60px;
     @include size(100%, auto);
     @include flex(flex-start, center);
   }
-  &__notification{
-    background: red;
-    color: white;
 
+  &__notification {
+    @include flex();
+    height: 12px;
+    min-width: 12px;
+    background: $red-color;
+    color: $bg;
+    position: absolute;
+    left: 55%; top: 50%;
+    font-size: 9px;
+    padding: 3px;
+    border-radius: 20px;
+    transform: translateY(-110%);
   }
+
   &__item {
     @include size($sidebarWidth);
     @include flex();
@@ -38,12 +48,14 @@ $sidebarWidth: 60px;
     &--active {
       #{$b}__icon {
         @include svg-color($deepBlue-90);
+        filter: grayscale(0%);
       }
     }
 
     &:hover {
       #{$b}__icon {
         @include svg-color($deepBlue-60);
+        filter: grayscale(0%);
       }
     }
   }
@@ -58,5 +70,6 @@ $sidebarWidth: 60px;
     @include size(24px);
     @include svg-color($deepBlue-40);
     pointer-events: none;
+    filter: grayscale(100%);
   }
 }
