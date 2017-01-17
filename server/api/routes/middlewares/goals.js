@@ -61,7 +61,7 @@ const goalsCreate = valLocals('goalsCreate', {
 const goalsNext = valLocals('goalsNext', {
   goal: object.require(),
   doNext: bool.require(),
-  step_back_id: string.require(),
+  step_back_id: string,
 }, (req, res, next) => {
   const {
     goal,

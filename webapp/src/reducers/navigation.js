@@ -29,7 +29,6 @@ export default function history(state = initialState, action) {
       });
     }
     case types.NAVIGATION_POP: {
-      const { id, counter } = payload;
       return state.updateIn(['history', state.get('id')], (s) => {
         if (payload && typeof payload.index === 'number') {
           return s.slice(0, payload.index + 1);

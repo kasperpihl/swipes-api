@@ -13,6 +13,12 @@
     padding-top: 9px;
     display: flex;
     flex-direction: column;
+    &.fullscreen{
+      padding: 0;
+      .nav-bar{
+        display: none;
+      }
+    }
   }
   &__flex-wrap {
     @include size(100%);

@@ -132,9 +132,9 @@ class GoalStep extends Component {
         <div className="goal-step__content">
           {this.renderProgressBar()}
           {this.renderStatusMessage()}
+          {this.renderHandoff()}
           {this.renderStatus()}
           {this.renderAttachments()}
-          {this.renderHandoff()}
           {this.renderSubmission()}
         </div>
       </div>

@@ -111,8 +111,12 @@ class HOCViewController extends Component {
     if (reservedNavIds.indexOf(navId) !== -1 || !history || !currentView) {
       return undefined;
     }
+    let className = 'view-controller__content-container';
+    if (currentView.get('fullscreen')) {
+      className += ' fullscreen';
+    }
     return (
-      <div className="view-controller__content-container">
+      <div className={className}>
         {this.renderNavbar()}
         {this.renderContent()}
       </div>

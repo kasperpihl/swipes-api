@@ -1,6 +1,5 @@
 import { List } from 'immutable';
 import { request } from './api';
-import { note, overlay } from './main';
 import { load } from './modal';
 
 export const addToCollection = (goalId, content) => (dispatch, getState) => {

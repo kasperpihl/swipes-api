@@ -2,11 +2,11 @@ import * as types from 'constants';
 
 const startingViewForNavId = (navId) => {
   switch (navId) {
-    case 'goals':
+    case 'my-goals':
     default:
       return {
         component: 'GoalList',
-        title: 'Goals',
+        title: 'My Goals',
       };
     case 'dashboard':
       return {
@@ -27,15 +27,15 @@ const startingViewForNavId = (navId) => {
       return {
         component: 'Browser',
         title: 'Browser',
-        hideNav: true,
+        fullscreen: true,
         props: {
-          url: 'https://gmail.com',
+          url: 'https://google.com',
         },
       };
     case 'store':
       return {
         component: 'Store',
-        hideNav: true,
+        fullscreen: true,
       };
   }
 };
