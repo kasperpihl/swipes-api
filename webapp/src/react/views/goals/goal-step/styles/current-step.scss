@@ -4,22 +4,35 @@
 .current-step {
   @include size(100%, auto);
   position: relative;
+  margin-top: -24px;
+  margin-bottom: -24px;
 
-  &__step {
-    @include size(100%, 30px);
+  &:before {
+    content: '';
+    position: absolute;
+    left: 14px; top: 15px;
+    background-color: $deepBlue-10;
+    @include size(1px, calc(100% - 30px));
+    opacity: .5;
+  }
+
+  &__item {
+    @include size(100%, 36px);
+    @include flex(center, flex-start);
     font-size: 15px;
     color: $deepBlue-100;
     position: relative;
-    padding-left: 20px;
+    padding-left: 30px;
+    z-index: 2;
 
     &:before {
-      @include size(6px);
+      @include size(9px);
       content: '';
       position: absolute;
       left: 10px; top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
       border-radius: 50%;
-      border: 2px solid $deepBlue-100;
+      border: 1px solid $deepBlue-100;
     }
 
     &--prev {
@@ -36,6 +49,10 @@
 
     &--next {
       opacity: .4;
+    }
+
+    &:empty {
+      display: none;
     }
   }
 }

@@ -40,13 +40,20 @@ class GoalStep extends Component {
   renderProgressBar() {
     const {
       goal,
+      step,
     } = this.props;
+    const length = goal.get('steps').size;
+    let numberOfCompleted = goal.get('currentStepIndex');
+
+    if (numberOfCompleted === length - 1 && step.get('completed')) {
+      numberOfCompleted = length;
+    }
 
     return (
       <StepSection>
         <ProgressBar
-          length={goal.get('steps').size}
-          completed={goal.get('currentStepIndex')}
+          length={length}
+          completed={numberOfCompleted}
           steps={goal.get('steps')}
         />
       </StepSection>

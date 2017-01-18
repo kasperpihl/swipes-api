@@ -28,7 +28,7 @@ class HOCAddGoal extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    this.refs.input.focus();
+    // this.refs.input.focus();
   }
   onTitleChange(e) {
     this.setState({ title: e.target.value });

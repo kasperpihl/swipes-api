@@ -41,7 +41,6 @@ class ProgressBar extends Component {
       onClick,
     } = this.props;
     const styles = {};
-    console.log('completed', completed);
 
     if (completed) {
       const progressLength = 100 - ((completed * 100) / length);
