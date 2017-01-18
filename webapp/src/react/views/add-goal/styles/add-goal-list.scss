@@ -32,6 +32,7 @@
       border: 2px solid $deepBlue-100;
       border-radius: 50%;
       background-color: $deepBlue-100;
+      transition: .3s;
     }
 
     &:last-child:not(:first-child) {
@@ -43,8 +44,8 @@
       }
     }
 
-    &--last:not(:first-child):after {
-      animation: emptyDot .3s .35s ease forwards;
+    &--last:after {
+      background-color: $bg;
     }
   }
 
@@ -53,7 +54,7 @@
   }
 
   &__title {
-    width: 400px;
+    width: 300px;
     font-size: 15px;
     color: $deepBlue-100;
     line-height: 1.2;
@@ -65,12 +66,6 @@
       border-bottom: 1px solid $blue-100;
       transition: .1s ease-in-out;
     }
-  }
-}
-
-@keyframes emptyDot {
-  to {
-    background-color: $bg;
   }
 }
 
