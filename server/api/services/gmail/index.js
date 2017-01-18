@@ -4,12 +4,14 @@ import {
 } from './auth';
 import {
   request,
-  shareRequest,
 } from './request';
+import {
+  preview,
+} from './preview';
 
 export {
   authUrl,
   authData,
   request,
-  shareRequest,
+  preview,
 };

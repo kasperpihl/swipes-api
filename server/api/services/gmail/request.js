@@ -99,11 +99,7 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
       callback(error);
     });
 };
-const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
-  return callback(new SwipesError('shareRequest_not_supported_for_gmail'));
-};
 
 export {
   request,
-  shareRequest,
 };
