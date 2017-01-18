@@ -64,11 +64,13 @@ class GoalStep extends Component {
     const current = goal.getIn(['steps', stepIndex, 'title']);
     const next = goal.getIn(['steps', stepIndex + 1, 'title']);
     return (
-      <CurrentStep
-        prev={prev}
-        current={current}
-        next={next}
-      />
+      <StepSection title="current step">
+        <CurrentStep
+          prev={prev}
+          current={current}
+          next={next}
+        />
+      </StepSection>
     );
     return (
       <StepSection title="current step">
