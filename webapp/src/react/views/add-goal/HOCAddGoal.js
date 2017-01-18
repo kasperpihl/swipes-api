@@ -15,11 +15,21 @@ import './styles/add-goal.scss';
 
 const initialState = fromJS({
   title: '',
+  fieldSize: 0,
   attachments: [],
   addAssignees: [],
 });
 
 class HOCAddGoal extends Component {
+  static contextButtons() {
+    return [{
+      component: 'Button',
+      props: {
+        text: 'Load a Way',
+        primary: true,
+      },
+    }];
+  }
   constructor(props) {
     super(props);
     this.state = initialState.toObject();
@@ -29,10 +39,14 @@ class HOCAddGoal extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
     // this.refs.input.focus();
   }
   onTitleChange(e) {
     this.setState({ title: e.target.value });
+  }
+  onUpdatedFieldSize(fieldSize) {
+    this.setState({ fieldSize });
   }
   onAddAttachment(obj) {
     let { attachments } = this.state;
@@ -70,19 +84,31 @@ class HOCAddGoal extends Component {
 
 
   renderHeader() {
+    const { title } = this.state;
     return (
       <div className="add-goal__header">
-        <input type="text" className="add-goal__title" placeholder="Goal Name" />
+        <input
+          type="text"
+          value={title}
+          className="add-goal__title"
+          placeholder="Goal Name"
+          onChange={this.onTitleChange}
+        />
       </div>
     );
   }
   renderList() {
     return (
-      <AddGoalList />
+      <AddGoalList
+        delegate={this}
+      />
     );
   }
   renderAttachments() {
-    const { attachments } = this.state;
+    const { attachments, fieldSize } = this.state;
+    if (!fieldSize) {
+      return undefined;
+    }
     return (
       <StepSection title="Attachments">
         <HOCAttachments
@@ -93,12 +119,41 @@ class HOCAddGoal extends Component {
     );
   }
   renderHandoff() {
+    const { fieldSize } = this.state;
+    if (!fieldSize) {
+      return undefined;
+    }
     return (
       <StepSection title="Handoff" />
     );
   }
+  getStatus() {
+    const { fieldSize, title } = this.state;
+    let status;
+    if (!title || !title.length) {
+      console.log(title);
+      status = 'Please write a title for your goal';
+    } else if (!fieldSize) {
+      status = 'Each goal must have at least one step.';
+    }
+    return status;
+  }
   renderActions() {
-
+    const status = this.getStatus();
+    const disabled = !!status;
+    let statusHtml;
+    if (status) {
+      statusHtml = (
+        <div className="status-stuff">{status}</div>
+      );
+    }
+    return (
+      <StepSection title="Create Goal">
+        {statusHtml}
+        <Button text="Cancel" />
+        <Button text="Create Goal" primary disabled={disabled} />
+      </StepSection>
+    );
   }
   render() {
     const { isAdding } = this.state;

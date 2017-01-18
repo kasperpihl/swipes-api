@@ -24,7 +24,6 @@ class HOCAttachments extends Component {
       previewLink,
       attachments,
     } = this.props;
-    console.log(attachments.get(i));
     previewLink(attachments.get(i));
   }
   onAdd(e) {

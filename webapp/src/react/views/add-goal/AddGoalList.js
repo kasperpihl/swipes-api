@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { setupCachedCallback } from 'classes/utils';
-import './styles/add-goal-list';
+import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import { List, Map } from 'immutable';
+import './styles/add-goal-list';
 
 // now use events as onClick: this.onChangeCached(i)
 class AddGoalList extends Component {
@@ -11,11 +11,16 @@ class AddGoalList extends Component {
       fields: List(),
       addText: '',
     };
+    this.callDelegate = setupDelegate(props.delegate);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
   }
   componentDidMount() {
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.fields.size !== prevState.fields.size) {
+      this.callDelegate('onUpdatedFieldSize', this.state.fields.size);
+    }
+  }
   onChange(i, e) {
     let { fields } = this.state;
     const newText = e.target.value;
