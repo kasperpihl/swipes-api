@@ -11,9 +11,9 @@ const Attachment = (props) => {
   } = props;
 
   return (
-    <div className="step-content-row">
-      <Icon svg={icon} className="step-content-row__icon" />
-      <div className="step-content-row__title" onClick={onClick}>
+    <div className="attachment">
+      <Icon svg={icon} className="attachment__icon" />
+      <div className="attachment__title" onClick={onClick}>
         {title}
       </div>
     </div>

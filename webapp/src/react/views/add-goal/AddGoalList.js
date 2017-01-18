@@ -15,6 +15,7 @@ class AddGoalList extends Component {
   }
   componentDidMount() {
   }
+
   onChange(i, e) {
     let { fields } = this.state;
     const newText = e.target.value;
@@ -26,7 +27,6 @@ class AddGoalList extends Component {
       fields = fields.setIn([i, 'text'], newText);
     }
     this.setState({ fields });
-    console.log(i, e.target.value);
   }
   renderField(i, text) {
     const { fields } = this.state;
@@ -38,10 +38,10 @@ class AddGoalList extends Component {
     }
 
     return (
-      <div className={className}>
+      <div key={i} className={className}>
         <div className="add-goal-list__header">
           <input
-            key={i}
+
             className="add-goal-list__title"
             placeholder={'Add Step'}
             value={text}

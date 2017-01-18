@@ -41,7 +41,7 @@ export const addMenu = (options, callback) => (d, getState) => {
             if (res && res.ok) {
               addLinkAndCallback({
                 type: 'note',
-                service: 'swipes',
+                service_name: 'swipes',
                 id: res.id,
               }, {
                 account_id: myId,
@@ -53,7 +53,7 @@ export const addMenu = (options, callback) => (d, getState) => {
         } else if (type === 'link' && data && data.length) {
           addLinkAndCallback({
             type: 'url',
-            service: 'swipes',
+            service_name: 'swipes',
             id: data,
           }, {
             account_id: myId,
@@ -79,14 +79,14 @@ export const addMenu = (options, callback) => (d, getState) => {
 
 export const click = data => (dispatch, getState) => {
   const att = data;
-  if (att.get('service') === 'swipes' && att.get('type') === 'note') {
+  if (att.get('service_name') === 'swipes' && att.get('type') === 'note') {
     dispatch(a.main.note.show(att.get('id')));
   }
-  if (att.get('service') === 'swipes' && att.get('type') === 'url') {
+  if (att.get('service_name') === 'swipes' && att.get('type') === 'url') {
     dispatch(a.main.browser(att.get('id')));
     // window.open(att.get('id'));
   }
-  if (att.get('service') === 'dropbox') {
+  if (att.get('service_name') === 'dropbox') {
     const id = att.get('id');
 
     dispatch(a.modal.load('preview', {
