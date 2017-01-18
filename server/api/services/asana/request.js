@@ -111,65 +111,7 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
       callback(error);
     });
 };
-const cardData = (type, data) => {
-  let mappedData;
-  let subtitle = null;
-  let photo = null;
 
-  if (data.projects.length > 0) {
-    subtitle = [];
-    data.projects.forEach((project) => {
-      subtitle.push(project.name);
-    });
-
-    subtitle = subtitle.join('/');
-  }
-
-  if (data.assignee && data.assignee.photo) {
-    photo = data.assignee.photo;
-  }
-
-  if (type === 'story') {
-    mappedData = {
-      title: data.name || '',
-      subtitle,
-      photo,
-    };
-  }
-
-  return mappedData;
-};
-const cardActions = () => {
-  // Dummy for now
-  return [];
-};
-const shareRequest = ({ auth_data, type, itemId, user }, callback) => {
-  let method = '';
-  let params = {};
-
-  if (type === 'story') {
-    method = 'tasks.findById';
-    params = Object.assign({}, {
-      id: itemId,
-      opt_expand: 'assignee',
-    });
-  } else {
-    return callback('This type is not supported :/');
-  }
-
-  return request({ auth_data, method, params, user }, (err, res) => {
-    if (err) {
-      return callback(err);
-    }
-
-    const serviceActions = cardActions(type, res);
-    const serviceData = cardData(type, res);
-    const meta = Object.assign({}, serviceData, serviceActions);
-
-    return callback(null, { meta });
-  });
-};
 export {
   request,
-  shareRequest,
 };
