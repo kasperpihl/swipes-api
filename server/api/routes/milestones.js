@@ -18,6 +18,7 @@ authed.all('/milestones.create',
     description: string,
     due_date: string.format('iso8601'),
   }),
+
   valResponseAndSend({
     milestone: shape({
       id: string.require(),

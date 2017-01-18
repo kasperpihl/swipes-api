@@ -10,6 +10,17 @@ const camelCaseToUnderscore = (word) => {
   // http://stackoverflow.com/questions/30521224/javascript-convert-camel-case-to-underscore-case
   return word.replace(/([A-Z]+)/g, (x, y) => { return `_${y.toLowerCase()}`; }).replace(/^_/, '');
 };
+
+const localsMap = mapper => (req, res, next) => {
+  const error = valjs(mapper, objectOf(string).require());
+  if (error) {
+    return next('Error in localsMap object');
+  }
+  Object.entries(mapper).forEach(([fromKey, toKey]) => {
+    res.locals[toKey] = res.locals[fromKey];
+  });
+  return next();
+};
 const sendResponse = (req, res) => {
   const {
     returnObj = {},
@@ -23,6 +34,29 @@ const valResponseAndSend = schema => (req, res, next) => {
     return next(`Error returnObj: ${error}`);
   }
   return sendResponse(req, res);
+};
+
+const setLocals = (name, res, next, state) => {
+  const error = valjs(state, object.require());
+  if (error) {
+    return next(`${name}: Error in setLocals object`);
+  }
+  const errors = Object.entries(state).map(([key, value]) => {
+    /* if (!constants[key]) {
+      res.locals[key] = value;
+    }
+    else{
+      const scheme = constants[key];
+      const lError = valjs(value, scheme);
+      if (!lError) {
+        res.locals[key] = value;
+      }
+      return lError;
+    }*/
+
+    return value;
+  }).filter(v => !!v);
+  return null;
 };
 
 const valLocals = (name, schema, middleware) => (req, res, next) => {
@@ -42,7 +76,7 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
   }
 
   if (middleware) {
-    return middleware(req, res, next);
+    return middleware(req, res, next, setLocals.bind(null, name, res, next));
   }
 
   return next();
@@ -80,6 +114,7 @@ export {
   generateSlackLikeId,
   camelCaseToUnderscore,
   sendResponse,
+  localsMap,
   valResponseAndSend,
   valLocals,
   valBody,

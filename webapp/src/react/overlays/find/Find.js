@@ -90,7 +90,6 @@ class Find extends Component {
     );
   }
   render() {
-    return <HOCBrowse />;
     return (
       <div className="find">
         {this.renderHeader()}
