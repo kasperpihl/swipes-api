@@ -1,15 +1,13 @@
 import express from 'express';
 import {
   string,
+  shape,
+  arrayOf,
 } from 'valjs';
 import {
   valBody,
   sendResponse,
 } from '../utils';
-import {
-  validateLinkAdd,
-  validateLinkGet,
-} from '../validators/links';
 import {
   linksFindPermissions,
   linksAddPermission,
@@ -26,7 +24,9 @@ const authed = express.Router();
 const notAuthed = express.Router();
 
 authed.all('/link.get',
-  validateLinkGet,
+  valBody({
+    ids: arrayOf(string).require(),
+  }),
   linksGetByIds,
   sendResponse,
 );
@@ -39,7 +39,19 @@ authed.all('/link.get',
 // );
 
 authed.all('/link.create',
-  validateLinkAdd,
+  valBody({
+    link: shape({
+      id: string.require(),
+      type: string.require(),
+      service_name: string.require(),
+    }).require(),
+    permission: shape({
+      account_id: string.require(),
+    }).require(),
+    meta: shape({
+      title: string.require(),
+    }).require(),
+  }),
   linksCreate,
   linksAddPermission,
   sendResponse,
