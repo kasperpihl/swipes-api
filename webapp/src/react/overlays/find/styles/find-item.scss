@@ -61,19 +61,23 @@ $itemHeight: $largeHeight;
   &__actions {
     @include flex(flex);
     position: absolute;
-    right: 0; top: 50%;
+    right: 9px; top: 50%;
     transform: translateY(-50%);
-    background-color: white;
+    // background-color: white;
     display: none;
   }
 
   &__action {
-    background-color: white;
+    // background-color: white;
     border-radius: 50px;
 
     &:not(:first-child) {
       margin-left: 6px;
     }
+  }
+
+  &__btn {
+    background-color: #F0F6FD;
   }
 
   &:hover {

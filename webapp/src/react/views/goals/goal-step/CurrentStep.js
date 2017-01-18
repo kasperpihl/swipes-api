@@ -10,7 +10,11 @@ class CurrentStep extends Component {
   }
   render() {
     return (
-      <div className="current-step" />
+      <div className="current-step">
+        <div className="current-step__item current-step__item--prev">Write Specs</div>
+        <div className="current-step__item current-step__item--current">Deliver Design</div>
+        <div className="current-step__item current-step__item--next">Take Decisions on Design</div>
+      </div>
     );
   }
 }

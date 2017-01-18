@@ -40,6 +40,7 @@ import Reload from './svgs/reload.svg';
 import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
 import ThreeDots from './svgs/three-dots.svg';
+import Trash from './svgs/trash.svg';
 import Unassign from './svgs/unassign.svg';
 import Underline from './svgs/underline.svg';
 import UnorderedList from './svgs/unordered-list.svg';
@@ -116,6 +117,7 @@ export {
   SmallList,
   Star,
   ThreeDots,
+  Trash,
   Unassign,
   Underline,
   UnorderedList,

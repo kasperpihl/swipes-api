@@ -1,288 +1,133 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
+@import '~styles/_functions.scss/';
 
 .add-goal {
   $b: &;
 
   @include size(100%);
-  padding: 90px 0;
+  @include flex(center, flex-start, column);
+  position: relative;
   overflow-y: auto;
-
-  &__wrapper {
-    max-width: 750px;
-    margin: 0 auto;
-  }
 
   &__header {
     @include size(100%, auto);
-    @include flex(flex);
-
-    &--vertical-flex {
-      @include flex(flex-start, flex-start, column);
-    }
-  }
-
-  &__pattern-icon {
-    @include size(120px);
-    @include flex();
-    padding: 30px;
-    border-radius: 6px;
-    background-color: white;
-    box-shadow: 0 1px 1px 1px rgba($deepBlue-100, 0.09);
-    margin-right: 42px;
-    position: relative;
-    flex: none;
-
-    #{$b}__icon {
-      @include size(100%);
-    }
-  }
-
-  &__description {
-
-    &--textarea {
-      @include size(100%, auto);
-      resize: none;
-      font-size: 15px;
-      line-height: 1.4;
-      color: $deepBlue-60;
-
-      &::-webkit-input-placeholder {
-        color: $deepBlue-30;
-        font-weight: 300;
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-
-  &__add-step {
-    @include flex(center, flex-start);
-    color: $blue-100;
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: 500;
-    margin-top: 30px;
-  }
-
-  &__sidebar {
-    @include size(350px, 100%);
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: fixed;
-    right: 0; top: 0;
-    padding-top: 54px;
-    background-color: #ffffff;
-    box-shadow: 0 1px 2px 1px rgba(0, 12, 46, 0.09);
-    transform: translateX(100%);
-    transition: .25s ease-in-out;
-
-    &--shown {
-      transform: translateX(0px);
-    }
-  }
-
-  &__sidebar-header {
-    @include size(100%, 78px);
     @include flex(center, space-between);
-    padding: 0 21px;
-    font-size: 21px;
+    max-width: 780px;
+    padding: 45px 0;
+    position: relative;
+  }
+
+  &__title {
+    @include size(80%, auto);
+    border-bottom: 1px solid transparent;
     color: $deepBlue-100;
+    font-size: 26px;
+    line-height: 36px;
+    padding: 9px 0;
+    transition: .2s ease-in-out;
+
+    &:focus {
+      border-bottom: 1px solid $blue-100;
+      transition: .2s ease-in-out;
+    }
+  }
+
+  .step {
+    $e: getElementSelectorInBlock(#{&}, #{$b});
+
+    @include size(100%, auto);
+    min-height: 60px;
+    padding-left: 25px;
     position: relative;
 
-    &:after {
-      content: "";
-      @include size(calc(100% - 42px), 1px);
+    &:not(:first-child) {
+      margin-top: 12px;
+    }
+
+    &:before {
+      content: '';
       position: absolute;
-      left: 21px; bottom: 0;
+      left: 0; top: 0;
+      @include size(1px, 100%);
       background-color: $deepBlue-10;
     }
-  }
 
-  &__sidebar-item{
-    @include size(100%, auto);
-    @include flex(flex);
-    padding: 30px 0;
-    padding-right: 21px;
-    position: relative;
-    transition: .1s;
+    &:after {
+      content: '';
+      position: absolute;
+      left: -10px; top: 0px;
+      @include size(20px);
+      border: 5px solid $bg;
+      border-radius: 50%;
+      background-color: $deepBlue-100;
+    }
 
-    &:not(:nth-child(2)) {
-      &:after {
-        content: "";
-        @include size(calc(100% - 42px), 1px);
-        position: absolute;
-        left: 21px; top: 0;
-        background-color: $deepBlue-10;
+    #{$e}__header {
+      @include size(100%, 36px);
+      @include flex(center, flex-start);
+      transform: translateY(-9px);
+    }
+
+    #{$e}__title {
+      font-size: 15px;
+      color: $deepBlue-100;
+      line-height: 1.2;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+
+    #{$e}__actions {
+      padding-left: 18px;
+      @include flex(none);
+      opacity: 0;
+      transition: .2s;
+    }
+
+    #{$e}__btn {
+
+      &--add-person {
+
+      }
+
+      &--note {
+        margin-left: 9px;
+      }
+
+      &--trash {
+        margin-left: 9px;
+      }
+    }
+
+    #{$e}__assignees {
+      @include flex(flex);
+      flex-wrap: wrap;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 15px;
+      color: $blue-100;
+      transform: translateY(-10px);
+
+      &:hover {
+        text-decoration: underline;
       }
     }
 
     &:hover {
-      background-color: $blue-5;
-      transition: .1s;
-    }
-  }
-
-  &__sidebar-icon {
-    @include size(66px, 100%);
-    @include flex(flex-start, center);
-    flex: none;
-  }
-
-  &__sidebar-title {
-    @include size(100%, 24px);
-    @include flex(center, flex-start);
-    color: $deepBlue-80;
-    font-size: 15px;
-    font-weight: 500;
-  }
-
-  &__sidebar-description {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.5;
-    color: $deepBlue-30;
-    margin-top: 9px;
-  }
-
-  &__step-list {
-    @include size(100%, auto);
-  }
-
-  &__step-item {
-    @include size(100%, auto);
-    @include flex(flex);
-    margin: 9px 0;
-  }
-
-  &__step-index {
-    @include size(36px);
-    @include flex();
-    position: relative;
-    font-size: 18px;
-    color: #007aff;
-    margin-right: 12px;
-    flex: none;
-
-    &:after {
-      content: "";
-      @include size(36px);
-      border: 2px solid $blue-40;
-      border-radius: 50%;
-      position: absolute;
-      left: 0; top: 0;
-    }
-  }
-
-  &__step-name {
-    @include size(100%, 36px);
-    font-size: 18px;
-    color: $deepBlue-100;
-
-    &::-webkit-input-placeholder {
-      color: $deepBlue-30;
-    }
-  }
-
-  &__step-title {
-    color: $deepBlue-30;
-    font-size: 15px;
-    font-weight: 500;
-    margin-top: 9px;
-    overflow-x: hidden;
-  }
-
-  &__title {
-
-    &--input {
-      width: 100%;
-      max-width: 750px;
-      font-size: 27px;
-      color: $deepBlue-100;
-      padding: 20px 0;
-      padding-top: 0;
-      font-weight: 300;
-      line-height: 1;
-      margin-bottom: 25px;
-      margin-right: 30px;
-      position: relative;
-      border-bottom: 2px solid $blue-100;
-      -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 0% 95%, 0% 100%, 0 100%, 0 0);
-      transition: .2s ease-in-out;
-
-      &::-webkit-input-placeholder {
-        color: $deepBlue-30;
-        font-weight: 300;
-      }
-
-      &:focus {
-        border-bottom: 2px solid $blue-100;
-        -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 100% 95%, 100% 100%, 0 100%, 0 0);
-        transition: .2s ease-in-out;
-      }
-
-      &:not(:placeholder-shown) {
-        border-bottom: 2px solid $blue-20;
-        -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 95%, 100% 95%, 100% 100%, 0 100%, 0 0);
-        transition: .2s ease-in-out;
-
-        &:focus {
-          border-bottom: 2px solid $blue-100;
-        }
-      }
-    }
-
-    &--step {
-
-    }
-  }
-
-  &__button {
-
-    &--close-sidebar {
-      @include size(77px);
-      @include flex();
-      margin-right: -25.5px;
-
-      #{$b}__icon {
-        fill: $deepBlue-60;
-      }
-    }
-
-    &--add-step {
-      @include size(36px);
-      @include flex();
-      border: 2px solid $blue-40;
-      border-radius: 50%;
-      margin-right: 12px;
-    }
-
-    &--create-pattern {
-      @include size(170px, 50px);
-      @include flex();
-      border: 1px solid $blue-100;
-      border-radius: 6px;
-      color: $blue-100;
-      text-transform: uppercase;
-      font-size: 12px;
-      font-weight: 500;
-      float: right;
-      transition: .1s;
-      margin-top: 60px;
-
-      &:hover {
-        background-color: $blue-100;
-        color: $bg;
-        transition: .1s;
+      #{$e}__actions {
+        opacity: 1;
+        transition: .2s;
       }
     }
   }
 
-  &__icon {
-    @include size(24px);
-    fill: $blue-100;
-    stroke: $blue-100;
+  &__btn {
+
+
+    &--context {
+
+    }
   }
 }

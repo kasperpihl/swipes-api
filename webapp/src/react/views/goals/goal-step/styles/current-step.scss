@@ -1,6 +1,41 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.current-step{
-  
+.current-step {
+  @include size(100%, auto);
+  position: relative;
+
+  &__step {
+    @include size(100%, 30px);
+    font-size: 15px;
+    color: $deepBlue-100;
+    position: relative;
+    padding-left: 20px;
+
+    &:before {
+      @include size(6px);
+      content: '';
+      position: absolute;
+      left: 10px; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid $deepBlue-100;
+    }
+
+    &--prev {
+      opacity: .4;
+
+      &:before {
+        background-color: $deepBlue-100;
+      }
+    }
+
+    &--current {
+
+    }
+
+    &--next {
+      opacity: .4;
+    }
+  }
 }

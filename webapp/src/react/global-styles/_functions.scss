@@ -1,4 +1,4 @@
-//
+// named funcs
 
 @function getElementSelectorInBlock($elementPath, $block) {
   $selector: str-replace($elementPath, $block);

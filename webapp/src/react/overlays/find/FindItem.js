@@ -56,7 +56,7 @@ class FindItem extends Component {
     if (actionLabel && actionLabel.length) {
       customActionHtml = (
         <div className="find-item__action" onClick={this.onAction}>
-          <Button small primary text={actionLabel} />
+          <Button small primary text={actionLabel} className="find-item__btn" />
         </div>
       );
     }

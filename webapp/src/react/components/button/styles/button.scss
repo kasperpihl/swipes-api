@@ -1,11 +1,12 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
-$bigBtn: 42px;
+$bigBtn: 36px;
 $smallBtn: 34px;
 
 $btnSize: $bigBtn;
-$mainColor: $deepBlue-100;
+$mainColor: $deepBlue-50;
+$borderColor: $deepBlue-10;
 
 .g-button {
   $b: &;
@@ -14,8 +15,9 @@ $mainColor: $deepBlue-100;
   @include size(auto, $btnSize);
   display: inline-flex;
   border: 1px solid;
-  border-color: rgba($mainColor, .1);
+  border-color: $borderColor;
   border-radius: 50px;
+  flex: none;
   min-width: $btnSize;
   transition: .15s;
   background-color: $bg;
@@ -30,13 +32,12 @@ $mainColor: $deepBlue-100;
 
   &__svg {
     @include size(24px);
-    fill: rgba($mainColor, .8);
-    stroke: rgba($mainColor, .8);
+    @include svg-color($mainColor);
     transition: .15s;
   }
 
   &__text {
-    color: rgba($mainColor, .6);
+    color: $mainColor;
     font-size: 12px;
     font-weight: bold;
     padding: 0 $btnSize;
@@ -129,8 +130,8 @@ $mainColor: $deepBlue-100;
   $b: &;
 
   &:hover:not(&--primary):not(&--disabled) {
-    border-color: transparent;
-    background-color: rgba($mainColor, .1);
+    border-color: $borderColor;
+    background-color: $borderColor;
 
     #{$b}__svg {
       fill: $mainColor;
