@@ -62,19 +62,12 @@ class HOCGoalStep extends Component {
     const { clickLink } = this.props;
     clickLink(att);
   }
-  goalStepAdd(e) {
+  goalStepAddAttachment(obj) {
     const {
       addToCollection,
       goal,
-      addLinkMenu,
     } = this.props;
-    addLinkMenu({
-      boundingRect: e.target.getBoundingClientRect(),
-      alignY: 'center',
-      alignX: 'right',
-    }, (obj) => {
-      addToCollection(goal.get('id'), obj);
-    });
+    addToCollection(goal.get('id'), obj);
   }
   goalStepSubmit(i, message) {
     const { goal, step, submit, overlay } = this.props;

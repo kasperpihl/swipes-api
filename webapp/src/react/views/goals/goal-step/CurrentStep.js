@@ -15,7 +15,7 @@ class CurrentStep extends Component {
       <div className="current-step">
         <div className="current-step__item current-step__item--prev">{prev}</div>
         <div className="current-step__item current-step__item--current">{current}</div>
-        <div className="current-step__item current-step__item--next">{next}</div>
+        {/* <div className="current-step__item current-step__item--next">{next}</div>*/}
       </div>
     );
   }

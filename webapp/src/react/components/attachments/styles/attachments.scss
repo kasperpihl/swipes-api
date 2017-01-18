@@ -1,0 +1,22 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.attachments {
+  @include size(calc(100% - 42px), auto);
+  @include flex(flex-start, space-between);
+  flex-wrap: wrap;
+  position: relative;
+  &__add {
+    position: absolute;
+    right: 0; bottom: 15px;
+  }
+
+  &__empty-state {
+    @include size(100%, 60px);
+    @include flex(center, flex-start);
+    padding-left: 6px;
+    color: $deepBlue-70;
+    font-size: 15px;
+    font-weight: 400;
+  }
+}

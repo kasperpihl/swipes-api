@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import Icon from 'Icon';
 
-import './styles/step-content-row';
+import './styles/attachment.scss';
 
-const StepContentRow = (props) => {
+const Attachment = (props) => {
   const {
     icon,
     title,
@@ -20,11 +20,11 @@ const StepContentRow = (props) => {
   );
 };
 
-export default StepContentRow;
+export default Attachment;
 
 const { string, func } = PropTypes;
 
-StepContentRow.propTypes = {
+Attachment.propTypes = {
   icon: string,
   title: string,
   onClick: func,

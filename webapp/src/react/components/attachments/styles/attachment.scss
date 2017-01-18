@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.step-content-row {
+.attachment {
   $b: &;
   @include size(100%, auto);
   @include flex(center, flex-start);

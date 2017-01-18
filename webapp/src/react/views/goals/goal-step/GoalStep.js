@@ -4,14 +4,14 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
+import HOCAttachments from 'components/attachments/HOCAttachments';
 import ProgressBar from 'components/progress-bar/ProgressBar';
-import Button from 'Button';
 import StepSection from './StepSection';
 import StepHandoff from './StepHandoff';
-import StepContentRow from './StepContentRow';
 import StepSubmission from './StepSubmission';
 import GoalStatus from './GoalStatus';
 import CurrentStep from './CurrentStep';
+
 
 // styles
 import './styles/goal-step';
@@ -28,8 +28,8 @@ class GoalStep extends Component {
   onSubmit(goBack, message) {
     this.callDelegate('goalStepSubmit', goBack, message);
   }
-  onAdd(e) {
-    this.callDelegate('goalStepAdd', e);
+  onAddAttachment(obj) {
+    this.callDelegate('goalStepAddAttachment', obj);
   }
   onOpen(i, e) {
     const {
@@ -99,25 +99,14 @@ class GoalStep extends Component {
 
   renderAttachments() {
     const {
-      collection: col,
+      collection,
     } = this.props;
-    let html = col && col.map((c, i) => (
-      <StepContentRow
-        key={i}
-        onClick={this.onOpenCached(i)}
-        icon={c.get('type') === 'note' ? 'Note' : 'Hyperlink'}
-        title={c.get('title')}
-      />
-    ));
-    if (!html) {
-      html = <div className="goal-step__empty-state">Nothing here yet</div>;
-    }
     return (
       <StepSection title="Attachments">
-        <div className="goal-step__attachments">
-          {html}
-        </div>
-        <Button icon="Plus" onClick={this.onAdd} className="goal-step__btn" />
+        <HOCAttachments
+          attachments={collection}
+          delegate={this}
+        />
       </StepSection>
     );
   }

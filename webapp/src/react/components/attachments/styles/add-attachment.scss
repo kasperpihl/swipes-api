@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.attachment-menu {
+.add-attachment {
   $b: &;
   @include size(auto);
   @include flex(flex);

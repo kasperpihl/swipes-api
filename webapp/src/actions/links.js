@@ -1,6 +1,6 @@
 import * as c from 'constants';
 import * as a from 'actions';
-import AttachmentMenu from 'components/attachment-menu/AttachmentMenu';
+import AddAttachment from 'components/attachments/AddAttachment';
 
 export const add = (link, permission, meta) => a.api.request('link.create', {
   link,
@@ -22,7 +22,7 @@ export const addMenu = (options, callback) => (d, getState) => {
   const orgId = state.getIn(['me', 'organizations', 0, 'id']);
   d(a.main.contextMenu({
     options,
-    component: AttachmentMenu,
+    component: AddAttachment,
     props: {
       callback: (type, data) => {
         const addLinkAndCallback = (link, permission, meta) => {

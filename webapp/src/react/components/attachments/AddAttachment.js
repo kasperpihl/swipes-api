@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { setupCachedCallback } from 'classes/utils';
 import Button from 'Button';
 import Icon from 'Icon';
-import './styles/attachment-menu';
+import './styles/add-attachment';
 
-class AttachmentMenu extends Component {
+class AddAttachment extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,10 +52,10 @@ class AttachmentMenu extends Component {
     }
     const placeholder = addMenu === 'link' ? 'Enter a URL' : 'Enter note title';
     return (
-      <div className="attachment-menu__attach">
+      <div className="add-attachment__attach">
         <input
           key="input"
-          className="attachment-menu__input"
+          className="add-attachment__input"
           placeholder={placeholder}
           type="text"
           ref={(c) => { this._input = c; }}
@@ -65,7 +65,7 @@ class AttachmentMenu extends Component {
           key="butt"
           text="Add"
           onClick={this.onAdd}
-          className="attachment-menu__button"
+          className="add-attachment__button"
         />
       </div>
     );
@@ -76,15 +76,15 @@ class AttachmentMenu extends Component {
       return undefined;
     }
     return buttons.map((b, i) => (
-      <div key={`button-${i}`} className="attachment-menu__item" onClick={this.onMenuCached(i)}>
-        <Icon svg={b.svg} className="attachment-menu__icon" />
+      <div key={`button-${i}`} className="add-attachment__item" onClick={this.onMenuCached(i)}>
+        <Icon svg={b.svg} className="add-attachment__icon" />
         {b.title}
       </div>
     ));
   }
   render() {
     return (
-      <div className="attachment-menu">
+      <div className="add-attachment">
         {this.renderAddMenu()}
         {this.renderButtons()}
       </div>
@@ -92,10 +92,10 @@ class AttachmentMenu extends Component {
   }
 }
 
-export default AttachmentMenu;
+export default AddAttachment;
 
 const { func } = PropTypes;
 
-AttachmentMenu.propTypes = {
+AddAttachment.propTypes = {
   callback: func.isRequired,
 };
