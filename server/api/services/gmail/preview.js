@@ -6,6 +6,7 @@ const cardData = (type, service_type, data) => {
   const elements = [];
   let title = '';
   let subtitle = '';
+  let description = '';
 
   if (service_type === 'message') {
     data.payload.headers.forEach((header) => {
@@ -19,11 +20,18 @@ const cardData = (type, service_type, data) => {
       }
     });
 
+    data.payload.parts.forEach((part) => {
+      const value = part.body.data;
+
+      description += new Buffer(value, 'base64').toString('UTF-8');
+    });
+
     elements.push({
       type: 'header',
       data: {
         title,
         subtitle,
+        description,
       },
     });
   }
@@ -47,7 +55,6 @@ const preview = ({ auth_data, type, service_type = 'message', itemId, user }, ca
 
   return request({ auth_data, method, params, user }, (err, res) => {
     if (err) {
-      console.log(err);
       return callback(err);
     }
 
