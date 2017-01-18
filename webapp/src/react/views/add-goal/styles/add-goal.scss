@@ -33,101 +33,52 @@
     }
   }
 
-  .step {
-    $e: getElementSelectorInBlock(#{&}, #{$b});
+  &__info {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
 
+    &--show {
+      max-height: 300px;
+      opacity: 1;
+      transition: all 1.5s .4s ease;
+    }
+
+    &--showing {
+      max-height: 9000px;
+    }
+  }
+
+  &__footer {
     @include size(100%, auto);
-    min-height: 60px;
-    padding-left: 25px;
-    position: relative;
+    @include flex(center, space-between);
+    padding-top: 15px;
 
-    &:not(:first-child) {
-      margin-top: 12px;
+    #{$b}__status: {
+
     }
+  }
 
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0;
-      @include size(1px, 100%);
-      background-color: $deepBlue-10;
+  &__status {
+    @include size(100%, auto);
+    font-size: 12px;
+    color: $deepBlue-70;
+
+    & + #{$b}__actions {
+      width: auto
     }
+  }
 
-    &:after {
-      content: '';
-      position: absolute;
-      left: -10px; top: 0px;
-      @include size(20px);
-      border: 5px solid $bg;
-      border-radius: 50%;
-      background-color: $deepBlue-100;
-    }
-
-    #{$e}__header {
-      @include size(100%, 36px);
-      @include flex(center, flex-start);
-      transform: translateY(-9px);
-    }
-
-    #{$e}__title {
-      font-size: 15px;
-      color: $deepBlue-100;
-      line-height: 1.2;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-    }
-
-    #{$e}__actions {
-      padding-left: 18px;
-      @include flex(none);
-      opacity: 0;
-      transition: .2s;
-    }
-
-    #{$e}__btn {
-
-      &--add-person {
-
-      }
-
-      &--note {
-        margin-left: 9px;
-      }
-
-      &--trash {
-        margin-left: 9px;
-      }
-    }
-
-    #{$e}__assignees {
-      @include flex(flex);
-      flex-wrap: wrap;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 15px;
-      color: $blue-100;
-      transform: translateY(-10px);
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    &:hover {
-      #{$e}__actions {
-        opacity: 1;
-        transition: .2s;
-      }
-    }
+  &__actions {
+    @include size(100%, auto);
+    @include flex(center, flex-end);
+    @include flex(none);
   }
 
   &__btn {
 
-
-    &--context {
-
+    &--cta {
+      margin-left: 9px;
     }
   }
 }

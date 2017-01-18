@@ -81,8 +81,6 @@ class HOCAddGoal extends Component {
       navPop();
     });
   }
-
-
   renderHeader() {
     const { title } = this.state;
     return (
@@ -106,9 +104,11 @@ class HOCAddGoal extends Component {
   }
   renderAttachments() {
     const { attachments, fieldSize } = this.state;
+
     if (!fieldSize) {
       return undefined;
     }
+
     return (
       <StepSection title="Attachments">
         <HOCAttachments
@@ -120,9 +120,11 @@ class HOCAddGoal extends Component {
   }
   renderHandoff() {
     const { fieldSize } = this.state;
+
     if (!fieldSize) {
       return undefined;
     }
+
     return (
       <StepSection title="Handoff" />
     );
@@ -130,40 +132,54 @@ class HOCAddGoal extends Component {
   getStatus() {
     const { fieldSize, title } = this.state;
     let status;
+
     if (!title || !title.length) {
-      console.log(title);
       status = 'Please write a title for your goal';
     } else if (!fieldSize) {
       status = 'Each goal must have at least one step.';
     }
+
     return status;
   }
   renderActions() {
     const status = this.getStatus();
     const disabled = !!status;
     let statusHtml;
+
     if (status) {
       statusHtml = (
-        <div className="status-stuff">{status}</div>
+        <div className="add-goal__status">{status}</div>
       );
     }
+
     return (
       <StepSection title="Create Goal">
-        {statusHtml}
-        <Button text="Cancel" />
-        <Button text="Create Goal" primary disabled={disabled} />
+        <div className="add-goal__footer">
+          {statusHtml}
+          <div className="add-goal__actions">
+            <Button text="Cancel" className="add-goal__btn add-goal__btn--cancel" />
+            <Button text="Create Goal" primary disabled={disabled} className="add-goal__btn add-goal__btn--cta" />
+          </div>
+        </div>
       </StepSection>
     );
   }
   render() {
-    const { isAdding } = this.state;
+    const { isAdding, fieldSize } = this.state;
+    let infoClass = 'add-goal__info';
+
+    if (fieldSize) {
+      infoClass += ' add-goal__info--show';
+    }
 
     return (
       <div className="add-goal">
         {this.renderHeader()}
         {this.renderList()}
-        {this.renderHandoff()}
-        {this.renderAttachments()}
+        <div className={infoClass}>
+          {this.renderHandoff()}
+          {this.renderAttachments()}
+        </div>
         {this.renderActions()}
       </div>
     );

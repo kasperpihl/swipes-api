@@ -23,6 +23,7 @@ $borderColor: $deepBlue-10;
   background-color: $bg;
   position: relative;
   z-index: 2;
+  user-select: none;
 }
 
 // ELEMENTS
@@ -108,14 +109,15 @@ $borderColor: $deepBlue-10;
   }
 
   &--disabled {
-    border-color: $deepBlue-20;
+    border-color: $borderColor;
+    background-color: $borderColor;
 
     #{$b}__text {
-      color: $deepBlue-100;
+      color: $deepBlue-50;
     }
 
     #{$b}__svg {
-      @include svg-color($deepBlue-20);
+      @include svg-color($deepBlue-50);
     }
   }
 
@@ -179,10 +181,14 @@ $borderColor: $deepBlue-10;
   }
 
   &--disabled:hover {
-    background-color: transparent !important;
+    background-color: $borderColor !important;
+
+    #{$b}__text {
+      color: $deepBlue-50;
+    }
 
     #{$b}__svg {
-      @include svg-color($deepBlue-20 !important);
+      @include svg-color($borderColor !important);
     }
   }
 }

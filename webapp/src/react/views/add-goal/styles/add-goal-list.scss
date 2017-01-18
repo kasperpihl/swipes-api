@@ -1,14 +1,17 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.add-goal-list {
+.add-goal__list {
   $b: &;
+
   @include size(100%, auto);
   @include flex(column);
   max-width: 780px;
   padding-bottom: 30px;
 
-  &__step {
+  .step {
+    $e: getElementSelectorInBlock(#{&}, #{$b});
+
     @include size(100%, auto);
     min-height: 60px;
     padding-left: 39px;
@@ -17,7 +20,6 @@
     &:before, &:after {
       content: '';
       position: absolute;
-
     }
 
     &:before {
@@ -39,7 +41,7 @@
     &:last-child:not(:first-child) {
       animation: showStep .5s ease-in-out forwards;
 
-      #{$b}__title {
+      #{$e}__title {
         animation: showTitle .3s .35s ease-in-out forwards;
         opacity: 0;
       }
@@ -53,25 +55,26 @@
       background-color: $bg;
       transition: .3s ease;
     }
-  }
 
-  &__header {
-    @include size(100%, auto);
-  }
-
-  &__title {
-    @include size(300px, auto);
-    border-bottom: 1px solid transparent;
-    color: $deepBlue-100;
-    font-size: 15px;
-    line-height: 1.2;
-    padding-bottom: 9px;
-    transition: .1s ease-in-out;
-
-    &:focus {
-      border-bottom: 1px solid $blue-100;
-      transition: .1s ease-in-out;
+    #{$e}__header {
+      @include size(100%, auto);
     }
+
+    #{$e}__title {
+      @include size(300px, auto);
+      border-bottom: 1px solid transparent;
+      color: $deepBlue-100;
+      font-size: 15px;
+      line-height: 1.2;
+      padding-bottom: 9px;
+      transition: .1s ease-in-out;
+
+      &:focus {
+        border-bottom: 1px solid $blue-100;
+        transition: .1s ease-in-out;
+      }
+    }
+
   }
 }
 
