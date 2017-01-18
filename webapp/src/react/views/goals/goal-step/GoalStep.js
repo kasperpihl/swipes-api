@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
@@ -53,12 +52,6 @@ class GoalStep extends Component {
       </StepSection>
     );
   }
-  renderStatusMessage() {
-    const from = ['UB9BXJ1JB', 'URU3EUPOE'];
-    const to = ['UZTYMBVGO'];
-    const message = 'Stefan & Yana did their part. Now it is up to you. Good luck';
-    return <GoalStatus fromAssignees={from} toAssignees={to} message={message} />;
-  }
   renderStatus() {
     const {
       stepIndex,
@@ -74,6 +67,15 @@ class GoalStep extends Component {
       </StepSection>
     );
   }
+  renderStatusMessage() {
+    const from = ['UB9BXJ1JB', 'URU3EUPOE'];
+    const to = ['UZTYMBVGO'];
+    const message = 'Stefan & Yana did their part. Now it is up to you. Good luck';
+    return (
+      <GoalStatus fromAssignees={from} toAssignees={to} message={message} />
+    );
+  }
+
 
   renderAttachments() {
     const {
@@ -87,11 +89,9 @@ class GoalStep extends Component {
         title={c.get('title')}
       />
     ));
-    console.log('html1', html);
     if (!html) {
       html = <div className="goal-step__empty-state">Nothing here yet</div>;
     }
-    console.log('html2', html);
     return (
       <StepSection title="Attachments">
         <div className="goal-step__attachments">
@@ -137,8 +137,9 @@ class GoalStep extends Component {
         <div className="goal-step__content">
           {this.renderProgressBar()}
           {this.renderStatusMessage()}
-          {this.renderHandoff()}
           {this.renderStatus()}
+          {this.renderHandoff()}
+
           {this.renderAttachments()}
           {this.renderSubmission()}
         </div>
@@ -149,12 +150,13 @@ class GoalStep extends Component {
 
 export default GoalStep;
 
-const { object, bool, number } = PropTypes;
+const { object, bool, number, string } = PropTypes;
 
 GoalStep.propTypes = {
   step: map.isRequired,
   goal: map.isRequired,
   stepIndex: number,
+  status: string,
   handoff: object,
   collection: list,
   isSubmitting: bool,

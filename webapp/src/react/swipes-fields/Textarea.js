@@ -19,6 +19,9 @@ class Textarea extends Component {
       delegate('change', data.set('text', e.target.value));
     }
   }
+  focus() {
+    this.refs.textarea.focus();
+  }
   renderTextarea() {
     const { data, settings } = this.props;
     const defaultValue = data.get('text') || null;
