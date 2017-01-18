@@ -1,6 +1,90 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.add-goal-list{
+.add-goal-list {
+  $b: &;
+  @include size(100%, auto);
+  @include flex(column);
+  max-width: 780px;
   margin-top: 200px;
+
+  &__step {
+    $e: getElementSelectorInBlock(#{&}, #{$b});
+
+    @include size(100%, auto);
+    min-height: 60px;
+    padding-left: 39px;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 10px; top: 6px;
+      @include size(1px, calc(100% - 6px));
+      background-color: $deepBlue-10;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 4px; top: 4px;
+      @include size(13px);
+      border: 2px solid $deepBlue-100;
+      border-radius: 50%;
+      background-color: $deepBlue-100;
+    }
+
+    &:last-child:not(:first-child) {
+      animation: showStep .5s ease-in-out forwards;
+
+      #{$b}__title {
+        opacity: 0;
+        animation: showTitle .3s .35s ease-in-out forwards;
+      }
+    }
+
+    &--last:not(:first-child):after {
+      animation: emptyDot .3s .35s ease forwards;
+    }
+  }
+
+  &__header {
+    @include size(100%, auto);
+  }
+
+  &__title {
+    width: 400px;
+    font-size: 15px;
+    color: $deepBlue-100;
+    line-height: 1.2;
+    padding-bottom: 9px;
+    border-bottom: 1px solid transparent;
+    transition: .1s ease-in-out;
+
+    &:focus {
+      border-bottom: 1px solid $blue-100;
+      transition: .1s ease-in-out;
+    }
+  }
+}
+
+@keyframes emptyDot {
+  to {
+    background-color: $bg;
+  }
+}
+
+@keyframes showTitle {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes showStep {
+  from {
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 0, -20% 0);
+  }
+  to {
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, -20% 100%);
+  }
 }

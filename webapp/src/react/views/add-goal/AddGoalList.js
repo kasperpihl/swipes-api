@@ -28,16 +28,27 @@ class AddGoalList extends Component {
     this.setState({ fields });
     console.log(i, e.target.value);
   }
-  renderField(id, text) {
-    console.log(id);
+  renderField(i, text) {
+    const { fields } = this.state;
+    const isLast = fields.size === i;
+    let className = 'add-goal-list__step';
+
+    if (isLast) {
+      className += ' add-goal-list__step--last';
+    }
+
     return (
-      <input
-        key={id}
-        className="add-goal-list__step"
-        placeholder={'Add Step'}
-        value={text}
-        onChange={this.onChangeCached(id)}
-      />
+      <div className={className}>
+        <div className="add-goal-list__header">
+          <input
+            key={i}
+            className="add-goal-list__title"
+            placeholder={'Add Step'}
+            value={text}
+            onChange={this.onChangeCached(i)}
+          />
+        </div>
+      </div>
     );
   }
   renderFields() {
