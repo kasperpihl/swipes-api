@@ -2,13 +2,14 @@
 @import '~styles/_mixins.scss';
 
 .attachments {
-  @include size(calc(100% - 42px), auto);
+  @include size(calc(100%), auto);
   @include flex(flex-start, space-between);
   flex-wrap: wrap;
   position: relative;
+
   &__add {
     position: absolute;
-    right: 0; bottom: 15px;
+    right: 0; bottom: 0px;
   }
 
   &__empty-state {

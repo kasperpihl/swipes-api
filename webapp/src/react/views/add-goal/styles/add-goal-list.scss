@@ -6,6 +6,7 @@
   @include size(100%, auto);
   @include flex(column);
   max-width: 780px;
+  padding-bottom: 30px;
 
   &__step {
     @include size(100%, auto);
@@ -23,6 +24,7 @@
       @include size(1px, calc(100% - 6px));
       background-color: $deepBlue-10;
       left: 10px; top: 6px;
+      transition: .3s ease;
     }
 
     &:after {
@@ -41,6 +43,10 @@
         animation: showTitle .3s .35s ease-in-out forwards;
         opacity: 0;
       }
+    }
+
+    &--last:before {
+      height: 0;
     }
 
     &--last:after {
