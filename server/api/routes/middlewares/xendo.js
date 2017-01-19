@@ -11,6 +11,7 @@ import {
   valLocals,
 } from '../../utils';
 import db from '../../../db';
+import * as services from '../../services';
 
 const xendoConfig = config.get('xendo');
 
@@ -294,11 +295,19 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
   db.rethinkQuery(xendoServicesQ)
     .then((userServices) => {
       const mappedResults = result.response.docs.map((doc) => {
-        if (userServices[doc.service_id]) {
-          doc.account_id = userServices[doc.service_id];
+        const service = services[doc.source];
+        let mappedDoc = {};
+        let account_id;
+
+        if (service.mapSearch) {
+          mappedDoc = service.mapSearch(doc);
         }
 
-        return doc;
+        if (userServices[doc.service_id]) {
+          account_id = userServices[doc.service_id];
+        }
+
+        return Object.assign({}, mappedDoc, { account_id });
       });
 
       res.locals.mappedResults = mappedResults;

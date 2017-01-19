@@ -11,6 +11,9 @@ import {
 import {
   webhooks,
 } from './webhooks';
+import {
+  mapSearch,
+} from './search';
 
 export {
   authUrl,
@@ -18,4 +21,5 @@ export {
   request,
   preview,
   webhooks,
+  mapSearch,
 };
