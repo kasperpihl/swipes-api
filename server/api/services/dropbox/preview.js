@@ -27,7 +27,7 @@ const elementsData = (type, data) => {
 
   return elements;
 };
-const fileData = (type, res) => {
+const fileData = (type, metadata, res) => {
   const name = res.metadata.name;
   const nameArr = name.split('.');
   const ext = nameArr[nameArr.length - 1];
@@ -36,15 +36,39 @@ const fileData = (type, res) => {
   let file = {};
 
   if (type === 'file') {
+    const buttons = [
+      {
+        icon: 'Desktop',
+        title: 'Open on Desktop',
+        command: {
+          name: 'open_on_desktop',
+          params: {
+            path: metadata.path_display,
+          },
+        },
+      },
+      {
+        icon: 'Earth',
+        title: 'Open in Dropbox.com',
+        url: `https://www.dropbox.com/home${metadata.path_lower}/`,
+      },
+      {
+        icon: 'Download',
+        title: 'Download',
+        url,
+      },
+    ];
+
     file = {
       content_type,
       url,
+      buttons,
     };
   }
 
   return file;
 };
-const elements = ({ auth_data, type, itemId, user }) => {
+const metadata = ({ auth_data, type, itemId, user }) => {
   return new Promise((resolve, reject) => {
     let method = '';
     let params = {};
@@ -63,9 +87,7 @@ const elements = ({ auth_data, type, itemId, user }) => {
         return reject(err);
       }
 
-      const elements = elementsData(type, res);
-
-      return resolve(elements);
+      return resolve(res);
     });
   });
 };
@@ -88,20 +110,23 @@ const file = ({ auth_data, type, itemId, user }) => {
         return reject(err);
       }
 
-      const file = fileData(type, res);
-
-      return resolve(file);
+      return resolve(res);
     });
   });
 };
 const preview = ({ auth_data, type, itemId, user }, callback) => {
   Promise.all([
-    elements({ auth_data, type, itemId, user }),
+    metadata({ auth_data, type, itemId, user }),
     file({ auth_data, type, itemId, user }),
   ])
   .then((results) => {
+    const metadata = results[0];
+    const file = results[1];
+    const mapElements = elementsData(type, metadata);
+    const mapFile = fileData(type, metadata, file);
+
     return callback(null, {
-      file: Object.assign({}, results[1], { metadata: results[0] }),
+      file: Object.assign({}, mapFile, { metadata: mapElements }),
     });
   })
   .catch((err) => {
