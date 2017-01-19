@@ -15,7 +15,6 @@ $sectionHeight: 52px;
 	box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
 	overflow: hidden;
 	padding: $mainPadding $mainPadding 0 $mainPadding;
-  margin-top: 100px; // Delete later, testing purposes
   position: relative;
 
   &__search {
@@ -40,10 +39,9 @@ $sectionHeight: 52px;
 	}
 
   &__list {
-    $listWidth: calc(100% + (#{$mainPadding} * 2));
     $listHeight: calc(#{$containerHeight} - (#{$sectionHeight} * 2 + #{$mainPadding}));
 
-    @include size($listWidth, $listHeight);
+    @include size(100%, $listHeight);
     @include border-radius(0px, 0px, 6px, 6px);
 
 		background-color: $bg;
@@ -53,5 +51,88 @@ $sectionHeight: 52px;
     padding-top: $whiteSpacePadding;
 		position: absolute;
 		transition: .3s ease-in-out;
+
+    .result {
+			@include size(100%, auto);
+			@include flex(center, flex-start);
+			padding-bottom: 18px;
+      position: relative;
+			transition: .2s ease-in-out;
+
+			&__icon {
+				@include flex(none);
+        transition: .15s;
+
+        &--img {
+          @include size(30px);
+
+          img {
+            @include size();
+            border-radius: 50%;
+          }
+        }
+
+        &--svg {
+          @include size(30px);
+          @include flex();
+
+          svg {
+            @include size(24px);
+            @include svg-color($blue-100);
+          }
+        }
+
+        &--btn {
+          @include size(30px);
+          @include flex();
+          border: 1px solid $deepBlue-10;
+          border-radius: 50%;
+
+          svg {
+            @include size(24px);
+            @include svg-color($deepBlue-50);
+          }
+
+          &:hover {
+            background-color: $deepBlue-10;
+            transition: .15s;
+          }
+        }
+
+        &--label {
+
+        }
+
+        &--initials {
+
+        }
+
+        &--left:empty .result__title {
+          padding-left: 0;
+        }
+
+        &--right:empty .result__title {
+          padding-right: 0;
+        }
+			}
+
+			&__data {
+				@include size(100%, auto);
+				padding: 0 15px;
+			}
+
+			&__title {
+				font-size: 15px;
+				line-height: 21px;
+				color: $deepBlue-70;
+				font-weight: 500;
+			}
+
+			&__subtitle {
+				font-size: 12px;
+				line-height: 15px;
+				color: $deepBlue-40;
+			}
+		}
   }
 }

@@ -99,7 +99,22 @@ class TabMenu extends Component {
       params = ['onTabResults', tabIndex, callback];
     }
 
-    const results = this.callDelegate.apply(null, params);
+    let results = this.callDelegate.apply(null, params);
+    results = [
+      {
+        leftIcon: {
+          src: 'https://s3.amazonaws.com/uifaces/faces/twitter/andyvitale/128.jpg',
+        },
+        title: 'Stefan Vladimirov',
+        subtitle: 'stefan@swipesapp.com',
+        rightIcon: {
+          button: {
+            icon: 'Person',
+          },
+        },
+      },
+    ];
+
     if (results) {
       this.resultsCallback(this.qId, results);
       this.qId = undefined;
