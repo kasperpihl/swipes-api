@@ -77,9 +77,8 @@ export const addMenu = (options, callback) => (d, getState) => {
   }));
 };
 
-export const click = data => (dispatch, getState) => {
+export const preview = data => (dispatch) => {
   const att = data;
-  console.log(att.toJS());
   if (att.get('name') === 'swipes' && att.get('type') === 'note') {
     dispatch(a.main.note.show(att.get('id')));
   } else if (att.get('name') === 'swipes' && att.get('type') === 'url') {
@@ -92,7 +91,9 @@ export const click = data => (dispatch, getState) => {
     dispatch(a.api.request('link.preview', {
       short_url: att.get('shortUrl'),
     })).then((res) => {
-      console.log(res);
+      if (res && res.ok) {
+        dispatch(a.modal.load('preview', res.preview));
+      }
     });
   }
 };

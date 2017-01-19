@@ -40,6 +40,7 @@ const searchResults = results => results.map((doc) => {
       }
     }
   } else if (doc.source === 'dropbox') {
+    shareData.service.type = 'file';
     shareData.service.id = `rev:${idParts[idParts.length - 1]}`;
     meta.title = doc.filename;
     meta.subtitle = doc.filepath || '/';
