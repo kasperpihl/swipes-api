@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import { debounce } from 'classes/utils';
 
 import './styles/context-menu';
 
@@ -9,16 +10,78 @@ import './styles/context-menu';
 class HOCContextMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { styles: {} };
     this.clickedBackground = this.clickedBackground.bind(this);
     this.hideContextMenu = this.hideContextMenu.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.bouncedResize = debounce(this.fitToScreen.bind(this), 50);
   }
   componentDidMount() {
-    window.addEventListener('resize', this.hideContextMenu);
+    this.fitToScreen();
+    window.addEventListener('resize', this.bouncedResize);
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.hideContextMenu);
+    window.removeEventListener('resize', this.bouncedResize);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.contextMenu && nextProps.contextMenu !== this.props.contextMenu) {
+      this.setState({ styles: this.stylesForOptions(nextProps.contextMenu.options) });
+    }
+  }
+  componentDidUpdate() {
+    this.fitToScreen();
+  }
+  fitToScreen() {
+    if (this.refs.menu) {
+      const { styles } = this.state;
+      const dStyle = {};
+
+      const vw = this.refs.menu.clientWidth;
+      const vh = this.refs.menu.clientHeight;
+
+      const ww = window.innerWidth;
+      const wh = window.innerHeight;
+
+      let bottom = styles.bottom;
+      const padding = 5;
+      if (typeof bottom === 'string') {
+        bottom = parseInt(bottom, 10);
+        if ((bottom + vh) > wh) {
+          dStyle.bottom = `${wh - vh - padding}px`;
+        }
+      }
+
+      let top = styles.top;
+      if (typeof top === 'string') {
+        top = parseInt(top, 10);
+        if ((top + vh) > wh) {
+          dStyle.top = `${wh - vh - padding}px`;
+        }
+      }
+
+      let left = styles.left;
+      if (typeof left === 'string') {
+        left = parseInt(left, 10);
+        if ((left + vw) > ww) {
+          dStyle.left = `${ww - vw - padding}px`;
+        }
+      }
+      let right = styles.right;
+      if (typeof right === 'string') {
+        right = parseInt(right, 10);
+        if ((right + vw) > ww) {
+          dStyle.right = `${ww - vw - padding}px`;
+        }
+      }
+
+      if (dStyle.top || dStyle.bottom || dStyle.left || dStyle.right) {
+        if (dStyle.top !== styles.top || dStyle.bottom !== styles.bottom) {
+          this.setState({ styles: Object.assign({}, styles, dStyle) });
+        } else if (dStyle.left !== styles.left || dStyle.right !== styles.right) {
+          this.setState({ styles: Object.assign({}, styles, dStyle) });
+        }
+      }
+    }
   }
   hideContextMenu() {
     const {
@@ -89,9 +152,9 @@ class HOCContextMenu extends Component {
     }
     const Comp = contextMenu.component;
     const props = contextMenu.props || {};
-    const styles = this.stylesForOptions(contextMenu.options);
+    const styles = this.state.styles;
     return (
-      <div className="context-menu__content" style={styles}>
+      <div className="context-menu__content" ref="menu" style={styles}>
         <Comp {...props} />
       </div>
     );
