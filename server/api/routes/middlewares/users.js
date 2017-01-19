@@ -5,6 +5,7 @@ import sha1 from 'sha1';
 import moment from 'moment';
 import {
   string,
+  number,
   custom,
   object,
 } from 'valjs';
@@ -248,7 +249,7 @@ const usersGetXendoServiceId = valLocals('usersGetXendoServiceId', {
     });
 });
 const usersRemoveXendoService = valLocals('usersRemoveXendoService', {
-  xendoUserServiceId: string.require(),
+  xendoUserServiceId: number.require(),
 }, (req, res, next) => {
   const {
     xendoUserServiceId,

@@ -5,6 +5,7 @@ import querystring from 'querystring';
 import r from 'rethinkdb';
 import {
   string,
+  number,
   object,
 } from 'valjs';
 import {
@@ -205,7 +206,7 @@ const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
 
 const xendoRemoveServiceFromUser = valLocals('xendoRemoveServiceFromUser', {
   xendoSwipesCredentials: object.require(),
-  xendoUserServiceId: string.require(),
+  xendoUserServiceId: number.require(),
 }, (req, res, next) => {
   const {
     xendoSwipesCredentials,
