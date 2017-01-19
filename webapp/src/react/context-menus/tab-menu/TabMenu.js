@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate, randomString } from 'classes/utils';
+
 import TabBar from 'components/tab-bar/TabBar';
+import ResultList from './ResultList';
 
 class TabMenu extends Component {
   constructor(props) {
@@ -38,6 +40,9 @@ class TabMenu extends Component {
   renderSearchField() {
     const { search } = this.props;
     const { query } = this.state;
+    if (!search) {
+      return undefined;
+    }
   }
   renderTabBar() {
     const { tabs } = this.props;
@@ -70,7 +75,10 @@ class TabMenu extends Component {
     } = this.state;
 
     if (!loading) {
-      this.setState({ loading: true });
+      this.setState({
+        loading: true,
+        results: [],
+      });
     }
 
     // Setup id to make sure we get the latest.
@@ -96,10 +104,20 @@ class TabMenu extends Component {
       results,
       loading,
     } = this.state;
+    return (
+      <ResultList
+        results={results}
+        loading={loading}
+      />
+    );
   }
   render() {
     return (
-      <div className="tab-menu" />
+      <div className="tab-menu">
+        {this.renderSearchField()}
+        {this.renderTabbar()}
+        {this.renderResultList()}
+      </div>
     );
   }
 }
