@@ -17,9 +17,18 @@ class TabMenu extends Component {
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
+    this.fetchResults();
   }
   componentWillUnmount() {
     this.qId = undefined;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.tabIndex !== this.state.tabIndex
+    ) {
+      this.fetchResults();
+    }
   }
   tabDidChange(nav, index) {
     if (this.state.tabIndex !== index) {
