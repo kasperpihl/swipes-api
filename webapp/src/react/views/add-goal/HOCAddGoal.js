@@ -48,14 +48,17 @@ class HOCAddGoal extends Component {
   onHandoffChange(e) {
     this.setState({ handoff: e.target.value });
   }
-  onAddedStep(step) {
+  onAddedStep(title) {
     let { steps } = this.state;
-    steps = steps.push(step);
+    steps = steps.push(fromJS({
+      title,
+      assignees: [],
+    }));
     this.setState({ steps });
   }
-  onUpdatedStepText(i, text) {
+  onUpdatedStepTitle(i, title) {
     let { steps } = this.state;
-    steps = steps.setIn([i, 'text'], text);
+    steps = steps.setIn([i, 'title'], title);
     this.setState({ steps });
   }
   onAddAttachment(obj) {
@@ -64,7 +67,6 @@ class HOCAddGoal extends Component {
     this.setState({ attachments });
   }
   clickedAssign(e, i) {
-    console.log(i);
     const { assignModal } = this.props;
     const { steps } = this.state;
 

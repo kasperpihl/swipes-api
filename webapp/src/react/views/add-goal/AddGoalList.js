@@ -18,14 +18,11 @@ class AddGoalList extends Component {
   }
   onChange(i, e) {
     const { steps } = this.props;
-    const newText = e.target.value;
+    const title = e.target.value;
     if (i === steps.size) {
-      this.callDelegate('onAddedStep', fromJS({
-        text: newText,
-        assignees: [],
-      }));
+      this.callDelegate('onAddedStep', title);
     } else {
-      this.callDelegate('onUpdatedStepText', i, newText);
+      this.callDelegate('onUpdatedStepTitle', i, title);
     }
   }
   renderStep(i, step) {
@@ -52,7 +49,7 @@ class AddGoalList extends Component {
           <input
             className="step__title"
             placeholder={'Add Step'}
-            value={step.get('text')}
+            value={step.get('title')}
             onChange={this.onChangeCached(i)}
           />
           {assigneesHtml}
@@ -64,9 +61,9 @@ class AddGoalList extends Component {
     const { steps } = this.props;
     let renderedSteps = steps.map((f, i) => this.renderStep(i, f));
     const lStep = steps.size ? steps[steps.size - 1] : null;
-    if (!lStep || !lStep.get('text') || !lStep.get('text').length) {
+    if (!lStep || !lStep.get('title') || !lStep.get('title').length) {
       renderedSteps = renderedSteps.concat([
-        this.renderStep(steps.size, Map({ text: '' })),
+        this.renderStep(steps.size, Map({ title: '' })),
       ]);
     }
     return renderedSteps;
