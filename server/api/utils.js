@@ -1,5 +1,5 @@
 import randomstring from 'randomstring';
-import valjs, { shape, string, func, object } from 'valjs';
+import valjs, { shape, string, func, object, objectOf } from 'valjs';
 
 const generateSlackLikeId = (type) => {
   const id = randomstring.generate(8).toUpperCase();
@@ -38,10 +38,11 @@ const valResponseAndSend = schema => (req, res, next) => {
 
 const setLocals = (name, res, next, state) => {
   const error = valjs(state, object.require());
+
   if (error) {
     return next(`${name}: Error in setLocals object`);
   }
-  const errors = Object.entries(state).map(([key, value]) => {
+  // const errors = Object.entries(state).map(([key, value]) => {
     /* if (!constants[key]) {
       res.locals[key] = value;
     }
@@ -54,8 +55,8 @@ const setLocals = (name, res, next, state) => {
       return lError;
     }*/
 
-    return value;
-  }).filter(v => !!v);
+  //   return value;
+  // }).filter(v => !!v);
   return null;
 };
 
