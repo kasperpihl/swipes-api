@@ -101,8 +101,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
   ])
   .then((results) => {
     return callback(null, {
-      elements: results[0],
-      file: results[1],
+      file: Object.assign({}, results[1], { metadata: results[0] }),
     });
   })
   .catch((err) => {
