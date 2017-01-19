@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate, randomString } from 'classes/utils';
+import { setupDelegate, randomString, bindAll } from 'classes/utils';
 
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
@@ -18,9 +18,15 @@ class TabMenu extends Component {
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
+    bindAll(this, ['onChangeQuery']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
+    this.callDelegate('onTabMenuLoad', this);
+    const { search } = this.props;
+    if (search) {
+      this.refs.search.focus();
+    }
     this.fetchResults();
   }
   componentWillUnmount() {
@@ -39,6 +45,13 @@ class TabMenu extends Component {
       this.setState({ tabIndex: index });
     }
   }
+  onChangeQuery(e) {
+    let { query } = this.state;
+    if (query !== e.target.value) {
+      query = e.target.value;
+      this.setState({ query });
+    }
+  }
   renderSearchField() {
     const { search } = this.props;
     const { query } = this.state;
@@ -48,7 +61,14 @@ class TabMenu extends Component {
     }
 
     return (
-      <input type="text" className="tab-menu__search" placeholder={search} />
+      <input
+        type="text"
+        ref="search"
+        className="tab-menu__search"
+        placeholder={search}
+        onChange={this.onChangeQuery}
+        value={query}
+      />
     );
   }
   renderTabBar() {
@@ -74,8 +94,8 @@ class TabMenu extends Component {
     }
   }
   fetchResults() {
+    const { tabs } = this.props;
     const {
-      tabs,
       tabIndex,
       query,
       loading,
@@ -99,8 +119,8 @@ class TabMenu extends Component {
       params = ['onTabResults', tabIndex, callback];
     }
 
-    let results = this.callDelegate.apply(null, params);
-    results = [
+    const results = this.callDelegate.apply(null, params);
+    /* results = [
       {
         leftIcon: {
           src: 'https://s3.amazonaws.com/uifaces/faces/twitter/andyvitale/128.jpg',
@@ -113,7 +133,7 @@ class TabMenu extends Component {
           },
         },
       },
-    ];
+    ];*/
 
     if (results) {
       this.resultsCallback(this.qId, results);

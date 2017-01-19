@@ -25,7 +25,7 @@ class ResultItem extends Component {
       children = obj.label;
     } else if (obj.initials) {
       className += ' result__icon--initials';
-      children = obj.initials;
+      children = obj.initials.letters;
     }
 
     className += ` result__icon--${side}`;

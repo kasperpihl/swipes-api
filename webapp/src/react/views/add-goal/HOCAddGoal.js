@@ -67,8 +67,12 @@ class HOCAddGoal extends Component {
     this.setState({ attachments });
   }
   clickedAssign(e, i) {
-    const { assignModal } = this.props;
+    const { assignModal, selectAssignees } = this.props;
     const { steps } = this.state;
+    return selectAssignees({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    }, steps.getIn([i, 'assignees']));
 
     return assignModal(
       steps.getIn([i, 'assignees']),
@@ -247,6 +251,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   assignModal: actions.modal.assign,
+  selectAssignees: actions.goals.selectAssignees,
   navPop: actions.navigation.pop,
   request: actions.api.request,
   addToasty: actions.toasty.add,
