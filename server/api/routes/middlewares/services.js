@@ -34,10 +34,6 @@ const serviceWithAuthGet = (req, res, next) => {
     account_id,
   } = res.locals;
 
-  if (service_name === 'swipes') {
-    return next();
-  }
-
   return dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
@@ -62,10 +58,6 @@ const serviceWithAuthFromLinkGet = (req, res, next) => {
   const service_name = link_with_permission.service.name;
   const account_id = link_with_permission.permission.account_id;
 
-  if (service_name === 'swipes') {
-    return next();
-  }
-
   return dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
       if (results && !(results.length > 0)) {
@@ -86,10 +78,6 @@ const serviceImport = (req, res, next) => {
   const {
     service_name,
   } = res.locals;
-
-  if (service_name === 'swipes') {
-    return next();
-  }
 
   if (services[service_name]) {
     res.locals.service = services[service_name];
@@ -142,17 +130,10 @@ const serviceDoRequest = (req, res, next) => {
 const servicePreview = (req, res, next) => {
   const {
     service_auth_data,
-    service_name,
     service,
     link_with_permission,
     // meta,
   } = res.locals;
-
-  if (service_name === 'swipes') {
-    // Kasper not sure what's up here
-    // res.locals.short_url_data = Object.assign({}, link, meta);
-    return next();
-  }
 
   const options = {
     auth_data: service_auth_data,
@@ -176,16 +157,9 @@ const servicePreviewFind = (req, res, next) => {
     user_id,
     service_auth_data,
     service_item_id,
-    service_name,
     service_type,
     service,
   } = res.locals;
-
-  if (service_name === 'swipes') {
-    // Kasper not sure what's up here
-    // res.locals.short_url_data = Object.assign({}, link, meta);
-    return next();
-  }
 
   const options = {
     type: service_type,
