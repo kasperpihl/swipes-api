@@ -31,12 +31,6 @@ class GoalStep extends Component {
   onAddAttachment(obj) {
     this.callDelegate('goalStepAddAttachment', obj);
   }
-  onOpen(i, e) {
-    const {
-      collection,
-    } = this.props;
-    this.callDelegate('goalStepClicked', collection.get(i), e);
-  }
   renderProgressBar() {
     const {
       goal,
@@ -61,24 +55,10 @@ class GoalStep extends Component {
   }
   renderStatus() {
     const {
-      goal,
       stepIndex,
       step,
       status,
     } = this.props;
-
-    const prev = goal.getIn(['steps', stepIndex - 1, 'title']);
-    const current = goal.getIn(['steps', stepIndex, 'title']);
-    const next = goal.getIn(['steps', stepIndex + 1, 'title']);
-    return (
-      <StepSection title="current step">
-        <CurrentStep
-          prev={prev}
-          current={current}
-          next={next}
-        />
-      </StepSection>
-    );
     return (
       <StepSection title="current step">
         <div className="goal-step__status">

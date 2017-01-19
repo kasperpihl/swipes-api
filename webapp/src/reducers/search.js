@@ -11,7 +11,7 @@ const searchResults = results => results.map((doc) => {
   const shareData = { link: {}, meta: { service: doc.source }, permission: { type: 'public' } };
   const { meta } = shareData;
   const idParts = doc.id.split('-');
-  shareData.link.service = doc.source;
+  shareData.link.service_name = doc.source;
   shareData.link.type = doc.content_type;
   shareData.permission.account_id = doc.account_id;
   if (doc.source === 'slack') {

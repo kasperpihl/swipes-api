@@ -58,10 +58,6 @@ class HOCGoalStep extends Component {
     return new GoalsUtil(goal, me.get('id'), cachedData);
   }
 
-  goalStepClicked(att) {
-    const { clickLink } = this.props;
-    clickLink(att);
-  }
   goalStepAddAttachment(obj) {
     const {
       addToCollection,
@@ -176,7 +172,6 @@ HOCGoalStep.propTypes = {
   clickLink: func,
   contextMenu: func,
   overlay: func,
-  addLinkMenu: func,
   goal: map,
   me: map,
   users: map,

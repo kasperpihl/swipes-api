@@ -15,9 +15,8 @@ import './styles/add-goal.scss';
 
 const initialState = fromJS({
   title: '',
-  fieldSize: 0,
+  steps: [],
   attachments: [],
-  addAssignees: [],
 });
 
 class HOCAddGoal extends Component {
@@ -45,13 +44,37 @@ class HOCAddGoal extends Component {
   onTitleChange(e) {
     this.setState({ title: e.target.value });
   }
-  onUpdatedFieldSize(fieldSize) {
-    this.setState({ fieldSize });
+  onAddedStep(step) {
+    let { steps } = this.state;
+    steps = steps.push(step);
+    this.setState({ steps });
+  }
+  onUpdatedStepText(i, text) {
+    let { steps } = this.state;
+    steps = steps.setIn([i, 'text'], text);
+    this.setState({ steps });
   }
   onAddAttachment(obj) {
     let { attachments } = this.state;
     attachments = attachments.push(fromJS(obj));
     this.setState({ attachments });
+  }
+  clickedAssign(e, i) {
+    console.log(i);
+    const { assignModal } = this.props;
+    const { steps } = this.state;
+
+    return assignModal(
+      steps.getIn([i, 'assignees']),
+      this.selectedAssignees.bind(this, i),
+    );
+  }
+  selectedAssignees(i, res) {
+    if (res) {
+      let { steps } = this.state;
+      steps = steps.setIn([i, 'assignees'], fromJS(res));
+      this.setState({ steps });
+    }
   }
   clickedAdd() {
     const { steps, title } = this.state;
@@ -95,17 +118,19 @@ class HOCAddGoal extends Component {
       </div>
     );
   }
-  renderList() {
+  renderSteps() {
+    const { steps } = this.state;
     return (
       <AddGoalList
+        steps={steps}
         delegate={this}
       />
     );
   }
   renderAttachments() {
-    const { attachments, fieldSize } = this.state;
+    const { attachments, steps } = this.state;
 
-    if (!fieldSize) {
+    if (!steps.size) {
       return undefined;
     }
 
@@ -119,9 +144,9 @@ class HOCAddGoal extends Component {
     );
   }
   renderHandoff() {
-    const { fieldSize } = this.state;
+    const { steps } = this.state;
 
-    if (!fieldSize) {
+    if (!steps.size) {
       return undefined;
     }
 
@@ -130,12 +155,12 @@ class HOCAddGoal extends Component {
     );
   }
   getStatus() {
-    const { fieldSize, title } = this.state;
+    const { steps, title } = this.state;
     let status;
 
     if (!title || !title.length) {
       status = 'Please write a title for your goal';
-    } else if (!fieldSize) {
+    } else if (!steps.size) {
       status = 'Each goal must have at least one step.';
     }
 
@@ -165,17 +190,18 @@ class HOCAddGoal extends Component {
     );
   }
   render() {
-    const { isAdding, fieldSize } = this.state;
+    const { steps } = this.state;
     let infoClass = 'add-goal__info';
 
-    if (fieldSize) {
+    if (steps.size) {
       infoClass += ' add-goal__info--show';
     }
 
     return (
       <div className="add-goal">
         {this.renderHeader()}
-        {this.renderList()}
+
+        {this.renderSteps()}
         <div className={infoClass}>
           {this.renderHandoff()}
           {this.renderAttachments()}

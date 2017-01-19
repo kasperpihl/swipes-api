@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
-import { List, Map } from 'immutable';
+
+import { List, fromJS, Map } from 'immutable';
+import { list } from 'react-immutable-proptypes';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import './styles/add-goal-list';
 
@@ -8,39 +11,39 @@ import './styles/add-goal-list';
 class AddGoalList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      fields: List(),
-      addText: '',
-    };
     this.callDelegate = setupDelegate(props.delegate);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
   }
   componentDidMount() {
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.fields.size !== prevState.fields.size) {
-      this.callDelegate('onUpdatedFieldSize', this.state.fields.size);
-    }
-  }
   onChange(i, e) {
-    let { fields } = this.state;
+    const { steps } = this.props;
     const newText = e.target.value;
-    if (i === fields.size) {
-      fields = fields.push(Map({
+    if (i === steps.size) {
+      this.callDelegate('onAddedStep', fromJS({
         text: newText,
+        assignees: [],
       }));
     } else {
-      fields = fields.setIn([i, 'text'], newText);
+      this.callDelegate('onUpdatedStepText', i, newText);
     }
-    this.setState({ fields });
   }
-  renderField(i, text) {
-    const { fields } = this.state;
-    const isLast = fields.size === i;
+  renderStep(i, step) {
+    const { steps, delegate } = this.props;
+    const isLast = steps.size === i;
     let className = 'step';
+    let assigneesHtml;
 
     if (isLast) {
       className += ' step--last';
+    } else {
+      assigneesHtml = (
+        <HOCAssigning
+          assignees={step.get('assignees').toJS()}
+          index={i}
+          delegate={delegate}
+        />
+      );
     }
 
     return (
@@ -49,28 +52,29 @@ class AddGoalList extends Component {
           <input
             className="step__title"
             placeholder={'Add Step'}
-            value={text}
+            value={step.get('text')}
             onChange={this.onChangeCached(i)}
           />
+          {assigneesHtml}
         </div>
       </div>
     );
   }
-  renderFields() {
-    const { fields, addText } = this.state;
-    let renderedFields = fields.map((f, i) => this.renderField(i, f.get('text')));
-    const lField = fields.size ? fields[fields.size - 1] : null;
-
-    if (!lField || !lField.get('text') || !lField.get('text').length) {
-      renderedFields = renderedFields.concat([this.renderField(fields.size, addText)]);
+  renderSteps() {
+    const { steps } = this.props;
+    let renderedSteps = steps.map((f, i) => this.renderStep(i, f));
+    const lStep = steps.size ? steps[steps.size - 1] : null;
+    if (!lStep || !lStep.get('text') || !lStep.get('text').length) {
+      renderedSteps = renderedSteps.concat([
+        this.renderStep(steps.size, Map({ text: '' })),
+      ]);
     }
-
-    return renderedFields;
+    return renderedSteps;
   }
   render() {
     return (
       <div className="add-goal__list">
-        {this.renderFields()}
+        {this.renderSteps()}
       </div>
     );
   }
@@ -78,8 +82,9 @@ class AddGoalList extends Component {
 
 export default AddGoalList;
 
-const { string } = PropTypes;
+const { object } = PropTypes;
 
 AddGoalList.propTypes = {
-
+  steps: list,
+  delegate: object,
 };

@@ -126,9 +126,9 @@ class HOCViewController extends Component {
     const HOCGmail = views.Gmail;
     const { navId } = this.props;
     const hidden = navId !== 'gmail';
-    return (
+    /* return (
       <HOCGmail hidden={hidden} />
-    );
+    );*/
   }
   renderSlack() {
     const HOCSlack = views.Slack;
