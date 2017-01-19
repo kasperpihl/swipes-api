@@ -8,14 +8,14 @@ const initialState = fromJS({
 });
 
 const searchResults = results => results.map((doc) => {
-  const shareData = { link: {}, meta: { service: doc.source }, permission: { type: 'public' } };
+  const shareData = { service: {}, meta: { service: doc.source }, permission: { type: 'public' } };
   const { meta } = shareData;
   const idParts = doc.id.split('-');
-  shareData.link.service_name = doc.source;
-  shareData.link.type = doc.content_type;
+  shareData.service.name = doc.source;
+  shareData.service.type = doc.content_type;
   shareData.permission.account_id = doc.account_id;
   if (doc.source === 'slack') {
-    shareData.link.id = idParts[idParts.length - 1];
+    shareData.service.id = idParts[idParts.length - 1];
 
     if (['image', 'file', 'document'].indexOf(doc.content_type) > -1) {
       meta.title = doc.filename;
@@ -28,7 +28,7 @@ const searchResults = results => results.map((doc) => {
     }
   } else if (doc.source === 'asana') {
     if (doc.content_type === 'task') {
-      shareData.link.id = idParts[idParts.length - 1];
+      shareData.service.id = idParts[idParts.length - 1];
       meta.title = doc.title;
       if (doc.folder) {
         meta.subtitle = doc.folder.join(', ');
@@ -40,7 +40,7 @@ const searchResults = results => results.map((doc) => {
       }
     }
   } else if (doc.source === 'dropbox') {
-    shareData.link.id = `rev:${idParts[idParts.length - 1]}`;
+    shareData.service.id = `rev:${idParts[idParts.length - 1]}`;
     meta.title = doc.filename;
     meta.subtitle = doc.filepath || '/';
   }

@@ -65,8 +65,8 @@ export const addMenu = (options, callback) => (d, getState) => {
             component: 'Find',
             props: {
               actionLabel: 'Attach to Goal',
-              actionCallback: (link, permission, meta) => {
-                addLinkAndCallback(link, permission, meta);
+              actionCallback: (service, permission, meta) => {
+                addLinkAndCallback(service, permission, meta);
               },
             },
           }));
@@ -85,12 +85,12 @@ export const click = data => (dispatch, getState) => {
   } else if (att.get('name') === 'swipes' && att.get('type') === 'url') {
     dispatch(a.main.browser(att.get('id')));
     // window.open(att.get('id'));
-  } else if (att.get('short_url')) {
+  } else if (att.get('shortUrl')) {
     dispatch(a.modal.load('preview', {
       loading: true,
     }));
     dispatch(a.api.request('link.preview', {
-      short_url: att.get('short_url'),
+      short_url: att.get('shortUrl'),
     })).then((res) => {
       console.log(res);
     });

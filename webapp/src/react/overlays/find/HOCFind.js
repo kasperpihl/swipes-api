@@ -21,8 +21,8 @@ class HOCFind extends Component {
     const { searchResults, actionCallback } = this.props;
     const obj = searchResults.get(i);
     if (obj && actionCallback) {
-      const { link, permission, meta } = obj.toJS().shareData;
-      actionCallback(link, permission, meta);
+      const { service, permission, meta } = obj.toJS().shareData;
+      actionCallback(service, permission, meta);
     }
     console.log(obj.toJS());
   }

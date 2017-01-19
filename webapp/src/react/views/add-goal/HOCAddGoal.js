@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-
+import ReactTextarea from 'react-textarea-autosize';
 import Button from 'Button';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll } from 'classes/utils';
@@ -15,6 +15,7 @@ import './styles/add-goal.scss';
 
 const initialState = fromJS({
   title: '',
+  handoff: '',
   steps: [],
   attachments: [],
 });
@@ -33,7 +34,7 @@ class HOCAddGoal extends Component {
     super(props);
     this.state = initialState.toObject();
 
-    bindAll(this, ['clickedAdd', 'onTitleChange']);
+    bindAll(this, ['clickedAdd', 'onTitleChange', 'onHandoffChange']);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
@@ -43,6 +44,9 @@ class HOCAddGoal extends Component {
   }
   onTitleChange(e) {
     this.setState({ title: e.target.value });
+  }
+  onHandoffChange(e) {
+    this.setState({ handoff: e.target.value });
   }
   onAddedStep(step) {
     let { steps } = this.state;
@@ -143,15 +147,27 @@ class HOCAddGoal extends Component {
       </StepSection>
     );
   }
+
   renderHandoff() {
-    const { steps } = this.state;
+    const {
+      steps,
+      handoff,
+    } = this.state;
 
     if (!steps.size) {
       return undefined;
     }
 
     return (
-      <StepSection title="Handoff" />
+      <ReactTextarea
+        className="sw-textarea__input"
+        value={handoff}
+        minRows={3}
+        maxRows={10}
+        ref="textarea"
+        onChange={this.onHandoffChange}
+        placeholder="Pass on your initial message"
+      />
     );
   }
   getStatus() {
@@ -182,6 +198,7 @@ class HOCAddGoal extends Component {
         <div className="add-goal__footer">
           {statusHtml}
           <div className="add-goal__actions">
+            {this.renderHandoff()}
             <Button text="Cancel" className="add-goal__btn add-goal__btn--cancel" />
             <Button text="Create Goal" primary disabled={disabled} className="add-goal__btn add-goal__btn--cta" />
           </div>
@@ -203,7 +220,6 @@ class HOCAddGoal extends Component {
 
         {this.renderSteps()}
         <div className={infoClass}>
-          {this.renderHandoff()}
           {this.renderAttachments()}
         </div>
         {this.renderActions()}
