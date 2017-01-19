@@ -49,6 +49,41 @@ const goalsDeletedNotificationData = (req, res, next) => {
   return next();
 };
 
+const goalsMilestoneAddedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+  } = res.locals;
+
+  const notificationData = {
+    done_by: user_id,
+    goal_id: goal.id,
+    milestone_id: goal.milestone_id,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = { goal };
+
+  return next();
+};
+
+const goalsMilestoneRemovedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+  } = res.locals;
+
+  const notificationData = {
+    done_by: user_id,
+    goal_id: goal.id,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = { goal };
+
+  return next();
+};
+
 const goalsStepCompletedNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -90,4 +125,6 @@ export {
   goalsDeletedNotificationData,
   goalsStepCompletedNotificationData,
   goalsStepGotActiveNotificationData,
+  goalsMilestoneAddedNotificationData,
+  goalsMilestoneRemovedNotificationData,
 };

@@ -10,10 +10,14 @@ import {
   goalsUpdateData,
   goalsCreate,
   goalsDelete,
+  goalsAddMilestone,
+  goalsRemoveMilestone,
   goalsNext,
   goalsInsert,
   goalsCreateQueueMessage,
   goalsDeleteQueueMessage,
+  goalsAddMilestoneQueueMessage,
+  goalsRemoveMilestoneQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -73,6 +77,38 @@ authed.all('/goals.delete',
     } = res.locals;
 
     return res.status(200).json({ ok: true, id: goal_id });
+  });
+
+authed.all('/goals.addMilestone',
+  valBody({
+    id: string.require(),
+    milestone_id: string.require(),
+  }),
+  goalsAddMilestone,
+  goalsAddMilestoneQueueMessage,
+  notificationsPushToQueue,
+  (req, res) => {
+    const {
+      id,
+      milestone_id,
+    } = res.locals;
+
+    return res.status(200).json({ ok: true, id, milestone_id });
+  });
+
+authed.all('/goals.removeMilestone',
+  valBody({
+    id: string.require(),
+  }),
+  goalsRemoveMilestone,
+  goalsRemoveMilestoneQueueMessage,
+  notificationsPushToQueue,
+  (req, res) => {
+    const {
+      id,
+    } = res.locals;
+
+    return res.status(200).json({ ok: true, id });
   });
 
 // T_TODO warning: this endpoint is to be removed

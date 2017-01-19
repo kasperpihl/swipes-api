@@ -155,6 +155,46 @@ const goalsDelete = valLocals('goalsDelete', {
     });
 });
 
+const goalsAddMilestone = valLocals('goalsAddMilestone', {
+  id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next) => {
+  const {
+    id,
+    milestone_id,
+  } = res.locals;
+  const properties = { milestone_id };
+
+  dbGoalsUpdateSingle({ goal_id: id, properties })
+    .then(() => {
+      res.locals.eventType = 'goal_milestone_added';
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
+const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
+  id: string.require(),
+}, (req, res, next) => {
+  const {
+    id,
+  } = res.locals;
+  const properties = { milestone_id: null };
+
+  dbGoalsUpdateSingle({ goal_id: id, properties })
+    .then(() => {
+      res.locals.eventType = 'goal_milestone_removed';
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
 const goalsGet = (req, res, next) => {
   const {
     goal_id,
@@ -255,6 +295,51 @@ const goalsDeleteQueueMessage = valLocals('goalsDeleteQueueMessage', {
   return next();
 });
 
+const goalsAddMilestoneQueueMessage = valLocals('goalsAddMilestoneQueueMessage', {
+  user_id: string.require(),
+  id: string.require(),
+  milestone_id: string.require(),
+  eventType: string.require(),
+}, (req, res, next) => {
+  const {
+    user_id,
+    id,
+    milestone_id,
+    eventType,
+  } = res.locals;
+
+  res.locals.queueMessage = {
+    user_id,
+    milestone_id,
+    goal_id: id,
+    event_type: eventType,
+  };
+  res.locals.messageGroupId = id;
+
+  return next();
+});
+
+const goalsRemoveMilestoneQueueMessage = valLocals('goalsRemoveMilestoneQueueMessage', {
+  user_id: string.require(),
+  id: string.require(),
+  eventType: string.require(),
+}, (req, res, next) => {
+  const {
+    user_id,
+    id,
+    eventType,
+  } = res.locals;
+
+  res.locals.queueMessage = {
+    user_id,
+    goal_id: id,
+    event_type: eventType,
+  };
+  res.locals.messageGroupId = id;
+
+  return next();
+});
+
 const goalsNextStepQueueMessage = (req, res, next) => {
   const {
     user_id,
@@ -300,6 +385,8 @@ export {
   goalsNext,
   goalsInsert,
   goalsDelete,
+  goalsAddMilestone,
+  goalsRemoveMilestone,
   goalsGet,
   goalsUpdate,
   goalsUpdateData,
@@ -307,4 +394,6 @@ export {
   goalsDeleteQueueMessage,
   goalsNextStepQueueMessage,
   goalsStepGotActiveQueueMessage,
+  goalsAddMilestoneQueueMessage,
+  goalsRemoveMilestoneQueueMessage,
 };

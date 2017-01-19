@@ -4,6 +4,16 @@ import {
   shape,
 } from 'valjs';
 import {
+  milestonesCreate,
+  milestonesInsert,
+  milestonesDelete,
+  milestonesCreateQueueMessage,
+  milestonesDeleteQueueMessage,
+} from './middlewares/milestones';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
+import {
   valBody,
   valResponseAndSend,
 } from '../utils';
@@ -18,12 +28,26 @@ authed.all('/milestones.create',
     description: string,
     due_date: string.format('iso8601'),
   }),
-
+  milestonesCreate,
+  milestonesInsert,
+  milestonesCreateQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     milestone: shape({
       id: string.require(),
       title: string.require(),
     }).require(),
+  }));
+
+authed.all('/milestones.delete',
+  valBody({
+    id: string.require(),
+  }),
+  milestonesDelete,
+  milestonesDeleteQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    id: string.require(),
   }));
 
 export {

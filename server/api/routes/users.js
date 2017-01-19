@@ -38,7 +38,7 @@ const notAuthed = express.Router();
 notAuthed.all('/users.signin',
   valBody({
     email: custom(valEmail).require(),
-    password: string.min(1).require(),
+    password: string.require(),
   }),
   userSignIn,
   (req, res, next) => {

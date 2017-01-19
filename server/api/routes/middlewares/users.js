@@ -135,7 +135,7 @@ const userSignUp = (req, res, next) => {
 };
 const userSignIn = valLocals('userSignIn', {
   email: custom(valEmail).require(),
-  password: string.min(1).require(),
+  password: string.require(),
 }, (req, res, next) => {
   const {
     email,
