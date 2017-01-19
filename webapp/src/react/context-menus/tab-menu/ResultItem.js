@@ -24,8 +24,18 @@ class ResultItem extends Component {
       className += ' result__icon--label';
       children = obj.label;
     } else if (obj.initials) {
+      const styles = {};
+
+      if (obj.initials.color) {
+        styles.color = obj.initials.color;
+      }
+
+      if (obj.initials.backgroundColor) {
+        styles.backgroundColor = obj.initials.backgroundColor;
+      }
+
       className += ' result__icon--initials';
-      children = obj.initials.letters;
+      children = <div className="result__initials" style={styles}>{obj.initials.letters}</div>;
     }
 
     className += ` result__icon--${side}`;

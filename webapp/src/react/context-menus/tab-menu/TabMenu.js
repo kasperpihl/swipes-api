@@ -3,6 +3,7 @@ import { setupDelegate, randomString, bindAll } from 'classes/utils';
 
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
+import Button from 'Button';
 
 import './styles/tab-menu.scss';
 
@@ -18,7 +19,7 @@ class TabMenu extends Component {
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
-    bindAll(this, ['onChangeQuery']);
+    bindAll(this, ['onChangeQuery', 'emptySearch']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
@@ -52,6 +53,13 @@ class TabMenu extends Component {
       this.setState({ query });
     }
   }
+  emptySearch() {
+    const { query } = this.state;
+
+    if (query.length) {
+      this.setState({ query: '' });
+    }
+  }
   renderSearchField() {
     const { search } = this.props;
     const { query } = this.state;
@@ -61,14 +69,17 @@ class TabMenu extends Component {
     }
 
     return (
-      <input
-        type="text"
-        ref="search"
-        className="tab-menu__search"
-        placeholder={search}
-        onChange={this.onChangeQuery}
-        value={query}
-      />
+      <div className="tab-menu__search">
+        <input
+          type="text"
+          ref="search"
+          className="tab-menu__input"
+          placeholder={search}
+          onChange={this.onChangeQuery}
+          value={query}
+        />
+        <Button icon="Close" className="tab-menu__close" frameless onClick={this.emptySearch} />
+      </div>
     );
   }
   renderTabBar() {
@@ -111,8 +122,8 @@ class TabMenu extends Component {
     // Setup id to make sure we get the latest.
     this.qId = randomString(6);
     const callback = this.resultsCallback.bind(this, this.qId);
-
     let params = ['onResults', callback];
+
     if (query.length) {
       params = ['onSearchResults', query, callback];
     } else if (tabs && tabs.length) {
@@ -120,20 +131,6 @@ class TabMenu extends Component {
     }
 
     const results = this.callDelegate.apply(null, params);
-    /* results = [
-      {
-        leftIcon: {
-          src: 'https://s3.amazonaws.com/uifaces/faces/twitter/andyvitale/128.jpg',
-        },
-        title: 'Stefan Vladimirov',
-        subtitle: 'stefan@swipesapp.com',
-        rightIcon: {
-          button: {
-            icon: 'Person',
-          },
-        },
-      },
-    ];*/
 
     if (results) {
       this.resultsCallback(this.qId, results);
@@ -146,6 +143,7 @@ class TabMenu extends Component {
       results,
       loading,
     } = this.state;
+
     return (
       <ResultList
         results={results}
@@ -154,8 +152,15 @@ class TabMenu extends Component {
     );
   }
   render() {
+    const { query } = this.state;
+    let className = 'tab-menu';
+
+    if (query.length) {
+      className += ' tab-menu--is-searching';
+    }
+
     return (
-      <div className="tab-menu">
+      <div className={className}>
         {this.renderSearchField()}
         {this.renderTabBar()}
         {this.renderResultList()}

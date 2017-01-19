@@ -8,6 +8,7 @@ $whiteSpacePadding: 12px;
 $sectionHeight: 52px;
 
 .tab-menu {
+  $b: &;
   @include size($containerWidth, $containerHeight);
 
 	background-color: $bg;
@@ -18,9 +19,14 @@ $sectionHeight: 52px;
   position: relative;
 
   &__search {
-		@include size(100%, $sectionHeight);
+		@include size(100%, auto);
+    position: relative;
+    border-bottom: 1px solid $deepBlue-10;
+	}
 
-		border-bottom: 1px solid $deepBlue-10;
+  &__input {
+    @include size(calc(100% - 36px), $sectionHeight);
+
 		color: $deepBlue-100;
 		font-size: 18px;
 		font-weight: 400;
@@ -36,7 +42,16 @@ $sectionHeight: 52px;
 		&:focus {
 			outline: none;
 		}
-	}
+  }
+
+  &__close {
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: .15s ease;
+    pointer-events: none;
+  }
 
   &__list {
     $listHeight: calc(#{$containerHeight} - (#{$sectionHeight} * 2 + #{$mainPadding}));
@@ -50,7 +65,8 @@ $sectionHeight: 52px;
 		padding: 0 $mainPadding;
     padding-top: $whiteSpacePadding;
 		position: absolute;
-		transition: .3s ease-in-out;
+		transition: .25s ease-in-out;
+    z-index: 12;
 
     .result {
 			@include size(100%, auto);
@@ -104,7 +120,17 @@ $sectionHeight: 52px;
         }
 
         &--initials {
+          @include size(30px);
 
+          .result__initials {
+            @include size();
+            @include flex();
+            border-radius: 50%;
+            font-size: 15px;
+            font-weight: 500;
+            color: $bg;
+            background-color: $deepBlue-100;
+          }
         }
 
         &--left:empty .result__title {
@@ -134,5 +160,22 @@ $sectionHeight: 52px;
 				color: $deepBlue-40;
 			}
 		}
+  }
+
+  &--is-searching {
+
+    #{$b}__list {
+      @include size(100%, calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
+  		@include border-radius(0px, 0px, 6px, 6px);
+  		transform: translateY(-52px);
+  		transition: .25s ease-in-out;
+  		box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+    }
+
+    #{$b}__close {
+      opacity: 1;
+      transition: .15s ease;
+      pointer-events: all;
+    }
   }
 }

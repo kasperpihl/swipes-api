@@ -57,7 +57,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
       obj.leftIcon = {
         initials: {
           color: 'white',
-          backgroundColor: 'black',
+          backgroundColor: '#000C2F',
           letters: user.get('name').slice(0, 1),
         },
       };
