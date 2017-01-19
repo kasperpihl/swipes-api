@@ -4,12 +4,31 @@ import './styles/milestone-item.scss';
 const MilestoneItem = (props) => {
   const {
     title,
+    daysLeft,
+    goals,
+    status,
     onClick,
   } = props;
 
   return (
     <div className="milestone-item" onClick={onClick}>
-      {title}
+      <div className="header">
+        <div className="header__title">{title}</div>
+        <div className="header__subtitle">
+          <div className="header__days-left">{daysLeft}</div>
+          <div className="header__completed">{goals.completed}/{goals.total}</div>
+        </div>
+      </div>
+      <div className="progress-bar">
+        <div className="progress-bar__completed" />
+      </div>
+      <div className="status">
+        <div className="status__image">
+          <img src={status.src} alt="" />
+        </div>
+        <div className="status__message">{status.message}</div>
+        <div className="status__time-ago">{status.timeAgo}</div>
+      </div>
     </div>
   );
 };
