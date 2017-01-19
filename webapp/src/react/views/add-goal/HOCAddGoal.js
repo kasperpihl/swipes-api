@@ -208,7 +208,13 @@ class HOCAddGoal extends Component {
           {statusHtml}
           <div className="add-goal__actions">
             <Button text="Cancel" className="add-goal__btn add-goal__btn--cancel" />
-            <Button text="Create Goal" primary disabled={disabled} className="add-goal__btn add-goal__btn--cta" />
+            <Button
+              text="Create Goal"
+              primary
+              disabled={disabled}
+              className="add-goal__btn add-goal__btn--cta"
+              onClick={this.clickedAdd}
+            />
           </div>
         </div>
       </StepSection>
