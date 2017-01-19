@@ -307,7 +307,11 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
           account_id = userServices[doc.service_id];
         }
 
-        return Object.assign({}, mappedDoc, { account_id });
+        return Object.assign({}, mappedDoc, {
+          permission: {
+            account_id,
+          },
+        });
       });
 
       res.locals.mappedResults = mappedResults;

@@ -14,9 +14,12 @@ const mapSearch = (res) => {
     }
 
     return {
+      service: {
+        type: 'task',
+        id: idParts[idParts.length - 1],
+        name: 'asana',
+      },
       subtitle,
-      type: 'task',
-      id: idParts[idParts.length - 1],
       title: res.title,
     };
   }

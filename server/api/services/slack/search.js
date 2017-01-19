@@ -15,10 +15,13 @@ const mapSearch = (res) => {
   }
 
   return {
+    service: {
+      type,
+      id: idParts[idParts.length - 1],
+      name: 'slack',
+    },
     title,
     subtitle,
-    type,
-    id: idParts[idParts.length - 1],
   };
 };
 
