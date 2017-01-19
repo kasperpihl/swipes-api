@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ResultItem from './ResultItem';
 
 class ResultList extends Component {
   constructor(props) {
@@ -9,7 +10,9 @@ class ResultList extends Component {
   }
   render() {
     return (
-      <div className="className" />
+      <div className="tab-menu__list">
+        <ResultItem />
+      </div>
     );
   }
 }
@@ -19,5 +22,5 @@ export default ResultList;
 const { string } = PropTypes;
 
 ResultList.propTypes = {
-  removeThis: string.isRequired,
+  // removeThis: string.isRequired,
 };

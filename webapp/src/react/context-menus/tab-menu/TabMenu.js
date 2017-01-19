@@ -4,6 +4,8 @@ import { setupDelegate, randomString } from 'classes/utils';
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
 
+import './styles/tab-menu.scss';
+
 class TabMenu extends Component {
   constructor(props) {
     super(props);
@@ -40,9 +42,14 @@ class TabMenu extends Component {
   renderSearchField() {
     const { search } = this.props;
     const { query } = this.state;
+
     if (!search) {
       return undefined;
     }
+
+    return (
+      <input type="text" className="tab-menu__search" placeholder={search} />
+    );
   }
   renderTabBar() {
     const { tabs } = this.props;
@@ -115,7 +122,7 @@ class TabMenu extends Component {
     return (
       <div className="tab-menu">
         {this.renderSearchField()}
-        {this.renderTabbar()}
+        {this.renderTabBar()}
         {this.renderResultList()}
       </div>
     );
@@ -130,5 +137,5 @@ TabMenu.propTypes = {
   search: string,
   initialTabIndex: number,
   tabs: arrayOf(string),
-  delegate: object.isRequired,
+  // delegate: object.isRequired,
 };

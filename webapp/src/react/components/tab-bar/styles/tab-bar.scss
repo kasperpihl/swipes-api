@@ -4,10 +4,12 @@
 .tab-bar {
   $b: &;
 
-  @include size(100%, auto);
+  @include size(100%, 52px);
+	@include flex(center, flex-start);
   background-color: $bg;
   max-width: 780px;
   padding: 0;
+  padding-top: 12px;
   position: relative;
   z-index: 10;
   flex: none;
@@ -21,16 +23,17 @@
   }
 
   &__tab {
-    @include size(auto, 50px);
+    @include size(auto, 40px);
+    @include flex(center);
     color: $deepBlue-30;
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 12px;
+		font-weight: 500;
+		line-height: 15px;
+		color: #999EAC;
     margin: 0;
-    line-height: 50px;
     padding-right: 30px;
     position: relative;
-    text-transform: uppercase;
+    text-transform: capitalize;
     transition: .1s;
     user-select: none;
 
