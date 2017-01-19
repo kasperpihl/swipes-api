@@ -12,6 +12,9 @@ import {
   webhooks,
   unsubscribeFromAllWebhooks,
 } from './webhooks';
+import {
+  mapSearch,
+} from './search';
 
 export {
   authUrl,
@@ -20,4 +23,5 @@ export {
   preview,
   webhooks,
   unsubscribeFromAllWebhooks,
+  mapSearch,
 };

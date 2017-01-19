@@ -5,9 +5,13 @@ import {
 import {
   request,
 } from './request';
+import {
+  mapSearch,
+} from './search';
 
 export {
   authUrl,
   authData,
   request,
+  mapSearch,
 };
