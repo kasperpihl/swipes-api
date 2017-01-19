@@ -12,7 +12,6 @@ import StepSubmission from './StepSubmission';
 import GoalStatus from './GoalStatus';
 import CurrentStep from './CurrentStep';
 
-
 // styles
 import './styles/goal-step';
 
@@ -44,7 +43,7 @@ class GoalStep extends Component {
     }
 
     return (
-      <StepSection>
+      <StepSection first>
         <ProgressBar
           length={length}
           completed={numberOfCompleted}

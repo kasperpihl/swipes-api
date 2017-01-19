@@ -6,10 +6,17 @@ const StepSection = (props) => {
   const {
     title,
     children,
+    first,
   } = props;
 
+  let className = ' step-section';
+
+  if (first) {
+    className += ' step-section--first';
+  }
+
   return (
-    <div className="step-section">
+    <div className={className}>
       <div className="step-section__title">{title}</div>
       {children}
     </div>

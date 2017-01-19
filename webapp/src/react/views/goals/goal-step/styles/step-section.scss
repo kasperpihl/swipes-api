@@ -7,14 +7,7 @@
   max-width: 780px;
   position: relative;
   padding: 30px 0;
-
-  &:first-child {
-    padding: 0;
-  }
-
-  &:not(:first-child) {
-    border-top: 1px solid $deepBlue-10;
-  }
+  border-top: 1px solid $deepBlue-10;
 
   &__title {
     @include size(100%, 30px);
@@ -29,5 +22,10 @@
     &:empty {
       display: none;
     }
+  }
+
+  &--first {
+    padding: 0;
+    border: none;
   }
 }

@@ -162,7 +162,7 @@ class HOCAddGoal extends Component {
 
     return (
       <ReactTextarea
-        className="sw-textarea__input"
+        className="add-goal__handoff"
         value={handoff}
         minRows={3}
         maxRows={10}
@@ -197,10 +197,10 @@ class HOCAddGoal extends Component {
 
     return (
       <StepSection title="Create Goal">
+        {this.renderHandoff()}
         <div className="add-goal__footer">
           {statusHtml}
           <div className="add-goal__actions">
-            {this.renderHandoff()}
             <Button text="Cancel" className="add-goal__btn add-goal__btn--cancel" />
             <Button text="Create Goal" primary disabled={disabled} className="add-goal__btn add-goal__btn--cta" />
           </div>
