@@ -59,7 +59,7 @@ const serviceWithAuthFromLinkGet = (req, res, next) => {
     link_with_permission,
   } = res.locals;
   const user_id = link_with_permission.user_id;
-  const service_name = link_with_permission.meta.service;
+  const service_name = link_with_permission.service.name;
   const account_id = link_with_permission.permission.account_id;
 
   if (service_name === 'swipes') {
@@ -73,7 +73,6 @@ const serviceWithAuthFromLinkGet = (req, res, next) => {
       }
 
       const service = results[0];
-      console.log(service.auth_data);
       res.locals.service_auth_data = service.auth_data;
       res.locals.service_name = service_name;
 
@@ -157,8 +156,8 @@ const servicePreview = (req, res, next) => {
 
   const options = {
     auth_data: service_auth_data,
-    type: link_with_permission.type,
-    itemId: link_with_permission.id,
+    type: link_with_permission.service.type,
+    itemId: link_with_permission.service.id,
     user: { user_id: link_with_permission.user_id },
   };
 
@@ -176,10 +175,10 @@ const servicePreviewFind = (req, res, next) => {
   const {
     user_id,
     service_auth_data,
+    service_item_id,
     service_name,
+    service_type,
     service,
-    id,
-    type,
   } = res.locals;
 
   if (service_name === 'swipes') {
@@ -189,9 +188,9 @@ const servicePreviewFind = (req, res, next) => {
   }
 
   const options = {
-    type,
+    type: service_type,
     auth_data: service_auth_data,
-    itemId: id,
+    itemId: service_item_id,
     user: { user_id },
   };
 

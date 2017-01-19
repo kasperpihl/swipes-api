@@ -106,12 +106,12 @@ const linksAddPermission = (req, res, next) => {
 
 const linksCreate = (req, res, next) => {
   const {
-    link,
+    service,
     meta,
   } = res.locals;
 
-  const checksum = hash({ link });
-  const insert_doc = Object.assign({ checksum }, link, { meta });
+  const checksum = hash({ service });
+  const insert_doc = Object.assign({ checksum }, { service, meta });
 
   createLink({ meta, insert_doc })
     .then((result) => {

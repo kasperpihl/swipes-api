@@ -4,10 +4,10 @@ import {
   request,
 } from './request';
 
-const elementsData = (type, service_type, data) => {
+const elementsData = (type, data) => {
   const elements = [];
 
-  if (service_type === 'file') {
+  if (type === 'file') {
     let subtitle = data.path_display || '';
 
     if (subtitle.length > 0) {
@@ -27,7 +27,7 @@ const elementsData = (type, service_type, data) => {
 
   return elements;
 };
-const fileData = (type, service_type, res) => {
+const fileData = (type, res) => {
   const name = res.metadata.name;
   const nameArr = name.split('.');
   const ext = nameArr[nameArr.length - 1];
@@ -35,7 +35,7 @@ const fileData = (type, service_type, res) => {
   const url = res.link;
   let file = {};
 
-  if (service_type === 'file') {
+  if (type === 'file') {
     file = {
       content_type,
       url,
@@ -44,12 +44,12 @@ const fileData = (type, service_type, res) => {
 
   return file;
 };
-const elements = ({ auth_data, type, service_type = 'file', itemId, user }) => {
+const elements = ({ auth_data, type, itemId, user }) => {
   return new Promise((resolve, reject) => {
     let method = '';
     let params = {};
 
-    if (service_type === 'file') {
+    if (type === 'file') {
       method = 'files.getMetadata';
       params = Object.assign({}, {
         path: itemId,
@@ -63,18 +63,18 @@ const elements = ({ auth_data, type, service_type = 'file', itemId, user }) => {
         return reject(err);
       }
 
-      const elements = elementsData(type, service_type, res);
+      const elements = elementsData(type, res);
 
       return resolve(elements);
     });
   });
 };
-const file = ({ auth_data, type, service_type = 'file', itemId, user }) => {
+const file = ({ auth_data, type, itemId, user }) => {
   return new Promise((resolve, reject) => {
     let method = '';
     let params = {};
 
-    if (service_type === 'file') {
+    if (type === 'file') {
       method = 'files.getTemporaryLink';
       params = Object.assign({}, {
         path: itemId,
@@ -88,16 +88,16 @@ const file = ({ auth_data, type, service_type = 'file', itemId, user }) => {
         return reject(err);
       }
 
-      const file = fileData(type, service_type, res);
+      const file = fileData(type, res);
 
       return resolve(file);
     });
   });
 };
-const preview = ({ auth_data, type, service_type = 'file', itemId, user }, callback) => {
+const preview = ({ auth_data, type, itemId, user }, callback) => {
   Promise.all([
-    elements({ auth_data, type, service_type, itemId, user }),
-    file({ auth_data, type, service_type, itemId, user }),
+    elements({ auth_data, type, itemId, user }),
+    file({ auth_data, type, itemId, user }),
   ])
   .then((results) => {
     return callback(null, {

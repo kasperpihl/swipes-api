@@ -40,10 +40,10 @@ authed.all('/link.get',
 
 authed.all('/link.create',
   valBody({
-    link: shape({
+    service: shape({
       id: string.require(),
       type: string.require(),
-      service_name: string.require(),
+      name: string.require(),
     }).require(),
     permission: shape({
       account_id: string.require(),

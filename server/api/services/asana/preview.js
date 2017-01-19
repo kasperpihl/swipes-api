@@ -2,13 +2,13 @@ import {
   request,
 } from './request';
 
-const cardData = (type, service_type, data) => {
+const cardData = (type, data) => {
   const elements = [];
   let subtitle = '';
 
   // let photo = null;
 
-  if (service_type === 'story') {
+  if (type === 'story') {
     if (data.projects.length > 0) {
       subtitle = [];
       data.projects.forEach((project) => {
@@ -37,11 +37,11 @@ const cardData = (type, service_type, data) => {
 
   return elements;
 };
-const preview = ({ auth_data, type, service_type = 'story', itemId, user }, callback) => {
+const preview = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
   let params = {};
 
-  if (service_type === 'story') {
+  if (type === 'story') {
     method = 'tasks.findById';
     params = Object.assign({}, {
       id: itemId,
@@ -58,7 +58,7 @@ const preview = ({ auth_data, type, service_type = 'story', itemId, user }, call
 
     console.log(res);
 
-    const elements = cardData(type, service_type, res);
+    const elements = cardData(type, res);
 
     return callback(null, { elements });
   });

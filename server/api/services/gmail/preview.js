@@ -2,13 +2,13 @@ import {
   request,
 } from './request';
 
-const cardData = (type, service_type, data) => {
+const cardData = (type, data) => {
   const elements = [];
   let title = '';
   let subtitle = '';
   let description = '';
 
-  if (service_type === 'message') {
+  if (type === 'message') {
     data.payload.headers.forEach((header) => {
       const value = header.value;
 
@@ -38,11 +38,11 @@ const cardData = (type, service_type, data) => {
 
   return elements;
 };
-const preview = ({ auth_data, type, service_type = 'message', itemId, user }, callback) => {
+const preview = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
   let params = {};
 
-  if (service_type === 'message') {
+  if (type === 'message') {
     method = 'users.messages.get';
     params = Object.assign({}, {
       id: itemId,
@@ -58,7 +58,7 @@ const preview = ({ auth_data, type, service_type = 'message', itemId, user }, ca
       return callback(err);
     }
 
-    const elements = cardData(type, service_type, res);
+    const elements = cardData(type, res);
 
     return callback(null, { elements });
   });
