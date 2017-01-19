@@ -60,7 +60,7 @@ $sectionHeight: 52px;
     @include border-radius(0px, 0px, 6px, 6px);
 
 		background-color: $bg;
-		left: 0; top: calc((#{$sectionHeight} * 2 ) + #{$mainPadding});
+		left: 0; top: calc((#{$sectionHeight} * 2 ) + #{$mainPadding} + 1px);
 		overflow-y: auto;
 		padding: 0 $mainPadding;
     padding-top: $whiteSpacePadding;
