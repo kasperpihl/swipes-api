@@ -26,7 +26,7 @@ class Assigning extends Component {
   renderAddAssignees() {
     return (
       <div className="sw-assign__assign">
-        {this.renderIcon('AddPerson')}
+        {this.renderIcon('Person')}
       </div>
     );
   }

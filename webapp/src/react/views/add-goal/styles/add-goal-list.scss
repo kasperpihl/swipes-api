@@ -41,7 +41,7 @@
     &:last-child:not(:first-child) {
       animation: showStep .5s ease-in-out forwards;
 
-      #{$e}__title {
+      .step__title {
         animation: showTitle .3s .35s ease-in-out forwards;
         opacity: 0;
       }
@@ -56,11 +56,12 @@
       transition: .3s ease;
     }
 
-    #{$e}__header {
+    &__header {
       @include size(100%, auto);
+      @include flex(center, space-between);
     }
 
-    #{$e}__title {
+    &__title {
       @include size(300px, auto);
       border-bottom: 1px solid transparent;
       color: $deepBlue-100;
@@ -74,7 +75,6 @@
         transition: .1s ease-in-out;
       }
     }
-
   }
 }
 
