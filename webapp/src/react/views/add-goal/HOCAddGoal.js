@@ -82,12 +82,17 @@ class HOCAddGoal extends Component {
       this.setState({ steps });
     }
   }
-  clickedAdd() {
+  isReadyToCreate() {
     const { steps, title } = this.state;
+    return (steps.size && title.length);
+  }
+  clickedAdd() {
+    const { steps, title, attachments } = this.state;
     const { organization_id, request, addToasty, updateToasty, navPop } = this.props;
     const goal = {
       steps: steps.toJS(),
       title,
+      attachments: attachments.toJS(),
     };
 
     addToasty({ title: `Adding: ${title}`, loading: true }).then((toastId) => {
@@ -134,9 +139,9 @@ class HOCAddGoal extends Component {
     );
   }
   renderAttachments() {
-    const { attachments, steps } = this.state;
+    const { attachments } = this.state;
 
-    if (!steps.size) {
+    if (!this.isReadyToCreate()) {
       return undefined;
     }
 
@@ -151,12 +156,9 @@ class HOCAddGoal extends Component {
   }
 
   renderHandoff() {
-    const {
-      steps,
-      handoff,
-    } = this.state;
+    const { handoff } = this.state;
 
-    if (!steps.size) {
+    if (!this.isReadyToCreate()) {
       return undefined;
     }
 
