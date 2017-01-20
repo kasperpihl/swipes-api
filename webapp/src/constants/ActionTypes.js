@@ -8,7 +8,7 @@ export const LOAD_LINKS = 'LOAD_LINKS';
 export const OVERLAY = 'OVERLAY';
 export const NOTE_SHOW = 'NOTE_SHOW';
 export const NOTE_HIDE = 'NOTE_HIDE';
-
+export const UPDATE_RECENT_ASSIGNEES = 'UPDATE_RECENT_ASSIGNEES';
 export const CONTEXT_MENU = 'CONTEXT_MENU';
 
 // Notification

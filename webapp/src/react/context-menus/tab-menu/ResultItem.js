@@ -1,11 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
+import Button from 'Button';
+import { setupCachedCallback } from 'classes/utils';
 
+// now use events as onClick:
 
 class ResultItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onClickCached = setupCachedCallback(this.onClick, this);
+  }
+  onClick(side, e) {
+    const { onClick } = this.props;
+    onClick(side, e);
   }
   renderIcon(obj, side) {
     let className = 'result__icon';
@@ -19,7 +27,12 @@ class ResultItem extends Component {
       children = <Icon svg={obj.icon} />;
     } else if (obj.button) {
       className += ' result__icon--btn';
-      children = <Icon svg={obj.button.icon} />;
+      children = (
+        <Button
+          {...obj.button}
+          onClick={this.onClickCached(side)}
+        />
+        );
     } else if (obj.label) {
       className += ' result__icon--label';
       children = obj.label;
@@ -96,7 +109,7 @@ class ResultItem extends Component {
   }
 }
 
-const { shape, string, func } = PropTypes;
+const { shape, string, func, object } = PropTypes;
 
 const iconProps = shape({
   src: string,
@@ -114,6 +127,7 @@ const iconProps = shape({
 });
 
 ResultItem.propTypes = {
+  delegate: object,
   onClick: func,
   leftIcon: iconProps,
   title: string,

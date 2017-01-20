@@ -20,8 +20,18 @@ export const overlay = payload => ({ type: types.OVERLAY, payload });
 // ======================================================
 // Context Menu
 // ======================================================
-export const contextMenu = payload => ({ type: types.CONTEXT_MENU, payload });
+export const contextMenu = payload => (dp, getState) => {
+  const cMenu = getState().getIn(['main', 'contextMenu']);
+  if (!payload && cMenu && typeof cMenu.onClose === 'function') {
+    cMenu.onClose();
+  }
+  dp({ type: types.CONTEXT_MENU, payload });
+};
 
+// ======================================================
+// Update Recent
+// ======================================================
+export const updateRecentAssignees = payload => ({ type: types.UPDATE_RECENT_ASSIGNEES, payload });
 
 // ======================================================
 // Title

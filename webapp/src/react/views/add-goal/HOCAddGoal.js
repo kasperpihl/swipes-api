@@ -55,9 +55,17 @@ class HOCAddGoal extends Component {
     }));
     this.setState({ steps });
   }
+  onOpenAssignee(i, e) {
+    this.clickedAssign(e, i);
+  }
   onUpdatedStepTitle(i, title) {
     let { steps } = this.state;
     steps = steps.setIn([i, 'title'], title);
+    this.setState({ steps });
+  }
+  onUpdatedAssignees(i, assignees) {
+    let { steps } = this.state;
+    steps = steps.setIn([i, 'assignees'], fromJS(assignees));
     this.setState({ steps });
   }
   onAddAttachment(obj) {
@@ -71,12 +79,16 @@ class HOCAddGoal extends Component {
     return selectAssignees({
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
-    }, steps.getIn([i, 'assignees']));
-
-    return assignModal(
-      steps.getIn([i, 'assignees']),
-      this.selectedAssignees.bind(this, i),
-    );
+    }, steps.getIn([i, 'assignees']).toJS(), (assignees) => {
+      if (assignees) {
+        this.onUpdatedAssignees(i, assignees);
+      } else {
+        const ref = this.refs.list.refs[`input${i}`];
+        if (ref) {
+          ref.focus();
+        }
+      }
+    });
   }
   selectedAssignees(i, res) {
     if (res) {
@@ -136,6 +148,7 @@ class HOCAddGoal extends Component {
     const { steps } = this.state;
     return (
       <AddGoalList
+        ref="list"
         steps={steps}
         delegate={this}
       />

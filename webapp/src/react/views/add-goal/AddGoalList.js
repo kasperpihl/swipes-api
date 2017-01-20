@@ -21,6 +21,8 @@ class AddGoalList extends Component {
     const title = e.target.value;
     if (i === steps.size) {
       this.callDelegate('onAddedStep', title);
+    } else if (title.slice(-1) === '@' && title.length > steps.getIn([i, 'title']).length) {
+      this.callDelegate('onOpenAssignee', i, e);
     } else {
       this.callDelegate('onUpdatedStepTitle', i, title);
     }
@@ -47,6 +49,7 @@ class AddGoalList extends Component {
       <div key={i} className={className}>
         <div className="step__header">
           <input
+            ref={`input${i}`}
             className="step__title"
             placeholder={'Add Step'}
             value={step.get('title')}

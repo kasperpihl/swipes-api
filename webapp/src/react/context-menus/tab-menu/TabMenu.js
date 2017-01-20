@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate, randomString, bindAll } from 'classes/utils';
-
+import Button from 'Button';
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
-import Button from 'Button';
 
 import './styles/tab-menu.scss';
 
@@ -11,7 +10,7 @@ class TabMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabIndex: 0,
+      tabIndex: -1,
       query: '',
       loading: false,
       results: [],
@@ -19,7 +18,7 @@ class TabMenu extends Component {
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
-    bindAll(this, ['onChangeQuery', 'emptySearch']);
+    bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyUp']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
@@ -28,22 +27,26 @@ class TabMenu extends Component {
     if (search) {
       this.refs.search.focus();
     }
-    this.fetchResults();
-  }
-  componentWillUnmount() {
-    this.qId = undefined;
+    this.reload();
   }
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.query !== this.state.query ||
       prevState.tabIndex !== this.state.tabIndex
     ) {
-      this.fetchResults();
+      this.reload();
     }
   }
-  tabDidChange(nav, index) {
-    if (this.state.tabIndex !== index) {
-      this.setState({ tabIndex: index });
+  componentWillUnmount() {
+    this.qId = undefined;
+  }
+
+  onKeyUp(e) {
+    if (e.keyCode === 13) {
+      const { results } = this.state;
+      if (results.length) {
+        this.callDelegate('onItemAction', results[0], 'row', e);
+      }
     }
   }
   onChangeQuery(e) {
@@ -51,6 +54,45 @@ class TabMenu extends Component {
     if (query !== e.target.value) {
       query = e.target.value;
       this.setState({ query });
+    }
+  }
+  tabDidChange(nav, index) {
+    if (this.state.tabIndex !== index) {
+      this.setState({ tabIndex: index });
+    }
+  }
+
+  reload() {
+    const {
+      tabIndex,
+      query,
+      loading,
+    } = this.state;
+
+    if (!loading) {
+      this.setState({
+        loading: true,
+        results: [],
+      });
+    }
+
+    // Setup id to make sure we get the latest.
+    this.qId = randomString(6);
+    const callback = this.resultsCallback.bind(this, this.qId);
+    let params = ['resultsForAll', callback];
+
+    if (query.length) {
+      params = ['resultsForSearch', query, callback];
+    } else if (this.numberOfTabs) {
+      params = ['resultsForTab', tabIndex, callback];
+    }
+
+    const results = this.callDelegate.apply(null, params);
+
+    if (results) {
+      this.resultsCallback(this.qId, results);
+      this.qId = undefined;
+      this.setState({ loading: false });
     }
   }
   emptySearch() {
@@ -75,6 +117,7 @@ class TabMenu extends Component {
           ref="search"
           className="tab-menu__input"
           placeholder={search}
+          onKeyUp={this.onKeyUp}
           onChange={this.onChangeQuery}
           value={query}
         />
@@ -83,11 +126,23 @@ class TabMenu extends Component {
     );
   }
   renderTabBar() {
-    const { tabs } = this.props;
     const { tabIndex } = this.state;
-    if (!tabs || !tabs.length) {
+
+    this.numberOfTabs = this.callDelegate('numberOfTabs');
+
+    if (typeof this.numberOfTabs !== 'number') {
       return undefined;
     }
+
+    const tabs = [];
+    for (let i = 0; i < this.numberOfTabs; i += 1) {
+      let title = this.callDelegate('nameForTab', i);
+      if (typeof title !== 'string' || !title.length) {
+        title = `Tab #${i}`;
+      }
+      tabs.push(title);
+    }
+
     return (
       <TabBar
         tabs={tabs}
@@ -104,48 +159,17 @@ class TabMenu extends Component {
       });
     }
   }
-  fetchResults() {
-    const { tabs } = this.props;
-    const {
-      tabIndex,
-      query,
-      loading,
-    } = this.state;
 
-    if (!loading) {
-      this.setState({
-        loading: true,
-        results: [],
-      });
-    }
-
-    // Setup id to make sure we get the latest.
-    this.qId = randomString(6);
-    const callback = this.resultsCallback.bind(this, this.qId);
-    let params = ['onResults', callback];
-
-    if (query.length) {
-      params = ['onSearchResults', query, callback];
-    } else if (tabs && tabs.length) {
-      params = ['onTabResults', tabIndex, callback];
-    }
-
-    const results = this.callDelegate.apply(null, params);
-
-    if (results) {
-      this.resultsCallback(this.qId, results);
-      this.qId = undefined;
-      this.setState({ loading: false });
-    }
-  }
   renderResultList() {
     const {
       results,
       loading,
     } = this.state;
+    const { delegate } = this.props;
 
     return (
       <ResultList
+        delegate={delegate}
         results={results}
         loading={loading}
       />
@@ -171,7 +195,7 @@ class TabMenu extends Component {
 
 export default TabMenu;
 
-const { object, string, arrayOf, number } = PropTypes;
+const { object, string, arrayOf, number, func } = PropTypes;
 
 TabMenu.propTypes = {
   search: string,

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import { debounce } from 'classes/utils';
+import { debounce, bindAll } from 'classes/utils';
 
 import './styles/context-menu';
 
@@ -11,17 +11,18 @@ class HOCContextMenu extends Component {
   constructor(props) {
     super(props);
     this.state = { styles: {} };
-    this.clickedBackground = this.clickedBackground.bind(this);
-    this.hideContextMenu = this.hideContextMenu.bind(this);
+    bindAll(this, ['clickedBackground', 'onKeyUp']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bouncedResize = debounce(this.fitToScreen.bind(this), 50);
   }
   componentDidMount() {
     this.fitToScreen();
     window.addEventListener('resize', this.bouncedResize);
+    window.addEventListener('keyup', this.onKeyUp);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.bouncedResize);
+    window.removeEventListener('keyup', this.onKeyUp);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.contextMenu && nextProps.contextMenu !== this.props.contextMenu) {
@@ -30,6 +31,11 @@ class HOCContextMenu extends Component {
   }
   componentDidUpdate() {
     this.fitToScreen();
+  }
+  onKeyUp(e) {
+    if (e.keyCode === 27) {
+      this.hideContextMenu();
+    }
   }
   fitToScreen() {
     if (this.refs.menu) {

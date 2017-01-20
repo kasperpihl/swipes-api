@@ -54,6 +54,19 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
+    // Update Recent
+    // ======================================================
+    case types.UPDATE_RECENT_ASSIGNEES: {
+      let currentCache = state.get('recentAssignees');
+      if (currentCache) {
+        currentCache = currentCache.toJS();
+      }
+      currentCache = currentCache || [];
+
+      return state.set('recentAssignees', fromJS([...new Set(payload.concat(currentCache))]));
+    }
+
+    // ======================================================
     // Preview
     // ======================================================
     case types.PREVIEW_LOADING: {

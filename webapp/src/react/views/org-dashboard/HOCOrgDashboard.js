@@ -8,16 +8,6 @@ import { setupDelegate } from 'classes/utils';
 import OrgDashboard from './OrgDashboard';
 
 class HOCOrgDashboard extends Component {
-  static contextButtons() {
-    return [{
-      component: 'Button',
-      props: {
-        icon: 'ArrowRightLine',
-        text: 'View Goals',
-        alignIcon: 'right',
-      },
-    }];
-  }
   constructor(props) {
     super(props);
     this.state = {};
@@ -26,17 +16,6 @@ class HOCOrgDashboard extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
-  }
-  onContextClick() {
-    const {
-      navPush,
-    } = this.props;
-    navPush({
-      component: 'GoalList',
-      title: 'Goals',
-      props: {
-      },
-    });
   }
   nameForUser(users, id) {
     let name = 'Someone';

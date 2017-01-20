@@ -10,9 +10,9 @@ import Services from './services/Services';
 import Find from '../overlays/find/HOCFind';
 import Browser from '../overlays/browser/HOCBrowser';
 
-import Slack from './slack/HOCSlack';
+import Slack from './webviews/slack/HOCSlack';
 import Store from './store/Store';
-import Gmail from './gmail/HOCGmail';
+import Gmail from './webviews/gmail/HOCGmail';
 
 export {
   OrgDashboard,
