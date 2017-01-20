@@ -2,9 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import Button from 'Button';
 import * as Files from './files';
 import * as Elements from './elements';
-import Button from 'Button';
+import './preview-modal.scss';
 
 class HOCPreviewModal extends Component {
   constructor(props) {
@@ -15,39 +16,69 @@ class HOCPreviewModal extends Component {
   componentDidMount() {
   }
   renderButtons() {
-    const { buttons } = this.props.preview;
+    const { preview } = this.props;
+    const { buttons } = preview || {};
 
     return (
       <div className="header__actions">
-        <Button icon="close" className="header__btn header__btn--close" />
+        <Button
+          icon="close"
+          className="header__btn header__btn--close"
+        />
       </div>
     );
   }
-  renderFile() {
-    const { file } = this.props.preview;
+  renderFile(file) {
+    if (!file) {
+      return undefined;
+    }
+
+    const Comp = Object.entries(Files).find(([k, f]) => {
+      if (typeof f.supportContentType !== 'function') {
+        console.warn(`Preview file ${k} should have static supportContentType`);
+        return null;
+      }
+      return !!f.supportContentType(file.content_type);
+    });
+
+    if (!Comp) {
+      console.warn(`Unsupported preview file type: ${file.content_type}`);
+      return undefined;
+    }
+
+    return (
+      <Comp file={file} />
+    );
   }
-  renderElements() {
-    const { elements, file } = this.props.preview;
-    if (file || !elements) {
+  renderElements(elements, hide) {
+    if (!elements || hide) {
       return undefined;
     }
   }
   render() {
+    const { preview } = this.props;
+    const { elements, file, buttons } = preview || {};
+    let className = 'preview-modal';
+    if (preview) {
+      className += ' preview-modal--shown';
+    }
+
     return (
-      <div className="preview-modal">
+      <div className={className}>
         <div className="header">
-          {this.renderButtons()}
+          {this.renderButtons(buttons)}
         </div>
-        {this.renderFile()}
-        {this.renderElements()}
+        {this.renderFile(file)}
+        {this.renderElements(elements, !!file)}
       </div>
     );
   }
 }
 
-const { shape, arrayOf, string, object, oneOf } = PropTypes;
+const { shape, arrayOf, string, object, oneOf, bool } = PropTypes;
 
 HOCPreviewModal.propTypes = {
+  loading: bool,
   preview: shape({
     buttons: arrayOf(shape({
       title: string,
