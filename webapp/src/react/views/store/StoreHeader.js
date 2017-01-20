@@ -16,7 +16,7 @@ class StoreHeader extends Component {
     return (
       <div className={rootClass}>
         <div className="store-header__section store-header__section--first">
-          <div className="store-header__title">Workflows</div>
+          <div className="store-header__title">Ways of Working</div>
           <div className="store-header__search">
             <Icon svg="Find" className="store-header__icon store-header__icon--find" />
           </div>
