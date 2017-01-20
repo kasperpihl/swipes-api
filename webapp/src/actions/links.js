@@ -85,6 +85,6 @@ export const preview = data => (dispatch) => {
     dispatch(a.main.browser(att.get('id')));
     // window.open(att.get('id'));
   } else if (att.get('shortUrl')) {
-    dispatch(a.preview.load(att.get('shortUrl')));
+    dispatch(a.main.preview(att.get('shortUrl')));
   }
 };
