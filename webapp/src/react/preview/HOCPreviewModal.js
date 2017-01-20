@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from 'actions';
 import * as Files from './files';
 import * as Elements from './elements';
+import Button from 'Button';
 
 class HOCPreviewModal extends Component {
   constructor(props) {
@@ -15,6 +16,12 @@ class HOCPreviewModal extends Component {
   }
   renderButtons() {
     const { buttons } = this.props.preview;
+
+    return (
+      <div className="header__actions">
+        <Button icon="close" className="header__btn header__btn--close" />
+      </div>
+    );
   }
   renderFile() {
     const { file } = this.props.preview;
@@ -28,7 +35,9 @@ class HOCPreviewModal extends Component {
   render() {
     return (
       <div className="preview-modal">
-        {this.renderButtons()}
+        <div className="header">
+          {this.renderButtons()}
+        </div>
         {this.renderFile()}
         {this.renderElements()}
       </div>

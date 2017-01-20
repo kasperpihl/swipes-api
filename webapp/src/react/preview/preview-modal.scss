@@ -1,6 +1,27 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.preview-modal{
-  
+.preview-modal {
+  @include size(100%, calc(100% - 38px));
+  position: fixed;
+  left: 0; top: 38px;
+  z-index: 9000;
+  background-color: rgba($deepBlue-100, .8);
+
+  .header {
+    @include size(100%, 36px);
+    @include flex(center, flex-end); // change to space-between when title comes
+    position: relative;
+
+    &__actions {
+      @include size(auto, 36px);
+    }
+
+    &__btn {
+
+      &--close {
+
+      }
+    }
+  }
 }
