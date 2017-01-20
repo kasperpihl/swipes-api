@@ -1,9 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { mapContains } from 'react-immutable-proptypes';
 
 import './styles/image';
 
 class Image extends Component {
+  static supportContentType(contentType) {
+    return ([
+      'image/jpg',
+      'image/jpeg',
+    ].indexOf(contentType) !== -1);
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +21,7 @@ class Image extends Component {
     this.setState({ rawSize: !rawSize });
   }
   render() {
-    const { data } = this.props;
+    const { file } = this.props;
     const { rawSize } = this.state;
     let className = 'preview-image';
 
@@ -26,7 +31,7 @@ class Image extends Component {
 
     return (
       <div className={className} onClick={this.toggleRawSize}>
-        <img src={data.get('img')} className="preview-image__image" role="presentation" />
+        <img src={file.url} className="preview-image__image" role="presentation" />
       </div>
     );
   }
@@ -34,10 +39,8 @@ class Image extends Component {
 
 export default Image;
 
-const { string } = PropTypes;
+const { object } = PropTypes;
 
 Image.propTypes = {
-  data: mapContains({
-    img: string,
-  }),
+  file: object,
 };
