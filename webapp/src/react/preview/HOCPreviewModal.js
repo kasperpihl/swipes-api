@@ -80,7 +80,7 @@ class HOCPreviewModal extends Component {
   }
   render() {
     const { preview } = this.props;
-    const { elements, file, buttons } = preview || {};
+    const { elements, file, buttons, loading } = preview || {};
     let className = 'preview-modal';
 
     if (preview) {
@@ -94,7 +94,7 @@ class HOCPreviewModal extends Component {
         </div>
         {this.renderFile(file)}
         {this.renderElements(elements, !!file)}
-        {this.renderLoader()}
+        {this.renderLoader(loading)}
       </div>
     );
   }
@@ -103,8 +103,8 @@ class HOCPreviewModal extends Component {
 const { shape, arrayOf, string, object, oneOf, bool } = PropTypes;
 
 HOCPreviewModal.propTypes = {
-  loading: bool,
   preview: shape({
+    loading: bool,
     buttons: arrayOf(shape({
       title: string,
       icon: string,

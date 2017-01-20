@@ -1,5 +1,5 @@
 import * as types from 'constants';
-import { request } from './api';
+import * as a from './';
 
 export const setStatus = status => ({ type: types.SET_STATUS, status });
 
@@ -22,6 +22,31 @@ export const overlay = payload => ({ type: types.OVERLAY, payload });
 // ======================================================
 export const contextMenu = payload => ({ type: types.CONTEXT_MENU, payload });
 
+
+// ======================================================
+// Title
+// ======================================================
+export const preview = pre => (dp) => {
+  if (!pre) {
+    return dp({ type: types.PREVIEW, payload: null });
+  }
+  let endpoint = 'links.preview';
+  let params = {
+    short_url: pre,
+  };
+  if (typeof pre === 'object') {
+    endpoint = 'find.preview';
+    params = pre;
+  }
+  dp({ type: types.PREVIEW_LOADING });
+  return dp(a.api.request(endpoint, params)).then((res) => {
+    if (res && res.ok) {
+      dp({ type: types.PREVIEW, payload: res.preview });
+    } else {
+      console.warn('Preview error', pre);
+    }
+  });
+};
 
 // ======================================================
 // Browser
@@ -48,11 +73,11 @@ export const logout = () => (dp) => {
 // Notes
 // ======================================================
 export const note = {
-  create: (oId, title) => dp => dp(request('notes.create', {
+  create: (oId, title) => dp => dp(a.api.request('notes.create', {
     organization_id: oId,
     title,
   })),
-  save: (oId, id, text, unlock) => dp => dp(request('notes.save', {
+  save: (oId, id, text, unlock) => dp => dp(a.api.request('notes.save', {
     organization_id: oId,
     id,
     text,
@@ -69,7 +94,7 @@ export const note = {
 // ======================================================
 export const search = query => (dp) => {
   dp({ type: types.SEARCH, query });
-  dp(request('search', { q: query })).then((res) => {
+  dp(a.api.request('search', { q: query })).then((res) => {
     if (res && res.ok) {
       dp({ type: types.SEARCH_RESULTS, result: res.result });
     } else {

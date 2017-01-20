@@ -42,7 +42,7 @@ class FindItem extends Component {
     const {
       data,
     } = this.props;
-    const service = data.get('service');
+    const service = data.getIn(['service', 'name']);
 
     return (
       <div className="find-item__service">

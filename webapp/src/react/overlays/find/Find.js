@@ -73,12 +73,13 @@ class Find extends Component {
     if (!results || !results.size) {
       return undefined;
     }
+    console.log(results.toJS());
     const renderedResults = results.map((r, i) => (
       <FindItem
         key={i}
         index={i}
         actionLabel={actionLabel}
-        data={r.getIn(['shareData', 'meta'])}
+        data={r}
         delegate={this.props.delegate}
       />
     ));

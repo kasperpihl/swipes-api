@@ -37,7 +37,7 @@ export const TOAST_UPDATE = 'TOAST_UPDATE';
 
 // Preview
 export const PREVIEW_LOADING = 'PREVIEW_LOADING';
-
+export const PREVIEW = 'PREVIEW';
 
 // Modal
 export const LOAD_MODAL = 'LOAD_MODAL';

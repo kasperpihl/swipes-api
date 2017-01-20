@@ -56,6 +56,9 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Preview
     // ======================================================
+    case types.PREVIEW_LOADING: {
+      return state.set('preview', { loading: true });
+    }
     case types.PREVIEW: {
       return state.set('preview', payload);
     }
