@@ -35,7 +35,8 @@ export const TOAST_ADD = 'TOAST_ADD';
 export const TOAST_REMOVE = 'TOAST_REMOVE';
 export const TOAST_UPDATE = 'TOAST_UPDATE';
 
-// Overlay
+// Preview
+export const PREVIEW_LOADING = 'PREVIEW_LOADING';
 
 
 // Modal

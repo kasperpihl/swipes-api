@@ -39,7 +39,6 @@ export default function main(state = initialState, action) {
       return state.set('cache', initialState.get('cache'));
     }
 
-
     // ======================================================
     // Overlays
     // ======================================================
@@ -52,6 +51,13 @@ export default function main(state = initialState, action) {
     // ======================================================
     case types.CONTEXT_MENU: {
       return state.set('contextMenu', payload);
+    }
+
+    // ======================================================
+    // Preview
+    // ======================================================
+    case types.PREVIEW: {
+      return state.set('preview', payload);
     }
 
     // ======================================================
