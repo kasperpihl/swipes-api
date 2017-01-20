@@ -96,6 +96,8 @@
 
     &__assignees {
       transform: translateY(-25px);
+      opacity: 0;
+      animation: showTitle .4s ease forwards;
     }
   }
 }

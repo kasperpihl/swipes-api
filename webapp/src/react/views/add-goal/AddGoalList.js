@@ -42,11 +42,13 @@ class AddGoalList extends Component {
       className += ' step--last';
     } else {
       assigneesHtml = (
-        <HOCAssigning
-          assignees={step.get('assignees').toJS()}
-          index={i}
-          delegate={delegate}
-        />
+        <div className="step__assignees">
+          <HOCAssigning
+            assignees={step.get('assignees').toJS()}
+            index={i}
+            delegate={delegate}
+          />
+        </div>
       );
     }
 
@@ -61,9 +63,7 @@ class AddGoalList extends Component {
             onChange={this.onChangeCached(i)}
           />
           <div className="step__input-border" />
-          <div className="step__assignees">
-            {assigneesHtml}
-          </div>
+          {assigneesHtml}
         </div>
       </div>
     );
