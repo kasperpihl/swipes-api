@@ -7,6 +7,8 @@ class Image extends Component {
     return ([
       'image/jpg',
       'image/jpeg',
+      'image/png',
+      'image/gif',
     ].indexOf(contentType) !== -1);
   }
   constructor(props) {
