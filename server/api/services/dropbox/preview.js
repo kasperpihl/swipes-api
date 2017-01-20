@@ -27,7 +27,7 @@ const elementsData = (type, data) => {
 
   return elements;
 };
-const fileData = (type, metadata, res) => {
+const fileData = (type, res) => {
   const name = res.metadata.name;
   const nameArr = name.split('.');
   const ext = nameArr[nameArr.length - 1];
@@ -36,12 +36,25 @@ const fileData = (type, metadata, res) => {
   let file = {};
 
   if (type === 'file') {
-    const buttons = [
+    file = {
+      content_type,
+      url,
+    };
+  }
+
+  return file;
+};
+const buttonsData = (type, metadata, res) => {
+  const url = res.link;
+  let buttons = {};
+
+  if (type === 'file') {
+    buttons = [
       {
         icon: 'Desktop',
         title: 'Open on Desktop',
         command: {
-          name: 'open_on_desktop',
+          name: 'dropbox_open_desktop',
           params: {
             path: metadata.path_display,
           },
@@ -58,15 +71,9 @@ const fileData = (type, metadata, res) => {
         url,
       },
     ];
-
-    file = {
-      content_type,
-      url,
-      buttons,
-    };
   }
 
-  return file;
+  return buttons;
 };
 const metadata = ({ auth_data, type, itemId, user }) => {
   return new Promise((resolve, reject) => {
@@ -123,10 +130,17 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
     const metadata = results[0];
     const file = results[1];
     const mapElements = elementsData(type, metadata);
-    const mapFile = fileData(type, metadata, file);
+    const mapFile = fileData(type, file);
+    const mapButtons = buttonsData(type, metadata, file);
 
     return callback(null, {
-      file: Object.assign({}, mapFile, { metadata: mapElements }),
+      buttons: mapButtons,
+      file: Object.assign({}, mapFile, {
+        metadata: {
+          title: mapElements[0].data.title,
+          subtitle: mapElements[0].data.subtitle,
+        },
+      }),
     });
   })
   .catch((err) => {
