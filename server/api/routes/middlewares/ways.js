@@ -1,0 +1,138 @@
+import r from 'rethinkdb';
+import {
+  string,
+  object,
+} from 'valjs';
+import {
+  dbWaysInsertSingle,
+  dbWaysUpdateSingle,
+} from './db_utils/ways';
+import {
+  generateSlackLikeId,
+  valLocals,
+} from '../../utils';
+
+const waysCreate = valLocals('waysCreate', {
+  user_id: string.require(),
+  title: string.require(),
+  organization_id: string.require(),
+  description: string,
+  goal: object.require(),
+}, (req, res, next) => {
+  const {
+    user_id,
+    title,
+    organization_id,
+    description,
+    goal,
+  } = res.locals;
+  const way = {
+    title,
+    goal,
+    organization_id,
+    id: generateSlackLikeId('W'),
+    description: description || '',
+    created_by: user_id,
+    created_at: r.now(),
+    updated_at: r.now(),
+    deleted: false,
+  };
+
+  res.locals.way = way;
+
+  return next();
+});
+const waysInsert = valLocals('waysInsert', {
+  way: object.require(),
+}, (req, res, next) => {
+  const {
+    way,
+  } = res.locals;
+
+  dbWaysInsertSingle({ way })
+    .then((obj) => {
+      res.locals.eventType = 'way_created';
+      res.locals.returnObj = {
+        way,
+      };
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const waysDelete = valLocals('waysDelete', {
+  id: string.require(),
+}, (req, res, next) => {
+  const {
+    id,
+  } = res.locals;
+  const properties = {
+    deleted: true,
+    updated_at: r.now(),
+  };
+
+  dbWaysUpdateSingle({ id, properties })
+    .then(() => {
+      res.locals.eventType = 'way_archived';
+      res.locals.returnObj = {
+        id,
+      };
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const waysCreateQueueMessage = valLocals('waysCreateQueueMessage', {
+  user_id: string.require(),
+  way: object.require(),
+  eventType: string.require(),
+}, (req, res, next) => {
+  const {
+    user_id,
+    way,
+    eventType,
+  } = res.locals;
+
+  const way_id = way.id;
+
+  res.locals.queueMessage = {
+    user_id,
+    way_id,
+    event_type: eventType,
+  };
+  res.locals.messageGroupId = way_id;
+
+  return next();
+});
+const waysDeleteQueueMessage = valLocals('waysDeleteQueueMessage', {
+  user_id: string.require(),
+  id: string.require(),
+  eventType: string.require(),
+}, (req, res, next) => {
+  const {
+    user_id,
+    id,
+    eventType,
+  } = res.locals;
+
+  res.locals.queueMessage = {
+    user_id,
+    way_id: id,
+    event_type: eventType,
+  };
+  res.locals.messageGroupId = id;
+
+  return next();
+});
+
+export {
+  waysCreate,
+  waysInsert,
+  waysDelete,
+  waysCreateQueueMessage,
+  waysDeleteQueueMessage,
+};

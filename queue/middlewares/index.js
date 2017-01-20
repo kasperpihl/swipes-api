@@ -1,5 +1,6 @@
 import * as goals from './goals';
 import * as milestones from './milestones';
+import * as ways from './ways';
 import * as users from './users';
 import * as notify from './notify';
 
@@ -61,6 +62,18 @@ const milestone_archived = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const way_created = notifyWrapper([
+  ways.waysGetSingle,
+  ways.waysCreatedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const way_archived = notifyWrapper([
+  ways.waysGetSingle,
+  ways.waysDeletedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 export {
   goal_created,
   goal_deleted,
@@ -70,4 +83,6 @@ export {
   step_got_active,
   milestone_created,
   milestone_archived,
+  way_created,
+  way_archived,
 };
