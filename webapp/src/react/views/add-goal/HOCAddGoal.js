@@ -26,7 +26,6 @@ class HOCAddGoal extends Component {
       component: 'Button',
       props: {
         text: 'Load a Way',
-        primary: true,
       },
     }];
   }
@@ -150,7 +149,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <Section title="Attachments">
+      <Section title="Attachments" maxWidth={780}>
         <HOCAttachments
           attachments={attachments}
           delegate={this}
@@ -202,7 +201,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <Section title="Create Goal">
+      <Section title="Create Goal" maxWidth={780}>
         {this.renderHandoff()}
         <div className="add-goal__footer">
           {statusHtml}

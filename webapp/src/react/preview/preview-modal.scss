@@ -60,7 +60,7 @@
   }
 
   &__file {
-    height: 95%;
+    max-height: 95%;
     overflow-y: auto;
     @include flex();
   }

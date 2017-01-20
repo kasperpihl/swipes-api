@@ -25,7 +25,7 @@ class ResultList extends Component {
       return undefined;
     }
 
-    return <Loader center mini />;
+    return <Loader center mini size={30} />;
   }
   render() {
     return (
