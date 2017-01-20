@@ -7,6 +7,10 @@
   left: 0; top: 38px;
   z-index: 9000;
   background-color: rgba($deepBlue-100, .8);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+
 
   .header {
     @include size(100%, 36px);
@@ -23,5 +27,11 @@
 
       }
     }
+  }
+
+  &--shown {
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity .3s ease;
   }
 }
