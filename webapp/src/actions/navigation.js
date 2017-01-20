@@ -29,7 +29,7 @@ const startingViewForNavId = (navId) => {
         title: 'Browser',
         fullscreen: true,
         props: {
-          url: 'https://google.com',
+          url: 'https://paper.dropbox.com',
         },
       };
     case 'store':
