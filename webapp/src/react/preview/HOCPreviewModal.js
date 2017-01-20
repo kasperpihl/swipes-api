@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import Button from 'Button';
 import Loader from 'components/swipes-ui/Loader';
+import Section from 'components/section/Section';
 import * as actions from 'actions';
 import * as Files from './files';
 import * as Elements from './elements';
@@ -57,6 +58,12 @@ class HOCPreviewModal extends Component {
     if (!elements || hide) {
       return undefined;
     }
+
+    return (
+      <div className="preview-card">
+        {elements}
+      </div>
+    );
   }
   renderLoader() {
     const { loading } = this.state;

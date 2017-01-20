@@ -6,7 +6,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 // Views
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import ProgressBar from 'components/progress-bar/ProgressBar';
-import StepSection from './StepSection';
+import Section from 'components/section/Section';
 import StepHandoff from './StepHandoff';
 import StepSubmission from './StepSubmission';
 import GoalStatus from './GoalStatus';
@@ -43,13 +43,13 @@ class GoalStep extends Component {
     }
 
     return (
-      <StepSection first>
+      <Section first>
         <ProgressBar
           length={length}
           completed={numberOfCompleted}
           steps={goal.get('steps')}
         />
-      </StepSection>
+      </Section>
     );
   }
   renderStatus() {
@@ -59,11 +59,11 @@ class GoalStep extends Component {
       status,
     } = this.props;
     return (
-      <StepSection title="current step">
+      <Section title="current step">
         <div className="goal-step__status">
           <span>{`${stepIndex + 1}. ${step.get('title')} `}</span>{status}
         </div>
-      </StepSection>
+      </Section>
     );
   }
   renderStatusMessage() {
@@ -81,12 +81,12 @@ class GoalStep extends Component {
       collection,
     } = this.props;
     return (
-      <StepSection title="Attachments">
+      <Section title="Attachments">
         <HOCAttachments
           attachments={collection}
           delegate={this}
         />
-      </StepSection>
+      </Section>
     );
   }
   renderHandoff() {
@@ -95,9 +95,9 @@ class GoalStep extends Component {
       return undefined;
     }
     return (
-      <StepSection title="Deliver">
+      <Section title="Deliver">
         <StepHandoff data={handoff} />
-      </StepSection>
+      </Section>
     );
   }
 
@@ -105,13 +105,13 @@ class GoalStep extends Component {
     const { options, step, isSubmitting } = this.props;
     if (options.showSubmission) {
       return (
-        <StepSection title="Handoff">
+        <Section title="Handoff">
           <StepSubmission
             onSubmit={this.onSubmit}
             submission={step.get('submission')}
             disabled={!!isSubmitting}
           />
-        </StepSection>
+        </Section>
       );
     }
 

@@ -9,7 +9,7 @@ import { setupDelegate, bindAll } from 'classes/utils';
 
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import AddGoalList from './AddGoalList';
-import StepSection from '../goals/goal-step/StepSection';
+import Section from 'components/section/Section';
 
 import './styles/add-goal.scss';
 
@@ -150,12 +150,12 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <StepSection title="Attachments">
+      <Section title="Attachments">
         <HOCAttachments
           attachments={attachments}
           delegate={this}
         />
-      </StepSection>
+      </Section>
     );
   }
 
@@ -202,7 +202,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <StepSection title="Create Goal">
+      <Section title="Create Goal">
         {this.renderHandoff()}
         <div className="add-goal__footer">
           {statusHtml}
@@ -217,7 +217,7 @@ class HOCAddGoal extends Component {
             />
           </div>
         </div>
-      </StepSection>
+      </Section>
     );
   }
   render() {
