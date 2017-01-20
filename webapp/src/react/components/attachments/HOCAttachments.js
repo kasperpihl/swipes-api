@@ -82,5 +82,5 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   addLinkMenu: actions.links.addMenu,
-  previewLink: actions.links.click,
+  previewLink: actions.links.preview,
 })(HOCAttachments);

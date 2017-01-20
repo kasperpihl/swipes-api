@@ -40,7 +40,7 @@ export const preview = pre => (dp) => {
   if (!pre) {
     return dp({ type: types.PREVIEW, payload: null });
   }
-  let endpoint = 'links.preview';
+  let endpoint = 'link.preview';
   let params = {
     short_url: pre,
   };
