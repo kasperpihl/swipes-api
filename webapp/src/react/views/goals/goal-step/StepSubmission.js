@@ -3,16 +3,17 @@ import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
 import { fromJS } from 'immutable';
 import { nearestAttribute } from 'classes/utils';
-import * as Fields from 'src/react/swipes-fields';
 import './styles/step-submission.scss';
 import GoalStatus from './GoalStatus';
+import ReactTextarea from 'react-textarea-autosize';
 
 class StepSubmission extends Component {
   constructor(props) {
     super(props);
-    this.state = { showHandoff: false };
+    this.state = { showHandoff: false, text: '' };
     this.onSubmit = this.onSubmit.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.onHandoffChange = this.onHandoffChange.bind(this);
   }
   componentDidMount() {
   }
@@ -45,23 +46,23 @@ class StepSubmission extends Component {
       <GoalStatus fromAssignees={from} toAssignees={to} message={message} />
     );
   }
+  onHandoffChange(e) {
+    this.setState({ text: e.target.value });
+  }
   renderHandoffField() {
+    const { text } = this.state;
     if (!this.state.showHandoff) {
       return undefined;
     }
-    const Textarea = Fields.textarea;
-    const data = fromJS({ text: '' });
-    const settings = fromJS({ editable: true, placeholder: 'What message should be passed on to them?' });
     return (
-      <Textarea
+      <ReactTextarea
+        className="add-goal__handoff"
+        value={text}
+        minRows={3}
+        maxRows={10}
         ref="textarea"
-        data={data}
-        settings={settings}
-        delegate={(name, val) => {
-          if (name === 'change') {
-            this.handoffMessage = val.get('text');
-          }
-        }}
+        onChange={this.onHandoffChange}
+        placeholder="What message should be passed on to them?"
       />
     );
   }
