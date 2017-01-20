@@ -177,5 +177,5 @@ TabMenu.propTypes = {
   search: string,
   initialTabIndex: number,
   tabs: arrayOf(string),
-  // delegate: object.isRequired,
+  delegate: object.isRequired,
 };
