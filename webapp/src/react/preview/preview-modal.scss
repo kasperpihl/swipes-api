@@ -47,7 +47,7 @@
     transition: opacity .3s ease;
   }
 
-  .preview-card {
+  &__card {
     max-width: 90vh;
     max-height: 90vh;
     position: relative;

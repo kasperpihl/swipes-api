@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
+import { bindAll } from 'classes/utils';
 import Button from 'Button';
 import Loader from 'components/swipes-ui/Loader';
 import Section from 'components/section/Section';
@@ -12,12 +13,14 @@ import './preview-modal.scss';
 class HOCPreviewModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    bindAll(this, ['onClose']);
   }
   componentDidMount() {
+  }
+  onClose() {
+    const { closePreview } = this.props;
+    closePreview();
   }
   renderButtons() {
     const { preview } = this.props;
@@ -28,6 +31,7 @@ class HOCPreviewModal extends Component {
         <Button
           icon="Close"
           className="header__btn header__btn--close"
+          onClick={this.onClose}
         />
       </div>
     );
@@ -37,7 +41,8 @@ class HOCPreviewModal extends Component {
       return undefined;
     }
 
-    const Comp = Object.entries(Files).find(([k, f]) => {
+    let Comp = Object.entries(Files).find(([k, f]) => {
+      console.log(k, f);
       if (typeof f.supportContentType !== 'function') {
         console.warn(`Preview file ${k} should have static supportContentType`);
         return null;
@@ -49,6 +54,8 @@ class HOCPreviewModal extends Component {
       console.warn(`Unsupported preview file type: ${file.content_type}`);
       return undefined;
     }
+    Comp = Comp[1];
+    console.log(Comp);
 
     return (
       <Comp file={file} />
@@ -59,15 +66,26 @@ class HOCPreviewModal extends Component {
       return undefined;
     }
 
+    const renderedElements = elements.map((el, i) => {
+      const Comp = Object.entries(Elements).find(([k, Element]) => {
+
+      });
+      if (!Comp) {
+        return null;
+      }
+      return (
+        <Section key={i}>
+          <Comp element={el} />
+        </Section>
+      );
+    });
     return (
-      <div className="preview-card">
-        {elements}
+      <div className="preview-modal__card">
+        {renderedElements}
       </div>
     );
   }
-  renderLoader() {
-    const { loading } = this.state;
-
+  renderLoader(loading) {
     if (!loading) {
       return undefined;
     }
@@ -100,9 +118,10 @@ class HOCPreviewModal extends Component {
   }
 }
 
-const { shape, arrayOf, string, object, oneOf, bool } = PropTypes;
+const { shape, arrayOf, string, object, oneOf, bool, func } = PropTypes;
 
 HOCPreviewModal.propTypes = {
+  closePreview: func,
   preview: shape({
     loading: bool,
     buttons: arrayOf(shape({

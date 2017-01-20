@@ -18,7 +18,7 @@ import './styles/goal-step';
 class GoalStep extends Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['onSubmit', 'onAdd', 'onOpen']);
+    bindAll(this, ['onSubmit']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onOpenCached = setupCachedCallback(this.onOpen, this);
     // now use events as onClick: this.onOpenCached(i)

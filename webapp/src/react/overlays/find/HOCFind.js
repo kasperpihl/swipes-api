@@ -78,6 +78,6 @@ const ConnectedHOCFind = connect(mapStateToProps, {
   search: actions.main.search,
   request: actions.api.request,
   loadModal: actions.modal.load,
-  preview: actions.preview,
+  preview: actions.main.preview,
 })(HOCFind);
 export default ConnectedHOCFind;
