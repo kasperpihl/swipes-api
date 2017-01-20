@@ -58,7 +58,9 @@ class HOCPreviewModal extends Component {
     console.log(Comp);
 
     return (
-      <Comp file={file} />
+      <div className="preview-modal__file">
+        <Comp file={file} />
+      </div>
     );
   }
   renderElements(elements, hide) {
