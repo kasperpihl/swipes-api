@@ -4,59 +4,56 @@ import {
   object,
 } from 'valjs';
 import {
-  dbMilestonesInsertSingle,
-  dbMilestonesUpdateSingle,
-} from './db_utils/milestones';
+  dbWaysInsertSingle,
+  dbWaysUpdateSingle,
+} from './db_utils/ways';
 import {
   generateSlackLikeId,
   valLocals,
 } from '../../utils';
 
-const milestonesCreate = valLocals('milestonesCreate', {
+const waysCreate = valLocals('waysCreate', {
   user_id: string.require(),
   title: string.require(),
   organization_id: string.require(),
   description: string,
-  due_date: string.format('iso8601'),
+  goal: object.require(),
 }, (req, res, next) => {
   const {
     user_id,
     title,
     organization_id,
     description,
-    due_date,
+    goal,
   } = res.locals;
-  const milestone = {
-    id: generateSlackLikeId('M'),
+  const way = {
     title,
+    goal,
     organization_id,
+    id: generateSlackLikeId('W'),
     description: description || '',
-    due_date: due_date || null,
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
     deleted: false,
   };
 
-  res.locals.milestone = milestone;
+  res.locals.way = way;
 
   return next();
 });
-const milestonesInsert = valLocals('milestonesInsert', {
-  milestone: object.require(),
+const waysInsert = valLocals('waysInsert', {
+  way: object.require(),
 }, (req, res, next) => {
   const {
-    milestone,
+    way,
   } = res.locals;
 
-  dbMilestonesInsertSingle({ milestone })
+  dbWaysInsertSingle({ way })
     .then((obj) => {
-      res.locals.eventType = 'milestone_created';
+      res.locals.eventType = 'way_created';
       res.locals.returnObj = {
-        milestone: {
-          id: milestone.id,
-          title: milestone.title,
-        },
+        way,
       };
 
       return next();
@@ -65,7 +62,7 @@ const milestonesInsert = valLocals('milestonesInsert', {
       return next(err);
     });
 });
-const milestonesDelete = valLocals('milestonesDelete', {
+const waysDelete = valLocals('waysDelete', {
   id: string.require(),
 }, (req, res, next) => {
   const {
@@ -76,9 +73,9 @@ const milestonesDelete = valLocals('milestonesDelete', {
     updated_at: r.now(),
   };
 
-  dbMilestonesUpdateSingle({ id, properties })
+  dbWaysUpdateSingle({ id, properties })
     .then(() => {
-      res.locals.eventType = 'milestone_archived';
+      res.locals.eventType = 'way_archived';
       res.locals.returnObj = {
         id,
       };
@@ -89,29 +86,29 @@ const milestonesDelete = valLocals('milestonesDelete', {
       return next(err);
     });
 });
-const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
+const waysCreateQueueMessage = valLocals('waysCreateQueueMessage', {
   user_id: string.require(),
-  milestone: object.require(),
+  way: object.require(),
   eventType: string.require(),
 }, (req, res, next) => {
   const {
     user_id,
-    milestone,
+    way,
     eventType,
   } = res.locals;
 
-  const milestone_id = milestone.id;
+  const way_id = way.id;
 
   res.locals.queueMessage = {
     user_id,
-    milestone_id,
+    way_id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = milestone_id;
+  res.locals.messageGroupId = way_id;
 
   return next();
 });
-const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
+const waysDeleteQueueMessage = valLocals('waysDeleteQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
@@ -124,7 +121,7 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
 
   res.locals.queueMessage = {
     user_id,
-    milestone_id: id,
+    way_id: id,
     event_type: eventType,
   };
   res.locals.messageGroupId = id;
@@ -133,9 +130,9 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
 });
 
 export {
-  milestonesCreate,
-  milestonesInsert,
-  milestonesDelete,
-  milestonesCreateQueueMessage,
-  milestonesDeleteQueueMessage,
+  waysCreate,
+  waysInsert,
+  waysDelete,
+  waysCreateQueueMessage,
+  waysDeleteQueueMessage,
 };

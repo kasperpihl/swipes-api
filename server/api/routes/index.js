@@ -10,6 +10,7 @@ import * as notifications from './notifications';
 import * as notes from './notes';
 import * as find from './find';
 import * as milestones from './milestones';
+import * as ways from './ways';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -27,6 +28,7 @@ const v1Authed = [
   notes.authed,
   find.authed,
   milestones.authed,
+  ways.authed,
 ];
 const webhooksNotAuthed = [
   webhooks.notAuthed,
