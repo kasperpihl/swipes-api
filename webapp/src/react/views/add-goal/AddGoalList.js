@@ -19,9 +19,14 @@ class AddGoalList extends Component {
   onChange(i, e) {
     const { steps } = this.props;
     const title = e.target.value;
+    let wasAt = false;
+    const oldTitle = steps.getIn([i, 'title']);
+    if (title.slice(-1) === '@' && (!oldTitle || title.length > oldTitle.length)) {
+      wasAt = true;
+    }
     if (i === steps.size) {
       this.callDelegate('onAddedStep', title);
-    } else if (title.slice(-1) === '@' && title.length > steps.getIn([i, 'title']).length) {
+    } else if (wasAt) {
       this.callDelegate('onOpenAssignee', i, e);
     } else {
       this.callDelegate('onUpdatedStepTitle', i, title);

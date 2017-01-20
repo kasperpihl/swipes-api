@@ -11,18 +11,18 @@ class HOCContextMenu extends Component {
   constructor(props) {
     super(props);
     this.state = { styles: {} };
-    bindAll(this, ['clickedBackground', 'onKeyUp']);
+    bindAll(this, ['clickedBackground', 'onKeyDown']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bouncedResize = debounce(this.fitToScreen.bind(this), 50);
   }
   componentDidMount() {
     this.fitToScreen();
     window.addEventListener('resize', this.bouncedResize);
-    window.addEventListener('keyup', this.onKeyUp);
+    window.addEventListener('keydown', this.onKeyDown);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.bouncedResize);
-    window.removeEventListener('keyup', this.onKeyUp);
+    window.removeEventListener('keydown', this.onKeyDown);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.contextMenu && nextProps.contextMenu !== this.props.contextMenu) {
@@ -32,7 +32,7 @@ class HOCContextMenu extends Component {
   componentDidUpdate() {
     this.fitToScreen();
   }
-  onKeyUp(e) {
+  onKeyDown(e) {
     if (e.keyCode === 27) {
       this.hideContextMenu();
     }
