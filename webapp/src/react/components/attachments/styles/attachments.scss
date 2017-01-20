@@ -9,15 +9,15 @@
 
   &__add {
     position: absolute;
-    right: 0; bottom: 0px;
+    right: 0; bottom: -15px;
   }
 
   &__empty-state {
-    @include size(100%, 60px);
+    @include size(100%, 40px);
     @include flex(center, flex-start);
     padding-left: 6px;
-    color: $deepBlue-70;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 12px;
+line-height: 15px;
+color: #999EAC;
   }
 }

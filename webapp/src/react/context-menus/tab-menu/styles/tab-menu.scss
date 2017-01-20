@@ -17,6 +17,8 @@ $sectionHeight: 52px;
 	overflow: hidden;
 	padding: $mainPadding $mainPadding 0 $mainPadding;
   position: relative;
+  background-color: $bg;
+  z-index: 999;
 
   &__search {
 		@include size(100%, auto);

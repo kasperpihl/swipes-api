@@ -7,15 +7,20 @@
   @include size(100%, auto);
   @include flex(column);
   max-width: 780px;
-  padding-bottom: 30px;
+  padding-top: 30px;
+  margin-bottom: -30px;
 
   .step {
     $e: getElementSelectorInBlock(#{&}, #{$b});
 
     @include size(100%, auto);
-    min-height: 60px;
+    min-height: 72px;
     padding-left: 39px;
     position: relative;
+
+    &:hover {
+      z-index: 5;
+    }
 
     &:before, &:after {
       content: '';
@@ -23,18 +28,18 @@
     }
 
     &:before {
-      @include size(1px, calc(100% - 6px));
+      @include size(1px, calc(100% - 25px));
       background-color: $deepBlue-10;
-      left: 10px; top: 6px;
+      left: 10px; top: 20px;
       transition: .3s ease;
     }
 
     &:after {
-      @include size(13px);
+      @include size(9px);
       background-color: $deepBlue-100;
       border-radius: 50%;
       border: 2px solid $deepBlue-100;
-      left: 4px; top: 4px;
+      left: 6px; top: 4px;
       transition: .3s ease;
     }
 
@@ -42,7 +47,7 @@
       animation: showStep .5s ease-in-out forwards;
 
       .step__title {
-        animation: showTitle .3s .35s ease-in-out forwards;
+        animation: showTitle .2s .25s ease-in-out forwards;
         opacity: 0;
       }
     }
@@ -59,21 +64,38 @@
     &__header {
       @include size(100%, auto);
       @include flex(center, space-between);
+      padding-right: 9px;
+      position: relative;
     }
 
     &__title {
-      @include size(300px, auto);
+      @include size(90%, auto);
       border-bottom: 1px solid transparent;
       color: $deepBlue-100;
       font-size: 15px;
       line-height: 1.2;
-      padding-bottom: 9px;
+      padding: 25px 0;
       transition: .1s ease-in-out;
+      transform: translateY(-25px);
 
-      &:focus {
-        border-bottom: 1px solid $blue-100;
+      &:focus + .step__input-border {
+        opacity: 1;
         transition: .1s ease-in-out;
       }
+    }
+
+    &__input-border {
+      @include size(90%, 1px);
+      position: absolute;
+      left: 0; bottom: 38px;
+      background-color: $blue-100;
+      opacity: 0;
+      pointer-events: none;
+      transition: .1s ease-in-out;
+    }
+
+    &__assignees {
+      transform: translateY(-25px);
     }
   }
 }

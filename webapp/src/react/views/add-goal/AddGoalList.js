@@ -60,7 +60,10 @@ class AddGoalList extends Component {
             value={step.get('title')}
             onChange={this.onChangeCached(i)}
           />
-          {assigneesHtml}
+          <div className="step__input-border" />
+          <div className="step__assignees">
+            {assigneesHtml}
+          </div>
         </div>
       </div>
     );

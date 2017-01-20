@@ -14,18 +14,20 @@
     @include size(100%, auto);
     @include flex(center, space-between);
     max-width: 780px;
-    padding: 45px 0;
     position: relative;
   }
 
   &__title {
-    @include size(80%, auto);
+    @include size(100%, auto);
     border-bottom: 1px solid transparent;
     color: $deepBlue-100;
     font-size: 26px;
     line-height: 36px;
     padding: 9px 0;
     transition: .2s ease-in-out;
+    font-weight: 400;
+    position: relative;
+    padding-top: 45px;
 
     &:focus {
       border-bottom: 1px solid $blue-100;
@@ -40,7 +42,14 @@
     line-height: 21px;
     resize: none;
     width: 100%;
+    max-width: 480px;
     background-color: rgba($deepBlue-120, .04);
+    background-color: #FCFCFC;
+    border: 1px solid #E6E7EB;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 15px;
+    color: $deepBlue-80;
 
     &:focus {
       outline: none;

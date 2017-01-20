@@ -4,13 +4,15 @@
 .sw-assign {
   $b: &;
 
-  @include size(30px);
+  @include size(36px);
   @include flex();
   position: relative;
   z-index: 1;
+  border-radius: 50%;
+  border: 1px solid $deepBlue-10;
 
   &:hover {
-    z-index: 2;
+    z-index: 99;
 
     #{$b}__overlay {
       background-color: rgba($deepBlue-100, .9);
@@ -23,12 +25,12 @@
   }
 
   &__profile-image {
-    @include size(30px);
+    @include size(24px);
     border-radius: 50%;
   }
 
   &__overlay {
-    @include size(30px);
+    @include size(34px);
     @include flex();
     background-color: rgba($deepBlue-100, .4);
     border-radius: 50%;
@@ -46,7 +48,7 @@
     display: none;
     left: 0; bottom: 0;
     position: absolute;
-    transform: translateY(calc(100% + 12px)) translateX(calc(-100% + 30px));
+    transform: translateY(calc(100% + 12px)) translateX(calc(-100% + 36px));
 
     &:after {
       @include size(12px);
@@ -66,6 +68,11 @@
     text-overflow: ellipsis;
     font-size: 12px;
     color: $bg;
+  }
+
+  &__assign {
+    @include size();
+    @include flex();
   }
 
   &__icon {

@@ -78,7 +78,7 @@ class HOCAddGoal extends Component {
     const { steps } = this.state;
     return selectAssignees({
       boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
+      alignX: 'left',
     }, steps.getIn([i, 'assignees']).toJS(), (assignees) => {
       if (assignees) {
         this.onUpdatedAssignees(i, assignees);
@@ -140,6 +140,7 @@ class HOCAddGoal extends Component {
           className="add-goal__title"
           placeholder="Goal Name"
           onChange={this.onTitleChange}
+          autoFocus
         />
       </div>
     );
@@ -147,11 +148,13 @@ class HOCAddGoal extends Component {
   renderSteps() {
     const { steps } = this.state;
     return (
-      <AddGoalList
-        ref="list"
-        steps={steps}
-        delegate={this}
-      />
+      <Section title="Steps" maxWidth={780}>
+        <AddGoalList
+          ref="list"
+          steps={steps}
+          delegate={this}
+        />
+      </Section>
     );
   }
   renderAttachments() {
