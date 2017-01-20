@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
 import Button from 'Button';
+import Loader from 'components/swipes-ui/Loader';
+import * as actions from 'actions';
 import * as Files from './files';
 import * as Elements from './elements';
 import './preview-modal.scss';
@@ -10,7 +11,9 @@ import './preview-modal.scss';
 class HOCPreviewModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loading: false,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
@@ -22,7 +25,7 @@ class HOCPreviewModal extends Component {
     return (
       <div className="header__actions">
         <Button
-          icon="close"
+          icon="Close"
           className="header__btn header__btn--close"
         />
       </div>
@@ -55,10 +58,24 @@ class HOCPreviewModal extends Component {
       return undefined;
     }
   }
+  renderLoader() {
+    const { loading } = this.state;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    return (
+      <div className="preview-modal__loader">
+        <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
+      </div>
+    );
+  }
   render() {
     const { preview } = this.props;
     const { elements, file, buttons } = preview || {};
     let className = 'preview-modal';
+
     if (preview) {
       className += ' preview-modal--shown';
     }
@@ -70,6 +87,7 @@ class HOCPreviewModal extends Component {
         </div>
         {this.renderFile(file)}
         {this.renderElements(elements, !!file)}
+        {this.renderLoader()}
       </div>
     );
   }

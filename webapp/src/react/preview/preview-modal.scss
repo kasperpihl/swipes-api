@@ -6,27 +6,39 @@
   position: fixed;
   left: 0; top: 38px;
   z-index: 9000;
-  background-color: rgba($deepBlue-100, .8);
+  background-color: rgba($deepBlue-100, .9);
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s ease;
 
 
   .header {
-    @include size(100%, 36px);
+    @include size(100%, calc(36px * 2));
     @include flex(center, flex-end); // change to space-between when title comes
     position: relative;
 
     &__actions {
       @include size(auto, 36px);
+      margin-right: 18px;
     }
 
     &__btn {
 
       &--close {
-
+        background-color: transparent;
+        border-color: $deepBlue-60;
       }
     }
+  }
+
+  &__loader {
+    @include size(150px);
+    @include flex();
+    border-radius: 50%;
+    background-color: $bg;
+    position: fixed;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
   }
 
   &--shown {
