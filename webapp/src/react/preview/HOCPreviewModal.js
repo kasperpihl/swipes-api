@@ -27,7 +27,11 @@ class HOCPreviewModal extends Component {
   }
   render() {
     return (
-      <div className="preview-modal" />
+      <div className="preview-modal">
+        {this.renderButtons()}
+        {this.renderFile()}
+        {this.renderElements()}
+      </div>
     );
   }
 }
