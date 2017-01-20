@@ -71,7 +71,10 @@ const milestonesDelete = valLocals('milestonesDelete', {
   const {
     id,
   } = res.locals;
-  const properties = { deleted: true };
+  const properties = {
+    deleted: true,
+    updated_at: r.now(),
+  };
 
   dbMilestonesUpdateSingle({ id, properties })
     .then(() => {
