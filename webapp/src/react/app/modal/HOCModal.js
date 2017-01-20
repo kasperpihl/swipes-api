@@ -3,7 +3,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SwipesModal from 'src/react/modals/SwipesModal';
-import PreviewModal from 'src/react/modals/PreviewModal';
 import { modal as modalActions } from 'actions';
 
 import { bindAll } from 'classes/utils';
@@ -47,11 +46,7 @@ class HOCModal extends Component {
       return undefined;
     }
 
-    let Comp = SwipesModal;
-
-    if (type === 'preview') {
-      Comp = PreviewModal;
-    }
+    const Comp = SwipesModal;
 
     return <Comp callback={this.onModalCallback} {...props} />;
   }
