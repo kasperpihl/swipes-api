@@ -125,7 +125,6 @@ function handleAdd( req, res, next){
 function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   Parse.serverURL = keys.get( "parseUrl" );
-  console.log('handling sync');
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
   if(versionNumber == 0){
