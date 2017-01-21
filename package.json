@@ -4,16 +4,17 @@
   "description": "Swipes Sync + API",
   "author": "Kasper Pihl Tornøe <kasper@swipesapp.com>",
   "dependencies": {
-    "forky": "0.1.2",
-    "express": "4.12.2",
-    "parse": "1.9.2",
-    "underscore": "1.8.x",
+    "aws-sdk": "*",
     "backbone": "1.1.x",
     "body-parser": "1.x",
+    "express": "4.12.2",
+    "forky": "0.1.2",
+    "localStorage": "^1.0.3",
+    "parse": "1.9.2",
     "pg": "4.3.0",
-    "sql": "0.47.0",
     "request": "~2.51.0",
-    "aws-sdk": "*"
+    "sql": "0.47.0",
+    "underscore": "1.8.x"
   },
   "engines": {
     "node": "0.12.x"

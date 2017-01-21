@@ -4,10 +4,13 @@
 */
 var sql 	= require('sql'),
   Parse 	= require( 'parse/node' ).Parse;
+
 var request  = require("request");
 var session = sql.define( { "name": "session" , columns: [ 'sessionToken', 'userId', 'expires'] } );
 var pg = require('pg');
 var keys = require('../utilities/keys.js');
+var OldParse = require('./parse-old').Parse;
+OldParse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
 pg.defaults.poolSize = 80;
 pg.defaults.poolIdleTimeout = 12000;
 var _ = require('underscore');
@@ -135,7 +138,7 @@ PGClient.prototype.performQuery = function ( query , callback ){
     var endTime = new Date().getTime();
     var resultTime = (endTime - startTime);
     if(resultTime > 3500){
-      console.log(new Date() + ": " + resultTime, query.text, query.values );
+      //console.log(new Date() + ": " + resultTime, query.text, query.values );
       /*console.log( query.values );*/
     }
     var rowsPrSecond = parseInt( numberOfObjects / resultTime * 1000 , 10);
@@ -219,38 +222,49 @@ PGClient.prototype.validateToken = function( token , store , callback){
   var self = this;
   if ( !token )
     return callback(false, { code : 142 , message : "sessionToken must be included" });
+  function validateOldToken( store ){
+    OldParse.User.become( token ).then( function( user ){
+      self.userId = user.id;
+      callback( user.id, false );
+      if ( store )
+        self.storeSession( token , user.id );
+
+    },function( error, error2 ){
+      callback( false, error );
+    });
+  }
   function validateFromParse( store ){
+    if(!token.startsWith('r:')){
+      return validateOldToken(store);
+    }
     var options  = {
       url: keys.get("parseUrl") + "users/me",
       method: "GET",
       json: true,
       headers: {
-          "X-Parse-Session-Token": "hSw1JDJxOYJmlll3QZsfLfUwG",
+          "X-Parse-Session-Token": token,
           "X-Parse-Application-Id": keys.get( "applicationId" ),
           "X-Parse-REST-API-Key": keys.get( "restKey" )
       }
     };
     request(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log(body.objectId);
-        return;
         self.userId = body.objectId;
         callback( body.objectId, false );
         if ( store )
           self.storeSession( token , body.objectId );
       } else {
-        console.log(body.error);
         callback( false, body.error );
       }
     });
   };
+
   if ( !store)
     return validateFromParse( store );
 
   var now = new Date();
   var query = session.select( session.userId, session.expires ).where( session.sessionToken.equals( token ).and( session.expires.gt( now ) ) ).toQuery();
   this.performQuery( query, function( result, error ){
-    return validateFromParse( true );
     if ( error )
       return callback( false, error);
     if ( result.rows && result.rows.length > 0 ){

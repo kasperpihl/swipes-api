@@ -125,7 +125,7 @@ function handleAdd( req, res, next){
 function handleSync( req, res, next ){
   Parse.initialize( keys.get( "applicationId" ) , keys.get( "javaScriptKey" ) , keys.get( "masterKey" ) );
   Parse.serverURL = keys.get( "parseUrl" );
-
+  console.log('handling sync');
   var versionNumber = ( req.path == '/sync' ) ? 0 : 1;
   //res.setHeader( 'Content-Type' , 'application/json' );
   if(versionNumber == 0){
@@ -135,7 +135,7 @@ function handleSync( req, res, next ){
 
 
   var logger = new Logger();
-  var client = new PGClient( logger, 10000 );
+  var client = new PGClient( logger, 12000 );
   process.on('uncaughtException', function (err) {
     console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
     console.error(err.stack)
@@ -167,8 +167,6 @@ function handleSync( req, res, next ){
         if ( req.body.sendLogs ){
           result['logs'] = logger.logs;
         }
-
-        result['intercom-hmac'] = util.getIntercomHmac(userId);
         res.send( result );
       }
       else{
