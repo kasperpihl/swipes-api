@@ -14,7 +14,8 @@
     "pg": "4.3.0",
     "request": "~2.51.0",
     "sql": "0.47.0",
-    "underscore": "1.8.x"
+    "underscore": "1.8.x",
+    "xmlhttprequest": "^1.8.0"
   },
   "engines": {
     "node": "0.12.x"
