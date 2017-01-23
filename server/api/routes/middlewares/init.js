@@ -7,7 +7,6 @@ import {
   valLocals,
 } from '../../utils';
 import initMe from './db_utils/me';
-import processesGetAllOrderedByTitle from './db_utils/processes';
 import {
   servicesGetAll,
 } from './db_utils/services';
@@ -28,7 +27,6 @@ const initGetData = valLocals('initGetData', {
     initMe(user_id),
     servicesGetAll(),
     initActivities(user_id),
-    processesGetAllOrderedByTitle(),
     dbNotificationsGetAllByIdOrderByTs({ user_id }),
   ];
 
@@ -88,8 +86,7 @@ const initGetData = valLocals('initGetData', {
         notes,
         services: data[1],
         activity: data[2],
-        processes: data[3],
-        notifications: data[4],
+        notifications: data[3],
       };
 
       res.locals.initData = response;

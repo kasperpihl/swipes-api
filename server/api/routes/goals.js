@@ -23,9 +23,6 @@ import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
-  processesGetAllOrderedByTitle,
-} from './middlewares/db_utils/processes';
-import {
   usersGetSingleWithOrganizations,
 } from './middlewares/users';
 import {
@@ -35,16 +32,6 @@ import {
 
 const authed = express.Router();
 const notAuthed = express.Router();
-
-authed.all('/goals.processes', (req, res, next) => {
-  processesGetAllOrderedByTitle()
-    .then((processes) => {
-      return res.status(200).json({ ok: true, data: processes });
-    })
-    .catch((err) => {
-      return next(err);
-    });
-});
 
 authed.all('/goals.create',
   valBody({
