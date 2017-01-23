@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 
-import { List, fromJS, Map } from 'immutable';
-import { list } from 'react-immutable-proptypes';
+import { Map } from 'immutable';
+import { list, map } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
-import './styles/add-goal-list';
+import './styles/add-step-list';
 
 // now use events as onClick: this.onChangeCached(i)
-class AddGoalList extends Component {
+class AddStepList extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
@@ -16,25 +16,34 @@ class AddGoalList extends Component {
   }
   componentDidMount() {
   }
+  stepForIndex(i) {
+    const { steps, stepOrder } = this.props;
+    return steps.get(stepOrder.get(i));
+  }
   onChange(i, e) {
-    const { steps } = this.props;
+    const { stepOrder, steps } = this.props;
+    const stepId = stepOrder.get(i);
     const title = e.target.value;
+
+    // Assigning HACK!
     let wasAt = false;
-    const oldTitle = steps.getIn([i, 'title']);
+    const oldTitle = steps.getIn([stepId, 'title']);
     if (title.slice(-1) === '@' && (!oldTitle || title.length > oldTitle.length)) {
       wasAt = true;
     }
-    if (i === steps.size) {
+    // Hack end
+
+    if (i === stepOrder.size) {
       this.callDelegate('onAddedStep', title);
     } else if (wasAt) {
-      this.callDelegate('onOpenAssignee', i, e);
+      this.callDelegate('onOpenAssignee', stepId, e);
     } else {
-      this.callDelegate('onUpdatedStepTitle', i, title);
+      this.callDelegate('onUpdatedStepTitle', stepId, title);
     }
   }
   renderStep(i, step) {
-    const { steps, delegate } = this.props;
-    const isLast = steps.size === i;
+    const { stepOrder, delegate } = this.props;
+    const isLast = stepOrder.size === i;
     let className = 'step';
     let assigneesHtml;
 
@@ -45,7 +54,7 @@ class AddGoalList extends Component {
         <div className="step__assignees">
           <HOCAssigning
             assignees={step.get('assignees').toJS()}
-            index={i}
+            index={step.get('id')}
             delegate={delegate}
           />
         </div>
@@ -69,30 +78,29 @@ class AddGoalList extends Component {
     );
   }
   renderSteps() {
-    const { steps } = this.props;
-    let renderedSteps = steps.map((f, i) => this.renderStep(i, f));
-    const lStep = steps.size ? steps[steps.size - 1] : null;
-    if (!lStep || !lStep.get('title') || !lStep.get('title').length) {
-      renderedSteps = renderedSteps.concat([
-        this.renderStep(steps.size, Map({ title: '' })),
-      ]);
-    }
+    const { stepOrder, steps } = this.props;
+    let renderedSteps = stepOrder.map((sId, i) => this.renderStep(i, steps.get(sId)));
+    renderedSteps = renderedSteps.concat([
+      this.renderStep(steps.size, Map({ title: '' })),
+    ]);
+
     return renderedSteps;
   }
   render() {
     return (
-      <div className="add-goal__list">
+      <div className="add-step__list">
         {this.renderSteps()}
       </div>
     );
   }
 }
 
-export default AddGoalList;
+export default AddStepList;
 
 const { object } = PropTypes;
 
-AddGoalList.propTypes = {
-  steps: list,
+AddStepList.propTypes = {
+  steps: map,
+  stepOrder: list,
   delegate: object,
 };
