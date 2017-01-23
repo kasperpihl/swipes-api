@@ -368,6 +368,13 @@ class NoteEditor extends Component {
       readOnly,
     } = this.props;
 
+    const contentState = editorState.getCurrentContent();
+    const hasText = contentState.hasText();
+    let showPlaceholder = !hasText;
+    const firstBlock = contentState.getFirstBlock();
+    if (showPlaceholder && firstBlock && firstBlock.getType() !== 'unstyled') {
+      showPlaceholder = false;
+    }
     return (
       <div
         ref="rooty" className="sw-text-editor"
@@ -390,7 +397,7 @@ class NoteEditor extends Component {
           handleBeforeInput={this.handleBeforeInput}
           onTab={this.onTab}
           onBlur={this.props.onBlur}
-          placeholder="Write something cool in me"
+          placeholder={showPlaceholder ? 'Write something cool in me' : undefined}
 
         />
       </div>
