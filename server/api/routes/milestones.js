@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   string,
-  shape,
+  object,
 } from 'valjs';
 import {
   milestonesCreate,
@@ -33,7 +33,7 @@ authed.all('/milestones.create',
   milestonesCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    milestone: shape({
+    milestone: object.as({
       id: string.require(),
       title: string.require(),
     }).require(),

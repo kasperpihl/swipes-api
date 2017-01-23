@@ -6,12 +6,10 @@ import moment from 'moment';
 import {
   string,
   number,
-  custom,
   object,
 } from 'valjs';
 import {
   valLocals,
-  valEmail,
   generateSlackLikeId,
 } from '../../utils';
 import * as services from '../../services';
@@ -135,7 +133,7 @@ const userSignUp = (req, res, next) => {
     });
 };
 const userSignIn = valLocals('userSignIn', {
-  email: custom(valEmail).require(),
+  email: string.format('email').require(),
   password: string.require(),
 }, (req, res, next) => {
   const {

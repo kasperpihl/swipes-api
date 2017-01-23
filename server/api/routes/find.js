@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   string,
-  shape,
+  object,
 } from 'valjs';
 import {
   valBody,
@@ -18,12 +18,12 @@ const notAuthed = express.Router();
 
 authed.all('/find.preview',
   valBody({
-    service: shape({
+    service: object.as({
       id: string.require(),
       name: string.require(),
       type: string.require(),
     }).require(),
-    permission: shape({
+    permission: object.as({
       account_id: string.require(),
     }).require(),
   }),

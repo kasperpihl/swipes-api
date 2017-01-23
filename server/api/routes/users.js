@@ -1,11 +1,9 @@
 import express from 'express';
 import {
   string,
-  custom,
 } from 'valjs';
 import {
   valBody,
-  valEmail,
 } from '../utils';
 import {
   validateSignUp,
@@ -37,7 +35,7 @@ const notAuthed = express.Router();
 
 notAuthed.all('/users.signin',
   valBody({
-    email: custom(valEmail).require(),
+    email: string.format('email').require(),
     password: string.min(1).require(),
   }),
   userSignIn,

@@ -4,7 +4,7 @@ import hash from 'object-hash';
 import {
   string,
   object,
-  arrayOf,
+  array,
 } from 'valjs';
 import {
   valLocals,
@@ -21,7 +21,7 @@ const {
 } = config.get('amazonQueue');
 
 const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
-  notification_ids: arrayOf(string).require(),
+  notification_ids: array.of(string).require(),
 }, (req, res, next) => {
   const {
     notification_ids,

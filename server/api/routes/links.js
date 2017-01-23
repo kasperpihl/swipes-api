@@ -1,8 +1,8 @@
 import express from 'express';
 import {
   string,
-  shape,
-  arrayOf,
+  object,
+  array,
 } from 'valjs';
 import {
   valBody,
@@ -25,7 +25,7 @@ const notAuthed = express.Router();
 
 authed.all('/link.get',
   valBody({
-    ids: arrayOf(string).require(),
+    ids: array.of(string).require(),
   }),
   linksGetByIds,
   sendResponse,
@@ -40,15 +40,15 @@ authed.all('/link.get',
 
 authed.all('/link.create',
   valBody({
-    service: shape({
+    service: object.as({
       id: string.require(),
       type: string.require(),
       name: string.require(),
     }).require(),
-    permission: shape({
+    permission: object.as({
       account_id: string.require(),
     }).require(),
-    meta: shape({
+    meta: object.as({
       title: string.require(),
     }).require(),
   }),

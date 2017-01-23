@@ -1,5 +1,5 @@
 import randomstring from 'randomstring';
-import valjs, { shape, string, func, object, objectOf } from 'valjs';
+import valjs, { string, func, object } from 'valjs';
 
 const generateSlackLikeId = (type) => {
   const id = randomstring.generate(8).toUpperCase();
@@ -12,7 +12,7 @@ const camelCaseToUnderscore = (word) => {
 };
 
 const localsMap = mapper => (req, res, next) => {
-  const error = valjs(mapper, objectOf(string).require());
+  const error = valjs(mapper, object.of(string).require());
   if (error) {
     return next('Error in localsMap object');
   }
@@ -29,7 +29,7 @@ const sendResponse = (req, res) => {
   return res.status(200).json({ ok: true, ...returnObj });
 };
 const valResponseAndSend = schema => (req, res, next) => {
-  const error = valjs(res.locals.returnObj, shape(schema));
+  const error = valjs(res.locals.returnObj, object.as(schema));
   if (error) {
     return next(`Error returnObj: ${error}`);
   }
@@ -62,14 +62,14 @@ const setLocals = (name, res, next, state) => {
 
 const valLocals = (name, schema, middleware) => (req, res, next) => {
   // let's validate the params #inception! :D
-  let error = valjs({ name, schema, middleware }, shape({
+  let error = valjs({ name, schema, middleware }, object.as({
     name: string.require(),
     schema: object.require(),
     middleware: func,
   }));
 
   if (!error) {
-    error = valjs(res.locals, shape(schema));
+    error = valjs(res.locals, object.as(schema));
   }
 
   if (error) {
@@ -85,13 +85,13 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
 
 const valBody = (schema, middleware) => (req, res, next) => {
   // let's validate the params #inception! :D
-  let error = valjs({ schema, middleware }, shape({
+  let error = valjs({ schema, middleware }, object.as({
     schema: object.require(),
     middleware: func,
   }));
 
   if (!error) {
-    error = valjs(req.body, shape(schema));
+    error = valjs(req.body, object.as(schema));
   }
 
   if (error) {
@@ -105,12 +105,6 @@ const valBody = (schema, middleware) => (req, res, next) => {
   return next();
 };
 
-const valEmail = (v) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  return re.test(v) ? null : 'not a valid email address';
-};
-
 export {
   generateSlackLikeId,
   camelCaseToUnderscore,
@@ -119,5 +113,4 @@ export {
   valResponseAndSend,
   valLocals,
   valBody,
-  valEmail,
 };
