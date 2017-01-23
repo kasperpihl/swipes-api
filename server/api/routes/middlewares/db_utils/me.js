@@ -36,6 +36,17 @@ const initMe = (user_id) => {
       })
       .do((user) => {
         return user.merge({
+          ways:
+            r.table('ways')
+              .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+              .filter({
+                deleted: false,
+              })
+              .coerceTo('ARRAY'),
+        });
+      })
+      .do((user) => {
+        return user.merge({
           notes:
             r.table('notes')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
