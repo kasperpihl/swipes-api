@@ -248,7 +248,15 @@ class NoteEditor extends Component {
 
       return true;
     } else if (blockLength === 2 && currentBlock.getText() === '[]') {
-      this.onChange(this.resetBlockType(editorState, blockType !== 'checklist' ? 'checklist' : 'unstyled'));
+      this.onChange(this.resetBlockType(editorState, 'checklist'));
+
+      return true;
+    } else if (blockLength === 1 && currentBlock.getText() === '#') {
+      this.onChange(this.resetBlockType(editorState, 'header-one'));
+
+      return true;
+    } else if (blockLength === 2 && currentBlock.getText() === '##') {
+      this.onChange(this.resetBlockType(editorState, 'header-two'));
 
       return true;
     }
@@ -275,12 +283,17 @@ class NoteEditor extends Component {
       ),
     );
   }
-
   keyBindingFn(e) {
     const { editorState } = this.props;
+    const selection = editorState.getSelection();
+    const startKey = selection.getStartKey();
+    const blockText = editorState.getCurrentContent().getBlockForKey(startKey).getText();
+    const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
 
-    if (NoteChecklist.keyBindingFn(editorState, e) === 'empty-block') {
+    if (e.keyCode === 13 && !blockText.length && blockType !== 'unstyled') {
       this.onChange(this.resetBlockType(editorState, 'unstyled'));
+
+      return undefined;
     }
 
     return NoteChecklist.keyBindingFn(editorState, e)
