@@ -2,7 +2,7 @@ import * as c from 'constants';
 import * as a from 'actions';
 import AddAttachment from 'components/attachments/AddAttachment';
 
-export const add = (service, permission, meta) => a.api.request('link.create', {
+export const add = (service, permission, meta) => a.api.request('links.create', {
   service,
   permission,
   meta,

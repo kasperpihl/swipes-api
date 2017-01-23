@@ -23,7 +23,7 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/link.get',
+authed.all('/links.get',
   valBody({
     ids: array.of(string).require(),
   }),
@@ -38,7 +38,7 @@ authed.all('/link.get',
 //   sendResponse,
 // );
 
-authed.all('/link.create',
+authed.all('/links.create',
   valBody({
     service: object.as({
       id: string.require(),
@@ -57,7 +57,7 @@ authed.all('/link.create',
   sendResponse,
 );
 
-authed.all('/link.preview',
+authed.all('/links.preview',
   valBody({
     short_url: string.require(),
   }),
