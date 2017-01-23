@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback, bindAll } from 'classes/utils';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/add-attachment';
@@ -16,7 +16,7 @@ class AddAttachment extends Component {
       ],
     };
     this.onMenuCached = setupCachedCallback(this.onMenu, this);
-    this.onAdd = this.onAdd.bind(this);
+    bindAll(this, ['onAdd', 'onHandleKeyUp']);
   }
   onMenu(i) {
     const { callback } = this.props;
@@ -34,6 +34,11 @@ class AddAttachment extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.addMenu && this.state.addMenu) {
       this._input.focus();
+    }
+  }
+  onHandleKeyUp(e) {
+    if (e.keyCode === 13) {
+      this.onAdd();
     }
   }
   onAdd() {
@@ -57,6 +62,7 @@ class AddAttachment extends Component {
           key="input"
           className="add-attachment__input"
           placeholder={placeholder}
+          onKeyUp={this.onHandleKeyUp}
           type="text"
           ref={(c) => { this._input = c; }}
         />
