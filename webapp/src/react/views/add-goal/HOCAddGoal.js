@@ -216,13 +216,18 @@ class HOCAddGoal extends Component {
       );
     }
 
+    let saveButton;
+    if (this.isReadyToCreate()) {
+      saveButton = <Button text="Save as a Way" className="add-goal__btn add-goal__btn--save" />;
+    }
+
     return (
       <Section title="Create Goal" maxWidth={780}>
         {this.renderHandoff()}
         <div className="add-goal__footer">
           {statusHtml}
           <div className="add-goal__actions">
-            <Button text="Cancel" className="add-goal__btn add-goal__btn--cancel" />
+            {saveButton}
             <Button
               text="Create Goal"
               primary
