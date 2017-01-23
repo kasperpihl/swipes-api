@@ -239,9 +239,15 @@ class NoteEditor extends Component {
     const blockType = currentBlock.getType();
     const blockLength = currentBlock.getLength();
 
-    console.log('name', currentBlock.getText() === '[]');
+    if (blockLength === 1 && currentBlock.getText() === '-') {
+      this.onChange(this.resetBlockType(editorState, 'unordered-list-item'));
 
-    if (blockLength === 2 && currentBlock.getText() === '[]') {
+      return true;
+    } else if (blockLength === 2 && currentBlock.getText() === '1.') {
+      this.onChange(this.resetBlockType(editorState, 'ordered-list-item'));
+
+      return true;
+    } else if (blockLength === 2 && currentBlock.getText() === '[]') {
       this.onChange(this.resetBlockType(editorState, blockType !== 'checklist' ? 'checklist' : 'unstyled'));
 
       return true;
@@ -272,6 +278,10 @@ class NoteEditor extends Component {
 
   keyBindingFn(e) {
     const { editorState } = this.props;
+
+    if (NoteChecklist.keyBindingFn(editorState, e) === 'empty-block') {
+      this.onChange(this.resetBlockType(editorState, 'unstyled'));
+    }
 
     return NoteChecklist.keyBindingFn(editorState, e)
       || getDefaultKeyBinding(e);

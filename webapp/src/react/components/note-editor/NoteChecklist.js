@@ -6,6 +6,16 @@ import './styles/check-list';
 
 export default class ChecklistEditorBlock extends Component {
   static keyBindingFn(editorState, e) {
+    if (e.keyCode === 13) {
+      const selection = editorState.getSelection();
+      const startKey = selection.getStartKey();
+      const blockText = editorState.getCurrentContent().getBlockForKey(startKey).getText();
+      const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
+
+      if (blockType === 'checklist' && blockText.length < 1) {
+        return 'empty-block';
+      }
+    }
     // left key
     if (e.keyCode === 37) {
       const selection = editorState.getSelection();
