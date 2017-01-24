@@ -9,14 +9,15 @@
   border-top: 1px solid $deepBlue-10;
 
   &__title {
-    @include size(100%, 30px);
+    @include size(100%, 21px);
     @include flex(center, flex-end);
     position: absolute;
     left: 0; top: 0;
     text-transform: uppercase;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: bold;
-    color: $deepBlue-40;
+    text-align: right;
+    color: $deepBlue-60;
 
     &:empty {
       display: none;

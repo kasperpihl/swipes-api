@@ -51,7 +51,7 @@
       #{$b}__title {
         font-size: 27px;
   			font-weight: 400;
-  			color: #192445;
+  			color: $deepBlue-90;
   			white-space: nowrap;
       }
 
@@ -70,6 +70,7 @@
 
   &__title {
     color: $blue-100;
+    font-size: 15px;
     margin-right: 6px;
   }
 
@@ -80,7 +81,7 @@
     margin-right: 6px;
 
     #{$b}__icon {
-      fill: $deepBlue-40;
+      fill: $deepBlue-20;
     }
   }
 

@@ -109,15 +109,16 @@ $borderColor: $deepBlue-10;
   }
 
   &--disabled {
-    border-color: $borderColor;
-    background-color: $borderColor;
+    border-color: transparent;
+    background-color: transparent;
 
     #{$b}__text {
-      color: $deepBlue-50;
+      color: $deepBlue-20;
+      font-weight: 400;
     }
 
     #{$b}__svg {
-      @include svg-color($deepBlue-50);
+      @include svg-color($deepBlue-20);
     }
   }
 
@@ -181,14 +182,14 @@ $borderColor: $deepBlue-10;
   }
 
   &--disabled:hover {
-    background-color: $borderColor !important;
+    background-color: transparent !important;
 
     #{$b}__text {
-      color: $deepBlue-50;
+      color: $deepBlue-20;
     }
 
     #{$b}__svg {
-      @include svg-color($borderColor !important);
+      @include svg-color($deepBlue-20 !important);
     }
   }
 }
