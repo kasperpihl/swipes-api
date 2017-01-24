@@ -32,10 +32,10 @@ class HOCAssigning extends Component {
 
 function mapStateToProps(state, ownProps) {
   const users = state.get('users');
-  const { goalId, stepIndex, assignees } = ownProps;
+  const { goalId, stepId, assignees } = ownProps;
   let stateAssignees = List(assignees);
   if (goalId) {
-    stateAssignees = state.getIn(['goals', goalId, 'steps', stepIndex, 'assignees']);
+    stateAssignees = state.getIn(['goals', goalId, 'steps', stepId, 'assignees']);
   }
   stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
   return {

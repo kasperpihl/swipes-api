@@ -54,8 +54,8 @@ class HOCGoalStep extends Component {
     });
   }
   getHelper() {
-    const { goal, me, cachedData } = this.props;
-    return new GoalsUtil(goal, me.get('id'), cachedData);
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
   }
 
   goalStepAddAttachment(obj) {
@@ -89,39 +89,21 @@ class HOCGoalStep extends Component {
       }
     });
   }
-  generateStatus() {
-    const helper = this.getHelper();
-    return helper.getStatusForCurrentStep();
-  }
-  generateOptions() {
-    const {
-      goal,
-    } = this.props;
-    const i = goal.get('currentStepIndex');
-    const h = this.getHelper();
-    const showSubmission = (h.amIAssigned(i) && h.isCurrentStep(i));
-
-    return {
-      showSubmission,
-    };
-  }
   generateHandoff() {
     const {
       users,
       goal,
     } = this.props;
     const helper = this.getHelper();
-    const handOff = helper.getHandoffMessageForStepIndex(goal.get('currentStepIndex'));
+    const handOff = helper.getHandoffMessage();
     let handoffObj;
     if (handOff) {
-      const firstMessage = handOff.findEntry(() => true);
-
-      if (!firstMessage) {
-        return undefined;
-      }
-
-      const user = users.get(firstMessage[0]);
-      const message = firstMessage[1];
+      const {
+        message,
+        by,
+        at,
+      } = handOff;
+      const user = users.get(handOff.by);
 
       if (user && message && message.length) {
         handoffObj = {
@@ -139,7 +121,7 @@ class HOCGoalStep extends Component {
   }
   render() {
     const {
-      step,
+      me,
       goal,
     } = this.props;
     const {
@@ -149,12 +131,8 @@ class HOCGoalStep extends Component {
     return (
       <GoalStep
         goal={goal}
-        options={this.generateOptions()}
-        collection={goal.get('collection')}
-        stepIndex={goal.get('currentStepIndex')}
-        step={step}
-        status={this.generateStatus()}
         handoff={this.generateHandoff()}
+        me={me}
         isSubmitting={isSubmitting}
         delegate={this}
       />
@@ -175,7 +153,6 @@ HOCGoalStep.propTypes = {
   goal: map,
   me: map,
   users: map,
-  cachedData: map,
   // removeThis: PropTypes.string.isRequired
 };
 
@@ -185,10 +162,8 @@ function mapStateToProps(state, ownProps) {
   const goal = state.getIn(['goals', goalId]);
   return {
     goal,
-
     users: state.get('users'),
-    step: goal.getIn(['steps', goal.get('currentStepIndex')]),
-    cachedData: state.getIn(['main', 'cache', goalId]),
+    step: goal.getIn(['steps', goal.getIn(['status', 'current_step_id'])]),
     me: state.get('me'),
   };
 }

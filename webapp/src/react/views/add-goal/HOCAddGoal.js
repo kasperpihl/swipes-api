@@ -128,10 +128,10 @@ class HOCAddGoal extends Component {
 
     const goal = {
       steps: steps.toJS(),
-      stepOrder: stepOrder.toJS(),
+      step_order: stepOrder.toJS(),
       title,
       attachments: attachments.toJS(),
-      attachmentOrder: attachmentOrder.toJS(),
+      attachment_order: attachmentOrder.toJS(),
     };
     addToasty({ title: `Adding: ${title}`, loading: true }).then((toastId) => {
       request('goals.create', {

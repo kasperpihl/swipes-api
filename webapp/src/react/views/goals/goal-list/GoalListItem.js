@@ -26,7 +26,7 @@ class GoalListItem extends Component {
   render() {
     const { data } = this.props;
     const rootClass = 'goal-list-item';
-    const status = this.helper.getStatusForCurrentStep();
+    const status = this.helper.getStatus();
 
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
@@ -36,7 +36,7 @@ class GoalListItem extends Component {
         </div>
         <div className={`${rootClass}__assigning`}>
           <HOCAssigning
-            stepIndex={data.get('currentStepIndex')}
+            stepId={data.getIn(['status', 'current_step_id'])}
             goalId={data.get('id')}
           />
         </div>

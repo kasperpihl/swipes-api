@@ -7,6 +7,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import ProgressBar from 'components/progress-bar/ProgressBar';
 import Section from 'components/section/Section';
+import GoalsUtil from 'classes/goals-util';
 import StepHandoff from './StepHandoff';
 import StepSubmission from './StepSubmission';
 import GoalStatus from './GoalStatus';
@@ -30,34 +31,33 @@ class GoalStep extends Component {
   onAddAttachment(obj) {
     this.callDelegate('goalStepAddAttachment', obj);
   }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
+  }
   renderProgressBar() {
     const {
       goal,
-      step,
     } = this.props;
-    const length = goal.get('steps').size;
-    let numberOfCompleted = goal.get('currentStepIndex');
-
-    if (numberOfCompleted === length - 1 && step.get('completed')) {
-      numberOfCompleted = length;
-    }
+    const helper = this.getHelper();
+    const length = goal.get('step_order').size;
+    const numberOfCompleted = helper.getCurrentStepIndex();
 
     return (
       <Section first>
         <ProgressBar
           length={length}
           completed={numberOfCompleted}
-          steps={goal.get('steps')}
+          steps={helper.getOrderedSteps()}
         />
       </Section>
     );
   }
   renderStatus() {
-    const {
-      stepIndex,
-      step,
-      status,
-    } = this.props;
+    const helper = this.getHelper();
+    const stepIndex = helper.getCurrentStepIndex();
+    const step = helper.getCurrentStep();
+    const status = helper.getStatus();
     return (
       <Section title="current step">
         <div className="goal-step__status">
@@ -77,13 +77,15 @@ class GoalStep extends Component {
 
 
   renderAttachments() {
+    const helper = this.getHelper();
     const {
-      collection,
+      goal,
     } = this.props;
     return (
       <Section title="Attachments">
         <HOCAttachments
-          attachments={collection}
+          attachments={goal.get('attachments')}
+          attachmentOrder={goal.get('attachment_order')}
           delegate={this}
         />
       </Section>
@@ -102,20 +104,18 @@ class GoalStep extends Component {
   }
 
   renderSubmission() {
-    const { options, step, isSubmitting } = this.props;
-    if (options.showSubmission) {
-      return (
-        <Section title="Handoff">
-          <StepSubmission
-            onSubmit={this.onSubmit}
-            submission={step.get('submission')}
-            disabled={!!isSubmitting}
-          />
-        </Section>
-      );
-    }
-
-    return undefined;
+    const { isSubmitting } = this.props;
+    const helper = this.getHelper();
+    const step = helper.getCurrentStep();
+    return (
+      <Section title="Handoff">
+        <StepSubmission
+          onSubmit={this.onSubmit}
+          submission={step.get('submission')}
+          disabled={!!isSubmitting}
+        />
+      </Section>
+    );
   }
 
   render() {
@@ -138,16 +138,12 @@ class GoalStep extends Component {
 
 export default GoalStep;
 
-const { object, bool, number, string } = PropTypes;
+const { object, bool, string } = PropTypes;
 
 GoalStep.propTypes = {
-  step: map.isRequired,
   goal: map.isRequired,
-  stepIndex: number,
   status: string,
   handoff: object,
-  collection: list,
   isSubmitting: bool,
-  options: object.isRequired,
   delegate: object.isRequired,
 };
