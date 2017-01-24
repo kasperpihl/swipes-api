@@ -3,7 +3,6 @@ import * as users from './users';
 import * as links from './links';
 import * as services from './services';
 import * as goals from './goals';
-import * as steps from './steps';
 import * as search from './search';
 import * as webhooks from './webhooks';
 import * as notifications from './notifications';
@@ -23,7 +22,6 @@ const v1Authed = [
   search.authed,
   users.authed,
   goals.authed,
-  steps.authed,
   notifications.authed,
   notes.authed,
   find.authed,
