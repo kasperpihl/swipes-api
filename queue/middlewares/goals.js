@@ -105,6 +105,7 @@ const goalsStepCompletedNotificationData = (req, res, next) => {
 
 const goalsStepGotActiveNotificationData = (req, res, next) => {
   const {
+    user_id,
     goal,
     step_id,
   } = res.locals;
@@ -112,6 +113,7 @@ const goalsStepGotActiveNotificationData = (req, res, next) => {
   const notificationData = {
     step_id,
     goal_id: goal.id,
+    done_by: user_id,
   };
 
   res.locals.notificationData = notificationData;

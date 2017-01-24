@@ -94,6 +94,8 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     prev_step_id: current_step_id,
   };
 
+  res.locals.returnObj = goal;
+
   return next();
 });
 

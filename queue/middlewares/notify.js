@@ -23,10 +23,10 @@ const notifyAllInCompany = (req, res, next) => {
 const notifyAllInCurrentStep = (req, res, next) => {
   const {
     goal,
+    step_id,
   } = res.locals;
 
-  const currentStepIndex = goal.currentStepIndex;
-  const currentStep = goal.steps[currentStepIndex];
+  const currentStep = goal.steps[step_id];
   const usersIds = [];
 
   currentStep.assignees.forEach((userId) => {
