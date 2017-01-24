@@ -1,5 +1,6 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
+@import '~styles/_functions.scss/';
 
 $containerWidth: 360px;
 $containerHeight: 450px;
@@ -8,7 +9,54 @@ $whiteSpacePadding: 12px;
 $sectionHeight: 52px;
 
 .tab-menu {
-  $b: &;
+
+  &__search {
+
+  }
+
+  &__input {
+
+    &::-webkit-input-placeholder {
+
+    }
+
+    &:focus {
+
+    }
+  }
+
+  &__close {
+
+  }
+
+  &__list {
+
+    .result {
+
+      &__icon {
+
+      }
+
+      &__data {
+
+      }
+
+      &__title {
+
+      }
+
+      &__subtitle {
+
+      }
+    }
+  }
+}
+
+// ======================================================
+// BLOCK
+// ======================================================
+
+.tab-menu {
   @include size($containerWidth, $containerHeight);
 
 	background-color: $bg;
@@ -19,21 +67,28 @@ $sectionHeight: 52px;
   position: relative;
   background-color: $bg;
   z-index: 999;
+}
+
+// ======================================================
+// ELEMENTS
+// ======================================================
+
+
+// Search
+
+.tab-menu {
+  $b: &;
 
   &__search {
-		@include size(100%, auto);
+    @include size(100%, auto);
     position: relative;
     border-bottom: 1px solid $deepBlue-10;
-	}
+  }
 
   &__input {
     @include size(calc(100% - 36px), $sectionHeight);
-
-		color: $deepBlue-100;
-		font-size: 18px;
-		font-weight: 400;
-		line-height: 24px;
-		padding: 9px 0;
+    @include font(18px, $deepBlue-100, 24px, 400);
+		padding-bottom: 9px;
     padding-top: $whiteSpacePadding;
     position: relative;
 
@@ -54,6 +109,12 @@ $sectionHeight: 52px;
     transition: .15s ease;
     pointer-events: none;
   }
+}
+
+// List
+
+.tab-menu {
+  $b: &;
 
   &__list {
     $listHeight: calc(#{$containerHeight} - (#{$sectionHeight} * 2 + #{$mainPadding}));
@@ -64,104 +125,141 @@ $sectionHeight: 52px;
 		background-color: $bg;
 		left: 0; top: calc((#{$sectionHeight} * 2 ) + #{$mainPadding} + 1px);
 		overflow-y: auto;
-		padding: 0 $mainPadding;
-    padding-top: $whiteSpacePadding;
+		padding: $whiteSpacePadding $mainPadding 0 $mainPadding;
 		position: absolute;
 		transition: .25s ease-in-out;
     z-index: 12;
+  }
+}
 
-    .result {
-			@include size(100%, auto);
-			@include flex(center, flex-start);
-			padding-bottom: 18px;
+// List item
+
+.tab-menu__list {
+  $e: &;
+
+  .result {
+    @include size(100%, auto);
+    @include flex();
+    min-height: 50px;
+    margin-bottom: 9px;
+    position: relative;
+    transition: .2s ease-in-out;
+
+    &:before {
+      content: '';
+      @include size(110%, 100%);
+      position: absolute;
+      border-radius: 3px;
+      left: -5%; top: 0;
+      background-color: transparent;
+      transition: .15s ease-in-out;
+    }
+
+    &:hover {
+      &:before {
+        background-color: $deepBlue-5;
+      }
+    }
+
+    &__data {
+      @include size(100%, auto);
       position: relative;
-			transition: .2s ease-in-out;
+      z-index: 9;
+    }
 
-			&__icon {
-				@include flex(none);
+    &__title {
+      @include font(15px, $deepBlue-50, 21px, 500);
+    }
+
+    &__subtitle {
+      @include font(12px, $deepBlue-40, 15px);
+    }
+  }
+}
+
+// List item buttons
+
+.tab-menu__list .result {
+  $e: &;
+
+  &__icon {
+    @include flex(none);
+    position: relative;
+    z-index: 9;
+    transition: .15s;
+
+    &--img {
+      @include size(30px);
+
+      img {
+        @include size();
+        border-radius: 50%;
+      }
+    }
+
+    &--svg {
+      @include size(30px);
+      @include flex();
+
+      svg {
+        @include size(24px);
+        @include svg-color($blue-100);
+      }
+    }
+
+    &--btn {
+      @include size(30px);
+      @include flex();
+      border: 1px solid $deepBlue-10;
+      border-radius: 50%;
+
+      svg {
+        @include size(24px);
+        @include svg-color($deepBlue-50);
+      }
+
+      &:hover {
+        background-color: $deepBlue-10;
         transition: .15s;
+      }
+    }
 
-        &--img {
-          @include size(30px);
+    &--label {
 
-          img {
-            @include size();
-            border-radius: 50%;
-          }
-        }
+    }
 
-        &--svg {
-          @include size(30px);
-          @include flex();
+    &--initials {
+      @include size(30px);
 
-          svg {
-            @include size(24px);
-            @include svg-color($blue-100);
-          }
-        }
+      .result__initials {
+        @include size();
+        @include flex();
+        @include font(15px, $bg, 500);
+        background-color: $deepBlue-100;
+        border-radius: 50%;
+      }
+    }
 
-        &--btn {
-          @include size(30px);
-          @include flex();
-          border: 1px solid $deepBlue-10;
-          border-radius: 50%;
+    &--left {
+      margin-right: 15px;
+    }
 
-          svg {
-            @include size(24px);
-            @include svg-color($deepBlue-50);
-          }
+    &--right {
+      margin-left: 15px;
+    }
+  }
+}
 
-          &:hover {
-            background-color: $deepBlue-10;
-            transition: .15s;
-          }
-        }
+// ======================================================
+// MODIFIERS
+// ======================================================
 
-        &--label {
+.tab-menu {
+  $b: &;
 
-        }
-
-        &--initials {
-          @include size(30px);
-
-          .result__initials {
-            @include size();
-            @include flex();
-            border-radius: 50%;
-            font-size: 15px;
-            font-weight: 500;
-            color: $bg;
-            background-color: $deepBlue-100;
-          }
-        }
-
-        &--left:empty .result__title {
-          padding-left: 0;
-        }
-
-        &--right:empty .result__title {
-          padding-right: 0;
-        }
-			}
-
-			&__data {
-				@include size(100%, auto);
-				padding: 0 15px;
-			}
-
-			&__title {
-				font-size: 15px;
-				line-height: 21px;
-				color: $deepBlue-70;
-				font-weight: 500;
-			}
-
-			&__subtitle {
-				font-size: 12px;
-				line-height: 15px;
-				color: $deepBlue-40;
-			}
-		}
+  &__tab-bar:empty + &__list {
+      @include size(100%, calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
+      transform: translateY(-52px);
   }
 
   &--is-searching {
