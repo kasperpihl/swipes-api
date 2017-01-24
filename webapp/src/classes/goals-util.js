@@ -10,12 +10,20 @@ export default class GoalsUtil {
   getCurrentStepId() {
     return this.goal.getIn(['status', 'current_step_id']);
   }
+  getStepByIndex(index) {
+    const id = this.goal.getIn(['step_order', index]);
+    return this.goal.getIn(['steps', id]);
+  }
   getCurrentStepIndex() {
     const id = this.getCurrentStepId();
     return this.goal.get('step_order').findKey(v => (v === id));
   }
   getCurrentStep() {
     return this.goal.getIn(['steps', this.getCurrentStepId()]);
+  }
+  getNextStep() {
+    const nextIndex = this.getCurrentStepIndex() + 1;
+    return this.getStepByIndex(nextIndex);
   }
   amIAssigned() {
     const step = this.getCurrentStep();

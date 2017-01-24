@@ -7,7 +7,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
 import GoalsUtil from 'classes/goals-util';
-import StepSubmission from './StepSubmission';
+import HOCGoalHandoff from 'components/goal-handoff/HOCGoalHandoff';
 import GoalStatus from './GoalStatus';
 
 // styles
@@ -71,17 +71,9 @@ class GoalStep extends Component {
   }
 
   renderSubmission() {
-    const { isSubmitting } = this.props;
-    const helper = this.getHelper();
-    const step = helper.getCurrentStep();
+    const { goal } = this.props;
     return (
-      <Section title="Handoff">
-        <StepSubmission
-          onSubmit={this.onSubmit}
-          submission={step.get('submission')}
-          disabled={!!isSubmitting}
-        />
-      </Section>
+      <HOCGoalHandoff goal={goal} />
     );
   }
 

@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
+import GoalsUtil from 'classes/goals-util';
 
 import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
@@ -17,26 +19,51 @@ class HOCGoalHandoff extends Component {
     bindAll(this, ['onHandoffChange']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
+  }
+  onChangeClick(e) {
+
+  }
   componentDidMount() {
   }
   onHandoffChange(text) {
     this.setState({ message: text });
   }
+  mapStepToHeader(step, subtitle) {
+    if (!step) {
+      return undefined;
+    }
+    return {
+      title: step.get('title'),
+      subtitle,
+      assignees: step.get('assignees').toJS(),
+    };
+  }
   render() {
     const { message } = this.state;
+    const helper = this.getHelper();
+    const from = this.mapStepToHeader(helper.getCurrentStep(), 'Current Step');
+    const to = this.mapStepToHeader(helper.getNextStep(), 'Next step');
+
     return (
       <div className="goal-handoff">
-        <HandoffHeader />
+        <HandoffHeader from={from} to={to} onChangeClick={this.onChangeClick} />
         <HandoffMessage text={message} onChange={this.onHandoffChange} />
         <HandoffActions />
       </div>
     );
   }
 }
+HOCGoalHandoff.propTypes = {
+  goal: map,
+  me: map,
+};
 
 function mapStateToProps(state) {
   return {
-    main: state.get('main'),
+    me: state.get('me'),
   };
 }
 
