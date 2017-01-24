@@ -7,6 +7,8 @@ const initialState = fromJS({
   overlay: null,
   cache: {},
   links: {},
+  services: {},
+  ways: {},
   hasLoaded: false,
   activeGoal: null,
 });
@@ -19,9 +21,15 @@ export default function main(state = initialState, action) {
         return state;
       }
       return state.withMutations((ns) => {
+        // ways
         const ways = {};
         payload.ways.forEach((w) => { ways[w.id] = w; });
         ns.set('ways', fromJS(ways));
+        // services
+        const services = {};
+        payload.services.forEach((s) => { services[s.id] = s; });
+        ns.set('services', fromJS(services));
+        // socket url
         ns.set('socketUrl', payload.ws_url);
       });
     }
@@ -104,6 +112,16 @@ export default function main(state = initialState, action) {
     }
     case types.NOTE_HIDE: {
       return state.set('sideNoteId', null);
+    }
+
+    // ======================================================
+    // Ways
+    // ======================================================
+    case 'way_created': {
+      return state.setIn(['ways', payload.data.id], fromJS(payload.data));
+    }
+    case 'ways.create': {
+      return state.setIn(['ways', payload.way.id], fromJS(payload.way));
     }
 
     // ======================================================

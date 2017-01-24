@@ -1,4 +1,3 @@
-
 import { compose, applyMiddleware, createStore } from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
 import persistState from 'redux-localstorage';
@@ -11,10 +10,11 @@ const persist = () => state => Immutable.Map({
   main: {
     token: state.getIn(['main', 'token']) || null,
     cache: state.getIn(['main', 'cache']) || {},
+    services: state.getIn(['main', 'services']) || {},
+    ways: state.getIn(['main', 'ways']) || {},
     recentAssignees: state.getIn(['main', 'recentAssignees']) || [],
   },
   goals: state.get('goals'),
-  services: state.get('services'),
   users: state.get('users'),
   me: state.get('me'),
 });

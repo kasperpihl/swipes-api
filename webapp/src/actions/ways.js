@@ -1,10 +1,8 @@
-import * as types from 'constants';
 import * as a from 'actions';
 import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 
-export const save = (options, goal, callback) => (d, getState) => {
-  console.log('saving');
+export const save = (options, goal) => (d, getState) => {
   const organizationId = getState().getIn(['me', 'organizations', 0, 'id']);
   d(a.main.contextMenu({
     options,
@@ -14,12 +12,27 @@ export const save = (options, goal, callback) => (d, getState) => {
       buttonLabel: 'Save',
       onClick: (title) => {
         if (title && title.length) {
-          d(a.api.request('ways.create', {
-            title,
-            goal,
-            organization_id: organizationId,
-          })).then((res) => {
-            console.log('ressy', res);
+          d(a.toasty.add({ title: 'Adding Way', loading: true })).then((toastId) => {
+            d(a.api.request('ways.create', {
+              title,
+              goal,
+              organization_id: organizationId,
+            })).then((res) => {
+              if (res && res.ok) {
+                d(a.toasty.update(toastId, {
+                  title: 'Added way',
+                  completed: true,
+                  duration: 3000,
+                }));
+              } else {
+                d(a.toasty.update(toastId, {
+                  title: 'Error adding way',
+                  loading: false,
+                  duration: 3000,
+                }));
+              }
+              console.log('ressy', res);
+            });
           });
         }
       },
@@ -58,7 +71,6 @@ export const load = (options, callback) => (d, getState) => {
       const way = getState().getIn(['main', 'ways', obj.id]);
       callback(way);
       d(a.main.contextMenu(null));
-      console.log('action!', obj, side, e);
     },
   };
 
