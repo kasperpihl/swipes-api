@@ -47,6 +47,7 @@ class Button extends Component {
       ...rest
     } = this.props;
     let className = 'g-button';
+    const tabIndex = {};
 
     if ((alignIcon === 'right') && icon && text) {
       className += ' g-button--reverse';
@@ -70,6 +71,7 @@ class Button extends Component {
 
     if (disabled) {
       className += ' g-button--disabled';
+      tabIndex.tabIndex = '-1';
     }
 
     if (classNameFromButton && typeof classNameFromButton === 'string') {
@@ -77,10 +79,10 @@ class Button extends Component {
     }
 
     return (
-      <div className={className} {...rest} onClick={this.onClick}>
+      <button className={className} {...rest} onClick={this.onClick} {...tabIndex}>
         {this.renderIcon()}
         {this.renderText()}
-      </div>
+      </button>
     );
   }
 }

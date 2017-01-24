@@ -29,7 +29,7 @@
       margin-bottom: 9px;
     }
 
-    &:hover {
+    &:hover, &:focus {
       #{$b}__icon {
         @include svg-color($blue-100);
         margin-bottom: 18px;

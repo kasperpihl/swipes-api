@@ -24,6 +24,13 @@ $borderColor: $deepBlue-10;
   position: relative;
   z-index: 2;
   user-select: none;
+
+  &:not(&--disabled):focus {
+    outline:none; /*or outline-color:#FFFFFF; if the first doesn't work*/
+    border:1px solid $orange;
+    -webkit-box-shadow: 0px 0px 4px 0px $orange;
+    box-shadow: 0px 0px 4px 0px $orange;
+  }
 }
 
 // ELEMENTS
