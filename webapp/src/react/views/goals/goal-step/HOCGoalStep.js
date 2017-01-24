@@ -65,16 +65,11 @@ class HOCGoalStep extends Component {
     } = this.props;
     addToCollection(goal.get('id'), obj);
   }
-  goalStepSubmit(i, message) {
-    const { goal, step, submit, overlay } = this.props;
-    let previousSteps;
-
-    if (i) {
-      previousSteps = goal.get('steps').slice(0, goal.get('currentStepIndex'));
-    }
+  goalStepSubmit(stepId, message) {
+    const { goal, submit, overlay } = this.props;
 
     this.setState({ isSubmitting: true });
-    submit(goal.get('id'), step.get('id'), message, previousSteps).then((didSubmit) => {
+    submit(goal.get('id'), stepId, message).then((didSubmit) => {
       this.setState({ isSubmitting: false });
       if (didSubmit) {
         overlay({
@@ -92,7 +87,6 @@ class HOCGoalStep extends Component {
   generateHandoff() {
     const {
       users,
-      goal,
     } = this.props;
     const helper = this.getHelper();
     const handOff = helper.getHandoffMessage();
@@ -101,9 +95,8 @@ class HOCGoalStep extends Component {
       const {
         message,
         by,
-        at,
       } = handOff;
-      const user = users.get(handOff.by);
+      const user = users.get(by);
 
       if (user && message && message.length) {
         handoffObj = {
@@ -147,7 +140,6 @@ HOCGoalStep.propTypes = {
   delegate: object,
   submit: func,
   addToCollection: func,
-  clickLink: func,
   contextMenu: func,
   overlay: func,
   goal: map,
@@ -173,7 +165,6 @@ export default connect(mapStateToProps, {
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,
   clickLink: actions.links.click,
-  getLinks: actions.links.get,
   addToCollection: actions.goals.addToCollection,
-  submit: actions.goals.submitStep,
+  completeStep: actions.goals.completeStep,
 })(HOCGoalStep);

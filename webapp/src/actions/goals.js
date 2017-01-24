@@ -163,8 +163,20 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
 };
 
 
-export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise((resolve) => {
-  let modalOpt;
+export const completeStep = (gId, sId, message) => (dispatch, getState) => {
+  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
+  return dispatch(request('goals.completeStep', {
+    goal_id: gId,
+    next_step_id: sId,
+    current_step_id: currentStepId,
+    message,
+  })).then((res, err) => {
+    if (err) {
+     // return console.log('Error completing step', err);
+    }
+  });
+};
+  /* let modalOpt;
   if (pSteps) {
     modalOpt = {
       title: 'Go back to step',
@@ -181,18 +193,8 @@ export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise
       },
     };
   }
-  const submit = (stepBackId) => {
-    dispatch(request('steps.submit', {
-      goal_id: gId,
-      step_id: sId,
-      step_back_id: stepBackId,
-      message,
-    })).then((resMom, err) => {
-      resolve(!err);
-      if (err) {
-          // return console.log('Error completing step', err);
-      }
-    });
+  const submit = () => {
+
   };
   if (modalOpt) {
     dispatch(load(modalOpt, (res) => {
@@ -209,5 +211,4 @@ export const submitStep = (gId, sId, message, pSteps) => dispatch => new Promise
     }));
   } else {
     submit();
-  }
-});
+  }*/
