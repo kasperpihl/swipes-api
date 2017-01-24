@@ -6,6 +6,7 @@ import {
 } from 'valjs';
 import {
   valBody,
+  sendResponse,
 } from '../utils';
 import {
   goalsUpdate,
@@ -58,12 +59,8 @@ authed.all('/goals.create',
   goalsInsert,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
-  (req, res) => {
-    const {
-      returnObj,
-    } = res.locals;
-    return res.status(200).json({ ok: true, ...returnObj });
-  });
+  sendResponse,
+);
 
 authed.all('/goals.completeStep',
     valBody({
@@ -79,12 +76,8 @@ authed.all('/goals.completeStep',
     notificationsPushToQueue,
     goalsStepGotActiveQueueMessage,
     notificationsPushToQueue,
-    (req, res) => {
-      const {
-        returnObj,
-      } = res.locals;
-      return res.status(200).json({ ok: true, ...returnObj });
-    });
+    sendResponse,
+  );
 
 authed.all('/goals.delete',
   valBody({
