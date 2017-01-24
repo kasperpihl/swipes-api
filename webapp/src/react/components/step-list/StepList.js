@@ -22,7 +22,7 @@ class StepList extends Component {
         className += ' step-list__item--future';
       }
       return (
-        <div className={className}>{step.get('title')}</div>
+        <div className={className}>{s.get('title')}</div>
       );
     });
 
