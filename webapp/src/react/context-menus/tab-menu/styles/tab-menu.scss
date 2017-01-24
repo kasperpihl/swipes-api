@@ -8,50 +8,6 @@ $mainPadding: 21px;
 $whiteSpacePadding: 12px;
 $sectionHeight: 52px;
 
-.tab-menu {
-
-  &__search {
-
-  }
-
-  &__input {
-
-    &::-webkit-input-placeholder {
-
-    }
-
-    &:focus {
-
-    }
-  }
-
-  &__close {
-
-  }
-
-  &__list {
-
-    .result {
-
-      &__icon {
-
-      }
-
-      &__data {
-
-      }
-
-      &__title {
-
-      }
-
-      &__subtitle {
-
-      }
-    }
-  }
-}
-
 // ======================================================
 // BLOCK
 // ======================================================
@@ -193,7 +149,7 @@ $sectionHeight: 52px;
 
       img {
         @include size();
-        border-radius: 50%;
+        border-radius: 6px;
       }
     }
 
@@ -236,7 +192,7 @@ $sectionHeight: 52px;
         @include flex();
         @include font(15px, $bg, 500);
         background-color: $deepBlue-100;
-        border-radius: 50%;
+        border-radius: 6px;
       }
     }
 
