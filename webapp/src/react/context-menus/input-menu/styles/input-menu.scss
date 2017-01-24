@@ -1,0 +1,25 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.input-menu {
+  $b: &;
+  @include size(auto, 90px);
+  @include flex();
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+  position: relative;
+  padding-right: 15px;
+
+  &__input {
+    @include size(300px, calc(100% - 30px));
+    @include font(12px, $deepBlue-90);
+    border: 1px solid $deepBlue-10;
+    margin: 15px;
+    padding: 0 21px;
+
+    &::-webkit-input-placeholder {
+      @include font($c: $deepBlue-40);
+    }
+  }
+}

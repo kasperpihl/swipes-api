@@ -13,9 +13,7 @@
   &__item {
     @include size(120px);
     @include flex(center, center, column);
-    color: $blue-100;
-    font-size: 12px;
-    font-weight: 500;
+    @include font(12px, $blue-100, 500);
     padding: 12px;
     position: relative;
 
@@ -48,9 +46,8 @@
 
   &__input {
     @include size(300px, calc(100% - 30px));
+    @include font(12px, $deepBlue-90);
     border: 1px solid $deepBlue-10;
-    color: $deepBlue-90;
-    font-size: 12px;
     margin: 15px;
     padding: 0 21px;
 

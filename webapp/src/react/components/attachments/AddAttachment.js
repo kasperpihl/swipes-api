@@ -31,11 +31,6 @@ class AddAttachment extends Component {
       callback('find');
     }
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.addMenu && this.state.addMenu) {
-      this._input.focus();
-    }
-  }
   onHandleKeyUp(e) {
     if (e.keyCode === 13) {
       this.onAdd();
@@ -65,6 +60,7 @@ class AddAttachment extends Component {
           onKeyUp={this.onHandleKeyUp}
           type="text"
           ref={(c) => { this._input = c; }}
+          autoFocus
         />
         <Button
           primary
