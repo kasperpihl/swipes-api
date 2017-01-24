@@ -130,7 +130,7 @@ Services.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    services: state.get('services'),
+    services: state.getIn(['main', 'services']),
     myServices: state.getIn(['me', 'services']),
   };
 }

@@ -12,11 +12,12 @@ const persist = () => state => Immutable.Map({
   main: {
     token: state.getIn(['main', 'token']) || null,
     cache: state.getIn(['main', 'cache']) || {},
+    services: state.getIn(['main', 'services']) || {},
+    ways: state.getIn(['main', 'ways']) || {},
     recentAssignees: state.getIn(['main', 'recentAssignees']) || [],
   },
   goals: state.get('goals'),
   users: state.get('users'),
-  services: state.get('services'),
   me: state.get('me'),
 });
 const localStorageConfig = {

@@ -72,7 +72,6 @@ class HOCGoalList extends Component {
   }
   render() {
     const { goals, me, savedState } = this.props;
-    console.log(goals.toJS());
     const { tabIndex } = this.state;
     return (
       <GoalList

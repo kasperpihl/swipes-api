@@ -74,8 +74,8 @@ export const browser = (url, onLoad) => overlay({
 // Account related
 // ======================================================
 export const logout = () => (dp) => {
-  localStorage.clear();
   dp({ type: types.LOGOUT });
+  localStorage.clear();
   window.location.replace('/');
 };
 

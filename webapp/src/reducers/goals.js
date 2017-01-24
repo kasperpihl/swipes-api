@@ -32,16 +32,6 @@ export default function goalsReducer(state = initialState, action) {
     case 'goal_created': {
       return state.set(payload.data.id, fromJS(payload.data));
     }
-    case 'step_changed': {
-      const stepId = payload.id;
-      const goalId = payload.id.split('-')[0];
-      return state.updateIn([goalId, 'steps'], steps => steps.map((step) => {
-        if (step.get('id') === stepId) {
-          return fromJS(payload);
-        }
-        return step;
-      }));
-    }
     case types.GOAL_DELETE: {
       return state;
     }

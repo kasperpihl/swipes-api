@@ -77,9 +77,6 @@ class HOCAddGoal extends Component {
         this._loadedWay = true;
         this.setState(newState);
       }
-
-
-      console.log('way', way.toJS());
     });
   }
   onSave(e) {
