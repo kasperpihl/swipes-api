@@ -17,13 +17,12 @@ class HOCAttachments extends Component {
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
   }
-  componentDidMount() {
-  }
   onOpen(id) {
     const {
       previewLink,
       attachments,
     } = this.props;
+
     previewLink(attachments.get(id));
   }
   onAdd(e) {
@@ -39,12 +38,18 @@ class HOCAttachments extends Component {
       this.callDelegate('onAddAttachment', obj);
     });
   }
+  hasAttachments() {
+    const { attachmentOrder } = this.props;
+    return (attachmentOrder && attachmentOrder.size);
+  }
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder } = this.props;
-    let html = <div className="attachments__empty-state">Nothing here yet</div>;
-    if (aOrder && aOrder.size) {
+    let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
+
+    if (this.hasAttachments()) {
       html = aOrder.map((aId) => {
         const a = attachments.get(aId);
+
         return (
           <Attachment
             key={aId}
@@ -55,17 +60,33 @@ class HOCAttachments extends Component {
         );
       });
     }
+
     return html;
   }
-  render() {
-    return (
-      <div className="attachments">
-        {this.renderAttachments()}
+  renderAddAttachments() {
+    if (this.hasAttachments()) {
+      return (
         <Button
           icon="Plus"
           onClick={this.onAdd}
           className="attachments__add"
         />
+      );
+    } else {
+      return (
+        <div className="attachments__add-list">
+          <button className="attachments__add-item">Add URL</button>
+          <button className="attachments__add-item">New Note</button>
+          <button className="attachments__add-item">Find</button>
+        </div>
+      );
+    }
+  }
+  render() {
+    return (
+      <div className="attachments">
+        {this.renderAttachments()}
+        {this.renderAddAttachments()}
       </div>
     );
   }

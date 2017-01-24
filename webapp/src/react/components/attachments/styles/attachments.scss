@@ -13,11 +13,23 @@
   }
 
   &__empty-state {
-    @include size(100%, 40px);
+    @include size(100%, 39px);
     @include flex(center, flex-start);
+    @include font(12px, $deepBlue-30, 15px);
     padding-left: 6px;
-    font-size: 12px;
-    line-height: 15px;
-    color: $deepBlue-30;
+  }
+
+  &__add-list {
+    @include size(100%, auto);
+    @include flex(flex);
+  }
+
+  &__add-item {
+    padding: 0px 20px 6px 6px;
+    @include font(12px, $blue-100, 15px, 500);
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
   }
 }
