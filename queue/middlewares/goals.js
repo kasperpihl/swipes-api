@@ -88,13 +88,13 @@ const goalsStepCompletedNotificationData = (req, res, next) => {
   const {
     user_id,
     goal,
-    completedStepIndex,
+    step_id,
   } = res.locals;
 
   const notificationData = {
+    step_id,
     done_by: user_id,
     goal_id: goal.id,
-    stepIndex: completedStepIndex,
   };
 
   res.locals.notificationData = notificationData;
@@ -106,11 +106,12 @@ const goalsStepCompletedNotificationData = (req, res, next) => {
 const goalsStepGotActiveNotificationData = (req, res, next) => {
   const {
     goal,
+    step_id,
   } = res.locals;
 
   const notificationData = {
+    step_id,
     goal_id: goal.id,
-    stepIndex: goal.currentStepIndex,
   };
 
   res.locals.notificationData = notificationData;
