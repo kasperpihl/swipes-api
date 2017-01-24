@@ -6,6 +6,9 @@ $actionsHeight: 48px;
 .sw-pdf-viewer {
   $b: &;
   @include size(100%, auto);
+  @include flex(flex-start, center);
+  position: relative;
+  z-index: 99999;
 
   // Containers
 

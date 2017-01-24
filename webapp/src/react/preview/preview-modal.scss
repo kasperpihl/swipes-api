@@ -3,6 +3,7 @@
 
 .preview-modal {
   @include size(100%, calc(100% - 38px));
+  @include flex(column);
   position: fixed;
   left: 0; top: 38px;
   z-index: 9000;
@@ -15,6 +16,7 @@
   .header {
     @include size(100%, calc(36px * 2));
     @include flex(center, flex-end); // change to space-between when title comes
+    @include flex(none);
     position: relative;
 
     &__actions {
@@ -60,8 +62,9 @@
   }
 
   &__file {
-    max-height: 95%;
+    // width: 100%;
+    max-height: 100%;
     overflow-y: auto;
-    @include flex();
+    @include flex(flex-start, center);
   }
 }
