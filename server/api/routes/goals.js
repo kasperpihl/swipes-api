@@ -7,17 +7,20 @@ import {
   valBody,
 } from '../utils';
 import {
-  goalsUpdateData,
+  goalsUpdate,
   goalsCreate,
+  goalsGet,
   goalsDelete,
   goalsAddMilestone,
   goalsRemoveMilestone,
-  goalsNext,
   goalsInsert,
   goalsCreateQueueMessage,
   goalsDeleteQueueMessage,
   goalsAddMilestoneQueueMessage,
   goalsRemoveMilestoneQueueMessage,
+  goalsCompleteStep,
+  goalsNextStepQueueMessage,
+  goalsStepGotActiveQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -35,12 +38,11 @@ const notAuthed = express.Router();
 
 authed.all('/goals.create',
   valBody({
-    goal: object.require(), // T_TODO make it shape when it's more final
+    goal: object.require(), // T_TODO make it object.as when it's more final
     organization_id: string.require(),
-    workflow_id: string,
+    message: string,
   }),
   goalsCreate,
-  goalsNext,
   goalsInsert,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
@@ -50,6 +52,27 @@ authed.all('/goals.create',
     } = res.locals;
     return res.status(200).json({ ok: true, ...returnObj });
   });
+
+authed.all('/goals.completeStep',
+    valBody({
+      goal_id: string.require(), // T_TODO make it object.as when it's more final
+      current_step_id: string.require(),
+      next_step_id: string.require(),
+      message: string,
+    }),
+    goalsGet,
+    goalsCompleteStep,
+    goalsUpdate,
+    goalsNextStepQueueMessage,
+    notificationsPushToQueue,
+    goalsStepGotActiveQueueMessage,
+    notificationsPushToQueue,
+    (req, res) => {
+      const {
+        returnObj,
+      } = res.locals;
+      return res.status(200).json({ ok: true, ...returnObj });
+    });
 
 authed.all('/goals.delete',
   valBody({
@@ -101,7 +124,7 @@ authed.all('/goals.removeMilestone',
 // T_TODO warning: this endpoint is to be removed
 authed.all('/goals.update',
     usersGetSingleWithOrganizations,
-    goalsUpdateData,
+    goalsUpdate,
     notifyAllInCompany,
     notifyCommonRethinkdb,
     (req, res) => {

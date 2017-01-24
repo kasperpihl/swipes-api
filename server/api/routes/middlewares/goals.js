@@ -2,7 +2,6 @@ import r from 'rethinkdb';
 import {
   string,
   object,
-  bool,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -21,99 +20,79 @@ const goalsCreate = valLocals('goalsCreate', {
   user_id: string.require(),
   goal: object.require(),
   organization_id: string.require(),
-  workflow_id: string,
+  message: string,
 }, (req, res, next) => {
   const {
     user_id,
     goal,
     organization_id,
-    workflow_id,
+    message,
   } = res.locals;
   const goalId = generateSlackLikeId('G');
-
-  goal.currentStepIndex = -1;
-  goal.steps = goal.steps.map((step) => {
-    const stepId = generateSlackLikeId('');
-
-    step.id = `${goalId}-${stepId}`;
-    step.iterations = [];
-
-    return step;
-  });
+  const currentStepId = goal.steps_order[0];
 
   goal.id = goalId;
-  if (workflow_id) {
-    goal.workflow_id = workflow_id;
-  }
-
   goal.organization_id = organization_id;
-  goal.timestamp = r.now();
   goal.created_at = r.now();
   goal.updated_at = r.now();
   goal.created_by = user_id;
   goal.deleted = false;
-
-  res.locals.doNext = true;
+  goal.history = [{
+    message,
+    type: 'created',
+    from: null,
+    to: currentStepId,
+    done_by: user_id,
+  }];
+  goal.status = {
+    current_step_id: currentStepId,
+    prev_step_id: null,
+    handoff_message: message,
+    handoff_by: user_id,
+    handoff_at: r.now(),
+  };
 
   return next();
 });
 
-const goalsNext = valLocals('goalsNext', {
+const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goal: object.require(),
-  doNext: bool.require(),
-  step_back_id: string,
+  goal_id: string.require(), // T_TODO make it object.as when it's more final
+  current_step_id: string.require(),
+  next_step_id: string.require(),
+  message: string,
 }, (req, res, next) => {
   const {
+    user_id,
     goal,
-    doNext,
-    step_back_id,
+    current_step_id,
+    next_step_id,
+    message,
   } = res.locals;
-  const currentStepIndex = goal.currentStepIndex;
-  const currentStep = goal.steps[currentStepIndex];
-  let nextStepIndex = goal.currentStepIndex + 1;
 
-  if (!doNext) {
-    return next();
+  if (goal.status.current_step_id !== current_step_id) {
+    return next(new SwipesError('Invalid current_step_id!'));
   }
 
-  if (currentStep) {
-    currentStep.completed = true;
+  if (!goal.steps[next_step_id]) {
+    return next(new SwipesError('Invalid next_step_id!'));
   }
 
-  if (step_back_id) {
-    let stepBackFound = false;
+  goal.history.push({
+    message,
+    done_by: user_id,
+    from: current_step_id,
+    to: next_step_id,
+    type: 'complete_step',
+  });
 
-    goal.steps.map((step, i) => {
-      /* Find steps before the step we are going back to
-         and find steps after the current step and add null iteration
-      */
-      if ((!stepBackFound && step.id !== step_back_id) || i > currentStepIndex) {
-        step.iterations.push(null);
-      } else if (step.id === step_back_id) {
-        nextStepIndex = i;
-        stepBackFound = true;
-      }
-
-      if (stepBackFound && i <= currentStepIndex) {
-        step.completed = false;
-      }
-
-      return step;
-    });
-  }
-
-  const nextStep = goal.steps[nextStepIndex];
-  // Check that next step is not the last step
-  if (nextStep) {
-    res.locals.completedStepIndex = currentStepIndex;
-    goal.currentStepIndex = nextStepIndex;
-    nextStep.iterations.push({
-      errorLog: [],
-      automationLog: [],
-      previousStepIndex: currentStepIndex,
-      responses: {},
-    });
-  }
+  goal.status = {
+    current_step_id: next_step_id,
+    handoff_at: r.now(),
+    handoff_by: user_id,
+    handoff_message: message,
+    prev_step_id: current_step_id,
+  };
 
   return next();
 });
@@ -233,24 +212,6 @@ const goalsUpdate = (req, res, next) => {
     });
 };
 
-const goalsUpdateData = (req, res, next) => {
-  const {
-    goal_id,
-    goal,
-  } = res.locals;
-
-  dbGoalsUpdateSingle({ goal_id, properties: goal })
-    .then(() => {
-      res.locals.eventType = 'goal_updated';
-      res.locals.eventData = goal;
-
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    });
-};
-
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
@@ -344,7 +305,7 @@ const goalsNextStepQueueMessage = (req, res, next) => {
   const {
     user_id,
     goal,
-    completedStepIndex,
+    current_step_id,
   } = res.locals;
 
   const goal_id = goal.id;
@@ -352,7 +313,7 @@ const goalsNextStepQueueMessage = (req, res, next) => {
   res.locals.queueMessage = {
     user_id,
     goal_id,
-    completedStepIndex,
+    step_id: current_step_id,
     event_type: 'step_completed',
   };
   res.locals.messageGroupId = goal_id;
@@ -364,15 +325,15 @@ const goalsStepGotActiveQueueMessage = (req, res, next) => {
   const {
     user_id,
     goal,
+    next_step_id,
   } = res.locals;
 
   const goal_id = goal.id;
-  const current_step_id = goal.currentStepIndex;
 
   res.locals.queueMessage = {
     user_id,
     goal_id,
-    current_step_id,
+    step_id: next_step_id,
     event_type: 'step_got_active',
   };
   res.locals.messageGroupId = goal_id;
@@ -382,18 +343,17 @@ const goalsStepGotActiveQueueMessage = (req, res, next) => {
 
 export {
   goalsCreate,
-  goalsNext,
   goalsInsert,
   goalsDelete,
   goalsAddMilestone,
   goalsRemoveMilestone,
   goalsGet,
   goalsUpdate,
-  goalsUpdateData,
   goalsCreateQueueMessage,
   goalsDeleteQueueMessage,
   goalsNextStepQueueMessage,
   goalsStepGotActiveQueueMessage,
   goalsAddMilestoneQueueMessage,
   goalsRemoveMilestoneQueueMessage,
+  goalsCompleteStep,
 };
