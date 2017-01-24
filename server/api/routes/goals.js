@@ -41,7 +41,6 @@ const notAuthed = express.Router();
 authed.all('/goals.create',
   valBody({
     goal: object.as({
-      id: string.require(),
       title: string.require(),
       steps: object.of(object.as({
         id: string.require(),

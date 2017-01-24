@@ -45,7 +45,9 @@ class TabMenu extends Component {
     if (e.keyCode === 13) {
       const { results } = this.state;
       if (results.length) {
+        const { hide } = this.props;
         this.callDelegate('onItemAction', results[0], 'row', e);
+        hide();
       }
     }
   }
