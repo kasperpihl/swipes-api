@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { list } from 'react-immutable-proptypes';
+import { list, map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 
@@ -19,12 +19,12 @@ class HOCAttachments extends Component {
   }
   componentDidMount() {
   }
-  onOpen(i) {
+  onOpen(id) {
     const {
       previewLink,
       attachments,
     } = this.props;
-    previewLink(attachments.get(i));
+    previewLink(attachments.get(id));
   }
   onAdd(e) {
     const {
@@ -40,17 +40,20 @@ class HOCAttachments extends Component {
     });
   }
   renderAttachments() {
-    const { attachments } = this.props;
+    const { attachments, attachmentOrder: aOrder } = this.props;
     let html = <div className="attachments__empty-state">Nothing here yet</div>;
-    if (attachments && attachments.size) {
-      html = attachments.map((a, i) => (
-        <Attachment
-          key={i}
-          onClick={this.onOpenCached(i)}
-          icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
-          title={a.get('title')}
-        />
-      ));
+    if (aOrder && aOrder.size) {
+      html = aOrder.map((aId) => {
+        const a = attachments.get(aId);
+        return (
+          <Attachment
+            key={aId}
+            onClick={this.onOpenCached(aId)}
+            icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
+            title={a.get('title')}
+          />
+        );
+      });
     }
     return html;
   }
@@ -70,7 +73,8 @@ class HOCAttachments extends Component {
 
 const { func, object } = PropTypes;
 HOCAttachments.propTypes = {
-  attachments: list,
+  attachments: map,
+  attachmentOrder: list,
   addLinkMenu: func,
   delegate: object,
   previewLink: func,

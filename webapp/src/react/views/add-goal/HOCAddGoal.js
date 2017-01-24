@@ -5,19 +5,21 @@ import * as actions from 'actions';
 import ReactTextarea from 'react-textarea-autosize';
 import Button from 'Button';
 import { fromJS } from 'immutable';
-import { setupDelegate, bindAll } from 'classes/utils';
+import { setupDelegate, bindAll, randomString } from 'classes/utils';
 
 import HOCAttachments from 'components/attachments/HOCAttachments';
-import AddGoalList from './AddGoalList';
 import Section from 'components/section/Section';
+import AddStepList from './AddStepList';
 
 import './styles/add-goal.scss';
 
 const initialState = fromJS({
   title: '',
   handoff: '',
-  steps: [],
-  attachments: [],
+  steps: {},
+  stepOrder: [],
+  attachments: {},
+  attachmentOrder: [],
 });
 
 class HOCAddGoal extends Component {
@@ -48,52 +50,57 @@ class HOCAddGoal extends Component {
     this.setState({ handoff: e.target.value });
   }
   onAddedStep(title) {
-    let { steps } = this.state;
-    steps = steps.push(fromJS({
+    let { steps, stepOrder } = this.state;
+    const id = randomString(6);
+    steps = steps.set(id, fromJS({
+      id,
       title,
       assignees: [],
     }));
+    console.log(steps.toJS());
+    stepOrder = stepOrder.push(id);
+    this.setState({ steps, stepOrder });
+  }
+  onOpenAssignee(id, e) {
+    this.clickedAssign(e, id);
+  }
+  onUpdatedStepTitle(id, title) {
+    let { steps } = this.state;
+    steps = steps.setIn([id, 'title'], title);
     this.setState({ steps });
   }
-  onOpenAssignee(i, e) {
-    this.clickedAssign(e, i);
-  }
-  onUpdatedStepTitle(i, title) {
+  onUpdatedAssignees(id, assignees) {
     let { steps } = this.state;
-    steps = steps.setIn([i, 'title'], title);
-    this.setState({ steps });
-  }
-  onUpdatedAssignees(i, assignees) {
-    let { steps } = this.state;
-    steps = steps.setIn([i, 'assignees'], fromJS(assignees));
+    steps = steps.setIn([id, 'assignees'], fromJS(assignees));
     this.setState({ steps });
   }
   onAddAttachment(obj) {
-    let { attachments } = this.state;
-    attachments = attachments.push(fromJS(obj));
-    this.setState({ attachments });
+    let { attachments, attachmentOrder } = this.state;
+    attachments = attachments.set(obj.shortUrl, fromJS(obj));
+    attachmentOrder = attachmentOrder.push(obj.shortUrl);
+    this.setState({ attachments, attachmentOrder });
   }
-  clickedAssign(e, i) {
+  clickedAssign(e, id) {
     const { assignModal, selectAssignees } = this.props;
     const { steps } = this.state;
     return selectAssignees({
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'left',
-    }, steps.getIn([i, 'assignees']).toJS(), (assignees) => {
+    }, steps.getIn([id, 'assignees']).toJS(), (assignees) => {
       if (assignees) {
-        this.onUpdatedAssignees(i, assignees);
+        this.onUpdatedAssignees(id, assignees);
       } else {
-        const ref = this.refs.list.refs[`input${i}`];
+        const ref = this.refs.list.refs[`input${id}`];
         if (ref) {
           ref.focus();
         }
       }
     });
   }
-  selectedAssignees(i, res) {
+  selectedAssignees(id, res) {
     if (res) {
       let { steps } = this.state;
-      steps = steps.setIn([i, 'assignees'], fromJS(res));
+      steps = steps.setIn([id, 'assignees'], fromJS(res));
       this.setState({ steps });
     }
   }
@@ -102,16 +109,35 @@ class HOCAddGoal extends Component {
     return (steps.size && title.length);
   }
   clickedAdd() {
-    const { steps, title, attachments } = this.state;
-    const { organization_id, request, addToasty, updateToasty, navPop } = this.props;
+    const {
+      steps,
+      title,
+      attachments,
+      stepOrder,
+      attachmentOrder,
+      handoff,
+    } = this.state;
+    const {
+      organization_id,
+      request,
+      addToasty,
+      updateToasty,
+      navPop,
+    } = this.props;
+
     const goal = {
       steps: steps.toJS(),
+      stepOrder: stepOrder.toJS(),
       title,
       attachments: attachments.toJS(),
+      attachmentOrder: attachmentOrder.toJS(),
     };
-
     addToasty({ title: `Adding: ${title}`, loading: true }).then((toastId) => {
-      request('goals.create', { organization_id, goal }).then((res) => {
+      request('goals.create', {
+        message: handoff,
+        organization_id,
+        goal,
+      }).then((res) => {
         if (res.ok) {
           updateToasty(toastId, {
             title: 'Added goal',
@@ -146,19 +172,20 @@ class HOCAddGoal extends Component {
     );
   }
   renderSteps() {
-    const { steps } = this.state;
+    const { steps, stepOrder } = this.state;
     return (
       <Section title="Steps" maxWidth={780}>
-        <AddGoalList
+        <AddStepList
           ref="list"
           steps={steps}
+          stepOrder={stepOrder}
           delegate={this}
         />
       </Section>
     );
   }
   renderAttachments() {
-    const { attachments } = this.state;
+    const { attachments, attachmentOrder } = this.state;
 
     if (!this.isReadyToCreate()) {
       return undefined;
@@ -168,6 +195,7 @@ class HOCAddGoal extends Component {
       <Section title="Attachments" maxWidth={780}>
         <HOCAttachments
           attachments={attachments}
+          attachmentOrder={attachmentOrder}
           delegate={this}
         />
       </Section>
