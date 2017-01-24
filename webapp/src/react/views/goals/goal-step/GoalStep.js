@@ -1,17 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { map, list } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 
 // Views
 import HOCAttachments from 'components/attachments/HOCAttachments';
-import ProgressBar from 'components/progress-bar/ProgressBar';
 import Section from 'components/section/Section';
 import GoalsUtil from 'classes/goals-util';
-import StepHandoff from './StepHandoff';
 import StepSubmission from './StepSubmission';
 import GoalStatus from './GoalStatus';
-import CurrentStep from './CurrentStep';
 
 // styles
 import './styles/goal-step';
@@ -35,25 +32,15 @@ class GoalStep extends Component {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-  renderProgressBar() {
-    const {
-      goal,
-    } = this.props;
-    const helper = this.getHelper();
-    const length = goal.get('step_order').size;
-    const numberOfCompleted = helper.getCurrentStepIndex();
-
+  renderStatusMessage() {
+    const from = ['UB9BXJ1JB', 'URU3EUPOE'];
+    const to = ['UZTYMBVGO'];
+    const message = 'Stefan & Yana did their part. Now it is up to you. Good luck';
     return (
-      <Section first>
-        <ProgressBar
-          length={length}
-          completed={numberOfCompleted}
-          steps={helper.getOrderedSteps()}
-        />
-      </Section>
+      <GoalStatus fromAssignees={from} toAssignees={to} message={message} />
     );
   }
-  renderStatus() {
+  renderHandoff() {
     const helper = this.getHelper();
     const stepIndex = helper.getCurrentStepIndex();
     const step = helper.getCurrentStep();
@@ -66,15 +53,6 @@ class GoalStep extends Component {
       </Section>
     );
   }
-  renderStatusMessage() {
-    const from = ['UB9BXJ1JB', 'URU3EUPOE'];
-    const to = ['UZTYMBVGO'];
-    const message = 'Stefan & Yana did their part. Now it is up to you. Good luck';
-    return (
-      <GoalStatus fromAssignees={from} toAssignees={to} message={message} />
-    );
-  }
-
 
   renderAttachments() {
     const helper = this.getHelper();
@@ -88,17 +66,6 @@ class GoalStep extends Component {
           attachmentOrder={goal.get('attachment_order')}
           delegate={this}
         />
-      </Section>
-    );
-  }
-  renderHandoff() {
-    const { handoff } = this.props;
-    if (!handoff) {
-      return undefined;
-    }
-    return (
-      <Section title="Deliver">
-        <StepHandoff data={handoff} />
       </Section>
     );
   }
@@ -123,9 +90,7 @@ class GoalStep extends Component {
       <div className="goal-step">
 
         <div className="goal-step__content">
-          {this.renderProgressBar()}
           {this.renderStatusMessage()}
-          {this.renderStatus()}
           {this.renderHandoff()}
 
           {this.renderAttachments()}
