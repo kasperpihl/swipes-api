@@ -31,12 +31,12 @@ class HOCGoalHandoff extends Component {
   onHandoffChange(text) {
     this.setState({ message: text });
   }
-  mapStepToHeader(step, subtitle) {
+  mapStepToHeader(step, subtitle, index) {
     if (!step) {
       return undefined;
     }
     return {
-      title: step.get('title'),
+      title: `${index}. ${step.get('title')}`,
       subtitle,
       assignees: step.get('assignees').toJS(),
     };
@@ -44,8 +44,9 @@ class HOCGoalHandoff extends Component {
   render() {
     const { message } = this.state;
     const helper = this.getHelper();
-    const from = this.mapStepToHeader(helper.getCurrentStep(), 'Current Step');
-    const to = this.mapStepToHeader(helper.getNextStep(), 'Next step');
+    const fromIndex = helper.getCurrentStepIndex();
+    const from = this.mapStepToHeader(helper.getCurrentStep(), 'Current Step', fromIndex + 1);
+    const to = this.mapStepToHeader(helper.getNextStep(), 'Next step', fromIndex + 2);
 
     return (
       <div className="goal-handoff">
