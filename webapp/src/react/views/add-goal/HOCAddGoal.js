@@ -82,7 +82,8 @@ class HOCAddGoal extends Component {
   }
   clickedAssign(e, id) {
     const { assignModal, selectAssignees } = this.props;
-    const { steps } = this.state;
+    const { steps, stepOrder } = this.state;
+    const i = stepOrder.findKey(v => v === id);
     return selectAssignees({
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'left',
@@ -90,7 +91,7 @@ class HOCAddGoal extends Component {
       if (assignees) {
         this.onUpdatedAssignees(id, assignees);
       } else {
-        const ref = this.refs.list.refs[`input${id}`];
+        const ref = this.refs.list.refs[`input${i}`];
         if (ref) {
           ref.focus();
         }
