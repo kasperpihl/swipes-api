@@ -6,6 +6,7 @@
 
   @include size(36px);
   @include flex();
+  @include flex(none);
   position: relative;
   z-index: 1;
   border-radius: 50%;

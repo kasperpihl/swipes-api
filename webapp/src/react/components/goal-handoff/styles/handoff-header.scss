@@ -1,0 +1,76 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.handoff-header {
+  @include size(100%, auto);
+  @include flex(flex);
+  position: relative;
+  // background-color: yellow;
+
+  &__section {
+    @include size(50%, auto);
+    padding: 30px 0;
+    position: relative;
+
+    &--left {
+      padding-right: 25px;
+
+      &:before {
+        content: '';
+        @include size(1px, 100%);
+        background-color: $deepBlue-10;
+        position: absolute;
+        right: 0; top: 0;
+      }
+
+      &:after {
+        $boxSize: revPyth(32) + px;
+        border-right: 1px solid $deepBlue-10;
+        border-top: 1px solid $deepBlue-10;
+        content: '';
+        @include size($boxSize);
+        background-color: $bg;
+        position: absolute;
+        right: 0; top: 30px;
+        transform: translateX(50%) rotate(45deg);
+      }
+    }
+
+    &--right {
+      padding-left: 45px;
+    }
+  }
+
+  &__top {
+    @include size(100%, auto);
+    @include flex(flex-start, space-between);
+  }
+
+  &__title {
+    @include size(100%, auto);
+    @include font(21px, $deepBlue-100, 24px);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &__button {
+    @include font(12px, $blue-100, 24px, 500);
+    @include flex(none);
+    padding: 0 25px;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  &__assignees {
+    margin-top: -6px;
+  }
+
+  &__subtitle {
+    @include font(12px, $deepBlue-40, 15px, 500);
+    margin-top: 12px;
+  }
+}
