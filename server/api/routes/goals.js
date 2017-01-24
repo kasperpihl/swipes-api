@@ -2,6 +2,7 @@ import express from 'express';
 import {
   string,
   object,
+  array,
 } from 'valjs';
 import {
   valBody,
@@ -38,7 +39,18 @@ const notAuthed = express.Router();
 
 authed.all('/goals.create',
   valBody({
-    goal: object.require(), // T_TODO make it object.as when it's more final
+    goal: object.as({
+      id: string.require(),
+      title: string.require(),
+      steps: object.of(object.as({
+        id: string.require(),
+        title: string.require(),
+        assignees: array.of(string).require(),
+      })).require(),
+      step_order: array.of(string).require(),
+      attachments: object.require(),
+      attachment_order: array.of(string).require(),
+    }).require(),
     organization_id: string.require(),
     message: string,
   }),
