@@ -1,0 +1,63 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.step-list {
+  @include size(100%, auto);
+
+  &__item {
+    @include size(100%, auto);
+    @include font($fz: 12px, $lh: 15px);
+    padding-left: 24px;
+    position: relative;
+
+    &:not(:last-child) {
+      padding-bottom: 33px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 5px; top: 15px;
+        @include size(1px, 30px);
+        background-color: $deepBlue-5;
+      }
+    }
+
+    &:after {
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+    }
+
+    &--completed {
+      @include font($c: $deepBlue-50, $fw:500);
+
+      &:after {
+        @include size(9px);
+        background-color: $deepBlue-50;
+        left: 1px; top: 5px;
+      }
+    }
+
+    &--current {
+      @include font($c: $deepBlue-80, $fw: bold);
+
+      &:after {
+        @include size(11px);
+        background-color: transparent;
+        border: 2px solid $deepBlue-80;
+        left: 0px; top: 4px;
+      }
+    }
+
+    &--future {
+      @include font($c: $deepBlue-30, $fw: 500);
+
+      &:after {
+        @include size(11px);
+        background-color: transparent;
+        border: 2px solid $deepBlue-30;
+        left: 0px; top: 4px;
+      }
+    }
+  }
+}

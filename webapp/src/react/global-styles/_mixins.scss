@@ -1,4 +1,5 @@
 @import '~styles/_vars.scss/';
+@import '~styles/_functions.scss/';
 
 // if no parameters are passed, the size is inherited
 @mixin size($width:null, $height:null) {
@@ -36,6 +37,27 @@
 @mixin svg-color($fill:$deepBlue-100, $stroke:$fill) {
 	fill: $fill;
 	stroke: $stroke;
+}
+
+@mixin font($fz:null, $c:null, $lh:null, $fw:null) {
+	font-size: $fz;
+	color: $c;
+	font-weight: $fw;
+
+	@if $lh {
+		$getNum: $lh / 100;
+
+		@if round($getNum) == $getNum {
+			font-weight: $lh;
+		} @else {
+
+			@if strip-unit($lh) > 2 {
+				line-height: strip-unit($lh) / strip-unit($fz);
+			} @else {
+				line-height: $lh;
+			}
+		}
+	}
 }
 
 @mixin border-radius($topLeft:50%, $topRight:50%, $botLeft:50%, $botRight:50%) {
