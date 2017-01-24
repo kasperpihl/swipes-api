@@ -18,7 +18,12 @@ export default function main(state = initialState, action) {
       if (!payload.ok) {
         return state;
       }
-      return state.withMutations(ns => ns.set('socketUrl', payload.ws_url));
+      return state.withMutations((ns) => {
+        const ways = {};
+        payload.ways.forEach((w) => { ways[w.id] = w; });
+        ns.set('ways', fromJS(ways));
+        ns.set('socketUrl', payload.ws_url);
+      });
     }
 
     case types.SET_STATUS: {

@@ -35,9 +35,17 @@ class HOCAddGoal extends Component {
     super(props);
     this.state = initialState.toObject();
 
-    bindAll(this, ['clickedAdd', 'onTitleChange', 'onHandoffChange']);
+    bindAll(this, ['clickedAdd', 'onTitleChange', 'onHandoffChange', 'onSave']);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this._loadedWay) {
+      const input = this.refs.input;
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+      this._loadedWay = false;
+    }
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
@@ -48,6 +56,40 @@ class HOCAddGoal extends Component {
   }
   onHandoffChange(e) {
     this.setState({ handoff: e.target.value });
+  }
+
+  onContextClick(i, e) {
+    const { loadWay } = this.props;
+    loadWay({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignY: 'top',
+      alignX: 'right',
+    }, (way) => {
+      if (way) {
+        const goal = way.get('goal');
+        const newState = {
+          steps: goal.get('steps'),
+          stepOrder: goal.get('step_order'),
+          attachments: goal.get('attachments'),
+          attachmentOrder: goal.get('attachment_order'),
+          title: goal.get('title'),
+        };
+        this._loadedWay = true;
+        this.setState(newState);
+      }
+
+
+      console.log('way', way.toJS());
+    });
+  }
+  onSave(e) {
+    const { saveWay } = this.props;
+    const goal = this.getGoal();
+    saveWay({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignY: 'center',
+      alignX: 'right',
+    }, goal);
   }
   onAddedStep(title) {
     let { steps, stepOrder } = this.state;
@@ -109,14 +151,28 @@ class HOCAddGoal extends Component {
     const { steps, title } = this.state;
     return (steps.size && title.length);
   }
-  clickedAdd() {
+  getGoal() {
     const {
       steps,
       title,
       attachments,
       stepOrder,
       attachmentOrder,
+    } = this.state;
+
+    const goal = {
+      steps: steps.toJS(),
+      step_order: stepOrder.toJS(),
+      title,
+      attachments: attachments.toJS(),
+      attachment_order: attachmentOrder.toJS(),
+    };
+    return goal;
+  }
+  clickedAdd() {
+    const {
       handoff,
+      title,
     } = this.state;
     const {
       organization_id,
@@ -126,13 +182,7 @@ class HOCAddGoal extends Component {
       navPop,
     } = this.props;
 
-    const goal = {
-      steps: steps.toJS(),
-      step_order: stepOrder.toJS(),
-      title,
-      attachments: attachments.toJS(),
-      attachment_order: attachmentOrder.toJS(),
-    };
+    const goal = this.getGoal();
     addToasty({ title: `Adding: ${title}`, loading: true }).then((toastId) => {
       request('goals.create', {
         message: handoff,
@@ -162,6 +212,7 @@ class HOCAddGoal extends Component {
     return (
       <div className="add-goal__header">
         <input
+          ref="input"
           type="text"
           value={title}
           className="add-goal__title"
@@ -234,6 +285,7 @@ class HOCAddGoal extends Component {
 
     return status;
   }
+
   renderActions() {
     const status = this.getStatus();
     const disabled = !!status;
@@ -247,7 +299,13 @@ class HOCAddGoal extends Component {
 
     let saveButton;
     if (this.isReadyToCreate()) {
-      saveButton = <Button text="Save as a Way" className="add-goal__btn add-goal__btn--save" />;
+      saveButton = (
+        <Button
+          text="Save as a Way"
+          className="add-goal__btn add-goal__btn--save"
+          onClick={this.onSave}
+        />
+      );
     }
 
     return (
@@ -311,4 +369,6 @@ export default connect(mapStateToProps, {
   request: actions.api.request,
   addToasty: actions.toasty.add,
   updateToasty: actions.toasty.update,
+  loadWay: actions.ways.load,
+  saveWay: actions.ways.save,
 })(HOCAddGoal);

@@ -16,13 +16,14 @@ class InputMenu extends Component {
     }
   }
   onAdd() {
-    const { onClick } = this.props;
+    const { onClick, hide } = this.props;
     let val = this._input.value;
 
     if (val && val.length) {
       val = val.trim();
 
       onClick(val);
+      hide();
     }
   }
   render() {

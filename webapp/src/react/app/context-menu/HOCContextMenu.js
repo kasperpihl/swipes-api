@@ -11,7 +11,7 @@ class HOCContextMenu extends Component {
   constructor(props) {
     super(props);
     this.state = { styles: {} };
-    bindAll(this, ['clickedBackground', 'onKeyDown']);
+    bindAll(this, ['clickedBackground', 'onKeyDown', 'hideContextMenu']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bouncedResize = debounce(this.fitToScreen.bind(this), 50);
   }
@@ -161,7 +161,7 @@ class HOCContextMenu extends Component {
     const styles = this.state.styles;
     return (
       <div className="context-menu__content" ref="menu" style={styles}>
-        <Comp {...props} />
+        <Comp hide={this.hideContextMenu} {...props} />
       </div>
     );
   }
