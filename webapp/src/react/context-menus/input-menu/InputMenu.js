@@ -37,6 +37,7 @@ class InputMenu extends Component {
           onKeyUp={this.onHandleKeyUp}
           type="text"
           ref={(c) => { this._input = c; }}
+          autoFocus
         />
         <Button
           primary
