@@ -76,7 +76,7 @@
     }
 
     &--locked-editing {
-      background-color: $red-100;
+      background-color: $salmon;
     }
   }
 
@@ -89,7 +89,7 @@
   &--locked {
 
     #{$b}__header {
-      color: $red-100;
+      color: $salmon;
     }
 
     & > *:not(#{$b}__header) {

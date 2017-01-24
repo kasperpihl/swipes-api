@@ -200,16 +200,16 @@
 	&--error & {
 
 		&__title {
-			color: $red-100;
+			color: $salmon;
 		}
 
 		&__actions {
 
 			&__button {
-				background-color: $red-100;
+				background-color: $salmon;
 
 				&:hover {
-					background-color: darken($red-100, 5%);
+					background-color: darken($salmon, 5%);
 					color: white;
 				}
 			}
