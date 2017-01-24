@@ -1,74 +1,79 @@
 import React, { Component } from 'react';
 import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';
+import {
+  resetBlockToType,
+} from './draft-utils';
 
 import './styles/check-list';
 
 export default class ChecklistEditorBlock extends Component {
-  static keyBindingFn(editorState, e) {
-    if (e.keyCode === 13) {
-      const selection = editorState.getSelection();
-      const startKey = selection.getStartKey();
-      const blockText = editorState.getCurrentContent().getBlockForKey(startKey).getText();
-      const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
-
-      if (blockType === 'checklist' && blockText.length < 1) {
-        return 'empty-block';
-      }
-    }
+  static keyBindingFn(editorState, onChange, e) {
     // left key
     if (e.keyCode === 37) {
       const selection = editorState.getSelection();
       const startKey = selection.getStartKey();
       const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
-
       if (blockType === 'checklist' && selection.getStartOffset() === 0
         && (selection.isCollapsed() || selection.getIsBackward())) {
         return 'move-selection-to-end-of-prev-block';
       }
     }
 
-    return null;
+    return false;
   }
-  static handleKeyCommand(editorState, keyCommand) {
-    if (keyCommand === 'move-selection-to-end-of-prev-block') {
-      return this.handleMoveSelectionToEndOfPreviousBlockCommand(editorState);
-    }
-
-    return null;
-  }
-  static handleMoveSelectionToEndOfPreviousBlockCommand(editorState) {
+  static handleBeforeInput(editorState, onChange, str) {
+    console.log('hello there', str);
     const selection = editorState.getSelection();
-    const startKey = selection.getStartKey();
-    const contentState = editorState.getCurrentContent();
-    const prevBlock = contentState.getBlockBefore(startKey);
+    const currentBlock = editorState.getCurrentContent()
+      .getBlockForKey(selection.getStartKey());
+    const blockType = currentBlock.getType();
+    const blockLength = currentBlock.getLength();
+    if (str === ' ' && blockType === 'unstyled') {
+      if (blockLength === 2 && currentBlock.getText() === '[]') {
+        onChange(resetBlockToType(editorState, 'checklist', { checked: false }));
+        return true;
+      }
+    }
+    return false;
+  }
+  static handleKeyCommand(editorState, onChange, keyCommand) {
+    if (keyCommand === 'move-selection-to-end-of-prev-block') {
+      const selection = editorState.getSelection();
+      const startKey = selection.getStartKey();
+      const contentState = editorState.getCurrentContent();
+      const prevBlock = contentState.getBlockBefore(startKey);
 
-    // If there's no previous block, then do nothing
-    if (!prevBlock) return null;
+      // If there's no previous block, then do nothing
+      if (!prevBlock) return null;
 
-    const prevKey = prevBlock.getKey();
-    const prevLength = prevBlock.getLength();
+      const prevKey = prevBlock.getKey();
+      const prevLength = prevBlock.getLength();
 
-    // Move the focus offset to the end of the previous line
-    let selectionChanges = {
-      focusKey: prevKey,
-      focusOffset: prevLength,
-    };
-    // If the selection is collapsed, keep it collapsed by also moving the anchor
-    if (selection.isCollapsed()) {
-      selectionChanges = {
-        ...selectionChanges,
-        anchorKey: prevKey,
-        anchorOffset: prevLength,
+      // Move the focus offset to the end of the previous line
+      let selectionChanges = {
+        focusKey: prevKey,
+        focusOffset: prevLength,
       };
+      // If the selection is collapsed, keep it collapsed by also moving the anchor
+      if (selection.isCollapsed()) {
+        selectionChanges = {
+          ...selectionChanges,
+          anchorKey: prevKey,
+          anchorOffset: prevLength,
+        };
+      }
+
+      const nextSelection = selection.merge(selectionChanges);
+
+      // Update the selection state.
+      const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
+
+      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-end-of-prev-block'));
+      return true;
     }
 
-    const nextSelection = selection.merge(selectionChanges);
-
-    // Update the selection state.
-    const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
-
-    return EditorState.push(updatedEditorState, contentState, 'move-selection-to-end-of-prev-block');
+    return false;
   }
   constructor(props) {
     super(props);

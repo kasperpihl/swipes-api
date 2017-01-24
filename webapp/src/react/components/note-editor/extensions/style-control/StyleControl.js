@@ -1,5 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
+import {
+  EditorState,
+  Entity,
+  Modifier,
+  RichUtils,
+} from 'draft-js';
+
 import { bindAll, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
 import StyleControlButton from './StyleControlButton';
@@ -21,13 +28,26 @@ class StyleControl extends Component {
       this.calculatePosition();
     }, 0);
   }
+
+
   onToggle(style, type) {
+    const { editorState, onChange } = this.props;
     if (type === 'block') {
-      this.callDelegate('toggleBlockType', style);
+      onChange(
+        RichUtils.toggleBlockType(
+          editorState,
+          style,
+        ),
+      );
     }
 
     if (type === 'inline') {
-      this.callDelegate('toggleInlineStyle', style);
+      onChange(
+        RichUtils.toggleInlineStyle(
+          editorState,
+          style,
+        ),
+      );
     }
 
     if (type === 'entity') {
@@ -36,9 +56,57 @@ class StyleControl extends Component {
       }
     }
   }
+  addLink(styleControl, urlValue) {
+    const { editorState } = this.props;
+    const entityKey = Entity.create(
+      'LINK',
+      'MUTABLE',
+      { url: urlValue },
+    );
+    const contentState = editorState.getCurrentContent();
+    const newContentState = Modifier.applyEntity(
+      contentState,
+      editorState.getSelection(),
+      entityKey,
+    );
+    let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
+
+    newEditorState = RichUtils.toggleLink(
+      newEditorState,
+      newEditorState.getSelection(),
+      entityKey,
+    );
+    this.props.onChange(newEditorState);
+  }
+  hide() {
+    this.callDelegate('hideStyleControls');
+    setTimeout(() => {
+      const { editorState } = this.props;
+      const selectionState = editorState.getSelection();
+      let newKey = selectionState.get('focusKey');
+      let newOffset = selectionState.get('focusOffset');
+
+      if (selectionState.get('isBackward')) {
+        newKey = selectionState.get('anchorKey');
+        newOffset = selectionState.get('anchorOffset');
+      }
+
+      const newSelState = SelectionState.createEmpty().merge({
+        anchorKey: newKey,
+        anchorOffset: newOffset,
+        focusKey: newKey,
+        focusOffset: newOffset,
+      });
+      const newEditorState = EditorState.forceSelection(editorState, newSelState);
+
+      // editor.focus();
+      this.props.onChange(newEditorState);
+    }, 1);
+  }
   getCenterFromX(x, w) {
     return x - (w / 2);
   }
+
   handleDefaultPosition(styles) {
     const { editorState, position } = this.props;
     const { styleControls } = this.refs;
@@ -132,8 +200,7 @@ class StyleControl extends Component {
   addLink() {
     const { input } = this.refs;
     if (input.value.length) {
-      this.callDelegate('addLink', input.value);
-      this.callDelegate('hideStyleControls');
+      this.hide();
     }
   }
   renderButtons() {
