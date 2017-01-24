@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { setupDelegate, bindAll } from 'classes/utils';
 import Button from 'Button';
 
-class HandoffActions extends Component {
+class GoalActions extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -57,7 +57,7 @@ class HandoffActions extends Component {
   }
   render() {
     return (
-      <div className="handoff-actions">
+      <div className="goal-actions">
         {this.renderStatus()}
         {this.renderCancel()}
         {this.renderHandoff()}
@@ -66,11 +66,11 @@ class HandoffActions extends Component {
   }
 }
 
-export default HandoffActions;
+export default GoalActions;
 
-const { string, object, func, bool } = PropTypes;
+const { string, func, bool } = PropTypes;
 
-HandoffActions.propTypes = {
+GoalActions.propTypes = {
   showHandoff: bool,
   status: string,
   onHandoff: func,

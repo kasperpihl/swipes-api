@@ -26,6 +26,9 @@ class HOCGoalHandoff extends Component {
   onChangeClick(e) {
 
   }
+  toggleActive() {
+    this.setState({});
+  }
   componentDidMount() {
   }
   onHandoffChange(text) {

@@ -7,7 +7,6 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'classes/utils';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
 import GoalsUtil from 'classes/goals-util';
-import HOCGoalHandoff from 'components/goal-handoff/HOCGoalHandoff';
 import GoalStatus from './GoalStatus';
 
 // styles
@@ -21,6 +20,7 @@ class GoalStep extends Component {
     this.onOpenCached = setupCachedCallback(this.onOpen, this);
     // now use events as onClick: this.onOpenCached(i)
     this.callDelegate = setupDelegate(props.delegate);
+    this.state = { showHandoff: false };
   }
   onSubmit(goBack, message) {
     this.callDelegate('goalStepSubmit', goBack, message);
@@ -53,6 +53,11 @@ class GoalStep extends Component {
       </Section>
     );
   }
+  renderHandoffTextarea() {
+    return (
+      <HandoffTextarea />
+    );
+  }
 
   renderAttachments() {
     const helper = this.getHelper();
@@ -70,23 +75,15 @@ class GoalStep extends Component {
     );
   }
 
-  renderSubmission() {
-    const { goal } = this.props;
-    return (
-      <HOCGoalHandoff goal={goal} />
-    );
-  }
-
   render() {
     return (
       <div className="goal-step">
 
         <div className="goal-step__content">
-          {this.renderStatusMessage()}
-          {this.renderHandoff()}
-
+          {this.renderHeader()}
+          {this.renderHandoffTextarea()}
           {this.renderAttachments()}
-          {this.renderSubmission()}
+          {this.renderActions()}
         </div>
       </div>
     );

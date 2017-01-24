@@ -11,14 +11,14 @@ class HandoffMessage extends Component {
   onHandoffChange(e) {
     const { onChange } = this.props;
     onChange(e.target.value);
-    this.setState({ text: e.target.value });
   }
   renderTextfield() {
-    const { text } = this.props;
+    const { text, disabled } = this.props;
     return (
       <ReactTextarea
         className="add-goal__handoff"
         value={text}
+        disabled={disabled}
         minRows={3}
         maxRows={10}
         ref="textarea"
@@ -29,7 +29,7 @@ class HandoffMessage extends Component {
   }
   render() {
     return (
-      <div className="goal-handoff">
+      <div className="handoff-message">
         {this.renderTextfield()}
       </div>
     );
@@ -38,9 +38,10 @@ class HandoffMessage extends Component {
 
 export default HandoffMessage;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 HandoffMessage.propTypes = {
   text: string.isRequired,
+  disabled: bool,
   onChange: func,
 };
