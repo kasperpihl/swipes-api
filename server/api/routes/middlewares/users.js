@@ -208,7 +208,6 @@ const usersCleanupRegisteredWebhooksToService = valLocals('usersCleanupRegistere
   const serviceName = service.service_name;
 
   if (serviceName === 'asana') {
-    console.log(services[serviceName]);
     return services[serviceName]
       .unsubscribeFromAllWebhooks({ auth_data: service.auth_data, user_id })
       .then(() => {

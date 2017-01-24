@@ -59,7 +59,6 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
     MessageDeduplicationId: messageDeduplicationId,
   };
 
-  console.log(sqsParams);
   sqs.sendMessage(sqsParams, (err, data) => {
     if (err) {
       console.log('AMAZON QUEUE ERR', err);
