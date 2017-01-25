@@ -12,21 +12,28 @@ class HOCAttachments extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onOpenCached = setupCachedCallback(this.onOpen, this);
+    this.onPreviewCached = setupCachedCallback(this.onPreview, this);
+    this.onFlagCached = setupCachedCallback(this.onFlag, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
+    this.state = { flags: [] };
   }
-  onOpen(id, which) {
+  onPreview(id) {
     const {
       previewLink,
       attachments,
-      flags,
     } = this.props;
-    if (which === 'text') {
-      previewLink(attachments.get(id));
-    } else if (which === 'icon') {
-
+    previewLink(attachments.get(id));
+  }
+  onFlag(id) {
+    let flags = this.state.flags;
+    const index = flags.indexOf(id);
+    if (index !== -1) {
+      flags = flags.slice(0, index).concat(flags.slice(index + 1));
+    } else {
+      flags = flags.concat([id]);
     }
+    this.setState({ flags });
   }
   onAdd(e) {
     const {
@@ -48,7 +55,7 @@ class HOCAttachments extends Component {
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder } = this.props;
     let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
-
+    const { flags } = this.state;
     if (this.hasAttachments()) {
       html = aOrder.map((aId) => {
         const a = attachments.get(aId);
@@ -56,8 +63,9 @@ class HOCAttachments extends Component {
         return (
           <Attachment
             key={aId}
-            onClickIcon={this.onOpenCached(aId, 'icon')}
-            onClickText={this.onOpenCached(aId, 'text')}
+            flagged={(flags.indexOf(aId) !== -1)}
+            onClickIcon={this.onFlagCached(aId)}
+            onClickText={this.onPreviewCached(aId)}
             icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
             title={a.get('title')}
           />
