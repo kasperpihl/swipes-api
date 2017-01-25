@@ -23,7 +23,7 @@ class HandoffHeader extends Component {
         <div className="handoff-header__top">
           <div className="handoff-header__title">{from.title}</div>
           <div className="handoff-header__assignees">
-            <HOCAssigning assignees={from.assignees} />
+            <HOCAssigning assignees={from.assignees} maxImages={1} />
           </div>
         </div>
         <div className="handoff-header__subtitle">{from.subtitle}</div>
@@ -43,7 +43,7 @@ class HandoffHeader extends Component {
           <div className="handoff-header__title">{to.title}</div>
           <button className="handoff-header__button" onClick={this.handleClick}>change</button>
           <div className="handoff-header__assignees">
-            <HOCAssigning assignees={to.assignees} />
+            <HOCAssigning assignees={to.assignees} maxImages={1} />
           </div>
         </div>
         <div className="handoff-header__subtitle">{to.subtitle}</div>

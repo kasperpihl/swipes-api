@@ -22,10 +22,14 @@ class HOCAssigning extends Component {
   render() {
     const {
       stateAssignees,
-      me,
+      maxImages,
     } = this.props;
     return (
-      <Assigning me={me} assignees={stateAssignees} onClick={this.clickedAssignee} />
+      <Assigning
+        maxImages={maxImages}
+        assignees={stateAssignees}
+        onClick={this.clickedAssignee}
+      />
     );
   }
 }
@@ -50,6 +54,7 @@ HOCAssigning.propTypes = {
   index: oneOfType([number, string]),
   delegate: object,
   me: map,
+  maxImages: number,
 };
 
 export default connect(mapStateToProps, {

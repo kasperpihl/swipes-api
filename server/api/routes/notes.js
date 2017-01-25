@@ -28,7 +28,7 @@ authed.all('/notes.create',
 authed.all('/notes.save',
   valBody({
     id: string.require(),
-    title: string.require(),
+    title: string,
     organization_id: string.require(),
     text: string.require(),
     unlock: bool,

@@ -8,7 +8,9 @@ import './styles/assigning.scss';
 class Assigning extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      maxImages: props.maxImages || 3,
+    };
     bindAll(this, ['handleClick']);
   }
   handleClick(e) {
@@ -30,8 +32,8 @@ class Assigning extends Component {
     );
   }
   renderAssignees() {
-    const { assignees, me } = this.props;
-
+    const { assignees } = this.props;
+    const { maxImages } = this.state;
     if (!assignees || assignees.size < 1) {
       return this.renderAddAssignees();
     }
@@ -40,27 +42,27 @@ class Assigning extends Component {
       const pic = a.get('profile_pic');
       const firstLetter = a.get('name').charAt(0);
 
-      if (i <= 2) {
+      if (i < maxImages || (i === maxImages && assignees.size === (maxImages + 1))) {
         if (pic) {
           return (
             <div className="assignees__profile assignees__profile--image" key={i}>
               <img src={pic} alt="" />
             </div>
           );
-        } else {
-          return (
-            <div className="assignees__profile assignees__profile--name" key={i}>
-              {firstLetter}
-            </div>
-          );
         }
+        return (
+          <div className="assignees__profile assignees__profile--name" key={i}>
+            {firstLetter}
+          </div>
+        );
       }
+      return undefined;
     });
 
     let morePeople;
 
-    if (assignees.size > 3) {
-      morePeople = <div className="assignees__profile assignees__profile--more">+{assignees.size - 3}</div>;
+    if (assignees.size > (maxImages + 1)) {
+      morePeople = <div className="assignees__profile assignees__profile--more">+{assignees.size - maxImages}</div>;
     }
 
     return (
@@ -81,13 +83,13 @@ class Assigning extends Component {
 
 export default Assigning;
 
-const { string, func } = PropTypes;
+const { string, func, number } = PropTypes;
 
 Assigning.propTypes = {
   assignees: listOf(mapContains({
     name: string,
     profile_pic: string,
   })),
+  maxImages: number,
   onClick: func,
-  me: map,
 };
