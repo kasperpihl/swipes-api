@@ -68,6 +68,9 @@ export const addNote = (options, callback) => (d, getState) => {
   }));
 };
 
+// ======================================================
+// Adding a url (open context menu and then add)
+// ======================================================
 export const addURL = (options, callback) => (d) => {
   d(inputMenu(options, {
     placeholder: 'Enter a URL',
@@ -80,6 +83,10 @@ export const addURL = (options, callback) => (d) => {
     },
   }));
 };
+
+// ======================================================
+// Open find (and then add)
+// ======================================================
 export const openFind = callback => d => d(a.main.overlay({
   component: 'Find',
   props: {
@@ -90,6 +97,9 @@ export const openFind = callback => d => d(a.main.overlay({
   },
 }));
 
+// ======================================================
+// Open add (and then add)
+// ======================================================
 export const addMenu = (options, callback) => (d) => {
   d(a.main.contextMenu({
     options,
@@ -108,6 +118,9 @@ export const addMenu = (options, callback) => (d) => {
   }));
 };
 
+// ======================================================
+// Preview attacment
+// ======================================================
 export const preview = data => (d) => {
   const att = data;
   if (att.get('name') === 'swipes' && att.get('type') === 'note') {
