@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { map } from 'react-immutable-proptypes';
+import { list } from 'react-immutable-proptypes';
 
 import './styles/step-list.scss';
 
@@ -13,9 +13,9 @@ const StepList = (props) => {
   const renderSteps = steps.map((s, i) => {
     let className = 'step-list__item';
 
-    if (i <= completed) {
+    if (i < completed) {
       className += ' step-list__item--completed';
-    } else if (i === completed + 1) {
+    } else if (i === completed) {
       className += ' step-list__item--current';
     } else {
       className += ' step-list__item--future';
@@ -38,6 +38,6 @@ export default StepList;
 const { number } = PropTypes;
 
 StepList.propTypes = {
-  steps: map,
+  steps: list,
   completed: number,
 };
