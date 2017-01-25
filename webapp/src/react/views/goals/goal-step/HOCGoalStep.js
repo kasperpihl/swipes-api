@@ -70,7 +70,21 @@ class HOCGoalStep extends Component {
     this.setState({ isHandingOff: false });
   }
   onHandoff() {
-    this.setState({ isHandingOff: true });
+    const { completeStep, goal } = this.props;
+    const { handoffText } = this.state;
+    if (this.state.isHandingOff) {
+      const helper = this.getHelper();
+      const nextStep = helper.getNextStep();
+      let nextStepId;
+      if (nextStep) {
+        nextStepId = nextStep.get('id');
+      }
+      completeStep(goal.get('id'), nextStepId, handoffText).then((res) => {
+        console.log('res', res);
+      });
+    } else {
+      this.setState({ isHandingOff: true });
+    }
   }
   onHandoffChange(handoffText) {
     this.setState({ handoffText });
@@ -205,6 +219,7 @@ HOCGoalStep.propTypes = {
   archive: func,
   delegate: object,
   addToCollection: func,
+  completeStep: func,
   contextMenu: func,
   goal: map,
   me: map,

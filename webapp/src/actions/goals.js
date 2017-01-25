@@ -163,18 +163,14 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
 };
 
 
-export const completeStep = (gId, sId, message) => (dispatch, getState) => {
+export const completeStep = (gId, nextSId, message) => (dispatch, getState) => {
   const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
   return dispatch(request('goals.completeStep', {
     goal_id: gId,
-    next_step_id: sId,
+    next_step_id: nextSId,
     current_step_id: currentStepId,
     message,
-  })).then((res, err) => {
-    if (err) {
-     // return console.log('Error completing step', err);
-    }
-  });
+  }));
 };
   /* let modalOpt;
   if (pSteps) {
