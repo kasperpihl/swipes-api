@@ -191,7 +191,9 @@ class HOCGoalStep extends Component {
       return undefined;
     }
     return (
-      <GoalSide goal={goal} me={me} />
+      <div className="goal-step__side">
+        <GoalSide goal={goal} me={me} />
+      </div>
     );
   }
   render() {
@@ -209,9 +211,9 @@ class HOCGoalStep extends Component {
           {this.renderAttachments()}
           {this.renderActions()}
         </div>
-        <div className="goal-step__side">
-          {this.renderSide()}
-        </div>
+
+        {this.renderSide()}
+
       </div>
     );
   }
