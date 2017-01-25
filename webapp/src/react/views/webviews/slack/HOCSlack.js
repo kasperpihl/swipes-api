@@ -23,10 +23,17 @@ class HOCSlack extends Component {
       // Super hack haha. Don't change ref in SlackWebview
       this.refs.slack.refs.container.getElementsByClassName('webview')[0].focus();
     }
+    if (this.props.openIn && prevProps.openIn !== this.props.openIn) {
+      this._webview.send('message', {
+        type: 'open',
+        id: this.props.openIn,
+      });
+    }
   }
   onLoad(webview) {
+    this._webview = webview;
     webview.addEventListener('dom-ready', () => {
-      // webview.openDevTools();
+      webview.openDevTools();
     });
     webview.addEventListener('ipc-message', (event) => {
       const arg = event.args[0];

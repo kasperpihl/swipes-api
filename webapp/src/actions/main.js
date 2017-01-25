@@ -28,6 +28,8 @@ export const contextMenu = payload => (dp, getState) => {
   dp({ type: types.CONTEXT_MENU, payload });
 };
 
+export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } });
+
 // ======================================================
 // Update Recent
 // ======================================================

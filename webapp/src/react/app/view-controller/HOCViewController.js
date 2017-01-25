@@ -132,10 +132,10 @@ class HOCViewController extends Component {
   }
   renderSlack() {
     const HOCSlack = views.Slack;
-    const { navId } = this.props;
+    const { navId, slackOpenIn } = this.props;
     const hidden = navId !== 'slack';
     return (
-      <HOCSlack hidden={hidden} />
+      <HOCSlack hidden={hidden} openIn={slackOpenIn} />
     );
   }
   render() {
@@ -155,6 +155,7 @@ function mapStateToProps(state) {
   const currentView = history ? history.last() : undefined;
   const View = currentView ? views[currentView.get('component')] : undefined;
   return {
+    slackOpenIn: state.getIn(['main', 'slackOpenIn']),
     navId,
     history,
     currentView,
@@ -165,6 +166,7 @@ function mapStateToProps(state) {
 const { func, string } = PropTypes;
 HOCViewController.propTypes = {
   history: list,
+  slackOpenIn: string,
   navId: string,
   currentView: map,
   View: func,

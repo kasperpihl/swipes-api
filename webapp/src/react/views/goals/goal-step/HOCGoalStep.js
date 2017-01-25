@@ -35,6 +35,9 @@ class HOCGoalStep extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+    setTimeout(() => {
+      this.onOpenUser();
+    }, 5000);
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isHandingOff && !prevState.isHandingOff) {
@@ -96,6 +99,11 @@ class HOCGoalStep extends Component {
       goal,
     } = this.props;
     addToCollection(goal.get('id'), obj);
+  }
+  onOpenUser(id) {
+    const { openSlackIn, navigateToId } = this.props;
+    navigateToId('slack');
+    openSlackIn('U02H991H2');
   }
   getHelper() {
     const { goal, me } = this.props;
@@ -260,6 +268,8 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
+  openSlackIn: actions.main.openSlackIn,
+  navigateToId: actions.navigation.navigateToId,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,
   completeStep: actions.goals.completeStep,

@@ -51,6 +51,10 @@ export default function main(state = initialState, action) {
       return state.set('cache', initialState.get('cache'));
     }
 
+    case types.SLACK_OPEN_IN: {
+      return state.set('slackOpenIn', payload.id);
+    }
+
     // ======================================================
     // Overlays
     // ======================================================

@@ -9,6 +9,7 @@ export const NOTE_SHOW = 'NOTE_SHOW';
 export const NOTE_HIDE = 'NOTE_HIDE';
 export const UPDATE_RECENT_ASSIGNEES = 'UPDATE_RECENT_ASSIGNEES';
 export const CONTEXT_MENU = 'CONTEXT_MENU';
+export const SLACK_OPEN_IN = 'SLACK_OPEN_IN';
 
 // Notification
 export const NOTIFICATION_ADD = 'NOTIFICATION_ADD';
