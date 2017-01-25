@@ -8,13 +8,16 @@
   position: relative;
 
   &__icon {
+    @include size(24px, 36px);
     padding: 6px 0;
+    position: relative;
 
     &:hover {
       #{$b}__svg {
         @include svg-color(white);
-        background-color: $deepBlue-100;
-        border-color: $deepBlue-100;
+        background-color: $yellow-color;
+        border-color: $yellow-color;
+        transform: scale(1.2);
         transition: .15s ease;
       }
     }
@@ -26,6 +29,9 @@
     @include svg-color($deepBlue-40);
     border-radius: 3px;
     border: 1px solid $deepBlue-20;
+    position: absolute;
+    left: 0; top: 6px;
+    z-index: 99;
     transition: .15s ease;
   }
 
@@ -45,6 +51,15 @@
     }
   }
 
+  &--flagged {
+
+    #{$b}__svg {
+      @include svg-color(white);
+      background-color: $yellow-color;
+      border-color: $yellow-color;
+    }
+  }
+
   &--add {
 
     #{$b}__title {
@@ -61,6 +76,7 @@
         @include svg-color(white);
         background-color: $blue-100;
         border-color: $blue-100;
+        transform: scale(1);
         transition: .15s ease;
       }
     }

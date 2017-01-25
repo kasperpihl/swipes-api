@@ -12,8 +12,14 @@ const Attachment = (props) => {
     flagged,
   } = props;
 
+  let className = 'attachment';
+
+  if (flagged) {
+    className += ' attachment--flagged';
+  }
+
   return (
-    <div className="attachment">
+    <div className={className}>
       <div className="attachment__icon" onClick={onClickIcon}>
         <Icon svg={icon} className="attachment__svg" />
       </div>

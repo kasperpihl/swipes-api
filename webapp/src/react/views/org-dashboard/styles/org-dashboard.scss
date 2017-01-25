@@ -5,6 +5,7 @@
   @include size(100%);
   @include flex(column);
   position: relative;
+  padding-left: 10px;
 }
 
 .notifications {
