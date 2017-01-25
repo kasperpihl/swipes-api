@@ -16,10 +16,16 @@ class HandoffHeader extends Component {
     onChangeClick(e);
   }
   renderFrom() {
-    const { from } = this.props;
+    const { from, isHandingOff } = this.props;
+
+    let className = 'handoff-header__section handoff-header__section--left';
+
+    if (isHandingOff) {
+      className += ' handoff-header__section--active-left';
+    }
 
     return (
-      <div className="handoff-header__section handoff-header__section--left">
+      <div className={className}>
         <div className="handoff-header__top">
           <div className="handoff-header__title">{from.title}</div>
           <div className="handoff-header__assignees">
@@ -27,18 +33,25 @@ class HandoffHeader extends Component {
           </div>
         </div>
         <div className="handoff-header__subtitle">{from.subtitle}</div>
+        <div className="handoff-header__seperator" />
       </div>
     );
   }
   renderTo() {
-    const { to } = this.props;
+    const { to, isHandingOff } = this.props;
 
     if (!to) {
       return undefined;
     }
 
+    let className = 'handoff-header__section handoff-header__section--right';
+
+    if (isHandingOff) {
+      className += ' handoff-header__section--active-right';
+    }
+
     return (
-      <div className="handoff-header__section handoff-header__section--right">
+      <div className={className}>
         <div className="handoff-header__top">
           <div className="handoff-header__title">{to.title}</div>
           <button className="handoff-header__button" onClick={this.handleClick}>change</button>
@@ -62,7 +75,7 @@ class HandoffHeader extends Component {
 
 export default HandoffHeader;
 
-const { shape, func, string, array } = PropTypes;
+const { shape, func, string, array, bool } = PropTypes;
 
 HandoffHeader.propTypes = {
   from: shape({
@@ -75,5 +88,6 @@ HandoffHeader.propTypes = {
     subtitle: string,
     assignees: array,
   }),
+  isHandingOff: bool,
   onChangeClick: func.isRequired,
 };

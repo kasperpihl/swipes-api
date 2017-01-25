@@ -2,6 +2,7 @@
 @import '~styles/_mixins.scss/';
 
 .handoff-header {
+  $b: &;
   @include size(100%, auto);
   @include flex(flex);
   position: relative;
@@ -22,22 +23,56 @@
         position: absolute;
         right: 0; top: 0;
       }
-
-      &:after {
-        $boxSize: revPyth(32) + px;
-        border-right: 1px solid $deepBlue-10;
-        border-top: 1px solid $deepBlue-10;
-        content: '';
-        @include size($boxSize);
-        background-color: $bg;
-        position: absolute;
-        right: 0; top: 30px;
-        transform: translateX(50%) rotate(45deg);
-      }
     }
 
     &--right {
       padding-left: 45px;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: .3s ease;
+    }
+
+    &--active-left {
+
+      #{$b}__seperator:before {
+        transform: translateX(50%) rotate(45deg);
+        transition: .3s ease;
+      }
+    }
+
+    &--active-right {
+      opacity: 1;
+      transform: translateX(0);
+      transition: .3s ease;
+    }
+  }
+
+  &__seperator {
+    @include size(15px, 100%);
+    position: absolute;
+    right: 1px; top: 0;
+
+    &:before {
+      $boxSize: revPyth(30);
+
+      content: '';
+      @include size(#{$boxSize}px);
+      background-color: $bg;
+      position: absolute;
+      right: 0; top: 30px;
+      transform: translateX(-15%) rotate(45deg);
+      border-right: 1px solid $deepBlue-10;
+      border-top: 1px solid $deepBlue-10;
+      -webkit-clip-path: polygon(0 1%, 100% 0, 100% 100%, 50% 50%);
+      transition: .3s ease;
+    }
+
+    &:after {
+      content: '';
+      @include size(100%);
+      position: absolute;
+      left: 0; top: 0;
+      background-color: $bg;
     }
   }
 
