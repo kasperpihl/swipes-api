@@ -16,13 +16,17 @@ class HOCAttachments extends Component {
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
   }
-  onOpen(id) {
+  onOpen(id, which) {
     const {
       previewLink,
       attachments,
+      flags,
     } = this.props;
+    if (which === 'text') {
+      previewLink(attachments.get(id));
+    } else if (which === 'icon') {
 
-    previewLink(attachments.get(id));
+    }
   }
   onAdd(e) {
     const {
@@ -52,7 +56,8 @@ class HOCAttachments extends Component {
         return (
           <Attachment
             key={aId}
-            onClick={this.onOpenCached(aId)}
+            onClickIcon={this.onOpenCached(aId, 'icon')}
+            onClickText={this.onOpenCached(aId, 'text')}
             icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
             title={a.get('title')}
           />
@@ -94,6 +99,7 @@ class HOCAttachments extends Component {
 
 const { func, object } = PropTypes;
 HOCAttachments.propTypes = {
+  flags: list,
   attachments: map,
   attachmentOrder: list,
   addLinkMenu: func,

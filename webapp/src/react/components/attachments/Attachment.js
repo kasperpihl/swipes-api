@@ -7,13 +7,15 @@ const Attachment = (props) => {
   const {
     icon,
     title,
-    onClick,
+    onClickIcon,
+    onClickText,
+    flagged,
   } = props;
 
   return (
     <div className="attachment">
-      <Icon svg={icon} className="attachment__icon" />
-      <div className="attachment__title" onClick={onClick}>
+      <Icon svg={icon} className="attachment__icon" onClick={onClickIcon} />
+      <div className="attachment__title" onClick={onClickText}>
         {title}
       </div>
     </div>
@@ -22,10 +24,12 @@ const Attachment = (props) => {
 
 export default Attachment;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 Attachment.propTypes = {
+  flagged: bool,
   icon: string,
   title: string,
-  onClick: func,
+  onClickIcon: func,
+  onClickText: func,
 };
