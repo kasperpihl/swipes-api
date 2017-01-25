@@ -12,6 +12,7 @@ import HOCAttachments from 'components/attachments/HOCAttachments';
 import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
 import GoalActions from './GoalActions';
+import GoalSide from './GoalSide';
 
 import './styles/goal-step';
 
@@ -33,6 +34,11 @@ class HOCGoalStep extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.isHandingOff && !prevState.isHandingOff) {
+      this.refs.handoffMessage.focus();
+    }
   }
   onContextClick(i, e) {
     const {
@@ -130,6 +136,7 @@ class HOCGoalStep extends Component {
     return (
       <Section title={name ? `${name} wrote` : undefined}>
         <HandoffMessage
+          ref="handoffMessage"
           onChange={this.onHandoffChange}
           imgSrc={src}
           disabled={!isHandingOff}
@@ -164,16 +171,28 @@ class HOCGoalStep extends Component {
       </Section>
     );
   }
-
-  render() {
+  renderSide() {
+    const { goal, me } = this.props;
     return (
-      <div className="goal-step">
-
+      <GoalSide goal={goal} me={me} />
+    );
+  }
+  render() {
+    const { isHandingOff } = this.state;
+    let className = 'goal-step';
+    if (isHandingOff) {
+      className += 'goal-step__handing-off';
+    }
+    return (
+      <div className={className}>
         <div className="goal-step__content">
           {this.renderHeader()}
           {this.renderHandoffMessage()}
           {this.renderAttachments()}
           {this.renderActions()}
+        </div>
+        <div className="goal-step__side">
+          {this.renderSide()}
         </div>
       </div>
     );
