@@ -1,78 +1,108 @@
-import * as c from 'constants';
 import * as a from 'actions';
-import AddAttachment from 'components/attachments/AddAttachment';
+import AddAttachment from 'context-menus/add-attachment/AddAttachment';
+import InputMenu from 'context-menus/input-menu/InputMenu';
 
-export const add = (service, permission, meta) => a.api.request('links.create', {
-  service,
-  permission,
-  meta,
-});
-
-export const get = ids => (d) => {
-  d(a.api.request('link.get', { ids })).then((res) => {
-    if (res.ok) {
-      d({ type: c.LOAD_LINKS, payload: res.links });
+// ======================================================
+// Call links.create and pass back obj in form of attachment
+// ======================================================
+const addLinkAndCallback = (linkObj, callback) => (d) => {
+  d(a.api.request('links.create', linkObj)).then((res) => {
+    if (res && res.ok && callback) {
+      callback({
+        shortUrl: res.short_url,
+        title: linkObj.meta.title,
+        ...linkObj.service,
+      });
     }
   });
 };
 
-export const addMenu = (options, callback) => (d, getState) => {
+// ======================================================
+// Open up input menu for writing a title
+// ======================================================
+const inputMenu = (options, props) => a.main.contextMenu({
+  options,
+  component: InputMenu,
+  props,
+});
+
+// ======================================================
+// Default link obj with swipes as service
+// ======================================================
+const getSwipesLinkObj = title => (d, getState) => {
   const state = getState();
   const myId = state.getIn(['me', 'id']);
-  const orgId = state.getIn(['me', 'organizations', 0, 'id']);
+  return {
+    service: {
+      name: 'swipes',
+    },
+    permission: {
+      account_id: myId,
+    },
+    meta: {
+      title,
+    },
+  };
+};
+
+// ======================================================
+// Adding a note (open context menu and then add)
+// ======================================================
+export const addNote = (options, callback) => (d, getState) => {
+  d(inputMenu(options, {
+    placeholder: 'Enter note title',
+    buttonLabel: 'Add',
+    onResult: (title) => {
+      const state = getState();
+      const orgId = state.getIn(['me', 'organizations', 0, 'id']);
+      d(a.main.note.create(orgId, title)).then((res) => {
+        if (res && res.ok) {
+          const linkObj = d(getSwipesLinkObj(title));
+          linkObj.service.type = 'note';
+          linkObj.service.id = res.id;
+          d(a.main.note.show(res.id));
+          d(addLinkAndCallback(linkObj, callback));
+        }
+      });
+    },
+  }));
+};
+
+export const addURL = (options, callback) => (d) => {
+  d(inputMenu(options, {
+    placeholder: 'Enter a URL',
+    buttonLabel: 'Add',
+    onResult: (url) => {
+      const linkObj = d(getSwipesLinkObj(url));
+      linkObj.service.type = 'url';
+      linkObj.service.id = url;
+      d(addLinkAndCallback(linkObj, callback));
+    },
+  }));
+};
+export const openFind = callback => d => d(a.main.overlay({
+  component: 'Find',
+  props: {
+    actionLabel: 'Attach to Goal',
+    actionCallback: (service, permission, meta) => {
+      d(addLinkAndCallback({ service, permission, meta }, callback));
+    },
+  },
+}));
+
+export const addMenu = (options, callback) => (d) => {
   d(a.main.contextMenu({
     options,
     component: AddAttachment,
     props: {
-      callback: (type, data) => {
-        const addLinkAndCallback = (service, permission, meta) => {
-          d(add(service, permission, meta)).then((res) => {
-            if (res && res.ok && callback) {
-              callback({
-                shortUrl: res.short_url,
-                title: meta.title,
-                ...service,
-              });
-            }
-          });
-        };
-        if (type === 'note' && data && data.length) {
-          d(a.main.note.create(orgId, data)).then((res) => {
-            if (res && res.ok) {
-              d(a.main.note.show(res.id));
-              addLinkAndCallback({
-                type: 'note',
-                name: 'swipes',
-                id: res.id,
-              }, {
-                account_id: myId,
-              }, {
-                title: data,
-              });
-            }
-          });
-        } else if (type === 'link' && data && data.length) {
-          addLinkAndCallback({
-            type: 'url',
-            name: 'swipes',
-            id: data,
-          }, {
-            account_id: myId,
-          }, {
-            title: data,
-          });
+      callback: (type) => {
+        if (type === 'note') {
+          d(addNote(options, callback));
+        } else if (type === 'url') {
+          d(addURL(options, callback));
         } else if (type === 'find') {
-          d(a.main.overlay({
-            component: 'Find',
-            props: {
-              actionLabel: 'Attach to Goal',
-              actionCallback: (service, permission, meta) => {
-                addLinkAndCallback(service, permission, meta);
-              },
-            },
-          }));
+          d(openFind(callback));
         }
-        d(a.main.contextMenu(null));
       },
     },
   }));

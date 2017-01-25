@@ -30,8 +30,8 @@ class HandoffMessage extends Component {
         className={className}
         value={text}
         disabled={disabled}
-        minRows={3}
-        maxRows={10}
+        minRows={1}
+        maxRows={6}
         ref="textarea"
         onChange={this.onHandoffChange}
         placeholder="What message should be passed on to them?"
