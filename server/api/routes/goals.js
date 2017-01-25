@@ -122,7 +122,7 @@ authed.all('/goals.update',
     notifyAllInCompany,
     notifyCommonRethinkdb,
     valResponseAndSend({
-      id: string.require(),
+      goal: object.require(),
     }));
 
 export {

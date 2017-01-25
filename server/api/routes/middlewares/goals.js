@@ -214,6 +214,7 @@ const goalsUpdate = valLocals('goalsUpdate', {
     .then(() => {
       res.locals.eventType = 'goal_updated';
       res.locals.eventData = goal;
+      res.returnObj.goal = goal;
 
       return next();
     })
