@@ -1,25 +1,33 @@
-import { List } from 'immutable';
-import { request } from './api';
-import { load } from './modal';
-import * as a from './';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import { List, Map } from 'immutable';
+import * as a from './';
 
-export const addToCollection = (goalId, content) => (dispatch, getState) => {
-  let collection = getState().getIn(['goals', goalId, 'collection']);
-  if (!collection) {
-    collection = List();
+export const addToCollection = (goalId, content) => (d, getState) => {
+  let attachments = getState().getIn(['goals', goalId, 'attachments']);
+  if (!attachments) {
+    attachments = Map();
   }
-  collection = collection.push(content).toJS();
-  dispatch(request('goals.update', {
+  attachments = attachments.set(content.id, content).toJS();
+  let attachmentOrder = getState().getIn(['goals', goalId, 'attachment_order']);
+  if (!attachmentOrder) {
+    attachmentOrder = List();
+  }
+  attachmentOrder = attachmentOrder.push(content.id).toJS();
+
+  d(a.api.request('goals.update', {
     goal_id: goalId,
-    goal: { collection, id: goalId },
+    goal: {
+      attachments,
+      id: goalId,
+      attachment_order: attachmentOrder,
+    },
   })).then((res) => {
     console.log('ressy', res);
   });
 };
 
-export const archive = goalId => (dispatch) => {
-  dispatch(load(
+export const archive = goalId => (d) => {
+  d(a.modal.load(
     {
       title: 'Archive Goal?',
       data: {
@@ -30,7 +38,7 @@ export const archive = goalId => (dispatch) => {
     },
     (res) => {
       if (res && res.button === 0) {
-        dispatch(request('goals.delete', { goal_id: goalId }));
+        d(a.api.request('goals.delete', { goal_id: goalId }));
       }
     },
   ));
@@ -163,9 +171,9 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
 };
 
 
-export const completeStep = (gId, nextSId, message) => (dispatch, getState) => {
+export const completeStep = (gId, nextSId, message) => (d, getState) => {
   const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
-  return dispatch(request('goals.completeStep', {
+  return d(a.api.request('goals.completeStep', {
     goal_id: gId,
     next_step_id: nextSId,
     current_step_id: currentStepId,

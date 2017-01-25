@@ -54,8 +54,15 @@ class HOCSideNote extends Component {
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
         this.setState({ editorState, editing: false });
+        this._justChanged = true;
         // Using the last undo item to check if something has actually changed
       }
+    }
+  }
+  componentDidUpdate() {
+    if (this._justChanged) {
+      this.refs.editor.focus();
+      this._justChanged = false;
     }
   }
   onBlur() {
@@ -209,6 +216,7 @@ class HOCSideNote extends Component {
 
         <div className="side-note__note">
           <NoteEditor
+            ref="editor"
             editorState={editorState}
             onChange={this.onChange}
             readOnly={someoneElseEditing}
