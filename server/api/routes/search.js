@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   string,
-  object,
+  array,
 } from 'valjs';
 import {
   valBody,
@@ -24,7 +24,7 @@ authed.all('/search',
   xendoSearch,
   xendoSearchMapResults,
   valResponseAndSend({
-    mappedResults: object.require(),
+    mappedResults: array.require(),
   }));
 
 export {
