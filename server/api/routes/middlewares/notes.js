@@ -37,6 +37,7 @@ const notesCreate = valLocals('notesCreate', {
   dbNotesInsert({ note })
   .then(() => {
     res.locals.id = note_id;
+    res.locals.returnObj.id = note_id;
     return next();
   })
   .catch((err) => {
