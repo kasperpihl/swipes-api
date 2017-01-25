@@ -6,34 +6,41 @@
   @include size(234px, auto);
   @include flex(center, flex-start);
   position: relative;
-  padding: 6px 0;
 
   &__icon {
+    padding: 6px 0;
+
+    &:hover {
+      #{$b}__svg {
+        @include svg-color(white);
+        background-color: $deepBlue-100;
+        border-color: $deepBlue-100;
+        transition: .15s ease;
+      }
+    }
+  }
+
+  &__svg {
     @include size(24px);
     @include flex(none);
     @include svg-color($deepBlue-40);
-    border: 1px solid $deepBlue-20;
     border-radius: 3px;
+    border: 1px solid $deepBlue-20;
     transition: .15s ease;
   }
 
   &__title {
-    @include size(calc(100% - 24px - 12px), 24px);
-    line-height: 24px;
+    @include size(calc(100% - 24px - 12px), auto);
+    @include font(12px, $deepBlue-100, 24px, 500);
+    padding: 6px 0;
+    transition: .15s ease;
     padding-left: 12px;
-    color: $deepBlue-100;
-    font-size: 12px;
-    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
 
-  &:hover {
-    #{$b}__icon {
-      @include svg-color(white);
-      background-color: $deepBlue-100;
-      border-color: $deepBlue-100;
+    &:hover {
+      @include font($c: $blue-100);
       transition: .15s ease;
     }
   }
@@ -44,13 +51,14 @@
       @include font($c: $blue-100);
     }
 
-    #{$b}__icon {
+    #{$b}__svg {
       border-color: $blue-100;
       @include svg-color($blue-100);
     }
 
     &:hover {
-      #{$b}__icon {
+      #{$b}__svg {
+        @include svg-color(white);
         background-color: $blue-100;
         border-color: $blue-100;
         transition: .15s ease;

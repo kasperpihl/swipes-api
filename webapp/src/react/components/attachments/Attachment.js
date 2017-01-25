@@ -14,7 +14,9 @@ const Attachment = (props) => {
 
   return (
     <div className="attachment">
-      <Icon svg={icon} className="attachment__icon" onClick={onClickIcon} />
+      <div className="attachment__icon" onClick={onClickIcon}>
+        <Icon svg={icon} className="attachment__svg" />
+      </div>
       <div className="attachment__title" onClick={onClickText}>
         {title}
       </div>
