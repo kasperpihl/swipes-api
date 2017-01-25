@@ -38,6 +38,7 @@ class GoalListItem extends Component {
           <HOCAssigning
             stepId={data.getIn(['status', 'current_step_id'])}
             goalId={data.get('id')}
+            maxImages={1}
           />
         </div>
       </div>

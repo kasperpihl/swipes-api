@@ -2,6 +2,7 @@ import express from 'express';
 import {
   string,
   bool,
+  object,
 } from 'valjs';
 import {
   notesSave,
@@ -30,7 +31,7 @@ authed.all('/notes.save',
     id: string.require(),
     title: string,
     organization_id: string.require(),
-    text: string.require(),
+    text: object.require(),
     unlock: bool,
   }),
   notesSave,
