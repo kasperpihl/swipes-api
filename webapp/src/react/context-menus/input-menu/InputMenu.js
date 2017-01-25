@@ -67,5 +67,6 @@ InputMenu.propTypes = {
   placeholder: string,
   buttonLabel: string,
   buttonIcon: string,
+  hide: func,
   onResult: func,
 };

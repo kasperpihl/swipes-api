@@ -21,6 +21,7 @@ module.exports = {
       app: 'src/react/app',
       reducers: 'src/reducers',
       constants: 'src/constants/ActionTypes',
+      'context-menus': 'src/react/context-menus',
       components: 'src/react/components',
       styles: 'src/react/global-styles',
       actions: 'src/actions',

@@ -1,8 +1,10 @@
-import * as c from 'constants';
 import * as a from 'actions';
-import AddAttachment from 'components/attachments/AddAttachment';
-import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
+import AddAttachment from 'context-menus/add-attachment/AddAttachment';
+import InputMenu from 'context-menus/input-menu/InputMenu';
 
+// ======================================================
+// Call links.create and pass back obj in form of attachment
+// ======================================================
 const addLinkAndCallback = (linkObj, callback) => (d) => {
   d(a.api.request('links.create', linkObj)).then((res) => {
     if (res && res.ok && callback) {
@@ -15,12 +17,18 @@ const addLinkAndCallback = (linkObj, callback) => (d) => {
   });
 };
 
+// ======================================================
+// Open up input menu for writing a title
+// ======================================================
 const inputMenu = (options, props) => a.main.contextMenu({
   options,
   component: InputMenu,
   props,
 });
 
+// ======================================================
+// Default link obj with swipes as service
+// ======================================================
 const getSwipesLinkObj = title => (d, getState) => {
   const state = getState();
   const myId = state.getIn(['me', 'id']);
@@ -37,6 +45,9 @@ const getSwipesLinkObj = title => (d, getState) => {
   };
 };
 
+// ======================================================
+// Adding a note (open context menu and then add)
+// ======================================================
 export const addNote = (options, callback) => (d, getState) => {
   d(inputMenu(options, {
     placeholder: 'Enter note title',
@@ -56,6 +67,7 @@ export const addNote = (options, callback) => (d, getState) => {
     },
   }));
 };
+
 export const addURL = (options, callback) => (d) => {
   d(inputMenu(options, {
     placeholder: 'Enter a URL',
