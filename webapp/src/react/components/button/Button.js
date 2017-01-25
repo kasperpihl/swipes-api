@@ -12,6 +12,7 @@ class Button extends Component {
     const { onClick, disabled } = this.props;
     if (onClick && !disabled) {
       onClick(e);
+      this.refs.button.blur();
     }
   }
   renderIcon() {
@@ -79,7 +80,7 @@ class Button extends Component {
     }
 
     return (
-      <button className={className} {...rest} onClick={this.onClick} {...tabIndex}>
+      <button ref="button" className={className} {...rest} onClick={this.onClick} {...tabIndex}>
         {this.renderIcon()}
         {this.renderText()}
       </button>
