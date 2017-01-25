@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
-
-import Button from 'Button';
+import Icon from 'Icon';
 import Attachment from './Attachment';
 import './styles/attachments';
 
@@ -64,6 +63,17 @@ class HOCAttachments extends Component {
     return html;
   }
   renderAddAttachments() {
+    if (this.hasAttachments()) {
+      return (
+        <div className="attachment attachment--add" onClick={this.onAdd}>
+          <Icon svg="Plus" className="attachment__icon" />
+          <div className="attachment__title">
+            Add more
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="attachments__add-list">
         <button className="attachments__add-item">Add URL</button>

@@ -3,25 +3,25 @@
 
 .attachment {
   $b: &;
-  @include size(100%, auto);
+  @include size(234px, auto);
   @include flex(center, flex-start);
-  max-width: 50%;
   position: relative;
+  padding: 6px 0;
 
   &__icon {
     @include size(24px);
     @include flex(none);
+    @include svg-color($deepBlue-40);
     border: 1px solid $deepBlue-20;
     border-radius: 3px;
-    fill: $deepBlue-60;
-    stroke: $deepBlue-60;
+    transition: .15s ease;
   }
 
   &__title {
     @include size(calc(100% - 24px - 12px), 24px);
     line-height: 24px;
     padding-left: 12px;
-    color: $blue-100;
+    color: $deepBlue-100;
     font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
@@ -29,16 +29,32 @@
     text-overflow: ellipsis;
   }
 
-  &:not(:last-child) {
-    margin-bottom: 12px;
-  }
-
   &:hover {
     #{$b}__icon {
-      background-color: $blue-100;
+      @include svg-color(white);
+      background-color: $deepBlue-100;
+      border-color: $deepBlue-100;
+      transition: .15s ease;
+    }
+  }
+
+  &--add {
+
+    #{$b}__title {
+      @include font($c: $blue-100);
+    }
+
+    #{$b}__icon {
       border-color: $blue-100;
-      fill: white;
-      stroke: white;
+      @include svg-color($blue-100);
+    }
+
+    &:hover {
+      #{$b}__icon {
+        background-color: $blue-100;
+        border-color: $blue-100;
+        transition: .15s ease;
+      }
     }
   }
 }

@@ -3,7 +3,7 @@
 
 .attachments {
   @include size(calc(100%), auto);
-  @include flex(flex-start, space-between);
+  @include flex(flex-start, flex-start);
   flex-wrap: wrap;
   position: relative;
 

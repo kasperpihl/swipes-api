@@ -2,7 +2,7 @@
 @import '~styles/_mixins.scss/';
 
 $bigBtn: 36px;
-$smallBtn: 34px;
+$smallBtn: 30px;
 
 $btnSize: $bigBtn;
 $mainColor: $deepBlue-50;
@@ -26,7 +26,7 @@ $borderColor: $deepBlue-10;
   user-select: none;
 
   &:not(&--disabled):not(&--frameless):focus, {
-    outline:none; /*or outline-color:#FFFFFF; if the first doesn't work*/
+    outline:none;
     box-shadow: 0 0 2px 1px $blue-100;
     border: 1px solid $blue-100;
     transition: .15s ease;
