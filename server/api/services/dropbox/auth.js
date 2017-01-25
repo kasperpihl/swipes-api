@@ -28,8 +28,6 @@ const authData = (data, callback) => {
   };
 
   request({ auth_data, method, params }, (err, res) => {
-    // console.log('RESULTS', res);
-    // return callback('emi_malko_si_eba_maikata');
     if (err) {
       console.log(err);
     }

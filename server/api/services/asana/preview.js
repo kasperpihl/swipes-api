@@ -56,8 +56,6 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
       return callback(err);
     }
 
-    console.log(res);
-
     const elements = cardData(type, res);
 
     return callback(null, { elements });

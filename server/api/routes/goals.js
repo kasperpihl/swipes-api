@@ -7,6 +7,7 @@ import {
 import {
   valBody,
   sendResponse,
+  valResponseAndSend,
 } from '../utils';
 import {
   goalsUpdate,
@@ -63,7 +64,7 @@ authed.all('/goals.create',
 
 authed.all('/goals.completeStep',
     valBody({
-      goal_id: string.require(), // T_TODO make it object.as when it's more final
+      goal_id: string.require(),
       current_step_id: string.require(),
       next_step_id: string.require(),
       message: string,
@@ -85,13 +86,9 @@ authed.all('/goals.delete',
   goalsDelete,
   goalsDeleteQueueMessage,
   notificationsPushToQueue,
-  (req, res) => {
-    const {
-      goal_id,
-    } = res.locals;
-
-    return res.status(200).json({ ok: true, id: goal_id });
-  });
+  valResponseAndSend({
+    id: string.require(),
+  }));
 
 authed.all('/goals.addMilestone',
   valBody({
@@ -101,14 +98,10 @@ authed.all('/goals.addMilestone',
   goalsAddMilestone,
   goalsAddMilestoneQueueMessage,
   notificationsPushToQueue,
-  (req, res) => {
-    const {
-      id,
-      milestone_id,
-    } = res.locals;
-
-    return res.status(200).json({ ok: true, id, milestone_id });
-  });
+  valResponseAndSend({
+    id: string.require(),
+    milestone_id: string.require(),
+  }));
 
 authed.all('/goals.removeMilestone',
   valBody({
@@ -117,13 +110,10 @@ authed.all('/goals.removeMilestone',
   goalsRemoveMilestone,
   goalsRemoveMilestoneQueueMessage,
   notificationsPushToQueue,
-  (req, res) => {
-    const {
-      id,
-    } = res.locals;
-
-    return res.status(200).json({ ok: true, id });
-  });
+  valResponseAndSend({
+    id: string.require(),
+    milestone_id: string.require(),
+  }));
 
 // T_TODO warning: this endpoint is to be removed
 authed.all('/goals.update',
@@ -131,13 +121,9 @@ authed.all('/goals.update',
     goalsUpdate,
     notifyAllInCompany,
     notifyCommonRethinkdb,
-    (req, res) => {
-      const {
-        goal_id,
-      } = res.locals;
-
-      return res.status(200).json({ ok: true, id: goal_id });
-    });
+    valResponseAndSend({
+      id: string.require(),
+    }));
 
 export {
   authed,

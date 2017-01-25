@@ -315,7 +315,7 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
         });
       });
 
-      res.locals.mappedResults = mappedResults;
+      res.locals.returnObj.mappedResults = mappedResults;
 
       return next();
     })

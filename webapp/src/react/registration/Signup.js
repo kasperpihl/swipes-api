@@ -19,18 +19,12 @@ export default class Signup extends Component {
     const organization = this.refs.organization.state.value;
     const invcode = this.refs.invcode.state.value;
 
-    if (!invcode) {
-      return alert('Please use invitation code');
-    }
-    // Congratulations, if you found this, you deserve to create an account.
-    if (!invcode.startsWith('SW319-')) {
-      return alert('Wrong invitation code');
-    }
     const data = {
       email,
       name,
       password,
       repassword: password,
+      invitation_code: invcode,
       organization,
     };
 

@@ -31,13 +31,6 @@ authed.all('/links.get',
   sendResponse,
 );
 
-// authed.all('/link.copy',
-//   validateLinkAdd,
-//   linksFindPermissions,
-//   linksAddPermission,
-//   sendResponse,
-// );
-
 authed.all('/links.create',
   valBody({
     service: object.as({

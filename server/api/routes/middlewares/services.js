@@ -97,7 +97,7 @@ const serviceGetAuthUrl = (req, res, next) => {
       return next(new SwipesError('Something went wrong with the authorization'));
     }
 
-    res.locals.authUrl = result.url;
+    res.locals.returnObj.authUrl = result.url;
 
     return next();
   });
@@ -123,6 +123,7 @@ const serviceDoRequest = (req, res, next) => {
     }
 
     res.locals.service_request_result = result;
+    res.locals.returnObj.result = result;
 
     return next();
   });

@@ -88,7 +88,7 @@ const valBody = (schema, middleware) => (req, res, next) => {
   let error = valjs({ schema, middleware }, object.as({
     schema: object.require(),
     middleware: func,
-  }));
+  }), true);
 
   if (!error) {
     error = valjs(req.body, object.as(schema));

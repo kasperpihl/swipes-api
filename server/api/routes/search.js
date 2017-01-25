@@ -1,9 +1,11 @@
 import express from 'express';
 import {
   string,
+  object,
 } from 'valjs';
 import {
   valBody,
+  valResponseAndSend,
 } from '../utils';
 import {
   xendoUserCredentials,
@@ -21,9 +23,9 @@ authed.all('/search',
   xendoUserCredentials,
   xendoSearch,
   xendoSearchMapResults,
-  (req, res) => {
-    return res.status(200).json({ ok: true, result: res.locals.mappedResults });
-  });
+  valResponseAndSend({
+    mappedResults: object.require(),
+  }));
 
 export {
   notAuthed,
