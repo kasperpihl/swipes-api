@@ -4,7 +4,6 @@ export const LOGOUT = 'LOGOUT';
 export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
-export const LOAD_LINKS = 'LOAD_LINKS';
 export const OVERLAY = 'OVERLAY';
 export const NOTE_SHOW = 'NOTE_SHOW';
 export const NOTE_HIDE = 'NOTE_HIDE';

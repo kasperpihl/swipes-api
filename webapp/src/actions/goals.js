@@ -180,39 +180,3 @@ export const completeStep = (gId, nextSId, message) => (d, getState) => {
     message,
   }));
 };
-  /* let modalOpt;
-  if (pSteps) {
-    modalOpt = {
-      title: 'Go back to step',
-      data: {
-        list: {
-          selectable: true,
-          items: pSteps.map((step, i) => {
-            const title = `${i + 1}. ${step.get('title')}`;
-            const selected = (i === 0);
-            return { title, selected, id: step.get('id') };
-          }).toJS(),
-        },
-        buttons: ['Submit'],
-      },
-    };
-  }
-  const submit = () => {
-
-  };
-  if (modalOpt) {
-    dispatch(load(modalOpt, (res) => {
-      if (res) {
-        let stepBackId;
-        if (pSteps) {
-          const index = res.items.length ? res.items[0] : 0;
-          stepBackId = pSteps.get(index).get('id');
-        }
-        submit(stepBackId);
-      } else {
-        resolve();
-      }
-    }));
-  } else {
-    submit();
-  }*/

@@ -245,7 +245,6 @@ function mapStateToProps(state, ownProps) {
   };
 }
 export default connect(mapStateToProps, {
-  addLinkMenu: actions.links.addMenu,
   overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,

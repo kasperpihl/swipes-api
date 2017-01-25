@@ -106,7 +106,7 @@ export const search = query => (dp) => {
   dp({ type: types.SEARCH, query });
   dp(a.api.request('search', { q: query })).then((res) => {
     if (res && res.ok) {
-      dp({ type: types.SEARCH_RESULTS, result: res.result });
+      dp({ type: types.SEARCH_RESULTS, result: res.mappedResults });
     } else {
       dp({ type: types.SEARCH_ERROR });
     }

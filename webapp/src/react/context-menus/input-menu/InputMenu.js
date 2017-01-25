@@ -7,43 +7,49 @@ import './styles/input-menu.scss';
 class InputMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    bindAll(this, ['onAdd', 'onHandleKeyUp']);
+    this.state = { text: '' };
+    bindAll(this, ['onAdd', 'onHandleKeyUp', 'onChange']);
   }
   onHandleKeyUp(e) {
     if (e.keyCode === 13) {
       this.onAdd();
     }
   }
+  onChange(e) {
+    this.setState({ text: e.target.value });
+  }
   onAdd() {
-    const { onClick, hide } = this.props;
-    let val = this._input.value;
+    const { onResult, hide } = this.props;
+    let { text } = this.state;
 
-    if (val && val.length) {
-      val = val.trim();
+    if (text && text.length) {
+      text = text.trim();
 
-      onClick(val);
+      onResult(text);
       hide();
     }
   }
   render() {
     const { placeholder, buttonLabel, buttonIcon } = this.props;
+    const { text } = this.state;
 
     return (
       <div className="input-menu">
         <input
           key="input"
+          value={text}
+          onChange={this.onChange}
           className="input-menu__input"
           placeholder={placeholder}
           onKeyUp={this.onHandleKeyUp}
           type="text"
-          ref={(c) => { this._input = c; }}
           autoFocus
         />
         <Button
           primary
           key="butt"
           text={buttonLabel}
+          disabled={!text.length}
           icon={buttonIcon}
           onClick={this.onAdd}
           className="input-menu__button"
@@ -61,5 +67,5 @@ InputMenu.propTypes = {
   placeholder: string,
   buttonLabel: string,
   buttonIcon: string,
-  onClick: func,
+  onResult: func,
 };

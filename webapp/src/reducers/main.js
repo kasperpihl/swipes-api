@@ -6,7 +6,6 @@ const initialState = fromJS({
   token: null,
   overlay: null,
   cache: {},
-  links: {},
   services: {},
   ways: {},
   hasLoaded: false,
@@ -87,19 +86,6 @@ export default function main(state = initialState, action) {
     }
     case types.PREVIEW: {
       return state.set('preview', payload);
-    }
-
-    // ======================================================
-    // Links
-    // ======================================================
-    case types.LOAD_LINKS: {
-      let links = fromJS({});
-      payload.forEach((l) => {
-        if (l.last_updated !== state.getIn(['links', l.short_url, 'last_updated'])) {
-          links = links.set(l.short_url, fromJS(l));
-        }
-      });
-      return links.size ? state.mergeIn(['links'], links) : state;
     }
 
     // ======================================================

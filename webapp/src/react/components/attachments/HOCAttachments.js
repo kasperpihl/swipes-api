@@ -14,6 +14,7 @@ class HOCAttachments extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
     this.onFlagCached = setupCachedCallback(this.onFlag, this);
+    this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
     this.state = { flags: [] };
@@ -35,18 +36,33 @@ class HOCAttachments extends Component {
     }
     this.setState({ flags });
   }
-  onAdd(e) {
+  onAdd(which, e) {
     const {
       addLinkMenu,
+      addNote,
+      addURL,
+      openFind,
     } = this.props;
-
-    addLinkMenu({
+    const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
       alignX: 'right',
-    }, (obj) => {
+    };
+    const callback = (obj) => {
       this.callDelegate('onAddAttachment', obj);
-    });
+    };
+
+    switch (which) {
+      case 'url':
+        return addURL(options, callback);
+      case 'note':
+        return addNote(options, callback);
+      case 'find':
+        return openFind(callback);
+      default: {
+        return addLinkMenu(options, callback);
+      }
+    }
   }
   hasAttachments() {
     const { attachmentOrder } = this.props;
@@ -78,7 +94,7 @@ class HOCAttachments extends Component {
   renderAddAttachments() {
     if (this.hasAttachments()) {
       return (
-        <div className="attachment attachment--add" onClick={this.onAdd}>
+        <div className="attachment attachment--add" onClick={this.onAddCached('menu')}>
           <div className="attachment__icon">
             <Icon svg="Plus" className="attachment__svg" />
           </div>
@@ -91,9 +107,18 @@ class HOCAttachments extends Component {
 
     return (
       <div className="attachments__add-list">
-        <button className="attachments__add-item">Add URL</button>
-        <button className="attachments__add-item">New Note</button>
-        <button className="attachments__add-item">Find</button>
+        <button
+          className="attachments__add-item"
+          onClick={this.onAddCached('url')}
+        >Add URL</button>
+        <button
+          className="attachments__add-item"
+          onClick={this.onAddCached('note')}
+        >New Note</button>
+        <button
+          className="attachments__add-item"
+          onClick={this.onAddCached('find')}
+        >Find</button>
       </div>
     );
   }
@@ -113,6 +138,9 @@ HOCAttachments.propTypes = {
   attachments: map,
   attachmentOrder: list,
   addLinkMenu: func,
+  addNote: func,
+  addURL: func,
+  openFind: func,
   delegate: object,
   previewLink: func,
 };
@@ -123,5 +151,8 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   addLinkMenu: actions.links.addMenu,
+  addURL: actions.links.addURL,
+  openFind: actions.links.openFind,
+  addNote: actions.links.addNote,
   previewLink: actions.links.preview,
 })(HOCAttachments);
