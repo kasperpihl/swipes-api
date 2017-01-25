@@ -51,7 +51,6 @@ class HOCSideNote extends Component {
         newNote.get('id') !== oldNote.get('id') ||
         newNote.get('user_id') !== me.get('id')
       ) {
-        console.log('new state');
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
         this.setState({ editorState, editing: false });

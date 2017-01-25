@@ -39,6 +39,7 @@
       @include flex();
       @include font(12px, $deepBlue-70, 18px, 500);
       border: 1px solid $deepBlue-10;
+      background-color: $bg;
     }
   }
 

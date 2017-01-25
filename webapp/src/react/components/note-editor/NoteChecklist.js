@@ -23,7 +23,6 @@ export default class ChecklistEditorBlock extends Component {
     return false;
   }
   static handleBeforeInput(editorState, onChange, str) {
-    console.log('hello there', str);
     const selection = editorState.getSelection();
     const currentBlock = editorState.getCurrentContent()
       .getBlockForKey(selection.getStartKey());
