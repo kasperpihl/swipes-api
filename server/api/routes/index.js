@@ -4,7 +4,7 @@ import * as links from './links';
 import * as services from './services';
 import * as goals from './goals';
 import * as search from './search';
-import * as webhooks from './webhooks';
+// import * as webhooks from './webhooks';
 import * as notifications from './notifications';
 import * as notes from './notes';
 import * as find from './find';
@@ -28,12 +28,12 @@ const v1Authed = [
   milestones.authed,
   ways.authed,
 ];
-const webhooksNotAuthed = [
-  webhooks.notAuthed,
-];
+// const webhooksNotAuthed = [
+//   webhooks.notAuthed,
+// ];
 
 export {
   v1NotAuthed,
   v1Authed,
-  webhooksNotAuthed,
+  // webhooksNotAuthed,
 };
