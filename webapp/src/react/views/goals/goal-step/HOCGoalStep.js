@@ -182,17 +182,13 @@ class HOCGoalStep extends Component {
 
 const { func, object } = PropTypes;
 HOCGoalStep.propTypes = {
-  step: map,
   archive: func,
   delegate: object,
-  submit: func,
   addToCollection: func,
   contextMenu: func,
-  overlay: func,
   goal: map,
   me: map,
   users: map,
-  // removeThis: PropTypes.string.isRequired
 };
 
 
@@ -211,7 +207,6 @@ export default connect(mapStateToProps, {
   overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
   archive: actions.goals.archive,
-  clickLink: actions.links.click,
   addToCollection: actions.goals.addToCollection,
   completeStep: actions.goals.completeStep,
 })(HOCGoalStep);
