@@ -94,7 +94,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     prev_step_id: current_step_id,
   };
 
-  res.locals.returnObj = goal;
+  res.locals.returnObj = { goal };
 
   return next();
 });
@@ -179,7 +179,9 @@ const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
     });
 });
 
-const goalsGet = (req, res, next) => {
+const goalsGet = valLocals('goalsGet', {
+  goal_id: string.require(),
+}, (req, res, next) => {
   const {
     goal_id,
   } = res.locals;
@@ -197,9 +199,12 @@ const goalsGet = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
-const goalsUpdate = (req, res, next) => {
+const goalsUpdate = valLocals('goalsUpdate', {
+  goal_id: string.require(),
+  goal: object.require(),
+}, (req, res, next) => {
   const {
     goal_id,
     goal,
@@ -215,7 +220,7 @@ const goalsUpdate = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
@@ -306,7 +311,11 @@ const goalsRemoveMilestoneQueueMessage = valLocals('goalsRemoveMilestoneQueueMes
   return next();
 });
 
-const goalsNextStepQueueMessage = (req, res, next) => {
+const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
+  user_id: string.require(),
+  goal: object.require(),
+  current_step_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     goal,
@@ -324,9 +333,13 @@ const goalsNextStepQueueMessage = (req, res, next) => {
   res.locals.messageGroupId = goal_id;
 
   return next();
-};
+});
 
-const goalsStepGotActiveQueueMessage = (req, res, next) => {
+const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage', {
+  user_id: string.require(),
+  goal: object.require(),
+  next_step_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     goal,
@@ -344,7 +357,7 @@ const goalsStepGotActiveQueueMessage = (req, res, next) => {
   res.locals.messageGroupId = goal_id;
 
   return next();
-};
+});
 
 export {
   goalsCreate,
