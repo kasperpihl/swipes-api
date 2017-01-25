@@ -8,8 +8,16 @@ class HandoffMessage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
+  }
+  handleClick() {
+    const { onClick, user } = this.props;
+
+    if (onClick) {
+      onClick(user.get('id'));
+    }
   }
   renderAvatar(src, name) {
     const firstLetter = name.charAt(0);
@@ -25,9 +33,6 @@ class HandoffMessage extends Component {
     return (
       <div className="handoff-message__initials">{firstLetter}</div>
     );
-  }
-  renderOpenInSlack() {
-
   }
   render() {
     const {
@@ -48,7 +53,7 @@ class HandoffMessage extends Component {
       <div className="handoff-message">
         <div className="handoff-message__header">
           {this.renderAvatar(src, name)}
-          <div className="handoff-message__name">
+          <div className="handoff-message__name" onClick={this.handleClick}>
             {name}
             <Icon svg="SlackLogo" className="handoff-message__slack-icon" />
           </div>
@@ -63,9 +68,10 @@ class HandoffMessage extends Component {
 
 export default HandoffMessage;
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 HandoffMessage.propTypes = {
   user: map,
   message: string,
+  onClick: func,
 };
