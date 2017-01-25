@@ -15,8 +15,8 @@
     &:hover {
       #{$b}__svg {
         @include svg-color(white);
-        background-color: $yellow-color;
-        border-color: $yellow-color;
+        background-color: $deepBlue-100;
+        border-color: $deepBlue-100;
         transform: scale(1.2);
         transition: .15s ease;
       }
@@ -29,6 +29,7 @@
     @include svg-color($deepBlue-40);
     border-radius: 3px;
     border: 1px solid $deepBlue-20;
+    transform: scale(1);
     transition: .15s ease;
   }
 
@@ -41,6 +42,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    user-select: none;
 
     &:hover {
       @include font($c: $blue-100);
@@ -49,6 +51,15 @@
   }
 
   &--flagged {
+
+    #{$b}__icon:hover {
+
+      #{$b}__svg {
+        @include svg-color(white);
+        background-color: $yellow-color;
+        border-color: $yellow-color;
+      }
+    }
 
     #{$b}__svg {
       @include svg-color(white);
