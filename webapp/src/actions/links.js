@@ -39,6 +39,7 @@ export const addMenu = (options, callback) => (d, getState) => {
         if (type === 'note' && data && data.length) {
           d(a.main.note.create(orgId, data)).then((res) => {
             if (res && res.ok) {
+              d(a.main.note.show(res.id));
               addLinkAndCallback({
                 type: 'note',
                 name: 'swipes',
@@ -77,14 +78,14 @@ export const addMenu = (options, callback) => (d, getState) => {
   }));
 };
 
-export const preview = data => (dispatch) => {
+export const preview = data => (d) => {
   const att = data;
   if (att.get('name') === 'swipes' && att.get('type') === 'note') {
-    dispatch(a.main.note.show(att.get('id')));
+    d(a.main.note.show(att.get('id')));
   } else if (att.get('name') === 'swipes' && att.get('type') === 'url') {
-    dispatch(a.main.browser(att.get('id')));
+    d(a.main.browser(att.get('id')));
     // window.open(att.get('id'));
   } else if (att.get('shortUrl')) {
-    dispatch(a.main.preview(att.get('shortUrl')));
+    d(a.main.preview(att.get('shortUrl')));
   }
 };
