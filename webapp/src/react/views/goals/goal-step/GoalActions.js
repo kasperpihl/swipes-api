@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate, bindAll } from 'classes/utils';
+import { bindAll } from 'classes/utils';
 import Button from 'Button';
 
 class GoalActions extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate, this);
     bindAll(this, ['onHandoff', 'onCancel']);
   }
   componentDidMount() {
@@ -24,8 +23,8 @@ class GoalActions extends Component {
     }
   }
   renderStatus() {
-    const { status, showHandoff } = this.props;
-    if (!status || !showHandoff) {
+    const { status, isHandingOff } = this.props;
+    if (!status || !isHandingOff) {
       return undefined;
     }
     return (
@@ -33,8 +32,8 @@ class GoalActions extends Component {
     );
   }
   renderCancel() {
-    const { showHandoff } = this.props;
-    if (!showHandoff) {
+    const { isHandingOff } = this.props;
+    if (!isHandingOff) {
       return undefined;
     }
     return (
@@ -45,8 +44,8 @@ class GoalActions extends Component {
     );
   }
   renderHandoff() {
-    const { showHandoff } = this.props;
-    const title = showHandoff ? 'Complete Step' : 'Handoff';
+    const { isHandingOff } = this.props;
+    const title = isHandingOff ? 'Complete Step' : 'Handoff';
     return (
       <Button
         text={title}
@@ -71,7 +70,7 @@ export default GoalActions;
 const { string, func, bool } = PropTypes;
 
 GoalActions.propTypes = {
-  showHandoff: bool,
+  isHandingOff: bool,
   status: string,
   onHandoff: func,
   onCancel: func,

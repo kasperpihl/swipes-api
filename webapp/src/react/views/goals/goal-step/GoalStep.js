@@ -53,11 +53,7 @@ class GoalStep extends Component {
       </Section>
     );
   }
-  renderHandoffTextarea() {
-    return (
-      <HandoffTextarea />
-    );
-  }
+
 
   renderAttachments() {
     const helper = this.getHelper();

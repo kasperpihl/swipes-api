@@ -4,10 +4,16 @@ import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
-import { setupDelegate } from 'classes/utils';
-import ListMenu from 'components/list-menu/ListMenu';
-import GoalStep from './GoalStep';
+import { setupDelegate, bindAll } from 'classes/utils';
 
+import ListMenu from 'components/list-menu/ListMenu';
+import Section from 'components/section/Section';
+import HOCAttachments from 'components/attachments/HOCAttachments';
+import HandoffHeader from './HandoffHeader';
+import HandoffMessage from './HandoffMessage';
+import GoalActions from './GoalActions';
+
+import './styles/goal-step';
 
 class HOCGoalStep extends Component {
   static contextButtons() {
@@ -20,8 +26,9 @@ class HOCGoalStep extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { isHandingOff: false, handoffText: '' };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
@@ -53,82 +60,122 @@ class HOCGoalStep extends Component {
       },
     });
   }
-  getHelper() {
-    const { goal, me } = this.props;
-    return new GoalsUtil(goal, me.get('id'));
+  onCancel() {
+    this.setState({ isHandingOff: false });
   }
-
-  goalStepAddAttachment(obj) {
+  onHandoff() {
+    this.setState({ isHandingOff: true });
+  }
+  onHandoffChange(handoffText) {
+    this.setState({ handoffText });
+  }
+  onAddAttachment(obj) {
     const {
       addToCollection,
       goal,
     } = this.props;
     addToCollection(goal.get('id'), obj);
   }
-  goalStepSubmit(stepId, message) {
-    const { goal, submit, overlay } = this.props;
-
-    this.setState({ isSubmitting: true });
-    submit(goal.get('id'), stepId, message).then((didSubmit) => {
-      this.setState({ isSubmitting: false });
-      if (didSubmit) {
-        overlay({
-          component: 'Completed',
-          opaque: true,
-          props: {
-            onClose: () => {
-              console.log('closing the overlay, we should figure out how to animate progress here');
-            },
-          },
-        });
-      }
-    });
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
   }
-  generateHandoff() {
-    const {
-      users,
-    } = this.props;
-    const helper = this.getHelper();
-    const handOff = helper.getHandoffMessage();
-    let handoffObj;
-    if (handOff) {
-      const {
-        message,
-        by,
-      } = handOff;
-      const user = users.get(by);
 
-      if (user && message && message.length) {
-        handoffObj = {
-          message,
-          name: user.get('name'),
-          src: user.get('profile_pic'),
-        };
-        if (!handoffObj.src) {
-          handoffObj.svg = 'Person';
+  mapStepToHeader(step, subtitle, index) {
+    if (!step) {
+      return undefined;
+    }
+    return {
+      title: `${index}. ${step.get('title')}`,
+      subtitle,
+      assignees: step.get('assignees').toJS(),
+    };
+  }
+
+  renderHeader() {
+    const { isHandingOff } = this.state;
+    const helper = this.getHelper();
+    const fromIndex = helper.getCurrentStepIndex();
+    const from = this.mapStepToHeader(helper.getCurrentStep(), 'Current Step', fromIndex + 1);
+    const to = this.mapStepToHeader(helper.getNextStep(), 'Next step', fromIndex + 2);
+
+    return (
+      <HandoffHeader
+        from={from}
+        to={to}
+        onChangeClick={this.onChangeClick}
+        isHandingOff={isHandingOff}
+      />
+    );
+  }
+
+  renderHandoffMessage() {
+    const { me, users } = this.props;
+    let { handoffText, isHandingOff } = this.state;
+    let src = me.get('profile_pic');
+    let name;
+    if (!isHandingOff) {
+      const helper = this.getHelper();
+      const handOff = helper.getHandoffMessage();
+      if (handOff) {
+        handoffText = handOff.message;
+        const user = users.get(handOff.by);
+        if (user) {
+          name = user.get('name').split(' ')[0];
+          src = user.get('profile_pic');
         }
       }
     }
 
-    return handoffObj;
+    return (
+      <Section title={name ? `${name} wrote` : undefined}>
+        <HandoffMessage
+          onChange={this.onHandoffChange}
+          imgSrc={src}
+          disabled={!isHandingOff}
+          text={handoffText}
+        />
+      </Section>
+    );
   }
-  render() {
-    const {
-      me,
-      goal,
-    } = this.props;
-    const {
-      isSubmitting,
-    } = this.state;
+
+  renderAttachments() {
+    const { goal } = this.props;
 
     return (
-      <GoalStep
-        goal={goal}
-        handoff={this.generateHandoff()}
-        me={me}
-        isSubmitting={isSubmitting}
-        delegate={this}
-      />
+      <Section title="Attachments">
+        <HOCAttachments
+          attachments={goal.get('attachments')}
+          attachmentOrder={goal.get('attachment_order')}
+          delegate={this}
+        />
+      </Section>
+    );
+  }
+  renderActions() {
+    const { isHandingOff } = this.state;
+    return (
+      <Section>
+        <GoalActions
+          onCancel={this.onCancel}
+          onHandoff={this.onHandoff}
+          isHandingOff={isHandingOff}
+        />
+      </Section>
+    );
+  }
+
+  render() {
+    return (
+      <div className="goal-step">
+
+        <div className="goal-step__content">
+          {this.renderHeader()}
+          {this.renderHandoffMessage()}
+          {this.renderAttachments()}
+          {this.renderActions()}
+        </div>
+      </div>
     );
   }
 }

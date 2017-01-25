@@ -36,10 +36,11 @@ class HandoffMessage extends Component {
     );
   }
   render() {
+    const { imgSrc } = this.props;
     return (
       <div className="handoff-message">
         <div className="handoff-message__image">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/enda/128.jpg" />
+          <img src={imgSrc} role="presentation" />
         </div>
         {this.renderTextfield()}
       </div>
@@ -53,6 +54,7 @@ const { string, func, bool } = PropTypes;
 
 HandoffMessage.propTypes = {
   text: string,
+  imgSrc: string,
   disabled: bool,
   onChange: func,
 };
