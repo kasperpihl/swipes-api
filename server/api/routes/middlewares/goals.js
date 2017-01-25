@@ -128,7 +128,7 @@ const goalsDelete = valLocals('goalsDelete', {
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
       res.locals.eventType = 'goal_archived';
-      res.returnObj.id = goal_id;
+      res.locals.returnObj.id = goal_id;
 
       return next();
     })
@@ -150,8 +150,8 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
   dbGoalsUpdateSingle({ goal_id: id, properties })
     .then(() => {
       res.locals.eventType = 'goal_milestone_added';
-      res.returnObj.id = id;
-      res.returnObj.milestone_id = milestone_id;
+      res.locals.returnObj.id = id;
+      res.locals.returnObj.milestone_id = milestone_id;
 
       return next();
     })
@@ -214,7 +214,7 @@ const goalsUpdate = valLocals('goalsUpdate', {
     .then(() => {
       res.locals.eventType = 'goal_updated';
       res.locals.eventData = goal;
-      res.returnObj.goal = goal;
+      res.locals.returnObj.goal = goal;
 
       return next();
     })
