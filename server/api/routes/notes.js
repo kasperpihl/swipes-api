@@ -1,34 +1,40 @@
 import express from 'express';
 import {
-  validateNotesCreate,
-  validateNotesSave,
-} from '../validators/notes';
+  string,
+  bool,
+} from 'valjs';
 import {
   notesSave,
   notesCreate,
 } from './middlewares/notes';
+import {
+  valBody,
+  sendResponse,
+} from '../utils';
 
 const authed = express.Router();
 const notAuthed = express.Router();
 
 authed.all('/notes.create',
-  validateNotesCreate,
+  valBody({
+    title: string.require(),
+    organization_id: string.require(),
+    unlock: bool,
+  }),
   notesCreate,
-  (req, res) => {
-    const {
-      id,
-    } = res.locals;
-    return res.status(200).json({ ok: true, id });
-  },
+  sendResponse,
 );
 
-
 authed.all('/notes.save',
-  validateNotesSave,
+  valBody({
+    id: string.require(),
+    title: string.require(),
+    organization_id: string.require(),
+    text: string.require(),
+    unlock: bool,
+  }),
   notesSave,
-  (req, res) => {
-    return res.status(200).json({ ok: true });
-  },
+  sendResponse,
 );
 
 export {

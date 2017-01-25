@@ -1,9 +1,8 @@
 import express from 'express';
 import {
-  validateServicesAuthorize,
-  validateServicesRequest,
-  validateServicesAuthorizeSuccess,
-} from '../validators/services';
+  string,
+  object,
+} from 'valjs';
 import {
   serviceIdGet,
   serviceImport,
@@ -18,38 +17,52 @@ import {
   xendoRefreshSwipesToken,
   xendoAddServiceToUser,
 } from './middlewares/xendo';
+import {
+  valBody,
+  valResponseAndSend,
+  sendResponse,
+} from '../utils';
 
 const authed = express.Router();
 const notAuthed = express.Router();
 
 notAuthed.all('/services.authorize',
-  validateServicesAuthorize,
+  valBody({
+    service_name: string.require(),
+  }),
   serviceImport,
   serviceGetAuthUrl,
   (req, res) => {
     const {
-      authUrl,
+      returnObj,
     } = res.locals;
 
-    res.writeHead(302, { Location: authUrl });
+    res.writeHead(302, { Location: returnObj.authUrl });
     res.end();
   });
 
 authed.all('/services.request',
-  validateServicesRequest,
+  valBody({
+    service_name: string.require(),
+    account_id: string.require(),
+    method: object.as({
+      method: string.require(),
+      parameters: object.require(),
+    }),
+  }),
   serviceWithAuthGet,
   serviceImport,
   serviceDoRequest,
-  (req, res) => {
-    const {
-      service_request_result,
-    } = res.locals;
-
-    res.send({ ok: true, data: service_request_result });
-  });
+  // T_TODO Kasper fix this on client
+  valResponseAndSend({
+    result: object.require(),
+  }));
 
 authed.all('/services.authsuccess',
-  validateServicesAuthorizeSuccess,
+  valBody({
+    service_name: string.require(),
+    query: object.require(),
+  }),
   serviceIdGet,
   serviceImport,
   serviceGetAuthData,
@@ -57,9 +70,8 @@ authed.all('/services.authsuccess',
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoAddServiceToUser,
-  (req, res) => {
-    res.send({ ok: true });
-  });
+  sendResponse,
+);
 
 export {
   notAuthed,

@@ -99,6 +99,7 @@ const initGetData = valLocals('initGetData', {
       };
 
       res.locals.initData = response;
+      res.locals.returnObj = response;
 
       return next();
     })

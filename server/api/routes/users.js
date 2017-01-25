@@ -4,13 +4,9 @@ import {
 } from 'valjs';
 import {
   valBody,
+  sendResponse,
+  valResponseAndSend,
 } from '../utils';
-import {
-  validateSignUp,
-} from '../validators/users';
-import {
-  validateGetServiceFromUser,
-} from '../validators/services';
 import {
   userAvailability,
   userAddToOrganization,
@@ -39,34 +35,37 @@ notAuthed.all('/users.signin',
     password: string.min(1).require(),
   }),
   userSignIn,
-  (req, res, next) => {
-    const {
-    token,
-  } = res.locals;
-
-    res.status(200).json({ ok: true, token });
-  });
+  valResponseAndSend({
+    token: string.require(),
+  }));
 
 notAuthed.all('/users.signup',
-  validateSignUp,
+  valBody({
+    email: string.format('email').require(),
+    password: string.min(1).require(),
+    name: string.max(32).require(),
+    organization: string.max(64).require(),
+    // T_TODO Kasper send client side invitation_code not invitationCode
+    invitation_code: string.custom((value) => {
+      return value.startsWith('SW319-') ? null : 'Invalid invitation code';
+    }).require(),
+  }),
   userAvailability,
   userAddToOrganization,
   userSignUp,
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoUserSignUp,
-  (req, res, next) => {
-    const {
-      user_id,
-      token,
-    } = res.locals;
-
-    res.status(200).json({ ok: true, userId: user_id, token });
-  },
-);
+  // K_TODO response will be user_id, token not userId, token
+  valResponseAndSend({
+    user_id: string.require(),
+    token: string.require(),
+  }));
 
 authed.post('/users.serviceDisconnect',
-  validateGetServiceFromUser,
+  valBody({
+    account_id: string.require(),
+  }),
   usersGetService,
   usersCleanupRegisteredWebhooksToService,
   usersGetXendoServiceId,
@@ -75,18 +74,16 @@ authed.post('/users.serviceDisconnect',
   xendoRemoveServiceFromUser,
   usersRemoveXendoService,
   usersRemoveService,
-  (req, res, next) => {
-    return res.status(200).json({ ok: true });
-  });
+  sendResponse,
+);
 
 // T_TODO
 // that's a hack that we will remove Sunday
 // DELETE THIS AS SOON AS POSSIBLE
 authed.post('/users.profilePic',
   usersUpdateProfilePic,
-  (req, res, next) => {
-    return res.status(200).json({ ok: true });
-  });
+  sendResponse,
+);
 
 export {
   notAuthed,

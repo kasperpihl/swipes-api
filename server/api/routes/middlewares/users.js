@@ -126,6 +126,10 @@ const userSignUp = (req, res, next) => {
   return db.rethinkQuery(createUserQ)
     .then(() => {
       res.locals.token = token;
+      res.locals.returnObj = {
+        user_id,
+        token,
+      };
 
       return next();
     }).catch((err) => {
@@ -134,7 +138,7 @@ const userSignUp = (req, res, next) => {
 };
 const userSignIn = valLocals('userSignIn', {
   email: string.format('email').require(),
-  password: string.require(),
+  password: string.min(1).require(),
 }, (req, res, next) => {
   const {
     email,
@@ -168,6 +172,7 @@ const userSignIn = valLocals('userSignIn', {
       }, config.get('jwtTokenSecret'));
 
       res.locals.token = token;
+      res.locals.returnObj.token = token;
 
       return next();
     }).catch((err) => {
