@@ -1,83 +1,65 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.sw-assign {
+.assignees {
   $b: &;
+  @include size(auto, 30px);
 
-  @include size(36px);
-  @include flex();
-  @include flex(none);
-  position: relative;
-  z-index: 1;
-  border-radius: 50%;
-  border: 1px solid $deepBlue-10;
+  &__profiles {
+    @include flex(flex);
+  }
 
-  &:hover {
-    z-index: 99;
+  &__profile {
+    @include size(30px);
+    border-radius: 6px;
 
-    #{$b}__overlay {
-      background-color: rgba($deepBlue-100, .9);
-      transition: .1s;
+    &:not(:last-child) {
+      margin-right: 3px;
     }
 
-    #{$b}__tooltip {
-      display: block;
+    &--image {
+
+      img {
+        @include size(30px);
+        border-radius: 6px;
+      }
     }
-  }
 
-  &__profile-image {
-    @include size(24px);
-    border-radius: 50%;
-  }
-
-  &__overlay {
-    @include size(34px);
-    @include flex();
-    background-color: rgba($deepBlue-100, .4);
-    border-radius: 50%;
-    color: $bg;
-    font-size: 13px;
-    left: 0; top: 0;
-    position: absolute;
-    transition: .1s;
-  }
-
-  &__tooltip {
-    @include flex(flex-start, flex-start, column);
-    @include size(150px, auto);
-    background-color: $deepBlue-80;
-    display: none;
-    left: 0; bottom: 0;
-    position: absolute;
-    transform: translateY(calc(100% + 12px)) translateX(calc(-100% + 36px));
-
-    &:after {
-      @include size(12px);
-      background-color: $deepBlue-80;
-      content: '';
-      position: absolute;
-      right: 9px; top: -6px;
-      transform: rotate(45deg);
+    &--name {
+      @include flex();
+      @include font(12px, $bg, 18px, bold);
+      background-color: $deepBlue-90;
+      text-transform: uppercase;
     }
-  }
 
-  &__name {
-    @include size(150px, auto);
-    padding: 9px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 12px;
-    color: $bg;
+    &--more {
+      @include flex();
+      @include font(12px, $deepBlue-70, 18px, 500);
+      border: 1px solid $deepBlue-10;
+    }
   }
 
   &__assign {
-    @include size();
+    @include size(30px);
     @include flex();
+    border: 1px solid $deepBlue-10;
+    border-radius: 6px;
+    transition: .15s ease;
+
+    &:hover {
+      background-color: $deepBlue-70;
+      transition: .15s ease;
+
+      #{$b}__icon {
+        @include svg-color($bg);
+        transition: .15s ease;
+      }
+    }
   }
 
   &__icon {
     @include size(24px);
-    fill: $deepBlue-60;
+    @include svg-color($deepBlue-70);
+    transition: .15s ease;
   }
 }

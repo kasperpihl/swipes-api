@@ -11,21 +11,20 @@ class Assigning extends Component {
     this.state = {};
     bindAll(this, ['handleClick']);
   }
-  componentDidMount() {
-  }
   handleClick(e) {
     const { onClick } = this.props;
     e.stopPropagation();
+
     if (onClick) {
       onClick(e);
     }
   }
   renderIcon(icon) {
-    return <Icon svg={icon} className="sw-assign__icon" />;
+    return <Icon svg={icon} className="assignees__icon" />;
   }
   renderAddAssignees() {
     return (
-      <div className="sw-assign__assign">
+      <div className="assignees__assign">
         {this.renderIcon('Person')}
       </div>
     );
@@ -37,57 +36,44 @@ class Assigning extends Component {
       return this.renderAddAssignees();
     }
 
-    let profileImage = '';
-    assignees.forEach((assignee) => {
-      const pic = assignee.get('profile_pic');
-      if (pic) {
-        profileImage = pic;
-        if (me.get('id') === assignee.get('id')) {
-          return false;
+    const renderPeople = assignees.map((a, i) => {
+      const pic = a.get('profile_pic');
+      const firstLetter = a.get('name').charAt(0);
+
+      if (i <= 2) {
+        if (pic) {
+          return (
+            <div className="assignees__profile assignees__profile--image" key={i}>
+              <img src={pic} alt="" />
+            </div>
+          );
+        } else {
+          return (
+            <div className="assignees__profile assignees__profile--name" key={i}>
+              {firstLetter}
+            </div>
+          );
         }
       }
-      return true;
     });
 
-    if (!profileImage.length) {
-      return this.renderIcon('Person');
-    }
+    let morePeople;
 
-    return <img className="sw-assign__profile-image" src={profileImage} role="presentation" />;
-  }
-  renderOverlay() {
-    const { assignees } = this.props;
-
-    if (!assignees || assignees.size < 2) {
-      return undefined;
+    if (assignees.size > 3) {
+      morePeople = <div className="assignees__profile assignees__profile--more">+{assignees.size - 3}</div>;
     }
 
     return (
-      <div className="sw-assign__overlay">{`+${assignees.size - 1}`}</div>
-    );
-  }
-  renderTooltip() {
-    const { assignees } = this.props;
-    let tooltip;
-
-    if (assignees.size < 1) {
-      tooltip = <div className="sw-assign__name">No one is assigned</div>;
-    } else {
-      tooltip = assignees.map((assignee, i) => <div className="sw-assign__name" key={`assignee-${i}`}>{assignee.get('name')}</div>);
-    }
-
-    return (
-      <div className="sw-assign__tooltip" >
-        {tooltip}
+      <div className="assignees__profiles">
+        {morePeople}
+        {renderPeople}
       </div>
     );
   }
   render() {
     return (
-      <div className="sw-assign" onClick={this.handleClick}>
+      <div className="assignees" onClick={this.handleClick}>
         {this.renderAssignees()}
-        {this.renderOverlay()}
-        {this.renderTooltip()}
       </div>
     );
   }
