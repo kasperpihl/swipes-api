@@ -67,7 +67,7 @@ class AddStepList extends Component {
           <input
             ref={`input${i}`}
             className="step__title"
-            placeholder={'Add Step'}
+            placeholder={'Add a Step'}
             value={step.get('title')}
             onChange={this.onChangeCached(i)}
           />

@@ -16,6 +16,19 @@ class GoalSide extends Component {
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
+    const styles = {};
+
+    const progressLength = 100 - ((numberOfCompleted * 100) / totalSteps);
+    styles.WebkitClipPath = `inset(0 ${Math.min(97, progressLength)}% 0 0)`;
+
+    return (
+      <div className="goal-side__progress-bar">
+        <div className="progress-bar">
+          <div className="progress-bar__fill" style={styles} />
+          <div className="progress-bar__status">{numberOfCompleted}/{totalSteps} steps</div>
+        </div>
+      </div>
+    );
   }
   renderStepList() {
     const helper = this.getHelper();
@@ -27,7 +40,6 @@ class GoalSide extends Component {
     );
   }
   render() {
-    console.log('props', this.props.goal.toJS());
     return (
       <div className="goal-side">
         {this.renderProgress()}

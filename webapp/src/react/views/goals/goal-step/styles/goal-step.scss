@@ -5,8 +5,9 @@
   $b: &;
 
   @include size(100%);
-  @include flex(flex);
+  @include flex(flex-start, space-between);
   min-width: 450px;
+  max-width: 780px + 253px + 150px;
   background-color: $bg;
   position: relative;
   overflow-y: auto;
@@ -109,6 +110,40 @@
   }
 
   &__side {
+    @include size(253px, auto);
     @include flex(none);
+
+    @media (max-width: 1200px) {
+      display: none;
+    }
+  }
+}
+
+.goal-side {
+  @include size(100%, auto);
+
+  &__progress-bar {
+    @include size(100%, auto);
+    padding-bottom: 36px;
+    position: relative;
+
+    .progress-bar {
+      @include size(100%, 10px);
+      border-top: 1px solid $deepBlue-20;
+      border-bottom: 1px solid $deepBlue-20;
+
+      &__fill {
+        @include size(100%, 6px);
+        background-color: $deepBlue-100;
+        margin-top: 1px;
+      }
+
+      &__status {
+        @include font(10px, $deepBlue-60, 12px, bold);
+        position: absolute;
+        right: 0; top: 19px;
+        text-transform: uppercase;
+      }
+    }
   }
 }
