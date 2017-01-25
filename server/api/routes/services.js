@@ -53,8 +53,6 @@ authed.all('/services.request',
   serviceWithAuthGet,
   serviceImport,
   serviceDoRequest,
-  // K_TODO fix this on client
-  // it was {data: service_requst_response} or something...
   valResponseAndSend({
     result: object.require(),
   }));

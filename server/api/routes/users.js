@@ -45,7 +45,6 @@ notAuthed.all('/users.signup',
     password: string.min(1).require(),
     name: string.max(32).require(),
     organization: string.max(64).require(),
-    // K_TODO send client side invitation_code not invitationCode
     invitation_code: string.custom((value) => {
       return value.startsWith('SW319-') ? null : 'Invalid invitation code';
     }).require(),
@@ -56,7 +55,6 @@ notAuthed.all('/users.signup',
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoUserSignUp,
-  // K_TODO response will be user_id, token not userId, token
   valResponseAndSend({
     user_id: string.require(),
     token: string.require(),

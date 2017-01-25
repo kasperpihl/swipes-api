@@ -38,8 +38,8 @@ class HOCBrowse extends Component {
         },
       },
     }).then((res) => {
-      if (res && res.ok && res.data) {
-        this.updateCacheAtPath(path, this.mapResults(res.data.entries));
+      if (res && res.ok && res.result) {
+        this.updateCacheAtPath(path, this.mapResults(res.result.entries));
       }
     });
   }
@@ -70,12 +70,12 @@ class HOCBrowse extends Component {
         },
       },
     }).then((res) => {
-      if (res && res.data && res.data.link) {
-        console.log(res.data);
+      if (res && res.result && res.result.link) {
+        console.log(res.result);
         const dropboxFolder = localStorage.getItem('dropbox-folder');
-        const fullFilePath = dropboxFolder + res.data.metadata.path_display;
+        const fullFilePath = dropboxFolder + res.result.metadata.path_display;
         const type = 'application/pdf';
-        const link = res.data.link;
+        const link = res.result.link;
         const buttons = [];
         const newData = {
           type: null,
@@ -109,14 +109,14 @@ class HOCBrowse extends Component {
 
         newData.actions = buttons;
 
-        // const path = res.data.metadata.path_display;
+        // const path = res.result.metadata.path_display;
 
         if (['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1) {
-          newData.img = res.data.link;
+          newData.img = res.result.link;
           newData.type = 'image';
         }
         if (['application/pdf'].indexOf(type) > -1) {
-          newData.pdf = res.data.link;
+          newData.pdf = res.result.link;
           newData.type = 'pdf';
         }
         loadModal('preview', newData, () => {

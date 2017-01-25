@@ -64,23 +64,13 @@ class HOCAttachments extends Component {
     return html;
   }
   renderAddAttachments() {
-    if (this.hasAttachments()) {
-      return (
-        <Button
-          icon="Plus"
-          onClick={this.onAdd}
-          className="attachments__add"
-        />
-      );
-    } else {
-      return (
-        <div className="attachments__add-list">
-          <button className="attachments__add-item">Add URL</button>
-          <button className="attachments__add-item">New Note</button>
-          <button className="attachments__add-item">Find</button>
-        </div>
-      );
-    }
+    return (
+      <div className="attachments__add-list">
+        <button className="attachments__add-item">Add URL</button>
+        <button className="attachments__add-item">New Note</button>
+        <button className="attachments__add-item">Find</button>
+      </div>
+    );
   }
   render() {
     return (
