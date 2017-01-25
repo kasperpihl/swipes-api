@@ -199,6 +199,9 @@ class NoteEditor extends Component {
 
     return false;
   }
+  focus() {
+    this.refs.editor.focus();
+  }
 
   renderStyleControls() {
     const { hasSelected, styleControl } = this.state;
