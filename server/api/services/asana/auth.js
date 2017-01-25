@@ -1,8 +1,8 @@
 import createClient from './utils';
-import {
-  unsubscribeFromAllWebhooks,
-  subscribeToAllWebhooks,
-} from './webhooks';
+// import {
+//   unsubscribeFromAllWebhooks,
+//   subscribeToAllWebhooks,
+// } from './webhooks';
 
 const authUrl = (data, callback) => {
   const client = createClient();
@@ -16,7 +16,7 @@ const authUrl = (data, callback) => {
 const authData = (data, callback) => {
   const {
     query,
-    user_id,
+    //user_id,
   } = data;
   const client = createClient();
   const code = query.code;
@@ -35,14 +35,15 @@ const authData = (data, callback) => {
 
       authDataResponse = { auth_data, id, show_name };
 
-      return unsubscribeFromAllWebhooks({ auth_data, user_id });
-    })
-    .then(() => {
-      return subscribeToAllWebhooks({ auth_data, user_id, accountId: id });
-    })
-    .then(() => {
       return callback(null, authDataResponse);
+      // return unsubscribeFromAllWebhooks({ auth_data, user_id });
     })
+    // .then(() => {
+    //   return subscribeToAllWebhooks({ auth_data, user_id, accountId: id });
+    // })
+    // .then(() => {
+    //   return callback(null, authDataResponse);
+    // })
     .catch((error) => {
       console.log(error);
       callback(error);

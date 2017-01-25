@@ -22,7 +22,7 @@ app.use(cors({
 app.use('/workflows', express.static(`${__dirname}/../workflows`));
 
 // Webhooks route
-app.use('/webhooks', bodyParser.raw({ type: 'application/json' }), routes.webhooksNotAuthed);
+app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed*/);
 
 // Everything for v1 path is parsed as json
 app.use('/v1', bodyParser.json(), handleJsonError);
