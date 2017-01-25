@@ -14,6 +14,9 @@ class HandoffMessage extends Component {
     const { onChange } = this.props;
     onChange(e.target.value);
   }
+  focus() {
+    this.refs.textarea.focus();
+  }
   renderTextfield() {
     const { text, disabled } = this.props;
     let className = 'handoff-message__textarea';
