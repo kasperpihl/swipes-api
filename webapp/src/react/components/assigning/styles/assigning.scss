@@ -4,13 +4,16 @@
 .assignees {
   $b: &;
   @include size(auto, 30px);
+  @include flex(none);
 
   &__profiles {
     @include flex(flex);
+    @include flex(none);
   }
 
   &__profile {
     @include size(30px);
+    @include flex(none);
     border-radius: 6px;
 
     &:not(:last-child) {
@@ -41,6 +44,7 @@
 
   &__assign {
     @include size(30px);
+    @include flex(none);
     @include flex();
     border: 1px solid $deepBlue-10;
     border-radius: 6px;
