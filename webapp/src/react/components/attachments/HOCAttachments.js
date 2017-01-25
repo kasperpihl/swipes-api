@@ -46,7 +46,7 @@ class HOCAttachments extends Component {
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
-      alignX: 'right',
+      alignX: 'center',
     };
     const callback = (obj) => {
       this.callDelegate('onAddAttachment', obj);

@@ -28,6 +28,9 @@ export default function goalsReducer(state = initialState, action) {
     case 'step_completed': {
       return state.mergeIn([payload.data.id], fromJS(payload.data));
     }
+    case 'goals.update': {
+      return state.mergeIn([payload.goal.id], fromJS(payload.goal));
+    }
     case 'goals.create':
     case 'goal_created': {
       return state.set(payload.data.id, fromJS(payload.data));
