@@ -1,7 +1,11 @@
 import hash from 'object-hash';
 import {
+  string,
+  array,
+  object,
+} from 'valjs';
+import {
   findLinkPermissionsById,
-  // findLinkByChecksum,
   findLinksFromIds,
   addPermissionsToALink,
   createLink,
@@ -9,8 +13,13 @@ import {
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
+import {
+  valLocals,
+} from '../../utils';
 
-const linksGetByIds = (req, res, next) => {
+const linksGetByIds = valLocals('linksGetByIds', {
+  ids: array.of(string).require(),
+}, (req, res, next) => {
   const {
     ids,
   } = res.locals;
@@ -22,9 +31,11 @@ const linksGetByIds = (req, res, next) => {
     res.locals.returnObj.links = mappedLinks;
     return next();
   });
-};
+});
 // T_TODO optimize that
-const linksGetById = (req, res, next) => {
+const linksGetById = valLocals('linksGetById', {
+  short_url: string.require(),
+}, (req, res, next) => {
   const {
     short_url,
   } = res.locals;
@@ -40,13 +51,12 @@ const linksGetById = (req, res, next) => {
 
     return next();
   });
-};
-const linksFindPermissions = (req, res, next) => {
+});
+const linksFindPermissions = valLocals('linksFindPermissions', {
+  short_url: string.require(),
+}, (req, res, next) => {
   const {
-    // user_id,
     short_url,
-    // checksum,
-    // permission,
   } = res.locals;
 
   if (short_url) {
@@ -66,27 +76,13 @@ const linksFindPermissions = (req, res, next) => {
         return next(err);
       });
   }
+});
 
-  // if (checksum) {
-  //   findLinkByChecksum(checksum)
-  //     .then((result) => {
-  //       if (result) {
-  //         res.locals.permission = Object.assign({}, { user_id }, permission);
-  //         res.locals.checksum = result.checksum;
-  //         res.locals.meta = result.meta;
-  //
-  //         return next();
-  //       }
-  //
-  //       return next(new SwipesError('There is no link with that checksum'));
-  //     })
-  //     .catch((err) => {
-  //       return next(err);
-  //     });
-  // }
-};
-
-const linksAddPermission = (req, res, next) => {
+const linksAddPermission = valLocals('linksAddPermission', {
+  user_id: string.require(),
+  checksum: string.require(),
+  permission: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     permission,
@@ -102,9 +98,12 @@ const linksAddPermission = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
+});
 
-const linksCreate = (req, res, next) => {
+const linksCreate = valLocals('linksCreate', {
+  service: object.require(),
+  meta: object.require(),
+}, (req, res, next) => {
   const {
     service,
     meta,
@@ -125,7 +124,7 @@ const linksCreate = (req, res, next) => {
     .catch((error) => {
       return next(error);
     });
-};
+});
 
 export {
   linksFindPermissions,

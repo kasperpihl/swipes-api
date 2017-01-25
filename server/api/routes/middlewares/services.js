@@ -1,3 +1,7 @@
+import {
+  string,
+  object,
+} from 'valjs';
 import * as services from '../../services';
 import {
   getServiceByManifestId,
@@ -9,11 +13,18 @@ import {
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
+import {
+  valLocals,
+} from '../../utils';
 
-const serviceIdGet = (req, res, next) => {
-  const serviceName = res.locals.service_name;
+const serviceIdGet = valLocals('serviceIdGet', {
+  service_name: string.require(),
+}, (req, res, next) => {
+  const {
+    service_name,
+  } = res.locals;
 
-  getServiceByManifestId(serviceName)
+  getServiceByManifestId(service_name)
     .then((service) => {
       if (!service) {
         return next(new SwipesError('Service not found'));
@@ -26,8 +37,12 @@ const serviceIdGet = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const serviceWithAuthGet = (req, res, next) => {
+});
+const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
+  user_id: string.require(),
+  service_name: string.require(),
+  account_id: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service_name,
@@ -49,8 +64,10 @@ const serviceWithAuthGet = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const serviceWithAuthFromLinkGet = (req, res, next) => {
+});
+const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
+  link_with_permission: object.require(),
+}, (req, res, next) => {
   const {
     link_with_permission,
   } = res.locals;
@@ -73,8 +90,10 @@ const serviceWithAuthFromLinkGet = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const serviceImport = (req, res, next) => {
+});
+const serviceImport = valLocals('serviceImport', {
+  service_name: string.require(),
+}, (req, res, next) => {
   const {
     service_name,
   } = res.locals;
@@ -86,8 +105,10 @@ const serviceImport = (req, res, next) => {
   }
 
   return next(new SwipesError('Service not found'));
-};
-const serviceGetAuthUrl = (req, res, next) => {
+});
+const serviceGetAuthUrl = valLocals('serviceGetAuthUrl', {
+  service: object.require(),
+}, (req, res, next) => {
   const {
     service,
   } = res.locals;
@@ -101,8 +122,13 @@ const serviceGetAuthUrl = (req, res, next) => {
 
     return next();
   });
-};
-const serviceDoRequest = (req, res, next) => {
+});
+const serviceDoRequest = valLocals('serviceDoRequest', {
+  user_id: string.require(),
+  service_auth_data: object.require(),
+  service: object.require(),
+  data: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service_auth_data,
@@ -127,13 +153,16 @@ const serviceDoRequest = (req, res, next) => {
 
     return next();
   });
-};
-const servicePreview = (req, res, next) => {
+});
+const servicePreview = valLocals('servicePreview', {
+  service_auth_data: object.require(),
+  service: object.require(),
+  link_with_permission: object.require(),
+}, (req, res, next) => {
   const {
     service_auth_data,
     service,
     link_with_permission,
-    // meta,
   } = res.locals;
 
   const options = {
@@ -152,8 +181,14 @@ const servicePreview = (req, res, next) => {
 
     return next();
   });
-};
-const servicePreviewFind = (req, res, next) => {
+});
+const servicePreviewFind = valLocals('servicePreviewFind', {
+  user_id: string.require(),
+  service_auth_data: object.require(),
+  service_item_id: string.require(),
+  service_type: string.require(),
+  service: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service_auth_data,
@@ -178,8 +213,14 @@ const servicePreviewFind = (req, res, next) => {
 
     return next();
   });
-};
-const serviceGetAuthData = (req, res, next) => {
+});
+const serviceGetAuthData = valLocals('serviceGetAuthData', {
+  user_id: string.require(),
+  service_name: string.require(),
+  service_id: string.require(),
+  query: object.require(),
+  service: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     service_name,
@@ -220,8 +261,11 @@ const serviceGetAuthData = (req, res, next) => {
 
     return next();
   });
-};
-const serviceUpdateAuthData = (req, res, next) => {
+});
+const serviceUpdateAuthData = valLocals('serviceUpdateAuthData', {
+  user_id: string.require(),
+  serviceToAppend: object.require(),
+}, (req, res, next) => {
   const {
     user_id,
     serviceToAppend,
@@ -234,7 +278,7 @@ const serviceUpdateAuthData = (req, res, next) => {
     .catch((error) => {
       return next(error);
     });
-};
+});
 
 export {
   serviceIdGet,

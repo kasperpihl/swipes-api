@@ -28,7 +28,10 @@ import {
   dbXendoRemoveService,
 } from './db_utils/xendo';
 
-const userAvailability = (req, res, next) => {
+const userAvailability = valLocals('userAvailability', {
+  email: string.format('email').require(),
+  name: string.require(),
+}, (req, res, next) => {
   const {
     email,
     name,
@@ -55,8 +58,10 @@ const userAvailability = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const userAddToOrganization = (req, res, next) => {
+});
+const userAddToOrganization = valLocals('userAddToOrganization', {
+  organization: object.require(),
+}, (req, res, next) => {
   const {
     organization,
   } = res.locals;
@@ -99,8 +104,14 @@ const userAddToOrganization = (req, res, next) => {
     .catch((err) => {
       return next(err);
     });
-};
-const userSignUp = (req, res, next) => {
+});
+const userSignUp = valLocals('userSignUp', {
+  user_id: string.require(),
+  email: string.format('email').require(),
+  name: string.require(),
+  password: string.min(1).require(),
+  organizationId: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     email,
@@ -135,7 +146,7 @@ const userSignUp = (req, res, next) => {
     }).catch((err) => {
       return next(err);
     });
-};
+});
 const userSignIn = valLocals('userSignIn', {
   email: string.format('email').require(),
   password: string.min(1).require(),

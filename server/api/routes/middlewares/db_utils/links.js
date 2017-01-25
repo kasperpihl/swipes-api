@@ -11,11 +11,6 @@ const findLinkPermissionsById = (shortUrl) => {
 
   return db.rethinkQuery(q);
 };
-const findLinkByChecksum = (checksum) => {
-  const q = r.table('links').get(checksum);
-
-  return db.rethinkQuery(q);
-};
 const findLinksFromIds = (shareIds) => {
   const q =
     r.db('swipes').table('links_permissions')
@@ -70,7 +65,6 @@ const createLink = ({ meta, insert_doc }) => {
 
 export {
   findLinkPermissionsById,
-  findLinkByChecksum,
   findLinksFromIds,
   addPermissionsToALink,
   createLink,

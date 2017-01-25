@@ -1,29 +1,18 @@
 import {
+  string,
+  array,
+  object,
+} from 'valjs';
+import {
   commonMultipleEvents,
 } from './db_utils/events';
+import {
+  valLocals,
+} from '../../utils';
 
-const notifyAllInGoal = (req, res, next) => {
-  const {
-    goal,
-  } = res.locals;
-
-  const assignees = [];
-  const steps = goal.steps;
-
-  steps.forEach((step) => {
-    step.assignees.forEach((assignee) => {
-      assignees.push(assignee);
-    });
-  });
-
-  const uniqueUsersToNotify = Array.from(new Set(assignees));
-
-  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
-
-  return next();
-};
-
-const notifyAllInCompany = (req, res, next) => {
+const notifyAllInCompany = valLocals('notifyAllInCompany', {
+  user: object.require(),
+}, (req, res, next) => {
   const {
     user,
   } = res.locals;
@@ -40,25 +29,26 @@ const notifyAllInCompany = (req, res, next) => {
   res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
 
   return next();
-};
+});
 
-const notifyCommonRethinkdb = (req, res, next) => {
+const notifyCommonRethinkdb = valLocals('notifyCommonRethinkdb', {
+  uniqueUsersToNotify: array.of(string).require(),
+  eventType: string.require(),
+  eventData: object.require(),
+}, (req, res, next) => {
   const {
     uniqueUsersToNotify,
     eventType,
-    eventMessage,
     eventData,
   } = res.locals;
 
   const date = new Date();
   const type = eventType;
-  const message = eventMessage || '';
 
   const objToInsert = {
     user_ids: uniqueUsersToNotify,
     date,
     type,
-    message,
     data: eventData,
   };
 
@@ -67,13 +57,11 @@ const notifyCommonRethinkdb = (req, res, next) => {
       return next();
     })
     .catch((err) => {
-      console.log(err);
       return next(err);
     });
-};
+});
 
 export {
-  notifyAllInGoal,
   notifyAllInCompany,
   notifyCommonRethinkdb,
 };

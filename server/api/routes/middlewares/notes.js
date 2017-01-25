@@ -1,12 +1,22 @@
 import r from 'rethinkdb';
 import {
+  string,
+  bool,
+  object,
+} from 'valjs';
+import {
   dbNotesInsert,
 } from './db_utils/notes';
 import {
   generateSlackLikeId,
+  valLocals,
 } from '../../utils';
 
-const notesCreate = (req, res, next) => {
+const notesCreate = valLocals('notesCreate', {
+  user_id: string.require(),
+  organization_id: string.require(),
+  title: string.require(),
+}, (req, res, next) => {
   const {
     user_id,
     organization_id,
@@ -32,8 +42,14 @@ const notesCreate = (req, res, next) => {
   .catch((err) => {
     return next(err);
   });
-};
-const notesSave = (req, res, next) => {
+});
+const notesSave = valLocals('notesSave', {
+  user_id: string.require(),
+  organization_id: string.require(),
+  id: string.require(),
+  text: object.require(),
+  unlock: bool,
+}, (req, res, next) => {
   const {
     user_id,
     organization_id,
@@ -60,7 +76,7 @@ const notesSave = (req, res, next) => {
   .catch((err) => {
     return next(err);
   });
-};
+});
 
 export {
   notesCreate,
