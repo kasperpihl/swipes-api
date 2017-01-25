@@ -11,6 +11,7 @@ import Section from 'components/section/Section';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
+import HandoffWriteMessage from './HandoffWriteMessage';
 import GoalActions from './GoalActions';
 import GoalSide from './GoalSide';
 
@@ -128,33 +129,44 @@ class HOCGoalStep extends Component {
       />
     );
   }
-
-  renderHandoffMessage() {
-    const { me, users } = this.props;
-    let { handoffText, isHandingOff } = this.state;
-    let src = me.get('profile_pic');
-    let name;
+  renderHandoffWriteMessage() {
+    const { me } = this.props;
+    const { handoffText, isHandingOff } = this.state;
     if (!isHandingOff) {
-      const helper = this.getHelper();
-      const handOff = helper.getHandoffMessage();
-      if (handOff) {
-        handoffText = handOff.message;
-        const user = users.get(handOff.by);
-        if (user) {
-          name = user.get('name').split(' ')[0];
-          src = user.get('profile_pic');
-        }
-      }
+      return undefined;
     }
-
+    const src = me.get('profile_pic');
     return (
-      <Section title={name ? `${name} wrote` : undefined}>
-        <HandoffMessage
+      <Section title="Write handoff">
+        <HandoffWriteMessage
           ref="handoffMessage"
           onChange={this.onHandoffChange}
           imgSrc={src}
           disabled={!isHandingOff}
           text={handoffText}
+        />
+      </Section>
+    );
+  }
+  renderHandoffMessage() {
+    const { me, users } = this.props;
+    const { handoffText, isHandingOff } = this.state;
+    const helper = this.getHelper();
+    const handOff = helper.getHandoffMessage();
+    if (isHandingOff || !handOff) {
+      return undefined;
+    }
+
+    const text = handOff.message;
+    const user = users.get(handOff.by);
+    const at = handOff.at;
+
+    return (
+      <Section title="Handoff">
+        <HandoffMessage
+          user={user}
+          message={text}
+          at={at}
         />
       </Section>
     );
@@ -209,6 +221,7 @@ class HOCGoalStep extends Component {
           {this.renderHeader()}
           {this.renderHandoffMessage()}
           {this.renderAttachments()}
+          {this.renderHandoffWriteMessage()}
           {this.renderActions()}
         </div>
 

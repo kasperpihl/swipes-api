@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
-.handoff-message {
+.handoff-write-message {
   @include size(100%, auto);
   @include flex(flex);
   max-width: 780px;

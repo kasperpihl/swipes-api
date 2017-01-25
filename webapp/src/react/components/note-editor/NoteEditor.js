@@ -52,7 +52,6 @@ class NoteEditor extends Component {
       'blockRender',
       'keyBindingFn',
       'updateBlockMetadata',
-      'handleBeforeInput',
     ]);
 
     const blockRenderMap = Immutable.Map({

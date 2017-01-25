@@ -1,63 +1,37 @@
 import React, { Component, PropTypes } from 'react';
-import ReactTextarea from 'react-textarea-autosize';
-
-import './styles/handoff-message.scss';
+import { map } from 'react-immutable-proptypes';
 
 class HandoffMessage extends Component {
   constructor(props) {
     super(props);
-    this.onHandoffChange = this.onHandoffChange.bind(this);
+    this.state = {};
   }
   componentDidMount() {
   }
-  onHandoffChange(e) {
-    const { onChange } = this.props;
-    onChange(e.target.value);
-  }
-  focus() {
-    this.refs.textarea.focus();
-  }
-  renderTextfield() {
-    const { text, disabled } = this.props;
-    let className = 'handoff-message__textarea';
 
-    if (disabled) {
-      className += ' handoff-message__textarea--disabled';
-    }
-
-    return (
-      <ReactTextarea
-        className={className}
-        value={text}
-        disabled={disabled}
-        minRows={1}
-        maxRows={6}
-        ref="textarea"
-        onChange={this.onHandoffChange}
-        placeholder="What message should be passed on to them?"
-      />
-    );
-  }
   render() {
-    const { imgSrc } = this.props;
+    const {
+      user,
+      message,
+      at,
+    } = this.props;
+    let name;
+    let src;
+    if (user) {
+      name = user.get('name').split(' ')[0];
+      src = user.get('profile_pic');
+    }
     return (
-      <div className="handoff-message">
-        <div className="handoff-message__image">
-          <img src={imgSrc} role="presentation" />
-        </div>
-        {this.renderTextfield()}
-      </div>
+      <div className="handoff-message" />
     );
   }
 }
 
 export default HandoffMessage;
 
-const { string, func, bool } = PropTypes;
+const { string } = PropTypes;
 
 HandoffMessage.propTypes = {
-  text: string,
-  imgSrc: string,
-  disabled: bool,
-  onChange: func,
+  user: map,
+  message: string,
 };
