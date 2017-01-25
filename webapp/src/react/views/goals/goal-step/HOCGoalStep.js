@@ -186,7 +186,10 @@ class HOCGoalStep extends Component {
     );
   }
   renderSide() {
-    const { goal, me } = this.props;
+    const { goal, me, sideNoteId } = this.props;
+    if (sideNoteId) {
+      return undefined;
+    }
     return (
       <GoalSide goal={goal} me={me} />
     );
@@ -214,10 +217,11 @@ class HOCGoalStep extends Component {
   }
 }
 
-const { func, object } = PropTypes;
+const { func, object, string } = PropTypes;
 HOCGoalStep.propTypes = {
   archive: func,
   delegate: object,
+  sideNoteId: string,
   addToCollection: func,
   completeStep: func,
   contextMenu: func,
@@ -231,6 +235,7 @@ function mapStateToProps(state, ownProps) {
   const { goalId } = ownProps;
   const goal = state.getIn(['goals', goalId]);
   return {
+    sideNoteId: state.getIn(['main', 'sideNoteId']),
     goal,
     users: state.get('users'),
     step: goal.getIn(['steps', goal.getIn(['status', 'current_step_id'])]),
