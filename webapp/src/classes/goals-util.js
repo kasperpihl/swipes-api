@@ -35,6 +35,13 @@ export default class GoalsUtil {
   getOrderedAttachments() {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
   }
+  getNumberOfCompletedSteps() {
+    const currentIndex = this.getCurrentStepIndex();
+    return currentIndex;
+  }
+  getTotalNumberOfSteps() {
+    return this.goal.get('step_order').size;
+  }
 
   // Getting the handoff message from the step before this
   getHandoffMessage() {

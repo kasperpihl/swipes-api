@@ -13,12 +13,18 @@ class GoalSide extends Component {
     return new GoalsUtil(goal);
   }
   renderProgress() {
-
+    const helper = this.getHelper();
+    const numberOfCompleted = helper.getNumberOfCompletedSteps();
+    const totalSteps = helper.getTotalNumberOfSteps();
   }
   renderStepList() {
-    const { goal } = this.props;
     const helper = this.getHelper();
-    return <StepList steps={helper.getOrderedSteps()} completed={1} />;
+    return (
+      <StepList
+        steps={helper.getOrderedSteps()}
+        completed={helper.getCurrentStepIndex()}
+      />
+    );
   }
   render() {
     console.log('props', this.props.goal.toJS());
