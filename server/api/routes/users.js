@@ -45,7 +45,7 @@ notAuthed.all('/users.signup',
     password: string.min(1).require(),
     name: string.max(32).require(),
     organization: string.max(64).require(),
-    // T_TODO Kasper send client side invitation_code not invitationCode
+    // K_TODO send client side invitation_code not invitationCode
     invitation_code: string.custom((value) => {
       return value.startsWith('SW319-') ? null : 'Invalid invitation code';
     }).require(),

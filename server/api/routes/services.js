@@ -53,7 +53,7 @@ authed.all('/services.request',
   serviceWithAuthGet,
   serviceImport,
   serviceDoRequest,
-  // T_TODO Kasper fix this on client
+  // K_TODO fix this on client
   valResponseAndSend({
     result: object.require(),
   }));
