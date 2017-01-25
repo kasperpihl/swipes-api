@@ -49,7 +49,7 @@ class HOCContextMenu extends Component {
       const wh = window.innerHeight;
 
       let bottom = styles.bottom;
-      const padding = 5;
+      const padding = 20;
       if (typeof bottom === 'string') {
         bottom = parseInt(bottom, 10);
         if ((bottom + vh) > wh) {
