@@ -5,6 +5,7 @@
   $b: &;
 
   @include size(100%);
+  @include flex(flex);
   min-width: 450px;
   background-color: $bg;
   position: relative;
@@ -105,5 +106,9 @@
     color: $deepBlue-70;
     font-size: 15px;
     font-weight: 400;
+  }
+
+  &__side {
+    @include flex(none);
   }
 }

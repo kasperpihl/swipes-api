@@ -6,6 +6,10 @@ import './styles/step-list.scss';
 const StepList = (props) => {
   const { steps, completed } = props;
 
+  if (!steps) {
+    return undefined;
+  }
+
   const renderSteps = steps.map((s, i) => {
     let className = 'step-list__item';
 
@@ -18,9 +22,9 @@ const StepList = (props) => {
     }
 
     return (
-      <div className={className}>{s.get('title')}</div>
+      <div className={className} key={i}>{s.get('title')}</div>
     );
-  });
+  }).toArray();
 
   return (
     <div className="step-list">
