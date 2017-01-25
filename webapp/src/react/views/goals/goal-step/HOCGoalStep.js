@@ -30,14 +30,11 @@ class HOCGoalStep extends Component {
     super(props);
     this.state = { isHandingOff: false, handoffText: '' };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange']);
+    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
-    setTimeout(() => {
-      this.onOpenUser();
-    }, 5000);
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isHandingOff && !prevState.isHandingOff) {
@@ -100,10 +97,26 @@ class HOCGoalStep extends Component {
     } = this.props;
     addToCollection(goal.get('id'), obj);
   }
+  slackUserIdForUser(uId) {
+    switch (uId) {
+      case 'UB9BXJ1JB': // yana
+        return 'U02S15YG9';
+      case 'URU3EUPOE': // stefan
+        return 'U02H991H2';
+      case 'USTFL9YVE': // tihomir
+        return 'U0B119T8W';
+      case 'UVZWCJDHK': // kasper
+        return 'U02A53ZUL';
+      case 'UZTYMBVGO': // kristjan
+        return 'U09KBMX7Z';
+      default:
+        return 'USLACKBOT';
+    }
+  }
   onOpenUser(id) {
     const { openSlackIn, navigateToId } = this.props;
     navigateToId('slack');
-    openSlackIn('U02H991H2');
+    openSlackIn(this.slackUserIdForUser(id));
   }
   getHelper() {
     const { goal, me } = this.props;
@@ -172,6 +185,7 @@ class HOCGoalStep extends Component {
     return (
       <Section title="Handoff">
         <HandoffMessage
+          onClick={this.onOpenUser}
           user={user}
           message={text}
           at={at}

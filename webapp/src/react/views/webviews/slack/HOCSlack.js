@@ -33,7 +33,7 @@ class HOCSlack extends Component {
   onLoad(webview) {
     this._webview = webview;
     webview.addEventListener('dom-ready', () => {
-      webview.openDevTools();
+      // webview.openDevTools();
     });
     webview.addEventListener('ipc-message', (event) => {
       const arg = event.args[0];
@@ -74,10 +74,11 @@ class HOCSlack extends Component {
   }
 }
 
-const { func, bool } = PropTypes;
+const { func, bool, string } = PropTypes;
 HOCSlack.propTypes = {
   setCounter: func,
   browser: func,
+  openIn: string,
   hidden: bool,
   me: map,
 };
