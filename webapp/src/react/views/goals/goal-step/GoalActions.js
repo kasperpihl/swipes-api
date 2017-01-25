@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
 import Button from 'Button';
 
+import './styles/goal-actions.scss';
+
 class GoalActions extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +30,7 @@ class GoalActions extends Component {
       return undefined;
     }
     return (
-      <div>{status}</div>
+      <div className="goal-actions__status">{status}</div>
     );
   }
   renderCancel() {
@@ -40,6 +42,7 @@ class GoalActions extends Component {
       <Button
         text="Cancel"
         onClick={this.onCancel}
+        className="goal-actions__cancel"
       />
     );
   }
@@ -51,6 +54,7 @@ class GoalActions extends Component {
         text={title}
         primary
         onClick={this.onHandoff}
+        className="goal-actions__handoff"
       />
     );
   }

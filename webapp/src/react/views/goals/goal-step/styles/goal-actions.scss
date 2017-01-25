@@ -1,0 +1,23 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+
+.goal-actions {
+  @include size(100%, auto);
+  @include flex(center, flex-end);
+
+  &__status {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-60, 18px);
+  }
+
+  &__cancel {
+    @include flex(none);
+    margin-left: 15px;
+  }
+
+  &__handoff {
+    @include flex(none);
+    margin-left: 15px;
+  }
+}
