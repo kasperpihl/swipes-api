@@ -180,8 +180,9 @@ class HOCGoalStep extends Component {
   render() {
     const { isHandingOff } = this.state;
     let className = 'goal-step';
+
     if (isHandingOff) {
-      className += 'goal-step__handing-off';
+      className += ' goal-step__handing-off';
     }
     return (
       <div className={className}>

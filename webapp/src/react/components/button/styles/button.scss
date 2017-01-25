@@ -25,11 +25,11 @@ $borderColor: $deepBlue-10;
   z-index: 2;
   user-select: none;
 
-  &:not(&--disabled):focus {
+  &:not(&--disabled):not(&--frameless):focus, {
     outline:none; /*or outline-color:#FFFFFF; if the first doesn't work*/
-    border:1px solid $orange;
-    -webkit-box-shadow: 0px 0px 4px 0px $orange;
-    box-shadow: 0px 0px 4px 0px $orange;
+    box-shadow: 0 0 2px 1px $blue-100;
+    border: 1px solid $blue-100;
+    transition: .15s ease;
   }
 }
 
