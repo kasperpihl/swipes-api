@@ -138,6 +138,7 @@
         @include size(100%, 6px);
         background-color: $deepBlue-100;
         margin-top: 1px;
+        transition: .35s ease;
       }
 
       &__status {
