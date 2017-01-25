@@ -29,9 +29,6 @@
     @include svg-color($deepBlue-40);
     border-radius: 3px;
     border: 1px solid $deepBlue-20;
-    position: absolute;
-    left: 0; top: 6px;
-    z-index: 99;
     transition: .15s ease;
   }
 
