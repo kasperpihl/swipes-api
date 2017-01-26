@@ -17,6 +17,10 @@ class HOCAttachments extends Component {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
+    this.state = { loading: false };
+  }
+  componentWillUnmount() {
+    clearTimeout(this._timer);
   }
   onPreview(id) {
     const {
@@ -42,6 +46,10 @@ class HOCAttachments extends Component {
     };
     const callback = (obj) => {
       this.callDelegate('onAddAttachment', obj);
+      this.setState({ loading: true });
+      this._timer = setTimeout(() => {
+        this.setState({ loading: false });
+      }, 1000);
     };
 
     switch (which) {
@@ -96,8 +104,8 @@ class HOCAttachments extends Component {
     }
     if (this.hasAttachments()) {
       let className = ' attachment attachment--add';
-
-      if (false) { // TODO: Kasper, make things happen here
+      const { loading } = this.state;
+      if (loading) {
         className += ' attachment--loading';
       }
 
