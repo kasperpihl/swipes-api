@@ -32,6 +32,12 @@
       transition: .3s ease;
     }
 
+    &--complete {
+      #{$b}__title {
+        padding-left: 21px;
+      }
+    }
+
     &--active-left {
 
       #{$b}__seperator:before {
@@ -107,5 +113,19 @@
   &__subtitle {
     @include font(12px, $deepBlue-40, 15px, 500);
     margin-top: 12px;
+  }
+
+  &__icon {
+    @include size(36px);
+    @include flex();
+    @include flex(none);
+    border-radius: 50%;
+    background-color: $green-color;
+    transform: translateY(-6px);
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($bg);
   }
 }
