@@ -9,9 +9,11 @@
     @include font($fz: 12px, $lh: 15px);
     padding-left: 24px;
     position: relative;
+    transition: .25s ease;
 
     &:not(:last-child) {
       padding-bottom: 33px;
+      transition: .25s ease;
 
       &:before {
         content: '';
@@ -19,6 +21,7 @@
         left: 5px; top: 15px;
         @include size(1px, 30px);
         background-color: $deepBlue-5;
+        transition: .25s ease;
       }
     }
 
@@ -26,6 +29,7 @@
       border-radius: 50%;
       content: '';
       position: absolute;
+      transition: .25s ease;
     }
 
     &--completed {
