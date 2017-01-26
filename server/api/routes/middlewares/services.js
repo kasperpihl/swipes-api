@@ -138,19 +138,21 @@ const serviceDoRequest = valLocals('serviceDoRequest', {
   user_id: string.require(),
   service_auth_data: object.require(),
   service: object.require(),
-  data: object.require(),
+  method: string.require(),
+  parameters: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     service_auth_data,
     service,
-    data,
+    method,
+    parameters,
   } = res.locals;
 
   const options = {
     auth_data: service_auth_data,
-    method: data.method,
-    params: data.parameters,
+    method,
+    params: parameters,
     user: { user_id },
   };
 

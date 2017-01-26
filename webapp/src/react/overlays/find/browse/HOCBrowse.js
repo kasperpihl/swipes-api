@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import Browse from './Browse';
+import BrowseSectionList from './BrowseSectionList';
 
 class HOCBrowse extends Component {
   constructor(props) {
@@ -31,11 +32,9 @@ class HOCBrowse extends Component {
     request('services.request', {
       service_name: 'dropbox',
       account_id: accountId,
-      data: {
-        method: 'files.listFolder',
-        parameters: {
-          path,
-        },
+      method: 'files.listFolder',
+      parameters: {
+        path,
       },
     }).then((res) => {
       if (res && res.ok && res.result) {
@@ -47,82 +46,14 @@ class HOCBrowse extends Component {
     if (entry.type === 'folder') {
       this.loadPath(entry.path, entry.title);
     } else {
-      this.preview(entry);
+      console.log('wire up preview', entry);
+      // this.preview(entry);
     }
   }
   clickedBack() {
     const { paths } = this.state;
     paths.pop();
     this.setState({ paths });
-  }
-  preview(entry) {
-    const { loadModal, request, accountId } = this.props;
-    loadModal('preview', {
-      loading: true,
-    });
-    request('services.request', {
-      service_name: 'dropbox',
-      account_id: accountId,
-      data: {
-        method: 'files.getTemporaryLink',
-        parameters: {
-          path: `rev:${entry.id}`,
-        },
-      },
-    }).then((res) => {
-      if (res && res.result && res.result.link) {
-        console.log(res.result);
-        const dropboxFolder = localStorage.getItem('dropbox-folder');
-        const fullFilePath = dropboxFolder + res.result.metadata.path_display;
-        const type = 'application/pdf';
-        const link = res.result.link;
-        const buttons = [];
-        const newData = {
-          type: null,
-          title: entry.title,
-        };
-
-        if (dropboxFolder) {
-          buttons.push({
-            icon: 'Desktop',
-            title: 'Open on Desktop',
-            onClick: () => {
-              window.ipcListener.sendEvent('showItemInFolder', fullFilePath);
-            },
-          });
-        }
-
-        buttons.push({
-          icon: 'Earth',
-          title: 'Open in Dropbox.com',
-          onClick: () => {
-            const url = `https://www.dropbox.com/home${entry.path}`;
-            window.ipcListener.sendEvent('openExternal', url);
-          },
-        }, {
-          icon: 'Download',
-          title: 'Download',
-          onClick: () => {
-            window.location.replace(link);
-          },
-        });
-
-        newData.actions = buttons;
-
-        // const path = res.result.metadata.path_display;
-
-        if (['image/png', 'image/gif', 'image/jpeg', 'image/jpg'].indexOf(type) > -1) {
-          newData.img = res.result.link;
-          newData.type = 'image';
-        }
-        if (['application/pdf'].indexOf(type) > -1) {
-          newData.pdf = res.result.link;
-          newData.type = 'pdf';
-        }
-        loadModal('preview', newData, () => {
-        });
-      }
-    });
   }
   mapResults(entries) {
     return entries.map(ent => ({
@@ -133,6 +64,38 @@ class HOCBrowse extends Component {
       id: ent.rev,
     }));
   }
+  renderSidebarSection() {
+    const props = {
+      delegate: this,
+      sections: [{
+        title: 'Services',
+        items: [
+          { id: 'dropbox', title: 'Dropbox' },
+          { id: 'evernote', title: 'Evernote' },
+          { id: 'box', title: 'Box' },
+          { id: 'slack', title: 'Slack' },
+          { id: 'Invision', title: 'Invision' },
+          { id: 'notes', title: 'Swipes Notes' },
+        ],
+      }, {
+        title: 'Shortcuts',
+        items: [
+          { title: 'Brand Guidelines', leftIcon: 'Note' },
+          { title: 'Design notes', leftIcon: 'Note' },
+          { title: 'Production', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
+          { title: 'Prototype', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
+          { title: 'creative', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
+          { title: 'general', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
+          { title: 'Kasper', leftIcon: 'Person' },
+          { title: 'Journal', leftIcon: 'Note' },
+        ],
+      }],
+    };
+    return <BrowseSectionList {...props} />;
+  }
+  renderHorizontalSections() {
+
+  }
   render() {
     const {
       paths,
@@ -142,12 +105,20 @@ class HOCBrowse extends Component {
     const title = entry ? entry.title : 'Loading...';
     const path = entry ? entry.path : undefined;
     return (
-      <Browse
-        title={title}
-        showBack={(paths.length > 1)}
-        result={cache[`${path}`]}
-        delegate={this}
-      />
+      <div className="browse-container">
+        <div className="browse-sidebar">
+          {this.renderSidebarSection()}
+        </div>
+        <div className="browse-horizontol-scroller">
+          {this.renderHorizontalSections()}
+        </div>
+        {/* <Browse
+          title={title}
+          showBack={(paths.length > 1)}
+          result={cache[`${path}`]}
+          delegate={this}
+        />*/}
+      </div>
     );
   }
 }

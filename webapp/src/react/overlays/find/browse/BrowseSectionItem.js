@@ -20,10 +20,11 @@ const BrowseSectionItem = (props) => {
 
 export default BrowseSectionItem;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 BrowseSectionItem.propTypes = {
   title: string,
+  selected: bool,
   leftIcon: string,
   rightIcon: string,
   onClick: func,

@@ -73,7 +73,7 @@ class Find extends Component {
     if (!results || !results.size) {
       return undefined;
     }
-    console.log(results.toJS());
+
     const renderedResults = results.map((r, i) => (
       <FindItem
         key={i}
@@ -91,6 +91,7 @@ class Find extends Component {
     );
   }
   render() {
+    return <HOCBrowse />;
     return (
       <div className="find">
         {this.renderHeader()}

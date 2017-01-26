@@ -36,7 +36,7 @@ class HOCAddGoal extends Component {
     super(props);
     this.state = initialState.toObject();
 
-    bindAll(this, ['clickedAdd', 'onTitleChange', 'onHandoffChange', 'onSave', 'onInputChange']);
+    bindAll(this, ['clickedAdd', 'onHandoffChange', 'onSave', 'onInputChange']);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }

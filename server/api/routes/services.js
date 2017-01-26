@@ -44,10 +44,8 @@ authed.all('/services.request',
   valBody({
     service_name: string.require(),
     account_id: string.require(),
-    method: object.as({
-      method: string.require(),
-      parameters: object.require(),
-    }),
+    method: string.require(),
+    parameters: object.require(),
   }),
   serviceWithAuthGet,
   serviceImport,
