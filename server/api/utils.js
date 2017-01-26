@@ -1,3 +1,4 @@
+import config from 'config';
 import randomstring from 'randomstring';
 import valjs, { string, func, object } from 'valjs';
 
@@ -19,6 +20,7 @@ const localsMap = mapper => (req, res, next) => {
   Object.entries(mapper).forEach(([fromKey, toKey]) => {
     res.locals[toKey] = res.locals[fromKey];
   });
+
   return next();
 };
 const sendResponse = (req, res) => {
@@ -29,10 +31,18 @@ const sendResponse = (req, res) => {
   return res.status(200).json({ ok: true, ...returnObj });
 };
 const valResponseAndSend = schema => (req, res, next) => {
-  const error = valjs(res.locals.returnObj, object.as(schema));
-  if (error) {
-    return next(`Error returnObj: ${error}`);
+  if (schema) {
+    const error = valjs(res.locals, object.as(schema));
+
+    if (error) {
+      return next(`Error from output: ${error}`);
+    }
+
+    Object.entries(schema).forEach(([key, value]) => {
+      res.locals.returnObj[key] = res.locals[key];
+    });
   }
+
   return sendResponse(req, res);
 };
 
@@ -42,21 +52,17 @@ const setLocals = (name, res, next, state) => {
   if (error) {
     return next(`${name}: Error in setLocals object`);
   }
-  // const errors = Object.entries(state).map(([key, value]) => {
-    /* if (!constants[key]) {
-      res.locals[key] = value;
-    }
-    else{
-      const scheme = constants[key];
-      const lError = valjs(value, scheme);
-      if (!lError) {
-        res.locals[key] = value;
-      }
-      return lError;
-    }*/
 
-  //   return value;
-  // }).filter(v => !!v);
+  const debug = config.get('valjs_debug');
+
+  Object.entries(state).forEach(([key, value]) => {
+    if (res.locals[key] && debug) {
+      console.warn(`Warnign: ${key} is reassinged in ${name}`);
+    }
+
+    res.locals[key] = value;
+  });
+
   return null;
 };
 

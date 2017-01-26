@@ -19,7 +19,7 @@ import {
 
 const serviceIdGet = valLocals('serviceIdGet', {
   service_name: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     service_name,
   } = res.locals;
@@ -30,7 +30,9 @@ const serviceIdGet = valLocals('serviceIdGet', {
         return next(new SwipesError('Service not found'));
       }
 
-      res.locals.service_id = service.id;
+      setLocals({
+        service_id: service.id,
+      });
 
       return next();
     })
@@ -42,7 +44,7 @@ const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
   user_id: string.require(),
   service_name: string.require(),
   account_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     service_name,
@@ -57,7 +59,9 @@ const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
 
       const service = results[0];
 
-      res.locals.service_auth_data = service.auth_data;
+      setLocals({
+        service_auth_data: service.auth_data,
+      });
 
       return next();
     })
@@ -67,7 +71,7 @@ const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
 });
 const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
   link_with_permission: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     link_with_permission,
   } = res.locals;
@@ -82,8 +86,11 @@ const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
       }
 
       const service = results[0];
-      res.locals.service_auth_data = service.auth_data;
-      res.locals.service_name = service_name;
+
+      setLocals({
+        service_name,
+        service_auth_data: service.auth_data,
+      });
 
       return next();
     })
@@ -93,13 +100,15 @@ const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
 });
 const serviceImport = valLocals('serviceImport', {
   service_name: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     service_name,
   } = res.locals;
 
   if (services[service_name]) {
-    res.locals.service = services[service_name];
+    setLocals({
+      service: services[service_name],
+    });
 
     return next();
   }
@@ -108,7 +117,7 @@ const serviceImport = valLocals('serviceImport', {
 });
 const serviceGetAuthUrl = valLocals('serviceGetAuthUrl', {
   service: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     service,
   } = res.locals;
@@ -118,7 +127,9 @@ const serviceGetAuthUrl = valLocals('serviceGetAuthUrl', {
       return next(new SwipesError('Something went wrong with the authorization'));
     }
 
-    res.locals.returnObj.authUrl = result.url;
+    setLocals({
+      authUrl: result.url,
+    });
 
     return next();
   });
@@ -128,7 +139,7 @@ const serviceDoRequest = valLocals('serviceDoRequest', {
   service_auth_data: object.require(),
   service: object.require(),
   data: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     service_auth_data,
@@ -148,8 +159,9 @@ const serviceDoRequest = valLocals('serviceDoRequest', {
       return next(new SwipesError('Something went wrong with the request'));
     }
 
-    res.locals.service_request_result = result;
-    res.locals.returnObj.result = result;
+    setLocals({
+      result,
+    });
 
     return next();
   });
@@ -158,7 +170,7 @@ const servicePreview = valLocals('servicePreview', {
   service_auth_data: object.require(),
   service: object.require(),
   link_with_permission: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     service_auth_data,
     service,
@@ -177,7 +189,9 @@ const servicePreview = valLocals('servicePreview', {
       return next(new SwipesError('Something went wrong with the preview request'));
     }
 
-    res.locals.returnObj.preview = result;
+    setLocals({
+      preview: result,
+    });
 
     return next();
   });
@@ -188,7 +202,7 @@ const servicePreviewFind = valLocals('servicePreviewFind', {
   service_item_id: string.require(),
   service_type: string.require(),
   service: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     service_auth_data,
@@ -209,7 +223,9 @@ const servicePreviewFind = valLocals('servicePreviewFind', {
       return next(new SwipesError('Something went wrong with the preview request'));
     }
 
-    res.locals.returnObj.preview = result;
+    setLocals({
+      preview: result,
+    });
 
     return next();
   });
@@ -220,7 +236,7 @@ const serviceGetAuthData = valLocals('serviceGetAuthData', {
   service_id: string.require(),
   query: object.require(),
   service: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     service_name,
@@ -257,7 +273,9 @@ const serviceGetAuthData = valLocals('serviceGetAuthData', {
       service_name,
     });
 
-    res.locals.serviceToAppend = serviceToAppend;
+    setLocals({
+      serviceToAppend,
+    });
 
     return next();
   });

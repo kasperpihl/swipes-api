@@ -5,7 +5,7 @@ import {
 } from 'valjs';
 import {
   valBody,
-  sendResponse,
+  valResponseAndSend,
 } from '../utils';
 import {
   serviceWithAuthGet,
@@ -43,8 +43,9 @@ authed.all('/find.preview',
   serviceWithAuthGet,
   serviceImport,
   servicePreviewFind,
-  sendResponse,
-);
+  valResponseAndSend({
+    preview: object.require(),
+  }));
 
 export {
   authed,

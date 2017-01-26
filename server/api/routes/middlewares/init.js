@@ -19,7 +19,7 @@ import {
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
   } = res.locals;
@@ -83,8 +83,7 @@ const initGetData = valLocals('initGetData', {
       const ws_path = '/ws';
       const ws_url = https ? ws_origin + ws_path : `${ws_origin}:${api_port}${ws_path}`;
 
-      const response = {
-        ok: true,
+      setLocals({
         url,
         ws_url,
         self,
@@ -96,10 +95,7 @@ const initGetData = valLocals('initGetData', {
         services: data[1],
         activity: data[2],
         notifications: data[3],
-      };
-
-      res.locals.initData = response;
-      res.locals.returnObj = response;
+      });
 
       return next();
     })

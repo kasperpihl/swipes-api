@@ -12,7 +12,7 @@ import {
 
 const notifyAllInCompany = valLocals('notifyAllInCompany', {
   user: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user,
   } = res.locals;
@@ -26,7 +26,9 @@ const notifyAllInCompany = valLocals('notifyAllInCompany', {
 
   const uniqueUsersToNotify = Array.from(new Set(usersIds));
 
-  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
+  setLocals({
+    uniqueUsersToNotify,
+  });
 
   return next();
 });

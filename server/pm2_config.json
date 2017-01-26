@@ -5,6 +5,7 @@
     "watch"       : "./dist/",
     "node_args"   : ["--harmony"],
     "env_staging" : {
+       "SW_VALJS_DEBUG": false,
        "SW_ORIGIN": "https://staging.swipesapp.com",
        "SW_WEBHOOKS_HOST": "https://staging.swipesapp.com/",
        "SW_API_PORT": "5000",

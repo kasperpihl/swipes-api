@@ -19,7 +19,7 @@ import {
 
 const linksGetByIds = valLocals('linksGetByIds', {
   ids: array.of(string).require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     ids,
   } = res.locals;
@@ -28,33 +28,17 @@ const linksGetByIds = valLocals('linksGetByIds', {
     const mappedLinks = ids.map((id) => {
       return links.find(l => l.short_url === id) || {};
     });
-    res.locals.returnObj.links = mappedLinks;
-    return next();
-  });
-});
-// T_TODO optimize that
-const linksGetById = valLocals('linksGetById', {
-  short_url: string.require(),
-}, (req, res, next) => {
-  const {
-    short_url,
-  } = res.locals;
 
-  const ids = [short_url];
-
-  return findLinksFromIds(ids).then((links) => {
-    const mappedLinks = ids.map((id) => {
-      return links.find(l => l.short_url === id) || {};
+    setLocals({
+      link: mappedLinks,
     });
-
-    res.locals.returnObj.link = mappedLinks[0];
 
     return next();
   });
 });
 const linksFindPermissions = valLocals('linksFindPermissions', {
   short_url: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     short_url,
   } = res.locals;
@@ -65,7 +49,9 @@ const linksFindPermissions = valLocals('linksFindPermissions', {
         if (results && results.length > 0) {
           const result = results[0];
 
-          res.locals.link_with_permission = result;
+          setLocals({
+            link_with_permission: result,
+          });
 
           return next();
         }
@@ -82,7 +68,7 @@ const linksAddPermission = valLocals('linksAddPermission', {
   user_id: string.require(),
   checksum: string.require(),
   permission: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     permission,
@@ -91,7 +77,9 @@ const linksAddPermission = valLocals('linksAddPermission', {
 
   addPermissionsToALink({ user_id, checksum, permission })
     .then((result) => {
-      res.locals.returnObj.short_url = result.changes[0].new_val.id;
+      setLocals({
+        short_url: result.changes[0].new_val.id,
+      });
 
       return next();
     })
@@ -103,7 +91,7 @@ const linksAddPermission = valLocals('linksAddPermission', {
 const linksCreate = valLocals('linksCreate', {
   service: object.require(),
   meta: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     service,
     meta,
@@ -115,9 +103,16 @@ const linksCreate = valLocals('linksCreate', {
   createLink({ meta, insert_doc })
     .then((result) => {
       const insertedObj = result.changes[0].new_val;
-      res.locals.checksum = insertedObj.checksum;
+
+      setLocals({
+        checksum: insertedObj.checksum,
+      });
+
       delete insertedObj.checksum;
-      res.locals.returnObj.link = insertedObj;
+
+      setLocals({
+        link: insertedObj,
+      });
 
       return next();
     })
@@ -131,5 +126,4 @@ export {
   linksGetByIds,
   linksAddPermission,
   linksCreate,
-  linksGetById,
 };

@@ -40,6 +40,7 @@
     "secretAccessKey": "ERXLaiG3AUZIPWQeOMQKcGjpcY7lnyXcGcfpaOhj",
     "queueHost": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo"
   },
+  "valjs_debug": true,
   "origin": "http://localhost",
   "webhooksHost": "https://swipesdev.ngrok.io/",
   "apiPort": 5000,

@@ -10,7 +10,7 @@ import {
 } from './middlewares/notes';
 import {
   valBody,
-  sendResponse,
+  valResponseAndSend,
 } from '../utils';
 
 const authed = express.Router();
@@ -23,8 +23,9 @@ authed.all('/notes.create',
     unlock: bool,
   }),
   notesCreate,
-  sendResponse,
-);
+  valResponseAndSend({
+    id: string.require(),
+  }));
 
 authed.all('/notes.save',
   valBody({
@@ -35,7 +36,7 @@ authed.all('/notes.save',
     unlock: bool,
   }),
   notesSave,
-  sendResponse,
+  valResponseAndSend,
 );
 
 export {

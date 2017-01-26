@@ -18,7 +18,7 @@ const milestonesCreate = valLocals('milestonesCreate', {
   organization_id: string.require(),
   description: string,
   due_date: string.format('iso8601'),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     title,
@@ -38,26 +38,28 @@ const milestonesCreate = valLocals('milestonesCreate', {
     deleted: false,
   };
 
-  res.locals.milestone = milestone;
+  setLocals({
+    milestone,
+  });
 
   return next();
 });
 const milestonesInsert = valLocals('milestonesInsert', {
   milestone: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     milestone,
   } = res.locals;
 
   dbMilestonesInsertSingle({ milestone })
     .then((obj) => {
-      res.locals.eventType = 'milestone_created';
-      res.locals.returnObj = {
+      setLocals({
+        eventType: 'milestone_created',
         milestone: {
           id: milestone.id,
           title: milestone.title,
         },
-      };
+      });
 
       return next();
     })
@@ -67,7 +69,7 @@ const milestonesInsert = valLocals('milestonesInsert', {
 });
 const milestonesDelete = valLocals('milestonesDelete', {
   id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     id,
   } = res.locals;
@@ -78,10 +80,10 @@ const milestonesDelete = valLocals('milestonesDelete', {
 
   dbMilestonesUpdateSingle({ id, properties })
     .then(() => {
-      res.locals.eventType = 'milestone_archived';
-      res.locals.returnObj = {
+      setLocals({
+        eventType: 'milestone_archived',
         id,
-      };
+      });
 
       return next();
     })
@@ -93,21 +95,23 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
   user_id: string.require(),
   milestone: object.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     milestone,
     eventType,
   } = res.locals;
-
   const milestone_id = milestone.id;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     milestone_id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = milestone_id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: milestone_id,
+  });
 
   return next();
 });
@@ -115,19 +119,22 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     id,
     eventType,
   } = res.locals;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     milestone_id: id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: id,
+  });
 
   return next();
 });

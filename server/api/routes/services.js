@@ -20,7 +20,6 @@ import {
 import {
   valBody,
   valResponseAndSend,
-  sendResponse,
 } from '../utils';
 
 const authed = express.Router();
@@ -34,10 +33,10 @@ notAuthed.all('/services.authorize',
   serviceGetAuthUrl,
   (req, res) => {
     const {
-      returnObj,
+      authUrl,
     } = res.locals;
 
-    res.writeHead(302, { Location: returnObj.authUrl });
+    res.writeHead(302, { Location: authUrl });
     res.end();
   });
 
@@ -69,7 +68,7 @@ authed.all('/services.authsuccess',
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoAddServiceToUser,
-  sendResponse,
+  valResponseAndSend,
 );
 
 export {
