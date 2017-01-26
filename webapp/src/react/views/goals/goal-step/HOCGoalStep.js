@@ -176,7 +176,7 @@ class HOCGoalStep extends Component {
       <GoalCompleted
         title="Goal completed!"
         subtitle="Well done! Together with Tisho, Yana, Kasper, Kris and Stefan you completed this goal"
-        assignees={[me.get('id'), me.get('id'), me.get('id')]}
+        assignees={helper.getAllInvolvedAssignees()}
       />
     );
   }

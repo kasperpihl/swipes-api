@@ -56,13 +56,23 @@ export default class GoalsUtil {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
   }
   getNumberOfCompletedSteps() {
-    const num = this.goal.get('history').filter(h => h.get('type') === 'complete_step');
+    const num = this.goal.get('history').filter(h => ['complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1);
     return num.size;
   }
   getTotalNumberOfSteps() {
-    const currentIndex = this.getCurrentStepIndex();
     const size = this.goal.get('step_order').size;
+    let currentIndex = this.getCurrentStepIndex();
+    if (typeof currentIndex !== 'number') {
+      currentIndex = size;
+    }
     return this.getNumberOfCompletedSteps() + (size - currentIndex);
+  }
+  getAllInvolvedAssignees() {
+    const assignees = new Set();
+    this.goal.get('steps').forEach((s) => {
+      s.get('assignees').forEach(aId => assignees.add(aId));
+    });
+    return [...assignees];
   }
 
   getHandoffMessage() {
