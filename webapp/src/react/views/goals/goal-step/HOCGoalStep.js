@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
@@ -9,9 +10,9 @@ import { setupDelegate, bindAll } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
 import Section from 'components/section/Section';
 import HOCAttachments from 'components/attachments/HOCAttachments';
+import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
-import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import GoalActions from './GoalActions';
 import GoalCompleted from './GoalCompleted';
 import GoalSide from './GoalSide';
@@ -32,6 +33,7 @@ class HOCGoalStep extends Component {
     this.state = {
       isHandingOff: false,
       isSubmitting: false,
+      flags: [],
       handoffText: '',
       nextStepId: this.calculateNextStep(),
     };
@@ -52,20 +54,28 @@ class HOCGoalStep extends Component {
           isHandingOff: false,
           handoffText: '',
           nextStepId: this.calculateNextStep(nextGoal),
+          flags: [],
         });
       }
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isHandingOff && !prevState.isHandingOff) {
       this.refs.handoffMessage.focus();
     }
   }
-  calculateNextStep(goal) {
-    const helper = this.getHelper(goal);
-    const nextStep = helper.getNextStep();
-    return nextStep ? nextStep.get('id') : null;
+  onFlag(id) {
+    let flags = this.state.flags;
+    const index = flags.indexOf(id);
+    if (index !== -1) {
+      flags = flags.slice(0, index).concat(flags.slice(index + 1));
+    } else {
+      flags = flags.concat([id]);
+    }
+    this.setState({ flags });
   }
+
   onContextClick(i, e) {
     const {
       goal,
@@ -107,10 +117,11 @@ class HOCGoalStep extends Component {
   }
   onHandoff() {
     const { completeStep, goal } = this.props;
-    const { handoffText, nextStepId } = this.state;
+    const { handoffText, nextStepId, flags } = this.state;
     if (this.state.isHandingOff) {
       this.setState({ isSubmitting: true });
-      completeStep(goal.get('id'), nextStepId, handoffText).then((res) => {
+      console.log(flags);
+      completeStep(goal.get('id'), nextStepId, handoffText, flags).then((res) => {
         this.setState({ isSubmitting: false });
         console.log('res', res);
       });
@@ -128,6 +139,16 @@ class HOCGoalStep extends Component {
     } = this.props;
     addToCollection(goal.get('id'), obj);
   }
+  onOpenUser(id) {
+    const { openSlackIn, navigateToId } = this.props;
+    navigateToId('slack');
+    openSlackIn(this.slackUserIdForUser(id));
+  }
+  calculateNextStep(goal) {
+    const helper = this.getHelper(goal);
+    const nextStep = helper.getNextStep();
+    return nextStep ? nextStep.get('id') : null;
+  }
   slackUserIdForUser(uId) {
     switch (uId) {
       case 'UB9BXJ1JB': // yana
@@ -144,15 +165,11 @@ class HOCGoalStep extends Component {
         return 'USLACKBOT';
     }
   }
-  onOpenUser(id) {
-    const { openSlackIn, navigateToId } = this.props;
-    navigateToId('slack');
-    openSlackIn(this.slackUserIdForUser(id));
-  }
+
   getHelper(overwriteGoal) {
-    let { goal, me } = this.props;
-    goal = overwriteGoal || goal;
-    return new GoalsUtil(goal, me.get('id'));
+    const { goal, me } = this.props;
+    overwriteGoal = overwriteGoal || goal;
+    return new GoalsUtil(overwriteGoal, me.get('id'));
   }
 
   mapStepToHeader(stepId, next) {
@@ -170,7 +187,6 @@ class HOCGoalStep extends Component {
     };
   }
   renderGoalCompleted() {
-    const { me } = this.props;
     const helper = this.getHelper();
     if (helper.getCurrentStepId()) {
       return undefined;
@@ -247,12 +263,19 @@ class HOCGoalStep extends Component {
 
   renderAttachments() {
     const { goal } = this.props;
+    const { isHandingOff, flags } = this.state;
     const helper = this.getHelper();
+    let sendFlags = helper.getFlags();
+    if (isHandingOff) {
+      sendFlags = fromJS(flags);
+    }
     return (
       <Section title="Attachments">
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
+          flags={sendFlags}
+          disableFlagging={!isHandingOff}
           delegate={this}
           disableAdd={!helper.getCurrentStep()}
         />

@@ -45,6 +45,9 @@ export default class GoalsUtil {
   }
 
 
+  getFlags() {
+    return this.goal.getIn(['status', 'flags']);
+  }
   amIAssigned() {
     const step = this.getCurrentStep();
     return step.get('assignees').find(a => (a === this.id));

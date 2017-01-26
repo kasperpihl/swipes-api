@@ -211,10 +211,11 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
 };
 
 
-export const completeStep = (gId, nextSId, message) => (d, getState) => {
+export const completeStep = (gId, nextSId, message, flags) => (d, getState) => {
   const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
   return d(a.api.request('goals.completeStep', {
     goal_id: gId,
+    flags,
     next_step_id: nextSId,
     current_step_id: currentStepId,
     message,

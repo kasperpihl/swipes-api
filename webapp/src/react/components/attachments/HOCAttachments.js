@@ -17,7 +17,6 @@ class HOCAttachments extends Component {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = { flags: [] };
   }
   onPreview(id) {
     const {
@@ -27,14 +26,7 @@ class HOCAttachments extends Component {
     previewLink(attachments.get(id));
   }
   onFlag(id) {
-    let flags = this.state.flags;
-    const index = flags.indexOf(id);
-    if (index !== -1) {
-      flags = flags.slice(0, index).concat(flags.slice(index + 1));
-    } else {
-      flags = flags.concat([id]);
-    }
-    this.setState({ flags });
+    this.callDelegate('onFlag', id);
   }
   onAdd(which, e) {
     const {
@@ -71,7 +63,12 @@ class HOCAttachments extends Component {
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder } = this.props;
     let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
-    const { flags } = this.state;
+    let { flags } = this.props;
+    if (!flags) {
+      flags = [];
+    } else {
+      flags = flags.toJS();
+    }
     if (this.hasAttachments()) {
       html = aOrder.map((aId) => {
         const a = attachments.get(aId);
