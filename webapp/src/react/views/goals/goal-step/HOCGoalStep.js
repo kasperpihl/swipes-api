@@ -13,6 +13,7 @@ import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import GoalActions from './GoalActions';
+import GoalCompleted from './GoalCompleted';
 import GoalSide from './GoalSide';
 
 import './styles/goal-step';
@@ -145,7 +146,16 @@ class HOCGoalStep extends Component {
       assignees: step.get('assignees').toJS(),
     };
   }
-
+  renderGoalCompleted() {
+    const { me } = this.props;
+    return (
+      <GoalCompleted
+        title="Goal completed!"
+        subtitle="Well done! Together with Tisho, Yana, Kasper, Kris and Stefan you completed this goal"
+        assignees={[me.get('id'), me.get('id'), me.get('id')]}
+      />
+    );
+  }
   renderHeader() {
     const { isHandingOff, nextStepId } = this.state;
     const helper = this.getHelper();
@@ -251,6 +261,7 @@ class HOCGoalStep extends Component {
     return (
       <div className={className}>
         <div className="goal-step__content">
+          {this.renderGoalCompleted()}
           {this.renderHeader()}
           {this.renderHandoffMessage()}
           {this.renderAttachments()}
