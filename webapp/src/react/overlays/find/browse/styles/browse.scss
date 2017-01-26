@@ -16,8 +16,7 @@
     content: '';
     position: absolute;
     left: 0; top: 0;
-    @include size(100%, 1px);
-    max-width: 780px;
+    @include size(100%, 1px)
     background-color: $deepBlue-10;
   }
 }
@@ -34,4 +33,37 @@
   @include flex(flex);
   overflow-y: hidden;
   overflow-x: auto;
+
+  .browse-section-list {
+    animation: makeItWork .6s ease forwards;
+
+    &:not(:last-child) {
+      .browse-section-item {
+        &:not(.browse-section-item--selected) {
+          opacity: .3;
+          transition: .15s ease;
+        }
+      }
+      &:hover {
+        .browse-section-item {
+          opacity: 1;
+          transition: .15s ease;
+        }
+      }
+    }
+  }
+}
+
+@keyframes makeItWork {
+  0% {
+    transform: translateX(-100%);
+    z-index: 1;
+  }
+  99.9% {
+    z-index: 1;
+  }
+  100% {
+    transform: translateX(0px);
+    z-index: 2;
+  }
 }

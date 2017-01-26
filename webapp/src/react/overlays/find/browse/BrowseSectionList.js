@@ -41,8 +41,8 @@ class BrowseSectionList extends Component {
       return <Loader center />;
     }
 
-    const sectionsHTML = sections.map(s => (
-      <div className="browse-section">
+    const sectionsHTML = sections.map((s, i) => (
+      <div className="browse-section" key={i}>
         <div className="browse-section__title">{s.title}</div>
         {this.renderSectionItems(s.items)}
       </div>

@@ -141,7 +141,7 @@ class HOCBrowse extends Component {
         loading: !section.items,
         sections: [section],
       };
-      return <BrowseSectionList {...props} />;
+      return <BrowseSectionList key={i} {...props} />;
     });
   }
   render() {

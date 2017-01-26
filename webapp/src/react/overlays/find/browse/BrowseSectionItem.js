@@ -7,10 +7,17 @@ const BrowseSectionItem = (props) => {
     onClick,
     leftIcon,
     rightIcon,
+    selected,
   } = props;
 
+  let className = 'browse-section-item';
+
+  if (selected) {
+    className += ' browse-section-item--selected';
+  }
+
   return (
-    <div className="browse-section-item" onClick={onClick}>
+    <div className={className} onClick={onClick}>
       <div className="browse-section-item__icon browse-section-item__icon--left">
         <Icon svg={leftIcon} className="browse-section-item__svg" />
       </div>
