@@ -1,0 +1,51 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.browse-section-list {
+  $b: &;
+  @include size(100%);
+  overflow-y: auto;
+
+  .browse-section {
+    @include size(390px, auto);
+
+    &__title {
+      @include font(10px, $deepBlue-60, 12px, bold);
+      padding-bottom: 21px;
+      text-transform: uppercase;
+      padding: 0 45px;
+    }
+
+    &-item {
+      $e: &;
+      @include size(100%, 24px);
+      @include flex(flex);
+
+      &__title {
+        @include size(100%, 24px);
+        @include font(12px, $blue-100, 24px, 500);
+      }
+
+      &__icon {
+        @include size(24px);
+        @include flex(none);
+        @include svg-color($blue-100);
+        margin: 0 calc((45px - 24px) / 2);
+
+        &--right {
+          opacity: 0;
+          transform: translateX(-8px);
+          transition: .15s ease;
+        }
+      }
+
+      &:hover {
+        .browse-section-item__icon--right {
+          opacity: 1;
+          transform: translateX(0px);
+          transition: .15s .2s ease;
+        }
+      }
+    }
+  }
+}

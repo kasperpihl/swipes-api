@@ -1,14 +1,19 @@
 import React, { PropTypes } from 'react';
+import Icon from 'Icon';
 
 const BrowseSectionItem = (props) => {
   const {
     title,
     onClick,
+    leftIcon,
+    rightIcon,
   } = props;
 
   return (
     <div className="browse-section-item" onClick={onClick}>
-      {title}
+      <Icon svg={leftIcon} className="browse-section-item__icon browse-section-item__icon--left" />
+      <div className="browse-section-item__title">{title}</div>
+      <Icon svg={rightIcon} className="browse-section-item__icon browse-section-item__icon--right" />
     </div>
   );
 };
