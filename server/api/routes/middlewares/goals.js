@@ -29,7 +29,7 @@ const goalsCreate = valLocals('goalsCreate', {
     goal,
     organization_id,
     message,
-    flags,
+    flags = [],
   } = res.locals;
   const goalId = generateSlackLikeId('G');
   const currentStepId = goal.step_order[0];
@@ -74,7 +74,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     current_step_id,
     next_step_id,
     message,
-    flags,
+    flags = [],
   } = res.locals;
 
   if (goal.status.current_step_id !== current_step_id) {
