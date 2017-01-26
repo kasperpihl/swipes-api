@@ -12,8 +12,11 @@ class ResultItem extends Component {
     this.onClickCached = setupCachedCallback(this.onClick, this);
   }
   onClick(side, e) {
-    const { onClick } = this.props;
-    onClick(side, e);
+    const { onClick, disabled } = this.props;
+
+    if (onClick && !disabled) {
+      onClick(side, e);
+    }
   }
   renderIcon(obj, side) {
     let className = 'result__icon';
