@@ -95,13 +95,13 @@ class HOCGoalStep extends Component {
     this.setState({ isHandingOff: false });
   }
   onChangeClick(e) {
-    console.log('change!', e);
+    const { nextStepId } = this.state;
     const { selectStep, goal } = this.props;
     selectStep({
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
-    }, goal.get('id'), (nextStepId) => {
-      this.setState({ nextStepId });
+    }, goal.get('id'), nextStepId, (newStepId) => {
+      this.setState({ nextStepId: newStepId });
     });
   }
   onHandoff() {

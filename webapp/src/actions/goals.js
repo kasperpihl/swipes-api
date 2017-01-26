@@ -44,7 +44,7 @@ export const archive = goalId => (d) => {
   ));
 };
 
-export const selectStep = (options, goalId, callback) => (d, getState) => {
+export const selectStep = (options, goalId, nextStepId, callback) => (d, getState) => {
   const goal = getState().getIn(['goals', goalId]);
   const steps = goal.get('steps');
   const sortedSteps = goal.get('step_order').map(sId => steps.get(sId)).toArray();
@@ -53,11 +53,13 @@ export const selectStep = (options, goalId, callback) => (d, getState) => {
     id: step.get('id'),
     title: `${i + 1}. ${step.get('title')}`,
     disabled: (step.get('id') === currentStepId),
+    selected: (step.get('id') === nextStepId),
   });
   const delegate = {
     resultsForAll: () => sortedSteps.map((s, i) => resultForStep(s, i)).concat([{
       id: null,
       title: 'Complete Goal',
+      selected: !nextStepId,
       rightIcon: {
         icon: 'Checkmark',
       },
