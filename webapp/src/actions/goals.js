@@ -49,12 +49,18 @@ export const selectStep = (options, goalId, nextStepId, callback) => (d, getStat
   const steps = goal.get('steps');
   const sortedSteps = goal.get('step_order').map(sId => steps.get(sId)).toArray();
   const currentStepId = goal.getIn(['status', 'current_step_id']);
-  const resultForStep = (step, i) => ({
-    id: step.get('id'),
-    title: `${i + 1}. ${step.get('title')}`,
-    disabled: (step.get('id') === currentStepId),
-    selected: (step.get('id') === nextStepId),
-  });
+  const resultForStep = (step, i) => {
+    let title = `${i + 1}. ${step.get('title')}`;
+    if (step.get('id') === currentStepId) {
+      title += ' (current)';
+    }
+    return {
+      id: step.get('id'),
+      title,
+      disabled: (step.get('id') === currentStepId),
+      selected: (step.get('id') === nextStepId),
+    };
+  };
   const delegate = {
     resultsForAll: () => sortedSteps.map((s, i) => resultForStep(s, i)).concat([{
       id: null,
