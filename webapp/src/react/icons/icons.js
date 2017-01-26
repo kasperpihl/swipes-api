@@ -23,7 +23,10 @@ import Download from './svgs/download.svg';
 import Earth from './svgs/earth.svg';
 import Email from './svgs/email.svg';
 import Find from './svgs/find.svg';
+import Folder from './svgs/folder.svg';
 import Goals from './svgs/goals.svg';
+import Goal from './svgs/goal.svg';
+import Hashtag from './svgs/hashtag.svg';
 import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
 import Hyperlink from './svgs/hyperlink.svg';
@@ -31,8 +34,10 @@ import Itallic from './svgs/itallic.svg';
 import LargeList from './svgs/large-list.svg';
 import Linux from './svgs/linux.svg';
 import LogoLoader from './svgs/logo-loader.svg';
+import Milestones from './svgs/milestones.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';
+import Notification from './svgs/notification.svg';
 import OrderedList from './svgs/ordered-list.svg';
 import Person from './svgs/person.svg';
 import Plus from './svgs/plus.svg';
@@ -100,7 +105,10 @@ export {
   Earth,
   Email,
   Find,
+  Folder,
+  Goal,
   Goals,
+  Hashtag,
   HeaderOne,
   HeaderTwo,
   Hyperlink,
@@ -108,8 +116,10 @@ export {
   LargeList,
   Linux,
   LogoLoader,
+  Milestones,
   Minus,
   Note,
+  Notification,
   OrderedList,
   Person,
   Plus,
