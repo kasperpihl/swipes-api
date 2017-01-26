@@ -23,11 +23,15 @@ class HOCBrowse extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.paths.length !== this.state.paths.length) {
-      const { scroller } = this.refs;
-      const scrollW = scroller.scrollWidth;
-      const clientW = scroller.clientWidth;
-      scroller.scrollLeft = Math.max(scrollW - clientW, 0);
-      console.log(scrollW, clientW);
+      setTimeout(() => {
+        const { scroller } = this.refs;
+        if (scroller) {
+          const scrollW = scroller.scrollWidth;
+          const clientW = scroller.clientWidth;
+          scroller.scrollLeft = Math.max(scrollW - clientW, 0);
+          console.log(scrollW, clientW);
+        }
+      }, 600);
     }
   }
   updateCacheAtPath(path, result) {
@@ -97,12 +101,12 @@ class HOCBrowse extends Component {
       path_display: ent.path_display,
       type: ent['.tag'],
       id: ent.rev || ent.path_lower,
+      leftIcon: (ent['.tag'] === 'folder' ? 'Folder' : undefined),
       rightIcon: (ent['.tag'] === 'folder' ? 'ArrowRightLine' : undefined),
     }));
   }
   renderSidebarSection() {
     const props = {
-      delegate: this,
       selectedItemId: 'dropbox',
       sections: [{
         title: 'Services',
@@ -121,8 +125,8 @@ class HOCBrowse extends Component {
           { id: '2', title: 'Design notes', leftIcon: 'Note' },
           { id: '3', title: 'Production', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
           { id: '4', title: 'Prototype', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { id: '5', title: 'creative', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
-          { id: '6', title: 'general', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
+          { id: '5', title: 'creative', leftIcon: 'Hashtag', rightIcon: 'ArrowRightLine' },
+          { id: '6', title: 'general', leftIcon: 'Hashtag', rightIcon: 'ArrowRightLine' },
           { id: '7', title: 'Kasper', leftIcon: 'Person' },
           { id: '8', title: 'Journal', leftIcon: 'Note' },
         ],
