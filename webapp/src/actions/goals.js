@@ -44,6 +44,36 @@ export const archive = goalId => (d) => {
   ));
 };
 
+export const selectStep = (options, goalId, callback) => (d, getState) => {
+  const goal = getState().getIn(['goals', goalId]);
+  const steps = goal.get('steps');
+  const sortedSteps = goal.get('step_order').map(sId => steps.get(sId)).toArray();
+  const currentStepId = goal.getIn(['status', 'current_step_id']);
+  const resultForStep = (step, i) => ({
+    id: step.get('id'),
+    title: `${i + 1}. ${step.get('title')}`,
+    disabled: (step.get('id') === currentStepId),
+  });
+  const delegate = {
+    resultsForAll: () => sortedSteps.map((s, i) => resultForStep(s, i)).concat([{
+      id: null,
+      title: 'Complete Goal',
+      // KRIS_TODO: add left icon
+    }]),
+    onItemAction: (obj) => {
+      callback(obj.id);
+      d(a.main.contextMenu(null));
+    },
+  };
+  d(a.main.contextMenu({
+    options,
+    component: TabMenu,
+    props: {
+      delegate,
+    },
+  }));
+};
+
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];
 

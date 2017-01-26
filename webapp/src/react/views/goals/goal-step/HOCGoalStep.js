@@ -29,23 +29,41 @@ class HOCGoalStep extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = { isHandingOff: false, handoffText: '', nextStepId: null };
-    const helper = this.getHelper();
-    const nextStep = helper.getNextStep();
-    if (nextStep) {
-      this.state.nextStepId = nextStep.get('id');
-    }
+    this.state = {
+      isHandingOff: false,
+      handoffText: '',
+      nextStepId: this.calculateNextStep(),
+    };
+
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser']);
+    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser', 'onChangeClick']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+  componentWillReceiveProps(nextProps) {
+    const { goal } = this.props;
+    const nextGoal = nextProps.goal;
+    if (nextGoal && goal) {
+      if (nextGoal.getIn(['status', 'current_step_id']) !== goal.getIn(['status', 'current_step_id'])) {
+        this.setState({
+          isHandingOff: false,
+          handoffText: '',
+          nextStepId: this.calculateNextStep(nextGoal),
+        });
+      }
+    }
+  }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isHandingOff && !prevState.isHandingOff) {
       this.refs.handoffMessage.focus();
     }
+  }
+  calculateNextStep(goal) {
+    const helper = this.getHelper(goal);
+    const nextStep = helper.getNextStep();
+    return nextStep ? nextStep.get('id') : null;
   }
   onContextClick(i, e) {
     const {
@@ -78,17 +96,18 @@ class HOCGoalStep extends Component {
   }
   onChangeClick(e) {
     console.log('change!', e);
+    const { selectStep, goal } = this.props;
+    selectStep({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    }, goal.get('id'), (nextStepId) => {
+      this.setState({ nextStepId });
+    });
   }
   onHandoff() {
     const { completeStep, goal } = this.props;
-    const { handoffText } = this.state;
+    const { handoffText, nextStepId } = this.state;
     if (this.state.isHandingOff) {
-      const helper = this.getHelper();
-      const nextStep = helper.getNextStep();
-      let nextStepId;
-      if (nextStep) {
-        nextStepId = nextStep.get('id');
-      }
       completeStep(goal.get('id'), nextStepId, handoffText).then((res) => {
         console.log('res', res);
       });
@@ -127,8 +146,9 @@ class HOCGoalStep extends Component {
     navigateToId('slack');
     openSlackIn(this.slackUserIdForUser(id));
   }
-  getHelper() {
-    const { goal, me } = this.props;
+  getHelper(overwriteGoal) {
+    let { goal, me } = this.props;
+    goal = overwriteGoal || goal;
     return new GoalsUtil(goal, me.get('id'));
   }
 
@@ -306,6 +326,7 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
+  selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
   navigateToId: actions.navigation.navigateToId,
   archive: actions.goals.archive,
