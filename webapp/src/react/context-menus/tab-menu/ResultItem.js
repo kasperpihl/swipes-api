@@ -96,6 +96,13 @@ class ResultItem extends Component {
     return <div className="result__subtitle">{subtitle}</div>;
   }
   render() {
+    const { disabled } = this.props;
+    let className = 'result';
+
+    if (disabled) {
+      className += ' result--disabled';
+    }
+
     return (
       <div className="result" onClick={this.onClickCached('row')}>
         {this.renderLeftIcon()}
@@ -109,7 +116,7 @@ class ResultItem extends Component {
   }
 }
 
-const { shape, string, func, object } = PropTypes;
+const { shape, string, func, object, bool } = PropTypes;
 
 const iconProps = shape({
   src: string,
@@ -133,6 +140,7 @@ ResultItem.propTypes = {
   title: string,
   subtitle: string,
   rightIcon: iconProps,
+  disabled: bool,
 };
 
 export default ResultItem;

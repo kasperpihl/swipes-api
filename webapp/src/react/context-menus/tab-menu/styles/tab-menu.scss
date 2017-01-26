@@ -14,7 +14,7 @@ $sectionHeight: 52px;
 
 .tab-menu {
   @include size($containerWidth, $containerHeight);
-
+  @include flex(column);
 	background-color: $bg;
 	border-radius: 6px;
 	box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
@@ -29,6 +29,15 @@ $sectionHeight: 52px;
 // ELEMENTS
 // ======================================================
 
+// Section
+
+.tab-menu {
+  $b: &;
+
+  &__section {
+    @include flex(none);
+  }
+}
 
 // Search
 
@@ -37,6 +46,7 @@ $sectionHeight: 52px;
 
   &__search {
     @include size(100%, auto);
+    @include flex(none);
     position: relative;
     border-bottom: 1px solid $deepBlue-10;
   }
@@ -91,9 +101,10 @@ $sectionHeight: 52px;
 // List item
 
 .tab-menu__list {
-  $e: &;
 
   .result {
+    $e: &;
+
     @include size(100%, auto);
     @include flex();
     min-height: 50px;
@@ -111,7 +122,7 @@ $sectionHeight: 52px;
       transition: .15s ease-in-out;
     }
 
-    &:hover {
+    &:not(&--disabled):hover {
       &:before {
         background-color: $deepBlue-5;
       }
@@ -129,6 +140,12 @@ $sectionHeight: 52px;
 
     &__subtitle {
       @include font(12px, $deepBlue-40, 15px);
+    }
+
+    &--disabled {
+      #{$e}__title, #{$e}__subtitle {
+        @include font($c: $deepBlue-30);
+      }
     }
   }
 }
@@ -213,9 +230,10 @@ $sectionHeight: 52px;
 .tab-menu {
   $b: &;
 
-  &__tab-bar:empty + &__list {
-      @include size(100%, calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
-      transform: translateY(-52px);
+  &__section:empty + &__list {
+      @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
+      position: relative;
+      left: calc(-1 * #{$mainPadding}); top: auto;
   }
 
   &--is-searching {

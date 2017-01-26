@@ -187,8 +187,10 @@ class TabMenu extends Component {
 
     return (
       <div className={className}>
-        {this.renderSearchField()}
-        <div className="tab-menu__tab-bar">
+        <div className="tab-menu__section">
+          {this.renderSearchField()}
+        </div>
+        <div className="tab-menu__section">
           {this.renderTabBar()}
         </div>
         {this.renderResultList()}
