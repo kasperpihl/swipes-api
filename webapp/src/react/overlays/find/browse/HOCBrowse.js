@@ -15,10 +15,11 @@ class HOCBrowse extends Component {
 
       },
       paths: [],
+      selectedItemIds: [],
     };
   }
   componentDidMount() {
-    this.loadPath('', 'Dropbox');
+    this.loadPath({ path: '', title: 'Dropbox' });
   }
   updateCacheAtPath(path, result) {
     const { cache } = this.state;
@@ -26,17 +27,22 @@ class HOCBrowse extends Component {
     console.log(path, result, cache);
     this.setState({ cache });
   }
-  loadPath(path, title, depth) {
+  loadPath(entry, depth) {
+    const { title, path } = entry;
     const { accountId, request } = this.props;
-    const { paths } = this.state;
+    const { paths, selectedItemIds } = this.state;
     if (typeof depth === 'number') {
       const size = this.state.paths.length;
       if (depth < (size - 1)) {
         paths.splice(depth + 1);
+        selectedItemIds.splice(depth);
       }
     }
+    if (entry.id) {
+      selectedItemIds.push(entry.id);
+    }
     paths.push({ path, title });
-    this.setState({ paths });
+    this.setState({ paths, selectedItemIds });
     request('services.request', {
       service_name: 'dropbox',
       account_id: accountId,
@@ -52,7 +58,7 @@ class HOCBrowse extends Component {
   }
   clickedItem(depth, entry) {
     if (entry.type === 'folder') {
-      this.loadPath(entry.path, entry.title, depth);
+      this.loadPath(entry, depth);
     } else {
       console.log('wire up preview', entry);
       // this.preview(entry);
@@ -116,6 +122,7 @@ class HOCBrowse extends Component {
   renderHorizontalSections() {
     const {
       paths,
+      selectedItemIds,
       cache,
     } = this.state;
     return paths.map((p, i) => {
@@ -130,6 +137,7 @@ class HOCBrowse extends Component {
       const props = {
         depth: i,
         delegate: this,
+        selectedItemId: selectedItemIds[i],
         loading: !section.items,
         sections: [section],
       };

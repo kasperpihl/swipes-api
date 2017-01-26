@@ -37,7 +37,6 @@ class BrowseSectionList extends Component {
   }
   renderSections() {
     const { sections, loading } = this.props;
-
     if (loading) {
       return <Loader center />;
     }
