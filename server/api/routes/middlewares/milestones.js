@@ -35,7 +35,7 @@ const milestonesCreate = valLocals('milestonesCreate', {
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    deleted: false,
+    archived: false,
   };
 
   setLocals({
@@ -67,14 +67,14 @@ const milestonesInsert = valLocals('milestonesInsert', {
       return next(err);
     });
 });
-const milestonesDelete = valLocals('milestonesDelete', {
+const milestonesArchive = valLocals('milestonesArchive', {
   id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     id,
   } = res.locals;
   const properties = {
-    deleted: true,
+    archived: true,
     updated_at: r.now(),
   };
 
@@ -115,7 +115,7 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
 
   return next();
 });
-const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
+const milestonesArchiveQueueMessage = valLocals('milestonesArchiveQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
@@ -142,7 +142,7 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
 export {
   milestonesCreate,
   milestonesInsert,
-  milestonesDelete,
+  milestonesArchive,
   milestonesCreateQueueMessage,
-  milestonesDeleteQueueMessage,
+  milestonesArchiveQueueMessage,
 };

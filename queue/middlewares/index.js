@@ -20,9 +20,9 @@ const goal_created = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const goal_deleted = notifyWrapper([
+const goal_Archived = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsDeletedNotificationData,
+  goals.goalsArchivedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
@@ -58,7 +58,7 @@ const milestone_created = notifyWrapper([
 
 const milestone_archived = notifyWrapper([
   milestones.milestonesGetSingle,
-  milestones.milestonesDeletedNotificationData,
+  milestones.milestonesArchivedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
@@ -70,13 +70,13 @@ const way_created = notifyWrapper([
 
 const way_archived = notifyWrapper([
   ways.waysGetSingle,
-  ways.waysDeletedNotificationData,
+  ways.waysArchivedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 export {
   goal_created,
-  goal_deleted,
+  goal_archived,
   goal_milestone_added,
   goal_milestone_removed,
   step_completed,

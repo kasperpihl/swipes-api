@@ -32,7 +32,7 @@ const goalsNotificationData = (req, res, next) => {
   return next();
 };
 
-const goalsDeletedNotificationData = (req, res, next) => {
+const goalsArchivedNotificationData = (req, res, next) => {
   const {
     user_id,
     goal,
@@ -125,7 +125,7 @@ const goalsStepGotActiveNotificationData = (req, res, next) => {
 export {
   goalsGetSingle,
   goalsNotificationData,
-  goalsDeletedNotificationData,
+  goalsArchivedNotificationData,
   goalsStepCompletedNotificationData,
   goalsStepGotActiveNotificationData,
   goalsMilestoneAddedNotificationData,

@@ -6,9 +6,9 @@ import {
 import {
   milestonesCreate,
   milestonesInsert,
-  milestonesDelete,
+  milestonesArchive,
   milestonesCreateQueueMessage,
-  milestonesDeleteQueueMessage,
+  milestonesArchiveQueueMessage,
 } from './middlewares/milestones';
 import {
   notificationsPushToQueue,
@@ -39,12 +39,12 @@ authed.all('/milestones.create',
     }).require(),
   }));
 
-authed.all('/milestones.delete',
+authed.all('/milestones.archive',
   valBody({
     id: string.require(),
   }),
-  milestonesDelete,
-  milestonesDeleteQueueMessage,
+  milestonesArchive,
+  milestonesArchiveQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     id: string.require(),

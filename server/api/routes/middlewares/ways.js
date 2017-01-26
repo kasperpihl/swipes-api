@@ -35,7 +35,7 @@ const waysCreate = valLocals('waysCreate', {
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    deleted: false,
+    archived: false,
   };
 
   setLocals({
@@ -64,14 +64,14 @@ const waysInsert = valLocals('waysInsert', {
       return next(err);
     });
 });
-const waysDelete = valLocals('waysDelete', {
+const waysArchive = valLocals('waysArchive', {
   id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     id,
   } = res.locals;
   const properties = {
-    deleted: true,
+    archived: true,
     updated_at: r.now(),
   };
 
@@ -112,7 +112,7 @@ const waysCreateQueueMessage = valLocals('waysCreateQueueMessage', {
 
   return next();
 });
-const waysDeleteQueueMessage = valLocals('waysDeleteQueueMessage', {
+const waysArchiveQueueMessage = valLocals('waysArchiveQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
@@ -139,7 +139,7 @@ const waysDeleteQueueMessage = valLocals('waysDeleteQueueMessage', {
 export {
   waysCreate,
   waysInsert,
-  waysDelete,
+  waysArchive,
   waysCreateQueueMessage,
-  waysDeleteQueueMessage,
+  waysArchiveQueueMessage,
 };

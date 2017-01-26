@@ -38,7 +38,7 @@ export const archive = goalId => (d) => {
     },
     (res) => {
       if (res && res.button === 0) {
-        d(a.api.request('goals.delete', { goal_id: goalId }));
+        d(a.api.request('goals.archive', { goal_id: goalId }));
       }
     },
   ));

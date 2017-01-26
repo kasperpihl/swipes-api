@@ -39,7 +39,7 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.created_at = r.now();
   goal.updated_at = r.now();
   goal.created_by = user_id;
-  goal.deleted = false;
+  goal.archived = false;
   goal.history = [{
     flags,
     message,
@@ -133,13 +133,13 @@ const goalsInsert = valLocals('goalsInsert', {
     });
 });
 
-const goalsDelete = valLocals('goalsDelete', {
+const goalsArchive = valLocals('goalsArchive', {
   goal_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
   } = res.locals;
-  const properties = { deleted: true };
+  const properties = { archived: true };
 
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
@@ -272,7 +272,7 @@ const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   return next();
 });
 
-const goalsDeleteQueueMessage = valLocals('goalsDeleteQueueMessage', {
+const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   eventType: string.require(),
@@ -402,13 +402,13 @@ const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage
 export {
   goalsCreate,
   goalsInsert,
-  goalsDelete,
+  goalsArchive,
   goalsAddMilestone,
   goalsRemoveMilestone,
   goalsGet,
   goalsUpdate,
   goalsCreateQueueMessage,
-  goalsDeleteQueueMessage,
+  goalsArchiveQueueMessage,
   goalsNextStepQueueMessage,
   goalsStepGotActiveQueueMessage,
   goalsAddMilestoneQueueMessage,
