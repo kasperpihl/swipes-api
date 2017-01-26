@@ -11,7 +11,7 @@ import Section from 'components/section/Section';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
-import HandoffWriteMessage from './HandoffWriteMessage';
+import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import GoalActions from './GoalActions';
 import GoalSide from './GoalSide';
 
@@ -28,7 +28,12 @@ class HOCGoalStep extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = { isHandingOff: false, handoffText: '' };
+    this.state = { isHandingOff: false, handoffText: '', nextStepId: null };
+    const helper = this.getHelper();
+    const nextStep = helper.getNextStep();
+    if (nextStep) {
+      this.state.nextStepId = nextStep.get('id');
+    }
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser']);
     this.callDelegate = setupDelegate(props.delegate);
@@ -69,6 +74,9 @@ class HOCGoalStep extends Component {
   }
   onCancel() {
     this.setState({ isHandingOff: false });
+  }
+  onChangeClick(e) {
+    console.log('change!', e);
   }
   onHandoff() {
     const { completeStep, goal } = this.props;
@@ -123,23 +131,26 @@ class HOCGoalStep extends Component {
     return new GoalsUtil(goal, me.get('id'));
   }
 
-  mapStepToHeader(step, subtitle, index) {
-    if (!step) {
+  mapStepToHeader(stepId, next) {
+    const helper = this.getHelper();
+
+    if (!stepId) {
       return undefined;
     }
+    const stepIndex = helper.getStepIndexForId(stepId);
+    const step = helper.getStepById(stepId);
     return {
-      title: `${index}. ${step.get('title')}`,
-      subtitle,
+      title: `${stepIndex + 1}. ${step.get('title')}`,
+      subtitle: next ? 'Next Step' : 'Current Step',
       assignees: step.get('assignees').toJS(),
     };
   }
 
   renderHeader() {
-    const { isHandingOff } = this.state;
+    const { isHandingOff, nextStepId } = this.state;
     const helper = this.getHelper();
-    const fromIndex = helper.getCurrentStepIndex();
-    const from = this.mapStepToHeader(helper.getCurrentStep(), 'Current Step', fromIndex + 1);
-    const to = this.mapStepToHeader(helper.getNextStep(), 'Next step', fromIndex + 2);
+    const from = this.mapStepToHeader(helper.getCurrentStepId());
+    const to = this.mapStepToHeader(nextStepId, true);
 
     return (
       <HandoffHeader

@@ -7,6 +7,7 @@ import Button from 'Button';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
 
+import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
 import AddStepList from './AddStepList';
@@ -54,8 +55,8 @@ class HOCAddGoal extends Component {
   onTitleChange(e) {
     this.setState({ title: e.target.value });
   }
-  onHandoffChange(e) {
-    this.setState({ handoff: e.target.value });
+  onHandoffChange(handoff) {
+    this.setState({ handoff });
   }
 
   onContextClick(i, e) {
@@ -253,20 +254,16 @@ class HOCAddGoal extends Component {
 
   renderHandoff() {
     const { handoff } = this.state;
-
+    const { me } = this.props;
     if (!this.isReadyToCreate()) {
       return undefined;
     }
-
+    const src = me.get('profile_pic');
     return (
-      <ReactTextarea
-        className="add-goal__handoff"
-        value={handoff}
-        minRows={3}
-        maxRows={10}
-        ref="textarea"
+      <HandoffWriteMessage
+        text={handoff}
+        imgSrc={src}
         onChange={this.onHandoffChange}
-        placeholder="Pass on your initial message"
       />
     );
   }
@@ -355,6 +352,7 @@ HOCAddGoal.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    me: state.get('me'),
     organization_id: state.getIn(['me', 'organizations', 0, 'id']),
   };
 }
