@@ -150,12 +150,6 @@ $sectionHeight: 52px;
       &:before {
         background-color: $blue-10;
       }
-
-      &:hover {
-        &:before {
-          background-color: $blue-40;
-        }
-      }
     }
 
     &--disabled {
