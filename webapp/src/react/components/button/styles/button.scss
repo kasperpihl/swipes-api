@@ -40,7 +40,7 @@ $borderColor: $deepBlue-10;
 
   &__svg {
     @include size(24px);
-    @include svg-color($mainColor);
+    @include svg-color($mainColor !important);
     transition: .15s;
   }
 
@@ -81,8 +81,7 @@ $borderColor: $deepBlue-10;
     transition: .15s;
 
     #{$b}__svg {
-      fill: $mainColor;
-      stroke: $mainColor;
+      @include svg-color($mainColor !important);
     }
 
     #{$b}__text {
@@ -144,8 +143,7 @@ $borderColor: $deepBlue-10;
     background-color: $borderColor;
 
     #{$b}__svg {
-      fill: $mainColor;
-      stroke: $mainColor;
+      @include svg-color($mainColor !important);
     }
 
     #{$b}__text {
@@ -158,8 +156,7 @@ $borderColor: $deepBlue-10;
     background-color: $mainColor;
 
     #{$b}__svg {
-      fill: white;
-      stroke: white;
+      @include svg-color(white !important);
     }
 
     #{$b}__text {

@@ -104,7 +104,7 @@ class ResultItem extends Component {
     }
 
     return (
-      <div className="result" onClick={this.onClickCached('row')}>
+      <div className={className} onClick={this.onClickCached('row')}>
         {this.renderLeftIcon()}
         <div className="result__data">
           {this.renderTitle()}

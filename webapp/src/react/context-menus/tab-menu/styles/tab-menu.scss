@@ -122,7 +122,7 @@ $sectionHeight: 52px;
       transition: .15s ease-in-out;
     }
 
-    &:not(&--disabled):hover {
+    &:hover {
       &:before {
         background-color: $deepBlue-5;
       }
@@ -143,8 +143,14 @@ $sectionHeight: 52px;
     }
 
     &--disabled {
-      #{$e}__title, #{$e}__subtitle {
-        @include font($c: $deepBlue-30);
+      & .result__title, .result__subtitle {
+        @include font(15px, $deepBlue-30, 21px, 400);
+      }
+
+      &:hover {
+        &:before {
+          background-color: transparent;
+        }
       }
     }
   }

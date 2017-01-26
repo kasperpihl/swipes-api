@@ -182,16 +182,14 @@ class HOCGoalStep extends Component {
     const from = this.mapStepToHeader(helper.getCurrentStepId());
     const to = this.mapStepToHeader(nextStepId, true);
 
-    return undefined;
-
-    // return (
-    //   <HandoffHeader
-    //     from={from}
-    //     to={to}
-    //     onChangeClick={this.onChangeClick}
-    //     isHandingOff={isHandingOff}
-    //   />
-    // );
+    return (
+      <HandoffHeader
+        from={from}
+        to={to}
+        onChangeClick={this.onChangeClick}
+        isHandingOff={isHandingOff}
+      />
+    );
   }
   renderHandoffWriteMessage() {
     const { me } = this.props;
