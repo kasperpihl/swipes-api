@@ -21,16 +21,13 @@ export default class OrgDashboard extends Component {
   }
   render() {
     return (
-      <div className="milestones-screenshot" />
+      <div className="org-dashboard">
+        <div className="notifications__header">Notifications</div>
+        <div className="notifications__list">
+          {this.renderNotifications()}
+        </div>
+      </div>
     );
-    // return (
-    //   <div className="org-dashboard">
-    //     <div className="notifications__header">Notifications</div>
-    //     <div className="notifications__list">
-    //       {this.renderNotifications()}
-    //     </div>
-    //   </div>
-    // );
   }
 }
 
