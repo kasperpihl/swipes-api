@@ -1,0 +1,31 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.goal-completed {
+  @include size(100%, auto);
+  @include flex(flex);
+  padding: 45px 0;
+
+  &__assignees {
+    @include size(40%, auto);
+    @include flex(flex-start, flex-end);
+    padding-right: calc(45px / 2);
+  }
+
+  &__content {
+    @include size(60%, auto);
+    @include flex(none);
+    padding-left: calc(45px / 2);
+  }
+
+  &__title {
+    @include font(27px, $deepBlue-100, 30px);
+  }
+
+  &__subtitle {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-60, 20px);
+    max-width: 300px;
+    padding-top: 21px;
+  }
+}
