@@ -34,7 +34,6 @@ class HOCBrowse extends Component {
       if (depth < (size - 1)) {
         paths.splice(depth + 1);
       }
-      console.log(depth, entry);
     }
     paths.push({ path, title });
     this.setState({ paths });
@@ -57,6 +56,18 @@ class HOCBrowse extends Component {
     } else {
       console.log('wire up preview', entry);
       // this.preview(entry);
+      const { accountId, preview } = this.props;
+      const link = {
+        service: {
+          id: `rev:${entry.id}`,
+          name: 'dropbox',
+          type: 'file',
+        },
+        permission: {
+          account_id: accountId,
+        },
+      };
+      preview(link);
     }
   }
   clickedBack() {
@@ -154,4 +165,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   request: actions.api.request,
+  preview: actions.main.preview,
 })(HOCBrowse);
