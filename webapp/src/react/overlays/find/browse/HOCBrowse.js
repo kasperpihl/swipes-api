@@ -21,6 +21,15 @@ class HOCBrowse extends Component {
   componentDidMount() {
     this.loadPath({ path: '', title: 'Dropbox' });
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.paths.length !== this.state.paths.length) {
+      const { scroller } = this.refs;
+      const scrollW = scroller.scrollWidth;
+      const clientW = scroller.clientWidth;
+      scroller.scrollLeft = Math.max(scrollW - clientW, 0);
+      console.log(scrollW, clientW);
+    }
+  }
   updateCacheAtPath(path, result) {
     const { cache } = this.state;
     cache[`${path}`] = result;
@@ -30,18 +39,18 @@ class HOCBrowse extends Component {
   loadPath(entry, depth) {
     const { title, path } = entry;
     const { accountId, request } = this.props;
-    const { paths, selectedItemIds } = this.state;
+    let { paths, selectedItemIds } = this.state;
     if (typeof depth === 'number') {
       const size = this.state.paths.length;
       if (depth < (size - 1)) {
-        paths.splice(depth + 1);
-        selectedItemIds.splice(depth);
+        paths = paths.slice(0, depth + 1);
+        selectedItemIds = selectedItemIds.slice(0, depth);
       }
     }
     if (entry.id) {
-      selectedItemIds.push(entry.id);
+      selectedItemIds = selectedItemIds.concat([entry.id]);
     }
-    paths.push({ path, title });
+    paths = paths.concat([{ path, title }]);
     this.setState({ paths, selectedItemIds });
     request('services.request', {
       service_name: 'dropbox',
@@ -88,11 +97,13 @@ class HOCBrowse extends Component {
       path_display: ent.path_display,
       type: ent['.tag'],
       id: ent.rev || ent.path_lower,
+      rightIcon: (ent['.tag'] === 'folder' ? 'ArrowRightLine' : undefined),
     }));
   }
   renderSidebarSection() {
     const props = {
       delegate: this,
+      selectedItemId: 'dropbox',
       sections: [{
         title: 'Services',
         items: [
@@ -106,14 +117,14 @@ class HOCBrowse extends Component {
       }, {
         title: 'Shortcuts',
         items: [
-          { title: 'Brand Guidelines', leftIcon: 'Note' },
-          { title: 'Design notes', leftIcon: 'Note' },
-          { title: 'Production', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { title: 'Prototype', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { title: 'creative', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
-          { title: 'general', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
-          { title: 'Kasper', leftIcon: 'Person' },
-          { title: 'Journal', leftIcon: 'Note' },
+          { id: '1', title: 'Brand Guidelines', leftIcon: 'Note' },
+          { id: '2', title: 'Design notes', leftIcon: 'Note' },
+          { id: '3', title: 'Production', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
+          { id: '4', title: 'Prototype', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
+          { id: '5', title: 'creative', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
+          { id: '6', title: 'general', leftIcon: 'SlackLogo', rightIcon: 'ArrowRightLine' },
+          { id: '7', title: 'Kasper', leftIcon: 'Person' },
+          { id: '8', title: 'Journal', leftIcon: 'Note' },
         ],
       }],
     };
@@ -150,7 +161,7 @@ class HOCBrowse extends Component {
         <div className="browse-sidebar">
           {this.renderSidebarSection()}
         </div>
-        <div className="browse-horizontal-scroller">
+        <div className="browse-horizontal-scroller" ref="scroller">
           {this.renderHorizontalSections()}
         </div>
       </div>

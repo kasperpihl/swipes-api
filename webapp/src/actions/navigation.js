@@ -17,6 +17,7 @@ const startingViewForNavId = (navId) => {
       return {
         component: 'Find',
         title: 'Find',
+        placeholder: 'Search for anything in all your service',
       };
     case 'profile':
       return {
