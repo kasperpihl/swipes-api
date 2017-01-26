@@ -85,13 +85,15 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     return next(new SwipesError('Invalid next_step_id!'));
   }
 
+  const type = next_step_id ? 'complete_step' : 'complete_goal';
+
   goal.history.push({
+    type,
     flags,
     message,
     done_by: user_id,
     from: current_step_id,
     to: next_step_id,
-    type: 'complete_step',
   });
 
   goal.status = {
