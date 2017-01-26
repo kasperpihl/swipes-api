@@ -147,9 +147,13 @@ $sectionHeight: 52px;
         @include font(15px, $deepBlue-100, 21px, 4500);
       }
 
+      &:before {
+        background-color: $blue-10;
+      }
+
       &:hover {
         &:before {
-          background-color: $blue-10;
+          background-color: $blue-40;
         }
       }
     }
