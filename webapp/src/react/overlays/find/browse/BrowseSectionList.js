@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import BrowseSectionItem from './BrowseSectionItem';
 import Loader from 'components/swipes-ui/Loader';
-import { setupDelegate } from 'classes/utils';
 
 import './styles/section-list.scss';
 
@@ -9,12 +9,31 @@ class BrowseSectionList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate, this);
+    this.callDelegate = setupDelegate(props.delegate, props.depth);
+    this.clickedItemCached = setupCachedCallback(this.clickedItem, this);
+    // now use events as onClick: this.clickedItemCached(i)
   }
   componentDidMount() {
   }
+  clickedItem(i, item) {
+    this.callDelegate('clickedItem', item);
+  }
   renderSectionItems(items) {
-    return items.map(i => <BrowseSectionItem id={i.id} title={i.title} leftIcon={i.leftIcon} rightIcon={i.rightIcon} />);
+    const { selectedItemId } = this.props;
+    if (!items || !items.length) {
+      return undefined;
+    }
+    return items.map((item, i) => (
+      <BrowseSectionItem
+        key={`item${i}`}
+        id={item.id}
+        selected={(item.id === selectedItemId)}
+        onClick={this.clickedItemCached(i, item)}
+        title={item.title}
+        leftIcon={item.leftIcon}
+        rightIcon={item.rightIcon}
+      />
+    ));
   }
   renderSections() {
     const { sections, loading } = this.props;

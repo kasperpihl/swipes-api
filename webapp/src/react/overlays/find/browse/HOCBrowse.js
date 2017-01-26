@@ -26,9 +26,16 @@ class HOCBrowse extends Component {
     console.log(path, result, cache);
     this.setState({ cache });
   }
-  loadPath(path, title) {
+  loadPath(path, title, depth) {
     const { accountId, request } = this.props;
     const { paths } = this.state;
+    if (typeof depth === 'number') {
+      const size = this.state.paths.length;
+      if (depth < (size - 1)) {
+        paths.splice(depth + 1);
+      }
+      console.log(depth, entry);
+    }
     paths.push({ path, title });
     this.setState({ paths });
     request('services.request', {
@@ -44,9 +51,9 @@ class HOCBrowse extends Component {
       }
     });
   }
-  clickedEntry(entry) {
+  clickedItem(depth, entry) {
     if (entry.type === 'folder') {
-      this.loadPath(entry.path, entry.title);
+      this.loadPath(entry.path, entry.title, depth);
     } else {
       console.log('wire up preview', entry);
       // this.preview(entry);
@@ -63,7 +70,7 @@ class HOCBrowse extends Component {
       path: ent.path_lower,
       path_display: ent.path_display,
       type: ent['.tag'],
-      id: ent.rev,
+      id: ent.rev || ent.path_lower,
     }));
   }
   renderSidebarSection() {
@@ -96,16 +103,29 @@ class HOCBrowse extends Component {
     return <BrowseSectionList {...props} />;
   }
   renderHorizontalSections() {
-
-  }
-  render() {
     const {
       paths,
       cache,
     } = this.state;
-    const entry = paths[paths.length - 1];
-    const title = entry ? entry.title : 'Loading...';
-    const path = entry ? entry.path : undefined;
+    return paths.map((p, i) => {
+      const section = {
+        title: p.title,
+      };
+      const c = cache[p.path];
+      if (c) {
+        section.loading = false;
+        section.items = c;
+      }
+      const props = {
+        depth: i,
+        delegate: this,
+        loading: !section.items,
+        sections: [section],
+      };
+      return <BrowseSectionList {...props} />;
+    });
+  }
+  render() {
     return (
       <div className="browse-container">
         <div className="browse-sidebar">
@@ -114,23 +134,15 @@ class HOCBrowse extends Component {
         <div className="browse-horizontal-scroller">
           {this.renderHorizontalSections()}
         </div>
-        {/* <Browse
-          title={title}
-          showBack={(paths.length > 1)}
-          result={cache[`${path}`]}
-          delegate={this}
-        />*/}
       </div>
     );
   }
 }
 
-const { string, object, func } = PropTypes;
+const { string, func } = PropTypes;
 HOCBrowse.propTypes = {
-  title: string,
   accountId: string,
   request: func,
-  result: object,
 };
 
 function mapStateToProps(state) {
@@ -142,5 +154,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   request: actions.api.request,
-  loadModal: actions.modal.load,
 })(HOCBrowse);
