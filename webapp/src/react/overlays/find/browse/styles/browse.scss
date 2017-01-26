@@ -2,5 +2,36 @@
 @import '~styles/_mixins.scss';
 
 .browse {
-  
+
+}
+
+.browse-container {
+  @include size(calc(100% - 10px), 100%);
+  @include flex(flex);
+  position: relative;
+  margin-left: 10px;
+  padding-top: 30px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    @include size(100%, 1px);
+    max-width: 780px;
+    background-color: $deepBlue-10;
+  }
+}
+
+.browse-sidebar {
+  @include size(100%);
+  @include flex(none);
+  position: relative;
+  max-width: 207px;
+}
+
+.browse-horizontal-scroller {
+  @include size(100%);
+  @include flex(flex);
+  overflow-y: hidden;
+  overflow-x: auto;
 }

@@ -1,49 +1,69 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
+@import '~styles/_functions.scss/';
 
 .browse-section-list {
   $b: &;
   @include size(100%);
+  @include flex(none);
+  max-width: 390px;
   overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  border-right: 1px solid $deepBlue-10;
+  padding-bottom: 30px;
 
   .browse-section {
-    @include size(390px, auto);
+    @include size(100%, auto);
+    position: relative;
+
+    &:not(:first-child) {
+      padding-top: 45px;
+    }
 
     &__title {
+      @include size(100%, auto);
       @include font(10px, $deepBlue-60, 12px, bold);
-      padding-bottom: 21px;
       text-transform: uppercase;
       padding: 0 45px;
+      padding-bottom: 21px;
     }
 
     &-item {
-      $e: &;
-      @include size(100%, 24px);
-      @include flex(flex);
+      $e: getElementSelectorInBlock(#{&}, #{$b});
+      @include size(100%, 33px);
+      @include flex(center, flex-start);
 
       &__title {
         @include size(100%, 24px);
         @include font(12px, $blue-100, 24px, 500);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
       }
 
       &__icon {
-        @include size(24px);
+        @include size(45px, 24px);
+        @include flex();
         @include flex(none);
-        @include svg-color($blue-100);
-        margin: 0 calc((45px - 24px) / 2);
-
-        &--right {
-          opacity: 0;
-          transform: translateX(-8px);
-          transition: .15s ease;
-        }
+        transition: .2s ease;
       }
 
+      &__svg {
+        @include size(24px);
+        @include svg-color($blue-100 !important);
+
+        path {
+          @include svg-color($blue-100 !important);
+          stroke-width: 1px
+        }
+      }
       &:hover {
-        .browse-section-item__icon--right {
-          opacity: 1;
-          transform: translateX(0px);
-          transition: .15s .2s ease;
+
+        #{$e}__icon--right {
+          transform: translateX(5px);
+          transition: .2s ease;
         }
       }
     }

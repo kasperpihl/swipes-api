@@ -5,6 +5,8 @@ import * as actions from 'actions';
 import Browse from './Browse';
 import BrowseSectionList from './BrowseSectionList';
 
+import './styles/browse.scss';
+
 class HOCBrowse extends Component {
   constructor(props) {
     super(props);
@@ -109,7 +111,7 @@ class HOCBrowse extends Component {
         <div className="browse-sidebar">
           {this.renderSidebarSection()}
         </div>
-        <div className="browse-horizontol-scroller">
+        <div className="browse-horizontal-scroller">
           {this.renderHorizontalSections()}
         </div>
         {/* <Browse

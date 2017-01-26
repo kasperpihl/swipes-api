@@ -11,9 +11,13 @@ const BrowseSectionItem = (props) => {
 
   return (
     <div className="browse-section-item" onClick={onClick}>
-      <Icon svg={leftIcon} className="browse-section-item__icon browse-section-item__icon--left" />
+      <div className="browse-section-item__icon browse-section-item__icon--left">
+        <Icon svg={leftIcon} className="browse-section-item__svg" />
+      </div>
       <div className="browse-section-item__title">{title}</div>
-      <Icon svg={rightIcon} className="browse-section-item__icon browse-section-item__icon--right" />
+      <div className="browse-section-item__icon browse-section-item__icon--right">
+        <Icon svg={rightIcon} className="browse-section-item__svg" />
+      </div>
     </div>
   );
 };
