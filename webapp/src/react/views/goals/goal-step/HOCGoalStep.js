@@ -31,6 +31,7 @@ class HOCGoalStep extends Component {
     super(props);
     this.state = {
       isHandingOff: false,
+      isSubmitting: false,
       handoffText: '',
       nextStepId: this.calculateNextStep(),
     };
@@ -108,7 +109,9 @@ class HOCGoalStep extends Component {
     const { completeStep, goal } = this.props;
     const { handoffText, nextStepId } = this.state;
     if (this.state.isHandingOff) {
+      this.setState({ isSubmitting: true });
       completeStep(goal.get('id'), nextStepId, handoffText).then((res) => {
+        this.setState({ isSubmitting: false });
         console.log('res', res);
       });
     } else {
@@ -257,7 +260,7 @@ class HOCGoalStep extends Component {
     );
   }
   renderActions() {
-    const { isHandingOff, nextStepId } = this.state;
+    const { isHandingOff, nextStepId, isSubmitting } = this.state;
     const helper = this.getHelper();
     if (!helper.getCurrentStep()) {
       return undefined;
@@ -269,6 +272,7 @@ class HOCGoalStep extends Component {
           onHandoff={this.onHandoff}
           isHandingOff={isHandingOff}
           isCompletingGoal={!nextStepId}
+          isSubmitting={isSubmitting}
         />
       </Section>
     );

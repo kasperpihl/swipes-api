@@ -1,12 +1,35 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
-
+const MIN_TIME = 1000;
 import './styles/button.scss';
 
 class Button extends Component {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
+    this.state = { loading: props.loading || false };
+  }
+  componentWillUnmount() {
+    clearTimeout(this._timer);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.loading !== this.props.loading) {
+      if (nextProps.loading) {
+        this._loadTime = new Date().getTime();
+        this.setState({ loading: nextProps.loading });
+        clearTimeout(this._timer);
+      } else {
+        const nowTime = new Date().getTime();
+        const diff = (nowTime - this._loadTime);
+        if (diff < MIN_TIME) {
+          this._timer = setTimeout(() => {
+            this.setState({ loading: false });
+          }, MIN_TIME - diff);
+        } else {
+          this.setState({ loading: nextProps.loading });
+        }
+      }
+    }
   }
   onClick(e) {
     const { onClick, disabled } = this.props;
@@ -46,10 +69,11 @@ class Button extends Component {
       small,
       alignIcon,
       frameless,
-      loading,
+      loading: lol,
       className: classNameFromButton,
       ...rest
     } = this.props;
+    const { loading } = this.state;
     let className = 'g-button';
     const tabIndex = {};
 
@@ -81,8 +105,6 @@ class Button extends Component {
     if (loading) {
       className += ' g-button--loading';
     }
-
-    console.log('loading', loading);
 
     if (classNameFromButton && typeof classNameFromButton === 'string') {
       className += ` ${classNameFromButton}`;
