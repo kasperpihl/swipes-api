@@ -92,6 +92,10 @@ class HOCAttachments extends Component {
     return html;
   }
   renderAddAttachments() {
+    const { disableAdd } = this.props;
+    if (disableAdd) {
+      return false;
+    }
     if (this.hasAttachments()) {
       return (
         <div className="attachment attachment--add" onClick={this.onAddCached('menu')}>
@@ -132,11 +136,12 @@ class HOCAttachments extends Component {
   }
 }
 
-const { func, object } = PropTypes;
+const { func, object, bool } = PropTypes;
 HOCAttachments.propTypes = {
   flags: list,
   attachments: map,
   attachmentOrder: list,
+  disableAdd: bool,
   addLinkMenu: func,
   addNote: func,
   addURL: func,

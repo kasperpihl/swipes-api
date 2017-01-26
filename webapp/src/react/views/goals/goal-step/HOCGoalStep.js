@@ -218,8 +218,8 @@ class HOCGoalStep extends Component {
     );
   }
   renderHandoffMessage() {
-    const { me, users } = this.props;
-    const { handoffText, isHandingOff } = this.state;
+    const { users } = this.props;
+    const { isHandingOff } = this.state;
     const helper = this.getHelper();
     const handOff = helper.getHandoffMessage();
     if (isHandingOff || !handOff) {
@@ -229,9 +229,9 @@ class HOCGoalStep extends Component {
     const text = handOff.message;
     const user = users.get(handOff.by);
     const at = handOff.at;
-
+    const title = helper.getCurrentStep() ? 'Handoff' : 'Final note';
     return (
-      <Section title="Handoff">
+      <Section title={title}>
         <HandoffMessage
           onClick={this.onOpenUser}
           user={user}
@@ -244,19 +244,24 @@ class HOCGoalStep extends Component {
 
   renderAttachments() {
     const { goal } = this.props;
-
+    const helper = this.getHelper();
     return (
       <Section title="Attachments">
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
           delegate={this}
+          disableAdd={!helper.getCurrentStep()}
         />
       </Section>
     );
   }
   renderActions() {
     const { isHandingOff, nextStepId } = this.state;
+    const helper = this.getHelper();
+    if (!helper.getCurrentStep()) {
+      return undefined;
+    }
     return (
       <Section>
         <GoalActions

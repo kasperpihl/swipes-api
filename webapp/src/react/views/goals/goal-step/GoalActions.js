@@ -7,13 +7,21 @@ import './styles/goal-actions.scss';
 class GoalActions extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { loading: false };
     bindAll(this, ['onHandoff', 'onCancel']);
   }
   componentDidMount() {
   }
   onHandoff(e) {
     const { onHandoff } = this.props;
+    if (!this.state.loading) {
+      this.setState({ loading: true });
+      setTimeout(() => {
+        this.setState({ loading: false });
+      }, 3000);
+    }
+    return;
+
     if (onHandoff) {
       onHandoff(e);
     }
@@ -48,6 +56,7 @@ class GoalActions extends Component {
   }
   renderHandoff() {
     const { isHandingOff, isCompletingGoal } = this.props;
+    const { loading } = this.state;
     let title = 'Handoff';
     if (isHandingOff) {
       title = isCompletingGoal ? 'Complete Goal' : 'Complete Step';
@@ -55,6 +64,7 @@ class GoalActions extends Component {
     return (
       <Button
         text={title}
+        loading={loading}
         primary
         onClick={this.onHandoff}
         className="goal-actions__handoff"
