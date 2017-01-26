@@ -47,8 +47,11 @@ class GoalActions extends Component {
     );
   }
   renderHandoff() {
-    const { isHandingOff } = this.props;
-    const title = isHandingOff ? 'Complete Step' : 'Handoff';
+    const { isHandingOff, isCompletingGoal } = this.props;
+    let title = 'Handoff';
+    if (isHandingOff) {
+      title = isCompletingGoal ? 'Complete Goal' : 'Complete Step';
+    }
     return (
       <Button
         text={title}

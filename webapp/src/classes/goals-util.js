@@ -7,23 +7,28 @@ export default class GoalsUtil {
   updateGoal(goal) {
     this.goal = goal;
   }
-  getCurrentStepId() {
-    return this.goal.getIn(['status', 'current_step_id']);
-  }
-  getStepById(id) {
-    return this.goal.getIn(['steps', id]);
-  }
-  getStepIndexForId(id) {
-    return this.goal.get('step_order').findKey(v => (v === id));
-  }
-  getStepByIndex(index) {
-    const id = this.goal.getIn(['step_order', index]);
-    return this.getStepById(id);
-  }
+
+  // ======================================================
+  // Get stepIndex
+  // ======================================================
   getCurrentStepIndex() {
     const id = this.getCurrentStepId();
     return this.getStepIndexForId(id);
   }
+  getStepIndexForId(id) {
+    return this.goal.get('step_order').findKey(v => (v === id));
+  }
+
+  // ======================================================
+  // Get stepId
+  // ======================================================
+  getCurrentStepId() {
+    return this.goal.getIn(['status', 'current_step_id']);
+  }
+
+  // ======================================================
+  // Get step
+  // ======================================================
   getCurrentStep() {
     return this.goal.getIn(['steps', this.getCurrentStepId()]);
   }
@@ -31,6 +36,15 @@ export default class GoalsUtil {
     const nextIndex = this.getCurrentStepIndex() + 1;
     return this.getStepByIndex(nextIndex);
   }
+  getStepByIndex(index) {
+    const id = this.goal.getIn(['step_order', index]);
+    return this.getStepById(id);
+  }
+  getStepById(id) {
+    return this.goal.getIn(['steps', id]);
+  }
+
+
   amIAssigned() {
     const step = this.getCurrentStep();
     return step.get('assignees').find(a => (a === this.id));
@@ -49,7 +63,6 @@ export default class GoalsUtil {
     return this.goal.get('step_order').size;
   }
 
-  // Getting the handoff message from the step before this
   getHandoffMessage() {
     const status = this.goal.get('status');
     return {

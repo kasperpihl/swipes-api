@@ -168,6 +168,10 @@ class HOCGoalStep extends Component {
   }
   renderGoalCompleted() {
     const { me } = this.props;
+    const helper = this.getHelper();
+    if (helper.getCurrentStepId()) {
+      return undefined;
+    }
     return (
       <GoalCompleted
         title="Goal completed!"
@@ -179,6 +183,9 @@ class HOCGoalStep extends Component {
   renderHeader() {
     const { isHandingOff, nextStepId } = this.state;
     const helper = this.getHelper();
+    if (!helper.getCurrentStepId()) {
+      return undefined;
+    }
     const from = this.mapStepToHeader(helper.getCurrentStepId());
     const to = this.mapStepToHeader(nextStepId, true);
 
@@ -249,13 +256,14 @@ class HOCGoalStep extends Component {
     );
   }
   renderActions() {
-    const { isHandingOff } = this.state;
+    const { isHandingOff, nextStepId } = this.state;
     return (
       <Section>
         <GoalActions
           onCancel={this.onCancel}
           onHandoff={this.onHandoff}
           isHandingOff={isHandingOff}
+          isCompletingGoal={!nextStepId}
         />
       </Section>
     );
