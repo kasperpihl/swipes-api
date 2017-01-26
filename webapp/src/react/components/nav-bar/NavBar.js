@@ -24,6 +24,7 @@ class NavBar extends Component {
     return (
       <div className="bread-crumbs__title">
         <input
+          id="navbar-input"
           onChange={this.onInputChange}
           type="text"
           placeholder={placeholder}
