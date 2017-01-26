@@ -5,6 +5,7 @@ import { List } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate } from 'classes/utils';
+import GoalsUtil from 'classes/goals-util';
 import Assigning from './Assigning';
 
 class HOCAssigning extends Component {
@@ -38,8 +39,12 @@ class HOCAssigning extends Component {
 function mapStateToProps(state, ownProps) {
   const users = state.get('users');
   const { goalId, stepId, assignees } = ownProps;
+  const goal = state.getIn(['goals', goalId]);
   let stateAssignees = state.getIn(['goals', goalId, 'steps', stepId, 'assignees']);
-  if (!stateAssignees) {
+  if (!stateAssignees && goal) {
+    const helper = new GoalsUtil(goal);
+    stateAssignees = List(helper.getAllInvolvedAssignees());
+  } else if (!stateAssignees) {
     stateAssignees = List(assignees);
   }
   stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
