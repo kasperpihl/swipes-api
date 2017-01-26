@@ -145,6 +145,7 @@ HOCAttachments.propTypes = {
   attachments: map,
   attachmentOrder: list,
   disableAdd: bool,
+  disableFlagging: bool,
   addLinkMenu: func,
   addNote: func,
   addURL: func,
