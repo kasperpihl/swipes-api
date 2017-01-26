@@ -99,11 +99,15 @@ class ResultItem extends Component {
     return <div className="result__subtitle">{subtitle}</div>;
   }
   render() {
-    const { disabled } = this.props;
+    const { disabled, selected } = this.props;
     let className = 'result';
 
     if (disabled) {
       className += ' result--disabled';
+    }
+
+    if (selected) {
+      className += ' result--selected';
     }
 
     return (
@@ -144,6 +148,7 @@ ResultItem.propTypes = {
   subtitle: string,
   rightIcon: iconProps,
   disabled: bool,
+  selected: bool,
 };
 
 export default ResultItem;

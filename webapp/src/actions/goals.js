@@ -58,12 +58,8 @@ export const selectStep = (options, goalId, callback) => (d, getState) => {
     resultsForAll: () => sortedSteps.map((s, i) => resultForStep(s, i)).concat([{
       id: null,
       title: 'Complete Goal',
-      leftIcon: {
-        button: {
-          icon: 'Checkmark',
-          primary: true,
-          small: true,
-        },
+      rightIcon: {
+        icon: 'Checkmark',
       },
     }]),
     onItemAction: (obj) => {

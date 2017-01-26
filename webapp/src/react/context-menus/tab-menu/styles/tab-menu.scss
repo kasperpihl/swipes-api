@@ -142,6 +142,18 @@ $sectionHeight: 52px;
       @include font(12px, $deepBlue-40, 15px);
     }
 
+    &--selected {
+      & .result__title, & .result__subtitle {
+        @include font(15px, $deepBlue-100, 21px, 4500);
+      }
+
+      &:hover {
+        &:before {
+          background-color: $blue-10;
+        }
+      }
+    }
+
     &--disabled {
       & .result__title, .result__subtitle {
         @include font(15px, $deepBlue-30, 21px, 400);
