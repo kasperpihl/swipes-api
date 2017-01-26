@@ -10,10 +10,12 @@ class Button extends Component {
   }
   onClick(e) {
     const { onClick, disabled } = this.props;
+
     if (onClick && !disabled) {
       onClick(e);
-      this.refs.button.blur();
     }
+
+    this.refs.button.blur();
   }
   renderIcon() {
     const { icon } = this.props;
@@ -44,6 +46,7 @@ class Button extends Component {
       small,
       alignIcon,
       frameless,
+      loading,
       className: classNameFromButton,
       ...rest
     } = this.props;
@@ -75,6 +78,12 @@ class Button extends Component {
       tabIndex.tabIndex = '-1';
     }
 
+    if (loading) {
+      className += ' g-button--loading';
+    }
+
+    console.log('loading', loading);
+
     if (classNameFromButton && typeof classNameFromButton === 'string') {
       className += ` ${classNameFromButton}`;
     }
@@ -100,4 +109,6 @@ Button.propTypes = {
   text: string,
   small: bool,
   alignIcon: string,
+  disabled: bool,
+  loading: bool,
 };

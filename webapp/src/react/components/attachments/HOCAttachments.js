@@ -98,7 +98,7 @@ class HOCAttachments extends Component {
     }
     if (this.hasAttachments()) {
       return (
-        <div className="attachment attachment--add" onClick={this.onAddCached('menu')}>
+        <div className="attachment attachment--add attachment--loading" onClick={this.onAddCached('menu')}>
           <div className="attachment__icon">
             <Icon svg="Plus" className="attachment__svg" />
           </div>

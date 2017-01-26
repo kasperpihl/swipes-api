@@ -94,4 +94,20 @@
       }
     }
   }
+
+  &--loading {
+    #{$b}__svg {
+      border-radius: 50%;
+      animation: rotateAttatchmentLoader 2s linear infinite;
+    }
+  }
+}
+
+@keyframes rotateAttatchmentLoader {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

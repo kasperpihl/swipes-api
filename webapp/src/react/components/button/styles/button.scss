@@ -25,7 +25,7 @@ $borderColor: $deepBlue-10;
   z-index: 2;
   user-select: none;
 
-  &:not(&--disabled):not(&--frameless):focus, {
+  &:not(&--disabled):not(&--frameless):not(&--loading):focus, {
     outline:none;
     box-shadow: 0 0 2px 1px $blue-100;
     border: 1px solid $blue-100;
@@ -42,6 +42,7 @@ $borderColor: $deepBlue-10;
     @include size(24px);
     @include svg-color($mainColor !important);
     transition: .15s;
+    transition: opacity .15s .3s ease, margin .5s ease;
   }
 
   &__text {
@@ -51,6 +52,7 @@ $borderColor: $deepBlue-10;
     padding: 0 $btnSize;
     transition: .15s;
     pointer-events: none;
+    transition: opacity .15s .3s ease, margin .5s ease;
 
     &:first-letter {
       text-transform: uppercase;
@@ -195,5 +197,72 @@ $borderColor: $deepBlue-10;
     #{$b}__svg {
       @include svg-color($deepBlue-20 !important);
     }
+  }
+}
+
+
+// Loading
+
+.g-button {
+  $b: &;
+  transition: border-width .3s ease, border-color .3s .5s ease;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: -3px; top: -3px;
+    @include size($btnSize);
+    border: 0px solid $blue-100;
+    border-radius: 50%;
+    transform: rotate(-45deg);
+    -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+    opacity: 0;
+    transition: .3s -.3s ease;
+  }
+
+  &--loading {
+    border-width: 3px;
+    border-color: $deepBlue-10;
+    transition: .3s ease;
+    pointer-events: none;
+
+    &:hover {
+      background-color: $bg;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: -3px; top: -3px;
+      @include size($btnSize);
+      border: 3px solid $blue-100;
+      border-radius: 50%;
+      transform: rotate(-45deg);
+      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+      opacity: 1;
+      transition: border-width .15s .25s ease, opacity .15s .25s ease;
+      animation: rotateBtnLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
+    }
+
+    #{$b}__text {
+      opacity: 0;
+      margin: 0 -100px;
+      transition: opacity .15s ease, margin .5s ease;
+    }
+
+    #{$b}__svg {
+      opacity: 0;
+      transition: opacity .15s ease, margin .5s ease;
+    }
+  }
+}
+
+@keyframes rotateBtnLoader {
+  from {
+    transform: rotate(-45deg);
+  }
+
+  to {
+    transform: rotate(315deg);
   }
 }

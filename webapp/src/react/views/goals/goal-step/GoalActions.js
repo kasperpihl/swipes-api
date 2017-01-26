@@ -61,6 +61,7 @@ class GoalActions extends Component {
     if (isHandingOff) {
       title = isCompletingGoal ? 'Complete Goal' : 'Complete Step';
     }
+    console.log('loading', loading);
     return (
       <Button
         text={title}
