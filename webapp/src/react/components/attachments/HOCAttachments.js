@@ -96,7 +96,7 @@ class HOCAttachments extends Component {
     if (this.hasAttachments()) {
       let className = ' attachment attachment--add';
 
-      if (loading) { // TODO: Kasper, make things happen here
+      if (false) { // TODO: Kasper, make things happen here
         className += ' attachment--loading';
       }
 
