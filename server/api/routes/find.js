@@ -1,12 +1,15 @@
 import express from 'express';
 import {
-  string,
   object,
 } from 'valjs';
 import {
   valBody,
   valResponseAndSend,
 } from '../utils';
+import {
+  service,
+  linkPermission,
+} from '../validators';
 import {
   serviceWithAuthGet,
   serviceImport,
@@ -18,25 +21,21 @@ const notAuthed = express.Router();
 
 authed.all('/find.preview',
   valBody({
-    service: object.as({
-      id: string.require(),
-      name: string.require(),
-      type: string.require(),
-    }).require(),
-    permission: object.as({
-      account_id: string.require(),
-    }).require(),
+    service,
+    permission: linkPermission,
   }),
-  (req, res, next) => {
+  (req, res, next, setLocals) => {
     const {
       service,
       permission,
     } = res.locals;
 
-    res.locals.service_item_id = service.id;
-    res.locals.service_name = service.name;
-    res.locals.service_type = service.type;
-    res.locals.account_id = permission.account_id;
+    setLocals({
+      service_item_id: service.id,
+      service_name: service.name,
+      service_type: service.type,
+      account_id: permission.account_id,
+    });
 
     return next();
   },

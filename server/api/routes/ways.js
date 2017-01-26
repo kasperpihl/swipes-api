@@ -17,6 +17,9 @@ import {
   valBody,
   valResponseAndSend,
 } from '../utils';
+import {
+  goalMoreStrict,
+} from '../validators';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -26,7 +29,7 @@ authed.all('/ways.create',
     title: string.require(),
     organization_id: string.require(),
     description: string,
-    goal: object.require(),
+    goal: goalMoreStrict,
   }),
   waysCreate,
   waysInsert,

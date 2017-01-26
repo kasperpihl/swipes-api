@@ -9,6 +9,11 @@ import {
   valResponseAndSend,
 } from '../utils';
 import {
+  service,
+  linkPermission,
+  linkMeta,
+} from '../validators';
+import {
   linksFindPermissions,
   linksAddPermission,
   linksGetByIds,
@@ -34,17 +39,9 @@ authed.all('/links.get',
 
 authed.all('/links.create',
   valBody({
-    service: object.as({
-      id: string.require(),
-      type: string.require(),
-      name: string.require(),
-    }).require(),
-    permission: object.as({
-      account_id: string.require(),
-    }).require(),
-    meta: object.as({
-      title: string.require(),
-    }).require(),
+    service,
+    permission: linkPermission,
+    meta: linkMeta,
   }),
   linksCreate,
   linksAddPermission,

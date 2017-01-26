@@ -9,6 +9,9 @@ import {
   valResponseAndSend,
 } from '../utils';
 import {
+  goalMoreStrict,
+} from '../validators';
+import {
   goalsUpdate,
   goalsCreate,
   goalsGet,
@@ -40,17 +43,7 @@ const notAuthed = express.Router();
 
 authed.all('/goals.create',
   valBody({
-    goal: object.as({
-      title: string.require(),
-      steps: object.of(object.as({
-        id: string.require(),
-        title: string.require(),
-        assignees: array.of(string).require(),
-      })).require(),
-      step_order: array.of(string).require(),
-      attachments: object.require(),
-      attachment_order: array.of(string).require(),
-    }).require(),
+    goal: goalMoreStrict,
     organization_id: string.require(),
     message: string,
     flags: array.of(string),
