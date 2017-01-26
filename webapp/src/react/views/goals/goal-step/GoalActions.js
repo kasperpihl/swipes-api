@@ -14,14 +14,6 @@ class GoalActions extends Component {
   }
   onHandoff(e) {
     const { onHandoff } = this.props;
-    if (!this.state.loading) {
-      this.setState({ loading: true });
-      setTimeout(() => {
-        this.setState({ loading: false });
-      }, 3000);
-    }
-    return;
-
     if (onHandoff) {
       onHandoff(e);
     }
