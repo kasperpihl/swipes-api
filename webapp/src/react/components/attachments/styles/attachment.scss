@@ -166,6 +166,12 @@
       }
     }
   }
+
+  &--disabled {
+    #{$b}__icon {
+      pointer-events: none;
+    }
+  }
 }
 
 @keyframes rotateAttachLoader {

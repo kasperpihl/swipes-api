@@ -10,12 +10,17 @@ const Attachment = (props) => {
     onClickIcon,
     onClickText,
     flagged,
+    disableFlagging,
   } = props;
 
   let className = 'attachment';
 
   if (flagged) {
     className += ' attachment--flagged';
+  }
+
+  if (disableFlagging) {
+    className += ' attachment--disabled';
   }
 
   return (
