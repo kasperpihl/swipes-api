@@ -57,7 +57,7 @@ const setLocals = (name, res, next, state) => {
 
   Object.entries(state).forEach(([key, value]) => {
     if (res.locals[key] && debug) {
-      console.warn(`Warnign: ${key} is reassinged in ${name}`);
+      console.warn(`Warning: ${key} is reassinged in ${name}`);
     }
 
     res.locals[key] = value;
