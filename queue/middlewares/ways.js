@@ -31,7 +31,7 @@ const waysCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
-const waysDeletedNotificationData = (req, res, next) => {
+const waysArchivedNotificationData = (req, res, next) => {
   const {
     user_id,
     way,
@@ -51,5 +51,5 @@ const waysDeletedNotificationData = (req, res, next) => {
 export {
   waysGetSingle,
   waysCreatedNotificationData,
-  waysDeletedNotificationData,
+  waysArchivedNotificationData,
 };

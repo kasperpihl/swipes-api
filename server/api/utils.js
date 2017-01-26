@@ -1,3 +1,4 @@
+import config from 'config';
 import randomstring from 'randomstring';
 import valjs, { string, func, object } from 'valjs';
 
@@ -10,17 +11,6 @@ const camelCaseToUnderscore = (word) => {
   // http://stackoverflow.com/questions/30521224/javascript-convert-camel-case-to-underscore-case
   return word.replace(/([A-Z]+)/g, (x, y) => { return `_${y.toLowerCase()}`; }).replace(/^_/, '');
 };
-
-const localsMap = mapper => (req, res, next) => {
-  const error = valjs(mapper, object.of(string).require());
-  if (error) {
-    return next('Error in localsMap object');
-  }
-  Object.entries(mapper).forEach(([fromKey, toKey]) => {
-    res.locals[toKey] = res.locals[fromKey];
-  });
-  return next();
-};
 const sendResponse = (req, res) => {
   const {
     returnObj = {},
@@ -29,10 +19,18 @@ const sendResponse = (req, res) => {
   return res.status(200).json({ ok: true, ...returnObj });
 };
 const valResponseAndSend = schema => (req, res, next) => {
-  const error = valjs(res.locals.returnObj, object.as(schema));
-  if (error) {
-    return next(`Error returnObj: ${error}`);
+  if (schema) {
+    const error = valjs(res.locals, object.as(schema));
+
+    if (error) {
+      return next(`output ${req.route.path}: ${error}`);
+    }
+
+    Object.entries(schema).forEach(([key, value]) => {
+      res.locals.returnObj[key] = res.locals[key];
+    });
   }
+
   return sendResponse(req, res);
 };
 
@@ -40,23 +38,19 @@ const setLocals = (name, res, next, state) => {
   const error = valjs(state, object.require());
 
   if (error) {
-    return next(`${name}: Error in setLocals object`);
+    return next(`middleware setLocals ${name}: ${error}`);
   }
-  // const errors = Object.entries(state).map(([key, value]) => {
-    /* if (!constants[key]) {
-      res.locals[key] = value;
-    }
-    else{
-      const scheme = constants[key];
-      const lError = valjs(value, scheme);
-      if (!lError) {
-        res.locals[key] = value;
-      }
-      return lError;
-    }*/
 
-  //   return value;
-  // }).filter(v => !!v);
+  const debug = config.get('valjs_debug');
+
+  Object.entries(state).forEach(([key, value]) => {
+    if (res.locals[key] && debug) {
+      console.warn(`Warning: ${key} is reassinged in ${name}`);
+    }
+
+    res.locals[key] = value;
+  });
+
   return null;
 };
 
@@ -73,7 +67,7 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
   }
 
   if (error) {
-    return next(`${name} ${error}`);
+    return next(`middleware input ${name}: ${error}`);
   }
 
   if (middleware) {
@@ -95,7 +89,7 @@ const valBody = (schema, middleware) => (req, res, next) => {
   }
 
   if (error) {
-    return next(`body: ${req.route.path} ${error}`);
+    return next(`body ${req.route.path}: ${error}`);
   }
 
   if (middleware) {
@@ -109,7 +103,6 @@ export {
   generateSlackLikeId,
   camelCaseToUnderscore,
   sendResponse,
-  localsMap,
   valResponseAndSend,
   valLocals,
   valBody,

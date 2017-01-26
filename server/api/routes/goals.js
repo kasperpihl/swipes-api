@@ -6,19 +6,18 @@ import {
 } from 'valjs';
 import {
   valBody,
-  sendResponse,
   valResponseAndSend,
 } from '../utils';
 import {
   goalsUpdate,
   goalsCreate,
   goalsGet,
-  goalsDelete,
+  goalsArchive,
   goalsAddMilestone,
   goalsRemoveMilestone,
   goalsInsert,
   goalsCreateQueueMessage,
-  goalsDeleteQueueMessage,
+  goalsArchiveQueueMessage,
   goalsAddMilestoneQueueMessage,
   goalsRemoveMilestoneQueueMessage,
   goalsCompleteStep,
@@ -54,20 +53,23 @@ authed.all('/goals.create',
     }).require(),
     organization_id: string.require(),
     message: string,
+    flags: array.of(string),
   }),
   goalsCreate,
   goalsInsert,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
-  sendResponse,
-);
+  valResponseAndSend({
+    data: object.require(),
+  }));
 
 authed.all('/goals.completeStep',
     valBody({
       goal_id: string.require(),
       current_step_id: string.require(),
-      next_step_id: string.require(),
+      next_step_id: string,
       message: string,
+      flags: array.of(string),
     }),
     goalsGet,
     goalsCompleteStep,
@@ -76,15 +78,16 @@ authed.all('/goals.completeStep',
     notificationsPushToQueue,
     goalsStepGotActiveQueueMessage,
     notificationsPushToQueue,
-    sendResponse,
-  );
+    valResponseAndSend({
+      goal: object.require(),
+    }));
 
-authed.all('/goals.delete',
+authed.all('/goals.archive',
   valBody({
     goal_id: string.require(),
   }),
-  goalsDelete,
-  goalsDeleteQueueMessage,
+  goalsArchive,
+  goalsArchiveQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     id: string.require(),

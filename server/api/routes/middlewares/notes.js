@@ -16,7 +16,7 @@ const notesCreate = valLocals('notesCreate', {
   user_id: string.require(),
   organization_id: string.require(),
   title: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_id,
@@ -36,8 +36,9 @@ const notesCreate = valLocals('notesCreate', {
 
   dbNotesInsert({ note })
   .then(() => {
-    res.locals.id = note_id;
-    res.locals.returnObj.id = note_id;
+    setLocals({
+      id: note_id,
+    });
     return next();
   })
   .catch((err) => {

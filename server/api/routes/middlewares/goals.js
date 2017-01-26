@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -21,12 +22,14 @@ const goalsCreate = valLocals('goalsCreate', {
   goal: object.require(),
   organization_id: string.require(),
   message: string,
+  flags: array.of(string),
 }, (req, res, next) => {
   const {
     user_id,
     goal,
     organization_id,
     message,
+    flags = [],
   } = res.locals;
   const goalId = generateSlackLikeId('G');
   const currentStepId = goal.step_order[0];
@@ -36,8 +39,9 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.created_at = r.now();
   goal.updated_at = r.now();
   goal.created_by = user_id;
-  goal.deleted = false;
+  goal.archived = false;
   goal.history = [{
+    flags,
     message,
     type: 'created',
     from: null,
@@ -45,6 +49,7 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
   }];
   goal.status = {
+    flags,
     current_step_id: currentStepId,
     prev_step_id: null,
     handoff_message: message,
@@ -59,34 +64,40 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goal: object.require(),
   goal_id: string.require(), // T_TODO make it object.as when it's more final
   current_step_id: string.require(),
-  next_step_id: string.require(),
+  next_step_id: string,
   message: string,
-}, (req, res, next) => {
+  flags: array.of(string),
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     current_step_id,
     next_step_id,
     message,
+    flags = [],
   } = res.locals;
 
   if (goal.status.current_step_id !== current_step_id) {
-    return next(new SwipesError('Invalid current_step_id!'));
+    return next(new SwipesError('Invalid current_step_id'));
   }
 
-  if (!goal.steps[next_step_id]) {
-    return next(new SwipesError('Invalid next_step_id!'));
+  if (next_step_id && !goal.steps[next_step_id]) {
+    return next(new SwipesError('Invalid next_step_id'));
   }
+
+  const type = next_step_id ? 'complete_step' : 'complete_goal';
 
   goal.history.push({
+    type,
+    flags,
     message,
     done_by: user_id,
     from: current_step_id,
     to: next_step_id,
-    type: 'complete_step',
   });
 
   goal.status = {
+    flags,
     current_step_id: next_step_id,
     handoff_at: r.now(),
     handoff_by: user_id,
@@ -94,22 +105,27 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     prev_step_id: current_step_id,
   };
 
-  res.locals.returnObj = { goal };
+  setLocals({
+    goal,
+  });
 
   return next();
 });
 
 const goalsInsert = valLocals('goalsInsert', {
   goal: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     goal,
   } = res.locals;
 
   dbGoalsInsertSingle({ goal })
     .then((obj) => {
-      res.locals.eventType = 'goal_created';
-      res.locals.returnObj = { data: obj.changes[0].new_val };
+      setLocals({
+        eventType: 'goal_created',
+        data: obj.changes[0].new_val,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -117,18 +133,20 @@ const goalsInsert = valLocals('goalsInsert', {
     });
 });
 
-const goalsDelete = valLocals('goalsDelete', {
+const goalsArchive = valLocals('goalsArchive', {
   goal_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     goal_id,
   } = res.locals;
-  const properties = { deleted: true };
+  const properties = { archived: true };
 
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
-      res.locals.eventType = 'goal_archived';
-      res.locals.returnObj.id = goal_id;
+      setLocals({
+        eventType: 'goal_archived',
+        id: goal_id,
+      });
 
       return next();
     })
@@ -140,7 +158,7 @@ const goalsDelete = valLocals('goalsDelete', {
 const goalsAddMilestone = valLocals('goalsAddMilestone', {
   id: string.require(),
   milestone_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     id,
     milestone_id,
@@ -149,9 +167,11 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
 
   dbGoalsUpdateSingle({ goal_id: id, properties })
     .then(() => {
-      res.locals.eventType = 'goal_milestone_added';
-      res.locals.returnObj.id = id;
-      res.locals.returnObj.milestone_id = milestone_id;
+      setLocals({
+        eventType: 'goal_milestone_added',
+        id,
+        milestone_id,
+      });
 
       return next();
     })
@@ -162,7 +182,7 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
 
 const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
   id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     id,
   } = res.locals;
@@ -170,7 +190,9 @@ const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
 
   dbGoalsUpdateSingle({ goal_id: id, properties })
     .then(() => {
-      res.locals.eventType = 'goal_milestone_removed';
+      setLocals({
+        eventType: 'goal_milestone_removed',
+      });
 
       return next();
     })
@@ -204,7 +226,7 @@ const goalsGet = valLocals('goalsGet', {
 const goalsUpdate = valLocals('goalsUpdate', {
   goal_id: string.require(),
   goal: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     goal_id,
     goal,
@@ -212,9 +234,11 @@ const goalsUpdate = valLocals('goalsUpdate', {
 
   dbGoalsUpdateSingle({ goal_id, properties: goal })
     .then(() => {
-      res.locals.eventType = 'goal_updated';
-      res.locals.eventData = goal;
-      res.locals.returnObj.goal = goal;
+      setLocals({
+        eventType: 'goal_updated',
+        eventData: goal,
+        goal,
+      });
 
       return next();
     })
@@ -227,42 +251,47 @@ const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     eventType,
   } = res.locals;
-
   const goal_id = goal.id;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     goal_id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = goal_id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
 
   return next();
 });
 
-const goalsDeleteQueueMessage = valLocals('goalsDeleteQueueMessage', {
+const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     eventType,
   } = res.locals;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     goal_id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = goal_id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
 
   return next();
 });
@@ -272,21 +301,24 @@ const goalsAddMilestoneQueueMessage = valLocals('goalsAddMilestoneQueueMessage',
   id: string.require(),
   milestone_id: string.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     id,
     milestone_id,
     eventType,
   } = res.locals;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     milestone_id,
     goal_id: id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: id,
+  });
 
   return next();
 });
@@ -295,19 +327,22 @@ const goalsRemoveMilestoneQueueMessage = valLocals('goalsRemoveMilestoneQueueMes
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     id,
     eventType,
   } = res.locals;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     goal_id: id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: id,
+  });
 
   return next();
 });
@@ -316,22 +351,24 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
   current_step_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     current_step_id,
   } = res.locals;
-
   const goal_id = goal.id;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     goal_id,
     step_id: current_step_id,
     event_type: 'step_completed',
   };
-  res.locals.messageGroupId = goal_id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
 
   return next();
 });
@@ -339,23 +376,25 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
-  next_step_id: string.require(),
-}, (req, res, next) => {
+  next_step_id: string,
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     next_step_id,
   } = res.locals;
-
   const goal_id = goal.id;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     goal_id,
     step_id: next_step_id,
     event_type: 'step_got_active',
   };
-  res.locals.messageGroupId = goal_id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
 
   return next();
 });
@@ -363,13 +402,13 @@ const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage
 export {
   goalsCreate,
   goalsInsert,
-  goalsDelete,
+  goalsArchive,
   goalsAddMilestone,
   goalsRemoveMilestone,
   goalsGet,
   goalsUpdate,
   goalsCreateQueueMessage,
-  goalsDeleteQueueMessage,
+  goalsArchiveQueueMessage,
   goalsNextStepQueueMessage,
   goalsStepGotActiveQueueMessage,
   goalsAddMilestoneQueueMessage,

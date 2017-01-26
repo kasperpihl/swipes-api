@@ -6,7 +6,7 @@ import {
 } from 'valjs';
 import {
   valBody,
-  sendResponse,
+  valResponseAndSend,
 } from '../utils';
 import {
   linksFindPermissions,
@@ -28,8 +28,9 @@ authed.all('/links.get',
     ids: array.of(string).require(),
   }),
   linksGetByIds,
-  sendResponse,
-);
+  valResponseAndSend({
+    links: array.of(object).require(),
+  }));
 
 authed.all('/links.create',
   valBody({
@@ -47,8 +48,10 @@ authed.all('/links.create',
   }),
   linksCreate,
   linksAddPermission,
-  sendResponse,
-);
+  valResponseAndSend({
+    short_url: string.require(),
+    link: object.require(),
+  }));
 
 authed.all('/links.preview',
   valBody({
@@ -58,8 +61,9 @@ authed.all('/links.preview',
   serviceWithAuthFromLinkGet,
   serviceImport,
   servicePreview,
-  sendResponse,
-);
+  valResponseAndSend({
+    preview: object.require(),
+  }));
 
 export {
   authed,

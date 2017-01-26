@@ -56,11 +56,13 @@ export default class GoalsUtil {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
   }
   getNumberOfCompletedSteps() {
-    const currentIndex = this.getCurrentStepIndex();
-    return currentIndex;
+    const num = this.goal.get('history').filter(h => h.get('type') === 'complete_step');
+    return num.size;
   }
   getTotalNumberOfSteps() {
-    return this.goal.get('step_order').size;
+    const currentIndex = this.getCurrentStepIndex();
+    const size = this.goal.get('step_order').size;
+    return this.getNumberOfCompletedSteps() + (size - currentIndex);
   }
 
   getHandoffMessage() {
@@ -75,11 +77,15 @@ export default class GoalsUtil {
   getStatus() {
     const step = this.getCurrentStep();
 
-    let status = 'Waiting for people to complete this step';
-    const isMine = step.get('assignees').find(a => (a === this.id));
-    if (isMine) {
-      status = 'You need to complete this step';
+    let status = 'Goal is completed!';
+    if (step) {
+      status = 'Waiting for people to complete this step';
+      const isMine = step.get('assignees').find(a => (a === this.id));
+      if (isMine) {
+        status = 'You need to complete this step';
+      }
     }
+
     return status;
   }
 }

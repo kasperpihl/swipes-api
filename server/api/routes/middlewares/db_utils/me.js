@@ -18,7 +18,7 @@ const initMe = (user_id) => {
             r.table('goals')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
               .filter({
-                deleted: false,
+                archived: false,
               })
               .coerceTo('ARRAY'),
         });
@@ -29,7 +29,7 @@ const initMe = (user_id) => {
             r.table('milestones')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
               .filter({
-                deleted: false,
+                archived: false,
               })
               .coerceTo('ARRAY'),
         });
@@ -40,7 +40,7 @@ const initMe = (user_id) => {
             r.table('ways')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
               .filter({
-                deleted: false,
+                archived: false,
               })
               .coerceTo('ARRAY'),
         });

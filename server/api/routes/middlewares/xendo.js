@@ -18,7 +18,7 @@ const xendoConfig = config.get('xendo');
 
 const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
   xendoSwipesCredentials: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   // TODO check the expire time and don't refresh the token everytime
   const {
     xendoSwipesCredentials,
@@ -43,7 +43,9 @@ const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
           .nth(0)
           .update(newConfig);
 
-      res.locals.xendoSwipesCredentials = newConfig;
+      setLocals({
+        xendoSwipesCredentials: newConfig,
+      });
 
       return db.rethinkQuery(query);
     })
@@ -75,7 +77,7 @@ const xendoSwipesCredentials = (req, res, next) => {
 
 const xendoUserCredentials = valLocals('xendoUserCredentials', {
   user_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
   } = res.locals;
@@ -87,7 +89,9 @@ const xendoUserCredentials = valLocals('xendoUserCredentials', {
         return next('Invalid user_id :/');
       }
 
-      res.locals.xendoUserCredentials = result.xendoCredentials;
+      setLocals({
+        xendoUserCredentials: result.xendoCredentials,
+      });
 
       return next();
     })
@@ -99,7 +103,7 @@ const xendoUserCredentials = valLocals('xendoUserCredentials', {
 const xendoUserSignUp = valLocals('xendoUserSignUp', {
   user_id: string.require(),
   xendoSwipesCredentials: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     xendoSwipesCredentials,
@@ -123,7 +127,9 @@ const xendoUserSignUp = valLocals('xendoUserSignUp', {
       return next(xendoResult.error);
     }
 
-    res.locals.xendoUserCredentials = xendoResult;
+    setLocals({
+      xendoUserCredentials: xendoResult,
+    });
 
     const updateSwipesUserQ = r.table('users').get(user_id).update({
       xendoCredentials: JSON.parse(xendoResult),
@@ -234,7 +240,7 @@ const xendoRemoveServiceFromUser = valLocals('xendoRemoveServiceFromUser', {
 
 const xendoSearch = valLocals('xendoSearch', {
   xendoUserCredentials: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const q = res.locals.q;
   const page_size = parseInt(res.locals.page_size, 10);
   const p = parseInt(res.locals.p, 10) || 0;
@@ -265,7 +271,9 @@ const xendoSearch = valLocals('xendoSearch', {
     },
   })
   .then((result) => {
-    res.locals.result = JSON.parse(result);
+    setLocals({
+      result: JSON.parse(result),
+    });
 
     return next();
   })
@@ -277,7 +285,7 @@ const xendoSearch = valLocals('xendoSearch', {
 const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
   user_id: string.require(),
   result: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     result,
@@ -315,7 +323,9 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
         });
       });
 
-      res.locals.returnObj.mappedResults = mappedResults;
+      setLocals({
+        mappedResults,
+      });
 
       return next();
     })

@@ -53,7 +53,7 @@ const logErrors = (err, req, res, next) => {
 //
 const unhandledServerError = (err, req, res, next) => {
   if (err) {
-    return res.status(500).send({ err });
+    return res.status(500).send({ ok: false, err });
   }
 
   // Probably it will never hit this! :D

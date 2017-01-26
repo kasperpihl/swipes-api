@@ -18,7 +18,7 @@ const waysCreate = valLocals('waysCreate', {
   organization_id: string.require(),
   description: string,
   goal: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     title,
@@ -35,26 +35,28 @@ const waysCreate = valLocals('waysCreate', {
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    deleted: false,
+    archived: false,
   };
 
-  res.locals.way = way;
+  setLocals({
+    way,
+  });
 
   return next();
 });
 const waysInsert = valLocals('waysInsert', {
   way: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     way,
   } = res.locals;
 
   dbWaysInsertSingle({ way })
     .then((obj) => {
-      res.locals.eventType = 'way_created';
-      res.locals.returnObj = {
+      setLocals({
+        eventType: 'way_created',
         way,
-      };
+      });
 
       return next();
     })
@@ -62,23 +64,23 @@ const waysInsert = valLocals('waysInsert', {
       return next(err);
     });
 });
-const waysDelete = valLocals('waysDelete', {
+const waysArchive = valLocals('waysArchive', {
   id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     id,
   } = res.locals;
   const properties = {
-    deleted: true,
+    archived: true,
     updated_at: r.now(),
   };
 
   dbWaysUpdateSingle({ id, properties })
     .then(() => {
-      res.locals.eventType = 'way_archived';
-      res.locals.returnObj = {
+      setLocals({
+        eventType: 'way_archived',
         id,
-      };
+      });
 
       return next();
     })
@@ -90,41 +92,46 @@ const waysCreateQueueMessage = valLocals('waysCreateQueueMessage', {
   user_id: string.require(),
   way: object.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     way,
     eventType,
   } = res.locals;
-
   const way_id = way.id;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     way_id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = way_id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: way_id,
+  });
 
   return next();
 });
-const waysDeleteQueueMessage = valLocals('waysDeleteQueueMessage', {
+const waysArchiveQueueMessage = valLocals('waysArchiveQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     id,
     eventType,
   } = res.locals;
-
-  res.locals.queueMessage = {
+  const queueMessage = {
     user_id,
     way_id: id,
     event_type: eventType,
   };
-  res.locals.messageGroupId = id;
+
+  setLocals({
+    queueMessage,
+    messageGroupId: id,
+  });
 
   return next();
 });
@@ -132,7 +139,7 @@ const waysDeleteQueueMessage = valLocals('waysDeleteQueueMessage', {
 export {
   waysCreate,
   waysInsert,
-  waysDelete,
+  waysArchive,
   waysCreateQueueMessage,
-  waysDeleteQueueMessage,
+  waysArchiveQueueMessage,
 };

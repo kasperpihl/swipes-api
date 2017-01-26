@@ -13,7 +13,6 @@ import {
   dbNotificationsMarkAsSeen,
 } from './db_utils/notifications';
 
-// const env = process.env.NODE_ENV;
 const {
   accessKeyId,
   secretAccessKey,

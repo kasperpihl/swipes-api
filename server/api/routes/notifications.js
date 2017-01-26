@@ -8,7 +8,7 @@ import {
 } from './middlewares/notifications';
 import {
   valBody,
-  sendResponse,
+  valResponseAndSend,
 } from '../utils';
 
 const authed = express.Router();
@@ -19,7 +19,7 @@ authed.all('/notifications.markAsSeen',
     notification_ids: array.of(string).require(),
   }),
   notificationsMarkAsSeen,
-  sendResponse,
+  valResponseAndSend,
 );
 
 export {

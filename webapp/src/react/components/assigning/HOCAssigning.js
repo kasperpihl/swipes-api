@@ -24,6 +24,7 @@ class HOCAssigning extends Component {
       stateAssignees,
       maxImages,
     } = this.props;
+
     return (
       <Assigning
         maxImages={maxImages}
@@ -37,9 +38,9 @@ class HOCAssigning extends Component {
 function mapStateToProps(state, ownProps) {
   const users = state.get('users');
   const { goalId, stepId, assignees } = ownProps;
-  let stateAssignees = List(assignees);
-  if (goalId) {
-    stateAssignees = state.getIn(['goals', goalId, 'steps', stepId, 'assignees']);
+  let stateAssignees = state.getIn(['goals', goalId, 'steps', stepId, 'assignees']);
+  if (!stateAssignees) {
+    stateAssignees = List(assignees);
   }
   stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
   return {

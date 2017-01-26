@@ -61,7 +61,7 @@ const userAvailability = valLocals('userAvailability', {
 });
 const userAddToOrganization = valLocals('userAddToOrganization', {
   organization: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     organization,
   } = res.locals;
@@ -87,17 +87,23 @@ const userAddToOrganization = valLocals('userAddToOrganization', {
           users: r.row('users').append(user_id),
         });
 
-        res.locals.organizationId = organization.id;
+        setLocals({
+          organizationId: organization.id,
+        });
 
         return db.rethinkQuery(updateQ);
       }
 
-      res.locals.organizationId = organizationId;
+      setLocals({
+        organizationId,
+      });
 
       return db.rethinkQuery(insertQ);
     })
     .then(() => {
-      res.locals.user_id = user_id;
+      setLocals({
+        user_id,
+      });
 
       return next();
     })
@@ -111,7 +117,7 @@ const userSignUp = valLocals('userSignUp', {
   name: string.require(),
   password: string.min(1).require(),
   organizationId: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     email,
@@ -136,11 +142,10 @@ const userSignUp = valLocals('userSignUp', {
 
   return db.rethinkQuery(createUserQ)
     .then(() => {
-      res.locals.token = token;
-      res.locals.returnObj = {
-        user_id,
+      setLocals({
         token,
-      };
+        user_id,
+      });
 
       return next();
     }).catch((err) => {
@@ -150,7 +155,7 @@ const userSignUp = valLocals('userSignUp', {
 const userSignIn = valLocals('userSignIn', {
   email: string.format('email').require(),
   password: string.min(1).require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     email,
     password,
@@ -182,8 +187,9 @@ const userSignIn = valLocals('userSignIn', {
         sysAdm: user.is_sysadmin,
       }, config.get('jwtTokenSecret'));
 
-      res.locals.token = token;
-      res.locals.returnObj.token = token;
+      setLocals({
+        token,
+      });
 
       return next();
     }).catch((err) => {
@@ -193,7 +199,7 @@ const userSignIn = valLocals('userSignIn', {
 const usersGetService = valLocals('usersGetService', {
   user_id: string.require(),
   account_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     account_id,
@@ -205,7 +211,9 @@ const usersGetService = valLocals('usersGetService', {
         return next(new SwipesError('There is no such service'));
       }
 
-      res.locals.service = service;
+      setLocals({
+        service,
+      });
 
       return next();
     })
@@ -239,7 +247,7 @@ const usersCleanupRegisteredWebhooksToService = valLocals('usersCleanupRegistere
 const usersGetXendoServiceId = valLocals('usersGetXendoServiceId', {
   user_id: string.require(),
   service: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     service,
@@ -253,7 +261,9 @@ const usersGetXendoServiceId = valLocals('usersGetXendoServiceId', {
         xendoUserServiceId = xendoUserService[0].service_id;
       }
 
-      res.locals.xendoUserServiceId = xendoUserServiceId;
+      setLocals({
+        xendoUserServiceId,
+      });
 
       return next();
     })
@@ -315,14 +325,16 @@ const usersUpdateProfilePic = valLocals('usersUpdateProfilePic', {
 });
 const usersGetSingleWithOrganizations = valLocals('usersGetSingleWithOrganizations', {
   user_id: string.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
   } = res.locals;
 
   return dbUsersGetSingleWithOrganizations({ user_id })
     .then((user) => {
-      res.locals.user = user;
+      setLocals({
+        user,
+      });
 
       return next();
     })

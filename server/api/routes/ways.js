@@ -6,9 +6,9 @@ import {
 import {
   waysCreate,
   waysInsert,
-  waysDelete,
+  waysArchive,
   waysCreateQueueMessage,
-  waysDeleteQueueMessage,
+  waysArchiveQueueMessage,
 } from './middlewares/ways';
 import {
   notificationsPushToQueue,
@@ -36,12 +36,12 @@ authed.all('/ways.create',
     way: object.require(),
   }));
 
-authed.all('/ways.delete',
+authed.all('/ways.archive',
   valBody({
     id: string.require(),
   }),
-  waysDelete,
-  waysDeleteQueueMessage,
+  waysArchive,
+  waysArchiveQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     id: string.require(),
