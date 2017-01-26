@@ -38,10 +38,16 @@ class HOCViewController extends Component {
   viewDidLoad(view) {
     this._contentView = view;
   }
-  navbarClickedCrumb(navbar, i) {
+  navbarChangedInput(text) {
+    if (this._contentView && typeof this._contentView.onInputChange === 'function') {
+      this._contentView.onInputChange(text);
+    }
+  }
+  navbarClickedCrumb(i) {
     const { popTo } = this.props;
     popTo(i);
   }
+
 
   renderContextButton(index, button) {
     const Comp = Button;
@@ -76,6 +82,7 @@ class HOCViewController extends Component {
 
     const navbarData = history.map(el => ({
       title: el.get('title'),
+      placeholder: el.get('placeholder'),
     })).toArray();
 
     return (

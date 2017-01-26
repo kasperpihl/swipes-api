@@ -39,6 +39,7 @@ class HOCGoalList extends Component {
     navPush({
       component: 'AddGoal',
       title: 'Add Goal',
+      placeholder: 'Goal title',
     },
     savedState);
   }

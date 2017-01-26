@@ -10,26 +10,48 @@ class NavBar extends Component {
     super(props);
     this.state = {};
     this.clickedCrumb = this.clickedCrumb.bind(this);
-    this.callDelegate = setupDelegate(props.delegate, this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.callDelegate = setupDelegate(props.delegate);
   }
   clickedCrumb(e) {
     const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
     this.callDelegate('navbarClickedCrumb', i);
   }
-  renderCrumb(title, i, numberOfCrumbs) {
+  onInputChange(e) {
+    this.callDelegate('navbarChangedInput', e.target.value);
+  }
+  renderInputCrumb(placeholder) {
+    return (
+      <div className="bread-crumbs__title">
+        <input
+          onChange={this.onInputChange}
+          type="text"
+          placeholder={placeholder}
+        />
+      </div>
+    );
+  }
+  renderCrumb(crumb, i, numberOfCrumbs) {
+    const title = crumb.title;
     let className = 'bread-crumbs__crumb';
     let j = i;
-
-    if ((i + 1) === numberOfCrumbs) {
+    const isLast = (i + 1) === numberOfCrumbs;
+    if (isLast) {
       className += ' bread-crumbs__crumb--last';
       j = `${j}last`;
+    }
+    let renderedCrumb = (
+      <div className="bread-crumbs__title">
+        {title}
+      </div>
+    );
+    if (isLast && crumb.placeholder) {
+      renderedCrumb = this.renderInputCrumb(crumb.placeholder);
     }
 
     return (
       <div className={className} key={j} onClick={this.clickedCrumb} data-index={i}>
-        <div className="bread-crumbs__title">
-          {title}
-        </div>
+        {renderedCrumb}
         <div className="bread-crumbs__seperator">
           <Icon svg="ArrowRightLine" className="bread-crumbs__icon" />
         </div>
@@ -43,7 +65,7 @@ class NavBar extends Component {
     }
 
     const breadCrumbsHTML = history.map((crumb, i) =>
-      this.renderCrumb(crumb.title, i, history.length));
+      this.renderCrumb(crumb, i, history.length));
 
     return (
       <ReactCSSTransitionGroup
