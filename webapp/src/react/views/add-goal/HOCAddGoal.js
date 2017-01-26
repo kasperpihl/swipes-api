@@ -36,29 +36,30 @@ class HOCAddGoal extends Component {
     super(props);
     this.state = initialState.toObject();
 
-    bindAll(this, ['clickedAdd', 'onTitleChange', 'onHandoffChange', 'onSave']);
+    bindAll(this, ['clickedAdd', 'onTitleChange', 'onHandoffChange', 'onSave', 'onInputChange']);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-  componentDidUpdate(prevProps, prevState) {
+
+  componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+    const input = document.getElementById('navbar-input');
+    input.focus();
+  }
+  componentDidUpdate() {
     if (this._loadedWay) {
-      const input = this.refs.input;
+      const input = document.getElementById('navbar-input');
       input.focus();
       input.setSelectionRange(0, input.value.length);
       this._loadedWay = false;
     }
   }
-  componentDidMount() {
-    this.callDelegate('viewDidLoad', this);
-    // this.refs.input.focus();
-  }
-  onTitleChange(e) {
-    this.setState({ title: e.target.value });
-  }
   onHandoffChange(handoff) {
     this.setState({ handoff });
   }
-
+  onInputChange(text) {
+    this.setState({ title: text });
+  }
   onContextClick(i, e) {
     const { loadWay } = this.props;
     loadWay({
@@ -97,7 +98,6 @@ class HOCAddGoal extends Component {
       title,
       assignees: [],
     }));
-    console.log(steps.toJS());
     stepOrder = stepOrder.push(id);
     this.setState({ steps, stepOrder });
   }
@@ -204,22 +204,6 @@ class HOCAddGoal extends Component {
 
       navPop();
     });
-  }
-  renderHeader() {
-    const { title } = this.state;
-    return (
-      <div className="add-goal__header">
-        <input
-          ref="input"
-          type="text"
-          value={title}
-          className="add-goal__title"
-          placeholder="Goal Name"
-          onChange={this.onTitleChange}
-          autoFocus
-        />
-      </div>
-    );
   }
   renderSteps() {
     const { steps, stepOrder } = this.state;
@@ -331,8 +315,6 @@ class HOCAddGoal extends Component {
 
     return (
       <div className="add-goal">
-        {this.renderHeader()}
-
         {this.renderSteps()}
         <div className={infoClass}>
           {this.renderAttachments()}
