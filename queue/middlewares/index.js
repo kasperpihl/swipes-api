@@ -20,7 +20,7 @@ const goal_created = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const goal_Archived = notifyWrapper([
+const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsArchivedNotificationData,
   notify.notifyAllInCompany,
