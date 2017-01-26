@@ -77,11 +77,15 @@ export default class GoalsUtil {
   getStatus() {
     const step = this.getCurrentStep();
 
-    let status = 'Waiting for people to complete this step';
-    const isMine = step.get('assignees').find(a => (a === this.id));
-    if (isMine) {
-      status = 'You need to complete this step';
+    let status = 'Goal is completed!';
+    if (step) {
+      status = 'Waiting for people to complete this step';
+      const isMine = step.get('assignees').find(a => (a === this.id));
+      if (isMine) {
+        status = 'You need to complete this step';
+      }
     }
+
     return status;
   }
 }

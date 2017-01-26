@@ -64,7 +64,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goal: object.require(),
   goal_id: string.require(), // T_TODO make it object.as when it's more final
   current_step_id: string.require(),
-  next_step_id: string.require(),
+  next_step_id: string,
   message: string,
   flags: array.of(string),
 }, (req, res, next, setLocals) => {
@@ -78,11 +78,11 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   } = res.locals;
 
   if (goal.status.current_step_id !== current_step_id) {
-    return next(new SwipesError('Invalid current_step_id!'));
+    return next(new SwipesError('Invalid current_step_id'));
   }
 
-  if (!goal.steps[next_step_id]) {
-    return next(new SwipesError('Invalid next_step_id!'));
+  if (next_step_id && !goal.steps[next_step_id]) {
+    return next(new SwipesError('Invalid next_step_id'));
   }
 
   const type = next_step_id ? 'complete_step' : 'complete_goal';
@@ -376,7 +376,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
-  next_step_id: string.require(),
+  next_step_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
