@@ -11,6 +11,7 @@
     @include size(24px, 36px);
     padding: 6px 0;
     position: relative;
+    transition: .5s ease;
 
     &:hover {
       #{$b}__svg {
@@ -20,6 +21,20 @@
         transform: scale(1.2);
         transition: .15s ease;
       }
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: -3px; top: -3px;
+      @include size(24px);
+      border: 0px solid $blue-100;
+      border-radius: 50%;
+      transform: rotate(-45deg);
+      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+      opacity: 0;
+      transition: .3s -.3s ease;
+      animation: rotateAttachLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
     }
   }
 
@@ -43,6 +58,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     user-select: none;
+    position: relative;
 
     &:hover {
       @include font($c: $blue-100);
@@ -72,6 +88,22 @@
 
     #{$b}__title {
       @include font($c: $blue-100);
+
+      &:after {
+        content: 'Adding Attachment';
+        @include size(100%);
+        @include flex(center, flex-start);
+        position: absolute;
+        left: 0; top: 0;
+        opacity: .3;
+        color: $blue-100;
+        padding-left: 12px;
+        background-color: $bg;
+        pointer-events: none;
+        transform: translateY(100%);
+        opacity: 0;
+        transition: .3s ease;
+      }
     }
 
     #{$b}__icon {
@@ -96,18 +128,52 @@
   }
 
   &--loading {
-    #{$b}__svg {
+
+    #{$b}__icon {
+      @include size(24px);
+      padding: 0;
+      border: 3px solid $deepBlue-20;
       border-radius: 50%;
-      animation: rotateAttatchmentLoader 2s linear infinite;
+      position: relative;
+      transition: .15s;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: -3px; top: -3px;
+        @include size(24px);
+        border: 3px solid $blue-100;
+        border-radius: 50%;
+        transform: rotate(-45deg);
+        -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+        opacity: 1;
+        transition: border-width .15s .25s ease, opacity .15s .25s ease;
+        animation: rotateAttachLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
+      }
+    }
+
+    #{$b}__svg {
+      opacity: 0;
+    }
+
+    #{$b}__title {
+      position: relative;
+
+      &:after {
+        transform: translateY(0px);
+        opacity: 1;
+        transition: .15s ease;
+      }
     }
   }
 }
 
-@keyframes rotateAttatchmentLoader {
+@keyframes rotateAttachLoader {
   from {
-    transform: rotate(0deg);
+    transform: rotate(-45deg);
   }
+
   to {
-    transform: rotate(360deg);
+    transform: rotate(315deg);
   }
 }

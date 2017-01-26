@@ -9,6 +9,7 @@
   padding-bottom: 30px;
   position: relative;
   overflow-y: auto;
+  padding-left: 10px;
 
   &__header {
     @include size(100%, auto);

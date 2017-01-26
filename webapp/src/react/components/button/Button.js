@@ -133,4 +133,5 @@ Button.propTypes = {
   alignIcon: string,
   disabled: bool,
   loading: bool,
+  frameless: bool,
 };
