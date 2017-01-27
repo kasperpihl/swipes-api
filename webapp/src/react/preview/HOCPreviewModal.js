@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupCachedCallback } from 'classes/utils';
 import Button from 'Button';
 import Loader from 'components/swipes-ui/Loader';
 import Section from 'components/section/Section';
@@ -14,6 +14,7 @@ class HOCPreviewModal extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
     bindAll(this, ['onClose']);
   }
   componentDidMount() {
@@ -22,12 +23,31 @@ class HOCPreviewModal extends Component {
     const { closePreview } = this.props;
     closePreview();
   }
+  onClickButton(i) {
+    const { buttons } = this.props.preview;
+    const { browser } = this.props;
+    const button = buttons[i];
+    if (button.url) {
+      browser(button.url);
+    }
+  }
   renderButtons() {
     const { preview } = this.props;
-    const { buttons } = preview || {};
-
+    let { buttons } = preview || { };
+    if (!buttons) {
+      buttons = [];
+    }
     return (
       <div className="header__actions">
+        {buttons.map((b, i) => (
+          <Button
+            key={i}
+            className="header__btn"
+            icon={b.icon}
+            text={b.title}
+            onClick={this.onClickButtonCached(i)}
+          />
+        ))}
         <Button
           icon="Close"
           className="header__btn header__btn--close"
@@ -156,4 +176,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   closePreview: actions.main.preview,
+  browser: actions.main.browser,
 })(HOCPreviewModal);
