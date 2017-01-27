@@ -37,12 +37,14 @@ class HOCAttachments extends Component {
       addLinkMenu,
       addNote,
       addURL,
+      goalId,
       openFind,
     } = this.props;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
       alignX: 'center',
+      goalId,
     };
     const callback = (obj) => {
       this.callDelegate('onAddAttachment', obj);
@@ -58,7 +60,7 @@ class HOCAttachments extends Component {
       case 'note':
         return addNote(options, callback);
       case 'find':
-        return openFind(callback);
+        return openFind(goalId || callback);
       default: {
         return addLinkMenu(options, callback);
       }
@@ -148,10 +150,11 @@ class HOCAttachments extends Component {
   }
 }
 
-const { func, object, bool } = PropTypes;
+const { func, object, bool, string } = PropTypes;
 HOCAttachments.propTypes = {
   flags: list,
   attachments: map,
+  goalId: string,
   attachmentOrder: list,
   disableAdd: bool,
   disableFlagging: bool,

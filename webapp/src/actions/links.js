@@ -94,6 +94,14 @@ export const openFind = callback => d => d(a.navigation.push({
   props: {
     actionLabel: 'Attach to Goal',
     actionCallback: (service, permission, meta) => {
+      if (typeof callback === 'string') {
+        const goalId = callback;
+
+        callback = (link) => {
+          console.log(goalId, link);
+          d(a.goals.addToCollection(goalId, link));
+        };
+      }
       d(addLinkAndCallback({ service, permission, meta }, callback));
     },
   },
@@ -113,7 +121,7 @@ export const addMenu = (options, callback) => (d) => {
         } else if (type === 'url') {
           d(addURL(options, callback));
         } else if (type === 'find') {
-          d(openFind(callback));
+          d(openFind(options.goalId || callback));
         }
       },
     },

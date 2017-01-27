@@ -233,7 +233,7 @@ const goalsGet = valLocals('goalsGet', {
 
 const goalsUpdate = valLocals('goalsUpdate', {
   goal_id: string.require(),
-  goal: goalLessStrict,
+  goal: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
