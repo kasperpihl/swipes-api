@@ -89,7 +89,7 @@ export const addURL = (options, callback) => (d) => {
 // ======================================================
 export const openFind = callback => d => d(a.navigation.push({
   component: 'Find',
-  placeholder: 'Search through your services',
+  placeholder: 'Search across Dropbox, Asana, Slack...',
   title: 'Find',
   props: {
     actionLabel: 'Attach to Goal',

@@ -17,7 +17,7 @@ const startingViewForNavId = (navId) => {
       return {
         component: 'Find',
         title: 'Find',
-        placeholder: 'Search for anything in all your service',
+        placeholder: 'Search across Dropbox, Asana, Slack...',
       };
     case 'profile':
       return {

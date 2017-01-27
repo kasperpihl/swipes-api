@@ -7,7 +7,7 @@ import AddGoal from './add-goal/HOCAddGoal';
 import Profile from './profile/HOCProfile';
 import Services from './services/Services';
 
-import Find from '../overlays/find/HOCFind';
+import Find from './find/HOCFind';
 import Browser from '../overlays/browser/HOCBrowser';
 
 import Slack from './webviews/slack/HOCSlack';

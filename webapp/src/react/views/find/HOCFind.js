@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import { bindAll } from 'classes/utils';
+import { setupDelegate } from 'classes/utils';
+import HOCBrowse from './browse/HOCBrowse';
 import Find from './Find';
 import './styles/find.scss';
 
@@ -11,8 +12,20 @@ class HOCFind extends Component {
   constructor(props) {
     super(props);
     this.unhandledDocs = [];
+    this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+    const input = document.getElementById('navbar-input');
+    input.focus();
+  }
+  onInputKeyUp(e) {
+    if (e.keyCode === 13) {
+      const { search } = this.props;
+      if (e.target.value.length > 2) {
+        search(e.target.value);
+      }
+    }
   }
   findItemShare() {
     // const { searchResults } = this.props;
@@ -38,17 +51,38 @@ class HOCFind extends Component {
       service: obj.get('service'),
     });
   }
-  render() {
-    const { searchResults, searching, searchQuery, actionLabel, browseQuery } = this.props;
+  renderBrowse() {
+    const { searchResults, searching } = this.props;
+    if (searchResults && searching || searchResults.size) {
+      console.log('undefined');
+      return undefined;
+    }
+    return <HOCBrowse />;
+  }
+  renderSearchResults() {
+    const { searchResults, searching, searchQuery, actionLabel } = this.props;
+
+    if (!searchResults && !searching) {
+      console.log('undefined');
+      return undefined;
+    }
     return (
       <Find
         results={searchResults}
-        browseQuery={browseQuery}
         searching={searching}
         actionLabel={actionLabel}
         searchQuery={searchQuery}
         delegate={this}
       />
+    );
+  }
+  render() {
+    console.log('hello');
+    return (
+      <div className="find">
+        {this.renderBrowse()}
+        {this.renderSearchResults()}
+      </div>
     );
   }
 }
