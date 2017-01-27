@@ -44,6 +44,7 @@ import Plus from './svgs/plus.svg';
 import Reload from './svgs/reload.svg';
 import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
+import Store from './svgs/store.svg';
 import ThreeDots from './svgs/three-dots.svg';
 import Trash from './svgs/trash.svg';
 import Unassign from './svgs/unassign.svg';
@@ -126,6 +127,7 @@ export {
   Reload,
   SmallList,
   Star,
+  Store,
   ThreeDots,
   Trash,
   Unassign,

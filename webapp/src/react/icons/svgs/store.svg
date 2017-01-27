@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <g>
+    <rect width="24" height="24" transform="translate(24 0) rotate(90)" fill="none" stroke="none">
+    <g>
+      <polygon points="11 2 9 2 7 7 9 7 11 2" stroke="none"/>
+      <polygon points="17 7 15 2 13 2 15 7 17 7" stroke="none"/>
+    </g>
+    <path d="M23,8H1v2H3.08057l.771,9.249A3.01542,3.01542,0,0,0,6.83984,22H17.16016a3.01542,3.01542,0,0,0,2.98828-2.751l.771-9.249H23ZM18.15527,19.0835A1.00378,1.00378,0,0,1,17.16016,20H6.83984a1.00546,1.00546,0,0,1-.99609-.917L5.08643,10H18.91357Z" stroke="none"/>
+  </g>
+</svg>
