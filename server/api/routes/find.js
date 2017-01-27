@@ -24,18 +24,16 @@ authed.all('/find.preview',
     service,
     permission: linkPermission,
   }),
-  (req, res, next, setLocals) => {
+  (req, res, next) => {
     const {
       service,
       permission,
     } = res.locals;
 
-    setLocals({
-      service_item_id: service.id,
-      service_name: service.name,
-      service_type: service.type,
-      account_id: permission.account_id,
-    });
+    res.locals.service_item_id = service.id;
+    res.locals.service_name = service.name;
+    res.locals.service_type = service.type;
+    res.locals.account_id = permission.account_id;
 
     return next();
   },
