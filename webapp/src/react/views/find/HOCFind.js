@@ -52,8 +52,8 @@ class HOCFind extends Component {
     });
   }
   renderBrowse() {
-    const { searchResults, searching } = this.props;
-    if (searchResults && searching || searchResults.size) {
+    const { searchQuery, searching } = this.props;
+    if (searchQuery || searching) {
       return undefined;
     }
     return <HOCBrowse />;
@@ -61,7 +61,7 @@ class HOCFind extends Component {
   renderSearchResults() {
     const { searchResults, searching, searchQuery, actionLabel } = this.props;
 
-    if (!searchResults && !searching) {
+    if (!searchQuery && !searching) {
       return undefined;
     }
     return (
@@ -77,7 +77,7 @@ class HOCFind extends Component {
   render() {
     console.log('hello');
     return (
-      <div className="find">
+      <div className="find-container">
         {this.renderBrowse()}
         {this.renderSearchResults()}
       </div>

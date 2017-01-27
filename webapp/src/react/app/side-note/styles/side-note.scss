@@ -9,6 +9,7 @@
   overflow-y: auto;
   padding-left: 0 15px;
   position: relative;
+  margin-left: 15px;
 
   &:after {
     @include size(1px, 100%);

@@ -10,7 +10,7 @@
   &__content-container{
     @include size(100%);
     padding-left: 35px;
-    padding-right: 45px;
+    // padding-right: 45px;
     padding-top: 9px;
     display: flex;
     flex-direction: column;
