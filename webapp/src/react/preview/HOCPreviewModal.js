@@ -46,14 +46,14 @@ class HOCPreviewModal extends Component {
           <Button
             key={i}
             className="header__btn"
-            btn-title={b.title}
+            title={b.title}
             icon={b.icon}
             onClick={this.onClickButtonCached(i)}
           />
         ))}
         <Button
           icon="Close"
-          btn-title="title"
+          title="title"
           className="header__btn"
           onClick={this.onClose}
         />

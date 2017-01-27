@@ -2,6 +2,7 @@ import SwipesIcon from './pngs/swipes-icon.png';
 import SwipesLogo from './svgs/swipes-logo.svg';
 import DropboxLogo from './svgs/dropbox-logo.svg';
 import SlackLogo from './svgs/slack-logo.svg';
+import AirbnbLogo from './svgs/airbnb-logo.svg';
 
 import AddPerson from './svgs/add-person.svg';
 import AddToCollection from './svgs/add-to-collection.svg';
@@ -12,6 +13,7 @@ import ArrowRightLine from './svgs/arrow-right-line.svg';
 import Assign from './svgs/assign.svg';
 import Bold from './svgs/bold.svg';
 import Calendar from './svgs/calendar.svg';
+import Checklist from './svgs/checklist.svg';
 import Checkmark from './svgs/checkmark.svg';
 import Close from './svgs/close.svg';
 import Collection from './svgs/collection.svg';
@@ -85,6 +87,7 @@ export {
   SwipesLogo,
   DropboxLogo,
   SlackLogo,
+  AirbnbLogo,
 
   AddPerson,
   AddToCollection,
@@ -95,6 +98,7 @@ export {
   Assign,
   Bold,
   Calendar,
+  Checklist,
   Checkmark,
   Close,
   Collection,
