@@ -1,3 +1,5 @@
+import { fromJS } from 'immutable';
+
 export default class GoalsUtil {
 
   constructor(goal, myId) {
@@ -44,13 +46,18 @@ export default class GoalsUtil {
     return this.goal.getIn(['steps', id]);
   }
 
-
+  getIsCompleted() {
+    return !this.getCurrentStep();
+  }
   getFlags() {
     return this.goal.getIn(['status', 'flags']);
   }
   amIAssigned() {
     const step = this.getCurrentStep();
-    return step.get('assignees').find(a => (a === this.id));
+    if (!step) {
+      return false;
+    }
+    return !!step.get('assignees').find(a => (a === this.id));
   }
   getOrderedSteps() {
     return this.goal.get('step_order').map(id => this.goal.getIn(['steps', id]));
@@ -75,7 +82,18 @@ export default class GoalsUtil {
     this.goal.get('steps').forEach((s) => {
       s.get('assignees').forEach(aId => assignees.add(aId));
     });
-    return [...assignees];
+    return fromJS([...assignees]);
+  }
+  getRemainingSteps() {
+    return this.getOrderedSteps().slice(this.getCurrentStepIndex());
+  }
+  getRemainingAssignees() {
+    const steps = this.getRemainingSteps();
+    const assignees = new Set();
+    steps.forEach((s) => {
+      s.get('assignees').forEach(aId => assignees.add(aId));
+    });
+    return fromJS([...assignees]);
   }
 
   getHandoffMessage() {

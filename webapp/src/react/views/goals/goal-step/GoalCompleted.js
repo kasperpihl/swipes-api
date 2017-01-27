@@ -4,7 +4,7 @@ import Icon from 'Icon';
 
 import './styles/goal-completed.scss';
 
-const GoalCmpleted = (props) => {
+const GoalCompleted = (props) => {
   const {
     title,
     assignees,
@@ -25,11 +25,11 @@ const GoalCmpleted = (props) => {
   );
 };
 
-export default GoalCmpleted;
+export default GoalCompleted;
 
 const { string, array } = PropTypes;
 
-GoalCmpleted.propTypes = {
+GoalCompleted.propTypes = {
   title: string,
   subtitle: string,
   assignees: array,

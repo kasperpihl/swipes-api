@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import Browse from './Browse';
 import BrowseSectionList from './BrowseSectionList';
 
 import './styles/browse.scss';
@@ -29,7 +28,6 @@ class HOCBrowse extends Component {
           const scrollW = scroller.scrollWidth;
           const clientW = scroller.clientWidth;
           scroller.scrollLeft = Math.max(scrollW - clientW, 0);
-          console.log(scrollW, clientW);
         }
       }, 600);
     }
@@ -37,7 +35,6 @@ class HOCBrowse extends Component {
   updateCacheAtPath(path, result) {
     const { cache } = this.state;
     cache[`${path}`] = result;
-    console.log(path, result, cache);
     this.setState({ cache });
   }
   loadPath(entry, depth) {
@@ -73,8 +70,6 @@ class HOCBrowse extends Component {
     if (entry.type === 'folder') {
       this.loadPath(entry, depth);
     } else {
-      console.log('wire up preview', entry);
-      // this.preview(entry);
       const { accountId, preview } = this.props;
       const link = {
         service: {

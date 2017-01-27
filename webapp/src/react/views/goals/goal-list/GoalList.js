@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'classes/utils';
-
+import GoalsUtil from 'classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
 
@@ -43,83 +43,27 @@ class GoalList extends Component {
         return this.filterMine(goals);
     }
   }
+  getHelper(goal) {
+    const { me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
+  }
   filterCompleted(goals) {
-    return goals.filter(goal => (goal.get('steps').last().get('completed')));
+    return goals.filter(goal => (!goal.getIn(['status', 'current_step_id'])));
   }
   filterMine(goals) {
-    const {
-      me,
-    } = this.props;
-
     return goals.filter((goal) => {
-      const steps = goal.get('steps');
-      const currentStep = steps.find(step => step.get('completed') !== true);
-
-      if (!currentStep) {
-        return false;
-      }
-
-      const assignees = currentStep.get('assignees');
-      const containsMe = assignees.find((user) => {
-        if (user === me.get('id')) {
-          return true;
-        }
-
-        return false;
-      });
-
-      if (!containsMe) {
-        return false;
-      }
-
-      return true;
+      const helper = this.getHelper(goal);
+      return helper.amIAssigned();
     });
   }
   filterLater(goals) {
-    const {
-      me,
-    } = this.props;
-
+    const { me } = this.props;
     return goals.filter((goal) => {
-      const steps = goal.get('steps');
-      let indexCompleted = null;
-      let match = null;
-
-      const currentStep = steps.findEntry(step => step.get('completed') !== true);
-
-      if (!currentStep) {
+      const helper = this.getHelper(goal);
+      if (helper.amIAssigned() || helper.getIsCompleted()) {
         return false;
       }
-
-      indexCompleted = currentStep[0];
-
-      steps.forEach((step, i) => {
-        if (i > indexCompleted) {
-          const assignees = step.get('assignees');
-
-          const containsMe = assignees.find((user) => {
-            if (user === me.get('id')) {
-              return true;
-            }
-
-            return false;
-          });
-
-          if (containsMe) {
-            match = true;
-            // Stop the forEach
-            return false;
-          }
-        }
-
-        return undefined;
-      });
-
-      if (match) {
-        return true;
-      }
-
-      return false;
+      return helper.getRemainingAssignees().contains(me.get('id'));
     });
   }
   renderTabbar() {
