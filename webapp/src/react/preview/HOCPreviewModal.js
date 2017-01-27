@@ -61,6 +61,7 @@ class HOCPreviewModal extends Component {
           onClick={this.onClose}
         />
         <Button
+          title="Attach"
           text="Attach to Goal"
           onClick={this.onAttach}
           className="header__btn"
