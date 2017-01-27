@@ -10,12 +10,12 @@
   @include flex(flex);
   position: relative;
   margin-left: 10px;
-  padding-top: 35px;
+  padding-top: 60px;
 
   &:before {
     content: '';
     position: absolute;
-    left: 0; top: 15px;
+    left: 0; top: 39px;
     @include size(100%, 1px)
     background-color: $deepBlue-10;
   }

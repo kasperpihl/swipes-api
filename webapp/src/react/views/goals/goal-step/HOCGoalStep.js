@@ -120,10 +120,8 @@ class HOCGoalStep extends Component {
     const { handoffText, nextStepId, flags } = this.state;
     if (this.state.isHandingOff) {
       this.setState({ isSubmitting: true });
-      console.log(flags);
       completeStep(goal.get('id'), nextStepId, handoffText, flags).then((res) => {
         this.setState({ isSubmitting: false });
-        console.log('res', res);
       });
     } else {
       this.setState({ isHandingOff: true });

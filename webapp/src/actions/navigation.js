@@ -8,6 +8,12 @@ const startingViewForNavId = (navId) => {
         component: 'GoalList',
         title: 'My Goals',
       };
+    case 'milestones': {
+      return {
+        component: 'MilestoneList',
+        title: 'Milestones',
+      };
+    }
     case 'dashboard':
       return {
         component: 'OrgDashboard',

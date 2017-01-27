@@ -13,6 +13,7 @@ import Browser from '../overlays/browser/HOCBrowser';
 import Slack from './webviews/slack/HOCSlack';
 import Store from './store/Store';
 import Gmail from './webviews/gmail/HOCGmail';
+import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 
 export {
   OrgDashboard,
@@ -26,4 +27,5 @@ export {
   Slack,
   Store,
   Gmail,
+  MilestoneList,
 };
