@@ -66,7 +66,6 @@ class HOCGoalList extends Component {
       title: goal.get('title'),
       props: {
         goalId,
-        stepIndex: goal.get('currentStepIndex'),
       },
     },
     savedState);

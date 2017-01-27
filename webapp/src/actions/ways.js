@@ -10,7 +10,7 @@ export const save = (options, goal) => (d, getState) => {
     props: {
       placeholder: 'Name your Way: Like Development, Design etc.',
       buttonLabel: 'Save',
-      onClick: (title) => {
+      onResult: (title) => {
         if (title && title.length) {
           d(a.toasty.add({ title: 'Adding Way', loading: true })).then((toastId) => {
             d(a.api.request('ways.create', {

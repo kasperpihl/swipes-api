@@ -21,11 +21,6 @@ class HOCViewController extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onContextClick']);
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.history !== this.props.history) {
-      this._contentView = null;
-    }
-  }
   componentWillUnmount() {
     this._contentView = null;
   }
