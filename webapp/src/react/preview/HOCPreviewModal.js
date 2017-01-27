@@ -19,17 +19,20 @@ class HOCPreviewModal extends Component {
   }
   componentDidMount() {
   }
-  onClose() {
+  onClose(e) {
     const { closePreview } = this.props;
     closePreview();
+    e.target.blur();
   }
-  onClickButton(i) {
+  onClickButton(i, e) {
     const { buttons } = this.props.preview;
     const { browser } = this.props;
     const button = buttons[i];
     if (button.url) {
       browser(button.url);
     }
+
+    e.target.blur();
   }
   renderButtons() {
     const { preview } = this.props;
@@ -43,14 +46,15 @@ class HOCPreviewModal extends Component {
           <Button
             key={i}
             className="header__btn"
+            btn-title={b.title}
             icon={b.icon}
-            text={b.title}
             onClick={this.onClickButtonCached(i)}
           />
         ))}
         <Button
           icon="Close"
-          className="header__btn header__btn--close"
+          btn-title="title"
+          className="header__btn"
           onClick={this.onClose}
         />
       </div>

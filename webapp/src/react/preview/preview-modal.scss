@@ -12,7 +12,6 @@
   pointer-events: none;
   transition: opacity .3s ease;
 
-
   .header {
     @include size(100%, calc(36px * 2));
     @include flex(center, flex-end); // change to space-between when title comes
@@ -25,10 +24,36 @@
     }
 
     &__btn {
+      margin-left: 15px;
+      background-color: transparent;
+      border-color: $deepBlue-60;
 
-      &--close {
-        background-color: transparent;
-        border-color: $deepBlue-60;
+      &:hover {
+        background-color: $bg !important;
+        border-color: $bg;
+
+        &:before {
+          content: '';
+          content: attr(btn-title);
+          position: absolute;
+          left: -15px; top: 0;
+          background-color: $deepBlue-100;
+          color: white;
+          padding: 10px 20px;
+          display: inline;
+          word-wrap: normal;
+          white-space: nowrap;
+          z-index: 9999;
+          transform: translateX(-100%);
+          pointer-events: none;
+        }
+
+        .g-button__svg {
+          path, polygon {
+            @include svg-color($deepBlue-90 !important);
+            stroke-width: 1 !important;
+          }
+        }
       }
     }
   }
@@ -62,7 +87,6 @@
   }
 
   &__file {
-    // width: 100%;
     max-height: 100%;
     overflow-y: auto;
     @include flex(flex-start, center);
