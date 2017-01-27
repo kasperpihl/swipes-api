@@ -87,8 +87,10 @@ export const addURL = (options, callback) => (d) => {
 // ======================================================
 // Open find (and then add)
 // ======================================================
-export const openFind = callback => d => d(a.main.overlay({
+export const openFind = callback => d => d(a.navigation.push({
   component: 'Find',
+  placeholder: 'Search through your services',
+  title: 'Find',
   props: {
     actionLabel: 'Attach to Goal',
     actionCallback: (service, permission, meta) => {
