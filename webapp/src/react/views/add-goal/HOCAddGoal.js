@@ -76,6 +76,8 @@ class HOCAddGoal extends Component {
           attachmentOrder: goal.get('attachment_order'),
           title: goal.get('title'),
         };
+        const input = document.getElementById('navbar-input');
+        input.value = goal.get('title');
         this._loadedWay = true;
         this.setState(newState);
       }

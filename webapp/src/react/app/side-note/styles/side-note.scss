@@ -9,6 +9,7 @@
   overflow-y: auto;
   padding-left: 0 15px;
   position: relative;
+  margin-left: 15px;
 
   &:after {
     @include size(1px, 100%);
@@ -30,9 +31,9 @@
 
   &__btn-title {
     @include size(100%, 42px);
-    @include flex(flex);
+    @include flex(center, flex-start);
     position: absolute;
-    left: 0; top: 40px;
+    left: 0; top: 45px;
   }
 
   &__title-wrap {

@@ -97,3 +97,11 @@ svg {
     position: fixed;
   }
 }
+
+.find-container {
+  width: calc(100% - 10px);
+height: 100%;
+display: -ms-flexbox;
+display: flex;
+position: relative;
+}

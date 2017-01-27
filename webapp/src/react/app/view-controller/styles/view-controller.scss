@@ -10,7 +10,7 @@
   &__content-container{
     @include size(100%);
     padding-left: 35px;
-    padding-right: 45px;
+    // padding-right: 45px;
     padding-top: 9px;
     display: flex;
     flex-direction: column;
@@ -43,8 +43,8 @@
 
   &__actions {
     @include flex(flex);
-    position: absolute;
-    right: 0; bottom: 0;
+    @include flex(none);
+    align-self: flex-end;
   }
 
   &__action {

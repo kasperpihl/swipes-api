@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 
 import './styles/goal-completed.scss';
@@ -27,10 +28,10 @@ const GoalCompleted = (props) => {
 
 export default GoalCompleted;
 
-const { string, array } = PropTypes;
+const { string } = PropTypes;
 
 GoalCompleted.propTypes = {
   title: string,
   subtitle: string,
-  assignees: array,
+  assignees: list,
 };

@@ -1,0 +1,29 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+
+.find-overlay {
+  @include size(100%);
+  position: relative;
+}
+
+.find {
+  @include size(100%);
+  @include flex(column);
+  position: relative;
+  padding-top: 15px;
+
+  &__results {
+    @include size(100%);
+    overflow-y: auto;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; top: 15px;
+      background-color: $deepBlue-10;
+      @include size(100%, 1px);
+      max-width: 780px;
+    }
+  }
+}

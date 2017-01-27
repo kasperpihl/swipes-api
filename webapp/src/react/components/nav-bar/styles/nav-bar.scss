@@ -4,9 +4,11 @@
 .nav-bar {
   $b: &;
   @include size(100%, 73px);
+  @include flex(flex);
   flex: none;
   max-width: 780px;
   position: relative;
+  z-index: 9;
 
   &__button {
     @include size(42px);
@@ -41,18 +43,26 @@
 
   &__crumb {
     @include size(auto, 100%);
-    @include flex();
+    @include flex(center, flex-start);
 
     &--last {
+      @include size(100%);
       position: absolute;
-			left: 0; bottom: -6px;
+			left: 0; bottom: -9px;
 			transform: translateY(100%);
+      display: block;
 
       #{$b}__title {
-        font-size: 27px;
-  			font-weight: 400;
-  			color: $deepBlue-90;
+        @include font(27px, $deepBlue-90, 400);
   			white-space: nowrap;
+
+        input {
+          @include size(100%, auto);
+          @include font(27px, $deepBlue-90, 400);
+    			white-space: nowrap;
+        }
+
+
       }
 
       #{$b}__seperator {

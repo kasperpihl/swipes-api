@@ -206,10 +206,11 @@ class StyleControl extends Component {
   renderButtons() {
     const styleOptions = {
       block: [
-        { label: 'HeaderOne', style: 'checklist' },
+        { label: 'HeaderOne', style: 'header-one' },
         { label: 'HeaderTwo', style: 'header-two' },
         { label: 'OrderedList', style: 'ordered-list-item' },
         { label: 'UnorderedList', style: 'unordered-list-item' },
+        { label: 'Checklist', style: 'checklist' },
       ],
       inline: [
         { label: 'Bold', style: 'BOLD' },

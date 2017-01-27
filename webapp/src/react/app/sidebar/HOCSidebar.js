@@ -49,6 +49,7 @@ class HOCSidebar extends Component {
       </div>
     );
   }
+  // render
   renderTopSection() {
     return [
       { id: 'my-goals', svg: 'Goal' },
@@ -56,7 +57,7 @@ class HOCSidebar extends Component {
       { id: 'dashboard', svg: 'Notification' },
       { id: 'find', svg: 'Find' },
       { id: 'slack', svg: 'SlackLogo' },
-      { id: 'store', svg: 'Earth' },
+      { id: 'store', svg: 'Store' },
     ].map(o => this.renderItem(o));
   }
   renderProfile() {
@@ -65,8 +66,8 @@ class HOCSidebar extends Component {
     if (!me) {
       return undefined;
     }
-
-    return this.renderItem({ id: 'profile', src: me.get('profile_pic') });
+    return this.renderItem({ id: 'profile', svg: 'AirbnbLogo' });
+    // return this.renderItem({ id: 'profile', src: me.get('profile_pic') });
   }
   renderStore() {
     // For later

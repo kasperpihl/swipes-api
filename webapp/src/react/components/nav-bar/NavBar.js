@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Icon from 'Icon';
-import { nearestAttribute, setupDelegate } from 'classes/utils';
+import { nearestAttribute, setupDelegate, bindAll } from 'classes/utils';
 
 import './styles/nav-bar.scss';
 
@@ -9,26 +9,35 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.clickedCrumb = this.clickedCrumb.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
+    bindAll(this, ['onInputKeyDown', 'onInputKeyUp', 'onInputChange', 'clickedCrumb']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   clickedCrumb(e) {
     const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
     this.callDelegate('navbarClickedCrumb', i);
   }
+  onInputKeyDown(e) {
+    this.callDelegate('navbarInputKeyDown', e);
+  }
+  onInputKeyUp(e) {
+    this.callDelegate('navbarInputKeyUp', e);
+  }
   onInputChange(e) {
-    this.callDelegate('navbarChangedInput', e.target.value);
+    this.callDelegate('navbarInputChange', e.target.value);
   }
   renderInputCrumb(placeholder) {
     return (
       <div className="bread-crumbs__title">
         <input
           id="navbar-input"
+          onKeyDown={this.onInputKeyDown}
+          onKeyUp={this.onInputKeyUp}
           onChange={this.onInputChange}
           type="text"
           placeholder={placeholder}
         />
+
+        <div className="bread-crumbs__bottom-border" />
       </div>
     );
   }
