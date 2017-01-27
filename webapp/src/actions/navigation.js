@@ -1,5 +1,18 @@
 import * as types from 'constants';
-
+const additionalViewsForOptions = (navId, options) => {
+  if (navId === 'my-goals' && options) {
+    return [
+      {
+        component: 'GoalStep',
+        title: options.title,
+        props: {
+          goalId: options.goalId,
+        },
+      },
+    ];
+  }
+  return [];
+};
 const startingViewForNavId = (navId) => {
   switch (navId) {
     case 'my-goals':
@@ -47,19 +60,24 @@ const startingViewForNavId = (navId) => {
   }
 };
 
-export function navigateToId(navId) {
+export function navigateToId(navId, options) {
   return (dispatch, getState) => {
     if (navId) {
       const payload = {
         id: navId,
       };
+      /*
       const state = getState();
       let history = state.getIn(['navigation', 'history', navId]);
-      const currentNavId = state.getIn(['navigation', 'id']);
       if (!history) {
-        history = [startingViewForNavId(navId, currentNavId)];
+        history = [startingViewForNavId(navId, options)];
         payload.history = history;
-      }
+      }*/
+      const history = [
+        startingViewForNavId(navId),
+      ].concat(additionalViewsForOptions(navId, options));
+
+      payload.history = history;
       dispatch({ type: types.NAVIGATION_SET, payload });
     }
   };

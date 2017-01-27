@@ -15,7 +15,7 @@ export default class OrgDashboard extends Component {
         svg={n.get('svg')}
         iconBgColor={n.get('iconBgColor')}
         message={n.get('message')}
-        timeago="2m ago"
+        timeago={n.get('timeago')}
       />
     ));
   }
