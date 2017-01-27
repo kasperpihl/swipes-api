@@ -1,7 +1,22 @@
 import r from 'rethinkdb';
+import {
+  object,
+  funcWrap,
+} from 'valjs';
 import db from '../../../../db';
+import {
+  SwipesError,
+} from '../../../../middlewares/swipes-error';
 
-const dbNotesInsert = ({ note }) => {
+const dbNotesInsert = funcWrap([
+  object.as({
+    note: object.require(),
+  }).require(),
+], (err, { note }) => {
+  if (err) {
+    throw new SwipesError(`dbNotesInsert: ${err}`);
+  }
+
   const q =
     r.table('notes')
       .insert(note, {
@@ -19,7 +34,7 @@ const dbNotesInsert = ({ note }) => {
       });
 
   return db.rethinkQuery(q);
-};
+});
 
 export {
   dbNotesInsert,

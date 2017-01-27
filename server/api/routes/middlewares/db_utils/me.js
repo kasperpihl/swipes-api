@@ -1,7 +1,20 @@
 import r from 'rethinkdb';
+import {
+  string,
+  funcWrap,
+} from 'valjs';
 import db from '../../../../db';
+import {
+  SwipesError,
+} from '../../../../middlewares/swipes-error';
 
-const initMe = (user_id) => {
+const initMe = funcWrap([
+  string.require(),
+], (err, user_id) => {
+  if (err) {
+    throw new SwipesError(`initMe: ${err}`);
+  }
+
   const q =
     r.table('users')
       .get(user_id)
@@ -68,6 +81,6 @@ const initMe = (user_id) => {
       });
 
   return db.rethinkQuery(q);
-};
+});
 
 export default initMe;

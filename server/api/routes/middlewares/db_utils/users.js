@@ -1,7 +1,22 @@
 import r from 'rethinkdb';
+import {
+  string,
+  object,
+  funcWrap,
+} from 'valjs';
 import db from '../../../../db';
+import {
+  SwipesError,
+} from '../../../../middlewares/swipes-error';
 
-const dbUsersGetService = (user_id, account_id) => {
+const dbUsersGetService = funcWrap([
+  string.require(),
+  string.require(),
+], (err, user_id, account_id) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetService: ${err}`);
+  }
+
   const q =
     r.table('users')
       .get(user_id)('services')
@@ -11,8 +26,15 @@ const dbUsersGetService = (user_id, account_id) => {
       .nth(0);
 
   return db.rethinkQuery(q);
-};
-const dbUsersRemoveService = (user_id, account_id) => {
+});
+const dbUsersRemoveService = funcWrap([
+  string.require(),
+  string.require(),
+], (err, user_id, account_id) => {
+  if (err) {
+    throw new SwipesError(`dbUsersRemoveService: ${err}`);
+  }
+
   const q =
     r.table('users')
       .get(user_id)
@@ -23,8 +45,17 @@ const dbUsersRemoveService = (user_id, account_id) => {
       });
 
   return db.rethinkQuery(q);
-};
-const dbUsersAddSevice = ({ user_id, service }) => {
+});
+const dbUsersAddSevice = funcWrap([
+  object.as({
+    user_id: string.require(),
+    service: object.require(),
+  }).require(),
+], (err, { user_id, service }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersAddSevice: ${err}`);
+  }
+
   const q = r.table('users').get(user_id).update((user) => {
     return {
       services:
@@ -40,8 +71,18 @@ const dbUsersAddSevice = ({ user_id, service }) => {
   });
 
   return db.rethinkQuery(q);
-};
-const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
+});
+const dbUsersGetServiceWithAuth = funcWrap([
+  object.as({
+    user_id: string.require(),
+    service_name: string.require(),
+    account_id: string.require(),
+  }).require(),
+], (err, { user_id, service_name, account_id }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetServiceWithAuth: ${err}`);
+  }
+
   const filter = {
     id: account_id,
     service_name,
@@ -58,13 +99,30 @@ const dbUsersGetServiceWithAuth = ({ user_id, service_name, account_id }) => {
     .zip();
 
   return db.rethinkQuery(q);
-};
-const dbUsersUpdateProfilePic = ({ user_id, profilePic }) => {
+});
+const dbUsersUpdateProfilePic = funcWrap([
+  object.as({
+    user_id: string.require(),
+    profilePic: string.require(),
+  }).require(),
+], (err, { user_id, profilePic }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersUpdateProfilePic: ${err}`);
+  }
+
   const q = r.table('users').get(user_id).update({ profile_pic: profilePic });
 
   return db.rethinkQuery(q);
-};
-const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
+});
+const dbUsersGetSingleWithOrganizations = funcWrap([
+  object.as({
+    user_id: string.require(),
+  }).require(),
+], (err, { user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetSingleWithOrganizations: ${err}`);
+  }
+
   const q =
     r.table('users')
       .get(user_id)
@@ -77,7 +135,7 @@ const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
       });
 
   return db.rethinkQuery(q);
-};
+});
 
 export {
   dbUsersGetService,

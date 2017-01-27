@@ -257,7 +257,7 @@ const goalsUpdate = valLocals('goalsUpdate', {
 
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
-  goal: object.of({
+  goal: object.as({
     id: string.require(),
   }).require(),
   eventType: string.require(),
@@ -359,7 +359,7 @@ const goalsRemoveMilestoneQueueMessage = valLocals('goalsRemoveMilestoneQueueMes
 
 const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   user_id: string.require(),
-  goal: object.of({
+  goal: object.as({
     id: string.require(),
   }).require(),
   current_step_id: string.require(),
@@ -387,7 +387,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 
 const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage', {
   user_id: string.require(),
-  goal: object.of({
+  goal: object.as({
     id: string.require,
   }).require(),
   next_step_id: string,

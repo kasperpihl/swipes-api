@@ -31,7 +31,7 @@
     "shortid": "^2.2.6",
     "speakingurl": "^6.0.0",
     "underscore": "1.8.x",
-    "valjs": "0.0.16",
+    "valjs": "0.0.17",
     "ws": "^1.1.1"
   },
   "devDependencies": {

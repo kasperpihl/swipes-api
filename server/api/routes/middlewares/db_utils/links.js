@@ -1,8 +1,22 @@
 import shortid from 'shortid';
 import r from 'rethinkdb';
+import {
+  string,
+  object,
+  funcWrap,
+} from 'valjs';
 import db from '../../../../db';
+import {
+  SwipesError,
+} from '../../../../middlewares/swipes-error';
 
-const findLinkPermissionsById = (shortUrl) => {
+const findLinkPermissionsById = funcWrap([
+  string.require(),
+], (err, shortUrl) => {
+  if (err) {
+    throw new SwipesError(`findLinkPermissionsById: ${err}`);
+  }
+
   const q =
     r.table('links_permissions')
       .getAll(shortUrl)
@@ -10,8 +24,14 @@ const findLinkPermissionsById = (shortUrl) => {
       .zip();
 
   return db.rethinkQuery(q);
-};
-const findLinksFromIds = (shareIds) => {
+});
+const findLinksFromIds = funcWrap([
+  string.require(),
+], (err, shareIds) => {
+  if (err) {
+    throw new SwipesError(`findLinksFromIds: ${err}`);
+  }
+
   const q =
     r.db('swipes').table('links_permissions')
       .getAll(r.args(shareIds))
@@ -23,9 +43,18 @@ const findLinksFromIds = (shareIds) => {
       .zip()
       .without('permission', 'checksum', 'user_id');
   return db.rethinkQuery(q);
-};
+});
+const addPermissionsToALink = funcWrap([
+  object.as({
+    user_id: string.require(),
+    checksum: string.require(),
+    permission: object.require(),
+  }).require(),
+], (err, { user_id, checksum, permission }) => {
+  if (err) {
+    throw new SwipesError(`addPermissionsToALink: ${err}`);
+  }
 
-const addPermissionsToALink = ({ user_id, checksum, permission }) => {
   const permissionPart = shortid.generate();
   const q = r.table('links_permissions').insert({
     user_id,
@@ -37,8 +66,17 @@ const addPermissionsToALink = ({ user_id, checksum, permission }) => {
   });
 
   return db.rethinkQuery(q);
-};
-const createLink = ({ meta, insert_doc }) => {
+});
+const createLink = funcWrap([
+  object.as({
+    meta: object.require(),
+    insert_doc: object.require(),
+  }).require(),
+], (err, { meta, insert_doc }) => {
+  if (err) {
+    throw new SwipesError(`createLink: ${err}`);
+  }
+
   insert_doc.last_updated = r.now();
 
   const q =
@@ -61,7 +99,7 @@ const createLink = ({ meta, insert_doc }) => {
       });
 
   return db.rethinkQuery(q);
-};
+});
 
 export {
   findLinkPermissionsById,

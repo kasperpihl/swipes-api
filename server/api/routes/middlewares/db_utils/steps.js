@@ -1,7 +1,24 @@
 import r from 'rethinkdb';
+import {
+  string,
+  object,
+  funcWrap,
+} from 'valjs';
 import db from '../../../../db';
+import {
+  SwipesError,
+} from '../../../../middlewares/swipes-error';
 
-const dbStepsUpdateSingle = ({ goal_id, stepUpdated }) => {
+const dbStepsUpdateSingle = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    stepUpdated: object.require(),
+  }).require(),
+], (err, { goal_id, stepUpdated }) => {
+  if (err) {
+    throw new SwipesError(`dbStepsUpdateSingle: ${err}`);
+  }
+
   const q =
     r.db('swipes')
       .table('goals')
@@ -19,6 +36,6 @@ const dbStepsUpdateSingle = ({ goal_id, stepUpdated }) => {
       });
 
   return db.rethinkQuery(q);
-};
+});
 
 export default dbStepsUpdateSingle;

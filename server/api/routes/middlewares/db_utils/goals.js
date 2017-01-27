@@ -1,21 +1,57 @@
 import r from 'rethinkdb';
+import {
+  string,
+  object,
+  funcWrap,
+} from 'valjs';
 import db from '../../../../db';
+import {
+  goalFullMoreStrict,
+} from '../../../validators';
+import {
+  SwipesError,
+} from '../../../../middlewares/swipes-error';
 
-const dbGoalsInsertSingle = ({ goal }) => {
+const dbGoalsInsertSingle = funcWrap([
+  object.as({
+    goal: goalFullMoreStrict,
+  }),
+], (err, { goal }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsInsertSingle: ${err}`);
+  }
+
   const q = r.table('goals').insert(goal, { returnChanges: true });
 
   return db.rethinkQuery(q);
-};
-const dbGoalsUpdateSingle = ({ goal_id, properties }) => {
+});
+const dbGoalsUpdateSingle = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    properties: object.require(),
+  }),
+], (err, { goal_id, properties }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsUpdateSingle: ${err}`);
+  }
+
   const q = r.table('goals').get(goal_id).update(properties);
 
   return db.rethinkQuery(q);
-};
-const dbGoalsGetSingle = ({ goal_id }) => {
+});
+const dbGoalsGetSingle = funcWrap([
+  object.as({
+    goal_id: string.require(),
+  }),
+], (err, { goal_id }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsGetSingle: ${err}`);
+  }
+
   const q = r.table('goals').get(goal_id);
 
   return db.rethinkQuery(q);
-};
+});
 
 export {
   dbGoalsInsertSingle,

@@ -74,7 +74,7 @@ const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
     });
 });
 const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
-  link_with_permission: object.of({
+  link_with_permission: object.as({
     user_id: string.require(),
     service,
     permission: linkPermission,
@@ -179,7 +179,7 @@ const serviceDoRequest = valLocals('serviceDoRequest', {
 const servicePreview = valLocals('servicePreview', {
   service_auth_data: object.require(),
   service: object.require(),
-  link_with_permission: object.of({
+  link_with_permission: object.as({
     user_id: string.require(),
     service,
   }).require(),
