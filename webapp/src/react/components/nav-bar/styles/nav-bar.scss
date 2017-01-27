@@ -42,12 +42,13 @@
   position: relative;
 
   &__crumb {
-    @include size(100%);
+    @include size(auto, 100%);
     @include flex(center, flex-start);
 
     &--last {
+      @include size(100%);
       position: absolute;
-			left: 0; bottom: -6px;
+			left: 0; bottom: -9px;
 			transform: translateY(100%);
       display: block;
 
