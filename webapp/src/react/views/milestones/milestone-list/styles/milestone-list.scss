@@ -1,0 +1,20 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.milestone-list {
+  @include size(100%, auto);
+  @include flex(flex);
+  @include flex($horizontal: space-between);
+  flex-wrap: wrap;
+  max-width: calc(372px * 2 + 90px);
+  padding-top: 60px;
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0; top: 45px;
+    @include size(100%, 1px);
+    background-color: $deepBlue-10;
+  }
+}

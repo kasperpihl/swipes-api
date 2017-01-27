@@ -8,6 +8,10 @@
   padding: 30px 21px;
   transition: .25s ease;
 
+  &:nth-child(n+3) {
+    margin-top: 30px;
+  }
+
   .header {
     @include size(100%, auto);
     @include flex(center, space-between);
@@ -25,7 +29,6 @@
       font-weight: 500;
       line-height: 1.25;
       color: $deepBlue-60;
-      // overflow: hidden;
     }
 
     &__days-left {
@@ -51,8 +54,7 @@
 
     &__completed {
       @include size(100%);
-      background-color: $green-color;
-      -webkit-clip-path: inset(0 39% 0 0 round 2px);
+      background-color: $deepBlue-100;
     }
   }
 

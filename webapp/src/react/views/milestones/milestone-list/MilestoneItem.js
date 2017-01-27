@@ -10,6 +10,13 @@ const MilestoneItem = (props) => {
     onClick,
   } = props;
 
+  const styles = {};
+
+  const progressLength = 100 - ((goals.completed * 100) / goals.total);
+  styles.WebkitClipPath = `inset(0 ${Math.min(97, progressLength)}% 0 0 round 5px)`;
+
+  console.log('progressLength', styles);
+
   return (
     <div className="milestone-item" onClick={onClick}>
       <div className="header">
@@ -20,7 +27,7 @@ const MilestoneItem = (props) => {
         </div>
       </div>
       <div className="progress-bar">
-        <div className="progress-bar__completed" />
+        <div className="progress-bar__completed" style={styles} />
       </div>
       <div className="status">
         <div className="status__image">
