@@ -60,7 +60,7 @@ const userAvailability = valLocals('userAvailability', {
     });
 });
 const userAddToOrganization = valLocals('userAddToOrganization', {
-  organization: object.require(),
+  organization: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     organization,

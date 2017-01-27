@@ -16,6 +16,10 @@ import {
 import {
   valLocals,
 } from '../../utils';
+import {
+  service,
+  linkPermission,
+} from '../../validators';
 
 const serviceIdGet = valLocals('serviceIdGet', {
   service_name: string.require(),
@@ -70,7 +74,11 @@ const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
     });
 });
 const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
-  link_with_permission: object.require(),
+  link_with_permission: object.of({
+    user_id: string.require(),
+    service,
+    permission: linkPermission,
+  }).require(),
 }, (req, res, next, setLocals) => {
   const {
     link_with_permission,
@@ -171,7 +179,10 @@ const serviceDoRequest = valLocals('serviceDoRequest', {
 const servicePreview = valLocals('servicePreview', {
   service_auth_data: object.require(),
   service: object.require(),
-  link_with_permission: object.require(),
+  link_with_permission: object.of({
+    user_id: string.require(),
+    service,
+  }).require(),
 }, (req, res, next, setLocals) => {
   const {
     service_auth_data,

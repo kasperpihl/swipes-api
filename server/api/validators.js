@@ -17,6 +17,19 @@ const goalMoreStrict =
     attachment_order: array.of(string).require(),
   }).require();
 
+const goalLessStrict =
+  object.as({
+    title: string,
+    steps: object.of(object.as({
+      id: string,
+      title: string,
+      assignees: array.of(string),
+    })),
+    step_order: array.of(string),
+    attachments: object,
+    attachment_order: array.of(string),
+  }).require();
+
 const service =
   object.as({
     id: string.require(),
@@ -36,6 +49,7 @@ const linkMeta =
 
 export {
   goalMoreStrict,
+  goalLessStrict,
   service,
   linkPermission,
   linkMeta,

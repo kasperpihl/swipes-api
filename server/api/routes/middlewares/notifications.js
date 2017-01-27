@@ -36,7 +36,10 @@ const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
 });
 
 const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
-  queueMessage: object.require(),
+  queueMessage: object.of({
+    user_id: string.require(),
+    event_type: string.require(),
+  }).require(),
   messageGroupId: string.require(),
 }, (req, res, next) => {
   const {

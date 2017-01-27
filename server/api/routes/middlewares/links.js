@@ -2,7 +2,6 @@ import hash from 'object-hash';
 import {
   string,
   array,
-  object,
 } from 'valjs';
 import {
   findLinkPermissionsById,
@@ -16,6 +15,11 @@ import {
 import {
   valLocals,
 } from '../../utils';
+import {
+  service,
+  linkPermission,
+  linkMeta,
+} from '../../validators';
 
 const linksGetByIds = valLocals('linksGetByIds', {
   ids: array.of(string).require(),
@@ -67,7 +71,7 @@ const linksFindPermissions = valLocals('linksFindPermissions', {
 const linksAddPermission = valLocals('linksAddPermission', {
   user_id: string.require(),
   checksum: string.require(),
-  permission: object.require(),
+  permission: linkPermission,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -89,8 +93,8 @@ const linksAddPermission = valLocals('linksAddPermission', {
 });
 
 const linksCreate = valLocals('linksCreate', {
-  service: object.require(),
-  meta: object.require(),
+  service,
+  meta: linkMeta,
 }, (req, res, next, setLocals) => {
   const {
     service,

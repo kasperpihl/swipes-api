@@ -14,12 +14,16 @@ import {
   valLocals,
 } from '../../utils';
 import {
+  goalMoreStrict,
+  goalLessStrict,
+} from '../../validators';
+import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 
 const goalsCreate = valLocals('goalsCreate', {
   user_id: string.require(),
-  goal: object.require(),
+  goal: goalMoreStrict,
   organization_id: string.require(),
   message: string,
   flags: array.of(string),
@@ -61,7 +65,11 @@ const goalsCreate = valLocals('goalsCreate', {
 });
 
 const goalsCompleteStep = valLocals('goalsCompleteStep', {
-  goal: object.require(),
+  goal: object.as({
+    status: object.require(),
+    steps: object.require(),
+    history: array.of(object).require(),
+  }).require(),
   goal_id: string.require(), // T_TODO make it object.as when it's more final
   current_step_id: string.require(),
   next_step_id: string,
@@ -225,7 +233,7 @@ const goalsGet = valLocals('goalsGet', {
 
 const goalsUpdate = valLocals('goalsUpdate', {
   goal_id: string.require(),
-  goal: object.require(),
+  goal: goalLessStrict,
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
@@ -249,7 +257,9 @@ const goalsUpdate = valLocals('goalsUpdate', {
 
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
-  goal: object.require(),
+  goal: object.of({
+    id: string.require(),
+  }).require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -349,7 +359,9 @@ const goalsRemoveMilestoneQueueMessage = valLocals('goalsRemoveMilestoneQueueMes
 
 const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   user_id: string.require(),
-  goal: object.require(),
+  goal: object.of({
+    id: string.require(),
+  }).require(),
   current_step_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -375,7 +387,9 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 
 const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage', {
   user_id: string.require(),
-  goal: object.require(),
+  goal: object.of({
+    id: string.require,
+  }).require(),
   next_step_id: string,
 }, (req, res, next, setLocals) => {
   const {
