@@ -19,6 +19,9 @@ class HOCPreviewModal extends Component {
   }
   componentDidMount() {
   }
+  onAttach(e) {
+
+  }
   onClose(e) {
     const { closePreview } = this.props;
     closePreview();
@@ -53,9 +56,14 @@ class HOCPreviewModal extends Component {
         ))}
         <Button
           icon="Close"
-          title="title"
+          title="close"
           className="header__btn"
           onClick={this.onClose}
+        />
+        <Button
+          text="Attach to Goal"
+          onClick={this.onAttach}
+          className="header__btn"
         />
       </div>
     );

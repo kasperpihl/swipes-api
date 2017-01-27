@@ -24,6 +24,8 @@ class HOCFind extends Component {
       const { search } = this.props;
       if (e.target.value.length > 2) {
         search(e.target.value);
+      } else {
+        search();
       }
     }
   }
