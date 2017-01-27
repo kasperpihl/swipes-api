@@ -29,6 +29,8 @@ class NavBar extends Component {
           type="text"
           placeholder={placeholder}
         />
+
+        <div className="bread-crumbs__bottom-border" />
       </div>
     );
   }

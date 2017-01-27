@@ -43,8 +43,8 @@
 
   &__actions {
     @include flex(flex);
-    position: absolute;
-    right: 0; bottom: 0;
+    @include flex(none);
+    align-self: flex-end;
   }
 
   &__action {
