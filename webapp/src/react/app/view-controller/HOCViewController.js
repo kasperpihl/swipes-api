@@ -38,9 +38,19 @@ class HOCViewController extends Component {
   viewDidLoad(view) {
     this._contentView = view;
   }
-  navbarChangedInput(text) {
-    if (this._contentView && typeof this._contentView.onInputChange === 'function') {
-      this._contentView.onInputChange(text);
+  navbarInputKeyUp(e) {
+    this.callContentView('onInputKeyUp', e);
+  }
+  navbarInputKeyDown(e) {
+    this.callContentView('onInputKeyDown', e);
+  }
+  navbarInputChange(text) {
+    this.callContentView('onInputChange', text);
+  }
+  callContentView(name) {
+    const orgArgs = Array.prototype.slice.call(arguments, 1);
+    if (this._contentView && typeof this._contentView[name] === 'function') {
+      this._contentView[name](...orgArgs);
     }
   }
   navbarClickedCrumb(i) {

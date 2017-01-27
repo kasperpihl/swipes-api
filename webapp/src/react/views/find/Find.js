@@ -3,37 +3,13 @@ import { setupDelegate } from 'classes/utils';
 import { list } from 'react-immutable-proptypes';
 import Loader from 'components/swipes-ui/Loader';
 import FindItem from './FindItem';
-import HOCBrowse from './browse/HOCBrowse';
-
-import './styles/find.scss';
 
 class Find extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
-    this.onKeyUp = this.onKeyUp.bind(this);
   }
-  componentDidMount() {
-    setTimeout(() => {
-      this._searchInput.focus();
-    }, 0);
-  }
-  onKeyUp(e) {
-    if (e.keyCode === 13) {
-      this.callDelegate('findSearch', this._searchInput.value);
-    }
-  }
-  renderInput() {
-    return (
-      <input
-        onKeyUp={this.onKeyUp}
-        type="text"
-        ref={(c) => { this._searchInput = c; }}
-        className="find__input"
-        placeholder="Search across Dropbox, Asana, Slack..."
-      />
-    );
-  }
+
   renderSubTitle() {
     const { results, searchQuery, searching } = this.props;
     let string = '';
@@ -91,10 +67,8 @@ class Find extends Component {
     );
   }
   render() {
-    return <HOCBrowse />;
     return (
       <div className="find">
-        {this.renderHeader()}
         {this.renderResults()}
         {this.renderLoader()}
       </div>
