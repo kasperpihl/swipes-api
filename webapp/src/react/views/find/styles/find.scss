@@ -11,46 +11,19 @@
   @include size(100%);
   @include flex(column);
   position: relative;
-  padding-left: 83px;
-
-  &__header {
-    @include size(100%, 117px);
-    @include flex(center, flex-start);
-    max-width: 780px;
-    flex: none;
-    position: relative;
-
-    &:after {
-      @include size(100%, 1px);
-      content: '';
-      position: absolute;
-      left: 0; bottom: 0;
-      background-color: $deepBlue-10;
-    }
-  }
-
-  &__input {
-    @include size(100%, calc(100% - (27px * 2)));
-    font-size: 27px;
-    font-weight: 500;
-    color: $deepBlue-100;
-
-    &::-webkit-input-placeholder {
-      color: $deepBlue-40;
-    }
-  }
-
-  &__subtitle {
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 15px;
-    color: $deepBlue-30;
-    position: absolute;
-    left: 0; bottom: 6px;
-  }
+  padding-top: 15px;
 
   &__results {
     @include size(100%);
     overflow-y: auto;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; top: 15px;
+      background-color: $deepBlue-10;
+      @include size(100%, 1px);
+      max-width: 780px;
+    }
   }
 }
