@@ -1,6 +1,7 @@
 import r from 'rethinkdb';
 import {
   string,
+  number,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -23,7 +24,7 @@ const dbXendoGetService = funcWrap([
   return db.rethinkQuery(q);
 });
 const dbXendoRemoveService = funcWrap([
-  string.require(),
+  number.require(),
 ], (err, xendoUserServiceId) => {
   if (err) {
     throw new SwipesError(`dbXendoRemoveService: ${err}`);

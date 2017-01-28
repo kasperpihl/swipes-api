@@ -84,8 +84,10 @@ const valBody = (schema, middleware) => (req, res, next) => {
     middleware: func,
   }), true);
 
+  const params = Object.assign({}, req.params, req.query, req.body);
+
   if (!error) {
-    error = valjs(req.body, object.as(schema));
+    error = valjs(params, object.as(schema));
   }
 
   if (error) {
