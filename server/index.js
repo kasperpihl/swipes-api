@@ -3,6 +3,7 @@ import express from 'express';
 import config from 'config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import winston from 'winston';
 import websocketStart from './websocket';
 import restAuth from './middlewares/jwt-auth-middleware';
 import handleJsonError from './middlewares/errors';
@@ -10,6 +11,15 @@ import {
   swipesErrorMiddleware,
 } from './middlewares/swipes-error';
 import * as routes from './api/routes';
+
+require('winston-loggly-bulk');
+
+winston.add(winston.transports.Loggly, {
+  token: 'a760d2ee-d576-466b-a8ff-53826455a13d',
+  subdomain: 'swipesapp',
+  tags: ['swipesapp-dev-staging-nodejs-errors'],
+  json: true,
+});
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
@@ -44,7 +54,8 @@ app.use('/v1', routes.v1Authed);
 const logErrors = (err, req, res, next) => {
   // We can use some service like loggy to log errors
   if (err) {
-    console.error(err);
+    winston.log('error', err);
+
     return next(err);
   }
 
@@ -53,6 +64,8 @@ const logErrors = (err, req, res, next) => {
 //
 const unhandledServerError = (err, req, res, next) => {
   if (err) {
+    winston.log('fatal', err);
+
     return res.status(500).send({ ok: false, err });
   }
 
@@ -66,8 +79,7 @@ app.use(unhandledServerError);
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
-  console.error(`${(new Date()).toUTCString()} uncaughtException:`, err.message);
-  console.error(err.stack);
+  winston.log('fatal', err);
   process.exit(1);
 });
 
