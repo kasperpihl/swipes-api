@@ -5,6 +5,7 @@
     "watch"       : "./dist/",
     "node_args"   : ["--harmony"],
     "env_staging" : {
+       "SW_ENV": "staging",
        "SW_VALJS_DEBUG": false,
        "SW_ORIGIN": "https://staging.swipesapp.com",
        "SW_WEBHOOKS_HOST": "https://staging.swipesapp.com/",
@@ -24,7 +25,11 @@
 
        "SW_AMAZON_QUEUE_ACCESS_KEY_ID": "AKIAJYHNP3XSVYNJK7OA",
        "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY": "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",
-       "SW_AMAZON_QUEUE_HOST": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo"
+       "SW_AMAZON_QUEUE_HOST": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo",
+
+       "SW_LOGGLY_TOKEN": "a760d2ee-d576-466b-a8ff-53826455a13d",
+       "SW_LOGGLY_SUBDOMAIN": "swipesapp",
+       "SW_LOGGLY_TAGS": "swipesapp-staging-nodejs-errors"
     }
   }]
 }

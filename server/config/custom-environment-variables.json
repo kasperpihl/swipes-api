@@ -31,9 +31,15 @@
     "secretAccessKey": "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY",
     "queueHost": "SW_AMAZON_QUEUE_HOST"
   },
+  "loggly": {
+    "token": "SW_LOGGLY_TOKEN",
+    "tags": "SW_LOGGLY_TAGS",
+    "subdomain": "SW_LOGGLY_SUBDOMAIN"
+  },
   "valjs_debug": "SW_VALJS_DEBUG",
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
   "clientPort": "SW_CLIENT_PORT",
-  "webhooksHost": "SW_WEBHOOKS_HOST"
+  "webhooksHost": "SW_WEBHOOKS_HOST",
+  "env": "SW_ENV"
 }

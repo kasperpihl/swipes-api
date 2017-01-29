@@ -4,6 +4,7 @@ import config from 'config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import winston from 'winston';
+import expressWinston from 'express-winston';
 import websocketStart from './websocket';
 import restAuth from './middlewares/jwt-auth-middleware';
 import handleJsonError from './middlewares/errors';
@@ -14,12 +15,30 @@ import * as routes from './api/routes';
 
 require('winston-loggly-bulk');
 
-winston.add(winston.transports.Loggly, {
-  token: 'a760d2ee-d576-466b-a8ff-53826455a13d',
-  subdomain: 'swipesapp',
-  tags: ['swipesapp-dev-staging-nodejs-errors'],
-  json: true,
-});
+const logglyConfig = config.get('loggly');
+const env = config.get('env');
+const transports = [];
+
+if (env !== 'dev') {
+  expressWinston.requestWhitelist.push('body');
+  expressWinston.responseWhitelist.push('body');
+  expressWinston.requestWhitelist.push('locals');
+  expressWinston.responseWhitelist.push('locals');
+
+  transports.push(new winston.transports.Loggly({
+    subdomain: logglyConfig.subdomain,
+    token: logglyConfig.token,
+    tags: [logglyConfig.tags],
+    json: true,
+  }));
+
+  winston.add(winston.transports.Loggly, {
+    token: logglyConfig.token,
+    subdomain: logglyConfig.subdomain,
+    tags: [logglyConfig.tags],
+    json: true,
+  });
+}
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
@@ -29,6 +48,13 @@ app.use(cors({
   methods: 'HEAD, GET, POST',
   allowedHeader: 'Content-Type, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
 }));
+
+if (env !== 'dev') {
+  app.use(expressWinston.logger({
+    transports,
+  }));
+}
+
 app.use('/workflows', express.static(`${__dirname}/../workflows`));
 
 // Webhooks route
@@ -51,21 +77,21 @@ app.use('/v1', routes.v1Authed);
 // // ========================================================================
 // // Error handlers / they should be at the end of the middleware stack
 // // ========================================================================
-const logErrors = (err, req, res, next) => {
-  // We can use some service like loggy to log errors
-  if (err) {
-    winston.log('error', err);
+if (env !== 'dev') {
+  app.use(expressWinston.errorLogger({
+    transports,
+  }));
+}
 
-    return next(err);
+const debugErrorHandling = (err, req, res, next) => {
+  if (err && env === 'dev') {
+    console.error(err);
   }
 
-  return next();
+  return next(err);
 };
-//
 const unhandledServerError = (err, req, res, next) => {
   if (err) {
-    winston.log('fatal', err);
-
     return res.status(500).send({ ok: false, err });
   }
 
@@ -73,13 +99,19 @@ const unhandledServerError = (err, req, res, next) => {
   return next();
 };
 
-app.use(logErrors);
+if (env === 'dev') {
+  app.use(debugErrorHandling);
+}
 app.use(swipesErrorMiddleware);
 app.use(unhandledServerError);
 
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
-  winston.log('fatal', err);
+  if (env !== 'dev') {
+    winston.log('fatal', err);
+  } else {
+    console.error(err);
+  }
   process.exit(1);
 });
 

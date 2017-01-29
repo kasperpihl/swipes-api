@@ -40,6 +40,11 @@
     "secretAccessKey": "ERXLaiG3AUZIPWQeOMQKcGjpcY7lnyXcGcfpaOhj",
     "queueHost": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo"
   },
+  "loggly": {
+    "token": "a760d2ee-d576-466b-a8ff-53826455a13d",
+    "tags": "swipesapp-staging-nodejs-errors",
+    "subdomain": "swipesapp"
+  },
   "valjs_debug": true,
   "origin": "http://localhost",
   "webhooksHost": "https://swipesdev.ngrok.io/",
@@ -47,5 +52,6 @@
   "clientPort" :3000,
   "protocol": "http://",
   "cors": "*",
-  "jwtTokenSecret": "swipy the dinocat"
+  "jwtTokenSecret": "swipy the dinocat",
+  "env": "dev"
 }
