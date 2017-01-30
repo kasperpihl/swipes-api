@@ -66,7 +66,7 @@ authed.all('/services.authsuccess',
   xendoSwipesCredentials,
   xendoRefreshSwipesToken,
   xendoAddServiceToUser,
-  valResponseAndSend,
+  valResponseAndSend(),
 );
 
 export {

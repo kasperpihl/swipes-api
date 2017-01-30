@@ -72,7 +72,7 @@ authed.post('/users.serviceDisconnect',
   xendoRemoveServiceFromUser,
   usersRemoveXendoService,
   usersRemoveService,
-  valResponseAndSend,
+  valResponseAndSend(),
 );
 
 // T_TODO

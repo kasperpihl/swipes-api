@@ -19,7 +19,7 @@ authed.all('/notifications.markAsSeen',
     notification_ids: array.of(string).require(),
   }),
   notificationsMarkAsSeen,
-  valResponseAndSend,
+  valResponseAndSend(),
 );
 
 export {
