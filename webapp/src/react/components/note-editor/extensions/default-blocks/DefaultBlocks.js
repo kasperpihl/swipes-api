@@ -1,13 +1,20 @@
 import {
   resetBlockToType,
+  createNewEmptyBlock,
 } from '../../draft-utils';
 
 class DefaultBlocks {
   static keyBindingFn(editorState, onChange, e) {
     const selection = editorState.getSelection();
     const startKey = selection.getStartKey();
-    const blockText = editorState.getCurrentContent().getBlockForKey(startKey).getText();
-    const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
+    const block = editorState.getCurrentContent().getBlockForKey(startKey);
+    const blockText = block.getText();
+    const blockType = block.getType();
+
+    if (e.keyCode === 13 && block.getLength() > 0 && (block.getLength() === selection.getStartOffset()) && blockType === ('header-one' || 'header-two')) {
+      onChange(createNewEmptyBlock(editorState, startKey, 'unstyled'));
+      return true;
+    }
 
     if (e.keyCode === 13 && !blockText.length && blockType !== 'unstyled') {
       onChange(resetBlockToType(editorState, 'unstyled'));
@@ -36,11 +43,9 @@ class DefaultBlocks {
         return true;
       } else if (blockLength === 1 && currentBlock.getText() === '#') {
         onChange(resetBlockToType(editorState, 'header-one'));
-
         return true;
       } else if (blockLength === 2 && currentBlock.getText() === '##') {
         onChange(resetBlockToType(editorState, 'header-two'));
-        console.log('wtf');
         return true;
       }
     }
