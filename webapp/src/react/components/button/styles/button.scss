@@ -126,7 +126,7 @@ $borderColor: $deepBlue-10;
     }
 
     #{$b}__svg {
-      @include svg-color($deepBlue-20);
+      @include svg-color($deepBlue-20 !important);
     }
   }
 
