@@ -8,6 +8,7 @@ export const save = (options, goal) => (d, getState) => {
     options,
     component: InputMenu,
     props: {
+      initialValue: goal.title,
       placeholder: 'Name your Way: Like Development, Design etc.',
       buttonLabel: 'Save',
       onResult: (title) => {

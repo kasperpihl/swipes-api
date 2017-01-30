@@ -32,18 +32,6 @@ class HOCApp extends Component {
         navInit();
       }
     });
-
-    // Massive hack to not be able to drop files into swipes so it wouldn't redirect
-
-    document.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      return false;
-    });
-
-    document.addEventListener('drop', (e) => {
-      e.preventDefault();
-      return false;
-    });
   }
   renderNote() {
     return <HOCSideNote />;
