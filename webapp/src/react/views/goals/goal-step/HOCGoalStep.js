@@ -81,13 +81,14 @@ class HOCGoalStep extends Component {
       goal,
       archive,
       contextMenu,
+      saveWay,
     } = this.props;
-
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
     contextMenu({
-      options: {
-        boundingRect: e.target.getBoundingClientRect(),
-        alignX: 'right',
-      },
+      options,
       component: ListMenu,
       props: {
         items: [
@@ -96,6 +97,13 @@ class HOCGoalStep extends Component {
             onClick: () => {
               archive(goal.get('id'));
               contextMenu(null);
+            },
+          },
+          {
+            title: 'Save as a Way',
+            onClick: () => {
+              const helper = this.getHelper();
+              saveWay(options, helper.getObjectForWay());
             },
           },
         ],
@@ -365,6 +373,7 @@ export default connect(mapStateToProps, {
   contextMenu: actions.main.contextMenu,
   selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
+  saveWay: actions.ways.save,
   navigateToId: actions.navigation.navigateToId,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,

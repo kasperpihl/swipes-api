@@ -74,10 +74,10 @@ class HOCAddGoal extends Component {
           stepOrder: goal.get('step_order'),
           attachments: goal.get('attachments'),
           attachmentOrder: goal.get('attachment_order'),
-          title: goal.get('title'),
+          title: way.get('title'),
         };
         const input = document.getElementById('navbar-input');
-        input.value = goal.get('title');
+        input.value = way.get('title');
         this._loadedWay = true;
         this.setState(newState);
       }

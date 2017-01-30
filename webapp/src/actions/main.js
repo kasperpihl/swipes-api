@@ -89,12 +89,15 @@ export const note = {
     organization_id: oId,
     title,
   })),
-  save: (oId, id, text, unlock) => dp => dp(a.api.request('notes.save', {
-    organization_id: oId,
-    id,
-    text,
-    unlock,
-  })),
+  save: (oId, id, text, unlock) => (dp) => {
+    console.log(oId, id, text, unlock);
+    dp(a.api.request('notes.save', {
+      organization_id: oId,
+      id,
+      text,
+      unlock,
+    }));
+  },
   show: id => ({ type: types.NOTE_SHOW, payload: { id },
   }),
   hide: () => ({ type: types.NOTE_HIDE }),

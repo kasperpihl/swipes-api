@@ -95,6 +95,15 @@ export default class GoalsUtil {
     });
     return fromJS([...assignees]);
   }
+  getObjectForWay() {
+    return {
+      title: this.goal.get('title'),
+      steps: this.goal.get('steps'),
+      step_order: this.goal.get('step_order'),
+      attachments: this.goal.get('attachments'),
+      attachment_order: this.goal.get('attachment_order'),
+    };
+  }
 
   getHandoffMessage() {
     const status = this.goal.get('status');

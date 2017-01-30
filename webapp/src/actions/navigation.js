@@ -68,7 +68,9 @@ export function navigateToId(navId, options) {
       };
       const state = getState();
       let history = state.getIn(['navigation', 'history', navId]);
-      if (!history) {
+      const currentId = state.getIn(['navigation', 'id']);
+
+      if (currentId === navId || !history) {
         history = [startingViewForNavId(navId, options)];
         payload.history = history;
       }
