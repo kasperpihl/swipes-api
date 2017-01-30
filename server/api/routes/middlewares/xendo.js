@@ -159,7 +159,7 @@ const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
   const qs = querystring.stringify({
     client_id: xendoConfig.clientId,
     email: xendoEmail,
-    service_name: serviceToAppend.service_name,
+    service_name: serviceToAppend.service_name_xendo,
     access_token: serviceToAppend.auth_data.access_token,
     refresh_token: serviceToAppend.auth_data.refresh_token,
     display_name: serviceToAppend.show_name,
