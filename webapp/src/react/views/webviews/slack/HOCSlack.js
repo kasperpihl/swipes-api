@@ -24,10 +24,12 @@ class HOCSlack extends Component {
       this.refs.slack.refs.container.getElementsByClassName('webview')[0].focus();
     }
     if (this.props.openIn && prevProps.openIn !== this.props.openIn) {
+      const { openSlackIn } = this.props;
       this._webview.send('message', {
         type: 'open',
         id: this.props.openIn,
       });
+      openSlackIn(null);
     }
   }
   onLoad(webview) {
@@ -78,6 +80,7 @@ const { func, bool, string } = PropTypes;
 HOCSlack.propTypes = {
   setCounter: func,
   browser: func,
+  openSlackIn: func,
   openIn: string,
   hidden: bool,
   me: map,
@@ -91,5 +94,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   browser: actions.main.browser,
+  openSlackIn: actions.main.openSlackIn,
   setCounter: actions.navigation.setCounter,
 })(HOCSlack);

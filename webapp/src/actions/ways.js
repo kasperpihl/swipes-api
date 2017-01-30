@@ -31,7 +31,6 @@ export const save = (options, goal) => (d, getState) => {
                   duration: 3000,
                 }));
               }
-              console.log('ressy', res);
             });
           });
         }
