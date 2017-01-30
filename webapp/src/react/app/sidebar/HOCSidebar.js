@@ -66,8 +66,8 @@ class HOCSidebar extends Component {
     if (!me) {
       return undefined;
     }
-    return this.renderItem({ id: 'profile', svg: 'AirbnbLogo' });
-    // return this.renderItem({ id: 'profile', src: me.get('profile_pic') });
+
+    return this.renderItem({ id: 'profile', src: me.get('profile_pic') });
   }
   renderStore() {
     // For later

@@ -15,17 +15,6 @@
 
   &__label {
     position: relative;
-
-    &:after {
-      content: '';
-      @include size(105%, 1px);
-      position: absolute;
-      left: 0; top: 50%;
-      transform: translateX(-2.5%) translateY(-50%);
-      background-color: $deepBlue-60;
-      -webkit-clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
-      transition: .15s ease-in-out;
-    }
   }
 
 	&__input {
@@ -65,11 +54,7 @@
   & &__input:checked ~ &__label {
     color: $deepBlue-30;
     transition: .15s ease-in-out;
-
-    &:after {
-      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-      transition: .25s ease-in-out;
-    }
+    text-decoration: line-through;
   }
 
 	& &__input:checked ~ &__indicator {

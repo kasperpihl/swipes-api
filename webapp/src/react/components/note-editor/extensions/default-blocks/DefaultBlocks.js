@@ -40,7 +40,7 @@ class DefaultBlocks {
         return true;
       } else if (blockLength === 2 && currentBlock.getText() === '##') {
         onChange(resetBlockToType(editorState, 'header-two'));
-
+        console.log('wtf');
         return true;
       }
     }

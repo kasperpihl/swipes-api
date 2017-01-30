@@ -23,28 +23,14 @@
   	color: $deepBlue-80;
     position: relative;
     cursor: text;
-
-    &:after {
-      content: '';
-      @include size(calc(100% + 10px), 1px);
-      position: absolute;
-      left: 0; top: 50%;
-      transform: translateX(-5px) translateY(calc(-50% + 1px));
-      background-color: $deepBlue-60;
-      -webkit-clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
-      transition: .15s ease-in-out;
-    }
+    word-break: break-all;
   }
 
   &--checked {
 
     #{$b}__text {
       color: $deepBlue-30;
-
-      &:after {
-        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-        transition: .25s ease-in-out;
-      }
+      text-decoration: line-through;
     }
   }
 }

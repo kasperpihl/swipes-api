@@ -14,6 +14,7 @@ export default class ChecklistEditorBlock extends Component {
       const selection = editorState.getSelection();
       const startKey = selection.getStartKey();
       const blockType = editorState.getCurrentContent().getBlockForKey(startKey).getType();
+
       if (blockType === 'checklist' && selection.getStartOffset() === 0
         && (selection.isCollapsed() || selection.getIsBackward())) {
         return 'move-selection-to-end-of-prev-block';
@@ -28,12 +29,17 @@ export default class ChecklistEditorBlock extends Component {
       .getBlockForKey(selection.getStartKey());
     const blockType = currentBlock.getType();
     const blockLength = currentBlock.getLength();
+
     if (str === ' ' && blockType === 'unstyled') {
       if (blockLength === 2 && currentBlock.getText() === '[]') {
         onChange(resetBlockToType(editorState, 'checklist', { checked: false }));
         return true;
+      } else if (blockLength === 3 && currentBlock.getText() === '[x]') {
+        onChange(resetBlockToType(editorState, 'checklist', { checked: true }));
+        return true;
       }
     }
+
     return false;
   }
   static handleKeyCommand(editorState, onChange, keyCommand) {

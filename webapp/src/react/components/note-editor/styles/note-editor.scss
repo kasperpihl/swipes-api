@@ -53,10 +53,7 @@
   & ul {
     display: block;
     list-style-type: disc;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 3px 0;
     padding-left: 3px;
   }
 
@@ -66,7 +63,7 @@
 
   & li {
     // list-style: initial;
-    margin: 3px 0;
+    padding: 3px 0;
   }
 
   &[contenteditable="true"] {
