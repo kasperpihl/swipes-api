@@ -36,7 +36,7 @@ authed.all('/notes.save',
     unlock: bool,
   }),
   notesSave,
-  valResponseAndSend,
+  valResponseAndSend(),
 );
 
 export {
