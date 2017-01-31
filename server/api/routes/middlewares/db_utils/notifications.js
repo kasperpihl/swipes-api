@@ -2,7 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
-  array,
+  date,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -12,16 +12,21 @@ import {
 
 const dbNotificationsMarkAsSeen = funcWrap([
   object.as({
-    notification_ids: array.require(),
+    user_id: string.require(),
+    timestamp: date.require(),
   }).require(),
-], (err, { notification_ids }) => {
+], (err, { user_id, timestamp }) => {
   if (err) {
     throw new SwipesError(`dbNotificationsMarkAsSeen: ${err}`);
   }
 
-  const q = r.table('notifications').getAll(r.args(notification_ids)).update({
-    seen: r.now(),
-  });
+  const q =
+    r.table('notifications')
+      .getAll(user_id, { index: 'user_id' })
+      .filter(r.row('ts').le(timestamp))
+      .update({
+        seen: r.now(),
+      });
 
   return db.rethinkQuery(q);
 });
