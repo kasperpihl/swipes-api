@@ -46,17 +46,39 @@ $sidebarWidth: 60px;
     @include flex();
     position: relative;
 
-    &--active {
-      #{$b}__icon {
-        @include svg-color($deepBlue-90);
-        filter: grayscale(0%);
-      }
+    &:after {
+      content: '';
+      @include size(4px, 40px);
+      position: absolute;
+      left: 0; top: 10px;
+      background-color: $blue-100;
+      -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      transition: -webkit-clip-path .25s ease, width .15s ease;
     }
 
     &:hover {
       #{$b}__icon {
         @include svg-color($deepBlue-60);
         filter: grayscale(0%);
+      }
+    }
+
+    &--active {
+      #{$b}__icon {
+        @include svg-color($deepBlue-90);
+        filter: grayscale(0%);
+      }
+
+      &:after {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        transition: .25s ease;
+      }
+
+      &:hover {
+        &:after {
+          @include size(6px, 40px);
+          transition: .15s ease;
+        }
       }
     }
   }

@@ -31,6 +31,13 @@ $borderColor: $deepBlue-10;
     border: 1px solid $blue-100;
     transition: .15s ease;
   }
+
+  &:not(&--disabled):not(&--frameless):not(&--loading):active, {
+    outline:none;
+    box-shadow: 0 0 2px 1px transparent;
+    border: 1px solid transparent;
+    transition: .15s ease;
+  }
 }
 
 // ELEMENTS

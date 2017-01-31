@@ -14,14 +14,17 @@
     position: relative;
 
     &--left {
-      padding-right: 25px;
+      @include size(100%, auto);
+      @include flex(none);
+      transition: .5s .6s ease;
 
       &:before {
         content: '';
-        @include size(1px, 100%);
+        @include size(1px, 0%);
         background-color: $deepBlue-10;
         position: absolute;
         right: 0; top: 0;
+        transition: .3s .3s ease;
       }
     }
 
@@ -39,17 +42,25 @@
     }
 
     &--active-left {
+      @include size(50%, auto);
+      padding-right: 25px;
+      transition: .5s ease;
+
+      &:before {
+        @include size(1px, 100%);
+        transition: .3s .5s ease;
+      }
 
       #{$b}__seperator:before {
         transform: translateX(50%) rotate(45deg);
-        transition: .3s ease;
+        transition: .3s .8s ease;
       }
     }
 
     &--active-right {
       opacity: 1;
       transform: translateX(0);
-      transition: .3s ease;
+      transition: .3s .8s ease;
     }
   }
 
@@ -90,6 +101,8 @@
   &__title {
     @include size(100%, auto);
     @include font(21px, $deepBlue-100, 24px);
+    max-width: 450px;
+    margin-right: 6px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -108,6 +121,8 @@
 
   &__assignees {
     margin-top: -3px;
+    position: relative;
+    z-index: 9;
   }
 
   &__subtitle {
