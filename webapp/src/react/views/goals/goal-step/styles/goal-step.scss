@@ -150,3 +150,20 @@
     }
   }
 }
+
+.handoffMessageTransition {
+  //empty
+  &-enter {
+
+    &-active + .section {
+      background-color: red;
+    }
+  }
+
+  &-leave {
+
+    &-active {
+      
+    }
+  }
+}

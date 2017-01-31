@@ -25,11 +25,11 @@ class HandoffActions extends Component {
   }
   renderStatus() {
     const { status, showHandoff } = this.props;
-    if (!status || !showHandoff) {
-      return undefined;
-    }
+    // if (!status || !showHandoff) {
+    //   return undefined;
+    // }
     return (
-      <div>{status}</div>
+      <div>You are about to complete “2. Moodboard” and pass your work to Kasper.</div>
     );
   }
   renderCancel() {

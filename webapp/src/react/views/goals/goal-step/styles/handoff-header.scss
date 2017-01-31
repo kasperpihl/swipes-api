@@ -14,9 +14,8 @@
     position: relative;
 
     &--left {
-      @include size(100%, auto);
-      @include flex(none);
-      transition: .5s .6s ease;
+      @include size(50%, auto);
+      padding-right: 21px;
 
       &:before {
         content: '';
@@ -46,25 +45,22 @@
     }
 
     &--active-left {
-      @include size(50%, auto);
-      padding-right: 25px;
-      transition: .5s ease;
 
       &:before {
         @include size(1px, 100%);
-        transition: .3s .5s ease;
+        transition: .3s ease;
       }
 
       #{$b}__seperator:before {
         transform: translateX(50%) rotate(45deg);
-        transition: .3s .8s ease;
+        transition: .3s .3s ease;
       }
     }
 
     &--active-right {
       opacity: 1;
       transform: translateX(0);
-      transition: .3s .8s ease;
+      transition: .3s .3s ease;
     }
   }
 

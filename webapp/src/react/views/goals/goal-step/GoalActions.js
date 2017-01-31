@@ -25,11 +25,11 @@ class GoalActions extends Component {
   }
   renderStatus() {
     const { status, isHandingOff } = this.props;
-    if (!status || !isHandingOff) {
+    if (!isHandingOff) {
       return undefined;
     }
     return (
-      <div className="goal-actions__status">{status}</div>
+      <div className="goal-actions__status">You are about to complete “2. Moodboard” and pass your work to Kasper.</div>
     );
   }
   renderCancel() {

@@ -6,7 +6,6 @@ import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate, bindAll } from 'classes/utils';
-
 import ListMenu from 'components/list-menu/ListMenu';
 import Section from 'components/section/Section';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -256,7 +255,7 @@ class HOCGoalStep extends Component {
     const at = handOff.at;
     const title = helper.getCurrentStep() ? 'Handoff' : 'Final note';
     return (
-      <Section title={title}>
+      <Section title={title} key={title}>
         <HandoffMessage
           onClick={this.onOpenUser}
           user={user}
