@@ -150,7 +150,7 @@ class HOCGoalStep extends Component {
   }
   onOpenUser(id) {
     const { openSlackIn, navigateToId } = this.props;
-    navigateToId('slack');
+    navigateToId('primary', 'slack');
     openSlackIn(this.slackUserIdForUser(id));
   }
   calculateNextStep(goal) {
@@ -423,7 +423,6 @@ export default connect(mapStateToProps, {
   selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
   saveWay: actions.ways.save,
-  navPop: actions.navigation.pop,
   navigateToId: actions.navigation.navigateToId,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,

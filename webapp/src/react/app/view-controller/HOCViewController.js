@@ -6,7 +6,7 @@ import Navbar from 'components/nav-bar/NavBar';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
-import { bindAll, nearestAttribute } from 'classes/utils';
+import { bindAll, nearestAttribute, setupCachedCallback } from 'classes/utils';
 import './styles/view-controller';
 
 const reservedNavIds = [
@@ -19,6 +19,9 @@ class HOCViewController extends Component {
     super(props);
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.bindedNavPush = props.push.bind(this, props.target);
+    this.bindedNavPop = props.pop.bind(this, props.target);
+
     bindAll(this, ['onContextClick']);
   }
   componentWillUnmount() {
@@ -49,8 +52,8 @@ class HOCViewController extends Component {
     }
   }
   navbarClickedCrumb(i) {
-    const { popTo } = this.props;
-    popTo(i);
+    const { popTo, target } = this.props;
+    popTo(target, i);
   }
 
 
@@ -67,18 +70,25 @@ class HOCViewController extends Component {
     );
   }
   renderContextButtons() {
-    const { View, currentView } = this.props;
+    const { View, currentView, target } = this.props;
+    let contextButtons = [];
     if (View && typeof View.contextButtons === 'function') {
       let props = currentView.get('props');
       props = props ? props.toObject() : undefined;
       const buttons = View.contextButtons(props);
       if (buttons && buttons.length) {
-        return (
-          <div className="nav-bar__actions">
-            {buttons.map((b, i) => this.renderContextButton(i, b)).reverse()}
-          </div>
-        );
+        contextButtons = buttons.map((b, i) => this.renderContextButton(i, b)).reverse();
       }
+    }
+    if (target !== 'primary') {
+      // contextButtons.push();
+    }
+    if (contextButtons.length) {
+      return (
+        <div className="nav-bar__actions">
+          {contextButtons}
+        </div>
+      );
     }
     return undefined;
   }
@@ -112,6 +122,8 @@ class HOCViewController extends Component {
 
     return (
       <View
+        navPop={this.bindedNavPop}
+        navPush={this.bindedNavPush}
         delegate={this}
         key={currentView.get('component')}
         {...props}
@@ -161,9 +173,10 @@ class HOCViewController extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const navId = state.getIn(['navigation', 'id']);
-  const history = state.getIn(['navigation', 'history', navId]);
+function mapStateToProps(state, ownProps) {
+  const navId = state.getIn(['navigation', ownProps.target, 'id']);
+  const history = state.getIn(['navigation', ownProps.target, 'history', navId]);
+
   const currentView = history ? history.last() : undefined;
   const View = currentView ? views[currentView.get('component')] : undefined;
   return {
@@ -183,10 +196,14 @@ HOCViewController.propTypes = {
   currentView: map,
   View: func,
   popTo: func,
+  push: func,
+  pop: func,
+  target: string,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
   popTo: actions.navigation.popTo,
   pop: actions.navigation.pop,
+  push: actions.navigation.push,
 })(HOCViewController);
 export default ConnectedHOCViewController;

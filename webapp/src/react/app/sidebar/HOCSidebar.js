@@ -11,22 +11,35 @@ class HOCSidebar extends Component {
   constructor(props) {
     super(props);
     this.clickedItem = this.clickedItem.bind(this);
+    this.rightClickedItem = this.rightClickedItem.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   clickedItem(e) {
-    const { navigateToId } = this.props;
+    const { navigateToId, navId } = this.props;
     const id = e.target.getAttribute('data-id');
 
-    navigateToId(id);
+    navigateToId('primary', id);
+  }
+  rightClickedItem(e) {
+    const { navigateToId, secondaryNavId } = this.props;
+    let id = e.target.getAttribute('data-id');
+    if (id === secondaryNavId) {
+      id = null;
+    }
+    console.log(id);
+    navigateToId('secondary', id);
   }
   renderItem(item) {
-    const { navId, counters } = this.props;
+    const { navId, counters, secondaryNavId } = this.props;
     const counter = counters.get(item.id);
 
     let className = 'sidebar__item';
 
     if (item.id === navId) {
-      className += ' sidebar__item--secondary-active sidebar__item--active';
+      className += ' sidebar__item--active';
+    }
+    if (item.id === secondaryNavId) {
+      className += ' sidebar__item--secondary-active';
     }
     let notif = null;
     if (counter && counter.length) {
@@ -42,6 +55,7 @@ class HOCSidebar extends Component {
     return (
       <div
         onClick={this.clickedItem}
+        onContextMenu={this.rightClickedItem}
         className={className}
         key={item.id}
         data-id={item.id}
@@ -89,7 +103,8 @@ class HOCSidebar extends Component {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
-    navId: state.getIn(['navigation', 'id']),
+    navId: state.getIn(['navigation', 'primary', 'id']),
+    secondaryNavId: state.getIn(['navigation', 'secondary', 'id']),
     counters: state.getIn(['navigation', 'counters']),
   };
 }
@@ -99,6 +114,7 @@ const { string, func } = PropTypes;
 HOCSidebar.propTypes = {
   me: map,
   navId: string,
+  secondaryNavId: string,
   counters: map,
   navigateToId: func,
 };

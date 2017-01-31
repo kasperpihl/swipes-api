@@ -19,8 +19,6 @@ class HOCOrgDashboard extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
-    const { notifications } = this.props;
-    console.log(notifications.map(n => n.get('id')).toJS());
   }
   onClick(id, type) {
     if (type === 'goal') {
@@ -159,5 +157,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  navPush: actions.navigation.push,
 })(HOCOrgDashboard);

@@ -1,18 +1,5 @@
 import * as types from 'constants';
-const additionalViewsForOptions = (navId, options) => {
-  if (navId === 'goals' && options) {
-    return [
-      {
-        component: 'GoalStep',
-        title: options.title,
-        props: {
-          goalId: options.goalId,
-        },
-      },
-    ];
-  }
-  return [];
-};
+
 const startingViewForNavId = (navId) => {
   switch (navId) {
     case 'goals':
@@ -60,36 +47,36 @@ const startingViewForNavId = (navId) => {
   }
 };
 
-export function navigateToId(navId, options) {
+export function navigateToId(target, navId) {
   return (dispatch, getState) => {
+    const payload = {
+      id: navId,
+      target,
+    };
     if (navId) {
-      const payload = {
-        id: navId,
-      };
+      console.log('target', target);
       const state = getState();
-      let history = state.getIn(['navigation', 'history', navId]);
-      const currentId = state.getIn(['navigation', 'id']);
+      let history = state.getIn(['navigation', target, 'history', navId]);
+      const currentId = state.getIn(['navigation', target, 'id']);
 
       if (currentId === navId || !history) {
-        history = [startingViewForNavId(navId, options)];
+        history = [startingViewForNavId(navId)];
         payload.history = history;
       }
-
-      dispatch({ type: types.NAVIGATION_SET, payload });
     }
+    dispatch({ type: types.NAVIGATION_SET, payload });
   };
 }
 
 export function init() {
   return (dispatch, getState) => {
     const state = getState();
-    let navId = state.getIn(['navigation', 'id']);
-    const me = state.get('me');
-    if (!navId && me) {
+    let navId = state.getIn(['navigation', 'primary', 'id']);
+    if (!navId) {
       navId = 'goals';
     }
     if (navId) {
-      dispatch(navigateToId(navId));
+      dispatch(navigateToId('primary', navId));
     }
   };
 }
@@ -97,21 +84,19 @@ export function setCounter(id, counter) {
   return { type: types.NAVIGATION_SET_COUNTER, payload: { id, counter } };
 }
 
-export function push(obj, savedState) {
-  const payload = { obj, savedState };
+export function push(target, obj, savedState) {
+  const payload = { obj, savedState, target };
   return { type: types.NAVIGATION_PUSH, payload };
 }
-export function pop() {
-  return { type: types.NAVIGATION_POP };
+export function pop(target) {
+  return { type: types.NAVIGATION_POP, payload: { target } };
 }
-export function popTo(i) {
+export function popTo(target, i) {
   i = Math.max(parseInt(i, 10), 0); // Don't allow removing root
 
   const payload = {
     index: i,
+    target,
   };
   return { type: types.NAVIGATION_POP, payload };
-}
-export function popToRoot() {
-
 }

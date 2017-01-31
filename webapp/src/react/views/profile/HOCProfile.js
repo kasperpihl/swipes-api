@@ -65,7 +65,6 @@ HOCProfile.propTypes = {
 };
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
-  navPush: navigation.push,
   loadModal: modal.load,
   logout: main.logout,
 })(HOCProfile);

@@ -27,11 +27,7 @@ class HOCApp extends Component {
   componentDidMount() {
     const { request, navInit } = this.props;
     navInit();
-    request('rtm.start').then((res) => {
-      if (res && res.ok) {
-        navInit();
-      }
-    });
+    request('rtm.start');
   }
   renderNote() {
     return <HOCSideNote />;
@@ -44,7 +40,8 @@ class HOCApp extends Component {
         <Topbar pathname={location.pathname} status={status} />
         <div className="content-wrapper">
           <HOCSidebar />
-          <HOCViewController />
+          <HOCViewController target="primary" />
+          <HOCViewController target="secondary" />
           <HOCSideNote />
         </div>
         <HOCOverlay />

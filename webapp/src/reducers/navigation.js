@@ -2,8 +2,14 @@ import { fromJS } from 'immutable';
 import * as types from 'constants';
 
 const initialState = fromJS({
-  id: null,
-  history: {},
+  primary: {
+    id: null,
+    history: {},
+  },
+  secondary: {
+    id: null,
+    history: {},
+  },
   counters: {},
 });
 
@@ -12,15 +18,17 @@ export default function history(state = initialState, action) {
   switch (type) {
     case types.NAVIGATION_SET: {
       return state.update((s) => {
-        s = s.set('id', payload.id);
+        s = s.setIn([payload.target, 'id'], payload.id);
         if (payload.history) {
-          s = s.setIn(['history', payload.id], fromJS(payload.history));
+          s = s.setIn([payload.target, 'history', payload.id], fromJS(payload.history));
         }
         return s;
       });
     }
     case types.NAVIGATION_PUSH: {
-      return state.updateIn(['history', state.get('id')], (s) => {
+      console.log(payload.target);
+      const currentId = state.getIn([payload.target, 'id']);
+      return state.updateIn([payload.target, 'history', currentId], (s) => {
         const { savedState } = payload;
         if (savedState) {
           s = s.mergeIn([s.size - 1], fromJS({ savedState }));
@@ -29,7 +37,8 @@ export default function history(state = initialState, action) {
       });
     }
     case types.NAVIGATION_POP: {
-      return state.updateIn(['history', state.get('id')], (s) => {
+      const currentId = state.getIn([payload.target, 'id']);
+      return state.updateIn([payload.target, 'history', currentId], (s) => {
         if (payload && typeof payload.index === 'number') {
           return s.slice(0, payload.index + 1);
         }

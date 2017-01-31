@@ -104,5 +104,4 @@ HOCGoalList.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  navPush: actions.navigation.push,
 })(HOCGoalList);

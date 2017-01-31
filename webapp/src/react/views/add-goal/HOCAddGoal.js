@@ -357,7 +357,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   assignModal: actions.modal.assign,
   selectAssignees: actions.goals.selectAssignees,
-  navPop: actions.navigation.pop,
   saveCache: actions.main.cache.save,
   removeCache: actions.main.cache.remove,
   request: actions.api.request,
