@@ -20,7 +20,10 @@ export default function goalsReducer(state = initialState, action) {
       });
       return fromJS(tempG);
     }
-    case 'goal_deleted': {
+    case 'goals.archive': {
+      return state.delete(payload.id);
+    }
+    case 'goal_archived': {
       return state.delete(payload.data.id);
     }
     case 'goal_updated':

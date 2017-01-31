@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { list } from 'react-immutable-proptypes';
+import { list, map } from 'react-immutable-proptypes';
+import moment from 'moment';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import OrgDashboard from './OrgDashboard';
-import moment from 'moment';
 
 class HOCOrgDashboard extends Component {
   constructor(props) {
@@ -48,6 +48,9 @@ class HOCOrgDashboard extends Component {
   }
   clickableGoalForId(goalId) {
     const title = this.titleForGoalId(goalId);
+    if (!title) {
+      return null;
+    }
     return <b onClick={this.onClickCached(goalId, 'goal')}>{title}</b>;
   }
   clickableNameForUserId(userId) {
@@ -56,6 +59,7 @@ class HOCOrgDashboard extends Component {
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
   messageForNotification(n) {
+    const { ways } = this.props;
     const data = n.get('data');
     const type = data.get('type');
     let m = Map({
@@ -64,38 +68,61 @@ class HOCOrgDashboard extends Component {
     switch (type) {
       case 'goal_created': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{' started a goal: '}{goal}</span>);
-        m = m.set('svg', 'Plus');
-        m = m.set('iconBgColor', '#3893fc');
+        if (goal) {
+          const name = this.clickableNameForUserId(data.get('done_by'));
+          m = m.set('message', <span>{name}{' started a goal: '}{goal}</span>);
+          m = m.set('svg', 'Plus');
+          m = m.set('iconBgColor', '#3893fc');
+        }
+
         break;
       }
       case 'goal_archived': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{' archived a goal: '}{goal}</span>);
-        m = m.set('svg', 'Minus');
-        m = m.set('iconBgColor', '#fc7170');
+        if (goal) {
+          const name = this.clickableNameForUserId(data.get('done_by'));
+          m = m.set('message', <span>{name}{' archived a goal: '}{goal}</span>);
+          m = m.set('svg', 'Minus');
+          m = m.set('iconBgColor', '#fc7170');
+        }
         break;
       }
       case 'step_got_active': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);
-        m = m.set('svg', 'Deliver');
-        m = m.set('iconBgColor', '#3893fc');
+        if (goal) {
+          m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);
+          m = m.set('svg', 'Deliver');
+          m = m.set('iconBgColor', '#3893fc');
+        }
+
         break;
       }
       case 'step_completed': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{' completed a step in: '}{goal}</span>);
-        m = m.set('svg', 'Checkmark');
-        m = m.set('iconBgColor', '#51e389');
+        if (goal) {
+          const name = this.clickableNameForUserId(data.get('done_by'));
+          m = m.set('message', <span>{name}{' completed a step in: '}{goal}</span>);
+          m = m.set('svg', 'Checkmark');
+          m = m.set('iconBgColor', '#51e389');
+        }
+        break;
+      }
+      case 'way_created': {
+        const way = ways.get(data.get('way_id'));
+        if (way) {
+          const name = this.clickableNameForUserId(data.get('done_by'));
+          m = m.set('message', <span>{name}{` created a way: ${way.get('title')}`}</span>);
+          m = m.set('svg', 'Plus');
+          m = m.set('iconBgColor', '#3893fc');
+        }
         break;
       }
       default:
         console.log(data.toJS());
         break;
+    }
+    if (!m.get('message')) {
+      return null;
     }
     return m;
   }
@@ -117,12 +144,15 @@ HOCOrgDashboard.propTypes = {
   navPush: func,
   delegate: object,
   notifications: list,
+  ways: map,
+  goals: map,
 };
 
 function mapStateToProps(state) {
   return {
     notifications: state.get('notifications'),
     users: state.get('users'),
+    ways: state.getIn(['main', 'ways']),
     goals: state.get('goals'),
     me: state.get('me'),
   };

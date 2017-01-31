@@ -37,11 +37,11 @@ class HOCApp extends Component {
     return <HOCSideNote />;
   }
   render() {
-    const { location } = this.props;
+    const { location, status } = this.props;
 
     return (
       <div className="app">
-        <Topbar pathname={location.pathname} />
+        <Topbar pathname={location.pathname} status={status} />
         <div className="content-wrapper">
           <HOCSidebar />
           <HOCViewController />
@@ -58,15 +58,22 @@ class HOCApp extends Component {
   }
 }
 
-const { func, object } = PropTypes;
+const { func, object, string } = PropTypes;
 
 HOCApp.propTypes = {
   request: func,
+  status: string,
   navInit: func,
   location: object,
 };
 
-const ConnectedHOCApp = connect(null, {
+function mapStateToProps(state) {
+  return {
+    status: state.getIn(['main', 'status']),
+  };
+}
+
+const ConnectedHOCApp = connect(mapStateToProps, {
   request: api.request,
   navInit: navigation.init,
 })(HOCApp);

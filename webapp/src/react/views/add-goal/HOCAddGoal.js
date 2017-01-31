@@ -35,6 +35,9 @@ class HOCAddGoal extends Component {
   constructor(props) {
     super(props);
     this.state = initialState.toObject();
+    if (props.cache) {
+      this.state = props.cache.toObject();
+    }
 
     bindAll(this, ['clickedAdd', 'onHandoffChange', 'onSave', 'onInputChange']);
     this.callDelegate = setupDelegate(props.delegate);
@@ -44,6 +47,7 @@ class HOCAddGoal extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
     const input = document.getElementById('navbar-input');
+    input.value = this.state.title;
     input.focus();
   }
   componentDidUpdate() {
@@ -54,11 +58,19 @@ class HOCAddGoal extends Component {
       this._loadedWay = false;
     }
   }
+  componentWillUnmount() {
+    const { saveCache } = this.props;
+    saveCache('add-goal', fromJS(this.state));
+  }
+  updateState(newState) {
+    this.setState(newState);
+    console.log('lets cache this');
+  }
   onHandoffChange(handoff) {
-    this.setState({ handoff });
+    this.updateState({ handoff });
   }
   onInputChange(text) {
-    this.setState({ title: text });
+    this.updateState({ title: text });
   }
   onContextClick(i, e) {
     const { loadWay } = this.props;
@@ -79,7 +91,7 @@ class HOCAddGoal extends Component {
         const input = document.getElementById('navbar-input');
         input.value = way.get('title');
         this._loadedWay = true;
-        this.setState(newState);
+        this.updateState(newState);
       }
     });
   }
@@ -101,7 +113,7 @@ class HOCAddGoal extends Component {
       assignees: [],
     }));
     stepOrder = stepOrder.push(id);
-    this.setState({ steps, stepOrder });
+    this.updateState({ steps, stepOrder });
   }
   onOpenAssignee(id, e) {
     this.clickedAssign(e, id);
@@ -109,18 +121,18 @@ class HOCAddGoal extends Component {
   onUpdatedStepTitle(id, title) {
     let { steps } = this.state;
     steps = steps.setIn([id, 'title'], title);
-    this.setState({ steps });
+    this.updateState({ steps });
   }
   onUpdatedAssignees(id, assignees) {
     let { steps } = this.state;
     steps = steps.setIn([id, 'assignees'], fromJS(assignees));
-    this.setState({ steps });
+    this.updateState({ steps });
   }
   onAddAttachment(obj) {
     let { attachments, attachmentOrder } = this.state;
     attachments = attachments.set(obj.shortUrl, fromJS(obj));
     attachmentOrder = attachmentOrder.push(obj.shortUrl);
-    this.setState({ attachments, attachmentOrder });
+    this.updateState({ attachments, attachmentOrder });
   }
   clickedAssign(e, id) {
     const { assignModal, selectAssignees } = this.props;
@@ -144,7 +156,7 @@ class HOCAddGoal extends Component {
     if (res) {
       let { steps } = this.state;
       steps = steps.setIn([id, 'assignees'], fromJS(res));
-      this.setState({ steps });
+      this.updateState({ steps });
     }
   }
   isReadyToCreate() {
@@ -177,6 +189,7 @@ class HOCAddGoal extends Component {
     const {
       organization_id,
       request,
+      removeCache,
       addToasty,
       updateToasty,
       navPop,
@@ -190,6 +203,7 @@ class HOCAddGoal extends Component {
         goal,
       }).then((res) => {
         if (res.ok) {
+          removeCache('add-goal');
           updateToasty(toastId, {
             title: 'Added goal',
             completed: true,
@@ -203,7 +217,6 @@ class HOCAddGoal extends Component {
           });
         }
       });
-
       navPop();
     });
   }
@@ -337,6 +350,7 @@ HOCAddGoal.propTypes = {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
+    cache: state.getIn(['main', 'cache', 'add-goal']),
     organization_id: state.getIn(['me', 'organizations', 0, 'id']),
   };
 }
@@ -345,6 +359,8 @@ export default connect(mapStateToProps, {
   assignModal: actions.modal.assign,
   selectAssignees: actions.goals.selectAssignees,
   navPop: actions.navigation.pop,
+  saveCache: actions.main.cache.save,
+  removeCache: actions.main.cache.remove,
   request: actions.api.request,
   addToasty: actions.toasty.add,
   updateToasty: actions.toasty.update,

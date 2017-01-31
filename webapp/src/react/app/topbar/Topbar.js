@@ -27,6 +27,7 @@ class Topbar extends Component {
     setTimeout(this.gradientStep, 3000);
   }
   render() {
+    const { status } = this.props;
     const styles = gradient.getGradientStyles();
 
     if (this.state.gradientPos) {

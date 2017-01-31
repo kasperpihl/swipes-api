@@ -8,7 +8,7 @@ export const setStatus = status => ({ type: types.SET_STATUS, status });
 // ======================================================
 export const cache = {
   save: (index, data) => ({ type: types.CACHE_SAVE, payload: { index, data } }),
-  remove: index => ({ type: types.CACHE_REMOVE, index }),
+  remove: index => ({ type: types.CACHE_REMOVE, payload: { index } }),
   clear: () => ({ type: types.CACHE_CLEAR }),
 };
 

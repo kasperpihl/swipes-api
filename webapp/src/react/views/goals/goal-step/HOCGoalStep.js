@@ -45,8 +45,11 @@ class HOCGoalStep extends Component {
     this.callDelegate('viewDidLoad', this);
   }
   componentWillReceiveProps(nextProps) {
-    const { goal } = this.props;
+    const { goal, navPop } = this.props;
     const nextGoal = nextProps.goal;
+    if (goal && !nextGoal) {
+      navPop();
+    }
     if (nextGoal && goal) {
       if (nextGoal.getIn(['status', 'current_step_id']) !== goal.getIn(['status', 'current_step_id'])) {
         this.setState({
@@ -319,7 +322,12 @@ class HOCGoalStep extends Component {
   }
   render() {
     const { isHandingOff } = this.state;
+    const { goal } = this.props;
+
     let className = 'goal-step';
+    if (!goal) {
+      return <div className={className} />;
+    }
 
     if (isHandingOff) {
       className += ' goal-step__handing-off';
@@ -359,11 +367,15 @@ HOCGoalStep.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { goalId } = ownProps;
   const goal = state.getIn(['goals', goalId]);
+  let step;
+  if (goal) {
+    step = goal.getIn(['steps', goal.getIn(['status', 'current_step_id'])]);
+  }
   return {
     sideNoteId: state.getIn(['main', 'sideNoteId']),
     goal,
     users: state.get('users'),
-    step: goal.getIn(['steps', goal.getIn(['status', 'current_step_id'])]),
+    step,
     me: state.get('me'),
   };
 }
@@ -373,6 +385,7 @@ export default connect(mapStateToProps, {
   selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
   saveWay: actions.ways.save,
+  navPop: actions.navigation.pop,
   navigateToId: actions.navigation.navigateToId,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,
