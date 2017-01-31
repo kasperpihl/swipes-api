@@ -64,7 +64,6 @@ class HOCAddGoal extends Component {
   }
   updateState(newState) {
     this.setState(newState);
-    console.log('lets cache this');
   }
   onHandoffChange(handoff) {
     this.updateState({ handoff });

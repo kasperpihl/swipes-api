@@ -19,6 +19,8 @@ class HOCOrgDashboard extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+    const { notifications } = this.props;
+    console.log(notifications.map(n => n.get('id')).toJS());
   }
   onClick(id, type) {
     if (type === 'goal') {
@@ -78,13 +80,11 @@ class HOCOrgDashboard extends Component {
         break;
       }
       case 'goal_archived': {
-        const goal = this.clickableGoalForId(data.get('goal_id'));
-        if (goal) {
-          const name = this.clickableNameForUserId(data.get('done_by'));
-          m = m.set('message', <span>{name}{' archived a goal: '}{goal}</span>);
-          m = m.set('svg', 'Minus');
-          m = m.set('iconBgColor', '#fc7170');
-        }
+        const title = data.get('goal_title');
+        const name = this.clickableNameForUserId(data.get('done_by'));
+        m = m.set('message', <span>{name}{' archived a goal: '}{title}</span>);
+        m = m.set('svg', 'Minus');
+        m = m.set('iconBgColor', '#fc7170');
         break;
       }
       case 'step_got_active': {
@@ -150,7 +150,7 @@ HOCOrgDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    notifications: state.get('notifications'),
+    notifications: state.getIn(['main', 'notifications']),
     users: state.get('users'),
     ways: state.getIn(['main', 'ways']),
     goals: state.get('goals'),
