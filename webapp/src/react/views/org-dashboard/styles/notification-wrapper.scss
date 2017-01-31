@@ -26,10 +26,9 @@
     @include size(100%, auto);
     font-size: 12px;
     color: $deepBlue-70;
+    white-space: nowrap;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 
     b {
       font-weight: 500;

@@ -14,10 +14,9 @@
     font-weight: bold;
     line-height: 15px;
     color: $deepBlue-30;
+    white-space: nowrap;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
   }
 
   &__title {
@@ -26,10 +25,9 @@
     line-height: 27px;
     color: $deepBlue-90;
     margin-top: 9px;
+    white-space: nowrap;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
   }
 
   &__description {
@@ -38,9 +36,11 @@
     line-height: 21px;
     color: $deepBlue-60;
     position: relative;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+
+    &:not(:first-line) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }

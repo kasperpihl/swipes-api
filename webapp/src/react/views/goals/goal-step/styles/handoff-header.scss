@@ -102,10 +102,9 @@
     @include size(100%, auto);
     @include font(21px, $deepBlue-100, 24px);
     max-width: 450px;
+    white-space: nowrap;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
   }
 
   &__button {

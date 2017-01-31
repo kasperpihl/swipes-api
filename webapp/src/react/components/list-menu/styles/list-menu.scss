@@ -11,14 +11,13 @@
   &__item {
     @include size(100%, 60px);
     color: $deepBlue-60;
-    display: -webkit-box;
     font-size: 12px;
     line-height: 60px;
-    overflow: hidden;
     padding: 0 18px;
     position: relative;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:not(:last-child) {
       &:after {

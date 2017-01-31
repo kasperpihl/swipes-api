@@ -40,10 +40,9 @@
       &__title {
         @include size(100%, 24px);
         @include font(12px, $blue-100, 24px, 500);
+        white-space: nowrap;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
       }
 
       &__icon {

@@ -38,10 +38,11 @@ $itemHeight: $largeHeight;
     line-height: 18px;
     color: #999EAC;
     margin-top: 3px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    &:not(:first-line) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__service {
@@ -101,9 +102,5 @@ $itemHeight: $largeHeight;
     $itemHeight: $smallHeight;
 
     @include size(100%, $itemHeight);
-
-    #{$b}__description {
-      -webkit-line-clamp: 1;
-    }
   }
 }
