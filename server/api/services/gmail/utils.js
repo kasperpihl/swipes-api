@@ -4,13 +4,13 @@ import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 
-const gmailConfig = config.get('gmail');
+const googleConfig = config.get('google');
 const createClient = () => {
   const OAuth2 = google.auth.OAuth2;
   const oauth2Client = new OAuth2(
-    gmailConfig.clientId,
-    gmailConfig.clientSecret,
-    gmailConfig.redirectUri,
+    googleConfig.clientId,
+    googleConfig.clientSecret,
+    googleConfig.redirectUri,
   );
 
   return oauth2Client;

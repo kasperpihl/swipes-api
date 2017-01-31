@@ -30,7 +30,7 @@
     "clientSecret": "306fd7099a762968aa876d53579fa694",
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
-  "gmail": {
+  "google": {
     "clientId": "336134475796-pab4vabvhf37tkkh82vi846e6jheq76i.apps.googleusercontent.com",
     "clientSecret": "KittPpq9liOYxktfVptv_kYr",
     "redirectUri": "http://localhost:3000/oauth-success.html"
