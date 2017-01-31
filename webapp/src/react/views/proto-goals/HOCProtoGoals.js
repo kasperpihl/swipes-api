@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
+import TabBar from 'components/tab-bar/TabBar';
 import * as actions from 'actions';
 
 

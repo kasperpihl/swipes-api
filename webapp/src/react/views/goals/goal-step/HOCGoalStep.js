@@ -4,6 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Measure from 'react-measure';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate, bindAll } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
@@ -64,7 +65,7 @@ class HOCGoalStep extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isHandingOff && !prevState.isHandingOff) {
-      this.refs.handoffMessage.focus();
+      this.refs.handoffWriteMessageTextarea.focus();
     }
   }
   onFlag(id) {
@@ -228,20 +229,30 @@ class HOCGoalStep extends Component {
   renderHandoffWriteMessage() {
     const { me } = this.props;
     const { handoffText, isHandingOff } = this.state;
+    let className = 'section--show';
+
     if (!isHandingOff) {
-      return undefined;
+      className = 'section--hidden';
     }
+
     const src = me.get('profile_pic');
+
     return (
-      <Section title="Write handoff">
-        <HandoffWriteMessage
-          ref="handoffMessage"
-          onChange={this.onHandoffChange}
-          imgSrc={src}
-          disabled={!isHandingOff}
-          text={handoffText}
-        />
-      </Section>
+      <Measure
+        onMeasure={(dim) => {
+          this.setState({ handoffWriteMessageH: dim.height });
+        }}
+      >
+        <Section title="Write handoff" className={className}>
+          <HandoffWriteMessage
+            ref="handoffWriteMessageTextarea"
+            onChange={this.onHandoffChange}
+            imgSrc={src}
+            disabled={!isHandingOff}
+            text={handoffText}
+          />
+        </Section>
+      </Measure>
     );
   }
   renderHandoffMessage() {
@@ -249,36 +260,56 @@ class HOCGoalStep extends Component {
     const { isHandingOff } = this.state;
     const helper = this.getHelper();
     const handOff = helper.getHandoffMessage();
+    let className = 'section--show';
+
     if (isHandingOff || !handOff) {
-      return undefined;
+      className = 'section--hidden';
     }
 
     const text = handOff.message;
     const user = users.get(handOff.by);
     const at = handOff.at;
     const title = helper.getCurrentStep() ? 'Handoff' : 'Final note';
+
     return (
-      <Section title={title} key={title}>
-        <HandoffMessage
-          onClick={this.onOpenUser}
-          user={user}
-          message={text}
-          at={at}
-        />
-      </Section>
+      <Measure
+        onMeasure={(dim) => {
+          this.setState({ handoffMessageH: dim.height });
+        }}
+      >
+        <Section title={title} key={title} className={className}>
+          <HandoffMessage
+            onClick={this.onOpenUser}
+            user={user}
+            message={text}
+            at={at}
+          />
+        </Section>
+      </Measure>
     );
   }
 
   renderAttachments() {
     const { goal } = this.props;
-    const { isHandingOff, flags } = this.state;
+    const {
+      isHandingOff,
+      flags,
+      handoffMessageH,
+    } = this.state;
     const helper = this.getHelper();
     let sendFlags = helper.getFlags();
+    const style = {};
+
     if (isHandingOff) {
       sendFlags = fromJS(flags);
+
+      if (handoffMessageH) {
+        style.marginTop = -1 * handoffMessageH;
+      }
     }
+
     return (
-      <Section title="Attachments">
+      <Section title="Attachments" style={style}>
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
@@ -292,13 +323,20 @@ class HOCGoalStep extends Component {
     );
   }
   renderActions() {
-    const { isHandingOff, nextStepId, isSubmitting } = this.state;
+    const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH } = this.state;
     const helper = this.getHelper();
+    const style = {};
+
     if (!helper.getCurrentStep()) {
       return undefined;
     }
+
+    if (!isHandingOff && handoffWriteMessageH) {
+      style.marginTop = -1 * handoffWriteMessageH;
+    }
+
     return (
-      <Section>
+      <Section style={style}>
         <GoalActions
           onCancel={this.onCancel}
           onHandoff={this.onHandoff}

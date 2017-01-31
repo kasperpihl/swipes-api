@@ -9,7 +9,14 @@ class Filter extends Component {
   }
   render() {
     return (
-      <div className="className" />
+      <div className="goals-filter">
+        <div className="goals-filter__section">
+          <div className="goals-filter__filter">
+            Belongs to Milestone
+            <div className="filter-dropdown" />
+          </div>
+        </div>
+      </div>
     );
   }
 }

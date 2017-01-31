@@ -1,39 +1,50 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import './styles/section';
 
-const Section = (props) => {
-  const {
-    title,
-    children,
-    first,
-    style,
-    maxWidth,
-  } = props;
-
-  let className = 'section';
-  let styles = {};
-
-  if (first) {
-    className += ' section--first';
+class Section extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
+  render() {
+    const {
+      title,
+      children,
+      first,
+      style,
+      maxWidth,
+      className: classNameFromButton,
+    } = this.props;
 
-  if (style) {
-    styles = style;
+    let className = 'section';
+    let styles = {};
+
+    if (first) {
+      className += ' section--first';
+    }
+
+    if (style) {
+      styles = style;
+    }
+
+    if (maxWidth) {
+      styles.maxWidth = maxWidth;
+    }
+
+    if (classNameFromButton && typeof classNameFromButton === 'string') {
+      className += ` ${classNameFromButton}`;
+    }
+
+    return (
+      <div ref="section" className={className} style={styles}>
+        <div className="section__title">{title}</div>
+
+        {children}
+      </div>
+    );
   }
-
-  if (maxWidth) {
-    styles.maxWidth = maxWidth;
-  }
-
-  return (
-    <div className={className} style={styles}>
-      <div className="section__title">{title}</div>
-
-      {children}
-    </div>
-  );
-};
+}
 
 export default Section;
 
@@ -45,4 +56,5 @@ Section.propTypes = {
   first: bool,
   style: object,
   maxWidth: number,
+  className: string,
 };

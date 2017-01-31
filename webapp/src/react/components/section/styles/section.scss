@@ -8,6 +8,7 @@
   padding: 30px 0;
   border-top: 1px solid $deepBlue-10;
   background-color: $bg;
+  transition: margin-top .4s ease, opacity .4s ease;
 
   &__title {
     @include size(100%, 21px);
@@ -28,5 +29,11 @@
   &--first {
     padding: 0;
     border: none;
+  }
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: margin-top .4s ease, opacity .4s ease;
   }
 }
