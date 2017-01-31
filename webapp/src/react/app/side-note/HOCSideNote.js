@@ -70,7 +70,6 @@ class HOCSideNote extends Component {
   }
   onChange(editorState) {
     const { editing } = this.state;
-
     const changeObj = { editorState };
     const lastUndo = editorState.getUndoStack().first();
     // If you are editing or if not the last undo item has changed.

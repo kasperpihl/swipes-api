@@ -26,5 +26,7 @@ export default function Setup(plugins, context, onChange) {
     'keyBindingFn',
     'handleBeforeInput',
     'handleKeyCommand',
+    'onUpArrow',
+    'onDownArrow',
   ]);
 }

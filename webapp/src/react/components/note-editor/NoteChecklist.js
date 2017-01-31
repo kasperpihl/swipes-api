@@ -8,6 +8,47 @@ import {
 import './styles/check-list';
 
 export default class ChecklistEditorBlock extends Component {
+  static onUpArrow(editorState, onChange, e) {
+    const selection = editorState.getSelection();
+    const startKey = selection.getStartKey();
+    const contentState = editorState.getCurrentContent();
+    const blockType = contentState.getBlockForKey(startKey).getType();
+    const prevBlock = contentState.getBlockBefore(startKey);
+
+    if (blockType === 'checklist' && selection.isCollapsed() && prevBlock.getType() === 'checklist') {
+      e.preventDefault();
+      const focusOffset = selection.focusOffset;
+
+      if (!prevBlock) {
+        return false;
+      }
+
+      const prevKey = prevBlock.getKey();
+      const prevLength = prevBlock.getLength();
+      const newOffsetlocation = focusOffset > prevLength ? prevLength : focusOffset;
+      let selectionChanges = {
+        focusKey: prevKey,
+        focusOffset: newOffsetlocation,
+      };
+
+      if (selection.isCollapsed()) {
+        selectionChanges = {
+          ...selectionChanges,
+          anchorKey: prevKey,
+          anchorOffset: newOffsetlocation,
+        };
+      }
+
+      const nextSelection = selection.merge(selectionChanges);
+      const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
+
+      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-prev-block'));
+
+      return true;
+    }
+
+    return false;
+  }
   static keyBindingFn(editorState, onChange, e) {
     // left key
     if (e.keyCode === 37) {
