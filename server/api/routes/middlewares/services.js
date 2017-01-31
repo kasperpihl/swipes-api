@@ -4,7 +4,7 @@ import {
 } from 'valjs';
 import * as services from '../../services';
 import {
-  getServiceByManifestId,
+  getServiceByName,
 } from './db_utils/services';
 import {
   dbUsersAddSevice,
@@ -28,7 +28,7 @@ const serviceIdGet = valLocals('serviceIdGet', {
     service_name,
   } = res.locals;
 
-  getServiceByManifestId(service_name)
+  getServiceByName(service_name)
     .then((service) => {
       if (!service) {
         return next(new SwipesError('Service not found'));
@@ -36,6 +36,7 @@ const serviceIdGet = valLocals('serviceIdGet', {
 
       setLocals({
         service_id: service.id,
+        service_name_xendo: service.xendo_name,
       });
 
       return next();
@@ -246,6 +247,7 @@ const servicePreviewFind = valLocals('servicePreviewFind', {
 const serviceGetAuthData = valLocals('serviceGetAuthData', {
   user_id: string.require(),
   service_name: string.require(),
+  service_name_xendo: string.require(),
   service_id: string.require(),
   query: object.require(),
   service: object.require(),
@@ -253,6 +255,7 @@ const serviceGetAuthData = valLocals('serviceGetAuthData', {
   const {
     user_id,
     service_name,
+    service_name_xendo,
     service_id,
     query,
     service,
@@ -284,6 +287,7 @@ const serviceGetAuthData = valLocals('serviceGetAuthData', {
     const serviceToAppend = Object.assign({}, serviceData, {
       service_id,
       service_name,
+      service_name_xendo,
     });
 
     setLocals({

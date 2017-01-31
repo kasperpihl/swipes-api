@@ -13,11 +13,11 @@ const servicesGetAll = () => {
 
   return db.rethinkQuery(q);
 };
-const getServiceByManifestId = funcWrap([
+const getServiceByName = funcWrap([
   string.require(),
 ], (err, serviceName) => {
   if (err) {
-    throw new SwipesError(`getServiceByManifestId: ${err}`);
+    throw new SwipesError(`getServiceByName: ${err}`);
   }
 
   const q = r.table('services')
@@ -30,5 +30,5 @@ const getServiceByManifestId = funcWrap([
 
 export {
   servicesGetAll,
-  getServiceByManifestId,
+  getServiceByName,
 };
