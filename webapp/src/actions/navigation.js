@@ -1,6 +1,6 @@
 import * as types from 'constants';
 const additionalViewsForOptions = (navId, options) => {
-  if (navId === 'my-goals' && options) {
+  if (navId === 'goals' && options) {
     return [
       {
         component: 'GoalStep',
@@ -15,10 +15,10 @@ const additionalViewsForOptions = (navId, options) => {
 };
 const startingViewForNavId = (navId) => {
   switch (navId) {
-    case 'my-goals':
+    case 'goals':
     default:
       return {
-        component: 'ProtoGoals',
+        component: 'GoalList',
         title: 'Goals',
       };
     case 'milestones': {
@@ -86,7 +86,7 @@ export function init() {
     let navId = state.getIn(['navigation', 'id']);
     const me = state.get('me');
     if (!navId && me) {
-      navId = 'my-goals';
+      navId = 'goals';
     }
     if (navId) {
       dispatch(navigateToId(navId));
