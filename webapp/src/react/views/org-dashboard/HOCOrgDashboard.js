@@ -31,7 +31,6 @@ class HOCOrgDashboard extends Component {
           goalId: id,
         },
       });
-      console.log('clicked goal', id);
     }
   }
   nameForUser(users, id) {
