@@ -59,10 +59,10 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
     .then((credentials) => {
       client.setCredentials(credentials);
 
-      const gmailMethod = mapApiMethod(method, client);
+      const driveMethod = mapApiMethod(method, client);
 
       // T_TODO We have to return null if the method don't exist
-      if (!gmailMethod) {
+      if (!driveMethod) {
         return Promise.reject(new SwipesError('gmail_sdk_not_supported_method'));
       }
 
@@ -87,7 +87,7 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
         auth: client,
       });
 
-      return gmailMethod(newParams, (err, response) => {
+      return driveMethod(newParams, (err, response) => {
         if (err) {
           return callback(err);
         }

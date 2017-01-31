@@ -1,7 +1,7 @@
 import google from 'googleapis';
 
 const mapApiMethod = (method) => {
-  const client = google.gmail('v1');
+  const client = google.drive('v3');
   const arr = method.split('.');
   const len = arr.length;
   let finalMethod = client;
