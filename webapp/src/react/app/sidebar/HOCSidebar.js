@@ -24,6 +24,7 @@ class HOCSidebar extends Component {
     const counter = counters.get(item.id);
 
     let className = 'sidebar__item';
+
     if (item.id === navId) {
       className += ' sidebar__item--active';
     }
@@ -33,6 +34,7 @@ class HOCSidebar extends Component {
     }
 
     let image = <Icon svg={item.svg} className="sidebar__icon" />;
+
     if (item.src) {
       image = <img src={item.src} className="sidebar__image" alt="" />;
     }

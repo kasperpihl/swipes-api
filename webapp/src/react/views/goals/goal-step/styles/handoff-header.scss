@@ -26,6 +26,10 @@
         right: 0; top: 0;
         transition: .3s .3s ease;
       }
+
+      #{$b}__title {
+        margin-right: 6px;
+      }
     }
 
     &--right {
@@ -102,10 +106,9 @@
     @include size(100%, auto);
     @include font(21px, $deepBlue-100, 24px);
     max-width: 450px;
-    margin-right: 6px;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
   }
 
