@@ -46,14 +46,23 @@ $sidebarWidth: 60px;
     @include flex();
     position: relative;
 
-    &:after {
+    &:before, &:after {
       content: '';
       @include size(4px, 40px);
       position: absolute;
-      left: 0; top: 10px;
+      top: 10px;
       background-color: $blue-100;
-      -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
       transition: -webkit-clip-path .25s ease, width .15s ease;
+    }
+
+    &:before {
+      left: 0;
+      -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    }
+
+    &:after {
+      right: 1px;
+      -webkit-clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
     }
 
     &:hover {
@@ -64,6 +73,25 @@ $sidebarWidth: 60px;
     }
 
     &--active {
+      #{$b}__icon {
+        @include svg-color($deepBlue-90);
+        filter: grayscale(0%);
+      }
+
+      &:before {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        transition: .25s ease;
+      }
+
+      &:hover {
+        &:before {
+          @include size(6px, 40px);
+          transition: .15s ease;
+        }
+      }
+    }
+
+    &--secondary-active {
       #{$b}__icon {
         @include svg-color($deepBlue-90);
         filter: grayscale(0%);

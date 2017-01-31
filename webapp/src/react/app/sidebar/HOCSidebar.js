@@ -26,7 +26,7 @@ class HOCSidebar extends Component {
     let className = 'sidebar__item';
 
     if (item.id === navId) {
-      className += ' sidebar__item--active';
+      className += ' sidebar__item--secondary-active sidebar__item--active';
     }
     let notif = null;
     if (counter && counter.length) {
