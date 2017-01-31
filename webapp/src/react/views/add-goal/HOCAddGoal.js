@@ -35,6 +35,9 @@ class HOCAddGoal extends Component {
   constructor(props) {
     super(props);
     this.state = initialState.toObject();
+    if (props.cache) {
+      this.state = props.cache.toObject();
+    }
 
     bindAll(this, ['clickedAdd', 'onHandoffChange', 'onSave', 'onInputChange']);
     this.callDelegate = setupDelegate(props.delegate);
@@ -44,6 +47,7 @@ class HOCAddGoal extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
     const input = document.getElementById('navbar-input');
+    input.value = this.state.title;
     input.focus();
   }
   componentDidUpdate() {
@@ -53,6 +57,10 @@ class HOCAddGoal extends Component {
       input.setSelectionRange(0, input.value.length);
       this._loadedWay = false;
     }
+  }
+  componentWillUnmount() {
+    const { saveCache } = this.props;
+    saveCache('add-goal', fromJS(this.state));
   }
   updateState(newState) {
     this.setState(newState);
@@ -181,6 +189,7 @@ class HOCAddGoal extends Component {
     const {
       organization_id,
       request,
+      removeCache,
       addToasty,
       updateToasty,
       navPop,
@@ -194,6 +203,7 @@ class HOCAddGoal extends Component {
         goal,
       }).then((res) => {
         if (res.ok) {
+          removeCache('add-goal');
           updateToasty(toastId, {
             title: 'Added goal',
             completed: true,
@@ -207,7 +217,6 @@ class HOCAddGoal extends Component {
           });
         }
       });
-
       navPop();
     });
   }
@@ -341,6 +350,7 @@ HOCAddGoal.propTypes = {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
+    cache: state.getIn(['main', 'cache', 'add-goal']),
     organization_id: state.getIn(['me', 'organizations', 0, 'id']),
   };
 }
@@ -349,6 +359,8 @@ export default connect(mapStateToProps, {
   assignModal: actions.modal.assign,
   selectAssignees: actions.goals.selectAssignees,
   navPop: actions.navigation.pop,
+  saveCache: actions.main.cache.save,
+  removeCache: actions.main.cache.remove,
   request: actions.api.request,
   addToasty: actions.toasty.add,
   updateToasty: actions.toasty.update,

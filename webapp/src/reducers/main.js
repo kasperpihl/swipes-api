@@ -42,10 +42,10 @@ export default function main(state = initialState, action) {
     // Caching
     // ======================================================
     case types.CACHE_SAVE: {
-      return state.setIn(['cache', action.index], action.data);
+      return state.setIn(['cache', payload.index], payload.data);
     }
     case types.CACHE_REMOVE: {
-      return state.deleteIn(['cache', action.index]);
+      return state.deleteIn(['cache', payload.index]);
     }
     case types.CACHE_CLEAR: {
       return state.set('cache', initialState.get('cache'));
