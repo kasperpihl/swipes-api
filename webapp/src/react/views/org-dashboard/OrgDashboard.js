@@ -9,15 +9,20 @@ export default class OrgDashboard extends Component {
     if (!notifications) {
       return 'No notifications....';
     }
-    return notifications.map((n, i) => (
-      <NotificationWrapper
-        key={`notif${i}`}
-        svg={n.get('svg')}
-        iconBgColor={n.get('iconBgColor')}
-        message={n.get('message')}
-        timeago={n.get('timeago')}
-      />
-    ));
+    return notifications.map((n, i) => {
+      if (!n) {
+        return null;
+      }
+      return (
+        <NotificationWrapper
+          key={`notif${i}`}
+          svg={n.get('svg')}
+          iconBgColor={n.get('iconBgColor')}
+          message={n.get('message')}
+          timeago={n.get('timeago')}
+        />
+      );
+    });
   }
   render() {
     return (

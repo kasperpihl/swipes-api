@@ -86,7 +86,7 @@ export function init() {
     let navId = state.getIn(['navigation', 'id']);
     const me = state.get('me');
     if (!navId && me) {
-      navId = 'goals';
+      navId = 'my-goals';
     }
     if (navId) {
       dispatch(navigateToId(navId));

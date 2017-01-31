@@ -54,11 +54,15 @@ class HOCAddGoal extends Component {
       this._loadedWay = false;
     }
   }
+  updateState(newState) {
+    this.setState(newState);
+    console.log('lets cache this');
+  }
   onHandoffChange(handoff) {
-    this.setState({ handoff });
+    this.updateState({ handoff });
   }
   onInputChange(text) {
-    this.setState({ title: text });
+    this.updateState({ title: text });
   }
   onContextClick(i, e) {
     const { loadWay } = this.props;
@@ -79,7 +83,7 @@ class HOCAddGoal extends Component {
         const input = document.getElementById('navbar-input');
         input.value = way.get('title');
         this._loadedWay = true;
-        this.setState(newState);
+        this.updateState(newState);
       }
     });
   }
@@ -101,7 +105,7 @@ class HOCAddGoal extends Component {
       assignees: [],
     }));
     stepOrder = stepOrder.push(id);
-    this.setState({ steps, stepOrder });
+    this.updateState({ steps, stepOrder });
   }
   onOpenAssignee(id, e) {
     this.clickedAssign(e, id);
@@ -109,18 +113,18 @@ class HOCAddGoal extends Component {
   onUpdatedStepTitle(id, title) {
     let { steps } = this.state;
     steps = steps.setIn([id, 'title'], title);
-    this.setState({ steps });
+    this.updateState({ steps });
   }
   onUpdatedAssignees(id, assignees) {
     let { steps } = this.state;
     steps = steps.setIn([id, 'assignees'], fromJS(assignees));
-    this.setState({ steps });
+    this.updateState({ steps });
   }
   onAddAttachment(obj) {
     let { attachments, attachmentOrder } = this.state;
     attachments = attachments.set(obj.shortUrl, fromJS(obj));
     attachmentOrder = attachmentOrder.push(obj.shortUrl);
-    this.setState({ attachments, attachmentOrder });
+    this.updateState({ attachments, attachmentOrder });
   }
   clickedAssign(e, id) {
     const { assignModal, selectAssignees } = this.props;
@@ -144,7 +148,7 @@ class HOCAddGoal extends Component {
     if (res) {
       let { steps } = this.state;
       steps = steps.setIn([id, 'assignees'], fromJS(res));
-      this.setState({ steps });
+      this.updateState({ steps });
     }
   }
   isReadyToCreate() {
