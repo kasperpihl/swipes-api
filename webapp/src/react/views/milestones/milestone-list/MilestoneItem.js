@@ -15,8 +15,6 @@ const MilestoneItem = (props) => {
   const progressLength = 100 - ((goals.completed * 100) / goals.total);
   styles.WebkitClipPath = `inset(0 ${Math.min(97, progressLength)}% 0 0 round 5px)`;
 
-  console.log('progressLength', styles);
-
   return (
     <div className="milestone-item" onClick={onClick}>
       <div className="header">
