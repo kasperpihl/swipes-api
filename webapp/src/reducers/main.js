@@ -7,6 +7,7 @@ const initialState = fromJS({
   overlay: null,
   cache: {},
   services: {},
+  notifications: [],
   ways: {},
   hasLoaded: false,
   activeGoal: null,
@@ -28,6 +29,8 @@ export default function main(state = initialState, action) {
         const services = {};
         payload.services.forEach((s) => { services[s.id] = s; });
         ns.set('services', fromJS(services));
+        // notifications
+        ns.set('notifications', fromJS(payload.notifications));
         // socket url
         ns.set('socketUrl', payload.ws_url);
       });
@@ -53,6 +56,13 @@ export default function main(state = initialState, action) {
 
     case types.SLACK_OPEN_IN: {
       return state.set('slackOpenIn', payload.id);
+    }
+
+    // ======================================================
+    // Notifications
+    // ======================================================
+    case types.NOTIFICATION_ADD: {
+      return state.updateIn(['notifications'], s => s.insert(0, fromJS({ id: payload.id, data: payload })));
     }
 
     // ======================================================

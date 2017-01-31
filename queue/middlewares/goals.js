@@ -41,6 +41,7 @@ const goalsArchivedNotificationData = (req, res, next) => {
   const notificationData = {
     done_by: user_id,
     goal_id: goal.id,
+    goal_title: goal.title,
   };
 
   res.locals.notificationData = notificationData;

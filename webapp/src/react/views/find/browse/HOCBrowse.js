@@ -17,6 +17,9 @@ class HOCBrowse extends Component {
       selectedItemIds: [],
     };
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   componentDidMount() {
     this.loadPath({ path: '', title: 'Dropbox' });
   }
@@ -35,7 +38,9 @@ class HOCBrowse extends Component {
   updateCacheAtPath(path, result) {
     const { cache } = this.state;
     cache[`${path}`] = result;
-    this.setState({ cache });
+    if (!this._unmounted) {
+      this.setState({ cache });
+    }
   }
   loadPath(entry, depth) {
     const { title, path } = entry;

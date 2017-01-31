@@ -40,6 +40,7 @@ const milestonesArchivedNotificationData = (req, res, next) => {
   const notificationData = {
     done_by: user_id,
     milestone_id: milestone.id,
+    milestone_title: milestone.title,
   };
 
   res.locals.notificationData = notificationData;

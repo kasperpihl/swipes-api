@@ -6,7 +6,7 @@ import React from 'react'
 // ==========================================
 
 // 1. Import the component you want to test
-import SwipesCard from 'components/swipes-card/SwipesCard'
+import TabBar from 'components/tab-bar/TabBar';
 
 // 2. Set the components and props to test
 const props = {
@@ -16,7 +16,7 @@ const props = {
 };
 
 view = (
-  <SwipesCard {...props} />
+  <TabBar {...props} />
 )
 
 // 3. Change this to true, to enable the tester

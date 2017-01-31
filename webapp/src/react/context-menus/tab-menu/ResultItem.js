@@ -15,6 +15,7 @@ class ResultItem extends Component {
     const { onClick, disabled } = this.props;
 
     if (onClick && !disabled) {
+      e.stopPropagation();
       onClick(side, e);
     }
   }

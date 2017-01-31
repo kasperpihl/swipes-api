@@ -159,7 +159,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     },
     numberOfTabs: () => 3,
     nameForTab: i => [`Assigned (${assignees.length})`, 'Recent', 'All'][i],
-    onItemAction: (item) => {
+    onItemAction: (item, row) => {
       const index = assignees.indexOf(item.id);
       if (index === -1) {
         assignees.push(item.id);
