@@ -18,8 +18,8 @@ const startingViewForNavId = (navId) => {
     case 'my-goals':
     default:
       return {
-        component: 'GoalList',
-        title: 'My Goals',
+        component: 'ProtoGoals',
+        title: 'Goals',
       };
     case 'milestones': {
       return {
