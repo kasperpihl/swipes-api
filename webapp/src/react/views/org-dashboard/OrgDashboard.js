@@ -13,7 +13,7 @@ export default class OrgDashboard extends Component {
       if (!n) {
         return null;
       }
-      const color = n.get('read') ? 'gray' : n.get('iconBgColor');
+      const color = n.get('seen') ? 'gray' : n.get('iconBgColor');
       return (
         <NotificationWrapper
           key={`notif${i}`}

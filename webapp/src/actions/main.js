@@ -28,6 +28,16 @@ export const contextMenu = payload => (dp, getState) => {
   dp({ type: types.CONTEXT_MENU, payload });
 };
 
+// ======================================================
+// Mark notifications as read
+// ======================================================
+export const markNotifications = timestamp => dp => dp(a.api.request('notifications.markAsSeen', {
+  timestamp,
+}));
+
+// ======================================================
+// Open slack in a users page
+// ======================================================
 export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } });
 
 // ======================================================
