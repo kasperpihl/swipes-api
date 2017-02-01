@@ -18,6 +18,11 @@ export const cache = {
 export const overlay = payload => ({ type: types.OVERLAY, payload });
 
 // ======================================================
+// Modal
+// ======================================================
+export const modal = (props, callback) => ({ type: types.MODAL, payload: { props, callback } });
+
+// ======================================================
 // Context Menu
 // ======================================================
 export const contextMenu = payload => (dp, getState) => {

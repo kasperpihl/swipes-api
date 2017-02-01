@@ -26,13 +26,13 @@ if (process.env.NODE_ENV !== 'production') {
 if (typeof Tester !== 'undefined') {
   RenderedComp = Tester;
 } else if (!window.process || !window.process.versions.electron) {
-  if (window.__share_data) {
+  /* if (window.__share_data) {
     window.swipesApi = new SwipesAPIConnector(window.location.origin);
     Page = require('./containers/SharePage'); // eslint-disable-line
     props.data = window.__share_data;
-  } else {
+  } else {*/
     Page = require('./react/download-page/DownloadPage'); // eslint-disable-line
-  }
+  // }
 } else {
   Page = require('./react/app/Root'); // eslint-disable-line
 }

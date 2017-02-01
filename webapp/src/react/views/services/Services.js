@@ -140,6 +140,6 @@ const ConnectedServices = connect(mapStateToProps, {
   overlay: actions.main.overlay,
   handleOAuthSuccess: actions.me.handleOAuthSuccess,
   disconnectService: actions.me.disconnectService,
-  loadModal: actions.modal.load,
+  loadModal: actions.main.modal,
 })(Services);
 export default ConnectedServices;

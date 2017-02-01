@@ -82,6 +82,13 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
+    // Modals
+    // ======================================================
+    case types.MODAL: {
+      return state.set('modal', payload);
+    }
+
+    // ======================================================
     // Context Menu
     // ======================================================
     case types.CONTEXT_MENU: {

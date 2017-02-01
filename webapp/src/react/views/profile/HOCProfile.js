@@ -3,7 +3,7 @@ import Icon from 'Icon';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { navigation, main, modal } from 'actions';
+import { navigation, main } from 'actions';
 import { bindAll } from 'classes/utils';
 import './profile.scss';
 
@@ -65,7 +65,7 @@ HOCProfile.propTypes = {
 };
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
-  loadModal: modal.load,
+  loadModal: main.modal,
   logout: main.logout,
 })(HOCProfile);
 

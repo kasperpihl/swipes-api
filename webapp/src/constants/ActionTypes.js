@@ -5,6 +5,7 @@ export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
 export const OVERLAY = 'OVERLAY';
+export const MODAL = 'MODAL';
 export const NOTE_SHOW = 'NOTE_SHOW';
 export const NOTE_HIDE = 'NOTE_HIDE';
 export const UPDATE_RECENT_ASSIGNEES = 'UPDATE_RECENT_ASSIGNEES';

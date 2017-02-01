@@ -106,7 +106,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCFind = connect(mapStateToProps, {
-  loadModal: actions.modal.load,
   preview: actions.main.preview,
   request: actions.api.request,
   search: actions.main.search,

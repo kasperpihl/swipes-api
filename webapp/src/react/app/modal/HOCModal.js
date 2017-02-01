@@ -3,7 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SwipesModal from 'src/react/modals/SwipesModal';
-import { modal as modalActions } from 'actions';
+import * as a from 'actions';
 
 import { bindAll } from 'classes/utils';
 
@@ -22,47 +22,44 @@ class HOCModal extends Component {
   onKeyUp(e) {
     const { modal } = this.props;
 
-    if (e.keyCode === 27 && modal && modal.get('shown')) {
+    if (e.keyCode === 27 && modal && modal.props) {
       this.onModalCallback(null);
     }
   }
 
   onModalCallback(res) {
-    const { modal, hideModal } = this.props;
+    const { modal, loadModal } = this.props;
 
-    if (modal.get('callback')) {
-      modal.get('callback')(res);
+    if (modal.callback) {
+      modal.callback(res);
     }
 
-    hideModal();
+    loadModal(null);
   }
   closeModal() {
     this.onModalCallback(null);
   }
-  renderModal(type, props) {
+  renderModal(props) {
     const { modal } = this.props;
 
-    if (!modal.get('shown')) {
+    if (!modal || !modal.props) {
       return undefined;
     }
 
-    const Comp = SwipesModal;
-
-    return <Comp callback={this.onModalCallback} {...props} />;
+    return <SwipesModal callback={this.onModalCallback} {...props} />;
   }
   render() {
     const { modal } = this.props;
-    const props = modal.get('props') || {};
-    const type = modal.get('type');
     let className = 'g-modal';
-
-    if (modal.get('shown')) {
+    let props = {};
+    if (modal && modal.props) {
       className += ' g-modal--shown';
+      props = modal.props;
     }
     return (
       <div className={className}>
         <div className="g-modal__overlay" onClick={this.closeModal} />
-        {this.renderModal(type, props)}
+        {this.renderModal(props)}
       </div>
     );
   }
@@ -70,20 +67,19 @@ class HOCModal extends Component {
 
 function mapStateToProps(state) {
   return {
-    modal: state.get('modal'),
+    modal: state.getIn(['main', 'modal']),
   };
 }
 
 const ConnectedHOCModal = connect(mapStateToProps, {
-  hideModal: modalActions.hide,
-
+  loadModal: a.main.modal,
 })(HOCModal);
 
-const { func } = PropTypes;
+const { func, object } = PropTypes;
 
 HOCModal.propTypes = {
-  modal: map,
-  hideModal: func,
+  modal: object,
+  loadModal: func,
 };
 
 export default ConnectedHOCModal;

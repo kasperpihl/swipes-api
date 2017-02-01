@@ -25,7 +25,7 @@ export const addToCollection = (goalId, content) => (d, getState) => {
 };
 
 export const archive = goalId => (d) => {
-  d(a.modal.load(
+  d(a.main.modal(
     {
       title: 'Archive Goal?',
       data: {
