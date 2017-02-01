@@ -28,17 +28,24 @@ $sidebarWidth: 60px;
 
   &__notification {
     @include flex();
+    @include font(9px, $bg, 500);
     height: 12px;
     min-width: 12px;
     max-width: 30px;
-    background: $red-color;
-    color: $bg;
+    background: $deepBlue-40;
     position: absolute;
     left: 55%; top: 50%;
-    font-size: 9px;
-    padding: 3px;
+    padding: 0 3px;
+    padding-bottom: 1px;
     border-radius: 20px;
     transform: translateY(-110%);
+    animation: newNotification 1s ease forwards;
+
+    @keyframes newNotification {
+      50% {
+        background-color: $red-color;
+      }
+    }
   }
 
   &__item {

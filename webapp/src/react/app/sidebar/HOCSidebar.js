@@ -42,7 +42,7 @@ class HOCSidebar extends Component {
     }
     let notif = null;
     if (counter && counter.length) {
-      notif = <div className="sidebar__notification">{counter}</div>;
+      notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
     }
 
     let image = <Icon svg={item.svg} className="sidebar__icon" />;
