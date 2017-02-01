@@ -387,7 +387,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage', {
   user_id: string.require(),
   goal: object.as({
-    id: string.require,
+    id: string.require(),
   }).require(),
   next_step_id: string,
 }, (req, res, next, setLocals) => {
