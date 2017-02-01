@@ -45,15 +45,24 @@ class HandoffStatus extends Component {
     const { toId, goal } = this.props;
     const helper = this.getHelper();
     const to = helper.getStepById(toId);
-    const toIndex = helper;
+    const toIndex = helper.getStepIndexForId(toId);
+    const fromIndex = helper.getCurrentStepIndex();
+    const diff = toIndex - fromIndex;
     let status = '';
 
     if (!to) {
       status = 'Complete this goal';
     } else {
+      const absDiff = Math.abs(diff);
+      let moveString = `Move ${absDiff} step`;
+      if (absDiff > 1) {
+        moveString += 's';
+      }
+      const dirString = diff < 0 ? 'backward' : 'forward';
+      moveString += ` ${dirString} to `;
       status = (
         <span>
-          Handoff step to <b>{this.namesFromAssignees(to.get('assignees'))}</b> for "<b>{to.get('title')}</b>"
+          {moveString}<b>{this.namesFromAssignees(to.get('assignees'))}</b> for "<b>{to.get('title')}</b>"
         </span>
       );
     }
@@ -71,8 +80,10 @@ class HandoffStatus extends Component {
 
 export default HandoffStatus;
 
-const { object } = PropTypes;
+const { object, func } = PropTypes;
 
 HandoffStatus.propTypes = {
+  onChangeStep: func,
+  onChangeAssignees: func,
   goal: object,
 };

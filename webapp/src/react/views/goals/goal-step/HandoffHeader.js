@@ -59,7 +59,6 @@ class HandoffHeader extends Component {
             <Icon svg="Checkmark" className="handoff-header__svg" />
           </div>
           <div className="handoff-header__title">Complete goal</div>
-          <button className="handoff-header__button" onClick={this.handleClick}>change</button>
         </div>
       </div>
     );
