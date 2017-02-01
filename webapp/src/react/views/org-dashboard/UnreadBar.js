@@ -5,10 +5,17 @@ const UnreadBar = (props) => {
   const {
     title,
     onClick,
+    showButton,
   } = props;
 
+  let className = 'unread-bar';
+
+  if (showButton) {
+    className += ' unread-bar--with-button';
+  }
+
   return (
-    <div className="unread-bar">
+    <div className={className}>
       <div className="unread-bar__title">{title}</div>
       <div onClick={onClick} className="unread-bar__button">Mark as read</div>
     </div>
@@ -17,9 +24,10 @@ const UnreadBar = (props) => {
 
 export default UnreadBar;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 UnreadBar.propTypes = {
   title: string,
   onClick: func,
+  showButton: bool,
 };
