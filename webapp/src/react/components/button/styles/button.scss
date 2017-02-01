@@ -19,7 +19,7 @@ $borderColor: $deepBlue-10;
   border-radius: 50px;
   flex: none;
   min-width: $btnSize;
-  transition: .15s;
+  transition: all .15s, border-color .15s 0s;
   background-color: $bg;
   position: relative;
   z-index: 2;
@@ -29,14 +29,14 @@ $borderColor: $deepBlue-10;
     outline:none;
     box-shadow: 0 0 2px 1px $blue-100;
     border: 1px solid $blue-100;
-    transition: .15s ease;
+    transition: all .15s ease, border-color .15s 0s;
   }
 
   &:not(&--disabled):not(&--frameless):not(&--loading):active, {
     outline:none;
     box-shadow: 0 0 2px 1px transparent;
     border: 1px solid transparent;
-    transition: .15s ease;
+    transition: all .15s ease, border-color .15s 0s;
   }
 }
 
@@ -48,8 +48,7 @@ $borderColor: $deepBlue-10;
   &__svg {
     @include size(24px);
     @include svg-color($mainColor !important);
-    transition: .15s;
-    transition: opacity .15s .3s ease, margin .5s ease;
+    transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
   }
 
   &__text {
@@ -57,9 +56,8 @@ $borderColor: $deepBlue-10;
     font-size: 12px;
     font-weight: bold;
     padding: 0 $btnSize;
-    transition: .15s;
     pointer-events: none;
-    transition: opacity .15s .3s ease, margin .5s ease;
+    transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
 
     &:first-letter {
       text-transform: uppercase;
@@ -87,7 +85,7 @@ $borderColor: $deepBlue-10;
     $mainColor: $blue-100;
 
     border-color: $mainColor;
-    transition: .15s;
+    transition: all .15s ease, border-color .15s 0s;
 
     #{$b}__svg {
       @include svg-color($mainColor !important);
@@ -212,7 +210,6 @@ $borderColor: $deepBlue-10;
 
 .g-button {
   $b: &;
-  transition: border-width .3s ease, border-color .3s .5s ease;
 
   &:after {
     content: '';
@@ -230,7 +227,7 @@ $borderColor: $deepBlue-10;
   &--loading {
     border-width: 3px;
     border-color: $deepBlue-10;
-    transition: .3s ease;
+    transition: all .3s ease, border-width .3s ease, border-color .3s .5s ease;
     pointer-events: none;
 
     &:hover {

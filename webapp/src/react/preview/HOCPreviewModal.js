@@ -39,10 +39,17 @@ class HOCPreviewModal extends Component {
   }
   renderButtons() {
     const { preview } = this.props;
-    let { buttons } = preview || { };
+    let { elements, file, buttons, loading } = preview || {};
+
+    if (!elements && !file) {
+      return undefined;
+    }
+
+
     if (!buttons) {
       buttons = [];
     }
+
     return (
       <div className="header__actions">
         {buttons.map((b, i) => (
