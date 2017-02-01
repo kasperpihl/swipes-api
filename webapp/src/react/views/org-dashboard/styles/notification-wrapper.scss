@@ -5,7 +5,9 @@
   $b: &;
   @include size(100%, auto);
   @include flex(center, flex-start);
+  min-height: 66px;
   max-width: 780px;
+  border-bottom: 1px solid $deepBlue-10;
 
   &__icon {
     @include size(36px);
@@ -23,15 +25,13 @@
 
   &__message {
     @include size(100%, auto);
-    font-size: 12px;
-    color: $deepBlue-70;
+    @include font(12px, $deepBlue-70, 18px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     b {
-      font-weight: 500;
-      color: $deepBlue-90;
+      @include font(12px, $deepBlue-90, 18px, 500);
     }
   }
 
@@ -39,21 +39,5 @@
     @include flex(none);
     font-size: 12px;
     color: $deepBlue-30;
-  }
-
-  &:not(:last-child) {
-    padding-bottom: 12px;
-  }
-
-  &--blue {
-
-  }
-
-  &--green {
-
-  }
-
-  &--red {
-
   }
 }

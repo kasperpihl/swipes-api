@@ -72,6 +72,10 @@ class HOCOrgDashboard extends Component {
     const { ways } = this.props;
     const data = n.get('data');
     const type = data.get('type');
+    const greenColor = '#4FE69B';
+    const redColor = '#FC461E';
+    const blueColor = '#007AFF';
+
     let m = Map({
       timeago: moment(n.get('ts')).fromNow(),
       seen: n.get('seen'),
@@ -83,7 +87,7 @@ class HOCOrgDashboard extends Component {
           const name = this.clickableNameForUserId(data.get('done_by'));
           m = m.set('message', <span>{name}{' started a goal: '}{goal}</span>);
           m = m.set('svg', 'Plus');
-          m = m.set('iconBgColor', '#3893fc');
+          m = m.set('iconBgColor', blueColor);
         }
 
         break;
@@ -93,7 +97,7 @@ class HOCOrgDashboard extends Component {
         const name = this.clickableNameForUserId(data.get('done_by'));
         m = m.set('message', <span>{name}{' archived a goal: '}{title}</span>);
         m = m.set('svg', 'Minus');
-        m = m.set('iconBgColor', '#fc7170');
+        m = m.set('iconBgColor', redColor);
         break;
       }
       case 'step_got_active': {
@@ -101,7 +105,7 @@ class HOCOrgDashboard extends Component {
         if (goal) {
           m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);
           m = m.set('svg', 'Deliver');
-          m = m.set('iconBgColor', '#3893fc');
+          m = m.set('iconBgColor', blueColor);
         }
 
         break;
@@ -112,7 +116,7 @@ class HOCOrgDashboard extends Component {
           const name = this.clickableNameForUserId(data.get('done_by'));
           m = m.set('message', <span>{name}{' completed a step in: '}{goal}</span>);
           m = m.set('svg', 'Checkmark');
-          m = m.set('iconBgColor', '#51e389');
+          m = m.set('iconBgColor', greenColor);
         }
         break;
       }
@@ -122,7 +126,7 @@ class HOCOrgDashboard extends Component {
           const name = this.clickableNameForUserId(data.get('done_by'));
           m = m.set('message', <span>{name}{` created a way: ${way.get('title')}`}</span>);
           m = m.set('svg', 'Plus');
-          m = m.set('iconBgColor', '#3893fc');
+          m = m.set('iconBgColor', blueColor);
         }
         break;
       }
