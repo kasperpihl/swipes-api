@@ -9,12 +9,20 @@ const NotificationWrapper = (props) => {
     iconBgColor,
     onClick,
     timeago,
+    unread,
   } = props;
   const style = {};
+  let className = 'notification';
+
   if (iconBgColor) {
     style.fill = iconBgColor;
     style.stroke = iconBgColor;
   }
+
+  if (unread) {
+    className += ' notification--unread';
+  }
+
   return (
     <div className="notification" onClick={onClick}>
       <div className="notification__icon" >

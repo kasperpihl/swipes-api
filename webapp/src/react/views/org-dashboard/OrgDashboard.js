@@ -53,8 +53,8 @@ export default class OrgDashboard extends Component {
         <div className="notifications__header">Notifications</div>
         <div className="notifications__list">
           {this.renderNotifications()}
-          {this.renderUnreadBar()}
         </div>
+        {this.renderUnreadBar()}
       </div>
     );
   }

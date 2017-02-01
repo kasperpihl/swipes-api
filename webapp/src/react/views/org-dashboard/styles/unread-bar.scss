@@ -2,5 +2,39 @@
 @import '~styles/_mixins.scss';
 
 .unread-bar{
-  
+  @include size(480px, 48px);
+  @include flex(flex);
+  position: absolute;
+  left: calc(780px / 2); bottom: 30px;
+  background-color: $bg;
+  border-radius: 3px;
+  border: 1px solid $deepBlue-10;
+  box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+  transform: translateX(-50%);
+
+  &__title {
+    @include size(100%);
+    @include flex(center, flex-start);
+    @include font(12px, $deepBlue-70, 18px, 500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 30px;
+  }
+
+  &__button {
+    @include size(138px, 100%);
+    @include flex();
+    @include flex(none);
+    @include font(12px, $blue-100, 18px, 500);
+    border-left: 1px solid $deepBlue-10;
+    transition: .2s ease;
+
+    &:hover {
+      @include font($c: $bg);
+      border-color: $blue-100;
+      background-color: $blue-100;
+      transition: .2s ease;
+    }
+  }
 }

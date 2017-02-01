@@ -9,8 +9,8 @@ const UnreadBar = (props) => {
 
   return (
     <div className="unread-bar">
-      {title}
-      <div onClick={onClick}>Mark as read</div>
+      <div className="unread-bar__title">{title}</div>
+      <div onClick={onClick} className="unread-bar__button">Mark as read</div>
     </div>
   );
 };
