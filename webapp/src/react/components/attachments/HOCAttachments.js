@@ -111,7 +111,7 @@ class HOCAttachments extends Component {
     return (attachmentOrder && attachmentOrder.size);
   }
   renderAttachments() {
-    const { attachments, attachmentOrder: aOrder, disableFlagging } = this.props;
+    const { attachments, attachmentOrder: aOrder, enableFlagging } = this.props;
     let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
     let { flags } = this.props;
     if (!flags) {
@@ -131,7 +131,7 @@ class HOCAttachments extends Component {
             onClickText={this.onPreviewCached(aId)}
             icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
             title={a.get('title')}
-            disableFlagging={disableFlagging}
+            enableFlagging={enableFlagging}
           />
         );
       });
@@ -201,7 +201,7 @@ HOCAttachments.propTypes = {
   attachments: map,
   delegate: object,
   disableAdd: bool,
-  disableFlagging: bool,
+  enableFlagging: bool,
   flags: list,
   goalId: string,
   openFind: func,

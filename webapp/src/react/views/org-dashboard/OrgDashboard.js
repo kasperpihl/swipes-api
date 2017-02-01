@@ -48,7 +48,7 @@ export default class OrgDashboard extends Component {
     return (
       <UnreadBar
         title={title}
-        showButton={!!numberOfUnreads}
+        btnLabel={numberOfUnreads ? 'Mark as seen' : 'Clear all'}
         onClick={this.onClick}
       />
     );

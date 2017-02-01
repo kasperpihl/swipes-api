@@ -315,7 +315,7 @@ class HOCGoalStep extends Component {
           attachmentOrder={goal.get('attachment_order')}
           flags={sendFlags}
           goalId={goal.get('id')}
-          disableFlagging={!isHandingOff}
+          enableFlagging={!!isHandingOff}
           delegate={this}
           disableAdd={!helper.getCurrentStep()}
         />

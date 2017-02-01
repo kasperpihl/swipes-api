@@ -64,6 +64,15 @@ export default function main(state = initialState, action) {
     case types.NOTIFICATION_ADD: {
       return state.updateIn(['notifications'], s => s.insert(0, fromJS({ id: payload.id, data: payload })));
     }
+    case 'notifications.markAsSeen': {
+      const { marked_at, last_marked: lastMarked } = payload;
+      return state.updateIn(['notifications'], s => s.map((n) => {
+        if (n.get('ts') <= lastMarked) {
+          return n.set('seen', marked_at);
+        }
+        return n;
+      }));
+    }
 
     // ======================================================
     // Overlays

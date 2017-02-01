@@ -10,7 +10,7 @@ const Attachment = (props) => {
     onClickIcon,
     onClickText,
     flagged,
-    disableFlagging,
+    enableFlagging,
   } = props;
 
   let className = 'attachment';
@@ -19,7 +19,7 @@ const Attachment = (props) => {
     className += ' attachment--flagged';
   }
 
-  if (disableFlagging) {
+  if (enableFlagging) {
     className += ' attachment--disabled';
   }
 
@@ -43,6 +43,7 @@ Attachment.propTypes = {
   flagged: bool,
   icon: string,
   title: string,
+  enableFlagging: bool,
   onClickIcon: func,
   onClickText: func,
 };
