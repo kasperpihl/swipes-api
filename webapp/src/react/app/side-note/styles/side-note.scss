@@ -6,8 +6,6 @@
   @include size(100%);
   @include flex(center, flex-start);
   @include flex(column);
-  overflow-x: hidden;
-  overflow-y: auto;
   padding-left: 0 15px;
   position: relative;
   border-left: 1px solid $deepBlue-10;
@@ -18,8 +16,10 @@
     @include flex(none);
     color: $deepBlue-40;
     font-size: 12px;
-    padding-bottom: 60px;
+    padding-bottom: 103px;
     padding-right: 15px;
+    border-bottom: 1px solid $deepBlue-10;
+
   }
 
   &__btn-title {
@@ -38,17 +38,10 @@
   &__title {
     @include size(100%);
     color: $deepBlue-90;
-    font-size: 27px;
-    font-weight: 700;
-    line-height: 42px;
+    @include font(27px, #192445, 42px, 400);
     max-width: 750px;
     padding: 0 25px;
-  }
-  &__title {
     position: absolute;
-    font-size: 27px;
-    font-weight: 700;
-    color: #192445;
     white-space: nowrap;
   }
 
@@ -62,6 +55,7 @@
     background-color: $green-color;
     border-radius: 100%;
     margin-left: 12px;
+    margin-top: 12px;
     transition: .1s;
 
     &--active-editing {
@@ -74,9 +68,10 @@
   }
 
   &__note {
-    @include size(100%, auto);
-    max-width: 650px;
+    @include size(100%);
     padding: 45px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   &--locked {

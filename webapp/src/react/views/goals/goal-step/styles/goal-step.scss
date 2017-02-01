@@ -28,6 +28,7 @@
     @include size(100%, auto);
     max-width: 780px;
     position: relative;
+    padding-right: 15px;
   }
 
   &__completed {
@@ -163,7 +164,7 @@
   &-leave {
 
     &-active {
-      
+
     }
   }
 }
