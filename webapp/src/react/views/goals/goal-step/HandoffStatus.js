@@ -42,7 +42,7 @@ class HandoffStatus extends Component {
     return assigneeString;
   }
   renderStatus() {
-    const { toId, goal } = this.props;
+    const { toId, goal, onChangeStep } = this.props;
     const helper = this.getHelper();
     const to = helper.getStepById(toId);
     const toIndex = helper.getStepIndexForId(toId);
@@ -51,7 +51,12 @@ class HandoffStatus extends Component {
     let status = '';
 
     if (!to) {
-      status = 'Complete this goal';
+      status = (
+        <span>
+          {'Complete '}
+          "<b onClick={onChangeStep}>{goal.get('title')}</b>"
+        </span>
+      );
     } else {
       const absDiff = Math.abs(diff);
       let moveString = `Move ${absDiff} step`;
@@ -62,7 +67,10 @@ class HandoffStatus extends Component {
       moveString += ` ${dirString} to `;
       status = (
         <span>
-          {moveString}<b>{this.namesFromAssignees(to.get('assignees'))}</b> for "<b>{to.get('title')}</b>"
+          {moveString}
+          <b>{this.namesFromAssignees(to.get('assignees'))}</b>
+          {' for '}
+          "<b onClick={onChangeStep}>{to.get('title')}</b>"
         </span>
       );
     }

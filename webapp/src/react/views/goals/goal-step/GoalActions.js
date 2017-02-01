@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import HandoffStatus from './HandoffStatus';
 import { bindAll } from 'classes/utils';
 import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
@@ -24,17 +23,6 @@ class GoalActions extends Component {
     if (onCancel) {
       onCancel(e);
     }
-  }
-  renderStatus() {
-    const { isHandingOff, goal, toId, users, me } = this.props;
-
-    if (!isHandingOff) {
-      return undefined;
-    }
-
-    return (
-      <HandoffStatus goal={goal} toId={toId} users={users} me={me} />
-    );
   }
   renderCancel() {
     const { isHandingOff } = this.props;
@@ -66,9 +54,10 @@ class GoalActions extends Component {
     );
   }
   render() {
+    const { children } = this.props;
     return (
       <div className="goal-actions">
-        {this.renderStatus()}
+        {children}
         {this.renderCancel()}
         {this.renderHandoff()}
       </div>
@@ -84,11 +73,6 @@ GoalActions.propTypes = {
   isHandingOff: bool,
   isSubmitting: bool,
   isCompletingGoal: bool,
-  status: string,
   onHandoff: func,
   onCancel: func,
-  goal: map,
-  toId: string,
-  me: map,
-  users: map,
 };

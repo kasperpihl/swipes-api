@@ -15,6 +15,7 @@ import HandoffHeader from './HandoffHeader';
 import HandoffMessage from './HandoffMessage';
 import GoalActions from './GoalActions';
 import GoalCompleted from './GoalCompleted';
+import HandoffStatus from './HandoffStatus';
 import GoalSide from './GoalSide';
 
 import './styles/goal-step';
@@ -322,6 +323,24 @@ class HOCGoalStep extends Component {
       </Section>
     );
   }
+  renderStatus() {
+    const { goal, users, me } = this.props;
+    const { isHandingOff, nextStepId } = this.state;
+
+    if (!isHandingOff) {
+      return null;
+    }
+
+    return (
+      <HandoffStatus
+        goal={goal}
+        toId={nextStepId}
+        users={users}
+        me={me}
+        onChangeStep={this.onChangeClick}
+      />
+    );
+  }
   renderActions() {
     const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH } = this.state;
     const { users, me, goal } = this.props;
@@ -344,11 +363,9 @@ class HOCGoalStep extends Component {
           isHandingOff={isHandingOff}
           isCompletingGoal={!nextStepId}
           isSubmitting={isSubmitting}
-          goal={goal}
-          toId={nextStepId}
-          users={users}
-          me={me}
-        />
+        >
+          {this.renderStatus()}
+        </GoalActions>
       </Section>
     );
   }
