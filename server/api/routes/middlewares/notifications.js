@@ -21,13 +21,20 @@ const {
 const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
   user_id: string.require(),
   timestamp: string.format('iso8601').require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     timestamp,
   } = res.locals;
 
-  dbNotificationsMarkAsSeen({ user_id, timestamp })
+  const timestamp_now = new Date().toISOString();
+
+  setLocals({
+    marked_at: timestamp,
+    last_marked: timestamp_now,
+  });
+
+  dbNotificationsMarkAsSeen({ user_id, timestamp, timestamp_now })
     .then(() => {
       return next();
     })

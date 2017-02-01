@@ -14,7 +14,7 @@ const dbNotificationsMarkAsSeen = funcWrap([
     user_id: string.require(),
     timestamp: string.format('iso8601').require(),
   }).require(),
-], (err, { user_id, timestamp }) => {
+], (err, { user_id, timestamp, timestamp_now }) => {
   if (err) {
     throw new SwipesError(`dbNotificationsMarkAsSeen: ${err}`);
   }
@@ -24,7 +24,7 @@ const dbNotificationsMarkAsSeen = funcWrap([
       .getAll(user_id, { index: 'user_id' })
       .filter(r.row('ts').le(timestamp))
       .update({
-        seen: r.now(),
+        seen: new Date().toISOString(),
       });
 
   return db.rethinkQuery(q);

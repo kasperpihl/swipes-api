@@ -18,8 +18,10 @@ authed.all('/notifications.markAsSeen',
     timestamp: string.format('iso8601').require(),
   }),
   notificationsMarkAsSeen,
-  valResponseAndSend(),
-);
+  valResponseAndSend({
+    marked_at: string.require(),
+    last_marked: string.require(),
+  }));
 
 export {
   notAuthed,
