@@ -282,6 +282,14 @@ const xendoSearch = valLocals('xendoSearch', {
   });
 });
 
+const mapSourceToServiceName = (source) => {
+  if (source === 'googledocs') {
+    return 'drive';
+  }
+
+  return source;
+};
+
 const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
   user_id: string.require(),
   result: object.require(),
@@ -304,7 +312,7 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
   db.rethinkQuery(xendoServicesQ)
     .then((userServices) => {
       const mappedResults = result.response.docs.map((doc) => {
-        const service = services[doc.source];
+        const service = services[mapSourceToServiceName(doc.source)];
         let mappedDoc = {};
         let account_id;
 

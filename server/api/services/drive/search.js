@@ -3,12 +3,12 @@ const mapSearch = (res) => {
 
   return {
     service: {
-      type: res.content_type,
+      type: res.source_content_type,
       id: idParts[idParts.length - 1],
-      name: 'gmail',
+      name: 'drive',
     },
-    title: res.subject,
-    subtitle: res.from || '/',
+    title: res.title,
+    subtitle: '',
   };
 };
 
