@@ -19,6 +19,14 @@ class HOCOrgDashboard extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+    const { markNotifications, notifications } = this.props;
+    if (notifications.size) {
+      const first = notifications.first();
+      console.log(first.toJS());
+      markNotifications(first.get('ts')).then((res) => {
+        console.log('lalala', res);
+      });
+    }
   }
   onClick(id, type) {
     if (type === 'goal') {
@@ -63,6 +71,7 @@ class HOCOrgDashboard extends Component {
     const type = data.get('type');
     let m = Map({
       timeago: moment(n.get('ts')).fromNow(),
+      seen: n.get('seen'),
     });
     switch (type) {
       case 'goal_created': {
@@ -141,6 +150,7 @@ HOCOrgDashboard.propTypes = {
   navPush: func,
   delegate: object,
   notifications: list,
+  markNotifications: func,
   ways: map,
   goals: map,
 };
@@ -156,4 +166,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  markNotifications: actions.main.markNotifications,
 })(HOCOrgDashboard);

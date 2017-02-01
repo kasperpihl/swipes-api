@@ -2,7 +2,6 @@ import r from 'rethinkdb';
 import {
   string,
   object,
-  date,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -13,7 +12,7 @@ import {
 const dbNotificationsMarkAsSeen = funcWrap([
   object.as({
     user_id: string.require(),
-    timestamp: date.require(),
+    timestamp: string.format('iso8601').require(),
   }).require(),
 ], (err, { user_id, timestamp }) => {
   if (err) {

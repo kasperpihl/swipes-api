@@ -4,7 +4,6 @@ import hash from 'object-hash';
 import {
   string,
   object,
-  date,
 } from 'valjs';
 import {
   valLocals,
@@ -21,7 +20,7 @@ const {
 
 const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
   user_id: string.require(),
-  timestamp: date.require(),
+  timestamp: string.format('iso8601').require(),
 }, (req, res, next) => {
   const {
     user_id,

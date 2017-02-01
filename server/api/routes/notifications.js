@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  date,
+  string,
 } from 'valjs';
 import {
   notificationsMarkAsSeen,
@@ -15,7 +15,7 @@ const notAuthed = express.Router();
 
 authed.all('/notifications.markAsSeen',
   valBody({
-    timestamp: date.require(),
+    timestamp: string.format('iso8601').require(),
   }),
   notificationsMarkAsSeen,
   valResponseAndSend(),
