@@ -23,7 +23,7 @@
   	color: $deepBlue-80;
     position: relative;
     cursor: text;
-    word-break: break-all;
+    word-wrap: break-word;
   }
 
   &--checked {

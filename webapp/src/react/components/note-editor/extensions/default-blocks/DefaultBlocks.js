@@ -49,6 +49,7 @@ class DefaultBlocks {
         return true;
       }
     }
+
     return false;
   }
 }

@@ -20,6 +20,7 @@
 
     &__actions {
       @include size(auto, 36px);
+      @include flex(flex);
       margin-right: 18px;
     }
 

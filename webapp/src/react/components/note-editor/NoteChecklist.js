@@ -127,18 +127,16 @@ export default class ChecklistEditorBlock extends Component {
       const contentState = editorState.getCurrentContent();
       const prevBlock = contentState.getBlockBefore(startKey);
 
-      // If there's no previous block, then do nothing
       if (!prevBlock) return null;
 
       const prevKey = prevBlock.getKey();
       const prevLength = prevBlock.getLength();
 
-      // Move the focus offset to the end of the previous line
       let selectionChanges = {
         focusKey: prevKey,
         focusOffset: prevLength,
       };
-      // If the selection is collapsed, keep it collapsed by also moving the anchor
+
       if (selection.isCollapsed()) {
         selectionChanges = {
           ...selectionChanges,
@@ -148,11 +146,10 @@ export default class ChecklistEditorBlock extends Component {
       }
 
       const nextSelection = selection.merge(selectionChanges);
-
-      // Update the selection state.
       const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
 
       onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-end-of-prev-block'));
+
       return true;
     }
 
@@ -174,7 +171,7 @@ export default class ChecklistEditorBlock extends Component {
   }
 
   render() {
-    const { offsetKey, blockProps } = this.props;
+    const { blockProps } = this.props;
     const { checked } = blockProps;
 
     let className = 'ChecklistEditorBlock';
@@ -184,7 +181,7 @@ export default class ChecklistEditorBlock extends Component {
     }
 
     return (
-      <div className={className} data-offset-key={offsetKey}>
+      <div className={className}>
         <Checkbox checked={checked} onChange={this.toggleChecked} />
         <div className="ChecklistEditorBlock__text"><EditorBlock {...this.props} /></div>
       </div>
