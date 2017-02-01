@@ -20,7 +20,7 @@ const Attachment = (props) => {
   }
 
   if (enableFlagging) {
-    className += ' attachment--disabled';
+    className += ' attachment--flagable';
   }
 
   return (

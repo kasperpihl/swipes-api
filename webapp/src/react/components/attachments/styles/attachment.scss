@@ -11,15 +11,40 @@
     @include size(24px, 36px);
     padding: 6px 0;
     position: relative;
+    overflow: hidden;
     transition: .5s ease;
 
+    &:before {
+      content: 'x';
+      @include flex();
+      @include font(13px, $deepBlue-100, 24px);
+      padding-bottom: 2px;
+      position: absolute;
+      left: 0; top: 6;
+      @include size(24px);
+      background-color: $deepBlue-20;
+      border-radius: 3px;
+      opacity: 0;
+    }
+
     &:hover {
+      &:before {
+        content: 'x';
+        @include flex();
+        @include font(13px, $deepBlue-100, 24px);
+        padding-bottom: 2px;
+        position: absolute;
+        left: 0; top: 6;
+        @include size(24px);
+        background-color: $deepBlue-20;
+        border-radius: 3px;
+        opacity: 1;
+        transition: 0s;
+      }
+
       #{$b}__svg {
-        @include svg-color($yellow-color);
-        background-color: $bg;
-        border-color: $yellow-color;
-        transform: scale(1.2);
-        transition: .15s ease;
+        opacity: 0;
+        transition: 0s;
       }
     }
 
@@ -45,7 +70,7 @@
     border-radius: 3px;
     border: 1px solid $deepBlue-20;
     transform: scale(1);
-    transition: .15s ease;
+    transition: all .15s ease, opacity .2s ease;
   }
 
   &__title {
@@ -167,10 +192,23 @@
     }
   }
 
-  &--disabled {
-    #{$b}__icon {
-      pointer-events: none;
-    }
+  &--flagable {
+      #{$b}__icon:hover {
+        overflow: visible;
+
+        &:before {
+          opacity: 0;
+        }
+
+        #{$b}__svg {
+          @include svg-color($yellow-color);
+          background-color: $bg;
+          border-color: $yellow-color;
+          transform: scale(1.2);
+          opacity: 1;
+          transition: .15s ease;
+        }
+      }
   }
 }
 
