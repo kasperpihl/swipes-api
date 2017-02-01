@@ -15,7 +15,7 @@
 
   &__title {
     @include size(100%);
-    @include flex();
+    @include flex(center, flex-start);
     @include font(12px, $deepBlue-70, 18px, 500);
     white-space: nowrap;
     overflow: hidden;
@@ -30,23 +30,12 @@
     @include font(12px, $blue-100, 18px, 500);
     border-left: 1px solid $deepBlue-10;
     transition: .2s ease;
-    display: none;
 
     &:hover {
       @include font($c: $bg);
       border-color: $blue-100;
       background-color: $blue-100;
       transition: .2s ease;
-    }
-  }
-
-  &--with-button {
-    #{$b}__title {
-      @include flex(center, flex-start);
-    }
-
-    #{$b}__button {
-      display: flex;
     }
   }
 }
