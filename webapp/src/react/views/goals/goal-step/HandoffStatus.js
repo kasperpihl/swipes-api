@@ -1,11 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-
+import GoalsUtil from 'classes/goals-util';
 import './styles/handoff-status.scss';
 
 class HandoffStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
   }
   nameForUser(id) {
     const { users, me } = this.props;
@@ -21,31 +25,37 @@ class HandoffStatus extends Component {
 
     return name;
   }
-  namesFromAssignees(source) {
-    let assignees = '';
-    const numOfAssignees = source.assignees.length;
+  namesFromAssignees(assignees) {
+    let assigneeString = '';
+    const numOfAssignees = assignees.size;
 
     if (numOfAssignees > 0) {
-      assignees += `${this.nameForUser(source.assignees[0])}`;
+      assigneeString += `${this.nameForUser(assignees.get(0))}`;
     }
     if (numOfAssignees === 2) {
-      assignees += ` and ${this.nameForUser(source.assignees[1])}`;
+      assigneeString += ` and ${this.nameForUser(assignees.get(1))}`;
     }
     if (numOfAssignees > 2) {
-      assignees += ` and ${numOfAssignees - 1} others`;
+      assigneeString += ` and ${numOfAssignees - 1} others`;
     }
 
-    return assignees;
+    return assigneeString;
   }
   renderStatus() {
     const { toId, goal } = this.props;
+    const helper = this.getHelper();
+    const to = helper.getStepById(toId);
+    const toIndex = helper;
     let status = '';
 
     if (!to) {
-      status = 'Complete this step';
+      status = 'Complete this goal';
     } else {
-      const title = to.title.slice(to.title.indexOf(' ') + 1);
-      status = `Handoff step to ${this.namesFromAssignees(to)} for "${title}"`;
+      status = (
+        <span>
+          Handoff step to <b>{this.namesFromAssignees(to.get('assignees'))}</b> for "<b>{to.get('title')}</b>"
+        </span>
+      );
     }
 
     return status;
@@ -64,5 +74,5 @@ export default HandoffStatus;
 const { object } = PropTypes;
 
 HandoffStatus.propTypes = {
-  goal,
+  goal: object,
 };
