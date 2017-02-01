@@ -24,6 +24,7 @@ export default class OrgDashboard extends Component {
       const color = n.get('iconBgColor');
       return (
         <NotificationWrapper
+          unread={!n.get('seen')}
           key={`notif${i}`}
           svg={n.get('svg')}
           iconBgColor={color}
