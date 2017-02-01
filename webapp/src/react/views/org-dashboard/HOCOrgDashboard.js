@@ -21,6 +21,8 @@ class HOCOrgDashboard extends Component {
     this.callDelegate('viewDidLoad', this);
   }
   onMarkSeen() {
+    console.log('marking seen!');
+    return;
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
       const first = notifications.first();
@@ -147,7 +149,7 @@ class HOCOrgDashboard extends Component {
       notifications = notifications.map(n => this.messageForNotification(n));
     }
     return (
-      <OrgDashboard notifications={notifications} />
+      <OrgDashboard delegate={this} notifications={notifications} />
     );
   }
 }
