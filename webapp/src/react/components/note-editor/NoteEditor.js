@@ -144,10 +144,6 @@ class NoteEditor extends Component {
 
     styleControl = { show: false };
     this.setState({ styleControl });
-
-    setTimeout(() => {
-      this.refs.styleControl.hideStyleControls();
-    }, 0);
   }
   updateBlockMetadata(blockKey, metadata) {
     const { editorState } = this.props;

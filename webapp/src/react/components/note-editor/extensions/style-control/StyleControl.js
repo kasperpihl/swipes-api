@@ -5,6 +5,7 @@ import {
   Entity,
   Modifier,
   RichUtils,
+  SelectionState,
 } from 'draft-js';
 
 import { bindAll, setupDelegate } from 'classes/utils';
@@ -80,6 +81,7 @@ class StyleControl extends Component {
   }
   hide() {
     this.callDelegate('hideStyleControls');
+
     setTimeout(() => {
       const { editorState } = this.props;
       const selectionState = editorState.getSelection();
@@ -199,7 +201,32 @@ class StyleControl extends Component {
   }
   addLink() {
     const { input } = this.refs;
+    const { editorState, onChange } = this.props;
+
+
     if (input.value.length) {
+      const entityKey = Entity.create(
+        'LINK',
+        'MUTABLE',
+        { url: input.value },
+      );
+      const contentState = editorState.getCurrentContent();
+      const newContentState = Modifier.applyEntity(
+        contentState,
+        editorState.getSelection(),
+        entityKey,
+      );
+
+      let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
+
+      newEditorState = RichUtils.toggleLink(
+        newEditorState,
+        newEditorState.getSelection(),
+        entityKey,
+      );
+
+      onChange(newEditorState);
+
       this.hide();
     }
   }
