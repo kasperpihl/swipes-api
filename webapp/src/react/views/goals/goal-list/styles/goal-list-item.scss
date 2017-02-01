@@ -15,8 +15,18 @@ $imgContHeight: 54px;
   border-bottom: 1px solid $deepBlue-10;
 
   &:hover {
-    background-color: $blue-10;;
-    z-index: 2;
+    // background-color: $blue-10;;
+
+    #{$b}__title {
+      color: $blue-100;
+      transform: translateX(6px);
+      transition: .25s ease;
+    }
+
+    #{$b}__label {
+      transform: translateX(6px);
+      transition: .25s ease;
+    }
   }
 
   &__image {
@@ -36,21 +46,20 @@ $imgContHeight: 54px;
   }
 
   &__title {
+    @include font(15px, $deepBlue-80, 400);
     width: calc(100% - 50px);
-    color: $deepBlue-80;
-    font-size: 15px;
+    transition: .25s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   &__label {
+    @include font(12px, $deepBlue-40, 500);
     width: calc(100% - 50px);
-    color: $deepBlue-40;
-    font-size: 12px;
-    font-weight: 500;
     margin-top: 3px;
     letter-spacing: .5px;
+    transition: .25s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
