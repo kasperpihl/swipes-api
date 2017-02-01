@@ -40,12 +40,18 @@ export default class OrgDashboard extends Component {
       return undefined;
     }
     const numberOfUnreads = notifications.filter(n => n && !n.get('seen')).size;
-    if (!numberOfUnreads) {
-      return undefined;
+    let title = 'You have no unread notifications';
+    if (numberOfUnreads) {
+      title = `You have ${numberOfUnreads} unread notification`;
     }
-    let title = `You have ${numberOfUnreads} unread notification`;
     if (numberOfUnreads > 1) title += 's';
-    return <UnreadBar title={title} onClick={this.onClick} />;
+    return (
+      <UnreadBar
+        title={title}
+        showButton={!!numberOfUnreads}
+        onClick={this.onClick}
+      />
+    );
   }
   render() {
     return (
