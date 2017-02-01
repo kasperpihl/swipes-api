@@ -41,12 +41,11 @@ class HOCGoalStep extends Component {
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser', 'onChangeClick', 'getHeight']);
+    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser', 'onChangeClick']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
-    this.setState({ hasLoaded: true });
   }
   componentWillReceiveProps(nextProps) {
     const { goal, navPop } = this.props;
@@ -222,15 +221,6 @@ class HOCGoalStep extends Component {
       />
     );
   }
-  getHeight(dim) {
-    const { handoffWriteMessageH } = this.state;
-
-    if (!handoffWriteMessageH) {
-      this.setState({ handoffWriteMessageH: dim.height, tranTime: '0s' });
-    } else {
-      this.setState({ handoffWriteMessageH: dim.height, tranTime: '.4s' });
-    }
-  }
   renderHandoffWriteMessage() {
     const { me } = this.props;
     const { handoffText, isHandingOff } = this.state;
@@ -243,7 +233,16 @@ class HOCGoalStep extends Component {
     const src = me.get('profile_pic');
 
     return (
-      <Measure onMeasure={this.getHeight}>
+      <Measure
+        onMeasure={(dim) => {
+          this.setState({ handoffWriteMessageH: dim.height });
+          if (!this.state.hasLoaded) {
+            setTimeout(() => {
+              this.setState({ hasLoaded: true });
+            }, 1);
+          }
+        }}
+      >
         <Section title="Write handoff" className={className}>
           <HandoffWriteMessage
             ref="handoffWriteMessageTextarea"
@@ -342,22 +341,26 @@ class HOCGoalStep extends Component {
     );
   }
   renderActions() {
-    const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH, tranTime } = this.state;
+    const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH, hasLoaded } = this.state;
     const { users, me, goal } = this.props;
     const helper = this.getHelper();
     const style = {};
+    let className = '';
 
     if (!helper.getCurrentStep()) {
       return undefined;
     }
 
+    if (!hasLoaded) {
+      className = 'no-animation';
+    }
+
     if (!isHandingOff && handoffWriteMessageH) {
       style.marginTop = -1 * handoffWriteMessageH;
-      style.transition = `margin-top ${tranTime} ease-in, opacity .4s ease`;
     }
 
     return (
-      <Section style={style}>
+      <Section style={style} className={className}>
         <GoalActions
           onCancel={this.onCancel}
           onHandoff={this.onHandoff}
@@ -382,15 +385,12 @@ class HOCGoalStep extends Component {
     );
   }
   render() {
-    const { isHandingOff, hasLoaded } = this.state;
+    const { isHandingOff } = this.state;
     const { goal } = this.props;
 
     let className = 'goal-step';
     if (!goal) {
       return <div className={className} />;
-    }
-    if (!hasLoaded) {
-      className += ' no-animation';
     }
 
     if (isHandingOff) {
