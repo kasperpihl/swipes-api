@@ -13,7 +13,7 @@ class HOCAttachments extends Component {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
-    this.onFlagCached = setupCachedCallback(this.onFlag, this);
+    this.onIconClickCached = setupCachedCallback(this.onIconClick, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
@@ -30,8 +30,21 @@ class HOCAttachments extends Component {
     } = this.props;
     previewLink(attachments.get(id));
   }
-  onFlag(id) {
-    this.callDelegate('onFlag', id);
+  onIconClick(id) {
+    const {
+      enableFlagging,
+      goalId,
+      removeFromCollection,
+    } = this.props;
+    if (enableFlagging) {
+      this.callDelegate('onFlag', id);
+    } else {
+      if (goalId) {
+        removeFromCollection(goalId, id).then(() => {
+        });
+      }
+      this.callDelegate('onRemoveAttachment', id);
+    }
   }
   onAdd(which, e) {
     const {
@@ -127,7 +140,7 @@ class HOCAttachments extends Component {
           <Attachment
             key={aId}
             flagged={(flags.indexOf(aId) !== -1)}
-            onClickIcon={this.onFlagCached(aId)}
+            onClickIcon={this.onIconClickCached(aId)}
             onClickText={this.onPreviewCached(aId)}
             icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
             title={a.get('title')}
@@ -219,6 +232,7 @@ export default connect(mapStateToProps, {
   addNote: actions.links.addNote,
   addToasty: actions.toasty.add,
   addToCollection: actions.goals.addToCollection,
+  removeFromCollection: actions.goals.removeFromCollection,
   addURL: actions.links.addURL,
   openFind: actions.links.openFind,
   previewLink: actions.links.preview,

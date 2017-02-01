@@ -1,18 +1,45 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import { List, Map } from 'immutable';
+import * as c from 'constants';
 import * as a from './';
+
+
+export const removeFromCollection = (goalId, id) => (d, getState) => {
+  let attachments = getState().getIn(['goals', goalId, 'attachments']);
+  if (!attachments) {
+    attachments = Map();
+  }
+  attachments = attachments.delete(id).toJS();
+  let attachmentOrder = getState().getIn(['goals', goalId, 'attachment_order']);
+  if (!attachmentOrder) {
+    attachmentOrder = List();
+  }
+  attachmentOrder = attachmentOrder.filter(at => at !== id).toJS();
+
+  const goal = {
+    attachments,
+    id: goalId,
+    attachment_order: attachmentOrder,
+  };
+  d({ type: 'goal_updated', payload: { data: goal } });
+  return d(a.api.request('goals.update', {
+    goal_id: goalId,
+    goal,
+  }));
+};
 
 export const addToCollection = (goalId, content) => (d, getState) => {
   let attachments = getState().getIn(['goals', goalId, 'attachments']);
   if (!attachments) {
     attachments = Map();
   }
-  attachments = attachments.set(content.id, content).toJS();
+
+  attachments = attachments.set(content.shortUrl, content).toJS();
   let attachmentOrder = getState().getIn(['goals', goalId, 'attachment_order']);
   if (!attachmentOrder) {
     attachmentOrder = List();
   }
-  attachmentOrder = attachmentOrder.push(content.id).toJS();
+  attachmentOrder = attachmentOrder.push(content.shortUrl).toJS();
 
   return d(a.api.request('goals.update', {
     goal_id: goalId,

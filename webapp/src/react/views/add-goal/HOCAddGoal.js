@@ -143,6 +143,12 @@ class HOCAddGoal extends Component {
       })));
     }
   }
+  onRemoveAttachment(id) {
+    let { attachments, attachmentOrder } = this.state;
+    attachments = attachments.delete(id);
+    attachmentOrder = attachmentOrder.filter(a => a !== id);
+    this.updateState({ attachments, attachmentOrder });
+  }
   clickedAssign(e, id) {
     const { selectAssignees } = this.props;
     const { steps, stepOrder } = this.state;
