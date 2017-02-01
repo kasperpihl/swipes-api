@@ -79,7 +79,7 @@ export default class ChecklistEditorBlock extends Component {
       const nextSelection = selection.merge(selectionChanges);
       const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
 
-      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-prev-block'));
+      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-next-block'));
 
       return true;
     }
