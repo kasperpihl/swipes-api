@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
+import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
-import ReactTextarea from 'react-textarea-autosize';
 import Button from 'Button';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
@@ -143,7 +143,7 @@ class HOCAddGoal extends Component {
     }
   }
   clickedAssign(e, id) {
-    const { assignModal, selectAssignees } = this.props;
+    const { selectAssignees } = this.props;
     const { steps, stepOrder } = this.state;
     const i = stepOrder.findKey(v => v === id);
     return selectAssignees({
@@ -228,6 +228,18 @@ class HOCAddGoal extends Component {
       navPop();
     });
   }
+  getStatus() {
+    const { steps, title } = this.state;
+    let status;
+
+    if (!title || !title.length) {
+      status = 'Please write a title for your goal';
+    } else if (!steps.size) {
+      status = 'Each goal must have at least one step.';
+    }
+
+    return status;
+  }
   renderSteps() {
     const { steps, stepOrder } = this.state;
     return (
@@ -274,18 +286,7 @@ class HOCAddGoal extends Component {
       />
     );
   }
-  getStatus() {
-    const { steps, title } = this.state;
-    let status;
 
-    if (!title || !title.length) {
-      status = 'Please write a title for your goal';
-    } else if (!steps.size) {
-      status = 'Each goal must have at least one step.';
-    }
-
-    return status;
-  }
 
   renderActions() {
     const status = this.getStatus();
@@ -348,11 +349,23 @@ class HOCAddGoal extends Component {
   }
 }
 
-const { func, object } = PropTypes;
+const { func, object, string } = PropTypes;
 
 HOCAddGoal.propTypes = {
   delegate: object,
-  assignModal: func,
+  addToasty: func,
+  updateToasty: func,
+  navPop: func,
+  removeCache: func,
+  request: func,
+  organization_id: string,
+  saveCache: func,
+  loadWay: func,
+  saveWay: func,
+  selectAssignees: func,
+  cache: map,
+
+  me: map,
 };
 
 function mapStateToProps(state) {
@@ -364,7 +377,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  assignModal: actions.modal.assign,
   selectAssignees: actions.goals.selectAssignees,
   saveCache: actions.main.cache.save,
   removeCache: actions.main.cache.remove,

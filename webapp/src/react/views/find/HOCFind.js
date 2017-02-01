@@ -37,7 +37,7 @@ class HOCFind extends Component {
     const obj = searchResults.get(i);
     if (obj && actionCallback) {
       const { service, permission, title } = obj.toJS();
-      actionCallback(service, permission, { title });
+      actionCallback({ service, permission, meta: { title } });
     }
   }
   findSearch(query) {
@@ -76,7 +76,6 @@ class HOCFind extends Component {
     );
   }
   render() {
-    console.log('hello');
     return (
       <div className="find-container">
         {this.renderBrowse()}
@@ -89,14 +88,13 @@ class HOCFind extends Component {
 const { func, bool, string } = PropTypes;
 
 HOCFind.propTypes = {
-  request: func,
-  actionLabel: string,
   actionCallback: func,
-  loadModal: func,
+  actionLabel: string,
+  preview: func,
   search: func,
-  searchResults: list,
   searching: bool,
   searchQuery: string,
+  searchResults: list,
 };
 
 function mapStateToProps(state) {
@@ -108,9 +106,9 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCFind = connect(mapStateToProps, {
-  search: actions.main.search,
-  request: actions.api.request,
   loadModal: actions.modal.load,
   preview: actions.main.preview,
+  request: actions.api.request,
+  search: actions.main.search,
 })(HOCFind);
 export default ConnectedHOCFind;

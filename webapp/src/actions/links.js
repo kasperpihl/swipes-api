@@ -96,9 +96,9 @@ export const openFind = callback => d => d(a.navigation.push('primary', {
   title: 'Find',
   props: {
     actionLabel: 'Attach to Goal',
-    actionCallback: (service, permission, meta) => {
+    actionCallback: (linkObj) => {
       callback('start', 'find');
-      d(addLinkAndCallback('find', { service, permission, meta }, callback));
+      d(addLinkAndCallback('find', linkObj, callback));
     },
   },
 }));

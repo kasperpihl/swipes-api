@@ -12,12 +12,13 @@ const NotificationWrapper = (props) => {
   } = props;
   const style = {};
   if (iconBgColor) {
-    style.backgroundColor = iconBgColor;
+    style.fill = iconBgColor;
+    style.stroke = iconBgColor;
   }
   return (
     <div className="notification" onClick={onClick}>
-      <div className="notification__icon" style={style}>
-        <Icon svg={svg} className="notification__svg" />
+      <div className="notification__icon" >
+        <Icon svg={svg} style={style} className="notification__svg" />
       </div>
       <div className="notification__message">
         {message}
