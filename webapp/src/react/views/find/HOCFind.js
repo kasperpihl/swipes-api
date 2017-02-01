@@ -39,7 +39,6 @@ class HOCFind extends Component {
       const { service, permission, title } = obj.toJS();
       actionCallback(service, permission, { title });
     }
-    console.log(obj.toJS());
   }
   findSearch(query) {
     const { search } = this.props;

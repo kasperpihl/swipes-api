@@ -32,6 +32,7 @@ class HOCGoalStep extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hasLoaded: false,
       isHandingOff: false,
       isSubmitting: false,
       flags: [],
@@ -45,6 +46,7 @@ class HOCGoalStep extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+    this.setState({ hasLoaded: true });
   }
   componentWillReceiveProps(nextProps) {
     const { goal, navPop } = this.props;
@@ -141,13 +143,6 @@ class HOCGoalStep extends Component {
   }
   onHandoffChange(handoffText) {
     this.setState({ handoffText });
-  }
-  onAddAttachment(obj) {
-    const {
-      addToCollection,
-      goal,
-    } = this.props;
-    addToCollection(goal.get('id'), obj);
   }
   onOpenUser(id) {
     const { openSlackIn, navigateToId } = this.props;
@@ -387,12 +382,15 @@ class HOCGoalStep extends Component {
     );
   }
   render() {
-    const { isHandingOff } = this.state;
+    const { isHandingOff, hasLoaded } = this.state;
     const { goal } = this.props;
 
     let className = 'goal-step';
     if (!goal) {
       return <div className={className} />;
+    }
+    if (!hasLoaded) {
+      className += ' no-animation';
     }
 
     if (isHandingOff) {

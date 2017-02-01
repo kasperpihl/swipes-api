@@ -61,6 +61,7 @@ class HOCAddGoal extends Component {
   componentWillUnmount() {
     const { saveCache } = this.props;
     saveCache('add-goal', fromJS(this.state));
+    this._unmounted = true;
   }
   updateState(newState) {
     this.setState(newState);
@@ -131,7 +132,15 @@ class HOCAddGoal extends Component {
     let { attachments, attachmentOrder } = this.state;
     attachments = attachments.set(obj.shortUrl, fromJS(obj));
     attachmentOrder = attachmentOrder.push(obj.shortUrl);
-    this.updateState({ attachments, attachmentOrder });
+    if (!this._unmounted) {
+      this.updateState({ attachments, attachmentOrder });
+    } else {
+      const { saveCache } = this.props;
+      saveCache('add-goal', fromJS(Object.assign({}, this.state, {
+        attachments,
+        attachmentOrder,
+      })));
+    }
   }
   clickedAssign(e, id) {
     const { assignModal, selectAssignees } = this.props;

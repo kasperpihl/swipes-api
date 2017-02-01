@@ -14,16 +14,14 @@ export const addToCollection = (goalId, content) => (d, getState) => {
   }
   attachmentOrder = attachmentOrder.push(content.id).toJS();
 
-  d(a.api.request('goals.update', {
+  return d(a.api.request('goals.update', {
     goal_id: goalId,
     goal: {
       attachments,
       id: goalId,
       attachment_order: attachmentOrder,
     },
-  })).then((res) => {
-    console.log('ressy', res);
-  });
+  }));
 };
 
 export const archive = goalId => (d) => {

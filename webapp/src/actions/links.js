@@ -5,17 +5,17 @@ import InputMenu from 'context-menus/input-menu/InputMenu';
 // ======================================================
 // Call links.create and pass back obj in form of attachment
 // ======================================================
-const addLinkAndCallback = (linkObj, callback) => (d) => {
-  d(a.api.request('links.create', linkObj)).then((res) => {
-    if (res && res.ok && callback) {
-      callback({
-        shortUrl: res.short_url,
-        title: linkObj.meta.title,
-        ...linkObj.service,
-      });
-    }
-  });
-};
+export const addLinkAndCallback = (ty, lO, cb) => d => d(a.api.request('links.create', lO)).then((res) => {
+  if (res && res.ok && cb) {
+    cb('ready', ty, {
+      shortUrl: res.short_url,
+      title: lO.meta.title,
+      ...lO.service,
+    });
+  } else if (cb) {
+    cb('error', ty, res);
+  }
+});
 
 // ======================================================
 // Open up input menu for writing a title
@@ -48,11 +48,12 @@ const getSwipesLinkObj = title => (d, getState) => {
 // ======================================================
 // Adding a note (open context menu and then add)
 // ======================================================
-export const addNote = (options, callback) => (d, getState) => {
+export const addNote = (options, cb) => (d, getState) => {
   d(inputMenu(options, {
     placeholder: 'Enter note title',
     buttonLabel: 'Add',
     onResult: (title) => {
+      cb('start', 'note');
       const state = getState();
       const orgId = state.getIn(['me', 'organizations', 0, 'id']);
       d(a.main.note.create(orgId, title)).then((res) => {
@@ -60,8 +61,9 @@ export const addNote = (options, callback) => (d, getState) => {
           const linkObj = d(getSwipesLinkObj(title));
           linkObj.service.type = 'note';
           linkObj.service.id = res.id;
-          d(a.main.note.show(res.id));
-          d(addLinkAndCallback(linkObj, callback));
+          d(addLinkAndCallback('note', linkObj, cb));
+        } else if (cb) {
+          cb('error', 'note', res);
         }
       });
     },
@@ -76,10 +78,11 @@ export const addURL = (options, callback) => (d) => {
     placeholder: 'Enter a URL',
     buttonLabel: 'Add',
     onResult: (url) => {
+      callback('start', 'url');
       const linkObj = d(getSwipesLinkObj(url));
       linkObj.service.type = 'url';
       linkObj.service.id = url;
-      d(addLinkAndCallback(linkObj, callback));
+      d(addLinkAndCallback('url', linkObj, callback));
     },
   }));
 };
@@ -87,22 +90,15 @@ export const addURL = (options, callback) => (d) => {
 // ======================================================
 // Open find (and then add)
 // ======================================================
-export const openFind = callback => d => d(a.navigation.push(true, {
+export const openFind = callback => d => d(a.navigation.push('primary', {
   component: 'Find',
   placeholder: 'Search across Dropbox, Asana, Slack...',
   title: 'Find',
   props: {
     actionLabel: 'Attach to Goal',
     actionCallback: (service, permission, meta) => {
-      if (typeof callback === 'string') {
-        const goalId = callback;
-
-        callback = (link) => {
-          console.log(goalId, link);
-          d(a.goals.addToCollection(goalId, link));
-        };
-      }
-      d(addLinkAndCallback({ service, permission, meta }, callback));
+      callback('start', 'find');
+      d(addLinkAndCallback('find', { service, permission, meta }, callback));
     },
   },
 }));
@@ -121,7 +117,7 @@ export const addMenu = (options, callback) => (d) => {
         } else if (type === 'url') {
           d(addURL(options, callback));
         } else if (type === 'find') {
-          d(openFind(options.goalId || callback));
+          d(openFind(callback));
         }
       },
     },

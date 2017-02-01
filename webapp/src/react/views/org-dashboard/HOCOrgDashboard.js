@@ -19,13 +19,16 @@ class HOCOrgDashboard extends Component {
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+  }
+  onMarkSeen() {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
       const first = notifications.first();
-      console.log(first.toJS());
-      markNotifications(first.get('ts')).then((res) => {
-        console.log('lalala', res);
-      });
+      if (!first.get('seen')) {
+        markNotifications(first.get('ts')).then((res) => {
+          // console.log('lalala', res);
+        });
+      }
     }
   }
   onClick(id, type) {

@@ -21,6 +21,7 @@ class HOCAttachments extends Component {
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
+    this._unmounted = true;
   }
   onPreview(id) {
     const {
@@ -35,9 +36,13 @@ class HOCAttachments extends Component {
   onAdd(which, e) {
     const {
       addLinkMenu,
+      addToCollection,
       addNote,
+      addToasty,
+      updateToasty,
       addURL,
       goalId,
+      showNote,
       openFind,
     } = this.props;
     const options = {
@@ -46,12 +51,47 @@ class HOCAttachments extends Component {
       alignX: 'center',
       goalId,
     };
-    const callback = (obj) => {
-      this.callDelegate('onAddAttachment', obj);
-      this.setState({ loading: true });
-      this._timer = setTimeout(() => {
-        this.setState({ loading: false });
-      }, 1000);
+    let toastId;
+    const callback = (progress, type, obj) => {
+      if (progress === 'start') {
+        if (!this._unmounted) {
+          this.setState({ loading: true });
+        }
+        if (type === 'find') {
+          addToasty({ title: 'Adding Attachment', loading: true }).then((tId) => {
+            toastId = tId;
+          });
+        }
+      }
+      if (progress === 'ready') {
+        const succCB = () => {
+          if (!this._unmounted) {
+            this.setState({ loading: false });
+          }
+          if (type === 'find' && toastId) {
+            updateToasty(toastId, { title: 'Added Attachment', completed: true, duration: 3000 });
+          }
+          if (type === 'note' && obj.id) {
+            showNote(obj.id);
+          }
+        };
+        if (goalId) {
+          addToCollection(goalId, obj).then(() => {
+            succCB();
+          });
+        } else {
+          succCB();
+          this.callDelegate('onAddAttachment', obj);
+        }
+      }
+      if (progress === 'error') {
+        if (!this._unmounted) {
+          this.setState({ loading: false });
+        }
+        if (type === 'find' && toastId) {
+          updateToasty(toastId, { title: 'Error adding attachment', loading: false, duration: 3000 });
+        }
+      }
     };
 
     switch (which) {
@@ -60,7 +100,7 @@ class HOCAttachments extends Component {
       case 'note':
         return addNote(options, callback);
       case 'find':
-        return openFind(goalId || callback);
+        return openFind(callback);
       default: {
         return addLinkMenu(options, callback);
       }
@@ -152,18 +192,22 @@ class HOCAttachments extends Component {
 
 const { func, object, bool, string } = PropTypes;
 HOCAttachments.propTypes = {
-  flags: list,
-  attachments: map,
-  goalId: string,
-  attachmentOrder: list,
-  disableAdd: bool,
-  disableFlagging: bool,
   addLinkMenu: func,
   addNote: func,
+  addToasty: func,
+  addToCollection: func,
   addURL: func,
-  openFind: func,
+  attachmentOrder: list,
+  attachments: map,
   delegate: object,
+  disableAdd: bool,
+  disableFlagging: bool,
+  flags: list,
+  goalId: string,
+  openFind: func,
   previewLink: func,
+  showNote: func,
+  updateToasty: func,
 };
 
 function mapStateToProps() {
@@ -172,8 +216,12 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   addLinkMenu: actions.links.addMenu,
+  addNote: actions.links.addNote,
+  addToasty: actions.toasty.add,
+  addToCollection: actions.goals.addToCollection,
   addURL: actions.links.addURL,
   openFind: actions.links.openFind,
-  addNote: actions.links.addNote,
   previewLink: actions.links.preview,
+  showNote: actions.main.note.show,
+  updateToasty: actions.toasty.update,
 })(HOCAttachments);
