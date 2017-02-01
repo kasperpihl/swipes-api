@@ -54,9 +54,16 @@
     @include size(6px);
     background-color: $green-color;
     border-radius: 100%;
-    margin-left: 12px;
-    margin-top: 12px;
+    margin-right: 15px;
+    margin-top: 45px;
     transition: .1s;
+
+    &:before {
+      content: attr(data-status);
+      position: absolute;
+      right: -30px; top: 15px;
+      transform: translateX(-100%);
+    }
 
     &--active-editing {
       background-color: $blue-100;

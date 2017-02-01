@@ -189,8 +189,7 @@ class HOCSideNote extends Component {
             </div>
           </div>
         </div>
-        {message}
-        <div className={dotClass} />
+        <div className={dotClass} data-status={message} />
       </div>
     );
   }
