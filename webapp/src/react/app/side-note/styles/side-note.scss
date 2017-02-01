@@ -18,8 +18,15 @@
     font-size: 12px;
     padding-bottom: 103px;
     padding-right: 15px;
-    border-bottom: 1px solid $deepBlue-10;
+    position: relative;
 
+    &:after {
+      @include size(calc(100% - 66px), 1px);
+      content: '';
+      position: absolute;
+      left: 33px; bottom: 0;
+      background-color: $deepBlue-10;
+    }
   }
 
   &__btn-title {
