@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { bindAll, setupCachedCallback } from 'classes/utils';
+import Icon from 'Icon';
 import Button from 'Button';
 import Loader from 'components/swipes-ui/Loader';
 import Section from 'components/section/Section';
@@ -39,15 +40,23 @@ class HOCPreviewModal extends Component {
   }
   renderButtons() {
     const { preview } = this.props;
-    let { elements, file, buttons, loading } = preview || {};
-
-    if (!elements && !file) {
-      return undefined;
-    }
-
+    let { buttons } = preview || {};
 
     if (!buttons) {
       buttons = [];
+    }
+
+    if (this._noPreview) {
+      return (
+        <div className="header__actions">
+          <Button
+            icon="Close"
+            title="close"
+            className="header__btn"
+            onClick={this.onClose}
+          />
+        </div>
+      );
     }
 
     return (
@@ -77,6 +86,7 @@ class HOCPreviewModal extends Component {
     );
   }
   renderFile(file) {
+    this._noPreview = false;
     if (!file) {
       return undefined;
     }
@@ -91,6 +101,7 @@ class HOCPreviewModal extends Component {
     });
 
     if (!Comp) {
+      this._noPreview = true;
       console.warn(`Unsupported preview file type: ${file.content_type}`);
       return undefined;
     }
@@ -138,6 +149,35 @@ class HOCPreviewModal extends Component {
       </div>
     );
   }
+  renderNoPreview() {
+    const { preview } = this.props;
+    const { buttons, loading } = preview || {};
+
+    if (!this._noPreview || loading) {
+      return undefined;
+    }
+
+    const buttonsHtml = buttons.map((b, i) => (
+      <div className="preview-modal__button" onClick={this.onClickButtonCached(i)} key={`no-prev-btn-${i}`}>
+        <Icon svg={b.icon} className="preview-modal__svg" />
+        {b.title}
+      </div>
+      ));
+
+    return (
+      <div className="preview-modal__no-preview">
+        <div className="preview-modal__title" />
+        <div className="preview-modal__actions">
+          {buttonsHtml}
+          <div className="preview-modal__attach">
+            <div className="preview-modal__button preview-modal__button--attach" onClick={this.onAttach}>
+              Attach to Goal
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   render() {
     const { preview } = this.props;
     const { elements, file, buttons, loading } = preview || {};
@@ -146,15 +186,19 @@ class HOCPreviewModal extends Component {
     if (preview) {
       className += ' preview-modal--shown';
     }
+    // HACK: This need to be run before renderButtons to determine if we support the preview
+    // Check this._noPreview
+    const renderedFile = this.renderFile(file);
 
     return (
       <div className={className}>
         <div className="header">
           {this.renderButtons(buttons)}
         </div>
-        {this.renderFile(file)}
+        {renderedFile}
         {this.renderElements(elements, !!file)}
         {this.renderLoader(loading)}
+        {this.renderNoPreview()}
       </div>
     );
   }
