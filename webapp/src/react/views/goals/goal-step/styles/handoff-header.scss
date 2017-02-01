@@ -32,7 +32,7 @@
     }
 
     &--right {
-      padding-left: 45px;
+      padding-left: 27px;
       opacity: 0;
       transform: translateX(-10px);
       transition: .3s ease;
@@ -100,11 +100,15 @@
 
   &__title {
     @include size(100%, auto);
-    @include font(21px, $deepBlue-100, 24px);
+    @include font(18px, $deepBlue-100, 24px);
     max-width: 450px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding-right: 3px;
+
+    &:not(:first-line) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__button {
