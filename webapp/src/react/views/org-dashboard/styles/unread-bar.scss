@@ -28,6 +28,7 @@
     @include flex();
     @include flex(none);
     @include font(12px, $blue-100, 18px, 500);
+    @include border-radius(0, 3px, 0, 3px);
     border-left: 1px solid $deepBlue-10;
     transition: .2s ease;
 
