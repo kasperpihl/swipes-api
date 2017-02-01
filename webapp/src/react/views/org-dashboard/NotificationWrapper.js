@@ -24,7 +24,7 @@ const NotificationWrapper = (props) => {
   }
 
   return (
-    <div className="notification" onClick={onClick}>
+    <div className={className} onClick={onClick}>
       <div className="notification__icon" >
         <Icon svg={svg} style={style} className="notification__svg" />
       </div>
