@@ -30,9 +30,10 @@ class HOCPreviewModal extends Component {
   }
   onClickButton(i, e) {
     const { buttons } = this.props.preview;
-    const { browser } = this.props;
+    const { browser, closePreview } = this.props;
     const button = buttons[i];
     if (button.url) {
+      closePreview();
       browser(button.url);
     }
 
