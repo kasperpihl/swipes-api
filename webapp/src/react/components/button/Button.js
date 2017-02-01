@@ -69,6 +69,7 @@ class Button extends Component {
       small,
       alignIcon,
       frameless,
+      tabIndex: tabIndexProps,
       loading: lol,
       className: classNameFromButton,
       ...rest
@@ -100,6 +101,10 @@ class Button extends Component {
     if (disabled) {
       className += ' g-button--disabled';
       tabIndex.tabIndex = '-1';
+    }
+
+    if (tabIndexProps) {
+      tabIndex.tabIndex = tabIndexProps;
     }
 
     if (loading) {

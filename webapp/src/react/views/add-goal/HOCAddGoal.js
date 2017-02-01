@@ -29,6 +29,7 @@ class HOCAddGoal extends Component {
       component: 'Button',
       props: {
         text: 'Load a Way',
+        tabIndex: -1,
       },
     }];
   }
