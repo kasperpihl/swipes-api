@@ -70,7 +70,7 @@ class HandoffStatus extends Component {
           {moveString}
           <b>{this.namesFromAssignees(to.get('assignees'))}</b>
           {' for '}
-          "<b onClick={onChangeStep}>{to.get('title')}</b>"
+          <b onClick={onChangeStep}>"{to.get('title')}"</b>
         </span>
       );
     }

@@ -9,6 +9,16 @@
   &__status {
     @include size(100%, auto);
     @include font(12px, $deepBlue-60, 18px);
+  
+    b {
+      @include font($c: $blue-100, $fw: 500);
+      text-decoration: none;
+      display: inline-block;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   &__cancel {

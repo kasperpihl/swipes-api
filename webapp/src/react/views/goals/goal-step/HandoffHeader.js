@@ -80,7 +80,6 @@ class HandoffHeader extends Component {
       <div className={className}>
         <div className="handoff-header__top">
           <div className="handoff-header__title">{to.title}</div>
-          <button className="handoff-header__button" onClick={this.handleClick}>change</button>
           {this.renderAssignees(to.assignees)}
         </div>
         <div className="handoff-header__subtitle">{to.subtitle}</div>

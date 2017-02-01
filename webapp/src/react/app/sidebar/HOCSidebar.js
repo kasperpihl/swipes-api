@@ -71,7 +71,7 @@ class HOCSidebar extends Component {
       { id: 'milestones', svg: 'Milestones' },
       { id: 'dashboard', svg: 'Notification' },
       { id: 'find', svg: 'Find' },
-      { id: 'slack', svg: 'SlackLogo' },
+      { id: 'slack', svg: 'Hashtag' },
       { id: 'store', svg: 'Store' },
     ].map(o => this.renderItem(o));
   }

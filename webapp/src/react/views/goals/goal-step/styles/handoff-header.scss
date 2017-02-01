@@ -48,19 +48,19 @@
 
       &:before {
         @include size(1px, 100%);
-        transition: .3s .3s ease;
+        transition: .3s ease;
       }
 
       #{$b}__seperator:before {
         transform: translateX(50%) rotate(45deg);
-        transition: .3s .7s ease;
+        transition: .3s .3s ease;
       }
     }
 
     &--active-right {
       opacity: 1;
       transform: translateX(0);
-      transition: .3s .7s ease;
+      transition: .3s .3s ease;
     }
   }
 
