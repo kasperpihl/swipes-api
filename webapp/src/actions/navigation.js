@@ -54,7 +54,6 @@ export function navigateToId(target, navId) {
       target,
     };
     if (navId) {
-      console.log('target', target);
       const state = getState();
       let history = state.getIn(['navigation', target, 'history', navId]);
       const currentId = state.getIn(['navigation', target, 'id']);

@@ -26,7 +26,6 @@ export default function history(state = initialState, action) {
       });
     }
     case types.NAVIGATION_PUSH: {
-      console.log(payload.target);
       const currentId = state.getIn([payload.target, 'id']);
       return state.updateIn([payload.target, 'history', currentId], (s) => {
         const { savedState } = payload;

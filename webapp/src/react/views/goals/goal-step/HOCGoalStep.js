@@ -40,7 +40,7 @@ class HOCGoalStep extends Component {
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser', 'onChangeClick']);
+    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser', 'onChangeClick', 'getHeight']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
@@ -227,23 +227,28 @@ class HOCGoalStep extends Component {
       />
     );
   }
+  getHeight(dim) {
+    const { handoffWriteMessageH } = this.state;
+
+    if (!handoffWriteMessageH) {
+      this.setState({ handoffWriteMessageH: dim.height, tranTime: '0s' });
+    } else {
+      this.setState({ handoffWriteMessageH: dim.height, tranTime: '.4s' });
+    }
+  }
   renderHandoffWriteMessage() {
     const { me } = this.props;
     const { handoffText, isHandingOff } = this.state;
-    let className = 'section--show';
+    let className = 'section--hidden';
 
-    if (!isHandingOff) {
-      className = 'section--hidden';
+    if (isHandingOff) {
+      className = 'section--show';
     }
 
     const src = me.get('profile_pic');
 
     return (
-      <Measure
-        onMeasure={(dim) => {
-          this.setState({ handoffWriteMessageH: dim.height });
-        }}
-      >
+      <Measure onMeasure={this.getHeight}>
         <Section title="Write handoff" className={className}>
           <HandoffWriteMessage
             ref="handoffWriteMessageTextarea"
@@ -342,7 +347,7 @@ class HOCGoalStep extends Component {
     );
   }
   renderActions() {
-    const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH } = this.state;
+    const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH, tranTime } = this.state;
     const { users, me, goal } = this.props;
     const helper = this.getHelper();
     const style = {};
@@ -353,6 +358,7 @@ class HOCGoalStep extends Component {
 
     if (!isHandingOff && handoffWriteMessageH) {
       style.marginTop = -1 * handoffWriteMessageH;
+      style.transition = `margin-top ${tranTime} ease-in, opacity .4s ease`;
     }
 
     return (
