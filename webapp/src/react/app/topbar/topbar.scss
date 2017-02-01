@@ -2,109 +2,41 @@
 @import "~styles/_mixins.scss";
 
 $topbarSize: 38px;
+
 .topbar {
   $b: &;
   @include size(100%, $topbarSize);
-  @include flex(center, space-between);
   position: relative;
   user-select: none;
   z-index: 9999;
   flex: none;
   -webkit-app-region: drag;
+  overflow: hidden;
 
-  &__icon {
-    @include size(24px);
-    fill: white;
-    stroke: white;
-  }
+  &__gradient {
+    @include size(100%);
 
-  &__nav {
-    @include flex()
-    position: relative;
-    padding-left: 21px;
+    &--main {
 
-    &__back {
-      @include size(30px);
+    }
+
+    &--status {
+      background-color: $bg;
       @include flex();
-      // margin-left: 5px;
-      border-radius: 50%;
-
-      #{$b}__icon {
-        transform: translateX(-1px);
-      }
-
-      &:hover {
-        background-color: rgba(white, .3);
-      }
+      position: absolute;
+      left: 0; top: 0;
+      transform: translateX(100%);
+      transition: .2s ease;
     }
 
-    &__crumbs {
-      @include flex(flex);
-    }
-
-    &__crumb {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: white;
-      line-height: 1;
-      padding: 0 15px;
-      position: relative;
-
-      &:not(:last-child):hover {
-        text-decoration: underline;
-      }
-
-      &:not(:last-child):after {
-        content: ">";
-        position: absolute;
-        right: -5px; top: 0;
-        color: rgba(white, .5)
-      }
-    }
-  }
-
-  &__profile {
-    @include size(54px);
-    @include flex()
-
-    img {
-      @include size(30px);
-      border-radius: 50%;
+    &--indicate {
+      transform: translateX(0%);
+      transition: .2s ease;
     }
   }
 
   &__title {
-    @include flex(center, flex-start);
-    @include size(100%, $topbarSize);
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 2.6px;
-    padding: 0 30px;
-    padding-left: 15px;
-    text-transform: uppercase;
-    color: white;
-  }
-
-  &__actions {
-    @include size(auto, $topbarSize);
-    @include flex();
-  }
-
-  &__button {
-    @include size(30px);
-    @include flex();
-    background-color: rgba(white,.2);
-    border-radius: 50%;
-    margin-right: 12px;
-
-    &:hover {
-      background-color: rgba(white,.4);
-    }
-
-    &--find {
-      @include size(12px);
-      fill: white;
-    }
+    line-height: $topbarSize;
+    color: $deepBlue-100;
   }
 }

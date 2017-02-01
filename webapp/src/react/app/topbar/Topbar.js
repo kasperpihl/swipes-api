@@ -26,17 +26,39 @@ class Topbar extends Component {
 
     setTimeout(this.gradientStep, 3000);
   }
-  render() {
+  returnStatusIndicator() {
     const { status } = this.props;
+    let className = 'topbar__gradient topbar__gradient--status';
+    let statusMessage = '';
+
+    if (status === 'offline') {
+      className += ' topbar__gradient--indicate';
+      statusMessage = 'System is offline';
+    } else if (status === 'connecting') {
+      className += ' topbar__gradient--indicate';
+      statusMessage = 'System is connecting';
+    }
+
+    return (
+      <div className={className}>
+        <div className="topbar__title">
+          System is connecting
+        </div>
+      </div>
+    );
+  }
+  render() {
     const styles = gradient.getGradientStyles();
 
     if (this.state.gradientPos) {
       styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
     }
 
-
     return (
-      <div className="topbar" id="topbar" style={styles} />
+      <div className="topbar">
+        <div className="topbar__gradient topbar__gradient--main" style={styles} />
+        {this.returnStatusIndicator()}
+      </div>
     );
   }
 }
