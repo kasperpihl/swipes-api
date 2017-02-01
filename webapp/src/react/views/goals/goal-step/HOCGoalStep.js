@@ -324,6 +324,7 @@ class HOCGoalStep extends Component {
   }
   renderActions() {
     const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH } = this.state;
+    const { users, me, goal } = this.props;
     const helper = this.getHelper();
     const style = {};
 
@@ -343,6 +344,10 @@ class HOCGoalStep extends Component {
           isHandingOff={isHandingOff}
           isCompletingGoal={!nextStepId}
           isSubmitting={isSubmitting}
+          goal={goal}
+          toId={nextStepId}
+          users={users}
+          me={me}
         />
       </Section>
     );

@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import HandoffStatus from './HandoffStatus';
 import { bindAll } from 'classes/utils';
+import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
 
 import './styles/goal-actions.scss';
@@ -24,12 +26,14 @@ class GoalActions extends Component {
     }
   }
   renderStatus() {
-    const { status, isHandingOff } = this.props;
+    const { isHandingOff, goal, toId, users, me } = this.props;
+
     if (!isHandingOff) {
       return undefined;
     }
+
     return (
-      <div className="goal-actions__status">You are about to complete “2. Moodboard” and pass your work to Kasper.</div>
+      <HandoffStatus goal={goal} toId={toId} users={users} me={me} />
     );
   }
   renderCancel() {
@@ -83,4 +87,8 @@ GoalActions.propTypes = {
   status: string,
   onHandoff: func,
   onCancel: func,
+  goal: map,
+  toId: string,
+  me: map,
+  users: map,
 };
