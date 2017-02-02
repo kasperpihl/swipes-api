@@ -20,7 +20,7 @@
     position: absolute;
     left: 10px; top: 0;
     @include size(calc(100% - 10px), 1px);
-    max-width: 780px;
+    max-width: 770px;
     background-color: $deepBlue-10;
   }
 
@@ -148,23 +148,6 @@
         right: 0; top: 19px;
         text-transform: uppercase;
       }
-    }
-  }
-}
-
-.handoffMessageTransition {
-  //empty
-  &-enter {
-
-    &-active + .section {
-      background-color: red;
-    }
-  }
-
-  &-leave {
-
-    &-active {
-
     }
   }
 }

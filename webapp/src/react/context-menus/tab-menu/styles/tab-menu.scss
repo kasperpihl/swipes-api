@@ -68,12 +68,12 @@ $sectionHeight: 52px;
   }
 
   &__close {
+    opacity: 0;
+    pointer-events: none;
     position: absolute;
     right: 0; top: 50%;
     transform: translateY(-50%);
-    opacity: 0;
     transition: .15s ease;
-    pointer-events: none;
   }
 }
 
@@ -107,18 +107,18 @@ $sectionHeight: 52px;
 
     @include size(100%, auto);
     @include flex();
-    min-height: 50px;
     margin-bottom: 9px;
+    min-height: 50px;
     position: relative;
     transition: .2s ease-in-out;
 
     &:before {
-      content: '';
       @include size(110%, 100%);
-      position: absolute;
-      border-radius: 3px;
-      left: -5%; top: 0;
       background-color: transparent;
+      border-radius: 3px;
+      content: '';
+      left: -5%; top: 0;
+      position: absolute;
       transition: .15s ease-in-out;
     }
 
@@ -174,8 +174,8 @@ $sectionHeight: 52px;
   &__icon {
     @include flex(none);
     position: relative;
-    z-index: 9;
     transition: .15s;
+    z-index: 9;
 
     &--img {
       @include size(30px);
@@ -248,8 +248,8 @@ $sectionHeight: 52px;
 
   &__section:empty + &__list {
     @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
-    position: relative;
     left: calc(-1 * #{$mainPadding}); top: auto;
+    position: relative;
   }
 
   &--is-searching {
@@ -258,15 +258,20 @@ $sectionHeight: 52px;
       @include size(calc(100% + (#{$mainPadding} * 2)), calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
       @include flex(none);
   		@include border-radius(0px, 0px, 6px, 6px);
+  		box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
   		transform: translateY(-52px);
   		transition: .25s ease-in-out;
-  		box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+    }
+
+    #{$b}__section:empty + #{$b}__list {
+      @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
+      transform: translateY(0px);
     }
 
     #{$b}__close {
       opacity: 1;
-      transition: .15s ease;
       pointer-events: all;
+      transition: .15s ease;
     }
   }
 
