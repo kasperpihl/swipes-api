@@ -2,6 +2,7 @@ import * as goals from './goals';
 import * as milestones from './milestones';
 import * as ways from './ways';
 import * as users from './users';
+import * as notifications from './notifications';
 import * as notify from './notify';
 
 const notifyWrapper = (middlewares) => {
@@ -74,6 +75,12 @@ const way_archived = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const notifications_seen = [
+  notifications.notificationsSeenNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
 export {
   goal_created,
   goal_archived,
@@ -85,4 +92,5 @@ export {
   milestone_archived,
   way_created,
   way_archived,
+  notifications_seen,
 };

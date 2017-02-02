@@ -4,6 +4,7 @@ import {
 } from 'valjs';
 import {
   notificationsMarkAsSeen,
+  notificationsMarkAsSeenQueueMessage,
 } from './middlewares/notifications';
 import {
   valBody,
@@ -18,6 +19,7 @@ authed.all('/notifications.markAsSeen',
     timestamp: string.format('iso8601').require(),
   }),
   notificationsMarkAsSeen,
+  notificationsMarkAsSeenQueueMessage,
   valResponseAndSend({
     marked_at: string.require(),
     last_marked: string.require(),

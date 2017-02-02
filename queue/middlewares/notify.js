@@ -2,6 +2,17 @@ import r from 'rethinkdb';
 import commonMultipleEvents from '../db_utils/events';
 import dbInsertMultipleNotifications from '../db_utils/notifications';
 
+const notifySingleUser = (req, res, next) => {
+  const {
+    user_id,
+  } = res.locals;
+
+  const uniqueUsersToNotify = [user_id];
+
+  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
+
+  return next();
+};
 const notifyAllInCompany = (req, res, next) => {
   const {
     user,
@@ -43,7 +54,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
   const {
     uniqueUsersToNotify,
     event_type,
-    userNotificationMap,
+    userNotificationMap = {},
     notificationData,
     eventData,
   } = res.locals;
@@ -114,6 +125,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
 };
 
 export {
+  notifySingleUser,
   notifyAllInCompany,
   notifyCommonRethinkdb,
   notifyInsertMultipleNotifications,
