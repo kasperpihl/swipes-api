@@ -1,6 +1,32 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.sw-filter{
-  
+.sw-filter {
+  $b: &;
+  @include font(27px, $deepBlue-80, 700);
+
+  button#{$b}__selector {
+    @include font(27px, $blue-80, 700);
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      @include size(100%, 9px);
+      background-color: rgba($blue-100, .15);
+      transition: .2s ease;
+      z-index: -1;
+    }
+
+    &:hover, &:focus {
+      @include font(27px, $blue-100, 700);
+
+      &:before {
+        background-color: rgba($blue-100, .3);
+        transform: translateY(6px) scaleY(.3);
+        transition: .2s ease;
+      }
+    }
+  }
 }

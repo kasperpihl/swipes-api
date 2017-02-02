@@ -85,18 +85,20 @@ class GoalList extends Component {
   renderFilter() {
     return (
       <Measure onMeasure={this.onFilterHeight}>
-        <Filter
-          onClick={(id, obj, e) => {
-            console.log('clicked', id, obj, e);
-          }}
-          filter={[
-            { id: 'goal-type', string: 'All goals' },
-            ' for ',
-            { id: 'person', string: 'Anyone' },
-            ' in ',
-            { id: 'milestone', string: 'Any milestone' },
-          ]}
-        />
+        <div className="goals-list__filter">
+          <Filter
+            onClick={(id, obj, e) => {
+              console.log('clicked', id, obj, e);
+            }}
+            filter={[
+              { id: 'goal-type', string: 'All goals' },
+              ' for ',
+              { id: 'person', string: 'Anyone' },
+              ' in ',
+              { id: 'milestone', string: 'Any milestone' },
+            ]}
+          />
+        </div>
       </Measure>
     );
   }

@@ -20,29 +20,26 @@
     position: relative;
     overflow-y: auto;
     will-change: padding-top;
-    transition: padding-top .5s ease;
   }
 
   &__filter {
-    position: absolute;
+    @include size(100%, auto);
+    border-bottom: 1px solid $deepBlue-10;
     left: 0; top: 0;
-    @include size(100%, 300px);
     max-width: 780px;
-    background-color: red;
+    position: absolute;
+    padding: 30px 0;
     transform: translateY(-100%);
-    transition: transform .5s ease;
     will-change: transform;
   }
 
   &--show-filters {
     #{$b}__scroller {
       will-change: padding-top;
-      transition: padding-top .5s ease;
     }
 
     #{$b}__filter {
       transform: translateY(0px);
-      transition: transform .5s ease;
       will-change: transform;
     }
   }

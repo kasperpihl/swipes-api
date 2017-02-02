@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { setupCachedCallback } from 'classes/utils';
 
+import './styles/filter.scss';
 // now use events as onClick:
 class Filter extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Filter extends Component {
         return f;
       }
 
-      return <div onClick={this.onClickCached(f.id, f)} className="slsl">{f.string}</div>;
+      return <button onClick={this.onClickCached(f.id, f)} className="sw-filter__selector" key={f.id}>{f.string}</button>;
     });
   }
   render() {
@@ -37,10 +38,10 @@ class Filter extends Component {
 
 export default Filter;
 
-const { string, shape, arrayOf, oneOf, bool, func } = PropTypes;
+const { string, shape, arrayOf, oneOfType, func } = PropTypes;
 
 Filter.propTypes = {
-  filter: arrayOf(oneOf([
+  filter: arrayOf(oneOfType([
     string,
     shape({
       id: string.isRequired,

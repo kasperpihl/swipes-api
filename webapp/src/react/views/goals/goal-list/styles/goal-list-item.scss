@@ -15,8 +15,6 @@ $imgContHeight: 54px;
   border-bottom: 1px solid $deepBlue-10;
 
   &:hover {
-    // background-color: $blue-10;;
-
     #{$b}__title {
       color: $blue-100;
       transform: translateX(6px);
