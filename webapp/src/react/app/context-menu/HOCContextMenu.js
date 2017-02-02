@@ -59,17 +59,33 @@ class HOCContextMenu extends Component {
 
       let top = styles.top;
       if (typeof top === 'string') {
+        const { alignY } = this.props.contextMenu.options;
         top = parseInt(top, 10);
-        if ((top + vh) > wh) {
-          dStyle.top = `${wh - vh - padding}px`;
+        let extraCalc = 0;
+        if (alignY === 'center') {
+          extraCalc = (vh / 2);
+          top -= extraCalc;
+        }
+        if (top < 0) {
+          dStyle.top = `${extraCalc + padding}px`;
+        } else if ((top + vh) > wh) {
+          dStyle.top = `${(wh - vh - padding) + extraCalc}px`;
         }
       }
 
       let left = styles.left;
       if (typeof left === 'string') {
+        const { alignX } = this.props.contextMenu.options;
         left = parseInt(left, 10);
-        if ((left + vw) > ww) {
-          dStyle.left = `${ww - vw - padding}px`;
+        let extraCalc = 0;
+        if (alignX === 'center') {
+          extraCalc = (vw / 2);
+          left -= extraCalc;
+        }
+        if (left < 0) {
+          dStyle.left = `${extraCalc + padding}px`;
+        } else if ((left + vw) > ww) {
+          dStyle.left = `${(ww - vw - padding) + extraCalc}px`;
         }
       }
       let right = styles.right;
