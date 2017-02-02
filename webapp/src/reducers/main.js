@@ -62,7 +62,7 @@ export default function main(state = initialState, action) {
     // Notifications
     // ======================================================
     case types.NOTIFICATION_ADD: {
-      return state.updateIn(['notifications'], s => s.insert(0, fromJS({ payload })));
+      return state.updateIn(['notifications'], s => s.insert(0, fromJS(payload)));
     }
     case 'notifications.markAsSeen': {
       const { marked_at, last_marked: lastMarked } = payload;
