@@ -73,8 +73,8 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     notificationData,
   } = res.locals;
   const notifications = [];
-  const data = Object.assign({}, notificationData, {
-    created_by: user_id,
+  const data = Object.assign({}, {
+    data: notificationData,
     type: event_type,
   });
 
