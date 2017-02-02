@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
 
 const initialState = fromJS({
@@ -112,10 +112,10 @@ export default function main(state = initialState, action) {
     // Preview
     // ======================================================
     case types.PREVIEW_LOADING: {
-      return state.set('preview', { loading: true });
+      return state.set('preview', Map({ loading: true }));
     }
     case types.PREVIEW: {
-      return state.set('preview', payload);
+      return state.set('preview', Map(payload));
     }
 
     // ======================================================

@@ -22,7 +22,7 @@ class HOCBrowser extends Component {
     webview.focus();
     const { onLoad } = this.props;
     if (onLoad) {
-      onLoad(webview, this.close);
+      onLoad(webview, this.close.bind(this));
     }
     webview.addEventListener('did-navigate', (e) => {
       this.updateUrl(e.url);

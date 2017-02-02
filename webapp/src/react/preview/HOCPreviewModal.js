@@ -21,7 +21,6 @@ class HOCPreviewModal extends Component {
   componentDidMount() {
   }
   onAttach(e) {
-
   }
   onClose(e) {
     const { closePreview } = this.props;
@@ -40,8 +39,9 @@ class HOCPreviewModal extends Component {
     e.target.blur();
   }
   renderButtons() {
-    const { preview } = this.props;
+    const { preview, options } = this.props;
     let { buttons } = preview || {};
+    const custButtons = (options && options.buttons) || [];
 
     if (!buttons) {
       buttons = [];
@@ -77,12 +77,16 @@ class HOCPreviewModal extends Component {
           className="header__btn"
           onClick={this.onClose}
         />
-        <Button
-          title="Attach"
-          text="Attach to Goal"
-          onClick={this.onAttach}
-          className="header__btn"
-        />
+        {custButtons.map((b, i) => (
+          <Button
+            key={`cust-${i}`}
+            title={b.title}
+            text={b.title}
+            onClick={b.onClick}
+            className="header__btn"
+          />
+        ))}
+
       </div>
     );
   }
@@ -151,8 +155,9 @@ class HOCPreviewModal extends Component {
     );
   }
   renderNoPreview() {
-    const { preview } = this.props;
-    const { buttons, loading } = preview || {};
+    const { preview, loading, options } = this.props;
+    const custButtons = (options && options.buttons) || [];
+    const { buttons } = preview || {};
 
     if (!this._noPreview || loading) {
       return undefined;
@@ -171,20 +176,27 @@ class HOCPreviewModal extends Component {
         <div className="preview-modal__actions">
           {buttonsHtml}
           <div className="preview-modal__attach">
-            <div className="preview-modal__button preview-modal__button--attach" onClick={this.onAttach}>
-              Attach to Goal
-            </div>
+            {custButtons.map((b, i) => (
+              <div
+                key={i}
+                className="preview-modal__button preview-modal__button--attach"
+                onClick={b.onClick}
+              >
+                {b.title}
+              </div>
+            ))}
+
           </div>
         </div>
       </div>
     );
   }
   render() {
-    const { preview } = this.props;
-    const { elements, file, buttons, loading } = preview || {};
+    const { preview, loading } = this.props;
+    const { elements, file, buttons } = preview || {};
     let className = 'preview-modal';
 
-    if (preview) {
+    if (preview || loading) {
       className += ' preview-modal--shown';
     }
     // HACK: This need to be run before renderButtons to determine if we support the preview
@@ -209,8 +221,9 @@ const { shape, arrayOf, string, object, oneOf, bool, func } = PropTypes;
 
 HOCPreviewModal.propTypes = {
   closePreview: func,
+  options: object,
+  loading: bool,
   preview: shape({
-    loading: bool,
     buttons: arrayOf(shape({
       title: string,
       icon: string,
@@ -235,7 +248,9 @@ HOCPreviewModal.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    preview: state.getIn(['main', 'preview']),
+    preview: state.getIn(['main', 'preview', 'object']),
+    loading: state.getIn(['main', 'preview', 'loading']),
+    options: state.getIn(['main', 'preview', 'options']),
   };
 }
 

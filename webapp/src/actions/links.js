@@ -127,7 +127,7 @@ export const addMenu = (options, callback) => (d) => {
 // ======================================================
 // Preview attacment
 // ======================================================
-export const preview = data => (d) => {
+export const preview = (data, options) => (d) => {
   const att = data;
   if (att.get('name') === 'swipes' && att.get('type') === 'note') {
     d(a.main.note.show(att.get('id')));
@@ -135,6 +135,6 @@ export const preview = data => (d) => {
     d(a.main.browser(att.get('id')));
     // window.open(att.get('id'));
   } else if (att.get('shortUrl')) {
-    d(a.main.preview(att.get('shortUrl')));
+    d(a.main.preview(att.get('shortUrl'), options));
   }
 };

@@ -53,7 +53,7 @@ export const updateRecentAssignees = payload => ({ type: types.UPDATE_RECENT_ASS
 // ======================================================
 // Title
 // ======================================================
-export const preview = pre => (dp) => {
+export const preview = (pre, options) => (dp) => {
   if (!pre) {
     return dp({ type: types.PREVIEW, payload: null });
   }
@@ -68,7 +68,7 @@ export const preview = pre => (dp) => {
   dp({ type: types.PREVIEW_LOADING });
   return dp(a.api.request(endpoint, params)).then((res) => {
     if (res && res.ok) {
-      dp({ type: types.PREVIEW, payload: res.preview });
+      dp({ type: types.PREVIEW, payload: { object: res.preview, options } });
     } else {
       console.warn('Preview error', pre);
     }

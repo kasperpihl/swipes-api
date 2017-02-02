@@ -29,6 +29,19 @@ class HOCFind extends Component {
       }
     }
   }
+  onPreviewLink(obj) {
+    const { preview, actionCallback } = this.props;
+    let buttons = [];
+    if (actionCallback) {
+      buttons = [{
+        title: 'Attach to Goal',
+        onClick: () => {
+          actionCallback(obj);
+        },
+      }];
+    }
+    preview(obj, { buttons });
+  }
   findItemShare() {
     // const { searchResults } = this.props;
   }
@@ -45,11 +58,12 @@ class HOCFind extends Component {
     search(query);
   }
   findItemClick(i) {
-    const { preview, searchResults } = this.props;
-    const obj = searchResults.get(i);
-    preview({
-      permission: obj.get('permission'),
-      service: obj.get('service'),
+    const { searchResults } = this.props;
+    const obj = searchResults.get(i).toJS();
+    this.onPreviewLink({
+      permission: obj.permission,
+      service: obj.service,
+      meta: { title: obj.title },
     });
   }
   renderBrowse() {
@@ -57,11 +71,10 @@ class HOCFind extends Component {
     if (searchQuery || searching) {
       return undefined;
     }
-    return <HOCBrowse />;
+    return <HOCBrowse delegate={this} />;
   }
   renderSearchResults() {
     const { searchResults, searching, searchQuery, actionLabel } = this.props;
-
     if (!searchQuery && !searching) {
       return undefined;
     }

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import { setupDelegate } from 'classes/utils';
 import BrowseSectionList from './BrowseSectionList';
 
 import './styles/browse.scss';
@@ -16,10 +17,9 @@ class HOCBrowse extends Component {
       paths: [],
       selectedItemIds: [],
     };
+    this.callDelegate = setupDelegate(props.delegate);
   }
-  componentWillUnmount() {
-    this._unmounted = true;
-  }
+
   componentDidMount() {
     this.loadPath({ path: '', title: 'Dropbox' });
   }
@@ -34,6 +34,9 @@ class HOCBrowse extends Component {
         }
       }, 600);
     }
+  }
+  componentWillUnmount() {
+    this._unmounted = true;
   }
   updateCacheAtPath(path, result) {
     const { cache } = this.state;
@@ -75,7 +78,7 @@ class HOCBrowse extends Component {
     if (entry.type === 'folder') {
       this.loadPath(entry, depth);
     } else {
-      const { accountId, preview } = this.props;
+      const { accountId } = this.props;
       const link = {
         service: {
           id: `rev:${entry.id}`,
@@ -85,8 +88,11 @@ class HOCBrowse extends Component {
         permission: {
           account_id: accountId,
         },
+        meta: {
+          title: entry.title,
+        },
       };
-      preview(link);
+      this.callDelegate('onPreviewLink', link);
     }
   }
   clickedBack() {
@@ -173,10 +179,11 @@ class HOCBrowse extends Component {
   }
 }
 
-const { string, func } = PropTypes;
+const { string, func, object } = PropTypes;
 HOCBrowse.propTypes = {
   accountId: string,
   request: func,
+  delegate: object,
 };
 
 function mapStateToProps(state) {

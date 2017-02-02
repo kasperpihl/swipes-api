@@ -25,9 +25,7 @@ class HOCOrgDashboard extends Component {
     if (notifications.size) {
       const first = notifications.first();
       if (!first.get('seen')) {
-        console.log(first.get('ts'));
         markNotifications(first.get('ts')).then((res) => {
-          console.log('lalala', res);
         });
       }
     }
