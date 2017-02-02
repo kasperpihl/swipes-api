@@ -44,7 +44,7 @@
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
-    "valjs": "0.0.5",
+    "valjs": "0.0.18",
     "vivus": "^0.2.3"
   },
   "devDependencies": {

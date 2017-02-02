@@ -14,7 +14,6 @@ import Slack from './webviews/slack/HOCSlack';
 import Store from './store/Store';
 import Gmail from './webviews/gmail/HOCGmail';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
-import ProtoGoals from './proto-goals/HOCProtoGoals';
 
 export {
   OrgDashboard,
@@ -29,5 +28,4 @@ export {
   Store,
   Gmail,
   MilestoneList,
-  ProtoGoals,
 };

@@ -59,11 +59,24 @@ export default class GoalsUtil {
     }
     return !!step.get('assignees').find(a => (a === this.id));
   }
+
+  isUserCurrentlyAssigned(userId) {
+    const step = this.getCurrentStep();
+    if (!step) {
+      return false;
+    }
+    return !!step.get('assignees').find(a => (a === userId));
+  }
+
   getOrderedSteps() {
     return this.goal.get('step_order').map(id => this.goal.getIn(['steps', id]));
   }
   getOrderedAttachments() {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
+  }
+
+  getRemainingSteps() {
+    return this.getOrderedSteps().slice(this.getCurrentStepIndex());
   }
   getNumberOfCompletedSteps() {
     const num = this.goal.get('history').filter(h => ['complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1);
@@ -77,6 +90,15 @@ export default class GoalsUtil {
     }
     return this.getNumberOfCompletedSteps() + (size - currentIndex);
   }
+
+
+  getCurrentAssignees() {
+    const step = this.getCurrentStep();
+    if (!step) {
+      return false;
+    }
+    return step.get('assignees');
+  }
   getAllInvolvedAssignees() {
     const assignees = new Set();
     this.goal.get('steps').forEach((s) => {
@@ -84,8 +106,9 @@ export default class GoalsUtil {
     });
     return fromJS([...assignees]);
   }
-  getRemainingSteps() {
-    return this.getOrderedSteps().slice(this.getCurrentStepIndex());
+  hasEmptyStepsLater() {
+    const steps = this.getRemainingSteps();
+    return (steps.filter(s => !s.get('assignees').size).size > 0);
   }
   getRemainingAssignees() {
     const steps = this.getRemainingSteps();
@@ -95,6 +118,8 @@ export default class GoalsUtil {
     });
     return fromJS([...assignees]);
   }
+
+
   getObjectForWay() {
     return {
       title: this.goal.get('title'),
@@ -128,4 +153,62 @@ export default class GoalsUtil {
 
     return status;
   }
+}
+
+export function filterGoals(goals, type, userId, milestoneId) {
+  return goals.filter((goal) => {
+    const helper = new GoalsUtil(goal);
+    if (milestoneId && milestoneId !== 'any') {
+      if (milestoneId === 'none') {
+        if (goal.get('milestoneId')) {
+          return false;
+        }
+      } else if (goal.get('milestoneId') !== milestoneId) {
+        return false;
+      }
+    }
+    if (type === 'completed' && helper.getCurrentStep()) {
+      return false;
+    }
+    if (userId && userId !== 'any') {
+      if (type === 'all' || type === 'completed') {
+        const allInvolved = helper.getAllInvolvedAssignees();
+        const hasUser = (allInvolved.indexOf(userId) > -1);
+        if (userId !== 'none' && !hasUser) {
+          return false;
+        }
+      } else if (type === 'upcoming' || type === 'current') {
+        const currentAssignees = helper.getCurrentAssignees();
+        if (currentAssignees === false) {
+          return false; // goal is completed
+        }
+        const isCurrentlyAssigned = currentAssignees.find(uId => uId === userId);
+        if (type === 'current') {
+          if (userId === 'none') {
+            if (currentAssignees.size) {
+              return false;
+            }
+          } else if (!isCurrentlyAssigned) {
+            return false;
+          }
+        } else if (type === 'upcoming') {
+          if (userId === 'none') {
+            if (!helper.hasEmptyStepsLater()) {
+              return false;
+            }
+          } else {
+            if (isCurrentlyAssigned) {
+              return false;
+            }
+            const remainingAssignees = helper.getRemainingAssignees();
+            const isAssignedLater = remainingAssignees.find(uId => uId === userId);
+            if (!isAssignedLater) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return true;
+  });
 }
