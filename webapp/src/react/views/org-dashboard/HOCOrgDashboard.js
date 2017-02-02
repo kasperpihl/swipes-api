@@ -73,7 +73,7 @@ class HOCOrgDashboard extends Component {
     const { ways } = this.props;
     let data = n.get('data');
     data = data || Map();
-    const type = data.get('type');
+    const type = n.get('type');
     const greenColor = '#4FE69B';
     const redColor = '#FC461E';
     const blueColor = '#007AFF';
@@ -134,10 +134,11 @@ class HOCOrgDashboard extends Component {
         break;
       }
       default:
-        console.log(data.toJS());
+        console.log(n.toJS());
         break;
     }
     if (!m.get('message')) {
+      console.log(m.toJS());
       return null;
     }
     return m;
