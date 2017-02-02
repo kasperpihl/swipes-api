@@ -17,12 +17,12 @@ $imgContHeight: 54px;
   &:hover {
     #{$b}__title {
       color: $blue-100;
-      transform: translateX(6px);
+      transform: translateX(3px);
       transition: .25s ease;
     }
 
     #{$b}__label {
-      transform: translateX(6px);
+      transform: translateX(3px);
       transition: .25s ease;
     }
   }
