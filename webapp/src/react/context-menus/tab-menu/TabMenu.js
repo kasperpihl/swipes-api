@@ -178,11 +178,18 @@ class TabMenu extends Component {
     );
   }
   render() {
+    const { search } = this.props;
     const { query } = this.state;
     let className = 'tab-menu';
 
     if (query.length) {
       className += ' tab-menu--is-searching';
+    }
+
+    this.numberOfTabs = this.callDelegate('numberOfTabs');
+
+    if (typeof this.numberOfTabs !== 'number' && !search) {
+      className += ' tab-menu--dynamic-height';
     }
 
     return (

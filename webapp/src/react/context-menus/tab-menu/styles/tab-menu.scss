@@ -83,16 +83,16 @@ $sectionHeight: 52px;
   $b: &;
 
   &__list {
-    $listHeight: calc(#{$containerHeight} - (#{$sectionHeight} * 2 + #{$mainPadding}));
+    // $listHeight: calc(#{$containerHeight} - (#{$sectionHeight} * 2 + #{$mainPadding}));
 
-    @include size(100%, $listHeight);
+    @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
     @include border-radius(0px, 0px, 6px, 6px);
 
 		background-color: $bg;
-		left: 0; top: calc((#{$sectionHeight} * 2 ) + #{$mainPadding} + 1px);
+		left: calc(-1 * #{$mainPadding}); top: auto;
 		overflow-y: auto;
 		padding: $whiteSpacePadding $mainPadding 0 $mainPadding;
-		position: absolute;
+		position: relative;
 		transition: .25s ease-in-out;
     z-index: 12;
   }
@@ -247,15 +247,16 @@ $sectionHeight: 52px;
   $b: &;
 
   &__section:empty + &__list {
-      @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
-      position: relative;
-      left: calc(-1 * #{$mainPadding}); top: auto;
+    @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
+    position: relative;
+    left: calc(-1 * #{$mainPadding}); top: auto;
   }
 
   &--is-searching {
 
     #{$b}__list {
-      @include size(100%, calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
+      @include size(calc(100% + (#{$mainPadding} * 2)), calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
+      @include flex(none);
   		@include border-radius(0px, 0px, 6px, 6px);
   		transform: translateY(-52px);
   		transition: .25s ease-in-out;
@@ -267,5 +268,9 @@ $sectionHeight: 52px;
       transition: .15s ease;
       pointer-events: all;
     }
+  }
+
+  &--dynamic-height {
+    @include size($containerWidth, auto);
   }
 }
