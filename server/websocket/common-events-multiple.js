@@ -42,7 +42,6 @@ const commonEventsMultiple = (socket, userId) => {
           payload = _.omit(n, ['id', 'type', 'user_ids', 'user_notification_map']);
         }
 
-        console.log(payload);
         socket.send(JSON.stringify({
           type,
           payload,
