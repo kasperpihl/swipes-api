@@ -71,7 +71,8 @@ class HOCOrgDashboard extends Component {
   }
   messageForNotification(n) {
     const { ways } = this.props;
-    const data = n.get('data');
+    let data = n.get('data');
+    data = data || Map();
     const type = data.get('type');
     const greenColor = '#4FE69B';
     const redColor = '#FC461E';
@@ -81,6 +82,7 @@ class HOCOrgDashboard extends Component {
       timeago: moment(n.get('ts')).fromNow(),
       seen: n.get('seen'),
     });
+
     switch (type) {
       case 'goal_created': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
