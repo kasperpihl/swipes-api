@@ -5,6 +5,7 @@ import GoalsUtil from 'classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
 import Measure from 'react-measure';
+import Filter from './Filter';
 
 import './styles/goals-list.scss';
 
@@ -84,7 +85,18 @@ class GoalList extends Component {
   renderFilter() {
     return (
       <Measure onMeasure={this.onFilterHeight}>
-        <div className="goals-list__filter" />
+        <Filter
+          onClick={(id, obj, e) => {
+            console.log('clicked', id, obj, e);
+          }}
+          filter={[
+            { id: 'goal-type', string: 'All goals' },
+            ' for ',
+            { id: 'person', string: 'Anyone' },
+            ' in ',
+            { id: 'milestone', string: 'Any milestone' },
+          ]}
+        />
       </Measure>
     );
   }
