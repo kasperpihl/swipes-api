@@ -272,5 +272,6 @@ $sectionHeight: 52px;
 
   &--dynamic-height {
     @include size($containerWidth, auto);
+    max-height: $containerHeight;
   }
 }
