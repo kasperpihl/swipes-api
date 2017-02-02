@@ -73,14 +73,11 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     notificationData,
   } = res.locals;
   const notifications = [];
-  const data = Object.assign({}, {
-    data: notificationData,
-    type: event_type,
-  });
 
   uniqueUsersToNotify.forEach((userId) => {
     notifications.push({
-      data,
+      data: notificationData,
+      type: event_type,
       user_id: userId,
       seen: false,
       ts: r.now(),
@@ -99,6 +96,11 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
           id: newVal.id,
           ts: newVal.ts,
         };
+      });
+
+      const data = Object.assign({}, {
+        data: notificationData,
+        type: event_type,
       });
 
       res.locals.userNotificationMap = userNotificationMap;
