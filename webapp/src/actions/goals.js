@@ -1,8 +1,6 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import { List, Map } from 'immutable';
-import * as c from 'constants';
 import * as a from './';
-
 
 export const removeFromCollection = (goalId, id) => (d, getState) => {
   let attachments = getState().getIn(['goals', goalId, 'attachments']);
@@ -184,7 +182,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     },
     numberOfTabs: () => 3,
     nameForTab: i => [`Assigned (${assignees.length})`, 'Recent', 'All'][i],
-    onItemAction: (item, row) => {
+    onItemAction: (item) => {
       const index = assignees.indexOf(item.id);
       if (index === -1) {
         assignees.push(item.id);

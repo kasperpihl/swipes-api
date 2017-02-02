@@ -4,7 +4,7 @@ import { bindAll, setupDelegate } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import GoalListItem from './GoalListItem';
-
+import Measure from 'react-measure';
 
 import './styles/goals-list.scss';
 
@@ -12,8 +12,9 @@ class GoalList extends Component {
   constructor(props) {
     super(props);
     this.tabs = ['now', 'later', 'completed', 'all'];
+    this.state = { filterHeight: 0 };
     this.callDelegate = setupDelegate(props.delegate, this);
-    bindAll(this, ['clickedListItem']);
+    bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
   componentDidMount() {
     const { savedState } = this.props;
@@ -23,6 +24,9 @@ class GoalList extends Component {
         this.refs.scroller.scrollTop = scrollTop;
       }
     }
+  }
+  onFilterHeight(dim) {
+    this.setState({ filterHeight: dim.height });
   }
   clickedListItem(id) {
     this.callDelegate('goalListClickedGoal', id, this.refs.scroller.scrollTop);
@@ -77,6 +81,13 @@ class GoalList extends Component {
       </div>
     );
   }
+  renderFilter() {
+    return (
+      <Measure onMeasure={this.onFilterHeight}>
+        <div className="goals-list__filter" />
+      </Measure>
+    );
+  }
   renderList() {
     let { goals } = this.props;
 
@@ -86,16 +97,19 @@ class GoalList extends Component {
     return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
   }
   render() {
+    const { tabIndex } = this.props;
+    const { filterHeight } = this.state;
     let className = 'goals-list';
-
-    if (false) {
+    const style = {};
+    if (tabIndex === (this.tabs.length - 1)) {
+      style.paddingTop = `${filterHeight}px`;
       className += ' goals-list--show-filters';
     }
     return (
       <div className={className}>
         {this.renderTabbar()}
-        <div className="goals-list__scroller" ref="scroller">
-          <div className="goals-list__filter" />
+        <div className="goals-list__scroller" style={style} ref="scroller">
+          {this.renderFilter()}
           {this.renderList()}
         </div>
       </div>

@@ -35,15 +35,30 @@ class HOCAttachments extends Component {
       enableFlagging,
       goalId,
       removeFromCollection,
+      loadModal,
     } = this.props;
     if (enableFlagging) {
       this.callDelegate('onFlag', id);
     } else {
-      if (goalId) {
-        removeFromCollection(goalId, id).then(() => {
-        });
-      }
-      this.callDelegate('onRemoveAttachment', id);
+      loadModal(
+        {
+          title: 'Archive Goal?',
+          data: {
+            message: 'Are you sure you want to archive this goal?',
+            buttons: ['Yes', 'No'],
+          },
+          type: 'warning',
+        },
+        (res) => {
+          if (res && res.button === 0) {
+            if (goalId) {
+              removeFromCollection(goalId, id).then(() => {
+              });
+            }
+            this.callDelegate('onRemoveAttachment', id);
+          }
+        },
+      );
     }
   }
   onAdd(which, e) {
@@ -217,8 +232,10 @@ HOCAttachments.propTypes = {
   enableFlagging: bool,
   flags: list,
   goalId: string,
+  loadModal: func,
   openFind: func,
   previewLink: func,
+  removeFromCollection: func,
   showNote: func,
   updateToasty: func,
 };
@@ -232,10 +249,11 @@ export default connect(mapStateToProps, {
   addNote: actions.links.addNote,
   addToasty: actions.toasty.add,
   addToCollection: actions.goals.addToCollection,
-  removeFromCollection: actions.goals.removeFromCollection,
   addURL: actions.links.addURL,
+  loadModal: actions.main.modal,
   openFind: actions.links.openFind,
   previewLink: actions.links.preview,
+  removeFromCollection: actions.goals.removeFromCollection,
   showNote: actions.main.note.show,
   updateToasty: actions.toasty.update,
 })(HOCAttachments);
