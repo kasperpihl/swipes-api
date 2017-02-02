@@ -90,6 +90,7 @@ class GoalList extends Component {
       <div className="goals-list">
         {this.renderTabbar()}
         <div className="goals-list__scroller" ref="scroller">
+          <div className="goals-list__filter" />
           {this.renderList()}
         </div>
       </div>

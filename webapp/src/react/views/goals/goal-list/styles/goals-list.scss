@@ -2,6 +2,7 @@
 @import '~styles/_mixins.scss';
 
 .goals-list {
+  $b: &;
   @include size(100%);
   position: relative;
   display: flex;
@@ -18,5 +19,31 @@
     @include size(100%);
     position: relative;
     overflow-y: auto;
+    will-change: padding-top;
+    transition: padding-top .5s ease;
+  }
+
+  &__filter {
+    position: absolute;
+    left: 0; top: 0;
+    @include size(100%, 300px);
+    max-width: 780px;
+    background-color: red;
+    transform: translateY(-100%);
+    transition: transform .5s ease;
+    will-change: transform;
+  }
+
+  &--show-filters {
+    #{$b}__scroller {
+      will-change: padding-top;
+      transition: padding-top .5s ease;
+    }
+
+    #{$b}__filter {
+      transform: translateY(0px);
+      transition: transform .5s ease;
+      will-change: transform;
+    }
   }
 }
