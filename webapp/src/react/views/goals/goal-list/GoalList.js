@@ -7,6 +7,7 @@ import GoalsUtil, { filterGoals } from 'classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import Measure from 'react-measure';
 import GoalListItem from './GoalListItem';
+import FilterFooter from './FilterFooter';
 
 import Filter from './Filter';
 
@@ -123,6 +124,9 @@ class GoalList extends Component {
 
     return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
   }
+  renderFilterFooter() {
+    return <FilterFooter />;
+  }
   render() {
     const { tabIndex } = this.props;
     const { filterHeight } = this.state;
@@ -139,6 +143,7 @@ class GoalList extends Component {
           {this.renderFilter()}
           {this.renderList()}
         </div>
+        {this.renderFilterFooter()}
       </div>
     );
   }

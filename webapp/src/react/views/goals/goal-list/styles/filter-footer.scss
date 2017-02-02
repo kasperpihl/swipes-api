@@ -1,0 +1,80 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.filter-footer {
+  $b: &;
+  @include size(780px, 60px);
+  @include flex(flex);
+  background-color: $bg;
+  box-shadow: 0 0 20px 3px rgba(5,57,128,0.1);
+  left: 0; bottom: 0;
+  max-width: calc(100vw - 95px - 16px);
+  position: absolute;
+
+  &__section {
+    @include size(100%, auto);
+    @include flex(center, flex-start);
+    position: relative;
+
+    &:last-child {
+      @include size(256px, 100%);
+      @include flex();
+      @include flex(none);
+      border-left: 1px solid darken($deepBlue-5, 2%);
+
+      #{$b}__status {
+        padding-left: 15px;
+      }
+    }
+  }
+
+  &__status {
+    @include font(12px, $deepBlue-70, 18px, 500);
+    padding-left: 45px;
+  }
+
+  &__button {
+
+    &--edit {
+      @include font(12px, $blue-100, 40px, 500);
+      padding: 0 15px;
+
+      &:hover, &:focus {
+        text-decoration: underline;
+      }
+    }
+
+    &--toggle {
+      @include size(24px);
+      @include flex(none);
+      position: relative;
+      border-radius: 50%;
+      border: 1px solid $deepBlue-20;
+      transition: .2s ease;
+
+      &:after {
+        content: '';
+        @include size(18px);
+        position: absolute;
+        left: 2px; top: 2px;
+        border-radius: 50%;
+        background-color: $blue-100;
+        transform: scale(0);
+        transition: .3s ease;
+      }
+
+      &:hover {
+        border-color: $blue-100;
+        transition: .2s ease;
+      }
+    }
+
+    &--active {
+
+      &:after {
+        transform: scale(1);
+        transition: .3s cubic-bezier(.88,.08,.57,1.5);
+      }
+    }
+  }
+}
