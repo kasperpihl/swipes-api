@@ -99,14 +99,16 @@ class GoalList extends Component {
         <div className="goals-list__filter">
           <Filter
             onClick={(id, obj, e) => {
-              console.log('clicked', id, obj, e);
+              console.log('yo', id, obj, e);
             }}
             filter={[
-              { id: 'goal-type', string: 'All goals' },
-              ' for ',
-              { id: 'person', string: 'Anyone' },
-              ' in ',
-              { id: 'milestone', string: 'Any milestone' },
+              'Show ',
+              { id: 'goal-type', string: 'all goals' },
+              ' related to ',
+              { id: 'milestone', string: 'any milestone' },
+              ' and assigned to ',
+              { id: 'person', string: 'anyone' },
+              '.',
             ]}
           />
         </div>

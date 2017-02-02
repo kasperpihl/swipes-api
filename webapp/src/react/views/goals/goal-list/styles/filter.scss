@@ -3,29 +3,29 @@
 
 .sw-filter {
   $b: &;
-  @include font(27px, $deepBlue-80, 700);
+  @include font(27px, $deepBlue-90, 42px, 300);
 
   button#{$b}__selector {
-    @include font(27px, $blue-80, 700);
+    @include font(27px, $blue-100, 42px, 400);
     position: relative;
 
     &:before {
       content: '';
       position: absolute;
-      left: 0; bottom: 0;
-      @include size(100%, 9px);
-      background-color: rgba($blue-100, .15);
-      transition: .2s ease;
+      left: 0; bottom: 3px;
+      @include size(100%, 6px);
+      background-color: $blue-10;
+      transition: .15s ease;
       z-index: -1;
     }
 
     &:hover, &:focus {
-      @include font(27px, $blue-100, 700);
 
       &:before {
-        background-color: rgba($blue-100, .3);
-        transform: translateY(6px) scaleY(.3);
-        transition: .2s ease;
+        @include size(100%, 2px);
+        background-color: $blue-100;
+        transform: translateY(3px);
+        transition: .15s ease;
       }
     }
   }
