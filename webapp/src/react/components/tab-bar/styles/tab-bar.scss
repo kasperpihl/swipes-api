@@ -25,11 +25,7 @@
   &__tab {
     @include size(auto, 40px);
     @include flex(center);
-    color: $deepBlue-30;
-    font-size: 12px;
-		font-weight: 500;
-		line-height: 15px;
-		color: #999EAC;
+    @include font(12px, $deepBlue-30, 18px, 500);
     margin: 0;
     padding-right: 30px;
     position: relative;
