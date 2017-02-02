@@ -38,6 +38,7 @@ $sidebarWidth: 60px;
     padding: 0 3px;
     padding-bottom: 1px;
     border-radius: 20px;
+    pointer-events: none;
     transform: translateY(-110%);
     animation: newNotification 1s ease forwards;
 
@@ -77,6 +78,10 @@ $sidebarWidth: 60px;
         @include svg-color($deepBlue-60);
         filter: grayscale(0%);
       }
+
+      #{$b}__notification {
+        background-color: $deepBlue-60;
+      }
     }
 
     &--active {
@@ -88,6 +93,10 @@ $sidebarWidth: 60px;
       &:before {
         -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         transition: .25s ease;
+      }
+
+      #{$b}__notification {
+        background-color: $deepBlue-90;
       }
 
       &:hover {
