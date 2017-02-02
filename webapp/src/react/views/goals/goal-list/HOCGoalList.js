@@ -112,6 +112,7 @@ class HOCGoalList extends Component {
     if (obj.id === 'user') {
       const { selectUser } = this.props;
       selectUser(options, (res) => {
+        console.log('res', res);
         updateState(obj.id, res.id);
       });
     }

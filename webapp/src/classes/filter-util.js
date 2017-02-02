@@ -11,7 +11,7 @@ export function getGoalTypeForValue(goalType) {
 
 export function getUserStringForValue(users, userId) {
   if (userId === 'none') {
-    return 'noone';
+    return 'no one';
   }
   if (users) {
     const user = users.get(userId);
@@ -59,6 +59,9 @@ export function filterGoals(goals, type, userId, milestoneId) {
         if (userId !== 'none' && !hasUser) {
           return false;
         }
+        if (userId === 'none' && allInvolved.size) {
+          return false;
+        }
       } else if (type === 'upcoming' || type === 'current') {
         const currentAssignees = helper.getCurrentAssignees();
         if (currentAssignees === false) {
@@ -66,7 +69,13 @@ export function filterGoals(goals, type, userId, milestoneId) {
         }
         const isCurrentlyAssigned = currentAssignees.find(uId => uId === userId);
         if (type === 'current') {
-          if (userId === 'none') {
+          console.log(userId);
+          if (userId === 'any') {
+            console.log('currentAssignees', currentAssignees.size);
+            if (!currentAssignees.size) {
+              return false;
+            }
+          } else if (userId === 'none') {
             if (currentAssignees.size) {
               return false;
             }

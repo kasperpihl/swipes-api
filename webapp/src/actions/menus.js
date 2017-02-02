@@ -1,6 +1,24 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import * as a from './';
 
+export const selectGoalType = (options, callback) => (d, getState) => {
+  const delegate = {
+    onItemAction: (item) => {
+      callback(item);
+      d(a.main.contextMenu(null));
+    },
+    resultsForAll: () => allUsers(),
+  };
+
+  d(a.main.contextMenu({
+    options,
+    component: TabMenu,
+    props: {
+      delegate,
+    },
+  }));
+};
+
 export const selectUser = (options, callback) => (d, getState) => {
   const state = getState();
   const me = state.get('me');
@@ -43,7 +61,10 @@ export const selectUser = (options, callback) => (d, getState) => {
     },
   ).toArray();
 
-  const allUsers = () => sortedUsers(state.get('users')).map(u => resultForUser(u));
+  const allUsers = () => [
+    { id: 'any', title: 'Any one assigned' },
+    { id: 'none', title: 'No one assigned' },
+  ].concat(sortedUsers(state.get('users')).map(u => resultForUser(u)));
 
   const searchForUser = q => sortedUsers(state.get('users')).map((u) => {
     if (u.get('name').toLowerCase().startsWith(q.toLowerCase())) {
