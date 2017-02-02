@@ -86,8 +86,13 @@ class GoalList extends Component {
     return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
   }
   render() {
+    let className = 'goals-list';
+
+    if (false) {
+      className += ' goals-list--show-filters';
+    }
     return (
-      <div className="goals-list">
+      <div className={className}>
         {this.renderTabbar()}
         <div className="goals-list__scroller" ref="scroller">
           <div className="goals-list__filter" />
