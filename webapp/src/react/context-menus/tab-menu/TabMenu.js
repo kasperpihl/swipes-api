@@ -18,7 +18,7 @@ class TabMenu extends Component {
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
-    bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyUp']);
+    bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
@@ -41,7 +41,7 @@ class TabMenu extends Component {
     this.qId = undefined;
   }
 
-  onKeyUp(e) {
+  onKeyDown(e) {
     if (e.keyCode === 13) {
       const { results } = this.state;
       if (results.length) {
@@ -119,7 +119,7 @@ class TabMenu extends Component {
           ref="search"
           className="tab-menu__input"
           placeholder={search}
-          onKeyUp={this.onKeyUp}
+          onKeyDown={this.onKeyDown}
           onChange={this.onChangeQuery}
           value={query}
         />
