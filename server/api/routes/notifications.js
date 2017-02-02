@@ -5,6 +5,7 @@ import {
 import {
   notificationsMarkAsSeen,
   notificationsMarkAsSeenQueueMessage,
+  notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
   valBody,
@@ -20,6 +21,7 @@ authed.all('/notifications.markAsSeen',
   }),
   notificationsMarkAsSeen,
   notificationsMarkAsSeenQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     marked_at: string.require(),
     last_marked: string.require(),

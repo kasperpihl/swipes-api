@@ -54,7 +54,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
   const {
     uniqueUsersToNotify,
     event_type,
-    userNotificationMap = {},
+    userNotificationMap = null,
     notificationData,
     eventData,
   } = res.locals;
