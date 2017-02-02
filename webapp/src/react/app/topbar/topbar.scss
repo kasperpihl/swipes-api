@@ -22,21 +22,28 @@ $topbarSize: 38px;
 
     &--status {
       background-color: $bg;
+      opacity: 0;
       @include flex();
       position: absolute;
       left: 0; top: 0;
-      transform: translateX(100%);
+      pointer-events: none;
       transition: .2s ease;
     }
 
     &--indicate {
-      transform: translateX(0%);
+      opacity: .3;
       transition: .2s ease;
+
+      #{$b}__title {
+        opacity: 1;
+      }
     }
   }
 
   &__title {
     line-height: $topbarSize;
-    color: $deepBlue-100;
+    color: $deepBlue-80;
+    padding-top: 3px;
+    opacity: 0;
   }
 }
