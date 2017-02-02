@@ -6,6 +6,7 @@ import * as me from './me';
 import * as toasty from './toasty';
 import * as goals from './goals';
 import * as ways from './ways';
+import * as menus from './menus';
 
 export {
   main,
@@ -13,6 +14,7 @@ export {
   links,
   goals,
   api,
+  menus,
   me,
   toasty,
   ways,

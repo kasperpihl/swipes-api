@@ -11,6 +11,7 @@ const persist = () => state => Immutable.Map({
     token: state.getIn(['main', 'token']) || null,
     cache: state.getIn(['main', 'cache']) || {},
     services: state.getIn(['main', 'services']) || {},
+    milestones: state.getIn(['main', 'milestones']) || {},
     notifications: state.getIn(['main', 'notifications']) || [],
     ways: state.getIn(['main', 'ways']) || {},
     recentAssignees: state.getIn(['main', 'recentAssignees']) || [],

@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { map } from 'react-immutable-proptypes';
+import { map, list } from 'react-immutable-proptypes';
 import { object, any, string } from 'valjs';
-
+import { fromJS } from 'immutable';
 import { bindAll, setupDelegate } from 'classes/utils';
-import GoalsUtil, { filterGoals } from 'classes/goals-util';
+import GoalsUtil from 'classes/goals-util';
+import { filterGoals } from 'classes/filter-util';
 import TabBar from 'components/tab-bar/TabBar';
 import Measure from 'react-measure';
 import GoalListItem from './GoalListItem';
@@ -31,25 +32,8 @@ class GoalList extends Component {
   constructor(props) {
     super(props);
     this.state = { filterHeight: 0 };
-    this.tabs = [{
-      title: 'Current',
-      filter: {
-        user: 'me',
-        goalType: 'current',
-        milestone: 'any',
-      },
-    }, {
-      title: 'Upcoming',
-      filter: {
-        user: 'me',
-        goalType: 'upcoming',
-        milestone: 'any',
-      },
-    }, {
-      title: 'Filter',
-    }];
 
-    this.callDelegate = setupDelegate(props.delegate, this);
+    this.callDelegate = setupDelegate(props.delegate);
     bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
   componentDidMount() {
@@ -64,53 +48,43 @@ class GoalList extends Component {
   onFilterHeight(dim) {
     this.setState({ filterHeight: dim.height });
   }
-  clickedListItem(id) {
-    this.callDelegate('goalListClickedGoal', id, this.refs.scroller.scrollTop);
-  }
-  filterGoals(goals) {
-    const { tabIndex, me } = this.props;
-    const tab = this.tabs[tabIndex];
-    const { filter } = tab;
-    const error = validFilter.test(filter);
-    if (filter) {
-      const user = filter.user === 'me' ? me.get('id') : filter.user;
-      return filterGoals(goals, filter.goalType, user, filter.milestone);
-    }
-    return goals;
-  }
   getHelper(goal) {
     const { me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
+  clickedListItem(id) {
+    this.callDelegate('goalListClickedGoal', id, this.refs.scroller.scrollTop);
+  }
+  filterGoals(goals) {
+    const { tabIndex, me, tabs } = this.props;
+    const filter = tabs.getIn([tabIndex, 'filter']);
+    const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
+    return filterGoals(goals, filter.get('goalType'), user, filter.get('milestone'));
+  }
+
 
   renderTabbar() {
     const {
       tabIndex,
       delegate,
+      tabs,
     } = this.props;
     return (
       <div className="goals-list__tab-bar">
-        <TabBar tabs={this.tabs.map(t => t.title)} delegate={delegate} activeTab={tabIndex} />
+        <TabBar tabs={tabs.map(t => t.get('title')).toArray()} delegate={delegate} activeTab={tabIndex} />
       </div>
     );
   }
   renderFilter() {
+    const { filterProp } = this.props;
     return (
       <Measure onMeasure={this.onFilterHeight}>
         <div className="goals-list__filter">
           <Filter
             onClick={(id, obj, e) => {
-              console.log('yo', id, obj, e);
+              this.callDelegate('onChangeFilter', obj, e);
             }}
-            filter={[
-              'Show ',
-              { id: 'goal-type', string: 'all goals' },
-              ' related to ',
-              { id: 'milestone', string: 'any milestone' },
-              ' and assigned to ',
-              { id: 'person', string: 'anyone' },
-              '.',
-            ]}
+            filter={filterProp.toJS()}
           />
         </div>
       </Measure>
@@ -128,11 +102,11 @@ class GoalList extends Component {
     return <FilterFooter />;
   }
   render() {
-    const { tabIndex } = this.props;
+    const { tabIndex, tabs } = this.props;
     const { filterHeight } = this.state;
     let className = 'goals-list';
     const style = {};
-    if (tabIndex === (this.tabs.length - 1)) {
+    if (tabIndex === (tabs.size - 1)) {
       style.paddingTop = `${filterHeight}px`;
       className += ' goals-list--show-filters';
     }
@@ -149,10 +123,11 @@ class GoalList extends Component {
   }
 }
 
-const { object: obj, number } = PropTypes;
+const { object: obj, number, array } = PropTypes;
 
 GoalList.propTypes = {
   goals: map.isRequired,
+  tabs: list,
   savedState: map,
   tabIndex: number,
   me: map.isRequired,

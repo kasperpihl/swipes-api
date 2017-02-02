@@ -7,6 +7,7 @@ const initialState = fromJS({
   overlay: null,
   cache: {},
   services: {},
+  milestones: {},
   notifications: [],
   ways: {},
   hasLoaded: false,
@@ -25,6 +26,12 @@ export default function main(state = initialState, action) {
         const ways = {};
         payload.ways.forEach((w) => { ways[w.id] = w; });
         ns.set('ways', fromJS(ways));
+
+        // milestones
+        const milestones = {};
+        payload.milestones.forEach((m) => { milestones[m.id] = m; });
+        ns.set('milestones', fromJS(milestones));
+
         // services
         const services = {};
         payload.services.forEach((s) => { services[s.id] = s; });
