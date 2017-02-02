@@ -99,9 +99,7 @@ svg {
 }
 
 .find-container {
-  width: calc(100% - 10px);
-height: 100%;
-display: -ms-flexbox;
-display: flex;
-position: relative;
+  @include size(calc(100% - 10px), 100%);
+  @include flex(flex);
+  position: relative;
 }
