@@ -1,5 +1,7 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import SelectStep from 'src/react/context-menus/select-step/SelectStep';
 import { List, Map } from 'immutable';
+import GoalsUtil from 'classes/goals-util';
 import * as a from './';
 
 export const removeFromCollection = (goalId, id) => (d, getState) => {
@@ -69,40 +71,32 @@ export const archive = goalId => (d) => {
 
 export const selectStep = (options, goalId, nextStepId, callback) => (d, getState) => {
   const goal = getState().getIn(['goals', goalId]);
-  const steps = goal.get('steps');
-  const sortedSteps = goal.get('step_order').map(sId => steps.get(sId)).toArray();
+  const helper = new GoalsUtil(goal);
+
+  let steps = goal.get('steps');
+  const sortedSteps = goal.get('step_order').map(sId => steps.get(sId));
   const currentStepId = goal.getIn(['status', 'current_step_id']);
-  const resultForStep = (step, i) => {
-    let title = `${i + 1}. ${step.get('title')}`;
-    if (step.get('id') === currentStepId) {
-      title += ' (current)';
-    }
-    return {
-      id: step.get('id'),
-      title,
-      disabled: (step.get('id') === currentStepId),
-      selected: (step.get('id') === nextStepId),
-    };
+
+
+  steps = sortedSteps.map(step => (Map({
+    id: step.get('id'),
+    title: step.get('title'),
+    current: (step.get('id') === currentStepId),
+    next: (step.get('id') === nextStepId),
+  })));
+  const numberOfCompleted = helper.getNumberOfCompletedSteps();
+  const onClick = (id) => {
+    callback(id);
+    d(a.main.contextMenu(null));
   };
-  const delegate = {
-    resultsForAll: () => sortedSteps.map((s, i) => resultForStep(s, i)).concat([{
-      id: null,
-      title: 'Complete Goal',
-      selected: !nextStepId,
-      rightIcon: {
-        icon: 'Checkmark',
-      },
-    }]),
-    onItemAction: (obj) => {
-      callback(obj.id);
-      d(a.main.contextMenu(null));
-    },
-  };
+
   d(a.main.contextMenu({
     options,
-    component: TabMenu,
+    component: SelectStep,
     props: {
-      delegate,
+      numberOfCompleted,
+      steps,
+      onClick,
     },
   }));
 };
