@@ -26,41 +26,48 @@ export default class Signin extends Component {
     e.preventDefault();
   }
   render() {
-    const { errorLable } = this.props;
+    const { errorLable, loading } = this.props;
+    let loadingClass = 'sign__form__loader';
+
+    if (loading) {
+      loadingClass += ' sign__form__loader--active';
+    }
+
     return (
-      <div className="sign">
-        {/* <SwipesBackgroundAnimation /> */}
-        <div className="sign__wrapper">
-          <div className="sign__logo">
-            <Icon png="SwipesIcon" />
-          </div>
-          <div className="sign__headline">Welcome to your Swipes</div>
-          <div className="sign__card">
-            <div className="sign__title">sign in to swipes</div>
-            <form className="sign__form" action="" onSubmit={this.preventSubmit}>
-              <br />
-              <FloatingInput label="Email" type="email" id="email" ref="username" error={errorLable} />
-              <FloatingInput label="Password" type="password" id="password" ref="password" error={errorLable} />
-              <br />
-              <div className="sign__error-status">{errorLable}</div>
-              <input
-                type="submit"
-                className="sign__form__button sign__form__button--submit"
-                value="SIGN IN"
-                onClick={this.signin}
-              />
-            </form>
-          </div>
-          <div className="sign__subheadline">No account yet?</div>
-          <div className="sign__button"><Link to="/signup">SIGN UP</Link></div>
-        </div>
-      </div>
+      <form className="sign__form" action="" onSubmit={this.preventSubmit}>
+        <br />
+        <FloatingInput
+          label="Email"
+          type="email"
+          id="email"
+          ref="username"
+          error={errorLable}
+        />
+        <FloatingInput
+          label="Password"
+          type="password"
+          id="password"
+          ref="password"
+          error={errorLable}
+        />
+        <br />
+        <div className="sign__error-status">{errorLable}</div>
+        <button
+          className="sign__form__button sign__form__button--submit"
+          onClick={this.signin}
+        >
+          <div className={loadingClass} />
+          SIGN IN
+        </button>
+      </form>
     );
   }
 }
 
-const { func } = PropTypes;
+const { func, string, bool } = PropTypes;
 
 Signin.propTypes = {
   onLogin: func,
+  errorLable: string,
+  loading: bool,
 };
