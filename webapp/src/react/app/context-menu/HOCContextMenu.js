@@ -121,7 +121,7 @@ class HOCContextMenu extends Component {
     }
   }
   stylesForOptions(options) {
-    const styles = {};
+    const styles = { transform: '' };
     options = options || {};
     const ww = window.innerWidth;
     const wh = window.innerHeight;
@@ -137,10 +137,9 @@ class HOCContextMenu extends Component {
     if (positionX && typeof positionX === 'number') {
       exW += positionX;
     }
-
     if (alignX === 'center') {
-      styles.left = `${(bR.left) + ((bR.right - bR.left) / 2)}px`;
-      styles.transform = 'translateX(-50%)';
+      styles.left = `${(bR.left) + (bR.width / 2)}px`;
+      styles.transform += 'translateX(-50%) ';
     } else if (alignX === 'right') {
       styles.right = `${(ww - bR.right) + exW}px`;
     } else {
@@ -158,8 +157,8 @@ class HOCContextMenu extends Component {
       exH += positionY;
     }
     if (alignY === 'center') {
-      styles.top = `${(bR.top) + ((bR.bottom - bR.top) / 2)}px`;
-      styles.transform = 'translateY(-50%)';
+      styles.top = `${(bR.top) + (bR.height / 2)}px`;
+      styles.transform += 'translateY(-50%) ';
     } else if (alignY === 'bottom') {
       styles.bottom = `${(wh - bR.bottom) + exH}px`;
     } else {
