@@ -40,7 +40,7 @@ class HOCAddGoal extends Component {
       this.state = props.cache.toObject();
     }
 
-    bindAll(this, ['clickedAdd', 'onHandoffChange', 'onSave', 'onInputChange']);
+    bindAll(this, ['clickedAdd', 'onHandoffChange', 'onSave', 'onInputChange', 'saveToCache']);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
@@ -48,6 +48,7 @@ class HOCAddGoal extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
     const input = document.getElementById('navbar-input');
+    window.addEventListener('beforeunload', this.saveToCache);
     input.value = this.state.title;
     input.focus();
   }
@@ -59,9 +60,13 @@ class HOCAddGoal extends Component {
       this._loadedWay = false;
     }
   }
-  componentWillUnmount() {
+  saveToCache() {
     const { saveCache } = this.props;
     saveCache('add-goal', fromJS(this.state));
+  }
+  componentWillUnmount() {
+    this.saveToCache();
+    window.removeEventListener('beforeunload', this.saveToCache);
     this._unmounted = true;
   }
   updateState(newState) {
