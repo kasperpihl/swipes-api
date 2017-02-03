@@ -45,8 +45,12 @@
       }
     }
 
+    &--hide {
+      display: none;
+    }
+
     &--toggle {
-      // @include size(24px);
+      @include size(24px);
       @include flex(none);
       position: relative;
       border-radius: 50%;
