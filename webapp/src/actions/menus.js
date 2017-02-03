@@ -1,13 +1,18 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import * as a from './';
 
-export const selectGoalType = (options, callback) => (d, getState) => {
+export const selectGoalType = (options, callback) => (d) => {
   const delegate = {
     onItemAction: (item) => {
       callback(item);
       d(a.main.contextMenu(null));
     },
-    resultsForAll: () => allUsers(),
+    resultsForAll: () => [
+      { id: 'any', title: 'Any goals' },
+      { id: 'completed', title: 'Completed goals' },
+      { id: 'current', title: 'Current goals' },
+      { id: 'upcoming', title: 'Upcoming goals' },
+    ],
   };
 
   d(a.main.contextMenu({

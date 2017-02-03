@@ -107,25 +107,12 @@ class HOCGoalList extends Component {
       contextMenu(null);
     }
     if (obj.id === 'goalType') {
-      contextMenu({
-        options,
-        component: ListMenu,
-        props: {
-          items: [
-            { title: 'Any goals', onClick: gtcb.bind(this, 'any') },
-            { title: 'Completed goals', onClick: gtcb.bind(this, 'completed') },
-            { title: 'Current goals', onClick: gtcb.bind(this, 'current') },
-            { title: 'Upcoming goals', onClick: gtcb.bind(this, 'upcoming') },
-          ],
-        },
-      });
+      const { selectGoalType } = this.props;
+      selectGoalType(options, res => updateState(obj.id, res.id));
     }
     if (obj.id === 'user') {
       const { selectUser } = this.props;
-      selectUser(options, (res) => {
-        console.log('res', res);
-        updateState(obj.id, res.id);
-      });
+      selectUser(options, res => updateState(obj.id, res.id));
     }
   }
   onContextClick() {
@@ -273,4 +260,5 @@ HOCGoalList.propTypes = {
 export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
   selectUser: a.menus.selectUser,
+  selectGoalType: a.menus.selectGoalType,
 })(HOCGoalList);
