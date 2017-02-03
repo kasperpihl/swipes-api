@@ -42,9 +42,9 @@ class HOCAttachments extends Component {
     } else {
       loadModal(
         {
-          title: 'Archive Goal?',
+          title: 'Remove Attachment?',
           data: {
-            message: 'Are you sure you want to archive this goal?',
+            message: 'Are you sure you want to remove this attachment?',
             buttons: ['Yes', 'No'],
           },
           type: 'warning',
