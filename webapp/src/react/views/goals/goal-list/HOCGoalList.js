@@ -54,6 +54,7 @@ class HOCGoalList extends Component {
         title: 'Filter',
         filter: defaultFilter,
       }]),
+      showFilter: false,
       filterProp: fromJS([
         'Show ',
         { id: 'goalType' },
@@ -72,6 +73,9 @@ class HOCGoalList extends Component {
     }
 
     const filter = this.state.tabs.getIn([tabIndex, 'filter']);
+    if (tabIndex === (tabs.size - 1)) {
+      this.state.showFilter = true;
+    }
     this.state.filterProp = this.updateFilterProp(filterProp, tabIndex);
     this.state.filteredGoals = this.filterGoals(filter);
     this.state.filterLabel = this.updateFilterLabel(filter, this.state.filteredGoals);
@@ -82,8 +86,48 @@ class HOCGoalList extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+  onEditFilter() {
+    console.log('showing!');
+    this.setState({ showFilter: true });
+  }
+  onHideFilter() {
+    this.setState({ showFilter: false });
+  }
   onClearFilter() {
     this.updateFilter(defaultFilter);
+  }
+
+  onChangeFilter(obj, e) {
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'center',
+    };
+    if (obj.id === 'goalType') {
+      const { selectGoalType } = this.props;
+      selectGoalType(options, res => this.updateFilter({ goalType: res.id }));
+    }
+    if (obj.id === 'user') {
+      const { selectUser } = this.props;
+      selectUser(options, res => this.updateFilter({ user: res.id }));
+    }
+    if (obj.id === 'milestone') {
+      const { selectMilestone } = this.props;
+      // selectMilestone(options, res => updateState(obj.id, res.id));
+    }
+  }
+
+  onContextClick() {
+    const { navPush } = this.props;
+    const { tabIndex } = this.state;
+    const savedState = {
+      tabIndex,
+    };
+    navPush({
+      component: 'AddGoal',
+      title: 'Add Goal',
+      placeholder: 'Goal title',
+    },
+    savedState);
   }
   updateFilter(mergeObj) {
     const { saveCache } = this.props;
@@ -102,39 +146,6 @@ class HOCGoalList extends Component {
       filteredGoals,
       filterLabel,
     });
-  }
-  onChangeFilter(obj, e) {
-    const { contextMenu } = this.props;
-
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'center',
-    };
-    if (obj.id === 'goalType') {
-      const { selectGoalType } = this.props;
-      selectGoalType(options, res => this.updateFilter({ goalType: res.id }));
-    }
-    if (obj.id === 'user') {
-      const { selectUser } = this.props;
-      selectUser(options, res => this.updateFilter({ user: res.id }));
-    }
-    if (obj.id === 'milestone') {
-      const { selectMilestone } = this.props;
-      // selectMilestone(options, res => updateState(obj.id, res.id));
-    }
-  }
-  onContextClick() {
-    const { navPush } = this.props;
-    const { tabIndex } = this.state;
-    const savedState = {
-      tabIndex,
-    };
-    navPush({
-      component: 'AddGoal',
-      title: 'Add Goal',
-      placeholder: 'Goal title',
-    },
-    savedState);
   }
   updateFilterProp(filterProp, tabIndex, filter) {
     filter = filter || this.state.tabs.getIn([tabIndex, 'filter']);
@@ -174,29 +185,23 @@ class HOCGoalList extends Component {
     return filterGoals(sortedGoals, filter.get('goalType'), user, filter.get('milestone'));
   }
 
-  checkIfUpdateFilter() {
-    const { filterProp } = this.state;
-    const newFilterProp = this.updateFilterProp(filterProp);
-    if (newFilterProp !== filterProp) {
-      return newFilterProp;
-    }
-    return undefined;
-  }
   tabDidChange(nav, index) {
     const { tabIndex, filterProp, tabs } = this.state;
     if (tabIndex !== index) {
       const filter = tabs.getIn([index, 'filter']);
       const filteredGoals = this.filterGoals(filter);
       const filterLabel = this.updateFilterLabel(filter, filteredGoals);
+      const showFilter = (index === (tabs.size - 1));
       this.setState({
         tabIndex: index,
         filterProp: this.updateFilterProp(filterProp, index),
         filteredGoals,
         filterLabel,
+        showFilter,
       });
     }
   }
-  goalListClickedGoal(goalId, scrollTop) {
+  onClickGoal(goalId, scrollTop) {
     const {
       navPush,
       goals,
@@ -219,10 +224,11 @@ class HOCGoalList extends Component {
     savedState);
   }
   render() {
-    const { goals, me, savedState } = this.props;
+    const { me, savedState } = this.props;
     const {
       tabIndex,
       tabs,
+      showFilter,
       filterProp,
       filterLabel,
       filteredGoals,
@@ -237,6 +243,7 @@ class HOCGoalList extends Component {
         tabs={tabs}
         filterProp={filterProp}
         filterLabel={filterLabel}
+        showFilter={showFilter}
       />
     );
   }
@@ -258,16 +265,17 @@ HOCGoalList.propTypes = {
   goals: map,
   milestones: map,
   users: map,
+  cache: map,
   savedState: object,
   navPush: func,
   delegate: object,
   me: map,
-  contextMenu: func,
+  selectUser: func,
+  selectGoalType: func,
   // removeThis: PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps, {
-  contextMenu: a.main.contextMenu,
   saveCache: a.main.cache.save,
   selectUser: a.menus.selectUser,
   selectGoalType: a.menus.selectGoalType,
