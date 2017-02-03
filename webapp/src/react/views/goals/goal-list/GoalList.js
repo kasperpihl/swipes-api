@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { object, any, string } from 'valjs';
-import { fromJS } from 'immutable';
 import { bindAll, setupDelegate } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
-import { filterGoals } from 'classes/filter-util';
 import TabBar from 'components/tab-bar/TabBar';
 import Measure from 'react-measure';
 import GoalListItem from './GoalListItem';
@@ -14,20 +11,6 @@ import Filter from './Filter';
 
 import './styles/goals-list.scss';
 
-const validFilter = object.as({
-  user: any.of(
-    'me',
-    'none',
-    'any',
-    string),
-  goalType: any.of(['all', 'completed', 'current', 'upcoming']),
-  milestone: any.of([
-    'any',
-    'none',
-    string,
-  ]),
-});
-
 class GoalList extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +18,9 @@ class GoalList extends Component {
 
     this.callDelegate = setupDelegate(props.delegate);
     this.clearFilter = this.callDelegate.bind(null, 'onClearFilter');
+    this.hideFilter = this.callDelegate.bind(null, 'onHideFilter');
+    this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
+
     bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
   componentDidMount() {
@@ -54,7 +40,7 @@ class GoalList extends Component {
     return new GoalsUtil(goal, me.get('id'));
   }
   clickedListItem(id) {
-    this.callDelegate('goalListClickedGoal', id, this.refs.scroller.scrollTop);
+    this.callDelegate('onClickGoal', id, this.refs.scroller.scrollTop);
   }
 
   renderTabbar() {
@@ -83,8 +69,12 @@ class GoalList extends Component {
 
           <div className="goals-list__filter-actions">
             <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
-            <div className="goals-list__filter-action">Save as tab</div>
-            <div className="goals-list__filter-action goals-list__filter-action--main">Hide</div>
+            <div
+              className="goals-list__filter-action goals-list__filter-action--main"
+              onClick={this.hideFilter}
+            >
+              Hide
+            </div>
           </div>
         </div>
       </Measure>
@@ -95,15 +85,21 @@ class GoalList extends Component {
     return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
   }
   renderFilterFooter() {
-    const { filterLabel } = this.props;
-    return <FilterFooter status={filterLabel} />;
+    const { filterLabel, showFilter, delegate, tabs, tabIndex } = this.props;
+    return (
+      <FilterFooter
+        status={filterLabel}
+        delegate={delegate}
+        disableEdit={!showFilter || (tabIndex !== (tabs.size - 1))}
+      />
+    );
   }
   render() {
-    const { tabIndex, tabs } = this.props;
+    const { showFilter } = this.props;
     const { filterHeight } = this.state;
     let className = 'goals-list';
     const style = {};
-    if (tabIndex === (tabs.size - 1)) {
+    if (showFilter) {
       style.paddingTop = `${filterHeight}px`;
       className += ' goals-list--show-filters';
     }
@@ -120,11 +116,14 @@ class GoalList extends Component {
   }
 }
 
-const { object: obj, number, array } = PropTypes;
+const { object: obj, number, array, bool, string } = PropTypes;
 
 GoalList.propTypes = {
   goals: array.isRequired,
   tabs: list,
+  showFilter: bool,
+  filterProp: list,
+  filterLabel: string,
   savedState: map,
   tabIndex: number,
   me: map.isRequired,

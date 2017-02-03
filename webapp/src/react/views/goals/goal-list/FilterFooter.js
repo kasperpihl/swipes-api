@@ -1,18 +1,16 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupDelegate } from 'classes/utils';
 import './styles/filter-footer.scss';
 
 class FilterFooter extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['editFilter', 'toggleCompleted']);
-  }
-  editFilter() {
-
+    bindAll(this, ['toggleCompleted']);
+    this.callDelegate = setupDelegate(props.delegate);
+    this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
   }
   toggleCompleted() {
-
   }
   render() {
     const { status, showCompleted, disableEdit } = this.props;
