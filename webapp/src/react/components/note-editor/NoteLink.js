@@ -19,7 +19,7 @@ class NoteLink extends Component {
     const { url } = Entity.get(entityKey).get('data');
 
     return (
-      <a className="DraftEditor-link" href={url} target="_blank">
+      <a className="DraftEditor-link" href={url} target="_blank" rel="noreferrer noopener">
         {children}
       </a>
     );
