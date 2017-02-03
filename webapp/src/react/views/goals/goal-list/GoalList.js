@@ -90,7 +90,7 @@ class GoalList extends Component {
       <FilterFooter
         status={filterLabel}
         delegate={delegate}
-        disableEdit={!showFilter || (tabIndex !== (tabs.size - 1))}
+        disableEdit={showFilter || (tabIndex !== (tabs.size - 1))}
       />
     );
   }

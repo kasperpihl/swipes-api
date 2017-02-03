@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Textarea from 'react-textarea-autosize';
 import Icon from 'Icon';
-import Loader from 'components/swipes-ui/Loader';
+import Loader from 'components/loaders/Loader';
 
 import './styles/swipes-modal.scss';
 

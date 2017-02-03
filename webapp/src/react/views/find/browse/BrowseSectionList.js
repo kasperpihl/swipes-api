@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import BrowseSectionItem from './BrowseSectionItem';
-import Loader from 'components/swipes-ui/Loader';
+import Loader from 'components/loaders/Loader';
 
 import './styles/section-list.scss';
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindAll, setupCachedCallback } from 'classes/utils';
 import Icon from 'Icon';
 import Button from 'Button';
-import Loader from 'components/swipes-ui/Loader';
+import Loader from 'components/loaders/Loader';
 import Section from 'components/section/Section';
 import * as actions from 'actions';
 import * as Files from './files';

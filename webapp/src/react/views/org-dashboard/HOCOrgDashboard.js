@@ -58,7 +58,7 @@ class HOCOrgDashboard extends Component {
   clickableGoalForId(goalId) {
     const title = this.titleForGoalId(goalId);
     if (!title) {
-      return null;
+      return '(archived)';
     }
     return <b onClick={this.onClickCached(goalId, 'goal')}>{title}</b>;
   }
@@ -84,12 +84,10 @@ class HOCOrgDashboard extends Component {
     switch (type) {
       case 'goal_created': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        if (goal) {
-          const name = this.clickableNameForUserId(data.get('done_by'));
-          m = m.set('message', <span>{name}{' started a goal: '}{goal}</span>);
-          m = m.set('svg', 'Plus');
-          m = m.set('iconBgColor', blueColor);
-        }
+        const name = this.clickableNameForUserId(data.get('done_by'));
+        m = m.set('message', <span>{name}{' started a goal: '}{goal}</span>);
+        m = m.set('svg', 'Plus');
+        m = m.set('iconBgColor', blueColor);
 
         break;
       }
@@ -103,32 +101,26 @@ class HOCOrgDashboard extends Component {
       }
       case 'step_got_active': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        if (goal) {
-          m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);
-          m = m.set('svg', 'Deliver');
-          m = m.set('iconBgColor', blueColor);
-        }
+        m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);
+        m = m.set('svg', 'Deliver');
+        m = m.set('iconBgColor', blueColor);
 
         break;
       }
       case 'step_completed': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
-        if (goal) {
-          const name = this.clickableNameForUserId(data.get('done_by'));
-          m = m.set('message', <span>{name}{' completed a step in: '}{goal}</span>);
-          m = m.set('svg', 'Checkmark');
-          m = m.set('iconBgColor', greenColor);
-        }
+        const name = this.clickableNameForUserId(data.get('done_by'));
+        m = m.set('message', <span>{name}{' completed a step in: '}{goal}</span>);
+        m = m.set('svg', 'Checkmark');
+        m = m.set('iconBgColor', greenColor);
         break;
       }
       case 'way_created': {
         const way = ways.get(data.get('way_id'));
-        if (way) {
-          const name = this.clickableNameForUserId(data.get('done_by'));
-          m = m.set('message', <span>{name}{` created a way: ${way.get('title')}`}</span>);
-          m = m.set('svg', 'Plus');
-          m = m.set('iconBgColor', blueColor);
-        }
+        const name = this.clickableNameForUserId(data.get('done_by'));
+        m = m.set('message', <span>{name}{` created a way: ${way.get('title')}`}</span>);
+        m = m.set('svg', 'Plus');
+        m = m.set('iconBgColor', blueColor);
         break;
       }
       default:
