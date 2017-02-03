@@ -15,14 +15,9 @@ export default class ChecklistEditorBlock extends Component {
     const blockType = contentState.getBlockForKey(startKey).getType();
     const prevBlock = contentState.getBlockBefore(startKey);
 
-    if (blockType === 'checklist' && selection.isCollapsed() && prevBlock && prevBlock.getType() === 'checklist') {
+    if (blockType === 'checklist' && selection.isCollapsed() && prevBlock) {
       e.preventDefault();
       const focusOffset = selection.focusOffset;
-
-      if (!prevBlock) {
-        return false;
-      }
-
       const prevKey = prevBlock.getKey();
       const prevLength = prevBlock.getLength();
       const newOffsetlocation = focusOffset > prevLength ? prevLength : focusOffset;
@@ -47,7 +42,7 @@ export default class ChecklistEditorBlock extends Component {
       return true;
     }
 
-    return false;
+    return true;
   }
   static onDownArrow(editorState, onChange, e) {
     const selection = editorState.getSelection();
