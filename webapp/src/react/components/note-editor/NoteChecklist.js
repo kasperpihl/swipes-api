@@ -15,7 +15,7 @@ export default class ChecklistEditorBlock extends Component {
     const blockType = contentState.getBlockForKey(startKey).getType();
     const prevBlock = contentState.getBlockBefore(startKey);
 
-    if (blockType === 'checklist' && selection.isCollapsed() && prevBlock.getType() === 'checklist') {
+    if (blockType === 'checklist' && selection.isCollapsed() && prevBlock && prevBlock.getType() === 'checklist') {
       e.preventDefault();
       const focusOffset = selection.focusOffset;
 

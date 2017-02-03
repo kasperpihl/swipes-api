@@ -5,10 +5,8 @@
   $b: &;
   @include size(100%, 60px);
   @include flex(flex);
-  max-width: calc(780px - 30px);
+  max-width: 780px;
   background-color: $bg;
-  box-shadow: 0 0 20px 3px rgba(5,57,128,0.1);
-  margin-top: 60px; margin-left: 15px;
 
   &__section {
     @include size(100%, auto);
@@ -16,10 +14,10 @@
     position: relative;
 
     &:last-child {
-      @include size(256px, 100%);
+      @include size(auto, 100%);
       @include flex();
       @include flex(none);
-      border-left: 1px solid darken($deepBlue-5, 2%);
+      padding-left: 45px;
 
       #{$b}__status {
         padding-left: 15px;
@@ -29,7 +27,6 @@
 
   &__status {
     @include font(12px, $deepBlue-70, 18px, 500);
-    padding-left: 45px;
   }
 
   &__button {
