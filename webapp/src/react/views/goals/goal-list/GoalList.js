@@ -34,6 +34,7 @@ class GoalList extends Component {
     this.state = { filterHeight: 0 };
 
     this.callDelegate = setupDelegate(props.delegate);
+    this.clearFilter = this.callDelegate.bind(null, 'onClearFilter');
     bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
   componentDidMount() {
@@ -81,7 +82,7 @@ class GoalList extends Component {
           />
 
           <div className="goals-list__filter-actions">
-            <div className="goals-list__filter-action">Clear filter</div>
+            <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
             <div className="goals-list__filter-action">Save as tab</div>
             <div className="goals-list__filter-action goals-list__filter-action--main">Hide</div>
           </div>
@@ -122,7 +123,7 @@ class GoalList extends Component {
 const { object: obj, number, array } = PropTypes;
 
 GoalList.propTypes = {
-  goals: map.isRequired,
+  goals: array.isRequired,
   tabs: list,
   savedState: map,
   tabIndex: number,

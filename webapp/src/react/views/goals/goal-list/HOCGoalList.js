@@ -12,9 +12,13 @@ import {
   getFilterLabel,
   filterGoals,
 } from 'classes/filter-util';
-import ListMenu from 'components/list-menu/ListMenu';
 import GoalList from './GoalList';
 
+const defaultFilter = fromJS({
+  user: 'any',
+  goalType: 'any',
+  milestone: 'any',
+});
 
 class HOCGoalList extends Component {
   static contextButtons() {
@@ -48,11 +52,7 @@ class HOCGoalList extends Component {
         },
       }, {
         title: 'Filter',
-        filter: {
-          user: 'any',
-          goalType: 'any',
-          milestone: 'any',
-        },
+        filter: defaultFilter,
       }]),
       filterProp: fromJS([
         'Show ',
@@ -66,12 +66,14 @@ class HOCGoalList extends Component {
     if (props.savedState) {
       this.state.tabIndex = props.savedState.get('tabIndex');
     }
+    const { tabIndex, filterProp, tabs } = this.state;
+    if (props.cache) {
+      this.state.tabs = tabs.setIn([tabs.size - 1, 'filter'], props.cache);
+    }
 
-    const { tabIndex, filterProp } = this.state;
     const filter = this.state.tabs.getIn([tabIndex, 'filter']);
     this.state.filterProp = this.updateFilterProp(filterProp, tabIndex);
     this.state.filteredGoals = this.filterGoals(filter);
-
     this.state.filterLabel = this.updateFilterLabel(filter, this.state.filteredGoals);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -80,6 +82,27 @@ class HOCGoalList extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+  onClearFilter() {
+    this.updateFilter(defaultFilter);
+  }
+  updateFilter(mergeObj) {
+    const { saveCache } = this.props;
+    const { tabs, filterProp, tabIndex } = this.state;
+    const newTabs = tabs.mergeIn([tabIndex, 'filter'], mergeObj);
+    const newFilter = newTabs.getIn([tabIndex, 'filter']);
+    const newFilterProp = this.updateFilterProp(filterProp, tabIndex, newFilter);
+    const filteredGoals = this.filterGoals(newFilter);
+    const filterLabel = this.updateFilterLabel(newFilter, filteredGoals);
+    if (tabIndex === (tabs.size - 1)) {
+      saveCache('list-filter', newFilter);
+    }
+    this.setState({
+      tabs: newTabs,
+      filterProp: newFilterProp,
+      filteredGoals,
+      filterLabel,
+    });
+  }
   onChangeFilter(obj, e) {
     const { contextMenu } = this.props;
 
@@ -87,32 +110,17 @@ class HOCGoalList extends Component {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'center',
     };
-
-    const updateState = (type, value) => {
-      const { tabs, tabIndex, filterProp } = this.state;
-      const newTabs = tabs.setIn([tabIndex, 'filter', type], value);
-      const newFilter = newTabs.getIn([tabIndex, 'filter']);
-      const newFilterProp = this.updateFilterProp(filterProp, tabIndex, newFilter);
-      const filteredGoals = this.filterGoals(newFilter);
-      const filterLabel = this.updateFilterLabel(newFilter, filteredGoals);
-      this.setState({
-        tabs: newTabs,
-        filterProp: newFilterProp,
-        filteredGoals,
-        filterLabel,
-      });
-    };
-    function gtcb(value) {
-      updateState(obj.id, value);
-      contextMenu(null);
-    }
     if (obj.id === 'goalType') {
       const { selectGoalType } = this.props;
-      selectGoalType(options, res => updateState(obj.id, res.id));
+      selectGoalType(options, res => this.updateFilter({ goalType: res.id }));
     }
     if (obj.id === 'user') {
       const { selectUser } = this.props;
-      selectUser(options, res => updateState(obj.id, res.id));
+      selectUser(options, res => this.updateFilter({ user: res.id }));
+    }
+    if (obj.id === 'milestone') {
+      const { selectMilestone } = this.props;
+      // selectMilestone(options, res => updateState(obj.id, res.id));
     }
   }
   onContextClick() {
@@ -237,6 +245,7 @@ class HOCGoalList extends Component {
 function mapStateToProps(state) {
   return {
     goals: state.get('goals'),
+    cache: state.getIn(['main', 'cache', 'list-filter']),
     me: state.get('me'),
     users: state.get('users'),
     milestones: state.getIn(['main', 'milestones']),
@@ -259,6 +268,7 @@ HOCGoalList.propTypes = {
 
 export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
+  saveCache: a.main.cache.save,
   selectUser: a.menus.selectUser,
   selectGoalType: a.menus.selectGoalType,
 })(HOCGoalList);
