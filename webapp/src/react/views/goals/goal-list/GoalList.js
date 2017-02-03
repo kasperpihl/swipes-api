@@ -109,8 +109,8 @@ class GoalList extends Component {
         <div className="goals-list__scroller" style={style} ref="scroller">
           {this.renderFilter()}
           {this.renderList()}
+          {this.renderFilterFooter()}
         </div>
-        {this.renderFilterFooter()}
       </div>
     );
   }

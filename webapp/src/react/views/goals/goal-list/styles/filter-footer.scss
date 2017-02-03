@@ -3,14 +3,12 @@
 
 .filter-footer {
   $b: &;
-  @include size(780px, 60px);
-  // @include size(calc(100% + 35px), 60px);
+  @include size(100%, 60px);
   @include flex(flex);
+  max-width: calc(780px - 30px);
   background-color: $bg;
   box-shadow: 0 0 20px 3px rgba(5,57,128,0.1);
-  left: 0px; bottom: 0;
-  max-width: calc(100vw - 95px - 16px);
-  position: absolute;
+  margin-top: 60px; margin-left: 15px;
 
   &__section {
     @include size(100%, auto);

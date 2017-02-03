@@ -13,14 +13,15 @@ $imgContHeight: 54px;
   padding: 12px 21px;
   padding-left: 0px;
   border-bottom: 1px solid $deepBlue-10;
-  transition: .25s ease;
+  transition: padding-left .25s ease;
 
   &:hover {
     padding-left: 3px;
-    transition: .25s ease;
+    transition: padding-left .25s ease;
 
     #{$b}__title {
       color: $blue-100;
+      transition: color .1s ease;
     }
   }
 
@@ -43,7 +44,7 @@ $imgContHeight: 54px;
   &__title {
     @include font(15px, $deepBlue-80, 400);
     width: calc(100% - 50px);
-    transition: .25s ease;
+    transition: color .1s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
