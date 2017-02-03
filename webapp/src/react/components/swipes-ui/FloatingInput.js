@@ -32,7 +32,7 @@ class FloatingInput extends Component {
     this.setState({ floatValue: inputVal });
   }
   render() {
-    const { label, type, id } = this.props;
+    const { label, type, id, error } = this.props;
     let floatingClass = 'floating-label--inactive';
 
     if (this.state.float) {
@@ -41,6 +41,10 @@ class FloatingInput extends Component {
 
     if (this.state.floatValue > 0) {
       floatingClass += ' floating-label--standby';
+    }
+
+    if (error) {
+      floatingClass += ' floating-label--error';
     }
 
     return (

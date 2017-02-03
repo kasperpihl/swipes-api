@@ -1,8 +1,14 @@
 @import "~styles/_vars.scss";
 @import "~styles/_mixins.scss";
 
+$idleLight: $deepBlue-40;
+$idleDark: $deepBlue-80;
+$activeColor: $blue-100;
+$errorColor: $red-color;
+
 
 .floating-label {
+  $b: &;
   position: relative;
   width: 100%;
   padding: 15px 30px;
@@ -12,11 +18,11 @@
     padding: 5px 0;
     width: inherit;
     border: none;
-    border-bottom: 1px solid $deepBlue-40;
+    border-bottom: 1px solid $idleLight;
     background-color: transparent;
     font-weight: 400;
     font-size: 16px;
-    color: $deepBlue-80;
+    color: $idleDark;
     position: relative;
     transition: .2s ease-in-out;
 
@@ -30,7 +36,7 @@
     bottom: 50%;
     left: 0;
     font-weight: 400;
-    color: $deepBlue-40;
+    color: $idleLight;
     transform: translateY(50%);
     transition: .2s ease-in-out;
     padding-left: 30px;
@@ -58,6 +64,12 @@
       transform: translate3d(0px,-13px, 0px);
       font-size: 11px;
       transition: .2s ease-in-out;
+    }
+  }
+
+  &--error {
+    #{$b}__input {
+      border-color: $errorColor;
     }
   }
 }

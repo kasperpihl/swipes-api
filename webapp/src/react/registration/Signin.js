@@ -26,6 +26,7 @@ export default class Signin extends Component {
     e.preventDefault();
   }
   render() {
+    const { errorLable } = this.props;
     return (
       <div className="sign">
         {/* <SwipesBackgroundAnimation /> */}
@@ -38,9 +39,10 @@ export default class Signin extends Component {
             <div className="sign__title">sign in to swipes</div>
             <form className="sign__form" action="" onSubmit={this.preventSubmit}>
               <br />
-              <FloatingInput label="Email" type="email" id="email" ref="username" />
-              <FloatingInput label="Password" type="password" id="password" ref="password" />
+              <FloatingInput label="Email" type="email" id="email" ref="username" error={errorLable} />
+              <FloatingInput label="Password" type="password" id="password" ref="password" error={errorLable} />
               <br />
+              <div className="sign__error-status">{errorLable}</div>
               <input
                 type="submit"
                 className="sign__form__button sign__form__button--submit"
