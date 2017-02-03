@@ -28,9 +28,27 @@
     left: 0; top: 0;
     max-width: 780px;
     position: absolute;
-    padding: 30px 0;
+    padding-top: 30px;
     transform: translateY(-100%);
     will-change: transform;
+  }
+
+  &__filter-actions {
+    @include size(100%, 48px);
+    @include flex(center, flex-end);
+  }
+
+  &__filter-action {
+    @include font(12px, $deepBlue-50, 18px, 500);
+    padding-left: 15px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &--main {
+      @include font($c: $blue-100);
+    }
   }
 
   &--show-filters {

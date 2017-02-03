@@ -86,6 +86,12 @@ class GoalList extends Component {
             }}
             filter={filterProp.toJS()}
           />
+
+          <div className="goals-list__filter-actions">
+            <div className="goals-list__filter-action">Clear filter</div>
+            <div className="goals-list__filter-action">Save as tab</div>
+            <div className="goals-list__filter-action goals-list__filter-action--main">Hide</div>
+          </div>
         </div>
       </Measure>
     );
