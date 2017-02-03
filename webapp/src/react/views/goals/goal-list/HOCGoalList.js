@@ -16,7 +16,7 @@ import GoalList from './GoalList';
 
 const defaultFilter = fromJS({
   user: 'any',
-  goalType: 'any',
+  goalType: 'all',
   milestone: 'any',
 });
 
@@ -56,7 +56,6 @@ class HOCGoalList extends Component {
       }]),
       showFilter: false,
       filterProp: fromJS([
-        'Show ',
         { id: 'goalType' },
         ' assigned to ',
         { id: 'user' },
@@ -85,6 +84,16 @@ class HOCGoalList extends Component {
 
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.goals !== this.props.goals) {
+      const newFilteredGoals = this;
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.goals !== this.props.goals) {
+      this.updateFilter({});
+    }
   }
   onEditFilter() {
     console.log('showing!');
@@ -267,6 +276,7 @@ HOCGoalList.propTypes = {
   users: map,
   cache: map,
   savedState: object,
+  saveCache: func,
   navPush: func,
   delegate: object,
   me: map,

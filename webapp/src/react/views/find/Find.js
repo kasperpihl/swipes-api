@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate } from 'classes/utils';
 import { list } from 'react-immutable-proptypes';
-import Loader from 'components/swipes-ui/Loader';
+import Loader from 'components/loaders/Loader';
 import FindItem from './FindItem';
 
 class Find extends Component {

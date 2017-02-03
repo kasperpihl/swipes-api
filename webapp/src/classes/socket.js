@@ -59,7 +59,7 @@ export default class Socket {
       return;
     }
     this.store.dispatch({ type, payload });
-    if (payload && payload.notification_data) {
+    if (payload && payload.notification_data && Object.keys(payload.notification_data).length) {
       this.store.dispatch({
         type: types.NOTIFICATION_ADD,
         payload: payload.notification_data,

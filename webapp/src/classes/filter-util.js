@@ -3,11 +3,11 @@ import GoalsUtil from 'classes/goals-util';
 
 export function getGoalTypeForValue(goalType) {
   const goalTypes = {
-    current: 'current goals',
-    upcoming: 'upcoming goals',
-    completed: 'completed goals',
+    current: 'Current goals',
+    upcoming: 'Upcoming goals',
+    completed: 'Completed goals',
   };
-  return goalTypes[goalType] || 'any goals';
+  return goalTypes[goalType] || 'All goals';
 }
 
 export function getUserStringForValue(users, userId) {
@@ -76,7 +76,7 @@ export function filterGoals(goals, type, userId, milestoneId) {
       return false;
     }
     if (userId) {
-      if (type === 'any' || type === 'completed') {
+      if (type === 'all' || type === 'completed') {
         const allInvolved = helper.getAllInvolvedAssignees();
         const hasUser = (allInvolved.indexOf(userId) > -1);
         if (userId !== 'none' && userId !== 'any' && !hasUser) {

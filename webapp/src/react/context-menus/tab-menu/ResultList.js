@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Loader from 'components/swipes-ui/Loader';
+import Loader from 'components/loaders/Loader';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import ResultItem from './ResultItem';
 
