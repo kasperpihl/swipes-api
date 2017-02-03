@@ -82,7 +82,14 @@ class GoalList extends Component {
   }
   renderList() {
     const { goals } = this.props;
-    return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
+    return goals.map(goal => (
+      <GoalListItem
+        onClick={this.clickedListItem}
+        me={this.props.me}
+        goal={goal}
+        key={`goal-list-item-${goal.get('id')}`}
+      />
+    ));
   }
   renderFilterFooter() {
     const { filterLabel, showFilter, delegate, tabs, tabIndex } = this.props;

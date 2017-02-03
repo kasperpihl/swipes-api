@@ -77,7 +77,6 @@ export const selectStep = (options, goalId, nextStepId, callback) => (d, getStat
   const sortedSteps = goal.get('step_order').map(sId => steps.get(sId));
   const currentStepId = goal.getIn(['status', 'current_step_id']);
 
-
   steps = sortedSteps.map(step => (Map({
     id: step.get('id'),
     title: step.get('title'),

@@ -5,15 +5,9 @@ import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate } from 'classes/utils';
-import {
-  getGoalTypeForValue,
-  getUserStringForValue,
-  getMilestoneStringForValue,
-  getFilterLabel,
-  filterGoals,
-} from 'classes/filter-util';
+import filterGoals from 'classes/filter-util';
 import GoalList from './GoalList';
-
+/* global msgGen*/
 const defaultFilter = fromJS({
   user: 'any',
   goalType: 'all',
@@ -85,18 +79,34 @@ class HOCGoalList extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.goals !== this.props.goals) {
-      const newFilteredGoals = this;
-    }
-  }
   componentDidUpdate(prevProps) {
     if (prevProps.goals !== this.props.goals) {
       this.updateFilter({});
     }
   }
+  onClickGoal(goalId, scrollTop) {
+    const {
+      navPush,
+      goals,
+    } = this.props;
+    const {
+      tabIndex,
+    } = this.state;
+    const savedState = {
+      tabIndex,
+      scrollTop,
+    }; // state if this gets reopened
+    const goal = goals.get(goalId);
+    navPush({
+      component: 'GoalStep',
+      title: goal.get('title'),
+      props: {
+        goalId,
+      },
+    },
+    savedState);
+  }
   onEditFilter() {
-    console.log('showing!');
     this.setState({ showFilter: true });
   }
   onHideFilter() {
@@ -121,7 +131,7 @@ class HOCGoalList extends Component {
     }
     if (obj.id === 'milestone') {
       const { selectMilestone } = this.props;
-      // selectMilestone(options, res => updateState(obj.id, res.id));
+      selectMilestone(options, res => this.updateFilter({ goalType: res.id }));
     }
   }
 
@@ -158,7 +168,6 @@ class HOCGoalList extends Component {
   }
   updateFilterProp(filterProp, tabIndex, filter) {
     filter = filter || this.state.tabs.getIn([tabIndex, 'filter']);
-    const { users, milestones, me } = this.props;
 
     return filterProp.map((p) => {
       if (typeof p === 'string') {
@@ -167,12 +176,11 @@ class HOCGoalList extends Component {
       let newString;
 
       if (p.get('id') === 'goalType') {
-        newString = getGoalTypeForValue(filter.get('goalType'));
+        newString = msgGen.getGoalTypeForValue(filter.get('goalType'));
       } else if (p.get('id') === 'user') {
-        const userId = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
-        newString = getUserStringForValue(users, userId);
+        newString = msgGen.getUserStringForValue(filter.get('user'));
       } else if (p.get('id') === 'milestone') {
-        return p.set('string', getMilestoneStringForValue(milestones, filter.get('milestone')));
+        return p.set('string', msgGen.getMilestoneStringForValue(filter.get('milestone')));
       }
       if (newString !== p.get('string')) {
         return p.set('string', newString);
@@ -182,8 +190,7 @@ class HOCGoalList extends Component {
     });
   }
   updateFilterLabel(filter, filteredGoals) {
-    const { users, milestones, me } = this.props;
-    return getFilterLabel(filteredGoals.length, filter, users, milestones, me);
+    return msgGen.getFilterLabel(filteredGoals.length, filter);
   }
   filterGoals(filter) {
     const { goals, me } = this.props;
@@ -210,28 +217,7 @@ class HOCGoalList extends Component {
       });
     }
   }
-  onClickGoal(goalId, scrollTop) {
-    const {
-      navPush,
-      goals,
-    } = this.props;
-    const {
-      tabIndex,
-    } = this.state;
-    const savedState = {
-      tabIndex,
-      scrollTop,
-    }; // state if this gets reopened
-    const goal = goals.get(goalId);
-    navPush({
-      component: 'GoalStep',
-      title: goal.get('title'),
-      props: {
-        goalId,
-      },
-    },
-    savedState);
-  }
+
   render() {
     const { me, savedState } = this.props;
     const {
@@ -263,8 +249,6 @@ function mapStateToProps(state) {
     goals: state.get('goals'),
     cache: state.getIn(['main', 'cache', 'list-filter']),
     me: state.get('me'),
-    users: state.get('users'),
-    milestones: state.getIn(['main', 'milestones']),
   };
 }
 
@@ -272,8 +256,6 @@ function mapStateToProps(state) {
 const { func, object } = PropTypes;
 HOCGoalList.propTypes = {
   goals: map,
-  milestones: map,
-  users: map,
   cache: map,
   savedState: object,
   saveCache: func,
@@ -282,6 +264,7 @@ HOCGoalList.propTypes = {
   me: map,
   selectUser: func,
   selectGoalType: func,
+  selectMilestone: func,
   // removeThis: PropTypes.string.isRequired
 };
 

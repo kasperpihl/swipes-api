@@ -1,66 +1,6 @@
 import GoalsUtil from 'classes/goals-util';
 
-
-export function getGoalTypeForValue(goalType) {
-  const goalTypes = {
-    current: 'Current goals',
-    upcoming: 'Upcoming goals',
-    completed: 'Completed goals',
-  };
-  return goalTypes[goalType] || 'All goals';
-}
-
-export function getUserStringForValue(users, userId) {
-  if (userId === 'none') {
-    return 'no one';
-  }
-  if (users) {
-    const user = users.get(userId);
-    if (user) {
-      return user.get('name').split(' ')[0].toLowerCase();
-    }
-  }
-
-  return 'anyone';
-}
-
-export function getMilestoneStringForValue(milestones, milestoneId) {
-  if (milestoneId === 'none') {
-    return 'no milestone';
-  }
-  if (milestones) {
-    const milestone = milestones.get(milestoneId);
-    if (milestone) {
-      return milestone.get('title');
-    }
-  }
-
-  return 'any milestone';
-}
-
-export function getFilterLabel(number, filter, users, milestones, me) {
-  const goalTypes = {
-    current: 'current ',
-    upcoming: 'upcoming ',
-    completed: 'completed ',
-  };
-
-  const typeLabel = goalTypes[filter.get('goalType')] || '';
-  let label = `${number} ${typeLabel}goal`;
-  if (number !== 1) {
-    label += 's';
-  }
-  if (filter.get('user') !== 'any') {
-    const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
-    label += ` assigned to ${getUserStringForValue(users, user)}`;
-  }
-  if (filter.get('milestone') !== 'any') {
-    label += ` with ${getMilestoneStringForValue(milestones, filter.get('milestone'))}`;
-  }
-  return label;
-}
-
-export function filterGoals(goals, type, userId, milestoneId) {
+export default function filterGoals(goals, type, userId, milestoneId) {
   return goals.filter((goal) => {
     const helper = new GoalsUtil(goal);
     if (milestoneId && milestoneId !== 'any') {

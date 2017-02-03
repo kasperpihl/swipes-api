@@ -11,6 +11,7 @@ import Socket from 'classes/socket';
 import IpcListener from 'classes/ipc-listener';
 import SwipesUrlProvider from 'classes/swipes-url-provider';
 import Notifications from 'classes/notifications';
+import MessageGenerator from 'classes/message-generator';
 
 const store = configureStore();
 
@@ -24,6 +25,7 @@ window.swipesUrlProvider = new SwipesUrlProvider(store);
 window.socket = new Socket(store);
 window.notifications = new Notifications(store);
 window.ipcListener = new IpcListener(store);
+window.msgGen = new MessageGenerator(store);
 
 export default function Root() {
   return (

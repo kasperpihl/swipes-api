@@ -10,34 +10,34 @@ import './styles/goal-list-item.scss';
 class GoalListItem extends Component {
   constructor(props) {
     super(props);
-    const { data, me } = props;
-    this.helper = new GoalsUtil(data, me.get('id'));
+    const { goal, me } = props;
+    this.helper = new GoalsUtil(goal, me.get('id'));
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedListItem = this.clickedListItem.bind(this);
   }
   clickedListItem() {
-    const { onClick, data } = this.props;
+    const { onClick, goal } = this.props;
 
     if (onClick) {
-      onClick(data.get('id'));
+      onClick(goal.get('id'));
     }
   }
   render() {
-    const { data } = this.props;
+    const { goal } = this.props;
     const rootClass = 'goal-list-item';
     const status = this.helper.getStatus();
 
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
         <div className={`${rootClass}__content`}>
-          <div className={`${rootClass}__title`}>{data.get('title')}</div>
+          <div className={`${rootClass}__title`}>{goal.get('title')}</div>
           <div className={`${rootClass}__label`}>{status}</div>
         </div>
         <div className={`${rootClass}__assigning`}>
           <HOCAssigning
-            stepId={data.getIn(['status', 'current_step_id'])}
-            goalId={data.get('id')}
+            stepId={goal.getIn(['status', 'current_step_id'])}
+            goalId={goal.get('id')}
             maxImages={1}
           />
         </div>
@@ -49,7 +49,7 @@ class GoalListItem extends Component {
 const { func } = PropTypes;
 
 GoalListItem.propTypes = {
-  data: map,
+  goal: map,
   me: map,
   onClick: func,
 };

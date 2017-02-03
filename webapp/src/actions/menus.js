@@ -32,11 +32,13 @@ export const selectUser = (options, callback) => (d, getState) => {
     if (!user) {
       return null;
     }
-    const sub = me.get('id') === user.get('id') ? 'You' : user.get('job_title');
+    const isMe = me.get('id') === user.get('id');
+    const subtitle = isMe ? 'You' : user.get('job_title');
+    const id = isMe ? 'me' : user.get('id');
     const obj = {
-      id: user.get('id'),
+      id,
       title: user.get('name'),
-      subtitle: sub,
+      subtitle,
     };
     if (user.get('profile_pic')) {
       obj.leftIcon = {
