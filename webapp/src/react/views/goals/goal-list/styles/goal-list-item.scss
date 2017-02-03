@@ -13,17 +13,14 @@ $imgContHeight: 54px;
   padding: 12px 21px;
   padding-left: 0px;
   border-bottom: 1px solid $deepBlue-10;
+  transition: .25s ease;
 
   &:hover {
+    padding-left: 3px;
+    transition: .25s ease;
+
     #{$b}__title {
       color: $blue-100;
-      transform: translateX(3px);
-      transition: .25s ease;
-    }
-
-    #{$b}__label {
-      transform: translateX(3px);
-      transition: .25s ease;
     }
   }
 
