@@ -67,7 +67,7 @@ $imgContHeight: 54px;
     @include size(auto, 30px);
     @include flex(none);
     position: absolute;
-    right: 21px; top: 50%;
+    right: 0px; top: 50%;
     transform: translateY(-50%);
   }
 }
