@@ -55,13 +55,6 @@ class GoalList extends Component {
   clickedListItem(id) {
     this.callDelegate('goalListClickedGoal', id, this.refs.scroller.scrollTop);
   }
-  filterGoals(goals) {
-    const { tabIndex, me, tabs } = this.props;
-    const filter = tabs.getIn([tabIndex, 'filter']);
-    const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
-    return filterGoals(goals, filter.get('goalType'), user, filter.get('milestone'));
-  }
-
 
   renderTabbar() {
     const {
@@ -97,15 +90,12 @@ class GoalList extends Component {
     );
   }
   renderList() {
-    let { goals } = this.props;
-
-    goals = goals.sort((a, b) => b.get('created_at').localeCompare(a.get('created_at'))).toArray();
-    goals = this.filterGoals(goals);
-
+    const { goals } = this.props;
     return goals.map(goal => <GoalListItem onClick={this.clickedListItem} me={this.props.me} data={goal} key={`goal-list-item-${goal.get('id')}`} />);
   }
   renderFilterFooter() {
-    return <FilterFooter />;
+    const { filterLabel } = this.props;
+    return <FilterFooter status={filterLabel} />;
   }
   render() {
     const { tabIndex, tabs } = this.props;

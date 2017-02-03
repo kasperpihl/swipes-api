@@ -1,5 +1,6 @@
 import GoalsUtil from 'classes/goals-util';
 
+
 export function getGoalTypeForValue(goalType) {
   const goalTypes = {
     current: 'current goals',
@@ -25,7 +26,7 @@ export function getUserStringForValue(users, userId) {
 
 export function getMilestoneStringForValue(milestones, milestoneId) {
   if (milestoneId === 'none') {
-    return 'without milestone';
+    return 'no milestone';
   }
   if (milestones) {
     const milestone = milestones.get(milestoneId);
@@ -35,6 +36,28 @@ export function getMilestoneStringForValue(milestones, milestoneId) {
   }
 
   return 'any milestone';
+}
+
+export function getFilterLabel(number, filter, users, milestones, me) {
+  const goalTypes = {
+    current: 'current ',
+    upcoming: 'upcoming ',
+    completed: 'completed ',
+  };
+
+  const typeLabel = goalTypes[filter.get('goalType')] || '';
+  let label = `${number} ${typeLabel}goal`;
+  if (number !== 1) {
+    label += 's';
+  }
+  if (filter.get('user') !== 'any') {
+    const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
+    label += ` assigned to ${getUserStringForValue(users, user)}`;
+  }
+  if (filter.get('milestone') !== 'any') {
+    label += ` with ${getMilestoneStringForValue(milestones, filter.get('milestone'))}`;
+  }
+  return label;
 }
 
 export function filterGoals(goals, type, userId, milestoneId) {
@@ -52,11 +75,11 @@ export function filterGoals(goals, type, userId, milestoneId) {
     if (type === 'completed' && helper.getCurrentStep()) {
       return false;
     }
-    if (userId && userId !== 'any') {
-      if (type === 'all' || type === 'completed') {
+    if (userId) {
+      if (type === 'any' || type === 'completed') {
         const allInvolved = helper.getAllInvolvedAssignees();
         const hasUser = (allInvolved.indexOf(userId) > -1);
-        if (userId !== 'none' && !hasUser) {
+        if (userId !== 'none' && userId !== 'any' && !hasUser) {
           return false;
         }
         if (userId === 'none' && allInvolved.size) {
@@ -69,9 +92,7 @@ export function filterGoals(goals, type, userId, milestoneId) {
         }
         const isCurrentlyAssigned = currentAssignees.find(uId => uId === userId);
         if (type === 'current') {
-          console.log(userId);
           if (userId === 'any') {
-            console.log('currentAssignees', currentAssignees.size);
             if (!currentAssignees.size) {
               return false;
             }

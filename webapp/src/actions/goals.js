@@ -182,13 +182,16 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     },
     numberOfTabs: () => 3,
     nameForTab: i => [`Assigned (${assignees.length})`, 'Recent', 'All'][i],
-    onItemAction: (item) => {
+    onItemAction: (item, side) => {
       const index = assignees.indexOf(item.id);
       if (index === -1) {
         assignees.push(item.id);
         recent.unshift(item.id);
       } else {
         assignees.splice(index, 1);
+      }
+      if (side === 'enter') {
+        d(a.main.contextMenu(null));
       }
       callback(assignees);
       tabMenu.reload();

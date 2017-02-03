@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import * as actions from 'actions';
 import { setupDelegate } from 'classes/utils';
 import {
   getGoalTypeForValue,
   getUserStringForValue,
   getMilestoneStringForValue,
+  getFilterLabel,
+  filterGoals,
 } from 'classes/filter-util';
 import ListMenu from 'components/list-menu/ListMenu';
 import GoalList from './GoalList';
@@ -49,27 +50,32 @@ class HOCGoalList extends Component {
         title: 'Filter',
         filter: {
           user: 'any',
-          goalType: 'all',
+          goalType: 'any',
           milestone: 'any',
         },
       }]),
       filterProp: fromJS([
         'Show ',
         { id: 'goalType' },
-        ' related to ',
-        { id: 'milestone' },
-        ' and assigned to ',
+        ' assigned to ',
         { id: 'user' },
+        ' with ',
+        { id: 'milestone' },
       ]),
     };
-    const { tabIndex, filterProp } = this.state;
-    this.state.filterProp = this.updateFilterProp(filterProp, tabIndex);
     if (props.savedState) {
       this.state.tabIndex = props.savedState.get('tabIndex');
     }
+
+    const { tabIndex, filterProp } = this.state;
+    const filter = this.state.tabs.getIn([tabIndex, 'filter']);
+    this.state.filterProp = this.updateFilterProp(filterProp, tabIndex);
+    this.state.filteredGoals = this.filterGoals(filter);
+
+    this.state.filterLabel = this.updateFilterLabel(filter, this.state.filteredGoals);
+
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-
 
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
@@ -85,10 +91,15 @@ class HOCGoalList extends Component {
     const updateState = (type, value) => {
       const { tabs, tabIndex, filterProp } = this.state;
       const newTabs = tabs.setIn([tabIndex, 'filter', type], value);
-      const newFilterProp = this.updateFilterProp(filterProp, tabIndex, newTabs.getIn([tabIndex, 'filter']));
+      const newFilter = newTabs.getIn([tabIndex, 'filter']);
+      const newFilterProp = this.updateFilterProp(filterProp, tabIndex, newFilter);
+      const filteredGoals = this.filterGoals(newFilter);
+      const filterLabel = this.updateFilterLabel(newFilter, filteredGoals);
       this.setState({
         tabs: newTabs,
         filterProp: newFilterProp,
+        filteredGoals,
+        filterLabel,
       });
     };
     function gtcb(value) {
@@ -155,6 +166,19 @@ class HOCGoalList extends Component {
       return p;
     });
   }
+  updateFilterLabel(filter, filteredGoals) {
+    const { users, milestones, me } = this.props;
+    return getFilterLabel(filteredGoals.length, filter, users, milestones, me);
+  }
+  filterGoals(filter) {
+    const { goals, me } = this.props;
+
+    const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
+    const sortedGoals = goals.sort((c, b) => b.get('created_at').localeCompare(c.get('created_at'))).toArray();
+
+    return filterGoals(sortedGoals, filter.get('goalType'), user, filter.get('milestone'));
+  }
+
   checkIfUpdateFilter() {
     const { filterProp } = this.state;
     const newFilterProp = this.updateFilterProp(filterProp);
@@ -164,11 +188,16 @@ class HOCGoalList extends Component {
     return undefined;
   }
   tabDidChange(nav, index) {
-    const { tabIndex, filterProp } = this.state;
+    const { tabIndex, filterProp, tabs } = this.state;
     if (tabIndex !== index) {
+      const filter = tabs.getIn([index, 'filter']);
+      const filteredGoals = this.filterGoals(filter);
+      const filterLabel = this.updateFilterLabel(filter, filteredGoals);
       this.setState({
         tabIndex: index,
         filterProp: this.updateFilterProp(filterProp, index),
+        filteredGoals,
+        filterLabel,
       });
     }
   }
@@ -196,16 +225,23 @@ class HOCGoalList extends Component {
   }
   render() {
     const { goals, me, savedState } = this.props;
-    const { tabIndex, tabs, filterProp } = this.state;
+    const {
+      tabIndex,
+      tabs,
+      filterProp,
+      filterLabel,
+      filteredGoals,
+    } = this.state;
     return (
       <GoalList
         me={me}
         tabIndex={tabIndex}
         savedState={savedState}
-        goals={goals}
+        goals={filteredGoals}
         delegate={this}
         tabs={tabs}
         filterProp={filterProp}
+        filterLabel={filterLabel}
       />
     );
   }

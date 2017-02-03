@@ -46,8 +46,7 @@ class TabMenu extends Component {
       const { results } = this.state;
       if (results.length) {
         const { hide } = this.props;
-        this.callDelegate('onItemAction', results[0], 'row', e);
-        hide();
+        this.callDelegate('onItemAction', results[0], 'enter', e);
       }
     }
   }
