@@ -41,7 +41,7 @@ class HOCSidebar extends Component {
       className += ' sidebar__item--secondary-active';
     }
     let notif = null;
-    if (counter && counter.length) {
+    if (counter && counter.length && item.id !== navId) {
       notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
     }
 

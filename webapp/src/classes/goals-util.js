@@ -89,16 +89,9 @@ export default class GoalsUtil {
       return this.goal.get('step_order').size;
     }
     return this.getCurrentStepIndex();
-    /* const num = this.goal.get('history').filter(h => ['complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1);
-    return num.size;*/
   }
   getTotalNumberOfSteps() {
     return this.goal.get('step_order').size;
-    /* let currentIndex = this.getCurrentStepIndex();
-    if (typeof currentIndex !== 'number') {
-      currentIndex = size;
-    }
-    return this.getNumberOfCompletedSteps() + (size - currentIndex);*/
   }
 
 

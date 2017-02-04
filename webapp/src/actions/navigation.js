@@ -11,7 +11,7 @@ const startingViewForNavId = (navId) => {
     case 'milestones': {
       return {
         component: 'MilestoneList',
-        title: 'Milestones',
+        title: 'Milestones (In Progress)',
       };
     }
     case 'dashboard':
