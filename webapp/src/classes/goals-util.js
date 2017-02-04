@@ -74,21 +74,31 @@ export default class GoalsUtil {
   getOrderedAttachments() {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
   }
+  getLastHandoff() {
+    return this.goal.get('history').findLast(h => (['created', 'complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1));
+  }
+  getLastUpdate() {
+    return this.goal.get('updated_at');
+  }
 
   getRemainingSteps() {
     return this.getOrderedSteps().slice(this.getCurrentStepIndex());
   }
   getNumberOfCompletedSteps() {
-    const num = this.goal.get('history').filter(h => ['complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1);
-    return num.size;
+    if (!this.getCurrentStep()) {
+      return this.goal.get('step_order').size;
+    }
+    return this.getCurrentStepIndex();
+    /* const num = this.goal.get('history').filter(h => ['complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1);
+    return num.size;*/
   }
   getTotalNumberOfSteps() {
-    const size = this.goal.get('step_order').size;
-    let currentIndex = this.getCurrentStepIndex();
+    return this.goal.get('step_order').size;
+    /* let currentIndex = this.getCurrentStepIndex();
     if (typeof currentIndex !== 'number') {
       currentIndex = size;
     }
-    return this.getNumberOfCompletedSteps() + (size - currentIndex);
+    return this.getNumberOfCompletedSteps() + (size - currentIndex);*/
   }
 
 
@@ -137,20 +147,5 @@ export default class GoalsUtil {
       by: status.get('handoff_by'),
       at: status.get('handoff_at'),
     };
-  }
-
-  getStatus() {
-    const step = this.getCurrentStep();
-
-    let status = 'Goal is completed!';
-    if (step) {
-      status = 'Waiting for people to complete this step';
-      const isMine = step.get('assignees').find(a => (a === this.id));
-      if (isMine) {
-        status = 'You need to complete this step';
-      }
-    }
-
-    return status;
   }
 }
