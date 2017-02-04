@@ -6,6 +6,8 @@ import {
   createSwipesTempStreamUrl,
 } from '../../swipes_url_utils';
 
+const env = config.get('env');
+
 const elementsData = (data) => {
   const elements = [];
   const subtitle = '';
@@ -101,7 +103,8 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
     .then((doc) => {
       const id = doc.changes[0].new_val.id;
       const origin = config.get('origin');
-      const tempUrl = `${origin}/v1/stream/${id}`;
+      const originWithPort = env === 'dev' ? `${origin}:5000` : origin;
+      const tempUrl = `${originWithPort}/v1/stream/?id=${id}`;
 
       const mapElements = elementsData(metadata);
       const mapFile = fileData(metadata, tempUrl);

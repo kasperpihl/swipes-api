@@ -1,5 +1,6 @@
 import r from 'rethinkdb';
 import {
+  string,
   object,
   funcWrap,
 } from 'valjs';
@@ -8,7 +9,7 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
-const createTempStreamingLink = funcWrap([
+const dbCreateTempStreamingLink = funcWrap([
   object.as({
     insert_doc: object.require(),
   }).require(),
@@ -24,6 +25,21 @@ const createTempStreamingLink = funcWrap([
   return db.rethinkQuery(q);
 });
 
+const dbGetSingleTempStreamingLink = funcWrap([
+  object.as({
+    id: string.require(),
+  }).require(),
+], (err, { id }) => {
+  if (err) {
+    throw new SwipesError(`getSingleTempStreamingLink: ${err}`);
+  }
+
+  const q = r.table('temp_streaming_links').get(id);
+
+  return db.rethinkQuery(q);
+});
+
 export {
-  createTempStreamingLink,
+  dbCreateTempStreamingLink,
+  dbGetSingleTempStreamingLink,
 };

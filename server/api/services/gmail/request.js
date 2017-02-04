@@ -17,7 +17,10 @@ const refreshAccessToken = (auth_data, user) => {
     const ts_last_token = auth_data.ts_last_token;
     const client = createClient();
 
-    client.setCredentials(auth_data);
+    client.setCredentials({
+      access_token: auth_data.access_token,
+      refresh_token: auth_data.refresh_token,
+    });
 
     if ((now - ts_last_token > expires_in) && user) {
       const user_id = user.id;
@@ -33,7 +36,9 @@ const refreshAccessToken = (auth_data, user) => {
             .map((service) => {
               return r.branch(
                 service('auth_data')('access_token').eq(auth_data.access_token),
-                service('auth_data').merge(newAuthData),
+                service.merge({
+                  auth_data: newAuthData,
+                }),
                 service,
               );
             }),
@@ -41,7 +46,7 @@ const refreshAccessToken = (auth_data, user) => {
 
         db.rethinkQuery(query)
         .then(() => {
-          resolve(tokens);
+          resolve(newAuthData);
         })
         .catch((error) => {
           reject(error);

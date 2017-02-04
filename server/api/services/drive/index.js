@@ -4,6 +4,7 @@ import {
 } from './auth';
 import {
   request,
+  requestStream,
 } from './request';
 import {
   preview,
@@ -16,6 +17,7 @@ export {
   authUrl,
   authData,
   request,
+  requestStream,
   preview,
   mapSearch,
 };

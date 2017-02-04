@@ -17,12 +17,16 @@ const refreshAccessToken = (auth_data, user) => {
     const ts_last_token = auth_data.ts_last_token;
     const client = createClient();
 
-    client.setCredentials(auth_data);
+    client.setCredentials({
+      access_token: auth_data.access_token,
+      refresh_token: auth_data.refresh_token,
+    });
 
     if ((now - ts_last_token > expires_in) && user) {
-      const user_id = user.id;
+      const user_id = user.user_id;
 
       client.refreshAccessToken((err, tokens) => {
+        console.log(tokens);
         const newAuthData = Object.assign({}, tokens, { ts_last_token: now });
         // T_TODO
         // Update service in our database
@@ -33,7 +37,9 @@ const refreshAccessToken = (auth_data, user) => {
             .map((service) => {
               return r.branch(
                 service('auth_data')('access_token').eq(auth_data.access_token),
-                service('auth_data').merge(newAuthData),
+                service.merge({
+                  auth_data: newAuthData,
+                }),
                 service,
               );
             }),
@@ -41,7 +47,7 @@ const refreshAccessToken = (auth_data, user) => {
 
         db.rethinkQuery(query)
         .then(() => {
-          resolve(tokens);
+          resolve(newAuthData);
         })
         .catch((error) => {
           reject(error);
@@ -63,7 +69,7 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
 
       // T_TODO We have to return null if the method don't exist
       if (!driveMethod) {
-        return Promise.reject(new SwipesError('gmail_sdk_not_supported_method'));
+        return Promise.reject(new SwipesError('drive_sdk_not_supported_method'));
       }
 
       // T_TODO think of something better for comparison.
@@ -99,7 +105,45 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
       callback(error);
     });
 };
+const requestStream = ({ auth_data, urlData, user }, res, next) => {
+  const client = createClient();
+  const type = urlData.service.type;
+  const method = type === 'drive#binary' ? 'files.get' : 'files.export';
+
+  refreshAccessToken(auth_data, user)
+    .then((credentials) => {
+      client.setCredentials(credentials);
+
+      const driveMethod = mapApiMethod(method);
+
+      // T_TODO We have to return null if the method does not exist
+      if (!driveMethod) {
+        return Promise.reject(new SwipesError('drive_sdk_not_supported_method'));
+      }
+
+      const methodOptions = {
+        auth: client,
+        fileId: urlData.service.id,
+      };
+
+      if (method === 'files.get') {
+        methodOptions.alt = 'media';
+      } else {
+        methodOptions.mimeType = 'application/pdf';
+      }
+
+      return driveMethod(methodOptions)
+      .on('end', () => {
+        res.end();
+      })
+      .pipe(res);
+    })
+    .catch((error) => {
+      return next(error);
+    });
+};
 
 export {
   request,
+  requestStream,
 };
