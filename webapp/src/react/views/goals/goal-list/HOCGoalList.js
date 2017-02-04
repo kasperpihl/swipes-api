@@ -176,11 +176,11 @@ class HOCGoalList extends Component {
       let newString;
 
       if (p.get('id') === 'goalType') {
-        newString = msgGen.getGoalTypeForValue(filter.get('goalType'));
+        newString = msgGen.getGoalType(filter.get('goalType'));
       } else if (p.get('id') === 'user') {
-        newString = msgGen.getUserStringForValue(filter.get('user'));
+        newString = msgGen.getUserString(filter.get('user'));
       } else if (p.get('id') === 'milestone') {
-        return p.set('string', msgGen.getMilestoneStringForValue(filter.get('milestone')));
+        return p.set('string', msgGen.getMilestoneString(filter.get('milestone')));
       }
       if (newString !== p.get('string')) {
         return p.set('string', newString);

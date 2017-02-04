@@ -3,15 +3,11 @@ import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
-import GoalsUtil from 'classes/goals-util';
-
 import './styles/goal-list-item.scss';
 
 class GoalListItem extends Component {
   constructor(props) {
     super(props);
-    const { goal, me } = props;
-    this.helper = new GoalsUtil(goal, me.get('id'));
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedListItem = this.clickedListItem.bind(this);
@@ -24,9 +20,9 @@ class GoalListItem extends Component {
     }
   }
   render() {
-    const { goal } = this.props;
+    const { goal, filter } = this.props;
     const rootClass = 'goal-list-item';
-    const status = this.helper.getStatus();
+    const status = msgGen.getGoalSubtitle(goal, filter);
 
     return (
       <div className={rootClass} onClick={this.clickedListItem}>
@@ -50,7 +46,7 @@ const { func } = PropTypes;
 
 GoalListItem.propTypes = {
   goal: map,
-  me: map,
+  filter: map,
   onClick: func,
 };
 

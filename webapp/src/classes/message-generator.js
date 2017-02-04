@@ -1,8 +1,11 @@
+import moment from 'moment';
+import GoalsUtil from './goals-util';
+
 export default class MessageGenerator {
   constructor(store) {
     this.store = store;
   }
-  getGoalTypeForValue(goalType) {
+  getGoalType(goalType) {
     const goalTypes = {
       current: 'Current goals',
       upcoming: 'Upcoming goals',
@@ -11,7 +14,7 @@ export default class MessageGenerator {
     return goalTypes[goalType] || 'All goals';
   }
 
-  getUserStringForValue(userId) {
+  getUserString(userId) {
     const state = this.store.getState();
     const users = state.get('users');
     const me = state.get('me');
@@ -35,7 +38,7 @@ export default class MessageGenerator {
     return 'anyone';
   }
 
-  getMilestoneStringForValue(milestoneId) {
+  getMilestoneString(milestoneId) {
     const state = this.store.getState();
     const milestones = state.get('milestones');
 
@@ -51,6 +54,43 @@ export default class MessageGenerator {
 
     return 'any milestone';
   }
+  getGoalSubtitle(goal, filter) {
+    let status = ''; // TODO: Include default status msg
+    const state = this.store.getState();
+    const me = state.get('me');
+    const helper = new GoalsUtil(goal, me);
+    const lastHandoff = helper.getLastHandoff();
+    const doneBy = this.getUserString(lastHandoff.get('done_by'));
+    const lastUpdate = moment(lastHandoff.get('done_at') || helper.getLastUpdate());
+    let type = 'all';
+    if (filter) {
+      type = filter.get('goalType');
+    }
+    if (type === 'completed') {
+      status = `Completed by ${doneBy} ${lastUpdate.fromNow()}`;
+      // Show last
+    }
+    if (type === 'upcoming') {
+    }
+    if (type === 'current') {
+      status = `${doneBy} handed this off `;
+      if (filter.get('user') !== 'any') {
+        let receiver = this.getUserString(filter.get('user'));
+        if (receiver === 'you' && doneBy === 'you') {
+          receiver = 'yourself (cool!)';
+        } else if (receiver === doneBy) {
+          receiver += ' (nice!)';
+        }
+        if (receiver === 'no one') {
+
+        }
+
+        status += `to ${receiver} `;
+      }
+      status += lastUpdate.fromNow();
+    }
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  }
 
   getFilterLabel(number, filter) {
     const goalTypes = {
@@ -65,10 +105,10 @@ export default class MessageGenerator {
       label += 's';
     }
     if (filter.get('user') !== 'any') {
-      label += ` assigned to ${this.getUserStringForValue(filter.get('user'))}`;
+      label += ` assigned to ${this.getUserString(filter.get('user'))}`;
     }
     if (filter.get('milestone') !== 'any') {
-      label += ` with ${this.getMilestoneStringForValue(filter.get('milestone'))}`;
+      label += ` with ${this.getMilestoneString(filter.get('milestone'))}`;
     }
     return label;
   }

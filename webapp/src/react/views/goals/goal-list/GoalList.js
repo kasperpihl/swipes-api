@@ -81,11 +81,13 @@ class GoalList extends Component {
     );
   }
   renderList() {
-    const { goals } = this.props;
+    const { goals, tabs, tabIndex } = this.props;
+    const filter = tabs.getIn([tabIndex, 'filter']);
     return goals.map(goal => (
       <GoalListItem
         onClick={this.clickedListItem}
         me={this.props.me}
+        filter={filter}
         goal={goal}
         key={`goal-list-item-${goal.get('id')}`}
       />
