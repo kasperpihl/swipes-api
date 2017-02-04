@@ -22,11 +22,10 @@ const refreshAccessToken = (auth_data, user) => {
       refresh_token: auth_data.refresh_token,
     });
 
-    if ((now - ts_last_token > expires_in) && user) {
+    if ((now - ts_last_token > now - expires_in) && user) {
       const user_id = user.user_id;
 
       client.refreshAccessToken((err, tokens) => {
-        console.log(tokens);
         const newAuthData = Object.assign({}, tokens, { ts_last_token: now });
         // T_TODO
         // Update service in our database
@@ -134,6 +133,9 @@ const requestStream = ({ auth_data, urlData, user }, res, next) => {
 
       return driveMethod(methodOptions)
       .on('end', () => {
+        res.end();
+      })
+      .on('error', () => {
         res.end();
       })
       .pipe(res);

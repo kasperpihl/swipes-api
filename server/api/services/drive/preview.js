@@ -90,6 +90,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
     const metadata = res;
 
     return createSwipesTempStreamUrl({
+      metadata,
       user_id: user.user_id,
       service: {
         id: itemId,

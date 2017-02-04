@@ -17,7 +17,6 @@ const tempStreamingLinkGetSingle = valLocals('tempStreamingLinkGetSingle', {
 
   dbGetSingleTempStreamingLink({ id })
     .then((link) => {
-      console.log(link);
       setLocals({
         service_name: link.service.name,
         account_id: link.permission.account_id,
