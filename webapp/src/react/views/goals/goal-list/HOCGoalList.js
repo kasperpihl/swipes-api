@@ -215,6 +215,10 @@ class HOCGoalList extends Component {
         filterLabel,
         showFilter,
       });
+    } else if (index === (tabs.size - 1)) {
+      if (!this.state.showFilter) {
+        this.setState({ showFilter: true });
+      }
     }
   }
 

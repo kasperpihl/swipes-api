@@ -19,10 +19,7 @@ class TabBar extends Component {
   }
   onChange(e) {
     const newIndex = Number(e.target.getAttribute('data-index'));
-
-    if (newIndex !== this.props.activeTab) {
-      this.callDelegate('tabDidChange', newIndex);
-    }
+    this.callDelegate('tabDidChange', newIndex);
   }
   calculateSliderClips() {
     const { tabBar } = this.refs;
