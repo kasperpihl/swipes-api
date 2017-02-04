@@ -98,6 +98,8 @@ export default class MessageGenerator {
         }
         const time = lastUpdate.fromNow().slice(0, -4);
         status = `${userString} ${hasHave} been working on '${stepTitle}' for ${time}`;
+      } else {
+        status = `No one is working on "${stepTitle}"`;
       }
     }
     if (type === 'upcoming') {
