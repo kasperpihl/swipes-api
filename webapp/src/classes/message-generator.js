@@ -37,7 +37,21 @@ export default class MessageGenerator {
 
     return 'anyone';
   }
+  getUserArrayString(userIds, preferId) {
+    const state = this.store.getState();
+    const me = state.get('me');
+    preferId = preferId || me.get('id');
 
+    const names = userIds.map(uId => this.getUserString(uId));
+    let nameString = names.find((name, i) => userIds.get(i) === preferId);
+    if (!nameString) {
+      nameString = names.get(0);
+    }
+    if (names.size > 1) {
+      nameString += ` & ${names.size - 1} other${names.size > 2 ? 's' : ''}`;
+    }
+    return nameString;
+  }
   getMilestoneString(milestoneId) {
     const state = this.store.getState();
     const milestones = state.get('milestones');
@@ -55,22 +69,39 @@ export default class MessageGenerator {
     return 'any milestone';
   }
   getGoalSubtitle(goal, filter) {
-    let status = ''; // TODO: Include default status msg
+    let status = ' '; // TODO: Include default status msg
     const state = this.store.getState();
     const me = state.get('me');
     const helper = new GoalsUtil(goal, me);
     const lastHandoff = helper.getLastHandoff();
     const doneBy = this.getUserString(lastHandoff.get('done_by'));
+    const currentStep = helper.getCurrentStep();
     const lastUpdate = moment(lastHandoff.get('done_at') || helper.getLastUpdate());
     let type = 'all';
     if (filter) {
       type = filter.get('goalType');
     }
-    if (type === 'completed') {
+    if (!currentStep) {
       status = `Completed by ${doneBy} ${lastUpdate.fromNow()}`;
       // Show last
+    } else {
+      const stepTitle = currentStep.get('title');
+      const assignees = currentStep.get('assignees');
+
+      if (assignees.size) {
+        const preferId = filter.get('user').startsWith('U') ? filter.get('user') : undefined;
+        const userString = this.getUserArrayString(assignees, preferId);
+
+        let hasHave = 'have';
+        if (assignees.size === 1 && assignees.get(0) !== me.get('id')) {
+          hasHave = 'has';
+        }
+        const time = lastUpdate.fromNow().slice(0, -4);
+        status = `${userString} ${hasHave} been working on '${stepTitle}' for ${time}`;
+      }
     }
     if (type === 'upcoming') {
+
     }
     if (type === 'current') {
       status = `${doneBy} handed this off `;
@@ -82,7 +113,7 @@ export default class MessageGenerator {
           receiver += ' (nice!)';
         }
         if (receiver === 'no one') {
-
+          // receiver += ' (Lets find one)'
         }
 
         status += `to ${receiver} `;
