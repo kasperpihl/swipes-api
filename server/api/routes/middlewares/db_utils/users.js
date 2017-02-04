@@ -56,8 +56,6 @@ const dbUsersAddSevice = funcWrap([
     throw new SwipesError(`dbUsersAddSevice: ${err}`);
   }
 
-  console.log(service);
-
   const q = r.table('users').get(user_id).update((user) => {
     return {
       services:
