@@ -50,6 +50,7 @@ const goalsCreate = valLocals('goalsCreate', {
     from: null,
     to: currentStepId,
     done_by: user_id,
+    done_at: r.now(),
   }];
   goal.status = {
     flags,
@@ -101,6 +102,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     done_by: user_id,
     from: current_step_id,
     to: next_step_id,
+    done_at: r.now(),
   });
 
   goal.status = {
