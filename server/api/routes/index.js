@@ -10,10 +10,12 @@ import * as notes from './notes';
 import * as find from './find';
 import * as milestones from './milestones';
 import * as ways from './ways';
+import * as stream from './stream';
 
 const v1NotAuthed = [
   users.notAuthed,
   services.notAuthed,
+  stream.notAuthed,
 ];
 const v1Authed = [
   init.authed,

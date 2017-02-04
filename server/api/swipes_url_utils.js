@@ -4,7 +4,7 @@ import {
   createLink,
 } from './routes/middlewares/db_utils/links';
 import {
-  createTempStreamingLink,
+  dbCreateTempStreamingLink,
 } from './routes/middlewares/db_utils/temp_streaming_links';
 import {
   insertEvent,
@@ -35,7 +35,7 @@ const createSwipesTempStreamUrl = (urlData) => {
   const id = shortid.generate();
   const insert_doc = Object.assign({}, { id }, urlData);
 
-  return createTempStreamingLink({ insert_doc });
+  return dbCreateTempStreamingLink({ insert_doc });
 };
 
 export {

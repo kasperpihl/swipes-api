@@ -177,6 +177,27 @@ const serviceDoRequest = valLocals('serviceDoRequest', {
     return next();
   });
 });
+const serviceDoStream = valLocals('serviceDoStream', {
+  user_id: string.require(),
+  service_auth_data: object.require(),
+  service: object.require(),
+  urlData: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    service_auth_data,
+    service,
+    urlData,
+  } = res.locals;
+
+  const options = {
+    auth_data: service_auth_data,
+    urlData,
+    user: { user_id },
+  };
+
+  service.requestStream(options, res, next);
+});
 const servicePreview = valLocals('servicePreview', {
   service_auth_data: object.require(),
   service: object.require(),
@@ -326,4 +347,5 @@ export {
   servicePreviewFind,
   serviceGetAuthData,
   serviceUpdateAuthData,
+  serviceDoStream,
 };

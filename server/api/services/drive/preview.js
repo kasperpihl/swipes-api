@@ -101,7 +101,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
     .then((doc) => {
       const id = doc.changes[0].new_val.id;
       const origin = config.get('origin');
-      const tempUrl = `${origin}/v1/stream/${id}`;
+      const tempUrl = `${origin}/v1/stream/?id=${id}`;
 
       const mapElements = elementsData(metadata);
       const mapFile = fileData(metadata, tempUrl);
