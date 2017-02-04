@@ -23,52 +23,6 @@ $mainPadding: 21px;
 // elements
 // ======================================================
 
-// progress-bar
-
-.step-selection-menu {
-  $b: &;
-
-  .progress-bar {
-    @include size(100%, 10px);
-    @include flex(none);
-    border-top: 1px solid $deepBlue-20;
-    border-bottom: 1px solid $deepBlue-20;
-    position: relative;
-
-    &__fill {
-      @include size(100%, 6px);
-      border-radius: 6px;
-      position: absolute;
-      left: 0; top: 1px;
-      transition: .35s ease-in;
-
-      &--current {
-        background-color: $deepBlue-100;
-        z-index: 2;
-      }
-
-      &--next {
-        background-color: $yellow-color;
-        z-index: 1;
-      }
-
-      &--new {
-        background-color: $yellow-color;
-        z-index: 3;
-        transition: .35s .3s ease-out;
-      }
-    }
-
-    &__status {
-      @include size(100%, auto);
-      @include font(10px, $deepBlue-60, 12px, bold);
-      text-transform: uppercase;
-      text-align: right;
-      padding: 3px;
-    }
-  }
-}
-
 // List
 
 .step-selection-menu {

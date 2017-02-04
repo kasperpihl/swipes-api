@@ -10,7 +10,7 @@
   @include flex(flex);
   position: relative;
   margin-left: 10px;
-  padding-top: 60px;
+  padding-top: 40px;
 
   &:before {
     content: '';
@@ -26,6 +26,17 @@
   @include flex(none);
   position: relative;
   max-width: 207px;
+  box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+  z-index: 9;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    @include size(20px, 100%);
+    background-color: $bg;
+    transform: translateX(-100%);
+  }
 }
 
 .browse-horizontal-scroller {

@@ -25,10 +25,10 @@
 
     &__title {
       @include size(100%, auto);
-      @include font(10px, $deepBlue-60, 12px, bold);
+      @include font(11px, $deepBlue-30, 12px, bold);
       text-transform: uppercase;
-      padding: 0 45px;
-      padding-bottom: 21px;
+      padding: 21px 45px;
+      // padding-bottom: 21px;
     }
 
     &-item {
@@ -39,7 +39,7 @@
 
       &__title {
         @include size(100%, 24px);
-        @include font(12px, $blue-100, 24px, 500);
+        @include font(12px, $deepBlue-80, 24px, 500);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -54,11 +54,21 @@
 
       &__svg {
         @include size(24px);
-        @include svg-color($blue-100 !important);
+        @include svg-color($deepBlue-20 !important);
+        transition: .2s ease;
+      }
 
-        path {
-          @include svg-color($blue-100 !important);
-          stroke-width: 1px
+      &:hover {
+
+        #{$e}__svg {
+          @include svg-color($deepBlue-80 !important);
+          transition: .2s ease;
+
+        }
+
+        #{$e}__icon--right {
+          transform: translateX(5px);
+          transition: .2s ease;
         }
       }
 
@@ -66,13 +76,19 @@
         border-top: 1px solid $deepBlue-10;
         border-bottom: 1px solid $deepBlue-10;
         position: relative;
-      }
 
-      &:hover {
+        #{$e}__title {
+          @include font($c: $blue-100);
+        }
 
-        #{$e}__icon--right {
-          transform: translateX(5px);
-          transition: .2s ease;
+        #{$e}__svg {
+          @include svg-color($blue-100 !important);
+        }
+
+        &:hover {
+          #{$e}__svg {
+            @include svg-color($blue-100 !important);
+          }
         }
       }
     }
