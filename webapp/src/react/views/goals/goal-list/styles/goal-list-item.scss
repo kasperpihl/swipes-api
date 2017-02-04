@@ -13,11 +13,8 @@ $imgContHeight: 54px;
   padding: 12px 21px;
   padding-left: 0px;
   border-bottom: 1px solid $deepBlue-10;
-  transition: padding-left .25s ease;
 
   &:hover {
-    padding-left: 3px;
-    transition: padding-left .25s ease;
 
     #{$b}__title {
       color: $blue-100;
@@ -50,9 +47,16 @@ $imgContHeight: 54px;
     text-overflow: ellipsis;
   }
 
+  &__subtitle {
+    @include size(calc(100% - 50px), 30px);
+    @include flex(center, flex-start);
+    position: relative;
+    overflow: hidden;
+  }
+
   &__label {
-    @include font(12px, $deepBlue-40, 500);
-    width: calc(100% - 50px);
+    @include size(100%, 20px);
+    @include font(12px, $deepBlue-40, 500, 20px);
     margin-top: 3px;
     letter-spacing: .5px;
     transition: .25s ease;
@@ -67,5 +71,62 @@ $imgContHeight: 54px;
     position: absolute;
     right: 0px; top: 50%;
     transform: translateY(-50%);
+  }
+}
+
+.goal-list-item {
+  $b: &;
+
+  .progress-bar {
+    @include size(100%, 20px);
+    @include flex(center, flex-center);
+    position: absolute;
+    left: 1px; bottom: -20px;
+    background-color: $bg;
+    transition: .2s ease;
+
+    & > * {
+      opacity: 0;
+      transition: .2s ease;
+    }
+
+
+    &__frame {
+      @include size(190px, 8px);
+      border-top: 1px solid $deepBlue-10;
+      border-bottom: 1px solid $deepBlue-10;
+      border-right: 1px solid $deepBlue-10;
+      position: relative;
+    }
+
+    &__fill {
+      height: 4px;
+      min-width: 3%;
+      background-color: $deepBlue-100;
+      margin-top: 1px;
+      border-radius: 2px;
+    }
+
+    &__status {
+      @include font(12px, $deepBlue-20, 500);
+      margin-left: 9px;
+    }
+  }
+
+  &:hover {
+    .progress-bar {
+      transition: .2s .2s ease;
+      bottom: 5px;
+
+      & > * {
+        opacity: 1;
+        transition: .2s .2s ease;
+      }
+    }
+
+    #{$b}__label {
+      transform: translateY(-26px);
+      transition: .2s .2s ease;
+    }
   }
 }

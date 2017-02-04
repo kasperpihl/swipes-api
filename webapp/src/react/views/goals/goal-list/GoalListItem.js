@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
+import GoalsUtil from 'classes/goals-util';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
@@ -19,18 +20,39 @@ class GoalListItem extends Component {
       onClick(goal.get('id'));
     }
   }
+  renderProgressBar() {
+    const { goal } = this.props;
+    const helper = new GoalsUtil(goal);
+    const numberOfCompletedSteps = helper.getNumberOfCompletedSteps();
+    const numberOfAllSteps = helper.getTotalNumberOfSteps();
+    const completedProgressFill = (numberOfCompletedSteps * 100) / numberOfAllSteps;
+    const styles = {
+      width: `${completedProgressFill}%`,
+    };
+
+    return (
+      <div className="progress-bar">
+        <div className="progress-bar__frame">
+          <div className="progress-bar__fill" style={styles} />
+        </div>
+        <div className="progress-bar__status">{numberOfCompletedSteps} of {numberOfAllSteps} step{numberOfAllSteps > 1 ? 's' : ''} completed</div>
+      </div>
+    );
+  }
   render() {
     const { goal, filter } = this.props;
-    const rootClass = 'goal-list-item';
     const status = msgGen.getGoalSubtitle(goal, filter);
 
     return (
-      <div className={rootClass} onClick={this.clickedListItem}>
-        <div className={`${rootClass}__content`}>
-          <div className={`${rootClass}__title`}>{goal.get('title')}</div>
-          <div className={`${rootClass}__label`}>{status}</div>
+      <div className="goal-list-item" onClick={this.clickedListItem}>
+        <div className="goal-list-item__content">
+          <div className="goal-list-item__title">{goal.get('title')}</div>
+          <div className="goal-list-item__subtitle">
+            <div className="goal-list-item__label">{status}</div>
+            {this.renderProgressBar()}
+          </div>
         </div>
-        <div className={`${rootClass}__assigning`}>
+        <div className="goal-list-item__assigning">
           <HOCAssigning
             stepId={goal.getIn(['status', 'current_step_id'])}
             goalId={goal.get('id')}
