@@ -70,7 +70,7 @@
 
       &:hover {
         max-width: 390px;
-        transition: max-width .5s .2s ease;
+        transition: max-width .5s .1s ease;
 
         &::-webkit-scrollbar-thumb {
         	border-radius: 10px;
@@ -90,7 +90,7 @@
 
     &:hover ~ .browse-section-list {
       max-width: 200px;
-      transition: max-width .5s .2s ease;
+      transition: max-width .3s .3s ease;
     }
   }
 }
