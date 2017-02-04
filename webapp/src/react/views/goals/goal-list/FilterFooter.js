@@ -31,10 +31,10 @@ class FilterFooter extends Component {
           <div className="filter-footer__status">{status}</div>
           <button className={editClass} onClick={this.editFilter}>Edit filter</button>
         </div>
-        <div className="filter-footer__section">
+        {/* <div className="filter-footer__section">
           <button className={toggleClass} onClick={this.toggleCompleted} />
           <div className="filter-footer__status">Include completed goals</div>
-        </div>
+        </div>*/}
       </div>
     );
   }
