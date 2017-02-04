@@ -56,6 +56,8 @@ const dbUsersAddSevice = funcWrap([
     throw new SwipesError(`dbUsersAddSevice: ${err}`);
   }
 
+  console.log(service);
+
   const q = r.table('users').get(user_id).update((user) => {
     return {
       services:
@@ -63,8 +65,9 @@ const dbUsersAddSevice = funcWrap([
           .default([])
           .filter((s) => {
             return s('id')
-                    .ne(service.id)
-                    .and(s('service_id').ne(service.service_id));
+                    .eq(service.id)
+                    .and(s('service_id').eq(service.service_id))
+                    .not();
           })
           .append(service),
     };
