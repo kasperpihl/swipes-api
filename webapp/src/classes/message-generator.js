@@ -14,7 +14,8 @@ export default class MessageGenerator {
     return goalTypes[goalType] || 'All goals';
   }
 
-  getUserString(userId) {
+  getUserString(userId, options) {
+    options = options || {};
     const state = this.store.getState();
     const users = state.get('users');
     const me = state.get('me');
@@ -23,13 +24,13 @@ export default class MessageGenerator {
       return 'no one';
     }
     if (userId === 'me') {
-      return 'you';
+      return options.yourself ? 'yourself' : 'you';
     }
     if (users) {
       const user = users.get(userId);
       if (user) {
         if (user.get('id') === me.get('id')) {
-          return 'you';
+          return options.yourself ? 'yourself' : 'you';
         }
         return user.get('name').split(' ')[0].toLowerCase();
       }
@@ -37,18 +38,22 @@ export default class MessageGenerator {
 
     return 'anyone';
   }
-  getUserArrayString(userIds, preferId) {
+  getUserArrayString(userIds, options) {
+    options = options || {};
     const state = this.store.getState();
     const me = state.get('me');
-    preferId = preferId || me.get('id');
+    const preferId = options.preferId || me.get('id');
 
-    const names = userIds.map(uId => this.getUserString(uId));
+    const names = userIds.map(uId => this.getUserString(uId, options));
     let nameString = names.find((name, i) => userIds.get(i) === preferId);
     if (!nameString) {
       nameString = names.get(0);
     }
     if (names.size > 1) {
       nameString += ` & ${names.size - 1} other${names.size > 2 ? 's' : ''}`;
+    }
+    if (!nameString) {
+      nameString = 'no one';
     }
     return nameString;
   }
@@ -90,7 +95,7 @@ export default class MessageGenerator {
 
       if (assignees.size) {
         const preferId = filter.get('user').startsWith('U') ? filter.get('user') : undefined;
-        const userString = this.getUserArrayString(assignees, preferId);
+        const userString = this.getUserArrayString(assignees, { preferId });
 
         let hasHave = 'have';
         if (assignees.size === 1 && assignees.get(0) !== me.get('id')) {

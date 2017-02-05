@@ -1,10 +1,11 @@
 const mapSearch = (res) => {
-  const idParts = res.id.split('-');
+  const id = res.id.split(/-(.+)/)[1];
 
   return {
     service: {
-      type: res.source_content_type,
-      id: idParts[idParts.length - 1],
+      id,
+      content_type: res.source_content_type,
+      type: 'file',
       name: 'drive',
     },
     title: res.title,

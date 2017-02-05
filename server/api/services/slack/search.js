@@ -1,5 +1,5 @@
 const mapSearch = (res) => {
-  const idParts = res.id.split('-');
+  const id = res.id.split(/-(.+)/)[1];
   const type = res.content_type;
   let title = '';
   let subtitle = '';
@@ -16,8 +16,8 @@ const mapSearch = (res) => {
 
   return {
     service: {
+      id,
       type,
-      id: idParts[idParts.length - 1],
       name: 'slack',
     },
     title,

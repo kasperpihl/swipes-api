@@ -221,7 +221,7 @@ const servicePreview = valLocals('servicePreview', {
 
   return service.preview(options, (err, result) => {
     if (err) {
-      return next(new SwipesError('Something went wrong with the preview request'));
+      return next(new SwipesError('servicePreview - Something went wrong with the preview request', err));
     }
 
     setLocals({
@@ -255,7 +255,7 @@ const servicePreviewFind = valLocals('servicePreviewFind', {
 
   return service.preview(options, (err, result) => {
     if (err) {
-      return next(new SwipesError('Something went wrong with the preview request'));
+      return next(new SwipesError('servicePreviewFind - Something went wrong with the preview request', err));
     }
 
     setLocals({

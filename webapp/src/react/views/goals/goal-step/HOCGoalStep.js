@@ -36,6 +36,7 @@ class HOCGoalStep extends Component {
       isHandingOff: false,
       isSubmitting: false,
       flags: [],
+      newAssignees: null,
       handoffText: '',
       nextStepId: this.calculateNextStep(),
     };
@@ -54,12 +55,13 @@ class HOCGoalStep extends Component {
       navPop();
     }
     if (nextGoal && goal) {
-      if (nextGoal.getIn(['status', 'current_step_id']) !== goal.getIn(['status', 'current_step_id'])) {
+      if (nextGoal.getIn(['status', 'handoff_at']) !== goal.getIn(['status', 'handoff_at'])) {
         this.setState({
           isHandingOff: false,
           handoffText: '',
           nextStepId: this.calculateNextStep(nextGoal),
           flags: [],
+          newAssignees: null,
         });
       }
     }
@@ -68,6 +70,12 @@ class HOCGoalStep extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isHandingOff && !prevState.isHandingOff) {
       this.refs.handoffWriteMessageTextarea.focus();
+    }
+  }
+  componentWillUnmount() {
+    const { hideNote, sideNoteId } = this.props;
+    if (sideNoteId) {
+      hideNote(sideNoteId);
     }
   }
   onFlag(id) {
@@ -98,17 +106,17 @@ class HOCGoalStep extends Component {
       props: {
         items: [
           {
-            title: 'Archive Goal',
-            onClick: () => {
-              archive(goal.get('id'));
-              contextMenu(null);
-            },
-          },
-          {
             title: 'Save as a Way',
             onClick: () => {
               const helper = this.getHelper();
               saveWay(options, helper.getObjectForWay());
+            },
+          },
+          {
+            title: 'Archive Goal',
+            onClick: () => {
+              archive(goal.get('id'));
+              contextMenu(null);
             },
           },
         ],
@@ -118,22 +126,52 @@ class HOCGoalStep extends Component {
   onCancel() {
     this.setState({ isHandingOff: false });
   }
-  onChangeClick(e) {
-    const { nextStepId } = this.state;
-    const { selectStep, goal } = this.props;
-    selectStep({
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    }, goal.get('id'), nextStepId, (newStepId) => {
-      this.setState({ nextStepId: newStepId });
+  onSelectAssignees(options, newAssignees) {
+    const { selectAssignees } = this.props;
+    selectAssignees(options, newAssignees.toJS(), (assignees) => {
+      if (assignees) {
+        this.setState({ newAssignees: fromJS(assignees) });
+      }
     });
+  }
+  onChangeClick(type, e) {
+    let { nextStepId, newAssignees } = this.state;
+    const helper = this.getHelper();
+    const { goal, selectStep } = this.props;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'center',
+    };
+    if (type === 'step') {
+      selectStep(options, goal.get('id'), nextStepId, (newStepId) => {
+        if (newStepId !== nextStepId) {
+          this.setState({ nextStepId: newStepId, newAssignees: null });
+          if (newStepId === helper.getCurrentStepId()) {
+            this.onSelectAssignees(options, helper.getCurrentStep().get('assignees'));
+          }
+        }
+      });
+    } else {
+      if (type === 'from') {
+        const newState = { isHandingOff: true };
+        if (nextStepId !== helper.getCurrentStepId()) {
+          nextStepId = helper.getCurrentStepId();
+          newState.nextStepId = nextStepId;
+          newState.newAssignees = null;
+        }
+        this.setState(newState);
+      }
+      const step = helper.getStepById(nextStepId);
+      newAssignees = newAssignees || step.get('assignees');
+      this.onSelectAssignees(options, newAssignees);
+    }
   }
   onHandoff() {
     const { completeStep, goal } = this.props;
-    const { handoffText, nextStepId, flags } = this.state;
+    const { handoffText, nextStepId, flags, newAssignees } = this.state;
     if (this.state.isHandingOff) {
       this.setState({ isSubmitting: true });
-      completeStep(goal.get('id'), nextStepId, handoffText, flags).then((res) => {
+      completeStep(goal.get('id'), nextStepId, handoffText, flags, newAssignees).then(() => {
         this.setState({ isSubmitting: false });
       });
     } else {
@@ -147,6 +185,11 @@ class HOCGoalStep extends Component {
     const { openSlackIn, navigateToId } = this.props;
     navigateToId('primary', 'slack');
     openSlackIn(this.slackUserIdForUser(id));
+  }
+  getHelper(overwriteGoal) {
+    const { goal, me } = this.props;
+    overwriteGoal = overwriteGoal || goal;
+    return new GoalsUtil(overwriteGoal, me.get('id'));
   }
   calculateNextStep(goal) {
     const helper = this.getHelper(goal);
@@ -170,24 +213,32 @@ class HOCGoalStep extends Component {
     }
   }
 
-  getHelper(overwriteGoal) {
-    const { goal, me } = this.props;
-    overwriteGoal = overwriteGoal || goal;
-    return new GoalsUtil(overwriteGoal, me.get('id'));
-  }
-
   mapStepToHeader(stepId, next) {
     const helper = this.getHelper();
-
+    let { newAssignees } = this.state;
     if (!stepId) {
       return undefined;
     }
+    let subtitle = 'Current step';
     const stepIndex = helper.getStepIndexForId(stepId);
     const step = helper.getStepById(stepId);
+    const assignees = step.get('assignees');
+    newAssignees = newAssignees || assignees;
+    newAssignees = next ? newAssignees : assignees;
+    if (next) {
+      const currentI = helper.getCurrentStepIndex();
+      const nextI = helper.getStepIndexForId(stepId);
+      subtitle = 'Next step';
+      if (nextI === currentI) {
+        subtitle = 'Reassign';
+      } else if (nextI < currentI) {
+        subtitle = 'Make Iteration';
+      }
+    }
     return {
       title: `${stepIndex + 1}. ${step.get('title')}`,
-      subtitle: next ? 'Next Step' : 'Current Step',
-      assignees: step.get('assignees').toJS(),
+      subtitle,
+      assignees: newAssignees.toJS(),
     };
   }
   renderGoalCompleted() {
@@ -198,7 +249,7 @@ class HOCGoalStep extends Component {
     return (
       <GoalCompleted
         title="Goal completed!"
-        subtitle="Well done! Together with Tisho, Yana, Kasper, Kris and Stefan you completed this goal"
+        subtitle="Well done! Together with Tisho, Yana, Kasper, Kris and Stefan"
         assignees={helper.getAllInvolvedAssignees()}
       />
     );
@@ -323,9 +374,14 @@ class HOCGoalStep extends Component {
     );
   }
   renderStatus() {
-    const { goal, users, me } = this.props;
-    const { isHandingOff, nextStepId } = this.state;
-
+    const { goal } = this.props;
+    const { isHandingOff, nextStepId, newAssignees } = this.state;
+    const helper = this.getHelper();
+    const nextStep = helper.getStepById(nextStepId);
+    let assignees = null;
+    if (nextStep) {
+      assignees = newAssignees || nextStep.get('assignees');
+    }
     if (!isHandingOff) {
       return null;
     }
@@ -333,22 +389,34 @@ class HOCGoalStep extends Component {
     return (
       <HandoffStatus
         goal={goal}
+        assignees={assignees}
         toId={nextStepId}
-        users={users}
-        me={me}
-        onChangeStep={this.onChangeClick}
+        onChangeClick={this.onChangeClick}
       />
     );
   }
   renderActions() {
     const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH, hasLoaded } = this.state;
-    const { users, me, goal } = this.props;
     const helper = this.getHelper();
     const style = {};
     let className = '';
 
     if (!helper.getCurrentStep()) {
       return undefined;
+    }
+    let mainLabel = 'Handoff';
+    if (isHandingOff && !nextStepId) {
+      mainLabel = 'Complete Goal';
+    } else if (isHandingOff) {
+      mainLabel = 'Complete Step';
+      const nextStepIndex = helper.getStepIndexForId(nextStepId);
+      const currentStepIndex = helper.getCurrentStepIndex();
+      if (nextStepIndex === currentStepIndex) {
+        mainLabel = 'Reassign Step';
+      }
+      if (nextStepIndex < currentStepIndex) {
+        mainLabel = 'Make Iteration';
+      }
     }
 
     if (!hasLoaded) {
@@ -365,7 +433,7 @@ class HOCGoalStep extends Component {
           onCancel={this.onCancel}
           onHandoff={this.onHandoff}
           isHandingOff={isHandingOff}
-          isCompletingGoal={!nextStepId}
+          mainLabel={mainLabel}
           isSubmitting={isSubmitting}
         >
           {this.renderStatus()}
@@ -419,7 +487,13 @@ HOCGoalStep.propTypes = {
   archive: func,
   delegate: object,
   sideNoteId: string,
-  addToCollection: func,
+  navPop: func,
+  saveWay: func,
+  selectStep: func,
+  selectAssignees: func,
+  hideNote: func,
+  openSlackIn: func,
+  navigateToId: func,
   completeStep: func,
   contextMenu: func,
   goal: map,
@@ -444,11 +518,13 @@ function mapStateToProps(state, ownProps) {
   };
 }
 export default connect(mapStateToProps, {
+  selectAssignees: actions.goals.selectAssignees,
   overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
   selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
   saveWay: actions.ways.save,
+  hideNote: actions.main.note.hide,
   navigateToId: actions.navigation.navigateToId,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,

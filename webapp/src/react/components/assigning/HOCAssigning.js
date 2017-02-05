@@ -4,7 +4,7 @@ import { list, map } from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import Assigning from './Assigning';
 
@@ -12,25 +12,21 @@ class HOCAssigning extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.clickedAssignee = this.clickedAssignee.bind(this);
-
     this.callDelegate = setupDelegate(props.delegate);
-  }
-  clickedAssignee(e) {
-    const { index } = this.props;
-    this.callDelegate('clickedAssign', e, index);
+    this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'clickedAssign'), this);
   }
   render() {
     const {
       stateAssignees,
       maxImages,
+      index,
     } = this.props;
 
     return (
       <Assigning
         maxImages={maxImages}
         assignees={stateAssignees}
-        onClick={this.clickedAssignee}
+        onClick={this.onClick(index)}
       />
     );
   }

@@ -75,6 +75,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   next_step_id: string,
   message: string,
   flags: array.of(string),
+  assignees: array.of(string),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -83,6 +84,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     next_step_id,
     message,
     flags = [],
+    assignees = null,
   } = res.locals;
 
   if (goal.status.current_step_id !== current_step_id) {
@@ -94,8 +96,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   }
 
   const type = next_step_id ? 'complete_step' : 'complete_goal';
-
-  goal.history.push({
+  const history = {
     type,
     flags,
     message,
@@ -103,8 +104,16 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     from: current_step_id,
     to: next_step_id,
     done_at: r.now(),
-  });
+  };
 
+  if (assignees) {
+    const currentStep = goal.steps[current_step_id];
+    const oldAssignees = Object.assign({}, currentStep.assignees);
+    history.assignees = oldAssignees;
+    goal.steps[next_step_id].assignees = assignees;
+  }
+
+  goal.history.push(history);
   goal.status = {
     flags,
     current_step_id: next_step_id,

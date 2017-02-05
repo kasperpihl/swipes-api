@@ -1,10 +1,11 @@
 const mapSearch = (res) => {
-  const idParts = res.id.split('-');
+  const id = res.id.split(/-(.+)/)[1];
 
   return {
     service: {
+      id,
+      content_type: res.content_type,
       type: res.content_type,
-      id: idParts[idParts.length - 1],
       name: 'gmail',
     },
     title: res.subject,

@@ -85,8 +85,8 @@ export const selectStep = (options, goalId, nextStepId, callback) => (d, getStat
   })));
   const numberOfCompleted = helper.getNumberOfCompletedSteps();
   const onClick = (id) => {
-    callback(id);
     d(a.main.contextMenu(null));
+    callback(id);
   };
 
   d(a.main.contextMenu({
@@ -230,7 +230,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
 };
 
 
-export const completeStep = (gId, nextSId, message, flags) => (d, getState) => {
+export const completeStep = (gId, nextSId, message, flags, assignees) => (d, getState) => {
   const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
   return d(a.api.request('goals.completeStep', {
     goal_id: gId,
@@ -238,5 +238,6 @@ export const completeStep = (gId, nextSId, message, flags) => (d, getState) => {
     next_step_id: nextSId,
     current_step_id: currentStepId,
     message,
+    assignees,
   }));
 };
