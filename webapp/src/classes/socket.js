@@ -62,11 +62,11 @@ export default class Socket {
     };
   }
   sendPing(ws) {
-    if (this.status === 'online') {
-      ws.send('ping');
+    if (this.status === 'online' && ws) {
+      ws.send(JSON.stringify({ type: 'ping', id: 1 }));
     }
   }
-  changeStatus(status, ) {
+  changeStatus(status) {
     this.status = status;
     this.store.dispatch({
       type: types.SET_STATUS,
