@@ -90,10 +90,12 @@ const goalsStepCompletedNotificationData = (req, res, next) => {
     user_id,
     goal,
     step_id,
+    progress,
   } = res.locals;
 
   const notificationData = {
     step_id,
+    progress,
     done_by: user_id,
     goal_id: goal.id,
   };

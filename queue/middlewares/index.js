@@ -41,7 +41,7 @@ const goal_milestone_removed = notifyWrapper([
 
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsStepGotActiveNotificationData,
+  goals.goalsStepCompletedNotificationData,
   notify.notifyAllInCompany,
 ]);
 

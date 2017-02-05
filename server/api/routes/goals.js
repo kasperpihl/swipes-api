@@ -26,6 +26,7 @@ import {
   goalsCompleteStep,
   goalsNextStepQueueMessage,
   goalsStepGotActiveQueueMessage,
+  goalsProgressStatus,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -67,6 +68,7 @@ authed.all('/goals.completeStep',
     }),
     goalsGet,
     goalsCompleteStep,
+    goalsProgressStatus,
     goalsUpdate,
     goalsNextStepQueueMessage,
     notificationsPushToQueue,
