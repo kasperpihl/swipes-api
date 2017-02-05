@@ -13,13 +13,16 @@ class HandoffHeader extends Component {
   }
   handleClick(e) {
     const { onChangeClick } = this.props;
-
-    onChangeClick(e);
+    onChangeClick('step', e);
   }
-  renderAssignees(assignees) {
+  clickedAssign(id, e) {
+    const { onChangeClick } = this.props;
+    onChangeClick(id, e);
+  }
+  renderAssignees(assignees, id) {
     return (
       <div className="handoff-header__assignees">
-        <HOCAssigning assignees={assignees} maxImages={1} />
+        <HOCAssigning index={id} assignees={assignees} maxImages={1} delegate={this} />
       </div>
     );
   }
@@ -36,7 +39,7 @@ class HandoffHeader extends Component {
       <div className={className}>
         <div className="handoff-header__top">
           <div className="handoff-header__title">{from.title}</div>
-          {this.renderAssignees(from.assignees)}
+          {this.renderAssignees(from.assignees, 'from')}
         </div>
         <div className="handoff-header__subtitle">{from.subtitle}</div>
         <div className="handoff-header__seperator" />
@@ -58,7 +61,7 @@ class HandoffHeader extends Component {
           <div className="handoff-header__icon">
             <Icon svg="Checkmark" className="handoff-header__svg" />
           </div>
-          <div className="handoff-header__title">Complete goal</div>
+          <div onClick={this.handleClick} className="handoff-header__title">Complete goal</div>
         </div>
       </div>
     );
@@ -79,8 +82,8 @@ class HandoffHeader extends Component {
     return (
       <div className={className}>
         <div className="handoff-header__top">
-          <div className="handoff-header__title">{to.title}</div>
-          {this.renderAssignees(to.assignees)}
+          <div onClick={this.handleClick} className="handoff-header__title">{to.title}</div>
+          {this.renderAssignees(to.assignees, 'to')}
         </div>
         <div className="handoff-header__subtitle">{to.subtitle}</div>
       </div>

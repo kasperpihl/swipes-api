@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
-import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
 
 import './styles/goal-actions.scss';
@@ -38,14 +37,10 @@ class GoalActions extends Component {
     );
   }
   renderHandoff() {
-    const { isHandingOff, isCompletingGoal, isSubmitting } = this.props;
-    let title = 'Handoff';
-    if (isHandingOff) {
-      title = isCompletingGoal ? 'Complete Goal' : 'Complete Step';
-    }
+    const { mainLabel, isSubmitting } = this.props;
     return (
       <Button
-        text={title}
+        text={mainLabel}
         loading={isSubmitting}
         primary
         onClick={this.onHandoff}
@@ -67,12 +62,13 @@ class GoalActions extends Component {
 
 export default GoalActions;
 
-const { string, func, bool } = PropTypes;
+const { string, func, bool, object } = PropTypes;
 
 GoalActions.propTypes = {
   isHandingOff: bool,
   isSubmitting: bool,
-  isCompletingGoal: bool,
+  mainLabel: string,
   onHandoff: func,
   onCancel: func,
+  children: object,
 };

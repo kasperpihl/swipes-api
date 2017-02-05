@@ -68,6 +68,10 @@ class HOCAddGoal extends Component {
     this.saveToCache();
     window.removeEventListener('beforeunload', this.saveToCache);
     this._unmounted = true;
+    const { hideNote, sideNoteId } = this.props;
+    if (sideNoteId) {
+      hideNote(sideNoteId);
+    }
   }
   updateState(newState) {
     this.setState(newState);
@@ -122,7 +126,7 @@ class HOCAddGoal extends Component {
     this.updateState({ steps, stepOrder });
   }
   onOpenAssignee(id, e) {
-    this.clickedAssign(e, id);
+    this.clickedAssign(id, e);
   }
   onUpdatedStepTitle(id, title) {
     let { steps } = this.state;
@@ -154,7 +158,7 @@ class HOCAddGoal extends Component {
     attachmentOrder = attachmentOrder.filter(a => a !== id);
     this.updateState({ attachments, attachmentOrder });
   }
-  clickedAssign(e, id) {
+  clickedAssign(id, e) {
     const { selectAssignees } = this.props;
     const { steps, stepOrder } = this.state;
     const i = stepOrder.findKey(v => v === id);
@@ -371,9 +375,11 @@ HOCAddGoal.propTypes = {
   removeCache: func,
   request: func,
   organization_id: string,
+  sideNoteId: string,
   saveCache: func,
   loadWay: func,
   saveWay: func,
+  hideNote: func,
   selectAssignees: func,
   cache: map,
 
@@ -382,6 +388,7 @@ HOCAddGoal.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    sideNoteId: state.getIn(['main', 'sideNoteId']),
     me: state.get('me'),
     cache: state.getIn(['main', 'cache', 'add-goal']),
     organization_id: state.getIn(['me', 'organizations', 0, 'id']),
@@ -392,6 +399,7 @@ export default connect(mapStateToProps, {
   selectAssignees: actions.goals.selectAssignees,
   saveCache: actions.main.cache.save,
   removeCache: actions.main.cache.remove,
+  hideNote: actions.main.note.hide,
   request: actions.api.request,
   addToasty: actions.toasty.add,
   updateToasty: actions.toasty.update,

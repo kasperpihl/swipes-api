@@ -21,7 +21,10 @@ export default function goalsReducer(state = initialState, action) {
       return fromJS(tempG);
     }
     case 'goals.archive': {
-      return state.delete(payload.id);
+      if (payload.ok) {
+        return state.delete(payload.id);
+      }
+      return state;
     }
     case 'goal_archived': {
       return state.delete(payload.data.id);
@@ -33,10 +36,16 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'goals.completeStep':
     case 'goals.update': {
-      return state.mergeIn([payload.goal.id], fromJS(payload.goal));
+      if (payload.ok) {
+        return state.mergeIn([payload.goal.id], fromJS(payload.goal));
+      }
+      return state;
     }
     case 'goals.create':
     case 'goal_created': {
+      if (type === 'goals.create' && !payload.ok) {
+        return state;
+      }
       return state.set(payload.data.id, fromJS(payload.data));
     }
     case types.GOAL_DELETE: {

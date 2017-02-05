@@ -1,48 +1,23 @@
 import React, { Component, PropTypes } from 'react';
+import { setupCachedCallback } from 'classes/utils';
+import { list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import './styles/handoff-status.scss';
+/* global msgGen */
 
 class HandoffStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+
+    this.onChange = setupCachedCallback(props.onChangeClick, this);
   }
   getHelper() {
-    const { goal, me } = this.props;
-    return new GoalsUtil(goal, me.get('id'));
-  }
-  nameForUser(id) {
-    const { users, me } = this.props;
-    let name = 'Someone';
-    const user = users.get(id);
-
-    if (user) {
-      name = user.get('name');
-      if (user.get('id') === me.get('id')) {
-        name = 'yourself';
-      }
-    }
-
-    return name;
-  }
-  namesFromAssignees(assignees) {
-    let assigneeString = '';
-    const numOfAssignees = assignees.size;
-
-    if (numOfAssignees > 0) {
-      assigneeString += `${this.nameForUser(assignees.get(0))}`;
-    }
-    if (numOfAssignees === 2) {
-      assigneeString += ` and ${this.nameForUser(assignees.get(1))}`;
-    }
-    if (numOfAssignees > 2) {
-      assigneeString += ` and ${numOfAssignees - 1} others`;
-    }
-
-    return assigneeString;
+    const { goal } = this.props;
+    return new GoalsUtil(goal);
   }
   renderStatus() {
-    const { toId, goal, onChangeStep } = this.props;
+    const { toId, goal, assignees } = this.props;
     const helper = this.getHelper();
     const to = helper.getStepById(toId);
     const toIndex = helper.getStepIndexForId(toId);
@@ -54,23 +29,24 @@ class HandoffStatus extends Component {
       status = (
         <span>
           {'Complete '}
-          "<b onClick={onChangeStep}>{goal.get('title')}</b>"
+          <b onClick={this.onChange('step')}>{`"${goal.get('title')}"`}</b>
         </span>
       );
     } else {
-      const absDiff = Math.abs(diff);
-      let moveString = `Move ${absDiff} step`;
-      if (absDiff > 1) {
-        moveString += 's';
+      const title = `"${to.get('title')}"`;
+      let moveString = `Move ${diff} step${diff > 1 ? 's' : ''} forward to `;
+      if (diff === 0) {
+        moveString = 'Reassign ';
       }
-      const dirString = diff < 0 ? 'backward' : 'forward';
-      moveString += ` ${dirString} to `;
+      if (diff < 0) {
+        moveString = 'Make iteration on ';
+      }
       status = (
         <span>
           {moveString}
-          <b>{this.namesFromAssignees(to.get('assignees'))}</b>
-          {' for '}
-          <b onClick={onChangeStep}>"{to.get('title')}"</b>
+          <b onClick={this.onChange('step')}>{title}</b>
+          {diff === 0 ? ' to ' : ' and assign '}
+          <b onClick={this.onChange('to')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
         </span>
       );
     }
@@ -88,10 +64,11 @@ class HandoffStatus extends Component {
 
 export default HandoffStatus;
 
-const { object, func } = PropTypes;
+const { object, func, string } = PropTypes;
 
 HandoffStatus.propTypes = {
-  onChangeStep: func,
-  onChangeAssignees: func,
+  onChangeClick: func,
+  assignees: list,
   goal: object,
+  toId: string,
 };

@@ -91,10 +91,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     return next(new SwipesError('Invalid current_step_id'));
   }
 
-  if (
-    (next_step_id && !goal.steps[next_step_id]) ||
-    (next_step_id && next_step_id !== current_step_id)
-  ) {
+  if (next_step_id && !goal.steps[next_step_id]) {
     return next(new SwipesError('Invalid next_step_id'));
   }
 
