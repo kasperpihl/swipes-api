@@ -162,13 +162,16 @@ class HOCPreviewModal extends Component {
     if (!this._noPreview || loading) {
       return undefined;
     }
+    const buttonsHtml = buttons.map((b, i) => {
+      b.icon = `${b.icon}2x`;
 
-    const buttonsHtml = buttons.map((b, i) => (
-      <div className="preview-modal__button" onClick={this.onClickButtonCached(i)} key={`no-prev-btn-${i}`}>
-        <Icon svg={b.icon} className="preview-modal__svg" />
-        {b.title}
-      </div>
-      ));
+      return (
+        <div className="preview-modal__button" onClick={this.onClickButtonCached(i)} key={`no-prev-btn-${i}`}>
+          <Icon svg={b.icon} className="preview-modal__svg" />
+          {b.title}
+        </div>
+      );
+    });
 
     return (
       <div className="preview-modal__no-preview">

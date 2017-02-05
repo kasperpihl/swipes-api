@@ -20,9 +20,12 @@ import Collection from './svgs/collection.svg';
 import CreateNote from './svgs/create-note.svg';
 import Deliver from './svgs/deliver.svg';
 import Desktop from './svgs/desktop.svg';
+import Desktop2x from './svgs/desktop2x.svg';
 import Dot from './svgs/dot.svg';
 import Download from './svgs/download.svg';
+import Download2x from './svgs/download2x.svg';
 import Earth from './svgs/earth.svg';
+import Earth2x from './svgs/earth2x.svg';
 import Email from './svgs/email.svg';
 import Find from './svgs/find.svg';
 import Flag from './svgs/flag.svg';
@@ -106,9 +109,12 @@ export {
   CreateNote,
   Deliver,
   Desktop,
+  Desktop2x,
   Dot,
   Download,
+  Download2x,
   Earth,
+  Earth2x,
   Email,
   Find,
   Flag,

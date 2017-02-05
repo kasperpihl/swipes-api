@@ -108,22 +108,39 @@
   &__actions {
     @include flex(flex);
     position: relative;
+
+    &:after {
+      @include size(calc(100% + 30px), 1px);
+      content: '';
+      left: -15px; bottom: 0px;
+      position: absolute;
+      background-color: rgba(white, .1);
+    }
   }
 
   &__button {
-    @include size(200px);
+    @include size(180px);
     @include flex(center, center, column);
-    @include font(15px, $bg, 500);
-    border: 1px solid $bg;
+    @include font(12px, $bg, 500);
+    position: relative;
     transform: translateY(-33px);
     transition: .15s ease;
 
-    &:hover {
-      background-color: rgba($bg, .1);
-      transition: .15s ease;
+    &:not(:first-child) {
+      // border-left: 1px solid rgba(white, .1);
 
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0; top: 10%;
+        @include size(1px, 80%);
+        background-color: rgba(white, .1);
+      }
+    }
+
+    &:hover {
       #{$b}__svg {
-        margin-bottom: 48px;
+        margin-bottom: 15px;
         transition: .2s ease;
       }
     }
