@@ -13,14 +13,13 @@
   overflow-y: auto;
   margin-top: 21px;
   padding-top: 1px;
-  padding-left: 10px;
 
   &:before {
     content: '';
     position: absolute;
-    left: 10px; top: 0;
-    @include size(calc(100% - 10px), 1px);
-    max-width: 770px;
+    left: 0; top: 0;
+    @include size(100%, 1px);
+    max-width: 780px;
     background-color: $deepBlue-10;
   }
 
@@ -28,7 +27,6 @@
     @include size(100%, auto);
     max-width: 780px;
     position: relative;
-    padding-right: 15px;
   }
 
   &__completed {
@@ -64,6 +62,11 @@
     font-size: 15px;
     line-height: 1.4;
     color: $deepBlue-80;
+  }
+
+  &__attachment {
+    padding: 0;
+    border: none;
   }
 
   &__status {

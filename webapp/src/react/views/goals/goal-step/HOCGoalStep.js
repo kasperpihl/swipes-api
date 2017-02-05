@@ -309,7 +309,7 @@ class HOCGoalStep extends Component {
     }
 
     return (
-      <Section title="Attachments" style={style}>
+      <Section className="goal-step__attachment" style={style}>
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}

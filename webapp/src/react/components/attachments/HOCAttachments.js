@@ -6,6 +6,7 @@ import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
 import Attachment from './Attachment';
+import TabBar from 'components/tab-bar/TabBar';
 import './styles/attachments';
 
 class HOCAttachments extends Component {
@@ -13,15 +14,23 @@ class HOCAttachments extends Component {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
-    this.onIconClickCached = setupCachedCallback(this.onIconClick, this);
+    this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
+    this.onDeleteClickCached = setupCachedCallback(this.onDeleteClick, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = { loading: false };
+    this.state = { loading: false, tabIndex: 0 };
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
     this._unmounted = true;
+  }
+  tabDidChange(el, index) {
+    const { tabIndex } = this.state;
+
+    if (index !== tabIndex) {
+      this.setState({ tabIndex: index });
+    }
   }
   onPreview(id) {
     const {
@@ -30,36 +39,35 @@ class HOCAttachments extends Component {
     } = this.props;
     previewLink(attachments.get(id));
   }
-  onIconClick(id) {
+  onFlagClick(id) {
+    this.callDelegate('onFlag', id);
+  }
+  onDeleteClick(id) {
     const {
-      enableFlagging,
       goalId,
       removeFromCollection,
       loadModal,
     } = this.props;
-    if (enableFlagging) {
-      this.callDelegate('onFlag', id);
-    } else {
-      loadModal(
-        {
-          title: 'Remove Attachment?',
-          data: {
-            message: 'Are you sure you want to remove this attachment?',
-            buttons: ['Yes', 'No'],
-          },
-          type: 'warning',
+
+    loadModal(
+      {
+        title: 'Remove Attachment?',
+        data: {
+          message: 'Are you sure you want to remove this attachment?',
+          buttons: ['Yes', 'No'],
         },
-        (res) => {
-          if (res && res.button === 0) {
-            if (goalId) {
-              removeFromCollection(goalId, id).then(() => {
-              });
-            }
-            this.callDelegate('onRemoveAttachment', id);
+        type: 'warning',
+      },
+      (res) => {
+        if (res && res.button === 0) {
+          if (goalId) {
+            removeFromCollection(goalId, id).then(() => {
+            });
           }
-        },
-      );
-    }
+          this.callDelegate('onRemoveAttachment', id);
+        }
+      },
+    );
   }
   onAdd(which, e) {
     const {
@@ -140,32 +148,53 @@ class HOCAttachments extends Component {
   }
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder, enableFlagging } = this.props;
-    let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
+    const { tabIndex } = this.state;
+    // let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
     let { flags } = this.props;
     if (!flags) {
       flags = [];
     } else {
       flags = flags.toJS();
     }
+
+    const flaggedAttachments = [];
+    const allAttachments = [];
+
     if (this.hasAttachments()) {
-      html = aOrder.map((aId) => {
+      aOrder.forEach((aId) => {
         const a = attachments.get(aId);
 
-        return (
-          <Attachment
+        if (flags.indexOf(aId) !== -1) {
+          flaggedAttachments.push(<Attachment
             key={aId}
             flagged={(flags.indexOf(aId) !== -1)}
-            onClickIcon={this.onIconClickCached(aId)}
+            onFlag={this.onFlagClickCached(aId)}
+            onDelete={this.onDeleteClickCached(aId)}
             onClickText={this.onPreviewCached(aId)}
             icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
             title={a.get('title')}
             enableFlagging={enableFlagging}
-          />
-        );
+          />);
+        }
+
+        allAttachments.push(<Attachment
+          key={aId}
+          flagged={(flags.indexOf(aId) !== -1)}
+          onFlag={this.onFlagClickCached(aId)}
+          onDelete={this.onDeleteClickCached(aId)}
+          onClickText={this.onPreviewCached(aId)}
+          icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
+          title={a.get('title')}
+          enableFlagging={enableFlagging}
+        />);
       });
     }
 
-    return html;
+    if (tabIndex === 0) {
+      return flaggedAttachments;
+    } else if (tabIndex === 1) {
+      return allAttachments;
+    }
   }
   renderAddAttachments() {
     const { disableAdd } = this.props;
@@ -208,11 +237,25 @@ class HOCAttachments extends Component {
       </div>
     );
   }
+  renderTabbar() {
+    const { enableFlagging } = this.props;
+    const { tabIndex } = this.state;
+    const tabs = ['Flagged', 'All attachments'];
+    //
+    // if (enableFlagging) {
+    //   tabs = ['Flag attachments'];
+    // }
+
+    return (
+      <TabBar tabs={tabs} activeTab={tabIndex} delegate={this} />
+    );
+  }
   render() {
     return (
       <div className="attachments">
+        {this.renderTabbar()}
         {this.renderAttachments()}
-        {this.renderAddAttachments()}
+        {/* {this.renderAddAttachments()} */}
       </div>
     );
   }

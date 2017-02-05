@@ -3,221 +3,98 @@
 
 .attachment {
   $b: &;
-  @include size(234px, auto);
+  @include size(100%, 60px);
   @include flex(center, flex-start);
   position: relative;
 
-  &__icon {
-    @include size(24px, 36px);
-    padding: 6px 0;
-    position: relative;
-    // overflow: hidden;
-    transition: .5s ease;
+  &:not(:last-child) {
+    border-bottom: 1px solid darken($deepBlue-5, 3%);
+  }
 
-    &:before {
-      content: 'x';
-      @include flex();
-      @include font(13px, $deepBlue-100, 24px);
-      padding-bottom: 2px;
-      position: absolute;
-      left: 0; top: 6;
-      @include size(24px);
-      background-color: $deepBlue-20;
-      border-radius: 3px;
-      opacity: 0;
+  &__title {
+    @include size(100%, auto);
+    @include flex(center, flex-start);
+    @include font(12px, $deepBlue-100, 18px);
+  }
+
+  &__icon {
+    @include size(24px);
+    @include flex(none);
+    margin-right: 12px;
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-20);
+    }
+  }
+
+  &__actions {
+    @include size(auto, 100%);
+    @include flex();
+    @include flex(none);
+  }
+
+  &__button {
+    @include size(36px);
+    @include flex();
+    border: 1px solid $deepBlue-10;
+    border-radius: 50%;
+    margin-left: 6px;
+    opacity: 0;
+    transition: .15s ease;
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-60);
+      transition: .15s ease;
+    }
+
+    &--flag {
+      display: none;
+      pointer-events: none;
     }
 
     &:hover {
-      &:before {
-        content: 'x';
-        @include flex();
-        @include font(13px, $deepBlue-100, 24px);
-        padding-bottom: 2px;
-        position: absolute;
-        left: 0; top: 6;
-        @include size(24px);
-        background-color: $deepBlue-20;
-        border-radius: 3px;
-        opacity: 1;
-        transition: 0s;
-      }
+      background-color: $deepBlue-10;
+      transition: .15s ease;
 
       #{$b}__svg {
-        opacity: 0;
-        transition: 0s;
+        @include svg-color($deepBlue-50);
+        transition: .15s ease;
       }
-    }
-
-    &:after {
-      content: '';
-      position: absolute;
-      left: -3px; top: -3px;
-      @include size(24px);
-      border: 0px solid $blue-100;
-      border-radius: 50%;
-      transform: rotate(-45deg);
-      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      opacity: 0;
-      transition: .3s -.3s ease;
-      animation: rotateAttachLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
     }
   }
 
   &__svg {
     @include size(24px);
-    @include flex(none);
-    @include svg-color($deepBlue-40);
-    border-radius: 3px;
-    border: 1px solid $deepBlue-20;
-    transform: scale(1);
-    transition: all .15s ease, opacity .2s ease;
-  }
-
-  &__title {
-    @include size(calc(100% - 24px - 12px), auto);
-    @include font(12px, $deepBlue-100, 24px, 500);
-    padding: 6px 0;
-    transition: .15s ease;
-    padding-left: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: none;
-    position: relative;
-
-    &:hover {
-      @include font($c: $blue-100);
-      transition: .15s ease;
-    }
   }
 
   &--flagged {
-
-    #{$b}__icon:hover {
+    #{$b}__button--flag {
+      @include flex(flex);
+      border-color: transparent;
+      opacity: 1;
 
       #{$b}__svg {
-        @include svg-color(white);
-        background-color: $yellow-color;
-        border-color: $yellow-color;
-      }
-    }
-
-    #{$b}__svg {
-      @include svg-color(white);
-      background-color: $yellow-color;
-      border-color: $yellow-color;
-    }
-  }
-
-  &--add {
-
-    #{$b}__title {
-      @include font($c: $blue-100);
-
-      &:after {
-        content: 'Adding Attachment';
-        @include size(100%);
-        @include flex(center, flex-start);
-        position: absolute;
-        left: 0; top: 0;
-        opacity: .3;
-        color: $blue-100;
-        padding-left: 12px;
-        background-color: $bg;
-        pointer-events: none;
-        transform: translateY(100%);
-        opacity: 0;
-        transition: .3s ease;
-      }
-    }
-
-    #{$b}__icon {
-      pointer-events: none;
-    }
-
-    #{$b}__svg {
-      border-color: $blue-100;
-      @include svg-color($blue-100);
-      pointer-events: none;
-    }
-
-    &:hover {
-      #{$b}__svg {
-        @include svg-color(white);
-        background-color: $blue-100;
-        border-color: $blue-100;
-        transform: scale(1);
-        transition: .15s ease;
-      }
-    }
-  }
-
-  &--loading {
-
-    #{$b}__icon {
-      @include size(24px);
-      padding: 0;
-      border: 3px solid $deepBlue-20;
-      border-radius: 50%;
-      position: relative;
-      transition: .15s;
-
-      &:after {
-        content: '';
-        position: absolute;
-        left: -3px; top: -3px;
-        @include size(24px);
-        border: 3px solid $blue-100;
-        border-radius: 50%;
-        transform: rotate(-45deg);
-        -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-        opacity: 1;
-        transition: border-width .15s .25s ease, opacity .15s .25s ease;
-        animation: rotateAttachLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
-      }
-    }
-
-    #{$b}__svg {
-      opacity: 0;
-    }
-
-    #{$b}__title {
-      position: relative;
-
-      &:after {
-        transform: translateY(0px);
-        opacity: 1;
-        transition: .15s ease;
+        @include svg-color($red-80);
       }
     }
   }
 
   &--flagable {
-      #{$b}__icon:hover {
-        overflow: visible;
+    #{$b}__button--flag {
+      @include flex(flex);
+      opacity: 1;
+      pointer-events: all;
+    }
 
-        &:before {
-          opacity: 0;
-        }
-
-        #{$b}__svg {
-          @include svg-color($yellow-color);
-          background-color: $bg;
-          border-color: $yellow-color;
-          transform: scale(1.2);
-          opacity: 1;
-          transition: .15s ease;
-        }
-      }
-  }
-}
-
-@keyframes rotateAttachLoader {
-  from {
-    transform: rotate(-45deg);
+    #{$b}__button--delete {
+      display: none;
+    }
   }
 
-  to {
-    transform: rotate(315deg);
+  &:hover {
+
+    #{$b}__button--delete {
+      opacity: 1;
+    }
   }
 }

@@ -2,9 +2,7 @@
 @import '~styles/_mixins.scss';
 
 .attachments {
-  @include size(calc(100%), auto);
-  @include flex(flex-start, flex-start);
-  flex-wrap: wrap;
+  @include size(100%, auto);
   position: relative;
 
   &__add {

@@ -25,6 +25,7 @@ import Download from './svgs/download.svg';
 import Earth from './svgs/earth.svg';
 import Email from './svgs/email.svg';
 import Find from './svgs/find.svg';
+import Flag from './svgs/flag.svg';
 import Folder from './svgs/folder.svg';
 import Goals from './svgs/goals.svg';
 import Goal from './svgs/goal.svg';
@@ -110,6 +111,7 @@ export {
   Earth,
   Email,
   Find,
+  Flag,
   Folder,
   Goal,
   Goals,
