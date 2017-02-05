@@ -12,17 +12,7 @@
     @include size(100%, auto);
     @include flex(center, flex-start);
     position: relative;
-
-    &:last-child {
-      @include size(auto, 100%);
-      @include flex();
-      @include flex(none);
-      padding-left: 45px;
-
-      #{$b}__status {
-        padding-left: 15px;
-      }
-    }
+    padding-left: 3px;
   }
 
   &__status {
