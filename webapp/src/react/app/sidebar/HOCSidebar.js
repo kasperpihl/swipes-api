@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import Icon from 'Icon';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import { navigation } from 'actions';
 
 import './styles/sidebar.scss';
@@ -47,8 +48,8 @@ class HOCSidebar extends Component {
 
     let image = <Icon svg={item.svg} className="sidebar__icon" />;
 
-    if (item.src) {
-      image = <img src={item.src} className="sidebar__image" alt="" />;
+    if (item.id === 'profile') {
+      image = <HOCAssigning assignees={[item.personId]} />;
     }
 
     return (
@@ -82,7 +83,7 @@ class HOCSidebar extends Component {
       return undefined;
     }
 
-    return this.renderItem({ id: 'profile', src: me.get('profile_pic') });
+    return this.renderItem({ id: 'profile', personId: me.get('id') });
   }
   renderStore() {
     // For later
