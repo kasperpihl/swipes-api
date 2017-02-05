@@ -4,7 +4,7 @@ import { bindAll } from 'classes/utils';
 export default class Socket {
   constructor(store) {
     this.store = store;
-    this.reconnect_attempts = 1;
+    this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange']);
     store.subscribe(this.storeChange);
   }
@@ -15,17 +15,34 @@ export default class Socket {
     const token = state.getIn(['main', 'token']);
 
     if (!this.socket && url && state.getIn(['main', 'status']) !== 'connecting') {
-      this.connect(url, token);
+      this.timedConnect(url, token, this.timerForAttempt());
     }
+  }
+  timerForAttempt() {
+    switch (this.reconnect_attempts) {
+      case 0: return 0;
+      case 1: return 1000;
+      case 2: return 5000;
+      case 3: return 10000;
+      case 4: return 30000;
+      default: return 180000;
+    }
+  }
+  timedConnect(url, token, time) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.connect.bind(this, url, token), time);
   }
   connect(url, token) {
     const ws = new WebSocket(`${url}?token=${token}`);
-
     this.changeStatus('connecting');
 
     ws.onopen = () => {
+      this.reconnect_attempts = 0;
       this.socket = true;
       this.changeStatus('online');
+      this._pingTimer = setInterval(() => {
+        this.sendPing(ws);
+      }, 30000);
       // we can send stuff here like that
       // ws.send('stuff')
     };
@@ -33,16 +50,24 @@ export default class Socket {
     ws.onmessage = this.message;
 
     ws.onerror = (event) => {
-      console.log('websocket error', event); // eslint-disable-line
+      // console.log('websocket error', event); // eslint-disable-line
     };
 
     ws.onclose = () => {
       this.changeStatus('offline');
-      setTimeout(this.connect.bind(this, url, token), this.reconnect_attempts * 200);
+      clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
+      const time = this.timerForAttempt();
+      this.timedConnect(url, token, time);
     };
   }
-  changeStatus(status) {
+  sendPing(ws) {
+    if (this.status === 'online') {
+      ws.send('ping');
+    }
+  }
+  changeStatus(status, ) {
+    this.status = status;
     this.store.dispatch({
       type: types.SET_STATUS,
       status,
