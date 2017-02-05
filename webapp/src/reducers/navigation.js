@@ -44,6 +44,9 @@ export default function history(state = initialState, action) {
         return s.butLast();
       });
     }
+    case types.NAVIGATION_WILL_CHANGE_TO: {
+      return state.setIn([payload.target, 'upcomingId'], payload.id);
+    }
     case types.NAVIGATION_SET_COUNTER: {
       const { id, counter } = payload;
       return state.setIn(['counters', id], `${counter}`);

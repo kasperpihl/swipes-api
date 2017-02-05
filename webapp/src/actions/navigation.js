@@ -63,6 +63,7 @@ export function navigateToId(target, navId) {
         payload.history = history;
       }
     }
+    dispatch({ type: types.NAVIGATION_WILL_CHANGE_TO, payload: { target, id: navId } });
     dispatch({ type: types.NAVIGATION_SET, payload });
   };
 }

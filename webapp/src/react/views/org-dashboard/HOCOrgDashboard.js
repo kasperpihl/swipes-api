@@ -20,6 +20,10 @@ class HOCOrgDashboard extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+  onNavWillChange(to) {
+    console.log('nav will change', to);
+    this.onMarkSeen();
+  }
   onMarkSeen() {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
