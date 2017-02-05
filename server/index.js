@@ -46,7 +46,8 @@ const app = express();
 app.use(cors({
   origin: config.get('cors'),
   methods: 'HEAD, GET, POST',
-  allowedHeader: 'Content-Type, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
+  allowedHeader: 'Content-Type, Range, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
+  exposedHeaders: 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range',
 }));
 
 if (env !== 'dev') {
