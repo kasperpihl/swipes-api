@@ -151,9 +151,11 @@ class HOCAttachments extends Component {
     const { disableAdd } = this.props;
     const { loading } = this.state;
 
-    if (this.hasAttachments() || !disableAdd) {
-      return <Button icon="Plus" className="attachments__add-button" loading={loading} primary onClick={this.onAddCached('menu')} />;
+    if (!this.hasAttachments() || disableAdd) {
+      return false;
     }
+
+    return <Button text="Add attachment" className="attachments__add-button" loading={loading} onClick={this.onAddCached('menu')} />;
   }
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder, enableFlagging } = this.props;
