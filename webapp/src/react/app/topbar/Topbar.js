@@ -30,7 +30,6 @@ class Topbar extends Component {
     const { status } = this.props;
     let className = 'topbar__gradient topbar__gradient--status';
     let statusMessage = '';
-
     if (status === 'offline') {
       className += ' topbar__gradient--indicate';
       statusMessage = 'System is offline';
@@ -42,7 +41,7 @@ class Topbar extends Component {
     return (
       <div className={className}>
         <div className="topbar__title">
-          System is connecting
+          {statusMessage}
         </div>
       </div>
     );
