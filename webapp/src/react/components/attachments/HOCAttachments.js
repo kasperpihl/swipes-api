@@ -5,6 +5,7 @@ import { list, map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
+import Button from 'Button';
 import Attachment from './Attachment';
 import TabBar from 'components/tab-bar/TabBar';
 import './styles/attachments';
@@ -25,19 +26,19 @@ class HOCAttachments extends Component {
     clearTimeout(this._timer);
     this._unmounted = true;
   }
-  tabDidChange(el, index) {
-    const { tabIndex } = this.state;
-
-    if (index !== tabIndex) {
-      this.setState({ tabIndex: index });
-    }
-  }
   onPreview(id) {
     const {
       previewLink,
       attachments,
     } = this.props;
     previewLink(attachments.get(id));
+  }
+  tabDidChange(el, index) {
+    const { tabIndex } = this.state;
+
+    if (index !== tabIndex) {
+      this.setState({ tabIndex: index });
+    }
   }
   onFlagClick(id) {
     this.callDelegate('onFlag', id);
@@ -146,10 +147,18 @@ class HOCAttachments extends Component {
     const { attachmentOrder } = this.props;
     return (attachmentOrder && attachmentOrder.size);
   }
+  renderAddAttachmentsPlus() {
+    const { disableAdd } = this.props;
+    const { loading } = this.state;
+
+    if (this.hasAttachments() || !disableAdd) {
+      return <Button icon="Plus" className="attachments__add-button" loading={loading} primary onClick={this.onAddCached('menu')} />;
+    }
+  }
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder, enableFlagging } = this.props;
     const { tabIndex } = this.state;
-    // let html = <div className="attachments__empty-state">There are no attachments yet.</div>;
+
     let { flags } = this.props;
     if (!flags) {
       flags = [];
@@ -218,26 +227,9 @@ class HOCAttachments extends Component {
   }
   renderAddAttachments() {
     const { disableAdd } = this.props;
-    if (disableAdd) {
-      return false;
-    }
-    if (this.hasAttachments()) {
-      let className = ' attachment attachment--add';
-      const { loading } = this.state;
-      if (loading) {
-        className += ' attachment--loading';
-      }
 
-      return (
-        <div className={className} onClick={this.onAddCached('menu')}>
-          <div className="attachment__icon">
-            <Icon svg="Plus" className="attachment__svg" />
-          </div>
-          <div className="attachment__title">
-            Add more
-          </div>
-        </div>
-      );
+    if (disableAdd || this.hasAttachments()) {
+      return false;
     }
 
     return (
@@ -258,9 +250,9 @@ class HOCAttachments extends Component {
     );
   }
   renderTabbar() {
-    const { enableFlagging, flags } = this.props;
+    const { enableFlagging, flags, attachmentOrder } = this.props;
     let { tabIndex } = this.state;
-    let tabs = [`Flagged (${flags.size})`, 'All attachments'];
+    let tabs = [`Flagged (${flags.size})`, `All attachments (${attachmentOrder.size})`];
     let key = 'noHandoff';
 
     if (enableFlagging) {
@@ -270,7 +262,10 @@ class HOCAttachments extends Component {
     }
 
     return (
-      <TabBar key={key} tabs={tabs} activeTab={tabIndex} delegate={this} />
+      <div className="attachments__tabs">
+        {this.renderAddAttachmentsPlus()}
+        <TabBar key={key} tabs={tabs} activeTab={tabIndex} delegate={this} />
+      </div>
     );
   }
   render() {
@@ -278,7 +273,7 @@ class HOCAttachments extends Component {
       <div className="attachments">
         {this.renderTabbar()}
         {this.renderAttachments()}
-        {/* {this.renderAddAttachments()} */}
+        {this.renderAddAttachments()}
       </div>
     );
   }

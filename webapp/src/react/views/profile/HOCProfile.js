@@ -31,7 +31,7 @@ class HOCProfile extends Component {
   renderProfileImage() {
     const { me } = this.props;
 
-    if (false) {
+    if (me.get('profile_pic')) {
       return <img src={me.get('profile_pic')} role="presentation" />;
     }
 
