@@ -71,8 +71,9 @@ export default function main(state = initialState, action) {
     case types.NOTIFICATION_ADD: {
       return state.updateIn(['notifications'], s => s.insert(0, fromJS(payload)));
     }
+    case 'notifications_seen':
     case 'notifications.markAsSeen': {
-      const { marked_at, last_marked: lastMarked } = payload;
+      const { marked_at, last_marked: lastMarked } = payload.data || payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
         if (n.get('ts') <= lastMarked) {
           return n.set('seen', marked_at);
@@ -144,6 +145,9 @@ export default function main(state = initialState, action) {
       return state.setIn(['ways', payload.data.id], fromJS(payload.data));
     }
     case 'ways.create': {
+      if (!payload.ok) {
+        return state;
+      }
       return state.setIn(['ways', payload.way.id], fromJS(payload.way));
     }
 
