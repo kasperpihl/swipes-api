@@ -16,13 +16,16 @@ const notifySingleUser = (req, res, next) => {
 const notifyAllInCompany = (req, res, next) => {
   const {
     user,
+    user_id,
   } = res.locals;
 
   const usersIds = [];
   const organization = user.organizations[0];
 
   organization.users.forEach((userId) => {
-    usersIds.push(userId);
+    if (user_id !== userId) {
+      usersIds.push(userId);
+    }
   });
 
   const uniqueUsersToNotify = Array.from(new Set(usersIds));
@@ -35,13 +38,16 @@ const notifyAllInCurrentStep = (req, res, next) => {
   const {
     goal,
     step_id,
+    user_id,
   } = res.locals;
 
   const currentStep = goal.steps[step_id];
   const usersIds = [];
 
   currentStep.assignees.forEach((userId) => {
-    usersIds.push(userId);
+    if (user_id !== userId) {
+      usersIds.push(userId);
+    }
   });
 
   const uniqueUsersToNotify = Array.from(new Set(usersIds));
