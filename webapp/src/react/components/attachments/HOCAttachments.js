@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
@@ -20,7 +21,7 @@ class HOCAttachments extends Component {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = { loading: false, tabIndex: props.flags.size ? 0 : 1 };
+    this.state = { loading: false, tabIndex: (props.flags && props.flags.size) ? 0 : 1 };
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -252,7 +253,7 @@ class HOCAttachments extends Component {
     );
   }
   renderTabbar() {
-    const { enableFlagging, flags, attachmentOrder } = this.props;
+    const { enableFlagging, flags = List(), attachmentOrder = List() } = this.props;
     let { tabIndex } = this.state;
     let tabs = [`Flagged (${flags.size})`, `All attachments (${attachmentOrder.size})`];
     let key = 'noHandoff';
