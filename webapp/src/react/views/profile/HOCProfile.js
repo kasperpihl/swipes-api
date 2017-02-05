@@ -28,13 +28,24 @@ class HOCProfile extends Component {
 
     navPush({ component: 'Services', title: 'Services' });
   }
+  renderProfileImage() {
+    const { me } = this.props;
+
+    if (false) {
+      return <img src={me.get('profile_pic')} role="presentation" />;
+    }
+
+    const initials = me.get('name').substring(0, 1);
+
+    return <div className="profile__img-name">{initials}</div>;
+  }
   render() {
     const { me } = this.props;
 
     return (
       <div className="profile">
         <div className="profile__image">
-          <img src={me.get('profile_pic')} role="presentation" />
+          {this.renderProfileImage()}
         </div>
         <div className="profile__name">{me.get('name')}</div>
         <div className="profile__organization">{me.getIn(['organizations', 0, 'name'])}</div>

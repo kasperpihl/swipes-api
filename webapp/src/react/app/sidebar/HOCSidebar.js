@@ -18,7 +18,7 @@ class HOCSidebar extends Component {
   clickedItem(e) {
     const { navigateToId, navId } = this.props;
     const id = e.target.getAttribute('data-id');
-
+    console.log('e', e);
     navigateToId('primary', id);
   }
   rightClickedItem(e) {

@@ -54,6 +54,10 @@ $sidebarWidth: 60px;
     @include flex();
     position: relative;
 
+    & > * {
+      pointer-events: none;
+    }
+
     &:before, &:after {
       content: '';
       @include size(4px, 40px);

@@ -19,12 +19,22 @@
     max-height: 192px;
     max-width: 192px;
     border-radius: 50%;
+    position: relative;
 
     img {
       border-radius: 50%;
       max-height: 192px;
       max-width: 192px;
     }
+  }
+
+  &__img-name {
+    @include size();
+    @include flex();
+    @include font(90px, $bg, 700);
+    border-radius: 50%;
+    background-color: $deepBlue-100;
+    text-transform: uppercase;
   }
 
   &__name {
