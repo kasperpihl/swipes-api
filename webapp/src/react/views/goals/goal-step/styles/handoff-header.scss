@@ -8,6 +8,8 @@
   position: relative;
   // background-color: yellow;
 
+  border-bottom: 1px solid $deepBlue-10;
+
   &__section {
     @include size(50%, auto);
     padding: 30px 0;
@@ -36,6 +38,13 @@
       opacity: 0;
       transform: translateX(-10px);
       transition: .3s ease;
+
+      #{$b}__title {
+
+        &:hover {
+          @include font($c: $blue-100);
+        }
+      }
     }
 
     &--complete {
@@ -54,6 +63,11 @@
       #{$b}__seperator:before {
         transform: translateX(50%) rotate(45deg);
         transition: .3s .3s ease;
+      }
+
+      #{$b}__assignees {
+        opacity: 0;
+        transition: .2s ease;
       }
     }
 
