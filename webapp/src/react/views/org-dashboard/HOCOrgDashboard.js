@@ -20,8 +20,7 @@ class HOCOrgDashboard extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onNavWillChange(to) {
-    console.log('nav will change', to);
+  onNavWillChange() {
     this.onMarkSeen();
   }
   onMarkSeen() {
@@ -67,8 +66,7 @@ class HOCOrgDashboard extends Component {
     return <b onClick={this.onClickCached(goalId, 'goal')}>{title}</b>;
   }
   clickableNameForUserId(userId) {
-    const { users } = this.props;
-    const name = this.nameForUser(users, userId);
+    const name = msgGen.getUserString(userId);
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
   messageForNotification(n) {

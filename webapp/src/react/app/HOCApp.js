@@ -25,9 +25,8 @@ class HOCApp extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    const { request, navInit } = this.props;
+    const { navInit } = this.props;
     navInit();
-    request('rtm.start');
   }
   renderNote() {
     return <HOCSideNote />;

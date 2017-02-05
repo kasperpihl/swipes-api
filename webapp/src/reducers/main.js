@@ -44,8 +44,12 @@ export default function main(state = initialState, action) {
     }
 
     case types.SET_STATUS: {
-      const hasLoaded = (state.get('hasLoaded') || action.status === 'online') ? true : null;
-      return state.withMutations(ns => ns.set('hasLoaded', hasLoaded).set('status', action.status));
+      console.log('payload', payload);
+      const hasLoaded = (state.get('hasLoaded') || payload.status === 'online') ? true : null;
+
+      return state.withMutations(ns =>
+        ns.set('hasLoaded', hasLoaded).set('status', payload.status).set('nextRetry', payload.nextRetry),
+      );
     }
 
     // ======================================================

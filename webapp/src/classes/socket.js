@@ -1,5 +1,6 @@
 import * as types from 'constants';
 import { bindAll } from 'classes/utils';
+import * as a from 'actions';
 
 export default class Socket {
   constructor(store) {
@@ -11,11 +12,11 @@ export default class Socket {
   storeChange() {
     const state = this.store.getState();
 
-    const url = state.getIn(['main', 'socketUrl']);
     const token = state.getIn(['main', 'token']);
-
-    if (!this.socket && url && state.getIn(['main', 'status']) !== 'connecting') {
-      this.timedConnect(url, token, this.timerForAttempt());
+    if (token && !this.socket && state.getIn(['main', 'status']) !== 'connecting') {
+      if (!this.timer) {
+        this.timedConnect(token, this.timerForAttempt());
+      }
     }
   }
   timerForAttempt() {
@@ -28,37 +29,42 @@ export default class Socket {
       default: return 180000;
     }
   }
-  timedConnect(url, token, time) {
+  timedConnect(token, time) {
     clearTimeout(this.timer);
-    this.timer = setTimeout(this.connect.bind(this, url, token), time);
+    this.timer = setTimeout(this.connect.bind(this, token), time);
   }
-  connect(url, token) {
+  connect(token) {
+    let url = `${window.location.origin}`;
+    if (window.location.hostname === 'localhost') {
+      url = 'http://localhost:5000';
+    }
+    url = `ws://${url.split('://')[1]}/ws`;
     const ws = new WebSocket(`${url}?token=${token}`);
     this.changeStatus('connecting');
 
     ws.onopen = () => {
       this.reconnect_attempts = 0;
       this.socket = true;
-      this.changeStatus('online');
       this._pingTimer = setInterval(() => {
         this.sendPing(ws);
       }, 30000);
-      // we can send stuff here like that
-      // ws.send('stuff')
+      this.store.dispatch(a.api.request('rtm.start')).then((res) => {
+        if (res && res.ok) {
+          this.changeStatus('online');
+        } else {
+          ws.close();
+        }
+      });
     };
 
     ws.onmessage = this.message;
-
-    ws.onerror = (event) => {
-      // console.log('websocket error', event); // eslint-disable-line
-    };
 
     ws.onclose = () => {
       this.changeStatus('offline');
       clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
       const time = this.timerForAttempt();
-      this.timedConnect(url, token, time);
+      this.timedConnect(token, time);
     };
   }
   sendPing(ws) {
@@ -70,7 +76,7 @@ export default class Socket {
     this.status = status;
     this.store.dispatch({
       type: types.SET_STATUS,
-      status,
+      payload: { status },
     });
   }
   message(message) {

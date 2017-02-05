@@ -1,7 +1,7 @@
 import * as types from 'constants';
 import * as a from './';
 
-export const setStatus = status => ({ type: types.SET_STATUS, status });
+export const setStatus = (status, nextRetry) => ({ type: types.SET_STATUS, payload: { status, nextRetry } });
 
 // ======================================================
 // Simple persistent cache
