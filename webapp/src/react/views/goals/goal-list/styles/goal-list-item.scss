@@ -7,6 +7,7 @@ $imgContHeight: 54px;
   $b: &;
 
   @include size(100%, auto);
+  @include flex(center, flex-start);
   max-width: 780px;
   min-height: $imgContHeight;
   position: relative;
@@ -39,7 +40,7 @@ $imgContHeight: 54px;
   }
 
   &__title {
-    @include font(15px, $deepBlue-80, 400);
+    @include font(16px, $deepBlue-90, 400);
     width: calc(100% - 50px);
     transition: color .1s ease;
     white-space: nowrap;
@@ -56,7 +57,7 @@ $imgContHeight: 54px;
 
   &__label {
     @include size(100%, 20px);
-    @include font(12px, $deepBlue-40, 500, 20px);
+    @include font(12px, $deepBlue-50, 400, 20px);
     margin-top: 3px;
     letter-spacing: .5px;
     transition: .25s ease;
@@ -71,6 +72,30 @@ $imgContHeight: 54px;
     position: absolute;
     right: 0px; top: 50%;
     transform: translateY(-50%);
+  }
+
+  &__completed-icon {
+    @include size(30px);
+    @include svg-color($green-color);
+    @include flex(none);
+    border-radius: 50%;
+    border: 2px solid $green-color;
+    display: none;
+    padding: 4px;
+  }
+
+  &--completed {
+    #{$b}__subtitle {
+      display: none;
+    }
+
+    #{$b}__completed-icon {
+      display: block;
+    }
+
+    #{$b}__content {
+      padding-left: 21px;
+    }
   }
 }
 
@@ -91,24 +116,25 @@ $imgContHeight: 54px;
     }
 
     &__frame {
-      @include size(190px, 8px);
-      border-top: 1px solid $deepBlue-10;
-      border-bottom: 1px solid $deepBlue-10;
-      border-right: 1px solid $deepBlue-10;
+      @include size(180px, 9px);
+      border: 1px solid $deepBlue-20;
+      border-radius: 100px;
       position: relative;
     }
 
     &__fill {
-      height: 4px;
+      height: 5px;
+      max-width: 176px;
       min-width: 3%;
       background-color: $deepBlue-100;
       margin-top: 1px;
-      border-radius: 2px;
+      margin-left: 1px;
+      border-radius: 100px;
     }
 
     &__status {
-      @include font(12px, $deepBlue-20, 500);
-      margin-left: 9px;
+      @include font(12px, $deepBlue-60);
+      margin-left: 18px;
     }
   }
 

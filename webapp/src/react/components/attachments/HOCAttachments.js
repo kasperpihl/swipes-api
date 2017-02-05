@@ -21,7 +21,7 @@ class HOCAttachments extends Component {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = { loading: false, tabIndex: (props.flags && props.flags.size) ? 0 : 1 };
+    this.state = { loading: false, tabIndex: (props.flags && props.flags.size || props.noFlagging) ? 0 : 1 };
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -159,7 +159,7 @@ class HOCAttachments extends Component {
     return <Button text="Add attachment" className="attachments__add-button" loading={loading} onClick={this.onAddCached('menu')} />;
   }
   renderAttachments() {
-    const { attachments, attachmentOrder: aOrder, enableFlagging } = this.props;
+    const { attachments, attachmentOrder: aOrder, enableFlagging, noFlagging } = this.props;
     const { tabIndex } = this.state;
 
     let { flags } = this.props;
@@ -218,7 +218,7 @@ class HOCAttachments extends Component {
       />);
     }
 
-    if (enableFlagging) {
+    if (enableFlagging || noFlagging) {
       return allAttachments;
     }
 
@@ -253,10 +253,14 @@ class HOCAttachments extends Component {
     );
   }
   renderTabbar() {
-    const { enableFlagging, flags = List(), attachmentOrder = List() } = this.props;
+    const { enableFlagging, flags = List(), attachmentOrder = List(), noFlagging } = this.props;
     let { tabIndex } = this.state;
     let tabs = [`Flagged (${flags.size})`, `All attachments (${attachmentOrder.size})`];
     let key = 'noHandoff';
+
+    if (noFlagging) {
+      tabs = [`All attachments (${attachmentOrder.size})`];
+    }
 
     if (enableFlagging) {
       tabs = ['Flag any attachments to highlight them'];
@@ -302,6 +306,7 @@ HOCAttachments.propTypes = {
   removeFromCollection: func,
   showNote: func,
   updateToasty: func,
+  noFlagging: bool,
 };
 
 function mapStateToProps() {

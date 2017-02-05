@@ -277,11 +277,12 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <Section title="Attachments" maxWidth={780}>
+      <Section className="add-goal__attachment" maxWidth={780}>
         <HOCAttachments
           attachments={attachments}
           attachmentOrder={attachmentOrder}
           delegate={this}
+          noFlagging
         />
       </Section>
     );

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
+import Icon from 'Icon';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
@@ -42,9 +43,16 @@ class GoalListItem extends Component {
   render() {
     const { goal, filter } = this.props;
     const status = msgGen.getGoalSubtitle(goal, filter);
+    const isActive = goal.getIn(['status', 'current_step_id']);
+    let className = 'goal-list-item';
+
+    if (!isActive) {
+      className += ' goal-list-item--completed';
+    }
 
     return (
-      <div className="goal-list-item" onClick={this.clickedListItem}>
+      <div className={className} onClick={this.clickedListItem}>
+        <Icon svg="Checkmark" className="goal-list-item__completed-icon" />
         <div className="goal-list-item__content">
           <div className="goal-list-item__title">{goal.get('title')}</div>
           <div className="goal-list-item__subtitle">
