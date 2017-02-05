@@ -19,7 +19,7 @@ class HOCAttachments extends Component {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = { loading: false, tabIndex: 0 };
+    this.state = { loading: false, tabIndex: props.flags.size ? 0 : 1 };
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -190,6 +190,26 @@ class HOCAttachments extends Component {
       });
     }
 
+    if (flaggedAttachments.length === 0) {
+      flaggedAttachments.push(<Attachment
+        key="empty-flagged"
+        title="There are no flagged attachments."
+        emptystate
+      />);
+    }
+
+    if (allAttachments.length === 0) {
+      allAttachments.push(<Attachment
+        key="empty-all"
+        title="There are no attachments yet."
+        emptystate
+      />);
+    }
+
+    if (enableFlagging) {
+      return allAttachments;
+    }
+
     if (tabIndex === 0) {
       return flaggedAttachments;
     } else if (tabIndex === 1) {
@@ -238,10 +258,11 @@ class HOCAttachments extends Component {
     );
   }
   renderTabbar() {
-    const { enableFlagging } = this.props;
+    const { enableFlagging, flags } = this.props;
     let { tabIndex } = this.state;
-    let tabs = ['Flagged', 'All attachments'];
+    let tabs = [`Flagged (${flags.size})`, 'All attachments'];
     let key = 'noHandoff';
+
     if (enableFlagging) {
       tabs = ['Flag any attachments to highlight them'];
       tabIndex = 0;

@@ -29,9 +29,12 @@
     margin: 0;
     padding-right: 30px;
     position: relative;
-    text-transform: capitalize;
     transition: .1s;
     user-select: none;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
 
     &:hover {
       color: darken($deepBlue-40, 5%);
