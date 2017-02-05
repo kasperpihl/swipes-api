@@ -239,15 +239,17 @@ class HOCAttachments extends Component {
   }
   renderTabbar() {
     const { enableFlagging } = this.props;
-    const { tabIndex } = this.state;
-    const tabs = ['Flagged', 'All attachments'];
-    //
-    // if (enableFlagging) {
-    //   tabs = ['Flag attachments'];
-    // }
+    let { tabIndex } = this.state;
+    let tabs = ['Flagged', 'All attachments'];
+    let key = 'noHandoff';
+    if (enableFlagging) {
+      tabs = ['Flag any attachments to highlight them'];
+      tabIndex = 0;
+      key = 'isHandingOff';
+    }
 
     return (
-      <TabBar tabs={tabs} activeTab={tabIndex} delegate={this} />
+      <TabBar key={key} tabs={tabs} activeTab={tabIndex} delegate={this} />
     );
   }
   render() {
