@@ -25,7 +25,6 @@ const valResponseAndSend = schema => (req, res, next) => {
     if (error) {
       return next(`output ${req.route.path}: ${error}`);
     }
-
     Object.entries(schema).forEach(([key, value]) => {
       res.locals.returnObj[key] = res.locals[key];
     });
@@ -42,7 +41,6 @@ const setLocals = (name, res, next, state) => {
   }
 
   const debug = config.get('valjs_debug');
-
   Object.entries(state).forEach(([key, value]) => {
     if (res.locals[key] && debug) {
       console.warn(`Warning: ${key} is reassinged in ${name}`);
