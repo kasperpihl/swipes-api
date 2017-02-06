@@ -33,6 +33,16 @@
   &__icon {
     @include size(24px);
   }
+
+  &__actions {
+    @include flex(flex);
+    @include flex(none);
+    align-self: flex-end;
+  }
+
+  &__action {
+    margin: 0 3px;
+  }
 }
 
 .bread-crumbs {

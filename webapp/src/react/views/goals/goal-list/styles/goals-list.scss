@@ -3,23 +3,16 @@
 
 .goals-list {
   $b: &;
-  @include size(100%);
+  @include size(100%, auto);
   position: relative;
   display: flex;
   flex-direction: column;
   z-index: 3;
+  overflow: hidden;
 
   &__tab-bar {
     @include size(100%, auto);
     z-index: 5;
-  }
-
-  &__scroller {
-    @include size(100%);
-    position: relative;
-    overflow-y: auto;
-    will-change: padding-top;
-    padding-bottom: 75px;
   }
 
   &__filter {

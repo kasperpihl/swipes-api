@@ -55,8 +55,6 @@ class HOCViewController extends Component {
     const { popTo, target } = this.props;
     popTo(target, i);
   }
-
-
   renderContextButton(index, button) {
     const Comp = Button;
     const props = button.props || {};
@@ -101,9 +99,11 @@ class HOCViewController extends Component {
     })).toArray();
 
     return (
-      <Navbar key="navbar" history={navbarData} delegate={this}>
-        {this.renderContextButtons()}
-      </Navbar>
+      <div className="sw-view__nav-bar">
+        <Navbar key="navbar" history={navbarData} delegate={this}>
+          {this.renderContextButtons()}
+        </Navbar>
+      </div>
     );
   }
   renderContent() {

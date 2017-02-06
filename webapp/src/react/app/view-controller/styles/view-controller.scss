@@ -1,53 +1,41 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+$contentOverflowPadding: 45px;
+$innercContentWidth: calc(100% - #{$contentOverflowPadding});
+
 .view-controller {
   @include size(100%);
+  @include flex(column);
   position: relative;
-  display: flex;
-  flex-direction: column;
-
-  &__content-container{
-    @include size(100%);
-    padding-left: 35px;
-    // padding-right: 45px;
-    padding-top: 9px;
-    display: flex;
-    flex-direction: column;
-    &.fullscreen{
-      padding: 0;
-      .nav-bar{
-        display: none;
-      }
-    }
-  }
-  &__flex-wrap {
-    @include size(100%);
-    @include flex(flex);
-  }
 }
 
-.global-actions {
-  position: fixed;
-  right: 30px; top: 79px;
-  @include flex(flex);
-  z-index: 9;
+.sw-view {
+  @include size(100%);
+  @include flex(column);
+  position: relative;
 
-  &__action {
-    margin: 0 3px;
-  }
-}
-
-.nav-bar {
-  // padding-left: 10px;
-
-  &__actions {
-    @include flex(flex);
-    @include flex(none);
-    align-self: flex-end;
+  &__nav-bar {
+    @include size($innercContentWidth, auto);
+		margin: 0 $contentOverflowPadding;
+    position: relative;
   }
 
-  &__action {
-    margin: 0 3px;
+  &__header {
+    @include size($innercContentWidth, auto);
+		margin: 0 $contentOverflowPadding;
+    position: relative;
+  }
+
+  &__scroll {
+    @include size(100%);
+    position: relative;
+		overflow-y: auto;
+  }
+
+  &__content {
+    @include size($innercContentWidth, auto);
+		margin: 0 $contentOverflowPadding;
+    position: relative;
   }
 }

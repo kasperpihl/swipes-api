@@ -27,7 +27,7 @@ class HOCSidebar extends Component {
     if (id === secondaryNavId) {
       id = null;
     }
-    // navigateToId('secondary', id);
+    navigateToId('secondary', id);
   }
   renderItem(item) {
     const { navId, counters, secondaryNavId } = this.props;

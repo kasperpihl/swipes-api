@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
+import './styles/view-controller.scss';
+
 class SWView extends Component {
   constructor(props) {
     super(props);

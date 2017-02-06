@@ -7,6 +7,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'src/react/app/view-controller/SWView';
+import TabBar from 'components/tab-bar/TabBar';
 import GoalList from './GoalList';
 
 /* global msgGen*/
@@ -223,7 +224,18 @@ class HOCGoalList extends Component {
       }
     }
   }
+  renderTabbar() {
+    const {
+      tabIndex,
+      tabs,
+    } = this.state;
 
+    return (
+      <div className="goals-list__tab-bar">
+        <TabBar tabs={tabs.map(t => t.get('title')).toArray()} delegate={this} activeTab={tabIndex} />
+      </div>
+    );
+  }
   render() {
     const { me, savedState } = this.props;
     const {
@@ -234,8 +246,9 @@ class HOCGoalList extends Component {
       filterLabel,
       filteredGoals,
     } = this.state;
+
     return (
-      <SWView>
+      <SWView header={this.renderTabbar()}>
         <GoalList
           me={me}
           tabIndex={tabIndex}
