@@ -6,7 +6,7 @@
 
   @include size(100%);
   @include flex(flex-start, space-between);
-  min-width: 450px;
+  // min-width: 450px;
   max-width: 780px + 253px + 150px;
   background-color: $bg;
   position: relative;

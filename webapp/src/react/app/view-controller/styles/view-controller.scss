@@ -17,6 +17,7 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
 
   &__nav-bar {
     @include size($innercContentWidth, auto);
+    @include flex(none);
 		margin: 0 $contentOverflowPadding;
     position: relative;
   }
