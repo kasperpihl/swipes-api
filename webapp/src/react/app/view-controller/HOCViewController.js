@@ -135,24 +135,13 @@ class HOCViewController extends Component {
     if (reservedNavIds.indexOf(navId) !== -1 || !history || !currentView) {
       return undefined;
     }
-    let className = 'view-controller__content-container';
-    if (currentView.get('fullscreen')) {
-      className += ' fullscreen';
-    }
-    return (
-      <div className={className}>
-        {this.renderNavbar()}
-        {this.renderContent()}
-      </div>
-    );
-  }
-  renderGmail() {
-    const HOCGmail = views.Gmail;
-    const { navId } = this.props;
-    const hidden = navId !== 'gmail';
-    /* return (
-      <HOCGmail hidden={hidden} />
-    );*/
+    // if (currentView.get('fullscreen')) {
+    //   className += ' fullscreen';
+    // }
+    return [
+      this.renderNavbar(),
+      this.renderContent(),
+    ];
   }
   renderSlack() {
     const HOCSlack = views.Slack;
@@ -167,7 +156,6 @@ class HOCViewController extends Component {
       <div className="view-controller">
         {this.renderContainer()}
         {this.renderSlack()}
-        {this.renderGmail()}
       </div>
     );
   }

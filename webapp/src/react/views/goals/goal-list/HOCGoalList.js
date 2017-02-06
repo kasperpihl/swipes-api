@@ -6,7 +6,9 @@ import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
+import SWView from 'src/react/app/view-controller/SWView';
 import GoalList from './GoalList';
+
 /* global msgGen*/
 const defaultFilter = fromJS({
   user: 'any',
@@ -233,17 +235,19 @@ class HOCGoalList extends Component {
       filteredGoals,
     } = this.state;
     return (
-      <GoalList
-        me={me}
-        tabIndex={tabIndex}
-        savedState={savedState}
-        goals={filteredGoals}
-        delegate={this}
-        tabs={tabs}
-        filterProp={filterProp}
-        filterLabel={filterLabel}
-        showFilter={showFilter}
-      />
+      <SWView>
+        <GoalList
+          me={me}
+          tabIndex={tabIndex}
+          savedState={savedState}
+          goals={filteredGoals}
+          delegate={this}
+          tabs={tabs}
+          filterProp={filterProp}
+          filterLabel={filterLabel}
+          showFilter={showFilter}
+        />
+      </SWView>
     );
   }
 }
