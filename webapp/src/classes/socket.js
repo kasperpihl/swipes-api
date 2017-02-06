@@ -35,11 +35,13 @@ export default class Socket {
   }
   connect(token) {
     let url = `${window.location.origin}`;
+
     if (window.location.hostname === 'localhost') {
       url = 'http://localhost:5000';
     }
-    url = `ws://${url.split('://')[1]}/ws`;
-    const ws = new WebSocket(`${url}?token=${token}`);
+
+    const wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
+    const ws = new WebSocket(`${wsUrl}?token=${token}`);
     this.changeStatus('connecting');
 
     ws.onopen = () => {
