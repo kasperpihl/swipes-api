@@ -125,6 +125,29 @@ const goalsStepGotActiveNotificationData = (req, res, next) => {
   return next();
 };
 
+const goalsNotifyNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    goal_id,
+    user_ids,
+    flags,
+    message,
+  } = res.locals;
+
+  const notificationData = {
+    goal_id,
+    message,
+    flags,
+    assignees: user_ids,
+    done_by: user_id,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = notificationData;
+
+  return next();
+};
+
 export {
   goalsGetSingle,
   goalsNotificationData,
@@ -133,4 +156,5 @@ export {
   goalsStepGotActiveNotificationData,
   goalsMilestoneAddedNotificationData,
   goalsMilestoneRemovedNotificationData,
+  goalsNotifyNotificationData,
 };

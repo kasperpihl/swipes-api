@@ -27,6 +27,7 @@ import {
   goalsNextStepQueueMessage,
   goalsStepGotActiveQueueMessage,
   goalsProgressStatus,
+  goalsNotifyQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -113,6 +114,19 @@ authed.all('/goals.removeMilestone',
     id: string.require(),
     milestone_id: string.require(),
   }));
+
+// T_TODO think about how to overcome the 256KB limit of the message to the queue
+authed.all('/goals.notify',
+  valBody({
+    goal_id: string.require(),
+    assignees: array.of(string).require(),
+    flags: array.of(string),
+    message: string,
+  }),
+  goalsNotifyQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend(),
+);
 
 // T_TODO warning: this endpoint is to be removed
 authed.all('/goals.update',

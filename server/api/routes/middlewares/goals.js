@@ -457,6 +457,37 @@ const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage
   return next();
 });
 
+const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  assignees: array.of(string).require(),
+  flags: array.of(string),
+  message: string,
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    assignees,
+    flags = [],
+    message = '',
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    flags,
+    message,
+    user_ids: assignees,
+    event_type: 'goal_notify',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
+
 export {
   goalsCreate,
   goalsInsert,
@@ -473,4 +504,5 @@ export {
   goalsRemoveMilestoneQueueMessage,
   goalsCompleteStep,
   goalsProgressStatus,
+  goalsNotifyQueueMessage,
 };

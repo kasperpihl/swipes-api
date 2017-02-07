@@ -13,6 +13,17 @@ const notifySingleUser = (req, res, next) => {
 
   return next();
 };
+const notifyMultipleUsers = (req, res, next) => {
+  const {
+    user_ids,
+  } = res.locals;
+
+  const uniqueUsersToNotify = user_ids;
+
+  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
+
+  return next();
+};
 const notifyAllInCompany = (req, res, next) => {
   const {
     user,
@@ -136,4 +147,5 @@ export {
   notifyCommonRethinkdb,
   notifyInsertMultipleNotifications,
   notifyAllInCurrentStep,
+  notifyMultipleUsers,
 };
