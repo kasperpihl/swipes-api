@@ -229,15 +229,28 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   }));
 };
 
+export const notify = (gId, handoff) => (d) => {
+  let assignees = handoff.get('assignees');
+  assignees = assignees || assignees.toJS();
+  return d(a.api.request('goals.notify', {
+    goal_id: gId,
+    flags: handoff.get('flags'),
+    message: handoff.get('message'),
+    assignees,
+  }));
+};
 
-export const completeStep = (gId, nextSId, message, flags, assignees) => (d, getState) => {
+export const completeStep = (gId, handoff) => (d, getState) => {
   const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
+  const target = handoff.get('target') === '_complete' ? null : handoff.get('target');
+  let assignees = handoff.get('assignees');
+  assignees = assignees || assignees.toJS();
   return d(a.api.request('goals.completeStep', {
     goal_id: gId,
-    flags,
-    next_step_id: nextSId,
+    flags: handoff.get('flags'),
+    next_step_id: target,
     current_step_id: currentStepId,
-    message,
+    message: handoff.get('message'),
     assignees,
   }));
 };

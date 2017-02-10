@@ -19,20 +19,29 @@ class HandoffStatus extends Component {
   renderStatus() {
     const { toId, goal, assignees } = this.props;
     const helper = this.getHelper();
-    const to = helper.getStepById(toId);
-    const toIndex = helper.getStepIndexForId(toId);
-    const fromIndex = helper.getCurrentStepIndex();
-    const diff = toIndex - fromIndex;
+
     let status = '';
 
-    if (!to) {
+    if (toId === '_complete') {
       status = (
         <span>
           {'Complete '}
           <b onClick={this.onChange('step')}>{`"${goal.get('title')}"`}</b>
         </span>
       );
+    } else if (toId === '_notify') {
+      status = (
+        <span>
+          {'Notify '}
+          <b onClick={this.onChange('to')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
+        </span>
+      );
     } else {
+      const to = helper.getStepById(toId);
+      const toIndex = helper.getStepIndexForId(toId);
+      const fromIndex = helper.getCurrentStepIndex();
+      const diff = toIndex - fromIndex;
+
       const title = `"${to.get('title')}"`;
       let moveString = `Move ${diff} step${diff > 1 ? 's' : ''} forward to `;
       if (diff === 0) {

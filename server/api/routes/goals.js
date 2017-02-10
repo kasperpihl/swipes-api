@@ -116,10 +116,11 @@ authed.all('/goals.removeMilestone',
   }));
 
 // T_TODO think about how to overcome the 256KB limit of the message to the queue
+// K_SOLUTION limit message length (don't write a book to people :)
 authed.all('/goals.notify',
   valBody({
     goal_id: string.require(),
-    assignees: array.of(string).require(),
+    assignees: array.of(string).min(1).require(),
     flags: array.of(string),
     message: string,
   }),

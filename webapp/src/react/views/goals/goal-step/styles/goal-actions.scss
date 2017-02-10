@@ -9,7 +9,7 @@
   &__status {
     @include size(100%, auto);
     @include font(12px, $deepBlue-60, 18px);
-  
+
     b {
       @include font($c: $blue-100, $fw: 500);
       text-decoration: none;
@@ -21,12 +21,12 @@
     }
   }
 
-  &__cancel {
+  &__secondary {
     @include flex(none);
     margin-left: 15px;
   }
 
-  &__handoff {
+  &__primary {
     @include flex(none);
     margin-left: 15px;
   }

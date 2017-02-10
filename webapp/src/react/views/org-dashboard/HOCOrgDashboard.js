@@ -101,6 +101,16 @@ class HOCOrgDashboard extends Component {
         m = m.set('iconBgColor', redColor);
         break;
       }
+      case 'goal_notify': {
+        const goal = this.clickableGoalForId(data.get('goal_id'));
+        const name = this.clickableNameForUserId(data.get('done_by'));
+        const message = data.get('message');
+        const youLabel = name === 'you' ? 'yourself' : 'you';
+        m = m.set('message', <span>{name}{` notified ${youLabel} on: `}{goal}{` and wrote "${message}"`}</span>);
+        m = m.set('svg', 'Deliver');
+        m = m.set('iconBgColor', blueColor);
+        break;
+      }
       case 'step_got_active': {
         const goal = this.clickableGoalForId(data.get('goal_id'));
         m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);

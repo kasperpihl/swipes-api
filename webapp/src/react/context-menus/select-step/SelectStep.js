@@ -66,7 +66,7 @@ class SelectStep extends PureComponent {
   render() {
     let completeClass = 'step-item step-item--complete';
 
-    if (!this.getNextStepNumber()) {
+    if (typeof this.getNextStepNumber() !== 'number') {
       completeClass += ' step-item--active';
     }
 

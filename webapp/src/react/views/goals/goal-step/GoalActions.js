@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from 'classes/utils';
+import { setupDelegate } from 'classes/utils';
 import Button from 'Button';
 
 import './styles/goal-actions.scss';
@@ -7,44 +7,34 @@ import './styles/goal-actions.scss';
 class GoalActions extends Component {
   constructor(props) {
     super(props);
-    bindAll(this, ['onHandoff', 'onCancel']);
+    this.callDelegate = setupDelegate(props.delegate);
+    this.onPrimary = this.callDelegate.bind(null, 'onGoalAction', 'primary');
+    this.onSecondary = this.callDelegate.bind(null, 'onGoalAction', 'secondary');
   }
   componentDidMount() {
   }
-  onHandoff(e) {
-    const { onHandoff } = this.props;
-    if (onHandoff) {
-      onHandoff(e);
-    }
-  }
-  onCancel(e) {
-    const { onCancel } = this.props;
-    if (onCancel) {
-      onCancel(e);
-    }
-  }
-  renderCancel() {
-    const { isHandingOff } = this.props;
-    if (!isHandingOff) {
+  renderSecondary() {
+    const { secondaryLabel } = this.props;
+    if (!secondaryLabel) {
       return undefined;
     }
     return (
       <Button
-        text="Cancel"
-        onClick={this.onCancel}
-        className="goal-actions__cancel"
+        text={secondaryLabel}
+        onClick={this.onSecondary}
+        className="goal-actions__secondary"
       />
     );
   }
-  renderHandoff() {
-    const { mainLabel, isSubmitting } = this.props;
+  renderPrimary() {
+    const { primaryLabel, primaryLoading } = this.props;
     return (
       <Button
-        text={mainLabel}
-        loading={isSubmitting}
+        text={primaryLabel}
+        loading={primaryLoading}
         primary
-        onClick={this.onHandoff}
-        className="goal-actions__handoff"
+        onClick={this.onPrimary}
+        className="goal-actions__primary"
       />
     );
   }
@@ -53,8 +43,8 @@ class GoalActions extends Component {
     return (
       <div className="goal-actions">
         {children}
-        {this.renderCancel()}
-        {this.renderHandoff()}
+        {this.renderSecondary()}
+        {this.renderPrimary()}
       </div>
     );
   }
@@ -62,13 +52,12 @@ class GoalActions extends Component {
 
 export default GoalActions;
 
-const { string, func, bool, object } = PropTypes;
+const { string, bool, object, element } = PropTypes;
 
 GoalActions.propTypes = {
-  isHandingOff: bool,
-  isSubmitting: bool,
-  mainLabel: string,
-  onHandoff: func,
-  onCancel: func,
-  children: object,
+  primaryLoading: bool,
+  primaryLabel: string,
+  secondaryLabel: string,
+  delegate: object,
+  children: element,
 };
