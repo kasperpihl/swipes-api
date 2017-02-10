@@ -114,7 +114,7 @@ class GoalList extends Component {
     }
     return (
       <div className={className}>
-        {this.renderTabbar()}
+        {/* {this.renderTabbar()} */}
         <div className="goals-list__scroller" style={style} ref="scroller">
           {this.renderFilter()}
           {this.renderList()}

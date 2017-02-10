@@ -11,7 +11,7 @@
   border-left: 1px solid $deepBlue-10;
 
   &__header {
-    @include size(100%, 84px);
+    @include size(100%, 125px);
     @include flex(center, flex-end);
     @include flex(none);
     color: $deepBlue-40;
@@ -45,7 +45,7 @@
   &__title {
     @include size(100%);
     color: $deepBlue-90;
-    @include font(27px, #192445, 42px, 400);
+    @include font(27px, $deepBlue-90, 42px, 400);
     max-width: 750px;
     padding: 0 25px;
     position: absolute;

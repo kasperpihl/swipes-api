@@ -23,6 +23,7 @@
         @include svg-color($blue-100);
       }
     }
+    transition: .1s ease;
   }
 
   &__icon {
@@ -32,6 +33,7 @@
 
     #{$b}__svg {
       @include svg-color($deepBlue-20);
+      transition: .2s ease;
     }
   }
 
@@ -100,6 +102,18 @@
   }
 
   &:hover {
+
+    #{$b}__title {
+      @include font($c: $blue-100);
+      transition: .1s ease;
+    }
+
+    #{$b}__icon {
+      #{$b}__svg {
+        @include svg-color($blue-100);
+        transition: .2s ease;
+      }
+    }
 
     #{$b}__button--delete {
       opacity: 1;

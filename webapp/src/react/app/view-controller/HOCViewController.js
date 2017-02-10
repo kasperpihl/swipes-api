@@ -53,8 +53,6 @@ class HOCViewController extends Component {
     const { popTo, target } = this.props;
     popTo(target, i);
   }
-
-
   renderContextButton(index, button) {
     const Comp = Button;
     const props = button.props || {};
@@ -99,16 +97,18 @@ class HOCViewController extends Component {
     })).toArray();
 
     return (
-      <Navbar key="navbar" history={navbarData} delegate={this}>
-        {this.renderContextButtons()}
-      </Navbar>
+      <div className="sw-view__nav-bar" key="navbar">
+        <Navbar history={navbarData} delegate={this}>
+          {this.renderContextButtons()}
+        </Navbar>
+      </div>
     );
   }
   renderContent() {
     const { currentView, View } = this.props;
 
     if (!View) {
-      return <div>View ({currentView.get('component')}) not found!</div>;
+      return <div key="not-found">View ({currentView.get('component')}) not found!</div>;
     }
     let props = {};
     if (currentView.get('props')) {
@@ -133,16 +133,13 @@ class HOCViewController extends Component {
     if (reservedNavIds.indexOf(navId) !== -1 || !history || !currentView) {
       return undefined;
     }
-    let className = 'view-controller__content-container';
-    if (currentView.get('fullscreen')) {
-      className += ' fullscreen';
-    }
-    return (
-      <div className={className}>
-        {this.renderNavbar()}
-        {this.renderContent()}
-      </div>
-    );
+    // if (currentView.get('fullscreen')) {
+    //   className += ' fullscreen';
+    // }
+    return [
+      this.renderNavbar(),
+      this.renderContent(),
+    ];
   }
   renderSlack() {
     const HOCSlack = views.Slack;

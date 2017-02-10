@@ -9,6 +9,7 @@
   max-width: 780px;
   position: relative;
   z-index: 9;
+  padding-top: 9px;
 
   &__button {
     @include size(42px);
@@ -32,6 +33,17 @@
 
   &__icon {
     @include size(24px);
+  }
+
+  &__actions {
+    @include flex(flex);
+    @include flex(none);
+    align-self: flex-end;
+    transform: translateY(6px);
+  }
+
+  &__action {
+    margin: 0 3px;
   }
 }
 

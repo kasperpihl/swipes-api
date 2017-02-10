@@ -9,6 +9,7 @@ import { setupDelegate, bindAll } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
 import GoalStep from './GoalStep';
 import GoalSide from './GoalSide';
+import SWView from 'src/react/app/view-controller/SWView';
 
 
 import './styles/goal-step';
@@ -298,11 +299,12 @@ class HOCGoalStep extends Component {
       className += ' goal-step__handing-off';
     }
     return (
-      <div className={className}>
-        {this.renderContent()}
-        {this.renderSide()}
-
-      </div>
+      <SWView>
+        <div className={className}>
+          {this.renderContent()}
+          {this.renderSide()}
+        </div>
+      </SWView>
     );
   }
 }

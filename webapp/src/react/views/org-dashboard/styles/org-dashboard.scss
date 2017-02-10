@@ -2,10 +2,10 @@
 @import '~styles/_mixins.scss';
 
 .org-dashboard {
-  @include size(100%);
+  @include size(100%, auto);
   @include flex(column);
   position: relative;
-  padding-left: 10px;
+  padding-bottom: 120px;
 }
 
 .notifications {
@@ -20,12 +20,5 @@
     font-size: 12px;
     font-weight: bold;
     color: $deepBlue-60;
-  }
-
-  &__list {
-    @include size(100%);
-    overflow-y: auto;
-    padding-top: 0;
-    padding-bottom: 105px;
   }
 }

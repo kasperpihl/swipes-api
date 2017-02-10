@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import MilestoneItem from './MilestoneItem';
+import SWView from 'src/react/app/view-controller/SWView';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import MilestoneItem from './MilestoneItem';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 
@@ -77,9 +78,11 @@ class HOCMilestoneList extends Component {
   }
   render() {
     return (
-      <div className="milestone-list">
-        {this.renderMilestones()}
-      </div>
+      <SWView>
+        <div className="milestone-list">
+          {this.renderMilestones()}
+        </div>
+      </SWView>
     );
   }
 }
