@@ -46,7 +46,7 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
   &__nav-bar {
     @include size($innercContentWidth, auto);
     @include flex(none);
-		margin: 0 $contentOverflowPadding;
+    margin: 0 $contentOverflowPadding;
 
     &--center {
       @include flex(flex-start, center);
@@ -56,17 +56,17 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
   &__header {
     @include size($innercContentWidth, auto);
     @include flex(none);
-		margin: 0 $contentOverflowPadding;
+    margin: 0 $contentOverflowPadding;
   }
 
   &__scroll {
     @include size(100%);
-		overflow-y: auto;
+    overflow-y: auto;
   }
 
   &__container {
     @include size($innercContentWidth, 100%);
-		margin: 0 $contentOverflowPadding;
+    margin: 0 $contentOverflowPadding;
     min-height: 100%;
   }
 
