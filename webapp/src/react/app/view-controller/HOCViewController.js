@@ -142,8 +142,12 @@ class HOCViewController extends Component {
     ];
   }
   renderSlack() {
+    const { navId, slackOpenIn, target } = this.props;
+    if (target !== 'primary') {
+      return undefined;
+    }
+
     const HOCSlack = views.Slack;
-    const { navId, slackOpenIn } = this.props;
     const hidden = navId !== 'slack';
     return (
       <HOCSlack hidden={hidden} openIn={slackOpenIn} />
