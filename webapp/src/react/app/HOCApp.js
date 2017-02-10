@@ -25,9 +25,8 @@ class HOCApp extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    const { request, navInit } = this.props;
+    const { navInit } = this.props;
     navInit();
-    request('rtm.start');
   }
   renderNote() {
     return <HOCSideNote />;
@@ -41,7 +40,7 @@ class HOCApp extends Component {
         <div className="content-wrapper">
           <HOCSidebar />
           <HOCViewController target="primary" />
-          {/* <HOCViewController target="secondary" /> */}
+          <HOCViewController target="secondary" />
           <HOCSideNote />
         </div>
         <HOCOverlay />

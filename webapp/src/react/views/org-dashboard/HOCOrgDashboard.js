@@ -20,6 +20,9 @@ class HOCOrgDashboard extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+  onNavWillChange() {
+    this.onMarkSeen();
+  }
   onMarkSeen() {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
@@ -63,8 +66,7 @@ class HOCOrgDashboard extends Component {
     return <b onClick={this.onClickCached(goalId, 'goal')}>{title}</b>;
   }
   clickableNameForUserId(userId) {
-    const { users } = this.props;
-    const name = this.nameForUser(users, userId);
+    const name = msgGen.getUserString(userId);
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
   messageForNotification(n) {
@@ -97,6 +99,16 @@ class HOCOrgDashboard extends Component {
         m = m.set('message', <span>{name}{' archived a goal: '}{title}</span>);
         m = m.set('svg', 'Minus');
         m = m.set('iconBgColor', redColor);
+        break;
+      }
+      case 'goal_notify': {
+        const goal = this.clickableGoalForId(data.get('goal_id'));
+        const name = this.clickableNameForUserId(data.get('done_by'));
+        const message = data.get('message');
+        const youLabel = name === 'you' ? 'yourself' : 'you';
+        m = m.set('message', <span>{name}{` notified ${youLabel} on: `}{goal}{` and wrote "${message}"`}</span>);
+        m = m.set('svg', 'Deliver');
+        m = m.set('iconBgColor', blueColor);
         break;
       }
       case 'step_got_active': {

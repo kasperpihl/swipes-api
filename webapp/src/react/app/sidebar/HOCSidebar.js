@@ -16,9 +16,8 @@ class HOCSidebar extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   clickedItem(e) {
-    const { navigateToId, navId } = this.props;
+    const { navigateToId } = this.props;
     const id = e.target.getAttribute('data-id');
-
     navigateToId('primary', id);
   }
   rightClickedItem(e) {
@@ -42,7 +41,7 @@ class HOCSidebar extends Component {
       className += ' sidebar__item--secondary-active';
     }
     let notif = null;
-    if (counter && counter.length && item.id !== navId) {
+    if (counter && counter.length) {
       notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
     }
 

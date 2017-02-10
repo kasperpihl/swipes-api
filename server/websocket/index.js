@@ -49,6 +49,21 @@ const websocketStart = (server) => {
       return;
     }
 
+    socket.on('message', (msg) => {
+      const message = JSON.parse(msg);
+      const date = new Date().toISOString();
+
+      if (message.type === 'ping') {
+        socket.send(JSON.stringify({
+          type: 'pong',
+          payload: {
+            id: message.id,
+            ts: date,
+          },
+        }));
+      }
+    });
+
     socket.send(JSON.stringify({ type: 'hello', payload: 'world' }));
 
     usersProfilePic(socket, user_id);

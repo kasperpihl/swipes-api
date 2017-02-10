@@ -12,9 +12,17 @@
   }
 
   &__title {
-    @include size(100%, auto);
+    @include size(100%);
     @include flex(center, flex-start);
     @include font(12px, $deepBlue-100, 18px);
+
+    &:hover {
+      @include font($c: $blue-100);
+
+      #{$b}__icon {
+        @include svg-color($blue-100);
+      }
+    }
     transition: .1s ease;
   }
 

@@ -4,20 +4,13 @@ import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Measure from 'react-measure';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate, bindAll } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
-import Section from 'components/section/Section';
-import HOCAttachments from 'components/attachments/HOCAttachments';
-import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
-import HandoffHeader from './HandoffHeader';
-import HandoffMessage from './HandoffMessage';
-import GoalActions from './GoalActions';
-import GoalCompleted from './GoalCompleted';
-import HandoffStatus from './HandoffStatus';
+import GoalStep from './GoalStep';
 import GoalSide from './GoalSide';
 import SWView from 'src/react/app/view-controller/SWView';
+
 
 import './styles/goal-step';
 
@@ -33,19 +26,17 @@ class HOCGoalStep extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasLoaded: false,
       isHandingOff: false,
+      isSendingNotification: false,
       isSubmitting: false,
-      flags: [],
-      newAssignees: null,
-      handoffText: '',
-      nextStepId: this.calculateNextStep(),
+      handoff: this.getEmptyHandoff(),
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onCancel', 'onHandoff', 'onHandoffChange', 'onOpenUser', 'onChangeClick']);
+    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick']);
     this.callDelegate = setupDelegate(props.delegate);
   }
+
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
@@ -59,18 +50,9 @@ class HOCGoalStep extends Component {
       if (nextGoal.getIn(['status', 'handoff_at']) !== goal.getIn(['status', 'handoff_at'])) {
         this.setState({
           isHandingOff: false,
-          handoffText: '',
-          nextStepId: this.calculateNextStep(nextGoal),
-          flags: [],
-          newAssignees: null,
+          handoff: this.getEmptyHandoff(this.calculateNextStep(nextGoal)),
         });
       }
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.isHandingOff && !prevState.isHandingOff) {
-      this.refs.handoffWriteMessageTextarea.focus();
     }
   }
   componentWillUnmount() {
@@ -80,14 +62,13 @@ class HOCGoalStep extends Component {
     }
   }
   onFlag(id) {
-    let flags = this.state.flags;
-    const index = flags.indexOf(id);
-    if (index !== -1) {
-      flags = flags.slice(0, index).concat(flags.slice(index + 1));
+    let { handoff } = this.state;
+    if (handoff.get('flags').includes(id)) {
+      handoff = handoff.updateIn(['flags'], fl => fl.filter(f => f !== id));
     } else {
-      flags = flags.concat([id]);
+      handoff = handoff.updateIn(['flags'], fl => fl.push(id));
     }
-    this.setState({ flags });
+    this.setState({ handoff });
   }
 
   onContextClick(i, e) {
@@ -124,19 +105,18 @@ class HOCGoalStep extends Component {
       },
     });
   }
-  onCancel() {
-    this.setState({ isHandingOff: false });
-  }
   onSelectAssignees(options, newAssignees) {
     const { selectAssignees } = this.props;
+
     selectAssignees(options, newAssignees.toJS(), (assignees) => {
+      const { handoff } = this.state;
       if (assignees) {
-        this.setState({ newAssignees: fromJS(assignees) });
+        this.setState({ handoff: handoff.set('assignees', fromJS(assignees)) });
       }
     });
   }
   onChangeClick(type, e) {
-    let { nextStepId, newAssignees } = this.state;
+    let { handoff } = this.state;
     const helper = this.getHelper();
     const { goal, selectStep } = this.props;
     const options = {
@@ -144,9 +124,11 @@ class HOCGoalStep extends Component {
       alignX: 'center',
     };
     if (type === 'step') {
-      selectStep(options, goal.get('id'), nextStepId, (newStepId) => {
-        if (newStepId !== nextStepId) {
-          this.setState({ nextStepId: newStepId, newAssignees: null });
+      selectStep(options, goal.get('id'), handoff.get('target'), (newStepId) => {
+        if (newStepId !== handoff.get('target')) {
+          this.setState({
+            handoff: handoff.set('assignees', null).set('target', newStepId || '_complete'),
+          });
           if (newStepId === helper.getCurrentStepId()) {
             this.onSelectAssignees(options, helper.getCurrentStep().get('assignees'));
           }
@@ -155,32 +137,79 @@ class HOCGoalStep extends Component {
     } else {
       if (type === 'from') {
         const newState = { isHandingOff: true };
-        if (nextStepId !== helper.getCurrentStepId()) {
-          nextStepId = helper.getCurrentStepId();
-          newState.nextStepId = nextStepId;
-          newState.newAssignees = null;
+        if (handoff.get('target') !== helper.getCurrentStepId()) {
+          newState.handoff = handoff = handoff.set('target', helper.getCurrentStepId()).set('assignees', null);
         }
         this.setState(newState);
       }
-      const step = helper.getStepById(nextStepId);
-      newAssignees = newAssignees || step.get('assignees');
+      const step = helper.getStepById(handoff.get('target'));
+      let newAssignees = handoff.get('assignees');
+      if (!newAssignees && step) {
+        newAssignees = step.get('assignees');
+      }
       this.onSelectAssignees(options, newAssignees);
     }
   }
-  onHandoff() {
+  onCompleteStep(e) {
     const { completeStep, goal } = this.props;
-    const { handoffText, nextStepId, flags, newAssignees } = this.state;
-    if (this.state.isHandingOff) {
-      this.setState({ isSubmitting: true });
-      completeStep(goal.get('id'), nextStepId, handoffText, flags, newAssignees).then(() => {
+    const { handoff } = this.state;
+
+    this.setState({ isSubmitting: true });
+    completeStep(goal.get('id'), handoff).then(() => {
+      this.setState({ isSubmitting: false });
+    });
+  }
+  onNotify() {
+    const { goalNotify, goal } = this.props;
+    const { handoff } = this.state;
+    this.setState({ isSubmitting: true });
+    goalNotify(goal.get('id'), handoff).then((res) => {
+      if (res && res.ok) {
+        this.setState({
+          isSubmitting: false,
+          handoff: this.getEmptyHandoff(),
+          isHandingOff: false,
+        });
+      } else {
         this.setState({ isSubmitting: false });
-      });
+      }
+    });
+  }
+  onGoalAction(type, e) {
+    const { handoff, isHandingOff } = this.state;
+    if (type === 'primary') {
+      // Submissions!
+      if (isHandingOff) {
+        if (handoff.get('target') === '_notify') {
+          this.onNotify();
+        } else {
+          this.onCompleteStep();
+        }
+      } else {
+        this.setState({ isHandingOff: true });
+      }
+    } else if (this.state.isHandingOff) {
+      const newState = { isHandingOff: false };
+      if (handoff.get('target') === '_notify') {
+        newState.handoff = handoff.set('target', this.calculateNextStep());
+      }
+      this.setState(newState);
     } else {
-      this.setState({ isHandingOff: true });
+      this.onSelectAssignees({
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'center',
+        alignY: 'bottom',
+      }, fromJS([]));
+
+      this.setState({
+        isHandingOff: true,
+        handoff: handoff.set('target', '_notify').set('assignees', fromJS([])),
+      });
     }
   }
   onHandoffChange(handoffText) {
-    this.setState({ handoffText });
+    const { handoff } = this.state;
+    this.setState({ handoff: handoff.set('message', handoffText) });
   }
   onOpenUser(id) {
     const { openSlackIn, navigateToId } = this.props;
@@ -192,10 +221,18 @@ class HOCGoalStep extends Component {
     overwriteGoal = overwriteGoal || goal;
     return new GoalsUtil(overwriteGoal, me.get('id'));
   }
+  getEmptyHandoff(target, message) {
+    return fromJS({
+      flags: [],
+      assignees: null,
+      message: message || '',
+      target: target || this.calculateNextStep(),
+    });
+  }
   calculateNextStep(goal) {
     const helper = this.getHelper(goal);
     const nextStep = helper.getNextStep();
-    return nextStep ? nextStep.get('id') : null;
+    return nextStep ? nextStep.get('id') : '_complete';
   }
   slackUserIdForUser(uId) {
     switch (uId) {
@@ -214,232 +251,28 @@ class HOCGoalStep extends Component {
     }
   }
 
-  mapStepToHeader(stepId, next) {
-    const helper = this.getHelper();
-    let { newAssignees } = this.state;
-    if (!stepId) {
-      return undefined;
-    }
-    let subtitle = 'Current step';
-    const stepIndex = helper.getStepIndexForId(stepId);
-    const step = helper.getStepById(stepId);
-    const assignees = step.get('assignees');
-    newAssignees = newAssignees || assignees;
-    newAssignees = next ? newAssignees : assignees;
-    if (next) {
-      const currentI = helper.getCurrentStepIndex();
-      const nextI = helper.getStepIndexForId(stepId);
-      subtitle = 'Next step';
-      if (nextI === currentI) {
-        subtitle = 'Reassign';
-      } else if (nextI < currentI) {
-        subtitle = 'Make Iteration';
-      }
-    }
-    return {
-      title: `${stepIndex + 1}. ${step.get('title')}`,
-      subtitle,
-      assignees: newAssignees.toJS(),
-    };
-  }
-  renderGoalCompleted() {
-    const helper = this.getHelper();
-    if (helper.getCurrentStepId()) {
-      return undefined;
-    }
-    return (
-      <GoalCompleted
-        title="Goal completed!"
-        subtitle="Well done! Together with Tisho, Yana, Kasper, Kris and Stefan"
-        assignees={helper.getAllInvolvedAssignees()}
-      />
-    );
-  }
-  renderHeader() {
-    const { isHandingOff, nextStepId } = this.state;
-    const helper = this.getHelper();
-    if (!helper.getCurrentStepId()) {
-      return undefined;
-    }
-    const from = this.mapStepToHeader(helper.getCurrentStepId());
-    const to = this.mapStepToHeader(nextStepId, true);
-
-    return (
-      <HandoffHeader
-        from={from}
-        to={to}
-        onChangeClick={this.onChangeClick}
-        isHandingOff={isHandingOff}
-      />
-    );
-  }
-  renderHandoffWriteMessage() {
-    const { me } = this.props;
-    const { handoffText, isHandingOff } = this.state;
-    let className = 'section--hidden';
-
-    if (isHandingOff) {
-      className = 'section--show';
-    }
-
-    const src = me.get('profile_pic');
-
-    return (
-      <Measure
-        onMeasure={(dim) => {
-          this.setState({ handoffWriteMessageH: dim.height });
-          if (!this.state.hasLoaded) {
-            setTimeout(() => {
-              this.setState({ hasLoaded: true });
-            }, 1);
-          }
-        }}
-      >
-        <Section title="Write handoff" className={className}>
-          <HandoffWriteMessage
-            ref="handoffWriteMessageTextarea"
-            onChange={this.onHandoffChange}
-            imgSrc={src}
-            disabled={!isHandingOff}
-            text={handoffText}
-          />
-        </Section>
-      </Measure>
-    );
-  }
-  renderHandoffMessage() {
-    const { users } = this.props;
-    const { isHandingOff } = this.state;
-    const helper = this.getHelper();
-    const handOff = helper.getHandoffMessage();
-    let className = 'section--show';
-
-    if (isHandingOff || !handOff) {
-      className = 'section--hidden';
-    }
-
-    const text = handOff.message;
-    const user = users.get(handOff.by);
-    const at = handOff.at;
-    const title = helper.getCurrentStep() ? 'Handoff' : 'Final note';
-
-    return (
-      <Measure
-        onMeasure={(dim) => {
-          this.setState({ handoffMessageH: dim.height });
-        }}
-      >
-        <Section title={title} key={title} className={className}>
-          <HandoffMessage
-            onClick={this.onOpenUser}
-            user={user}
-            message={text}
-            at={at}
-          />
-        </Section>
-      </Measure>
-    );
-  }
-
-  renderAttachments() {
-    const { goal } = this.props;
+  renderContent() {
+    const {
+      goal,
+      me,
+      users,
+    } = this.props;
     const {
       isHandingOff,
-      flags,
-      handoffMessageH,
+      isSubmitting,
+      handoff,
     } = this.state;
-    const helper = this.getHelper();
-    let sendFlags = helper.getFlags();
-    const style = {};
-
-    if (isHandingOff) {
-      sendFlags = fromJS(flags);
-
-      if (handoffMessageH) {
-        style.marginTop = -1 * handoffMessageH;
-      }
-    }
 
     return (
-      <Section className="goal-step__attachment" style={style}>
-        <HOCAttachments
-          attachments={goal.get('attachments')}
-          attachmentOrder={goal.get('attachment_order')}
-          flags={sendFlags}
-          goalId={goal.get('id')}
-          enableFlagging={!!isHandingOff}
-          delegate={this}
-          disableAdd={!helper.getCurrentStep()}
-        />
-      </Section>
-    );
-  }
-  renderStatus() {
-    const { goal } = this.props;
-    const { isHandingOff, nextStepId, newAssignees } = this.state;
-    const helper = this.getHelper();
-    const nextStep = helper.getStepById(nextStepId);
-    let assignees = null;
-    if (nextStep) {
-      assignees = newAssignees || nextStep.get('assignees');
-    }
-    if (!isHandingOff) {
-      return null;
-    }
-
-    return (
-      <HandoffStatus
+      <GoalStep
         goal={goal}
-        assignees={assignees}
-        toId={nextStepId}
-        onChangeClick={this.onChangeClick}
+        me={me}
+        users={users}
+        delegate={this}
+        handoff={handoff}
+        isHandingOff={isHandingOff}
+        isSubmitting={isSubmitting}
       />
-    );
-  }
-  renderActions() {
-    const { isHandingOff, nextStepId, isSubmitting, handoffWriteMessageH, hasLoaded } = this.state;
-    const helper = this.getHelper();
-    const style = {};
-    let className = '';
-
-    if (!helper.getCurrentStep()) {
-      return undefined;
-    }
-    let mainLabel = 'Handoff';
-    if (isHandingOff && !nextStepId) {
-      mainLabel = 'Complete Goal';
-    } else if (isHandingOff) {
-      mainLabel = 'Complete Step';
-      const nextStepIndex = helper.getStepIndexForId(nextStepId);
-      const currentStepIndex = helper.getCurrentStepIndex();
-      if (nextStepIndex === currentStepIndex) {
-        mainLabel = 'Reassign Step';
-      }
-      if (nextStepIndex < currentStepIndex) {
-        mainLabel = 'Make Iteration';
-      }
-    }
-
-    if (!hasLoaded) {
-      className = 'no-animation';
-    }
-
-    if (!isHandingOff && handoffWriteMessageH) {
-      style.marginTop = -1 * handoffWriteMessageH;
-    }
-
-    return (
-      <Section style={style} className={className}>
-        <GoalActions
-          onCancel={this.onCancel}
-          onHandoff={this.onHandoff}
-          isHandingOff={isHandingOff}
-          mainLabel={mainLabel}
-          isSubmitting={isSubmitting}
-        >
-          {this.renderStatus()}
-        </GoalActions>
-      </Section>
     );
   }
   renderSide() {
@@ -468,17 +301,8 @@ class HOCGoalStep extends Component {
     return (
       <SWView>
         <div className={className}>
-          <div className="goal-step__content">
-            {this.renderGoalCompleted()}
-            {this.renderHeader()}
-            {this.renderHandoffMessage()}
-            {this.renderAttachments()}
-            {this.renderHandoffWriteMessage()}
-            {this.renderActions()}
-          </div>
-
+          {this.renderContent()}
           {this.renderSide()}
-
         </div>
       </SWView>
     );
@@ -493,6 +317,7 @@ HOCGoalStep.propTypes = {
   navPop: func,
   saveWay: func,
   selectStep: func,
+  goalNotify: func,
   selectAssignees: func,
   hideNote: func,
   openSlackIn: func,
@@ -524,6 +349,7 @@ export default connect(mapStateToProps, {
   selectAssignees: actions.goals.selectAssignees,
   overlay: actions.main.overlay,
   contextMenu: actions.main.contextMenu,
+  goalNotify: actions.goals.notify,
   selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
   saveWay: actions.ways.save,

@@ -49,7 +49,7 @@ export default class GoalsUtil {
   getIsCompleted() {
     return !this.getCurrentStep();
   }
-  getFlags() {
+  getCurrentFlags() {
     return this.goal.getIn(['status', 'flags']);
   }
   amIAssigned() {

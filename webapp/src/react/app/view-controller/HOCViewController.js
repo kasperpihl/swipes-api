@@ -6,7 +6,7 @@ import Navbar from 'components/nav-bar/NavBar';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
-import { bindAll, nearestAttribute, setupCachedCallback } from 'classes/utils';
+import { bindAll, setupCachedCallback } from 'classes/utils';
 import './styles/view-controller';
 
 const reservedNavIds = [
@@ -21,17 +21,15 @@ class HOCViewController extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bindedNavPush = props.push.bind(this, props.target);
     this.bindedNavPop = props.pop.bind(this, props.target);
-
-    bindAll(this, ['onContextClick']);
+    this.onContext = setupCachedCallback(this.callContentView.bind(this, 'onContextClick'), this);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.upcomingId !== this.props.upcomingId) {
+      this.callContentView('onNavWillChange', nextProps.upcomingId);
+    }
   }
   componentWillUnmount() {
     this._contentView = null;
-  }
-  onContextClick(e) {
-    if (this._contentView && typeof this._contentView.onContextClick === 'function') {
-      const index = parseInt(nearestAttribute(e.target, 'data-index'), 10);
-      this._contentView.onContextClick(index, e);
-    }
   }
   viewDidLoad(view) {
     this._contentView = view;
@@ -59,10 +57,10 @@ class HOCViewController extends Component {
     const Comp = Button;
     const props = button.props || {};
     return (
-      <div key={index} data-index={index} className="nav-bar__action">
+      <div key={index} className="nav-bar__action">
         <Comp
           {...props}
-          onClick={this.onContextClick}
+          onClick={this.onContext(index)}
         />
       </div>
     );
@@ -99,8 +97,8 @@ class HOCViewController extends Component {
     })).toArray();
 
     return (
-      <div className="sw-view__nav-bar">
-        <Navbar key="navbar" history={navbarData} delegate={this}>
+      <div className="sw-view__nav-bar" key="navbar">
+        <Navbar history={navbarData} delegate={this}>
           {this.renderContextButtons()}
         </Navbar>
       </div>
@@ -110,7 +108,7 @@ class HOCViewController extends Component {
     const { currentView, View } = this.props;
 
     if (!View) {
-      return <div>View ({currentView.get('component')}) not found!</div>;
+      return <div key="not-found">View ({currentView.get('component')}) not found!</div>;
     }
     let props = {};
     if (currentView.get('props')) {
@@ -164,12 +162,14 @@ class HOCViewController extends Component {
 function mapStateToProps(state, ownProps) {
   const navId = state.getIn(['navigation', ownProps.target, 'id']);
   const history = state.getIn(['navigation', ownProps.target, 'history', navId]);
+  const upcomingId = state.getIn(['navigation', ownProps.target, 'upcomingId']);
 
   const currentView = history ? history.last() : undefined;
   const View = currentView ? views[currentView.get('component')] : undefined;
   return {
     slackOpenIn: state.getIn(['main', 'slackOpenIn']),
     navId,
+    upcomingId,
     history,
     currentView,
     View,
@@ -180,6 +180,7 @@ const { func, string } = PropTypes;
 HOCViewController.propTypes = {
   history: list,
   slackOpenIn: string,
+  upcomingId: string,
   navId: string,
   currentView: map,
   View: func,

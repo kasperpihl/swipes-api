@@ -70,7 +70,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     steps: object.require(),
     history: array.of(object).require(),
   }).require(),
-  goal_id: string.require(), // T_TODO make it object.as when it's more final
+  goal_id: string.require(),
   current_step_id: string.require(),
   next_step_id: string,
   message: string,
@@ -129,7 +129,39 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 
   return next();
 });
+const goalsProgressStatus = valLocals('goalsArchive', {
+  goal: object.as({
+    status: object.require(),
+    steps: object.require(),
+    history: array.of(object).require(),
+  }).require(),
+  current_step_id: string.require(),
+  next_step_id: string,
+}, (req, res, next, setLocals) => {
+  const {
+    goal,
+    current_step_id,
+    next_step_id,
+  } = res.locals;
 
+  const currentStepPosision = goal.step_order.indexOf(current_step_id);
+  const nextStepPosision = goal.step_order.indexOf(next_step_id);
+  let goalProgress = 'forward';
+
+  if (currentStepPosision === nextStepPosision) {
+    goalProgress = 'reassign';
+  }
+
+  if (nextStepPosision < currentStepPosision) {
+    goalProgress = 'iteration';
+  }
+
+  setLocals({
+    goalProgress,
+  });
+
+  return next();
+});
 const goalsInsert = valLocals('goalsInsert', {
   goal: object.require(),
 }, (req, res, next, setLocals) => {
@@ -150,7 +182,6 @@ const goalsInsert = valLocals('goalsInsert', {
       return next(err);
     });
 });
-
 const goalsArchive = valLocals('goalsArchive', {
   goal_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -373,17 +404,20 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
     id: string.require(),
   }).require(),
   current_step_id: string.require(),
+  goalProgress: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     current_step_id,
+    goalProgress,
   } = res.locals;
   const goal_id = goal.id;
   const queueMessage = {
     user_id,
     goal_id,
     step_id: current_step_id,
+    progress: goalProgress,
     event_type: 'step_completed',
   };
 
@@ -423,6 +457,37 @@ const goalsStepGotActiveQueueMessage = valLocals('goalsStepGotActiveQueueMessage
   return next();
 });
 
+const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  assignees: array.of(string).require(),
+  flags: array.of(string),
+  message: string,
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    assignees,
+    flags = [],
+    message = '',
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    flags,
+    message,
+    user_ids: assignees,
+    event_type: 'goal_notify',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
+
 export {
   goalsCreate,
   goalsInsert,
@@ -438,4 +503,6 @@ export {
   goalsAddMilestoneQueueMessage,
   goalsRemoveMilestoneQueueMessage,
   goalsCompleteStep,
+  goalsProgressStatus,
+  goalsNotifyQueueMessage,
 };
