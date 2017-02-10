@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'classes/utils';
-import SWView from 'SWView';
 import NotificationWrapper from './NotificationWrapper';
 import UnreadBar from './UnreadBar';
 import './styles/org-dashboard';
@@ -11,9 +10,6 @@ export default class OrgDashboard extends Component {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.onClick = this.callDelegate.bind(null, 'onMarkSeen');
-  }
-  renderHeader() {
-    return <div className="notifications__header">Notifications</div>;
   }
   renderNotifications() {
     const { notifications } = this.props;
@@ -58,12 +54,10 @@ export default class OrgDashboard extends Component {
   }
   render() {
     return (
-      <SWView header={this.renderHeader()}>
-        <div className="org-dashboard">
-          {this.renderNotifications()}
-          {this.renderUnreadBar()}
-        </div>
-      </SWView>
+      <div className="org-dashboard">
+        {this.renderNotifications()}
+        {this.renderUnreadBar()}
+      </div>
     );
   }
 }

@@ -8,6 +8,10 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
   @include size(calc(100% - 60px), 100%);
   @include flex(column);
   position: relative;
+
+  &--empty {
+    display: none;
+  }
 }
 
 .sw-view {
