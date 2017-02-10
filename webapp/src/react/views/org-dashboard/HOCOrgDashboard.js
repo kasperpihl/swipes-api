@@ -106,7 +106,7 @@ class HOCOrgDashboard extends Component {
         const name = this.clickableNameForUserId(data.get('done_by'));
         const message = data.get('message');
         const youLabel = name === 'you' ? 'yourself' : 'you';
-        m = m.set('message', <span>{name}{` notified ${youLabel} on: `}{goal}{` and wrote "${message}"`}</span>);
+        m = m.set('message', <span>{name}{` wrote: "${message}" in `}{goal}</span>);
         m = m.set('svg', 'Deliver');
         m = m.set('iconBgColor', blueColor);
         break;

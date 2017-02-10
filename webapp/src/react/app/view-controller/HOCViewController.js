@@ -150,8 +150,14 @@ class HOCViewController extends Component {
     );
   }
   render() {
+    const { navId } = this.props;
+    let className = 'view-controller';
+    if (!navId) {
+      className = 'view-controller--empty';
+    }
+
     return (
-      <div className="view-controller">
+      <div className={className}>
         {this.renderContainer()}
         {this.renderSlack()}
       </div>
