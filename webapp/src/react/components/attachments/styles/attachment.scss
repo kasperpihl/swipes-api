@@ -15,6 +15,7 @@
     @include size(100%, auto);
     @include flex(center, flex-start);
     @include font(12px, $deepBlue-100, 18px);
+    transition: .1s ease;
   }
 
   &__icon {
@@ -24,6 +25,7 @@
 
     #{$b}__svg {
       @include svg-color($deepBlue-20);
+      transition: .2s ease;
     }
   }
 
@@ -92,6 +94,18 @@
   }
 
   &:hover {
+
+    #{$b}__title {
+      @include font($c: $blue-100);
+      transition: .1s ease;
+    }
+
+    #{$b}__icon {
+      #{$b}__svg {
+        @include svg-color($blue-100);
+        transition: .2s ease;
+      }
+    }
 
     #{$b}__button--delete {
       opacity: 1;

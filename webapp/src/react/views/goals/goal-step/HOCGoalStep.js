@@ -17,6 +17,7 @@ import GoalActions from './GoalActions';
 import GoalCompleted from './GoalCompleted';
 import HandoffStatus from './HandoffStatus';
 import GoalSide from './GoalSide';
+import SWView from 'src/react/app/view-controller/SWView';
 
 import './styles/goal-step';
 
@@ -465,19 +466,21 @@ class HOCGoalStep extends Component {
       className += ' goal-step__handing-off';
     }
     return (
-      <div className={className}>
-        <div className="goal-step__content">
-          {this.renderGoalCompleted()}
-          {this.renderHeader()}
-          {this.renderHandoffMessage()}
-          {this.renderAttachments()}
-          {this.renderHandoffWriteMessage()}
-          {this.renderActions()}
+      <SWView>
+        <div className={className}>
+          <div className="goal-step__content">
+            {this.renderGoalCompleted()}
+            {this.renderHeader()}
+            {this.renderHandoffMessage()}
+            {this.renderAttachments()}
+            {this.renderHandoffWriteMessage()}
+            {this.renderActions()}
+          </div>
+
+          {this.renderSide()}
+
         </div>
-
-        {this.renderSide()}
-
-      </div>
+      </SWView>
     );
   }
 }

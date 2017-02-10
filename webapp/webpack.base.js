@@ -27,6 +27,7 @@ module.exports = {
       actions: 'src/actions',
       views: 'src/react/views',
       Icon: 'src/react/icons/Icon',
+      SWView: 'src/react/app/view-controller/SWView',
       Button: 'src/react/components/button/Button',
       classes: 'src/classes'
     },

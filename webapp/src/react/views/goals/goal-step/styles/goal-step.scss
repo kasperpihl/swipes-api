@@ -4,24 +4,11 @@
 .goal-step {
   $b: &;
 
-  @include size(100%);
-  @include flex(flex-start, space-between);
-  // min-width: 450px;
-  max-width: 780px + 253px + 150px;
+  @include size(100%, auto);
+  @include flex(flex);
   background-color: $bg;
   position: relative;
-  overflow-y: auto;
-  margin-top: 21px;
-  padding-top: 1px;
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-    @include size(100%, 1px);
-    max-width: 780px;
-    background-color: $deepBlue-10;
-  }
+  margin-top: 52px;
 
   &__content {
     @include size(100%, auto);
@@ -127,6 +114,7 @@
 
 .goal-side {
   @include size(100%, auto);
+  margin-left: 5vw;
 
   &__progress-bar {
     @include size(100%, auto);

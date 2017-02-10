@@ -35,8 +35,9 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
   }
 
   &__content {
-    @include size($innercContentWidth, auto);
+    @include size($innercContentWidth, 100%);
 		margin: 0 $contentOverflowPadding;
+    min-height: 100%;
     position: relative;
   }
 }

@@ -9,6 +9,7 @@
   max-width: 780px;
   position: relative;
   z-index: 9;
+  padding-top: 9px;
 
   &__button {
     @include size(42px);
@@ -38,6 +39,7 @@
     @include flex(flex);
     @include flex(none);
     align-self: flex-end;
+    transform: translateY(6px);
   }
 
   &__action {
