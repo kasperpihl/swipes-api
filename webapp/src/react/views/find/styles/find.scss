@@ -4,6 +4,7 @@
 
 .find-overlay {
   @include size(100%);
+  @include flex(flex);
   position: relative;
 }
 
@@ -14,8 +15,8 @@
   padding-top: 15px;
 
   &__results {
-    @include size(100%);
-    overflow-y: auto;
+    @include size(100%, auto);
+    // overflow-y: auto;
 
     &:before {
       content: '';
