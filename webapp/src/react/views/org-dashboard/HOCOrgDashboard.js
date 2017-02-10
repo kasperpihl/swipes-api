@@ -71,7 +71,7 @@ class HOCOrgDashboard extends Component {
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
   messageForNotification(n) {
-    const { ways } = this.props;
+    const { ways, me } = this.props;
     let data = n.get('data');
     data = data || Map();
     const type = n.get('type');
@@ -106,8 +106,8 @@ class HOCOrgDashboard extends Component {
         const goal = this.clickableGoalForId(data.get('goal_id'));
         const name = this.clickableNameForUserId(data.get('done_by'));
         const message = data.get('message');
-        const youLabel = name === 'you' ? 'yourself' : 'you';
-        m = m.set('message', <span>{name}{` wrote: "${message}" in `}{goal}</span>);
+        const youLabel = data.get('done_by') === me.get('id') ? 'yourself' : 'you';
+        m = m.set('message', <span>{name}{` wrote ${youLabel}: "${message}" in `}{goal}</span>);
         m = m.set('svg', 'Deliver');
         m = m.set('iconBgColor', blueColor);
         break;
@@ -172,6 +172,7 @@ HOCOrgDashboard.propTypes = {
   markNotifications: func,
   ways: map,
   goals: map,
+  me: map,
 };
 
 function mapStateToProps(state) {
