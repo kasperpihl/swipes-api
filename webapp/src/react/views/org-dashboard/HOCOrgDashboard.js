@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { list, map } from 'react-immutable-proptypes';
+import SWView from 'SWView';
 import moment from 'moment';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -145,6 +146,9 @@ class HOCOrgDashboard extends Component {
     }
     return m;
   }
+  renderHeader() {
+    return <div className="notifications__header">Notifications</div>;
+  }
   render() {
     let {
       notifications,
@@ -153,7 +157,9 @@ class HOCOrgDashboard extends Component {
       notifications = notifications.map(n => this.messageForNotification(n));
     }
     return (
-      <OrgDashboard delegate={this} notifications={notifications} />
+      <SWView header={this.renderHeader()}>
+        <OrgDashboard delegate={this} notifications={notifications} />
+      </SWView>
     );
   }
 }
