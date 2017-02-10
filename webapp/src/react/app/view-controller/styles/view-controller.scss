@@ -12,6 +12,10 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
   &--empty {
     display: none;
   }
+
+  &:last-child {
+    border-left: 1px solid $deepBlue-10;
+  }
 }
 
 .sw-view {
