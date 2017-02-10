@@ -4,6 +4,7 @@
 
 .find-overlay {
   @include size(100%);
+  @include flex(flex);
   position: relative;
 }
 

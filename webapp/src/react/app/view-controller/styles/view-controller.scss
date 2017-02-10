@@ -5,7 +5,7 @@ $contentOverflowPadding: 45px;
 $innercContentWidth: calc(100% - #{$contentOverflowPadding});
 
 .view-controller {
-  @include size(100%);
+  @include size(calc(100% - 60px), 100%);
   @include flex(column);
   position: relative;
 }
@@ -24,6 +24,7 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
 
   &__header {
     @include size($innercContentWidth, auto);
+    @include flex(none);
 		margin: 0 $contentOverflowPadding;
     position: relative;
   }

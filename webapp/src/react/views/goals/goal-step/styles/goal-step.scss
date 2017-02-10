@@ -8,7 +8,7 @@
   @include flex(flex);
   background-color: $bg;
   position: relative;
-  margin-top: 52px;
+  padding-top: 52px;
 
   &__content {
     @include size(100%, auto);

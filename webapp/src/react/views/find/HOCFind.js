@@ -5,6 +5,7 @@ import * as actions from 'actions';
 import { setupDelegate } from 'classes/utils';
 import HOCBrowse from './browse/HOCBrowse';
 import Find from './Find';
+import SWView from 'SWView';
 import './styles/find.scss';
 
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
@@ -90,10 +91,12 @@ class HOCFind extends Component {
   }
   render() {
     return (
-      <div className="find-container">
-        {this.renderBrowse()}
-        {this.renderSearchResults()}
-      </div>
+      <SWView>
+        <div className="find-container">
+          {this.renderBrowse()}
+          {this.renderSearchResults()}
+        </div>
+      </SWView>
     );
   }
 }

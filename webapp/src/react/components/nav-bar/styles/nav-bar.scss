@@ -3,33 +3,14 @@
 
 .nav-bar {
   $b: &;
-  @include size(100%, 73px);
+  @include size(100%, 90px);
   @include flex(flex);
-  flex: none;
+  @include flex(none);
+  background-color: $bg;
   max-width: 780px;
+  padding-top: 9px;
   position: relative;
   z-index: 9;
-  padding-top: 9px;
-
-  &__button {
-    @include size(42px);
-    @include flex();
-    border-radius: 50%;
-
-    &--back {
-      position: absolute;
-      left: -13px; bottom: 0px;
-      transform: translateX(-100%);
-
-      #{$b}__icon {
-        transform: translateX(-1px);
-      }
-
-      &:hover {
-        background-color: $deepBlue-10;
-      }
-    }
-  }
 
   &__icon {
     @include size(24px);
@@ -39,7 +20,7 @@
     @include flex(flex);
     @include flex(none);
     align-self: flex-end;
-    transform: translateY(6px);
+    transform: translateY(-10px);
   }
 
   &__action {
