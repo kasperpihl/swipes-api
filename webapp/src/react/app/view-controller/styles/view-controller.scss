@@ -16,6 +16,26 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
   &:last-child {
     border-left: 1px solid $deepBlue-10;
   }
+
+  &--overlay {
+    @include size(60%, 100%);
+    position: absolute;
+    right: 0; top: 0;
+    z-index: 99;
+    background-color: $bg;
+    box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+    animation: slideViewIn .5s ease forwards;
+    transform: translateX(100%);
+
+    @keyframes slideViewIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0%);
+      }
+    }
+  }
 }
 
 .sw-view {

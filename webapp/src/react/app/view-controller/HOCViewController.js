@@ -20,6 +20,7 @@ class HOCViewController extends Component {
     super(props);
     this.state = {
       centerNav: false,
+      secondaryOverlay: false,
     };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bindedNavPush = props.push.bind(this, props.target);
@@ -43,6 +44,12 @@ class HOCViewController extends Component {
       this.setState({ centerNav: true });
     } else {
       this.setState({ centerNav: false });
+    }
+
+    if (dim.width < 800) {
+      this.setState({ secondaryOverlay: true });
+    } else {
+      this.setState({ secondaryOverlay: false });
     }
   }
   navbarInputKeyUp(e) {
@@ -170,10 +177,16 @@ class HOCViewController extends Component {
     );
   }
   render() {
-    const { navId } = this.props;
+    const { navId, target } = this.props;
+    const { secondaryOverlay } = this.state;
     let className = 'view-controller';
     if (!navId) {
       className = 'view-controller--empty';
+    }
+    console.log('target', target);
+
+    if (target && target === 'secondary' && navId && secondaryOverlay) {
+      className += ' view-controller--overlay';
     }
 
     return (
