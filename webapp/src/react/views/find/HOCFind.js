@@ -165,8 +165,8 @@ class HOCFind extends Component {
   render() {
     return (
       <div className="find-container">
-        {this.renderBrowse()}
-        {this.renderSearchResults()}
+        {this.renderSidebar()}
+        {this.renderContent()}
       </div>
     );
   }
