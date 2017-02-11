@@ -107,9 +107,9 @@ export default class MessageGenerator {
         status = `No one is working on "${stepTitle}"`;
       }
     }
-    if (type === 'upcoming') {
+    /* if (type === 'upcoming') {
 
-    }
+    }*/
     if (type === 'current') {
       status = `${doneBy} handed this off `;
       if (filter.get('user') !== 'any') {

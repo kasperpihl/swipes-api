@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
-import SwipesAPIConnector from './classes/api-connector';
+// import SwipesAPIConnector from './classes/api-connector';
 import './react/global-styles/reset.scss';
 import './react/global-styles/app.scss';
 import './react/global-styles/transitions.scss';

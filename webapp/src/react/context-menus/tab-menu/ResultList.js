@@ -48,9 +48,10 @@ class ResultList extends Component {
 
 export default ResultList;
 
-const { arrayOf, bool, shape } = PropTypes;
+const { arrayOf, bool, shape, object } = PropTypes;
 
 ResultList.propTypes = {
   results: arrayOf(shape(ResultItem.propTypes)),
+  delegate: object,
   loading: bool,
 };

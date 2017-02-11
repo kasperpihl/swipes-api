@@ -1,4 +1,5 @@
 import req from 'request';
+import contentDisposition from 'content-disposition';
 
 const request = ({ auth_data, method, params = {} }, callback) => {
   const copyParams = Object.assign({}, params);
@@ -39,7 +40,7 @@ const requestStream = ({ auth_data, urlData, user }, res, next) => {
     response.headers['access-control-allow-origin'] = '*';
     response.headers['cache-control'] = 'no-cache';
     response.headers['Content-Type'] = urlData.metadata.mimetype;
-    response.headers['Content-Disposition'] = `attachment; filename="${urlData.metadata.name}"`;
+    response.headers['Content-Disposition'] = contentDisposition(urlData.metadata.name);
   })
   .on('end', () => {
     res.end();

@@ -60,14 +60,10 @@ export const load = (options, callback) => (d, getState) => {
     return null;
   }).filter(v => !!v);
 
-  let tabMenu;
   const delegate = {
-    onTabMenuLoad: (tMenu) => {
-      tabMenu = tMenu;
-    },
     resultsForSearch: query => searchForWay(query),
     resultsForAll: () => sortedWays.map(w => resultForWay(w)),
-    onItemAction: (obj, side, e) => {
+    onItemAction: (obj, side) => {
       const way = getState().getIn(['main', 'ways', obj.id]);
       callback(way);
       d(a.main.contextMenu(null));

@@ -70,6 +70,7 @@ const { string } = PropTypes;
 
 FloatingInput.propTypes = {
   label: string,
+  error: string,
   type: string,
   id: string,
 };

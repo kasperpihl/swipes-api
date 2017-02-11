@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { list, map } from 'react-immutable-proptypes';
+import { list } from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -46,7 +46,6 @@ function mapStateToProps(state, ownProps) {
   stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
   return {
     stateAssignees,
-    me: state.get('me'),
   };
 }
 
@@ -55,7 +54,6 @@ HOCAssigning.propTypes = {
   stateAssignees: list,
   index: oneOfType([number, string]),
   delegate: object,
-  me: map,
   maxImages: number,
 };
 

@@ -1,5 +1,6 @@
 import r from 'rethinkdb';
 import Promise from 'bluebird';
+import contentDisposition from 'content-disposition';
 import db from '../../../db';
 import mapApiMethod from './api_map';
 import {
@@ -134,7 +135,7 @@ const requestStream = ({ auth_data, urlData, user }, res, next) => {
       return driveMethod(methodOptions)
       .on('response', (response) => {
         response.headers['Content-Type'] = urlData.metadata.mimeType;
-        response.headers['Content-Disposition'] = `attachment; filename="${urlData.metadata.name}"`;
+        response.headers['Content-Disposition'] = contentDisposition(urlData.metadata.name);
       })
       .on('end', () => {
         res.end();

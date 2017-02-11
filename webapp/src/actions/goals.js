@@ -246,7 +246,6 @@ export const completeStep = (gId, handoff) => (d, getState) => {
 
   let assignees = handoff.get('assignees');
   assignees = assignees && assignees.toJS();
-  console.log(target, assignees);
   return d(a.api.request('goals.completeStep', {
     goal_id: gId,
     flags: handoff.get('flags'),

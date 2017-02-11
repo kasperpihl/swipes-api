@@ -1,7 +1,10 @@
 import * as types from 'constants';
 import * as a from './';
 
-export const setStatus = (status, nextRetry) => ({ type: types.SET_STATUS, payload: { status, nextRetry } });
+export const setStatus = (status, nextRetry) => ({
+  type: types.SET_STATUS,
+  payload: { status, nextRetry,
+  } });
 
 // ======================================================
 // Simple persistent cache
@@ -105,7 +108,6 @@ export const note = {
     title,
   })),
   save: (oId, id, text, unlock) => (dp) => {
-    console.log(oId, id, text, unlock);
     dp(a.api.request('notes.save', {
       organization_id: oId,
       id,
