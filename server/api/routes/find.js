@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  string,
   object,
 } from 'valjs';
 import {
@@ -14,6 +15,7 @@ import {
   serviceWithAuthGet,
   serviceImport,
   servicePreviewFind,
+  serviceDoBrowse,
 } from './middlewares/services';
 
 const authed = express.Router();
@@ -42,6 +44,20 @@ authed.all('/find.preview',
   servicePreviewFind,
   valResponseAndSend({
     preview: object.require(),
+  }));
+
+authed.all('/find.browse',
+  valBody({
+    service_name: string.require(),
+    account_id: string.require(),
+    query: object,
+    page: object,
+  }),
+  serviceWithAuthGet,
+  serviceImport,
+  serviceDoBrowse,
+  valResponseAndSend({
+    result: object.require(),
   }));
 
 export {
