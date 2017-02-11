@@ -4,46 +4,51 @@ import {
 
 const browse = ({ auth_data, query, page, account_id, user }, callback) => {
   const pathTitle = query ? query.title : '';
-  const path = query ? query.path : '';
-  const method = page ? 'files.listFolder.continue' : 'files.listFolder';
-  const params = page ? {
-    cursor: page.cursor,
-  } : {
-    path,
+  const path = query ? query.path : 'root';
+  const sharedWithMeFilter = path === 'root' ? 'or sharedWithMe' : '';
+  const method = 'files.list';
+  const params = {
+    orderBy: 'folder',
+    q: `'${path}' in parents ${sharedWithMeFilter}`,
+    pageSize: '1',
   };
+
+  if (page) {
+    params.pageToken = page.pageToken;
+  }
 
   return request({ auth_data, method, params, user }, (err, res) => {
     if (err) {
       return callback(err);
     }
 
-    const mappedResults = res.entries.filter((entry) => {
-      return entry['.tag'] === 'folder' || entry['.tag'] === 'file';
-    }).map((entry) => {
-      if (entry['.tag'] === 'folder') {
+    const mappedResults = res.files.filter((file) => {
+      return file.kind === 'drive#file';
+    }).map((file) => {
+      if (file.mimeType === 'application/vnd.google-apps.folder') {
         return {
-          title: entry.name,
+          title: file.name,
           left_icon: 'folder',
           on_click: {
             type: 'query',
             query: {
-              title: entry.name,
-              path: entry.path_lower,
+              title: file.name,
+              path: file.id,
             },
           },
         };
       }
 
       return {
-        title: entry.name,
+        title: file.name,
         left_icon: '',
         on_click: {
           type: 'preview',
           preview: {
             service: {
-              name: 'dropbox',
+              name: 'drive',
               type: 'file',
-              id: `rev:${entry.rev}`,
+              id: file.id,
             },
             permission: {
               account_id,
@@ -53,12 +58,18 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
       };
     });
 
+    let has_more = false;
+
+    if (res.nextPageToken) {
+      has_more = true;
+    }
+
     return callback(null, {
+      has_more,
       title: pathTitle,
       items: mappedResults,
-      has_more: res.has_more,
       page: {
-        cursor: res.cursor,
+        pageToken: res.nextPageToken,
       },
     });
   });

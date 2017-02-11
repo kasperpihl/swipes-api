@@ -225,6 +225,7 @@ const serviceDoBrowse = valLocals('serviceDoBrowse', {
 
   return service.browse(options, (err, result) => {
     if (err) {
+      console.log(err);
       return next(new SwipesError('serviceBrowse - Something went wrong with the browse request', err));
     }
 
