@@ -78,22 +78,22 @@ class HOCFind extends Component {
       return undefined;
     }
     return (
-      <Find
-        results={searchResults}
-        searching={searching}
-        actionLabel={actionLabel}
-        searchQuery={searchQuery}
-        delegate={this}
-      />
+      <SWView maxWidth={780}>
+        <Find
+          results={searchResults}
+          searching={searching}
+          actionLabel={actionLabel}
+          searchQuery={searchQuery}
+          delegate={this}
+        />
+      </SWView>
     );
   }
   render() {
     return (
       <div className="find-container">
         {this.renderBrowse()}
-        <SWView maxWidth={780}>
-          {this.renderSearchResults()}
-        </SWView>
+        {this.renderSearchResults()}
       </div>
     );
   }

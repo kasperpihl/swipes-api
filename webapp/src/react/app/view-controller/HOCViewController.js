@@ -45,8 +45,6 @@ class HOCViewController extends Component {
     window.removeEventListener('resize', this.debouncedUpdateDimensions);
   }
   updateDimensions() {
-    console.log('window.innerWidth', window.innerWidth);
-
     if (window.innerWidth <= 1200) {
       this.setState({ secondaryOverlay: true });
     } else {
