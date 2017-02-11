@@ -2,11 +2,13 @@ import {
   request,
 } from './request';
 
-const browse = ({ auth_data, query, account_id, user }, callback) => {
+const browse = ({ auth_data, query, page, account_id, user }, callback) => {
   const pathTitle = query ? query.title : '';
   const path = query ? query.path : '';
-  const method = 'files.listFolder';
-  const params = {
+  const method = page ? 'files.listFolder.continue' : 'files.listFolder';
+  const params = page ? {
+    cursor: page.cursor,
+  } : {
     path,
   };
 
@@ -53,6 +55,10 @@ const browse = ({ auth_data, query, account_id, user }, callback) => {
     return callback(null, {
       title: pathTitle,
       items: mappedResults,
+      has_more: res.has_more,
+      page: {
+        cursor: res.cursor,
+      },
     });
   });
 };

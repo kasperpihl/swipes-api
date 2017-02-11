@@ -204,6 +204,7 @@ const serviceDoBrowse = valLocals('serviceDoBrowse', {
   service: object.require(),
   account_id: string.require(),
   query: object,
+  page: object,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -211,11 +212,13 @@ const serviceDoBrowse = valLocals('serviceDoBrowse', {
     service,
     account_id,
     query = null,
+    page = null,
   } = res.locals;
 
   const options = {
     auth_data: service_auth_data,
     query,
+    page,
     account_id,
     user: { user_id },
   };
