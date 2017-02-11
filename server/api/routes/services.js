@@ -9,6 +9,7 @@ import {
   serviceGetAuthUrl,
   serviceWithAuthGet,
   serviceDoRequest,
+  serviceDoBrowse,
   serviceGetAuthData,
   serviceUpdateAuthData,
 } from './middlewares/services';
@@ -50,6 +51,19 @@ authed.all('/services.request',
   serviceWithAuthGet,
   serviceImport,
   serviceDoRequest,
+  valResponseAndSend({
+    result: object.require(),
+  }));
+
+authed.all('/services.browse',
+  valBody({
+    service_name: string.require(),
+    account_id: string.require(),
+    query: object,
+  }),
+  serviceWithAuthGet,
+  serviceImport,
+  serviceDoBrowse,
   valResponseAndSend({
     result: object.require(),
   }));

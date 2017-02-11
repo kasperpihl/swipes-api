@@ -14,11 +14,15 @@ import {
 import {
   mapSearch,
 } from './search';
+import {
+  browse,
+} from './browse';
 
 export {
   authUrl,
   authData,
   request,
+  browse,
   preview,
   webhooks,
   mapSearch,
