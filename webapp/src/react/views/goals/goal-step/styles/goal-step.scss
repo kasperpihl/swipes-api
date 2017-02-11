@@ -106,10 +106,6 @@
     @include size(253px, auto);
     @include flex(none);
     margin-right: 15px;
-
-    @media (max-width: 1250px) {
-      display: none;
-    }
   }
 }
 

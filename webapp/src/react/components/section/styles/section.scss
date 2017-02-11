@@ -6,7 +6,7 @@
   @include size(100%, auto);
   position: relative;
   padding: 30px 0;
-  // border-top: 1px solid $deepBlue-10;
+  border-top: 1px solid $deepBlue-10;
   background-color: $bg;
   transition: margin-top .4s ease-in, opacity .4s ease;
   will-change: margin-top;
