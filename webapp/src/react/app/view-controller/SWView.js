@@ -10,9 +10,9 @@ class SWView extends Component {
     this.state = {
       center: false,
     };
-    this.bouncedMeasure = debounce(this.onMeasure, 1);
 
     this.onMeasure = this.onMeasure.bind(this);
+    this.bouncedMeasure = debounce(this.onMeasure, 10);
   }
   componentDidMount() {
   }
@@ -56,8 +56,10 @@ class SWView extends Component {
       className += ' sw-view--center-content ';
     }
 
+    console.log('center', center);
+
     return (
-      <Measure onMeasure={this.onMeasure}>
+      <Measure onMeasure={this.bouncedMeasure}>
         <div className={className}>
           {this.renderHeader()}
           <div className="sw-view__scroll">

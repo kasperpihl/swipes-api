@@ -8,11 +8,14 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
   @include size(100%);
   @include flex(column);
   position: relative;
+  will-change: width;
+  transition: .5s .5s ease;
 
   &--empty {
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
+    @include size(0%, 100%);
+    border-left: 0px solid $deepBlue-10;
+    will-change: width;
+    transition: .5s .5s ease;
   }
 
   &:last-child {
@@ -67,16 +70,16 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
   &--center-content {
     @include flex(center, flex-start, column);
-    transition: .5 ease;
+    transition: .5s ease;
 
     #{$b}__container {
       @include flex(flex-start, center);
-      transition: .5 ease;
+      transition: .5s ease;
     }
 
     #{$b}__content {
       @include flex(flex-start, center);
-      transition: .5 ease;
+      transition: .5s ease;
     }
   }
 }

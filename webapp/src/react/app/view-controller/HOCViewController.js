@@ -190,7 +190,7 @@ class HOCViewController extends Component {
     const { secondaryOverlay } = this.state;
     let className = 'view-controller';
     if (!navId) {
-      className = 'view-controller--empty';
+      className += ' view-controller--empty';
     }
 
     if (target && target === 'secondary' && navId && secondaryOverlay) {
