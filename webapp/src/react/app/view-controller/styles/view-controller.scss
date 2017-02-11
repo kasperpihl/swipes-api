@@ -5,13 +5,9 @@ $contentOverflowPadding: 45px;
 $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 .view-controller {
-  @include size(50%, 100%);
+  @include size(100%);
   @include flex(column);
   position: relative;
-
-  @media screen and (max-width: 1200px) {
-    @include size(100%);
-  }
 
   &--empty {
     position: absolute;
