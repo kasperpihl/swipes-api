@@ -69,42 +69,9 @@ class HOCBrowse extends PureComponent {
       });
     }
   }
-  loadPath(entry, depth) {
-    const { title, path } = entry;
-    const { accountId, request } = this.props;
-    let { paths, selectedItemIds } = this.state;
-    if (typeof depth === 'number') {
-      const size = this.state.paths.length;
-      if (depth < (size - 1)) {
-        paths = paths.slice(0, depth + 1);
-        selectedItemIds = selectedItemIds.slice(0, depth);
-      }
-    }
-    if (entry.id) {
-      selectedItemIds = selectedItemIds.concat([entry.id]);
-    }
-    paths = paths.concat([{ path, title }]);
-    this.setState({ paths, selectedItemIds });
-    request('services.request', {
-      service_name: 'dropbox',
-      account_id: accountId,
-      method: 'files.listFolder',
-      parameters: {
-        path,
-      },
-    }).then((res) => {
-      if (res && res.ok && res.result) {
-        this.updateCacheAtPath(path, this.mapResults(res.result.entries));
-      }
-    });
-  }
   clickedItem(depth, i, entry) {
-    console.log(depth, entry);
     const { queries, results, selectedIndexes } = this.state;
     if (typeof depth !== 'number') {
-      // sidebar
-      console.log(i, entry);
-
       this.setState({
         queries: queries.clear().push(null),
         results: results.clear(),
@@ -114,10 +81,8 @@ class HOCBrowse extends PureComponent {
       });
     } else {
       const r = results.get(depth).items[i];
-      console.log(r);
       if (r && r.on_click.type === 'query') {
         const query = r.on_click.query;
-        console.log('setting query', depth);
         this.setState({
           queries: queries.setSize(depth + 1).push(query),
           results: results.setSize(depth + 1),
@@ -127,11 +92,6 @@ class HOCBrowse extends PureComponent {
 
       }
     }
-  }
-  clickedBack() {
-    const { paths } = this.state;
-    paths.pop();
-    this.setState({ paths });
   }
   mapResults(items) {
     return items.map(item => ({
@@ -221,9 +181,8 @@ class HOCBrowse extends PureComponent {
   }
 }
 
-const { string, func, object } = PropTypes;
+const { func, object } = PropTypes;
 HOCBrowse.propTypes = {
-  accountId: string,
   request: func,
   me: map,
   services: map,
@@ -231,11 +190,9 @@ HOCBrowse.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const accountId = state.getIn(['me', 'services']).find(s => s.get('service_name') === 'dropbox').get('id');
   return {
     services: state.getIn(['main', 'services']),
     me: state.get('me'),
-    accountId,
   };
 }
 
