@@ -26,5 +26,29 @@ const request = ({ auth_data, method, params = {} }, callback) => {
     return callback(null, body);
   });
 };
+const requestStream = ({ auth_data, urlData, user }, res, next) => {
+  const options = {
+    url: `${urlData.metadata.url_private}`,
+    headers: {
+      Authorization: `Bearer ${auth_data.access_token}`,
+    },
+  };
 
-export default request;
+  return req(options)
+  .on('response', (response) => {
+    response.headers['access-control-allow-origin'] = '*';
+    response.headers['cache-control'] = 'no-cache';
+  })
+  .on('end', () => {
+    res.end();
+  })
+  .on('error', () => {
+    res.end();
+  })
+  .pipe(res);
+};
+
+export {
+  request,
+  requestStream,
+};
