@@ -44,6 +44,13 @@ class HOCViewController extends Component {
     this._contentView = null;
     window.removeEventListener('resize', this.debouncedUpdateDimensions);
   }
+  onMeasure(dim) {
+    if (dim.width < 1200) {
+      this.setState({ centerNav: true });
+    } else {
+      this.setState({ centerNav: false });
+    }
+  }
   updateDimensions() {
     console.log('window.innerWidth', window.innerWidth);
 
@@ -51,13 +58,6 @@ class HOCViewController extends Component {
       this.setState({ secondaryOverlay: true });
     } else {
       this.setState({ secondaryOverlay: false });
-    }
-  }
-  onMeasure(dim) {
-    if (dim.width < 1200) {
-      this.setState({ centerNav: true });
-    } else {
-      this.setState({ centerNav: false });
     }
   }
   viewDidLoad(view) {

@@ -12,10 +12,7 @@ class NavBar extends Component {
     bindAll(this, ['onInputKeyDown', 'onInputKeyUp', 'onInputChange', 'clickedCrumb']);
     this.callDelegate = setupDelegate(props.delegate);
   }
-  clickedCrumb(e) {
-    const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
-    this.callDelegate('navbarClickedCrumb', i);
-  }
+
   onInputKeyDown(e) {
     this.callDelegate('navbarInputKeyDown', e);
   }
@@ -24,6 +21,10 @@ class NavBar extends Component {
   }
   onInputChange(e) {
     this.callDelegate('navbarInputChange', e.target.value);
+  }
+  clickedCrumb(e) {
+    const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
+    this.callDelegate('navbarClickedCrumb', i);
   }
   renderInputCrumb(placeholder) {
     return (

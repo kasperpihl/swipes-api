@@ -20,10 +20,6 @@ class HOCContextMenu extends Component {
     window.addEventListener('resize', this.bouncedResize);
     window.addEventListener('keydown', this.onKeyDown);
   }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.bouncedResize);
-    window.removeEventListener('keydown', this.onKeyDown);
-  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.contextMenu && nextProps.contextMenu !== this.props.contextMenu) {
       this.setState({ styles: this.stylesForOptions(nextProps.contextMenu.options) });
@@ -31,6 +27,10 @@ class HOCContextMenu extends Component {
   }
   componentDidUpdate() {
     this.fitToScreen();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.bouncedResize);
+    window.removeEventListener('keydown', this.onKeyDown);
   }
   onKeyDown(e) {
     if (e.keyCode === 27) {

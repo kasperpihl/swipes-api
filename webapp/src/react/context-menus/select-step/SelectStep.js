@@ -1,7 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { listOf, mapContains } from 'react-immutable-proptypes';
-import { setupCachedCallback, bindAll } from 'classes/utils';
-import Icon from 'Icon';
+import { setupCachedCallback } from 'classes/utils';
 
 import './styles/select-step.scss';
 

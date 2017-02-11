@@ -57,7 +57,6 @@ class HOCApp extends Component {
 const { func, object, string } = PropTypes;
 
 HOCApp.propTypes = {
-  request: func,
   status: string,
   navInit: func,
   location: object,
@@ -70,7 +69,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCApp = connect(mapStateToProps, {
-  request: api.request,
   navInit: navigation.init,
 })(HOCApp);
 export default ConnectedHOCApp;

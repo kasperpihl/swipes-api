@@ -44,9 +44,7 @@ export default function main(state = initialState, action) {
     }
 
     case types.SET_STATUS: {
-      console.log('payload', payload);
       const hasLoaded = (state.get('hasLoaded') || payload.status === 'online') ? true : null;
-
       return state.withMutations(ns =>
         ns.set('hasLoaded', hasLoaded).set('status', payload.status).set('nextRetry', payload.nextRetry),
       );

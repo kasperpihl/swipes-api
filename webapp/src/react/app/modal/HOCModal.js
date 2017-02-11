@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SwipesModal from 'src/react/modals/SwipesModal';
 import * as a from 'actions';
