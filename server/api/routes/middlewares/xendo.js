@@ -311,18 +311,17 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
 
   db.rethinkQuery(xendoServicesQ)
     .then((userServices) => {
-      const mappedResults = result.response.docs.map((doc) => {
+      const mappedResults = result.response.docs.filter((doc) => {
+        return userServices[doc.service_id] !== undefined;
+      }).map((doc) => {
         const service = services[mapSourceToServiceName(doc.source)];
         let mappedDoc = {};
-        let account_id;
 
         if (service.mapSearch) {
           mappedDoc = service.mapSearch(doc);
         }
 
-        if (userServices[doc.service_id]) {
-          account_id = userServices[doc.service_id];
-        }
+        const account_id = userServices[doc.service_id];
 
         return Object.assign({}, mappedDoc, {
           permission: {
