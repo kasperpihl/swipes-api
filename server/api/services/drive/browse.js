@@ -27,7 +27,7 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
       if (file.mimeType === 'application/vnd.google-apps.folder') {
         return {
           title: file.name,
-          left_icon: 'folder',
+          left_icon: 'Folder',
           on_click: {
             type: 'query',
             query: {
