@@ -5,11 +5,24 @@ import Button from 'Button';
 class JiraAuth extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { loading: false, error: null };
+    this.onClick = this.onClick.bind(this);
   }
-  componentDidMount() {
+  onClick() {
+    this.setState({ loading: true, error: null });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+        error: 'Did not work. Tisho need to implement it!',
+      });
+    }, 500);
   }
   render() {
+    const {
+      loading,
+      error,
+    } = this.state;
+
     return (
       <div className="jira-auth">
         Authorize JIRA!
@@ -31,7 +44,12 @@ class JiraAuth extends Component {
           id="password"
           ref="password"
         />
-        <Button primary text="Authorize Jira" />
+        <Button
+          primary
+          text="Authorize Jira"
+          onClick={this.onClick}
+          loading={loading}
+        />
       </div>
     );
   }
