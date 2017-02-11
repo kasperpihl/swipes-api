@@ -1,0 +1,44 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.jira-auth {
+  @include size(100%);
+  @include flex(center, center, column);
+
+  &__title {
+    @include font(36px, $deepBlue-90, 700);
+    margin-bottom: 60px;
+  }
+
+  &__form {
+    @include size(100%, auto);
+    @include flex(center, center, column);
+    max-width: 480px;
+
+    & > * {
+      max-width: 400px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__error {
+    @include size(auto, 40px);
+    @include font(15px, $red-80, 40px);
+    margin-bottom: 15px;
+    opacity: 0;
+    transition: .2s ease;
+
+    &--show {
+      opacity: 1;
+      transition: .2s ease;
+    }
+  }
+
+  &__actions {
+    @include size(100%, auto);
+    max-width: 400px;
+    @include flex(center, flex-end);
+    margin-top: 45px;
+    margin-right: 55px;
+  }
+}
