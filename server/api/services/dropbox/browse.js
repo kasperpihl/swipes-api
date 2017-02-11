@@ -23,7 +23,7 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
       if (entry['.tag'] === 'folder') {
         return {
           title: entry.name,
-          left_icon: 'folder',
+          left_icon: 'Folder',
           on_click: {
             type: 'query',
             query: {
@@ -36,7 +36,6 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
 
       return {
         title: entry.name,
-        left_icon: '',
         on_click: {
           type: 'preview',
           preview: {

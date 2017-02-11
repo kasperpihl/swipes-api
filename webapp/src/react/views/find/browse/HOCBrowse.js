@@ -1,5 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
+import { map } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
+
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate } from 'classes/utils';
@@ -7,10 +9,15 @@ import BrowseSectionList from './BrowseSectionList';
 
 import './styles/browse.scss';
 
-class HOCBrowse extends Component {
+class HOCBrowse extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      queries: fromJS([]),
+      results: fromJS([]),
+      selectedIndexes: fromJS([]),
+      accountId: null,
+      serviceName: null,
       cache: {
 
       },
@@ -21,9 +28,12 @@ class HOCBrowse extends Component {
   }
 
   componentDidMount() {
-    this.loadPath({ path: '', title: 'Dropbox' });
   }
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.queries !== this.state.queries) {
+      console.log('updated q', this.state);
+      this.fetchQuery();
+    }
     if (prevState.paths.length !== this.state.paths.length) {
       setTimeout(() => {
         const { scroller } = this.refs;
@@ -35,14 +45,28 @@ class HOCBrowse extends Component {
       }, 600);
     }
   }
-  componentWillUnmount() {
-    this._unmounted = true;
-  }
-  updateCacheAtPath(path, result) {
-    const { cache } = this.state;
-    cache[`${path}`] = result;
-    if (!this._unmounted) {
-      this.setState({ cache });
+  fetchQuery() {
+    const {
+      queries,
+      results,
+      serviceName,
+      accountId,
+    } = this.state;
+
+    if (queries.size !== results.size) {
+      const query = queries.last();
+      const { request } = this.props;
+      request('services.browse', {
+        service_name: serviceName,
+        account_id: accountId,
+        query,
+      }).then((res) => {
+        console.log(res);
+
+        if (res && res.ok) {
+          this.setState({ results: results.push(res.result) });
+        }
+      });
     }
   }
   loadPath(entry, depth) {
@@ -74,25 +98,34 @@ class HOCBrowse extends Component {
       }
     });
   }
-  clickedItem(depth, entry) {
-    if (entry.type === 'folder') {
-      this.loadPath(entry, depth);
+  clickedItem(depth, i, entry) {
+    console.log(depth, entry);
+    const { queries, results, selectedIndexes } = this.state;
+    if (typeof depth !== 'number') {
+      // sidebar
+      console.log(i, entry);
+
+      this.setState({
+        queries: queries.clear().push(null),
+        results: results.clear(),
+        selectedIndexes: selectedIndexes.clear(),
+        serviceName: entry.serviceName,
+        accountId: entry.accountId,
+      });
     } else {
-      const { accountId } = this.props;
-      const link = {
-        service: {
-          id: `rev:${entry.id}`,
-          name: 'dropbox',
-          type: 'file',
-        },
-        permission: {
-          account_id: accountId,
-        },
-        meta: {
-          title: entry.title,
-        },
-      };
-      this.callDelegate('onPreviewLink', link);
+      const r = results.get(depth).items[i];
+      console.log(r);
+      if (r && r.on_click.type === 'query') {
+        const query = r.on_click.query;
+        console.log('setting query', depth);
+        this.setState({
+          queries: queries.setSize(depth + 1).push(query),
+          results: results.setSize(depth + 1),
+          selectedIndexes: selectedIndexes.setSize(depth).push(i),
+        });
+      } else if (r && r.on_click.type === 'preview') {
+
+      }
     }
   }
   clickedBack() {
@@ -100,30 +133,36 @@ class HOCBrowse extends Component {
     paths.pop();
     this.setState({ paths });
   }
-  mapResults(entries) {
-    return entries.map(ent => ({
-      title: ent.name,
-      path: ent.path_lower,
-      path_display: ent.path_display,
-      type: ent['.tag'],
-      id: ent.rev || ent.path_lower,
-      leftIcon: (ent['.tag'] === 'folder' ? 'Folder' : undefined),
-      rightIcon: (ent['.tag'] === 'folder' ? 'ArrowRightLine' : undefined),
+  mapResults(items) {
+    return items.map(item => ({
+      title: item.title,
+      leftIcon: item.left_icon,
+      rightIcon: (item.on_click.type === 'query') ? 'ArrowRightLine' : undefined,
     }));
   }
   renderSidebarSection() {
+    const { me, services } = this.props;
+    const myServices = me.get('services')
+                          .filter(s => services.getIn([s.get('service_id'), 'browse']))
+                          .sort((a, b) => a.get('service_name').localeCompare(b.get('service_name')));
+    const { accountId, serviceName } = this.state;
+    let selectedIndex;
+
     const props = {
-      selectedItemId: 'dropbox',
+      delegate: this,
       sections: [{
         title: 'Services',
-        items: [
-          { id: 'dropbox', title: 'Dropbox' },
-          { id: 'evernote', title: 'Evernote' },
-          { id: 'box', title: 'Box' },
-          { id: 'slack', title: 'Slack' },
-          { id: 'Invision', title: 'Invision' },
-          { id: 'notes', title: 'Swipes Notes' },
-        ],
+        items: myServices.map((s, i) => {
+          if (s.get('id') === accountId && s.get('service_name') === serviceName) {
+            selectedIndex = i;
+          }
+          return {
+            id: s.get('service_name'),
+            serviceName: s.get('service_name'),
+            accountId: s.get('id'),
+            title: services.getIn([s.get('service_id'), 'title']),
+          };
+        }).toArray(),
       }, {
         title: 'Shortcuts',
         items: [
@@ -138,29 +177,32 @@ class HOCBrowse extends Component {
         ],
       }],
     };
+    props.selectedIndex = selectedIndex;
     return <BrowseSectionList {...props} />;
   }
   renderHorizontalSections() {
     const {
-      paths,
-      selectedItemIds,
-      cache,
+      queries,
+      selectedIndexes,
+      results,
     } = this.state;
-    return paths.map((p, i) => {
-      const section = {
-        title: p.title,
-      };
-      const c = cache[p.path];
-      if (c) {
-        section.loading = false;
-        section.items = c;
+
+    return queries.map((q, i) => {
+      const r = results.get(i);
+      let sections;
+      if (r) {
+        sections = [{
+          title: r.title,
+          items: this.mapResults(r.items),
+        }];
       }
+
       const props = {
         depth: i,
         delegate: this,
-        selectedItemId: selectedItemIds[i],
-        loading: !section.items,
-        sections: [section],
+        selectedItemId: selectedIndexes.get(i),
+        loading: !r,
+        sections,
       };
       return <BrowseSectionList key={i} {...props} />;
     });
@@ -183,12 +225,16 @@ const { string, func, object } = PropTypes;
 HOCBrowse.propTypes = {
   accountId: string,
   request: func,
+  me: map,
+  services: map,
   delegate: object,
 };
 
 function mapStateToProps(state) {
   const accountId = state.getIn(['me', 'services']).find(s => s.get('service_name') === 'dropbox').get('id');
   return {
+    services: state.getIn(['main', 'services']),
+    me: state.get('me'),
     accountId,
   };
 }

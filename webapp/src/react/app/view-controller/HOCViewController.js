@@ -183,7 +183,6 @@ class HOCViewController extends Component {
     if (!navId) {
       className = 'view-controller--empty';
     }
-    console.log('target', target);
 
     if (target && target === 'secondary' && navId && secondaryOverlay) {
       className += ' view-controller--overlay';

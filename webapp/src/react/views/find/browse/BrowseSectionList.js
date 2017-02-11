@@ -10,24 +10,20 @@ class BrowseSectionList extends Component {
     super(props);
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate, props.depth);
-    this.clickedItemCached = setupCachedCallback(this.clickedItem, this);
+    this.clickedItemCached = setupCachedCallback(this.callDelegate.bind(null, 'clickedItem'));
     // now use events as onClick: this.clickedItemCached(i)
   }
   componentDidMount() {
   }
-  clickedItem(i, item) {
-    this.callDelegate('clickedItem', item);
-  }
-  renderSectionItems(items) {
-    const { selectedItemId } = this.props;
+  renderSectionItems(sectionI, items) {
+    const { selectedIndex, selectedSectionIndex = 0 } = this.props;
     if (!items || !items.length) {
       return undefined;
     }
     return items.map((item, i) => (
       <BrowseSectionItem
         key={`item${i}`}
-        id={item.id}
-        selected={(item.id === selectedItemId)}
+        selected={(i === selectedIndex && sectionI === selectedSectionIndex)}
         onClick={this.clickedItemCached(i, item)}
         title={item.title}
         leftIcon={item.leftIcon}
@@ -44,7 +40,7 @@ class BrowseSectionList extends Component {
     const sectionsHTML = sections.map((s, i) => (
       <div className="browse-section" key={i}>
         <div className="browse-section__title">{s.title}</div>
-        {this.renderSectionItems(s.items)}
+        {this.renderSectionItems(i, s.items)}
       </div>
       ));
 
@@ -61,16 +57,15 @@ class BrowseSectionList extends Component {
 
 export default BrowseSectionList;
 
-const { object, arrayOf, shape, string, bool } = PropTypes;
+const { object, arrayOf, shape, string, bool, number } = PropTypes;
 
 BrowseSectionList.propTypes = {
   delegate: object,
   loading: bool,
-  selectedItemId: string,
+  selectedIndex: number,
   sections: arrayOf(shape({
     title: string,
     items: arrayOf(shape({
-      id: string,
       title: string,
       leftIcon: string,
       rightIcon: string,
