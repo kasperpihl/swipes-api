@@ -24,6 +24,8 @@
 
        "SW_GMAIL_REDIRECT_URI": "https://staging.swipesapp.com/oauth-success.html",
 
+       "SW_JIRA_REDIRECT_URI": "https://staging.swipesapp.com/oauth-success.html",
+
        "SW_AMAZON_QUEUE_ACCESS_KEY_ID": "AKIAJYHNP3XSVYNJK7OA",
        "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY": "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",
        "SW_AMAZON_QUEUE_HOST": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo",

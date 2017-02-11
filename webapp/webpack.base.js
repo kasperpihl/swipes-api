@@ -37,6 +37,7 @@ module.exports = {
     app: [
       './src/index'
     ],
+    jira: [ './src/jira-index' ],
     vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
@@ -51,6 +52,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
       chunks: ['vendor', 'app']
+    }),
+    new HtmlWebpackPlugin({
+      template: 'statics/jira-auth.html',
+      chunks: ['vendor', 'jira']
     }),
     new webpack.ProvidePlugin({
       "PDFJS": "pdfjs-dist",

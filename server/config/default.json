@@ -35,6 +35,9 @@
     "clientSecret": "KittPpq9liOYxktfVptv_kYr",
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
+  "jira": {
+    "redirectUri": "http://localhost:3000/oauth-success.html"
+  },
   "amazonQueue": {
     "accessKeyId": "AKIAJYHNP3XSVYNJK7OA",
     "secretAccessKey": "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",
