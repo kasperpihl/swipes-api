@@ -9,8 +9,7 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
   const method = 'files.list';
   const params = {
     orderBy: 'folder',
-    q: `'${path}' in parents ${sharedWithMeFilter}`,
-    pageSize: '1',
+    q: `'${path}' in parents ${sharedWithMeFilter} and trashed = false`,
   };
 
   if (page) {
@@ -41,7 +40,6 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
 
       return {
         title: file.name,
-        left_icon: '',
         on_click: {
           type: 'preview',
           preview: {
