@@ -25,7 +25,7 @@ class ResultItem extends Component {
 
     if (obj.src) {
       className += ' result__icon--img';
-      children = <img src={obj.src} />;
+      children = <img role="presentation" src={obj.src} />;
     } else if (obj.icon) {
       className += ' result__icon--svg';
       children = <Icon svg={obj.icon} />;
@@ -124,7 +124,7 @@ class ResultItem extends Component {
   }
 }
 
-const { shape, string, func, object, bool } = PropTypes;
+const { shape, string, func, bool } = PropTypes;
 
 const iconProps = shape({
   src: string,
@@ -142,7 +142,6 @@ const iconProps = shape({
 });
 
 ResultItem.propTypes = {
-  delegate: object,
   onClick: func,
   leftIcon: iconProps,
   title: string,

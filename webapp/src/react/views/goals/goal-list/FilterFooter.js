@@ -13,13 +13,13 @@ class FilterFooter extends Component {
   toggleCompleted() {
   }
   render() {
-    const { status, showCompleted, disableEdit } = this.props;
-    let toggleClass = 'filter-footer__button filter-footer__button--toggle';
+    const { status, disableEdit } = this.props;
+    // let toggleClass = 'filter-footer__button filter-footer__button--toggle';
     let editClass = 'filter-footer__button filter-footer__button--edit';
 
-    if (showCompleted) {
+    /* if (showCompleted) {
       toggleClass += ' filter-footer__button--active';
-    }
+    }*/
 
     if (disableEdit) {
       editClass += ' filter-footer__button--hide';
@@ -47,6 +47,5 @@ const { string, object, bool } = PropTypes;
 FilterFooter.propTypes = {
   status: string,
   delegate: object,
-  showCompleted: bool,
   disableEdit: bool,
 };

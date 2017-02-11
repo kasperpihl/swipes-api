@@ -52,7 +52,6 @@ class BrowserNavBar extends Component {
   renderTitleURL() {
     const {
       title,
-      url,
     } = this.props;
 
     return (
@@ -103,5 +102,4 @@ BrowserNavBar.propTypes = {
   backEnabled: bool,
   forwardEnabled: bool,
   title: string,
-  url: string,
 };

@@ -2,10 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import SWView from 'SWView';
 import { setupDelegate } from 'classes/utils';
 import HOCBrowse from './browse/HOCBrowse';
 import Find from './Find';
-import SWView from 'SWView';
+
 import './styles/find.scss';
 
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
@@ -42,9 +43,6 @@ class HOCFind extends Component {
       }];
     }
     preview(obj, { buttons });
-  }
-  findItemShare() {
-    // const { searchResults } = this.props;
   }
   findItemAction(i) {
     const { searchResults, actionCallback } = this.props;
@@ -101,11 +99,12 @@ class HOCFind extends Component {
   }
 }
 
-const { func, bool, string } = PropTypes;
+const { func, bool, string, object } = PropTypes;
 
 HOCFind.propTypes = {
   actionCallback: func,
   actionLabel: string,
+  delegate: object,
   preview: func,
   search: func,
   searching: bool,

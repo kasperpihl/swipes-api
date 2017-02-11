@@ -40,11 +40,12 @@ const NotificationWrapper = (props) => {
 
 export default NotificationWrapper;
 
-const { string, func, oneOfType, array, object } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 NotificationWrapper.propTypes = {
   iconBgColor: string,
-  children: oneOfType([array, object]),
+  message: string,
+  unread: bool,
   timeago: string,
   svg: string,
   onClick: func,

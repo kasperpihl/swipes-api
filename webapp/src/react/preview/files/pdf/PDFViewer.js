@@ -38,7 +38,7 @@ class PDFViewer extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentWillMount() {
-    const { page } = this.state;
+    // const { page } = this.state;
 
     this.timeout = setTimeout(() => {
       this.setState({ shown: false });
@@ -46,8 +46,6 @@ class PDFViewer extends Component {
   }
   componentWillUnmount() {
     clearTimeout(this.timeout);
-  }
-  componentDidMount() {
   }
   onDocumentComplete(pages) {
     const { fileLoaded } = this.props;

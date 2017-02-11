@@ -6,7 +6,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import './styles/goal-list-item.scss';
-
+/* global msgGen */
 class GoalListItem extends Component {
   constructor(props) {
     super(props);
