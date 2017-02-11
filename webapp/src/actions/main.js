@@ -124,7 +124,10 @@ export const note = {
 // ======================================================
 export const search = query => (dp) => {
   dp({ type: types.SEARCH, query });
-  dp(a.api.request('search', { q: query })).then((res) => {
+  if (!query || !query.length) {
+    return dp({ type: types.SEARCH_RESULTS, result: null });
+  }
+  return dp(a.api.request('search', { q: query })).then((res) => {
     if (res && res.ok) {
       dp({ type: types.SEARCH_RESULTS, result: res.mappedResults });
     } else {

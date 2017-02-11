@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
-import BrowseSectionItem from './BrowseSectionItem';
 import Loader from 'components/loaders/Loader';
+import BrowseSectionItem from './BrowseSectionItem';
 
 import './styles/section-list.scss';
 
@@ -15,16 +15,16 @@ class BrowseSectionList extends Component {
   }
   componentDidMount() {
   }
-  renderSectionItems(sectionI, items) {
-    const { selectedIndex, selectedSectionIndex = 0 } = this.props;
+  renderSectionItems(items) {
+    const { selectedId } = this.props;
     if (!items || !items.length) {
       return undefined;
     }
     return items.map((item, i) => (
       <BrowseSectionItem
         key={`item${i}`}
-        selected={(i === selectedIndex && sectionI === selectedSectionIndex)}
-        onClick={this.clickedItemCached(i, item)}
+        selected={(item.id === selectedId)}
+        onClick={this.clickedItemCached(item.id, i, item)}
         title={item.title}
         leftIcon={item.leftIcon}
         rightIcon={item.rightIcon}
@@ -40,7 +40,7 @@ class BrowseSectionList extends Component {
     const sectionsHTML = sections.map((s, i) => (
       <div className="browse-section" key={i}>
         <div className="browse-section__title">{s.title}</div>
-        {this.renderSectionItems(i, s.items)}
+        {this.renderSectionItems(s.items)}
       </div>
       ));
 
@@ -61,11 +61,13 @@ const { object, arrayOf, shape, string, bool, number } = PropTypes;
 
 BrowseSectionList.propTypes = {
   delegate: object,
+  depth: number,
   loading: bool,
-  selectedIndex: number,
+  selectedId: string,
   sections: arrayOf(shape({
     title: string,
     items: arrayOf(shape({
+      id: string.isRequired,
       title: string,
       leftIcon: string,
       rightIcon: string,

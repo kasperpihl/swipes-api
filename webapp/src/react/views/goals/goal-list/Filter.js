@@ -24,7 +24,15 @@ class Filter extends Component {
         return f;
       }
 
-      return <button onClick={this.onClickCached(f.id, f)} className="sw-filter__selector" key={f.id}>{f.string}</button>;
+      return (
+        <button
+          onClick={this.onClickCached(f.id, f)}
+          className="sw-filter__selector"
+          key={f.id}
+        >
+          {f.string}
+        </button>
+      );
     });
   }
   render() {

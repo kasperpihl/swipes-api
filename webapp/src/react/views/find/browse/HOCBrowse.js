@@ -18,11 +18,6 @@ class HOCBrowse extends PureComponent {
       selectedIndexes: fromJS([]),
       accountId: null,
       serviceName: null,
-      cache: {
-
-      },
-      paths: [],
-      selectedItemIds: [],
     };
     this.callDelegate = setupDelegate(props.delegate);
   }
@@ -34,7 +29,7 @@ class HOCBrowse extends PureComponent {
       console.log('updated q', this.state);
       this.fetchQuery();
     }
-    if (prevState.paths.length !== this.state.paths.length) {
+    /* if (prevState.paths.length !== this.state.paths.length) {
       setTimeout(() => {
         const { scroller } = this.refs;
         if (scroller) {
@@ -43,7 +38,7 @@ class HOCBrowse extends PureComponent {
           scroller.scrollLeft = Math.max(scrollW - clientW, 0);
         }
       }, 600);
-    }
+    }*/
   }
   fetchQuery() {
     const {
@@ -69,13 +64,17 @@ class HOCBrowse extends PureComponent {
       });
     }
   }
-  clickedItem(depth, i, entry) {
+  clickedItem(depth, id, i, entry) {
     const { queries, results, selectedIndexes } = this.state;
+
+    console.log('ss', depth, i, entry);
     if (typeof depth !== 'number') {
+      // console.log('ss', sectionI, i);
       this.setState({
         queries: queries.clear().push(null),
         results: results.clear(),
         selectedIndexes: selectedIndexes.clear(),
+        selectedId: id,
         serviceName: entry.serviceName,
         accountId: entry.accountId,
       });
@@ -89,12 +88,13 @@ class HOCBrowse extends PureComponent {
           selectedIndexes: selectedIndexes.setSize(depth).push(i),
         });
       } else if (r && r.on_click.type === 'preview') {
-
+        this.callDelegate('onPreviewLink', r.on_click.preview);
       }
     }
   }
   mapResults(items) {
-    return items.map(item => ({
+    return items.map((item, i) => ({
+      id: `id${i}`,
       title: item.title,
       leftIcon: item.left_icon,
       rightIcon: (item.on_click.type === 'query') ? 'ArrowRightLine' : undefined,
@@ -105,24 +105,19 @@ class HOCBrowse extends PureComponent {
     const myServices = me.get('services')
                           .filter(s => services.getIn([s.get('service_id'), 'browse']))
                           .sort((a, b) => a.get('service_name').localeCompare(b.get('service_name')));
-    const { accountId, serviceName } = this.state;
-    let selectedIndex;
+    const { selectedId } = this.state;
 
     const props = {
       delegate: this,
+      selectedId,
       sections: [{
         title: 'Services',
-        items: myServices.map((s, i) => {
-          if (s.get('id') === accountId && s.get('service_name') === serviceName) {
-            selectedIndex = i;
-          }
-          return {
-            id: s.get('service_name'),
-            serviceName: s.get('service_name'),
-            accountId: s.get('id'),
-            title: services.getIn([s.get('service_id'), 'title']),
-          };
-        }).toArray(),
+        items: myServices.map(s => ({
+          id: `${s.get('service_name')}-${s.get('id')}`,
+          serviceName: s.get('service_name'),
+          accountId: s.get('id'),
+          title: services.getIn([s.get('service_id'), 'title']),
+        })).toArray(),
       }, {
         title: 'Shortcuts',
         items: [
@@ -137,7 +132,6 @@ class HOCBrowse extends PureComponent {
         ],
       }],
     };
-    props.selectedIndex = selectedIndex;
     return <BrowseSectionList {...props} />;
   }
   renderHorizontalSections() {

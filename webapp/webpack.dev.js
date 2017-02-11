@@ -16,7 +16,7 @@ config.plugins = config.plugins.concat([
 
 // Add the hot reloader to dev environ
 const currentJS = config.module.loaders[0].loaders;
-config.module.loaders[0].loaders = ['react-hot-loader/webpack'].concat(currentJS);  //.concat(['eslint-loader']);
+config.module.loaders[0].loaders = ['react-hot-loader/webpack'].concat(currentJS).concat(['eslint-loader']);
 config.devServer.hot = true;
 
 

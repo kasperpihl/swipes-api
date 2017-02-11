@@ -38,7 +38,6 @@ class HandoffMessage extends Component {
     const {
       user,
       message,
-      at,
     } = this.props;
 
     let name;

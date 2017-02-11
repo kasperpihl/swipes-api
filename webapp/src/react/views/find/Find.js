@@ -9,25 +9,6 @@ class Find extends Component {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
   }
-
-  renderSubTitle() {
-    const { results, searchQuery, searching } = this.props;
-    let string = '';
-    if (results && !searching && searchQuery && searchQuery.length) {
-      string = `${results.size} results found for '${searchQuery}'`;
-    }
-    return (
-      <div className="find__subtitle">{string}</div>
-    );
-  }
-  renderHeader() {
-    return (
-      <div className="find__header">
-        {this.renderInput()}
-        {this.renderSubTitle()}
-      </div>
-    );
-  }
   renderLoader() {
     const {
       searching,

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
-import { map } from 'react-immutable-proptypes';
 
 import './styles/handoff-header.scss';
 
