@@ -55,7 +55,9 @@ export default class OrgDashboard extends Component {
   render() {
     return (
       <div className="org-dashboard">
-        {this.renderNotifications()}
+        <div className="org-dashboard__notifications">
+          {this.renderNotifications()}
+        </div>
         {this.renderUnreadBar()}
       </div>
     );

@@ -198,6 +198,44 @@ const serviceDoStream = valLocals('serviceDoStream', {
 
   service.requestStream(options, res, next);
 });
+const serviceDoBrowse = valLocals('serviceDoBrowse', {
+  user_id: string.require(),
+  service_auth_data: object.require(),
+  service: object.require(),
+  account_id: string.require(),
+  query: object,
+  page: object,
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    service_auth_data,
+    service,
+    account_id,
+    query = null,
+    page = null,
+  } = res.locals;
+
+  const options = {
+    auth_data: service_auth_data,
+    query,
+    page,
+    account_id,
+    user: { user_id },
+  };
+
+  return service.browse(options, (err, result) => {
+    if (err) {
+      console.log(err);
+      return next(new SwipesError('serviceBrowse - Something went wrong with the browse request', err));
+    }
+
+    setLocals({
+      result,
+    });
+
+    return next();
+  });
+});
 const servicePreview = valLocals('servicePreview', {
   service_auth_data: object.require(),
   service: object.require(),
@@ -348,4 +386,5 @@ export {
   serviceGetAuthData,
   serviceUpdateAuthData,
   serviceDoStream,
+  serviceDoBrowse,
 };

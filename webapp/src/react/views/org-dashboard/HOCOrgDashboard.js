@@ -157,7 +157,7 @@ class HOCOrgDashboard extends Component {
       notifications = notifications.map(n => this.messageForNotification(n));
     }
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView header={this.renderHeader()} maxWidth={780}>
         <OrgDashboard delegate={this} notifications={notifications} />
       </SWView>
     );

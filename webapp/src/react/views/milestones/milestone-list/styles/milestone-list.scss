@@ -6,7 +6,6 @@
   @include flex(flex);
   @include flex($horizontal: space-between);
   flex-wrap: wrap;
-  max-width: calc(372px * 2 + 90px);
   padding-top: 60px;
   position: relative;
 

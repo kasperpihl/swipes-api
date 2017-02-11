@@ -132,6 +132,10 @@ const requestStream = ({ auth_data, urlData, user }, res, next) => {
       }
 
       return driveMethod(methodOptions)
+      .on('response', (response) => {
+        response.headers['Content-Type'] = urlData.metadata.mimeType;
+        response.headers['Content-Disposition'] = `attachment; filename="${urlData.metadata.name}"`;
+      })
       .on('end', () => {
         res.end();
       })

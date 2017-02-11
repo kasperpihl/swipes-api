@@ -22,16 +22,6 @@ notAuthed.all('/stream',
     id: string.require(),
   }),
   tempStreamingLinkGetSingle,
-  // (req, res, next) => {
-  //   const {
-  //     urlData,
-  //   } = res.locals;
-  //
-  //   res.set('Content-Type', urlData.metadata.mimeType);
-  //   res.set('Content-Disposition', `attachment; filename="${urlData.metadata.name}"`);
-  //
-  //   return next();
-  // },
   serviceWithAuthGet,
   serviceImport,
   serviceDoStream,

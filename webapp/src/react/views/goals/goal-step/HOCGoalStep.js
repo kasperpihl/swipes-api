@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
+import Measure from 'react-measure';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
@@ -30,10 +31,11 @@ class HOCGoalStep extends Component {
       isSendingNotification: false,
       isSubmitting: false,
       handoff: this.getEmptyHandoff(),
+      showSide: true,
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick']);
+    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick', 'onMeasure']);
     this.callDelegate = setupDelegate(props.delegate);
   }
 
@@ -59,6 +61,13 @@ class HOCGoalStep extends Component {
     const { hideNote, sideNoteId } = this.props;
     if (sideNoteId) {
       hideNote(sideNoteId);
+    }
+  }
+  onMeasure(dim) {
+    if (dim.width < 1200) {
+      this.setState({ showSide: false });
+    } else {
+      this.setState({ showSide: true });
     }
   }
   onFlag(id) {
@@ -277,7 +286,9 @@ class HOCGoalStep extends Component {
   }
   renderSide() {
     const { goal, me, sideNoteId } = this.props;
-    if (sideNoteId) {
+    const { showSide } = this.state;
+
+    if (sideNoteId, !showSide) {
       return undefined;
     }
     return (
@@ -299,12 +310,14 @@ class HOCGoalStep extends Component {
       className += ' goal-step__handing-off';
     }
     return (
-      <SWView>
-        <div className={className}>
-          {this.renderContent()}
-          {this.renderSide()}
-        </div>
-      </SWView>
+      <Measure onMeasure={this.onMeasure}>
+        <SWView>
+          <div className={className}>
+            {this.renderContent()}
+            {this.renderSide()}
+          </div>
+        </SWView>
+      </Measure>
     );
   }
 }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
 import Button from 'Button';
+import SWView from 'SWView';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
 
@@ -355,13 +356,15 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <div className="add-goal">
-        {this.renderSteps()}
-        <div className={infoClass}>
-          {this.renderAttachments()}
+      <SWView maxWidth={780}>
+        <div className="add-goal">
+          {this.renderSteps()}
+          <div className={infoClass}>
+            {this.renderAttachments()}
+          </div>
+          {this.renderActions()}
         </div>
-        {this.renderActions()}
-      </div>
+      </SWView>
     );
   }
 }

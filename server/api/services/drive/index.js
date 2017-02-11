@@ -10,6 +10,9 @@ import {
   preview,
 } from './preview';
 import {
+  browse,
+} from './browse';
+import {
   mapSearch,
 } from './search';
 
@@ -19,5 +22,6 @@ export {
   request,
   requestStream,
   preview,
+  browse,
   mapSearch,
 };

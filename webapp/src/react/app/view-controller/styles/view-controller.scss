@@ -2,10 +2,10 @@
 @import '~styles/_mixins.scss/';
 
 $contentOverflowPadding: 45px;
-$innercContentWidth: calc(100% - #{$contentOverflowPadding});
+$innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 .view-controller {
-  @include size(calc(100% - 60px), 100%);
+  @include size(100%);
   @include flex(column);
   position: relative;
 
@@ -16,37 +16,73 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
   &:last-child {
     border-left: 1px solid $deepBlue-10;
   }
+
+  &--overlay {
+    @include size(60%, 100%);
+    position: absolute;
+    right: 0; top: 0;
+    z-index: 99;
+    background-color: $bg;
+    box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+    animation: slideViewIn .5s ease forwards;
+    transform: translateX(100%);
+
+    @keyframes slideViewIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0%);
+      }
+    }
+  }
 }
 
 .sw-view {
+  $b: &;
   @include size(100%);
   @include flex(column);
-  position: relative;
 
   &__nav-bar {
     @include size($innercContentWidth, auto);
     @include flex(none);
-		margin: 0 $contentOverflowPadding;
-    position: relative;
+    margin: 0 $contentOverflowPadding;
+
+    &--center {
+      @include flex(flex-start, center);
+    }
   }
 
   &__header {
     @include size($innercContentWidth, auto);
     @include flex(none);
-		margin: 0 $contentOverflowPadding;
-    position: relative;
+    margin: 0 $contentOverflowPadding;
   }
 
   &__scroll {
     @include size(100%);
-    position: relative;
-		overflow-y: auto;
+    overflow-y: auto;
+  }
+
+  &__container {
+    @include size($innercContentWidth, 100%);
+    margin: 0 $contentOverflowPadding;
+    min-height: 100%;
   }
 
   &__content {
-    @include size($innercContentWidth, 100%);
-		margin: 0 $contentOverflowPadding;
-    min-height: 100%;
-    position: relative;
+    @include size(100%);
+  }
+
+  &--center-content {
+    @include flex(center, flex-start, column);
+
+    #{$b}__container {
+      @include flex(flex-start, center);
+    }
+
+    #{$b}__content {
+      @include flex(flex-start, center);
+    }
   }
 }

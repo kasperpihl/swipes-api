@@ -6,10 +6,11 @@
 }
 
 .browse-container {
-  @include size(100%, 100%);
+  @include size(calc(100% - 48px), 100%);
   @include flex(flex);
   position: relative;
   padding-top: 40px;
+  margin-left: 48px;
 
   &:before {
     content: '';
