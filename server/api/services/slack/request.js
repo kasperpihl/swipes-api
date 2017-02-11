@@ -38,6 +38,8 @@ const requestStream = ({ auth_data, urlData, user }, res, next) => {
   .on('response', (response) => {
     response.headers['access-control-allow-origin'] = '*';
     response.headers['cache-control'] = 'no-cache';
+    response.headers['Content-Type'] = urlData.metadata.mimetype;
+    response.headers['Content-Disposition'] = `attachment; filename="${urlData.metadata.name}"`;
   })
   .on('end', () => {
     res.end();
