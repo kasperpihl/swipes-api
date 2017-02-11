@@ -8,13 +8,12 @@ class FloatingInput extends Component {
     this.state = {
       float: false,
       floatValue: 0,
-      value: null,
     };
 
     bindAll(this, ['floatFocus', 'floatBlur', 'onChange']);
   }
   onChange(e) {
-    this.setState({ value: e.target.value });
+    this.props.onChange(e.target.value, e);
   }
   floatFocus() {
     if (!this.state.float) {
@@ -32,7 +31,7 @@ class FloatingInput extends Component {
     this.setState({ floatValue: inputVal });
   }
   render() {
-    const { label, type, id, error } = this.props;
+    const { label, type, id, error, value } = this.props;
     let floatingClass = 'floating-label--inactive';
 
     if (this.state.float) {
@@ -52,10 +51,12 @@ class FloatingInput extends Component {
         <input
           ref="floatingInput"
           className="floating-label__input"
+          value={value}
           type={type}
           id={id}
           onFocus={this.floatFocus}
           onBlur={this.floatBlur}
+          onKeyDown={this.props.onKeyDown}
           onChange={this.onChange}
         />
         <label htmlFor={id} className="floating-label__label">{label}</label>
@@ -66,10 +67,13 @@ class FloatingInput extends Component {
 
 export default FloatingInput;
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 FloatingInput.propTypes = {
   label: string,
+  value: string.isRequired,
+  onChange: func.isRequired,
+  onKeyDown: func,
   error: string,
   type: string,
   id: string,
