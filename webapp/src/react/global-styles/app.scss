@@ -88,9 +88,3 @@ svg {
     position: fixed;
   }
 }
-
-.find-container {
-  @include size(calc(100% - 10px), 100%);
-  @include flex(flex);
-  position: relative;
-}

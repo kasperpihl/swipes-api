@@ -28,15 +28,20 @@ class SWView extends Component {
     );
   }
   render() {
-    const { children, maxWidth } = this.props;
+    const { children, maxWidth, disableScroll } = this.props;
     const styles = {};
+    let className = 'sw-view';
 
     if (maxWidth) {
       styles.maxWidth = `${maxWidth}px`;
     }
 
+    if (disableScroll) {
+      className += ' sw-view--no-scroll';
+    }
+
     return (
-      <div className="sw-view">
+      <div className={className}>
         {this.renderHeader()}
         <div className="sw-view__scroll">
           <div className="sw-view__container">
@@ -52,10 +57,11 @@ class SWView extends Component {
 
 export default SWView;
 
-const { element, number } = PropTypes;
+const { element, number, bool } = PropTypes;
 
 SWView.propTypes = {
   header: element,
   children: element,
   maxWidth: number,
+  disableScroll: bool,
 };
