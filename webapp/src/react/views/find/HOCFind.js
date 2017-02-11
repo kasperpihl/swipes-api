@@ -9,8 +9,6 @@ import HOCBrowse from './browse/HOCBrowse';
 import SearchResults from './SearchResults';
 import BrowseSectionList from './browse/BrowseSectionList';
 
-import './styles/find.scss';
-
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
 class HOCFind extends Component {
   constructor(props) {
