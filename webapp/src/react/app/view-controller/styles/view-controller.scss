@@ -2,40 +2,40 @@
 @import '~styles/_mixins.scss/';
 
 $contentOverflowPadding: 45px;
-$innercContentWidth: calc(100% - #{$contentOverflowPadding});
+$innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 .view-controller {
-  @include size(calc(100% - 60px), 100%);
+  @include size(100%);
   @include flex(column);
   position: relative;
 
   &--empty {
     display: none;
   }
+
+  &:last-child {
+    border-left: 1px solid $deepBlue-10;
+  }
 }
 
 .sw-view {
   @include size(100%);
   @include flex(column);
-  position: relative;
 
   &__nav-bar {
     @include size($innercContentWidth, auto);
     @include flex(none);
 		margin: 0 $contentOverflowPadding;
-    position: relative;
   }
 
   &__header {
     @include size($innercContentWidth, auto);
     @include flex(none);
 		margin: 0 $contentOverflowPadding;
-    position: relative;
   }
 
   &__scroll {
     @include size(100%);
-    position: relative;
 		overflow-y: auto;
   }
 
@@ -43,6 +43,5 @@ $innercContentWidth: calc(100% - #{$contentOverflowPadding});
     @include size($innercContentWidth, 100%);
 		margin: 0 $contentOverflowPadding;
     min-height: 100%;
-    position: relative;
   }
 }

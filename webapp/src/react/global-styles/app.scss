@@ -3,27 +3,17 @@
 
 #content {
   @include size(100%);
-  @include flex(flex-start, center);
-  overflow-y: auto;
-  position: relative;
+  @include flex(flex);
 
   .app {
     @include size(100%);
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    @include flex(column);
   }
 }
 
 .content-wrapper {
   @include size(100%);
   @include flex(flex);
-  position: relative;
-}
-
-.scroll-container {
-  @include size(100%);
-  overflow-y: scroll;
 }
 
 svg {
