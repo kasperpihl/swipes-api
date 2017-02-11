@@ -5,12 +5,18 @@ $contentOverflowPadding: 45px;
 $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 .view-controller {
-  @include size(100%);
+  @include size(50%, 100%);
   @include flex(column);
   position: relative;
 
+  @media screen and (max-width: 1200px) {
+    @include size(100%);
+  }
+
   &--empty {
-    display: none;
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
   }
 
   &:last-child {
@@ -18,23 +24,12 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
   }
 
   &--overlay {
-    @include size(60%, 100%);
+    @include size(60vw, 100%);
     position: absolute;
     right: 0; top: 0;
     z-index: 99;
     background-color: $bg;
     box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
-    animation: slideViewIn .5s ease forwards;
-    transform: translateX(100%);
-
-    @keyframes slideViewIn {
-      from {
-        transform: translateX(100%);
-      }
-      to {
-        transform: translateX(0%);
-      }
-    }
   }
 }
 
@@ -76,13 +71,16 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
   &--center-content {
     @include flex(center, flex-start, column);
+    transition: .5 ease;
 
     #{$b}__container {
       @include flex(flex-start, center);
+      transition: .5 ease;
     }
 
     #{$b}__content {
       @include flex(flex-start, center);
+      transition: .5 ease;
     }
   }
 }

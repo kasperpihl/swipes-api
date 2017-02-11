@@ -7,7 +7,7 @@ import Navbar from 'components/nav-bar/NavBar';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback, bindAll, debounce } from 'classes/utils';
 import './styles/view-controller';
 
 const reservedNavIds = [
@@ -26,7 +26,14 @@ class HOCViewController extends Component {
     this.bindedNavPush = props.push.bind(this, props.target);
     this.bindedNavPop = props.pop.bind(this, props.target);
     this.onContext = setupCachedCallback(this.callContentView.bind(this, 'onContextClick'), this);
-    this.onMeasure = this.onMeasure.bind(this);
+    this.debouncedUpdateDimensions = debounce(this.updateDimensions, 1);
+    bindAll(this, ['onMeasure', 'debouncedUpdateDimensions', 'debouncedUpdateDimensions']);
+  }
+  componentWillMount() {
+    this.debouncedUpdateDimensions();
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.debouncedUpdateDimensions);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.upcomingId !== this.props.upcomingId) {
@@ -35,9 +42,16 @@ class HOCViewController extends Component {
   }
   componentWillUnmount() {
     this._contentView = null;
+    window.removeEventListener('resize', this.debouncedUpdateDimensions);
   }
-  viewDidLoad(view) {
-    this._contentView = view;
+  updateDimensions() {
+    console.log('window.innerWidth', window.innerWidth);
+
+    if (window.innerWidth <= 1200) {
+      this.setState({ secondaryOverlay: true });
+    } else {
+      this.setState({ secondaryOverlay: false });
+    }
   }
   onMeasure(dim) {
     if (dim.width < 1200) {
@@ -45,12 +59,9 @@ class HOCViewController extends Component {
     } else {
       this.setState({ centerNav: false });
     }
-
-    if (dim.width < 800) {
-      this.setState({ secondaryOverlay: true });
-    } else {
-      this.setState({ secondaryOverlay: false });
-    }
+  }
+  viewDidLoad(view) {
+    this._contentView = view;
   }
   navbarInputKeyUp(e) {
     this.callContentView('onInputKeyUp', e);
