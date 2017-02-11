@@ -3,8 +3,9 @@ import { setupDelegate } from 'classes/utils';
 import { list } from 'react-immutable-proptypes';
 import Loader from 'components/loaders/Loader';
 import FindItem from './FindItem';
+import './styles/search-results.scss';
 
-class Find extends Component {
+class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
@@ -42,14 +43,14 @@ class Find extends Component {
     ));
 
     return (
-      <div className="find__results">
+      <div className="search__result">
         {renderedResults}
       </div>
     );
   }
   render() {
     return (
-      <div className="find">
+      <div className="search">
         {this.renderResults()}
         {this.renderLoader()}
       </div>
@@ -57,10 +58,10 @@ class Find extends Component {
   }
 }
 
-export default Find;
+export default SearchResults;
 
 const { object, string, bool } = PropTypes;
-Find.propTypes = {
+SearchResults.propTypes = {
   delegate: object,
   actionLabel: string,
   results: list,

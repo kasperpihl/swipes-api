@@ -67,14 +67,14 @@ class FloatingInput extends Component {
 
 export default FloatingInput;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 FloatingInput.propTypes = {
   label: string,
   value: string.isRequired,
   onChange: func.isRequired,
   onKeyDown: func,
-  error: string,
+  error: bool,
   type: string,
   id: string,
 };

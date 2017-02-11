@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { api } from 'actions';
-import { Link } from 'react-router';
 import Icon from 'Icon';
 
 import './registration.scss';
@@ -15,6 +14,7 @@ class HOCRegistration extends Component {
     super(props);
     this.signin = this.signin.bind(this);
     this.signup = this.signup.bind(this);
+    this.state = { errorLabel: null };
   }
   componentDidUpdate() {
     const { token } = this.props;
@@ -24,10 +24,28 @@ class HOCRegistration extends Component {
     }
   }
   signin(data) {
-    this.props.request('users.signin', data);
+    this.signinOrUp('users.signin', data);
   }
   signup(data) {
-    this.props.request('users.signup', data);
+    this.signinOrUp('users.signup', data);
+  }
+  signinOrUp(endpoint, data) {
+    if (this.state.err !== null) {
+      this.setState({ errorLabel: null });
+    }
+    this.props.request(endpoint, data).then((res) => {
+      if (!res.ok) {
+        let label = 'Something went wrong :/';
+        console.log(res);
+        if (res.err === "body /users.signup: Invalid object['invitation_code']: Invalid invitation code") {
+          label = 'Invalid invitation code';
+        }
+        if (res.err === "body /users.signup: Invalid object['email']: did not match format") {
+          label = 'Not a valid email';
+        }
+        this.setState({ errorLabel: label });
+      }
+    });
   }
   renderWrapper(children) {
     const { route } = this.props;
@@ -62,12 +80,13 @@ class HOCRegistration extends Component {
   }
   render() {
     const { route } = this.props;
-
+    const { errorLabel, loading } = this.state;
+    const props = { errorLabel, loading };
     if (route.path === 'signin') {
-      return this.renderWrapper(<Signin onLogin={this.signin} />);
+      return this.renderWrapper(<Signin onLogin={this.signin} {...props} />);
     }
 
-    return this.renderWrapper(<Signup onSignup={this.signup} />);
+    return this.renderWrapper(<Signup onSignup={this.signup} {...props} />);
   }
 }
 

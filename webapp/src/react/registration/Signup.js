@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import Icon from 'Icon';
-// import SwipesBackgroundAnimation from './SwipesBackgroundAnimation';
+import { setupCachedCallback } from 'classes/utils';
 import FloatingInput from 'components/swipes-ui/FloatingInput';
 
 
@@ -9,22 +7,36 @@ export default class Signup extends Component {
   constructor(props) {
     super(props);
     this.signup = this.signup.bind(this);
+    this.state = {
+      name: '',
+      email: '',
+      password: '',
+      invCode: '',
+      organization: '',
+    };
+    this.cachedOnChange = setupCachedCallback(this.onChange, this);
   }
-  componentDidMount() {
+  onChange(key, value) {
+    if (this.props.loading) {
+      return;
+    }
+    this.setState({ [key]: value });
   }
   signup() {
-    const name = this.refs.name.state.value;
-    const email = this.refs.email.state.value;
-    const password = this.refs.password.state.value;
-    const organization = this.refs.organization.state.value;
-    const invcode = this.refs.invcode.state.value;
+    const {
+      name,
+      email,
+      password,
+      organization,
+      invCode,
+    } = this.state;
 
     const data = {
       email,
       name,
       password,
       repassword: password,
-      invitation_code: invcode,
+      invitation_code: invCode,
       organization,
     };
 
@@ -36,20 +48,63 @@ export default class Signup extends Component {
     e.preventDefault();
   }
   render() {
+    const {
+      errorLabel,
+    } = this.props;
+
+    const {
+      name,
+      email,
+      password,
+      organization,
+      invCode,
+    } = this.state;
+
     return (
       <form className="sign__form" action="" onSubmit={this.preventSubmit}>
         <br />
-        <FloatingInput label="Your Name" type="text" id="name" ref="name" />
-        <FloatingInput label="Email" type="email" id="email" ref="email" />
-        <FloatingInput label="Password" type="password" id="password" ref="password" />
+        <FloatingInput
+          label="Your Name"
+          type="text"
+          id="name"
+          value={name}
+          onChange={this.cachedOnChange('name')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Email"
+          type="email"
+          id="email"
+          value={email}
+          onChange={this.cachedOnChange('email')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Password"
+          type="password"
+          id="password"
+          value={password}
+          onChange={this.cachedOnChange('password')}
+          error={!!errorLabel}
+        />
         <FloatingInput
           label="Organization"
           type="text"
           id="organization"
-          ref="organization"
+          value={organization}
+          onChange={this.cachedOnChange('organization')}
+          error={!!errorLabel}
         />
-        <FloatingInput label="Invitation Code" type="text" id="invitation" ref="invcode" />
+        <FloatingInput
+          label="Invitation Code"
+          type="text"
+          id="invitation"
+          value={invCode}
+          onChange={this.cachedOnChange('invCode')}
+          error={!!errorLabel}
+        />
         <br />
+        <div className="sign__error-status">{errorLabel}</div>
         <input
           type="submit"
           className="sign__form__button sign__form__button--submit"
@@ -61,8 +116,9 @@ export default class Signup extends Component {
   }
 }
 
-const { func } = PropTypes;
+const { func, bool } = PropTypes;
 
 Signup.propTypes = {
   onSignup: func,
+  loading: bool,
 };

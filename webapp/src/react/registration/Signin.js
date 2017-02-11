@@ -1,20 +1,29 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import Icon from 'Icon';
-// import SwipesBackgroundAnimation from './SwipesBackgroundAnimation';
+import { setupCachedCallback } from 'classes/utils';
 import FloatingInput from 'components/swipes-ui/FloatingInput';
-
 
 export default class Signin extends Component {
   constructor(props) {
     super(props);
     this.signin = this.signin.bind(this);
+    this.state = {
+      email: '',
+      password: '',
+    };
+    this.cachedOnChange = setupCachedCallback(this.onChange, this);
   }
-  componentDidMount() {
+  onChange(key, value) {
+    if (this.props.loading) {
+      return;
+    }
+    this.setState({ [key]: value });
   }
   signin() {
-    const email = this.refs.username.state.value;
-    const password = this.refs.password.state.value;
+    const {
+      email,
+      password,
+    } = this.state;
+
     const data = {
       email,
       password,
@@ -26,7 +35,11 @@ export default class Signin extends Component {
     e.preventDefault();
   }
   render() {
-    const { errorLable, loading } = this.props;
+    const { errorLabel, loading } = this.props;
+    const {
+      email,
+      password,
+    } = this.state;
     let loadingClass = 'sign__form__loader';
 
     if (loading) {
@@ -40,18 +53,20 @@ export default class Signin extends Component {
           label="Email"
           type="email"
           id="email"
-          ref="username"
-          error={errorLable}
+          value={email}
+          onChange={this.cachedOnChange('email')}
+          error={!!errorLabel}
         />
         <FloatingInput
           label="Password"
           type="password"
           id="password"
-          ref="password"
-          error={errorLable}
+          value={password}
+          onChange={this.cachedOnChange('password')}
+          error={!!errorLabel}
         />
         <br />
-        <div className="sign__error-status">{errorLable}</div>
+        <div className="sign__error-status">{errorLabel}</div>
         <button
           className="sign__form__button sign__form__button--submit"
           onClick={this.signin}
@@ -68,6 +83,6 @@ const { func, string, bool } = PropTypes;
 
 Signin.propTypes = {
   onLogin: func,
-  errorLable: string,
+  errorLabel: string,
   loading: bool,
 };

@@ -6,7 +6,7 @@ import * as actions from 'actions';
 import SWView from 'SWView';
 import { setupDelegate } from 'classes/utils';
 import HOCBrowse from './browse/HOCBrowse';
-import Find from './Find';
+import SearchResults from './SearchResults';
 import BrowseSectionList from './browse/BrowseSectionList';
 
 import './styles/find.scss';
@@ -102,7 +102,7 @@ class HOCFind extends Component {
     }
     return (
       <SWView maxWidth={780}>
-        <Find
+        <SearchResults
           results={searchResults}
           searching={searching}
           actionLabel={actionLabel}
