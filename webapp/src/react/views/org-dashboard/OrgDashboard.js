@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'classes/utils';
 import NotificationWrapper from './NotificationWrapper';
-import UnreadBar from './UnreadBar';
 import './styles/org-dashboard';
 
 export default class OrgDashboard extends Component {
@@ -33,32 +32,12 @@ export default class OrgDashboard extends Component {
       );
     });
   }
-  renderUnreadBar() {
-    const { notifications } = this.props;
-    if (!notifications) {
-      return undefined;
-    }
-    const numberOfUnreads = notifications.filter(n => n && !n.get('seen')).size;
-    let title = 'You have no unread notifications';
-    if (numberOfUnreads) {
-      title = `You have ${numberOfUnreads} unread notification`;
-    }
-    if (numberOfUnreads > 1) title += 's';
-    return (
-      <UnreadBar
-        title={title}
-        btnLabel={numberOfUnreads ? 'Mark as seen' : 'Clear all'}
-        onClick={this.onClick}
-      />
-    );
-  }
   render() {
     return (
       <div className="org-dashboard">
         <div className="org-dashboard__notifications">
           {this.renderNotifications()}
         </div>
-        {this.renderUnreadBar()}
       </div>
     );
   }

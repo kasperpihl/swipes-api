@@ -7,7 +7,7 @@ import Navbar from 'components/nav-bar/NavBar';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
-import { bindAll, setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'classes/utils';
 import './styles/view-controller';
 
 const reservedNavIds = [
