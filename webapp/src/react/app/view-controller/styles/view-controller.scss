@@ -9,13 +9,11 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
   @include flex(column);
   position: relative;
   will-change: width;
-  transition: .5s .5s ease;
 
   &--empty {
     @include size(0%, 100%);
     border-left: 0px solid $deepBlue-10;
     will-change: width;
-    transition: .5s .5s ease;
   }
 
   &:last-child {
@@ -30,6 +28,11 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
     background-color: $bg;
     box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
   }
+
+  &__close-button {
+    left: 7px; top: 48px;
+    position: absolute;
+  }
 }
 
 .sw-view {
@@ -41,10 +44,6 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
     @include size($innercContentWidth, auto);
     @include flex(none);
     margin: 0 $contentOverflowPadding;
-
-    &--center {
-      @include flex(flex-start, center);
-    }
   }
 
   &__header {
@@ -66,20 +65,5 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
   &__content {
     @include size(100%);
-  }
-
-  &--center-content {
-    @include flex(center, flex-start, column);
-    transition: .5s ease;
-
-    #{$b}__container {
-      @include flex(flex-start, center);
-      transition: .5s ease;
-    }
-
-    #{$b}__content {
-      @include flex(flex-start, center);
-      transition: .5s ease;
-    }
   }
 }

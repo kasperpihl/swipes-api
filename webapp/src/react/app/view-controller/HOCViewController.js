@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
-import Measure from 'react-measure';
 import Navbar from 'components/nav-bar/NavBar';
 import Button from 'Button';
 import * as actions from 'actions';
@@ -19,7 +18,6 @@ class HOCViewController extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      centerNav: false,
       secondaryOverlay: false,
     };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -27,7 +25,7 @@ class HOCViewController extends Component {
     this.bindedNavPop = props.pop.bind(this, props.target);
     this.onContext = setupCachedCallback(this.callContentView.bind(this, 'onContextClick'), this);
     this.debouncedUpdateDimensions = debounce(this.updateDimensions, 1);
-    bindAll(this, ['onMeasure', 'debouncedUpdateDimensions', 'debouncedUpdateDimensions']);
+    bindAll(this, ['debouncedUpdateDimensions']);
   }
   componentWillMount() {
     this.debouncedUpdateDimensions();
@@ -43,13 +41,6 @@ class HOCViewController extends Component {
   componentWillUnmount() {
     this._contentView = null;
     window.removeEventListener('resize', this.debouncedUpdateDimensions);
-  }
-  onMeasure(dim) {
-    if (dim.width < 1200) {
-      this.setState({ centerNav: true });
-    } else {
-      this.setState({ centerNav: false });
-    }
   }
   updateDimensions() {
     if (window.innerWidth <= 1200) {
@@ -115,21 +106,24 @@ class HOCViewController extends Component {
     }
     return undefined;
   }
+  renderCloseButton() {
+    const { navId, target } = this.props;
+
+    if (target && target === 'secondary' && navId) {
+      return <Button small icon="Close" className="view-controller__close-button" key="close-button" />;
+    }
+
+    return undefined;
+  }
   renderNavbar() {
     const { history } = this.props;
-    const { centerNav } = this.state;
-    let className = 'sw-view__nav-bar';
     const navbarData = history.map(el => ({
       title: el.get('title'),
       placeholder: el.get('placeholder'),
     })).toArray();
 
-    if (centerNav) {
-      className += ' sw-view__nav-bar--center';
-    }
-
     return (
-      <div className={className} key="navbar">
+      <div className="sw-view__nav-bar" key="navbar">
         <Navbar history={navbarData} delegate={this}>
           {this.renderContextButtons()}
         </Navbar>
@@ -169,6 +163,7 @@ class HOCViewController extends Component {
     //   className += ' fullscreen';
     // }
     return [
+      this.renderCloseButton(),
       this.renderNavbar(),
       this.renderContent(),
     ];
@@ -198,12 +193,10 @@ class HOCViewController extends Component {
     }
 
     return (
-      <Measure onMeasure={this.onMeasure}>
-        <div className={className}>
-          {this.renderContainer()}
-          {this.renderSlack()}
-        </div>
-      </Measure>
+      <div className={className}>
+        {this.renderContainer()}
+        {this.renderSlack()}
+      </div>
     );
   }
 }

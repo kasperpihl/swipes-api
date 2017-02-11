@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { debounce } from 'classes/utils';
-import Measure from 'react-measure';
 
 import './styles/view-controller.scss';
 
@@ -8,20 +6,7 @@ class SWView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      center: false,
     };
-
-    this.onMeasure = this.onMeasure.bind(this);
-    this.bouncedMeasure = debounce(this.onMeasure, 10);
-  }
-  componentDidMount() {
-  }
-  onMeasure(dim) {
-    if (dim.width < 1200) {
-      this.setState({ center: true });
-    } else {
-      this.setState({ center: false });
-    }
   }
   renderHeader() {
     const { header, maxWidth } = this.props;
@@ -44,33 +29,23 @@ class SWView extends Component {
   }
   render() {
     const { children, maxWidth } = this.props;
-    const { center } = this.state;
     const styles = {};
-    let className = 'sw-view';
 
     if (maxWidth) {
       styles.maxWidth = `${maxWidth}px`;
     }
 
-    if (center) {
-      className += ' sw-view--center-content ';
-    }
-
-    console.log('center', center);
-
     return (
-      <Measure onMeasure={this.bouncedMeasure}>
-        <div className={className}>
-          {this.renderHeader()}
-          <div className="sw-view__scroll">
-            <div className="sw-view__container">
-              <div className="sw-view__content" style={styles}>
-                {children}
-              </div>
+      <div className="sw-view">
+        {this.renderHeader()}
+        <div className="sw-view__scroll">
+          <div className="sw-view__container">
+            <div className="sw-view__content" style={styles}>
+              {children}
             </div>
           </div>
         </div>
-      </Measure>
+      </div>
     );
   }
 }
