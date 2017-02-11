@@ -18,11 +18,6 @@ class HOCBrowse extends PureComponent {
       selectedIndexes: fromJS([]),
       accountId: null,
       serviceName: null,
-      cache: {
-
-      },
-      paths: [],
-      selectedItemIds: [],
     };
     this.callDelegate = setupDelegate(props.delegate);
   }
@@ -34,7 +29,7 @@ class HOCBrowse extends PureComponent {
       console.log('updated q', this.state);
       this.fetchQuery();
     }
-    if (prevState.paths.length !== this.state.paths.length) {
+    /* if (prevState.paths.length !== this.state.paths.length) {
       setTimeout(() => {
         const { scroller } = this.refs;
         if (scroller) {
@@ -43,7 +38,7 @@ class HOCBrowse extends PureComponent {
           scroller.scrollLeft = Math.max(scrollW - clientW, 0);
         }
       }, 600);
-    }
+    }*/
   }
   fetchQuery() {
     const {
@@ -89,7 +84,7 @@ class HOCBrowse extends PureComponent {
           selectedIndexes: selectedIndexes.setSize(depth).push(i),
         });
       } else if (r && r.on_click.type === 'preview') {
-
+        this.callDelegate('onPreviewLink', r.on_click.preview);
       }
     }
   }
