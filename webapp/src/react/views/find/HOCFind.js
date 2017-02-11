@@ -91,12 +91,12 @@ class HOCFind extends Component {
   }
   render() {
     return (
-      <SWView>
-        <div className="find-container">
-          {this.renderBrowse()}
+      <div className="find-container">
+        {this.renderBrowse()}
+        <SWView maxWidth={780}>
           {this.renderSearchResults()}
-        </div>
-      </SWView>
+        </SWView>
+      </div>
     );
   }
 }

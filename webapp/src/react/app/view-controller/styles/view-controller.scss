@@ -19,6 +19,7 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 }
 
 .sw-view {
+  $b: &;
   @include size(100%);
   @include flex(column);
 
@@ -26,6 +27,10 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
     @include size($innercContentWidth, auto);
     @include flex(none);
 		margin: 0 $contentOverflowPadding;
+
+    &--center {
+      @include flex(flex-start, center);
+    }
   }
 
   &__header {
@@ -39,9 +44,25 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 		overflow-y: auto;
   }
 
-  &__content {
+  &__container {
     @include size($innercContentWidth, 100%);
 		margin: 0 $contentOverflowPadding;
     min-height: 100%;
+  }
+
+  &__content {
+    @include size(100%);
+  }
+
+  &--center-content {
+    @include flex(center, flex-start, column);
+
+    #{$b}__container {
+      @include flex(flex-start, center);
+    }
+
+    #{$b}__content {
+      @include flex(flex-start, center);
+    }
   }
 }

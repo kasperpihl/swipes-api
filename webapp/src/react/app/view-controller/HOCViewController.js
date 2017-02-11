@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
+import Measure from 'react-measure';
 import Navbar from 'components/nav-bar/NavBar';
 import Button from 'Button';
 import * as actions from 'actions';
@@ -17,11 +18,14 @@ const reservedNavIds = [
 class HOCViewController extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      centerNav: false,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bindedNavPush = props.push.bind(this, props.target);
     this.bindedNavPop = props.pop.bind(this, props.target);
     this.onContext = setupCachedCallback(this.callContentView.bind(this, 'onContextClick'), this);
+    this.onMeasure = this.onMeasure.bind(this);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.upcomingId !== this.props.upcomingId) {
@@ -33,6 +37,13 @@ class HOCViewController extends Component {
   }
   viewDidLoad(view) {
     this._contentView = view;
+  }
+  onMeasure(dim) {
+    if (dim.width < 1200) {
+      this.setState({ centerNav: true });
+    } else {
+      this.setState({ centerNav: false });
+    }
   }
   navbarInputKeyUp(e) {
     this.callContentView('onInputKeyUp', e);
@@ -90,14 +101,19 @@ class HOCViewController extends Component {
   }
   renderNavbar() {
     const { history } = this.props;
-
+    const { centerNav } = this.state;
+    let className = 'sw-view__nav-bar';
     const navbarData = history.map(el => ({
       title: el.get('title'),
       placeholder: el.get('placeholder'),
     })).toArray();
 
+    if (centerNav) {
+      className += ' sw-view__nav-bar--center';
+    }
+
     return (
-      <div className="sw-view__nav-bar" key="navbar">
+      <div className={className} key="navbar">
         <Navbar history={navbarData} delegate={this}>
           {this.renderContextButtons()}
         </Navbar>
@@ -161,10 +177,12 @@ class HOCViewController extends Component {
     }
 
     return (
-      <div className={className}>
-        {this.renderContainer()}
-        {this.renderSlack()}
-      </div>
+      <Measure onMeasure={this.onMeasure}>
+        <div className={className}>
+          {this.renderContainer()}
+          {this.renderSlack()}
+        </div>
+      </Measure>
     );
   }
 }

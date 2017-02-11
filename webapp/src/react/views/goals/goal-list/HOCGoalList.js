@@ -248,7 +248,7 @@ class HOCGoalList extends Component {
     } = this.state;
 
     return (
-      <SWView header={this.renderTabbar()}>
+      <SWView header={this.renderTabbar()} maxWidth={780}>
         <GoalList
           me={me}
           tabIndex={tabIndex}

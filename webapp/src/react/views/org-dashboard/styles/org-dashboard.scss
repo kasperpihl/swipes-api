@@ -4,8 +4,13 @@
 .org-dashboard {
   @include size(100%, auto);
   @include flex(column);
-  position: relative;
-  padding-bottom: 120px;
+
+  &__notifications {
+    @include size(100%, auto);
+    @include flex(column);
+    padding-bottom: 120px;
+
+  }
 }
 
 .notifications {
@@ -14,7 +19,6 @@
     @include size(100%, 50px);
     @include flex(center, flex-start);
     @include flex(none);
-    max-width: 780px;
     position: relative;
     border-bottom: 1px solid $deepBlue-10;
     font-size: 12px;
