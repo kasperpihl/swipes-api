@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate, randomString } from 'classes/utils';
 import BrowseSectionList from './BrowseSectionList';
 
 import './styles/browse.scss';
@@ -13,16 +13,27 @@ class HOCBrowse extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      queries: fromJS([]),
+      queries: fromJS([null]),
       results: fromJS([]),
       selectedIndexes: fromJS([]),
-      accountId: null,
-      serviceName: null,
     };
     this.callDelegate = setupDelegate(props.delegate);
   }
 
   componentDidMount() {
+    if (this.props.accountId) {
+      this.fetchQuery();
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.id !== this.props.id) {
+      const { queries, results, selectedIndexes } = this.state;
+      this.setState({
+        queries: queries.clear().push(null),
+        results: results.clear(),
+        selectedIndexes: selectedIndexes.clear(),
+      });
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.queries !== this.state.queries) {
@@ -40,25 +51,33 @@ class HOCBrowse extends PureComponent {
       }, 600);
     }*/
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   fetchQuery() {
     const {
       queries,
       results,
+    } = this.state;
+    const {
       serviceName,
       accountId,
-    } = this.state;
+    } = this.props;
 
     if (queries.size !== results.size) {
       const query = queries.last();
       const { request } = this.props;
-      request('services.browse', {
+      const qId = randomString(6);
+      this._queryId = qId;
+
+      request('find.browse', {
         service_name: serviceName,
         account_id: accountId,
         query,
       }).then((res) => {
         console.log(res);
 
-        if (res && res.ok) {
+        if (!this._unmounted && res && res.ok && qId === this._queryId) {
           this.setState({ results: results.push(res.result) });
         }
       });
@@ -68,28 +87,16 @@ class HOCBrowse extends PureComponent {
     const { queries, results, selectedIndexes } = this.state;
 
     console.log('ss', depth, i, entry);
-    if (typeof depth !== 'number') {
-      // console.log('ss', sectionI, i);
+    const r = results.get(depth).items[i];
+    if (r && r.on_click.type === 'query') {
+      const query = r.on_click.query;
       this.setState({
-        queries: queries.clear().push(null),
-        results: results.clear(),
-        selectedIndexes: selectedIndexes.clear(),
-        selectedId: id,
-        serviceName: entry.serviceName,
-        accountId: entry.accountId,
+        queries: queries.setSize(depth + 1).push(query),
+        results: results.setSize(depth + 1),
+        selectedIndexes: selectedIndexes.setSize(depth).push(i),
       });
-    } else {
-      const r = results.get(depth).items[i];
-      if (r && r.on_click.type === 'query') {
-        const query = r.on_click.query;
-        this.setState({
-          queries: queries.setSize(depth + 1).push(query),
-          results: results.setSize(depth + 1),
-          selectedIndexes: selectedIndexes.setSize(depth).push(i),
-        });
-      } else if (r && r.on_click.type === 'preview') {
-        this.callDelegate('onPreviewLink', r.on_click.preview);
-      }
+    } else if (r && r.on_click.type === 'preview') {
+      this.callDelegate('onPreviewLink', r.on_click.preview);
     }
   }
   mapResults(items) {
@@ -99,40 +106,6 @@ class HOCBrowse extends PureComponent {
       leftIcon: item.left_icon,
       rightIcon: (item.on_click.type === 'query') ? 'ArrowRightLine' : undefined,
     }));
-  }
-  renderSidebarSection() {
-    const { me, services } = this.props;
-    const myServices = me.get('services')
-                          .filter(s => services.getIn([s.get('service_id'), 'browse']))
-                          .sort((a, b) => a.get('service_name').localeCompare(b.get('service_name')));
-    const { selectedId } = this.state;
-
-    const props = {
-      delegate: this,
-      selectedId,
-      sections: [{
-        title: 'Services',
-        items: myServices.map(s => ({
-          id: `${s.get('service_name')}-${s.get('id')}`,
-          serviceName: s.get('service_name'),
-          accountId: s.get('id'),
-          title: services.getIn([s.get('service_id'), 'title']),
-        })).toArray(),
-      }, {
-        title: 'Shortcuts',
-        items: [
-          { id: '1', title: 'Brand Guidelines', leftIcon: 'Note' },
-          { id: '2', title: 'Design notes', leftIcon: 'Note' },
-          { id: '3', title: 'Production', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { id: '4', title: 'Prototype', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { id: '5', title: 'creative', leftIcon: 'Hashtag', rightIcon: 'ArrowRightLine' },
-          { id: '6', title: 'general', leftIcon: 'Hashtag', rightIcon: 'ArrowRightLine' },
-          { id: '7', title: 'Kasper', leftIcon: 'Person' },
-          { id: '8', title: 'Journal', leftIcon: 'Note' },
-        ],
-      }],
-    };
-    return <BrowseSectionList {...props} />;
   }
   renderHorizontalSections() {
     const {
@@ -154,7 +127,7 @@ class HOCBrowse extends PureComponent {
       const props = {
         depth: i,
         delegate: this,
-        selectedItemId: selectedIndexes.get(i),
+        selectedId: `id${selectedIndexes.get(i)}`,
         loading: !r,
         sections,
       };
@@ -164,9 +137,6 @@ class HOCBrowse extends PureComponent {
   render() {
     return (
       <div className="browse-container">
-        <div className="browse-sidebar">
-          {this.renderSidebarSection()}
-        </div>
         <div className="browse-horizontal-scroller" ref="scroller">
           {this.renderHorizontalSections()}
         </div>
