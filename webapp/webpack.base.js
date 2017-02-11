@@ -55,7 +55,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'statics/jira-auth.html',
-      chunks: ['vendor', 'jira']
+      chunks: ['vendor', 'jira'],
+      filename: 'jira-auth.html',
     }),
     new webpack.ProvidePlugin({
       "PDFJS": "pdfjs-dist",
