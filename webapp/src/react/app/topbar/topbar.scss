@@ -3,29 +3,38 @@
 
 $topbarSize: 38px;
 
+// ======================================================
+// Block
+// ======================================================
+
 .topbar {
   $b: &;
   @include size(100%, $topbarSize);
-  position: relative;
+  -webkit-app-region: drag;
+  flex: none;
+  overflow: hidden;
   user-select: none;
   z-index: 9999;
-  flex: none;
-  -webkit-app-region: drag;
-  overflow: hidden;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+// Gradient
+
+.topbar {
+  $b: &;
 
   &__gradient {
     @include size(100%);
 
-    &--main {
-
-    }
-
     &--status {
-      background-color: rgba($bg, 0);
       @include flex();
-      position: absolute;
+      background-color: rgba($bg, 0);
       left: 0; top: 0;
       pointer-events: none;
+      position: absolute;
       transition: .2s ease;
     }
 
@@ -40,6 +49,12 @@ $topbarSize: 38px;
       }
     }
   }
+}
+
+// Misc
+
+.topbar {
+  $b: &;
 
   &__title {
     @include font(13px, $deepBlue-100, 500);
@@ -55,5 +70,44 @@ $topbarSize: 38px;
     &:hover {
       text-decoration: underline;
     }
+  }
+}
+
+// Windows window actions
+
+.topbar {
+  $b: &;
+
+  &__window-actions {
+    @include size(auto, $topbarSize);
+    display: none;
+    position: absolute;
+    right: 0; top: 0;
+    -webkit-app-region: no-drag;
+  }
+
+  &__button {
+    @include size(50px, $topbarSize);
+    -webkit-app-region: no-drag;
+
+    &--minimize {
+
+      #{$b}__svg {
+        left: 50%; top: auto; bottom: 0;
+        transform: translateX(-50%) translateY(0%);
+      }
+    }
+
+    &:hover {
+      background-color: rgba($bg, .3);
+    }
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($bg);
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
 }

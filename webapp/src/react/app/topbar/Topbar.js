@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll } from 'classes/utils';
+import Icon from 'Icon';
 import './topbar.scss';
 import gradient from './gradient';
 
@@ -61,6 +62,17 @@ class Topbar extends Component {
       <div className="topbar">
         <div className="topbar__gradient topbar__gradient--main" style={styles} />
         {this.returnStatusIndicator()}
+        <div className="topbar__window-actions">
+          <div className="topbar__button topbar__button--minimize">
+            <Icon svg="Minus" className="topbar__svg" />
+          </div>
+          <div className="topbar__button topbar__button--maximize">
+            <Icon svg="Plus" className="topbar__svg" />
+          </div>
+          <div className="topbar__button topbar__button--close">
+            <Icon svg="Close" className="topbar__svg" />
+          </div>
+        </div>
       </div>
     );
   }
