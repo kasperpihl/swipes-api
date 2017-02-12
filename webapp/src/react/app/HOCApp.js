@@ -27,16 +27,46 @@ class HOCApp extends Component {
   componentDidMount() {
     const { navInit } = this.props;
     navInit();
+    this.updateMaximizeClass(this.props.isMaximized);
+    this.updateFullscreenClass(this.props.isFullscreen);
+  }
+  updateFullscreenClass(isFullscreen) {
+    const classList = document.getElementById('content').classList;
+    if (isFullscreen) {
+      classList.add('is-fullscreen');
+    } else {
+      classList.remove('is-fullscreen');
+    }
+  }
+  updateMaximizeClass(isMaximized) {
+    const classList = document.getElementById('content').classList;
+    if (isMaximized) {
+      classList.add('is-maximized');
+    } else {
+      classList.remove('is-maximized');
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.isMaximized !== prevProps.isMaximized) {
+      this.updateMaximizeClass(this.props.isMaximized);
+    }
+    if (this.props.isFullscreen !== prevProps.isFullscreen) {
+      this.updateFullscreenClass(this.props.isFullscreen);
+    }
   }
   renderNote() {
     return <HOCSideNote />;
   }
   render() {
-    const { location, status } = this.props;
+    const { location, status, isMaximized } = this.props;
 
     return (
       <div className="app">
-        <Topbar pathname={location.pathname} status={status} />
+        <Topbar
+          pathname={location.pathname}
+          status={status}
+          isMaximized={isMaximized}
+        />
         <div className="content-wrapper">
           <HOCSidebar />
           <div className="view-container">
@@ -67,6 +97,8 @@ HOCApp.propTypes = {
 function mapStateToProps(state) {
   return {
     status: state.getIn(['main', 'status']),
+    isMaximized: state.getIn(['main', 'isMaximized']),
+    isFullscreen: state.getIn(['main', 'isFullscreen']),
   };
 }
 

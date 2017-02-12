@@ -21,18 +21,19 @@
   &.platform-darwin {
 
     .content-wrapper {
-      border-radius: 3px;
+      border-radius: 5px;
     }
   }
 }
 
 .content-wrapper {
-  @include size(calc(100% - 10px), calc(100% - 43px));
+  $sideMarg: 3px;
+  @include size(calc(100% - #{2 * $sideMarg}), calc(100% - #{38 + $sideMarg}));
   @include flex(flex);
   overflow: hidden;
   z-index: 99999;
   background: #fff;
-  margin: 5px;
+  margin: $sideMarg;
   margin-top: calc(38px);
 }
 
