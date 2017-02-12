@@ -20,31 +20,59 @@ class JiraAuth extends Component {
   }
   onClick() {
     this.setState({ loading: true, error: null });
-    setTimeout(() => {
-      const {
+
+    const {
+      url,
+      password,
+      email,
+    } = this.state;
+    const apiUrl = `${window.location.origin}/v1/services.authcheck`;
+
+    fetch(apiUrl, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      method: 'POST',
+      body: JSON.stringify({
+        service_name: 'jira',
+        credentials: {
+          url,
+          email,
+          password,
+        },
+      }),
+    })
+    .then(response => response.json())
+    .then((json) => {
+      if (json.ok === false) {
+        this.setState({
+          loading: false,
+          error: 'Something went wrong. Try again later.',
+        });
+
+        return;
+      }
+      if (json.result.active !== true) {
+        this.setState({
+          loading: false,
+          error: 'That username is not active.',
+        });
+      }
+
+      const res = {
         url,
         password,
         email,
-      } = this.state;
-
-      if (true) {
-        // Success
-        const res = {
-          url,
-          password,
-          email,
-        };
-        const query = this.serializeQuery(res);
-        // console.log(query);
-        document.location.href = `${document.location.origin}/oauth-success.html?${query}`;
-      } else {
-        // error
-        this.setState({
-          loading: false,
-          error: 'Did not work. Tisho need to implement it!',
-        });
-      }
-    }, 500);
+      };
+      const query = this.serializeQuery(res);
+      document.location.href = `${document.location.origin}/oauth-success.html?${query}`;
+    })
+    .catch(() => {
+      this.setState({
+        loading: false,
+        error: 'Something went wrong. Try again later.',
+      });
+    });
   }
   onKeyDown(e) {
     if (e.keyCode === 13) {
