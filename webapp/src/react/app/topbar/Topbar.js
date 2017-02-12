@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { bindAll } from 'classes/utils';
+import { bindAll, setupCachedCallback } from 'classes/utils';
+
+// now use events as onClick: this.onWinClickCached(i)
 import Icon from 'Icon';
 import './topbar.scss';
 import gradient from './gradient';
@@ -13,10 +15,14 @@ class Topbar extends Component {
       gradientPos,
     };
     bindAll(this, ['gradientStep', 'onRetry']);
+    this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
     this.gradientStep();
+  }
+  onWinClick(name) {
+    window.ipcListener[name]();
   }
   onRetry(e) {
     console.log('yo', e);
@@ -51,9 +57,39 @@ class Topbar extends Component {
       </div>
     );
   }
+  renderWindowsActions() {
+    const { isMaximized } = this.props;
+    return (
+      <div className="topbar__window-actions">
+        <div
+          onClick={this.onWinClickCached('minimize')}
+          className="topbar__button topbar__button--minimize"
+        >
+          <Icon svg="Minus" className="topbar__svg" />
+        </div>
+        <div
+          onClick={this.onWinClickCached('unmaximize')}
+          className="topbar__button topbar__button--unmaximize"
+        >
+          <Icon svg="Plus" className="topbar__svg" />
+        </div>
+        <div
+          onClick={this.onWinClickCached('maximize')}
+          className="topbar__button topbar__button--maximize"
+        >
+          <Icon svg="Vote" className="topbar__svg" />
+        </div>
+        <div
+          onClick={this.onWinClickCached('close')}
+          className="topbar__button topbar__button--close"
+        >
+          <Icon svg="Close" className="topbar__svg" />
+        </div>
+      </div>
+    );
+  }
   render() {
     const styles = gradient.getGradientStyles();
-
     if (this.state.gradientPos) {
       styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
     }
@@ -62,17 +98,7 @@ class Topbar extends Component {
       <div className="topbar">
         <div className="topbar__gradient topbar__gradient--main" style={styles} />
         {this.returnStatusIndicator()}
-        <div className="topbar__window-actions">
-          <div className="topbar__button topbar__button--minimize">
-            <Icon svg="Minus" className="topbar__svg" />
-          </div>
-          <div className="topbar__button topbar__button--maximize">
-            <Icon svg="Plus" className="topbar__svg" />
-          </div>
-          <div className="topbar__button topbar__button--close">
-            <Icon svg="Close" className="topbar__svg" />
-          </div>
-        </div>
+        {this.renderWindowsActions()}
       </div>
     );
   }

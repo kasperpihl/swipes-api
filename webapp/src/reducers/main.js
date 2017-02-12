@@ -49,6 +49,12 @@ export default function main(state = initialState, action) {
         ns.set('hasLoaded', hasLoaded).set('status', payload.status).set('nextRetry', payload.nextRetry),
       );
     }
+    case types.SET_MAXIMIZED: {
+      return state.set('isMaximized', payload.toggle);
+    }
+    case types.SET_FULLSCREEN: {
+      return state.set('isFullscreen', payload.toggle);
+    }
 
     // ======================================================
     // Caching
