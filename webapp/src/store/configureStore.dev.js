@@ -11,6 +11,7 @@ import rootReducer from 'reducers';
 const persist = () => state => Immutable.Map({
   main: {
     token: state.getIn(['main', 'token']) || null,
+    slackUrl: state.getIn(['main', 'slackUrl']) || null,
     cache: state.getIn(['main', 'cache']) || {},
     services: state.getIn(['main', 'services']) || {},
     milestones: state.getIn(['main', 'milestones']) || {},

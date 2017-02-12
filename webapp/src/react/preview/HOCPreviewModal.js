@@ -107,6 +107,7 @@ class HOCPreviewModal extends Component {
 
     if (!Comp) {
       this._noPreview = true;
+      console.log(file);
       console.warn(`Unsupported preview file type: ${file.content_type}`);
       return undefined;
     }

@@ -15,7 +15,6 @@ import db from '../../../db';
 import * as services from '../../services';
 
 const xendoConfig = config.get('xendo');
-
 const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
   xendoSwipesCredentials: object.require(),
 }, (req, res, next, setLocals) => {
@@ -56,7 +55,6 @@ const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
       return next(error);
     });
 });
-
 const xendoSwipesCredentials = (req, res, next) => {
   const query = r.table('config').getAll('xendo', { index: 'key' }).nth(0);
 
@@ -74,7 +72,6 @@ const xendoSwipesCredentials = (req, res, next) => {
       return next(error);
     });
 };
-
 const xendoUserCredentials = valLocals('xendoUserCredentials', {
   user_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -99,7 +96,6 @@ const xendoUserCredentials = valLocals('xendoUserCredentials', {
       return next(error);
     });
 });
-
 const xendoUserSignUp = valLocals('xendoUserSignUp', {
   user_id: string.require(),
   xendoSwipesCredentials: object.require(),
@@ -144,7 +140,6 @@ const xendoUserSignUp = valLocals('xendoUserSignUp', {
     return next(error);
   });
 });
-
 const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
   user_id: string.require(),
   xendoSwipesCredentials: object.require(),
@@ -209,7 +204,6 @@ const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
     return next(error);
   });
 });
-
 const xendoRemoveServiceFromUser = valLocals('xendoRemoveServiceFromUser', {
   xendoSwipesCredentials: object.require(),
   xendoUserServiceId: number.require(),
@@ -237,7 +231,6 @@ const xendoRemoveServiceFromUser = valLocals('xendoRemoveServiceFromUser', {
     return next();
   });
 });
-
 const xendoSearch = valLocals('xendoSearch', {
   xendoUserCredentials: object.require(),
 }, (req, res, next, setLocals) => {
@@ -281,7 +274,6 @@ const xendoSearch = valLocals('xendoSearch', {
     return next(error);
   });
 });
-
 const mapSourceToServiceName = (source) => {
   if (source === 'googledocs') {
     return 'drive';
@@ -289,7 +281,6 @@ const mapSourceToServiceName = (source) => {
 
   return source;
 };
-
 const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
   user_id: string.require(),
   result: object.require(),

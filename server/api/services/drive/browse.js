@@ -3,7 +3,7 @@ import {
 } from './request';
 
 const browse = ({ auth_data, query, page, account_id, user }, callback) => {
-  const pathTitle = query ? query.title : '';
+  const pathTitle = query ? query.title : 'Google Drive';
   const path = query ? query.path : 'root';
   const sharedWithMeFilter = path === 'root' ? 'or sharedWithMe' : '';
   const method = 'files.list';

@@ -11,6 +11,7 @@ import {
   serviceDoRequest,
   serviceGetAuthData,
   serviceUpdateAuthData,
+  serviceAuthCheck,
 } from './middlewares/services';
 import {
   xendoSwipesCredentials,
@@ -68,6 +69,17 @@ authed.all('/services.authsuccess',
   xendoAddServiceToUser,
   valResponseAndSend(),
 );
+
+notAuthed.all('/services.authcheck',
+  valBody({
+    service_name: string.require(),
+    credentials: object.require(),
+  }),
+  serviceImport,
+  serviceAuthCheck,
+  valResponseAndSend({
+    result: object.require(),
+  }));
 
 export {
   notAuthed,

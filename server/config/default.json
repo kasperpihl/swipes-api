@@ -36,6 +36,7 @@
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "jira": {
+    "authUrl": "http://localhost:3000/jira-auth.html",
     "redirectUri": "http://localhost:3000/oauth-success.html"
   },
   "amazonQueue": {

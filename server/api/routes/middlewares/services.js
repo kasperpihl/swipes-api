@@ -373,6 +373,30 @@ const serviceUpdateAuthData = valLocals('serviceUpdateAuthData', {
       return next(error);
     });
 });
+const serviceAuthCheck = valLocals('serviceAuthCheck', {
+  credentials: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    credentials,
+    service,
+  } = res.locals;
+
+  if (!service.authCheck) {
+    return next(new SwipesError('This service does not support checking the auth'));
+  }
+
+  return service.authCheck(credentials, (error, result) => {
+    if (error) {
+      return next(new SwipesError('Something went wrong with checking the auth'));
+    }
+
+    setLocals({
+      result,
+    });
+
+    return next();
+  });
+});
 
 export {
   serviceIdGet,
@@ -387,4 +411,5 @@ export {
   serviceUpdateAuthData,
   serviceDoStream,
   serviceDoBrowse,
+  serviceAuthCheck,
 };

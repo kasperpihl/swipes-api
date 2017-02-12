@@ -27,6 +27,7 @@
     "redirectUri": "SW_GOOGLE_REDIRECT_URI"
   },
   "jira": {
+    "authUrl": "SW_JIRA_AUTH_URL",
     "redirectUri": "SW_JIRA_REDIRECT_URI"
   },
   "amazonQueue": {

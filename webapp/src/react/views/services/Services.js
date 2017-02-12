@@ -28,15 +28,22 @@ class Services extends Component {
     this.props.disconnectService(data.id);
   }
   clickedConnect(data) {
-    const { browser } = this.props;
+    const { browser, handleOAuthSuccess } = this.props;
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
 
     browser(url, (webview, close) => {
+      // .'did-get-redirect-request'
       webview.addEventListener('did-get-redirect-request', (e) => {
         if (authSuccess.find(u => e.newURL.startsWith(u))) {
-          const { handleOAuthSuccess, overlay } = this.props;
           const params = queryStringToObject(e.newURL.split('?')[1]);
+          handleOAuthSuccess(serviceName, params);
+          close();
+        }
+      });
+      webview.addEventListener('did-navigate', (e) => {
+        if (authSuccess.find(u => e.url.startsWith(u))) {
+          const params = queryStringToObject(e.url.split('?')[1]);
           handleOAuthSuccess(serviceName, params);
           close();
         }

@@ -3,7 +3,7 @@ import {
 } from './request';
 
 const browse = ({ auth_data, query, page, account_id, user }, callback) => {
-  const pathTitle = query ? query.title : '';
+  const pathTitle = query ? query.title : 'Dropbox';
   const path = query ? query.path : '';
   const method = page ? 'files.listFolder.continue' : 'files.listFolder';
   const params = page ? {
