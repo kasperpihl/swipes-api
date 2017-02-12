@@ -25,42 +25,42 @@ path,
 svg,
 ul,
 textarea {
-	background-color: transparent;
-	border: none;
-	box-sizing: border-box;
-	cursor: default;
-	font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	text-decoration: none;
-	stroke-width: 2px;
-	position: relative;
+  background-color: transparent;
+  border: none;
+  box-sizing: border-box;
+  cursor: default;
+  font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  stroke-width: 2px;
+  position: relative;
 
   &::-webkit-input-placeholder {
     font-family: inherit;
   }
 
   &:focus {
-		border: 0 !important;
-	  outline: 0 !important;
-	  outline-offset: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    outline-offset: 0 !important;
   }
 }
 
 
 button {
-	&:focus {
-		outline: none;
-	}
+  &:focus {
+    outline: none;
+  }
 }
 
 input {
   cursor: text;
 
-	&:focus, &:active {
-		outline: 0 !important;
-	}
+  &:focus, &:active {
+    outline: 0 !important;
+  }
 }
 
 input:-webkit-autofill {
@@ -72,42 +72,46 @@ input::-webkit-autofill {
 }
 
 html, body {
-	@include size(100%);
-	@include flex(flex);
-	background-color: $bg;
-	font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
+  @include size(100%);
+  @include flex(flex);
+  background-color: $bg;
+  font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-smooth: always;
+  text-rendering: optimizeLegibility !important;
+  transform: rotate(-0.0000000001deg);
+  -webkit-font-smoothing: antialiased !important;
 }
 
 ::-webkit-scrollbar {
-	// width: 0;
+  // width: 0;
 }
 
 h1 {
-	font-size: 66px;
+  font-size: 66px;
 }
 
 h2 {
-	font-size: 56px;
+  font-size: 56px;
 }
 
 h3 {
-	font-size: 45px;
+  font-size: 45px;
 }
 
 h4 {
-	font-size: 34px;
+  font-size: 34px;
 }
 
 h5 {
-	font-size: 24px;
+  font-size: 24px;
 }
 
 h6 {
-	font-size: 20px;
+  font-size: 20px;
 }
 
 p {
-	font-size: 15px;
+  font-size: 15px;
 }
