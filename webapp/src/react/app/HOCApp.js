@@ -39,8 +39,10 @@ class HOCApp extends Component {
         <Topbar pathname={location.pathname} status={status} />
         <div className="content-wrapper">
           <HOCSidebar />
-          <HOCViewController target="primary" />
-          <HOCViewController target="secondary" />
+          <div className="view-container">
+            <HOCViewController target="primary" />
+            <HOCViewController target="secondary" />
+          </div>
           <HOCSideNote />
         </div>
         <HOCOverlay />

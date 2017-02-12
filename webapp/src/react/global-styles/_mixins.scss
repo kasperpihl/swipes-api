@@ -66,3 +66,16 @@
   border-bottom-left-radius: $botLeft;
   border-bottom-right-radius: $botRight;
 }
+
+@mixin styleIfNumberOfElements($numberOfElements) {
+  @if $numberOfElements == 1 {
+    &:first-of-type:nth-last-of-type(1) {
+    	@content;
+    }
+  } @else if $numberOfElements > 1 {
+    &:first-of-type:nth-last-of-type(#{$numberOfElements}),
+    &:first-of-type:nth-last-of-type(#{$numberOfElements}) ~ & {
+    	@content;
+    }
+  }
+}

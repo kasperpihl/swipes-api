@@ -11,11 +11,14 @@ class Topbar extends Component {
     this.state = {
       gradientPos,
     };
-    bindAll(this, ['gradientStep']);
+    bindAll(this, ['gradientStep', 'onRetry']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
     this.gradientStep();
+  }
+  onRetry(e) {
+    console.log('yo', e);
   }
   gradientStep() {
     const gradientPos = gradient.getGradientPos();
@@ -32,7 +35,7 @@ class Topbar extends Component {
     let statusMessage = '';
     if (status === 'offline') {
       className += ' topbar__gradient--indicate';
-      statusMessage = 'System is offline';
+      statusMessage = 'Offline - retrying in 10 seconds';
     } else if (status === 'connecting') {
       className += ' topbar__gradient--indicate';
       statusMessage = 'System is connecting';
@@ -43,6 +46,7 @@ class Topbar extends Component {
         <div className="topbar__title">
           {statusMessage}
         </div>
+        <div className="topbar__retry-btn" onClick={this.onRetry}>Retry now</div>
       </div>
     );
   }

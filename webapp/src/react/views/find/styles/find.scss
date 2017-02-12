@@ -2,17 +2,17 @@
 @import '~styles/_mixins.scss/';
 
 $contentOverflowPadding: 45px;
-$innercContentWidth: calc(100% - #{$contentOverflowPadding});
+$innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 .find {
   @include size($innercContentWidth, 100%);
   @include flex(flex);
-  margin-left: $contentOverflowPadding;
+  margin: 0 $contentOverflowPadding;
   padding-top: 51px;
 
   &:before {
     content: '';
-    @include size(calc(100% - #{$contentOverflowPadding}), 1px);
+    @include size(100%, 1px);
     position: absolute;
     left: 0; top: 50px;
     background-color: $deepBlue-10;

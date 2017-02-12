@@ -4,30 +4,43 @@
 $contentOverflowPadding: 45px;
 $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
-.view-controller {
+// ======================================================
+// Block
+// ======================================================
+
+.view-container {
+  @include size(100%);
+	@include flex(flex);
+}
+
+section.view-controller {
   @include size(100%);
   @include flex(column);
-  position: relative;
   will-change: width;
 
-  &--empty {
-    @include size(0%, 100%);
-    border-left: 0px solid $deepBlue-10;
-    will-change: width;
-  }
-
-  &:last-child {
-    border-left: 1px solid $deepBlue-10;
-  }
-
-  &--overlay {
-    @include size(60vw, 100%);
+  &:after {
+    content: '';
+    @include size(calc(20vw - 60px), 100%);
     position: absolute;
-    right: 0; top: 0;
-    z-index: 99;
-    background-color: $bg;
-    box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+    left: 0; top: 0;
+    background-color: rgba($bg, 0);
+    transform: translateX(-100%);
+    pointer-events: none;
+    transition: .5s;
   }
+}
+
+.sw-view {
+  $b: &;
+  @include size(100%);
+  @include flex(column);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.view-controller {
 
   &__close-button {
     left: 7px; top: 48px;
@@ -36,9 +49,6 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 }
 
 .sw-view {
-  $b: &;
-  @include size(100%);
-  @include flex(column);
 
   &__nav-bar {
     @include size($innercContentWidth, auto);
@@ -65,5 +75,52 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
   &__content {
     @include size(100%);
+  }
+}
+
+// ======================================================
+// Selector targets
+// ======================================================
+
+section.view-controller {
+
+  &:last-child {
+    border-left: 1px solid $deepBlue-10;
+  }
+
+  @include styleIfNumberOfElements(1) {
+    @include size(100%);
+  }
+
+  @include styleIfNumberOfElements(2) {
+    @include size(50%, 100%);
+  }
+}
+
+// ======================================================
+// modifiers
+// ======================================================
+
+section.view-controller {
+
+  &--overlay {
+    @include size(80vw, 100%);
+    position: absolute;
+    right: 0; top: 0;
+    z-index: 99;
+    background-color: $bg;
+    box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+
+    &:after {
+      background-color: rgba($bg, .7);
+      pointer-events: all;
+      transition: .5s ease;
+    }
+  }
+
+  &--empty {
+    @include size(0%, 100%);
+    border-left: 0px solid $deepBlue-10;
+    will-change: width;
   }
 }

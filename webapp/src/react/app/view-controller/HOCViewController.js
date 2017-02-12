@@ -43,7 +43,7 @@ class HOCViewController extends Component {
     window.removeEventListener('resize', this.debouncedUpdateDimensions);
   }
   updateDimensions() {
-    if (window.innerWidth <= 1200) {
+    if (window.innerWidth <= 1400) {
       this.setState({ secondaryOverlay: true });
     } else {
       this.setState({ secondaryOverlay: false });
@@ -184,8 +184,16 @@ class HOCViewController extends Component {
     const { navId, target } = this.props;
     const { secondaryOverlay } = this.state;
     let className = 'view-controller';
+
     if (!navId) {
       className += ' view-controller--empty';
+
+      return (
+        <div className={className}>
+          {this.renderContainer()}
+          {this.renderSlack()}
+        </div>
+      );
     }
 
     if (target && target === 'secondary' && navId && secondaryOverlay) {
@@ -193,10 +201,10 @@ class HOCViewController extends Component {
     }
 
     return (
-      <div className={className}>
+      <section className={className}>
         {this.renderContainer()}
         {this.renderSlack()}
-      </div>
+      </section>
     );
   }
 }

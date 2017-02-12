@@ -136,10 +136,8 @@ class HOCBrowse extends PureComponent {
   }
   render() {
     return (
-      <div className="browse-container">
-        <div className="browse-horizontal-scroller" ref="scroller">
-          {this.renderHorizontalSections()}
-        </div>
+      <div className="browse-horizontal-scroller" ref="scroller">
+        {this.renderHorizontalSections()}
       </div>
     );
   }

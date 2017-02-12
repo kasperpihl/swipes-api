@@ -21,8 +21,7 @@ $topbarSize: 38px;
     }
 
     &--status {
-      background-color: $bg;
-      opacity: 0;
+      background-color: rgba($bg, 0);
       @include flex();
       position: absolute;
       left: 0; top: 0;
@@ -31,19 +30,30 @@ $topbarSize: 38px;
     }
 
     &--indicate {
-      opacity: .3;
+      @include flex();
+      background-color: rgba($bg, .5);
+      pointer-events: all;
       transition: .2s ease;
 
-      #{$b}__title {
+      #{$b}__title, #{$b}__retry-btn {
         opacity: 1;
       }
     }
   }
 
   &__title {
-    line-height: $topbarSize;
-    color: $deepBlue-80;
-    padding-top: 3px;
+    @include font(13px, $deepBlue-100, 500);
     opacity: 0;
+  }
+
+  &__retry-btn {
+    @include font(13px, $blue-100, 500);
+    margin-left: 9px;
+    opacity: 0;
+    -webkit-app-region: no-drag;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
