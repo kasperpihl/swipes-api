@@ -32,6 +32,11 @@ class HOCFind extends Component {
     if (e.keyCode === 13) {
       const { search } = this.props;
       if (e.target.value.length > 2) {
+        if (this.state.selectedId !== 'search-results') {
+          this.setState({
+            selectedId: 'search-results',
+          });
+        }
         search(e.target.value);
       } else {
         search();
