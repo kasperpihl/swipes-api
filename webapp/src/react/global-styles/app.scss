@@ -10,8 +10,11 @@
     @include flex(column);
   }
 
+  .is-maximized.platform-win32 {
+    padding: 5px;
+  }
+
   &.platform-win32 {
-    // padding: 5px;
 
     .topbar__window-actions {
       // @include flex(flex);
@@ -27,13 +30,9 @@
 }
 
 .content-wrapper {
-  @include size(calc(100% - 10px), calc(100% - 43px));
+  @include size(100%);
   @include flex(flex);
   overflow: hidden;
-  z-index: 99999;
-  background: #fff;
-  margin: 5px;
-  margin-top: calc(38px);
 }
 
 svg {

@@ -25,9 +25,6 @@ $topbarSize: 38px;
 
 .topbar {
   $b: &;
-  @include size(100%);
-  position: fixed;
-  left: 0; top: 0;
 
   &__gradient {
     @include size(100%);
