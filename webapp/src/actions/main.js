@@ -15,6 +15,8 @@ export const cache = {
   clear: () => ({ type: types.CACHE_CLEAR }),
 };
 
+export const setSlackUrl = url => ({ type: types.SET_SLACK_URL, payload: { url } });
+
 // ======================================================
 // Overlays
 // ======================================================

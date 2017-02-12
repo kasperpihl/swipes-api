@@ -66,6 +66,9 @@ export default function main(state = initialState, action) {
     case types.SLACK_OPEN_IN: {
       return state.set('slackOpenIn', payload.id);
     }
+    case types.SET_SLACK_URL: {
+      return state.set('slackUrl', payload.url);
+    }
 
     // ======================================================
     // Notifications

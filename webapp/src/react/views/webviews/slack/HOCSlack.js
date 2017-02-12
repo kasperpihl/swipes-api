@@ -4,26 +4,29 @@ import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import Webview from 'components/webview/Webview';
+import Button from 'Button';
 import './styles/slack-view';
 
 class HOCSlack extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: 'https://swipes.slack.com/messages/',
       persistId: `browser${props.me.get('id')}`,
+      teamDomain: '',
     };
     this.onLoad = this.onLoad.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onClick = this.onClick.bind(this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.hidden !== this.props.hidden && !this.props.hidden) {
+    if (this._webview && prevProps.hidden !== this.props.hidden && !this.props.hidden) {
       // Super hack haha. Don't change ref in SlackWebview
       this.refs.slack.refs.container.getElementsByClassName('webview')[0].focus();
     }
-    if (this.props.openIn && prevProps.openIn !== this.props.openIn) {
+    if (this._webview && this.props.openIn && prevProps.openIn !== this.props.openIn) {
       const { openSlackIn } = this.props;
       this._webview.send('message', {
         type: 'open',
@@ -31,6 +34,14 @@ class HOCSlack extends Component {
       });
       openSlackIn(null);
     }
+  }
+  onChange(e) {
+    this.setState({ teamDomain: e.target.value });
+  }
+  onClick() {
+    const { setSlackUrl } = this.props;
+    const { teamDomain } = this.state;
+    setSlackUrl(`https://${teamDomain}.slack.com/messages`);
   }
   onLoad(webview) {
     this._webview = webview;
@@ -57,20 +68,59 @@ class HOCSlack extends Component {
       browser(e.url);
     });
   }
+  renderSetup() {
+    const { slackUrl } = this.props;
+    if (slackUrl) {
+      return undefined;
+    }
+    const { teamDomain } = this.state;
+    return (
+      <div className="slack-view__setup">
+        <h1>Run Slack inside Swipes.</h1>
+        <h2>You can use slack right inside swipes for x, y, z reason.</h2>
+        <input
+          type="text"
+          value={teamDomain}
+          placeholder="teamdomain"
+          onChange={this.onChange}
+        />.slack.com
+        <Button
+          text="Continue"
+          primary
+          onClick={this.onClick}
+        />
+      </div>
+    );
+  }
+  renderWebview() {
+    const { slackUrl } = this.props;
+    const { persistId } = this.state;
+    if (!slackUrl) {
+      return undefined;
+    }
+    const preloadUrl = window.ipcListener.preloadUrl('slack-preload');
 
-
+    return (
+      <Webview
+        ref="slack"
+        preloadUrl={preloadUrl}
+        url={slackUrl}
+        persistId={persistId}
+        onLoad={this.onLoad}
+      />
+    );
+  }
   render() {
     const { hidden } = this.props;
-    const { url, persistId } = this.state;
 
     let className = 'slack-view';
     if (hidden) {
       className += ' hide';
     }
-    const preloadUrl = window.ipcListener.preloadUrl('slack-preload');
     return (
       <div className={className}>
-        <Webview ref="slack" preloadUrl={preloadUrl} url={url} persistId={persistId} onLoad={this.onLoad} />
+        {this.renderSetup()}
+        {this.renderWebview()}
       </div>
     );
   }
@@ -81,19 +131,23 @@ HOCSlack.propTypes = {
   setCounter: func,
   browser: func,
   openSlackIn: func,
+  setSlackUrl: func,
   openIn: string,
   hidden: bool,
+  slackUrl: string,
   me: map,
 };
 
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
+    slackUrl: state.getIn(['main', 'slackUrl']),
   };
 }
 
 export default connect(mapStateToProps, {
   browser: actions.main.browser,
   openSlackIn: actions.main.openSlackIn,
+  setSlackUrl: actions.main.setSlackUrl,
   setCounter: actions.navigation.setCounter,
 })(HOCSlack);
