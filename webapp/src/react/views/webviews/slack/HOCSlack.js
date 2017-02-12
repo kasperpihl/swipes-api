@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import { bindAll } from 'classes/utils';
 import Webview from 'components/webview/Webview';
 import Button from 'Button';
 import './styles/slack-view';
@@ -14,9 +15,7 @@ class HOCSlack extends Component {
       persistId: `browser${props.me.get('id')}`,
       teamDomain: '',
     };
-    this.onLoad = this.onLoad.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onClick = this.onClick.bind(this);
+    bindAll(this, ['onKeyDown', 'onClick', 'onChange', 'onLoad']);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
@@ -37,6 +36,9 @@ class HOCSlack extends Component {
   }
   onChange(e) {
     this.setState({ teamDomain: e.target.value });
+  }
+  onKeyDown(e) {
+    if (e.keyCode === 13) this.onClick();
   }
   onClick() {
     const { setSlackUrl } = this.props;
@@ -82,6 +84,7 @@ class HOCSlack extends Component {
           type="text"
           value={teamDomain}
           placeholder="teamdomain"
+          onKeyDown={this.onKeyDown}
           onChange={this.onChange}
         />.slack.com
         <Button

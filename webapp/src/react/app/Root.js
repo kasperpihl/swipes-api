@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -27,12 +27,21 @@ window.notifications = new Notifications(store);
 window.ipcListener = new IpcListener(store);
 window.msgGen = new MessageGenerator(store);
 
-export default function Root() {
-  return (
-    <Provider store={store}>
-      <Router history={history} store={store} />
-    </Provider>
-  );
+class Root extends Component {
+  componentDidMount() {
+    if (window.process && window.process.platform) {
+      document.getElementById('content').classList.add(`platform-${window.process.platform}`);
+    }
+  }
+  render() {
+    return (
+      <Provider store={store}>
+        <Router history={history} store={store} />
+      </Provider>
+    );
+  }
 }
+
+export default Root;
 
 module.exports = Root;
