@@ -21,7 +21,6 @@ const toasts = {};
 export default class IpcListener {
   constructor(store) {
     if (isElectron) {
-      console.log(ipcRenderer);
       ipcRenderer.on('oauth-success', (event, arg) => {
         store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
       });

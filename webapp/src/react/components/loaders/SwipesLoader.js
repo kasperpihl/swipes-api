@@ -57,8 +57,11 @@ class SwipesLoader extends Component {
 }
 
 export default SwipesLoader;
+const { string, object } = PropTypes;
 
 SwipesLoader.propTypes = {
   size: PropTypes.number,
   center: PropTypes.bool,
+  text: string,
+  textStyle: object,
 };

@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { api, navigation } from 'actions';
 
+import SwipesLoader from 'components/loaders/SwipesLoader';
 import Topbar from './topbar/Topbar';
 import HOCModal from './modal/HOCModal';
 import HOCViewController from './view-controller/HOCViewController';
@@ -54,20 +55,20 @@ class HOCApp extends Component {
       this.updateFullscreenClass(this.props.isFullscreen);
     }
   }
-  renderNote() {
-    return <HOCSideNote />;
+  renderLoader() {
+    const { hasLoaded } = this.props;
+    if (hasLoaded) {
+      return undefined;
+    }
+    return <SwipesLoader center text="Loading" size={90} />;
   }
-  render() {
-    const { location, status, isMaximized, nextRetry } = this.props;
-
+  renderContent() {
+    const { hasLoaded } = this.props;
+    if (!hasLoaded) {
+      return undefined;
+    }
     return (
-      <div className="app">
-        <Topbar
-          pathname={location.pathname}
-          status={status}
-          nextRetry={nextRetry}
-          isMaximized={isMaximized}
-        />
+      <div className="content-wrapper">
         <div className="content-wrapper">
           <HOCSidebar />
           <div className="view-container">
@@ -85,14 +86,35 @@ class HOCApp extends Component {
       </div>
     );
   }
+  renderNote() {
+    return <HOCSideNote />;
+  }
+  render() {
+    const { location, status, isMaximized, nextRetry, hasLoaded } = this.props;
+    return (
+      <div className="app">
+        <Topbar
+          pathname={location.pathname}
+          status={status}
+          nextRetry={nextRetry}
+          isMaximized={isMaximized}
+          hasLoaded={hasLoaded}
+        />
+        {this.renderLoader()}
+        {this.renderContent()}
+      </div>
+    );
+  }
 }
 
-const { func, object, string } = PropTypes;
+const { func, object, string, bool } = PropTypes;
 
 HOCApp.propTypes = {
   status: string,
   navInit: func,
   location: object,
+  hasLoaded: bool,
+  isMaximized: bool,
 };
 
 function mapStateToProps(state) {
@@ -101,6 +123,7 @@ function mapStateToProps(state) {
     nextRetry: state.getIn(['main', 'nextRetry']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
+    hasLoaded: state.getIn(['main', 'hasLoaded']),
   };
 }
 
