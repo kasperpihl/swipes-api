@@ -14,8 +14,9 @@ export default class Socket {
 
     const token = state.getIn(['main', 'token']);
     if (token && !this.socket && state.getIn(['main', 'status']) !== 'connecting') {
+      this.token = token;
       if (!this.timer) {
-        this.timedConnect(token, this.timerForAttempt());
+        this.timedConnect(this.timerForAttempt());
       }
     }
   }
@@ -29,19 +30,23 @@ export default class Socket {
       default: return 180000;
     }
   }
-  timedConnect(token, time) {
+  timedConnect(time) {
     clearTimeout(this.timer);
-    this.timer = setTimeout(this.connect.bind(this, token), time);
+    this.timer = setTimeout(this.connect.bind(this), time);
   }
-  connect(token) {
+  connect() {
     let url = `${window.location.origin}`;
 
     if (window.location.hostname === 'localhost') {
       url = 'http://localhost:5000';
     }
+    if (this.isConnecting) {
+      return;
+    }
+    this.isConnecting = true;
 
     const wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
-    const ws = new WebSocket(`${wsUrl}?token=${token}`);
+    const ws = new WebSocket(`${wsUrl}?token=${this.token}`);
     this.changeStatus('connecting');
 
     ws.onopen = () => {
@@ -51,6 +56,7 @@ export default class Socket {
         this.sendPing(ws);
       }, 30000);
       this.store.dispatch(a.api.request('rtm.start')).then((res) => {
+        this.isConnecting = false;
         if (res && res.ok) {
           this.changeStatus('online');
         } else {
@@ -62,11 +68,14 @@ export default class Socket {
     ws.onmessage = this.message;
 
     ws.onclose = () => {
-      this.changeStatus('offline');
+      this.isConnecting = false;
       clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
       const time = this.timerForAttempt();
-      this.timedConnect(token, time);
+      const nextRetry = new Date();
+      nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
+      this.changeStatus('offline', nextRetry);
+      this.timedConnect(time);
     };
   }
   sendPing(ws) {
@@ -74,11 +83,14 @@ export default class Socket {
       ws.send(JSON.stringify({ type: 'ping', id: 1 }));
     }
   }
-  changeStatus(status) {
+  changeStatus(status, nextRetry) {
     this.status = status;
     this.store.dispatch({
       type: types.SET_STATUS,
-      payload: { status },
+      payload: {
+        status,
+        nextRetry,
+      },
     });
   }
   message(message) {

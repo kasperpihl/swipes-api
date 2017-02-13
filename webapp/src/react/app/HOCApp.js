@@ -58,13 +58,14 @@ class HOCApp extends Component {
     return <HOCSideNote />;
   }
   render() {
-    const { location, status, isMaximized } = this.props;
+    const { location, status, isMaximized, nextRetry } = this.props;
 
     return (
       <div className="app">
         <Topbar
           pathname={location.pathname}
           status={status}
+          nextRetry={nextRetry}
           isMaximized={isMaximized}
         />
         <div className="content-wrapper">
@@ -97,6 +98,7 @@ HOCApp.propTypes = {
 function mapStateToProps(state) {
   return {
     status: state.getIn(['main', 'status']),
+    nextRetry: state.getIn(['main', 'nextRetry']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
   };

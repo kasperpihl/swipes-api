@@ -13,6 +13,7 @@ class Topbar extends Component {
     const gradientPos = gradient.getGradientPos();
     this.state = {
       gradientPos,
+      secondsLeft: 0,
     };
     bindAll(this, ['gradientStep', 'onRetry']);
     this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
@@ -21,12 +22,28 @@ class Topbar extends Component {
   componentDidMount() {
     this.gradientStep();
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.nextRetry !== this.props.nextRetry) {
+      clearTimeout(this._retryTimer);
+      if (nextProps.nextRetry) {
+        this.updateSecondsLeft(nextProps.nextRetry);
+      }
+    }
+  }
   onWinClick(name) {
     console.log('name', name);
     window.ipcListener[name]();
   }
   onRetry(e) {
-    console.log('yo', e);
+    window.socket.connect();
+  }
+  updateSecondsLeft(nextRetry) {
+    nextRetry = nextRetry || this.props.nextRetry;
+    const secUnrounded = this.secondsToTime(nextRetry) / 1000;
+    const secRounded = parseInt(secUnrounded);
+    const remainder = (secUnrounded - secRounded) * 1000 + 1;
+    this.setState({ secondsLeft: secRounded });
+    this._retryTimer = setTimeout(this.updateSecondsLeft.bind(this), secRounded);
   }
   gradientStep() {
     const gradientPos = gradient.getGradientPos();
@@ -37,16 +54,21 @@ class Topbar extends Component {
 
     setTimeout(this.gradientStep, 3000);
   }
+  secondsToTime(time) {
+    const now = new Date().getTime();
+    return time.getTime() - now;
+  }
   returnStatusIndicator() {
     const { status } = this.props;
+    const { secondsLeft } = this.state;
     let className = 'topbar__gradient topbar__gradient--status';
     let statusMessage = '';
     if (status === 'offline') {
       className += ' topbar__gradient--indicate';
-      statusMessage = 'Offline - retrying in 10 seconds';
+      statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
     } else if (status === 'connecting') {
       className += ' topbar__gradient--indicate';
-      statusMessage = 'System is connecting';
+      statusMessage = 'Connecting...';
     }
 
     return (
