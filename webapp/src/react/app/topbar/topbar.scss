@@ -25,6 +25,9 @@ $topbarSize: 38px;
 
 .topbar {
   $b: &;
+  @include size(100%);
+  position: fixed;
+  left: 0; top: 0;
 
   &__gradient {
     @include size(100%);
@@ -82,7 +85,7 @@ $topbarSize: 38px;
     @include size(auto, $topbarSize);
     // display: none;
     @include flex(flex);
-    
+
     position: absolute;
     right: 0; top: 0;
     -webkit-app-region: no-drag;
