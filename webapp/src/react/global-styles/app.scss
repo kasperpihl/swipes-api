@@ -17,6 +17,13 @@
       // @include flex(flex);
     }
   }
+
+  &.platform-darwin {
+
+    .content-wrapper {
+      border-radius: 3px;
+    }
+  }
 }
 
 .content-wrapper {
