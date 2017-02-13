@@ -16,7 +16,7 @@ const authCheck = (data, callback) => {
     email,
     password,
   } = data;
-  const apiUrl = `https://${url}/rest/api/2/myself`;
+  const apiUrl = `${url}/rest/api/2/myself`;
 
   req(apiUrl, {
     auth: {

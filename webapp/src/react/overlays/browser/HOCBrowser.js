@@ -25,7 +25,7 @@ class HOCBrowser extends Component {
       onLoad(webview, this.close.bind(this));
     }
     webview.addEventListener('dom-ready', () => {
-      webview.openDevTools();
+      // webview.openDevTools();
     });
     webview.addEventListener('did-navigate', (e) => {
       this.updateUrl(e.url);

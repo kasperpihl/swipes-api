@@ -12,9 +12,9 @@ import {
 // import {
 //   webhooks,
 // } from './webhooks';
-// import {
-//   mapSearch,
-// } from './search';
+import {
+  mapSearch,
+} from './search';
 // import {
 //   browse,
 // } from './browse';
@@ -27,5 +27,5 @@ export {
   // browse,
   // preview,
   // webhooks,
-  // mapSearch,
+  mapSearch,
 };
