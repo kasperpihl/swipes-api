@@ -22,6 +22,7 @@ class Topbar extends Component {
     this.gradientStep();
   }
   onWinClick(name) {
+    console.log('name', name);
     window.ipcListener[name]();
   }
   onRetry(e) {
@@ -59,6 +60,14 @@ class Topbar extends Component {
   }
   renderWindowsActions() {
     const { isMaximized } = this.props;
+    let toggleMaximizeIcon = 'Plus';
+    let toggleMaximizeFunc = 'maximize';
+
+    if (isMaximized) {
+      toggleMaximizeIcon = 'Reload';
+      toggleMaximizeFunc = 'unmaximize';
+    }
+
     return (
       <div className="topbar__window-actions">
         <div
@@ -68,16 +77,10 @@ class Topbar extends Component {
           <Icon svg="Minus" className="topbar__svg" />
         </div>
         <div
-          onClick={this.onWinClickCached('unmaximize')}
+          onClick={this.onWinClickCached(toggleMaximizeFunc)}
           className="topbar__button topbar__button--unmaximize"
         >
-          <Icon svg="Plus" className="topbar__svg" />
-        </div>
-        <div
-          onClick={this.onWinClickCached('maximize')}
-          className="topbar__button topbar__button--maximize"
-        >
-          <Icon svg="Vote" className="topbar__svg" />
+          <Icon svg={toggleMaximizeIcon} className="topbar__svg" />
         </div>
         <div
           onClick={this.onWinClickCached('close')}

@@ -11,6 +11,7 @@ $topbarSize: 38px;
   $b: &;
   @include size(100%, $topbarSize);
   -webkit-app-region: drag;
+  // -webkit-app-region: no-drag;
   flex: none;
   overflow: hidden;
   user-select: none;
@@ -80,8 +81,7 @@ $topbarSize: 38px;
 
   &__window-actions {
     @include size(auto, $topbarSize);
-    // display: none;
-    @include flex(flex);
+    display: none;
 
     position: absolute;
     right: 0; top: 0;

@@ -10,14 +10,15 @@
     @include flex(column);
   }
 
-  .is-maximized.platform-win32 {
-    padding: 5px;
-  }
 
   &.platform-win32 {
 
+    &.is-maximized {
+      padding: 5px;
+    }
+
     .topbar__window-actions {
-      // @include flex(flex);
+      @include flex(flex);
     }
   }
 
@@ -33,6 +34,8 @@
   @include size(100%);
   @include flex(flex);
   overflow: hidden;
+  // z-index: 9999999;
+  // margin-top: 38px;
 }
 
 svg {
@@ -45,38 +48,38 @@ svg {
   transform: translate(-50%, -50%);
 }
 
-// .overlay {
-//   @include size(100%, calc(100% - 38px));
-//   background: $bg;
-//   left: 0; top: 38px;
-//   position:fixed;
-//   visibility: hidden;
-//   z-index: 9;
-//   opacity: 0;
-//   transition: visibility 0s .3s, opacity 0s .3s;
-//
-//   &__anim-wrap {
-//     @include size(100%);
-//   }
-//
-//   &__actions {
-//     position: fixed;
-//     right: 30px; top: 79px;
-//     @include flex(flex);
-//   }
-//
-//   &__action {
-//     transition: .15s;
-//   }
-//   &--opaque{
-//     background: rgba(255,255,255,0.8);
-//   }
-//   &--shown {
-//     visibility: visible;
-//     opacity: 1;
-//     transition: visibility 0s 0s, opacity .15s;
-//   }
-// }
+.overlay {
+  @include size(100%, calc(100% - 38px));
+  background: $bg;
+  left: 0; top: 38px;
+  position:fixed;
+  visibility: hidden;
+  z-index: 9;
+  opacity: 0;
+  transition: visibility 0s .3s, opacity 0s .3s;
+
+  &__anim-wrap {
+    @include size(100%);
+  }
+
+  &__actions {
+    position: fixed;
+    right: 30px; top: 79px;
+    @include flex(flex);
+  }
+
+  &__action {
+    transition: .15s;
+  }
+  &--opaque{
+    background: rgba(255,255,255,0.8);
+  }
+  &--shown {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .15s;
+  }
+}
 
 .g-modal {
   @include size(100%);

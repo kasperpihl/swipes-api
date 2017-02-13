@@ -17,17 +17,6 @@ section.view-controller {
   @include size(100%);
   @include flex(column);
   will-change: width;
-
-  &:after {
-    content: '';
-    @include size(calc(20vw - 60px), 100%);
-    position: absolute;
-    left: 0; top: 0;
-    background-color: rgba($bg, 0);
-    transform: translateX(-100%);
-    pointer-events: none;
-    transition: .5s;
-  }
 }
 
 .sw-view {
