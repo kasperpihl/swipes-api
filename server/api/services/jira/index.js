@@ -3,15 +3,12 @@ import {
   authData,
   authCheck,
 } from './auth';
-// import {
-//   request,
-// } from './request';
+import {
+  request,
+} from './request';
 // import {
 //   preview,
 // } from './preview';
-// import {
-//   webhooks,
-// } from './webhooks';
 import {
   mapSearch,
 } from './search';
@@ -23,9 +20,8 @@ export {
   authUrl,
   authData,
   authCheck,
-  // request,
+  request,
   // browse,
   // preview,
-  // webhooks,
   mapSearch,
 };
