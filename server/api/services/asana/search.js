@@ -17,6 +17,7 @@ const mapSearch = (res) => {
       service: {
         id,
         type: 'task',
+        content_type: res.source_content_type,
         name: 'asana',
       },
       subtitle,

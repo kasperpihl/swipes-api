@@ -1,16 +1,15 @@
 const mapSearch = (res) => {
-  console.log(res);
-  return {};
   const id = res.id.split(/-(.+)/)[1];
 
   return {
     service: {
-      type: 'file',
-      id: `rev:${id}`,
-      name: 'dropbox',
+      id,
+      type: res.content_type,
+      content_type: res.source_content_type,
+      name: 'jira',
     },
-    title: res.filename,
-    subtitle: res.filepath || '/',
+    title: res.title,
+    subtitle: res.folder.join(', '),
   };
 };
 

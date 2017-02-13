@@ -3,9 +3,10 @@ const mapSearch = (res) => {
 
   return {
     service: {
-      type: 'file',
       id: `rev:${id}`,
       name: 'dropbox',
+      type: 'file',
+      content_type: res.source_content_type,
     },
     title: res.filename,
     subtitle: res.filepath || '/',
