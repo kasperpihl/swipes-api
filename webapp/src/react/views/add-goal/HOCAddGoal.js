@@ -25,15 +25,6 @@ const initialState = fromJS({
 });
 
 class HOCAddGoal extends Component {
-  static contextButtons() {
-    return [{
-      component: 'Button',
-      props: {
-        text: 'Load a Way',
-        tabIndex: -1,
-      },
-    }];
-  }
   constructor(props) {
     super(props);
     this.state = initialState.toObject();
@@ -41,30 +32,43 @@ class HOCAddGoal extends Component {
       this.state = props.cache.toObject();
     }
 
-    bindAll(this, ['clickedAdd', 'onHandoffChange', 'onSave', 'onInputChange', 'saveToCache']);
+    bindAll(this, [
+      'clickedAdd',
+      'onHandoffChange',
+      'onSave',
+      'onInputChange',
+      'saveToCache',
+      'onLoadWay',
+    ]);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
-    const input = document.getElementById('navbar-input');
     window.addEventListener('beforeunload', this.saveToCache);
-    input.value = this.state.title;
-    input.focus();
+    this.focusNavInput();
+  }
+  navbarLoadedInput(input) {
+    this._input = input;
+    this.focusNavInput();
+  }
+  focusNavInput(select) {
+    if (this._input) {
+      const input = this._input;
+      input.focus();
+      if (input.value.length) {
+        input.setSelectionRange(0, input.value.length);
+      }
+    }
   }
   componentDidUpdate() {
     if (this._loadedWay) {
-      const input = document.getElementById('navbar-input');
-      input.focus();
-      input.setSelectionRange(0, input.value.length);
+      this.focusNavInput();
       this._loadedWay = false;
     }
   }
-  saveToCache() {
-    const { saveCache } = this.props;
-    saveCache('add-goal', fromJS(this.state));
-  }
+
   componentWillUnmount() {
     this.saveToCache();
     window.removeEventListener('beforeunload', this.saveToCache);
@@ -74,16 +78,14 @@ class HOCAddGoal extends Component {
       hideNote(sideNoteId);
     }
   }
-  updateState(newState) {
-    this.setState(newState);
-  }
+
   onHandoffChange(handoff) {
     this.updateState({ handoff });
   }
-  onInputChange(text) {
-    this.updateState({ title: text });
+  onInputChange(e) {
+    this.updateState({ title: e.target.value });
   }
-  onContextClick(i, e) {
+  onLoadWay(e) {
     const { loadWay } = this.props;
     loadWay({
       boundingRect: e.target.getBoundingClientRect(),
@@ -99,8 +101,6 @@ class HOCAddGoal extends Component {
           attachmentOrder: goal.get('attachment_order'),
           title: way.get('title'),
         };
-        const input = document.getElementById('navbar-input');
-        input.value = way.get('title');
         this._loadedWay = true;
         this.updateState(newState);
       }
@@ -158,6 +158,13 @@ class HOCAddGoal extends Component {
     attachments = attachments.delete(id);
     attachmentOrder = attachmentOrder.filter(a => a !== id);
     this.updateState({ attachments, attachmentOrder });
+  }
+  updateState(newState) {
+    this.setState(newState);
+  }
+  saveToCache() {
+    const { saveCache } = this.props;
+    saveCache('add-goal', fromJS(this.state));
   }
   clickedAssign(id, e) {
     const { selectAssignees } = this.props;
@@ -259,9 +266,15 @@ class HOCAddGoal extends Component {
   }
   renderNavbar() {
     const { target } = this.props;
+    const { title } = this.state;
     return (
-      <HOCNavbar target={target}>
-        <Button text="Add Goal" primary onClick={this.onAddGoal} />
+      <HOCNavbar
+        onChange={this.onInputChange}
+        target={target}
+        delegate={this}
+        value={title}
+      >
+        <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
       </HOCNavbar>
     );
   }
@@ -384,6 +397,7 @@ HOCAddGoal.propTypes = {
   addToasty: func,
   updateToasty: func,
   navPop: func,
+  target: string,
   removeCache: func,
   request: func,
   organization_id: string,
@@ -394,7 +408,6 @@ HOCAddGoal.propTypes = {
   hideNote: func,
   selectAssignees: func,
   cache: map,
-
   me: map,
 };
 

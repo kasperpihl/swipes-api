@@ -4,7 +4,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import * as a from 'actions';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback, setupDelegate } from 'classes/utils';
 
 import './styles/nav-bar.scss';
 
@@ -13,24 +13,30 @@ class HOCNavBar extends Component {
     super(props);
     this.state = {};
     this.onClickCached = setupCachedCallback(this.onClick, this);
+    this.callDelegate = setupDelegate(props.delegate);
   }
 
   onClick(i) {
     const { target, popTo } = this.props;
     popTo(target, i);
   }
-
+  componentDidMount() {
+    const { input } = this.refs;
+    this.callDelegate('navbarLoadedInput', input);
+  }
   renderInputCrumb(placeholder) {
     const {
       history, // eslint-disable-line
       target, // eslint-disable-line
       popTo, // eslint-disable-line
       children, // eslint-disable-line
+      delegate,
       ...rest
     } = this.props;
     return (
-      <div className="bread-crumbs__title">
+      <div className="bread-crumbs__title" ref="title">
         <input
+          ref="input"
           {...rest}
           type="text"
           placeholder={placeholder}
@@ -59,7 +65,7 @@ class HOCNavBar extends Component {
     }
 
     return (
-      <div className={className} key={j} onClick={this.onClickCached(i)}>
+      <div className={className} key={j} ref="container" onClick={this.onClickCached(i)}>
         {renderedCrumb}
         <div className="bread-crumbs__seperator">
           <Icon svg="ArrowRightLine" className="bread-crumbs__icon" />
@@ -100,12 +106,13 @@ class HOCNavBar extends Component {
   }
 }
 
-const { object, func, string } = PropTypes;
+const { object, func, string, array, oneOfType } = PropTypes;
 
 HOCNavBar.propTypes = {
   target: string.isRequired,
   history: list,
-  children: object,
+  delegate: object,
+  children: oneOfType([object, array]),
   popTo: func,
 };
 
