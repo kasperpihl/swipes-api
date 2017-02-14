@@ -25,12 +25,8 @@ section.view-container {
   opacity: 0;
   overflow: hidden;
   position: absolute;
-  transition: left .5s ease, width .5s ease;
+  transition: left .5s ease;
   will-change: width, left;
-
-  & > * {
-    animation: showViewContainerInside 1s ease forwards;
-  }
 }
 
 .sw-view {
@@ -113,14 +109,5 @@ section.view-container {
   to {
     opacity: 1;
     transform: translateX(0px);
-  }
-}
-
-@keyframes showViewContainerInside {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
