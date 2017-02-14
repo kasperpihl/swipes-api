@@ -136,7 +136,7 @@ class HOCFind extends Component {
       return undefined;
     }
     return (
-      <SWView maxWidth={780}>
+      <SWView>
         <SearchResults
           results={searchResults}
           searching={searching}

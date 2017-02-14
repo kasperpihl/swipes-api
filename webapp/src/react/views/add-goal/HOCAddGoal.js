@@ -378,7 +378,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <SWView header={this.renderNavbar()} maxWidth={780}>
+      <SWView header={this.renderNavbar()}>
         <div className="add-goal">
           {this.renderSteps()}
           <div className={infoClass}>
