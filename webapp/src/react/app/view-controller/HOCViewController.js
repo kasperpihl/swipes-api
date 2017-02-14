@@ -4,7 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback, debounce } from 'classes/utils';
 import './styles/view-controller';
 
 const DEFAULT_MIN_WIDTH = 500;
@@ -21,6 +21,8 @@ class HOCViewController extends PureComponent {
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
     this.onClose = this.onClose.bind(this);
+    this.updateWidth = this.updateWidth.bind(this);
+    this.bouncedUpdate = debounce(this.updateWidth, 50);
   }
   componentDidMount() {
     this.updateWidth();
@@ -33,6 +35,11 @@ class HOCViewController extends PureComponent {
       [min2, max2, max2 - min1],
     );
     console.log('test res', test);
+    window.addEventListener('resize', this.bouncedUpdate);
+  }
+  componentWillUnmount() {
+    this._unmounted = true;
+    window.removeEventListener('resize', this.bouncedUpdate);
   }
   onClose() {
     const { navigateToId } = this.props;
@@ -80,21 +87,26 @@ class HOCViewController extends PureComponent {
     let runningX = isOverlay ? 0 : remainingSpace / 2;
     return [pView, sView].map((currentView, i) => {
       const target = (i === 0) ? 'primary' : 'secondary';
+      const xClass = [];
       const w = sizes[i];
       const style = {
         width: `${w}px`,
         left: `${runningX}px`,
-        zIndex: i + 1,
+        zIndex: i + 2,
       };
       runningX += (w + SPACING);
       if (target === 'secondary' && isOverlay) {
         style.left = width - w;
+        style.zIndex = 1;
+        xClass.push('view-container--overlay');
       }
-      return currentView ? this.renderContent(currentView, target, style) : undefined;
+      return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
     });
   }
   updateWidth() {
-    this.setState({ width: this.refs.controller.clientWidth });
+    if (!this._unmounted) {
+      this.setState({ width: this.refs.controller.clientWidth });
+    }
   }
   determineSizesForWidths(pMinMax, sMinMax) {
     if (!sMinMax) {
@@ -143,7 +155,7 @@ class HOCViewController extends PureComponent {
 
     return undefined;
   }
-  renderContent(currentView, target, style) {
+  renderContent(currentView, target, style, xClasses) {
     const View = views[currentView.get('component')];
     if (!View) {
       return `View (${currentView.get('component')}) not found!`;
@@ -155,9 +167,9 @@ class HOCViewController extends PureComponent {
     if (currentView.get('savedState')) {
       props.savedState = currentView.get('savedState');
     }
-
+    const className = ['view-container'].concat(xClasses).join(' ');
     return (
-      <section className="view-container" key={target} style={style}>
+      <section className={className} key={target} style={style}>
         {this.renderCloseButton(target)}
         <View
           navPop={this.onPopCached(target)}
