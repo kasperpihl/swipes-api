@@ -20,6 +20,7 @@ class HOCViewController extends PureComponent {
     };
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
+    this.onClose = this.onClose.bind(this);
   }
   componentDidMount() {
     this.updateWidth();
@@ -33,7 +34,10 @@ class HOCViewController extends PureComponent {
     );
     console.log('test res', test);
   }
-
+  onClose() {
+    const { navigateToId } = this.props;
+    navigateToId('secondary');
+  }
   getMinMaxForView(View) {
     const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
     if (typeof View.minWidth === 'function') {
@@ -129,6 +133,7 @@ class HOCViewController extends PureComponent {
         <Button
           small
           frameless
+          onClick={this.onClose}
           icon="Close"
           className="view-container__close-button"
           key="close-button"
@@ -192,11 +197,13 @@ const { func } = PropTypes;
 HOCViewController.propTypes = {
   navigation: map,
   push: func,
+  navigateToId: func,
   pop: func,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
   pop: actions.navigation.pop,
   push: actions.navigation.push,
+  navigateToId: actions.navigation.navigateToId,
 })(HOCViewController);
 export default ConnectedHOCViewController;

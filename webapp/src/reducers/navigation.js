@@ -18,10 +18,7 @@ export default function history(state = initialState, action) {
           s = s.setIn(['history', s.getIn(['id'])], s.getIn(['primary']));
           s = s.setIn('id', payload.id);
         }
-        if (payload.stack) {
-          s = s.set(payload.target, fromJS(payload.stack));
-        }
-        return s;
+        return s.set(payload.target, fromJS(payload.stack || []));
       });
     }
     case types.NAVIGATION_SAVE_STATE: {
