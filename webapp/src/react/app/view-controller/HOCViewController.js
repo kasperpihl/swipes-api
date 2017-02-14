@@ -7,9 +7,10 @@ import * as views from 'views';
 import { setupCachedCallback } from 'classes/utils';
 import './styles/view-controller';
 
-const reservedNavIds = [
-  'slack',
-];
+const DEFAULT_MIN_WIDTH = 500;
+const DEFAULT_MAX_WIDTH = 800;
+const SPACING = 20;
+const OVERLAY_LEFT_MIN = 100;
 
 class HOCViewController extends PureComponent {
   constructor(props) {
@@ -22,14 +23,107 @@ class HOCViewController extends PureComponent {
   }
   componentDidMount() {
     this.updateWidth();
+    const min1 = 500;
+    const max1 = 800;
+    const min2 = 600;
+    const max2 = 1400;
+    const test = this.determineSizesForWidths(
+      [min1, max1, max1 - min1],
+      [min2, max2, max2 - min1],
+    );
+    console.log('test res', test);
+  }
+
+  getMinMaxForView(View) {
+    const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
+    if (typeof View.minWidth === 'function') {
+      minMax[0] = View.minWidth();
+    }
+    if (typeof View.maxWidth === 'function') {
+      minMax[1] = View.maxWidth();
+    }
+    minMax.push(minMax[1] - minMax[0]);
+    return minMax;
+  }
+  getRemainingSpace(sizes) {
+    let { width } = this.state;
+    width = width || 1200;
+    let spacing = SPACING;
+    if (sizes[1] > 0) {
+      spacing += SPACING;
+    }
+    return width - spacing - sizes.reduce((a, b) => a + b);
+  }
+  renderViewControllers() {
+    const { navigation } = this.props;
+    const { width } = this.state;
+
+    // Primary view
+    const pView = navigation.get('primary').last();
+    const PView = views[pView.get('component')];
+    const pMinMax = this.getMinMaxForView(PView);
+
+    // Secondary view
+    const sView = navigation.get('secondary').last();
+    const SView = sView ? views[sView.get('component')] : undefined;
+    const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
+
+    const sizes = this.determineSizesForWidths(pMinMax, sMinMax);
+
+    const remainingSpace = this.getRemainingSpace(sizes);
+    const isOverlay = (SView && (remainingSpace < 0));
+
+    let runningX = isOverlay ? 0 : remainingSpace / 2;
+    return [pView, sView].map((currentView, i) => {
+      const target = (i === 0) ? 'primary' : 'secondary';
+      const w = sizes[i];
+      const style = {
+        width: `${w}px`,
+        left: `${runningX}px`,
+      };
+      runningX += (w + SPACING);
+      if (target === 'secondary' && isOverlay) {
+        style.left = width - w;
+      }
+      return currentView ? this.renderContent(currentView, target, style) : undefined;
+    });
   }
   updateWidth() {
     this.setState({ width: this.refs.controller.clientWidth });
   }
-  renderCloseButton() {
-    const { navId, target } = this.props;
+  determineSizesForWidths(pMinMax, sMinMax) {
+    if (!sMinMax) {
+      sMinMax = [0, 0, 0];
+    }
+    const { width } = this.state;
 
-    if (target && target === 'secondary' && navId) {
+    const sizes = [pMinMax[0], sMinMax[0]];
+    let remaining = this.getRemainingSpace(sizes);
+    if (remaining > 0) {
+      const pDiff = pMinMax[2]; // 200
+      const sDiff = sMinMax[2]; // 600
+      const diff = pDiff - sDiff;
+      if (diff < 0) {
+        sizes[1] += Math.min(remaining, Math.abs(diff));
+      } else if (diff > 0) {
+        sizes[0] += Math.min(remaining, diff);
+      }
+      remaining = this.getRemainingSpace(sizes);
+      const equalSplit = Math.min(pDiff, sDiff);
+      if (remaining > 0 && equalSplit > 0) {
+        const toAdd = Math.min(remaining / 2, equalSplit);
+        sizes[0] += toAdd;
+        sizes[1] += toAdd;
+      }
+    }
+    if (remaining < 0) {
+      sizes[0] = Math.min(width - SPACING, pMinMax[1]);
+      sizes[1] = Math.min(width - OVERLAY_LEFT_MIN, sMinMax[1]);
+    }
+    return sizes;
+  }
+  renderCloseButton(target) {
+    if (target && target === 'secondary') {
       return (
         <Button small icon="Close" className="view-controller__close-button" key="close-button" />
       );
@@ -37,9 +131,10 @@ class HOCViewController extends PureComponent {
 
     return undefined;
   }
-  renderContent(currentView, View, target) {
+  renderContent(currentView, target, style) {
+    const View = views[currentView.get('component')];
     if (!View) {
-      return <div key="not-found">View ({currentView.get('component')}) not found!</div>;
+      return `View (${currentView.get('component')}) not found!`;
     }
     let props = {};
     if (currentView.get('props')) {
@@ -50,7 +145,7 @@ class HOCViewController extends PureComponent {
     }
 
     return (
-      <section className="view-container">
+      <section className="view-container" style={style}>
         <View
           navPop={this.onPopCached(target)}
           navPush={this.onPushCached(target)}
@@ -64,33 +159,16 @@ class HOCViewController extends PureComponent {
     );
   }
 
-  renderSlack() {
-    const { navId, target } = this.props;
-    if (target !== 'primary') {
-      return undefined;
-    }
-
+  renderSlack(hidden) {
     const HOCSlack = views.Slack;
-    const hidden = navId !== 'slack';
     return (
       <HOCSlack hidden={hidden} />
     );
   }
-  renderSecondary() {
-
-  }
-  renderPrimary() {
-    const target = 'primary';
-    const { navigation } = this.props;
-    const history = navigation.get(target);
-    const currentView = history.last();
-    const View = views[currentView.get('component')];
-    return this.renderContent(currentView, View, target);
-  }
   render() {
     return (
       <div ref="controller" className="view-controller">
-        {this.renderPrimary()}
+        {this.renderViewControllers()}
       </div>
     );
   }
@@ -105,7 +183,6 @@ function mapStateToProps(state) {
 const { func, string } = PropTypes;
 HOCViewController.propTypes = {
   navigation: map,
-  navId: string,
   push: func,
   pop: func,
 };
