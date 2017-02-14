@@ -92,12 +92,12 @@ class HOCViewController extends PureComponent {
       const style = {
         width: `${w}px`,
         left: `${runningX}px`,
-        zIndex: i + 2,
+        zIndex: 2 - i,
       };
       runningX += (w + SPACING);
       if (target === 'secondary' && isOverlay) {
         style.left = width - w;
-        style.zIndex = 1;
+        style.zIndex = 3;
         xClass.push('view-container--overlay');
       }
       return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
