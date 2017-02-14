@@ -126,7 +126,13 @@ class HOCViewController extends PureComponent {
   renderCloseButton(target) {
     if (target && target === 'secondary') {
       return (
-        <Button small icon="Close" className="view-controller__close-button" key="close-button" />
+        <Button
+          small
+          frameless
+          icon="Close"
+          className="view-container__close-button"
+          key="close-button"
+        />
       );
     }
 

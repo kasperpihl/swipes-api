@@ -23,8 +23,11 @@ section.view-container {
   margin-top: calc(60px - 38px);
   overflow: hidden;
   position: absolute;
+  opacity: 0;
+  transform: translateX(-50%);
   transition: left .5s ease;
   will-change: width, left;
+  animation: showViewContainer .5s ease forwards;
 }
 
 .sw-view {
@@ -115,5 +118,16 @@ section.view-container {
     @include size(0%, 100%);
     border-left: 0px solid $deepBlue-10;
     will-change: width;
+  }
+}
+
+// ======================================================
+// Animations
+// ======================================================
+
+@keyframes showViewContainer {
+  to {
+    opacity: 1;
+    transform: translateX(0px);
   }
 }
