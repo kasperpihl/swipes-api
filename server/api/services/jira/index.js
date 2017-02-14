@@ -6,9 +6,9 @@ import {
 import {
   request,
 } from './request';
-// import {
-//   preview,
-// } from './preview';
+import {
+  preview,
+} from './preview';
 import {
   mapSearch,
 } from './search';
@@ -22,6 +22,6 @@ export {
   authCheck,
   request,
   browse,
-  // preview,
+  preview,
   mapSearch,
 };
