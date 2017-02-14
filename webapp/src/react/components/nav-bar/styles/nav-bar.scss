@@ -1,75 +1,105 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+$navbarH: 90px;
+
+// ======================================================
+// Block
+// ======================================================
+
 .nav-bar {
   $b: &;
-  @include size(100%, 90px);
+  @include size(100%, $navbarH);
   @include flex(flex);
   @include flex(none);
   background-color: $bg;
-  max-width: 780px;
-  padding-top: 9px;
-  position: relative;
   z-index: 9;
+}
+
+.bread-crumbs {
+  $b: &;
+  @include size(100%, $navbarH);
+  @include flex(column);
+}
+
+// ======================================================
+// Elelements
+// ======================================================
+
+.nav-bar {
+  $b: &;
 
   &__icon {
     @include size(24px);
   }
 
   &__actions {
+    @include size(auto, 100%);
     @include flex(flex);
     @include flex(none);
-    align-self: flex-end;
-    transform: translateY(-10px);
-  }
 
-  &__action {
-    margin: 0 3px;
+    button {
+      align-self: flex-end;
+    }
   }
 }
 
+// Containers
+
 .bread-crumbs {
   $b: &;
-  @include size(100%, 30px);
-  @include flex(flex);
-  position: relative;
+
+  &__history {
+    @include size(100%, 30px);
+    @include flex(flex);
+    @include flex(none);
+  }
+
+  &__title {
+    @include size(100%);
+    @include flex(flex);
+  }
+}
+
+// Crumb
+
+.bread-crumbs {
+  $b: &;
 
   &__crumb {
     @include size(auto, 100%);
     @include flex(center, flex-start);
 
-    &--last {
-      @include size(100%);
-      position: absolute;
-			left: 0; bottom: -9px;
-			transform: translateY(100%);
-      display: block;
-
-      #{$b}__title {
-        @include font(27px, $deepBlue-90, 400);
-  			white-space: nowrap;
-
-        input {
-          @include size(100%, auto);
-          @include font(27px, $deepBlue-90, 400);
-    			white-space: nowrap;
-        }
-
-
-      }
-
-      #{$b}__seperator {
-        display: none;
-      }
-    }
-
     &:not(&--last):hover {
-
       #{$b}__title {
         text-decoration: underline;
       }
     }
+
+    &--last {
+      @include size(100%);
+      @include flex(flex-end, flex-start);
+
+      #{$b}__title {
+        @include size(100%, auto);
+        @include font(27px, $deepBlue-90, 36px, 400);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        input {
+          @include size(100%, auto);
+          @include font(27px, $deepBlue-90, 36px, 400);
+        }
+      }
+    }
   }
+}
+
+// Misc
+
+.bread-crumbs {
+  $b: &;
 
   &__title {
     color: $blue-100;
@@ -93,22 +123,6 @@
   }
 }
 
-.breadCrumbsTransition {
-  &-enter {
-    opacity: 0;
-
-    &-active {
-      opacity: 1;
-      transition: all .1s .1s ease-in-out;
-    }
-  }
-
-  &-leave {
-    opacity: 1;
-
-    &-active {
-      opacity: 0;
-      transition: all .1s ease-in-out;
-    }
-  }
-}
+// ======================================================
+// Modifiers
+// ======================================================

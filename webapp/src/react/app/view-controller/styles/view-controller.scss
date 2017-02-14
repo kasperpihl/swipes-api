@@ -29,7 +29,7 @@ section.view-controller {
 // Elements
 // ======================================================
 
-.view-controller {
+section.view-controller {
 
   &__close-button {
     left: 7px; top: 48px;
@@ -40,9 +40,8 @@ section.view-controller {
 .sw-view {
 
   &__nav-bar {
-    @include size($innercContentWidth, auto);
+    @include size(100%, auto);
     @include flex(none);
-    margin: 0 $contentOverflowPadding;
   }
 
   &__header {

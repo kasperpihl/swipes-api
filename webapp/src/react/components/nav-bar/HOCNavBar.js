@@ -33,6 +33,7 @@ class HOCNavBar extends Component {
       delegate, // eslint-disable-line
       ...rest
     } = this.props;
+
     return (
       <div className="bread-crumbs__title" ref="title">
         <input
@@ -41,57 +42,68 @@ class HOCNavBar extends Component {
           type="text"
           placeholder={placeholder}
         />
-
-        <div className="bread-crumbs__bottom-border" />
       </div>
     );
   }
-  renderCrumb(crumb, i, numberOfCrumbs) {
+  renderCrumb(crumb, i) {
     const title = crumb.get('title');
-    let className = 'bread-crumbs__crumb';
-    let j = i;
-    const isLast = (i + 1) === numberOfCrumbs;
-    if (isLast) {
-      className += ' bread-crumbs__crumb--last';
-      j = `${j}last`;
-    }
-    let renderedCrumb = (
-      <div className="bread-crumbs__title">
-        {title}
-      </div>
-    );
-    if (isLast && crumb.get('placeholder')) {
-      renderedCrumb = this.renderInputCrumb(crumb.get('placeholder'));
-    }
 
     return (
-      <div className={className} key={j} ref="container" onClick={this.onClickCached(i)}>
-        {renderedCrumb}
+      <div className="bread-crumbs__crumb" key={i} ref="container" onClick={this.onClickCached(i)}>
+        <div className="bread-crumbs__title">
+          {title}
+        </div>
         <div className="bread-crumbs__seperator">
           <Icon svg="ArrowRightLine" className="bread-crumbs__icon" />
         </div>
       </div>
     );
   }
+  renderLastCrumb(crumb, i) {
+    const title = crumb.get('title');
+
+    return (
+      <div
+        className="bread-crumbs__crumb bread-crumbs__crumb--last"
+        key={`last-crumb-${i}`}
+      >
+        <div className="bread-crumbs__title">
+          {title}
+        </div>
+      </div>
+    );
+  }
   renderBreadCrumbs() {
     const { history } = this.props;
+
     if (!history) {
       return undefined;
     }
 
-    const breadCrumbsHTML = history.map((crumb, i) =>
-      this.renderCrumb(crumb, i, history.size));
+    const breadCrumbsHTML = [];
+    const lastBreadCrumbHTML = [];
+
+    history.forEach((crumb, i) => {
+      const isLast = (i + 1) === history.size;
+
+      if ((i + 1) > history.size) {
+        breadCrumbsHTML.push(this.renderCrumb(crumb, i));
+      }
+
+      if (isLast && !crumb.get('placeholder')) {
+        lastBreadCrumbHTML.push(this.renderLastCrumb(crumb, i));
+      }
+
+      if (isLast && crumb.get('placeholder')) {
+        lastBreadCrumbHTML.push(this.renderLastCrumb(crumb.get('placeholder')));
+      }
+    });
 
     return (
-      <ReactCSSTransitionGroup
-        transitionName="breadCrumbsTransition"
-        component="div"
-        className="bread-crumbs"
-        transitionEnterTimeout={200}
-        transitionLeaveTimeout={200}
-      >
-        {breadCrumbsHTML}
-      </ReactCSSTransitionGroup>
+      <div className="bread-crumbs">
+        <div className="bread-crumbs__history">{breadCrumbsHTML}</div>
+        <div className="bread-crumbs__title">{lastBreadCrumbHTML}</div>
+      </div>
     );
   }
   render() {
