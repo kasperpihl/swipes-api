@@ -14,6 +14,9 @@ import './styles/find.scss';
 
 // ipcListener.sendEvent('showItemInFolder', '/Volumes/Extra\ HD/Dropbox\ \(Swipes\)' + path);
 class HOCFind extends Component {
+  static maxWidth() {
+    return 1600;
+  }
   constructor(props) {
     super(props);
     this.state = {

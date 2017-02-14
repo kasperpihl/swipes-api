@@ -11,6 +11,7 @@ const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 20;
 const OVERLAY_LEFT_MIN = 100;
+const OVERLAY_RIGHT_SPACING = 20;
 
 class HOCViewController extends PureComponent {
   constructor(props) {
@@ -26,15 +27,6 @@ class HOCViewController extends PureComponent {
   }
   componentDidMount() {
     this.updateWidth();
-    const min1 = 500;
-    const max1 = 800;
-    const min2 = 600;
-    const max2 = 1400;
-    const test = this.determineSizesForWidths(
-      [min1, max1, max1 - min1],
-      [min2, max2, max2 - min1],
-    );
-    console.log('test res', test);
     window.addEventListener('resize', this.bouncedUpdate);
   }
   componentWillUnmount() {
@@ -64,6 +56,43 @@ class HOCViewController extends PureComponent {
       spacing += SPACING;
     }
     return width - spacing - sizes.reduce((a, b) => a + b);
+  }
+
+  updateWidth() {
+    if (!this._unmounted) {
+      this.setState({ width: this.refs.controller.clientWidth });
+    }
+  }
+  determineSizesForWidths(pMinMax, sMinMax) {
+    if (!sMinMax) {
+      sMinMax = [0, 0, 0];
+    }
+    const { width } = this.state;
+
+    const sizes = [pMinMax[0], sMinMax[0]];
+    let remaining = this.getRemainingSpace(sizes);
+    if (remaining > 0) {
+      const pDiff = pMinMax[2]; // 200
+      const sDiff = sMinMax[2]; // 600
+      const diff = pDiff - sDiff;
+      if (diff < 0) {
+        sizes[1] += Math.min(remaining, Math.abs(diff));
+      } else if (diff > 0) {
+        sizes[0] += Math.min(remaining, diff);
+      }
+      remaining = this.getRemainingSpace(sizes);
+      const equalSplit = Math.min(pDiff, sDiff);
+      if (remaining > 0 && equalSplit > 0) {
+        const toAdd = Math.min(remaining / 2, equalSplit);
+        sizes[0] += toAdd;
+        sizes[1] += toAdd;
+      }
+    }
+    if (remaining < 0) {
+      sizes[0] = Math.min(width - SPACING, pMinMax[1]);
+      sizes[1] = Math.min((width - OVERLAY_LEFT_MIN - OVERLAY_RIGHT_SPACING), sMinMax[1]);
+    }
+    return sizes;
   }
   renderViewControllers() {
     const { navigation } = this.props;
@@ -102,42 +131,6 @@ class HOCViewController extends PureComponent {
       }
       return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
     });
-  }
-  updateWidth() {
-    if (!this._unmounted) {
-      this.setState({ width: this.refs.controller.clientWidth });
-    }
-  }
-  determineSizesForWidths(pMinMax, sMinMax) {
-    if (!sMinMax) {
-      sMinMax = [0, 0, 0];
-    }
-    const { width } = this.state;
-
-    const sizes = [pMinMax[0], sMinMax[0]];
-    let remaining = this.getRemainingSpace(sizes);
-    if (remaining > 0) {
-      const pDiff = pMinMax[2]; // 200
-      const sDiff = sMinMax[2]; // 600
-      const diff = pDiff - sDiff;
-      if (diff < 0) {
-        sizes[1] += Math.min(remaining, Math.abs(diff));
-      } else if (diff > 0) {
-        sizes[0] += Math.min(remaining, diff);
-      }
-      remaining = this.getRemainingSpace(sizes);
-      const equalSplit = Math.min(pDiff, sDiff);
-      if (remaining > 0 && equalSplit > 0) {
-        const toAdd = Math.min(remaining / 2, equalSplit);
-        sizes[0] += toAdd;
-        sizes[1] += toAdd;
-      }
-    }
-    if (remaining < 0) {
-      sizes[0] = Math.min(width - SPACING, pMinMax[1]);
-      sizes[1] = Math.min(width - OVERLAY_LEFT_MIN, sMinMax[1]);
-    }
-    return sizes;
   }
   renderCloseButton(target) {
     if (target && target === 'secondary') {
