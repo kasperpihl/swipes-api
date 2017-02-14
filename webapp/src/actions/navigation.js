@@ -1,6 +1,6 @@
 import * as types from 'constants';
 
-const startingViewForNavId = (navId) => {
+export const viewForId = (navId) => {
   switch (navId) {
     case 'goals':
     default:
@@ -55,15 +55,17 @@ export function navigateToId(target, navId) {
     };
     if (navId) {
       const state = getState();
-      let history = state.getIn(['navigation', target, 'history', navId]);
+      let stack;
+      if (target === 'primary') {
+        stack = state.getIn(['navigation', 'history', navId]);
+      }
       const currentId = state.getIn(['navigation', target, 'id']);
 
-      if (currentId === navId || !history) {
-        history = [startingViewForNavId(navId)];
-        payload.history = history;
+      if (currentId === navId || !stack) {
+        stack = [viewForId(navId)];
       }
+      payload.stack = stack;
     }
-    dispatch({ type: types.NAVIGATION_WILL_CHANGE_TO, payload: { target, id: navId } });
     dispatch({ type: types.NAVIGATION_SET, payload });
   };
 }
@@ -88,15 +90,10 @@ export function push(target, obj, savedState) {
   const payload = { obj, savedState, target };
   return { type: types.NAVIGATION_PUSH, payload };
 }
-export function pop(target) {
-  return { type: types.NAVIGATION_POP, payload: { target } };
-}
-export function popTo(target, i) {
-  i = Math.max(parseInt(i, 10), 0); // Don't allow removing root
-
-  const payload = {
-    index: i,
-    target,
-  };
+export function pop(target, i) {
+  const payload = { target };
+  if (typeof i !== 'undefined') {
+    payload.index = Math.max(parseInt(i, 10), 0);
+  }
   return { type: types.NAVIGATION_POP, payload };
 }

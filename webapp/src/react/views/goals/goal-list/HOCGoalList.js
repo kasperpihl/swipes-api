@@ -83,6 +83,7 @@ class HOCGoalList extends Component {
   onClickGoal(goalId, scrollTop) {
     const {
       navPush,
+      openSecondary,
       goals,
     } = this.props;
     const {
@@ -93,7 +94,7 @@ class HOCGoalList extends Component {
       scrollTop,
     }; // state if this gets reopened
     const goal = goals.get(goalId);
-    navPush({
+    openSecondary({
       component: 'GoalStep',
       title: goal.get('title'),
       props: {
@@ -291,6 +292,7 @@ HOCGoalList.propTypes = {
   savedState: object,
   saveCache: func,
   navPush: func,
+  openSecondary: func,
   delegate: object,
   me: map,
   selectUser: func,

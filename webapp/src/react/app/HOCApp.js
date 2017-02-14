@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { api, navigation } from 'actions';
+import * as a from 'actions';
 import gradient from 'classes/gradient';
 
 import SwipesLoader from 'components/loaders/SwipesLoader';
@@ -38,6 +38,15 @@ class HOCApp extends Component {
     this.updateFullscreenClass(this.props.isFullscreen);
     this.gradientStep();
   }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.isMaximized !== prevProps.isMaximized) {
+      this.updateMaximizeClass(this.props.isMaximized);
+    }
+    if (this.props.isFullscreen !== prevProps.isFullscreen) {
+      this.updateFullscreenClass(this.props.isFullscreen);
+    }
+  }
   updateFullscreenClass(isFullscreen) {
     const classList = document.getElementById('content').classList;
     if (isFullscreen) {
@@ -52,14 +61,6 @@ class HOCApp extends Component {
       classList.add('is-maximized');
     } else {
       classList.remove('is-maximized');
-    }
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.isMaximized !== prevProps.isMaximized) {
-      this.updateMaximizeClass(this.props.isMaximized);
-    }
-    if (this.props.isFullscreen !== prevProps.isFullscreen) {
-      this.updateFullscreenClass(this.props.isFullscreen);
     }
   }
   gradientStep() {
@@ -88,8 +89,7 @@ class HOCApp extends Component {
         <div className="content-wrapper">
           <HOCSidebar />
           <div className="view-container">
-            <HOCViewController target="primary" />
-            <HOCViewController target="secondary" />
+            <HOCViewController />
           </div>
           <HOCSideNote />
         </div>
@@ -143,7 +143,9 @@ HOCApp.propTypes = {
   status: string,
   navInit: func,
   location: object,
+  nextRetry: object,
   hasLoaded: bool,
+  isFullscreen: bool,
   isMaximized: bool,
 };
 
@@ -158,6 +160,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCApp = connect(mapStateToProps, {
-  navInit: navigation.init,
+  navInit: a.navigation.init,
 })(HOCApp);
 export default ConnectedHOCApp;

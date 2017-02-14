@@ -1,7 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { list, map } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
@@ -10,38 +9,23 @@ import './styles/view-controller';
 
 const reservedNavIds = [
   'slack',
-  'gmail',
 ];
 
-class HOCViewController extends Component {
+class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      secondaryOverlay: false,
+      width: 0,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.bindedNavPush = props.push.bind(this, props.target);
-    this.bindedNavPop = props.pop.bind(this, props.target);
-    this.onContext = setupCachedCallback(this.callContentView.bind(this, 'onContextClick'), this);
+    this.onPopCached = setupCachedCallback(props.pop, this);
+    this.onPushCached = setupCachedCallback(props.push, this);
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.upcomingId !== this.props.upcomingId) {
-      this.callContentView('onNavWillChange', nextProps.upcomingId);
-    }
+  componentDidMount() {
+    this.updateWidth();
   }
-  componentWillUnmount() {
-    this._contentView = null;
+  updateWidth() {
+    this.setState({ width: this.refs.controller.clientWidth });
   }
-  viewDidLoad(view) {
-    this._contentView = view;
-  }
-  callContentView(name) {
-    const orgArgs = Array.prototype.slice.call(arguments, 1);
-    if (this._contentView && typeof this._contentView[name] === 'function') {
-      this._contentView[name](...orgArgs);
-    }
-  }
-
   renderCloseButton() {
     const { navId, target } = this.props;
 
@@ -53,9 +37,7 @@ class HOCViewController extends Component {
 
     return undefined;
   }
-  renderContent() {
-    const { currentView, View, target } = this.props;
-
+  renderContent(currentView, View, target) {
     if (!View) {
       return <div key="not-found">View ({currentView.get('component')}) not found!</div>;
     }
@@ -68,31 +50,22 @@ class HOCViewController extends Component {
     }
 
     return (
-      <View
-        navPop={this.bindedNavPop}
-        navPush={this.bindedNavPush}
-        delegate={this}
-        target={target}
-        key={currentView.get('component')}
-        {...props}
-      />
+      <section className="view-container">
+        <View
+          navPop={this.onPopCached(target)}
+          navPush={this.onPushCached(target)}
+          openSecondary={this.onPushCached('secondary')}
+          delegate={this}
+          target={target}
+          key={currentView.get('component')}
+          {...props}
+        />
+      </section>
     );
   }
-  renderContainer() {
-    const { history, currentView, navId } = this.props;
-    if (reservedNavIds.indexOf(navId) !== -1 || !history || !currentView) {
-      return undefined;
-    }
-    // if (currentView.get('fullscreen')) {
-    //   className += ' fullscreen';
-    // }
-    return [
-      this.renderCloseButton(),
-      this.renderContent(),
-    ];
-  }
+
   renderSlack() {
-    const { navId, slackOpenIn, target } = this.props;
+    const { navId, target } = this.props;
     if (target !== 'primary') {
       return undefined;
     }
@@ -100,71 +73,44 @@ class HOCViewController extends Component {
     const HOCSlack = views.Slack;
     const hidden = navId !== 'slack';
     return (
-      <HOCSlack hidden={hidden} openIn={slackOpenIn} />
+      <HOCSlack hidden={hidden} />
     );
   }
+  renderSecondary() {
+
+  }
+  renderPrimary() {
+    const target = 'primary';
+    const { navigation } = this.props;
+    const history = navigation.get(target);
+    const currentView = history.last();
+    const View = views[currentView.get('component')];
+    return this.renderContent(currentView, View, target);
+  }
   render() {
-    const { navId, target } = this.props;
-    const { secondaryOverlay } = this.state;
-    let className = 'view-controller';
-
-    if (!navId) {
-      className += ' view-controller--empty';
-
-      return (
-        <div className={className}>
-          {this.renderContainer()}
-          {this.renderSlack()}
-        </div>
-      );
-    }
-
-    if (target && target === 'secondary' && navId && secondaryOverlay) {
-      className += ' view-controller--overlay';
-    }
-
     return (
-      <section className={className}>
-        {this.renderContainer()}
-        {this.renderSlack()}
-      </section>
+      <div ref="controller" className="view-controller">
+        {this.renderPrimary()}
+      </div>
     );
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  const navId = state.getIn(['navigation', ownProps.target, 'id']);
-  const history = state.getIn(['navigation', ownProps.target, 'history', navId]);
-  const upcomingId = state.getIn(['navigation', ownProps.target, 'upcomingId']);
-
-  const currentView = history ? history.last() : undefined;
-  const View = currentView ? views[currentView.get('component')] : undefined;
+function mapStateToProps(state) {
   return {
-    slackOpenIn: state.getIn(['main', 'slackOpenIn']),
-    navId,
-    upcomingId,
-    history,
-    currentView,
-    View,
+    navigation: state.get('navigation'),
   };
 }
 
 const { func, string } = PropTypes;
 HOCViewController.propTypes = {
-  history: list,
-  slackOpenIn: string,
-  upcomingId: string,
+  navigation: map,
   navId: string,
-  currentView: map,
-  View: func,
-  popTo: func,
   push: func,
   pop: func,
-  target: string,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
-  popTo: actions.navigation.popTo,
   pop: actions.navigation.pop,
   push: actions.navigation.push,
 })(HOCViewController);

@@ -2,14 +2,10 @@ import { fromJS } from 'immutable';
 import * as types from 'constants';
 
 const initialState = fromJS({
-  primary: {
-    id: null,
-    history: {},
-  },
-  secondary: {
-    id: null,
-    history: {},
-  },
+  id: null,
+  primary: [],
+  secondary: [],
+  history: {},
   counters: {},
 });
 
@@ -18,34 +14,32 @@ export default function history(state = initialState, action) {
   switch (type) {
     case types.NAVIGATION_SET: {
       return state.update((s) => {
-        s = s.setIn([payload.target, 'id'], payload.id);
-        if (payload.history) {
-          s = s.setIn([payload.target, 'history', payload.id], fromJS(payload.history));
+        if (payload.target === 'primary') {
+          s = s.setIn(['history', s.getIn(['id'])], s.getIn(['primary']));
+          s = s.setIn('id', payload.id);
+        }
+        if (payload.stack) {
+          s = s.set(payload.target, fromJS(payload.stack));
         }
         return s;
       });
     }
+    case types.NAVIGATION_SAVE_STATE: {
+      return state.updateIn([
+        payload.target,
+        (state.get(payload.target).size - 1),
+      ], s => s.set('savedState', payload.savedState));
+    }
     case types.NAVIGATION_PUSH: {
-      const currentId = state.getIn([payload.target, 'id']);
-      return state.updateIn([payload.target, 'history', currentId], (s) => {
-        const { savedState } = payload;
-        if (savedState) {
-          s = s.mergeIn([s.size - 1], fromJS({ savedState }));
-        }
-        return s.push(fromJS(payload.obj));
-      });
+      return state.updateIn([payload.target], s => s.push(fromJS(payload.obj)));
     }
     case types.NAVIGATION_POP: {
-      const currentId = state.getIn([payload.target, 'id']);
-      return state.updateIn([payload.target, 'history', currentId], (s) => {
+      return state.updateIn([payload.target], (s) => {
         if (payload && typeof payload.index === 'number') {
           return s.slice(0, payload.index + 1);
         }
         return s.butLast();
       });
-    }
-    case types.NAVIGATION_WILL_CHANGE_TO: {
-      return state.setIn([payload.target, 'upcomingId'], payload.id);
     }
     case types.NAVIGATION_SET_COUNTER: {
       const { id, counter } = payload;

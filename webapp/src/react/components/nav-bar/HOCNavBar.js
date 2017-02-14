@@ -17,8 +17,8 @@ class HOCNavBar extends Component {
   }
 
   onClick(i) {
-    const { target, popTo } = this.props;
-    popTo(target, i);
+    const { target, pop } = this.props;
+    pop(target, i);
   }
   componentDidMount() {
     const { input } = this.refs;
@@ -28,7 +28,7 @@ class HOCNavBar extends Component {
     const {
       history, // eslint-disable-line
       target, // eslint-disable-line
-      popTo, // eslint-disable-line
+      pop, // eslint-disable-line
       children, // eslint-disable-line
       delegate, // eslint-disable-line
       ...rest
@@ -130,7 +130,7 @@ HOCNavBar.propTypes = {
   history: list,
   delegate: object,
   children: oneOfType([object, array]),
-  popTo: func,
+  pop: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -143,5 +143,5 @@ function mapStateToProps(state, ownProps) {
 
 
 export default connect(mapStateToProps, {
-  popTo: a.navigation.popTo,
+  pop: a.navigation.pop,
 })(HOCNavBar);
