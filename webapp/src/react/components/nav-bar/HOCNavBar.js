@@ -134,10 +134,8 @@ HOCNavBar.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const navId = state.getIn(['navigation', ownProps.target, 'id']);
-  const history = state.getIn(['navigation', ownProps.target, 'history', navId]);
   return {
-    history,
+    history: state.getIn(['navigation', ownProps.target]),
   };
 }
 
