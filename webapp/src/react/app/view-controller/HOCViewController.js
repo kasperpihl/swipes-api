@@ -80,6 +80,7 @@ class HOCViewController extends PureComponent {
       const style = {
         width: `${w}px`,
         left: `${runningX}px`,
+        zIndex: i + 1,
       };
       runningX += (w + SPACING);
       if (target === 'secondary' && isOverlay) {
@@ -146,6 +147,7 @@ class HOCViewController extends PureComponent {
 
     return (
       <section className="view-container" key={target} style={style}>
+        {this.renderCloseButton(target)}
         <View
           navPop={this.onPopCached(target)}
           navPush={this.onPushCached(target)}
@@ -180,7 +182,7 @@ function mapStateToProps(state) {
   };
 }
 
-const { func, string } = PropTypes;
+const { func } = PropTypes;
 HOCViewController.propTypes = {
   navigation: map,
   push: func,
