@@ -30,7 +30,7 @@ class HOCNavBar extends Component {
       target, // eslint-disable-line
       popTo, // eslint-disable-line
       children, // eslint-disable-line
-      delegate,
+      delegate, // eslint-disable-line
       ...rest
     } = this.props;
     return (

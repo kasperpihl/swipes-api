@@ -46,7 +46,9 @@ class HOCViewController extends Component {
     const { navId, target } = this.props;
 
     if (target && target === 'secondary' && navId) {
-      return <Button small icon="Close" className="view-controller__close-button" key="close-button" />;
+      return (
+        <Button small icon="Close" className="view-controller__close-button" key="close-button" />
+      );
     }
 
     return undefined;

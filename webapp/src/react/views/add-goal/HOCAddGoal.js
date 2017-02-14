@@ -47,20 +47,6 @@ class HOCAddGoal extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
     window.addEventListener('beforeunload', this.saveToCache);
-    this.focusNavInput();
-  }
-  navbarLoadedInput(input) {
-    this._input = input;
-    this.focusNavInput();
-  }
-  focusNavInput(select) {
-    if (this._input) {
-      const input = this._input;
-      input.focus();
-      if (input.value.length) {
-        input.setSelectionRange(0, input.value.length);
-      }
-    }
   }
   componentDidUpdate() {
     if (this._loadedWay) {
@@ -159,6 +145,49 @@ class HOCAddGoal extends Component {
     attachmentOrder = attachmentOrder.filter(a => a !== id);
     this.updateState({ attachments, attachmentOrder });
   }
+  getGoal() {
+    const {
+      steps,
+      title,
+      attachments,
+      stepOrder,
+      attachmentOrder,
+    } = this.state;
+
+    const goal = {
+      steps: steps.toJS(),
+      step_order: stepOrder.toJS(),
+      title,
+      attachments: attachments.toJS(),
+      attachment_order: attachmentOrder.toJS(),
+    };
+    return goal;
+  }
+  getStatus() {
+    const { steps, title } = this.state;
+    let status;
+
+    if (!title || !title.length) {
+      status = 'Please write a title for your goal';
+    } else if (!steps.size) {
+      status = 'Each goal must have at least one step.';
+    }
+
+    return status;
+  }
+  navbarLoadedInput(input) {
+    this._input = input;
+    this.focusNavInput();
+  }
+  focusNavInput() {
+    if (this._input) {
+      const input = this._input;
+      input.focus();
+      if (input.value.length) {
+        input.setSelectionRange(0, input.value.length);
+      }
+    }
+  }
   updateState(newState) {
     this.setState(newState);
   }
@@ -195,24 +224,7 @@ class HOCAddGoal extends Component {
     const { steps, title } = this.state;
     return (steps.size && title.length);
   }
-  getGoal() {
-    const {
-      steps,
-      title,
-      attachments,
-      stepOrder,
-      attachmentOrder,
-    } = this.state;
 
-    const goal = {
-      steps: steps.toJS(),
-      step_order: stepOrder.toJS(),
-      title,
-      attachments: attachments.toJS(),
-      attachment_order: attachmentOrder.toJS(),
-    };
-    return goal;
-  }
   clickedAdd() {
     const {
       handoff,
@@ -252,18 +264,7 @@ class HOCAddGoal extends Component {
       navPop();
     });
   }
-  getStatus() {
-    const { steps, title } = this.state;
-    let status;
 
-    if (!title || !title.length) {
-      status = 'Please write a title for your goal';
-    } else if (!steps.size) {
-      status = 'Each goal must have at least one step.';
-    }
-
-    return status;
-  }
   renderNavbar() {
     const { target } = this.props;
     const { title } = this.state;

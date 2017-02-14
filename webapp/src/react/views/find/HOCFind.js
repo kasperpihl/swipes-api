@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
 import * as actions from 'actions';
 import SWView from 'SWView';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate, bindAll } from 'classes/utils';
+import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import Button from 'Button';
 import HOCBrowse from './browse/HOCBrowse';
 import SearchResults from './SearchResults';
 import BrowseSectionList from './browse/BrowseSectionList';
@@ -19,25 +20,26 @@ class HOCFind extends Component {
       selectedId: 'search-results',
       accountId: null,
       serviceName: null,
+      searchQ: '',
     };
     this.unhandledDocs = [];
     this.callDelegate = setupDelegate(props.delegate);
+    bindAll(this, ['onInputChange', 'onInputKeyUp']);
   }
-  componentDidMount() {
-    this.callDelegate('viewDidLoad', this);
-    const input = document.getElementById('navbar-input');
-    input.focus();
+  onInputChange(e) {
+    this.setState({ searchQ: e.target.value });
   }
   onInputKeyUp(e) {
     if (e.keyCode === 13) {
       const { search } = this.props;
-      if (e.target.value.length > 2) {
+      const { searchQ } = this.state;
+      if (searchQ.length > 2) {
         if (this.state.selectedId !== 'search-results') {
           this.setState({
             selectedId: 'search-results',
           });
         }
-        search(e.target.value);
+        search(searchQ);
       } else {
         search();
       }
@@ -55,6 +57,19 @@ class HOCFind extends Component {
       }];
     }
     preview(obj, { buttons });
+  }
+  navbarLoadedInput(input) {
+    this._input = input;
+    this.focusNavInput();
+  }
+  focusNavInput() {
+    if (this._input) {
+      const input = this._input;
+      input.focus();
+      if (input.value.length) {
+        input.setSelectionRange(0, input.value.length);
+      }
+    }
   }
   clickedItem(depth, id, i, entry) {
     this.setState({
@@ -83,6 +98,21 @@ class HOCFind extends Component {
       service: obj.service,
       meta: { title: obj.title },
     });
+  }
+  renderNavbar() {
+    const { target } = this.props;
+    const { searchQ } = this.state;
+    return (
+      <HOCNavbar
+        onChange={this.onInputChange}
+        onKeyUp={this.onInputKeyUp}
+        target={target}
+        delegate={this}
+        value={searchQ}
+      >
+        <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
+      </HOCNavbar>
+    );
   }
   renderBrowse() {
     const {
@@ -170,6 +200,7 @@ class HOCFind extends Component {
   render() {
     return (
       <div className="find">
+        {this.renderNavbar()}
         <div className="find__sidebar">
           {this.renderSidebar()}
         </div>
@@ -191,6 +222,7 @@ HOCFind.propTypes = {
   search: func,
   searching: bool,
   searchQuery: string,
+  target: string,
   searchResults: list,
   me: map,
   services: map,
