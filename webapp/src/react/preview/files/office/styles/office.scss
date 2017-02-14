@@ -2,5 +2,10 @@
 @import '~styles/_mixins.scss';
 
 .preview-office{
-  
+  @include size(100%);
+  @include flex();
+
+  iframe {
+    @include size(85vmin);
+  }
 }

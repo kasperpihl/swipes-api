@@ -19,8 +19,6 @@ class Office extends PureComponent {
       <div className="preview-office" onClick={this.toggleRawSize}>
         <iframe
           src={`https://view.officeapps.live.com/op/embed.aspx?src=${file.url}`}
-          width="1366px"
-          height="623px"
           frameBorder="0"
         />
       </div>
