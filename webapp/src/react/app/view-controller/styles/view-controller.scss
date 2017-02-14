@@ -15,7 +15,7 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 }
 
 section.view-container {
-  @include size(100%, calc(100% - (60px - 38px) - 38px));
+  @include size(100%, calc(100% - (60px - 38px) - 60px));
   @include flex(column);
   background-color: $bg;
   border-radius: 6px;
