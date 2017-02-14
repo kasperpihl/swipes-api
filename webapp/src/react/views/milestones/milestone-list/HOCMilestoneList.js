@@ -86,7 +86,7 @@ class HOCMilestoneList extends Component {
   }
   render() {
     return (
-      <SWView maxWidth={780}>
+      <SWView maxWidth={780} header={this.renderHeader()}>
         <div className="milestone-list">
           {this.renderMilestones()}
         </div>

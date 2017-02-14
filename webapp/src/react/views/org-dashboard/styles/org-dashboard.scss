@@ -1,9 +1,24 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .org-dashboard {
   @include size(100%, auto);
   @include flex(column);
+}
+
+.notifications {
+
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.org-dashboard {
 
   &__notifications {
     @include size(100%, auto);
