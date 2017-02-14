@@ -59,6 +59,10 @@ import UnorderedList from './svgs/unordered-list.svg';
 import Upload from './svgs/upload.svg';
 import Vote from './svgs/vote.svg';
 import Windows from './svgs/windows.svg';
+import WindowsClose from './svgs/windows-close.svg';
+import WindowsMaximize from './svgs/windows-maximize.svg';
+import WindowsMinimize from './svgs/windows-minimize.svg';
+import WindowsUnmaximize from './svgs/windows-unmaximize.svg';
 
 import ShapeOne from './svgs/shape-1.svg';
 import ShapeTwo from './svgs/shape-2.svg';
@@ -148,6 +152,10 @@ export {
   Upload,
   Vote,
   Windows,
+  WindowsClose,
+  WindowsMaximize,
+  WindowsMinimize,
+  WindowsUnmaximize,
 
   ShapeOne,
   ShapeTwo,

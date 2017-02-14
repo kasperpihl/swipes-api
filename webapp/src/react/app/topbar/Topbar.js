@@ -82,11 +82,11 @@ class Topbar extends Component {
   }
   renderWindowsActions() {
     const { isMaximized } = this.props;
-    let toggleMaximizeIcon = 'Plus';
+    let toggleMaximizeIcon = 'WindowsMaximize';
     let toggleMaximizeFunc = 'maximize';
 
     if (isMaximized) {
-      toggleMaximizeIcon = 'Reload';
+      toggleMaximizeIcon = 'WindowsUnmaximize';
       toggleMaximizeFunc = 'unmaximize';
     }
 
@@ -96,7 +96,7 @@ class Topbar extends Component {
           onClick={this.onWinClickCached('minimize')}
           className="topbar__button topbar__button--minimize"
         >
-          <Icon svg="Minus" className="topbar__svg" />
+          <Icon svg="WindowsMinimize" className="topbar__svg" />
         </div>
         <div
           onClick={this.onWinClickCached(toggleMaximizeFunc)}
@@ -108,7 +108,7 @@ class Topbar extends Component {
           onClick={this.onWinClickCached('close')}
           className="topbar__button topbar__button--close"
         >
-          <Icon svg="Close" className="topbar__svg" />
+          <Icon svg="WindowsClose" className="topbar__svg" />
         </div>
       </div>
     );
