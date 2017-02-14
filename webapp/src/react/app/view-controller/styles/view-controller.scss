@@ -1,5 +1,6 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
+@import '~styles/_functions.scss/';
 
 $contentOverflowPadding: 45px;
 $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
@@ -8,15 +9,23 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 // Block
 // ======================================================
 
-.view-container {
+.view-controller {
   @include size(100%);
-	@include flex(flex);
+  overflow: hidden;
 }
 
-section.view-controller {
-  @include size(100%);
+section.view-container {
+  @include size(100%, calc(100% - (60px - 38px) - 38px));
   @include flex(column);
-  will-change: width;
+  background-color: $bg;
+  border-radius: 6px;
+  box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+  margin-top: calc(60px - 38px);
+  max-width: 600px;
+  overflow: hidden;
+  position: absolute;
+  transition: left .5s ease;
+  will-change: width, left;
 }
 
 .sw-view {
@@ -29,11 +38,19 @@ section.view-controller {
 // Elements
 // ======================================================
 
-section.view-controller {
+section.view-container {
+  $b: getElementSelectorInBlock(#{&}, 'section');
 
-  &__close-button {
-    left: 7px; top: 48px;
+  #{$b}__close-button {
+    right: 3px; top: 3px;
+    opacity: 0;
     position: absolute;
+  }
+
+  &:hover {
+    #{$b}__close-button {
+      opacity: 1;
+    }
   }
 }
 
@@ -70,26 +87,15 @@ section.view-controller {
 // Selector targets
 // ======================================================
 
-section.view-controller {
+section.view-container {
 
-  &:last-child {
-    border-left: 1px solid $deepBlue-10;
-  }
-
-  @include styleIfNumberOfElements(1) {
-    @include size(100%);
-  }
-
-  @include styleIfNumberOfElements(2) {
-    @include size(50%, 100%);
-  }
 }
 
 // ======================================================
 // modifiers
 // ======================================================
 
-section.view-controller {
+section.view-container {
 
   &--overlay {
     @include size(80vw, 100%);

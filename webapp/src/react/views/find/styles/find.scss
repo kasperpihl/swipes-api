@@ -1,13 +1,9 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
-$contentOverflowPadding: 45px;
-$innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
-
 .find {
-  @include size($innercContentWidth, 100%);
+  @include size(100%);
   @include flex(flex);
-  margin: 0 $contentOverflowPadding;
   padding-top: 51px;
 
   &:before {

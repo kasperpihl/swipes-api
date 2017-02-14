@@ -88,9 +88,7 @@ class HOCApp extends Component {
       <div className="content-wrapper">
         <div className="content-wrapper">
           <HOCSidebar />
-          <div className="view-container">
-            <HOCViewController />
-          </div>
+          <HOCViewController />
           <HOCSideNote />
         </div>
         <HOCOverlay />
