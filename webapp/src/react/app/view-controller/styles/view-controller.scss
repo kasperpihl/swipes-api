@@ -25,7 +25,6 @@ section.view-container {
   opacity: 0;
   overflow: hidden;
   position: absolute;
-  transform: translateX(-50%);
   transition: left .5s ease;
   will-change: width, left;
 }
@@ -98,8 +97,17 @@ section.view-container {
 // ======================================================
 
 section.view-container {
+  $b: getElementSelectorInBlock(#{&}, 'section');
 
+  &:not(#{$b}--overlay) {
+    transform: translateX(-50%);
+  }
+
+  &--overlay {
+    transform: translateX(50%);
+  }
 }
+
 
 // ======================================================
 // Animations
