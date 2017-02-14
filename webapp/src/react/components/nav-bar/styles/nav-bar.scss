@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$navbarH: 70px;
+$navbarH: 90px;
 
 // ======================================================
 // Block
@@ -13,6 +13,7 @@ $navbarH: 70px;
   @include flex(flex);
   @include flex(none);
   background-color: $bg;
+  margin-bottom: 30px;
   z-index: 9;
 }
 
@@ -50,7 +51,7 @@ $navbarH: 70px;
   $b: &;
 
   &__history {
-    @include size(100%, 30px);
+    @include size(100%, 60px);
     @include flex(flex);
     @include flex(none);
   }
