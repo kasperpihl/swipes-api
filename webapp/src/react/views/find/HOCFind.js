@@ -199,15 +199,16 @@ class HOCFind extends Component {
   }
   render() {
     return (
-      <div className="find">
-        {this.renderNavbar()}
-        <div className="find__sidebar">
-          {this.renderSidebar()}
+      <SWView header={this.renderNavbar()}>
+        <div className="find">
+          <div className="find__sidebar">
+            {this.renderSidebar()}
+          </div>
+          <div className="find__content">
+            {this.renderContent()}
+          </div>
         </div>
-        <div className="find__content">
-          {this.renderContent()}
-        </div>
-      </div>
+      </SWView>
     );
   }
 }

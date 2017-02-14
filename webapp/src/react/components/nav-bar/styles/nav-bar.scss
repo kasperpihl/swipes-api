@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$navbarH: 90px;
+$navbarH: 70px;
 
 // ======================================================
 // Block
@@ -55,7 +55,7 @@ $navbarH: 90px;
     @include flex(none);
   }
 
-  &__title {
+  &__last {
     @include size(100%);
     @include flex(flex);
   }

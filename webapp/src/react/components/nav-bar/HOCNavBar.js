@@ -35,13 +35,18 @@ class HOCNavBar extends Component {
     } = this.props;
 
     return (
-      <div className="bread-crumbs__title" ref="title">
-        <input
-          ref="input"
-          {...rest}
-          type="text"
-          placeholder={placeholder}
-        />
+      <div
+        className="bread-crumbs__crumb bread-crumbs__crumb--last"
+        key="last-crumb-input"
+      >
+        <div className="bread-crumbs__title" ref="title">
+          <input
+            ref="input"
+            {...rest}
+            type="text"
+            placeholder={placeholder}
+          />
+        </div>
       </div>
     );
   }
@@ -86,7 +91,7 @@ class HOCNavBar extends Component {
     history.forEach((crumb, i) => {
       const isLast = (i + 1) === history.size;
 
-      if ((i + 1) > history.size) {
+      if ((i + 1) < history.size) {
         breadCrumbsHTML.push(this.renderCrumb(crumb, i));
       }
 
@@ -95,14 +100,14 @@ class HOCNavBar extends Component {
       }
 
       if (isLast && crumb.get('placeholder')) {
-        lastBreadCrumbHTML.push(this.renderLastCrumb(crumb.get('placeholder')));
+        lastBreadCrumbHTML.push(this.renderInputCrumb(crumb.get('placeholder')));
       }
     });
 
     return (
       <div className="bread-crumbs">
         <div className="bread-crumbs__history">{breadCrumbsHTML}</div>
-        <div className="bread-crumbs__title">{lastBreadCrumbHTML}</div>
+        <div className="bread-crumbs__last">{lastBreadCrumbHTML}</div>
       </div>
     );
   }

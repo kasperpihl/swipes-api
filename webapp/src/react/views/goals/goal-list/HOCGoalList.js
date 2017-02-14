@@ -219,6 +219,7 @@ class HOCGoalList extends Component {
   }
   renderNavbar() {
     const { target } = this.props;
+
     return (
       <HOCNavbar target={target}>
         <Button text="Add Goal" primary onClick={this.onAddGoal} />

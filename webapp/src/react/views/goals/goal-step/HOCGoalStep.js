@@ -11,6 +11,8 @@ import ListMenu from 'components/list-menu/ListMenu';
 import GoalStep from './GoalStep';
 import GoalSide from './GoalSide';
 import SWView from 'src/react/app/view-controller/SWView';
+import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import Button from 'Button';
 
 
 import './styles/goal-step';
@@ -35,7 +37,7 @@ class HOCGoalStep extends Component {
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick', 'onMeasure']);
+    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick', 'onMeasure', 'onContextClick']);
     this.callDelegate = setupDelegate(props.delegate);
   }
 
@@ -80,7 +82,7 @@ class HOCGoalStep extends Component {
     this.setState({ handoff });
   }
 
-  onContextClick(i, e) {
+  onContextClick(e) {
     const {
       goal,
       archive,
@@ -297,10 +299,18 @@ class HOCGoalStep extends Component {
       </div>
     );
   }
+  renderNavbar() {
+    const { target } = this.props;
+
+    return (
+      <HOCNavbar target={target}>
+        <Button icon="ThreeDots" onClick={this.onContextClick} />
+      </HOCNavbar>
+    );
+  }
   render() {
     const { isHandingOff } = this.state;
     const { goal } = this.props;
-
     let className = 'goal-step';
     if (!goal) {
       return <div className={className} />;
@@ -311,10 +321,10 @@ class HOCGoalStep extends Component {
     }
     return (
       <Measure onMeasure={this.onMeasure}>
-        <SWView>
+        <SWView header={this.renderNavbar()}>
           <div className={className}>
             {this.renderContent()}
-            {this.renderSide()}
+            {/* {this.renderSide()} */}
           </div>
         </SWView>
       </Measure>
@@ -340,6 +350,7 @@ HOCGoalStep.propTypes = {
   goal: map,
   me: map,
   users: map,
+  target: string,
 };
 
 

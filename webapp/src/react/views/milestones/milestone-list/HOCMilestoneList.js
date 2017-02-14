@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import SWView from 'src/react/app/view-controller/SWView';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import MilestoneItem from './MilestoneItem';
+import HOCNavbar from 'components/nav-bar/HOCNavBar';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 
@@ -15,6 +16,13 @@ class HOCMilestoneList extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
+  }
+  renderHeader() {
+    const { target } = this.props;
+
+    return (
+      <HOCNavbar target={target} />
+    );
   }
   renderMilestones() {
     const { users } = this.props;
