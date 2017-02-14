@@ -1,15 +1,113 @@
 @import './vars';
 @import './mixins';
 
+// ======================================================
+// Block
+// ======================================================
+
+// Containers
+
 #content {
   @include size(100%);
   @include flex(flex);
+}
 
-  .app {
+.app {
+  @include size(100%);
+  @include flex(column);
+}
+
+.content-wrapper {
+  @include size(100%);
+  @include flex(flex);
+  overflow: hidden;
+}
+
+.gradient-bg {
+  @include size(100%);
+  left: 0; top: 0;
+  position: fixed;
+  z-index: -1;
+}
+
+// overlay (Browser etc.)
+
+.overlay {
+  @include size(100%, calc(100% - 38px));
+  background: $bg;
+  left: 0; top: 38px;
+  opacity: 0;
+  position:fixed;
+  visibility: hidden;
+  z-index: 9;
+  transition: visibility 0s .3s, opacity 0s .3s;
+}
+
+// Modal component
+
+.g-modal {
+  @include size(100%);
+  @include flex();
+  left: 0; top: 0;
+  opacity: 0;
+  position: fixed;
+  visibility: hidden;
+  z-index: 9999;
+  transition: visibility 0s .3s, opacity .3s;
+}
+
+
+// ======================================================
+// Elements
+// ======================================================
+
+.overlay {
+
+  &__anim-wrap {
     @include size(100%);
-    @include flex(column);
   }
 
+  &__actions {
+    @include flex(flex);
+    right: 30px; top: 79px;
+    position: fixed;
+  }
+
+  &__action {
+    transition: .15s;
+  }
+}
+
+.g-modal {
+
+  &__transition {
+    @include size();
+    @include flex();
+  }
+
+  &__overlay {
+    @include size(100%);
+    background-color: rgba($deepBlue-100, .96);
+    left: 0; top: 0;
+    position: fixed;
+  }
+}
+
+.gradient-bg {
+
+  &__gradient {
+    @include size(100%);
+    opacity: .7; // TODO: Fix later with Stefan
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+// OS specific modifiers
+
+#content {
 
   &.platform-win32 {
 
@@ -30,82 +128,26 @@
   }
 }
 
-.content-wrapper {
-  @include size(100%);
-  @include flex(flex);
-  overflow: hidden;
-  // z-index: 9999999;
-  // margin-top: 38px;
-}
-
-svg {
-  pointer-events: none;
-}
-
-.main-loader {
-  left: 50%; top: 50%;
-  position: fixed !important;
-  transform: translate(-50%, -50%);
-}
+// Misc
 
 .overlay {
-  @include size(100%, calc(100% - 38px));
-  background: $bg;
-  left: 0; top: 38px;
-  position:fixed;
-  visibility: hidden;
-  z-index: 9;
-  opacity: 0;
-  transition: visibility 0s .3s, opacity 0s .3s;
 
-  &__anim-wrap {
-    @include size(100%);
-  }
-
-  &__actions {
-    position: fixed;
-    right: 30px; top: 79px;
-    @include flex(flex);
-  }
-
-  &__action {
-    transition: .15s;
-  }
   &--opaque{
     background: rgba(255,255,255,0.8);
   }
+
   &--shown {
-    visibility: visible;
     opacity: 1;
+    visibility: visible;
     transition: visibility 0s 0s, opacity .15s;
   }
 }
 
 .g-modal {
-  @include size(100%);
-  @include flex();
-  left: 0; top: 0;
-  position: fixed;
-  z-index: 9999;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s .3s, opacity .3s;
 
   &--shown {
     visibility: visible;
     opacity: 1;
     transition: visibility 0s 0s, opacity .3s;
-  }
-
-  &__transition {
-    @include size();
-    @include flex();
-  }
-
-  &__overlay {
-    @include size(100%);
-    background-color: rgba($deepBlue-100, .96);
-    left: 0; top: 0;
-    position: fixed;
   }
 }

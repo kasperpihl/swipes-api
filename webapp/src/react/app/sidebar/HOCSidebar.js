@@ -70,8 +70,8 @@ class HOCSidebar extends Component {
   // render
   renderTopSection() {
     return [
-      { id: 'goals', svg: 'Goal' },
-      { id: 'milestones', svg: 'Milestones' },
+      { id: 'goals', svg: 'Goals' },
+      { id: 'milestones', svg: 'Flag' },
       { id: 'dashboard', svg: 'Notification' },
       { id: 'find', svg: 'Find' },
       { id: 'slack', svg: 'Hashtag' },
@@ -93,10 +93,14 @@ class HOCSidebar extends Component {
   render() {
     return (
       <div className="sidebar">
-        <div className="sidebar__top-section2">
-          {this.renderTopSection()}
+        <div className="sidebar__top-section">
+          <div className="sidebar__section">
+            {this.renderTopSection()}
+          </div>
         </div>
-        {this.renderProfile()}
+        <div className="sidebar__bottom-section">
+          {this.renderProfile()}
+        </div>
       </div>
     );
   }

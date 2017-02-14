@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { api, navigation } from 'actions';
+import gradient from 'classes/gradient';
 
 import SwipesLoader from 'components/loaders/SwipesLoader';
 import Topbar from './topbar/Topbar';
@@ -24,12 +25,18 @@ class HOCApp extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    const gradientPos = gradient.getGradientPos();
+    this.state = {
+      gradientPos,
+    };
+    this.gradientStep = this.gradientStep.bind(this);
   }
   componentDidMount() {
     const { navInit } = this.props;
     navInit();
     this.updateMaximizeClass(this.props.isMaximized);
     this.updateFullscreenClass(this.props.isFullscreen);
+    this.gradientStep();
   }
   updateFullscreenClass(isFullscreen) {
     const classList = document.getElementById('content').classList;
@@ -54,6 +61,15 @@ class HOCApp extends Component {
     if (this.props.isFullscreen !== prevProps.isFullscreen) {
       this.updateFullscreenClass(this.props.isFullscreen);
     }
+  }
+  gradientStep() {
+    const gradientPos = gradient.getGradientPos();
+
+    if (this.state.gradientPos !== gradientPos) {
+      this.setState({ gradientPos });
+    }
+
+    setTimeout(this.gradientStep, 3000);
   }
   renderLoader() {
     const { hasLoaded } = this.props;
@@ -89,10 +105,24 @@ class HOCApp extends Component {
   renderNote() {
     return <HOCSideNote />;
   }
+  renderGradient() {
+    const styles = gradient.getGradientStyles();
+
+    if (this.state.gradientPos) {
+      styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
+    }
+
+    return (
+      <div className="gradient-bg">
+        <div className="gradient-bg__gradient" style={styles} />
+      </div>
+    );
+  }
   render() {
     const { location, status, isMaximized, nextRetry, hasLoaded } = this.props;
     return (
       <div className="app">
+        {this.renderGradient()}
         <Topbar
           pathname={location.pathname}
           status={status}

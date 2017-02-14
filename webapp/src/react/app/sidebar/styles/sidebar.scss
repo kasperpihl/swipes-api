@@ -3,44 +3,98 @@
 
 $sidebarWidth: 60px;
 
-.sidebar {
-  $b: &;
-  @include flex(center, space-between, column);
-  @include size($sidebarWidth, 100%);
-  background-color: #FCFCFC;
-  flex: none;
-  padding-top: 30px;
-  padding-bottom: 22px;
-  position: relative;
+// ======================================================
+// Block
+// ======================================================
 
-  &:after {
-    @include size(1px, 100%);
-    background-color: $deepBlue-10;
-    content: '';
-    position: absolute;
-    right: 0; top: 0;
-  }
+.sidebar {
+  @include size($sidebarWidth, 100%);
+  @include flex(column);
+  @include flex(none);
+  padding-bottom: 22px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+// Sections
+
+.sidebar {
 
   &__top-section {
-    @include size(100%, auto);
-    @include flex(flex-start, center);
+    @include size(100%);
+    @include flex(center, center, column);
+    padding-bottom: 38px;
   }
 
-  &__notification {
+  &__bottom-section {
+    @include size(100%, auto);
+    @include flex(column);
+    @include flex(none);
+  }
+
+  &__section {
+    @include size(50%, auto);
+    @include flex(center, center, column);
+    padding: 0 20px;
+    border-radius: 50px;
+    background-color: rgba($bg, .3);
+  }
+}
+
+// Item
+
+.sidebar {
+  $b: &;
+
+  &__item {
+    @include size($sidebarWidth);
     @include flex();
-    @include font(9px, $bg, 500);
-    height: 12px;
-    min-width: 12px;
-    max-width: 30px;
-    background: $deepBlue-40;
-    position: absolute;
+
+    &:after {
+      @include size(calc(#{$sidebarWidth} / 2));
+      background-color: rgba($blue-60, 0);
+      border-radius: 50%;
+      content: '';
+      left: 50%; top: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      transition: .2s ease;
+    }
+
+    & > * {
+      pointer-events: none;
+    }
+
+    &:hover {
+      &:after {
+        background-color: rgba($blue-60, 1);
+        transition: .2s ease;
+      }
+    }
+  }
+}
+
+// Notifications
+
+.sidebar {
+
+  &__notification {
+    @include size(auto, 12px);
+    @include widthSpecifications(12px, 30px);
+    @include flex();
+    @include font(9px, $deepBlue-90, 500);
+    animation: newNotification 1s ease forwards;
+    background: $bg;
+    border-radius: 20px;
     left: 55%; top: 50%;
     padding: 0 3px;
     padding-bottom: 1px;
-    border-radius: 20px;
     pointer-events: none;
+    position: absolute;
     transform: translateY(-110%);
-    animation: newNotification 1s ease forwards;
 
     @keyframes newNotification {
       50% {
@@ -48,99 +102,19 @@ $sidebarWidth: 60px;
       }
     }
   }
+}
 
-  &__item {
-    @include size($sidebarWidth);
-    @include flex();
-    position: relative;
+// Misc
 
-    & > * {
-      pointer-events: none;
-    }
-
-    &:before, &:after {
-      content: '';
-      @include size(4px, 40px);
-      position: absolute;
-      top: 10px;
-      background-color: $blue-100;
-      transition: -webkit-clip-path .25s ease, width .15s ease;
-    }
-
-    &:before {
-      left: 0;
-      -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-    }
-
-    &:after {
-      right: 1px;
-      -webkit-clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
-    }
-
-    &:hover {
-      #{$b}__icon {
-        @include svg-color($deepBlue-60);
-        filter: grayscale(0%);
-      }
-
-      #{$b}__notification {
-        background-color: $deepBlue-60;
-      }
-    }
-
-    &--active {
-      #{$b}__icon {
-        @include svg-color($deepBlue-90);
-        filter: grayscale(0%);
-      }
-
-      &:before {
-        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        transition: .25s ease;
-      }
-
-      #{$b}__notification {
-        background-color: $deepBlue-90;
-      }
-
-      &:hover {
-        &:before {
-          @include size(6px, 40px);
-          transition: .15s ease;
-        }
-      }
-    }
-
-    &--secondary-active {
-      #{$b}__icon {
-        @include svg-color($deepBlue-90);
-        filter: grayscale(0%);
-      }
-
-      &:after {
-        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        transition: .25s ease;
-      }
-
-      &:hover {
-        &:after {
-          @include size(6px, 40px);
-          transition: .15s ease;
-        }
-      }
-    }
-  }
-
-  &__image {
-    @include size(32px);
-    border-radius: 50%;
-    pointer-events: none;
-  }
+.sidebar {
 
   &__icon {
     @include size(24px);
-    @include svg-color($deepBlue-40);
+    @include svg-color($bg);
     pointer-events: none;
-    filter: grayscale(100%);
   }
 }
+
+// ======================================================
+// Modifiers
+// ======================================================

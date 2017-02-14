@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import gradient from 'src/react/app/topbar/gradient';
+import gradient from 'classes/gradient';
 import Icon from 'Icon';
 import './styles/swipes-loader.scss';
 

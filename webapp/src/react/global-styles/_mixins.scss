@@ -17,6 +17,16 @@
 	}
 }
 
+@mixin widthSpecifications($minW: null, $maxW: null) {
+	min-width: $minW;
+	max-width: $maxW;
+}
+
+@mixin heightSpecifications($minH: null, $maxH: null) {
+	min-height: $minH;
+	max-height: $maxH;
+}
+
 //Pass nothing paramenters for simple centering
 @mixin flex($vertical:center, $horizontal:center, $direction:row) {
 	@if $vertical == flex {

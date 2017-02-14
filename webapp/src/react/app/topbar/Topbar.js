@@ -1,26 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindAll, setupCachedCallback } from 'classes/utils';
 
 // now use events as onClick: this.onWinClickCached(i)
 import Icon from 'Icon';
 import './topbar.scss';
-import gradient from './gradient';
+
 
 class Topbar extends Component {
   constructor(props) {
     super(props);
-    const gradientPos = gradient.getGradientPos();
     this.state = {
-      gradientPos,
       secondsLeft: 0,
     };
-    bindAll(this, ['gradientStep', 'onRetry']);
+    bindAll(this, ['onRetry']);
     this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-  componentDidMount() {
-    this.gradientStep();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.nextRetry !== this.props.nextRetry) {
@@ -31,28 +26,18 @@ class Topbar extends Component {
     }
   }
   onWinClick(name) {
-    console.log('name', name);
     window.ipcListener[name]();
   }
-  onRetry(e) {
+  onRetry() {
     window.socket.connect();
   }
   updateSecondsLeft(nextRetry) {
     nextRetry = nextRetry || this.props.nextRetry;
     const secUnrounded = this.secondsToTime(nextRetry) / 1000;
-    const secRounded = parseInt(secUnrounded);
-    const remainder = (secUnrounded - secRounded) * 1000 + 1;
+    const secRounded = parseInt(secUnrounded, 10);
+    const remainder = ((secUnrounded - secRounded) * 1000) + 1;
     this.setState({ secondsLeft: secRounded });
-    this._retryTimer = setTimeout(this.updateSecondsLeft.bind(this), secRounded);
-  }
-  gradientStep() {
-    const gradientPos = gradient.getGradientPos();
-
-    if (this.state.gradientPos !== gradientPos) {
-      this.setState({ gradientPos });
-    }
-
-    setTimeout(this.gradientStep, 3000);
+    this._retryTimer = setTimeout(this.updateSecondsLeft.bind(this), remainder);
   }
   secondsToTime(time) {
     const now = new Date().getTime();
@@ -114,15 +99,9 @@ class Topbar extends Component {
     );
   }
   render() {
-    const styles = gradient.getGradientStyles();
-    if (this.state.gradientPos) {
-      styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
-    }
-
     return (
       <div className="topbar">
-        <div className="topbar__gradient topbar__gradient--main" style={styles} />
-        {this.returnStatusIndicator()}
+        {/* {this.returnStatusIndicator()} */}
         {this.renderWindowsActions()}
       </div>
     );
@@ -130,3 +109,10 @@ class Topbar extends Component {
 }
 
 export default Topbar;
+
+const { object, string, bool } = PropTypes;
+Topbar.propTypes = {
+  nextRetry: object,
+  status: string,
+  isMaximized: bool,
+};
