@@ -12,16 +12,16 @@ import {
 import {
   mapSearch,
 } from './search';
-// import {
-//   browse,
-// } from './browse';
+import {
+  browse,
+} from './browse';
 
 export {
   authUrl,
   authData,
   authCheck,
   request,
-  // browse,
+  browse,
   // preview,
   mapSearch,
 };

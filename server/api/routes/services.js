@@ -2,6 +2,8 @@ import express from 'express';
 import {
   string,
   object,
+  array,
+  any,
 } from 'valjs';
 import {
   serviceIdGet,
@@ -52,7 +54,7 @@ authed.all('/services.request',
   serviceImport,
   serviceDoRequest,
   valResponseAndSend({
-    result: object.require(),
+    result: any.of(object, array),
   }));
 
 authed.all('/services.authsuccess',
