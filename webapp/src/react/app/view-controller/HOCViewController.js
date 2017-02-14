@@ -145,7 +145,7 @@ class HOCViewController extends PureComponent {
     }
 
     return (
-      <section className="view-container" style={style}>
+      <section className="view-container" key={target} style={style}>
         <View
           navPop={this.onPopCached(target)}
           navPush={this.onPushCached(target)}
