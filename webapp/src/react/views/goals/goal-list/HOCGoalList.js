@@ -8,6 +8,8 @@ import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'src/react/app/view-controller/SWView';
 import TabBar from 'components/tab-bar/TabBar';
+import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import Button from 'Button';
 import GoalList from './GoalList';
 
 /* global msgGen*/
@@ -18,16 +20,6 @@ const defaultFilter = fromJS({
 });
 
 class HOCGoalList extends Component {
-  static contextButtons() {
-    return [{
-      component: 'Button',
-      props: {
-        text: 'New Goal',
-        primary: true,
-      },
-    }];
-  }
-
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
@@ -77,6 +69,7 @@ class HOCGoalList extends Component {
     this.state.filterLabel = this.updateFilterLabel(filter, this.state.filteredGoals);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.onAddGoal = this.onAddGoal.bind(this);
   }
 
   componentDidMount() {
@@ -138,7 +131,7 @@ class HOCGoalList extends Component {
     }
   }
 
-  onContextClick() {
+  onAddGoal() {
     const { navPush } = this.props;
     const { tabIndex } = this.state;
     const savedState = {
@@ -224,6 +217,22 @@ class HOCGoalList extends Component {
       }
     }
   }
+  renderNavbar() {
+    const { target } = this.props;
+    return (
+      <HOCNavbar target={target}>
+        <Button text="Add Goal" primary onClick={this.onAddGoal} />
+      </HOCNavbar>
+    );
+  }
+  renderHeader() {
+    return (
+      <div className="sw-view__nav-bar" key="navbar">
+        {this.renderNavbar()}
+        {this.renderTabbar()}
+      </div>
+    );
+  }
   renderTabbar() {
     const {
       tabIndex,
@@ -231,7 +240,7 @@ class HOCGoalList extends Component {
     } = this.state;
 
     return (
-      <div className="goals-list__tab-bar">
+      <div className="goals-list__tab-bar" key="tabbar">
         <TabBar tabs={tabs.map(t => t.get('title')).toArray()} delegate={this} activeTab={tabIndex} />
       </div>
     );
@@ -248,7 +257,7 @@ class HOCGoalList extends Component {
     } = this.state;
 
     return (
-      <SWView header={this.renderTabbar()} maxWidth={780}>
+      <SWView header={this.renderHeader()} maxWidth={780}>
         <GoalList
           me={me}
           tabIndex={tabIndex}
@@ -274,7 +283,7 @@ function mapStateToProps(state) {
 }
 
 
-const { func, object } = PropTypes;
+const { func, object, string } = PropTypes;
 HOCGoalList.propTypes = {
   goals: map,
   cache: map,
@@ -286,6 +295,7 @@ HOCGoalList.propTypes = {
   selectUser: func,
   selectGoalType: func,
   selectMilestone: func,
+  target: string,
   // removeThis: PropTypes.string.isRequired
 };
 

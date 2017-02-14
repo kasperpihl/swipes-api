@@ -1,39 +1,37 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
-import { nearestAttribute, setupDelegate, bindAll } from 'classes/utils';
+import * as a from 'actions';
+import { setupCachedCallback } from 'classes/utils';
 
 import './styles/nav-bar.scss';
 
-class NavBar extends Component {
+class HOCNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['onInputKeyDown', 'onInputKeyUp', 'onInputChange', 'clickedCrumb']);
-    this.callDelegate = setupDelegate(props.delegate);
+    this.onClickCached = setupCachedCallback(this.onClick, this);
   }
 
-  onInputKeyDown(e) {
-    this.callDelegate('navbarInputKeyDown', e);
+  onClick(i) {
+    const { target, popTo } = this.props;
+    popTo(target, i);
   }
-  onInputKeyUp(e) {
-    this.callDelegate('navbarInputKeyUp', e);
-  }
-  onInputChange(e) {
-    this.callDelegate('navbarInputChange', e.target.value);
-  }
-  clickedCrumb(e) {
-    const i = parseInt(nearestAttribute(e.target, 'data-index'), 10);
-    this.callDelegate('navbarClickedCrumb', i);
-  }
+
   renderInputCrumb(placeholder) {
+    const {
+      history, // eslint-disable-line
+      target, // eslint-disable-line
+      popTo, // eslint-disable-line
+      children, // eslint-disable-line
+      ...rest
+    } = this.props;
     return (
       <div className="bread-crumbs__title">
         <input
-          id="navbar-input"
-          onKeyDown={this.onInputKeyDown}
-          onKeyUp={this.onInputKeyUp}
-          onChange={this.onInputChange}
+          {...rest}
           type="text"
           placeholder={placeholder}
         />
@@ -43,7 +41,7 @@ class NavBar extends Component {
     );
   }
   renderCrumb(crumb, i, numberOfCrumbs) {
-    const title = crumb.title;
+    const title = crumb.get('title');
     let className = 'bread-crumbs__crumb';
     let j = i;
     const isLast = (i + 1) === numberOfCrumbs;
@@ -56,12 +54,12 @@ class NavBar extends Component {
         {title}
       </div>
     );
-    if (isLast && crumb.placeholder) {
-      renderedCrumb = this.renderInputCrumb(crumb.placeholder);
+    if (isLast && crumb.get('placeholder')) {
+      renderedCrumb = this.renderInputCrumb(crumb.get('placeholder'));
     }
 
     return (
-      <div className={className} key={j} onClick={this.clickedCrumb} data-index={i}>
+      <div className={className} key={j} onClick={this.onClickCached(i)}>
         {renderedCrumb}
         <div className="bread-crumbs__seperator">
           <Icon svg="ArrowRightLine" className="bread-crumbs__icon" />
@@ -76,7 +74,7 @@ class NavBar extends Component {
     }
 
     const breadCrumbsHTML = history.map((crumb, i) =>
-      this.renderCrumb(crumb, i, history.length));
+      this.renderCrumb(crumb, i, history.size));
 
     return (
       <ReactCSSTransitionGroup
@@ -94,18 +92,32 @@ class NavBar extends Component {
     return (
       <div className="nav-bar">
         {this.renderBreadCrumbs()}
-        {this.props.children}
+        <div className="nav-bar__actions">
+          {this.props.children}
+        </div>
       </div>
     );
   }
 }
 
-export default NavBar;
+const { object, func, string } = PropTypes;
 
-const { array, object } = PropTypes;
-
-NavBar.propTypes = {
-  history: array,
-  delegate: object,
+HOCNavBar.propTypes = {
+  target: string.isRequired,
+  history: list,
   children: object,
+  popTo: func,
 };
+
+function mapStateToProps(state, ownProps) {
+  const navId = state.getIn(['navigation', ownProps.target, 'id']);
+  const history = state.getIn(['navigation', ownProps.target, 'history', navId]);
+  return {
+    history,
+  };
+}
+
+
+export default connect(mapStateToProps, {
+  popTo: a.navigation.popTo,
+})(HOCNavBar);

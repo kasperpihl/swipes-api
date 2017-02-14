@@ -7,7 +7,7 @@ import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
-
+import HOCNavbar from 'components/nav-bar/HOCNavBar';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
@@ -257,6 +257,14 @@ class HOCAddGoal extends Component {
 
     return status;
   }
+  renderNavbar() {
+    const { target } = this.props;
+    return (
+      <HOCNavbar target={target}>
+        <Button text="Add Goal" primary onClick={this.onAddGoal} />
+      </HOCNavbar>
+    );
+  }
   renderSteps() {
     const { steps, stepOrder } = this.state;
     return (
@@ -356,7 +364,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <SWView maxWidth={780}>
+      <SWView header={this.renderNavbar()} maxWidth={780}>
         <div className="add-goal">
           {this.renderSteps()}
           <div className={infoClass}>
