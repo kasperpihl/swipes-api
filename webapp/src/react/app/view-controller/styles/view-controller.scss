@@ -16,18 +16,18 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 section.view-container {
   @include size(100%, calc(100% - (60px - 38px)));
-  @include flex(column);
-  background-color: $bg;
   @include border-radius(6px, 6px, 0px, 0px);
+  @include flex(column);
+  animation: showViewContainer .7s ease forwards;
+  background-color: $bg;
   box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
   margin-top: calc(60px - 38px);
+  opacity: 0;
   overflow: hidden;
   position: absolute;
-  opacity: 0;
   transform: translateX(-50%);
   transition: left .5s ease;
   will-change: width, left;
-  animation: showViewContainer .5s ease forwards;
 }
 
 .sw-view {
@@ -99,26 +99,6 @@ section.view-container {
 
 section.view-container {
 
-  &--overlay {
-    @include size(80vw, 100%);
-    position: absolute;
-    right: 0; top: 0;
-    z-index: 99;
-    background-color: $bg;
-    box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
-
-    &:after {
-      background-color: rgba($bg, .7);
-      pointer-events: all;
-      transition: .5s ease;
-    }
-  }
-
-  &--empty {
-    @include size(0%, 100%);
-    border-left: 0px solid $deepBlue-10;
-    will-change: width;
-  }
 }
 
 // ======================================================
