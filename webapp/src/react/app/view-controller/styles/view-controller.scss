@@ -48,12 +48,6 @@ section.view-container {
     opacity: 0;
     position: absolute;
   }
-
-  &:hover {
-    #{$b}__close-button {
-      opacity: 1;
-    }
-  }
 }
 
 .sw-view {
@@ -104,8 +98,26 @@ section.view-container {
   &--overlay {
     transform: translateX(50%);
   }
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
+// ======================================================
+// Hover
+// ======================================================
+
+section.view-container {
+  $b: &;
+
+  &:hover {
+    #{$b}__close-button {
+      opacity: 1;
+    }
+  }
+}
 
 // ======================================================
 // Animations
