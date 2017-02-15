@@ -12,6 +12,11 @@ $navbarH: 48px;
   @include size(100%, $navbarH);
   @include flex(column);
   border-bottom: 1px solid $deepBlue-20;
+
+  &:empty {
+    @include size(100%, 15px);
+    border-bottom: none;
+  }
 }
 
 // ======================================================
@@ -46,7 +51,7 @@ $navbarH: 48px;
   &__seperator {
     @include size(24px, $navbarH);
     @include flex();
-    transform: translateY(-.5px);
+    transform: translateY(-1.5px);
 
     #{$b}__icon {
       fill: $deepBlue-20;

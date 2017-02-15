@@ -5,10 +5,13 @@
   $b: &;
   @include size(100%, auto);
   @include flex(column);
+  animation: fadeList .4s ease forwards;
   z-index: 3;
 
   &__header {
     @include size(100%, auto);
+    padding-bottom: 10px;
+    border-bottom: 1px solid $deepBlue-10;
   }
 
   &__tab-bar {
@@ -53,5 +56,16 @@
       transform: translateY(0px);
       will-change: transform;
     }
+  }
+}
+
+
+@keyframes fadeList {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

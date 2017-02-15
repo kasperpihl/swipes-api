@@ -6,13 +6,13 @@
   @include flex(flex);
   @include flex($horizontal: space-between);
   flex-wrap: wrap;
-  padding-top: 60px;
+  padding-top: 1px;
   position: relative;
 
   &:before {
     content: '';
     position: absolute;
-    left: 0; top: 45px;
+    left: 0; top: 0;
     @include size(100%, 1px);
     background-color: $deepBlue-10;
   }

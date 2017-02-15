@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import OrgDashboard from './OrgDashboard';
-import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 
 class HOCOrgDashboard extends Component {
   constructor(props) {
@@ -152,7 +152,7 @@ class HOCOrgDashboard extends Component {
 
     return (
       <div className="dashboard-header">
-        <HOCBreadCrumbs target={target} />
+        <HOCHeaderTitle target={target} />
         <div className="notifications__header">Notifications</div>
       </div>
     );

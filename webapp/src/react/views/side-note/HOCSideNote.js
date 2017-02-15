@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import NoteEditor from 'components/note-editor/NoteEditor';
-import Button from 'Button';
+import SWView from 'SWView';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
   convertFromRaw,
@@ -18,6 +19,9 @@ import './styles/side-note';
 const UNLOCK_TIMER = 30000;
 
 class HOCSideNote extends Component {
+  static maxWidth() {
+    return 740;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -164,38 +168,33 @@ class HOCSideNote extends Component {
     return editorState;
   }
   renderHeader() {
+    const { target } = this.props;
+    const subtitle = this.getSubtitle();
+
+    return (
+      <div className="side-note__header">
+        <HOCHeaderTitle target={target} subtitle={subtitle} />
+      </div>
+    );
+  }
+  getSubtitle() {
     const { note, users, me } = this.props;
     const { locked, editing } = this.state;
 
-    let dotClass = 'side-note__editing-dot';
     let message = '';
     const title = note && note.get('title');
     const lockedBy = note && note.get('locked_by');
 
     if (editing) {
       message = 'You are writing';
-      dotClass += ' side-note__editing-dot--active-editing';
     }
 
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
-
-      dotClass += ' side-note__editing-dot--locked-editing';
       message = `${person.get('name').split(' ')[0]} is writing`;
     }
 
-    return (
-      <div className="side-note__header">
-        <div className="side-note__btn-title">
-          <div className="side-note__title-wrap">
-            <div className="side-note__title">
-              {title}
-            </div>
-          </div>
-        </div>
-        <div className={dotClass} data-status={message} />
-      </div>
-    );
+    return message;
   }
   render() {
     const { sideNoteId } = this.props;
@@ -213,10 +212,8 @@ class HOCSideNote extends Component {
     }
 
     return (
-      <div className={className}>
-        {this.renderHeader()}
-
-        <div className="side-note__note">
+      <SWView header={this.renderHeader()}>
+        <div className={className}>
           <NoteEditor
             ref="editor"
             editorState={editorState}
@@ -225,7 +222,7 @@ class HOCSideNote extends Component {
             onBlur={this.onBlur}
           />
         </div>
-      </div>
+      </SWView>
     );
   }
 }
@@ -236,8 +233,9 @@ HOCSideNote.propTypes = {
   note: map,
   organizationId: string,
   me: map,
-  users: map,
   saveNote: func,
+  users: map,
+  target: string,
 };
 
 function mapStateToProps(state, ownProps) {

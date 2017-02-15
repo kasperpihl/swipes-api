@@ -6,86 +6,10 @@
   @include size(100%);
   @include flex(center, flex-start);
   @include flex(column);
-  padding-left: 0 15px;
-  position: relative;
-  border-left: 1px solid $deepBlue-10;
 
   &__header {
-    @include size(100%, 125px);
-    @include flex(center, flex-end);
-    @include flex(none);
-    color: $deepBlue-40;
-    font-size: 12px;
-    padding-bottom: 103px;
-    padding-right: 15px;
-    position: relative;
-
-    &:after {
-      @include size(calc(100% - 66px), 1px);
-      content: '';
-      position: absolute;
-      left: 33px; bottom: 0;
-      background-color: $deepBlue-10;
-    }
-  }
-
-  &__btn-title {
-    @include size(100%, 42px);
-    @include flex(center, flex-start);
-    position: absolute;
-    left: 0; top: 45px;
-  }
-
-  &__title-wrap {
-    @include size(100%);
-    @include flex();
-    position: relative;
-  }
-
-  &__title {
-    @include size(100%);
-    color: $deepBlue-90;
-    @include font(27px, $deepBlue-90, 42px, 400);
-    max-width: 750px;
-    padding: 0 25px;
-    position: absolute;
-    white-space: nowrap;
-  }
-
-  &__back {
-    @include flex(none);
-    margin-left: 30px;
-  }
-
-  &__editing-dot {
-    @include size(6px);
-    background-color: $green-color;
-    border-radius: 100%;
-    margin-right: 15px;
-    margin-top: 45px;
-    transition: .1s;
-
-    &:before {
-      content: attr(data-status);
-      position: absolute;
-      right: -30px; top: 15px;
-      transform: translateX(-100%);
-    }
-
-    &--active-editing {
-      background-color: $blue-100;
-    }
-
-    &--locked-editing {
-      background-color: $salmon;
-    }
-  }
-
-  &__note {
-    @include size(100%);
-    padding: 45px 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+    @include size(100%, auto);
+    border-bottom: 1px solid $deepBlue-20;
   }
 
   &--locked {

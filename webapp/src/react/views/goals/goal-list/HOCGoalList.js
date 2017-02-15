@@ -218,22 +218,15 @@ class HOCGoalList extends Component {
       }
     }
   }
-  renderNavbar() {
+  renderHeader() {
     const { target } = this.props;
 
     return (
-      <div className="goal-list__header">
+      <div className="goals-list__header">
         <HOCBreadCrumbs target={target} />
         <HOCHeaderTitle target={target}>
           <Button text="Add Goal" primary onClick={this.onAddGoal} />
         </HOCHeaderTitle>
-      </div>
-    );
-  }
-  renderHeader() {
-    return (
-      <div className="sw-view__nav-bar" key="navbar">
-        {this.renderNavbar()}
         {this.renderTabbar()}
       </div>
     );

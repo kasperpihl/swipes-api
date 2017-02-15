@@ -32,7 +32,7 @@ section.view-container {
   $b: &;
   @include size(100%);
   @include flex(column);
-  transform: rotate3d(0, 0, 0);
+  animation: fadeView .6s ease forwards;
   will-change: width;
 }
 
@@ -44,7 +44,7 @@ section.view-container {
   $b: getElementSelectorInBlock(#{&}, 'section');
 
   #{$b}__close-button {
-    right: 3px; top: 3px;
+    right: 12px; top: 10px;
     opacity: 0;
     position: absolute;
   }
@@ -110,7 +110,7 @@ section.view-container {
 // ======================================================
 
 section.view-container {
-  $b: &;
+  $b: getElementSelectorInBlock(#{&}, 'section');
 
   &:hover {
     #{$b}__close-button {
@@ -129,7 +129,7 @@ section.view-container {
   }
 }
 
-@keyframes showViewContainerInside {
+@keyframes fadeView {
   from {
     opacity: 0;
   }

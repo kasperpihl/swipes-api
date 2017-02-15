@@ -104,7 +104,7 @@ class GoalList extends Component {
     );
   }
   render() {
-    const { showFilter } = this.props;
+    const { showFilter, tabIndex } = this.props;
     const { filterHeight } = this.state;
     let className = 'goals-list';
     const style = {};
@@ -113,13 +113,10 @@ class GoalList extends Component {
       className += ' goals-list--show-filters';
     }
     return (
-      <div className={className}>
-        {/* {this.renderTabbar()} */}
-        <div className="goals-list__scroller" style={style} ref="scroller">
-          {this.renderFilter()}
-          {this.renderList()}
-          {this.renderFilterFooter()}
-        </div>
+      <div className={className} style={style} ref="scroller" key={tabIndex}>
+        {this.renderFilter()}
+        {this.renderList()}
+        {this.renderFilterFooter()}
       </div>
     );
   }
