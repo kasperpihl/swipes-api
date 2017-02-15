@@ -74,14 +74,10 @@ input::-webkit-autofill {
 html, body {
   @include size(100%);
   @include flex(flex);
-  background-color: $bg;
   font-family: 'Aktiv-Grotesk', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  font-smooth: always;
-  text-rendering: optimizeLegibility !important;
-  transform: rotate(-0.0000000001deg);
-  -webkit-font-smoothing: antialiased !important;
+
 }
 
 ::-webkit-scrollbar {
