@@ -120,12 +120,12 @@ class HOCViewController extends PureComponent {
       const w = sizes[i];
       const style = {
         width: `${w}px`,
-        transform: `translateX(${runningX}px)`,
+        transform: `translate3d(${runningX}px, 0px, 0px)`,
         zIndex: 2 - i,
       };
       runningX += (w + SPACING);
       if (target === 'secondary' && isOverlay) {
-        style.transform = `translateX(${width - w}px)`;
+        style.transform = `translate3d(${width - w}px, 0px, 0px)`;
         style.zIndex = 3;
         xClass.push('view-container--overlay');
       }
@@ -161,7 +161,6 @@ class HOCViewController extends PureComponent {
       props.savedState = currentView.get('savedState');
     }
     const className = ['view-container'].concat(xClasses).join(' ');
-    console.log('style', style);
     return (
       <section className={className} key={target} style={style}>
         {this.renderCloseButton(target)}
