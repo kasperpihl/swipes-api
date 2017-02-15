@@ -16,12 +16,12 @@ class HOCSidebar extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   clickedItem(e) {
-    const { navigateToId } = this.props;
+    const { navSet } = this.props;
     const id = e.target.getAttribute('data-id');
-    navigateToId('primary', id);
+    navSet('primary', id);
   }
   rightClickedItem(e) {
-    const { navigateToId, secondaryNavId } = this.props;
+    const { navSet, secondaryNavId } = this.props;
     let id = e.target.getAttribute('data-id');
     if (id === 'slack') {
       return undefined;
@@ -29,7 +29,7 @@ class HOCSidebar extends Component {
     if (id === secondaryNavId) {
       id = null;
     }
-    return navigateToId('secondary', id);
+    return navSet('secondary', id);
   }
   renderItem(item) {
     const { navId, counters, secondaryNavId } = this.props;
@@ -122,10 +122,10 @@ HOCSidebar.propTypes = {
   navId: string,
   secondaryNavId: string,
   counters: map,
-  navigateToId: func,
+  navSet: func,
 };
 
 const ConnectedHOCSidebar = connect(mapStateToProps, {
-  navigateToId: navigation.navigateToId,
+  navSet: navigation.set,
 })(HOCSidebar);
 export default ConnectedHOCSidebar;

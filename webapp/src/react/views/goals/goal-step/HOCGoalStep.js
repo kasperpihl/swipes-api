@@ -223,8 +223,8 @@ class HOCGoalStep extends Component {
     this.setState({ handoff: handoff.set('message', handoffText) });
   }
   onOpenUser(id) {
-    const { openSlackIn, navigateToId } = this.props;
-    navigateToId('primary', 'slack');
+    const { openSlackIn, navSet } = this.props;
+    navSet('primary', 'slack');
     openSlackIn(this.slackUserIdForUser(id));
   }
   getHelper(overwriteGoal) {
@@ -343,7 +343,7 @@ HOCGoalStep.propTypes = {
   selectAssignees: func,
   hideNote: func,
   openSlackIn: func,
-  navigateToId: func,
+  navSet: func,
   completeStep: func,
   contextMenu: func,
   goal: map,
@@ -377,7 +377,7 @@ export default connect(mapStateToProps, {
   openSlackIn: actions.main.openSlackIn,
   saveWay: actions.ways.save,
   hideNote: actions.main.note.hide,
-  navigateToId: actions.navigation.navigateToId,
+  navSet: actions.navigation.set,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,
   completeStep: actions.goals.completeStep,

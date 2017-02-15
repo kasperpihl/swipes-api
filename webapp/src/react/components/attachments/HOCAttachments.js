@@ -80,7 +80,7 @@ class HOCAttachments extends Component {
       updateToasty,
       addURL,
       goalId,
-      showNote,
+      navSet,
       openFind,
     } = this.props;
     const options = {
@@ -110,7 +110,13 @@ class HOCAttachments extends Component {
             updateToasty(toastId, { title: 'Added Attachment', completed: true, duration: 3000 });
           }
           if (type === 'note' && obj.id) {
-            showNote(obj.id);
+            navSet('secondary', {
+              component: 'SideNote',
+              title: 'Note',
+              props: {
+                id: obj.id,
+              },
+            });
           }
         };
         if (goalId) {
@@ -304,7 +310,7 @@ HOCAttachments.propTypes = {
   openFind: func,
   previewLink: func,
   removeFromCollection: func,
-  showNote: func,
+  navSet: func,
   updateToasty: func,
   noFlagging: bool,
 };
@@ -323,6 +329,6 @@ export default connect(mapStateToProps, {
   openFind: actions.links.openFind,
   previewLink: actions.links.preview,
   removeFromCollection: actions.goals.removeFromCollection,
-  showNote: actions.main.note.show,
+  navSet: actions.navigation.set,
   updateToasty: actions.toasty.update,
 })(HOCAttachments);

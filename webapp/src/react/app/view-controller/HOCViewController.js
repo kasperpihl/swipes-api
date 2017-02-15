@@ -34,8 +34,8 @@ class HOCViewController extends PureComponent {
     window.removeEventListener('resize', this.bouncedUpdate);
   }
   onClose() {
-    const { navigateToId } = this.props;
-    navigateToId('secondary');
+    const { navSet } = this.props;
+    navSet('secondary', null);
   }
   getMinMaxForView(View) {
     const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
@@ -202,13 +202,13 @@ const { func } = PropTypes;
 HOCViewController.propTypes = {
   navigation: map,
   push: func,
-  navigateToId: func,
+  navSet: func,
   pop: func,
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
   pop: actions.navigation.pop,
   push: actions.navigation.push,
-  navigateToId: actions.navigation.navigateToId,
+  navSet: actions.navigation.set,
 })(HOCViewController);
 export default ConnectedHOCViewController;

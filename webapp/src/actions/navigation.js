@@ -47,13 +47,13 @@ export const viewForId = (navId) => {
   }
 };
 
-export function navigateToId(target, navId) {
+export function set(target, navId) {
   return (dispatch, getState) => {
     const payload = {
       id: navId,
       target,
     };
-    if (navId) {
+    if (typeof navId === 'string') {
       const state = getState();
       let stack;
       if (target === 'primary') {
@@ -65,6 +65,8 @@ export function navigateToId(target, navId) {
         stack = [viewForId(navId)];
       }
       payload.stack = stack;
+    } else if (typeof navId === 'object') {
+      payload.stack = [navId];
     }
     dispatch({ type: types.NAVIGATION_SET, payload });
   };
@@ -78,7 +80,7 @@ export function init() {
       navId = 'goals';
     }
     if (navId) {
-      dispatch(navigateToId('primary', navId));
+      dispatch(set('primary', navId));
     }
   };
 }

@@ -119,9 +119,6 @@ export const note = {
       unlock,
     }));
   },
-  show: id => ({ type: types.NOTE_SHOW, payload: { id },
-  }),
-  hide: () => ({ type: types.NOTE_HIDE }),
 };
 
 

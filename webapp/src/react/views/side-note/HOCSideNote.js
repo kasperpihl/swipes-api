@@ -237,13 +237,12 @@ HOCSideNote.propTypes = {
   hideNote: func,
 };
 
-function mapStateToProps(state) {
-  const sideNoteId = state.getIn(['main', 'sideNoteId']);
+function mapStateToProps(state, ownProps) {
   return {
     organizationId: state.getIn(['me', 'organizations', 0, 'id']),
-    sideNoteId,
+    sideNoteId: ownProps.id,
     me: state.get('me'),
-    note: state.getIn(['notes', sideNoteId]),
+    note: state.getIn(['notes', ownProps.id]),
     users: state.get('users'),
   };
 }
