@@ -9,6 +9,12 @@ import Button from 'Button';
 import './styles/slack-view';
 
 class HOCSlack extends Component {
+  static minWidth() {
+    return 800;
+  }
+  static maxWidth() {
+    return 1200;
+  }
   constructor(props) {
     super(props);
     this.state = {

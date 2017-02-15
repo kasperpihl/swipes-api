@@ -57,11 +57,11 @@ class SWView extends Component {
 
 export default SWView;
 
-const { element, number, bool } = PropTypes;
+const { element, number, bool, arrayOf, oneOfType } = PropTypes;
 
 SWView.propTypes = {
   header: element,
-  children: element,
+  children: oneOfType([element, arrayOf(element)]),
   maxWidth: number,
   disableScroll: bool,
 };

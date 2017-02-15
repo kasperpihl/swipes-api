@@ -15,7 +15,6 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import GoalStep from './GoalStep';
 import GoalSide from './GoalSide';
 
-
 import './styles/goal-step';
 
 class HOCGoalStep extends Component {
@@ -58,12 +57,6 @@ class HOCGoalStep extends Component {
           handoff: this.getEmptyHandoff(this.calculateNextStep(nextGoal)),
         });
       }
-    }
-  }
-  componentWillUnmount() {
-    const { hideNote, sideNoteId } = this.props;
-    if (sideNoteId) {
-      hideNote(sideNoteId);
     }
   }
   onMeasure(dim) {
@@ -288,12 +281,8 @@ class HOCGoalStep extends Component {
     );
   }
   renderSide() {
-    const { goal, me, sideNoteId } = this.props;
-    const { showSide } = this.state;
+    const { goal, me } = this.props;
 
-    if (sideNoteId, !showSide) {
-      return undefined;
-    }
     return (
       <div className="goal-step__side">
         <GoalSide goal={goal} me={me} />
@@ -346,7 +335,6 @@ HOCGoalStep.propTypes = {
   selectStep: func,
   goalNotify: func,
   selectAssignees: func,
-  hideNote: func,
   openSlackIn: func,
   navSet: func,
   completeStep: func,
@@ -381,7 +369,6 @@ export default connect(mapStateToProps, {
   selectStep: actions.goals.selectStep,
   openSlackIn: actions.main.openSlackIn,
   saveWay: actions.ways.save,
-  hideNote: actions.main.note.hide,
   navSet: actions.navigation.set,
   archive: actions.goals.archive,
   addToCollection: actions.goals.addToCollection,

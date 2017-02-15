@@ -1,17 +1,17 @@
 import OrgDashboard from './org-dashboard/HOCOrgDashboard';
+
 import GoalList from './goals/goal-list/HOCGoalList';
 import GoalStep from './goals/goal-step/HOCGoalStep';
+import GoalOverview from './goals/goal-overview/HOCGoalOverview';
+import AddGoal from './goals/add-goal/HOCAddGoal';
 
-import AddGoal from './add-goal/HOCAddGoal';
-
-import Profile from './profile/HOCProfile';
-import Services from './services/Services';
+import Profile from './settings/profile/HOCProfile';
+import Services from './settings/services/Services';
 
 import Find from './find/HOCFind';
 
-import Slack from './webviews/slack/HOCSlack';
+import Slack from './slack/HOCSlack';
 import Store from './store/Store';
-import Gmail from './webviews/gmail/HOCGmail';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 import Browser from './browser/HOCBrowser';
 import SideNote from './side-note/HOCSideNote';
@@ -21,13 +21,13 @@ export {
   GoalList,
   AddGoal,
   GoalStep,
+  GoalOverview,
   Find,
   Profile,
   Browser,
   Services,
   Slack,
   Store,
-  Gmail,
   MilestoneList,
   SideNote,
 };
