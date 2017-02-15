@@ -25,26 +25,23 @@ class HOCSideNote extends Component {
       locked: false,
       editing: false,
     };
+    this.state = Object.assign(this.state, this.handleNoteChange(null, props.note));
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur', 'closeSideNote']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
-
-  componentWillReceiveProps(nextProps) {
-    const { me, note: oldNote } = this.props;
-    const { note: newNote } = nextProps;
-    if (oldNote && !newNote) {
-      // If we leave the note, unlock stuff.
-      this.unlockUI();
-      this.setState({ editorState: null });
-    }
-    if (newNote && newNote !== oldNote) {
+  componentDidMount() {
+  }
+  handleNoteChange(oldNote, newNote) {
+    const { me } = this.props;
+    let newState = {};
+    if (newNote !== oldNote) {
       const newLock = newNote.get('locked_by');
       if (newLock) {
         const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
-        this.lockUI(ts);
+        newState = Object.assign(newState, this.lockUI(ts));
       } else {
-        this.unlockUI();
+        newState = Object.assign(newState, this.unlockUI());
       }
       if (
         !oldNote ||
@@ -53,11 +50,18 @@ class HOCSideNote extends Component {
       ) {
         const editorState = this.parseInitialData(newNote.get('text'));
         this.lastUndo = editorState.getUndoStack().first();
-        this.setState({ editorState, editing: false });
+
         this._justChanged = true;
+        newState = Object.assign(newState, { editorState, editing: false });
         // Using the last undo item to check if something has actually changed
       }
     }
+    return newState;
+  }
+  componentWillReceiveProps(nextProps) {
+    const { note: oldNote } = this.props;
+    const { note: newNote } = nextProps;
+    this.setState(this.handleNoteChange(oldNote, newNote));
   }
   componentDidUpdate() {
     if (this._justChanged) {
@@ -66,7 +70,7 @@ class HOCSideNote extends Component {
     }
   }
   onBlur() {
-    this.unlockUI();
+    this.setState(this.unlockUI());
   }
   onChange(editorState) {
     const { editing } = this.state;
@@ -108,12 +112,13 @@ class HOCSideNote extends Component {
     const timeleft = (ts + UNLOCK_TIMER) - now;
     if (timeleft > 0) {
       this.lockTimer = setTimeout(() => {
-        this.unlockUI();
+        this.setState(this.unlockUI());
       }, timeleft);
       if (!this.state.locked) {
-        this.setState({ locked: true });
+        return { locked: true };
       }
     }
+    return {};
   }
   unlockUI() {
     this.clearTimer();
@@ -129,7 +134,7 @@ class HOCSideNote extends Component {
     if (locked) {
       newState.locked = false;
     }
-    this.setState(newState);
+    return newState;
   }
 
   saveNote(unlock, editorState) {
@@ -182,7 +187,6 @@ class HOCSideNote extends Component {
     return (
       <div className="side-note__header">
         <div className="side-note__btn-title">
-          <Button icon="Close" className="side-note__back" onClick={this.closeSideNote} />
           <div className="side-note__title-wrap">
             <div className="side-note__title">
               {title}
@@ -234,7 +238,6 @@ HOCSideNote.propTypes = {
   me: map,
   users: map,
   saveNote: func,
-  hideNote: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -249,5 +252,4 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   saveNote: actions.main.note.save,
-  hideNote: actions.main.note.hide,
 })(HOCSideNote);
