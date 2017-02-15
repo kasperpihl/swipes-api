@@ -70,7 +70,7 @@ class HOCApp extends Component {
       this.setState({ gradientPos });
     }
 
-    setTimeout(this.gradientStep, 3000);
+    window.requestAnimationFrame(this.gradientStep);
   }
   renderLoader() {
     const { hasLoaded } = this.props;
