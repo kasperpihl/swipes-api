@@ -7,7 +7,7 @@ import { setupCachedCallback } from 'classes/utils';
 
 import './styles/bread-crumbs.scss';
 
-class HOCNavBar extends Component {
+class HOCBreadCrumbs extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -55,7 +55,7 @@ class HOCNavBar extends Component {
 
 const { func, string } = PropTypes;
 
-HOCNavBar.propTypes = {
+HOCBreadCrumbs.propTypes = {
   target: string.isRequired,
   history: list,
   pop: func,
@@ -70,4 +70,4 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   pop: a.navigation.pop,
-})(HOCNavBar);
+})(HOCBreadCrumbs);

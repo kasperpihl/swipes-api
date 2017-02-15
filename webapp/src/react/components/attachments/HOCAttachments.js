@@ -237,7 +237,7 @@ class HOCAttachments extends Component {
   renderAddAttachments() {
     const { disableAdd } = this.props;
 
-    if (disableAdd || this.hasAttachments()) {
+    if (disableAdd) {
       return false;
     }
 
@@ -276,7 +276,7 @@ class HOCAttachments extends Component {
 
     return (
       <div className="attachments__tabs">
-        {this.renderAddAttachmentsPlus()}
+        {/* {this.renderAddAttachmentsPlus()} */}
         <TabBar key={key} tabs={tabs} activeTab={tabIndex} delegate={this} />
       </div>
     );

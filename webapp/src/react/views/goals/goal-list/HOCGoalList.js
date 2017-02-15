@@ -9,6 +9,7 @@ import filterGoals from 'classes/filter-util';
 import SWView from 'src/react/app/view-controller/SWView';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import GoalList from './GoalList';
 
@@ -219,10 +220,14 @@ class HOCGoalList extends Component {
   }
   renderNavbar() {
     const { target } = this.props;
-    // <Button text="Add Goal" primary onClick={this.onAddGoal} />
 
     return (
-      <HOCBreadCrumbs target={target} />
+      <div className="goal-list__header">
+        <HOCBreadCrumbs target={target} />
+        <HOCHeaderTitle target={target}>
+          <Button text="Add Goal" primary onClick={this.onAddGoal} />
+        </HOCHeaderTitle>
+      </div>
     );
   }
   renderHeader() {

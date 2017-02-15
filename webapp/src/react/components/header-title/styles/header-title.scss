@@ -1,0 +1,49 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+$h: 105px;
+
+// ======================================================
+// Block
+// ======================================================
+
+.header-title {
+  @include size(100%, $h);
+  @include flex(flex);
+  padding-top: 21px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.header-title {
+  $b: &;
+
+  &__title {
+    @include size(100%, 39px);
+    @include font(30px, $deepBlue-100);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__input {
+    @include size(100%, 39px);
+  }
+
+  &__actions {
+    @include size(auto, 39px);
+    @include flex(flex);
+    @include flex(none);
+    margin-left: 30px;
+
+    &:empty {
+      display: none;
+    }
+
+    & > *:not(:first-child) {
+      margin-left: 12px;
+    }
+  }
+}

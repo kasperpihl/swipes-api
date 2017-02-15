@@ -8,11 +8,12 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
 import { setupDelegate, bindAll } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
-import GoalStep from './GoalStep';
-import GoalSide from './GoalSide';
+import Button from 'Button';
 import SWView from 'src/react/app/view-controller/SWView';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
-import Button from 'Button';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import GoalStep from './GoalStep';
+import GoalSide from './GoalSide';
 
 
 import './styles/goal-step';
@@ -299,12 +300,16 @@ class HOCGoalStep extends Component {
       </div>
     );
   }
-  renderNavbar() {
+  renderHeader() {
     const { target } = this.props;
-    // <Button icon="ThreeDots" onClick={this.onContextClick} />
 
     return (
-      <HOCBreadCrumbs target={target} />
+      <div className="goals-list__header">
+        <HOCBreadCrumbs target={target} />
+        <HOCHeaderTitle target={target}>
+          <Button icon="ThreeDots" onClick={this.onContextClick} />
+        </HOCHeaderTitle>
+      </div>
     );
   }
   render() {
@@ -320,7 +325,7 @@ class HOCGoalStep extends Component {
     }
     return (
       <Measure onMeasure={this.onMeasure}>
-        <SWView header={this.renderNavbar()}>
+        <SWView header={this.renderHeader()}>
           <div className={className}>
             {this.renderContent()}
             {/* {this.renderSide()} */}

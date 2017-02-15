@@ -4,23 +4,14 @@
 .tab-bar {
   $b: &;
 
-  @include size(100%, 52px);
+  @include size(100%, 40px);
 	@include flex(center, flex-start);
+  @include flex(none);
   background-color: $bg;
-  // max-width: 780px;
-  padding: 0;
-  padding-top: 12px;
+  border-top: 1px solid $deepBlue-20;
+  padding: 12px 0;
   position: relative;
   z-index: 2;
-  flex: none;
-
-  &:after {
-    @include size(100%, 1px);
-    background-color: $deepBlue-10;
-    content: "";
-    left: 0; bottom: 0;
-    position: absolute;
-  }
 
   &__tab {
     @include size(auto, 40px);
@@ -28,7 +19,6 @@
     @include font(12px, $deepBlue-30, 18px, 500);
     margin: 0;
     padding-right: 30px;
-    position: relative;
     transition: .1s;
     user-select: none;
 
@@ -54,7 +44,7 @@
     @include size(100%, 1px);
     @include flex();
     background: $blue-100;
-    left: 0; bottom: 0;
+    left: 0; bottom: 6px;
     position: absolute;
     transition: -webkit-clip-path .2s ease-in-out;
     z-index: 2;
