@@ -1,0 +1,17 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.team {
+  @include size(100%, auto);
+
+  &__images {
+    @include size(100%, auto);
+  }
+
+  &__label {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-30, 18px, 500);
+    margin-top: 9px;
+    margin-bottom: 60px;
+  }
+}

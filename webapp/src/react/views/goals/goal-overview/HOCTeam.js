@@ -7,6 +7,8 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalsUtil from 'classes/goals-util';
 /* global msgGen */
 
+import './styles/team.scss';
+
 class HOCTeam extends PureComponent {
   constructor(props) {
     super(props);
@@ -40,7 +42,7 @@ class HOCTeam extends PureComponent {
     }
     string += 'this goal';
     return (
-      <div className="team-component--label">
+      <div className="team__label">
         {msgGen.getUserArrayString(assignees)}{string}
       </div>
     );
@@ -50,8 +52,10 @@ class HOCTeam extends PureComponent {
     const assignees = helper.getAllInvolvedAssignees();
 
     return (
-      <div className="team-component">
-        {this.renderTeamImages(assignees)}
+      <div className="team">
+        <div className="team__images">
+          {this.renderTeamImages(assignees)}
+        </div>
         {this.renderTeamLabel(assignees, helper)}
       </div>
     );

@@ -44,9 +44,8 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <Section title="Team">
-          <HOCTeam goal={goal} />
-        </Section>
+        <Section title="Team" />
+        <HOCTeam goal={goal} />
         <GoalSide goal={goal} />
       </div>
     );
