@@ -7,6 +7,9 @@ import BrowserNavBar from './BrowserNavBar';
 import './styles/browser';
 
 class HOCBrowser extends Component {
+  static maxWidth() {
+    return 1600;
+  }
   constructor(props) {
     super(props);
     this.state = {

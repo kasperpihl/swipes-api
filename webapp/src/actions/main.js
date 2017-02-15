@@ -85,14 +85,13 @@ export const preview = (pre, options) => (dp) => {
 // ======================================================
 // Browser
 // ======================================================
-export const browser = (url, onLoad) => overlay({
+export const browser = (url, onLoad) => dp => dp(a.navigation.set('secondary', {
   component: 'Browser',
-  hideClose: true,
   props: {
     url,
     onLoad,
   },
-});
+}));
 
 // ======================================================
 // Account related

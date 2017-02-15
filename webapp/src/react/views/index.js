@@ -8,12 +8,12 @@ import Profile from './profile/HOCProfile';
 import Services from './services/Services';
 
 import Find from './find/HOCFind';
-import Browser from '../overlays/browser/HOCBrowser';
 
 import Slack from './webviews/slack/HOCSlack';
 import Store from './store/Store';
 import Gmail from './webviews/gmail/HOCGmail';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
+import Browser from './browser/HOCBrowser';
 import SideNote from './side-note/HOCSideNote';
 
 export {
