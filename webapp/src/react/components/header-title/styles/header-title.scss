@@ -21,15 +21,26 @@ $h: 105px;
   $b: &;
 
   &__title {
-    @include size(100%, 39px);
+    @include size(100%, auto);
     @include font(30px, $deepBlue-100);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
+  &__subtitle {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-30, 500);
+    margin-left: 3px;
+  }
+
   &__input {
     @include size(100%, 39px);
+    @include font(30px, $deepBlue-100);
+
+    &::-webkit-input-placeholder {
+      @include font(30px, $deepBlue-60);
+    }
   }
 
   &__actions {

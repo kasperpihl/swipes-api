@@ -7,15 +7,10 @@
 
   @include size(100%);
   padding-bottom: 30px;
-  position: relative;
-  overflow-y: auto;
-  padding-left: 10px;
 
   &__header {
     @include size(100%, auto);
-    @include flex(center, space-between);
-    max-width: 780px;
-    position: relative;
+    @include flex(column);
   }
 
   &__title {

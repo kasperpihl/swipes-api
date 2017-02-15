@@ -17,7 +17,7 @@ class HOCHeaderTitle extends Component {
     const { input } = this.refs;
     this.callDelegate('navbarLoadedInput', input);
   }
-  renderInputCrumb(placeholder) {
+  renderInputTitle(placeholder) {
     const {
       history, // eslint-disable-line
       target, // eslint-disable-line
@@ -39,9 +39,15 @@ class HOCHeaderTitle extends Component {
     );
   }
   renderTitle(crumb) {
+    const { subtitle } = this.props;
     const title = crumb.get('title');
 
-    return <div className="header-title__title" key="header-title">{title}</div>;
+    return (
+      <div className="header-title__title" key="header-title">
+        {title}
+        <div className="header-title__subtitle">{subtitle}</div>
+      </div>
+    );
   }
   renderContent() {
     const { history } = this.props;

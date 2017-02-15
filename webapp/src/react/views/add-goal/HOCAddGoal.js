@@ -8,6 +8,7 @@ import SWView from 'SWView';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
@@ -39,6 +40,7 @@ class HOCAddGoal extends Component {
       'onInputChange',
       'saveToCache',
       'onLoadWay',
+      'onClear',
     ]);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -70,6 +72,9 @@ class HOCAddGoal extends Component {
   }
   onInputChange(e) {
     this.updateState({ title: e.target.value });
+  }
+  onClear() {
+    this.setState(initialState.toObject());
   }
   onLoadWay(e) {
     const { loadWay } = this.props;
@@ -264,22 +269,36 @@ class HOCAddGoal extends Component {
       navPop();
     });
   }
+  renderClearButton() {
+    const hasTitle = this.state.title.length > 0;
+    const hasAttachments = this.state.attachments.size > 0;
+    const hasSteps = this.state.steps.size > 0;
+    const hasHandoff = this.state.handoff.length > 0;
 
+    if (hasTitle || hasAttachments || hasSteps || hasHandoff) {
+      return <Button text="Clear Fields" tabIndex={-1} onClick={this.onClear} />;
+    }
+
+    return undefined;
+  }
   renderNavbar() {
     const { target } = this.props;
     const { title } = this.state;
-    // return (
-    //   <HOCNavbar
-    //     onChange={this.onInputChange}
-    //     target={target}
-    //     delegate={this}
-    //     value={title}
-    //   >
-    //     <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
-    //   </HOCNavbar>
-    // );
 
-    return <HOCBreadCrumbs target={target} />;
+    return (
+      <div className="add-goal__header">
+        <HOCBreadCrumbs target={target} />
+        <HOCHeaderTitle
+          onChange={this.onInputChange}
+          target={target}
+          delegate={this}
+          value={title}
+        >
+          {this.renderClearButton()}
+          <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
+        </HOCHeaderTitle>
+      </div>
+    );
   }
   renderSteps() {
     const { steps, stepOrder } = this.state;
@@ -312,7 +331,6 @@ class HOCAddGoal extends Component {
       </Section>
     );
   }
-
   renderHandoff() {
     const { handoff } = this.state;
     const { me } = this.props;
@@ -328,8 +346,6 @@ class HOCAddGoal extends Component {
       />
     );
   }
-
-
   renderActions() {
     const status = this.getStatus();
     const disabled = !!status;

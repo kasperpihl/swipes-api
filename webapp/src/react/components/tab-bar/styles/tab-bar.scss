@@ -16,7 +16,7 @@
   &__tab {
     @include size(auto, 40px);
     @include flex(center);
-    @include font(12px, $deepBlue-30, 18px, 500);
+    @include font(12px, $deepBlue-30, 18px, bold);
     margin: 0;
     padding-right: 30px;
     transition: .1s;
@@ -41,9 +41,9 @@
   }
 
   &__slider {
-    @include size(100%, 1px);
+    @include size(100%, 2px);
     @include flex();
-    background: $blue-100;
+    background: $blue-30;
     left: 0; bottom: 6px;
     position: absolute;
     transition: -webkit-clip-path .2s ease-in-out;

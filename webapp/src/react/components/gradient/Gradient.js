@@ -42,5 +42,5 @@ export default Gradient;
 const { string } = PropTypes;
 
 Gradient.propTypes = {
-  removeThis: string.isRequired,
+
 };
