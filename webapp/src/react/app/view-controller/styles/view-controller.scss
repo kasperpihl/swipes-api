@@ -2,7 +2,7 @@
 @import '~styles/_mixins.scss/';
 @import '~styles/_functions.scss/';
 
-$contentOverflowPadding: 45px;
+$contentOverflowPadding: 30px;
 $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 // ======================================================

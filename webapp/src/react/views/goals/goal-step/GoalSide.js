@@ -25,7 +25,7 @@ class GoalSide extends Component {
       <div className="goal-side__progress-bar">
         <div className="progress-bar">
           <div className="progress-bar__fill" style={styles} />
-          <div className="progress-bar__status">{numberOfCompleted}/{totalSteps} steps</div>
+          <div className="progress-bar__status">{numberOfCompleted}/{totalSteps} Steps</div>
         </div>
       </div>
     );

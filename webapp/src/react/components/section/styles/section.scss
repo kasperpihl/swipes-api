@@ -3,24 +3,21 @@
 
 .section {
   $b: &;
-  @include size(100%, auto);
+  @include size(100%, 52px);
   position: relative;
   padding: 30px 0;
-  border-top: 1px solid $deepBlue-10;
+  border-top: 1px solid $deepBlue-20;
   background-color: $bg;
   transition: margin-top .4s ease-in, opacity .4s ease;
   will-change: margin-top;
 
   &__title {
-    @include size(100%, 21px);
-    @include flex(center, flex-end);
+    @include size(100%, auto);
+    @include flex(center, flex-start);
+    @include font(12px, $deepBlue-80, 15px, bold);
     position: absolute;
-    left: 0; top: 0;
-    text-transform: uppercase;
-    font-size: 10px;
-    font-weight: bold;
-    text-align: right;
-    color: $deepBlue-60;
+    left: 0; top: 12px;
+    text-transform: capitalize;;
 
     &:empty {
       display: none;

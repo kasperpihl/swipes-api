@@ -1,6 +1,32 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .goal-overview{
-  
+  @include size(100%, auto);
+  @include flex(flex);
+}
+
+// ======================================================
+// Element
+// ======================================================
+
+.goal-overview {
+  $b: &;
+
+  &__column {
+    @include size(100%, auto);
+
+    &--left {
+      margin-right: 10%;
+    }
+
+    &--right {
+      @include size(270px, auto);
+      @include flex(none);
+    }
+  }
 }

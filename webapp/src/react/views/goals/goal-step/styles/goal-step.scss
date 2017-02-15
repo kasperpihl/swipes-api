@@ -110,30 +110,27 @@
 
 .goal-side {
   @include size(100%, auto);
-  margin-left: 5vw;
 
   &__progress-bar {
     @include size(100%, auto);
-    padding-bottom: 36px;
-    position: relative;
+    padding-bottom: 45px;
 
     .progress-bar {
-      @include size(100%, 10px);
+      @include size(100%, 13px);
       border-top: 1px solid $deepBlue-20;
       border-bottom: 1px solid $deepBlue-20;
 
       &__fill {
-        @include size(100%, 6px);
+        @include size(100%, 9px);
         background-color: $deepBlue-100;
         margin-top: 1px;
         transition: .35s ease;
       }
 
       &__status {
-        @include font(10px, $deepBlue-60, 12px, bold);
+        @include font(12px, $deepBlue-80, 15px, bold);
         position: absolute;
-        right: 0; top: 19px;
-        text-transform: uppercase;
+        left: 0; top: 19px;
       }
     }
   }

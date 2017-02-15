@@ -19,16 +19,17 @@ class HOCGoalOverview extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
+    const { target } = this.props;
     return (
       <div className="add-goal__header">
-        <HOCHeaderTitle />
+        <HOCHeaderTitle target={target} />
       </div>
     );
   }
   renderLeft() {
     const { goal } = this.props;
     return (
-      <div className="goal-overview__left">
+      <div className="goal-overview__column goal-overview__column--left">
         <Section title="Latest update" />
         <HOCAttachments
           attachments={goal.get('attachments')}
@@ -42,7 +43,7 @@ class HOCGoalOverview extends PureComponent {
   renderRight() {
     const { goal } = this.props;
     return (
-      <div className="goal-overview__right">
+      <div className="goal-overview__column goal-overview__column--right">
         <Section title="Team">
           <HOCTeam goal={goal} />
         </Section>
@@ -56,9 +57,11 @@ class HOCGoalOverview extends PureComponent {
   render() {
     return (
       <SWView header={this.renderHeader()}>
-        {this.renderLeft()}
-        {this.renderRight()}
-        {this.renderHandoffBar()}
+        <div className="goal-overview">
+          {this.renderLeft()}
+          {this.renderRight()}
+          {this.renderHandoffBar()}
+        </div>
       </SWView>
     );
   }
