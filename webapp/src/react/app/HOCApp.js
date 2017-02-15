@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import gradient from 'classes/gradient';
 
 import SwipesLoader from 'components/loaders/SwipesLoader';
+import Gradient from 'components/gradient/Gradient';
 import Topbar from './topbar/Topbar';
 import HOCModal from './modal/HOCModal';
 import HOCViewController from './view-controller/HOCViewController';
@@ -12,7 +12,6 @@ import HOCSidebar from './sidebar/HOCSidebar';
 import HOCOverlay from './overlay/HOCOverlay';
 import HOCPreview from '../preview/HOCPreviewModal';
 import HOCToasty from './toasty/HOCToasty';
-import HOCSideNote from './side-note/HOCSideNote';
 import HOCContextMenu from './context-menu/HOCContextMenu';
 
 let DevTools = 'div';
@@ -25,18 +24,12 @@ class HOCApp extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    const gradientPos = gradient.getGradientPos();
-    this.state = {
-      gradientPos,
-    };
-    this.gradientStep = this.gradientStep.bind(this);
   }
   componentDidMount() {
     const { navInit } = this.props;
     navInit();
     this.updateMaximizeClass(this.props.isMaximized);
     this.updateFullscreenClass(this.props.isFullscreen);
-    this.gradientStep();
   }
 
   componentDidUpdate(prevProps) {
@@ -63,15 +56,6 @@ class HOCApp extends Component {
       classList.remove('is-maximized');
     }
   }
-  gradientStep() {
-    const gradientPos = gradient.getGradientPos();
-
-    if (this.state.gradientPos !== gradientPos) {
-      this.setState({ gradientPos });
-    }
-
-    window.requestAnimationFrame(this.gradientStep);
-  }
   renderLoader() {
     const { hasLoaded } = this.props;
     if (hasLoaded) {
@@ -89,7 +73,6 @@ class HOCApp extends Component {
         <div className="content-wrapper">
           <HOCSidebar />
           <HOCViewController />
-          <HOCSideNote />
         </div>
         <HOCOverlay />
         <HOCModal />
@@ -100,27 +83,11 @@ class HOCApp extends Component {
       </div>
     );
   }
-  renderNote() {
-    return <HOCSideNote />;
-  }
-  renderGradient() {
-    const styles = gradient.getGradientStyles();
-
-    if (this.state.gradientPos) {
-      styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
-    }
-
-    return (
-      <div className="gradient-bg">
-        <div className="gradient-bg__gradient" style={styles} />
-      </div>
-    );
-  }
   render() {
     const { location, status, isMaximized, nextRetry, hasLoaded } = this.props;
     return (
       <div className="app">
-        {this.renderGradient()}
+        <Gradient />
         <Topbar
           pathname={location.pathname}
           status={status}
