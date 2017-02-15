@@ -18,14 +18,16 @@ section.view-container {
   @include size(100%, calc(100% - (60px - 38px)));
   @include border-radius(6px, 6px, 0px, 0px);
   @include flex(column);
-  animation: showViewContainer .7s ease forwards;
+  // animation: showViewContainer .7s ease forwards;
   background-color: $bg;
   box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
   margin-top: calc(60px - 38px);
-  opacity: 0;
+  // opacity: 0;
+  left: 0; top: 0;
   overflow: hidden;
   position: absolute;
-  transition: left .5s ease ,width .5s ease;
+  transform: rotate3d(0, 0, 0);
+  transition: transform .5s ease;
   will-change: width, left;
 }
 
@@ -33,7 +35,9 @@ section.view-container {
   $b: &;
   @include size(100%);
   @include flex(column);
-  animation: showViewContainerInside 1.4s ease forwards;
+  animation: showViewContainerInside ,7s ease forwards;
+  transform: rotate3d(0, 0, 0);
+  will-change: width;
 }
 
 // ======================================================
@@ -61,27 +65,32 @@ section.view-container {
   &__nav-bar {
     @include size(100%, auto);
     @include flex(none);
+    will-change: width;
   }
 
   &__header {
     @include size($innercContentWidth, auto);
     @include flex(none);
     margin: 0 $contentOverflowPadding;
+    will-change: width;
   }
 
   &__scroll {
     @include size(100%);
     overflow-y: auto;
+    will-change: width;
   }
 
   &__container {
     @include size($innercContentWidth, 100%);
     margin: 0 $contentOverflowPadding;
     min-height: 100%;
+    will-change: width;
   }
 
   &__content {
     @include size(100%);
+    will-change: width;
   }
 }
 
@@ -107,18 +116,24 @@ section.view-container {
 // ======================================================
 
 @keyframes showViewContainer {
+  from {
+    transform: rotate3d(0, 0, 0);
+  }
   to {
     opacity: 1;
     transform: translateX(0px);
+    transform: rotate3d(0, 0, 0);
   }
 }
 
 @keyframes showViewContainerInside {
   from {
     opacity: 0;
+    transform: rotate3d(0, 0, 0);
   }
 
   to {
     opacity: 1;
+    transform: rotate3d(0, 0, 0);
   }
 }
