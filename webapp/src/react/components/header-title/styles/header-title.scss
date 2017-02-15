@@ -39,7 +39,7 @@ $h: 105px;
     @include font(30px, $deepBlue-100);
 
     &::-webkit-input-placeholder {
-      @include font(30px, $deepBlue-60);
+      @include font(30px, $deepBlue-30);
     }
   }
 
