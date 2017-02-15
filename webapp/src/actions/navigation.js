@@ -39,6 +39,11 @@ export const viewForId = (navId) => {
           url: 'https://paper.dropbox.com',
         },
       };
+    case 'slack':
+      return {
+        component: 'Slack',
+        title: 'Slack',
+      };
     case 'store':
       return {
         component: 'Store',

@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import { Map } from 'immutable';
 import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
@@ -96,6 +97,7 @@ class HOCViewController extends PureComponent {
   }
   renderViewControllers() {
     const { navigation } = this.props;
+    this._slackOptions = {};
     const { width } = this.state;
 
     // Primary view
@@ -129,8 +131,27 @@ class HOCViewController extends PureComponent {
         style.zIndex = 3;
         xClass.push('view-container--overlay');
       }
+      if (currentView && currentView.get('component') === 'Slack') {
+        this._slackOptions = {
+          target,
+          style,
+          xClass,
+        };
+        return undefined;
+      }
       return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
     });
+  }
+  renderSlack() {
+    const { target, style, xClass } = this._slackOptions;
+    const classes = xClass || ['view-container--hidden'];
+    return this.renderContent(Map({
+      component: 'Slack',
+      title: 'Slack',
+      props: Map({
+        hidden: !target,
+      }),
+    }), target, style, classes, 'slack');
   }
   renderCloseButton(target) {
     if (target && target === 'secondary') {
@@ -148,7 +169,7 @@ class HOCViewController extends PureComponent {
 
     return undefined;
   }
-  renderContent(currentView, target, style, xClasses) {
+  renderContent(currentView, target, style, xClasses, key) {
     const View = views[currentView.get('component')];
     if (!View) {
       return `View (${currentView.get('component')}) not found!`;
@@ -162,7 +183,7 @@ class HOCViewController extends PureComponent {
     }
     const className = ['view-container'].concat(xClasses).join(' ');
     return (
-      <section className={className} key={target} style={style}>
+      <section className={className} key={key || target} style={style}>
         {this.renderCloseButton(target)}
         <View
           navPop={this.onPopCached(target)}
@@ -177,16 +198,11 @@ class HOCViewController extends PureComponent {
     );
   }
 
-  renderSlack(hidden) {
-    const HOCSlack = views.Slack;
-    return (
-      <HOCSlack hidden={hidden} />
-    );
-  }
   render() {
     return (
       <div ref="controller" className="view-controller">
         {this.renderViewControllers()}
+        {this.renderSlack()}
       </div>
     );
   }

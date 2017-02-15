@@ -23,9 +23,6 @@ class HOCSidebar extends Component {
   rightClickedItem(e) {
     const { navSet, secondaryNavId } = this.props;
     let id = e.target.getAttribute('data-id');
-    if (id === 'slack') {
-      return undefined;
-    }
     if (id === secondaryNavId) {
       id = null;
     }
