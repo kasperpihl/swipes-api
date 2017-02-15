@@ -4,15 +4,7 @@
 .find {
   @include size(100%);
   @include flex(flex);
-  padding-top: 51px;
-
-  &:before {
-    content: '';
-    @include size(100%, 1px);
-    position: absolute;
-    left: 0; top: 50px;
-    background-color: $deepBlue-10;
-  }
+  border-top: 1px solid $deepBlue-10;
 
   &__sidebar {
     @include flex(none);

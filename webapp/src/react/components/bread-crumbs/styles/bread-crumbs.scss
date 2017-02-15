@@ -1,0 +1,63 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+$navbarH: 48px;
+
+// ======================================================
+// Block
+// ======================================================
+
+.bread-crumbs {
+  $b: &;
+  @include size(100%, $navbarH);
+  @include flex(column);
+  border-bottom: 1px solid $deepBlue-20;
+}
+
+// ======================================================
+// Elelements
+// ======================================================
+
+// Crumb
+
+.bread-crumbs {
+  $b: &;
+
+  &__crumb {
+    @include size(auto, 100%);
+    @include flex(center, flex-start);
+  }
+}
+
+// Misc
+
+.bread-crumbs {
+  $b: &;
+
+  &__title {
+    @include font(11px, $blue-100, 15px, 500);
+    text-transform: uppercase;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__seperator {
+    @include size(24px, $navbarH);
+    @include flex();
+    transform: translateY(-.5px);
+
+    #{$b}__icon {
+      fill: $deepBlue-20;
+    }
+  }
+
+  &__icon {
+    @include size(18px);
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================

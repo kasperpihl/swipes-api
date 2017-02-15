@@ -8,7 +8,7 @@ import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'src/react/app/view-controller/SWView';
 import TabBar from 'components/tab-bar/TabBar';
-import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import Button from 'Button';
 import GoalList from './GoalList';
 
@@ -219,11 +219,10 @@ class HOCGoalList extends Component {
   }
   renderNavbar() {
     const { target } = this.props;
+    // <Button text="Add Goal" primary onClick={this.onAddGoal} />
 
     return (
-      <HOCNavbar target={target}>
-        <Button text="Add Goal" primary onClick={this.onAddGoal} />
-      </HOCNavbar>
+      <HOCBreadCrumbs target={target} />
     );
   }
   renderHeader() {

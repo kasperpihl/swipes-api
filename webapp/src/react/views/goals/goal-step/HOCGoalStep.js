@@ -11,7 +11,7 @@ import ListMenu from 'components/list-menu/ListMenu';
 import GoalStep from './GoalStep';
 import GoalSide from './GoalSide';
 import SWView from 'src/react/app/view-controller/SWView';
-import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import Button from 'Button';
 
 
@@ -301,11 +301,10 @@ class HOCGoalStep extends Component {
   }
   renderNavbar() {
     const { target } = this.props;
+    // <Button icon="ThreeDots" onClick={this.onContextClick} />
 
     return (
-      <HOCNavbar target={target}>
-        <Button icon="ThreeDots" onClick={this.onContextClick} />
-      </HOCNavbar>
+      <HOCBreadCrumbs target={target} />
     );
   }
   render() {

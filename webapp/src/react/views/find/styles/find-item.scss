@@ -9,7 +9,6 @@ $itemHeight: $largeHeight;
 .find-item {
   $b: &;
   @include size(100%, $itemHeight);
-  position: relative;
   border-bottom: 1px solid $deepBlue-10;
 
   &__content {

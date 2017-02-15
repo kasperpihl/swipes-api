@@ -7,7 +7,7 @@ import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
-import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
@@ -268,16 +268,18 @@ class HOCAddGoal extends Component {
   renderNavbar() {
     const { target } = this.props;
     const { title } = this.state;
-    return (
-      <HOCNavbar
-        onChange={this.onInputChange}
-        target={target}
-        delegate={this}
-        value={title}
-      >
-        <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
-      </HOCNavbar>
-    );
+    // return (
+    //   <HOCNavbar
+    //     onChange={this.onInputChange}
+    //     target={target}
+    //     delegate={this}
+    //     value={title}
+    //   >
+    //     <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
+    //   </HOCNavbar>
+    // );
+
+    return <HOCBreadCrumbs target={target} />;
   }
   renderSteps() {
     const { steps, stepOrder } = this.state;

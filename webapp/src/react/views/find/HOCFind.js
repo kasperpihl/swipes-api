@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from 'actions';
 import SWView from 'SWView';
 import { setupDelegate, bindAll } from 'classes/utils';
-import HOCNavbar from 'components/nav-bar/HOCNavBar';
+import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import Button from 'Button';
 import HOCBrowse from './browse/HOCBrowse';
 import SearchResults from './SearchResults';
@@ -105,17 +105,18 @@ class HOCFind extends Component {
   renderNavbar() {
     const { target } = this.props;
     const { searchQ } = this.state;
-    return (
-      <HOCNavbar
-        onChange={this.onInputChange}
-        onKeyUp={this.onInputKeyUp}
-        target={target}
-        delegate={this}
-        value={searchQ}
-      >
-        <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
-      </HOCNavbar>
-    );
+    // return (
+    //   <HOCNavbar
+    //     onChange={this.onInputChange}
+    //     onKeyUp={this.onInputKeyUp}
+    //     target={target}
+    //     delegate={this}
+    //     value={searchQ}
+    //   >
+    //     <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
+    //   </HOCNavbar>
+    // );
+    return <HOCBreadCrumbs target={target} />;
   }
   renderBrowse() {
     const {
