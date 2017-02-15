@@ -12,6 +12,9 @@ import {
 import {
   preview,
 } from './preview';
+import {
+  browse,
+} from './browse';
 
 export {
   authUrl,
@@ -20,4 +23,5 @@ export {
   requestStream,
   mapSearch,
   preview,
+  browse,
 };
