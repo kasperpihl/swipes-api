@@ -15,20 +15,21 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 }
 
 section.view-container {
-  @include size(100%, calc(100% - (60px - 38px)));
+  @include size(100%, calc(100% - 60px));
   @include border-radius(6px, 6px, 0px, 0px);
   @include flex(column);
-  animation: showViewContainer .7s ease forwards;
+  // animation: showViewContainer .7s ease forwards;
   background-color: $bg;
   // box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
-  margin-top: calc(60px - 38px);
-  opacity: 0;
-  left: 0; top: 0;
-  overflow: hidden;
-  position: absolute;
-  transform: rotate3d(0, 0, 0);
+  margin-top: calc(60px);
+  // opacity: 0;
+  width: 600px !important;
+  left: 60px; top: 0;
+  // overflow: hidden;
+  position: fixed;
+  // transform: rotate3d(0, 0, 0);
   transition: transform 5s ease;
-  will-change: width, left;
+  will-change: width, transform;
 }
 
 .sw-view {
