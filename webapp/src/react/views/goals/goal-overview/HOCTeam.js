@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
-// import { map, list } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import HOCAssigning from 'components/assigning/HOCAssigning';
+import GoalsUtil from 'classes/goals-util';
+/* global msgGen */
 
 class HOCTeam extends PureComponent {
   constructor(props) {
@@ -11,18 +14,60 @@ class HOCTeam extends PureComponent {
   }
   componentDidMount() {
   }
-  render() {
+  getHelper() {
+    const { goal } = this.props;
+    return new GoalsUtil(goal);
+  }
+  renderTeamImages(assignees) {
     return (
-      <div className="className" />
+      <HOCAssigning
+        assignees={assignees}
+        maxImages={assignees.size}
+      />
+    );
+  }
+  renderTeamLabel(assignees, helper) {
+    const { me } = this.props;
+    let string;
+    if (helper.getIsCompleted()) {
+      string = ' completed ';
+    } else {
+      string = assignees.size > 1 ? ' are ' : ' is ';
+      if (assignees.size === 1 && assignees.get(0) === me.get('id')) {
+        string = ' are ';
+      }
+      string += 'working on ';
+    }
+    string += 'this goal';
+    return (
+      <div className="team-component--label">
+        {msgGen.getUserArrayString(assignees)}{string}
+      </div>
+    );
+  }
+  render() {
+    const helper = this.getHelper();
+    const assignees = helper.getAllInvolvedAssignees();
+
+    return (
+      <div className="team-component">
+        {this.renderTeamImages(assignees)}
+        {this.renderTeamLabel(assignees, helper)}
+      </div>
     );
   }
 }
 // const { string } = PropTypes;
 
-HOCTeam.propTypes = {};
+HOCTeam.propTypes = {
+  goal: map,
+  me: map,
+};
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    me: state.get('me'),
+  };
 }
 
 export default connect(mapStateToProps, {
