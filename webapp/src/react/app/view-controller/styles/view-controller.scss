@@ -25,7 +25,7 @@ section.view-container {
   opacity: 0;
   overflow: hidden;
   position: absolute;
-  transition: left .5s ease;
+  transition: left .5s ease ,width .5s ease;
   will-change: width, left;
 }
 
@@ -33,6 +33,7 @@ section.view-container {
   $b: &;
   @include size(100%);
   @include flex(column);
+  animation: showViewContainerInside 1.4s ease forwards;
 }
 
 // ======================================================
@@ -109,5 +110,15 @@ section.view-container {
   to {
     opacity: 1;
     transform: translateX(0px);
+  }
+}
+
+@keyframes showViewContainerInside {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
