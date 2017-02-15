@@ -1,35 +1,25 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { navigation } from 'actions';
+import * as a from 'actions';
+import { setupCachedCallback } from 'classes/utils';
 
 import './styles/sidebar.scss';
 
-class HOCSidebar extends Component {
+class HOCSidebar extends PureComponent {
   constructor(props) {
     super(props);
-    this.clickedItem = this.clickedItem.bind(this);
-    this.rightClickedItem = this.rightClickedItem.bind(this);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.onClickCached = setupCachedCallback(this.onClick, this);
+    this.onRightClickCached = setupCachedCallback(this.onClick, this);
   }
-  clickedItem(e) {
+  onClick(id, target) {
     const { navSet } = this.props;
-    const id = e.target.getAttribute('data-id');
-    navSet('primary', id);
-  }
-  rightClickedItem(e) {
-    const { navSet, secondaryNavId } = this.props;
-    let id = e.target.getAttribute('data-id');
-    if (id === secondaryNavId) {
-      id = null;
-    }
-    return navSet('secondary', id);
+    navSet(target, id);
   }
   renderItem(item) {
-    const { navId, counters, secondaryNavId } = this.props;
+    const { navId, counters } = this.props;
     const counter = counters.get(item.id);
 
     let className = 'sidebar__item';
@@ -37,9 +27,7 @@ class HOCSidebar extends Component {
     if (item.id === navId) {
       className += ' sidebar__item--active';
     }
-    if (item.id === secondaryNavId) {
-      className += ' sidebar__item--secondary-active';
-    }
+
     let notif = null;
     if (counter && counter.length) {
       notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
@@ -53,8 +41,8 @@ class HOCSidebar extends Component {
 
     return (
       <div
-        onClick={this.clickedItem}
-        onContextMenu={this.rightClickedItem}
+        onClick={this.onClickCached(item.id, 'primary')}
+        onContextMenu={this.onRightClickCached(item.id, 'secondary')}
         className={className}
         key={item.id}
         data-id={item.id}
@@ -106,8 +94,7 @@ class HOCSidebar extends Component {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
-    navId: state.getIn(['navigation', 'primary', 'id']),
-    secondaryNavId: state.getIn(['navigation', 'secondary', 'id']),
+    navId: state.getIn(['navigation', 'id']),
     counters: state.getIn(['navigation', 'counters']),
   };
 }
@@ -117,12 +104,11 @@ const { string, func } = PropTypes;
 HOCSidebar.propTypes = {
   me: map,
   navId: string,
-  secondaryNavId: string,
   counters: map,
   navSet: func,
 };
 
 const ConnectedHOCSidebar = connect(mapStateToProps, {
-  navSet: navigation.set,
+  navSet: a.navigation.set,
 })(HOCSidebar);
 export default ConnectedHOCSidebar;
