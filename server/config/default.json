@@ -23,7 +23,7 @@
   "asana": {
     "clientId": "93722876544112",
     "clientSecret": "07cf42d4b1190acb4333d66229fb080b",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
+    "redirectUri": "https://staging.swipesapp.com/oauth-success.html"
   },
   "slack": {
     "clientId": "2345135970.9201204242",
