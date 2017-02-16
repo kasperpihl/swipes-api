@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
+import Measure from 'react-measure';
 import * as actions from 'actions';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import GoalsUtil from 'classes/goals-util';
@@ -31,10 +32,11 @@ class HOCGoalStep extends Component {
       isSendingNotification: false,
       isSubmitting: false,
       handoff: this.getEmptyHandoff(),
+      showSide: true,
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick', 'onContextClick']);
+    bindAll(this, ['onHandoffChange', 'onOpenUser', 'onChangeClick', 'onMeasure', 'onContextClick']);
     this.callDelegate = setupDelegate(props.delegate);
   }
 
@@ -54,6 +56,13 @@ class HOCGoalStep extends Component {
           handoff: this.getEmptyHandoff(this.calculateNextStep(nextGoal)),
         });
       }
+    }
+  }
+  onMeasure(dim) {
+    if (dim.width < 1200) {
+      this.setState({ showSide: false });
+    } else {
+      this.setState({ showSide: true });
     }
   }
   onFlag(id) {
@@ -145,7 +154,7 @@ class HOCGoalStep extends Component {
       this.onSelectAssignees(options, newAssignees);
     }
   }
-  onCompleteStep() {
+  onCompleteStep(e) {
     const { completeStep, goal } = this.props;
     const { handoff } = this.state;
 
@@ -308,6 +317,7 @@ const { func, object, string } = PropTypes;
 HOCGoalStep.propTypes = {
   archive: func,
   delegate: object,
+  sideNoteId: string,
   navPop: func,
   saveWay: func,
   selectStep: func,

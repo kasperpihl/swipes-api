@@ -1,7 +1,7 @@
 import OrgDashboard from './org-dashboard/HOCOrgDashboard';
 
 import GoalList from './goals/goal-list/HOCGoalList';
-import GoalStep from './goals/goal-step/HOCGoalStep';
+import GoalHandoff from './goals/goal-handoff/HOCGoalHandoff';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import AddGoal from './goals/add-goal/HOCAddGoal';
 
@@ -20,7 +20,7 @@ export {
   OrgDashboard,
   GoalList,
   AddGoal,
-  GoalStep,
+  GoalHandoff,
   GoalOverview,
   Find,
   Profile,

@@ -40,7 +40,7 @@ class HOCOrgDashboard extends Component {
       const { goals, navPush } = this.props;
       const goal = goals.get(id);
       navPush({
-        component: 'GoalStep',
+        component: 'GoalOverview',
         title: goal.get('title'),
         props: {
           goalId: id,

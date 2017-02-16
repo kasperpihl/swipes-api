@@ -1,16 +1,112 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
+import GoalsUtil from 'classes/goals-util';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
+import GoalHandoff from './GoalHandoff';
 
 class HOCGoalHandoff extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isSubmitting: false,
+      handoff: this.getEmptyHandoff(),
+    };
   }
   componentDidMount() {
+  }
+  onCompleteStep() {
+    const { completeStep, goal, navPop } = this.props;
+    const { handoff } = this.state;
+
+    this.setState({ isSubmitting: true });
+    completeStep(goal.get('id'), handoff).then((res) => {
+      this.setState({ isSubmitting: false });
+      if (res && res.ok) {
+        navPop();
+      }
+    });
+  }
+  onNotify() {
+    const { goalNotify, goal, navPop } = this.props;
+    const { handoff } = this.state;
+    this.setState({ isSubmitting: true });
+    goalNotify(goal.get('id'), handoff).then((res) => {
+      this.setState({ isSubmitting: false });
+      if (res && res.ok) {
+        navPop();
+      }
+    });
+  }
+  onGoalAction(type) {
+    const { handoff } = this.state;
+    if (type === 'primary') {
+      if (handoff.get('target') === '_notify') {
+        this.onNotify();
+      } else {
+        this.onCompleteStep();
+      }
+    }
+  }
+  onFlag(id) {
+    let { handoff } = this.state;
+    if (handoff.get('flags').includes(id)) {
+      handoff = handoff.updateIn(['flags'], fl => fl.filter(f => f !== id));
+    } else {
+      handoff = handoff.updateIn(['flags'], fl => fl.push(id));
+    }
+    this.setState({ handoff });
+  }
+  onSelectAssignees(options, newAssignees) {
+    const { selectAssignees } = this.props;
+
+    selectAssignees(options, newAssignees.toJS(), (assignees) => {
+      const { handoff } = this.state;
+      if (assignees) {
+        this.setState({ handoff: handoff.set('assignees', fromJS(assignees)) });
+      }
+    });
+  }
+  onHandoffChange(handoffText) {
+    const { handoff } = this.state;
+    this.setState({ handoff: handoff.set('message', handoffText) });
+  }
+  onChangeClick(type, e) {
+    let { handoff } = this.state;
+    const helper = this.getHelper();
+    const { goal, selectStep } = this.props;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'center',
+    };
+    if (type === 'step') {
+      selectStep(options, goal.get('id'), handoff.get('target'), (newStepId) => {
+        if (newStepId !== handoff.get('target')) {
+          this.setState({
+            handoff: handoff.set('assignees', null).set('target', newStepId || '_complete'),
+          });
+          if (newStepId === helper.getCurrentStepId()) {
+            this.onSelectAssignees(options, helper.getCurrentStep().get('assignees'));
+          }
+        }
+      });
+    } else {
+      if (type === 'from') {
+        const newState = {};
+        if (handoff.get('target') !== helper.getCurrentStepId()) {
+          newState.handoff = handoff = handoff.set('target', helper.getCurrentStepId()).set('assignees', null);
+        }
+        this.setState(newState);
+      }
+      const step = helper.getStepById(handoff.get('target'));
+      let newAssignees = handoff.get('assignees');
+      if (!newAssignees && step) {
+        newAssignees = step.get('assignees');
+      }
+      this.onSelectAssignees(options, newAssignees);
+    }
   }
   getEmptyHandoff(target, message) {
     return fromJS({
@@ -20,24 +116,66 @@ class HOCGoalHandoff extends PureComponent {
       target: target || this.calculateNextStep(),
     });
   }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
+  }
+  calculateNextStep(goal) {
+    const helper = this.getHelper(goal);
+    const nextStep = helper.getNextStep();
+    return nextStep ? nextStep.get('id') : '_complete';
+  }
+  renderHeader() {
+
+  }
   render() {
+    const {
+      goal,
+      me,
+      users,
+    } = this.props;
+    const {
+      isSubmitting,
+      handoff,
+    } = this.state;
+
     return (
       <SWView>
-        <div className="goal-handoff" />
+        <GoalHandoff
+          goal={goal}
+          me={me}
+          users={users}
+          delegate={this}
+          handoff={handoff}
+          isSubmitting={isSubmitting}
+        />
       </SWView>
     );
   }
 }
-const { func } = PropTypes;
 
+const { func, string } = PropTypes;
 HOCGoalHandoff.propTypes = {
-  goal: map,
   navPop: func,
+  selectStep: func,
+  goalNotify: func,
+  selectAssignees: func,
+  completeStep: func,
+  goal: map,
+  me: map,
+  users: map,
 };
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state, ownProps) {
+  return {
+    goal: state.getIn(['goals', ownProps.goalId]),
+    me: state.get('me'),
+  };
 }
 
 export default connect(mapStateToProps, {
+  selectAssignees: a.goals.selectAssignees,
+  goalNotify: a.goals.notify,
+  selectStep: a.goals.selectStep,
+  completeStep: a.goals.completeStep,
 })(HOCGoalHandoff);
