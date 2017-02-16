@@ -4,7 +4,7 @@
 .milestone-list {
   @include size(100%, auto);
   @include flex(flex);
-  @include flex($horizontal: space-between);
+  @include flex($horizontal: space-around);
   flex-wrap: wrap;
   padding-top: 1px;
   position: relative;
