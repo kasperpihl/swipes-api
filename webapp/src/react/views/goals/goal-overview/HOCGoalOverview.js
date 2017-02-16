@@ -12,6 +12,9 @@ import GoalSide from '../goal-step/GoalSide';
 import './styles/goal-overview.scss';
 
 class HOCGoalOverview extends PureComponent {
+  static minWidth() {
+    return 650;
+  }
   constructor(props) {
     super(props);
     this.state = {};

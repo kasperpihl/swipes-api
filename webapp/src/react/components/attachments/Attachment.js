@@ -30,7 +30,9 @@ const Attachment = (props) => {
         <div className="attachment__icon">
           <Icon svg={icon} className="attachment__svg" />
         </div>
-        {title}
+        <div className="attachment__words">
+          {title}
+        </div>
       </div>
       <div className="attachment__actions">
         <div className="attachment__button attachment__button--delete" onClick={onDelete}>

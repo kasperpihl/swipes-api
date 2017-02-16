@@ -1,20 +1,28 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .attachment {
-  $b: &;
   @include size(100%, 60px);
   @include flex(center, flex-start);
-  position: relative;
+}
 
-  &:not(:last-child) {
-    border-bottom: 1px solid darken($deepBlue-5, 3%);
-  }
+// ======================================================
+// Elements
+// ======================================================
+
+.attachment {
+  $b: &;
 
   &__title {
-    @include size(100%);
+    $width: calc(100% - (36px + 2px));
+    @include size($width, 100%);
     @include flex(center, flex-start);
     @include font(12px, $deepBlue-100, 18px);
+    transition: .1s ease;
 
     &:hover {
       @include font($c: $blue-100);
@@ -23,7 +31,14 @@
         @include svg-color($blue-100);
       }
     }
-    transition: .1s ease;
+  }
+
+  &__words {
+    @include size(100%, auto);
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__icon {
@@ -42,6 +57,16 @@
     @include flex();
     @include flex(none);
   }
+
+  &__svg {
+    @include size(24px);
+  }
+}
+
+// Buttons
+
+.attachment {
+  $b: &;
 
   &__button {
     @include size(36px);
@@ -72,10 +97,14 @@
       }
     }
   }
+}
 
-  &__svg {
-    @include size(24px);
-  }
+// ======================================================
+// Modifiers
+// ======================================================
+
+.attachment {
+  $b: &;
 
   &--flagged {
     #{$b}__button--flag {
@@ -100,6 +129,27 @@
       display: none;
     }
   }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.attachment {
+  $b: &;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid darken($deepBlue-5, 3%);
+  }
+}
+
+
+// ======================================================
+// Hover
+// ======================================================
+
+.attachment {
+  $b: &;
 
   &:hover {
 

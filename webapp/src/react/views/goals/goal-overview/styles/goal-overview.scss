@@ -18,9 +18,9 @@
   $b: &;
 
   &__column {
-    @include size(100%, auto);
 
     &--left {
+      @include size(calc(100% - 270px - 30px - 10%), auto);
       margin-right: 10%;
     }
 
