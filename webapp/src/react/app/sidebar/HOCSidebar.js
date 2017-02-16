@@ -16,6 +16,9 @@ class HOCSidebar extends PureComponent {
   }
   onClick(id, target) {
     const { navSet } = this.props;
+    if (target === 'secondary' && id === 'slack') {
+      return;
+    }
     navSet(target, id);
   }
   renderItem(item) {

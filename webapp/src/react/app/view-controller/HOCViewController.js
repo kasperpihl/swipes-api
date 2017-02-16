@@ -6,6 +6,7 @@ import Button from 'Button';
 import * as actions from 'actions';
 import * as views from 'views';
 import { setupCachedCallback, debounce } from 'classes/utils';
+import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import './styles/view-controller';
 
 const DEFAULT_MIN_WIDTH = 500;
@@ -153,23 +154,30 @@ class HOCViewController extends PureComponent {
       }),
     }), target, style, classes, 'slack');
   }
-  renderCloseButton(target) {
-    if (target && target === 'secondary') {
+  renderCardHeader(target, slack) {
+    if (slack) {
       return (
-        <Button
-          small
-          frameless
-          onClick={this.onClose}
-          icon="Close"
-          className="view-container__close-button"
-          key="close-button"
-        />
+        <div className="view-container__header" />
       );
     }
-
-    return undefined;
+    const closeButton = (target !== 'primary') ? (
+      <Button
+        small
+        frameless
+        onClick={this.onClose}
+        icon="Close"
+        className="view-container__close-button"
+        key="close-button"
+      />
+    ) : undefined;
+    return (
+      <div className="view-container__header">
+        <HOCBreadCrumbs target={target} />
+        {closeButton}
+      </div>
+    );
   }
-  renderContent(currentView, target, style, xClasses, key) {
+  renderContent(currentView, target, style, xClasses, slack) {
     const View = views[currentView.get('component')];
     if (!View) {
       return `View (${currentView.get('component')}) not found!`;
@@ -183,8 +191,8 @@ class HOCViewController extends PureComponent {
     }
     const className = ['view-container'].concat(xClasses).join(' ');
     return (
-      <section className={className} key={key || target} style={style}>
-        {this.renderCloseButton(target)}
+      <section className={className} key={slack || target} style={style}>
+        {this.renderCardHeader(target, slack)}
         <View
           navPop={this.onPopCached(target)}
           navPush={this.onPushCached(target)}
