@@ -65,13 +65,14 @@ class HOCGoalOverview extends PureComponent {
   }
   renderHandoffBar() {
     const helper = this.getHelper();
-    console.log('helper.amIAssigned()', helper.amIAssigned());
+
     if (false) {
       return undefined;
     }
+
     return (
       <div className="handoff-bar">
-        <div className="handoff-bar__label">It’s Yana’s turn to handoff work</div>
+        <div className="handoff-bar__label">It’s your turn to handoff work</div>
         <div className="handoff-bar__actions">
           <Button text="Handoff" primary className="handoff-bar__button" />
         </div>
