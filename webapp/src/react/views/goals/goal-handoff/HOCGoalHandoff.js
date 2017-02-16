@@ -114,7 +114,7 @@ class HOCGoalHandoff extends PureComponent {
   getEmptyHandoff(target, message) {
     return fromJS({
       flags: [],
-      assignees: null,
+      assignees: (target === '_notify') ? [] : null,
       message: message || '',
       target: target || this.calculateNextStep(),
     });
