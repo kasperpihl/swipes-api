@@ -23,7 +23,7 @@ const refreshAccessToken = (auth_data, user) => {
     });
 
     if ((now - ts_last_token > now - expires_in) && user) {
-      const user_id = user.id;
+      const user_id = user.user_id;
 
       client.refreshAccessToken((err, tokens) => {
         const newAuthData = Object.assign({}, tokens, { ts_last_token: now });

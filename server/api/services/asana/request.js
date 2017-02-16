@@ -16,7 +16,7 @@ const refreshAccessToken = (auth_data, user) => {
     let accessToken;
 
     if ((now - ts_last_token > expires_in) && user) {
-      const user_id = user.id;
+      const user_id = user.user_id;
 
       client.app.accessTokenFromRefreshToken(auth_data.refresh_token)
         .then((response) => {
@@ -101,7 +101,7 @@ const request = ({ auth_data, method, params = {}, user }, callback) => {
         if (response.sync) {
           data = response;
         } else {
-          data = response.data || response;
+          data = response._response || response.data || response;
         }
       }
 

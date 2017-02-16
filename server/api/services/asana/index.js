@@ -9,6 +9,9 @@ import {
   preview,
 } from './preview';
 import {
+  browse,
+} from './browse';
+import {
   webhooks,
   unsubscribeFromAllWebhooks,
 } from './webhooks';
@@ -21,6 +24,7 @@ export {
   authData,
   request,
   preview,
+  browse,
   webhooks,
   unsubscribeFromAllWebhooks,
   mapSearch,
