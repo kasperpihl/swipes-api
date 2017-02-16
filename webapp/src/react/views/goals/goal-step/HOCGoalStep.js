@@ -9,7 +9,6 @@ import { setupDelegate, bindAll } from 'classes/utils';
 import ListMenu from 'components/list-menu/ListMenu';
 import Button from 'Button';
 import SWView from 'src/react/app/view-controller/SWView';
-import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import GoalStep from './GoalStep';
 import GoalSide from './GoalSide';
@@ -271,21 +270,11 @@ class HOCGoalStep extends Component {
       />
     );
   }
-  renderSide() {
-    const { goal, me } = this.props;
-
-    return (
-      <div className="goal-step__side">
-        <GoalSide goal={goal} me={me} />
-      </div>
-    );
-  }
   renderHeader() {
     const { target } = this.props;
 
     return (
       <div className="goals-list__header">
-        <HOCBreadCrumbs target={target} />
         <HOCHeaderTitle target={target}>
           <Button icon="ThreeDots" onClick={this.onContextClick} />
         </HOCHeaderTitle>
@@ -296,6 +285,7 @@ class HOCGoalStep extends Component {
     const { isHandingOff } = this.state;
     const { goal } = this.props;
     let className = 'goal-step';
+
     if (!goal) {
       return <div className={className} />;
     }
@@ -303,11 +293,11 @@ class HOCGoalStep extends Component {
     if (isHandingOff) {
       className += ' goal-step__handing-off';
     }
+
     return (
       <SWView header={this.renderHeader()}>
         <div className={className}>
           {this.renderContent()}
-          {/* {this.renderSide()} */}
         </div>
       </SWView>
     );

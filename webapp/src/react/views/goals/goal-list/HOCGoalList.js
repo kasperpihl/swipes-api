@@ -8,7 +8,6 @@ import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'src/react/app/view-controller/SWView';
 import TabBar from 'components/tab-bar/TabBar';
-import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import GoalList from './GoalList';
@@ -223,7 +222,6 @@ class HOCGoalList extends Component {
 
     return (
       <div className="goals-list__header">
-        <HOCBreadCrumbs target={target} />
         <HOCHeaderTitle target={target}>
           <Button text="Add Goal" primary onClick={this.onAddGoal} />
         </HOCHeaderTitle>

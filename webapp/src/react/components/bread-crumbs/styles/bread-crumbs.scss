@@ -11,12 +11,8 @@ $navbarH: 48px;
   $b: &;
   @include size(100%, $navbarH);
   @include flex(column);
+  padding-top: 6px;
   border-bottom: 1px solid $deepBlue-20;
-
-  &:empty {
-    @include size(100%, 15px);
-    border-bottom: none;
-  }
 }
 
 // ======================================================
@@ -66,3 +62,23 @@ $navbarH: 48px;
 // ======================================================
 // Modifiers
 // ======================================================
+
+.bread-crumbs {
+
+  &--small:empty {
+    @include size($height: 15px);
+    border: none;
+  }
+}
+
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.bread-crumbs {
+
+  &:empty {
+    // @include size($height: 15px);
+  }
+}

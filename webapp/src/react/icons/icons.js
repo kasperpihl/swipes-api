@@ -12,10 +12,12 @@ import ArrowRightFull from './svgs/arrow-right-full.svg';
 import ArrowRightLine from './svgs/arrow-right-line.svg';
 import Assign from './svgs/assign.svg';
 import Bold from './svgs/bold.svg';
+import Breadcrumb from './svgs/breadcrumb.svg';
 import Calendar from './svgs/calendar.svg';
 import Checklist from './svgs/checklist.svg';
 import Checkmark from './svgs/checkmark.svg';
 import Close from './svgs/close.svg';
+import CloseSmall from './svgs/close-small.svg';
 import Collection from './svgs/collection.svg';
 import CreateNote from './svgs/create-note.svg';
 import Deliver from './svgs/deliver.svg';
@@ -105,10 +107,12 @@ export {
   ArrowRightLine,
   Assign,
   Bold,
+  Breadcrumb,
   Calendar,
   Checklist,
   Checkmark,
   Close,
+  CloseSmall,
   Collection,
   CreateNote,
   Deliver,

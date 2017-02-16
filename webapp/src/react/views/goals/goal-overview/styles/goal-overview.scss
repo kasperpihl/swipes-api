@@ -20,7 +20,7 @@
   &__column {
 
     &--left {
-      @include size(calc(100% - 270px - 30px - 10%), auto);
+      @include size(calc(100% - 270px - 10%), auto);
       margin-right: 10%;
     }
 

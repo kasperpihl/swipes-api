@@ -160,20 +160,26 @@ class HOCViewController extends PureComponent {
         <div className="view-container__header" />
       );
     }
+
     const closeButton = (target !== 'primary') ? (
       <Button
         small
         frameless
         onClick={this.onClose}
-        icon="Close"
+        icon="CloseSmall"
         className="view-container__close-button"
         key="close-button"
       />
     ) : undefined;
+
+    const hideBreadCrumbs = !closeButton;
+
     return (
       <div className="view-container__header">
-        <HOCBreadCrumbs target={target} />
-        {closeButton}
+        <HOCBreadCrumbs target={target} hidden={hideBreadCrumbs} />
+        <div className="view-container__actions">
+          {closeButton}
+        </div>
       </div>
     );
   }

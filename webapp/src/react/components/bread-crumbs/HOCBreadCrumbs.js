@@ -26,7 +26,7 @@ class HOCBreadCrumbs extends Component {
           {title}
         </div>
         <div className="bread-crumbs__seperator">
-          <Icon svg="ArrowRightLine" className="bread-crumbs__icon" />
+          <Icon svg="Breadcrumb" className="bread-crumbs__icon" />
         </div>
       </div>
     );
@@ -46,10 +46,20 @@ class HOCBreadCrumbs extends Component {
       }
     });
 
-    return <div className="bread-crumbs">{breadCrumbsHTML}</div>;
+    return breadCrumbsHTML;
   }
   render() {
-    return this.renderBreadCrumbs();
+    const { hidden } = this.props;
+    let className = 'bread-crumbs';
+
+    if (hidden) {
+      className += ' bread-crumbs--small';
+    }
+    return (
+      <div className={className}>
+        {this.renderBreadCrumbs()}
+      </div>
+    );
   }
 }
 

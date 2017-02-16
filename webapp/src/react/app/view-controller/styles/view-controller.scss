@@ -43,10 +43,21 @@ section.view-container {
 section.view-container {
   $b: getElementSelectorInBlock(#{&}, 'section');
 
-  #{$b}__close-button {
-    right: 12px; top: 10px;
-    opacity: 0;
+  #{$b}__header {
+    @include size(calc(100% - 60px), auto);
+    margin: 0 30px;
+  }
+
+  #{$b}__actions {
+    @include size(auto, 100%);
+    @include flex(flex);
     position: absolute;
+    right: 0; top: 0;
+    padding-top:  9px;
+  }
+
+  #{$b}__close-button {
+    // opacity: 0;
   }
 }
 
