@@ -7,7 +7,6 @@ import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
 import { setupDelegate, bindAll, randomString } from 'classes/utils';
-import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -287,7 +286,6 @@ class HOCAddGoal extends Component {
 
     return (
       <div className="add-goal__header">
-        <HOCBreadCrumbs target={target} />
         <HOCHeaderTitle
           onChange={this.onInputChange}
           target={target}

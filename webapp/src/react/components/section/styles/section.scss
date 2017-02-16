@@ -3,7 +3,7 @@
 
 .section {
   $b: &;
-  @include size(100%, 52px);
+  @include size(100%, auto);
   position: relative;
   padding: 30px 0;
   border-top: 1px solid $deepBlue-20;
