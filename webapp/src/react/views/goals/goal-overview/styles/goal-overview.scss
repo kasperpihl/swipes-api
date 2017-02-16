@@ -10,6 +10,25 @@
   @include flex(flex);
 }
 
+.handoff-bar {
+  @include size(calc(100% + 60px), 60px);
+  @include flex(center, flex-start);
+  border-top: 1px solid $deepBlue-10;
+  left: -30px; bottom: 0;
+  padding: 0 30px;
+  position: absolute;
+
+  &__label {
+    @include size(100%, auto);
+    @include font(12px, $blue-100, 500);
+  }
+
+  &__actions {
+    @include size(auto);
+    @include flex(none);
+  }
+}
+
 // ======================================================
 // Element
 // ======================================================

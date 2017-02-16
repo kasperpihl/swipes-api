@@ -5,11 +5,13 @@ import moment from 'moment';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 /* global msgGen */
 
+import './styles/last-update.scss';
+
 class HOCLastUpdate extends PureComponent {
   renderMessage(handoff) {
     if (handoff.get('message') && handoff.get('message').length) {
       return (
-        <div className="last-update--message">
+        <div className="last-update__message">
           {handoff.get('message')}
         </div>
       );
@@ -37,7 +39,7 @@ class HOCLastUpdate extends PureComponent {
     }
     string += ` ${moment(handoff.get('done_at')).fromNow()}`;
     return (
-      <div className="last-update--label">
+      <div className="last-update__label">
         {string}
       </div>
     );
@@ -48,8 +50,10 @@ class HOCLastUpdate extends PureComponent {
     return (
       <div className="last-update">
         {this.renderMessage(handoff)}
-        {this.renderImage(handoff)}
-        {this.renderLabel(handoff)}
+        <div className="last-update__footer">
+          {this.renderImage(handoff)}
+          {this.renderLabel(handoff)}
+        </div>
       </div>
     );
   }

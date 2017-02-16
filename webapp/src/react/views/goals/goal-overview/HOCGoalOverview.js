@@ -5,6 +5,7 @@ import * as a from 'actions';
 
 import Section from 'components/section/Section';
 import SWView from 'SWView';
+import Button from 'Button';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCTeam from './HOCTeam';
@@ -41,9 +42,8 @@ class HOCGoalOverview extends PureComponent {
     const handoff = helper.getLastHandoff();
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <Section title="Latest update">
-          <HOCLastUpdate handoff={handoff} />
-        </Section>
+        <Section title="Latest update" />
+        <HOCLastUpdate handoff={handoff} />
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
@@ -65,11 +65,17 @@ class HOCGoalOverview extends PureComponent {
   }
   renderHandoffBar() {
     const helper = this.getHelper();
-    if (!helper.amIAssigned()) {
+    console.log('helper.amIAssigned()', helper.amIAssigned());
+    if (false) {
       return undefined;
     }
     return (
-      <div className="handoff-bar" />
+      <div className="handoff-bar">
+        <div className="handoff-bar__label">It’s Yana’s turn to handoff work</div>
+        <div className="handoff-bar__actions">
+          <Button text="Handoff" primary className="handoff-bar__button" />
+        </div>
+      </div>
     );
   }
   render() {
@@ -78,8 +84,8 @@ class HOCGoalOverview extends PureComponent {
         <div className="goal-overview">
           {this.renderLeft()}
           {this.renderRight()}
-          {this.renderHandoffBar()}
         </div>
+        {this.renderHandoffBar()}
       </SWView>
     );
   }

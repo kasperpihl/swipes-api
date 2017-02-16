@@ -1,0 +1,23 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.last-update {
+  @include size(100%, auto);
+  margin-bottom: 55px;
+
+  &__message {
+    @include font(15px, $deepBlue-80, 24px);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  &__footer {
+    @include size(100%, auto);
+    @include flex(center, flex-start);
+  }
+
+  &__label {
+    @include font(12px, $deepBlue-30, 18px, 500);
+    margin-left: 12px;
+  }
+}
