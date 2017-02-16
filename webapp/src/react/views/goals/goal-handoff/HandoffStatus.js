@@ -19,7 +19,6 @@ class HandoffStatus extends Component {
   renderStatus() {
     const { toId, goal, assignees } = this.props;
     const helper = this.getHelper();
-
     let status = '';
 
     if (toId === '_complete') {
