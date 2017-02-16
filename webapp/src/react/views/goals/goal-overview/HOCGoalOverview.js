@@ -1,7 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import * as a from 'actions';
+import { bindAll } from 'classes/utils';
+import GoalsUtil from 'classes/goals-util';
+// import * as a from 'actions';
 
 import Section from 'components/section/Section';
 import SWView from 'SWView';
@@ -12,7 +14,6 @@ import HOCTeam from './HOCTeam';
 import HOCLastUpdate from './HOCLastUpdate';
 import GoalSide from '../goal-step/GoalSide';
 import './styles/goal-overview.scss';
-import GoalsUtil from 'classes/goals-util';
 
 class HOCGoalOverview extends PureComponent {
   static minWidth() {
@@ -20,19 +21,45 @@ class HOCGoalOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    bindAll(this, ['onHandoff', 'onNotify']);
   }
   componentDidMount() {
   }
+  onHandoff() {
+    const { navPush, goal } = this.props;
+    navPush({
+      component: 'GoalHandoff',
+      title: 'Handoff',
+      props: {
+        goalId: goal.get('id'),
+      },
+    });
+  }
+  onNotify() {
+    const { navPush, goal } = this.props;
+    navPush({
+      component: 'GoalHandoff',
+      title: 'Notify',
+      props: {
+        notify: true,
+        goalId: goal.get('id'),
+      },
+    });
+  }
   getHelper() {
     const { goal, me } = this.props;
-    return new GoalsUtil(goal, me);
+    return new GoalsUtil(goal, me.get('id'));
   }
   renderHeader() {
     const { target } = this.props;
     return (
       <div className="add-goal__header">
-        <HOCHeaderTitle target={target} />
+        <HOCHeaderTitle target={target}>
+          <Button
+            text="Notify"
+            onClick={this.onNotify}
+          />
+        </HOCHeaderTitle>
       </div>
     );
   }
@@ -66,7 +93,7 @@ class HOCGoalOverview extends PureComponent {
   renderHandoffBar() {
     const helper = this.getHelper();
 
-    if (false) {
+    if (!helper.amIAssigned()) {
       return undefined;
     }
 
@@ -74,7 +101,12 @@ class HOCGoalOverview extends PureComponent {
       <div className="handoff-bar">
         <div className="handoff-bar__label">It’s your turn to handoff work</div>
         <div className="handoff-bar__actions">
-          <Button text="Handoff" primary className="handoff-bar__button" />
+          <Button
+            text="Handoff"
+            primary
+            className="handoff-bar__button"
+            onClick={this.onHandoff}
+          />
         </div>
       </div>
     );
@@ -91,15 +123,20 @@ class HOCGoalOverview extends PureComponent {
     );
   }
 }
-const { string } = PropTypes;
+
+const { func, string } = PropTypes;
 
 HOCGoalOverview.propTypes = {
   goal: map,
+  navPush: func,
+  me: map,
+  target: string,
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
+    me: state.get('me'),
   };
 }
 

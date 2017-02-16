@@ -94,7 +94,7 @@ class HOCGoalList extends Component {
     }; // state if this gets reopened
     const goal = goals.get(goalId);
     navPush({
-      component: 'GoalHandoff',
+      component: 'GoalOverview',
       title: goal.get('title'),
       props: {
         goalId,

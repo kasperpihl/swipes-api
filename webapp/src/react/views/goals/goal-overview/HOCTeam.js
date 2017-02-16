@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalsUtil from 'classes/goals-util';
@@ -35,7 +36,7 @@ class HOCTeam extends PureComponent {
     string += 'this goal';
     return (
       <div className="team__label">
-        {msgGen.getUserArrayString(assignees)}{string}
+        {msgGen.getUserArrayString(assignees || fromJS([]))}{string}
       </div>
     );
   }

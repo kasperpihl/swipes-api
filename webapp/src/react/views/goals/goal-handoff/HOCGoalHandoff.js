@@ -12,7 +12,7 @@ class HOCGoalHandoff extends PureComponent {
     super(props);
     this.state = {
       isSubmitting: false,
-      handoff: this.getEmptyHandoff(),
+      handoff: this.getEmptyHandoff(props.notify ? '_notify' : undefined),
     };
   }
   componentDidMount() {
@@ -48,6 +48,9 @@ class HOCGoalHandoff extends PureComponent {
       } else {
         this.onCompleteStep();
       }
+    } else {
+      const { navPop } = this.props;
+      navPop();
     }
   }
   onFlag(id) {
@@ -154,9 +157,10 @@ class HOCGoalHandoff extends PureComponent {
   }
 }
 
-const { func, string } = PropTypes;
+const { func, bool } = PropTypes;
 HOCGoalHandoff.propTypes = {
   navPop: func,
+  notify: bool,
   selectStep: func,
   goalNotify: func,
   selectAssignees: func,

@@ -77,7 +77,7 @@ export default class MessageGenerator {
     let status = ' '; // TODO: Include default status msg
     const state = this.store.getState();
     const me = state.get('me');
-    const helper = new GoalsUtil(goal, me);
+    const helper = new GoalsUtil(goal, me.get('id'));
     const lastHandoff = helper.getLastHandoff();
     const doneBy = this.getUserString(lastHandoff.get('done_by'));
     const currentStep = helper.getCurrentStep();
