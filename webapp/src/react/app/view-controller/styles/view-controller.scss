@@ -116,6 +116,22 @@ section.view-container {
   }
 }
 
+.sw-view {
+  $b: &;
+
+  &--no-frame {
+    #{$b}__header {
+      @include size(100%, auto);
+      margin: 0;
+    }
+
+    #{$b}__container {
+      @include size(100%);
+      margin: 0;
+    }
+  }
+}
+
 // ======================================================
 // Hover
 // ======================================================

@@ -28,7 +28,7 @@ class SWView extends Component {
     );
   }
   render() {
-    const { children, maxWidth, disableScroll } = this.props;
+    const { children, maxWidth, disableScroll, noframe } = this.props;
     const styles = {};
     let className = 'sw-view';
 
@@ -38,6 +38,10 @@ class SWView extends Component {
 
     if (disableScroll) {
       className += ' sw-view--no-scroll';
+    }
+
+    if (noframe) {
+      className += ' sw-view--no-frame';
     }
 
     return (

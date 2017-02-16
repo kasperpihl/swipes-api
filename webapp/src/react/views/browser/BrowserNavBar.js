@@ -69,13 +69,6 @@ class BrowserNavBar extends Component {
         frameless
         onClick={this.actions.browser}
       />,
-      <Button
-        key="close"
-        icon="Close"
-        className="browser-nav__btn"
-        frameless
-        onClick={this.actions.close}
-      />,
     ];
   }
   render() {

@@ -5,10 +5,12 @@ $navbarHeight: 60px;
 
 .browser-overlay {
   @include size(100%);
+  overflow: hidden;
 
   &__webview-container {
     $height: calc(100% - #{$navbarHeight});
     @include size(100%, $height);
+    padding-top: 5px;
   }
 }
 

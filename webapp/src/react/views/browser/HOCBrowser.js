@@ -4,6 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import BrowserNavBar from './BrowserNavBar';
+import SWView from 'SWView';
 import './styles/browser';
 
 class HOCBrowser extends Component {
@@ -96,7 +97,12 @@ class HOCBrowser extends Component {
       currentUrl,
     } = this.state;
     return (
-      <div className="browser-overlay">
+      <SWView noframe>
+        <div
+          ref="container"
+          className="browser-overlay__webview-container"
+          dangerouslySetInnerHTML={{ __html: wHtml }}
+        />
         <BrowserNavBar
           backEnabled={backEnabled}
           forwardEnabled={forwardEnabled}
@@ -104,14 +110,7 @@ class HOCBrowser extends Component {
           title={title}
           url={currentUrl}
         />
-        <div
-          ref="container"
-          className="browser-overlay__webview-container"
-          dangerouslySetInnerHTML={{ __html: wHtml }}
-        />
-      </div>
-
-
+      </SWView>
     );
   }
 }
