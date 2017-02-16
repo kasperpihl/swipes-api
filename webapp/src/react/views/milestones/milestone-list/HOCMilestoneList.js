@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import SWView from 'src/react/app/view-controller/SWView';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import MilestoneItem from './MilestoneItem';
-import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
@@ -23,7 +22,6 @@ class HOCMilestoneList extends Component {
 
     return (
       <div className="milestone-list__header">
-        <HOCBreadCrumbs target={target} />
         <HOCHeaderTitle target={target} />
       </div>
     );

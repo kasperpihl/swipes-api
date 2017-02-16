@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$sidebarWidth: 60px;
+$sidebarWidth: 84px;
 
 // ======================================================
 // Block
@@ -35,11 +35,10 @@ $sidebarWidth: 60px;
   }
 
   &__section {
-    @include size(50%, auto);
+    @include size(54px, auto);
     @include flex(center, center, column);
-    padding: 0 20px;
     border-radius: 50px;
-    background-color: rgba($bg, .3);
+    background-color: rgba($bg, .6);
   }
 }
 
@@ -49,19 +48,31 @@ $sidebarWidth: 60px;
   $b: &;
 
   &__item {
-    @include size($sidebarWidth);
+    @include size(54px);
     @include flex();
 
     &:after {
-      @include size(calc(#{$sidebarWidth} / 2));
-      background-color: rgba($blue-60, 0);
+      @include size(54px);
+      background-color: $bg;
       border-radius: 50%;
       content: '';
-      left: 50%; top: 50%;
+      left: 0; top: 0;
       position: absolute;
-      transform: translate(-50%, -50%);
       z-index: -1;
-      transition: .2s ease;
+      opacity: 0;
+      transition: .1s ease;
+    }
+
+    &--active {
+
+      &:after {
+        opacity: 1;
+        transition: .1s ease;
+      }
+
+      #{$b}__icon {
+        @include svg-color($deepBlue-100);
+      }
     }
 
     & > * {
@@ -69,9 +80,8 @@ $sidebarWidth: 60px;
     }
 
     &:hover {
-      &:after {
-        background-color: rgba($blue-60, 1);
-        transition: .2s ease;
+      #{$b}__icon {
+        @include svg-color($deepBlue-100);
       }
     }
   }
@@ -110,7 +120,7 @@ $sidebarWidth: 60px;
 
   &__icon {
     @include size(24px);
-    @include svg-color($bg);
+    @include svg-color(rgba($deepBlue-100, .3));
     pointer-events: none;
   }
 }
