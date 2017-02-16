@@ -16,7 +16,7 @@ export default function history(state = initialState, action) {
       return state.update((s) => {
         if (payload.target === 'primary') {
           s = s.setIn(['history', s.getIn(['id'])], s.getIn(['primary']));
-          s = s.setIn('id', payload.id);
+          s = s.set('id', payload.id);
         }
         return s.set(payload.target, fromJS(payload.stack || []));
       });
