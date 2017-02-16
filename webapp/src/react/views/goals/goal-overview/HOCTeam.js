@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalsUtil from 'classes/goals-util';
 /* global msgGen */
@@ -10,12 +8,6 @@ import GoalsUtil from 'classes/goals-util';
 import './styles/team.scss';
 
 class HOCTeam extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);

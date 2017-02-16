@@ -8,8 +8,10 @@ import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCTeam from './HOCTeam';
+import HOCLastUpdate from './HOCLastUpdate';
 import GoalSide from '../goal-step/GoalSide';
 import './styles/goal-overview.scss';
+import GoalsUtil from 'classes/goals-util';
 
 class HOCGoalOverview extends PureComponent {
   static minWidth() {
@@ -21,6 +23,10 @@ class HOCGoalOverview extends PureComponent {
   }
   componentDidMount() {
   }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me);
+  }
   renderHeader() {
     const { target } = this.props;
     return (
@@ -31,9 +37,13 @@ class HOCGoalOverview extends PureComponent {
   }
   renderLeft() {
     const { goal } = this.props;
+    const helper = this.getHelper();
+    const handoff = helper.getLastHandoff();
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <Section title="Latest update" />
+        <Section title="Latest update">
+          <HOCLastUpdate handoff={handoff} />
+        </Section>
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
