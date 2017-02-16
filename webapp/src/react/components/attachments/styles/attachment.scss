@@ -8,6 +8,8 @@
 .attachment {
   @include size(100%, 60px);
   @include flex(center, flex-start);
+  border-top: 1px solid $deepBlue-10;
+  border-bottom: 1px solid $deepBlue-10;
 }
 
 // ======================================================

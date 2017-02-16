@@ -1,6 +1,10 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+.goal-step__attachment {
+  border: none;
+}
+
 .attachments {
   @include size(100%, auto);
   position: relative;
@@ -18,11 +22,10 @@
   }
 
   &__add-list {
-    @include size(100%, 30px);
-    @include flex(flex);
+    @include size(100%, 60px);
+    @include flex(center, flex-start);
     background-color: $bg;
     padding-left: 33px;
-    transform: translateY(-10px);
   }
 
   &__add-item {
@@ -38,6 +41,7 @@
     @include size(100%, auto);
     max-width: 780px;
     position: relative;
+    margin-bottom: 12px;
   }
 
   &__add-button {

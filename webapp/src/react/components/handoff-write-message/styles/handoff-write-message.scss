@@ -5,6 +5,7 @@
   @include size(100%, auto);
   @include flex(flex);
   max-width: 780px;
+  margin-top: 30px;
 
   &__image {
     padding-right: 25px;

@@ -10,6 +10,8 @@ import HandoffHeader from './HandoffHeader';
 import GoalActions from './GoalActions';
 import HandoffStatus from './HandoffStatus';
 
+import './styles/goal-handoff.scss';
+
 class GoalHandoff extends PureComponent {
   constructor(props) {
     super(props);

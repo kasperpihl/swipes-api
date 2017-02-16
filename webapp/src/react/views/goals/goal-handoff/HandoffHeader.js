@@ -41,7 +41,9 @@ class HandoffHeader extends Component {
           {this.renderAssignees(from.assignees, 'from')}
         </div>
         <div className="handoff-header__subtitle">{from.subtitle}</div>
-        <div className="handoff-header__seperator" />
+        <div className="handoff-header__seperator">
+          <Icon svg="ArrowRightLine" className="handoff-header__svg" />
+        </div>
       </div>
     );
   }

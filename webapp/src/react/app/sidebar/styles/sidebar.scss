@@ -73,6 +73,11 @@ $sidebarWidth: 84px;
       #{$b}__icon {
         @include svg-color($deepBlue-100);
       }
+
+      #{$b}__notification {
+        @include font($c: $bg);
+        background-color: $deepBlue-100;
+      }
     }
 
     & > * {

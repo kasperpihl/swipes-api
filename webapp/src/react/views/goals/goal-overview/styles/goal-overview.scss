@@ -8,26 +8,24 @@
 .goal-overview{
   @include size(100%, auto);
   @include flex(flex);
+  padding-bottom: 60px;
 }
 
 .handoff-bar {
   @include size(calc(100% + 60px), 60px);
   @include flex(center, flex-start);
+  background-color: $bg;
   border-top: 1px solid $deepBlue-10;
   left: -30px; bottom: 0;
   padding: 0 30px;
   position: absolute;
-
-  &__label {
-    @include size(100%, auto);
-    @include font(12px, $blue-100, 500);
-  }
-
-  &__actions {
-    @include size(auto);
-    @include flex(none);
-  }
+  z-index: 99;
 }
+
+.goal-side {
+  @include size(100%, auto);
+}
+
 
 // ======================================================
 // Element
@@ -46,6 +44,46 @@
     &--right {
       @include size(270px, auto);
       @include flex(none);
+    }
+  }
+}
+
+.handoff-bar {
+
+  &__label {
+    @include size(100%, auto);
+    @include font(12px, $blue-100, 500);
+  }
+
+  &__actions {
+    @include size(auto);
+    @include flex(none);
+  }
+}
+
+.goal-side {
+
+  &__progress-bar {
+    @include size(100%, auto);
+    padding-bottom: 45px;
+
+    .progress-bar {
+      @include size(100%, 13px);
+      border-top: 1px solid $deepBlue-20;
+      border-bottom: 1px solid $deepBlue-20;
+
+      &__fill {
+        @include size(100%, 9px);
+        background-color: $deepBlue-100;
+        margin-top: 1px;
+        transition: .35s ease;
+      }
+
+      &__status {
+        @include font(12px, $deepBlue-80, 15px, bold);
+        position: absolute;
+        left: 0; top: 19px;
+      }
     }
   }
 }

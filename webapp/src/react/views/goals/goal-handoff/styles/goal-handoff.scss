@@ -1,0 +1,18 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.goal-handoff {
+  @include size(100%, auto);
+  min-height: 100%;
+
+  &__action-bar {
+    @include size(calc(100% + 60px), 60px);
+    @include flex(center, flex-start);
+    background-color: $bg;
+    border-top: 1px solid $deepBlue-10;
+    left: -30px; bottom: 0;
+    padding: 0 30px;
+    position: absolute;
+    z-index: 99;
+  }
+}
