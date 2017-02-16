@@ -64,7 +64,13 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   renderHandoffBar() {
-
+    const helper = this.getHelper();
+    if (!helper.amIAssigned()) {
+      return undefined;
+    }
+    return (
+      <div className="handoff-bar" />
+    );
   }
   render() {
     return (
