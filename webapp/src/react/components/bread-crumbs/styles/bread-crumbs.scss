@@ -47,7 +47,7 @@ $navbarH: 48px;
   &__seperator {
     @include size(24px, $navbarH);
     @include flex();
-    transform: translateY(-1.5px);
+    transform: translateY(-1px);
 
     #{$b}__icon {
       fill: $deepBlue-20;
@@ -55,7 +55,7 @@ $navbarH: 48px;
   }
 
   &__icon {
-    @include size(18px);
+    @include size(24px);
   }
 }
 

@@ -16,7 +16,7 @@
       content: '';
       position: absolute;
       left: 0; top: 20px;
-      @include size(5px, calc(100% - 40px));
+      @include size(5px, calc(100% - 20px));
       background-color: $blue-20;
     }
   }
