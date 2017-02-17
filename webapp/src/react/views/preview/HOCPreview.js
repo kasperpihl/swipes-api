@@ -11,6 +11,12 @@ import * as Files from './files';
 import './preview.scss';
 
 class HOCPreviewModal extends PureComponent {
+  static minWidth() {
+    return 750;
+  }
+  static maxWidth() {
+    return 1000;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -60,7 +66,7 @@ class HOCPreviewModal extends PureComponent {
   }
   renderLoader() {
     return (
-      <div className="preview-modal__loader">
+      <div className="preview-loader">
         <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
       </div>
     );
@@ -74,23 +80,26 @@ class HOCPreviewModal extends PureComponent {
 
   }
   renderCols(cols) {
-    return cols.map(([col, obj]) => (
-      <div key={col} className={`preview__${col}`}>
-        {obj.sections.map((s, sI) => (
-          <div key={sI} className="preview__section">
-            <Section
-              title={s.title}
-              progress={s.progress}
-            />
-            {s.rows.map((r, rI) => (
-              <div key={rI} className="preview__row">
-                {this.renderRow(r, rI)}
+    return;
+    <div className="preview-content">
+        {cols.map(([col, obj]) => (
+        <div key={col} className={`preview__${col}`}>
+            {obj.sections.map((s, sI) => (
+            <div key={sI} className="preview__section">
+                <Section
+                title={s.title}
+                progress={s.progress}
+              />
+                {s.rows.map((r, rI) => (
+                <div key={rI} className="preview__row">
+                    {this.renderRow(r, rI)}
+                  </div>
+              ))}
               </div>
-            ))}
+          ))}
           </div>
-        ))}
-      </div>
-    ));
+      ))}
+      </div>;
   }
   renderFile(file) {
     this._noPreview = false;
@@ -111,7 +120,7 @@ class HOCPreviewModal extends PureComponent {
     Comp = Comp[1];
 
     return (
-      <div className="preview__file">
+      <div className="preview-file">
         <Comp
           file={file}
           delegate={this}

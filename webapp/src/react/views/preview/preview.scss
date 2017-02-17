@@ -5,6 +5,14 @@
 // Block
 // ======================================================
 
+.preview-loader {
+  @include size(100%);
+}
+
+.preview-file {
+  @include size(100%);
+}
+
 .preview-footer {
   @include size(100%, 60px);
   @include flex(center, flex-end);

@@ -5,10 +5,13 @@ $actionsHeight: 48px;
 
 .sw-pdf-viewer {
   $b: &;
-  @include size(100%, auto);
-  @include flex(flex-start, center);
-  position: relative;
-  z-index: 99999;
+  @include size(100%);
+
+  &__pdf {
+    @include size(98%, auto);
+    min-height: 100%;
+    margin-left: 1%;
+  }
 
   // Containers
 
@@ -17,9 +20,9 @@ $actionsHeight: 48px;
     @include size(324px, $actionsHeight);
     background-color: rgba($deepBlue-120, .9);
     border-radius: 6px;
-    border: 1px solid #333d58;
-    left: 50%; bottom: 30px;
-    position: fixed;
+    border: 1px solid $deepBlue-80;
+    left: 50%; bottom: 24px;
+    position: sticky;
     transform: translateX(-50%);
     overflow: hidden;
     opacity: 0;
@@ -90,20 +93,24 @@ $actionsHeight: 48px;
     margin: 0 6px;
 
     #{$b}__icon {
-      fill: $deepBlue-40;
+      @include svg-color($deepBlue-40);
     }
 
     &:not(#{$e}--disabled):hover {
       #{$b}__icon {
-        fill: $bg;
+        @include svg-color($bg);
       }
     }
 
     &--disabled {
       #{$b}__icon {
-        fill: $deepBlue-80;
+        @include svg-color($deepBlue-80);
       }
     }
+  }
+
+  canvas {
+    z-index: -1;
   }
 
   &__icon {
