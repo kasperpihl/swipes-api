@@ -12,7 +12,7 @@ class HOCLastUpdate extends PureComponent {
     if (handoff.get('message') && handoff.get('message').length) {
       return (
         <div className="last-update__message">
-          {handoff.get('message')}
+          &bdquo;{handoff.get('message')}&ldquo;
         </div>
       );
     }
@@ -49,11 +49,11 @@ class HOCLastUpdate extends PureComponent {
 
     return (
       <div className="last-update">
-        {this.renderMessage(handoff)}
-        <div className="last-update__footer">
+        <div className="last-update__header">
           {this.renderImage(handoff)}
           {this.renderLabel(handoff)}
         </div>
+        {this.renderMessage(handoff)}
       </div>
     );
   }

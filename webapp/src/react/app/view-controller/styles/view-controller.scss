@@ -76,6 +76,13 @@ section.view-container {
     will-change: width;
   }
 
+  &__footer {
+    @include size(100%, auto);
+    @include flex(none);
+    margin: 0;
+    will-change: width;
+  }
+
   &__scroll {
     @include size(100%);
     overflow-y: auto;

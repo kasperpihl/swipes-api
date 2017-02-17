@@ -6,13 +6,26 @@
   min-height: 100%;
 
   &__action-bar {
-    @include size(calc(100% + 60px), 60px);
+    @include size(100%, 60px);
     @include flex(center, flex-start);
+    animation: showActionBar .4s .3s ease forwards;
     background-color: $bg;
     border-top: 1px solid $deepBlue-10;
-    left: -30px; bottom: 0;
     padding: 0 30px;
-    position: absolute;
-    z-index: 99;
+    transform: translateY(100%);
+  }
+}
+
+// ======================================================
+// Animations
+// ======================================================
+
+@keyframes showActionBar {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0px);
   }
 }

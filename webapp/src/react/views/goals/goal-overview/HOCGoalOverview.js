@@ -113,12 +113,11 @@ class HOCGoalOverview extends PureComponent {
   }
   render() {
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView header={this.renderHeader()} footer={this.renderHandoffBar()}>
         <div className="goal-overview">
           {this.renderLeft()}
           {this.renderRight()}
         </div>
-        {this.renderHandoffBar()}
       </SWView>
     );
   }

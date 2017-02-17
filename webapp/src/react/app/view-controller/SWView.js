@@ -27,6 +27,25 @@ class SWView extends Component {
       </div>
     );
   }
+  renderFooter() {
+    const { footer, maxWidth } = this.props;
+
+    if (!footer) {
+      return undefined;
+    }
+
+    const styles = {};
+
+    if (maxWidth) {
+      styles.maxWidth = `${maxWidth}px`;
+    }
+
+    return (
+      <div className="sw-view__footer" style={styles}>
+        {footer}
+      </div>
+    );
+  }
   render() {
     const { children, maxWidth, disableScroll, noframe } = this.props;
     const styles = {};
@@ -54,6 +73,7 @@ class SWView extends Component {
             </div>
           </div>
         </div>
+        {this.renderFooter()}
       </div>
     );
   }
@@ -65,6 +85,7 @@ const { element, number, bool, arrayOf, oneOfType } = PropTypes;
 
 SWView.propTypes = {
   header: element,
+  footer: element,
   children: oneOfType([element, arrayOf(element)]),
   maxWidth: number,
   disableScroll: bool,

@@ -12,14 +12,13 @@
 }
 
 .handoff-bar {
-  @include size(calc(100% + 60px), 60px);
+  @include size(100%, 60px);
   @include flex(center, flex-start);
+  animation: showHandoffBar .4s .3s ease forwards;
   background-color: $bg;
   border-top: 1px solid $deepBlue-10;
-  left: -30px; bottom: 0;
   padding: 0 30px;
-  position: absolute;
-  z-index: 99;
+  transform: translateY(100%);
 }
 
 .goal-side {
@@ -85,5 +84,19 @@
         left: 0; top: 19px;
       }
     }
+  }
+}
+
+// ======================================================
+// Animations
+// ======================================================
+
+@keyframes showHandoffBar {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0px);
   }
 }

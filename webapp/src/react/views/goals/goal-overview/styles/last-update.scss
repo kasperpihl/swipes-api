@@ -3,15 +3,23 @@
 
 .last-update {
   @include size(100%, auto);
-  margin-bottom: 55px;
 
   &__message {
     @include font(15px, $deepBlue-80, 24px);
     font-style: italic;
-    margin-bottom: 12px;
+    padding: 20px;
+    padding-left: 13px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; top: 20px;
+      @include size(5px, calc(100% - 40px));
+      background-color: $blue-20;
+    }
   }
 
-  &__footer {
+  &__header {
     @include size(100%, auto);
     @include flex(center, flex-start);
   }

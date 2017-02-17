@@ -7,8 +7,6 @@ import Section from 'components/section/Section';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HandoffHeader from './HandoffHeader';
-import GoalActions from './GoalActions';
-import HandoffStatus from './HandoffStatus';
 
 import './styles/goal-handoff.scss';
 
@@ -115,74 +113,12 @@ class GoalHandoff extends PureComponent {
       </Section>
     );
   }
-  renderStatus() {
-    const {
-      goal,
-      handoff,
-    } = this.props;
-
-    const helper = this.getHelper();
-    let assignees = handoff.get('assignees');
-    if (!assignees && !handoff.get('target').startsWith('_')) {
-      const nextStep = helper.getStepById(handoff.get('target'));
-      assignees = nextStep.get('assignees');
-    }
-
-
-    return (
-      <HandoffStatus
-        goal={goal}
-        assignees={assignees}
-        toId={handoff.get('target')}
-        onChangeClick={this.onChangeClick}
-      />
-    );
-  }
-  renderActionBar() {
-    const {
-      handoff,
-      isSubmitting,
-      delegate,
-    } = this.props;
-    const helper = this.getHelper();
-
-    let primaryLabel = 'Complete step';
-    const secondaryLabel = 'Cancel';
-    if (handoff.get('target') === '_complete') {
-      primaryLabel = 'Complete Goal';
-    } else if (handoff.get('target') === '_notify') {
-      primaryLabel = 'Send Notification';
-    } else {
-      const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
-      const currentStepIndex = helper.getCurrentStepIndex();
-      if (nextStepIndex === currentStepIndex) {
-        primaryLabel = 'Reassign Step';
-      }
-      if (nextStepIndex < currentStepIndex) {
-        primaryLabel = 'Make Iteration';
-      }
-    }
-
-    return (
-      <div className="goal-handoff__action-bar">
-        <GoalActions
-          delegate={delegate}
-          secondaryLabel={secondaryLabel}
-          primaryLabel={primaryLabel}
-          primaryLoading={isSubmitting}
-        >
-          {this.renderStatus()}
-        </GoalActions>
-      </div>
-    );
-  }
   render() {
     return (
       <div className="goal-handoff">
         {this.renderHeader()}
         {this.renderWriteMessage()}
         {this.renderAttachments()}
-        {this.renderActionBar()}
       </div>
     );
   }
@@ -190,14 +126,11 @@ class GoalHandoff extends PureComponent {
 
 export default GoalHandoff;
 
-// const { string } = PropTypes;
-
-const { object, bool } = PropTypes;
+const { object } = PropTypes;
 
 GoalHandoff.propTypes = {
   delegate: object.isRequired,
   goal: map,
   me: map,
   handoff: map,
-  isSubmitting: bool,
 };

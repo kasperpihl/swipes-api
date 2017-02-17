@@ -6,6 +6,8 @@ import GoalsUtil from 'classes/goals-util';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
 import GoalHandoff from './GoalHandoff';
+import GoalActions from './GoalActions';
+import HandoffStatus from './HandoffStatus';
 
 class HOCGoalHandoff extends PureComponent {
   constructor(props) {
@@ -128,8 +130,62 @@ class HOCGoalHandoff extends PureComponent {
     const nextStep = helper.getNextStep();
     return nextStep ? nextStep.get('id') : '_complete';
   }
-  renderHeader() {
+  renderStatus() {
+    const { goal } = this.props;
+    const { handoff } = this.state;
 
+    const helper = this.getHelper();
+    let assignees = handoff.get('assignees');
+    if (!assignees && !handoff.get('target').startsWith('_')) {
+      const nextStep = helper.getStepById(handoff.get('target'));
+      assignees = nextStep.get('assignees');
+    }
+
+    return (
+      <HandoffStatus
+        goal={goal}
+        assignees={assignees}
+        toId={handoff.get('target')}
+        onChangeClick={this.onChangeClick}
+      />
+    );
+  }
+  renderFooter() {
+    const {
+      handoff,
+      isSubmitting,
+    } = this.state;
+    const helper = this.getHelper();
+
+    let primaryLabel = 'Complete step';
+    const secondaryLabel = 'Cancel';
+    if (handoff.get('target') === '_complete') {
+      primaryLabel = 'Complete Goal';
+    } else if (handoff.get('target') === '_notify') {
+      primaryLabel = 'Send Notification';
+    } else {
+      const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
+      const currentStepIndex = helper.getCurrentStepIndex();
+      if (nextStepIndex === currentStepIndex) {
+        primaryLabel = 'Reassign Step';
+      }
+      if (nextStepIndex < currentStepIndex) {
+        primaryLabel = 'Make Iteration';
+      }
+    }
+
+    return (
+      <div className="goal-handoff__action-bar">
+        <GoalActions
+          delegate={this}
+          secondaryLabel={secondaryLabel}
+          primaryLabel={primaryLabel}
+          primaryLoading={isSubmitting}
+        >
+          {this.renderStatus()}
+        </GoalActions>
+      </div>
+    );
   }
   render() {
     const {
@@ -143,7 +199,7 @@ class HOCGoalHandoff extends PureComponent {
     } = this.state;
 
     return (
-      <SWView>
+      <SWView footer={this.renderFooter()}>
         <GoalHandoff
           goal={goal}
           me={me}

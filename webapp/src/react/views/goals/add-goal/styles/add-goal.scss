@@ -76,6 +76,7 @@
     @include size(100%, auto);
     @include flex(center, space-between);
     padding-top: 15px;
+    padding-bottom: 60px;
 
     #{$b}__status: {
 
