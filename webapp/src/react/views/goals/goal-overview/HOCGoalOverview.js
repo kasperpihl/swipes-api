@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { bindAll } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
-// import * as a from 'actions';
+import * as a from 'actions';
 
 import Section from 'components/section/Section';
+import ListMenu from 'components/list-menu/ListMenu';
 import SWView from 'SWView';
 import Button from 'Button';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -21,7 +22,7 @@ class HOCGoalOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    bindAll(this, ['onHandoff', 'onNotify']);
+    bindAll(this, ['onHandoff', 'onNotify', 'onContext']);
   }
   componentDidMount() {
   }
@@ -46,6 +47,47 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onContext(e) {
+    const {
+      goal,
+      archive,
+      contextMenu,
+      saveWay,
+    } = this.props;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
+    contextMenu({
+      options,
+      component: ListMenu,
+      props: {
+        items: [
+          {
+            title: 'Handoff',
+            onClick: () => {
+              this.onHandoff();
+              contextMenu(null);
+            },
+          },
+          {
+            title: 'Save as a Way',
+            onClick: () => {
+              const helper = this.getHelper();
+              saveWay(options, helper.getObjectForWay());
+            },
+          },
+          {
+            title: 'Archive Goal',
+            onClick: () => {
+              archive(goal.get('id'));
+              contextMenu(null);
+            },
+          },
+        ],
+      },
+    });
+  }
   getHelper() {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
@@ -58,6 +100,10 @@ class HOCGoalOverview extends PureComponent {
           <Button
             text="Notify"
             onClick={this.onNotify}
+          />
+          <Button
+            icon="ThreeDots"
+            onClick={this.onContext}
           />
         </HOCHeaderTitle>
       </div>
@@ -131,6 +177,9 @@ HOCGoalOverview.propTypes = {
   navPush: func,
   me: map,
   target: string,
+  archive: func,
+  saveWay: func,
+  contextMenu: func,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -141,4 +190,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  saveWay: a.ways.save,
+  archive: a.goals.archive,
+  contextMenu: a.main.contextMenu,
 })(HOCGoalOverview);
