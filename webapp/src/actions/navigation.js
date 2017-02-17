@@ -16,7 +16,7 @@ export const viewForId = (navId) => {
     }
     case 'dashboard':
       return {
-        component: 'OrgDashboard',
+        component: 'Dashboard',
         title: 'Dashboard',
       };
     case 'find':

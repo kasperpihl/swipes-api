@@ -60,27 +60,13 @@ export const updateRecentAssignees = payload => ({ type: types.UPDATE_RECENT_ASS
 // ======================================================
 // Title
 // ======================================================
-export const preview = (pre, options) => (dp) => {
-  if (!pre) {
-    return dp({ type: types.PREVIEW, payload: null });
-  }
-  let endpoint = 'links.preview';
-  let params = {
-    short_url: pre,
-  };
-  if (typeof pre === 'object') {
-    endpoint = 'find.preview';
-    params = pre;
-  }
-  dp({ type: types.PREVIEW_LOADING });
-  return dp(a.api.request(endpoint, params)).then((res) => {
-    if (res && res.ok) {
-      dp({ type: types.PREVIEW, payload: { object: res.preview, options } });
-    } else {
-      console.warn('Preview error', pre);
-    }
-  });
-};
+export const preview = (pre, options) => dp => dp(a.navigation.set('secondary', {
+  component: 'Preview',
+  props: {
+    loadPreview: pre,
+    options,
+  },
+}));
 
 // ======================================================
 // Browser

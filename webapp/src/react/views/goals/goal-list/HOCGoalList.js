@@ -6,7 +6,7 @@ import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
-import SWView from 'src/react/app/view-controller/SWView';
+import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
