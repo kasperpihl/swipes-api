@@ -3,11 +3,13 @@
 
 .last-update {
   @include size(100%, auto);
+  padding-bottom: 20px;
 
   &__message {
     @include font(15px, $deepBlue-80, 24px);
     font-style: italic;
     padding: 20px;
+    padding-bottom: 0;
     padding-left: 13px;
 
     &:before {
