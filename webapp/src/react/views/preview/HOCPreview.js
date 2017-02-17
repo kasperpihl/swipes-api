@@ -65,7 +65,7 @@ class HOCPreviewModal extends PureComponent {
     );
   }
   renderHeader(header) {
-    const { title, subtitle } = header;
+    // const { title, subtitle } = header;
   }
   renderRow(row, i) {
 
