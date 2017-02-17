@@ -64,15 +64,15 @@ class HOCPreviewModal extends PureComponent {
       </div>
     );
   }
-  renderHeader() {
-
+  renderHeader(header) {
+    const { title, subtitle } = header;
   }
   renderRow(row, i) {
 
   }
-  renderSides(sides) {
-    return sides.map(([side, obj]) => (
-      <div key={side} className={`preview__${side}`}>
+  renderCols(cols) {
+    return cols.map(([col, obj]) => (
+      <div key={col} className={`preview__${col}`}>
         {obj.sections.map((s, sI) => (
           <div key={sI} className="preview__section">
             <Section
@@ -126,11 +126,11 @@ class HOCPreviewModal extends PureComponent {
       return this.renderFile(preview.file);
     }
     if (preview.main) {
-      const sides = [['main', preview.main]];
+      const cols = [['main', preview.main]];
       if (preview.side) {
-        sides.push(['side', preview.side]);
+        cols.push(['side', preview.side]);
       }
-      return this.renderSides(sides);
+      return this.renderCols(cols);
     }
     return this.renderError();
   }
