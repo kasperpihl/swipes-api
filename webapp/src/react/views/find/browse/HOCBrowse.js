@@ -86,7 +86,6 @@ class HOCBrowse extends PureComponent {
   clickedItem(depth, id, i, entry) {
     const { queries, results, selectedIndexes } = this.state;
 
-    console.log('ss', depth, i, entry);
     const r = results.get(depth).items[i];
     if (r && r.on_click.type === 'query') {
       const query = r.on_click.query;
@@ -96,7 +95,11 @@ class HOCBrowse extends PureComponent {
         selectedIndexes: selectedIndexes.setSize(depth).push(i),
       });
     } else if (r && r.on_click.type === 'preview') {
-      this.callDelegate('onPreviewLink', r.on_click.preview);
+      this.callDelegate('onPreviewLink', Object.assign({}, r.on_click.preview, {
+        meta: {
+          title: r.title,
+        },
+      }));
     }
   }
   mapResults(items) {
