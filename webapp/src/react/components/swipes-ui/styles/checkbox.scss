@@ -5,17 +5,10 @@
   $b: &;
 
 	@include size(auto, 18px);
-	line-height: 18px;
-	font-size: 15px;
-	color: $deepBlue-80;
+  @include font(15px, $deepBlue-80, 27px);
 	padding-left: 30px;
-	position: relative;
   user-select: none;
   margin: 0;
-
-  &__label {
-    position: relative;
-  }
 
 	&__input {
 		position: absolute;
@@ -29,12 +22,13 @@
 		border-radius: 3px;
 		border: solid 1px $blue-100;
 		left: 0; top: 0;
+    transition: .1s;
 	}
 
   &__icon {
     @include size(18px);
+    @include svg-color($blue-100);
     @include flex();
-    stroke: $blue-100;
     position: absolute;
     left: -1px;
     top: -1px;
@@ -46,7 +40,7 @@
 	// hover state for unchecked
 
 	&:hover &__input ~ &__indicator {
-
+    box-shadow: 0 0 3px 0 $blue-100;
 	}
 
   // checked styles
@@ -58,8 +52,10 @@
   }
 
 	& &__input:checked ~ &__indicator {
+    border: solid 1px $deepBlue-20;
 
 		#{$b}__icon {
+      @include svg-color($blue-100);
 		  opacity: 1;
 		}
 	}
@@ -67,7 +63,7 @@
 	// hover state for checked
 
 	&:hover &__input:checked ~ &__indicator {
-
+    box-shadow: 0 0 3px 0 $deepBlue-30;
 	}
 
   & &__input:disabled ~ &__indicator {

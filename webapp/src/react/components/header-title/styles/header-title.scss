@@ -9,8 +9,7 @@ $h: 85px;
 
 .header-title {
   @include size(100%, $h);
-  @include flex(flex);
-  padding-top: 21px;
+  @include flex(center, flex-start);
 }
 
 // ======================================================
@@ -31,7 +30,6 @@ $h: 85px;
   &__subtitle {
     @include size(100%, auto);
     @include font(12px, $deepBlue-30, 500);
-    margin-left: 3px;
   }
 
   &__input {

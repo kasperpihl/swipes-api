@@ -29,7 +29,7 @@ class Checkbox extends Component {
           disabled={!!disable}
         />
         <div className="sw-checkbox__indicator">
-          <Icon svg="Checkmark" className="sw-checkbox__icon" />
+          <Icon svg="ChecklistCheckmark" className="sw-checkbox__icon" />
         </div>
         <div className="sw-checkbox__label">{label}</div>
       </label>

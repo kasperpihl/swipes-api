@@ -17,11 +17,12 @@
     }
   }
 
+  & > .sw-checkbox {
+    margin-top: 4px;
+  }
+
   &__text {
-    line-height: 18px;
-  	font-size: 15px;
-  	color: $deepBlue-80;
-    position: relative;
+    @include font(15px, $deepBlue-80, 27px);
     cursor: text;
     word-wrap: break-word;
   }
@@ -29,8 +30,7 @@
   &--checked {
 
     #{$b}__text {
-      color: $deepBlue-30;
-      text-decoration: line-through;
+      @include font(15px, $deepBlue-30, 27px);
     }
   }
 }

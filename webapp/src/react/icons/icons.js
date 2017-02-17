@@ -15,6 +15,7 @@ import Bold from './svgs/bold.svg';
 import Breadcrumb from './svgs/breadcrumb.svg';
 import Calendar from './svgs/calendar.svg';
 import Checklist from './svgs/checklist.svg';
+import ChecklistCheckmark from './svgs/checklist-checkmark.svg';
 import Checkmark from './svgs/checkmark.svg';
 import Close from './svgs/close.svg';
 import CloseSmall from './svgs/close-small.svg';
@@ -110,6 +111,7 @@ export {
   Breadcrumb,
   Calendar,
   Checklist,
+  ChecklistCheckmark,
   Checkmark,
   Close,
   CloseSmall,

@@ -22,31 +22,21 @@
 }
 
 .public-DraftEditor-content {
+  @include font(15px, $deepBlue-80, 27px);
   width: 100%;
   height: inherit;
   min-height: 49vh;
   text-align: initial;
-  font-size: 15px;
-  line-height: 1.5;
-  letter-spacing: .6px;
   color: $deepBlue-100;
   padding: 45px 0;
-  padding-top: 15px;
+  padding-top: 21px;
 
   & h1 {
-    letter-spacing: 0px;
-    font-size: 30px;
-    line-height: 1.8;
-    font-weight: 500;
-    color: $deepBlue-80;
+    @include font(27px, $deepBlue-100, 36px);
   }
 
   & h2 {
-    letter-spacing: 0px;
-    font-size: 21px;
-    line-height: 1.8;
-    font-weight: 500;
-    color: $deepBlue-80;
+    @include font(21px, $deepBlue-100, 27px);
   }
 
   & ul {
@@ -61,8 +51,8 @@
   }
 
   & li {
-    // list-style: initial;
-    padding: 3px 0;
+    list-style: initial;
+
   }
 
   &[contenteditable="true"] {
@@ -71,14 +61,10 @@
 }
 
 .public-DraftEditorPlaceholder-root {
-  color: $deepBlue-30;
+  @include font(15px, $deepBlue-30, 27px);
   position: absolute;
   z-index: 0;
-  left: 1px; top: 18px;
-}
-
-.public-DraftEditorPlaceholder-hasFocus {
-  color: $deepBlue-40;
+  left: 1px; top: 21px;
 }
 
 .DraftEditorPlaceholder-hidden {

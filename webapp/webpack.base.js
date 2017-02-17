@@ -24,6 +24,7 @@ module.exports = {
       'context-menus': 'src/react/context-menus',
       components: 'src/react/components',
       styles: 'src/react/global-styles',
+      icons: 'src/react/icons',
       actions: 'src/actions',
       views: 'src/react/views',
       Icon: 'src/react/icons/Icon',

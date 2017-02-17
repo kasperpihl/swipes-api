@@ -10,13 +10,14 @@ class DefaultBlocks {
     const block = editorState.getCurrentContent().getBlockForKey(startKey);
     const blockText = block.getText();
     const blockType = block.getType();
+    const isHeaderBlock = ['header-one', 'header-two'].indexOf(blockType) !== -1;
 
-    if (e.keyCode === 13 && block.getLength() > 0 && (block.getLength() === selection.getStartOffset()) && blockType === ('header-one' || 'header-two')) {
+    if (isHeaderBlock && e.keyCode === 13 && block.getLength() > 0 && (block.getLength() === selection.getStartOffset())) {
       onChange(createNewEmptyBlock(editorState, startKey, 'unstyled'));
       return true;
     }
 
-    if (e.keyCode === 13 && !blockText.length && blockType !== 'unstyled') {
+    if (blockType !== 'unstyled' && e.keyCode === 13 && !blockText.length) {
       onChange(resetBlockToType(editorState, 'unstyled'));
       return true;
     }
