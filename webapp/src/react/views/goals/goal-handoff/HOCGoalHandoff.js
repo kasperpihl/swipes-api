@@ -16,6 +16,7 @@ class HOCGoalHandoff extends PureComponent {
       isSubmitting: false,
       handoff: this.getEmptyHandoff(props.notify ? '_notify' : undefined),
     };
+    this.onChangeClick = this.onChangeClick.bind(this);
   }
   componentDidMount() {
   }
