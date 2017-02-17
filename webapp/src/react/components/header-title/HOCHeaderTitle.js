@@ -39,18 +39,21 @@ class HOCHeaderTitle extends Component {
     );
   }
   renderTitle(crumb) {
-    const { subtitle } = this.props;
-    const title = crumb.get('title');
+    const { title, subtitle } = this.props;
+    const titleText = crumb ? crumb.get('title') : title;
 
     return (
       <div className="header-title__title" key="header-title">
-        {title}
+        {titleText}
         <div className="header-title__subtitle">{subtitle}</div>
       </div>
     );
   }
   renderContent() {
-    const { history } = this.props;
+    const { history, title } = this.props;
+    if (!history && title) {
+      return this.renderTitle();
+    }
 
     if (!history) {
       return undefined;
@@ -85,7 +88,9 @@ class HOCHeaderTitle extends Component {
 const { object, func, string, array, oneOfType } = PropTypes;
 
 HOCHeaderTitle.propTypes = {
-  target: string.isRequired,
+  target: string,
+  title: string,
+  subtitle: string,
   history: list,
   delegate: object,
   children: oneOfType([object, array]),

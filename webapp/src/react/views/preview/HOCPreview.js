@@ -4,6 +4,7 @@ import { bindAll, setupCachedCallback } from 'classes/utils';
 import Button from 'Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import * as a from 'actions';
 import * as Files from './files';
@@ -66,6 +67,8 @@ class HOCPreviewModal extends PureComponent {
   }
   renderHeader(header) {
     // const { title, subtitle } = header;
+
+    return <HOCHeaderTitle title="Fireworks" subtitle="Uploaded on the 4th of July" />;
   }
   renderRow(row, i) {
 
@@ -146,23 +149,21 @@ class HOCPreviewModal extends PureComponent {
     }
 
     return (
-      <div className="header__actions">
+      <div className="preview-footer">
         {buttons.map((b, i) => (
           <Button
             key={i}
-            className="header__btn"
-            title={b.title}
-            icon={b.icon}
+            className="preview-footer__btn"
+            text={b.title}
             onClick={this.onClickButtonCached(i)}
           />
         ))}
         {custButtons.map((b, i) => (
           <Button
             key={`cust-${i}`}
-            title={b.title}
             text={b.title}
             onClick={b.onClick}
-            className="header__btn"
+            className="preview-footer__btn"
           />
         ))}
 
@@ -171,14 +172,12 @@ class HOCPreviewModal extends PureComponent {
   }
   render() {
     return (
-      <div className="preview">
-        <SWView
-          header={this.renderHeader()}
-          footer={this.renderFooter()}
-        >
-          {this.renderContent()}
-        </SWView>
-      </div>
+      <SWView
+        header={this.renderHeader()}
+        footer={this.renderFooter()}
+      >
+        {this.renderContent()}
+      </SWView>
     );
   }
 }
