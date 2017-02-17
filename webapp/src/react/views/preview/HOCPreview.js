@@ -39,14 +39,14 @@ class HOCPreviewModal extends PureComponent {
     };
     if (typeof loadPreview === 'object') {
       endpoint = 'find.preview';
-      params = loadPreview;
+      params = loadPreview.toJS();
     }
     request(endpoint, params).then((res) => {
       if (this._unmounted) {
         return;
       }
       if (res && res.ok) {
-        // this.setState({ loading: false, preview: res.preview });
+        this.setState({ loading: false, preview: res.preview });
       } else {
         console.warn('Preview error', res);
       }
@@ -183,13 +183,14 @@ class HOCPreviewModal extends PureComponent {
   }
 }
 
-const { object, func } = PropTypes;
+const { object, func, oneOfType, string } = PropTypes;
 
 HOCPreviewModal.propTypes = {
   options: object,
   browser: func,
   preview: object,
-  loadPreview: func,
+  request: func,
+  loadPreview: oneOfType([object, string]),
 };
 
 function mapStateToProps() {
