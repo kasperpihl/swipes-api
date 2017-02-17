@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'classes/utils';
 import NotificationWrapper from './NotificationWrapper';
-import './styles/org-dashboard';
+import './styles/dashboard';
 
-export default class OrgDashboard extends Component {
+export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
@@ -34,8 +34,8 @@ export default class OrgDashboard extends Component {
   }
   render() {
     return (
-      <div className="org-dashboard">
-        <div className="org-dashboard__notifications">
+      <div className="dashboard">
+        <div className="dashboard__notifications">
           {this.renderNotifications()}
         </div>
       </div>
@@ -43,7 +43,7 @@ export default class OrgDashboard extends Component {
   }
 }
 const { object } = PropTypes;
-OrgDashboard.propTypes = {
+Dashboard.propTypes = {
   notifications: list,
   delegate: object,
 };

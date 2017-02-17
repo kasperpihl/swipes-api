@@ -7,10 +7,10 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
-import OrgDashboard from './OrgDashboard';
+import Dashboard from './Dashboard';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 
-class HOCOrgDashboard extends Component {
+class HOCDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -166,14 +166,14 @@ class HOCOrgDashboard extends Component {
     }
     return (
       <SWView header={this.renderHeader()}>
-        <OrgDashboard delegate={this} notifications={notifications} />
+        <Dashboard delegate={this} notifications={notifications} />
       </SWView>
     );
   }
 }
 
 const { func, object } = PropTypes;
-HOCOrgDashboard.propTypes = {
+HOCDashboard.propTypes = {
   navPush: func,
   delegate: object,
   notifications: list,
@@ -195,4 +195,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   markNotifications: actions.main.markNotifications,
-})(HOCOrgDashboard);
+})(HOCDashboard);
