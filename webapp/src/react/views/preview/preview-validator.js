@@ -1,13 +1,18 @@
 import { string, object, array, any, number } from 'valjs';
 
 const icon = object.of({
-
+  src: string,
+  icon: string,
+  color: string,
+  initials: string,
 });
+
 const preview = object.as({
   name: string,
   id: string,
   type: string,
 });
+
 const row = any.of([
   object.as({
     type: 'default',
@@ -15,13 +20,18 @@ const row = any.of([
     leftIcon: icon,
     onClick: preview,
   }),
+  object.as({
+    type: 'markdown',
+    content: string,
+  }),
 ]);
+
 const section = object.as({
   title: string.require(),
   rows: array.of(row).require(),
   progress: number.min(0).max(100),
-  progressColor: string,
-});
+}).require();
+
 export default object.as({
   header: object.as({
     title: string.require(),
@@ -29,11 +39,11 @@ export default object.as({
   }).require(),
   main: object.as({
     title: string.require(),
-    sections: section.require(),
+    sections: array.of(section).require(),
   }),
   side: object.as({
     title: string.require(),
-    sections: section.require(),
+    sections: array.of(section).require(),
   }),
   file: object.as({
     url: string.require(),

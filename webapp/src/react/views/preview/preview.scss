@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.preview-modal {
+.preview {
   $b: &;
   @include size(100%, calc(100% - 38px));
   @include flex(column);

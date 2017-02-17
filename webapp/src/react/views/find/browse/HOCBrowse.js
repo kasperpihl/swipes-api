@@ -1,5 +1,4 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 
 import { connect } from 'react-redux';
@@ -37,7 +36,6 @@ class HOCBrowse extends PureComponent {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.queries !== this.state.queries) {
-      console.log('updated q', this.state);
       this.fetchQuery();
     }
     /* if (prevState.paths.length !== this.state.paths.length) {
@@ -75,15 +73,13 @@ class HOCBrowse extends PureComponent {
         account_id: accountId,
         query,
       }).then((res) => {
-        console.log(res);
-
         if (!this._unmounted && res && res.ok && qId === this._queryId) {
           this.setState({ results: results.push(res.result) });
         }
       });
     }
   }
-  clickedItem(depth, id, i, entry) {
+  clickedItem(depth, id, i) {
     const { queries, results, selectedIndexes } = this.state;
 
     const r = results.get(depth).items[i];
@@ -146,22 +142,20 @@ class HOCBrowse extends PureComponent {
   }
 }
 
-const { func, object } = PropTypes;
+const { func, object, string } = PropTypes;
 HOCBrowse.propTypes = {
   request: func,
-  me: map,
-  services: map,
   delegate: object,
+  accountId: string,
+  serviceName: string,
+  id: string,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps() {
   return {
-    services: state.getIn(['main', 'services']),
-    me: state.get('me'),
   };
 }
 
 export default connect(mapStateToProps, {
   request: actions.api.request,
-  preview: actions.main.preview,
 })(HOCBrowse);

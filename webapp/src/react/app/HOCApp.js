@@ -9,7 +9,6 @@ import Topbar from './topbar/Topbar';
 import HOCModal from './modal/HOCModal';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
-import HOCPreview from '../preview/HOCPreviewModal';
 import HOCToasty from './toasty/HOCToasty';
 import HOCContextMenu from './context-menu/HOCContextMenu';
 
@@ -74,7 +73,6 @@ class HOCApp extends Component {
           <HOCViewController />
         </div>
         <HOCModal />
-        <HOCPreview />
         <HOCToasty />
         <HOCContextMenu />
         <DevTools />
