@@ -19,12 +19,16 @@ class HOCPreviewModal extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true,
-    };
-    this.fetch();
+    this.state = this.getDefaultState();
+    this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
     bindAll(this, ['onClose']);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.loadPreview !== this.props.loadPreview) {
+      this.setState(this.getDefaultState());
+      this.fetch(nextProps.loadPreview);
+    }
   }
   componentWillUnmount() {
     this._unmounted = true;
@@ -38,22 +42,63 @@ class HOCPreviewModal extends PureComponent {
     }
     e.target.blur();
   }
-  fetch() {
-    const { loadPreview, request } = this.props;
-    let endpoint = 'links.preview';
-    let params = {
-      short_url: loadPreview,
+  onLoaded() {
+    this.setState({ loading: false });
+  }
+  getDefaultState() {
+    return {
+      loading: true,
+      preview: null,
     };
-    if (typeof loadPreview === 'object') {
-      endpoint = 'find.preview';
-      params = loadPreview.toJS();
+  }
+  getComponentForRow(row) {
+
+  }
+  getComponentForFile(file) {
+    const Comp = Object.entries(Files).find(([k, f]) => {
+      if (typeof f.supportContentType !== 'function') {
+        console.warn(`Preview file ${k} missing static supportContentType`);
+        return null;
+      }
+      return !!f.supportContentType(file.content_type);
+    });
+
+    if (!Comp) {
+      console.warn(`Unsupported preview file type: ${file.content_type}`);
+      return undefined;
+    }
+    return Comp[1];
+  }
+  fetch(params) {
+    const { request } = this.props;
+    let endpoint = 'find.preview';
+    if (typeof params === 'string') {
+      endpoint = 'links.preview';
+      params = { short_url: params };
+    } else {
+      params = params.toJS();
     }
     request(endpoint, params).then((res) => {
       if (this._unmounted) {
         return;
       }
       if (res && res.ok) {
-        this.setState({ loading: false, preview: res.preview });
+        let fileNotFound = false;
+        let loadingFile = false;
+        if (res.preview.file) {
+          if (!this.getComponentForFile(res.preview.file)) {
+            fileNotFound = true;
+          } else {
+            // Keep loading and let the file component turn off the loading.
+            loadingFile = true;
+          }
+        }
+        this.setState({
+          loading: false,
+          preview: res.preview,
+          fileNotFound,
+          loadingFile,
+        });
       } else {
         console.warn('Preview error', res);
       }
@@ -64,7 +109,16 @@ class HOCPreviewModal extends PureComponent {
       <div>Some error happened :(</div>
     );
   }
+  renderNoPreview() {
+    return (
+      <div>No preview for this file</div>
+    );
+  }
   renderLoader() {
+    const { loading, loadingFile } = this.state;
+    if (!loading && !loadingFile) {
+      return undefined;
+    }
     return (
       <div className="preview-loader">
         <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
@@ -80,47 +134,37 @@ class HOCPreviewModal extends PureComponent {
 
   }
   renderCols(cols) {
-    return;
-    <div className="preview-content">
+    return (
+      <div className="preview-content">
         {cols.map(([col, obj]) => (
-        <div key={col} className={`preview__${col}`}>
+          <div key={col} className={`preview__${col}`}>
             {obj.sections.map((s, sI) => (
-            <div key={sI} className="preview__section">
+              <div key={sI} className="preview__section">
                 <Section
-                title={s.title}
-                progress={s.progress}
-              />
+                  title={s.title}
+                  progress={s.progress}
+                />
                 {s.rows.map((r, rI) => (
-                <div key={rI} className="preview__row">
+                  <div key={rI} className="preview__row">
                     {this.renderRow(r, rI)}
                   </div>
               ))}
               </div>
           ))}
           </div>
-      ))}
-      </div>;
+        ))}
+      </div>
+    );
   }
   renderFile(file) {
-    this._noPreview = false;
-
-    let Comp = Object.entries(Files).find(([k, f]) => {
-      if (typeof f.supportContentType !== 'function') {
-        console.warn(`Preview file ${k} missing static supportContentType`);
-        return null;
-      }
-      return !!f.supportContentType(file.content_type);
-    });
-
-    if (!Comp) {
-      this._noPreview = true;
-      console.warn(`Unsupported preview file type: ${file.content_type}`);
-      return undefined;
+    const Comp = this.getComponentForFile(file);
+    const { loadingFile } = this.state;
+    let className = 'preview-file';
+    if (loadingFile) {
+      className += ' preview-file--hidden';
     }
-    Comp = Comp[1];
-
     return (
-      <div className="preview-file">
+      <div className={className}>
         <Comp
           file={file}
           delegate={this}
@@ -131,12 +175,16 @@ class HOCPreviewModal extends PureComponent {
   renderContent() {
     const { loading } = this.state;
     if (loading) {
-      return this.renderLoader();
+      return undefined;
     }
-    const { preview } = this.state;
-    if (preview.file) {
+    const { preview, fileNotFound } = this.state;
+    if (preview.file && fileNotFound) {
+      return this.renderNoPreview();
+    }
+    if (preview.file && !fileNotFound) {
       return this.renderFile(preview.file);
     }
+
     if (preview.main) {
       const cols = [['main', preview.main]];
       if (preview.side) {
@@ -185,6 +233,7 @@ class HOCPreviewModal extends PureComponent {
         header={this.renderHeader()}
         footer={this.renderFooter()}
       >
+        {this.renderLoader()}
         {this.renderContent()}
       </SWView>
     );

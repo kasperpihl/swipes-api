@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { setupDelegate } from 'classes/utils';
 import PDFViewer from './PDFViewer';
 
 class PDF extends Component {
@@ -13,12 +14,10 @@ class PDF extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    this.callDelegate = setupDelegate(props.delegate);
   }
-  componentDidMount() {
-  }
-  fileLoaded(e) {
-    console.log('loaded file', e);
+  fileLoaded() {
+    this.callDelegate('onLoaded');
   }
   render() {
     const { file } = this.props;
@@ -34,4 +33,5 @@ const { object } = PropTypes;
 
 PDF.propTypes = {
   file: object,
+  delegate: object,
 };
