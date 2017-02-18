@@ -66,6 +66,9 @@ const sideSections = (metadata) => {
       rows: [{
         type: 'standard',
         title: `${type.name}`,
+        leftIcon: {
+          color: '#4FE69B',
+        },
       }],
     });
   }

@@ -23,7 +23,7 @@ class HOCPreviewModal extends PureComponent {
     this.state = this.getDefaultState();
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
-    bindAll(this, ['onClose', 'onFileLoaded', 'onFileError']);
+    bindAll(this, ['onFileLoaded', 'onFileError']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loadPreview !== this.props.loadPreview) {
