@@ -8,6 +8,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import * as a from 'actions';
 import * as Files from './files';
+import * as Rows from './rows';
 import './preview.scss';
 
 class HOCPreviewModal extends PureComponent {
@@ -34,7 +35,7 @@ class HOCPreviewModal extends PureComponent {
     this._unmounted = true;
   }
   onClickButton(i, e) {
-    const { buttons } = this.props.preview;
+    const { buttons } = this.state.preview;
     const { browser } = this.props;
     const button = buttons[i];
     if (button.url) {
@@ -60,7 +61,12 @@ class HOCPreviewModal extends PureComponent {
     };
   }
   getComponentForRow(row) {
-
+    const Comp = Rows[row.type];
+    if (!Comp) {
+      console.warn(`Unsupported row type: ${row.type}`);
+      return null;
+    }
+    return Comp;
   }
   getComponentForFile(file) {
     const Comp = Object.entries(Files).find(([k, f]) => {
@@ -138,8 +144,16 @@ class HOCPreviewModal extends PureComponent {
 
     return <HOCHeaderTitle title="Fireworks" subtitle="Uploaded on the 4th of July" />;
   }
-  renderRow(row, i) {
-
+  renderRow(row) {
+    const Comp = this.getComponentForRow(row);
+    if (!Comp) {
+      return undefined;
+    }
+    return (
+      <Comp
+        {...row}
+      />
+    );
   }
   renderCols(cols) {
     return (

@@ -10,6 +10,9 @@ class DefaultRow extends PureComponent {
   componentDidMount() {
   }
   renderIcon(icon) {
+    if (!icon) {
+      return undefined;
+    }
     if (icon.src) {
       return (
         <div className="default-row__icon default-row__icon--image">
