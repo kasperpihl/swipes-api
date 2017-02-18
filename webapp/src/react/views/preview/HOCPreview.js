@@ -44,18 +44,18 @@ class HOCPreviewModal extends PureComponent {
   }
   onFileError() {
     this.setState({
-      loadingFile: false,
+      fileLoading: false,
       fileError: true,
     });
   }
   onFileLoaded() {
-    this.setState({ loadingFile: false });
+    this.setState({ fileLoading: false });
   }
   getDefaultState() {
     return {
       loading: true,
       preview: null,
-      loadingFile: false,
+      fileLoading: false,
       fileError: false,
     };
   }
@@ -92,20 +92,20 @@ class HOCPreviewModal extends PureComponent {
       }
       if (res && res.ok) {
         let fileNotFound = false;
-        let loadingFile = false;
+        let fileLoading = false;
         if (res.preview.file) {
           if (!this.getComponentForFile(res.preview.file)) {
             fileNotFound = true;
           } else {
             // Keep loading and let the file component turn off the loading.
-            loadingFile = true;
+            fileLoading = true;
           }
         }
         this.setState({
           loading: false,
           preview: res.preview,
           fileNotFound,
-          loadingFile,
+          fileLoading,
         });
       } else {
         console.warn('Preview error', res);
@@ -119,19 +119,12 @@ class HOCPreviewModal extends PureComponent {
   }
   renderNoPreview() {
     return (
-      <div className="preview-no-preview">
-        <div className="preview-no-preview__header">Can’t display preview</div>
-        <div className="preview-no-preview__text">
-          Unfortunately this file format is not supported yet. You can: <br />
-          1. Click “Open in” > “Browser” to see preview in browser <br />
-          2. Click “Attach to goal” to attach the file to a goal of your choice <br />
-        </div>
-      </div>
+      <div>No preview for this file</div>
     );
   }
   renderLoader() {
-    const { loading, loadingFile } = this.state;
-    if (!loading && !loadingFile) {
+    const { loading, fileLoading } = this.state;
+    if (!loading && !fileLoading) {
       return undefined;
     }
     return (
@@ -173,9 +166,9 @@ class HOCPreviewModal extends PureComponent {
   }
   renderFile(file) {
     const Comp = this.getComponentForFile(file);
-    const { loadingFile } = this.state;
+    const { fileLoading } = this.state;
     let className = 'preview-file';
-    if (loadingFile) {
+    if (fileLoading) {
       className += ' preview-file--hidden';
     }
     return (
