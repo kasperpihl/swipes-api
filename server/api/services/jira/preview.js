@@ -27,7 +27,10 @@ const mainSections = (metadata) => {
       rows: [{
         type: 'default',
         title: `${author.displayName} commented on ${date}`,
-        left_icon: author.avatarUrls['48x48'],
+        secondary: true,
+        left_icon: {
+          src: author.avatarUrls['48x48'],
+        },
       }, {
         type: 'markdown',
         content: comment.body,
@@ -48,7 +51,9 @@ const sideSections = (metadata) => {
       rows: [{
         type: 'default',
         title: `${assignee.displayName}`,
-        left_icon: assignee.avatarUrls['48x48'],
+        left_icon: {
+          src: assignee.avatarUrls['48x48'],
+        },
       }],
     });
   }
