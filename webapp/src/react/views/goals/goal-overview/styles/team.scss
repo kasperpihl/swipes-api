@@ -3,6 +3,7 @@
 
 .team {
   @include size(100%, auto);
+  margin-bottom: 60px;
 
   &__images {
     @include size(100%, auto);

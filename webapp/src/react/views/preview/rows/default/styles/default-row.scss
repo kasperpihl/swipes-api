@@ -58,6 +58,10 @@
 
   &--image {
     border-radius: 3px;
+
+    img {
+      @include size(24px);
+    }
   }
 
   &--svg {
@@ -70,6 +74,11 @@
 
   &--circle {
     border-radius: 50%;
+
+    .default-row__circle {
+      @include size(24px);
+      border-radius: 50%;
+    }
   }
 }
 

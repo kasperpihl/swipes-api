@@ -159,15 +159,15 @@ class HOCPreviewModal extends PureComponent {
     return (
       <div className="preview-content">
         {cols.map(([col, obj]) => (
-          <div key={col} className={`preview__${col}`}>
+          <div key={col} className={`preview-content__column preview-content__column--${col}`}>
             {obj.sections.map((s, sI) => (
-              <div key={sI} className="preview__section">
+              <div key={sI} className="preview-content__section">
                 <Section
                   title={s.title}
                   progress={s.progress}
                 />
                 {s.rows.map((r, rI) => (
-                  <div key={rI} className="preview__row">
+                  <div key={rI} className="preview-content__row">
                     {this.renderRow(r, rI)}
                   </div>
               ))}

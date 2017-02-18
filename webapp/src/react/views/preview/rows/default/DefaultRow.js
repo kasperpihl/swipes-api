@@ -2,6 +2,8 @@ import React, { PureComponent, PropTypes } from 'react';
 import Icon from 'Icon';
 // import { map, list } from 'react-immutable-proptypes';
 
+import './styles/default-row.scss';
+
 class DefaultRow extends PureComponent {
   constructor(props) {
     super(props);
@@ -31,7 +33,9 @@ class DefaultRow extends PureComponent {
       };
 
       return (
-        <div className="default-row__icon default-row__icon--circle" style={styles} />
+        <div className="default-row__icon default-row__icon--circle">
+          <div className="default-row__circle" style={styles} />
+        </div>
       );
     } else if (icon.initials) {
       return (

@@ -9,10 +9,6 @@
   @include size(100%);
 }
 
-.preview-file {
-  @include size(100%);
-}
-
 .preview-no-preview {
   @include size(100%);
   @include flex();
@@ -31,6 +27,15 @@
   }
 }
 
+.preview-file {
+  @include size(100%);
+}
+
+.preview-content {
+  @include size(100%, auto);
+  @include flex(flex);
+}
+
 .preview-footer {
   @include size(100%, 60px);
   @include flex(center, flex-end);
@@ -42,6 +47,34 @@
 // ======================================================
 // Elements
 // ======================================================
+
+.preview-content {
+  $b: &;
+
+  &__column {
+
+    &--main {
+      @include size(calc(100% - 270px - 10%), auto);
+      margin-right: 10%;
+    }
+
+    &--side {
+      @include size(270px, auto);
+      @include flex(none);
+    }
+  }
+
+  &__section {
+
+    &:not(:first-child) {
+      margin-top: 60px;
+    }
+  }
+
+  &__row {
+
+  }
+}
 
 .preview-footer {
   $b: &;
@@ -62,158 +95,3 @@
     opacity: 0;
   }
 }
-
-// .preview {
-//   $b: &;
-//   @include size(100%);
-//   @include flex(column);
-//
-//   .header {
-//     @include size(100%, calc(36px * 2));
-//     @include flex(center, flex-end); // change to space-between when title comes
-//     @include flex(none);
-//     position: relative;
-//
-//     &__actions {
-//       @include size(100%, 36px);
-//       @include flex(flex);
-//       border-top: 1px solid red;
-//     }
-//
-//     &__btn {
-//       margin-left: 15px;
-//       background-color: transparent;
-//       border-color: $deepBlue-60;
-//
-//       &:hover {
-//         background-color: $bg !important;
-//         border-color: $bg;
-//
-//         &:before {
-//           content: '';
-//           content: attr(title);
-//           position: absolute;
-//           left: -15px; top: 0;
-//           background-color: $deepBlue-100;
-//           color: white;
-//           padding: 10px 20px;
-//           display: inline;
-//           word-wrap: normal;
-//           white-space: nowrap;
-//           z-index: 9999;
-//           transform: translateX(-100%);
-//           pointer-events: none;
-//         }
-//
-//         .g-button__svg {
-//           path, polygon {
-//             @include svg-color($deepBlue-90 !important);
-//             stroke-width: 1 !important;
-//           }
-//         }
-//       }
-//     }
-//   }
-//
-//   &__loader {
-//     @include size(150px);
-//     @include flex();
-//     border-radius: 50%;
-//     background-color: $bg;
-//     position: fixed;
-//     left: 50%; top: 50%;
-//     transform: translate(-50%, -50%);
-//   }
-//
-//   &--shown {
-//     opacity: 1;
-//     pointer-events: all;
-//     transition: opacity .3s ease;
-//   }
-//
-//   &__card {
-//     max-width: 90vh;
-//     max-height: 90vh;
-//     @include flex();
-//     position: relative;
-//     background-color: $bg;
-//     border-radius: 3px;
-//     border: 1px solid #E6E7EB;
-//     box-shadow: 0 1px 2px 0 rgba(0,12,46,0.15);
-//     overflow: auto;
-//   }
-//
-//   &__file {
-//     max-height: 100%;
-//     overflow-y: auto;
-//     @include flex(flex-start, center);
-//   }
-//
-//   &__no-preview {
-//     @include size(100%);
-//     @include flex(center, center, column);
-//     position: relative;
-//   }
-//
-//   &__title {
-//     @include font(27px, $bg, 33px, 500px);
-//     transform: translateY(-60px);
-//   }
-//
-//   &__actions {
-//     @include flex(flex);
-//     position: relative;
-//
-//     &:after {
-//       @include size(calc(100% + 30px), 1px);
-//       content: '';
-//       left: -15px; bottom: 0px;
-//       position: absolute;
-//       background-color: rgba(white, .1);
-//     }
-//   }
-//
-//   &__button {
-//     @include size(180px);
-//     @include flex(center, center, column);
-//     @include font(12px, $bg, 500);
-//     position: relative;
-//     transform: translateY(-33px);
-//     transition: .15s ease;
-//
-//     &:not(:first-child) {
-//       // border-left: 1px solid rgba(white, .1);
-//
-//       &:after {
-//         content: '';
-//         position: absolute;
-//         left: 0; top: 10%;
-//         @include size(1px, 80%);
-//         background-color: rgba(white, .1);
-//       }
-//     }
-//
-//     &:hover {
-//       #{$b}__svg {
-//         margin-bottom: 15px;
-//         transition: .2s ease;
-//       }
-//     }
-//
-//     &--attach {
-//       @include size(auto);
-//       padding: 20px 40px;
-//       position: absolute;
-//       left: 50%; bottom: 0;
-//
-//       transform: translateY(100%) translateX(-50%);
-//     }
-//   }
-//
-//   &__svg {
-//     @include size(48px);
-//     @include svg-color($bg);
-//     margin-bottom: 30px;
-//     transition: .2s ease;
-//   }
-// }

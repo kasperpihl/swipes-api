@@ -4,6 +4,7 @@
 .last-update {
   @include size(100%, auto);
   padding-bottom: 20px;
+  margin-bottom: 60px;
 
   &__message {
     @include font(15px, $deepBlue-80, 24px);
