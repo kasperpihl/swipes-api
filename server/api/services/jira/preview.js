@@ -25,10 +25,10 @@ const mainSections = (metadata) => {
     sections.push({
       title: 'Last comment',
       rows: [{
-        type: 'default',
+        type: 'standard',
         title: `${author.displayName} commented on ${date}`,
         secondary: true,
-        left_icon: {
+        leftIcon: {
           src: author.avatarUrls['48x48'],
         },
       }, {
@@ -49,9 +49,9 @@ const sideSections = (metadata) => {
     sections.push({
       title: 'Assignee',
       rows: [{
-        type: 'default',
+        type: 'standard',
         title: `${assignee.displayName}`,
-        left_icon: {
+        leftIcon: {
           src: assignee.avatarUrls['48x48'],
         },
       }],
@@ -64,7 +64,7 @@ const sideSections = (metadata) => {
     sections.push({
       title: 'Type',
       rows: [{
-        type: 'default',
+        type: 'standard',
         title: `${type.name}`,
       }],
     });
@@ -76,7 +76,7 @@ const sideSections = (metadata) => {
     sections.push({
       title: 'Due',
       rows: [{
-        type: 'default',
+        type: 'standard',
         title: `${date}`,
       }],
     });
