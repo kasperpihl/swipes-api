@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate } from 'classes/utils';
 import PDFViewer from './PDFViewer';
 
 class PDF extends Component {
@@ -12,26 +11,20 @@ class PDF extends Component {
       'application/vnd.google-apps.spreadsheet',
     ].indexOf(contentType) !== -1);
   }
-  constructor(props) {
-    super(props);
-    this.callDelegate = setupDelegate(props.delegate);
-  }
-  fileLoaded() {
-    this.callDelegate('onLoaded');
-  }
   render() {
     const { file } = this.props;
     return (
-      <PDFViewer file={file.url} fileLoaded={this.fileLoaded} />
+      <PDFViewer file={file.url} fileLoaded={this.props.onLoad} />
     );
   }
 }
 
 export default PDF;
 
-const { object } = PropTypes;
+const { object, func } = PropTypes;
 
 PDF.propTypes = {
   file: object,
-  delegate: object,
+  onLoad: func,
+  onError: func,
 };

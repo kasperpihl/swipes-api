@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
+import { bindAll } from 'classes/utils';
 import './styles/image';
 
 class Image extends Component {
@@ -16,7 +16,7 @@ class Image extends Component {
     this.state = {
       rawSize: false,
     };
-    this.toggleRawSize = this.toggleRawSize.bind(this);
+    bindAll(this, ['toggleRawSize']);
   }
   toggleRawSize() {
     const { rawSize } = this.state;
@@ -33,7 +33,13 @@ class Image extends Component {
 
     return (
       <div className={className} onClick={this.toggleRawSize}>
-        <img src={file.url} className="preview-image__image" role="presentation" />
+        <img
+          onLoad={this.props.onLoad}
+          onError={this.props.onError}
+          src={file.url}
+          className="preview-image__image"
+          role="presentation"
+        />
       </div>
     );
   }
@@ -41,8 +47,10 @@ class Image extends Component {
 
 export default Image;
 
-const { object } = PropTypes;
+const { object, func } = PropTypes;
 
 Image.propTypes = {
   file: object,
+  onError: func,
+  onLoad: func,
 };

@@ -22,7 +22,7 @@ class HOCPreviewModal extends PureComponent {
     this.state = this.getDefaultState();
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
-    bindAll(this, ['onClose']);
+    bindAll(this, ['onClose', 'onFileLoaded', 'onFileError']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loadPreview !== this.props.loadPreview) {
@@ -42,13 +42,21 @@ class HOCPreviewModal extends PureComponent {
     }
     e.target.blur();
   }
-  onLoaded() {
-    this.setState({ loading: false });
+  onFileError() {
+    this.setState({
+      loadingFile: false,
+      fileError: true,
+    });
+  }
+  onFileLoaded() {
+    this.setState({ loadingFile: false });
   }
   getDefaultState() {
     return {
       loading: true,
       preview: null,
+      loadingFile: false,
+      fileError: false,
     };
   }
   getComponentForRow(row) {
@@ -125,7 +133,7 @@ class HOCPreviewModal extends PureComponent {
       </div>
     );
   }
-  renderHeader(header) {
+  renderHeader() {
     // const { title, subtitle } = header;
 
     return <HOCHeaderTitle title="Fireworks" subtitle="Uploaded on the 4th of July" />;
@@ -167,6 +175,8 @@ class HOCPreviewModal extends PureComponent {
       <div className={className}>
         <Comp
           file={file}
+          onLoad={this.onFileLoaded}
+          onError={this.onFileError}
           delegate={this}
         />
       </div>

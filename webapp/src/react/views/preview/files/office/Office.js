@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { bindAll } from 'classes/utils';
 
 import './styles/office.scss';
 
@@ -20,6 +21,8 @@ class Office extends PureComponent {
         <iframe
           src={`https://view.officeapps.live.com/op/embed.aspx?src=${file.url}`}
           frameBorder="0"
+          onLoad={this.props.onLoad}
+          onError={this.props.onError}
         />
       </div>
     );
@@ -28,8 +31,10 @@ class Office extends PureComponent {
 
 export default Office;
 
-const { object } = PropTypes;
+const { object, func } = PropTypes;
 
 Office.propTypes = {
   file: object,
+  onError: func,
+  onLoad: func,
 };

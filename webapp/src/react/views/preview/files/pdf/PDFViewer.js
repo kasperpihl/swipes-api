@@ -229,7 +229,9 @@ class PDFViewer extends Component {
       <div className="sw-pdf-viewer" onMouseMove={this.handleMouseMove}>
         <div className="sw-pdf-viewer__pdf">
           <PDFRender
-            file={file} scale={this.state.scale} onDocumentComplete={this.onDocumentComplete}
+            file={file}
+            scale={this.state.scale}
+            onDocumentComplete={this.onDocumentComplete}
             page={page}
           />
         </div>
