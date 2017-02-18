@@ -24,6 +24,17 @@ const row = any.of([
     type: 'markdown',
     content: string,
   }),
+  object.as({
+    type: 'tags',
+    tags: array,
+  }),
+  object.as({
+    type: 'attachment',
+    title: string,
+    src: string,
+    onClick: preview,
+    leftIcon: icon,
+  }),
 ]);
 
 const section = object.as({

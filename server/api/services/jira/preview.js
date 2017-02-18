@@ -85,6 +85,37 @@ const sideSections = (metadata) => {
     });
   }
 
+  if (metadata.fields.labels && metadata.fields.labels.length > 0) {
+    sections.push({
+      title: 'Labels',
+      rows: [{
+        type: 'tags',
+        tags: metadata.fields.labels,
+      }],
+    });
+  }
+
+  if (metadata.fields.attachment && metadata.fields.attachment.length > 0) {
+    const attachments = metadata.fields.attachment;
+
+    sections.push({
+      title: 'Attachments',
+      rows: attachments.map((attachment) => {
+        const map = {
+          type: 'attachment',
+          title: attachment.filename,
+          src: attachment.content,
+        };
+
+        if (attachment.thumbnail) {
+          map.leftIcon = attachment.thumbnail;
+        }
+
+        return map;
+      }),
+    });
+  }
+
   return sections;
 };
 const elementsData = (metadata) => {
@@ -141,8 +172,6 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
       console.log(err);
       return callback(err);
     }
-
-    console.log(res);
 
     const metadata = res;
     const mapElements = elementsData(metadata);
