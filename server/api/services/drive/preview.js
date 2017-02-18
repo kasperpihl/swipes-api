@@ -9,23 +9,13 @@ import {
 const env = config.get('env');
 
 const elementsData = (data) => {
-  const elements = [];
-  const subtitle = '';
-  const description = '';
-  let title = '';
+  const title = data.name;
 
-  title = data.name;
-
-  elements.push({
-    type: 'header',
-    data: {
+  return {
+    header: {
       title,
-      subtitle,
-      description,
     },
-  });
-
-  return elements;
+  };
 };
 const buttonsData = (metadata, url) => {
   const buttons = [
@@ -113,12 +103,8 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
 
       return callback(null, {
         buttons: mapButtons,
-        file: Object.assign({}, mapFile, {
-          metadata: {
-            title: mapElements[0].data.title,
-            subtitle: mapElements[0].data.subtitle,
-          },
-        }),
+        file: mapFile,
+        ...mapElements,
       });
     })
     .catch((err) => {

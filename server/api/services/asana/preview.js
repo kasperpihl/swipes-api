@@ -3,39 +3,27 @@ import {
 } from './request';
 
 const cardData = (type, data) => {
-  const elements = [];
+  const header = {};
   let subtitle = '';
 
-  // let photo = null;
-
   if (type === 'story') {
+    header.title = data.name;
+
     if (data.projects.length > 0) {
       subtitle = [];
       data.projects.forEach((project) => {
         subtitle.push(project.name);
       });
 
-      subtitle = subtitle.join('/');
+      header.subtitle = subtitle.join('/');
     }
 
-    const title = data.name || '';
-    const description = data.notes || '';
-
-    // if (data.assignee && data.assignee.photo) {
-    //   photo = data.assignee.photo;
-    // }
-
-    elements.push({
-      type: 'header',
-      data: {
-        title,
-        subtitle,
-        description,
-      },
-    });
+    return {
+      header,
+    };
   }
 
-  return elements;
+  return {};
 };
 const preview = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
@@ -58,7 +46,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
 
     const elements = cardData(type, res);
 
-    return callback(null, { elements });
+    return callback(null, { ...elements });
   });
 };
 

@@ -5,27 +5,24 @@ import {
 } from './request';
 
 const elementsData = (type, data) => {
-  const elements = [];
-
   if (type === 'file') {
-    let subtitle = data.path_display || '';
+    let subtitle = data.path_display;
 
     if (subtitle.length > 0) {
       subtitle = subtitle.split('/').slice(0, -1).join('/');
     }
 
-    const title = data.name || '';
+    const title = data.name;
 
-    elements.push({
-      type: 'header',
-      data: {
+    return {
+      header: {
         title,
         subtitle,
       },
-    });
+    };
   }
 
-  return elements;
+  return {};
 };
 const fileData = (type, res) => {
   const name = res.metadata.name;
@@ -135,12 +132,8 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
 
     return callback(null, {
       buttons: mapButtons,
-      file: Object.assign({}, mapFile, {
-        metadata: {
-          title: mapElements[0].data.title,
-          subtitle: mapElements[0].data.subtitle,
-        },
-      }),
+      file: mapFile,
+      ...mapElements,
     });
   })
   .catch((err) => {
