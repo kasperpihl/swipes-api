@@ -1,29 +1,108 @@
+import moment from 'moment';
 import {
   request,
 } from './request';
 
+const mainSections = (metadata) => {
+  const sections = [];
+
+  if (metadata.fields.description) {
+    sections.push({
+      title: 'Description',
+      rows: [{
+        type: 'markdown',
+        content: metadata.fields.description,
+      }],
+    });
+  }
+
+  if (metadata.fields.comment.total > 0) {
+    const total = metadata.fields.comment.total;
+    const comment = metadata.fields.comment.comments[total - 1];
+    const author = comment.author;
+    const date = moment(comment.created).format('D MMM YYYY');
+
+    sections.push({
+      title: 'Last comment',
+      rows: [{
+        type: 'default',
+        title: `${author.displayName} commented on ${date}`,
+        left_icon: author.avatarUrls['48x48'],
+      }, {
+        type: 'markdown',
+        content: comment.body,
+      }],
+    });
+  }
+
+  return sections;
+};
+const sideSections = (metadata) => {
+  const sections = [];
+
+  if (metadata.fields.assignee) {
+    const assignee = metadata.fields.assignee;
+
+    sections.push({
+      title: 'Assignee',
+      rows: [{
+        type: 'default',
+        title: `${assignee.displayName}`,
+        left_icon: assignee.avatarUrls['48x48'],
+      }],
+    });
+  }
+
+  if (metadata.fields.issuetype) {
+    const type = metadata.fields.issuetype;
+
+    sections.push({
+      title: 'Type',
+      rows: [{
+        type: 'default',
+        title: `${type.name}`,
+      }],
+    });
+  }
+
+  if (metadata.fields.duedate) {
+    const date = moment(metadata.fields.duedate).format('D MMM YYYY');
+
+    sections.push({
+      title: 'Due',
+      rows: [{
+        type: 'default',
+        title: `${date}`,
+      }],
+    });
+  }
+
+  return sections;
+};
 const elementsData = (metadata) => {
-  const elements = [];
   const title = metadata.fields.summary;
   const subtitle = `Project - ${metadata.fields.project.name}`;
-  const description = metadata.fields.description;
 
-  elements.push({
-    type: 'header',
-    data: {
+  return {
+    header: {
       title,
       subtitle,
-      description,
     },
-  });
-
-  return elements;
+    main: {
+      title: 'About',
+      sections: mainSections(metadata),
+    },
+    side: {
+      title: 'Details',
+      sections: sideSections(metadata),
+    },
+  };
 };
 const buttonsData = (metadata) => {
   const buttons = [
     {
       icon: 'Earth',
-      title: 'Open in jira',
+      title: 'Open in Jira',
       url: `${metadata.self}/`,
     },
   ];
@@ -51,8 +130,11 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
 
   return request({ auth_data, method, params, user }, (err, res) => {
     if (err) {
+      console.log(err);
       return callback(err);
     }
+
+    console.log(res);
 
     const metadata = res;
     const mapElements = elementsData(metadata);
@@ -60,7 +142,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
 
     return callback(null, {
       buttons: mapButtons,
-      elements: mapElements,
+      ...mapElements,
     });
   });
 };
