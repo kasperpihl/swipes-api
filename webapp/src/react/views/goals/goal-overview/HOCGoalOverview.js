@@ -121,6 +121,7 @@ class HOCGoalOverview extends PureComponent {
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
           goalId={goal.get('id')}
+          flags={handoff.get('flags')}
           delegate={this}
         />
       </div>

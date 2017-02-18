@@ -7,8 +7,9 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
-import Dashboard from './Dashboard';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import Dashboard from './Dashboard';
+/* global msgGen */
 
 class HOCDashboard extends Component {
   constructor(props) {
@@ -22,15 +23,17 @@ class HOCDashboard extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onNavWillChange() {
-    this.onMarkSeen();
+  componentWillUnmount() {
+    if (!this._dontMark) {
+      this.onMarkSeen();
+    }
   }
   onMarkSeen() {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
       const first = notifications.first();
       if (!first.get('seen')) {
-        markNotifications(first.get('ts')).then((res) => {
+        markNotifications(first.get('ts')).then(() => {
         });
       }
     }
@@ -39,6 +42,7 @@ class HOCDashboard extends Component {
     if (type === 'goal') {
       const { goals, navPush } = this.props;
       const goal = goals.get(id);
+      this._dontMark = true;
       navPush({
         component: 'GoalOverview',
         title: goal.get('title'),
@@ -172,11 +176,12 @@ class HOCDashboard extends Component {
   }
 }
 
-const { func, object } = PropTypes;
+const { func, object, string } = PropTypes;
 HOCDashboard.propTypes = {
   navPush: func,
   delegate: object,
   notifications: list,
+  target: string,
   markNotifications: func,
   ways: map,
   goals: map,
