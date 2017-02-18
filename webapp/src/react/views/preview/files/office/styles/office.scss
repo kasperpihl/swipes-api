@@ -6,6 +6,6 @@
   @include flex();
 
   iframe {
-    @include size(85vmin);
+    @include size(100%);
   }
 }
