@@ -32,11 +32,11 @@
   padding-top: 21px;
 
   & h1 {
-    @include font(27px, $deepBlue-100, 36px);
+    @include font(27px, $deepBlue-100, 36px, 400);
   }
 
   & h2 {
-    @include font(21px, $deepBlue-100, 27px);
+    @include font(21px, $deepBlue-100, 27px, 400);
   }
 
   & ul {
@@ -51,7 +51,6 @@
   }
 
   & li {
-    list-style: initial;
 
   }
 
