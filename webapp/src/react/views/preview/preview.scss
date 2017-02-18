@@ -13,6 +13,24 @@
   @include size(100%);
 }
 
+.preview-no-preview {
+  @include size(100%);
+  @include flex();
+  @include flex(column);
+
+  &__header {
+    @include font(27px, $deepBlue-80, 36px);
+  }
+
+  &__text {
+    @include size(100%, auto);
+    @include widthSpecifications(300px, 425px);
+    @include font(15px, $deepBlue-80, 24px);
+    padding-top: 15px;
+    text-align: center;
+  }
+}
+
 .preview-footer {
   @include size(100%, 60px);
   @include flex(center, flex-end);
