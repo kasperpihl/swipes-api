@@ -1,0 +1,86 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.default-row {
+  @include size(100%, auto);
+  @include flex(center, flex-start);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.default-row {
+
+  &__title {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-100, 18px);
+    margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__icon {
+    @include size(24px);
+    @include flex(none);
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-80);
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.default-row {
+  $b: &;
+
+  &--secondary {
+
+    #{$b}__title {
+      @include font($c: $deepBlue-30);
+    }
+  }
+}
+
+// Icon modifiers
+
+.default-row__icon {
+  $b: &;
+
+  &--image {
+    border-radius: 3px;
+  }
+
+  &--svg {
+    @include flex();
+  }
+
+  &--initials {
+    border-radius: 3px;
+  }
+
+  &--circle {
+    border-radius: 50%;
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.default-row {
+  $b: &;
+
+  &__icon:empty + &__title {
+    margin-left: 0;
+  }
+}
