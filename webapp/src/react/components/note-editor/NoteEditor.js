@@ -9,13 +9,16 @@ import {
   DefaultDraftBlockRenderMap,
 } from 'draft-js';
 import Immutable from 'immutable';
+import MultiDecorator from 'draft-js-multidecorators';
 import { bindAll } from 'classes/utils';
 import StyleControl from './extensions/style-control/StyleControl';
 import NoteLink from './NoteLink';
 import NoteChecklist from './NoteChecklist';
 import DraftExt from './draft-ext';
 import DefaultBlocks from './extensions/default-blocks/DefaultBlocks';
+import CodeBlock from './extensions/code-block/CodeBlock';
 
+import './extensions/code-block/styles/index.scss';
 import './styles/note-editor.scss';
 
 class NoteEditor extends Component {
@@ -26,12 +29,14 @@ class NoteEditor extends Component {
     };
   }
   static getEmptyEditorState() {
-    const decorators = [
-      NoteLink,
-    ].map(d => this.decorator(d));
-    const decorator = new CompositeDecorator(decorators);
+    const decorators = new MultiDecorator([
+      CodeBlock.getDecorator(),
+      new CompositeDecorator([
+        NoteLink,
+      ].map(d => this.decorator(d))),
+    ]);
 
-    return EditorState.createEmpty(decorator);
+    return EditorState.createEmpty(decorators);
   }
   constructor(props) {
     super(props);
@@ -85,6 +90,7 @@ class NoteEditor extends Component {
     };
 
     this.plugins = DraftExt([
+      CodeBlock,
       NoteChecklist,
       DefaultBlocks,
     ], this, this.onChange);
@@ -249,7 +255,6 @@ class NoteEditor extends Component {
           editorState={editorState}
           {...this.plugins}
           onChange={this.onChange}
-          onTab={this.onTab}
           onBlur={this.props.onBlur}
           placeholder={showPlaceholder ? 'Write something cool in me' : undefined}
 

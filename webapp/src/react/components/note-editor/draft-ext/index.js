@@ -25,8 +25,10 @@ export default function Setup(plugins, context, onChange) {
   return createPluginIterators([
     'keyBindingFn',
     'handleBeforeInput',
+    'handleReturn',
     'handleKeyCommand',
     'onUpArrow',
+    'onTab',
     'onDownArrow',
   ]);
 }
