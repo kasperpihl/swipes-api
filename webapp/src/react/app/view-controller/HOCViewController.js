@@ -13,16 +13,17 @@ const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 20;
 const OVERLAY_LEFT_MIN = 100;
-const OVERLAY_RIGHT_SPACING = 20;
 
 class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       width: 0,
+      onTop: 'secondary',
     };
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
+    this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onClose = this.onClose.bind(this);
     this.updateWidth = this.updateWidth.bind(this);
     this.bouncedUpdate = debounce(this.updateWidth, 50);
@@ -31,6 +32,17 @@ class HOCViewController extends PureComponent {
     this.updateWidth();
     window.addEventListener('resize', this.bouncedUpdate);
   }
+  componentWillReceiveProps(nextProps) {
+    const nav = this.props.navigation;
+    const nextNav = nextProps.navigation;
+    const { onTop } = this.state;
+    if (onTop === 'primary' && nav.get('secondary') !== nextNav.get('secondary')) {
+      this.setState({ onTop: 'secondary' });
+    }
+    if (onTop === 'secondary' && nav.get('primary') !== nextNav.get('primary')) {
+      this.setState({ onTop: 'primary' });
+    }
+  }
   componentWillUnmount() {
     this._unmounted = true;
     window.removeEventListener('resize', this.bouncedUpdate);
@@ -38,6 +50,9 @@ class HOCViewController extends PureComponent {
   onClose() {
     const { navSet } = this.props;
     navSet('secondary', null);
+  }
+  onUnderlay(target) {
+    this.setState({ onTop: target });
   }
   getMinMaxForView(View) {
     const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
@@ -91,15 +106,15 @@ class HOCViewController extends PureComponent {
       }
     }
     if (remaining < 0) {
-      sizes[0] = Math.min(width - SPACING, pMinMax[1]);
-      sizes[1] = Math.min((width - OVERLAY_LEFT_MIN - OVERLAY_RIGHT_SPACING), sMinMax[1]);
+      sizes[0] = Math.min((width - OVERLAY_LEFT_MIN - SPACING), pMinMax[1]);
+      sizes[1] = Math.min((width - OVERLAY_LEFT_MIN - SPACING), sMinMax[1]);
     }
     return sizes;
   }
   renderViewControllers() {
     const { navigation } = this.props;
     this._slackOptions = {};
-    const { width } = this.state;
+    const { width, onTop } = this.state;
 
     // Primary view
     const pView = navigation.get('primary').last();
@@ -127,11 +142,20 @@ class HOCViewController extends PureComponent {
         zIndex: 2 - i,
       };
       runningX += (w + SPACING);
-      if (target === 'secondary' && isOverlay) {
-        style.transform = `translate3d(${width - w}px, 0px, 0px)`;
-        style.zIndex = 3;
-        xClass.push('view-container--overlay');
+      if (isOverlay) {
+        if (target === onTop) {
+          style.zIndex = 3;
+          xClass.push('view-container--overlay');
+        } else {
+          xClass.push('view-container--underlay');
+        }
+        if (target === 'secondary') {
+          style.transform = `translate3d(${width - w - SPACING}px, 0px, 0px)`;
+        }
       }
+
+
+      // If currentView is slack, ignore here and set global settings to pick up
       if (currentView && currentView.get('component') === 'Slack') {
         this._slackOptions = {
           target,
@@ -196,8 +220,17 @@ class HOCViewController extends PureComponent {
       props.savedState = currentView.get('savedState');
     }
     const className = ['view-container'].concat(xClasses).join(' ');
+    let onClick;
+    if (xClasses.indexOf('view-container--underlay') !== -1) {
+      onClick = this.onUnderlayCached(target);
+    }
     return (
-      <section className={className} key={slack || target} style={style}>
+      <section
+        className={className}
+        key={slack || target}
+        style={style}
+        onClick={onClick}
+      >
         {this.renderCardHeader(target, slack)}
         <View
           navPop={this.onPopCached(target)}
