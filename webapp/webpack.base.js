@@ -77,6 +77,10 @@ module.exports = {
         loader: 'babel!svg-react'
       },
       {
+        test: /\.json$/,
+        loader: 'json',
+      },
+      {
         test: /\.woff2$/,
         // Inline small woff files and output them below font/.
         loader: 'url',

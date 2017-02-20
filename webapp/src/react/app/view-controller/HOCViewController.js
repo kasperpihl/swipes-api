@@ -20,10 +20,12 @@ class HOCViewController extends PureComponent {
     this.state = {
       width: 0,
       onTop: 'secondary',
+      fullscreen: null,
     };
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
+    this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
     this.onClose = this.onClose.bind(this);
     this.updateWidth = this.updateWidth.bind(this);
     this.bouncedUpdate = debounce(this.updateWidth, 50);
@@ -53,6 +55,14 @@ class HOCViewController extends PureComponent {
   }
   onUnderlay(target) {
     this.setState({ onTop: target });
+  }
+  onFullscreen(target) {
+    const { fullscreen } = this.state;
+    if (fullscreen) {
+      this.setState({ fullscreen: null });
+    } else {
+      this.setState({ fullscreen: target });
+    }
   }
   getMinMaxForView(View) {
     const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
@@ -114,7 +124,7 @@ class HOCViewController extends PureComponent {
   renderViewControllers() {
     const { navigation } = this.props;
     this._slackOptions = {};
-    const { width, onTop } = this.state;
+    const { width, onTop, fullscreen } = this.state;
 
     // Primary view
     const pView = navigation.get('primary').last();
@@ -153,7 +163,14 @@ class HOCViewController extends PureComponent {
           style.transform = `translate3d(${width - w - SPACING}px, 0px, 0px)`;
         }
       }
-
+      if (fullscreen) {
+        if (fullscreen === target) {
+          xClass.push('view-container--fullscreen');
+          style.zIndex = 4;
+        } else {
+          xClass.push('view-container--not-fullscreen');
+        }
+      }
 
       // If currentView is slack, ignore here and set global settings to pick up
       if (currentView && currentView.get('component') === 'Slack') {
@@ -178,13 +195,13 @@ class HOCViewController extends PureComponent {
       }),
     }), target, style, classes, 'slack');
   }
-  renderCardHeader(target, slack) {
+  renderCardHeader(target, canFullscreen, slack) {
     if (slack) {
       return (
         <div className="view-container__header" />
       );
     }
-
+    const { fullscreen } = this.state;
     const closeButton = (target !== 'primary') ? (
       <Button
         small
@@ -195,6 +212,16 @@ class HOCViewController extends PureComponent {
         key="close-button"
       />
     ) : undefined;
+    const fullscreenButton = (canFullscreen) ? (
+      <Button
+        small
+        frameless
+        onClick={this.onFullscreenCached(target)}
+        icon={fullscreen === target ? 'Minus' : 'Plus'}
+        className="view-container__fullscreen-button"
+        key="fullscreen-button"
+      />
+    ) : undefined;
 
     const hideBreadCrumbs = !closeButton;
 
@@ -202,6 +229,7 @@ class HOCViewController extends PureComponent {
       <div className="view-container__header">
         <HOCBreadCrumbs target={target} hidden={hideBreadCrumbs} />
         <div className="view-container__actions">
+          {fullscreenButton}
           {closeButton}
         </div>
       </div>
@@ -220,6 +248,12 @@ class HOCViewController extends PureComponent {
       props.savedState = currentView.get('savedState');
     }
     const className = ['view-container'].concat(xClasses).join(' ');
+
+    let canFullscreen = false;
+    if (typeof View.fullscreen === 'function') {
+      canFullscreen = !!View.fullscreen();
+    }
+
     let onClick;
     if (xClasses.indexOf('view-container--underlay') !== -1) {
       onClick = this.onUnderlayCached(target);
@@ -231,7 +265,7 @@ class HOCViewController extends PureComponent {
         style={style}
         onClick={onClick}
       >
-        {this.renderCardHeader(target, slack)}
+        {this.renderCardHeader(target, canFullscreen, slack)}
         <View
           navPop={this.onPopCached(target)}
           navPush={this.onPushCached(target)}

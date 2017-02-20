@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-// import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 // import { map, list } from 'react-immutable-proptypes';
 class Markdown extends PureComponent {
   constructor(props) {
@@ -11,7 +11,7 @@ class Markdown extends PureComponent {
   render() {
     const { content } = this.props;
     return (
-      <div />
+      <ReactMarkdown source={content} />
     );
   }
 }

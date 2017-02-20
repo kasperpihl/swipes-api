@@ -41,17 +41,17 @@ class HOCApp extends Component {
   updateFullscreenClass(isFullscreen) {
     const classList = document.getElementById('content').classList;
     if (isFullscreen) {
-      classList.add('is-fullscreen');
+      classList.add('window-is-fullscreen');
     } else {
-      classList.remove('is-fullscreen');
+      classList.remove('window-is-fullscreen');
     }
   }
   updateMaximizeClass(isMaximized) {
     const classList = document.getElementById('content').classList;
     if (isMaximized) {
-      classList.add('is-maximized');
+      classList.add('window-is-maximized');
     } else {
-      classList.remove('is-maximized');
+      classList.remove('window-is-maximized');
     }
   }
   renderLoader() {

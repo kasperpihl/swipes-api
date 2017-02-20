@@ -14,6 +14,9 @@ class HOCBrowser extends Component {
   static maxWidth() {
     return 1600;
   }
+  static fullscreen() {
+    return true;
+  }
   constructor(props) {
     super(props);
     this.state = {

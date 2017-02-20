@@ -22,6 +22,9 @@ class HOCSideNote extends Component {
   static maxWidth() {
     return 740;
   }
+  static fullscreen() {
+    return true;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -96,13 +99,6 @@ class HOCSideNote extends Component {
 
     this.lastUndo = lastUndo;
   }
-  closeSideNote() {
-    const {
-      hideNote,
-    } = this.props;
-    hideNote();
-  }
-
 
   clearTimer() {
     if (this.lockTimer) {
