@@ -36,7 +36,7 @@ const request = (options, data) => (dispatch, getState) => {
     command = options.resultAction || command;
       // Dispatch an action with the command as type
     if (res.error) {
-      res.payload = Object.assign({}, res.payload.response, { ok: false });
+      res.payload = Object.assign({}, res.payload.response, { data }, { ok: false });
     }
     if (res.payload.err && res.payload.err === 'not_authed') {
       dispatch({
@@ -53,7 +53,7 @@ const request = (options, data) => (dispatch, getState) => {
 
       // Let's return a promise for convenience.
     return Promise.resolve(res.payload);
-  }).catch(err => Promise.resolve(err));
+  }).catch(err => Promise.resolve({ err, data }));
 };
 
 const serviceRequest = (serviceName, method, parameters, stream) => {

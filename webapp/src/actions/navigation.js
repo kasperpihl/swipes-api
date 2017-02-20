@@ -64,7 +64,7 @@ export function set(target, navId) {
       if (target === 'primary') {
         stack = state.getIn(['navigation', 'history', navId]);
       }
-      const currentId = state.getIn(['navigation', target, 'id']);
+      const currentId = state.getIn(['navigation', 'id']);
 
       if (currentId === navId || !stack) {
         stack = [viewForId(navId)];
