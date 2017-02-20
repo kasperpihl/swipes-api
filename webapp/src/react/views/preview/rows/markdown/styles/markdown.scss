@@ -2,5 +2,35 @@
 @import '~styles/_mixins.scss';
 
 .markdown {
-  
+
+  p {
+    @include font(15px, $deepBlue-80, 27px);
+  }
+
+  h1 {
+    @include font(27px, $deepBlue-100, 36px, 400);
+  }
+
+  h2, h3, h4, h5, h6 {
+    @include font(21px, $deepBlue-100, 27px, 400);
+  }
+
+  & ul {
+    display: block;
+    list-style-type: disc;
+    margin: 3px 0;
+    padding-left: 3px;
+  }
+
+  & ol {
+    padding-left: 3px;
+  }
+
+  a {
+    color: $blue-100;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
