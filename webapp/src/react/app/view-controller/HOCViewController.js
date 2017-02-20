@@ -51,6 +51,10 @@ class HOCViewController extends PureComponent {
   }
   onClose() {
     const { navSet } = this.props;
+    const { fullscreen } = this.state;
+    if (fullscreen) {
+      this.setState({ fullscreen: null });
+    }
     navSet('secondary', null);
   }
   onUnderlay(target) {

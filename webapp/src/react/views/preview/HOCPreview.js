@@ -18,6 +18,9 @@ class HOCPreviewModal extends PureComponent {
   static maxWidth() {
     return 1000;
   }
+  static fullscreen() {
+    return true;
+  }
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();

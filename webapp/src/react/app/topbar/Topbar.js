@@ -101,7 +101,7 @@ class Topbar extends Component {
   render() {
     return (
       <div className="topbar">
-        {/* {this.returnStatusIndicator()} */}
+        {this.returnStatusIndicator()}
         {this.renderWindowsActions()}
       </div>
     );

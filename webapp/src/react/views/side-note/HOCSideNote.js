@@ -35,7 +35,7 @@ class HOCSideNote extends Component {
     };
     this.state = Object.assign(this.state, this.handleNoteChange(null, props.note));
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur', 'closeSideNote']);
+    bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
   componentDidMount() {
