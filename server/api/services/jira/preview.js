@@ -1,4 +1,5 @@
 import moment from 'moment';
+import j2m from 'j2m';
 import {
   request,
 } from './request';
@@ -11,7 +12,7 @@ const mainSections = (metadata) => {
       title: 'Description',
       rows: [{
         type: 'markdown',
-        content: metadata.fields.description,
+        content: j2m.toM(metadata.fields.description),
       }],
     });
   }
@@ -33,7 +34,7 @@ const mainSections = (metadata) => {
         },
       }, {
         type: 'markdown',
-        content: comment.body,
+        content: j2m.toM(comment.body),
       }],
     });
   }
