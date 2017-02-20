@@ -117,6 +117,10 @@ section.view-container {
     transform: translateX(50%);
   }
 
+  &#{$b}--underlay > *:not(#{$b}__header) {
+      pointer-events: none;
+  }
+
   &--hidden {
     opacity: 0;
     pointer-events: none;
