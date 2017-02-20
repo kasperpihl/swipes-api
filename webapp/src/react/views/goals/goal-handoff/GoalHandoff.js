@@ -85,7 +85,7 @@ class GoalHandoff extends PureComponent {
     const { goal, delegate, handoff } = this.props;
 
     return (
-      <Section className="goal-step__attachment">
+      <Section className="goal-step__attachment" noframe>
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}

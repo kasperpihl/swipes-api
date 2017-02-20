@@ -3,10 +3,10 @@
 
 .section {
   $b: &;
-  @include size(100%, 51px);
+  @include size(100%, auto);
   background-color: $bg;
   border-top: 1px solid $deepBlue-20;
-  padding-top: 40px;
+  margin-bottom: 51px;
   transition: margin-top .4s ease-in, opacity .4s ease;
   will-change: margin-top;
 
@@ -29,6 +29,10 @@
 
   &--first {
     padding: 0;
+    border: none;
+  }
+
+  &--no-frame {
     border: none;
   }
 

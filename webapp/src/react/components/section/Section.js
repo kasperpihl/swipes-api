@@ -14,6 +14,7 @@ class Section extends Component {
       first,
       style,
       maxWidth,
+      noframe,
       className: classNameFromButton,
     } = this.props;
 
@@ -22,6 +23,10 @@ class Section extends Component {
 
     if (first) {
       className += ' section--first';
+    }
+
+    if (noframe) {
+      className += ' section--no-frame';
     }
 
     if (style) {
@@ -57,4 +62,5 @@ Section.propTypes = {
   style: object,
   maxWidth: number,
   className: string,
+  noframe: bool,
 };

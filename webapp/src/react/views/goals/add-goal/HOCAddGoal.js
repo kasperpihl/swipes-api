@@ -301,7 +301,7 @@ class HOCAddGoal extends Component {
   renderSteps() {
     const { steps, stepOrder } = this.state;
     return (
-      <Section title="Steps" maxWidth={780}>
+      <Section title="Steps">
         <AddStepList
           ref="list"
           steps={steps}
@@ -319,7 +319,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <Section className="add-goal__attachment" maxWidth={780}>
+      <Section className="add-goal__attachment">
         <HOCAttachments
           attachments={attachments}
           attachmentOrder={attachmentOrder}
@@ -337,14 +337,16 @@ class HOCAddGoal extends Component {
     }
     const src = me.get('profile_pic');
     return (
-      <HandoffWriteMessage
-        text={handoff}
-        imgSrc={src}
-        onChange={this.onHandoffChange}
-      />
+      <Section title="Create Goal">
+        <HandoffWriteMessage
+          text={handoff}
+          imgSrc={src}
+          onChange={this.onHandoffChange}
+        />
+      </Section>
     );
   }
-  renderActions() {
+  renderFooter() {
     const status = this.getStatus();
     const disabled = !!status;
     let statusHtml;
@@ -367,22 +369,19 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <Section title="Create Goal" maxWidth={780}>
-        {this.renderHandoff()}
-        <div className="add-goal__footer">
-          {statusHtml}
-          <div className="add-goal__actions">
-            {saveButton}
-            <Button
-              text="Create Goal"
-              primary
-              disabled={disabled}
-              className="add-goal__btn add-goal__btn--cta"
-              onClick={this.clickedAdd}
-            />
-          </div>
+      <div className="add-goal__footer">
+        {statusHtml}
+        <div className="add-goal__actions">
+          {saveButton}
+          <Button
+            text="Create Goal"
+            primary
+            disabled={disabled}
+            className="add-goal__btn add-goal__btn--cta"
+            onClick={this.clickedAdd}
+          />
         </div>
-      </Section>
+      </div>
     );
   }
   render() {
@@ -394,13 +393,13 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <SWView header={this.renderNavbar()}>
+      <SWView header={this.renderNavbar()} footer={this.renderFooter()}>
         <div className="add-goal">
           {this.renderSteps()}
           <div className={infoClass}>
             {this.renderAttachments()}
           </div>
-          {this.renderActions()}
+          {this.renderHandoff()}
         </div>
       </SWView>
     );

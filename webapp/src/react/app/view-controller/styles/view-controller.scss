@@ -19,7 +19,7 @@ section.view-container {
   @include border-radius(6px, 6px, 0px, 0px);
   @include flex(column);
   background-color: $bg;
-  box-shadow: 0 1px 20px 3px rgba(0,55,130,0.1);
+  box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
   margin-top: calc(60px - 38px);
   left: 0; top: 0;
   overflow: hidden;
