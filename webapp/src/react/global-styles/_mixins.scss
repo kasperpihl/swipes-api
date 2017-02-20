@@ -89,3 +89,59 @@
     }
   }
 }
+
+@mixin flexContainer($direction: 'row', $directionHorizontal: null, $directionVertical: null, $selectorsToIgnoreFlex: null) {
+  display: flex;
+
+	@if $direction == row {
+		@if $directionHorizontal == left {
+	    justify-content: flex-start;
+	  } @else if $directionHorizontal == center {
+	    justify-content: center;
+	  } @else if $directionHorizontal == right {
+	    justify-content: flex-end;
+	  }
+
+	  @if $directionVertical == top {
+	    align-items: flex-start;
+	  } @else if $directionVertical == center {
+	    align-items: center;
+	  } @else if $directionVertical == bottom {
+	    align-items: flex-end;
+	  }
+	} @else if $direction == column {
+		flex-direction: column;
+
+		@if $directionHorizontal == left {
+	    align-items: flex-start;
+	  } @else if $directionHorizontal == center {
+	    align-items: center;
+	  } @else if $directionHorizontal == right {
+	    align-items: flex-end;
+	  }
+
+	  @if $directionVertical == top {
+	    justify-content: flex-start;
+	  } @else if $directionVertical == center {
+	    justify-content: center;
+	  } @else if $directionVertical == bottom {
+	    justify-content: flex-end;
+	  }
+	}
+
+	@if  $selectorsToIgnoreFlex {
+    @if length($selectorsToIgnoreFlex) == 1 {
+      & > #{$selectorsToIgnoreFlex} {
+  			flex: none;
+  		}
+    } @else {
+      @each $item in $selectorsToIgnoreFlex {
+        & > #{$item} {
+          flex: none;
+        }
+      }
+    }
+	}
+
+  @content;
+}

@@ -2,19 +2,96 @@
 @import '~styles/_mixins.scss/';
 @import '~styles/_functions.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
 .browse-section-list {
-  $b: &;
   @include size(100%);
-  @include flex(none);
-  max-width: 390px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-right: 1px solid $deepBlue-10;
-  padding-bottom: 30px;
   background-color: $bg;
-  z-index: 2;
+  border-right: 1px solid $deepBlue-10;
+  max-width: 390px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 30px;
   transition: max-width .5s ease;
   will-change: max-width, width;
+  z-index: 2;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.browse-section-list {
+  $b: &;
+
+  .browse-section {
+    @include size(100%, auto);
+  }
+}
+
+.browse-section {
+
+  &__title {
+    @include size(100%, 54px);
+    @include flexContainer('row', left, center);
+    @include font(11px, $deepBlue-30, 12px, bold);
+  }
+
+  &-item {
+    $flexIgnoreList: null;
+
+    @include size(auto, 33px);
+    @include flexContainer('row');
+  }
+}
+
+.browse-section-item {
+
+  &__title {
+    @include size(100%, 24px);
+    @include font(12px, $deepBlue-80, 24px, 500);
+  }
+
+  &__icon {
+    @include size(auto, 24px);
+    @include flexContainer('row', center, center);
+    padding: 0 15px;
+    transition: .2s ease;
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-20 !important);
+    transition: .2s ease;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.browse-section-item {
+  $b: &;
+
+  &--selected {
+
+    #{$b}__title {
+      @include font($c: $blue-100);
+    }
+
+    #{$b}__svg {
+      @include svg-color($blue-100 !important);
+    }
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.browse-section-list {
 
   &::-webkit-scrollbar {
     background-color: rgba(black,0);
@@ -40,74 +117,24 @@
   	background-color: rgba(0, 0, 0, 0.15);
   	-webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
   }
+}
 
-  .browse-section {
-    @include size(100%, auto);
+// ======================================================
+// Hover
+// ======================================================
 
-    &__title {
-      @include size(100%, 54px);
-      @include flex(center, flex-start);
-      @include font(11px, $deepBlue-30, 12px, bold);
-      padding: 0 45px;
+.browse-section-item {
+  $b: &;
+
+  &:hover {
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-80 !important);
     }
 
-    &-item {
-      $e: getElementSelectorInBlock(#{&}, #{$b});
-      @include size(100%, 33px);
-      @include flex(center, flex-start);
-
-      &__title {
-        @include size(100%, 24px);
-        @include font(12px, $deepBlue-80, 24px, 500);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      &__icon {
-        @include size(45px, 24px);
-        @include flex();
-        transition: .2s ease;
-      }
-
-      &__svg {
-        @include size(24px);
-        @include svg-color($deepBlue-20 !important);
-        transition: .2s ease;
-      }
-
-      &:hover {
-
-        #{$e}__svg {
-          @include svg-color($deepBlue-80 !important);
-          transition: .2s ease;
-
-        }
-
-        #{$e}__icon--right {
-          transform: translateX(5px);
-          transition: .2s ease;
-        }
-      }
-
-      &--selected {
-        border-top: 1px solid $deepBlue-10;
-        border-bottom: 1px solid $deepBlue-10;
-        position: relative;
-
-        #{$e}__title {
-          @include font($c: $blue-100);
-        }
-
-        #{$e}__svg {
-          @include svg-color($blue-100 !important);
-        }
-
-        &:hover {
-          #{$e}__svg {
-            @include svg-color($blue-100 !important);
-          }
-        }
+    #{$b}__icon {
+      &--right {
+        transform: translateX(5px);
       }
     }
   }

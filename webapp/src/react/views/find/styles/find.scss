@@ -1,16 +1,39 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
 .find {
+  $b: &;
+  $flexIgnoreList: #{$b}__sidebar;
+
   @include size(100%);
   @include flex(flex);
+  @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
   border-top: 1px solid $deepBlue-10;
+}
 
-  &__sidebar {
-    @include flex(none);
-  }
+// ======================================================
+// Elements
+// ======================================================
+
+.find {
 
   &__content {
     @include size(100%);
+    overflow: hidden;
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.find__sidebar {
+  & > .browse-section-list {
+    @include size(270px, 100%);
+    @include widthSpecifications(initial, initial);
   }
 }
