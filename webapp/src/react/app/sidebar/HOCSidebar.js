@@ -39,7 +39,7 @@ class HOCSidebar extends PureComponent {
     let image = <Icon svg={item.svg} className="sidebar__icon" />;
 
     if (item.id === 'profile') {
-      image = <HOCAssigning assignees={[item.personId]} rounded size={45} />;
+      image = <HOCAssigning assignees={[item.personId]} rounded size={44} />;
     }
 
     return (

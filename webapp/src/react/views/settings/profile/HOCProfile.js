@@ -57,7 +57,7 @@ class HOCProfile extends Component {
           onClick={this.clickedServices}
         />
         <Button
-          icon="Reload"
+          icon="Logout"
           className="profile__button profile__button--logout"
           onClick={this.onLogout}
         />
