@@ -25,12 +25,12 @@ $sidebarWidth: 84px;
   &__top-section {
     @include size(100%);
     @include flex(center, center, column);
-    padding-bottom: 38px;
+    padding-top: 38px;
   }
 
   &__bottom-section {
     @include size(100%, auto);
-    @include flex(column);
+    @include flex(center, center, column);
     @include flex(none);
   }
 

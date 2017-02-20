@@ -20,6 +20,8 @@ class HOCAssigning extends Component {
       stateAssignees,
       maxImages,
       index,
+      rounded,
+      size,
     } = this.props;
 
     return (
@@ -27,6 +29,8 @@ class HOCAssigning extends Component {
         maxImages={maxImages}
         assignees={stateAssignees}
         onClick={this.onClick(index)}
+        rounded={rounded}
+        size={size}
       />
     );
   }
@@ -49,12 +53,14 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const { object, oneOfType, number, string } = PropTypes;
+const { object, oneOfType, number, string, bool } = PropTypes;
 HOCAssigning.propTypes = {
   stateAssignees: list,
   index: oneOfType([number, string]),
   delegate: object,
   maxImages: number,
+  rounded: bool,
+  size: number,
 };
 
 export default connect(mapStateToProps, {

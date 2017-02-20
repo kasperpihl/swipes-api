@@ -1,9 +1,12 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+$compSize: 30px;
+
 .assignees {
+  --assigneesSize: 30px;
   $b: &;
-  @include size(auto, 30px);
+  @include size(auto, var(--assigneesSize, $compSize));
   @include flex(none);
 
   &__profiles {
@@ -12,7 +15,7 @@
   }
 
   &__profile {
-    @include size(30px);
+    @include size(var(--assigneesSize, $compSize));
     @include flex(none);
     border-radius: 6px;
 
@@ -23,7 +26,7 @@
     &--image {
 
       img {
-        @include size(30px);
+        @include size(var(--assigneesSize, $compSize));
         border-radius: 6px;
       }
     }
@@ -44,7 +47,7 @@
   }
 
   &__assign {
-    @include size(30px);
+    @include size(var(--assigneesSize, $compSize));
     @include flex(none);
     @include flex();
     border: 1px solid $deepBlue-10;
@@ -66,5 +69,22 @@
     @include size(24px);
     @include svg-color($deepBlue-70);
     transition: .15s ease;
+  }
+
+  &--rounded {
+    #{$b}__profile {
+      border-radius: 50%;
+
+      &--image {
+
+        img {
+          border-radius: 50%;
+        }
+      }
+    }
+
+    #{$b}__assign {
+      border-radius: 50%;
+    }
   }
 }

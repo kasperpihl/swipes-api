@@ -13,6 +13,13 @@ class Assigning extends Component {
     };
     bindAll(this, ['handleClick']);
   }
+  componentDidMount() {
+    const { size } = this.props;
+    const assigning = this.refs.assigning;
+    if (assigning.classList.contains('assignees--custom-size')) {
+      assigning.style.setProperty('--assigneesSize', `${size}px`);
+    }
+  }
   handleClick(e) {
     const { onClick } = this.props;
     e.stopPropagation();
@@ -73,8 +80,20 @@ class Assigning extends Component {
     );
   }
   render() {
+    const { rounded, size } = this.props;
+    let className = 'assignees';
+    const styles = {};
+
+    if (rounded) {
+      className += ' assignees--rounded';
+    }
+
+    if (size) {
+      className += ' assignees--custom-size';
+    }
+
     return (
-      <div className="assignees" onClick={this.handleClick}>
+      <div className={className} onClick={this.handleClick} ref="assigning">
         {this.renderAssignees()}
       </div>
     );
@@ -83,7 +102,7 @@ class Assigning extends Component {
 
 export default Assigning;
 
-const { string, func, number } = PropTypes;
+const { string, func, number, bool } = PropTypes;
 
 Assigning.propTypes = {
   assignees: listOf(mapContains({
@@ -92,4 +111,6 @@ Assigning.propTypes = {
   })),
   maxImages: number,
   onClick: func,
+  rounded: bool,
+  size: number,
 };
