@@ -26,6 +26,13 @@ class HOCGoalOverview extends PureComponent {
   }
   componentDidMount() {
   }
+  componentWillReceiveProps(nextProps) {
+    const { goal, navPop } = this.props;
+    const nextGoal = nextProps.goal;
+    if (goal && !nextGoal) {
+      navPop();
+    }
+  }
   onHandoff() {
     const { navPush, goal } = this.props;
     navPush({

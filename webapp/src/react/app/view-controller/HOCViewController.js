@@ -12,7 +12,7 @@ import './styles/view-controller';
 const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 20;
-const OVERLAY_LEFT_MIN = 100;
+const OVERLAY_LEFT_MIN = 120;
 
 class HOCViewController extends PureComponent {
   constructor(props) {
