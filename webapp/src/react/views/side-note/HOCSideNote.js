@@ -16,11 +16,12 @@ import * as actions from 'actions';
 
 import './styles/side-note';
 
+const maxWidth = 740;
 const UNLOCK_TIMER = 30000;
 
 class HOCSideNote extends Component {
   static maxWidth() {
-    return 740;
+    return maxWidth;
   }
   static fullscreen() {
     return true;
@@ -208,7 +209,7 @@ class HOCSideNote extends Component {
     }
 
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView header={this.renderHeader()} maxWidth={maxWidth}>
         <div className={className}>
           <NoteEditor
             ref="editor"

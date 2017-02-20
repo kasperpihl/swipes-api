@@ -98,6 +98,7 @@ section.view-container {
 
   &__content {
     @include size(100%);
+    margin: 0 auto;
     will-change: width;
   }
 }
@@ -149,11 +150,18 @@ section.view-container {
   $b: getElementSelectorInBlock(#{&}, 'section');
 
   &#{$b}--fullscreen {
-
+    @include size(100% !important, calc(100% - 38px));
+    left: 0; top: 38px;
+    transform: translate3d(0px, 0px, 0px) !important;
+    border-radius: 0px;
+    margin: 0 !important;
+    transition: all 0s;
+    transition-delay: .3s;
+    animation: showFullscreen .6s ease forwards;
   }
 
   &#{$b}--not-fullscreen {
-
+    animation: hideNotFullscreen .3s ease forwards;
   }
 }
 
@@ -188,5 +196,33 @@ section.view-container {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes showFullscreen {
+  0% {
+    opacity: 1;
+  }
+  49.9999% {
+    position: absolute;
+  }
+  50% {
+    position: fixed;
+    opacity: 0;
+  }
+
+  100% {
+    position: fixed;
+    opacity: 1;
+  }
+}
+
+@keyframes hideNotFullscreen {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
   }
 }

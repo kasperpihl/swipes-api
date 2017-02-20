@@ -112,7 +112,13 @@
   &.platform-win32 {
 
     &.window-is-maximized {
-      padding: 5px;
+      $paddingSide: 5px;
+      padding: paddingSide;
+
+      & section.view-container.view-container--fullscreen {
+        @include size(calc(100% - (#{$paddingSide} * 2)) !important, calc(100% - (38px + #{$paddingSide})) !important);
+        left: $paddingSide; top: 38px;
+      }
     }
 
     .topbar__window-actions {
