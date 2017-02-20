@@ -217,7 +217,7 @@ class HOCViewController extends PureComponent {
         small
         frameless
         onClick={this.onFullscreenCached(target)}
-        icon={fullscreen === target ? 'Minus' : 'Plus'}
+        icon={fullscreen === target ? 'FromFullscreen' : 'ToFullscreen'}
         className="view-container__fullscreen-button"
         key="fullscreen-button"
       />

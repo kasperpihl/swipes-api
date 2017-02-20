@@ -1,12 +1,21 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.profile {
-  $b: &;
+// ======================================================
+// Block
+// ======================================================
 
+.profile {
   @include size(100%);
-  // overflow-y: scroll;
+  @include flex(center, flex-start, column);
   padding: 12vh 0;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.profile {
 
   &__svg {
     @include size(192px);
@@ -38,17 +47,14 @@
   }
 
   &__name {
-    color: $deepBlue-80;
-    font-size: 30px;
-    font-weight: 700;
+    @include font(30px, $deepBlue-80, 700);
     margin-top: 5vh;
     text-align: center;
   }
 
   &__organization {
-    color: $deepBlue-30;
+    @include font($c: $deepBlue-30);
     padding-top: 15px;
-    position: relative;
     max-width: 300px;
     margin: 0 auto;
     margin-top: 15px;
@@ -64,46 +70,19 @@
   }
 
   &__button {
-    @include flex();
-    color: #fdfdfd;
-    transition: .15s ease-in-out;
 
-    i {
-      font-size: 18px;
-    }
-
-    &--nav {
-      @include size(180px, 45px);
-      background-color: $blue-100;
-      border-radius: 3px;
-      box-shadow: 0 1px 20px 3px rgba($blue-100, 0.4);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .5px;
-      margin: 0 auto;
-      margin-top: 10vh;
-      text-transform: uppercase;
-
-      &:hover {
-        $darkBlue: darken($blue-100, 7%);
-        background-color: $darkBlue;
-        box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
-      }
+    &--services {
+      margin-top: 5vh;
     }
 
     &--logout {
-      @include size(44px);
-      background-color: $salmon;
-      border-radius: 50%;
-      box-shadow: 0 1px 20px 3px rgba($salmon, 0.4);
       position: fixed;
       right: 60px; bottom: 60px;
-
-      &:hover {
-        $darkBlue: darken($salmon, 7%);
-        background-color: $darkBlue;
-        box-shadow: 0 1px 10px 1px rgba($darkBlue, 0.4);
-      }
     }
   }
 }
+
+
+// ======================================================
+// Modifiers
+// ======================================================

@@ -33,6 +33,7 @@ import Email from './svgs/email.svg';
 import Find from './svgs/find.svg';
 import Flag from './svgs/flag.svg';
 import Folder from './svgs/folder.svg';
+import FromFullscreen from './svgs/from-fullscreen.svg';
 import Goals from './svgs/goals.svg';
 import Goal from './svgs/goal.svg';
 import Hashtag from './svgs/hashtag.svg';
@@ -43,6 +44,7 @@ import Itallic from './svgs/itallic.svg';
 import LargeList from './svgs/large-list.svg';
 import Linux from './svgs/linux.svg';
 import LogoLoader from './svgs/logo-loader.svg';
+import Logout from './svgs/logout.svg';
 import Milestones from './svgs/milestones.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';
@@ -55,6 +57,7 @@ import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
 import Store from './svgs/store.svg';
 import ThreeDots from './svgs/three-dots.svg';
+import ToFullscreen from './svgs/to-fullscreen.svg';
 import Trash from './svgs/trash.svg';
 import Unassign from './svgs/unassign.svg';
 import Underline from './svgs/underline.svg';
@@ -129,6 +132,7 @@ export {
   Find,
   Flag,
   Folder,
+  FromFullscreen,
   Goal,
   Goals,
   Hashtag,
@@ -139,6 +143,7 @@ export {
   LargeList,
   Linux,
   LogoLoader,
+  Logout,
   Milestones,
   Minus,
   Note,
@@ -151,6 +156,7 @@ export {
   Star,
   Store,
   ThreeDots,
+  ToFullscreen,
   Trash,
   Unassign,
   Underline,

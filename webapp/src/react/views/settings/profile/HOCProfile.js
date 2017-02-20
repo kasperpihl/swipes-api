@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
+import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
@@ -49,12 +50,17 @@ class HOCProfile extends Component {
         </div>
         <div className="profile__name">{me.get('name')}</div>
         <div className="profile__organization">{me.getIn(['organizations', 0, 'name'])}</div>
-        <div className="profile__button profile__button--nav" onClick={this.clickedServices}>
-          Services
-        </div>
-        <div className="profile__button profile__button--logout" onClick={this.onLogout}>
-          <i className="material-icons">power_settings_new</i>
-        </div>
+        <Button
+          primary
+          text="Services"
+          className="profile__button profile__button--services"
+          onClick={this.clickedServices}
+        />
+        <Button
+          icon="Reload"
+          className="profile__button profile__button--logout"
+          onClick={this.onLogout}
+        />
       </div>
     );
   }

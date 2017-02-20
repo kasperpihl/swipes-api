@@ -143,6 +143,20 @@ section.view-container {
   }
 }
 
+// Deal with fullscreen
+
+section.view-container {
+  $b: getElementSelectorInBlock(#{&}, 'section');
+
+  &#{$b}--fullscreen {
+
+  }
+
+  &#{$b}--not-fullscreen {
+
+  }
+}
+
 // ======================================================
 // Hover
 // ======================================================
