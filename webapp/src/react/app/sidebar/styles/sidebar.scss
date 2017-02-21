@@ -97,25 +97,19 @@ $sidebarWidth: 84px;
 .sidebar {
 
   &__notification {
-    @include size(auto, 12px);
-    @include widthSpecifications(12px, 30px);
+    @include size(auto, 18px);
+    @include widthSpecifications(18px, 30px);
     @include flex();
-    @include font(9px, $deepBlue-90, 500);
+    @include font(10px, $bg, 12px, bold);
     animation: newNotification 1s ease forwards;
-    background: $bg;
+    background: $red-80;
     border-radius: 20px;
-    left: 55%; top: 50%;
-    padding: 0 3px;
+    left: 55%; top: 40%;
+    padding: 3px 6px;
     padding-bottom: 1px;
     pointer-events: none;
     position: absolute;
     transform: translateY(-110%);
-
-    @keyframes newNotification {
-      50% {
-        background-color: $red-color;
-      }
-    }
   }
 }
 

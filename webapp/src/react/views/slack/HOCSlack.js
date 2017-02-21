@@ -41,8 +41,8 @@ class HOCSlack extends Component {
       openSlackIn(null);
     }
   }
-  onChange(e) {
-    this.setState({ teamDomain: e.target.value });
+  onChange(title) {
+    this.setState({ teamDomain: title });
   }
   onKeyDown(e) {
     if (e.keyCode === 13) this.onClick();
@@ -95,6 +95,7 @@ class HOCSlack extends Component {
             id="teamdomain"
             onKeyDown={this.onKeyDown}
             onChange={this.onChange}
+            value={teamDomain}
           />
           <div className="slack-view__url">.slack.com</div>
           <Button
