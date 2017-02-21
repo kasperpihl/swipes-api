@@ -38,16 +38,24 @@ class HOCDashboard extends Component {
       }
     }
   }
-  onClick(id, type) {
-    if (type === 'goal') {
+  onClickAttachment(nI, i) {
+    const n = this.props.notifications.get(nI);
+    const { goals, preview } = this.props;
+    const aId = n.getIn(['data', 'flags', i]);
+    const att = goals.getIn([n.getIn(['data', 'goal_id']), 'attachments', aId]);
+    preview(att);
+  }
+  onClickTitle(i) {
+    const n = this.props.notifications.get(i);
+    if (n && n.getIn(['data', 'goal_id'])) {
       const { goals, navPush } = this.props;
-      const goal = goals.get(id);
+      const goal = goals.get(n.getIn(['data', 'goal_id']));
       this._dontMark = true;
       navPush({
         component: 'GoalOverview',
         title: goal.get('title'),
         props: {
-          goalId: id,
+          goalId: goal.get('id'),
         },
       });
     }
@@ -82,7 +90,7 @@ class HOCDashboard extends Component {
 
     let m = Map({
       timeago: moment(n.get('ts')).fromNow(),
-      seen: n.get('seen'),
+      seen: !!n.get('seen'),
     });
 
     const from = msgGen.getUserString(data.get('done_by'));
@@ -117,7 +125,6 @@ class HOCDashboard extends Component {
         m = Map();
         break;
     }
-    console.log(n.toJS());
     if (!m.get('title')) {
       return null;
     }
@@ -155,6 +162,7 @@ HOCDashboard.propTypes = {
   notifications: list,
   target: string,
   markNotifications: func,
+  preview: func,
   goals: map,
   me: map,
 };
@@ -170,4 +178,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   markNotifications: actions.main.markNotifications,
+  preview: actions.links.preview,
 })(HOCDashboard);
