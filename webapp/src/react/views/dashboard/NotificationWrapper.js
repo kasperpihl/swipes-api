@@ -78,8 +78,15 @@ class NotificationItem extends Component {
     return <div className="notification__timestamp">{n.get('timestamp')}</div>;
   }
   render() {
+    const { notification: n } = this.props;
+    let className = 'notification';
+
+    if (n.get('unread')) {
+      className += ' notification--unread';
+    }
+
     return (
-      <div className="notification">
+      <div className={className}>
         {this.renderIcon()}
         {this.renderContent()}
         {this.renderTimestamp()}
@@ -90,11 +97,12 @@ class NotificationItem extends Component {
 
 export default NotificationItem;
 
-const { string, object } = PropTypes;
+const { string, object, bool } = PropTypes;
 
 NotificationItem.propTypes = {
   delegate: object,
   notification: mapContains({
+    unread: bool,
     icon: string,
     subtitle: string,
     title: string,
