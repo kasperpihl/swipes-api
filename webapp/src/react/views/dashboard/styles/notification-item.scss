@@ -98,13 +98,13 @@
 
   &__svg {
     @include size(24px);
-    @include svg-color($deepBlue-20);
+    @include svg-color($blue-100);
     transition: .15s ease;
   }
 
   &__title {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-50, 18px, 500);
+    @include font(12px, $blue-100, 18px, 500);
     padding-left: 6px;
     transition: .15s ease;
     white-space: nowrap;
@@ -143,14 +143,8 @@
   $b: &;
 
   &:hover {
-    #{$b}__svg {
-      @include svg-color($blue-100);
-      transition: .15s ease;
-    }
-
     #{$b}__title {
-      @include font($c: $blue-100);
-      transition: .15s ease;
+      text-decoration: underline;
     }
   }
 }

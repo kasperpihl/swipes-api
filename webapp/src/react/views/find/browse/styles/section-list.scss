@@ -53,6 +53,9 @@
   &__title {
     @include size(100%, 24px);
     @include font(12px, $deepBlue-80, 24px, 500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__icon {
