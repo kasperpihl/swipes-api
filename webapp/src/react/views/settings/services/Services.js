@@ -137,7 +137,6 @@ Services.propTypes = {
   disconnectService: func,
   myServices: list,
   loadModal: func,
-  overlay: func,
   browser: func,
   handleOAuthSuccess: func,
   services: map,
@@ -155,7 +154,6 @@ function mapStateToProps(state) {
 
 const ConnectedServices = connect(mapStateToProps, {
   browser: actions.main.browser,
-  overlay: actions.main.overlay,
   handleOAuthSuccess: actions.me.handleOAuthSuccess,
   disconnectService: actions.me.disconnectService,
   loadModal: actions.main.modal,

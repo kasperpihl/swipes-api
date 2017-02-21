@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import ReactMarkdown from 'react-markdown';
 // import { map, list } from 'react-immutable-proptypes';
 
@@ -12,15 +12,22 @@ class Markdown extends PureComponent {
   componentDidMount() {
   }
   render() {
-    const { content } = this.props;
+    const { content, indentLeft } = this.props;
+    let className = 'markdown';
+    if (indentLeft) {
+      className += ' markdown--indent';
+    }
     return (
-      <ReactMarkdown source={content} className="markdown" />
+      <ReactMarkdown source={content} className={className} />
     );
   }
 }
 
 export default Markdown;
 
-// const { string } = PropTypes;
+const { string, bool } = PropTypes;
 
-Markdown.propTypes = {};
+Markdown.propTypes = {
+  content: string,
+  indentLeft: bool,
+};

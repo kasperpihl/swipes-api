@@ -23,11 +23,6 @@ class HOCDashboard extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  componentWillUnmount() {
-    if (!this._dontMark) {
-      this.onMarkSeen();
-    }
-  }
   onMarkSeen() {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
