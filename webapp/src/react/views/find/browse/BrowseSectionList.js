@@ -11,6 +11,7 @@ class BrowseSectionList extends Component {
     super(props);
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate, props.depth);
+    this.onContextClick = this.callDelegate.bind(null, 'onContextClick');
     this.clickedItemCached = setupCachedCallback(this.callDelegate.bind(null, 'clickedItem'));
     // now use events as onClick: this.clickedItemCached(i)
   }
@@ -38,7 +39,13 @@ class BrowseSectionList extends Component {
       return <Loader center />;
     }
     const threeDots = (
-      <Button small frameless icon="ThreeDots" className="browse-section__button" />
+      <Button
+        small
+        frameless
+        icon="ThreeDots"
+        className="browse-section__button"
+        onClick={this.onContextClick}
+      />
     );
 
     const sectionsHTML = sections.map((s, i) => (
