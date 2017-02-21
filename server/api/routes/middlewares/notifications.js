@@ -1,4 +1,5 @@
 import config from 'config';
+// import request from 'request';
 import AWS from 'aws-sdk';
 import hash from 'object-hash';
 import {
@@ -101,10 +102,11 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
   // Leaving this here because it is easier to test with local queue when
   // adding new notifications
 
+
   // request.post({
   //   url: `${queueHost}/process`,
   //   method: 'POST',
-  //   json: payload,
+  //   json: { payload: message },
   // }, (error) => {
   //   if (error) {
   //     console.log(error, 'Error pushing to queue!');

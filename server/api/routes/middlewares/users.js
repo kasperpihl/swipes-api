@@ -272,7 +272,7 @@ const usersGetXendoServiceId = valLocals('usersGetXendoServiceId', {
     });
 });
 const usersRemoveXendoService = valLocals('usersRemoveXendoService', {
-  xendoUserServiceId: number.require(),
+  xendoUserServiceId: number,
 }, (req, res, next) => {
   const {
     xendoUserServiceId,

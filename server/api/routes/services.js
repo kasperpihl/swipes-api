@@ -16,10 +16,11 @@ import {
   serviceAuthCheck,
 } from './middlewares/services';
 import {
-  xendoSwipesCredentials,
-  xendoRefreshSwipesToken,
-  xendoAddServiceToUser,
+  xendoAddServiceToUserQueueMessage,
 } from './middlewares/xendo';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 import {
   valBody,
   valResponseAndSend,
@@ -66,9 +67,8 @@ authed.all('/services.authsuccess',
   serviceImport,
   serviceGetAuthData,
   serviceUpdateAuthData,
-  xendoSwipesCredentials,
-  xendoRefreshSwipesToken,
-  xendoAddServiceToUser,
+  xendoAddServiceToUserQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend(),
 );
 

@@ -2,6 +2,7 @@ import * as goals from './goals';
 import * as milestones from './milestones';
 import * as ways from './ways';
 import * as users from './users';
+import * as xendo from './xendo';
 import * as notifications from './notifications';
 import * as notify from './notify';
 
@@ -14,6 +15,13 @@ const notifyWrapper = (middlewares) => {
     notify.notifyInsertMultipleNotifications,
     notify.notifyCommonRethinkdb,
   ]);
+};
+const xendoWrapper = (middlewares) => {
+  return [
+    xendo.xendoSwipesCredentials,
+    xendo.xendoRefreshSwipesToken,
+  ]
+  .concat(middlewares);
 };
 const goal_created = notifyWrapper([
   goals.goalsGetSingle,
@@ -86,6 +94,18 @@ const notifications_seen = [
   notify.notifyCommonRethinkdb,
 ];
 
+const xendo_user_signup = xendoWrapper([
+  xendo.xendoUserSignUp,
+]);
+
+const xendo_remove_service_from_user = xendoWrapper([
+  xendo.xendoRemoveServiceFromUser,
+]);
+
+const xendo_add_service_to_user = xendoWrapper([
+  xendo.xendoAddServiceToUser,
+]);
+
 export {
   goal_created,
   goal_archived,
@@ -99,4 +119,7 @@ export {
   way_created,
   way_archived,
   notifications_seen,
+  xendo_user_signup,
+  xendo_remove_service_from_user,
+  xendo_add_service_to_user,
 };
