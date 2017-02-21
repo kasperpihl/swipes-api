@@ -36,6 +36,9 @@ import Folder from './svgs/folder.svg';
 import FromFullscreen from './svgs/from-fullscreen.svg';
 import Goals from './svgs/goals.svg';
 import Goal from './svgs/goal.svg';
+import GotAssigned from './svgs/got-assigned.svg';
+import GotNotified from './svgs/got-notified.svg';
+import GotUnassigned from './svgs/got-unassigned.svg';
 import Hashtag from './svgs/hashtag.svg';
 import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
@@ -135,6 +138,9 @@ export {
   FromFullscreen,
   Goal,
   Goals,
+  GotAssigned,
+  GotNotified,
+  GotUnassigned,
   Hashtag,
   HeaderOne,
   HeaderTwo,
