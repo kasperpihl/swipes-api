@@ -34,20 +34,22 @@ class HOCBrowse extends PureComponent {
       });
     }
   }
+  scrollToEnd() {
+    const { scroller } = this.refs;
+    if (scroller) {
+      const scrollW = scroller.scrollWidth;
+      const clientW = scroller.clientWidth;
+      scroller.scrollLeft = Math.max(scrollW - clientW, 0);
+    }
+  }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.queries !== this.state.queries) {
       this.fetchQuery();
+      this.scrollToEnd();
     }
-    /* if (prevState.paths.length !== this.state.paths.length) {
-      setTimeout(() => {
-        const { scroller } = this.refs;
-        if (scroller) {
-          const scrollW = scroller.scrollWidth;
-          const clientW = scroller.clientWidth;
-          scroller.scrollLeft = Math.max(scrollW - clientW, 0);
-        }
-      }, 600);
-    }*/
+    if (prevState.results !== this.state.results) {
+      this.scrollToEnd();
+    }
   }
   componentWillUnmount() {
     this._unmounted = true;

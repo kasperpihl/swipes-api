@@ -68,7 +68,7 @@ class NotificationItem extends Component {
       <div className="notification__content">
         <div className="notification__click-area" onClick={this.onClick}>
           <div className="notification__subtitle">{n.get('subtitle')}</div>
-          <div className="notification__title" onClick={this.onClick}>{n.get('title')}</div>
+          <div className="notification__title">{n.get('title')}</div>
           {this.renderMessage()}
         </div>
         {this.renderAttachments()}

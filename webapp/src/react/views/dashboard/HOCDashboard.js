@@ -98,7 +98,7 @@ class HOCDashboard extends Component {
     }
     switch (type) {
       case 'goal_created': {
-        m = m.set('subtitle', `${name} created a new goal`);
+        m = m.set('subtitle', `${from} created a new goal with you in it`);
         m = m.set('icon', 'Plus');
         break;
       }
