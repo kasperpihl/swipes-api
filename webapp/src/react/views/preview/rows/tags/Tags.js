@@ -6,9 +6,8 @@ import './styles/tags.scss';
 class Tags extends PureComponent {
   render() {
     let { tags } = this.props;
-
     tags = tags || [];
-    tags = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, tenetur?'.split(' ');
+
     return (
       <div className="tags">
         {tags.map(t => (
