@@ -138,9 +138,9 @@ class HOCAttachments extends Component {
       case 'note':
         return addNote(options, callback);
       case 'find':
-        return openFind(callback);
+        return openFind(this.context.target, callback);
       default: {
-        return addLinkMenu(options, callback);
+        return addLinkMenu(this.context.target, options, callback);
       }
     }
   }

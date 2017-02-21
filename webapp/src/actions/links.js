@@ -90,7 +90,7 @@ export const addURL = (options, callback) => (d) => {
 // ======================================================
 // Open find (and then add)
 // ======================================================
-export const openFind = callback => d => d(a.navigation.set('secondary', {
+export const openFind = (from, callback) => d => d(a.navigation.openSecondary(from, {
   component: 'Find',
   placeholder: 'Search across Dropbox, Asana, Slack...',
   title: 'Find',
@@ -106,7 +106,7 @@ export const openFind = callback => d => d(a.navigation.set('secondary', {
 // ======================================================
 // Open add (and then add)
 // ======================================================
-export const addMenu = (options, callback) => (d) => {
+export const addMenu = (from, options, callback) => (d) => {
   d(a.main.contextMenu({
     options,
     component: AddAttachment,
@@ -117,7 +117,7 @@ export const addMenu = (options, callback) => (d) => {
         } else if (type === 'url') {
           d(addURL(options, callback));
         } else if (type === 'find') {
-          d(openFind(callback));
+          d(from, openFind(callback));
         }
       },
     },
@@ -141,6 +141,7 @@ export const preview = (target, data, options) => (d) => {
   } else {
     d(a.navigation.openSecondary(target, {
       component: 'Preview',
+      title: 'Preview',
       props: {
         loadPreview: data.get('shortUrl') || data.toJS(),
         options,

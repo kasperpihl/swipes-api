@@ -40,7 +40,7 @@ class HOCHeaderTitle extends Component {
   }
   renderTitle(crumb) {
     const { title, subtitle } = this.props;
-    const titleText = crumb ? crumb.get('title') : title;
+    const titleText = title || crumb.get('title');
 
     return (
       <div className="header-title__title" key="header-title">

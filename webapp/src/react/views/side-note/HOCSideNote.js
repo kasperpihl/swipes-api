@@ -165,12 +165,16 @@ class HOCSideNote extends Component {
     return editorState;
   }
   renderHeader() {
-    const { target } = this.props;
+    const { target, note } = this.props;
     const subtitle = this.getSubtitle();
-
+    const title = note && note.get('title');
     return (
       <div className="side-note__header">
-        <HOCHeaderTitle target={target} subtitle={subtitle} />
+        <HOCHeaderTitle
+          title={title}
+          target={target}
+          subtitle={subtitle}
+        />
       </div>
     );
   }

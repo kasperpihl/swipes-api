@@ -1,22 +1,20 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
 
 import './styles/tags.scss';
 
-class Tags extends PureComponent {
-  render() {
-    let { tags } = this.props;
-    tags = tags || [];
+const Tags = (props) => {
+  let { tags } = props;
+  tags = tags || [];
 
-    return (
-      <div className="tags">
-        {tags.map(t => (
-          <div className="tags__item">{t}</div>
-        ))}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="tags">
+      {tags.map((t, i) => (
+        <div key={i} className="tags__item">{t}</div>
+      ))}
+    </div>
+  );
+};
 
 export default Tags;
 
