@@ -109,6 +109,7 @@
 
 #content {
 
+  // windows
   &.platform-win32 {
 
     &.window-is-maximized {
@@ -126,10 +127,18 @@
     }
   }
 
+  // Mac
   &.platform-darwin {
 
     .content-wrapper {
       border-radius: 5px;
+    }
+
+    &.window-is-fullscreen {
+      & section.view-container.view-container--fullscreen {
+        @include size(100% !important);
+        left: 0; top: 0;
+      }
     }
   }
 }
