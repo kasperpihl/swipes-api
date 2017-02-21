@@ -1,0 +1,135 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Blocks
+// ======================================================
+
+.notification {
+  $b: &;
+  $flexIgnoreList: #{$b}__icon, #{$b}__timestamp;
+
+  @include size(100%, auto);
+  @include heightSpecifications(66px, initial);
+  @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
+  padding: 18px 9px;
+}
+
+.attachment {
+  $b: &;
+  $flexIgnoreList: #{$b}__icon;
+
+  @include size(100%, 24px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+// Icon
+.notification {
+
+  &__icon {
+    @include size(30px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-30;
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($bg);
+  }
+}
+
+// Content
+
+.notification {
+
+  &__content {
+    @include size(100%, auto);
+  }
+
+  &__subtitle {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-30, 15px, 500);
+  }
+
+  &__title {
+    @include size(100%, auto);
+    @include font(15px, $deepBlue-90, 21px);
+  }
+
+  &__message {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-50, 18px, 500);
+  }
+
+  &__attachments {
+    @include size(100%, auto);
+  }
+}
+
+// Timestamp
+
+.notification {
+
+  &__timestamp {
+    @include size(auto);
+    @include font(12px, $deepBlue-30, 18px, 500);
+  }
+}
+
+// Attachment
+
+.attachment {
+
+  &__icon {
+    @include size(24px);
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-20);
+  }
+
+  &__title {
+    @include size(100%, auto);
+    padding-left: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.notification {
+  $b: &;
+
+  &--unseen {
+    #{$b}__icon {
+      background-color: $blue-100;
+    }
+  }
+}
+
+// ======================================================
+// Hover
+// ======================================================
+
+.attachment {
+  $b: &;
+
+  &:hover {
+    #{$b}__svg {
+      @include svg-color($blue-100);
+    }
+
+    #{$b}__title {
+      @include font($c: $blue-100);
+    }
+  }
+}
