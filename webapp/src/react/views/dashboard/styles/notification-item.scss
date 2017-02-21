@@ -131,6 +131,14 @@
 // Hover
 // ======================================================
 
+.notification {
+  &__title {
+    &:hover {
+      @include font($c: $blue-100);
+    }
+  }
+}
+
 .notif-attachment {
   $b: &;
 

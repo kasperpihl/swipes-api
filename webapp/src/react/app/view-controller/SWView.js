@@ -17,10 +17,6 @@ class SWView extends Component {
 
     const styles = {};
 
-    if (maxWidth) {
-      styles.maxWidth = `${maxWidth}px`;
-    }
-
     return (
       <div className="sw-view__header" style={styles}>
         {header}
