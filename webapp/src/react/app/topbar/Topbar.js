@@ -69,7 +69,7 @@ class Topbar extends Component {
     const { isMaximized, isFullscreen } = this.props;
     let toggleMaximizeIcon = 'WindowsMaximize';
     let toggleMaximizeFunc = 'maximize';
-    console.log('isMaximized', isMaximized);
+
     if (isMaximized) {
       toggleMaximizeIcon = 'WindowsUnmaximize';
       toggleMaximizeFunc = 'unmaximize';
