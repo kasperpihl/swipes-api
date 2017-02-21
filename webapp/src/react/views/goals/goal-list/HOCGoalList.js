@@ -219,7 +219,6 @@ class HOCGoalList extends Component {
   }
   renderHeader() {
     const { target } = this.props;
-    console.log(this.context);
 
     return (
       <div className="goals-list__header">

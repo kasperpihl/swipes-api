@@ -14,6 +14,13 @@ const initialState = fromJS({
   activeGoal: null,
 });
 
+const shouldKeepNotification = payload => [
+  'step_got_active',
+  'goal_notify',
+  'goal_completed',
+  'goal_created',
+].indexOf(payload.type) !== -1;
+
 export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
@@ -37,7 +44,7 @@ export default function main(state = initialState, action) {
         payload.services.forEach((s) => { services[s.id] = s; });
         ns.set('services', fromJS(services));
         // notifications
-        ns.set('notifications', fromJS(payload.notifications));
+        ns.set('notifications', fromJS(payload.notifications.filter(n => shouldKeepNotification(n))));
         // socket url
         ns.set('socketUrl', payload.ws_url);
       });
@@ -80,6 +87,9 @@ export default function main(state = initialState, action) {
     // Notifications
     // ======================================================
     case types.NOTIFICATION_ADD: {
+      if (!shouldKeepNotification(payload)) {
+        return state;
+      }
       return state.updateIn(['notifications'], s => s.insert(0, fromJS(payload)));
     }
     case 'notifications_seen':
