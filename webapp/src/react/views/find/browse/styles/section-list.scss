@@ -37,6 +37,7 @@
     @include size(100%, 54px);
     @include flexContainer('row', left, center);
     @include font(11px, $deepBlue-30, 12px, bold);
+    padding: 0 45px;
   }
 
   &-item {
@@ -55,9 +56,8 @@
   }
 
   &__icon {
-    @include size(auto, 24px);
+    @include size(54px, 24px);
     @include flexContainer('row', center, center);
-    padding: 0 15px;
     transition: .2s ease;
   }
 
