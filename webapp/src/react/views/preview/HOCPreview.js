@@ -149,10 +149,10 @@ class HOCPreviewModal extends PureComponent {
       </div>
     );
   }
-  renderHeader() {
-    // const { title, subtitle } = header;
+  renderHeader(header) {
+    const { title, subtitle } = header;
 
-    return <HOCHeaderTitle title="Fireworks" subtitle="Uploaded on the 4th of July" />;
+    return <HOCHeaderTitle title={title} subtitle={subtitle} />;
   }
   renderRow(row) {
     const Comp = this.getComponentForRow(row);
