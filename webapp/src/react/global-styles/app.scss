@@ -139,6 +139,10 @@
         @include size(100% !important);
         left: 0; top: 0;
       }
+
+      .topbar {
+        -webkit-app-region: no-drag !important;
+      }
     }
   }
 }
