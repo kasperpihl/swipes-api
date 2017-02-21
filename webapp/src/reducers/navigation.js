@@ -38,6 +38,13 @@ export default function history(state = initialState, action) {
         return s.butLast();
       });
     }
+    case types.NAVIGATION_POP_SECONDARY: {
+      const stack = state.get('secondary');
+      if (stack.size > 1) {
+        return state.updateIn(['secondary'], s => (s.butLast()));
+      }
+      return state.set('secondary', fromJS([]));
+    }
     case types.NAVIGATION_SET_COUNTER: {
       const { id, counter } = payload;
       return state.setIn(['counters', id], `${counter}`);

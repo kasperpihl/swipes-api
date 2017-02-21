@@ -77,6 +77,9 @@ export function openSecondary(from, obj, savedState) {
   }
   return push('secondary', obj, savedState);
 }
+export function popSecondary() {
+  return { type: types.NAVIGATION_POP_SECONDARY };
+}
 
 export function pop(target, i) {
   const payload = { target };
