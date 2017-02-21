@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { bindAll } from 'classes/utils';
 import Webview from 'components/webview/Webview';
+import FloatingInput from 'components/swipes-ui/FloatingInput';
 import Button from 'Button';
 import './styles/slack-view';
 
@@ -84,20 +85,24 @@ class HOCSlack extends Component {
     const { teamDomain } = this.state;
     return (
       <div className="slack-view__setup">
-        <h1>Run Slack inside Swipes.</h1>
-        <h2>You can use slack right inside swipes for x, y, z reason.</h2>
-        <input
-          type="text"
-          value={teamDomain}
-          placeholder="teamdomain"
-          onKeyDown={this.onKeyDown}
-          onChange={this.onChange}
-        />.slack.com
-        <Button
-          text="Continue"
-          primary
-          onClick={this.onClick}
-        />
+        <h1>Run Slack inside Swipes</h1>
+        <h2>Stay with your team on the same page, without having to switch between windows.</h2>
+
+        <div className="slack-view__form">
+          <FloatingInput
+            label="teamdomain"
+            type="text"
+            id="teamdomain"
+            onKeyDown={this.onKeyDown}
+            onChange={this.onChange}
+          />
+          <div className="slack-view__url">.slack.com</div>
+          <Button
+            text="Continue"
+            primary
+            onClick={this.onClick}
+          />
+        </div>
       </div>
     );
   }

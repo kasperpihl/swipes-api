@@ -20,4 +20,31 @@
     width: 0px;
     height: 0px;
   }
+
+  &__setup {
+    @include size(100%);
+    @include flexContainer('column', center, center);
+    h1 {
+      @include font(27px, $deepBlue-80, 36px, 400);
+    }
+
+    h2 {
+      @include size(425px, auto);
+      @include font(15px, $deepBlue-80, 24px, 400);
+      text-align: center;
+      padding-top: 15px;
+    }
+  }
+
+  &__form {
+    @include flexContainer('row', flex-start, center);
+    padding-top: 53px;
+  }
+
+  &__url {
+    @include font(15px, $deepBlue-100, 21px, 700);
+    margin-left: -20px;
+    margin-right: 79px;
+    // transform: translateY(9px);
+  }
 }
