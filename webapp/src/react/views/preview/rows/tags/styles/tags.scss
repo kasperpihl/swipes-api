@@ -1,0 +1,18 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.tags {
+  @include size(100%, auto);
+  @include flexContainer('row', left, top) {
+    flex-wrap: wrap;
+  }
+
+  &__item {
+    @include font(12px, $deepBlue-80, 18px, 500);
+    background-color: $blue-5;
+    border: 1px solid $blue-20;
+    border-radius: 6px;
+    padding: 3px 15px;
+    margin-right: 9px; margin-bottom: 6px;
+  }
+}

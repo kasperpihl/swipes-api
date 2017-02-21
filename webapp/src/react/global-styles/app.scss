@@ -113,8 +113,8 @@
   &.platform-win32 {
 
     &.window-is-maximized {
-      $paddingSide: 5px;
-      padding: paddingSide;
+      $paddingSide: 4px;
+      padding: $paddingSide;
 
       & section.view-container.view-container--fullscreen {
         @include size(calc(100% - (#{$paddingSide} * 2)) !important, calc(100% - (38px + #{$paddingSide})) !important);

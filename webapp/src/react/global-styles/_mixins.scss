@@ -100,7 +100,11 @@
 	    justify-content: center;
 	  } @else if $directionHorizontal == right {
 	    justify-content: flex-end;
-	  }
+	  } @else if $directionHorizontal == between {
+			justify-content: space-between;
+		} @else if $directionHorizontal == around {
+			justify-content: space-around;
+		}
 
 	  @if $directionVertical == top {
 	    align-items: flex-start;
@@ -126,7 +130,11 @@
 	    justify-content: center;
 	  } @else if $directionVertical == bottom {
 	    justify-content: flex-end;
-	  }
+	  } @else if $directionHorizontal == between {
+			justify-content: space-between;
+		} @else if $directionHorizontal == around {
+			justify-content: space-around;
+		}
 	}
 
 	@if  $selectorsToIgnoreFlex {
