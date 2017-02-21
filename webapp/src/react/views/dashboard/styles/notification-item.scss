@@ -54,6 +54,10 @@
     margin-top: -2px;
   }
 
+  &__click-area {
+    @include size(100%, auto);
+  }
+
   &__subtitle {
     @include size(100%, auto);
     @include font(12px, $deepBlue-30, 15px, 500);
@@ -73,7 +77,13 @@
 
   &__attachments {
     @include size(100%, auto);
-    margin-top: 6px;
+    padding-top: 7px;
+    margin-top: 7px;
+    border-top: 1px solid $deepBlue-10;
+
+    &:empty {
+      border: none;
+    }
   }
 }
 
@@ -132,9 +142,23 @@
 // ======================================================
 
 .notification {
-  &__title {
+  $b: &;
+
+  &__click-area {
     &:hover {
-      @include font($c: $blue-100);
+      #{$b}__title {
+        @include font($c: $blue-100);
+      }
+
+      & + #{$b}__attachments {
+        .notif-attachment__title {
+          @include font($c: $deepBlue-50);
+        }
+
+        .notif-attachment__svg {
+          @include svg-color($deepBlue-50);
+        }
+      }
     }
   }
 }

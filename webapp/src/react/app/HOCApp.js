@@ -80,7 +80,7 @@ class HOCApp extends Component {
     );
   }
   render() {
-    const { location, status, isMaximized, nextRetry, hasLoaded } = this.props;
+    const { location, status, isMaximized, nextRetry, hasLoaded, isFullscreen } = this.props;
     return (
       <div className="app">
         <Gradient />
@@ -89,6 +89,7 @@ class HOCApp extends Component {
           status={status}
           nextRetry={nextRetry}
           isMaximized={isMaximized}
+          isFullscreen={isFullscreen}
           hasLoaded={hasLoaded}
         />
         {this.renderLoader()}

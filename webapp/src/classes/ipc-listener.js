@@ -97,6 +97,12 @@ export default class IpcListener {
       }
     }
   }
+  unFullscreen() {
+    if (isElectron) {
+      const remWin = remote.getCurrentWindow();
+      remWin.setFullScreen(false);
+    }
+  }
   unmaximize() {
     if (isElectron) {
       const remWin = remote.getCurrentWindow();
