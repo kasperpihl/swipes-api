@@ -27,7 +27,7 @@ const row = any.of([
   }),
   object.as({
     type: 'tags',
-    tags: array,
+    tags: array.of(string),
   }),
   object.as({
     type: 'attachment',
