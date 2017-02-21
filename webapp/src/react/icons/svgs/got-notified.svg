@@ -1,11 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <title>Asset 131</title>
   <g>
-    <rect width="24" height="24" transform="translate(24 24) rotate(-180)" fill="none"/>
-    <rect x="11" y="6" width="2" height="12" transform="translate(24 24) rotate(-180)" fill="#000c2f"/>
-    <rect x="7.00095" y="8.99999" width="2" height="5.99999" transform="translate(16.00191 23.99998) rotate(-180)" fill="#000c2f"/>
-    <rect x="3.00191" y="10.99998" width="2" height="1.99999" transform="translate(8.00382 23.99995) rotate(-180)" fill="#000c2f"/>
-    <rect x="19.00191" y="10.99998" width="2" height="1.99999" transform="translate(40.00382 23.99995) rotate(-180)" fill="#000c2f"/>
-    <rect x="15.00095" y="8.99999" width="2" height="5.99999" transform="translate(32.00191 23.99998) rotate(-180)" fill="#000c2f"/>
+    <rect width="24" height="24" transform="translate(24 24) rotate(-180)" fill="none" stroke="none"/>
+    <rect x="11" y="6" width="2" height="12" transform="translate(24 24) rotate(-180)" stroke="none"/>
+    <rect x="7.00095" y="8.99999" width="2" height="5.99999" transform="translate(16.00191 23.99998) rotate(-180)" stroke="none"/>
+    <rect x="3.00191" y="10.99998" width="2" height="1.99999" transform="translate(8.00382 23.99995) rotate(-180)" stroke="none"/>
+    <rect x="19.00191" y="10.99998" width="2" height="1.99999" transform="translate(40.00382 23.99995) rotate(-180)" stroke="none"/>
+    <rect x="15.00095" y="8.99999" width="2" height="5.99999" transform="translate(32.00191 23.99998) rotate(-180)" stroke="none"/>
   </g>
 </svg>

@@ -30,7 +30,7 @@ class NotificationItem extends Component {
     }
 
     return (
-      <div className="notification__message">{n.get('message')}</div>
+      <div className="notification__message">&#8220;{n.get('message')}&#8221;</div>
     );
   }
   renderAttachments() {
@@ -42,11 +42,11 @@ class NotificationItem extends Component {
     }
 
     const HTMLAttachments = attachments.map((title, i) => (
-      <div className="attachment" key={i}>
-        <div className="attachment__icon">
-          <Icon svg="Flag" className="attachment__svg" />
+      <div className="notif-attachment" key={i}>
+        <div className="notif-attachment__icon">
+          <Icon svg="Flag" className="notif-attachment__svg" />
         </div>
-        <div className="attachment__title">{title}</div>
+        <div className="notif-attachment__title">{title}</div>
       </div>
       ));
 
@@ -82,7 +82,7 @@ class NotificationItem extends Component {
     let className = 'notification';
 
     if (n.get('seen')) {
-      className += ' notification--unread';
+      className += ' notification--seen';
     }
 
     return (
