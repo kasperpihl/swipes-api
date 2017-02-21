@@ -7,6 +7,7 @@ import * as actions from 'actions';
 import * as views from 'views';
 import { setupCachedCallback, debounce } from 'classes/utils';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
+import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
 
 const DEFAULT_MIN_WIDTH = 500;
@@ -24,6 +25,7 @@ class HOCViewController extends PureComponent {
     };
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
+    this.onOpenSecondary = setupCachedCallback(props.openSecondary, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
     this.onClose = this.onClose.bind(this);
@@ -263,23 +265,24 @@ class HOCViewController extends PureComponent {
       onClick = this.onUnderlayCached(target);
     }
     return (
-      <section
-        className={className}
-        key={slack || target}
-        style={style}
-        onClick={onClick}
-      >
-        {this.renderCardHeader(target, canFullscreen, slack)}
-        <View
-          navPop={this.onPopCached(target)}
-          navPush={this.onPushCached(target)}
-          openSecondary={this.onPushCached('secondary')}
-          delegate={this}
-          target={target}
-          key={currentView.get('component')}
-          {...props}
-        />
-      </section>
+      <ContextWrapper target={target} key={slack || target}>
+        <section
+          className={className}
+          style={style}
+          onClick={onClick}
+        >
+          {this.renderCardHeader(target, canFullscreen, slack)}
+          <View
+            navPop={this.onPopCached(target)}
+            navPush={this.onPushCached(target)}
+            openSecondary={this.onOpenSecondary(target)}
+            delegate={this}
+            target={target}
+            key={currentView.get('component')}
+            {...props}
+          />
+        </section>
+      </ContextWrapper>
     );
   }
 
@@ -310,6 +313,7 @@ HOCViewController.propTypes = {
 const ConnectedHOCViewController = connect(mapStateToProps, {
   pop: actions.navigation.pop,
   push: actions.navigation.push,
+  openSecondary: actions.navigation.openSecondary,
   navSet: actions.navigation.set,
 })(HOCViewController);
 export default ConnectedHOCViewController;

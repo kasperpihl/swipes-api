@@ -14,8 +14,8 @@ const authSuccess = [
 /* global nodeRequire, ipcListener */
 
 class Services extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
   }
   componentDidMount() {
@@ -32,7 +32,7 @@ class Services extends Component {
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
 
-    browser(url, (webview, close) => {
+    browser(this.context.target, url, (webview, close) => {
       // .'did-get-redirect-request'
       webview.addEventListener('did-get-redirect-request', (e) => {
         if (authSuccess.find(u => e.newURL.startsWith(u))) {
@@ -123,7 +123,7 @@ class Services extends Component {
   }
 }
 
-const { func } = PropTypes;
+const { func, string } = PropTypes;
 
 Services.propTypes = {
   disconnectService: func,
@@ -133,6 +133,9 @@ Services.propTypes = {
   browser: func,
   handleOAuthSuccess: func,
   services: map,
+};
+Services.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps(state) {

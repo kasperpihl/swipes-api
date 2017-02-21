@@ -74,7 +74,7 @@ class HOCSlack extends Component {
     });
     webview.addEventListener('new-window', (e) => {
       const { browser } = this.props;
-      browser(e.url);
+      browser('primary', e.url);
     });
   }
   renderSetup() {

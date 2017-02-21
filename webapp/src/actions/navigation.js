@@ -30,15 +30,6 @@ export const viewForId = (navId) => {
         component: 'Profile',
         title: 'Profile',
       };
-    case 'browser':
-      return {
-        component: 'Browser',
-        title: 'Browser',
-        fullscreen: true,
-        props: {
-          url: 'https://paper.dropbox.com',
-        },
-      };
     case 'slack':
       return {
         component: 'Slack',
@@ -47,7 +38,6 @@ export const viewForId = (navId) => {
     case 'store':
       return {
         component: 'Store',
-        fullscreen: true,
       };
   }
 };
@@ -77,6 +67,25 @@ export function set(target, navId) {
   };
 }
 
+export function push(target, obj, savedState) {
+  const payload = { obj, savedState, target };
+  return { type: types.NAVIGATION_PUSH, payload };
+}
+export function openSecondary(from, obj, savedState) {
+  if (from === 'primary') {
+    return set('secondary', obj, savedState);
+  }
+  return push('secondary', obj, savedState);
+}
+
+export function pop(target, i) {
+  const payload = { target };
+  if (typeof i !== 'undefined') {
+    payload.index = Math.max(parseInt(i, 10), 0);
+  }
+  return { type: types.NAVIGATION_POP, payload };
+}
+
 export function init() {
   return (dispatch, getState) => {
     const state = getState();
@@ -89,18 +98,7 @@ export function init() {
     }
   };
 }
+
 export function setCounter(id, counter) {
   return { type: types.NAVIGATION_SET_COUNTER, payload: { id, counter } };
-}
-
-export function push(target, obj, savedState) {
-  const payload = { obj, savedState, target };
-  return { type: types.NAVIGATION_PUSH, payload };
-}
-export function pop(target, i) {
-  const payload = { target };
-  if (typeof i !== 'undefined') {
-    payload.index = Math.max(parseInt(i, 10), 0);
-  }
-  return { type: types.NAVIGATION_POP, payload };
 }
