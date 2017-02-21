@@ -34,6 +34,7 @@ const mainSections = (metadata) => {
         },
       }, {
         type: 'markdown',
+        indentLeft: true,
         content: j2m.toM(comment.body),
       }],
     });

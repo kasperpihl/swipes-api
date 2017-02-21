@@ -1,4 +1,4 @@
-import { string, object, array, any, number } from 'valjs';
+import { string, object, array, any, number, bool } from 'valjs';
 
 const icon = object.of({
   src: string,
@@ -23,6 +23,7 @@ const row = any.of([
   object.as({
     type: 'markdown',
     content: string,
+    indentLeft: bool,
   }),
   object.as({
     type: 'tags',
