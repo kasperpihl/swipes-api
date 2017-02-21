@@ -23,6 +23,7 @@ export default class Dashboard extends Component {
       return (
         <NotificationWrapper
           notification={n}
+          i={i}
           delegate={delegate}
           key={`notif${i}`}
         />

@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';
+import { setupDelegate, setupCachedCallback } from 'classes/utils';
+
 
 import './styles/notification-item';
 
@@ -8,6 +10,9 @@ class NotificationItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.callDelegate = setupDelegate(props.delegate, props.i);
+    this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'onClickAttachment'));
+    this.onClick = this.callDelegate.bind(null, 'onClickTitle');
   }
   renderIcon() {
     const { notification: n } = this.props;
@@ -42,7 +47,7 @@ class NotificationItem extends Component {
     }
 
     const HTMLAttachments = attachments.map((title, i) => (
-      <div className="notif-attachment" key={i}>
+      <div onClick={this.onAttachmentClick(i)} className="notif-attachment" key={i}>
         <div className="notif-attachment__icon">
           <Icon svg="Flag" className="notif-attachment__svg" />
         </div>
@@ -62,7 +67,7 @@ class NotificationItem extends Component {
     return (
       <div className="notification__content">
         <div className="notification__subtitle">{n.get('subtitle')}</div>
-        <div className="notification__title">{n.get('title')}</div>
+        <div className="notification__title" onClick={this.onClick}>{n.get('title')}</div>
         {this.renderMessage()}
         {this.renderAttachments()}
       </div>
@@ -97,12 +102,13 @@ class NotificationItem extends Component {
 
 export default NotificationItem;
 
-const { string, object } = PropTypes;
+const { string, object, number, bool } = PropTypes;
 
 NotificationItem.propTypes = {
+  i: number,
   delegate: object,
   notification: mapContains({
-    seen: string,
+    seen: bool,
     icon: string,
     subtitle: string,
     title: string,
