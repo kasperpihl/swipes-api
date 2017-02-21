@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import Loader from 'components/loaders/Loader';
+import Button from 'Button';
 import BrowseSectionItem from './BrowseSectionItem';
 
 import './styles/section-list.scss';
@@ -36,10 +37,16 @@ class BrowseSectionList extends Component {
     if (loading) {
       return <Loader center />;
     }
+    const threeDots = (
+      <Button small frameless icon="ThreeDots" className="browse-section__button" />
+    );
 
     const sectionsHTML = sections.map((s, i) => (
       <div className="browse-section" key={i}>
-        <div className="browse-section__title">{s.title}</div>
+        <div className="browse-section__header">
+          <div className="browse-section__title">{s.title}</div>
+          {i === 0 ? threeDots : undefined}
+        </div>
         {this.renderSectionItems(s.items)}
       </div>
       ));

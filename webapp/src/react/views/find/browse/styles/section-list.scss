@@ -33,11 +33,16 @@
 
 .browse-section {
 
-  &__title {
+  &__header {
     @include size(100%, 54px);
-    @include flexContainer('row', left, center);
+    @include flexContainer('row', between, center);
+    padding-left: 41px;
+    padding-right: 7px;
+  }
+
+  &__title {
+    @include size(100%, auto);
     @include font(11px, $deepBlue-30, 12px, bold);
-    padding: 0 45px;
   }
 
   &-item {
