@@ -1,17 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'classes/utils';
 import NotificationWrapper from './NotificationWrapper';
 import './styles/dashboard';
 
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate);
-    this.onClick = this.callDelegate.bind(null, 'onMarkSeen');
   }
   renderNotifications() {
-    const { notifications } = this.props;
+    const {
+      notifications,
+      delegate,
+    } = this.props;
+
     if (!notifications) {
       return 'No notifications....';
     }
@@ -19,15 +20,11 @@ export default class Dashboard extends Component {
       if (!n) {
         return null;
       }
-      const color = n.get('iconBgColor');
       return (
         <NotificationWrapper
-          unread={!n.get('seen')}
+          notification={n}
+          delegate={delegate}
           key={`notif${i}`}
-          svg={n.get('svg')}
-          iconBgColor={color}
-          message={n.get('message')}
-          timeago={n.get('timeago')}
         />
       );
     });

@@ -41,12 +41,12 @@ class NotificationItem extends Component {
       return undefined;
     }
 
-    const HTMLAttachments = attachments((a, i) => (
-      <div className="attachment">
+    const HTMLAttachments = attachments.map((title, i) => (
+      <div className="attachment" key={i}>
         <div className="attachment__icon">
           <Icon svg="Flag" className="attachment__svg" />
         </div>
-        <div className="attachment__title">{a.get('title')}</div>
+        <div className="attachment__title">{title}</div>
       </div>
       ));
 
@@ -71,17 +71,17 @@ class NotificationItem extends Component {
   renderTimestamp() {
     const { notification: n } = this.props;
 
-    if (!n.get('timestamp')) {
+    if (!n.get('timeago')) {
       return undefined;
     }
 
-    return <div className="notification__timestamp">{n.get('timestamp')}</div>;
+    return <div className="notification__timeago">{n.get('timeago')}</div>;
   }
   render() {
     const { notification: n } = this.props;
     let className = 'notification';
 
-    if (n.get('unread')) {
+    if (n.get('seen')) {
       className += ' notification--unread';
     }
 
@@ -97,20 +97,17 @@ class NotificationItem extends Component {
 
 export default NotificationItem;
 
-const { string, object, bool } = PropTypes;
+const { string, object } = PropTypes;
 
 NotificationItem.propTypes = {
   delegate: object,
   notification: mapContains({
-    unread: bool,
+    seen: string,
     icon: string,
     subtitle: string,
     title: string,
     message: string,
-    attachments: listOf({
-      icon: string,
-      title: string,
-    }),
-    timestamp: string,
+    attachments: listOf(string),
+    timeago: string,
   }),
 };

@@ -156,7 +156,7 @@ class HOCGoalOverview extends PureComponent {
         <div className="handoff-bar__label">It’s your turn to handoff work</div>
         <div className="handoff-bar__actions">
           <Button
-            text="Handoff"
+            text="Move forward"
             primary
             className="handoff-bar__button"
             onClick={this.onHandoff}

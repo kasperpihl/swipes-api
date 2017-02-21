@@ -3,7 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { list, map } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import moment from 'moment';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
@@ -52,101 +52,73 @@ class HOCDashboard extends Component {
       });
     }
   }
-  nameForUser(users, id) {
-    let name = 'Someone';
-    const user = users.get(id);
-    if (user) {
-      name = user.get('name');
+  getAttachments(goalId, flags) {
+    const { goals } = this.props;
+    const goal = goals.get(goalId);
+    if (!goal || !flags || !goal.get('attachments')) {
+      return undefined;
     }
-    return name;
+    const at = flags.map(fId => (goal.getIn(['attachments', fId, 'title']))).filter(v => !!v);
+    return fromJS(at);
   }
   titleForGoalId(goalId) {
     const { goals } = this.props;
-    return goals.getIn([goalId, 'title']);
-  }
-  clickableGoalForId(goalId) {
-    const title = this.titleForGoalId(goalId);
+    const title = goals.getIn([goalId, 'title']);
     if (!title) {
       return '(archived)';
     }
-    return <b onClick={this.onClickCached(goalId, 'goal')}>{title}</b>;
+    return title;
   }
   clickableNameForUserId(userId) {
     const name = msgGen.getUserString(userId);
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
+
   messageForNotification(n) {
-    const { ways, me } = this.props;
+    const { me } = this.props;
     let data = n.get('data');
     data = data || Map();
     const type = n.get('type');
-    const greenColor = '#4FE69B';
-    const redColor = '#FC461E';
-    const blueColor = '#007AFF';
 
     let m = Map({
       timeago: moment(n.get('ts')).fromNow(),
       seen: n.get('seen'),
     });
 
+    const from = msgGen.getUserString(data.get('done_by'));
+    const to = data.get('done_by') === me.get('id') ? 'yourself' : 'you';
+
+    if (data.get('goal_id')) {
+      m = m.set('title', this.titleForGoalId(data.get('goal_id')));
+      m = m.set('message', data.get('message'));
+      m = m.set('attachments', this.getAttachments(data.get('goal_id'), data.get('flags')));
+    }
     switch (type) {
       case 'goal_created': {
-        const goal = this.clickableGoalForId(data.get('goal_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{' started a goal: '}{goal}</span>);
-        m = m.set('svg', 'Plus');
-        m = m.set('iconBgColor', blueColor);
-
-        break;
-      }
-      case 'goal_archived': {
-        const title = data.get('goal_title');
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{' archived a goal: '}{title}</span>);
-        m = m.set('svg', 'Minus');
-        m = m.set('iconBgColor', redColor);
+        m = m.set('subtitle', `${name} created a new goal`);
+        m = m.set('icon', 'Plus');
         break;
       }
       case 'goal_notify': {
-        const goal = this.clickableGoalForId(data.get('goal_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        const message = data.get('message');
-        const youLabel = data.get('done_by') === me.get('id') ? 'yourself' : 'you';
-        m = m.set('message', <span>{name}{` wrote ${youLabel}: "${message}" in `}{goal}</span>);
-        m = m.set('svg', 'Deliver');
-        m = m.set('iconBgColor', blueColor);
+        m = m.set('subtitle', `${from} notified ${to} in`);
+        m = m.set('icon', 'GotNotified');
         break;
       }
       case 'step_got_active': {
-        const goal = this.clickableGoalForId(data.get('goal_id'));
-        m = m.set('message', <span>{'It is your turn to act on: '}{goal}</span>);
-        m = m.set('svg', 'Deliver');
-        m = m.set('iconBgColor', blueColor);
-
+        m = m.set('subtitle', `${from} passed this on to ${to} to work on 'stepname'`);
+        m = m.set('icon', 'GotAssigned');
         break;
       }
-      case 'step_completed': {
-        const goal = this.clickableGoalForId(data.get('goal_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{' completed a step in: '}{goal}</span>);
-        m = m.set('svg', 'Checkmark');
-        m = m.set('iconBgColor', greenColor);
-        break;
-      }
-      case 'way_created': {
-        const way = ways.get(data.get('way_id'));
-        const name = this.clickableNameForUserId(data.get('done_by'));
-        m = m.set('message', <span>{name}{` created a way: ${way.get('title')}`}</span>);
-        m = m.set('svg', 'Plus');
-        m = m.set('iconBgColor', blueColor);
+      case 'goal_completed': {
+        m = m.set('icon', 'Star');
         break;
       }
       default:
-        console.log(n.toJS());
+        m = Map();
         break;
     }
-    if (!m.get('message')) {
-      console.log(m.toJS());
+    console.log(n.toJS());
+    if (!m.get('title')) {
       return null;
     }
     return m;
@@ -183,7 +155,6 @@ HOCDashboard.propTypes = {
   notifications: list,
   target: string,
   markNotifications: func,
-  ways: map,
   goals: map,
   me: map,
 };
@@ -192,7 +163,6 @@ function mapStateToProps(state) {
   return {
     notifications: state.getIn(['main', 'notifications']),
     users: state.get('users'),
-    ways: state.getIn(['main', 'ways']),
     goals: state.get('goals'),
     me: state.get('me'),
   };

@@ -74,7 +74,7 @@
 
 .notification {
 
-  &__timestamp {
+  &__timeago {
     @include size(auto);
     @include font(12px, $deepBlue-30, 18px, 500);
   }
