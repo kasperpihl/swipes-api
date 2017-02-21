@@ -12,8 +12,8 @@ import TabBar from 'components/tab-bar/TabBar';
 import './styles/attachments';
 
 class HOCAttachments extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
     this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
@@ -32,15 +32,9 @@ class HOCAttachments extends Component {
       previewLink,
       attachments,
     } = this.props;
-    previewLink(attachments.get(id));
+    previewLink(this.context.target, attachments.get(id));
   }
-  tabDidChange(el, index) {
-    const { tabIndex } = this.state;
 
-    if (index !== tabIndex) {
-      this.setState({ tabIndex: index });
-    }
-  }
   onFlagClick(id) {
     this.callDelegate('onFlag', id);
   }
@@ -80,7 +74,7 @@ class HOCAttachments extends Component {
       updateToasty,
       addURL,
       goalId,
-      navSet,
+      openSecondary,
       openFind,
     } = this.props;
     const options = {
@@ -110,7 +104,7 @@ class HOCAttachments extends Component {
             updateToasty(toastId, { title: 'Added Attachment', completed: true, duration: 3000 });
           }
           if (type === 'note' && obj.id) {
-            navSet('secondary', {
+            openSecondary(this.context.target, {
               component: 'SideNote',
               title: 'Note',
               props: {
@@ -148,6 +142,13 @@ class HOCAttachments extends Component {
       default: {
         return addLinkMenu(options, callback);
       }
+    }
+  }
+  tabDidChange(el, index) {
+    const { tabIndex } = this.state;
+
+    if (index !== tabIndex) {
+      this.setState({ tabIndex: index });
     }
   }
   hasAttachments() {
@@ -236,7 +237,6 @@ class HOCAttachments extends Component {
   }
   renderAddAttachments() {
     const { disableAdd } = this.props;
-
     if (disableAdd) {
       return false;
     }
@@ -310,9 +310,12 @@ HOCAttachments.propTypes = {
   openFind: func,
   previewLink: func,
   removeFromCollection: func,
-  navSet: func,
+  openSecondary: func,
   updateToasty: func,
   noFlagging: bool,
+};
+HOCAttachments.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps() {
@@ -329,6 +332,6 @@ export default connect(mapStateToProps, {
   openFind: actions.links.openFind,
   previewLink: actions.links.preview,
   removeFromCollection: actions.goals.removeFromCollection,
-  navSet: actions.navigation.set,
+  openSecondary: actions.navigation.openSecondary,
   updateToasty: actions.toasty.update,
 })(HOCAttachments);

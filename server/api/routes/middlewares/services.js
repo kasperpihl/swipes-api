@@ -341,6 +341,10 @@ const serviceGetAuthData = valLocals('serviceGetAuthData', {
     // The id field should be string. Some services like asana are returning
     // numbers and this is okay for the auth_data but not for the id field in the root
     // because it is hell to write db queries that maches different type for a field
+    if (!serviceData.id) {
+      return next(new SwipesError('service id is required! - serviceGetAuthData'));
+    }
+
     serviceData.id = serviceData.id.toString();
 
     const serviceToAppend = Object.assign({}, serviceData, {

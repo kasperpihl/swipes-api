@@ -21,8 +21,8 @@ class HOCPreviewModal extends PureComponent {
   static fullscreen() {
     return true;
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = this.getDefaultState();
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
@@ -42,7 +42,7 @@ class HOCPreviewModal extends PureComponent {
     const { browser } = this.props;
     const button = buttons[i];
     if (button.url) {
-      browser(button.url);
+      browser(this.context.target, button.url);
     }
     e.target.blur();
   }
@@ -149,10 +149,10 @@ class HOCPreviewModal extends PureComponent {
       </div>
     );
   }
-  renderHeader() {
-    // const { title, subtitle } = header;
+  renderHeader(header) {
+    const { title, subtitle } = header || {};
 
-    return <HOCHeaderTitle title="Fireworks" subtitle="Uploaded on the 4th of July" />;
+    return <HOCHeaderTitle title={title} subtitle={subtitle} />;
   }
   renderRow(row) {
     const Comp = this.getComponentForRow(row);
@@ -279,9 +279,11 @@ const { object, func, oneOfType, string } = PropTypes;
 HOCPreviewModal.propTypes = {
   options: object,
   browser: func,
-  preview: object,
   request: func,
   loadPreview: oneOfType([object, string]),
+};
+HOCPreviewModal.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps() {

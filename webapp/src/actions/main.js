@@ -58,20 +58,9 @@ export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } }
 export const updateRecentAssignees = payload => ({ type: types.UPDATE_RECENT_ASSIGNEES, payload });
 
 // ======================================================
-// Title
-// ======================================================
-export const preview = (pre, options) => dp => dp(a.navigation.set('secondary', {
-  component: 'Preview',
-  props: {
-    loadPreview: pre,
-    options,
-  },
-}));
-
-// ======================================================
 // Browser
 // ======================================================
-export const browser = (url, onLoad) => dp => dp(a.navigation.set('secondary', {
+export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondary(from, {
   component: 'Browser',
   props: {
     url,

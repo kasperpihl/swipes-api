@@ -14,8 +14,8 @@ const authSuccess = [
 /* global nodeRequire, ipcListener */
 
 class Services extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
   }
   componentDidMount() {
@@ -24,27 +24,35 @@ class Services extends Component {
   componentDidUpdate() {
     this.checkForDropboxFolder();
   }
+  handleOAuthSuccess(serviceName, params) {
+    if (this._handled) {
+      return;
+    }
+    const { handleOAuthSuccess } = this.props;
+    handleOAuthSuccess(serviceName, params);
+    this._handled = true;
+  }
   clickedDisconnect(data) {
     this.props.disconnectService(data.id);
   }
   clickedConnect(data) {
-    const { browser, handleOAuthSuccess } = this.props;
+    const { browser } = this.props;
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
 
-    browser(url, (webview, close) => {
+    browser(this.context.target, url, (webview, close) => {
       // .'did-get-redirect-request'
       webview.addEventListener('did-get-redirect-request', (e) => {
         if (authSuccess.find(u => e.newURL.startsWith(u))) {
           const params = queryStringToObject(e.newURL.split('?')[1]);
-          handleOAuthSuccess(serviceName, params);
+          this.handleOAuthSuccess(serviceName, params);
           close();
         }
       });
       webview.addEventListener('did-navigate', (e) => {
         if (authSuccess.find(u => e.url.startsWith(u))) {
           const params = queryStringToObject(e.url.split('?')[1]);
-          handleOAuthSuccess(serviceName, params);
+          this.handleOAuthSuccess(serviceName, params);
           close();
         }
       });
@@ -123,7 +131,7 @@ class Services extends Component {
   }
 }
 
-const { func } = PropTypes;
+const { func, string } = PropTypes;
 
 Services.propTypes = {
   disconnectService: func,
@@ -133,6 +141,9 @@ Services.propTypes = {
   browser: func,
   handleOAuthSuccess: func,
   services: map,
+};
+Services.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps(state) {

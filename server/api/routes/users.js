@@ -20,11 +20,12 @@ import {
   usersUpdateProfilePic,
 } from './middlewares/users';
 import {
-  xendoSwipesCredentials,
-  xendoRefreshSwipesToken,
-  xendoUserSignUp,
-  xendoRemoveServiceFromUser,
+  xendoSignUpQueueMessage,
+  xendoRemoveServiceFromUserQueueMessage,
 } from './middlewares/xendo';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -52,9 +53,8 @@ notAuthed.all('/users.signup',
   userAvailability,
   userAddToOrganization,
   userSignUp,
-  xendoSwipesCredentials,
-  xendoRefreshSwipesToken,
-  xendoUserSignUp,
+  xendoSignUpQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     user_id: string.require(),
     token: string.require(),
@@ -67,11 +67,10 @@ authed.post('/users.serviceDisconnect',
   usersGetService,
   usersCleanupRegisteredWebhooksToService,
   usersGetXendoServiceId,
-  xendoSwipesCredentials,
-  xendoRefreshSwipesToken,
-  xendoRemoveServiceFromUser,
   usersRemoveXendoService,
   usersRemoveService,
+  xendoRemoveServiceFromUserQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend(),
 );
 

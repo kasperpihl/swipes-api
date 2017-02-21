@@ -127,20 +127,24 @@ export const addMenu = (options, callback) => (d) => {
 // ======================================================
 // Preview attacment
 // ======================================================
-export const preview = (data, options) => (d) => {
-  const att = data;
-  if (att.get('name') === 'swipes' && att.get('type') === 'note') {
-    d(a.navigation.set('secondary', {
+export const preview = (target, data, options) => (d) => {
+  if (data.get('name') === 'swipes' && data.get('type') === 'note') {
+    d(a.navigation.openSecondary(target, {
       component: 'SideNote',
       title: 'Note',
       props: {
-        id: att.get('id'),
+        id: data.get('id'),
       },
     }));
-  } else if (att.get('name') === 'swipes' && att.get('type') === 'url') {
-    d(a.main.browser(att.get('id')));
-    // window.open(att.get('id'));
-  } else if (att.get('shortUrl')) {
-    d(a.main.preview(att.get('shortUrl'), options));
+  } else if (data.get('name') === 'swipes' && data.get('type') === 'url') {
+    d(a.main.browser(target, data.get('id')));
+  } else {
+    d(a.navigation.openSecondary(target, {
+      component: 'Preview',
+      props: {
+        loadPreview: data.get('shortUrl') || data.toJS(),
+        options,
+      },
+    }));
   }
 };

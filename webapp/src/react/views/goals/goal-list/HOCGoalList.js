@@ -20,8 +20,8 @@ const defaultFilter = fromJS({
 });
 
 class HOCGoalList extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.callDelegate = setupDelegate(props.delegate);
     this.state = {
       tabIndex: 0,
@@ -219,6 +219,7 @@ class HOCGoalList extends Component {
   }
   renderHeader() {
     const { target } = this.props;
+    console.log(this.context);
 
     return (
       <div className="goals-list__header">
@@ -286,7 +287,6 @@ HOCGoalList.propTypes = {
   savedState: object,
   saveCache: func,
   navPush: func,
-  openSecondary: func,
   delegate: object,
   me: map,
   selectUser: func,
@@ -294,6 +294,9 @@ HOCGoalList.propTypes = {
   selectMilestone: func,
   target: string,
   // removeThis: PropTypes.string.isRequired
+};
+HOCGoalList.contextTypes = {
+  target: string,
 };
 
 export default connect(mapStateToProps, {

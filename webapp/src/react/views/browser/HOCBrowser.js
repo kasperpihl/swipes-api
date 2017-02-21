@@ -38,16 +38,23 @@ class HOCBrowser extends Component {
       // webview.openDevTools();
     });
     webview.addEventListener('did-navigate', (e) => {
-      this.updateUrl(e.url);
+      if (!this._unmounted) {
+        this.updateUrl(e.url);
+      }
     });
     webview.addEventListener('did-navigate-in-page', (e) => {
-      if (e.isMainFrame) {
+      if (!this._unmounted && e.isMainFrame) {
         this.updateUrl(e.url);
       }
     });
     webview.addEventListener('page-title-updated', (e) => {
-      this.setState({ title: e.title });
+      if (!this._unmounted) {
+        this.setState({ title: e.title });
+      }
     });
+  }
+  componentWillUnmount() {
+    this._unmounted = true;
   }
   updateUrl(url) {
     const updateObj = {
@@ -79,8 +86,8 @@ class HOCBrowser extends Component {
     }
   }
   close() {
-    const { overlay } = this.props;
-    overlay(null);
+    const { popSecondary } = this.props;
+    popSecondary();
   }
   getWebviewHtml() {
     const { url, me } = this.props;
@@ -121,8 +128,8 @@ class HOCBrowser extends Component {
 const { string, func } = PropTypes;
 HOCBrowser.propTypes = {
   url: string,
+  popSecondary: func,
   onLoad: func,
-  overlay: func,
   me: map,
 };
 
@@ -133,5 +140,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  overlay: actions.main.overlay,
+  popSecondary: actions.navigation.popSecondary,
 })(HOCBrowser);

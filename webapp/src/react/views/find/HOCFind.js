@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import SWView from 'SWView';
@@ -19,8 +20,8 @@ class HOCFind extends Component {
   static maxWidth() {
     return 1600;
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       selectedId: 'search-results',
       accountId: null,
@@ -61,7 +62,7 @@ class HOCFind extends Component {
         },
       }];
     }
-    preview(obj, { buttons });
+    preview(this.context.target, Map(obj), { buttons });
   }
   navbarLoadedInput(input) {
     this._input = input;
@@ -232,6 +233,9 @@ HOCFind.propTypes = {
   me: map,
   services: map,
 };
+HOCFind.contextTypes = {
+  target: string,
+};
 
 function mapStateToProps(state) {
   return {
@@ -244,7 +248,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCFind = connect(mapStateToProps, {
-  preview: actions.main.preview,
+  preview: actions.links.preview,
   request: actions.api.request,
   search: actions.main.search,
 })(HOCFind);

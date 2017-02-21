@@ -12,8 +12,8 @@ import Dashboard from './Dashboard';
 /* global msgGen */
 
 class HOCDashboard extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {};
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClickCached = setupCachedCallback(this.onClick, this);
@@ -43,7 +43,7 @@ class HOCDashboard extends Component {
     const { goals, preview } = this.props;
     const aId = n.getIn(['data', 'flags', i]);
     const att = goals.getIn([n.getIn(['data', 'goal_id']), 'attachments', aId]);
-    preview(att);
+    preview(this.context.target, att);
   }
   onClickTitle(i) {
     const n = this.props.notifications.get(i);
@@ -165,6 +165,9 @@ HOCDashboard.propTypes = {
   preview: func,
   goals: map,
   me: map,
+};
+HOCDashboard.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps(state) {
