@@ -34,11 +34,17 @@ $h: 105px;
   }
 
   &__input {
-    @include size(100%, 39px);
+    @include size(100%, 54px);
     @include font(30px, $deepBlue-100);
+    border-bottom: 1px solid $deepBlue-10;
+    padding-bottom: 15px;
 
     &::-webkit-input-placeholder {
       @include font(30px, $deepBlue-30);
+    }
+
+    &:focus {
+      border-color: $blue-100;
     }
   }
 

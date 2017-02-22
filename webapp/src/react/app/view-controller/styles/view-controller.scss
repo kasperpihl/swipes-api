@@ -157,6 +157,7 @@ section.view-container {
     margin: 0 !important;
     transition: all 0s;
     transition-delay: .3s;
+    z-index: 9999 !important;
     animation: showFullscreen .6s ease forwards;
   }
 
