@@ -1,3 +1,7 @@
+import {
+  appendExtForDriveDocs,
+} from './utils';
+
 const mapSearch = (res) => {
   const id = res.id.split(/-(.+)/)[1];
 
@@ -8,7 +12,7 @@ const mapSearch = (res) => {
       type: 'file',
       name: 'drive',
     },
-    title: res.title,
+    title: appendExtForDriveDocs(res.title, res.source_content_type),
     subtitle: '',
   };
 };

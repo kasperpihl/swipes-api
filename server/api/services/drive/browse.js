@@ -1,6 +1,9 @@
 import {
   request,
 } from './request';
+import {
+  appendExtForDriveDocs,
+} from './utils';
 
 const browse = ({ auth_data, query, page, account_id, user }, callback) => {
   const pathTitle = query ? query.title : 'Google Drive';
@@ -39,7 +42,7 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
       }
 
       return {
-        title: file.name,
+        title: appendExtForDriveDocs(file.name, file.mimeType),
         on_click: {
           type: 'preview',
           preview: {

@@ -3,6 +3,9 @@ import {
   request,
 } from './request';
 import {
+  googleMimeTypesToExtMap,
+} from './utils';
+import {
   createSwipesTempStreamUrl,
 } from '../../swipes_url_utils';
 
@@ -42,17 +45,9 @@ const fileData = (metadata, url) => {
   return file;
 };
 const typeData = (metadata) => {
-  // these are just the types that we support
-  // to see the rest - https://developers.google.com/drive/v3/web/mime-types
-  const googleMimeTypes = [
-    'application/vnd.google-apps.document',
-    'application/vnd.google-apps.drawing',
-    'application/vnd.google-apps.presentation',
-    'application/vnd.google-apps.spreadsheet',
-  ];
   const fileMimeType = metadata.mimeType;
 
-  if (googleMimeTypes.indexOf(fileMimeType) > -1) {
+  if (googleMimeTypesToExtMap[fileMimeType]) {
     return 'drive#document';
   }
 
