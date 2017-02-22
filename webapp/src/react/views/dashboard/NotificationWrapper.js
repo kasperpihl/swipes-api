@@ -66,12 +66,9 @@ class NotificationItem extends Component {
 
     return (
       <div className="notification__content">
-        <div className="notification__click-area" onClick={this.onClick}>
-          <div className="notification__subtitle">{n.get('subtitle')}</div>
-          <div className="notification__title">{n.get('title')}</div>
-          {this.renderMessage()}
-        </div>
-        {this.renderAttachments()}
+        <div className="notification__subtitle">{n.get('subtitle')}</div>
+        <div className="notification__title">{n.get('title')}</div>
+        {this.renderMessage()}
       </div>
     );
   }
@@ -94,9 +91,14 @@ class NotificationItem extends Component {
 
     return (
       <div className={className}>
-        {this.renderIcon()}
-        {this.renderContent()}
-        {this.renderTimestamp()}
+        <div className="notification__top" onClick={this.onClick}>
+          {this.renderIcon()}
+          {this.renderContent()}
+          {this.renderTimestamp()}
+        </div>
+        <div className="notification__bottom">
+          {this.renderAttachments()}
+        </div>
       </div>
     );
   }

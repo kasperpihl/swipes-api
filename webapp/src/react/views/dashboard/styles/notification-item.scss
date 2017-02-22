@@ -7,13 +7,14 @@
 
 .notification {
   $b: &;
-  $flexIgnoreList: '#{$b}__icon', '#{$b}__timeago';
+  // $flexIgnoreList: '#{$b}__icon', '#{$b}__timeago';
 
   @include size(100%, auto);
   @include heightSpecifications(66px, initial);
-  @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
+  // @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
   padding: 15px 9px;
   border-top: 1px solid $deepBlue-5;
+  overflow: hidden;
 }
 
 .notif-attachment {
@@ -27,6 +28,24 @@
 // ======================================================
 // Elements
 // ======================================================
+
+// Containers
+
+.notification {
+  $b: &;
+
+  &__top {
+    $flexIgnoreList: '#{$b}__icon', '#{$b}__timeago';
+
+    @include size(100%, auto);
+    @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
+  }
+
+  &__bottom {
+    @include size(100%, auto);
+    padding-left: 51px;
+  }
+}
 
 // Icon
 .notification {
@@ -52,10 +71,6 @@
     @include size(100%, auto);
     padding-left: 21px;
     margin-top: -2px;
-  }
-
-  &__click-area {
-    @include size(100%, auto);
   }
 
   &__subtitle {
@@ -114,7 +129,6 @@
     @include size(100%, auto);
     @include font(12px, $blue-100, 18px, 500);
     padding-left: 6px;
-    word-break: break-all;
     transition: .15s ease;
     white-space: nowrap;
     overflow: hidden;
