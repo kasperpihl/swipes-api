@@ -8,9 +8,7 @@ const initialState = fromJS({
   cache: {},
   services: {},
   milestones: {},
-  versionInfo: {
-
-  },
+  versionInfo: {},
   notifications: [],
   ways: {},
   hasLoaded: false,
@@ -60,7 +58,7 @@ export default function main(state = initialState, action) {
       );
     }
     case types.SET_UPDATE_STATUS: {
-      return state.mergeIn(['versionInfo'], payload);
+      return state.mergeIn(['versionInfo'], fromJS(payload));
     }
     case types.SET_MAXIMIZED: {
       return state.set('isMaximized', payload.toggle);

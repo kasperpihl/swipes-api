@@ -11,8 +11,6 @@ const authSuccess = [
   'https://staging.swipesapp.com',
 ].map(o => `${o}/oauth-success.html`);
 
-/* global nodeRequire, ipcListener */
-
 class Services extends Component {
   constructor(props, context) {
     super(props, context);

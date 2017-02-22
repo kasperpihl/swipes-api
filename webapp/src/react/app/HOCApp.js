@@ -80,18 +80,10 @@ class HOCApp extends Component {
     );
   }
   render() {
-    const { location, status, isMaximized, nextRetry, hasLoaded, isFullscreen } = this.props;
     return (
       <div className="app">
         <Gradient />
-        <Topbar
-          pathname={location.pathname}
-          status={status}
-          nextRetry={nextRetry}
-          isMaximized={isMaximized}
-          isFullscreen={isFullscreen}
-          hasLoaded={hasLoaded}
-        />
+        <Topbar />
         {this.renderLoader()}
         {this.renderContent()}
       </div>
@@ -99,13 +91,10 @@ class HOCApp extends Component {
   }
 }
 
-const { func, object, string, bool } = PropTypes;
+const { func, bool } = PropTypes;
 
 HOCApp.propTypes = {
-  status: string,
   navInit: func,
-  location: object,
-  nextRetry: object,
   hasLoaded: bool,
   isFullscreen: bool,
   isMaximized: bool,
@@ -113,8 +102,6 @@ HOCApp.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    status: state.getIn(['main', 'status']),
-    nextRetry: state.getIn(['main', 'nextRetry']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
     hasLoaded: state.getIn(['main', 'hasLoaded']),

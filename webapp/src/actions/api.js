@@ -5,20 +5,23 @@ const apiUrl = `${window.location.origin}/v1/`;
 const handleUpdatesNeeded = (payload, state, dispatch) => {
   const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
   const updateAvailable = state.getIn(['main', 'versionInfo', 'updateAvailable']);
+  const updateUrl = state.getIn(['main', 'versionInfo', 'updateUrl']);
   const reloadAvailable = state.getIn(['main', 'versionInfo', 'reloadAvailable']);
   const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
+
   if (
     payload.update_required !== updateRequired ||
     payload.update_available !== updateAvailable ||
+    payload.update_url !== updateUrl ||
     payload.reload_required !== reloadRequired ||
     payload.reload_available !== reloadAvailable
   ) {
-    console.log('fire!');
     dispatch({
       type: types.SET_UPDATE_STATUS,
       payload: {
         updateRequired: payload.update_required,
         updateAvailable: payload.update_available,
+        updateUrl: payload.update_url,
         reloadRequired: payload.reload_required,
         reloadAvailable: payload.reload_available,
       },
@@ -45,7 +48,16 @@ const request = (options, data) => (dispatch, getState) => {
   ];
 
   const body = Object.assign({}, { token: getState().getIn(['main', 'token']) }, data);
-
+  const state = getState();
+  const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
+  const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
+  if (updateRequired || reloadRequired) {
+    return Promise.resolve({
+      ok: false,
+      update_required: updateRequired,
+      reload_required: reloadRequired,
+    });
+  }
   return dispatch({
     [CALL_API]: {
       endpoint: apiUrl + command,

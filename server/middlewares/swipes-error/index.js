@@ -5,7 +5,7 @@ const swipesErrorMiddleware = (err, req, res, next) => {
     return res.status(200).json({
       ok: false,
       error: err.message,
-      extra: err.extra,
+      ...err.extra,
     });
   }
 
