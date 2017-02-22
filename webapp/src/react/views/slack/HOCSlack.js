@@ -156,6 +156,7 @@ HOCSlack.propTypes = {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
+    openIn: state.getIn(['main', 'slackOpenIn']),
     slackUrl: state.getIn(['main', 'slackUrl']),
   };
 }

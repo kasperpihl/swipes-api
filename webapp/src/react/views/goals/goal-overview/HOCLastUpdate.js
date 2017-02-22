@@ -1,13 +1,36 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { map, list } from 'react-immutable-proptypes';
+import { map } from 'react-immutable-proptypes';
 import moment from 'moment';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import * as a from 'actions';
 /* global msgGen */
 
 import './styles/last-update.scss';
 
 class HOCLastUpdate extends PureComponent {
+  slackUserIdForUser(uId) {
+    switch (uId) {
+      case 'UB9BXJ1JB': // yana
+        return 'U02S15YG9';
+      case 'URU3EUPOE': // stefan
+        return 'U02H991H2';
+      case 'USTFL9YVE': // tihomir
+        return 'U0B119T8W';
+      case 'UVZWCJDHK': // kasper
+        return 'U02A53ZUL';
+      case 'UZTYMBVGO': // kristjan
+        return 'U09KBMX7Z';
+      default:
+        return 'USLACKBOT';
+    }
+  }
+  clickedAssign() {
+    const { handoff } = this.props;
+    const { openSlackIn, navSet } = this.props;
+    navSet('primary', 'slack');
+    openSlackIn(this.slackUserIdForUser(handoff.get('done_by')));
+  }
   renderMessage(handoff) {
     if (handoff.get('message') && handoff.get('message').length) {
       return (
@@ -16,10 +39,11 @@ class HOCLastUpdate extends PureComponent {
         </div>
       );
     }
+    return undefined;
   }
   renderImage(handoff) {
     return (
-      <HOCAssigning assignees={[handoff.get('done_by')]} />
+      <HOCAssigning delegate={this} assignees={[handoff.get('done_by')]} />
     );
   }
   renderLabel(handoff) {
@@ -58,10 +82,12 @@ class HOCLastUpdate extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
+const { func } = PropTypes;
 
 HOCLastUpdate.propTypes = {
   handoff: map.isRequired,
+  openSlackIn: func,
+  navSet: func,
 };
 
 function mapStateToProps() {
@@ -69,4 +95,6 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, {
+  openSlackIn: a.main.openSlackIn,
+  navSet: a.navigation.set,
 })(HOCLastUpdate);
