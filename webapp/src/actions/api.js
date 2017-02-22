@@ -27,7 +27,12 @@ const request = (options, data) => (dispatch, getState) => {
   return dispatch({
     [CALL_API]: {
       endpoint: apiUrl + command,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'sw-web-version': window.__VERSION__,
+        'sw-electron-version': window.ipcListener.version,
+        'sw-platform': window.ipcListener.platform,
+      },
       types: reqTypes,
       method: 'POST',
       body: JSON.stringify(body),

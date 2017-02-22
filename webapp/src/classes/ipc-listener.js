@@ -20,7 +20,10 @@ const toasts = {};
 
 export default class IpcListener {
   constructor(store) {
+    this.platform = 'web';
     if (isElectron) {
+      this.platform = window.process.platform;
+      this.version = window.process.env.npm_package_version;
       ipcRenderer.on('oauth-success', (event, arg) => {
         store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
       });
@@ -28,9 +31,9 @@ export default class IpcListener {
         alert(arg.message);
       });
 
-
       // Deal with windows maximize stuff
       const remWin = remote.getCurrentWindow();
+
       store.dispatch(main.setMaximized(remWin.isMaximized()));
       remWin.on('maximize', () => {
         store.dispatch(main.setMaximized(true));

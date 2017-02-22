@@ -29,8 +29,8 @@ window.msgGen = new MessageGenerator(store);
 
 class Root extends Component {
   componentDidMount() {
-    if (window.process && window.process.platform) {
-      document.getElementById('content').classList.add(`platform-${window.process.platform}`);
+    if (window.ipcListener.platform) {
+      document.getElementById('content').classList.add(`platform-${window.ipcListener.platform}`);
     }
   }
   render() {

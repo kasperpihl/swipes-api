@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
-// import SwipesAPIConnector from './classes/api-connector';
 import './react/global-styles/reset.scss';
 import './react/global-styles/app.scss';
 import './react/global-styles/transitions.scss';
@@ -11,7 +10,7 @@ const regeneratorRuntime = require('babel-runtime/regenerator'); // eslint-disab
 if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
-
+window.__VERSION__ = require('../package.json').version;
 // Include stylesheet (compile sass)
 
 let Page;
