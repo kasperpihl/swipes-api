@@ -155,7 +155,21 @@ class HOCFind extends Component {
                           .filter(s => services.getIn([s.get('service_id'), 'browse']))
                           .sort((a, b) => a.get('service_name').localeCompare(b.get('service_name')));
     const { selectedId } = this.state;
-
+    const serviceItems = myServices.map((s, i) => {
+      let title = services.getIn([s.get('service_id'), 'title']);
+      const curr = s.get('service_name');
+      const pre = myServices.getIn([i - 1, 'service_name']);
+      const next = myServices.getIn([i + 1, 'service_name']);
+      if (curr === pre || curr === next) {
+        title += ` (${s.get('show_name')})`;
+      }
+      return {
+        id: `browse-${s.get('service_name')}-${s.get('id')}`,
+        serviceName: s.get('service_name'),
+        accountId: s.get('id'),
+        title,
+      };
+    }).toArray();
     const props = {
       delegate: this,
       selectedId,
@@ -167,12 +181,7 @@ class HOCFind extends Component {
         ],
       }, {
         title: 'Browse',
-        items: myServices.map(s => ({
-          id: `browse-${s.get('service_name')}-${s.get('id')}`,
-          serviceName: s.get('service_name'),
-          accountId: s.get('id'),
-          title: services.getIn([s.get('service_id'), 'title']),
-        })).toArray(),
+        items: serviceItems,
       }, {
         title: 'Shortcuts',
         items: [

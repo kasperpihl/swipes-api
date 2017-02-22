@@ -50,7 +50,7 @@ const authData = (data, callback) => {
       const data = {
         auth_data,
         id: user.emailAddress,
-        show_name: user.displayName,
+        show_name: user.emailAddress,
       };
 
       return callback(null, data);
