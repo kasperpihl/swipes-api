@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$navbarH: 48px;
+$navbarH: 49px;
 
 // ======================================================
 // Block
@@ -11,7 +11,7 @@ $navbarH: 48px;
   $b: &;
   @include size(100%, $navbarH);
   @include flex(flex);
-  padding-top: 6px;
+  padding-top: 4px;
   border-bottom: 1px solid $deepBlue-20;
 }
 
@@ -36,7 +36,7 @@ $navbarH: 48px;
   $b: &;
 
   &__title {
-    @include font(11px, $blue-100, 15px, 500);
+    @include font(11px, $blue-100, 19px, 500);
     text-transform: uppercase;
 
     &:hover {
@@ -47,10 +47,10 @@ $navbarH: 48px;
   &__seperator {
     @include size(24px, $navbarH);
     @include flex();
-    transform: translateY(-1px);
+    margin: 0 3px;
 
     #{$b}__icon {
-      fill: $deepBlue-20;
+      @include svg-color($deepBlue-30);
     }
   }
 
