@@ -28,9 +28,8 @@
 	}
 
 	&__logo {
-		@include size(60px, 60px);
-		left: 30px; top: 30px;
-		position: absolute;
+		@include size(120px);
+		margin: 60px auto;
 
 		svg {
 			@include size();
@@ -42,7 +41,6 @@
 		font-size: 3em;
 		font-weight: 100;
 		text-align: center;
-	  padding-top: calc(272px / 3);
 	}
 
 	&__card {

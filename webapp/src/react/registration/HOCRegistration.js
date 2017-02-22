@@ -65,7 +65,7 @@ class HOCRegistration extends Component {
       <div className="sign">
         <div className="sign__wrapper">
           <div className="sign__logo">
-            <Icon png="SwipesIcon" />
+            <Icon svg="SwipesLogo" />
           </div>
           <div className="sign__headline">Welcome to your Swipes</div>
           <div className="sign__card">
