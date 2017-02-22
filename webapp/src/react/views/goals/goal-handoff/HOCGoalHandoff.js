@@ -19,6 +19,10 @@ class HOCGoalHandoff extends PureComponent {
     this.onChangeClick = this.onChangeClick.bind(this);
   }
   componentDidMount() {
+    const { openAssignees } = this.props;
+    if (openAssignees) {
+      this.onSelectAssignees(openAssignees.toJS(), fromJS([]));
+    }
   }
   onCompleteStep() {
     const { completeStep, goal, navPop } = this.props;
@@ -221,6 +225,7 @@ HOCGoalHandoff.propTypes = {
   selectStep: func,
   goalNotify: func,
   selectAssignees: func,
+  openAssignees: map,
   completeStep: func,
   goal: map,
   me: map,

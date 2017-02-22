@@ -43,12 +43,16 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onNotify() {
+  onNotify(e) {
     const { navPush, goal } = this.props;
     navPush({
       component: 'GoalHandoff',
       title: 'Notify',
       props: {
+        openAssignees: {
+          boundingRect: e.target.getBoundingClientRect(),
+          alignX: 'center',
+        },
         notify: true,
         goalId: goal.get('id'),
       },
@@ -183,6 +187,7 @@ HOCGoalOverview.propTypes = {
   goal: map,
   navPush: func,
   me: map,
+  navPop: func,
   target: string,
   archive: func,
   saveWay: func,
