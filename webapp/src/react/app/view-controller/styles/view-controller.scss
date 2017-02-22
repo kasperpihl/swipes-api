@@ -32,7 +32,7 @@ section.view-container {
   $b: &;
   @include size(100%);
   @include flex(column);
-  animation: fadeView 1s ease forwards;
+  animation: fadeView .8s ease forwards;
   will-change: width;
 }
 

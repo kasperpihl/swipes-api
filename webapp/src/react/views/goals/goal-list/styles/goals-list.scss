@@ -5,7 +5,7 @@
   $b: &;
   @include size(100%, auto);
   @include flex(column);
-  animation: fadeList .4s ease forwards;
+  animation: fadeList .6s ease forwards;
   z-index: 3;
 
   &__header {
