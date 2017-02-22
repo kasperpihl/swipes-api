@@ -1,4 +1,4 @@
-const notificationsSeenNotificationData = (req, res, next) => {
+const notificationsSeenTsNotificationData = (req, res, next) => {
   const {
     marked_at,
     last_marked,
@@ -15,6 +15,22 @@ const notificationsSeenNotificationData = (req, res, next) => {
   return next();
 };
 
+const notificationsSeenIdsNotificationData = (req, res, next) => {
+  const {
+    notification_ids,
+  } = res.locals;
+
+  const notificationData = {};
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = {
+    notification_ids,
+  };
+
+  return next();
+};
+
 export {
-  notificationsSeenNotificationData,
+  notificationsSeenTsNotificationData,
+  notificationsSeenIdsNotificationData,
 };

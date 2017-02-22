@@ -92,8 +92,14 @@ const way_archived = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const notifications_seen = [
-  notifications.notificationsSeenNotificationData,
+const notifications_seen_ts = [
+  notifications.notificationsSeenTsNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
+const notifications_seen_ids = [
+  notifications.notificationsSeenIdsNotificationData,
   notify.notifySingleUser,
   notify.notifyCommonRethinkdb,
 ];
@@ -122,7 +128,8 @@ export {
   milestone_archived,
   way_created,
   way_archived,
-  notifications_seen,
+  notifications_seen_ts,
+  notifications_seen_ids,
   xendo_user_signup,
   xendo_remove_service_from_user,
   xendo_add_service_to_user,
