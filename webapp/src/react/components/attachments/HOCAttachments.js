@@ -5,10 +5,9 @@ import { list, map } from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
-import Icon from 'Icon';
 import Button from 'Button';
-import Attachment from './Attachment';
 import TabBar from 'components/tab-bar/TabBar';
+import Attachment from './Attachment';
 import './styles/attachments';
 
 class HOCAttachments extends Component {
@@ -21,7 +20,20 @@ class HOCAttachments extends Component {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = { loading: false, tabIndex: (props.flags && props.flags.size || props.noFlagging) ? 0 : 1 };
+    this.state = {
+      loading: false,
+      tabIndex: ((props.flags && props.flags.size) || props.noFlagging) ? 0 : 1,
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.attachments.size !== this.props.attachments.size) {
+      if (this.state.tabIndex === 0) {
+        this.setState({ tabIndex: 1 });
+      }
+    }
+  }
+  componentDidUpdate(prevProps) {
+
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -67,7 +79,6 @@ class HOCAttachments extends Component {
   }
   onAdd(which, e) {
     const {
-      addLinkMenu,
       addToCollection,
       addNote,
       addToasty,
@@ -139,9 +150,8 @@ class HOCAttachments extends Component {
         return addNote(options, callback);
       case 'find':
         return openFind(this.context.target, callback);
-      default: {
-        return addLinkMenu(this.context.target, options, callback);
-      }
+      default:
+        return undefined;
     }
   }
   tabDidChange(el, index) {
@@ -224,16 +234,13 @@ class HOCAttachments extends Component {
         emptystate
       />);
     }
-
     if (enableFlagging || noFlagging) {
       return allAttachments;
     }
-
     if (tabIndex === 0) {
       return flaggedAttachments;
-    } else if (tabIndex === 1) {
-      return allAttachments;
     }
+    return allAttachments;
   }
   renderAddAttachments() {
     const { disableAdd } = this.props;
@@ -294,7 +301,6 @@ class HOCAttachments extends Component {
 
 const { func, object, bool, string } = PropTypes;
 HOCAttachments.propTypes = {
-  addLinkMenu: func,
   addNote: func,
   addToasty: func,
   addToCollection: func,
@@ -306,11 +312,11 @@ HOCAttachments.propTypes = {
   enableFlagging: bool,
   flags: list,
   goalId: string,
-  loadModal: func,
   openFind: func,
+  openSecondary: func,
+  loadModal: func,
   previewLink: func,
   removeFromCollection: func,
-  openSecondary: func,
   updateToasty: func,
   noFlagging: bool,
 };

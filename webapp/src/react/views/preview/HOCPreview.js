@@ -26,7 +26,7 @@ class HOCPreviewModal extends PureComponent {
     this.state = this.getDefaultState();
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
-    bindAll(this, ['onFileLoaded', 'onFileError']);
+    bindAll(this, ['onFileLoaded', 'onFileError', 'onAttach']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loadPreview !== this.props.loadPreview) {
@@ -54,6 +54,18 @@ class HOCPreviewModal extends PureComponent {
   }
   onFileLoaded() {
     this.setState({ fileLoading: false });
+  }
+  onAttach(e) {
+    const {
+      onAttach,
+      loadPreview,
+      attachToGoal,
+    } = this.props;
+    if (onAttach) {
+      onAttach(loadPreview.toJS(), e);
+    } else {
+      attachToGoal(loadPreview);
+    }
   }
   getDefaultState() {
     return {
@@ -149,7 +161,9 @@ class HOCPreviewModal extends PureComponent {
       </div>
     );
   }
-  renderHeader(header) {
+  renderHeader() {
+    const { preview } = this.state;
+    const { header } = preview || {};
     const { title, subtitle } = header || {};
 
     return <HOCHeaderTitle title={title} subtitle={subtitle} />;
@@ -230,10 +244,8 @@ class HOCPreviewModal extends PureComponent {
   }
 
   renderFooter() {
-    const { options } = this.props;
     const { preview } = this.state;
     let { buttons } = preview || {};
-    const custButtons = (options && options.buttons) || [];
 
     if (!buttons) {
       buttons = [];
@@ -249,15 +261,13 @@ class HOCPreviewModal extends PureComponent {
             onClick={this.onClickButtonCached(i)}
           />
         ))}
-        {custButtons.map((b, i) => (
-          <Button
-            key={`cust-${i}`}
-            text={b.title}
-            onClick={b.onClick}
-            className="preview-footer__btn"
-          />
-        ))}
-
+        <Button
+          key="attach"
+          text="Attach to Goal"
+          primary
+          onClick={this.onAttach}
+          className="preview-footer__btn"
+        />
       </div>
     );
   }
@@ -277,10 +287,10 @@ class HOCPreviewModal extends PureComponent {
 const { object, func, oneOfType, string } = PropTypes;
 
 HOCPreviewModal.propTypes = {
-  options: object,
   browser: func,
   request: func,
   loadPreview: oneOfType([object, string]),
+  onAttach: func,
 };
 HOCPreviewModal.contextTypes = {
   target: string,
@@ -292,5 +302,6 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   request: a.api.request,
+  attachToGoal: a.goals.attachToGoal,
   browser: a.main.browser,
 })(HOCPreviewModal);

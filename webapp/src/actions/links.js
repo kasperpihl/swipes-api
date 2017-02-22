@@ -95,41 +95,27 @@ export const openFind = (from, callback) => d => d(a.navigation.openSecondary(fr
   placeholder: 'Search across Dropbox, Asana, Slack...',
   title: 'Find',
   props: {
-    actionLabel: 'Attach to Goal',
-    actionCallback: (linkObj) => {
+    onAttach: (linkObj) => {
       callback('start', 'find');
       d(addLinkAndCallback('find', linkObj, callback));
     },
   },
 }));
 
-// ======================================================
-// Open add (and then add)
-// ======================================================
-export const addMenu = (from, options, callback) => (d) => {
-  d(a.main.contextMenu({
-    options,
-    component: AddAttachment,
-    props: {
-      callback: (type) => {
-        if (type === 'note') {
-          d(addNote(options, callback));
-        } else if (type === 'url') {
-          d(addURL(options, callback));
-        } else if (type === 'find') {
-          d(from, openFind(callback));
-        }
-      },
-    },
+export const openPreview = (from, props) => (d) => {
+  d(a.navigation.openSecondary(from, {
+    component: 'Preview',
+    title: 'Preview',
+    props,
   }));
 };
 
 // ======================================================
 // Preview attacment
 // ======================================================
-export const preview = (target, data, options) => (d) => {
+export const preview = (from, data) => (d) => {
   if (data.get('name') === 'swipes' && data.get('type') === 'note') {
-    d(a.navigation.openSecondary(target, {
+    d(a.navigation.openSecondary(from, {
       component: 'SideNote',
       title: 'Note',
       props: {
@@ -137,15 +123,10 @@ export const preview = (target, data, options) => (d) => {
       },
     }));
   } else if (data.get('name') === 'swipes' && data.get('type') === 'url') {
-    d(a.main.browser(target, data.get('id')));
+    d(a.main.browser(from, data.get('id')));
   } else {
-    d(a.navigation.openSecondary(target, {
-      component: 'Preview',
-      title: 'Preview',
-      props: {
-        loadPreview: data.get('shortUrl') || data.toJS(),
-        options,
-      },
+    d(openPreview(from, {
+      loadPreview: data.get('shortUrl') || data.toJS(),
     }));
   }
 };

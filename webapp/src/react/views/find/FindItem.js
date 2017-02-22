@@ -10,18 +10,14 @@ class FindItem extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate, props.index);
-    bindAll(this, ['onShare', 'onClick', 'onAction']);
-  }
-  onShare(e) {
-    e.stopPropagation();
-    this.callDelegate('findItemShare');
+    bindAll(this, ['onClick', 'onAttach']);
   }
   onClick() {
     this.callDelegate('findItemClick');
   }
-  onAction(e) {
+  onAttach(e) {
     e.stopPropagation();
-    this.callDelegate('findItemAction');
+    this.callDelegate('findItemAttach');
   }
   renderContent() {
     const {
@@ -51,18 +47,11 @@ class FindItem extends Component {
     );
   }
   renderActions() {
-    const { actionLabel } = this.props;
-    let customActionHtml;
-    if (actionLabel && actionLabel.length) {
-      customActionHtml = (
-        <div className="find-item__action" onClick={this.onAction}>
-          <Button small text={actionLabel} className="find-item__btn" />
-        </div>
-      );
-    }
     return (
       <div className="find-item__actions">
-        {customActionHtml}
+        <div className="find-item__action" onClick={this.onAttach}>
+          <Button small primary text="Attach to Goal" className="find-item__btn" />
+        </div>
       </div>
     );
   }

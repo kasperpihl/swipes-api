@@ -255,3 +255,8 @@ export const completeStep = (gId, handoff) => (d, getState) => {
     assignees,
   }));
 };
+
+
+export const attachToGoal = (shareObj, goalId) => (d, getState) => {
+
+};

@@ -52,17 +52,12 @@ class HOCFind extends Component {
     }
   }
   onPreviewLink(obj) {
-    const { preview, actionCallback } = this.props;
-    let buttons = [];
-    if (actionCallback) {
-      buttons = [{
-        title: 'Attach to Goal',
-        onClick: () => {
-          actionCallback(obj);
-        },
-      }];
-    }
-    preview(this.context.target, Map(obj), { buttons });
+    const { openPreview, onAttach, goalId } = this.props;
+    openPreview(this.context.target, {
+      loadPreview: obj,
+      onAttach,
+      goalId,
+    });
   }
   navbarLoadedInput(input) {
     this._input = input;
@@ -84,12 +79,15 @@ class HOCFind extends Component {
       accountId: entry.accountId,
     });
   }
-  findItemAction(i) {
-    const { searchResults, actionCallback } = this.props;
+  findItemAttach(i, e) {
+    const { searchResults, onAttach, attachToGoal } = this.props;
     const obj = searchResults.get(i);
-    if (obj && actionCallback) {
-      const { service, permission, title } = obj.toJS();
-      actionCallback({ service, permission, meta: { title } });
+    const { service, permission, title } = obj.toJS();
+    const shareObj = { service, permission, meta: { title } };
+    if (onAttach) {
+      onAttach(shareObj, e);
+    } else {
+      attachToGoal(shareObj);
     }
   }
   findSearch(query) {
@@ -136,7 +134,7 @@ class HOCFind extends Component {
     );
   }
   renderSearchResults() {
-    const { searchResults, searching, searchQuery, actionLabel } = this.props;
+    const { searchResults, searching, searchQuery } = this.props;
     if (!searchQuery && !searching) {
       return undefined;
     }
@@ -145,7 +143,6 @@ class HOCFind extends Component {
         <SearchResults
           results={searchResults}
           searching={searching}
-          actionLabel={actionLabel}
           searchQuery={searchQuery}
           delegate={this}
         />
@@ -221,10 +218,9 @@ class HOCFind extends Component {
 const { func, bool, string, object } = PropTypes;
 
 HOCFind.propTypes = {
-  actionCallback: func,
-  actionLabel: string,
+  onAttach: func,
   delegate: object,
-  preview: func,
+  openPreview: func,
   search: func,
   searching: bool,
   searchQuery: string,
@@ -248,7 +244,8 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCFind = connect(mapStateToProps, {
-  preview: actions.links.preview,
+  openPreview: actions.links.openPreview,
+  attachToGoal: actions.goals.attachToGoal,
   request: actions.api.request,
   search: actions.main.search,
 })(HOCFind);
