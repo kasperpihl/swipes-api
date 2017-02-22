@@ -64,7 +64,6 @@
 .browse-horizontal-scroller {
 
   .browse-section-list {
-    //animation: makeItWork .1s ease forwards;
 
     &:not(:last-child) {
       max-width: 200px;
@@ -110,19 +109,5 @@
       max-width: 200px;
       transition: max-width .3s .3s ease;
     }
-  }
-}
-
-@keyframes makeItWork {
-  0% {
-    transform: translateX(-100%);
-    z-index: 1;
-  }
-  99.9% {
-    z-index: 1;
-  }
-  100% {
-    transform: translateX(0px);
-    z-index: 2;
   }
 }
