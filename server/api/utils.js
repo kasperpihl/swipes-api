@@ -14,11 +14,17 @@ const camelCaseToUnderscore = (word) => {
 const sendResponse = (req, res) => {
   const {
     reload_available,
+    update_available,
+    update_url,
     returnObj = {},
   } = res.locals;
 
   if (reload_available) {
     returnObj.reload_available = reload_available;
+  }
+  if (update_available) {
+    returnObj.update_available = update_available;
+    returnObj.update_url = update_url;
   }
 
   return res.status(200).json({ ok: true, ...returnObj });

@@ -5,6 +5,12 @@ import {
   SwipesError,
 } from './swipes-error';
 
+const newestElectronVersion = '0.0.1';
+const electronUrls = {
+  darwin: 'https://macurl.com',
+  win32: 'https://winurl.com',
+};
+
 const parseVersionString = (version) => {
   const x = version.split('.');
   const major = parseInt(x[0], 10) || 0;
@@ -18,9 +24,9 @@ const parseVersionString = (version) => {
   };
 };
 const checkForUpdates = (req, res, next) => {
-  // const electronVersion = req.header('sw-electron-version');
+  const electronVersion = req.header('sw-electron-version');
   const webVersion = req.header('sw-web-version');
-  // const platform = req.header('sw-platform');
+  const platform = req.header('sw-platform');
   if (webVersion) {
     const latest = parseVersionString(version);
     const running = parseVersionString(webVersion);
@@ -32,6 +38,21 @@ const checkForUpdates = (req, res, next) => {
     }
     if (latest.minor > running.minor || latest.patch > running.patch) {
       res.locals.reload_available = version;
+    }
+  }
+  if (electronVersion) {
+    const latest = parseVersionString(newestElectronVersion);
+    const running = parseVersionString(electronVersion);
+    if (latest.major > running.major) {
+      return next(new SwipesError('update_required', {
+        update_required: true,
+        update_available: version,
+        update_url: electronUrls[platform],
+      }));
+    }
+    if (latest.minor > running.minor || latest.patch > running.patch) {
+      res.locals.update_available = version;
+      res.locals.update_url = electronUrls[platform];
     }
   }
 

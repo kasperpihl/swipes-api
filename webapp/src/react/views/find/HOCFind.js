@@ -182,7 +182,7 @@ class HOCFind extends Component {
       }, {
         title: 'Browse',
         items: serviceItems,
-      }, {
+      }, /* , {
         title: 'Shortcuts',
         items: [
           { id: '1', title: 'Brand Guidelines', leftIcon: 'Note' },
@@ -194,7 +194,7 @@ class HOCFind extends Component {
           { id: '7', title: 'Kasper', leftIcon: 'Person' },
           { id: '8', title: 'Journal', leftIcon: 'Note' },
         ],
-      }],
+      }*/],
     };
     return <BrowseSectionList {...props} />;
   }
