@@ -18,19 +18,21 @@ const parseVersionString = (version) => {
   };
 };
 const checkForUpdates = (req, res, next) => {
-  const electronVersion = req.header('sw-electron-version');
+  // const electronVersion = req.header('sw-electron-version');
   const webVersion = req.header('sw-web-version');
-  const platform = req.header('sw-platform');
-
-  if (electronVersion && webVersion && platform) {
+  // const platform = req.header('sw-platform');
+  if (webVersion) {
     const latest = parseVersionString(version);
     const running = parseVersionString(webVersion);
-
     if (latest.major > running.major) {
-      return next(new SwipesError({ reload_required: true }));
+      const error = new SwipesError('reload_required', {
+        reload_required: true,
+        reload_available: version,
+      });
+      return next(error);
     }
     if (latest.minor > running.minor || latest.patch > running.patch) {
-      res.locals.reload_available = true;
+      res.locals.reload_available = version;
     }
   }
 

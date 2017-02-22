@@ -1,5 +1,6 @@
 // Main
 export const SET_STATUS = 'SET_STATUS';
+export const SET_UPDATE_STATUS = 'SET_UPDATE_STATUS';
 export const SET_MAXIMIZED = 'SET_MAXIMIZED';
 export const SET_FULLSCREEN = 'SET_FULLSCREEN';
 export const LOGOUT = 'LOGOUT';

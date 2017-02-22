@@ -8,6 +8,9 @@ const initialState = fromJS({
   cache: {},
   services: {},
   milestones: {},
+  versionInfo: {
+
+  },
   notifications: [],
   ways: {},
   hasLoaded: false,
@@ -55,6 +58,9 @@ export default function main(state = initialState, action) {
       return state.withMutations(ns =>
         ns.set('hasLoaded', hasLoaded).set('status', payload.status).set('nextRetry', payload.nextRetry),
       );
+    }
+    case types.SET_UPDATE_STATUS: {
+      return state.mergeIn(['versionInfo'], payload);
     }
     case types.SET_MAXIMIZED: {
       return state.set('isMaximized', payload.toggle);
