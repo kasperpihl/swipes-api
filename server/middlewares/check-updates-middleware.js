@@ -25,11 +25,10 @@ const checkForUpdates = (req, res, next) => {
     const latest = parseVersionString(version);
     const running = parseVersionString(webVersion);
     if (latest.major > running.major) {
-      const error = new SwipesError('reload_required', {
+      return next(new SwipesError('reload_required', {
         reload_required: true,
         reload_available: version,
-      });
-      return next(error);
+      }));
     }
     if (latest.minor > running.minor || latest.patch > running.patch) {
       res.locals.reload_available = version;
