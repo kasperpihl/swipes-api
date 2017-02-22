@@ -15,7 +15,7 @@ const goalsGetSingle = (req, res, next) => {
       return next(err);
     });
 };
-const goalsNotificationData = (req, res, next) => {
+const goalsCreatedNotificationData = (req, res, next) => {
   const {
     user_id,
     goal,
@@ -24,6 +24,8 @@ const goalsNotificationData = (req, res, next) => {
   const notificationData = {
     done_by: user_id,
     goal_id: goal.id,
+    flags: goal.history[0].flags,
+    message: goal.history[0].message,
   };
 
   res.locals.notificationData = notificationData;
@@ -31,7 +33,80 @@ const goalsNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsCompletedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    goal,
+  } = res.locals;
 
+  const notificationData = {
+    done_by: user_id,
+    goal_id: goal.id,
+    flags: goal.status.flags,
+    message: goal.status.handoff_message,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = goal;
+
+  return next();
+};
+const goalsStepsInterseptUsers = (req, res, next) => {
+  const {
+    goal,
+    interceptUsers = [],
+  } = res.locals;
+  let additionalInterceptUsers = [];
+
+  for (const [k, v] of Object.entries(goal.steps)) {
+    additionalInterceptUsers = additionalInterceptUsers.concat(v.assignees);
+  }
+
+  res.locals.interceptUsers = new Set([...additionalInterceptUsers, ...interceptUsers]);
+
+  return next();
+};
+const goalsNextStepInterseptUsers = (req, res, next) => {
+  const {
+    goal,
+    next_step_id,
+    interceptNextStepUsers = [],
+  } = res.locals;
+  const nextStep = goal.steps[next_step_id];
+  const additionalInterceptNextStepUsers = [];
+
+  if (nextStep.assignees) {
+    nextStep.assignees.forEach((assignee) => {
+      additionalInterceptNextStepUsers.push(assignee);
+    });
+  }
+
+  res.locals.interceptNextStepUsers = new Set([
+    ...additionalInterceptNextStepUsers,
+    ...interceptNextStepUsers,
+  ]);
+
+  return next();
+};
+const goalsHistoryInterseptUsers = (req, res, next) => {
+  const {
+    goal,
+    interceptUsers = [],
+  } = res.locals;
+  const additionalInterceptUsers = [];
+
+  goal.history.forEach((item) => {
+    if (item.assignees && item.assignees.length > 0) {
+      item.assignees.forEach((assignee) => {
+        additionalInterceptUsers.push(assignee);
+      });
+    }
+  });
+
+  res.locals.interceptUsers = new Set([...additionalInterceptUsers, ...interceptUsers]);
+
+  return next();
+};
 const goalsArchivedNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -49,7 +124,6 @@ const goalsArchivedNotificationData = (req, res, next) => {
 
   return next();
 };
-
 const goalsMilestoneAddedNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -67,7 +141,6 @@ const goalsMilestoneAddedNotificationData = (req, res, next) => {
 
   return next();
 };
-
 const goalsMilestoneRemovedNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -84,21 +157,23 @@ const goalsMilestoneRemovedNotificationData = (req, res, next) => {
 
   return next();
 };
-
 const goalsStepCompletedNotificationData = (req, res, next) => {
   const {
     user_id,
     goal,
     step_id,
+    next_step_id,
     progress,
   } = res.locals;
 
   const notificationData = {
     step_id,
     progress,
+    next_step_id,
     done_by: user_id,
     goal_id: goal.id,
-    goal_status: goal.status,
+    flags: goal.status.flags,
+    message: goal.status.handoff_message,
   };
 
   res.locals.notificationData = notificationData;
@@ -106,26 +181,6 @@ const goalsStepCompletedNotificationData = (req, res, next) => {
 
   return next();
 };
-
-const goalsStepGotActiveNotificationData = (req, res, next) => {
-  const {
-    user_id,
-    goal,
-    step_id,
-  } = res.locals;
-
-  const notificationData = {
-    step_id,
-    goal_id: goal.id,
-    done_by: user_id,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
-
-  return next();
-};
-
 const goalsNotifyNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -151,10 +206,13 @@ const goalsNotifyNotificationData = (req, res, next) => {
 
 export {
   goalsGetSingle,
-  goalsNotificationData,
+  goalsCreatedNotificationData,
+  goalsCompletedNotificationData,
+  goalsStepsInterseptUsers,
+  goalsNextStepInterseptUsers,
+  goalsHistoryInterseptUsers,
   goalsArchivedNotificationData,
   goalsStepCompletedNotificationData,
-  goalsStepGotActiveNotificationData,
   goalsMilestoneAddedNotificationData,
   goalsMilestoneRemovedNotificationData,
   goalsNotifyNotificationData,

@@ -52,9 +52,26 @@ const dbGoalsGetSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbGoalsPushToHistorySingle = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    historyItem: object.require(),
+  }),
+], (err, { goal_id, historyItem }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsPushToHistorySingle: ${err}`);
+  }
+
+  const q = r.table('goals').get(goal_id).update({
+    history: r.row('history').append(historyItem),
+  });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
+  dbGoalsPushToHistorySingle,
 };

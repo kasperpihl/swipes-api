@@ -25,7 +25,16 @@ const xendoWrapper = (middlewares) => {
 };
 const goal_created = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsNotificationData,
+  goals.goalsCreatedNotificationData,
+  goals.goalsStepsInterseptUsers,
+  notify.notifyAllInCompany,
+]);
+
+const goal_completed = notifyWrapper([
+  goals.goalsGetSingle,
+  goals.goalsCompletedNotificationData,
+  goals.goalsStepsInterseptUsers,
+  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
@@ -55,13 +64,8 @@ const goal_notify = notifyWrapper([
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsStepCompletedNotificationData,
-  notify.notifyAllInCompany,
-]);
-
-const step_got_active = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsStepGotActiveNotificationData,
-  notify.notifyAllInCurrentStep,
+  goals.goalsNextStepInterseptUsers,
+  notify.notifyAllInGoal,
 ]);
 
 const milestone_created = notifyWrapper([
@@ -108,12 +112,12 @@ const xendo_add_service_to_user = xendoWrapper([
 
 export {
   goal_created,
+  goal_completed,
   goal_archived,
   goal_milestone_added,
   goal_milestone_removed,
   goal_notify,
   step_completed,
-  step_got_active,
   milestone_created,
   milestone_archived,
   way_created,

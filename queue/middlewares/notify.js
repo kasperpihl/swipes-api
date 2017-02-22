@@ -45,6 +45,28 @@ const notifyAllInCompany = (req, res, next) => {
 
   return next();
 };
+const notifyAllInGoal = (req, res, next) => {
+  const {
+    goal,
+    user_id,
+  } = res.locals;
+
+  const usersIds = [];
+
+  for (const [k, v] of Object.entries(goal.steps)) {
+    v.assignees.forEach((assignee) => {
+      if (user_id !== assignee) {
+        usersIds.push(assignee);
+      }
+    });
+  }
+
+  const uniqueUsersToNotify = Array.from(new Set(usersIds));
+
+  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
+
+  return next();
+};
 const notifyAllInCurrentStep = (req, res, next) => {
   const {
     goal,
@@ -95,22 +117,34 @@ const notifyCommonRethinkdb = (req, res, next) => {
 };
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
-    user_id,
     event_type,
     uniqueUsersToNotify,
     notificationData,
+    interceptUsers,
+    interceptNextStepUsers,
   } = res.locals;
   const notifications = [];
 
   uniqueUsersToNotify.forEach((userId) => {
-    notifications.push({
-      data: notificationData,
+    const notification = {
+      // because mutation is the root of all evil
+      // we are mutating the data object few lines down
+      data: { ...notificationData },
       type: event_type,
       user_id: userId,
       seen: false,
       ts: r.now(),
-      me: userId === user_id,
-    });
+    };
+
+    if (interceptUsers) {
+      notification.data.includes_me = interceptUsers.has(userId);
+    }
+
+    if (interceptNextStepUsers) {
+      notification.data.me_is_next = interceptNextStepUsers.has(userId);
+    }
+
+    notifications.push(notification);
   });
 
   dbInsertMultipleNotifications({ notifications })
@@ -146,6 +180,7 @@ export {
   notifyAllInCompany,
   notifyCommonRethinkdb,
   notifyInsertMultipleNotifications,
+  notifyAllInGoal,
   notifyAllInCurrentStep,
   notifyMultipleUsers,
 };
