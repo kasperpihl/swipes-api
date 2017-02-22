@@ -136,6 +136,10 @@
 
   &:hover {
 
+    #{$b}__title {
+      @include font($c: $blue-100);
+    }
+
     #{$b}__svg {
       @include svg-color($deepBlue-80 !important);
     }

@@ -52,7 +52,7 @@ class BrowseSectionList extends Component {
       <div className="browse-section" key={i}>
         <div className="browse-section__header">
           <div className="browse-section__title">{s.title}</div>
-          {i === 0 ? threeDots : undefined}
+          {/* {i === 0 ? threeDots : undefined} */}
         </div>
         {this.renderSectionItems(s.items)}
       </div>
