@@ -10,7 +10,8 @@ $imgContHeight: 54px;
   @include flex(center, flex-start);
   min-height: $imgContHeight;
   position: relative;
-  padding: 12px 21px;
+  padding: 15px 21px;
+  padding-bottom: 9px;
   padding-left: 0px;
   border-bottom: 1px solid $deepBlue-10;
 
@@ -39,7 +40,7 @@ $imgContHeight: 54px;
   }
 
   &__title {
-    @include font(16px, $deepBlue-90, 400);
+    @include font(15px, $deepBlue-100, 400);
     width: calc(100% - 50px);
     transition: color .1s ease;
     white-space: nowrap;
@@ -56,7 +57,7 @@ $imgContHeight: 54px;
 
   &__label {
     @include size(100%, 20px);
-    @include font(12px, $deepBlue-50, 400, 20px);
+    @include font(12px, $deepBlue-30, 400, 20px);
     margin-top: 3px;
     letter-spacing: .5px;
     transition: .25s ease;

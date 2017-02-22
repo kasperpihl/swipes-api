@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
-$h: 85px;
+$h: 105px;
 
 // ======================================================
 // Block
@@ -9,7 +9,8 @@ $h: 85px;
 
 .header-title {
   @include size(100%, $h);
-  @include flex(center, flex-start);
+  @include flexContainer('row', left, top);
+  padding-top: 21px;
 }
 
 // ======================================================
@@ -21,7 +22,7 @@ $h: 85px;
 
   &__title {
     @include size(100%, auto);
-    @include font(30px, $deepBlue-100);
+    @include font(30px, $deepBlue-100, 39px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

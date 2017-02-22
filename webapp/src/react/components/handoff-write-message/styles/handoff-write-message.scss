@@ -7,11 +7,11 @@
   margin-top: 50px;
 
   &__image {
-    padding-right: 25px;
+    padding-right: 15px;
 
     img {
-      @include size(30px);
-      border-radius: 6px;
+      @include size(24px);
+      border-radius: 50%;
     }
   }
 

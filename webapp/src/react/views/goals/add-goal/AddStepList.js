@@ -56,6 +56,7 @@ class AddStepList extends Component {
             assignees={step.get('assignees').toJS()}
             index={step.get('id')}
             delegate={delegate}
+            rounded
           />
         </div>
       );

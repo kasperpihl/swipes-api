@@ -182,7 +182,7 @@ $sectionHeight: 52px;
 
       img {
         @include size();
-        border-radius: 6px;
+        border-radius: 50%;
       }
     }
 
@@ -259,7 +259,7 @@ $sectionHeight: 52px;
       @include flex(none);
   		@include border-radius(0px, 0px, 6px, 6px);
   		box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
-  		transform: translateY(-52px);
+  		transform: translateY(-41px);
   		transition: .25s ease-in-out;
     }
 

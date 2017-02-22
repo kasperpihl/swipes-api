@@ -17,7 +17,10 @@ $compSize: 30px;
   &__profile {
     @include size(var(--assigneesSize, $compSize));
     @include flex(none);
+    border: 2px solid white;
+    box-sizing: content-box;
     border-radius: 6px;
+    margin-left: -9px;
 
     &:not(:last-child) {
       margin-right: 3px;
@@ -40,9 +43,14 @@ $compSize: 30px;
 
     &--more {
       @include flex();
-      @include font(12px, $deepBlue-70, 18px, 500);
-      border: 1px solid $deepBlue-10;
-      background-color: $bg;
+      @include font(12px, $deepBlue-60, 18px, bold);
+      background-color: $deepBlue-10;
+    }
+
+    @for $i from 1 through 100 {
+      &:nth-child(#{$i}) {
+        z-index: 100 - $i;
+      }
     }
   }
 

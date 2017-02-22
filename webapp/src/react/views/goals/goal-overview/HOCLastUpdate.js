@@ -42,8 +42,9 @@ class HOCLastUpdate extends PureComponent {
     return undefined;
   }
   renderImage(handoff) {
+    console.log('refresh');
     return (
-      <HOCAssigning delegate={this} assignees={[handoff.get('done_by')]} />
+      <HOCAssigning delegate={this} assignees={[handoff.get('done_by')]} rounded size={24} />
     );
   }
   renderLabel(handoff) {
@@ -73,11 +74,11 @@ class HOCLastUpdate extends PureComponent {
 
     return (
       <div className="last-update">
-        <div className="last-update__header">
-          {this.renderImage(handoff)}
+        {this.renderImage(handoff)}
+        <div className="last-update__content">
+          {this.renderMessage(handoff)}
           {this.renderLabel(handoff)}
         </div>
-        {this.renderMessage(handoff)}
       </div>
     );
   }

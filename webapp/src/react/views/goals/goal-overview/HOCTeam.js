@@ -18,6 +18,8 @@ class HOCTeam extends PureComponent {
       <HOCAssigning
         assignees={assignees}
         maxImages={assignees.size}
+        rounded
+        size={24}
       />
     );
   }

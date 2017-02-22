@@ -75,7 +75,7 @@
 
   &__title {
     @include size(100%, auto);
-    @include font(18px, $deepBlue-100, 24px);
+    @include font(15px, $deepBlue-100, 24px);
     max-width: 450px;
     padding-right: 3px;
 
@@ -104,8 +104,8 @@
   }
 
   &__subtitle {
-    @include font(12px, $deepBlue-40, 15px, 500);
-    margin-top: 12px;
+    @include font(12px, $deepBlue-40, 18px, 500);
+    margin-top: 3px;
   }
 
   &__icon {

@@ -6,10 +6,9 @@
 // ======================================================
 
 .attachment {
-  @include size(100%, 60px);
+  @include size(100%, 55px);
   @include flex(center, flex-start);
-  border-top: 1px solid $deepBlue-10;
-  border-bottom: 1px solid $deepBlue-10;
+  border-top: 1px solid darken($deepBlue-5, 3%);
 }
 
 // ======================================================
@@ -46,7 +45,7 @@
   &__icon {
     @include size(24px);
     @include flex(none);
-    margin-right: 12px;
+    margin-right: 15px;
 
     #{$b}__svg {
       @include svg-color($deepBlue-20);
@@ -80,7 +79,7 @@
     transition: .15s ease;
 
     #{$b}__svg {
-      @include svg-color($deepBlue-60);
+      @include svg-color($deepBlue-50);
       transition: .15s ease;
     }
 
@@ -132,19 +131,6 @@
     }
   }
 }
-
-// ======================================================
-// Targeting
-// ======================================================
-
-.attachment {
-  $b: &;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid darken($deepBlue-5, 3%);
-  }
-}
-
 
 // ======================================================
 // Hover

@@ -6,6 +6,7 @@ import { List } from 'immutable';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import Button from 'Button';
+import Icon from 'Icon';
 import TabBar from 'components/tab-bar/TabBar';
 import Attachment from './Attachment';
 import './styles/attachments';
@@ -250,6 +251,9 @@ class HOCAttachments extends Component {
 
     return (
       <div className="attachments__add-list">
+        <div className="attachments__add-icon">
+          <Icon svg="Plus" className="attachments__svg" />
+        </div>
         <button
           className="attachments__add-item"
           onClick={this.onAddCached('url')}

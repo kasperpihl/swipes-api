@@ -21,7 +21,7 @@ class HandoffHeader extends Component {
   renderAssignees(assignees, id) {
     return (
       <div className="handoff-header__assignees">
-        <HOCAssigning index={id} assignees={assignees} maxImages={1} delegate={this} />
+        <HOCAssigning index={id} assignees={assignees} maxImages={1} delegate={this} rounded size={24} />
       </div>
     );
   }

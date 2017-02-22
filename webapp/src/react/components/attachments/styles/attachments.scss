@@ -21,16 +21,26 @@
     padding-left: 6px;
   }
 
+  &__add-icon {
+    @include size(24px);
+    margin-right: 15px;
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($blue-100);
+  }
+
   &__add-list {
-    @include size(100%, 60px);
+    @include size(100%, 54px);
     @include flex(center, flex-start);
     background-color: $bg;
-    padding-left: 33px;
+    border-top: 1px solid darken($deepBlue-5, 3%);
   }
 
   &__add-item {
-    padding: 0px 20px 6px 6px;
-    @include font(12px, $blue-100, 15px, 500);
+    padding: 0px 18px 0px 6px;
+    @include font(12px, $blue-100, 18px, 500);
 
     &:hover, &:focus {
       text-decoration: underline;

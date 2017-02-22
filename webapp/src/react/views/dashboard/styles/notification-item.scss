@@ -7,18 +7,18 @@
 
 .notification {
   $b: &;
-  $flexIgnoreList: #{$b}__icon, #{$b}__timestamp;
+  $flexIgnoreList: '#{$b}__icon', '#{$b}__timeago';
 
   @include size(100%, auto);
   @include heightSpecifications(66px, initial);
   @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
-  padding: 18px 9px;
+  padding: 15px 9px;
   border-top: 1px solid $deepBlue-5;
 }
 
 .notif-attachment {
   $b: &;
-  $flexIgnoreList: #{$b}__icon;
+  $flexIgnoreList: '#{$b}__icon';
 
   @include size(100%, 24px);
   @include flexContainer('row', left, center, $flexIgnoreList);
@@ -77,12 +77,10 @@
 
   &__attachments {
     @include size(100%, auto);
-    padding-top: 7px;
-    margin-top: 7px;
-    border-top: 1px solid $deepBlue-10;
+    padding-top: 9px;
 
     &:empty {
-      border: none;
+      display: none;
     }
   }
 }
@@ -116,6 +114,7 @@
     @include size(100%, auto);
     @include font(12px, $blue-100, 18px, 500);
     padding-left: 6px;
+    word-break: break-all;
     transition: .15s ease;
     white-space: nowrap;
     overflow: hidden;
