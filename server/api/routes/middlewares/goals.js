@@ -439,7 +439,7 @@ const goalsNotify = valLocals('goalsNotify', {
     message = '',
   } = res.locals;
 
-  const historyItem = [{
+  const historyItem = {
     flags,
     message,
     assignees,
@@ -448,7 +448,7 @@ const goalsNotify = valLocals('goalsNotify', {
     to: current_step_id,
     done_by: user_id,
     done_at: r.now(),
-  }];
+  };
 
   dbGoalsPushToHistorySingle({ goal_id, historyItem })
     .then(() => {
