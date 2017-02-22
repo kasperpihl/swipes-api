@@ -1,8 +1,12 @@
+import AirbnbLogo from './svgs/airbnb-logo.svg';
+import AsanaLogo from './svgs/asana-logo.svg';
+import DriveLogo from './svgs/drive-logo.svg';
+import DropboxLogo from './svgs/dropbox-logo.svg';
+import GmailLogo from './svgs/gmail-logo.svg';
+import JiraLogo from './svgs/jira-logo.svg';
+import SlackLogo from './svgs/slack-logo.svg';
 import SwipesIcon from './pngs/swipes-icon.png';
 import SwipesLogo from './svgs/swipes-logo.svg';
-import DropboxLogo from './svgs/dropbox-logo.svg';
-import SlackLogo from './svgs/slack-logo.svg';
-import AirbnbLogo from './svgs/airbnb-logo.svg';
 
 import AddPerson from './svgs/add-person.svg';
 import AddToCollection from './svgs/add-to-collection.svg';
@@ -101,10 +105,14 @@ import LoginIconTwo from './svgs/login-background-2.svg';
 
 export {
   SwipesIcon, /* SwipesLogo old, replace */
-  SwipesLogo,
-  DropboxLogo,
-  SlackLogo,
   AirbnbLogo,
+  AsanaLogo,
+  DriveLogo,
+  DropboxLogo,
+  GmailLogo,
+  JiraLogo,
+  SlackLogo,
+  SwipesLogo,
 
   AddPerson,
   AddToCollection,

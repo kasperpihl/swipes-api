@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
+  <defs>
+    <radialGradient id="a" cx="21990.24607" cy="10931.66911" r="7.53165" gradientTransform="translate(-10920.84983 22006.58514) rotate(-90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fd9932"/>
+      <stop offset="0.5" stop-color="#f95d8e"/>
+      <stop offset="1" stop-color="#f95457"/>
+    </radialGradient>
+    <radialGradient id="b" cx="7856.51543" cy="22100.57125" r="7.53165" gradientTransform="translate(7873.42593 22113.18054) rotate(180)" xlink:href="#a"/>
+    <radialGradient id="c" cx="1431.34373" cy="-579.92846" r="7.53165" gradientTransform="translate(-1419.6828 591.31916)" xlink:href="#a"/>
+  </defs>
+  <title>Asset 138</title>
+  <g>
+    <rect width="24" height="24" fill="none"/>
+    <g>
+      <circle cx="7.42857" cy="16" r="3.42857" transform="translate(-9.13793 9.93908) rotate(-45)" fill="url(#a)"/>
+      <circle cx="16.57143" cy="16" r="3.42857" transform="translate(-6.46005 16.40406) rotate(-45)" fill="url(#b)"/>
+      <circle cx="12" cy="8" r="3.42857" fill="url(#c)"/>
+    </g>
+  </g>
+</svg>
