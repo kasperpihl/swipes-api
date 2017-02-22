@@ -2,7 +2,29 @@ import { CALL_API } from 'redux-api-middleware';
 import * as types from 'constants';
 
 const apiUrl = `${window.location.origin}/v1/`;
-
+const handleUpdatesNeeded = (payload, state, dispatch) => {
+  const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
+  const updateAvailable = state.getIn(['main', 'versionInfo', 'updateAvailable']);
+  const reloadAvailable = state.getIn(['main', 'versionInfo', 'reloadAvailable']);
+  const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
+  if (
+    payload.update_required !== updateRequired ||
+    payload.update_available !== updateAvailable ||
+    payload.reload_required !== reloadRequired ||
+    payload.reload_available !== reloadAvailable
+  ) {
+    console.log('fire!');
+    dispatch({
+      type: types.SET_UPDATE_STATUS,
+      payload: {
+        updateRequired: payload.update_required,
+        updateAvailable: payload.update_available,
+        reloadRequired: payload.reload_required,
+        reloadAvailable: payload.reload_available,
+      },
+    });
+  }
+};
 const request = (options, data) => (dispatch, getState) => {
     // K_TODO: Validate types, check if types is second parameter etc.
   let command;
@@ -27,12 +49,19 @@ const request = (options, data) => (dispatch, getState) => {
   return dispatch({
     [CALL_API]: {
       endpoint: apiUrl + command,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'sw-web-version': window.__VERSION__,
+        'sw-electron-version': window.ipcListener.version,
+        'sw-platform': window.ipcListener.platform,
+      },
       types: reqTypes,
       method: 'POST',
       body: JSON.stringify(body),
     },
   }).then((res) => {
+    const state = getState();
+
     command = options.resultAction || command;
       // Dispatch an action with the command as type
     if (res.error) {
@@ -45,6 +74,8 @@ const request = (options, data) => (dispatch, getState) => {
       window.location.replace('/');
       return Promise.reject({ ok: false });
     }
+    handleUpdatesNeeded(res.payload, state, dispatch);
+
     dispatch({
       type: command,
       payload: res.payload,

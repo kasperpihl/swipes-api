@@ -1,14 +1,13 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
-var nodeModules = {};
+const nodeModules = {};
 fs.readdirSync('node_modules')
-  .filter(function(x) {
+  .filter((x) => {
     return ['.bin'].indexOf(x) === -1;
   })
-  .forEach(function(mod) {
-    nodeModules[mod] = 'commonjs ' + mod;
+  .forEach((mod) => {
+    nodeModules[mod] = `commonjs ${mod}`;
   });
 
 module.exports = {
@@ -18,16 +17,20 @@ module.exports = {
   target: 'node',
   externals: nodeModules,
   output: {
-      path: path.join(__dirname, 'dist'),
-      filename: "index.js"
+    path: path.join(__dirname, 'dist'),
+    filename: 'index.js',
   },
   module: {
     loaders: [
       {
+        test: /\.json$/,
+        loader: 'json',
+      },
+      {
         test: /\.js$/,
-        loaders: [ 'babel-loader', 'eslint-loader' ],
-        exclude: /node_modules/
-      }
-    ]
-  }
+        loaders: ['babel-loader', 'eslint-loader'],
+        exclude: /node_modules/,
+      },
+    ],
+  },
 };

@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Swipes Webapp",
   "author": "Swipes Team",
   "license": "MIT",
@@ -83,7 +83,7 @@
     "style-loader": "^0.13.1",
     "svg-react-loader": "^0.4.0-beta.2",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.0",
+    "webpack": "^1.14.0",
     "webpack-dev-server": "^1.14.1"
   },
   "engines": {

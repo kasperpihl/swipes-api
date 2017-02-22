@@ -1,10 +1,10 @@
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
-// import SwipesAPIConnector from './classes/api-connector';
 import './react/global-styles/reset.scss';
 import './react/global-styles/app.scss';
 import './react/global-styles/transitions.scss';
+import { version } from '../package.json';
 
 const getURLParameter = name => decodeURIComponent((new  RegExp(`[?|&]${name}=` + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null; // eslint-disable-line
 const regeneratorRuntime = require('babel-runtime/regenerator'); // eslint-disable-line
@@ -12,6 +12,7 @@ if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
 
+window.__VERSION__ = version;
 // Include stylesheet (compile sass)
 
 let Page;

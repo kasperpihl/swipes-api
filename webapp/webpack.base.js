@@ -3,7 +3,6 @@ var webpack = require('webpack');
 var path = require('path');
 
 var NODE_ENV = process.env.NODE_ENV;
-
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const apiRedirect = {
@@ -57,7 +56,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'statics/jira-auth.html',
       chunks: ['vendor', 'jira'],
-      filename: 'jira-auth.html',
+      filename: 'jira-auth.html'
     }),
     new webpack.ProvidePlugin({
       "PDFJS": "pdfjs-dist",

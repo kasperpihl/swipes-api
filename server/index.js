@@ -7,6 +7,7 @@ import winston from 'winston';
 import expressWinston from 'express-winston';
 import websocketStart from './websocket';
 import restAuth from './middlewares/jwt-auth-middleware';
+import checkForUpdates from './middlewares/check-updates-middleware';
 import handleJsonError from './middlewares/errors';
 import {
   swipesErrorMiddleware,
@@ -70,6 +71,8 @@ app.use('/v1', (req, res, next) => {
 });
 // No authed routes goes here
 app.use('/v1', routes.v1NotAuthed);
+// Checking for updates
+app.use('/v1', checkForUpdates);
 // Validation of user's token
 app.use('/v1', restAuth);
 // Authed routes goes here

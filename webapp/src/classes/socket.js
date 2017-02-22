@@ -50,7 +50,6 @@ export default class Socket {
     this.changeStatus('connecting');
 
     ws.onopen = () => {
-      this.reconnect_attempts = 0;
       this.socket = true;
       this._pingTimer = setInterval(() => {
         this.sendPing(ws);
@@ -58,6 +57,7 @@ export default class Socket {
       this.store.dispatch(a.api.request('rtm.start')).then((res) => {
         this.isConnecting = false;
         if (res && res.ok) {
+          this.reconnect_attempts = 0;
           this.changeStatus('online');
         } else {
           ws.close();
