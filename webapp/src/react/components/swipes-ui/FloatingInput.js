@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
+import Icon from 'Icon';
 import './styles/floating-input.scss';
 
 class FloatingInput extends Component {
@@ -8,9 +9,10 @@ class FloatingInput extends Component {
     this.state = {
       float: false,
       floatValue: 0,
+      visiblePassword: false,
     };
 
-    bindAll(this, ['floatFocus', 'floatBlur', 'onChange']);
+    bindAll(this, ['floatFocus', 'floatBlur', 'onChange', 'showPassword', 'hidePassword']);
   }
   onChange(e) {
     this.props.onChange(e.target.value, e);
@@ -30,9 +32,26 @@ class FloatingInput extends Component {
 
     this.setState({ floatValue: inputVal });
   }
+  showPassword() {
+    const { visiblePassword } = this.state;
+
+    if (!visiblePassword) {
+      this.setState({ visiblePassword: true });
+    }
+  }
+  hidePassword() {
+    const { visiblePassword } = this.state;
+
+    if (visiblePassword) {
+      this.setState({ visiblePassword: false });
+    }
+  }
   render() {
     const { label, type, id, error, value } = this.props;
+    const { visiblePassword } = this.state;
     let floatingClass = 'floating-label--inactive';
+    let iconClass = 'floating-label__icon';
+    let newType = type;
 
     if (this.state.float) {
       floatingClass = 'floating-label--active';
@@ -46,13 +65,18 @@ class FloatingInput extends Component {
       floatingClass += ' floating-label--error';
     }
 
+    if (type === 'password' && value.length > 0) {
+      iconClass += ' floating-label__icon--visible';
+      newType = visiblePassword ? 'text' : type;
+    }
+
     return (
       <div className={`floating-label ${floatingClass}`}>
         <input
           ref="floatingInput"
           className="floating-label__input"
           value={value}
-          type={type}
+          type={newType}
           id={id}
           onFocus={this.floatFocus}
           onBlur={this.floatBlur}
@@ -60,6 +84,10 @@ class FloatingInput extends Component {
           onChange={this.onChange}
         />
         <label htmlFor={id} className="floating-label__label">{label}</label>
+
+        <div className={iconClass} onMouseDown={this.showPassword} onMouseUp={this.hidePassword} onMouseLeave={this.hidePassword}>
+          <Icon svg="Plus" className="floating-label__svg" />
+        </div>
       </div>
     );
   }

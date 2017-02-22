@@ -6,42 +6,82 @@ $idleDark: $deepBlue-80;
 $activeColor: $blue-100;
 $errorColor: $red-color;
 
+// ======================================================
+// Block
+// ======================================================
+
+.floating-label {
+  @include size(100%, auto);
+  @include widthSpecifications(initial, 350px);
+  padding: 15px 30px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
 
 .floating-label {
   $b: &;
-  position: relative;
-  width: 100%;
-  padding: 15px 30px;
-  max-width: 350px;
 
   &__input {
-    padding: 5px 0;
-    width: inherit;
+    @include size(inherit, auto);
+    @include font(16px, $idleDark, 400);
+    background-color: transparent;
     border: none;
     border-bottom: 1px solid $idleLight;
-    background-color: transparent;
-    font-weight: 400;
-    font-size: 16px;
-    color: $idleDark;
-    position: relative;
+    padding: 5px 0;
     transition: .2s ease-in-out;
 
     &:focus {
       outline: none;
     }
+
+    &:not([type="password"]) {
+      user-select: none;
+    }
   }
 
   &__label {
+    @include font(14px, $idleLight, 400);
+    padding-left: 30px;
     position: absolute;
-    bottom: 50%;
-    left: 0;
-    font-weight: 400;
-    color: $idleLight;
+    left: 0; bottom: 50%;
     transform: translateY(50%);
     transition: .2s ease-in-out;
-    padding-left: 30px;
-    font-size: 14px;
+    user-select: none;
   }
+
+  &__icon {
+    @include size(24px);
+    position: absolute;
+    right: 30px; bottom: 16px;
+    user-select: none;
+    display: none;
+
+    &--visible {
+      display: block;
+    }
+
+    &:hover {
+      #{$b}__svg {
+        @include svg-color($deepBlue-50);
+        transition: .15s ease;
+      }
+    }
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-20);
+    transition: .15s ease;
+  }
+}
+
+// ======================================================
+// Modifier
+// ======================================================
+.floating-label {
+  $b: &;
 
   &--active & {
 
@@ -51,9 +91,8 @@ $errorColor: $red-color;
     }
 
     &__label {
-      color: $blue-100;
-      transform: translate3d(0px,-13px, 0px);
-      font-size: 11px;
+      @include font(11px, $blue-100);
+      transform: translate3d(0px, -13px, 0px);
       transition: .2s ease-in-out;
     }
   }
@@ -61,8 +100,8 @@ $errorColor: $red-color;
   &--standby & {
 
     &__label {
+      @include font($fz: 11px);
       transform: translate3d(0px,-13px, 0px);
-      font-size: 11px;
       transition: .2s ease-in-out;
     }
   }
