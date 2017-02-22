@@ -7,7 +7,7 @@
 
 .find {
   $b: &;
-  $flexIgnoreList: #{$b}__sidebar;
+  $flexIgnoreList: '#{$b}__sidebar';
 
   @include size(100%);
   @include flex(flex);
