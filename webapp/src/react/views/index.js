@@ -11,7 +11,7 @@ import Profile from './settings/profile/HOCProfile';
 import Services from './settings/services/Services';
 import SideNote from './side-note/HOCSideNote';
 import Slack from './slack/HOCSlack';
-import Store from './store/Store';
+import Store from './store/HOCStore';
 
 export {
   AddGoal,
