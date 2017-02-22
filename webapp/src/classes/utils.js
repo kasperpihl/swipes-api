@@ -13,6 +13,12 @@ export function iconForService(service) {
       return 'SlackLogo';
     case 'dropbox':
       return 'DropboxLogo';
+    case 'jira':
+      return 'JiraLogo';
+    case 'drive':
+      return 'DriveLogo';
+    case 'asana':
+      return 'AsanaLogo';
     default:
       return 'SwipesLogo';
   }

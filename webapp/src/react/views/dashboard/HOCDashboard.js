@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { list, map } from 'react-immutable-proptypes';
 import SWView from 'SWView';
+import Button from 'Button';
 import moment from 'moment';
 import { Map, fromJS } from 'immutable';
 import { connect } from 'react-redux';
@@ -19,6 +20,7 @@ class HOCDashboard extends Component {
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
     this.callDelegate = setupDelegate(props.delegate);
+    this.onMarkSeen = this.onMarkSeen.bind(this);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
@@ -130,7 +132,9 @@ class HOCDashboard extends Component {
 
     return (
       <div className="dashboard-header">
-        <HOCHeaderTitle target={target} />
+        <HOCHeaderTitle target={target}>
+          <Button text="Mark all" onClick={this.onMarkSeen} />
+        </HOCHeaderTitle>
         <div className="notifications__header">Notifications</div>
       </div>
     );

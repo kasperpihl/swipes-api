@@ -229,13 +229,16 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   }));
 };
 
-export const notify = (gId, handoff) => (d) => {
+export const notify = (gId, handoff) => (d, getState) => {
   let assignees = handoff.get('assignees');
   assignees = assignees || assignees.toJS();
+
+  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
   return d(a.api.request('goals.notify', {
     goal_id: gId,
     flags: handoff.get('flags'),
     message: handoff.get('message'),
+    current_step_id: currentStepId,
     assignees,
   }));
 };
