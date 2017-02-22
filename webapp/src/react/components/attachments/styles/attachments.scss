@@ -1,34 +1,59 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
+.attachments {
+  @include size(100%, auto);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
 .goal-step__attachment {
   border: none;
 }
 
+// Add list
+
 .attachments {
-  @include size(100%, auto);
-  position: relative;
-
-  &__add {
-    position: absolute;
-    right: 0; bottom: -15px;
-  }
-
-  &__empty-state {
-    @include size(100%, 39px);
-    @include flex(center, flex-start);
-    @include font(12px, $deepBlue-30, 15px);
-    padding-left: 6px;
-  }
 
   &__add-icon {
     @include size(24px);
     margin-right: 15px;
+    border-radius: 50%;
+
+    &:before {
+      @include size(24px);
+      position: absolute;
+      left: 0; top: 0;
+      content: '';
+      border-radius: 50%;
+      background-color: $blue-100;
+      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+      opacity: 0;
+      transition: .2s ease;
+    }
+
+    &:after {
+      @include size(18px);
+      position: absolute;
+      left: 3px; top: 3px;
+      content: '';
+      border-radius: 50%;
+      background-color: $bg;
+      opacity: 0;
+      transition: .2s .2s ease;
+    }
   }
 
   &__svg {
     @include size(24px);
     @include svg-color($blue-100);
+    transition: .2s .2s ease;
   }
 
   &__add-list {
@@ -39,13 +64,19 @@
   }
 
   &__add-item {
-    padding: 0px 18px 0px 6px;
     @include font(12px, $blue-100, 18px, 500);
+    padding: 0px 18px 0px 6px;
+    transition: .5s ease;
 
     &:hover, &:focus {
       text-decoration: underline;
     }
   }
+}
+
+// tabs
+
+.attachments {
 
   &__tabs {
     @include size(100%, auto);
@@ -53,10 +84,53 @@
     position: relative;
     margin-bottom: 12px;
   }
+}
 
-  &__add-button {
-    position: absolute;
-    right: 0; bottom: 9px;
-    z-index: 3;
+// ======================================================
+// Modifiers
+// ======================================================
+
+.attachments {
+  $b: &;
+
+  &__add-list {
+
+    &--loading {
+
+      #{$b}__add-item {
+        opacity: 0;
+        pointer-events: none;
+        transition: .5s ease;
+      }
+
+      #{$b}__add-icon {
+        animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
+
+        &:before {
+          opacity: 1;
+          transition: .2s .2s ease;
+        }
+
+        &:after {
+          opacity: 1;
+          transition: 0s .2s ease;
+        }
+      }
+
+      #{$b}__svg {
+        opacity: 0;
+        transition: .2s ease;
+      }
+    }
+  }
+}
+
+@keyframes rotateAddLoader {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

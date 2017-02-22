@@ -166,16 +166,6 @@ class HOCAttachments extends Component {
     const { attachmentOrder } = this.props;
     return (attachmentOrder && attachmentOrder.size);
   }
-  renderAddAttachmentsPlus() {
-    const { disableAdd } = this.props;
-    const { loading } = this.state;
-
-    if (!this.hasAttachments() || disableAdd) {
-      return false;
-    }
-
-    return <Button text="Add attachment" className="attachments__add-button" loading={loading} onClick={this.onAddCached('menu')} />;
-  }
   renderAttachments() {
     const { attachments, attachmentOrder: aOrder, enableFlagging, noFlagging } = this.props;
     const { tabIndex } = this.state;
@@ -244,13 +234,21 @@ class HOCAttachments extends Component {
     return allAttachments;
   }
   renderAddAttachments() {
+    const { loading } = this.state;
     const { disableAdd } = this.props;
+
     if (disableAdd) {
       return false;
     }
 
+    let className = 'attachments__add-list';
+
+    if (loading) {
+      className += ' attachments__add-list--loading';
+    }
+
     return (
-      <div className="attachments__add-list">
+      <div className={className}>
         <div className="attachments__add-icon">
           <Icon svg="Plus" className="attachments__svg" />
         </div>
@@ -287,7 +285,6 @@ class HOCAttachments extends Component {
 
     return (
       <div className="attachments__tabs">
-        {/* {this.renderAddAttachmentsPlus()} */}
         <TabBar key={key} tabs={tabs} activeTab={tabIndex} delegate={this} />
       </div>
     );
