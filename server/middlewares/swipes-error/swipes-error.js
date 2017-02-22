@@ -4,7 +4,7 @@ class SwipesError extends Error {
     Error.captureStackTrace(this, this.constructor);
     this.name = 'SwipesError';
     this.message = message;
-    if (extra) this.extra = extra;
+    this.extra = extra || {};
   }
 }
 

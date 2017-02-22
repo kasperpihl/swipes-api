@@ -130,6 +130,13 @@ export default class IpcListener {
       remWin.close();
     }
   }
+  reload() {
+    if (isElectron) {
+      this.sendEvent('reload');
+    } else {
+      window.location.reload();
+    }
+  }
   openDialog(options) {
     if (isElectron) {
       dialog.showOpenDialog(options);
