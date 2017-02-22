@@ -85,7 +85,12 @@ class FloatingInput extends Component {
         />
         <label htmlFor={id} className="floating-label__label">{label}</label>
 
-        <div className={iconClass} onMouseDown={this.showPassword} onMouseUp={this.hidePassword} onMouseLeave={this.hidePassword}>
+        <div
+          className={iconClass}
+          onMouseDown={this.showPassword}
+          onMouseUp={this.hidePassword}
+          onMouseLeave={this.hidePassword}
+        >
           <Icon svg="Plus" className="floating-label__svg" />
         </div>
       </div>
