@@ -170,6 +170,11 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   render() {
+    const { goal } = this.props;
+    if (!goal) {
+      return <div />;
+    }
+
     return (
       <SWView header={this.renderHeader()} footer={this.renderHandoffBar()}>
         <div className="goal-overview">

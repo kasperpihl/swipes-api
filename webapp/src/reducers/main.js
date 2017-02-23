@@ -17,9 +17,14 @@ const initialState = fromJS({
 
 const shouldKeepNotification = (payload) => {
   switch (payload.type) {
-    case 'step_got_active':
     case 'goal_notify':
       return true;
+    case 'step_completed': {
+      if (payload.data.me_is_next) {
+        return true;
+      }
+      return false;
+    }
     case 'goal_completed':
     case 'goal_created': {
       if (payload.data.includes_me) {
