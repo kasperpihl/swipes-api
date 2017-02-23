@@ -6,7 +6,7 @@ const cardData = (type, data) => {
   const header = {};
   let subtitle = '';
 
-  if (type === 'story') {
+  if (type === 'task') {
     header.title = data.name;
 
     if (data.projects.length > 0) {
@@ -29,7 +29,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
   let params = {};
 
-  if (type === 'story') {
+  if (type === 'task') {
     method = 'tasks.findById';
     params = Object.assign({}, {
       id: itemId,
@@ -44,6 +44,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
       return callback(err);
     }
 
+    // console.log(res);
     const elements = cardData(type, res);
 
     return callback(null, { ...elements });

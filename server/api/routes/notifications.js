@@ -4,7 +4,7 @@ import {
   array,
 } from 'valjs';
 import {
-  notificationsMarkAsSeen,
+  notificationsMarkAsSeenTs,
   notificationsMarkAsSeenIds,
   notificationsMarkAsSeenTsQueueMessage,
   notificationsMarkAsSeenIdsQueueMessage,
@@ -22,7 +22,7 @@ authed.all('/notifications.markAsSeen.ts',
   valBody({
     timestamp: string.format('iso8601').require(),
   }),
-  notificationsMarkAsSeen,
+  notificationsMarkAsSeenTs,
   notificationsMarkAsSeenTsQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
@@ -37,7 +37,10 @@ authed.all('/notifications.markAsSeen.ids',
   notificationsMarkAsSeenIds,
   notificationsMarkAsSeenIdsQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
+  valResponseAndSend({
+    notification_ids: array.of(string).require(),
+    last_marked: string.require(),
+  }),
 );
 
 export {
