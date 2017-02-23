@@ -45,14 +45,15 @@ export const contextMenu = payload => (dp, getState) => {
 // ======================================================
 export const markNotifications = payload => (dp) => {
   if (typeof payload === 'string') {
-    dp(a.api.request('notifications.markAsSeen.ts', {
+    return dp(a.api.request('notifications.markAsSeen.ts', {
       timestamp: payload,
     }));
   } else if (Array.isArray(payload)) {
-    dp(a.api.request('notifications.markAsSeen.ids', {
+    return dp(a.api.request('notifications.markAsSeen.ids', {
       notification_ids: payload,
     }));
   }
+  return Promise.resolve();
 };
 
 // ======================================================

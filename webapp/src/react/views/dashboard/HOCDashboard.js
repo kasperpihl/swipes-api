@@ -15,7 +15,9 @@ import Dashboard from './Dashboard';
 class HOCDashboard extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      loading: false,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
@@ -25,15 +27,23 @@ class HOCDashboard extends Component {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   onMark(id) {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
       let arg = [id];
       if (id === 'all') {
+        this.setState({ loading: true });
         arg = notifications.getIn([0, 'ts']);
       }
       if (arg) {
-        markNotifications(arg);
+        markNotifications(arg).then(() => {
+          if (!this._unmounted) {
+            this.setState({ loading: false });
+          }
+        });
       }
     }
   }
@@ -135,11 +145,12 @@ class HOCDashboard extends Component {
   }
   renderHeader() {
     const { target } = this.props;
+    const { loading } = this.state;
 
     return (
       <div className="dashboard-header">
         <HOCHeaderTitle target={target}>
-          <Button text="Mark all" onClick={this.onMarkCached('all')} />
+          <Button loading={loading} text="Mark all" onClick={this.onMarkCached('all')} />
         </HOCHeaderTitle>
         <div className="notifications__header">Notifications</div>
       </div>

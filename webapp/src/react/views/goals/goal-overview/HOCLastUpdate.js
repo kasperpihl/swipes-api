@@ -42,7 +42,6 @@ class HOCLastUpdate extends PureComponent {
     return undefined;
   }
   renderImage(handoff) {
-    console.log('refresh');
     return (
       <HOCAssigning delegate={this} assignees={[handoff.get('done_by')]} rounded />
     );
