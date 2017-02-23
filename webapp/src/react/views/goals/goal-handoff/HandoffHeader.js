@@ -27,7 +27,9 @@ class HandoffHeader extends Component {
   }
   renderFrom() {
     const { from, isHandingOff } = this.props;
-
+    if (!from) {
+      return this.renderCompletion(true);
+    }
     let className = 'handoff-header__section handoff-header__section--left';
 
     if (isHandingOff) {
@@ -47,7 +49,7 @@ class HandoffHeader extends Component {
       </div>
     );
   }
-  renderCompletion() {
+  renderCompletion(completed) {
     const { isHandingOff } = this.props;
 
     let className = 'handoff-header__section handoff-header__section--right handoff-header__section--complete';
@@ -55,14 +57,14 @@ class HandoffHeader extends Component {
     if (isHandingOff) {
       className += ' handoff-header__section--active-right';
     }
-
+    const text = completed ? 'Completed goal' : 'Complete goal';
     return (
       <div className={className}>
         <div className="handoff-header__top">
           <div className="handoff-header__icon">
             <Icon svg="Checkmark" className="handoff-header__svg" />
           </div>
-          <div onClick={this.handleClick} className="handoff-header__title">Complete goal</div>
+          <div onClick={this.handleClick} className="handoff-header__title">{text}</div>
         </div>
       </div>
     );

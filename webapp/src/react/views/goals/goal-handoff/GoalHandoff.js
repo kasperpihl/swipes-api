@@ -28,7 +28,7 @@ class GoalHandoff extends PureComponent {
   mapStepToHeader(target, isNext) {
     const { handoff } = this.props;
     const helper = this.getHelper();
-    if (target === '_complete') {
+    if (target === '_complete' || !target) {
       return undefined;
     }
     if (target === '_notify') {
@@ -65,9 +65,7 @@ class GoalHandoff extends PureComponent {
   renderHeader() {
     const { handoff } = this.props;
     const helper = this.getHelper();
-    if (!helper.getCurrentStepId()) {
-      return undefined;
-    }
+
     const from = this.mapStepToHeader(helper.getCurrentStepId());
     const to = this.mapStepToHeader(handoff.get('target'), true);
 
