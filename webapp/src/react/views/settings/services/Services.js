@@ -3,6 +3,7 @@ import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll, queryStringToObject } from 'classes/utils';
 import * as actions from 'actions';
+import SWView from 'SWView';
 import ConnectRow from './ConnectRow';
 import './services.scss';
 
@@ -115,7 +116,7 @@ class Services extends Component {
   }
   render() {
     return (
-      <div className="scroll-container">
+      <SWView>
         <div className="swipes-services">
           <div className="swipes-services__title" data-title="Connect new services" />
           {this.renderServicesToConnect()}
@@ -124,7 +125,7 @@ class Services extends Component {
           <div className="swipes-services__title" data-title="Connected services" />
           {this.renderConnectedServices()}
         </div>
-      </div>
+      </SWView>
     );
   }
 }
