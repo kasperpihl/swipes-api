@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$imgContHeight: 54px;
+$imgContHeight: 66px;
 
 .goal-list-item {
   $b: &;
@@ -40,7 +40,7 @@ $imgContHeight: 54px;
   }
 
   &__title {
-    @include font(15px, $deepBlue-100, 400);
+    @include font(18px, $deepBlue-100, 24px, 400);
     width: calc(100% - 50px);
     transition: color .1s ease;
     white-space: nowrap;
@@ -57,7 +57,7 @@ $imgContHeight: 54px;
 
   &__label {
     @include size(100%, 20px);
-    @include font(12px, $deepBlue-30, 400, 20px);
+    @include font(12px, $deepBlue-40, 400);
     margin-top: 3px;
     letter-spacing: .5px;
     transition: .25s ease;

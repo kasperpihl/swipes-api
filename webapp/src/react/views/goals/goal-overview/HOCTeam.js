@@ -19,7 +19,6 @@ class HOCTeam extends PureComponent {
         assignees={assignees}
         maxImages={assignees.size}
         rounded
-        size={24}
       />
     );
   }

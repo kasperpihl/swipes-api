@@ -45,7 +45,7 @@
   &__icon {
     @include size(24px);
     @include flex(none);
-    margin-right: 15px;
+    margin-right: 18px;
 
     #{$b}__svg {
       @include svg-color($deepBlue-20);

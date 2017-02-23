@@ -9,7 +9,7 @@
   &__content {
     @include size(100%, auto);
     @include flex('column');
-    padding-left: 15px;
+    padding-left: 12px;
   }
 
   &__message {
@@ -19,7 +19,7 @@
 
 
   &__label {
-    @include font(12px, $deepBlue-30, 18px, 500);
+    @include font(12px, $deepBlue-40, 18px, 500);
     margin-top: 12px;
   }
 }
