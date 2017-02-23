@@ -74,7 +74,7 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
               service: {
                 name: 'asana',
                 type: 'task',
-                id: item.id,
+                id: item.id.toString(),
               },
               permission: {
                 account_id,
