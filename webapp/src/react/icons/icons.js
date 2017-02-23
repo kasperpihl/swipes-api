@@ -8,6 +8,7 @@ import SlackLogo from './svgs/slack-logo.svg';
 import SwipesIcon from './pngs/swipes-icon.png';
 import SwipesLogo from './svgs/swipes-logo.svg';
 import SwipesLogoText from './svgs/swipes-logo-text.svg';
+import SwipesLogoEmpty from './svgs/swipes-logo-empty.svg';
 
 import AddPerson from './svgs/add-person.svg';
 import AddToCollection from './svgs/add-to-collection.svg';
@@ -116,6 +117,7 @@ export {
   SlackLogo,
   SwipesLogo,
   SwipesLogoText,
+  SwipesLogoEmpty,
 
   AddPerson,
   AddToCollection,

@@ -3,38 +3,18 @@
 
 
 .sw-loader-wrap {
-  &--center {
-    position: absolute;
-    left: 50%;
-    top:50%;
-    transform: translate(-50%, -50%);
-    @include flex(center, center, column);
-  }
+  @include size(100%);
+  @include flexContainer('row', center, center);
 
-  .sw-loader {
-    width: 60px;
-    height: 60px;
-    clip-path: url(#sw-loader-clip);
-    overflow: hidden;
-    background-size: 8800% 8800% !important;
-  }
-
-  .sw-loader__svg {
-    position: absolute;
-  }
-
-  &__text {
-    @include size(100%, auto);
-    @include flex(center, center);
-    margin-top: 10px;
-    color: $deepBlue-40;
+  &__svg {
+    @include size($width: 60px);
+    @include svg-color($bg);
+    animation: pulsateLoader 2s linear infinite;
   }
 }
 
-.loader-clippath {
-  width: 0;
-  height: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
+@keyframes pulsateLoader {
+  50% {
+    opacity: .5;
+  }
 }
