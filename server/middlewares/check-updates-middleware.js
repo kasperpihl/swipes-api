@@ -8,7 +8,8 @@ import {
 const newestElectronVersion = '0.0.4';
 const electronUrls = {
   darwin: 'https://www.dropbox.com/s/qbcv6oqeztfq992/Swipes.dmg?dl=1',
-  win32: 'https://winurl.com',
+  win32: 'https://www.dropbox.com/s/mveq4y2lcvinu37/Swipes-win32-x64.zip?dl=1',
+  linux: 'https://www.dropbox.com/s/qy3i8y4dxpxbosh/Swipes-linux-x64.zip?dl=1',
 };
 
 const parseVersionString = (version) => {
