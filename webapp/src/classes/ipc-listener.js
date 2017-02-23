@@ -22,6 +22,7 @@ export default class IpcListener {
   constructor(store) {
     this.platform = 'web';
     if (isElectron) {
+      this.isElectron = true;
       this.platform = window.process.platform;
       this.version = window.process.env.npm_package_version;
       ipcRenderer.on('oauth-success', (event, arg) => {

@@ -32,6 +32,8 @@ class HOCGoalHandoff extends PureComponent {
     completeStep(goal.get('id'), handoff).then((res) => {
       this.setState({ isSubmitting: false });
       if (res && res.ok) {
+        const event = handoff.get('target') === '_complete' ? 'Complete goal' : 'Complete step';
+        window.analytics.sendEvent(event);
         navPop();
       }
     });
@@ -43,6 +45,7 @@ class HOCGoalHandoff extends PureComponent {
     goalNotify(goal.get('id'), handoff).then((res) => {
       this.setState({ isSubmitting: false });
       if (res && res.ok) {
+        window.analytics.sendEvent('Notify');
         navPop();
       }
     });

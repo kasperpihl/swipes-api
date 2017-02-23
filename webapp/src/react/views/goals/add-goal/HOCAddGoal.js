@@ -251,6 +251,7 @@ class HOCAddGoal extends Component {
         goal,
       }).then((res) => {
         if (res.ok) {
+          window.analytics.sendEvent('Created goal');
           removeCache('add-goal');
           updateToasty(toastId, {
             title: 'Added goal',

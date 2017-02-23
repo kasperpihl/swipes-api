@@ -71,7 +71,7 @@ class HOCAttachments extends Component {
         if (res && res.button === 0) {
           if (goalId) {
             removeFromCollection(goalId, id).then(() => {
-
+              window.analytics.sendEvent('Removed attachment');
             });
           }
           this.callDelegate('onRemoveAttachment', id);
@@ -134,6 +134,9 @@ class HOCAttachments extends Component {
           succCB();
           this.callDelegate('onAddAttachment', obj);
         }
+        window.analytics.sendEvent('Added attachment', {
+          Type: type,
+        });
       }
       if (progress === 'error') {
         if (!this._unmounted) {

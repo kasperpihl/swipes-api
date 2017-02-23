@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import * as a from 'actions';
 
 import Router from 'src/Router';
 import configureStore from 'src/store/configureStore';

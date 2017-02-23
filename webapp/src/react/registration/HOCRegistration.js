@@ -44,6 +44,9 @@ class HOCRegistration extends Component {
           label = 'Not a valid email';
         }
         this.setState({ errorLabel: label });
+      } else {
+        const event = endpoint === 'users.signup' ? 'Signed up' : 'Signed in';
+        window.analytics.sendEvent(event);
       }
     });
   }
