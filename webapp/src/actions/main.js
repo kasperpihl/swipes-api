@@ -43,9 +43,17 @@ export const contextMenu = payload => (dp, getState) => {
 // ======================================================
 // Mark notifications as read
 // ======================================================
-export const markNotifications = timestamp => dp => dp(a.api.request('notifications.markAsSeen', {
-  timestamp,
-}));
+export const markNotifications = payload => (dp) => {
+  if (typeof payload === 'string') {
+    dp(a.api.request('notifications.markAsSeen.ts', {
+      timestamp: payload,
+    }));
+  } else if (Array.isArray(payload)) {
+    dp(a.api.request('notifications.markAsSeen.ids', {
+      notification_ids: payload,
+    }));
+  }
+};
 
 // ======================================================
 // Open slack in a users page

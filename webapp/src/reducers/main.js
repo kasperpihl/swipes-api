@@ -106,8 +106,18 @@ export default function main(state = initialState, action) {
       }
       return state.updateIn(['notifications'], s => s.insert(0, fromJS(payload)));
     }
-    case 'notifications_seen':
-    case 'notifications.markAsSeen': {
+    case 'notifications.markAsSeen.ids':
+    case 'notifications_seen_ids': {
+      const { notification_ids: ids, last_marked: lastMarked } = payload.data || payload;
+      return state.updateIn(['notifications'], s => s.map((n) => {
+        if (ids && ids.indexOf(n.get('id')) !== -1) {
+          return n.set('seen', lastMarked);
+        }
+        return n;
+      }));
+    }
+    case 'notifications_seen_ts':
+    case 'notifications.markAsSeen.ts': {
       const { marked_at, last_marked: lastMarked } = payload.data || payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
         if (n.get('ts') <= lastMarked) {

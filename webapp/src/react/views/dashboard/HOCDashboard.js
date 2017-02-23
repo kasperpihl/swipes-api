@@ -20,18 +20,20 @@ class HOCDashboard extends Component {
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
     this.callDelegate = setupDelegate(props.delegate);
-    this.onMarkSeen = this.onMarkSeen.bind(this);
+    this.onMarkCached = setupCachedCallback(this.onMark, this);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
-  onMarkSeen() {
+  onMark(id) {
     const { markNotifications, notifications } = this.props;
     if (notifications.size) {
-      const first = notifications.first();
-      if (!first.get('seen')) {
-        markNotifications(first.get('ts')).then(() => {
-        });
+      let arg = [id];
+      if (id === 'all') {
+        arg = notifications.getIn([0, 'ts']);
+      }
+      if (arg) {
+        markNotifications(arg);
       }
     }
   }
@@ -44,17 +46,21 @@ class HOCDashboard extends Component {
   }
   onClickTitle(i) {
     const n = this.props.notifications.get(i);
+    this.onMarkCached(n.get('id'))();
     if (n && n.getIn(['data', 'goal_id'])) {
       const { goals, navPush } = this.props;
       const goal = goals.get(n.getIn(['data', 'goal_id']));
       this._dontMark = true;
-      navPush({
-        component: 'GoalOverview',
-        title: goal.get('title'),
-        props: {
-          goalId: goal.get('id'),
-        },
-      });
+
+      if (goal) {
+        navPush({
+          component: 'GoalOverview',
+          title: goal.get('title'),
+          props: {
+            goalId: goal.get('id'),
+          },
+        });
+      }
     }
   }
   getAttachments(goalId, flags) {
@@ -133,7 +139,7 @@ class HOCDashboard extends Component {
     return (
       <div className="dashboard-header">
         <HOCHeaderTitle target={target}>
-          <Button text="Mark all" onClick={this.onMarkSeen} />
+          <Button text="Mark all" onClick={this.onMarkCached('all')} />
         </HOCHeaderTitle>
         <div className="notifications__header">Notifications</div>
       </div>
