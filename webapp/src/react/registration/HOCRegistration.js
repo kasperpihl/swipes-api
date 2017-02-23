@@ -28,7 +28,7 @@ class HOCRegistration extends Component {
       signupInvCode: '',
     };
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
-    bindAll(this, ['signin', 'signup', 'handleButtonClick']);
+    bindAll(this, ['signin', 'signup', 'handleButtonClick', 'handleKeyDown']);
   }
   componentDidUpdate() {
     const { token } = this.props;
@@ -51,6 +51,11 @@ class HOCRegistration extends Component {
 
     if (index !== tabIndex) {
       this.setState({ tabIndex: index });
+    }
+  }
+  handleKeyDown(e) {
+    if (e.keyCode === 13) {
+      this.handleButtonClick();
     }
   }
   handleButtonClick() {
@@ -177,6 +182,7 @@ class HOCRegistration extends Component {
           key="signinPassword"
           value={signinPassword}
           onChange={this.cachedOnChange('signinPassword')}
+          onKeyDown={this.handleKeyDown}
           error={!!errorLabel}
         />
         <div className="sign-in__error-status">{errorLabel}</div>
