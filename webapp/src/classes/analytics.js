@@ -32,10 +32,8 @@ export default class Analytics {
   }
   storeChange() {
     const state = this.store.getState();
-
     const me = state.get('me');
 
-    console.log('me', me.toJS());
     if (me && me.get('id') && me.get('id') !== this.userId) {
       const orgId = me.getIn(['organizations', 0, 'id']);
       const orgName = me.getIn(['organizations', 0, 'name']);

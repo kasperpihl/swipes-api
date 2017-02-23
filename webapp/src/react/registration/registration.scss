@@ -1,182 +1,79 @@
 @import "~styles/_vars.scss";
 @import "~styles/_mixins.scss";
 
+// ======================================================
+// Block
+// ======================================================
 
-.sign {
-	@include size(100%, 100%);
-	@include flex(center, center);
-	background-color: $deepBlue-100;
-	margin: 0;
-	overflow: hidden;
-	padding: 0;
+.sign-in {
+	@include size(100%);
+	// background-color: $blue-100;
+}
 
-	&__wrapper {
-		@include size(100%, 100%);
-		overflow-y: auto;
-		padding: 50px 0;
-		position: relative;
-    animation: signFadeIn .6s ease-in-out forwards;
-    opacity: 0;
-    transform: translateY(50px);
+// ======================================================
+// Element
+// ======================================================
 
-    @keyframes signFadeIn {
-      100% {
-        opacity: 1;
-        transform: translateY(0px);
-      }
-	  }
-	}
+// containers
 
-	&__logo {
-		@include size(120px);
-		margin: 60px auto;
-
-		svg {
-			@include size();
-		}
-	}
-
-	&__headline {
-		color: white;
-		font-size: 3em;
-		font-weight: 100;
-		text-align: center;
-	}
+.sign-in {
 
 	&__card {
-		@include size(350px, auto);
-		background-color: white;
-		border-radius: 5px;
-		box-shadow: $swipes-shadow-five;
-		margin-left: calc(50% - (350px / 2));
-		margin-top: 50px;
-		overflow: hidden;
-		position: relative;
+		@include size(100%, calc(100% - 60px));
+		@include widthSpecifications(initial, 660px);
+		@include border-radius(6px, 6px, 0px, 0px);
+		animation: showSignIn 1s ease forwards;
+		background-color: $bg;
+		border: 1px solid $deepBlue-10;
+		box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
+		margin: 0 auto;
+		margin-top: calc(60px - 38px);
+		padding-top: 60px;
+	}
+
+	&__header {
+		@include size(100%, auto);
+		padding: 0 45px;
+	}
+
+	&__content {
+		@include size(100%, auto);
+		padding: 0 45px;
+	}
+
+	&__footer {
+		@include size(100%, 60px);
+		@include flexContainer('row', right, center);
+		border-top: 1px solid $deepBlue-10;
+		padding: 0 30px;
+	}
+}
+
+// Ui
+
+.sign-in {
+
+	&__logo {
+		margin-bottom: 45px;
+	}
+
+	&__svg {
+		@include size(72px, 9px);
+		@include svg-color($deepBlue-20);
 	}
 
 	&__title {
-		color: $deepBlue-80;
-		font-size: 1.2em;
-		font-weight: 400;
-		padding-top: 40px;
-		padding: 50px 0;
-		text-align: center;
-		text-transform: uppercase;
+		@include font(36px, $deepBlue-90, 48px, 300);
 	}
 
-	&__form {
-		@include size(100%, auto);
-		@include flex(center, center, column);
-		margin-top: -30px;
-		position: relative;
-
-		&__button {
-			@include size(100%, 70px);
-			@include flex();
-			cursor: default;
-			margin-top: 20px;
-			position: relative;
-
-			&--submit {
-				background-color: $blue-100;
-				color: white;
-
-				&:hover, &:focus {
-					background-color: $blue-80;
-				}
-			}
-		}
-
-		&__loader {
-			@include size(20px);
-			display: none;
-			border-radius: 50%;
-			border: 2px solid $bg;
-			position: relative;
-			-webkit-clip-path: polygon(50% 0, 100% 0, 100% 50%, 50% 50%);
-			position: absolute;
-			left: 50%; top: 50%;
-			transform: translateX(-50%) translateY(-50%) rotate(-45deg);
-			margin-left: -60px;
-			animation: rotateSinginLoader .85s cubic-bezier(.56,.31,.52,.78) infinite;
-
-			&--active {
-				display: block;
-			}
-
-			@keyframes rotateSinginLoader {
-			  from {
-			    transform: translateX(-50%) translateY(-50%) rotate(-45deg);
-			  }
-
-			  to {
-			    transform: translateX(-50%) translateY(-50%) rotate(315deg);
-			  }
-			}
-
-		}
-	}
-
-	&__subheadline {
-		color: $deepBlue-60;
-		font-size: 1em;
-		font-weight: 400;
-		text-align: center;
-	  padding-top: 50px;
-	}
-
-	&__button {
-		color: $deepBlue-40;
-		font-size: 1em;
-		font-weight: 400;
-		text-align: center;
-	  margin-top: 15px;
-		text-transform: uppercase;
-
-		a {
-			color: $deepBlue-40;
-			font-size: 1em;
-			font-weight: 400;
-
-			&:hover {
-				color: $deepBlue-20;
-				text-decoration: underline;
-			}
-
-			&:visited {
-				color: $deepBlue-40;
-			}
-		}
+	&__subtitle {
+		@include font(15px, $deepBlue-60, 24px);
+		margin-top: 12px;
+		margin-bottom: 45px;
 	}
 
 	&__error-status {
-		@include font(12px, $red-color);
+		@include font(12px, $red-80);
 		margin-bottom: 8px;
-	}
-}
-
-#layer1 {
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	overflow: hidden;
-
-	path {
-		fill: none;
-		stroke: rgba($blue-80,.4);
-	}
-}
-
-#layer2 {
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	overflow: hidden;
-
-	path {
-		fill: none;
-		stroke: rgba($deepBlue-80,.6);
 	}
 }

@@ -1,26 +1,96 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory, Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { api } from 'actions';
+import { setupCachedCallback, bindAll } from 'classes/utils';
+import Gradient from 'components/gradient/Gradient';
+import Topbar from 'src/react/app/topbar/Topbar';
+import SWView from 'SWView';
+import TabBar from 'components/tab-bar/TabBar';
+import FloatingInput from 'components/swipes-ui/FloatingInput';
 import Icon from 'Icon';
+import Button from 'Button';
 
 import './registration.scss';
-
-import Signup from './Signup';
-import Signin from './Signin';
 
 class HOCRegistration extends Component {
   constructor(props) {
     super(props);
-    this.signin = this.signin.bind(this);
-    this.signup = this.signup.bind(this);
-    this.state = { errorLabel: null };
+    this.state = {
+      errorLabel: null,
+      tabIndex: 0,
+      signinEmail: '',
+      signinPassword: '',
+      signupName: '',
+      signupEmail: '',
+      signupPassword: '',
+      signupInvCode: '',
+      signupOrganization: '',
+    };
+    this.cachedOnChange = setupCachedCallback(this.onChange, this);
+    bindAll(this, ['signin', 'signup', 'handleButtonClick']);
   }
   componentDidUpdate() {
     const { token } = this.props;
 
     if (token) {
       browserHistory.push('/');
+    }
+  }
+  onChange(key, value) {
+    const { loading } = this.state;
+
+    if (loading) {
+      return;
+    }
+
+    this.setState({ [key]: value });
+  }
+  tabDidChange(el, index) {
+    const { tabIndex } = this.state;
+
+    if (index !== tabIndex) {
+      this.setState({ tabIndex: index });
+    }
+  }
+  handleButtonClick() {
+    const {
+      tabIndex,
+      signinEmail,
+      signinPassword,
+      signupName,
+      signupEmail,
+      signupPassword,
+      signupInvCode,
+      signupOrganization,
+   } = this.state;
+
+    if (tabIndex === 0) {
+      const email = signinEmail;
+      const password = signinPassword;
+
+      const data = {
+        email,
+        password,
+      };
+
+      this.signin(data);
+    } else {
+      const name = signupName;
+      const email = signupEmail;
+      const password = signupPassword;
+      const invCode = signupInvCode;
+      const organization = signupOrganization;
+
+      const data = {
+        name,
+        email,
+        password,
+        invCode,
+        organization,
+      };
+
+      this.singup(data);
     }
   }
   signin(data) {
@@ -36,7 +106,7 @@ class HOCRegistration extends Component {
     this.props.request(endpoint, data).then((res) => {
       if (!res.ok) {
         let label = 'Something went wrong :/';
-        console.log(res);
+
         if (res.err === "body /users.signup: Invalid object['invitation_code']: Invalid invitation code") {
           label = 'Invalid invitation code';
         }
@@ -50,46 +120,151 @@ class HOCRegistration extends Component {
       }
     });
   }
-  renderWrapper(children) {
-    const { route } = this.props;
-    let title = 'sign up to swipes';
-    let subtitle = 'Already have an account?';
-    let linkLabel = 'SIGN IN';
-    let link = '/signin';
+  renderHeader() {
+    return (
+      <div className="sign-in__header">
+        <div className="sign-in__logo">
+          <Icon svg="SwipesLogoText" className="sign-in__svg" />
+        </div>
 
-    if (route.path === 'signin') {
-      title = 'sign in to swipes';
-      subtitle = 'No account yet?';
-      linkLabel = 'SIGN UP';
-      link = '/signup';
-    }
+        <div className="sign-in__title">Welcome to your workspace</div>
+        <div
+          className="sign-in__subtitle"
+        >
+          Track and accomplish goals together. Let’s get started.
+        </div>
+        {this.renderTabs()}
+      </div>
+    );
+  }
+  renderTabs() {
+    const { tabIndex } = this.state;
+    const tabs = ['Sign in', 'Sign up'];
+
+    return <TabBar tabs={tabs} activeTab={tabIndex} delegate={this} />;
+  }
+  renderContent() {
+    const { tabIndex } = this.state;
 
     return (
-      <div className="sign">
-        <div className="sign__wrapper">
-          <div className="sign__logo">
-            <Icon svg="SwipesLogo" />
-          </div>
-          <div className="sign__headline">Welcome to your Swipes</div>
-          <div className="sign__card">
-            <div className="sign__title">{title}</div>
-            {children}
-          </div>
-          <div className="sign__subheadline">{subtitle}</div>
-          <div className="sign__button"><Link to={link}>{linkLabel}</Link></div>
-        </div>
+      <div className="sign-in__content">
+        {tabIndex === 0 ? this.renderSignin() : this.renderSignup()}
+      </div>
+    );
+  }
+  renderSignin() {
+    const {
+      errorLabel,
+      signinEmail,
+      signinPassword,
+    } = this.state;
+
+    return (
+      <div className="sign-in__form">
+        <FloatingInput
+          label="Email"
+          type="email"
+          id="email"
+          key="signinEmail"
+          value={signinEmail}
+          onChange={this.cachedOnChange('signinEmail')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Password"
+          type="password"
+          id="password"
+          key="signinPassword"
+          value={signinPassword}
+          onChange={this.cachedOnChange('signinPassword')}
+          error={!!errorLabel}
+        />
+        <div className="sign-in__error-status">{errorLabel}</div>
+      </div>
+    );
+  }
+  renderSignup() {
+    const {
+      errorLabel,
+      signupName,
+      signupEmail,
+      signupPassword,
+      signupInvCode,
+      signupOrganization,
+    } = this.state;
+
+    return (
+      <div className="sign-in__form">
+        <FloatingInput
+          label="Your Name"
+          type="text"
+          id="name"
+          key="signupName"
+          value={signupName}
+          onChange={this.cachedOnChange('signupName')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Email"
+          type="email"
+          id="email"
+          key="signupEmail"
+          value={signupEmail}
+          onChange={this.cachedOnChange('signupEmail')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Password"
+          type="password"
+          id="password"
+          key="signupPassword"
+          value={signupPassword}
+          onChange={this.cachedOnChange('signupPassword')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Organization"
+          type="text"
+          id="organization"
+          key="signupOrganization"
+          value={signupOrganization}
+          onChange={this.cachedOnChange('signupOrganization')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Invitation Code"
+          type="text"
+          id="invitation"
+          key="signupInvCode"
+          value={signupInvCode}
+          onChange={this.cachedOnChange('signupInvCode')}
+          error={!!errorLabel}
+        />
+        <div className="sign-in__error-status">{errorLabel}</div>
+      </div>
+    );
+  }
+  renderFooter() {
+    const { tabIndex, loading } = this.state;
+
+    return (
+      <div className="sign-in__footer">
+        <Button primary text={tabIndex === 0 ? 'Sign in' : 'Sign up'} loading={loading} onClick={this.handleButtonClick} />
       </div>
     );
   }
   render() {
-    const { route } = this.props;
-    const { errorLabel, loading } = this.state;
-    const props = { errorLabel, loading };
-    if (route.path === 'signin') {
-      return this.renderWrapper(<Signin onLogin={this.signin} {...props} />);
-    }
-
-    return this.renderWrapper(<Signup onSignup={this.signup} {...props} />);
+    return (
+      <div className="sign-in">
+        <Gradient />
+        <Topbar />
+        <div className="sign-in__card">
+          <SWView header={this.renderHeader()} footer={this.renderFooter()}>
+            {this.renderContent()}
+          </SWView>
+        </div>
+      </div>
+    );
   }
 }
 

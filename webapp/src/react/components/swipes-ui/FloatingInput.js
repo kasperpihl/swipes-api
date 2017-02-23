@@ -8,7 +8,7 @@ class FloatingInput extends Component {
     super(props);
     this.state = {
       float: false,
-      floatValue: 0,
+      floatValue: 0 || props.value.length,
       visiblePassword: false,
     };
 
@@ -91,7 +91,7 @@ class FloatingInput extends Component {
           onMouseUp={this.hidePassword}
           onMouseLeave={this.hidePassword}
         >
-          <Icon svg="Plus" className="floating-label__svg" />
+          <Icon svg="Eye" className="floating-label__svg" />
         </div>
       </div>
     );

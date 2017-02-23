@@ -1,10 +1,10 @@
 @import "~styles/_vars.scss";
 @import "~styles/_mixins.scss";
 
-$idleLight: $deepBlue-40;
-$idleDark: $deepBlue-80;
+$idleLight: $deepBlue-30;
+$idleDark: $deepBlue-100;
 $activeColor: $blue-100;
-$errorColor: $red-color;
+$errorColor: $red-80;
 
 // ======================================================
 // Block
@@ -12,8 +12,8 @@ $errorColor: $red-color;
 
 .floating-label {
   @include size(100%, auto);
-  @include widthSpecifications(initial, 350px);
   padding: 15px 30px;
+  padding-left: 0;
 }
 
 // ======================================================
@@ -28,7 +28,8 @@ $errorColor: $red-color;
     @include font(16px, $idleDark, 400);
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid $idleLight;
+    border-bottom: 1px solid $deepBlue-5;
+    margin-top: 27px;
     padding: 5px 0;
     transition: .2s ease-in-out;
 
@@ -42,17 +43,18 @@ $errorColor: $red-color;
   }
 
   &__label {
-    @include font(14px, $idleLight, 400);
-    padding-left: 30px;
+    @include font(15px, $idleLight, 21px, 400);
     position: absolute;
-    left: 0; bottom: 50%;
+    left: 0; bottom: calc(50% - (27px / 2));
     transform: translateY(50%);
     transition: .2s ease-in-out;
     user-select: none;
+    cursor: text;
   }
 
   &__icon {
-    @include size(24px);
+    @include size(30px);
+    @include flexContainer('row', center, center);
     position: absolute;
     right: 30px; bottom: 16px;
     user-select: none;

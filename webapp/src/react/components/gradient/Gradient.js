@@ -13,6 +13,9 @@ class Gradient extends Component {
   componentDidMount() {
     this.gradientStep();
   }
+  componentWillUnmount() {
+    window.cancelAnimationFrame(this.animationFrame);
+  }
   gradientStep() {
     const gradientPos = gradient.getGradientPos();
 
@@ -20,7 +23,7 @@ class Gradient extends Component {
       this.setState({ gradientPos });
     }
 
-    window.requestAnimationFrame(this.gradientStep);
+    this.animationFrame = window.requestAnimationFrame(this.gradientStep);
   }
   render() {
     const styles = gradient.getGradientStyles();

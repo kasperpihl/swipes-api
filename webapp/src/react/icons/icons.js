@@ -7,6 +7,7 @@ import JiraLogo from './svgs/jira-logo.svg';
 import SlackLogo from './svgs/slack-logo.svg';
 import SwipesIcon from './pngs/swipes-icon.png';
 import SwipesLogo from './svgs/swipes-logo.svg';
+import SwipesLogoText from './svgs/swipes-logo-text.svg';
 
 import AddPerson from './svgs/add-person.svg';
 import AddToCollection from './svgs/add-to-collection.svg';
@@ -34,6 +35,7 @@ import Download2x from './svgs/download2x.svg';
 import Earth from './svgs/earth.svg';
 import Earth2x from './svgs/earth2x.svg';
 import Email from './svgs/email.svg';
+import Eye from './svgs/eye.svg';
 import Find from './svgs/find.svg';
 import Flag from './svgs/flag.svg';
 import Folder from './svgs/folder.svg';
@@ -113,6 +115,7 @@ export {
   JiraLogo,
   SlackLogo,
   SwipesLogo,
+  SwipesLogoText,
 
   AddPerson,
   AddToCollection,
@@ -140,6 +143,7 @@ export {
   Earth,
   Earth2x,
   Email,
+  Eye,
   Find,
   Flag,
   Folder,
