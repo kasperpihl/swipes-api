@@ -25,6 +25,10 @@ class HOCGoalOverview extends PureComponent {
     bindAll(this, ['onHandoff', 'onNotify', 'onContext']);
   }
   componentDidMount() {
+    const { goal, navPop } = this.props;
+    if (!goal) {
+      navPop();
+    }
   }
   componentWillReceiveProps(nextProps) {
     const { goal, navPop } = this.props;
@@ -170,6 +174,11 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   render() {
+    const { goal } = this.props;
+    if (!goal) {
+      return <div />;
+    }
+
     return (
       <SWView header={this.renderHeader()} footer={this.renderHandoffBar()}>
         <div className="goal-overview">

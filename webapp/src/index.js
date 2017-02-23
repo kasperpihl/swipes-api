@@ -37,7 +37,7 @@ if (typeof Tester !== 'undefined') {
 } else {
   Page = require('./react/app/Root'); // eslint-disable-line
 }
-Page = require('./react/app/Root');
+// Page = require('./react/app/Root');
 
 render(
   RenderedComp || <Page {...props} />

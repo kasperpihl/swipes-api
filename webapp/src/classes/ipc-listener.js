@@ -25,6 +25,7 @@ export default class IpcListener {
       this.isElectron = true;
       this.platform = window.process.platform;
       this.version = remote.getGlobal('version');
+      this.arch = window.process.arch;
       ipcRenderer.on('oauth-success', (event, arg) => {
         store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
       });

@@ -36,6 +36,14 @@ const commonEventsMultiple = (socket, userId) => {
 
             n.notification_data.id = notification_map.id;
             n.notification_data.ts = notification_map.ts;
+
+            if (notification_map.includes_me) {
+              n.notification_data.data.includes_me = notification_map.includes_me;
+            }
+
+            if (notification_map.me_is_next) {
+              n.notification_data.data.me_is_next = notification_map.me_is_next;
+            }
           }
 
           type = n.type;

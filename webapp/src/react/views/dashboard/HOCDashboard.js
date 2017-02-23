@@ -125,12 +125,13 @@ class HOCDashboard extends Component {
         m = m.set('icon', 'GotNotified');
         break;
       }
-      case 'step_got_active': {
-        m = m.set('subtitle', `${from} passed this on to ${to} to work on 'stepname'`);
+      case 'step_completed': {
+        m = m.set('subtitle', `${from} passed this on to ${to}`);
         m = m.set('icon', 'GotAssigned');
         break;
       }
       case 'goal_completed': {
+        m = m.set('subtitle', `${from} completed this goal`);
         m = m.set('icon', 'Star');
         break;
       }

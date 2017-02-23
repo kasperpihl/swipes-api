@@ -124,6 +124,8 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     interceptNextStepUsers,
   } = res.locals;
   const notifications = [];
+  const userNotificationMap = {};
+
 
   uniqueUsersToNotify.forEach((userId) => {
     const notification = {
@@ -135,29 +137,38 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       seen: false,
       ts: r.now(),
     };
+    let notificationMap = userNotificationMap[userId] || {};
 
     if (interceptUsers) {
-      notification.data.includes_me = interceptUsers.has(userId);
+      const includes_me = interceptUsers.has(userId);
+
+      notification.data.includes_me = includes_me;
+      notificationMap = Object.assign({}, notificationMap, { includes_me });
     }
 
     if (interceptNextStepUsers) {
-      notification.data.me_is_next = interceptNextStepUsers.has(userId);
+      const me_is_next = interceptNextStepUsers.has(userId);
+
+      notification.data.me_is_next = me_is_next;
+      notificationMap = Object.assign({}, notificationMap, { me_is_next });
     }
 
+    userNotificationMap[userId] = notificationMap;
     notifications.push(notification);
   });
 
   dbInsertMultipleNotifications({ notifications })
     .then((dbResults) => {
-      const userNotificationMap = {};
-
       dbResults.changes.forEach((change) => {
         const newVal = change.new_val;
+        let notificationMap = userNotificationMap[newVal.user_id] || {};
 
-        userNotificationMap[newVal.user_id] = {
+        notificationMap = Object.assign({}, notificationMap, {
           id: newVal.id,
           ts: newVal.ts,
-        };
+        });
+
+        userNotificationMap[newVal.user_id] = notificationMap;
       });
 
       const data = Object.assign({}, {

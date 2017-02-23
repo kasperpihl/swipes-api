@@ -19,9 +19,18 @@ class HOCGoalHandoff extends PureComponent {
     this.onChangeClick = this.onChangeClick.bind(this);
   }
   componentDidMount() {
-    const { openAssignees } = this.props;
-    if (openAssignees) {
+    const { openAssignees, goal, navPop } = this.props;
+    if (!goal) {
+      navPop();
+    } else if (openAssignees) {
       this.onSelectAssignees(openAssignees.toJS(), fromJS([]));
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    const { goal, navPop } = this.props;
+    const nextGoal = nextProps.goal;
+    if (goal && !nextGoal) {
+      navPop();
     }
   }
   onCompleteStep() {
@@ -205,6 +214,10 @@ class HOCGoalHandoff extends PureComponent {
       isSubmitting,
       handoff,
     } = this.state;
+
+    if (!goal) {
+      return <div />;
+    }
 
     return (
       <SWView footer={this.renderFooter()}>
