@@ -136,7 +136,7 @@ class HOCRegistration extends Component {
         <div
           className="sign-in__subtitle"
         >
-          Track and accomplish goals together. Let’s get started.
+          The place where you join your team on the mission of creating great work together.
         </div>
         {this.renderTabs()}
       </div>
