@@ -34,7 +34,9 @@ export default class Analytics {
     const state = this.store.getState();
 
     const me = state.get('me');
-    if (me && me.get('id') !== this.userId) {
+
+    console.log('me', me.toJS());
+    if (me && me.get('id') && me.get('id') !== this.userId) {
       const orgId = me.getIn(['organizations', 0, 'id']);
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
