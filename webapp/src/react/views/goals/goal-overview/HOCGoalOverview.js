@@ -25,6 +25,10 @@ class HOCGoalOverview extends PureComponent {
     bindAll(this, ['onHandoff', 'onNotify', 'onContext']);
   }
   componentDidMount() {
+    const { goal, navPop } = this.props;
+    if (!goal) {
+      navPop();
+    }
   }
   componentWillReceiveProps(nextProps) {
     const { goal, navPop } = this.props;
