@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ReactTextarea from 'react-textarea-autosize';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import './styles/handoff-write-message.scss';
 
@@ -39,11 +40,11 @@ class HandoffWriteMessage extends Component {
     );
   }
   render() {
-    const { imgSrc } = this.props;
+    const { userId } = this.props;
     return (
       <div className="handoff-write-message">
         <div className="handoff-write-message__image">
-          <img src={imgSrc} role="presentation" />
+          <HOCAssigning assignees={[userId]} rounded />
         </div>
         {this.renderTextfield()}
       </div>
