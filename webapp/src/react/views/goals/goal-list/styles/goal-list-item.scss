@@ -40,7 +40,7 @@ $imgContHeight: 66px;
   }
 
   &__title {
-    @include font(18px, $deepBlue-100, 24px, 400);
+    @include font(17px, $deepBlue-100, 24px, 400);
     width: calc(100% - 50px);
     transition: color .1s ease;
     white-space: nowrap;
