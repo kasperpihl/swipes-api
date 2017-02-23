@@ -75,7 +75,16 @@ export default class GoalsUtil {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
   }
   getLastHandoff() {
-    return this.goal.get('history').findLast(h => (['created', 'complete_step', 'complete_goal'].indexOf(h.get('type')) !== -1));
+    return this.goal.get('history').findLast((h) => {
+      switch (h.get('type')) {
+        case 'created':
+        case 'complete_step':
+        case 'complete_goal':
+          return true;
+        default:
+          return false;
+      }
+    });
   }
   getLastUpdate() {
     return this.goal.get('updated_at');

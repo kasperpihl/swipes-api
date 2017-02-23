@@ -25,6 +25,21 @@
     @include size(100%);
     overflow: hidden;
   }
+  &__setup {
+    @include size(100%);
+    @include flexContainer('column', center, center);
+    h1 {
+      @include font(27px, $deepBlue-80, 36px, 400);
+    }
+
+    h2 {
+      @include size(425px, auto);
+      @include font(15px, $deepBlue-80, 24px, 400);
+      text-align: center;
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
 }
 
 // ======================================================

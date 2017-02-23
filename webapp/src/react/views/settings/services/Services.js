@@ -18,10 +18,10 @@ class Services extends Component {
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
   }
   componentDidMount() {
-    this.checkForDropboxFolder();
+    // this.checkForDropboxFolder();
   }
   componentDidUpdate() {
-    this.checkForDropboxFolder();
+    // this.checkForDropboxFolder();
   }
   handleOAuthSuccess(serviceName, params) {
     if (this._handled) {

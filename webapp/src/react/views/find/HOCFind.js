@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import SWView from 'SWView';
+import Button from 'Button';
 import { setupDelegate, bindAll } from 'classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCBrowse from './browse/HOCBrowse';
@@ -30,7 +31,7 @@ class HOCFind extends Component {
     };
     this.unhandledDocs = [];
     this.callDelegate = setupDelegate(props.delegate);
-    bindAll(this, ['onInputChange', 'onInputKeyUp']);
+    bindAll(this, ['onInputChange', 'onInputKeyUp', 'onConnectService']);
   }
   onInputChange(e) {
     this.setState({ searchQ: e.target.value });
@@ -57,6 +58,12 @@ class HOCFind extends Component {
       loadPreview: obj,
       onAttach,
       goalId,
+    });
+  }
+  onConnectService() {
+    const { openSecondary } = this.props;
+    openSecondary({
+      component: 'Services', title: 'Services',
     });
   }
   navbarLoadedInput(input) {
@@ -133,10 +140,28 @@ class HOCFind extends Component {
       />
     );
   }
+  renderEmpty() {
+    const { me } = this.props;
+    const numberOfServices = me.get('services').size;
+    return (
+      <div className="find__setup">
+        <h1>Search and Find</h1>
+        <h2>
+          Here is the power house of your workspace.
+          It connects to all your services and helps you quickly search through them.
+        </h2>
+        <Button
+          text="Connect new service"
+          primary
+          onClick={this.onConnectService}
+        />
+      </div>
+    );
+  }
   renderSearchResults() {
     const { searchResults, searching, searchQuery } = this.props;
     if (!searchQuery && !searching) {
-      return undefined;
+      return this.renderEmpty();
     }
     return (
       <SWView>
