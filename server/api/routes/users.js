@@ -44,11 +44,9 @@ notAuthed.all('/users.signup',
   valBody({
     email: string.format('email').require(),
     password: string.min(1).require(),
-    name: string.max(32).require(),
-    organization: string.max(64).require(),
-    invitation_code: string.custom((value) => {
-      return value.startsWith('SW319-') ? null : 'Invalid invitation code';
-    }).require(),
+    first_name: string.max(32).require(),
+    last_name: string.max(32).require(),
+    invitation_code: string.require(),
   }),
   userAvailability,
   userAddToOrganization,

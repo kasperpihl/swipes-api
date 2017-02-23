@@ -30,27 +30,17 @@ import {
 
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),
-  name: string.require(),
 }, (req, res, next) => {
   const {
     email,
-    name,
   } = res.locals;
 
-  const query = r.do(
-    r.table('users').getAll(email, { index: 'email' }).isEmpty(),
-    r.table('users').getAll(name, { index: 'name' }).isEmpty(),
-    (isEmail, isName) => {
-      return r.expr([isEmail, isName]);
-    },
-  );
+  const query = r.table('users').getAll(email, { index: 'email' }).isEmpty();
 
   db.rethinkQuery(query)
-    .then((results) => {
-      if (!results[0]) {
+    .then((result) => {
+      if (!result) {
         return next(new SwipesError('There is a user with that email'));
-      } else if (!results[1]) {
-        return next(new SwipesError('This username is not available'));
       }
 
       return next();
@@ -60,51 +50,37 @@ const userAvailability = valLocals('userAvailability', {
     });
 });
 const userAddToOrganization = valLocals('userAddToOrganization', {
-  organization: string.require(),
+  invitation_code: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    organization,
+    invitation_code,
   } = res.locals;
-
-  const organizationId = generateSlackLikeId('O');
   const user_id = generateSlackLikeId('U');
-  const name = organization;
-  const nameToCompare = name.toLowerCase().replace(/\s+/g, '_');
-  const insertDoc = {
-    id: organizationId,
-    name,
-    name_to_compare: nameToCompare,
-    users: [user_id],
-  };
-  const checkQ = r.table('organizations').getAll(nameToCompare, { index: 'name_to_compare' });
-  const insertQ = r.table('organizations').insert(insertDoc);
+  const checkQ = r.table('organizations').getAll(invitation_code, { index: 'invitation_code' });
 
   db.rethinkQuery(checkQ)
     .then((organizations) => {
       if (organizations.length > 0) {
         const organization = organizations[0];
-        const updateQ = r.table('organizations').update({
-          users: r.row('users').append(user_id),
-        });
+        const organizationId = organization.id;
+        const updateQ =
+          r.table('organizations')
+            .get(organizationId)
+            .update({
+              users: r.row('users').append(user_id),
+            });
 
         setLocals({
-          organizationId: organization.id,
+          organizationId,
+          user_id,
         });
 
         return db.rethinkQuery(updateQ);
       }
 
-      setLocals({
-        organizationId,
-      });
-
-      return db.rethinkQuery(insertQ);
+      return next(new SwipesError('Invalid invitation code'));
     })
     .then(() => {
-      setLocals({
-        user_id,
-      });
-
       return next();
     })
     .catch((err) => {
@@ -114,14 +90,16 @@ const userAddToOrganization = valLocals('userAddToOrganization', {
 const userSignUp = valLocals('userSignUp', {
   user_id: string.require(),
   email: string.format('email').require(),
-  name: string.require(),
+  first_name: string.require(),
+  last_name: string.require(),
   password: string.min(1).require(),
   organizationId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     email,
-    name,
+    first_name,
+    last_name,
     password,
     organizationId,
   } = res.locals;
@@ -131,7 +109,8 @@ const userSignUp = valLocals('userSignUp', {
     services: [],
     organizations: [organizationId],
     email,
-    name,
+    first_name,
+    last_name,
     password: sha1(password),
     created: moment().unix(),
   };
