@@ -2,16 +2,51 @@ import {
   request,
 } from './request';
 
-const cardData = (type, data) => {
+const mainSections = (metadata) => {
+  const sections = [];
+
+  if (metadata.notes) {
+    sections.push({
+      title: 'Description',
+      rows: [{
+        type: 'standard',
+        title: metadata.notes,
+      }],
+    });
+  }
+
+  return sections;
+};
+const sideSections = (metadata) => {
+  const sections = [];
+
+  if (metadata.assignee) {
+    const assignee = metadata.assignee;
+
+    sections.push({
+      title: 'Assignee',
+      rows: [{
+        type: 'standard',
+        title: `${assignee.name}`,
+        leftIcon: {
+          src: assignee.photo.image_128x128,
+        },
+      }],
+    });
+  }
+
+  return sections;
+};
+const elementsData = (type, metadata) => {
   const header = {};
   let subtitle = '';
 
   if (type === 'task') {
-    header.title = data.name;
+    header.title = metadata.name;
 
-    if (data.projects.length > 0) {
+    if (metadata.projects.length > 0) {
       subtitle = [];
-      data.projects.forEach((project) => {
+      metadata.projects.forEach((project) => {
         subtitle.push(project.name);
       });
 
@@ -20,10 +55,32 @@ const cardData = (type, data) => {
 
     return {
       header,
+      main: {
+        title: 'About',
+        sections: mainSections(metadata),
+      },
+      side: {
+        title: 'Details',
+        sections: sideSections(metadata),
+      },
     };
   }
 
   return {};
+};
+const buttonsData = (metadata) => {
+  let buttons = [];
+
+  if (metadata.workspace && metadata.workspace.id) {
+    buttons = [
+      {
+        title: 'Open in Asana',
+        url: `https://app.asana.com/0/${metadata.workspace.id}/${metadata.id}/`,
+      },
+    ];
+  }
+
+  return buttons;
 };
 const preview = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
@@ -44,10 +101,14 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
       return callback(err);
     }
 
-    // console.log(res);
-    const elements = cardData(type, res);
+    const metadata = res;
+    const elements = elementsData(type, metadata);
+    const mapButtons = buttonsData(metadata);
 
-    return callback(null, { ...elements });
+    return callback(null, {
+      buttons: mapButtons,
+      ...elements,
+    });
   });
 };
 
