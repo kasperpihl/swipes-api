@@ -44,7 +44,7 @@ class HandoffMessage extends Component {
     let src;
 
     if (user) {
-      name = user.get('name').split(' ')[0];
+      name = user.get('first_name');
       src = user.get('profile_pic');
     }
 

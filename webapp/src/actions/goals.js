@@ -115,7 +115,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     }
     const obj = {
       id: user.get('id'),
-      title: user.get('name'),
+      title: `${user.get('first_name')} ${user.get('last_name')}`,
       subtitle: user.get('job_title'),
       rightIcon: {
         button: {
@@ -139,7 +139,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
         initials: {
           color: 'white',
           backgroundColor: '#000C2F',
-          letters: user.get('name').slice(0, 1),
+          letters: user.get('first_name').slice(0, 1),
         },
       };
     }
@@ -152,13 +152,16 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   };
 
   const sortedUsers = users => users.sort(
-    (b, c) => b.get('name').localeCompare(c.get('name')),
+    (b, c) => b.get('first_name').localeCompare(c.get('first_name')),
   ).toArray();
 
   const allUsers = () => sortedUsers(state.get('users')).map(u => resultForUser(u));
 
   const searchForUser = q => sortedUsers(state.get('users')).map((u) => {
-    if (u.get('name').toLowerCase().startsWith(q.toLowerCase())) {
+    if (
+      u.get('first_name').toLowerCase().startsWith(q.toLowerCase()) ||
+      u.get('last_name').toLowerCase().startsWith(q.toLowerCase())
+    ) {
       return resultForUser(u);
     }
     return null;

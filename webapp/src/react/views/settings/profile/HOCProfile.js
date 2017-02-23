@@ -36,7 +36,7 @@ class HOCProfile extends Component {
       return <img src={me.get('profile_pic')} role="presentation" />;
     }
 
-    const initials = me.get('name').substring(0, 1);
+    const initials = me.get('first_name').substring(0, 1) + me.get('last_name').substring(0, 1);
 
     return <div className="profile__img-name">{initials}</div>;
   }
@@ -48,7 +48,7 @@ class HOCProfile extends Component {
         <div className="profile__image">
           {this.renderProfileImage()}
         </div>
-        <div className="profile__name">{me.get('name')}</div>
+        <div className="profile__name">{me.get('first_name')} {me.get('last_name')}</div>
         <div className="profile__organization">{me.getIn(['organizations', 0, 'name'])}</div>
         <Button
           primary

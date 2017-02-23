@@ -32,7 +32,7 @@ export default class MessageGenerator {
         if (user.get('id') === me.get('id')) {
           return options.yourself ? 'yourself' : 'you';
         }
-        return user.get('name').split(' ')[0].toLowerCase();
+        return user.get('first_name').toLowerCase();
       }
     }
 

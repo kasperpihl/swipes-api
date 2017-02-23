@@ -73,6 +73,7 @@ export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondar
 // ======================================================
 export const logout = () => (dp) => {
   dp({ type: types.LOGOUT });
+  window.analytics.logout();
   localStorage.clear();
   window.location.replace('/');
 };

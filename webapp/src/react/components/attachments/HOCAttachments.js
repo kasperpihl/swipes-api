@@ -71,6 +71,7 @@ class HOCAttachments extends Component {
         if (res && res.button === 0) {
           if (goalId) {
             removeFromCollection(goalId, id).then(() => {
+
             });
           }
           this.callDelegate('onRemoveAttachment', id);

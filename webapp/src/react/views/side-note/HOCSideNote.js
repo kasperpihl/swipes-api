@@ -192,7 +192,7 @@ class HOCSideNote extends Component {
 
     if (locked && lockedBy && lockedBy !== me.get('id')) {
       const person = users.get(note.get('locked_by'));
-      message = `${person.get('name').split(' ')[0]} is writing`;
+      message = `${person.get('first_name')} is writing`;
     }
 
     return message;
