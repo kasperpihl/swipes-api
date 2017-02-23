@@ -98,14 +98,12 @@ class GoalHandoff extends PureComponent {
   renderWriteMessage() {
     const { me, handoff } = this.props;
 
-    const src = me.get('profile_pic');
-
     return (
       <Section title="Write handoff" className="section--show">
         <HandoffWriteMessage
           ref="handoffWriteMessageTextarea"
           onChange={this.onHandoffChange}
-          imgSrc={src}
+          userId={me.get('id')}
           text={handoff.get('message')}
         />
       </Section>

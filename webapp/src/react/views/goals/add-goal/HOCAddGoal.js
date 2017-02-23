@@ -336,12 +336,12 @@ class HOCAddGoal extends Component {
     if (!this.isReadyToCreate()) {
       return undefined;
     }
-    const src = me.get('profile_pic');
+
     return (
       <Section title="Create Goal">
         <HandoffWriteMessage
           text={handoff}
-          imgSrc={src}
+          userId={me.get('id')}
           onChange={this.onHandoffChange}
         />
       </Section>
