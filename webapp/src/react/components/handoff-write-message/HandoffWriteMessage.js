@@ -44,7 +44,7 @@ class HandoffWriteMessage extends Component {
     return (
       <div className="handoff-write-message">
         <div className="handoff-write-message__image">
-          <HOCAssigning assignees={[userId]} rounded />
+          <HOCAssigning assignees={[userId]} rounded size={24} />
         </div>
         {this.renderTextfield()}
       </div>
