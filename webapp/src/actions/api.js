@@ -65,6 +65,7 @@ const request = (options, data) => (dispatch, getState) => {
         'Content-Type': 'application/json',
         'sw-web-version': window.__VERSION__,
         'sw-electron-version': window.ipcListener.version,
+        'sw-electron-arch': window.ipcListener.arch,
         'sw-platform': window.ipcListener.platform,
       },
       types: reqTypes,

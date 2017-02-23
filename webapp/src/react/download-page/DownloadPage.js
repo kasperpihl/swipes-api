@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Icon from 'Icon';
+import Gradient from 'components/gradient/Gradient';
 import './download-page.scss';
 
 class DownloadPage extends Component {
@@ -21,14 +22,14 @@ class DownloadPage extends Component {
 
         <div className="btn-group">
 
-          <a href="http://cdn.swipesapp.com/appdownloads/Swipes-win32-ia32.zip" traget="_blank">
+          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/cxo9ifcvm2hhgbq/Swipes-win32-ia32.zip?dl=1" target="_blank">
             <button>
               <Icon svg="Windows" />
               Windows 32bit
             </button>
           </a>
 
-          <a href="http://cdn.swipesapp.com/appdownloads/Swipes-win32-x64.zip" traget="_blank">
+          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/mveq4y2lcvinu37/Swipes-win32-x64.zip?dl=1" target="_blank">
             <button>
               <Icon svg="Windows" />
               Windows 64bit
@@ -39,7 +40,7 @@ class DownloadPage extends Component {
 
         <div className="btn-group">
 
-          <a href="http://cdn.swipesapp.com/appdownloads/SwipesWorkspace.dmg" traget="_blank">
+          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/qbcv6oqeztfq992/Swipes.dmg?dl=1" target="_blank">
             <button>
               <Icon svg="Apple" />
               OS X
@@ -50,14 +51,14 @@ class DownloadPage extends Component {
 
         <div className="btn-group">
 
-          <a href="http://cdn.swipesapp.com/appdownloads/Swipes-linux-ia32.zip" traget="_blank">
+          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/wbbpqrml7m7ln7s/Swipes-linux-ia32.zip?dl=1" target="_blank">
             <button>
               <Icon svg="Linux" />
               Linux 32bit
             </button>
           </a>
 
-          <a href="http://cdn.swipesapp.com/appdownloads/Swipes-linux-x64.zip" traget="_blank">
+          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/qy3i8y4dxpxbosh/Swipes-linux-x64.zip?dl=1" target="_blank">
             <button>
               <Icon svg="Linux" />
               Linux 64bit
@@ -75,14 +76,13 @@ class DownloadPage extends Component {
     );
   }
   renderWebsite() {
-    let downloadOptions; // = this.renderButtons();
-    const microCopy = 'But only for a few selected people.';
+    const downloadOptions = this.renderButtons();
+    const microCopy = 'Get started by downloading';
 
     return (
       <div className="dl-card">
-        {/* <img src={SwipesIcon}/> */}
-        <h6>SECRET VERSION OF SWIPES</h6>
-        <p>Swipes is available. <br /> {microCopy}</p>
+        <Icon svg="SwipesLogoText" className="dl-card__svg" />
+        <h6>Staging Environment</h6>
         {downloadOptions}
       </div>
     );
@@ -90,6 +90,7 @@ class DownloadPage extends Component {
   render() {
     return (
       <div className="dl-page-wrapper">
+        <Gradient />
         {this.renderWebsite()}
       </div>
     );
