@@ -5,7 +5,7 @@ import {
   SwipesError,
 } from './swipes-error';
 
-const newestElectronVersion = '0.0.2';
+const newestElectronVersion = '0.0.3';
 const electronUrls = {
   darwin: 'https://www.dropbox.com/s/qbcv6oqeztfq992/Swipes.dmg?dl=1',
   win32: 'https://winurl.com',
