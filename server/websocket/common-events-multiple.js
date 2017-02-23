@@ -38,11 +38,11 @@ const commonEventsMultiple = (socket, userId) => {
             n.notification_data.ts = notification_map.ts;
 
             if (notification_map.includes_me) {
-              n.notification_data.includes_me = notification_map.includes_me;
+              n.notification_data.data.includes_me = notification_map.includes_me;
             }
 
             if (notification_map.me_is_next) {
-              n.notification_data.me_is_next = notification_map.me_is_next;
+              n.notification_data.data.me_is_next = notification_map.me_is_next;
             }
           }
 
