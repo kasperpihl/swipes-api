@@ -21,11 +21,11 @@ class HOCRegistration extends Component {
       tabIndex: 0,
       signinEmail: '',
       signinPassword: '',
-      signupName: '',
+      signupFirstName: '',
+      signupLastName: '',
       signupEmail: '',
       signupPassword: '',
       signupInvCode: '',
-      signupOrganization: '',
     };
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
     bindAll(this, ['signin', 'signup', 'handleButtonClick']);
@@ -58,11 +58,11 @@ class HOCRegistration extends Component {
       tabIndex,
       signinEmail,
       signinPassword,
-      signupName,
+      signupFirstName,
+      signupLastName,
       signupEmail,
       signupPassword,
       signupInvCode,
-      signupOrganization,
    } = this.state;
 
     if (tabIndex === 0) {
@@ -76,21 +76,21 @@ class HOCRegistration extends Component {
 
       this.signin(data);
     } else {
-      const name = signupName;
+      const first_name = signupFirstName;
+      const last_name = signupLastName;
       const email = signupEmail;
       const password = signupPassword;
-      const invCode = signupInvCode;
-      const organization = signupOrganization;
+      const invitation_code = signupInvCode;
 
       const data = {
-        name,
+        first_name,
+        last_name,
         email,
         password,
-        invCode,
-        organization,
+        invitation_code,
       };
 
-      this.singup(data);
+      this.signup(data);
     }
   }
   signin(data) {
@@ -186,22 +186,31 @@ class HOCRegistration extends Component {
   renderSignup() {
     const {
       errorLabel,
-      signupName,
+      signupFirstName,
+      signupLastName,
       signupEmail,
       signupPassword,
       signupInvCode,
-      signupOrganization,
     } = this.state;
 
     return (
       <div className="sign-in__form">
         <FloatingInput
-          label="Your Name"
+          label="Your First Name"
           type="text"
-          id="name"
-          key="signupName"
-          value={signupName}
-          onChange={this.cachedOnChange('signupName')}
+          id="firstname"
+          key="signupFirstName"
+          value={signupFirstName}
+          onChange={this.cachedOnChange('signupFirstName')}
+          error={!!errorLabel}
+        />
+        <FloatingInput
+          label="Your Last Name"
+          type="text"
+          id="lastname"
+          key="signupLastName"
+          value={signupLastName}
+          onChange={this.cachedOnChange('signupLastName')}
           error={!!errorLabel}
         />
         <FloatingInput
@@ -220,15 +229,6 @@ class HOCRegistration extends Component {
           key="signupPassword"
           value={signupPassword}
           onChange={this.cachedOnChange('signupPassword')}
-          error={!!errorLabel}
-        />
-        <FloatingInput
-          label="Organization"
-          type="text"
-          id="organization"
-          key="signupOrganization"
-          value={signupOrganization}
-          onChange={this.cachedOnChange('signupOrganization')}
           error={!!errorLabel}
         />
         <FloatingInput
