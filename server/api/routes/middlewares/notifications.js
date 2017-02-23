@@ -93,14 +93,17 @@ const notificationsMarkAsSeenTsQueueMessage = valLocals('notificationsMarkAsSeen
 const notificationsMarkAsSeenIdsQueueMessage = valLocals('notificationsMarkAsSeenIdsQueueMessage', {
   user_id: string.require(),
   notification_ids: array.of(string).require(),
+  last_marked: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     notification_ids,
+    last_marked,
   } = res.locals;
   const queueMessage = {
     user_id,
     notification_ids,
+    last_marked,
     event_type: 'notifications_seen_ids',
   };
 

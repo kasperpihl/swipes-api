@@ -18,6 +18,7 @@ const notificationsSeenTsNotificationData = (req, res, next) => {
 const notificationsSeenIdsNotificationData = (req, res, next) => {
   const {
     notification_ids,
+    last_marked,
   } = res.locals;
 
   const notificationData = {};
@@ -25,6 +26,7 @@ const notificationsSeenIdsNotificationData = (req, res, next) => {
   res.locals.notificationData = notificationData;
   res.locals.eventData = {
     notification_ids,
+    last_marked,
   };
 
   return next();
