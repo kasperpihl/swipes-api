@@ -47,9 +47,14 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
 
   if (type === 'message') {
     return callback(`Type "${type}" is not supported :/`);
+    // const idParts = itemId.split('-');
+    // const channelId = idParts[0];
+    // const messageId = idParts[1];
+    //
     // method = 'channels.history';
     // params = Object.assign({}, {
-    //   latest: itemId,
+    //   channel: channelId,
+    //   latest: messageId,
     //   inclusive: true,
     //   count: 1,
     // });
@@ -66,6 +71,11 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
     if (err) {
       return callback(err);
     }
+
+    // if (type === 'message') {
+    //   console.log(res);
+    //   return callback('shit');
+    // }
 
     const metadata = res.file;
 
