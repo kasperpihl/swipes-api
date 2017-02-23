@@ -21,7 +21,7 @@ const {
   queueHost,
 } = config.get('amazonQueue');
 
-const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
+const notificationsMarkAsSeenTs = valLocals('notificationsMarkAsSeen', {
   user_id: string.require(),
   timestamp: string.format('iso8601').require(),
 }, (req, res, next, setLocals) => {
@@ -52,7 +52,13 @@ const notificationsMarkAsSeenIds = valLocals('notificationsMarkAsSeenIds', {
     notification_ids,
   } = res.locals;
 
-  dbNotificationsMarkAsSeenIds({ notification_ids })
+  const timestamp_now = new Date().toISOString();
+
+  setLocals({
+    last_marked: timestamp_now,
+  });
+
+  dbNotificationsMarkAsSeenIds({ notification_ids, timestamp_now })
     .then(() => {
       return next();
     })
@@ -155,7 +161,7 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
 });
 
 export {
-  notificationsMarkAsSeen,
+  notificationsMarkAsSeenTs,
   notificationsMarkAsSeenIds,
   notificationsPushToQueue,
   notificationsMarkAsSeenTsQueueMessage,

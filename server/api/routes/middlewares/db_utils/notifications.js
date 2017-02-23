@@ -34,13 +34,13 @@ const dbNotificationsMarkAsSeenIds = funcWrap([
   object.as({
     notification_ids: array.require(),
   }).require(),
-], (err, { notification_ids }) => {
+], (err, { notification_ids, timestamp_now }) => {
   if (err) {
     throw new SwipesError(`dbNotificationsMarkAsSeenIds: ${err}`);
   }
 
   const q = r.table('notifications').getAll(r.args(notification_ids)).update({
-    seen: r.now(),
+    seen: timestamp_now,
   });
 
   return db.rethinkQuery(q);
