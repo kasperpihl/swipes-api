@@ -125,6 +125,32 @@
       transition: .15s ease;
     }
   }
+
+  &:not(&--completed)#{&}--hover {
+    opacity: 1;
+    #{$b}__icon:after {
+      opacity: 0;
+      transition: .15s ease;
+    }
+
+    #{$b}__svg {
+      opacity: 1;
+      transition: .15s ease;
+    }
+  }
+
+  &:not(&--current):not(&--future)#{&}--hover {
+    opacity: 1;
+    #{$b}__icon:after {
+      opacity: 1;
+      transition: .15s ease;
+    }
+
+    #{$b}__svg {
+      opacity: 0;
+      transition: .15s ease;
+    }
+  }
 }
 
 // ======================================================
@@ -135,8 +161,6 @@
   $b: &;
 
   &:hover {
-    opacity: 1;
-    transition: .15s ease;
 
     #{$b}__tooltip {
       opacity: 1;
