@@ -53,7 +53,7 @@ class HOCHistory extends PureComponent {
         break;
       }
       case 'complete_step': {
-        m = m.set('subtitle', `${from} completed this off to ${to}`);
+        m = m.set('subtitle', `${from} handed off work to ${to}`);
         m = m.set('title', stepTitle);
         m = m.set('icon', 'GotAssigned');
         break;

@@ -109,7 +109,7 @@ export default function main(state = initialState, action) {
       if (!shouldKeepNotification(payload)) {
         return state;
       }
-      return state.updateIn(['notifications'], s => s.insert(0, fromJS(payload)));
+      return state.updateIn(['notifications'], s => s.filter(n => n.get('id') !== payload.id).insert(0, fromJS(payload)));
     }
     case 'notifications.markAsSeen.ids':
     case 'notifications_seen_ids': {
