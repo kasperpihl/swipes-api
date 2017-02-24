@@ -157,6 +157,7 @@ class HOCSideNote extends Component {
   }
   parseInitialData(initialState) {
     let editorState = NoteEditor.getEmptyEditorState();
+
     if (initialState) {
       const raw = JSON.parse(JSON.stringify(initialState.toJS()));
       editorState = EditorState.push(editorState, convertFromRaw(raw));

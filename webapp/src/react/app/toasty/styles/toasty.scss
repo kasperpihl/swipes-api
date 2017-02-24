@@ -6,5 +6,6 @@
   @include size(200px, auto);
   position: fixed;
   z-index: 10000;
+  pointer-events: none;
   right: 20px; top: 70px;
 }

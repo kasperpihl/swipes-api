@@ -12,6 +12,7 @@
   position: relative;
   transition: .2s;
   overflow: hidden;
+  pointer-events: none;
 
   &:hover {
     opacity: .2;

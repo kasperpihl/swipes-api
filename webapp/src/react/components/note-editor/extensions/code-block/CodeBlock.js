@@ -1,15 +1,17 @@
 import React, { PureComponent } from 'react';
-import PrismDraftDecorator from 'draft-js-prism';
+import PrismDecorator from 'draft-js-prism';
 import CodeUtils from 'draft-js-code';
 import {
   resetBlockToType,
 } from '../../draft-utils';
 
+import './styles/index.scss';
+
 // import { map, list } from 'react-immutable-proptypes';
 
 class CodeBlock extends PureComponent {
   static getDecorator() {
-    return new PrismDraftDecorator();
+    return new PrismDecorator();
   }
   static handleBeforeInput(editorState, onChange, str) {
     const selection = editorState.getSelection();
@@ -65,10 +67,9 @@ class CodeBlock extends PureComponent {
 
   componentDidMount() {
   }
-
   render() {
     return (
-      <div className="className" />
+      <div className="codeBlock" />
     );
   }
 }

@@ -52,7 +52,7 @@ $compSize: 30px;
 
     @for $i from 1 through 100 {
       &:nth-child(#{$i}) {
-        z-index: 100 - $i;
+        z-index: 20 - $i;
       }
     }
   }
