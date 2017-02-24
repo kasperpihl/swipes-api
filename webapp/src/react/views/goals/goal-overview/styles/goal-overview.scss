@@ -7,7 +7,7 @@
 
 .goal-overview{
   $b: &;
-  $flexIgnoreList: '#{$b}__right';
+  $flexIgnoreList: '#{$b}__column--right';
 
   @include size(100%, auto);
   @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
