@@ -29,7 +29,6 @@ class HOCHistory extends PureComponent {
   getNotificationForEvent(e) {
     const { me } = this.props;
     const type = e.get('type');
-    console.log(e.toJS());
     let m = Map({
       timeago: moment(e.get('done_at')).fromNow(),
       seen: true,
@@ -42,18 +41,20 @@ class HOCHistory extends PureComponent {
 
     switch (type) {
       case 'created': {
-        m = m.set('subtitle', `${from} created this goal`);
+        m = m.set('subtitle', `${from} kicked off this goal with`);
+        m = m.set('title', stepTitle);
         m = m.set('icon', 'Plus');
         break;
       }
       case 'notified': {
-        m = m.set('subtitle', `${from} notified ${to} in `);
+        m = m.set('subtitle', `${from} notified ${to} regarding`);
+        m = m.set('title', stepTitle);
         m = m.set('icon', 'GotNotified');
         break;
       }
       case 'complete_step': {
-        m = m.set('subtitle', `${from} handed this off to ${to}`);
-
+        m = m.set('subtitle', `${from} completed this off to ${to}`);
+        m = m.set('title', stepTitle);
         m = m.set('icon', 'GotAssigned');
         break;
       }
@@ -62,6 +63,8 @@ class HOCHistory extends PureComponent {
         m = m.set('icon', 'Star');
         break;
       }
+      default:
+        break;
     }
     return m;
   }
