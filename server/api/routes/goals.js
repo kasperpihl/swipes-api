@@ -119,7 +119,7 @@ authed.all('/goals.notify',
   valBody({
     goal_id: string.require(),
     assignees: array.of(string).min(1).require(),
-    current_step_id: string.require(),
+    current_step_id: string,
     flags: array.of(string),
     message: string,
   }),
