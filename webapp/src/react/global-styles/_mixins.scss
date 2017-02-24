@@ -27,6 +27,20 @@
 	max-height: $maxH;
 }
 
+@mixin truncateString($secondLine: 'false') {
+	@if $secondLine == true {
+	  &:not(:first-line) {
+	    white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+	  }
+	} @else {
+	  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	}
+}
+
 //Pass nothing paramenters for simple centering
 @mixin flex($vertical:center, $horizontal:center, $direction:row) {
 	@if $vertical == flex {
@@ -88,6 +102,23 @@
     	@content;
     }
   }
+}
+
+@mixin centerAbsolute($axis: null) {
+	position: absolute;
+
+	@if $axis == null {
+	  left: 50%; top: 50%;
+	  transform: translate(-50%, -50%);
+	} @else {
+	  @if $axis == horizontal {
+	    left: 50%; top: 0;
+	    transform: translateX(-50%);
+	  } @else if $axis == vertical {
+	    left: 0; top: 50%;
+	    transform: translateY(-50%);
+	  }
+	}
 }
 
 @mixin flexContainer($direction: 'row', $directionHorizontal: null, $directionVertical: null, $selectorsToIgnoreFlex: null) {

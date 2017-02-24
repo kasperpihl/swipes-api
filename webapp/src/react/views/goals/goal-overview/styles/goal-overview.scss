@@ -6,14 +6,20 @@
 // ======================================================
 
 .goal-overview{
+  $b: &;
+  $flexIgnoreList: '#{$b}__right';
+
   @include size(100%, auto);
-  @include flex(flex);
+  @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
   padding-bottom: 30px;
 }
 
 .handoff-bar {
+  $b: &;
+  $flexIgnoreList: '#{$b}__actions';
+
   @include size(100%, 60px);
-  @include flex(center, flex-start);
+  @include flexContainer('row', left, center, $flexIgnoreList);
   animation: showHandoffBar .4s .3s ease forwards;
   background-color: $bg;
   border-top: 1px solid $deepBlue-10;
@@ -36,13 +42,12 @@
   &__column {
 
     &--left {
-      @include size(calc(100% - 270px - 10%), auto);
-      margin-right: 10%;
+      @include size(100%,  auto);
+      padding-right: 60px;
     }
 
     &--right {
-      @include size(270px, auto);
-      @include flex(none);
+      @include size(300px, auto);
     }
   }
 }
@@ -56,7 +61,6 @@
 
   &__actions {
     @include size(auto);
-    @include flex(none);
   }
 }
 

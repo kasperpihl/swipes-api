@@ -1,58 +1,117 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
 .step-list {
   @include size(100%, auto);
+}
 
-  &__item {
-    @include size(100%, 24px);
-    @include font($fz: 12px, $lh: 18px);
-    @include flex(center, flex-start);
-    padding-left: 39px;
-    transition: .25s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.step-list-item {
+  $b: &;
+  $flexIgnoreList: '#{$b}__indicator', '#{$b}__assignees';
 
-    &:not(:last-child) {
-      margin-bottom: 15px;
-      transition: .25s ease;
-    }
+  @include size(100%, 54px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+  transition: .15s ease;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.step-list-item {
+
+  &__indicator {
+    @include size(39px, 100%);
+    @include flexContainer('row', left, center);
+  }
+
+  &__icon {
+    @include size(24px);
+    transition: .15s ease;
+  }
+
+  &__svg {
+    @include size();
+    @include svg-color($green-color);
+    transition: .15s ease;
+  }
+
+  &__title {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-80, 18px, 500);
+  }
+}
+
+// ======================================================
+// PseudoElements
+// ======================================================
+
+// Circle for steplist item
+
+.step-list-item {
+
+  &__icon {
 
     &:after {
-      @include size(10px);
+      @include size(18px);
+      @include centerAbsolute();
+      border: 1px solid $deepBlue-50;
       border-radius: 50%;
-      left: 6px; top: 7px;
       content: '';
-      position: absolute;
-      transition: .25s ease;
+      transition: .15s ease;
     }
+  }
+}
 
-    &--completed {
-      @include font($c: $deepBlue-100);
+// ======================================================
+// Modifiers
+// ======================================================
 
-      &:after {
-        background-color: $deepBlue-100;
-      }
+.step-list-item {
+  $b: &;
+
+  &--completed {
+    opacity: .5;
+    transition: .15s ease;
+
+    #{$b}__icon:after {
+      opacity: 0;
+      transition: .15s ease;
     }
+  }
 
-    &--current {
-      @include font($c: $deepBlue-100);
+  &--current {
 
-      &:after {
-        background-color: transparent;
-        border: 2px solid $deepBlue-100;
-      }
+    #{$b}__svg {
+      opacity: 0;
+      transition: .15s ease;
     }
+  }
 
-    &--future {
-      @include font($c: $deepBlue-40);
+  &--future {
+    opacity: .5;
+    transition: .15s ease;
 
-      &:after {
-        @include size(11px);
-        background-color: transparent;
-        border: 2px solid $deepBlue-40;
-      }
+    #{$b}__svg {
+      opacity: 0;
+      transition: .15s ease;
     }
+  }
+}
+
+// ======================================================
+// Hover
+// ======================================================
+
+.step-list-item {
+  $b: &;
+
+  &:hover {
+    opacity: 1;
+    transition: .15s ease;
   }
 }

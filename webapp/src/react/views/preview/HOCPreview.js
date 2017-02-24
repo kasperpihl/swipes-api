@@ -209,6 +209,8 @@ class HOCPreviewModal extends PureComponent {
     if (fileLoading) {
       className += ' preview-file--hidden';
     }
+
+    console.log('file', file);
     return (
       <div className={className}>
         <Comp

@@ -20,9 +20,10 @@
 
   &__title {
     $width: calc(100% - (36px + 2px));
+
     @include size($width, 100%);
     @include flex(center, flex-start);
-    @include font(12px, $deepBlue-100, 18px);
+    @include font(12px, $deepBlue-80, 18px, 500);
     transition: .1s ease;
 
     &:hover {

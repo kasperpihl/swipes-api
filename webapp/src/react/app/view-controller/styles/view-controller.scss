@@ -126,6 +126,12 @@ section.view-container {
     opacity: 0;
     pointer-events: none;
   }
+
+  &--no-scroll {
+    #{$b}__scroll {
+      overflow: hidden;
+    }
+  }
 }
 
 .sw-view {
