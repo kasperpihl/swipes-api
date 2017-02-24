@@ -25,6 +25,7 @@ const StepList = (props) => {
 
     return (
       <div className={className} key={i}>
+        <div className="step-list-item__tooltip">Reassign current step</div>
         <div className="step-list-item__indicator">
           <div className="step-list-item__icon">
             <Icon svg="Checkmark" className="step-list-item__svg" />
