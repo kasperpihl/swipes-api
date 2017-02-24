@@ -35,6 +35,7 @@ class Services extends Component {
     this.props.disconnectService(data.id);
   }
   clickedConnect(data) {
+    this._handled = false;
     const { browser } = this.props;
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
