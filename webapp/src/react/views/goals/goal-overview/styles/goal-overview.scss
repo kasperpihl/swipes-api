@@ -42,7 +42,8 @@
   &__column {
 
     &--left {
-      @include size(100%,  auto);
+      $width: calc(100% - 300px);
+      @include size($width,  auto);
       padding-right: 60px;
     }
 

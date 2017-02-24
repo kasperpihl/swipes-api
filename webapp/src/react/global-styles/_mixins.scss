@@ -104,19 +104,29 @@
   }
 }
 
-@mixin centerAbsolute($axis: null) {
+@mixin centerAbsolute($axis: null, $side: null, $addToTransform: null) {
 	position: absolute;
 
 	@if $axis == null {
 	  left: 50%; top: 50%;
-	  transform: translate(-50%, -50%);
+	  transform: translate(-50%, -50%) #{$addToTransform};
 	} @else {
 	  @if $axis == horizontal {
-	    left: 50%; top: 0;
-	    transform: translateX(-50%);
+	    left: 50%;
+			@if $side {
+	      #{$side}: 0;
+	    } @else {
+	      top: 0;
+	    }
+	    transform: translateX(-50%) #{$addToTransform};
 	  } @else if $axis == vertical {
-	    left: 0; top: 50%;
-	    transform: translateY(-50%);
+	    top: 50%;
+			@if $side {
+	      #{$side}: 0;
+	    } @else {
+	      left: 0;
+	    }
+	    transform: translateY(-50%) #{$addToTransform};
 	  }
 	}
 }
