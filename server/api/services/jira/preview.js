@@ -154,7 +154,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
   let method = '';
   let params = {};
 
-  if (type === 'issue') {
+  if (type === 'task') {
     method = 'issue.getIssue';
     params = Object.assign({}, {
       issueId: itemId,
