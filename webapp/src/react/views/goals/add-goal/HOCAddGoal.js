@@ -320,7 +320,7 @@ class HOCAddGoal extends Component {
     }
 
     return (
-      <Section className="add-goal__attachment">
+      <Section className="add-goal__attachment" title="Attachments">
         <HOCAttachments
           attachments={attachments}
           attachmentOrder={attachmentOrder}

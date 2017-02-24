@@ -56,7 +56,7 @@ class TabBar extends Component {
       WebkitClipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
     };
 
-    if (sliderClips.length) {
+    if (sliderClips.length && sliderClips[activeTab]) {
       styles = {
         WebkitClipPath: `polygon(${sliderClips[activeTab].start}% 0%, ${sliderClips[activeTab].end}% 0%, ${sliderClips[activeTab].end}% 100%, ${sliderClips[activeTab].start}% 100%)`,
       };

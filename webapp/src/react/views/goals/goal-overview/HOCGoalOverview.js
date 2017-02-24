@@ -130,8 +130,19 @@ class HOCGoalOverview extends PureComponent {
     const handoff = helper.getLastHandoff();
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <Section title="Latest update" />
+        <Section title="Activity" />
         <HOCLastUpdate handoff={handoff} />
+      </div>
+    );
+  }
+  renderRight() {
+    const { goal } = this.props;
+    const helper = this.getHelper();
+    const handoff = helper.getLastHandoff();
+    return (
+      <div className="goal-overview__column goal-overview__column--right">
+        <GoalSide goal={goal} />
+        <Section title="Attachments" />
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
@@ -139,16 +150,6 @@ class HOCGoalOverview extends PureComponent {
           flags={handoff.get('flags')}
           delegate={this}
         />
-      </div>
-    );
-  }
-  renderRight() {
-    const { goal } = this.props;
-    return (
-      <div className="goal-overview__column goal-overview__column--right">
-        <Section title="Team" />
-        <HOCTeam goal={goal} />
-        <GoalSide goal={goal} />
       </div>
     );
   }

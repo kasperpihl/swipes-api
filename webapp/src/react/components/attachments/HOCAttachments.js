@@ -1,20 +1,16 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import * as actions from 'actions';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
-import Button from 'Button';
 import Icon from 'Icon';
-import TabBar from 'components/tab-bar/TabBar';
 import Attachment from './Attachment';
 import './styles/attachments';
 
-class HOCAttachments extends Component {
+class HOCAttachments extends PureComponent {
   constructor(props, context) {
     super(props, context);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
     this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
     this.onDeleteClickCached = setupCachedCallback(this.onDeleteClick, this);
@@ -23,18 +19,7 @@ class HOCAttachments extends Component {
     this.onAdd = this.onAdd.bind(this);
     this.state = {
       loading: false,
-      tabIndex: ((props.flags && props.flags.size) || props.noFlagging) ? 0 : 1,
     };
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.attachments.size !== this.props.attachments.size) {
-      if (this.state.tabIndex === 0) {
-        this.setState({ tabIndex: 1 });
-      }
-    }
-  }
-  componentDidUpdate(prevProps) {
-
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -159,91 +144,38 @@ class HOCAttachments extends Component {
         return undefined;
     }
   }
-  tabDidChange(el, index) {
-    const { tabIndex } = this.state;
-
-    if (index !== tabIndex) {
-      this.setState({ tabIndex: index });
-    }
-  }
-  hasAttachments() {
-    const { attachmentOrder } = this.props;
-    return (attachmentOrder && attachmentOrder.size);
+  renderEmpty() {
+    return <div>No attachments yet</div>;
   }
   renderAttachments() {
-    const { attachments, attachmentOrder: aOrder, enableFlagging, noFlagging } = this.props;
-    const { tabIndex } = this.state;
+    const {
+      attachments,
+      attachmentOrder: aOrder,
+      enableFlagging,
+      flags = List(),
+    } = this.props;
 
-    let { flags } = this.props;
-    if (!flags) {
-      flags = [];
-    } else {
-      flags = flags.toJS();
+    if (!aOrder.size) {
+      return this.renderEmpty();
     }
-
-    const flaggedAttachments = [];
-    const allAttachments = [];
-
-    if (this.hasAttachments()) {
-      aOrder.forEach((aId) => {
-        const a = attachments.get(aId);
-
-        if (flags.indexOf(aId) !== -1) {
-          flaggedAttachments.push(<Attachment
-            key={aId}
-            flagged={(flags.indexOf(aId) !== -1)}
-            onFlag={this.onFlagClickCached(aId)}
-            onDelete={this.onDeleteClickCached(aId)}
-            onClickText={this.onPreviewCached(aId)}
-            icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
-            title={a.get('title')}
-            enableFlagging={enableFlagging}
-          />);
-        }
-
-        allAttachments.push(<Attachment
+    return aOrder.map((aId) => {
+      const a = attachments.get(aId);
+      return (
+        <Attachment
           key={aId}
           flagged={(flags.indexOf(aId) !== -1)}
           onFlag={this.onFlagClickCached(aId)}
           onDelete={this.onDeleteClickCached(aId)}
-          onClickText={this.onPreviewCached(aId)}
+          onClick={this.onPreviewCached(aId)}
           icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
           title={a.get('title')}
           enableFlagging={enableFlagging}
-        />);
-      });
-    }
-
-    if (flaggedAttachments.length === 0) {
-      flaggedAttachments.push(<Attachment
-        key="empty-flagged"
-        title="There are no flagged attachments."
-        emptystate
-      />);
-    }
-
-    if (allAttachments.length === 0) {
-      allAttachments.push(<Attachment
-        key="empty-all"
-        title="There are no attachments yet."
-        emptystate
-      />);
-    }
-    if (enableFlagging || noFlagging) {
-      return allAttachments;
-    }
-    if (tabIndex === 0) {
-      return flaggedAttachments;
-    }
-    return allAttachments;
+        />
+      );
+    });
   }
   renderAddAttachments() {
     const { loading } = this.state;
-    const { disableAdd } = this.props;
-
-    if (disableAdd) {
-      return false;
-    }
 
     let className = 'attachments__add-list';
 
@@ -271,32 +203,9 @@ class HOCAttachments extends Component {
       </div>
     );
   }
-  renderTabbar() {
-    const { enableFlagging, flags = List(), attachmentOrder = List(), noFlagging } = this.props;
-    let { tabIndex } = this.state;
-    let tabs = [`Flagged (${flags.size})`, `All attachments (${attachmentOrder.size})`];
-    let key = 'noHandoff';
-
-    if (noFlagging) {
-      tabs = [`All attachments (${attachmentOrder.size})`];
-    }
-
-    if (enableFlagging) {
-      tabs = ['Flag any attachments to highlight them'];
-      tabIndex = 0;
-      key = 'isHandingOff';
-    }
-
-    return (
-      <div className="attachments__tabs">
-        <TabBar key={key} tabs={tabs} activeTab={tabIndex} delegate={this} />
-      </div>
-    );
-  }
   render() {
     return (
       <div className="attachments">
-        {this.renderTabbar()}
         {this.renderAttachments()}
         {this.renderAddAttachments()}
       </div>
@@ -313,7 +222,6 @@ HOCAttachments.propTypes = {
   attachmentOrder: list,
   attachments: map,
   delegate: object,
-  disableAdd: bool,
   enableFlagging: bool,
   flags: list,
   goalId: string,
@@ -323,7 +231,6 @@ HOCAttachments.propTypes = {
   previewLink: func,
   removeFromCollection: func,
   updateToasty: func,
-  noFlagging: bool,
 };
 HOCAttachments.contextTypes = {
   target: string,

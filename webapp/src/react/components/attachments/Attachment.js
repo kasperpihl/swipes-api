@@ -9,7 +9,7 @@ const Attachment = (props) => {
     title,
     onFlag,
     onDelete,
-    onClickText,
+    onClick,
     flagged,
     enableFlagging,
   } = props;
@@ -26,7 +26,7 @@ const Attachment = (props) => {
 
   return (
     <div className={className}>
-      <div className="attachment__title" onClick={onClickText}>
+      <div className="attachment__title" onClick={onClick}>
         <div className="attachment__icon">
           <Icon svg={icon} className="attachment__svg" />
         </div>
@@ -57,5 +57,5 @@ Attachment.propTypes = {
   enableFlagging: bool,
   onFlag: func,
   onDelete: func,
-  onClickText: func,
+  onClick: func,
 };
