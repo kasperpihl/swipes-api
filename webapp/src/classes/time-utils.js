@@ -31,7 +31,7 @@ export function dayStringForDate(date) {
 }
 
 export function timeAgo(date) {
-  return moment(date).from(moment());
+  return moment(date).fromNow();
 }
 
 export function startOfDayTs(date) {
