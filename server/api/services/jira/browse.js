@@ -53,7 +53,7 @@ const browse = ({ auth_data, query, page, account_id, user }, callback) => {
             preview: {
               service: {
                 name: 'jira',
-                type: 'issue',
+                type: 'task',
                 id: item.id,
               },
               permission: {

@@ -35,7 +35,6 @@ const authData = (data, callback) => {
 
   oauth2Client.getToken(code, (err, tokens) => {
     oauth2Client.setCredentials(tokens);
-    console.log(tokens);
 
     drive.about.get({
       fields: ['user'],
