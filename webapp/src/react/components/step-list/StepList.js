@@ -31,7 +31,7 @@ class StepList extends PureComponent {
     });
   }
   renderStep(step, i) {
-    const { completed, delegate } = this.props;
+    const { completed, delegate, steps } = this.props;
     const completedI = completed - 1;
     const { hoverIndex } = this.state;
 
@@ -60,7 +60,10 @@ class StepList extends PureComponent {
     if (i > completedI) {
       tooltip = 'Complete this step';
       if (i > completed) {
-        tooltip = `Complete ${i - completedI} step${(i > completed + 1) ? 's' : ''}`;
+        tooltip = `Complete ${i - completedI} step${(i > (completedI + 1)) ? 's' : ''}`;
+      }
+      if (i === (steps.size - 1)) {
+        tooltip = 'Complete goal';
       }
     }
 
