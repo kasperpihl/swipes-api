@@ -40,6 +40,7 @@ app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) 
       return originalRes.status(200).json({ ok: true, res: res.locals });
     },
     (err, req, res, next) => {
+      console.log(originalReq.body.payload);
       return originalNext(err);
     },
   );
