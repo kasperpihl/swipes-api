@@ -188,6 +188,7 @@ const goalsNotifyNotificationData = (req, res, next) => {
     user_ids,
     flags,
     message,
+    goal,
   } = res.locals;
 
   const notificationData = {
@@ -199,7 +200,7 @@ const goalsNotifyNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = notificationData;
+  res.locals.eventData = goal;
 
   return next();
 };
