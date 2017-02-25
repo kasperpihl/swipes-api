@@ -69,7 +69,6 @@ class StepList extends PureComponent {
         className={className}
         key={i}
       >
-        <div className="step-list-item__tooltip">{tooltip}</div>
         <div
           className="step-list-item__indicator"
           onClick={this.onCheck(i)}
@@ -81,6 +80,7 @@ class StepList extends PureComponent {
             <Icon svg="Circle" className="step-list-item__svg step-list-item__svg--circle" />
           </div>
         </div>
+        <div className="step-list-item__tooltip">{tooltip}</div>
         <div className="step-list-item__title" onClick={this.onClick(i)}>
           {step.get('title')}
         </div>

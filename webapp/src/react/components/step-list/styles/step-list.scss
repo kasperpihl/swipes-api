@@ -76,7 +76,7 @@
 
   &__tooltip {
     @include font(12px, $bg, 500);
-    @include centerAbsolute(vertical, $addToTransform: translateX(-120%));
+    @include centerAbsolute(vertical, $addToTransform: translateX(-110%));
     background-color: $deepBlue-100;
     padding: 10px 15px;
     opacity: 0;
@@ -158,6 +158,10 @@
       stroke-dashoffset: 19;
     }
   }
+
+  &--hover {
+    opacity: 1;
+  }
 }
 
 // ======================================================
@@ -178,24 +182,17 @@
 
 .step-list {
 
-  &:hover .step-list-item {
-    opacity: 1;
-  }
 }
 
 .step-list-item {
   $b: &;
 
   &:hover {
+    opacity: 1;
+  }
 
-    #{$b}__tooltip {
-      opacity: 1;
-      transform: translateY(-50%) translateX(-110%);
-      transition: .3s ease;
-    }
-
-    & ~ .step-list-item {
-      opacity: .5;
-    }
+  &__indicator:hover + &__tooltip {
+    opacity: 1;
+    transition: .3s ease;
   }
 }
