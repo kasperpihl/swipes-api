@@ -23,6 +23,7 @@ import Calendar from './svgs/calendar.svg';
 import Checklist from './svgs/checklist.svg';
 import ChecklistCheckmark from './svgs/checklist-checkmark.svg';
 import Checkmark from './svgs/checkmark.svg';
+import Circle from './svgs/circle.svg';
 import Close from './svgs/close.svg';
 import CloseSmall from './svgs/close-small.svg';
 import Collection from './svgs/collection.svg';
@@ -132,6 +133,7 @@ export {
   Checklist,
   ChecklistCheckmark,
   Checkmark,
+  Circle,
   Close,
   CloseSmall,
   Collection,

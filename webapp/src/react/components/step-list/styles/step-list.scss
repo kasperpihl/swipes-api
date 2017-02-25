@@ -7,6 +7,7 @@
 
 .step-list {
   @include size(100%, auto);
+  margin-bottom: 60px;
 }
 
 .step-list-item {
@@ -15,6 +16,7 @@
 
   @include size(100%, 54px);
   @include flexContainer('row', left, center, $flexIgnoreList);
+  border-bottom: 1px solid $deepBlue-5;
   transition: .15s ease;
 }
 
@@ -35,9 +37,31 @@
   }
 
   &__svg {
-    @include size();
-    @include svg-color($green-color);
+    @include centerAbsolute();
     transition: .15s ease;
+
+    &--checkmark {
+      @include size();
+      @include svg-color($green-color);
+      stroke-dasharray: 19;
+    	stroke-dashoffset: 0;
+    	stroke-miterlimit: 10;
+      transition: .5s ease;
+    }
+
+    &--circle {
+      @include size(20px);
+      @include svg-color($deepBlue-50);
+      stroke-dasharray: 69;
+    	stroke-dashoffset: 0;
+    	stroke-miterlimit: 10;
+      transition: .5s ease;
+      transform: translate(-50%, -50%) rotate(-35deg);
+
+      circle {
+        stroke-width: 1;
+      }
+    }
   }
 
   &__title {
@@ -71,27 +95,6 @@
 }
 
 // ======================================================
-// PseudoElements
-// ======================================================
-
-// Circle for steplist item
-
-.step-list-item {
-
-  &__icon {
-
-    &:after {
-      @include size(18px);
-      @include centerAbsolute();
-      border: 1px solid $deepBlue-50;
-      border-radius: 50%;
-      content: '';
-      transition: .15s ease;
-    }
-  }
-}
-
-// ======================================================
 // Modifiers
 // ======================================================
 
@@ -102,17 +105,15 @@
     opacity: .5;
     transition: .15s ease;
 
-    #{$b}__icon:after {
-      opacity: 0;
-      transition: .15s ease;
+    #{$b}__svg--circle {
+      stroke-dashoffset: 69;
     }
   }
 
   &--current {
 
-    #{$b}__svg {
-      opacity: 0;
-      transition: .15s ease;
+    #{$b}__svg--checkmark {
+      stroke-dashoffset: 19;
     }
   }
 
@@ -120,42 +121,67 @@
     opacity: .5;
     transition: .15s ease;
 
-    #{$b}__svg {
-      opacity: 0;
-      transition: .15s ease;
+    #{$b}__svg--checkmark {
+      stroke-dashoffset: 19;
+    }
+
+    #{$b}__svg--circle {
+      stroke-dashoffset: 0;
     }
   }
 
   &:not(&--completed)#{&}--hover {
-    opacity: 1;
+
     #{$b}__icon:after {
       opacity: 0;
       transition: .15s ease;
     }
 
     #{$b}__svg {
-      opacity: 1;
-      transition: .15s ease;
+
+      &--checkmark {
+        stroke-dashoffset: 0;
+      }
+
+      &--circle {
+        stroke-dashoffset: 69;
+      }
     }
   }
 
   &:not(&--current):not(&--future)#{&}--hover {
-    opacity: 1;
-    #{$b}__icon:after {
-      opacity: 1;
-      transition: .15s ease;
+    #{$b}__svg--circle {
+      stroke-dashoffset: 0;
     }
 
-    #{$b}__svg {
-      opacity: 0;
-      transition: .15s ease;
+    #{$b}__svg--checkmark {
+      stroke-dashoffset: 19;
     }
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.step-list-item {
+
+  &:first-child {
+    border-top: 1px solid $deepBlue-5;
   }
 }
 
 // ======================================================
 // Hover
 // ======================================================
+
+
+.step-list {
+
+  &:hover .step-list-item {
+    opacity: 1;
+  }
+}
 
 .step-list-item {
   $b: &;
@@ -166,6 +192,10 @@
       opacity: 1;
       transform: translateY(-50%) translateX(-110%);
       transition: .3s ease;
+    }
+
+    & ~ .step-list-item {
+      opacity: .5;
     }
   }
 }

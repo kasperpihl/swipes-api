@@ -62,7 +62,8 @@ class StepList extends PureComponent {
         <div className="step-list-item__tooltip">Reassign current step</div>
         <div className="step-list-item__indicator">
           <div className="step-list-item__icon">
-            <Icon svg="Checkmark" className="step-list-item__svg" />
+            <Icon svg="Checkmark" className="step-list-item__svg step-list-item__svg--checkmark" />
+            <Icon svg="Circle" className="step-list-item__svg step-list-item__svg--circle" />
           </div>
         </div>
         <div className="step-list-item__title">
