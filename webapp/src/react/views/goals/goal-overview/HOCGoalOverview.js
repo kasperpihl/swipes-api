@@ -39,31 +39,39 @@ class HOCGoalOverview extends PureComponent {
       navPop();
     }
   }
-  onHandoff() {
+
+  onStepClick(i) {
+    console.log('click!', i);
+  }
+
+  onStepCheck(i) {
+    const helper = this.getHelper();
+    const currentI = helper.getCurrentStepIndex();
+    console.log(i, currentI);
+    if (i >= currentI) {
+      i += 1;
+    }
+    const step = helper.getStepByIndex(i);
+    const _target = (step && step.get('id')) || '_complete';
+    this.onHandoff(_target, 'Handoff');
+  }
+
+  onHandoff(_target, title) {
     const { navPush, goal } = this.props;
     navPush({
       component: 'GoalHandoff',
-      title: 'Handoff',
+      title,
       props: {
+        _target,
         goalId: goal.get('id'),
       },
     });
   }
-  onNotify(e) {
-    const { navPush, goal } = this.props;
-    navPush({
-      component: 'GoalHandoff',
-      title: 'Notify',
-      props: {
-        openAssignees: {
-          boundingRect: e.target.getBoundingClientRect(),
-          alignX: 'center',
-        },
-        notify: true,
-        goalId: goal.get('id'),
-      },
-    });
+
+  onNotify() {
+    this.onHandoff('_notify', 'Notify');
   }
+
   onContext(e) {
     const {
       goal,
@@ -104,10 +112,16 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+
   getHelper() {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
+
+  clickedAssign(i) {
+    console.log('clicked assign', i);
+  }
+
   renderHeader() {
     const { target } = this.props;
     return (
@@ -139,7 +153,7 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <GoalSide goal={goal} />
+        <GoalSide goal={goal} delegate={this} />
         <Section title="Attachments" />
         <HOCAttachments
           attachments={goal.get('attachments')}

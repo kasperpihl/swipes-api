@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
-// import * as a from 'actions';
+import { timeAgo } from 'classes/time-utils';
+import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
 import NotificationWrapper from '../../dashboard/NotificationWrapper';
@@ -13,6 +13,15 @@ class HOCHistory extends PureComponent {
     this.state = {};
   }
   componentDidMount() {
+  }
+  onClickAttachment(hI, i) {
+    const { goal, preview } = this.props;
+    const flag = goal.getIn(['history', hI, 'flags', i]);
+    const att = goal.getIn(['attachments', flag]);
+    if (att) {
+      console.log(att.toJS());
+      preview(this.context.target, att);
+    }
   }
   getAttachments(flags) {
     const { goal } = this.props;
@@ -30,7 +39,7 @@ class HOCHistory extends PureComponent {
     const { me } = this.props;
     const type = e.get('type');
     let m = Map({
-      timeago: moment(e.get('done_at')).fromNow(),
+      timeago: timeAgo(e.get('done_at'), true),
       seen: true,
       message: e.get('message'),
       attachments: this.getAttachments(e.get('flags')),
@@ -108,4 +117,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  preview: a.links.preview,
 })(HOCHistory);

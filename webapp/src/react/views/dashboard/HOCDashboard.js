@@ -3,11 +3,11 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { list, map } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Button from 'Button';
-import moment from 'moment';
 import { Map, fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { timeAgo } from 'classes/time-utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Dashboard from './Dashboard';
 /* global msgGen */
@@ -102,7 +102,7 @@ class HOCDashboard extends Component {
     const type = n.get('type');
 
     let m = Map({
-      timeago: moment(n.get('ts')).fromNow(),
+      timeago: timeAgo(n.get('ts'), true),
       seen: !!n.get('seen'),
     });
 

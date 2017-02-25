@@ -14,16 +14,14 @@ class HOCGoalHandoff extends PureComponent {
     super(props);
     this.state = {
       isSubmitting: false,
-      handoff: this.getEmptyHandoff(props.notify ? '_notify' : undefined),
+      handoff: this.getEmptyHandoff(props._target),
     };
     this.onChangeClick = this.onChangeClick.bind(this);
   }
   componentDidMount() {
-    const { openAssignees, goal, navPop } = this.props;
+    const { goal, navPop } = this.props;
     if (!goal) {
       navPop();
-    } else if (openAssignees) {
-      this.onSelectAssignees(openAssignees.toJS(), fromJS([]));
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -234,14 +232,13 @@ class HOCGoalHandoff extends PureComponent {
   }
 }
 
-const { func, bool } = PropTypes;
+const { func, bool, string } = PropTypes;
 HOCGoalHandoff.propTypes = {
   navPop: func,
-  notify: bool,
   selectStep: func,
   goalNotify: func,
   selectAssignees: func,
-  openAssignees: map,
+  _target: string.isRequired,
   completeStep: func,
   goal: map,
   me: map,

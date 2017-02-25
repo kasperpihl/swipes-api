@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback, setupDelegate } from 'classes/utils';
 import Icon from 'Icon';
 
 import './styles/step-list.scss';
@@ -12,8 +12,11 @@ class StepList extends PureComponent {
     this.state = {
       hoverIndex: -1,
     };
-    this.onEnterCached = setupCachedCallback(this.onEnter, this);
-    this.onLeaveCached = setupCachedCallback(this.onLeave, this);
+    this.onEnter = setupCachedCallback(this.onEnter, this);
+    this.onLeave = this.onLeave.bind(this);
+    this.callDelegate = setupDelegate(props.delegate);
+    this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
+    this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onStepClick'));
   }
   componentDidMount() {
   }
@@ -22,26 +25,28 @@ class StepList extends PureComponent {
       hoverIndex: i,
     });
   }
-  onLeave(i) {
+  onLeave() {
     this.setState({
       hoverIndex: -1,
     });
   }
   renderStep(step, i) {
-    const { completed } = this.props;
+    const { completed, delegate } = this.props;
+    const completedI = completed - 1;
     const { hoverIndex } = this.state;
 
     let className = 'step-list-item';
 
-    if (i < completed) {
+    if (i <= completedI) {
       className += ' step-list-item--completed';
     } else if (i === completed) {
       className += ' step-list-item--current';
     } else {
       className += ' step-list-item--future';
     }
+
+
     if (hoverIndex !== -1) {
-      const completedI = completed - 1;
       if (hoverIndex > completedI) {
         if (i > completedI && i <= hoverIndex) {
           className += ' step-list-item--hover';
@@ -51,26 +56,42 @@ class StepList extends PureComponent {
       }
     }
 
+    let tooltip = 'Make iteration to this step';
+    if (i > completedI) {
+      tooltip = 'Complete this step';
+      if (i > completed) {
+        tooltip = `Complete ${i - completedI} step${(i > completed + 1) ? 's' : ''}`;
+      }
+    }
 
     return (
       <div
         className={className}
         key={i}
-        onMouseEnter={this.onEnterCached(i)}
-        onMouseLeave={this.onLeaveCached(i)}
       >
-        <div className="step-list-item__tooltip">Reassign current step</div>
-        <div className="step-list-item__indicator">
+        <div className="step-list-item__tooltip">{tooltip}</div>
+        <div
+          className="step-list-item__indicator"
+          onClick={this.onCheck(i)}
+          onMouseEnter={this.onEnter(i)}
+          onMouseLeave={this.onLeave}
+        >
           <div className="step-list-item__icon">
             <Icon svg="Checkmark" className="step-list-item__svg step-list-item__svg--checkmark" />
             <Icon svg="Circle" className="step-list-item__svg step-list-item__svg--circle" />
           </div>
         </div>
-        <div className="step-list-item__title">
+        <div className="step-list-item__title" onClick={this.onClick(i)}>
           {step.get('title')}
         </div>
         <div className="step-list-item__assignees">
-          <HOCAssigning assignees={step.get('assignees')} rounded size={24} />
+          <HOCAssigning
+            delegate={delegate}
+            index={i}
+            assignees={step.get('assignees')}
+            rounded
+            size={24}
+          />
         </div>
       </div>
     );
@@ -88,9 +109,10 @@ class StepList extends PureComponent {
 
 export default StepList;
 
-const { number } = PropTypes;
+const { number, object } = PropTypes;
 
 StepList.propTypes = {
   steps: list,
   completed: number,
+  delegate: object,
 };

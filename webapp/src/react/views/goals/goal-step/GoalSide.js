@@ -36,6 +36,7 @@ class GoalSide extends Component {
       <StepList
         steps={helper.getOrderedSteps()}
         completed={helper.getCurrentStepIndex()}
+        delegate={this.props.delegate}
       />
     );
   }
@@ -51,6 +52,9 @@ class GoalSide extends Component {
 
 export default GoalSide;
 
+const { object } = PropTypes;
+
 GoalSide.propTypes = {
   goal: map,
+  delegate: object,
 };
