@@ -4,7 +4,7 @@ const mapSearch = (res) => {
   let title = '';
   let subtitle = '';
 
-  if (['image', 'file', 'document'].indexOf(type) > -1) {
+  if (['image', 'file', 'document', 'video'].indexOf(type) > -1) {
     const idParts = res.id.split('-');
 
     id = idParts[idParts.length - 1];
@@ -12,7 +12,9 @@ const mapSearch = (res) => {
     subtitle = `From ${res.author}`;
   }
   if (type === 'message') {
-    id = res.id.split(/-(.+)/)[1];
+    const idParts = res.id.split('-');
+
+    id = idParts[idParts.length - 1];
     title = res.message;
     subtitle = res.folder.join(', ');
     subtitle += ` - ${res.author}`;
