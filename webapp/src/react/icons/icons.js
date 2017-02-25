@@ -48,6 +48,7 @@ import GotAssigned from './svgs/got-assigned.svg';
 import GotNotified from './svgs/got-notified.svg';
 import GotUnassigned from './svgs/got-unassigned.svg';
 import Hashtag from './svgs/hashtag.svg';
+import Handoff from './svgs/handoff.svg';
 import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
 import Hyperlink from './svgs/hyperlink.svg';
@@ -158,6 +159,7 @@ export {
   GotNotified,
   GotUnassigned,
   Hashtag,
+  Handoff,
   HeaderOne,
   HeaderTwo,
   Hyperlink,

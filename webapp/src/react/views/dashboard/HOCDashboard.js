@@ -127,7 +127,7 @@ class HOCDashboard extends Component {
       }
       case 'step_completed': {
         m = m.set('subtitle', `${from} passed this on to ${to}`);
-        m = m.set('icon', 'GotAssigned');
+        m = m.set('icon', 'Handoff');
         break;
       }
       case 'goal_completed': {
