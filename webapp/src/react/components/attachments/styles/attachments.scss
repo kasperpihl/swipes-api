@@ -72,6 +72,14 @@
       text-decoration: underline;
     }
   }
+
+  &__empty {
+    @include size(100%, 54px);
+    @include font(12px, $deepBlue-50, 18px, 500);
+    @include flex(center, flex-start);
+    background-color: $bg;
+    border-top: 1px solid darken($deepBlue-5, 3%);
+  }
 }
 
 // tabs
