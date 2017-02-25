@@ -10,6 +10,9 @@ import GoalActions from './GoalActions';
 import HandoffStatus from './HandoffStatus';
 
 class HOCGoalHandoff extends PureComponent {
+  static maxWidth() {
+    return 600;
+  }
   constructor(props) {
     super(props);
     this.state = {

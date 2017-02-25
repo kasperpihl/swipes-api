@@ -96,12 +96,6 @@ class HOCGoalOverview extends PureComponent {
             },
           },
           {
-            title: 'Complete Goal',
-            onClick: () => {
-
-            },
-          },
-          {
             title: 'Archive Goal',
             onClick: () => {
               archive(goal.get('id'));
