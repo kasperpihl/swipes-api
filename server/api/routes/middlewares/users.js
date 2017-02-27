@@ -162,8 +162,6 @@ const userSignIn = valLocals('userSignIn', {
 
       const token = jwt.encode({
         iss: user.id,
-        adm: user.is_admin,
-        sysAdm: user.is_sysadmin,
       }, config.get('jwtTokenSecret'));
 
       setLocals({
