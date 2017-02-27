@@ -6,7 +6,6 @@ import GoalsUtil from 'classes/goals-util';
 import Section from 'components/section/Section';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
-import HandoffHeader from './HandoffHeader';
 
 import './styles/goal-handoff.scss';
 
@@ -25,65 +24,12 @@ class GoalHandoff extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-  mapStepToHeader(target, isNext) {
-    const { handoff } = this.props;
-    const helper = this.getHelper();
-    if (target === '_complete' || !target) {
-      return undefined;
-    }
-    if (target === '_notify') {
-      let notifyTo = handoff.get('assignees') || [];
-      if (typeof notifyTo.size === 'number') {
-        notifyTo = notifyTo.toJS();
-      }
-      return {
-        title: 'Notify people',
-        assignees: notifyTo,
-      };
-    }
-    let subtitle = 'Current step';
-    const stepIndex = helper.getStepIndexForId(target);
-    const step = helper.getStepById(target);
-    let assignees = step.get('assignees');
-    if (isNext) {
-      assignees = handoff.get('assignees') || assignees;
-      const currentI = helper.getCurrentStepIndex();
-      const nextI = helper.getStepIndexForId(target);
-      subtitle = 'Next step';
-      if (nextI === currentI) {
-        subtitle = 'Reassign';
-      } else if (nextI < currentI) {
-        subtitle = 'Make Iteration';
-      }
-    }
-    return {
-      title: `${stepIndex + 1}. ${step.get('title')}`,
-      subtitle,
-      assignees: assignees.toJS(),
-    };
-  }
-  renderHeader() {
-    const { handoff } = this.props;
-    const helper = this.getHelper();
-
-    const from = this.mapStepToHeader(helper.getCurrentStepId());
-    const to = this.mapStepToHeader(handoff.get('target'), true);
-
-    return (
-      <HandoffHeader
-        from={from}
-        to={to}
-        onChangeClick={this.onChangeClick}
-        isHandingOff
-      />
-    );
-  }
 
   renderAttachments() {
     const { goal, delegate, handoff } = this.props;
 
     return (
-      <Section title="Attachments" className="goal-step__attachment">
+      <Section title="Flag attachments" className="goal-step__attachment">
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
@@ -99,7 +45,7 @@ class GoalHandoff extends PureComponent {
     const { me, handoff } = this.props;
 
     return (
-      <Section title="Write handoff" className="section--show">
+      <Section title="Write a message" className="section--show">
         <HandoffWriteMessage
           ref="handoffWriteMessageTextarea"
           onChange={this.onHandoffChange}
@@ -112,7 +58,6 @@ class GoalHandoff extends PureComponent {
   render() {
     return (
       <div className="goal-handoff">
-        {this.renderHeader()}
         {this.renderWriteMessage()}
         {this.renderAttachments()}
       </div>

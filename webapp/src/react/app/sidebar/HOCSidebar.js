@@ -61,7 +61,7 @@ class HOCSidebar extends PureComponent {
       { id: 'goals', svg: 'Goals' },
       // { id: 'milestones', svg: 'Milestones' },
       { id: 'dashboard', svg: 'Notification' },
-      { id: 'find', svg: 'Find' },
+      // { id: 'find', svg: 'Find' },
       { id: 'slack', svg: 'Hashtag' },
       //{ id: 'store', svg: 'Store' },
     ].map(o => this.renderItem(o));

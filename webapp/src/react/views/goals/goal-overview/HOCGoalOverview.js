@@ -62,6 +62,7 @@ class HOCGoalOverview extends PureComponent {
       component: 'GoalHandoff',
       title,
       props: {
+        title,
         _target,
         goalId: goal.get('id'),
       },

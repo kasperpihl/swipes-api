@@ -80,7 +80,7 @@ class HOCHistory extends PureComponent {
   renderEvent(e, i) {
     const { me } = this.props;
     if (e.get('type') === 'notified') {
-      if (e.get('assignees').indexOf(me.get('id')) === -1) {
+      if (e.get('assignees').indexOf(me.get('id')) === -1 && e.get('done_by') !== me.get('id')) {
         return undefined;
       }
     }

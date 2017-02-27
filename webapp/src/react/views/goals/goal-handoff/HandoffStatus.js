@@ -31,8 +31,8 @@ class HandoffStatus extends Component {
     } else if (toId === '_notify') {
       status = (
         <span>
-          {'Notify '}
-          <b onClick={this.onChange('to')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
+          {'Send notification to '}
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
         </span>
       );
     } else {
@@ -54,7 +54,7 @@ class HandoffStatus extends Component {
           {moveString}
           <b onClick={this.onChange('step')}>{title}</b>
           {diff === 0 ? ' to ' : ' and assign '}
-          <b onClick={this.onChange('to')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
         </span>
       );
     }

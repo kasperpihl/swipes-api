@@ -5,6 +5,7 @@ import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalHandoff from './GoalHandoff';
 import GoalActions from './GoalActions';
 import HandoffStatus from './HandoffStatus';
@@ -97,7 +98,7 @@ class HOCGoalHandoff extends PureComponent {
     this.setState({ handoff: handoff.set('message', handoffText) });
   }
   onChangeClick(type, e) {
-    let { handoff } = this.state;
+    const { handoff } = this.state;
     const helper = this.getHelper();
     const { goal, selectStep } = this.props;
     const options = {
@@ -116,13 +117,6 @@ class HOCGoalHandoff extends PureComponent {
         }
       });
     } else {
-      if (type === 'from') {
-        const newState = {};
-        if (handoff.get('target') !== helper.getCurrentStepId()) {
-          newState.handoff = handoff = handoff.set('target', helper.getCurrentStepId()).set('assignees', null);
-        }
-        this.setState(newState);
-      }
       const step = helper.getStepById(handoff.get('target'));
       let newAssignees = handoff.get('assignees');
       if (!newAssignees && step) {
@@ -143,21 +137,50 @@ class HOCGoalHandoff extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-  calculateNextStep(goal) {
-    const helper = this.getHelper(goal);
-    const nextStep = helper.getNextStep();
-    return nextStep ? nextStep.get('id') : '_complete';
-  }
-  renderStatus() {
-    const { goal } = this.props;
+  getAssignees() {
     const { handoff } = this.state;
 
     const helper = this.getHelper();
     let assignees = handoff.get('assignees');
     if (!assignees && !handoff.get('target').startsWith('_')) {
       const nextStep = helper.getStepById(handoff.get('target'));
-      assignees = nextStep.get('assignees');
+      if (nextStep) {
+        assignees = nextStep.get('assignees');
+      }
     }
+    return assignees;
+  }
+  clickedAssign(index, e) {
+    this.onChangeClick('assignees', e);
+  }
+  calculateNextStep(goal) {
+    const helper = this.getHelper(goal);
+    const nextStep = helper.getNextStep();
+    return nextStep ? nextStep.get('id') : '_complete';
+  }
+  renderHeader() {
+    const { title } = this.props;
+    const assignees = this.getAssignees();
+
+    return (
+      <div className="goal-handoff__header">
+        <div>
+          <div className="goal-handoff__title">{title}</div>
+          <div className="goal-handoff__subtitle">
+            {this.renderStatus()}
+          </div>
+        </div>
+        <HOCAssigning
+          delegate={this}
+          assignees={assignees}
+        />
+      </div>
+    );
+  }
+  renderStatus() {
+    const { goal } = this.props;
+    const { handoff } = this.state;
+    const assignees = this.getAssignees();
 
     return (
       <HandoffStatus
@@ -176,7 +199,6 @@ class HOCGoalHandoff extends PureComponent {
     const helper = this.getHelper();
 
     let primaryLabel = 'Complete step';
-    const secondaryLabel = 'Cancel';
     if (handoff.get('target') === '_complete') {
       primaryLabel = 'Complete Goal';
     } else if (handoff.get('target') === '_notify') {
@@ -196,7 +218,6 @@ class HOCGoalHandoff extends PureComponent {
       <div className="goal-handoff__action-bar">
         <GoalActions
           delegate={this}
-          secondaryLabel={secondaryLabel}
           primaryLabel={primaryLabel}
           primaryLoading={isSubmitting}
         >
@@ -221,7 +242,7 @@ class HOCGoalHandoff extends PureComponent {
     }
 
     return (
-      <SWView footer={this.renderFooter()}>
+      <SWView header={this.renderHeader()} footer={this.renderFooter()}>
         <GoalHandoff
           goal={goal}
           me={me}
@@ -235,7 +256,7 @@ class HOCGoalHandoff extends PureComponent {
   }
 }
 
-const { func, bool, string } = PropTypes;
+const { func, string } = PropTypes;
 HOCGoalHandoff.propTypes = {
   navPop: func,
   selectStep: func,
