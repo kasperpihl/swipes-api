@@ -80,6 +80,30 @@ class HOCGoalList extends Component {
       this.updateFilter({});
     }
   }
+  onAssignClick(goalId, stepId, e) {
+    const { goals, selectAssignees, navPush } = this.props;
+    const step = goals.getIn([goalId, 'steps', stepId]);
+
+    const options = this.getOptionsForE(e);
+    let overrideAssignees;
+    const title = 'Handoff';
+    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        navPush({
+          component: 'GoalHandoff',
+          title,
+          props: {
+            title,
+            _target: stepId,
+            assignees: overrideAssignees,
+            goalId,
+          },
+        });
+      }
+    });
+  }
   onClickGoal(goalId, scrollTop) {
     const {
       navPush,
@@ -143,6 +167,12 @@ class HOCGoalList extends Component {
       placeholder: 'Goal title',
     },
     savedState);
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
   }
   updateFilter(mergeObj) {
     const { saveCache } = this.props;
@@ -302,4 +332,5 @@ export default connect(mapStateToProps, {
   saveCache: a.main.cache.save,
   selectUser: a.menus.selectUser,
   selectGoalType: a.menus.selectGoalType,
+  selectAssignees: a.goals.selectAssignees,
 })(HOCGoalList);
