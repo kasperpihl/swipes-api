@@ -168,8 +168,12 @@ $sectionHeight: 52px;
     }
 
     &--selected {
-      & .result__title, & .result__subtitle {
+      & .result__title {
         @include font(15px, $deepBlue-100, 21px, 4500);
+      }
+
+      & .result__subtitle {
+        @include font(12px, $deepBlue-80, 15px);
       }
 
       &:before {
@@ -180,8 +184,12 @@ $sectionHeight: 52px;
     &--disabled {
       pointer-events: none;
 
-      & .result__title, .result__subtitle {
+      & .result__title {
         @include font(15px, $deepBlue-30, 21px, 400);
+      }
+
+      & .result__subtitle {
+        @include font(12px, $deepBlue-30, 15px);
       }
 
       &:hover {
