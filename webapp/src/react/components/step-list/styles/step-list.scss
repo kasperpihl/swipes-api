@@ -40,27 +40,15 @@
     @include centerAbsolute();
     transition: .15s ease;
 
-    &--checkmark {
+    &--transition {
       @include size();
       @include svg-color($green-color);
-      stroke-dasharray: 19;
-    	stroke-dashoffset: 0;
+      padding: 2px;
+      stroke-dashoffset: 0;
+      stroke-dasharray: 19px 100px;
     	stroke-miterlimit: 10;
-      transition: .5s ease;
-    }
-
-    &--circle {
-      @include size(20px);
-      @include svg-color($deepBlue-50);
-      stroke-dasharray: 69;
-    	stroke-dashoffset: 0;
-    	stroke-miterlimit: 10;
-      transition: .5s ease;
-      transform: translate(-50%, -50%) rotate(-35deg);
-
-      circle {
-        stroke-width: 1;
-      }
+      stroke-width: 2;
+      transition: .7s ease;
     }
   }
 
@@ -104,16 +92,15 @@
   &--completed {
     opacity: .5;
     transition: .15s ease;
-
-    #{$b}__svg--circle {
-      stroke-dashoffset: 69;
-    }
   }
 
   &--current {
 
-    #{$b}__svg--checkmark {
-      stroke-dashoffset: 19;
+    #{$b}__svg--transition {
+      @include svg-color($deepBlue-50);
+      stroke-dashoffset: 0;
+    	stroke-dashoffset: -23px;
+      stroke-dasharray: 69px 26px;
     }
   }
 
@@ -121,41 +108,29 @@
     opacity: .5;
     transition: .15s ease;
 
-    #{$b}__svg--checkmark {
-      stroke-dashoffset: 19;
-    }
-
-    #{$b}__svg--circle {
+    #{$b}__svg--transition {
+      @include svg-color($deepBlue-50);
       stroke-dashoffset: 0;
+    	stroke-dashoffset: -23px;
+      stroke-dasharray: 69px 26px;
     }
   }
 
   &:not(&--completed)#{&}--hover {
 
-    #{$b}__icon:after {
-      opacity: 0;
-      transition: .15s ease;
-    }
-
-    #{$b}__svg {
-
-      &--checkmark {
-        stroke-dashoffset: 0;
-      }
-
-      &--circle {
-        stroke-dashoffset: 69;
-      }
+    #{$b}__svg--transition {
+      @include svg-color($green-color);
+      stroke-dashoffset: 0;
+      stroke-dasharray: 19px 100px;
     }
   }
 
   &:not(&--current):not(&--future)#{&}--hover {
-    #{$b}__svg--circle {
+    #{$b}__svg--transition {
+      @include svg-color($deepBlue-50);
       stroke-dashoffset: 0;
-    }
-
-    #{$b}__svg--checkmark {
-      stroke-dashoffset: 19;
+    	stroke-dashoffset: -23px;
+      stroke-dasharray: 69px 26px;
     }
   }
 

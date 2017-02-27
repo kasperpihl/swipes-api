@@ -79,8 +79,7 @@ class StepList extends PureComponent {
           onMouseLeave={this.onLeave}
         >
           <div className="step-list-item__icon">
-            <Icon svg="Checkmark" className="step-list-item__svg step-list-item__svg--checkmark" />
-            <Icon svg="Circle" className="step-list-item__svg step-list-item__svg--circle" />
+            <Icon svg="CircleCheckmark" className="step-list-item__svg step-list-item__svg--transition" />
           </div>
         </div>
         <div className="step-list-item__tooltip">{tooltip}</div>
