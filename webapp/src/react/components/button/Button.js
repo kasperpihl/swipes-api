@@ -7,10 +7,15 @@ class Button extends Component {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
-    this.state = { loading: props.loading || false };
+    this.state = {
+      loading: props.loading || false,
+      errorState: false,
+      successState: false,
+    };
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
+    clearTimeout(this._resultTimer);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loading !== this.props.loading) {
@@ -29,6 +34,24 @@ class Button extends Component {
           this.setState({ loading: nextProps.loading });
         }
       }
+    }
+
+    if (nextProps.errorLabel !== this.props.errorLabel) {
+      this.setSate({ errorState: true });
+      clearTimeout(this._resultTimer);
+
+      this._resultTimer = setTimeout(() => {
+        this.setState({ errorState: false });
+      }, 3000);
+    }
+
+    if (nextProps.successLabel !== this.props.successLabel) {
+      this.setSate({ successState: true });
+      clearTimeout(this._resultTimer);
+
+      this._resultTimer = setTimeout(() => {
+        this.setState({ successState: false });
+      }, 3000);
     }
   }
   onClick(e) {
@@ -60,6 +83,25 @@ class Button extends Component {
       <div className="g-button__text">{text}</div>
     );
   }
+  renderResultState() {
+    const { successLabel, errorLabel } = this.props;
+    let label = '';
+    let icon = '';
+
+    if (!successLabel && !errorLabel) {
+      return undefined;
+    }
+
+    label = successLabel || errorLabel;
+    icon = successLabel ? 'Checkmark' : 'Close';
+
+    return (
+      <div className="g-button__result-state">
+        <Icon svg={icon} className="g-button__svg" />
+        <div className="g-button__text">{label}</div>
+      </div>
+    );
+  }
   render() {
     const {
       primary,
@@ -74,7 +116,7 @@ class Button extends Component {
       className: classNameFromButton,
       ...rest
     } = this.props;
-    const { loading } = this.state;
+    const { loading, errorState, successState } = this.state;
     let className = 'g-button';
     const tabIndex = {};
 
@@ -111,6 +153,14 @@ class Button extends Component {
       className += ' g-button--loading';
     }
 
+    if (errorState) {
+      className += ' g-button--result g-button--error';
+    }
+
+    if (successState) {
+      className += ' g-button--result g-button--error';
+    }
+
     if (classNameFromButton && typeof classNameFromButton === 'string') {
       className += ` ${classNameFromButton}`;
     }
@@ -119,6 +169,7 @@ class Button extends Component {
       <button ref="button" className={className} {...rest} onClick={this.onClick} {...tabIndex}>
         {this.renderIcon()}
         {this.renderText()}
+        {this.renderResultState()}
       </button>
     );
   }

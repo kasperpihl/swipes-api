@@ -8,22 +8,68 @@ $btnSize: $bigBtn;
 $mainColor: $deepBlue-50;
 $borderColor: $deepBlue-10;
 
+// ======================================================
+// Block
+// ======================================================
+
 .g-button {
   $b: &;
 
-  @include flex();
   @include size(auto, $btnSize);
-  display: inline-flex;
+  @include widthSpecifications($btnSize, initial);
+  @include flexContainer('row', center, center) {
+    flex: none;
+  };
+  background-color: $bg;
+  border-radius: 50px;
   border: 1px solid;
   border-color: $borderColor;
-  border-radius: 50px;
-  flex: none;
-  min-width: $btnSize;
+  display: inline-flex;
   transition: all .15s, border-color .15s 0s;
-  background-color: $bg;
-  position: relative;
-  z-index: 2;
   user-select: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.g-button {
+  $b: &;
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($mainColor !important);
+    transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
+  }
+
+  &__text {
+    @include font(12px, $mainColor, 15px, bold);
+    padding: 0 $btnSize;
+    pointer-events: none;
+    transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+// Result states
+
+.g-button {
+  $b: &;
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+
+// Focus and active state, not for disabled, frameless and loading
+
+.g-button {
 
   &:not(&--disabled):not(&--frameless):not(&--loading):focus, {
     outline:none;
@@ -40,37 +86,14 @@ $borderColor: $deepBlue-10;
   }
 }
 
-// ELEMENTS
+// ======================================================
+// Modifiers
+// ======================================================
+
+// Icon and text
 
 .g-button {
   $b: &;
-
-  &__svg {
-    @include size(24px);
-    @include svg-color($mainColor !important);
-    transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
-  }
-
-  &__text {
-    color: $mainColor;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 0 $btnSize;
-    pointer-events: none;
-    transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
-
-    &:first-letter {
-      text-transform: uppercase;
-    }
-  }
-}
-
-
-// MODIFIERS
-
-.g-button {
-  $b: &;
-
 
   &--icon-and-text {
     padding: 0 $btnSize;
@@ -80,6 +103,28 @@ $borderColor: $deepBlue-10;
       padding-left: 6px;
     }
   }
+}
+
+// Reverse for Icon and text
+
+.g-button {
+  $b: &;
+
+  &--reverse {
+    #{$b}__svg {
+      order: 2;
+    }
+
+    #{$b}__text {
+      order: 1;
+    }
+  }
+}
+
+// Primary
+
+.g-button {
+  $b: &;
 
   &--primary {
     $mainColor: $blue-100;
@@ -95,16 +140,12 @@ $borderColor: $deepBlue-10;
       color: $mainColor;
     }
   }
+}
 
-  &--reverse {
-    #{$b}__svg {
-      order: 2;
-    }
+// Small button
 
-    #{$b}__text {
-      order: 1;
-    }
-  }
+.g-button {
+  $b: &;
 
   &--small {
     $btnSize: $smallBtn;
@@ -120,10 +161,17 @@ $borderColor: $deepBlue-10;
       padding: 0 $btnSize;
     }
   }
+}
+
+// disabled
+
+.g-button {
+  $b: &;
 
   &--disabled {
     border-color: transparent;
     background-color: transparent;
+    pointer-events: none;
 
     #{$b}__text {
       color: $deepBlue-20;
@@ -134,13 +182,23 @@ $borderColor: $deepBlue-10;
       @include svg-color($deepBlue-20 !important);
     }
   }
+}
+
+// frameless
+
+.g-button {
+  $b: &;
 
   &--frameless {
     border: none;
   }
 }
 
-// HOVER
+// ======================================================
+// Hover
+// ======================================================
+
+// default hover
 
 .g-button {
   $b: &;
@@ -157,6 +215,12 @@ $borderColor: $deepBlue-10;
       color: $mainColor;
     }
   }
+}
+
+// Primary hover
+
+.g-button {
+  $b: &;
 
   &--primary:hover {
     $mainColor: $blue-100;
@@ -170,6 +234,13 @@ $borderColor: $deepBlue-10;
       color: white;
     }
   }
+}
+
+// Icon and text hover
+
+.g-button {
+  $b: &;
+
 
   &--icon-and-text:hover {
 
@@ -191,6 +262,12 @@ $borderColor: $deepBlue-10;
       transform: translateX(-6px);
     }
   }
+}
+
+// disabled hover
+
+.g-button {
+  $b: &;
 
   &--disabled:hover {
     background-color: transparent !important;
@@ -205,8 +282,9 @@ $borderColor: $deepBlue-10;
   }
 }
 
-
+// ======================================================
 // Loading
+// ======================================================
 
 .g-button {
   $b: &;
@@ -268,5 +346,72 @@ $borderColor: $deepBlue-10;
 
   to {
     transform: rotate(315deg);
+  }
+}
+
+// ======================================================
+// Result states
+// ======================================================
+
+.g-button {
+  $b: &;
+
+  &--result {
+    pointer-events: none;
+
+    #{$b}__svg {
+      display: none;
+    }
+
+    #{$b}__text {
+      display: none;
+    }
+  }
+
+  &--success {
+    border-color: $green-color;
+
+    &:hover {
+      border-color: $green-color;
+    }
+
+    #{$b}__svg {
+      @include svg-color($green-color !important);
+    }
+
+    #{$b}__text {
+      @include font($c: $green-color);
+    }
+  }
+
+  &--error {
+    border-color: $red-80;
+
+    &:hover {
+      border-color: $red-80;
+    }
+
+    #{$b}__svg {
+      @include svg-color($red-80 !important);
+    }
+
+    #{$b}__text {
+      @include font($c: $red-80);
+    }
+  }
+
+  &__result-state {
+    @include size(100%);
+    @include flexContainer('row', center, center);
+
+    #{$b}__svg {
+      margin-left: 15px;
+      display: block;
+    }
+
+    #{$b}__text {
+      display: block;
+      padding: 0 15px;
+    }
   }
 }
