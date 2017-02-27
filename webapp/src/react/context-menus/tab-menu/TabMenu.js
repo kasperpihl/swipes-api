@@ -197,7 +197,7 @@ class TabMenu extends Component {
     );
   }
   renderFooter() {
-    const { actionLabel } = this.props;
+    const { actionLabel, actionStatus } = this.props;
 
     if (!actionLabel) {
       return undefined;
@@ -205,7 +205,12 @@ class TabMenu extends Component {
 
     return (
       <div className="tab-menu__footer">
-        <Button text={actionLabel} primary onClick={this.handleClick} />
+        <div className="tab-menu__status">
+          {actionStatus}
+        </div>
+        <div className="tab-menu__actions">
+          <Button text={actionLabel} primary onClick={this.handleClick} />
+        </div>
       </div>
     );
   }

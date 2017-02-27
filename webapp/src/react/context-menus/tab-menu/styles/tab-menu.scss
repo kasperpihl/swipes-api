@@ -42,11 +42,24 @@ $sectionHeight: 52px;
 // Footer
 
 .tab-menu {
+  $b: &;
 
   &__footer {
+    $flexIgnoreList: '#{$b}__actions';
+
     @include size(100%, 60px);
-    @include flexContainer('row', center, center);
+    @include flexContainer('row', left, center, $flexIgnoreList);
     border-top: 1px solid $deepBlue-10;
+    padding: 0 15px;
+  }
+
+  &__status {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-40, 18px, 500);
+  }
+
+  &__actions {
+    padding-left: 15px;
   }
 }
 
