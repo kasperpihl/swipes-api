@@ -56,6 +56,10 @@ class StepList extends PureComponent {
       }
     }
 
+    if (step.get('loading')) {
+      className += ' step-list-item--loading'
+    }
+
     let tooltip = 'Make iteration to this step';
     if (i > completedI) {
       tooltip = 'Complete this step';
@@ -77,7 +81,6 @@ class StepList extends PureComponent {
           onClick={this.onCheck(i)}
           onMouseEnter={this.onEnter(i)}
           onMouseLeave={this.onLeave}
-        >
           <div className="step-list-item__icon">
             <Icon svg="CircleCheckmark" className="step-list-item__svg step-list-item__svg--transition" />
           </div>

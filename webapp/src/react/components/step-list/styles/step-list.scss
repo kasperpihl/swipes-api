@@ -175,7 +175,6 @@
   &:hover {
     opacity: 1;
   }
-
   &__indicator:hover + &__tooltip {
     opacity: 1;
     transition: .3s ease;
