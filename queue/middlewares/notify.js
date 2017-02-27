@@ -126,7 +126,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
   const notifications = [];
   const userNotificationMap = {};
 
-
   uniqueUsersToNotify.forEach((userId) => {
     const notification = {
       // because mutation is the root of all evil
@@ -156,6 +155,10 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     userNotificationMap[userId] = notificationMap;
     notifications.push(notification);
   });
+
+  if (notifications.length === 0) {
+    return next();
+  }
 
   dbInsertMultipleNotifications({ notifications })
     .then((dbResults) => {
