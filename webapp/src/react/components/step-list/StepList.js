@@ -56,7 +56,9 @@ class StepList extends PureComponent {
       }
     }
 
+    let title = step.get('title');
     if (step.get('loading')) {
+      title = step.get('loading');
       className += ' step-list-item--loading';
     }
 
@@ -88,7 +90,7 @@ class StepList extends PureComponent {
         </div>
         <div className="step-list-item__tooltip">{tooltip}</div>
         <div className="step-list-item__title" onClick={this.onClick(i)}>
-          {step.get('title')}
+          {title}
         </div>
         <div className="step-list-item__assignees">
           <HOCAssigning
