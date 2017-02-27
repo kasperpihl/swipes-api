@@ -65,7 +65,7 @@ class HOCGoalOverview extends PureComponent {
               onResult: (title) => {
                 contextMenu(null);
                 if (title !== step.get('title') && title.length) {
-                  this.setStepLoading(step.get('id'), true);
+                  this.setStepLoading(step.get('id'), 'Renaming...');
                   renameStep(goal.get('id'), step.get('id'), title).then(this.clearCB(step.get('id')));
                 }
               },
@@ -73,7 +73,7 @@ class HOCGoalOverview extends PureComponent {
           });
         } else {
           contextMenu(null);
-          this.setStepLoading(step.get('id'), true);
+          this.setStepLoading(step.get('id'), 'Removing...');
           removeStep(goal.get('id'), step.get('id')).then(this.clearCB(step.get('id')));
         }
       },
@@ -189,7 +189,7 @@ class HOCGoalOverview extends PureComponent {
   }
   setStepLoading(id, flag) {
     let { loadingSteps } = this.state;
-    loadingSteps = loadingSteps.set(id, true);
+    loadingSteps = loadingSteps.set(id, flag);
     if (!flag) {
       loadingSteps = loadingSteps.delete(id);
     }
@@ -216,7 +216,7 @@ class HOCGoalOverview extends PureComponent {
         if (i === helper.getCurrentStepIndex()) {
           this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
         } else {
-          this.setStepLoading(step.get('id'), true);
+          this.setStepLoading(step.get('id'), 'Assigning...');
           reassignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
         }
       }
