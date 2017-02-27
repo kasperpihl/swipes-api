@@ -214,13 +214,17 @@ class HOCGoalHandoff extends PureComponent {
     }
 
     return (
-      <div className="goal-handoff__action-bar">
-        <Button
-          text={label}
-          onClick={this.onSubmit}
-          primary
-        />
-        {this.renderStatus()}
+      <div className="handoff-footer">
+        <div className="handoff-footer__status">
+          {this.renderStatus()}
+        </div>
+        <div className="handoff-footer__actions">
+          <Button
+            text={label}
+            onClick={this.onSubmit}
+            primary
+          />
+        </div>
       </div>
     );
   }

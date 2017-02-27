@@ -10,6 +10,19 @@
   @include heightSpecifications(100%, initial);
 }
 
+.handoff-footer {
+  $b: &;
+  $flexIgnoreList: '#{$b}__actions';
+
+  @include size(100%, 60px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+  animation: showActionBar .4s .3s ease forwards;
+  background-color: $bg;
+  border-top: 1px solid $deepBlue-10;
+  padding: 0 30px;
+  transform: translateY(100%);
+}
+
 .goal-step__attachment {
   padding-top: 51px;
 }
@@ -17,6 +30,8 @@
 // ======================================================
 // Elements
 // ======================================================
+
+// Header
 
 .goal-handoff {
   $b: &;
@@ -41,34 +56,23 @@
 
   &__subtitle {
     @include font(12px, $deepBlue-40, 18px, 500);
-
-    span {
-      @include font(12px, $deepBlue-40, 18px, 500);
-      padding-left: 2px;
-    }
-
-    // b {
-    //   @include font($c: $blue-100);
-    //
-    //   &:hover {
-    //     text-decoration: underline;
-    //   }
-    // }
   }
 
   &__assignees {
     @include size(auto, 39px);
     @include flexContainer('row', left, center);
   }
+}
 
-  &__action-bar {
-    @include size(100%, 60px);
-    @include flexContainer('row', left, center);
-    animation: showActionBar .4s .3s ease forwards;
-    background-color: $bg;
-    border-top: 1px solid $deepBlue-10;
-    padding: 0 30px;
-    transform: translateY(100%);
+.handoff-footer {
+
+  &__status {
+    @include size(100%, auto);
+    padding-right: 30px;
+  }
+
+  &__actions {
+
   }
 }
 

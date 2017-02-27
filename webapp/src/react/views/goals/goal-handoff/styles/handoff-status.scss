@@ -1,0 +1,18 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.handoff-status {
+  @include size(100%, auto);
+
+  span {
+    @include font(12px, $deepBlue-40, 18px, 500);
+
+    b {
+      @include font($c: $blue-100);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

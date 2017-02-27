@@ -63,7 +63,7 @@ class HandoffStatus extends Component {
   }
   render() {
     return (
-      <div className="goal-actions__status">
+      <div className="handoff-status">
         {this.renderStatus()}
       </div>
     );
