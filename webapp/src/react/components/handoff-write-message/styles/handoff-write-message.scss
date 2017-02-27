@@ -22,7 +22,8 @@
     resize: none;
 
     &::-webkit-input-placeholder {
-      @include font(15px, $deepBlue-30, 24px);
+      @include font(15px, $deepBlue-50, 24px);
+      font-style: italic;
     }
 
     &:focus {
