@@ -153,7 +153,9 @@
 	    align-items: center;
 	  } @else if $directionVertical == bottom {
 	    align-items: flex-end;
-	  }
+	  } @else if $directionVertical == stretch {
+			align-items: stretch;
+		}
 	} @else if $direction == column {
 		flex-direction: column;
 

@@ -160,16 +160,19 @@ class HOCGoalHandoff extends PureComponent {
 
     return (
       <div className="goal-handoff__header">
-        <div>
+        <div className="goal-handoff__content">
           <div className="goal-handoff__title">{title}</div>
           <div className="goal-handoff__subtitle">
             {this.renderStatus()}
           </div>
         </div>
-        <HOCAssigning
-          delegate={this}
-          assignees={assignees}
-        />
+        <div className="goal-handoff__assignees">
+          <HOCAssigning
+            delegate={this}
+            assignees={assignees}
+            rounded
+          />
+        </div>
       </div>
     );
   }

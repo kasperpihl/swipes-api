@@ -8,8 +8,11 @@ $sidebarWidth: 84px;
 // ======================================================
 
 .sidebar {
+  $b: &;
+  $flexIgnoreList: '#{$b}__bottom-section';
+
   @include size($sidebarWidth, 100%);
-  @include flex(column);
+  @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList);
   @include flex(none);
   padding-bottom: 22px;
 }
@@ -24,19 +27,19 @@ $sidebarWidth: 84px;
 
   &__top-section {
     @include size(100%);
-    @include flex(center, center, column);
+    @include flexContainer('column', center, center);
     padding-top: 38px;
   }
 
   &__bottom-section {
     @include size(100%, auto);
-    @include flex(center, center, column);
+    @include flexContainer('column', center, center);
     @include flex(none);
   }
 
   &__section {
     @include size(54px, auto);
-    @include flex(center, center, column);
+    @include flexContainer('column', center, center);
     border-radius: 50px;
     background-color: rgba($bg, .6);
   }
@@ -49,7 +52,7 @@ $sidebarWidth: 84px;
 
   &__item {
     @include size(54px);
-    @include flex();
+    @include flexContainer('row', center, center);
 
     &:after {
       @include size(54px);
@@ -99,8 +102,8 @@ $sidebarWidth: 84px;
   &__notification {
     @include size(auto, 18px);
     @include widthSpecifications(18px, 30px);
-    @include flex();
-    @include font(12px, $bg, 12px, bold);
+    @include flexContainer('row', center, center);
+    @include font(10px, $bg, 12px, bold);
     animation: newNotification 1s ease forwards;
     background: $red-80;
     border-radius: 20px;
