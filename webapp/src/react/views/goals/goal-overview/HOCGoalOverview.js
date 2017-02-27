@@ -47,7 +47,6 @@ class HOCGoalOverview extends PureComponent {
   onStepCheck(i) {
     const helper = this.getHelper();
     const currentI = helper.getCurrentStepIndex();
-    console.log(i, currentI);
     if (i >= currentI) {
       i += 1;
     }
@@ -56,7 +55,7 @@ class HOCGoalOverview extends PureComponent {
     this.onHandoff(_target, 'Handoff');
   }
 
-  onHandoff(_target, title) {
+  onHandoff(_target, title, assignees) {
     const { navPush, goal } = this.props;
     navPush({
       component: 'GoalHandoff',
@@ -64,13 +63,14 @@ class HOCGoalOverview extends PureComponent {
       props: {
         title,
         _target,
+        assignees,
         goalId: goal.get('id'),
       },
     });
   }
 
   onNotify() {
-    this.onHandoff('_notify', 'Notify');
+    this.onHandoff('_notify', 'Notify', []);
   }
 
   onContext(e) {
@@ -113,8 +113,27 @@ class HOCGoalOverview extends PureComponent {
     return new GoalsUtil(goal, me.get('id'));
   }
 
-  clickedAssign(i) {
-    console.log('clicked assign', i);
+  clickedAssign(i, e) {
+    const { selectAssignees, reassignStep, goal } = this.props;
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
+
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
+    let overrideAssignees;
+    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        if (i === helper.getCurrentStepIndex()) {
+          this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
+        } else {
+          reassignStep(goal.get('id'), step.get('id'), overrideAssignees);
+        }
+      }
+    });
   }
 
   renderHeader() {
@@ -186,6 +205,8 @@ HOCGoalOverview.propTypes = {
   target: string,
   archive: func,
   saveWay: func,
+  selectAssignees: func,
+  reassignStep: func,
   contextMenu: func,
 };
 
@@ -200,4 +221,6 @@ export default connect(mapStateToProps, {
   saveWay: a.ways.save,
   archive: a.goals.archive,
   contextMenu: a.main.contextMenu,
+  reassignStep: a.goals.reassignStep,
+  selectAssignees: a.goals.selectAssignees,
 })(HOCGoalOverview);

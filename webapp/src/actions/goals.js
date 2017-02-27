@@ -4,6 +4,11 @@ import { List, Map } from 'immutable';
 import GoalsUtil from 'classes/goals-util';
 import * as a from './';
 
+const updateGoal = (goalId, goal) => a.api.request('goals.update', {
+  goal_id: goalId,
+  goal: Object.assign({ id: goalId }, goal),
+});
+
 export const removeFromCollection = (goalId, id) => (d, getState) => {
   let attachments = getState().getIn(['goals', goalId, 'attachments']);
   if (!attachments) {
@@ -22,10 +27,7 @@ export const removeFromCollection = (goalId, id) => (d, getState) => {
     attachment_order: attachmentOrder,
   };
   d({ type: 'goal_updated', payload: { data: goal } });
-  return d(a.api.request('goals.update', {
-    goal_id: goalId,
-    goal,
-  }));
+  return d(updateGoal(goalId, goal));
 };
 
 export const addToCollection = (goalId, content) => (d, getState) => {
@@ -41,14 +43,33 @@ export const addToCollection = (goalId, content) => (d, getState) => {
   }
   attachmentOrder = attachmentOrder.push(content.shortUrl).toJS();
 
-  return d(a.api.request('goals.update', {
-    goal_id: goalId,
-    goal: {
-      attachments,
-      id: goalId,
-      attachment_order: attachmentOrder,
-    },
+  return d(updateGoal(goalId, {
+    attachments,
+    attachment_order: attachmentOrder,
   }));
+};
+
+export const reassignStep = (goalId, stepId, assignees) => (d, getState) => {
+  let steps = getState().getIn(['goals', goalId, 'steps']);
+  steps = steps.setIn([stepId, 'assignees'], assignees).toJS();
+  return d(updateGoal(goalId, { steps }));
+};
+
+export const removeStep = (goalId, stepId) => (d, getState) => {
+  let steps = getState().getIn(['goals', goalId, 'steps']);
+  let stepOrder = getState().getIn(['goals', goalId, 'stepOrder']);
+  steps = steps.setIn([stepId, 'deleted'], true).toJS();
+  stepOrder = stepOrder.filter(sId => sId !== stepId).toJS();
+  return d(updateGoal(goalId, {
+    steps,
+    stepOrder,
+  }));
+};
+
+export const renameStep = (goalId, stepId, title) => (d, getState) => {
+  let steps = getState().getIn(['goals', goalId, 'steps']);
+  steps = steps.setIn([stepId, 'title'], title).toJS();
+  return d(updateGoal(goalId, { steps }));
 };
 
 export const archive = goalId => (d) => {
