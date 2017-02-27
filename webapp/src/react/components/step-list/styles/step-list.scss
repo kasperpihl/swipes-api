@@ -134,6 +134,16 @@
     }
   }
 
+  &--loading {
+    #{$b}__svg--transition {
+      @include svg-color($blue-100);
+      animation: rotateIconLoader 1s .4s linear infinite;
+      stroke-dashoffset: 0;
+  		stroke-dashoffset: -50px;
+  		stroke-dasharray: 20px 100px;
+    }
+  }
+
   &--hover {
     opacity: 1;
   }
@@ -169,5 +179,18 @@
   &__indicator:hover + &__tooltip {
     opacity: 1;
     transition: .3s ease;
+  }
+}
+
+// ======================================================
+// Animation
+// ======================================================
+
+@keyframes rotateIconLoader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
