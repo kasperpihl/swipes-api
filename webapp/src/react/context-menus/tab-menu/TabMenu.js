@@ -41,7 +41,7 @@ class TabMenu extends Component {
     this.qId = undefined;
   }
   handleClick() {
-    this.callDelegate('onTabMenuButtonClick');
+    this.callDelegate('onActionClick');
   }
   onKeyDown(e) {
     if (e.keyCode === 13) {
@@ -190,15 +190,15 @@ class TabMenu extends Component {
     );
   }
   renderFooter() {
-    const { buttonLabel } = this.props;
+    const { actionLabel } = this.props;
 
-    if (!buttonLabel) {
+    if (!actionLabel) {
       return undefined;
     }
 
     return (
       <div className="tab-menu__footer">
-        <Button text={buttonLabel} primary onClick={this.handleClick} />
+        <Button text={actionLabel} primary onClick={this.handleClick} />
       </div>
     );
   }
@@ -236,4 +236,5 @@ TabMenu.propTypes = {
   initialTabIndex: number,
   tabs: arrayOf(string),
   delegate: object.isRequired,
+  actionLabel: string,
 };
