@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { map } from 'react-immutable-proptypes';
+import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
@@ -18,7 +18,12 @@ class HOCGoalHandoff extends PureComponent {
     super(props);
     this.state = {
       isSubmitting: false,
-      handoff: this.getEmptyHandoff(props._target),
+      handoff: fromJS({
+        flags: [],
+        assignees: props.assignees || null,
+        message: props.message || '',
+        target: props._target,
+      }),
     };
     this.onChangeClick = this.onChangeClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -121,14 +126,6 @@ class HOCGoalHandoff extends PureComponent {
       this.onSelectAssignees(options, newAssignees);
     }
   }
-  getEmptyHandoff(target, message) {
-    return fromJS({
-      flags: [],
-      assignees: (target === '_notify') ? [] : null,
-      message: message || '',
-      target: target || this.calculateNextStep(),
-    });
-  }
   getHelper() {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
@@ -148,11 +145,6 @@ class HOCGoalHandoff extends PureComponent {
   }
   clickedAssign(index, e) {
     this.onChangeClick('assignees', e);
-  }
-  calculateNextStep(goal) {
-    const helper = this.getHelper(goal);
-    const nextStep = helper.getNextStep();
-    return nextStep ? nextStep.get('id') : '_complete';
   }
   renderHeader() {
     const { title } = this.props;
@@ -262,6 +254,8 @@ const { func, string } = PropTypes;
 HOCGoalHandoff.propTypes = {
   navPop: func,
   selectStep: func,
+  assignees: list,
+  message: string,
   goalNotify: func,
   title: string,
   selectAssignees: func,

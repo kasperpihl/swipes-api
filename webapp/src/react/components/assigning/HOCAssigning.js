@@ -47,7 +47,13 @@ function mapStateToProps(state, ownProps) {
   } else if (!stateAssignees) {
     stateAssignees = List(assignees);
   }
+  const me = state.get('me');
+  if (stateAssignees.includes(me.get('id'))) {
+    stateAssignees = stateAssignees.filter(uId => uId !== me.get('id')).insert(0, me.get('id'));
+  }
   stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
+
+
   return {
     stateAssignees,
   };
