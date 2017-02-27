@@ -32,9 +32,10 @@ class GoalSide extends Component {
   }
   renderStepList() {
     const helper = this.getHelper();
+    const { loadingSteps } = this.props;
     return (
       <StepList
-        steps={helper.getOrderedSteps()}
+        steps={helper.getOrderedSteps().map(s => s.set('loading', loadingSteps.get(s.get('id'))))}
         completed={helper.getCurrentStepIndex()}
         delegate={this.props.delegate}
       />
@@ -57,4 +58,5 @@ const { object } = PropTypes;
 GoalSide.propTypes = {
   goal: map,
   delegate: object,
+  loadingSteps: map,
 };

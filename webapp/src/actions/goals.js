@@ -57,12 +57,12 @@ export const reassignStep = (goalId, stepId, assignees) => (d, getState) => {
 
 export const removeStep = (goalId, stepId) => (d, getState) => {
   let steps = getState().getIn(['goals', goalId, 'steps']);
-  let stepOrder = getState().getIn(['goals', goalId, 'stepOrder']);
+  let stepOrder = getState().getIn(['goals', goalId, 'step_order']);
   steps = steps.setIn([stepId, 'deleted'], true).toJS();
   stepOrder = stepOrder.filter(sId => sId !== stepId).toJS();
   return d(updateGoal(goalId, {
     steps,
-    stepOrder,
+    step_order: stepOrder,
   }));
 };
 

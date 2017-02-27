@@ -7,7 +7,7 @@ import './styles/input-menu.scss';
 class InputMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = { text: props.text || '' };
     bindAll(this, ['onAdd', 'onHandleKeyUp', 'onChange']);
   }
   onHandleKeyUp(e) {

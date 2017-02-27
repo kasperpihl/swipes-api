@@ -65,6 +65,13 @@ class TabMenu extends Component {
   }
 
   reload() {
+    const { items } = this.props;
+    if (items) {
+      this.setState({
+        results: items,
+      });
+      return;
+    }
     const {
       tabIndex,
       query,
@@ -229,12 +236,12 @@ class TabMenu extends Component {
 
 export default TabMenu;
 
-const { object, string, arrayOf, number, func } = PropTypes;
+const { object, string, arrayOf, number } = PropTypes;
 
 TabMenu.propTypes = {
   search: string,
   initialTabIndex: number,
-  tabs: arrayOf(string),
+  items: arrayOf(object),
   delegate: object.isRequired,
   actionLabel: string,
 };

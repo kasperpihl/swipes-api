@@ -1,7 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { bindAll } from 'classes/utils';
+import { fromJS } from 'immutable';
+import { bindAll, setupCachedCallback } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
 
@@ -11,6 +12,8 @@ import SWView from 'SWView';
 import Button from 'Button';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import InputMenu from 'context-menus/input-menu/InputMenu';
 import HOCHistory from './HOCHistory';
 import GoalSide from '../goal-step/GoalSide';
 import './styles/goal-overview.scss';
@@ -25,6 +28,10 @@ class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     bindAll(this, ['onHandoff', 'onNotify', 'onContext']);
+    this.state = {
+      loadingSteps: fromJS({}),
+    };
+    this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
   }
   componentDidMount() {
     const { goal, navPop } = this.props;
@@ -40,8 +47,45 @@ class HOCGoalOverview extends PureComponent {
     }
   }
 
-  onStepClick(i) {
-    console.log('click!', i);
+  onStepClick(i, e) {
+    const { contextMenu, goal, removeStep, renameStep } = this.props;
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
+    const options = this.getOptionsForE(e);
+    const items = [{ title: 'Rename' }, { title: 'Remove' }];
+    const delegate = {
+      onItemAction: (item) => {
+        if (item.title === 'Rename') {
+          contextMenu({
+            options,
+            component: InputMenu,
+            props: {
+              text: step.get('title'),
+              buttonLabel: 'Rename',
+              onResult: (title) => {
+                contextMenu(null);
+                if (title !== step.get('title') && title.length) {
+                  this.setStepLoading(step.get('id'), true);
+                  renameStep(goal.get('id'), step.get('id'), title).then(this.clearCB(step.get('id')));
+                }
+              },
+            },
+          });
+        } else {
+          contextMenu(null);
+          this.setStepLoading(step.get('id'), true);
+          removeStep(goal.get('id'), step.get('id')).then(this.clearCB(step.get('id')));
+        }
+      },
+    };
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+      },
+    });
   }
 
   onStepCheck(i) {
@@ -69,8 +113,37 @@ class HOCGoalOverview extends PureComponent {
     });
   }
 
-  onNotify() {
-    this.onHandoff('_notify', 'Notify', []);
+  onNotify(e) {
+    const { contextMenu } = this.props;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
+    const items = [
+      { title: 'Everyone in goal' },
+      { title: 'Current step' },
+      { title: 'Yourself' },
+      { title: 'Choose People' },
+    ];
+    const delegate = {
+      onItemAction: (item, side) => {
+        console.log(item, side);
+        if (item.id === 'choose') {
+
+        }
+      },
+    };
+
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+      },
+    });
+
+    // this.onHandoff('_notify', 'Notify', []);
   }
 
   onContext(e) {
@@ -80,10 +153,7 @@ class HOCGoalOverview extends PureComponent {
       contextMenu,
       saveWay,
     } = this.props;
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
+    const options = this.getOptionsForE(e);
     contextMenu({
       options,
       component: ListMenu,
@@ -107,10 +177,29 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
+  }
   getHelper() {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
+  }
+  setStepLoading(id, flag) {
+    let { loadingSteps } = this.state;
+    loadingSteps = loadingSteps.set(id, true);
+    if (!flag) {
+      loadingSteps = loadingSteps.delete(id);
+    }
+    this.setState({
+      loadingSteps,
+    });
+  }
+  clearLoadingForStep(id, res) {
+    this.setStepLoading(id, false);
+    console.log('ressy', res);
   }
 
   clickedAssign(i, e) {
@@ -118,10 +207,7 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
     const step = helper.getStepByIndex(i);
 
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
+    const options = this.getOptionsForE(e);
     let overrideAssignees;
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
       if (newAssignees) {
@@ -130,7 +216,8 @@ class HOCGoalOverview extends PureComponent {
         if (i === helper.getCurrentStepIndex()) {
           this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
         } else {
-          reassignStep(goal.get('id'), step.get('id'), overrideAssignees);
+          this.setStepLoading(step.get('id'), true);
+          reassignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
         }
       }
     });
@@ -165,9 +252,10 @@ class HOCGoalOverview extends PureComponent {
   }
   renderRight() {
     const { goal } = this.props;
+    const { loadingSteps } = this.state;
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <GoalSide goal={goal} delegate={this} />
+        <GoalSide goal={goal} delegate={this} loadingSteps={loadingSteps} />
         <Section title="Attachments" />
         <HOCAttachments
           attachments={goal.get('attachments')}
@@ -221,6 +309,8 @@ export default connect(mapStateToProps, {
   saveWay: a.ways.save,
   archive: a.goals.archive,
   contextMenu: a.main.contextMenu,
+  removeStep: a.goals.removeStep,
+  renameStep: a.goals.renameStep,
   reassignStep: a.goals.reassignStep,
   selectAssignees: a.goals.selectAssignees,
 })(HOCGoalOverview);
