@@ -14,19 +14,32 @@ $compSize: 30px;
     @include flex(none);
   }
 
+  &__people {
+    @include flexContainer();
+
+    #{$b}__profile {
+
+      &:first-child {
+        order: 2;
+        z-index: 1;
+      }
+
+      &:not(:first-child) {
+        order: 1;
+      }
+    }
+  }
+
   &__profile {
     @include size(var(--assigneesSize, $compSize) !important);
     @include flex(none);
     border: 2px solid white;
     box-sizing: content-box;
     border-radius: 6px;
+    margin-right: -9px;
 
     @include styleIfNumberOfElements(1) {
       border: none;
-    }
-
-    &:not(:last-child) {
-      margin-right: -9px;
     }
 
     &--image {

@@ -75,7 +75,9 @@ class Assigning extends Component {
     return (
       <div className="assignees__profiles">
         {morePeople}
-        {renderPeople}
+        <div className="assignees__people">
+          {renderPeople}
+        </div>
       </div>
     );
   }
