@@ -13,15 +13,16 @@ $sectionHeight: 52px;
 // ======================================================
 
 .tab-menu {
+  $b: &;
+  $flexIgnoreList: '#{$b}__section', '#{$b}__search', '#{$b}__footer';
+
   @include size($containerWidth, $containerHeight);
-  @include flex(column);
+  @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList);
 	background-color: $bg;
 	border-radius: 6px;
 	box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
 	overflow: hidden;
 	padding: $mainPadding $mainPadding 0 $mainPadding;
-  position: relative;
-  background-color: $bg;
   z-index: 999;
 }
 
@@ -29,13 +30,32 @@ $sectionHeight: 52px;
 // ELEMENTS
 // ======================================================
 
-// Section
+// Header
 
 .tab-menu {
-  $b: &;
+
+  &__header {
+    @include size(100%, auto);
+  }
+}
+
+// Footer
+
+.tab-menu {
+
+  &__footer {
+    @include size(100%, 60px);
+    @include flexContainer('row', center, center);
+    border-top: 1px solid $deepBlue-10;
+  }
+}
+
+// sections
+
+.tab-menu {
 
   &__section {
-    @include flex(none);
+    transition: .25s ease;
   }
 }
 
@@ -46,8 +66,6 @@ $sectionHeight: 52px;
 
   &__search {
     @include size(100%, auto);
-    @include flex(none);
-    position: relative;
     border-bottom: 1px solid $deepBlue-10;
   }
 
@@ -56,7 +74,6 @@ $sectionHeight: 52px;
     @include font(18px, $deepBlue-100, 24px, 400);
 		padding-bottom: 9px;
     padding-top: $whiteSpacePadding;
-    position: relative;
 
 		&::-webkit-input-placeholder {
       color: $deepBlue-30;
@@ -68,11 +85,9 @@ $sectionHeight: 52px;
   }
 
   &__close {
+    @include centerAbsolute(vertical, right);
     opacity: 0;
     pointer-events: none;
-    position: absolute;
-    right: 0; top: 50%;
-    transform: translateY(-50%);
     transition: .15s ease;
   }
 }
@@ -83,16 +98,13 @@ $sectionHeight: 52px;
   $b: &;
 
   &__list {
-    // $listHeight: calc(#{$containerHeight} - (#{$sectionHeight} * 2 + #{$mainPadding}));
 
     @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
     @include border-radius(0px, 0px, 6px, 6px);
-
 		background-color: $bg;
 		left: calc(-1 * #{$mainPadding}); top: auto;
 		overflow-y: auto;
 		padding: $whiteSpacePadding $mainPadding 0 $mainPadding;
-		position: relative;
 		transition: .25s ease-in-out;
     z-index: 12;
   }
@@ -254,18 +266,9 @@ $sectionHeight: 52px;
 
   &--is-searching {
 
-    #{$b}__list {
-      @include size(calc(100% + (#{$mainPadding} * 2)), calc(#{$containerHeight} - (#{$sectionHeight} + #{$mainPadding})));
-      @include flex(none);
-  		@include border-radius(0px, 0px, 6px, 6px);
-  		box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
-  		transform: translateY(-41px);
-  		transition: .25s ease-in-out;
-    }
-
-    #{$b}__section:empty + #{$b}__list {
-      @include size(calc(100% + (#{$mainPadding} * 2)), 100%);
-      transform: translateY(0px);
+    #{$b}__section--tab-bar {
+      max-height: 0px;
+      transition: .5s ease;
     }
 
     #{$b}__close {

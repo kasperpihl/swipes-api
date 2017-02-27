@@ -132,7 +132,10 @@
 }
 
 @mixin flexContainer($direction: 'row', $directionHorizontal: null, $directionVertical: null, $selectorsToIgnoreFlex: null) {
-  display: flex;
+
+	@if $direction != null {
+   display: flex;
+  }
 
 	@if $direction == row {
 		@if $directionHorizontal == left {

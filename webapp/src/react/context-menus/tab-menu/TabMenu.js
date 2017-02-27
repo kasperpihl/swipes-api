@@ -18,7 +18,7 @@ class TabMenu extends Component {
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
-    bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown']);
+    bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown', 'handleClick']);
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentDidMount() {
@@ -40,7 +40,9 @@ class TabMenu extends Component {
   componentWillUnmount() {
     this.qId = undefined;
   }
-
+  handleClick() {
+    this.callDelegate('onTabMenuButtonClick');
+  }
   onKeyDown(e) {
     if (e.keyCode === 13) {
       const { results } = this.state;
@@ -175,6 +177,31 @@ class TabMenu extends Component {
       />
     );
   }
+  renderHeader() {
+    return (
+      <div className="tab-menu__header">
+        <div className="tab-menu__section">
+          {this.renderSearchField()}
+        </div>
+        <div className="tab-menu__section tab-menu__section--tab-bar">
+          {this.renderTabBar()}
+        </div>
+      </div>
+    );
+  }
+  renderFooter() {
+    const { buttonLabel } = this.props;
+
+    if (!buttonLabel) {
+      return undefined;
+    }
+
+    return (
+      <div className="tab-menu__footer">
+        <Button text={buttonLabel} primary onClick={this.handleClick} />
+      </div>
+    );
+  }
   render() {
     const { search } = this.props;
     const { query } = this.state;
@@ -192,13 +219,9 @@ class TabMenu extends Component {
 
     return (
       <div className={className}>
-        <div className="tab-menu__section">
-          {this.renderSearchField()}
-        </div>
-        <div className="tab-menu__section">
-          {this.renderTabBar()}
-        </div>
+        {this.renderHeader()}
         {this.renderResultList()}
+        {this.renderFooter()}
       </div>
     );
   }
