@@ -135,6 +135,8 @@
   }
 
   &--loading {
+    opacity: 1;
+
     #{$b}__svg--transition {
       @include svg-color($blue-100);
       animation: rotateIconLoader 1s .4s linear infinite;
@@ -164,11 +166,6 @@
 // Hover
 // ======================================================
 
-
-.step-list {
-
-}
-
 .step-list-item {
   $b: &;
 
@@ -187,9 +184,9 @@
 
 @keyframes rotateIconLoader {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
