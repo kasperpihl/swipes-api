@@ -5,9 +5,9 @@ import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
+import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalHandoff from './GoalHandoff';
-import GoalActions from './GoalActions';
 import HandoffStatus from './HandoffStatus';
 
 class HOCGoalHandoff extends PureComponent {
@@ -21,6 +21,7 @@ class HOCGoalHandoff extends PureComponent {
       handoff: this.getEmptyHandoff(props._target),
     };
     this.onChangeClick = this.onChangeClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
     const { goal, navPop } = this.props;
@@ -61,17 +62,12 @@ class HOCGoalHandoff extends PureComponent {
       }
     });
   }
-  onGoalAction(type) {
+  onSubmit() {
     const { handoff } = this.state;
-    if (type === 'primary') {
-      if (handoff.get('target') === '_notify') {
-        this.onNotify();
-      } else {
-        this.onCompleteStep();
-      }
+    if (handoff.get('target') === '_notify') {
+      this.onNotify();
     } else {
-      const { navPop } = this.props;
-      navPop();
+      this.onCompleteStep();
     }
   }
   onFlag(id) {
@@ -198,31 +194,30 @@ class HOCGoalHandoff extends PureComponent {
     } = this.state;
     const helper = this.getHelper();
 
-    let primaryLabel = 'Complete step';
+    let label = 'Complete step';
     if (handoff.get('target') === '_complete') {
-      primaryLabel = 'Complete Goal';
+      label = 'Complete Goal';
     } else if (handoff.get('target') === '_notify') {
-      primaryLabel = 'Send Notification';
+      label = 'Send Notification';
     } else {
       const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
       const currentStepIndex = helper.getCurrentStepIndex();
       if (nextStepIndex === currentStepIndex) {
-        primaryLabel = 'Reassign Step';
+        label = 'Reassign Step';
       }
       if (nextStepIndex < currentStepIndex) {
-        primaryLabel = 'Make Iteration';
+        label = 'Make Iteration';
       }
     }
 
     return (
       <div className="goal-handoff__action-bar">
-        <GoalActions
-          delegate={this}
-          primaryLabel={primaryLabel}
-          primaryLoading={isSubmitting}
-        >
-          {this.renderStatus()}
-        </GoalActions>
+        <Button
+          text={label}
+          onClick={this.onSubmit}
+          primary
+        />
+        {this.renderStatus()}
       </div>
     );
   }
