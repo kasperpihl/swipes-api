@@ -261,6 +261,7 @@ HOCGoalHandoff.propTypes = {
   navPop: func,
   selectStep: func,
   goalNotify: func,
+  title: string,
   selectAssignees: func,
   _target: string.isRequired,
   completeStep: func,
