@@ -20,7 +20,7 @@ class GoalList extends Component {
     this.clearFilter = this.callDelegate.bind(null, 'onClearFilter');
     this.hideFilter = this.callDelegate.bind(null, 'onHideFilter');
     this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
-
+    this.onAssignClick = this.callDelegate.bind(null, 'onAssignClick');
     bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
   componentDidMount() {
@@ -86,6 +86,7 @@ class GoalList extends Component {
     return goals.map(goal => (
       <GoalListItem
         onClick={this.clickedListItem}
+        onAssignClick={this.onAssignClick}
         me={this.props.me}
         filter={filter}
         goal={goal}

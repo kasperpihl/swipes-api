@@ -145,6 +145,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
       },
     };
     if (assignees.indexOf(user.get('id')) !== -1) {
+      obj.selected = true;
       obj.rightIcon = {
         button: {
           icon: 'Close',

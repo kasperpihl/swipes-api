@@ -14,6 +14,17 @@ class GoalListItem extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedListItem = this.clickedListItem.bind(this);
   }
+  getHelper() {
+    const { goal } = this.props;
+    return new GoalsUtil(goal);
+  }
+  clickedAssign(stepId, e) {
+    const { onAssignClick, goal } = this.props;
+    const helper = this.getHelper();
+    if (onAssignClick) {
+      onAssignClick(goal.get('id'), helper.getCurrentStepId(), e);
+    }
+  }
   clickedListItem() {
     const { onClick, goal } = this.props;
 
@@ -21,9 +32,9 @@ class GoalListItem extends Component {
       onClick(goal.get('id'));
     }
   }
+
   renderProgressBar() {
-    const { goal } = this.props;
-    const helper = new GoalsUtil(goal);
+    const helper = this.getHelper();
     const numberOfCompletedSteps = helper.getNumberOfCompletedSteps();
     const numberOfAllSteps = helper.getTotalNumberOfSteps();
     const completedProgressFill = (numberOfCompletedSteps * 100) / numberOfAllSteps;
@@ -40,10 +51,30 @@ class GoalListItem extends Component {
       </div>
     );
   }
+  renderAssignees() {
+    const { goal } = this.props;
+    const helper = this.getHelper();
+    if (helper.getIsCompleted()) {
+      return undefined;
+    }
+    return (
+      <div className="goal-list-item__assigning">
+        <HOCAssigning
+          index={helper.getCurrentStepId()}
+          stepId={helper.getCurrentStepId()}
+          goalId={goal.get('id')}
+          maxImages={2}
+          rounded
+          delegate={this}
+        />
+      </div>
+    );
+  }
   render() {
     const { goal, filter } = this.props;
+    const helper = this.getHelper();
     const status = msgGen.getGoalSubtitle(goal, filter);
-    const isActive = goal.getIn(['status', 'current_step_id']);
+    const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 
     if (!isActive) {
@@ -60,14 +91,7 @@ class GoalListItem extends Component {
             {this.renderProgressBar()}
           </div>
         </div>
-        <div className="goal-list-item__assigning">
-          <HOCAssigning
-            stepId={goal.getIn(['status', 'current_step_id'])}
-            goalId={goal.get('id')}
-            maxImages={2}
-            rounded
-          />
-        </div>
+        {this.renderAssignees()}
       </div>
     );
   }
@@ -78,6 +102,7 @@ const { func } = PropTypes;
 GoalListItem.propTypes = {
   goal: map,
   filter: map,
+  onAssignClick: func,
   onClick: func,
 };
 
