@@ -29,6 +29,7 @@
 
 .goal-side {
   @include size(100%, auto);
+  margin-bottom: 60px;
 }
 
 .add-step {
