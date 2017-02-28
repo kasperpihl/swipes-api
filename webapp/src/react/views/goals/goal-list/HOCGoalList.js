@@ -1,9 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import * as a from 'actions';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
@@ -21,7 +20,7 @@ const defaultFilter = fromJS({
   matching: null,
 });
 
-class HOCGoalList extends Component {
+class HOCGoalList extends PureComponent {
   constructor(props, context) {
     super(props, context);
     this.callDelegate = setupDelegate(props.delegate);
@@ -72,7 +71,6 @@ class HOCGoalList extends Component {
     this.state.filteredGoals = this.filterGoals(filter);
     this.state.filterLabel = this.updateFilterLabel(filter, this.state.filteredGoals);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onAddGoal = this.onAddGoal.bind(this);
   }
 
