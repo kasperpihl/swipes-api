@@ -1,0 +1,23 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.g-tooltip {
+  @include size(100%);
+  left: 0; top: 0;
+  position:fixed;
+  visibility: hidden;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+
+  &__content {
+    @include size(auto);
+    position: absolute;
+  }
+
+  &--shown {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .15s;
+  }
+}

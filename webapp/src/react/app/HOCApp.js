@@ -11,6 +11,7 @@ import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
 import HOCToasty from './toasty/HOCToasty';
 import HOCContextMenu from './context-menu/HOCContextMenu';
+import HOCTooltip from './tooltip/HOCTooltip';
 
 let DevTools = 'div';
 
@@ -75,6 +76,7 @@ class HOCApp extends Component {
         <HOCModal />
         <HOCToasty />
         <HOCContextMenu />
+        <HOCTooltip />
         <DevTools />
       </div>
     );

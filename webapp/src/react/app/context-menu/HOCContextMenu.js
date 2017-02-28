@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
+import * as a from 'actions';
 import { debounce, bindAll } from 'classes/utils';
 
 import './styles/context-menu';
@@ -207,7 +207,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  hide: actions.main.contextMenu,
+  hide: a.main.contextMenu,
 })(HOCContextMenu);
 
 const { func, object } = PropTypes;

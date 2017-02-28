@@ -21,6 +21,7 @@ class HOCAssigning extends Component {
       maxImages,
       index,
       rounded,
+      tooltip,
       size,
     } = this.props;
 
@@ -30,6 +31,7 @@ class HOCAssigning extends Component {
         assignees={stateAssignees}
         onClick={this.onClick(index)}
         rounded={rounded}
+        tooltip={tooltip}
         size={size}
       />
     );
@@ -71,4 +73,5 @@ HOCAssigning.propTypes = {
 
 export default connect(mapStateToProps, {
   stepAssign: actions.goals.stepAssign,
+  tooltip: actions.main.tooltip,
 })(HOCAssigning);

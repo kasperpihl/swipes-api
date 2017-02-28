@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from 'classes/utils';
+import { bindAll, getParentByClass } from 'classes/utils';
 import { map, mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import AssigneeTooltip from './AssigneeTooltip';
@@ -13,7 +13,7 @@ class Assigning extends Component {
       maxImages: props.maxImages || 3,
       showTooltip: true,
     };
-    bindAll(this, ['handleClick']);
+    bindAll(this, ['onClick', 'onMouseEnter', 'onMouseLeave']);
   }
   componentDidMount() {
     const { size } = this.props;
@@ -22,13 +22,35 @@ class Assigning extends Component {
       assigning.style.setProperty('--assigneesSize', `${size}px`);
     }
   }
-  handleClick(e) {
+  onClick(e) {
     const { onClick } = this.props;
     e.stopPropagation();
 
     if (onClick) {
       onClick(e);
     }
+  }
+  onMouseEnter(e) {
+    const target = getParentByClass(e.target, 'assignees');
+    console.log('tarbet', target);
+    const { tooltip, assignees } = this.props;
+    const data = {
+      component: AssigneeTooltip,
+      props: {
+        assignees,
+      },
+      options: {
+        boundingRect: target.getBoundingClientRect(),
+        position: 'left',
+      },
+    };
+
+    tooltip(data);
+  }
+  onMouseLeave() {
+    const { tooltip } = this.props;
+
+    tooltip(null);
   }
   renderIcon(icon) {
     return <Icon svg={icon} className="assignees__icon" />;
@@ -83,16 +105,6 @@ class Assigning extends Component {
       </div>
     );
   }
-  renderTooltip() {
-    const { assignees } = this.props;
-    const { showTooltip } = this.state;
-
-    if (!assignees || assignees.size < 1 && !showTooltip) {
-      return undefined;
-    }
-
-    return <AssigneeTooltip assignees={assignees} />;
-  }
   render() {
     const { rounded, size } = this.props;
     let className = 'assignees';
@@ -107,9 +119,15 @@ class Assigning extends Component {
     }
 
     return (
-      <div className={className} onClick={this.handleClick} ref="assigning">
+      <div
+        className={className}
+        onClick={this.onClick}
+        ref="assigning"
+        data-assigning
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
         {this.renderAssignees()}
-        {this.renderTooltip()}
       </div>
     );
   }
@@ -128,4 +146,5 @@ Assigning.propTypes = {
   onClick: func,
   rounded: bool,
   size: number,
+  tooltip: func,
 };

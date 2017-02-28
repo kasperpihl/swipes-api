@@ -9,12 +9,8 @@
   @include size(180px, auto);
   @include heightSpecifications(initial, 400px);
   background-color: $deepBlue-100;
-  display: none;
   overflow-y: auto;
   padding: 9px 0;
-  position: absolute;
-  right: 0; bottom: -9px;
-  transform: translateY(100%);
 }
 
 // ======================================================

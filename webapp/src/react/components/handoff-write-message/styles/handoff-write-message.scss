@@ -3,7 +3,7 @@
 
 .handoff-write-message {
   @include size(100%, auto);
-  @include flex(flex);
+  @include flexContainer();
   margin-top: 50px;
 
   &__image {

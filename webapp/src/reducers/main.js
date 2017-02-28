@@ -133,10 +133,10 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
-    // Overlays
+    // Tooltips
     // ======================================================
-    case types.OVERLAY: {
-      return state.set('overlay', payload);
+    case types.TOOLTIP: {
+      return state.set('tooltip', payload);
     }
 
     // ======================================================

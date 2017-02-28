@@ -20,9 +20,9 @@ export const cache = {
 export const setSlackUrl = url => ({ type: types.SET_SLACK_URL, payload: { url } });
 
 // ======================================================
-// Overlays
+// Tooltips
 // ======================================================
-export const overlay = payload => ({ type: types.OVERLAY, payload });
+export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 
 // ======================================================
 // Modal
