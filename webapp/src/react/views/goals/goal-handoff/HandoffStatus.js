@@ -32,7 +32,7 @@ class HandoffStatus extends Component {
       status = (
         <span>
           {'Send notification to '}
-          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );
     } else {
@@ -54,7 +54,7 @@ class HandoffStatus extends Component {
           {moveString}
           <b onClick={this.onChange('step')}>{title}</b>
           {diff === 0 ? ' to ' : ' and assign '}
-          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true })}"`}</b>
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );
     }

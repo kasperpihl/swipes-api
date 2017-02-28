@@ -43,14 +43,29 @@ export default class MessageGenerator {
     const state = this.store.getState();
     const me = state.get('me');
     const preferId = options.preferId || me.get('id');
-
+    const numberOfNames = options.number || 1;
     const names = userIds.map(uId => this.getUserString(uId, options));
     let nameString = names.find((name, i) => userIds.get(i) === preferId);
-    if (!nameString) {
-      nameString = names.get(0);
-    }
-    if (names.size > 1) {
-      nameString += ` & ${names.size - 1} other${names.size > 2 ? 's' : ''}`;
+    let i = 0;
+    do {
+      const uId = userIds.get(i);
+      const name = names.get(i);
+      if (i < numberOfNames && uId && uId !== preferId) {
+        let seperator = ', ';
+        if (i === (names.size - 1)) {
+          seperator = ' & ';
+        }
+        if (!nameString) {
+          nameString = name;
+        } else {
+          nameString += (seperator + name);
+        }
+      }
+      i += 1;
+    } while (i < numberOfNames && i < names.size);
+    if (names.size && i < names.size) {
+      const extra = (names.size - i);
+      nameString += ` & ${extra} other${extra > 1 ? 's' : ''}`;
     }
     if (!nameString) {
       nameString = 'no one';

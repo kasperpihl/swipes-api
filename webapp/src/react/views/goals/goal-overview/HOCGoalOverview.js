@@ -17,6 +17,7 @@ import InputMenu from 'context-menus/input-menu/InputMenu';
 import HOCHistory from './HOCHistory';
 import GoalSide from '../goal-step/GoalSide';
 import './styles/goal-overview.scss';
+/* global msgGen */
 
 class HOCGoalOverview extends PureComponent {
   static minWidth() {
@@ -50,9 +51,23 @@ class HOCGoalOverview extends PureComponent {
   onStepClick(i, e) {
     const { contextMenu, goal, removeStep, renameStep } = this.props;
     const helper = this.getHelper();
+
     const step = helper.getStepByIndex(i);
     const options = this.getOptionsForE(e);
-    const items = [{ title: 'Rename' }, { title: 'Remove' }];
+    const remove = {
+      title: 'Remove',
+    };
+    if (i === helper.getCurrentStepIndex()) {
+      remove.disabled = true;
+      remove.subtitle = 'Cannot remove current step';
+    }
+    if (helper.getTotalNumberOfSteps() === 1) {
+      remove.disabled = true;
+      remove.subtitle = 'Cannot remove the last step';
+      console.log('hello');
+    }
+
+    const items = [{ title: 'Rename' }, remove];
     const delegate = {
       onItemAction: (item) => {
         if (item.title === 'Rename') {
@@ -114,23 +129,36 @@ class HOCGoalOverview extends PureComponent {
   }
 
   onNotify(e) {
-    const { contextMenu } = this.props;
+    const helper = this.getHelper();
+    const { contextMenu, me } = this.props;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
     };
-    const items = [
-      { title: 'Everyone in goal' },
-      { title: 'Current step' },
-      { title: 'Yourself' },
-      { title: 'Choose People' },
-    ];
-    const delegate = {
-      onItemAction: (item, side) => {
-        console.log(item, side);
-        if (item.id === 'choose') {
+    const all = helper.getAllInvolvedAssignees().filter(uId => uId !== me.get('id'));
+    const inStep = helper.getCurrentAssignees().filter(uId => uId !== me.get('id'));
 
-        }
+    const items = [];
+    if (all.size) {
+      items.push({
+        title: 'Everyone in goal (not you)',
+        assignees: all,
+        subtitle: msgGen.getUserArrayString(all, { number: 3 }),
+      });
+    }
+    if (inStep.size) {
+      items.push({
+        title: 'Current Assignees (not you)',
+        assignees: inStep,
+        subtitle: msgGen.getUserArrayString(inStep, { number: 3 }),
+      });
+    }
+    items.push({ title: 'Yourself', assignees: [me.get('id')] });
+    items.push({ title: 'Choose people' });
+    const delegate = {
+      onItemAction: (item) => {
+        contextMenu(null);
+        this.onHandoff('_notify', 'Notify', item.assignees);
       },
     };
 
@@ -143,7 +171,7 @@ class HOCGoalOverview extends PureComponent {
       },
     });
 
-    // this.onHandoff('_notify', 'Notify', []);
+    //
   }
 
   onContext(e) {
@@ -197,9 +225,8 @@ class HOCGoalOverview extends PureComponent {
       loadingSteps,
     });
   }
-  clearLoadingForStep(id, res) {
+  clearLoadingForStep(id) {
     this.setStepLoading(id, false);
-    console.log('ressy', res);
   }
 
   clickedAssign(i, e) {
@@ -295,6 +322,8 @@ HOCGoalOverview.propTypes = {
   saveWay: func,
   selectAssignees: func,
   reassignStep: func,
+  renameStep: func,
+  removeStep: func,
   contextMenu: func,
 };
 
