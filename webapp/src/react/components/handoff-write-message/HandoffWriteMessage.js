@@ -31,7 +31,7 @@ class HandoffWriteMessage extends Component {
         className={className}
         value={text}
         disabled={disabled}
-        minRows={1}
+        minRows={2}
         maxRows={6}
         ref="textarea"
         onChange={this.onHandoffChange}
