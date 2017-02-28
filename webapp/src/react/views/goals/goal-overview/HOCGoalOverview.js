@@ -25,8 +25,8 @@ class HOCGoalOverview extends PureComponent {
   static maxWidth() {
     return 900;
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     bindAll(this, ['onHandoff', 'onNotify', 'onContext']);
     this.state = {
       loadingSteps: fromJS({}),
@@ -113,8 +113,8 @@ class HOCGoalOverview extends PureComponent {
   }
 
   onHandoff(_target, title, assignees) {
-    const { navPush, goal } = this.props;
-    navPush({
+    const { openSecondary, goal } = this.props;
+    openSecondary({
       component: 'GoalHandoff',
       title,
       props: {
@@ -323,6 +323,9 @@ HOCGoalOverview.propTypes = {
   renameStep: func,
   removeStep: func,
   contextMenu: func,
+};
+HOCGoalOverview.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps(state, ownProps) {
