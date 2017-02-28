@@ -23,7 +23,16 @@ export function iconForService(service) {
       return 'SwipesLogo';
   }
 }
-
+export function getParentByClass(target, className) {
+  let node;
+  do {
+    if (target.classList.contains(className)) {
+      node = target;
+    }
+    target = target.parentNode;
+  } while (!node && typeof target.getAttribute === 'function');
+  return node;
+}
 export function nearestAttribute(target, attribute) {
   let value;
   do {
