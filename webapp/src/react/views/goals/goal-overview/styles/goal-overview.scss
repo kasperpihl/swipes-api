@@ -31,6 +31,14 @@
   @include size(100%, auto);
 }
 
+.add-step {
+  $b: &;
+  $flexIgnoreList: '#{$b}__icon';
+
+  @include size(100%, 54px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+}
+
 
 // ======================================================
 // Element
@@ -88,6 +96,30 @@
         position: absolute;
         left: 0; top: 19px;
       }
+    }
+  }
+}
+
+.add-step {
+  $b: &;
+
+  &__icon {
+    @include size(39px, 100%);
+    @include flexContainer('row', left, center);
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($blue-100);
+  }
+
+  button#{$b}__text {
+    @include font(12px, $blue-100, 18px, 500);
+    padding-right: 18px;
+    transition: .5s ease;
+
+    &:hover, &:focus {
+      text-decoration: underline;
     }
   }
 }

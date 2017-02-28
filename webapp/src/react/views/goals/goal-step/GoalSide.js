@@ -1,12 +1,16 @@
 import React, { Component, PropTypes } from 'react';
+import { setupDelegate } from 'classes/utils';
 import StepList from 'components/step-list/StepList';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
+import Icon from 'Icon';
 
 class GoalSide extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.callDelegate = setupDelegate(props.delegate);
+    this.onClick = this.callDelegate.bind(null, 'onAddStep');
   }
   getHelper() {
     const { goal } = this.props;
@@ -41,11 +45,22 @@ class GoalSide extends Component {
       />
     );
   }
+  renderAddStep() {
+    return (
+      <div className="add-step">
+        <div className="add-step__icon">
+          <Icon svg="Plus" className="add-step__svg" />
+        </div>
+        <button className="add-step__text" onClick={this.onClick}>Add new step</button>
+      </div>
+    );
+  }
   render() {
     return (
       <div className="goal-side">
         {this.renderProgress()}
         {this.renderStepList()}
+        {this.renderAddStep()}
       </div>
     );
   }
