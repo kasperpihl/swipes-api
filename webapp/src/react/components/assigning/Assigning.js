@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
 import { map, mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';
+import AssigneeTooltip from './AssigneeTooltip';
 
 import './styles/assigning.scss';
 
@@ -10,6 +11,7 @@ class Assigning extends Component {
     super(props);
     this.state = {
       maxImages: props.maxImages || 3,
+      showTooltip: true,
     };
     bindAll(this, ['handleClick']);
   }
@@ -81,6 +83,16 @@ class Assigning extends Component {
       </div>
     );
   }
+  renderTooltip() {
+    const { assignees } = this.props;
+    const { showTooltip } = this.state;
+
+    if (!assignees || assignees.size < 1 && !showTooltip) {
+      return undefined;
+    }
+
+    return <AssigneeTooltip assignees={assignees} />;
+  }
   render() {
     const { rounded, size } = this.props;
     let className = 'assignees';
@@ -97,6 +109,7 @@ class Assigning extends Component {
     return (
       <div className={className} onClick={this.handleClick} ref="assigning">
         {this.renderAssignees()}
+        {this.renderTooltip()}
       </div>
     );
   }

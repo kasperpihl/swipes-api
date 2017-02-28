@@ -1,0 +1,55 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.tooltip {
+  @include size(180px, auto);
+  @include heightSpecifications(initial, 400px);
+  background-color: $deepBlue-100;
+  display: none;
+  overflow-y: auto;
+  padding: 9px 0;
+  position: absolute;
+  right: 0; bottom: -9px;
+  transform: translateY(100%);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.tooltip {
+  $b: &;
+
+  &__item {
+    $flexIgnoreList: '#{$b}__image', '#{$b}__initial';
+
+    @include size(100%, 42px);
+    @include flexContainer('row', left, center, $flexIgnoreList);
+  }
+
+  &__image {
+    @include size(24px);
+    margin: 0 15px;
+
+    img {
+      @include size(24px);
+      border-radius: 50%;
+    }
+  }
+
+  &__initial {
+    @include size(24px);
+    @include font(12px, $deepBlue-90, 18px, bold);
+    background-color: $bg;
+    margin: 0 15px;
+  }
+
+  &__name {
+    @include font(12px, $deepBlue-20, 18px, 500);
+    @include truncateString();
+  }
+}
