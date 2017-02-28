@@ -46,6 +46,9 @@ class GoalSide extends Component {
     );
   }
   renderAddStep() {
+    const { loadingSteps } = this.props;
+    const isLoading = !!loadingSteps.get('add');
+    console.log('isLoading', isLoading);
     return (
       <div className="add-step">
         <div className="add-step__icon">
