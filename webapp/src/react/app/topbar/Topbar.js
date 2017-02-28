@@ -7,6 +7,7 @@ import { bindAll, setupCachedCallback } from 'classes/utils';
 
 // now use events as onClick: this.onWinClickCached(i)
 import Icon from 'Icon';
+import Button from 'Button';
 import './topbar.scss';
 
 
@@ -56,9 +57,10 @@ class HOCTopbar extends PureComponent {
   renderStatusIndicator() {
     const { status, versionInfo } = this.props;
     const { secondsLeft } = this.state;
-    let className = 'topbar__gradient topbar__gradient--status';
+    let className = 'topbar__status';
     let statusMessage;
     let btn;
+
     if (versionInfo && versionInfo.get('updateRequired')) {
       statusMessage = 'Offline - new version required';
       btn = this.renderDownloadBtn();
@@ -79,31 +81,33 @@ class HOCTopbar extends PureComponent {
     }
 
     if (statusMessage) {
-      className += ' topbar__gradient--indicate';
+      className += ' topbar__status--shown';
     }
 
     return (
       <div className={className}>
-        <div className="topbar__title">
-          {statusMessage}
+        <div className="topbar__header">
+          <div className="topbar__title">
+            {statusMessage}
+          </div>
+          {btn}
         </div>
-        {btn}
       </div>
     );
   }
   renderDownloadBtn() {
     return (
-      <div className="topbar__retry-btn" onClick={this.onDownload}>Download</div>
+      <Button primary small text="download" onClick={this.onDownload} className="topbar__retry-btn" />
     );
   }
   renderRetryBtn() {
     return (
-      <div className="topbar__retry-btn" onClick={this.onRetry}>Retry now</div>
+      <Button primary small text="Retry now" onClick={this.onRetry} className="topbar__retry-btn" />
     );
   }
   renderReloadBtn() {
     return (
-      <div className="topbar__retry-btn" onClick={this.onReload}>Reload</div>
+      <Button primary small text="Reload" onClick={this.onReload} className="topbar__retry-btn" />
     );
   }
   renderWindowsActions() {

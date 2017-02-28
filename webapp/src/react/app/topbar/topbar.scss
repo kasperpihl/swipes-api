@@ -12,42 +12,31 @@ $topbarSize: 38px;
   @include size(100%, $topbarSize);
   -webkit-app-region: drag;
   flex: none;
-  overflow: hidden;
   user-select: none;
-  z-index: 9999;
 }
 
 // ======================================================
 // Elements
 // ======================================================
 
-// Gradient
+// topbar
 
 .topbar {
   $b: &;
 
-  &__gradient {
-    @include size(100%);
+  &__status {
+    @include size(100%, 100vh);
+    background-color: rgba($bg, .7);
+    display: none;
 
-    &--status {
-      @include flex();
-      background-color: rgba($bg, 0);
-      left: 0; top: 0;
-      pointer-events: none;
-      position: absolute;
-      transition: .2s ease;
+    &--shown {
+      display: block;
     }
+  }
 
-    &--indicate {
-      @include flex();
-      background-color: rgba($bg, .5);
-      pointer-events: all;
-      transition: .2s ease;
-
-      #{$b}__title, #{$b}__retry-btn {
-        opacity: 1;
-      }
-    }
+  &__header {
+    @include size(100%, 60px);
+    @include flexContainer('row', center, center);
   }
 }
 
@@ -57,18 +46,26 @@ $topbarSize: 38px;
   $b: &;
 
   &__title {
-    @include font(13px, $deepBlue-100, 500);
-    opacity: 0;
+    @include font(12px, $deepBlue-100, 18px, 500);
   }
 
   &__retry-btn {
-    @include font(13px, $blue-100, 500);
+    @include font($c: $deepBlue-100);
     margin-left: 9px;
-    opacity: 0;
     -webkit-app-region: no-drag;
+    border-color: $deepBlue-100;
+    background-color: transparent;
+
+    & > * {
+      @include font($c: $deepBlue-100 !important);
+    }
 
     &:hover {
-      text-decoration: underline;
+      background-color: $deepBlue-100;
+
+      & > * {
+        @include font($c: $bg !important);
+      }
     }
   }
 }
