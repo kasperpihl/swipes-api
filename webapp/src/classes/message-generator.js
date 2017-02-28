@@ -161,6 +161,9 @@ export default class MessageGenerator {
     if (filter.get('milestone') !== 'any') {
       label += ` with ${this.getMilestoneString(filter.get('milestone'))}`;
     }
+    if (filter.get('matching') && filter.get('matching').length) {
+      label += ` matching "${filter.get('matching')}"`;
+    }
     return label;
   }
 }

@@ -1,6 +1,6 @@
 import GoalsUtil from 'classes/goals-util';
 
-export default function filterGoals(goals, type, userId, milestoneId) {
+export default function filterGoals(goals, type, userId, milestoneId, matching) {
   return goals.filter((goal) => {
     const helper = new GoalsUtil(goal);
     if (milestoneId && milestoneId !== 'any') {
@@ -59,6 +59,23 @@ export default function filterGoals(goals, type, userId, milestoneId) {
             }
           }
         }
+      }
+    }
+    if (matching && matching.length) {
+      matching = matching.toLowerCase();
+      let foundMatch = false;
+
+      if (goal.get('title').toLowerCase().includes(matching)) {
+        foundMatch = true;
+      }
+      goal.get('steps').forEach((s) => {
+        if (s.get('title').toLowerCase().includes(matching)) {
+          foundMatch = true;
+        }
+        return !foundMatch;
+      });
+      if (!foundMatch) {
+        return false;
       }
     }
     return true;

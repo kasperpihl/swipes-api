@@ -19,10 +19,10 @@ class InputMenu extends Component {
     this.setState({ text: e.target.value });
   }
   onAdd() {
-    const { onResult, hide } = this.props;
+    const { onResult, hide, allowEmpty } = this.props;
     let { text } = this.state;
 
-    if (text && text.length) {
+    if (allowEmpty || (text && text.length)) {
       text = text.trim();
 
       onResult(text);
@@ -30,7 +30,7 @@ class InputMenu extends Component {
     }
   }
   render() {
-    const { placeholder, buttonLabel, buttonIcon } = this.props;
+    const { placeholder, buttonLabel, buttonIcon, allowEmpty } = this.props;
     const { text } = this.state;
 
     return (
@@ -49,7 +49,7 @@ class InputMenu extends Component {
           primary
           key="butt"
           text={buttonLabel}
-          disabled={!text.length}
+          disabled={allowEmpty ? false : !text.length}
           icon={buttonIcon}
           onClick={this.onAdd}
           className="input-menu__button"
@@ -61,12 +61,13 @@ class InputMenu extends Component {
 
 export default InputMenu;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 InputMenu.propTypes = {
   placeholder: string,
   buttonLabel: string,
   buttonIcon: string,
+  allowEmpty: bool,
   hide: func,
   onResult: func,
 };

@@ -8,6 +8,7 @@ import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
+import InputMenu from 'context-menus/input-menu/InputMenu';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import GoalList from './GoalList';
@@ -17,6 +18,7 @@ const defaultFilter = fromJS({
   user: 'any',
   goalType: 'all',
   milestone: 'any',
+  matching: null,
 });
 
 class HOCGoalList extends Component {
@@ -31,6 +33,7 @@ class HOCGoalList extends Component {
           user: 'me',
           goalType: 'current',
           milestone: 'any',
+          matching: null,
         },
       }, {
         title: 'Upcoming',
@@ -38,6 +41,7 @@ class HOCGoalList extends Component {
           user: 'me',
           goalType: 'upcoming',
           milestone: 'any',
+          matching: null,
         },
       }, {
         title: 'Filter',
@@ -48,8 +52,8 @@ class HOCGoalList extends Component {
         { id: 'goalType' },
         ' assigned to ',
         { id: 'user' },
-        ' with ',
-        { id: 'milestone' },
+        ' matching ',
+        { id: 'matching' },
       ]),
     };
     if (props.savedState) {
@@ -153,6 +157,21 @@ class HOCGoalList extends Component {
       const { selectMilestone } = this.props;
       selectMilestone(options, res => this.updateFilter({ goalType: res.id }));
     }
+    if (obj.id === 'matching') {
+      const { contextMenu } = this.props;
+      const { tabs, tabIndex } = this.state;
+      contextMenu({
+        options,
+        component: InputMenu,
+        props: {
+          buttonLabel: 'Search',
+          placeholder: 'Search goal and step titles',
+          allowEmpty: true,
+          text: tabs.getIn([tabIndex, 'filter', 'matching']),
+          onResult: res => this.updateFilter({ matching: res }),
+        },
+      });
+    }
   }
 
   onAddGoal() {
@@ -207,6 +226,11 @@ class HOCGoalList extends Component {
         newString = msgGen.getUserString(filter.get('user'));
       } else if (p.get('id') === 'milestone') {
         return p.set('string', msgGen.getMilestoneString(filter.get('milestone')));
+      } else if (p.get('id') === 'matching') {
+        if (!filter.get('matching') || !filter.get('matching').length) {
+          return p.set('string', 'anything');
+        }
+        return p.set('string', `"${filter.get('matching')}"`);
       }
       if (newString !== p.get('string')) {
         return p.set('string', newString);
@@ -224,7 +248,7 @@ class HOCGoalList extends Component {
     const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
     const sortedGoals = goals.sort((c, b) => b.get('created_at').localeCompare(c.get('created_at'))).toArray();
 
-    return filterGoals(sortedGoals, filter.get('goalType'), user, filter.get('milestone'));
+    return filterGoals(sortedGoals, filter.get('goalType'), user, filter.get('milestone'), filter.get('matching'));
   }
 
   tabDidChange(nav, index) {
@@ -317,6 +341,7 @@ HOCGoalList.propTypes = {
   saveCache: func,
   navPush: func,
   delegate: object,
+  contextMenu: func,
   me: map,
   selectUser: func,
   selectGoalType: func,
@@ -331,6 +356,7 @@ HOCGoalList.contextTypes = {
 export default connect(mapStateToProps, {
   saveCache: a.main.cache.save,
   selectUser: a.menus.selectUser,
+  contextMenu: a.main.contextMenu,
   selectGoalType: a.menus.selectGoalType,
   selectAssignees: a.goals.selectAssignees,
 })(HOCGoalList);
