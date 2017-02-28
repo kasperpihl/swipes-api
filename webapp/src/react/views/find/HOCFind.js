@@ -207,19 +207,7 @@ class HOCFind extends Component {
       }, {
         title: 'Browse',
         items: serviceItems,
-      }, /* , {
-        title: 'Shortcuts',
-        items: [
-          { id: '1', title: 'Brand Guidelines', leftIcon: 'Note' },
-          { id: '2', title: 'Design notes', leftIcon: 'Note' },
-          { id: '3', title: 'Production', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { id: '4', title: 'Prototype', leftIcon: 'Person', rightIcon: 'ArrowRightLine' },
-          { id: '5', title: 'creative', leftIcon: 'Hashtag', rightIcon: 'ArrowRightLine' },
-          { id: '6', title: 'general', leftIcon: 'Hashtag', rightIcon: 'ArrowRightLine' },
-          { id: '7', title: 'Kasper', leftIcon: 'Person' },
-          { id: '8', title: 'Journal', leftIcon: 'Note' },
-        ],
-      }*/],
+      }],
     };
     return <BrowseSectionList {...props} />;
   }

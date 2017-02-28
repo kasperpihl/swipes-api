@@ -70,6 +70,7 @@ class HOCPreviewModal extends PureComponent {
   getDefaultState() {
     return {
       loading: true,
+      submitting: false,
       preview: null,
       fileLoading: false,
       fileError: false,

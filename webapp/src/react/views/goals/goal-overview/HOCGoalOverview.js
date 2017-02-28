@@ -118,7 +118,6 @@ class HOCGoalOverview extends PureComponent {
       component: 'GoalHandoff',
       title,
       props: {
-        title,
         _target,
         assignees,
         goalId: goal.get('id'),
@@ -319,6 +318,7 @@ HOCGoalOverview.propTypes = {
   archive: func,
   saveWay: func,
   selectAssignees: func,
+  openSecondary: func,
   reassignStep: func,
   renameStep: func,
   removeStep: func,

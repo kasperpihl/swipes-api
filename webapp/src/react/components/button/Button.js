@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
 const MIN_TIME = 1000;
+const SUCCESS_TIMER = 3000;
 import './styles/button.scss';
 
 class Button extends Component {
@@ -37,21 +38,21 @@ class Button extends Component {
     }
 
     if (nextProps.errorLabel !== this.props.errorLabel) {
-      this.setSate({ errorState: true });
+      this.setState({ errorState: !!nextProps.errorLabel });
       clearTimeout(this._resultTimer);
 
       this._resultTimer = setTimeout(() => {
         this.setState({ errorState: false });
-      }, 3000);
+      }, SUCCESS_TIMER);
     }
 
     if (nextProps.successLabel !== this.props.successLabel) {
-      this.setSate({ successState: true });
+      this.setState({ successState: !!nextProps.successLabel });
       clearTimeout(this._resultTimer);
 
       this._resultTimer = setTimeout(() => {
         this.setState({ successState: false });
-      }, 3000);
+      }, SUCCESS_TIMER);
     }
   }
   onClick(e) {

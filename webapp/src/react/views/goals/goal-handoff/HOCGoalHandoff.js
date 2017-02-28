@@ -143,28 +143,59 @@ class HOCGoalHandoff extends PureComponent {
     }
     return assignees;
   }
+  getTitle() {
+    const { handoff } = this.state;
+    const helper = this.getHelper();
+
+    let label = 'Complete Step';
+    if (handoff.get('target') === '_complete') {
+      label = 'Complete Goal';
+    } else if (handoff.get('target') === '_notify') {
+      label = 'Send Notification';
+    } else {
+      const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
+      const currentStepIndex = helper.getCurrentStepIndex();
+      if (nextStepIndex === currentStepIndex) {
+        label = 'Reassign Step';
+      }
+      if (nextStepIndex < currentStepIndex) {
+        label = 'Make Iteration';
+      }
+    }
+    return label;
+  }
   clickedAssign(index, e) {
     this.onChangeClick('assignees', e);
   }
-  renderHeader() {
-    const { title } = this.props;
+  renderAssignees() {
+    const { handoff } = this.state;
+    if (handoff.get('target') === '_complete') {
+      return undefined;
+    }
+
     const assignees = this.getAssignees();
 
     return (
+      <div className="goal-handoff__assignees">
+        <HOCAssigning
+          delegate={this}
+          assignees={assignees}
+          rounded
+        />
+      </div>
+    );
+  }
+  renderHeader() {
+    return (
       <div className="goal-handoff__header">
         <div className="goal-handoff__content">
-          <div className="goal-handoff__title">{title}</div>
+          <div className="goal-handoff__title">{this.getTitle()}</div>
           <div className="goal-handoff__subtitle">
             {this.renderStatus()}
           </div>
         </div>
-        <div className="goal-handoff__assignees">
-          <HOCAssigning
-            delegate={this}
-            assignees={assignees}
-            rounded
-          />
-        </div>
+        {this.renderAssignees()}
+
       </div>
     );
   }
@@ -257,7 +288,6 @@ HOCGoalHandoff.propTypes = {
   assignees: list,
   message: string,
   goalNotify: func,
-  title: string,
   selectAssignees: func,
   _target: string.isRequired,
   completeStep: func,
