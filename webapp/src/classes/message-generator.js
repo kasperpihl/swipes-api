@@ -41,34 +41,32 @@ export default class MessageGenerator {
   getUserArrayString(userIds, options) {
     options = options || {};
     const state = this.store.getState();
+    if (!userIds || !userIds.size) {
+      return 'no one';
+    }
     const me = state.get('me');
     const preferId = options.preferId || me.get('id');
     const numberOfNames = options.number || 1;
+    if (userIds.includes(preferId)) {
+      userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
+    }
     const names = userIds.map(uId => this.getUserString(uId, options));
-    let nameString = names.find((name, i) => userIds.get(i) === preferId);
+    let nameString = '';
     let i = 0;
     do {
-      const uId = userIds.get(i);
       const name = names.get(i);
-      if (i < numberOfNames && uId && uId !== preferId) {
-        let seperator = ', ';
-        if (i === (names.size - 1)) {
+      if (i < numberOfNames && name) {
+        let seperator = i > 0 ? ', ' : '';
+        if (i === (names.size - 1) && i > 0) {
           seperator = ' & ';
         }
-        if (!nameString) {
-          nameString = name;
-        } else {
-          nameString += (seperator + name);
-        }
+        nameString += (seperator + name);
       }
       i += 1;
     } while (i < numberOfNames && i < names.size);
     if (names.size && i < names.size) {
       const extra = (names.size - i);
       nameString += ` & ${extra} other${extra > 1 ? 's' : ''}`;
-    }
-    if (!nameString) {
-      nameString = 'no one';
     }
     return nameString;
   }

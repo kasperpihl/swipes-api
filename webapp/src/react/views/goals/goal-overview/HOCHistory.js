@@ -46,7 +46,6 @@ class HOCHistory extends PureComponent {
     });
     const stepTitle = this.getStepTitle(e.get('to'));
     const from = msgGen.getUserString(e.get('done_by'));
-    const to = e.get('done_by') === me.get('id') ? 'yourself' : 'you';
 
     switch (type) {
       case 'created': {
@@ -56,13 +55,18 @@ class HOCHistory extends PureComponent {
         break;
       }
       case 'notified': {
+        const yourself = e.get('done_by') === me.get('id');
+        const to = msgGen.getUserArrayString(e.get('assignees'), {
+          number: 3,
+          yourself,
+        });
         m = m.set('subtitle', `${from} notified ${to} regarding`);
         m = m.set('title', stepTitle);
         m = m.set('icon', 'GotNotified');
         break;
       }
       case 'complete_step': {
-        m = m.set('subtitle', `${from} handed off work to ${to}`);
+        m = m.set('subtitle', `${from} completed the step`);
         m = m.set('title', stepTitle);
         m = m.set('icon', 'GotAssigned');
         break;

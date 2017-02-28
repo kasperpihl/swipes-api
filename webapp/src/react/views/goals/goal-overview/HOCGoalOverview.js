@@ -7,7 +7,6 @@ import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
 
 import Section from 'components/section/Section';
-import ListMenu from 'components/list-menu/ListMenu';
 import SWView from 'SWView';
 import Button from 'Button';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -64,7 +63,6 @@ class HOCGoalOverview extends PureComponent {
     if (helper.getTotalNumberOfSteps() === 1) {
       remove.disabled = true;
       remove.subtitle = 'Cannot remove the last step';
-      console.log('hello');
     }
 
     const items = [{ title: 'Rename' }, remove];
@@ -182,26 +180,26 @@ class HOCGoalOverview extends PureComponent {
       saveWay,
     } = this.props;
     const options = this.getOptionsForE(e);
+    const delegate = {
+      onItemAction: (item) => {
+        if (item.id === 'way') {
+          const helper = this.getHelper();
+          saveWay(options, helper.getObjectForWay());
+        } else {
+          archive(goal.get('id'));
+          contextMenu(null);
+        }
+      },
+    };
     contextMenu({
       options,
-      component: ListMenu,
+      component: TabMenu,
       props: {
         items: [
-          {
-            title: 'Save as a Way',
-            onClick: () => {
-              const helper = this.getHelper();
-              saveWay(options, helper.getObjectForWay());
-            },
-          },
-          {
-            title: 'Archive Goal',
-            onClick: () => {
-              archive(goal.get('id'));
-              contextMenu(null);
-            },
-          },
+          { id: 'way', title: 'Save as a Way' },
+          { title: 'Archive Goal' },
         ],
+        delegate,
       },
     });
   }
