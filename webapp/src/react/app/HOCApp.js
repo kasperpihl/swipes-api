@@ -6,7 +6,6 @@ import * as a from 'actions';
 import SwipesLoader from 'components/loaders/SwipesLoader';
 import Gradient from 'components/gradient/Gradient';
 import Topbar from './topbar/Topbar';
-import HOCModal from './modal/HOCModal';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
 import HOCToasty from './toasty/HOCToasty';
@@ -73,7 +72,6 @@ class HOCApp extends Component {
           <HOCSidebar />
           <HOCViewController />
         </div>
-        <HOCModal />
         <HOCToasty />
         <HOCContextMenu />
         <HOCTooltip />

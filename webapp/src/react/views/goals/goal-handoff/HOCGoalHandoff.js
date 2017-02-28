@@ -245,6 +245,7 @@ class HOCGoalHandoff extends PureComponent {
           <Button
             text={label}
             onClick={this.onSubmit}
+            loading={isSubmitting}
             primary
           />
         </div>

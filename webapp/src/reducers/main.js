@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
+import { randomString } from 'classes/utils';
 
 const initialState = fromJS({
   socketUrl: null,
@@ -150,7 +151,8 @@ export default function main(state = initialState, action) {
     // Context Menu
     // ======================================================
     case types.CONTEXT_MENU: {
-      return state.set('contextMenu', payload);
+      const pl = payload && Object.assign({}, payload, { id: randomString(5) });
+      return state.set('contextMenu', pl);
     }
 
     // ======================================================
