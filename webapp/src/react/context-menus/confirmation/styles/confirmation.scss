@@ -1,0 +1,62 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+$containerWidth: 390px;
+
+// ======================================================
+// Block
+// ======================================================
+
+.confirmation {
+  @include size($containerWidth, auto);
+  padding: 45px;
+  padding-bottom: 30px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.confirmation {
+
+  &__title {
+    @include font(21px, $deepBlue-100, 27px, 500);
+  }
+
+  &__message {
+    @include font(15px, $deepBlue-80, 27px);
+    margin-top: 21px;
+  }
+
+  &__actions {
+    @include size(100%, auto);
+    @include flexContainer('row', left, top);
+    margin-top: 45px;
+  }
+}
+
+// Buttons
+
+.confirmation {
+
+  &__button {
+
+    &:not(:first-child) {
+      margin-left: 15px;
+    }
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.confirmation {
+
+  &__button {
+
+    &--warning {
+      
+    }
+  }
+}
