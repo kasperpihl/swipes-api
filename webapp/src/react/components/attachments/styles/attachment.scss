@@ -19,7 +19,7 @@
   $b: &;
 
   &__title {
-    $width: calc(100% - (36px + 2px));
+    $width: calc(100% - 42px);
 
     @include size($width, 100%);
     @include flex(center, flex-start);

@@ -105,13 +105,39 @@
   $b: &;
 
   &__icon {
-    @include size(39px, 100%);
+    @include size(24px);
     @include flexContainer('row', left, center);
+    border-radius: 50%;
+    margin-right: 15px;
+
+    &:before {
+      @include size(24px);
+      position: absolute;
+      left: 0; top: 0;
+      content: '';
+      border-radius: 50%;
+      background-color: $blue-100;
+      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+      opacity: 0;
+      transition: .2s ease;
+    }
+
+    &:after {
+      @include size(18px);
+      position: absolute;
+      left: 3px; top: 3px;
+      content: '';
+      border-radius: 50%;
+      background-color: $bg;
+      opacity: 0;
+      transition: .2s .2s ease;
+    }
   }
 
   &__svg {
     @include size(24px);
     @include svg-color($blue-100);
+    transition: .2s .2s ease;
   }
 
   button#{$b}__text {
@@ -121,6 +147,42 @@
 
     &:hover, &:focus {
       text-decoration: underline;
+    }
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.add-step {
+  $b: &;
+
+  &--loading {
+
+    button#{$b}__text {
+      @include font($c: $deepBlue-80);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+
+    #{$b}__icon {
+      animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
+
+      &:before {
+        opacity: 1;
+        transition: .2s .2s ease;
+      }
+
+      &:after {
+        opacity: 1;
+        transition: 0s .2s ease;
+      }
+    }
+
+    #{$b}__svg {
+      opacity: 0;
+      transition: .2s ease;
     }
   }
 }

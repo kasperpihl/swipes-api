@@ -48,13 +48,19 @@ class GoalSide extends Component {
   renderAddStep() {
     const { loadingSteps } = this.props;
     const isLoading = !!loadingSteps.get('add');
-    console.log('isLoading', isLoading);
+    let className = 'add-step';
+    const buttonTitle = loadingSteps.get('add') || 'Add new step';
+
+    if (isLoading) {
+      className += ' add-step--loading';
+    }
+
     return (
-      <div className="add-step">
+      <div className={className}>
         <div className="add-step__icon">
           <Icon svg="Plus" className="add-step__svg" />
         </div>
-        <button className="add-step__text" onClick={this.onClick}>Add new step</button>
+        <button className="add-step__text" onClick={this.onClick}>{buttonTitle}</button>
       </div>
     );
   }
