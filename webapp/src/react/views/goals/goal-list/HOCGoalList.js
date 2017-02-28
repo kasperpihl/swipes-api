@@ -173,7 +173,6 @@ class HOCGoalList extends Component {
       });
     }
   }
-
   onAddGoal() {
     const { navPush } = this.props;
     const { tabIndex } = this.state;

@@ -2,6 +2,7 @@ import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import SelectStep from 'src/react/context-menus/select-step/SelectStep';
 import { List, Map } from 'immutable';
 import GoalsUtil from 'classes/goals-util';
+import { randomString } from 'classes/utils';
 import * as a from './';
 
 const updateGoal = (goalId, goal) => a.api.request('goals.update', {
@@ -70,6 +71,22 @@ export const renameStep = (goalId, stepId, title) => (d, getState) => {
   let steps = getState().getIn(['goals', goalId, 'steps']);
   steps = steps.setIn([stepId, 'title'], title).toJS();
   return d(updateGoal(goalId, { steps }));
+};
+
+export const addStep = (goalId, title) => (d, getState) => {
+  let steps = getState().getIn(['goals', goalId, 'steps']);
+  let stepOrder = getState().getIn(['goals', goalId, 'step_order']);
+  const step = {
+    id: randomString(6),
+    title,
+    assignees: [],
+  };
+  steps = steps.setIn([step.id], step).toJS();
+  stepOrder = stepOrder.push(step.id).toJS();
+  return d(updateGoal(goalId, {
+    steps,
+    step_order: stepOrder,
+  }));
 };
 
 export const archive = goalId => (d) => {

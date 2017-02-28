@@ -202,6 +202,25 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onAddStep(e) {
+    const { addStep, contextMenu, goal } = this.props;
+    const options = this.getOptionsForE(e);
+    contextMenu({
+      options,
+      component: InputMenu,
+      props: {
+        placeholder: 'Title for the step',
+        buttonLabel: 'Add',
+        onResult: (title) => {
+          contextMenu(null);
+          if (title && title.length) {
+            this.setStepLoading('add', 'Adding...');
+            addStep(goal.get('id'), title).then(this.clearCB('add'));
+          }
+        },
+      },
+    });
+  }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),
@@ -311,6 +330,7 @@ const { func, string } = PropTypes;
 
 HOCGoalOverview.propTypes = {
   goal: map,
+  addStep: func,
   navPush: func,
   me: map,
   navPop: func,
@@ -339,6 +359,7 @@ export default connect(mapStateToProps, {
   saveWay: a.ways.save,
   archive: a.goals.archive,
   contextMenu: a.main.contextMenu,
+  addStep: a.goals.addStep,
   removeStep: a.goals.removeStep,
   renameStep: a.goals.renameStep,
   reassignStep: a.goals.reassignStep,
