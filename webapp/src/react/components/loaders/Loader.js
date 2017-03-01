@@ -146,19 +146,19 @@ class Loader extends Component {
       styles.height = `${size}px`;
     }
 
-    let className = 'sw-loader__wrapper';
+    let className = 'sw-loader';
 
     if (center) {
-      className += ' sw-loader__wrapper--center';
+      className += ' sw-loader--center';
     }
 
     if (textPosition === 'right') {
-      className += ' sw-loader__wrapper--text-right';
+      className += ' sw-loader--text-right';
     }
 
     return (
       <div style={styles} className={className}>
-        <div className="sw-loader__holder">
+        <div className="sw-loader__wrapper">
           {this.renderTiles()}
         </div>
         {this.renderText(text, textStyle)}

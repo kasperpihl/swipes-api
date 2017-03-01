@@ -8,8 +8,11 @@ $h: 105px;
 // ======================================================
 
 .header-title {
+  $b: &;
+  $flexIgnoreList: '#{$b}__actions';
+
   @include size(100%, $h);
-  @include flexContainer('row', left, top);
+  @include flexContainer('row', left, top, $flexIgnoreList);
   padding-top: 21px;
 }
 
@@ -23,9 +26,7 @@ $h: 105px;
   &__title {
     @include size(100%, auto);
     @include font(30px, $deepBlue-100, 39px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include truncateString();
   }
 
   &__subtitle {
@@ -50,8 +51,7 @@ $h: 105px;
 
   &__actions {
     @include size(auto, 39px);
-    @include flex(flex);
-    @include flex(none);
+    @include flexContainer();
     margin-left: 30px;
 
     &:empty {

@@ -3,21 +3,15 @@
 
 .list-menu {
   @include size(200px, auto);
-  background: white;
+  background: $bg;
   border-radius: 6px;
   box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
-  position: relative;
 
   &__item {
     @include size(100%, 60px);
-    color: $deepBlue-60;
-    font-size: 12px;
-    line-height: 60px;
+    @include font(12px, $deepBlue-60, 60px);
+    @include truncateString();
     padding: 0 18px;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
     &:not(:last-child) {
       &:after {
@@ -30,8 +24,8 @@
     }
 
     &:hover {
+      @include font($c: $blue-100);
       background-color: rgba($deepBlue-5, .5);
-      color: $blue-100;
     }
   }
 }

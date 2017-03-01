@@ -289,10 +289,23 @@ $borderColor: $deepBlue-10;
 .g-button {
   $b: &;
 
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    @include size($btnSize);
+    border: 0px solid $blue-100;
+    border-radius: 50%;
+    border-width: 3px;
+    border-color: $deepBlue-10;
+    opacity: 0;
+    transition: .2s ease;
+  }
+
   &:after {
     content: '';
     position: absolute;
-    left: -3px; top: -3px;
+    left: 0; top: 0;
     @include size($btnSize);
     border: 0px solid $blue-100;
     border-radius: 50%;
@@ -303,7 +316,7 @@ $borderColor: $deepBlue-10;
   }
 
   &--loading {
-    border-width: 3px;
+    border-width: 0px;
     border-color: $deepBlue-10;
     transition: all .3s ease, border-width .3s ease, border-color .3s .5s ease;
     pointer-events: none;
@@ -312,10 +325,15 @@ $borderColor: $deepBlue-10;
       background-color: $bg;
     }
 
+    &:before {
+      opacity: 1;
+      transition: .3s .5s ease;
+    }
+
     &:after {
       content: '';
       position: absolute;
-      left: -3px; top: -3px;
+      left: 0; top: 0;
       @include size($btnSize);
       border: 3px solid $blue-100;
       border-radius: 50%;

@@ -1,21 +1,24 @@
 @import "~styles/_vars.scss";
 @import "~styles/_mixins.scss";
 
-.sw-loader__wrapper {
-  position:relative;
+// ======================================================
+// Block
+// ======================================================
 
-  &--center {
-    position:absolute;
-    left: 50%;
-    top:50%;
-    transform: translate(-50%, -50%);
-  }
+.sw-loader {
 
-  .sw-loader__holder {
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.sw-loader {
+
+  &__wrapper {
     @include size(70%, 70%);
     margin-left: 15%;
     margin-top: 15%;
-    position: relative;
     transform: rotate(-45deg);
 
     .rect {
@@ -38,6 +41,17 @@
     color: $deepBlue-40;
     width: 100%;
     bottom: -15px;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.sw-loader {
+
+  &--center {
+    @include centerAbsolute();
   }
 
   &--text-right & {

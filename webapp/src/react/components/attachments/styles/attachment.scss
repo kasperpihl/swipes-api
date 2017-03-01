@@ -6,8 +6,11 @@
 // ======================================================
 
 .attachment {
+  $b: &;
+  $flexIgnoreList: '#{$b}__actions';
+
   @include size(100%, 55px);
-  @include flex(center, flex-start);
+  @include flexContainer('row', left, center, $flexIgnoreList);
   border-top: 1px solid darken($deepBlue-5, 3%);
 }
 
@@ -22,7 +25,7 @@
     $width: calc(100% - 42px);
 
     @include size($width, 100%);
-    @include flex(center, flex-start);
+    @include flexContainer('row', left, center);
     @include font(12px, $deepBlue-80, 18px, 500);
     transition: .1s ease;
 
@@ -37,10 +40,8 @@
 
   &__words {
     @include size(100%, auto);
+    @include truncateString();
     word-break: break-all;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   &__icon {
@@ -56,8 +57,7 @@
 
   &__actions {
     @include size(auto, 100%);
-    @include flex();
-    @include flex(none);
+    @include flexContainer('row', center, center);
   }
 
   &__svg {
@@ -72,7 +72,7 @@
 
   &__button {
     @include size(36px);
-    @include flex();
+      @include flexContainer('row', center, center);
     border: 1px solid $deepBlue-10;
     border-radius: 50%;
     margin-left: 6px;
@@ -110,7 +110,7 @@
 
   &--flagged {
     #{$b}__button--flag {
-      @include flex(flex);
+      @include flexContainer();
       border-color: transparent;
       opacity: 1;
 
@@ -122,7 +122,7 @@
 
   &--flagable {
     #{$b}__button--flag {
-      @include flex(flex);
+      @include flexContainer();
       opacity: 1;
       pointer-events: all;
     }

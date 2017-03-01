@@ -17,7 +17,7 @@ $innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 section.view-container {
   @include size(100%, calc(100% - (60px - 38px)));
   @include border-radius(6px, 6px, 0px, 0px);
-  @include flex(column);
+  @include flexContainer('column');
   background-color: $bg;
   box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
   margin-top: calc(60px - 38px);
@@ -30,8 +30,10 @@ section.view-container {
 
 .sw-view {
   $b: &;
+  $flexIgnoreList: '#{$b}__nav-bar', '#{$b}__header', '#{$b}__footer';
+
   @include size(100%);
-  @include flex(column);
+  @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList);
   animation: fadeView .8s ease forwards;
   will-change: width;
 }
@@ -50,14 +52,10 @@ section.view-container {
 
   #{$b}__actions {
     @include size(auto, 100%);
-    @include flex(flex);
+    @include flexContainer();
     position: absolute;
     right: 0; top: 0;
     padding-top:  9px;
-  }
-
-  #{$b}__close-button {
-    // opacity: 0;
   }
 }
 
@@ -65,20 +63,17 @@ section.view-container {
 
   &__nav-bar {
     @include size(100%, auto);
-    @include flex(none);
     will-change: width;
   }
 
   &__header {
     @include size($innercContentWidth, auto);
-    @include flex(none);
     margin: 0 $contentOverflowPadding;
     will-change: width;
   }
 
   &__footer {
     @include size(100%, auto);
-    @include flex(none);
     margin: 0;
     will-change: width;
   }
@@ -91,8 +86,8 @@ section.view-container {
 
   &__container {
     @include size($innercContentWidth, 100%);
+    @include heightSpecifications(100%, initial);
     margin: 0 $contentOverflowPadding;
-    min-height: 100%;
     will-change: width;
   }
 

@@ -10,7 +10,7 @@ $navbarH: 49px;
 .bread-crumbs {
   $b: &;
   @include size(100%, $navbarH);
-  @include flex(flex);
+  @include flexContainer();
   padding-top: 4px;
   border-bottom: 1px solid $deepBlue-20;
 }
@@ -26,7 +26,7 @@ $navbarH: 49px;
 
   &__crumb {
     @include size(auto, 100%);
-    @include flex(center, flex-start);
+    @include flexContainer('row', left, center);
   }
 }
 
@@ -46,7 +46,7 @@ $navbarH: 49px;
 
   &__seperator {
     @include size(24px, $navbarH);
-    @include flex();
+    @include flexContainer('row', center, center);
     margin: 0 3px;
 
     #{$b}__icon {
@@ -68,17 +68,5 @@ $navbarH: 49px;
   &--small:empty {
     @include size($height: 15px);
     border: none;
-  }
-}
-
-
-// ======================================================
-// Targeting
-// ======================================================
-
-.bread-crumbs {
-
-  &:empty {
-    // @include size($height: 15px);
   }
 }

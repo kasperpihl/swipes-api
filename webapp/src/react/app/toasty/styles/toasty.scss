@@ -2,10 +2,9 @@
 @import '~styles/_mixins.scss';
 
 .toasty {
-  $b: &;
   @include size(200px, auto);
-  position: fixed;
-  z-index: 10000;
   pointer-events: none;
+  position: fixed;
   right: 20px; top: 70px;
+  z-index: 10000;
 }

@@ -1,22 +1,40 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
 .context-menu {
   @include size(100%);
   left: 0; top: 0;
+  opacity: 0;
   position:fixed;
   visibility: hidden;
   z-index: 10;
-  opacity: 0;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.context-menu {
 
   &__content {
     @include size(auto);
     position: absolute;
   }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.context-menu {
 
   &--shown {
-    visibility: visible;
     opacity: 1;
     transition: visibility 0s 0s, opacity .15s;
+    visibility: visible;
   }
 }

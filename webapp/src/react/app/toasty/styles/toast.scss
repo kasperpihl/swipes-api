@@ -1,33 +1,36 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .toast {
-  $b: &;
   @include size(200px, 60px);
-  display: flex !important;
+  @include flexContainer();
   background-color: $bg;
   border-radius: 3px;
   box-shadow: 0 1px 20px 3px rgba($deepBlue-40, 0.4);
   margin-bottom: 15px;
-  position: relative;
-  transition: .2s;
   overflow: hidden;
   pointer-events: none;
+  transition: .2s;
+}
 
-  &:hover {
-    opacity: .2;
-    transition: .2s;
-  }
+// ======================================================
+// Elements
+// ======================================================
+
+.toast {
 
   &__loader {
     @include size(60px);
-    @include flex();
-    position: relative;
+    @include flexContainer('row', center, center);
 
     &:after {
-      content: "";
       @include size(1px, 50%);
       background-color: $deepBlue-10;
+      content: "";
       position: absolute;
       right: 0; top: 25%;
     }
@@ -35,31 +38,34 @@
 
   &__icon {
     @include size(24px);
-    stroke: $green-color;
+    @include svg-color($green-color);
     stroke-width: 2px;
   }
 
   &__title {
     @include size(calc(100% - 60px), 100%);
-    color: $deepBlue-60;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 60px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include font(12px, $deepBlue-60, 60px, 500);
+    @include flexContainer('row', center, center);
+    @include truncateString();
     padding: 0 10px;
   }
 }
 
-.svg {
+// ======================================================
+// Hovers
+// ======================================================
 
-  &--defs {
-    position: absolute;
-    left: 0; top: 0;
+.toast {
+
+  &:hover {
+    opacity: .2;
+    transition: .2s;
   }
 }
+
+// ======================================================
+// Animations
+// ======================================================
 
 .fadeToaster {
   //empty
