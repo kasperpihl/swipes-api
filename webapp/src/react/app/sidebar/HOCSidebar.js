@@ -117,7 +117,6 @@ class HOCSidebar extends PureComponent {
     // For later
   }
   render() {
-    console.log('this.state.activeItem', this.state.activeItem);
     return (
       <div className="sidebar">
         <div className="sidebar__top-section">
