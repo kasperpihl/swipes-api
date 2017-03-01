@@ -8,7 +8,6 @@ import { navigation, main, menus } from 'actions';
 import { bindAll } from 'classes/utils';
 import './profile.scss';
 
-
 class HOCProfile extends Component {
   constructor(props) {
     super(props);

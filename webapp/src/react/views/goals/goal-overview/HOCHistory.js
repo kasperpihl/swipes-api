@@ -68,7 +68,7 @@ class HOCHistory extends PureComponent {
       case 'complete_step': {
         m = m.set('subtitle', `${from} completed the step`);
         m = m.set('title', stepTitle);
-        m = m.set('icon', 'GotAssigned');
+        m = m.set('icon', 'Handoff');
         break;
       }
       case 'complete_goal': {
